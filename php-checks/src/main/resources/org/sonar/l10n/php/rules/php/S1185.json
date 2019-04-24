@@ -1,5 +1,5 @@
 {
-  "title": "Overriding methods should do more than simply call the same method in the super class ",
+  "title": "重写方法不应该只是在超类中简单地调用相同的方法",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "Static members should be referenced with \"static::\"",
+  "title": "静态成员应该用\"static::\"引用",
   "type": "BUG",
   "status": "ready",
   "remediation": {

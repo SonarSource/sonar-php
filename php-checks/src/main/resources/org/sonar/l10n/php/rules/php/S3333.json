@@ -1,5 +1,5 @@
 {
-  "title": "\"open_basedir\" should limit file access",
+  "title": "\"open_basedir\"应该限制文件访问",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
-<p>Return of boolean literal statements wrapped into <code>if-then-else</code> ones should be simplified.</p>
-<h2>Noncompliant Code Example</h2>
+<p>返回包装进 <code>if-then-else</code> 二进制码的布尔文字语句应该简化。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if (expression) {
   return true;
@@ -7,7 +7,7 @@ if (expression) {
   return false;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 return expression;
 </pre>

@@ -1,6 +1,6 @@
-<p><code>goto</code> is an unstructured control flow statement. It makes code less readable and maintainable. Structured control flow statements such
-as <code>if</code>, <code>for</code>, <code>while</code>, <code>continue</code> or <code>break</code> should be used instead.</p>
-<h2>Noncompliant Code Example</h2>
+<p><code>goto</code> 是一种非结构化的控制流语句。它降低了代码的可读性和可维护性。应替换为结构化的控制流语句
+如 <code>if</code>， <code>for</code>， <code>while</code>， <code>continue</code> 或是 <code>break</code> 这些语句。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 $i = 0;
 loop:
@@ -10,13 +10,13 @@ loop:
     goto loop;
   }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 for ($i = 0; $i &lt; 10; $i++){
   echo("i = $i");
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C:2004, 14.4 - The goto statement shall not be used. </li>
   <li> MISRA C:2012, 15.1 - The goto statement should not be used </li>

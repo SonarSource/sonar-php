@@ -1,15 +1,13 @@
-<p>Files that define symbols such as classes and variables may be included into many files. Simply performing that inclusion should have no effect on
-those files other than declaring new symbols. For instance, a file containing a class definition should not also contain side-effects such as
-<code>print</code> statements that will be evaluated automatically on inclusion. Logic should be segregated into symbol-only files and
-side-effect-only files. The type of operation which is not allowed in a symbol-definition file includes but is not limited to: </p>
+<p>定义类和变量等符号的文件可以包含在许多文件中。简单地执行包含应该不会对这些文件产生任何影响，除了声明新的符号。例如，包含类定义的文件不应该包含副作用，比如
+<code>print</code> 语句，这些语句将在包含时自动评估。逻辑应分为仅符号文件和仅副作用文件。符号定义文件中不允许的操作类型包括但不限于：</p>
 <ul>
-  <li> generating output </li>
-  <li> modifying <code>ini</code> settings </li>
-  <li> emitting errors or exceptions </li>
-  <li> modifying global or static variables </li>
-  <li> reading/writing files </li>
+  <li> 生成输出 </li>
+  <li> 修改 <code>ini</code> 设置 </li>
+  <li> 发出错误或异常</li>
+  <li> 修改全局变量或静态（static）变量 </li>
+  <li> 读/写文件 </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
 &lt;?php
 
@@ -19,7 +17,7 @@ class foo {
   // ...
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 &lt;?php
 
@@ -31,7 +29,7 @@ class foo {
 
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://www.php-fig.org/psr/psr-1/">PHP-FIG Basic Coding Standard PSR1</a>, 2.3 - Side Effects </li>
 </ul>

@@ -1,10 +1,9 @@
-<p>There is no reason to concatenate literal strings. Doing so is an exercise in reducing code readability. Instead, the strings should be
-combined.</p>
-<h2>Noncompliant Code Example</h2>
+<p>没有理由去连接文字字符串。这样做是一种降低代码可读性的练习。相反，字符串应该组合在一起。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-$msg = "Hello " . "${name}" . "!";  // Noncompliant
+$msg = "Hello " . "${name}" . "!";  // 不合规
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $msg = "Hello ${name}!";
 </pre>

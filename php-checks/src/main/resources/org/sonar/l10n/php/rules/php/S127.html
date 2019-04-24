@@ -1,14 +1,12 @@
-<p>A <code>for</code> loop stop condition should test the loop counter against an invariant value (i.e. one that is true at both the beginning and
-ending of every loop iteration). Ideally, this means that the stop condition is set to a local variable just before the loop begins. </p>
-<p>Stop conditions that are not invariant are slightly less efficient, as well as being difficult to understand and maintain, and likely lead to the
-introduction of errors in the future.</p>
-<p>This rule tracks three types of non-invariant stop conditions:</p>
+<p> 一个<code>for</code>循环停止条件的应该针对一个不变值(即在每个循环迭代的开始和结束时都为true的值)测试循环计数器。理想情况下，这意味着在循环开始之前将停止条件设置为局部变量。</p>
+<p>如果停止条件不是不变的，那么效率会稍微低一些，并且很难理解和维护，并且可能会在将来引入错误。</p>
+<p>此规则跟踪三种类型的非不变停止条件：</p>
 <ul>
-  <li> When the loop counters are updated in the body of the <code>for</code> loop </li>
-  <li> When the stop condition depend upon a method call </li>
-  <li> When the stop condition depends on an object property, since such properties could change during the execution of the loop. </li>
+  <li> 当循环计数器在<code>for</code>循环的主体中更新 </li>
+  <li> 当停止条件依赖于方法调用 </li>
+  <li> 当停止条件依赖于对象属性，这些属性可能在循环执行期间更改。</li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
 for ($i = 0; $i &lt; 10; $i++) {
   echo $i;
@@ -17,14 +15,14 @@ for ($i = 0; $i &lt; 10; $i++) {
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 for ($i = 0; $i &lt; 10; $i++) {
   echo $i;
 }
 
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C:2004, 13.6 - Numeric variables being used within a <em>for</em> loop for iteration counting shall not be modified in the body of the
   loop. </li>

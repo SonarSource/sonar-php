@@ -1,11 +1,10 @@
-<p><code>echo</code> can be called with or without parentheses, but it is best practice to leave parentheses off the call because using parentheses
-with multiple arguments will result in a parse error.</p>
-<h2>Noncompliant Code Example</h2>
+<p><code>echo</code>可以带括号或不带括号调用，但最好不要使用括号，因为带多个参数的括号会导致分析错误。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-echo("Hello");  // Noncompliant, but it works
-echo("Hello", "World"); // Noncompliant. Parse error
+echo("Hello");  // 不合规，但是仍然有效
+echo("Hello", "World"); // 不合规，解析错误
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 echo "Hello";
 echo "Hello","World!";

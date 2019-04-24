@@ -1,5 +1,5 @@
 {
-  "title": "Unused function parameters should be removed",
+  "title": "未使用的函数参数应该被删掉",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

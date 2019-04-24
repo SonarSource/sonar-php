@@ -1,5 +1,5 @@
 {
-  "title": "Local variable and function parameter names should comply with a naming convention",
+  "title": "局部变量和函数参数名称应符合命名约定",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

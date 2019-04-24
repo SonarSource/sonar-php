@@ -1,5 +1,5 @@
 {
-  "title": "The names of methods with boolean return values should start with \"is\" or \"has\"",
+  "title": "具有布尔返回值的方法的名称应该以\"is\"或\"has\"开头",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

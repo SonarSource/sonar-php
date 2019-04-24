@@ -1,15 +1,14 @@
-<p>An un-authenticated LDAP connection can lead to transactions without access control. Authentication, and with it, access control, are the last line
-of defense against LDAP injections and should not be disabled.</p>
-<p>This rule raises an issue when an anonymous LDAP connection is created.</p>
-<h2>Noncompliant Code Example</h2>
+<p>未经身份验证的LDAP连接可能导致没有访问控制的事务。身份验证及其访问控制是针对LDAP注入的最后一道防线，不应该禁用。</p>
+<p>当创建匿名LDAP连接时，此规则会引发问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 $ldapconn = ldap_connect("ldap.example.com");
 
 if ($ldapconn) {
-    $ldapbind = ldap_bind($ldapconn); // Noncompliant; anonymous authentication, no user/password provided
+    $ldapbind = ldap_bind($ldapconn); // 不合规；匿名身份验证，不提供用户/密码
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $ldaprdn  = 'uname';
 $ldappass = 'password';
@@ -17,10 +16,10 @@ $ldappass = 'password';
 $ldapconn = ldap_connect("ldap.example.com");
 
 if ($ldapconn) {
-    $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass); // Compliant
+    $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass); // 合规的
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/521.html">CWE-521</a> - Weak Password Requirements </li>
   <li> OWASP Top 10 2017 Category A2 - Broken Authentication </li>

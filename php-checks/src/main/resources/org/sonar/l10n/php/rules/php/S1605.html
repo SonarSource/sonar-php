@@ -1,6 +1,6 @@
-<p>In PHP 5 both the way to declare a constructor and the way to make a call to a parent constructor have evolved. When declaring constructors with
-the PHP5 <code>__construct</code> name, nested calls to parent constructors should also use the new <code>__constructor</code> name.</p>
-<h2>Noncompliant Code Example</h2>
+<p>在PHP 5中，声明构造函数和调用父构造函数的方法都有所改进。当使用 PHP5 中的<code>__construct</code> 关键字声明构造函数时，
+ 对父构造函数的嵌套调用也应使用新的 <code>__constructor</code> 关键字。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 class Foo extends Bar {
   function __construct() {
@@ -8,7 +8,7 @@ class Foo extends Bar {
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 class Foo extends Bar {
   function __construct() {

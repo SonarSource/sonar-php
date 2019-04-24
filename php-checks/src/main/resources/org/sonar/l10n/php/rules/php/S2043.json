@@ -1,5 +1,5 @@
 {
-  "title": "Superglobals should not be accessed directly",
+  "title": "不应该直接访问超全局变量",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

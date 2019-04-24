@@ -1,13 +1,11 @@
-<p><code>sleep</code> is sometimes used in a mistaken attempt to prevent Denial of Service (DoS) attacks by throttling response rate. But because it
-ties up a thread, each request takes longer to serve that it otherwise would, making the application <em>more</em> vulnerable to DoS attacks, rather
-than less.</p>
-<h2>Noncompliant Code Example</h2>
+<p><code>sleep</code> 有时被错误地用于通过限制响应速率来防止拒绝服务(DoS)攻击。但是因为它占用了一个线程，所以每个请求的服务时间都比其他方法长，这使得应用程序 <em>more</em> 容易受到DoS攻击，而不是更少。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if (is_bad_ip($requester)) {
-  sleep(5);  // Noncompliant
+  sleep(5);  // 不合规
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> OWASP Top 10 2017 Category A6 - Security Misconfiguration </li>
 </ul>

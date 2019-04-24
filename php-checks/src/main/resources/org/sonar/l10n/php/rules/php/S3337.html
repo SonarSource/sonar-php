@@ -1,17 +1,16 @@
-<p><code>enable_dl</code> is on by default and allows <code>open_basedir</code> restrictions, which limit the files a script can access, to be
-ignored. For that reason, it's a dangerous option and should be explicitly turned off.</p>
-<p>This rule raises an issue when <code>enable_dl</code> is not explicitly set to 0 in <em>php.ini</em>.</p>
-<h2>Noncompliant Code Example</h2>
+<p><code>enable_dl</code> 默认是打开的，并且允许忽略<code>open_basedir</code> 限制，这限制脚本可以访问的文件。因此，这是一个危险的选择，应该明确地关闭。</p>
+<p>当<code>enable_dl</code> 在 <em>php.ini</em>中没有显式设置为0时，该规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-; php.ini
-enable_dl=1  ; Noncompliant
+; 在php.ini中
+enable_dl=1  ; 不合规
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
-; php.ini
+; 在php.ini中
 enable_dl=0
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/23.html">MITRE, CWE-23</a> - Relative Path Traversal </li>
   <li> <a href="https://cwe.mitre.org/data/definitions/36.html">MITRE, CWE-36</a> - Absolute Path Traversal </li>

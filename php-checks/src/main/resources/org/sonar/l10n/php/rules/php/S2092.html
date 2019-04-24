@@ -1,21 +1,20 @@
-<p>The "secure" attribute prevents cookies from being sent over plaintext connections such as HTTP, where they would be easily eavesdropped upon.
-Instead, cookies with the secure attribute are only sent over encrypted HTTPS connections.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<p>“secure”属性阻止cookie通过明文连接(如HTTP)发送，因为它们很容易被窃听。相反，带有secure属性的cookie只通过加密的HTTPS连接发送。</p>
+<h2>推荐的安全编码实践</h2>
 <ul>
-  <li> set the last parameter of the <code>setcookie</code> function to "true" </li>
-  <li> set <code>session.cookie_secure = 1</code> in the php.ini file </li>
+  <li> 将<code>setcookie</code>函数的最后一个参数设置为"true" </li>
+  <li> 在php.ini文件里设置<code>session.cookie_secure = 1</code> </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
-; php.ini
-session.cookie_secure = 0; Noncompliant
+; 在php.ini内
+session.cookie_secure = 0  ;不合规
 
-// in PHP code
-session_set_cookie_params($lifetime, $path, $domain, false); // Noncompliant, the last parameter means that the session cookie should not be secure
+//使用PHP代码
+session_set_cookie_params($lifetime, $path, $domain, false); // 不合规，最后一个参数表示会话cookie应该不是安全的
 
-setcookie($name, $value, $expire, $path, $domain, false); // Noncompliant, the last parameter means that the cookie should not be secure
+setcookie($name, $value, $expire, $path, $domain, false); // 不合规，最后一个参数表示cookie应该不是安全的
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/311">MITRE, CWE-311</a> - Missing Encryption of Sensitive Data </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/315">MITRE, CWE-315</a> - Cleartext Storage of Sensitive Information in a Cookie </li>

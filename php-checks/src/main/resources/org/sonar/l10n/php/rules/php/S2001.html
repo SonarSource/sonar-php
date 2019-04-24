@@ -1,12 +1,11 @@
-<p>Deprecated language features are those that have been retained temporarily for backward compatibility, but which will eventually be removed from
-the language. In effect, deprecation announces a grace period to allow the smooth transition from the old features to the new ones. In that period, no
-use of the deprecated features should be added to the code, and all existing uses should be gradually removed.</p>
-<p>The following functions were deprecated in PHP 5:</p>
+<p>不推荐使用的语言功能是为了向后版本兼容而临时保留的功能，但最终都将从语言中删除。 实际上，弃用宣布了一个宽限期，允许从旧功能到新功能的平稳过渡。
+ 在此期间，不应该在代码中添加任何已废弃特性的使用，并且应该逐步删除所有现有的使用。</p>
+<p>PHP5不支持以下函数:</p>
 <table>
   <tbody>
     <tr>
-      <th>Deprecated</th>
-      <th>Use Instead</th>
+      <th>不支持</th>
+      <th>更新代替</th>
     </tr>
     <tr>
       <td><code>call_user_method()</code></td>
@@ -30,18 +29,18 @@ use of the deprecated features should be added to the code, and all existing use
     </tr>
     <tr>
       <td><code>ereg_replace()</code></td>
-      <td><code>preg_replace()</code> (note that this is deprecated in PHP 5.5)</td>
+      <td><code>preg_replace()</code> (注意，这在PHP 5.5中是不推荐的)</td>
     </tr>
     <tr>
       <td><code>eregi()</code></td>
-      <td><code>preg_match()</code> with 'i' modifier</td>
+      <td><code>preg_match()</code> 使用'i'修饰符</td>
     </tr>
     <tr>
       <td><code>eregi_replace()</code></td>
-      <td><code>preg_replace()</code> with 'i' modifier</td>
+      <td><code>preg_replace()</code> 使用'i'修饰符</td>
     </tr>
     <tr>
-      <td><code>set_magic_quotes_runtime()</code> and its alias, <code>magic_quotes_runtime()</code></td>
+      <td><code>set_magic_quotes_runtime()</code> 和它的别名,<code>magic_quotes_runtime()</code></td>
       <td></td>
     </tr>
     <tr>
@@ -66,7 +65,7 @@ use of the deprecated features should be added to the code, and all existing use
     </tr>
     <tr>
       <td><code>spliti()</code></td>
-      <td><code>preg_split()</code> with 'i' modifier</td>
+      <td><code>preg_split()</code> 使用'i'修饰符</td>
     </tr>
     <tr>
       <td><code>sql_regcase()</code></td>
@@ -74,24 +73,24 @@ use of the deprecated features should be added to the code, and all existing use
     </tr>
     <tr>
       <td><code>mysql_db_query()</code></td>
-      <td><code>mysql_select_db()</code> and <code>mysql_query()</code></td>
+      <td><code>mysql_select_db()</code> 和 <code>mysql_query()</code></td>
     </tr>
     <tr>
       <td><code>mysql_escape_string()</code></td>
       <td><code>mysql_real_escape_string()</code></td>
     </tr>
     <tr>
-      <td>Passing locale category names as strings</td>
-      <td>Use the LC_* family of constants</td>
+      <td>将区域设置类别名称作为字符串传递</td>
+      <td>使用LC_*常量族</td>
     </tr>
   </tbody>
 </table>
-<p>The following functions were deprecated in PHP 7:</p>
+<p>PHP7不支持以下函数:</p>
 <table>
   <tbody>
     <tr>
-      <th>Deprecated</th>
-      <th>Use Instead</th>
+      <th>不支持</th>
+      <th>更新代替</th>
     </tr>
     <tr>
       <td><code>__autoload()</code></td>
@@ -99,35 +98,35 @@ use of the deprecated features should be added to the code, and all existing use
     </tr>
     <tr>
       <td><code>create_function()</code></td>
-      <td>anonymous function</td>
+      <td>匿名函数</td>
     </tr>
     <tr>
-      <td><code>parse_str()</code> without second argument</td>
-      <td><code>parse_str()</code> with second argument</td>
+      <td><code>parse_str()</code> 没有第二个参数</td>
+      <td><code>parse_str()</code> 伴随第二个参数</td>
     </tr>
     <tr>
       <td><code>gmp_random()</code></td>
-      <td><code>gmp_random_bits()</code> or <code>gmp_random_range()</code></td>
+      <td><code>gmp_random_bits()</code> 或 <code>gmp_random_range()</code></td>
     </tr>
     <tr>
       <td><code>each()</code></td>
       <td><code>foreach</code></td>
     </tr>
     <tr>
-      <td><code>assert()</code> with string argument</td>
+      <td><code>assert()</code> 伴随字符串参数</td>
       <td> </td>
     </tr>
     <tr>
-      <td>Defining case-insensitive constants by calling <code>define()</code> with <code>true</code> as third parameter</td>
-      <td><code>define("myconst", $value)</code> or <code>define("myconst", $value, false)</code></td>
+      <td>通过调用<code>define()</code>定义不区分大小写的常量，并将<code>true</code> 作为第三个参数</td>
+      <td><code>define("myconst", $value)</code> 或 <code>define("myconst", $value, false)</code></td>
     </tr>
     <tr>
-      <td><code>FILTER_FLAG_SCHEME_REQUIRED</code> and <code>FILTER_FLAG_HOST_REQUIRED</code> flags</td>
-      <td><code>FILTER_VALIDATE_URL</code> flag</td>
+      <td><code>FILTER_FLAG_SCHEME_REQUIRED</code> 和 <code>FILTER_FLAG_HOST_REQUIRED</code> 标志</td>
+      <td><code>FILTER_VALIDATE_URL</code> 标志</td>
     </tr>
     <tr>
-      <td><code>fgetss()</code> function, <code>"string.strip_tags"</code> stream filter name, <code>SplFileObject::fgetss()</code> method and
-      <code>gzgetss()</code> function</td>
+      <td><code>fgetss()</code> 函数，<code>"string.strip_tags"</code> 流过滤的名字, <code>SplFileObject::fgetss()</code> 方法和
+      <code>gzgetss()</code> 函数</td>
       <td> </td>
     </tr>
     <tr>
@@ -135,12 +134,12 @@ use of the deprecated features should be added to the code, and all existing use
       <code>mberegi_replace()</code>, <code>mbsplit()</code>, <code>mbereg_match()</code>, <code>mbereg_search()</code>,
       <code>mbereg_search_pos()</code>, <code>mbereg_search_regs()</code>, <code>mbereg_search_init()</code>, <code>mbereg_search_getregs()</code>,
       <code>mbereg_search_getpos()</code>, <code>mbereg_search_setpos()</code></td>
-      <td>Use the<br> corresponding <code>mb_ereg_*()</code> variants instead</td>
+      <td>使用<br> 相应的 <code>mb_ereg_*()</code> 变体代替</td>
     </tr>
     <tr>
-      <td>string search functions with integer needle (<code>stristr</code>, <code>strrchr</code>, <code>strstr</code>, <code>strripos</code>,
+      <td>带整数指针的字符串搜索函数(<code>stristr</code>, <code>strrchr</code>, <code>strstr</code>, <code>strripos</code>,
       <code>stripos</code>, <code>strrpos</code>, <code>strpos</code>, <code>strchr</code>) </td>
-      <td>use a string needle instead</td>
+      <td>用字符串指针代替</td>
     </tr>
     <tr>
       <td><code>image2wbmp()</code></td>
@@ -151,12 +150,12 @@ use of the deprecated features should be added to the code, and all existing use
       <td> </td>
     </tr>
     <tr>
-      <td>Defining an <code>assert()</code> function inside a namespace</td>
-      <td>use the standard <code>assert()</code> function</td>
+      <td>在名称空间中定义一个<code>assert()</code>函数</td>
+      <td>使用标准的<code>assert()</code>函数</td>
     </tr>
   </tbody>
 </table>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://wiki.php.net/rfc/deprecations_php_7_3">PHP RFC: Deprecations for PHP 7.3</a> </li>
   <li> <a href="https://wiki.php.net/rfc/case_insensitive_constant_deprecation">PHP RFC: Deprecate and Remove Case-Insensitive Constants</a> </li>

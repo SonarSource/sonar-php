@@ -1,5 +1,5 @@
 {
-  "title": "Configuration should not be changed dynamically",
+  "title": "配置不应动态更改",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

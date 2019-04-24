@@ -1,9 +1,9 @@
-<p>The following predefined variables are deprecated and should be replaced by the new versions:</p>
+<p>下列预定义变量已被弃用，应替换为新版本：</p>
 <table>
   <tbody>
     <tr>
-      <th>Replace</th>
-      <th>With</th>
+      <th>旧版本</th>
+      <th>新版本</th>
     </tr>
     <tr>
       <td>$HTTP_SERVER_VARS</td>
@@ -39,11 +39,11 @@
     </tr>
   </tbody>
 </table>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
 echo 'Name parameter value: ' . $HTTP_GET_VARS["name"];
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 echo 'Name parameter value: ' . $_GET["name"];
 </pre>

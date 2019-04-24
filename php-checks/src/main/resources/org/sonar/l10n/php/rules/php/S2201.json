@@ -1,5 +1,5 @@
 {
-  "title": "Return values from functions without side effects should not be ignored",
+  "title": "不应忽略没有副作用的函数的返回值",
   "type": "BUG",
   "status": "ready",
   "remediation": {

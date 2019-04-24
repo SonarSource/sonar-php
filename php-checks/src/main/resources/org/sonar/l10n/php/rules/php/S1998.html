@@ -1,21 +1,18 @@
-<p>Passing a reference to a function parameter means that any modifications the method makes to the parameter will be made to the original value as
-well, since references have the effect of pointing two variables at the same memory space. This feature can be difficult to use correctly,
-particularly if the callee is not expecting a reference, and the improper use of references in function calls can make code less efficient rather than
-more efficient. </p>
-<p>Further, according to the PHP manual: </p>
+<p>传递对函数参数的引用意味着方法对参数所做的任何修改也将对原始值进行修改，因为引用具有将两个变量指向同一内存空间的效果。
+这个特性很难正确地使用，特别是当被调用者不期望引用时，而且函数调用中引用使用不当会降低代码的效率，而不是提高代码的效率。</p>
+<p>此外，根据PHP手册:</p>
 <blockquote>
-  As of PHP 5.3.0, you will get a warning saying that "call-time pass-by-reference" is deprecated... And as of PHP 5.4.0, call-time pass-by-reference
-  was removed, so using it will raise a fatal error.
+  从PHP 5.3.0开始，会收到一个警告，“call-time pass-by-reference”，这是不推荐的……从PHP5.4.0开始，”call-time pass-by-reference“被删除了，因此使用它将引发致命错误。
 </blockquote>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
-myfun(&amp;$name);  // Noncompliant
+myfun(&amp;$name);  // 不合规
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 myfun($name);
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/374">MITRE, CWE-374</a> - Weakness Base Passing Mutable Objects to an Untrusted Method </li>
 </ul>

@@ -1,5 +1,5 @@
 {
-  "title": "Comments should not be located at the end of lines of code",
+  "title": "注释不应位于代码行的末尾",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

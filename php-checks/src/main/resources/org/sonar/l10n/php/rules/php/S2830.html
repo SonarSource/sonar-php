@@ -1,16 +1,15 @@
-<p>Dependency injection is a software design pattern in which one or more dependencies (or services) are injected, or passed by reference, into a
-dependent object (or client) and are made part of the client's state. The pattern separates the creation of a client's dependencies from its own
-behavior, which allows program designs to be loosely coupled and to follow the dependency inversion and single responsibility principles.</p>
-<h2>Noncompliant Code Example</h2>
+<p>依赖注入是一种软件设计模式，在这种模式中，一个或多个依赖项(或服务)被注入或通过引用传递到一个依赖对象(或客户机)中，并成为客户机状态的一部分。
+ 该模式将客户机依赖关系的创建与其自身行为分离开来，从而允许程序设计松散耦合，并遵循依赖关系倒置和单一责任原则。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 class SomeClass {
 
   public function __construct() {
-    $this-&gt;object = new SomeOtherClass();  // Noncompliant
+    $this-&gt;object = new SomeOtherClass();  // 不合规
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 class SomeClass {
 

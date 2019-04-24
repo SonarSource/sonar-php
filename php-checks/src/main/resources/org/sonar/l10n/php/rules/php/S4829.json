@@ -1,5 +1,5 @@
 {
-  "title": "Reading the Standard Input is security-sensitive",
+  "title": "读取标准输入是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "tags": [

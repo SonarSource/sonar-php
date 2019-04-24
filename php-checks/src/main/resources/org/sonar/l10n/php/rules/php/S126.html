@@ -1,9 +1,8 @@
-<p>This rule applies whenever an <code>if</code> statement is followed by one or more <code>else if</code> statements; the final <code>else if</code>
-should be followed by an <code>else</code> statement.</p>
-<p>The requirement for a final <code>else</code> statement is defensive programming.</p>
-<p>The <code>else</code> statement should either take appropriate action or contain a suitable comment as to why no action is taken. This is
-consistent with the requirement to have a final <code>default</code> clause in a <code>switch</code> statement.</p>
-<h2>Noncompliant Code Example</h2>
+<p>只要 <code>if</code> 语句后面跟一个或多个 <code>else if</code> 语句，这条规则就有用；最后的 <code>else if</code>
+后面应该跟一个 <code>else</code> 语句。</p>
+<p>最终要求的 <code>else</code> 语句是防御性编程。</p>
+<p> <code>else</code> 语句应该采取适当的操作，或者包含关于为什么不采取操作的适当注释。这与在<code>switch</code>语句中最后使用<code>default</code>子句的要求是一致的。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if (condition1) {
   do_something();
@@ -11,7 +10,7 @@ if (condition1) {
   do_something_else();
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if (condition1) {
   do_something();
@@ -21,7 +20,7 @@ if (condition1) {
   throw new InvalidArgumentException('message');
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C:2004, 14.10 - All if...else if constructs shall be terminated with an else clause. </li>
   <li> MISRA C++:2008, 6-4-2 - All if...else if constructs shall be terminated with an else clause. </li>
@@ -29,4 +28,3 @@ if (condition1) {
   <li> <a href="https://www.securecoding.cert.org/confluence/x/YgE">CERT, MSC01-C.</a> - Strive for logical completeness </li>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/PQHRAw">CERT, MSC57-J.</a> - Strive for logical completeness </li>
 </ul>
-

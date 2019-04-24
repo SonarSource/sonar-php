@@ -1,5 +1,5 @@
 {
-  "title": "Class constructors should not create other objects",
+  "title": "类构造函数不应该创建其他对象",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

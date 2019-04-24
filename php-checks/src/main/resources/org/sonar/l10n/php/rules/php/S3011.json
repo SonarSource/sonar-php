@@ -1,5 +1,5 @@
 {
-  "title": "Changing or bypassing accessibility is security-sensitive",
+  "title": "更改或绕过可访问性是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {

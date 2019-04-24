@@ -1,5 +1,5 @@
 {
-  "title": "\"sleep\" should not be called",
+  "title": "不应该调用\"sleep\"",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

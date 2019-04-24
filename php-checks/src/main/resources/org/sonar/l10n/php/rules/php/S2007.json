@@ -1,5 +1,5 @@
 {
-  "title": "Functions and variables should not be defined outside of classes",
+  "title": "函数和变量不应在类之外定义",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "Using hardcoded IP addresses is security-sensitive",
+  "title": "使用硬编码的IP地址是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {

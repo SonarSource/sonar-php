@@ -1,5 +1,5 @@
 {
-  "title": "PHP parser failure",
+  "title": "PHP分析程序失败",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

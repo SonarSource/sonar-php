@@ -1,21 +1,19 @@
-<p>Defining and using global variables and global functions, when the convention dictates OOP can be confusing and difficult to use properly for
-multiple reasons:</p>
+<p>定义和使用全局变量和全局函数时，如果该约定指示OOP，则由于多种原因，可能会造成混淆，并且难以正确使用：</p>
 <ul>
-  <li> You run the risk of name clashes. </li>
-  <li> Global functions must be stateless, or they can cause difficult-to-track bugs. </li>
-  <li> Global variables can be updated from anywhere and may no longer hold the value you expect. </li>
-  <li> It is difficult to properly test classes that use global functions. </li>
+  <li>有名字冲突的风险。</li>
+  <li>全局函数必须是无状态的，否则会导致难以跟踪的bug。</li>
+  <li>全局变量可以从任何地方更新，并且可能不再保存您期望的值。</li>
+  <li>正确地测试使用全局函数的类是困难的。</li>
 </ul>
-<p>Instead of being declared globally, such variables and functions should be moved into a class, potentially marked <code>static</code>, so they can
-be used without a class instance. </p>
-<p>This rule checks that only object-oriented programming is used and that no functions or procedures are declared outside of a class.</p>
-<h2>Noncompliant Code Example</h2>
+<p>这些变量和函数不应该被全局声明，而是应该被移动到一个类中，可能标记为 <code>static</code>，这样它们就可以在没有类实例的情况下使用。</p>
+<p>此规则检查是否只使用面向对象的编程，以及是否在类外部声明任何函数或过程。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 &lt;?php
 
-$name = "Bob"; // Noncompliant
+$name = "Bob"; // 不合规
 
-function doSomething($arg) {   // Noncompliant
+function doSomething($arg) {   // 不合规
   //...
 }
 
@@ -23,14 +21,14 @@ class MyClass {
     //...
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 &lt;?php
 class MyClass {
 
-  public static $name = "Bob"; // Compliant
+  public static $name = "Bob"; // 合规
 
-  public static function doSomething($arg) {              // Compliant
+  public static function doSomething($arg) {              // 合规
     //...
   }
   //...

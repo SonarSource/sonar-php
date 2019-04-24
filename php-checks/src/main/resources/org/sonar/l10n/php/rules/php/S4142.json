@@ -1,5 +1,5 @@
 {
-  "title": "Duplicate values should not be passed as arguments",
+  "title": "不应将重复值作为参数传递",
   "type": "CODE_SMELL",
   "status": "deprecated",
   "remediation": {

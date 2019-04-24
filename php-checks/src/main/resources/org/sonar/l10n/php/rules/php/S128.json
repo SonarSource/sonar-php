@@ -1,5 +1,5 @@
 {
-  "title": "Switch cases should end with an unconditional \"break\" statement",
+  "title": "Switch cases 结构应该以无条件的 \"break\" 语句结束",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

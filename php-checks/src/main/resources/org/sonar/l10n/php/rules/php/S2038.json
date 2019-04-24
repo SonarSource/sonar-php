@@ -1,5 +1,5 @@
 {
-  "title": "Colors should be defined in upper case",
+  "title": "颜色应该用大写字母定义",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

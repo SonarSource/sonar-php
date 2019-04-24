@@ -1,5 +1,5 @@
 {
-  "title": "Useless \"if(true) {...}\" and \"if(false){...}\" blocks should be removed",
+  "title": " 没有的\"if(true) {...}\" and \"if(false){...}\"语块应该被删除",
   "type": "BUG",
   "status": "ready",
   "remediation": {

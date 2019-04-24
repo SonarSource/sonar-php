@@ -1,5 +1,5 @@
 {
-  "title": "\"elseif\" keyword should be used in place of \"else if\" keywords",
+  "title": "应该使用\"elseif\"关键词来代替\"else if\"关键词",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

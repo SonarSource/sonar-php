@@ -1,5 +1,5 @@
 {
-  "title": "\"session.use_trans_sid\" should not be enabled",
+  "title": "不应启用\"session.use_trans_sid\"",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

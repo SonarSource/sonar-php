@@ -1,57 +1,44 @@
-<p>Configuring loggers is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>配置记录器是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-0285">CVE-2018-0285</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2000-1127">CVE-2000-1127</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15113">CVE-2017-15113</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-5742">CVE-2015-5742</a> </li>
 </ul>
-<p>Logs are useful before, during and after a security incident.</p>
+<p>日志在安全事件之前、期间和之后都很有用。</p>
 <ul>
-  <li> Attackers will most of the time start their nefarious work by probing the system for vulnerabilities. Monitoring this activity and stopping it
-  is the first step to prevent an attack from ever happening. </li>
-  <li> In case of a successful attack, logs should contain enough information to understand what damage an attacker may have inflicted. </li>
+  <li> 大多数时候，攻击者会通过探测系统的漏洞来开始他们邪恶的工作。监视此活动并阻止它是防止攻击发生的第一步。</li>
+  <li> 如果攻击成功，日志应该包含足够的信息来理解攻击者可能造成的破坏。</li>
 </ul>
-<p>Logs are also a target for attackers because they might contain sensitive information. Configuring loggers has an impact on the type of information
-logged and how they are logged.</p>
-<p>This rule flags for review code that initiates loggers configuration. The goal is to guide security code reviews.</p>
-<h2>Ask Yourself Whether</h2>
+<p>日志也是攻击者的目标，因为它们可能包含敏感信息。配置记录器对记录的信息类型和记录方式有影响。</p>
+<p>此规则标记用于初始化日志记录器配置的评审代码。目标是指导安全代码审查。</p>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> unauthorized users might have access to the logs, either because they are stored in an insecure location or because the application gives
-  access to them. </li>
-  <li> the logs contain sensitive information on a production server. This can happen when the logger is in debug mode. </li>
-  <li> the log can grow without limit. This can happen when additional information is written into logs every time a user performs an action and the
-  user can perform the action as many times as he/she wants. </li>
-  <li> the logs do not contain enough information to understand the damage an attacker might have inflicted. The loggers mode (info, warn, error)
-  might filter out important information. They might not print contextual information like the precise time of events or the server hostname. </li>
-  <li> the logs are only stored locally instead of being backuped or replicated. </li>
+  <li> 未经授权的用户可以访问日志，这可能是因为日志存储在不安全的位置，也可能是因为应用程序允许访问日志。</li>
+  <li> 日志包含生产服务器上的敏感信息。这可能发生在日志程序处于调试模式时。</li>
+  <li> 日志可以无限制增长。当用户每次执行一个操作时都将附加信息写入日志中，并且用户可以任意多次执行该操作时，就会发生这种情况。</li>
+  <li> 日志中没有包含足够的信息来理解攻击者可能造成的破坏。日志记录器模式(info、warn、error)可能会过滤掉重要信息。它们可能不会打印上下文信息，如事件的精确时间或服务器主机名。</li>
+  <li> 日志只存储在本地，而不是备份或复制。</li>
 </ul>
-<p>You are at risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
 <ul>
-  <li> Check that your production deployment doesn't have its loggers in "debug" mode as it might write sensitive information in logs. </li>
-  <li> Production logs should be stored in a secure location which is only accessible to system administrators. </li>
-  <li> Configure the loggers to display all warnings, info and error messages. Write relevant information such as the precise time of events and the
-  hostname. </li>
-  <li> Choose log format which is easy to parse and process automatically. It is important to process logs rapidly in case of an attack so that the
-  impact is known and limited. </li>
-  <li> Check that the permissions of the log files are correct. If you index the logs in some other service, make sure that the transfer and the
-  service are secure too. </li>
-  <li> Add limits to the size of the logs and make sure that no user can fill the disk with logs. This can happen even when the user does not control
-  the logged information. An attacker could just repeat a logged action many times. </li>
+  <li> 检查生产部署是否处于“调试”模式，因为它可能在日志中写入敏感信息。</li>
+  <li> 生产日志应该存储在只有系统管理员才能访问的安全位置。</li>
+  <li> 配置日志记录器以显示所有警告、信息和错误消息。编写相关信息，例如事件的准确时间和主机名。</li>
+  <li> 选择易于自动解析和处理的日志格式。在发生攻击时，快速处理日志非常重要，这样才能知道和限制影响。</li>
+  <li> 检查日志文件的权限是否正确。如果在其他服务中索引日志，请确保传输和服务也是安全的。</li>
+  <li> 添加日志大小的限制，并确保没有用户可以用日志填充磁盘。即使用户不控制所记录的信息，也会发生这种情况。攻击者可以多次重复已记录的操作。</li>
 </ul>
-<p>Remember that configuring loggers properly doesn't make them bullet-proof. Here is a list of recommendations explaining on how to use your
-logs:</p>
+<p>请记住，正确配置日志记录器并不能使它们防攻击。以下是一些关于如何使用日志的建议：</p>
 <ul>
-  <li> Don't log any sensitive information. This obviously includes passwords and credit card numbers but also any personal information such as user
-  names, locations, etc... Usually any information which is protected by law is good candidate for removal. </li>
-  <li> Sanitize all user inputs before writing them in the logs. This includes checking its size, content, encoding, syntax, etc... As for any user
-  input, validate using whitelists whenever possible. Enabling users to write what they want in your logs can have many impacts. It could for example
-  use all your storage space or compromise your log indexing service. </li>
-  <li> Log enough information to monitor suspicious activities and evaluate the impact an attacker might have on your systems. Register events such as
-  failed logins, successful logins, server side input validation failures, access denials and any important transaction. </li>
-  <li> Monitor the logs for any suspicious activity. </li>
+  <li> 不要记录任何敏感信息。这显然包括密码和信用卡号码，但也包括任何个人信息，如用户名、位置等。通常，任何受法律保护的信息都有可能被删除。</li>
+  <li> 在将所有用户输入写入日志之前对其进行净化。这包括检查它的大小、内容、编码、语法等等。对于任何用户输入，尽可能使用白名单进行验证。允许用户在日志中编写他们想要的内容可能会产生很多影响。
+  例如，它可以使用您所有的存储空间，或者破坏您的日志索引服务。</li>
+  <li> 记录足够的信息来监视可疑的活动，并评估攻击者可能对您的系统造成的影响。注册事件，如登录失败、登录成功、服务器端输入验证失败、访问拒绝和任何重要事务。</li>
+  <li> 监视日志中的任何可疑活动。</li>
 </ul>
-<p>See</p>
+<p>请参阅</p>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/532.html">MITRE, CWE-532</a> - Information Exposure Through Log Files </li>
   <li> <a href="https://cwe.mitre.org/data/definitions/117.html">MITRE, CWE-117</a> - Improper Output Neutralization for Logs </li>
@@ -60,56 +47,55 @@ logs:</p>
   <li> OWASP Top 10 2017 Category A10 - Insufficient Logging &amp; Monitoring </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
 </ul>
-<h2>Questionable Code Example</h2>
-<p>Basic PHP configuration:</p>
+<h2>可疑的代码示例</h2>
+<p>基本的PHP配置：</p>
 <pre>
 function configure_logging() {
-  error_reporting(E_RECOVERABLE_ERROR); // Questionable
-  error_reporting(32); // Questionable
+  error_reporting(E_RECOVERABLE_ERROR); // 可疑的
+  error_reporting(32); // 可疑的
 
-  ini_set('docref_root', '1'); // Questionable
-  ini_set('display_errors', '1'); // Questionable
-  ini_set('display_startup_errors', '1'); // Questionable
-  ini_set('error_log', "path/to/logfile"); // Questionable - check logfile is secure
-  ini_set('error_reporting', E_PARSE ); // Questionable
-  ini_set('error_reporting', 64); // Questionable
-  ini_set('log_errors', '0'); // Questionable
-  ini_set('log_errors_max_length', '512'); // Questionable
-  ini_set('ignore_repeated_errors', '1'); // Questionable
-  ini_set('ignore_repeated_source', '1'); // Questionable
-  ini_set('track_errors', '0'); // Questionable
+  ini_set('docref_root', '1'); // 可疑的
+  ini_set('display_errors', '1'); // 可疑的
+  ini_set('display_startup_errors', '1'); // 可疑的
+  ini_set('error_log', "path/to/logfile"); // 可疑的 - 检查日志文件是否安全
+  ini_set('error_reporting', E_PARSE ); // 可疑的
+  ini_set('error_reporting', 64); // 可疑的
+  ini_set('log_errors', '0'); // 可疑的
+  ini_set('log_errors_max_length', '512'); // 可疑的
+  ini_set('ignore_repeated_errors', '1'); // 可疑的
+  ini_set('ignore_repeated_source', '1'); // 可疑的
+  ini_set('track_errors', '0'); // 可疑的
 
-  ini_alter('docref_root', '1'); // Questionable
-  ini_alter('display_errors', '1'); // Questionable
-  ini_alter('display_startup_errors', '1'); // Questionable
-  ini_alter('error_log', "path/to/logfile"); // Questionable - check logfile is secure
-  ini_alter('error_reporting', E_PARSE ); // Questionable
-  ini_alter('error_reporting', 64); // Questionable
-  ini_alter('log_errors', '0'); // Questionable
-  ini_alter('log_errors_max_length', '512'); // Questionable
-  ini_alter('ignore_repeated_errors', '1'); // Questionable
-  ini_alter('ignore_repeated_source', '1'); // Questionable
-  ini_alter('track_errors', '0'); // Questionable
+  ini_alter('docref_root', '1'); // 可疑的
+  ini_alter('display_errors', '1'); // 可疑的
+  ini_alter('display_startup_errors', '1'); // 可疑的
+  ini_alter('error_log', "path/to/logfile"); // 可疑的 - 检查日志文件是否安全
+  ini_alter('error_reporting', E_PARSE ); // 可疑的
+  ini_alter('error_reporting', 64); // 可疑的
+  ini_alter('log_errors', '0'); // 可疑的
+  ini_alter('log_errors_max_length', '512'); // 可疑的
+  ini_alter('ignore_repeated_errors', '1'); // 可疑的
+  ini_alter('ignore_repeated_source', '1'); // 可疑的
+  ini_alter('track_errors', '0'); // 可疑的
 }
 </pre>
-<p>Definition of custom loggers with <code>psr/log</code></p>
+<p>使用<code>psr/log</code>定义自定义日志记录器</p>
 <pre>
-abstract class MyLogger implements \Psr\Log\LoggerInterface { // Questionable
-    // ...
+abstract class MyLogger implements \Psr\Log\LoggerInterface { // 可疑的
+    // ......
 }
 
-abstract class MyLogger2 extends \Psr\Log\AbstractLogger { // Questionable
-    // ...
+abstract class MyLogger2 extends \Psr\Log\AbstractLogger { // 可疑的
+    // ......
 }
 
 abstract class MyLogger3 {
-    use \Psr\Log\LoggerTrait; // Questionable
-    // ...
+    use \Psr\Log\LoggerTrait; // 可疑的
+    // ......
 }
 </pre>
-<h2>Exceptions</h2>
-<p>No issue will be raised for logger configuration when it follows <a href="https://www.loggly.com/ultimate-guide/php-logging-basics/">recommended
-settings</a> for production servers. The following examples are all valid:</p>
+<h2>例外</h2>
+<p>当日志配置遵循生产服务器的 <a href="https://www.loggly.com/ultimate-guide/php-logging-basics/">建议设置</a> 时，不会引发任何问题。以下示例均有效：</p>
 <pre>
   ini_set('docref_root', '0');
   ini_set('display_errors', '0');

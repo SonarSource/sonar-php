@@ -1,5 +1,5 @@
 {
-  "title": "Cryptographic RSA algorithms should always incorporate OAEP (Optimal Asymmetric Encryption Padding)",
+  "title": "加密RSA算法应该始终结合OAEP(最优非对称加密填充)",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "Track uses of \"TODO\" tags",
+  "title": "追踪\"TODO\"标签的使用",
   "type": "CODE_SMELL",
   "status": "ready",
   "tags": [

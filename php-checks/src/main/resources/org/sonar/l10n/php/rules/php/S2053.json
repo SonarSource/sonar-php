@@ -1,5 +1,5 @@
 {
-  "title": "Hashes should include an unpredictable salt",
+  "title": "哈希应该包括一种不可预测的salt",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

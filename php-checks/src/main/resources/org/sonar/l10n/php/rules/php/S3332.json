@@ -1,5 +1,5 @@
 {
-  "title": "Session-management cookies should not be persistent",
+  "title": "会话管理cookie不应该是持久性的",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {
@@ -7,6 +7,7 @@
     "constantCost": "5min"
   },
   "tags": [
+  
     "owasp-a7",
     "php-ini"
   ],

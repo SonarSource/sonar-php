@@ -1,5 +1,5 @@
 {
-  "title": "Identical expressions should not be used on both sides of a binary operator",
+  "title": "不应该在二进制运算符的两边使用相同的表达式",
   "type": "BUG",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "\"final\" should not be used redundantly",
+  "title": "\"final\" 不能重复使用",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

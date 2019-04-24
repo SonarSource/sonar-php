@@ -1,21 +1,20 @@
-<p>The use of operators pairs ( <code>=+</code>, <code>=-</code> or <code>=!</code> ) where the reversed, single operator was meant (<code>+=</code>,
-<code>-=</code> or <code>!=</code>) will compile and run, but not produce the expected results.</p>
-<p>This rule raises an issue when <code>=+</code>, <code>=-</code>, or <code>=!</code> is used without any spacing between the two operators and when
-there is at least one whitespace character after.</p>
-<h2>Noncompliant Code Example</h2>
+<p>使用运算符对( <code>=+</code>，<code>=-</code> 或者 <code>=!</code> )进行反向运算时，单个运算符意味着(<code>+=</code>，
+<code>-=</code> 或者 <code>!=</code>) 将编译并运行，但不会产生预期的结果。</p>
+<p>当使用 <code>=+</code>，<code>=-</code> 或者 <code>=!</code> 时，这两个操作符之间没有任何间距，并且后面至少有一个空格字符时，这条规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 $target = -5;
 $num = 3;
 
-$target =- $num;  // Noncompliant; target = -3. Is that really what's meant?
-$target =+ $num; // Noncompliant; target = 3
+$target =- $num;  // 不合规；target = -3。这是什么意思？
+$target =+ $num; // 不合规；target = 3
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $target = -5;
 $num = 3;
 
-$target = -$num;  // Compliant; intent to assign inverse value of num is clear
+$target = -$num;  // 合规；分配num逆值的意图很明显
 $target += $num;
 </pre>
 

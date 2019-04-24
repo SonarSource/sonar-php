@@ -1,43 +1,39 @@
-<p>Executing code dynamically is security sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>动态执行代码是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-9807">CVE-2017-9807</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-9802">CVE-2017-9802</a> </li>
 </ul>
-<p>Any code which is dynamically evaluated in your process will have the same permissions as the rest of your code. Thus it is very dangerous to do so
-with code coming from an untrusted source. <a href="https://www.owasp.org/index.php/Code_Injection">Injected Code</a> can either run on the server or
-in the client (exemple: XSS attack).</p>
-<p>The <code>eval</code> function is a way to run arbitrary code at run-time. </p>
-<p>According to the PHP documentation</p>
+<p>在流程中动态评估的任何代码都将具有与其他代码相同的权限。因此，对于来自不可信源的代码这样做是非常危险的。 
+<a href="https://www.owasp.org/index.php/Code_Injection">Injected Code</a> 不是在服务器上运行，就是在客户机上运行 (例如：XSS攻击)。</p>
+<p><code>eval</code> 函数是在运行时运行任意代码的一种方法。</p>
+<p>根据PHP文档</p>
 <blockquote>
-  <p>The eval() language construct is very dangerous because it allows execution of arbitrary PHP code. Its use thus is discouraged. If you have
-  carefully verified that there is no other option than to use this construct, pay special attention not to pass any user provided data into it
-  without properly validating it beforehand.</p>
+  <p>eval()语言结构是非常危险的，因为它允许执行任意的PHP代码。因此不鼓励使用。 
+  如果仔细地验证了除了使用这个构造之外没有其他选择，那么要特别注意，在没有事先正确验证数据之前，不要将任何用户提供的数据传递给它。</p>
 </blockquote>
-<p>This rule marks for review each occurence of dynamic code execution.</p>
-<h2>Ask Yourself Whether</h2>
+<p>此规则标记用于检查每次出现的动态代码执行。</p>
+<h2>问问自己可能的选择</h2>
 <ul>
-  <li> the executed code may come from a untrusted source and hasn't been sanitized. </li>
-  <li> the code to run is dynamically chosen via reflection, and an untrusted source can use it to choose which code to run. For example a class could
-  be retrieved by its name and this name comes from a user input. </li>
+  <li>执行的代码可能来自不受信任的源，并且没有经过清理。</li>
+  <li>要运行的代码是通过反射动态选择的，不受信任的源代码可以使用它来选择要运行的代码。例如，可以通过类的名称检索类，而这个名称来自用户输入。</li>
 </ul>
-<p>You are at risk if you answered yes to any of these questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>Regarding the execution of unknown code, the best solution is to not run code provided by an untrusted source. If you really need to do it, run the
-code in a <a href="https://en.wikipedia.org/wiki/Sandbox_(computer_security)">sandboxed</a> environment. Use jails, firewalls and whatever means your
-operating system and programming language provide (example: <a
-href="https://wiki.sei.cmu.edu/confluence/display/java/SEC54-J.+Create+a+secure+sandbox+using+a+security+manager">Security Managers</a> in java, <a
-href="https://www.w3schools.com/tags/att_iframe_sandbox.asp">iframes</a> and <a href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin
-policy</a> for javascript in a web browser).</p>
-<p>Do not try to create a blacklist of dangerous code. It is impossible to cover all attacks that way.</p>
-<p>As for the use of reflection, it should be strictly controlled as it can lead to many vulnerabilities. Never let an untrusted source decide what
-code to run. If you have to do it anyway, create a list of allowed code and choose among this list.</p>
-<h2>Noncompliant Code Example</h2>
+<p>如果对这些问题中的任何一个回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
+<p>关于未知代码的执行，最好的解决方案是不运行由不可信源提供的代码。如果你真的运行这些代码，请在 <a href="https://en.wikipedia.org/wiki/Sandbox_(computer_security)">sandboxed</a> 环境中运行它。
+ 使用jails虚拟机、防火墙以及操作系统和编程语言提供的任何方法(例如： <a
+href="https://wiki.sei.cmu.edu/confluence/display/java/SEC54-J.+Create+a+secure+sandbox+using+a+security+manager">Security Managers</a> 用java， <a
+href="https://www.w3schools.com/tags/att_iframe_sandbox.asp">iframes</a> 和 <a href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin
+policy</a> 在web浏览器里用javascript)。</p>
+<p>不要试图创建危险代码的黑名单。以这种方式覆盖所有攻击是不可能的</p>
+<p>对于反射的使用，应该严格控制它，因为它会导致许多漏洞。永远不要让不可信的源决定运行什么代码。
+如果无论如何都必须这样做，创建一个允许代码列表，并在这个列表中进行选择。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 eval($code_to_be_dynamically_executed)
 </pre>
-<h2>Exceptions</h2>
-<p>Calling reflection methods with a hard-coded type name, method name or field name will not raise an issue.</p>
-<h2>See</h2>
+<h2>例外</h2>
+<p>使用硬编码的类型名、方法名或字段名调用反射方法不会引发问题。</p>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/95.html">MITRE CWE-95</a> - Improper Neutralization of Directives in Dynamically Evaluated Code
   ('Eval Injection') </li>

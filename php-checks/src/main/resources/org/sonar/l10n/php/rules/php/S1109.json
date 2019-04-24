@@ -1,5 +1,5 @@
 {
-  "title": "A close curly brace should be located at the beginning of a line",
+  "title": "右大括号应该位于一行的开头",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

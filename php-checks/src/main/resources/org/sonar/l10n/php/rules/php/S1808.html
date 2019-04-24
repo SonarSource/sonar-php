@@ -1,167 +1,161 @@
-<p>Shared coding conventions make it possible for a team to collaborate efficiently. This rule raises issues for failures to comply with formatting
-standard. The default parameter values conform to the PSR2 standard.</p>
-<h2>Noncompliant Code Example</h2>
-<p>With the default PSR2 parameter values:</p>
+<p>共享的编码约定使团队高效协作成为可能。这条规则会导致不符合格式标准的问题。默认参数值符合PSR2标准。</p>
+<h2>不合规的代码示例</h2>
+<p>使用默认PSR2参数值：</p>
 <pre>
-use FooClass;              // Noncompliant; the "use" declaration should be placed after the "namespace" declaration
+use FooClass;              // 不合规；“use”声明应该放在“namespace”声明之后
 
 namespace Vendor\Package;
-use FooClass;              // Noncompliant; the "namespace" declaration should be followed by a blank line
-$foo = 1;                  // Noncompliant; the "use" declaration should be followed by a blank line
+use FooClass;              // 不合规；"namespace"声明后面应该有一行空白
+$foo = 1;                  // 不合规；"use"声明后面应该有一行空白
 
-class ClassA {             // Noncompliant; an open curly brace should be at the beginning of a new line for classes and functions
-  function my_function(){  // Noncompliant; curly brace on wrong line
-    if ($firstThing)       // Noncompliant; an open curly brace should be at the end of line for a control structure
+class ClassA {             // 不合规；一个左花括号应该在类和函数的新行开头
+  function my_function(){  // 不合规；花括号在错误的行上
+    if ($firstThing)       // 不合规；控件结构的行尾应该有一个左花括号
     {
       ...
     }
 
-    if ($secondThing)    { // Noncompliant; there should be exactly one space between the closing parenthesis and the opening curly brace
+    if ($secondThing)    { // 不合规；右括号和左花括号之间应该正好有一个空格
       ...
     }
 
-    if($thirdThing) {      // Noncompliant; there should be exactly one space between the control structure keyword and the opening parenthesis
+    if($thirdThing) {      // 不合规；控件结构关键字和左括号之间应该只有一个空格
       ...
     }
-    else {                 // Noncompliant; the close curly brace and the next "else" (or "catch" or "finally") keyword should be located on the same line
+    else {                 // 不合规；右花括号和下一个 "else" (或者"catch" 或者 "finally")关键字应该位于同一行
       ...
     }
 
-    try{                   // Noncompliant; there should be exactly one space between the control structure keyword and the curly brace
+    try{                   // 不合规；控件结构关键字和花括号之间应该只有一个空格
       ...
     } catch (Exception $e) {
     }
 
-    analyse( $fruit ) ;    // Noncompliant; there should not be any space after the opening parenthesis and before the closing parenthesis
+    analyse( $fruit ) ;    // 不合规；左括号后和右括号前不应有任何空格
 
-    for ($i = 0;$i &lt; 10;   $i++) { // Nomcompliant; there should be exactly one space after each ";" in the {{for}} statement
+    for ($i = 0;$i &lt; 10;   $i++) { // 不合规；在{{for}}语句中，每个“;”后面应该有一个空格
       ...
     }
 
-    pressJuice($apply ,$orange);    // Noncompliant; the comma should be followed by one space and not preceded by any
+    pressJuice($apply ,$orange);    // 不合规；逗号后面应该有一个空格，前面不应该有任何空格
 
-    do_something ();       // Noncompliant; there should not be any space after the method name
+    do_something ();       // 不合规；方法名称后面不应该有任何空格
 
-    foreach ($fruits    as $fruit_key =&gt;     $fruit) {  // Noncompliant; in the foreach statement there should be one space before and after "as" keyword and "=&gt;" operator
+    foreach ($fruits    as $fruit_key =&gt;     $fruit) {  // 不合规；在foreach语句中，在"as" 关键词 和 "=&gt;" 操作符的前面和后面应该有一个空格
       ...
     }
   }
 }
 
 class ClassB
-extends ParentClass  // Noncompliant; the class name and the "extends" / "implements" keyword should be on the same line
+extends ParentClass  // 不合规；类名和"extends" / "implements" 关键字应该在同一行上
 {
   ...
 }
 
 class ClassC extends ParentClass implements \ArrayAccess, \Countable,
-    \Serializable    // Noncompliant; the list of implemented interfaces should be correctly indented
+    \Serializable    // 不合规；已实现接口的列表应该正确缩进
 {
 
-  public function aVeryLongMethodName(ClassTypeHint $arg1, // Noncompliant; the arguments in a method declaration should be correctly indented
+  public function aVeryLongMethodName(ClassTypeHint $arg1, // 不合规；方法声明中的参数应该正确缩进
     &amp;$arg2, array $arg3 = []) {
 
-    $noArgs_longVars = function () use ($longVar1,         // Noncompliant; the arguments in a function declaration should be correctly indented
+    $noArgs_longVars = function () use ($longVar1,         // 不合规；函数声明中的参数应该正确缩进
         $longerVar2,
         $muchLongerVar3
     ) {
       ...
     };
 
-    $foo-&gt;bar($longArgument,    // Noncompliant; the arguments in a method call should be correctly indented
+    $foo-&gt;bar($longArgument,    // 不合规；方法调用中的参数应该正确缩进
       $longerArgument,
-      $muchLongerArgument);     // Noncompliant; the closing parenthesis should be placed on the next line
+      $muchLongerArgument);     // 不合规；右括号应该放在下一行
 
-    $closureWithArgsAndVars = function($arg1, $arg2)use   ($var1, $var2) {  // Noncompliant; the closure declaration should be correctly spaced - see (5)
+    $closureWithArgsAndVars = function($arg1, $arg2)use   ($var1, $var2) {  // 不合规；闭包声明应该正确间隔 -- 请参考(5)
       ...
     };
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
-namespace Vendor\Package; // Compliant; the "namespace" declaration is followed by a blank line
+namespace Vendor\Package; // 合规；"namespace" 声明后面有一行空白
 
-use FooClass;             // Compliant; the "use" declaration is placed after the "namespace" declaration
-                          // Compliant; the "use" declaration is followed by a blank line
+use FooClass;             // 合规；“use”声明位于“namespace”声明之后
+                          // 合规；“use”声明后面有一行空白
 $foo = 1;
 
 class ClassA
-{                         // Compliant; the open curly brace is at the beginning of a new line for the class
+{                         // 合规；左花括号位于类的新行开头
   function my_function()
-  {                       // Compliant; the open curly brace is at the beginning of a new line for the function
-    if ($firstThing) {    // Compliant; the open curly brace is at the end of line for the control structure
+  {                       // 合规；左花括号位于函数的新行开头
+    if ($firstThing) {    // 合规；左花括号位于控件结构的行尾
       ...
     }
 
-    if ($secondThing) {   // Compliant; there is exactly one space between the closing parenthesis and the opening curly brace
+    if ($secondThing) {   // 合规；右括号和左花括号之间只有一个空格
       ...
     }
 
-    if ($thirdThing) {    // Compliant; there is exactly one space between the control structure keyword and the opening parenthesis
+    if ($thirdThing) {    // 合规；控件结构关键字和左括号之间只有一个空格
       ...
-    } else {              // Compliant; the close curly brace and the next "else" (or "catch" or "finally") keyword are located on the same line
+    } else {              // 合规；右花括号和下一个 "else" (或 "catch" 或 "finally")关键字位于同一行
       ...
     }
 
-    try {                 // Compliant; there is exactly one space between the control structure keyword and the curly brace
+    try {                 // 合规；控件结构关键字和花括号之间只有一个空格
       ...
     } catch (Exception $e) {
       ...
     }
 
-    analyse($fruit);      // Compliant: there is no space after the opening parenthesis, nor before the closing parenthesis
+    analyse($fruit);      // 合规；在左括号之后和右括号之前都没有空格
 
-    for ($i = 0; $i &lt; 10; $i++) { // Compliant: there is exactly one space after each ";" in the {{for}} statement
+    for ($i = 0; $i &lt; 10; $i++) { // 合规；在{{for}}语句中，每个“;”后面都有一个空格
       ...
     }
 
-    pressJuice($apply, $orange);   // Compliant; the comma is followed by one space and is not preceded by any
+    pressJuice($apply, $orange);   // 合规；逗号后面有一个空格，前面没有空格
 
-    do_something();       // Compliant; there is no space after the method name
+    do_something();       // 合规；方法名称后面没有空格
 
-    foreach ($fruits as $fruit_key =&gt; $fruit) {  // Compliant; in the foreach statement there is one space before and after "as" keyword and "=&gt;" operator
+    foreach ($fruits as $fruit_key =&gt; $fruit) {  // 合规；在foreach语句中， "as" 关键字和 "=&gt;" 运算符前后各有一个空格
       ...
     }
   }
 }
 
-/* The idea here is to make it obvious at first glance that a class extends
- * some other classes and/or implements some interfaces. The names of
- * extended classes or implemented interfaces can be located on subsequent lines.
+/* 这里的想法是，乍一看，类扩展了一些其他类和\或实现了一些接口，
+ *扩展类或已实现接口的名称可以位于后续行中。
  */
-class ClassB1 extends ParentClass // Compliant; the class name and the "extends" (or "implements") keyword are located on the same line
+class ClassB1 extends ParentClass // 合规；类名和"extends" (或 "implements") 关键字位于同一行
 {
   ...
 }
 
-class ClassB2 extends             // Compliant; the class name and the "extends" (or "implements") keyword are located on the same line
+class ClassB2 extends             // 合规；类名和"extends" (或 "implements") 关键字位于同一行
 ParentClass {
   ...
 }
 
-/* Lists of implements may be split across multiple lines, where each subsequent line
- * is indented once. When doing so, the first item in the list should be on the next line,
- * and there should be only one interface per line.
+/*实现列表可以分割为多行，其中后续的每一行都缩进一次。这样做时，列表中的第一项应该在下一行，每行应该只有一个接口。
  */
 class ClassC extends ParentClass implements
-    \ArrayAccess,         // Compliant; the list of implemented interfaces is correctly indented
+    \ArrayAccess,         // 合规；已实现接口的列表正确缩进
     \Countable,
     \Serializable
 {
-  /* Argument lists may be split across multiple lines, where each subsequent line
-   * is indented once. When doing so, the first item in the list should be on the next line,
-   * and there should be only one argument per line. Also, when the argument list is
-   * split across multiple lines, the closing parenthesis and opening brace should be
-   * placed together on their own line with one space between them.
+  /* 参数列表可以拆分为多行，其中后续的每行缩进一次。
+   * 这样做时，列表中的第一项应该在下一行，每行应该只有一个参数。
+   * 此外，当参数列表被分割成多行时，右括号和左花括号应该放在它们自己的行上，它们之间有一个空格。
    */
   public function aVeryLongMethodName(
-    ClassTypeHint $arg1,  // Compliant; the arguments in a method/function declaration are correctly indented
+    ClassTypeHint $arg1,  // 合规；方法/函数声明中的参数正确缩进
       &amp;$arg2,
       array $arg3 = []
     ) {
       $noArgs_longVars = function () use (
-        $longVar1,        // Compliant; the arguments in a method/function declaration are correctly indented
+        $longVar1,        // 合规；方法/函数声明中的参数正确缩进 
         $longerVar2,
         $muchLongerVar3
       ) {
@@ -169,20 +163,18 @@ class ClassC extends ParentClass implements
       };
 
 
-    /* Argument lists may be split across multiple lines, where each subsequent line is
-     * indented once. When doing so, the first item in the list should be on the next line,
-     * and there should be only one argument per line.
+    /* 参数列表可以拆分为多行，其中后续的每行缩进一次。
+     * 这样做时，列表中的第一项应该在下一行，每行应该只有一个参数。
      */
     $foo-&gt;bar(
-      $longArgument,       // Compliant; the arguments in the method call are be correctly indented
+      $longArgument,       // 合规；方法调用中的参数是正确缩进的
       $longerArgument,
       $muchLongerArgument
-    );                     // Compliant; the closing parenthesis is placed on a separate line
+    );                     // 合规；右括号放在单独的一行上
 
-    /* Closures should be declared with a space after the "function" keyword,
-     * and a space before and after the "use" keyword.
+    /* 闭包的声明应该在“function”关键字后面加上空格，在“use”关键字前后加上空格。
      */
-    $closureWithArgsAndVars = function ($arg1, $arg2) use ($var1, $var2) { // Compliant; the closure declaration is correctly spaced
+    $closureWithArgsAndVars = function ($arg1, $arg2) use ($var1, $var2) { //合规；闭包声明的间距正确
       ...
     };
   }

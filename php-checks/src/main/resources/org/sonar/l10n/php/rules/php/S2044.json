@@ -1,5 +1,5 @@
 {
-  "title": "\"php_sapi_name()\" should not be used",
+  "title": "不应该使用\"php_sapi_name()\"",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "Use of namespaces should be preferred to \"include\" or \"require\" functions",
+  "title": "应该优先使用名称空间，而不是\"include\"或\"require\" 函数",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

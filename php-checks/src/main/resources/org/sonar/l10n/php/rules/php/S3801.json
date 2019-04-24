@@ -1,5 +1,5 @@
 {
-  "title": "Functions should use \"return\" consistently",
+  "title": "函数应该始终使用\"return\"",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

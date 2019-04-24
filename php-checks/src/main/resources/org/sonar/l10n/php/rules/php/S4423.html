@@ -1,15 +1,15 @@
-<p>Not all SSL protocols are created equal and some legacy ones like "SSL", have been proven to be insecure.</p>
-<p>This rule raises an issue when an SSL context is created with an insecure protocol (ie: a protocol different from "TLSv1.2" or "DTLSv1.2").</p>
-<h2>Noncompliant Code Example</h2>
+<p>并不是所有的SSL协议都是平等创建的，一些像“SSL”这样的遗留协议已经被证明是不安全的。</p>
+<p>当使用不安全协议(即不同于“TLSv1.2”或“DTLSv1.2”的协议)创建SSL上下文时，此规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 $ctx = stream_context_create([
   'ssl' =&gt; [
     'crypto_method' =&gt;
-      STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT // Noncompliant
+      STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT // 不合规
   ],
 ]);
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $ctx = stream_context_create([
     'ssl' =&gt; [
@@ -17,7 +17,7 @@ $ctx = stream_context_create([
     ],
 ]);
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/326.html">MITRE, CWE-327</a> - Inadequate Encryption Strength </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-326</a> - Use of a Broken or Risky Cryptographic Algorithm </li>

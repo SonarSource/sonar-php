@@ -1,5 +1,5 @@
 {
-  "title": "Short-circuit logic should be used to prevent null pointer dereferences in conditionals",
+  "title": "应该使用短路逻辑来防止条件语句中的空指针取消引用",
   "type": "BUG",
   "status": "ready",
   "remediation": {

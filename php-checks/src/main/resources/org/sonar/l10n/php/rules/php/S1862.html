@@ -1,18 +1,14 @@
-<p>A <code>switch</code> and a chain of <code>if</code>/<code>else if</code> statements is evaluated from top to bottom. At most, only one branch will
-be executed: the first one with a condition that evaluates to <code>true</code>.</p>
-<p>Therefore, duplicating a condition automatically leads to dead code. Usually, this is due to a copy/paste error. At best, it's simply dead code and
-at worst, it's a bug that is likely to induce further bugs as the code is maintained, and obviously it could lead to unexpected behavior.</p>
-<p>For a <code>switch</code>, if the first case ends with a <code>break</code>, the second case will never be executed, rendering it dead code. Worse
-there is the risk in this situation that future maintenance will be done on the dead case, rather than on the one that's actually used.</p>
-<p>On the other hand, if the first case does not end with a <code>break</code>, both cases will be executed, but future maintainers may not notice
-that.</p>
-<h2>Noncompliant Code Example</h2>
+<p>一个<code>switch</code> 和一系列的<code>if</code>/<code>else if</code> 语句是从上到下计算的。最多只执行一个分支时:第一个分支的计算条件为 <code>true</code>。</p>
+<p>因此，复制一个条件会自动导致死码。通常，这是由于复制/粘贴错误。在最好的情况下，它只是死码，在最坏的情况下，它是一个bug，随着代码的维护，它可能会引发更多的bug，并且很明显，它可能会导致意想不到的行为。</p>
+<p>对于<code>switch</code>，如果第一种情况以 <code>break</code>结束，那么第二种情况将永远不会执行，从而导致死码。 更糟的是，在这种情况下，未来的维护工作可能会在死码上进行，而不是在实际使用的代码上。</p>
+<p>另一方面，如果第一种情况没有以<code>break</code>结束，这两种情况都将被执行，但是未来的维护者可能不会注意到这一点。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if ($param == 1)
   openWindow();
 else if ($param == 2)
   closeWindow();
-else if ($param == 1)  // Noncompliant
+else if ($param == 1)  // 不合规
   moveWindowToTheBackground();
 
 
@@ -23,7 +19,7 @@ switch($i) {
   case 3:
     //...
     break;
-  case 1:  // Noncompliant
+  case 1:  // 不合规
     //...
     break;
   default:
@@ -31,7 +27,7 @@ switch($i) {
     break;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if ($param == 1)
   openWindow();
@@ -52,7 +48,7 @@ switch($i) {
     break;
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/NYA5">CERT, MSC12-C.</a> - Detect and remove code that has no effect or is never
   executed </li>

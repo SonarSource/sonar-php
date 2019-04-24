@@ -1,20 +1,19 @@
-<p>Shared naming conventions allow teams to collaborate effectively. This rule raises an issue when an open curly brace is not placed at the end of a
-line of code.</p>
-<h2>Noncompliant Code Example</h2>
+<p>共享命名约定允许团队有效协作。当没有将左括号放在一行代码的末尾时，这条规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if(condition)
 {
   doSomething();
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if(condition) {
   doSomething();
 }
 </pre>
-<h2>Exceptions</h2>
-<p>When blocks are inlined (left and right curly braces on the same line), no issue is triggered. </p>
+<h2>例外</h2>
+<p>当块内联时(在同一行上有左大括号和右大括号)，不会触发任何问题。 </p>
 <pre>
 if(condition) {doSomething();}
 </pre>

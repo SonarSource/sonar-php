@@ -1,5 +1,5 @@
 {
-  "title": "\"for\" loop stop conditions should be invariant",
+  "title": "\"for\" 循环停止条件应该不变",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

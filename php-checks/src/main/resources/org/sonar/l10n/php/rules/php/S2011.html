@@ -1,18 +1,17 @@
-<p>Global variables are a useful construct, but they should not be abused. Functions can access the global scope either through the
-<code>global</code> keyword or though the <code>$GLOBALS</code> array, but these practices considerably reduce the function's readability and
-reusability. Instead, the global variable should be passed as a parameter to the function.</p>
-<h2>Noncompliant Code Example</h2>
+<p>全局变量是一个有用的构造，但是不应该滥用它们。函数可以通过<code>global</code> 关键字或通过 <code>$GLOBALS</code> 数组访问全局范围，
+但是这些做法大大降低了函数的可读性和可重用性。相反，应该将全局变量作为参数传递给函数。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 $myGlobalVariable;
 
 function foo()
 {
-  global $myGlobalVariable; // Noncompliant
-  $GLOBALS['myGlobalVariable']; // Noncompliant
+  global $myGlobalVariable; // 不合规
+  $GLOBALS['myGlobalVariable']; // 不合规
   // ...
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 function foo($myStateVariable)
 {

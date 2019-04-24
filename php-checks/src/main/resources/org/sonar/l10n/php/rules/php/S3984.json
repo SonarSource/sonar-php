@@ -1,5 +1,5 @@
 {
-  "title": "Exception should not be created without being thrown",
+  "title": "不抛出异常就不应该创建异常",
   "type": "BUG",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "Array or Countable object count comparisons should make sense",
+  "title": "数组或可数对象计数比较应该有意义",
   "type": "BUG",
   "status": "ready",
   "remediation": {

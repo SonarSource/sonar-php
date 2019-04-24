@@ -1,14 +1,13 @@
-<p>Shared naming conventions allow teams to collaborate effectively. This rule raises an issue when a local variable or function parameter name does
-not match the provided regular expression.</p>
-<h2>Noncompliant Code Example</h2>
-<p>With the default regular expression <code>^[a-z][a-zA-Z0-9]*$</code>:</p>
+<p>共享命名约定允许团队有效协作。当局部变量或函数参数名称与提供的正则表达式不匹配时，此规则将引发问题。</p>
+<h2>不合规的代码示例</h2>
+<p>使用默认提供的正则表达式 <code>^[a-z][a-zA-Z0-9]*$</code>:</p>
 <pre>
 public function doSomething($my_param){
   $LOCAL;
   ...
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 public function doSomething($myParam){
   $local;

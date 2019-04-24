@@ -1,7 +1,6 @@
-<p>When either the equality operator in a null test or the logical operator that follows it is reversed, the code has the appearance of safely
-null-testing the object before dereferencing it. Unfortunately the effect is just the opposite - the object is null-tested and then dereferenced
-<em>only</em> if it is null, leading to a guaranteed null pointer dereference.</p>
-<h2>Noncompliant Code Example</h2>
+<p>当null测试中的相等运算符或它后面的逻辑运算符被反转时，代码的外观是在解除引用对象之前会对其进行安全的null测试。不幸的是，结果正好相反————对象被null测试，
+并且如果是null的话，解除引用<em>only</em>，从而导致一个被保证的空指针解除引用。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if ($obj == null &amp;&amp; $obj-&gt;isOpen()) {
   echo "Object is open";
@@ -11,7 +10,7 @@ if ($obj != null || $obj-&gt;isOpen()) {
   echo "Object is not open";
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if ($obj == null || $obj-&gt;isOpen()) {
   echo "Object is open";
@@ -21,4 +20,3 @@ if ($obj != null &amp;&amp; !$obj-&gt;isOpen()) {
   echo "Object is not open";
 }
 </pre>
-

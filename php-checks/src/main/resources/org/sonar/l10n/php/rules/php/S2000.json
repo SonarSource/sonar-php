@@ -1,5 +1,5 @@
 {
-  "title": "Files should not contain characters before \"<?php\"",
+  "title": "文件不应该包含\"<?php\"之前的字符",
   "type": "BUG",
   "status": "ready",
   "remediation": {

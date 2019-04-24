@@ -1,5 +1,5 @@
 {
-  "title": "Local variables should not be declared and then immediately returned or thrown",
+  "title": "不应该声明局部变量，然后立即返回或抛出",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -1,7 +1,6 @@
-<p>Having two <code>cases</code> in a <code>switch</code> statement or two branches in an <code>if</code> chain with the same implementation is at
-best duplicate code, and at worst a coding error. If the same logic is truly needed for both instances, then in an <code>if</code> chain they should
-be combined, or for a <code>switch</code>, one should fall through to the other. </p>
-<h2>Noncompliant Code Example</h2>
+<p>有两个<code>cases</code> 在一个 <code>switch</code> 语句，或两个分支在一个具有相同功能的 <code>if</code>链的最好情况是重复代码，最坏是编码错误。
+如果这两个实例确实需要相同的逻辑，那么在<code>if</code> 链中，应该将他们组合在一起，或者对于<code>switch</code>，应该使用贯穿（fall through）的方式。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 switch ($i) {
   case 1:
@@ -11,7 +10,7 @@ switch ($i) {
   case 2:
     doSomethingDifferent();
     break;
-  case 3:  // Noncompliant; duplicates case 1's implementation
+  case 3:  // 不合规；复制 case 1 的实现
     doFirst();
     doSomething();
     break;
@@ -28,12 +27,11 @@ else if ($a &gt;= 10 &amp;&amp; $a &lt; 20) {
 }
 else if ($a &gt;= 20 &amp;&amp; $a &lt; 50) {
   doFirst();
-  doTheThing();  // Noncompliant; duplicates first condition
+  doTheThing();  // 不合规；重复第一个条件
 }
 </pre>
-<h2>Exceptions</h2>
-<p>Blocks in an <code>if</code> chain that contain a single line of code are ignored, as are blocks in a <code>switch</code> statement that contain a
-single line of code with or without a following <code>break</code>.</p>
+<h2>例外</h2>
+<p>包含单行代码的 <code>if</code> 链中的块将被忽略，同样，包含单行代码的 <code>switch</code> 语句中的块也将被忽略，无论是否包含以下的 <code>break</code>。</p>
 <pre>
 if ($a &gt;= 0 &amp;&amp; $a &lt; 10) {
   doTheThing();
@@ -42,18 +40,17 @@ else if ($a &gt;= 10 &amp;&amp; $a &lt; 20) {
   doTheOtherThing();
 }
 else if ($a &gt;= 20 &amp;&amp; $a &lt; 50) {
-  doTheThing();  // no issue, usually this is done on purpose to increase the readability
+  doTheThing();  // 没有问题，通常这样做是为了提高可读性
 }
 </pre>
-<p>But this exception does not apply to <code>if</code> chains without <code>else</code>-s, or to <code>switch</code>-es without default clauses when
-all branches have the same single line of code. In case of <code>if</code> chains with <code>else</code>-s, or of <code>switch</code>-es with default
-clauses, rule {rule:php:S3923} raises a bug. </p>
+<p>但是，当所有分支都具有相同的单行代码时，这个异常不适用于没有 <code>else</code>-s 的 <code>if</code> 链，或没有缺省子句的 <code>switch</code>-es。
+如果<code>if</code>链中有 <code>else</code>-s，或者<code>switch</code>-es 中有默认子句，规则{rule:php:S3923} 会引发一个bug。</p>
 <pre>
 if ($a &gt;= 0 &amp;&amp; $a &lt; 10) {
   doTheThing();
 }
 else if ($a &gt;= 20 &amp;&amp; $a &lt; 50) {
-  doTheThing();   //Noncompliant; this might have been done on purpose but probably not
+  doTheThing();   //不合规；这可能是故意的，但也可能不是
 }
 </pre>
 

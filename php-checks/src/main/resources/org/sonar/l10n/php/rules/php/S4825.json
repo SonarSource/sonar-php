@@ -1,5 +1,5 @@
 {
-  "title": "Sending HTTP requests is security-sensitive",
+  "title": "发送HTTP请求是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "tags": [

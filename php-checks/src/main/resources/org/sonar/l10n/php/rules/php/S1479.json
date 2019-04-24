@@ -1,5 +1,5 @@
 {
-  "title": "\"switch\" statements should not have too many \"case\" clauses",
+  "title": "\"switch\" 语句不应该有太多的 \"case\"子句",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

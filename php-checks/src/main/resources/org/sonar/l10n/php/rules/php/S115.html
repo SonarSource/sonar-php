@@ -1,6 +1,6 @@
-<p>Shared coding conventions allow teams to collaborate efficiently. This rule checks that all constant names match a provided regular expression.</p>
-<h2>Noncompliant Code Example</h2>
-<p>With the default regular expression <code>^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$</code>:</p>
+<p>共享编码约定允许团队高效协作。此规则检查所有常量名称是否与提供的正则表达式匹配。</p>
+<h2>不合规的代码示例</h2>
+<p>使用默认提供的正则表达式 <code>^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$</code>:</p>
 <pre>
 define("const1", true);
 
@@ -8,7 +8,7 @@ class Foo {
     const const2 = "bar";
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 define("CONST1", true);
 

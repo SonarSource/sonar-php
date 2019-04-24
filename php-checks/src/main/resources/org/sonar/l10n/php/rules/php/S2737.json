@@ -1,5 +1,5 @@
 {
-  "title": "\"catch\" clauses should do more than rethrow",
+  "title": "\"catch\"子句应该做的不仅仅是重新抛出",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

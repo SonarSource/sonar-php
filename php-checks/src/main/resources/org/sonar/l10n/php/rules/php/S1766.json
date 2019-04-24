@@ -1,5 +1,5 @@
 {
-  "title": "More than one property should not be declared per statement",
+  "title": "每个语句不应声明多个属性",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

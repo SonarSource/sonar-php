@@ -1,5 +1,5 @@
 {
-  "title": "\"default\" clauses should be first or last",
+  "title": "\"default\" 子句应放在前面或后面",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

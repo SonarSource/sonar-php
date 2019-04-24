@@ -1,5 +1,5 @@
 {
-  "title": "Ternary operators should not be nested",
+  "title": "三元运算符不应嵌套",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

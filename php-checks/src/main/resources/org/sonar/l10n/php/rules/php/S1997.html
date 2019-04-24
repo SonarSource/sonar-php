@@ -1,12 +1,11 @@
-<p>Shared coding conventions allow teams to collaborate efficiently. To avoid the confusion that can be caused by tangling two coding languages in the
-same file, inline HTML should be avoided.</p>
-<h2>Noncompliant Code Example</h2>
+<p>共享编码约定允许团队高效地协作。为了避免混淆同一文件中的两种编码语言，应该避免内联HTML。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 &lt;?php
 $name = "George";
 ?&gt;
 &lt;p&gt; Hello &lt;?php echo $name ?&gt;!&lt;/p&gt;
 </pre>
-<h2>Exceptions</h2>
-<p>File having the extension <code>.phtml</code> are ignored by this rule because they are expected to have mixed PHP and HTML.</p>
+<h2>例外</h2>
+<p>扩展名为 <code>.phtml</code> 的文件被此规则忽略，，因为它们应该混合使用PHP和HTML。</p>
 

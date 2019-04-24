@@ -1,23 +1,22 @@
-<p>Disabling SSL/TLS certificates chain of trust verification is similar to trust every one in the chain and so to expose the application to
-man-in-the-middle (MITM) attacks.</p>
-<h2>Noncompliant Code Example</h2>
+<p>禁用SSL/TLS证书信任验证链类似于信任链中的每一个证书，从而将应用程序暴露给中间人(man-in-the-middle, MITM)攻击。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // Noncompliant; TRUE is casted to 1 which is not a secure configuration
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // 不合规；TRUE被转换为1，这不是一个安全配置
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
 
-// and/or
+// 与/或
 
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的的解决方案</h2>
 <pre>
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // Compliant; default value is 2 to "check the existence of a common name and also verify that it matches the hostname provided" according to PHP's documentation
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // 合规的；根据PHP文档，默认值是2，用于“检查是否存在公共名称，并验证它是否匹配提供的主机名”
 
-// and/or
+// 与/或
 
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, TRUE); // Compliant; default value is TRUE
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, TRUE); // 合规的；默认值为TRUE
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
 </pre>
 

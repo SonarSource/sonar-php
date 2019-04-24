@@ -1,46 +1,45 @@
-<p>Overriding a method just to call the same method from the super class without performing any other actions is useless and misleading. The only time
-this is justified is in <code>final</code> overriding methods, where the effect is to lock in the parent class behavior. This rule ignores such
-overrides of <code>equals</code>, <code>hashCode</code> and <code>toString</code>.</p>
-<h2>Noncompliant Code Example</h2>
+<p>重写一个方法仅仅只是从超类调用同一个方法，而不执行任何其他操作，这是无用的和误导性的。唯一合理的一次是在 <code>final</code> 重写方法中，其效果是锁定父类行为。
+ 该规则忽略了对<code>equals</code>, <code>hashCode</code> 和 <code>toString</code>的重写。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 class Child extends Parent {
 
   public function func($n,$m) {
-    parent::func($n$m);  // Noncompliant
+    parent::func($n$m);  // 不合规
   }
 }
 
 class Parent {
   public function func($n, $m) {
-    // do something
+    // 做点什么（do something）
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 class Child extends Parent {
 
   public function func($n,$m) {
     parent::func($n$m);
-    // do additional things...
+    // 做额外的事情...
   }
 }
 
 class Parent {
   public function func($n, $m) {
-    // do something
+    // 做点什么（do something）
   }
 }
 </pre>
-<p>or</p>
+<p>或者</p>
 <pre>
 class Child extends Parent {
-  // function eliminated
+  // 函数被消除
 }
 
 class Parent {
   public function func($n, $m) {
-    // do something
+    // 做点什么 （do something）
   }
 }
 </pre>

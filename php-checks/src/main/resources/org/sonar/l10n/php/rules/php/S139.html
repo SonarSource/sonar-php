@@ -1,14 +1,12 @@
-<p>This rule verifies that single-line comments are not located at the ends of lines of code. The main idea behind this rule is that in order to be
-really readable, trailing comments would have to be properly written and formatted (correct alignment, no interference with the visual structure of
-the code, not too long to be visible) but most often, automatic code formatters would not handle this correctly: the code would end up less readable.
-Comments are far better placed on the previous empty line of code, where they will always be visible and properly formatted.</p>
-<h2>Noncompliant Code Example</h2>
+<p>此规则验证单行注释是否位于代码行的末尾。这条规则背后的主要思想是，为了真正可读，尾随注释必须正确地编写和格式化(正确的对齐，不干扰代码的视觉结构，不太长之可见)，
+但大多数情况下，自动代码格式化将无法正确地处理这个问题：代码的可读性最终会降低。注释放在前面的空代码行上要好得多，在空行上，它们总是可见的，并且格式化正确。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-$a = $b + $c; // This is a trailing comment that can be very very long
+$a = $b + $c; // 这可能是一个非常长的尾随注释
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
-// This very long comment is better placed before the line of code
+// 这个很长的注释最好放在代码行之前
 $a = $b + $c;
 </pre>
 

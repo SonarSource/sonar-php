@@ -1,16 +1,16 @@
-<p>The use of increment and decrement operators in method calls or in combination with other arithmetic operators is not recommended, because:</p>
+<p>不建议在方法调用中或与其他算术运算符结合时使用增量和递减运算符，理由：</p>
 <ul>
-  <li> It can significantly impair the readability of the code. </li>
-  <li> It introduces additional side effects into a statement, with the potential for undefined behavior. </li>
-  <li> It is safer to use these operators in isolation from any other arithmetic operators. </li>
+  <li> 它会严重损害代码的可读性。 </li>
+  <li> 它会在代码中引入额外的副作用，会导致潜在的未定义的行为。 </li>
+  <li> 将这些运算符与任何其他算术运算符隔离使用更安全。 </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
 $u8a = ++$u8b + $u8c--;
 $foo = $bar++ / 4;
 </pre>
-<h2>Compliant Solution</h2>
-<p>The following sequence is clearer and therefore safer:</p>
+<h2>合规的解决方案</h2>
+<p>以下顺序更清晰，因此更安全：</p>
 <pre>
 ++$u8b;
 $u8a = $u8b + $u8c;
@@ -18,7 +18,7 @@ $u8c--;
 $foo = $bar / 4;
 $bar++;
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C:2004, 12.1 - Limited dependence should be placed on the C operator precedence rules in expressions. </li>
   <li> MISRA C:2004, 12.13 - The increment (++) and decrement (--) operators should not be mixed with other operators in an expression. </li>

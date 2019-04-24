@@ -1,5 +1,5 @@
 {
-  "title": "Alias functions should not be used",
+  "title": "不应使用别名函数",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

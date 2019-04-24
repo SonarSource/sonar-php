@@ -1,5 +1,5 @@
 {
-  "title": "String literals should not be concatenated",
+  "title": "不应连接字符串文本",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

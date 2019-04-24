@@ -1,5 +1,5 @@
 {
-  "title": "Functions should not be nested too deeply",
+  "title": "函数不应该嵌套得太深",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

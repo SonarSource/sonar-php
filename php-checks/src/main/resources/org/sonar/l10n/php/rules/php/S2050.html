@@ -1,11 +1,10 @@
-<p>Certain functions exist in PHP only as aliases of other functions. These aliases have been made available for backward compatibility, but should
-really be removed from code. </p>
-<p>This rule looks for uses of the following aliases:</p>
+<p>PHP中的某些函数仅作为其他函数的别名存在。这些别名是为了向后版本兼容而提供的，但实际上应该从代码中删除。</p>
+<p>这条规则寻找以下别名的用法：</p>
 <table>
   <tbody>
     <tr>
-      <th>Alias</th>
-      <th>Replacement</th>
+      <th>别名</th>
+      <th>更换</th>
     </tr>
     <tr>
       <td><code>chop</code></td>
@@ -77,12 +76,12 @@ really be removed from code. </p>
     </tr>
   </tbody>
 </table>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
 $arr=array("apple", "pear","banana");
-echo sizeof($arr);  // Noncompliant
+echo sizeof($arr);  // 不合规
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $arr=array("apple", "pear","banana");
 echo count($arr);

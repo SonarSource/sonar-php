@@ -1,5 +1,5 @@
-<p>Redundant Boolean literals should be removed from expressions to improve readability.</p>
-<h2>Noncompliant Code Example</h2>
+<p>为了提高可读性，表达式中应该删除冗余的布尔值（Boolean）</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if ($booleanVariable == true) { /* ... */ }
 if ($booleanVariable != true) { /* ... */ }
@@ -11,7 +11,7 @@ $booleanVariable = condition ? false : exp;
 $booleanVariable = condition ?  exp : true;
 $booleanVariable = condition ?  exp : false;
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if ($booleanVariable) { /* ... */ }
 if (!$booleanVariable) { /* ... */ }
@@ -23,6 +23,6 @@ $booleanVariable = !condition &amp;&amp; exp;
 $booleanVariable = !condition ||  exp;
 $booleanVariable = condition &amp;&amp; exp;
 </pre>
-<h2>Exceptions</h2>
-<p>The use of literal booleans in comparisons which use identity operators (<code>===</code> and <code>!==</code>) are ignored.</p>
+<h2>例外</h2>
+<p>在使用标识运算符(<code>===</code> 和 <code>!==</code>)的比较中，忽略了文字布尔值的使用。</p>
 

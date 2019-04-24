@@ -1,5 +1,5 @@
 {
-  "title": "Assignments should not be made from within sub-expressions",
+  "title": "不应该在子表达式中进行赋值",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

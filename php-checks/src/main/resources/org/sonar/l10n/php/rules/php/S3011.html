@@ -1,23 +1,20 @@
-<p>Changing or bypassing accessibility is security-sensitive. For example, it has led in the past to the following vulnerability:</p>
+<p>更改或绕过可访问性是安全敏感的。例如，它在过去导致了以下脆弱性：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2012-4681">CVE-2012-4681</a> </li>
 </ul>
-<p><code>private</code> methods were made <code>private</code> for a reason, and the same is true of every other visibility level. Altering or
-bypassing the accessibility of classes, methods, or fields violates the encapsulation principle and could introduce security holes.</p>
-<p>This rule raises an issue when reflection is used to change the visibility of a class, method or field, and when it is used to directly update a
-field value.</p>
-<h2>Ask Yourself Whether</h2>
+<p><code>private</code> 方法被创建为 <code>private</code> 是有原因的，其他任何可见性级别也是如此。更改或绕过类、方法或字段的可访问性违反了封装原则，可能会引入安全漏洞。</p>
+<p>当反射用于更改类、方法或字段的可见性时，以及当反射用于直接更新字段值时，该规则会引发一个问题。</p>
+<h2>询问是否有以下情况：</h2>
 <ul>
-  <li> there is a good reason to override the existing accessibility level of the method/field. This is very rarely the case. Accessing hidden fields
-  and methods will make your code unstable as they are not part of the public API and may change in future versions. </li>
-  <li> this method is called by untrusted code. <strong>*</strong> </li>
-  <li> it is possible to modify or bypass the accessibility of sensitive methods or fields using this code. <strong>*</strong> </li>
+  <li> 有一个很好的理由覆盖方法/字段的现有可访问性级别。这种情况很少发生。访问隐藏字段和方法将使代码不稳定，因为它们不是公共API的一部分，在未来的版本中可能会发生变化。</li>
+  <li> 此方法由不受信任的代码调用。<strong>*</strong> </li>
+  <li> 可以使用此代码修改或绕过敏感方法或字段的可访问性。<strong>*</strong> </li>
 </ul>
-<p><strong>*</strong> You are at risk if you answered yes to those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>Don't change or bypass the accessibility of any method or field if possible.</p>
-<p>If untrusted code can execute this method, make sure that it cannot decide which method or field's accessibility can be modified or bypassed.</p>
-<h2>Questionable Code Example</h2>
+<p><strong>*</strong> 如果你对这些问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
+<p>如果可能，不要改变或绕过任何方法或字段的可访问性。</p>
+<p>如果不受信任的代码可以执行此方法，确保它不能决定可以修改或绕过哪个方法或字段的可访问性。</p>
+<h2>可疑代码示例</h2>
 <pre>
 class MyClass
 {
@@ -35,80 +32,80 @@ class MyClass
 
 $clazz = new ReflectionClass('MyClass');
 
-$clazz-&gt;getstaticProperties(); // Questionable. This gives access to private static properties
+$clazz-&gt;getstaticProperties(); // 可疑的。这允许访问私有静态属性（private static properties）
 
-$clazz-&gt;setStaticPropertyValue('publicstatic', '42'); // OK as there is no overloading to bypass and it respects access control.
-$clazz-&gt;getStaticPropertyValue('publicstatic'); // OK as there is no overloading to bypass and it respects access control.
+$clazz-&gt;setStaticPropertyValue('publicstatic', '42'); // OK，因为没有要绕过的重载，而且它尊重访问控制。
+$clazz-&gt;getStaticPropertyValue('publicstatic'); // OK，因为没有要绕过的重载，而且它尊重访问控制。
 
-// The following calls can access private or protected constants.
-$clazz-&gt;getConstant('CONST_PRIVATE'); // Questionable.
-$clazz-&gt;getConstants(); // Questionable.
-$clazz-&gt;getReflectionConstant('CONST_PRIVATE'); // Questionable.
-$clazz-&gt;getReflectionConstants(); // Questionable.
+// 以下调用可以访问私有（private）或受保护（protected）的常量。
+$clazz-&gt;getConstant('CONST_PRIVATE'); // 可疑的。
+$clazz-&gt;getConstants(); // 可疑的。
+$clazz-&gt;getReflectionConstant('CONST_PRIVATE'); // 可疑的。
+$clazz-&gt;getReflectionConstants(); // 可疑的。
 
-$obj = $clazz-&gt;newInstanceWithoutConstructor(); // Questionable. Bypassing private constructor.
+$obj = $clazz-&gt;newInstanceWithoutConstructor(); // 可疑的。绕过私有（private）构造函数。 
 
 $constructor = $clazz-&gt;getConstructor();
-$constructorClosure = $constructor-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$constructor-&gt;setAccessible(true); // Questionable. Bypassing constructor accessibility.
+$constructorClosure = $constructor-&gt;getClosure($obj); // 可疑的。 可以使用闭包调用私有方法。
+$constructor-&gt;setAccessible(true); // 可疑的。 绕过构造函数的可访问性。
 
 $prop = new ReflectionProperty('MyClass', 'private');
-$prop-&gt;setAccessible(true); // Questionable. Change accessibility of a property.
-$prop-&gt;setValue($obj, "newValue"); // Questionable. Bypass of the __set method.
-$prop-&gt;getValue($obj); // Questionable. Bypass of the __get method.
+$prop-&gt;setAccessible(true); // 可疑的。 更改属性的可访问性。
+$prop-&gt;setValue($obj, "newValue"); // 可疑的。 绕过了 __set 方法。
+$prop-&gt;getValue($obj); // 可疑的。 绕过了 __get 方法。
 
 $prop2 = $clazz-&gt;getProperties()[2];
-$prop2-&gt;setAccessible(true); // Questionable. Change accessibility of a property.
-$prop2-&gt;setValue($obj, "newValue"); // Questionable. Bypass of the __set method.
-$prop2-&gt;getValue($obj); // Questionable. Bypass of the __get method.
+$prop2-&gt;setAccessible(true); // 可疑的。更改属性的可访问性。
+$prop2-&gt;setValue($obj, "newValue"); // 可疑的。 绕过了 __set 方法。
+$prop2-&gt;getValue($obj); // 可疑的。 绕过了 __get 方法。
 
 $meth = new ReflectionMethod('MyClass', 'privateMethod');
-$clos = $meth-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$meth-&gt;setAccessible(true); // Questionable. Change accessibility of a method.
+$clos = $meth-&gt;getClosure($obj); // 可疑的。可以使用闭包调用私有方法。
+$meth-&gt;setAccessible(true); // 可疑的。 更改方法的可访问性。
 
 $meth2 = $clazz-&gt;getMethods()[0];
-$clos2 = $meth2-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$meth2-&gt;setAccessible(true); // Questionable. Change accessibility of a method.
+$clos2 = $meth2-&gt;getClosure($obj); // 可疑的。可以使用闭包调用私有方法。
+$meth2-&gt;setAccessible(true); // 可疑的。 更改方法的可访问性。
 
-// Using a ReflectionObject instead of the class
+// 使用 ReflectionObject 而不是类
 
 $objr = new ReflectionObject($obj);
-$objr-&gt;newInstanceWithoutConstructor(); // Questionable. Bypassing private constructor.
+$objr-&gt;newInstanceWithoutConstructor(); // 可疑的。 绕过私有构造函数。
 
-$objr-&gt;getStaticPropertyValue("publicstatic"); // OK as there is no overloading to bypass and it respects access control.
-$objr-&gt;setStaticPropertyValue("publicstatic", "newValue"); // OK as there is no overloading to bypass and it respects access control.
+$objr-&gt;getStaticPropertyValue("publicstatic"); // OK，因为没有要绕过的重载，而且它尊重访问控制。
+$objr-&gt;setStaticPropertyValue("publicstatic", "newValue"); // OK，因为没有要绕过的重载，而且它尊重访问控制。
 
-$objr-&gt;getStaticProperties(); // Questionable. This gives access to private static properties
+$objr-&gt;getStaticProperties(); // 可疑的。这允许访问私有静态属性
 
-// The following calls can access private or protected constants.
-$objr-&gt;getConstant('CONST_PRIVATE'); // Questionable.
-$objr-&gt;getConstants(); // Questionable.
-$objr-&gt;getReflectionConstant('CONST_PRIVATE'); // Questionable.
-$objr-&gt;getReflectionConstants(); // Questionable.
+// 以下调用可以访问私有或受保护的常量。
+$objr-&gt;getConstant('CONST_PRIVATE'); // 可疑的。
+$objr-&gt;getConstants(); // 可疑的。
+$objr-&gt;getReflectionConstant('CONST_PRIVATE'); // 可疑的。
+$objr-&gt;getReflectionConstants(); // 可疑的。
 
 $constructor = $objr-&gt;getConstructor();
-$constructorClosure = $constructor-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$constructor-&gt;setAccessible(true); // Questionable. Bypassing constructor accessibility.
+$constructorClosure = $constructor-&gt;getClosure($obj); // 可疑的。可以使用闭包调用私有方法。
+$constructor-&gt;setAccessible(true); // 可疑的。绕过构造函数的可访问性。
 
 $prop3 = $objr-&gt;getProperty('private');
-$prop3-&gt;setAccessible(true); // Questionable. Change accessibility of a property.
-$prop3-&gt;setValue($obj, "newValue"); // Questionable. Bypass of the __set method.
-$prop3-&gt;getValue($obj); // Questionable. Bypass of the __get method.
+$prop3-&gt;setAccessible(true); // 可疑的。 更改属性的可访问性。
+$prop3-&gt;setValue($obj, "newValue"); // 可疑的。 绕过了 __set 方法。
+$prop3-&gt;getValue($obj); // 可疑的。 绕过了 __get 方法。
 
 $prop4 = $objr-&gt;getProperties()[2];
-$prop4-&gt;setAccessible(true); // Questionable. Change accessibility of a property.
-$prop4-&gt;setValue($obj, "newValue"); // Questionable. Bypass of the __set method.
-$prop4-&gt;getValue($obj); // Questionable. Bypass of the __get method.
+$prop4-&gt;setAccessible(true); // 可疑的。 更改属性的可访问性。
+$prop4-&gt;setValue($obj, "newValue"); // 可疑的。 绕过了 __set 方法。
+$prop4-&gt;getValue($obj); // 可疑的。 绕过了 __get 方法。
 
 $meth3 = $objr-&gt;getMethod('privateMethod');
-$clos3 = $meth3-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$meth3-&gt;setAccessible(true); // Questionable. Change accessibility of a method.
+$clos3 = $meth3-&gt;getClosure($obj); // 可疑的。 可以使用闭包调用私有方法。
+$meth3-&gt;setAccessible(true); // 可疑的。 更改方法的可访问性。
 
 $meth4 = $objr-&gt;getMethods()[0];
-$clos4 = $meth4-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$meth4-&gt;setAccessible(true); // Questionable. Change accessibility of a method.
+$clos4 = $meth4-&gt;getClosure($obj); // 可疑的。 可以使用闭包调用私有方法。
+$meth4-&gt;setAccessible(true); // 可疑的。更改方法的可访问性。
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/3YEVAQ">CERT, SEC05-J.</a> - Do not use reflection to increase accessibility of

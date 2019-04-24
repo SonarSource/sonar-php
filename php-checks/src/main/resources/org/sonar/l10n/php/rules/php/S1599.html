@@ -1,11 +1,11 @@
-<p>PHP's "variable variables" feature (dynamically-named variables) is temptingly powerful, but can lead to unmaintainable code. </p>
-<h2>Noncompliant Code Example</h2>
+<p>PHP的“可变变量”特性（动态命名的变量）非常强大，但可能导致无法维护的代码。 </p>
+<h2>不合规的代码示例</h2>
 <pre>
 $var = 'foo';
-$$var = 'bar';      //Noncompliant
-$$$var = 'hello';  //Noncompliant
+$$var = 'bar';      //不合规
+$$$var = 'hello';  //不合规
 
-echo $foo; //will display 'bar'
-echo $bar; //will display 'hello'
+echo $foo; //将显示'bar'
+echo $bar; //将显示'hello'
 </pre>
 

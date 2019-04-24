@@ -1,10 +1,9 @@
-<p>Just as pain is your body's way of telling you something is wrong, errors are PHP's way of telling you there's something you need to fix. Neither
-pain, nor PHP errors should be ignored.</p>
-<h2>Noncompliant Code Example</h2>
+<p>就像疼痛是你的身体告诉你出了问题一样，错误是PHP告诉你需要纠正的地方。无论是痛苦还是PHP错误都不应该被忽略。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-@doSomethingDangerous($password);  // Noncompliant; '@' silences errors from function call
+@doSomethingDangerous($password);  // 不合规; ‘@’会消除函数调用中的错误
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 doSomethingDangerous($password);
 </pre>

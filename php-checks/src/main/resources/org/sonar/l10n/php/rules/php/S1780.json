@@ -1,5 +1,5 @@
 {
-  "title": "Closing tag \"?>\" should be omitted on files containing only PHP",
+  "title": "只包含php的文件中应省略 Closing 标签\"?>\" ",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

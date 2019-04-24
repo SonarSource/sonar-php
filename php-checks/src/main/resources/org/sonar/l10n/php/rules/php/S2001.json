@@ -1,5 +1,5 @@
 {
-  "title": "Deprecated features should not be used",
+  "title": "不应该使用不支持的特性",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

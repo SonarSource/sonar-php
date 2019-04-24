@@ -1,11 +1,7 @@
-<p>Cookies without fixed lifetimes or expiration dates are known as non-persistent, or "session" cookies, meaning they last only as long as the
-browser session, and poof away when the browser closes. Cookies with expiration dates, "persistent" cookies, are stored/persisted until those
-dates.</p>
-<p>Non-persistent cookies should be used for the management of logged-in sessions on web sites. To make a cookie non-persistent, simply omit the
-<code>expires</code> attribute.</p>
-<p>This rule raises an issue when <code>expires</code> is set for a session cookie, either programmatically or via configuration, such as
-<code>session.cookie_lifetime</code>.</p>
-<h2>See</h2>
+<p>没有固定生存期或失效日期的cookie称为非持久性cookie，或“会话（session）”cookie，这意味着它们只在浏览器会话期间有效，而当浏览器关闭时，它们就会消失。具有失效日期的Cookies，即"持久（persistent）" cookies将被存储/保存到这些日期。</p>
+<p>非持久性cookie应用于管理网站上的登录会话。要使cookie非持久化，只需省略 <code>expires</code>属性。</p>
+<p>当会话cookie设置了<code>expires</code> 时，该规则会引发一个问题，这个可以通过编程方式设置，也可以通过配置设置，比如<code>session.cookie_lifetime</code>。</p>
+<h2>请参阅</h2>
 <ul>
   <li> OWASP Top 10 2017 Category A7 - Cross-Site Scripting (XSS) </li>
   <li> <a href="https://www.owasp.org/index.php/Session_Management_Cheat_Sheet#Expire_and_Max-Age_Attributes">OWASP, Session Management Cheat

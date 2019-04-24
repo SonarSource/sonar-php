@@ -1,29 +1,28 @@
-<p>Assignments within sub-expressions are hard to spot and therefore make the code less readable. Ideally, sub-expressions should not have
-side-effects.</p>
-<h2>Noncompliant Code Example</h2>
+<p>子表达式中的赋值很难发现，会降低代码的可读性。理想情况下，子表达式不应该有副作用。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-if ($val = value() &amp;&amp; check()) { // Noncompliant
+if ($val = value() &amp;&amp; check()) { // 不合规
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $val = value();
 if ($val &amp;&amp; check()) {
 }
 </pre>
-<p>or </p>
+<p>或者</p>
 <pre>
-if ($val == value() &amp;&amp; check()) { // Perhaps in fact the assignment operator was expected
+if ($val == value() &amp;&amp; check()) { // 也许事实上，赋值运算符是意料之中的
 }
 </pre>
-<h2>Exceptions</h2>
-<p>Assignments in <code>while</code> statement conditions, and assignments enclosed in relational expressions are allowed.</p>
+<h2>例外</h2>
+<p>在<code>while</code> 语句环境中赋值和在关系表达式中赋值是允许的。</p>
 <pre>
 while (($line = next_line()) != NULL) {...}
 
 while ($line = next_line()) {...}
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C:2004, 13.1 - Assignment operators shall not be used in expressions that yield a Boolean value </li>
   <li> MISRA C++:2008, 6-2-1 - Assignment operators shall not be used in sub-expressions </li>

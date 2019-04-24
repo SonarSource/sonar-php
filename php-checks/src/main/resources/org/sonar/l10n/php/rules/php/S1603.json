@@ -1,5 +1,5 @@
 {
-  "title": "PHP 4 constructor declarations should not be used ",
+  "title": "不应该使用PHP 4构造函数声明 ",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

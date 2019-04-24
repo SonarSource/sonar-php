@@ -1,26 +1,23 @@
-<p>A cookie's domain specifies which websites should be able to read it. Left blank, browsers are supposed to only send the cookie to sites that
-exactly match the sending domain. For example, if a cookie was set by <em>lovely.dream.com</em>, it should only be readable by that domain, and not by
-<em>nightmare.com</em> or even <em>strange.dream.com</em>. If you want to allow sub-domain access for a cookie, you can specify it by adding a dot in
-front of the cookie's domain, like so: <em>.dream.com</em>. But cookie domains should always use at least two levels.</p>
-<p>Cookie domains can be set either programmatically or via configuration. This rule raises an issue when any cookie domain is set with a single
-level, as in <em>.com</em>.</p>
-<h2>Noncompliant Code Example</h2>
+<p>cookie的域指定哪些网站应该能够读取它。如果保留空白，浏览器应该只将cookie发送到与发送域完全匹配的站点。例如，如果cookie 是由<em>lovely.dream.com</em>设置的，那么它应该只由该域来读取，而不是由
+<em>nightmare.com</em> 或甚至 <em>strange.dream.com</em>读取。如果希望允许子域访问cookie，可以通过在cookie的域前面添加一个点来指定它，例如: <em>.dream.com</em>。但是cookie域应该始终至少使用两个级别。</p>
+<p>可以通过编程或配置来设置cookie域。当任何cookie域设置为单一级别时，正如 <em>.com</em>，此规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant
-session_set_cookie_params(3600, "/~path/", ".com"); // Noncompliant
+setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // 不合规
+session_set_cookie_params(3600, "/~path/", ".com"); // 不合规
 
-// inside php.ini
-session.cookie_domain=".com"; // Noncompliant
+// 在php.ini内部
+session.cookie_domain=".com"; // 不合规
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 setcookie("TestCookie", $value, time()+3600, "/~path/", ".myDomain.com", 1);
 session_set_cookie_params(3600, "/~path/", ".myDomain.com");
 
-// inside php.ini
+// 在php.ini内部
 session.cookie_domain=".myDomain.com";
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> OWASP Top 10 2017 Category A7 - Cross-Site Scripting (XSS) </li>
 </ul>

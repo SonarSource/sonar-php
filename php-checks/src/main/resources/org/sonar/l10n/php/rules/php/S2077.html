@@ -1,15 +1,13 @@
-<p>Executing SQL queries is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>执行SQL查询是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-9019">CVE-2018-9019</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-7318">CVE-2018-7318</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-5611">CVE-2017-5611</a> </li>
 </ul>
-<p><a href="https://www.owasp.org/index.php/SQL_Injection">SQL injection</a> is still one of the top 10 security vulnerabilities. Applications that
-execute SQL commands should neutralize any externally-provided values used in those commands. Failure to do so could allow an attacker to include
-input that changes the query so that unintended commands are executed, or sensitive data is exposed. Instead of trying to sanitize data by hand, SQL
-binding mechanisms should be used; they can be relied on to automatically perform a full sanitization.</p>
-<p>This rule raises an issue when an execution of SQL queries might be susceptible to SQL injection. The goal is to guide security code reviews.</p>
-<p>The following native database functions don't support prepared statements, thus their use is considered susceptible to injection.</p>
+<p><a href="https://www.owasp.org/index.php/SQL_Injection">SQL injection</a> SQL注入仍然是十大安全漏洞之一。执行SQL命令的应用程序应该拒绝任何外部提供的SQL命令。
+如果不这样做，攻击者可能会改变查询条件，以便执行非预期的命令，或者暴露敏感数据。应该使用SQL绑定机制，而不是手工清理数据；它们可以自动执行全面的清除。</p>
+<p>当SQL查询的执行可能容易受到SQL注入的影响时，此规则会引发一个问题。其目标是指导安全代码审查。</p>
+<p>以下原生数据库函数不支持预编译语句，因此它们的使用很容易被注入。</p>
 <ul>
   <li> <code>mysql_query</code> </li>
   <li> <code>mysql_db_query</code> </li>
@@ -25,41 +23,40 @@ binding mechanisms should be used; they can be relied on to automatically perfor
   <li> <code>PDO::query</code> </li>
   <li> <code>PDO::exec</code> </li>
 </ul>
-<p>In addition, the following function call will also raise an issue if the provided query is a string with one or more interpolated variable
-(containing "$" sign).</p>
+<p>此外，如果提供的查询是一个带有一个或多个内插变量(包含“$”符号)的字符串，下面的函数调用也会引发一个问题。</p>
 <ul>
   <li> <code>PDO::prepare</code> </li>
 </ul>
-<h2>Ask Yourself Whether</h2>
+<h2>检查是否有这种情况</h2>
 <ul>
-  <li> the SQL query contains any non sanitized input from a user or another untrusted source. </li>
+  <li> SQL查询包含来自用户或其他不可信源的任何未经清理的输入。</li>
 </ul>
-<p>You are at risk if you answered yes to this question.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<p>如果你对这个问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
 <ul>
-  <li> Avoid building queries manually using concatenation or formatting. If you do it anyway, do not include user input in this building process.
+  <li> 避免使用连接或格式化手动构建查询。如果无论如何都要这样做，那么在构建过程中不要包含用户输入。
   </li>
-  <li> Use <a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet">parameterized queries, prepared statements, or stored
-  procedures</a> whenever possible. </li>
-  <li> PHP Data Objects (PDO) prepared statement with bound parameters should be preferred to native database functions. </li>
-  <li> Avoid executing SQL queries containing unsafe input in stored procedures or functions. </li>
-  <li> <a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">Sanitize</a> every unsafe input. </li>
+  <li> 尽可能使用<a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet">参数化查询（parameterized queries）、准备好的语句（prepared statements）或存储过程（stored
+  procedures）</a>。</li>
+  <li> 具有绑定参数的PHP数据对象（PDO）准备语句应该优先于本机数据库函数。</li>
+  <li> 避免执行存储过程或函数中包含不安全输入的SQL查询。</li>
+  <li> <a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">净化（Sanitize）</a>每一个不安全的输入。</li>
 </ul>
-<p>You can also reduce the impact of an attack by using a database account with low privileges.</p>
-<h2>Questionable Code Example</h2>
+<p>还可以通过使用低权限的数据库帐户来减少攻击的影响。</p>
+<h2>可疑代码示例</h2>
 <pre>
 $id = $_GET['id'];
 mysql_connect('localhost', $username, $password) or die('Could not connect: ' . mysql_error());
 mysql_select_db('myDatabase') or die('Could not select database');
 
 $query = "SELECT * FROM myTable WHERE id = " + $id;
-$result = mysql_query($query) or die('Query failed: ' . mysql_error());  // Questionable, seems to be susceptible to SQL injection
+$result = mysql_query($query) or die('Query failed: ' . mysql_error());  // 可疑的，似乎容易受到SQL注入的影响
 
 while ($row = mysql_fetch_object($result)) {
     echo $row-&gt;name;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $id = $_GET['id'];
 try {
@@ -76,13 +73,12 @@ try {
     echo 'ERROR: ' . $e-&gt;getMessage();
 }
 </pre>
-<h2>Exceptions</h2>
-<p>No issue will be raised if one of the functions is called with hard-coded string (no concatenation) and this string does not contain a "$"
-sign.</p>
+<h2>例外</h2>
+<p>如果使用硬编码字符串调用其中一个函数(没有连接)，并且该字符串不包含“$”符号，则不会引发任何问题。</p>
 <pre>
-$result = mysql_query("SELECT * FROM myTable WHERE id = 42") or die('Query failed: ' . mysql_error());  // Compliant
+$result = mysql_query("SELECT * FROM myTable WHERE id = 42") or die('Query failed: ' . mysql_error());  // 合规
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/89">MITRE, CWE-89</a> - Improper Neutralization of Special Elements used in an SQL Command </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/564.html">MITRE, CWE-564</a> - SQL Injection: Hibernate </li>

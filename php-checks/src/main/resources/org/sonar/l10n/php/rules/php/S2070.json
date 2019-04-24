@@ -1,5 +1,5 @@
 {
-  "title": "SHA-1 and Message-Digest hash algorithms should not be used in secure contexts",
+  "title": "SHA-1和消息摘要哈希算法不应在安全上下文中使用",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

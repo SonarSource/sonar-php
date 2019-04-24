@@ -1,12 +1,11 @@
-<p>The PHP 4 method of declaring a variable, using the <code>var</code> keyword, was deprecated in early versions of PHP 5. Even though it's not
-considered deprecated in the most recent versions, it's nonetheless not best practice to use it. When <code>var</code> does appear, it is interpreted
-as a synonym for <code>public</code> and treated as such. Therefore <code>public</code> should be used instead.</p>
-<p>From the PHP Manual:</p>
+<p>PHP4中使用 <code>var</code>关键字声明变量的方法在PHP5的早期版本中是不提倡的。尽管在最近的版本中它并没有被认为是不受欢迎的，但它仍然不是最佳的使用方法。
+当 <code>var</code> 出现时，它被解释为 <code>public</code> 的同义词，并按此处理。应该使用 <code>public</code> 代替。</p>
+<p>来自PHP手册：</p>
 <blockquote>
-  <p>The PHP 4 method of declaring a variable with the var keyword is still supported for compatibility reasons (as a synonym for the public keyword).
-  In PHP 5 before 5.1.3, its usage would generate an E_STRICT warning.</p>
+  <p>出于兼容性的原因(作为public关键字的同义词)，仍然支持使用var关键字声明变量的PHP4方法。
+  在5.1.3之前的PHP 5中，使用它会生成一个E_STRICT警告。</p>
 </blockquote>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
 &lt;?php
 class Foo
@@ -14,7 +13,7 @@ class Foo
     var $bar = 1;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 &lt;?php
 class Foo
@@ -22,4 +21,3 @@ class Foo
     public $bar = 1;
 }
 </pre>
-

@@ -1,27 +1,27 @@
-<p>According to the Single Responsibility Principle, introduced by Robert C. Martin in his book "Principles of Object Oriented Design", a class should
-have only one responsibility:</p>
+<p>根据Robert C著作的单一职责原则（Single Responsibility Principle）。Martin 在他的《面向对象设计原理》（"Principles of Object Oriented Design"）一书中指出，
+ 一个类应该只有一个职责：</p>
 <blockquote>
-  <p>If a class has more than one responsibility, then the responsibilities become coupled.</p>
-  <p>Changes to one responsibility may impair or inhibit the class' ability to meet the others.</p>
-  <p>This kind of coupling leads to fragile designs that break in unexpected ways when changed.</p>
+  <p>如果一个类有多个职责，那么这些职责就会耦合起来。</p>
+  <p>一项职责的变更可能会损害或抑制类承担其他职责的能力。</p>
+  <p>这种耦合导致脆弱的设计，在改变时会以意想不到的方式中断。</p>
 </blockquote>
-<p>Classes which rely on many other classes tend to aggregate too many responsibilities and should be split into several smaller ones.</p>
-<p>Nested classes dependencies are not counted as dependencies of the outer class.</p>
-<h2>Noncompliant Code Example</h2>
+<p>依赖于许多其他类的类往往聚合了太多的职责，应该划分为几个较小的类。</p>
+<p>嵌套类依赖项不计算为外部类的依赖项。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-  class Foo {            // Noncompliant - Foo depends on too many classes: T1, T2, T3, T4, T5, T6 and T7
+  class Foo {            // 不合规 - Foo 依赖于太多其他的类：T1, T2, T3, T4, T5, T6 和 T7
     /**
      * @var T1
      */
-    public $a1;          // Foo is coupled to T1
+    public $a1;          // Foo 连接到 T1
     /**
      * @var T2
      */
-    protected $a2;       // Foo is coupled to T2
+    protected $a2;       // Foo 连接到 T2
     /**
      * @var T3
      */
-    private $a3;         // Foo is coupled to T3
+    private $a3;         // Foo 连接到 T3
 
     /**
      * @param T5
@@ -29,8 +29,8 @@ have only one responsibility:</p>
      *
      * @return T4
      */
-    public function compute(T5 $a, $b) { // Foo is coupled to T4, T5 and T6
-      $result = new T7();     // Foo is coupled to T7
+    public function compute(T5 $a, $b) { // Foo 连接到 T4, T5 和 T6
+      $result = new T7();     // Foo 连接到 T7
       return $result;
   }
 }

@@ -1,5 +1,5 @@
 {
-  "title": "Method arguments with default values should be last",
+  "title": "带有默认值的方法参数应该放在最后",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

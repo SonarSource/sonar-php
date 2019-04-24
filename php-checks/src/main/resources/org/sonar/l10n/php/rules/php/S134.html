@@ -1,17 +1,16 @@
-<p>Nested <code>if</code>, <code>for</code>, <code>while</code>, <code>switch</code>, and <code>try</code> statements are key ingredients for making
-what's known as "Spaghetti code".</p>
-<p>Such code is hard to read, refactor and therefore maintain.</p>
-<h2>Noncompliant Code Example</h2>
-<p>With the default threshold of 3:</p>
+<p>嵌套的<code>if</code>，<code>for</code>，<code>while</code>，<code>switch</code>，和<code>try</code> 语句是制作所谓“意大利面代码”的关键成分。</p>
+<p>这样的代码很难读取、重构和维护。</p>
+<h2>不合规的代码示例</h2>
+<p>当默认阈值为3时:</p>
 <pre>
-  if (condition1) {                  // Compliant - depth = 1
+  if (condition1) {                  // 合格 - depth = 1
     ...
-    if (condition2) {                // Compliant - depth = 2
+    if (condition2) {                // 合格 - depth = 2
       ...
-      for($ = 0; $i &lt; 10; $i++) {  // Compliant - depth = 3, not exceeding the limit
+      for($ = 0; $i &lt; 10; $i++) {  // 合格 - depth = 3,不超过限额
         ...
-        if (condition4) {            // Non-Compliant - depth = 4
-          if (condition5) {          // Depth = 5, exceeding the limit, but issues are only reported on depth = 4
+        if (condition4) {            // 不合格 - depth = 4
+          if (condition5) {          // Depth = 5, 超出限制，但只有 depth = 4时才报告问题
             ...
           }
           return;

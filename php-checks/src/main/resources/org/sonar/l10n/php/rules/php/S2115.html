@@ -1,7 +1,6 @@
-<p>Failure to password-protect a database is so careless or naive as to be almost negligent. Databases should always be password protected, but the
-use of a database connection with an empty password is a clear indication of a database that is not protected.</p>
-<p>This rule flags database connections with empty passwords.</p>
-<h2>Noncompliant Code Example</h2>
+<p>未能对数据库进行密码保护是粗心大意或幼稚的，甚至几乎是疏忽大意。数据库应该始终受到密码保护，但是使用空密码的数据库连接明显表明数据库没有受到保护。</p>
+<p>此规则用空密码标记数据库连接。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 &lt;?php
   $servername = "localhost";
@@ -25,7 +24,7 @@ use of a database connection with an empty password is a clear indication of a d
   $conn = pg_connect($pgConnInfo);
 ?&gt;
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
 </ul>

@@ -1,5 +1,5 @@
 {
-  "title": "Executing XPath expressions is security-sensitive",
+  "title": "执行XPATH表达式是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "tags": [

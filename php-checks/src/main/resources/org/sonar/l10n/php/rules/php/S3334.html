@@ -1,20 +1,18 @@
-<p><code>allow_url_fopen</code> and <code>allow_url_include</code> allow code to be read into a script from URL's. The ability to suck in executable
-code from outside your site, coupled with imperfect input cleansing could lay your site bare to attackers. Even if your input filtering is perfect
-today, are you prepared to bet your site that it will always be perfect in the future?</p>
-<p>This rule raises an issue when either property is explicitly enabled in <em>php.ini</em> and when <code>allow_url_fopen</code>, which defaults to
-enabled, is not explicitly disabled.</p>
-<h2>Noncompliant Code Example</h2>
+<p><code>allow_url_fopen</code> 和 <code>allow_url_include</code>允许从URL的脚本中读取代码。从站点外部吸收可执行代码的能力，加上不完善的输入清理，可能会使攻击者暴露你的站点。 
+即使你的输入过滤今天是完美的，你准备好打赌你的网站在未来总是完美的吗？</p>
+<p>当在<em>php.ini</em> 中显式启用这两个属性时，以及当 <code>allow_url_fopen</code>(默认为启用)未显式禁用时，该规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-; php.ini  Noncompliant; allow_url_fopen not explicitly disabled
-allow_url_include=1  ; Noncompliant
+; 在php.ini中，不合规；allow_url_fopen 未显式禁用
+allow_url_include=1   ;不合规
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
-; php.ini
+; 在php.ini中
 allow_url_fopen=0
 allow_url_include=0
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/829.html">MITRE, CWE-829</a> - Inclusion of Functionality from Untrusted Control Sphere </li>
   <li> OWASP Top 10 2017 Category A1 - Injection </li>

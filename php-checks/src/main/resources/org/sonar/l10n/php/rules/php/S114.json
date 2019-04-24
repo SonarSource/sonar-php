@@ -1,5 +1,5 @@
 {
-  "title": "Interface names should comply with a naming convention",
+  "title": "接口名应符合命名约定",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

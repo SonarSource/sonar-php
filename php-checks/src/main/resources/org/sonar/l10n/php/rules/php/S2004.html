@@ -1,11 +1,11 @@
-<p>Nesting functions can quickly turn your code into "spaghetti code". Such code is hard to read, refactor and therefore to maintain.</p>
-<h2>Noncompliant Code Example</h2>
-<p>With the default threshold of 3:</p>
+<p>嵌套函数可以快速地将代码转换为“意大利面条代码（spaghetti code）"。这样的代码很难读取、重构，因此也很难维护。</p>
+<h2>不合规的代码示例</h2>
+<p>默认阈值为3时：</p>
 <pre>
 function f () {
   function f_inner () {
     function f_inner_inner() {
-      function f_inner_inner_inner() { // Noncompliant
+      function f_inner_inner_inner() { // 不合规
       }
     }
   }

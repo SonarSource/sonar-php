@@ -1,74 +1,63 @@
-<p>Using regular expressions is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>使用正则表达式是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-16021">CVE-2017-16021</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-13863">CVE-2018-13863</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-8926">CVE-2018-8926</a> </li>
 </ul>
-<p>Regular Expressions are subject to different kinds of vulnerabilities.</p>
+<p>正则表达式受到不同类型的漏洞的影响。</p>
 <p> </p>
-<p>First, evaluating regular expressions against input strings is potentially an extremely CPU-intensive task. Specially crafted regular expressions
-such as <code>(a+)+</code> will take several seconds to evaluate the input string <code>aaaaaaaaaaaaaaaaaaaaaaaaaaaaa!</code>. The problem is that
-with every additional <code>a</code> character added to the input, the time required to evaluate the regex doubles. However, the equivalent regular
-expression, <code>a+</code> (without grouping) is efficiently evaluated in milliseconds and scales linearly with the input size.</p>
-<p>Evaluating user-provided strings as regular expressions opens the door to <a
-href="https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS">Regular expression Denial of Service (ReDoS)</a> attacks. In the
-context of a web application, attackers can force the web server to spend all of its resources evaluating regular expressions thereby making the
-service inaccessible to genuine users.</p>
+<p>首先，根据输入字符串计算正则表达式可能是一项非常cpu密集型的任务。特别设计的正则表达式，如<code>(a+)+</code> 将花费几秒钟来计算输入字符串 <code>aaaaaaaaaaaaaaaaaaaaaaaaaaaaa!</code>。
+问题是，在输入中每增加一个 <code>a</code> 字符，计算regex所需的时间就会加倍。然而，等价的正则表达式 <code>a+</code> (不分组)以毫秒为单位进行高效计算，并随输入大小线性扩展。</p>
+<p>将用户提供的字符串计算为正则表达式打开了<a href="https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS">正则表达式拒绝服务(ReDoS)</a> 攻击的大门。
+在web应用程序中，攻击者可以迫使web服务器花费所有资源来评估正则表达式，从而使真正的用户无法访问服务。</p>
 <p> </p>
-<p>Another type of vulnerability can occur when regular expressions are used to validate user input. A regular expression can be used to filter unsafe
-input by either matching a whole input when it is valid (example: the whole string should only contain alphanumeric characters) or by detecting
-dangerous parts of an input. In both cases it is possible to let dangerous values through. For example, searching for <code>&lt;script&gt;</code> tags
-in some HTML code with the regular expression <code>.*&lt;script&gt;.*</code> will miss <code>&lt;script id="test"&gt;</code>.</p>
+<p>当正则表达式用于验证用户输入时，可能会出现另一种类型的漏洞。正则表达式可以用于过滤不安全的输入，方法是在输入有效时匹配整个输入(例如:整个字符串应该只包含字母数字字符)，或者检测输入的危险部分。
+在这两种情况下，都有可能让危险的值通过。例如，使用正则表达式<code>.*&lt;script&gt;.*</code>搜索某些HTML代码中的 <code>&lt;script&gt;</code> 标签将错过<code>&lt;script id="test"&gt;</code>。</p>
 <p> </p>
-<p>This rule flags any regular expression execution, which means that an issue will be created whenever one of the following function is called:</p>
+<p>这条规则标记任何正则表达式的执行，这意味着每当调用以下函数之一时都会产生一个问题：</p>
 <ul>
-  <li> <a href="http://php.net/manual/en/book.pcre.php">PCRE</a>: Perl style regular expressions: <a
-  href="http://php.net/manual/en/function.preg-filter.php">preg_filter</a>, <a href="http://php.net/manual/en/function.preg-grep.php">preg_grep</a>,
-  <a href="http://php.net/manual/en/function.preg-match-all.php">preg_match_all</a>, <a
-  href="http://php.net/manual/en/function.preg-match.php">preg_match</a>, <a
-  href="http://php.net/manual/en/function.preg-replace-callback-array.php">preg_replace_callback_array</a>, <a
-  href="http://php.net/manual/en/function.preg-replace-callback.php">preg_replace_callback</a>, <a
-  href="http://php.net/manual/en/function.preg-replace.php">preg_replace</a>, <a
+  <li> <a href="http://php.net/manual/en/book.pcre.php">PCRE</a>：Perl风格的正则表达式：<a
+  href="http://php.net/manual/en/function.preg-filter.php">preg_filter</a>，<a href="http://php.net/manual/en/function.preg-grep.php">preg_grep</a>，
+  <a href="http://php.net/manual/en/function.preg-match-all.php">preg_match_all</a>，<a
+  href="http://php.net/manual/en/function.preg-match.php">preg_match</a>，<a
+  href="http://php.net/manual/en/function.preg-replace-callback-array.php">preg_replace_callback_array</a>，<a
+  href="http://php.net/manual/en/function.preg-replace-callback.php">preg_replace_callback</a>，<a
+  href="http://php.net/manual/en/function.preg-replace.php">preg_replace</a>，<a
   href="http://php.net/manual/en/function.preg-split.php">preg_split</a> </li>
-  <li> <a href="http://php.net/manual/en/book.regex.php">POSIX extended</a>, which are deprecated: <a
-  href="http://php.net/manual/en/function.ereg-replace.php">ereg_replace</a>, <a href="http://php.net/manual/en/function.ereg.php">ereg</a>, <a
-  href="http://php.net/manual/en/function.eregi-replace.php">eregi_replace</a>, <a href="http://php.net/manual/en/function.eregi.php">eregi</a>, <a
-  href="http://php.net/manual/en/function.split.php">split</a>, <a href="http://php.net/manual/en/function.spliti.php">spliti</a>. </li>
+  <li> <a href="http://php.net/manual/en/book.regex.php">POSIX 扩展</a>，已经被弃用：<a
+  href="http://php.net/manual/en/function.ereg-replace.php">ereg_replace</a>，<a href="http://php.net/manual/en/function.ereg.php">ereg</a>，<a
+  href="http://php.net/manual/en/function.eregi-replace.php">eregi_replace</a>，<a href="http://php.net/manual/en/function.eregi.php">eregi</a>，<a
+  href="http://php.net/manual/en/function.split.php">split</a>，<a href="http://php.net/manual/en/function.spliti.php">spliti</a>。</li>
   <li> <a href="http://php.net/manual/en/function.fnmatch.php">fnmatch</a> </li>
-  <li> Any of the multibyte string regular expressions: <a href="http://php.net/manual/en/function.mb-eregi-replace.php">mb_eregi_replace</a>, <a
-  href="http://php.net/manual/en/function.mb-ereg-match.php">mb_ereg_match</a>, <a
-  href="http://php.net/manual/en/function.mb-ereg-replace-callback.php">mb_ereg_replace_callback</a>, <a
-  href="http://php.net/manual/en/function.mb-ereg-replace.php">mb_ereg_replace</a>, <a
-  href="http://php.net/manual/en/function.mb-ereg-search-init.php">mb_ereg_search_init</a>, <a
-  href="http://php.net/manual/en/function.mb-ereg-search-pos.php">mb_ereg_search_pos</a>, <a
-  href="http://php.net/manual/en/function.mb-ereg-search-regs.php">mb_ereg_search_regs</a>, <a
-  href="http://php.net/manual/en/function.mb-ereg-search.php">mb_ereg_search</a>, <a href="http://php.net/manual/en/function.mb-ereg.php">mb_ereg</a>,
-  <a href="http://php.net/manual/en/function.mb-eregi-replace.php">mb_eregi_replace</a>, <a
+  <li> 任何多字节字符串正则表达式：<a href="http://php.net/manual/en/function.mb-eregi-replace.php">mb_eregi_replace</a>，<a
+  href="http://php.net/manual/en/function.mb-ereg-match.php">mb_ereg_match</a>，<a
+  href="http://php.net/manual/en/function.mb-ereg-replace-callback.php">mb_ereg_replace_callback</a>，<a
+  href="http://php.net/manual/en/function.mb-ereg-replace.php">mb_ereg_replace</a>，<a
+  href="http://php.net/manual/en/function.mb-ereg-search-init.php">mb_ereg_search_init</a>，<a
+  href="http://php.net/manual/en/function.mb-ereg-search-pos.php">mb_ereg_search_pos</a>，<a
+  href="http://php.net/manual/en/function.mb-ereg-search-regs.php">mb_ereg_search_regs</a>，<a
+  href="http://php.net/manual/en/function.mb-ereg-search.php">mb_ereg_search</a>，<a href="http://php.net/manual/en/function.mb-ereg.php">mb_ereg</a>，
+  <a href="http://php.net/manual/en/function.mb-eregi-replace.php">mb_eregi_replace</a>，<a
   href="http://php.net/manual/en/function.mb-eregi.php">mb_eregi</a> </li>
 </ul>
-<p>Note that <code>ereg*</code> functions have been removed in PHP 7 and <strong>PHP 5 end of life date is the 1st of January 2019. Using PHP 5 after
-this date is dangerous as there will be no security fix</strong>.</p>
-<p>This rule's goal is to guide security code reviews.</p>
-<h2>Ask Yourself Whether</h2>
+<p>注意，<code>ereg*</code> 函数已经在PHP7中删除并且 <strong>PHP5的使用终止日期是2019年1月1日。在此日期之后使用PHP 5是危险的，因为没有安全修复</strong>。</p>
+<p>该规则的目标是指导安全代码审查。</p>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> a user input string is executed as a regular-expression, or it is inserted in a regular expression. </li>
-  <li> a user can provide a string which will be analyzed by a regular expression. </li>
-  <li> your regular expression engine performance decrease with specially crafted inputs and regular expressions. </li>
-  <li> the regular expression is used to validate unsafe input, but it does not detect all dangerous values. </li>
+  <li> 用户输入字符串作为正则表达式执行，或者插入到正则表达式中。</li>
+  <li> 用户可以提供一个字符串，该字符串将由正则表达式分析。</li>
+  <li> 使用特殊设计的输入和正则表达式会降低正则表达式引擎的性能。</li>
+  <li> 正则表达式用于验证不安全的输入，但它不能检测所有危险值。</li>
 </ul>
-<p>You may be at risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>Avoid executing a user input string as a regular expression or use at least <code>preg_quote</code> to escape regular expression characters.</p>
-<p>Check whether your regular expression engine (the algorithm executing your regular expression) has any known vulnerabilities. Search for
-vulnerability reports mentioning the one engine you're are using.</p>
-<p>Test your regular expressions with techniques such as equivalence partitioning, and boundary value analysis, and test for robustness. Try not to
-make complex regular expressions as they are difficult to understand and test. Note that some regular expression engines will match only part of the
-input if no anchors are used. In PHP for example <code>preg_match("/[A-Za-z0-9]+/", $text)</code> will accept any string containing at least one
-alphanumeric character because it has no anchors.</p>
-<h2>Exceptions</h2>
-<p>An issue will be created for the functions <code>mb_ereg_search_pos</code>, <code>mb_ereg_search_regs</code> and <code>mb_ereg_search</code> if and
-only if at least the first argument, i.e. the $pattern, is provided.</p>
-<h2>See</h2>
+<p>果对这些问题中的任何一个回答是肯定的，那么就有可能处于危险之中。</p>
+<h2>推荐的安全编码实践</h2>
+<p>避免将用户输入字符串作为正则表达式执行，或者至少使用<code>preg_quote</code> 来转义正则表达式字符。</p>
+<p>检查正则表达式引擎(执行正则表达式的算法)是否存在已知的漏洞。搜索提及正在使用的一个引擎的漏洞报告。</p>
+<p>使用等价划分、边值分析和健壮性测试等技术测试正则表达式。尽量不要使用复杂的正则表达式，因为它们很难理解和测试。注意，如果不使用锚（anchors），一些正则表达式引擎只匹配部分输入。
+在PHP中，例如<code>preg_match("/[A-Za-z0-9]+/", $text)</code>将接受任何包含至少一个字母数字字符的字符串，因为它没有锚（anchors）。</p>
+<h2>例外</h2>
+<p>当且仅当至少提供了第一个参数，如$pattern时，将为函数<code>mb_ereg_search_pos</code>，<code>mb_ereg_search_regs</code> 和 <code>mb_ereg_search</code> 创建一个问题。</p>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS">MITRA, CWE-624</a> - Executable Regular Expression Error
   </li>

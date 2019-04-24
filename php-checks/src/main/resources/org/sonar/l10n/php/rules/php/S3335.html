@@ -1,12 +1,11 @@
-<p>The <code>cgi.force_redirect</code> <em>php.ini</em> configuration is on by default, and it prevents unauthenticated access to scripts when PHP is
-running as a CGI. Unfortunately, it must be disabled on IIS, OmniHTTPD and Xitami, but in all other cases it should be on.</p>
-<p>This rule raises an issue when when <code>cgi.force_redirect</code> is explicitly disabled.</p>
-<h2>Noncompliant Code Example</h2>
+<p>默认情况下，<code>cgi.force_redirect</code> <em>php.ini</em> 配置是打开的，它防止在PHP作为CGI运行时对脚本进行未经身份验证的访问。不幸的是，它必须在IIS、OmniHTTPD和Xitami上禁用，但在其他所有情况下都应该启用。</p>
+<p>当显示禁用<code>cgi.force_redirect</code> 时，该规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-; php.ini
-cgi.force_redirect=0  ; Noncompliant
+; 在php.ini中
+cgi.force_redirect=0  ; 不合规
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/305">MITRE, CWE-305</a> - Authentication Bypass by Primary Weakness </li>
   <li> OWASP Top 10 2017 Category A6 - Security Misconfiguration </li>

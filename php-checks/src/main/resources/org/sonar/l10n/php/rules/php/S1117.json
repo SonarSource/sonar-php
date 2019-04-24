@@ -1,5 +1,5 @@
 {
-  "title": "Local variables should not have the same name as class fields",
+  "title": "局部变量不应该具有与类字段相同的名称",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

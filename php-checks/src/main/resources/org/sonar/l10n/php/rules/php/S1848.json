@@ -1,5 +1,5 @@
 {
-  "title": "Objects should not be created to be dropped immediately without being used",
+  "title": "不应在不使用的情况下创建要立即删除的对象",
   "type": "BUG",
   "status": "ready",
   "remediation": {

@@ -1,36 +1,35 @@
-<p>A <code>catch</code> clause that only rethrows the caught exception has the same effect as omitting the <code>catch</code> altogether and letting
-it bubble up automatically, but with more code and the additional detriment of leaving maintainers scratching their heads. </p>
-<p>Such clauses should either be eliminated or populated with the appropriate logic.</p>
-<h2>Noncompliant Code Example</h2>
+<p>只重抛捕获异常的<code>catch</code> 子句的效果与完全省略 <code>catch</code> 并让它自动抛出来的效果相同，但是会产生更多的代码，并且会给维护人员带来额外的麻烦。</p>
+<p>应该删除这些子句，或者用适当的逻辑填充它们。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 $s = "";
 try {
   $s = readMyFile($fileName);
 } catch (Exception $e)  {
-  throw $e;  // Noncompliant
+  throw $e;  // 不合规
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $s = "";
 try {
   $s = readMyFile($fileName);
 } catch (Exception $e) {
   error_log($e-&gt;getMessage());
-  throw $e;  // Compliant
+  throw $e;  // 合规
 }
 </pre>
-<p>or</p>
+<p>或者</p>
 <pre>
 $s = "";
 try {
   $s = readMyFile($fileName);
 } catch (Exception $e) {
   error_log($e-&gt;getMessage());
-  throw new MyException("an exception occurred", 2, $e);  // Compliant
+  throw new MyException("an exception occurred", 2, $e);  // 合规
 }
 </pre>
-<p>or</p>
+<p>或者</p>
 <pre>
 $s = readMyFile($fileName);
 </pre>

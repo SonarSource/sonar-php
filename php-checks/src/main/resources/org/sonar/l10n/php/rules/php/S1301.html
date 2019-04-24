@@ -1,6 +1,6 @@
-<p><code>switch</code> statements are useful when there are many different cases depending on the value of the same expression.</p>
-<p>For just one or two cases however, the code will be more readable with <code>if</code> statements.</p>
-<h2>Noncompliant Code Example</h2>
+<p>当许多不同的cases依赖于同一表达式的值时，<code>switch</code> 语句是很有用的。</p>
+<p> 但是，对于只有一到两种情况，使用<code>if</code> 语句更具有可读性。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 switch ($variable) {
   case 0:
@@ -11,7 +11,7 @@ switch ($variable) {
     break;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if ($variable == 0) {
   do_something();
@@ -19,7 +19,7 @@ if ($variable == 0) {
   do_something_else();
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C:2004, 15.5 - Every switch statement shall have at least one case clause. </li>
   <li> MISRA C++:2008, 6-4-8 - Every switch statement shall have at least one case-clause. </li>

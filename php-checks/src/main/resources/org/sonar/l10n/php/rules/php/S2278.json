@@ -1,5 +1,5 @@
 {
-  "title": "Neither DES (Data Encryption Standard) nor DESede (3DES) should be used",
+  "title": "不应使用DES(数据加密标准)或DESede(3 DES)",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

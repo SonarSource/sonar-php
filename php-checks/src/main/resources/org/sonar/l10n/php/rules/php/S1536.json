@@ -1,5 +1,5 @@
 {
-  "title": "Function argument names should be unique",
+  "title": "函数参数名称应唯一",
   "type": "BUG",
   "status": "ready",
   "remediation": {

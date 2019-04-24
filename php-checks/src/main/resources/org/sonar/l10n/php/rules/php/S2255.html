@@ -1,48 +1,45 @@
-<p>Using cookies is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>使用cookie是安全敏感的。它过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-7772">CVE-2018-7772</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-10085">CVE-2018-10085</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-6537">CVE-2016-6537</a> </li>
 </ul>
-<p>Attackers can use widely-available tools to read and modify cookies, thus:</p>
+<p>击者可以使用广泛可用的工具来读取和修改cookie，因此：</p>
 <ul>
-  <li> sensitive information written by the server will be exposed. </li>
-  <li> cookies sent by the client can be crafted to attack server vulnerabilities. </li>
+  <li> 服务器写入的敏感信息将被公开。</li>
+  <li> 客户端发送的cookie可以被精心设计来攻击服务器漏洞。</li>
 </ul>
-<p>This rule flags code that reads or writes cookies.</p>
-<h2>Ask Yourself Whether</h2>
+<p>此规则标记读取或写入cookie的代码。</p>
+<h2>检查是否有下列情况</h2>
 <ul>
-  <li> sensitive information is stored inside the cookie. </li>
-  <li> cookie values are used without being first sanitized. </li>
+  <li>敏感信息存储在cookie中。</li>
+  <li>使用cookie值时不首先进行清理。</li>
 </ul>
-<p>You are at risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>Cookies should only be used to manage the user session. The best practice is to keep all user-related information server-side and link them to the
-user session, never sending them to the client. In a very few corner cases, cookies can be used for non-sensitive information that need to live longer
-than the user session.</p>
-<p>Do not try to encode sensitive information in a non human-readable format before writing them in a cookie. The encoding can be reverted and the
-original information will be exposed.</p>
-<p><a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">Sanitize</a> every information read from a cookie before using them.</p>
-<p>Using cookies only for session IDs doesn't make them secure. Follow <a
-href="https://www.owasp.org/index.php/Session_Management_Cheat_Sheet#Cookies">OWASP best practices</a> when you configure your cookies.</p>
-<h2>Questionable Code Example</h2>
+<p>如果你对这些问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
+<p>Cookies只能用于管理用户会话。最佳实践是保持所有与用户相关的信息服务器端，并将它们链接到用户会话，而不是将它们发送到客户端。在极少数情况下，cookie可以用于需要比用户会话更长时间的非敏感信息。</p>
+<p>在将敏感信息写入cookie之前，不要尝试以非人类可读的格式对其进行编码。编码可以恢复，原始信息将被公开。</p>
+<p><a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">Sanitize</a>在使用cookie之前从cookie中读取的所有信息。</p>
+<p>仅对会话ID使用cookie并不能保证它们的安全。在配置cookie时，请遵循<a
+href="https://www.owasp.org/index.php/Session_Management_Cheat_Sheet#Cookies">OWASP最佳实践（best practices）</a>。</p>
+<h2>可疑代码示例</h2>
 <pre>
 $value = "1234 1234 1234 1234";
 
-// Review this cookie as it seems to send sensitive information (credit card number).
-setcookie("CreditCardNumber", $value, $expire, $path, $domain, true, true); // Questionable
-setrawcookie("CreditCardNumber", $value, $expire, $path, $domain, true, true); // Questionable
+// 查看此cookie，因为它似乎发送敏感信息(信用卡号)。
+setcookie("CreditCardNumber", $value, $expire, $path, $domain, true, true); // 可疑的
+setrawcookie("CreditCardNumber", $value, $expire, $path, $domain, true, true); // 可疑的
 
-$_COOKIE["name"]; // Questionable
-$HTTP_COOKIE_VARS["name"]; // Questionable
+$_COOKIE["name"]; // 可疑的
+$HTTP_COOKIE_VARS["name"]; // 可疑的
 
-// Unseting and testing existence of a cookie is fine
-unset($_COOKIE["cookie"]); // Compliant
-unset($HTTP_COOKIE_VARS["cookie"]); // Compliant
-isset($_COOKIE["cookie"]); // Compliant
-isset($HTTP_COOKIE_VARS["cookie"]); // Compliant
+// 解除和测试cookie的存在是很好的。
+unset($_COOKIE["cookie"]); // 合规
+unset($HTTP_COOKIE_VARS["cookie"]); // 合规
+isset($_COOKIE["cookie"]); // 合规
+isset($HTTP_COOKIE_VARS["cookie"]); // 合规
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/312.html">MITRE, CWE-312</a> - Cleartext Storage of Sensitive Information </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/315.html">MITRE, CWE-315</a> - Cleartext Storage of Sensitive Information in a Cookie </li>

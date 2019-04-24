@@ -1,48 +1,46 @@
-<p>Using sockets is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>使用套接字（Sockets）是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2011-1785">CVE-2011-178</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-5645">CVE-2017-5645</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-6597">CVE-2018-6597</a> </li>
 </ul>
-<p>Sockets are vulnerable in multiple ways:</p>
+<p>套接字易受到多种方式的攻击：</p>
 <ul>
-  <li> They enable a software to interact with the outside world. As this world is full of attackers it is necessary to check that they cannot receive
-  sensitive information or inject dangerous input. </li>
-  <li> The number of sockets is limited and can be exhausted. Which makes the application unresponsive to users who need additional sockets. </li>
+  <li> 它们使软件能够与外部世界交互。由于这个世界充满了攻击者，因此有必要检查他们是否无法接收敏感信息或注入危险的输入。 </li>
+  <li> 套接字数量有限，可以耗尽。这使得应用程序对需要额外套接字的用户没有响应。</li>
 </ul>
-<p>This rules flags code that creates sockets. It matches only the direct use of sockets, not use through frameworks or high-level APIs such as the
-use of http connections.</p>
-<h2>Ask Yourself Whether</h2>
+<p>此规则标记创建套接字的代码。它只匹配套接字的直接使用，而不是通过框架或高级APIs(如使用http连接)使用。</p>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> sockets are created without any limit every time a user performs an action. </li>
-  <li> input received from sockets is used without being sanitized. </li>
-  <li> sensitive data is sent via sockets without being encrypted. </li>
+  <li> 每次用户执行操作时都不受任何限制地创建套接字。</li>
+  <li> 从套接字接收到的输入无需经过净化即可使用。</li>
+  <li> 敏感数据通过套接字发送，无需加密。</li>
 </ul>
-<p>You are at risk if you answered yes to any of these questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
 <ul>
-  <li> In many cases there is no need to open a socket yourself. Use instead libraries and existing protocols. </li>
-  <li> Encrypt all data sent if it is sensitive. Usually it is better to encrypt it even if the data is not sensitive as it might change later. </li>
-  <li> <a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">Sanitize</a> any input read from the socket. </li>
-  <li> Limit the number of sockets a given user can create. Close the sockets as soon as possible. </li>
+  <li> 许多情况下，没有必要自己打开套接字。而是使用库和现有协议。</li>
+  <li> 如果发送的数据是敏感的，加密所有数据。通常最好加密它，即使数据不敏感，因为稍后可能会发生更改。</li>
+  <li> <a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">净化</a>从套接字读取的任何输入。</li>
+  <li> 限制给定用户可以创建的套接字的数量。尽快关闭套接字。</li>
 </ul>
-<h2>Questionable Code Example</h2>
+<h2>可疑的代码示例</h2>
 <pre>
 function handle_sockets($domain, $type, $protocol, $port, $backlog, $addr, $hostname, $local_socket, $remote_socket, $fd) {
-    socket_create($domain, $type, $protocol); // Questionable
-    socket_create_listen($port, $backlog); // Questionable
-    socket_addrinfo_bind($addr); // Questionable
-    socket_addrinfo_connect($addr); // Questionable
+    socket_create($domain, $type, $protocol); // 可疑的
+    socket_create_listen($port, $backlog); // 可疑的
+    socket_addrinfo_bind($addr); // 可疑的
+    socket_addrinfo_connect($addr); // 可疑的
     socket_create_pair($domain, $type, $protocol, $fd);
 
-    fsockopen($hostname); // Questionable
-    pfsockopen($hostname); // Questionable
-    stream_socket_server($local_socket); // Questionable
-    stream_socket_client($remote_socket); // Questionable
-    stream_socket_pair($domain, $type, $protocol); // Questionable
+    fsockopen($hostname); // 可疑的
+    pfsockopen($hostname); // 可疑的
+    stream_socket_server($local_socket); // 可疑的
+    stream_socket_client($remote_socket); // 可疑的
+    stream_socket_pair($domain, $type, $protocol); // 可疑的
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/20">MITRE, CWE-20</a> - Improper Input Validation </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/400">MITRE, CWE-400</a> - Uncontrolled Resource Consumption ('Resource Exhaustion') </li>

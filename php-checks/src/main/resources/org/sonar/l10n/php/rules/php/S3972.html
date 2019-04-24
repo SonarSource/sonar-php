@@ -1,31 +1,29 @@
-<p>Code is clearest when each statement has its own line. Nonetheless, it is a common pattern to combine on the same line an <code>if</code> and its
-resulting <em>then</em> statement. However, when an <code>if</code> is placed on the same line as the closing <code>}</code> from a preceding
-<code>else</code> or <code>elseif</code>, it is either an error - <code>else</code> is missing - or the invitation to a future error as maintainers
-fail to understand that the two statements are unconnected.</p>
-<h2>Noncompliant Code Example</h2>
+<p>当每个语句都有自己的行时，代码最清楚。尽管如此，将<code>if</code> 及其结果 <em>then</em> 语句组合在同一行是一种常见的模式。但是，当<code>if</code> 于前面的 <code>else</code> 或 <code>elseif</code> 的结束代码 <code>}</code> 放在同一行时，
+它要么是个错误——没有<code>else</code>，要么在维护者不理解这两个语句是不连接的情况下，导致将来出现错误。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if ($condition1) {
-  // ...
-} if ($condition2) {  // Noncompliant
-  //...
+  //......
+} if ($condition2) {  // 不合规
+  //......
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if ($condition1) {
-  // ...
+  //......
 } elseif ($condition2) {
-  //...
+  //......
 }
 </pre>
-<p>Or</p>
+<p>或者</p>
 <pre>
 if ($condition1) {
-  // ...
+  //......
 }
 
 if ($condition2) {
-  //...
+  //......
 }
 </pre>
 

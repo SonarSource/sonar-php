@@ -1,5 +1,5 @@
 {
-  "title": "Cryptographic keys should not be too short",
+  "title": "密码密钥不能太短",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

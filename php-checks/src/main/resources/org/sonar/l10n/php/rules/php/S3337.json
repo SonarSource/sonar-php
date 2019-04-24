@@ -1,5 +1,5 @@
 {
-  "title": "\"enable_dl\" should be disabled",
+  "title": "应该禁用\"enable_dl\"",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

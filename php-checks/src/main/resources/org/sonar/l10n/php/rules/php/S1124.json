@@ -1,5 +1,5 @@
 {
-  "title": "Modifiers should be declared in the correct order",
+  "title": "修饰符应按正确的顺序声明",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

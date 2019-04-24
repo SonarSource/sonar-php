@@ -1,16 +1,16 @@
-<p>Having characters before <code>&lt;?php</code> can cause "Cannot modify header information" errors and similar problems with Ajax requests.</p>
-<h2>Noncompliant Code Example</h2>
+<p>在<code>&lt;?php</code> 之前有字符会导致“Cannot modify header information”错误和Ajax请求的类似问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-test&lt;?php  //Noncompliant
+test&lt;?php  //不合规
 // ...
 </pre>
-<p>and</p>
+<p>和</p>
 <pre>
-// Noncompliant; newline before opening tag
+// 不合规;在打开标记之前换行
 &lt;?php
 // ...
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 &lt;?php
 // ...

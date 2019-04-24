@@ -1,17 +1,15 @@
-<p>Because it is dynamically typed, PHP does not enforce a return type on a function. This means that different paths through a function can return
-different types of values, which can be very confusing to the user and significantly harder to maintain.</p>
-<p>In particular, it is consequently also possible to mix empty <code>return</code> statements (implicitly returning <code>null</code>) with some
-returning an expression. This rule verifies that all the <code>return</code> statements from a function are consistent.</p>
-<h2>Noncompliant Code Example</h2>
+<p>因为PHP是动态类型的，所以PHP不会对函数强制执行返回类型。这意味着函数中的不同路径可以返回不同类型的值，这可能会让用户非常困惑，而且维护起来也非常困难。</p>
+<p>特别是，因此也可以将空的 <code>return</code> 语句 (隐式返回 <code>null</code>) 与一些返回表达式混合使用。此规则验证函数中的所有 <code>return</code> 语句是否一致。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-function foo($a) { // Noncompliant, function will return "true" or null
+function foo($a) { // 不合规，函数将返回"true"或null
   if ($a == 1) {
     return true;
   }
   return;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 function foo($a) {
   if ($a == 1) {
@@ -20,7 +18,7 @@ function foo($a) {
   return false;
 }
 </pre>
-<p>or </p>
+<p>或者</p>
 <pre>
 function foo($a) {
   if ($a == 1) {

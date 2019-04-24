@@ -1,25 +1,23 @@
-<p>Curly braces can be omitted from a one-line block, such as with an <code>if</code> statement or <code>for</code> loop, but doing so can be
-misleading and induce bugs. </p>
-<p>This rule raises an issue when the whitespacing of the lines after a one line block indicates an intent to include those lines in the block, but
-the omission of curly braces means the lines will be unconditionally executed once.</p>
-<h2>Noncompliant Code Example</h2>
+<p>单行块可以省略圆括号，例如使用<code>if</code>语句或<code>for</code>循环，但是这样做可能会误导和引发错误。</p>
+<p>当一行代码块后面的行出现空白，表示有意将这些行包含在代码块中，但是没有圆括号意味着这些行将无条件地执行一次时，这条规则就会产生问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if ($condition)
   firstActionInBlock();
-  secondAction();  // Noncompliant; executed unconditionally
+  secondAction();  // 不合规；无条件执行
 thirdAction();
 
-if($condition) firstActionInBlock(); secondAction();  // Noncompliant; secondAction executed unconditionally
+if($condition) firstActionInBlock(); secondAction();  // 不合规；无条件执行secondAction
 
-if($condition) firstActionInBlock();  // Noncompliant
-  secondAction();  // Executed unconditionally
+if($condition) firstActionInBlock();  // 不合规
+  secondAction();  //无条件执行
 
 $str = null;
 for ($i = 0; $i &lt; count($array); $i++)
   $str = $array[$i];
-  doTheThing($str);  // Noncompliant; executed only on last array element
+  doTheThing($str);  // 不合规；仅在最后一个数组元素上执行
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if ($condition) {
   firstActionInBlock();
@@ -40,7 +38,7 @@ for ($i = 0; $i &lt; count($array); $i++) {
   doTheThing($str);
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/483.html">MITRE, CWE-483</a> - Incorrect Block Delimitation </li>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/3wHEAw">CERT, EXP52-J.</a> - Use braces for the body of an if, for, or while statement

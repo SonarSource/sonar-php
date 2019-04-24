@@ -1,5 +1,5 @@
 {
-  "title": "Deprecated predefined variables should not be used",
+  "title": "不应使用已弃用的预定义变量",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

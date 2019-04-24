@@ -1,5 +1,5 @@
 {
-  "title": "Classes should not have too many fields",
+  "title": "类不应该有太多文件",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

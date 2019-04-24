@@ -1,14 +1,13 @@
-<p>In PHP 4, any function with the same name as the nesting class was considered a class constructor. In PHP 5, this mechanism has been deprecated and
-the "__construct" method name should be used instead. If both styles are present in the same class, PHP 5 will treat the function named "__construct"
-as the class constructor. </p>
-<p>This rule rule raises an issue for each method with the same name as the enclosing class.</p>
-<h2>Noncompliant Code Example</h2>
+<p>在PHP 4中，任何与嵌套类同名的函数都被认为是类的构造函数。在PHP 5中，这种机制已经被弃用，应该使用“_construct”方法名。
+如果两个模式都出现在同一个类中，PHP 5将把名为“_construct”的函数作为类的构造函数。</p>
+<p>对于每个与封闭类同名的方法，此规则都会引发问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 class Foo {
   function Foo(){...}
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 class Foo {
   function __construct(){...}

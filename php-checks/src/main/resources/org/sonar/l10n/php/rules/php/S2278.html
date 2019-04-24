@@ -1,32 +1,31 @@
-<p>According to the US National Institute of Standards and Technology (NIST), the Data Encryption Standard (DES) is no longer considered secure:</p>
+<p>根据美国国家标准和技术研究所(NIST)的说法，数据加密标准(DES)不再被认为是安全的：</p>
 <blockquote>
-  <p>Adopted in 1977 for federal agencies to use in protecting sensitive, unclassified information, the DES is being withdrawn because it no longer
-  provides the security that is needed to protect federal government information.</p>
-  <p>Federal agencies are encouraged to use the Advanced Encryption Standard, a faster and stronger algorithm approved as FIPS 197 in 2001.</p>
+  <p>1977年通过的联邦机构用于保护敏感、非机密信息的DES被撤销，因为它不再提供保护联邦政府信息所需的安全性。</p>
+  <p>联邦机构被鼓励使用高级加密标准，这是一种更快更强的算法，在2001年被批准为FIPS 197。</p>
 </blockquote>
-<p>For similar reasons, RC2 should also be avoided.</p>
-<h2>Noncompliant Code Example</h2>
+<p>出于类似的原因，还应避免RC2。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 &lt;?php
-  $ciphertext = mcrypt_encrypt(MCRYPT_DES, $key, $plaintext, $mode); // Noncompliant
+  $ciphertext = mcrypt_encrypt(MCRYPT_DES, $key, $plaintext, $mode); // 不合规
   // ...
-  $ciphertext = mcrypt_encrypt(MCRYPT_DES_COMPAT, $key, $plaintext, $mode); // Noncompliant
+  $ciphertext = mcrypt_encrypt(MCRYPT_DES_COMPAT, $key, $plaintext, $mode); // 不合规
   // ...
-  $ciphertext = mcrypt_encrypt(MCRYPT_TRIPLEDES, $key, $plaintext, $mode); // Noncompliant
+  $ciphertext = mcrypt_encrypt(MCRYPT_TRIPLEDES, $key, $plaintext, $mode); // 不合规
   // ...
-  $ciphertext = mcrypt_encrypt(MCRYPT_3DES, $key, $plaintext, $mode); // Noncompliant
+  $ciphertext = mcrypt_encrypt(MCRYPT_3DES, $key, $plaintext, $mode); // 不合规
 
-  $cipher = "des-ede3-cfb";  // Noncompliant
+  $cipher = "des-ede3-cfb";  //不合规
   $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
 ?&gt;
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 &lt;?php
   $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $plaintext, MCRYPT_MODE_CBC, $iv);
 ?&gt;
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/326.html">MITRE, CWE-326</a> - Inadequate Encryption Strength </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-327</a> - Use of a Broken or Risky Cryptographic Algorithm </li>

@@ -1,28 +1,28 @@
-<p>Unused parameters are misleading. Whatever the value passed to such parameters is, the behavior will be the same.</p>
-<h2>Noncompliant Code Example</h2>
+<p>未使用的参数具有误导性。无论传递给这些参数的值是什么，行为都是相同的。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-function doSomething($a, $b) { // "$a" is unused
+function doSomething($a, $b) { // "$a"未使用
   return compute($b);
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 function doSomething($b) {
   return compute($b);
 }
 </pre>
-<h2>Exceptions</h2>
-<p>Functions in classes that override a class or implement interfaces are ignored.</p>
+<h2>例外</h2>
+<p>类中重写类或实现接口的函数将被忽略。</p>
 <pre>
 class C extends B {
 
-  function doSomething($a, $b) {     // no issue reported on $b
+  function doSomething($a, $b) {     // 没有关于$b的问题报告
     compute($a);
   }
 
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C++:2008, 0-1-11 - There shall be no unused parameters (named or unnamed) in nonvirtual functions. </li>
   <li> MISRA C:2012, 2.7 - There should be no unused parameters in functions </li>

@@ -1,5 +1,5 @@
 {
-  "title": "\"cgi.force_redirect\" should be enabled",
+  "title": "应该启用\"cgi.force_redirect\"",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

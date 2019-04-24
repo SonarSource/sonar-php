@@ -1,74 +1,70 @@
-<p>Using command line arguments is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>使用命令行参数是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-7281">CVE-2018-7281</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-12326">CVE-2018-12326</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2011-3198">CVE-2011-3198</a> </li>
 </ul>
-<p>Command line arguments can be dangerous just like any other user input. They should never be used without being first validated and sanitized.</p>
-<p>Remember also that any user can retrieve the list of processes running on a system, which makes the arguments provided to them visible. Thus
-passing sensitive information via command line arguments should be considered as insecure.</p>
-<p>This rule raises an issue when on every program entry points (<code>main</code> methods) when command line arguments are used. The goal is to guide
-security code reviews.</p>
-<h2>Ask Yourself Whether</h2>
+<p>与任何其他用户输入一样，命令行参数也可能是危险的。在未经验证和净化的情况下，不应该使用它们。</p>
+<p>还请记住，任何用户都可以检索在系统上运行的进程列表，这将使提供给它们的参数可见。因此，通过命令行参数传递敏感信息应该被认为是不安全的。</p>
+<p>当在每个程序入口点(<code>main</code> 方法)上使用命令行参数时，该规则都会引发一个问题。其目标是指导安全代码检查。</p>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> any of the command line arguments are used without being sanitized first. </li>
-  <li> your application accepts sensitive information via command line arguments. </li>
+  <li>使用任何命令行参数都不需要先进行净化。</li>
+  <li> 应用程序通过命令行参数接受敏感信息。</li>
 </ul>
-<p>If you answered yes to any of these questions you are at risk.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p><a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">Sanitize</a> all command line arguments before using them.</p>
-<p>Any user or application can list running processes and see the command line arguments they were started with. There are safer ways of providing
-sensitive information to an application than exposing them in the command line. It is common to write them on the process' standard input, or give the
-path to a file containing the information.</p>
-<h2>Questionable Code Example</h2>
-<p>Builtin access to <code>$argv</code></p>
+<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
+<p>在使用命令行参数之前<a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">净化</a>这些参数。</p>
+<p>任何用户或应用程序都可以列出正在运行的进程，并查看它们开始时的命令行参数。与在命令行中公开敏感信息相比，向应用程序提供敏感信息有更安全的方法。通常将它们写入进程的标准输入，或者给出包含这些信息的文件的路径。</p>
+<h2>可疑的代码示例</h2>
+<p>内置访问 <code>$argv</code></p>
 <pre>
 function globfunc() {
-    global $argv; // Questionable. Reference to global $argv
-    foreach ($argv as $arg) { // Questionable.
-        // ...
+    global $argv; // 可疑的。参考 global $argv
+    foreach ($argv as $arg) { // 可疑的。
+        // ......
     }
 }
 
 function myfunc($argv) {
-    $param = $argv[0]; // OK. Reference to local $argv parameter
-    // ...
+    $param = $argv[0]; // 没问题。引用本地 $argv 参数
+    // ......
 }
 
-foreach ($argv as $arg) { // Questionable. Reference to $argv.
-    // ...
+foreach ($argv as $arg) { // 可疑的。 参考$argv.
+    // ......
 }
 
-$myargv = $_SERVER['argv']; // Questionable. Equivalent to $argv.
+$myargv = $_SERVER['argv']; // 可疑的。 Equivalent to $argv.
 
 function serve() {
-    $myargv = $_SERVER['argv']; // Questionable.
-    // ...
+    $myargv = $_SERVER['argv']; // 可疑的。
+    // ......
 }
 
-myfunc($argv); // Questionable
+myfunc($argv); // 可疑的
 
-$myvar = $HTTP_SERVER_VARS[0]; // Questionable. Note: HTTP_SERVER_VARS has ben removed since PHP 5.4.
+$myvar = $HTTP_SERVER_VARS[0]; // 可疑的。注意:HTTP_SERVER_VARS已经从PHP 5.4中删除。
 
-$options = getopt('a:b:'); // Questionable. Parsing arguments.
+$options = getopt('a:b:'); // 可疑的。解析参数。
 
-$GLOBALS["argv"]; // Questionable. Equivalent to $argv.
+$GLOBALS["argv"]; // 可疑的。相当于$argv。
 
 function myglobals() {
-    $GLOBALS["argv"]; // Questionable
+    $GLOBALS["argv"]; // 可疑的
 }
 
-$argv = [1,2,3]; // Questionable. It is a bad idea to override argv.
+$argv = [1,2,3]; // 可疑的。覆盖argv不是个好主意。
 </pre>
-<p>Zend Console</p>
+<p>Zend 控制台</p>
 <pre>
-new Zend\Console\Getopt(['myopt|m' =&gt; 'this is an option']); // Questionable
+new Zend\Console\Getopt(['myopt|m' =&gt; 'this is an option']); // 可疑的
 </pre>
-<p>Getopt-php library</p>
+<p>Getopt-php 库</p>
 <pre>
-new \GetOpt\Option('m', 'myoption', \GetOpt\GetOpt::REQUIRED_ARGUMENT); // Questionable
+new \GetOpt\Option('m', 'myoption', \GetOpt\GetOpt::REQUIRED_ARGUMENT); // 可疑的
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/88.html">MITRE, CWE-88</a> - Argument Injection or Modification </li>
   <li> <a href="https://cwe.mitre.org/data/definitions/214.html">MITRE, CWE-214</a> - Information Exposure Through Process Environment </li>

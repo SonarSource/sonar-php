@@ -1,5 +1,5 @@
 {
-  "title": "\"require_once\" and \"include_once\" should be used instead of \"require\" and \"include\"",
+  "title": "应该使用\"require_once\" 和 \"include_once\" 而不是 \"require\" 和 \"include\"",
   "type": "BUG",
   "status": "ready",
   "remediation": {

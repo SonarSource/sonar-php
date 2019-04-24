@@ -1,52 +1,48 @@
-<p>Delivering code in production with debug features activated is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>在带有激活的调试特性的生产环境中交付代码是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1999007">CVE-2018-1999007</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-5306">CVE-2015-5306</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-2006">CVE-2013-2006</a> </li>
 </ul>
-<p>An application's debug features enable developers to find bugs more easily. It often gives access to detailed information on both the system
-running the application and users. Sometime it even enables the execution of custom commands. Thus deploying on production servers an application
-which has debug features activated is extremely dangerous.</p>
-<h2>Ask Yourself Whether</h2>
+<p>应用程序的调试特性使开发人员能够更容易地发现bug。它通常提供对运行应用程序的系统和用户的详细信息的访问。有时甚至可以执行自定义命令。因此，在生产服务器上部署已激活调试功能的应用程序非常危险。</p>
+<h2>询问是否有下列情况：</h2>
 <ul>
-  <li> the code or configuration enabling the application debug features is deployed on production servers. </li>
-  <li> the application runs by default with debug features activated. </li>
+  <li> 支持应用程序调试特性的代码或配置部署在生产服务器上。</li>
+  <li> 应用程序在默认情况下运行，并激活调试功能。</li>
 </ul>
-<p>You are at risk if you answered yes to any of these questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>The application should run by default in the most secure mode, i.e. as on production servers. This is to prevent any mistake. Enabling debug mode
-should be explicitly asked via a command line argument, an environment variable or a configuration file.</p>
-<p>Check that every aspect of the debug mode is controlled by only one configuration switch: logging, exception/error handling, access control, etc...
-It is otherwise very easy to forget one of them.</p>
-<p>Do not enable debug mode on production servers.</p>
-<p>Only the value "0" or "false" for CakePHP 3.x is suitable (production mode) to not leak sensitive data on the logs.</p>
-<h2>Noncompliant Code Example</h2>
-<p>CakePHP 1.x, 2.x:</p>
+<p>如果你对这些问题中的任何一个回答是肯定的，那么你就有风险。</p>
+<h2>推荐的安全编码实践</h2>
+<p>应用程序应该默认以最安全的模式运行，即在生产服务器上运行。这是为了防止任何错误。应该通过命令行参数、环境变量或配置文件显式地询问启用调试模式。</p>
+<p>检查调试模式的每个方面是否只由一个配置开关控制:日志记录、异常/错误处理、访问控制等等。否则很容易忘记其中的一个。</p>
+<p>不要在生产服务器上启用调试模式。</p>
+<p>只有 CakePHP 3.x 的值为“0”或“false”才适合（生产模式下）不泄漏日志上的敏感数据。</p>
+<h2>不合规的代码示例</h2>
+<p>在CakePHP 1.x, 2.x版本：</p>
 <pre>
-Configure::write('debug', 1); // Noncompliant; development mode
+Configure::write('debug', 1); // 不合规；生产模式
 or
-Configure::write('debug', 2); // Noncompliant; development mode
+Configure::write('debug', 2); // 不合规；生产模式
 or
-Configure::write('debug', 3); // Noncompliant; development mode
+Configure::write('debug', 3); // 不合规；生产模式
 </pre>
-<p>CakePHP 3.0:</p>
+<p>在CakePHP 3.0版本：</p>
 <pre>
 use Cake\Core\Configure;
 
 Configure::config('debug', true);
 </pre>
-<h2>Compliant Solution</h2>
-<p>CakePHP 1.2:</p>
+<h2>合规的解决方案</h2>
+<p>在CakePHP 1.2版本：</p>
 <pre>
-Configure::write('debug', 0); // Compliant; this is the production mode
+Configure::write('debug', 0); // 合规的；这是生产模式
 </pre>
-<p>CakePHP 3.0:</p>
+<p>在CakePHP 3.0版本：</p>
 <pre>
 use Cake\Core\Configure;
 
 Configure::config('debug', false);
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/489.html">MITRE, CWE-489</a> - Leftover Debug Code </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/215.html">MITRE, CWE-215</a> - Information Exposure Through Debug Information </li>

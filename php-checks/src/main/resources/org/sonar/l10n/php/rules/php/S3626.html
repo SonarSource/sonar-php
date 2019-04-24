@@ -1,16 +1,15 @@
-<p>Jump statements, such as <code>return</code>, <code>goto</code>, and <code>continue</code> let you change the default flow of program execution,
-but jump statements that direct the control flow to the original direction are just a waste of keystrokes.</p>
-<h2>Noncompliant Code Example</h2>
+<p>跳转语句，如 <code>return</code>，<code>goto</code> 和 <code>continue</code> 允许您更改程序执行的默认流程，但是，将控制流引导到原始方向的跳转语句只是对击键的浪费。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 function foo($p) {
   $i = $p;
   while ($i &gt; 0) {
     $i--;
-    continue; // Noncompliant
+    continue; // 不合规
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 function foo($p) {
   $i = $p;

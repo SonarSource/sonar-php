@@ -1,29 +1,27 @@
-<p>Signalling processes is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>信令进程是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0390">CVE-2009-0390</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2002-0839">CVE-2002-0839</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-1671">CVE-2008-1671</a> </li>
 </ul>
-<p>Sending signals without checking properly which process will receive it can cause a denial of service.</p>
-<h2>Ask Yourself Whether</h2>
+<p>在没有正确检查哪个进程将接收到信号的情况下发送信号可能导致拒绝服务。</p>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> the PID of the process to which the signal will be sent is coming from an untrusted source. It could for example come from a world-writable
-  file. </li>
-  <li> users who are asking for the signal to be sent might not have the permission to send those signals. </li>
+  <li> 将信号发送到的进程的PID来自一个不可信的源。例如，它可以来自一个可写的文件。</li>
+  <li> 请求发送信号的用户可能没有发送这些信号的权限。</li>
 </ul>
-<p>You are at risk if you answered yes to any of these questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
 <ul>
-  <li> If the signal is sent because of a user's request. Check that the user is allowed to send this signal. You can for example forbid it if the
-  user doesn't own the process. </li>
-  <li> Secure the source from which the process PID is read. </li>
-  <li> Run the process sending the signals with minimal permissions. </li>
+  <li> 如果信号是由于用户的请求而发送的。检查用户是否允许发送此信号。例如，如果用户不拥有进程，您可以禁止它。</li>
+  <li> 保护读取进程PID的源。</li>
+  <li> 运行以最小权限发送信号的进程。</li>
 </ul>
-<h2>Questionable Code Example</h2>
+<h2>可疑的代码示例</h2>
 <pre>
-posix_kill(42, 42); // Questionable
+posix_kill(42, 42); // 可疑的
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/283.html">MITRE, CWE-283</a> - https://cwe.mitre.org/data/definitions/283.html </li>
 </ul>

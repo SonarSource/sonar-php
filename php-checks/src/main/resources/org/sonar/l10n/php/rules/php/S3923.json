@@ -1,5 +1,5 @@
 {
-  "title": "All branches in a conditional structure should not have exactly the same implementation",
+  "title": "条件结构中的所有分支不应该具有完全相同的实现",
   "type": "BUG",
   "status": "ready",
   "remediation": {

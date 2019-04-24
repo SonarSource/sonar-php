@@ -1,5 +1,5 @@
 {
-  "title": "Constant names should comply with a naming convention",
+  "title": "常量名称应符合命名约定",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

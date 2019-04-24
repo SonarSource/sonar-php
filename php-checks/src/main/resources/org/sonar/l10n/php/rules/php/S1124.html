@@ -1,16 +1,16 @@
-<p>The PSR2 standard recommends listing modifiers in the following order to improve the readability of PHP source code:</p>
+<p>PSR2标准建议按照以下顺序列出修饰符，以提高PHP源代码的可读性：</p>
 <ol>
-  <li> final or abstract </li>
-  <li> public or protected or private </li>
-  <li> static </li>
+  <li> 不可继承类（final）或者抽象类（abstract） </li>
+  <li> 公共类型（public），受保护类型（protected）或者私有类型（private）</li>
+  <li> 静态（static） </li>
 </ol>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
 static protected $foo;
 ...
 public static final function bar(){...}
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 protected static $foo;
 ...

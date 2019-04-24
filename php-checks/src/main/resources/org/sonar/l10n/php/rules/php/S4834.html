@@ -1,49 +1,45 @@
-<p>Controlling permissions is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>控制权限是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-12999">CVE-2018-12999</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-10285">CVE-2018-10285</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7455">CVE-2017-7455</a> </li>
 </ul>
-<p>Attackers can only damage what they have access to. Thus limiting their access is a good way to prevent them from wreaking havoc, but it has to be
-done properly.</p>
-<p>This rule flags code that controls the access to resources and actions or configures this access. The goal is to guide security code reviews.</p>
-<h2>Ask Yourself Whether</h2>
+<p>攻击者只能破坏他们所能访问的东西。因此，限制他们的访问是防止他们造成破坏的好方法，但必须正确地做。</p>
+<p>此规则标记控制对资源和操作的访问或配置此访问的代码。目标是指导安全代码审查。</p>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> at least one accessed action or resource is security-sensitive. </li>
-  <li> there is no access control in place or it does not cover all sensitive actions and resources. </li>
-  <li> users have permissions they don't need. </li>
-  <li> the access control is based on a user input or on some other unsafe data. </li>
-  <li> permissions are difficult to remove or take a long time to be updated. </li>
+  <li> 至少有一个被访问的操作或资源是安全敏感的。</li>
+  <li> 没有适当的访问控制，或者它不能覆盖所有敏感的操作和资源。</li>
+  <li> 用户拥有他们不需要的权限。</li>
+  <li> 访问控制基于用户输入或其他一些不安全数据。</li>
+  <li> 权限很难删除或需要很长时间才能更新。</li>
 </ul>
-<p>You are at risk if you answered yes to the first question and any of the following ones.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>The first step is to restrict all sensitive actions to authenticated users.</p>
-<p>Each user should have the lowest privileges possible. The access control granularity should match the sensitivity of each resource or action. The
-more sensitive it is, the less people should have access to it. </p>
-<p>Do not base the access control on a user input or on a value which might have been tampered with. For example, the developer should not read a
-user's permissions from an HTTP cookie as it can be modified client-side.</p>
-<p>Check that the access to each action and resource is properly restricted.</p>
-<p>Enable administrators to swiftly remove permissions when necessary. This enables them to reduce the time an attacker can have access to your
-systems when a breach occurs.</p>
-<p>Log and monitor refused access requests as they can reveal an attack.</p>
-<h2>Questionable Code Example</h2>
+<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
+<p>第一步是将所有敏感操作限制为经过身份验证的用户。</p>
+<p>每个用户应该拥有尽可能低的特权。访问控制粒度应该匹配每个资源或操作的敏感性。它越敏感，人们接触它的机会就越少。</p>
+<p>不要将访问控制基于用户输入或可能被篡改的值。例如，开发人员不应该从HTTP cookie读取用户的权限，因为它可以在客户端修改。</p>
+<p>检查对每个操作和资源的访问是否受到了适当的限制。</p>
+<p>允许管理员在必要时快速删除权限。这使它们能够减少攻击者在发生攻击时访问您的系统的时间。</p>
+<p>记录和监视被拒绝的访问请求，因为它们可能揭示攻击。</p>
+<h2>可疑的代码示例</h2>
 <p>CakePHP</p>
 <pre>
 use Cake\Auth\BaseAuthorize;
 use Cake\Controller\Controller;
 
-abstract class MyAuthorize extends BaseAuthorize { // Questionable. Method extending Cake\Auth\BaseAuthorize.
-    // ...
+abstract class MyAuthorize extends BaseAuthorize { // 可疑的。方法扩展 Cake\Auth\BaseAuthorize.
+    // ......
 }
 
 // Note that "isAuthorized" methods will only be detected in direct subclasses of Cake\Controller\Controller.
 abstract class MyController extends Controller {
-    public function isAuthorized($user) { // Questionable. Method called isAuthorized in a Cake\Controller\Controller.
+    public function isAuthorized($user) { // 可疑的。方法在 Cake\Controller\Controller中被授权。
         return false;
     }
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> OWASP Top 10 2017 Category A5 - Broken Access Control </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>

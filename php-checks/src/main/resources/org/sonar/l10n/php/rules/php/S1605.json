@@ -1,5 +1,5 @@
 {
-  "title": "\"__construct\" functions should not make PHP 4-style calls to parent constructors",
+  "title": "\"__construct\"函数不应该对父构造函数进行PHP 4风格的调用",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

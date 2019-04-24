@@ -1,5 +1,5 @@
 {
-  "title": "Empty statements should be removed",
+  "title": "空语句应该被删除",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

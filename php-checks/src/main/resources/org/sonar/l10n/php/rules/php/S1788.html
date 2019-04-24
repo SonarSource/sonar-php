@@ -1,17 +1,15 @@
-<p>The ability to define default values for method arguments can make a method easier to use. Default argument values allow callers to specify as many
-or as few arguments as they want while getting the same functionality and minimizing boilerplate, wrapper code. </p>
-<p>But all method arguments with default values should be declared after the method arguments without default values. Otherwise, it makes it
-impossible for callers to take advantage of defaults; they must re-specify the defaulted values in order to "get to" the non-default arguments.</p>
-<h2>Noncompliant Code Example</h2>
+<p>为方法参数定义默认值的能力可以使方法更容易使用。默认参数值允许调用者指定任意多或少的参数，同时获得相同的功能和最小化样板文件、包装程序代码。</p>
+<p>但是，所有带有默认值的方法参数都应该在没有默认值的方法参数之后声明。否则，调用者就不可能利用默认值;它们必须重新指定默认值，以便“获得”非默认参数。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-function makeyogurt($type = "acidophilus", $flavor){...}  // Noncompliant
+function makeyogurt($type = "acidophilus", $flavor){...}  // 不合规
 
-makeyogurt("raspberry")}}  // Runtime error: Missing argument 2 in call to makeyogurt()
+makeyogurt("raspberry")}}  // 运行时错误:调用makeyogurt()时缺少参数2
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 function makeyogurt($flavor, $type = "acidophilus", ){...}
 
-makeyogurt("raspberry")}} // Works as expected
+makeyogurt("raspberry")}} // 像预期的那样工作
 </pre>
 

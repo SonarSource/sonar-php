@@ -1,15 +1,14 @@
-<p>References in a class to static class members (fields or methods) can be made using either <code>self::$var</code> or <code>static::$var</code>
-(introduced in 5.3). The difference between the two is one of scope. Confusingly, in subclasses, the use of <code>self::</code> references the
-original definition of the member, i.e. the superclass version, rather than any override at the subclass level. <code>static::</code>, on the other
-hand, references the class that was called at runtime.</p>
-<h2>Noncompliant Code Example</h2>
+<p>类中对静态类成员（字段或方法）的引用可以使用 <code>self::$var</code>或 <code>static::$var</code>(在5.3中介绍)。
+两者的区别在于范围。令人困惑的是，在子类中，<code>self::</code> 的使用引用了成员的原始定义，即超类版本，而不是子类级别上的任何覆盖。
+ 另一方面，<code>static::</code>引用了运行时调用的类</p>
+<h2>不合规的代码示例<</h2>
 <pre>
 &lt;?php
 
 class Toy {
 
     public static function status() {
-        self::getStatus();  // Noncompliant; will always print "Sticks are fun!" even when called from a subclass which overrides this method;
+        self::getStatus();  //不合规；即使从重写此方法的子类调用，也将始终打印 "Sticks are fun!"；
     }
 
     protected static function getStatus() {
@@ -19,22 +18,22 @@ class Toy {
 
 class Ball extends Toy {
 
-    protected static function getStatus() {  // Doesn't actually get called
+    protected static function getStatus() {  // 实际上没有调用到子程序
         echo "Balls are fun!";
     }
 }
 
 $myBall = new Ball();
-$myBall::status();  // Prints "Sticks are fun!"
+$myBall::status();  // 打印"Sticks are fun!"
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 &lt;?php
 
 class Toy {
 
     public static function status() {
-        static::getStatus();  // Compliant
+        static::getStatus();  // 合规
     }
 
     protected static function getStatus() {
@@ -50,10 +49,10 @@ class Ball extends Toy {
 }
 
 $myBall = new Ball();
-$myBall::status();  // Prints "Balls are fun!"
+$myBall::status();  // 打印"Balls are fun!"
 </pre>
-<h2>Exceptions</h2>
-<p>No issue is raised when <code>self</code> is used on a constant field, a private field or a private method.</p>
+<h2>例外</h2>
+<p>当<code>self</code>用于常量字段、私有字段或私有方法时，不会引发任何问题。</p>
 <pre>
 class A
 {
@@ -62,8 +61,8 @@ class A
 
     private static function foo()
     {
-        $var = self::$somevar . self::CONSTANT;  // Should be OK
-        self::foo();                               // Should be OK
+        $var = self::$somevar . self::CONSTANT;  // 应该 OK
+        self::foo();                               // 应该 OK
     }
 }
 </pre>

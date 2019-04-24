@@ -1,5 +1,5 @@
 {
-  "title": "Errors should not be silenced",
+  "title": "错误不应被掩盖",
   "type": "BUG",
   "status": "ready",
   "remediation": {

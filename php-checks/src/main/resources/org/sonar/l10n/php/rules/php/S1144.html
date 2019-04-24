@@ -1,10 +1,10 @@
-<p><code>private</code> methods that are never executed are dead code: unnecessary, inoperative code that should be removed. Cleaning out dead code
-decreases the size of the maintained codebase, making it easier to understand the program and preventing bugs from being introduced.</p>
-<h2>Noncompliant Code Example</h2>
+<p>未执行的<code>private</code> 方法是死码：即不必要的，无效的应该被删除的代码。清除死代码会减少维护的代码库的大小，
+使程序更容易理解，并防止引入错误。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 public class Foo
 {
-  private function Foo() {}   // Compliant, private empty constructor intentionally used to prevent any direct instantiation of a class.
+  private function Foo() {}   // 合规，私有的空的构造函数故意用于防止任何类的直接实例化。
 
   public static function doSomething()
   {
@@ -12,15 +12,15 @@ public class Foo
     ...
   }
 
-  private function unusedPrivateFunction() {  // Noncompliant
+  private function unusedPrivateFunction() {  // 不合规
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 public class Foo
 {
-  private function Foo(){}   // Compliant, private empty constructor intentionally used to prevent any direct instantiation of a class.
+  private function Foo(){}   // 合规，私有的空的构造函数故意用于防止任何类的直接实例化。
 
   public static function doSomething()
   {

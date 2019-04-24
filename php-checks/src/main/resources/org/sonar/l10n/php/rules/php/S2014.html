@@ -1,9 +1,9 @@
-<p><code>$this</code> refers to the current class instance. But static methods can be accessed without instantiating the class, and <code>$this</code>
-is not available to them. Using <code>$this</code> in a static context will result in a fatal error at runtime.</p>
-<h2>Noncompliant Code Example</h2>
+<p><code>$this</code> 指的是当前类实例。但是静态方法可以在不实例化类的情况下访问，并且 <code>$this</code>
+对它们不可用。在静态上下文中使用 <code>$this</code> 将在运行时导致致命错误。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 class Clazz {
-  $name=NULL;  // instance variable
+  $name=NULL;  // 实例变量
 
   public static function foo(){
     if ($this-&gt;name != NULL) {
@@ -12,10 +12,10 @@ class Clazz {
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 class Clazz {
-  $name=NULL;  // instance variable
+  $name=NULL;  // 实例变量
 
   public static function foo($nameParam){
     if ($nameParam != NULL) {

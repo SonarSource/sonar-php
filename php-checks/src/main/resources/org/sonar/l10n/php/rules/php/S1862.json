@@ -1,5 +1,5 @@
 {
-  "title": "Related \"if\/else if\" statements and \"cases\" in a \"switch\" should not have the same condition",
+  "title": "在\"switch\"中，相关的\"if\/else if\" 语句和\"cases\"不应该有相同的条件",
   "type": "BUG",
   "status": "ready",
   "remediation": {

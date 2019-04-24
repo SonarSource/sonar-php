@@ -1,5 +1,5 @@
 {
-  "title": "Multiline blocks should be enclosed in curly braces",
+  "title": "多行块应该用圆括号括起来",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

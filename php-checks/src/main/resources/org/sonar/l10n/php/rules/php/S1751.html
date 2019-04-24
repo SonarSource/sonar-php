@@ -1,16 +1,15 @@
-<p>A loop with at most one iteration is equivalent to the use of an <code>if</code> statement to conditionally execute one piece of code. No developer
-expects to find such a use of a loop statement. If the initial intention of the author was really to conditionally execute one piece of code, an
-<code>if</code> statement should be used instead.</p>
-<p>At worst that was not the initial intention of the author and so the body of the loop should be fixed to use the nested <code>return</code>,
-<code>break</code> or <code>throw</code> statements in a more appropriate way.</p>
-<h2>Noncompliant Code Example</h2>
+<p>最多有一个迭代的循环相当于使用 <code>if</code>语句有条件地执行一段代码。没有开发人员希望找到循环语句的这种用法。
+  如果作者的初始意图是有条件地执行一个代码，则应改为使用<code>if</code>语句。 </p>
+<p>在最坏的情况下，这并不是作者最初的意图，所以循环体应该被修复，应该采用嵌套的 <code>return</code>,
+<code>break</code> 或者 <code>throw</code> 语句为更合适的方式。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-for ($i = 0; $i &lt; 10; $i++) { // Noncompliant
+for ($i = 0; $i &lt; 10; $i++) { // 不合规
   echo "i is $i";
   break;
 }
 ...
-for ($i = 0; $i &lt; 10; $i++) { // Noncompliant
+for ($i = 0; $i &lt; 10; $i++) { // 不合规
   if ($i == $x) {
     break;
   } else {
@@ -19,7 +18,7 @@ for ($i = 0; $i &lt; 10; $i++) { // Noncompliant
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 for ($i = 0; $i &lt; 10; $i++) {
   echo "i is $i";

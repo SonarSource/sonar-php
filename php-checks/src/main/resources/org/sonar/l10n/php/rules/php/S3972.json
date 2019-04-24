@@ -1,5 +1,5 @@
 {
-  "title": "Conditionals should start on new lines",
+  "title": "条件句应该从新行开始",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

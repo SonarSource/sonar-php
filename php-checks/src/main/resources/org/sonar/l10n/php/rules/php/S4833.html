@@ -1,21 +1,20 @@
-<p>PHP 5.3 introduces <a href="http://www.php.net/namespaces">namespaces</a> to the language. Use of this mechanism should be preferred to
-<code>include</code> or <code>include_once</code> or <code>require</code> or <code>require_once</code> because it solves two common problems:</p>
+<p>PHP 5.3向该语言引入了<a href="http://www.php.net/namespaces">名称空间</a>。这种机制的使用应该优于
+<code>include</code> 或 <code>include_once</code> 或 <code>require</code> 或 <code>require_once</code>，因为它解决了两个常见的问题：</p>
 <ul>
-  <li> it avoids name collisions </li>
-  <li> it provides the ability to create alias which improve readability of the code </li>
+  <li>它避免了名称冲突</li>
+  <li>它提供了创建别名的能力，从而提高了代码的可读性</li>
 </ul>
-<p>Starting from its version 8, Drupal is relying on namespaces to be compliant with <a
-href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md">PSR-4 standard</a>. Drupal's modules should be compliant with
-PSR-4 standard and therefore should no longer rely on <code>include</code> or <code>include_once</code> or <code>require</code> or
-<code>require_once</code> functions.</p>
-<h2>Noncompliant Code Example</h2>
+<p>Drupal的第8版开始，Drupal就依赖名称空间来符合 <a
+href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md">PSR-4标准</a>。Drupal的模块应该符合PSR-4标准，因此不应该再依赖于 <code>include</code> 或 <code>include_once</code> 或 <code>require</code> 或
+<code>require_once</code> 函数。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 require_once('./modules/vegetable/src/Entity/Tomato.php');
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 use Drupal\vegetable\Entity\Tomato
 </pre>
-<h2>Exceptions</h2>
-<p>This rule doesn't raise issues on <code>autoload.php</code> or <code>ScriptHandler.php</code> files.</p>
+<h2>例外</h2>
+<p>该规则不会对<code>autoload.php</code> 或 <code>ScriptHandler.php</code> 文件引发问题。</p>
 

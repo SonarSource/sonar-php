@@ -1,6 +1,5 @@
-<p>When two methods have the same implementation, either it was a mistake - something else was intended - or the duplication was intentional, but may
-be confusing to maintainers. In the latter case, one implementation should invoke the other.</p>
-<h2>Noncompliant Code Example</h2>
+<p>当两个方法具有相同的实现时，要么是一个错误—另有目的—要么是有意进行的复制，但可能会让维护人员感到困惑。在后一种情况下，一个实现应该调用另一个实现。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 class A {
     private const CODE = "bounteous";
@@ -10,13 +9,13 @@ class A {
         return A::CODE;
     }
 
-    public function getName() {  // Noncompliant
+    public function getName() {  // 不合规
         doTheThing();
         return A::CODE;
     }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 class A {
     private const CODE = "bounteous";
@@ -31,6 +30,6 @@ class A {
     }
 }
 </pre>
-<h2>Exceptions</h2>
-<p>Methods that are not accessors (getters and setters), with fewer than 2 statements are ignored.</p>
+<h2>例外</h2>
+<p>忽略不是访问器（getter和setter）且语句数少于2条的方法。</p>
 

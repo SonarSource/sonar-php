@@ -1,17 +1,16 @@
-<p><code>file_uploads</code> is an on-by-default PHP configuration that allows files to be uploaded to your site. Since accepting <del>candy</del>
-files from strangers is inherently dangerous, this feature should be disabled unless it is absolutely necessary for your site.</p>
-<p>This rule raises an issue when <code>file_uploads</code> is not explicitly disabled.</p>
-<h2>Noncompliant Code Example</h2>
+<p><code>file_uploads</code> 是默认打开的PHP配置，允许将文件上载到站点。因为从陌生人那里接受 <del>candy</del>文件本身就是危险的，除非对站点绝对必要，否则应该禁用该特性。</p>
+<p>当 <code>file_uploads</code> 未显式禁用时，此规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-; php.ini
-file_uploads=1  ; Noncompliant
+; 在php.ini中
+file_uploads=1  ; 不合规
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
-; php.ini
+; 在php.ini中
 file_uploads=0
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/434.html">MITRE, CWE-434</a> - Unrestricted Upload of File with Dangerous Type </li>
   <li> OWASP Top 10 2017 Category A6 - Security Misconfiguration </li>

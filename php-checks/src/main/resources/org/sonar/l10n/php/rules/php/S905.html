@@ -1,11 +1,10 @@
-<p>Any statement (other than a null statement, which means a statement containing only a semicolon <code>;</code>) which has no side effect and does
-not result in a change of control flow will normally indicate a programming error, and therefore should be refactored.</p>
-<h2>Noncompliant Code Example</h2>
+<p>如果任何语句(NULL语句除外，这意味着只包含分号 <code>;</code>的语句)没有副作用，并且也不导致控制流的更改，通常会是编程错误，应该进行重构。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-$a == 1; // Noncompliant; was assignment intended?
-$a &lt; $b; // Noncompliant; have we forgotten to assign the result to a variable?
+$a == 1; // 不合规；这样的赋值有意义吗？ 
+$a &lt; $b; // 不合规； 忘记把结果赋值给变量了吗？
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/482">MITRE, CWE-482</a> - Comparing instead of Assigning </li>
   <li> MISRA C:2004, 14.2 - All non-null statements shall either have at least one side-effect however executed, or cause control flow to change.

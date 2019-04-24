@@ -1,51 +1,41 @@
-<p>Hashing data is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>哈希数据是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-9233">CVE-2018-9233</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-5097">CVE-2013-5097</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-1051">CVE-2007-1051</a> </li>
 </ul>
-<p>Cryptographic hash functions are used to uniquely identify information without storing their original form. When not done properly, an attacker can
-steal the original information by guessing it (ex: with a <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table</a>), or replace the
-original data with another one having the same hash.</p>
-<p>This rule creates an issue when one of the following functions are called: <a href="http://php.net/manual/en/function.hash.php">hash</a>, <a
-href="http://php.net/manual/en/function.hash-init.php">hash_init</a>, <a href="http://php.net/manual/en/function.crypt.php">crypt</a>, <a
-href="http://php.net/manual/en/function.password-hash.php">password_hash</a>, <a
-href="http://php.net/manual/en/function.hash-pbkdf2.php">hash_pbkdf2</a>, <a
-href="http://php.net/manual/en/function.openssl-pbkdf2.php">openssl_pbkdf2</a>, <a href="http://php.net/manual/en/function.md5.php">md5</a>, <a
+<p>密码哈希函数用于在不存储原始形式的情况下唯一标识信息。如果处理不当，攻击者可以通过猜测来窃取原始信息 (例如:使用 <a href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow表</a>)，或者用具有相同哈希的其他数据替换原始数据。</p>
+<p>当调用下列函数之一时，此规则会产生问题：<a href="http://php.net/manual/en/function.hash.php">hash</a>, <a
+href="http://php.net/manual/en/function.hash-init.php">hash_init</a>，<a href="http://php.net/manual/en/function.crypt.php">crypt</a>，<a
+href="http://php.net/manual/en/function.password-hash.php">password_hash</a>，<a
+href="http://php.net/manual/en/function.hash-pbkdf2.php">hash_pbkdf2</a>，<a
+href="http://php.net/manual/en/function.openssl-pbkdf2.php">openssl_pbkdf2</a>，<a href="http://php.net/manual/en/function.md5.php">md5</a>，<a
 href="http://php.net/manual/en/function.sha1.php">sha1</a></p>
-<h2>Ask Yourself Whether</h2>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> the hashed value is used in a security context. </li>
-  <li> the hashing algorithm you are using is known to have vulnerabilities. </li>
-  <li> <a href="https://en.wikipedia.org/wiki/Salt_(cryptography)">salts</a> are not automatically generated and applied by the hashing function.
-  </li>
-  <li> any generated salts are cryptographically weak or not credential-specific. </li>
+  <li> 哈希值在安全环境中使用。</li>
+  <li> 已知使用的哈希算法存在漏洞。</li>
+  <li> <a href="https://en.wikipedia.org/wiki/Salt_(cryptography)">salts类</a> 不是由哈希函数自动生成和应用的。</li>
+  <li> 生成的任何盐（salts）类在密码上都是弱的，或者不是特定于凭证的。 </li>
 </ul>
-<p>You are at risk if you answered yes to the first question and any of the following ones.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>If the hashed data is sensitive, just use the functions <a href="http://php.net/manual/en/book.password.php">officially recommended by PHP</a>,
-i.e. <code>password_hash</code>, <code>password_verify</code> and <code>password_needs_rehash</code>.</p>
-<p>Alternatively you can use the <code>crypt</code> function or <code>hash_pbkdf2</code> functions. Do not use the <code>md5</code> or
-<code>sha1</code> for sensitive values, and avoid <code>hash</code> and <code>hash_init</code> whenever possible.</p>
-<p>If you use <code>hash_pbkdf2</code> or <code>crypt</code> choose a hashing algorithms which is <a
-href="https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet">known to be strong</a>. Check regularly that this is still the case as hashing
-algorithms often lose strength over time.</p>
-<p>It is recommended to use a hashing function that generate salts automatically, but if you generate salts separately:</p>
+<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
+<p>如果散列数据是敏感的，就使用<a href="http://php.net/manual/en/book.password.php">PHP官方推荐</a>的函数，例如 <code>password_hash</code>，<code>password_verify</code> 和 <code>password_needs_rehash</code>。</p>
+<p>或者，可以使用 <code>crypt</code> 函数或 <code>hash_pbkdf2</code> 函数。对于敏感值，不要使用 <code>md5</code> 或 <code>sha1</code>，并且尽可能避免使用 <code>hash</code> 和 <code>hash_init</code>。</p>
+<p>如果使用 <code>hash_pbkdf2</code> 或 <code>crypt</code>，请选择一个已知的 <a
+href="https://www.owasp.org/index.php/Password_Storage_Cheat_Sheet">众所周知的强</a>哈希算法。定期检查这仍然是状况，因为哈希算法往往会随着时间的推移而失去强度。</p>
+<p>建议使用自动生成盐的哈希函数，但如果单独生成盐：</p>
 <ul>
-  <li> generate a cryptographically strong and random salt that is unique for every credential being hashed. </li>
-  <li> the salt is applied correctly before the hashing. </li>
-  <li> save both the salt and the hashed value in the relevant database record; during future validation operations, the salt and hash can then be
-  retrieved from the database. The hash is recalculated with the stored salt and the value being validated, and the result compared to the stored
-  hash. </li>
+  <li> 生成一个加密的强随机salt，对于每个正在散列的凭证都是惟一的。</li>
+  <li> 在哈希之前正确地使用盐。</li>
+  <li> 将salt和hash值保存在相关数据库记录中;在未来的验证操作期间，可以从数据库检索salt和hash。使用存储的salt和正在验证的值重新计算hash，并将结果与存储的hash进行比较。</li>
 </ul>
 <p> </p>
-<p>Note that <code>password_hash</code> generates strong salts automatically.</p>
-<p>Remember to rehash your data regularly as the hashing algorithms become less secure over time. The <code>password_needs_rehash</code> function
-helps you with that.</p>
-<h2>Exceptions</h2>
-<p>HMAC computing is out of the scope of this rule. Thus no issue will be raised when the <code>hash_init</code> function is called with
-<code>HASH_HMAC</code> given as second parameter.</p>
-<h2>See</h2>
+<p>注意，<code>password_hash</code>会自动生成强盐。</p>
+<p>记住，随着时间的推移，哈希算法变得越来越不安全，要定期更新哈希数据。<code>password_needs_rehash</code> 函数可以帮助实现这一点。</p>
+<h2>例外</h2>
+<p>HMACHMAC计算超出了这条规则的范围。因此，当使用作为第二个参数的<code>HASH_HMAC</code>调用<code>hash_init</code> 函数时，不会引发任何问题。</p>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/916.html">MITRE, CWE-916</a> - Use of Password Hash With Insufficient Computational Effort
   </li>

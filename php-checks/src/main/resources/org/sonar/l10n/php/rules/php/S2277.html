@@ -1,15 +1,14 @@
-<p>Without OAEP in RSA encryption, it takes less work for an attacker to decrypt the data or infer patterns from the ciphertext. This rule logs an
-issue when <code>openssl_public_encrypt</code> is used with one the following padding constants: <code>OPENSSL_NO_PADDING</code> or
-<code>OPENSSL_PKCS1_PADDING</code> or <code>OPENSSL_SSLV23_PADDING</code>.</p>
-<h2>Noncompliant Code Example</h2>
+<p>如果在RSA加密中没有OAEP，攻击者解密数据或从密文推断模式所需的工作就会更少。当以下填充常量使用 <code>openssl_public_encrypt</code> 时，此规则将记录一个问题：
+ <code>OPENSSL_NO_PADDING</code> 或<code>OPENSSL_PKCS1_PADDING</code> 或者 <code>OPENSSL_SSLV23_PADDING</code>。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 function encrypt($data, $key) {
   $crypted='';
-  openssl_public_encrypt($data, $crypted, $key, OPENSSL_NO_PADDING); // Noncompliant
+  openssl_public_encrypt($data, $crypted, $key, OPENSSL_NO_PADDING); // 不合规
   return $crypted;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 function encrypt($data, $key) {
   $crypted='';
@@ -17,7 +16,7 @@ function encrypt($data, $key) {
   return $crypted;
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/780.html">MITRE CWE-780</a> - Use of RSA Algorithm without OAEP </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/327.html">MITRE CWE-327</a> - Use of a Broken or Risky Cryptographic Algorithm </li>

@@ -1,5 +1,5 @@
 {
-  "title": "Parentheses should not be used for calls to \"echo\"",
+  "title": "不应该在调用\"echo\"时使用括号",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

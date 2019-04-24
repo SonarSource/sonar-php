@@ -1,15 +1,14 @@
-<p>In the absence of enclosing curly braces, the line immediately after a conditional is the one that is conditionally executed. By both convention
-and good practice, such lines are indented. In the absence of both curly braces and indentation the intent of the original programmer is entirely
-unclear and perhaps not actually what is executed. Additionally, such code is highly likely to be confusing to maintainers.</p>
-<h2>Noncompliant Code Example</h2>
+<p>如果没有封闭的圆括号，紧接在条件句之后的行就是有条件执行的行。根据惯例和良好的实践，这些行都是缩进的。
+在没有圆括号和缩进的情况下，原始程序员的意图是完全不清楚的，可能实际上并没有执行什么。此外，这样的代码很可能让维护人员感到困惑。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-if ($x &gt; 0)  // Noncompliant
+if ($x &gt; 0)  // 不合规
 doTheThing();
 doTheOtherThing();
 
 foo();
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if ($x &gt; 0) {
   doTheThing();
@@ -18,7 +17,7 @@ if ($x &gt; 0) {
 
 foo();
 </pre>
-<p>or</p>
+<p>或者</p>
 <pre>
 if ($x &gt; 0)
     doTheThing();

@@ -1,5 +1,5 @@
 {
-  "title": "\"HttpOnly\" should be set on cookies",
+  "title": "应该在cookie上设置\"HttpOnly\"",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

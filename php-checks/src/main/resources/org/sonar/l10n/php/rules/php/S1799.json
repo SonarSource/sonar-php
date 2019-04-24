@@ -1,5 +1,5 @@
 {
-  "title": "\"exit(...)\" and \"die(...)\" statements should not be used",
+  "title": "不应该使用\"exit(...)\" 和 \"die(...)\"语句",
   "type": "BUG",
   "status": "ready",
   "remediation": {

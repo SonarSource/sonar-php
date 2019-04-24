@@ -1,5 +1,5 @@
 {
-  "title": "Variables should be initialized before use",
+  "title": "变量在使用前要初始化",
   "type": "BUG",
   "status": "ready",
   "remediation": {

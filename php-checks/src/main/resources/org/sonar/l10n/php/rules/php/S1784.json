@@ -1,5 +1,5 @@
 {
-  "title": "Method visibility should be explicitly declared",
+  "title": "方法可见性应显式声明",
   "type": "BUG",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "\"allow_url_fopen\" and \"allow_url_include\" should be disabled",
+  "title": "\"allow_url_fopen\" 和 \"allow_url_include\" 应该被禁用",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

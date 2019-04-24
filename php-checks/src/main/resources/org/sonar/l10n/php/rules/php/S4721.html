@@ -1,41 +1,39 @@
-<p>OS commands are security-sensitive. For example, their use has led in the past to the following vulnerabilities:</p>
+<p>操作系统命令是安全敏感的。例如，它们的使用在过去曾导致以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-12465">CVE-2018-12465</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-7187">CVE-2018-7187</a> </li>
 </ul>
-<p>Applications that execute operating system commands or execute commands that interact with the underlying system should neutralize any
-externally-provided input used to construct those commands. Failure to do so could allow an attacker to execute unexpected or dangerous commands,
-potentially leading to loss of confidentiality, integrity or availability.</p>
+<p>执行操作系统命令或执行与底层系统交互的命令的应用程序应该中和用于构造这些命令的任何外部提供的输入。如果不这样做，攻击者可能会执行意外的或危险的命令，从而可能导致机密性、完整性或可用性的丢失。</p>
 <p> </p>
-<p>This rule flags code that specifies the name of the command to run. The goal is to guide security code reviews.</p>
-<h2>Ask Yourself Whether</h2>
+<p>此规则标记指定要运行的命令名称的代码。目标是指导安全代码审查。</p>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> the executed command is constructed by input that is externally-influenced, for example, user input (attacker). (*) </li>
-  <li> the command execution is not restricted to the right users. (*) </li>
-  <li> the application can be redesigned to not rely on external input to execute the command. </li>
+  <li> 执行的命令由受外部影响的输入构造，例如，用户输入(攻击者)。(*) </li>
+  <li> 命令的执行并不局限于正确的用户。(*) </li>
+  <li> 可以重新设计应用程序，使其不依赖外部输入来执行命令。</li>
 </ul>
-<p>(*) You are at risk if you answered yes to any of those questions.</p>
+<p>(*)如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
 <p> </p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>Restrict the control given to the user over the executed command:</p>
+<h2>推荐的安全编码实践</h2>
+<p>限制用户对执行的命令的控制：</p>
 <ul>
-  <li> make the executed command part of a whitelist and reject all commands not part of this list. </li>
-  <li> sanitize the user input. </li>
+  <li> 将执行的命令作为白名单的一部分，并拒绝不属于此列表的所有命令。 </li>
+  <li> 净化用户输入。 </li>
 </ul>
 <p> </p>
-<p>Restrict which users can have access to the command:</p>
+<p>限制哪些用户可以访问该命令：</p>
 <ul>
-  <li> use a firewall to protect the process running the code, and to protect the network from the command. </li>
-  <li> authenticate the user and allow only some users to run the command. </li>
+  <li> 使用防火墙保护运行代码的进程，并保护网络不受命令的影响。</li>
+  <li> 对用户进行身份验证，只允许部分用户运行命令。</li>
 </ul>
-<p>Reduce the damage the command can do:</p>
+<p>减少命令所能造成的伤害：</p>
 <ul>
-  <li> execute the code in a sandbox environment that enforces strict boundaries between the operating system and the process. For example: a "jail".
+  <li> 在沙箱环境中执行代码，沙箱环境强制执行操作系统和流程之间的严格边界。 例如："jail"。
   </li>
-  <li> refuse to run the command if the process has too many privileges. For example: forbid running the code as "root". </li>
+  <li> 如果进程拥有太多特权，则拒绝运行该命令。例如:禁止以“root”运行代码。</li>
 </ul>
 <p> </p>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/78">MITRE, CWE-78</a> - Improper Neutralization of Special Elements used in an OS Command </li>
   <li> OWASP Top 10 2017 Category A1 - Injection </li>

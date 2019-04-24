@@ -1,5 +1,5 @@
 {
-  "title": "\"switch case\" clauses should not have too many lines of code",
+  "title": "\"switch case\"子句不应该有太多的代码行",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

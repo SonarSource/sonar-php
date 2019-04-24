@@ -1,45 +1,44 @@
-<p>Reading Standard Input is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>读取标准输入是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-2337">CVE-2005-2337</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-11449">CVE-2017-11449</a> </li>
 </ul>
-<p>It is common for attackers to craft inputs enabling them to exploit software vulnerabilities. Thus any data read from the standard input (stdin)
-can be dangerous and should be validated.</p>
-<p>This rule flags code that reads from the standard input.</p>
-<h2>Ask Yourself Whether</h2>
+<p>攻击者通常会精心设计输入，使其能够利用软件漏洞。因此，从标准输入(stdin)读取的任何数据都可能是危险的，应该进行验证。</p>
+<p>此规则标记从标准输入中读取的代码。</p>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> data read from the standard input is not sanitized before being used. </li>
+  <li> 从标准输入中读取的数据在使用之前没有经过净化。</li>
 </ul>
-<p>You are at risk if you answered yes to this question.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p><a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">Sanitize</a> all data read from the standard input before using it.</p>
-<h2>Questionable Code Example</h2>
+<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
+<p>在使用标准输入之前对所有读取的数据进行<a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">净化</a>。</p>
+<h2>可疑的代码示例</h2>
 <pre>
-// Any reference to STDIN is Questionable
-$varstdin = STDIN; // Questionable
-stream_get_line(STDIN, 40); // Questionable
-stream_copy_to_stream(STDIN, STDOUT); // Questionable
-// ...
+// 任何对STDIN的引用都是可疑的
+$varstdin = STDIN; // 可疑的
+stream_get_line(STDIN, 40); // 可疑的
+stream_copy_to_stream(STDIN, STDOUT); // 可疑的
+// ......
 
 
-// Except those references as they can't create an injection vulnerability.
-ftruncate(STDIN, 5); // OK
-ftell(STDIN); // OK
-feof(STDIN); // OK
-fseek(STDIN, 5); // OK
-fclose(STDIN); // OK
+// 除了那些引用，因为它们不能创建注入漏洞。
+ftruncate(STDIN, 5); // 没问题
+ftell(STDIN); // 没问题
+feof(STDIN); // 没问题
+fseek(STDIN, 5); // 没问题
+fclose(STDIN); // 没问题
 
 
-// STDIN can also be referenced like this
-$mystdin = 'php://stdin'; // Questionable
+// STDIN也可以这样引用
+$mystdin = 'php://stdin'; // 可疑的
 
-file_get_contents('php://stdin'); // Questionable
-readfile('php://stdin'); // Questionable
+file_get_contents('php://stdin'); // 可疑的
+readfile('php://stdin'); // 可疑的
 
-$input = fopen('php://stdin', 'r'); // Questionable
-fclose($input); // OK
+$input = fopen('php://stdin', 'r'); // 可疑的
+fclose($input); // 没问题
 </pre>
-<h2>See:</h2>
+<h2>请参阅：</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/20.html">MITRE, CWE-20</a> - Improper Input Validation </li>
 </ul>

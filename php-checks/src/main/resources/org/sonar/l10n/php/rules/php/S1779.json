@@ -1,5 +1,5 @@
 {
-  "title": "Only LF character (Unix-like) should be used to end lines",
+  "title": "只有LF字符(类似Unix)才能用于结束行",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

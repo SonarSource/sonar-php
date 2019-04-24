@@ -1,5 +1,5 @@
 {
-  "title": "Cookie domains should be as narrow as possible ",
+  "title": "Cookie域应尽可能窄",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "A conditionally executed single line should be denoted by indentation",
+  "title": "有条件执行的单行应该用缩进表示",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -1,21 +1,20 @@
-<p>The <code>HttpOnly</code> cookie attribute tells the browser to prevent client-side scripts from reading cookies with the attribute, and its use
-can go a long way to defending against Cross-Site Scripting (XSS) attacks. Thus, as a precaution, the attribute should be set by default on all
-cookies set server-side, such as session id cookies.</p>
-<p>Setting the attribute can be done either programmatically, or globally via configuration files. </p>
-<p>This rule raises an issue:</p>
+<p>The <code>HttpOnly</code> cookie属性告诉浏览器要防止客户端脚本使用该属性读取cookie，使用该属性可以在很大程度上抵御跨站点脚本攻击(XSS)。
+因此，作为预防措施，应该在所有cookie集服务器端(如会话id cookie)上默认设置该属性。</p>
+<p>可以通过编程方式设置属性，也可以通过配置文件全局设置属性。</p>
+<p>这条规则引发了一个问题：</p>
 <ul>
-  <li> when <code>HttpOnly</code> is missing from <code>php.ini</code> or explicitly set to false </li>
-  <li> when <code>setcookie()</code>'s last parameter is explicitly set to false </li>
+  <li> 当<code>php.ini</code> 中缺少<code>HttpOnly</code>或显式设置为false时 </li>
+  <li> 当<code>setcookie()</code>的最后一个参数被显式设置为false时 </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
-; php.ini
-session.cookie_httponly=false  ; Noncompliant; explicitly set to false
+; 在php.ini文件中
+session.cookie_httponly=false  ;不合规；显式设置为false
 
-// file.php
-setcookie($name, $value, $expire, $path, $domain, $secure, false);  // Noncompliant; explicitly set to false
+// 在file.php文件中
+setcookie($name, $value, $expire, $path, $domain, $secure, false);  // 不合规；显式设置为false
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/79.html">CWE-79</a> - Improper Neutralization of Input During Web Page Generation ('Cross-site
   Scripting') </li>

@@ -1,4 +1,4 @@
-<p>Handling files is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>处理文件是安全敏感的。它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-0358">CVE-2018-0358</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7560">CVE-2017-7560</a> </li>
@@ -7,98 +7,76 @@
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-8008">CVE-2018-8008</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2010-2320">CVE-2010-2320</a> </li>
 </ul>
-<p>Any access to the file system can create a vulnerability. Exposing a file's content, path or even its existence or absence is dangerous. It is also
-extremely risky to create or write files without making sure that their permission and content is safe and controlled. Using a file path or reading a
-file content must be always done with caution as they could have been tampered with.</p>
-<p>The file system is a resource which can be easily exhausted. Opening too many files will use up all file descriptors, preventing other software
-from opening files. Filling the storage space will also prevent any additional write from happening.</p>
-<p>This rule raises an issue on <a href="http://php.net/manual/en/ref.filesystem.php">filesystem functions</a> which have a high impact on security
-and are often subject to injection. The goal is to guide manual security code reviews.</p>
-<h2>Ask Yourself Whether</h2>
+<p>对文件系统的任何访问都可能造成漏洞。暴露文件的内容、路径甚至是文件的存在与否都是危险的。如果不确保文件的权限和内容是安全的、受控制的，那么创建或编写文件也是非常危险的。
+使用文件路径或读取文件内容时必须始终保持谨慎，因为它们可能被篡改。</p>
+<p>文件系统是一种很容易耗尽的资源。打开太多的文件将耗尽所有的文件描述符，从而阻止其他软件打开文件。填充存储空间还可以防止发生任何额外的写操作。</p>
+<p>这条规则对<a href="http://php.net/manual/en/ref.filesystem.php">文件系统函数</a> 提出了一个问题，这些函数对安全性有很大的影响，并且常常受到注入的影响。目标是指导手动安全代码检查。</p>
+<h2>检查是否有下列问题：</h2>
 <ul>
-  <li> the file or directory path you are using is coming from a user input or could have been tampered with. </li>
-  <li> the code exposes to an unauthorized person the existence of a file or directory. Any hint given to a user might be dangerous. The information
-  could be given by displaying an error if the file/directory does not exist or just by returning an "Unauthorized" error when the file/directory
-  exists but the person can't perform an action. </li>
-  <li> the code exposes to an unauthorized person the paths of files and/or directories, for example by listing the content of a directory and
-  displaying the output. </li>
-  <li> a file or directory may be created with the wrong permissions. </li>
-  <li> an unvalidated user input is written into a file. </li>
-  <li> a file is read and its content is used without being validated. </li>
-  <li> a file is read and its content is exposed to an unauthorized person. </li>
-  <li> a file is open, created or written into each time a user performs an action. </li>
-  <li> files are open and not closed before executing a child process. This is only dangerous if file descriptors are inherited in your programming
-  language (example: C, C++). </li>
+  <li> 正在使用的文件或目录路径来自用户输入，或者可能已被篡改。</li>
+  <li> 代码向未授权的人公开文件或目录的存在。给用户的任何提示都可能是危险的。如果文件/目录不存在，则显示错误，或者如果文件/目录存在，但用户无法执行操作，则返回“未授权”错误，这样就可以提供信息。</li>
+  <li> 代码向未授权的人公开文件和/或目录的路径，例如通过列出目录的内容并显示输出。</li>
+  <li> 可能使用错误的权限创建文件或目录。</li>
+  <li> 未验证的用户输入被写入文件。</li>
+  <li> 读取文件并在未经验证的情况下使用其内容。</li>
+  <li> 读取文件并将其内容公开给未经授权的人员。</li>
+  <li> 每次用户执行操作时，都会打开、创建或写入文件。</li>
+  <li> 文件在执行子进程之前是打开的，而不是关闭的。只有在您的编程语言(例如:C、c++)中继承了文件描述符时，这才是危险的。</li>
 </ul>
-<p>You are at risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>Avoid using paths provided by users or other untrusted sources if possible. If this is required, check that the path does not reference an
-unauthorized directory or file. See <a href="https://www.owasp.org/index.php/Testing_Directory_traversal/file_include_(OTG-AUTHZ-001)">OWASP
-recommendations</a> as to how to test for directory traversal. Note that the paths length should be validated too.</p>
-<p>No File and directory names should be exposed. They can contain sensitive information. This means that a user should not be able to list the
-content of unauthorized directories.</p>
-<p>Make sure that no attackers can test for the existence or absence of sensitive files. Knowing that a specific file exists can reveal a
-vulnerability or at least expose file and directory names.</p>
-<p>Files and directories should be created with restricted permissions and ownership. Only authorized users and applications should be able to access
-the files, and they should have as little permissions as needed. Modifying a file's permissions is not good enough. The permissions should be
-restricted from the very beginning.</p>
-<p>Writing user input into files should be done with caution. It could fill the storage space if the amount of data written is not controlled. It
-could also write dangerous data which will later be used by an application or returned to another user. This is why the user input should be validated
-before being written.</p>
-<p>Reading a file can lead to other vulnerabilities. Any file could have been modified by an attacker. Thus the same validation as for any user input
-should be performed on file content.</p>
-<p>Once a file is read, its content should only be exposed to authorized users.</p>
-<p>Add limits to the number of files your application access simultaneously or create because of a user action. It is possible to perform a Denial of
-Service attack by opening too many files, and thus exhausting available file descriptors, or by filling the file system with new files. Release file
-descriptors by closing files as soon as possible.</p>
-<p>We also recommended to have tools monitoring your system and alerting you whenever resources are nearly exhausted.</p>
-<p>Do not allow untrusted code to access the filesystem. For some programming languages, child-processes may have access to file descriptors opened by
-the parent process before the creation of the child process. This creates a vulnerability when a child process doesn't have the permission to access a
-file but is still able to modify it via the inherited file descriptor. Check your language documentation for "file descriptor leak" or the use of the
-flags <code>O_CLOEXEC</code>, <code>FD_CLOEXEC</code>, or <code>bInheritHandles</code>. File descriptors can be inherited in the following languages:
-C, C++, C#, Objective-C, Swift, Go (but disabled by default), some JVM versions, Javascript and TypeScript in Nodejs, Some PHP versions, Python, Ruby,
-Rust, VB6 and VB.NET.</p>
-<h2>Questionable Code Example</h2>
+<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<h2>推荐的安全编码实践</h2>
+<p>尽可能避免使用用户或其他不可信源提供的路径。如果需要这样做，请检查路径是否引用未经授权的目录或文件。有关如何测试目录遍历，请参阅 <a href="https://www.owasp.org/index.php/Testing_Directory_traversal/file_include_(OTG-AUTHZ-001)">OWASP建议</a> 。注意，路径长度也应该进行验证。</p>
+<p>不应该公开任何文件和目录名。它们可能包含敏感信息。这意味着用户不能列出未授权目录的内容。</p>
+<p>确保没有攻击者能够测试敏感文件的存在与否。知道存在特定的文件可以暴露漏洞，或者至少暴露文件和目录名。</p>
+<p>应该使用受限制的权限和所有权创建文件和目录。只有经过授权的用户和应用程序才能访问这些文件，并且它们应该具有尽可能少的权限。仅仅修改文件的权限是不够的。从一开始就应该限制权限。</p>
+<p>将用户输入写入文件时应谨慎。如果不控制写入的数据量，它可以填充存储空间。它还可以编写危险的数据，这些数据稍后将被应用程序使用或返回给其他用户。这就是为什么在编写之前应该验证用户输入。</p>
+<p>读取文件可能会导致其他漏洞。任何文件都可能被攻击者修改。因此，应该对文件内容执行与任何用户输入相同的验证。</p>
+<p>一旦文件被读取，它的内容应该只向授权用户公开。</p>
+<p>为应用程序同时访问或由于用户操作而创建的文件数量添加限制。通过打开太多的文件，从而耗尽可用的文件描述符，或者用新文件填充文件系统，可以执行拒绝服务攻击。通过尽快关闭文件来释放文件描述符。</p>
+<p>我们还建议使用工具监视系统，并在资源几乎耗尽时发出警报。</p>
+<p>不允许不受信任的代码访问文件系统。对于某些编程语言，子进程可以访问父进程在创建子进程之前打开的文件描述符。当子进程没有访问文件的权限，但仍然能够通过继承的文件描述符修改文件时，这将创建一个漏洞。
+检查语言文档是否存在“文件描述符泄漏”，或者使用 <code>O_CLOEXEC</code>，<code>FD_CLOEXEC</code>，或 <code>bInheritHandles</code>。文件描述符可以用以下语言继承：
+C，C++，C#，Objective-C，Swift，Go (but disabled by default)，一些JVM版本，用Nodejs编写Javascript 和 TypeScript，一些PHP版本，Python，Ruby，Rust，VB6 和VB.NET。</p>
+<h2>可疑的代码示例</h2>
 <pre>
 function handle_file($filename, $directory, $group, $data, $mode, $flags, $use_include_path, $pattern, $recursive, $context)
 {
-    file_put_contents($filename, $data, $flags); // Questionable
-    copy($filename, $filename); // Questionable
-    tmpfile(); // Questionable
-    parse_ini_file($filename); // Questionable
+    file_put_contents($filename, $data, $flags); // 可疑的
+    copy($filename, $filename); // 可疑的
+    tmpfile(); // 可疑的
+    parse_ini_file($filename); // 可疑的
 
-    // The following calls will raise an issue if and only if the $filename or $directory is not hardcoded
-    move_uploaded_file($filename, $filename); // Questionable
-    rmdir($directory); // Questionable
-    unlink($filename); // Questionable
+    // 仅当 $filename 或 $directory 没有硬编码时，以下调用才会引发问题
+    move_uploaded_file($filename, $filename); // 可疑的
+    rmdir($directory); // 可疑的
+    unlink($filename); // 可疑的
 
-    move_uploaded_file("mypath1", "mypath2"); // Compliant
-    rmdir("dir1"); // Compliant
-    unlink("dir2"); // Compliant
+    move_uploaded_file("mypath1", "mypath2"); // 可疑的
+    rmdir("dir1"); // 可疑的
+    unlink("dir2"); // 可疑的
 
-    // The following functions can also be used to perform network requests (http, socket, ftp, etc...)
-    // in some case they won't raise issues, see below.
-    file_get_contents($filename, $use_include_path); // Questionable
-    file($filename, $flags); // Questionable
-    fopen($filename, $mode, $use_include_path); // Questionable
-    readfile($filename, $use_include_path); // Questionable
+    // 下面的函数也可以用来执行网络请求(http，套接字（socket），ftp等)
+    // 在某些情况下，他们不会提出问题，见下文。
+    file_get_contents($filename, $use_include_path); // 可疑的
+    file($filename, $flags); // 可疑的
+    fopen($filename, $mode, $use_include_path); // 可疑的
+    readfile($filename, $use_include_path); // 可疑的
 
-    // No issue is raised if the source path, cleaned from prefixed wrappers (like 'rar://', 'zlib://', 'bzip2://', 'zip://', 'compress.zlib://',
-    // 'compress.bzip2://', 'glob://', 'ogg://') still contains '://' without starting by 'file://'
-    file_get_contents("zip://http://example.com/file.zip" $use_include_path); // Compliant
-    file("http://example.com", $flags); // Compliant
-    fopen("http://example.com", $mode, $use_include_path); // Compliant
-    readfile("http://example.com", $use_include_path); // Compliant
+    // 如果从带前缀的包装器(如'rar://'，'zlib://'，'bzip2://'，'zip://'，'compress.zlib://'，'compress.bzip2://'，'glob://'，'ogg://') 清除的源路径仍然包含'://' 而不以'file://'开头，则不会引发任何问题。
+    file_get_contents("zip://http://example.com/file.zip" $use_include_path); // 合规的
+    file("http://example.com", $flags); // 合规的
+    fopen("http://example.com", $mode, $use_include_path); // 合规的
+    readfile("http://example.com", $use_include_path); // 合规的
 
-    // No issue is created if a context is given as there is a high chance that it is not a filesystem access.
-    // Note that this will create some false negatives with "zip" contexts.
-    file_get_contents($filename, $use_include_path, $context); // Compliant
-    file($filename, $flags, $context); // Compliant
-    fopen($filename, $mode, $use_include_path, $context); // Compliant
-    readfile($filename, $use_include_path, $context); // Compliant
+    // 如果给定上下文，则不会产生任何问题，因为它很可能不是文件系统访问。
+    // 注意，这将创建一些带有“zip”环境的漏报。
+    file_get_contents($filename, $use_include_path, $context); // 合规的
+    file($filename, $flags, $context); // 合规的
+    fopen($filename, $mode, $use_include_path, $context); // 合规的
+    readfile($filename, $use_include_path, $context); // 合规的
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/732">MITRE, CWE-732</a> - Incorrect Permission Assignment for Critical Resource </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/73">MITRE, CWE-73</a> - External Control of File Name or Path </li>

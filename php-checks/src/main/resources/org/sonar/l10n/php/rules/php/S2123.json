@@ -1,5 +1,5 @@
 {
-  "title": "Values should not be uselessly incremented",
+  "title": "值不应该毫无用处地递增",
   "type": "BUG",
   "status": "ready",
   "remediation": {

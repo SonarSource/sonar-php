@@ -1,10 +1,10 @@
-<p>A value that is incremented or decremented and then not stored is at best wasted code and at worst a bug.</p>
-<h2>Noncompliant Code Example</h2>
+<p>递增或递减而不存储的值最好情况是浪费代码，最坏的情况是错误（bug）。</p>
+<h2>不合规的代码示例</h2>
 <pre>
   $i = 0;
-  $i = $i++; // Noncompliant; i is still zero
+  $i = $i++; // 不合规；i仍然是0
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
   $i = 0;
   $i++;

@@ -1,16 +1,16 @@
-<p>If a <code>private</code> field is declared but not used in the program, it can be considered dead code and should therefore be removed. This will
-improve maintainability because developers will not wonder what the variable is used for.</p>
-<h2>Noncompliant Code Example</h2>
+<p>如果声明了 <code>private</code>字段，但在程序中未使用该字段，则可以将其视为死代码，因此应该删除该字段。
+这将提高可维护性，因为开发人员不会想知道变量是用来做什么的。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 class MyClass {
-  private $foo = 4;                       //foo is unused
+  private $foo = 4;                       //foo 未使用
 
   public function compute($a) {
     return $a * 4;
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 class MyClass {
 

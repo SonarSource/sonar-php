@@ -1,5 +1,5 @@
 {
-  "title": "The \"var\" keyword should not be used",
+  "title": "不应该使用\"var\"关键词",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

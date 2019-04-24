@@ -1,5 +1,5 @@
 {
-  "title": "Control structures should use curly braces",
+  "title": "控件结构应该使用大括号",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

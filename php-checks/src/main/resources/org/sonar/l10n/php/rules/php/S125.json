@@ -1,5 +1,5 @@
 {
-  "title": "Sections of code should not be commented out",
+  "title": "代码部分不应该被注释掉",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -1,11 +1,10 @@
-<p>The <code>switch</code> statement should be used only to clearly define some new branches in the control flow. As soon as a <code>case</code>
-clause contains too many statements this highly decreases the readability of the overall control flow statement. In such case, the content of the
-<code>case</code> clause should be extracted into a dedicated method.</p>
-<h2>Noncompliant Code Example</h2>
-<p>With a threshold of 5:</p>
+<p><code>switch</code>语句应该只用于清楚地定义控制流中的一些新分支。只要一个<code>case</code>
+子句包含太多语句，就会大大降低整个控制流语句的可读性。在这种情况下，应该将<code>case</code> 子句中的内容提取到单独的的方法中</p>
+<h2>不合规的代码示例</h2>
+<p>阈值为5时：</p>
 <pre>
 switch ($var) {
-  case 0:  // 6 lines till next case
+  case 0:  // 6行到下一个case
     methodCall1();
     methodCall2();
     methodCall3();
@@ -15,7 +14,7 @@ switch ($var) {
     break;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 switch ($var) {
   case 0:

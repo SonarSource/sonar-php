@@ -1,14 +1,13 @@
-<p>When the call to a function doesn't have any side effect, what is the point of making the call if the results are ignored? In such cases, either
-the function call is useless and should be dropped, or the source code doesn't behave as expected. </p>
-<h2>Noncompliant Code Example</h2>
+<p>当对函数的调用没有任何副作用时，如果忽略结果，那么调用该函数的意义何在?在这种情况下，要么函数调用无用，应该删除，要么源代码的行为不像预期的那样。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-strlen($name); // Noncompliant; "strlen" has no side effect
+strlen($name); // 不合规；"strlen" 没有副作用
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $length = strlen($name);
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C:2012, 17.7 - The value returned by a function having non-void return type shall be used </li>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/9YIRAQ">CERT, EXP12-C.</a> - Do not ignore values returned by functions </li>

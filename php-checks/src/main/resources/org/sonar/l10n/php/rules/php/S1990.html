@@ -1,18 +1,18 @@
-<p>There is no need to use the <code>final</code> modifier inside a <code>final</code> class. Everything in it is <code>final</code> by default.</p>
-<h2>Noncompliant Code Example</h2>
+<p>不需要在<code>final</code> 类中使用 <code>final</code> 修饰符。默认情况下，其中的所有内容都是<code>final</code>。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 final class MyClass {
 
-  public final String getName() {  // Noncompliant
+  public final String getName() {  // 不合规
     return name;
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 final class MyClass {
 
-  public String getName() {  // Compliant
+  public String getName() {  // 合规
     return name;
   }
 }

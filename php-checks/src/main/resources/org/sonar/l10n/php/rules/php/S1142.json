@@ -1,5 +1,5 @@
 {
-  "title": "Functions should not contain too many return statements",
+  "title": "函数不应该包含太多返回语句",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "Variable variables should not be used",
+  "title": "不应使用可变变量",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -1,18 +1,17 @@
-<p>A <code>for</code> loop with a counter that moves in the wrong direction is not an infinite loop. Because of wraparound, the loop will eventually
-reach its stop condition, but in doing so, it will run many, many more times than anticipated, potentially causing unexpected behavior. </p>
-<h2>Noncompliant Code Example</h2>
+<p>带有朝错误方向移动的计数器的<code>for</code>循环不是无限循环。由于环绕，循环最终将达到其停止条件，但这样做时，它将运行许多次，比预期的次数多，可能导致意外行为。 </p>
+<h2>不合规的代码示例</h2>
 <pre>
-for ($i = 0; $i &lt; $length; $i--) { // Noncompliant
+for ($i = 0; $i &lt; $length; $i--) { // 不合规
   //...
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 for ($i = 0; $i &lt; $length; $i++) {
   //...
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/zYEzAg">CERT, MSC54-J.</a> - Avoid inadvertent wrapping of loop counters </li>
 </ul>

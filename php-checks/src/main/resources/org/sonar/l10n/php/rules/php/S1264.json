@@ -1,5 +1,5 @@
 {
-  "title": "A \"while\" loop should be used instead of a \"for\" loop",
+  "title": "\"while\"循环应该被使用来代替 \"for\"循环",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

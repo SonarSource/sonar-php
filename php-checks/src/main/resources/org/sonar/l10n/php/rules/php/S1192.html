@@ -1,15 +1,15 @@
-<p>Duplicated string literals make the process of refactoring error-prone, since you must be sure to update all occurrences.</p>
-<p>On the other hand, constants can be referenced from many places, but only need to be updated in a single place.</p>
-<h2>Noncompliant Code Example</h2>
-<p>With the default threshold of 3:</p>
+<p>重复的字符串文本使重构过程容易出错，因为必须确保更新所有发生的情况。</p>
+<p>另一方面，常量可以从许多地方引用，但只需要在一个地方进行更新。</p>
+<h2>不合规的代码示例</h2>
+<p>默认阈值为3时：</p>
 <pre>
 function run() {
-  prepare('action1');                              // Non-Compliant - 'action1' is duplicated 3 times
+  prepare('action1');                              // 不合规 - 'action1'被复制了3次
   execute('action1');
   release('action1');
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 ACTION_1 = 'action1';
 
@@ -19,6 +19,5 @@ function run() {
   release(ACTION_1);
 }
 </pre>
-<h2>Exceptions</h2>
-<p>To prevent generating some false-positives, literals having less than 5 characters are excluded.</p>
-
+<h2>例外</h2>
+<p>为了防止产生一些误报，排除了少于5个字符的文字。</p>

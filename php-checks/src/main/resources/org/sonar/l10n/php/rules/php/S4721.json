@@ -1,5 +1,5 @@
 {
-  "title": "Executing OS commands is security-sensitive",
+  "title": "执行操作系统命令是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {

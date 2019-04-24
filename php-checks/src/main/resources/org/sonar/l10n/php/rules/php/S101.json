@@ -1,5 +1,5 @@
 {
-  "title": "Class names should comply with a naming convention",
+  "title": "类名应符合命名约定",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

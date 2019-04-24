@@ -1,20 +1,19 @@
-<p>PHP's <code>session.use_trans_sid</code> automatically appends the user's session id to urls when cookies are disabled. On the face of it, this
-seems like a nice way to let uncookie-able users use your site anyway. In reality, it makes those users vulnerable to having their sessions hijacked
-by anyone who might:</p>
+<p>当禁用cookie时，PHP的<code>session.use_trans_sid</code>自动将用户的会话id附加到urls。从表面上看，这似乎是一种很好的方式，让uncookie-able用户使用你的网站。
+实际上，它使这些用户的会话很容易被任何可能的人劫持：</p>
 <ul>
-  <li> see the URL over the user's shoulder </li>
-  <li> be sent the URL by the user </li>
-  <li> retrieve the URL from browser history </li>
-  <li> ... </li>
+  <li> 查看用户身后的URL </li>
+  <li> 由用户发送URL</li>
+  <li> 从浏览器历史记录中检索URL</li>
+  <li> ...... </li>
 </ul>
-<p>For that reason, it's better to practice a little "tough love" with your users and force them to turn on cookies.</p>
-<p>Since <code>session.use_trans_sid</code> is off by default, this rule raises an issue when it is explicitly enabled.</p>
-<h2>Noncompliant Code Example</h2>
+<p>因此，更好的做法是对用户进行一点强制要求，强迫他们打开cookie。</p>
+<p>由于<code>session.use_trans_sid</code> 在默认情况下是关闭的，所以当显式启用时，该规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-; php.ini
-session.use_trans_sid=1  ; Noncompliant
+; 在php.ini文件
+session.use_trans_sid=1  ; 不合规
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> OWASP Top 10 2017 Category A6 - Security Misconfiguration </li>
 </ul>

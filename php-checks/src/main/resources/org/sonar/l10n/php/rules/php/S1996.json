@@ -1,5 +1,5 @@
 {
-  "title": "Files should contain only one top-level class or interface each",
+  "title": "每个文件只能包含一个顶级类或接口",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

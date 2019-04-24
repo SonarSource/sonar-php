@@ -1,19 +1,18 @@
-<p>Because it is easy to extract strings from a compiled application, credentials should never be hard-coded. Do so, and they're almost guaranteed to
-end up in the hands of an attacker. This is particularly true for applications that are distributed.</p>
-<p>Credentials should be stored outside of the code in a strongly-protected encrypted configuration file or database.</p>
-<h2>Noncompliant Code Example</h2>
+<p>因为从已编译的应用程序中提取字符串很容易，所以不应该对凭证进行硬编码。这样做，它们几乎肯定会落入攻击者之手。对于分布式应用程序尤其如此。</p>
+<p>凭据应该存储在代码之外的强保护加密配置文件或数据库中。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 $uname = "steve";
 $password = "blue";
 connect($uname, $password);
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 $uname = getEncryptedUser();
 $password = getEncryptedPass();
 connect($uname, $password);
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/798">MITRE, CWE-798</a> - Use of Hard-coded Credentials </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/259">MITRE, CWE-259</a> - Use of Hard-coded Password </li>

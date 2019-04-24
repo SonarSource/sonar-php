@@ -1,5 +1,5 @@
 {
-  "title": "Source code should comply with formatting standards",
+  "title": "源代码应该符合格式标准",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

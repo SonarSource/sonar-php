@@ -1,5 +1,5 @@
 {
-  "title": "Classes should not have too many methods",
+  "title": "类不应该有太多的方法",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

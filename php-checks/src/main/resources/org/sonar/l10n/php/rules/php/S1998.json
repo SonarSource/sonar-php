@@ -1,5 +1,5 @@
 {
-  "title": "References should not be passed to function calls",
+  "title": "不应该将引用传递给函数调用",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

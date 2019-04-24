@@ -1,5 +1,5 @@
 {
-  "title": "Variables should not be self-assigned",
+  "title": "变量不应该自赋值",
   "type": "BUG",
   "status": "ready",
   "remediation": {

@@ -1,5 +1,5 @@
 {
-  "title": "\"&&\" and \"||\" should be used",
+  "title": "应该使用\"&&\" 和 \"||\"",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

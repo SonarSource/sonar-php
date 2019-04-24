@@ -1,17 +1,16 @@
-<p>If you throw a general exception type, such as ErrorException, RuntimeException, or Exception in a library or framework, it forces consumers to
-catch all exceptions, including unknown exceptions that they do not know how to handle.</p>
-<p>Instead, either throw a subtype that already exists in the Standard PHP Library, or create your own type that derives from Exception.</p>
-<h2>Noncompliant Code Example</h2>
+<p>如果在库或框架中报出一般异常类型，例如ErrorException, RuntimeException, 或者Exception, 它将强制使用者捕获所有异常，包括他们不知道如何处理的未知异常。</p>
+<p>相反，要么报出标准PHP库中已经存在的子类型，要么创建自己的从Exception派生的类型。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-throw new Exception();  // Noncompliant
+throw new Exception();  // 不合规
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 throw new InvalidArgumentException();
-// or
+// 或者
 throw new UnexpectedValueException();
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/397.html">MITRE, CWE-397</a> - Declaration of Throws for Generic Exception </li>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/BoB3AQ">CERT, ERR07-J.</a> - Do not throw RuntimeException, Exception, or Throwable

@@ -1,5 +1,5 @@
 {
-  "title": "Lines should not end with trailing whitespaces",
+  "title": "行不应该以尾随的空格结束",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

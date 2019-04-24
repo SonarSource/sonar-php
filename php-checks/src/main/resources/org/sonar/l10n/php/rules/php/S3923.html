@@ -1,16 +1,15 @@
-<p>Having all branches in a <code>switch</code> or <code>if</code> chain with the same implementation is an error. Either a copy-paste error was made
-and something different should be executed, or there shouldn't be a <code>switch</code>/<code>if</code> chain at all.</p>
-<h2>Noncompliant Code Example</h2>
+<p>将所有分支放在 <code>switch</code> 或者 <code>if</code> 链中并使用相同的实现是错误的。要么复制粘贴错误，应该执行一些不同的操作，要么根本不应该有一个 <code>switch</code>/<code>if</code> 链。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-if ($b == 0) {  // Noncompliant
+if ($b == 0) {  // 不合规
   doOneMoreThing();
 } else {
   doOneMoreThing();
 }
 
-$b = $a &gt; 12 ? 4 : 4;  // Noncompliant
+$b = $a &gt; 12 ? 4 : 4;  // 不合规
 
-switch ($i) {  // Noncompliant
+switch ($i) {  // 不合规
   case 1:
     doSomething();
     break;
@@ -24,11 +23,10 @@ switch ($i) {  // Noncompliant
     doSomething();
 }
 </pre>
-<h2>Exceptions</h2>
-<p>This rule does not apply to <code>if</code> chains without <code>else</code>-s, or to <code>switch</code>-es without <code>default</code>
-clauses.</p>
+<h2>例外</h2>
+<p>此规则不适用于 <code>if</code> 链没有 <code>else</code>-s，或者<code>switch</code>-es 没有 <code>default</code>子句。</p>
 <pre>
-if($b == 0) {    //no issue, this could have been done on purpose to make the code more readable
+if($b == 0) {    //没有问题，这样做的目的是使代码更具可读性
   doSomething();
 } elseif($b == 1) {
   doSomething();

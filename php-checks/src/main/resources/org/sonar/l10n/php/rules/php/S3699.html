@@ -1,10 +1,12 @@
-<p>If a function does not return anything, it makes no sense to use its output. Specifically, passing it to another function, or assigning its
-"result" to a variable is probably a bug because such functions return nothing, which is probably not what was intended.</p>
-<h2>Noncompliant Code Example</h2>
+<p>如果函数不返回任何内容，则使用其输出是没有意义的。具体地说，将其传递给另一个函数，或者将其“结果”分配给一个变量可能是一个bug，因为这样的函数不会返回任何东西，而这可能不是预期的结果。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-$result = closedir($dir_handle); // Noncompliant, "closedir" does not return anything.
+$result = closedir($dir_handle); // 不合规， "closedir" 没有返回任何东西。
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案
+
+
+</h2>
 <pre>
 closedir($dir_handle);
 </pre>

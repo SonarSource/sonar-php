@@ -1,5 +1,5 @@
 {
-  "title": "Exposing HTTP endpoints is security-sensitive",
+  "title": "公开HTTP端点是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {

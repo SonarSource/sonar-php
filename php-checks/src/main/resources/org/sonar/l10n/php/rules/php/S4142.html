@@ -1,27 +1,26 @@
-<p>There are valid cases for passing a variable multiple times into the same method call, but usually doing so is a mistake, and something else was
-intended for one of the arguments.</p>
-<h2>Noncompliant Code Example</h2>
+<p>有一些有效的情况可以将变量多次传递到相同的方法调用中，但是这样做通常是错误的，而且还需要为其中一个参数指定其他内容。</p>
+<h2>不合规的代码示例</h2>
 <pre>
-if (compare($a+$x, $a+$x) != 0) { // Noncompliant
-&nbsp;&nbsp;//...
+if (compare($a+$x, $a+$x) != 0) { // 不合规
+&nbsp;&nbsp;//......
 }
 
-if (compare(getValue($a), getValue($a)) != 0) { // Noncompliant
-&nbsp;&nbsp;// ...
+if (compare(getValue($a), getValue($a)) != 0) { // 不合规
+&nbsp;&nbsp;//......
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if (compare($a+$y, $a+$x) != 0) {
-&nbsp;&nbsp;//...
+&nbsp;&nbsp;//......
 }
 
 $v1 = getValue($a);
 $v2 = getValue($a);
 if (compare($v1, $v2) != 0) {
-&nbsp;&nbsp;// ...
+&nbsp;&nbsp;//......
 }
 </pre>
-<h2>Deprecated</h2>
-<p>This rule is deprecated, and will eventually be removed.</p>
+<h2>被弃用</h2>
+<p>此规则已被废弃，最终将被删除。</p>
 

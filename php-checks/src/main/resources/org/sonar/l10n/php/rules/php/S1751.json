@@ -1,5 +1,5 @@
 {
-  "title": "Loops with at most one iteration should be refactored",
+  "title": "最多一次迭代的循环应该重构",
   "type": "BUG",
   "status": "ready",
   "remediation": {

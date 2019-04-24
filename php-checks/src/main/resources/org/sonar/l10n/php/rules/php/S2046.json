@@ -1,5 +1,5 @@
 {
-  "title": "Perl-style comments should not be used",
+  "title": "不应该使用Perl样式的注释",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

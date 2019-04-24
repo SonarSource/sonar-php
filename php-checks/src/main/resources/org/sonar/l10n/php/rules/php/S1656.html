@@ -1,20 +1,18 @@
-<p>There is no reason to re-assign a variable to itself. Either this statement is redundant and should be removed, or the re-assignment is a mistake
-and some other value or variable was intended for the assignment instead.</p>
-<h2>Noncompliant Code Example</h2>
+<p>没有理由将变量重新赋值给自己。要么这个语句是冗余的，应该删除，要么重新赋值就是一个错误，而其他一些值或变量本来就是用于赋值的。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 public function setName($name) {
     $name = $name;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 public function setName($name) {
     $this-&gt;name = $name;
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/NYA5">CERT, MSC12-C.</a> - Detect and remove code that has no effect or is never
   executed </li>
 </ul>
-

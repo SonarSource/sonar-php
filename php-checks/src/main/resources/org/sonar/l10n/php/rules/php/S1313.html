@@ -1,22 +1,22 @@
-<p>Hardcoding an IP address into source code is a bad idea for several reasons:</p>
+<p>将IP地址硬编码到源代码中是一个坏主意，原因如下：</p>
 <ul>
-  <li> it forces the same address to be used in every environment (dev, sys, qa, prod) </li>
-  <li> it places the responsibility of setting the value to use in production on the shoulders of the developer </li>
+  <li> 它强制在每个环境(dev、sys、qa、prod)中使用相同的地址 </li>
+  <li> 它将在生产中设置值的责任放在开发人员的身上 </li>
 </ul>
-<h2>Recommended Secure Coding Practices</h2>
+<h2>推荐的安全编码实践</h2>
 <ul>
-  <li> make the IP address configurable. </li>
+  <li> 使IP地址可配置。</li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-socket_connect($socket, '8.8.8.8', 23);  // Noncompliant
+socket_connect($socket, '8.8.8.8', 23);  // 不合规
 </pre>
-<h2>Exceptions</h2>
+<h2>例外</h2>
 <ul>
-  <li> No issue is reported for 127.0.0.1 because loopback is not considered as sensitive </li>
+  <li> 127.0.0.1没有报告任何问题，因为回环不被认为是敏感的 </li>
 </ul>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/qQCHAQ">CERT, MSC03-J.</a> - Never hard code sensitive information </li>

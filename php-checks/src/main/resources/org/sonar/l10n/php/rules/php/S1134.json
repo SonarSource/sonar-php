@@ -1,5 +1,5 @@
 {
-  "title": "Track uses of \"FIXME\" tags",
+  "title": "跟踪\"FIXME\"标记的使用",
   "type": "CODE_SMELL",
   "status": "ready",
   "tags": [

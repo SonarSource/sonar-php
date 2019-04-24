@@ -1,15 +1,13 @@
-<p><code>switch</code> can contain a <code>default</code> clause for various reasons: to handle unexpected values, to show that all the cases were
-properly considered.</p>
-<p>For readability purpose, to help a developer to quickly find the default behavior of a <code>switch</code> statement, it is recommended to put the
-<code>default</code> clause at the end of the <code>switch</code> statement. This rule raises an issue if the <code>default</code> clause is not the
-first or the last one of the <code>switch</code>'s cases.</p>
-<h2>Noncompliant Code Example</h2>
+<p><code>switch</code> 可以包含一个 <code>default</code> 子句，原因有很多:处理意外值，以显示所有的情况都得到了正确的考虑。</p>
+<p>为了便于阅读，为了帮助开发人员快速找到 <code>switch</code> 语句的默认行为，建议将<code>default</code> 子句放在 <code>switch</code> 语句的末尾。
+如果<code>default</code> 子句不是 <code>switch</code>的cases中的第一个或最后一个子句，则此规则会引发一个问题。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 switch ($param) {
   case 0:
     doSomething();
     break;
-  default: // default clause should be the first or last one
+  default: // default子句应该放在第一或最后一行
     error();
     break;
   case 1:
@@ -17,7 +15,7 @@ switch ($param) {
     break;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 switch ($param) {
   case 0:
@@ -31,7 +29,7 @@ switch ($param) {
     break;
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C:2004, 15.3 - The final clause of a switch statement shall be the default clause </li>
   <li> MISRA C++:2008, 6-4-6 - The final clause of a switch statement shall be the default-clause </li>

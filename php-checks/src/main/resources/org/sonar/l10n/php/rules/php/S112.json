@@ -1,5 +1,5 @@
 {
-  "title": "Generic exceptions ErrorException, RuntimeException and Exception should not be thrown",
+  "title": "一般异常 ErrorException, RuntimeException 和 Exception 禁止被报出",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

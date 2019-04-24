@@ -1,5 +1,5 @@
 {
-  "title": "Databases should be password-protected",
+  "title": "数据库应该有密码保护",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

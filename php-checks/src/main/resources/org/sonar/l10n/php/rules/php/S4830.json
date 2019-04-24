@@ -1,5 +1,5 @@
 {
-  "title": "SSL\/TLS certificates chain of trust verification should not be disabled",
+  "title": "不应禁用SSL\/TLS证书链的信任验证",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {

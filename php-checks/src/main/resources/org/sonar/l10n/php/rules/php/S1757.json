@@ -1,5 +1,5 @@
 {
-  "title": "\"<?php\" and \"<?=\" tags should be used",
+  "title": "应该使用\"<?php\" and \"<?=\"标签",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

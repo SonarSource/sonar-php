@@ -1,14 +1,12 @@
-<p>Function arguments should all have different names to prevent any ambiguity. Indeed, if arguments have the same name, the last duplicated argument
-hides all the previous arguments with the same name. This hiding makes no sense, reduces understandability and maintainability, and obviously can be
-error prone. </p>
-<h2>Noncompliant Code Example</h2>
+<p>函数参数应该有不同的名称，以防止任何歧义。 事实上，如果参数具有相同的名称，则最后一个重复的参数
+会隐藏之前所有相同名称的参数。 这种隐藏毫无意义，降低了可理解性和可维护性，而且很显然很容易出错。 </p>
+<h2>不合规的代码示例</h2>
 <pre>
-function compute($a, $a, $c) { // Noncompliant
+function compute($a, $a, $c) { // 不合规
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
-function compute($a, $b, $c) { // Compliant
+function compute($a, $b, $c) { // 不合规
 }
 </pre>
-

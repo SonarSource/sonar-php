@@ -1,21 +1,21 @@
-<p>Empty statements, i.e. <code>;</code>, are usually introduced by mistake, for example because:</p>
+<p>空语句，像 <code>;</code>，通常是由错误引入的，例如原因有：</p>
 <ul>
-  <li> It was meant to be replaced by an actual statement, but this was forgotten. </li>
-  <li> There was a typo which lead the semicolon to be doubled, i.e. <code>;;</code>. </li>
+  <li> 它本来是要用一个实际的声明来代替的，但这一点却被遗忘了。 </li>
+  <li> 有一个打印小错误导致分号翻倍，即 <code>;;</code>。 </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h2>不合规的代码示例</h2>
 <pre>
 function doSomething() {
-  ;                                              // Noncompliant - was used as a kind of TODO marker
+  ;                                              // 不合规 - 被用作一种的TODO标记
 }
 
 function doSomethingElse($p) {
-  echo $p;;                                      // Noncompliant - double ;
+  echo $p;;                                      // 不合规 - 双倍分号（;）
 }
 
-for ($i = 1; $i &lt;= 10; doSomething($i), $i++);   // Noncompliant - Rarely, they are used on purpose as the body of a loop. It is a bad practice to have side-effects outside of the loop body
+for ($i = 1; $i &lt;= 10; doSomething($i), $i++);   // 不合规 -很少有人将它们作为循环的主体来使用。在循环体之外产生副作用是一种不好的做法
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 function doSomething() {}
 
@@ -27,7 +27,7 @@ function doSomethingElse($p) {
   }
 }
 </pre>
-<h2>See</h2>
+<h2>请参阅</h2>
 <ul>
   <li> MISRA C:2004, 14.3 - Before preprocessing, a null statement shall only occur on a line by itself; it may be followed by a comment provided that
   the first character following the null statement is a white-space character. </li>

@@ -1,5 +1,5 @@
 {
-  "title": "\"$this\" should not be used in a static context",
+  "title": "不应在静态上下文中使用\"$this\"",
   "type": "BUG",
   "status": "ready",
   "remediation": {

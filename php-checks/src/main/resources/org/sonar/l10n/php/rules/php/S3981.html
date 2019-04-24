@@ -1,7 +1,5 @@
-<p>The count of elements from an array or Countable object is always greater than or equal to zero. So testing that the count is greater than or equal
-to zero doesn't make sense, since the result is always <code>true</code>. Similarly testing that it is less than zero will always return
-<code>false</code>. Perhaps the intent was to check the non-emptiness of the object or array instead. </p>
-<h2>Noncompliant Code Example</h2>
+<p>数组或可计数对象中的元素个数始终大于或等于零。因此，测试count是否大于或等于零是没有意义的，因为结果总是 <code>true</code>。类似地，测试它是否小于零总是返回<code>false</code>。也许其目的是检查对象或数组的非空性。</p>
+<h2>不合规的代码示例</h2>
 <pre>
 if (count($arr) &gt;= 0) { ... }
 
@@ -11,7 +9,7 @@ $result = count($arr) &gt;= 0;
 
 if (0 &gt; count($arr)) { ... }
 </pre>
-<h2>Compliant Solution</h2>
+<h2>合规的解决方案</h2>
 <pre>
 if (count($arr) != 0) { ... }
 
