@@ -1420,9 +1420,6 @@
 'project:Symfony/Bundle/FrameworkBundle/Resources/views/Form/form_start.html.php':[
 3,
 ],
-'project:Symfony/Bundle/FrameworkBundle/Resources/views/Form/form_widget_simple.html.php':[
-1,
-],
 'project:Symfony/Bundle/FrameworkBundle/Resources/views/Form/widget_attributes.html.php':[
 1,
 ],
