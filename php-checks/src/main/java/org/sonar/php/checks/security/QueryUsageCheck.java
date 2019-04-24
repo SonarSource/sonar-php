@@ -29,6 +29,7 @@ import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.php.checks.utils.type.TypePredicateList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -37,7 +38,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S2077")
 public class QueryUsageCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Make sure that executing SQL queries is safe here.";
+  private static final String MESSAGE = "Make sure that formatting this SQL query is safe here.";
   private static final NewObjectCall IS_PDO_OBJECT = new NewObjectCall("PDO");
   private static final NewObjectCall IS_MYSQLI_OBJECT = new NewObjectCall("mysqli");
 
@@ -49,7 +50,6 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     map.put("mysql_query", 0);
     map.put("mysql_db_query", 1);
     map.put("mysql_unbuffered_query", 0);
-    map.put("pg_update", null);
     map.put("pg_send_query", 1);
     map.put("mysqli_query", 1);
     map.put("mysqli_real_query", 1);
@@ -81,23 +81,27 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     ExpressionTree callee = tree.callee();
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
       String qualifiedNameLowerCase = ((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ENGLISH);
-      if (SUSPICIOUS_GLOBAL_FUNCTIONS.keySet().contains(qualifiedNameLowerCase)) {
+      if (SUSPICIOUS_GLOBAL_FUNCTIONS.containsKey(qualifiedNameLowerCase)) {
         Integer index = SUSPICIOUS_GLOBAL_FUNCTIONS.get(qualifiedNameLowerCase);
-        return index == null || (tree.arguments().size() > index && !tree.arguments().get(index).is(Tree.Kind.REGULAR_STRING_LITERAL));
+        return tree.arguments().size() > index && isSuspiciousArgument(tree.arguments().get(index));
       } else if ("pg_query".equals(qualifiedNameLowerCase)) {
         // First argument of function 'pg_query' is optional
-        return !tree.arguments().isEmpty() && !tree.arguments().get(tree.arguments().size() - 1).is(Tree.Kind.REGULAR_STRING_LITERAL);
+        return !tree.arguments().isEmpty() && isSuspiciousArgument(tree.arguments().get(tree.arguments().size() - 1));
       }
     }
     return false;
   }
 
   private static boolean isSuspiciousMemberFunction(FunctionCallTree tree, TreeValues possibleValues) {
-    return SUSPICIOUS_QUERY_PREDICATES.test(possibleValues) && !tree.arguments().isEmpty() && !tree.arguments().get(0).is(Tree.Kind.REGULAR_STRING_LITERAL);
+    return SUSPICIOUS_QUERY_PREDICATES.test(possibleValues) && !tree.arguments().isEmpty() && isSuspiciousArgument(tree.arguments().get(0));
   }
 
   private static boolean isSuspiciousPrepareStatement(FunctionCallTree tree, TreeValues possibleValues) {
-    return PDO_PREPARE_PREDICATE.test(possibleValues) && !tree.arguments().isEmpty() && tree.arguments().get(0).is(Tree.Kind.EXPANDABLE_STRING_LITERAL);
+    return PDO_PREPARE_PREDICATE.test(possibleValues) && !tree.arguments().isEmpty() && isSuspiciousArgument(tree.arguments().get(0));
+  }
+
+  private static boolean isSuspiciousArgument(ExpressionTree expression) {
+    return expression.is(Tree.Kind.EXPANDABLE_STRING_LITERAL) || expression.is(Kind.CONCATENATION);
   }
 
 }
