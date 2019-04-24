@@ -39,7 +39,6 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
   private final String[] excludedPatterns;
   private static final Logger LOG = Loggers.get(PhpExclusionsFileFilter.class);
   private static final int DEFAULT_AVERAGE_LINE_LENGTH_THRESHOLD = 220;
-  private static final Predicate<String> PHP_OPEN_TAG = Pattern.compile(LexicalConstant.PHP_START_TAG).asPredicate();
 
 
   public PhpExclusionsFileFilter(Configuration configuration) {
@@ -59,7 +58,7 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
     }
 
     if (new AverageLineLengthCalculator(inputFile).getAverageLineLength() > DEFAULT_AVERAGE_LINE_LENGTH_THRESHOLD) {
-      LOG.debug("File [" + inputFile.uri() + "] is excluded because its default average line length is greater than " + DEFAULT_AVERAGE_LINE_LENGTH_THRESHOLD);
+      LOG.debug("File [" + inputFile.uri() + "] is excluded because it is considered generated (average line length is too big).");
       return false;
     }
 
@@ -76,6 +75,7 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
    * (i.e., it starts with <code>"//"</code>).
    */
   private static class AverageLineLengthCalculator {
+    private static final Predicate<String> PHP_OPEN_TAG = Pattern.compile(LexicalConstant.PHP_START_TAG).asPredicate();
 
     private InputFile file;
 
