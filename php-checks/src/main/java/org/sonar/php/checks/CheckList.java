@@ -35,7 +35,6 @@ import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.DataEncryptionCheck;
-import org.sonar.php.checks.security.FileSystemUsageCheck;
 import org.sonar.php.checks.security.HttpEndpointCheck;
 import org.sonar.php.checks.security.HttpRequestCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
@@ -115,7 +114,6 @@ public class CheckList {
       FieldNameCheck.class,
       FileHeaderCheck.class,
       FileNameCheck.class,
-      FileSystemUsageCheck.class,
       FileWithSymbolsAndSideEffectsCheck.class,
       FixmeTagPresenceCheck.class,
       ForHidingWhileCheck.class,
