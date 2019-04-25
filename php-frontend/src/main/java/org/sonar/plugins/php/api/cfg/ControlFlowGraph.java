@@ -19,6 +19,8 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.Collections;
@@ -79,6 +81,7 @@ public class ControlFlowGraph {
   /**
    * <b>WARNING:</b> This is an experimental API, it may change without notice.
    */
+  @VisibleForTesting
   public static ControlFlowGraph build(BlockTree body) {
     return new ControlFlowGraphBuilder(body.statements()).getGraph();
   }
@@ -86,7 +89,8 @@ public class ControlFlowGraph {
   /**
    * <b>WARNING:</b> This is an experimental API, it may change without notice.
    */
-  public static ControlFlowGraph build(ScriptTree scriptTree) {
+  @VisibleForTesting
+  static ControlFlowGraph build(ScriptTree scriptTree) {
     return new ControlFlowGraphBuilder(scriptTree.statements()).getGraph();
   }
 
@@ -117,8 +121,8 @@ public class ControlFlowGraph {
           throw new IllegalStateException("Unexpected tree kind " + tree.getKind());
       }
     } catch (Exception e) {
-      LOG.warn("Failed to build control flow graph for file [{}] at line {}", context.getPhpFile().toString(), ((PHPTree) tree).getLine());
-      LOG.warn(e.getMessage(), e);
+      LOG.warn("Failed to build control flow graph for file [{}] at line {} (activate debug logs for more details)", context.getPhpFile().toString(), ((PHPTree) tree).getLine());
+      LOG.debug(() -> Throwables.getStackTraceAsString(e));
       failedTrees.add(tree);
     }
 

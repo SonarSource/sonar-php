@@ -1508,12 +1508,13 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
         "}\n",
       PHPLexicalGrammar.COMPILATION_UNIT);
     FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
+    logTester.setLevel(LoggerLevel.DEBUG);
     ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
     assertThat(cfg).isNull();
-
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 2");
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build CFG");
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 2 (activate debug logs for more details)");
+    assertThat(logTester.logs(LoggerLevel.DEBUG)).hasOnlyOneElementSatisfying(s -> assertThat(s).contains("com.sonar.sslr.api.RecognitionException: Failed to build CFG\n\tat "));
     logTester.clear();
+    logTester.setLevel(LoggerLevel.INFO);
 
     // testing mechanism avoiding reporting failure multiple times for the same tree
     cfg = ControlFlowGraph.build(func, checkContext);
