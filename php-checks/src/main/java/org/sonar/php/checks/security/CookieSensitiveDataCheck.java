@@ -23,10 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
-import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseFunctionName;
@@ -34,57 +31,24 @@ import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseFunctionName;
 @Rule(key = "S2255")
 public class CookieSensitiveDataCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Make sure that this cookie is used safely.";
+  private static final String MESSAGE = "Make sure that this cookie is written safely.";
 
   private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
-  private static final List<String> COOKIE_PREDEFINED_VARIABLES = Arrays.asList("$_COOKIE", "$HTTP_COOKIE_VARS");
   private static final int VALUE_PARAMETER_INDEX = 1;
-  private long nestedUnsetStatementCount;
-  private long nestedIssetStatementCount;
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    nestedUnsetStatementCount = 0;
-    nestedIssetStatementCount = 0;
-    super.visitCompilationUnit(tree);
-    nestedUnsetStatementCount = 0;
-    nestedIssetStatementCount = 0;
-  }
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
-    if ("isset".equals(functionName)) {
-      nestedIssetStatementCount++;
-      super.visitFunctionCall(tree);
-      nestedIssetStatementCount--;
-      return;
-    } else if (SET_COOKIE_FUNCTIONS.contains(functionName) && hasCookieValue(tree)) {
+    if (SET_COOKIE_FUNCTIONS.contains(functionName) && hasCookieValue(tree)) {
       context().newIssue(this, tree.callee(), MESSAGE);
     }
 
     super.visitFunctionCall(tree);
   }
 
-  @Override
-  public void visitUnsetVariableStatement(UnsetVariableStatementTree tree) {
-    nestedUnsetStatementCount++;
-    super.visitUnsetVariableStatement(tree);
-    nestedUnsetStatementCount--;
-  }
-
-  @Override
-  public void visitVariableIdentifier(VariableIdentifierTree tree) {
-    super.visitVariableIdentifier(tree);
-
-    if (COOKIE_PREDEFINED_VARIABLES.contains(tree.text()) && nestedUnsetStatementCount == 0 && nestedIssetStatementCount == 0) {
-      context().newIssue(this, tree, MESSAGE);
-    }
-  }
-
   private static boolean hasCookieValue(FunctionCallTree tree) {
     return tree.arguments().size() > VALUE_PARAMETER_INDEX
-      && !CheckUtils.isNullOrEmptyString(tree.arguments().get(VALUE_PARAMETER_INDEX));
+        && !CheckUtils.isNullOrEmptyString(tree.arguments().get(VALUE_PARAMETER_INDEX));
   }
 
 }
