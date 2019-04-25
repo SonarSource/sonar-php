@@ -20,14 +20,26 @@
 package org.sonar.php.checks.security;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 @Rule(key = "S4784")
 public class RegexUsageCheck extends FunctionUsageCheck {
 
   private static final String MESSAGE = "Make sure that using a regular expression is safe here.";
+
+  private static final Set<Character> SPECIAL_CHARS = new HashSet<>(Arrays.asList('+', '*', '{'));
+  private static final int MIN_PATTERN_LENGTH = 3 + 2 + 2; // 2 for string quotes and 2 for regex pattern delimeters
+
+  // this function accepts pattern as second argument, all others as first
+  private static final String MB_EREG_SEARCH_INIT = "mb_ereg_search_init";
 
   private static final ImmutableSet<String> FUNCTION_NAMES = ImmutableSet.of(
     "ereg",
@@ -40,7 +52,7 @@ public class RegexUsageCheck extends FunctionUsageCheck {
     "mb_ereg_replace",
     "mb_ereg_replace_callback",
     "mb_ereg_search",
-    "mb_ereg_search_init",
+    MB_EREG_SEARCH_INIT,
     "mb_ereg_search_pos",
     "mb_ereg_search_regs",
     "mb_eregi",
@@ -51,7 +63,6 @@ public class RegexUsageCheck extends FunctionUsageCheck {
     "preg_match_all",
     "preg_replace",
     "preg_replace_callback",
-    "preg_replace_callback_array",
     "preg_split",
     "split",
     "spliti");
@@ -63,9 +74,37 @@ public class RegexUsageCheck extends FunctionUsageCheck {
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    if (!tree.arguments().isEmpty()) {
-      context().newIssue(this, tree, MESSAGE);
+    int index = getPatternArgumentIndex(tree);
+
+    if (tree.arguments().size() <= index) {
+      return;
     }
+
+    ExpressionTree patternArgument = tree.arguments().get(index);
+    if (patternArgument.is(Kind.REGULAR_STRING_LITERAL)) {
+      String value = ((LiteralTree) patternArgument).value();
+      if (value.length() >= MIN_PATTERN_LENGTH && hasEnoughNumberOfSpecialChars(value)) {
+        context().newIssue(this, tree, MESSAGE);
+      }
+    }
+  }
+
+  private int getPatternArgumentIndex(FunctionCallTree tree) {
+    int index = 0;
+    if (tree.callee().toString().equalsIgnoreCase(MB_EREG_SEARCH_INIT)) {
+      index = 1;
+    }
+    return index;
+  }
+
+  private boolean hasEnoughNumberOfSpecialChars(String value) {
+    int numberOfSpecialChars = 0;
+    for (char c : value.toCharArray()) {
+      if (SPECIAL_CHARS.contains(c)) {
+        numberOfSpecialChars++;
+      }
+    }
+    return numberOfSpecialChars >= 2;
   }
 
 }
