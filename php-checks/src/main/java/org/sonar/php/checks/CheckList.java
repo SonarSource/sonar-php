@@ -35,9 +35,6 @@ import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.DataEncryptionCheck;
-import org.sonar.php.checks.security.FileSystemUsageCheck;
-import org.sonar.php.checks.security.HttpEndpointCheck;
-import org.sonar.php.checks.security.HttpRequestCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 import org.sonar.php.checks.security.LoggerConfigurationCheck;
 import org.sonar.php.checks.security.PermissionsControlCheck;
@@ -47,7 +44,6 @@ import org.sonar.php.checks.security.SessionFixationCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 import org.sonar.php.checks.security.StandardInputUsageCheck;
-import org.sonar.php.checks.security.XPathUsageCheck;
 
 public class CheckList {
 
@@ -109,13 +105,11 @@ public class CheckList {
       EmptyNestedBlockCheck.class,
       EmptyStatementCheck.class,
       EvalUseCheck.class,
-      ExecCallCheck.class,
       ExitOrDieUsageCheck.class,
       ExpressionComplexityCheck.class,
       FieldNameCheck.class,
       FileHeaderCheck.class,
       FileNameCheck.class,
-      FileSystemUsageCheck.class,
       FileWithSymbolsAndSideEffectsCheck.class,
       FixmeTagPresenceCheck.class,
       ForHidingWhileCheck.class,
@@ -133,8 +127,6 @@ public class CheckList {
       HardCodedCredentialsCheck.class,
       HardCodedIpAddressCheck.class,
       HardCodedUriCheck.class,
-      HttpEndpointCheck.class,
-      HttpRequestCheck.class,
       HttpOnlyCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class,
       IfConditionAlwaysTrueOrFalseCheck.class,
@@ -230,8 +222,7 @@ public class CheckList {
       VariableVariablesCheck.class,
       VarKeywordUsageCheck.class,
       WeakSSLProtocolCheck.class,
-      WrongAssignmentOperatorCheck.class,
-      XPathUsageCheck.class);
+      WrongAssignmentOperatorCheck.class);
   }
 
   public static Iterable<Class> getPhpIniChecks() {
