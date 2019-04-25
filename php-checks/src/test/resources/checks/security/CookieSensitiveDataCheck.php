@@ -1,22 +1,22 @@
 <?php
 
-  setcookie($name, $value, $expire, $path, $domain, $secure, false); // Noncompliant {{Make sure storing this data in this cookie is safe here.}}
+  setcookie($name, $value, $expire, $path, $domain, $secure, false); // Noncompliant {{Make sure that this cookie is written safely.}}
 //^^^^^^^^^
 
-  setrawcookie($name, $value, $expire, $path, $domain, true, true); // Noncompliant {{Make sure storing this data in this cookie is safe here.}}
+  setrawcookie($name, $value, $expire, $path, $domain, true, true); // Noncompliant {{Make sure that this cookie is written safely.}}
 //^^^^^^^^^^^^
 
-setcookie($name, $value); // Noncompliant {{Make sure storing this data in this cookie is safe here.}}
-setrawcookie($name, $value); // Noncompliant {{Make sure storing this data in this cookie is safe here.}}
+setcookie($name, $value); // Noncompliant {{Make sure that this cookie is written safely.}}
+setrawcookie($name, $value); // Noncompliant {{Make sure that this cookie is written safely.}}
 
-SetCookie($name, false); // Noncompliant {{Make sure that this cookie is used safely.}}
-SetRawCookie($name, false); // Noncompliant {{Make sure that this cookie is used safely.}}
+SetCookie($name, false); // Noncompliant {{Make sure that this cookie is written safely.}}
+SetRawCookie($name, false); // Noncompliant {{Make sure that this cookie is written safely.}}
 
-setcookie($name, 1); // Noncompliant {{Make sure storing this data in this cookie is safe here.}}
-setrawcookie($name, 1); // Noncompliant {{Make sure storing this data in this cookie is safe here.}}
+setcookie($name, 1); // Noncompliant {{Make sure that this cookie is written safely.}}
+setrawcookie($name, 1); // Noncompliant {{Make sure that this cookie is written safely.}}
 
-setcookie($name, "x"); // Noncompliant {{Make sure storing this data in this cookie is safe here.}}
-setrawcookie($name, "x"); // Noncompliant {{Make sure storing this data in this cookie is safe here.}}
+setcookie($name, "x"); // Noncompliant {{Make sure that this cookie is written safely.}}
+setrawcookie($name, "x"); // Noncompliant {{Make sure that this cookie is written safely.}}
 
 setcookie($name); // Ok
 setcookie($name, NULL); // Ok

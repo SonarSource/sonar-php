@@ -31,7 +31,7 @@ import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseFunctionName;
 @Rule(key = "S2255")
 public class CookieSensitiveDataCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Make sure storing this data in this cookie is safe here.";
+  private static final String MESSAGE = "Make sure that this cookie is written safely.";
 
   private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
   private static final int VALUE_PARAMETER_INDEX = 1;
