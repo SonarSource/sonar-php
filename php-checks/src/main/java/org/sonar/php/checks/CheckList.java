@@ -45,7 +45,6 @@ import org.sonar.php.checks.security.SessionFixationCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 import org.sonar.php.checks.security.StandardInputUsageCheck;
-import org.sonar.php.checks.security.XPathUsageCheck;
 
 public class CheckList {
 
@@ -225,8 +224,7 @@ public class CheckList {
       VariableVariablesCheck.class,
       VarKeywordUsageCheck.class,
       WeakSSLProtocolCheck.class,
-      WrongAssignmentOperatorCheck.class,
-      XPathUsageCheck.class);
+      WrongAssignmentOperatorCheck.class);
   }
 
   public static Iterable<Class> getPhpIniChecks() {
