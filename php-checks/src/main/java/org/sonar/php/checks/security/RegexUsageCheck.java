@@ -90,11 +90,10 @@ public class RegexUsageCheck extends FunctionUsageCheck {
   }
 
   private int getPatternArgumentIndex(FunctionCallTree tree) {
-    int index = 0;
     if (tree.callee().toString().equalsIgnoreCase(MB_EREG_SEARCH_INIT)) {
-      index = 1;
+      return 1;
     }
-    return index;
+    return 0;
   }
 
   private boolean hasEnoughNumberOfSpecialChars(String value) {
@@ -103,8 +102,11 @@ public class RegexUsageCheck extends FunctionUsageCheck {
       if (SPECIAL_CHARS.contains(c)) {
         numberOfSpecialChars++;
       }
+      if (numberOfSpecialChars == 2) {
+        return true;
+      }
     }
-    return numberOfSpecialChars >= 2;
+    return false;
   }
 
 }
