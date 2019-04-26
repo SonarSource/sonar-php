@@ -7,7 +7,7 @@
 <p>SQL queries often need to use a hardcoded SQL string with a dynamic parameter coming from a user request. Concatenating or formatting a string to
 add those parameters to the request is a bad practice as it can result in an <a href="https://www.owasp.org/index.php/SQL_Injection">SQL
 injection</a>. The safe way to add parameters to a SQL query is to use SQL binding mechanisms.</p>
-<p>Note that this rule does not detect SQL injections. See Vulnerability rule {rule:php:S3649} to detect actual SQL injections. This rule flags the
+<p>Note that this rule does not detect SQL injections. See Vulnerability rule {rule:phpsecurity:S3649} to detect actual SQL injections. This rule flags the
 execution of SQL queries which are built using concatenation or formatting of strings, even if there is no injection. The goal is to guide security
 code reviews and to prevent a common bad practice.</p>
 <p>This rule flags the execution of SQL queries which are built using concatenation or formatting of strings, even if there is no injection. The goal
