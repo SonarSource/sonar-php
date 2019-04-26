@@ -53,7 +53,7 @@ dangerous as there will be no security fix</strong>.</p>
 <p>Check whether your regular expression engine (the algorithm executing your regular expression) has any known vulnerabilities. Search for
 vulnerability reports mentioning the one engine you're are using. Do not run vulnerable regular expressions on user input.</p>
 <p>Use if possible a library which is not vulnerable to Redos Attacks such as <a href="https://github.com/google/re2">Google Re2</a>.</p>
-<p>Remember also that a ReDos attack if possible if a user-provided regular expression is executed. See rule {rule:php:S2631} which detects such
+<p>Remember also that a ReDos attack is possible if a user-provided regular expression is executed. See rule {rule:php:S2631} which detects such
 regular expression injections.</p>
 <p>Avoid executing a user input string as a regular expression or use at least <code>preg_quote</code> to escape regular expression characters.</p>
 <h2>Exceptions</h2>
@@ -66,13 +66,14 @@ $result = eregi($pattern, $input);  // No issue will be raised even if it is Sen
 </pre>
 <h2>See</h2>
 <ul>
-  <li> <a href="https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS">MITRA, CWE-624</a> - Executable Regular Expression Error
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection">OWASP Top 10 2017 Category A1</a> - Injection </li>
+  <li> <a href="https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS">MITRE, CWE-624</a> - Executable Regular Expression Error
   </li>
   <li> OWASP Regular expression Denial of Service - ReDoS </li>
 </ul>
 <h3>See also</h3>
 <ul>
-  <li> {rule:php:S2631} - Regular expressions should not be vulnerable to Denial of Service attacks (available in SonarCloud and SonarQube Developer
+  <li> {rule:phpsecurity:S2631} - Regular expressions should not be vulnerable to Denial of Service attacks (available in SonarCloud and SonarQube Developer
   Edition) </li>
 </ul>
 

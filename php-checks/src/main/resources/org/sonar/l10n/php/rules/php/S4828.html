@@ -1,30 +1,22 @@
 <p>Signalling processes is security-sensitive. It has led in the past to the following vulnerabilities:</p>
-<ul>
-  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0390">CVE-2009-0390</a> </li>
-  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2002-0839">CVE-2002-0839</a> </li>
-  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-1671">CVE-2008-1671</a> </li>
-</ul>
+<p> * <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0390">CVE-2009-0390</a></p>
+<p> * <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2002-0839">CVE-2002-0839</a></p>
+<p> * <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-1671">CVE-2008-1671</a></p>
 <p>Sending signals without checking properly which process will receive it can cause a denial of service.</p>
 <h2>Ask Yourself Whether</h2>
-<ul>
-  <li> the PID of the process to which the signal will be sent is coming from an untrusted source. It could for example come from a world-writable
-  file. </li>
-  <li> users who are asking for the signal to be sent might not have the permission to send those signals. </li>
-</ul>
+<p> * the PID of the process to which the signal will be sent is coming from an untrusted source. It could for example come from a world-writable
+file.</p>
+<p> * users who are asking for the signal to be sent might not have the permission to send those signals.</p>
 <p>You are at risk if you answered yes to any of these questions.</p>
 <h2>Recommended Secure Coding Practices</h2>
-<ul>
-  <li> If the signal is sent because of a user's request. Check that the user is allowed to send this signal. You can for example forbid it if the
-  user doesn't own the process. </li>
-  <li> Secure the source from which the process PID is read. </li>
-  <li> Run the process sending the signals with minimal permissions. </li>
-</ul>
+<p> * If the signal is sent because of a user's request. Check that the user is allowed to send this signal. You can for example forbid it if the user
+doesn't own the process.</p>
+<p> * Secure the source from which the process PID is read.</p>
+<p> * Run the process sending the signals with minimal permissions.</p>
 <h2>Questionable Code Example</h2>
 <pre>
 posix_kill(42, 42); // Questionable
 </pre>
 <h2>See</h2>
-<ul>
-  <li> <a href="https://cwe.mitre.org/data/definitions/283.html">MITRE, CWE-283</a> - https://cwe.mitre.org/data/definitions/283.html </li>
-</ul>
+<p> * <a href="https://cwe.mitre.org/data/definitions/283.html">MITRE, CWE-283</a> - Unverified Ownership</p>
 

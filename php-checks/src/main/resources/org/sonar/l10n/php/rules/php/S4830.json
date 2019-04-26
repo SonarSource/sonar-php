@@ -7,10 +7,24 @@
     "constantCost": "5min"
   },
   "tags": [
+    "cwe",
+    "owasp-a6",
     "ssl"
+  ],
+  "standards": [
+    "CWE",
+    "OWASP Top Ten"
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-4830",
   "sqKey": "S4830",
-  "scope": "Main"
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      295
+    ],
+    "OWASP": [
+      "A6"
+    ]
+  }
 }

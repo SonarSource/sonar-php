@@ -1,5 +1,5 @@
 {
-  "title": "Concatenating or formatting strings used as SQL queries is security-sensitive",
+  "title": "Formatting SQL queries is security-sensitive",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {

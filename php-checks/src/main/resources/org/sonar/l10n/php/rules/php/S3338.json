@@ -9,10 +9,12 @@
   "tags": [
     "cwe",
     "sans-top25-insecure",
+    "owasp-a6",
     "php-ini"
   ],
   "standards": [
     "CWE",
+    "OWASP Top Ten",
     "SANS Top 25"
   ],
   "defaultSeverity": "Blocker",
@@ -22,6 +24,9 @@
   "securityStandards": {
     "CWE": [
       434
+    ],
+    "OWASP": [
+      "A6"
     ]
   }
 }
