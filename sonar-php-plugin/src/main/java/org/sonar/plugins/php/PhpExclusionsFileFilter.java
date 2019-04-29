@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFileFilter;
@@ -75,7 +74,7 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
    * (i.e., it starts with <code>"//"</code>).
    */
   private static class AverageLineLengthCalculator {
-    private static final Predicate<String> PHP_OPEN_TAG = Pattern.compile(LexicalConstant.PHP_START_TAG).asPredicate();
+    private static final Pattern PHP_OPEN_TAG = Pattern.compile(LexicalConstant.PHP_OPENING_TAG);
 
     private InputFile file;
 
@@ -96,7 +95,7 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
       List<String> lines = fileLines(file);
 
       for (String line : lines) {
-        if (!isLineInHeaderComment(line)) {
+        if (!ignoreLine(line)) {
           nbLines++;
           nbCharacters += line.length();
         }
@@ -118,13 +117,13 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
       return lines;
     }
 
-    private boolean isLineInHeaderComment(String line) {
+    private boolean ignoreLine(String line) {
       String trimmedLine = line.trim();
       if (isAtFirstLine) {
         if (trimmedLine.isEmpty()) {
           return true;
         }
-        if (PHP_OPEN_TAG.test(trimmedLine)) {
+        if (PHP_OPEN_TAG.matcher(trimmedLine).find()) {
           return false;
         }
         isAtFirstLine = false;
