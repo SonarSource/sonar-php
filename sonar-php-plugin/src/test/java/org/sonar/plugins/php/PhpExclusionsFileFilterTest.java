@@ -89,7 +89,7 @@ public class PhpExclusionsFileFilterTest {
     assertThat(filter.accept(inputFile("vendor/some_lib.php"))).isFalse();
   }
 
-  @Test
+  @Test(timeout = 2000)
   public void should_ignore_php_files_with_average_line_length_over_threshold() throws IOException {
     PhpExclusionsFileFilter filter = new PhpExclusionsFileFilter(new MapSettings().asConfig());
     File baseDir = new File("src/test/resources/exclusions");
@@ -106,6 +106,9 @@ public class PhpExclusionsFileFilterTest {
     assertThat(filter.accept(testFile)).isFalse();
 
     testFile = setupSingleFile(baseDir, context, "excluded3.php");
+    assertThat(filter.accept(testFile)).isFalse();
+
+    testFile = setupSingleFile(baseDir, context, "excluded4.php");
     assertThat(filter.accept(testFile)).isFalse();
 
     //
