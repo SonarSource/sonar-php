@@ -146,6 +146,7 @@ public class PHPSensor implements Sensor {
         progressReport.nextFile();
         analyseFile(context, phpAnalyzer, inputFile);
       }
+      phpAnalyzer.terminate();
       success = true;
     } finally {
       stopProgressReport(progressReport, success);

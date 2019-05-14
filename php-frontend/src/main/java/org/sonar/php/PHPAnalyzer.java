@@ -84,6 +84,12 @@ public class PHPAnalyzer {
     return issuesBuilder.build();
   }
 
+  public void terminate() {
+    for (PHPCheck check : checks) {
+      check.terminate();
+    }
+  }
+
   public FileMeasures computeMeasures(FileLinesContext fileLinesContext) {
     return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext);
   }

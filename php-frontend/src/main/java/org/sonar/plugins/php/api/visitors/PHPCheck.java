@@ -39,9 +39,15 @@ public interface PHPCheck {
    */
   void init();
 
+  /**
+   * Terminates the check, doing cleanup and postprocessing if necessary. This method is called once.
+   */
+  default void terminate() {}
+
   List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree);
 
   List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable);
 
   List<PhpIssue> analyze(CheckContext context);
+
 }
