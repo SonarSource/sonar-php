@@ -36,6 +36,8 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class PHPAnalyzerTest {
 
@@ -74,4 +76,16 @@ public class PHPAnalyzerTest {
 
     assertThat(analyzer.computeCpdTokens()).hasSize(4);
   }
+
+  @Test
+  public void terminate_forwarded_to_checks() throws Exception {
+    PHPCheck check1 = spy(new DummyCheck());
+    PHPCheck check2 = spy(new DummyCheck());
+    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check1, check2), tmpFolder.newFolder());
+    analyzer.terminate();
+
+    verify(check1).terminate();
+    verify(check2).terminate();
+  }
+
 }
