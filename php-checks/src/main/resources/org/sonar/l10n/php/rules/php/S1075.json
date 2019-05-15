@@ -1,5 +1,5 @@
 {
-  "title": "URIs should not be hardcoded",
+  "title": "URI不应该被硬编码",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

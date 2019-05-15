@@ -1,5 +1,5 @@
 {
-  "title": "Setting session IDs is security-sensitive",
+  "title": "设置会话ID是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
