@@ -35,11 +35,13 @@ public class PhpTestFileTest {
 
   @Test
   public void load_file() throws Exception {
-    PhpTestFile file = new PhpTestFile(new File("src/test/resources/tests/testfile.php"));
+    File physicalFile = new File("src/test/resources/tests/testfile.php");
+    PhpTestFile file = new PhpTestFile(physicalFile);
     assertThat(file.contents()).isEqualTo("<?php echo \"Hello\";\n");
     assertThat(file.filename()).isEqualTo("testfile.php");
     String expectedPath = Paths.get("src", "test", "resources", "tests", "testfile.php").toString();
     assertThat(file.toString()).isEqualTo(expectedPath);
+    assertThat(file.uri()).isEqualTo(physicalFile.toURI());
   }
 
   @Test

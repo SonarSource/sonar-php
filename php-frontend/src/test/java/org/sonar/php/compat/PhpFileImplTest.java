@@ -19,6 +19,7 @@
  */
 package org.sonar.php.compat;
 
+import java.net.URI;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -32,9 +33,12 @@ public class PhpFileImplTest {
 
   @Test
   public void test() throws Exception {
+    URI uri = new URI("uri");
+
     when(inputFile.contents()).thenReturn("Input file content");
     when(inputFile.filename()).thenReturn("file.php");
     when(inputFile.toString()).thenReturn("to string");
+    when(inputFile.uri()).thenReturn(uri);
 
     PhpFile phpFile = new PhpFileImpl(inputFile);
 
@@ -42,5 +46,7 @@ public class PhpFileImplTest {
     assertThat(phpFile.contents()).isEqualTo("Input file content");
     assertThat(phpFile.filename()).isEqualTo("file.php");
     assertThat(phpFile.toString()).isEqualTo("to string");
+    assertThat(phpFile.uri()).isEqualTo(uri);
   }
+
 }

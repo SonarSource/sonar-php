@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -50,6 +51,11 @@ public class PhpTestFile implements PhpFile {
   @Override
   public String filename() {
     return relativePath.getFileName().toString();
+  }
+
+  @Override
+  public URI uri() {
+    return relativePath.toUri();
   }
 
   @Override

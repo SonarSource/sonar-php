@@ -20,6 +20,7 @@
 package org.sonar.php.compat;
 
 import java.io.IOException;
+import java.net.URI;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
@@ -49,6 +50,11 @@ public class PhpFileImpl implements PhpFile {
   @Override
   public String filename() {
     return wrapped.filename();
+  }
+
+  @Override
+  public URI uri() {
+    return wrapped.uri();
   }
 
   @Override

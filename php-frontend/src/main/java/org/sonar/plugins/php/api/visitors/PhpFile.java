@@ -19,6 +19,8 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
+import java.net.URI;
+
 /**
  * Class representing file being analysed by SonarPHP plugin.
  */
@@ -27,7 +29,13 @@ public interface PhpFile {
   String contents();
 
   /**
-   * @return Filename for this file (inclusing extension). For example: MyFile.php.
+   * @return Filename for this file (including extension). For example: MyFile.php.
    */
   String filename();
+
+  /**
+   * @return Unique identifier of the file. It may not be a file:// URI, as it may not exist physically.
+   */
+  URI uri();
+
 }
