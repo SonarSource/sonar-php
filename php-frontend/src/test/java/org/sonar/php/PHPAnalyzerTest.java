@@ -27,6 +27,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.measures.FileLinesContext;
+import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -35,9 +37,15 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class PHPAnalyzerTest {
+
+  @Rule
+  public LogTester logTester = new LogTester();
 
   @Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder();
@@ -74,4 +82,29 @@ public class PHPAnalyzerTest {
 
     assertThat(analyzer.computeCpdTokens()).hasSize(4);
   }
+
+  @Test
+  public void terminate_call_forwarded_to_checks() throws Exception {
+    PHPCheck check1 = spy(new DummyCheck());
+    PHPCheck check2 = spy(new DummyCheck());
+    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check1, check2), tmpFolder.newFolder());
+    analyzer.terminate();
+
+    verify(check1).terminate();
+    verify(check2).terminate();
+  }
+
+  @Test
+  public void log_error_and_continue_when_exception_in_terminate() throws Exception {
+    PHPCheck check1 = spy(new DummyCheck());
+    doThrow(new RuntimeException("myError")).when(check1).terminate();
+    PHPCheck check2 = spy(new DummyCheck());
+    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check1, check2), tmpFolder.newFolder());
+    analyzer.terminate();
+
+    verify(check1).terminate();
+    verify(check2).terminate();
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains("An error occurred while trying to terminate checks:");
+  }
+
 }

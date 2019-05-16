@@ -77,11 +77,14 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.ProgressReport;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -279,6 +282,17 @@ public class PHPSensorTest {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(), null);
     createSensor().analyseFiles(context, phpAnalyzer, Collections.emptyList(), progressReport);
     verify(progressReport).stop();
+  }
+
+  @Test
+  public void init_and_terminate_method_called_only_once() throws Exception {
+    PHPCheck check = spy(new PHPVisitorCheck() {});
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
+    List<InputFile> inputFiles = asList(inputFile(ANALYZED_FILE), inputFile("cpd.php"), inputFile("empty.php"));
+    createSensor().analyseFiles(context, phpAnalyzer, inputFiles, progressReport);
+
+    verify(check, times(1)).init();
+    verify(check, times(1)).terminate();
   }
 
   @Test
@@ -528,4 +542,5 @@ public class PHPSensorTest {
       throw exception;
     }
   }
+
 }
