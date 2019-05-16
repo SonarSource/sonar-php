@@ -40,7 +40,8 @@ public interface PHPCheck {
   void init();
 
   /**
-   * Terminates the check, doing cleanup and postprocessing if necessary. This method is called once.
+   * Terminates the check, doing cleanup and postprocessing after the analysis of all project files if necessary.
+   * This method is called once.
    */
   default void terminate() {}
 

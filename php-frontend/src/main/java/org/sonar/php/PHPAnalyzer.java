@@ -30,6 +30,8 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.measures.FileLinesContext;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.highlighter.SymbolHighlighter;
 import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.CommentLineVisitor;
@@ -48,6 +50,7 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class PHPAnalyzer {
+  private static final Logger LOG = Loggers.get(PHPAnalyzer.class);
 
   private final ActionParser<Tree> parser;
   private final ImmutableList<PHPCheck> checks;
@@ -86,7 +89,11 @@ public class PHPAnalyzer {
 
   public void terminate() {
     for (PHPCheck check : checks) {
-      check.terminate();
+      try {
+        check.terminate();
+      } catch (Exception e) {
+        LOG.warn("An error occurred while trying to terminate checks:", e);
+      }
     }
   }
 
