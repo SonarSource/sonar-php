@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.tests;
 
 import java.io.File;
-import java.net.URI;
 import java.nio.file.Paths;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,7 +41,7 @@ public class PhpTestFileTest {
     assertThat(file.filename()).isEqualTo("testfile.php");
     String expectedPath = Paths.get("src", "test", "resources", "tests", "testfile.php").toString();
     assertThat(file.toString()).isEqualTo(expectedPath);
-    assertThat(file.uri()).isEqualTo(new URI("file://" + physicalFile.getAbsolutePath()));
+    assertThat(file.uri()).isEqualTo(physicalFile.toURI());
   }
 
   @Test
