@@ -151,6 +151,7 @@ public class Tests {
       .filter(line -> !line.startsWith("WARN: sonar.php.coverage.overallReportPath is deprecated as of SonarQube 6.2"))
       .filter(line -> !line.startsWith("WARN: Line with number 0 doesn't belong to file Math.php"))
       .filter(line -> !line.startsWith("WARN: Line with number 100 doesn't belong to file Math.php"))
+      .filter(line -> !line.startsWith("WARN: SonarQube scanners will require Java 11+ starting on next version"))
       .collect(Collectors.toList());
 
     assertThat(unexpectedLogs).isEmpty();
