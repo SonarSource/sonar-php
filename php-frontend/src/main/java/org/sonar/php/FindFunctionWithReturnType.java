@@ -38,8 +38,10 @@ import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -48,20 +50,18 @@ public class FindFunctionWithReturnType {
 
   static final ActionParser<Tree> parser = PHPParserBuilder.createParser();
 
-  static final Pattern RETURN_COMMENT = Pattern.compile("@return\\s+([\\S]+)");
-  static final List<String> TYPES_TO_FIND = Arrays.asList(
-    "symfony\\component\\httpfoundation\\Request",
-    "\\Illuminate\\Http\\Request");
+  static final Pattern RETURN_COMMENT = Pattern.compile("(@return|@var)\\s+([\\S]+)");
+  static final List<String> TYPES_TO_FIND = Arrays.asList("\\Illuminate\\Support\\Facades\\Input");
 
   public static void main(String[] args) throws Exception {
-    String dir = "C:\\projects\\tmp\\phpsig";
+    String dir = "/Users/pierre-loup/Developer/php/laravel/laravel-datatables-demo/public/vendor/laravel";
     Files.walk(Paths.get(dir))
       .filter(p -> p.toString().endsWith(".php"))
       .forEach(FindFunctionWithReturnType::analyze);
   }
 
   private static void analyze(Path path) {
-    System.out.println("Analyze: " + path);
+    //System.out.println("Analyze: " + path);
     CompilationUnitTree cut = (CompilationUnitTree) parser.parse(path.toFile());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
     Visitor visitor = new Visitor(symbolTable);
@@ -99,6 +99,12 @@ class Visitor extends PHPVisitorCheck {
     super.visitMethodDeclaration(tree);
   }
 
+  @Override
+  public  void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
+    analyzeClassProperty(tree);
+    super.visitClassPropertyDeclaration(tree);
+  }
+
   private void analyzeFunction(Tree tree,@Nullable Symbol symbol) {
     if (symbol == null) {
       return;
@@ -115,10 +121,23 @@ class Visitor extends PHPVisitorCheck {
     }
   }
 
+  private void analyzeClassProperty(ClassPropertyDeclarationTree tree) {
+    List<String> returnTypes = Collections.emptyList();
+    List<SyntaxTrivia> trivias = ((PHPTree) tree).getFirstToken().trivias();
+    if (!trivias.isEmpty()) {
+      returnTypes = parseComment(trivias.get(0).text()).stream()
+              .map(this::returnTypeName)
+              .collect(Collectors.toList());
+    }
+    if (returnTypes.stream().anyMatch(FindFunctionWithReturnType.TYPES_TO_FIND::contains) && !tree.hasModifiers("private")) {
+      tree.declarations().forEach(this::addClassProperty);
+    }
+  }
+
   private List<String> parseComment(String text) {
     Matcher matcher = FindFunctionWithReturnType.RETURN_COMMENT.matcher(text);
     if (matcher.find()) {
-      String[] returnTypes = matcher.group(1).split("\\|");
+      String[] returnTypes = matcher.group(2).split("\\|");
       return Arrays.asList(returnTypes);
     }
     return Collections.emptyList();
@@ -132,5 +151,13 @@ class Visitor extends PHPVisitorCheck {
       return s;
     }
     return s.startsWith("\\") ? s : namespace.toString() + "\\" + s;
+  }
+
+  private void addClassProperty(VariableDeclarationTree tree) {
+    Symbol symbol = symbolTable.getSymbol(tree.identifier());
+    if (symbol == null) {
+      return;
+    }
+    found.add(symbol);
   }
 }
