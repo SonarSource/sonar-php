@@ -73,7 +73,7 @@ pipeline {
     mavenSetBuildVersion()
     gitFetchSubmodules()
     dir("its/$TEST") {
-      runMavenOrch(JDK_VERSION, "test -Dsonar.runtimeVersion=$SQ_VERSION", "-Dmaven.test.redirectTestOutputToFile=false")
+      runMavenOrch(JDK_VERSION, "test -Dsonar.runtimeVersion=$SQ_VERSION")
     }
   }
 }
