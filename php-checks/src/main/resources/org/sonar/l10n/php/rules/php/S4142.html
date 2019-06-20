@@ -1,27 +1,25 @@
 <p>There are valid cases for passing a variable multiple times into the same method call, but usually doing so is a mistake, and something else was
 intended for one of the arguments.</p>
 <h2>Noncompliant Code Example</h2>
-<pre>
-if (compare($a+$x, $a+$x) != 0) { // Noncompliant
-&nbsp;&nbsp;//...
-}
-
-if (compare(getValue($a), getValue($a)) != 0) { // Noncompliant
-&nbsp;&nbsp;// ...
-}
-</pre>
+<p>{code} </p>
+<p>if (compare($a+$x, $a+$x) != 0) { // Noncompliant </p>
+<p>&nbsp;&nbsp;//... </p>
+<p>} </p>
+<p>if (compare(getValue($a), getValue($a)) != 0) { // Noncompliant </p>
+<p>&nbsp;&nbsp;// ... </p>
+<p>} </p>
+<p>{code} </p>
 <h2>Compliant Solution</h2>
-<pre>
-if (compare($a+$y, $a+$x) != 0) {
-&nbsp;&nbsp;//...
-}
-
-$v1 = getValue($a);
-$v2 = getValue($a);
-if (compare($v1, $v2) != 0) {
-&nbsp;&nbsp;// ...
-}
-</pre>
+<p>{code} </p>
+<p>if (compare($a+$y, $a+$x) != 0) { </p>
+<p>&nbsp;&nbsp;//... </p>
+<p>} </p>
+<p>$v1 = getValue($a); </p>
+<p>$v2 = getValue($a); </p>
+<p>if (compare($v1, $v2) != 0) { </p>
+<p>&nbsp;&nbsp;// ... </p>
+<p>} </p>
+<p>{code} </p>
 <h2>Deprecated</h2>
 <p>This rule is deprecated, and will eventually be removed.</p>
 

@@ -1,17 +1,14 @@
-<p>Concatenating or formatting strings used as SQL queries is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<p>Formatting strings used as SQL queries is security-sensitive. It has led in the past to the following vulnerabilities:</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-9019">CVE-2018-9019</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-7318">CVE-2018-7318</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-5611">CVE-2017-5611</a> </li>
 </ul>
-<p>SQL queries often need to use a hardcoded SQL string with a dynamic parameter coming from a user request. Concatenating or formatting a string to
-add those parameters to the request is a bad practice as it can result in an <a href="https://www.owasp.org/index.php/SQL_Injection">SQL
-injection</a>. The safe way to add parameters to a SQL query is to use SQL binding mechanisms.</p>
-<p>Note that this rule does not detect SQL injections. See Vulnerability rule {rule:phpsecurity:S3649} to detect actual SQL injections. This rule flags the
-execution of SQL queries which are built using concatenation or formatting of strings, even if there is no injection. The goal is to guide security
-code reviews and to prevent a common bad practice.</p>
-<p>This rule flags the execution of SQL queries which are built using concatenation or formatting of strings, even if there is no injection. The goal
-is to guide security code reviews and to prevent a common bad practice.</p>
+<p>SQL queries often need to use a hardcoded SQL string with a dynamic parameter coming from a user request. Formatting a string to add those
+parameters to the request is a bad practice as it can result in an <a href="https://www.owasp.org/index.php/SQL_Injection">SQL injection</a>. The safe
+way to add parameters to a SQL query is to use SQL binding mechanisms.</p>
+<p>This rule flags the execution of SQL queries which are built using formatting of strings, even if there is no injection. This rule does not detect
+SQL injections. The goal is to guide security code reviews and to prevent a common bad practice.</p>
 <p>The following functions are detected as SQL query execution:</p>
 <ul>
   <li> <code>mysql_query</code> </li>
@@ -30,14 +27,13 @@ is to guide security code reviews and to prevent a common bad practice.</p>
 </ul>
 <h2>Ask Yourself Whether</h2>
 <ul>
-  <li> the SQL query is built using concatenation or string formatting. </li>
+  <li> the SQL query is built using string formatting technics, such as concatenating variables. </li>
   <li> some of the values are coming from an untrusted source and are not sanitized. </li>
 </ul>
 <p>You may be at risk if you answered yes to this question.</p>
 <h2>Recommended Secure Coding Practices</h2>
 <ul>
-  <li> Avoid building queries manually using concatenation or formatting. If you do it anyway, do not include user input in this building process.
-  </li>
+  <li> Avoid building queries manually using formatting technics. If you do it anyway, do not include user input in this building process. </li>
   <li> Use <a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet">parameterized queries, prepared statements, or stored
   procedures</a> whenever possible. </li>
   <li> PHP Data Objects (PDO) prepared statement with bound parameters should be preferred to native database functions. </li>
@@ -99,9 +95,5 @@ $result = mysql_query($query);  // No issue will be raised even if it is Sensiti
   <li> Derived from FindSecBugs rules <a href="http://h3xstream.github.io/find-sec-bugs/bugs.htm#SQL_INJECTION_JPA">Potential SQL/JPQL Injection
   (JPA)</a>, <a href="http://h3xstream.github.io/find-sec-bugs/bugs.htm#SQL_INJECTION_JDO">Potential SQL/JDOQL Injection (JDO)</a>, <a
   href="http://h3xstream.github.io/find-sec-bugs/bugs.htm#SQL_INJECTION_HIBERNATE">Potential SQL/HQL Injection (Hibernate)</a> </li>
-</ul>
-<h3>See also</h3>
-<ul>
-  <li> {rule:phpsecurity:S3649} - SQL queries should not be vulnerable to injection attacks (available in SonarCloud and SonarQube Developer Edition) </li>
 </ul>
 

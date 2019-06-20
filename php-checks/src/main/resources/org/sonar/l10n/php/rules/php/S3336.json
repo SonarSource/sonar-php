@@ -11,7 +11,7 @@
     "php-ini"
   ],
   "standards": [
-    "OWASP Top Ten"
+    "OWASP Top 10"
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-3336",

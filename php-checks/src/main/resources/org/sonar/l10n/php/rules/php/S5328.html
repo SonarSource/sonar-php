@@ -12,7 +12,7 @@ fixation attacks and may allow an attacker to hijack another user's session.</p>
   <li> Don't manually generate session IDs, use instead PHP's native functionality such as <code>session_regenerate_id()</code>. </li>
   <li> If you must generate your own IDs, use a cryptographically secure method, like <code>bin2hex(random_bytes(16))</code> </li>
 </ul>
-<h2>Questionable Code Example</h2>
+<h2>Sensitive Code Example</h2>
 <pre>
 session_id(customHash($user));
 // or
@@ -27,10 +27,10 @@ session_id($sessionId);
 </pre>
 <h2>See</h2>
 <ul>
-  <li> <a href="http://cwe.mitre.org/data/definitions/384.html">MITRE, CWE-384</a> - Session Fixation </li>
   <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
   Misconfiguration </li>
   <li> <a href="https://www.owasp.org/index.php/Session_fixation">OWASP Sesssion Fixation</a> </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/384.html">MITRE, CWE-384</a> - Session Fixation </li>
   <li> <a href="https://www.php.net/random-bytes">PHP: random_bytes()</a> </li>
   <li> <a href="https://www.php.net/session-regenerate-id">PHP: session_regenerate_id()</a> </li>
 </ul>

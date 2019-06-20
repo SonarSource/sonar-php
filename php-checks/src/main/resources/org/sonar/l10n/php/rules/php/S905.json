@@ -8,8 +8,6 @@
   },
   "tags": [
     "cwe",
-    "based-on-misra",
-    "misra",
     "unused"
   ],
   "standards": [
