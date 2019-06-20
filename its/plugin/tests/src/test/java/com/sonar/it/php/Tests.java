@@ -152,6 +152,12 @@ public class Tests {
       .filter(line -> !line.startsWith("WARN: Line with number 0 doesn't belong to file Math.php"))
       .filter(line -> !line.startsWith("WARN: Line with number 100 doesn't belong to file Math.php"))
       .filter(line -> !line.startsWith("WARN: SonarQube scanners will require Java 11+ starting on next version"))
+      .filter(line -> !line.startsWith("WARNING: An illegal reflective access operation has occurred"))
+      .filter(line -> !line.startsWith("WARNING: Illegal reflective access"))
+      .filter(line -> !line.startsWith("WARNING: Please consider reporting this to the maintainers"))
+      .filter(line -> !line.startsWith("WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations"))
+      .filter(line -> !line.startsWith("WARNING: All illegal access operations will be denied in a future release"))
+      .filter(line -> !line.startsWith("Picked up JAVA_TOOL_OPTIONS:"))
       .collect(Collectors.toList());
 
     assertThat(unexpectedLogs).isEmpty();
