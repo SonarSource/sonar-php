@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.sonarsource.php</groupId>
     <artifactId>it-php-plugin</artifactId>
-    <version>3.2-SNAPSHOT</version>
+    <version>3.3-SNAPSHOT</version>
   </parent>
 
   <artifactId>it-php-plugin-plugins</artifactId>
