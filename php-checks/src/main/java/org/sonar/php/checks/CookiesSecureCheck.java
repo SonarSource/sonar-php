@@ -81,5 +81,4 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
       context().newIssue(this, tree.callee(), MESSAGE);
     }
   }
-  
 }
