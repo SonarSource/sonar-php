@@ -59,6 +59,8 @@ plugin_qa_task:
       - SQ_VERSION: DOGFOOD
   maven_cache:
     folder: ~/.m2/repository
+  submodules_script:
+    - git submodule update --init
   qa_script:
     - source cirrus-env QA
     - source set_maven_build_version $BUILD_NUMBER
