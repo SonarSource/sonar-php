@@ -15,6 +15,7 @@ env:
   BURGR_PASSWORD: ENCRYPTED[!83e130718e92b8c9de7c5226355f730e55fb46e45869149a9223e724bb99656878ef9684c5f8cfef434aa716e87f4cf2!]
 
 container_definition: &CONTAINER_DEFINITION
+  image: gcr.io/language-team/base:latest
   cluster_name: cirrus-ci-lt-cluster
   zone: us-central1-a
   namespace: default
@@ -24,7 +25,6 @@ only_sonarsource_qa: &ONLY_SONARSOURCE_QA
 
 build_task:
   gke_container:
-    image: gcr.io/language-team/base:v1
     <<: *CONTAINER_DEFINITION
     cpu: 2
     memory: 2G
@@ -42,13 +42,12 @@ build_task:
     - source cirrus-env BUILD
     - regular_mvn_build_deploy_analyse
   cleanup_before_cache_script: cleanup_maven_repository
-  
+
 plugin_qa_task:
   depends_on:
     - build
   <<: *ONLY_SONARSOURCE_QA
   gke_container:
-    image: gcr.io/language-team/base:v1
     <<: *CONTAINER_DEFINITION
     cpu: 3
     memory: 8G
@@ -73,7 +72,6 @@ ruling_task:
     - build
   <<: *ONLY_SONARSOURCE_QA
   gke_container:
-    image: gcr.io/language-team/base:v1
     <<: *CONTAINER_DEFINITION
     cpu: 4
     memory: 8G
@@ -95,8 +93,7 @@ promote_task:
     - ruling
     - plugin_qa
   only_if: $CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*"
-  gke_container:
-    image: gcr.io/language-team/base:v1
+  gke_container:    
     <<: *CONTAINER_DEFINITION
     cpu: 1
     memory: 1G
