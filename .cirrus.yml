@@ -37,13 +37,12 @@ build_task:
     DEPLOY_PULL_REQUEST: true
     CIRRUS_CLONE_DEPTH: 50
   maven_cache:
-    folder: $CIRRUS_WORKING_DIR/.m2/repository 
+    folder: ${CIRRUS_WORKING_DIR}/.m2/repository 
   build_script:
     - source cirrus-env BUILD
     - regular_mvn_build_deploy_analyse
   cleanup_before_cache_script: cleanup_maven_repository
-
- 
+  
 plugin_qa_task:
   depends_on:
     - build
@@ -59,7 +58,7 @@ plugin_qa_task:
       - SQ_VERSION: LATEST_RELEASE[7.9]
       - SQ_VERSION: DOGFOOD
   maven_cache:
-    folder: $CIRRUS_WORKING_DIR/.m2/repository
+    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   submodules_script:
     - git submodule update --init
   qa_script:
@@ -81,7 +80,7 @@ ruling_task:
   env:
     CIRRUS_CLONE_DEPTH: 1
   maven_cache:
-    folder: $CIRRUS_WORKING_DIR/.m2/repository
+    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   submodules_script:
     - git submodule update --init
   ruling_script:
@@ -108,7 +107,7 @@ promote_task:
     #artifacts that will have downloadable links in burgr
     ARTIFACTS: org.sonarsource.php:sonar-php-plugin:jar
   maven_cache:
-    folder: $CIRRUS_WORKING_DIR/.m2/repository
+    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   script:
     - source cirrus-env PROMOTE
     - source set_maven_build_version $BUILD_NUMBER
