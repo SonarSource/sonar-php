@@ -33,13 +33,11 @@ build_task:
     DEPLOY_PULL_REQUEST: true
     CIRRUS_CLONE_DEPTH: 50
   maven_cache:
-    folder: ~/.m2/repository 
+    folder: $CIRRUS_WORKING_DIR/.m2/repository 
   build_script:
     - source cirrus-env BUILD
     - regular_mvn_build_deploy_analyse
-  cleanup_before_cache_script:
-    - rm -rf "$HOME/.m2/repository/org/sonarsource/"
-    - find ~/.m2 -name resolver-status.properties -delete
+  cleanup_before_cache_script: cleanup_maven_repository
 
  
 plugin_qa_task:
@@ -58,7 +56,7 @@ plugin_qa_task:
       - SQ_VERSION: LATEST_RELEASE[7.9]
       - SQ_VERSION: DOGFOOD
   maven_cache:
-    folder: ~/.m2/repository
+    folder: $CIRRUS_WORKING_DIR/.m2/repository
   submodules_script:
     - git submodule update --init
   qa_script:
@@ -66,9 +64,7 @@ plugin_qa_task:
     - source set_maven_build_version $BUILD_NUMBER
     - cd its/plugin
     - mvn verify -Dsonar.runtimeVersion=${SQ_VERSION} -Dmaven.test.redirectTestOutputToFile=false -B -e -V
-  cleanup_before_cache_script:
-    - rm -rf "$HOME/.m2/repository/org/sonarsource/"
-    - find ~/.m2 -name resolver-status.properties -delete
+  cleanup_before_cache_script: cleanup_maven_repository
 
 ruling_task:
   depends_on:
@@ -83,7 +79,7 @@ ruling_task:
     CIRRUS_CLONE_DEPTH: 1
     SONARSOURCE_QA: true
   maven_cache:
-    folder: ~/.m2/repository
+    folder: $CIRRUS_WORKING_DIR/.m2/repository
   submodules_script:
     - git submodule update --init
   ruling_script:
@@ -91,8 +87,7 @@ ruling_task:
     - source set_maven_build_version $BUILD_NUMBER
     - cd its/ruling
     - mvn verify -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
-  cleanup_before_cache_script:
-    - rm -rf "$HOME/.m2/repository/org/sonarsource/"
+  cleanup_before_cache_script: cleanup_maven_repository
  
 promote_task:
   depends_on:
@@ -111,10 +106,10 @@ promote_task:
     #artifacts that will have downloadable links in burgr
     ARTIFACTS: org.sonarsource.php:sonar-php-plugin:jar
   maven_cache:
-    folder: ~/.m2/repository
+    folder: $CIRRUS_WORKING_DIR/.m2/repository
   script:
     - source cirrus-env PROMOTE
     - source set_maven_build_version $BUILD_NUMBER
     - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST"
     - burgr-notify-promotion
-
+  cleanup_before_cache_script: cleanup_maven_repository
