@@ -55,7 +55,6 @@ plugin_qa_task:
     memory: 8G
   env:
     CIRRUS_CLONE_DEPTH: 1
-    SONARSOURCE_QA: true
     matrix:
       - SQ_VERSION: LATEST_RELEASE[7.9]
       - SQ_VERSION: DOGFOOD
@@ -81,7 +80,6 @@ ruling_task:
     memory: 8G
   env:
     CIRRUS_CLONE_DEPTH: 1
-    SONARSOURCE_QA: true
   maven_cache:
     folder: $CIRRUS_WORKING_DIR/.m2/repository
   submodules_script:
