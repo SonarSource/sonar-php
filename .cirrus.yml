@@ -92,7 +92,7 @@ promote_task:
   depends_on:
     - ruling
     - plugin_qa
-  only_if: $CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*"
+  <<: *ONLY_SONARSOURCE_QA
   gke_container:    
     <<: *CONTAINER_DEFINITION
     cpu: 1
