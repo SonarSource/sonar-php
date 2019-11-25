@@ -111,6 +111,24 @@ public class SymbolHighlighterTest {
     checkSymbolReferences(1, 35, ImmutableList.of(textRange(1, 46, 1, 48)));
   }
 
+  @Test
+  public void test_arrow_function() throws Exception {
+    highlight("<?php $a = 1; $b = 2; $f = fn($b) => $a + $b; foo($a); foo($b);");
+    // global $a
+    checkSymbolReferences(1, 6, ImmutableList.of(
+      textRange(1, 37, 1, 39),
+      textRange(1, 50, 1, 52)
+      ));
+    // global $b
+    checkSymbolReferences(1, 14, ImmutableList.of(
+      textRange(1, 59, 1, 61)
+    ));
+    // local $b
+    checkSymbolReferences(1, 30, ImmutableList.of(
+      textRange(1, 42, 1, 44)
+    ));
+  }
+
   private void highlight(String s) {
     DefaultInputFile inputFile = TestInputFileBuilder.create("moduleKey", file.getName())
       .setLanguage("php")

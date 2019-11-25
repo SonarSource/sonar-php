@@ -55,7 +55,8 @@ public final class CheckUtils {
   private static final Kind[] FUNCTION_KINDS_ARRAY = {
     Kind.METHOD_DECLARATION,
     Kind.FUNCTION_DECLARATION,
-    Kind.FUNCTION_EXPRESSION};
+    Kind.FUNCTION_EXPRESSION,
+    Kind.ARROW_FUNCTION_EXPRESSION};
 
   public static final ImmutableList<Kind> FUNCTION_KINDS = ImmutableList.copyOf(FUNCTION_KINDS_ARRAY);
 

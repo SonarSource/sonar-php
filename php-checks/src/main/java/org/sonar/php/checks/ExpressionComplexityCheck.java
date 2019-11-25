@@ -54,6 +54,7 @@ public class ExpressionComplexityCheck extends PHPSubscriptionCheck {
   private static final Kind[] NESTING_KINDS = {
     Kind.COMPILATION_UNIT,
     Kind.FUNCTION_EXPRESSION,
+    Kind.ARROW_FUNCTION_EXPRESSION,
     Kind.FUNCTION_CALL
   };
 

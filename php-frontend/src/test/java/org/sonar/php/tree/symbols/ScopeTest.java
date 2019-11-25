@@ -72,6 +72,15 @@ public class ScopeTest extends ParsingTestUtils {
   }
 
   @Test
+  public void arrow_function_expression_scope() throws Exception {
+    Scope scope = getScopeFor(Kind.ARROW_FUNCTION_EXPRESSION);
+
+    assertThat(scope.getSymbols(Symbol.Kind.PARAMETER)).extracting(Symbol::name).containsExactly("$a");
+    assertThat(scope.getSymbols(Symbol.Kind.VARIABLE)).isEmpty();
+    assertThat(scope.getSymbol("$c", Symbol.Kind.VARIABLE)).isNotNull();
+  }
+
+  @Test
   public void global_statement() throws Exception {
     Scope functionScope = getScopeFor(Kind.FUNCTION_DECLARATION);
 

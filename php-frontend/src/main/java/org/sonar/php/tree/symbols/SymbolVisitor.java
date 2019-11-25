@@ -50,6 +50,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -187,6 +188,13 @@ public class SymbolVisitor extends PHPVisitorCheck {
   public void visitFunctionExpression(FunctionExpressionTree tree) {
     enterScope(tree);
     super.visitFunctionExpression(tree);
+    leaveScope();
+  }
+
+  @Override
+  public void visitArrowFunctionExpression(ArrowFunctionExpressionTree tree) {
+    enterArrowFunctionScope(tree);
+    super.visitArrowFunctionExpression(tree);
     leaveScope();
   }
 
@@ -635,7 +643,11 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   private void enterScope(Tree tree) {
-    currentScope = symbolTable.addScope(new Scope(currentScope, tree));
+    currentScope = symbolTable.addScope(new Scope(currentScope, tree, false));
+  }
+
+  private void enterArrowFunctionScope(Tree tree) {
+    currentScope = symbolTable.addScope(new Scope(currentScope, tree, true));
   }
 
   private SymbolImpl createSymbol(IdentifierTree identifier, Symbol.Kind kind) {

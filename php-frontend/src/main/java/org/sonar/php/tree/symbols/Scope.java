@@ -37,10 +37,12 @@ public class Scope {
   protected List<Symbol> symbols = new ArrayList<>();
   Scope superClassScope;
   private boolean unresolvedCompact;
+  private boolean captureOuterScope;
 
-  public Scope(Scope outer, Tree tree) {
+  public Scope(Scope outer, Tree tree, boolean captureOuterScope) {
     this.outer = Preconditions.checkNotNull(outer);
     this.tree = Preconditions.checkNotNull(tree);
+    this.captureOuterScope = captureOuterScope;
   }
 
   /**
@@ -50,6 +52,7 @@ public class Scope {
   public Scope(CompilationUnitTree compilationUnitTree) {
     this.outer = null;
     this.tree = compilationUnitTree;
+    this.captureOuterScope = false;
   }
 
   public Tree tree() {
@@ -87,7 +90,7 @@ public class Scope {
    * If no or more than one symbols meet conditions, then null is returned.
    */
   @Nullable
-  public Symbol getSymbol(String name, Kind ... kinds) {
+  public Symbol getSymbol(String name, Kind... kinds) {
     List<Kind> kindList = Arrays.asList(kinds);
     List<Symbol> result = new ArrayList<>();
     for (Symbol s : symbols) {
@@ -95,8 +98,12 @@ public class Scope {
         result.add(s);
       }
     }
-    if(result.isEmpty() && superClassScope != null) {
-      return superClassScope.getSymbol(name, kinds);
+    if (result.isEmpty()) {
+      if (superClassScope != null) {
+        return superClassScope.getSymbol(name, kinds);
+      } else if (captureOuterScope) {
+        return outer.getSymbol(name, kinds);
+      }
     }
 
     return result.size() == 1 ? result.get(0) : null;

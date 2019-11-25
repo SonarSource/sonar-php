@@ -24,6 +24,11 @@ function f($p1, &$p2) {
   $d = function () use ($c, &$b) {
     $e = 1;
   };
+
+  /**
+   * ARROW FUNCTION EXPRESSION SCOPE $a, $c
+   */
+  $f = fn($a) => $a + $c;
 }
 
 /**

@@ -53,3 +53,5 @@ myfunction(
     .($d ? 'x' : 'y')
     .($e ? 'x' : 'y')
 );
+
+$f = fn($x) => ($x ? 0 : 1) || false || true && false && true; // Noncompliant

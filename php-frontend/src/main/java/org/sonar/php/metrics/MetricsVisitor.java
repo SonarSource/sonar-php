@@ -36,6 +36,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   private static final Kind[] FUNCTION_NODES = {
     Kind.FUNCTION_DECLARATION,
     Kind.FUNCTION_EXPRESSION,
+    Kind.ARROW_FUNCTION_EXPRESSION,
     Kind.METHOD_DECLARATION,
   };
 

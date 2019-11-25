@@ -17,33 +17,37 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.expression;
+package org.sonar.plugins.php.api.tree.expression;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+public interface ArrowFunctionExpressionTree extends FunctionTree, ExpressionTree {
 
-public class FunctionCallParameterListTest {
+  @Nullable
+  SyntaxToken staticToken();
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.FUNCTION_CALL_PARAMETER_LIST)
-      .matches("()")
-      .matches("($p)")
-      .matches("(& $p)")
-      .matches("(yield)")
-      .matches("(yield 1 + 1)")
-      .matches("(yield + 1)")
-      .matches("(yield * 1)")
-      .matches("(...$p)")
-      .matches("(yield $a)")
-      .matches("($p1, & $p2, ...$p3, yield $p4)")
-      .matches("('title', 'body','comments',)")
-      .matches("($a, fn($x) => $x + 1)")
-      .notMatches("(,)")
-      .notMatches("('function','bar',,)")
-      .notMatches("(,'function','bar')");
-  }
+  @Override
+  // "fn" token
+  SyntaxToken functionToken();
+
+  @Nullable
+  @Override
+  SyntaxToken referenceToken();
+
+  @Override
+  ParameterListTree parameters();
+
+  @Override
+  @Nullable
+  ReturnTypeClauseTree returnTypeClause();
+
+  SyntaxToken doubleArrowToken();
+
+  @Override
+  ExpressionTree body();
 
 }
