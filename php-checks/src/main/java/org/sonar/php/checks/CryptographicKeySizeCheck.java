@@ -71,7 +71,7 @@ public class CryptographicKeySizeCheck extends PHPVisitorCheck {
   private boolean lessThanMinKeyLength(ExpressionTree keySize) {
     if (keySize.is(Kind.NUMERIC_LITERAL)) {
       LiteralTree literal = (LiteralTree) keySize;
-      int size = LiteralUtils.intLiteralValue(literal.value());
+      long size = LiteralUtils.intLiteralValue(literal.value());
       return size < MIN_KEY_LENGTH;
     } else if (keySize.is(Kind.VARIABLE_IDENTIFIER)) {
       Symbol keySizeSymbol = context().symbolTable().getSymbol(keySize);
