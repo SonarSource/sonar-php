@@ -25,10 +25,10 @@ public class LiteralUtils {
     // This class only contains static methods
   }
 
-  public static long intLiteralValue(String literalValue) {
+  public static long longLiteralValue(String literalValue) {
     String value = literalValue.replace("_", "");
     if (value.startsWith("0b") || value.startsWith("0B")) {
-      return Integer.parseUnsignedInt(value.substring(2), 2);
+      return Long.parseUnsignedLong(value.substring(2), 2);
     }
     return Long.decode(value);
   }

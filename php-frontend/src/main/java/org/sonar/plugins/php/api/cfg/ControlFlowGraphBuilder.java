@@ -319,7 +319,7 @@ class ControlFlowGraphBuilder {
       throw exception(argument);
     }
     try {
-      int breakLevels = (int) LiteralUtils.intLiteralValue(((LiteralTree) levelsExpression).value());
+      int breakLevels = (int) LiteralUtils.longLiteralValue(((LiteralTree) levelsExpression).value());
       if (breakLevels == 0) {
         return 1;
       }
