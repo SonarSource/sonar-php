@@ -17,31 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.lexical;
+package org.sonar.php.utils;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+public class LiteralUtils {
 
-import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
-
-public class NumericLiteralTest {
-
-  @Test
-  public void test() {
-    assertThat(Kind.NUMERIC_LITERAL)
-      .matches("7E-10")
-      .matches("1.2e3")
-      .matches("1.234")
-      .matches("0b11111111")
-      .matches("0B11111111")
-      .matches("0x1A")
-      .matches("0X1A")
-      .matches("0123")
-      .matches("1")
-      .matches("0_0")
-      .matches("299_792_458")
-      .matches("0xCAFE_F00D")
-      .matches("0b0101_1111")
-      .matches("6.674_083e-11");
+  private LiteralUtils() {
+    // This class only contains static methods
   }
+
+  public static long longLiteralValue(String literalValue) {
+    String value = literalValue.replace("_", "");
+    if (value.startsWith("0b") || value.startsWith("0B")) {
+      return Long.parseUnsignedLong(value.substring(2), 2);
+    }
+    return Long.decode(value);
+  }
+
 }

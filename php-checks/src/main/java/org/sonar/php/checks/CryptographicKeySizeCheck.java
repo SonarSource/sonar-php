@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.utils.LiteralUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -70,7 +71,7 @@ public class CryptographicKeySizeCheck extends PHPVisitorCheck {
   private boolean lessThanMinKeyLength(ExpressionTree keySize) {
     if (keySize.is(Kind.NUMERIC_LITERAL)) {
       LiteralTree literal = (LiteralTree) keySize;
-      int size = Integer.parseInt(literal.value());
+      long size = LiteralUtils.longLiteralValue(literal.value());
       return size < MIN_KEY_LENGTH;
     } else if (keySize.is(Kind.VARIABLE_IDENTIFIER)) {
       Symbol keySizeSymbol = context().symbolTable().getSymbol(keySize);
