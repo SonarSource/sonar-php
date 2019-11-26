@@ -20,10 +20,10 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import java.util.List;
 
 /**
  * <p>Class <a href="http://php.net/manual/en/language.oop5.properties.php">Properties</a>
@@ -46,6 +46,8 @@ import java.util.List;
 public interface ClassPropertyDeclarationTree extends ClassMemberTree {
 
   List<SyntaxToken> modifierTokens();
+
+  @Nullable TypeTree typeAnnotation();
 
   SeparatedList<VariableDeclarationTree> declarations();
 

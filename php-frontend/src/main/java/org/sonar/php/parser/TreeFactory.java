@@ -420,11 +420,12 @@ public class TreeFactory {
 
   public ClassPropertyDeclarationTree classVariableDeclaration(
     List<SyntaxToken> modifierTokens,
+    Optional<TypeTree> typeAnnotation,
     VariableDeclarationTree firstVariable,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalVariables,
     InternalSyntaxToken eosToken
   ) {
-    return ClassPropertyDeclarationTreeImpl.variable(modifierTokens, separatedList(firstVariable, additionalVariables), eosToken);
+    return ClassPropertyDeclarationTreeImpl.variable(modifierTokens, typeAnnotation.orNull(), separatedList(firstVariable, additionalVariables), eosToken);
   }
 
   public MethodDeclarationTree methodDeclaration(

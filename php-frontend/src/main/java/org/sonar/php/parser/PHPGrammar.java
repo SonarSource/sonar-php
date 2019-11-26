@@ -326,6 +326,7 @@ public class PHPGrammar {
         b.firstOf(
           f.singleToken(b.token(PHPKeyword.VAR)),
           b.oneOrMore(MEMBER_MODIFIER())),
+        b.optional(TYPE()),
         VARIABLE_DECLARATION(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), VARIABLE_DECLARATION())),
         EOS()));
@@ -486,6 +487,9 @@ public class PHPGrammar {
           b.token(ARRAY),
           b.token(CALLABLE),
           b.token(PHPLexicalGrammar.SELF),
+          b.token(PHPLexicalGrammar.PARENT),
+          b.token(PHPLexicalGrammar.ITERABLE),
+          b.token(PHPLexicalGrammar.OBJECT),
           b.token(PHPLexicalGrammar.BOOL),
           b.token(PHPLexicalGrammar.FLOAT),
           b.token(PHPLexicalGrammar.INT),

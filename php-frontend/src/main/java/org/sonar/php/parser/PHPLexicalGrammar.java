@@ -233,6 +233,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   PRINT,
 
   SELF,
+  PARENT,
 
   INTEGER,
   INT,
@@ -244,6 +245,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   BOOLEAN,
   BOOL,
   BINARY,
+  ITERABLE,
 
   FROM
   ;
@@ -324,6 +326,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(PRINT).is(word(b, "PRINT")).skip();
 
     b.rule(SELF).is(word(b, "SELF")).skip();
+    b.rule(PARENT).is(word(b, "PARENT")).skip();
 
     b.rule(INTEGER).is(word(b, "INTEGER")).skip();
     b.rule(INT).is(word(b, "INT")).skip();
@@ -335,6 +338,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(BOOLEAN).is(word(b, "BOOLEAN")).skip();
     b.rule(BOOL).is(word(b, "BOOL")).skip();
     b.rule(BINARY).is(word(b, "BINARY")).skip();
+    b.rule(ITERABLE).is(word(b, "ITERABLE")).skip();
 
     b.rule(FROM).is(word(b, "FROM")).skip();
 

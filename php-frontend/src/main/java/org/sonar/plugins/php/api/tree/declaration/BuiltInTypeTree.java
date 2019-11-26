@@ -27,12 +27,15 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * Valid built-in types:
  * <ul>
  *   <li>self</li>
+ *   <li>parent</li>
  *   <li>array</li>
  *   <li>callable</li>
  *   <li>bool</li>
  *   <li>float</li>
  *   <li>int</li>
  *   <li>string</li>
+ *   <li>iterable</li>
+ *   <li>object</li>
  * </ul>
  * <pre/>
  */
