@@ -50,6 +50,7 @@ public enum PHPPunctuator implements GrammarRuleKey {
   SL("<<"),
   SR(">>"),
   XOR_EQU("^="),
+  NULL_COALESCING_EQU("??="),
 
   PLUS("+"),
   MINUS("-"),

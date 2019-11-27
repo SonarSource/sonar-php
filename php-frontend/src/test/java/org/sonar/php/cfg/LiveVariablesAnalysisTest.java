@@ -68,6 +68,15 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
+  public void test_null_coalescing() {
+    verifyLiveVariableAnalysis("" +
+      "block( succ = [END], liveIn = [foo], liveOut = [], gen = [foo], kill = [foo, bar, qix]);" +
+      "$foo ??= 1;" +
+      "$bar = bar();" +
+      "$qix = 1 + 2;");
+  }
+
+  @Test
   public void test_simple_gen() {
     verifyLiveVariableAnalysis("" +
       "block( succ = [END], liveIn = [foo, bar], liveOut = [], gen = [foo, bar]);" +

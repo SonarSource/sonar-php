@@ -93,6 +93,13 @@ function compound_assignments() {
   return $fTerm; // OK
 }
 
+function compound_assignments_FN() {
+  $a = 42;
+  $a += 42; //FN here
+  $a = 10;
+  foo($a);
+}
+
 function array_assignment(){
   list($a, $b) = foo();  // reported by S1481 - unused local variable
 
@@ -106,6 +113,27 @@ function array_assignment(){
 function assignment_in_lhs() {
   $a = 43; // FN - we do not consider order inside expressions
   $b[$a = foo()] = bar($a);
+}
+
+function null_coalescing_assignment() {
+  $a = 42;
+  $a ??= 24; // ok
+  foo($a);
+}
+
+function null_coalescing_assignment_2() {
+  $a = 42; // Noncompliant
+  $a = 24; // ok
+  $a ??= 36;
+  foo($a);
+}
+
+function null_coalescing_assignment_FN() {
+  $a = 42;
+  $b ??= $a; // FN here: $b is considered read
+  $a = 24; // ok
+  $b = 55;
+  foo($a, $b);
 }
 
 /***************************

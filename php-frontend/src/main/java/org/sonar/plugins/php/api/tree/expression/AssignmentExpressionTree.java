@@ -39,6 +39,7 @@ import org.sonar.plugins.php.api.tree.Tree;
  *   {@link #variable()} {@link Tree.Kind#OR_ASSIGNMENT |=} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#CONCATENATION_ASSIGNMENT .=} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#ASSIGNMENT_BY_REFERENCE =&} {@link #value()}
+ *   {@link #variable()} {@link Tree.Kind#NULL_COALESCING_ASSIGNMENT ??=} {@link #value()}
  * </pre>
  */
 @Beta

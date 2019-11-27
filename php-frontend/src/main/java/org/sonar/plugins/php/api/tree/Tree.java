@@ -341,6 +341,12 @@ public interface Tree {
 
     /**
      * {@link AssignmentExpressionTree}
+     * {@code ??=}
+     */
+    NULL_COALESCING_ASSIGNMENT(AssignmentExpressionTree.class),
+
+    /**
+     * {@link AssignmentExpressionTree}
      * {@code *=}
      */
     MULTIPLY_ASSIGNMENT(AssignmentExpressionTree.class),

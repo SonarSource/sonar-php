@@ -1610,6 +1610,8 @@ public class TreeFactory {
       kind = Kind.OR_ASSIGNMENT;
     } else if (".=".equals(operator)) {
       kind = Kind.CONCATENATION_ASSIGNMENT;
+    } else if ("??=".equals(operator)) {
+      kind = Kind.NULL_COALESCING_ASSIGNMENT;
     }
 
     return new AssignmentExpressionTreeImpl(kind, lhs, operatorToken, rhs);
