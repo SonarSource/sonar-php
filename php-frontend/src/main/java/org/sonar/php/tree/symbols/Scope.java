@@ -22,6 +22,7 @@ package org.sonar.php.tree.symbols;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -94,8 +95,13 @@ public class Scope {
     List<Kind> kindList = Arrays.asList(kinds);
     List<Symbol> result = new ArrayList<>();
     for (Symbol s : symbols) {
-      if (s.called(name) && (kindList.isEmpty() || kindList.contains(s.kind()))) {
-        result.add(s);
+      if (s.called(name)) {
+        if (kindList.isEmpty() || kindList.contains(s.kind())) {
+          result.add(s);
+        } else if (s.is(Kind.PARAMETER) && kindList.equals(Collections.singletonList(Kind.VARIABLE))) {
+          // parameter of a child scope shadows variable of the outer scope
+          return null;
+        }
       }
     }
     if (result.isEmpty()) {

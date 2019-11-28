@@ -75,9 +75,19 @@ public class ScopeTest extends ParsingTestUtils {
   public void arrow_function_expression_scope() throws Exception {
     Scope scope = getScopeFor(Kind.ARROW_FUNCTION_EXPRESSION);
 
-    assertThat(scope.getSymbols(Symbol.Kind.PARAMETER)).extracting(Symbol::name).containsExactly("$a");
+    assertThat(scope.getSymbols(Symbol.Kind.PARAMETER)).extracting(Symbol::name).containsExactlyInAnyOrder("$a", "$d");
     assertThat(scope.getSymbols(Symbol.Kind.VARIABLE)).isEmpty();
-    assertThat(scope.getSymbol("$c", Symbol.Kind.VARIABLE)).isNotNull();
+    Symbol symbolC = scope.getSymbol("$c");
+    Symbol symbolD = scope.getSymbol("$d");
+    assertThat(symbolC).isNotNull();
+    assertThat(symbolC.kind()).isEqualTo(Symbol.Kind.VARIABLE);
+    assertThat(symbolD).isNotNull();
+    assertThat(scope.getSymbol("$d", Symbol.Kind.PARAMETER)).isEqualTo(symbolD);
+    assertThat(scope.getSymbol("$d", Symbol.Kind.VARIABLE)).isNull();
+
+    Scope functionScope = getScopeFor(Kind.FUNCTION_DECLARATION);
+    assertThat(symbolC).isEqualTo(functionScope.getSymbol("$c"));
+    assertThat(symbolD).isNotEqualTo(functionScope.getSymbol("$d"));
   }
 
   @Test

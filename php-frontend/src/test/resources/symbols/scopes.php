@@ -26,9 +26,9 @@ function f($p1, &$p2) {
   };
 
   /**
-   * ARROW FUNCTION EXPRESSION SCOPE $a, $c
+   * ARROW FUNCTION EXPRESSION SCOPE $a, $d, $c
    */
-  $f = fn($a) => $a + $c;
+  $f = fn($a, $d) => $a + $d + $c;
 }
 
 /**
