@@ -504,3 +504,28 @@ function return_object() {
   $obj = foo();
   return $obj->bar();
 }
+
+function parameter_by_reference(&$foo) {
+  if (cond()) {
+    $foo = '42';
+  }
+}
+
+function use_by_reference() {
+  $f = function($in) use(&$max) {
+    if($in > $max) {
+      $max = $in; // ok
+    }
+  };
+}
+
+function assign_by_reference() {
+ $ref = &$val; // ok
+ $ref = 'Hello';
+}
+
+function fn_assign_by_reference() {
+ $ref = '24'; // FN: we avoid reporting issues in presence of assignment by reference
+ $ref = &$val; // ok
+ $ref = 'Hello';
+}
