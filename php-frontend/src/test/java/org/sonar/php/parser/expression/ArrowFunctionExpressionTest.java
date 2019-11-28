@@ -20,30 +20,30 @@
 package org.sonar.php.parser.expression;
 
 import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class FunctionCallParameterListTest {
+public class ArrowFunctionExpressionTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.FUNCTION_CALL_PARAMETER_LIST)
-      .matches("()")
-      .matches("($p)")
-      .matches("(& $p)")
-      .matches("(yield)")
-      .matches("(yield 1 + 1)")
-      .matches("(yield + 1)")
-      .matches("(yield * 1)")
-      .matches("(...$p)")
-      .matches("(yield $a)")
-      .matches("($p1, & $p2, ...$p3, yield $p4)")
-      .matches("('title', 'body','comments',)")
-      .matches("($a, fn($x) => $x + 1)")
-      .notMatches("(,)")
-      .notMatches("('function','bar',,)")
-      .notMatches("(,'function','bar')");
+    assertThat(Tree.Kind.ARROW_FUNCTION_EXPRESSION)
+      .matches("fn($x) => $x + $y")
+      .matches("fn($x) => fn($y) => $x * $y + $z")
+      .matches("fn(array $x) => $x")
+      .matches("fn(): int => $x")
+      .matches("FN($x = 42) => $x")
+      .matches("fn(&$x) => $x")
+      .matches("fn&($x) => $x")
+      .matches("fn($x, ...$rest) => $rest")
+      .matches("static fn() => var_dump($this)")
+      .matches("fn() => $x++")
+      .matches("fn($str) => preg_match($regex, $str, $matches) && ($matches[1] % 7 == 0)")
+      .matches("fn($x) => ($x + $y)")
+      .matches("fn($c) => $callable($factory($c), $c)")
+      .matches("fn(...$args) => !$f(...$args)")
+      .notMatches("fn()");
   }
 
 }

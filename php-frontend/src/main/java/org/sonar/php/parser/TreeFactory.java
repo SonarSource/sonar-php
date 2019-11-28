@@ -62,6 +62,7 @@ import org.sonar.php.tree.impl.expression.ArrayAssignmentPatternTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayPairTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrowFunctionExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentByReferenceTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.BinaryExpressionTreeImpl;
@@ -149,6 +150,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTr
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
@@ -1511,6 +1513,25 @@ public class TreeFactory {
       lexicalVariables.orNull(),
       returnTypeClause.orNull(),
       block);
+  }
+
+  public ArrowFunctionExpressionTree arrowFunctionExpression(
+    Optional<InternalSyntaxToken> staticToken,
+    InternalSyntaxToken fnToken,
+    Optional<InternalSyntaxToken> ampersandToken,
+    ParameterListTree parameters,
+    Optional<ReturnTypeClauseTree> returnTypeClause,
+    InternalSyntaxToken doubleArrowToken,
+    ExpressionTree body
+  ) {
+    return new ArrowFunctionExpressionTreeImpl(
+      staticToken.orNull(),
+      fnToken,
+      ampersandToken.orNull(),
+      parameters,
+      returnTypeClause.orNull(),
+      doubleArrowToken,
+      body);
   }
 
   public NewExpressionTree newExpression(InternalSyntaxToken newToken, ExpressionTree expression) {

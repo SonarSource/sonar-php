@@ -10,6 +10,8 @@ $f = function () use ($a, &$b) {
     echo $b;         // use global $b
 };
 
+$f = fn($b) => $a + $b; // use global $a, local $b
+
 function g() {
     global $a;
     echo $a;         // use global $a

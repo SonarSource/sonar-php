@@ -196,6 +196,8 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   public void nested_functions() throws Exception {
     assertThat(components(" function nestedFunction() { if ($a) {} } ")).containsExactly(cc("if", 2));
     assertThat(components(" foo(function() { if ($a) {} });")).containsExactly(cc("if", 2));
+    assertThat(components(" foo(function() { return $a && $b; });")).containsExactly(cc("&&", 1));
+    assertThat(components(" foo(fn() => $a && $b);")).containsExactly(cc("&&", 1));
   }
 
   @Test
@@ -221,6 +223,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
         + 2 // gul (incl. function expression)
         + 1 // dom
         + 1 // $func function expression
+        + 1 // $func arrow function expression
         + 4 // rest of the script
     );
   }

@@ -26,6 +26,7 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,12 +38,15 @@ public class ComplexityVisitorTest {
   public void declarations() throws Exception {
     assertOneComplexityToken("function f() {}", "function");
     assertOneComplexityToken("$f = function() {};", "function");
+    assertOneComplexityToken("$f = fn() => 0;", "fn");
     assertThat(complexity("class A {}")).isEqualTo(0);
     assertOneComplexityToken("class A { public function f() {} }", "function");
 
     assertThat(complexity("function f() { f(); return; }")).isEqualTo(1);
     assertThat(complexity("function f() { return; f(); }")).isEqualTo(1);
     assertThat(complexity("class A { abstract function f(); }")).isEqualTo(1);
+    assertThat(expressionComplexity("function() { return $a && $b; };")).isEqualTo(2);
+    assertThat(expressionComplexity("fn() => $a && $b;")).isEqualTo(2);
   }
 
   @Test
@@ -84,7 +88,11 @@ public class ComplexityVisitorTest {
   public void without_nested_functions() throws Exception {
     assertThat(complexityWithoutNestedFunctions("$a && $b && $c;")).isEqualTo(2);
     assertThat(complexityWithoutNestedFunctions("$a && f(function () { return $a && $b; });")).isEqualTo(1);
+    assertThat(complexityWithoutNestedFunctions("$a && f(fn() => $a && $b);")).isEqualTo(1);
     assertThat(complexityWithoutNestedFunctions("function f() { f(function () { return $a && $b; }); $a && $b; }")).isEqualTo(2);
+    assertThat(complexityWithoutNestedFunctions("function f() { f(fn() => $a && $b); $a && $b; }")).isEqualTo(2);
+    assertThat(complexityWithoutNestedFunctions("function() { f(fn() => $a && $b); $a && $b; };")).isEqualTo(2);
+    assertThat(complexityWithoutNestedFunctions("fn() => f(fn() => $a && $b) && $b;")).isEqualTo(2);
   }
 
   private void assertOneComplexityToken(String codeToParse, String complexityToken) {
@@ -100,8 +108,16 @@ public class ComplexityVisitorTest {
     return ComplexityVisitor.complexity(tree);
   }
 
+  private int expressionComplexity(String toParse) {
+    ExpressionStatementTree tree = (ExpressionStatementTree)parser.parse(toParse);
+    return ComplexityVisitor.complexity(tree.expression());
+  }
+
   private int complexityWithoutNestedFunctions(String toParse) {
     Tree tree = parser.parse(toParse);
+    if (tree.is(Tree.Kind.EXPRESSION_STATEMENT)) {
+      tree = ((ExpressionStatementTree)tree).expression();
+    }
     return ComplexityVisitor.complexityNodesWithoutNestedFunctions(tree).size();
   }
 

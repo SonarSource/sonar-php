@@ -30,7 +30,10 @@ public class VariableDeclarationTest {
   public void variable_declaration() {
     assertThat(PHPLexicalGrammar.VARIABLE_DECLARATION)
       .matches("$a")
-      .matches("$a = 1");
+      .matches("$a = 1")
+      .matches("$a = 1")
+      .matches("$a = fn($x) => $x * 5")
+      .matches("$a = (fn($x) => $x * 5)(7)");
   }
 
 }

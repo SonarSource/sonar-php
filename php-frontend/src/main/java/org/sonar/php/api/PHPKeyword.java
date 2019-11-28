@@ -55,6 +55,7 @@ public enum PHPKeyword implements GrammarRuleKey {
   EXTENDS("extends"),
   FINALLY("finally"),
   FINAL("final"),
+  FN("fn"),
   FOREACH("foreach"),
   FOR("for"),
   FUNCTION("function"),

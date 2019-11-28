@@ -29,6 +29,8 @@ $func = function($a) {  // CC: 1
   if ($a) { }                     // +1
 };
 
+$func = fn($a) => $a && $b; // +1
+
 // rest of the script, with code outside functions
 if ($a) {                         // +1
   if ($b) {                       // +2

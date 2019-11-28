@@ -9,6 +9,7 @@ $a < 2;    // Noncompliant
 
 $funcExpr = function() {};
 function() {};    // Noncompliant
+fn() => NULL;     // Noncompliant
 
 echo "str";
 "str";            // Noncompliant

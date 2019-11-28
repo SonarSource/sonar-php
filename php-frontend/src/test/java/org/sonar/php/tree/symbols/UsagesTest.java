@@ -68,7 +68,8 @@ public class UsagesTest extends ParsingTestUtils {
       Tree tree = scope.tree();
       if (tree.is(Tree.Kind.FUNCTION_EXPRESSION)) {
         test_use_clause(scope);
-
+      } else if (tree.is(Tree.Kind.ARROW_FUNCTION_EXPRESSION)) {
+        test_arrow_function(scope);
       } else if (scope.isGlobal()) {
         test_global_scope(scope);
 
@@ -141,13 +142,13 @@ public class UsagesTest extends ParsingTestUtils {
   }
 
   private void test_global_scope(Scope scope) {
-    assertThat(globalSymbolA.usages()).hasSize(4);
+    assertThat(globalSymbolA.usages()).hasSize(5);
     assertThat(globalSymbolB.usages()).hasSize(1);
 
     Symbol arraySymbol = scope.getSymbol("$array");
     assertThat(arraySymbol.usages()).hasSize(1);
 
-    assertThat(scope.getSymbol("$f").usages()).hasSize(1);
+    assertThat(scope.getSymbol("$f").usages()).hasSize(2);
     assertThat(scope.getSymbol("h").usages()).hasSize(1);
     assertThat(scope.getSymbol("j").usages()).hasSize(1);
 
@@ -172,6 +173,14 @@ public class UsagesTest extends ParsingTestUtils {
     assertThat(useClauseSymbolA).isNotEqualTo(globalSymbolA);
     assertThat(useClauseSymbolB).isNotEqualTo(globalSymbolB);
     assertThat(useClauseSymbolA.usages()).hasSize(1);
+  }
+
+  private void test_arrow_function(Scope scope) {
+    Symbol symbolA = scope.getSymbol("$a");
+    Symbol symbolB = scope.getSymbol("$b");
+    assertThat(symbolA).isEqualTo(globalSymbolA);
+    assertThat(symbolB).isNotEqualTo(globalSymbolB);
+    assertThat(symbolB.usages()).hasSize(1);
   }
 
   Symbol getGlobalScopeSymbol(String name) {

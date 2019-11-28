@@ -41,6 +41,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
@@ -290,6 +291,11 @@ public interface Tree {
      * {@link FunctionExpressionTree}
      */
     FUNCTION_EXPRESSION(FunctionExpressionTree.class),
+
+    /**
+     * {@link ArrowFunctionExpressionTree}
+     */
+    ARROW_FUNCTION_EXPRESSION(ArrowFunctionExpressionTree.class),
 
     /**
      * {@link LexicalVariablesTree}

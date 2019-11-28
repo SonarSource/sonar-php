@@ -62,6 +62,7 @@ public class KeywordTest {
       .matches("extends")
       .matches("final")
       .matches("finally")
+      .matches("fn")
       .matches("for")
       .matches("foreach")
       .matches("function")
@@ -101,7 +102,7 @@ public class KeywordTest {
 
   @Test
   public void getKeywordValues() {
-    Assertions.assertThat(PHPKeyword.getKeywordValues().length).isEqualTo(67);
+    Assertions.assertThat(PHPKeyword.getKeywordValues().length).isEqualTo(68);
   }
 
 }

@@ -50,6 +50,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTr
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
@@ -1661,6 +1662,18 @@ public class PHPGrammar {
         BLOCK()));
   }
 
+  public ArrowFunctionExpressionTree ARROW_FUNCTION_EXPRESSION() {
+    return b.<ArrowFunctionExpressionTree>nonterminal(Kind.ARROW_FUNCTION_EXPRESSION).is(
+      f.arrowFunctionExpression(
+        b.optional(b.token(STATIC)),
+        b.token(PHPKeyword.FN),
+        b.optional(b.token(AMPERSAND)),
+        PARAMETER_LIST(),
+        b.optional(RETURN_TYPE_CLAUSE()),
+        b.token(DOUBLEARROW),
+        EXPRESSION()));
+  }
+
   public NewExpressionTree NEW_EXPRESSION() {
     return b.<NewExpressionTree>nonterminal(Kind.NEW_EXPRESSION).is(
       f.newExpression(b.token(NEW), b.firstOf(MEMBER_EXPRESSION(), ANONYMOUS_CLASS())));
@@ -1699,6 +1712,7 @@ public class PHPGrammar {
         b.firstOf(
           f.combinedScalarOffset(ARRAY_INITIALIZER(), b.zeroOrMore(DIMENSIONAL_OFFSET())),
           FUNCTION_EXPRESSION(),
+          ARROW_FUNCTION_EXPRESSION(),
           COMMON_SCALAR(),
           MEMBER_EXPRESSION(),
           NEW_EXPRESSION(),

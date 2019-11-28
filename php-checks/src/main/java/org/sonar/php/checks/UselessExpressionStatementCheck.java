@@ -39,6 +39,7 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
 
   private static final Tree.Kind[] USELESS_KINDS = {
     Kind.FUNCTION_EXPRESSION,
+    Kind.ARROW_FUNCTION_EXPRESSION,
     Kind.EQUAL_TO,
     Kind.STRICT_EQUAL_TO,
     Kind.NOT_EQUAL_TO,
