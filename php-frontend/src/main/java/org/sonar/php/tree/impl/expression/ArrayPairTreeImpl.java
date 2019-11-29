@@ -20,6 +20,8 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -28,26 +30,32 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-
 public class ArrayPairTreeImpl extends PHPTree implements ArrayPairTree {
 
   private static final Kind KIND = Kind.ARRAY_PAIR;
   private final ExpressionTree key;
   private final InternalSyntaxToken doubleArrowToken;
   private final ExpressionTree value;
+  private final InternalSyntaxToken ellipsis;
 
   public ArrayPairTreeImpl(ExpressionTree key, InternalSyntaxToken doubleArrowToken, ExpressionTree value) {
     this.key = key;
     this.doubleArrowToken = doubleArrowToken;
     this.value = value;
+    this.ellipsis = null;
   }
 
-  public ArrayPairTreeImpl(ExpressionTree value) {
+  public ArrayPairTreeImpl(@Nullable InternalSyntaxToken ellipsis, ExpressionTree value) {
     this.key = null;
     this.doubleArrowToken = null;
     this.value = value;
+    this.ellipsis = ellipsis;
+  }
+
+  @Nullable
+  @Override
+  public SyntaxToken ellipsisToken() {
+    return ellipsis;
   }
 
   @Nullable
@@ -74,7 +82,7 @@ public class ArrayPairTreeImpl extends PHPTree implements ArrayPairTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(key, doubleArrowToken, value);
+    return Iterators.forArray(ellipsis, key, doubleArrowToken, value);
   }
 
   @Override
