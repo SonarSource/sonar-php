@@ -51,4 +51,15 @@ public class AssignmentExpressionTreeTest extends PHPTreeModelTest {
     assertThat(expressionToString(tree.value())).isEqualTo("$b");
   }
 
+  @Test
+  public void test_null_coalescing_assignment() {
+    AssignmentExpressionTree tree = parse("$a ??= $b", PHPLexicalGrammar.ASSIGNMENT_EXPRESSION);
+    assertThat(tree.is(Kind.NULL_COALESCING_ASSIGNMENT)).isTrue();
+    assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.variable())).isEqualTo("$a");
+    assertThat(tree.operator()).isEqualTo("??=");
+    assertThat(tree.value().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.value())).isEqualTo("$b");
+  }
+
 }

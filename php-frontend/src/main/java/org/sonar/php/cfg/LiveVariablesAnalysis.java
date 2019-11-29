@@ -237,9 +237,10 @@ public class LiveVariablesAnalysis {
 
     @Override
     public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-      boolean isCompoundAssignment = tree.getKind() != Tree.Kind.ASSIGNMENT;
+      boolean isCompoundAssignment = !tree.is(Tree.Kind.ASSIGNMENT, Tree.Kind.NULL_COALESCING_ASSIGNMENT);
       boolean isUsedAsNamedParameterOrReturn = tree.getParent().is(Tree.Kind.FUNCTION_CALL, Tree.Kind.RETURN_STATEMENT);
-      if (isCompoundAssignment || isUsedAsNamedParameterOrReturn) {
+      boolean isNullCoalescingAssignment = tree.is(Tree.Kind.NULL_COALESCING_ASSIGNMENT);
+      if (isCompoundAssignment || isUsedAsNamedParameterOrReturn || isNullCoalescingAssignment) {
         visitReadVariable(tree.variable());
       }
       if (!visitAssignedVariable(tree.variable())) {

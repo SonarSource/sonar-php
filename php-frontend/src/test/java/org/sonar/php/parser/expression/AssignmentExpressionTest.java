@@ -67,6 +67,8 @@ public class AssignmentExpressionTest {
       .notMatches("$a =& $b * $c")
 
       .matches("$var = function () {}")
-      .matches("$a = $b = 1");
+      .matches("$a = $b = 1")
+      .matches("$a ??= $b")
+      .matches("$a ??= myFunction()");
   }
 }

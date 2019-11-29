@@ -1483,6 +1483,7 @@ public class PHPGrammar {
         b.token(PHPPunctuator.SL_EQU),
         b.token(PHPPunctuator.SR_EQU),
         b.token(PHPPunctuator.CONCATEQUAL),
+        b.token(PHPPunctuator.NULL_COALESCING_EQU),
 
         b.token(PHPPunctuator.ANDEQUAL),
         b.token(PHPPunctuator.XOR_EQU),
