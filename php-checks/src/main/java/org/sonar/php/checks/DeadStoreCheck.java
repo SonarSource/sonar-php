@@ -117,9 +117,13 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
       }
     }
   }
-
   private static boolean shouldSkip(Tree element, Symbol symbol) {
-    return symbol.hasModifier("static") || symbol.hasModifier("global") || isInitializedToBasicValue(element);
+    return symbol.hasModifier("static") || symbol.hasModifier("global") || isInitializedToBasicValue(element) || isReferenceValue(symbol);
+  }
+
+  private static boolean isReferenceValue(Symbol symbol) {
+    return symbol.declaration().getParent().is(Kind.REFERENCE_VARIABLE, Kind.ASSIGNMENT_BY_REFERENCE) ||
+      symbol.usages().stream().map(Tree::getParent).map(Tree::getParent).anyMatch(t -> t.is(Kind.ASSIGNMENT_BY_REFERENCE));
   }
 
   private static boolean isInitializedToBasicValue(Tree element) {
