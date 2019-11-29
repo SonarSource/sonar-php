@@ -50,4 +50,11 @@ public class ArrayPairTreeTest extends PHPTreeModelTest {
     assertThat(expressionToString(tree.value())).isEqualTo("$val");
   }
 
+  @Test
+  public void spread_operator() throws Exception {
+    ArrayPairTree tree = parse("...$val", Kind.ARRAY_PAIR);
+    assertThat(tree.ellipsisToken().text()).isEqualTo("...");
+    assertThat(expressionToString(tree.value())).isEqualTo("$val");
+  }
+
 }

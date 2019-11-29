@@ -29,9 +29,15 @@ public class ArrayPairTest {
   @Test
   public void test() {
     assertThat(Tree.Kind.ARRAY_PAIR)
+      .matches("$a")
+      .matches("getArr()")
       .matches("&$a")
       .matches("$a=>$b")
-      .matches("$a=>&$b");
+      .matches("$a=>&$b")
+      .matches("...$a")
+      .matches("...getArr()")
+      .notMatches("...&$arr")
+    ;
   }
 
 }

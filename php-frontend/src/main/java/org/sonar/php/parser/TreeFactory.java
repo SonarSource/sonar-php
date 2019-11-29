@@ -1462,11 +1462,16 @@ public class TreeFactory {
     if (pairExpression.isPresent()) {
       return new ArrayPairTreeImpl(expression, pairExpression.get().first(), pairExpression.get().second());
     }
-    return new ArrayPairTreeImpl(expression);
+    return new ArrayPairTreeImpl(null, expression);
+  }
+
+
+  public ArrayPairTree arrayPair2(InternalSyntaxToken ellipsis, ExpressionTree expressionTree) {
+    return new ArrayPairTreeImpl(ellipsis, expressionTree);
   }
 
   public ArrayPairTree arrayPair2(ReferenceVariableTree referenceVariableTree) {
-    return new ArrayPairTreeImpl(referenceVariableTree);
+    return new ArrayPairTreeImpl(null, referenceVariableTree);
   }
 
   public SeparatedListImpl<ArrayPairTree> arrayInitializerList(
