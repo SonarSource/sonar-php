@@ -138,7 +138,7 @@ import static org.sonar.php.api.PHPPunctuator.DOLLAR_LCURLY;
 import static org.sonar.php.api.PHPPunctuator.DOT;
 import static org.sonar.php.api.PHPPunctuator.DOUBLEARROW;
 import static org.sonar.php.api.PHPPunctuator.DOUBLECOLON;
-import static org.sonar.php.api.PHPPunctuator.ELIPSIS;
+import static org.sonar.php.api.PHPPunctuator.ELLIPSIS;
 import static org.sonar.php.api.PHPPunctuator.EQU;
 import static org.sonar.php.api.PHPPunctuator.EQUAL;
 import static org.sonar.php.api.PHPPunctuator.EQUAL2;
@@ -400,7 +400,7 @@ public class PHPGrammar {
       f.parameter(
         b.optional(TYPE()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
-        b.optional(b.token(PHPPunctuator.ELIPSIS)),
+        b.optional(b.token(PHPPunctuator.ELLIPSIS)),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
         b.optional(
           f.newTuple(
@@ -1504,7 +1504,7 @@ public class PHPGrammar {
   public SpreadArgumentTree SPREAD_ARGUMENT() {
     return b.<SpreadArgumentTree>nonterminal(Kind.SPREAD_ARGUMENT).is(
       f.spreadArgument(
-        b.token(ELIPSIS),
+        b.token(ELLIPSIS),
         EXPRESSION()));
   }
 

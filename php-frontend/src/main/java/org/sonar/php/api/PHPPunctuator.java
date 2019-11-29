@@ -85,7 +85,7 @@ public enum PHPPunctuator implements GrammarRuleKey {
   DOT("."),
   SEMICOLON(";"),
   COMMA(","),
-  ELIPSIS("..."),
+  ELLIPSIS("..."),
 
   AT("@"),
   BANG("!"),
