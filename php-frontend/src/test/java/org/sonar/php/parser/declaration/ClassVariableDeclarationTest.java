@@ -40,6 +40,8 @@ public class ClassVariableDeclarationTest {
       .matches("public float $x, $y;")
       .matches("public self $x;")
       .matches("public parent $x;")
+      .matches("public object $x;")
+      .matches("public array $x;")
       .notMatches("public static var $a;")
       .notMatches("const $a;");
   }
