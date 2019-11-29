@@ -19,19 +19,29 @@
  */
 package org.sonar.php.parser.declaration;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class ClassVariableDeclarationTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION)
+     assertThat(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION)
       .matches("var $a;")
       .matches("var $a, $b;")
       .matches("public static $a;")
+      .matches("public int $id;")
+      .matches("protected ClassName $classType;")
+      .matches("public static iterable $staticProp;")
+      .matches("var bool $flag;")
+      .matches("public string $str = \"foo\";")
+      .matches("public float $x, $y;")
+      .matches("public self $x;")
+      .matches("public parent $x;")
+      .matches("public object $x;")
+      .matches("public array $x;")
       .notMatches("public static var $a;")
       .notMatches("const $a;");
   }

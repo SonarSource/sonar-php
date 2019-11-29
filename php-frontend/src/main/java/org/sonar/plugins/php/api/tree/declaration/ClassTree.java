@@ -28,7 +28,7 @@ import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
- * Commont interface for {@link ClassDeclarationTree} and {@link AnonymousClassTree}
+ * Common interface for {@link ClassDeclarationTree} and {@link AnonymousClassTree}
  */
 @Beta
 public interface ClassTree extends Tree {
