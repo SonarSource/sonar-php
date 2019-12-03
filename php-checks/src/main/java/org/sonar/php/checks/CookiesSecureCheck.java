@@ -57,21 +57,27 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
-    if ((SET_COOKIE_FUNCTIONS.contains(functionName) && argumentSetToFalse(tree, SET_COOKIE_SECURE_PARAMETER))
-      || (SESSION_COOKIE_FUNC.equals(functionName) && argumentSetToFalse(tree, SESSION_COOKIE_SECURE_PARAMETER))) {
-      context().newIssue(this, tree.callee(), MESSAGE);
+    
+    if (SET_COOKIE_FUNCTIONS.contains(functionName)) {
+      raiseIssueIfBadFlag(tree, SET_COOKIE_SECURE_PARAMETER);
+    } else if (SESSION_COOKIE_FUNC.equals(functionName)) {
+      raiseIssueIfBadFlag(tree, SESSION_COOKIE_SECURE_PARAMETER);
     }
 
     super.visitFunctionCall(tree);
   }
 
-  private static boolean argumentSetToFalse(FunctionCallTree tree, int argumentIndex) {
+  private void raiseIssueIfBadFlag(FunctionCallTree tree, int argumentIndex) {
     if (tree.arguments().size() > argumentIndex) {
       ExpressionTree secureArgument = tree.arguments().get(argumentIndex);
-      return CheckUtils.isFalseValue(secureArgument);
+      if (CheckUtils.isFalseValue(secureArgument)) {
+        // if argument is defined to false
+        context().newIssue(this, tree.callee(), MESSAGE).secondary(tree.arguments().get(argumentIndex), null);
+      }
+    } else if(tree.arguments().size() != 3) {
+      // if only 3 argument are defined there is an ambiguity so we don't raise issue
+      context().newIssue(this, tree.callee(), MESSAGE);
     }
-
-    return true;
   }
-
+  
 }

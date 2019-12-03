@@ -29,17 +29,17 @@ import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.phpini.PhpIniFiles.checkRequiredBoolean;
 import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseFunctionName;
+import static org.sonar.php.checks.utils.CheckUtils.isFalseValue;
 
 @Rule(key = "S3330")
 public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
 
-  private static final String MESSAGE_PHP_INI = "Set the \"session.cookie_httponly\" property to \"true\".";
-  private static final String MESSAGE = "Set the last argument of \"setcookie()\" function to \"true\".";
+  private static final String MESSAGE_PHP_INI = "Set the \"session.cookie_httponly\" property to \"true\" if needed.";
+  private static final String MESSAGE = "Make sure creating this cookie without the \"httpOnly\" flag is safe here.";
 
   private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
   private static final int HTTP_ONLY_PARAMETER_INDEX = 6;
@@ -55,8 +55,17 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (isSetCookie(tree) && httpOnlySetToFalse(tree)) {
-      context().newIssue(this, tree.callee(), MESSAGE).secondary(tree.arguments().get(HTTP_ONLY_PARAMETER_INDEX), null);
+  
+    if (isSetCookie(tree)) {
+      if (tree.arguments().size() > HTTP_ONLY_PARAMETER_INDEX) {
+        ExpressionTree httpOnlyArgument = tree.arguments().get(HTTP_ONLY_PARAMETER_INDEX);
+        if (httpOnlyArgument.is(Kind.BOOLEAN_LITERAL) && isFalseValue(httpOnlyArgument)) {
+          context().newIssue(this, tree.callee(), MESSAGE).secondary(tree.arguments().get(HTTP_ONLY_PARAMETER_INDEX), null);  
+        }
+      } else if (tree.arguments().size() != 3) {
+        // if only 3 argument are defined there is an ambiguity so we don't raise issue
+        context().newIssue(this, tree.callee(), MESSAGE);
+      }
     }
 
     super.visitFunctionCall(tree);
@@ -65,14 +74,5 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
   private static boolean isSetCookie(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
     return functionName != null && SET_COOKIE_FUNCTIONS.contains(functionName);
-  }
-
-  private static boolean httpOnlySetToFalse(FunctionCallTree tree) {
-    if (tree.arguments().size() > HTTP_ONLY_PARAMETER_INDEX) {
-      ExpressionTree httpOnlyArgument = tree.arguments().get(HTTP_ONLY_PARAMETER_INDEX);
-      return httpOnlyArgument.is(Kind.BOOLEAN_LITERAL) && ((LiteralTree) httpOnlyArgument).value().equals("false");
-    }
-
-    return false;
   }
 }
