@@ -1,5 +1,6 @@
-<p>Not all SSL protocols are created equal and some legacy ones like "SSL", have been proven to be insecure.</p>
-<p>This rule raises an issue when an SSL context is created with an insecure protocol (ie: a protocol different from "TLSv1.2" or "DTLSv1.2").</p>
+<p>Older versions of SSL/TLS protocol like "SSLv3" have been proven to be insecure.</p>
+<p>This rule raises an issue when an SSL/TLS context is created with an insecure protocol version (ie: a protocol different from "TLSv1.2", "TLSv1.3",
+"DTLSv1.2" or "DTLSv1.3").</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 $ctx = stream_context_create([
@@ -27,5 +28,7 @@ $ctx = stream_context_create([
   <li> <a href="http://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-326</a> - Use of a Broken or Risky Cryptographic Algorithm </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
   <li> <a href="https://blogs.oracle.com/java-platform-group/diagnosing-tls,-ssl,-and-https">Diagnosing TLS, SSL, and HTTPS</a> </li>
+  <li> <a href="https://github.com/ssllabs/research/wiki/SSL-and-TLS-Deployment-Best-Practices#22-use-secure-protocols">SSL and TLS Deployment Best
+  Practices - Use secure protocols</a> </li>
 </ul>
 

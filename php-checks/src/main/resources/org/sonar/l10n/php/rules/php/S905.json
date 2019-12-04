@@ -10,9 +10,6 @@
     "cwe",
     "unused"
   ],
-  "standards": [
-    "CWE"
-  ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-905",
   "sqKey": "S905",

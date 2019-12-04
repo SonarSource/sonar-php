@@ -26,20 +26,20 @@ use of http connections.</p>
   <li> <a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">Sanitize</a> any input read from the socket. </li>
   <li> Limit the number of sockets a given user can create. Close the sockets as soon as possible. </li>
 </ul>
-<h2>Questionable Code Example</h2>
+<h2>Sensitive Code Example</h2>
 <pre>
 function handle_sockets($domain, $type, $protocol, $port, $backlog, $addr, $hostname, $local_socket, $remote_socket, $fd) {
-    socket_create($domain, $type, $protocol); // Questionable
-    socket_create_listen($port, $backlog); // Questionable
-    socket_addrinfo_bind($addr); // Questionable
-    socket_addrinfo_connect($addr); // Questionable
+    socket_create($domain, $type, $protocol); // Sensitive
+    socket_create_listen($port, $backlog); // Sensitive
+    socket_addrinfo_bind($addr); // Sensitive
+    socket_addrinfo_connect($addr); // Sensitive
     socket_create_pair($domain, $type, $protocol, $fd);
 
-    fsockopen($hostname); // Questionable
-    pfsockopen($hostname); // Questionable
-    stream_socket_server($local_socket); // Questionable
-    stream_socket_client($remote_socket); // Questionable
-    stream_socket_pair($domain, $type, $protocol); // Questionable
+    fsockopen($hostname); // Sensitive
+    pfsockopen($hostname); // Sensitive
+    stream_socket_server($local_socket); // Sensitive
+    stream_socket_client($remote_socket); // Sensitive
+    stream_socket_pair($domain, $type, $protocol); // Sensitive
 }
 </pre>
 <h2>See</h2>

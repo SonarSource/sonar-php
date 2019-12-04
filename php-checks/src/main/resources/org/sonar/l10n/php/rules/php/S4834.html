@@ -26,19 +26,19 @@ user's permissions from an HTTP cookie as it can be modified client-side.</p>
 <p>Enable administrators to swiftly remove permissions when necessary. This enables them to reduce the time an attacker can have access to your
 systems when a breach occurs.</p>
 <p>Log and monitor refused access requests as they can reveal an attack.</p>
-<h2>Questionable Code Example</h2>
+<h2>Sensitive Code Example</h2>
 <p>CakePHP</p>
 <pre>
 use Cake\Auth\BaseAuthorize;
 use Cake\Controller\Controller;
 
-abstract class MyAuthorize extends BaseAuthorize { // Questionable. Method extending Cake\Auth\BaseAuthorize.
+abstract class MyAuthorize extends BaseAuthorize { // Sensitive. Method extending Cake\Auth\BaseAuthorize.
     // ...
 }
 
 // Note that "isAuthorized" methods will only be detected in direct subclasses of Cake\Controller\Controller.
 abstract class MyController extends Controller {
-    public function isAuthorized($user) { // Questionable. Method called isAuthorized in a Cake\Controller\Controller.
+    public function isAuthorized($user) { // Sensitive. Method called isAuthorized in a Cake\Controller\Controller.
         return false;
     }
 }

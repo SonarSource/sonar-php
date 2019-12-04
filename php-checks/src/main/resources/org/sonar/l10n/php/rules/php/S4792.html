@@ -51,50 +51,50 @@ logs:</p>
   failed logins, successful logins, server side input validation failures, access denials and any important transaction. </li>
   <li> Monitor the logs for any suspicious activity. </li>
 </ul>
-<h2>Questionable Code Example</h2>
+<h2>Sensitive Code Example</h2>
 <p>Basic PHP configuration:</p>
 <pre>
 function configure_logging() {
-  error_reporting(E_RECOVERABLE_ERROR); // Questionable
-  error_reporting(32); // Questionable
+  error_reporting(E_RECOVERABLE_ERROR); // Sensitive
+  error_reporting(32); // Sensitive
 
-  ini_set('docref_root', '1'); // Questionable
-  ini_set('display_errors', '1'); // Questionable
-  ini_set('display_startup_errors', '1'); // Questionable
-  ini_set('error_log', "path/to/logfile"); // Questionable - check logfile is secure
-  ini_set('error_reporting', E_PARSE ); // Questionable
-  ini_set('error_reporting', 64); // Questionable
-  ini_set('log_errors', '0'); // Questionable
-  ini_set('log_errors_max_length', '512'); // Questionable
-  ini_set('ignore_repeated_errors', '1'); // Questionable
-  ini_set('ignore_repeated_source', '1'); // Questionable
-  ini_set('track_errors', '0'); // Questionable
+  ini_set('docref_root', '1'); // Sensitive
+  ini_set('display_errors', '1'); // Sensitive
+  ini_set('display_startup_errors', '1'); // Sensitive
+  ini_set('error_log', "path/to/logfile"); // Sensitive - check logfile is secure
+  ini_set('error_reporting', E_PARSE ); // Sensitive
+  ini_set('error_reporting', 64); // Sensitive
+  ini_set('log_errors', '0'); // Sensitive
+  ini_set('log_errors_max_length', '512'); // Sensitive
+  ini_set('ignore_repeated_errors', '1'); // Sensitive
+  ini_set('ignore_repeated_source', '1'); // Sensitive
+  ini_set('track_errors', '0'); // Sensitive
 
-  ini_alter('docref_root', '1'); // Questionable
-  ini_alter('display_errors', '1'); // Questionable
-  ini_alter('display_startup_errors', '1'); // Questionable
-  ini_alter('error_log', "path/to/logfile"); // Questionable - check logfile is secure
-  ini_alter('error_reporting', E_PARSE ); // Questionable
-  ini_alter('error_reporting', 64); // Questionable
-  ini_alter('log_errors', '0'); // Questionable
-  ini_alter('log_errors_max_length', '512'); // Questionable
-  ini_alter('ignore_repeated_errors', '1'); // Questionable
-  ini_alter('ignore_repeated_source', '1'); // Questionable
-  ini_alter('track_errors', '0'); // Questionable
+  ini_alter('docref_root', '1'); // Sensitive
+  ini_alter('display_errors', '1'); // Sensitive
+  ini_alter('display_startup_errors', '1'); // Sensitive
+  ini_alter('error_log', "path/to/logfile"); // Sensitive - check logfile is secure
+  ini_alter('error_reporting', E_PARSE ); // Sensitive
+  ini_alter('error_reporting', 64); // Sensitive
+  ini_alter('log_errors', '0'); // Sensitive
+  ini_alter('log_errors_max_length', '512'); // Sensitive
+  ini_alter('ignore_repeated_errors', '1'); // Sensitive
+  ini_alter('ignore_repeated_source', '1'); // Sensitive
+  ini_alter('track_errors', '0'); // Sensitive
 }
 </pre>
 <p>Definition of custom loggers with <code>psr/log</code></p>
 <pre>
-abstract class MyLogger implements \Psr\Log\LoggerInterface { // Questionable
+abstract class MyLogger implements \Psr\Log\LoggerInterface { // Sensitive
     // ...
 }
 
-abstract class MyLogger2 extends \Psr\Log\AbstractLogger { // Questionable
+abstract class MyLogger2 extends \Psr\Log\AbstractLogger { // Sensitive
     // ...
 }
 
 abstract class MyLogger3 {
-    use \Psr\Log\LoggerTrait; // Questionable
+    use \Psr\Log\LoggerTrait; // Sensitive
     // ...
 }
 </pre>

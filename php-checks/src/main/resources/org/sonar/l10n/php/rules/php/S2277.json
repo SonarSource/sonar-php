@@ -7,28 +7,10 @@
     "constantCost": "20min"
   },
   "tags": [
-    "cwe",
-    "owasp-a6",
-    "sans-top25-porous",
-    "owasp-a3"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top 10",
-    "SANS Top 25"
+    
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-2277",
   "sqKey": "S2277",
-  "scope": "Main",
-  "securityStandards": {
-    "CWE": [
-      780,
-      327
-    ],
-    "OWASP": [
-      "A3",
-      "A6"
-    ]
-  }
+  "scope": "Main"
 }

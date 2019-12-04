@@ -4,6 +4,12 @@ exactly match the sending domain. For example, if a cookie was set by <em>lovely
 front of the cookie's domain, like so: <em>.dream.com</em>. But cookie domains should always use at least two levels.</p>
 <p>Cookie domains can be set either programmatically or via configuration. This rule raises an issue when any cookie domain is set with a single
 level, as in <em>.com</em>.</p>
+<h2>Ask Yourself Whether</h2>
+<p> * the <code>domain</code> attribute has only one level as domain naming.</p>
+<p>You are at risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<p> * You should check the <code>domain</code> attribute has been set and its value has more than one level of domain nanimg, like:
+<em>sonarsource.com</em></p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant
@@ -22,7 +28,7 @@ session.cookie_domain=".myDomain.com";
 </pre>
 <h2>See</h2>
 <ul>
-  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A7-Cross-Site_Scripting_(XSS)">OWASP Top 10 2017 Category A7</a> - Cross-Site Scripting
-  (XSS) </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
 </ul>
 

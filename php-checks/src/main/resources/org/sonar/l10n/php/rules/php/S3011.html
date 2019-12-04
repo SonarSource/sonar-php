@@ -17,7 +17,7 @@ field value.</p>
 <h2>Recommended Secure Coding Practices</h2>
 <p>Don't change or bypass the accessibility of any method or field if possible.</p>
 <p>If untrusted code can execute this method, make sure that it cannot decide which method or field's accessibility can be modified or bypassed.</p>
-<h2>Questionable Code Example</h2>
+<h2>Sensitive Code Example</h2>
 <pre>
 class MyClass
 {
@@ -35,78 +35,78 @@ class MyClass
 
 $clazz = new ReflectionClass('MyClass');
 
-$clazz-&gt;getstaticProperties(); // Questionable. This gives access to private static properties
+$clazz-&gt;getstaticProperties(); // Sensitive. This gives access to private static properties
 
 $clazz-&gt;setStaticPropertyValue('publicstatic', '42'); // OK as there is no overloading to bypass and it respects access control.
 $clazz-&gt;getStaticPropertyValue('publicstatic'); // OK as there is no overloading to bypass and it respects access control.
 
 // The following calls can access private or protected constants.
-$clazz-&gt;getConstant('CONST_PRIVATE'); // Questionable.
-$clazz-&gt;getConstants(); // Questionable.
-$clazz-&gt;getReflectionConstant('CONST_PRIVATE'); // Questionable.
-$clazz-&gt;getReflectionConstants(); // Questionable.
+$clazz-&gt;getConstant('CONST_PRIVATE'); // Sensitive.
+$clazz-&gt;getConstants(); // Sensitive.
+$clazz-&gt;getReflectionConstant('CONST_PRIVATE'); // Sensitive.
+$clazz-&gt;getReflectionConstants(); // Sensitive.
 
-$obj = $clazz-&gt;newInstanceWithoutConstructor(); // Questionable. Bypassing private constructor.
+$obj = $clazz-&gt;newInstanceWithoutConstructor(); // Sensitive. Bypassing private constructor.
 
 $constructor = $clazz-&gt;getConstructor();
-$constructorClosure = $constructor-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$constructor-&gt;setAccessible(true); // Questionable. Bypassing constructor accessibility.
+$constructorClosure = $constructor-&gt;getClosure($obj); // Sensitive. It is possible to call private methods with closures.
+$constructor-&gt;setAccessible(true); // Sensitive. Bypassing constructor accessibility.
 
 $prop = new ReflectionProperty('MyClass', 'private');
-$prop-&gt;setAccessible(true); // Questionable. Change accessibility of a property.
-$prop-&gt;setValue($obj, "newValue"); // Questionable. Bypass of the __set method.
-$prop-&gt;getValue($obj); // Questionable. Bypass of the __get method.
+$prop-&gt;setAccessible(true); // Sensitive. Change accessibility of a property.
+$prop-&gt;setValue($obj, "newValue"); // Sensitive. Bypass of the __set method.
+$prop-&gt;getValue($obj); // Sensitive. Bypass of the __get method.
 
 $prop2 = $clazz-&gt;getProperties()[2];
-$prop2-&gt;setAccessible(true); // Questionable. Change accessibility of a property.
-$prop2-&gt;setValue($obj, "newValue"); // Questionable. Bypass of the __set method.
-$prop2-&gt;getValue($obj); // Questionable. Bypass of the __get method.
+$prop2-&gt;setAccessible(true); // Sensitive. Change accessibility of a property.
+$prop2-&gt;setValue($obj, "newValue"); // Sensitive. Bypass of the __set method.
+$prop2-&gt;getValue($obj); // Sensitive. Bypass of the __get method.
 
 $meth = new ReflectionMethod('MyClass', 'privateMethod');
-$clos = $meth-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$meth-&gt;setAccessible(true); // Questionable. Change accessibility of a method.
+$clos = $meth-&gt;getClosure($obj); // Sensitive. It is possible to call private methods with closures.
+$meth-&gt;setAccessible(true); // Sensitive. Change accessibility of a method.
 
 $meth2 = $clazz-&gt;getMethods()[0];
-$clos2 = $meth2-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$meth2-&gt;setAccessible(true); // Questionable. Change accessibility of a method.
+$clos2 = $meth2-&gt;getClosure($obj); // Sensitive. It is possible to call private methods with closures.
+$meth2-&gt;setAccessible(true); // Sensitive. Change accessibility of a method.
 
 // Using a ReflectionObject instead of the class
 
 $objr = new ReflectionObject($obj);
-$objr-&gt;newInstanceWithoutConstructor(); // Questionable. Bypassing private constructor.
+$objr-&gt;newInstanceWithoutConstructor(); // Sensitive. Bypassing private constructor.
 
 $objr-&gt;getStaticPropertyValue("publicstatic"); // OK as there is no overloading to bypass and it respects access control.
 $objr-&gt;setStaticPropertyValue("publicstatic", "newValue"); // OK as there is no overloading to bypass and it respects access control.
 
-$objr-&gt;getStaticProperties(); // Questionable. This gives access to private static properties
+$objr-&gt;getStaticProperties(); // Sensitive. This gives access to private static properties
 
 // The following calls can access private or protected constants.
-$objr-&gt;getConstant('CONST_PRIVATE'); // Questionable.
-$objr-&gt;getConstants(); // Questionable.
-$objr-&gt;getReflectionConstant('CONST_PRIVATE'); // Questionable.
-$objr-&gt;getReflectionConstants(); // Questionable.
+$objr-&gt;getConstant('CONST_PRIVATE'); // Sensitive.
+$objr-&gt;getConstants(); // Sensitive.
+$objr-&gt;getReflectionConstant('CONST_PRIVATE'); // Sensitive.
+$objr-&gt;getReflectionConstants(); // Sensitive.
 
 $constructor = $objr-&gt;getConstructor();
-$constructorClosure = $constructor-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$constructor-&gt;setAccessible(true); // Questionable. Bypassing constructor accessibility.
+$constructorClosure = $constructor-&gt;getClosure($obj); // Sensitive. It is possible to call private methods with closures.
+$constructor-&gt;setAccessible(true); // Sensitive. Bypassing constructor accessibility.
 
 $prop3 = $objr-&gt;getProperty('private');
-$prop3-&gt;setAccessible(true); // Questionable. Change accessibility of a property.
-$prop3-&gt;setValue($obj, "newValue"); // Questionable. Bypass of the __set method.
-$prop3-&gt;getValue($obj); // Questionable. Bypass of the __get method.
+$prop3-&gt;setAccessible(true); // Sensitive. Change accessibility of a property.
+$prop3-&gt;setValue($obj, "newValue"); // Sensitive. Bypass of the __set method.
+$prop3-&gt;getValue($obj); // Sensitive. Bypass of the __get method.
 
 $prop4 = $objr-&gt;getProperties()[2];
-$prop4-&gt;setAccessible(true); // Questionable. Change accessibility of a property.
-$prop4-&gt;setValue($obj, "newValue"); // Questionable. Bypass of the __set method.
-$prop4-&gt;getValue($obj); // Questionable. Bypass of the __get method.
+$prop4-&gt;setAccessible(true); // Sensitive. Change accessibility of a property.
+$prop4-&gt;setValue($obj, "newValue"); // Sensitive. Bypass of the __set method.
+$prop4-&gt;getValue($obj); // Sensitive. Bypass of the __get method.
 
 $meth3 = $objr-&gt;getMethod('privateMethod');
-$clos3 = $meth3-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$meth3-&gt;setAccessible(true); // Questionable. Change accessibility of a method.
+$clos3 = $meth3-&gt;getClosure($obj); // Sensitive. It is possible to call private methods with closures.
+$meth3-&gt;setAccessible(true); // Sensitive. Change accessibility of a method.
 
 $meth4 = $objr-&gt;getMethods()[0];
-$clos4 = $meth4-&gt;getClosure($obj); // Questionable. It is possible to call private methods with closures.
-$meth4-&gt;setAccessible(true); // Questionable. Change accessibility of a method.
+$clos4 = $meth4-&gt;getClosure($obj); // Sensitive. It is possible to call private methods with closures.
+$meth4-&gt;setAccessible(true); // Sensitive. Change accessibility of a method.
 </pre>
 <h2>See</h2>
 <ul>
