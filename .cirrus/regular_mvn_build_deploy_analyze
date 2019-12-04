@@ -179,7 +179,6 @@ else
   # in Maven local repository. Phase "verify" is enough.
 
   mvn verify \
-      -Drevision=${PROJECT_VERSION} \
       -Dmaven.test.redirectTestOutputToFile=false \
       -B -e -V $*
 fi
