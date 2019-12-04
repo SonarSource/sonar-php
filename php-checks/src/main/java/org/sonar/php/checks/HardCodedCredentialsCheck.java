@@ -93,7 +93,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   }
 
   private void checkVariable(SyntaxToken reportTree, @Nullable Tree assignedValue) {
-    if (assignedValue != null && assignedValue.is(Kind.REGULAR_STRING_LITERAL)) {
+    if (assignedValue != null && assignedValue.is(Kind.REGULAR_STRING_LITERAL) && !isEmptyStringLiteral((LiteralTree) assignedValue)) {
       checkCredential(reportTree, reportTree.text(), variablePatterns());
     }
   }
@@ -101,6 +101,10 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   private void checkCredential(Tree reportTree, String target, Stream<Pattern> patterns) {
     patterns.filter(pattern -> pattern.matcher(target).find()).findAny().ifPresent(pattern -> addIssue(pattern, reportTree));
 
+  }
+
+  private static boolean isEmptyStringLiteral(LiteralTree literal) {
+    return literal.value().substring(1, literal.value().length() -1).isEmpty();
   }
 
   private void addIssue(Pattern pattern, Tree tree) {
