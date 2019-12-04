@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.Plugin;
+import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.config.PropertyDefinition;
@@ -72,7 +73,7 @@ public class PhpPluginTest {
   }
 
   private static Plugin.Context qubeContext(Version version) {
-    final SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(version, SonarQubeSide.SCANNER);
+    final SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(version, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
     return new Plugin.Context(runtime);
   }
 
