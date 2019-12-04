@@ -5,7 +5,7 @@
   <parent>
     <artifactId>php</artifactId>
     <groupId>org.sonarsource.php</groupId>
-    <version>3.3-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>php-checks</artifactId>
