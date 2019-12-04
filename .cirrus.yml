@@ -64,7 +64,7 @@ plugin_qa_task:
     - git submodule update --init
   qa_script:
     - source cirrus-env QA
-    - source set_maven_build_version $BUILD_NUMBER
+    - source .cirrus/set_maven_build_version $BUILD_NUMBER
     - cd its/plugin
     - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} -Dmaven.test.redirectTestOutputToFile=false -B -e -V
   cleanup_before_cache_script: cleanup_maven_repository
@@ -85,7 +85,7 @@ ruling_task:
     - git submodule update --init
   ruling_script:
     - source cirrus-env QA
-    - source set_maven_build_version $BUILD_NUMBER
+    - source .cirrus/set_maven_build_version $BUILD_NUMBER
     - cd its/ruling
     - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
   cleanup_before_cache_script: cleanup_maven_repository
@@ -109,7 +109,7 @@ promote_task:
     folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   script:
     - source cirrus-env PROMOTE
-    - source set_maven_build_version $BUILD_NUMBER
+    - source .cirrus/set_maven_build_version $BUILD_NUMBER
     - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST"
     - burgr-notify-promotion
   cleanup_before_cache_script: cleanup_maven_repository
