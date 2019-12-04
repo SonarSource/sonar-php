@@ -2,14 +2,17 @@
 class A {
 
   public $fieldNameWithPasswordInIt = retrievePassword();
-  public $fieldNameWithPasswordInIt = ""; // Noncompliant {{'password' detected in this variable name, review this potentially hardcoded credential.}}
+  public $fieldNameWithPasswordInIt = "xxx"; // Noncompliant {{'password' detected in this variable name, review this potentially hardcoded credential.}}
 //       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  public $fieldNameWithPasswordInIt = ""; // OK, empty
+  public $fieldNameWithPasswordInIt = ''; // OK, empty
   public $fieldNameWithPasswordInIt = "$password";
   public $fieldNameWithPasswordInIt;
   public $otherFieldName = "";
 
   // only a single issue even if multiple occurence of forbidden words
-  public $myPasswordIsPWD = ""; // Noncompliant {{'password' detected in this variable name, review this potentially hardcoded credential.}}
+  public $myPasswordIsPWD = "something"; // Noncompliant {{'password' detected in this variable name, review this potentially hardcoded credential.}}
+  public $myPasswordIsPWD = ""; // OK, empty
 
   private function a() {
     $variable1 = "blabla";
@@ -33,7 +36,8 @@ const otherConstant = "xxx";
 const nonRelatedValue = 42;
 
 class A {
-  const constFieldNameWithPasswordInIt = ""; // Noncompliant
+  const constFieldNameWithPasswordInIt = "something"; // Noncompliant
+  const constFieldNameWithPasswordInIt = ""; // OK, empty
   const otherConstFieldName = "";
 }
 
