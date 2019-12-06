@@ -192,7 +192,7 @@ public class PHPSensor implements Sensor {
       saveParsingIssue(context, e, inputFile);
     } catch (Exception e) {
       checkInterrupted(e);
-      LOG.error("Could not analyse " + inputFile.filename(), e);
+      LOG.error("Could not analyse " + inputFile, e);
     }
   }
 
