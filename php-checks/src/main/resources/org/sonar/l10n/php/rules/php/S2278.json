@@ -7,26 +7,10 @@
     "constantCost": "20min"
   },
   "tags": [
-    "cwe",
-    "owasp-a6",
-    "sans-top25-porous"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top 10",
-    "SANS Top 25"
+    
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-2278",
   "sqKey": "S2278",
-  "scope": "Main",
-  "securityStandards": {
-    "CWE": [
-      326,
-      327
-    ],
-    "OWASP": [
-      "A6"
-    ]
-  }
+  "scope": "Main"
 }

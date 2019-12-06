@@ -20,12 +20,12 @@ security code reviews.</p>
 <p>Any user or application can list running processes and see the command line arguments they were started with. There are safer ways of providing
 sensitive information to an application than exposing them in the command line. It is common to write them on the process' standard input, or give the
 path to a file containing the information.</p>
-<h2>Questionable Code Example</h2>
+<h2>Sensitive Code Example</h2>
 <p>Builtin access to <code>$argv</code></p>
 <pre>
 function globfunc() {
-    global $argv; // Questionable. Reference to global $argv
-    foreach ($argv as $arg) { // Questionable.
+    global $argv; // Sensitive. Reference to global $argv
+    foreach ($argv as $arg) { // Sensitive.
         // ...
     }
 }
@@ -35,38 +35,38 @@ function myfunc($argv) {
     // ...
 }
 
-foreach ($argv as $arg) { // Questionable. Reference to $argv.
+foreach ($argv as $arg) { // Sensitive. Reference to $argv.
     // ...
 }
 
-$myargv = $_SERVER['argv']; // Questionable. Equivalent to $argv.
+$myargv = $_SERVER['argv']; // Sensitive. Equivalent to $argv.
 
 function serve() {
-    $myargv = $_SERVER['argv']; // Questionable.
+    $myargv = $_SERVER['argv']; // Sensitive.
     // ...
 }
 
-myfunc($argv); // Questionable
+myfunc($argv); // Sensitive
 
-$myvar = $HTTP_SERVER_VARS[0]; // Questionable. Note: HTTP_SERVER_VARS has ben removed since PHP 5.4.
+$myvar = $HTTP_SERVER_VARS[0]; // Sensitive. Note: HTTP_SERVER_VARS has ben removed since PHP 5.4.
 
-$options = getopt('a:b:'); // Questionable. Parsing arguments.
+$options = getopt('a:b:'); // Sensitive. Parsing arguments.
 
-$GLOBALS["argv"]; // Questionable. Equivalent to $argv.
+$GLOBALS["argv"]; // Sensitive. Equivalent to $argv.
 
 function myglobals() {
-    $GLOBALS["argv"]; // Questionable
+    $GLOBALS["argv"]; // Sensitive
 }
 
-$argv = [1,2,3]; // Questionable. It is a bad idea to override argv.
+$argv = [1,2,3]; // Sensitive. It is a bad idea to override argv.
 </pre>
 <p>Zend Console</p>
 <pre>
-new Zend\Console\Getopt(['myopt|m' =&gt; 'this is an option']); // Questionable
+new Zend\Console\Getopt(['myopt|m' =&gt; 'this is an option']); // Sensitive
 </pre>
 <p>Getopt-php library</p>
 <pre>
-new \GetOpt\Option('m', 'myoption', \GetOpt\GetOpt::REQUIRED_ARGUMENT); // Questionable
+new \GetOpt\Option('m', 'myoption', \GetOpt\GetOpt::REQUIRED_ARGUMENT); // Sensitive
 </pre>
 <h2>See</h2>
 <ul>

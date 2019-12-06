@@ -1,5 +1,6 @@
-<p>Jump statements (<code>return</code>, <code>break</code>, <code>continue</code>, <code>goto</code>) and <code>throw</code> expressions move control
-flow out of the current code block. So any unlabelled statements that come after a jump are dead code. </p>
+<p>Some statements (<code>return</code>, <code>break</code>, <code>continue</code>, <code>goto</code>, <code>switch</code>) and <code>throw</code>
+expressions move control flow out of the current code block. So any unlabeled statements that come after such a jump are unreachable, and either this
+dead code should be removed, or the logic should be corrected. </p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 function fun($a) {

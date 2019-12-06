@@ -1,5 +1,5 @@
 {
-  "title": "Weak SSL protocols should not be used",
+  "title": "Weak SSL\/TLS protocols should not be used",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {
@@ -11,11 +11,6 @@
     "owasp-a6",
     "sans-top25-porous",
     "owasp-a3"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top 10",
-    "SANS Top 25"
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-4423",

@@ -13,12 +13,12 @@ can be dangerous and should be validated.</p>
 <p>You are at risk if you answered yes to this question.</p>
 <h2>Recommended Secure Coding Practices</h2>
 <p><a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">Sanitize</a> all data read from the standard input before using it.</p>
-<h2>Questionable Code Example</h2>
+<h2>Sensitive Code Example</h2>
 <pre>
-// Any reference to STDIN is Questionable
-$varstdin = STDIN; // Questionable
-stream_get_line(STDIN, 40); // Questionable
-stream_copy_to_stream(STDIN, STDOUT); // Questionable
+// Any reference to STDIN is Sensitive
+$varstdin = STDIN; // Sensitive
+stream_get_line(STDIN, 40); // Sensitive
+stream_copy_to_stream(STDIN, STDOUT); // Sensitive
 // ...
 
 
@@ -31,12 +31,12 @@ fclose(STDIN); // OK
 
 
 // STDIN can also be referenced like this
-$mystdin = 'php://stdin'; // Questionable
+$mystdin = 'php://stdin'; // Sensitive
 
-file_get_contents('php://stdin'); // Questionable
-readfile('php://stdin'); // Questionable
+file_get_contents('php://stdin'); // Sensitive
+readfile('php://stdin'); // Sensitive
 
-$input = fopen('php://stdin', 'r'); // Questionable
+$input = fopen('php://stdin', 'r'); // Sensitive
 fclose($input); // OK
 </pre>
 <h2>See:</h2>

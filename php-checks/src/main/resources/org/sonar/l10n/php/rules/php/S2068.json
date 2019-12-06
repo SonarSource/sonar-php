@@ -1,6 +1,6 @@
 {
-  "title": "Credentials should not be hard-coded",
-  "type": "VULNERABILITY",
+  "title": "Hard-coded credentials are security-sensitive",
+  "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
@@ -10,11 +10,6 @@
     "cwe",
     "sans-top25-porous",
     "owasp-a2"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top 10",
-    "SANS Top 25"
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-2068",

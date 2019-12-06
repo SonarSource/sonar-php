@@ -9,13 +9,7 @@
   "tags": [
     "cwe",
     "sans-top25-porous",
-    "owasp-a2",
     "owasp-a3"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top 10",
-    "SANS Top 25"
   ],
   "defaultSeverity": "Minor",
   "ruleSpecification": "RSPEC-2092",
@@ -28,7 +22,6 @@
       315
     ],
     "OWASP": [
-      "A2",
       "A3"
     ]
   }

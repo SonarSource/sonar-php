@@ -11,10 +11,6 @@
     "owasp-a6",
     "php-ini"
   ],
-  "standards": [
-    "CWE",
-    "OWASP Top 10"
-  ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-3337",
   "sqKey": "S3337",
