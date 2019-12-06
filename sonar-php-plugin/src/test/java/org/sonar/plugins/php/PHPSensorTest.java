@@ -25,7 +25,6 @@ import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
@@ -39,6 +38,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
@@ -49,6 +49,8 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
+import org.sonar.api.batch.sensor.cpd.internal.TokensLine;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
@@ -59,17 +61,13 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.scan.issue.filter.FilterableIssue;
-import org.sonar.api.scan.issue.filter.IssueFilterChain;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.duplications.internal.pmd.TokensLine;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
-import org.sonar.php.checks.LeftCurlyBraceEndsLineCheck;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -101,8 +99,8 @@ public class PHPSensorTest {
 
   private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 7);
   private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(SONARLINT_DETECTABLE_VERSION);
-  private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION, SonarQubeSide.SERVER);
-  private static final SonarRuntime SONARQUBE_6_7 = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER);
+  private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION, SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
+  private static final SonarRuntime SONARQUBE_6_7 = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
 
   private static final String PARSE_ERROR_FILE = "parseError.php";
   private static final String ANALYZED_FILE = "PHPSquidSensor.php";
@@ -174,9 +172,6 @@ public class PHPSensorTest {
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
 
-    // the .php file contains NOSONAR at line 34
-    checkNoSonar(componentKey, 33, true, phpSensor);
-    checkNoSonar(componentKey, 34, false, phpSensor);
   }
 
   @Test
@@ -199,27 +194,6 @@ public class PHPSensorTest {
     assertThat(tokensLines.get(5).getValue()).isEqualTo("}");
     assertThat(tokensLines.get(6).getValue()).isEqualTo("echo$CHARS");
     assertThat(tokensLines.get(7).getValue()).isEqualTo(";");
-  }
-
-  private static void checkNoSonar(String componentKey, int line, boolean expected, PHPSensor phpSensor) throws NoSuchFieldException, IllegalAccessException {
-    // retrieve the noSonarFilter, which is private
-    Field field = PHPSensor.class.getDeclaredField("noSonarFilter");
-    field.setAccessible(true);
-    NoSonarFilter noSonarFilter = (NoSonarFilter) field.get(phpSensor);
-
-    // a filter chain that does nothing
-    IssueFilterChain chain = mock(IssueFilterChain.class);
-    when(chain.accept(any(FilterableIssue.class))).thenReturn(true);
-
-    // an issue
-    FilterableIssue issue = mock(FilterableIssue.class);
-    when(issue.line()).thenReturn(line);
-    when(issue.componentKey()).thenReturn(componentKey);
-    when(issue.ruleKey()).thenReturn(RuleKey.parse(CheckList.REPOSITORY_KEY + ":" + LeftCurlyBraceEndsLineCheck.KEY));
-
-    // test the noSonarFilter
-    boolean accepted = noSonarFilter.accept(issue, chain);
-    assertThat(accepted).as("response of noSonarFilter.accept for line " + line).isEqualTo(expected);
   }
 
   @Test
@@ -323,10 +297,12 @@ public class PHPSensorTest {
     FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
 
     String parsingErrorCheckKey = "S2260";
-    ActiveRules activeRules = (new ActiveRulesBuilder())
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey))
+    NewActiveRule activeRule = new NewActiveRule.Builder()
+      .setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey))
       .setName(parsingErrorCheckKey)
-      .activate()
+      .build();
+    ActiveRules activeRules = new ActiveRulesBuilder()
+      .addRule(activeRule)
       .build();
     return new PHPSensor(fileLinesContextFactory, new CheckFactory(activeRules), new NoSonarFilter(), CUSTOM_RULES);
   }
@@ -370,20 +346,15 @@ public class PHPSensorTest {
   }
 
   private static ActiveRules getActiveRules() {
-    return (new ActiveRulesBuilder())
-      // class name check -> PreciseIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S101"))
-      .activate()
-      // inline html in file check -> FileIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1997"))
-      .activate()
-      // line size -> LineIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S103"))
-      .activate()
-      // Modifiers order -> PreciseIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1124"))
-      .activate()
-      .build();
+    // class name check -> PreciseIssue
+    NewActiveRule s101 = new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S101")).build();
+    // inline html in file check -> FileIssue
+    NewActiveRule s1997 = new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S1997")).build();
+    // line size -> LineIssue
+    NewActiveRule s103 = new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S103")).build();
+    // Modifiers order -> PreciseIssue
+    NewActiveRule s1124 = new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S1124")).build();
+    return new ActiveRulesBuilder().addRule(s101).addRule(s1997).addRule(s103).addRule(s1124).build();
   }
 
   @Test

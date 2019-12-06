@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.sonarsource.parent</groupId>
     <artifactId>parent</artifactId>
-    <version>52</version>
+    <version>53</version>
   </parent>
 
   <groupId>org.sonarsource.php</groupId>
@@ -88,13 +88,13 @@
     <version.junit>4.10</version.junit>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>2.21.0</version.mockito>
-    <version.sonar>7.3-alpha1</version.sonar>
+    <version.sonar>7.9</version.sonar>
     <version.staxmate>2.0.1</version.staxmate>
     <version.sonar-orchestrator>3.26.0.2111</version.sonar-orchestrator>
     <version.sslr>1.23</version.sslr>
     <version.sslr-squid-bridge>2.7.0.377</version.sslr-squid-bridge>
     <version.guava>26.0-jre</version.guava>
-    <version.sonarlint>3.0.0.1140</version.sonarlint>
+    <version.sonarlint>4.7.0.12286</version.sonarlint>
     <version.analyzer-commons>1.10.2.456</version.analyzer-commons>
 
     <!-- Release: enable publication to Bintray -->
@@ -290,7 +290,7 @@
           <version>${version.sonar-packaging-maven-plugin}</version>
           <configuration>
             <sonarLintSupported>true</sonarLintSupported>
-            <sonarQubeMinVersion>6.7</sonarQubeMinVersion> <!-- allow to depend on API >=6.7 but run on LTS -->
+            <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
             <skipDependenciesPackaging>true</skipDependenciesPackaging>
           </configuration>
         </plugin>
