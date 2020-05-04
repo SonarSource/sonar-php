@@ -22,7 +22,9 @@ package org.sonar.php.tree.symbols;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import java.util.ArrayDeque;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -96,7 +98,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   private SymbolQualifiedName currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
   private Map<String, SymbolQualifiedName> aliases = new HashMap<>();
-  private Scope classScope = null;
+  private Deque<Scope> classScopes = new ArrayDeque<>();
   private Map<Symbol, Scope> scopeBySymbol = new HashMap<>();
 
   static class ClassMemberUsageState {
@@ -215,22 +217,22 @@ public class SymbolVisitor extends PHPVisitorCheck {
     TypeSymbolImpl classSymbol = (TypeSymbolImpl) symbolTable.getSymbol(tree.name());
     checkNotNull(classSymbol, "Symbol for %s not found", tree);
     enterScope(tree);
-    classScope = currentScope;
+    classScopes.push(currentScope);
     scan(tree.name());
     NamespaceNameTree superClass = tree.superClass();
     if (superClass != null) {
       Symbol superClassSymbol = lookupOrCreateUndeclaredSymbol(superClass);
-      classScope.superClassScope = scopeBySymbol.get(superClassSymbol);
+      currentClassScope().superClassScope = scopeBySymbol.get(superClassSymbol);
       classSymbol.setSuperClass(superClassSymbol);
     }
-    scopeBySymbol.put(classSymbol, classScope);
+    scopeBySymbol.put(classSymbol, currentClassScope());
     tree.superInterfaces().forEach(ifaceTree -> {
       Symbol ifaceSymbol = lookupOrCreateUndeclaredSymbol(ifaceTree);
       classSymbol.addInterface(ifaceSymbol);
     });
     createMemberSymbols(tree, classSymbol);
     scan(tree.members());
-    classScope = null;
+    classScopes.pop();
     leaveScope();
   }
 
@@ -255,7 +257,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     scan(tree.arguments());
 
     enterScope(tree);
-    classScope = currentScope;
+    classScopes.push(currentScope);
     createMemberSymbols(tree, null);
 
     // we've already scanned the arguments
@@ -268,7 +270,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     tree.superInterfaces().forEach(this::lookupOrCreateUndeclaredSymbol);
     scan(tree.members());
 
-    classScope = null;
+    classScopes.pop();
     leaveScope();
   }
 
@@ -297,7 +299,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   private SymbolImpl createMemberSymbol(@Nullable TypeSymbolImpl classSymbol, IdentifierTree identifier, Symbol.Kind kind) {
     SymbolImpl symbol;
     if (classSymbol != null) {
-      symbol = symbolTable.declareMemberSymbol(identifier, kind, classScope, classSymbol);
+      symbol = symbolTable.declareMemberSymbol(identifier, kind, currentClassScope(), classSymbol);
       classSymbol.addMember((MemberSymbol) symbol);
     } else {
       // anonymous class
@@ -320,8 +322,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
         createOrUseVariableIdentifierSymbol(tree);
       } else {
 
-        if (classMemberUsageState.isSelfMember && classScope != null && classMemberUsageState.isStatic) {
-          SymbolImpl symbol = (SymbolImpl) classScope.getSymbol(tree.text(), Symbol.Kind.FIELD);
+        if (classMemberUsageState.isSelfMember && isInClassScope() && classMemberUsageState.isStatic) {
+          SymbolImpl symbol = (SymbolImpl) currentClassScope().getSymbol(tree.text(), Symbol.Kind.FIELD);
           if (symbol != null) {
             associateSymbol(tree, symbol);
           }
@@ -359,7 +361,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitNameIdentifier(NameIdentifierTree tree) {
-    if (classMemberUsageState != null && classScope != null) {
+    if (classMemberUsageState != null && isInClassScope()) {
       resolveProperty(tree);
     } else {
       resolveSymbol(tree);
@@ -388,7 +390,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       name = (classMemberUsageState.isConst ? "" : "$") + name;
       kind = Symbol.Kind.FIELD;
     }
-    SymbolImpl symbol = (SymbolImpl) classScope.getSymbol(name, kind);
+    SymbolImpl symbol = (SymbolImpl) currentClassScope().getSymbol(name, kind);
     if (symbol != null) {
       associateSymbol(tree, symbol);
     }
@@ -671,5 +673,12 @@ public class SymbolVisitor extends PHPVisitorCheck {
     symbolTable.associateSymbol(token, symbol);
   }
 
+  private Scope currentClassScope() {
+    return classScopes.peek();
+  }
+
+  private boolean isInClassScope() {
+    return !classScopes.isEmpty();
+  }
 
 }
