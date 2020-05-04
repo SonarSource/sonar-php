@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -49,12 +50,14 @@ public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
     MethodDeclarationTree oldStyleConstructor = null;
     MethodDeclarationTree newStyleConstructor = null;
 
+    boolean namespaceContext = isClassInNamespaceContext(classDec);
+
     for (ClassMemberTree member : classDec.members()) {
       if (member.is(Kind.METHOD_DECLARATION)) {
         MethodDeclarationTree method = (MethodDeclarationTree) member;
         String methodName = method.name().text();
 
-        if (classDec.name().text().equalsIgnoreCase(methodName)) {
+        if (classDec.name().text().equalsIgnoreCase(methodName) && !namespaceContext) {
           oldStyleConstructor = method;
 
         } else if (ClassTree.PHP5_CONSTRUCTOR_NAME.equalsIgnoreCase(methodName)) {
@@ -72,4 +75,23 @@ public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
     }
   }
 
+  /**
+   * If there is a namespace that is declared at the file script level, then all classes belong to this namespace.
+   * If there are several namespaces, classes can belong to different namespaces,
+   * but each class must then belong to one namespace
+   */
+  private boolean isClassInNamespaceContext(ClassDeclarationTree classDec) {
+    Tree parent = classDec.getParent();
+    if (parent != null && parent.is(Kind.SCRIPT)) {
+      ScriptTree scriptTree = (ScriptTree) parent;
+
+      for (Tree statement : scriptTree.statements()) {
+        if (statement.is(Kind.NAMESPACE_STATEMENT)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
 }
