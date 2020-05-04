@@ -80,7 +80,7 @@ public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
    * If there are several namespaces, classes can belong to different namespaces,
    * but each class must then belong to one namespace
    */
-  private boolean isClassInNamespaceContext(ClassDeclarationTree classDec) {
+  private static boolean isClassInNamespaceContext(ClassDeclarationTree classDec) {
     Tree parent = classDec.getParent();
     if (parent != null && parent.is(Kind.SCRIPT)) {
       ScriptTree scriptTree = (ScriptTree) parent;
