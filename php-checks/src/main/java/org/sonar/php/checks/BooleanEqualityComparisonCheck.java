@@ -45,7 +45,7 @@ public class BooleanEqualityComparisonCheck extends PHPVisitorCheck {
 
   @Override
   public void visitConditionalExpression(ConditionalExpressionTree tree) {
-    check(tree.condition(), tree.falseExpression(), tree.trueExpression());
+    check(tree.condition());
     super.visitConditionalExpression(tree);
   }
 
