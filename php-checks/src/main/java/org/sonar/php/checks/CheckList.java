@@ -96,7 +96,6 @@ public class CheckList {
       DuplicateBranchImplementationCheck.class,
       DuplicateConditionCheck.class,
       DuplicatedArgumentCheck.class,
-      DuplicatedFunctionArgumentCheck.class,
       DuplicatedMethodCheck.class,
       EchoWithParenthesisCheck.class,
       ElseIfSequenceKeywordUsageCheck.class,
