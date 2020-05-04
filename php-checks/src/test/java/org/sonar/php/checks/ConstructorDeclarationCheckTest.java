@@ -27,6 +27,7 @@ public class ConstructorDeclarationCheckTest {
   @Test
   public void test() throws Exception {
     CheckVerifier.verify(new ConstructorDeclarationCheck(), "ConstructorDeclarationCheck.php");
+    CheckVerifier.verifyNoIssue(new ConstructorDeclarationCheck(), "ConstructorDeclarationInNamespaceCheck.php");
   }
 
 }
