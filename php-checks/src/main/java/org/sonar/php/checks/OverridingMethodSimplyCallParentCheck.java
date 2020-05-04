@@ -118,6 +118,9 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
 
     List<String> parameterNames = new ArrayList<>();
     for (ParameterTree parameter : method.parameters().parameters()) {
+      if (parameter.initValue() != null) {
+        return false;
+      }
       parameterNames.add(parameter.variableIdentifier().variableExpression().text());
     }
 
