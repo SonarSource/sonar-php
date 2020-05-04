@@ -22,7 +22,8 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -75,23 +76,9 @@ public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
     }
   }
 
-  /**
-   * If there is a namespace that is declared at the file script level, then all classes belong to this namespace.
-   * If there are several namespaces, classes can belong to different namespaces,
-   * but each class must then belong to one namespace
-   */
-  private static boolean isClassInNamespaceContext(ClassDeclarationTree classDec) {
-    Tree parent = classDec.getParent();
-    if (parent != null && parent.is(Kind.SCRIPT)) {
-      ScriptTree scriptTree = (ScriptTree) parent;
-
-      for (Tree statement : scriptTree.statements()) {
-        if (statement.is(Kind.NAMESPACE_STATEMENT)) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+  private boolean isClassInNamespaceContext(ClassDeclarationTree classDec) {
+    Symbol symbol = context().symbolTable().getSymbol(classDec.name());
+    QualifiedName qualifiedName = symbol.qualifiedName();
+    return qualifiedName != null && !qualifiedName.toString().equals(symbol.name());
   }
 }
