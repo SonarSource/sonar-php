@@ -82,7 +82,6 @@ public class SonarLintTest {
       .addInputFile(inputFile)
       .addIncludedRules(
         RuleKey.parse("php:S101"),
-        RuleKey.parse("php:S1125"),
         RuleKey.parse("php:S2964")
       )
       .build();
@@ -90,7 +89,6 @@ public class SonarLintTest {
 
     assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
       tuple("php:S101", 4, inputFile.getPath(), "MINOR"),
-      tuple("php:S1125", 20, inputFile.getPath(), "MINOR"),
       tuple("php:S2964", 9, inputFile.getPath(), "MINOR"));
   }
 
