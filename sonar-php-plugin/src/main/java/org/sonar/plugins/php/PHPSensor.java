@@ -143,8 +143,8 @@ public class PHPSensor implements Sensor {
     try {
       for (InputFile inputFile : inputFiles) {
         checkCancelled(context);
-        progressReport.nextFile();
         analyseFile(context, phpAnalyzer, inputFile);
+        progressReport.nextFile();
       }
       phpAnalyzer.terminate();
       success = true;
