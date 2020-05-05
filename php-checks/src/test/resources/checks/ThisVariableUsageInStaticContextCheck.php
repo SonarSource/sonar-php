@@ -9,6 +9,14 @@ class A {
 //         ^^^^^
   }
 
+  public static function static_anonymous_function() {
+    $fn = static function() { return $this->field; }; // Noncompliant
+  }
+
+  public static function anonymous_function() {
+    $fn = function() { return $this->field; }; // OK
+  }
+
   public function g() {
     return $this->field;       // OK
   }

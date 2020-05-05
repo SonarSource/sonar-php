@@ -21,7 +21,9 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.impl.expression.FunctionExpressionTreeImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -49,10 +51,22 @@ public class ThisVariableUsageInStaticContextCheck extends PHPVisitorCheck {
 
   @Override
   public void visitVariableIdentifier(VariableIdentifierTree varIdentifier) {
-    if (inStaticContext && "$this".equals(varIdentifier.variableExpression().text())) {
+    if (inStaticContext && !isWithinNonStaticFunctionExpression(varIdentifier) && "$this".equals(varIdentifier.variableExpression().text())) {
       context().newIssue(this, varIdentifier.variableExpression(), MESSAGE);
     }
     super.visitVariableIdentifier(varIdentifier);
   }
 
+  private boolean isWithinNonStaticFunctionExpression(VariableIdentifierTree varIdentifier) {
+    Tree parent = varIdentifier.getParent();
+    while (parent != null) {
+      if (parent.is(Tree.Kind.FUNCTION_EXPRESSION)) {
+        FunctionExpressionTreeImpl functionExpressionTree = (FunctionExpressionTreeImpl) parent;
+        return functionExpressionTree.staticToken() == null;
+      }
+      parent = parent.getParent();
+    }
+
+    return false;
+  }
 }
