@@ -61,6 +61,17 @@ abstract class B extends A {
 
    abstract public function l(); // OK
 
+  public function m($arg = 0) { // OK
+    parent::m($arg);
+  }
+
+  public function n($arg = 0) { // OK
+    A::n($arg);
+  }
+
+  public function o($arg1, $arg2 = 0) { // OK
+    A::o($arg1, $arg2);
+  }
 }
 
 class D extends C {
