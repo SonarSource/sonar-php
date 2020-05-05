@@ -148,10 +148,9 @@ function functionIsDead() {
   function foo() {}// Noncompliant
 }
 
-//No valid PHP - break the test case
-//function invalidJump() {
-//  continue; // no break/continue possible on level 1
-//}
+function invalidJump() {
+  continue;
+}
 
 $functionExpression = function() {
   switch ($x) {
@@ -182,7 +181,6 @@ function return_in_try() {
     dosmth();
   }
 }
-
 
 throw new Exception();
 ?>
