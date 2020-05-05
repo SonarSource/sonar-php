@@ -53,7 +53,7 @@ public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
     for (CfgBlock cfgBlock : cfg.blocks()) {
       if (cfgBlock.predecessors().isEmpty() && !cfgBlock.equals(cfg.start()) && !cfgBlock.elements().isEmpty()) {
         Tree firstElement = cfgBlock.elements().get(0);
-        if (firstElement.is(Kind.BREAK_STATEMENT) && firstElement.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE)
+        if ((firstElement.is(Kind.BREAK_STATEMENT) && firstElement.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE))
           || CheckUtils.isClosingTag(firstElement)) {
           continue;
         }
