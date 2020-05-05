@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -52,7 +53,8 @@ public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
     for (CfgBlock cfgBlock : cfg.blocks()) {
       if (cfgBlock.predecessors().isEmpty() && !cfgBlock.equals(cfg.start()) && !cfgBlock.elements().isEmpty()) {
         Tree firstElement = cfgBlock.elements().get(0);
-        if (isValidBreakStatement(firstElement) || isClosingTag(firstElement)) {
+        if (firstElement.is(Kind.BREAK_STATEMENT) && firstElement.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE)
+          || CheckUtils.isClosingTag(firstElement)) {
           continue;
         }
 
@@ -62,13 +64,5 @@ public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
           .forEach(block -> issue.secondary(block.elements().get(block.elements().size() - 1), null));
       }
     }
-  }
-
-  private boolean isValidBreakStatement(Tree element) {
-    return element.is(Kind.BREAK_STATEMENT) && element.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE);
-  }
-
-  private boolean isClosingTag(Tree element) {
-    return element.is(Kind.INLINE_HTML) && element.toString().trim().endsWith("?>");
   }
 }
