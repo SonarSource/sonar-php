@@ -19,7 +19,9 @@
  */
 package org.sonar.php.checks;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,6 +33,8 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -40,9 +44,15 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2068";
   private static final String MESSAGE = "'%s' detected in this variable name, review this potentially hardcoded credential.";
+  private static final String MESSAGE_ARGUMENTS = "detected string in password argument, review this potentially hardcoded credential.";
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
   private static final String LITERAL_PATTERN_SUFFIX = "=(?![\\?:(%s)'])..";
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
+  private static final int MIN_LENGTH_OF_HARDCODED_PASSWORD = 2;
+
+  private static final Map<String, Integer> FUNCTIONS = new HashMap<String, Integer>() {{
+    put("ldap_bind", 3);
+  }};
 
   @RuleProperty(
     key = "credentialWords",
@@ -72,6 +82,27 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
       .map(String::trim)
       .map(word -> Pattern.compile(word + suffix, Pattern.CASE_INSENSITIVE))
       .collect(Collectors.toList());
+  }
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    String functionName = tree.callee().toString();
+    if (FUNCTIONS.containsKey(functionName)) {
+      checkArgument(tree, FUNCTIONS.get(functionName));
+    }
+    super.visitFunctionCall(tree);
+  }
+
+  private void checkArgument(FunctionCallTree tree, int argNumber) {
+    if (argNumber > tree.arguments().size()) {
+      return;
+    }
+
+    ExpressionTree arg = tree.arguments().get(argNumber - 1);
+
+    if(arg.is(Kind.REGULAR_STRING_LITERAL) && arg.toString().length() >= MIN_LENGTH_OF_HARDCODED_PASSWORD) {
+      context().newIssue(this, arg, MESSAGE_ARGUMENTS);
+    }
   }
 
   @Override
