@@ -181,3 +181,6 @@ function return_in_try() {
     dosmth();
   }
 }
+
+throw new Exception();
+?>

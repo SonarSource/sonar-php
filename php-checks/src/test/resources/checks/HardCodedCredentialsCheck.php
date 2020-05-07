@@ -58,16 +58,6 @@ $var1 = "password=:param&login=a"; // Compliant
 $var1 = "password=%s&login=a"; // Compliant
 $var1 = "password=(secret)"; // Noncompliant
 
-$pwd = "pwd"; // Compliant
-$password = "pwd"; // Noncompliant
-$password = "password"; // Compliant
-$ampq_password = 'amqp-password'; // Compliant
-const CONFIG_PATH_QUEUE_AMQP_PASSWORD = 'queue/amqp/password'; // Compliant
-const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password'; // Compliant
-
-// The literal string doesn't contain the wordlist item matched on the variable name
-const DEFAULT_AMQP_PASSWORD = 'pwd'; // Noncompliant
-
 ldap_bind("a", "b", "password"); // Noncompliant
 $conection = new PDO("a", "b", "password"); // Noncompliant
 mysqli_connect("a", "b", "password"); // Noncompliant
@@ -83,5 +73,3 @@ imap_open("a", "b", "password"); // Noncompliant
 ifx_connect("a", "b", "password"); // Noncompliant
 dbx_connect("a", "b", "c", "d", "password"); // Noncompliant
 fbsql_pconnect("a", "b", "password"); // Noncompliant
-
-

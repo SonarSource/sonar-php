@@ -48,6 +48,7 @@ import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public final class CheckUtils {
@@ -168,6 +169,13 @@ public final class CheckUtils {
     if (token.is(Kind.INLINE_HTML_TOKEN)) {
       String text = token.text().trim();
       return "?>".equals(text) || "%>".equals(text);
+    }
+    return false;
+  }
+
+  public static boolean isClosingTag(Tree tree) {
+    if (tree.is(Kind.INLINE_HTML)) {
+      return isClosingTag(((InlineHTMLTree) tree).inlineHTMLToken());
     }
     return false;
   }

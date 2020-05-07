@@ -21,12 +21,17 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -37,6 +42,7 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
   public static final String KEY = "S905";
   private static final String MESSAGE = "Remove or refactor this statement.";
 
+  private static final Pattern STRING_LITERAL_EXCEPTION_PATTERN = Pattern.compile("@phan-var");
   private static final Tree.Kind[] USELESS_KINDS = {
     Kind.FUNCTION_EXPRESSION,
     Kind.ARROW_FUNCTION_EXPRESSION,
@@ -62,7 +68,6 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
     Kind.UNARY_PLUS,
     Kind.LOGICAL_COMPLEMENT,
 
-    Kind.REGULAR_STRING_LITERAL,
     Kind.EXPANDABLE_STRING_LITERAL,
     Kind.CONCATENATION,
     Kind.NAME_IDENTIFIER,
@@ -92,6 +97,10 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
   public void visitExpressionStatement(ExpressionStatementTree tree) {
     ExpressionTree expression = tree.expression();
     if (expression.is(USELESS_KINDS)) {
+      uselessNodes.add(tree);
+    }
+
+    if (expression.is(Kind.REGULAR_STRING_LITERAL) && !STRING_LITERAL_EXCEPTION_PATTERN.matcher(((LiteralTree) expression).value()).find()) {
       uselessNodes.add(tree);
     }
 
