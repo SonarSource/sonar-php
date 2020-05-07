@@ -63,8 +63,10 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
     Map<String, Integer> connectFunctions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     connectFunctions.put("ldap_bind", 3);
     connectFunctions.put("pdo", 3);
+    connectFunctions.put("mysqli", 3);
     connectFunctions.put("mysqli_connect", 3);
     connectFunctions.put("mysql_connect", 3);
+    connectFunctions.put("oci_connect", 2);
     connectFunctions.put("ldap_exop_passwd", 4);
     connectFunctions.put("mssql_connect", 3);
     connectFunctions.put("odbc_connect", 3);

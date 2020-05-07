@@ -83,6 +83,8 @@ imap_open("a", "b", "p4ssw0rd"); // Noncompliant
 ifx_connect("a", "b", "p4ssw0rd"); // Noncompliant
 dbx_connect("a", "b", "c", "d", "p4ssw0rd"); // Noncompliant
 fbsql_pconnect("a", "b", "p4ssw0rd"); // Noncompliant
+$connection = new mysqli("a", "b", "p4ssw0rd"); // Noncompliant
+oci_connect("a", "p4ssw0rd"); // Noncompliant
 
 ldap_bind("a", "b"); // Compliant
 ldap_bind("a", "b", $foo); // Compliant
