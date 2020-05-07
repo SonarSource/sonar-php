@@ -1,15 +1,4 @@
 {
-'project:PHPMailer/test/phpmailerTest.php':[
-316,
-1762,
-1829,
-],
-'project:Symfony/Component/Security/Core/Tests/Encoder/Argon2iPasswordEncoderTest.php':[
-22,
-],
-'project:Symfony/Component/Security/Core/Tests/Encoder/BCryptPasswordEncoderTest.php':[
-22,
-],
 'project:Symfony/Component/Security/Core/Tests/Validator/Constraints/UserPasswordValidatorTest.php':[
 26,
 ],
