@@ -53,24 +53,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
   private static final int MIN_LENGTH_OF_HARDCODED_PASSWORD = 2;
-
-  private static final Map<String, Integer> CONNECT_FUNCTIONS = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER) {{
-    put("ldap_bind", 3);
-    put("pdo", 3);
-    put("mysqli_connect", 3);
-    put("mysql_connect", 3);
-    put("ldap_exop_passwd", 4);
-    put("mssql_connect", 3);
-    put("odbc_connect", 3);
-    put("db2_connect", 3);
-    put("cubrid_connect", 5);
-    put("maxdb_connect", 3);
-    put("maxdb_change_user", 3);
-    put("imap_open", 3);
-    put("ifx_connect", 3);
-    put("dbx_connect", 5);
-    put("fbsql_pconnect", 3);
-  }};
+  private static final Map<String, Integer> CONNECT_FUNCTIONS = initializeConnectFunctionsMap();
 
   @RuleProperty(
     key = "credentialWords",
@@ -80,6 +63,27 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   private List<Pattern> variablePatterns = null;
   private List<Pattern> literalPatterns = null;
+
+  private static Map<String, Integer> initializeConnectFunctionsMap() {
+    Map<String, Integer> connectFunctions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    connectFunctions.put("ldap_bind", 3);
+    connectFunctions.put("pdo", 3);
+    connectFunctions.put("mysqli_connect", 3);
+    connectFunctions.put("mysql_connect", 3);
+    connectFunctions.put("ldap_exop_passwd", 4);
+    connectFunctions.put("mssql_connect", 3);
+    connectFunctions.put("odbc_connect", 3);
+    connectFunctions.put("db2_connect", 3);
+    connectFunctions.put("cubrid_connect", 5);
+    connectFunctions.put("maxdb_connect", 3);
+    connectFunctions.put("maxdb_change_user", 3);
+    connectFunctions.put("imap_open", 3);
+    connectFunctions.put("ifx_connect", 3);
+    connectFunctions.put("dbx_connect", 5);
+    connectFunctions.put("fbsql_pconnect", 3);
+
+    return connectFunctions;
+  }
 
   private Stream<Pattern> variablePatterns() {
     if (variablePatterns == null) {
@@ -118,7 +122,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
     ExpressionTree arg = tree.arguments().get(argNumber - 1);
 
-    if(arg.is(Kind.REGULAR_STRING_LITERAL) && arg.toString().length() >= MIN_LENGTH_OF_HARDCODED_PASSWORD) {
+    if(arg.is(Kind.REGULAR_STRING_LITERAL) && ((LiteralTree)arg).value().length() - 2 >= MIN_LENGTH_OF_HARDCODED_PASSWORD) {
       context().newIssue(this, arg, MESSAGE_ARGUMENTS);
     }
   }
