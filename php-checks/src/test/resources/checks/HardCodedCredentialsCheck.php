@@ -69,24 +69,6 @@ const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password'; // Compliant
 // The literal string doesn't contain the wordlist item matched on the variable name
 const DEFAULT_AMQP_PASSWORD = 'pwd'; // Noncompliant
 
-ldap_bind("a", "b", "password"); // Noncompliant
-$conection = new PDO("a", "b", "password"); // Noncompliant
-mysqli_connect("a", "b", "password"); // Noncompliant
-mysql_connect("a", "b", "password"); // Noncompliant
-ldap_exop_passwd("a", "b", "c", "password"); // Noncompliant
-mssql_connect("a", "b", "password"); // Noncompliant
-odbc_connect("a", "b", "password"); // Noncompliant
-db2_connect("a", "b", "password"); // Noncompliant
-cubrid_connect("a", "b", "c", "d", "password"); // Noncompliant
-maxdb_connect("a", "b", "password"); // Noncompliant
-maxdb_change_user("a", "b", "password"); // Noncompliant
-imap_open("a", "b", "password"); // Noncompliant
-ifx_connect("a", "b", "password"); // Noncompliant
-dbx_connect("a", "b", "c", "d", "password"); // Noncompliant
-fbsql_pconnect("a", "b", "password"); // Noncompliant
-ldap_bind("a", "b"); // Compliant
-ldap_bind("a", "b", ""); // Compliant
-
 $uri = "scheme://user:azerty123@domain.com"; // Noncompliant
 $uri = "ssh://user:azerty123@domain.com"; // Noncompliant
 $uri = "scheme://user:@domain.com"; // Compliant
