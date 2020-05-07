@@ -115,7 +115,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
     ExpressionTree arg = tree.arguments().get(argNumber - 1);
 
-    if(arg.is(Kind.REGULAR_STRING_LITERAL) && arg.toString().length() >= MIN_LENGTH_OF_HARDCODED_PASSWORD) {
+    if(arg.is(Kind.REGULAR_STRING_LITERAL) && ((LiteralTree)arg).value().length() - 2 >= MIN_LENGTH_OF_HARDCODED_PASSWORD) {
       context().newIssue(this, arg, MESSAGE_ARGUMENTS);
     }
   }
