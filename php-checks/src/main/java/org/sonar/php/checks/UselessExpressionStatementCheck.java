@@ -31,6 +31,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -41,7 +42,7 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
   public static final String KEY = "S905";
   private static final String MESSAGE = "Remove or refactor this statement.";
 
-  private static final String REGULAR_STRING_EXCEPTIONS = "@phan-var";
+  private static final Pattern STRING_LITERAL_EXCEPTION_PATTERN = Pattern.compile("@phan-var");
   private static final Tree.Kind[] USELESS_KINDS = {
     Kind.FUNCTION_EXPRESSION,
     Kind.ARROW_FUNCTION_EXPRESSION,
@@ -77,7 +78,6 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
 
   private boolean fileContainsHTML;
   private List<Tree> uselessNodes;
-  private List<Pattern> regularStringExceptionsPatterns = null;
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
@@ -100,8 +100,7 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
       uselessNodes.add(tree);
     }
 
-    if (expression.is(Kind.REGULAR_STRING_LITERAL)
-      && regularStringExceptionsPatterns().anyMatch(pattern -> !pattern.matcher(expression.toString()).find())) {
+    if (expression.is(Kind.REGULAR_STRING_LITERAL) && !STRING_LITERAL_EXCEPTION_PATTERN.matcher(((LiteralTree) expression).value()).find()) {
       uselessNodes.add(tree);
     }
 
@@ -113,19 +112,5 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
     if (token.is(Kind.INLINE_HTML_TOKEN) && !CheckUtils.isClosingTag(token)) {
       fileContainsHTML = true;
     }
-  }
-
-  private Stream<Pattern> regularStringExceptionsPatterns() {
-    if (regularStringExceptionsPatterns == null) {
-      regularStringExceptionsPatterns = toPatterns(REGULAR_STRING_EXCEPTIONS);
-    }
-    return regularStringExceptionsPatterns.stream();
-  }
-
-  private List<Pattern> toPatterns(String declarations) {
-    return Stream.of(declarations.split(","))
-      .map(String::trim)
-      .map(word -> Pattern.compile(word, Pattern.CASE_INSENSITIVE))
-      .collect(Collectors.toList());
   }
 }
