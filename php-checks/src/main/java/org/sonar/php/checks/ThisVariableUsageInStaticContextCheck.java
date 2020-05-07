@@ -51,7 +51,7 @@ public class ThisVariableUsageInStaticContextCheck extends PHPVisitorCheck {
 
   @Override
   public void visitVariableIdentifier(VariableIdentifierTree varIdentifier) {
-    if (inStaticContext && !isWithinNonStaticFunctionExpression(varIdentifier) && "$this".equals(varIdentifier.variableExpression().text())) {
+    if (inStaticContext && "$this".equals(varIdentifier.variableExpression().text()) && !isWithinNonStaticFunctionExpression(varIdentifier)) {
       context().newIssue(this, varIdentifier.variableExpression(), MESSAGE);
     }
     super.visitVariableIdentifier(varIdentifier);

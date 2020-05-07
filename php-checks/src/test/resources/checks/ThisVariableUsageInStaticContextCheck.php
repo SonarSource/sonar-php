@@ -22,6 +22,7 @@ class A {
       $fn = function() { return $this->field; }; // FN - No object gets bound to the closure. To solve this,
        // it has to be verified if this is done anywhere in the subsequent program flow
        // (i.e., call() or Closure::bind() with a valid object is called on it). This is not reliably doable with simple checks.
+      $fn();
     }
 
   public function g() {
