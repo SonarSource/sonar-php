@@ -45,7 +45,6 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
   private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))..";
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
-  private static final int MIN_LENGTH_OF_HARDCODED_PASSWORD = 2;
   private static final Map<String, Integer> CONNECT_FUNCTIONS = initializeConnectFunctionsMap();
 
   @RuleProperty(
@@ -115,7 +114,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
     ExpressionTree arg = tree.arguments().get(argNumber - 1);
 
-    if(arg.is(Kind.REGULAR_STRING_LITERAL) && ((LiteralTree)arg).value().length() - 2 >= MIN_LENGTH_OF_HARDCODED_PASSWORD) {
+    if(arg.is(Kind.REGULAR_STRING_LITERAL)) {
       context().newIssue(this, arg, MESSAGE_ARGUMENTS);
     }
   }
