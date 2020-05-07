@@ -19,9 +19,9 @@
  */
 package org.sonar.php.checks;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,10 +32,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.*;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -50,8 +47,22 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
   private static final int MIN_LENGTH_OF_HARDCODED_PASSWORD = 2;
 
-  private static final Map<String, Integer> FUNCTIONS = new HashMap<String, Integer>() {{
+  private static final Map<String, Integer> CONNECT_FUNCTIONS = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER) {{
     put("ldap_bind", 3);
+    put("pdo", 3);
+    put("mysqli_connect", 3);
+    put("mysql_connect", 3);
+    put("ldap_exop_passwd", 4);
+    put("mssql_connect", 3);
+    put("odbc_connect", 3);
+    put("db2_connect", 3);
+    put("cubrid_connect", 5);
+    put("maxdb_connect", 3);
+    put("maxdb_change_user", 3);
+    put("imap_open", 3);
+    put("ifx_connect", 3);
+    put("dbx_connect", 5);
+    put("fbsql_pconnect", 3);
   }};
 
   @RuleProperty(
@@ -87,8 +98,8 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = tree.callee().toString();
-    if (FUNCTIONS.containsKey(functionName)) {
-      checkArgument(tree, FUNCTIONS.get(functionName));
+    if (CONNECT_FUNCTIONS.containsKey(functionName)) {
+      checkArgument(tree, CONNECT_FUNCTIONS.get(functionName));
     }
     super.visitFunctionCall(tree);
   }
