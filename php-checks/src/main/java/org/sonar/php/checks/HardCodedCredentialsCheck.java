@@ -43,7 +43,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "'%s' detected in this variable name, review this potentially hardcoded credential.";
   private static final String MESSAGE_ARGUMENTS = "detected string in password argument, review this potentially hardcoded credential.";
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
-  private static final String LITERAL_PATTERN_SUFFIX = "=(?![\\?:(%s)'])..";
+  private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))..";
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
   private static final int MIN_LENGTH_OF_HARDCODED_PASSWORD = 2;
 
