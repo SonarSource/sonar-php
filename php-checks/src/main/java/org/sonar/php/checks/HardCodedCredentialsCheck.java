@@ -32,7 +32,10 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.*;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -114,7 +117,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
     ExpressionTree arg = tree.arguments().get(argNumber - 1);
 
-    if(arg.is(Kind.REGULAR_STRING_LITERAL)) {
+    if (arg.is(Kind.REGULAR_STRING_LITERAL)) {
       context().newIssue(this, arg, MESSAGE_ARGUMENTS);
     }
   }
@@ -152,7 +155,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   }
 
   private static boolean isEmptyStringLiteral(LiteralTree literal) {
-    return literal.value().substring(1, literal.value().length() -1).isEmpty();
+    return literal.value().substring(1, literal.value().length() - 1).isEmpty();
   }
 
   private void addIssue(Pattern pattern, Tree tree) {
