@@ -56,3 +56,4 @@ $var1 = "password=?&login=a"; // Compliant
 $var1 = "password=:password&login=a"; // Compliant
 $var1 = "password=:param&login=a"; // Compliant
 $var1 = "password=%s&login=a"; // Compliant
+$var1 = "password=(secret)"; // Noncompliant
