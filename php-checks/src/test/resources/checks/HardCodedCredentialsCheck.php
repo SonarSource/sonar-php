@@ -83,3 +83,6 @@ imap_open("a", "b", "password"); // Noncompliant
 ifx_connect("a", "b", "password"); // Noncompliant
 dbx_connect("a", "b", "c", "d", "password"); // Noncompliant
 fbsql_pconnect("a", "b", "password"); // Noncompliant
+
+ldap_bind("a", "b"); // Compliant
+ldap_bind("a", "b", ""); // Compliant
