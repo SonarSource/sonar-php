@@ -21,4 +21,7 @@ $a != 1;  // Noncompliant
 $a === 1; // Noncompliant
 $a !== 1; // Noncompliant
 
+'@phan-var TaskSet $tasks'; // OK
+'literal'; // Noncompliant
+
 ?>
