@@ -57,3 +57,13 @@ $var1 = "password=:password&login=a"; // Compliant
 $var1 = "password=:param&login=a"; // Compliant
 $var1 = "password=%s&login=a"; // Compliant
 $var1 = "password=(secret)"; // Noncompliant
+
+$pwd = "pwd"; // Compliant
+$password = "pwd"; // Noncompliant
+$password = "password"; // Compliant
+$ampq_password = 'amqp-password'; // Compliant
+const CONFIG_PATH_QUEUE_AMQP_PASSWORD = 'queue/amqp/password'; // Compliant
+const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password'; // Compliant
+
+// The literal string doesn't contain the wordlist item matched on the variable name
+const DEFAULT_AMQP_PASSWORD = 'pwd'; // Noncompliant
