@@ -45,3 +45,15 @@ function foo() {
   static $staticVariableNameWithPasswordInIt = "xxx"; // Noncompliant
   static $otherStaticVariableName = "xxx";
 }
+
+$var1 = "password=?"; // Compliant
+$var1 = "password=:password"; // Compliant
+$var1 = "password=:param"; // Compliant
+$var1 = "password=%s"; // Compliant
+$var1 = "password='" . pwd . "'"; // Compliant
+$var1 = "password=" . pwd . "'"; // Compliant
+$var1 = "password=?&login=a"; // Compliant
+$var1 = "password=:password&login=a"; // Compliant
+$var1 = "password=:param&login=a"; // Compliant
+$var1 = "password=%s&login=a"; // Compliant
+$var1 = "password=(secret)"; // Noncompliant

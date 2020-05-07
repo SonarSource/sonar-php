@@ -41,6 +41,8 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   public static final String KEY = "S2068";
   private static final String MESSAGE = "'%s' detected in this variable name, review this potentially hardcoded credential.";
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
+  private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))..";
+  private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
 
   @RuleProperty(
     key = "credentialWords",
@@ -60,7 +62,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   private Stream<Pattern> literalPatterns() {
     if (literalPatterns == null) {
-      literalPatterns = toPatterns("=..");
+      literalPatterns = toPatterns(LITERAL_PATTERN_SUFFIX);
     }
     return literalPatterns.stream();
   }
@@ -112,8 +114,8 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   }
 
   private static String cleanedPattern(String pattern) {
-    if (pattern.endsWith("=..")) {
-      return pattern.substring(0, pattern.length() - 3);
+    if (pattern.endsWith(LITERAL_PATTERN_SUFFIX)) {
+      return pattern.substring(0, pattern.length() - LITERAL_PATTERN_SUFFIX_LENGTH);
     }
     return pattern;
   }
