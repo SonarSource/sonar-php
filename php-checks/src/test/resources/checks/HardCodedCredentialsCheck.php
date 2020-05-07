@@ -86,3 +86,4 @@ fbsql_pconnect("a", "b", "p4ssw0rd"); // Noncompliant
 
 ldap_bind("a", "b"); // Compliant
 ldap_bind("a", "b", $foo); // Compliant
+ldap_bind("a", "b", ""); // Compliant
