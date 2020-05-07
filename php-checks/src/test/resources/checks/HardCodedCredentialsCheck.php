@@ -1,4 +1,5 @@
 <?php
+
 class A {
 
   public $fieldNameWithPasswordInIt = retrievePassword();
@@ -83,3 +84,13 @@ imap_open("a", "b", "password"); // Noncompliant
 ifx_connect("a", "b", "password"); // Noncompliant
 dbx_connect("a", "b", "c", "d", "password"); // Noncompliant
 fbsql_pconnect("a", "b", "password"); // Noncompliant
+
+$uri = "scheme://user:azerty123@domain.com"; // Noncompliant
+$uri = "ssh://user:azerty123@domain.com"; // Noncompliant
+$uri = "scheme://user:@domain.com"; // Compliant
+$uri = "scheme://user@domain.com:80"; // Compliant
+$uri = "scheme://user@domain.com"; // Compliant
+$uri = "scheme://domain.com/user:azerty123"; // Compliant - valid url without credentials
+$uri = "scheme://admin:admin@domain.com"; // Compliant
+Request::create('http://user:password@test.com'); // Compliant - often used for tests
+Request::create('https://username:password@test.com'); // Compliant - often used for tests

@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,8 +43,14 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   public static final String KEY = "S2068";
   private static final String MESSAGE = "'%s' detected in this variable name, review this potentially hardcoded credential.";
   private static final String MESSAGE_ARGUMENTS = "detected string in password argument, review this potentially hardcoded credential.";
+  private static final String MESSAGE_URI = "detected URI with password, review this potentially hardcoded credential.";
+
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
+
   private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))..";
+  private static final Pattern URI_PATTERN = Pattern.compile("\\w+://(?!user(name)?:password)(\\S+):(\\S+)@");
+
+
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
   private static final int MIN_LENGTH_OF_HARDCODED_PASSWORD = 2;
 
@@ -118,10 +125,23 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitLiteral(LiteralTree literal) {
-    if (literal.is(Kind.REGULAR_STRING_LITERAL)) {
-      literalPatterns().filter(pattern -> pattern.matcher(literal.token().text()).find()).findAny().ifPresent(pattern -> addIssue(pattern, literal));
-    }
+    checkForCredentialQuery(literal);
+    checkForCredentialUri(literal);
+
     super.visitLiteral(literal);
+  }
+
+  private void checkForCredentialQuery(LiteralTree literal) {
+    literalPatterns()
+      .filter(pattern -> pattern.matcher(literal.token().text()).find())
+      .findAny().ifPresent(pattern -> addIssue(pattern, literal));
+  }
+
+  private void checkForCredentialUri(LiteralTree literal) {
+    Matcher m = URI_PATTERN.matcher(literal.value());
+    if (m.find() && !m.group(2).equals(m.group(3))) {
+      context().newIssue(this, literal, MESSAGE_URI);
+    }
   }
 
   @Override
