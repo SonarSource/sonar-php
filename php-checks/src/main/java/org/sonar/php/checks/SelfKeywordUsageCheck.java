@@ -136,7 +136,7 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
   /**
    * Contrary to variables, constant names in PHP do not start with "$".
-   * Thus, they are NameIdentifierTree and not VariableIdentifierTree
+   * Thus, their name is NameIdentifierTree and not VariableIdentifierTree
    * So we can differentiate constant accesses from variable accesses based on that.
    */
   private static boolean isConstPropertyAccess(MemberAccessTree tree) {
