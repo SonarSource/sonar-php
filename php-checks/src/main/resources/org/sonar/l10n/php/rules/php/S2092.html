@@ -1,14 +1,18 @@
 <p>When a cookie is protected with the <code>secure</code> attribute set to <em>true</em> it will not be send by the browser over an unencrypted HTTP
-request and thus cannot be observed by an unauthorized person during a man-in-the-middle attack. By default the <code>secure</code> flag is set to
-<em>false</em> and so cookies can be stolen if a man-in-the-attack is performed.</p>
+request and thus cannot be observed by an unauthorized person during a man-in-the-middle attack. </p>
 <h2>Ask Yourself Whether</h2>
-<p> * the cookie is a <em>session-cookie</em> and the <code>secure</code> flag is set to <em>false</em></p>
-<p> * the content of the cookie is sensitive and the <code>secure</code> flag is set to <em>false</em></p>
+<ul>
+  <li> the cookie is for instance a <em>session-cookie</em> not designed to be sent over non-HTTPS communication. </li>
+  <li> it's not sure that the website contains <a href="https://developer.mozilla.org/fr/docs/S%C3%A9curit%C3%A9/MixedContent">mixed content</a> or
+  not (ie HTTPS everywhere or not) </li>
+</ul>
 <p>You are at risk if you answered yes to any of those questions.</p>
 <h2>Recommended Secure Coding Practices</h2>
-<p> * It is recommended to use <code>HTTPs</code> everywhere so setting the <code>secure</code> flag to <em>true</em> should be the default behaviour
-when creating cookies.</p>
-<p> * Set the <code>secure</code> flag to <em>true</em> for session / sensitive-security cookies.</p>
+<ul>
+  <li> It is recommended to use <code>HTTPs</code> everywhere so setting the <code>secure</code> flag to <em>true</em> should be the default behaviour
+  when creating cookies. </li>
+  <li> Set the <code>secure</code> flag to <em>true</em> for session-cookies. </li>
+</ul>
 <h2>Sensitive Code Examples</h2>
 <p>In <em>php.ini</em> you can specify the flags for the session cookie which is security-sensitive:</p>
 <pre>
@@ -45,9 +49,12 @@ setcookie($name, $value, $expire, $path, $domain, true); // Compliant: the sensi
 setrawcookie($name, $value, $expire, $path, $domain, true);// Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the sixth argument) set to true
 </pre>
 <h2>See</h2>
-<p> * <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure</p>
-<p> * <a href="http://cwe.mitre.org/data/definitions/311">MITRE, CWE-311</a> - Missing Encryption of Sensitive Data</p>
-<p> * <a href="http://cwe.mitre.org/data/definitions/315">MITRE, CWE-315</a> - Cleartext Storage of Sensitive Information in a Cookie</p>
-<p> * <a href="http://cwe.mitre.org/data/definitions/614">MITRE, CWE-614</a> - Sensitive Cookie in HTTPS Session Without 'Secure' Attribute</p>
-<p> * <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses</p>
+<ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/311">MITRE, CWE-311</a> - Missing Encryption of Sensitive Data </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/315">MITRE, CWE-315</a> - Cleartext Storage of Sensitive Information in a Cookie </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/614">MITRE, CWE-614</a> - Sensitive Cookie in HTTPS Session Without 'Secure' Attribute </li>
+  <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
+</ul>
 

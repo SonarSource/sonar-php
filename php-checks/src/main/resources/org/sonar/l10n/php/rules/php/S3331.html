@@ -5,11 +5,15 @@ front of the cookie's domain, like so: <em>.dream.com</em>. But cookie domains s
 <p>Cookie domains can be set either programmatically or via configuration. This rule raises an issue when any cookie domain is set with a single
 level, as in <em>.com</em>.</p>
 <h2>Ask Yourself Whether</h2>
-<p> * the <code>domain</code> attribute has only one level as domain naming.</p>
+<ul>
+  <li> the <code>domain</code> attribute has only one level as domain naming. </li>
+</ul>
 <p>You are at risk if you answered yes to any of those questions.</p>
 <h2>Recommended Secure Coding Practices</h2>
-<p> * You should check the <code>domain</code> attribute has been set and its value has more than one level of domain nanimg, like:
-<em>sonarsource.com</em></p>
+<ul>
+  <li> You should check the <code>domain</code> attribute has been set and its value has more than one level of domain nanimg, like:
+  <em>sonarsource.com</em> </li>
+</ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
 setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant
