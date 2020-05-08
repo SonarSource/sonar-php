@@ -435,125 +435,12 @@ function nested_function_has_different_scope() {
 
 function anonymous_lambda_use($kernel)
 {
-    // false positive because $a is considered a different symbol inside the 'use',
-    // even though it's the same symbol
-    $a = 42; // Noncompliant
+    $a = 42;
 
-    $foo->method(function ($x) use ($a) { // we don't realize $a is the same here
+    $foo->method(function ($x) use ($a) {
       return $a[$x];
     });
 
     $a = 42;
     $foo->method(bar($a)); // OK
-}
-
-
-/***************************
- * TRY, CATCH, FINALLY
- ***************************/
-
-function catch_exception() {
-  try {
-    doSomething();
-  } catch (Exception $e) {    // OK, ignore parameter
-    return false;
-  }
-}
-
-function usage_in_catch() {
-  $foo = 42;
-  foo($foo);
-  $foo = 43;
-  try {
-    bar();
-  } catch (Exception $e) {
-    report($foo); // ok
-  }
-}
-
-function no_usage_in_catch() {
-  $foo = 42;
-  foo($foo);
-  $foo = 43; // Compliant - functions with try-catch are ignored
-  try {
-    bar();
-  } catch (Exception $e) {
-    report();
-  }
-}
-
-function usage_in_finally() {
-  $foo = 42;
-  foo($foo);
-  $foo = 43;
-  try {
-    bar();
-  } finally {
-    report($foo); // ok
-  }
-}
-
-function usage_in_finally_in_loop() {
-  $foo = 42;
-  foo($foo);
-  $foo = 43;
-  while(cond) {
-    try {
-      throw new Exception();
-    } finally {
-      report($foo); // ok
-    }
-  }
-}
-
-/***************************
- * MISC
- ***************************/
-
-function return_array() {
-  $realNumber = 0;
-  $realNumber = foo();
-  return array('real' => $realNumber); // OK
-}
-
-function param_by_value(&$cellValue) {
-  $cellValue = foo();
-}
-
-function use_of_unresolved_compact() {
-    $groupby = "val";
-    $arr = array('groupby');
-    compact($arr);
-    $groupby = "another";
-    foo($groupby);
-}
-
-function return_object() {
-  $obj = foo();
-  return $obj->bar();
-}
-
-function parameter_by_reference(&$foo) {
-  if (cond()) {
-    $foo = '42';
-  }
-}
-
-function use_by_reference() {
-  $f = function($in) use(&$max) {
-    if($in > $max) {
-      $max = $in; // ok
-    }
-  };
-}
-
-function assign_by_reference() {
- $ref = &$val; // ok
- $ref = 'Hello';
-}
-
-function fn_assign_by_reference() {
- $ref = '24'; // FN: we avoid reporting issues in presence of assignment by reference
- $ref = &$val; // ok
- $ref = 'Hello';
 }

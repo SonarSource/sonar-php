@@ -152,7 +152,7 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   void associateSymbol(Tree identifier, Symbol symbol) {
-    symbolsByTree.put(identifier, symbol);
+    symbolsByTree.putIfAbsent(identifier, symbol);
   }
 
 
