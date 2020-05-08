@@ -29,6 +29,8 @@ public abstract class PHPTree implements Tree {
   @Nullable
   private Tree parent;
 
+  private SyntaxToken lastToken = null;
+
   public void setParent(Tree parent) {
     this.parent = parent;
   }
@@ -67,14 +69,15 @@ public abstract class PHPTree implements Tree {
   }
 
   public SyntaxToken getLastToken() {
-    SyntaxToken lastToken = null;
-    Iterator<Tree> childrenIterator = childrenIterator();
-    while (childrenIterator.hasNext()) {
-      PHPTree child = (PHPTree) childrenIterator.next();
-      if (child != null) {
-        SyntaxToken childLastToken = child.getLastToken();
-        if (childLastToken != null) {
-          lastToken = childLastToken;
+    if (lastToken == null) {
+      Iterator<Tree> childrenIterator = childrenIterator();
+      while (childrenIterator.hasNext()) {
+        PHPTree child = (PHPTree) childrenIterator.next();
+        if (child != null) {
+          SyntaxToken childLastToken = child.getLastToken();
+          if (childLastToken != null) {
+            lastToken = childLastToken;
+          }
         }
       }
     }
