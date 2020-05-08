@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nullable;
 import javax.xml.stream.XMLStreamException;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
@@ -71,18 +70,10 @@ public class JUnitLogParserForPhpUnit {
   }
 
   private static TestSuite processTestSuite(SMInputCursor cursor) throws XMLStreamException {
-    return processTestSuite(cursor, null);
-  }
-
-  private static TestSuite processTestSuite(SMInputCursor cursor, @Nullable String inheritedFile) throws XMLStreamException {
     String name = cursor.getAttrValue("name");
     String file = cursor.getAttrValue("file");
     double time = 0;
     String timeAttributeValue = cursor.getAttrValue("time");
-
-    if (file == null) {
-      file = inheritedFile;
-    }
 
     if (timeAttributeValue != null) {
       try {
@@ -94,11 +85,18 @@ public class JUnitLogParserForPhpUnit {
 
     List<TestCase> testCases = new ArrayList<>();
     List<TestSuite> nestedSuites = new ArrayList<>();
-    SMInputCursor childCursor = cursor.childCursor();
+
+    SMInputCursor childCursor;
+    if (file != null) {
+      childCursor = cursor.descendantElementCursor("testcase");
+    } else {
+      childCursor = cursor.childCursor();
+    }
+
     while (childCursor.getNext() != null) {
       String childName = childCursor.getLocalName();
       if ("testsuite".equals(childName)) {
-        nestedSuites.add(processTestSuite(childCursor, file));
+        nestedSuites.add(processTestSuite(childCursor));
       } else if ("testcase".equals(childName)) {
         testCases.add(processTestCase(childCursor));
       }
