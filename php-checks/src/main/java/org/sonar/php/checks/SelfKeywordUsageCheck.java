@@ -27,7 +27,6 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
-import org.sonar.php.tree.impl.expression.NameIdentifierTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -137,23 +136,18 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
   /**
    * Contrary to variables, constant names in PHP do not start with "$".
+   * Thus, they are NameIdentifierTree and not VariableIdentifierTree
    * So we can differentiate constant accesses from variable accesses based on that.
    */
-  private boolean isConstPropertyAccess(MemberAccessTree tree) {
+  private static boolean isConstPropertyAccess(MemberAccessTree tree) {
     // The MemberAccessTree of method calls looks the same as of constant field accesses. We filter them out.
     // If the parent tree of a MemberAccessTree is a method call it can also be the case that MemberAccessTree is an
     // argument (i.e., $foo->method(self::ABC)) So we have to check if the MemberAccessTree is the callee tree.
-    if (tree.getParent() == null ||
-      (tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTreeImpl) tree.getParent()).callee() == tree)) {
+    if (tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTreeImpl) tree.getParent()).callee() == tree) {
       return false;
     }
 
-    Tree member = tree.member();
-    if (!member.is(Kind.NAME_IDENTIFIER)) {
-      return false;
-    }
-
-    return !((NameIdentifierTreeImpl) member).text().startsWith("$");
+    return tree.member().is(Kind.NAME_IDENTIFIER);
   }
 
 }
