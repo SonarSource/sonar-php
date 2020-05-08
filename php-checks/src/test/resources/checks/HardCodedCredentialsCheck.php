@@ -26,7 +26,7 @@ class A {
     $otherVariableNameWithPasswordInIt;
     $this->fieldNameWithPasswdInIt = "xx"; // Noncompliant
 //         ^^^^^^^^^^^^^^^^^^^^^^^
-    $this->fieldNameWithPasswordInIt = retrievePassword(); 
+    $this->fieldNameWithPasswordInIt = retrievePassword();
   }
 
 }
@@ -67,3 +67,25 @@ const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password'; // Compliant
 
 // The literal string doesn't contain the wordlist item matched on the variable name
 const DEFAULT_AMQP_PASSWORD = 'pwd'; // Noncompliant
+
+ldap_bind("a", "b", "p4ssw0rd"); // Noncompliant
+$conection = new PDO("a", "b", "p4ssw0rd"); // Noncompliant
+mysqli_connect("a", "b", "p4ssw0rd"); // Noncompliant
+mysql_connect("a", "b", "p4ssw0rd"); // Noncompliant
+ldap_exop_passwd("a", "b", "c", "p4ssw0rd"); // Noncompliant
+mssql_connect("a", "b", "p4ssw0rd"); // Noncompliant
+odbc_connect("a", "b", "p4ssw0rd"); // Noncompliant
+db2_connect("a", "b", "p4ssw0rd"); // Noncompliant
+cubrid_connect("a", "b", "c", "d", "p4ssw0rd"); // Noncompliant
+maxdb_connect("a", "b", "p4ssw0rd"); // Noncompliant
+maxdb_change_user("a", "b", "p4ssw0rd"); // Noncompliant
+imap_open("a", "b", "p4ssw0rd"); // Noncompliant
+ifx_connect("a", "b", "p4ssw0rd"); // Noncompliant
+dbx_connect("a", "b", "c", "d", "p4ssw0rd"); // Noncompliant
+fbsql_pconnect("a", "b", "p4ssw0rd"); // Noncompliant
+$connection = new mysqli("a", "b", "p4ssw0rd"); // Noncompliant
+oci_connect("a", "p4ssw0rd"); // Noncompliant
+
+ldap_bind("a", "b"); // Compliant
+ldap_bind("a", "b", $foo); // Compliant
+ldap_bind("a", "b", ""); // Compliant
