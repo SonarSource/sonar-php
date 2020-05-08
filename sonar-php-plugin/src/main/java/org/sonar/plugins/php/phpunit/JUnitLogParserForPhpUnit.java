@@ -70,10 +70,19 @@ public class JUnitLogParserForPhpUnit {
   }
 
   private static TestSuite processTestSuite(SMInputCursor cursor) throws XMLStreamException {
+    return processTestSuite(cursor, null);
+  }
+
+  private static TestSuite processTestSuite(SMInputCursor cursor, @javax.annotation.Nullable String inheritedFile) throws XMLStreamException {
     String name = cursor.getAttrValue("name");
     String file = cursor.getAttrValue("file");
     double time = 0;
     String timeAttributeValue = cursor.getAttrValue("time");
+
+    if (file == null) {
+      file = inheritedFile;
+    }
+
     if (timeAttributeValue != null) {
       try {
         time = Double.parseDouble(timeAttributeValue);
@@ -88,7 +97,7 @@ public class JUnitLogParserForPhpUnit {
     while (childCursor.getNext() != null) {
       String childName = childCursor.getLocalName();
       if ("testsuite".equals(childName)) {
-        nestedSuites.add(processTestSuite(childCursor));
+        nestedSuites.add(processTestSuite(childCursor, file));
       } else if ("testcase".equals(childName)) {
         testCases.add(processTestCase(childCursor));
       }
@@ -103,9 +112,9 @@ public class JUnitLogParserForPhpUnit {
     String name = cursor.getAttrValue("name");
 
     SMInputCursor childCursor = cursor.childCursor();
-    Map<String,String> childValues = new HashMap<>();
+    Map<String, String> childValues = new HashMap<>();
     while (childCursor.getNext() != null) {
-      if(childCursor.getLocalName() != null) {
+      if (childCursor.getLocalName() != null) {
         childValues.put(childCursor.getLocalName(), childCursor.collectDescendantText(false));
       }
     }
@@ -117,5 +126,5 @@ public class JUnitLogParserForPhpUnit {
       childValues.get("failure"),
       childValues.get("skipped"));
   }
-  
+
 }
