@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 import javax.xml.stream.XMLStreamException;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
@@ -73,7 +74,7 @@ public class JUnitLogParserForPhpUnit {
     return processTestSuite(cursor, null);
   }
 
-  private static TestSuite processTestSuite(SMInputCursor cursor, @javax.annotation.Nullable String inheritedFile) throws XMLStreamException {
+  private static TestSuite processTestSuite(SMInputCursor cursor, @Nullable String inheritedFile) throws XMLStreamException {
     String name = cursor.getAttrValue("name");
     String file = cursor.getAttrValue("file");
     double time = 0;
