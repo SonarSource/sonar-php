@@ -10,7 +10,7 @@
 
   <artifactId>php-checks</artifactId>
 
-  <name>SonarPHP :: Checks</name>
+  <name>SonarSource PHP analyzer :: Checks</name>
 
   <dependencies>
     <dependency>

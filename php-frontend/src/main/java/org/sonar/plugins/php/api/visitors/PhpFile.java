@@ -22,7 +22,7 @@ package org.sonar.plugins.php.api.visitors;
 import java.net.URI;
 
 /**
- * Class representing file being analysed by SonarPHP plugin.
+ * Class representing a file being analysed by our PHP analyzer.
  */
 public interface PhpFile {
 
