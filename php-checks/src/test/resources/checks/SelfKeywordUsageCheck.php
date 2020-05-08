@@ -182,7 +182,7 @@ class constantInParams {
  }
 }
 
-class NotFoundConstant {
+class NotFoundConstant extends SomeExternalClass {
   public static function foo() {
     echo self::SOME_RANDOM_CONSTANT; // OK
   }
