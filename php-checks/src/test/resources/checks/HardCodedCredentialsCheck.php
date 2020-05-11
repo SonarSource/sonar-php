@@ -69,15 +69,19 @@ const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password'; // Compliant
 // The literal string doesn't contain the wordlist item matched on the variable name
 const DEFAULT_AMQP_PASSWORD = 'pwd'; // Noncompliant
 
-$uri = "scheme://user:azerty123@domain.com"; // Noncompliant
+$uri = "ftp://user:azerty123@domain.com"; // Noncompliant
 $uri = "ssh://user:azerty123@domain.com"; // Noncompliant
-$uri = "scheme://user:@domain.com"; // Compliant
-$uri = "scheme://user@domain.com:80"; // Compliant
-$uri = "scheme://user@domain.com"; // Compliant
-$uri = "scheme://domain.com/user:azerty123"; // Compliant - valid url without credentials
-$uri = "scheme://admin:admin@domain.com"; // Compliant
+$uri = "https://user:azerty123@domain.com"; // Noncompliant
+$uri = "http://user:azerty123@domain.com"; // Noncompliant
+$uri = "https://user:@domain.com"; // Compliant
+$uri = "https://user@domain.com:80"; // Compliant
+$uri = "http://user@domain.com"; // Compliant
+$uri = "https://domain.com/user:azerty123"; // Compliant - valid url without credentials
+$uri = "https://admin:admin@domain.com"; // Compliant
 Request::create('http://user:password@test.com'); // Compliant - often used for tests
 Request::create('https://username:password@test.com'); // Compliant - often used for tests
+preg_match('#(^git://|\.git/?$|git(?:olite)?@|//git\.|//github.com/)#i', $url); // Compliant
+$gitUri = "https://user:azerty@github.com/username/repository.git"; // Noncompliant
 
 ldap_bind("a", "b", "p4ssw0rd"); // Noncompliant
 $conection = new PDO("a", "b", "p4ssw0rd"); // Noncompliant
