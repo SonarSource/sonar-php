@@ -154,6 +154,7 @@ public class CheckList {
       MultilineBlocksCurlyBracesCheck.class,
       NestedControlFlowDepthCheck.class,
       NestedFunctionDepthCheck.class,
+      NestedSwitchCheck.class,
       NestedTernaryOperatorsCheck.class,
       NonEmptyCaseWithoutBreakCheck.class,
       NonLFCharAsEOLCheck.class,
