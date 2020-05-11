@@ -10,7 +10,7 @@
 
   <artifactId>php-frontend</artifactId>
 
-  <name>SonarPHP :: Frontend</name>
+  <name>SonarSource PHP analyzer :: Frontend</name>
 
   <dependencies>
     <dependency>

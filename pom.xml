@@ -13,8 +13,8 @@
   <version>${revision}</version>
   <packaging>pom</packaging>
 
-  <name>SonarPHP</name>
-  <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
+  <name>SonarSource PHP analyzer</name>
+  <url>http://redirect.sonarsource.com/plugins/php.html</url>
   <inceptionYear>2010</inceptionYear>
   <organization>
     <name>SonarSource and Akram Ben Aissi</name>

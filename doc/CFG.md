@@ -1,4 +1,4 @@
-# SonarPHP Control Flow Graph
+# Control Flow Graph in SonarSource PHP analyzer
 
 ## Definition
 
