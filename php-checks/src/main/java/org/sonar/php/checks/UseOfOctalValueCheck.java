@@ -94,10 +94,16 @@ public class UseOfOctalValueCheck extends PHPVisitorCheck {
   }
 
   private void checkNumericValue(LiteralTree tree) {
-    if (OCTAL_NUMERIC_PATTERN.matcher(tree.value()).find()) {
+    if (OCTAL_NUMERIC_PATTERN.matcher(tree.value()).find() && !isException(tree.value())) {
       context().newIssue(this, tree, MESSAGE);
     }
   }
 
-
+  /**
+   * This rule should not apply to values smaller than 8 and octal values having 3 digits,
+   * since 3 digits octal values are often used as file permission masks.
+   */
+  private boolean isException(String value) {
+    return value.length() == 4 || Integer.parseInt(value) < 8;
+  }
 }
