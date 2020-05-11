@@ -146,22 +146,22 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   }
 
   private void checkForCredentialUri(LiteralTree literal) {
-//    String possibleUrl = literal.value();
-//    possibleUrl = possibleUrl.substring(1, possibleUrl.length() - 1);
-//    URI uri = null;
-//
-//    try {
-//      uri = new URI(possibleUrl);
-//    } catch (URISyntaxException e) {
-//      return;
-//    }
-//
-//    if (uri.getUserInfo() != null) {
-//      Matcher m = Pattern.compile("(\\S+):(\\S+)").matcher(uri.getUserInfo());
-//      if (m.find() && !m.group(1).equals(m.group(2)) && !DEFAULT_CREDENTIAL_URI_PATTERN.matcher(uri.getUserInfo()).find()) {
-//        context().newIssue(this, literal, MESSAGE_URI);
-//      }
-//    }
+    String possibleUrl = literal.value();
+    possibleUrl = possibleUrl.substring(1, possibleUrl.length() - 1);
+    URI uri = null;
+
+    try {
+      uri = new URI(possibleUrl);
+    } catch (URISyntaxException e) {
+      return;
+    }
+
+    if (uri.getUserInfo() != null) {
+      Matcher m = Pattern.compile("(\\S+):(\\S+)").matcher(uri.getUserInfo());
+      if (m.find() && !m.group(1).equals(m.group(2)) && !DEFAULT_CREDENTIAL_URI_PATTERN.matcher(uri.getUserInfo()).find()) {
+        context().newIssue(this, literal, MESSAGE_URI);
+      }
+    }
   }
 
   @Override
