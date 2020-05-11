@@ -19,6 +19,8 @@
  */
 package org.sonar.php.checks;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -50,7 +52,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
 
   private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))..";
-  private static final Pattern URI_PATTERN = Pattern.compile("\\w+://(?!user(name)?:password)(\\S+):(\\S+)@");
+  private static final Pattern DEFAULT_CREDENTIAL_URI_PATTERN = Pattern.compile("^user(name)?:password$");
 
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
   private static final Map<String, Integer> CONNECT_FUNCTIONS = initializeConnectFunctionsMap();
@@ -144,10 +146,22 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   }
 
   private void checkForCredentialUri(LiteralTree literal) {
-    Matcher m = URI_PATTERN.matcher(literal.value());
-    if (m.find() && !m.group(2).equals(m.group(3))) {
-      context().newIssue(this, literal, MESSAGE_URI);
-    }
+//    String possibleUrl = literal.value();
+//    possibleUrl = possibleUrl.substring(1, possibleUrl.length() - 1);
+//    URI uri = null;
+//
+//    try {
+//      uri = new URI(possibleUrl);
+//    } catch (URISyntaxException e) {
+//      return;
+//    }
+//
+//    if (uri.getUserInfo() != null) {
+//      Matcher m = Pattern.compile("(\\S+):(\\S+)").matcher(uri.getUserInfo());
+//      if (m.find() && !m.group(1).equals(m.group(2)) && !DEFAULT_CREDENTIAL_URI_PATTERN.matcher(uri.getUserInfo()).find()) {
+//        context().newIssue(this, literal, MESSAGE_URI);
+//      }
+//    }
   }
 
   @Override
