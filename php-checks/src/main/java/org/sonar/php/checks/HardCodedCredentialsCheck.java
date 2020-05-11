@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -146,8 +147,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   }
 
   private void checkForCredentialUri(LiteralTree literal) {
-    String possibleUrl = literal.value();
-    possibleUrl = possibleUrl.substring(1, possibleUrl.length() - 1);
+    String possibleUrl = CheckUtils.trimQuotes(literal.value());
     URI uri = null;
 
     try {
