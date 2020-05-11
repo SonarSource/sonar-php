@@ -25,15 +25,18 @@ strings, and for variable names that match any of the patterns from the provided
 </ul>
 <h2>Sensitive Code Example</h2>
 <pre>
-$uname = "steve";
-$password = "blue";
-connect($uname, $password);
+$password = "65DBGgwe4uazdWQA"; // Sensitive
+
+$httpUrl = "https://example.domain?user=user&amp;password=65DBGgwe4uazdWQA" // Sensitive
+$sshUrl = "ssh://user:65DBGgwe4uazdWQA@example.domain" // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$uname = getEncryptedUser();
-$password = getEncryptedPass();
-connect($uname, $password);
+$user = getUser();
+$password = getPassword(); // Compliant
+
+$httpUrl = "https://example.domain?user=$user&amp;password=$password" // Compliant
+$sshUrl = "ssh://$user:$password@example.domain" // Compliant
 </pre>
 <h2>See</h2>
 <ul>
