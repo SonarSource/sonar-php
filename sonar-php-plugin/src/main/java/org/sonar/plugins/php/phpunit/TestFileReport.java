@@ -139,4 +139,8 @@ public class TestFileReport {
     builder.append("testDuration", testDuration);
     return builder.toString();
   }
+
+  public int getTests() {
+    return tests;
+  }
 }
