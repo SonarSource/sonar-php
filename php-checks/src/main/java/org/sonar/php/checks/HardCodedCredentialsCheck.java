@@ -53,7 +53,6 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
 
   private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))..";
-  private static final Pattern DEFAULT_CREDENTIAL_URI_PATTERN = Pattern.compile("^user(name)?:password$");
 
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
   private static final Map<String, Integer> CONNECT_FUNCTIONS = initializeConnectFunctionsMap();
@@ -157,8 +156,9 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
     }
 
     if (uri.getUserInfo() != null) {
-      Matcher m = Pattern.compile("(\\S+):(\\S+)").matcher(uri.getUserInfo());
-      if (m.find() && !m.group(1).equals(m.group(2)) && !DEFAULT_CREDENTIAL_URI_PATTERN.matcher(uri.getUserInfo()).find()) {
+      String userInfo = uri.getUserInfo();
+      Matcher m = Pattern.compile("(\\S+):(\\S+)").matcher(userInfo);
+      if (m.find() && !m.group(1).equals(m.group(2)) && !userInfo.equals("user:password") && !userInfo.equals("username:password")) {
         context().newIssue(this, literal, MESSAGE_URI);
       }
     }
