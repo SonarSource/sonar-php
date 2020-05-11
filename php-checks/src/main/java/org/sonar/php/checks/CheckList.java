@@ -221,7 +221,8 @@ public class CheckList {
       VariableVariablesCheck.class,
       VarKeywordUsageCheck.class,
       WeakSSLProtocolCheck.class,
-      WrongAssignmentOperatorCheck.class);
+      WrongAssignmentOperatorCheck.class,
+      UseOfOctalValueCheck.class);
   }
 
   public static Iterable<Class> getPhpIniChecks() {
