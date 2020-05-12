@@ -72,6 +72,7 @@ public class CheckList {
       ClassComplexityCheck.class,
       ClassCouplingCheck.class,
       ClassNameCheck.class,
+      ClassNamedLikeExceptionCheck.class,
       ClosingTagInFullPHPFileCheck.class,
       CodeFollowingJumpStatementCheck.class,
       CollapsibleIfStatementCheck.class,
