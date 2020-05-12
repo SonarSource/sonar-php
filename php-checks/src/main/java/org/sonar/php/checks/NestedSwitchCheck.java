@@ -32,7 +32,7 @@ public class NestedSwitchCheck extends PHPVisitorCheck {
   @Override
   public void visitSwitchStatement(SwitchStatementTree tree) {
     if (isWithinSwitch) {
-      context().newIssue(this, tree, MESSAGE);
+      context().newIssue(this, tree.switchToken(), MESSAGE);
     }
 
     boolean previousIsWithinSwitch = isWithinSwitch;
