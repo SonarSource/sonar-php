@@ -1,0 +1,85 @@
+/*
+ * SonarQube PHP Plugin
+ * Copyright (C) 2010-2020 SonarSource SA
+ * mailto:info AT sonarsource DOT com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+package org.sonar.php.checks;
+
+import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Rule(key = InvertedBooleanCheck.KEY)
+public class InvertedBooleanCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1940";
+  private static final String MESSAGE = "Use the opposite operator '%s' instead and remove complement operator.";
+
+  private static final Kind[] BINARY_EXPRESSION = {
+    Kind.GREATER_THAN,
+    Kind.GREATER_THAN_OR_EQUAL_TO,
+    Kind.LESS_THAN,
+    Kind.LESS_THAN_OR_EQUAL_TO,
+    Kind.EQUAL_TO,
+    Kind.STRICT_EQUAL_TO,
+    Kind.NOT_EQUAL_TO,
+    Kind.STRICT_NOT_EQUAL_TO};
+
+  private final Map<String, String> operatorReplacements = new HashMap<>();
+
+  public InvertedBooleanCheck() {
+    operatorReplacements.put("<", ">=");
+    operatorReplacements.put(">", "<=");
+    operatorReplacements.put("==", "!=");
+    operatorReplacements.put("===", "!==");
+    operatorReplacements.put("<=", ">");
+    operatorReplacements.put(">=", "<");
+    operatorReplacements.put("!=", "==");
+    operatorReplacements.put("!==", "===");
+  }
+
+  @Override
+  public void visitPrefixExpression(UnaryExpressionTree tree) {
+    if (tree.is(Kind.LOGICAL_COMPLEMENT) && tree.expression().is(Kind.PARENTHESISED_EXPRESSION)) {
+      checkParenthesisedExpression(tree, (ParenthesisedExpressionTree) tree.expression());
+    }
+
+    super.visitPrefixExpression(tree);
+  }
+
+  private void checkParenthesisedExpression(UnaryExpressionTree tree, ParenthesisedExpressionTree expression) {
+    if (expression.expression().is(BINARY_EXPRESSION)) {
+      checkBinaryExpression(tree, (BinaryExpressionTree) expression.expression());
+    } else if (expression.expression().is(Kind.PARENTHESISED_EXPRESSION)) {
+      checkParenthesisedExpression(tree, (ParenthesisedExpressionTree) expression.expression());
+    }
+  }
+
+  private void checkBinaryExpression(UnaryExpressionTree tree, BinaryExpressionTree expression) {
+    String operator = expression.operator().text();
+    if (operatorReplacements.containsKey(operator)) {
+      context().newIssue(this, tree, String.format(MESSAGE, operatorReplacements.get(operator)));
+    }
+  }
+
+}
