@@ -69,15 +69,11 @@ public class InvertedBooleanCheck extends PHPVisitorCheck {
 
   private void checkComplementParenthesisedExpression(UnaryExpressionTree tree, ParenthesisedExpressionTree expression) {
     if (expression.expression().is(BINARY_EXPRESSION)) {
-      checkBinaryExpression(tree, (BinaryExpressionTree) expression.expression());
+      String operator = ((BinaryExpressionTree) expression.expression()).operator().text();
+      context().newIssue(this, tree, String.format(MESSAGE, operatorReplacements.get(operator)));
     } else if (expression.expression().is(Kind.PARENTHESISED_EXPRESSION)) {
       checkComplementParenthesisedExpression(tree, (ParenthesisedExpressionTree) expression.expression());
     }
-  }
-
-  private void checkBinaryExpression(UnaryExpressionTree tree, BinaryExpressionTree expression) {
-    String operator = expression.operator().text();
-    context().newIssue(this, tree, String.format(MESSAGE, operatorReplacements.get(operator)));
   }
 
 }
