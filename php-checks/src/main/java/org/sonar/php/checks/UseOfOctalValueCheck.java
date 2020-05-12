@@ -21,10 +21,6 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.*;
-import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -34,7 +30,7 @@ import java.util.regex.Pattern;
 public class UseOfOctalValueCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1314";
-  private static final String MESSAGE = " Use decimal rather than octal values.";
+  private static final String MESSAGE = "Use decimal rather than octal values.";
 
   // Pattern syntax from https://www.php.net/manual/en/language.types.integer.php#language.types.integer.syntax
   private static final Pattern OCTAL_NUMERIC_PATTERN = Pattern.compile("^0[0-7]+(_[0-7]+)*$");
