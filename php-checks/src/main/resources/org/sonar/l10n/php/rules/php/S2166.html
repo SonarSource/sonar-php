@@ -3,28 +3,28 @@ Using "exception" in the name of a class that does not extend <code>Exception</c
 that a class' name will indicate what it is and/or does.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-public class FruitException {  // Noncompliant; this has nothing to do with Exception
-  private Fruit expected;
-  private String unusualCharacteristics;
-  private boolean appropriateForCommercialExploitation;
+class FruitException {  // Noncompliant; this has nothing to do with Exception
+  private $expected;
+  private $unusualCharacteristics;
+  private $appropriateForCommercialExploitation;
   // ...
 }
 
-public class CarException {  // Noncompliant; the extends clause was forgotten?
-  public CarException(String message, Throwable cause) {
+class CarException {  // Noncompliant; the extends clause was forgotten?
+  public __construct(string message, Throwable cause) {
   // ...
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-public class FruitSport {
-  private Fruit expected;
-  private String unusualCharacteristics;
-  private boolean appropriateForCommercialExploitation;
+class FruitSport {
+  private $expected;
+  private $unusualCharacteristics;
+  private $appropriateForCommercialExploitation;
   // ...
 }
 
-public class CarException extends Exception {
-  public CarException(String message, Throwable cause) {
+class CarException extends Exception {
+  public __construct(string message, Throwable cause) {
   // ...
 </pre>
 

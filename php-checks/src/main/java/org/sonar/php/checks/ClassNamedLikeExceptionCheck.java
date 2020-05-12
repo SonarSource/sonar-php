@@ -74,13 +74,15 @@ public class ClassNamedLikeExceptionCheck extends PHPVisitorCheck {
     String parentFullName = parent.fullName();
 
     if (visitedParents.contains(parentFullName)) {
-      return false; // avoid infinite recursions
+      // avoid infinite recursions
+      return false;
     }
 
     visitedParents.add(parent.fullName());
 
+    // Either we have found "Exception" or we don't have information about the parent
     if (parentFullName.equalsIgnoreCase(EXCEPTION_KEYWORD) ||
-      !classNamesToTree.containsKey(parentFullName)) { // Exception when we do not have information about the class
+      !classNamesToTree.containsKey(parentFullName)) {
       return true;
     }
 
