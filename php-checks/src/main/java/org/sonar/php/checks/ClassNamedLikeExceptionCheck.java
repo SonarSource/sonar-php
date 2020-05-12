@@ -31,9 +31,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Rule(key = ClassNamedLikeExceptionCheck.KEY)
+@Rule(key="S2166")
 public class ClassNamedLikeExceptionCheck extends PHPVisitorCheck {
-  public static final String KEY = "S2166";
+  private static final String MESSAGE = "Classes whose name ends with \"Exception\" should directly or indirectly extend the built-in \"Exception\" class.";
   private static final String EXCEPTION_KEYWORD = "Exception";
 
   Map<String, ClassDeclarationTree> classNamesToTree = new HashMap<>();
@@ -60,7 +60,7 @@ public class ClassNamedLikeExceptionCheck extends PHPVisitorCheck {
 
     for (ClassDeclarationTree classTree : classesToConsider) {
       if (!classExtendsException(classTree, new HashSet<>())) {
-        context().newIssue(this, classTree.name(), "class should extend Exception");
+        context().newIssue(this, classTree.name(), MESSAGE);
       }
     }
   }
