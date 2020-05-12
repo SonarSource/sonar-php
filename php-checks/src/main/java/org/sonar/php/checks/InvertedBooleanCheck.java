@@ -60,7 +60,7 @@ public class InvertedBooleanCheck extends PHPVisitorCheck {
 
   @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {
-    if (tree.is(Kind.LOGICAL_COMPLEMENT)) {
+    if (tree.is(Kind.LOGICAL_COMPLEMENT) && tree.expression().is(Kind.PARENTHESISED_EXPRESSION)) {
       checkComplementParenthesisedExpression(tree, (ParenthesisedExpressionTree) tree.expression());
     }
 
