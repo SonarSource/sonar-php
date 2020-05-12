@@ -3,6 +3,7 @@
 switch($a) { // Compliant
   case "foo":
     switch($b) { // Noncompliant
+//  ^^^^^^
       case "bar":
     }
 }
