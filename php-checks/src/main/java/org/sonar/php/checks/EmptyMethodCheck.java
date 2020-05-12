@@ -51,12 +51,12 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
     super.visitMethodDeclaration(tree);
   }
 
-  private boolean isClassAbstract(MethodDeclarationTree tree) {
+  private static boolean isClassAbstract(MethodDeclarationTree tree) {
     ClassDeclarationTree classTree = (ClassDeclarationTree) CheckUtils.getParentOfKind(tree, Kind.CLASS_DECLARATION);
-    return classTree != null && classTree.modifierToken() != null && classTree.modifierToken().text().equalsIgnoreCase("abstract");
+    return classTree.modifierToken() != null && classTree.modifierToken().text().equalsIgnoreCase("abstract");
   }
 
-  private boolean hasValuableBody(BlockTree tree) {
+  private static boolean hasValuableBody(BlockTree tree) {
     if (!tree.statements().isEmpty()) {
       return true;
     }

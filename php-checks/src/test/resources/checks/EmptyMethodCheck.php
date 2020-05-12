@@ -15,9 +15,19 @@ class TestClass {
     # Comment
   } // Compliant
 
-  public function method5() { /** Comment */ } // Compliant
+  public function method5() {
+    /* Comment */
+  } // Compliant
 
-  public function method6() {throw new Exception();} // Compliant
+  public function method6() {
+    /** Comment */
+  } // Compliant
+
+  public function method7() { /** Comment */ } // Compliant
+
+  public function method8() { /**/ } // Noncompliant
+
+  public function method9() {throw new Exception();} // Compliant
 }
 
 abstract class AbstractClass {
