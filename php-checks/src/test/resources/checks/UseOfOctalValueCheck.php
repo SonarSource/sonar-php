@@ -12,6 +12,9 @@ $a = 012; // Noncompliant
 $a = 012; // Noncompliant
 $a = 01234; // Noncompliant
 $a = "012"; // Compliant
+$a = "01234"; // Compliant
+$a = 0_1; // Compliant
+$a = 0_1234; // Noncompliant
 
 //--------------------------
 //  VariableDeclaration

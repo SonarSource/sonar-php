@@ -217,12 +217,12 @@ public class CheckList {
       UselessIncrementCheck.class,
       UselessObjectCreationCheck.class,
       UseOfEmptyReturnValueCheck.class,
+      UseOfOctalValueCheck.class,
       UseOfUninitializedVariableCheck.class,
       VariableVariablesCheck.class,
       VarKeywordUsageCheck.class,
       WeakSSLProtocolCheck.class,
-      WrongAssignmentOperatorCheck.class,
-      UseOfOctalValueCheck.class);
+      WrongAssignmentOperatorCheck.class);
   }
 
   public static Iterable<Class> getPhpIniChecks() {

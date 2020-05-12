@@ -40,61 +40,17 @@ public class UseOfOctalValueCheck extends PHPVisitorCheck {
   private static final Pattern OCTAL_NUMERIC_PATTERN = Pattern.compile("^0[0-7]+(_[0-7]+)*$");
 
   @Override
-  public void visitVariableDeclaration(VariableDeclarationTree tree) {
-    if (tree.initValue() != null && tree.initValue().is(Tree.Kind.NUMERIC_LITERAL)) {
-      checkNumericValue((LiteralTree) tree.initValue());
+  public void visitLiteral(LiteralTree tree) {
+    if (tree.is(Tree.Kind.NUMERIC_LITERAL)) {
+      checkNumericValue(tree);
     }
 
-    super.visitVariableDeclaration(tree);
-  }
-
-  @Override
-  public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-    if (tree.value().is(Tree.Kind.NUMERIC_LITERAL)) {
-      checkNumericValue((LiteralTree) tree.value());
-    }
-
-    super.visitAssignmentExpression(tree);
-  }
-
-  @Override
-  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    checkParameterInitValue(tree.parameters());
-
-    super.visitFunctionDeclaration(tree);
-  }
-
-  @Override
-  public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    checkParameterInitValue(tree.parameters());
-
-    super.visitMethodDeclaration(tree);
-  }
-
-  @Override
-  public void visitFunctionExpression(FunctionExpressionTree tree) {
-    checkParameterInitValue(tree.parameters());
-
-    super.visitFunctionExpression(tree);
-  }
-
-  @Override
-  public void visitArrowFunctionExpression(ArrowFunctionExpressionTree tree) {
-    checkParameterInitValue(tree.parameters());
-
-    super.visitArrowFunctionExpression(tree);
-  }
-
-  private void checkParameterInitValue(ParameterListTree tree) {
-    for (ParameterTree parameterTree : tree.parameters()) {
-      if (parameterTree.initValue() != null && parameterTree.initValue().is(Tree.Kind.NUMERIC_LITERAL)) {
-        checkNumericValue((LiteralTree) parameterTree.initValue());
-      }
-    }
+    super.visitLiteral(tree);
   }
 
   private void checkNumericValue(LiteralTree tree) {
-    if (OCTAL_NUMERIC_PATTERN.matcher(tree.value()).find() && !isException(tree.value())) {
+    String value = tree.value().replace("_", "");
+    if (OCTAL_NUMERIC_PATTERN.matcher(value).find() && !isException(value)) {
       context().newIssue(this, tree, MESSAGE);
     }
   }
