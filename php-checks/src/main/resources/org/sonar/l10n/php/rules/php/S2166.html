@@ -11,7 +11,7 @@ class FruitException {  // Noncompliant; this has nothing to do with Exception
 }
 
 class CarException {  // Noncompliant; the extends clause was forgotten?
-  public __construct(string message, Throwable cause) {
+  public function __construct(string message, Throwable cause) {
   // ...
 </pre>
 <h2>Compliant Solution</h2>
@@ -24,7 +24,7 @@ class FruitSport {
 }
 
 class CarException extends Exception {
-  public __construct(string message, Throwable cause) {
+  public function __construct(string message, Throwable cause) {
   // ...
 </pre>
 
