@@ -1,12 +1,13 @@
 <?php
 
-switch($a) { // Compliant
-  case "foo":
-    switch($b) { // Noncompliant
-//  ^^^^^^
-      case "bar":
-    }
-}
+  switch($a) { // Compliant
+//^^^^^^> {{Parent "switch" statement}}
+    case "foo":
+      switch($b) { // Noncompliant {{Refactor this code to eliminate this nested "switch" statement.}}
+  //  ^^^^^^
+        case "bar":
+      }
+  }
 
 switch($c) { // Compliant
   case "foo":

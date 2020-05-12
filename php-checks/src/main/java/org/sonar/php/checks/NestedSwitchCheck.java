@@ -27,18 +27,20 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class NestedSwitchCheck extends PHPVisitorCheck {
   public static final String KEY = "S1821";
   private static final String MESSAGE = "Refactor this code to eliminate this nested \"switch\" statement.";
-  private boolean isWithinSwitch = false;
+  private static final String MESSAGE_SECONDARY = "Parent \"switch\" statement";
+  private SwitchStatementTree parentSwitchStatement = null;
 
   @Override
   public void visitSwitchStatement(SwitchStatementTree tree) {
-    if (isWithinSwitch) {
-      context().newIssue(this, tree.switchToken(), MESSAGE);
+    if (parentSwitchStatement != null) {
+      context().newIssue(this, tree.switchToken(), MESSAGE)
+        .secondary(parentSwitchStatement.switchToken(), MESSAGE_SECONDARY);
     }
 
-    boolean previousIsWithinSwitch = isWithinSwitch;
+    SwitchStatementTree previousParentSwitchStatement = parentSwitchStatement;
 
-    isWithinSwitch = true;
+    parentSwitchStatement = tree;
     super.visitSwitchStatement(tree);
-    isWithinSwitch = previousIsWithinSwitch;
+    parentSwitchStatement = previousParentSwitchStatement;
   }
 }
