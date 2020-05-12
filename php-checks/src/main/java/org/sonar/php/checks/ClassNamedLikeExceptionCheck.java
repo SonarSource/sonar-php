@@ -25,8 +25,8 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,23 +59,31 @@ public class ClassNamedLikeExceptionCheck extends PHPVisitorCheck {
       .collect(Collectors.toSet());
 
     for (ClassDeclarationTree classTree : classesToConsider) {
-      if (!classExtendsException(classTree)) {
+      if (!classExtendsException(classTree, new HashSet<>())) {
         context().newIssue(this, classTree.name(), "class should extend Exception");
       }
     }
   }
 
-  private boolean classExtendsException(ClassDeclarationTree classTree) {
+  private boolean classExtendsException(ClassDeclarationTree classTree, Set<String> visitedParents) {
     NamespaceNameTree parent = classTree.superClass();
     if (parent == null) {
       return false;
     }
 
-    if (parent.qualifiedName().equalsIgnoreCase(EXCEPTION_KEYWORD) ||
-      !classNamesToTree.containsKey(parent.qualifiedName())) { // Exception when we do not have information about the class
+    String parentFullName = parent.fullName();
+
+    if (visitedParents.contains(parentFullName)) {
+      return false; // avoid infinite recursions
+    }
+
+    visitedParents.add(parent.fullName());
+
+    if (parentFullName.equalsIgnoreCase(EXCEPTION_KEYWORD) ||
+      !classNamesToTree.containsKey(parentFullName)) { // Exception when we do not have information about the class
       return true;
     }
 
-    return classExtendsException(classNamesToTree.get(parent.qualifiedName()));
+    return classExtendsException(classNamesToTree.get(parentFullName), visitedParents);
   }
 }

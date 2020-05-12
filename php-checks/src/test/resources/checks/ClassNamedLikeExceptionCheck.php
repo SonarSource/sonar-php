@@ -1,11 +1,12 @@
 <?php
-namespace A;
+
 // no extend
 class AMyException {} // Noncompliant
 
 // single extend
 class BMyException extends Foo {} // Compliant
 class CMyException extends Exception {} // Compliant
+class MyException extends \Exception {} // Compliant
 
 // double extend
 class DMyException extends Parent1 {} // Noncompliant
