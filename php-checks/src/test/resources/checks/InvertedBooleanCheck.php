@@ -26,3 +26,6 @@ $c = !($a || $b); // Compliant
 $c = -($a >= $b); // Compliant
 $c = +($a >= $b); // Compliant
 $c = @($a >= $b); // Compliant
+
+if (substr($string, 0, 3) !== '+OK') {}  // Compliant
+if (!$this->connected) {}  // Compliant
