@@ -217,6 +217,7 @@ public class CheckList {
       UselessIncrementCheck.class,
       UselessObjectCreationCheck.class,
       UseOfEmptyReturnValueCheck.class,
+      UseOfOctalValueCheck.class,
       UseOfUninitializedVariableCheck.class,
       VariableVariablesCheck.class,
       VarKeywordUsageCheck.class,

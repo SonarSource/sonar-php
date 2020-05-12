@@ -1,0 +1,16 @@
+{
+  "title": "Octal values should not be used",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "pitfall"
+  ],
+  "defaultSeverity": "Blocker",
+  "ruleSpecification": "RSPEC-1314",
+  "sqKey": "S1314",
+  "scope": "All"
+}
