@@ -24,3 +24,10 @@ class Parent4 {}
 class JMyException extends Parent5 {} // Compliant
 class Parent5 extends Parent6 {}
 class Parent6 extends Exception {}
+
+// the analysis is recursive. This shouldn't lead to infinite recursion.
+class XException extends B {} // Noncompliant
+class B extends C {}
+class C extends XException {}
+
+class X extends X {}
