@@ -259,4 +259,18 @@ public final class CheckUtils {
     return false;
   }
 
+  public static Tree getParentOfKind(Tree tree, Kind kind) {
+    Tree parent = tree.getParent();
+
+    if (parent != null) {
+      if (parent.is(kind)) {
+        return parent;
+      }
+      if (parent.getParent() != null) {
+        return getParentOfKind(parent.getParent(), kind);
+      }
+    }
+
+    return null;
+  }
 }
