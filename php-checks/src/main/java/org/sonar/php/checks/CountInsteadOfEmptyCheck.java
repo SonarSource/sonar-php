@@ -19,7 +19,74 @@
  */
 package org.sonar.php.checks;
 
+import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.type.FunctionCall;
+import org.sonar.php.checks.utils.type.TreeValues;
+import org.sonar.php.checks.utils.type.TypePredicateList;
+import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+@Rule(key = "S1155")
 public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
+  private static final TypePredicateList FUNCTION_PREDICATE = new TypePredicateList(
+    new FunctionCall("count")
+  );
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    if (isCountFunction(tree) && isInZeroCompare(tree) && isUsedAsArrayInScope(tree.arguments().get(0))) {
+      context().newIssue(this, tree, "Use empty() instead of count()");
+    }
+    super.visitFunctionCall(tree);
+  }
+
+  private boolean isInZeroCompare(FunctionCallTree tree) {
+    Tree parent = tree.getParent();
+    if (parent == null) {
+      return false;
+    }
+
+    if (!parent.is(Tree.Kind.GREATER_THAN_OR_EQUAL_TO,
+      Tree.Kind.GREATER_THAN,
+      Tree.Kind.LESS_THAN_OR_EQUAL_TO,
+      Tree.Kind.LESS_THAN,
+      Tree.Kind.EQUAL_TO,
+      Tree.Kind.NOT_EQUAL_TO,
+      Tree.Kind.STRICT_EQUAL_TO,
+      Tree.Kind.STRICT_NOT_EQUAL_TO)) {
+      return false;
+    }
+
+    BinaryExpressionTree comparisonTree = (BinaryExpressionTree) parent;
+    ExpressionTree comparedValue;
+    if (comparisonTree.leftOperand().equals(tree)) {
+      comparedValue = comparisonTree.rightOperand();
+    } else {
+      comparedValue = comparisonTree.leftOperand();
+    }
+
+    return comparedValue.is(Tree.Kind.NUMERIC_LITERAL) && ((LiteralTree)comparedValue).value().equals("0");
+  }
+
+  private boolean isCountFunction(FunctionCallTree tree) {
+    return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable())) && tree.arguments().size() == 1;
+  }
+
+  private boolean isUsedAsArrayInScope(ExpressionTree tree) {
+    Symbol symbol = context().symbolTable().getSymbol(tree);
+
+    if (symbol == null) {
+      return false;
+    }
+
+    return symbol.usages().stream()
+      .map(Tree::getParent)
+      .map(Tree::getParent)
+      .anyMatch(t -> t.is(Tree.Kind.ARRAY_ACCESS));
+  }
 }
