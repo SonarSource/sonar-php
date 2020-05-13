@@ -21,3 +21,5 @@ $c = !!$a && $b; // Noncompliant
 $c = !$a <=> $b; // Compliant
 $c = !$a & $b; // Compliant
 $c = !$a ?? $b; // Compliant
+
+$c = --$b; // Compliant
