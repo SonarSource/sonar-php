@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -29,10 +30,9 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import java.util.HashMap;
 import java.util.Map;
 
-@Rule(key = InvertedBooleanCheck.KEY)
+@Rule(key = "S1940")
 public class InvertedBooleanCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1940";
   private static final String MESSAGE = "Use the opposite operator '%s' instead and remove complement operator.";
 
   private static final Kind[] BINARY_EXPRESSION = {
@@ -60,19 +60,19 @@ public class InvertedBooleanCheck extends PHPVisitorCheck {
 
   @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {
-    if (tree.is(Kind.LOGICAL_COMPLEMENT) && tree.expression().is(Kind.PARENTHESISED_EXPRESSION)) {
-      checkComplementParenthesisedExpression(tree, (ParenthesisedExpressionTree) tree.expression());
+    if (tree.is(Kind.LOGICAL_COMPLEMENT)) {
+      checkComplementParenthesisedExpression(tree, tree.expression());
     }
 
     super.visitPrefixExpression(tree);
   }
 
-  private void checkComplementParenthesisedExpression(UnaryExpressionTree tree, ParenthesisedExpressionTree expression) {
-    if (expression.expression().is(BINARY_EXPRESSION)) {
-      String operator = ((BinaryExpressionTree) expression.expression()).operator().text();
+  private void checkComplementParenthesisedExpression(UnaryExpressionTree tree, ExpressionTree expression) {
+    if (expression.is(BINARY_EXPRESSION)) {
+      String operator = ((BinaryExpressionTree) expression).operator().text();
       context().newIssue(this, tree, String.format(MESSAGE, operatorReplacements.get(operator)));
-    } else if (expression.expression().is(Kind.PARENTHESISED_EXPRESSION)) {
-      checkComplementParenthesisedExpression(tree, (ParenthesisedExpressionTree) expression.expression());
+    } else if (expression.is(Kind.PARENTHESISED_EXPRESSION)) {
+      checkComplementParenthesisedExpression(tree, ((ParenthesisedExpressionTree) expression).expression());
     }
   }
 
