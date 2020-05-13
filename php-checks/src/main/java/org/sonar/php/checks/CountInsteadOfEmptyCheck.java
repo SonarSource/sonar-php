@@ -61,7 +61,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
   private static boolean isInZeroCompare(FunctionCallTree tree) {
     Tree parent = tree.getParent();
-    if (parent == null || !parent.is(COMPARE_OPERATORS)) {
+    if (!parent.is(COMPARE_OPERATORS)) {
       return false;
     }
 

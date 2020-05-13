@@ -52,3 +52,15 @@ function f_3(SomeObject $d) {
     echo "foo";
   }
 }
+
+if (count($x)) { // Compliant - FN
+  echo $x[0];
+}
+
+if (count()) { // Compliant
+  echo $y[0];
+}
+
+if (count(z) + 1) { // Compliant
+  echo $y[0];
+}
