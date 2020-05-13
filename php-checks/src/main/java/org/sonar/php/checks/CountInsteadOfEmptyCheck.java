@@ -53,8 +53,8 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (isCountFunction(tree) && isInZeroCompare(tree) && isUsedAsArrayInScope(tree.arguments().get(0))) {
-      context().newIssue(this, tree, "Use empty() instead of count()");
+    if (isCountFunction(tree) && isInZeroCompare(tree) && isArray(tree.arguments().get(0))) {
+      context().newIssue(this, tree, "Use empty() to check whether the array is empty or not.");
     }
     super.visitFunctionCall(tree);
   }
@@ -80,7 +80,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable())) && tree.arguments().size() == 1;
   }
 
-  private boolean isUsedAsArrayInScope(ExpressionTree tree) {
+  private boolean isArray(ExpressionTree tree) {
     Symbol symbol = context().symbolTable().getSymbol(tree);
 
     if (symbol == null) {
