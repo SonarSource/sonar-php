@@ -207,9 +207,11 @@ public class CheckUtilsTest {
   public void get_parent_of_kind() {
     FunctionCallTree expressionTree = (FunctionCallTree) expressionFromStatement("funtionCall(2);");
     LiteralTree argumentTree = (LiteralTree) expressionTree.arguments().get(0);
+    ExpressionStatementTree statementTree = (ExpressionStatementTree) expressionTree.getParent();
 
     assertThat(CheckUtils.getParentOfKind(argumentTree, Tree.Kind.FUNCTION_CALL).is(Tree.Kind.FUNCTION_CALL)).isTrue();
     assertThat(CheckUtils.getParentOfKind(argumentTree, Tree.Kind.EXPRESSION_STATEMENT).is(Tree.Kind.EXPRESSION_STATEMENT)).isTrue();
     assertThat(CheckUtils.getParentOfKind(argumentTree, Tree.Kind.NAMESPACE_STATEMENT)).isNull();
+    assertThat(CheckUtils.getParentOfKind(statementTree, Tree.Kind.NAMESPACE_STATEMENT)).isNull();
   }
 }
