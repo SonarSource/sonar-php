@@ -136,6 +136,7 @@ public class CheckList {
       InlineHTMLInFileCheck.class,
       InsecureHashCheck.class,
       InterfaceNameCheck.class,
+      InvertedBooleanCheck.class,
       KeywordsAndConstantsNotLowerCaseCheck.class,
       LDAPAuthenticatedConnectionCheck.class,
       LeftCurlyBraceEndsLineCheck.class,
