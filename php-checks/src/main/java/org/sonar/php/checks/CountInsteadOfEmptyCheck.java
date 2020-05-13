@@ -59,7 +59,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
   }
 
-  private boolean isInZeroCompare(FunctionCallTree tree) {
+  private static boolean isInZeroCompare(FunctionCallTree tree) {
     Tree parent = tree.getParent();
     if (parent == null || !parent.is(COMPARE_OPERATORS)) {
       return false;
@@ -90,14 +90,14 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     return isSymbolUsedAsArray(symbol) || isSymbolArrayParameter(symbol);
   }
 
-  private boolean isSymbolUsedAsArray(Symbol symbol) {
+  private static boolean isSymbolUsedAsArray(Symbol symbol) {
     return symbol.usages().stream()
       .map(Tree::getParent)
       .map(Tree::getParent)
       .anyMatch(t -> t.is(Tree.Kind.ARRAY_ACCESS));
   }
 
-  private boolean isSymbolArrayParameter(Symbol symbol) {
+  private static boolean isSymbolArrayParameter(Symbol symbol) {
     IdentifierTree declaration = symbol.declaration();
 
     if (declaration == null || declaration.getParent() == null || !declaration.getParent().is(Tree.Kind.PARAMETER)) {

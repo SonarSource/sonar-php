@@ -9,6 +9,13 @@ if (count($a_2) >= 0) { // Compliant
   echo $a_2;
 }
 
+if (0 < count($a_3)) { // Noncompliant
+  echo $a_3[0];
+}
+
+if (count($a_4) >= 1) { // Compliant
+  echo $a_4[1];
+}
 
 $b = getData();
 echo $b[0];
@@ -20,6 +27,14 @@ if (count($c) >= 0) { // Compliant - We are not sure that $b is an array
   echo "foo";
 }
 
+if (foo($c_1) > 0) { // Compliant
+  echo $c_1[0];
+}
+
+if (foo($c_2)) {
+  echo $c_2[0];
+}
+
 function f(array $d) {
   if (count($d) > 0) { // Noncompliant
     echo "foo";
@@ -27,6 +42,12 @@ function f(array $d) {
 }
 
 function f_2(string $d) {
+  if (count($d) > 0) { // Compliant
+    echo "foo";
+  }
+}
+
+function f_3(SomeObject $d) {
   if (count($d) > 0) { // Compliant
     echo "foo";
   }
