@@ -25,17 +25,31 @@ import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.php.checks.utils.type.TypePredicateList;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S1155")
 public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   private static final TypePredicateList FUNCTION_PREDICATE = new TypePredicateList(
-    new FunctionCall("count")
-  );
+    new FunctionCall("count"));
+
+  private static final Tree.Kind[] COMPARE_OPERATORS = {
+    Tree.Kind.GREATER_THAN_OR_EQUAL_TO,
+    Tree.Kind.GREATER_THAN,
+    Tree.Kind.LESS_THAN_OR_EQUAL_TO,
+    Tree.Kind.LESS_THAN,
+    Tree.Kind.EQUAL_TO,
+    Tree.Kind.NOT_EQUAL_TO,
+    Tree.Kind.STRICT_EQUAL_TO,
+    Tree.Kind.STRICT_NOT_EQUAL_TO
+  };
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -47,18 +61,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
   private boolean isInZeroCompare(FunctionCallTree tree) {
     Tree parent = tree.getParent();
-    if (parent == null) {
-      return false;
-    }
-
-    if (!parent.is(Tree.Kind.GREATER_THAN_OR_EQUAL_TO,
-      Tree.Kind.GREATER_THAN,
-      Tree.Kind.LESS_THAN_OR_EQUAL_TO,
-      Tree.Kind.LESS_THAN,
-      Tree.Kind.EQUAL_TO,
-      Tree.Kind.NOT_EQUAL_TO,
-      Tree.Kind.STRICT_EQUAL_TO,
-      Tree.Kind.STRICT_NOT_EQUAL_TO)) {
+    if (parent == null || !parent.is(COMPARE_OPERATORS)) {
       return false;
     }
 
@@ -70,7 +73,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
       comparedValue = comparisonTree.leftOperand();
     }
 
-    return comparedValue.is(Tree.Kind.NUMERIC_LITERAL) && ((LiteralTree)comparedValue).value().equals("0");
+    return comparedValue.is(Tree.Kind.NUMERIC_LITERAL) && ((LiteralTree) comparedValue).value().equals("0");
   }
 
   private boolean isCountFunction(FunctionCallTree tree) {
@@ -84,9 +87,30 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
       return false;
     }
 
+    return isSymbolUsedAsArray(symbol) || isSymbolArrayParameter(symbol);
+  }
+
+  private boolean isSymbolUsedAsArray(Symbol symbol) {
     return symbol.usages().stream()
       .map(Tree::getParent)
       .map(Tree::getParent)
       .anyMatch(t -> t.is(Tree.Kind.ARRAY_ACCESS));
+  }
+
+  private boolean isSymbolArrayParameter(Symbol symbol) {
+    IdentifierTree declaration = symbol.declaration();
+
+    if (declaration == null || declaration.getParent() == null || !declaration.getParent().is(Tree.Kind.PARAMETER)) {
+      return false;
+    }
+
+    TypeTree parameterTypeTree = ((ParameterTree) declaration.getParent()).type();
+    if (parameterTypeTree == null || !parameterTypeTree.typeName().is(Tree.Kind.BUILT_IN_TYPE)) {
+      return false;
+    }
+
+    BuiltInTypeTree builtInType = ((BuiltInTypeTree) parameterTypeTree.typeName());
+
+    return builtInType.token().text().equalsIgnoreCase("array");
   }
 }

@@ -16,12 +16,18 @@ if (count($b) > 0) { // Noncompliant
   echo "foo";
 }
 
+if (count($c) >= 0) { // Compliant - We are not sure that $b is an array
+  echo "foo";
+}
+
 function f(array $d) {
-  if (count($d) > 0) {
+  if (count($d) > 0) { // Noncompliant
     echo "foo";
   }
 }
 
-if (count($c) >= 0) { // Compliant - We are not sure that $b is an array
-  echo "foo";
+function f_2(string $d) {
+  if (count($d) > 0) { // Compliant
+    echo "foo";
+  }
 }
