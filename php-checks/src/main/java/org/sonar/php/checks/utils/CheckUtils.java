@@ -24,10 +24,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -260,9 +257,13 @@ public final class CheckUtils {
   }
 
   public static Tree getParentOfKind(Tree tree, Kind kind) {
+    return getParentOfKind(tree, kind, null);
+  }
+
+  public static Tree getParentOfKind(Tree tree, Kind kind, @Nullable Kind[] terminators) {
     Tree parent = tree.getParent();
 
-    if (parent != null) {
+    if (parent != null && (terminators == null || !parent.is(terminators))) {
       if (parent.is(kind)) {
         return parent;
       }

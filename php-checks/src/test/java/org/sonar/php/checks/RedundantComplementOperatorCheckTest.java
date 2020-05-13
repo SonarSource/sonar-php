@@ -26,7 +26,7 @@ public class RedundantComplementOperatorCheckTest {
 
   @Test
   public void test() throws Exception {
-    CheckVerifier.verify(new ReduntantComplementOperatorCheck(), "RedundantComplementOperatorCheck.php");
+    CheckVerifier.verify(new RedundantComplementOperatorCheck(), "RedundantComplementOperatorCheck.php");
   }
 
 }

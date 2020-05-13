@@ -20,30 +20,64 @@
 package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S2761")
-public class ReduntantComplementOperatorCheck extends PHPVisitorCheck {
+public class RedundantComplementOperatorCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Use the \"{!|~}\" operator just once or not at all. ";
 
   private static final Kind[] COMPLEMENT_BINARY = {
     Kind.BITWISE_COMPLEMENT,
-    Kind.LOGICAL_COMPLEMENT
-  };
+    Kind.LOGICAL_COMPLEMENT};
+
+  private static final Kind[] BINARY_EXPRESSIONS = {
+    Kind.CONCATENATION,
+    Kind.POWER,
+    Kind.MULTIPLY,
+    Kind.DIVIDE,
+    Kind.REMAINDER,
+    Kind.PLUS,
+    Kind.MINUS,
+    Kind.LEFT_SHIFT,
+    Kind.RIGHT_SHIFT,
+    Kind.LESS_THAN,
+    Kind.GREATER_THAN,
+    Kind.LESS_THAN_OR_EQUAL_TO,
+    Kind.GREATER_THAN_OR_EQUAL_TO,
+    Kind.EQUAL_TO,
+    Kind.STRICT_EQUAL_TO,
+    Kind.NOT_EQUAL_TO,
+    Kind.STRICT_NOT_EQUAL_TO,
+    Kind.ALTERNATIVE_NOT_EQUAL_TO,
+    Kind.COMPARISON,
+    Kind.BITWISE_AND,
+    Kind.BITWISE_XOR,
+    Kind.BITWISE_OR,
+    Kind.CONDITIONAL_AND,
+    Kind.CONDITIONAL_OR,
+    Kind.ALTERNATIVE_CONDITIONAL_AND,
+    Kind.ALTERNATIVE_CONDITIONAL_XOR,
+    Kind.ALTERNATIVE_CONDITIONAL_OR,
+    Kind.NULL_COALESCING_EXPRESSION};
 
   @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {
     if (tree.is(COMPLEMENT_BINARY)) {
-      checkRepeatedComplement(tree);
+      checkRedundantComplement(tree);
     }
 
     super.visitPrefixExpression(tree);
   }
 
-  private void checkRepeatedComplement(UnaryExpressionTree tree) {
+  private void checkRedundantComplement(UnaryExpressionTree tree) {
+    Tree parent = CheckUtils.getParentOfKind(tree, tree.getKind(), BINARY_EXPRESSIONS);
+    if (parent != null) {
+      context().newIssue(this, parent, MESSAGE);
+    }
   }
 }
