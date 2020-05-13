@@ -35,3 +35,7 @@ abstract class AbstractClass {
 
   abstract function abstractMethod1();
 }
+
+final class FinalClass {
+  public function defaultMethod1() { } // Noncompliant
+}
