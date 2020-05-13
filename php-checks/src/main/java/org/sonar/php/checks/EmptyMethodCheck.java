@@ -30,10 +30,9 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import java.util.regex.Pattern;
 
-@Rule(key = EmptyMethodCheck.KEY)
+@Rule(key = "S1186")
 public class EmptyMethodCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1186";
   private static final String MESSAGE = "Add a nested comment explaining why this method is empty, throw an Exception or complete the implementation.";
 
   private static final int MINIMUM_NUMBER_OF_WORD_CHARS_IN_COMMENT = 3;

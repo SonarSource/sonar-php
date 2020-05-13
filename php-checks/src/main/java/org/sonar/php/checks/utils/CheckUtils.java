@@ -267,7 +267,7 @@ public final class CheckUtils {
         return parent;
       }
       if (parent.getParent() != null) {
-        return getParentOfKind(parent.getParent(), kind);
+        return getParentOfKind(parent, kind);
       }
     }
 
