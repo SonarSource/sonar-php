@@ -107,4 +107,10 @@
 'project:Symfony/Component/OptionsResolver/OptionsResolver.php':[
 911,
 ],
+'project:Symfony/Component/Security/Core/Authentication/Token/UsernamePasswordToken.php':[
+46,
+],
+'project:Symfony/Component/Security/Http/RememberMe/AbstractRememberMeServices.php':[
+57,
+],
 }
