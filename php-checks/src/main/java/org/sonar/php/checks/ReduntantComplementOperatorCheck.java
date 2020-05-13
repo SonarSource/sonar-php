@@ -26,7 +26,7 @@ import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S2761")
-public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
+public class ReduntantComplementOperatorCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Use the \"{!|~}\" operator just once or not at all. ";
 
