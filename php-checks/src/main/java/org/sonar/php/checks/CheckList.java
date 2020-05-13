@@ -179,6 +179,7 @@ public class CheckList {
       RedundantParenthesesCheck.class,
       ReferenceInFunctionCallCheck.class,
       RegexUsageCheck.class,
+      RepeatedComplementOperatorCheck.class,
       RequireIncludeInstructionsUsageCheck.class,
       RequireInsteadOfRequireOnceCheck.class,
       ReturnOfBooleanExpressionCheck.class,
