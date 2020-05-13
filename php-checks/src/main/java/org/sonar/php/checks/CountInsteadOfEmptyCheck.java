@@ -96,7 +96,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   private static boolean isSymbolArrayParameter(Symbol symbol) {
     IdentifierTree declaration = symbol.declaration();
 
-    if (declaration == null || declaration.getParent() == null || !declaration.getParent().is(Tree.Kind.PARAMETER)) {
+    if (!declaration.getParent().is(Tree.Kind.PARAMETER)) {
       return false;
     }
 

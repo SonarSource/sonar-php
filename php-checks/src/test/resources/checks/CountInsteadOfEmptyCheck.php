@@ -53,6 +53,12 @@ function f_3(SomeObject $d) {
   }
 }
 
+function f_4($d) {
+  if (count($d) > 0) { // Compliant
+    echo "foo";
+  }
+}
+
 if (count($x)) { // Compliant - FN
   echo $x[0];
 }
