@@ -39,3 +39,11 @@ abstract class AbstractClass {
 final class FinalClass {
   public function defaultMethod1() { } // Noncompliant
 }
+
+trait AnonymousClassInTrait {
+    public function test() {
+        return new class() {
+            public function foo() {} // Noncompliant
+        };
+    }
+}
