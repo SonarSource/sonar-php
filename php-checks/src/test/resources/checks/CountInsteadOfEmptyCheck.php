@@ -75,3 +75,6 @@ if (count()) { // Compliant
   echo $foo[0];
 }
 
+if (count(getData()) > 0) { // Compliant
+  echo "foo";
+}
