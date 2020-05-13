@@ -57,10 +57,15 @@ if (count($x)) { // Compliant - FN
   echo $x[0];
 }
 
-if (count()) { // Compliant
+if (count($y) > "abc") {
   echo $y[0];
 }
 
 if (count(z) + 1) { // Compliant
-  echo $y[0];
+  echo $z[0];
 }
+
+if (count()) { // Compliant
+  echo $foo[0];
+}
+

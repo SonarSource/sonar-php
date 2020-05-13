@@ -83,10 +83,6 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   private boolean isArray(ExpressionTree tree) {
     Symbol symbol = context().symbolTable().getSymbol(tree);
 
-    if (symbol == null) {
-      return false;
-    }
-
     return isSymbolUsedAsArray(symbol) || isSymbolArrayParameter(symbol);
   }
 
