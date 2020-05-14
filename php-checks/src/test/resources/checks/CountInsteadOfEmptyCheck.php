@@ -10,6 +10,26 @@ if (sizeof($a) > 0) { // Noncompliant
   echo $a[0];
 }
 
+if (count($z_3) != 0) { // Noncompliant
+  echo $z_3[0];
+}
+
+if (count($z_9) >= 1) { // Noncompliant
+  echo $z_9[0];
+}
+
+if (0 != count($z_10)) { // Noncompliant
+  echo $z_10[0];
+}
+
+if (1 <= count($z_11)) { // Noncompliant
+  echo $z_11[0];
+}
+
+if (count($z_12) >= 1) { // Noncompliant
+  echo $z_12[0];
+}
+
 if (count($a_2) >= 0) { // Compliant
   echo $a_2;
 }
@@ -28,7 +48,7 @@ if (count($b) > 0) { // Noncompliant
   echo "foo";
 }
 
-if (count($c) >= 0) { // Compliant - We are not sure that $c is an array
+if (count($c) > 0) { // Compliant - We are not sure that $c is an array
   echo "foo";
 }
 
@@ -86,4 +106,21 @@ if (count(getData()) > 0) { // Compliant
 
 if (count($z_2, COUNT_RECURSIVE) > 0) { // Noncompliant
   echo $z_2[0];
+}
+
+if (count($z_4) === "abc") { // Compliant - Doesn't make sense but for test coverage
+  echo $z_4[0];
+}
+
+if (count($z_5) === $someVar) { // Compliant
+  echo $z_5[0];
+}
+
+if (count($z_6) === 2) { // Compliant
+  echo $z_6[0];
+}
+
+
+if (count($z_8) >= "abc") { // Compliant
+  echo $z_8[0];
 }

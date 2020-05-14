@@ -67,15 +67,17 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
     BinaryExpressionTree parentBinaryTree = (BinaryExpressionTree) tree.getParent();
 
+    boolean result = false;
     if (isEqualityExpression(parentBinaryTree)) {
-      return isZero(parentBinaryTree.leftOperand()) || isZero(parentBinaryTree.rightOperand());
+      result = isZero(parentBinaryTree.leftOperand()) || isZero(parentBinaryTree.rightOperand());
     } else if(parentBinaryTree.is(Tree.Kind.GREATER_THAN) || parentBinaryTree.is(Tree.Kind.LESS_THAN_OR_EQUAL_TO)) {
-      return isOne(parentBinaryTree.leftOperand()) || isZero(parentBinaryTree.rightOperand());
-    } else if (parentBinaryTree.is(Tree.Kind.GREATER_THAN_OR_EQUAL_TO) || parentBinaryTree.is(Tree.Kind.LESS_THAN)) {
-      return isZero(parentBinaryTree.leftOperand()) || isOne(parentBinaryTree.rightOperand());
+      result = isOne(parentBinaryTree.leftOperand()) || isZero(parentBinaryTree.rightOperand());
+    } else {
+      // Kind.GREATER_THAN_OR_EQUAL_TO or Kind.LESS_THAN
+      result = isZero(parentBinaryTree.leftOperand()) || isOne(parentBinaryTree.rightOperand());
     }
 
-    return false;
+    return result;
   }
 
   private boolean isCountFunction(FunctionCallTree tree) {
