@@ -28,7 +28,7 @@ if (count($b) > 0) { // Noncompliant
   echo "foo";
 }
 
-if (count($c) >= 0) { // Compliant - We are not sure that $b is an array
+if (count($c) >= 0) { // Compliant - We are not sure that $c is an array
   echo "foo";
 }
 
