@@ -5,6 +5,11 @@ if (count($a) >= 0) { // Noncompliant
   echo $a[0];
 }
 
+if (sizeof($a) >= 0) { // Noncompliant
+//  ^^^^^^^^^^
+  echo $a[0];
+}
+
 if (count($a_2) >= 0) { // Compliant
   echo $a_2;
 }

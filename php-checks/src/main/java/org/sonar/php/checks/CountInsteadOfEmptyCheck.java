@@ -38,7 +38,8 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S1155")
 public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   private static final TypePredicateList FUNCTION_PREDICATE = new TypePredicateList(
-    new FunctionCall("count"));
+    new FunctionCall("count"),
+    new FunctionCall("sizeof"));
 
   private static final Tree.Kind[] COMPARE_OPERATORS = {
     Tree.Kind.GREATER_THAN_OR_EQUAL_TO,
