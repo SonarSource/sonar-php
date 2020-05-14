@@ -1,7 +1,7 @@
 <?php
 
 class TestClass {
-  public function method1() { } // Noncompliant
+  public function method1() { } // Noncompliant {{Add a nested comment explaining why this method is empty, throw an Exception or complete the implementation.}}
 
   public function method2() {
     echo 1;
@@ -28,6 +28,13 @@ class TestClass {
   public function method8() { /**/ } // Noncompliant
 
   public function method9() {throw new Exception();} // Compliant
+
+  public function method10() {
+      /*
+          Larger comment
+      */
+
+  } // Compliant
 }
 
 abstract class AbstractClass {
@@ -47,3 +54,12 @@ trait AnonymousClassInTrait {
         };
     }
 }
+
+function function1() { } // Noncompliant {{Add a nested comment explaining why this function is empty, throw an Exception or complete the implementation.}}
+function function2() { echo 1; } // Compliant
+function function3() { throw new Exception(); } // Compliant
+function function4() { /* TODO */ } // Compliant
+
+$function1 = function() { }; // Noncompliant {{Add a nested comment explaining why this function expression is empty, throw an Exception or complete the implementation.}}
+$function1 = function() { echo 1; }; // Compliant
+$function1 = function() { /* TODO */ }; // Compliant

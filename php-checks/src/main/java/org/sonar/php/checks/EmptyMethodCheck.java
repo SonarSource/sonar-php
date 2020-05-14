@@ -23,7 +23,10 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -33,10 +36,10 @@ import java.util.regex.Pattern;
 @Rule(key = "S1186")
 public class EmptyMethodCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Add a nested comment explaining why this method is empty, throw an Exception or complete the implementation.";
+  private static final String MESSAGE = "Add a nested comment explaining why this %s is empty, throw an Exception or complete the implementation.";
 
   private static final int MINIMUM_NUMBER_OF_WORD_CHARS_IN_COMMENT = 3;
-  private static final String VALUABLE_COMMENT_FORMAT = "(//|#|/\\*).*\\w{%d,}";
+  private static final String VALUABLE_COMMENT_FORMAT = "(//|#|/\\*)(.|\n)*\\w{%d,}";
 
   private static final Pattern VALUABLE_COMMENT_PATTERN = Pattern.compile(String.format(VALUABLE_COMMENT_FORMAT, MINIMUM_NUMBER_OF_WORD_CHARS_IN_COMMENT));
 
@@ -44,10 +47,28 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree))) {
-      context().newIssue(this, tree, MESSAGE);
+      commitIssue(tree, "method");
     }
 
     super.visitMethodDeclaration(tree);
+  }
+
+  @Override
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    if (!hasValuableBody(tree.body())) {
+      commitIssue(tree, "function expression");
+    }
+
+    super.visitFunctionExpression(tree);
+  }
+
+  @Override
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    if (!hasValuableBody(tree.body())) {
+      commitIssue(tree, "function");
+    }
+
+    super.visitFunctionDeclaration(tree);
   }
 
   private static boolean isClassAbstract(MethodDeclarationTree tree) {
@@ -68,6 +89,10 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
     }
 
     return false;
+  }
+
+  private void commitIssue(FunctionTree tree, String type) {
+    context().newIssue(this, tree, String.format(MESSAGE, type));
   }
 
 }
