@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -47,7 +48,9 @@ public class ClassNamedLikeExceptionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    classNamesToTree.put(tree.name().text(), tree);
+    if (tree.is(Tree.Kind.CLASS_DECLARATION)) {
+      classNamesToTree.put(tree.name().text(), tree);
+    }
     super.visitClassDeclaration(tree);
   }
 
