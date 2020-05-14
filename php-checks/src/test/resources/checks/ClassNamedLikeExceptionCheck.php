@@ -31,3 +31,7 @@ class B extends C {}
 class C extends XException {}
 
 class X extends X {}
+
+interface ZException {} // Compliant
+interface ZException extends FooInterface {} // Compliant
+
