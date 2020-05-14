@@ -88,9 +88,9 @@ public final class CheckUtils {
    */
   public static String getFunctionName(FunctionTree functionDec) {
     if (functionDec.is(Kind.FUNCTION_DECLARATION)) {
-      return "\"" + ((FunctionDeclarationTree) functionDec).name().text() + "\"";
+      return ((FunctionDeclarationTree) functionDec).name().text();
     } else if (functionDec.is(Kind.METHOD_DECLARATION)) {
-      return "\"" + ((MethodDeclarationTree) functionDec).name().text() + "\"";
+      return ((MethodDeclarationTree) functionDec).name().text();
     }
     return "expression";
   }
