@@ -1,11 +1,11 @@
 <?php
 
-if (count($a) >= 0) { // Noncompliant
+if (count($a) > 0) { // Noncompliant
 //  ^^^^^^^^^
   echo $a[0];
 }
 
-if (sizeof($a) >= 0) { // Noncompliant
+if (sizeof($a) > 0) { // Noncompliant
 //  ^^^^^^^^^^
   echo $a[0];
 }
@@ -18,7 +18,7 @@ if (0 < count($a_3)) { // Noncompliant
   echo $a_3[0];
 }
 
-if (count($a_4) >= 1) { // Compliant
+if (count($a_4) >= 2) { // Compliant
   echo $a_4[1];
 }
 
@@ -82,4 +82,8 @@ if (count()) { // Compliant
 
 if (count(getData()) > 0) { // Compliant
   echo "foo";
+}
+
+if (count($z_2, COUNT_RECURSIVE) > 0) { // Noncompliant
+  echo $z_2[0];
 }

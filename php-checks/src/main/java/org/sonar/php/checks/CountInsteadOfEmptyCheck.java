@@ -54,31 +54,32 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (isCountFunction(tree) && isInZeroCompare(tree) && isArrayVariable(tree.arguments().get(0))) {
+    if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(tree.arguments().get(0))) {
       context().newIssue(this, tree, "Use empty() to check whether the array is empty or not.");
     }
     super.visitFunctionCall(tree);
   }
 
-  private static boolean isInZeroCompare(FunctionCallTree tree) {
-    Tree parent = tree.getParent();
-    if (!parent.is(COMPARE_OPERATORS)) {
+  private static boolean isEmptyComparison(FunctionCallTree tree) {
+    if (!tree.getParent().is(COMPARE_OPERATORS)) {
       return false;
     }
 
-    BinaryExpressionTree comparisonTree = (BinaryExpressionTree) parent;
-    ExpressionTree comparedValue;
-    if (comparisonTree.leftOperand().equals(tree)) {
-      comparedValue = comparisonTree.rightOperand();
-    } else {
-      comparedValue = comparisonTree.leftOperand();
+    BinaryExpressionTree parentBinaryTree = (BinaryExpressionTree) tree.getParent();
+
+    if (isEqualityExpression(parentBinaryTree)) {
+      return isZero(parentBinaryTree.leftOperand()) || isZero(parentBinaryTree.rightOperand());
+    } else if(parentBinaryTree.is(Tree.Kind.GREATER_THAN) || parentBinaryTree.is(Tree.Kind.LESS_THAN_OR_EQUAL_TO)) {
+      return isOne(parentBinaryTree.leftOperand()) || isZero(parentBinaryTree.rightOperand());
+    } else if (parentBinaryTree.is(Tree.Kind.GREATER_THAN_OR_EQUAL_TO) || parentBinaryTree.is(Tree.Kind.LESS_THAN)) {
+      return isZero(parentBinaryTree.leftOperand()) || isOne(parentBinaryTree.rightOperand());
     }
 
-    return comparedValue.is(Tree.Kind.NUMERIC_LITERAL) && ((LiteralTree) comparedValue).value().equals("0");
+    return false;
   }
 
   private boolean isCountFunction(FunctionCallTree tree) {
-    return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable())) && tree.arguments().size() == 1;
+    return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable())) && !tree.arguments().isEmpty();
   }
 
   private boolean isArrayVariable(ExpressionTree tree) {
@@ -113,5 +114,22 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     BuiltInTypeTree builtInType = ((BuiltInTypeTree) parameterTypeTree.typeName());
 
     return builtInType.token().text().equalsIgnoreCase("array");
+  }
+
+  private static boolean isEqualityExpression(BinaryExpressionTree tree) {
+    return tree.is(Tree.Kind.EQUAL_TO,
+      Tree.Kind.NOT_EQUAL_TO,
+      Tree.Kind.STRICT_EQUAL_TO,
+      Tree.Kind.STRICT_NOT_EQUAL_TO);
+  }
+
+  private static boolean isZero(ExpressionTree tree) {
+    return tree.is(Tree.Kind.NUMERIC_LITERAL) &&
+      "0".equals(((LiteralTree) tree).value());
+  }
+
+  private static boolean isOne(ExpressionTree tree) {
+    return tree.is(Tree.Kind.NUMERIC_LITERAL) &&
+      "1".equals(((LiteralTree) tree).value());
   }
 }
