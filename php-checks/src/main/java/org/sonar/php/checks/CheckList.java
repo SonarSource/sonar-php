@@ -88,6 +88,7 @@ public class CheckList {
       CookieDomainCheck.class,
       CookieSensitiveDataCheck.class,
       CookiesSecureCheck.class,
+      CountInsteadOfEmptyCheck.class,
       CryptographicHashCheck.class,
       CryptographicKeySizeCheck.class,
       DataEncryptionCheck.class,
