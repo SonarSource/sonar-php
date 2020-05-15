@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -259,22 +260,4 @@ public final class CheckUtils {
     return false;
   }
 
-  public static Tree getParentOfKind(Tree tree, Kind kind) {
-    return getParentOfKind(tree, kind, null);
-  }
-
-  public static Tree getParentOfKind(Tree tree, Kind kind, @Nullable Kind[] terminators) {
-    Tree parent = tree.getParent();
-
-    if (parent != null && (terminators == null || !parent.is(terminators))) {
-      if (parent.is(kind)) {
-        return parent;
-      }
-      if (parent.getParent() != null) {
-        return getParentOfKind(parent, kind);
-      }
-    }
-
-    return null;
-  }
 }
