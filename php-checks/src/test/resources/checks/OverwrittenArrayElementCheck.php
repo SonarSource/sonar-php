@@ -8,4 +8,4 @@ $b[2] = "bar"; // Compliant
 
 $c[1] = "foo";
 doSomething($c[1]);
-$c[1] = "bar";
+$c[1] = "bar"; // Compliant
