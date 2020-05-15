@@ -23,3 +23,6 @@ $c = !$a & $b; // Compliant
 $c = !$a ?? $b; // Compliant
 
 $c = --$b; // Compliant
+$c = -(-$b); // Noncompliant
+$c = -(--$b); // Compliant
+$c = -(-$b && $c); // Compliant

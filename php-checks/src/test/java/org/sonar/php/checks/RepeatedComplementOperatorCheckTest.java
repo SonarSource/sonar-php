@@ -22,11 +22,11 @@ package org.sonar.php.checks;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class RedundantComplementOperatorCheckTest {
+public class RepeatedComplementOperatorCheckTest {
 
   @Test
   public void test() throws Exception {
-    CheckVerifier.verify(new RedundantComplementOperatorCheck(), "RedundantComplementOperatorCheck.php");
+    CheckVerifier.verify(new RepeatedComplementOperatorCheck(), "RepeatedComplementOperatorCheck.php");
   }
 
 }
