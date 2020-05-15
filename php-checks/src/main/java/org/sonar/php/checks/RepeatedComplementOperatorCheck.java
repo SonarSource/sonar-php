@@ -28,16 +28,16 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S2761")
 public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Use the \"{!|~}\" operator just once or not at all. ";
+  private static final String MESSAGE = "Use the \"{!|~|-}\" operator just once or not at all. ";
 
-  private static final Kind[] COMPLEMENT_BINARY = {
+  private static final Kind[] COMPLEMENT_UNARY = {
     Kind.BITWISE_COMPLEMENT,
     Kind.LOGICAL_COMPLEMENT,
     Kind.UNARY_MINUS};
 
   @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {
-    if (tree.is(COMPLEMENT_BINARY)) {
+    if (tree.is(COMPLEMENT_UNARY)) {
       checkRepeatedComplement(tree);
     }
 
