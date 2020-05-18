@@ -80,6 +80,7 @@ OtherClass::testMethod($b, $a); // Compliant
 function functionWithoutParameters() {}
 functionWithoutParameters();
 $foo();
+$foo::$bar($a);
 
 class CoverageClass {
   public function testMethod($a) {}

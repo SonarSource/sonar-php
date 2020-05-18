@@ -46,7 +46,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     if (!tree.arguments().isEmpty()) {
       Symbol symbol = getDeclarationSymbol(tree);
-      if (symbol != null && isVerifiableSymbol(symbol)) {
+      if (symbol != null && symbol.declaration() != null) {
         checkParameterSequence(tree, (NameIdentifierTree) symbol.declaration());
       }
     }
@@ -79,14 +79,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   private static boolean isVerifiableClassMemberAccess(ExpressionTree tree) {
     return tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)
       && ((MemberAccessTree) tree).member().is(Tree.Kind.NAME_IDENTIFIER)
-      && ((MemberAccessTree) tree).object().is(Tree.Kind.NAMESPACE_NAME)
       && ((NamespaceNameTree) ((MemberAccessTree) tree).object()).fullName().equals("self");
-  }
-
-  private static boolean isVerifiableSymbol(Symbol symbol) {
-    return symbol.is(Symbol.Kind.FUNCTION)
-      && symbol.declaration() != null
-      && symbol.declaration().is(Tree.Kind.NAME_IDENTIFIER);
   }
 
   private void checkParameterSequence(FunctionCallTree call, NameIdentifierTree identifier) {
