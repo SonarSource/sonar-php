@@ -26,7 +26,6 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -47,7 +46,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree) || hasCommentAbove(tree.modifiers().get(0)))) {
-        commitIssue(tree, "method");
+      commitIssue(tree, "method");
     }
 
     super.visitMethodDeclaration(tree);
