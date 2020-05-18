@@ -26,6 +26,12 @@ if (FOO) {
 }
 $d[1] = "bar"; // Compliant
 
+$d_1[1] = "foo";
+if (FOO) {
+  $d_1[1] = "bar";
+}
+$d_1[1] = "bar"; // Compliant - FN
+
 $e[1] = "foo";
 echo $e[$x]; // We do not know what $x is
 $e[1] = "bar";

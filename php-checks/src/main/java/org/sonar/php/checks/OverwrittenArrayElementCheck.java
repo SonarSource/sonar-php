@@ -142,7 +142,7 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
     return checkVisitor.foundUsage;
   }
 
-  class SymbolUsageVisitor extends PHPTreeSubscriber {
+  private static class SymbolUsageVisitor extends PHPTreeSubscriber {
     private final Symbol symbol;
     private final SymbolTable symbolTable;
     private boolean foundUsage;
