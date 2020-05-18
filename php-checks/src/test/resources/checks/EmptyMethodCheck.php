@@ -67,9 +67,7 @@ function function2() { echo 1; } // Compliant
 function function3() { throw new Exception(); } // Compliant
 function function4() { /* TODO */ } // Compliant
 
-$function1 = function() { }; // Noncompliant {{Add a nested comment explaining why this function expression is empty, throw an Exception or complete the implementation.}}
-$function1 = function() { echo 1; }; // Compliant
-$function1 = function() { /* TODO */ }; // Compliant
+$function1 = function() { }; // Compliant Handled by Rule S108 - EmptyNestedBlockCheck
 
 // Comment
 function function5() {} // Compliant

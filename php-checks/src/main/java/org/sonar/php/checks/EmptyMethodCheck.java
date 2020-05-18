@@ -54,15 +54,6 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitFunctionExpression(FunctionExpressionTree tree) {
-    if (!(hasValuableBody(tree.body()) || hasCommentAbove(tree.functionToken()))) {
-      commitIssue(tree, "function expression");
-    }
-
-    super.visitFunctionExpression(tree);
-  }
-
-  @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     if (!(hasValuableBody(tree.body()) || hasCommentAbove(tree.functionToken()))) {
       commitIssue(tree, "function");
