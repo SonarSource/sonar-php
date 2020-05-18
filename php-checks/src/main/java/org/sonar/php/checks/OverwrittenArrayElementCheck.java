@@ -95,22 +95,22 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
   }
 
   private void updateWrittenAndUnread(StatementTree statementTree, String key, String variableName, Symbol variableSymbol) {
-    Map<String, Tree> KeysToAssignmentMap;
+    Map<String, Tree> keysToAssignmentMap;
     if (writtenAndUnread.containsKey(variableName)) {
-      KeysToAssignmentMap = writtenAndUnread.get(variableName);
+      keysToAssignmentMap = writtenAndUnread.get(variableName);
     } else {
-      KeysToAssignmentMap = new HashMap<>();
+      keysToAssignmentMap = new HashMap<>();
     }
-    KeysToAssignmentMap.put(key, statementTree);
+    keysToAssignmentMap.put(key, statementTree);
     namesToSymbols.put(variableName, variableSymbol);
-    writtenAndUnread.put(variableName, KeysToAssignmentMap);
+    writtenAndUnread.put(variableName, keysToAssignmentMap);
   }
 
   private void removeReadArrayKeys(StatementTree statementTree) {
     Map<String, Map<String, Tree>> cleanedWrittenAndUnread = new HashMap<>();
-    for (Map.Entry entry : writtenAndUnread.entrySet()) {
+    for (Map.Entry<String, Map<String, Tree>> entry : writtenAndUnread.entrySet()) {
       if (!symbolWasUsedInTree(namesToSymbols.get(entry.getKey()), statementTree)) {
-        cleanedWrittenAndUnread.put((String) entry.getKey(), (Map<String, Tree>) entry.getValue());
+        cleanedWrittenAndUnread.put(entry.getKey(), entry.getValue());
       }
     }
     writtenAndUnread = cleanedWrittenAndUnread;

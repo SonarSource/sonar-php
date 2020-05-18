@@ -21,3 +21,12 @@ $e[1] = "foo";
 echo $e[$x]; // We do not know what $x is
 $e[1] = "bar";
 
+$f[1] = "foo";
+$f[1] = $f[1] . "bar"; // Compliant
+
+
+// Coverage
+$z = "foo";
+foo()[1] = "foo";
+$z[] = "foo";
+$z[$foo] = "bar";
