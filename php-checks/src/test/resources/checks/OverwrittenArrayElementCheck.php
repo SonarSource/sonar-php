@@ -44,6 +44,9 @@ $bla = function($j) {
   $j[1] = "bar"; // Compliant
 };
 
+$h[1][2] = "foo";
+$h[1][2] = "bar"; // Compliant - FN only 1-dimensional array writes are currently supported
+
 // Coverage
 $z = "foo";
 foo()[1] = "foo";

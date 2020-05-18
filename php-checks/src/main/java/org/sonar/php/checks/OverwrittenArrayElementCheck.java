@@ -50,6 +50,7 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
   }
 
   private Map<String, Symbol> namesToSymbols = new HashMap<>();
+  // <variableName, <arrayKey, AssignmentTree>>
   private Map<String, Map<String, AssignmentExpressionTree>> writtenAndUnread = new HashMap<>();
 
   @Override
