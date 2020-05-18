@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -88,9 +89,9 @@ public final class CheckUtils {
    */
   public static String getFunctionName(FunctionTree functionDec) {
     if (functionDec.is(Kind.FUNCTION_DECLARATION)) {
-      return ((FunctionDeclarationTree) functionDec).name().text();
+      return "\"" + ((FunctionDeclarationTree) functionDec).name().text() + "\"";
     } else if (functionDec.is(Kind.METHOD_DECLARATION)) {
-      return ((MethodDeclarationTree) functionDec).name().text();
+      return "\"" + ((MethodDeclarationTree) functionDec).name().text() + "\"";
     }
     return "expression";
   }
@@ -125,6 +126,10 @@ public final class CheckUtils {
       return ((NamespaceNameTree) tree).qualifiedName();
     } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
       return ((NameIdentifierTree) tree).text();
+    } else if (tree.is(Kind.METHOD_DECLARATION)) {
+      return ((MethodDeclarationTree) tree).name().text();
+    } else if (tree.is(Kind.FUNCTION_DECLARATION)) {
+      return ((FunctionDeclarationTree) tree).name().text();
     } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)) {
       MemberAccessTree memberAccess = (MemberAccessTree) tree;
       String className = nameOf(memberAccess.object());
@@ -259,4 +264,19 @@ public final class CheckUtils {
     return false;
   }
 
+  @CheckForNull
+  public static Tree getParentOfKind(Tree tree, Kind kind) {
+    Tree parent = tree.getParent();
+
+    if (parent != null) {
+      if (parent.is(kind)) {
+        return parent;
+      }
+      if (parent.getParent() != null) {
+        return getParentOfKind(parent, kind);
+      }
+    }
+
+    return null;
+  }
 }

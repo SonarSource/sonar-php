@@ -19,89 +19,72 @@
  */
 package org.sonar.php.checks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.HashSet;
 
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.declaration.*;
+import org.sonar.plugins.php.api.tree.expression.*;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import javax.annotation.CheckForNull;
 
 @Rule(key = "S2234")
 public class ParameterSequenceCheck extends PHPVisitorCheck {
 
   public static final String MESSAGE = "Parameters to \"%s\" have the same names but not the same order as the method arguments.";
 
-  private final List<FunctionCallTree> functionCalls = new ArrayList<>();
-  private final Map<String, FunctionDeclarationTree> functionDeclarations = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-  private final Map<String, Map<String, MethodDeclarationTree>> methodDeclarations = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    functionCalls.clear();
-    functionDeclarations.clear();
-
-    super.visitCompilationUnit(tree);
-
-    checkFunctionCalls();
-  }
-
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (!tree.arguments().isEmpty()) {
-      functionCalls.add(tree);
+      Symbol symbol = getDeclarationSymbol(tree);
+      if (symbol != null && isVerifiableSymbol(symbol)) {
+        checkParameterSequence(tree, (NameIdentifierTree) symbol.declaration());
+      }
     }
 
     super.visitFunctionCall(tree);
   }
 
-  @Override
-  public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (!tree.arguments().isEmpty()) {
-      functionCalls.add(tree);
+  @CheckForNull
+  private Symbol getDeclarationSymbol(FunctionCallTree tree) {
+    ExpressionTree callee = tree.callee();
+
+    if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
+      return context().symbolTable().getSymbol(((NamespaceNameTree) callee).name());
+    } else if(isVerifiableObjectMemberAccess(callee)) {
+      return context().symbolTable().getSymbol(((MemberAccessTree) callee).member());
+    } else if(isVerifiableClassMemberAccess(callee)) {
+      return context().symbolTable().getSymbol(((MemberAccessTree) callee).member());
     }
 
-    super.visitMethodDeclaration(tree);
+    return null;
   }
 
-  private void addMethod(MethodDeclarationTree tree) {
-    ClassDeclarationTree classDeclaration = U
+  private boolean isVerifiableObjectMemberAccess(ExpressionTree tree) {
+    return tree.is(Tree.Kind.OBJECT_MEMBER_ACCESS)
+      && ((MemberAccessTree) tree).member().is(Tree.Kind.NAME_IDENTIFIER)
+      && ((MemberAccessTree) tree).object().is(Tree.Kind.VARIABLE_IDENTIFIER)
+      && ((VariableIdentifierTree) ((MemberAccessTree) tree).object()).text().equals("$this");
   }
 
-  @Override
-  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    if (!tree.parameters().parameters().isEmpty()) {
-      functionDeclarations.put(CheckUtils.getFunctionName(tree), tree);
-    }
-
-    super.visitFunctionDeclaration(tree);
+  private boolean isVerifiableClassMemberAccess(ExpressionTree tree) {
+    return tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)
+      && ((MemberAccessTree) tree).member().is(Tree.Kind.NAME_IDENTIFIER)
+      && ((MemberAccessTree) tree).object().is(Tree.Kind.NAMESPACE_NAME)
+      && ((NamespaceNameTree) ((MemberAccessTree) tree).object()).fullName().equals("self");
   }
 
-  private void checkFunctionCalls() {
-    for (FunctionCallTree call : functionCalls) {
-      if (call.callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
-        continue;
-      }
-      String functionName = CheckUtils.getFunctionName(call);
-      if (functionName != null && functionDeclarations.containsKey(functionName)) {
-        checkParameterSequence(functionName, call, functionDeclarations.get(functionName));
-      }
-    }
+  private boolean isVerifiableSymbol(Symbol symbol) {
+    return symbol.is(Symbol.Kind.FUNCTION)
+      && symbol.declaration() != null
+      && symbol.declaration().is(Tree.Kind.NAME_IDENTIFIER);
   }
 
-  private void checkParameterSequence(String functionName, FunctionCallTree call, FunctionDeclarationTree declaration)
-  {
-    List<String> parameters = declaration.parameters().parameters().stream()
+  private void checkParameterSequence(FunctionCallTree call, NameIdentifierTree identifier) {
+    List<String> parameters = ((FunctionTree) identifier.getParent()).parameters().parameters().stream()
       .map(e -> e.variableIdentifier().text())
       .collect(Collectors.toList());
 
@@ -111,7 +94,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
       .collect(Collectors.toList());
 
     if (arguments.size() == parameters.size() && !arguments.equals(parameters) && new HashSet<>(parameters).equals(new HashSet<>(arguments))) {
-      context().newIssue(this, call, String.format(MESSAGE, functionName));
+      context().newIssue(this, call, String.format(MESSAGE, identifier.text()));
     }
   }
 }
