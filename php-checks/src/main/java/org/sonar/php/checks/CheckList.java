@@ -103,6 +103,7 @@ public class CheckList {
       ElseIfSequenceKeywordUsageCheck.class,
       ElseIfWithoutElseCheck.class,
       EmptyDatabasePasswordCheck.class,
+      EmptyMethodCheck.class,
       EmptyNestedBlockCheck.class,
       EmptyStatementCheck.class,
       EvalUseCheck.class,
