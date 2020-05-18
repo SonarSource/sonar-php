@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -30,6 +31,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import java.util.Collections;
 import java.util.regex.Pattern;
 
 @Rule(key = "S1186")
@@ -75,7 +78,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
 
   private static boolean isClassAbstract(MethodDeclarationTree tree) {
-    ClassDeclarationTree classTree = (ClassDeclarationTree) CheckUtils.getParentOfKind(tree, Kind.CLASS_DECLARATION);
+    ClassDeclarationTree classTree = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree, Collections.singletonList(Kind.CLASS_DECLARATION));
     return classTree != null && classTree.modifierToken() != null && classTree.modifierToken().text().equalsIgnoreCase("abstract");
   }
 
