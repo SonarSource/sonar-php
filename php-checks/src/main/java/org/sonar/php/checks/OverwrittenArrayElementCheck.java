@@ -38,6 +38,7 @@ import org.sonar.plugins.php.api.visitors.PHPTreeSubscriber;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Rule(key = "S4143")
 public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
@@ -99,25 +100,14 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
   }
 
   private void updateWrittenAndUnread(AssignmentExpressionTree statementTree, String key, String variableName, Symbol variableSymbol) {
-    Map<String, AssignmentExpressionTree> keysToAssignmentMap;
-    if (writtenAndUnread.containsKey(variableName)) {
-      keysToAssignmentMap = writtenAndUnread.get(variableName);
-    } else {
-      keysToAssignmentMap = new HashMap<>();
-    }
-    keysToAssignmentMap.put(key, statementTree);
+    writtenAndUnread.computeIfAbsent(variableName, k -> new HashMap<>()).put(key, statementTree);
     namesToSymbols.put(variableName, variableSymbol);
-    writtenAndUnread.put(variableName, keysToAssignmentMap);
   }
 
   private void removeReadArrayKeys(StatementTree statementTree) {
-    Map<String, Map<String, AssignmentExpressionTree>> cleanedWrittenAndUnread = new HashMap<>();
-    for (Map.Entry<String, Map<String, AssignmentExpressionTree>> entry : writtenAndUnread.entrySet()) {
-      if (!symbolWasUsedInTree(namesToSymbols.get(entry.getKey()), statementTree)) {
-        cleanedWrittenAndUnread.put(entry.getKey(), entry.getValue());
-      }
-    }
-    writtenAndUnread = cleanedWrittenAndUnread;
+    writtenAndUnread = writtenAndUnread.entrySet().stream()
+      .filter(entry -> !symbolWasUsedInTree(namesToSymbols.get(entry.getKey()), statementTree))
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   private static boolean isArrayKeyAssignmentStatement(StatementTree tree) {

@@ -9,6 +9,12 @@ $a_1[1] = "foo";
 $a_1[2] = "foo2";
 $a_1[1] = "bar"; // Noncompliant
 
+$a_2[1] = "foo";
+$a_3[1] = "foo";
+echo $a_3[3];
+$a_2[1] = "bar"; // Noncompliant
+$a_3[1] = "bar"; // Compliant
+
 $b[1] = "foo";
 $b[2] = "bar"; // Compliant
 
