@@ -3,17 +3,17 @@
 //-----------------
 // Function Calls
 //-----------------
-// function testFunction($a, $b = null) { }
-//
-// testFunction($a, $b); // Compliant
-// testFunction($b, $a); // Noncompliant
-// testFunction($a, $a); // Compliant
-//
-// testFunction($c, $d); // Compliant
-// testFunction($a, $e); // Compliant
-// testFunction($f, $b); // Compliant
-// testFunction($a); // Compliant
-// otherFunction($b, $a); // Compliant
+function testFunction($a, $b = null) { }
+
+testFunction($a, $b); // Compliant
+testFunction($b, $a); // Noncompliant
+testFunction($a, $a); // Compliant
+
+testFunction($c, $d); // Compliant
+testFunction($a, $e); // Compliant
+testFunction($f, $b); // Compliant
+testFunction($a); // Compliant
+otherFunction($b, $a); // Compliant
 
 
 //-----------------
