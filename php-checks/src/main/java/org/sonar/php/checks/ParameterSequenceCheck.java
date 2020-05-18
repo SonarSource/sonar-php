@@ -19,14 +19,20 @@
  */
 package org.sonar.php.checks;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.*;
-import org.sonar.plugins.php.api.tree.expression.*;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import javax.annotation.CheckForNull;
@@ -63,21 +69,21 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
     return null;
   }
 
-  private boolean isVerifiableObjectMemberAccess(ExpressionTree tree) {
+  private static boolean isVerifiableObjectMemberAccess(ExpressionTree tree) {
     return tree.is(Tree.Kind.OBJECT_MEMBER_ACCESS)
       && ((MemberAccessTree) tree).member().is(Tree.Kind.NAME_IDENTIFIER)
       && ((MemberAccessTree) tree).object().is(Tree.Kind.VARIABLE_IDENTIFIER)
       && ((VariableIdentifierTree) ((MemberAccessTree) tree).object()).text().equals("$this");
   }
 
-  private boolean isVerifiableClassMemberAccess(ExpressionTree tree) {
+  private static boolean isVerifiableClassMemberAccess(ExpressionTree tree) {
     return tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)
       && ((MemberAccessTree) tree).member().is(Tree.Kind.NAME_IDENTIFIER)
       && ((MemberAccessTree) tree).object().is(Tree.Kind.NAMESPACE_NAME)
       && ((NamespaceNameTree) ((MemberAccessTree) tree).object()).fullName().equals("self");
   }
 
-  private boolean isVerifiableSymbol(Symbol symbol) {
+  private static boolean isVerifiableSymbol(Symbol symbol) {
     return symbol.is(Symbol.Kind.FUNCTION)
       && symbol.declaration() != null
       && symbol.declaration().is(Tree.Kind.NAME_IDENTIFIER);

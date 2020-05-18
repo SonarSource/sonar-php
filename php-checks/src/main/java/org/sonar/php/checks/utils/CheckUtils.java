@@ -126,10 +126,6 @@ public final class CheckUtils {
       return ((NamespaceNameTree) tree).qualifiedName();
     } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
       return ((NameIdentifierTree) tree).text();
-    } else if (tree.is(Kind.METHOD_DECLARATION)) {
-      return ((MethodDeclarationTree) tree).name().text();
-    } else if (tree.is(Kind.FUNCTION_DECLARATION)) {
-      return ((FunctionDeclarationTree) tree).name().text();
     } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)) {
       MemberAccessTree memberAccess = (MemberAccessTree) tree;
       String className = nameOf(memberAccess.object());
@@ -262,21 +258,5 @@ public final class CheckUtils {
       return value.trim().isEmpty();
     }
     return false;
-  }
-
-  @CheckForNull
-  public static Tree getParentOfKind(Tree tree, Kind kind) {
-    Tree parent = tree.getParent();
-
-    if (parent != null) {
-      if (parent.is(kind)) {
-        return parent;
-      }
-      if (parent.getParent() != null) {
-        return getParentOfKind(parent, kind);
-      }
-    }
-
-    return null;
   }
 }
