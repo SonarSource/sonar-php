@@ -41,6 +41,8 @@ import java.util.Map;
 
 @Rule(key = "S4143")
 public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
+  private static final String MESSAGE = "Verify this is the array key that was intended to be written to; a value has already been saved for it and not used.";
+  private static final String MESSAGE_SECONDARY = "Original assignment.";
 
   @Override
   public List<Tree.Kind> nodesToVisit() {
@@ -48,7 +50,7 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
   }
 
   private Map<String, Symbol> namesToSymbols = new HashMap<>();
-  private Map<String, Map<String, Tree>> writtenAndUnread = new HashMap<>();
+  private Map<String, Map<String, AssignmentExpressionTree>> writtenAndUnread = new HashMap<>();
 
   @Override
   public void visitNode(Tree tree) {
@@ -76,7 +78,7 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
 
       checkArrayKeyWrite(statementTree, assignmentExpressionTree, key, variableName, variableSymbol);
 
-      updateWrittenAndUnread(statementTree, key, variableName, variableSymbol);
+      updateWrittenAndUnread(assignmentExpressionTree, key, variableName, variableSymbol);
     }
 
     super.visitNode(tree);
@@ -90,12 +92,13 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
     if (writtenAndUnread.containsKey(variableName) &&
       writtenAndUnread.get(variableName).containsKey(key) &&
       !symbolWasUsedInTree(variableSymbol, assignmentExpressionTree.value())) {
-      context().newIssue(this, statementTree, "Verify this is the key that was intended; it was already set before");
+      AssignmentExpressionTree firstAssignmentTree = writtenAndUnread.get(variableName).get(key);
+      context().newIssue(this, statementTree, MESSAGE).secondary(firstAssignmentTree, MESSAGE_SECONDARY);
     }
   }
 
-  private void updateWrittenAndUnread(StatementTree statementTree, String key, String variableName, Symbol variableSymbol) {
-    Map<String, Tree> keysToAssignmentMap;
+  private void updateWrittenAndUnread(AssignmentExpressionTree statementTree, String key, String variableName, Symbol variableSymbol) {
+    Map<String, AssignmentExpressionTree> keysToAssignmentMap;
     if (writtenAndUnread.containsKey(variableName)) {
       keysToAssignmentMap = writtenAndUnread.get(variableName);
     } else {
@@ -107,8 +110,8 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
   }
 
   private void removeReadArrayKeys(StatementTree statementTree) {
-    Map<String, Map<String, Tree>> cleanedWrittenAndUnread = new HashMap<>();
-    for (Map.Entry<String, Map<String, Tree>> entry : writtenAndUnread.entrySet()) {
+    Map<String, Map<String, AssignmentExpressionTree>> cleanedWrittenAndUnread = new HashMap<>();
+    for (Map.Entry<String, Map<String, AssignmentExpressionTree>> entry : writtenAndUnread.entrySet()) {
       if (!symbolWasUsedInTree(namesToSymbols.get(entry.getKey()), statementTree)) {
         cleanedWrittenAndUnread.put(entry.getKey(), entry.getValue());
       }
