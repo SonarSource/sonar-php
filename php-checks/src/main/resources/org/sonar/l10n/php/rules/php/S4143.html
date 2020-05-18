@@ -1,10 +1,7 @@
 <p>It is highly suspicious when a value is saved for a key or index and then unconditionally overwritten. Such replacements are likely errors.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-letters.put("a", "Apple");
-letters.put("a", "Boy");  // Noncompliant
-
-towns[i] = "London";
-towns[i] = "Chicago";  // Noncompliant
+$someArray[1] = "someValue";
+$someArray[1] = "someOtherValue"; // The intention here was probably to write to another array key.
 </pre>
 
