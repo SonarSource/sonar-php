@@ -35,6 +35,9 @@ class TestClass {
       */
 
   } // Compliant
+
+  // Comment
+  public function method11() {} // Compliant
 }
 
 abstract class AbstractClass {
@@ -55,6 +58,10 @@ trait AnonymousClassInTrait {
     }
 }
 
+interface TestInterface {
+  public function interfaceMethod(); // Compliant
+}
+
 function function1() { } // Noncompliant {{Add a nested comment explaining why this function is empty, throw an Exception or complete the implementation.}}
 function function2() { echo 1; } // Compliant
 function function3() { throw new Exception(); } // Compliant
@@ -63,3 +70,12 @@ function function4() { /* TODO */ } // Compliant
 $function1 = function() { }; // Noncompliant {{Add a nested comment explaining why this function expression is empty, throw an Exception or complete the implementation.}}
 $function1 = function() { echo 1; }; // Compliant
 $function1 = function() { /* TODO */ }; // Compliant
+
+// Comment
+function function5() {} // Compliant
+
+# Comment
+function function6() {} // Compliant
+
+/* Comment */
+function function7() {} // Compliant

@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
 import java.util.regex.Pattern;
 
 @Rule(key = "S1186")
@@ -46,8 +46,8 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree))) {
-      commitIssue(tree, "method");
+    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree) || hasCommentAbove(tree.modifiers().get(0)))) {
+        commitIssue(tree, "method");
     }
 
     super.visitMethodDeclaration(tree);
@@ -55,7 +55,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    if (!hasValuableBody(tree.body())) {
+    if (!(hasValuableBody(tree.body()) || hasCommentAbove(tree.functionToken()))) {
       commitIssue(tree, "function expression");
     }
 
@@ -64,12 +64,25 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    if (!hasValuableBody(tree.body())) {
+    if (!(hasValuableBody(tree.body()) || hasCommentAbove(tree.functionToken()))) {
       commitIssue(tree, "function");
     }
 
     super.visitFunctionDeclaration(tree);
   }
+
+  private static boolean hasCommentAbove(SyntaxToken token) {
+    int beforeDeclarationLine = token.line() - 1;
+
+    for (SyntaxTrivia trivia : token.trivias()) {
+      if (beforeDeclarationLine == trivia.line() && VALUABLE_COMMENT_PATTERN.matcher(trivia.text()).find()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 
   private static boolean isClassAbstract(MethodDeclarationTree tree) {
     ClassDeclarationTree classTree = (ClassDeclarationTree) CheckUtils.getParentOfKind(tree, Kind.CLASS_DECLARATION);
