@@ -202,5 +202,4 @@ public class CheckUtilsTest {
   private Tree parse(String toParse) {
     return parser.parse(toParse);
   }
-
 }

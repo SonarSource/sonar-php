@@ -67,7 +67,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
     int beforeDeclarationLine = token.line() - 1;
 
     for (SyntaxTrivia trivia : token.trivias()) {
-      if (beforeDeclarationLine == trivia.line() && VALUABLE_COMMENT_PATTERN.matcher(trivia.text()).find()) {
+      if (beforeDeclarationLine == trivia.endLine() && VALUABLE_COMMENT_PATTERN.matcher(trivia.text()).find()) {
         return true;
       }
     }
