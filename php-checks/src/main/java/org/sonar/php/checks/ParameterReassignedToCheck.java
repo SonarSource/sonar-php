@@ -29,7 +29,12 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
-import org.sonar.plugins.php.api.tree.expression.*;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
