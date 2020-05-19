@@ -43,11 +43,9 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Introduce a new variable instead of reusing the parameter \"%s\".";
   private static final String MESSAGE_SECONDARY = "Initial value.";
 
-  private static final Tree.Kind[] ASSIGNMENT_LIKE_UNARY={
+  private static final Tree.Kind[] PREFIX_UNARY={
     Tree.Kind.PREFIX_DECREMENT,
-    Tree.Kind.PREFIX_INCREMENT,
-    Tree.Kind.POSTFIX_DECREMENT,
-    Tree.Kind.POSTFIX_INCREMENT
+    Tree.Kind.PREFIX_INCREMENT
   };
 
   private final Set<Symbol> variables = new HashSet<>();
@@ -100,9 +98,7 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
 
     if (variable.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       symbol = context().symbolTable().getSymbol(variable);
-      if (symbol != null) {
-        variables.add(symbol);
-      }
+      variables.add(symbol);
     }
 
     super.visitForEachStatement(tree);
@@ -121,7 +117,7 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
 
   @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {
-    if (tree.is(ASSIGNMENT_LIKE_UNARY)) {
+    if (tree.is(PREFIX_UNARY)) {
       visitWritingExpression(tree, tree.expression());
     }
 
@@ -130,9 +126,7 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
 
   @Override
   public void visitPostfixExpression(UnaryExpressionTree tree) {
-    if (tree.is(ASSIGNMENT_LIKE_UNARY)) {
-      visitWritingExpression(tree, tree.expression());
-    }
+    visitWritingExpression(tree, tree.expression());
 
     super.visitPostfixExpression(tree);
   }

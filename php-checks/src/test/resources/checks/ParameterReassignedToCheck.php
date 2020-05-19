@@ -10,13 +10,17 @@ function testFunction1($foo) {
   $foo++; // Noncompliant
   $a = $foo; // Compliant
   $a = $foo--; // Noncompliant
+  $a = @$foo; // Compliant
 }
-
 
 function testFunction2($foo) {
   if ($a < $b) {
     $foo = null; // Noncompliant
   }
+}
+
+function testFunction2() {
+$foo = null; // Compliant
 }
 
 //----------------------
