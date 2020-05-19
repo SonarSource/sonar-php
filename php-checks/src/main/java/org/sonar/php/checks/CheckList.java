@@ -171,6 +171,7 @@ public class CheckList {
       OverridingMethodSimplyCallParentCheck.class,
       OverwrittenArrayElementCheck.class,
       ParameterReassignedToCheck.class,
+      ParameterSequenceCheck.class,
       ParsingErrorCheck.class,
       PerlStyleCommentsUsageCheck.class,
       PermissionsControlCheck.class,
