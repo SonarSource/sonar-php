@@ -20,13 +20,9 @@
 package org.sonar.php.checks;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
 import org.sonar.check.Rule;
-import org.sonar.php.cfg.LiveVariablesAnalysis;
-import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -35,9 +31,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.*;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
-import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import sun.tools.tree.UnaryExpression;
 
 @Rule(key = "S1226")
 public class ParameterReassignedToCheck extends PHPVisitorCheck {
