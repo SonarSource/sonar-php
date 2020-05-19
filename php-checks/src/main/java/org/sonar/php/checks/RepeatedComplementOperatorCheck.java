@@ -43,11 +43,13 @@ public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
     Kind.LOGICAL_COMPLEMENT,
     Kind.UNARY_MINUS};
 
-  private static final HashMap<Kind, String> CAST_FUNCTION = new HashMap<>();
+  private static final Map<Kind, String> CAST_FUNCTION = castFunctions();
 
-  public RepeatedComplementOperatorCheck() {
-    CAST_FUNCTION.put(Kind.LOGICAL_COMPLEMENT, "(bool)");
-    CAST_FUNCTION.put(Kind.UNARY_MINUS, "(int)");
+  public static Map<Kind, String> castFunctions() {
+    Map<Kind, String> map = new HashMap();
+    map.put(Kind.LOGICAL_COMPLEMENT, "(bool)");
+    map.put(Kind.UNARY_MINUS, "(int)");
+    return map;
   }
 
 
