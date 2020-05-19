@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -45,7 +46,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     // only check method and function calls expect constructors with more than 1 argument
-    if (!tree.getParent().is(Tree.Kind.NEW_EXPRESSION) && tree.arguments().size() > 1) {
+    if (!tree.getParent().is(Kind.NEW_EXPRESSION) && tree.arguments().size() > 1) {
       Symbol symbol = getDeclarationSymbol(tree);
       if (symbol != null && symbol.declaration() != null) {
         checkParameterSequence(tree, (NameIdentifierTree) symbol.declaration());
@@ -59,7 +60,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   private Symbol getDeclarationSymbol(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
 
-    if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
+    if (callee.is(Kind.NAMESPACE_NAME)) {
       return context().symbolTable().getSymbol(((NamespaceNameTree) callee).name());
     } else if(isVerifiableObjectMemberAccess(callee)) {
       return context().symbolTable().getSymbol(((MemberAccessTree) callee).member());
@@ -71,19 +72,23 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   }
 
   private static boolean isVerifiableObjectMemberAccess(ExpressionTree tree) {
-    return tree.is(Tree.Kind.OBJECT_MEMBER_ACCESS)
-      && ((MemberAccessTree) tree).member().is(Tree.Kind.NAME_IDENTIFIER)
-      && ((MemberAccessTree) tree).object().is(Tree.Kind.VARIABLE_IDENTIFIER)
-      && ((VariableIdentifierTree) ((MemberAccessTree) tree).object()).text().equals("$this");
+    if (tree.is(Kind.OBJECT_MEMBER_ACCESS) && ((MemberAccessTree) tree).member().is(Kind.NAME_IDENTIFIER)) {
+      Tree object = ((MemberAccessTree) tree).object();
+
+      return object.is(Kind.VARIABLE_IDENTIFIER) && ((VariableIdentifierTree) object).text().equals("$this");
+    }
+
+    return false;
   }
 
   private static boolean isVerifiableClassMemberAccess(ExpressionTree tree) {
-    return tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)
-      && ((MemberAccessTree) tree).member().is(Tree.Kind.NAME_IDENTIFIER)
-      && ((((MemberAccessTree) tree).object().is(Tree.Kind.NAMESPACE_NAME)
-          && ((NamespaceNameTree) ((MemberAccessTree) tree).object()).fullName().equals("self"))
-        || (((MemberAccessTree) tree).object().is(Tree.Kind.NAME_IDENTIFIER)
-          && ((NameIdentifierTree) ((MemberAccessTree) tree).object()).text().equals("static")));
+    if (tree.is(Kind.CLASS_MEMBER_ACCESS) && ((MemberAccessTree) tree).member().is(Kind.NAME_IDENTIFIER)) {
+      Tree object = ((MemberAccessTree) tree).object();
+
+      return ((object.is(Kind.NAMESPACE_NAME) && ((NamespaceNameTree) object).fullName().equals("self"))
+        || (object.is(Kind.NAME_IDENTIFIER) && ((NameIdentifierTree) object).text().equals("static")));
+    }
+    return false;
   }
 
   private void checkParameterSequence(FunctionCallTree call, NameIdentifierTree identifier) {
@@ -92,7 +97,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
       .collect(Collectors.toList());
 
     List<String> arguments = call.arguments().stream()
-      .filter(e -> e.is(Tree.Kind.VARIABLE_IDENTIFIER))
+      .filter(e -> e.is(Kind.VARIABLE_IDENTIFIER))
       .map(e -> ((VariableIdentifierTree) e).text())
       .collect(Collectors.toList());
 
