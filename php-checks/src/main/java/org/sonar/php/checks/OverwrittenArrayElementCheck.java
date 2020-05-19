@@ -35,15 +35,27 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.visitors.PHPTreeSubscriber;
 
+import static java.util.Arrays.asList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Rule(key = "S4143")
 public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
   private static final String MESSAGE = "Verify this is the array key that was intended to be written to; a value has already been saved for it and not used.";
   private static final String MESSAGE_SECONDARY = "Original assignment.";
+  static final Set<String> PREDEFINED_GLOBAL_ARRAYS = new HashSet<>(asList("$GLOBALS",
+    "$_SERVER",
+    "$_REQUEST",
+    "$_POST",
+    "$_GET",
+    "$_FILES",
+    "$_ENV",
+    "$_COOKIE",
+    "$_SESSION"));
 
   @Override
   public List<Tree.Kind> nodesToVisit() {
@@ -110,6 +122,11 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
+  /**
+   * Verifies if a given statement is an array element assignment we want to handle.
+   * Currently, only array element assignments that have a depth of one, a literal key, and are not related to predefined
+   * global arrays get tracked.
+   */
   private static boolean isArrayKeyAssignmentStatement(StatementTree tree) {
     if (!tree.is(Tree.Kind.EXPRESSION_STATEMENT)) {
       return false;
@@ -121,8 +138,15 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
 
     AssignmentExpressionTree assignmentExpressionTree = (AssignmentExpressionTree) ((ExpressionStatementTree) tree).expression();
 
-    return assignmentExpressionTree.variable().is(Tree.Kind.ARRAY_ACCESS) &&
-      ((ArrayAccessTree) assignmentExpressionTree.variable()).object().is(Tree.Kind.VARIABLE_IDENTIFIER) &&
+    if (!assignmentExpressionTree.variable().is(Tree.Kind.ARRAY_ACCESS) ||
+      !((ArrayAccessTree) assignmentExpressionTree.variable()).object().is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      return false;
+    }
+
+    ArrayAccessTree arrayAccessTree = (ArrayAccessTree) assignmentExpressionTree.variable();
+    String arrayName = ((VariableIdentifierTree) arrayAccessTree.object()).text();
+
+    return !PREDEFINED_GLOBAL_ARRAYS.contains(arrayName) &&
       ((ArrayAccessTree) assignmentExpressionTree.variable()).offset() != null &&
       ((ArrayAccessTree) assignmentExpressionTree.variable()).offset().is(Tree.Kind.NUMERIC_LITERAL, Tree.Kind.REGULAR_STRING_LITERAL);
   }

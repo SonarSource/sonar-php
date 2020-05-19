@@ -61,6 +61,10 @@ foreach($results as $result) {
   $array[1] = $x->getValue(); // compliant
 }
 
+$GLOBALS["user"] = $adminUser;
+handleRequest();
+$GLOBALS["user"] = $defaultUser; // Compliant
+
 // Coverage
 $z = "foo";
 foo()[1] = "foo";
