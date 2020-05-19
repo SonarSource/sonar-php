@@ -25,15 +25,29 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import java.util.HashMap;
+
 @Rule(key = "S2761")
 public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Use the \"{!|~|-}\" operator just once or not at all. ";
+  private static final String MESSAGE = "Use the \"%s\" operator just once or not at all.";
+  private static final String ADDITIONAL_CAST_MESSAGE = " If a type cast is intended, use \"%s\" instead.";
 
   private static final Kind[] COMPLEMENT_UNARY = {
     Kind.BITWISE_COMPLEMENT,
     Kind.LOGICAL_COMPLEMENT,
     Kind.UNARY_MINUS};
+
+  private static final Kind[] CAST_UNARY = {
+    Kind.LOGICAL_COMPLEMENT,
+    Kind.UNARY_MINUS};
+
+  private static final HashMap<Kind, String> CAST_FUNCTION = new HashMap<>();
+
+  public RepeatedComplementOperatorCheck() {
+    CAST_FUNCTION.put(Kind.LOGICAL_COMPLEMENT, "(bool)");
+    CAST_FUNCTION.put(Kind.UNARY_MINUS, "(int)");
+  }
 
   @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {
@@ -46,7 +60,12 @@ public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
 
   private void checkRepeatedComplement(UnaryExpressionTree tree) {
     if (CheckUtils.skipParenthesis(tree.expression()).is(tree.getKind())) {
-      context().newIssue(this, tree, MESSAGE);
+      String message = String.format(MESSAGE, tree.operator().text());
+      if (tree.is(CAST_UNARY)) {
+        message += String.format(ADDITIONAL_CAST_MESSAGE, CAST_FUNCTION.get(tree.getKind()));
+      }
+
+      context().newIssue(this, tree, message);
     }
   }
 }
