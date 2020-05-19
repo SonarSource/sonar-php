@@ -33,6 +33,7 @@ public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Use the \"%s\" operator just once or not at all.";
   private static final String ADDITIONAL_CAST_MESSAGE = " If a type cast is intended, use \"%s\" instead.";
 
+
   private static final Kind[] COMPLEMENT_UNARY = {
     Kind.BITWISE_COMPLEMENT,
     Kind.LOGICAL_COMPLEMENT,
@@ -48,6 +49,7 @@ public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
     CAST_FUNCTION.put(Kind.LOGICAL_COMPLEMENT, "(bool)");
     CAST_FUNCTION.put(Kind.UNARY_MINUS, "(int)");
   }
+
 
   @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {
