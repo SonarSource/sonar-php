@@ -77,3 +77,8 @@ function function6() {} // Compliant
 
 /* Comment */
 function function7() {} // Compliant
+
+/**
+ * Comment
+ */
+function function8() {} // Compliant
