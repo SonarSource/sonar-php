@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -35,27 +36,15 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.visitors.PHPTreeSubscriber;
 
-import static java.util.Arrays.asList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Rule(key = "S4143")
 public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
   private static final String MESSAGE = "Verify this is the array key that was intended to be written to; a value has already been saved for it and not used.";
   private static final String MESSAGE_SECONDARY = "Original assignment.";
-  static final Set<String> PREDEFINED_GLOBAL_ARRAYS = new HashSet<>(asList("$GLOBALS",
-    "$_SERVER",
-    "$_REQUEST",
-    "$_POST",
-    "$_GET",
-    "$_FILES",
-    "$_ENV",
-    "$_COOKIE",
-    "$_SESSION"));
 
   @Override
   public List<Tree.Kind> nodesToVisit() {
@@ -146,7 +135,7 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
     ArrayAccessTree arrayAccessTree = (ArrayAccessTree) assignmentExpressionTree.variable();
     String arrayName = ((VariableIdentifierTree) arrayAccessTree.object()).text();
 
-    return !PREDEFINED_GLOBAL_ARRAYS.contains(arrayName) &&
+    return !CheckUtils.SUPERGLOBALS.contains(arrayName) &&
       ((ArrayAccessTree) assignmentExpressionTree.variable()).offset() != null &&
       ((ArrayAccessTree) assignmentExpressionTree.variable()).offset().is(Tree.Kind.NUMERIC_LITERAL, Tree.Kind.REGULAR_STRING_LITERAL);
   }
@@ -179,12 +168,13 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
       return ImmutableList.of(Tree.Kind.VARIABLE_IDENTIFIER,
         Tree.Kind.CONTINUE_STATEMENT,
         Tree.Kind.RETURN_STATEMENT,
-        Tree.Kind.BREAK_STATEMENT);
+        Tree.Kind.BREAK_STATEMENT,
+        Tree.Kind.THROW_STATEMENT);
     }
 
     @Override
     public void visitNode(Tree tree) {
-      if (tree.is(Tree.Kind.CONTINUE_STATEMENT, Tree.Kind.RETURN_STATEMENT, Tree.Kind.BREAK_STATEMENT)) {
+      if (tree.is(Tree.Kind.CONTINUE_STATEMENT, Tree.Kind.RETURN_STATEMENT, Tree.Kind.BREAK_STATEMENT, Tree.Kind.THROW_STATEMENT)) {
         foundFlowBreakingStatement = true;
         return;
       }
