@@ -1,0 +1,16 @@
+{
+  "title": "Function and method parameters' initial values should not be ignored",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    
+  ],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-1226",
+  "sqKey": "S1226",
+  "scope": "All"
+}

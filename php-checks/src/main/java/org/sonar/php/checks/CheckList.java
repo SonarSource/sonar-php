@@ -170,6 +170,7 @@ public class CheckList {
       OpeningPHPTagCheck.class,
       OverridingMethodSimplyCallParentCheck.class,
       OverwrittenArrayElementCheck.class,
+      ParameterReassignedToCheck.class,
       ParsingErrorCheck.class,
       PerlStyleCommentsUsageCheck.class,
       PermissionsControlCheck.class,
