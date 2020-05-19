@@ -130,13 +130,20 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
   private boolean symbolWasUsedInTree(Symbol symbol, Tree tree) {
     SymbolUsageVisitor checkVisitor = new SymbolUsageVisitor(symbol, context().symbolTable());
     checkVisitor.scanTree(tree);
-    return checkVisitor.foundUsage;
+    return checkVisitor.foundUsage || checkVisitor.foundFlowBreakingStatement;
   }
 
+  /**
+   * Given a symbol, the purpose of this visitor is to decide on whether we consider it to have been used in the visited
+   * tree. If a usage was found we remove it in the writtenAndUnread map in removeReadArrayKeys().
+   *
+   * To avoid false positives, we also consider that a symbol was used if we encounter a flow breaking statement.
+   */
   private static class SymbolUsageVisitor extends PHPTreeSubscriber {
     private final Symbol symbol;
     private final SymbolTable symbolTable;
-    private boolean foundUsage;
+    private boolean foundUsage = false;
+    private boolean foundFlowBreakingStatement = false;
 
     public SymbolUsageVisitor(Symbol symbol, SymbolTable symbolTable) {
       this.symbol = symbol;
@@ -145,11 +152,21 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
 
     @Override
     public List<Tree.Kind> nodesToVisit() {
-      return ImmutableList.of(Tree.Kind.VARIABLE_IDENTIFIER);
+      return ImmutableList.of(Tree.Kind.VARIABLE_IDENTIFIER,
+        Tree.Kind.CONTINUE_STATEMENT,
+        Tree.Kind.RETURN_STATEMENT,
+        Tree.Kind.BREAK_STATEMENT);
     }
 
     @Override
     public void visitNode(Tree tree) {
+      if (tree.is(Tree.Kind.CONTINUE_STATEMENT, Tree.Kind.RETURN_STATEMENT, Tree.Kind.BREAK_STATEMENT)) {
+        foundFlowBreakingStatement = true;
+        return;
+      }
+
+      // We have a VARIABLE_IDENTIFIER
+
       Symbol currentSymbol = symbolTable.getSymbol(tree);
 
       if (!foundUsage) {

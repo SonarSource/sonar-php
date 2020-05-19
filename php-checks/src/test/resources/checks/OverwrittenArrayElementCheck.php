@@ -53,6 +53,14 @@ $bla = function($j) {
 $h[1][2] = "foo";
 $h[1][2] = "bar"; // Compliant - FN only 1-dimensional array writes are currently supported
 
+foreach($results as $result) {
+  $array[1] = "foo";
+  if ($someCondition) {
+    continue;
+  }
+  $array[1] = $x->getValue(); // compliant
+}
+
 // Coverage
 $z = "foo";
 foo()[1] = "foo";
