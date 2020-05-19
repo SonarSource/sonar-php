@@ -24,6 +24,8 @@ class BeforeClass {
 }
 
 class TestClass {
+  public function __construct($a, $b) { }
+
   public static function testMethod($a, $b = null) { }
 
   public function otherTestMethod() {
@@ -32,6 +34,9 @@ class TestClass {
 
     self::testMethod($a, $b); // Compliant
     self::testMethod($b, $a); // Noncompliant
+
+    static::testMethod($a, $b); // Compliant
+    static::testMethod($b, $a); // Noncompliant
 
     $a->testMethod($b, $a); // Compliant
   }
@@ -58,9 +63,14 @@ class ChildClass2 extends TestClass {
 }
 
 //-----------------
+// Object Creation
+//-----------------
+$testClass = new TestClass($a, $b); // Compliant
+$testClass = new TestClass($b, $a); // False Negative
+
+//-----------------
 // Dynamic Method Calls
 //-----------------
-$testClass = new TestClass();
 $testClass->testMethod($a, $b); // Compliant
 $testClass->testMethod($f, $b); // Compliant
 $testClass->testMethod($b, $a); // False Negative
@@ -78,9 +88,10 @@ OtherClass::testMethod($b, $a); // Compliant
 // Code Coverage
 // -----------------
 function functionWithoutParameters() {}
-functionWithoutParameters();
+functionWithoutParameters($a);
+functionWithoutParameters($a, $b);
 $foo();
-$foo::$bar($a);
+$foo::$bar($a, $b);
 
 class CoverageClass {
   public function testMethod($a) {}

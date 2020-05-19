@@ -44,7 +44,8 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (!tree.arguments().isEmpty()) {
+    // only check method and function calls expect constructors with more than 1 argument
+    if (!tree.getParent().is(Tree.Kind.NEW_EXPRESSION) && tree.arguments().size() > 1) {
       Symbol symbol = getDeclarationSymbol(tree);
       if (symbol != null && symbol.declaration() != null) {
         checkParameterSequence(tree, (NameIdentifierTree) symbol.declaration());
@@ -79,7 +80,10 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   private static boolean isVerifiableClassMemberAccess(ExpressionTree tree) {
     return tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)
       && ((MemberAccessTree) tree).member().is(Tree.Kind.NAME_IDENTIFIER)
-      && ((NamespaceNameTree) ((MemberAccessTree) tree).object()).fullName().equals("self");
+      && ((((MemberAccessTree) tree).object().is(Tree.Kind.NAMESPACE_NAME)
+          && ((NamespaceNameTree) ((MemberAccessTree) tree).object()).fullName().equals("self"))
+        || (((MemberAccessTree) tree).object().is(Tree.Kind.NAME_IDENTIFIER)
+          && ((NameIdentifierTree) ((MemberAccessTree) tree).object()).text().equals("static")));
   }
 
   private void checkParameterSequence(FunctionCallTree call, NameIdentifierTree identifier) {
