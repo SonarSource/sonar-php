@@ -26,6 +26,7 @@ import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Rule(key = "S2761")
 public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
