@@ -41,7 +41,8 @@ import javax.annotation.CheckForNull;
 @Rule(key = "S2234")
 public class ParameterSequenceCheck extends PHPVisitorCheck {
 
-  public static final String MESSAGE = "Parameters to \"%s\" have the same names but not the same order as the method arguments.";
+  private static final String MESSAGE = "Parameters to \"%s\" have the same names but not the same order as the method arguments.";
+  private static final String SECONDARY_MESSAGE = "Implementation of the parameters sequence.";
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -102,7 +103,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
       .collect(Collectors.toList());
 
     if (arguments.size() == parameters.size() && !arguments.equals(parameters) && new HashSet<>(parameters).equals(new HashSet<>(arguments))) {
-      context().newIssue(this, call, String.format(MESSAGE, identifier.text()));
+      context().newIssue(this, call, String.format(MESSAGE, identifier.text())).secondary(identifier, SECONDARY_MESSAGE);
     }
   }
 }
