@@ -86,12 +86,12 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
   }
 
   private void clearFixFunctionTree(FunctionTree tree, Set<Symbol> live) {
-//    for (ParameterTree parameterTree : tree.parameters().parameters()) {
-//      Symbol symbol = context().symbolTable().getSymbol(parameterTree.variableIdentifier());
-//      if (!live.contains(symbol)) {
-//        variables.remove(symbol);
-//      }
-//    }
+    for (ParameterTree parameterTree : tree.parameters().parameters()) {
+      Symbol symbol = context().symbolTable().getSymbol(parameterTree.variableIdentifier());
+      if (!live.contains(symbol)) {
+        investigatedParameters.remove(symbol);
+      }
+    }
   }
 
   @Override
