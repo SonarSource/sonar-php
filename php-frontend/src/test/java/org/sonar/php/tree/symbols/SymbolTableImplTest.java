@@ -73,15 +73,15 @@ public class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   public void symbols_filtering() {
-    assertThat(SYMBOL_MODEL.getSymbols()).hasSize(18);
+    assertThat(SYMBOL_MODEL.getSymbols()).hasSize(20);
 
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FUNCTION)).hasSize(2);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.CLASS)).hasSize(1);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FIELD)).hasSize(3);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.PARAMETER)).hasSize(1);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.VARIABLE)).hasSize(11);
+    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.VARIABLE)).hasSize(13);
 
-    assertThat(SYMBOL_MODEL.getSymbols("$a")).hasSize(2);
+    assertThat(SYMBOL_MODEL.getSymbols("$a")).hasSize(3);
     // Case sensitive for variables
     assertThat(SYMBOL_MODEL.getSymbols("$A")).hasSize(0);
 
