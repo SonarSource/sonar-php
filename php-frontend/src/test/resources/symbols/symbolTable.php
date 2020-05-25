@@ -24,3 +24,6 @@ class A {                                     // A
   }
 }
 
+$x = function () use($a) {
+  echo $a;
+};

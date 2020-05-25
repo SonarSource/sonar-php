@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
@@ -466,6 +467,14 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbol("n\\a")).isNotNull();
     assertThat(symbolTable.getSymbol("n\\trait1")).isNotNull();
     assertThat(symbolTable.getSymbol("n\\trait2")).isNotNull();
+  }
+
+  @Test
+  public void lexical_vars_tree_symbol_association() {
+    FunctionExpressionTree functionExpression = (FunctionExpressionTree) ((AssignmentExpressionTree)((ExpressionStatementTree) cut.script().statements().get(7)).expression()).value();
+    Symbol symbol = SYMBOL_MODEL.getSymbol(functionExpression.lexicalVars().variables().get(0));
+    assertThat(symbol).isNotNull();
+    assertThat(((PHPTree)symbol.declaration()).getLine()).isEqualTo(3);
   }
 
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
