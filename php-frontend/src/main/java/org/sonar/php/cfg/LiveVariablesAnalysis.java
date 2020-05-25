@@ -325,7 +325,7 @@ public class LiveVariablesAnalysis {
     }
 
     private static boolean isLocalVariable(@Nullable Symbol symbol) {
-      return symbol != null && symbol.kind() == Symbol.Kind.VARIABLE;
+      return symbol != null && (symbol.is(Symbol.Kind.VARIABLE) || symbol.is(Symbol.Kind.PARAMETER));
     }
   }
 }

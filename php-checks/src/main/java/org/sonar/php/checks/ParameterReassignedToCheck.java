@@ -23,6 +23,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sonar.check.Rule;
+import org.sonar.php.cfg.LiveVariablesAnalysis;
+import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -32,111 +34,146 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S1226")
 public class ParameterReassignedToCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Introduce a new variable instead of reusing the parameter \"%s\".";
-  private static final String MESSAGE_SECONDARY = "Initial value.";
-
-  private static final Tree.Kind[] PREFIX_UNARY={
-    Tree.Kind.PREFIX_DECREMENT,
-    Tree.Kind.PREFIX_INCREMENT
-  };
+  private static final String SECONDARY_MESSAGE = "Initial value.";
 
   private final Set<Symbol> variables = new HashSet<>();
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    Set<Symbol> symbols = visitFunctionLikeDeclaration(tree);
-
+    Set<Symbol> live = visitFunctionTree(tree);
     super.visitFunctionDeclaration(tree);
-
-    symbols.forEach(variables::remove);
+    clearFixFunctionTree(tree, live);
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    Set<Symbol> symbols = visitFunctionLikeDeclaration(tree);
-
+    Set<Symbol> live = visitFunctionTree(tree);
     super.visitMethodDeclaration(tree);
-
-    symbols.forEach(variables::remove);
+    clearFixFunctionTree(tree, live);
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    Set<Symbol> symbols = visitFunctionLikeDeclaration(tree);
-
+    Set<Symbol> live = visitFunctionTree(tree);
     super.visitFunctionExpression(tree);
-
-    symbols.forEach(variables::remove);
+    clearFixFunctionTree(tree, live);
   }
 
-  private Set<Symbol> visitFunctionLikeDeclaration(FunctionTree tree) {
-    Set<Symbol> symbols = new HashSet<>();
-
-    for (ParameterTree parameter : tree.parameters().parameters()) {
-      Symbol symbol = context().symbolTable().getSymbol(parameter.variableIdentifier());
-      if (symbol != null) {
-        symbols.add(symbol);
-        variables.add(symbol);
-      }
+  private Set<Symbol> visitFunctionTree(FunctionTree tree) {
+    ControlFlowGraph cfg = ControlFlowGraph.build(tree, context());
+    if (cfg == null) {
+      return new HashSet<>();
     }
 
-    return symbols;
+    LiveVariablesAnalysis analysis = LiveVariablesAnalysis.analyze(cfg, context().symbolTable());
+    Set<Symbol> live = analysis.getLiveVariables(cfg.start()).getIn();
+    for (ParameterTree parameterTree : tree.parameters().parameters()) {
+      if (parameterTree.referenceToken() == null) {
+        Symbol symbol = context().symbolTable().getSymbol(parameterTree.variableIdentifier());
+        if (!live.contains(symbol)) {
+          variables.add(symbol);
+        }
+      }
+    }
+    return live;
+  }
+
+  private void clearFixFunctionTree(FunctionTree tree, Set<Symbol> live) {
+    for (ParameterTree parameterTree : tree.parameters().parameters()) {
+      Symbol symbol = context().symbolTable().getSymbol(parameterTree.variableIdentifier());
+      if (!live.contains(symbol)) {
+        variables.remove(symbol);
+      }
+    }
   }
 
   @Override
   public void visitForEachStatement(ForEachStatementTree tree) {
-    ExpressionTree variable = tree.value();
-    Symbol symbol = null;
+    ControlFlowGraph cfg = ControlFlowGraph.build(tree, context());
+    if (cfg == null) {
+      return;
+    }
 
-    if (variable.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      symbol = context().symbolTable().getSymbol(variable);
+    Symbol symbol = context().symbolTable().getSymbol(tree.value());
+    LiveVariablesAnalysis analysis = LiveVariablesAnalysis.analyze(cfg, context().symbolTable());
+
+    Set<Symbol> live = analysis.getLiveVariables(cfg.start()).getIn();
+    boolean liveVar = live.contains(symbol);
+
+    if (!liveVar) {
       variables.add(symbol);
     }
 
     super.visitForEachStatement(tree);
 
-    if (symbol != null) {
+    if (!liveVar) {
+      variables.remove(symbol);
+    }
+  }
+
+  @Override
+  public void visitCatchBlock(CatchBlockTree tree) {
+    ControlFlowGraph cfg = ControlFlowGraph.build(tree, context());
+    if (cfg == null) {
+      return;
+    }
+
+    Symbol symbol = context().symbolTable().getSymbol(tree.variable());
+    LiveVariablesAnalysis analysis = LiveVariablesAnalysis.analyze(cfg, context().symbolTable());
+
+    Set<Symbol> live = analysis.getLiveVariables(cfg.start()).getIn();
+    boolean liveVar = live.contains(symbol);
+
+    if (!liveVar) {
+      variables.add(symbol);
+    }
+
+    super.visitCatchBlock(tree);
+
+    if (!liveVar) {
       variables.remove(symbol);
     }
   }
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-    visitWritingExpression(tree, tree.variable());
+    visitOverridingExpression(tree, tree.variable());
 
     super.visitAssignmentExpression(tree);
   }
 
   @Override
+  public void visitPostfixExpression(UnaryExpressionTree tree) {
+    visitOverridingExpression(tree, tree.expression());
+
+    super.visitPostfixExpression(tree);
+  }
+
+  @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {
-    if (tree.is(PREFIX_UNARY)) {
-      visitWritingExpression(tree, tree.expression());
+    if (tree.is(Tree.Kind.PREFIX_INCREMENT) || tree.is(Tree.Kind.PREFIX_DECREMENT)) {
+      visitOverridingExpression(tree, tree.expression());
     }
 
     super.visitPrefixExpression(tree);
   }
 
-  @Override
-  public void visitPostfixExpression(UnaryExpressionTree tree) {
-    visitWritingExpression(tree, tree.expression());
-
-    super.visitPostfixExpression(tree);
-  }
-
-  private void visitWritingExpression(ExpressionTree tree, ExpressionTree expression) {
+  private void visitOverridingExpression(Tree tree, ExpressionTree expression) {
     if (expression.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      IdentifierTree identifier = (VariableIdentifierTree) expression;
+      VariableIdentifierTree identifier = (VariableIdentifierTree) expression;
       Symbol reference = context().symbolTable().getSymbol(identifier);
-      if (reference != null && variables.contains(reference)) {
-        context().newIssue(this, tree, String.format(MESSAGE, identifier.text())).secondary(reference.declaration(), MESSAGE_SECONDARY);
+      if (reference != null && (reference.is(Symbol.Kind.PARAMETER) || reference.is(Symbol.Kind.VARIABLE)) && variables.contains(reference)) {
+        context().newIssue(this, tree, String.format(MESSAGE, reference.toString())).secondary(reference.declaration(), SECONDARY_MESSAGE);
+        variables.remove(reference);
       }
     }
   }
