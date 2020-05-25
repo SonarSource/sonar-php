@@ -22,10 +22,10 @@ package org.sonar.php.checks;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class ParameterReassignedToCheckTest {
+public class ReassignedBeforeUsedCheckTest {
 
   @Test
   public void test() throws Exception {
-    CheckVerifier.verify(new ParameterReassignedToCheck(), "ParameterReassignedToCheck.php");
+    CheckVerifier.verify(new ReassignedBeforeUsedCheck(), "ReassignedBeforeUsedCheck.php");
   }
 }

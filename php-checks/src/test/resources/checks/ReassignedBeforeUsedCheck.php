@@ -5,7 +5,7 @@
 //----------------------
 
 function foo($d) {
-  $d = 42; // Noncompliant
+  $d = 42; // Noncompliant {{Introduce a new variable instead of reusing the parameter "$d".}}
   bar($d);
 }
 
@@ -163,3 +163,8 @@ catch (Exception $e) {
 //      Coverage
 //----------------------
 $globals = $engine->getGlobals();
+
+function foo($p) {
+  break;
+  $p = 42;
+}

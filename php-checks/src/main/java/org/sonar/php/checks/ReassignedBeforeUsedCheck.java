@@ -39,7 +39,7 @@ import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S1226")
-public class ParameterReassignedToCheck extends PHPVisitorCheck {
+public class ReassignedBeforeUsedCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Introduce a new variable instead of reusing the parameter \"%s\".";
   private static final String SECONDARY_MESSAGE = "Initial value.";
 
@@ -47,29 +47,26 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    Set<Symbol> live = visitFunctionTree(tree);
+    visitFunctionTree(tree);
     super.visitFunctionDeclaration(tree);
-    clearFixFunctionTree(tree, live);
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    Set<Symbol> live = visitFunctionTree(tree);
+    visitFunctionTree(tree);
     super.visitMethodDeclaration(tree);
-    clearFixFunctionTree(tree, live);
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    Set<Symbol> live = visitFunctionTree(tree);
+    visitFunctionTree(tree);
     super.visitFunctionExpression(tree);
-    clearFixFunctionTree(tree, live);
   }
 
-  private Set<Symbol> visitFunctionTree(FunctionTree tree) {
+  private void visitFunctionTree(FunctionTree tree) {
     ControlFlowGraph cfg = ControlFlowGraph.build(tree, context());
     if (cfg == null) {
-      return new HashSet<>();
+      return;
     }
 
     LiveVariablesAnalysis analysis = LiveVariablesAnalysis.analyze(cfg, context().symbolTable());
@@ -80,16 +77,6 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
         if (!live.contains(symbol)) {
           investigatedParameters.add(symbol);
         }
-      }
-    }
-    return live;
-  }
-
-  private void clearFixFunctionTree(FunctionTree tree, Set<Symbol> live) {
-    for (ParameterTree parameterTree : tree.parameters().parameters()) {
-      Symbol symbol = context().symbolTable().getSymbol(parameterTree.variableIdentifier());
-      if (!live.contains(symbol)) {
-        investigatedParameters.remove(symbol);
       }
     }
   }
