@@ -101,7 +101,7 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
       Map<Symbol, VariableUsage> usagesInElement = blockLiveVariables.getVariableUsages(element);
       for (Map.Entry<Symbol, VariableUsage> symbolWithUsage : usagesInElement.entrySet()) {
         Symbol symbol = symbolWithUsage.getKey();
-        if (!readSymbols.contains(symbol) || symbol.is(Symbol.Kind.PARAMETER)) {
+        if (outOfScope(readSymbols, symbol)) {
           // will be reported by S1481
           continue;
         }
@@ -117,6 +117,11 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
       }
     }
   }
+
+  private static boolean outOfScope(Set<Symbol> readSymbols, Symbol symbol) {
+    return !readSymbols.contains(symbol) || symbol.is(Symbol.Kind.PARAMETER);
+  }
+
   private static boolean shouldSkip(Tree element, Symbol symbol) {
     return symbol.hasModifier("static") || symbol.hasModifier("global") || isInitializedToBasicValue(element) || isReferenceValue(symbol);
   }

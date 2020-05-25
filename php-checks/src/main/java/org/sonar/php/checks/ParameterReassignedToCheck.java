@@ -32,9 +32,7 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
@@ -146,35 +144,15 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-    visitOverridingExpression(tree, tree.variable());
-
-    super.visitAssignmentExpression(tree);
-  }
-
-  @Override
-  public void visitPostfixExpression(UnaryExpressionTree tree) {
-    visitOverridingExpression(tree, tree.expression());
-
-    super.visitPostfixExpression(tree);
-  }
-
-  @Override
-  public void visitPrefixExpression(UnaryExpressionTree tree) {
-    if (tree.is(Tree.Kind.PREFIX_INCREMENT) || tree.is(Tree.Kind.PREFIX_DECREMENT)) {
-      visitOverridingExpression(tree, tree.expression());
-    }
-
-    super.visitPrefixExpression(tree);
-  }
-
-  private void visitOverridingExpression(Tree tree, ExpressionTree expression) {
-    if (expression.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      VariableIdentifierTree identifier = (VariableIdentifierTree) expression;
+    if (tree.variable().is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      VariableIdentifierTree identifier = (VariableIdentifierTree) tree.variable();
       Symbol reference = context().symbolTable().getSymbol(identifier);
       if (reference != null && (reference.is(Symbol.Kind.PARAMETER) || reference.is(Symbol.Kind.VARIABLE)) && variables.contains(reference)) {
         context().newIssue(this, tree, String.format(MESSAGE, reference.toString())).secondary(reference.declaration(), SECONDARY_MESSAGE);
         variables.remove(reference);
       }
     }
+
+    super.visitAssignmentExpression(tree);
   }
 }

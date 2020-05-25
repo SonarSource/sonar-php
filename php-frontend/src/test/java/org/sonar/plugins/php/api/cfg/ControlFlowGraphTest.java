@@ -39,11 +39,7 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.statement.BlockTree;
-import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
-import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
-import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.*;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
@@ -1543,6 +1539,30 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     cfg = cfgForBlock("for (;;) {}");
     assertThat(cfg.start().toString()).isEqualTo("empty");
+  }
+
+  @Test
+  public void test_cfg_build_for_catch_block_only() {
+    CatchBlockTree block = parse("" +
+      "catch (Exception $e) {" +
+      " echo $e->message();" +
+      "}", PHPLexicalGrammar.CATCH_BLOCK
+    );
+
+    ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
+    assertThat(cfg != null);
+  }
+
+  @Test
+  public void test_cfg_build_for_foreach_block_only() {
+    ForEachStatementTree block = parse("" +
+      "foreach ($array as $item) {" +
+      " echo $item;" +
+      "}", PHPLexicalGrammar.FOREACH_STATEMENT
+    );
+
+    ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
+    assertThat(cfg != null);
   }
 
   private void verifyBlockCfg(String functionBody) {

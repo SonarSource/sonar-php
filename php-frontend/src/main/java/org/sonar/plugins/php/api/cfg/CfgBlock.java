@@ -23,16 +23,7 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-import org.sonar.php.tree.impl.expression.PrefixedCastExpressionTreeImpl;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.*;
-import org.sonar.plugins.php.api.tree.expression.*;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
-import org.sonar.plugins.php.api.tree.statement.*;
-import org.sonar.sslr.grammar.GrammarRuleKey;
 
 /**
  * A node of a {@link ControlFlowGraph}.
