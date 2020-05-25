@@ -1,16 +1,15 @@
-<p>Using <code>Collection.size()</code> to test for emptiness works, but using <code>Collection.isEmpty()</code> makes the code more readable and can
-be more performant. The time complexity of any <code>isEmpty()</code> method implementation should be <code>O(1)</code> whereas some implementations
-of <code>size()</code> can be <code>O(n)</code>.</p>
+<p>Using "count()" to test for emptiness works, but using "empty()" makes the code more readable and can be more performant</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-if (myCollection.size() == 0) {  // Noncompliant
-  /* ... */
-}
+if (count($a) &gt; 0) { // Noncompliant
+ echo $a[0];
+}{code}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-if (myCollection.isEmpty()) {
-  /* ... */
+if (!empty($a)) {
+  echo $a[0];
 }
 </pre>
+<p>&nbsp;</p>
 
