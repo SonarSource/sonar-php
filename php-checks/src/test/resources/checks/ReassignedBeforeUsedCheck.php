@@ -168,3 +168,9 @@ function foo($p) {
   break;
   $p = 42;
 }
+
+try {}
+catch(Exception $e) {
+  break;
+  $p = 42;
+}
