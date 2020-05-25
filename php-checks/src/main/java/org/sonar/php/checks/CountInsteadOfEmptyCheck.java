@@ -55,7 +55,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(tree.arguments().get(0))) {
-      context().newIssue(this, tree, "Use empty() to check whether the array is empty or not.");
+      context().newIssue(this, tree.getParent(), "Use empty() to check whether the array is empty or not.");
     }
     super.visitFunctionCall(tree);
   }
