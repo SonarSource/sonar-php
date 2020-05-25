@@ -1550,7 +1550,8 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     );
 
     ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
-    assertThat(cfg != null);
+    assertThat(cfg).isNotNull();
+    assertThat(cfg.start().toString()).isEqualTo("echo $e->message();");
   }
 
   @Test
@@ -1562,7 +1563,8 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     );
 
     ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
-    assertThat(cfg != null);
+    assertThat(cfg).isNotNull();
+    assertThat(cfg.start().toString()).isEqualTo("echo $item;");
   }
 
   private void verifyBlockCfg(String functionBody) {
