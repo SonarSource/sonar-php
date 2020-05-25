@@ -17,33 +17,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.cfg;
+package org.sonar.php.checks;
 
-import java.util.List;
-import java.util.Set;
-import javax.annotation.Nullable;
+import org.junit.Test;
+import org.sonar.plugins.php.CheckVerifier;
 
-import org.sonar.plugins.php.api.tree.Tree;
+public class ReassignedBeforeUsedCheckTest {
 
-/**
- * A node of a {@link ControlFlowGraph}.
- * Successors are the nodes which may be executed after this one.
- * Predecessors are the nodes which may be executed before this one.
- * Elements are instances of {@link Tree} which are evaluated one after the other.
- */
-public interface CfgBlock {
-
-  Set<CfgBlock> predecessors();
-
-  Set<CfgBlock> successors();
-
-  /**
-   * @return block following this one if no jump is applied
-   * Returns {@code null} if this block doesn't end with jump statement (break, continue, return, goto, throw)
-   */
-  @Nullable
-  CfgBlock syntacticSuccessor();
-
-  List<Tree> elements();
-
+  @Test
+  public void test() throws Exception {
+    CheckVerifier.verify(new ReassignedBeforeUsedCheck(), "ReassignedBeforeUsedCheck.php");
+  }
 }

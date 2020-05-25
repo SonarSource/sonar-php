@@ -197,7 +197,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   @Test
   public void test_with_ignored_param() {
     verifyLiveVariableAnalysis("$a", "" +
-      "condition( succ = [insideIf], liveIn = [foo, bar], liveOut = [x], gen = [foo, bar], kill = [x,y,z,w]);" +
+      "condition( succ = [insideIf], liveIn = [foo, bar], liveOut = [x,a], gen = [foo, bar], kill = [x,y,z,w,a]);" +
       "$a = 42;" +
       "foo($a);" +
       "list(, , $x, $y) = array();" +
@@ -205,7 +205,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
       "list($z => $w ) = array('a' => 32);" +
       "foo($foo, $bar, $x);" +
       "if ($y) {" +
-      "  insideIf (succ = [END], liveIn = [x], liveOut = [], gen = [x]);" +
+      "  insideIf (succ = [END], liveIn = [x,a], liveOut = [], gen = [x,a]);" +
       "  foo($a, $x);" +
       "}");
   }
