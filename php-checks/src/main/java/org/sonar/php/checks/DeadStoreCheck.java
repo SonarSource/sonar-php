@@ -102,7 +102,7 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
       for (Map.Entry<Symbol, VariableUsage> symbolWithUsage : usagesInElement.entrySet()) {
         Symbol symbol = symbolWithUsage.getKey();
         if (outOfScope(readSymbols, symbol)) {
-          // will be reported by S1481
+          // These cases are verified by other checks
           continue;
         }
         VariableUsage usage = symbolWithUsage.getValue();

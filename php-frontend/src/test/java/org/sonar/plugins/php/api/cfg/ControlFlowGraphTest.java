@@ -39,7 +39,13 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.statement.*;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
+import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 

@@ -43,7 +43,7 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Introduce a new variable instead of reusing the parameter \"%s\".";
   private static final String SECONDARY_MESSAGE = "Initial value.";
 
-  private final Set<Symbol> variables = new HashSet<>();
+  private final Set<Symbol> investigatedParameters = new HashSet<>();
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
@@ -78,7 +78,7 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
       if (parameterTree.referenceToken() == null) {
         Symbol symbol = context().symbolTable().getSymbol(parameterTree.variableIdentifier());
         if (!live.contains(symbol)) {
-          variables.add(symbol);
+          investigatedParameters.add(symbol);
         }
       }
     }
@@ -86,12 +86,12 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
   }
 
   private void clearFixFunctionTree(FunctionTree tree, Set<Symbol> live) {
-    for (ParameterTree parameterTree : tree.parameters().parameters()) {
-      Symbol symbol = context().symbolTable().getSymbol(parameterTree.variableIdentifier());
-      if (!live.contains(symbol)) {
-        variables.remove(symbol);
-      }
-    }
+//    for (ParameterTree parameterTree : tree.parameters().parameters()) {
+//      Symbol symbol = context().symbolTable().getSymbol(parameterTree.variableIdentifier());
+//      if (!live.contains(symbol)) {
+//        variables.remove(symbol);
+//      }
+//    }
   }
 
   @Override
@@ -108,13 +108,13 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
     boolean liveVar = live.contains(symbol);
 
     if (!liveVar) {
-      variables.add(symbol);
+      investigatedParameters.add(symbol);
     }
 
     super.visitForEachStatement(tree);
 
     if (!liveVar) {
-      variables.remove(symbol);
+      investigatedParameters.remove(symbol);
     }
   }
 
@@ -132,13 +132,13 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
     boolean liveVar = live.contains(symbol);
 
     if (!liveVar) {
-      variables.add(symbol);
+      investigatedParameters.add(symbol);
     }
 
     super.visitCatchBlock(tree);
 
     if (!liveVar) {
-      variables.remove(symbol);
+      investigatedParameters.remove(symbol);
     }
   }
 
@@ -147,9 +147,9 @@ public class ParameterReassignedToCheck extends PHPVisitorCheck {
     if (tree.variable().is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       VariableIdentifierTree identifier = (VariableIdentifierTree) tree.variable();
       Symbol reference = context().symbolTable().getSymbol(identifier);
-      if (reference != null && (reference.is(Symbol.Kind.PARAMETER) || reference.is(Symbol.Kind.VARIABLE)) && variables.contains(reference)) {
-        context().newIssue(this, tree, String.format(MESSAGE, reference.toString())).secondary(reference.declaration(), SECONDARY_MESSAGE);
-        variables.remove(reference);
+      if (reference != null && (reference.is(Symbol.Kind.PARAMETER) || reference.is(Symbol.Kind.VARIABLE)) && investigatedParameters.contains(reference)) {
+        context().newIssue(this, tree, String.format(MESSAGE, reference.name())).secondary(reference.declaration(), SECONDARY_MESSAGE);
+        investigatedParameters.remove(reference);
       }
     }
 

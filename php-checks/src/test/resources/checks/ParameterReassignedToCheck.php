@@ -18,7 +18,7 @@ function foo(&$d) {
 }
 
 function foo(&$d) {
-  $d = 42; // Compliant - False Positive
+  $d = 42; // Compliant
   bar($d);
 }
 
