@@ -77,6 +77,7 @@ import org.sonar.squidbridge.ProgressReport;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -276,6 +277,19 @@ public class PHPSensorTest {
     DefaultInputFile defaultInputFile = inputFile(ANALYZED_FILE);
     createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.of(defaultInputFile), progressReport);
     assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Could not analyse PHPSquidSensor.php");
+  }
+
+  @Test
+  public void exception_should_fail_analysis_if_configured_so() throws Exception {
+    RuntimeException exception = new NumberFormatException();
+    PHPCheck check = new ExceptionRaisingCheck(exception);
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
+    DefaultInputFile defaultInputFile = inputFile(ANALYZED_FILE);
+    context.setSettings(new MapSettings().setProperty("sonar.internal.analysis.failFast", "true"));
+    assertThatThrownBy(() -> createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.of(defaultInputFile), progressReport))
+      .isInstanceOf(IllegalStateException.class)
+      .hasCause(exception)
+      .hasMessageContaining("PHPSquidSensor.php");
   }
 
   @Test
