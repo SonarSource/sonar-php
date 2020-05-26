@@ -31,6 +31,10 @@ if (count($z_12) >= 1) { // Noncompliant
   echo $z_12[0];
 }
 
+if (count($_POST) > 0) { // Noncompliant
+  echo $a;
+}
+
 if (count($a_2) >= 0) { // Compliant
   echo $a_2;
 }
@@ -124,8 +128,4 @@ if (count($z_6) === 2) { // Compliant
 
 if (count($z_8) >= "abc") { // Compliant
   echo $z_8[0];
-}
-
-if (count($_POST) > 0) {
-  echo $a;
 }
