@@ -78,6 +78,14 @@ function foo($g) {
   }
 }
 
+function testFunction1($foo) {
+//                     ^^^^>
+  foreach ($array as $item) {
+    $foo = $item; // Noncompliant
+//  ^^^^^^^^^^^^
+  }
+}
+
 //----------------------
 // Method Declarations
 //----------------------
@@ -119,58 +127,11 @@ functionExpression = function($foo) {
 };
 
 //----------------------
-//        Loops
-//----------------------
-foreach ($array as $item) {
-  $item = null; // Noncompliant
-}
-
-foreach ($array as $item) {
-  echo $item;
-  $item = null; // Compliant
-}
-
-function testFunction1($foo) {
-  foreach ($array as $item) { }
-  $item = null; // Compliant
-}
-
-function testFunction1($foo) {
-  foreach ($array as $item) {
-    $foo = $item; // Noncompliant
-  }
-}
-
-foreach ($array as &$item) {
-  $item = null; // Compliant
-}
-
-//----------------------
-//      TryCatch
-//----------------------
-try {}
-catch (Exception $e) {
-  $e = null; // Noncompliant
-}
-
-try {}
-catch (Exception $e) {
-  echo $e->message();
-  $e = null; // Compliant
-}
-
-//----------------------
 //      Coverage
 //----------------------
 $globals = $engine->getGlobals();
 
 function foo($p) {
-  break;
-  $p = 42;
-}
-
-try {}
-catch(Exception $e) {
   break;
   $p = 42;
 }

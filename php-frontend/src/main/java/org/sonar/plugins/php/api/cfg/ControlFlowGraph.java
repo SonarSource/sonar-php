@@ -99,14 +99,6 @@ public class ControlFlowGraph {
   /**
    * <b>WARNING:</b> This is an experimental API, it may change without notice.
    */
-  @VisibleForTesting
-  static ControlFlowGraph build(ForEachStatementTree statementTree) {
-    return new ControlFlowGraphBuilder(statementTree.statements()).getGraph();
-  }
-
-  /**
-   * <b>WARNING:</b> This is an experimental API, it may change without notice.
-   */
   @CheckForNull
   public static ControlFlowGraph build(Tree tree, CheckContext context) {
     if (failedTrees.contains(tree)) {
@@ -127,10 +119,6 @@ public class ControlFlowGraph {
           }
         case SCRIPT:
           return build(((ScriptTree) tree));
-        case FOREACH_STATEMENT:
-          return build((ForEachStatementTree) tree);
-        case CATCH_BLOCK:
-          return build(((CatchBlockTree) tree).block());
         default:
           throw new IllegalStateException("Unexpected tree kind " + tree.getKind());
       }

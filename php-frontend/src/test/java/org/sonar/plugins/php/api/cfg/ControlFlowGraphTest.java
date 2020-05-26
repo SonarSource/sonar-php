@@ -1547,32 +1547,6 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     assertThat(cfg.start().toString()).isEqualTo("empty");
   }
 
-  @Test
-  public void test_cfg_build_for_catch_block_only() {
-    CatchBlockTree block = parse("" +
-      "catch (Exception $e) {" +
-      " echo $e->message();" +
-      "}", PHPLexicalGrammar.CATCH_BLOCK
-    );
-
-    ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
-    assertThat(cfg).isNotNull();
-    assertThat(cfg.start().toString()).isEqualTo("echo $e->message();");
-  }
-
-  @Test
-  public void test_cfg_build_for_foreach_block_only() {
-    ForEachStatementTree block = parse("" +
-      "foreach ($array as $item) {" +
-      " echo $item;" +
-      "}", PHPLexicalGrammar.FOREACH_STATEMENT
-    );
-
-    ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
-    assertThat(cfg).isNotNull();
-    assertThat(cfg.start().toString()).isEqualTo("echo $item;");
-  }
-
   private void verifyBlockCfg(String functionBody) {
     Validator.assertCfgStructure(cfgForBlock(functionBody));
   }
