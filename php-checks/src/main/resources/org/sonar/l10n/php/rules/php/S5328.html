@@ -1,12 +1,12 @@
-<p>Setting session IDs is security-sensitive. Dynamically setting session IDs with client-supplied data or insecure hashes may lead to session
-fixation attacks and may allow an attacker to hijack another user's session.</p>
+<p>If a session can be easily determined ("session fixation attacks"), then an attacker can try to force a legit user to use a session ID that he
+knows. Thus, when the user is authenticated, he will share the same session ID than the attacker and all its privileges on the web application.</p>
 <h2>Ask Yourself Whether</h2>
 <ul>
-  <li> the session ID is not unique </li>
-  <li> the session ID is set from an hidden field of a web form </li>
-  <li> the session ID is relying on a non secure cryptographically hash </li>
+  <li> The session ID can be easily guessed (eg: not random). </li>
+  <li> When a user authenticates, its old/current session ID is used instead of a new one. </li>
+  <li> Many users can share the same session ID. </li>
 </ul>
-<p>You are at risk if you answered yes to any of those questions.</p>
+<p>There is a risk if you answered yes to any of those questions.</p>
 <h2>Recommended Secure Coding Practices</h2>
 <ul>
   <li> Don't manually generate session IDs, use instead PHP's native functionality such as <code>session_regenerate_id()</code>. </li>
@@ -27,11 +27,9 @@ session_id($sessionId);
 </pre>
 <h2>See</h2>
 <ul>
-  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
-  Misconfiguration </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A2-Broken_Authentication">OWASP Top 10 2017 Category A2</a> -
+  Broken Authentication </li>
   <li> <a href="https://www.owasp.org/index.php/Session_fixation">OWASP Sesssion Fixation</a> </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/384.html">MITRE, CWE-384</a> - Session Fixation </li>
-  <li> <a href="https://www.php.net/random-bytes">PHP: random_bytes()</a> </li>
-  <li> <a href="https://www.php.net/session-regenerate-id">PHP: session_regenerate_id()</a> </li>
 </ul>
 
