@@ -1,40 +1,40 @@
 <?php
 
 class TestClass {
-//   public function method1() { } // Noncompliant {{Add a nested comment explaining why this method is empty, throw an Exception or complete the implementation.}}
-//
-//   public function method2() {
-//     echo 1;
-//   } // Compliant
-//
-//   public function method3() {
-//     // Comment
-//   } // Compliant
-//
-//   public function method4() {
-//     # Comment
-//   } // Compliant
-//
-//   public function method5() {
-//     /* Comment */
-//   } // Compliant
-//
-//   public function method6() {
-//     /** Comment */
-//   } // Compliant
-//
-//   public function method7() { /** Comment */ } // Compliant
-//
-//   public function method8() { /**/ } // Noncompliant
-//
-//   public function method9() {throw new Exception();} // Compliant
-//
-//   public function method10() {
-//       /*
-//           Larger comment
-//       */
-//
-//   } // Compliant
+  public function method1() { } // Noncompliant {{Add a nested comment explaining why this method is empty, throw an Exception or complete the implementation.}}
+
+  public function method2() {
+    echo 1;
+  } // Compliant
+
+  public function method3() {
+    // Comment
+  } // Compliant
+
+  public function method4() {
+    # Comment
+  } // Compliant
+
+  public function method5() {
+    /* Comment */
+  } // Compliant
+
+  public function method6() {
+    /** Comment */
+  } // Compliant
+
+  public function method7() { /** Comment */ } // Compliant
+
+  public function method8() { /**/ } // Noncompliant
+
+  public function method9() {throw new Exception();} // Compliant
+
+  public function method10() {
+      /*
+          Larger comment
+      */
+
+  } // Compliant
 
   // Comment
   public function method11() {} // Compliant
