@@ -68,6 +68,7 @@ import org.sonar.squidbridge.ProgressReport;
 
 public class PHPSensor implements Sensor {
 
+  private static final String FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast";
   private static final Logger LOG = Loggers.get(PHPSensor.class);
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
@@ -192,6 +193,9 @@ public class PHPSensor implements Sensor {
       saveParsingIssue(context, e, inputFile);
     } catch (Exception e) {
       checkInterrupted(e);
+      if (context.config().getBoolean(FAIL_FAST_PROPERTY_NAME).orElse(false)) {
+        throw new IllegalStateException("Exception when analyzing " + inputFile, e);
+      }
       LOG.error("Could not analyse " + inputFile, e);
     }
   }
