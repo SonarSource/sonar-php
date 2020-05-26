@@ -1,5 +1,6 @@
 <?php
 
+
 if (count($a) > 0) { // Noncompliant
 //  ^^^^^^^^^^^^^
   echo $a[0];
@@ -28,6 +29,10 @@ if (1 <= count($z_11)) { // Noncompliant
 
 if (count($z_12) >= 1) { // Noncompliant
   echo $z_12[0];
+}
+
+if (count($_POST) > 0) { // Noncompliant
+  echo $a;
 }
 
 if (count($a_2) >= 0) { // Compliant
