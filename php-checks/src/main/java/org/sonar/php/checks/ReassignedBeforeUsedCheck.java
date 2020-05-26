@@ -34,8 +34,6 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
-import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
-import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S1226")
@@ -78,54 +76,6 @@ public class ReassignedBeforeUsedCheck extends PHPVisitorCheck {
           investigatedParameters.add(symbol);
         }
       }
-    }
-  }
-
-  @Override
-  public void visitForEachStatement(ForEachStatementTree tree) {
-    ControlFlowGraph cfg = ControlFlowGraph.build(tree, context());
-    if (cfg == null) {
-      return;
-    }
-
-    Symbol symbol = context().symbolTable().getSymbol(tree.value());
-    LiveVariablesAnalysis analysis = LiveVariablesAnalysis.analyze(cfg, context().symbolTable());
-
-    Set<Symbol> live = analysis.getLiveVariables(cfg.start()).getIn();
-    boolean liveVar = live.contains(symbol);
-
-    if (!liveVar) {
-      investigatedParameters.add(symbol);
-    }
-
-    super.visitForEachStatement(tree);
-
-    if (!liveVar) {
-      investigatedParameters.remove(symbol);
-    }
-  }
-
-  @Override
-  public void visitCatchBlock(CatchBlockTree tree) {
-    ControlFlowGraph cfg = ControlFlowGraph.build(tree, context());
-    if (cfg == null) {
-      return;
-    }
-
-    Symbol symbol = context().symbolTable().getSymbol(tree.variable());
-    LiveVariablesAnalysis analysis = LiveVariablesAnalysis.analyze(cfg, context().symbolTable());
-
-    Set<Symbol> live = analysis.getLiveVariables(cfg.start()).getIn();
-    boolean liveVar = live.contains(symbol);
-
-    if (!liveVar) {
-      investigatedParameters.add(symbol);
-    }
-
-    super.visitCatchBlock(tree);
-
-    if (!liveVar) {
-      investigatedParameters.remove(symbol);
     }
   }
 
