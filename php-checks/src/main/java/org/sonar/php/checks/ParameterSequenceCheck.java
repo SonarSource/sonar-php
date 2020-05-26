@@ -44,11 +44,6 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Parameters to \"%s\" have the same names but not the same order as the method arguments.";
   private static final String SECONDARY_MESSAGE = "Implementation of the parameters sequence.";
 
-  private static final Kind[] FUNCTION_LIKE_DECLARATIONS = {
-    Kind.FUNCTION_DECLARATION,
-    Kind.METHOD_DECLARATION
-  };
-
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     // only check method and function calls expect constructors with more than 1 argument
