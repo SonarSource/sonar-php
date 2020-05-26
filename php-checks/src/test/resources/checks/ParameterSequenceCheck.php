@@ -102,3 +102,6 @@ class CoverageClass {
     $this->$foo($a);
   }
 }
+
+class Date {} // Same symbol identifier as function symbol of 'date'
+date($a, $b);
