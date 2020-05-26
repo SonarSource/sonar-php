@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.type.FunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.php.checks.utils.type.TypePredicateList;
@@ -33,6 +34,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S1155")
@@ -55,7 +57,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(tree.arguments().get(0))) {
-      context().newIssue(this, tree, "Use empty() to check whether the array is empty or not.");
+      context().newIssue(this, tree.getParent(), "Use empty() to check whether the array is empty or not.");
     }
     super.visitFunctionCall(tree);
   }
@@ -89,9 +91,13 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
       return false;
     }
 
+    if (CheckUtils.SUPERGLOBALS.contains(((VariableIdentifierTree)tree).variableExpression().text())) {
+      return true;
+    }
+
     Symbol symbol = context().symbolTable().getSymbol(tree);
 
-    return isSymbolUsedAsArray(symbol) || isSymbolArrayParameter(symbol);
+    return symbol != null && (isSymbolUsedAsArray(symbol) || isSymbolArrayParameter(symbol));
   }
 
   private static boolean isSymbolUsedAsArray(Symbol symbol) {

@@ -1,9 +1,8 @@
-<p>Using <code>count()</code> to test for emptiness works, but using <code>empty()</code> makes the code more readable and can
-be more performant.
+<p>Using <code>count()</code> to test for emptiness works, but using <code>empty()</code> makes the code more readable and can be more performant</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-if (count($a) > 0) {  // Noncompliant
-  echo $a[0];
+if (count($a) &gt; 0) { // Noncompliant
+ echo $a[0];
 }
 </pre>
 <h2>Compliant Solution</h2>
