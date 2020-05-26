@@ -178,6 +178,7 @@ public class CheckList {
       PhpSapiNameFunctionUsageCheck.class,
       QueryUsageCheck.class,
       RandomGeneratorCheck.class,
+      ReassignedBeforeUsedCheck.class,
       RedundantFinalCheck.class,
       RedundantJumpCheck.class,
       RedundantParenthesesCheck.class,
