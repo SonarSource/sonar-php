@@ -47,7 +47,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree) || hasCommentAbove(tree.modifiers().get(0)))) {
+    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree) || hasCommentAbove(tree))) {
       commitIssue(tree, "method");
     }
 
@@ -56,11 +56,23 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    if (!(hasValuableBody(tree.body()) || hasCommentAbove(tree.functionToken()))) {
+    if (!(hasValuableBody(tree.body()) || hasCommentAbove(tree))) {
       commitIssue(tree, "function");
     }
 
     super.visitFunctionDeclaration(tree);
+  }
+
+  private static boolean hasCommentAbove(MethodDeclarationTree tree) {
+    if (tree.modifiers().isEmpty()) {
+      return hasCommentAbove(tree.functionToken());
+    } else {
+      return hasCommentAbove(tree.modifiers().get(0));
+    }
+  }
+
+  private static boolean hasCommentAbove(FunctionDeclarationTree tree) {
+    return hasCommentAbove(tree.functionToken());
   }
 
   private static boolean hasCommentAbove(SyntaxToken token) {
