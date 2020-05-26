@@ -38,6 +38,9 @@ class TestClass {
 
   // Comment
   public function method11() {} // Compliant
+
+  // Comment
+  function method11() {} // Compliant
 }
 
 abstract class AbstractClass {
