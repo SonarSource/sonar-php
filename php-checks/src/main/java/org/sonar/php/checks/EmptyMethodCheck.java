@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.php.tree.TreeUtils;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -47,7 +48,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree) || hasCommentAbove(tree))) {
+    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree) || hasCommentAbove(((PHPTree) tree).getFirstToken()))) {
       commitIssue(tree, "method");
     }
 
@@ -56,23 +57,11 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    if (!(hasValuableBody(tree.body()) || hasCommentAbove(tree))) {
+    if (!(hasValuableBody(tree.body()) || hasCommentAbove(((PHPTree) tree).getFirstToken()))) {
       commitIssue(tree, "function");
     }
 
     super.visitFunctionDeclaration(tree);
-  }
-
-  private static boolean hasCommentAbove(MethodDeclarationTree tree) {
-    if (tree.modifiers().isEmpty()) {
-      return hasCommentAbove(tree.functionToken());
-    } else {
-      return hasCommentAbove(tree.modifiers().get(0));
-    }
-  }
-
-  private static boolean hasCommentAbove(FunctionDeclarationTree tree) {
-    return hasCommentAbove(tree.functionToken());
   }
 
   private static boolean hasCommentAbove(SyntaxToken token) {
