@@ -57,6 +57,6 @@ public class UseOfOctalValueCheck extends PHPVisitorCheck {
    * Also values like "03" should not raise an issue because they are used in dates.
    */
   private static boolean isException(String value) {
-    return value.length() == 4 || (value.length() == 2 && Integer.parseInt(value) < 8);
+    return value.length() == 4 || value.length() == 2;
   }
 }
