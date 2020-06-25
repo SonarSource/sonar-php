@@ -83,7 +83,7 @@
 
     <!-- JAR versions -->
     <version.assertj>3.5.2</version.assertj>
-    <version.commons-io>2.5</version.commons-io>
+    <version.commons-io>2.7</version.commons-io>
     <version.commons-lang>3.10</version.commons-lang>
     <version.junit>4.10</version.junit>
     <version.maven-project>2.0.6</version.maven-project>
@@ -151,8 +151,8 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
         <version>${version.commons-lang}</version>
       </dependency>
       <dependency>

@@ -22,8 +22,8 @@ package org.sonar.plugins.php.phpunit.xml;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.sonar.plugins.php.phpunit.TestFileReport;
 
 public final class TestSuites {

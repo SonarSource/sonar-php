@@ -21,7 +21,7 @@ package org.sonar.plugins.php.api;
 
 import com.google.common.collect.Lists;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
 import org.sonar.plugins.php.PhpPlugin;
