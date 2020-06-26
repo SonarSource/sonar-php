@@ -435,11 +435,9 @@ function nested_function_has_different_scope() {
 
 function anonymous_lambda_use($kernel)
 {
-    // false positive because $a is considered a different symbol inside the 'use',
-    // even though it's the same symbol
-    $a = 42; // Noncompliant
+    $a = 42; // Compliant
 
-    $foo->method(function ($x) use ($a) { // we don't realize $a is the same here
+    $foo->method(function ($x) use ($a) {
       return $a[$x];
     });
 
