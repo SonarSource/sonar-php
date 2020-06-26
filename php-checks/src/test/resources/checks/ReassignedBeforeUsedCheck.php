@@ -122,7 +122,7 @@ functionExpression = function($foo) {
     $foo = null; // False Negative
   };
 
-  $foo = null; // Noncompliant
+  $foo = null; // Compliant
   echo $foo;
 };
 
