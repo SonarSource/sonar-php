@@ -1,0 +1,26 @@
+<p>When a reference is used in a <code>foreach</code> loop instead of using a simple variable, the reference remains assigned and keeps its "value"
+which is a reference, even after the <code>foreach</code> execution. Most of the time, this is not what the developer is expecting and the reference
+may be used wrongly in the rest of the code. For this reason, it is recommended to always <code>unset</code> a reference that is used in a
+<code>foreach</code> to avoid any unexpected side effects.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+$arr = array(1, 2, 3);
+foreach ($arr as &amp;$value) {
+    $value = $value * 2;
+}
+// Noncompliant; $value is still alive and references the last item of the array: $arr[2]
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+$arr = array(1, 2, 3);
+foreach ($arr as &amp;$value) {
+    $value = $value * 2;
+}
+unset($value); // Compliant; there is no risk to use by mistake the content of $value pointing to $arr[2]
+</pre>
+<h2>See</h2>
+<ul>
+  <li> PHP Documentation: <a href="https://php.net/manual/en/control-structures.foreach.php">Foreach </a> </li>
+  <li> <a href="https://schlueters.de/blog/archives/141-references-and-foreach.html">References and Foreach</a> </li>
+</ul>
+
