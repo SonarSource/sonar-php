@@ -32,6 +32,11 @@ public class PostfixExprTest {
       .matches("$a")
       .matches("array()[]")
       .matches("[][]")
-      .matches("$a instanceof class1");
+      .matches("$a instanceof class1")
+      .matches("['Test', 'method']()")
+      .matches("'Test::method'()")
+      .matches("(['Test', 'method'])()")
+      .matches("('Test::method')()")
+    ;
   }
 }

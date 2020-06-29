@@ -1381,6 +1381,10 @@ public class TreeFactory {
     return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, accessToken, member);
   }
 
+  public ExpressionTree memberExpression(ExpressionTree object, FunctionCallTree call) {
+    return  ((FunctionCallTreeImpl) call).complete(object);
+  }
+
   public ExpressionTree memberExpression(ExpressionTree object, Optional<List<ExpressionTree>> memberAccesses) {
     ExpressionTree result = object;
 
