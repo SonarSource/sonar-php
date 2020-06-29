@@ -42,9 +42,14 @@ unset($value7); }
 $value7 = "x";
 
 $arr8 = array(1, 2, 3);
-foreach ($arr8 as $value8) { // Compliant - FN . Implementation does not use CFG.
+foreach ($arr8 as &$value8) { // Compliant - FN . Implementation does not use CFG.
     $value8 = $value8 * 2;
 }
 if (false) {
   unset($value8);
+}
+
+$arr9 = array(1, 2, 3);
+foreach ($arr9 as &$value9) { // Compliant
+    $value9 = $value9 * 2;
 }
