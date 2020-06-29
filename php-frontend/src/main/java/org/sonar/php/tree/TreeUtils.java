@@ -20,7 +20,12 @@
 package org.sonar.php.tree;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.function.Predicate;
 import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 
 public class TreeUtils {
@@ -44,5 +49,27 @@ public class TreeUtils {
       parent = parent.getParent();
     }
     return parent;
+  }
+
+  public static Optional<Tree> firstDescendant(@Nullable Tree root, Predicate<Tree> predicate) {
+    if (root == null || ((PHPTree) root).isLeaf()) {
+      return Optional.empty();
+    }
+    Iterator<Tree> iterator = ((PHPTree) root).childrenIterator();
+    while (iterator.hasNext()) {
+      Tree child = iterator.next();
+      if (predicate.test(child)) {
+        return Optional.of(child);
+      }
+      Optional<Tree> childDescendant = firstDescendant(child, predicate);
+      if (childDescendant.isPresent()) {
+        return childDescendant;
+      }
+    }
+    return Optional.empty();
+  }
+
+  public static <T extends Tree> Optional<T> firstDescendant(Tree root, Class<T> clazz) {
+    return (Optional<T>) firstDescendant(root, clazz::isInstance);
   }
 }
