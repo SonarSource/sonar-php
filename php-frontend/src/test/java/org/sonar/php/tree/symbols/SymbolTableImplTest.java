@@ -468,6 +468,12 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbol("n\\trait2")).isNotNull();
   }
 
+  @Test
+  public void global_statement_with_compound_variable() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php global ${foo()};");
+    assertThat(symbolTable.getSymbol("foo")).isNotNull();
+  }
+
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
