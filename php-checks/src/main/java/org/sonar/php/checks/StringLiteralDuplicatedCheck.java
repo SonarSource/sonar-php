@@ -23,6 +23,7 @@ import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -32,23 +33,28 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
-@Rule(key = StringLiteralDuplicatedCheck.KEY)
+@Rule(key = "S1192")
 public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1192";
   private static final String MESSAGE = "Define a constant instead of duplicating this literal \"%s\" %s times.";
 
-  private static final Integer MINIMAL_LITERAL_LENGTH = 5;
+  private static final Pattern ALLOWED_DUPLICATED_LITERALS = Pattern.compile("^[a-zA-Z][_\\-\\w]+$");
 
   private final Map<String, LiteralTree> firstOccurrenceTrees = Maps.newHashMap();
   private final Map<String, List<LiteralTree>> sameLiteralOccurrences = Maps.newHashMap();
 
-  public static final int DEFAULT = 3;
+  public static final int DEFAULT = 5;
+  public static final int MINIMAL_LITERAL_LENGTH = 5;
 
   @RuleProperty(
     key = "threshold",
     defaultValue = "" + DEFAULT)
   int threshold = DEFAULT;
+
+  @RuleProperty(
+    key = "minimal_literal_length",
+    defaultValue = "" + MINIMAL_LITERAL_LENGTH)
+  int minimalLiteralLength = MINIMAL_LITERAL_LENGTH;
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
@@ -79,7 +85,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
       String literal = tree.value();
       String value = StringUtils.substring(literal, 1, literal.length() - 1);
 
-      if (value.length() >= MINIMAL_LITERAL_LENGTH) {
+      if (value.length() >= minimalLiteralLength && !ALLOWED_DUPLICATED_LITERALS.matcher(value).find()) {
 
         if (!sameLiteralOccurrences.containsKey(value)) {
           List<LiteralTree> occurrences = new ArrayList<>();
