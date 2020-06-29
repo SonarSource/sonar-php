@@ -20,6 +20,7 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
+import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -50,6 +51,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   private final SyntaxToken openCurlyBraceToken;
   private final List<ClassMemberTree> members;
   private final SyntaxToken closeCurlyBraceToken;
+  private ClassSymbol symbol;
 
   private ClassDeclarationTreeImpl(
       Kind kind,
@@ -225,5 +227,13 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
         members,
         closeCurlyBraceToken
     );
+  }
+
+  public ClassSymbol symbol() {
+    return symbol;
+  }
+
+  public void setSymbol(ClassSymbol symbol) {
+    this.symbol = symbol;
   }
 }

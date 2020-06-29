@@ -19,53 +19,70 @@
  */
 package org.sonar.php.tree.symbols;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.symbols.ClassSymbolImpl;
+import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.symbols.ClassSymbolData;
+import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 
 import static org.sonar.plugins.php.api.symbols.Symbol.Kind.FUNCTION;
 
-public class DeclarationVisitor extends PHPVisitorCheck {
+public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   private final SymbolTableImpl symbolTable;
-
-  private SymbolQualifiedName currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
+  private ProjectSymbolData projectSymbolData;
   private Scope globalScope;
+  private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
 
-  DeclarationVisitor(SymbolTableImpl symbolTable) {
+  DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData) {
+    super(symbolTable);
     this.symbolTable = symbolTable;
+    this.projectSymbolData = projectSymbolData;
   }
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     globalScope = symbolTable.addScope(new Scope(tree));
     super.visitCompilationUnit(tree);
-  }
 
-  @Override
-  public void visitNamespaceStatement(NamespaceStatementTree tree) {
-    NamespaceNameTree namespaceNameTree = tree.namespaceName();
-    currentNamespace = namespaceNameTree != null ? SymbolQualifiedName.create(namespaceNameTree) : SymbolQualifiedName.GLOBAL_NAMESPACE;
-    super.visitNamespaceStatement(tree);
-
-    boolean isBracketedNamespace = tree.openCurlyBrace() != null;
-    if (isBracketedNamespace) {
-      currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
-    }
+    Map<ClassSymbolData, ClassSymbol> symbolByData = ClassSymbolImpl.createSymbols(new HashSet<>(classSymbolDataByTree.values()), projectSymbolData);
+    classSymbolDataByTree.forEach((declaration, symbolData) -> {
+      ClassSymbol symbol = symbolByData.get(symbolData);
+      ((ClassDeclarationTreeImpl) declaration).setSymbol(symbol);
+    });
   }
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    symbolTable.declareTypeSymbol(tree.name(), globalScope, currentNamespace);
+    NamespaceNameTree superClass = tree.superClass();
+    QualifiedName superClassName = superClass == null ? null : getFullyQualifiedName(superClass, Symbol.Kind.CLASS);
+
+    IdentifierTree name = tree.name();
+    SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
+    classSymbolDataByTree.put(tree, new ClassSymbolData(qualifiedName, superClassName));
+
+    symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
     super.visitClassDeclaration(tree);
   }
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace);
+    symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
     super.visitFunctionDeclaration(tree);
+  }
+
+  public Collection<ClassSymbolData> classSymbolData() {
+    return classSymbolDataByTree.values();
   }
 }

@@ -22,11 +22,14 @@ package org.sonar.php.tree.symbols;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
+import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -41,13 +44,20 @@ public class SymbolTableImpl implements SymbolTable {
   private Map<Tree, Scope> scopes = new HashMap<>();
   private Map<Tree, Symbol> symbolsByTree = new HashMap<>();
   private Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
+  private Collection<ClassSymbolData> classSymbolData;
 
   private SymbolTableImpl() {
   }
 
   public static SymbolTableImpl create(CompilationUnitTree compilationUnit) {
+    return create(compilationUnit, new ProjectSymbolData());
+  }
+
+  public static SymbolTableImpl create(CompilationUnitTree compilationUnit, ProjectSymbolData projectSymbolData) {
     SymbolTableImpl symbolModel = new SymbolTableImpl();
-    new DeclarationVisitor(symbolModel).visitCompilationUnit(compilationUnit);
+    DeclarationVisitor declarationVisitor = new DeclarationVisitor(symbolModel, projectSymbolData);
+    declarationVisitor.visitCompilationUnit(compilationUnit);
+    symbolModel.classSymbolData = declarationVisitor.classSymbolData();
     new SymbolVisitor(symbolModel).visitCompilationUnit(compilationUnit);
     return symbolModel;
   }
@@ -86,8 +96,7 @@ public class SymbolTableImpl implements SymbolTable {
     associateSymbol(name, symbol);
   }
 
-  TypeSymbolImpl declareTypeSymbol(IdentifierTree name, Scope scope, SymbolQualifiedName namespace) {
-    SymbolQualifiedName qualifiedName = namespace.resolve(name.text());
+  TypeSymbolImpl declareTypeSymbol(IdentifierTree name, Scope scope, SymbolQualifiedName qualifiedName) {
     TypeSymbolImpl symbol = new TypeSymbolImpl(name, scope, qualifiedName);
     symbolByQualifiedName.put(qualifiedName, symbol);
     addSymbol(name, scope, symbol);
@@ -161,5 +170,9 @@ public class SymbolTableImpl implements SymbolTable {
   @CheckForNull
   public Symbol getSymbol(Tree tree) {
     return symbolsByTree.get(tree);
+  }
+
+  public Collection<ClassSymbolData> classSymbolDatas() {
+    return classSymbolData;
   }
 }
