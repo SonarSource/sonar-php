@@ -4,6 +4,7 @@ $arr = array(1, 2, 3);
 foreach ($arr as &$value) { // Noncompliant {{Make sure that the referenced value variable is unset after the loop.}}
     $value = $value * 2;
 }
+$value = "x";
 
 $arr2 = array(1, 2, 3);
 foreach ($arr2 as &$value2) { // Compliant
@@ -22,6 +23,7 @@ foreach ($arr4 as &$value4) { // Noncompliant
     $value4 = $value4 * 2;
     unset($value4);
 }
+$value4 = "x";
 
 $arr5 = array(1, 2, 3);
 foreach ($arr5 as $value5) { // Compliant
@@ -37,3 +39,12 @@ $arr7 = array(1, 2, 3);
 foreach ($arr7 as &$value7) { // Noncompliant
     $value7 = $value7 * 2;
 unset($value7); }
+$value7 = "x";
+
+$arr8 = array(1, 2, 3);
+foreach ($arr8 as $value8) { // Compliant - FN . Implementation does not use CFG.
+    $value8 = $value8 * 2;
+}
+if (false) {
+  unset($value8);
+}

@@ -44,15 +44,20 @@ public class UnsetForeachReferenceVariableCheck extends PHPVisitorCheck {
 
     Symbol symbol = context().symbolTable().getSymbol(referenceVariable.variableExpression());
 
-    boolean unsetFound = false;
+    boolean usedBeforeUnset = false;
+    boolean wasUnset = false;
     for (SyntaxToken usage : symbol.usages()) {
-      if (usageIsOutsideForEach(usage, tree) && usageIsInUnset(usage)) {
-        unsetFound = true;
+      boolean usageIsOutsideForEach = usageIsOutsideForEach(usage, tree);
+      if (usageIsOutsideForEach && !usageIsInUnset(usage)) {
+        usedBeforeUnset = true;
+      } else if(usageIsOutsideForEach) {
+        // unset() found
+        wasUnset = true;
         break;
       }
     }
 
-    if (!unsetFound) {
+    if (!wasUnset && usedBeforeUnset) {
       context().newIssue(this, referenceVariable, MESSAGE);
     }
   }
