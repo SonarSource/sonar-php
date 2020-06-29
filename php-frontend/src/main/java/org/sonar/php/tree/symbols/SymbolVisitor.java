@@ -440,6 +440,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
         // consider 'global' has being a modifier for the variable
         symbol.addModifiers(Collections.singletonList(tree.globalToken()));
 
+      } else if (variable.is(Kind.COMPOUND_VARIABLE_NAME))  {
+        visitCompoundVariable((CompoundVariableTree) variable);
       }
     }
   }
