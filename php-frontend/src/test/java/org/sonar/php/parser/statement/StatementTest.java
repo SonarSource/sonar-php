@@ -61,6 +61,7 @@ public class StatementTest {
       .matches("'Foo::bar'();")
       .matches("['Foo','bar']();")
       .matches("[A::class, $method_name]();")
+      .matches("null();")
     ;
   }
 

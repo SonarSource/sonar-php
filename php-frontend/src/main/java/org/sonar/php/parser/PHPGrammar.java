@@ -1534,10 +1534,11 @@ public class PHPGrammar {
         EXPRESSION()));
   }
 
-  public ExpressionTree INDIRECT_METHOD_CALL() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.INDIRECT_METHOD_CALL).is(
+  public ExpressionTree SPECIAL_CALL() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SPECIAL_CALL).is(
       f.memberExpression(
         b.firstOf(
+          f.nullLiteral(b.token(PHPLexicalGrammar.NULL)),
           ARRAY_INITIALIZER(),
           STRING_LITERAL()),
         FUNCTION_CALL_ARGUMENT_LIST()
@@ -1548,7 +1549,7 @@ public class PHPGrammar {
   public ExpressionTree MEMBER_EXPRESSION() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.MEMBER_EXPRESSION).is(
       b.firstOf(
-        INDIRECT_METHOD_CALL(),
+        SPECIAL_CALL(),
         f.memberExpression(
           PRIMARY_EXPRESSION(),
           b.zeroOrMore(
@@ -1733,7 +1734,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.POSTFIX_EXPR).is(
       f.postfixExpression(
         b.firstOf(
-          INDIRECT_METHOD_CALL(),
+          SPECIAL_CALL(),
           f.combinedScalarOffset(ARRAY_INITIALIZER(), b.zeroOrMore(DIMENSIONAL_OFFSET())),
           FUNCTION_EXPRESSION(),
           ARROW_FUNCTION_EXPRESSION(),
