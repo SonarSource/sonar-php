@@ -19,22 +19,31 @@
  */
 package org.sonar.php.tree.symbols;
 
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbol;
-import org.sonar.php.symbols.ClassSymbolImpl;
-import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.ClassSymbolData;
+import org.sonar.php.symbols.ClassSymbolImpl;
+import org.sonar.php.symbols.LocationInFileImpl;
+import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.symbols.UnknownLocationInFile;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.sonar.plugins.php.api.symbols.Symbol.Kind.FUNCTION;
 
@@ -42,13 +51,16 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   private final SymbolTableImpl symbolTable;
   private ProjectSymbolData projectSymbolData;
+  @Nullable
+  private String filePath;
   private Scope globalScope;
   private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
 
-  DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData) {
+  DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
     this.symbolTable = symbolTable;
     this.projectSymbolData = projectSymbolData;
+    this.filePath = file == null ? null : Paths.get(file.uri()).toString();
   }
 
   @Override
@@ -70,7 +82,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
-    classSymbolDataByTree.put(tree, new ClassSymbolData(qualifiedName, superClassName));
+    classSymbolDataByTree.put(tree, new ClassSymbolData(location(name), qualifiedName, superClassName));
 
     symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
     super.visitClassDeclaration(tree);
@@ -85,4 +97,14 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   public Collection<ClassSymbolData> classSymbolData() {
     return classSymbolDataByTree.values();
   }
+
+  private LocationInFile location(Tree tree) {
+    if (filePath == null) {
+      return UnknownLocationInFile.UNKNOWN_LOCATION;
+    }
+    SyntaxToken firstToken = ((PHPTree) tree).getFirstToken();
+    SyntaxToken lastToken = ((PHPTree) tree).getLastToken();
+    return new LocationInFileImpl(filePath, firstToken.line(), firstToken.column(), lastToken.endLine(), lastToken.endColumn());
+  }
+
 }

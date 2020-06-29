@@ -22,16 +22,22 @@ package org.sonar.php.symbols;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.php.symbols.UnknownClassSymbol.UNKNOWN;
 
 public class UnknownClassSymbolTest {
 
   @Test
   public void qualifiedName() {
-    assertThat(UnknownClassSymbol.UNKNOWN.qualifiedName()).hasToString("[unknown]");
+    assertThat(UNKNOWN.qualifiedName()).hasToString("[unknown]");
   }
 
   @Test
   public void superClass() {
-    assertThat(UnknownClassSymbol.UNKNOWN.superClass()).isEmpty();
+    assertThat(UNKNOWN.superClass()).isEmpty();
+  }
+
+  @Test
+  public void location() {
+    assertThat(UNKNOWN.location()).isEqualTo(UnknownLocationInFile.UNKNOWN_LOCATION);
   }
 }

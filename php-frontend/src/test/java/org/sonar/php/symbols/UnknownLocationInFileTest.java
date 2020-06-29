@@ -19,31 +19,20 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.Optional;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.junit.Test;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-enum UnknownClassSymbol implements ClassSymbol {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  UNKNOWN;
+public class UnknownLocationInFileTest {
 
-  @Override
-  public LocationInFile location() {
-    return UnknownLocationInFile.UNKNOWN_LOCATION;
-  }
-
-  @Override
-  public QualifiedName qualifiedName() {
-    return QualifiedName.qualifiedName("[unknown]");
-  }
-
-  @Override
-  public Optional<ClassSymbol> superClass() {
-    return Optional.empty();
-  }
-
-  @Override
-  public boolean isUnknownSymbol() {
-    return true;
+  @Test
+  public void unknown() {
+    LocationInFile loc = UnknownLocationInFile.UNKNOWN_LOCATION;
+    assertThat(loc.filePath()).isEqualTo("[unknown file]");
+    assertThat(loc.startLine()).isEqualTo(1);
+    assertThat(loc.startLineOffset()).isZero();
+    assertThat(loc.endLine()).isEqualTo(1);
+    assertThat(loc.endLineOffset()).isEqualTo(1);
   }
 }

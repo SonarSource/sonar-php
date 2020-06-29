@@ -17,33 +17,18 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
+package org.sonar.plugins.php.api.visitors;
 
-import java.util.Optional;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
+public interface LocationInFile {
 
-enum UnknownClassSymbol implements ClassSymbol {
+  String filePath();
 
-  UNKNOWN;
+  int startLine();
 
-  @Override
-  public LocationInFile location() {
-    return UnknownLocationInFile.UNKNOWN_LOCATION;
-  }
+  int startLineOffset();
 
-  @Override
-  public QualifiedName qualifiedName() {
-    return QualifiedName.qualifiedName("[unknown]");
-  }
+  int endLine();
 
-  @Override
-  public Optional<ClassSymbol> superClass() {
-    return Optional.empty();
-  }
+  int endLineOffset();
 
-  @Override
-  public boolean isUnknownSymbol() {
-    return true;
-  }
 }

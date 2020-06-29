@@ -19,31 +19,34 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.Optional;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-enum UnknownClassSymbol implements ClassSymbol {
+public enum UnknownLocationInFile implements LocationInFile {
 
-  UNKNOWN;
+  UNKNOWN_LOCATION;
 
   @Override
-  public LocationInFile location() {
-    return UnknownLocationInFile.UNKNOWN_LOCATION;
+  public String filePath() {
+    return "[unknown file]";
   }
 
   @Override
-  public QualifiedName qualifiedName() {
-    return QualifiedName.qualifiedName("[unknown]");
+  public int startLine() {
+    return 1;
   }
 
   @Override
-  public Optional<ClassSymbol> superClass() {
-    return Optional.empty();
+  public int startLineOffset() {
+    return 0;
   }
 
   @Override
-  public boolean isUnknownSymbol() {
-    return true;
+  public int endLine() {
+    return 1;
+  }
+
+  @Override
+  public int endLineOffset() {
+    return 1;
   }
 }

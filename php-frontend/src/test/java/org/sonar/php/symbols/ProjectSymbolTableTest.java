@@ -21,6 +21,8 @@ package org.sonar.php.symbols;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import org.junit.Test;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -44,12 +46,14 @@ public class ProjectSymbolTableTest {
     PhpFile file3 = file("file3.php", "<?php namespace ns1; class B extends A {}");
     ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2, file3);
     Tree ast = parser.parse(file2.contents());
-    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData);
+    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
     Optional<ClassDeclarationTree> classDeclarationTree = firstDescendant(ast, ClassDeclarationTree.class);
     ClassSymbol c = Symbols.get(classDeclarationTree.get());
     assertThat(c.qualifiedName()).hasToString("ns1\\c");
+    assertThat(c.location()).isEqualTo(new LocationInFileImpl(filePath("file2.php"), 1, 27, 1, 28));
     ClassSymbol b = c.superClass().get();
     assertThat(b.qualifiedName()).hasToString("ns1\\b");
+    assertThat(b.location()).isEqualTo(new LocationInFileImpl(filePath("file3.php"), 1, 27, 1, 28));
     ClassSymbol a = b.superClass().get();
     assertThat(a.qualifiedName()).hasToString("ns1\\a");
     assertThat(a.superClass()).isEmpty();
@@ -59,10 +63,18 @@ public class ProjectSymbolTableTest {
     ProjectSymbolData projectSymbolData = new ProjectSymbolData();
     for (PhpFile file : files) {
       Tree ast = parser.parse(file.contents());
-      SymbolTableImpl symbolTable = SymbolTableImpl.create((CompilationUnitTree) ast, new ProjectSymbolData());
+      SymbolTableImpl symbolTable = SymbolTableImpl.create((CompilationUnitTree) ast, new ProjectSymbolData(), file);
       symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
     }
     return projectSymbolData;
+  }
+
+  private String filePath(String fileName) {
+    return path(fileName).toFile().getAbsolutePath();
+  }
+
+  private Path path(String fileName) {
+    return Paths.get("dir1", fileName);
   }
 
   private PhpFile file(String name, String content) {
@@ -80,7 +92,7 @@ public class ProjectSymbolTableTest {
 
       @Override
       public URI uri() {
-        return null;
+        return path(name).toUri();
       }
     };
   }
