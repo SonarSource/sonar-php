@@ -44,10 +44,6 @@ public class UnsetForeachReferenceVariableCheck extends PHPVisitorCheck {
 
     Symbol symbol = context().symbolTable().getSymbol(referenceVariable.variableExpression());
 
-    if (symbol == null) {
-      return;
-    }
-
     boolean unsetFound = false;
     for (SyntaxToken usage : symbol.usages()) {
       if (usageIsOutsideForEach(usage, tree) && usageIsInUnset(usage)) {
@@ -61,15 +57,11 @@ public class UnsetForeachReferenceVariableCheck extends PHPVisitorCheck {
     }
   }
 
-  private boolean usageIsInUnset(SyntaxToken usage) {
-    if (usage.getParent() == null || usage.getParent().getParent() == null) {
-      return false;
-    }
-
+  private static boolean usageIsInUnset(SyntaxToken usage) {
     return usage.getParent().getParent().is(Tree.Kind.UNSET_VARIABLE_STATEMENT);
   }
 
-  private boolean usageIsOutsideForEach(SyntaxToken usage, ForEachStatementTree tree) {
+  private static boolean usageIsOutsideForEach(SyntaxToken usage, ForEachStatementTree tree) {
     SyntaxToken forEachLastToken = ((PHPTree) tree).getLastToken();
     return usage.line() > forEachLastToken.line() ||
       (usage.line() == forEachLastToken.line() && usage.column() > forEachLastToken.endColumn());
