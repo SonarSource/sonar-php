@@ -72,7 +72,7 @@
   </ciManagement>
 
   <properties>
-    <revision>3.5-SNAPSHOT</revision>
+    <revision>3.6-SNAPSHOT</revision>
     <version.enforcer.plugin>3.0.0-M3</version.enforcer.plugin>
     <gitRepositoryName>sonar-php</gitRepositoryName>
     <license.title>SonarQube PHP Plugin</license.title>
@@ -83,8 +83,8 @@
 
     <!-- JAR versions -->
     <version.assertj>3.5.2</version.assertj>
-    <version.commons-io>2.5</version.commons-io>
-    <version.commons-lang>2.6</version.commons-lang>
+    <version.commons-io>2.7</version.commons-io>
+    <version.commons-lang>3.10</version.commons-lang>
     <version.junit>4.10</version.junit>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>2.21.0</version.mockito>
@@ -151,8 +151,8 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
         <version>${version.commons-lang}</version>
       </dependency>
       <dependency>

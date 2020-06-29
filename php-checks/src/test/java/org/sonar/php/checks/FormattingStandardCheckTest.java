@@ -20,7 +20,7 @@
 package org.sonar.php.checks;
 
 import java.lang.reflect.Field;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 public abstract class FormattingStandardCheckTest {
 

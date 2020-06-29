@@ -152,7 +152,8 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   void associateSymbol(Tree identifier, Symbol symbol) {
-    symbolsByTree.put(identifier, symbol);
+    // If a tree could semantically be associated with two different symbols (see SONARPHP-857), keep the first one and do not override.
+    symbolsByTree.putIfAbsent(identifier, symbol);
   }
 
 

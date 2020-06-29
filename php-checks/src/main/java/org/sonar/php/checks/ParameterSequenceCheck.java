@@ -49,7 +49,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
     // only check method and function calls expect constructors with more than 1 argument
     if (!tree.getParent().is(Kind.NEW_EXPRESSION) && tree.arguments().size() > 1) {
       Symbol symbol = getDeclarationSymbol(tree);
-      if (symbol != null && symbol.declaration() != null) {
+      if (symbol != null && symbol.declaration() != null && symbol.is(Symbol.Kind.FUNCTION)) {
         checkParameterSequence(tree, (NameIdentifierTree) symbol.declaration());
       }
     }
