@@ -24,9 +24,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.Test;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class ClassSymbolImplTest {
 
@@ -127,11 +127,14 @@ public class ClassSymbolImplTest {
   }
 
   private ClassSymbolData data(String fqn) {
-    return new ClassSymbolData(QualifiedName.qualifiedName(fqn), null);
+    return new ClassSymbolData(someLocation(), qualifiedName(fqn), null);
   }
 
   private ClassSymbolData data(String fqn, String superClassFqn) {
-    return new ClassSymbolData(QualifiedName.qualifiedName(fqn), QualifiedName.qualifiedName(superClassFqn));
+    return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn));
   }
 
+  private LocationInFileImpl someLocation() {
+    return new LocationInFileImpl("path", 1, 0, 1, 3);
+  }
 }

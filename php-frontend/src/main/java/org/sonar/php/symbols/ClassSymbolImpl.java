@@ -26,14 +26,22 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class ClassSymbolImpl implements ClassSymbol {
 
+  private final LocationInFile location;
   private final QualifiedName qualifiedName;
   private ClassSymbol superClass;
 
-  public ClassSymbolImpl(QualifiedName qualifiedName) {
+  public ClassSymbolImpl(LocationInFile location, QualifiedName qualifiedName) {
+    this.location = location;
     this.qualifiedName = qualifiedName;
+  }
+
+  @Override
+  public LocationInFile location() {
+    return location;
   }
 
   @Override
@@ -57,7 +65,7 @@ public class ClassSymbolImpl implements ClassSymbol {
     Deque<ClassSymbolData> toComplete = new ArrayDeque<>();
     Map<QualifiedName, ClassSymbolImpl> symbolsByQualifiedName = new HashMap<>();
     fileDeclarations.forEach(data -> {
-      ClassSymbolImpl symbol = new ClassSymbolImpl(data.qualifiedName());
+      ClassSymbolImpl symbol = new ClassSymbolImpl(data.location(), data.qualifiedName());
       result.put(data, symbol);
       toComplete.push(data);
       symbolsByQualifiedName.put(symbol.qualifiedName, symbol);
@@ -72,7 +80,7 @@ public class ClassSymbolImpl implements ClassSymbol {
         if (superClass == null) {
           Optional<ClassSymbolData> superClassData = projectSymbolData.classSymbolData(superClassName.get());
           if (superClassData.isPresent()) {
-            superClass = new ClassSymbolImpl(superClassName.get());
+            superClass = new ClassSymbolImpl(superClassData.get().location(), superClassName.get());
             toComplete.push(superClassData.get());
             symbolsByQualifiedName.put(superClassName.get(), superClass);
             symbolsByData.put(superClassData.get(), superClass);

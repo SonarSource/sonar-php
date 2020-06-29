@@ -37,6 +37,7 @@ import org.sonar.plugins.php.api.symbols.TypeSymbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class SymbolTableImpl implements SymbolTable {
 
@@ -50,12 +51,12 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   public static SymbolTableImpl create(CompilationUnitTree compilationUnit) {
-    return create(compilationUnit, new ProjectSymbolData());
+    return create(compilationUnit, new ProjectSymbolData(), null);
   }
 
-  public static SymbolTableImpl create(CompilationUnitTree compilationUnit, ProjectSymbolData projectSymbolData) {
+  public static SymbolTableImpl create(CompilationUnitTree compilationUnit, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     SymbolTableImpl symbolModel = new SymbolTableImpl();
-    DeclarationVisitor declarationVisitor = new DeclarationVisitor(symbolModel, projectSymbolData);
+    DeclarationVisitor declarationVisitor = new DeclarationVisitor(symbolModel, projectSymbolData, file);
     declarationVisitor.visitCompilationUnit(compilationUnit);
     symbolModel.classSymbolData = declarationVisitor.classSymbolData();
     new SymbolVisitor(symbolModel).visitCompilationUnit(compilationUnit);

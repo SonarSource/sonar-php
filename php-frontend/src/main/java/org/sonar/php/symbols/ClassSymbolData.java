@@ -22,16 +22,23 @@ package org.sonar.php.symbols;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class ClassSymbolData {
 
+  private final LocationInFile location;
   private final QualifiedName qualifiedName;
   @Nullable
   private final QualifiedName superClass;
 
-  public ClassSymbolData(QualifiedName qualifiedName, @Nullable QualifiedName superClass) {
+  public ClassSymbolData(LocationInFile location, QualifiedName qualifiedName, @Nullable QualifiedName superClass) {
+    this.location = location;
     this.qualifiedName = qualifiedName;
     this.superClass = superClass;
+  }
+
+  public LocationInFile location() {
+    return location;
   }
 
   public QualifiedName qualifiedName() {

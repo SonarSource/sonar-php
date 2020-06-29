@@ -17,33 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+@javax.annotation.ParametersAreNonnullByDefault
 package org.sonar.php.symbols;
-
-import java.util.Optional;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
-
-enum UnknownClassSymbol implements ClassSymbol {
-
-  UNKNOWN;
-
-  @Override
-  public LocationInFile location() {
-    return UnknownLocationInFile.UNKNOWN_LOCATION;
-  }
-
-  @Override
-  public QualifiedName qualifiedName() {
-    return QualifiedName.qualifiedName("[unknown]");
-  }
-
-  @Override
-  public Optional<ClassSymbol> superClass() {
-    return Optional.empty();
-  }
-
-  @Override
-  public boolean isUnknownSymbol() {
-    return true;
-  }
-}
