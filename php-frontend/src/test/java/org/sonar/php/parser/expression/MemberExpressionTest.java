@@ -95,6 +95,11 @@ public class MemberExpressionTest {
     .matches("f()->$a")
     .matches("$a->{'b'}")
 
-    .matches("A::class");
+    .matches("A::class")
+
+    .matches("['Test', 'method']()")
+    .matches("'Test::method'()")
+    .matches("(['Test', 'method'])()")
+    .matches("('Test::method')()");
   }
 }

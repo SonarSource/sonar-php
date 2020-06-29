@@ -1536,14 +1536,23 @@ public class PHPGrammar {
 
   public ExpressionTree MEMBER_EXPRESSION() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.MEMBER_EXPRESSION).is(
-      f.memberExpression(
-        PRIMARY_EXPRESSION(),
-        b.zeroOrMore(
+      b.firstOf(
+        f.memberExpression(
+          PRIMARY_EXPRESSION(),
+          b.zeroOrMore(
+            b.firstOf(
+              OBJECT_MEMBER_ACCESS(),
+              CLASS_MEMBER_ACCESS(),
+              DIMENSIONAL_OFFSET(),
+              FUNCTION_CALL_ARGUMENT_LIST()))
+        ),
+        f.memberExpression(
           b.firstOf(
-            OBJECT_MEMBER_ACCESS(),
-            CLASS_MEMBER_ACCESS(),
-            DIMENSIONAL_OFFSET(),
-            FUNCTION_CALL_ARGUMENT_LIST()))));
+            ARRAY_INITIALIZER(),
+            STRING_LITERAL()),
+          FUNCTION_CALL_ARGUMENT_LIST()
+        )
+      ));
   }
 
   public MemberAccessTree OBJECT_MEMBER_ACCESS() {
