@@ -5,18 +5,18 @@ may be used wrongly in the rest of the code. For this reason, it is recommended 
 <h2>Noncompliant Code Example</h2>
 <pre>
 $arr = array(1, 2, 3);
-foreach ($arr as &amp;$value) {
+foreach ($arr as &amp;$value) { // Noncompliant; $value is still alive after the loop and references the last item of the array: $arr[2]
     $value = $value * 2;
 }
-// Noncompliant; $value is still alive and references the last item of the array: $arr[2]
+$value = 'x';
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
 $arr = array(1, 2, 3);
-foreach ($arr as &amp;$value) {
+foreach ($arr as &amp;$value) { // Compliant; there is no risk to use by mistake the content of $value pointing to $arr[2]
     $value = $value * 2;
 }
-unset($value); // Compliant; there is no risk to use by mistake the content of $value pointing to $arr[2]
+unset($value);
 </pre>
 <h2>See</h2>
 <ul>

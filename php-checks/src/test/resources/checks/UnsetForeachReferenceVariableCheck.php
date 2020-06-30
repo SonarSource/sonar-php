@@ -53,3 +53,8 @@ $arr9 = array(1, 2, 3);
 foreach ($arr9 as &$value9) { // Compliant
     $value9 = $value9 * 2;
 }
+
+$arr10 = array(1, 2, 3);
+foreach ($arr10 as $key => &$value10) { // Compliant
+    $value10 = $value10 * 2;
+}
