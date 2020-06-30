@@ -43,18 +43,18 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   private final Map<String, LiteralTree> firstOccurrenceTrees = Maps.newHashMap();
   private final Map<String, List<LiteralTree>> sameLiteralOccurrences = Maps.newHashMap();
 
-  public static final int DEFAULT = 5;
-  public static final int MINIMAL_LITERAL_LENGTH = 5;
+  public static final int THRESHOLD_DEFAULT = 3;
+  public static final int MINIMAL_LITERAL_LENGTH_DEFAULT = 5;
 
   @RuleProperty(
     key = "threshold",
-    defaultValue = "" + DEFAULT)
-  int threshold = DEFAULT;
+    defaultValue = "" + THRESHOLD_DEFAULT)
+  int threshold = THRESHOLD_DEFAULT;
 
   @RuleProperty(
     key = "minimal_literal_length",
-    defaultValue = "" + MINIMAL_LITERAL_LENGTH)
-  int minimalLiteralLength = MINIMAL_LITERAL_LENGTH;
+    defaultValue = "" + MINIMAL_LITERAL_LENGTH_DEFAULT)
+  int minimalLiteralLength = MINIMAL_LITERAL_LENGTH_DEFAULT;
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
