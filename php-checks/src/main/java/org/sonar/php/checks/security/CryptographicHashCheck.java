@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 @Rule(key = "S4790")
 public class CryptographicHashCheck extends FunctionUsageCheck {
 
-  private static final String MESSAGE = "Make sure that hashing data is safe here.";
+  private static final String MESSAGE = "Make sure this weak hash algorithm is not used in a sensitive context here.";
 
   @Override
   protected ImmutableSet<String> functionNames() {
