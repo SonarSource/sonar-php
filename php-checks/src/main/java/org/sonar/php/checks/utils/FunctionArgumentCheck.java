@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -47,16 +48,35 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
   }
 
   public void checkArgument(FunctionCallTree tree, String expectedFunctionName, ArgumentIndicator... expectedArgument) {
-    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-    List<ExpressionTree> arguments = tree.arguments();
-
-    if (expectedFunctionName.equals(functionName)) {
+    if (isExpectedFunction(tree, expectedFunctionName)) {
+      List<ExpressionTree> arguments = tree.arguments();
       for (ArgumentIndicator argumentIndicator: expectedArgument) {
         if (argumentIndicator.position >= arguments.size() || !verifyArgument(arguments, argumentIndicator)) {
           return;
         }
       }
     }
+  }
+
+  public boolean checkArgumentAbsence(FunctionCallTree tree, String expectedFunctionName, int position) {
+    return checkArgumentAbsence(tree, expectedFunctionName, position, true);
+  }
+
+  public boolean checkArgumentAbsence(FunctionCallTree tree, String expectedFunctionName, int position, boolean raiseIssueOnAbsence) {
+    if (isExpectedFunction(tree, expectedFunctionName)) {
+      List<ExpressionTree> arguments = tree.arguments();
+      if (arguments.size() <= position == raiseIssueOnAbsence) {
+        createIssue(tree);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isExpectedFunction(FunctionCallTree tree, String expectedFunctionName) {
+    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
+
+    return expectedFunctionName.equals(functionName);
   }
 
   private boolean verifyArgument(List<ExpressionTree> arguments, ArgumentIndicator argumentIndicator) {
@@ -112,7 +132,9 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
     public ArgumentIndicator(int position, Set<String> values) {
       this.position = position;
-      this.values = values;
+      this.values = values.stream()
+        .map(name -> name.toLowerCase(Locale.ENGLISH))
+        .collect(Collectors.toSet());
     }
   }
 

@@ -106,6 +106,7 @@ public class CheckList {
       EmptyMethodCheck.class,
       EmptyNestedBlockCheck.class,
       EmptyStatementCheck.class,
+      EncryptionModeAndPaddingCheck.class,
       EvalUseCheck.class,
       ExitOrDieUsageCheck.class,
       ExpressionComplexityCheck.class,
