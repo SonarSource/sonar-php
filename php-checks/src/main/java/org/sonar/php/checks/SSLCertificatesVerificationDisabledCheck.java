@@ -20,39 +20,30 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import java.util.List;
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.CurlUsageCheck;
+import org.sonar.php.checks.utils.FunctionArgumentCheck;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 
 @Rule(key = "S4830")
-public class SSLCertificatesVerificationDisabledCheck extends CurlUsageCheck {
-
-  private static final String CURLOPT_SSL_VERIFYPEER = "CURLOPT_SSL_VERIFYPEER";
-  private static final Set<String> VERIFY_PEER_COMPLIANT_VALUES = ImmutableSet.of("true", "1");
+public class SSLCertificatesVerificationDisabledCheck extends FunctionArgumentCheck {
 
   private static final String MESSAGE = "Enable server certificate validation on this SSL/TLS connection.";
 
+  private static final String CURL_SETOPT = "curl_setopt";
+  private static final String CURLOPT_SSL_VERIFYPEER = "CURLOPT_SSL_VERIFYPEER";
+  private static final Set<String> VERIFY_PEER_COMPLIANT_VALUES = ImmutableSet.of("true", "1");
+
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-    List<ExpressionTree> arguments = tree.arguments();
+    checkArgument(tree, CURL_SETOPT, new ArgumentIndicator(1, CURLOPT_SSL_VERIFYPEER), new ArgumentVerifier(2, VERIFY_PEER_COMPLIANT_VALUES, false));
 
-    // Detect curl_setopt function usage
-    // http://php.net/manual/fr/function.curl-setopt.php
-    if (CURL_SETOPT.equals(functionName) && arguments.size() > 2) {
-      checkCurlSetop(arguments, CURLOPT_SSL_VERIFYPEER, VERIFY_PEER_COMPLIANT_VALUES);
-    }
-
-    // super method must be called in order to visit function call node's children
     super.visitFunctionCall(tree);
   }
 
-  protected void addIssue(ExpressionTree expressionTree) {
+  protected void createIssue(ExpressionTree expressionTree) {
     context().newIssue(this, expressionTree, MESSAGE);
   }
 }

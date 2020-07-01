@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -35,16 +36,9 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
-  protected abstract void createIssue(ExpressionTree tree);
-
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
+  protected abstract void createIssue(ExpressionTree tree);
 
   public void checkArgument(FunctionCallTree tree, String expectedFunctionName, ArgumentIndicator... expectedArgument) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
@@ -59,6 +53,13 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     }
   }
 
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
+    tree.accept(assignmentExpressionVisitor);
+    super.visitCompilationUnit(tree);
+  }
+
   private boolean verifyArgument(List<ExpressionTree> arguments, ArgumentIndicator argumentIndicator) {
     ExpressionTree argument = arguments.get(argumentIndicator.position);
     ExpressionTree argumentValue = getAssignedValue(argument);
@@ -66,12 +67,11 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     Optional<String> value = nameOf(argumentValue);
     if (value.isPresent()) {
       String quoteLessLowercaseValue = CheckUtils.trimQuotes(value.get()).toLowerCase(Locale.ENGLISH);
-
       boolean containValues = argumentIndicator.values.contains(quoteLessLowercaseValue);
 
       if (argumentIndicator instanceof ArgumentVerifier && ((ArgumentVerifier) argumentIndicator).raiseIssueOnMatch == containValues) {
-          createIssue(argument);
-          return true;
+        createIssue(argument);
+        return true;
       }
 
       return containValues;
@@ -112,7 +112,9 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
     public ArgumentIndicator(int position, Set<String> values) {
       this.position = position;
-      this.values = values;
+      this.values = values.stream()
+        .map(name -> name.toLowerCase(Locale.ENGLISH))
+        .collect(Collectors.toSet());
     }
   }
 
