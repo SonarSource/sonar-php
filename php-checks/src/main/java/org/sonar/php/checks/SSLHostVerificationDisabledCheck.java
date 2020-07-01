@@ -19,8 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
-import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionArgumentCheck;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
