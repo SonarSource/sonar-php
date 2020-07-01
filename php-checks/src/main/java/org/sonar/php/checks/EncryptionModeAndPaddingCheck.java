@@ -35,10 +35,30 @@ public class EncryptionModeAndPaddingCheck extends FunctionArgumentCheck {
   private static final String OPENSSL_PUBLIC_ENCRYPT_COMPLIANT_VALUE = "OPENSSL_PKCS1_OAEP_PADDING";
 
   private static final String OPENSSL_ENCRYPT = "openssl_encrypt";
-  private static final Set<String> OPENSSL_PUBLIC_ENCRYPT_NONCOMPLIANT_VALUES = ImmutableSet.of("aes-128-ecb", "aes-192-ecb", "aes-256-ecb", "aria-128-ecb", "aria-192-ecb", "aria-256-ecb", "bf-ecb", "camellia-128-ecb", "camellia-192-ecb", "camellia-256-ecb", "cast5-ecb", "des-ecb", "rc2-ecb", "seed-ecb", "sm4-ecb");
+  private static final Set<String> OPENSSL_PUBLIC_ENCRYPT_NONCOMPLIANT_VALUES = opensslPublicEncryptNoncompliantValues();
 
   private static final String MCRYPT_ENCRYPT = "mcrypt_encrypt";
   private static final String MCRYPT_ENCRYPT_NONCOMPLIANT_VALUE = "ecb";
+
+  private static Set<String> opensslPublicEncryptNoncompliantValues() {
+    return ImmutableSet.of(
+      "aes-128-ecb",
+      "aes-192-ecb",
+      "aes-256-ecb",
+      "aria-128-ecb",
+      "aria-192-ecb",
+      "aria-256-ecb",
+      "bf-ecb",
+      "camellia-128-ecb",
+      "camellia-192-ecb",
+      "camellia-256-ecb",
+      "cast5-ecb",
+      "des-ecb",
+      "rc2-ecb",
+      "seed-ecb",
+      "sm4-ecb"
+    );
+  }
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

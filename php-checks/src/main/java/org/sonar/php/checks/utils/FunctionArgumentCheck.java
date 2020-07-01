@@ -73,7 +73,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private boolean isExpectedFunction(FunctionCallTree tree, String expectedFunctionName) {
+  private static boolean isExpectedFunction(FunctionCallTree tree, String expectedFunctionName) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
 
     return expectedFunctionName.equals(functionName);
@@ -90,8 +90,8 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
       boolean containValues = argumentIndicator.values.contains(quoteLessLowercaseValue);
 
       if (argumentIndicator instanceof ArgumentVerifier && ((ArgumentVerifier) argumentIndicator).raiseIssueOnMatch == containValues) {
-          createIssue(argument);
-          return true;
+        createIssue(argument);
+        return true;
       }
 
       return containValues;
