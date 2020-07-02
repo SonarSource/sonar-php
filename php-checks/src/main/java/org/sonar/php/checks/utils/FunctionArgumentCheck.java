@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.utils;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import java.util.List;
 import java.util.Locale;
@@ -34,12 +35,31 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+/**
+ * This abstract class simplifies the checking of function calls for the specific arguments.
+ * {@link ArgumentVerifier} can be used to check whether an argument corresponds to a certain value or a set of values.
+ * Based on a flag of the verifier an issue can be created on match or non-match.
+ * If arguments should only be checked when other arguments must match certain values,
+ * {@link ArgumentIndicator} can be used. They are used as a condition for the verification.
+ */
 public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
+  /**
+   * Implement this method to create an issue with specific message for the certain check.
+   * As tree argument the verified argument is given.
+   */
   protected abstract void createIssue(ExpressionTree tree);
 
+  /**
+   * Several {@link ArgumentVerifier} and {@link ArgumentIndicator} can be included in the check.
+   * This means a single function can be checked for multiple arguments.
+   *
+   * The order of indicators and verifiers must be observed.
+   * On the one hand, an indicator can lead to the termination of the check of a certain function.
+   * On the other hand, issues can be created by verifier before an indicator is triggered.
+   */
   public void checkArgument(FunctionCallTree tree, String expectedFunctionName, ArgumentIndicator... expectedArgument) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     List<ExpressionTree> arguments = tree.arguments();
@@ -90,6 +110,9 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return name != null ? Optional.of(name) : Optional.empty();
   }
 
+  /**
+   * Try to resolve the value of a variable which is passed as argument.
+   */
   private ExpressionTree getAssignedValue(ExpressionTree value) {
     if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       Symbol valueSymbol = context().symbolTable().getSymbol(value);
@@ -117,11 +140,13 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
         .collect(Collectors.toSet());
     }
 
-    public int getPosition() {
+    @VisibleForTesting
+    int getPosition() {
       return position;
     }
 
-    public Set<String> getValues() {
+    @VisibleForTesting
+    Set<String> getValues() {
       return values;
     }
   }
@@ -148,7 +173,8 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
       this.raiseIssueOnMatch = raiseIssueOnMatch;
     }
 
-    public boolean isRaiseIssueOnMatch() {
+    @VisibleForTesting
+    boolean isRaiseIssueOnMatch() {
       return raiseIssueOnMatch;
     }
   }
