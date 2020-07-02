@@ -30,22 +30,22 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_indicator_with_string() {
-    ArgumentIndicator argumentIndicator = new ArgumentIndicator(0, "VALUE");
+    ArgumentIndicator argumentIndicator = new ArgumentIndicator(1, "VALUE");
 
     assertThat(argumentIndicator.getValues()).isEqualTo(ImmutableSet.of("value"));
-    assertThat(argumentIndicator.getPosition()).isEqualTo(0);
+    assertThat(argumentIndicator.getPosition()).isEqualTo(1);
   }
 
   @Test
   public void argument_indicator_with_set() {
-    ArgumentIndicator argumentIndicator = new ArgumentIndicator(0, ImmutableSet.of("VALUE"));
+    ArgumentIndicator argumentIndicator = new ArgumentIndicator(1, ImmutableSet.of("VALUE"));
 
     assertThat(argumentIndicator.getValues()).isEqualTo(ImmutableSet.of("value"));
   }
 
   @Test
   public void argument_verifier_with_value() {
-    ArgumentVerifier argumentVerifier = new ArgumentVerifier(0, "VALUE", false);
+    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, "VALUE", false);
 
     assertThat(argumentVerifier.getValues()).isEqualTo(ImmutableSet.of("value"));
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isFalse();
@@ -53,7 +53,7 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_verifier_with_set() {
-    ArgumentVerifier argumentVerifier = new ArgumentVerifier(0, ImmutableSet.of("VALUE"), true);
+    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, ImmutableSet.of("VALUE"), true);
 
     assertThat(argumentVerifier.getValues()).isEqualTo(ImmutableSet.of("value"));
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isTrue();
@@ -61,7 +61,7 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_verifier_with_default() {
-    ArgumentVerifier argumentVerifier = new ArgumentVerifier(0, "VALUE");
+    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, "VALUE");
 
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isTrue();
   }
