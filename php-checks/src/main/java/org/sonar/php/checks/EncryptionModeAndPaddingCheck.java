@@ -35,7 +35,7 @@ public class EncryptionModeAndPaddingCheck extends FunctionArgumentCheck {
   private static final String OPENSSL_PUBLIC_ENCRYPT_COMPLIANT_VALUE = "OPENSSL_PKCS1_OAEP_PADDING";
 
   private static final String OPENSSL_ENCRYPT = "openssl_encrypt";
-  private static final Set<String> OPENSSL_PUBLIC_ENCRYPT_NONCOMPLIANT_VALUES = opensslPublicEncryptNoncompliantValues();
+  private static final Set<String> OPENSSL_ENCRYPT_NONCOMPLIANT_VALUES = opensslPublicEncryptNoncompliantValues();
 
   private static final String MCRYPT_ENCRYPT = "mcrypt_encrypt";
   private static final String MCRYPT_ENCRYPT_NONCOMPLIANT_VALUE = "ecb";
@@ -66,7 +66,7 @@ public class EncryptionModeAndPaddingCheck extends FunctionArgumentCheck {
     if (!checkArgumentAbsence(tree, OPENSSL_PUBLIC_ENCRYPT, 3)) {
       checkArgument(tree, OPENSSL_PUBLIC_ENCRYPT, new ArgumentVerifier(3, OPENSSL_PUBLIC_ENCRYPT_COMPLIANT_VALUE, false));
     }
-    checkArgument(tree, OPENSSL_ENCRYPT, new ArgumentVerifier(1, OPENSSL_PUBLIC_ENCRYPT_NONCOMPLIANT_VALUES, true));
+    checkArgument(tree, OPENSSL_ENCRYPT, new ArgumentVerifier(1, OPENSSL_ENCRYPT_NONCOMPLIANT_VALUES, true));
     checkArgument(tree, MCRYPT_ENCRYPT, new ArgumentVerifier(3, MCRYPT_ENCRYPT_NONCOMPLIANT_VALUE, true));
 
     super.visitFunctionCall(tree);
