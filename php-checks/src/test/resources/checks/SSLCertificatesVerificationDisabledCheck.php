@@ -16,3 +16,6 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); // Noncompliant {{Enable serv
 CURL_setopt($curl, CURLOPT_SSL_VERIFYPEER, $verify_peer_off); // Noncompliant
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, '0'); // Noncompliant
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // Noncompliant
+
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, CurlSetting::isVerifyPeer()); // FN - Simulation necessary
+curl_setopt();
