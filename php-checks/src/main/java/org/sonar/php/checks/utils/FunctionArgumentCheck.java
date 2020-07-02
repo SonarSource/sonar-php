@@ -107,7 +107,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     } else {
       name = CheckUtils.nameOf(tree);
     }
-    return name != null ? Optional.of(name) : Optional.empty();
+    return Optional.ofNullable(name);
   }
 
   /**
