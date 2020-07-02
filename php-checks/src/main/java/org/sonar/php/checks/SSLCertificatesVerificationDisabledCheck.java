@@ -34,16 +34,17 @@ public class SSLCertificatesVerificationDisabledCheck extends FunctionArgumentCh
 
   private static final String CURL_SETOPT = "curl_setopt";
   private static final String CURLOPT_SSL_VERIFYPEER = "CURLOPT_SSL_VERIFYPEER";
-  private static final Set<String> VERIFY_PEER_COMPLIANT_VALUES = ImmutableSet.of("true", "1");
+  private static final Set<String> VERIFY_PEER_COMPLIANT_VALUES = ImmutableSet.of("false", "0");
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    checkArgument(tree, CURL_SETOPT, new ArgumentIndicator(1, CURLOPT_SSL_VERIFYPEER), new ArgumentVerifier(2, VERIFY_PEER_COMPLIANT_VALUES, false));
+    checkArgument(tree, CURL_SETOPT, new ArgumentMatcher(1, CURLOPT_SSL_VERIFYPEER), new ArgumentVerifier(2, VERIFY_PEER_COMPLIANT_VALUES));
 
+    // super method must be called in order to visit function call node's children
     super.visitFunctionCall(tree);
   }
 
-  protected void createIssue(ExpressionTree expressionTree) {
-    context().newIssue(this, expressionTree, MESSAGE);
+  protected void createIssue(ExpressionTree argument) {
+    context().newIssue(this, argument, MESSAGE);
   }
 }

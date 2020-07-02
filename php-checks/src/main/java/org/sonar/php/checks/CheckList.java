@@ -218,6 +218,7 @@ public class CheckList {
       TrailingCommentCheck.class,
       TrailingWhitespaceCheck.class,
       UnserializeCallCheck.class,
+      UnsetForeachReferenceVariableCheck.class,
       UnusedExceptionCheck.class,
       UnusedFunctionParametersCheck.class,
       UnusedLocalVariableCheck.class,

@@ -36,7 +36,7 @@ public class SSLHostVerificationDisabledCheck extends FunctionArgumentCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    checkArgument(tree, CURL_SETOPT, new ArgumentIndicator(1, CURLOPT_SSL_VERIFYHOST), new ArgumentVerifier(2, VERIFY_HOST_COMPLIANT_VALUES, false));
+    checkArgument(tree, CURL_SETOPT, new ArgumentMatcher(1, CURLOPT_SSL_VERIFYHOST), new ArgumentVerifier(2, VERIFY_HOST_COMPLIANT_VALUES, false));
 
     super.visitFunctionCall(tree);
   }
