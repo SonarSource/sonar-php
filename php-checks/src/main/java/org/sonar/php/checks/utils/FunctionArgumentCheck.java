@@ -73,6 +73,16 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     }
   }
 
+  public boolean checkArgumentAbsence(FunctionCallTree tree, String expectedFunctionName, int position) {
+    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
+    List<ExpressionTree> arguments = tree.arguments();
+    if (expectedFunctionName.equals(functionName) && position >= arguments.size()) {
+      createIssue(tree);
+      return true;
+    }
+    return false;
+  }
+
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
