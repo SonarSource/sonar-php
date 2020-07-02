@@ -19,28 +19,27 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
-
-import java.util.List;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class StringLiteralDuplicatedCheckTest {
 
   private StringLiteralDuplicatedCheck check = new StringLiteralDuplicatedCheck();
 
   @Test
-  public void defaultValue() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"));
+  public void default_value() {
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/default.php");
   }
 
   @Test
-  public void custom() throws Exception {
+  public void custom_property_threshold() {
     check.threshold = 4;
-    List<PhpIssue> issue = ImmutableList.<PhpIssue>of(new LegacyIssue(check, "Define a constant instead of duplicating this literal \"name1\" 4 times.").line(20));
-    PHPCheckTest.check(check, TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), issue);
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom_threshold.php");
+  }
+
+  @Test
+  public void custom_property_minimal_literal_length() {
+    check.minimalLiteralLength = 4;
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom_length.php");
   }
 }

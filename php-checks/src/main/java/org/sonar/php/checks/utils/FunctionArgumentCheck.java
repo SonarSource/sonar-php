@@ -40,7 +40,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
  * {@link ArgumentVerifier} can be used to check whether an argument corresponds to a certain value or a set of values.
  * Based on a flag of the verifier an issue can be created on match or non-match.
  * If arguments should only be checked when other arguments must match certain values,
- * {@link ArgumentIndicator} can be used. They are used as a condition for the verification.
+ * {@link ArgumentMatcher} can be used. They are used as a condition for the verification.
  */
 public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
@@ -48,23 +48,25 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
   /**
    * Implement this method to create an issue with specific message for the certain check.
-   * As tree argument the verified argument is given.
+   * As expression tree the verified argument is given.
    */
-  protected abstract void createIssue(ExpressionTree tree);
+  protected abstract void createIssue(ExpressionTree argument);
 
   /**
-   * Several {@link ArgumentVerifier} and {@link ArgumentIndicator} can be included in the check.
+   * Several {@link ArgumentVerifier} and {@link ArgumentMatcher} can be included in the check.
    * This means a single function can be checked for multiple arguments.
    *
    * The order of indicators and verifiers must be observed.
    * On the one hand, an indicator can lead to the termination of the check of a certain function.
    * On the other hand, issues can be created by verifier before an indicator is triggered.
    */
-  public void checkArgument(FunctionCallTree tree, String expectedFunctionName, ArgumentIndicator... expectedArgument) {
-    if (isExpectedFunction(tree, expectedFunctionName)) {
-      List<ExpressionTree> arguments = tree.arguments();
-      for (ArgumentIndicator argumentIndicator: expectedArgument) {
-        if (argumentIndicator.position >= arguments.size() || !verifyArgument(arguments, argumentIndicator)) {
+  public void checkArgument(FunctionCallTree tree, String expectedFunctionName, ArgumentMatcher... expectedArgument) {
+    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
+    List<ExpressionTree> arguments = tree.arguments();
+
+    if (expectedFunctionName.equals(functionName)) {
+      for (ArgumentMatcher argumentMatcher : expectedArgument) {
+        if (argumentMatcher.position >= arguments.size() || !verifyArgument(arguments, argumentMatcher)) {
           return;
         }
       }
@@ -78,37 +80,16 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     super.visitCompilationUnit(tree);
   }
 
-  public boolean checkArgumentAbsence(FunctionCallTree tree, String expectedFunctionName, int position) {
-    return checkArgumentAbsence(tree, expectedFunctionName, position, true);
-  }
-
-  public boolean checkArgumentAbsence(FunctionCallTree tree, String expectedFunctionName, int position, boolean raiseIssueOnAbsence) {
-    if (isExpectedFunction(tree, expectedFunctionName)) {
-      List<ExpressionTree> arguments = tree.arguments();
-      if (arguments.size() <= position == raiseIssueOnAbsence) {
-        createIssue(tree);
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private static boolean isExpectedFunction(FunctionCallTree tree, String expectedFunctionName) {
-    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-
-    return expectedFunctionName.equals(functionName);
-  }
-
-  private boolean verifyArgument(List<ExpressionTree> arguments, ArgumentIndicator argumentIndicator) {
-    ExpressionTree argument = arguments.get(argumentIndicator.position);
+  private boolean verifyArgument(List<ExpressionTree> arguments, ArgumentMatcher argumentMatcher) {
+    ExpressionTree argument = arguments.get(argumentMatcher.position);
     ExpressionTree argumentValue = getAssignedValue(argument);
 
     Optional<String> value = nameOf(argumentValue);
     if (value.isPresent()) {
       String quoteLessLowercaseValue = CheckUtils.trimQuotes(value.get()).toLowerCase(Locale.ENGLISH);
-      boolean containValues = argumentIndicator.values.contains(quoteLessLowercaseValue);
+      boolean containValues = argumentMatcher.values.contains(quoteLessLowercaseValue);
 
-      if (argumentIndicator instanceof ArgumentVerifier && ((ArgumentVerifier) argumentIndicator).raiseIssueOnMatch == containValues) {
+      if (argumentMatcher instanceof ArgumentVerifier && ((ArgumentVerifier) argumentMatcher).raiseIssueOnMatch == containValues) {
         createIssue(argument);
         return true;
       }
@@ -126,7 +107,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     } else {
       name = CheckUtils.nameOf(tree);
     }
-    return name != null ? Optional.of(name) : Optional.empty();
+    return Optional.ofNullable(name);
   }
 
   /**
@@ -142,17 +123,17 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return value;
   }
 
-  protected static class ArgumentIndicator {
+  protected static class ArgumentMatcher {
 
     private final int position;
 
     private final Set<String> values;
 
-    public ArgumentIndicator(int position, String value) {
+    public ArgumentMatcher(int position, String value) {
       this(position, ImmutableSet.of(value));
     }
 
-    public ArgumentIndicator(int position, Set<String> values) {
+    public ArgumentMatcher(int position, Set<String> values) {
       this.position = position;
       this.values = values.stream()
         .map(name -> name.toLowerCase(Locale.ENGLISH))
@@ -170,7 +151,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     }
   }
 
-  protected static class ArgumentVerifier extends ArgumentIndicator {
+  protected static class ArgumentVerifier extends ArgumentMatcher {
 
     private boolean raiseIssueOnMatch = true;
 
