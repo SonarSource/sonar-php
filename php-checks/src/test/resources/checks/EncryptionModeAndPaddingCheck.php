@@ -8,8 +8,6 @@
 // by default OPENSSL_PKCS1_PADDING is used
   openssl_public_encrypt($data, $crypted, $key); // Noncompliant
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  foo($data, $crypted, $key, OPENSSL_NO_PADDING);
-  openssl_public_encrypt($data, $crypted, $key, $padding);
 
   openssl_encrypt($plaintext, "BF-ECB", $key, $options=OPENSSL_RAW_DATA, $iv); // Noncompliant {{Use secure mode and padding scheme.}}
   openssl_encrypt($plaintext, "RC2-ECB", $key, $options=OPENSSL_RAW_DATA, $iv); // Noncompliant
@@ -24,3 +22,6 @@
   mcrypt_encrypt(MCRYPT_RC4, $key, $plaintext, "ecb"); // Noncompliant
   mcrypt_encrypt(MCRYPT_RC4, $key, $plaintext, "cbc"); // Compliant
 
+  foo($data, $crypted, $key, OPENSSL_NO_PADDING);
+  openssl_public_encrypt($data, $crypted, $key, getPadding());
+  mcrypt_encrypt(MCRYPT_RC4, $key, $plaintext);
