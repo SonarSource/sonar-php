@@ -12,3 +12,7 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $verify_host_off); // Noncompliant {{
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // Noncompliant
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, '0'); // Noncompliant
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0); // Noncompliant
+
+
+curl_setopt($curl, CURLOPT_OTHER_KEY);
+curl_setopt($curl, getCurlOptionKey('host'), getCurlOptionValue('host'));
