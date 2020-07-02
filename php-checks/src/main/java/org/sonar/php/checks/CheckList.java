@@ -40,6 +40,7 @@ import org.sonar.php.checks.security.LoggerConfigurationCheck;
 import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.QueryUsageCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
+import org.sonar.php.checks.security.RobustCipherAlgorithmCheck;
 import org.sonar.php.checks.security.SessionFixationCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
@@ -189,6 +190,7 @@ public class CheckList {
       RequireInsteadOfRequireOnceCheck.class,
       ReturnOfBooleanExpressionCheck.class,
       RightCurlyBraceStartsLineCheck.class,
+      RobustCipherAlgorithmCheck.class,
       SelfAssignmentCheck.class,
       SelfKeywordUsageCheck.class,
       SessionCookiePersistenceCheck.class,
