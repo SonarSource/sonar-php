@@ -23,24 +23,24 @@ import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.sonar.php.checks.utils.FunctionArgumentCheck.ArgumentIndicator;
+import static org.sonar.php.checks.utils.FunctionArgumentCheck.ArgumentMatcher;
 import static org.sonar.php.checks.utils.FunctionArgumentCheck.ArgumentVerifier;
 
 public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_indicator_with_string() {
-    ArgumentIndicator argumentIndicator = new ArgumentIndicator(1, "VALUE");
+    ArgumentMatcher argumentMatcher = new ArgumentMatcher(1, "VALUE");
 
-    assertThat(argumentIndicator.getValues()).isEqualTo(ImmutableSet.of("value"));
-    assertThat(argumentIndicator.getPosition()).isEqualTo(1);
+    assertThat(argumentMatcher.getValues()).isEqualTo(ImmutableSet.of("value"));
+    assertThat(argumentMatcher.getPosition()).isEqualTo(1);
   }
 
   @Test
   public void argument_indicator_with_set() {
-    ArgumentIndicator argumentIndicator = new ArgumentIndicator(1, ImmutableSet.of("VALUE"));
+    ArgumentMatcher argumentMatcher = new ArgumentMatcher(1, ImmutableSet.of("VALUE"));
 
-    assertThat(argumentIndicator.getValues()).isEqualTo(ImmutableSet.of("value"));
+    assertThat(argumentMatcher.getValues()).isEqualTo(ImmutableSet.of("value"));
   }
 
   @Test
