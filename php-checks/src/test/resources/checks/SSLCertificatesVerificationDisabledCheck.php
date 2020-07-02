@@ -20,6 +20,6 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, '0'); // Noncompliant
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // Noncompliant
 
 
-function isVerifyPeer() { return true; }
+function isVerifyPeer() { return false; }
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, isVerifyPeer()); // FN - Simulation necessary
 curl_setopt();
