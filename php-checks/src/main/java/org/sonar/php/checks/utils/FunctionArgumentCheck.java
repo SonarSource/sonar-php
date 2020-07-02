@@ -80,7 +80,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return false;
   }
 
-  protected static Optional<String> nameOf(Tree tree) {
+  private static Optional<String> nameOf(Tree tree) {
     String name;
     if (tree instanceof LiteralTree) {
       name = ((LiteralTree) tree).value();
@@ -100,7 +100,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return value;
   }
 
-  public static class ArgumentIndicator {
+  protected static class ArgumentIndicator {
 
     private final int position;
 
@@ -116,9 +116,17 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
         .map(name -> name.toLowerCase(Locale.ENGLISH))
         .collect(Collectors.toSet());
     }
+
+    public int getPosition() {
+      return position;
+    }
+
+    public Set<String> getValues() {
+      return values;
+    }
   }
 
-  public static class ArgumentVerifier extends ArgumentIndicator {
+  protected static class ArgumentVerifier extends ArgumentIndicator {
 
     private boolean raiseIssueOnMatch = true;
 
@@ -138,6 +146,10 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     public ArgumentVerifier(int position, Set<String> values, boolean raiseIssueOnMatch) {
       super(position, values);
       this.raiseIssueOnMatch = raiseIssueOnMatch;
+    }
+
+    public boolean isRaiseIssueOnMatch() {
+      return raiseIssueOnMatch;
     }
   }
 }
