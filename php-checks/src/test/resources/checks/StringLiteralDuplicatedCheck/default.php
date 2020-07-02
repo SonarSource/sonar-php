@@ -6,11 +6,6 @@ echo "aa()";
 echo "aa()";
 echo "aa()";
 
-echo "bbbbbb";  // OK - too few
-echo "bbbbbb";
-echo "bbbbbb";
-echo "bbbbbb";
-
 echo "aaaa()"; // Noncompliant {{Define a constant instead of duplicating this literal "aaaa()" 5 times.}}
 //   ^^^^^^^^
 echo "aaaa()";

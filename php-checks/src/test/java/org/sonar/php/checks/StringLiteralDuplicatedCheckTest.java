@@ -27,14 +27,19 @@ public class StringLiteralDuplicatedCheckTest {
   private StringLiteralDuplicatedCheck check = new StringLiteralDuplicatedCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  public void default_value() {
     CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/default.php");
   }
 
   @Test
-  public void custom() throws Exception {
+  public void custom_property_threshold() {
     check.threshold = 4;
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom_threshold.php");
+  }
+
+  @Test
+  public void custom_property_minimal_literal_length() {
     check.minimalLiteralLength = 4;
-    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom.php");
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom_length.php");
   }
 }
