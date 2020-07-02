@@ -22,24 +22,9 @@ package org.sonar.php.checks;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class StringLiteralDuplicatedCheckTest {
-
-  private StringLiteralDuplicatedCheck check = new StringLiteralDuplicatedCheck();
-
+public class UnsetForeachReferenceVariableCheckTest {
   @Test
-  public void default_value() {
-    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/default.php");
-  }
-
-  @Test
-  public void custom_property_threshold() {
-    check.threshold = 4;
-    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom_threshold.php");
-  }
-
-  @Test
-  public void custom_property_minimal_literal_length() {
-    check.minimalLiteralLength = 4;
-    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom_length.php");
+  public void test() throws Exception {
+    CheckVerifier.verify(new UnsetForeachReferenceVariableCheck(), "UnsetForeachReferenceVariableCheck.php");
   }
 }

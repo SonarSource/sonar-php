@@ -22,48 +22,21 @@ package org.sonar.php.checks.security;
 import com.google.common.collect.ImmutableSet;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S4790")
 public class CryptographicHashCheck extends FunctionUsageCheck {
 
-  private static final String MESSAGE = "Make sure that hashing data is safe here.";
-
-  private static final ImmutableSet<String> FUNCTION_NAMES = ImmutableSet.of(
-    "hash",
-    "hash_init",
-    "crypt",
-    "password_hash",
-    "hash_pbkdf2",
-    "openssl_pbkdf2",
-    "md5",
-    "sha1");
+  private static final String MESSAGE = "Make sure this weak hash algorithm is not used in a sensitive context here.";
 
   @Override
   protected ImmutableSet<String> functionNames() {
-    return FUNCTION_NAMES;
+    return ImmutableSet.of("md5", "sha1");
   }
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    if (!isHashInitHMAC(tree)) {
-      context().newIssue(this, tree, MESSAGE);
-    }
-  }
-
-  private static boolean isHashInitHMAC(FunctionCallTree tree) {
-    String qualifiedName = ((NamespaceNameTree) tree.callee()).qualifiedName();
-    return qualifiedName.equalsIgnoreCase("hash_init") &&
-      tree.arguments().size() >= 2 &&
-      isHMAC(tree.arguments().get(1));
-  }
-
-  private static boolean isHMAC(ExpressionTree option) {
-    return option.getKind() == Tree.Kind.NAMESPACE_NAME &&
-      ((NamespaceNameTree)option).qualifiedName().equals("HASH_HMAC");
+    context().newIssue(this, tree.callee(), MESSAGE);
   }
 
 }
