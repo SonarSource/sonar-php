@@ -19,11 +19,13 @@
  */
 package org.sonar.php.checks.utils;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -33,19 +35,31 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+/**
+ * This abstract class simplifies the checking of function calls for the specific arguments.
+ * {@link ArgumentVerifier} can be used to check whether an argument corresponds to a certain value or a set of values.
+ * Based on a flag of the verifier an issue can be created on match or non-match.
+ * If arguments should only be checked when other arguments must match certain values,
+ * {@link ArgumentIndicator} can be used. They are used as a condition for the verification.
+ */
 public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
-
-  protected abstract void createIssue(ExpressionTree tree);
 
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
+  /**
+   * Implement this method to create an issue with specific message for the certain check.
+   * As tree argument the verified argument is given.
+   */
+  protected abstract void createIssue(ExpressionTree tree);
 
+  /**
+   * Several {@link ArgumentVerifier} and {@link ArgumentIndicator} can be included in the check.
+   * This means a single function can be checked for multiple arguments.
+   *
+   * The order of indicators and verifiers must be observed.
+   * On the one hand, an indicator can lead to the termination of the check of a certain function.
+   * On the other hand, issues can be created by verifier before an indicator is triggered.
+   */
   public void checkArgument(FunctionCallTree tree, String expectedFunctionName, ArgumentIndicator... expectedArgument) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     List<ExpressionTree> arguments = tree.arguments();
@@ -59,6 +73,13 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     }
   }
 
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
+    tree.accept(assignmentExpressionVisitor);
+    super.visitCompilationUnit(tree);
+  }
+
   private boolean verifyArgument(List<ExpressionTree> arguments, ArgumentIndicator argumentIndicator) {
     ExpressionTree argument = arguments.get(argumentIndicator.position);
     ExpressionTree argumentValue = getAssignedValue(argument);
@@ -66,12 +87,11 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     Optional<String> value = nameOf(argumentValue);
     if (value.isPresent()) {
       String quoteLessLowercaseValue = CheckUtils.trimQuotes(value.get()).toLowerCase(Locale.ENGLISH);
-
       boolean containValues = argumentIndicator.values.contains(quoteLessLowercaseValue);
 
       if (argumentIndicator instanceof ArgumentVerifier && ((ArgumentVerifier) argumentIndicator).raiseIssueOnMatch == containValues) {
-          createIssue(argument);
-          return true;
+        createIssue(argument);
+        return true;
       }
 
       return containValues;
@@ -80,7 +100,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return false;
   }
 
-  protected static Optional<String> nameOf(Tree tree) {
+  private static Optional<String> nameOf(Tree tree) {
     String name;
     if (tree instanceof LiteralTree) {
       name = ((LiteralTree) tree).value();
@@ -90,6 +110,9 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return name != null ? Optional.of(name) : Optional.empty();
   }
 
+  /**
+   * Try to resolve the value of a variable which is passed as argument.
+   */
   private ExpressionTree getAssignedValue(ExpressionTree value) {
     if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       Symbol valueSymbol = context().symbolTable().getSymbol(value);
@@ -100,7 +123,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return value;
   }
 
-  public static class ArgumentIndicator {
+  protected static class ArgumentIndicator {
 
     private final int position;
 
@@ -112,11 +135,23 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
     public ArgumentIndicator(int position, Set<String> values) {
       this.position = position;
-      this.values = values;
+      this.values = values.stream()
+        .map(name -> name.toLowerCase(Locale.ENGLISH))
+        .collect(Collectors.toSet());
+    }
+
+    @VisibleForTesting
+    int getPosition() {
+      return position;
+    }
+
+    @VisibleForTesting
+    Set<String> getValues() {
+      return values;
     }
   }
 
-  public static class ArgumentVerifier extends ArgumentIndicator {
+  protected static class ArgumentVerifier extends ArgumentIndicator {
 
     private boolean raiseIssueOnMatch = true;
 
@@ -136,6 +171,11 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     public ArgumentVerifier(int position, Set<String> values, boolean raiseIssueOnMatch) {
       super(position, values);
       this.raiseIssueOnMatch = raiseIssueOnMatch;
+    }
+
+    @VisibleForTesting
+    boolean isRaiseIssueOnMatch() {
+      return raiseIssueOnMatch;
     }
   }
 }
