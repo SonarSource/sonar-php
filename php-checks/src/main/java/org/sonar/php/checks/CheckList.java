@@ -201,6 +201,7 @@ public class CheckList {
       SleepFunctionUsageCheck.class,
       SocketUsageCheck.class,
       SSLCertificatesVerificationDisabledCheck.class,
+      SSLHostVerificationDisabledCheck.class,
       StandardInputUsageCheck.class,
       StringLiteralDuplicatedCheck.class,
       SwitchCaseTooBigCheck.class,

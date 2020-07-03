@@ -1,0 +1,24 @@
+<p>To establish a SSL/TLS connection not vulnerable to man-in-the-middle attacks, it's essential to make sure the server presents the right
+certificate. </p>
+<p>The certificate's hostname-specific data should match the server hostname.</p>
+<p>It's not recommended to re-invent the wheel by implementing custom hostname verification.</p>
+<p>TLS/SSL libraries provide built-in hostname verification functions that should be used.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE); // Noncompliant
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);  // Noncompliant
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // Compliant; default value is 2 to "check the existence of a common name and also verify that it matches the hostname provided" according to PHP's documentation
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // Compliant: From 7.66.0: treats 1 and 2 the same (https://curl.haxx.se/libcurl/c/CURLOPT_SSL_VERIFYHOST.html)
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/297.html">MITRE, CWE-297</a> - Improper Validation of Certificate with Host Mismatch </li>
+</ul>
+
