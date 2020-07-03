@@ -7,7 +7,7 @@
 <p> * the PID of the process to which the signal will be sent is coming from an untrusted source. It could for example come from a world-writable
 file.</p>
 <p> * users who are asking for the signal to be sent might not have the permission to send those signals.</p>
-<p>You are at risk if you answered yes to any of these questions.</p>
+<p>There is a risk if you answered yes to any of those questions.</p>
 <h2>Recommended Secure Coding Practices</h2>
 <p> * If the signal is sent because of a user's request. Check that the user is allowed to send this signal. You can for example forbid it if the user
 doesn't own the process.</p>

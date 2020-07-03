@@ -1,5 +1,5 @@
 {
-  "title": "Allowing session fixation is security-sensitive",
+  "title": "Manual generation of session ID is security-sensitive",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
@@ -8,18 +8,18 @@
   },
   "tags": [
     "cwe",
-    "owasp-a2"
+    "owasp-a6"
   ],
-  "defaultSeverity": "Critical",
+  "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-5328",
   "sqKey": "S5328",
   "scope": "All",
   "securityStandards": {
     "CWE": [
-      384
+      330
     ],
     "OWASP": [
-      "A2"
+      "A6"
     ]
   }
 }

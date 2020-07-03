@@ -1,35 +1,32 @@
-<p>If a session can be easily determined ("session fixation attacks"), then an attacker can try to force a legit user to use a session ID that he
-knows. Thus, when the user is authenticated, he will share the same session ID than the attacker and all its privileges on the web application.</p>
+<p>If a session ID can be guessed (not generated with a secure pseudo random generator, or with insufficient length ...) an attacker may be able to
+hijack another user's session.</p>
 <h2>Ask Yourself Whether</h2>
 <ul>
-  <li> The session ID can be easily guessed (eg: not random). </li>
-  <li> When a user authenticates, its old/current session ID is used instead of a new one. </li>
-  <li> Many users can share the same session ID. </li>
+  <li> the session ID is not unique. </li>
+  <li> the session ID is set from a user-controlled input. </li>
+  <li> the session ID is generated with not secure pseudo random generator. </li>
+  <li> the session ID length is too short. </li>
 </ul>
 <p>There is a risk if you answered yes to any of those questions.</p>
 <h2>Recommended Secure Coding Practices</h2>
-<ul>
-  <li> Don't manually generate session IDs, use instead PHP's native functionality such as <code>session_regenerate_id()</code>. </li>
-  <li> If you must generate your own IDs, use a cryptographically secure method, like <code>bin2hex(random_bytes(16))</code> </li>
-</ul>
+<p>Don't manually generate session IDs, use instead language based native functionality.</p>
 <h2>Sensitive Code Example</h2>
 <pre>
-session_id(customHash($user));
-// or
-session_id($_POST["hidden_session_id"]);
+session_id(bin2hex(random_bytes(4))); // Sensitive: 4 bytes is too short
+session_id($_POST["session_id"]); // Sensitive: session ID can be specified by the user
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-session_regenerate_id();
-// or
-$sessionId = bin2hex(random_bytes(16));
-session_id($sessionId);
+session_regenerate_id(); ; // Compliant
+session_id(bin2hex(random_bytes(16))); // Compliant
 </pre>
 <h2>See</h2>
 <ul>
-  <li> <a href="https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A2-Broken_Authentication">OWASP Top 10 2017 Category A2</a> -
-  Broken Authentication </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
   <li> <a href="https://www.owasp.org/index.php/Session_fixation">OWASP Sesssion Fixation</a> </li>
-  <li> <a href="http://cwe.mitre.org/data/definitions/384.html">MITRE, CWE-384</a> - Session Fixation </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/330.html">MITRE, CWE-330</a> - Use of Insufficiently Random Values </li>
+  <li> <a href="https://www.php.net/random-bytes">PHP: random_bytes()</a> </li>
+  <li> <a href="https://www.php.net/session-regenerate-id">PHP: session_regenerate_id()</a> </li>
 </ul>
 
