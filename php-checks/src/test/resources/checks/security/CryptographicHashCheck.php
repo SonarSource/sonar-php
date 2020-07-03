@@ -23,18 +23,22 @@ hash_init("ripemd160"); // Noncompliant
 hash_init("haval160,3"); // Noncompliant
 hash_init("haval192,3"); // Noncompliant
 hash_init("haval224,3"); // Noncompliant
+hash_init("sha512"); // Compliant
+hash_init($unknown); // Compliant
 
 
-hash("md2"); // Noncompliant
-hash("md4"); // Noncompliant
-hash("md5"); // Noncompliant
-hash("sha1"); // Noncompliant
-hash("sha224"); // Noncompliant
-hash("ripemd128"); // Noncompliant
-hash("ripemd160"); // Noncompliant
-hash("haval160,3"); // Noncompliant
-hash("haval192,3"); // Noncompliant
-hash("haval224,3"); // Noncompliant
+hash("md2", $data); // Noncompliant
+hash("md4", $data); // Noncompliant
+hash("md5", $data); // Noncompliant
+hash("sha1", $data); // Noncompliant
+hash("sha224", $data); // Noncompliant
+hash("ripemd128", $data); // Noncompliant
+hash("ripemd160", $data); // Noncompliant
+hash("haval160,3", $data); // Noncompliant
+hash("haval192,3", $data); // Noncompliant
+hash("haval224,3", $data); // Noncompliant
+hash("sha512", $data); // Compliant
+hash($unknown, $data); // Compliant
 
 hash_pbkdf2("md2", $password, $salt, $iterations); // Noncompliant
 hash_pbkdf2("md4", $password, $salt, $iterations); // Noncompliant
@@ -46,6 +50,8 @@ hash_pbkdf2("ripemd160", $password, $salt, $iterations); // Noncompliant
 hash_pbkdf2("haval160,3", $password, $salt, $iterations); // Noncompliant
 hash_pbkdf2("haval192,3", $password, $salt, $iterations); // Noncompliant
 hash_pbkdf2("haval224,3", $password, $salt, $iterations); // Noncompliant
+hash_pbkdf2("sha512", $password, $salt, $iterations); // Compliant
+hash_pbkdf2($unknown, $password, $salt, $iterations); // Compliant
 
 mhash(MHASH_MD2, $data); // Noncompliant
 mhash(MHASH_MD4, $data); // Noncompliant
@@ -58,3 +64,6 @@ mhash(MHASH_HAVAL128, $data); // Noncompliant
 mhash(MHASH_HAVAL160, $data); // Noncompliant
 mhash(MHASH_HAVAL192, $data); // Noncompliant
 mhash(MHASH_HAVAL224, $data); // Noncompliant
+mhash(MHASH_HAVAL224, $data); // Noncompliant
+mhash(MHASH_SHA512, $data); // Compliant
+mhash("xyz", $data); // Compliant
