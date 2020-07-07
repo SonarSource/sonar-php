@@ -85,7 +85,7 @@
     <version.assertj>3.5.2</version.assertj>
     <version.commons-io>2.7</version.commons-io>
     <version.commons-lang>3.10</version.commons-lang>
-    <version.junit>4.10</version.junit>
+    <version.junit>4.13</version.junit>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>2.21.0</version.mockito>
     <version.sonar>7.9</version.sonar>
