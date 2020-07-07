@@ -82,7 +82,7 @@
     <version.sonar-packaging-maven-plugin>1.17</version.sonar-packaging-maven-plugin>
 
     <!-- JAR versions -->
-    <version.assertj>3.5.2</version.assertj>
+    <version.assertj>3.16.1</version.assertj>
     <version.commons-io>2.7</version.commons-io>
     <version.commons-lang>3.10</version.commons-lang>
     <version.junit>4.10</version.junit>
