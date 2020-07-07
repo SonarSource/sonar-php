@@ -87,7 +87,7 @@
     <version.commons-lang>3.10</version.commons-lang>
     <version.junit>4.10</version.junit>
     <version.maven-project>2.0.6</version.maven-project>
-    <version.mockito>2.21.0</version.mockito>
+    <version.mockito>2.28.2</version.mockito>
     <version.sonar>7.9</version.sonar>
     <version.staxmate>2.0.1</version.staxmate>
     <version.sonar-orchestrator>3.26.0.2111</version.sonar-orchestrator>
