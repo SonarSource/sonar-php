@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
+import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 
@@ -40,6 +41,7 @@ public class IssueLocationTest {
     assertThat(issueLocation.startLineOffset()).isEqualTo(10);
     assertThat(issueLocation.endLine()).isEqualTo(5);
     assertThat(issueLocation.endLineOffset()).isEqualTo(16);
+    assertThat(issueLocation.filePath()).isNull();
   }
 
   @Test
@@ -59,6 +61,18 @@ public class IssueLocationTest {
     assertThat(issueLocation.startLineOffset()).isEqualTo(10);
     assertThat(issueLocation.endLine()).isEqualTo(12);
     assertThat(issueLocation.endLineOffset()).isEqualTo(6);
+  }
+
+  @Test
+  public void location_in_file() {
+    LocationInFileImpl locationInFile = new LocationInFileImpl("dir1/file1.php", 1, 2, 3, 4);
+    IssueLocation issueLocation = new IssueLocation(locationInFile, "Test message");
+    assertThat(issueLocation.message()).isEqualTo("Test message");
+    assertThat(issueLocation.startLine()).isEqualTo(1);
+    assertThat(issueLocation.startLineOffset()).isEqualTo(2);
+    assertThat(issueLocation.endLine()).isEqualTo(3);
+    assertThat(issueLocation.endLineOffset()).isEqualTo(4);
+    assertThat(issueLocation.filePath()).isEqualTo("dir1/file1.php");
   }
 
   private static Tree createToken(int line, int column, String tokenValue) {

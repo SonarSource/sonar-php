@@ -47,12 +47,19 @@ public class PreciseIssue implements PhpIssue {
   }
 
   public PreciseIssue secondary(Tree tree, @Nullable String message) {
-    this.secondaryLocations.add(new IssueLocation(tree, message));
-    return this;
+    return secondary(new IssueLocation(tree, message));
   }
 
   public PreciseIssue secondary(Tree startTree, Tree endTree, @Nullable String message) {
-    this.secondaryLocations.add(new IssueLocation(startTree, endTree, message));
+    return secondary(new IssueLocation(startTree, endTree, message));
+  }
+
+  public PreciseIssue secondary(LocationInFile locationInFile, @Nullable String message) {
+    return secondary(new IssueLocation(locationInFile, message));
+  }
+
+  private PreciseIssue secondary(IssueLocation issueLocation) {
+    this.secondaryLocations.add(issueLocation);
     return this;
   }
 
