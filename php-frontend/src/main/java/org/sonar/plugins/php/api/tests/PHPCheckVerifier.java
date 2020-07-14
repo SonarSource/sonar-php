@@ -21,8 +21,13 @@ package org.sonar.plugins.php.api.tests;
 
 import com.google.common.base.Preconditions;
 import com.sonar.sslr.api.typed.ActionParser;
-import com.sonarsource.checks.verifier.SingleFileVerifier;
+import com.sonarsource.checks.verifier.MultiFileVerifier;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -53,30 +58,36 @@ public class PHPCheckVerifier {
   }
 
   public static void verify(File sourceFile, PHPCheck check) {
-    new PHPCheckVerifier(true).createVerifier(sourceFile, check).assertOneOrMoreIssues();
+    new PHPCheckVerifier(true).createVerifier(Collections.singletonList(sourceFile), check).assertOneOrMoreIssues();
   }
 
   public static void verifyNoIssue(File sourceFile, PHPCheck check) {
-    new PHPCheckVerifier(true).createVerifier(sourceFile, check).assertNoIssues();
+    new PHPCheckVerifier(true).createVerifier(Collections.singletonList(sourceFile), check).assertNoIssues();
+  }
+
+  public static void verify(PHPCheck check, File... files) {
+    new PHPCheckVerifier(true).createVerifier(Arrays.asList(files), check).assertOneOrMoreIssues();
   }
 
   /**
    * Internal use only. Subject to changes.
    */
-  protected SingleFileVerifier createVerifier(File file, PHPCheck check) {
-    SingleFileVerifier verifier = SingleFileVerifier.create(file.toPath(), UTF_8);
-    PhpTestFile phpFile = new PhpTestFile(file);
-    return getSingleFileVerifier(check, verifier, phpFile);
+  protected MultiFileVerifier createVerifier(List<File> files, PHPCheck check) {
+    MultiFileVerifier verifier = MultiFileVerifier.create(files.get(0).toPath(), UTF_8);
+    for (File file : files) {
+      addFile(check, verifier, new PhpTestFile(file));
+    }
+    return verifier;
   }
 
-  private SingleFileVerifier getSingleFileVerifier(PHPCheck check, SingleFileVerifier verifier, PhpFile phpFile) {
+  private void addFile(PHPCheck check, MultiFileVerifier verifier, PhpFile phpFile) {
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(phpFile.contents());
     check.init();
     for (PhpIssue issue : check.analyze(phpFile, tree)) {
       if (!issue.check().equals(check)) {
         throw new IllegalStateException("Verifier support only one kind of issue " + issue.check() + " != " + check);
       }
-      addIssue(verifier, issue).withGap(issue.cost());
+      addIssue(verifier, issue, phpFile).withGap(issue.cost());
     }
     if (readExpectedIssuesFromComments) {
       PHPVisitorCheck commentVisitor = new PHPVisitorCheck() {
@@ -84,54 +95,59 @@ public class PHPCheckVerifier {
         public void visitTrivia(SyntaxTrivia trivia) {
           super.visitTrivia(trivia);
           int suffixLength = trivia.text().startsWith("//") ? 0 : 2;
-          verifier.addComment(trivia.line(), trivia.column() + 1, trivia.text(), 2, suffixLength);
+          verifier.addComment(path(context().getPhpFile()), trivia.line(), trivia.column() + 1, trivia.text(), 2, suffixLength);
         }
       };
       commentVisitor.analyze(phpFile, tree);
     }
-    return verifier;
   }
 
-  private static SingleFileVerifier.Issue addIssue(SingleFileVerifier verifier, PhpIssue issue) {
+  private static Path path(PhpFile phpFile) {
+    return Paths.get(phpFile.uri());
+  }
+
+  private static MultiFileVerifier.Issue addIssue(MultiFileVerifier verifier, PhpIssue issue, PhpFile file) {
     if (issue instanceof LegacyIssue) {
-      return addLegacyIssue(verifier, (LegacyIssue) issue);
+      return addLegacyIssue(verifier, (LegacyIssue) issue, file);
     } else if (issue instanceof LineIssue) {
-      return addLineIssue(verifier, (LineIssue) issue);
+      return addLineIssue(verifier, (LineIssue) issue, file);
     } else if (issue instanceof FileIssue) {
-      return addFileIssue(verifier, (FileIssue) issue);
+      return addFileIssue(verifier, (FileIssue) issue, file);
     } else {
-      return addPreciseIssue(verifier, (PreciseIssue) issue);
+      return addPreciseIssue(verifier, (PreciseIssue) issue, file);
     }
   }
 
-  private static SingleFileVerifier.Issue addLegacyIssue(SingleFileVerifier verifier, LegacyIssue legacyIssue) {
+  private static MultiFileVerifier.Issue addLegacyIssue(MultiFileVerifier verifier, LegacyIssue legacyIssue, PhpFile file) {
     if (legacyIssue.line() > 0) {
-      return verifier.reportIssue(legacyIssue.message())
+      return verifier.reportIssue(path(file), legacyIssue.message())
         .onLine(legacyIssue.line());
     } else {
-      return verifier.reportIssue(legacyIssue.message())
+      return verifier.reportIssue(path(file), legacyIssue.message())
         .onFile();
     }
   }
 
-  private static SingleFileVerifier.Issue addLineIssue(SingleFileVerifier verifier, LineIssue lineIssue) {
-    return verifier.reportIssue(lineIssue.message())
+  private static MultiFileVerifier.Issue addLineIssue(MultiFileVerifier verifier, LineIssue lineIssue, PhpFile file) {
+    return verifier.reportIssue(path(file), lineIssue.message())
       .onLine(lineIssue.line());
   }
 
-  private static SingleFileVerifier.Issue addFileIssue(SingleFileVerifier verifier, FileIssue fileIssue) {
-    return verifier.reportIssue(fileIssue.message())
+  private static MultiFileVerifier.Issue addFileIssue(MultiFileVerifier verifier, FileIssue fileIssue, PhpFile file) {
+    return verifier.reportIssue(path(file), fileIssue.message())
       .onFile();
   }
 
-  private static SingleFileVerifier.Issue addPreciseIssue(SingleFileVerifier verifier, PreciseIssue preciseIssue) {
+  private static MultiFileVerifier.Issue addPreciseIssue(MultiFileVerifier verifier, PreciseIssue preciseIssue, PhpFile file) {
     IssueLocation location = preciseIssue.primaryLocation();
     String message = location.message();
     Preconditions.checkNotNull(message, "Primary location message should never be null.");
-    SingleFileVerifier.Issue issueBuilder = verifier.reportIssue(message)
+    MultiFileVerifier.Issue issueBuilder = verifier.reportIssue(path(file), message)
       .onRange(location.startLine(), location.startLineOffset() + 1, location.endLine(), location.endLineOffset());
     for (IssueLocation secondary : preciseIssue.secondaryLocations()) {
-      issueBuilder.addSecondary(secondary.startLine(), secondary.startLineOffset() + 1, secondary.endLine(), secondary.endLineOffset(), secondary.message());
+      String filePath = secondary.filePath();
+      Path path = filePath == null ? path(file) : (new File(filePath)).toPath();
+      issueBuilder.addSecondary(path, secondary.startLine(), secondary.startLineOffset() + 1, secondary.endLine(), secondary.endLineOffset(), secondary.message());
     }
     return issueBuilder;
   }

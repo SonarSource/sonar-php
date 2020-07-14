@@ -20,6 +20,8 @@
 package org.sonar.plugins.php;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 import org.sonar.plugins.php.api.tests.PHPCheckVerifier;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
@@ -29,8 +31,8 @@ public final class CheckVerifier extends PHPCheckVerifier {
     super(readExpectedIssuesFromComments);
   }
 
-  public static void verify(PHPCheck check, String relativePath) {
-    PHPCheckVerifier.verify(checkFile(relativePath), check);
+  public static void verify(PHPCheck check, String... relativePaths) {
+    PHPCheckVerifier.verify(check, Arrays.stream(relativePaths).map(CheckVerifier::checkFile).toArray(File[]::new));
   }
 
   public static void verifyNoIssue(PHPCheck check, String relativePath) {
@@ -38,7 +40,7 @@ public final class CheckVerifier extends PHPCheckVerifier {
   }
 
   public static void verifyNoIssueIgnoringExpected(PHPCheck check, String relativePath) {
-    new CheckVerifier(false).createVerifier(checkFile(relativePath), check).assertNoIssues();
+    new CheckVerifier(false).createVerifier(Collections.singletonList(checkFile(relativePath)), check).assertNoIssues();
   }
 
   private static File checkFile(String relativePath) {
