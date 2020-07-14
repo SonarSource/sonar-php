@@ -21,11 +21,12 @@ package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
+import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.tree.Tree;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PreciseIssueTest {
 
@@ -67,6 +68,21 @@ public class PreciseIssueTest {
     assertThat(preciseIssue.secondaryLocations().get(1).endLine()).isEqualTo(242);
     assertThat(preciseIssue.secondaryLocations().get(2).startLine()).isEqualTo(342);
     assertThat(preciseIssue.secondaryLocations().get(2).endLine()).isEqualTo(352);
+  }
+
+  @Test
+  public void with_secondary_in_different_file() {
+    PreciseIssue preciseIssue = new PreciseIssue(CHECK, PRIMARY_LOCATION);
+    LocationInFileImpl locationInFile = new LocationInFileImpl("dir1/file1.php", 1, 2, 3, 4);
+    preciseIssue.secondary(locationInFile, "Secondary message");
+    assertThat(preciseIssue.secondaryLocations()).hasSize(1);
+    IssueLocation secondary = preciseIssue.secondaryLocations().get(0);
+    assertThat(secondary.message()).isEqualTo("Secondary message");
+    assertThat(secondary.startLine()).isEqualTo(1);
+    assertThat(secondary.startLineOffset()).isEqualTo(2);
+    assertThat(secondary.endLine()).isEqualTo(3);
+    assertThat(secondary.endLineOffset()).isEqualTo(4);
+    assertThat(secondary.filePath()).isEqualTo("dir1/file1.php");
   }
 
   private static Tree createToken(int line, int column, String tokenValue) {
