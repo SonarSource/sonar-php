@@ -27,8 +27,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -74,16 +78,27 @@ public class PHPCheckVerifier {
    */
   protected MultiFileVerifier createVerifier(List<File> files, PHPCheck check) {
     MultiFileVerifier verifier = MultiFileVerifier.create(files.get(0).toPath(), UTF_8);
+
+    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+    Map<File, CompilationUnitTree> astByFile = new HashMap<>();
     for (File file : files) {
-      addFile(check, verifier, new PhpTestFile(file));
+      PhpTestFile phpFile = new PhpTestFile(file);
+      CompilationUnitTree ast = (CompilationUnitTree) parser.parse(phpFile.contents());
+      astByFile.put(file, ast);
+      SymbolTableImpl symbolTable = SymbolTableImpl.create(ast, new ProjectSymbolData(), phpFile);
+      symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
+    }
+
+    for (File file : files) {
+      addFile(check, verifier, astByFile.get(file), new PhpTestFile(file), projectSymbolData);
     }
     return verifier;
   }
 
-  private void addFile(PHPCheck check, MultiFileVerifier verifier, PhpFile phpFile) {
-    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(phpFile.contents());
+  private void addFile(PHPCheck check, MultiFileVerifier verifier, CompilationUnitTree tree, PhpFile phpFile, ProjectSymbolData projectSymbolData) {
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(tree, projectSymbolData, phpFile);
     check.init();
-    for (PhpIssue issue : check.analyze(phpFile, tree)) {
+    for (PhpIssue issue : check.analyze(phpFile, tree, symbolTable)) {
       if (!issue.check().equals(check)) {
         throw new IllegalStateException("Verifier support only one kind of issue " + issue.check() + " != " + check);
       }
