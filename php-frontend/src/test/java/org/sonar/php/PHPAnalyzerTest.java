@@ -30,6 +30,7 @@ import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.php.metrics.FileMeasures;
+import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -53,7 +54,7 @@ public class PHPAnalyzerTest {
   @Test(expected = RecognitionException.class)
   public void parsing_failure_should_raise_an_exception() throws IOException {
     PHPCheck check = new DummyCheck();
-    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check), tmpFolder.newFolder());
+    PHPAnalyzer analyzer = createAnalyzer(check);
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php if(condition): ?>");
     analyzer.nextFile(file);
   }
@@ -61,7 +62,7 @@ public class PHPAnalyzerTest {
   @Test
   public void test_analyze() throws Exception {
     PHPCheck check = new DummyCheck();
-    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check), tmpFolder.newFolder());
+    PHPAnalyzer analyzer = createAnalyzer(check);
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
     List<PhpIssue> issues = analyzer.analyze();
@@ -76,7 +77,7 @@ public class PHPAnalyzerTest {
 
   @Test
   public void test_cpd() throws Exception {
-    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(), tmpFolder.newFolder());
+    PHPAnalyzer analyzer = createAnalyzer();
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
 
@@ -87,7 +88,7 @@ public class PHPAnalyzerTest {
   public void terminate_call_forwarded_to_checks() throws Exception {
     PHPCheck check1 = spy(new DummyCheck());
     PHPCheck check2 = spy(new DummyCheck());
-    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check1, check2), tmpFolder.newFolder());
+    PHPAnalyzer analyzer = createAnalyzer(check1, check2);
     analyzer.terminate();
 
     verify(check1).terminate();
@@ -99,7 +100,7 @@ public class PHPAnalyzerTest {
     PHPCheck check1 = spy(new DummyCheck());
     doThrow(new RuntimeException("myError")).when(check1).terminate();
     PHPCheck check2 = spy(new DummyCheck());
-    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check1, check2), tmpFolder.newFolder());
+    PHPAnalyzer analyzer = createAnalyzer(check1, check2);
     analyzer.terminate();
 
     verify(check1).terminate();
@@ -107,4 +108,7 @@ public class PHPAnalyzerTest {
     assertThat(logTester.logs(LoggerLevel.WARN)).contains("An error occurred while trying to terminate checks:");
   }
 
+  private PHPAnalyzer createAnalyzer(PHPCheck... checks) throws IOException {
+    return new PHPAnalyzer(ImmutableList.copyOf(checks), tmpFolder.newFolder(), new ProjectSymbolData());
+  }
 }

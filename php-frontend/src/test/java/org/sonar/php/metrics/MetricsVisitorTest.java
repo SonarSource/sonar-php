@@ -25,6 +25,8 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.ParsingTestUtils;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +41,8 @@ public class MetricsVisitorTest extends ParsingTestUtils {
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/"+filename));
 
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-    FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext);
+    CompilationUnitTree ast = parse(filename);
+    FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, ast, SymbolTableImpl.create(ast), fileLinesContext);
 
     assertThat(fileMeasures.getFileComplexity()).isEqualTo(1);
     assertThat(fileMeasures.getFileCognitiveComplexity()).isEqualTo(0);

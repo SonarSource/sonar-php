@@ -25,7 +25,6 @@ import com.sonar.sslr.api.RecognitionException;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.api.SonarProduct;
@@ -53,6 +52,7 @@ import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
+import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.FileIssue;
@@ -64,11 +64,9 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.CoverageResultImporter;
 import org.sonar.plugins.php.phpunit.TestResultImporter;
-import org.sonar.squidbridge.ProgressReport;
 
 public class PHPSensor implements Sensor {
 
-  private static final String FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast";
   private static final Logger LOG = Loggers.get(PHPSensor.class);
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
@@ -84,9 +82,15 @@ public class PHPSensor implements Sensor {
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
     CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRuleRepository[] customRuleRepositories) {
 
-    this.checks = PHPChecks.createPHPCheck(checkFactory)
-      .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
-      .addCustomChecks(customRuleRepositories);
+    this(fileLinesContextFactory,
+      PHPChecks.createPHPCheck(checkFactory)
+        .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
+        .addCustomChecks(customRuleRepositories),
+      noSonarFilter);
+  }
+
+  PHPSensor(FileLinesContextFactory fileLinesContextFactory, PHPChecks checks, NoSonarFilter noSonarFilter) {
+    this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
     this.parsingErrorRuleKey = getParsingErrorRuleKey();
@@ -111,16 +115,15 @@ public class PHPSensor implements Sensor {
       fileSystem.predicates().hasType(InputFile.Type.MAIN),
       fileSystem.predicates().hasLanguage(Php.KEY));
 
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(checks.all()), fileSystem.workDir());
-
     List<InputFile> inputFiles = new ArrayList<>();
     fileSystem.inputFiles(mainFilePredicate).forEach(inputFiles::add);
 
-    ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
-    progressReport.start(inputFiles.stream().map(InputFile::toString).collect(Collectors.toList()));
+    SymbolScanner symbolScanner = new SymbolScanner(context);
 
     try {
-      analyseFiles(context, phpAnalyzer, inputFiles, progressReport);
+      symbolScanner.execute(inputFiles);
+      ProjectSymbolData projectSymbolData = symbolScanner.getProjectSymbolData();
+      new AnalysisScanner(context, projectSymbolData).execute(inputFiles);
       if (inSonarQube(context)) {
         processTestsAndCoverage(context);
       }
@@ -139,64 +142,54 @@ public class PHPSensor implements Sensor {
     CoverageResultImporter.multiCoverageImporter().importReport(context);
   }
 
-  void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, Iterable<InputFile> inputFiles, ProgressReport progressReport) {
-    boolean success = false;
-    try {
-      for (InputFile inputFile : inputFiles) {
-        checkCancelled(context);
-        analyseFile(context, phpAnalyzer, inputFile);
-        progressReport.nextFile();
-      }
-      phpAnalyzer.terminate();
-      success = true;
-    } finally {
-      stopProgressReport(progressReport, success);
+  private class AnalysisScanner extends Scanner {
+
+    PHPAnalyzer phpAnalyzer;
+
+    public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData) {
+      super(context);
+      phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(checks.all()), context.fileSystem().workDir(), projectSymbolData);
     }
-  }
 
-  private static void checkCancelled(SensorContext context) {
-    if (context.isCancelled()) {
-      throw new CancellationException("Analysis cancelled");
+    @Override
+    String name() {
+      return "PHP rules";
     }
-  }
 
-  private static void stopProgressReport(ProgressReport progressReport, boolean success) {
-    if (success) {
-      progressReport.stop();
-    } else {
-      progressReport.cancel();
-    }
-  }
+    @Override
+    void scanFile(InputFile inputFile) {
+      try {
+        phpAnalyzer.nextFile(new PhpFileImpl(inputFile));
 
-  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile) {
-    try {
-      phpAnalyzer.nextFile(new PhpFileImpl(inputFile));
-
-      if (inSonarQube(context)) {
-        phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
-        phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
-        saveNewFileMeasures(context,
-          phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
-          inputFile);
         if (inSonarQube(context)) {
-          saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
+          phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
+          phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
+          saveNewFileMeasures(context,
+            phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
+            inputFile);
+          if (inSonarQube(context)) {
+            saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
+          }
         }
-      }
 
-      noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
-      saveIssues(context, phpAnalyzer.analyze(), inputFile);
-
-    } catch (RecognitionException e) {
-      checkInterrupted(e);
-      LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
-      LOG.error(e.getMessage());
-      saveParsingIssue(context, e, inputFile);
-    } catch (Exception e) {
-      checkInterrupted(e);
-      if (context.config().getBoolean(FAIL_FAST_PROPERTY_NAME).orElse(false)) {
-        throw new IllegalStateException("Exception when analyzing " + inputFile, e);
+        noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
+        saveIssues(context, phpAnalyzer.analyze(), inputFile);
+      } catch (RecognitionException e) {
+        checkInterrupted(e);
+        LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
+        LOG.error(e.getMessage());
+        saveParsingIssue(context, e, inputFile);
       }
-      LOG.error("Could not analyse " + inputFile, e);
+    }
+
+    @Override
+    void logException(Exception e, InputFile file) {
+      LOG.error("Could not analyse " + file.toString(), e);
+    }
+
+    @Override
+    void onEnd() {
+      phpAnalyzer.terminate();
     }
   }
 
@@ -337,10 +330,4 @@ public class PHPSensor implements Sensor {
     newCpdTokens.save();
   }
 
-  private static class CancellationException extends RuntimeException {
-
-    CancellationException(String message) {
-      super(message);
-    }
-  }
 }

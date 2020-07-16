@@ -21,14 +21,10 @@ package org.sonar.plugins.php;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
-import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
 import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +32,6 @@ import java.util.stream.Collectors;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
@@ -66,16 +61,13 @@ import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.ProgressReport;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
@@ -86,13 +78,12 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 
 public class PHPSensorTest {
 
   @org.junit.Rule
   public LogTester logTester = new LogTester();
-
-  private ProgressReport progressReport = mock(ProgressReport.class);
 
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
 
@@ -107,9 +98,6 @@ public class PHPSensorTest {
   private static final String ANALYZED_FILE = "PHPSquidSensor.php";
 
   private Set<File> tempReportFiles = new HashSet<>();
-
-  @org.junit.Rule
-  public final ExpectedException thrown = ExpectedException.none();
 
   @org.junit.Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder();
@@ -146,6 +134,12 @@ public class PHPSensorTest {
 
   private PHPSensor createSensor() {
     return new PHPSensor(createFileLinesContextFactory(), checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+  }
+
+  private PHPSensor createSensor(PHPCheck check) {
+    PHPChecks checks = mock(PHPChecks.class);
+    when(checks.all()).thenReturn(ImmutableList.of(check));
+    return new PHPSensor(createFileLinesContextFactory(), checks, new NoSonarFilter());
   }
 
   @Test
@@ -234,37 +228,22 @@ public class PHPSensorTest {
   }
 
   private void analyseSingleFile(PHPSensor sensor, String fileName) {
-    context.fileSystem().add(inputFile(fileName));
+    addInputFiles(fileName);
     sensor.execute(context);
   }
 
-  private static DefaultInputFile inputFile(String fileName) {
-    try {
-      return TestInputFileBuilder.create("moduleKey", fileName)
-        .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
-        .setType(Type.MAIN)
-        .setCharset(Charset.defaultCharset())
-        .setLanguage(Php.KEY)
-        .initMetadata(new String(java.nio.file.Files.readAllBytes(new File("src/test/resources/" + fileName).toPath()), StandardCharsets.UTF_8)).build();
-    } catch (IOException e) {
-      throw new IllegalStateException("File not found", e);
+  private void addInputFiles(String... paths) {
+    for (String path : paths) {
+      context.fileSystem().add(inputFile(path));
     }
-
-  }
-
-  @Test
-  public void progress_report_should_be_stopped() throws Exception {
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(), null);
-    createSensor().analyseFiles(context, phpAnalyzer, Collections.emptyList(), progressReport);
-    verify(progressReport).stop();
   }
 
   @Test
   public void init_and_terminate_method_called_only_once() throws Exception {
     PHPCheck check = spy(new PHPVisitorCheck() {});
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
-    List<InputFile> inputFiles = asList(inputFile(ANALYZED_FILE), inputFile("cpd.php"), inputFile("empty.php"));
-    createSensor().analyseFiles(context, phpAnalyzer, inputFiles, progressReport);
+
+    addInputFiles(ANALYZED_FILE, "cpd.php", "empty.php");
+    createSensor(check).execute(context);
 
     verify(check, times(1)).init();
     verify(check, times(1)).terminate();
@@ -273,9 +252,8 @@ public class PHPSensorTest {
   @Test
   public void exception_should_report_file_name() throws Exception {
     PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException());
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
-    DefaultInputFile defaultInputFile = inputFile(ANALYZED_FILE);
-    createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.of(defaultInputFile), progressReport);
+    addInputFiles(ANALYZED_FILE);
+    createSensor(check).execute(context);
     assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Could not analyse PHPSquidSensor.php");
   }
 
@@ -283,25 +261,13 @@ public class PHPSensorTest {
   public void exception_should_fail_analysis_if_configured_so() throws Exception {
     RuntimeException exception = new NumberFormatException();
     PHPCheck check = new ExceptionRaisingCheck(exception);
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
-    DefaultInputFile defaultInputFile = inputFile(ANALYZED_FILE);
+    addInputFiles(ANALYZED_FILE);
     context.setSettings(new MapSettings().setProperty("sonar.internal.analysis.failFast", "true"));
-    assertThatThrownBy(() -> createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.of(defaultInputFile), progressReport))
+    PHPSensor sensor = createSensor(check);
+    assertThatThrownBy(() -> sensor.execute(context))
       .isInstanceOf(IllegalStateException.class)
       .hasCause(exception)
       .hasMessageContaining("PHPSquidSensor.php");
-  }
-
-  @Test
-  public void cancelled_analysis() throws Exception {
-    PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException(new InterruptedException()));
-    analyseFileWithException(check, inputFile(ANALYZED_FILE), "Analysis cancelled");
-  }
-
-  @Test
-  public void cancelled_analysis_causing_recognition_exception() throws Exception {
-    PHPCheck check = new ExceptionRaisingCheck(new RecognitionException(42, "message", new InterruptedIOException()));
-    analyseFileWithException(check, inputFile(ANALYZED_FILE), "Analysis cancelled");
   }
 
   /**
@@ -343,6 +309,18 @@ public class PHPSensorTest {
   }
 
   @Test
+  public void cross_file_issue() {
+    checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S2166")).build());
+    addInputFiles("cross-file/A.php", "cross-file/B.php");
+    createSensor().execute(context);
+    assertThat(context.allIssues()).hasSize(1);
+    Issue issue = context.allIssues().iterator().next();
+    assertThat(issue.ruleKey().rule()).isEqualTo("S2166");
+    assertThat(issue.primaryLocation().inputComponent()).hasToString("cross-file/A.php");
+    assertThat(issue.primaryLocation().textRange().start().line()).isEqualTo(3);
+  }
+
+  @Test
   public void should_stop_if_cancel() throws Exception {
     checkFactory = new CheckFactory(getActiveRules());
 
@@ -355,20 +333,24 @@ public class PHPSensorTest {
     context.setCancelled(false);
     analyseSingleFile(createSensor(), ANALYZED_FILE);
 
-    assertThat(context.allIssues()).as("Should have no issue").isNotEmpty();
+    assertThat(context.allIssues()).isNotEmpty();
     assertThat(context.measures("moduleKey:PHPSquidSensor.php")).isNotEmpty();
   }
 
   private static ActiveRules getActiveRules() {
     // class name check -> PreciseIssue
-    NewActiveRule s101 = new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S101")).build();
+    NewActiveRule s101 = newActiveRule("S101");
     // inline html in file check -> FileIssue
-    NewActiveRule s1997 = new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S1997")).build();
+    NewActiveRule s1997 = newActiveRule("S1997");
     // line size -> LineIssue
-    NewActiveRule s103 = new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S103")).build();
+    NewActiveRule s103 = newActiveRule("S103");
     // Modifiers order -> PreciseIssue
-    NewActiveRule s1124 = new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S1124")).build();
+    NewActiveRule s1124 = newActiveRule("S1124");
     return new ActiveRulesBuilder().addRule(s101).addRule(s1997).addRule(s103).addRule(s1124).build();
+  }
+
+  private static NewActiveRule newActiveRule(String ruleKey) {
+    return new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, ruleKey)).build();
   }
 
   @Test
@@ -503,18 +485,7 @@ public class PHPSensorTest {
     }
   }
 
-  private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
-    thrown.expect(AnalysisException.class);
-    thrown.expectMessage(expectedMessageSubstring);
-    try {
-      createSensor().analyseFiles(context, phpAnalyzer, Collections.singletonList(inputFile), progressReport);
-    } finally {
-      verify(progressReport).cancel();
-    }
-  }
-
-  private static final class ExceptionRaisingCheck extends PHPVisitorCheck {
+  private static class ExceptionRaisingCheck extends PHPVisitorCheck {
 
     private final RuntimeException exception;
 
@@ -527,5 +498,4 @@ public class PHPSensorTest {
       throw exception;
     }
   }
-
 }
