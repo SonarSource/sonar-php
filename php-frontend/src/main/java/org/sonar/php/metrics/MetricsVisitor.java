@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -77,13 +78,14 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   public FileMeasures getFileMeasures(
     PhpFile file,
     CompilationUnitTree tree,
+    SymbolTable symbolTable,
     FileLinesContext fileLinesContext
   ) {
 
     this.fileMeasures = new FileMeasures();
     this.fileLinesContext = fileLinesContext;
 
-    super.analyze(file, tree);
+    super.analyze(file, tree, symbolTable);
 
     setCounterMeasures();
     setLineAndCommentMeasures();

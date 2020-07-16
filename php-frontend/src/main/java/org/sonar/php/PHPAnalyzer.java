@@ -40,6 +40,7 @@ import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -56,13 +57,15 @@ public class PHPAnalyzer {
   private final ImmutableList<PHPCheck> checks;
   @Nullable
   private final File workingDir;
+  private final ProjectSymbolData projectSymbolData;
 
   private CompilationUnitTree currentFileTree;
   private PhpFile currentFile;
   private SymbolTable currentFileSymbolTable;
 
-  public PHPAnalyzer(ImmutableList<PHPCheck> checks, @Nullable File workingDir) {
+  public PHPAnalyzer(ImmutableList<PHPCheck> checks, @Nullable File workingDir, ProjectSymbolData projectSymbolData) {
     this.workingDir = workingDir;
+    this.projectSymbolData = projectSymbolData;
     this.parser = PHPParserBuilder.createParser();
     this.checks = checks;
 
@@ -74,7 +77,7 @@ public class PHPAnalyzer {
   public void nextFile(PhpFile file) {
     currentFile = file;
     currentFileTree = (CompilationUnitTree) parser.parse(file.contents());
-    currentFileSymbolTable = SymbolTableImpl.create(currentFileTree);
+    currentFileSymbolTable = SymbolTableImpl.create(currentFileTree, projectSymbolData, file);
   }
 
   public List<PhpIssue> analyze() {
@@ -98,7 +101,7 @@ public class PHPAnalyzer {
   }
 
   public FileMeasures computeMeasures(FileLinesContext fileLinesContext) {
-    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext);
+    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, currentFileSymbolTable, fileLinesContext);
   }
 
   public NewHighlighting getSyntaxHighlighting(SensorContext context, InputFile inputFile) {
@@ -114,7 +117,7 @@ public class PHPAnalyzer {
   }
 
   public List<CpdToken> computeCpdTokens() {
-    return new CpdVisitor().getCpdTokens(currentFile, currentFileTree);
+    return new CpdVisitor().getCpdTokens(currentFile, currentFileTree, currentFileSymbolTable);
   }
 
   public Set<Integer> computeNoSonarLines() {
