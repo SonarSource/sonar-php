@@ -23,9 +23,13 @@ import java.util.Optional;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-enum UnknownClassSymbol implements ClassSymbol {
+class UnknownClassSymbol implements ClassSymbol {
 
-  UNKNOWN;
+  private final QualifiedName qualifiedName;
+
+  UnknownClassSymbol(QualifiedName qualifiedName) {
+    this.qualifiedName = qualifiedName;
+  }
 
   @Override
   public LocationInFile location() {
@@ -34,7 +38,7 @@ enum UnknownClassSymbol implements ClassSymbol {
 
   @Override
   public QualifiedName qualifiedName() {
-    return QualifiedName.qualifiedName("[unknown]");
+    return qualifiedName;
   }
 
   @Override

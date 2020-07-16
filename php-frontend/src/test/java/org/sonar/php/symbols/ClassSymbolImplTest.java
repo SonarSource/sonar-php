@@ -101,10 +101,16 @@ public class ClassSymbolImplTest {
 
   @Test
   public void unknown_super_class() {
-    ClassSymbolData a = data("ns1\\a", "ns1\\b");
-    Optional<ClassSymbol> superClass = createSymbols(projectData(), a).get(a).superClass();
+    ClassSymbolData a = data("ns1\\a", "ns1\\c");
+    ClassSymbolData b = data("ns1\\b", "ns1\\c");
+    Map<ClassSymbolData, ClassSymbol> symbols = createSymbols(projectData(), a, b);
+    Optional<ClassSymbol> superClass = symbols.get(a).superClass();
     assertThat(superClass).isNotEmpty();
     assertThat(superClass.get().isUnknownSymbol()).isTrue();
+    assertThat(superClass.get().qualifiedName()).isEqualTo(qualifiedName("ns1\\c"));
+    assertThat(superClass.get().superClass()).isEmpty();
+    assertThat(superClass.get().location()).isEqualTo(UnknownLocationInFile.UNKNOWN_LOCATION);
+    assertThat(symbols.get(b).superClass()).containsSame(superClass.get());
   }
 
   private Map<ClassSymbolData, ClassSymbol> createSymbols(ProjectSymbolData projectData, ClassSymbolData... data) {

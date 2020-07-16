@@ -63,7 +63,7 @@ public class ClassSymbolImpl implements ClassSymbol {
     Map<ClassSymbolData, ClassSymbolImpl> symbolsByData = new HashMap<>();
     Map<ClassSymbolData, ClassSymbol> result = new HashMap<>();
     Deque<ClassSymbolData> toComplete = new ArrayDeque<>();
-    Map<QualifiedName, ClassSymbolImpl> symbolsByQualifiedName = new HashMap<>();
+    Map<QualifiedName, ClassSymbol> symbolsByQualifiedName = new HashMap<>();
     fileDeclarations.forEach(data -> {
       ClassSymbolImpl symbol = new ClassSymbolImpl(data.location(), data.qualifiedName());
       result.put(data, symbol);
@@ -76,17 +76,20 @@ public class ClassSymbolImpl implements ClassSymbol {
       ClassSymbolData data = toComplete.pop();
       Optional<QualifiedName> superClassName = data.superClass();
       if (superClassName.isPresent()) {
-        ClassSymbolImpl superClass = symbolsByQualifiedName.get(superClassName.get());
+        ClassSymbol superClass = symbolsByQualifiedName.get(superClassName.get());
         if (superClass == null) {
           Optional<ClassSymbolData> superClassData = projectSymbolData.classSymbolData(superClassName.get());
           if (superClassData.isPresent()) {
-            superClass = new ClassSymbolImpl(superClassData.get().location(), superClassName.get());
+            ClassSymbolImpl knownSuperClass = new ClassSymbolImpl(superClassData.get().location(), superClassName.get());
             toComplete.push(superClassData.get());
-            symbolsByQualifiedName.put(superClassName.get(), superClass);
-            symbolsByData.put(superClassData.get(), superClass);
+            symbolsByData.put(superClassData.get(), knownSuperClass);
+            superClass = knownSuperClass;
+          } else {
+            superClass = new UnknownClassSymbol(superClassName.get());
           }
+          symbolsByQualifiedName.put(superClassName.get(), superClass);
         }
-        symbolsByData.get(data).superClass = superClass == null ? UnknownClassSymbol.UNKNOWN : superClass;
+        symbolsByData.get(data).superClass = superClass;
       }
     }
 
