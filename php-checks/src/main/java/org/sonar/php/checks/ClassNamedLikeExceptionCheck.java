@@ -19,76 +19,54 @@
  */
 package org.sonar.php.checks;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.symbols.Symbols;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Rule(key="S2166")
 public class ClassNamedLikeExceptionCheck extends PHPVisitorCheck {
+
   private static final String MESSAGE = "Classes whose name ends with \"Exception\" should directly or indirectly extend the built-in \"Exception\" class.";
-  private static final String EXCEPTION_KEYWORD = "Exception";
-
-  Map<String, ClassDeclarationTree> classNamesToTree = new HashMap<>();
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    classNamesToTree.clear();
-    super.visitCompilationUnit(tree);
-    checkClasses();
-  }
+  private static final QualifiedName EXCEPTION_FQN = QualifiedName.qualifiedName("Exception");
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    if (tree.is(Tree.Kind.CLASS_DECLARATION)) {
-      classNamesToTree.put(tree.name().text(), tree);
+    if (tree.is(Tree.Kind.CLASS_DECLARATION) && tree.name().text().endsWith("Exception") && !classExtendsException(tree)) {
+      context().newIssue(this, tree.name(), MESSAGE);
     }
     super.visitClassDeclaration(tree);
   }
 
-  private void checkClasses() {
-    // Get the classes whose name ends with "Exception"
-    Set<ClassDeclarationTree> classesToConsider = classNamesToTree.entrySet().stream()
-      .filter(entry -> entry.getKey().endsWith(EXCEPTION_KEYWORD))
-      .map(Map.Entry::getValue)
-      .collect(Collectors.toSet());
+  private static boolean classExtendsException(ClassDeclarationTree classTree) {
+    Set<ClassSymbol> visitedParents = new HashSet<>();
+    ClassSymbol classSymbol = Symbols.get(classTree);
 
-    for (ClassDeclarationTree classTree : classesToConsider) {
-      if (!classExtendsException(classTree, new HashSet<>())) {
-        context().newIssue(this, classTree.name(), MESSAGE);
+    while (!classSymbol.isUnknownSymbol()) {
+      Optional<ClassSymbol> superClass = classSymbol.superClass();
+      if (!superClass.isPresent()) {
+        return false;
       }
-    }
-  }
 
-  private boolean classExtendsException(ClassDeclarationTree classTree, Set<String> visitedParents) {
-    NamespaceNameTree parent = classTree.superClass();
-    if (parent == null) {
-      return false;
-    }
+      if (visitedParents.contains(superClass.get())) {
+        // avoid infinite recursions
+        return false;
+      }
 
-    String parentFullName = parent.fullName();
+      visitedParents.add(superClass.get());
+      if (EXCEPTION_FQN.equals(superClass.get().qualifiedName())) {
+        return true;
+      }
 
-    if (visitedParents.contains(parentFullName)) {
-      // avoid infinite recursions
-      return false;
+      classSymbol = superClass.get();
     }
 
-    visitedParents.add(parent.fullName());
-
-    // Either we have found "Exception" or we don't have information about the parent
-    if (parentFullName.equalsIgnoreCase(EXCEPTION_KEYWORD) ||
-      !classNamesToTree.containsKey(parentFullName)) {
-      return true;
-    }
-
-    return classExtendsException(classNamesToTree.get(parentFullName), visitedParents);
+    return true;
   }
 }
