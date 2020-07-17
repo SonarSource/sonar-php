@@ -20,6 +20,7 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
+import org.sonar.php.symbols.Symbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -43,6 +44,8 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
 
   private final String fullName;
   private final String qualifiedName;
+
+  private Symbol symbol;
 
   public NamespaceNameTreeImpl(@Nullable InternalSyntaxToken absoluteSeparator, SeparatedListImpl<NameIdentifierTree> namespaces, IdentifierTree name) {
     this.absoluteSeparator = absoluteSeparator;
@@ -144,5 +147,13 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   @Override
   public void accept(VisitorCheck visitor) {
     visitor.visitNamespaceName(this);
+  }
+
+  public Symbol symbol() {
+    return symbol;
+  }
+
+  public void setSymbol(Symbol symbol) {
+    this.symbol = symbol;
   }
 }

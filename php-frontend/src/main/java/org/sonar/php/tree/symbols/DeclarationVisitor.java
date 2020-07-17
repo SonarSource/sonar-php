@@ -27,7 +27,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
-import org.sonar.php.symbols.ClassSymbolImpl;
+import org.sonar.php.symbols.ClassSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
@@ -55,6 +55,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private String filePath;
   private Scope globalScope;
   private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
+  private ClassSymbolIndex classSymbolIndex;
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -68,9 +69,9 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     globalScope = symbolTable.addScope(new Scope(tree));
     super.visitCompilationUnit(tree);
 
-    Map<ClassSymbolData, ClassSymbol> symbolByData = ClassSymbolImpl.createSymbols(new HashSet<>(classSymbolDataByTree.values()), projectSymbolData);
+    classSymbolIndex = ClassSymbolIndex.create(new HashSet<>(classSymbolDataByTree.values()), projectSymbolData);
     classSymbolDataByTree.forEach((declaration, symbolData) -> {
-      ClassSymbol symbol = symbolByData.get(symbolData);
+      ClassSymbol symbol = classSymbolIndex.get(symbolData);
       ((ClassDeclarationTreeImpl) declaration).setSymbol(symbol);
     });
   }
@@ -96,6 +97,10 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   public Collection<ClassSymbolData> classSymbolData() {
     return classSymbolDataByTree.values();
+  }
+
+  public ClassSymbolIndex classSymbolIndex() {
+    return classSymbolIndex;
   }
 
   private LocationInFile location(Tree tree) {

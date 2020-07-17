@@ -17,31 +17,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
+package org.sonar.php.tree.symbols;
 
-import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.symbols.ClassSymbolIndex;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
-import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 
-/**
- * Utility class to retrieve symbols from the AST.
- * We can drop this class as soon as we expose an equivalent API directly on the AST interfaces.
- */
-public class Symbols {
+class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
 
-  private Symbols() {
+  private final ClassSymbolIndex classSymbolIndex;
+
+  SymbolUsageVisitor(SymbolTableImpl symbolTable, ClassSymbolIndex classSymbolIndex) {
+    super(symbolTable);
+    this.classSymbolIndex = classSymbolIndex;
   }
 
-  public static ClassSymbol get(ClassDeclarationTree classDeclarationTree) {
-    return ((ClassDeclarationTreeImpl) classDeclarationTree).symbol();
-  }
-
-  public static ClassSymbol getClass(NamespaceNameTree namespaceNameTree) {
-    Symbol symbol = ((NamespaceNameTreeImpl) namespaceNameTree).symbol();
-    if (symbol instanceof ClassSymbol) {
-      return (ClassSymbol) symbol;
+  @Override
+  public void visitCatchBlock(CatchBlockTree tree) {
+    for (NamespaceNameTree exceptionType : tree.exceptionTypes()) {
+      QualifiedName fqn = getFullyQualifiedName(exceptionType, Symbol.Kind.CLASS);
+      ClassSymbol classSymbol = classSymbolIndex.get(fqn);
+      ((NamespaceNameTreeImpl) exceptionType).setSymbol(classSymbol);
     }
-    throw new IllegalStateException("No class symbol available on " + namespaceNameTree);
+    super.visitCatchBlock(tree);
   }
 }
