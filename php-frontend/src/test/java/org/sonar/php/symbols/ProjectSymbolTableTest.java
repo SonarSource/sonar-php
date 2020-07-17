@@ -30,9 +30,12 @@ import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.php.tree.TreeUtils.firstDescendant;
 
 public class ProjectSymbolTableTest {
@@ -57,6 +60,27 @@ public class ProjectSymbolTableTest {
     ClassSymbol a = b.superClass().get();
     assertThat(a.qualifiedName()).hasToString("ns1\\a");
     assertThat(a.superClass()).isEmpty();
+  }
+
+  @Test
+  public void catch_clause() {
+    PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
+    PhpFile file2 = file("file2.php", "<?php namespace ns1; try {} catch (A $a) {}");
+    Tree ast = parser.parse(file2.contents());
+    SymbolTableImpl.create((CompilationUnitTree) ast, buildProjectSymbolData(file1, file2), file2);
+    CatchBlockTree catchBlockTree = firstDescendant(ast, CatchBlockTree.class).get();
+    ClassSymbol a = Symbols.getClass(catchBlockTree.exceptionTypes().get(0));
+    assertThat(a.location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 27, 1, 28));
+  }
+
+  @Test
+  public void non_class_namespace_name() {
+    PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
+    Tree ast = parser.parse(file1.contents());
+    NamespaceNameTree namespaceNameTree = firstDescendant(ast, NamespaceNameTree.class).get();
+    assertThatThrownBy(
+      () -> Symbols.getClass(namespaceNameTree))
+      .isInstanceOf(IllegalStateException.class);
   }
 
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {

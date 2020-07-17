@@ -21,20 +21,19 @@ package org.sonar.php.symbols;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
-public class ClassSymbolImplTest {
+public class ClassSymbolIndexTest {
 
   @Test
   public void class_without_superclass() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b");
-    Map<ClassSymbolData, ClassSymbol> symbols = createSymbols(projectData(), a, b);
+    ClassSymbolIndex symbols = createSymbols(projectData(), a, b);
     assertThat(symbols.get(a).superClass()).isEmpty();
     assertThat(symbols.get(b).superClass()).isEmpty();
   }
@@ -43,7 +42,7 @@ public class ClassSymbolImplTest {
   public void superclass_in_current_file() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
-    Map<ClassSymbolData, ClassSymbol> symbols = createSymbols(projectData(), a, b);
+    ClassSymbolIndex symbols = createSymbols(projectData(), a, b);
     assertThat(symbols.get(a).superClass()).isEmpty();
     assertThat(symbols.get(b).superClass()).containsSame(symbols.get(a));
   }
@@ -52,8 +51,7 @@ public class ClassSymbolImplTest {
   public void superclass_outside_current_file() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
-    Map<ClassSymbolData, ClassSymbol> symbols = createSymbols(projectData(a), b);
-    assertThat(symbols.get(a)).isNull();
+    ClassSymbolIndex symbols = createSymbols(projectData(a), b);
     assertThat(symbols.get(b).superClass().get().qualifiedName()).isEqualTo(a.qualifiedName());
   }
 
@@ -62,8 +60,7 @@ public class ClassSymbolImplTest {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolData c = data("ns1\\c", "ns1\\a");
-    Map<ClassSymbolData, ClassSymbol> symbols = createSymbols(projectData(a), b, c);
-    assertThat(symbols.get(a)).isNull();
+    ClassSymbolIndex symbols = createSymbols(projectData(a), b, c);
     assertThat(symbols.get(b).superClass()).containsSame(symbols.get(c).superClass().get());
   }
 
@@ -72,7 +69,7 @@ public class ClassSymbolImplTest {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolData c = data("ns1\\c", "ns1\\b");
-    Map<ClassSymbolData, ClassSymbol> symbols = createSymbols(projectData(a, b), c);
+    ClassSymbolIndex symbols = createSymbols(projectData(a, b), c);
     ClassSymbol cSuperClass = symbols.get(c).superClass().get();
     assertThat(cSuperClass.qualifiedName()).isEqualTo(b.qualifiedName());
     assertThat(cSuperClass.superClass().get().qualifiedName()).isEqualTo(a.qualifiedName());
@@ -83,7 +80,7 @@ public class ClassSymbolImplTest {
     ClassSymbolData a = data("ns1\\a", "ns1\\c");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolData c = data("ns1\\c", "ns1\\b");
-    Map<ClassSymbolData, ClassSymbol> symbols = createSymbols(projectData(), a, b, c);
+    ClassSymbolIndex symbols = createSymbols(projectData(), a, b, c);
     assertThat(symbols.get(a).superClass()).containsSame(symbols.get(c));
     assertThat(symbols.get(b).superClass()).containsSame(symbols.get(a));
     assertThat(symbols.get(c).superClass()).containsSame(symbols.get(b));
@@ -94,7 +91,7 @@ public class ClassSymbolImplTest {
     ClassSymbolData a = data("ns1\\a", "ns1\\b");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolData c = data("ns1\\c", "ns1\\a");
-    Map<ClassSymbolData, ClassSymbol> symbols = createSymbols(projectData(a, b), c);
+    ClassSymbolIndex symbols = createSymbols(projectData(a, b), c);
     ClassSymbol cSuperClass = symbols.get(c).superClass().get();
     assertThat(cSuperClass.superClass().get().superClass()).containsSame(cSuperClass);
   }
@@ -103,7 +100,7 @@ public class ClassSymbolImplTest {
   public void unknown_super_class() {
     ClassSymbolData a = data("ns1\\a", "ns1\\c");
     ClassSymbolData b = data("ns1\\b", "ns1\\c");
-    Map<ClassSymbolData, ClassSymbol> symbols = createSymbols(projectData(), a, b);
+    ClassSymbolIndex symbols = createSymbols(projectData(), a, b);
     Optional<ClassSymbol> superClass = symbols.get(a).superClass();
     assertThat(superClass).isNotEmpty();
     assertThat(superClass.get().isUnknownSymbol()).isTrue();
@@ -113,10 +110,23 @@ public class ClassSymbolImplTest {
     assertThat(symbols.get(b).superClass()).containsSame(superClass.get());
   }
 
-  private Map<ClassSymbolData, ClassSymbol> createSymbols(ProjectSymbolData projectData, ClassSymbolData... data) {
-    Map<ClassSymbolData, ClassSymbol> result = ClassSymbolImpl.createSymbols(new HashSet<>(Arrays.asList(data)), projectData);
-    assertThat(result).hasSameSizeAs(data);
-    assertThat(result).containsKeys(data);
+  @Test
+  public void get_by_qualified_name() {
+    ClassSymbolData a = data("ns1\\a", "ns1\\c");
+    ClassSymbolData b = data("ns1\\b", "ns1\\c");
+    ClassSymbolData c = data("ns1\\c");
+    ClassSymbolIndex symbols = createSymbols(projectData(a), b, c);
+    assertThat(symbols.get(a)).isNull();
+    assertThat(symbols.get(b.qualifiedName())).isSameAs(symbols.get(b));
+    assertThat(symbols.get(a.qualifiedName()).superClass()).containsSame(symbols.get(c));
+
+    assertThat(symbols.get(qualifiedName("unknown")).isUnknownSymbol()).isTrue();
+    assertThat(symbols.get(qualifiedName("unknown"))).isSameAs(symbols.get(qualifiedName("unknown")));
+    assertThat(symbols.get(qualifiedName("unknown"))).isNotEqualTo(symbols.get(qualifiedName("otherunknown")));
+  }
+
+  private ClassSymbolIndex createSymbols(ProjectSymbolData projectData, ClassSymbolData... data) {
+    ClassSymbolIndex result = ClassSymbolIndex.create(new HashSet<>(Arrays.asList(data)), projectData);
     for (ClassSymbolData d : data) {
       assertThat(result.get(d).qualifiedName()).isEqualTo(d.qualifiedName());
       assertThat(result.get(d).isUnknownSymbol()).isFalse();
