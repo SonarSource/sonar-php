@@ -24,7 +24,11 @@ import org.sonar.php.symbols.ClassSymbolIndex;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 
 class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
@@ -39,10 +43,26 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
   @Override
   public void visitCatchBlock(CatchBlockTree tree) {
     for (NamespaceNameTree exceptionType : tree.exceptionTypes()) {
-      QualifiedName fqn = getFullyQualifiedName(exceptionType, Symbol.Kind.CLASS);
-      ClassSymbol classSymbol = classSymbolIndex.get(fqn);
-      ((NamespaceNameTreeImpl) exceptionType).setSymbol(classSymbol);
+      resolveClassSymbol(exceptionType);
     }
     super.visitCatchBlock(tree);
+  }
+
+  @Override
+  public void visitNewExpression(NewExpressionTree tree) {
+    ExpressionTree expression = tree.expression();
+    if (expression.is(Tree.Kind.FUNCTION_CALL)) {
+      expression = ((FunctionCallTree) expression).callee();
+    }
+    if (expression.is(Tree.Kind.NAMESPACE_NAME)) {
+      resolveClassSymbol((NamespaceNameTree) expression);
+    }
+    super.visitNewExpression(tree);
+  }
+
+  private void resolveClassSymbol(NamespaceNameTree namespaceName) {
+    QualifiedName fqn = getFullyQualifiedName(namespaceName, Symbol.Kind.CLASS);
+    ClassSymbol classSymbol = classSymbolIndex.get(fqn);
+    ((NamespaceNameTreeImpl) namespaceName).setSymbol(classSymbol);
   }
 }

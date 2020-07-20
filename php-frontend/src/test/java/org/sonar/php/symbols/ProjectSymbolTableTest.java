@@ -25,13 +25,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.TreeUtils;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
@@ -97,6 +101,25 @@ public class ProjectSymbolTableTest {
     CatchBlockTree catchBlockTree = firstDescendant(ast, CatchBlockTree.class).get();
     ClassSymbol a = Symbols.getClass(catchBlockTree.exceptionTypes().get(0));
     assertThat(a.location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 27, 1, 28));
+  }
+
+  @Test
+  public void new_expression() {
+    PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
+    PhpFile file2 = file("file2.php", "<?php namespace ns1;\n new A();\n new A;");
+    Tree ast = parser.parse(file2.contents());
+    SymbolTableImpl.create((CompilationUnitTree) ast, buildProjectSymbolData(file1, file2), file2);
+
+    List<NewExpressionTree> newExpressions = TreeUtils.descendants(ast)
+      .filter(NewExpressionTree.class::isInstance)
+      .map(NewExpressionTree.class::cast)
+      .collect(Collectors.toList());
+    assertThat(newExpressions).extracting(e -> ((PHPTree) e).getLine()).containsExactly(2, 3);
+    assertThat(newExpressions).extracting(e -> e.expression().getKind()).containsExactly(Tree.Kind.FUNCTION_CALL, Tree.Kind.NAMESPACE_NAME);
+    for (NewExpressionTree newExpression : newExpressions) {
+      NamespaceNameTree namespaceName = firstDescendant(newExpression, NamespaceNameTree.class).get();
+      assertThat(Symbols.getClass(namespaceName).location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 27, 1, 28));
+    }
   }
 
   @Test

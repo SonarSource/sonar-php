@@ -20,9 +20,12 @@
 package org.sonar.php.tree;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
@@ -51,22 +54,17 @@ public class TreeUtils {
     return parent;
   }
 
-  public static Optional<Tree> firstDescendant(@Nullable Tree root, Predicate<Tree> predicate) {
+  public static Stream<Tree> descendants(@Nullable Tree root) {
     if (root == null || ((PHPTree) root).isLeaf()) {
-      return Optional.empty();
+      return Stream.empty();
     }
-    Iterator<Tree> iterator = ((PHPTree) root).childrenIterator();
-    while (iterator.hasNext()) {
-      Tree child = iterator.next();
-      if (predicate.test(child)) {
-        return Optional.of(child);
-      }
-      Optional<Tree> childDescendant = firstDescendant(child, predicate);
-      if (childDescendant.isPresent()) {
-        return childDescendant;
-      }
-    }
-    return Optional.empty();
+    Spliterator<Tree> spliterator = Spliterators.spliteratorUnknownSize(((PHPTree) root).childrenIterator(), Spliterator.ORDERED);
+    Stream<Tree> stream = StreamSupport.stream(spliterator, false);
+    return stream.flatMap(tree -> Stream.concat(Stream.of(tree), descendants(tree)));
+  }
+
+  public static Optional<Tree> firstDescendant(@Nullable Tree root, Predicate<Tree> predicate) {
+    return descendants(root).filter(predicate).findFirst();
   }
 
   public static <T extends Tree> Optional<T> firstDescendant(Tree root, Class<T> clazz) {
