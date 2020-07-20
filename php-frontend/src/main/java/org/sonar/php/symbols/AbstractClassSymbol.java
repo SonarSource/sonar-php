@@ -17,27 +17,30 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.symbols;
 
-import org.sonar.check.Rule;
-import org.sonar.php.symbols.Symbols;
+import java.util.HashSet;
+import java.util.Set;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key="S2166")
-public class ClassNamedLikeExceptionCheck extends PHPVisitorCheck {
-
-  private static final String MESSAGE = "Classes whose name ends with \"Exception\" should directly or indirectly extend the built-in \"Exception\" class.";
-  private static final QualifiedName EXCEPTION_FQN = QualifiedName.qualifiedName("Exception");
+public abstract class AbstractClassSymbol implements ClassSymbol {
 
   @Override
-  public void visitClassDeclaration(ClassDeclarationTree tree) {
-    if (tree.is(Tree.Kind.CLASS_DECLARATION) && tree.name().text().endsWith("Exception") && Symbols.get(tree).isOrSubClassOf(EXCEPTION_FQN).isFalse()) {
-      context().newIssue(this, tree.name(), MESSAGE);
+  public Trilean isOrSubClassOf(QualifiedName qualifiedName) {
+    Set<ClassSymbol> visitedClasses = new HashSet<>();
+    ClassSymbol superClass = this;
+    while (superClass != null) {
+      if (qualifiedName.equals(superClass.qualifiedName())) {
+        return Trilean.TRUE;
+      }
+      if (superClass.isUnknownSymbol()) {
+        return Trilean.UNKNOWN;
+      }
+      if (!visitedClasses.add(superClass)) {
+        return Trilean.FALSE;
+      }
+      superClass = superClass.superClass().orElse(null);
     }
-    super.visitClassDeclaration(tree);
+    return Trilean.FALSE;
   }
-
 }

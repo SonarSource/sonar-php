@@ -61,7 +61,7 @@ public class ClassSymbolIndex {
     }
   }
 
-  private class ClassSymbolImpl implements ClassSymbol {
+  private class ClassSymbolImpl extends AbstractClassSymbol {
 
     private final ClassSymbolData data;
     private ClassSymbol superClass;
@@ -92,7 +92,6 @@ public class ClassSymbolIndex {
     public boolean isUnknownSymbol() {
       return false;
     }
-
   }
 
 }
