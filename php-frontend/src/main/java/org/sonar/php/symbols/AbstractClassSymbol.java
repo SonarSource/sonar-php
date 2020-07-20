@@ -19,11 +19,15 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 public abstract class AbstractClassSymbol implements ClassSymbol {
+
+  private Set<ClassSymbol> allSuperTypes;
 
   @Override
   public Trilean isOrSubClassOf(QualifiedName qualifiedName) {
@@ -43,4 +47,33 @@ public abstract class AbstractClassSymbol implements ClassSymbol {
     }
     return Trilean.FALSE;
   }
+
+  @Override
+  public Trilean isSubTypeOf(QualifiedName typeName) {
+    if (allSuperTypes().stream().anyMatch(s -> s.qualifiedName().equals(typeName))) {
+      return Trilean.TRUE;
+    }
+    if (allSuperTypes().stream().anyMatch(Symbol::isUnknownSymbol)) {
+      return Trilean.UNKNOWN;
+    }
+    return Trilean.FALSE;
+  }
+
+  private Set<ClassSymbol> allSuperTypes() {
+    if (allSuperTypes == null) {
+      allSuperTypes = new HashSet<>();
+      Deque<ClassSymbol> workList = new ArrayDeque<>();
+      workList.push(this);
+      while (!workList.isEmpty()) {
+        ClassSymbol symbol = workList.pop();
+        if (!allSuperTypes.add(symbol)) {
+          continue;
+        }
+        symbol.superClass().ifPresent(workList::push);
+        symbol.implementedInterfaces().forEach(workList::push);
+      }
+    }
+    return allSuperTypes;
+  }
+
 }
