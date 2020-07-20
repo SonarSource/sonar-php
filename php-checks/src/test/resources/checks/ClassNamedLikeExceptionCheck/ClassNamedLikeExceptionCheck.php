@@ -34,4 +34,5 @@ class X extends X {}
 
 interface ZException {} // Compliant
 interface ZException extends FooInterface {} // Compliant
+class ZException implements FooInterface {} // Noncompliant
 

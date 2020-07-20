@@ -19,6 +19,8 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
@@ -44,6 +46,11 @@ class UnknownClassSymbol extends AbstractClassSymbol {
   @Override
   public Optional<ClassSymbol> superClass() {
     return Optional.empty();
+  }
+
+  @Override
+  public List<ClassSymbol> implementedInterfaces() {
+    return Collections.emptyList();
   }
 
   @Override

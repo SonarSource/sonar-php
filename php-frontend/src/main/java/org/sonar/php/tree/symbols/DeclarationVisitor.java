@@ -23,7 +23,9 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
@@ -81,9 +83,13 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     NamespaceNameTree superClass = tree.superClass();
     QualifiedName superClassName = superClass == null ? null : getFullyQualifiedName(superClass, Symbol.Kind.CLASS);
 
+    List<QualifiedName> interfaceNames = tree.superInterfaces().stream()
+      .map(name -> getFullyQualifiedName(name, Symbol.Kind.CLASS))
+      .collect(Collectors.toList());
+
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
-    classSymbolDataByTree.put(tree, new ClassSymbolData(location(name), qualifiedName, superClassName));
+    classSymbolDataByTree.put(tree, new ClassSymbolData(location(name), qualifiedName, superClassName, interfaceNames));
 
     symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
     super.visitClassDeclaration(tree);

@@ -19,6 +19,7 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -30,11 +31,13 @@ public class ClassSymbolData {
   private final QualifiedName qualifiedName;
   @Nullable
   private final QualifiedName superClass;
+  private final List<QualifiedName> implementedInterfaces;
 
-  public ClassSymbolData(LocationInFile location, QualifiedName qualifiedName, @Nullable QualifiedName superClass) {
+  public ClassSymbolData(LocationInFile location, QualifiedName qualifiedName, @Nullable QualifiedName superClass, List<QualifiedName> implementedInterfaces) {
     this.location = location;
     this.qualifiedName = qualifiedName;
     this.superClass = superClass;
+    this.implementedInterfaces = implementedInterfaces;
   }
 
   public LocationInFile location() {
@@ -47,5 +50,9 @@ public class ClassSymbolData {
 
   public Optional<QualifiedName> superClass() {
     return Optional.ofNullable(superClass);
+  }
+
+  public List<QualifiedName> implementedInterfaces() {
+    return implementedInterfaces;
   }
 }

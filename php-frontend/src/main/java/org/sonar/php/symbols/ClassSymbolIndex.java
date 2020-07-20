@@ -20,9 +20,11 @@
 package org.sonar.php.symbols;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
@@ -86,6 +88,11 @@ public class ClassSymbolIndex {
         data.superClass().ifPresent(name -> superClass = get(name));
       }
       return Optional.ofNullable(superClass);
+    }
+
+    @Override
+    public List<ClassSymbol> implementedInterfaces() {
+      return data.implementedInterfaces().stream().map(i -> get(i)).collect(Collectors.toList());
     }
 
     @Override

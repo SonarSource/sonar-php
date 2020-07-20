@@ -23,6 +23,7 @@ import com.sonar.sslr.api.typed.ActionParser;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -37,6 +38,7 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.php.tree.TreeUtils.firstDescendant;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class ProjectSymbolTableTest {
 
@@ -60,6 +62,30 @@ public class ProjectSymbolTableTest {
     ClassSymbol a = b.superClass().get();
     assertThat(a.qualifiedName()).hasToString("ns1\\a");
     assertThat(a.superClass()).isEmpty();
+  }
+
+  @Test
+  public void implemented_interfaces() {
+    PhpFile file2 = file("file2.php", "<?php namespace ns1; class B extends A implements C {}");
+    PhpFile file3 = file("file3.php", "<?php namespace ns1; interface C extends D {}");
+    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file2, file3);
+
+    Tree ast = parser.parse(file2.contents());
+    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
+    ClassDeclarationTree bDeclaration = firstDescendant(ast, ClassDeclarationTree.class).get();
+
+    ClassSymbol b = Symbols.get(bDeclaration);
+    assertThat(b.qualifiedName()).hasToString("ns1\\b");
+
+    ClassSymbol a = b.superClass().get();
+    assertThat(a.qualifiedName()).hasToString("ns1\\a");
+    assertThat(a.isUnknownSymbol()).isTrue();
+    assertThat(a.implementedInterfaces()).isEmpty();
+
+    List<ClassSymbol> bInterfaces = b.implementedInterfaces();
+    assertThat(bInterfaces).hasSize(1);
+    ClassSymbol c = bInterfaces.get(0);
+    assertThat(c.implementedInterfaces()).extracting(ClassSymbol::qualifiedName).containsExactly(qualifiedName("ns1\\d"));
   }
 
   @Test

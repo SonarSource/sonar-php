@@ -21,10 +21,14 @@ package org.sonar.php.symbols;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
@@ -157,6 +161,37 @@ public class ClassSymbolIndexTest {
     assertThat(a.isOrSubClassOf(fqn("c"))).isEqualTo(Trilean.FALSE);
   }
 
+  @Test
+  public void isSubTypeOf() {
+    ClassSymbolIndex symbols = createSymbols(
+      data("a", "b"),
+      data("b"),
+      data("c", "d", singletonList("e")),
+      data("e", "f"));
+    ClassSymbol a = symbols.get(fqn("a"));
+    ClassSymbol b = symbols.get(fqn("b"));
+    ClassSymbol c = symbols.get(fqn("c"));
+    assertThat(a.isSubTypeOf(fqn("a"))).isEqualTo(Trilean.TRUE);
+    assertThat(a.isSubTypeOf(fqn("b"))).isEqualTo(Trilean.TRUE);
+    assertThat(a.isSubTypeOf(fqn("c"))).isEqualTo(Trilean.FALSE);
+    assertThat(b.isSubTypeOf(fqn("a"))).isEqualTo(Trilean.FALSE);
+    assertThat(c.isSubTypeOf(fqn("d"))).isEqualTo(Trilean.TRUE);
+    assertThat(c.isSubTypeOf(fqn("e"))).isEqualTo(Trilean.TRUE);
+    assertThat(c.isSubTypeOf(fqn("f"))).isEqualTo(Trilean.TRUE);
+    assertThat(c.isSubTypeOf(fqn("x"))).isEqualTo(Trilean.UNKNOWN);
+  }
+
+  @Test
+  public void isSubTypeOf_with_cycle() {
+    ClassSymbolIndex symbols = createSymbols(
+      data("a", "b"),
+      data("b", "a"));
+    ClassSymbol a = symbols.get(fqn("a"));
+    assertThat(a.isSubTypeOf(fqn("a"))).isEqualTo(Trilean.TRUE);
+    assertThat(a.isSubTypeOf(fqn("b"))).isEqualTo(Trilean.TRUE);
+    assertThat(a.isSubTypeOf(fqn("c"))).isEqualTo(Trilean.FALSE);
+  }
+
   private ClassSymbolIndex createSymbols(ClassSymbolData... data) {
     return createSymbols(new ProjectSymbolData(), data);
   }
@@ -183,11 +218,16 @@ public class ClassSymbolIndexTest {
   }
 
   private ClassSymbolData data(String fqn) {
-    return new ClassSymbolData(someLocation(), qualifiedName(fqn), null);
+    return new ClassSymbolData(someLocation(), qualifiedName(fqn), null, emptyList());
   }
 
   private ClassSymbolData data(String fqn, String superClassFqn) {
-    return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn));
+    return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn), emptyList());
+  }
+
+  private ClassSymbolData data(String fqn, String superClassFqn, List<String> interfaceFqns) {
+    List<QualifiedName> interfaces = interfaceFqns.stream().map(this::fqn).collect(Collectors.toList());
+    return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn), interfaces);
   }
 
   private LocationInFileImpl someLocation() {
