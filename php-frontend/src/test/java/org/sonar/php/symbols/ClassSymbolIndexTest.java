@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import org.junit.Test;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
@@ -33,7 +34,7 @@ public class ClassSymbolIndexTest {
   public void class_without_superclass() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b");
-    ClassSymbolIndex symbols = createSymbols(projectData(), a, b);
+    ClassSymbolIndex symbols = createSymbols(a, b);
     assertThat(symbols.get(a).superClass()).isEmpty();
     assertThat(symbols.get(b).superClass()).isEmpty();
   }
@@ -42,7 +43,7 @@ public class ClassSymbolIndexTest {
   public void superclass_in_current_file() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
-    ClassSymbolIndex symbols = createSymbols(projectData(), a, b);
+    ClassSymbolIndex symbols = createSymbols(a, b);
     assertThat(symbols.get(a).superClass()).isEmpty();
     assertThat(symbols.get(b).superClass()).containsSame(symbols.get(a));
   }
@@ -80,7 +81,7 @@ public class ClassSymbolIndexTest {
     ClassSymbolData a = data("ns1\\a", "ns1\\c");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolData c = data("ns1\\c", "ns1\\b");
-    ClassSymbolIndex symbols = createSymbols(projectData(), a, b, c);
+    ClassSymbolIndex symbols = createSymbols(a, b, c);
     assertThat(symbols.get(a).superClass()).containsSame(symbols.get(c));
     assertThat(symbols.get(b).superClass()).containsSame(symbols.get(a));
     assertThat(symbols.get(c).superClass()).containsSame(symbols.get(b));
@@ -100,7 +101,7 @@ public class ClassSymbolIndexTest {
   public void unknown_super_class() {
     ClassSymbolData a = data("ns1\\a", "ns1\\c");
     ClassSymbolData b = data("ns1\\b", "ns1\\c");
-    ClassSymbolIndex symbols = createSymbols(projectData(), a, b);
+    ClassSymbolIndex symbols = createSymbols(a, b);
     Optional<ClassSymbol> superClass = symbols.get(a).superClass();
     assertThat(superClass).isNotEmpty();
     assertThat(superClass.get().isUnknownSymbol()).isTrue();
@@ -125,6 +126,41 @@ public class ClassSymbolIndexTest {
     assertThat(symbols.get(qualifiedName("unknown"))).isNotEqualTo(symbols.get(qualifiedName("otherunknown")));
   }
 
+  @Test
+  public void isOrSubclassOf() {
+    ClassSymbolIndex symbols = createSymbols(
+      data("a", "b"),
+      data("b"),
+      data("c", "d"));
+    ClassSymbol a = symbols.get(fqn("a"));
+    ClassSymbol b = symbols.get(fqn("b"));
+    ClassSymbol c = symbols.get(fqn("c"));
+    assertThat(a.isOrSubClassOf(fqn("a"))).isEqualTo(Trilean.TRUE);
+    assertThat(a.isOrSubClassOf(fqn("b"))).isEqualTo(Trilean.TRUE);
+    assertThat(a.isOrSubClassOf(fqn("c"))).isEqualTo(Trilean.FALSE);
+    assertThat(b.isOrSubClassOf(fqn("a"))).isEqualTo(Trilean.FALSE);
+    assertThat(c.isOrSubClassOf(fqn("d"))).isEqualTo(Trilean.TRUE);
+    assertThat(c.isOrSubClassOf(fqn("e"))).isEqualTo(Trilean.UNKNOWN);
+    ClassSymbol unknown = symbols.get(fqn("unknown"));
+    assertThat(unknown.isOrSubClassOf(fqn("x"))).isEqualTo(Trilean.UNKNOWN);
+    assertThat(unknown.isOrSubClassOf(fqn("unknown"))).isEqualTo(Trilean.TRUE);
+  }
+
+  @Test
+  public void isOrSubclassOf_with_cycle() {
+    ClassSymbolIndex symbols = createSymbols(
+      data("a", "b"),
+      data("b", "a"));
+    ClassSymbol a = symbols.get(fqn("a"));
+    assertThat(a.isOrSubClassOf(fqn("a"))).isEqualTo(Trilean.TRUE);
+    assertThat(a.isOrSubClassOf(fqn("b"))).isEqualTo(Trilean.TRUE);
+    assertThat(a.isOrSubClassOf(fqn("c"))).isEqualTo(Trilean.FALSE);
+  }
+
+  private ClassSymbolIndex createSymbols(ClassSymbolData... data) {
+    return createSymbols(new ProjectSymbolData(), data);
+  }
+
   private ClassSymbolIndex createSymbols(ProjectSymbolData projectData, ClassSymbolData... data) {
     ClassSymbolIndex result = ClassSymbolIndex.create(new HashSet<>(Arrays.asList(data)), projectData);
     for (ClassSymbolData d : data) {
@@ -140,6 +176,10 @@ public class ClassSymbolIndexTest {
       projectSymbolData.add(d);
     }
     return projectSymbolData;
+  }
+
+  private QualifiedName fqn(String name) {
+    return qualifiedName(name);
   }
 
   private ClassSymbolData data(String fqn) {

@@ -31,4 +31,6 @@ public interface ClassSymbol extends Symbol {
 
   Optional<ClassSymbol> superClass();
 
+  Trilean isOrSubClassOf(QualifiedName qualifiedName);
+
 }

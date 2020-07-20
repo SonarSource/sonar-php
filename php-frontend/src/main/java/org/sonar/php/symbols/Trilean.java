@@ -19,35 +19,19 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.Optional;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
+/**
+ * A tree-value boolean: true, false, unknown.
+ * https://en.wikipedia.org/wiki/Three-valued_logic
+ */
+public enum Trilean {
 
-class UnknownClassSymbol extends AbstractClassSymbol {
+  TRUE, FALSE, UNKNOWN;
 
-  private final QualifiedName qualifiedName;
-
-  UnknownClassSymbol(QualifiedName qualifiedName) {
-    this.qualifiedName = qualifiedName;
+  public boolean isTrue() {
+    return this == TRUE;
   }
 
-  @Override
-  public LocationInFile location() {
-    return UnknownLocationInFile.UNKNOWN_LOCATION;
-  }
-
-  @Override
-  public QualifiedName qualifiedName() {
-    return qualifiedName;
-  }
-
-  @Override
-  public Optional<ClassSymbol> superClass() {
-    return Optional.empty();
-  }
-
-  @Override
-  public boolean isUnknownSymbol() {
-    return true;
+  public boolean isFalse() {
+    return this == FALSE;
   }
 }

@@ -19,35 +19,23 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.Optional;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
+import org.junit.Test;
 
-class UnknownClassSymbol extends AbstractClassSymbol {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  private final QualifiedName qualifiedName;
+public class TrileanTest {
 
-  UnknownClassSymbol(QualifiedName qualifiedName) {
-    this.qualifiedName = qualifiedName;
+  @Test
+  public void isTrue() {
+    assertThat(Trilean.TRUE.isTrue()).isTrue();
+    assertThat(Trilean.FALSE.isTrue()).isFalse();
+    assertThat(Trilean.UNKNOWN.isTrue()).isFalse();
   }
 
-  @Override
-  public LocationInFile location() {
-    return UnknownLocationInFile.UNKNOWN_LOCATION;
-  }
-
-  @Override
-  public QualifiedName qualifiedName() {
-    return qualifiedName;
-  }
-
-  @Override
-  public Optional<ClassSymbol> superClass() {
-    return Optional.empty();
-  }
-
-  @Override
-  public boolean isUnknownSymbol() {
-    return true;
+  @Test
+  public void isFalse() {
+    assertThat(Trilean.TRUE.isFalse()).isFalse();
+    assertThat(Trilean.FALSE.isFalse()).isTrue();
+    assertThat(Trilean.UNKNOWN.isFalse()).isFalse();
   }
 }
