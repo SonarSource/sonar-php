@@ -19,9 +19,6 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -48,12 +45,7 @@ public class ClassSymbolIndex {
   public ClassSymbol get(QualifiedName qualifiedName) {
     return symbolsByQualifiedName.computeIfAbsent(qualifiedName, qn ->
       projectSymbolData.classSymbolData(qn)
-        .<ClassSymbol>map(data -> {
-          ClassSymbolImpl symbol = new ClassSymbolImpl(data);
-          symbolsByData.put(data, symbol);
-          complete(Collections.singleton(data));
-          return symbol;
-        })
+        .<ClassSymbol>map(ClassSymbolImpl::new)
         .orElse(new UnknownClassSymbol(qualifiedName)));
   }
 
@@ -64,60 +56,35 @@ public class ClassSymbolIndex {
   private void init(Set<ClassSymbolData> fileDeclarations) {
     for (ClassSymbolData data : fileDeclarations) {
       ClassSymbolImpl symbol = new ClassSymbolImpl(data);
-      symbolsByQualifiedName.put(symbol.qualifiedName, symbol);
+      symbolsByQualifiedName.put(symbol.qualifiedName(), symbol);
       symbolsByData.put(data, symbol);
     }
-    complete(fileDeclarations);
   }
 
-  private void complete(Set<ClassSymbolData> fileDeclarations) {
-    Deque<ClassSymbolData> toComplete = new ArrayDeque<>();
-    toComplete.addAll(fileDeclarations);
-    while (!toComplete.isEmpty()) {
-      ClassSymbolData data = toComplete.pop();
-      Optional<QualifiedName> superClassName = data.superClass();
-      if (superClassName.isPresent()) {
-        ClassSymbol superClass = symbolsByQualifiedName.get(superClassName.get());
-        if (superClass == null) {
-          Optional<ClassSymbolData> superClassData = projectSymbolData.classSymbolData(superClassName.get());
-          if (superClassData.isPresent()) {
-            ClassSymbolImpl knownSuperClass = new ClassSymbolImpl(superClassData.get());
-            toComplete.push(superClassData.get());
-            symbolsByData.put(superClassData.get(), knownSuperClass);
-            superClass = knownSuperClass;
-          } else {
-            superClass = new UnknownClassSymbol(superClassName.get());
-          }
-          symbolsByQualifiedName.put(superClassName.get(), superClass);
-        }
-        symbolsByData.get(data).superClass = superClass;
-      }
-    }
-  }
+  private class ClassSymbolImpl implements ClassSymbol {
 
-  private static class ClassSymbolImpl implements ClassSymbol {
-
-    private final LocationInFile location;
-    private final QualifiedName qualifiedName;
+    private final ClassSymbolData data;
     private ClassSymbol superClass;
 
     private ClassSymbolImpl(ClassSymbolData data) {
-      this.location = data.location();
-      this.qualifiedName = data.qualifiedName();
+      this.data = data;
     }
 
     @Override
     public LocationInFile location() {
-      return location;
+      return data.location();
     }
 
     @Override
     public QualifiedName qualifiedName() {
-      return qualifiedName;
+      return data.qualifiedName();
     }
 
     @Override
     public Optional<ClassSymbol> superClass() {
+      if (superClass == null) {
+        data.superClass().ifPresent(name -> superClass = get(name));
+      }
       return Optional.ofNullable(superClass);
     }
 
