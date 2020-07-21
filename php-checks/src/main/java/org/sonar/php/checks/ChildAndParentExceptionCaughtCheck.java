@@ -60,7 +60,7 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
       PreciseIssue issue = null;
       for (Map.Entry<ClassSymbol, List<NamespaceNameTree>> otherException : caughtExceptionsBySymbol.entrySet()) {
         ClassSymbol comparedSymbol = otherException.getKey();
-        if (currentSymbol != comparedSymbol && currentSymbol.isOrSubClassOf(comparedSymbol.qualifiedName()).isTrue()) {
+        if (currentSymbol != comparedSymbol && currentSymbol.isSubTypeOf(comparedSymbol.qualifiedName()).isTrue()) {
           if (issue == null) {
             issue = context().newIssue(this, currentException, MESSAGE_DERIVATIVE);
           }

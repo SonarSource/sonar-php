@@ -1,5 +1,5 @@
 {
-  "title": "A subclass should not be in the same \"catch\" statement as a parent class",
+  "title": "A subclass should not be in the same \"catch\" clause as a parent class",
   "type": "CODE_SMELL",
   "status": "ready",
   "tags": [
