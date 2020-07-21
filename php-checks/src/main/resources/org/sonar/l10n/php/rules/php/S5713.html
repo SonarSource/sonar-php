@@ -15,7 +15,7 @@ try {
  &nbsp;&nbsp; throw new CustomException();
 } catch(Exception | Exception $e) { // Noncompliant.
  &nbsp;&nbsp; echo $e-&gt;message();
-}{code}
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
@@ -34,5 +34,7 @@ try {
 }
 </pre>
 <h2>See</h2>
-<p> * RFC - <a href="https://wiki.php.net/rfc/multiple-catch">Catching Multiple Exception Types</a></p>
+<ul>
+  <li> RFC - <a href="https://wiki.php.net/rfc/multiple-catch">Catching Multiple Exception Types</a> </li>
+</ul>
 
