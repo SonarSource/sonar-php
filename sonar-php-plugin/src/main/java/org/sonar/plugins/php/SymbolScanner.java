@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php;
 
+import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -50,9 +51,13 @@ class SymbolScanner extends Scanner {
   @Override
   void scanFile(InputFile file) {
     PhpFileImpl phpFile = new PhpFileImpl(file);
-    Tree ast = parser.parse(phpFile.contents());
-    SymbolTableImpl symbolTable = SymbolTableImpl.create((CompilationUnitTree) ast, new ProjectSymbolData(), phpFile);
-    symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
+    try {
+      Tree ast = parser.parse(phpFile.contents());
+      SymbolTableImpl symbolTable = SymbolTableImpl.create((CompilationUnitTree) ast, new ProjectSymbolData(), phpFile);
+      symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
+    } catch (RecognitionException e) {
+      LOG.debug("Parsing error in " + file);
+    }
   }
 
   @Override

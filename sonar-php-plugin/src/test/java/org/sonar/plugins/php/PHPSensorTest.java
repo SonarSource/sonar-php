@@ -227,6 +227,13 @@ public class PHPSensorTest {
     assertThat(context.allIssues()).as("One issue must be raised").isEmpty();
   }
 
+  @Test
+  public void parsing_error_should_not_fail_the_analysis_even_with_fail_fast() {
+    context.setSettings(new MapSettings().setProperty("sonar.internal.analysis.failFast", "true"));
+    analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
+    assertThat(context.allAnalysisErrors()).hasSize(1);
+  }
+
   private void analyseSingleFile(PHPSensor sensor, String fileName) {
     addInputFiles(fileName);
     sensor.execute(context);
