@@ -34,6 +34,8 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S1045")
 public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
 
+  private static final String MESSAGE = "Catch this exception only once; it is already handled by a previous catch clause.";
+
   @Override
   public void visitTryStatement(TryStatementTree tree) {
     Map<ClassSymbol, NamespaceNameTree> previouslyCaught = new HashMap<>();
@@ -53,7 +55,7 @@ public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
       if (caughtSuperClasses.values().stream().allMatch(Optional::isPresent)) {
         caughtInThisCatch.forEach((symbol, name) -> {
           ClassSymbol superClass = caughtSuperClasses.get(symbol).get();
-          context().newIssue(this, name, "Catch this exception only once; it is already handled by a previous catch clause.")
+          context().newIssue(this, name, MESSAGE)
             .secondary(previouslyCaught.get(superClass), null);
         });
       }
