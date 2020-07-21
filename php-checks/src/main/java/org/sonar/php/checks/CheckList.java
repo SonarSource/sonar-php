@@ -70,6 +70,7 @@ public class CheckList {
       CatchRethrowingCheck.class,
       ChangingAccessibilityCheck.class,
       CharacterBeforeOpeningPHPTagCheck.class,
+      ChildAndParentExceptionCaughtCheck.class,
       ClassComplexityCheck.class,
       ClassCouplingCheck.class,
       ClassNameCheck.class,
