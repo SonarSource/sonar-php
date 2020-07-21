@@ -36,3 +36,6 @@ interface ZException {} // Compliant
 interface ZException extends FooInterface {} // Compliant
 class ZException implements FooInterface {} // Noncompliant
 
+class my_exception {} // Noncompliant
+class MY_EXCEPTION {} // Noncompliant
+class MY_EXCEPTION_WRAPPER {} // Compliant

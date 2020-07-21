@@ -34,7 +34,7 @@ public class ClassNamedLikeExceptionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    if (tree.is(Tree.Kind.CLASS_DECLARATION) && tree.name().text().endsWith("Exception") && Symbols.get(tree).isOrSubClassOf(EXCEPTION_FQN).isFalse()) {
+    if (tree.is(Tree.Kind.CLASS_DECLARATION) && tree.name().text().toLowerCase().endsWith("exception") && Symbols.get(tree).isOrSubClassOf(EXCEPTION_FQN).isFalse()) {
       context().newIssue(this, tree.name(), MESSAGE);
     }
     super.visitClassDeclaration(tree);
