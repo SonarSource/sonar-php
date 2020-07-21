@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key="S2166")
 public class ClassNamedLikeExceptionCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Classes whose name ends with \"Exception\" should directly or indirectly extend the built-in \"Exception\" class.";
+  private static final String MESSAGE = "Rename this class to remove \"Exception\" or correct its inheritance.";
   private static final QualifiedName EXCEPTION_FQN = QualifiedName.qualifiedName("Exception");
 
   @Override

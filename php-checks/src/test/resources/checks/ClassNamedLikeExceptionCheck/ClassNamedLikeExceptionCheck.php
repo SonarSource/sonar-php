@@ -1,7 +1,7 @@
 <?php
 
 // no extend
-class AMyException {} // Noncompliant
+class AMyException {} // Noncompliant {{Rename this class to remove "Exception" or correct its inheritance.}}
 
 // single extend
 class BMyException extends Foo {} // Compliant
