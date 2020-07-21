@@ -1,0 +1,46 @@
+<p>In Python 3, attempting to catch in an <code>except</code> statement an object which does not derive from BaseException will raise a
+<code>TypeError</code>. In Python 2 it is possible to raise old-style classes but this shouldn't be done anymore in order to be compatible with Python
+3.</p>
+<p>In order to catch multiple exceptions in an <code>except</code> statement, a tuple of exception classes should be provided.</p>
+<p>If you are about to create a custom Exception class, note that custom exceptions should inherit from <code>Exception</code>, not
+<code>BaseException</code>. <code>Exception</code> allows people to catch all exceptions except the ones explicitly asking the interpreter to stop,
+such as <code>KeyboardInterrupt</code> and <a href="https://docs.python.org/3/library/exceptions.html#GeneratorExit"><code>GeneratorExit</code></a>
+which is not an error. See <a href="https://www.python.org/dev/peps/pep-0352/#exception-hierarchy-changes">PEP 352</a> for more information.</p>
+<p>This rule raises an issue when the expression used in an <code>except</code> statement is not a class deriving from <code>BaseException</code> nor
+a tuple of such classes.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+class CustomException:
+    """An Invalid exception class."""
+
+try:
+    "a string" * 42
+except CustomException:  # Noncompliant
+    print("exception")
+except (None, list()):  # Noncompliant * 2
+    print("exception")
+
+try:
+    "a string" * 42
+except [TypeError, ValueError]:  # Noncompliant. Lists are not accepted.
+    print("exception")
+except {TypeError, ValueError}:  # Noncompliant. Sets are not accepted.
+    print("exception")
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+class MyError(Exception):
+    pass
+
+try:
+    "a string" * 42
+except (MyError, TypeError):
+    print("exception")
+</pre>
+<h2>See</h2>
+<ul>
+  <li> Python documentation - <a href="https://docs.python.org/3/tutorial/errors.html">Errors and Exceptions</a> </li>
+  <li> Python documentation - <a href="https://docs.python.org/3/reference/compound_stmts.html#except">the <code>try</code> statement</a> </li>
+  <li> <a href="https://www.python.org/dev/peps/pep-0352/#exception-hierarchy-changes">PEP 352 - Required Superclass for Exceptions</a> </li>
+</ul>
+
