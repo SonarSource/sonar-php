@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.symbols.ClassSymbol;
@@ -36,6 +37,8 @@ public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Catch this exception only once; it is already handled by a previous catch clause.";
 
+  private static final BinaryOperator<NamespaceNameTree> DUPLICATE_RESOLUTION = (a, b) -> a;
+
   @Override
   public void visitTryStatement(TryStatementTree tree) {
     Map<ClassSymbol, NamespaceNameTree> previouslyCaught = new HashMap<>();
@@ -43,7 +46,7 @@ public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
     for (CatchBlockTree catchBlock : tree.catchBlocks()) {
 
       Map<ClassSymbol, NamespaceNameTree> caughtInThisCatch =
-        catchBlock.exceptionTypes().stream().collect(Collectors.toMap(Symbols::getClass, e -> e));
+        catchBlock.exceptionTypes().stream().collect(Collectors.toMap(Symbols::getClass, e -> e, DUPLICATE_RESOLUTION));
 
       Map<ClassSymbol, Optional<ClassSymbol>> caughtSuperClasses = caughtInThisCatch.keySet().stream()
         .collect(Collectors.toMap(
