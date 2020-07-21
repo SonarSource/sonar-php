@@ -68,6 +68,7 @@ public class CheckList {
       CallParentConstructorCheck.class,
       CallToIniSetCheck.class,
       CatchRethrowingCheck.class,
+      CatchThrowableCheck.class,
       ChangingAccessibilityCheck.class,
       CharacterBeforeOpeningPHPTagCheck.class,
       ClassComplexityCheck.class,
