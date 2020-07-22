@@ -1,7 +1,7 @@
 <?php
 
 // no extend
-class AMyException {} // Noncompliant
+class AMyException {} // Noncompliant {{Rename this class to remove "Exception" or correct its inheritance.}}
 
 // single extend
 class BMyException extends Foo {} // Compliant
@@ -36,3 +36,6 @@ interface ZException {} // Compliant
 interface ZException extends FooInterface {} // Compliant
 class ZException implements FooInterface {} // Noncompliant
 
+class my_exception {} // Noncompliant
+class MY_EXCEPTION {} // Noncompliant
+class MY_EXCEPTION_WRAPPER {} // Compliant

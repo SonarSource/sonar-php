@@ -1,0 +1,12 @@
+{
+  "title": "Caught Exceptions must derive from Throwable",
+  "type": "BUG",
+  "status": "ready",
+  "tags": [
+    "python3"
+  ],
+  "defaultSeverity": "Blocker",
+  "ruleSpecification": "RSPEC-5708",
+  "sqKey": "S5708",
+  "scope": "All"
+}
