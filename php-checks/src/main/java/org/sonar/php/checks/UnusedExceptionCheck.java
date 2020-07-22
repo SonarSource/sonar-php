@@ -38,7 +38,6 @@ public class UnusedExceptionCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Throw this exception or remove this useless statement";
 
   private static final QualifiedName EXCEPTION_FQN = qualifiedName("Exception");
-  private static final QualifiedName RUNTIME_EXCEPTION_FQN = qualifiedName("RuntimeException");
 
   @Override
   public void visitExpressionStatement(ExpressionStatementTree tree) {
