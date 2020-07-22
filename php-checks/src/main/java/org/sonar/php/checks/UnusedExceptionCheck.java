@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -50,11 +49,8 @@ public class UnusedExceptionCheck extends PHPVisitorCheck {
         checkForException = ((FunctionCallTree) checkForException).callee();
       }
 
-      if (checkForException.is(Tree.Kind.NAMESPACE_NAME)) {
-        ClassSymbol classSymbol = Symbols.getClass((NamespaceNameTree) checkForException);
-        if (classSymbol.isOrSubClassOf(EXCEPTION_FQN).isTrue() || classSymbol.isOrSubClassOf(RUNTIME_EXCEPTION_FQN).isTrue()) {
-          context().newIssue(this, newExpressionTree, MESSAGE);
-        }
+      if (checkForException.is(Tree.Kind.NAMESPACE_NAME) && Symbols.getClass((NamespaceNameTree) checkForException).isOrSubClassOf(EXCEPTION_FQN).isTrue()) {
+        context().newIssue(this, newExpressionTree, MESSAGE);
       }
     }
     super.visitExpressionStatement(tree);
