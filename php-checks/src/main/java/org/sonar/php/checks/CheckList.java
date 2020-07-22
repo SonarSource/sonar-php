@@ -211,6 +211,7 @@ public class CheckList {
       SwitchWithoutDefaultCheck.class,
       TabCharacterCheck.class,
       ThisVariableUsageInStaticContextCheck.class,
+      ThrowThrowableCheck.class,
       TodoTagPresenceCheck.class,
       TooManyCasesInSwitchCheck.class,
       TooManyFieldsInClassCheck.class,
