@@ -1,0 +1,12 @@
+{
+  "title": "A subclass should not be in the same \"catch\" clause as a parent class",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [
+    "unused"
+  ],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-5713",
+  "sqKey": "S5713",
+  "scope": "All"
+}
