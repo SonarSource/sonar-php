@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.visitors;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.plugins.php.api.tree.Tree;
 
 public class PreciseIssue implements PhpIssue {
@@ -55,6 +56,9 @@ public class PreciseIssue implements PhpIssue {
   }
 
   public PreciseIssue secondary(LocationInFile locationInFile, @Nullable String message) {
+    if (locationInFile == UnknownLocationInFile.UNKNOWN_LOCATION) {
+      return this;
+    }
     return secondary(new IssueLocation(locationInFile, message));
   }
 

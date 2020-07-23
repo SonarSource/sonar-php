@@ -59,7 +59,8 @@ public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
         caughtInThisCatch.forEach((symbol, name) -> {
           ClassSymbol superClass = caughtSuperClasses.get(symbol).get();
           context().newIssue(this, name, MESSAGE)
-            .secondary(previouslyCaught.get(superClass), null);
+            .secondary(previouslyCaught.get(superClass), null)
+            .secondary(symbol.location(), null);
         });
       }
 

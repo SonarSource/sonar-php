@@ -1,7 +1,7 @@
 <?php
 
-class NotReallyAnException extends B { // Noncompliant
-}
-
-class ARealException extends C {
+try {
+  foo();
+} catch (A $e) {
+} catch (A1 $e) { // Noncompliant
 }

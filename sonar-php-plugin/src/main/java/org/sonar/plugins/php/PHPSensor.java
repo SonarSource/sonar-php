@@ -22,6 +22,7 @@ package org.sonar.plugins.php;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
+import java.io.File;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -282,7 +283,16 @@ public class PHPSensor implements Sensor {
         PreciseIssue preciseIssue = (PreciseIssue) issue;
 
         newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
-        preciseIssue.secondaryLocations().forEach(secondary -> newIssue.addLocation(newLocation(inputFile, newIssue, secondary)));
+        preciseIssue.secondaryLocations().forEach(secondary -> {
+          InputFile file = inputFile;
+          String filePath = secondary.filePath();
+          if (filePath != null) {
+            file = context.fileSystem().inputFile(context.fileSystem().predicates().is(new File(filePath)));
+          }
+          if (file != null) {
+            newIssue.addLocation(newLocation(file, newIssue, secondary));
+          }
+        });
       }
 
       newIssue.save();

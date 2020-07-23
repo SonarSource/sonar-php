@@ -3,6 +3,7 @@
 class A extends Exception {}
 class B extends Exception {}
 class A1 extends A {}
+//    ^^>
 class A11 extends A1 {}
 class A2 extends A {}
 
@@ -38,9 +39,7 @@ catch (A2 $e) {}
 
 try {}
 catch (B | A $e) {}
-//         ^>
 catch (A1 $e) {} // Noncompliant
-//     ^^
 
 try {}
 catch (B $e) {}
