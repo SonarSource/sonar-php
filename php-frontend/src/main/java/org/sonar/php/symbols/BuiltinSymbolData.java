@@ -19,27 +19,36 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
-/**
- * Instances of this class should never hold references to an AST node: we want to have a low memory usage for the
- * analysis of a project and an AST node basically keeps references to the whole AST of a file.
- */
-public class ProjectSymbolData {
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.sonar.php.symbols.UnknownLocationInFile.UNKNOWN_LOCATION;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
-  private final BuiltinSymbolData builtinSymbolData = BuiltinSymbolData.BUILTINS;
-  private final Map<QualifiedName, ClassSymbolData> classSymbolsByQualifiedName = new HashMap<>();
+public enum BuiltinSymbolData {
 
-  public void add(ClassSymbolData classSymbolData) {
-    classSymbolsByQualifiedName.put(classSymbolData.qualifiedName(), classSymbolData);
+  BUILTINS;
+
+  private final Map<QualifiedName, ClassSymbolData> classSymbolsByQualifiedName = init();
+
+  private Map<QualifiedName, ClassSymbolData> init() {
+    List<ClassSymbolData> data = Arrays.asList(
+      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Throwable"), null, emptyList()),
+      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Exception"), null, singletonList(qualifiedName("Throwable"))),
+      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("RuntimeException"), qualifiedName("Exception"), emptyList())
+    );
+    return data.stream().collect(Collectors.toMap(ClassSymbolData::qualifiedName, a -> a));
   }
 
   public Optional<ClassSymbolData> classSymbolData(QualifiedName qualifiedName) {
-    ClassSymbolData value = classSymbolsByQualifiedName.get(qualifiedName);
-    return value == null ? builtinSymbolData.classSymbolData(qualifiedName) : Optional.of(value);
+    return Optional.ofNullable(classSymbolsByQualifiedName.get(qualifiedName));
   }
+
 
 }

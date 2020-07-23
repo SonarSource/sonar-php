@@ -36,4 +36,4 @@ class NotReallyAnException {}
 new NotReallyAnException(); // OK
 
 class MyRuntimeError extends RuntimeException {}
-new MyRuntimeError(); // FN
+new MyRuntimeError(); // Noncompliant

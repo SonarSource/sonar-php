@@ -56,3 +56,7 @@ catch (A1 | A2 $e) {} // Noncompliant 2
 
 try {}
 catch (A1 | A1 $e) {}
+
+try {}
+catch (\Exception $e) {}
+catch (\RuntimeException $e) {} // Noncompliant
