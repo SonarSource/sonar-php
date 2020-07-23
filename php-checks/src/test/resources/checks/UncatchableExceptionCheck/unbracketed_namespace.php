@@ -32,12 +32,3 @@ try {}
 catch (Exception $e) {} // OK - Exception is used from global namespace
 
 //-------------------------------------------------------------------------
-
-namespace Bar\Foo\Bar;
-
-use Bla\Exceptions;
-
-try {}
-catch (Exceptions\Exception $e) {} // OK - Exception is used from global namespace
-
-//-------------------------------------------------------------------------
