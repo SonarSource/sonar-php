@@ -40,16 +40,17 @@ public class ThrowThrowableCheck extends PHPVisitorCheck {
   @Override
   public void visitThrowStatement(ThrowStatementTree tree) {
     if (tree.expression().is(Tree.Kind.NEW_EXPRESSION)) {
-      Optional<NamespaceNameTree> namespaceNameTree = extractNamespaceTree(((NewExpressionTree) tree.expression()).expression());
-      namespaceNameTree.ifPresent(n -> verifyClass(n, tree));
+      extractNamespaceTree(((NewExpressionTree) tree.expression()).expression())
+        .ifPresent(n -> verifyClass(n, tree));
     }
     super.visitThrowStatement(tree);
   }
 
   private static Optional<NamespaceNameTree> extractNamespaceTree(ExpressionTree expression) {
-    if (expression.is(Tree.Kind.FUNCTION_CALL) && ((FunctionCallTree) expression).callee().is(Tree.Kind.NAMESPACE_NAME)) {
-      return Optional.of((NamespaceNameTree) ((FunctionCallTree) expression).callee());
-    } else if (expression.is(Tree.Kind.NAMESPACE_NAME)) {
+    if (expression.is(Tree.Kind.FUNCTION_CALL)) {
+      expression = ((FunctionCallTree) expression).callee();
+    }
+    if (expression.is(Tree.Kind.NAMESPACE_NAME)) {
       return Optional.of((NamespaceNameTree) expression);
     }
 
