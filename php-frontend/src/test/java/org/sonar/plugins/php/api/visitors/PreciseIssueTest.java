@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.visitors;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.symbols.LocationInFileImpl;
+import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -83,6 +84,13 @@ public class PreciseIssueTest {
     assertThat(secondary.endLine()).isEqualTo(3);
     assertThat(secondary.endLineOffset()).isEqualTo(4);
     assertThat(secondary.filePath()).isEqualTo("dir1/file1.php");
+  }
+
+  @Test
+  public void secondary_on_unknown_location() {
+    PreciseIssue preciseIssue = new PreciseIssue(CHECK, PRIMARY_LOCATION);
+    preciseIssue.secondary(UnknownLocationInFile.UNKNOWN_LOCATION, "Secondary message");
+    assertThat(preciseIssue.secondaryLocations()).isEmpty();
   }
 
   private static Tree createToken(int line, int column, String tokenValue) {

@@ -317,14 +317,21 @@ public class PHPSensorTest {
 
   @Test
   public void cross_file_issue() {
-    checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S2166")).build());
+    checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S1045")).build());
     addInputFiles("cross-file/A.php", "cross-file/B.php");
     createSensor().execute(context);
     assertThat(context.allIssues()).hasSize(1);
     Issue issue = context.allIssues().iterator().next();
-    assertThat(issue.ruleKey().rule()).isEqualTo("S2166");
+    assertThat(issue.ruleKey().rule()).isEqualTo("S1045");
     assertThat(issue.primaryLocation().inputComponent()).hasToString("cross-file/A.php");
-    assertThat(issue.primaryLocation().textRange().start().line()).isEqualTo(3);
+    assertThat(issue.primaryLocation().textRange().start().line()).isEqualTo(6);
+    assertThat(issue.flows()).extracting(
+      f -> f.locations().get(0).inputComponent().toString(),
+      f -> f.locations().get(0).textRange().start().line()
+    ).containsExactly(
+      tuple("cross-file/A.php", 5),
+      tuple("cross-file/B.php", 6)
+    );
   }
 
   @Test

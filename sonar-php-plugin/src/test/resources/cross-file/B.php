@@ -1,7 +1,7 @@
 <?php
 
-class B {
+class A extends Exception {
 }
 
-class C extends Exception {
+class A1 extends A {
 }
