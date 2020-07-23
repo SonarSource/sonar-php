@@ -223,6 +223,7 @@ public class CheckList {
       TooManyReturnCheck.class,
       TrailingCommentCheck.class,
       TrailingWhitespaceCheck.class,
+      UncatchableExceptionCheck.class,
       UnreachableCatchBlockCheck.class,
       UnserializeCallCheck.class,
       UnsetForeachReferenceVariableCheck.class,
