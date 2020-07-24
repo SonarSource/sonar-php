@@ -178,9 +178,7 @@ public class PHPSensor implements Sensor {
           saveNewFileMeasures(context,
             phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
             inputFile);
-          if (!inSonarLint(context)) {
-            saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
-          }
+          saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
         }
 
         noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
