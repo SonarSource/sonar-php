@@ -65,6 +65,7 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
             issue = context().newIssue(this, currentException, MESSAGE_DERIVATIVE);
           }
           addSecondaryLocations(issue, otherException.getValue());
+          issue.secondary(currentSymbol.location(), null);
         }
       }
     });
