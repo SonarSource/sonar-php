@@ -49,6 +49,7 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
+import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
@@ -58,6 +59,7 @@ import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
@@ -124,7 +126,7 @@ public class PHPSensor implements Sensor {
       symbolScanner.execute(inputFiles);
       ProjectSymbolData projectSymbolData = symbolScanner.getProjectSymbolData();
       new AnalysisScanner(context, projectSymbolData).execute(inputFiles);
-      if (inSonarQube(context)) {
+      if (!inSonarLint(context)) {
         processTestsAndCoverage(context);
       }
     } catch (CancellationException e) {
@@ -132,8 +134,8 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private static boolean inSonarQube(SensorContext context) {
-    return context.runtime().getProduct() != SonarProduct.SONARLINT;
+  private static boolean inSonarLint(SensorContext context) {
+    return context.runtime().getProduct() == SonarProduct.SONARLINT;
   }
 
   private static void processTestsAndCoverage(SensorContext context) {
@@ -148,7 +150,16 @@ public class PHPSensor implements Sensor {
 
     public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData) {
       super(context);
-      phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(checks.all()), context.fileSystem().workDir(), projectSymbolData);
+
+      List<PHPCheck> allChecks = checks.all();
+
+      if (inSonarLint(context)) {
+        allChecks = allChecks.stream()
+          .filter(e -> !(e instanceof UncatchableExceptionCheck))
+          .collect(Collectors.toList());
+      }
+
+      phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(allChecks), context.fileSystem().workDir(), projectSymbolData);
     }
 
     @Override
@@ -161,13 +172,13 @@ public class PHPSensor implements Sensor {
       try {
         phpAnalyzer.nextFile(new PhpFileImpl(inputFile));
 
-        if (inSonarQube(context)) {
+        if (!inSonarLint(context)) {
           phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
           phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
           saveNewFileMeasures(context,
             phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
             inputFile);
-          if (inSonarQube(context)) {
+          if (!inSonarLint(context)) {
             saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
           }
         }

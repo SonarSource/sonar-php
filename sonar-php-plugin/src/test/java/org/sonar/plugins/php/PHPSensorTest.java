@@ -62,6 +62,7 @@ import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.CheckList;
+import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -463,6 +464,23 @@ public class PHPSensorTest {
       "No PHPUnit coverage reports provided (see '" + PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY + "' property)");
 
     logTester.clear();
+  }
+
+  @Test
+  public void should_disable_rules_for_sonarlint() {
+    checkFactory = new CheckFactory(new ActiveRulesBuilder()
+      .addRule(newActiveRule(UncatchableExceptionCheck.KEY))
+      .build());
+
+    // SonarLint Runtime
+    context.setRuntime(SONARLINT_RUNTIME);
+    analyseSingleFile(createSensor(), "disable_rules_for_sonarlint.php");
+    assertThat(context.allIssues()).hasSize(0);
+
+    // SonarQube Runtime
+    context.setRuntime(NOT_SONARLINT_RUNTIME);
+    analyseSingleFile(createSensor(), "disable_rules_for_sonarlint.php");
+    assertThat(context.allIssues()).hasSize(1);
   }
 
   @After

@@ -27,9 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key="S5911")
+@Rule(key=UncatchableExceptionCheck.KEY)
 public class UncatchableExceptionCheck extends PHPVisitorCheck {
 
+  public static final String KEY = "S5911";
   private static final String MESSAGE = "Create class \"%s\" in namespace or check correct import of class";
   private static final String GLOBAL_NAMESPACE = "";
 
