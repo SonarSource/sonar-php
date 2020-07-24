@@ -96,6 +96,11 @@ public class ClassSymbolIndex {
     }
 
     @Override
+    public boolean isInterface() {
+      return data.isInterface();
+    }
+
+    @Override
     public boolean isUnknownSymbol() {
       return false;
     }

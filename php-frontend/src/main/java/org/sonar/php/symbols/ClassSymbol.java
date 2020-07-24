@@ -34,6 +34,8 @@ public interface ClassSymbol extends Symbol {
 
   List<ClassSymbol> implementedInterfaces();
 
+  boolean isInterface();
+
   Trilean isOrSubClassOf(QualifiedName qualifiedName);
 
   Trilean isSubTypeOf(QualifiedName typeName);
