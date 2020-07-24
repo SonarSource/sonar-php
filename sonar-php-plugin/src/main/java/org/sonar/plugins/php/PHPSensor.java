@@ -283,19 +283,23 @@ public class PHPSensor implements Sensor {
         PreciseIssue preciseIssue = (PreciseIssue) issue;
 
         newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
-        preciseIssue.secondaryLocations().forEach(secondary -> {
-          InputFile file = inputFile;
-          String filePath = secondary.filePath();
-          if (filePath != null) {
-            file = context.fileSystem().inputFile(context.fileSystem().predicates().is(new File(filePath)));
-          }
-          if (file != null) {
-            newIssue.addLocation(newLocation(file, newIssue, secondary));
-          }
-        });
+        preciseIssue.secondaryLocations().forEach(secondary ->
+          addSecondaryLocation(context, inputFile, newIssue, secondary)
+        );
       }
 
       newIssue.save();
+    }
+  }
+
+  private static void addSecondaryLocation(SensorContext context, InputFile inputFile, NewIssue newIssue, IssueLocation secondary) {
+    InputFile file = inputFile;
+    String filePath = secondary.filePath();
+    if (filePath != null) {
+      file = context.fileSystem().inputFile(context.fileSystem().predicates().is(new File(filePath)));
+    }
+    if (file != null) {
+      newIssue.addLocation(newLocation(file, newIssue, secondary));
     }
   }
 
