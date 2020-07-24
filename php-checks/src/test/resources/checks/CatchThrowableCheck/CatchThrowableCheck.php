@@ -18,6 +18,12 @@ try {
     echo "foo";
 }
 
+try {
+  foo();
+} catch (SomeInterface $e) { // Compliant
+  echo "foo";
+}
+
 class SomeThrowableA implements Throwable {
     // Throwable methods implementation
 }

@@ -54,6 +54,11 @@ class UnknownClassSymbol extends AbstractClassSymbol {
   }
 
   @Override
+  public boolean isInterface() {
+    return false;
+  }
+
+  @Override
   public boolean isUnknownSymbol() {
     return true;
   }

@@ -32,12 +32,18 @@ public class ClassSymbolData {
   @Nullable
   private final QualifiedName superClass;
   private final List<QualifiedName> implementedInterfaces;
+  private final boolean isInterface;
 
-  public ClassSymbolData(LocationInFile location, QualifiedName qualifiedName, @Nullable QualifiedName superClass, List<QualifiedName> implementedInterfaces) {
+  public ClassSymbolData(LocationInFile location, QualifiedName qualifiedName, @Nullable QualifiedName superClass, List<QualifiedName> implementedInterfaces, boolean isInterface) {
     this.location = location;
     this.qualifiedName = qualifiedName;
     this.superClass = superClass;
     this.implementedInterfaces = implementedInterfaces;
+    this.isInterface = isInterface;
+  }
+
+  public ClassSymbolData(LocationInFile location, QualifiedName qualifiedName, @Nullable QualifiedName superClass, List<QualifiedName> implementedInterfaces) {
+    this(location, qualifiedName, superClass, implementedInterfaces, false);
   }
 
   public LocationInFile location() {
@@ -54,5 +60,9 @@ public class ClassSymbolData {
 
   public List<QualifiedName> implementedInterfaces() {
     return implementedInterfaces;
+  }
+
+  public boolean isInterface() {
+    return isInterface;
   }
 }

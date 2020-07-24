@@ -89,7 +89,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
-    classSymbolDataByTree.put(tree, new ClassSymbolData(location(name), qualifiedName, superClassName, interfaceNames));
+    classSymbolDataByTree.put(tree, new ClassSymbolData(location(name), qualifiedName, superClassName, interfaceNames, tree.is(Tree.Kind.INTERFACE_DECLARATION)));
 
     symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
     super.visitClassDeclaration(tree);

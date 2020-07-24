@@ -33,6 +33,7 @@ public class CatchThrowableCheck extends PHPVisitorCheck {
   @Override
   public void visitCatchBlock(CatchBlockTree tree) {
     tree.exceptionTypes().stream().
+      filter(type -> !Symbols.getClass(type).isInterface()).
       filter(type -> Symbols.getClass(type).isSubTypeOf(THROWABLE_FQN).isFalse()).
       forEach(type -> context().newIssue(this, type, MESSAGE));
     super.visitCatchBlock(tree);
