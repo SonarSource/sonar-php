@@ -2,8 +2,12 @@
   "title": "Caught Exceptions must derive from Throwable",
   "type": "BUG",
   "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": null
+  },
   "tags": [
-    "python3"
+    "unused"
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-5708",
