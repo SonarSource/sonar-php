@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -58,8 +59,10 @@ public class ThrowThrowableCheck extends PHPVisitorCheck {
   }
 
   private void verifyClass(NamespaceNameTree namespaceNameTree, ThrowStatementTree tree) {
-    if (Symbols.getClass(namespaceNameTree).isSubTypeOf(THROWABLE_FQN).isFalse()) {
-      context().newIssue(this, tree, MESSAGE);
+    ClassSymbol classSymbol = Symbols.getClass(namespaceNameTree);
+    if (classSymbol.isSubTypeOf(THROWABLE_FQN).isFalse()) {
+      context().newIssue(this, tree, MESSAGE).
+        secondary(classSymbol.location(), null);
     }
   }
 }

@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import org.sonar.check.Rule;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -35,7 +36,12 @@ public class CatchThrowableCheck extends PHPVisitorCheck {
     tree.exceptionTypes().stream().
       filter(type -> !Symbols.getClass(type).isInterface()).
       filter(type -> Symbols.getClass(type).isSubTypeOf(THROWABLE_FQN).isFalse()).
-      forEach(type -> context().newIssue(this, type, MESSAGE));
+      forEach(this::addIssue);
     super.visitCatchBlock(tree);
+  }
+
+  private void addIssue(NamespaceNameTree tree) {
+    context().newIssue(this, tree, MESSAGE)
+      .secondary(Symbols.getClass(tree).location(), null);
   }
 }

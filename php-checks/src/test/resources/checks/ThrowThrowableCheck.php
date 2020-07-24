@@ -1,10 +1,12 @@
 <?php
 
 class NoThrowable {}
+//    ^^^^^^^^^^^>
 class SomeThrowable implements Throwable { /* Throwable methods implementation */ }
 class SomeCustomException extends Exception {};
 
-throw new NoThrowable(); // Noncompliant {{Throw an object derived from "Throwable".}}
+  throw new NoThrowable(); // Noncompliant {{Throw an object derived from "Throwable".}}
+//^^^^^^^^^^^^^^^^^^^^^^^^
 throw new NoThrowable; // Noncompliant
 
 throw new Exception(); // Compliant

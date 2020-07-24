@@ -1,7 +1,7 @@
 <?php
 
 class NoThrowableA {}
-
+//    ^^^^^^^^^^^^>
 try {
     foo();
 } catch (NoThrowableA $e) { // Noncompliant {{Change this type to be a class deriving from "Throwable".}}
@@ -11,10 +11,11 @@ try {
 
 interface SomeInterface {}
 class NoThrowableB implements SomeInterface {}
-
+//    ^^^^^^^^^^^^>
 try {
     foo();
 } catch (NoThrowableB $e) { // Noncompliant
+//       ^^^^^^^^^^^^
     echo "foo";
 }
 
