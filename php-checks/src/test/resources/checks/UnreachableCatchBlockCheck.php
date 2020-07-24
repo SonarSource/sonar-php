@@ -31,7 +31,9 @@ catch (A $e) {}
 
 try {}
 catch (A $e) {}
+//     ^>
 catch (A $e) {} // Noncompliant
+//     ^
 
 try {}
 catch (A1 $e) {}

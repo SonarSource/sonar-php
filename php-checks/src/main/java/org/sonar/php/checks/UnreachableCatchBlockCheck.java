@@ -31,6 +31,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 @Rule(key = "S1045")
 public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
@@ -58,9 +59,11 @@ public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
       if (caughtSuperClasses.values().stream().allMatch(Optional::isPresent)) {
         caughtInThisCatch.forEach((symbol, name) -> {
           ClassSymbol superClass = caughtSuperClasses.get(symbol).get();
-          context().newIssue(this, name, MESSAGE)
-            .secondary(previouslyCaught.get(superClass), null)
-            .secondary(symbol.location(), null);
+          PreciseIssue issue = context().newIssue(this, name, MESSAGE)
+            .secondary(previouslyCaught.get(superClass), null);
+          if (symbol != superClass) {
+            issue.secondary(symbol.location(), null);
+          }
         });
       }
 
