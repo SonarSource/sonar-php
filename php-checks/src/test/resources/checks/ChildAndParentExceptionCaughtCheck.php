@@ -1,7 +1,6 @@
 <?php
 
 class CustomException extends Exception {}
-class CustomSubException extends CustomException {}
 class OtherException extends Exception {}
 
 // duplicated exception
@@ -18,16 +17,23 @@ catch (CustomException | FooException | FooException $e) {} // Noncompliant
 //                       ^^^^^^^^^^^^   ^^^^^^^^^^^^<
 
 // derived exception
+class CustomException1 extends Exception {}
+//    ^^^^^^^^^^^^^^^^>
 try {}
-catch (Exception | CustomException $e) {} // Noncompliant {{Remove this useless Exception class; it derives from another which is also caught.}}
-//     ^^^^^^^^^>  ^^^^^^^^^^^^^^^
+catch (Exception | CustomException1 $e) {} // Noncompliant {{Remove this useless Exception class; it derives from another which is also caught.}}
+//     ^^^^^^^^^>  ^^^^^^^^^^^^^^^^
 
+class CustomException2 extends Exception {}
+//    ^^^^^^^^^^^^^^^^>
 try {}
-catch (CustomException | Exception $e) {} // Noncompliant
-//     ^^^^^^^^^^^^^^^   ^^^^^^^^^<
+catch (CustomException2 | Exception $e) {} // Noncompliant
+//     ^^^^^^^^^^^^^^^^   ^^^^^^^^^<
 
 try {}
 catch (CustomSubException | CustomException | Exception $e) {} // Noncompliant 2
+
+class CustomSubException extends CustomException {}
+//    ^^^^^^^^^^^^^^^^^^>
 
 // derived exception with another known exception
 try {}
@@ -37,7 +43,7 @@ catch (OtherException | CustomException | CustomSubException $e) {} // Noncompli
 // derived exception with another unknown exception
 try {}
 catch (FooException | CustomException | CustomSubException $e) {} // Noncompliant
-//                    ^^^^^^^^^^^^^^^>  ^^^^^^^^^^^^^^^^^^
+//                                      ^^^^^^^^^^^^^^^^^^
 
 try {}
 catch (CustomException | OtherException $e) {} // Compliant
