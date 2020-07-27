@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.utils;
 
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
