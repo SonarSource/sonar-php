@@ -65,7 +65,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   private static boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
     ClassSymbol symbol = Symbols.get(tree);
     return symbol.isSubTypeOf(qualifiedName("PHPUnit\\Framework\\TestCase")).isTrue()
-       || symbol.isSubTypeOf(qualifiedName("PHPUnit_Framework_TestCase")).isTrue());
+       || symbol.isSubTypeOf(qualifiedName("PHPUnit_Framework_TestCase")).isTrue();
   }
 
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {
