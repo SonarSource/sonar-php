@@ -18,6 +18,7 @@ class MyNextOtherTest extends TestCase { // OK
 }
 
 class MyLastTest extends TestCase { // Noncompliant {{Add some tests to this class.}}
+  use TestTrait;
   /** @test */
   private function testFoo() {}
 }
