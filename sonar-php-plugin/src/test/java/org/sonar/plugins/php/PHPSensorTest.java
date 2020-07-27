@@ -63,6 +63,7 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.UncatchableExceptionCheck;
+import org.sonar.php.checks.phpunit.PhpUnitCheck;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -504,6 +505,15 @@ public class PHPSensorTest {
     assertThat(context.allIssues()).hasSize(1);
   }
 
+  @Test
+  public void should_use_test_file_checks() {
+    PHPCheck check = new TestFileCheck();
+    InputFile testFile = inputFile(ANALYZED_FILE, Type.TEST);
+    context.fileSystem().add(testFile);
+    createSensor(check).execute(context);
+    assertThat(((TestFileCheck) check).wasTriggered).isTrue();
+  }
+
   @After
   public void tearDown() {
     tempReportFiles.forEach(File::delete);
@@ -542,6 +552,16 @@ public class PHPSensorTest {
     @Override
     public void visitCompilationUnit(CompilationUnitTree tree) {
       throw exception;
+    }
+  }
+
+  @Rule(key = "testKey")
+  private static class TestFileCheck extends PhpUnitCheck {
+    protected boolean wasTriggered = false;
+
+    @Override
+    public void visitCompilationUnit(CompilationUnitTree tree) {
+      wasTriggered = true;
     }
   }
 }
