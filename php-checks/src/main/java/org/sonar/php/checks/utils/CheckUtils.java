@@ -258,4 +258,16 @@ public final class CheckUtils {
     }
     return false;
   }
+
+  public static boolean hasAnnotation(Tree declaration, String annotation) {
+    if (!annotation.startsWith("@")) {
+      annotation = "@"+annotation;
+    }
+    for (SyntaxTrivia comment : ((PHPTree) declaration).getFirstToken().trivias()) {
+      if (StringUtils.containsIgnoreCase(comment.text(), annotation)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
