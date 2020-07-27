@@ -152,15 +152,15 @@ public class PHPSensor implements Sensor {
       super(context);
 
       List<PHPCheck> allChecks = checks.all();
-      List<PHPCheck> testFilesChecks  = allChecks.stream().
-        filter(c -> c instanceof PhpUnitCheck).
-        collect(Collectors.toList());
-
       if (inSonarLint(context)) {
         allChecks = allChecks.stream()
           .filter(e -> !(e instanceof UncatchableExceptionCheck))
           .collect(Collectors.toList());
       }
+
+      List<PHPCheck> testFilesChecks  = allChecks.stream().
+        filter(c -> c instanceof PhpUnitCheck).
+        collect(Collectors.toList());
 
       phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(allChecks), ImmutableList.copyOf(testFilesChecks), context.fileSystem().workDir(), projectSymbolData);
     }
