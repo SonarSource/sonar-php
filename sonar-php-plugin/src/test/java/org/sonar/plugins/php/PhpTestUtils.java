@@ -65,11 +65,11 @@ public class PhpTestUtils {
     assertThat(context.measure(componentKey, metric)).as("metric for: " + metric.getKey()).isNull();
   }
 
-  public static DefaultInputFile inputFile(String fileName) {
+  public static DefaultInputFile inputFile(String fileName, InputFile.Type type) {
     try {
       return TestInputFileBuilder.create("moduleKey", fileName)
         .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
-        .setType(InputFile.Type.MAIN)
+        .setType(type)
         .setCharset(Charset.defaultCharset())
         .setLanguage(Php.KEY)
         .initMetadata(new String(java.nio.file.Files.readAllBytes(new File("src/test/resources/" + fileName).toPath()), StandardCharsets.UTF_8)).build();
@@ -78,4 +78,7 @@ public class PhpTestUtils {
     }
   }
 
+  public static DefaultInputFile inputFile(String fileName) {
+    return inputFile(fileName, InputFile.Type.MAIN);
+  }
 }

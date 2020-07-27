@@ -51,6 +51,7 @@ import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
+import org.sonar.php.checks.phpunit.PhpUnitCheck;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
@@ -114,12 +115,10 @@ public class PHPSensor implements Sensor {
   public void execute(SensorContext context) {
     FileSystem fileSystem = context.fileSystem();
 
-    FilePredicate mainFilePredicate = fileSystem.predicates().and(
-      fileSystem.predicates().hasType(InputFile.Type.MAIN),
-      fileSystem.predicates().hasLanguage(Php.KEY));
+    FilePredicate phpFilePredicate = fileSystem.predicates().hasLanguage(Php.KEY);
 
     List<InputFile> inputFiles = new ArrayList<>();
-    fileSystem.inputFiles(mainFilePredicate).forEach(inputFiles::add);
+    fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
 
     SymbolScanner symbolScanner = new SymbolScanner(context);
 
@@ -149,18 +148,24 @@ public class PHPSensor implements Sensor {
 
     PHPAnalyzer phpAnalyzer;
 
+    private final boolean hasTestFileChecks;
+
     public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData) {
       super(context);
 
       List<PHPCheck> allChecks = checks.all();
-
       if (inSonarLint(context)) {
         allChecks = allChecks.stream()
           .filter(e -> !(e instanceof UncatchableExceptionCheck))
           .collect(Collectors.toList());
       }
 
-      phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(allChecks), context.fileSystem().workDir(), projectSymbolData);
+      List<PHPCheck> testFilesChecks  = allChecks.stream().
+        filter(c -> c instanceof PhpUnitCheck).
+        collect(Collectors.toList());
+      hasTestFileChecks = !testFilesChecks.isEmpty();
+
+      phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(allChecks), ImmutableList.copyOf(testFilesChecks), context.fileSystem().workDir(), projectSymbolData);
     }
 
     @Override
@@ -170,6 +175,10 @@ public class PHPSensor implements Sensor {
 
     @Override
     void scanFile(InputFile inputFile) {
+      if (inputFile.type() == Type.TEST && !hasTestFileChecks) {
+        return;
+      }
+
       try {
         phpAnalyzer.nextFile(new PhpFileImpl(inputFile));
 
@@ -179,11 +188,13 @@ public class PHPSensor implements Sensor {
           saveNewFileMeasures(context,
             phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
             inputFile);
-          saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
+          if (inputFile.type() == Type.MAIN) {
+            saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
+          }
         }
 
         noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
-        saveIssues(context, phpAnalyzer.analyze(), inputFile);
+        saveIssues(context, inputFile.type() == Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
       } catch (RecognitionException e) {
         checkInterrupted(e);
         LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
