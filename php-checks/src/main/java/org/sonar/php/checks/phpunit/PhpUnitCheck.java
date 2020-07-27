@@ -19,9 +19,11 @@
  */
 package org.sonar.php.checks.phpunit;
 
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
@@ -29,23 +31,57 @@ import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
   private boolean isPhpUnitTestCase = false;
+  private boolean isPhpUnitTestMethod = false;
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    ClassSymbol symbol = Symbols.get(tree);
-    isPhpUnitTestCase = !symbol.isUnknownSymbol() && isSubTypeOfTestCase(symbol);
+    isPhpUnitTestCase = isSubClassOfTestCase(tree);
+    if (isPhpUnitTestCase) {
+      visitPhpUnitTestCase(tree);
+    }
 
     super.visitClassDeclaration(tree);
 
     isPhpUnitTestCase = false;
   }
 
-  private boolean isSubTypeOfTestCase(ClassSymbol symbol) {
-    return symbol.isSubTypeOf(qualifiedName("PHPUnit\\Framework\\TestCase")).isTrue()
-      || symbol.isSubTypeOf(qualifiedName("PHPUnit_Framework_TestCase")).isTrue();
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    isPhpUnitTestMethod = isTestCaseMethod(tree);
+    if (isPhpUnitTestMethod) {
+      visitPhpUnitTestMethod(tree);
+    }
+
+    super.visitMethodDeclaration(tree);
+
+    isPhpUnitTestMethod = false;
   }
 
-  protected boolean isPhpUnitTestCase() {
+  private boolean isTestCaseMethod(MethodDeclarationTree tree) {
+    return isPhpUnitTestCase
+      && (tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test"));
+  }
+
+  private boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
+    ClassSymbol symbol = Symbols.get(tree);
+    return !symbol.isUnknownSymbol()
+      && (symbol.isSubTypeOf(qualifiedName("PHPUnit\\Framework\\TestCase")).isTrue()
+       || symbol.isSubTypeOf(qualifiedName("PHPUnit_Framework_TestCase")).isTrue());
+  }
+
+  protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {
+    // can be specified in child check
+  }
+
+  protected void visitPhpUnitTestMethod(MethodDeclarationTree tree) {
+    // can be specified in child check
+  }
+
+  public boolean isPhpUnitTestCase() {
     return isPhpUnitTestCase;
+  }
+
+  public boolean isPhpUnitTestMethod() {
+    return isPhpUnitTestMethod;
   }
 }
