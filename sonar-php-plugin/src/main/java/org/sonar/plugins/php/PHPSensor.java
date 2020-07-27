@@ -51,6 +51,7 @@ import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
+import org.sonar.php.checks.phpunit.PhpUnitCheck;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
@@ -114,12 +115,10 @@ public class PHPSensor implements Sensor {
   public void execute(SensorContext context) {
     FileSystem fileSystem = context.fileSystem();
 
-    FilePredicate mainFilePredicate = fileSystem.predicates().and(
-      fileSystem.predicates().hasType(InputFile.Type.MAIN),
-      fileSystem.predicates().hasLanguage(Php.KEY));
+    FilePredicate phpFilePredicate = fileSystem.predicates().hasLanguage(Php.KEY);
 
     List<InputFile> inputFiles = new ArrayList<>();
-    fileSystem.inputFiles(mainFilePredicate).forEach(inputFiles::add);
+    fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
 
     SymbolScanner symbolScanner = new SymbolScanner(context);
 
@@ -153,6 +152,9 @@ public class PHPSensor implements Sensor {
       super(context);
 
       List<PHPCheck> allChecks = checks.all();
+      List<PHPCheck> testFilesChecks  = allChecks.stream().
+        filter(c -> c instanceof PhpUnitCheck).
+        collect(Collectors.toList());
 
       if (inSonarLint(context)) {
         allChecks = allChecks.stream()
@@ -160,7 +162,7 @@ public class PHPSensor implements Sensor {
           .collect(Collectors.toList());
       }
 
-      phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(allChecks), context.fileSystem().workDir(), projectSymbolData);
+      phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(allChecks), ImmutableList.copyOf(testFilesChecks), context.fileSystem().workDir(), projectSymbolData);
     }
 
     @Override
@@ -183,7 +185,7 @@ public class PHPSensor implements Sensor {
         }
 
         noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
-        saveIssues(context, phpAnalyzer.analyze(), inputFile);
+        saveIssues(context, inputFile.type() == Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
       } catch (RecognitionException e) {
         checkInterrupted(e);
         LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());

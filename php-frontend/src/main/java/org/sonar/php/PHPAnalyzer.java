@@ -55,6 +55,7 @@ public class PHPAnalyzer {
 
   private final ActionParser<Tree> parser;
   private final ImmutableList<PHPCheck> checks;
+  private final ImmutableList<PHPCheck> testFilesChecks;
   @Nullable
   private final File workingDir;
   private final ProjectSymbolData projectSymbolData;
@@ -64,12 +65,21 @@ public class PHPAnalyzer {
   private SymbolTable currentFileSymbolTable;
 
   public PHPAnalyzer(ImmutableList<PHPCheck> checks, @Nullable File workingDir, ProjectSymbolData projectSymbolData) {
+    this(checks, ImmutableList.of(), workingDir, projectSymbolData);
+  }
+
+  public PHPAnalyzer(ImmutableList<PHPCheck> checks, ImmutableList<PHPCheck> testFilesChecks, @Nullable File workingDir, ProjectSymbolData projectSymbolData) {
     this.workingDir = workingDir;
     this.projectSymbolData = projectSymbolData;
     this.parser = PHPParserBuilder.createParser();
     this.checks = checks;
+    this.testFilesChecks = testFilesChecks;
 
     for (PHPCheck check : checks) {
+      check.init();
+    }
+
+    for (PHPCheck check : testFilesChecks) {
       check.init();
     }
   }
@@ -83,6 +93,16 @@ public class PHPAnalyzer {
   public List<PhpIssue> analyze() {
     ImmutableList.Builder<PhpIssue> issuesBuilder = ImmutableList.builder();
     for (PHPCheck check : checks) {
+      PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
+      issuesBuilder.addAll(check.analyze(context));
+    }
+
+    return issuesBuilder.build();
+  }
+
+  public List<PhpIssue> analyzeTest() {
+    ImmutableList.Builder<PhpIssue> issuesBuilder = ImmutableList.builder();
+    for (PHPCheck check : testFilesChecks) {
       PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
       issuesBuilder.addAll(check.analyze(context));
     }
