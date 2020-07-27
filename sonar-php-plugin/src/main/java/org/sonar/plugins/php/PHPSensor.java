@@ -148,7 +148,7 @@ public class PHPSensor implements Sensor {
 
     PHPAnalyzer phpAnalyzer;
 
-    private boolean hasTestFileChecks = false;
+    private final boolean hasTestFileChecks;
 
     public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData) {
       super(context);
