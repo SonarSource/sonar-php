@@ -20,6 +20,7 @@
 package org.sonar.php.checks.phpunit;
 
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -33,16 +34,18 @@ public class NoTestInTestClassCheck extends PhpUnitCheck {
 
   @Override
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {
-    boolean hasTestMethod = false;
-    for (ClassMemberTree member : tree.members()) {
-      if (member.is(Tree.Kind.METHOD_DECLARATION) && isTestCaseMethod((MethodDeclarationTree) member)) {
-        hasTestMethod = true;
-        break;
+    if (!CheckUtils.isAbstract(tree)) {
+      boolean hasTestMethod = false;
+      for (ClassMemberTree member : tree.members()) {
+        if (member.is(Tree.Kind.METHOD_DECLARATION) && isTestCaseMethod((MethodDeclarationTree) member)) {
+          hasTestMethod = true;
+          break;
+        }
       }
-    }
 
-    if (!hasTestMethod) {
-      context().newIssue(this, tree, MESSAGE);
+      if (!hasTestMethod) {
+        context().newIssue(this, tree, MESSAGE);
+      }
     }
 
     super.visitPhpUnitTestCase(tree);

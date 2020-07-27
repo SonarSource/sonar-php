@@ -23,3 +23,4 @@ class MyLastTest extends TestCase { // Noncompliant {{Add some tests to this cla
   private function testFoo() {}
 }
 
+abstract class MyTest extends TestCase {} // OK

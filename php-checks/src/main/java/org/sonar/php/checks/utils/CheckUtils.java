@@ -36,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -294,5 +295,9 @@ public final class CheckUtils {
       }
     }
     return false;
+  }
+
+  public static boolean isAbstract(ClassDeclarationTree tree) {
+    return tree.modifierToken() != null && tree.modifierToken().text().equals("abstract");
   }
 }
