@@ -193,6 +193,20 @@ public class PHPSensorTest {
   }
 
   @Test
+  public void test_no_cpd_on_test_files() {
+    String fileName = "cpd.php";
+    String componentKey = "moduleKey:" + fileName;
+
+    PHPSensor phpSensor = createSensor();
+    InputFile testFile = inputFile(fileName, Type.TEST);
+    context.fileSystem().add(testFile);
+    phpSensor.execute(context);
+
+    List<TokensLine> tokensLines = context.cpdTokens(componentKey);
+    assertThat(tokensLines).isNull();
+  }
+
+  @Test
   public void empty_file_should_raise_no_issue() throws Exception {
     analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "empty.php");
 
