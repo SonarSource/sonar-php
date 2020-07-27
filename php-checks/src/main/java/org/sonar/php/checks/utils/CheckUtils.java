@@ -24,7 +24,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -35,6 +37,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -266,6 +270,28 @@ public final class CheckUtils {
     for (SyntaxTrivia comment : ((PHPTree) declaration).getFirstToken().trivias()) {
       if (StringUtils.containsIgnoreCase(comment.text(), annotation)) {
         return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean isPublic(ClassMemberTree tree) {
+    return !tree.is(Kind.USE_TRAIT_DECLARATION) && !(hasModifier(tree, "private") || hasModifier(tree, "protected"));
+  }
+
+  public static boolean hasModifier(ClassMemberTree tree, String expectedModifier) {
+    List<SyntaxToken> modifiers = new ArrayList<>();
+    if (tree.is(Kind.METHOD_DECLARATION)) {
+      modifiers = ((MethodDeclarationTree) tree).modifiers();
+    } else if (tree.is(Kind.CLASS_PROPERTY_DECLARATION)) {
+      modifiers = ((ClassPropertyDeclarationTree) tree).modifierTokens();
+    }
+    if (!modifiers.isEmpty()) {
+      for (SyntaxToken modifier : modifiers) {
+        String normalizedModifier = modifier.text().toLowerCase(Locale.ENGLISH);
+        if (normalizedModifier.equals(expectedModifier)) {
+          return true;
+        }
       }
     }
     return false;

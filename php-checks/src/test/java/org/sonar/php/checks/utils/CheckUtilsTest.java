@@ -33,6 +33,8 @@ import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -204,6 +206,38 @@ public class CheckUtilsTest {
     assertThat(CheckUtils.hasAnnotation(tree, "annotation")).isFalse();
   }
 
+  @Test
+  public void has_modifier() {
+    ClassMemberTree tree = parseClassMembers("abstract protected function foo(){}").get(0);
+    assertThat(CheckUtils.hasModifier(tree, "abstract")).isTrue();
+    assertThat(CheckUtils.hasModifier(tree, "protected")).isTrue();
+
+    tree = parseClassMembers("use MyTrait;").get(0);
+    assertThat(CheckUtils.hasModifier(tree, "private")).isFalse();
+  }
+
+
+  @Test
+  public void is_public() {
+    ClassMemberTree tree = parseClassMembers("public function foo(){}").get(0);
+    assertThat(CheckUtils.isPublic(tree)).isTrue();
+
+    tree = parseClassMembers("public $field = null;").get(0);
+    assertThat(CheckUtils.isPublic(tree)).isTrue();
+
+    tree = parseClassMembers("private $field = null;").get(0);
+    assertThat(CheckUtils.isPublic(tree)).isFalse();
+
+    tree = parseClassMembers("protected function foo(){}").get(0);
+    assertThat(CheckUtils.isPublic(tree)).isFalse();
+
+    tree = parseClassMembers("function foo(){}").get(0);
+    assertThat(CheckUtils.isPublic(tree)).isTrue();
+
+    tree = parseClassMembers("use MyTrait;").get(0);
+    assertThat(CheckUtils.isPublic(tree)).isFalse();
+  }
+
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
     return Arrays.stream(values).map(value -> new LiteralTreeImpl(kind,
       new InternalSyntaxToken(1, 1, value, Collections.emptyList(), 0, false)));
@@ -215,5 +249,9 @@ public class CheckUtilsTest {
 
   private Tree parse(String toParse) {
     return parser.parse(toParse);
+  }
+
+  private List<ClassMemberTree> parseClassMembers(String toParse) {
+    return ((ClassDeclarationTree) parse("class Wrapper{\n" + toParse+ "\n}")).members();
   }
 }
