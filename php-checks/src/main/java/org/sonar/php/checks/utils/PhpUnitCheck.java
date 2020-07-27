@@ -19,10 +19,15 @@
  */
 package org.sonar.php.checks.utils;
 
+import java.util.Locale;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
@@ -81,5 +86,13 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
   public boolean isPhpUnitTestMethod() {
     return isPhpUnitTestMethod;
+  }
+
+  public static boolean isAssertion(FunctionCallTree tree) {
+    if ((tree.callee().is(Tree.Kind.CLASS_MEMBER_ACCESS) || tree.callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) && ((MemberAccessTree) tree.callee()).member().is(Tree.Kind.NAME_IDENTIFIER)) {
+      String name = ((NameIdentifierTree) ((MemberAccessTree) tree.callee()).member()).text().toLowerCase(Locale.ENGLISH);
+      return name.length() > 6 && name.startsWith("assert");
+    }
+    return false;
   }
 }
