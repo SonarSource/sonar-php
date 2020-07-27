@@ -23,6 +23,7 @@ import com.sonar.sslr.api.typed.ActionParser;
 import com.sonarsource.checks.coverage.UtilityClass;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -32,6 +33,7 @@ import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -188,6 +190,18 @@ public class CheckUtilsTest {
 
     assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true", "false")
         .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
+  }
+
+  @Test
+  public void has_annotation_of_function() {
+    FunctionDeclarationTree tree = (FunctionDeclarationTree) parse("/**\n * @annotation\n */\nfunction foo(){}");
+    assertThat(CheckUtils.hasAnnotation(tree, "@annotation")).isTrue();
+    assertThat(CheckUtils.hasAnnotation(tree, "annotation")).isTrue();
+    assertThat(CheckUtils.hasAnnotation(tree, "other_annotation")).isFalse();
+
+    tree = (FunctionDeclarationTree) parse("/**\n * annotation\n */\nfunction foo(){}");
+    assertThat(CheckUtils.hasAnnotation(tree, "@annotation")).isFalse();
+    assertThat(CheckUtils.hasAnnotation(tree, "annotation")).isFalse();
   }
 
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
