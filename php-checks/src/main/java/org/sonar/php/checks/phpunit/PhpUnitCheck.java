@@ -57,12 +57,12 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
     isPhpUnitTestMethod = false;
   }
 
-  private boolean isTestCaseMethod(MethodDeclarationTree tree) {
+  protected boolean isTestCaseMethod(MethodDeclarationTree tree) {
     return isPhpUnitTestCase
       && (tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test"));
   }
 
-  private static boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
+  protected static boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
     ClassSymbol symbol = Symbols.get(tree);
     return symbol.isSubTypeOf(qualifiedName("PHPUnit\\Framework\\TestCase")).isTrue()
        || symbol.isSubTypeOf(qualifiedName("PHPUnit_Framework_TestCase")).isTrue();
