@@ -20,7 +20,6 @@
 package org.sonar.php.checks.utils;
 
 import org.junit.Test;
-import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
