@@ -17,9 +17,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.phpunit;
+package org.sonar.php.checks.utils;
 
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -57,12 +56,12 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
     isPhpUnitTestMethod = false;
   }
 
-  private boolean isTestCaseMethod(MethodDeclarationTree tree) {
-    return isPhpUnitTestCase
+  protected boolean isTestCaseMethod(MethodDeclarationTree tree) {
+    return isPhpUnitTestCase && CheckUtils.isPublic(tree)
       && (tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test"));
   }
 
-  private static boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
+  protected static boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
     ClassSymbol symbol = Symbols.get(tree);
     return symbol.isSubTypeOf(qualifiedName("PHPUnit\\Framework\\TestCase")).isTrue()
        || symbol.isSubTypeOf(qualifiedName("PHPUnit_Framework_TestCase")).isTrue();

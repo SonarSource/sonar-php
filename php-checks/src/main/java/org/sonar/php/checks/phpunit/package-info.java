@@ -17,31 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+@javax.annotation.ParametersAreNonnullByDefault
 package org.sonar.php.checks.phpunit;
-
-import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
-import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-
-public class PhpUnitCheckTest {
-
-  @Test
-  public void test() {
-    CheckVerifier.verify(new PhpUnitCheckImpl(), "PhpUnitCheck.php");
-  }
-
-  static class PhpUnitCheckImpl extends PhpUnitCheck {
-    @Override
-    protected void visitPhpUnitTestMethod(MethodDeclarationTree tree) {
-      context().newIssue(this, tree, "Identified as test method.");
-    }
-
-    @Override
-    public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-      if (isPhpUnitTestCase() && isPhpUnitTestMethod()) {
-        context().newIssue(this, tree, "Identified assignment in the test class and method.");
-      }
-    }
-  }
-}

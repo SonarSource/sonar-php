@@ -29,6 +29,7 @@ import org.sonar.php.checks.phpini.EnableDlCheck;
 import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
+import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
@@ -168,6 +169,7 @@ public class CheckList {
       NonLFCharAsEOLCheck.class,
       NoPaddingRsaCheck.class,
       NoSonarCheck.class,
+      NoTestInTestClassCheck.class,
       NullDereferenceInConditionalCheck.class,
       OnePropertyDeclarationPerStatementCheck.class,
       OneStatementPerLineCheck.class,
