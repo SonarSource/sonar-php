@@ -63,7 +63,7 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.UncatchableExceptionCheck;
-import org.sonar.php.checks.phpunit.PhpUnitCheck;
+import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
