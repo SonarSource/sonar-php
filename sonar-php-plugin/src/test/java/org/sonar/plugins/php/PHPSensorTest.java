@@ -507,11 +507,11 @@ public class PHPSensorTest {
 
   @Test
   public void should_use_test_file_checks() {
-    PHPCheck check = new TestFileCheck();
+    TestFileCheck check = new TestFileCheck();
     InputFile testFile = inputFile(ANALYZED_FILE, Type.TEST);
     context.fileSystem().add(testFile);
     createSensor(check).execute(context);
-    assertThat(((TestFileCheck) check).wasTriggered).isTrue();
+    assertThat(check.wasTriggered).isTrue();
   }
 
   @After
@@ -555,7 +555,6 @@ public class PHPSensorTest {
     }
   }
 
-  @Rule(key = "testKey")
   private static class TestFileCheck extends PhpUnitCheck {
     protected boolean wasTriggered = false;
 
