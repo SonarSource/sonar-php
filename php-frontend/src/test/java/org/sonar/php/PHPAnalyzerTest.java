@@ -76,6 +76,23 @@ public class PHPAnalyzerTest {
   }
 
   @Test
+  public void test_analyze_test_file() throws Exception {
+    PHPCheck check = new DummyCheck();
+    PHPCheck testCheck = new DummyCheck();
+    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check, testCheck), ImmutableList.of(testCheck), tmpFolder.newFolder(), new ProjectSymbolData());
+    PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
+    analyzer.nextFile(file);
+    List<PhpIssue> issues = analyzer.analyze();
+    assertThat(issues).hasSize(2);
+
+    issues = analyzer.analyzeTest();
+    assertThat(issues).hasSize(1);
+    assertThat(((PreciseIssue) issues.get(0)).primaryLocation().startLine()).isEqualTo(1);
+    assertThat(issues.get(0).check()).isEqualTo(testCheck);
+    assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo(DummyCheck.MESSAGE);
+  }
+
+  @Test
   public void test_cpd() throws Exception {
     PHPAnalyzer analyzer = createAnalyzer();
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
