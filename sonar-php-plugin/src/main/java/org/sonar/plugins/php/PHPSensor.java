@@ -148,6 +148,8 @@ public class PHPSensor implements Sensor {
 
     PHPAnalyzer phpAnalyzer;
 
+    private boolean hasTestFileChecks = false;
+
     public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData) {
       super(context);
 
@@ -161,6 +163,7 @@ public class PHPSensor implements Sensor {
       List<PHPCheck> testFilesChecks  = allChecks.stream().
         filter(c -> c instanceof PhpUnitCheck).
         collect(Collectors.toList());
+      hasTestFileChecks = !testFilesChecks.isEmpty();
 
       phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(allChecks), ImmutableList.copyOf(testFilesChecks), context.fileSystem().workDir(), projectSymbolData);
     }
@@ -172,6 +175,10 @@ public class PHPSensor implements Sensor {
 
     @Override
     void scanFile(InputFile inputFile) {
+      if (inputFile.type() == Type.TEST && !hasTestFileChecks) {
+        return;
+      }
+
       try {
         phpAnalyzer.nextFile(new PhpFileImpl(inputFile));
 
