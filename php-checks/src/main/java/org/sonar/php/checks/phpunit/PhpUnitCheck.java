@@ -62,7 +62,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
       && (tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test"));
   }
 
-  private boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
+  private static boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
     ClassSymbol symbol = Symbols.get(tree);
     return !symbol.isUnknownSymbol()
       && (symbol.isSubTypeOf(qualifiedName("PHPUnit\\Framework\\TestCase")).isTrue()
