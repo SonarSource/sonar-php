@@ -17,9 +17,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.phpunit;
+package org.sonar.php.checks.utils;
 
 import org.junit.Test;
+import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
