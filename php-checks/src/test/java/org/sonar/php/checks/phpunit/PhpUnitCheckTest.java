@@ -28,7 +28,7 @@ public class PhpUnitCheckTest {
 
   @Test
   public void test() {
-    CheckVerifier.verify(new PhpUnitCheckImpl(), "PhpUnitCheck.php");
+    CheckVerifier.verify(new PhpUnitCheckImpl(), "phpunit/PhpUnitCheck.php");
   }
 
   static class PhpUnitCheckImpl extends PhpUnitCheck {
