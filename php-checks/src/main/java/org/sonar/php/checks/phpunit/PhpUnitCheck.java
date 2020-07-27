@@ -58,7 +58,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   }
 
   protected boolean isTestCaseMethod(MethodDeclarationTree tree) {
-    return isPhpUnitTestCase
+    return isPhpUnitTestCase && CheckUtils.isPublic(tree)
       && (tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test"));
   }
 
