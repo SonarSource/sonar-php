@@ -29,6 +29,7 @@ import org.sonar.php.checks.phpini.EnableDlCheck;
 import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
+import org.sonar.php.checks.phpunit.AssertionArgumentOrderCheck;
 import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
@@ -61,6 +62,7 @@ public class CheckList {
       AlwaysUseCurlyBracesCheck.class,
       ArgumentWithDefaultValueNotLastCheck.class,
       ArrayCountableCountCheck.class,
+      AssertionArgumentOrderCheck.class,
       AssignmentInSubExpressionCheck.class,
       AtLeastThreeCasesInSwitchCheck.class,
       AvoidDESCheck.class,
