@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.Test;
+import org.sonar.php.checks.utils.type.FunctionCall;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
@@ -249,6 +250,22 @@ public class CheckUtilsTest {
 
     tree = parseClassMember("use MyTrait;");
     assertThat(CheckUtils.isPublic(tree)).isFalse();
+  }
+
+  @Test
+  public void parent_of_kind() {
+    FunctionCallTree call = (FunctionCallTree) expressionFromStatement("foo(0);");
+    assertThat(call.arguments()).isNotEmpty();
+    Tree argument = call.arguments().get(0);
+    assertThat(CheckUtils.getParentOfKind(argument, Tree.Kind.FUNCTION_CALL)).isPresent();
+  }
+
+  @Test
+  public void no_parent_of_kind() {
+    FunctionCallTree call = (FunctionCallTree) expressionFromStatement("foo(0);");
+    assertThat(call.arguments()).isNotEmpty();
+    Tree argument = call.arguments().get(0);
+    assertThat(CheckUtils.getParentOfKind(argument, Tree.Kind.ASSIGNMENT)).isEmpty();
   }
 
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
