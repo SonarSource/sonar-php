@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.Test;
-import org.sonar.php.checks.utils.type.FunctionCall;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
