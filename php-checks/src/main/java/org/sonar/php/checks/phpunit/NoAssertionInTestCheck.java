@@ -82,11 +82,22 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
 
       if (isAssertion(tree) ||
         (functionName != null && (ASSERTION_METHODS_PATTERN.matcher(functionName).matches())) ||
+        isDynamicFunctionCall(tree) ||
         isLocalMethodWithAssertion(tree)) {
         didFindAssertion = true;
       }
 
       super.visitFunctionCall(tree);
+    }
+
+    private boolean isDynamicFunctionCall(FunctionCallTree tree) {
+      Tree functionNameTree = tree.callee();
+
+      if (functionNameTree.is(Tree.Kind.CLASS_MEMBER_ACCESS, Tree.Kind.OBJECT_MEMBER_ACCESS)) {
+        functionNameTree = ((MemberAccessTree) functionNameTree).member();
+      }
+
+      return !functionNameTree.is(Tree.Kind.NAMESPACE_NAME, Tree.Kind.NAME_IDENTIFIER);
     }
 
     private boolean isLocalMethodWithAssertion(FunctionCallTree tree) {

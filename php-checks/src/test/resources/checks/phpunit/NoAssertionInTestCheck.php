@@ -25,10 +25,13 @@ class MyTest extends TestCase {
     self::assertTrue(foo());
   }
 
-  public function testE() { // Noncompliant
-    $x = "xyz";
+  public function testE() { // Compliant
     self::$x(foo());
   }
+
+  public function testEE() { // Compliant
+      $x(foo());
+    }
 
   /** @expectedException */
   public function testF() {
