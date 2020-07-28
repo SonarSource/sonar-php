@@ -251,22 +251,6 @@ public class CheckUtilsTest {
     assertThat(CheckUtils.isPublic(tree)).isFalse();
   }
 
-  @Test
-  public void parent_of_kind() {
-    FunctionCallTree call = (FunctionCallTree) expressionFromStatement("foo(0);");
-    assertThat(call.arguments()).isNotEmpty();
-    Tree argument = call.arguments().get(0);
-    assertThat(CheckUtils.getParentOfKind(argument, Tree.Kind.FUNCTION_CALL)).isPresent();
-  }
-
-  @Test
-  public void no_parent_of_kind() {
-    FunctionCallTree call = (FunctionCallTree) expressionFromStatement("foo(0);");
-    assertThat(call.arguments()).isNotEmpty();
-    Tree argument = call.arguments().get(0);
-    assertThat(CheckUtils.getParentOfKind(argument, Tree.Kind.ASSIGNMENT)).isEmpty();
-  }
-
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
     return Arrays.stream(values).map(value -> new LiteralTreeImpl(kind,
       new InternalSyntaxToken(1, 1, value, Collections.emptyList(), 0, false)));
