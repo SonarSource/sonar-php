@@ -78,12 +78,6 @@
 1627,
 1648,
 ],
-'project:Symfony/Component/Form/Tests/Extension/Validator/EventListener/ValidationListenerTest.php':[
-168,
-],
-'project:Symfony/Component/Form/Tests/Extension/Validator/Type/FormTypeValidatorExtensionTest.php':[
-64,
-],
 'project:Symfony/Component/HttpFoundation/Tests/HeaderBagTest.php':[
 195,
 ],
@@ -103,11 +97,6 @@
 ],
 'project:Symfony/Component/HttpFoundation/Tests/Session/Storage/Handler/MongoDbSessionHandlerTest.php':[
 90,
-],
-'project:Symfony/Component/HttpFoundation/Tests/Session/Storage/Handler/PdoSessionHandlerTest.php':[
-327,
-330,
-334,
 ],
 'project:Symfony/Component/HttpFoundation/Tests/Session/Storage/PhpBridgeSessionStorageTest.php':[
 90,
