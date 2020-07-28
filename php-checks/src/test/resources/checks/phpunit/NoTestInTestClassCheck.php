@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 class MyTest extends TestCase {} // Noncompliant {{Add some tests to this class.}}
+//    ^^^^^^
 
 class MyOtherTest extends TestCase { // OK
   public function testFoo() {}
@@ -18,6 +19,7 @@ class MyNextOtherTest extends TestCase { // OK
 }
 
 class MyLastTest extends TestCase { // Noncompliant {{Add some tests to this class.}}
+//    ^^^^^^^^^^
   use TestTrait;
   /** @test */
   private function testFoo() {}
