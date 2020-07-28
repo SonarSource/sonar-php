@@ -22,6 +22,10 @@ package org.sonar.php.checks.phpunit;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
+import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -32,6 +36,8 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
 
   private static final String MESSAGE = "Swap these 2 arguments so they are in the correct order: expected value, actual value.";
   private static final Kind[] LITERAL = {Kind.BOOLEAN_LITERAL, Kind.NULL_LITERAL, Kind.NUMERIC_LITERAL, Kind.EXPANDABLE_STRING_LITERAL, Kind.REGULAR_STRING_LITERAL};
+
+  private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -45,5 +51,25 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
     }
 
     super.visitFunctionCall(tree);
+  }
+
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
+    tree.accept(assignmentExpressionVisitor);
+    super.visitCompilationUnit(tree);
+  }
+
+  /**
+   * Try to resolve the value of a variable which is passed as argument.
+   */
+  private ExpressionTree getAssignedValue(ExpressionTree value) {
+    if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      Symbol valueSymbol = context().symbolTable().getSymbol(value);
+      return assignmentExpressionVisitor
+        .getUniqueAssignedValue(valueSymbol)
+        .orElse(value);
+    }
+    return value;
   }
 }

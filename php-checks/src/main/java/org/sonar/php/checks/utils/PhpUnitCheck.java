@@ -26,13 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -42,7 +37,6 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
   private boolean isPhpUnitTestCase = false;
   private boolean isPhpUnitTestMethod = false;
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
   private static final Map<String, Assertion> ASSERTION = assertions();
 
   private static Map<String, Assertion> assertions() {
@@ -241,13 +235,6 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
-
-  @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     isPhpUnitTestCase = isSubClassOfTestCase(tree);
     if (isPhpUnitTestCase) {
@@ -313,19 +300,6 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
       }
     }
     return Optional.empty();
-  }
-
-  /**
-   * Try to resolve the value of a variable which is passed as argument.
-   */
-  protected ExpressionTree getAssignedValue(ExpressionTree value) {
-    if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      Symbol valueSymbol = context().symbolTable().getSymbol(value);
-      return assignmentExpressionVisitor
-        .getUniqueAssignedValue(valueSymbol)
-        .orElse(value);
-    }
-    return value;
   }
 
   public static class Assertion {
