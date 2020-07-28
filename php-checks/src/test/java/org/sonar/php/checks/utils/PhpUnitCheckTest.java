@@ -22,13 +22,13 @@ package org.sonar.php.checks.utils;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 public class PhpUnitCheckTest {
 
   @Test
   public void test() {
-    CheckVerifier.verify(new PhpUnitCheckImpl(), "phpunit/PhpUnitCheck.php");
+    CheckVerifier.verify(new PhpUnitCheckImpl(), "utils/PhpUnitCheck.php");
   }
 
   static class PhpUnitCheckImpl extends PhpUnitCheck {
@@ -38,10 +38,11 @@ public class PhpUnitCheckTest {
     }
 
     @Override
-    public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-      if (isPhpUnitTestCase() && isPhpUnitTestMethod()) {
-        context().newIssue(this, tree, "Identified assignment in the test class and method.");
+    public void visitFunctionCall(FunctionCallTree tree) {
+      if (isPhpUnitTestCase() && isPhpUnitTestMethod() && isAssertion(tree)) {
+        context().newIssue(this, tree, "Identified as test assertion.");
       }
+      super.visitFunctionCall(tree);
     }
   }
 }

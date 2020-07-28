@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,6 +50,7 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -129,15 +131,34 @@ public final class CheckUtils {
       return ((NamespaceNameTree) tree).qualifiedName();
     } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
       return ((NameIdentifierTree) tree).text();
-    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)) {
+    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) || tree.is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
       MemberAccessTree memberAccess = (MemberAccessTree) tree;
       String className = nameOf(memberAccess.object());
       String memberName = nameOf(memberAccess.member());
       if (className != null && memberName != null) {
         return className + "::" + memberName;
       }
+    } else if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      VariableIdentifierTree variableIdentifier = (VariableIdentifierTree) tree;
+      if (variableIdentifier.text().equals("$this")) {
+        Optional<Tree> classDeclaration = getParentOfKind(tree, Kind.CLASS_DECLARATION);
+        if (classDeclaration.isPresent()) {
+          return nameOf(((ClassDeclarationTree) classDeclaration.get()).name());
+        }
+      }
     }
     return null;
+  }
+
+  public static Optional<Tree> getParentOfKind(Tree tree, Kind kind) {
+    Tree parent = tree.getParent();
+    if (parent != null) {
+      if (parent.is(kind)) {
+        return Optional.of(parent);
+      }
+      return getParentOfKind(parent, kind);
+    }
+    return Optional.empty();
   }
 
   /**
