@@ -24,7 +24,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -49,6 +49,7 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -129,12 +130,20 @@ public final class CheckUtils {
       return ((NamespaceNameTree) tree).qualifiedName();
     } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
       return ((NameIdentifierTree) tree).text();
-    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)) {
+    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) || tree.is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
       MemberAccessTree memberAccess = (MemberAccessTree) tree;
       String className = nameOf(memberAccess.object());
       String memberName = nameOf(memberAccess.member());
       if (className != null && memberName != null) {
         return className + "::" + memberName;
+      }
+    } else if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      VariableIdentifierTree variableIdentifier = (VariableIdentifierTree) tree;
+      if (variableIdentifier.text().equals("$this")) {
+        ClassDeclarationTree classDeclaration = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Kind.CLASS_DECLARATION));
+        if (classDeclaration != null) {
+          return nameOf(classDeclaration.name());
+        }
       }
     }
     return null;
@@ -158,6 +167,15 @@ public final class CheckUtils {
   public static boolean isExitExpression(FunctionCallTree functionCallTree) {
     String callee = functionCallTree.callee().toString();
     return "die".equalsIgnoreCase(callee) || "exit".equalsIgnoreCase(callee);
+  }
+
+  public static boolean hasModifier(ClassMemberTree tree, String toFind) {
+    if (tree.is(Kind.METHOD_DECLARATION)) {
+      return hasModifier(((MethodDeclarationTree) tree).modifiers(), toFind);
+    } else if (tree.is(Kind.CLASS_PROPERTY_DECLARATION)) {
+      return hasModifier(((ClassPropertyDeclarationTree) tree).modifierTokens(), toFind);
+    }
+    return false;
   }
 
   public static boolean hasModifier(List<SyntaxToken> modifiers, String toFind) {
@@ -277,24 +295,6 @@ public final class CheckUtils {
 
   public static boolean isPublic(ClassMemberTree tree) {
     return !tree.is(Kind.USE_TRAIT_DECLARATION) && !(hasModifier(tree, "private") || hasModifier(tree, "protected"));
-  }
-
-  public static boolean hasModifier(ClassMemberTree tree, String expectedModifier) {
-    List<SyntaxToken> modifiers = new ArrayList<>();
-    if (tree.is(Kind.METHOD_DECLARATION)) {
-      modifiers = ((MethodDeclarationTree) tree).modifiers();
-    } else if (tree.is(Kind.CLASS_PROPERTY_DECLARATION)) {
-      modifiers = ((ClassPropertyDeclarationTree) tree).modifierTokens();
-    }
-    if (!modifiers.isEmpty()) {
-      for (SyntaxToken modifier : modifiers) {
-        String normalizedModifier = modifier.text().toLowerCase(Locale.ENGLISH);
-        if (normalizedModifier.equals(expectedModifier)) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   public static boolean isAbstract(ClassDeclarationTree tree) {
