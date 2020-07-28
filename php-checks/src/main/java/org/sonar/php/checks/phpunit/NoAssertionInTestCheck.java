@@ -131,7 +131,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       }
 
       if (functionName != null && functionName.contains("::")) {
-        functionName = functionName.substring(functionName.indexOf("::") + 2);
+        functionName = functionName.substring(functionName.lastIndexOf("::") + 2);
       }
 
       return functionName;
