@@ -40,11 +40,20 @@ import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
+  private static final Map<String, Assertion> ASSERTION = assertions();
+  private final boolean useAssignmentExpressionVisitor;
   private boolean isPhpUnitTestCase = false;
   private boolean isPhpUnitTestMethod = false;
-  private static final Map<String, Assertion> ASSERTION = assertions();
 
   protected AssignmentExpressionVisitor assignmentExpressionVisitor;
+
+  public PhpUnitCheck() {
+    this(false);
+  }
+
+  public PhpUnitCheck(boolean useAssignmentExpressionVisitor) {
+    this.useAssignmentExpressionVisitor = useAssignmentExpressionVisitor;
+  }
 
   private static Map<String, Assertion> assertions() {
     return Stream.of(
@@ -267,7 +276,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    if (this instanceof RequireAssignmentExpressionVisitor) {
+    if (useAssignmentExpressionVisitor) {
       assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
       tree.accept(assignmentExpressionVisitor);
     }

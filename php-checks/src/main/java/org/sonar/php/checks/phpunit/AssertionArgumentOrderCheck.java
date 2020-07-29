@@ -22,17 +22,20 @@ package org.sonar.php.checks.phpunit;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
-import org.sonar.php.checks.utils.RequireAssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 import static org.sonar.plugins.php.api.tree.Tree.Kind;
 
 @Rule(key = "S3415")
-public class AssertionArgumentOrderCheck extends PhpUnitCheck implements RequireAssignmentExpressionVisitor {
+public class AssertionArgumentOrderCheck extends PhpUnitCheck {
 
   private static final String MESSAGE = "Swap these 2 arguments so they are in the correct order: expected value, actual value.";
   private static final Kind[] LITERAL = {Kind.BOOLEAN_LITERAL, Kind.NULL_LITERAL, Kind.NUMERIC_LITERAL, Kind.EXPANDABLE_STRING_LITERAL, Kind.REGULAR_STRING_LITERAL};
+
+  public AssertionArgumentOrderCheck() {
+    super(true);
+  }
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
