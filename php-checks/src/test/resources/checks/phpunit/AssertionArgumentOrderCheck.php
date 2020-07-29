@@ -19,5 +19,12 @@ class MyTest extends TestCase
     self::assertTrue(12); // OK
     self::assertFileExists('test/testbootstrap.php', 'Message'); // OK - No expected value
     $this->assertStringEqualsFile($targetFilePath, 'SOURCE FILE'); // Noncompliant
+
+    self::assertEquals($foo); // OK - No valid assertion of moodle test cases
+    doSomethind($result->format('d-M-Y'), '31-Jan-2012'); // OK - No assertion
+  }
+
+  private function no_test() {
+    doSomethind();
   }
 }
