@@ -46,9 +46,11 @@ import java.util.regex.Pattern;
 public class NoAssertionInTestCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Add at least one assertion to this test case.";
 
-  private static final Pattern ASSERTION_METHODS_PATTERN = Pattern.compile("(assert|verify|fail|pass|should|check|expect|validate|test|.*Test).*");
+  private static final Pattern ASSERTION_METHODS_PATTERN = Pattern.compile("(assert|verify|fail|pass|should|check|expect|validate|test).*");
   private static final List<String> TEST_CONTROL_FUNCTIONS = ImmutableList.of(
-    "addtoassertioncount");
+    "addtoassertioncount",
+    "marktestskipped",
+    "marktestincomplete");
 
   private final Map<MethodDeclarationTree, Boolean> assertionInMethod = new HashMap<>();
 
@@ -58,22 +60,22 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       return;
     }
 
-    if (CheckUtils.hasAnnotation(tree, "expectedException") ||
-      CheckUtils.hasAnnotation(tree, "doesNotPerformAssertions") ||
-      CheckUtils.hasAnnotation(tree, "expectedDeprecation")) {
+    if (CheckUtils.hasAnnotation(tree, "expectedException")
+      || CheckUtils.hasAnnotation(tree, "doesNotPerformAssertions")
+      || CheckUtils.hasAnnotation(tree, "expectedDeprecation")) {
       return;
     }
 
     AssertionsFindVisitor assertionsFindVisitor = new AssertionsFindVisitor(context().symbolTable());
     tree.accept(assertionsFindVisitor);
 
-    if (!assertionsFindVisitor.didFindAssertion) {
+    if (!assertionsFindVisitor.hasFoundAssertion) {
       context().newIssue(this, tree.name(), MESSAGE);
     }
   }
 
   private class AssertionsFindVisitor extends PHPVisitorCheck {
-    private boolean didFindAssertion = false;
+    private boolean hasFoundAssertion = false;
     private final SymbolTable symbolTable;
 
     private AssertionsFindVisitor(SymbolTable symbolTable) {
@@ -82,13 +84,13 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
 
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
-      String functionName = getFunctionName(tree);
+      String functionName = getLowercaseFunctionName(tree);
 
-      if (isAssertion(tree) ||
-        functionNameCountsAsAssertion(functionName) ||
-        isDynamicFunctionCall(tree) ||
-        isLocalMethodWithAssertion(tree)) {
-        didFindAssertion = true;
+      if (isAssertion(tree)
+        || functionNameCountsAsAssertion(functionName)
+        || isDynamicFunctionCall(tree)
+        || isLocalMethodWithAssertion(tree)) {
+        hasFoundAssertion = true;
       }
 
       super.visitFunctionCall(tree);
@@ -99,8 +101,8 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
         return false;
       }
 
-      return ASSERTION_METHODS_PATTERN.matcher(functionName).matches() ||
-        TEST_CONTROL_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT));
+      return ASSERTION_METHODS_PATTERN.matcher(functionName).matches()
+        || TEST_CONTROL_FUNCTIONS.contains(functionName);
     }
 
     private boolean isDynamicFunctionCall(FunctionCallTree tree) {
@@ -126,7 +128,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
         assertionInMethod.put(methodDeclaration, false);
         AssertionsFindVisitor v = new AssertionsFindVisitor(symbolTable);
         methodDeclaration.accept(v);
-        assertionInMethod.put(methodDeclaration, v.didFindAssertion);
+        assertionInMethod.put(methodDeclaration, v.hasFoundAssertion);
       }
       return assertionInMethod.get(methodDeclaration);
     }
@@ -146,7 +148,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       return Optional.empty();
     }
 
-    private @Nullable String getFunctionName(FunctionCallTree tree) {
+    private @Nullable String getLowercaseFunctionName(FunctionCallTree tree) {
       String functionName = CheckUtils.getFunctionName(tree);
 
       if (functionName == null && tree.callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
@@ -157,7 +159,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
         functionName = functionName.substring(functionName.lastIndexOf("::") + 2);
       }
 
-      return functionName;
+      return functionName != null ? functionName.toLowerCase(Locale.ROOT) : functionName;
     }
   }
 }
