@@ -26,8 +26,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
+import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
+import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -35,9 +40,20 @@ import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
+  private static final Map<String, Assertion> ASSERTION = assertions();
+  private final boolean useAssignmentExpressionVisitor;
   private boolean isPhpUnitTestCase = false;
   private boolean isPhpUnitTestMethod = false;
-  private static final Map<String, Assertion> ASSERTION = assertions();
+
+  protected AssignmentExpressionVisitor assignmentExpressionVisitor;
+
+  public PhpUnitCheck() {
+    this(false);
+  }
+
+  public PhpUnitCheck(boolean useAssignmentExpressionVisitor) {
+    this.useAssignmentExpressionVisitor = useAssignmentExpressionVisitor;
+  }
 
   private static Map<String, Assertion> assertions() {
     return Stream.of(
@@ -258,6 +274,15 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
     isPhpUnitTestMethod = false;
   }
 
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    if (useAssignmentExpressionVisitor) {
+      assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
+      tree.accept(assignmentExpressionVisitor);
+    }
+    super.visitCompilationUnit(tree);
+  }
+
   protected boolean isTestCaseMethod(MethodDeclarationTree tree) {
     return isPhpUnitTestCase && CheckUtils.isPublic(tree)
       && (tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test"));
@@ -287,6 +312,19 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
   public static boolean isAssertion(FunctionCallTree tree) {
     return getAssertion(tree).isPresent();
+  }
+
+  /**
+   * Try to resolve the value of a variable which is passed as argument.
+   */
+  protected ExpressionTree getAssignedValue(ExpressionTree value) {
+    if (value.is(Tree.Kind.VARIABLE_IDENTIFIER) && assignmentExpressionVisitor != null) {
+      Symbol valueSymbol = context().symbolTable().getSymbol(value);
+      return assignmentExpressionVisitor
+        .getUniqueAssignedValue(valueSymbol)
+        .orElse(value);
+    }
+    return value;
   }
 
   public static Optional<Assertion> getAssertion(FunctionCallTree tree) {
