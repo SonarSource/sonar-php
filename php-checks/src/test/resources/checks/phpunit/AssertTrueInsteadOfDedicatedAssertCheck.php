@@ -27,8 +27,12 @@ class MyTest extends TestCase
 
     assertTrue(!($a === null)); // Noncompliant {{Use assertNotNull instead.}}
 
+    assertTrue(null == null); // Noncompliant
+
     assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false); // OK
+    assertTrue(strpos($this->Mail->Body, 'src="composer.json"') !== false); // OK
     assertTrue(doSomeThing() === true); // Noncompliant
+    assertEquals($a, $b);
     doSomeThing();
   }
 
