@@ -7,6 +7,10 @@ class MyTest extends TestCase {
   public function testA() {} // Noncompliant {{Add at least one assertion to this test case.}}
 //                ^^^^^
 
+  public function testA2() { // Noncompliant
+    doSomeStuff();
+  }
+
    /** @test */
   public function testB() { // Compliant
     self::assertTrue(foo());
