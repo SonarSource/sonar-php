@@ -36,12 +36,15 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
@@ -79,6 +82,16 @@ public class CheckUtilsTest {
     assertThat(CheckUtils.getFunctionName(call)).isEqualTo("A::run");
     assertThat(CheckUtils.getLowerCaseFunctionName(call)).isEqualTo("a::run");
     assertThat(CheckUtils.getLowerCaseFunctionName((FunctionCallTree)expressionFromStatement("$var(2);"))).isNull();
+
+    root = ((ExpressionStatementTree) parseMethodStatement("$this->run(2);")).expression();
+    assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
+    call = (FunctionCallTree) root;
+    assertThat(CheckUtils.getFunctionName(call)).isEqualTo("Wrapper::run");
+
+    root = ((ExpressionStatementTree) parseMethodStatement("$foo->run(2);")).expression();
+    assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
+    call = (FunctionCallTree) root;
+    assertThat(CheckUtils.getFunctionName(call)).isNull();
   }
 
   @Test
@@ -208,33 +221,33 @@ public class CheckUtilsTest {
 
   @Test
   public void has_modifier() {
-    ClassMemberTree tree = parseClassMembers("abstract protected function foo(){}").get(0);
+    ClassMemberTree tree = parseClassMember("abstract protected function foo(){}");
     assertThat(CheckUtils.hasModifier(tree, "abstract")).isTrue();
     assertThat(CheckUtils.hasModifier(tree, "protected")).isTrue();
 
-    tree = parseClassMembers("use MyTrait;").get(0);
+    tree = parseClassMember("use MyTrait;");
     assertThat(CheckUtils.hasModifier(tree, "private")).isFalse();
   }
 
 
   @Test
   public void is_public() {
-    ClassMemberTree tree = parseClassMembers("public function foo(){}").get(0);
+    ClassMemberTree tree = parseClassMember("public function foo(){}");
     assertThat(CheckUtils.isPublic(tree)).isTrue();
 
-    tree = parseClassMembers("public $field = null;").get(0);
+    tree = parseClassMember("public $field = null;");
     assertThat(CheckUtils.isPublic(tree)).isTrue();
 
-    tree = parseClassMembers("private $field = null;").get(0);
+    tree = parseClassMember("private $field = null;");
     assertThat(CheckUtils.isPublic(tree)).isFalse();
 
-    tree = parseClassMembers("protected function foo(){}").get(0);
+    tree = parseClassMember("protected function foo(){}");
     assertThat(CheckUtils.isPublic(tree)).isFalse();
 
-    tree = parseClassMembers("function foo(){}").get(0);
+    tree = parseClassMember("function foo(){}");
     assertThat(CheckUtils.isPublic(tree)).isTrue();
 
-    tree = parseClassMembers("use MyTrait;").get(0);
+    tree = parseClassMember("use MyTrait;");
     assertThat(CheckUtils.isPublic(tree)).isFalse();
   }
 
@@ -252,6 +265,19 @@ public class CheckUtilsTest {
   }
 
   private List<ClassMemberTree> parseClassMembers(String toParse) {
-    return ((ClassDeclarationTree) parse("class Wrapper{\n" + toParse+ "\n}")).members();
+    return ((ClassDeclarationTree) parse("class Wrapper{" + toParse+ "}")).members();
+  }
+
+  private ClassMemberTree parseClassMember(String toParse) {
+    return parseClassMembers(toParse).get(0);
+  }
+
+  private List<StatementTree> parseMethodStatements(String toParse) {
+    MethodDeclarationTree method = (MethodDeclarationTree) parseClassMembers("public function wrapperMethod() {"+ toParse +"}").get(0);
+    return ((BlockTree) method.body()).statements();
+  }
+
+  private StatementTree parseMethodStatement(String toParse) {
+    return parseMethodStatements(toParse).get(0);
   }
 }

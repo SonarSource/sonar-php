@@ -17,32 +17,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.utils;
+package org.sonar.php.checks.phpunit;
 
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
-import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-public class PhpUnitCheckTest {
+public class AssertionArgumentOrderCheckTest {
 
   @Test
   public void test() {
-    CheckVerifier.verify(new PhpUnitCheckImpl(), "utils/PhpUnitCheck.php");
-  }
-
-  static class PhpUnitCheckImpl extends PhpUnitCheck {
-    @Override
-    protected void visitPhpUnitTestMethod(MethodDeclarationTree tree) {
-      context().newIssue(this, tree, "Identified as test method.");
-    }
-
-    @Override
-    public void visitFunctionCall(FunctionCallTree tree) {
-      if (isPhpUnitTestCase() && isPhpUnitTestMethod() && isAssertion(tree)) {
-        context().newIssue(this, tree, "Identified as test assertion.");
-      }
-      super.visitFunctionCall(tree);
-    }
+    CheckVerifier.verify(new AssertionArgumentOrderCheck(), "phpunit/AssertionArgumentOrderCheck.php");
   }
 }

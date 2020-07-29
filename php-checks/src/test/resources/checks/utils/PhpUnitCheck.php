@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 class MyTest extends TestCase {
   public function testMethod() { // Noncompliant {{Identified as test method.}}
-    $foo = $bar; // Noncompliant {{Identified assignment in the test class and method.}}
+    self::assertEquals(0, $code); // Noncompliant {{Identified as test assertion.}}
   }
 }
 
