@@ -34,15 +34,18 @@ class MyTest extends TestCase {
     }
 
   /** @expectedException */
-  public function testF() {
+  public function testF() { // Compliant
   }
 
   /** @doesNotPerformAssertions */
-  public function testG() {
+  public function testG() { // Compliant
   }
 
   /** @expectedDeprecation */
-  public function testH() {
+  public function testH() { // Compliant
   }
 
+  public function testI() { // Compliant
+    $this->addToAssertionCount(1);
+  }
 }

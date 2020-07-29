@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.phpunit;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -35,6 +36,8 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -45,6 +48,9 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
 
   private static final Pattern ASSERTION_METHODS_PATTERN =
     Pattern.compile("(assert|verify|fail|pass|should|check|expect|validate|test|.*Test).*");
+  private static final List<String> TEST_CONTROL_FUNCTIONS = ImmutableList.of(
+    "addtoassertioncount"
+  );
 
   private final Map<MethodDeclarationTree, Boolean> assertionInMethod = new HashMap<>();
 
@@ -81,7 +87,9 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       String functionName = getFunctionName(tree);
 
       if (isAssertion(tree) ||
-        (functionName != null && (ASSERTION_METHODS_PATTERN.matcher(functionName).matches())) ||
+        (functionName != null &&
+          (ASSERTION_METHODS_PATTERN.matcher(functionName).matches() ||
+          TEST_CONTROL_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT)))) ||
         isDynamicFunctionCall(tree) ||
         isLocalMethodWithAssertion(tree)) {
         didFindAssertion = true;
