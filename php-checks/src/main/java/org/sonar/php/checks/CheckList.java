@@ -30,6 +30,7 @@ import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 import org.sonar.php.checks.phpunit.AssertionArgumentOrderCheck;
+import org.sonar.php.checks.phpunit.NoAssertionInTestCheck;
 import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
@@ -167,6 +168,7 @@ public class CheckList {
       NestedFunctionDepthCheck.class,
       NestedSwitchCheck.class,
       NestedTernaryOperatorsCheck.class,
+      NoAssertionInTestCheck.class,
       NonEmptyCaseWithoutBreakCheck.class,
       NonLFCharAsEOLCheck.class,
       NoPaddingRsaCheck.class,
