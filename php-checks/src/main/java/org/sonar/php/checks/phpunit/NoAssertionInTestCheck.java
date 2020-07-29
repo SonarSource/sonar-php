@@ -46,11 +46,9 @@ import java.util.regex.Pattern;
 public class NoAssertionInTestCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Add at least one assertion to this test case.";
 
-  private static final Pattern ASSERTION_METHODS_PATTERN =
-    Pattern.compile("(assert|verify|fail|pass|should|check|expect|validate|test|.*Test).*");
+  private static final Pattern ASSERTION_METHODS_PATTERN = Pattern.compile("(assert|verify|fail|pass|should|check|expect|validate|test|.*Test).*");
   private static final List<String> TEST_CONTROL_FUNCTIONS = ImmutableList.of(
-    "addtoassertioncount"
-  );
+    "addtoassertioncount");
 
   private final Map<MethodDeclarationTree, Boolean> assertionInMethod = new HashMap<>();
 
@@ -87,15 +85,22 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       String functionName = getFunctionName(tree);
 
       if (isAssertion(tree) ||
-        (functionName != null &&
-          (ASSERTION_METHODS_PATTERN.matcher(functionName).matches() ||
-          TEST_CONTROL_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT)))) ||
+        functionNameCountsAsAssertion(functionName) ||
         isDynamicFunctionCall(tree) ||
         isLocalMethodWithAssertion(tree)) {
         didFindAssertion = true;
       }
 
       super.visitFunctionCall(tree);
+    }
+
+    private boolean functionNameCountsAsAssertion(@Nullable String functionName) {
+      if (functionName == null) {
+        return false;
+      }
+
+      return ASSERTION_METHODS_PATTERN.matcher(functionName).matches() ||
+        TEST_CONTROL_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT));
     }
 
     private boolean isDynamicFunctionCall(FunctionCallTree tree) {
@@ -119,10 +124,9 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
 
       if (!assertionInMethod.containsKey(methodDeclaration)) {
         assertionInMethod.put(methodDeclaration, false);
-        AssertionsFindVisitor c = new AssertionsFindVisitor(symbolTable);
-
-        c.scan(methodDeclaration);
-        assertionInMethod.put(methodDeclaration, c.didFindAssertion);
+        AssertionsFindVisitor v = new AssertionsFindVisitor(symbolTable);
+        methodDeclaration.accept(v);
+        assertionInMethod.put(methodDeclaration, v.didFindAssertion);
       }
       return assertionInMethod.get(methodDeclaration);
     }
