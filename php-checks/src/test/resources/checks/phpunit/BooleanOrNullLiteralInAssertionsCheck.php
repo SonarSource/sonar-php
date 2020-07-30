@@ -22,6 +22,11 @@ class MyTest extends TestCase {
 
     assertEquals($x, true); // Noncompliant {{Use assertTrue() instead.}}
 
+    assertTrue($x); // Compliant
+    assertFalse($x); // Compliant
+    assertNull($x); // Compliant
+    assertNotNull($x); // Compliant
+
     assertSame($x, $y); // Compliant
     assertContains(true, [true,false]); // Compliant
   }
