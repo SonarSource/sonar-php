@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
 public class NoAssertionInTestCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Add at least one assertion to this test case.";
 
-  private static final Pattern ASSERTION_METHODS_PATTERN = Pattern.compile("(assert|verify|fail|pass|should|check|expect|validate|test).*");
+  private static final Pattern ASSERTION_METHODS_PATTERN = Pattern.compile("(assert|verify|fail|pass|should|will|check|expect|validate|test).*");
   private static final List<String> TEST_CONTROL_FUNCTIONS = ImmutableList.of(
     "addtoassertioncount",
     "marktestskipped",

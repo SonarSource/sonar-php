@@ -52,4 +52,9 @@ class MyTest extends TestCase {
   public function testI() { // Compliant
     $this->addToAssertionCount(1);
   }
+
+  public function testJ() { // Compliant
+    $captcha = $this->createMock(DefaultModel::class);
+    $captcha->method('isRequired')->willReturn($isRequired);
+  }
 }
