@@ -14,19 +14,4 @@ assertSame($expected, $a);
 assertNotEqual($expected, $a);
 assertNotSame($expected, $a);
 </pre>
-<h2>Exceptions</h2>
-<p>In a unit test validating the <code>equals(...)</code> and <code>hashCode()</code> methods, it's legitimate to compare an object to itself. This
-rule does not raise an issue for <code>isEqualTo</code>, <code>assertEquals</code> or <code>hasSameHashCodeAs</code> when the unit test name contains
-(case insensitive): <code>equal</code>, <code>hash_?code</code>, <code>object_?method</code>. For example, in tests with the following names:
-<code>test_equals</code>, <code>testEqual</code>, <code>test_hashCode</code>, <code>test_hash_code</code>, <code>test_object_methods</code>.</p>
-<pre>
-class MyClassTest {
-  @Test
-  void test_equals_and_hash_code() {
-    MyClass obj = new MyClass();
-    assertThat(obj).isEqualTo(obj); // Compliant
-    assertThat(obj).hasSameHashCodeAs(obj); // Compliant
-  }
-}
-</pre>
 
