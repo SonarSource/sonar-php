@@ -42,6 +42,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
   private static final Map<String, Assertion> ASSERTION = assertions();
   private final boolean useAssignmentExpressionVisitor;
+
   private boolean isPhpUnitTestCase = false;
   private boolean isPhpUnitTestMethod = false;
 
@@ -275,6 +276,14 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   }
 
   @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    if (isPhpUnitTestMethod) {
+      getAssertion(tree).ifPresent(assertion -> visitPhpUnitAssertion(tree, assertion));
+    }
+    super.visitFunctionCall(tree);
+  }
+
+  @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     if (useAssignmentExpressionVisitor) {
       assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
@@ -299,6 +308,10 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   }
 
   protected void visitPhpUnitTestMethod(MethodDeclarationTree tree) {
+    // can be specified in child check
+  }
+
+  protected void visitPhpUnitAssertion(FunctionCallTree tree, Assertion assertion) {
     // can be specified in child check
   }
 
