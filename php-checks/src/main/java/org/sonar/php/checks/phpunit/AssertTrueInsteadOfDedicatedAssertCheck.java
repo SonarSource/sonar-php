@@ -25,11 +25,9 @@ import java.util.Map;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 
 import static org.sonar.php.checks.utils.CheckUtils.skipParenthesis;
@@ -54,10 +52,10 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
   private enum ReplacementAssertion {
     NULL("Null", "A null-check"),
     NOT_NULL("NotNull", "A null-check"),
-    SAME("Same", "An object reference comparison"),
-    NOT_SAME("NotSame", "An object reference comparison"),
-    EQUALS("Equals", "An equals check"),
-    NOT_EQUALS("NotEquals", "An equals check");
+    SAME("Same", "A type-safe equality check"),
+    NOT_SAME("NotSame", "A type-safe equality check"),
+    EQUALS("Equals", "An equality check"),
+    NOT_EQUALS("NotEquals", "An equality check");
 
     public final String methodName;
     public final String actionDescription;
@@ -75,8 +73,7 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree fct) {
     if (isPhpUnitTestMethod()) {
-      Optional<Assertion> assertion = getAssertion(fct);
-      assertion.ifPresent(a -> { if (ASSERT_METHOD_NAMES.contains(a.name())) { checkBooleanExpressionInAssertMethod(fct, a.name()); }});
+      getAssertion(fct).ifPresent(a -> { if (ASSERT_METHOD_NAMES.contains(a.name())) { checkBooleanExpressionInAssertMethod(fct, a.name()); }});
     }
     super.visitFunctionCall(fct);
   }
@@ -115,9 +112,7 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
         }
         break;
       case STRICT_EQUAL_TO:
-        if (isPositionVerification((BinaryExpressionTree) argumentExpression)) {
-          break;
-        } else if (isCheckForNull((BinaryExpressionTree) argumentExpression)) {
+        if (isCheckForNull((BinaryExpressionTree) argumentExpression)) {
           replacementAssertion = ReplacementAssertion.NULL;
         } else {
           replacementAssertion = ReplacementAssertion.SAME;
@@ -131,9 +126,7 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
         }
         break;
       case STRICT_NOT_EQUAL_TO:
-        if (isPositionVerification((BinaryExpressionTree) argumentExpression)) {
-          break;
-        } else if (isCheckForNull((BinaryExpressionTree) argumentExpression)) {
+        if (isCheckForNull((BinaryExpressionTree) argumentExpression)) {
           replacementAssertion = ReplacementAssertion.NOT_NULL;
         } else {
           replacementAssertion = ReplacementAssertion.NOT_SAME;
@@ -149,18 +142,5 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
 
   private static boolean isCheckForNull(BinaryExpressionTree bet) {
     return bet.leftOperand().is(NULL_LITERAL) || bet.rightOperand().is(NULL_LITERAL);
-  }
-
-  private static boolean isPositionVerification(BinaryExpressionTree bet) {
-    return isBooleanFalse(bet.leftOperand()) ^ isBooleanFalse(bet.rightOperand());
-  }
-
-  /**
-   * There are built-in methods which return integer or false (e.g. for example strpos, see https://www.php.net/manual/en/function.strpos.php)
-   * If you want to check if the boolean value is returned, you can't do this with assertFalse, because a typecast of integer 0 would also apply here.
-   * So if a strict comparison with boolean should compare false, this rule should not be applied.
-   */
-  private static boolean isBooleanFalse(ExpressionTree tree) {
-    return tree.is(Tree.Kind.BOOLEAN_LITERAL) && ((LiteralTree) tree).value().equalsIgnoreCase("false");
   }
 }
