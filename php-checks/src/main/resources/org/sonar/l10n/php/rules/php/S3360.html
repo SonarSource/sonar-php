@@ -1,0 +1,18 @@
+<p>By default, PHPUnit CLI only executes test classes with names that end in "Test". Name your class "TestClassX.php", for instance, and it will be
+skipped.</p>
+<p>This rule raises an issue for each test class with a name not ending in "Test".</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+class TestClassX extends PHPUnit\Framework\TestCase {  // Noncompliant
+
+  public void testDoTheThing() {
+    //...
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+class ClassXTest extends PHPUnit\Framework\TestCase {
+
+  public void testDoTheThing() {
+    //...
+</pre>
+

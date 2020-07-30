@@ -145,6 +145,16 @@ public final class CheckUtils {
           return nameOf(classDeclaration.name());
         }
       }
+    } else if (tree.is(Kind.CLASS_DECLARATION)) {
+      return nameOf(((ClassDeclarationTree) tree).name());
+    }
+    return null;
+  }
+
+  public static String nameOfLowerCase(Tree tree) {
+    String name = nameOf(tree);
+    if (name != null) {
+      return name.toLowerCase(Locale.ENGLISH);
     }
     return null;
   }
@@ -299,5 +309,9 @@ public final class CheckUtils {
 
   public static boolean isAbstract(ClassDeclarationTree tree) {
     return tree.modifierToken() != null && tree.modifierToken().text().equals("abstract");
+  }
+
+  public static boolean endsWithIgnoreCase(String string, String suffix) {
+    return string.toLowerCase(Locale.ENGLISH).endsWith(suffix.toLowerCase());
   }
 }
