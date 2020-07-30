@@ -37,10 +37,13 @@ import java.util.Set;
 public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Use %s instead.";
 
-  private static final Set<String> HANDLED_ASSERTIONS = ImmutableSet.of("assertEquals",
+  private static final Set<String> HANDLED_ASSERTIONS = ImmutableSet.of(
+    "assertEquals",
     "assertSame",
     "assertNotEquals",
     "assertNotSame");
+
+  private static final Set<String> INVERSE_ASSERTIONS = ImmutableSet.of("assertNotSame", "assertNotEquals");
 
   private static final Map<String, String> REPLACEMENT_ASSERTIONS = ImmutableMap.of(
     "true", "assertTrue()",
@@ -73,7 +76,7 @@ public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
 
   private void suggestAlternative(LiteralTreeImpl literalTree, FunctionCallTree functionCallTree, String assertionName) {
     String literalValue = literalTree.value().toLowerCase(Locale.ROOT);
-    if (assertionName.equals("assertNotSame") || assertionName.equals("assertNotEquals")) {
+    if (INVERSE_ASSERTIONS.contains(assertionName)) {
       literalValue = LITERAL_INVERSES.get(literalValue);
     }
 
