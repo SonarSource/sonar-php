@@ -30,6 +30,7 @@ import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 import org.sonar.php.checks.phpunit.AssertionArgumentOrderCheck;
+import org.sonar.php.checks.phpunit.BooleanOrNullLiteralInAssertionsCheck;
 import org.sonar.php.checks.phpunit.NoAssertionInTestCheck;
 import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
@@ -68,6 +69,7 @@ public class CheckList {
       AtLeastThreeCasesInSwitchCheck.class,
       AvoidDESCheck.class,
       BooleanEqualityComparisonCheck.class,
+      BooleanOrNullLiteralInAssertionsCheck.class,
       CakePhpDebugModeCheck.class,
       CallParentConstructorCheck.class,
       CallToIniSetCheck.class,
