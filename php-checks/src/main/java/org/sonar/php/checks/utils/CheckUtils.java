@@ -309,8 +309,4 @@ public final class CheckUtils {
   public static boolean isAbstract(ClassDeclarationTree tree) {
     return tree.modifierToken() != null && tree.modifierToken().text().equals("abstract");
   }
-
-  public static boolean endsWithIgnoreCase(String string, String suffix) {
-    return string.toLowerCase(Locale.ENGLISH).endsWith(suffix.toLowerCase());
-  }
 }
