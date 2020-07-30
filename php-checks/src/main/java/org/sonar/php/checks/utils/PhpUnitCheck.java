@@ -140,7 +140,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
       new Assertion("assertClassNotHasStaticAttribute"),
       new Assertion("assertObjectHasAttribute"),
       new Assertion("assertObjectNotHasAttribute"),
-      new Assertion("assertSam", true),
+      new Assertion("assertSame", true),
       new Assertion("assertAttributeSame"),
       new Assertion("assertNotSame", true),
       new Assertion("assertAttributeNotSame"),
