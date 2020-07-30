@@ -23,8 +23,8 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 
+import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseClassName;
 import static org.sonar.php.checks.utils.CheckUtils.isAbstract;
-import static org.sonar.php.checks.utils.CheckUtils.nameOfLowerCase;
 
 @Rule(key = "S3360")
 public class TestClassNameCheck extends PhpUnitCheck {
@@ -33,7 +33,7 @@ public class TestClassNameCheck extends PhpUnitCheck {
 
   @Override
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {
-    if (!isAbstract(tree) && !nameOfLowerCase(tree).endsWith("test")) {
+    if (!isAbstract(tree) && !getLowerCaseClassName(tree).endsWith("test")) {
       context().newIssue(this, tree.name(), MESSAGE);
     }
   }
