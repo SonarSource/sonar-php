@@ -57,4 +57,8 @@ class MyTest extends TestCase {
     $captcha = $this->createMock(DefaultModel::class);
     $captcha->method('isRequired')->willReturn($isRequired);
   }
+
+  public function testK() { // Compliant
+    doTest();
+  }
 }
