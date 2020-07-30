@@ -82,10 +82,13 @@ public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
   }
 
   private static Optional<LiteralTreeImpl> findLiteralArgument(FunctionCallTree tree) {
-    if (isLiteral(tree.arguments().get(0))) {
-      return Optional.of((LiteralTreeImpl) tree.arguments().get(0));
-    } else if (isLiteral(tree.arguments().get(1))) {
-      return Optional.of((LiteralTreeImpl) tree.arguments().get(1));
+    ExpressionTree firstArgument = tree.arguments().get(0);
+    ExpressionTree secondArgument = tree.arguments().get(1);
+
+    if (isLiteral(firstArgument)) {
+      return Optional.of((LiteralTreeImpl) firstArgument);
+    } else if (isLiteral(secondArgument)) {
+      return Optional.of((LiteralTreeImpl) secondArgument);
     }
 
     return Optional.empty();
