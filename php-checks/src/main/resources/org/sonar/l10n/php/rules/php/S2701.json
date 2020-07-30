@@ -1,0 +1,17 @@
+{
+  "title": "Literal boolean values and nulls should not be used in equality assertions",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "tests",
+    "phpunit"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-2701",
+  "sqKey": "S2701",
+  "scope": "Tests"
+}

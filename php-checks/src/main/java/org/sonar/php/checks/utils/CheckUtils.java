@@ -27,6 +27,7 @@ import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -119,6 +120,14 @@ public final class CheckUtils {
 
   public static Set<String> lowerCaseSet(String... names) {
     return Arrays.stream(names).map(name -> name.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+  }
+
+  public static String getClassName(ClassDeclarationTree classDeclaration) {
+    return Objects.requireNonNull(nameOf(classDeclaration.name()));
+  }
+
+  public static String getLowerCaseClassName(ClassDeclarationTree classDeclarationTree) {
+    return getClassName(classDeclarationTree).toLowerCase(Locale.ROOT);
   }
 
   /**
