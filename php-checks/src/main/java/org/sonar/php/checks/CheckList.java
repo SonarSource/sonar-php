@@ -32,6 +32,7 @@ import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 import org.sonar.php.checks.phpunit.AssertTrueInsteadOfDedicatedAssertCheck;
 import org.sonar.php.checks.phpunit.AssertionArgumentOrderCheck;
 import org.sonar.php.checks.phpunit.AssertionCompareToSelfCheck;
+import org.sonar.php.checks.phpunit.AssertionInTryCatchCheck;
 import org.sonar.php.checks.phpunit.BooleanOrNullLiteralInAssertionsCheck;
 import org.sonar.php.checks.phpunit.NoAssertionInTestCheck;
 import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
@@ -69,6 +70,7 @@ public class CheckList {
       ArrayCountableCountCheck.class,
       AssertionArgumentOrderCheck.class,
       AssertionCompareToSelfCheck.class,
+      AssertionInTryCatchCheck.class,
       AssertTrueInsteadOfDedicatedAssertCheck.class,
       AssignmentInSubExpressionCheck.class,
       AtLeastThreeCasesInSwitchCheck.class,

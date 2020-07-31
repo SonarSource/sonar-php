@@ -1,0 +1,9 @@
+{
+'project:Symfony/Bundle/FrameworkBundle/Tests/DependencyInjection/FrameworkExtensionTest.php':[
+816,
+843,
+],
+'project:Symfony/Component/Routing/Tests/RouteTest.php':[
+251,
+],
+}
