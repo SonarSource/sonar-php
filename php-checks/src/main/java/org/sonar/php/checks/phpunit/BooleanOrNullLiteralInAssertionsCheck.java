@@ -45,16 +45,14 @@ public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
 
   private static final Set<String> INVERSE_ASSERTIONS = ImmutableSet.of("assertNotSame", "assertNotEquals");
 
-  private static final Map<String, String> REPLACEMENT_ASSERTIONS = ImmutableMap.of(
-    "true", "assertTrue()",
-    "false", "assertFalse()",
-    "null", "assertNull()",
-    "!null", "assertNotNull()");
-
-  private static final Map<String, String> LITERAL_INVERSES = ImmutableMap.of(
-    "true", "false",
-    "false", "true",
-    "null", "!null");
+  private static final Map<String, String> REPLACEMENT_ASSERTIONS = ImmutableMap.<String, String>builder().
+    put("true", "assertTrue()").
+    put("false", "assertFalse()").
+    put("null", "assertNull()").
+    put("!true", "assertNotTrue()").
+    put("!false", "assertNotFalse()").
+    put("!null", "assertNotNull()").
+    build();
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -77,7 +75,7 @@ public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
   private void suggestAlternative(LiteralTreeImpl literalTree, FunctionCallTree functionCallTree, String assertionName) {
     String literalValue = literalTree.value().toLowerCase(Locale.ROOT);
     if (INVERSE_ASSERTIONS.contains(assertionName)) {
-      literalValue = LITERAL_INVERSES.get(literalValue);
+      literalValue = "!" + literalValue;
     }
 
     context().newIssue(this, functionCallTree,
