@@ -309,4 +309,9 @@ public final class CheckUtils {
   public static boolean isAbstract(ClassDeclarationTree tree) {
     return tree.modifierToken() != null && tree.modifierToken().text().equals("abstract");
   }
+
+  /** Class name resolution via scope resolution operator (e.g. MyClass::class) */
+  public static boolean isClassNameResolution(MemberAccessTree mat) {
+    return mat.member().is(Tree.Kind.NAME_IDENTIFIER) && ((NameIdentifierTree) mat.member()).text().equalsIgnoreCase("class");
+  }
 }

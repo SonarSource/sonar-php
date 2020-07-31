@@ -34,6 +34,7 @@ import org.sonar.php.checks.phpunit.AssertionArgumentOrderCheck;
 import org.sonar.php.checks.phpunit.BooleanOrNullLiteralInAssertionsCheck;
 import org.sonar.php.checks.phpunit.NoAssertionInTestCheck;
 import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
+import org.sonar.php.checks.phpunit.TestCatchRuntimeExceptionCheck;
 import org.sonar.php.checks.phpunit.TestClassNameCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
@@ -221,6 +222,7 @@ public class CheckList {
       SwitchDefaultPositionCheck.class,
       SwitchWithoutDefaultCheck.class,
       TabCharacterCheck.class,
+      TestCatchRuntimeExceptionCheck.class,
       TestClassNameCheck.class,
       ThisVariableUsageInStaticContextCheck.class,
       ThrowThrowableCheck.class,

@@ -1,0 +1,14 @@
+<p>If a <code>RuntimeException</code> is thrown while code is unit tested, it's likely to be thrown again in production. Therefore, test methods
+should be allowed to \<code>throw RuntimeException</code>s so you're alerted early to problems in the code.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+@Test
+public void testTheThing() {
+  try {
+    // ...
+  } catch (RuntimeException e) {  // Noncompliant
+    // ...
+  }
+}
+</pre>
+

@@ -28,6 +28,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 
@@ -58,6 +59,15 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
       resolveClassSymbol((NamespaceNameTree) expression);
     }
     super.visitNewExpression(tree);
+  }
+
+  @Override
+  public void visitMemberAccess(MemberAccessTree tree) {
+    ExpressionTree object = tree.object();
+    if (object.is(Tree.Kind.NAMESPACE_NAME)) {
+      resolveClassSymbol((NamespaceNameTree) object);
+    }
+    super.visitMemberAccess(tree);
   }
 
   private void resolveClassSymbol(NamespaceNameTree namespaceName) {

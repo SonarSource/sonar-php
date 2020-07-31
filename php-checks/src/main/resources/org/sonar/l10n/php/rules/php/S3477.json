@@ -1,0 +1,17 @@
+{
+  "title": "Tests should not catch \"RuntimeException\"",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "tests",
+    "phpunit"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-3477",
+  "sqKey": "S3477",
+  "scope": "Main"
+}
