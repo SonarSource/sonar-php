@@ -76,7 +76,9 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
       }
 
       result.addAll(
-        catchBlockTree.exceptionTypes().stream().filter(this::isRelevantExceptionType).collect(Collectors.toList())
+        catchBlockTree.exceptionTypes().stream().
+          filter(AssertionInTryCatchCheck::isRelevantExceptionType).
+          collect(Collectors.toList())
       );
     }
 
@@ -87,17 +89,12 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
     return !context().symbolTable().getSymbol(variable).usages().isEmpty();
   }
 
-  private boolean isRelevantExceptionType(NamespaceNameTree tree) {
+  private static boolean isRelevantExceptionType(NamespaceNameTree tree) {
     return RELEVANT_EXCEPTIONS.contains(Symbols.getClass(tree).qualifiedName().toString());
   }
 
   private static class AssertionsFindVisitor extends PHPVisitorCheck {
     private final List<FunctionCallTree> foundAssertions = new ArrayList<>();
-
-    @Override
-    public void visitTryStatement(TryStatementTree tree) {
-      // Avoid visiting nested try-catch statements.
-    }
 
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
