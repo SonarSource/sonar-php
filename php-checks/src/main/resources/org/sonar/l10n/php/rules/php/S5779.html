@@ -1,33 +1,27 @@
-<p>Assertion methods&nbsp;are throwing a "<code>java.lang.AssertionError</code>". If this call is done within the try block of a try-catch cathing a
-similar error, you should make sure to test some properties of the exception. Otherwise, the assertion will never fail.</p>
+<p>PHPUnit assertions do throw a <em>PHPUnit\Framework\ExpectationFailedException</em> exception when they fail. This is how PHPUnit internally
+notices when assertions within testcases fail. However, if such an exception type or one of its parent types is captured within a try-catch block and
+not rethrown, PHPUnit does not notice the assertion failure.</p>
+<p>This check raises an issue on assertions within the <em>try</em> body of a <em>try-catch</em> block that do catch exceptions of the type
+<em>PHPUnit\Framework\ExpectationFailedException</em>, <em>PHPUnit\Framework\AssertionFailedError</em>, or <em>Exception</em>, and do not handle the
+variable holding the exception.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-@Test
-public void should_throw_assertion_error() {
-  try {
-    throwAssertionError();
-    Assert.fail("Expected an AssertionError!"); // Noncompliant, the AssertionError will be caught and the test will never fail.
-  } catch (AssertionError e) {}
-}
+public function testA() {
+    try {
+        assertTrue(getValue()); // Noncompliant
+    } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
 
-private void throwAssertionError() {
-  throw new AssertionError("My assertion error");
+    }
 }
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-assertThrows(AssertionError.class, () -&gt; throwAssertionError());
+public function testB() {
+    try {
+        assertTrue(getValue()); // Compliant
+    } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
+        assertEquals("Some message", $e-&gt;getMessage());
+    }
+}
 </pre>
-<pre>
-try {
-   throwAssertionError();
-   Assert.fail("Expected an AssertionError!"); // Compliant, we made sure to test that the correct error is raised
- } catch (AssertionError e) {
-   Assert.assertThat(e.getMessage(), is("My assertion error"));
- }
-</pre>
-<h2>See</h2>
-<ul>
-  <li> <a href="https://github.com/junit-team/junit4/wiki/Exception-testing">JUnit 4 exception testing documentation</a> </li>
-</ul>
 

@@ -1,10 +1,10 @@
 {
-  "title": "Assertion methods should not be used within the try block of a try-catch catching an Error",
+  "title": "Assertion failure exceptions should not be ignored",
   "type": "BUG",
   "status": "ready",
   "tags": [
-    "junit",
-    "tests"
+    "tests",
+    "phpunit"
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-5779",
