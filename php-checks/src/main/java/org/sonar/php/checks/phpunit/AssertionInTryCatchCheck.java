@@ -1,3 +1,22 @@
+/*
+ * SonarQube PHP Plugin
+ * Copyright (C) 2010-2020 SonarSource SA
+ * mailto:info AT sonarsource DOT com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 package org.sonar.php.checks.phpunit;
 
 import com.google.common.collect.ImmutableSet;
@@ -52,7 +71,7 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
   private List<NamespaceNameTree> getCaughtRelevantExceptionTypes(List<CatchBlockTree> catchBlocks) {
     List<NamespaceNameTree> result = new ArrayList<>();
     for(CatchBlockTree catchBlockTree : catchBlocks) {
-      if (exceptionVariableIsUsed(catchBlockTree.variable())) {
+      if (variableIsUsed(catchBlockTree.variable())) {
         continue;
       }
 
@@ -64,7 +83,7 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
     return result;
   }
 
-  private boolean exceptionVariableIsUsed(VariableIdentifierTree variable) {
+  private boolean variableIsUsed(VariableIdentifierTree variable) {
     return !context().symbolTable().getSymbol(variable).usages().isEmpty();
   }
 
@@ -77,7 +96,7 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
 
     @Override
     public void visitTryStatement(TryStatementTree tree) {
-      // Avoid visiting nested try-catch statement.
+      // Avoid visiting nested try-catch statements.
     }
 
     @Override
