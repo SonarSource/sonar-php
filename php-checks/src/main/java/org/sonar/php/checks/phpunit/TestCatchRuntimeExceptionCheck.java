@@ -72,7 +72,7 @@ public class TestCatchRuntimeExceptionCheck extends PhpUnitCheck {
     return CheckUtils.isClassNameResolution(mat) && mat.object().is(NAMESPACE_NAME) && isRuntimeException((NamespaceNameTree) mat.object());
   }
 
-  private boolean isRuntimeException(LiteralTree lt) {
+  private static boolean isRuntimeException(LiteralTree lt) {
     return trimQuotes(lt).equalsIgnoreCase(RUNTIME_EXCEPTION);
   }
 
@@ -84,7 +84,7 @@ public class TestCatchRuntimeExceptionCheck extends PhpUnitCheck {
     context().newIssue(this, tree, MESSAGE);
   }
 
-  private String getFunctionName(FunctionCallTree fct) {
+  private static String getFunctionName(FunctionCallTree fct) {
     String name = CheckUtils.getFunctionName(fct);
     if (name != null && name.contains("::")) {
       name = name.substring(name.indexOf("::") + 2);
