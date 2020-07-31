@@ -8,16 +8,16 @@ class MyTest extends TestCase {
     assertEquals(false, $x); // Noncompliant {{Use assertFalse() instead.}}
     assertEquals(null, $x); // Noncompliant {{Use assertNull() instead.}}
 
-    assertNotEquals(true, $x); // Noncompliant {{Use assertFalse() instead.}}
-    assertNotEquals(false, $x); // Noncompliant {{Use assertTrue() instead.}}
+    assertNotEquals(true, $x); // Noncompliant {{Use assertNotTrue() instead.}}
+    assertNotEquals(false, $x); // Noncompliant {{Use assertNotFalse() instead.}}
     assertNotEquals(null, $x); // Noncompliant {{Use assertNotNull() instead.}}
 
     assertSame(true, $x); // Noncompliant {{Use assertTrue() instead.}}
     assertSame(false, $x); // Noncompliant {{Use assertFalse() instead.}}
     assertSame(null, $x); // Noncompliant {{Use assertNull() instead.}}
 
-    assertNotSame(true, $x); // Noncompliant {{Use assertFalse() instead.}}
-    assertNotSame(false, $x); // Noncompliant {{Use assertTrue() instead.}}
+    assertNotSame(true, $x); // Noncompliant {{Use assertNotTrue() instead.}}
+    assertNotSame(false, $x); // Noncompliant {{Use assertNotFalse() instead.}}
     assertNotSame(null, $x); // Noncompliant {{Use assertNotNull() instead.}}
 
     assertEquals($x, true); // Noncompliant {{Use assertTrue() instead.}}
