@@ -1,0 +1,21 @@
+<p>Classes subclassing <code>unittest.TestCase</code>&nbsp;are considered test cases. Methods within the class will be discovered by the test runner
+if their name starts with "<code>test</code>". If a method intended to be a test does not respect this convention, it will not be executed.</p>
+<p>This rule raises an issue when a method is not discoverable as a test and is never used within its test case class.</p>
+<p>This rule will not raise if:</p>
+<p> * The method is called directly from another method.</p>
+<p> * The method overrides an existing one in <code>unittest.TestCase</code> (example: <code>a tearDown</code> method).</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+import unittest
+class MyTest(unittest.TestCase):
+  def setUp(self): ... # OK (unittest.TestCase method)
+  def something_test(self): ... # Noncompliant
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+import unittest
+class MyTest(unittest.TestCase):
+  def setUp(self): ...
+  def test_something(self): ...
+</pre>
+
