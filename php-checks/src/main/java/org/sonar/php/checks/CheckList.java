@@ -29,6 +29,7 @@ import org.sonar.php.checks.phpini.EnableDlCheck;
 import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
+import org.sonar.php.checks.phpunit.AbortedTestCaseCheck;
 import org.sonar.php.checks.phpunit.AssertTrueInsteadOfDedicatedAssertCheck;
 import org.sonar.php.checks.phpunit.AssertionArgumentOrderCheck;
 import org.sonar.php.checks.phpunit.AssertionCompareToSelfCheck;
@@ -63,6 +64,7 @@ public class CheckList {
 
   public static List<Class> getChecks() {
     return ImmutableList.<Class>of(
+      AbortedTestCaseCheck.class,
       AliasFunctionUsageCheck.class,
       AllBranchesIdenticalCheck.class,
       AlwaysUseCurlyBracesCheck.class,
