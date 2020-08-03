@@ -104,8 +104,9 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
         return;
       }
 
-      if (isInternalMethodCall(tree)) {
-        calledFunctions.add(getFunctionName(tree));
+      String functionName = getFunctionName(tree);
+      if (functionName != null && isInternalMethodCall(tree)) {
+        calledFunctions.add(functionName);
       }
 
       super.visitFunctionCall(tree);
