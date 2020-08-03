@@ -8,7 +8,8 @@
   },
   "tags": [
     "tests",
-    "unused"
+    "unused",
+    "phpunit"
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-5899",
