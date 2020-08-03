@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 @Rule(key = "S1607")
 public class AbortedTestCaseCheck extends PhpUnitCheck {
 
-  private static final String MESSAGE = "Either remove this call or add an explanation about why test is aborted.";
+  private static final String MESSAGE = "Either remove this call or add an explanation about why the test is aborted.";
   private static final Set<String> ABORT_FUNCTIONS = ImmutableSet.of("markTestSkipped", "markTestIncomplete");
 
   @Override
