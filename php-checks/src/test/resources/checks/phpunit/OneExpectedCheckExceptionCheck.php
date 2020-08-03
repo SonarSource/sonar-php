@@ -13,6 +13,11 @@ class MyTest extends TestCase
       $this->fail('RuntimeException is not thrown');
     } catch (RuntimeException $e) {}
 
+    try { // Noncompliant
+      g($y);
+      $foo();
+    } catch (RuntimeException $e) {}
+
     $y = y(1);
     try {
       g($y); // OK
