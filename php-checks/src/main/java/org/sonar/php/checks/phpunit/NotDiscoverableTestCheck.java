@@ -46,7 +46,7 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     "teardown",
     "setupbeforeclass",
     "teardownafterclass");
-  private static final ImmutableSet<String> SELF_OBJECTS = ImmutableSet.of("$this", "self", "static");
+  private static final Set<String> SELF_OBJECTS = ImmutableSet.of("$this", "self", "static");
 
   private Set<String> internalCalledMethods = new HashSet<>();
 
@@ -76,13 +76,15 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
 
     if (!CheckUtils.isPublic(tree) && isMarkedAsTestMethod(tree)) {
       context().newIssue(this, tree.name(), MESSAGE_VISIBLE);
-    } else if (CheckUtils.isPublic(tree)
-      && !isMarkedAsTestMethod(tree)
-      && !internalCalledMethods.contains(tree.name().text().toLowerCase(Locale.ROOT))
-      && !OVERRIDABLE_METHODS.contains(tree.name().text().toLowerCase(Locale.ROOT))
-      && methodContainsAssertions(tree)) {
+    } else if (CheckUtils.isPublic(tree) && !isMarkedAsTestMethod(tree)
+      && isUncalledMethod(tree) && methodContainsAssertions(tree)) {
       context().newIssue(this, tree.name(), MESSAGE_MARKED);
     }
+  }
+
+  private boolean isUncalledMethod(MethodDeclarationTree tree) {
+    return !internalCalledMethods.contains(tree.name().text().toLowerCase(Locale.ROOT))
+      && !OVERRIDABLE_METHODS.contains(tree.name().text().toLowerCase(Locale.ROOT));
   }
 
   private static boolean methodContainsAssertions(MethodDeclarationTree tree) {
