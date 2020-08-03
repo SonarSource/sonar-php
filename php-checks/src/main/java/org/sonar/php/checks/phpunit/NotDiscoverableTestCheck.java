@@ -81,17 +81,17 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
       && !internalCalledMethods.contains(tree.name().text().toLowerCase(Locale.ROOT))
       && !OVERRIDABLE_METHODS.contains(tree.name().text().toLowerCase(Locale.ROOT))
       && methodContainsAssertions(tree)) {
-        context().newIssue(this, tree.name(), MESSAGE_MARKED);
-      }
+      context().newIssue(this, tree.name(), MESSAGE_MARKED);
+    }
   }
 
-  private boolean methodContainsAssertions(MethodDeclarationTree tree) {
+  private static boolean methodContainsAssertions(MethodDeclarationTree tree) {
     AssertionsFindVisitor assertionsFindVisitor = new AssertionsFindVisitor();
     tree.accept(assertionsFindVisitor);
     return assertionsFindVisitor.hasFoundAssertion;
   }
 
-  private boolean isMarkedAsTestMethod(MethodDeclarationTree tree) {
+  private static boolean isMarkedAsTestMethod(MethodDeclarationTree tree) {
     return tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test");
   }
 
@@ -111,7 +111,7 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
       super.visitFunctionCall(tree);
     }
 
-    private String getFunctionName(FunctionCallTree tree) {
+    private static String getFunctionName(FunctionCallTree tree) {
       String functionName = CheckUtils.getLowerCaseFunctionName(tree);
 
       if (functionName != null && functionName.contains("::")) {
@@ -121,7 +121,7 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
       return functionName;
     }
 
-    private boolean isInternalMethodCall(FunctionCallTree tree) {
+    private static boolean isInternalMethodCall(FunctionCallTree tree) {
       if (!tree.callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS, Tree.Kind.CLASS_MEMBER_ACCESS)) {
         return false;
       }
