@@ -1,5 +1,5 @@
 {
-  "title": "Only one method invocation is expected when testing checked exceptions",
+  "title": "Only one method invocation is expected when testing exceptions",
   "type": "BUG",
   "status": "ready",
   "tags": [
