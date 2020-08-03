@@ -36,6 +36,7 @@ import org.sonar.php.checks.phpunit.AssertionInTryCatchCheck;
 import org.sonar.php.checks.phpunit.BooleanOrNullLiteralInAssertionsCheck;
 import org.sonar.php.checks.phpunit.NoAssertionInTestCheck;
 import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
+import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
 import org.sonar.php.checks.phpunit.TestClassNameCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
@@ -184,6 +185,7 @@ public class CheckList {
       NoSonarCheck.class,
       NoTestInTestClassCheck.class,
       NullDereferenceInConditionalCheck.class,
+      OneExpectedCheckExceptionCheck.class,
       OnePropertyDeclarationPerStatementCheck.class,
       OneStatementPerLineCheck.class,
       OpeningPHPTagCheck.class,

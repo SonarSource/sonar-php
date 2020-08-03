@@ -327,6 +327,13 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
     return getAssertion(tree).isPresent();
   }
 
+  public static boolean isFail(FunctionCallTree tree) {
+    String name = CheckUtils.getLowerCaseFunctionName(tree);
+    return name != null && name.endsWith("fail");
+  }
+
+
+
   /**
    * Try to resolve the value of a variable which is passed as argument.
    */
