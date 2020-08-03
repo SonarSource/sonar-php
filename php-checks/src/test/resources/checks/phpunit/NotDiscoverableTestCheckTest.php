@@ -19,6 +19,12 @@ class MyTest extends TestCase
     $this->assertTrue("abc");
   }
 
+  public function internalAnonFunction() {
+    return function() {
+      $this->assertTrue("abc");
+    };
+  }
+
   public function setUp() { // Compliant
     $this->assertTrue("abc");
   }

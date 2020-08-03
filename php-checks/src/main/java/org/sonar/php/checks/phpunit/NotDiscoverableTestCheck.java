@@ -40,7 +40,7 @@ import java.util.Set;
 @Rule(key = "S5899")
 public class NotDiscoverableTestCheck extends PhpUnitCheck {
   private static final String MESSAGE_VISIBLE = "Adjust the visibility of this test method so that it can be executed by the test runner.";
-  private static final String MESSAGE_MARKED = "Mark this method as test so that it can be executed by the test runner.";
+  private static final String MESSAGE_MARKED = "Mark this method as a test so that it can be executed by the test runner.";
   private static final Set<String> OVERRIDABLE_METHODS = ImmutableSet.of(
     "setup",
     "teardown",
