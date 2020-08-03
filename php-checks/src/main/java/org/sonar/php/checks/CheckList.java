@@ -29,6 +29,7 @@ import org.sonar.php.checks.phpini.EnableDlCheck;
 import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
+import org.sonar.php.checks.phpunit.AbortedTestCaseCheck;
 import org.sonar.php.checks.phpunit.AssertTrueInsteadOfDedicatedAssertCheck;
 import org.sonar.php.checks.phpunit.AssertionArgumentOrderCheck;
 import org.sonar.php.checks.phpunit.AssertionCompareToSelfCheck;
@@ -37,6 +38,7 @@ import org.sonar.php.checks.phpunit.BooleanOrNullLiteralInAssertionsCheck;
 import org.sonar.php.checks.phpunit.NoAssertionInTestCheck;
 import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
 import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
+import org.sonar.php.checks.phpunit.NotDiscoverableTestCheck;
 import org.sonar.php.checks.phpunit.TestClassNameCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
@@ -64,6 +66,7 @@ public class CheckList {
 
   public static List<Class> getChecks() {
     return ImmutableList.<Class>of(
+      AbortedTestCaseCheck.class,
       AliasFunctionUsageCheck.class,
       AllBranchesIdenticalCheck.class,
       AlwaysUseCurlyBracesCheck.class,
@@ -183,6 +186,7 @@ public class CheckList {
       NonLFCharAsEOLCheck.class,
       NoPaddingRsaCheck.class,
       NoSonarCheck.class,
+      NotDiscoverableTestCheck.class,
       NoTestInTestClassCheck.class,
       NullDereferenceInConditionalCheck.class,
       OneExpectedCheckExceptionCheck.class,
