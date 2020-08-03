@@ -37,6 +37,12 @@ abstract class FooClass extends TestCase {
   }
 }
 
+class AbstractTestCase extends TestCase {
+  public function doAssertion() { // Compliant
+    assertTrue("abc");
+  }
+}
+
 // For coverage
 class BarClass {
   public function bar() { // Compliant

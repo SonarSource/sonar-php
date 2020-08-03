@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
-import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
