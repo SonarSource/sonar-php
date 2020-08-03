@@ -6,7 +6,7 @@ class MyTest extends TestCase
 {
   public function testSomething()
   {
-    $this->markTestSkipped(); // Noncompliant
+    $this->markTestSkipped(); // Noncompliant {{Either remove this call or add an explanation about why the test is aborted.]}
     $this->markTestIncomplete(); // Noncompliant
     markTestIncomplete(); // Noncompliant
 

@@ -9,7 +9,8 @@
   "tags": [
     "tests",
     "bad-practice",
-    "confusing"
+    "confusing",
+    "phpunit"
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-1607",

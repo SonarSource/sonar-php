@@ -46,7 +46,7 @@ public class AbortedTestCaseCheck extends PhpUnitCheck {
   }
 
   private static String getFunctionName(FunctionCallTree fct) {
-    String name = CheckUtils.getFunctionName(fct);
+    String name = CheckUtils.getLowerCaseFunctionName(fct);
     if (name != null && name.contains("::")) {
       name = name.substring(name.indexOf("::") + 2);
     }
