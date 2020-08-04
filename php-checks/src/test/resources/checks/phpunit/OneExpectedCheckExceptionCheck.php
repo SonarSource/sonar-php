@@ -32,12 +32,23 @@ class MyTest extends TestCase
     } catch (RuntimeException $e) {}
 
     try {
-        Coordinate::columnIndexFromString($cellAddress);
+        Coordinate::columnIndexFromString($cellAddress); // OK
     } catch (\Exception $e) {
         self::assertInstanceOf(Exception::class, $e);
         return;
     }
     $this->fail('An expected exception has not been raised.');
+
+    try {
+     g($y); // OK
+     $this->fail(sprintf('RuntimeException is not thrown by %s',$functionName));
+    } catch (RuntimeException $e) {}
+
+    try { // Noncompliant
+//  ^^^
+     $this->chain1('foo')->chain2('bar')->chain3('foobar')->chain4();
+//          ^^^^^^<        ^^^^^^<        ^^^^^^<           ^^^^^<
+    } catch (RuntimeException $e) {}
   }
 }
 

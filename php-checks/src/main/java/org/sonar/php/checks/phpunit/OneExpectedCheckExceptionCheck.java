@@ -23,9 +23,15 @@ import java.util.HashSet;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+
+import static org.sonar.plugins.php.api.tree.Tree.Kind.CLASS_MEMBER_ACCESS;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.OBJECT_MEMBER_ACCESS;
 
 @Rule(key = "S5783")
 public class OneExpectedCheckExceptionCheck extends PhpUnitCheck {
@@ -49,18 +55,29 @@ public class OneExpectedCheckExceptionCheck extends PhpUnitCheck {
   private void checkFunctionCallCount(TryStatementTree tree) {
     if (functionCallCount.size() > 1) {
       PreciseIssue issue = context().newIssue(this, tree.tryToken(), MESSAGE);
-      functionCallCount.forEach(call -> issue.secondary(call.callee(), null));
+      functionCallCount.forEach(call -> addSecondaryLocations(call.callee(), issue));
     }
     functionCallCount.clear();
+  }
+
+  private void addSecondaryLocations(ExpressionTree callee, PreciseIssue issue) {
+    Tree tree = callee;
+    if (callee.is(OBJECT_MEMBER_ACCESS) || callee.is(CLASS_MEMBER_ACCESS)) {
+      tree = ((MemberAccessTree) callee).member();
+    }
+    issue.secondary(tree, null);
   }
 
   private class TryBlockVisitor extends PhpUnitCheck {
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
-      if (!isAssertion(tree) && !isFail(tree)) {
-        functionCallCount.add(tree);
+      if (!isFail(tree)) {
+        if (!isAssertion(tree)) {
+          functionCallCount.add(tree);
+        }
+
+        super.visitFunctionCall(tree);
       }
-      super.visitFunctionCall(tree);
     }
   }
 }
