@@ -60,7 +60,7 @@ public class OneExpectedCheckExceptionCheck extends PhpUnitCheck {
     functionCallCount.clear();
   }
 
-  private void addSecondaryLocations(ExpressionTree callee, PreciseIssue issue) {
+  private static void addSecondaryLocations(ExpressionTree callee, PreciseIssue issue) {
     Tree tree = callee;
     if (callee.is(OBJECT_MEMBER_ACCESS) || callee.is(CLASS_MEMBER_ACCESS)) {
       tree = ((MemberAccessTree) callee).member();
