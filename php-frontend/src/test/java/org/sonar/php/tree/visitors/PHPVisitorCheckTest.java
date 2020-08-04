@@ -21,6 +21,7 @@ package org.sonar.php.tree.visitors;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -36,6 +37,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -93,6 +96,24 @@ public class PHPVisitorCheckTest {
     visitor.analyze(phpCheckContext);
   }
 
+  @Test
+  public void test_newIssue() {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser();
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse("<?php phpinfo();");
+    PHPVisitorCheck testVisitor = new PHPVisitorCheck() {
+      @Override
+      public void visitCompilationUnit(CompilationUnitTree tree) {
+        newIssue(tree, "testIssue");
+      }
+    };
+    testVisitor.analyze(new PHPCheckContext(mock(PhpFile.class), tree, null));
+
+    List<PhpIssue> issues = testVisitor.context().getIssues();
+
+    assertThat(issues.size()).isEqualTo(1);
+    assertThat(issues.get(0)).isInstanceOf(PreciseIssue.class);
+    assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo("testIssue");
+  }
 
   private class ContextTestVisitor extends PHPVisitorCheck {
   }
