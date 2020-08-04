@@ -72,3 +72,17 @@ class BarTest extends TestCase {
     new AssertNotNull();
   }
 }
+
+class ChainsTest extends TestCase {
+  public function testFoo() {
+    $this->a();
+  }
+
+  public function a() {
+    b();
+  }
+
+  public function b() { // Compliant
+    $this->assertTrue("abc");
+  }
+}
