@@ -348,14 +348,9 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   }
 
   public static Optional<Assertion> getAssertion(FunctionCallTree tree) {
-    String name = CheckUtils.getLowerCaseFunctionName(tree);
-    if (name != null) {
-      if (name.contains("::")) {
-        name = name.substring(name.indexOf("::") + 2);
-      }
-      if (ASSERTION.containsKey(name)) {
-        return Optional.of(ASSERTION.get(name));
-      }
+    String name = CheckUtils.lowerCaseFunctionName(tree);
+    if (name != null && ASSERTION.containsKey(name)) {
+      return Optional.of(ASSERTION.get(name));
     }
     return Optional.empty();
   }

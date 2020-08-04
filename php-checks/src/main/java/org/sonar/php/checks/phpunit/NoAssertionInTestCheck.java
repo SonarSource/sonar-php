@@ -21,6 +21,12 @@ package org.sonar.php.checks.phpunit;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
@@ -33,14 +39,6 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Rule(key = "S2699")
 public class NoAssertionInTestCheck extends PhpUnitCheck {
@@ -84,7 +82,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
 
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
-      String functionName = getLowercaseFunctionName(tree);
+      String functionName = CheckUtils.lowerCaseFunctionName(tree);
 
       if (isAssertion(tree)
         || functionNameCountsAsAssertion(functionName)
@@ -146,20 +144,6 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       }
 
       return Optional.empty();
-    }
-
-    private @Nullable String getLowercaseFunctionName(FunctionCallTree tree) {
-      String functionName = CheckUtils.getFunctionName(tree);
-
-      if (functionName == null && tree.callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
-        functionName = CheckUtils.nameOf(((MemberAccessTree) tree.callee()).member());
-      }
-
-      if (functionName != null && functionName.contains("::")) {
-        functionName = functionName.substring(functionName.lastIndexOf("::") + 2);
-      }
-
-      return functionName != null ? functionName.toLowerCase(Locale.ROOT) : functionName;
     }
   }
 }

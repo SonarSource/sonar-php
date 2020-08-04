@@ -22,9 +22,10 @@ package org.sonar.php.checks.phpunit;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+
+import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
 
 @Rule(key = "S1607")
 public class AbortedTestCaseCheck extends PhpUnitCheck {
@@ -42,14 +43,6 @@ public class AbortedTestCaseCheck extends PhpUnitCheck {
   }
 
   private static boolean isAbortFunctionWithoutMessage(FunctionCallTree fct) {
-    return ABORT_FUNCTIONS.contains(getFunctionName(fct)) && fct.arguments().isEmpty();
-  }
-
-  private static String getFunctionName(FunctionCallTree fct) {
-    String name = CheckUtils.getLowerCaseFunctionName(fct);
-    if (name != null && name.contains("::")) {
-      name = name.substring(name.indexOf("::") + 2);
-    }
-    return name;
+    return ABORT_FUNCTIONS.contains(lowerCaseFunctionName(fct)) && fct.arguments().isEmpty();
   }
 }

@@ -48,6 +48,8 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
+import static org.sonar.php.checks.utils.CheckUtils.functionName;
+import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
 public class CheckUtilsTest {
@@ -249,6 +251,38 @@ public class CheckUtilsTest {
 
     tree = parseClassMember("use MyTrait;");
     assertThat(CheckUtils.isPublic(tree)).isFalse();
+  }
+
+  @Test
+  public void pure_function_name() {
+    FunctionCallTree functionCall = (FunctionCallTree) expressionFromStatement("fooBar();");
+    assertThat(functionName(functionCall)).isEqualTo("fooBar");
+    assertThat(functionName(functionCall)).isNotEqualTo("foobar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("$this->fooBar();");
+    assertThat(functionName(functionCall)).isEqualTo("fooBar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("self::fooBar();");
+    assertThat(functionName(functionCall)).isEqualTo("fooBar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("self::$foo();");
+    assertThat(functionName(functionCall)).isNull();
+  }
+
+  @Test
+  public void pure_lower_case_function_name() {
+    FunctionCallTree functionCall = (FunctionCallTree) expressionFromStatement("fooBar();");
+    assertThat(lowerCaseFunctionName(functionCall)).isEqualTo("foobar");
+    assertThat(lowerCaseFunctionName(functionCall)).isNotEqualTo("fooBar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("$this->fooBar();");
+    assertThat(lowerCaseFunctionName(functionCall)).isEqualTo("foobar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("self::fooBar();");
+    assertThat(lowerCaseFunctionName(functionCall)).isEqualTo("foobar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("self::$foo();");
+    assertThat(lowerCaseFunctionName(functionCall)).isNull();
   }
 
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {

@@ -147,22 +147,12 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
 
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
-      String functionName = getFunctionName(tree);
+      String functionName = CheckUtils.lowerCaseFunctionName(tree);
       if (functionName != null && isInternalMethodCall(tree)) {
         calledFunctions.computeIfAbsent(currentMethodName, f -> new HashSet<>()).add(functionName);
       }
 
       super.visitFunctionCall(tree);
-    }
-
-    private static String getFunctionName(FunctionCallTree tree) {
-      String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-
-      if (functionName != null && functionName.contains("::")) {
-        functionName = functionName.substring(functionName.lastIndexOf("::") + 2);
-      }
-
-      return functionName;
     }
 
     private static boolean isInternalMethodCall(FunctionCallTree tree) {

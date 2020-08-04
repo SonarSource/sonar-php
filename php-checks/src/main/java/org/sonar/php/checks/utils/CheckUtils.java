@@ -102,7 +102,7 @@ public final class CheckUtils {
   }
 
   /**
-   * @return Returns function or static method's name, like "f" or "A::f". Warning, use case insensitive comparison of the result.
+   * @return Returns function, static method's or known dynamic method's name, like "f" or "A::f". Warning, use case insensitive comparison of the result.
    */
   @Nullable
   public static String getFunctionName(FunctionCallTree functionCall) {
@@ -110,11 +110,32 @@ public final class CheckUtils {
   }
 
   /**
-   * @return Returns function or static method's lower case name, like "f" or "a::f".
+   * @return Returns function, static method's or known dynamic method's lower case name, like "f" or "a::f".
    */
   @Nullable
   public static String getLowerCaseFunctionName(FunctionCallTree functionCall) {
     String name = getFunctionName(functionCall);
+    return name != null ? name.toLowerCase(Locale.ROOT) : null;
+  }
+
+  /**
+   * @return Returns function or method's name without receiver, like "fooBar".
+   */
+  @Nullable
+  public static String functionName(FunctionCallTree functionCall) {
+    ExpressionTree callee = functionCall.callee();
+    if (callee.is(Kind.CLASS_MEMBER_ACCESS) || callee.is(Kind.OBJECT_MEMBER_ACCESS)) {
+      return nameOf(((MemberAccessTree) callee).member());
+    }
+    return getFunctionName(functionCall);
+  }
+
+  /**
+   * @return Returns function or method's lower case name without receiver, like "foobar".
+   */
+  @Nullable
+  public static String lowerCaseFunctionName(FunctionCallTree functionCall) {
+    String name = functionName(functionCall);
     return name != null ? name.toLowerCase(Locale.ROOT) : null;
   }
 
