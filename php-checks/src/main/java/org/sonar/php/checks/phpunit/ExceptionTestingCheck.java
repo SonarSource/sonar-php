@@ -1,5 +1,6 @@
 package org.sonar.php.checks.phpunit;
 
+import com.google.common.collect.ImmutableList;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
@@ -15,11 +16,22 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
+import java.util.List;
 import java.util.Optional;
 
 @Rule(key = "S5935")
 public class ExceptionTestingCheck extends PhpUnitCheck {
+  private static final String MESSAGE = "Use expectException() to verify the exception throw.";
+  private static final String MESSAGE_CODE = "Use expectExceptionCode() instead.";
+  private static final String MESSAGE_MESSAGE = "Use expectExceptionMessage() instead.";
+
+  private static final List<String> RELEVANT_ASSERTIONS = ImmutableList.of(
+    "assertequals",
+    "assertsame"
+  );
+
   @Override
   public void visitTryStatement(TryStatementTree tree) {
     if (!isPhpUnitTestMethod()) {
@@ -29,10 +41,22 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     if (tree.catchBlocks().size() == 1 && containsCallToFail(tree.block())) {
       CatchBlockInspector catchBlockInspector = new CatchBlockInspector(tree.catchBlocks().get(0).variable(), context().symbolTable());
       tree.catchBlocks().get(0).block().accept(catchBlockInspector);
-
+      if (!catchBlockInspector.didFindOtherCalls) {
+        raiseIssue(tree.catchBlocks().get(0).variable(), catchBlockInspector);
+      }
     }
 
     super.visitTryStatement(tree);
+  }
+
+  private void raiseIssue(VariableIdentifierTree variable, CatchBlockInspector catchBlockInspector) {
+    PreciseIssue issue = newIssue(variable, MESSAGE);
+    if (catchBlockInspector.foundMessageAssertions != null) {
+      issue.secondary(catchBlockInspector.foundMessageAssertions, MESSAGE_MESSAGE);
+    }
+    if (catchBlockInspector.foundCodeAssertion != null) {
+      issue.secondary(catchBlockInspector.foundCodeAssertion, MESSAGE_CODE);
+    }
   }
 
   private boolean containsCallToFail(BlockTree block) {
@@ -47,23 +71,13 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     }
 
     FunctionCallTree functionCall = (FunctionCallTree) ((ExpressionStatementTree) statementTree).expression();
-    return "fail".equals(getFunctionName(functionCall));
-  }
-
-  private static String getFunctionName(FunctionCallTree tree) {
-    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-
-    if (functionName != null && functionName.contains("::")) {
-      functionName = functionName.substring(functionName.lastIndexOf("::") + 2);
-    }
-
-    return functionName;
+    return "fail".equals(CheckUtils.lowerCaseFunctionName(functionCall));
   }
 
   private static class CatchBlockInspector extends PHPVisitorCheck {
     private final Symbol exceptionVariableSymbol;
     private final SymbolTable symbolTable;
-    private boolean didFindOtherStatements = false;
+    private boolean didFindOtherCalls = false;
     private FunctionCallTree foundMessageAssertions;
     private FunctionCallTree foundCodeAssertion;
 
@@ -74,23 +88,27 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
 
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
-      String functionName = getFunctionName(tree);
-      if ("assertEquals".equals(functionName) && isAssertion(tree) && tree.arguments().size() >= 2) {
-        String exceptionMethodCall = getExceptionVariableMethodCall(tree.arguments().get(0)).orElse(getExceptionVariableMethodCall(tree.arguments().get(1)).orElse(null));
+      String functionName = CheckUtils.lowerCaseFunctionName(tree);
+      if (RELEVANT_ASSERTIONS.contains(functionName)
+          && isAssertion(tree) && tree.arguments().size() >= 2) {
+        String exceptionMethodCall = getExceptionVariableMethodCall(tree.arguments().get(0))
+          .orElse(getExceptionVariableMethodCall(tree.arguments().get(1)).orElse(null));
 
         if ("getmessage".equals(exceptionMethodCall)) {
           foundMessageAssertions = tree;
         } else if ("getcode".equals(exceptionMethodCall)) {
           foundCodeAssertion = tree;
+        } else {
+          didFindOtherCalls = true;
         }
       } else {
-        didFindOtherStatements = true;
+        didFindOtherCalls = true;
       }
     }
 
     private Optional<String> getExceptionVariableMethodCall(ExpressionTree expressionTree) {
       if (!expressionTree.is(Tree.Kind.FUNCTION_CALL) ||
-        ((FunctionCallTree) expressionTree).callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
+        !((FunctionCallTree) expressionTree).callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
         return Optional.empty();
       }
 
@@ -100,7 +118,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
         return Optional.empty();
       }
 
-      return Optional.ofNullable(getFunctionName(((FunctionCallTree) expressionTree)));
+      return Optional.ofNullable(CheckUtils.lowerCaseFunctionName(((FunctionCallTree) expressionTree)));
     }
   }
 }
