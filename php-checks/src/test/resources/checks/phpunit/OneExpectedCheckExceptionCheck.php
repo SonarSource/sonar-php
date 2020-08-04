@@ -47,7 +47,7 @@ class MyTest extends TestCase
     try { // Noncompliant
 //  ^^^
      $this->chain1('foo')->chain2('bar')->chain3('foobar')->chain4();
-//          ^^^^^^<        ^^^^^^<        ^^^^^^<           ^^^^^<
+//          ^^^^^^<        ^^^^^^<        ^^^^^^<           ^^^^^^<
     } catch (RuntimeException $e) {}
   }
 }
