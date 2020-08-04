@@ -81,10 +81,10 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     }
 
     if (!CheckUtils.isPublic(tree) && isMarkedAsTestMethod(tree)) {
-      context().newIssue(this, tree.name(), MESSAGE_VISIBLE);
+      newIssue(tree.name(), MESSAGE_VISIBLE);
     } else if (CheckUtils.isPublic(tree) && !isMarkedAsTestMethod(tree)
                && !isCalledMethod(tree) && methodContainsAssertions(tree)) {
-      context().newIssue(this, tree.name(), MESSAGE_MARKED);
+      newIssue(tree.name(), MESSAGE_MARKED);
     }
   }
 

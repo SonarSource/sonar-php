@@ -23,6 +23,7 @@ import com.google.common.annotations.Beta;
 import java.util.List;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 
 /**
  * Marker interface for all PHP checks.
@@ -50,5 +51,7 @@ public interface PHPCheck {
   List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable);
 
   List<PhpIssue> analyze(CheckContext context);
+
+  PreciseIssue newIssue(Tree tree, String message);
 
 }

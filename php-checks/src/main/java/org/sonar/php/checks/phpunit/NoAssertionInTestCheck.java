@@ -70,7 +70,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
     tree.accept(assertionsFindVisitor);
 
     if (!assertionsFindVisitor.hasFoundAssertion) {
-      context().newIssue(this, tree.name(), MESSAGE);
+      newIssue(tree.name(), MESSAGE);
     }
   }
 

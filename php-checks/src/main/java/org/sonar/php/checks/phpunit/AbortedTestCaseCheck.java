@@ -35,7 +35,7 @@ public class AbortedTestCaseCheck extends PhpUnitCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree fct) {
     if (isPhpUnitTestCase() && isAbortFunctionWithoutMessage(fct)) {
-      context().newIssue(this, fct, MESSAGE);
+      newIssue(fct, MESSAGE);
     }
 
     super.visitFunctionCall(fct);

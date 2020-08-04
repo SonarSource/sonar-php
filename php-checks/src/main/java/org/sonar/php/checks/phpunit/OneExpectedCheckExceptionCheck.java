@@ -54,7 +54,7 @@ public class OneExpectedCheckExceptionCheck extends PhpUnitCheck {
 
   private void checkFunctionCallCount(TryStatementTree tree) {
     if (functionCallCount.size() > 1) {
-      PreciseIssue issue = context().newIssue(this, tree.tryToken(), MESSAGE);
+      PreciseIssue issue = newIssue(tree.tryToken(), MESSAGE);
       functionCallCount.forEach(call -> addSecondaryLocations(call.callee(), issue));
     }
     functionCallCount.clear();

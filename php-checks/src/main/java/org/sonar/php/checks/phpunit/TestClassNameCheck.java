@@ -34,7 +34,7 @@ public class TestClassNameCheck extends PhpUnitCheck {
   @Override
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {
     if (!isAbstract(tree) && !getLowerCaseClassName(tree).endsWith("test")) {
-      context().newIssue(this, tree.name(), MESSAGE);
+      newIssue(tree.name(), MESSAGE);
     }
   }
 }

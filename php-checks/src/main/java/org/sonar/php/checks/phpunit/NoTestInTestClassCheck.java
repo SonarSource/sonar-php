@@ -44,7 +44,7 @@ public class NoTestInTestClassCheck extends PhpUnitCheck {
       }
 
       if (!hasTestMethod) {
-        context().newIssue(this, tree.name(), MESSAGE);
+        newIssue(tree.name(), MESSAGE);
       }
     }
 
