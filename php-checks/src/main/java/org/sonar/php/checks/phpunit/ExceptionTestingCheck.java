@@ -83,7 +83,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     return numberOfStatements > 0 && isCallToFail(block.statements().get(numberOfStatements - 1));
   }
 
-  private boolean isCallToFail(StatementTree statementTree) {
+  private static boolean isCallToFail(StatementTree statementTree) {
     if (!statementTree.is(Tree.Kind.EXPRESSION_STATEMENT)
       || !((ExpressionStatementTree) statementTree).expression().is(Tree.Kind.FUNCTION_CALL)) {
       return false;
