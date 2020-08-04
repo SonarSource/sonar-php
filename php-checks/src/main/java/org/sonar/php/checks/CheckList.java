@@ -35,6 +35,7 @@ import org.sonar.php.checks.phpunit.AssertionArgumentOrderCheck;
 import org.sonar.php.checks.phpunit.AssertionCompareToSelfCheck;
 import org.sonar.php.checks.phpunit.AssertionInTryCatchCheck;
 import org.sonar.php.checks.phpunit.BooleanOrNullLiteralInAssertionsCheck;
+import org.sonar.php.checks.phpunit.ExceptionTestingCheck;
 import org.sonar.php.checks.phpunit.NoAssertionInTestCheck;
 import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
 import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
@@ -128,6 +129,7 @@ public class CheckList {
       EmptyStatementCheck.class,
       EncryptionModeAndPaddingCheck.class,
       EvalUseCheck.class,
+      ExceptionTestingCheck.class,
       ExitOrDieUsageCheck.class,
       ExpressionComplexityCheck.class,
       FieldNameCheck.class,
