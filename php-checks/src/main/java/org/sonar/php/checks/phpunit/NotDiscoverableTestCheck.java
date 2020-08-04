@@ -94,7 +94,7 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     return testMethods.stream().anyMatch(t -> callPathExists(t, methodName));
   }
 
-  // Perform a DFS to check if a path between to internal methods exists
+  // Perform a DFS to check if a path between two internal methods exists
   private boolean callPathExists(String start, String end) {
     Set<String> visited = new HashSet<>();
     Deque<String> stack = new ArrayDeque<>();
