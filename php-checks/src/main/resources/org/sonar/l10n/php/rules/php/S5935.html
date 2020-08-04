@@ -1,0 +1,31 @@
+<p>PHPUnit provides helper functions and annotations to verify that a given block of code throws an exception and to assert different properties of
+that exception. The provided helper functions are:</p>
+<p> - <em>expectException()</em></p>
+<p> - <em>expectExceptionCode()</em></p>
+<p> - <em>expectExceptionMessage()</em></p>
+<p> - <em>expectExceptionMessageRegExp()</em></p>
+<p>This check raises an issue when the throw of an exception is verified using a&nbsp;_try-catch_ approach instead of relying on the provided helper
+functions.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+public function testA()
+{
+    try {
+        doSomething();
+        $this-&gt;fail("Assertion should have been thrown");
+    } catch (MyException $e) {
+        assertEquals("Exception message", $e-&gt;getMessage());
+    }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+public function testB()
+{
+    $this-&gt;expectException(MyException::class);
+    $this-&gt;expectExceptionMessage("Exception message");
+
+    doSomething();
+}{code}
+</pre>
+
