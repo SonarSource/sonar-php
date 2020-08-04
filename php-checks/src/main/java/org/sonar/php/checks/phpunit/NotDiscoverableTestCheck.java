@@ -33,8 +33,12 @@ import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 @Rule(key = "S5899")
@@ -48,7 +52,8 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     "teardownafterclass");
   private static final Set<String> SELF_OBJECTS = ImmutableSet.of("$this", "self", "static");
 
-  private Set<String> internalCalledMethods = new HashSet<>();
+  private Map<String, Set<String>> internalCalledMethods = new HashMap<>();
+  private Set<String> testMethods = new HashSet<>();
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -64,6 +69,7 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     InternalCallsFindVisitor callsFindVisitor = new InternalCallsFindVisitor();
     tree.accept(callsFindVisitor);
     internalCalledMethods = callsFindVisitor.calledFunctions;
+    testMethods = callsFindVisitor.testMethods;
 
     super.visitPhpUnitTestCase(tree);
   }
@@ -77,14 +83,37 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     if (!CheckUtils.isPublic(tree) && isMarkedAsTestMethod(tree)) {
       context().newIssue(this, tree.name(), MESSAGE_VISIBLE);
     } else if (CheckUtils.isPublic(tree) && !isMarkedAsTestMethod(tree)
-      && isUncalledMethod(tree) && methodContainsAssertions(tree)) {
+               && !isCalledMethod(tree) && methodContainsAssertions(tree)) {
       context().newIssue(this, tree.name(), MESSAGE_MARKED);
     }
   }
 
-  private boolean isUncalledMethod(MethodDeclarationTree tree) {
-    return !internalCalledMethods.contains(tree.name().text().toLowerCase(Locale.ROOT))
-      && !OVERRIDABLE_METHODS.contains(tree.name().text().toLowerCase(Locale.ROOT));
+  private boolean isCalledMethod(MethodDeclarationTree tree) {
+    String methodName = tree.name().text().toLowerCase(Locale.ROOT);
+
+    return testMethods.stream().anyMatch(t -> callPathExists(t, methodName));
+  }
+
+  // Perform a DFS to check if a path between to internal methods exists
+  private boolean callPathExists(String start, String end) {
+    Set<String> visited = new HashSet<>();
+    Deque<String> stack = new ArrayDeque<>();
+
+    stack.push(start);
+    while (!stack.isEmpty()) {
+      String currentEl = stack.pop();
+
+      if (currentEl.equals(end)) {
+        return true;
+      }
+
+      if (!visited.contains(currentEl) && internalCalledMethods.containsKey(currentEl)) {
+        visited.add(currentEl);
+        internalCalledMethods.get(currentEl).forEach(stack::push);
+      }
+    }
+
+    return false;
   }
 
   private static boolean methodContainsAssertions(MethodDeclarationTree tree) {
@@ -98,17 +127,29 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
   }
 
   private static class InternalCallsFindVisitor extends PhpUnitCheck {
-    private final Set<String> calledFunctions = new HashSet<>();
+    private final Map<String, Set<String>> calledFunctions = new HashMap<>();
+    private final Set<String> testMethods = new HashSet<>();
+    private String currentMethodName;
+
+    @Override
+    public void visitMethodDeclaration(MethodDeclarationTree tree) {
+      currentMethodName = tree.name().text().toLowerCase(Locale.ROOT);
+      if (OVERRIDABLE_METHODS.contains(currentMethodName)) {
+        testMethods.add(currentMethodName);
+      }
+      super.visitMethodDeclaration(tree);
+    }
+
+    @Override
+    protected void visitPhpUnitTestMethod(MethodDeclarationTree tree) {
+      testMethods.add(currentMethodName);
+    }
 
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
-      if (!isPhpUnitTestMethod()) {
-        return;
-      }
-
       String functionName = getFunctionName(tree);
       if (functionName != null && isInternalMethodCall(tree)) {
-        calledFunctions.add(functionName);
+        calledFunctions.computeIfAbsent(currentMethodName, f -> new HashSet<>()).add(functionName);
       }
 
       super.visitFunctionCall(tree);
