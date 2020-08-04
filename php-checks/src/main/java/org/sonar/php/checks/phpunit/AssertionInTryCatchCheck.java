@@ -64,7 +64,7 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
   }
 
   private void raiseIssue(FunctionCallTree assertion, List<NamespaceNameTree> caughtRelevantExceptionTypes) {
-    PreciseIssue issue = context().newIssue(this, assertion, MESSAGE);
+    PreciseIssue issue = newIssue(assertion, MESSAGE);
     caughtRelevantExceptionTypes.forEach(e -> issue.secondary(e, SECONDARY_MESSAGE));
   }
 

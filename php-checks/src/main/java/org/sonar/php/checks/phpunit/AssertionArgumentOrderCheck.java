@@ -45,7 +45,7 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
         ExpressionTree expected = tree.arguments().get(0);
         ExpressionTree actual = tree.arguments().get(1);
         if (getAssignedValue(actual).is(LITERAL) && !getAssignedValue(expected).is(LITERAL)) {
-          context().newIssue(this, actual, MESSAGE).secondary(expected, null);
+          newIssue(actual, MESSAGE).secondary(expected, null);
         }
       }
     }

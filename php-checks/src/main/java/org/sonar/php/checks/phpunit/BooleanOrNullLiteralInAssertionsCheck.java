@@ -78,8 +78,7 @@ public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
       literalValue = "!" + literalValue;
     }
 
-    context().newIssue(this, functionCallTree,
-      String.format(MESSAGE, REPLACEMENT_ASSERTIONS.get(literalValue)));
+    newIssue(functionCallTree, String.format(MESSAGE, REPLACEMENT_ASSERTIONS.get(literalValue)));
   }
 
   private static Optional<LiteralTreeImpl> findLiteralArgument(FunctionCallTree tree) {

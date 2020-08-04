@@ -600,4 +600,9 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
     }
     return symbol.qualifiedName();
   }
+
+  @Override
+  public PreciseIssue newIssue(Tree tree, String message) {
+    return context().newIssue(this, tree, message);
+  }
 }

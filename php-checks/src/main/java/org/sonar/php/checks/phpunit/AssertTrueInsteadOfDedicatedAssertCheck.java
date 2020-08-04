@@ -89,7 +89,7 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
   }
 
   private void reportIssue(FunctionCallTree problematicAssertionCall, ReplacementAssertion replacementAssertion, ExpressionTree argumentExpression) {
-    context().newIssue(this, problematicAssertionCall, replacementAssertion.useInsteadMessage)
+    newIssue(problematicAssertionCall, replacementAssertion.useInsteadMessage)
       .secondary(argumentExpression, replacementAssertion.secondaryExplanationMessage);
   }
 
