@@ -50,6 +50,20 @@ class AbstractTestCase extends TestCase {
   }
 }
 
+class ChainsTest extends TestCase {
+  public function testFoo() {
+    $this->a();
+  }
+
+  public function a() {
+    $this->b();
+  }
+
+  public function b() { // Compliant
+    $this->assertTrue("abc");
+  }
+}
+
 // For coverage
 class BarClass {
   public function bar() { // Compliant
@@ -70,5 +84,26 @@ class BarTest extends TestCase {
   public function foo() {
     foo();
     new AssertNotNull();
+  }
+}
+
+class ChainsTestLoop extends TestCase {
+  public function setUp() {
+    $this->a();
+  }
+
+  public function a() {
+    if ($x) {
+      $this->c();
+    }
+    $this->b();
+  }
+
+  public function b() { // Compliant
+    $this->assertTrue("abc");
+  }
+
+  public function c() {
+    $this->a();
   }
 }
