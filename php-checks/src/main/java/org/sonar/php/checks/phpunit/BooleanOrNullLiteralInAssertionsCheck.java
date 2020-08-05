@@ -82,6 +82,10 @@ public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
   }
 
   private static Optional<LiteralTreeImpl> findLiteralArgument(FunctionCallTree tree) {
+    if (tree.arguments().size() < 2) {
+      return Optional.empty();
+    }
+
     ExpressionTree firstArgument = tree.arguments().get(0);
     ExpressionTree secondArgument = tree.arguments().get(1);
 
