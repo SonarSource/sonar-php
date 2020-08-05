@@ -44,10 +44,12 @@ public class OneExpectedCheckExceptionCheck extends PhpUnitCheck {
 
   @Override
   public void visitTryStatement(TryStatementTree tree) {
-    if (isPhpUnitTestMethod()) {
-      tree.block().accept(tryBlockVisitor);
-      checkFunctionCallCount(tree);
+    if (!isPhpUnitTestMethod()) {
+      return;
     }
+
+    tree.block().accept(tryBlockVisitor);
+    checkFunctionCallCount(tree);
 
     super.visitTryStatement(tree);
   }

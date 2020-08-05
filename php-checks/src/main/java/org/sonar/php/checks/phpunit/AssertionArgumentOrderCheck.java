@@ -39,14 +39,16 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (isPhpUnitTestMethod()) {
-      Optional<Assertion> assertion = getAssertion(tree);
-      if (tree.arguments().size() >= 2 && assertion.isPresent() && assertion.get().hasExpectedValue()) {
-        ExpressionTree expected = tree.arguments().get(0);
-        ExpressionTree actual = tree.arguments().get(1);
-        if (getAssignedValue(actual).is(LITERAL) && !getAssignedValue(expected).is(LITERAL)) {
-          newIssue(actual, MESSAGE).secondary(expected, null);
-        }
+    if (!isPhpUnitTestMethod()) {
+      return;
+    }
+
+    Optional<Assertion> assertion = getAssertion(tree);
+    if (tree.arguments().size() >= 2 && assertion.isPresent() && assertion.get().hasExpectedValue()) {
+      ExpressionTree expected = tree.arguments().get(0);
+      ExpressionTree actual = tree.arguments().get(1);
+      if (getAssignedValue(actual).is(LITERAL) && !getAssignedValue(expected).is(LITERAL)) {
+        newIssue(actual, MESSAGE).secondary(expected, null);
       }
     }
 
