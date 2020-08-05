@@ -72,10 +72,6 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
   private static boolean isLastInMethodBody(TryStatementTree tree) {
     MethodDeclarationTree method = (MethodDeclarationTree) TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Tree.Kind.METHOD_DECLARATION));
 
-    if (method == null) {
-      return false;
-    }
-
     BlockTree methodBody = (BlockTree) method.body();
 
     return methodBody.statements().get(methodBody.statements().size() - 1) == tree;
