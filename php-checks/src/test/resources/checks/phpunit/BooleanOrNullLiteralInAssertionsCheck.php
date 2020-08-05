@@ -34,7 +34,13 @@ class MyTest extends TestCase {
 
 // For coverage
 class Foo {
-  public function bar () {
+  public function bar() {
     foo();
+  }
+}
+
+class Bar extends TestCase {
+  public function testBar() {
+    $this->assertEquals($x);
   }
 }
