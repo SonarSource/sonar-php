@@ -1,0 +1,17 @@
+{
+  "title": "Framework-provided functions should be used to test exceptions",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "tests",
+    "phpunit"
+  ],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-5935",
+  "sqKey": "S5935",
+  "scope": "All"
+}
