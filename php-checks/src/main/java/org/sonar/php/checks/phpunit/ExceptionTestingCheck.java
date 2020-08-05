@@ -40,6 +40,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Rule(key = "S5935")
@@ -71,6 +72,8 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
 
   private static boolean isLastInMethodBody(TryStatementTree tree) {
     MethodDeclarationTree method = (MethodDeclarationTree) TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Tree.Kind.METHOD_DECLARATION));
+
+    Objects.requireNonNull(method);
 
     BlockTree methodBody = (BlockTree) method.body();
 
