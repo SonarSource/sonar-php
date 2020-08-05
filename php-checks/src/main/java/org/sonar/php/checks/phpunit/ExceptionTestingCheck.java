@@ -23,9 +23,11 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -57,7 +59,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
       return;
     }
 
-    if (tree.catchBlocks().size() == 1 && containsCallToFail(tree.block())) {
+    if (isLastInMethodBody(tree) && tree.catchBlocks().size() == 1 && containsCallToFail(tree.block())) {
       CatchBlockInspector catchBlockInspector = new CatchBlockInspector(tree.catchBlocks().get(0).variable(), context().symbolTable());
       tree.catchBlocks().get(0).block().accept(catchBlockInspector);
       if (!catchBlockInspector.didFindOtherCalls) {
@@ -66,6 +68,18 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     }
 
     super.visitTryStatement(tree);
+  }
+
+  private boolean isLastInMethodBody(TryStatementTree tree) {
+    MethodDeclarationTree method = (MethodDeclarationTree) TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Tree.Kind.METHOD_DECLARATION));
+
+    if (method == null) {
+      return false;
+    }
+
+    BlockTree methodBody = (BlockTree) method.body();
+
+    return methodBody.statements().get(methodBody.statements().size() - 1) == tree;
   }
 
   private void raiseIssue(VariableIdentifierTree variable, CatchBlockInspector catchBlockInspector) {
