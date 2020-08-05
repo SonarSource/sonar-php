@@ -39,7 +39,9 @@ import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -82,12 +84,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
 
   private void raiseIssue(VariableIdentifierTree variable, CatchBlockInspector catchBlockInspector) {
     PreciseIssue issue = newIssue(variable, MESSAGE);
-    if (catchBlockInspector.foundMessageAssertion != null) {
-      issue.secondary(catchBlockInspector.foundMessageAssertion, MESSAGE_MESSAGE);
-    }
-    if (catchBlockInspector.foundCodeAssertion != null) {
-      issue.secondary(catchBlockInspector.foundCodeAssertion, MESSAGE_CODE);
-    }
+    catchBlockInspector.foundExceptionAssertions.forEach(issue::secondary);
   }
 
   private static boolean containsCallToFail(BlockTree block) {
@@ -109,8 +106,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     private final Symbol exceptionVariableSymbol;
     private final SymbolTable symbolTable;
     private boolean didFindOtherCalls = false;
-    private FunctionCallTree foundMessageAssertion;
-    private FunctionCallTree foundCodeAssertion;
+    private final Map<Tree, String> foundExceptionAssertions = new HashMap<>();
 
     public CatchBlockInspector(VariableIdentifierTree variable, SymbolTable symbolTable) {
       this.symbolTable = symbolTable;
@@ -130,9 +126,9 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
         .orElse(getExceptionVariableMethodCall(tree.arguments().get(1)).orElse(null));
 
       if ("getmessage".equals(exceptionMethodCall)) {
-        foundMessageAssertion = tree;
+        foundExceptionAssertions.put(tree, MESSAGE_MESSAGE);
       } else if ("getcode".equals(exceptionMethodCall)) {
-        foundCodeAssertion = tree;
+        foundExceptionAssertions.put(tree, MESSAGE_CODE);
       } else {
         didFindOtherCalls = true;
       }
