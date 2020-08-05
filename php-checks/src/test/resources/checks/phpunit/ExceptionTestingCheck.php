@@ -41,6 +41,16 @@ class MyTest extends TestCase {
      }
   }
 
+  public function testA1111() {
+       try {
+        doSomething();
+        $this->fail();
+       } catch(Exception $e) { // Compliant - Switch is not last statement in method.
+        $this->assertEquals(123, $e->getCode());
+       }
+       assertTrue(doSomething());
+    }
+
   public function testA2() {
      try {
       doSomething();

@@ -49,9 +49,8 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
   private static final String MESSAGE_MESSAGE = "Use expectExceptionMessage() instead.";
 
   private static final List<String> RELEVANT_ASSERTIONS = ImmutableList.of(
-    "assertequals",
-    "assertsame"
-  );
+    "assertEquals",
+    "assertSame");
 
   @Override
   public void visitTryStatement(TryStatementTree tree) {
@@ -70,7 +69,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     super.visitTryStatement(tree);
   }
 
-  private boolean isLastInMethodBody(TryStatementTree tree) {
+  private static boolean isLastInMethodBody(TryStatementTree tree) {
     MethodDeclarationTree method = (MethodDeclarationTree) TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Tree.Kind.METHOD_DECLARATION));
 
     if (method == null) {
@@ -84,15 +83,15 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
 
   private void raiseIssue(VariableIdentifierTree variable, CatchBlockInspector catchBlockInspector) {
     PreciseIssue issue = newIssue(variable, MESSAGE);
-    if (catchBlockInspector.foundMessageAssertions != null) {
-      issue.secondary(catchBlockInspector.foundMessageAssertions, MESSAGE_MESSAGE);
+    if (catchBlockInspector.foundMessageAssertion != null) {
+      issue.secondary(catchBlockInspector.foundMessageAssertion, MESSAGE_MESSAGE);
     }
     if (catchBlockInspector.foundCodeAssertion != null) {
       issue.secondary(catchBlockInspector.foundCodeAssertion, MESSAGE_CODE);
     }
   }
 
-  private boolean containsCallToFail(BlockTree block) {
+  private static boolean containsCallToFail(BlockTree block) {
     int numberOfStatements = block.statements().size();
     return numberOfStatements > 0 && isCallToFail(block.statements().get(numberOfStatements - 1));
   }
@@ -111,7 +110,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     private final Symbol exceptionVariableSymbol;
     private final SymbolTable symbolTable;
     private boolean didFindOtherCalls = false;
-    private FunctionCallTree foundMessageAssertions;
+    private FunctionCallTree foundMessageAssertion;
     private FunctionCallTree foundCodeAssertion;
 
     public CatchBlockInspector(VariableIdentifierTree variable, SymbolTable symbolTable) {
@@ -121,19 +120,20 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
 
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
-      String functionName = CheckUtils.lowerCaseFunctionName(tree);
-      if (RELEVANT_ASSERTIONS.contains(functionName)
-          && isAssertion(tree) && tree.arguments().size() >= 2) {
-        String exceptionMethodCall = getExceptionVariableMethodCall(tree.arguments().get(0))
-          .orElse(getExceptionVariableMethodCall(tree.arguments().get(1)).orElse(null));
+      Optional<Assertion> assertion = getAssertion(tree);
 
-        if ("getmessage".equals(exceptionMethodCall)) {
-          foundMessageAssertions = tree;
-        } else if ("getcode".equals(exceptionMethodCall)) {
-          foundCodeAssertion = tree;
-        } else {
-          didFindOtherCalls = true;
-        }
+      if (!assertion.isPresent() || !RELEVANT_ASSERTIONS.contains(assertion.get().name()) || tree.arguments().size() < 2) {
+        didFindOtherCalls = true;
+        return;
+      }
+
+      String exceptionMethodCall = getExceptionVariableMethodCall(tree.arguments().get(0))
+        .orElse(getExceptionVariableMethodCall(tree.arguments().get(1)).orElse(null));
+
+      if ("getmessage".equals(exceptionMethodCall)) {
+        foundMessageAssertion = tree;
+      } else if ("getcode".equals(exceptionMethodCall)) {
+        foundCodeAssertion = tree;
       } else {
         didFindOtherCalls = true;
       }
