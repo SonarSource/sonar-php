@@ -95,6 +95,30 @@ class FooClass extends TestCase {
     }
   }
 
+  public function testFoo1() {
+    try {
+    } catch (Exception $e) {
+    }
+  }
+
+  public function testFoo2() {
+    try {
+      doSomething();
+      $this->fail();
+    } catch (Exception $e) {
+      $this->assertEquals("foo");
+    }
+  }
+
+  public function testFoo3() {
+    try {
+      doSomething();
+      $this->fail();
+    } catch (Exception $e) {
+      $this->assertEquals("foo", foo());
+    }
+  }
+
   public function testBar() {
     try {
       doSomething();
