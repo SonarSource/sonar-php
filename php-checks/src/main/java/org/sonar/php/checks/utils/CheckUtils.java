@@ -315,11 +315,13 @@ public final class CheckUtils {
     if (!annotation.startsWith("@")) {
       annotation = "@"+annotation;
     }
-    for (SyntaxTrivia comment : ((PHPTree) declaration).getFirstToken().trivias()) {
-      if (StringUtils.containsIgnoreCase(comment.text(), annotation)) {
-        return true;
-      }
+
+    List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
+
+    if (!trivias.isEmpty()) {
+      return StringUtils.containsIgnoreCase(trivias.get(trivias.size() - 1).text(), annotation);
     }
+
     return false;
   }
 
