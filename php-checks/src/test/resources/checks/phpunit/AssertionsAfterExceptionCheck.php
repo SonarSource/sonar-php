@@ -14,6 +14,14 @@ class ATest extends TestCase {
         $this->assertTrue(foo()); // Noncompliant {{Refactor this test; if this assertion's argument raises an exception, the assertion will never get executed.}}
     }
 
+    /**
+    * @expectedException \RuntimeException
+    */
+    public function testAnnotation() {
+        foo();
+        $this->assertTrue(true); // Noncompliant {{Don't perform an assertion here; An exception is expected to be raised before its execution.}}
+    }
+
     public function testNoExpect() {
       $this->assertTrue(true); // Compliant
     }

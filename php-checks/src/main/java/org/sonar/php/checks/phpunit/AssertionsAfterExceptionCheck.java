@@ -43,7 +43,13 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
     "expectexceptionmessage",
     "exceptexceptioncode"
   );
-  private FunctionCallTree expectsExceptionCall;
+  private static final List<String> EXPECT_ANNOTATIONS = ImmutableList.of(
+    "expectedexception",
+    "expectexceptionmessage",
+    "expectedexceptionmessage"
+  );
+
+  private FunctionCallTree expectExceptionCall;
   private FunctionCallTree lastFunctionCall;
   private boolean hasOtherFunctionCalls;
   private final Deque<FunctionCallTree> assertionsStack = new ArrayDeque<>();
@@ -55,16 +61,27 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
       return;
     }
 
-    expectsExceptionCall = null;
+    expectExceptionCall = null;
     lastFunctionCall = null;
     hasOtherFunctionCalls = false;
     currentMethodBody = tree.body();
 
     super.visitMethodDeclaration(tree);
 
-    if (expectsExceptionCall != null && isAssertion(lastFunctionCall)) {
+    if ((expectExceptionCall != null || hasExpectAnnotation(tree))
+        && isAssertion(lastFunctionCall)) {
       newIssue(lastFunctionCall.callee(), hasOtherFunctionCalls ? MESSAGE : MESSAGE_SINGLE);
     }
+  }
+
+  private boolean hasExpectAnnotation(MethodDeclarationTree tree) {
+    for (String method : EXPECT_ANNOTATIONS) {
+      if (CheckUtils.hasAnnotation(tree, method)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @Override
@@ -75,7 +92,7 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
 
     String functionName = CheckUtils.lowerCaseFunctionName(tree);
     if (EXPECT_METHODS.contains(functionName) && isMainStatementInBody(tree)) {
-      expectsExceptionCall = tree;
+      expectExceptionCall = tree;
     } else if (isAssertion(tree)) {
       assertionsStack.add(tree);
     } else if (assertionsStack.isEmpty()) {
