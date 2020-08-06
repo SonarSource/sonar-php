@@ -32,6 +32,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+
+import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -319,7 +321,7 @@ public final class CheckUtils {
     List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
 
     if (!trivias.isEmpty()) {
-      return StringUtils.containsIgnoreCase(trivias.get(trivias.size() - 1).text(), annotation);
+      return StringUtils.containsIgnoreCase(Iterables.getLast(trivias).text(), annotation);
     }
 
     return false;
