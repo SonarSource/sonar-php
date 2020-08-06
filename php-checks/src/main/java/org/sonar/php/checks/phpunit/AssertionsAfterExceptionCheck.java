@@ -27,6 +27,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -110,6 +111,11 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
     // Do not descend into anonymous functions
+  }
+
+  @Override
+  public void visitThrowStatement(ThrowStatementTree tree) {
+    lastFunctionCall = null;
   }
 
   private boolean isMainStatementInBody(FunctionCallTree tree) {

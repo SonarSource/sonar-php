@@ -52,6 +52,17 @@ class ATest extends TestCase {
   public function testNoFunctionCall() {
     $x = "y";
   }
+
+  public function testThrowAtEnd() {
+    $this->expectException(\RuntimeException::class);
+    try {
+      doSomething();
+      $this->fail();
+    } catch(\FooException $e) {}
+
+    $this->assertTrue($a); // Compliant
+    throw $e;
+  }
 }
 
 // For coverage
