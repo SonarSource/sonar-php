@@ -23,6 +23,8 @@ import java.util.Iterator;
 
 import javax.annotation.Nullable;
 
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -46,6 +48,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
   private final ParameterListTree parameters;
   private final ReturnTypeClauseTree returnTypeClause;
   private final BlockTree body;
+  private FunctionSymbol symbol;
 
   public FunctionDeclarationTreeImpl(
     InternalSyntaxToken functionToken,
@@ -110,4 +113,11 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
     visitor.visitFunctionDeclaration(this);
   }
 
+  public FunctionSymbol symbol() {
+    return symbol;
+  }
+
+  public void setSymbol(FunctionSymbol symbol) {
+    this.symbol = symbol;
+  }
 }

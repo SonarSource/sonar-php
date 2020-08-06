@@ -27,14 +27,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ClassSymbolIndex;
+import org.sonar.php.symbols.FunctionSymbol;
+import org.sonar.php.symbols.FunctionSymbolData;
+import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -58,6 +63,8 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private Scope globalScope;
   private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
   private ClassSymbolIndex classSymbolIndex;
+  private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
+  private FunctionSymbolIndex functionSymbolIndex;
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -75,6 +82,12 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     classSymbolDataByTree.forEach((declaration, symbolData) -> {
       ClassSymbol symbol = classSymbolIndex.get(symbolData);
       ((ClassDeclarationTreeImpl) declaration).setSymbol(symbol);
+    });
+
+    functionSymbolIndex = FunctionSymbolIndex.create(new HashSet<>(functionSymbolDataByTree.values()), projectSymbolData);
+    functionSymbolDataByTree.forEach((declaration, symbolData) -> {
+      FunctionSymbol symbol = functionSymbolIndex.get(symbolData);
+      ((FunctionDeclarationTreeImpl) declaration).setSymbol(symbol);
     });
   }
 
@@ -97,6 +110,10 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    IdentifierTree name = tree.name();
+    SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
+    functionSymbolDataByTree.put(tree, new FunctionSymbolData(location(name), qualifiedName));
+
     symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
     super.visitFunctionDeclaration(tree);
   }
