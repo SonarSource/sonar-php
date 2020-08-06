@@ -22,6 +22,8 @@ package org.sonar.php.checks.utils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -32,6 +34,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -315,11 +318,13 @@ public final class CheckUtils {
     if (!annotation.startsWith("@")) {
       annotation = "@"+annotation;
     }
-    for (SyntaxTrivia comment : ((PHPTree) declaration).getFirstToken().trivias()) {
-      if (StringUtils.containsIgnoreCase(comment.text(), annotation)) {
-        return true;
-      }
+
+    List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
+
+    if (!trivias.isEmpty()) {
+      return StringUtils.containsIgnoreCase(Iterables.getLast(trivias).text(), annotation);
     }
+
     return false;
   }
 
