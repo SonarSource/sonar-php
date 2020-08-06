@@ -69,7 +69,7 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
     super.visitMethodDeclaration(tree);
 
     if ((expectExceptionCall != null || hasExpectAnnotation(tree))
-        && isAssertion(lastFunctionCall)) {
+      && lastFunctionCall != null && isAssertion(lastFunctionCall)) {
       newIssue(lastFunctionCall.callee(), hasOtherFunctionCalls ? MESSAGE : MESSAGE_SINGLE);
     }
   }
