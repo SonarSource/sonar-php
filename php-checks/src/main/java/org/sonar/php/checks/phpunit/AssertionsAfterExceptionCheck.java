@@ -74,7 +74,7 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
     }
   }
 
-  private boolean hasExpectAnnotation(MethodDeclarationTree tree) {
+  private static boolean hasExpectAnnotation(MethodDeclarationTree tree) {
     for (String method : EXPECT_ANNOTATIONS) {
       if (CheckUtils.hasAnnotation(tree, method)) {
         return true;
