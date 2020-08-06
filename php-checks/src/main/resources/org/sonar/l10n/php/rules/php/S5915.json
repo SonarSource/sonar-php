@@ -8,8 +8,8 @@
   },
   "tags": [
     "tests",
-    "unused",
-    "pitfall"
+    "pitfall",
+    "phpunit"
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-5915",
