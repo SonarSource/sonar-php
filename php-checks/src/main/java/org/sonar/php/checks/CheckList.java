@@ -34,6 +34,7 @@ import org.sonar.php.checks.phpunit.AssertTrueInsteadOfDedicatedAssertCheck;
 import org.sonar.php.checks.phpunit.AssertionArgumentOrderCheck;
 import org.sonar.php.checks.phpunit.AssertionCompareToSelfCheck;
 import org.sonar.php.checks.phpunit.AssertionInTryCatchCheck;
+import org.sonar.php.checks.phpunit.AssertionsAfterExceptionCheck;
 import org.sonar.php.checks.phpunit.BooleanOrNullLiteralInAssertionsCheck;
 import org.sonar.php.checks.phpunit.ExceptionTestingCheck;
 import org.sonar.php.checks.phpunit.NoAssertionInTestCheck;
@@ -76,6 +77,7 @@ public class CheckList {
       AssertionArgumentOrderCheck.class,
       AssertionCompareToSelfCheck.class,
       AssertionInTryCatchCheck.class,
+      AssertionsAfterExceptionCheck.class,
       AssertTrueInsteadOfDedicatedAssertCheck.class,
       AssignmentInSubExpressionCheck.class,
       AtLeastThreeCasesInSwitchCheck.class,

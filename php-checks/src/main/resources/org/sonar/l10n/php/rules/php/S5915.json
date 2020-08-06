@@ -1,0 +1,18 @@
+{
+  "title": "Assertions should not be made at the end of blocks expecting an exception",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "tests",
+    "pitfall",
+    "phpunit"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-5915",
+  "sqKey": "S5915",
+  "scope": "Tests"
+}
