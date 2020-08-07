@@ -126,6 +126,14 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     return classSymbolIndex;
   }
 
+  public Collection<FunctionSymbolData> functionSymbolData() {
+    return functionSymbolDataByTree.values();
+  }
+
+  public FunctionSymbolIndex functionSymbolIndex() {
+    return functionSymbolIndex;
+  }
+
   private LocationInFile location(Tree tree) {
     if (filePath == null) {
       return UnknownLocationInFile.UNKNOWN_LOCATION;

@@ -32,14 +32,24 @@ public class ProjectSymbolData {
 
   private final BuiltinSymbolData builtinSymbolData = BuiltinSymbolData.BUILTINS;
   private final Map<QualifiedName, ClassSymbolData> classSymbolsByQualifiedName = new HashMap<>();
+  private final Map<QualifiedName, FunctionSymbolData> functionSymbolsByQualifiedName = new HashMap<>();
 
   public void add(ClassSymbolData classSymbolData) {
     classSymbolsByQualifiedName.put(classSymbolData.qualifiedName(), classSymbolData);
   }
 
+  public void add(FunctionSymbolData functionSymbolData) {
+    functionSymbolsByQualifiedName.put(functionSymbolData.qualifiedName(), functionSymbolData);
+  }
+
   public Optional<ClassSymbolData> classSymbolData(QualifiedName qualifiedName) {
     ClassSymbolData value = classSymbolsByQualifiedName.get(qualifiedName);
     return value == null ? builtinSymbolData.classSymbolData(qualifiedName) : Optional.of(value);
+  }
+
+  public Optional<FunctionSymbolData> functionSymbolData(QualifiedName qualifiedName) {
+    FunctionSymbolData value = functionSymbolsByQualifiedName.get(qualifiedName);
+    return Optional.ofNullable(value);
   }
 
 }

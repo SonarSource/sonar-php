@@ -55,6 +55,7 @@ class SymbolScanner extends Scanner {
       Tree ast = parser.parse(phpFile.contents());
       SymbolTableImpl symbolTable = SymbolTableImpl.create((CompilationUnitTree) ast, new ProjectSymbolData(), phpFile);
       symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
+      symbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
     } catch (RecognitionException e) {
       LOG.debug("Parsing error in " + file);
     }

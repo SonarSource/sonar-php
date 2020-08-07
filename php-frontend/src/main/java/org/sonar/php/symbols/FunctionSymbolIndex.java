@@ -30,15 +30,21 @@ public class FunctionSymbolIndex {
     }
   }
 
+  public FunctionSymbol get(QualifiedName qualifiedName) {
+    return symbolsByQualifiedName.computeIfAbsent(qualifiedName, qn -> projectSymbolData.functionSymbolData(qn)
+      .<FunctionSymbol>map(FunctionSymbolIndex.FunctionSymbolImpl::new)
+      .orElse(new UnknownFunctionSymbol(qualifiedName)));
+  }
+
   public FunctionSymbol get(FunctionSymbolData symbolData) {
     return symbolsByData.get(symbolData);
   }
 
-  private static class FunctionSymbolImpl implements FunctionSymbol{
+  private static class FunctionSymbolImpl implements FunctionSymbol {
 
     private final FunctionSymbolData data;
 
-    public FunctionSymbolImpl(FunctionSymbolData data) {
+    private FunctionSymbolImpl(FunctionSymbolData data) {
       this.data = data;
     }
 
