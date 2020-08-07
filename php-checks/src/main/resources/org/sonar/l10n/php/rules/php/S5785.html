@@ -1,15 +1,15 @@
 <p>Testing equality or nullness with PHPUnit's <code>assertTrue()</code> or <code>assertFalse()</code> should be simplified to the corresponding
-dedicated replacementAssertion.</p>
+dedicated assertion.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-assertTrue($a == $b);
 assertTrue($a === $b);
+assertTrue($a == $b);
 assertTrue($a === null);
 assertTrue($a !== null);
-assertTrue($a != $b);
 assertTrue($a !== $b);
-assertFalse($a == $b);
+assertTrue($a != $b);
 assertFalse($a === $b);
+assertFalse($a == $b);
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
