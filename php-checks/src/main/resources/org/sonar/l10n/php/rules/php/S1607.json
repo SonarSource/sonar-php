@@ -1,5 +1,5 @@
 {
-  "title": "Test should not be incomplete or skipped",
+  "title": "A reason should be provided when skipping a test",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

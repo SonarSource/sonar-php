@@ -4,7 +4,7 @@ that exception. The provided helper functions are:</p>
 <p> - <em>expectExceptionCode()</em></p>
 <p> - <em>expectExceptionMessage()</em></p>
 <p> - <em>expectExceptionMessageRegExp()</em></p>
-<p>This check raises an issue when the throw of an exception is verified using a&nbsp;_try-catch_ approach instead of relying on the provided helper
+<p>This check raises an issue when the throw of an exception is verified using a <em>try-catch</em> approach instead of relying on the provided helper
 functions.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
@@ -26,6 +26,8 @@ public function testB()
     $this-&gt;expectExceptionMessage("Exception message");
 
     doSomething();
-}{code}
+}
 </pre>
+<h2>See</h2>
+<p>thePHP.cc: <a href="https://thephp.cc/news/2016/02/questioning-phpunit-best-practices">Questioning PHPUnit Best Practice</a></p>
 
