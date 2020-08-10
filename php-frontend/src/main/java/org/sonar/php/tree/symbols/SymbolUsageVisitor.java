@@ -66,7 +66,7 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (tree.callee().is(Tree.Kind.NAMESPACE_NAME)) {
+    if (!tree.getParent().is(Tree.Kind.NEW_EXPRESSION) && tree.callee().is(Tree.Kind.NAMESPACE_NAME)) {
       resolveFunctionSymbol((NamespaceNameTree) tree.callee());
     }
     super.visitFunctionCall(tree);
