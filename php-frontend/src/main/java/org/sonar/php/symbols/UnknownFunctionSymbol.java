@@ -22,6 +22,9 @@ package org.sonar.php.symbols;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UnknownFunctionSymbol implements FunctionSymbol {
   private final QualifiedName qualifiedName;
 
@@ -37,6 +40,11 @@ public class UnknownFunctionSymbol implements FunctionSymbol {
   @Override
   public QualifiedName qualifiedName() {
     return qualifiedName;
+  }
+
+  @Override
+  public List<FunctionSymbolData.Parameter> parameters() {
+    return new ArrayList<>();
   }
 
   @Override

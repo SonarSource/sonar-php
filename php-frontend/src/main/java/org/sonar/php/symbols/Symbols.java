@@ -50,6 +50,6 @@ public class Symbols {
     if (symbol instanceof FunctionSymbol) {
       return (FunctionSymbol) symbol;
     }
-    throw new IllegalStateException("No class symbol available on " + namespaceNameTree);
+    throw new IllegalStateException("No function symbol available on " + namespaceNameTree);
   }
 }

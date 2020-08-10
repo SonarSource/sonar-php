@@ -23,7 +23,6 @@ import java.util.Iterator;
 
 import javax.annotation.Nullable;
 
-import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;

@@ -51,7 +51,7 @@ public class FunctionSymbolData {
 
   public static class Parameter {
     private final String name;
-    private final String type; // TODO: create and use a Type class
+    private final String type;
     private final boolean hasDefault;
     private final boolean isReference;
     private final boolean hasEllipsisOperator;
