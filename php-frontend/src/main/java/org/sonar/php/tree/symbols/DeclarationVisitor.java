@@ -20,6 +20,7 @@
 package org.sonar.php.tree.symbols;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,6 +48,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
@@ -112,7 +114,13 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
-    functionSymbolDataByTree.put(tree, new FunctionSymbolData(location(name), qualifiedName));
+
+    List<FunctionSymbolData.Parameter> parameters = new ArrayList<>();
+    tree.parameters().parameters().stream()
+      .map(FunctionSymbolData.Parameter::fromTree)
+      .forEach(parameters::add);
+
+    functionSymbolDataByTree.put(tree, new FunctionSymbolData(location(name), qualifiedName, parameters));
 
     symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
     super.visitFunctionDeclaration(tree);
