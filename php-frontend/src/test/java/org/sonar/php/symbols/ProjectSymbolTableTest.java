@@ -168,8 +168,8 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void function_has_return_function_expression() {
-    PhpFile file1 = file("file1.php", "<?php function a() { $x = function() {return $y;}; }");
+  public void function_has_return_function_expression_and_inner() {
+    PhpFile file1 = file("file1.php", "<?php function a() { function foo() {return $y;} $x = function() {return $y;}; }");
     PhpFile file2 = file("file2.php", "<?php a();");
     ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2);
     Tree ast = parser.parse(file2.contents());

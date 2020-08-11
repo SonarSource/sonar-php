@@ -115,6 +115,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    boolean backDidFindReturn = didFindReturn;
     didFindReturn = false;
 
     symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
@@ -130,6 +131,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     super.visitFunctionDeclaration(tree);
 
     functionSymbolDataByTree.put(tree, new FunctionSymbolData(location(name), qualifiedName, parameters, didFindReturn));
+    didFindReturn = backDidFindReturn;
   }
 
   @Override
