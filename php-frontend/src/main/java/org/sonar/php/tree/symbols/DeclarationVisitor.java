@@ -124,10 +124,9 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
 
-    List<Parameter> parameters = new ArrayList<>();
-    tree.parameters().parameters().stream()
+    List<Parameter> parameters = tree.parameters().parameters().stream()
       .map(Parameter::fromTree)
-      .forEach(parameters::add);
+      .collect(Collectors.toList());
 
     super.visitFunctionDeclaration(tree);
 

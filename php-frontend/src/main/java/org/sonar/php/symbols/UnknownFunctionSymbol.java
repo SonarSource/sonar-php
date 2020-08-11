@@ -23,6 +23,7 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UnknownFunctionSymbol implements FunctionSymbol {
@@ -49,7 +50,7 @@ public class UnknownFunctionSymbol implements FunctionSymbol {
 
   @Override
   public List<Parameter> parameters() {
-    return new ArrayList<>();
+    return Collections.emptyList();
   }
 
   @Override

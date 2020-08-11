@@ -29,7 +29,7 @@ import java.util.Set;
 
 public class FunctionSymbolIndex {
   private final Map<QualifiedName, FunctionSymbol> symbolsByQualifiedName = new HashMap<>();
-  private final Map<FunctionSymbolData, FunctionSymbolIndex.FunctionSymbolImpl> symbolsByData = new HashMap<>();
+  private final Map<FunctionSymbolData, FunctionSymbol> symbolsByData = new HashMap<>();
   private final ProjectSymbolData projectSymbolData;
 
   public FunctionSymbolIndex(ProjectSymbolData projectSymbolData) {
