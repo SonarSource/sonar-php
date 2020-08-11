@@ -52,7 +52,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
     // only check method and function calls expect constructors with more than 1 argument
     if (!tree.getParent().is(Kind.NEW_EXPRESSION) && tree.arguments().size() > 1) {
       if (tree.callee().is(Kind.NAMESPACE_NAME)) {
-        checkFunctionCall(tree);
+        checkFunctionCall(tree, (NamespaceNameTree) tree.callee());
       } else {
         checkMethodCall(tree);
       }
@@ -75,8 +75,8 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
     }
   }
 
-  private void checkFunctionCall(FunctionCallTree tree) {
-    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree) tree.callee());
+  private void checkFunctionCall(FunctionCallTree tree, NamespaceNameTree callee) {
+    FunctionSymbol symbol = Symbols.getFunction(callee);
     List<String> parameters = symbol.parameters().stream()
       .map(Parameter::name)
       .collect(Collectors.toList());
