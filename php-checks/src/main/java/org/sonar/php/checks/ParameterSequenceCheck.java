@@ -68,7 +68,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
         .map(e -> e.variableIdentifier().text())
         .collect(Collectors.toList());
 
-      if (checkParameterSequence(tree, parameters)) {
+      if (isWrongParameterSequence(tree, parameters)) {
         context().newIssue(this, tree, String.format(MESSAGE, symbol.declaration().text())).secondary(symbol.declaration(), SECONDARY_MESSAGE);
       }
     }
@@ -80,7 +80,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
       .map(FunctionSymbolData.Parameter::name)
       .collect(Collectors.toList());
 
-    if (checkParameterSequence(tree, parameters)) {
+    if (isWrongParameterSequence(tree, parameters)) {
       context().newIssue(this, tree, String.format(MESSAGE, symbol.qualifiedName())).secondary(symbol.location(), SECONDARY_MESSAGE);
     }
   }
@@ -116,7 +116,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private boolean checkParameterSequence(FunctionCallTree call, List<String> parameters) {
+  private static boolean isWrongParameterSequence(FunctionCallTree call, List<String> parameters) {
     List<String> arguments = call.arguments().stream()
       .filter(e -> e.is(Kind.VARIABLE_IDENTIFIER))
       .map(e -> ((VariableIdentifierTree) e).text())
