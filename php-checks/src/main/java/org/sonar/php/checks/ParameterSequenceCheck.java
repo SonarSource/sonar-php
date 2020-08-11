@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.sonar.check.Rule;
+import org.sonar.php.symbols.FunctionSymbol;
+import org.sonar.php.symbols.FunctionSymbolData;
+import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -48,24 +51,45 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     // only check method and function calls expect constructors with more than 1 argument
     if (!tree.getParent().is(Kind.NEW_EXPRESSION) && tree.arguments().size() > 1) {
-      Symbol symbol = getDeclarationSymbol(tree);
-      if (symbol != null && symbol.declaration() != null && symbol.is(Symbol.Kind.FUNCTION)) {
-        checkParameterSequence(tree, (NameIdentifierTree) symbol.declaration());
+      if (tree.callee().is(Kind.NAMESPACE_NAME)) {
+        checkFunctionCall(tree);
+      } else {
+        checkMethodCall(tree);
       }
     }
 
     super.visitFunctionCall(tree);
   }
 
+  private void checkMethodCall(FunctionCallTree tree) {
+    Symbol symbol = getDeclarationSymbol(tree);
+    if (symbol != null && symbol.declaration() != null && symbol.is(Symbol.Kind.FUNCTION)) {
+      List<String> parameters = ((FunctionTree) symbol.declaration().getParent()).parameters().parameters().stream()
+        .map(e -> e.variableIdentifier().text())
+        .collect(Collectors.toList());
+
+      if (checkParameterSequence(tree, parameters)) {
+        context().newIssue(this, tree, String.format(MESSAGE, symbol.declaration().text())).secondary(symbol.declaration(), SECONDARY_MESSAGE);
+      }
+    }
+  }
+
+  private void checkFunctionCall(FunctionCallTree tree) {
+    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree) tree.callee());
+    List<String> parameters = symbol.parameters().stream()
+      .map(FunctionSymbolData.Parameter::name)
+      .collect(Collectors.toList());
+
+    if (checkParameterSequence(tree, parameters)) {
+      context().newIssue(this, tree, String.format(MESSAGE, symbol.qualifiedName())).secondary(symbol.location(), SECONDARY_MESSAGE);
+    }
+  }
+
   @CheckForNull
   private Symbol getDeclarationSymbol(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
 
-    if (callee.is(Kind.NAMESPACE_NAME)) {
-      return context().symbolTable().getSymbol(((NamespaceNameTree) callee).name());
-    } else if(isVerifiableObjectMemberAccess(callee)) {
-      return context().symbolTable().getSymbol(((MemberAccessTree) callee).member());
-    } else if(isVerifiableClassMemberAccess(callee)) {
+    if(isVerifiableObjectMemberAccess(callee) || isVerifiableClassMemberAccess(callee)) {
       return context().symbolTable().getSymbol(((MemberAccessTree) callee).member());
     }
 
@@ -92,18 +116,12 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private void checkParameterSequence(FunctionCallTree call, NameIdentifierTree identifier) {
-    List<String> parameters = ((FunctionTree) identifier.getParent()).parameters().parameters().stream()
-      .map(e -> e.variableIdentifier().text())
-      .collect(Collectors.toList());
-
+  private boolean checkParameterSequence(FunctionCallTree call, List<String> parameters) {
     List<String> arguments = call.arguments().stream()
       .filter(e -> e.is(Kind.VARIABLE_IDENTIFIER))
       .map(e -> ((VariableIdentifierTree) e).text())
       .collect(Collectors.toList());
 
-    if (arguments.size() == parameters.size() && !arguments.equals(parameters) && new HashSet<>(parameters).equals(new HashSet<>(arguments))) {
-      context().newIssue(this, call, String.format(MESSAGE, identifier.text())).secondary(identifier, SECONDARY_MESSAGE);
-    }
+    return arguments.size() == parameters.size() && !arguments.equals(parameters) && new HashSet<>(parameters).equals(new HashSet<>(arguments));
   }
 }

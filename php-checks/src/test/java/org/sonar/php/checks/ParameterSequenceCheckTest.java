@@ -26,6 +26,7 @@ public class ParameterSequenceCheckTest {
 
   @Test
   public void test() throws Exception {
-    CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck.php");
+    CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/ParameterSequenceCheck.php");
+    CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/A.php", "ParameterSequenceCheck/B.php");
   }
 }
