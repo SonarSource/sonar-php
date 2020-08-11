@@ -74,10 +74,11 @@ public class FunctionSymbolIndexTest {
     FunctionSymbol result = index.get(qualifiedName("unknown"));
     assertThat(result.isUnknownSymbol()).isTrue();
     assertThat(result.location()).isInstanceOf(UnknownLocationInFile.class);
+    assertThat(result.hasReturn()).isFalse();
   }
 
   private FunctionSymbolData data(String name) {
-    return new FunctionSymbolData(someLocation(), qualifiedName(name), new ArrayList<>());
+    return new FunctionSymbolData(someLocation(), qualifiedName(name), new ArrayList<>(), false);
   }
 
   private FunctionSymbolIndex index(FunctionSymbolData... data) {

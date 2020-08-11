@@ -30,11 +30,13 @@ public class FunctionSymbolData {
   private final LocationInFile location;
   private final QualifiedName qualifiedName;
   private final List<Parameter> parameters;
+  private final boolean hasReturn;
 
-  public FunctionSymbolData(LocationInFile location, QualifiedName qualifiedName, List<Parameter> parameters) {
+  public FunctionSymbolData(LocationInFile location, QualifiedName qualifiedName, List<Parameter> parameters, boolean hasReturn) {
     this.location = location;
     this.qualifiedName = qualifiedName;
     this.parameters = parameters;
+    this.hasReturn = hasReturn;
   }
 
   public LocationInFile location() {
@@ -47,6 +49,10 @@ public class FunctionSymbolData {
 
   public List<Parameter> parameters() {
     return parameters;
+  }
+
+  public boolean hasReturn() {
+    return hasReturn;
   }
 
   public static class Parameter {

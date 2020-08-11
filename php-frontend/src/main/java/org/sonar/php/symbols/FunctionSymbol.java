@@ -29,5 +29,7 @@ public interface FunctionSymbol extends Symbol {
 
   QualifiedName qualifiedName();
 
+  boolean hasReturn();
+
   List<FunctionSymbolData.Parameter> parameters();
 }

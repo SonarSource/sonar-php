@@ -79,6 +79,11 @@ public class FunctionSymbolIndex {
     }
 
     @Override
+    public boolean hasReturn() {
+      return data.hasReturn();
+    }
+
+    @Override
     public List<FunctionSymbolData.Parameter> parameters() {
       return data.parameters();
     }

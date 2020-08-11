@@ -43,6 +43,11 @@ public class UnknownFunctionSymbol implements FunctionSymbol {
   }
 
   @Override
+  public boolean hasReturn() {
+    return false;
+  }
+
+  @Override
   public List<FunctionSymbolData.Parameter> parameters() {
     return new ArrayList<>();
   }

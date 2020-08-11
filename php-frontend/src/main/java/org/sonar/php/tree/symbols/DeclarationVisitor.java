@@ -48,8 +48,10 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
@@ -66,6 +68,8 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private ClassSymbolIndex classSymbolIndex;
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
+
+  private boolean didFindReturn;
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -111,6 +115,10 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    didFindReturn = false;
+
+    symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
+
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
 
@@ -119,10 +127,22 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .map(FunctionSymbolData.Parameter::fromTree)
       .forEach(parameters::add);
 
-    functionSymbolDataByTree.put(tree, new FunctionSymbolData(location(name), qualifiedName, parameters));
-
-    symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
     super.visitFunctionDeclaration(tree);
+
+    functionSymbolDataByTree.put(tree, new FunctionSymbolData(location(name), qualifiedName, parameters, didFindReturn));
+  }
+
+  @Override
+  public void visitReturnStatement(ReturnStatementTree tree) {
+    didFindReturn = true;
+    super.visitReturnStatement(tree);
+  }
+
+  @Override
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    boolean backDidFindReturn = didFindReturn;
+    super.visitFunctionExpression(tree);
+    didFindReturn = backDidFindReturn;
   }
 
   public Collection<ClassSymbolData> classSymbolData() {
