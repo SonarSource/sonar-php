@@ -17,16 +17,43 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.symbols;
 
-import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-public class ParameterSequenceCheckTest {
+import java.util.Collections;
+import java.util.List;
 
-  @Test
-  public void test() throws Exception {
-    CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/ParameterSequenceCheck.php");
-    CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/A.php", "ParameterSequenceCheck/B.php");
+public class UnknownFunctionSymbol implements FunctionSymbol {
+  private final QualifiedName qualifiedName;
+
+  public UnknownFunctionSymbol(QualifiedName qualifiedName) {
+    this.qualifiedName = qualifiedName;
+  }
+
+  @Override
+  public LocationInFile location() {
+    return UnknownLocationInFile.UNKNOWN_LOCATION;
+  }
+
+  @Override
+  public QualifiedName qualifiedName() {
+    return qualifiedName;
+  }
+
+  @Override
+  public boolean hasReturn() {
+    return false;
+  }
+
+  @Override
+  public List<Parameter> parameters() {
+    return Collections.emptyList();
+  }
+
+  @Override
+  public boolean isUnknownSymbol() {
+    return true;
   }
 }

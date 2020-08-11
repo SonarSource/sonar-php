@@ -21,6 +21,8 @@ package org.sonar.php.tree.symbols;
 
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolIndex;
+import org.sonar.php.symbols.FunctionSymbol;
+import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -34,10 +36,12 @@ import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
 
   private final ClassSymbolIndex classSymbolIndex;
+  private final FunctionSymbolIndex functionSymbolIndex;
 
-  SymbolUsageVisitor(SymbolTableImpl symbolTable, ClassSymbolIndex classSymbolIndex) {
+  SymbolUsageVisitor(SymbolTableImpl symbolTable, ClassSymbolIndex classSymbolIndex, FunctionSymbolIndex functionSymbolIndex) {
     super(symbolTable);
     this.classSymbolIndex = classSymbolIndex;
+    this.functionSymbolIndex = functionSymbolIndex;
   }
 
   @Override
@@ -60,9 +64,23 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
     super.visitNewExpression(tree);
   }
 
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    if (!tree.getParent().is(Tree.Kind.NEW_EXPRESSION) && tree.callee().is(Tree.Kind.NAMESPACE_NAME)) {
+      resolveFunctionSymbol((NamespaceNameTree) tree.callee());
+    }
+    super.visitFunctionCall(tree);
+  }
+
   private void resolveClassSymbol(NamespaceNameTree namespaceName) {
     QualifiedName fqn = getFullyQualifiedName(namespaceName, Symbol.Kind.CLASS);
     ClassSymbol classSymbol = classSymbolIndex.get(fqn);
     ((NamespaceNameTreeImpl) namespaceName).setSymbol(classSymbol);
+  }
+
+  private void resolveFunctionSymbol(NamespaceNameTree namespaceNameTree) {
+    QualifiedName fqn = getFullyQualifiedName(namespaceNameTree, Symbol.Kind.FUNCTION);
+    FunctionSymbol functionSymbol = functionSymbolIndex.get(fqn);
+    ((NamespaceNameTreeImpl) namespaceNameTree).setSymbol(functionSymbol);
   }
 }

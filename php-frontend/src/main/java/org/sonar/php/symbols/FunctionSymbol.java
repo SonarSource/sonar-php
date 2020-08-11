@@ -17,16 +17,19 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.symbols;
 
-import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-public class ParameterSequenceCheckTest {
+import java.util.List;
 
-  @Test
-  public void test() throws Exception {
-    CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/ParameterSequenceCheck.php");
-    CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/A.php", "ParameterSequenceCheck/B.php");
-  }
+public interface FunctionSymbol extends Symbol {
+  LocationInFile location();
+
+  QualifiedName qualifiedName();
+
+  boolean hasReturn();
+
+  List<Parameter> parameters();
 }

@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
+
+import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -46,6 +48,7 @@ public class SymbolTableImpl implements SymbolTable {
   private Map<Tree, Symbol> symbolsByTree = new HashMap<>();
   private Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
   private Collection<ClassSymbolData> classSymbolData;
+  private Collection<FunctionSymbolData> functionSymbolData;
 
   private SymbolTableImpl() {
   }
@@ -59,8 +62,13 @@ public class SymbolTableImpl implements SymbolTable {
     DeclarationVisitor declarationVisitor = new DeclarationVisitor(symbolModel, projectSymbolData, file);
     declarationVisitor.visitCompilationUnit(compilationUnit);
     symbolModel.classSymbolData = declarationVisitor.classSymbolData();
+    symbolModel.functionSymbolData = declarationVisitor.functionSymbolData();
     new SymbolVisitor(symbolModel).visitCompilationUnit(compilationUnit);
-    new SymbolUsageVisitor(symbolModel, declarationVisitor.classSymbolIndex()).visitCompilationUnit(compilationUnit);
+    new SymbolUsageVisitor(
+      symbolModel,
+      declarationVisitor.classSymbolIndex(),
+      declarationVisitor.functionSymbolIndex()
+    ).visitCompilationUnit(compilationUnit);
     return symbolModel;
   }
 
@@ -176,5 +184,9 @@ public class SymbolTableImpl implements SymbolTable {
 
   public Collection<ClassSymbolData> classSymbolDatas() {
     return classSymbolData;
+  }
+
+  public Collection<FunctionSymbolData> functionSymbolDatas() {
+    return functionSymbolData;
   }
 }

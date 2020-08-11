@@ -27,14 +27,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ClassSymbolIndex;
+import org.sonar.php.symbols.FunctionSymbol;
+import org.sonar.php.symbols.FunctionSymbolData;
+import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
+import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -42,8 +48,10 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
@@ -58,6 +66,10 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private Scope globalScope;
   private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
   private ClassSymbolIndex classSymbolIndex;
+  private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
+  private FunctionSymbolIndex functionSymbolIndex;
+
+  private boolean didFindReturn;
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -75,6 +87,12 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     classSymbolDataByTree.forEach((declaration, symbolData) -> {
       ClassSymbol symbol = classSymbolIndex.get(symbolData);
       ((ClassDeclarationTreeImpl) declaration).setSymbol(symbol);
+    });
+
+    functionSymbolIndex = FunctionSymbolIndex.create(new HashSet<>(functionSymbolDataByTree.values()), projectSymbolData);
+    functionSymbolDataByTree.forEach((declaration, symbolData) -> {
+      FunctionSymbol symbol = functionSymbolIndex.get(symbolData);
+      ((FunctionDeclarationTreeImpl) declaration).setSymbol(symbol);
     });
   }
 
@@ -97,8 +115,35 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    boolean backDidFindReturn = didFindReturn;
+    didFindReturn = false;
+
     symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
+
+    IdentifierTree name = tree.name();
+    SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
+
+    List<Parameter> parameters = tree.parameters().parameters().stream()
+      .map(Parameter::fromTree)
+      .collect(Collectors.toList());
+
     super.visitFunctionDeclaration(tree);
+
+    functionSymbolDataByTree.put(tree, new FunctionSymbolData(location(name), qualifiedName, parameters, didFindReturn));
+    didFindReturn = backDidFindReturn;
+  }
+
+  @Override
+  public void visitReturnStatement(ReturnStatementTree tree) {
+    didFindReturn = true;
+    super.visitReturnStatement(tree);
+  }
+
+  @Override
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    boolean backDidFindReturn = didFindReturn;
+    super.visitFunctionExpression(tree);
+    didFindReturn = backDidFindReturn;
   }
 
   public Collection<ClassSymbolData> classSymbolData() {
@@ -107,6 +152,14 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   public ClassSymbolIndex classSymbolIndex() {
     return classSymbolIndex;
+  }
+
+  public Collection<FunctionSymbolData> functionSymbolData() {
+    return functionSymbolDataByTree.values();
+  }
+
+  public FunctionSymbolIndex functionSymbolIndex() {
+    return functionSymbolIndex;
   }
 
   private LocationInFile location(Tree tree) {
