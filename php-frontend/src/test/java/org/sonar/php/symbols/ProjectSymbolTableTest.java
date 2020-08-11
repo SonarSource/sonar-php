@@ -148,7 +148,6 @@ public class ProjectSymbolTableTest {
     assertThat(symbol.parameters()).hasSize(3);
     assertThat(symbol.parameters().get(0).name()).isEqualTo("$x");
     assertThat(symbol.parameters().get(0).type()).isEqualTo("int");
-    assertThat(symbol.parameters().get(1).hasEllipsisOperator()).isTrue();
     assertThat(symbol.parameters().get(1).hasDefault()).isFalse();
     assertThat(symbol.parameters().get(2).hasDefault()).isTrue();
   }
