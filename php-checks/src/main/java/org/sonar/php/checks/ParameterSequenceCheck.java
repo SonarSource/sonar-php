@@ -69,7 +69,8 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
         .collect(Collectors.toList());
 
       if (isWrongParameterSequence(tree, parameters)) {
-        context().newIssue(this, tree, String.format(MESSAGE, symbol.declaration().text())).secondary(symbol.declaration(), SECONDARY_MESSAGE);
+        newIssue(tree, String.format(MESSAGE, symbol.declaration().text()))
+          .secondary(symbol.declaration(), SECONDARY_MESSAGE);
       }
     }
   }
@@ -81,7 +82,8 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
       .collect(Collectors.toList());
 
     if (isWrongParameterSequence(tree, parameters)) {
-      context().newIssue(this, tree, String.format(MESSAGE, symbol.qualifiedName())).secondary(symbol.location(), SECONDARY_MESSAGE);
+      newIssue(tree, String.format(MESSAGE, symbol.qualifiedName()))
+        .secondary(symbol.location(), SECONDARY_MESSAGE);
     }
   }
 
