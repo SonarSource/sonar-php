@@ -31,5 +31,5 @@ public interface FunctionSymbol extends Symbol {
 
   boolean hasReturn();
 
-  List<FunctionSymbolData.Parameter> parameters();
+  List<Parameter> parameters();
 }

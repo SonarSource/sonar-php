@@ -36,6 +36,7 @@ import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
+import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.tree.impl.PHPTree;
@@ -123,9 +124,9 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
 
-    List<FunctionSymbolData.Parameter> parameters = new ArrayList<>();
+    List<Parameter> parameters = new ArrayList<>();
     tree.parameters().parameters().stream()
-      .map(FunctionSymbolData.Parameter::fromTree)
+      .map(Parameter::fromTree)
       .forEach(parameters::add);
 
     super.visitFunctionDeclaration(tree);

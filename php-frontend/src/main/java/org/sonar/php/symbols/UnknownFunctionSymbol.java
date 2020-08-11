@@ -48,7 +48,7 @@ public class UnknownFunctionSymbol implements FunctionSymbol {
   }
 
   @Override
-  public List<FunctionSymbolData.Parameter> parameters() {
+  public List<Parameter> parameters() {
     return new ArrayList<>();
   }
 

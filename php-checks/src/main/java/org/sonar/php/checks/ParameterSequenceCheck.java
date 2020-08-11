@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 import org.sonar.check.Rule;
 import org.sonar.php.symbols.FunctionSymbol;
-import org.sonar.php.symbols.FunctionSymbolData;
+import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -78,7 +78,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   private void checkFunctionCall(FunctionCallTree tree) {
     FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree) tree.callee());
     List<String> parameters = symbol.parameters().stream()
-      .map(FunctionSymbolData.Parameter::name)
+      .map(Parameter::name)
       .collect(Collectors.toList());
 
     if (isWrongParameterSequence(tree, parameters)) {

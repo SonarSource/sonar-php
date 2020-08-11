@@ -84,7 +84,7 @@ public class FunctionSymbolIndex {
     }
 
     @Override
-    public List<FunctionSymbolData.Parameter> parameters() {
+    public List<Parameter> parameters() {
       return data.parameters();
     }
 
