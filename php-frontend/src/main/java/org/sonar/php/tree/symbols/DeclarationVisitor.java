@@ -20,6 +20,7 @@
 package org.sonar.php.tree.symbols;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
@@ -163,7 +164,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), qualifiedName, parameters, didFindReturn,
       visibility, currentClassQualifiedName);
     ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
-    methodsByClassTree.computeIfAbsent(currentClassTree, c -> Collections.emptyList()).add(methodSymbolData);
+    methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
 
     didFindReturn = backDidFindReturn;
   }

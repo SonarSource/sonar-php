@@ -87,7 +87,6 @@ public class PHPCheckVerifier {
       astByFile.put(file, ast);
       SymbolTableImpl symbolTable = SymbolTableImpl.create(ast, new ProjectSymbolData(), phpFile);
       symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
-      symbolTable.methodSymbolDatas().forEach(projectSymbolData::add);
       symbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
     }
 
