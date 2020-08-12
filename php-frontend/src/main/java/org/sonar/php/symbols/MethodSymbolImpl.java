@@ -20,14 +20,12 @@
 package org.sonar.php.symbols;
 
 import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-import java.util.List;
-
-public class MethodSymbolImpl implements MethodSymbol {
+public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
   private final MethodSymbolData data;
 
   public MethodSymbolImpl(MethodSymbolData data) {
+    super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.hasReturn()));
     this.data = data;
   }
 
@@ -39,30 +37,5 @@ public class MethodSymbolImpl implements MethodSymbol {
   @Override
   public QualifiedName className() {
     return data.className();
-  }
-
-  @Override
-  public LocationInFile location() {
-    return data.location();
-  }
-
-  @Override
-  public QualifiedName qualifiedName() {
-    return data.qualifiedName();
-  }
-
-  @Override
-  public boolean hasReturn() {
-    return data.hasReturn();
-  }
-
-  @Override
-  public List<Parameter> parameters() {
-    return data.parameters();
-  }
-
-  @Override
-  public boolean isUnknownSymbol() {
-    return false;
   }
 }
