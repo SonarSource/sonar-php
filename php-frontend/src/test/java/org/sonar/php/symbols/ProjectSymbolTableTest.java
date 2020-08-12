@@ -258,6 +258,19 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
+  public void get_class_methods_anonymous() {
+    PhpFile file1 = file("file1.php", "<?php class A {public function x() {$o = new class() {public function anon() {}};}}");
+    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1);
+    Tree ast = parser.parse(file1.contents());
+    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file1);
+
+    Optional<ClassDeclarationTree> classDeclaration = firstDescendant(ast, ClassDeclarationTree.class);
+    ClassSymbol classSymbol = Symbols.get(classDeclaration.get());
+    assertThat(classSymbol.methods()).hasSize(1);
+    assertThat(classSymbol.getMethod(qualifiedName("anon"))).isInstanceOf(UnknownMethodSymbol.class);
+  }
+
+  @Test
   public void get_symbol_from_method_declaration() {
     PhpFile file1 = file("file1.php", "<?php namespace SomeNamespace; class A {public function foo(){}}");
     ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1);

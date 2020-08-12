@@ -63,6 +63,7 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -87,6 +88,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   private ClassDeclarationTree currentClassTree;
   private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
+  private boolean isInAnonymousClass;
 
   private static final Set<String> VALID_VISIBILITIES = ImmutableSet.of("PUBLIC", "PRIVATE", "PROTECTED");
 
@@ -138,6 +140,14 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   }
 
   @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    boolean isInAnonymousClassBack = isInAnonymousClass;
+    isInAnonymousClass = true;
+    super.visitAnonymousClass(tree);
+    isInAnonymousClass = isInAnonymousClassBack;
+  }
+
+  @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     if (currentClassTree == null) {
       super.visitMethodDeclaration(tree);
@@ -165,7 +175,10 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), qualifiedName, parameters, didFindReturn,
       Visibility.valueOf(visibility));
     ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
-    methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
+
+    if (!isInAnonymousClass) {
+      methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
+    }
 
     didFindReturn = backDidFindReturn;
   }
