@@ -123,4 +123,8 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   public void setSymbol(MethodSymbol symbol) {
     this.symbol = symbol;
   }
+
+  public MethodSymbol getSymbol() {
+    return symbol;
+  }
 }

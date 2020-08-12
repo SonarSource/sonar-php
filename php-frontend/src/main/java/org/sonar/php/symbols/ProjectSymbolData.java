@@ -19,7 +19,6 @@
  */
 package org.sonar.php.symbols;
 
-import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
