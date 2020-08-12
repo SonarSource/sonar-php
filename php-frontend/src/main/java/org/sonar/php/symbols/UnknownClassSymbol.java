@@ -59,6 +59,11 @@ class UnknownClassSymbol extends AbstractClassSymbol {
   }
 
   @Override
+  public List<MethodSymbol> methods() {
+    return Collections.emptyList();
+  }
+
+  @Override
   public boolean isUnknownSymbol() {
     return true;
   }

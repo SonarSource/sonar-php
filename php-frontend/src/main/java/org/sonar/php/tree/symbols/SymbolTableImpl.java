@@ -30,6 +30,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.sonar.php.symbols.FunctionSymbolData;
+import org.sonar.php.symbols.MethodSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -49,6 +50,7 @@ public class SymbolTableImpl implements SymbolTable {
   private Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
   private Collection<ClassSymbolData> classSymbolData;
   private Collection<FunctionSymbolData> functionSymbolData;
+  private Collection<MethodSymbolData> methodSymbolData;
 
   private SymbolTableImpl() {
   }
@@ -188,5 +190,9 @@ public class SymbolTableImpl implements SymbolTable {
 
   public Collection<FunctionSymbolData> functionSymbolDatas() {
     return functionSymbolData;
+  }
+
+  public Collection<MethodSymbolData> methodSymbolDatas() {
+    return methodSymbolData;
   }
 }

@@ -35,7 +35,7 @@ public class ProjectSymbolDataTest {
 
     assertThat(projectSymbolData.classSymbolData(qualifiedName)).isEmpty();
 
-    ClassSymbolData class1 = new ClassSymbolData(new LocationInFileImpl("f1", 1, 2, 3, 4), qualifiedName, null, emptyList());
+    ClassSymbolData class1 = new ClassSymbolData(new LocationInFileImpl("f1", 1, 2, 3, 4), qualifiedName, null, emptyList(), emptyList());
     projectSymbolData.add(class1);
     assertThat(projectSymbolData.classSymbolData(qualifiedName)).contains(class1);
   }
@@ -45,7 +45,7 @@ public class ProjectSymbolDataTest {
     ProjectSymbolData projectSymbolData = new ProjectSymbolData();
     assertThat(projectSymbolData.classSymbolData(qualifiedName("Exception")).get().implementedInterfaces()).containsExactly(qualifiedName("Throwable"));
 
-    ClassSymbolData myException = new ClassSymbolData(new LocationInFileImpl("f1", 1, 2, 3, 4), qualifiedName("Exception"), null, emptyList());
+    ClassSymbolData myException = new ClassSymbolData(new LocationInFileImpl("f1", 1, 2, 3, 4), qualifiedName("Exception"), null, emptyList(), emptyList());
     projectSymbolData.add(myException);
     assertThat(projectSymbolData.classSymbolData(qualifiedName("Exception"))).contains(myException);
   }

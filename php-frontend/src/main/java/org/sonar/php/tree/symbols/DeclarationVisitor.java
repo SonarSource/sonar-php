@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,9 +42,8 @@ import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData.FunctionSymbolProperties;
 import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
-import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.MethodSymbolData;
-import org.sonar.php.symbols.MethodSymbolIndex;
+import org.sonar.php.symbols.MethodSymbolImpl;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
@@ -78,12 +78,12 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private Scope globalScope;
   private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
   private ClassSymbolIndex classSymbolIndex;
-  private final Map<MethodDeclarationTree, MethodSymbolData> methodSymbolDataByTree = new HashMap<>();
-  private MethodSymbolIndex methodSymbolIndex;
+  private final Map<ClassDeclarationTree, List<MethodSymbolData>> methodsByClassTree = new HashMap<>();
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
 
-  private QualifiedName currentClass;
+  private ClassDeclarationTree currentClassTree;
+  private QualifiedName currentClassQualifiedName;
   private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
@@ -104,12 +104,6 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       ((ClassDeclarationTreeImpl) declaration).setSymbol(symbol);
     });
 
-    methodSymbolIndex = MethodSymbolIndex.create(new HashSet<>(methodSymbolDataByTree.values()), projectSymbolData);
-    methodSymbolDataByTree.forEach((declaration, symbolData) -> {
-      MethodSymbol symbol = methodSymbolIndex.get(symbolData);
-      ((MethodDeclarationTreeImpl) declaration).setSymbol(symbol);
-    });
-
     functionSymbolIndex = FunctionSymbolIndex.create(new HashSet<>(functionSymbolDataByTree.values()), projectSymbolData);
     functionSymbolDataByTree.forEach((declaration, symbolData) -> {
       FunctionSymbol symbol = functionSymbolIndex.get(symbolData);
@@ -119,6 +113,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
+    currentClassTree = tree;
     NamespaceNameTree superClass = tree.superClass();
     QualifiedName superClassName = superClass == null ? null : getFullyQualifiedName(superClass, Symbol.Kind.CLASS);
 
@@ -128,18 +123,21 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
-    currentClass = qualifiedName;
-
-    classSymbolDataByTree.put(tree, new ClassSymbolData(location(name), qualifiedName, superClassName, interfaceNames, tree.is(Tree.Kind.INTERFACE_DECLARATION)));
+    currentClassQualifiedName = qualifiedName;
 
     symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
     super.visitClassDeclaration(tree);
-    currentClass = null;
+    ClassSymbolData classSymbolData = new ClassSymbolData(location(name), qualifiedName, superClassName, interfaceNames,
+      tree.is(Tree.Kind.INTERFACE_DECLARATION), methodsByClassTree.getOrDefault(tree, Collections.emptyList()));
+    classSymbolDataByTree.put(tree, classSymbolData);
+
+    currentClassTree = null;
+    currentClassQualifiedName = null;
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (currentClass == null) {
+    if (currentClassTree == null) {
       super.visitMethodDeclaration(tree);
       return;
     }
@@ -162,7 +160,11 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     super.visitMethodDeclaration(tree);
 
-    methodSymbolDataByTree.put(tree, new MethodSymbolData(location(name), qualifiedName, parameters, didFindReturn, visibility, currentClass));
+    MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), qualifiedName, parameters, didFindReturn,
+      visibility, currentClassQualifiedName);
+    ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
+    methodsByClassTree.computeIfAbsent(currentClassTree, c -> Collections.emptyList()).add(methodSymbolData);
+
     didFindReturn = backDidFindReturn;
   }
 

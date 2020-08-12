@@ -66,10 +66,14 @@ public class ClassSymbolIndex {
   private class ClassSymbolImpl extends AbstractClassSymbol {
 
     private final ClassSymbolData data;
+    private final List<MethodSymbol> methods;
     private ClassSymbol superClass;
 
     private ClassSymbolImpl(ClassSymbolData data) {
       this.data = data;
+      this.methods = data.methods().stream()
+        .map(MethodSymbolImpl::new)
+        .collect(Collectors.toList());
     }
 
     @Override
@@ -98,6 +102,11 @@ public class ClassSymbolIndex {
     @Override
     public boolean isInterface() {
       return data.isInterface();
+    }
+
+    @Override
+    public List<MethodSymbol> methods() {
+      return methods;
     }
 
     @Override

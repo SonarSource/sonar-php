@@ -218,16 +218,16 @@ public class ClassSymbolIndexTest {
   }
 
   private ClassSymbolData data(String fqn) {
-    return new ClassSymbolData(someLocation(), qualifiedName(fqn), null, emptyList());
+    return new ClassSymbolData(someLocation(), qualifiedName(fqn), null, emptyList(), emptyList());
   }
 
   private ClassSymbolData data(String fqn, String superClassFqn) {
-    return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn), emptyList());
+    return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn), emptyList(), emptyList());
   }
 
   private ClassSymbolData data(String fqn, String superClassFqn, List<String> interfaceFqns) {
     List<QualifiedName> interfaces = interfaceFqns.stream().map(this::fqn).collect(Collectors.toList());
-    return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn), interfaces);
+    return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn), interfaces, emptyList());
   }
 
   private LocationInFileImpl someLocation() {
