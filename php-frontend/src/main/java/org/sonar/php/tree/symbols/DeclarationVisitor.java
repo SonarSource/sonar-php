@@ -86,7 +86,6 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private FunctionSymbolIndex functionSymbolIndex;
 
   private ClassDeclarationTree currentClassTree;
-  private QualifiedName currentClassQualifiedName;
   private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
 
   private static final Set<String> VALID_VISIBILITIES = ImmutableSet.of("PUBLIC", "PRIVATE", "PROTECTED");
@@ -128,7 +127,6 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
-    currentClassQualifiedName = qualifiedName;
 
     symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
     super.visitClassDeclaration(tree);
@@ -137,7 +135,6 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     classSymbolDataByTree.put(tree, classSymbolData);
 
     currentClassTree = null;
-    currentClassQualifiedName = null;
   }
 
   @Override

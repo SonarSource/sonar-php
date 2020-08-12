@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class UnknownFunctionSymbol implements FunctionSymbol {
-  protected final QualifiedName qualifiedName;
+  private final QualifiedName qualifiedName;
 
   public UnknownFunctionSymbol(QualifiedName qualifiedName) {
     this.qualifiedName = qualifiedName;
