@@ -28,6 +28,7 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
@@ -70,6 +71,15 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
       resolveFunctionSymbol((NamespaceNameTree) tree.callee());
     }
     super.visitFunctionCall(tree);
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    if (tree.superClass() != null) {
+      resolveClassSymbol(tree.superClass());
+    }
+
+    super.visitAnonymousClass(tree);
   }
 
   private void resolveClassSymbol(NamespaceNameTree namespaceName) {
