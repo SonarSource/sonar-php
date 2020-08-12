@@ -21,17 +21,22 @@ package org.sonar.php.checks;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.FunctionSymbol;
+import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.Symbols;
-import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -39,7 +44,7 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import javax.annotation.CheckForNull;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 @Rule(key = "S2234")
 public class ParameterSequenceCheck extends PHPVisitorCheck {
@@ -47,36 +52,35 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Parameters to \"%s\" have the same names but not the same order as the method arguments.";
   private static final String SECONDARY_MESSAGE = "Implementation of the parameters sequence.";
 
+  private ClassSymbol currentClassSymbol;
+  private boolean isInAnonymousClass = false;
+
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    currentClassSymbol = Symbols.get(tree);
+    super.visitClassDeclaration(tree);
+    currentClassSymbol = null;
+  }
+
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     // only check method and function calls expect constructors with more than 1 argument
     if (!tree.getParent().is(Kind.NEW_EXPRESSION) && tree.arguments().size() > 1) {
-      if (tree.callee().is(Kind.NAMESPACE_NAME)) {
-        checkFunctionCall(tree, (NamespaceNameTree) tree.callee());
-      } else {
-        checkMethodCall(tree);
-      }
+      getDeclarationSymbol(tree).ifPresent(d -> checkFunctionCall(tree, d));
     }
 
     super.visitFunctionCall(tree);
   }
 
-  private void checkMethodCall(FunctionCallTree tree) {
-    Symbol symbol = getDeclarationSymbol(tree);
-    if (symbol != null && symbol.declaration() != null && symbol.is(Symbol.Kind.FUNCTION)) {
-      List<String> parameters = ((FunctionTree) symbol.declaration().getParent()).parameters().parameters().stream()
-        .map(e -> e.variableIdentifier().text())
-        .collect(Collectors.toList());
-
-      if (isWrongParameterSequence(tree, parameters)) {
-        newIssue(tree, String.format(MESSAGE, symbol.declaration().text()))
-          .secondary(symbol.declaration(), SECONDARY_MESSAGE);
-      }
-    }
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    boolean isInAnonymousClassBack = isInAnonymousClass;
+    isInAnonymousClass = true;
+    super.visitAnonymousClass(tree);
+    isInAnonymousClass = isInAnonymousClassBack;
   }
 
-  private void checkFunctionCall(FunctionCallTree tree, NamespaceNameTree callee) {
-    FunctionSymbol symbol = Symbols.getFunction(callee);
+  private void checkFunctionCall(FunctionCallTree tree, FunctionSymbol symbol) {
     List<String> parameters = symbol.parameters().stream()
       .map(Parameter::name)
       .collect(Collectors.toList());
@@ -87,15 +91,26 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
     }
   }
 
-  @CheckForNull
-  private Symbol getDeclarationSymbol(FunctionCallTree tree) {
+  private Optional<FunctionSymbol> getDeclarationSymbol(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
+    String functionName = CheckUtils.functionName(tree);
 
-    if(isVerifiableObjectMemberAccess(callee) || isVerifiableClassMemberAccess(callee)) {
-      return context().symbolTable().getSymbol(((MemberAccessTree) callee).member());
+    if (callee.is(Kind.NAMESPACE_NAME)) {
+      return Optional.of(Symbols.getFunction((NamespaceNameTree) callee));
+    } else if (functionName != null && !isInAnonymousClass && currentClassSymbol != null
+               && (isVerifiableObjectMemberAccess(callee) || isVerifiableClassMemberAccess(callee))) {
+      QualifiedName methodName = qualifiedName(functionName);
+      MethodSymbol declaration = currentClassSymbol.getMethod(methodName);
+      Optional<ClassSymbol> superClass = currentClassSymbol.superClass();
+      while (superClass.isPresent() && declaration.isUnknownSymbol()) {
+        declaration = superClass.get().getMethod(methodName);
+        superClass = superClass.get().superClass();
+      }
+
+      return Optional.of(declaration);
     }
 
-    return null;
+    return Optional.empty();
   }
 
   private static boolean isVerifiableObjectMemberAccess(ExpressionTree tree) {

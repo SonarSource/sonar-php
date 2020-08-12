@@ -85,6 +85,16 @@ TestClass::testMethod($b, $a); // False Negative
 OtherClass::testMethod($b, $a); // Compliant
 
 // -----------------
+// Anonymous Classes
+// -----------------
+$c = new class() {
+   public function method1($a, $b) {}
+   public function method2() {
+    $this->method1($b, $a);
+   }
+};
+
+// -----------------
 // Code Coverage
 // -----------------
 function functionWithoutParameters() {}
