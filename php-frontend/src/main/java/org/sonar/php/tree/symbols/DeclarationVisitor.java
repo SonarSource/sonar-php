@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Optional;
@@ -157,7 +158,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .collect(Collectors.toList());
 
     String visibility = tree.modifiers().stream()
-      .map(m -> m.text().toUpperCase())
+      .map(m -> m.text().toUpperCase(Locale.ROOT))
       .filter(VALID_VISIBILITIES::contains)
       .findFirst()
       .orElse("PUBLIC");
