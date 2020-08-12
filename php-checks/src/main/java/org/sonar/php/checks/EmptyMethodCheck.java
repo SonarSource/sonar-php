@@ -19,6 +19,9 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.Iterables;
+import java.util.Collections;
+import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -31,9 +34,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.Collections;
-import java.util.regex.Pattern;
 
 @Rule(key = "S1186")
 public class EmptyMethodCheck extends PHPVisitorCheck {
@@ -66,16 +66,9 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   private static boolean hasCommentAbove(SyntaxToken token) {
     int beforeDeclarationLine = token.line() - 1;
-
-    for (SyntaxTrivia trivia : token.trivias()) {
-      if (beforeDeclarationLine == trivia.endLine() && VALUABLE_COMMENT_PATTERN.matcher(trivia.text()).find()) {
-        return true;
-      }
-    }
-
-    return false;
+    SyntaxTrivia trivia = Iterables.getLast(token.trivias(), null);
+    return trivia != null && beforeDeclarationLine == trivia.endLine() && isValuableComment(trivia);
   }
-
 
   private static boolean isClassAbstract(MethodDeclarationTree tree) {
     ClassDeclarationTree classTree = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree, Collections.singletonList(Kind.CLASS_DECLARATION));
@@ -88,13 +81,12 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
     }
 
     // Check whether there is a valuable comment in method body
-    for (SyntaxTrivia trivia : tree.closeCurlyBraceToken().trivias()) {
-      if (VALUABLE_COMMENT_PATTERN.matcher(trivia.text()).find()) {
-        return true;
-      }
-    }
+    SyntaxTrivia trivia = Iterables.getLast(tree.closeCurlyBraceToken().trivias(), null);
+    return trivia != null && isValuableComment(trivia);
+  }
 
-    return false;
+  private static boolean isValuableComment(SyntaxToken trivia) {
+    return VALUABLE_COMMENT_PATTERN.matcher(trivia.text()).find();
   }
 
   private void commitIssue(FunctionTree tree, String type) {
