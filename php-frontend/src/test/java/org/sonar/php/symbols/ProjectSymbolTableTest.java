@@ -236,6 +236,27 @@ public class ProjectSymbolTableTest {
       .isInstanceOf(IllegalStateException.class);
   }
 
+  @Test
+  public void get_class_methods() {
+    PhpFile file1 = file("file1.php", "<?php namespace SomeNamespace; class A {public function foo(){}}");
+    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1);
+    Tree ast = parser.parse(file1.contents());
+    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file1);
+
+    Optional<ClassDeclarationTree> classDeclaration = firstDescendant(ast, ClassDeclarationTree.class);
+    ClassSymbol classSymbol = Symbols.get(classDeclaration.get());
+
+    assertThat(classSymbol.methods()).hasSize(1);
+
+    MethodSymbol methodSymbol = classSymbol.getMethod(qualifiedName("foo"));
+    assertThat(methodSymbol.isUnknownSymbol()).isFalse();
+    assertThat(methodSymbol.parameters()).isEmpty();
+    assertThat(methodSymbol.hasReturn()).isFalse();
+    assertThat(methodSymbol.className()).isEqualTo(qualifiedName("SomeNamespace\\a"));
+    assertThat(methodSymbol.visibility()).isEqualTo("public");
+    assertThat(methodSymbol.location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 56, 1, 59));
+  }
+
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {
     ProjectSymbolData projectSymbolData = new ProjectSymbolData();
     for (PhpFile file : files) {
