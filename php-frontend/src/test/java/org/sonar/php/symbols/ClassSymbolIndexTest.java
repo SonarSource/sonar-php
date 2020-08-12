@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
@@ -192,6 +194,29 @@ public class ClassSymbolIndexTest {
     assertThat(a.isSubTypeOf(fqn("c"))).isEqualTo(Trilean.FALSE);
   }
 
+  @Test
+  public void get_method() {
+    ImmutableList<MethodSymbolData> methods = ImmutableList.of(
+      method("methodA"),
+      method("methodB")
+    );
+
+    ClassSymbolIndex symbols = createSymbols(
+      data("a", methods),
+      data("b")
+    );
+
+    ClassSymbol a = symbols.get(fqn("a"));
+    assertThat(a.methods()).hasSize(2);
+    assertThat(a.getMethod(fqn("methodA"))).isInstanceOf(MethodSymbolImpl.class);
+    assertThat(a.getMethod(fqn("random"))).isInstanceOf(UnknownMethodSymbol.class);
+
+    ClassSymbol b = symbols.get(fqn("b"));
+    assertThat(b.methods()).isEmpty();
+    assertThat(b.getMethod(fqn("methodA"))).isInstanceOf(UnknownMethodSymbol.class);
+  }
+
+
   private ClassSymbolIndex createSymbols(ClassSymbolData... data) {
     return createSymbols(new ProjectSymbolData(), data);
   }
@@ -221,6 +246,10 @@ public class ClassSymbolIndexTest {
     return new ClassSymbolData(someLocation(), qualifiedName(fqn), null, emptyList(), emptyList());
   }
 
+  private ClassSymbolData data(String fqn, List<MethodSymbolData> methods) {
+    return new ClassSymbolData(someLocation(), qualifiedName(fqn), null, emptyList(), methods);
+  }
+
   private ClassSymbolData data(String fqn, String superClassFqn) {
     return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn), emptyList(), emptyList());
   }
@@ -228,6 +257,10 @@ public class ClassSymbolIndexTest {
   private ClassSymbolData data(String fqn, String superClassFqn, List<String> interfaceFqns) {
     List<QualifiedName> interfaces = interfaceFqns.stream().map(this::fqn).collect(Collectors.toList());
     return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn), interfaces, emptyList());
+  }
+
+  private MethodSymbolData method(String name) {
+    return new MethodSymbolData(someLocation(), qualifiedName(name), emptyList(), false, "public", qualifiedName("foo"));
   }
 
   private LocationInFileImpl someLocation() {

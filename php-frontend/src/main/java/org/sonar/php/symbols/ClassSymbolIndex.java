@@ -19,11 +19,13 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
@@ -66,14 +68,14 @@ public class ClassSymbolIndex {
   private class ClassSymbolImpl extends AbstractClassSymbol {
 
     private final ClassSymbolData data;
-    private final List<MethodSymbol> methods;
+    private final Map<QualifiedName, MethodSymbol> methods;
     private ClassSymbol superClass;
 
     private ClassSymbolImpl(ClassSymbolData data) {
       this.data = data;
       this.methods = data.methods().stream()
         .map(MethodSymbolImpl::new)
-        .collect(Collectors.toList());
+        .collect(Collectors.toMap(MethodSymbolImpl::qualifiedName, Function.identity()));
     }
 
     @Override
@@ -106,7 +108,12 @@ public class ClassSymbolIndex {
 
     @Override
     public List<MethodSymbol> methods() {
-      return methods;
+      return new ArrayList<>(methods.values());
+    }
+
+    @Override
+    public MethodSymbol getMethod(QualifiedName name) {
+      return methods.getOrDefault(name, new UnknownMethodSymbol(name));
     }
 
     @Override

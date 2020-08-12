@@ -42,4 +42,5 @@ public interface ClassSymbol extends Symbol {
 
   List<MethodSymbol> methods();
 
+  MethodSymbol getMethod(QualifiedName name);
 }

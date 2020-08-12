@@ -64,6 +64,11 @@ class UnknownClassSymbol extends AbstractClassSymbol {
   }
 
   @Override
+  public MethodSymbol getMethod(QualifiedName name) {
+    return new UnknownMethodSymbol(name);
+  }
+
+  @Override
   public boolean isUnknownSymbol() {
     return true;
   }
