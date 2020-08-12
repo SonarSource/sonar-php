@@ -48,6 +48,7 @@ import org.sonar.php.symbols.MethodSymbolImpl;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
+import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
@@ -86,6 +87,8 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private ClassDeclarationTree currentClassTree;
   private QualifiedName currentClassQualifiedName;
   private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
+
+  private static final Set<String> VALID_VISIBILITIES = ImmutableSet.of("PUBLIC", "PRIVATE", "PROTECTED");
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -145,6 +148,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     boolean backDidFindReturn = didFindReturn;
     didFindReturn = false;
+
     IdentifierTree name = tree.name();
     QualifiedName qualifiedName = QualifiedName.qualifiedName(name.text());
 
@@ -152,17 +156,16 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .map(Parameter::fromTree)
       .collect(Collectors.toList());
 
-    // TODO: use enum for visibility
-    Set<String> possibleVisibilities = ImmutableSet.of("public", "private", "protected");
     String visibility = tree.modifiers().stream()
-      .map(SyntaxToken::text)
-      .filter(m -> possibleVisibilities.contains(m.toLowerCase()))
-      .findFirst().orElse("public");
+      .map(m -> m.text().toUpperCase())
+      .filter(VALID_VISIBILITIES::contains)
+      .findFirst()
+      .orElse("PUBLIC");
 
     super.visitMethodDeclaration(tree);
 
     MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), qualifiedName, parameters, didFindReturn,
-      visibility, currentClassQualifiedName);
+      Visibility.valueOf(visibility), currentClassQualifiedName);
     ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
     methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
 

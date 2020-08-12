@@ -32,7 +32,7 @@ public class MethodSymbolImpl implements MethodSymbol {
   }
 
   @Override
-  public String visibility() {
+  public Visibility visibility() {
     return data.visibility();
   }
 

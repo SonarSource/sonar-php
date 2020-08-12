@@ -27,8 +27,8 @@ public class UnknownMethodSymbol extends UnknownFunctionSymbol implements Method
   }
 
   @Override
-  public String visibility() {
-    return "public";
+  public Visibility visibility() {
+    return Visibility.PUBLIC;
   }
 
   @Override
