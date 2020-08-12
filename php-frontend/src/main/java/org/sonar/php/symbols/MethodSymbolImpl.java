@@ -19,8 +19,6 @@
  */
 package org.sonar.php.symbols;
 
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-
 public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
   private final MethodSymbolData data;
 
@@ -34,8 +32,4 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
     return data.visibility();
   }
 
-  @Override
-  public QualifiedName className() {
-    return data.className();
-  }
 }

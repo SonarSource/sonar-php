@@ -230,7 +230,6 @@ public class ClassSymbolIndexTest {
     MethodSymbol methodSymbol = classSymbol.getMethod(fqn("y"));
     assertThat(methodSymbol).isInstanceOf(UnknownMethodSymbol.class);
     assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
-    assertThat(methodSymbol.className()).isEqualTo(fqn("UNKNOWN"));
   }
 
 
@@ -277,7 +276,7 @@ public class ClassSymbolIndexTest {
   }
 
   private MethodSymbolData method(String name) {
-    return new MethodSymbolData(someLocation(), qualifiedName(name), emptyList(), false, Visibility.PUBLIC, qualifiedName("foo"));
+    return new MethodSymbolData(someLocation(), qualifiedName(name), emptyList(), false, Visibility.PUBLIC);
   }
 
   private LocationInFileImpl someLocation() {

@@ -31,8 +31,4 @@ public class UnknownMethodSymbol extends UnknownFunctionSymbol implements Method
     return Visibility.PUBLIC;
   }
 
-  @Override
-  public QualifiedName className() {
-    return QualifiedName.qualifiedName("UNKNOWN");
-  }
 }

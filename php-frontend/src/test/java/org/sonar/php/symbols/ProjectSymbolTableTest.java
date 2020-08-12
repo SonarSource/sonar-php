@@ -253,7 +253,6 @@ public class ProjectSymbolTableTest {
     assertThat(methodSymbol.isUnknownSymbol()).isFalse();
     assertThat(methodSymbol.parameters()).isEmpty();
     assertThat(methodSymbol.hasReturn()).isFalse();
-    assertThat(methodSymbol.className()).isEqualTo(qualifiedName("SomeNamespace\\a"));
     assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
     assertThat(methodSymbol.location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 56, 1, 59));
   }

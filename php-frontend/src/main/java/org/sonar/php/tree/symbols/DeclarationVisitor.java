@@ -166,7 +166,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     super.visitMethodDeclaration(tree);
 
     MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), qualifiedName, parameters, didFindReturn,
-      Visibility.valueOf(visibility), currentClassQualifiedName);
+      Visibility.valueOf(visibility));
     ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
     methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
 
