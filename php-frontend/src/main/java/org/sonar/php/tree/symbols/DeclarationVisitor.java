@@ -27,9 +27,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableSet;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ClassSymbolIndex;
@@ -38,18 +41,23 @@ import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData.FunctionSymbolProperties;
 import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
+import org.sonar.php.symbols.MethodSymbol;
+import org.sonar.php.symbols.MethodSymbolData;
+import org.sonar.php.symbols.MethodSymbolIndex;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
@@ -70,8 +78,12 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private Scope globalScope;
   private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
   private ClassSymbolIndex classSymbolIndex;
+  private final Map<MethodDeclarationTree, MethodSymbolData> methodSymbolDataByTree = new HashMap<>();
+  private MethodSymbolIndex methodSymbolIndex;
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
+
+  private QualifiedName currentClass;
   private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
@@ -92,6 +104,12 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       ((ClassDeclarationTreeImpl) declaration).setSymbol(symbol);
     });
 
+    methodSymbolIndex = MethodSymbolIndex.create(new HashSet<>(methodSymbolDataByTree.values()), projectSymbolData);
+    methodSymbolDataByTree.forEach((declaration, symbolData) -> {
+      MethodSymbol symbol = methodSymbolIndex.get(symbolData);
+      ((MethodDeclarationTreeImpl) declaration).setSymbol(symbol);
+    });
+
     functionSymbolIndex = FunctionSymbolIndex.create(new HashSet<>(functionSymbolDataByTree.values()), projectSymbolData);
     functionSymbolDataByTree.forEach((declaration, symbolData) -> {
       FunctionSymbol symbol = functionSymbolIndex.get(symbolData);
@@ -110,10 +128,42 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
+    currentClass = qualifiedName;
+
     classSymbolDataByTree.put(tree, new ClassSymbolData(location(name), qualifiedName, superClassName, interfaceNames, tree.is(Tree.Kind.INTERFACE_DECLARATION)));
 
     symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
     super.visitClassDeclaration(tree);
+    currentClass = null;
+  }
+
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    if (currentClass == null) {
+      super.visitMethodDeclaration(tree);
+      return;
+    }
+
+    boolean backDidFindReturn = didFindReturn;
+    didFindReturn = false;
+    IdentifierTree name = tree.name();
+    QualifiedName qualifiedName = QualifiedName.qualifiedName(name.text());
+
+    List<Parameter> parameters = tree.parameters().parameters().stream()
+      .map(Parameter::fromTree)
+      .collect(Collectors.toList());
+
+    // TODO: use enum for visibility
+    Set<String> possibleVisibilities = ImmutableSet.of("public", "private", "protected");
+    String visibility = tree.modifiers().stream()
+      .map(SyntaxToken::text)
+      .filter(m -> possibleVisibilities.contains(m.toLowerCase()))
+      .findFirst().orElse("public");
+
+    super.visitMethodDeclaration(tree);
+
+    methodSymbolDataByTree.put(tree, new MethodSymbolData(location(name), qualifiedName, parameters, didFindReturn, visibility, currentClass));
+    didFindReturn = backDidFindReturn;
   }
 
   @Override

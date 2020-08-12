@@ -20,6 +20,7 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
+import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -45,6 +46,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   private final ParameterListTree parameters;
   private final ReturnTypeClauseTree returnTypeClause;
   private final Tree body;
+  private MethodSymbol symbol;
 
   public MethodDeclarationTreeImpl(
     List<SyntaxToken> modifiersToken,
@@ -118,4 +120,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     visitor.visitMethodDeclaration(this);
   }
 
+  public void setSymbol(MethodSymbol symbol) {
+    this.symbol = symbol;
+  }
 }
