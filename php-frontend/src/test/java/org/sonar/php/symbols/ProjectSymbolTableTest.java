@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -255,6 +256,17 @@ public class ProjectSymbolTableTest {
     assertThat(methodSymbol.className()).isEqualTo(qualifiedName("SomeNamespace\\a"));
     assertThat(methodSymbol.visibility()).isEqualTo("public");
     assertThat(methodSymbol.location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 56, 1, 59));
+  }
+
+  @Test
+  public void get_symbol_from_method_declaration() {
+    PhpFile file1 = file("file1.php", "<?php namespace SomeNamespace; class A {public function foo(){}}");
+    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1);
+    Tree ast = parser.parse(file1.contents());
+    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file1);
+
+    Optional<MethodDeclarationTreeImpl> methodDeclarationTree = firstDescendant(ast, MethodDeclarationTreeImpl.class);
+    assertThat(methodDeclarationTree.get().symbol()).isInstanceOf(MethodSymbolImpl.class);
   }
 
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {

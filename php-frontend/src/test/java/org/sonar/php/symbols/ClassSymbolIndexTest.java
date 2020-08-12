@@ -220,6 +220,19 @@ public class ClassSymbolIndexTest {
     assertThat(unknown.getMethod(fqn("foo"))).isInstanceOf(UnknownMethodSymbol.class);
   }
 
+  @Test
+  public void unknown_class_and_method() {
+    ClassSymbolIndex symbols = createSymbols(data("a"));
+
+    ClassSymbol classSymbol = symbols.get(fqn("x"));
+    assertThat(classSymbol).isInstanceOf(UnknownClassSymbol.class);
+
+    MethodSymbol methodSymbol = classSymbol.getMethod(fqn("y"));
+    assertThat(methodSymbol).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(methodSymbol.visibility()).isEqualTo("public");
+    assertThat(methodSymbol.className()).isEqualTo(fqn("UNKNOWN"));
+  }
+
 
   private ClassSymbolIndex createSymbols(ClassSymbolData... data) {
     return createSymbols(new ProjectSymbolData(), data);
