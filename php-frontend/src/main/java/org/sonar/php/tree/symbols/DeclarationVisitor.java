@@ -83,6 +83,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
   private ClassSymbolIndex classSymbolIndex;
   private final Map<ClassDeclarationTree, List<MethodSymbolData>> methodsByClassTree = new HashMap<>();
+  private final Map<MethodSymbolData, MethodDeclarationTreeImpl> methodTreeByData = new HashMap<>();
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
 
@@ -108,6 +109,10 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     classSymbolDataByTree.forEach((declaration, symbolData) -> {
       ClassSymbol symbol = classSymbolIndex.get(symbolData);
       ((ClassDeclarationTreeImpl) declaration).setSymbol(symbol);
+      if (methodsByClassTree.containsKey(declaration)) {
+        methodsByClassTree.get(declaration)
+          .forEach(methodData -> methodTreeByData.get(methodData).setSymbol(symbol.getDeclaredMethod(methodData.name())));
+      }
     });
 
     functionSymbolIndex = FunctionSymbolIndex.create(new HashSet<>(functionSymbolDataByTree.values()), projectSymbolData);
@@ -173,10 +178,13 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), name.text(), parameters, didFindReturn,
       Visibility.valueOf(visibility));
-    ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
+
+    methodTreeByData.put(methodSymbolData, (MethodDeclarationTreeImpl) tree);
 
     if (!isInAnonymousClass) {
       methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
+    } else {
+      ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
     }
 
     didFindReturn = didFindReturnBack;
