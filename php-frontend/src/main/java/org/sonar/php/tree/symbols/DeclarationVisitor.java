@@ -71,7 +71,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   private Map<String, Boolean> functionProperties = initFunctionProperties();
 
-  private Map<String, Boolean> initFunctionProperties() {
+  private static Map<String, Boolean> initFunctionProperties() {
     Map<String, Boolean> map = new HashMap<>();
     map.put("hasReturn", false);
     map.put("hasFuncGetArgs", false);
@@ -187,7 +187,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     return new LocationInFileImpl(filePath, firstToken.line(), firstToken.column(), lastToken.endLine(), lastToken.endColumn());
   }
 
-  private boolean isFuncGetArgsCall(FunctionCallTree fct) {
+  private static boolean isFuncGetArgsCall(FunctionCallTree fct) {
     return fct.callee().is(Tree.Kind.NAMESPACE_NAME)
       && ((NamespaceNameTree) fct.callee()).fullyQualifiedName().equals("func_get_args");
   }

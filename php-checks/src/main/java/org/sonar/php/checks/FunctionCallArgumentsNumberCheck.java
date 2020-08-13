@@ -69,17 +69,17 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
       .secondary(symbol.location(), null);
   }
 
-  private boolean hasEllipsisOperator(List<Parameter> parameters) {
+  private static boolean hasEllipsisOperator(List<Parameter> parameters) {
     return !parameters.isEmpty() && Iterables.getLast(parameters).hasEllipsisOperator();
   }
 
-  private int minArguments(List<Parameter> parameters) {
+  private static int minArguments(List<Parameter> parameters) {
     return (int) parameters.stream()
       .filter(p -> !p.hasDefault())
       .count();
   }
 
-  private int maxArguments(List<Parameter> parameters) {
+  private static int maxArguments(List<Parameter> parameters) {
     return parameters.size();
   }
 }
