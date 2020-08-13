@@ -22,6 +22,7 @@ package org.sonar.php;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -94,7 +95,13 @@ public class PHPAnalyzer {
     ImmutableList.Builder<PhpIssue> issuesBuilder = ImmutableList.builder();
     for (PHPCheck check : checks) {
       PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
-      issuesBuilder.addAll(check.analyze(context));
+      List<PhpIssue> issues = Collections.emptyList();
+      try {
+        issues = check.analyze(context);
+      } catch (StackOverflowError e) {
+        LOG.warn(String.format("Stack overflow of %s in file [%s]", check.getClass().getName(), currentFile.uri()));
+      }
+      issuesBuilder.addAll(issues);
     }
 
     return issuesBuilder.build();
