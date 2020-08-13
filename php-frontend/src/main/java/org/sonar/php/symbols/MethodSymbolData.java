@@ -42,6 +42,8 @@ public class MethodSymbolData extends FunctionSymbolData {
     return visibility;
   }
 
-  public String name() {return name;}
+  public String name() {
+    return name;
+  }
 
 }
