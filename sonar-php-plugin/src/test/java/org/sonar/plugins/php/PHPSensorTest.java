@@ -98,6 +98,7 @@ public class PHPSensorTest {
 
   private static final String PARSE_ERROR_FILE = "parseError.php";
   private static final String ANALYZED_FILE = "PHPSquidSensor.php";
+  private static final String TEST_FILE = "Test.php";
 
   private Set<File> tempReportFiles = new HashSet<>();
 
@@ -452,14 +453,10 @@ public class PHPSensorTest {
   @Test
   public void no_measures_for_test_files() {
     checkFactory = new CheckFactory(new ActiveRulesBuilder()
-      .addRule(newActiveRule("S5779"))
+      .addRule(newActiveRule("S2187"))
       .build());
-    DefaultInputFile testFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php")
-      .setModuleBaseDir(context.fileSystem().baseDirPath())
-      .setType(InputFile.Type.TEST)
-      .setLanguage(Php.KEY)
-      .setContents("<?php echo $foo;\necho$bar;")
-      .build();
+
+    InputFile testFile = inputFile(TEST_FILE, Type.TEST);
 
     String testFileKey = testFile.key();
 
@@ -468,6 +465,7 @@ public class PHPSensorTest {
 
     createSensor().execute(context);
 
+    assertThat(context.allIssues()).isNotEmpty();
     assertThat(context.measure(testFileKey, CoreMetrics.NCLOC)).isNull();
 
   }
