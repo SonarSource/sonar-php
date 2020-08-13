@@ -208,8 +208,8 @@ public class ClassSymbolIndexTest {
 
     ClassSymbol a = symbols.get(fqn("a"));
     assertThat(a.declaredMethods()).hasSize(2);
-    assertThat(a.getDeclaredMethod("methodA")).isInstanceOf(MethodSymbolImpl.class);
-    assertThat(a.getDeclaredMethod("random")).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(a.getDeclaredMethod("methodA").isUnknownSymbol()).isFalse();
+    assertThat(a.getDeclaredMethod("random").isUnknownSymbol()).isTrue();
 
     ClassSymbol b = symbols.get(fqn("b"));
     assertThat(b.declaredMethods()).isEmpty();

@@ -154,7 +154,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       return;
     }
 
-    boolean backDidFindReturn = didFindReturn;
+    boolean didFindReturnBack = didFindReturn;
     didFindReturn = false;
 
     IdentifierTree name = tree.name();
@@ -179,7 +179,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
     }
 
-    didFindReturn = backDidFindReturn;
+    didFindReturn = didFindReturnBack;
   }
 
   @Override
