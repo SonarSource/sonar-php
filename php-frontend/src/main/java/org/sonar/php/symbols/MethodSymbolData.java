@@ -26,18 +26,22 @@ import java.util.List;
 
 public class MethodSymbolData extends FunctionSymbolData {
   private Visibility visibility;
+  private String name;
 
   public MethodSymbolData(LocationInFile location,
-    QualifiedName qualifiedName,
+    String name,
     List<Parameter> parameters,
     boolean hasReturn,
     Visibility visibility) {
-    super(location, qualifiedName, parameters, hasReturn);
+    super(location, QualifiedName.qualifiedName(name), parameters, hasReturn);
+    this.name = name;
     this.visibility = visibility;
   }
 
   public Visibility visibility() {
     return visibility;
   }
+
+  public String name() {return name;}
 
 }

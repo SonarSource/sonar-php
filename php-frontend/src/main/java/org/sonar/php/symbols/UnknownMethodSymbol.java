@@ -22,13 +22,21 @@ package org.sonar.php.symbols;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 public class UnknownMethodSymbol extends UnknownFunctionSymbol implements MethodSymbol {
-  public UnknownMethodSymbol(QualifiedName qualifiedName) {
-    super(qualifiedName);
+  private final String name;
+
+  public UnknownMethodSymbol(String name) {
+    super(QualifiedName.qualifiedName(name));
+    this.name = name;
   }
 
   @Override
   public Visibility visibility() {
     return Visibility.PUBLIC;
+  }
+
+  @Override
+  public String name() {
+    return name;
   }
 
 }

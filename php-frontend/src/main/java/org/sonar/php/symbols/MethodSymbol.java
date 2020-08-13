@@ -21,4 +21,6 @@ package org.sonar.php.symbols;
 
 public interface MethodSymbol extends FunctionSymbol {
   Visibility visibility();
+
+  String name();
 }

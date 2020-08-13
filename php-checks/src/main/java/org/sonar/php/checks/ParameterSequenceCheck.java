@@ -31,7 +31,6 @@ import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.Symbols;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -44,7 +43,6 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 @Rule(key = "S2234")
 public class ParameterSequenceCheck extends PHPVisitorCheck {
@@ -99,11 +97,10 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
       return Optional.of(Symbols.getFunction((NamespaceNameTree) callee));
     } else if (functionName != null && !isInAnonymousClass && currentClassSymbol != null
                && (isVerifiableObjectMemberAccess(callee) || isVerifiableClassMemberAccess(callee))) {
-      QualifiedName methodName = qualifiedName(functionName);
-      MethodSymbol declaration = currentClassSymbol.getDeclaredMethod(methodName);
+      MethodSymbol declaration = currentClassSymbol.getDeclaredMethod(functionName);
       Optional<ClassSymbol> superClass = currentClassSymbol.superClass();
       while (superClass.isPresent() && declaration.isUnknownSymbol()) {
-        declaration = superClass.get().getDeclaredMethod(methodName);
+        declaration = superClass.get().getDeclaredMethod(functionName);
         superClass = superClass.get().superClass();
       }
 

@@ -22,6 +22,7 @@ package org.sonar.php.symbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -68,14 +69,14 @@ public class ClassSymbolIndex {
   private class ClassSymbolImpl extends AbstractClassSymbol {
 
     private final ClassSymbolData data;
-    private final Map<QualifiedName, MethodSymbol> methods;
+    private final Map<String, MethodSymbol> methods;
     private ClassSymbol superClass;
 
     private ClassSymbolImpl(ClassSymbolData data) {
       this.data = data;
       this.methods = data.methods().stream()
         .map(MethodSymbolImpl::new)
-        .collect(Collectors.toMap(MethodSymbolImpl::qualifiedName, Function.identity(), (a, b) -> a));
+        .collect(Collectors.toMap(m -> m.name().toLowerCase(Locale.ROOT), Function.identity(), (a, b) -> a));
     }
 
     @Override
@@ -112,8 +113,8 @@ public class ClassSymbolIndex {
     }
 
     @Override
-    public MethodSymbol getDeclaredMethod(QualifiedName name) {
-      return methods.getOrDefault(name, new UnknownMethodSymbol(name));
+    public MethodSymbol getDeclaredMethod(String name) {
+      return methods.getOrDefault(name.toLowerCase(Locale.ROOT), new UnknownMethodSymbol(name));
     }
 
     @Override

@@ -64,7 +64,7 @@ class UnknownClassSymbol extends AbstractClassSymbol {
   }
 
   @Override
-  public MethodSymbol getDeclaredMethod(QualifiedName name) {
+  public MethodSymbol getDeclaredMethod(String name) {
     return new UnknownMethodSymbol(name);
   }
 

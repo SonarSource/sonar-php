@@ -158,7 +158,6 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     didFindReturn = false;
 
     IdentifierTree name = tree.name();
-    QualifiedName qualifiedName = QualifiedName.qualifiedName(name.text());
 
     List<Parameter> parameters = tree.parameters().parameters().stream()
       .map(Parameter::fromTree)
@@ -172,7 +171,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     super.visitMethodDeclaration(tree);
 
-    MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), qualifiedName, parameters, didFindReturn,
+    MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), name.text(), parameters, didFindReturn,
       Visibility.valueOf(visibility));
     ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
 

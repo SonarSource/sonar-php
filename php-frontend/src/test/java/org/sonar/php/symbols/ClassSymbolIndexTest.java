@@ -208,16 +208,16 @@ public class ClassSymbolIndexTest {
 
     ClassSymbol a = symbols.get(fqn("a"));
     assertThat(a.declaredMethods()).hasSize(2);
-    assertThat(a.getDeclaredMethod(fqn("methodA"))).isInstanceOf(MethodSymbolImpl.class);
-    assertThat(a.getDeclaredMethod(fqn("random"))).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(a.getDeclaredMethod("methodA")).isInstanceOf(MethodSymbolImpl.class);
+    assertThat(a.getDeclaredMethod("random")).isInstanceOf(UnknownMethodSymbol.class);
 
     ClassSymbol b = symbols.get(fqn("b"));
     assertThat(b.declaredMethods()).isEmpty();
-    assertThat(b.getDeclaredMethod(fqn("methodA"))).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(b.getDeclaredMethod("methodA")).isInstanceOf(UnknownMethodSymbol.class);
 
     ClassSymbol unknown = symbols.get(fqn("unknown"));
     assertThat(unknown.declaredMethods()).isEmpty();
-    assertThat(unknown.getDeclaredMethod(fqn("foo"))).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(unknown.getDeclaredMethod("foo")).isInstanceOf(UnknownMethodSymbol.class);
   }
 
   @Test
@@ -227,7 +227,7 @@ public class ClassSymbolIndexTest {
     ClassSymbol classSymbol = symbols.get(fqn("x"));
     assertThat(classSymbol).isInstanceOf(UnknownClassSymbol.class);
 
-    MethodSymbol methodSymbol = classSymbol.getDeclaredMethod(fqn("y"));
+    MethodSymbol methodSymbol = classSymbol.getDeclaredMethod("y");
     assertThat(methodSymbol).isInstanceOf(UnknownMethodSymbol.class);
     assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
   }
@@ -276,7 +276,7 @@ public class ClassSymbolIndexTest {
   }
 
   private MethodSymbolData method(String name) {
-    return new MethodSymbolData(someLocation(), qualifiedName(name), emptyList(), false, Visibility.PUBLIC);
+    return new MethodSymbolData(someLocation(), name, emptyList(), false, Visibility.PUBLIC);
   }
 
   private LocationInFileImpl someLocation() {

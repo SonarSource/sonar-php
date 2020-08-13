@@ -42,5 +42,5 @@ public interface ClassSymbol extends Symbol {
 
   List<MethodSymbol> declaredMethods();
 
-  MethodSymbol getDeclaredMethod(QualifiedName name);
+  MethodSymbol getDeclaredMethod(String name);
 }

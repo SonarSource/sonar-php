@@ -32,4 +32,9 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
     return data.visibility();
   }
 
+  @Override
+  public String name() {
+    return data.name();
+  }
+
 }
