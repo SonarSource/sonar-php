@@ -107,12 +107,12 @@ public class ClassSymbolIndex {
     }
 
     @Override
-    public List<MethodSymbol> methods() {
+    public List<MethodSymbol> declaredMethods() {
       return new ArrayList<>(methods.values());
     }
 
     @Override
-    public MethodSymbol getMethod(QualifiedName name) {
+    public MethodSymbol getDeclaredMethod(QualifiedName name) {
       return methods.getOrDefault(name, new UnknownMethodSymbol(name));
     }
 

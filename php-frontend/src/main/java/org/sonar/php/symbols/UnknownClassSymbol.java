@@ -59,12 +59,12 @@ class UnknownClassSymbol extends AbstractClassSymbol {
   }
 
   @Override
-  public List<MethodSymbol> methods() {
+  public List<MethodSymbol> declaredMethods() {
     return Collections.emptyList();
   }
 
   @Override
-  public MethodSymbol getMethod(QualifiedName name) {
+  public MethodSymbol getDeclaredMethod(QualifiedName name) {
     return new UnknownMethodSymbol(name);
   }
 

@@ -100,10 +100,10 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
     } else if (functionName != null && !isInAnonymousClass && currentClassSymbol != null
                && (isVerifiableObjectMemberAccess(callee) || isVerifiableClassMemberAccess(callee))) {
       QualifiedName methodName = qualifiedName(functionName);
-      MethodSymbol declaration = currentClassSymbol.getMethod(methodName);
+      MethodSymbol declaration = currentClassSymbol.getDeclaredMethod(methodName);
       Optional<ClassSymbol> superClass = currentClassSymbol.superClass();
       while (superClass.isPresent() && declaration.isUnknownSymbol()) {
-        declaration = superClass.get().getMethod(methodName);
+        declaration = superClass.get().getDeclaredMethod(methodName);
         superClass = superClass.get().superClass();
       }
 

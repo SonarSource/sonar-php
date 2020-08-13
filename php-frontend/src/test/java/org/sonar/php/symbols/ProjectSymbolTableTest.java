@@ -247,9 +247,9 @@ public class ProjectSymbolTableTest {
     Optional<ClassDeclarationTree> classDeclaration = firstDescendant(ast, ClassDeclarationTree.class);
     ClassSymbol classSymbol = Symbols.get(classDeclaration.get());
 
-    assertThat(classSymbol.methods()).hasSize(1);
+    assertThat(classSymbol.declaredMethods()).hasSize(1);
 
-    MethodSymbol methodSymbol = classSymbol.getMethod(qualifiedName("foo"));
+    MethodSymbol methodSymbol = classSymbol.getDeclaredMethod(qualifiedName("foo"));
     assertThat(methodSymbol.isUnknownSymbol()).isFalse();
     assertThat(methodSymbol.parameters()).isEmpty();
     assertThat(methodSymbol.hasReturn()).isFalse();
@@ -266,8 +266,8 @@ public class ProjectSymbolTableTest {
 
     Optional<ClassDeclarationTree> classDeclaration = firstDescendant(ast, ClassDeclarationTree.class);
     ClassSymbol classSymbol = Symbols.get(classDeclaration.get());
-    assertThat(classSymbol.methods()).hasSize(1);
-    assertThat(classSymbol.getMethod(qualifiedName("anon"))).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(classSymbol.declaredMethods()).hasSize(1);
+    assertThat(classSymbol.getDeclaredMethod(qualifiedName("anon"))).isInstanceOf(UnknownMethodSymbol.class);
   }
 
   @Test

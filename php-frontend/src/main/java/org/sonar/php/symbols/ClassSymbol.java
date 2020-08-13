@@ -40,7 +40,7 @@ public interface ClassSymbol extends Symbol {
 
   Trilean isSubTypeOf(QualifiedName typeName);
 
-  List<MethodSymbol> methods();
+  List<MethodSymbol> declaredMethods();
 
-  MethodSymbol getMethod(QualifiedName name);
+  MethodSymbol getDeclaredMethod(QualifiedName name);
 }

@@ -207,17 +207,17 @@ public class ClassSymbolIndexTest {
     );
 
     ClassSymbol a = symbols.get(fqn("a"));
-    assertThat(a.methods()).hasSize(2);
-    assertThat(a.getMethod(fqn("methodA"))).isInstanceOf(MethodSymbolImpl.class);
-    assertThat(a.getMethod(fqn("random"))).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(a.declaredMethods()).hasSize(2);
+    assertThat(a.getDeclaredMethod(fqn("methodA"))).isInstanceOf(MethodSymbolImpl.class);
+    assertThat(a.getDeclaredMethod(fqn("random"))).isInstanceOf(UnknownMethodSymbol.class);
 
     ClassSymbol b = symbols.get(fqn("b"));
-    assertThat(b.methods()).isEmpty();
-    assertThat(b.getMethod(fqn("methodA"))).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(b.declaredMethods()).isEmpty();
+    assertThat(b.getDeclaredMethod(fqn("methodA"))).isInstanceOf(UnknownMethodSymbol.class);
 
     ClassSymbol unknown = symbols.get(fqn("unknown"));
-    assertThat(unknown.methods()).isEmpty();
-    assertThat(unknown.getMethod(fqn("foo"))).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(unknown.declaredMethods()).isEmpty();
+    assertThat(unknown.getDeclaredMethod(fqn("foo"))).isInstanceOf(UnknownMethodSymbol.class);
   }
 
   @Test
@@ -227,7 +227,7 @@ public class ClassSymbolIndexTest {
     ClassSymbol classSymbol = symbols.get(fqn("x"));
     assertThat(classSymbol).isInstanceOf(UnknownClassSymbol.class);
 
-    MethodSymbol methodSymbol = classSymbol.getMethod(fqn("y"));
+    MethodSymbol methodSymbol = classSymbol.getDeclaredMethod(fqn("y"));
     assertThat(methodSymbol).isInstanceOf(UnknownMethodSymbol.class);
     assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
   }
