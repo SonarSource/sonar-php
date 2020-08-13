@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ClassSymbolIndex;
@@ -48,6 +47,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -69,7 +69,14 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
 
-  private boolean didFindReturn;
+  private Map<String, Boolean> functionProperties = initFunctionProperties();
+
+  private Map<String, Boolean> initFunctionProperties() {
+    Map<String, Boolean> map = new HashMap<>();
+    map.put("hasReturn", false);
+    map.put("hasFuncGetArgs", false);
+    return map;
+  }
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -115,8 +122,8 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    boolean backDidFindReturn = didFindReturn;
-    didFindReturn = false;
+    Map<String, Boolean> backFunctionProperties = new HashMap<>(functionProperties);
+    functionProperties = initFunctionProperties();
 
     symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
 
@@ -129,21 +136,30 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     super.visitFunctionDeclaration(tree);
 
-    functionSymbolDataByTree.put(tree, new FunctionSymbolData(location(name), qualifiedName, parameters, didFindReturn));
-    didFindReturn = backDidFindReturn;
+    FunctionSymbolData data =  new FunctionSymbolData(location(name), qualifiedName, parameters, functionProperties);
+    functionSymbolDataByTree.put(tree, data);
+    functionProperties = backFunctionProperties;
   }
 
   @Override
   public void visitReturnStatement(ReturnStatementTree tree) {
-    didFindReturn = true;
+    functionProperties.put("hasReturn", true);
     super.visitReturnStatement(tree);
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    boolean backDidFindReturn = didFindReturn;
+    Map<String, Boolean> backFunctionProperties = new HashMap<>(functionProperties);
     super.visitFunctionExpression(tree);
-    didFindReturn = backDidFindReturn;
+    functionProperties = backFunctionProperties;
+  }
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    if (isFuncGetArgsCall(tree)) {
+      functionProperties.put("hasFuncGetArgs", true);
+    }
+    super.visitFunctionCall(tree);
   }
 
   public Collection<ClassSymbolData> classSymbolData() {
@@ -169,6 +185,11 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     SyntaxToken firstToken = ((PHPTree) tree).getFirstToken();
     SyntaxToken lastToken = ((PHPTree) tree).getLastToken();
     return new LocationInFileImpl(filePath, firstToken.line(), firstToken.column(), lastToken.endLine(), lastToken.endColumn());
+  }
+
+  private boolean isFuncGetArgsCall(FunctionCallTree fct) {
+    return fct.callee().is(Tree.Kind.NAMESPACE_NAME)
+      && ((NamespaceNameTree) fct.callee()).fullyQualifiedName().equals("func_get_args");
   }
 
 }
