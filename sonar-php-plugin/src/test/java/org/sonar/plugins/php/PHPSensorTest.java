@@ -450,6 +450,29 @@ public class PHPSensorTest {
   }
 
   @Test
+  public void no_measures_for_test_files() {
+    checkFactory = new CheckFactory(new ActiveRulesBuilder()
+      .addRule(newActiveRule("S5779"))
+      .build());
+    DefaultInputFile testFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php")
+      .setModuleBaseDir(context.fileSystem().baseDirPath())
+      .setType(InputFile.Type.TEST)
+      .setLanguage(Php.KEY)
+      .setContents("<?php echo $foo;\necho$bar;")
+      .build();
+
+    String testFileKey = testFile.key();
+
+    context.fileSystem().add(testFile);
+    context.setRuntime(NOT_SONARLINT_RUNTIME);
+
+    createSensor().execute(context);
+
+    assertThat(context.measure(testFileKey, CoreMetrics.NCLOC)).isNull();
+
+  }
+
+  @Test
   public void should_use_multi_path_coverage() throws Exception {
     context.setRuntime(SONARQUBE_6_7);
 

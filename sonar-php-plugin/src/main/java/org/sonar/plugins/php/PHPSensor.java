@@ -185,10 +185,10 @@ public class PHPSensor implements Sensor {
         if (!inSonarLint(context)) {
           phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
           phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
-          saveNewFileMeasures(context,
-            phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
-            inputFile);
           if (inputFile.type() == Type.MAIN) {
+            saveNewFileMeasures(context,
+              phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
+              inputFile);
             saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
           }
         }
