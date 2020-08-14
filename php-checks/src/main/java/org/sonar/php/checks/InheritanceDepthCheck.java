@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 @Rule(key = "S110")
 public class InheritanceDepthCheck extends PHPVisitorCheck {
@@ -80,19 +82,24 @@ public class InheritanceDepthCheck extends PHPVisitorCheck {
 
   private void checkClassInheritance(ClassSymbol symbol, Tree tree) {
     Optional<ClassSymbol> superClass = symbol.superClass();
+    List<ClassSymbol> superClasses = new ArrayList<>();
     while (superClass.filter(classSymbol -> !classSymbol.isUnknownSymbol()).isPresent() ) {
+      ClassSymbol superClassSymbol = superClass.get();
+      QualifiedName qualifiedName = superClassSymbol.qualifiedName();
 
-      QualifiedName qualifiedName = superClass.get().qualifiedName();
       if (getFilteredClasses().stream().anyMatch(e -> e.equals(qualifiedName))) {
         break;
       }
+
       inheritanceCounter++;
-      superClass = superClass.get().superClass();
+      superClasses.add(superClassSymbol);
+      superClass = superClassSymbol.superClass();
     }
 
     if (inheritanceCounter > max) {
-      newIssue(tree, String.format(MESSAGE, inheritanceCounter, max))
+      PreciseIssue issue = newIssue(tree, String.format(MESSAGE, inheritanceCounter, max))
         .cost(inheritanceCounter - max);
+      superClasses.forEach(e -> issue.secondary(e.location(), null));
     }
     inheritanceCounter = 0;
   }
