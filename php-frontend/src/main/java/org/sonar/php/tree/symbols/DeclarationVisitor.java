@@ -20,11 +20,14 @@
 package org.sonar.php.tree.symbols;
 
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbol;
@@ -32,6 +35,7 @@ import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ClassSymbolIndex;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.FunctionSymbolData;
+import org.sonar.php.symbols.FunctionSymbolData.FunctionSymbolProperties;
 import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.Parameter;
@@ -68,15 +72,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private ClassSymbolIndex classSymbolIndex;
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
-
-  private Map<String, Boolean> functionProperties = initFunctionProperties();
-
-  private static Map<String, Boolean> initFunctionProperties() {
-    Map<String, Boolean> map = new HashMap<>();
-    map.put("hasReturn", false);
-    map.put("hasFuncGetArgs", false);
-    return map;
-  }
+  private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -122,8 +118,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    Map<String, Boolean> backFunctionProperties = new HashMap<>(functionProperties);
-    functionProperties = initFunctionProperties();
+    functionPropertiesStack.push(new FunctionSymbolProperties());
 
     symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
 
@@ -136,29 +131,28 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     super.visitFunctionDeclaration(tree);
 
-    FunctionSymbolData data =  new FunctionSymbolData(location(name), qualifiedName, parameters, functionProperties);
+    FunctionSymbolData data =  new FunctionSymbolData(location(name), qualifiedName, parameters, functionPropertiesStack.pop());
     functionSymbolDataByTree.put(tree, data);
-    functionProperties = backFunctionProperties;
   }
 
   @Override
   public void visitReturnStatement(ReturnStatementTree tree) {
-    functionProperties.put("hasReturn", true);
+    functionSymbolProperties().ifPresent(p -> p.hasReturn(true));
     super.visitReturnStatement(tree);
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    Map<String, Boolean> backFunctionProperties = new HashMap<>(functionProperties);
+    functionPropertiesStack.add(new FunctionSymbolProperties());
     super.visitFunctionExpression(tree);
-    functionProperties = backFunctionProperties;
+    functionPropertiesStack.pop();
   }
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (isFuncGetArgsCall(tree)) {
-      functionProperties.put("hasFuncGetArgs", true);
-    }
+    functionSymbolProperties().ifPresent(p -> {
+      if (isFuncGetArgsCall(tree)) { p.hasFuncGetArgs(true);}
+    });
     super.visitFunctionCall(tree);
   }
 
@@ -176,6 +170,13 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   public FunctionSymbolIndex functionSymbolIndex() {
     return functionSymbolIndex;
+  }
+
+  private Optional<FunctionSymbolProperties> functionSymbolProperties() {
+    if (!functionPropertiesStack.isEmpty()) {
+      return Optional.of(functionPropertiesStack.getFirst());
+    }
+    return Optional.empty();
   }
 
   private LocationInFile location(Tree tree) {

@@ -20,7 +20,6 @@
 package org.sonar.php.symbols;
 
 import java.util.List;
-import java.util.Map;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
@@ -28,9 +27,9 @@ public class FunctionSymbolData {
   private final LocationInFile location;
   private final QualifiedName qualifiedName;
   private final List<Parameter> parameters;
-  private final Map<String, Boolean> properties;
+  private final FunctionSymbolProperties properties;
 
-  public FunctionSymbolData(LocationInFile location, QualifiedName qualifiedName, List<Parameter> parameters, Map<String, Boolean> properties) {
+  public FunctionSymbolData(LocationInFile location, QualifiedName qualifiedName, List<Parameter> parameters, FunctionSymbolProperties properties) {
     this.location = location;
     this.qualifiedName = qualifiedName;
     this.parameters = parameters;
@@ -50,10 +49,31 @@ public class FunctionSymbolData {
   }
 
   public boolean hasReturn() {
-    return properties.getOrDefault("hasReturn", false);
+    return properties.hasReturn();
   }
 
   public boolean hasFuncGetArgs() {
-    return properties.getOrDefault("hasFuncGetArgs", false);
+    return properties.hasFuncGetArgs();
+  }
+
+  public static class FunctionSymbolProperties {
+    private boolean hasReturn = false;
+    private boolean hasFuncGetArgs = false;
+
+    public boolean hasReturn() {
+      return hasReturn;
+    }
+
+    public void hasReturn(boolean hasReturn) {
+      this.hasReturn = hasReturn;
+    }
+
+    public boolean hasFuncGetArgs() {
+      return hasFuncGetArgs;
+    }
+
+    public void hasFuncGetArgs(boolean hasFuncGetArgs) {
+      this.hasFuncGetArgs = hasFuncGetArgs;
+    }
   }
 }
