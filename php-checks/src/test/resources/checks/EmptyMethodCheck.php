@@ -87,6 +87,11 @@ function function7() {} // Compliant
 function function8() {} // Compliant
 
 /**
+ * Co
+ */
+function function9() {} // Noncompliant
+
+/*
  * CommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommententtCommentCommentCommentCommentCommentCommentCommentCommentent
  * CommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommenenttCommentCommentCommentCommentCommentCommentCommentCommentent
  * CommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommenenttCommentCommentCommentCommentCommentCommentCommentCommentent
@@ -95,4 +100,4 @@ function function8() {} // Compliant
  * CommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommenenttCommentCommentCommentCommentCommentCommentCommentCommentent
  * CommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommententtCommentCommentCommentCommentCommentCommentCommentCommentent
  */
-function function9() {} // Compliant - is related to https://jira.sonarsource.com/browse/SONARPHP-1022
+function function10() {} // Compliant - is related to https://jira.sonarsource.com/browse/SONARPHP-1022
