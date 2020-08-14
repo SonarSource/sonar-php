@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -260,6 +261,9 @@ public class ProjectSymbolTableTest {
 
     Optional<MethodDeclarationTreeImpl> methodDeclarationTree = firstDescendant(ast, MethodDeclarationTreeImpl.class);
     assertThat(methodDeclarationTree.get().symbol()).isInstanceOf(MethodSymbolImpl.class);
+
+    Optional<ClassDeclarationTreeImpl> classDeclarationTree = firstDescendant(ast, ClassDeclarationTreeImpl.class);
+    assertThat(methodDeclarationTree.get().symbol()).isSameAs(classDeclarationTree.get().symbol().getDeclaredMethod("foo"));
   }
 
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {
