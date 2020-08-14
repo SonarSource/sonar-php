@@ -27,11 +27,13 @@ public class Parameter {
   private final String name;
   private final String type;
   private final boolean hasDefault;
+  private final boolean hasEllipsisOperator;
 
-  public Parameter(String name, @Nullable String type, boolean hasDefault) {
+  public Parameter(String name, @Nullable String type, boolean hasDefault, boolean hasEllipsisOperator) {
     this.type = type;
     this.name = name;
     this.hasDefault = hasDefault;
+    this.hasEllipsisOperator = hasEllipsisOperator;
   }
 
   public static Parameter fromTree(ParameterTree parameter) {
@@ -41,7 +43,8 @@ public class Parameter {
     return new Parameter(
       parameterName,
       parameterType,
-      parameter.initValue() != null
+      parameter.initValue() != null,
+      parameter.ellipsisToken() != null
     );
   }
 
@@ -55,5 +58,9 @@ public class Parameter {
 
   public boolean hasDefault() {
     return hasDefault;
+  }
+
+  public boolean hasEllipsisOperator() {
+    return hasEllipsisOperator;
   }
 }

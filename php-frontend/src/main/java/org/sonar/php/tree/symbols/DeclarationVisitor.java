@@ -20,19 +20,22 @@
 package org.sonar.php.tree.symbols;
 
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ClassSymbolIndex;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.FunctionSymbolData;
+import org.sonar.php.symbols.FunctionSymbolData.FunctionSymbolProperties;
 import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.Parameter;
@@ -48,6 +51,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -68,8 +72,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private ClassSymbolIndex classSymbolIndex;
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
-
-  private boolean didFindReturn;
+  private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -115,8 +118,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    boolean backDidFindReturn = didFindReturn;
-    didFindReturn = false;
+    functionPropertiesStack.push(new FunctionSymbolProperties());
 
     symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
 
@@ -129,21 +131,29 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     super.visitFunctionDeclaration(tree);
 
-    functionSymbolDataByTree.put(tree, new FunctionSymbolData(location(name), qualifiedName, parameters, didFindReturn));
-    didFindReturn = backDidFindReturn;
+    FunctionSymbolData data =  new FunctionSymbolData(location(name), qualifiedName, parameters, functionPropertiesStack.pop());
+    functionSymbolDataByTree.put(tree, data);
   }
 
   @Override
   public void visitReturnStatement(ReturnStatementTree tree) {
-    didFindReturn = true;
+    functionSymbolProperties().ifPresent(p -> p.hasReturn(true));
     super.visitReturnStatement(tree);
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    boolean backDidFindReturn = didFindReturn;
+    functionPropertiesStack.add(new FunctionSymbolProperties());
     super.visitFunctionExpression(tree);
-    didFindReturn = backDidFindReturn;
+    functionPropertiesStack.pop();
+  }
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    functionSymbolProperties().ifPresent(p -> {
+      if (isFuncGetArgsCall(tree)) { p.hasFuncGetArgs(true);}
+    });
+    super.visitFunctionCall(tree);
   }
 
   public Collection<ClassSymbolData> classSymbolData() {
@@ -162,6 +172,13 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     return functionSymbolIndex;
   }
 
+  private Optional<FunctionSymbolProperties> functionSymbolProperties() {
+    if (!functionPropertiesStack.isEmpty()) {
+      return Optional.of(functionPropertiesStack.getFirst());
+    }
+    return Optional.empty();
+  }
+
   private LocationInFile location(Tree tree) {
     if (filePath == null) {
       return UnknownLocationInFile.UNKNOWN_LOCATION;
@@ -169,6 +186,11 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     SyntaxToken firstToken = ((PHPTree) tree).getFirstToken();
     SyntaxToken lastToken = ((PHPTree) tree).getLastToken();
     return new LocationInFileImpl(filePath, firstToken.line(), firstToken.column(), lastToken.endLine(), lastToken.endColumn());
+  }
+
+  private static boolean isFuncGetArgsCall(FunctionCallTree fct) {
+    return fct.callee().is(Tree.Kind.NAMESPACE_NAME)
+      && ((NamespaceNameTree) fct.callee()).fullyQualifiedName().matches("func_get_arg(s)?");
   }
 
 }

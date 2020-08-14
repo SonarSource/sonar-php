@@ -143,6 +143,7 @@ public class CheckList {
       ForLoopCounterChangedCheck.class,
       ForLoopIncrementSignCheck.class,
       FormattingStandardCheck.class,
+      FunctionCallArgumentsNumberCheck.class,
       FunctionCognitiveComplexityCheck.class,
       FunctionComplexityCheck.class,
       FunctionDefineOutsideClassCheck.class,

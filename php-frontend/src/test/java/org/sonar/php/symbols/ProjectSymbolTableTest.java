@@ -148,7 +148,9 @@ public class ProjectSymbolTableTest {
     assertThat(symbol.parameters()).hasSize(3);
     assertThat(symbol.parameters().get(0).name()).isEqualTo("$x");
     assertThat(symbol.parameters().get(0).type()).isEqualTo("int");
+    assertThat(symbol.parameters().get(0).hasEllipsisOperator()).isFalse();
     assertThat(symbol.parameters().get(1).hasDefault()).isFalse();
+    assertThat(symbol.parameters().get(1).hasEllipsisOperator()).isTrue();
     assertThat(symbol.parameters().get(2).hasDefault()).isTrue();
   }
 
@@ -178,6 +180,34 @@ public class ProjectSymbolTableTest {
     FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
 
     assertThat(symbol.hasReturn()).isFalse();
+  }
+
+  @Test
+  public void function_has_func_get_args() {
+    PhpFile file1 = file("file1.php", "<?php function a() { $args = func_get_args(); }");
+    PhpFile file2 = file("file2.php", "<?php a();");
+    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2);
+    Tree ast = parser.parse(file2.contents());
+    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
+
+    Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
+    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
+
+    assertThat(symbol.hasFuncGetArgs()).isTrue();
+  }
+
+  @Test
+  public void function_has_func_get_args_function_expression_and_inner() {
+    PhpFile file1 = file("file1.php", "<?php function a() { function foo() { $args = func_get_args();} $x = function() {$args = func_get_args();}; }");
+    PhpFile file2 = file("file2.php", "<?php a();");
+    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2);
+    Tree ast = parser.parse(file2.contents());
+    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
+
+    Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
+    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
+
+    assertThat(symbol.hasFuncGetArgs()).isFalse();
   }
 
   @Test

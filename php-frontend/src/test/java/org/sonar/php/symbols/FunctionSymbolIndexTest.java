@@ -19,13 +19,13 @@
  */
 package org.sonar.php.symbols;
 
-import org.junit.Test;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.sonar.plugins.php.api.symbols.QualifiedName.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class FunctionSymbolIndexTest {
 
@@ -75,10 +75,11 @@ public class FunctionSymbolIndexTest {
     assertThat(result.isUnknownSymbol()).isTrue();
     assertThat(result.location()).isInstanceOf(UnknownLocationInFile.class);
     assertThat(result.hasReturn()).isFalse();
+    assertThat(result.hasFuncGetArgs()).isFalse();
   }
 
   private FunctionSymbolData data(String name) {
-    return new FunctionSymbolData(someLocation(), qualifiedName(name), new ArrayList<>(), false);
+    return new FunctionSymbolData(someLocation(), qualifiedName(name), new ArrayList<>(), new FunctionSymbolData.FunctionSymbolProperties());
   }
 
   private FunctionSymbolIndex index(FunctionSymbolData... data) {

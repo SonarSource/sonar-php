@@ -17,21 +17,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
+package org.sonar.php.checks;
 
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
+import org.junit.Test;
+import org.sonar.plugins.php.CheckVerifier;
 
-import java.util.List;
+public class FunctionCallArgumentsNumberCheckTest {
 
-public interface FunctionSymbol extends Symbol {
-  LocationInFile location();
-
-  QualifiedName qualifiedName();
-
-  boolean hasReturn();
-
-  boolean hasFuncGetArgs();
-
-  List<Parameter> parameters();
+  @Test
+  public void test() {
+    CheckVerifier.verify(new FunctionCallArgumentsNumberCheck(), "FunctionCallArgumentsNumberCheck.php");
+  }
 }

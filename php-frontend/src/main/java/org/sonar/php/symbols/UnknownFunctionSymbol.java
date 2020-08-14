@@ -48,6 +48,11 @@ public class UnknownFunctionSymbol implements FunctionSymbol {
   }
 
   @Override
+  public boolean hasFuncGetArgs() {
+    return false;
+  }
+
+  @Override
   public List<Parameter> parameters() {
     return Collections.emptyList();
   }
