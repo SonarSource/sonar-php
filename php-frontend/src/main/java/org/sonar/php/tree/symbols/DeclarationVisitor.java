@@ -190,7 +190,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   private static boolean isFuncGetArgsCall(FunctionCallTree fct) {
     return fct.callee().is(Tree.Kind.NAMESPACE_NAME)
-      && ((NamespaceNameTree) fct.callee()).fullyQualifiedName().equals("func_get_args");
+      && ((NamespaceNameTree) fct.callee()).fullyQualifiedName().matches("func_get_arg(s)?");
   }
 
 }

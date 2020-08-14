@@ -25,6 +25,11 @@ function function7() {
 }
 function7($a); // Noncompliant
 
+function function8() {
+  $arg = func_get_arg(1);
+}
+function8($a); // OK
+
 namespace Foo {
   function namespaced($a) {}
 }
