@@ -56,6 +56,10 @@ public class FunctionSymbolData {
     return properties.hasFuncGetArgs();
   }
 
+  public FunctionSymbolProperties properties() {
+    return properties;
+  }
+
   public static class FunctionSymbolProperties {
     private boolean hasReturn = false;
     private boolean hasFuncGetArgs = false;

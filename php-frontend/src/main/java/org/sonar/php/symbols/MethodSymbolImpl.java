@@ -23,7 +23,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
   private final MethodSymbolData data;
 
   public MethodSymbolImpl(MethodSymbolData data) {
-    super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.hasReturn()));
+    super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties()));
     this.data = data;
   }
 

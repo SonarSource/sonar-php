@@ -31,9 +31,9 @@ public class MethodSymbolData extends FunctionSymbolData {
   public MethodSymbolData(LocationInFile location,
     String name,
     List<Parameter> parameters,
-    boolean hasReturn,
+    FunctionSymbolProperties properties,
     Visibility visibility) {
-    super(location, QualifiedName.qualifiedName(name), parameters, hasReturn);
+    super(location, QualifiedName.qualifiedName(name), parameters, properties);
     this.name = name;
     this.visibility = visibility;
   }

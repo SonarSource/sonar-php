@@ -19,23 +19,24 @@
  */
 package org.sonar.php.tree.symbols;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Deque;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
-import com.google.common.collect.ImmutableSet;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ClassSymbolIndex;
@@ -62,8 +63,8 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -159,8 +160,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       return;
     }
 
-    boolean didFindReturnBack = didFindReturn;
-    didFindReturn = false;
+    functionPropertiesStack.push(new FunctionSymbolProperties());
 
     IdentifierTree name = tree.name();
 
@@ -176,8 +176,8 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     super.visitMethodDeclaration(tree);
 
-    MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), name.text(), parameters, didFindReturn,
-      Visibility.valueOf(visibility));
+    MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), name.text(), parameters,
+      functionPropertiesStack.pop(), Visibility.valueOf(visibility));
 
     methodTreeByData.put(methodSymbolData, (MethodDeclarationTreeImpl) tree);
 
@@ -186,8 +186,6 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     } else {
       ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
     }
-
-    didFindReturn = didFindReturnBack;
   }
 
   @Override
