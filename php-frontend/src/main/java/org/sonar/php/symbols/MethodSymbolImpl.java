@@ -19,28 +19,22 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.List;
-import java.util.Optional;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
+public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
+  private final MethodSymbolData data;
 
-public interface ClassSymbol extends Symbol {
+  public MethodSymbolImpl(MethodSymbolData data) {
+    super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties()));
+    this.data = data;
+  }
 
-  LocationInFile location();
+  @Override
+  public Visibility visibility() {
+    return data.visibility();
+  }
 
-  QualifiedName qualifiedName();
+  @Override
+  public String name() {
+    return data.name();
+  }
 
-  Optional<ClassSymbol> superClass();
-
-  List<ClassSymbol> implementedInterfaces();
-
-  boolean isInterface();
-
-  Trilean isOrSubClassOf(QualifiedName qualifiedName);
-
-  Trilean isSubTypeOf(QualifiedName typeName);
-
-  List<MethodSymbol> declaredMethods();
-
-  MethodSymbol getDeclaredMethod(String name);
 }

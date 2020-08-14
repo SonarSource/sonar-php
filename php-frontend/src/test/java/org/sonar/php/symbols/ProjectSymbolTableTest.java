@@ -30,6 +30,8 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -54,9 +56,7 @@ public class ProjectSymbolTableTest {
     PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
     PhpFile file2 = file("file2.php", "<?php namespace ns1; class C extends B {}");
     PhpFile file3 = file("file3.php", "<?php namespace ns1; class B extends A {}");
-    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2, file3);
-    Tree ast = parser.parse(file2.contents());
-    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
+    Tree ast = getAst(file2, buildProjectSymbolData(file1, file2, file3));
     Optional<ClassDeclarationTree> classDeclarationTree = firstDescendant(ast, ClassDeclarationTree.class);
     ClassSymbol c = Symbols.get(classDeclarationTree.get());
     assertThat(c.qualifiedName()).hasToString("ns1\\c");
@@ -73,10 +73,8 @@ public class ProjectSymbolTableTest {
   public void implemented_interfaces() {
     PhpFile file2 = file("file2.php", "<?php namespace ns1; class B extends A implements C {}");
     PhpFile file3 = file("file3.php", "<?php namespace ns1; interface C extends D {}");
-    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file2, file3);
+    Tree ast = getAst(file2, buildProjectSymbolData(file2, file3));
 
-    Tree ast = parser.parse(file2.contents());
-    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
     ClassDeclarationTree bDeclaration = firstDescendant(ast, ClassDeclarationTree.class).get();
 
     ClassSymbol b = Symbols.get(bDeclaration);
@@ -97,8 +95,8 @@ public class ProjectSymbolTableTest {
   public void catch_clause() {
     PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
     PhpFile file2 = file("file2.php", "<?php namespace ns1; try {} catch (A $a) {}");
-    Tree ast = parser.parse(file2.contents());
-    SymbolTableImpl.create((CompilationUnitTree) ast, buildProjectSymbolData(file1, file2), file2);
+    Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
+
     CatchBlockTree catchBlockTree = firstDescendant(ast, CatchBlockTree.class).get();
     ClassSymbol a = Symbols.getClass(catchBlockTree.exceptionTypes().get(0));
     assertThat(a.location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 27, 1, 28));
@@ -108,8 +106,7 @@ public class ProjectSymbolTableTest {
   public void new_expression() {
     PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
     PhpFile file2 = file("file2.php", "<?php namespace ns1;\n new A();\n new A;");
-    Tree ast = parser.parse(file2.contents());
-    SymbolTableImpl.create((CompilationUnitTree) ast, buildProjectSymbolData(file1, file2), file2);
+    Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
 
     List<NewExpressionTree> newExpressions = TreeUtils.descendants(ast)
       .filter(NewExpressionTree.class::isInstance)
@@ -137,9 +134,7 @@ public class ProjectSymbolTableTest {
   public void function_symbol_added_to_call() {
     PhpFile file1 = file("file1.php", "<?php function a(int $x, string... $y, $z = 'default') {}");
     PhpFile file2 = file("file2.php", "<?php a();");
-    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2);
-    Tree ast = parser.parse(file2.contents());
-    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
+    Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
     FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
@@ -158,9 +153,7 @@ public class ProjectSymbolTableTest {
   public void function_has_return() {
     PhpFile file1 = file("file1.php", "<?php function a() { return $y; }");
     PhpFile file2 = file("file2.php", "<?php a();");
-    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2);
-    Tree ast = parser.parse(file2.contents());
-    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
+    Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
     FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
@@ -172,9 +165,7 @@ public class ProjectSymbolTableTest {
   public void function_has_return_function_expression_and_inner() {
     PhpFile file1 = file("file1.php", "<?php function a() { function foo() {return $y;} $x = function() {return $y;}; }");
     PhpFile file2 = file("file2.php", "<?php a();");
-    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2);
-    Tree ast = parser.parse(file2.contents());
-    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
+    Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
     FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
@@ -213,9 +204,7 @@ public class ProjectSymbolTableTest {
   @Test
   public void unknown_function_symbol() {
     PhpFile file1 = file("file1.php", "<?php a();");
-    ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1);
-    Tree ast = parser.parse(file1.contents());
-    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file1);
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
     FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
@@ -236,6 +225,47 @@ public class ProjectSymbolTableTest {
       .isInstanceOf(IllegalStateException.class);
   }
 
+  @Test
+  public void get_class_methods() {
+    PhpFile file1 = file("file1.php", "<?php namespace SomeNamespace; class A {public function foo(){}}");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+
+    Optional<ClassDeclarationTree> classDeclaration = firstDescendant(ast, ClassDeclarationTree.class);
+    ClassSymbol classSymbol = Symbols.get(classDeclaration.get());
+
+    assertThat(classSymbol.declaredMethods()).hasSize(1);
+
+    MethodSymbol methodSymbol = classSymbol.getDeclaredMethod("foo");
+    assertThat(methodSymbol.isUnknownSymbol()).isFalse();
+    assertThat(methodSymbol.parameters()).isEmpty();
+    assertThat(methodSymbol.hasReturn()).isFalse();
+    assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
+    assertThat(methodSymbol.location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 56, 1, 59));
+  }
+
+  @Test
+  public void get_class_methods_anonymous() {
+    PhpFile file1 = file("file1.php", "<?php class A {public function x() {$o = new class() {public function anon() {}};}}");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+
+    Optional<ClassDeclarationTree> classDeclaration = firstDescendant(ast, ClassDeclarationTree.class);
+    ClassSymbol classSymbol = Symbols.get(classDeclaration.get());
+    assertThat(classSymbol.declaredMethods()).hasSize(1);
+    assertThat(classSymbol.getDeclaredMethod("anon")).isInstanceOf(UnknownMethodSymbol.class);
+  }
+
+  @Test
+  public void get_symbol_from_method_declaration() {
+    PhpFile file1 = file("file1.php", "<?php namespace SomeNamespace; class A {public function foo(){}}");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+
+    Optional<MethodDeclarationTreeImpl> methodDeclarationTree = firstDescendant(ast, MethodDeclarationTreeImpl.class);
+    assertThat(methodDeclarationTree.get().symbol()).isInstanceOf(MethodSymbolImpl.class);
+
+    Optional<ClassDeclarationTreeImpl> classDeclarationTree = firstDescendant(ast, ClassDeclarationTreeImpl.class);
+    assertThat(methodDeclarationTree.get().symbol()).isSameAs(classDeclarationTree.get().symbol().getDeclaredMethod("foo"));
+  }
+
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {
     ProjectSymbolData projectSymbolData = new ProjectSymbolData();
     for (PhpFile file : files) {
@@ -245,6 +275,13 @@ public class ProjectSymbolTableTest {
       symbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
     }
     return projectSymbolData;
+  }
+
+  private Tree getAst(PhpFile file, ProjectSymbolData projectSymbolData) {
+    Tree ast = parser.parse(file.contents());
+    SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file);
+
+    return ast;
   }
 
   private String filePath(String fileName) {

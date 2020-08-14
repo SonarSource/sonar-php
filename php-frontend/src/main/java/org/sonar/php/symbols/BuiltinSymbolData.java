@@ -20,6 +20,7 @@
 package org.sonar.php.symbols;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,9 +40,9 @@ public enum BuiltinSymbolData {
 
   private Map<QualifiedName, ClassSymbolData> init() {
     List<ClassSymbolData> data = Arrays.asList(
-      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Throwable"), null, emptyList(), true),
-      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Exception"), null, singletonList(qualifiedName("Throwable"))),
-      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("RuntimeException"), qualifiedName("Exception"), emptyList())
+      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Throwable"), null, emptyList(), true, Collections.emptyList()),
+      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Exception"), null, singletonList(qualifiedName("Throwable")), Collections.emptyList()),
+      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("RuntimeException"), qualifiedName("Exception"), emptyList(), Collections.emptyList())
     );
     return data.stream().collect(Collectors.toMap(ClassSymbolData::qualifiedName, a -> a));
   }

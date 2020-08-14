@@ -19,17 +19,24 @@
  */
 package org.sonar.php.tree.symbols;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ClassSymbolIndex;
@@ -38,19 +45,25 @@ import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData.FunctionSymbolProperties;
 import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
+import org.sonar.php.symbols.MethodSymbolData;
+import org.sonar.php.symbols.MethodSymbolImpl;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
+import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -70,9 +83,16 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private Scope globalScope;
   private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
   private ClassSymbolIndex classSymbolIndex;
+  private final Map<ClassDeclarationTree, List<MethodSymbolData>> methodsByClassTree = new HashMap<>();
+  private final Map<MethodSymbolData, MethodDeclarationTreeImpl> methodTreeByData = new HashMap<>();
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
+
+  private ClassDeclarationTree currentClassTree;
   private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
+  private boolean isInAnonymousClass;
+
+  private static final Set<String> VALID_VISIBILITIES = ImmutableSet.of("PUBLIC", "PRIVATE", "PROTECTED");
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -90,6 +110,10 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     classSymbolDataByTree.forEach((declaration, symbolData) -> {
       ClassSymbol symbol = classSymbolIndex.get(symbolData);
       ((ClassDeclarationTreeImpl) declaration).setSymbol(symbol);
+      if (methodsByClassTree.containsKey(declaration)) {
+        methodsByClassTree.get(declaration)
+          .forEach(methodData -> methodTreeByData.get(methodData).setSymbol(symbol.getDeclaredMethod(methodData.name())));
+      }
     });
 
     functionSymbolIndex = FunctionSymbolIndex.create(new HashSet<>(functionSymbolDataByTree.values()), projectSymbolData);
@@ -101,6 +125,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
+    currentClassTree = tree;
     NamespaceNameTree superClass = tree.superClass();
     QualifiedName superClassName = superClass == null ? null : getFullyQualifiedName(superClass, Symbol.Kind.CLASS);
 
@@ -110,10 +135,57 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     IdentifierTree name = tree.name();
     SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
-    classSymbolDataByTree.put(tree, new ClassSymbolData(location(name), qualifiedName, superClassName, interfaceNames, tree.is(Tree.Kind.INTERFACE_DECLARATION)));
 
     symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
     super.visitClassDeclaration(tree);
+    ClassSymbolData classSymbolData = new ClassSymbolData(location(name), qualifiedName, superClassName, interfaceNames,
+      tree.is(Tree.Kind.INTERFACE_DECLARATION), methodsByClassTree.getOrDefault(tree, Collections.emptyList()));
+    classSymbolDataByTree.put(tree, classSymbolData);
+
+    currentClassTree = null;
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    boolean isInAnonymousClassBack = isInAnonymousClass;
+    isInAnonymousClass = true;
+    super.visitAnonymousClass(tree);
+    isInAnonymousClass = isInAnonymousClassBack;
+  }
+
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    if (currentClassTree == null) {
+      super.visitMethodDeclaration(tree);
+      return;
+    }
+
+    functionPropertiesStack.push(new FunctionSymbolProperties());
+
+    IdentifierTree name = tree.name();
+
+    List<Parameter> parameters = tree.parameters().parameters().stream()
+      .map(Parameter::fromTree)
+      .collect(Collectors.toList());
+
+    String visibility = tree.modifiers().stream()
+      .map(m -> m.text().toUpperCase(Locale.ROOT))
+      .filter(VALID_VISIBILITIES::contains)
+      .findFirst()
+      .orElse("PUBLIC");
+
+    super.visitMethodDeclaration(tree);
+
+    MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), name.text(), parameters,
+      functionPropertiesStack.pop(), Visibility.valueOf(visibility));
+
+    methodTreeByData.put(methodSymbolData, (MethodDeclarationTreeImpl) tree);
+
+    if (!isInAnonymousClass) {
+      methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
+    } else {
+      ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
+    }
   }
 
   @Override

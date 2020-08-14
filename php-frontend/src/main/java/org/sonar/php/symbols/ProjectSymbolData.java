@@ -51,5 +51,4 @@ public class ProjectSymbolData {
     FunctionSymbolData value = functionSymbolsByQualifiedName.get(qualifiedName);
     return Optional.ofNullable(value);
   }
-
 }

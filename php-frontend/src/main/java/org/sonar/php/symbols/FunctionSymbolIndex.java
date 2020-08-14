@@ -60,11 +60,11 @@ public class FunctionSymbolIndex {
     return symbolsByData.get(symbolData);
   }
 
-  private static class FunctionSymbolImpl implements FunctionSymbol {
+  protected static class FunctionSymbolImpl implements FunctionSymbol {
 
     private final FunctionSymbolData data;
 
-    private FunctionSymbolImpl(FunctionSymbolData data) {
+    protected FunctionSymbolImpl(FunctionSymbolData data) {
       this.data = data;
     }
 

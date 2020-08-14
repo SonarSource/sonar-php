@@ -175,7 +175,6 @@ public class SymbolTableImpl implements SymbolTable {
     symbolsByTree.putIfAbsent(identifier, symbol);
   }
 
-
   @Override
   @CheckForNull
   public Symbol getSymbol(Tree tree) {

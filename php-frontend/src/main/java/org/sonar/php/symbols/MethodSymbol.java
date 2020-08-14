@@ -19,28 +19,8 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.List;
-import java.util.Optional;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
+public interface MethodSymbol extends FunctionSymbol {
+  Visibility visibility();
 
-public interface ClassSymbol extends Symbol {
-
-  LocationInFile location();
-
-  QualifiedName qualifiedName();
-
-  Optional<ClassSymbol> superClass();
-
-  List<ClassSymbol> implementedInterfaces();
-
-  boolean isInterface();
-
-  Trilean isOrSubClassOf(QualifiedName qualifiedName);
-
-  Trilean isSubTypeOf(QualifiedName typeName);
-
-  List<MethodSymbol> declaredMethods();
-
-  MethodSymbol getDeclaredMethod(String name);
+  String name();
 }

@@ -19,57 +19,31 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-class UnknownClassSymbol extends AbstractClassSymbol {
+import java.util.List;
 
-  private final QualifiedName qualifiedName;
+public class MethodSymbolData extends FunctionSymbolData {
+  private Visibility visibility;
+  private String name;
 
-  UnknownClassSymbol(QualifiedName qualifiedName) {
-    this.qualifiedName = qualifiedName;
+  public MethodSymbolData(LocationInFile location,
+    String name,
+    List<Parameter> parameters,
+    FunctionSymbolProperties properties,
+    Visibility visibility) {
+    super(location, QualifiedName.qualifiedName(name), parameters, properties);
+    this.name = name;
+    this.visibility = visibility;
   }
 
-  @Override
-  public LocationInFile location() {
-    return UnknownLocationInFile.UNKNOWN_LOCATION;
+  public Visibility visibility() {
+    return visibility;
   }
 
-  @Override
-  public QualifiedName qualifiedName() {
-    return qualifiedName;
+  public String name() {
+    return name;
   }
 
-  @Override
-  public Optional<ClassSymbol> superClass() {
-    return Optional.empty();
-  }
-
-  @Override
-  public List<ClassSymbol> implementedInterfaces() {
-    return Collections.emptyList();
-  }
-
-  @Override
-  public boolean isInterface() {
-    return false;
-  }
-
-  @Override
-  public List<MethodSymbol> declaredMethods() {
-    return Collections.emptyList();
-  }
-
-  @Override
-  public MethodSymbol getDeclaredMethod(String name) {
-    return new UnknownMethodSymbol(name);
-  }
-
-  @Override
-  public boolean isUnknownSymbol() {
-    return true;
-  }
 }
