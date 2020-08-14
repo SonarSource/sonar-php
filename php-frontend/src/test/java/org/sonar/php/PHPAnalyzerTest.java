@@ -39,6 +39,7 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -86,10 +87,10 @@ public class PHPAnalyzerTest {
     PHPAnalyzer analyzer = createAnalyzer(check);
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
-    analyzer.analyze();
 
-    assertThat(logTester.logs(LoggerLevel.WARN).size()).isEqualTo(1);
-    assertThat(logTester.logs(LoggerLevel.WARN).get(0)).startsWith("Stack overflow");
+    assertThatExceptionOfType(StackOverflowError.class).isThrownBy(analyzer::analyze);
+    assertThat(logTester.logs(LoggerLevel.ERROR).size()).isEqualTo(1);
+    assertThat(logTester.logs(LoggerLevel.ERROR).get(0)).startsWith("Stack overflow");
   }
 
   @Test

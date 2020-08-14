@@ -99,7 +99,8 @@ public class PHPAnalyzer {
       try {
         issues = check.analyze(context);
       } catch (StackOverflowError e) {
-        LOG.warn(String.format("Stack overflow of %s in file [%s]", check.getClass().getName(), currentFile.uri()));
+        LOG.error("Stack overflow of {} in file {}", check.getClass().getName(), currentFile.uri());
+        throw e;
       }
       issuesBuilder.addAll(issues);
     }
