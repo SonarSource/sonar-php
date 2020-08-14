@@ -160,6 +160,7 @@ public class CheckList {
       IgnoredReturnValueCheck.class,
       ImmediatelyReturnedVariableCheck.class,
       IncrementDecrementInSubExpressionCheck.class,
+      InheritanceDepthCheck.class,
       InlineHTMLInFileCheck.class,
       InsecureHashCheck.class,
       InterfaceNameCheck.class,

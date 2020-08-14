@@ -40,10 +40,10 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Add a nested comment explaining why this %s is empty, throw an Exception or complete the implementation.";
 
-  private static final int MINIMUM_NUMBER_OF_WORD_CHARS_IN_COMMENT = 3;
-  private static final String VALUABLE_COMMENT_FORMAT = "(//|#|/\\*)(.|\n)*\\w{%d,}";
+  private static final int MIN_WORD_CHARS = 3;
+  private static final String VALUABLE_COMMENT_FORMAT = "\\w{%d}";
 
-  private static final Pattern VALUABLE_COMMENT_PATTERN = Pattern.compile(String.format(VALUABLE_COMMENT_FORMAT, MINIMUM_NUMBER_OF_WORD_CHARS_IN_COMMENT));
+  private static final Pattern VALUABLE_COMMENT_PATTERN = Pattern.compile(String.format(VALUABLE_COMMENT_FORMAT, MIN_WORD_CHARS));
 
 
   @Override
