@@ -32,16 +32,20 @@ import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.utils.DummyCheck;
+import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class PHPAnalyzerTest {
 
@@ -73,6 +77,20 @@ public class PHPAnalyzerTest {
 
     FileMeasures measures = analyzer.computeMeasures(mock(FileLinesContext.class));
     assertThat(measures.getLinesOfCodeNumber()).isEqualTo(1);
+  }
+
+  @Test
+  public void test_analyse_with_stack_overflow() throws Exception {
+    PHPCheck check = spy(PHPCheck.class);
+    when(check.analyze(any(CheckContext.class))).thenThrow(StackOverflowError.class);
+
+    PHPAnalyzer analyzer = createAnalyzer(check);
+    PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
+    analyzer.nextFile(file);
+
+    assertThatExceptionOfType(StackOverflowError.class).isThrownBy(analyzer::analyze);
+    assertThat(logTester.logs(LoggerLevel.ERROR).size()).isEqualTo(1);
+    assertThat(logTester.logs(LoggerLevel.ERROR).get(0)).startsWith("Stack overflow");
   }
 
   @Test
