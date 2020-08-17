@@ -44,22 +44,27 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (tree.callee().is(Tree.Kind.NAMESPACE_NAME) && !requireNonNull(tree.getParent()).is(Tree.Kind.NEW_EXPRESSION)) {
-      NamespaceNameTree callee = (NamespaceNameTree) tree.callee();
-      FunctionSymbol symbol = Symbols.getFunction(callee);
+      checkArguments(tree);
+    }
 
-      if (!symbol.isUnknownSymbol() && !symbol.hasFuncGetArgs()) {
-        actualArguments = tree.arguments().size();
-        List<Parameter> parameters = symbol.parameters();
+    super.visitFunctionCall(tree);
+  }
 
-        if (!hasEllipsisOperator(parameters) && actualArguments > maxArguments(parameters)) {
+  private void checkArguments(FunctionCallTree fct) {
+    NamespaceNameTree callee = (NamespaceNameTree) fct.callee();
+    FunctionSymbol symbol = Symbols.getFunction(callee);
+
+    if (!symbol.isUnknownSymbol() && !symbol.hasFuncGetArgs()) {
+      actualArguments = fct.arguments().size();
+      List<Parameter> parameters = symbol.parameters();
+      if (!hasEllipsisOperator(parameters)) {
+        if (actualArguments > maxArguments(parameters)) {
           addIssue(callee, symbol, MESSAGE_MORE, maxArguments(parameters));
         } else if (actualArguments < minArguments(parameters)) {
           addIssue(callee, symbol, MESSAGE_FEWER, minArguments(parameters));
         }
       }
     }
-
-    super.visitFunctionCall(tree);
   }
 
   private void addIssue(NamespaceNameTree callee, FunctionSymbol symbol, String messageAddition, int expectedArguments) {

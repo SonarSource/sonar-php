@@ -39,4 +39,12 @@ Foo\namespaced(); // Noncompliant
 $bar->foo();
 new Foo($a);
 
+function function9($a, ...$args) {
+}
+function9($a); // OK
+
+function function10($a, ...$args) {
+}
+function10($a, $b); // OK
+
 
