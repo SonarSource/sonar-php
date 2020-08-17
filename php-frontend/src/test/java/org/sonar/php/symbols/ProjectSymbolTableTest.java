@@ -209,10 +209,21 @@ public class ProjectSymbolTableTest {
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
     FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
 
-    assertThat(symbol).isInstanceOf(UnknownFunctionSymbol.class);
+    assertThat(symbol.isUnknownSymbol()).isTrue();
     assertThat(symbol.location()).isInstanceOf(UnknownLocationInFile.class);
     assertThat(symbol.parameters()).isEmpty();
     assertThat(symbol.qualifiedName()).isEqualTo(qualifiedName("a"));
+  }
+
+  @Test
+  public void duplicate_function_declaration() {
+    PhpFile file1 = file("file1.php", "<?php f();");
+    PhpFile file2 = file("file2.php", "<?php function f($p1) {}");
+    PhpFile file3 = file("file3.php", "<?php function f($p2) {}");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1, file2, file3));
+    Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
+    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree) functionCall.get().callee());
+    assertThat(symbol.isUnknownSymbol()).isTrue();
   }
 
   @Test
@@ -251,7 +262,7 @@ public class ProjectSymbolTableTest {
     Optional<ClassDeclarationTree> classDeclaration = firstDescendant(ast, ClassDeclarationTree.class);
     ClassSymbol classSymbol = Symbols.get(classDeclaration.get());
     assertThat(classSymbol.declaredMethods()).hasSize(1);
-    assertThat(classSymbol.getDeclaredMethod("anon")).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(classSymbol.getDeclaredMethod("anon").isUnknownSymbol()).isTrue();
   }
 
   @Test

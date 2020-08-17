@@ -19,7 +19,10 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -32,14 +35,16 @@ public class ProjectSymbolData {
 
   private final BuiltinSymbolData builtinSymbolData = BuiltinSymbolData.BUILTINS;
   private final Map<QualifiedName, ClassSymbolData> classSymbolsByQualifiedName = new HashMap<>();
-  private final Map<QualifiedName, FunctionSymbolData> functionSymbolsByQualifiedName = new HashMap<>();
+  private final Map<QualifiedName, List<FunctionSymbolData>> functionSymbolsByQualifiedName = new HashMap<>();
 
   public void add(ClassSymbolData classSymbolData) {
     classSymbolsByQualifiedName.put(classSymbolData.qualifiedName(), classSymbolData);
   }
 
   public void add(FunctionSymbolData functionSymbolData) {
-    functionSymbolsByQualifiedName.put(functionSymbolData.qualifiedName(), functionSymbolData);
+    functionSymbolsByQualifiedName
+      .computeIfAbsent(functionSymbolData.qualifiedName(), k -> new ArrayList<>(1))
+      .add(functionSymbolData);
   }
 
   public Optional<ClassSymbolData> classSymbolData(QualifiedName qualifiedName) {
@@ -47,8 +52,7 @@ public class ProjectSymbolData {
     return value == null ? builtinSymbolData.classSymbolData(qualifiedName) : Optional.of(value);
   }
 
-  public Optional<FunctionSymbolData> functionSymbolData(QualifiedName qualifiedName) {
-    FunctionSymbolData value = functionSymbolsByQualifiedName.get(qualifiedName);
-    return Optional.ofNullable(value);
+  public List<FunctionSymbolData> functionSymbolData(QualifiedName qualifiedName) {
+    return functionSymbolsByQualifiedName.getOrDefault(qualifiedName, Collections.emptyList());
   }
 }

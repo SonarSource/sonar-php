@@ -51,9 +51,14 @@ public class FunctionSymbolIndex {
   }
 
   public FunctionSymbol get(QualifiedName qualifiedName) {
-    return symbolsByQualifiedName.computeIfAbsent(qualifiedName, qn -> projectSymbolData.functionSymbolData(qn)
-      .<FunctionSymbol>map(FunctionSymbolIndex.FunctionSymbolImpl::new)
-      .orElse(new UnknownFunctionSymbol(qualifiedName)));
+    return symbolsByQualifiedName.computeIfAbsent(qualifiedName, qn -> {
+      List<FunctionSymbolData> all = projectSymbolData.functionSymbolData(qn);
+      if (all.size() == 1) {
+        return new FunctionSymbolImpl(all.get(0));
+      } else {
+        return new UnknownFunctionSymbol(qualifiedName);
+      }
+    });
   }
 
   public FunctionSymbol get(FunctionSymbolData symbolData) {
