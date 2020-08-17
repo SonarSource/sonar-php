@@ -18,7 +18,7 @@ class A {
   /**
    * @inheritdoc
    */
-  public function DoSomething() {  // OK
+  public function DoSomething() {  // Noncompliant
   }
 
   function DoSomething() {  // Noncompliant {{Rename function "DoSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
@@ -44,4 +44,13 @@ class A {
   public function __clone() {}
   public function __debugInfo() {}
 
+}
+
+class A1 extends A {
+  public function DoSomething() {} // OK, overrides A.DoSomething
+  public function DoSomethingElse() {} // Noncompliant
+}
+
+class B extends Unknown {
+  public function MayOverrideAnotherMethod() {}
 }
