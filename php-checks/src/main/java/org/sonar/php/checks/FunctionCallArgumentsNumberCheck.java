@@ -44,27 +44,30 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (tree.callee().is(Tree.Kind.NAMESPACE_NAME) && !requireNonNull(tree.getParent()).is(Tree.Kind.NEW_EXPRESSION)) {
-      NamespaceNameTree callee = (NamespaceNameTree) tree.callee();
-      FunctionSymbol symbol = Symbols.getFunction(callee);
-
-      if (!symbol.isUnknownSymbol() && !symbol.hasFuncGetArgs()) {
-        actualArguments = tree.arguments().size();
-        List<Parameter> parameters = symbol.parameters();
-
-        if (!hasEllipsisOperator(parameters) && actualArguments > maxArguments(parameters)) {
-          addIssue(callee, symbol, MESSAGE_MORE, maxArguments(parameters));
-        } else if (actualArguments < minArguments(parameters)) {
-          addIssue(callee, symbol, MESSAGE_FEWER, minArguments(parameters));
-        }
-      }
+      checkArguments(tree);
     }
 
     super.visitFunctionCall(tree);
   }
 
+  private void checkArguments(FunctionCallTree fct) {
+    NamespaceNameTree callee = (NamespaceNameTree) fct.callee();
+    FunctionSymbol symbol = Symbols.getFunction(callee);
+
+    if (!symbol.isUnknownSymbol() && !symbol.hasFuncGetArgs()) {
+      actualArguments = fct.arguments().size();
+      List<Parameter> parameters = symbol.parameters();
+      if (!hasEllipsisOperator(parameters) && actualArguments > maxArguments(parameters)) {
+        addIssue(callee, symbol, MESSAGE_MORE, maxArguments(parameters));
+      } else if (actualArguments < minArguments(parameters)) {
+        addIssue(callee, symbol, MESSAGE_FEWER, minArguments(parameters));
+      }
+    }
+  }
+
   private void addIssue(NamespaceNameTree callee, FunctionSymbol symbol, String messageAddition, int expectedArguments) {
     String expectedWord = expectedArguments == 1 ? "" : "s";
-    String actualWord = actualArguments == 1 ? "is" : "were";
+    String actualWord = actualArguments == 1 ? "was" : "were";
     newIssue(callee, String.format(MESSAGE, callee.fullName(), expectedArguments, expectedWord, actualArguments, actualWord, messageAddition))
       .secondary(symbol.location(), null);
   }
@@ -76,6 +79,7 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
   private static int minArguments(List<Parameter> parameters) {
     return (int) parameters.stream()
       .filter(p -> !p.hasDefault())
+      .filter(p -> !p.hasEllipsisOperator())
       .count();
   }
 
