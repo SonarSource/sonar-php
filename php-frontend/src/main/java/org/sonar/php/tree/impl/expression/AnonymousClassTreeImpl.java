@@ -23,8 +23,10 @@ import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
+import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -35,7 +37,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTree {
+public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTree, HasClassSymbol {
 
   private static final Kind KIND = Kind.ANONYMOUS_CLASS;
 
@@ -50,6 +52,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   private final SyntaxToken openCurlyBraceToken;
   private final List<ClassMemberTree> members;
   private final SyntaxToken closeCurlyBraceToken;
+  private ClassSymbol symbol;
 
   public AnonymousClassTreeImpl(
     SyntaxToken classToken,
@@ -173,5 +176,13 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   @Override
   public Kind getKind() {
     return KIND;
+  }
+
+  public ClassSymbol symbol() {
+    return symbol;
+  }
+
+  public void setSymbol(ClassSymbol symbol) {
+    this.symbol = symbol;
   }
 }

@@ -21,8 +21,10 @@ package org.sonar.php.symbols;
 
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 
 /**
  * Utility class to retrieve symbols from the AST.
@@ -51,5 +53,9 @@ public class Symbols {
       return (FunctionSymbol) symbol;
     }
     throw new IllegalStateException("No function symbol available on " + namespaceNameTree);
+  }
+
+  public static ClassSymbol get(AnonymousClassTree anonymousClassTree) {
+    return ((AnonymousClassTreeImpl) anonymousClassTree).symbol();
   }
 }

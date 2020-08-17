@@ -20,7 +20,6 @@
 package org.sonar.php.tree.symbols;
 
 import com.google.common.collect.ImmutableSet;
-
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ClassSymbolIndex;
@@ -46,13 +44,11 @@ import org.sonar.php.symbols.FunctionSymbolData.FunctionSymbolProperties;
 import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.MethodSymbolData;
-import org.sonar.php.symbols.MethodSymbolImpl;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -60,6 +56,7 @@ import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -81,18 +78,18 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   @Nullable
   private String filePath;
   private Scope globalScope;
-  private final Map<ClassDeclarationTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
+  private final Map<ClassTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
   private ClassSymbolIndex classSymbolIndex;
-  private final Map<ClassDeclarationTree, List<MethodSymbolData>> methodsByClassTree = new HashMap<>();
+  private final Map<ClassTree, List<MethodSymbolData>> methodsByClassTree = new HashMap<>();
   private final Map<MethodSymbolData, MethodDeclarationTreeImpl> methodTreeByData = new HashMap<>();
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
 
-  private ClassDeclarationTree currentClassTree;
+  private Deque<ClassTree> classTreeStack = new ArrayDeque<>();
   private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
-  private boolean isInAnonymousClass;
 
   private static final Set<String> VALID_VISIBILITIES = ImmutableSet.of("PUBLIC", "PRIVATE", "PROTECTED");
+  private static final QualifiedName ANONYMOUS_CLASS_NAME = QualifiedName.qualifiedName("<anonymous_class>");
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
@@ -109,7 +106,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     classSymbolIndex = ClassSymbolIndex.create(new HashSet<>(classSymbolDataByTree.values()), projectSymbolData);
     classSymbolDataByTree.forEach((declaration, symbolData) -> {
       ClassSymbol symbol = classSymbolIndex.get(symbolData);
-      ((ClassDeclarationTreeImpl) declaration).setSymbol(symbol);
+      ((HasClassSymbol) declaration).setSymbol(symbol);
       if (methodsByClassTree.containsKey(declaration)) {
         methodsByClassTree.get(declaration)
           .forEach(methodData -> methodTreeByData.get(methodData).setSymbol(symbol.getDeclaredMethod(methodData.name())));
@@ -125,7 +122,23 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    currentClassTree = tree;
+    SymbolQualifiedName qualifiedName = currentNamespace().resolve(tree.name().text());
+    symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
+    classTreeStack.push(tree);
+    super.visitClassDeclaration(tree);
+    classTreeStack.pop();
+    addClassSymbolData(tree, qualifiedName, location(tree.name()));
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    classTreeStack.push(tree);
+    super.visitAnonymousClass(tree);
+    classTreeStack.pop();
+    addClassSymbolData(tree, ANONYMOUS_CLASS_NAME, location(tree.classToken()));
+  }
+
+  private void addClassSymbolData(ClassTree tree, QualifiedName qualifiedName, LocationInFile location) {
     NamespaceNameTree superClass = tree.superClass();
     QualifiedName superClassName = superClass == null ? null : getFullyQualifiedName(superClass, Symbol.Kind.CLASS);
 
@@ -133,28 +146,14 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .map(name -> getFullyQualifiedName(name, Symbol.Kind.CLASS))
       .collect(Collectors.toList());
 
-    IdentifierTree name = tree.name();
-    SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
-
-    symbolTable.declareTypeSymbol(tree.name(), globalScope, qualifiedName);
-    super.visitClassDeclaration(tree);
-    ClassSymbolData classSymbolData = new ClassSymbolData(location(name), qualifiedName, superClassName, interfaceNames,
+    ClassSymbolData classSymbolData = new ClassSymbolData(location, qualifiedName, superClassName, interfaceNames,
       tree.is(Tree.Kind.INTERFACE_DECLARATION), methodsByClassTree.getOrDefault(tree, Collections.emptyList()));
     classSymbolDataByTree.put(tree, classSymbolData);
-
-    currentClassTree = null;
-  }
-
-  @Override
-  public void visitAnonymousClass(AnonymousClassTree tree) {
-    boolean isInAnonymousClassBack = isInAnonymousClass;
-    isInAnonymousClass = true;
-    super.visitAnonymousClass(tree);
-    isInAnonymousClass = isInAnonymousClassBack;
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    ClassTree currentClassTree = classTreeStack.peek();
     if (currentClassTree == null) {
       super.visitMethodDeclaration(tree);
       return;
@@ -180,12 +179,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       functionPropertiesStack.pop(), Visibility.valueOf(visibility));
 
     methodTreeByData.put(methodSymbolData, (MethodDeclarationTreeImpl) tree);
-
-    if (!isInAnonymousClass) {
-      methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
-    } else {
-      ((MethodDeclarationTreeImpl) tree).setSymbol(new MethodSymbolImpl(methodSymbolData));
-    }
+    methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
   }
 
   @Override
