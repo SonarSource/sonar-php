@@ -5,17 +5,23 @@ an exception was thrown before getting to that point.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 public function testA() {
+    $o = new MyClass();
     $this-&gt;expectException(\Exception::class);
-    doSomething();
-    $this-&gt;assertTrue($a); // Noncompliant - This assertion might never get evaluated
+    $o-&gt;doSomething();
+    $this-&gt;assertTrue($o-&gt;hasProperty()); // Noncompliant - This assertion might never get evaluated
 }
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
 public function testA() {
+    $o = new MyClass();
     $this-&gt;expectException(\Exception::class);
-    doSomething();
-    $this-&gt;assertTrue($a);
+    $o-&gt;doSomething();
+}
+
+public function testB() {
+    $o = new MyClass();
+    $this-&gt;assertTrue($o-&gt;hasProperty());
 }
 </pre>
 
