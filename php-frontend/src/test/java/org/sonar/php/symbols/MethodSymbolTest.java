@@ -20,8 +20,11 @@
 package org.sonar.php.symbols;
 
 import com.sonar.sslr.api.typed.ActionParser;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
@@ -50,6 +53,23 @@ public class MethodSymbolTest {
     ClassSymbol anonymous = Symbols.get(firstDescendant(ast, AnonymousClassTreeImpl.class).get());
     MethodSymbol foo = firstDescendant(ast, MethodDeclarationTreeImpl.class).get().symbol();
     assertThat(anonymous.declaredMethods().get(0)).isSameAs(foo);
+  }
+
+  @Test
+  public void isOverriding() {
+    Tree ast = parse("<?php",
+      "class A { function foo() {} }",
+      "class B extends X { function foo() {} }",
+      "class A1 extends A { function foo() {} function bar() {} }",
+      "class A2 extends A { }",
+      "class A21 extends A2 { function foo() {} }");
+    Map<String, ClassSymbol> classes = TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
+      .collect(Collectors.toMap(c -> c.name().text(), ClassDeclarationTreeImpl::symbol));
+    assertThat(classes.get("A").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.FALSE);
+    assertThat(classes.get("B").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.UNKNOWN);
+    assertThat(classes.get("A1").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.TRUE);
+    assertThat(classes.get("A1").getDeclaredMethod("bar").isOverriding()).isEqualTo(Trilean.FALSE);
+    assertThat(classes.get("A21").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.TRUE);
   }
 
   private CompilationUnitTree parse(String... lines) {

@@ -75,7 +75,7 @@ public class ClassSymbolIndex {
     private ClassSymbolImpl(ClassSymbolData data) {
       this.data = data;
       this.methods = data.methods().stream()
-        .map(MethodSymbolImpl::new)
+        .map(d -> new MethodSymbolImpl(d, this))
         .collect(Collectors.toMap(m -> m.name().toLowerCase(Locale.ROOT), Function.identity(), (a, b) -> a));
     }
 

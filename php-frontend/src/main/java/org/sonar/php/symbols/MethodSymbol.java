@@ -23,4 +23,6 @@ public interface MethodSymbol extends FunctionSymbol {
   Visibility visibility();
 
   String name();
+
+  Trilean isOverriding();
 }

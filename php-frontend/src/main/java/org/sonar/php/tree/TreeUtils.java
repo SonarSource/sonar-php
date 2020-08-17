@@ -63,6 +63,12 @@ public class TreeUtils {
     return stream.flatMap(tree -> Stream.concat(Stream.of(tree), descendants(tree)));
   }
 
+  public static <T extends Tree> Stream<T> descendants(@Nullable Tree root, Class<T> clazz) {
+    return descendants(root)
+      .filter(clazz::isInstance)
+      .map(clazz::cast);
+  }
+
   public static Optional<Tree> firstDescendant(@Nullable Tree root, Predicate<Tree> predicate) {
     return descendants(root).filter(predicate).findFirst();
   }
