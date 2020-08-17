@@ -47,4 +47,7 @@ function function10($a, ...$args) {
 }
 function10($a, $b); // OK
 
+function function10($a, ...$args) {
+}
+function10(); // Noncompliant
 

@@ -57,12 +57,10 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
     if (!symbol.isUnknownSymbol() && !symbol.hasFuncGetArgs()) {
       actualArguments = fct.arguments().size();
       List<Parameter> parameters = symbol.parameters();
-      if (!hasEllipsisOperator(parameters)) {
-        if (actualArguments > maxArguments(parameters)) {
-          addIssue(callee, symbol, MESSAGE_MORE, maxArguments(parameters));
-        } else if (actualArguments < minArguments(parameters)) {
-          addIssue(callee, symbol, MESSAGE_FEWER, minArguments(parameters));
-        }
+      if (!hasEllipsisOperator(parameters) && actualArguments > maxArguments(parameters)) {
+        addIssue(callee, symbol, MESSAGE_MORE, maxArguments(parameters));
+      } else if (actualArguments < minArguments(parameters)) {
+        addIssue(callee, symbol, MESSAGE_FEWER, minArguments(parameters));
       }
     }
   }
@@ -81,6 +79,7 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
   private static int minArguments(List<Parameter> parameters) {
     return (int) parameters.stream()
       .filter(p -> !p.hasDefault())
+      .filter(p -> !p.hasEllipsisOperator())
       .count();
   }
 
