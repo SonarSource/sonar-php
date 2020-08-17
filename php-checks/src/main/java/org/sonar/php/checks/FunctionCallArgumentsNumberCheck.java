@@ -67,7 +67,7 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
 
   private void addIssue(NamespaceNameTree callee, FunctionSymbol symbol, String messageAddition, int expectedArguments) {
     String expectedWord = expectedArguments == 1 ? "" : "s";
-    String actualWord = actualArguments == 1 ? "is" : "were";
+    String actualWord = actualArguments == 1 ? "was" : "were";
     newIssue(callee, String.format(MESSAGE, callee.fullName(), expectedArguments, expectedWord, actualArguments, actualWord, messageAddition))
       .secondary(symbol.location(), null);
   }

@@ -2,7 +2,7 @@
 
   function function1($a, $b) {}
 //         ^^^^^^^^^>
-  function1($a); // Noncompliant {{"function1" expects 2 arguments, but 1 is provided. Add more arguments or define default values.}}
+  function1($a); // Noncompliant {{"function1" expects 2 arguments, but 1 was provided. Add more arguments or define default values.}}
 //^^^^^^^^^
 
 function function2($a) {}
@@ -42,12 +42,5 @@ new Foo($a);
 function function9($a, ...$args) {
 }
 function9($a); // OK
-
-function function10($a, ...$args) {
-}
-function10($a, $b); // OK
-
-function function10($a, ...$args) {
-}
-function10(); // Noncompliant
-
+function9($a, $b); // OK
+function9(); // Noncompliant {{"function9" expects 1 argument, but 0 were provided. Add more arguments or define default values.}}
