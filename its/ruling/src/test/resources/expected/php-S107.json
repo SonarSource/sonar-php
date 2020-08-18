@@ -93,10 +93,6 @@
 151,
 201,
 ],
-'project:Symfony/Component/Form/Tests/Extension/Validator/ViolationMapper/ViolationMapperTest.php':[
-1245,
-1445,
-],
 'project:Symfony/Component/HttpFoundation/Cookie.php':[
 70,
 88,
@@ -115,9 +111,6 @@
 ],
 'project:Symfony/Component/Routing/Route.php':[
 53,
-],
-'project:Symfony/Component/Routing/Tests/RouteCompilerTest.php':[
-307,
 ],
 'project:Symfony/Component/Security/Core/User/LdapUserProvider.php':[
 38,
@@ -139,8 +132,5 @@
 ],
 'project:Symfony/Component/Security/Http/Firewall/UsernamePasswordJsonAuthenticationListener.php':[
 58,
-],
-'project:Symfony/Component/Yaml/Tests/InlineTest.php':[
-545,
 ],
 }

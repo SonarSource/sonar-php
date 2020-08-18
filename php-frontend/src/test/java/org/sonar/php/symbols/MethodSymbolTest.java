@@ -62,7 +62,9 @@ public class MethodSymbolTest {
       "class B extends X { function foo() {} }",
       "class A1 extends A { function foo() {} function bar() {} }",
       "class A2 extends A { }",
-      "class A21 extends A2 { function foo() {} }");
+      "class A21 extends A2 { function foo() {} }",
+      "class C { function __construct() {} }",
+      "class C1 extends C { function __construct() {} }");
     Map<String, ClassSymbol> classes = TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
       .collect(Collectors.toMap(c -> c.name().text(), ClassDeclarationTreeImpl::symbol));
     assertThat(classes.get("A").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.FALSE);
@@ -70,6 +72,7 @@ public class MethodSymbolTest {
     assertThat(classes.get("A1").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.TRUE);
     assertThat(classes.get("A1").getDeclaredMethod("bar").isOverriding()).isEqualTo(Trilean.FALSE);
     assertThat(classes.get("A21").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.TRUE);
+    assertThat(classes.get("C1").getDeclaredMethod("__construct").isOverriding()).isEqualTo(Trilean.FALSE);
   }
 
   private CompilationUnitTree parse(String... lines) {

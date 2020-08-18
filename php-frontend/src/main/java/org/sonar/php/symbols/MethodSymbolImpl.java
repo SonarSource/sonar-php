@@ -44,6 +44,9 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
 
   @Override
   public Trilean isOverriding() {
+    if ("__construct".equals(name())) {
+      return Trilean.FALSE;
+    }
     Optional<ClassSymbol> superClass = owner.superClass();
     while (superClass.isPresent()) {
       if (superClass.get().isUnknownSymbol()) {
