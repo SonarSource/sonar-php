@@ -20,7 +20,6 @@
 package org.sonar.php.symbols;
 
 import com.sonar.sslr.api.typed.ActionParser;
-import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -30,8 +29,7 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
-import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
+import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -266,15 +264,15 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void get_symbol_from_method_declaration() {
-    PhpFile file1 = file("file1.php", "<?php namespace SomeNamespace; class A {public function foo(){}}");
+  public void anonymous_class() {
+    PhpFile file1 = file("file1.php", "<?php $x = new class extends A implements B { public function foo() {} };");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
-
-    Optional<MethodDeclarationTreeImpl> methodDeclarationTree = firstDescendant(ast, MethodDeclarationTreeImpl.class);
-    assertThat(methodDeclarationTree.get().symbol()).isInstanceOf(MethodSymbolImpl.class);
-
-    Optional<ClassDeclarationTreeImpl> classDeclarationTree = firstDescendant(ast, ClassDeclarationTreeImpl.class);
-    assertThat(methodDeclarationTree.get().symbol()).isSameAs(classDeclarationTree.get().symbol().getDeclaredMethod("foo"));
+    ClassSymbol anonymous = Symbols.get(firstDescendant(ast, AnonymousClassTreeImpl.class).get());
+    assertThat(anonymous.isUnknownSymbol()).isFalse();
+    assertThat(anonymous.qualifiedName()).hasToString("<anonymous_class>");
+    assertThat(anonymous.superClass().get().qualifiedName()).isEqualTo(qualifiedName("a"));
+    assertThat(anonymous.implementedInterfaces()).extracting(ClassSymbol::qualifiedName).containsOnly(qualifiedName("b"));
+    assertThat(anonymous.declaredMethods()).extracting(MethodSymbol::name).containsOnly("foo");
   }
 
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {
@@ -300,26 +298,10 @@ public class ProjectSymbolTableTest {
   }
 
   private Path path(String fileName) {
-    return Paths.get("dir1", fileName);
+    return Paths.get(fileName);
   }
 
   private PhpFile file(String name, String content) {
-    return new PhpFile() {
-
-      @Override
-      public String contents() {
-        return content;
-      }
-
-      @Override
-      public String filename() {
-        return name;
-      }
-
-      @Override
-      public URI uri() {
-        return path(name).toUri();
-      }
-    };
+    return new TestFile(content, name);
   }
 }

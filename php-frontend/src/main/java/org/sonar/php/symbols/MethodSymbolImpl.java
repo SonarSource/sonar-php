@@ -19,12 +19,17 @@
  */
 package org.sonar.php.symbols;
 
-public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
-  private final MethodSymbolData data;
+import java.util.Optional;
 
-  public MethodSymbolImpl(MethodSymbolData data) {
+public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
+
+  private final MethodSymbolData data;
+  private final ClassSymbol owner;
+
+  public MethodSymbolImpl(MethodSymbolData data, ClassSymbol owner) {
     super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties()));
     this.data = data;
+    this.owner = owner;
   }
 
   @Override
@@ -35,6 +40,21 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
   @Override
   public String name() {
     return data.name();
+  }
+
+  @Override
+  public Trilean isOverriding() {
+    Optional<ClassSymbol> superClass = owner.superClass();
+    while (superClass.isPresent()) {
+      if (superClass.get().isUnknownSymbol()) {
+        return Trilean.UNKNOWN;
+      }
+      if (!superClass.get().getDeclaredMethod(name()).isUnknownSymbol()) {
+        return Trilean.TRUE;
+      }
+      superClass = superClass.get().superClass();
+    }
+    return Trilean.FALSE;
   }
 
 }

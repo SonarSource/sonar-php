@@ -19,10 +19,32 @@
  */
 package org.sonar.php.symbols;
 
-public interface MethodSymbol extends FunctionSymbol {
-  Visibility visibility();
+import java.net.URI;
+import java.nio.file.Paths;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
-  String name();
+public class TestFile implements PhpFile {
 
-  Trilean isOverriding();
+  private final String content;
+  private final String name;
+
+  public TestFile(String content, String name) {
+    this.content = content;
+    this.name = name;
+  }
+
+  @Override
+  public String contents() {
+    return content;
+  }
+
+  @Override
+  public String filename() {
+    return name;
+  }
+
+  @Override
+  public URI uri() {
+    return Paths.get(name).toUri();
+  }
 }
