@@ -275,6 +275,60 @@ public class ProjectSymbolTableTest {
     assertThat(anonymous.declaredMethods()).extracting(MethodSymbol::name).containsOnly("foo");
   }
 
+  @Test
+  public void get_function_symbol_from_call() {
+    PhpFile file1 = file("file1.php", "<?php function foo() {} foo();");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(optional.isPresent()).isTrue();
+    assertThat(optional.get()).isNotInstanceOf(MethodSymbol.class);
+    assertThat(optional.get().isUnknownSymbol()).isFalse();
+  }
+
+  @Test
+  public void do_not_get_function_symbol_from_unresolvable_call() {
+    PhpFile file1 = file("file1.php", "<?php function foo() {} $foo();");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(optional.isPresent()).isFalse();
+  }
+
+  @Test
+  public void get_method_symbol_from_call() {
+    PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::foo();");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(optional.isPresent()).isTrue();
+    assertThat(optional.get()).isInstanceOf(MethodSymbol.class);
+    assertThat(optional.get().isUnknownSymbol()).isFalse();
+  }
+
+  @Test
+  public void get_method_symbol_from_extended_call() {
+    PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} class BAR extends FOO{} BAR::foo();");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(optional.isPresent()).isTrue();
+    assertThat(optional.get()).isInstanceOf(MethodSymbol.class);
+    assertThat(optional.get().isUnknownSymbol()).isFalse();
+  }
+
+  @Test
+  public void do_not_get_method_symbol_from_unresolvable_call() {
+    PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::$foo();");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(optional.isPresent()).isFalse();
+  }
+
+  @Test
+  public void do_not_get_function_symbol_from_new_expression_call() {
+    PhpFile file1 = file("file1.php", "<?php class FOO{} new FOO();");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(optional.isPresent()).isFalse();
+  }
+
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {
     ProjectSymbolData projectSymbolData = new ProjectSymbolData();
     for (PhpFile file : files) {

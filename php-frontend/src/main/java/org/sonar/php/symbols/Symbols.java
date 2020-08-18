@@ -33,10 +33,10 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+
 import static org.sonar.php.utils.SymbolUtils.isFunctionCall;
 import static org.sonar.php.utils.SymbolUtils.isMethodCall;
 import static org.sonar.php.utils.SymbolUtils.isResolvable;
-import static org.sonar.plugins.php.api.tree.Tree.Kind.NAMESPACE_NAME;
 
 /**
  * Utility class to retrieve symbols from the AST.
@@ -53,7 +53,7 @@ public class Symbols {
 
   public static Optional<FunctionSymbol> get(FunctionCallTree functionCallTree) {
     ExpressionTree callee = functionCallTree.callee();
-    if (isFunctionCall(functionCallTree) && callee.is(NAMESPACE_NAME)) {
+    if (isFunctionCall(functionCallTree)) {
       return Optional.of(getFunction((NamespaceNameTree) functionCallTree.callee()));
     } else if (isMethodCall(functionCallTree) && isResolvable((MemberAccessTree) callee)) {
       return Optional.of(getMethod((NameIdentifierTree) ((MemberAccessTree) callee).member()));

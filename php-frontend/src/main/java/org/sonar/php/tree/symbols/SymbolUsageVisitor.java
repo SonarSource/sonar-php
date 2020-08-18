@@ -50,8 +50,7 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
   private final ClassSymbolIndex classSymbolIndex;
   private final FunctionSymbolIndex functionSymbolIndex;
 
-  private ArrayDeque<ClassSymbol> currentClassSymbolStack = new ArrayDeque<>();
-  private boolean isInAnonymousClass;
+  private final ArrayDeque<ClassSymbol> currentClassSymbolStack = new ArrayDeque<>();
 
   SymbolUsageVisitor(SymbolTableImpl symbolTable, ClassSymbolIndex classSymbolIndex, FunctionSymbolIndex functionSymbolIndex) {
     super(symbolTable);
@@ -131,7 +130,7 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
     ((HasSymbol) namespaceNameTree).setSymbol(functionSymbol);
   }
 
-  private void resolveMethodSymbol(NameIdentifierTree nameIdentifierTree, ClassSymbol receiverClassSymbol) {
+  private static void resolveMethodSymbol(NameIdentifierTree nameIdentifierTree, ClassSymbol receiverClassSymbol) {
     String methodName = nameIdentifierTree.text();
     MethodSymbol methodSymbol = receiverClassSymbol.getDeclaredMethod(methodName);
     Optional<ClassSymbol> superClass = receiverClassSymbol.superClass();

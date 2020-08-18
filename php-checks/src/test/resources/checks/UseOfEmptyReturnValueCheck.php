@@ -115,15 +115,24 @@ class Foo {
 $foo = Foo::a(); // Noncompliant
 
 
-abstract class A {
+abstract class B {
   public function function1() {
     $a = $this->function2(); // OK
   }
 
   abstract protected function function2() {}
+
+  protected function function3 () {}
 }
 
-function function3() {
+class C extends B {
+  protected function function2() {
+    $foo = $this->function3(); // Noncompliant
+    return $foo;
+  }
+}
+
+function function4() {
   yield "Word";
 }
-$o = function3(); // OK
+$o = function4(); // OK
