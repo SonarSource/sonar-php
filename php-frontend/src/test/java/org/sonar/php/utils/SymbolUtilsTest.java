@@ -1,15 +1,3 @@
-package org.sonar.php.utils;
-
-import com.sonar.sslr.api.typed.ActionParser;
-import org.junit.Test;
-import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.sonar.php.tree.TreeUtils.firstDescendant;
-
 /*
  * SonarQube PHP Plugin
  * Copyright (C) 2010-2020 SonarSource SA
@@ -29,6 +17,18 @@ import static org.sonar.php.tree.TreeUtils.firstDescendant;
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+package org.sonar.php.utils;
+
+import com.sonar.sslr.api.typed.ActionParser;
+import org.junit.Test;
+import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.php.tree.TreeUtils.firstDescendant;
+
 
 public class SymbolUtilsTest{
 
