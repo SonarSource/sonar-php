@@ -280,7 +280,7 @@ public class ProjectSymbolTableTest {
     PhpFile file1 = file("file1.php", "<?php function foo() {} foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional.isPresent()).isTrue();
+    assertThat(optional).isPresent();
     assertThat(optional.get()).isNotInstanceOf(MethodSymbol.class);
     assertThat(optional.get().isUnknownSymbol()).isFalse();
   }
@@ -290,7 +290,7 @@ public class ProjectSymbolTableTest {
     PhpFile file1 = file("file1.php", "<?php function foo() {} $foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional.isPresent()).isFalse();
+    assertThat(optional).isEmpty();
   }
 
   @Test
@@ -298,7 +298,7 @@ public class ProjectSymbolTableTest {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional.isPresent()).isTrue();
+    assertThat(optional).isPresent();
     assertThat(optional.get()).isInstanceOf(MethodSymbol.class);
     assertThat(optional.get().isUnknownSymbol()).isFalse();
   }
@@ -308,7 +308,7 @@ public class ProjectSymbolTableTest {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} class BAR extends FOO{} BAR::foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional.isPresent()).isTrue();
+    assertThat(optional).isPresent();
     assertThat(optional.get()).isInstanceOf(MethodSymbol.class);
     assertThat(optional.get().isUnknownSymbol()).isFalse();
   }
@@ -318,7 +318,7 @@ public class ProjectSymbolTableTest {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::$foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional.isPresent()).isFalse();
+    assertThat(optional).isEmpty();
   }
 
   @Test
@@ -326,7 +326,7 @@ public class ProjectSymbolTableTest {
     PhpFile file1 = file("file1.php", "<?php class FOO{} new FOO();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional.isPresent()).isFalse();
+    assertThat(optional).isEmpty();
   }
 
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {
