@@ -20,21 +20,17 @@
 package org.sonar.php.tree.impl;
 
 import com.google.common.collect.Iterators;
-import org.sonar.php.symbols.Symbol;
+import java.util.Iterator;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import java.util.Iterator;
-
 public class VariableIdentifierTreeImpl extends PHPTree implements VariableIdentifierTree {
 
   private final SyntaxToken token;
   private static final Kind KIND = Kind.VARIABLE_IDENTIFIER;
-  private Symbol symbol;
-
 
   public VariableIdentifierTreeImpl(SyntaxToken token) {
     this.token = token;
@@ -68,13 +64,5 @@ public class VariableIdentifierTreeImpl extends PHPTree implements VariableIdent
   @Override
   public IdentifierTree variableExpression() {
     return this;
-  }
-
-  public Symbol symbol() {
-    return symbol;
-  }
-
-  public void setSymbol(Symbol symbol) {
-    this.symbol = symbol;
   }
 }

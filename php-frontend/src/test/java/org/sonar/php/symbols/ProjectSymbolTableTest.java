@@ -34,6 +34,7 @@ import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
@@ -314,6 +315,16 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
+  public void get_method_symbol_from_unknown_extended_call() {
+    PhpFile file1 = file("file1.php", "<?php class BAR extends FOO{} BAR::foo();");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(optional).isPresent();
+    assertThat(optional.get()).isInstanceOf(MethodSymbol.class);
+    assertThat(optional.get().isUnknownSymbol()).isTrue();
+  }
+
+  @Test
   public void do_not_get_method_symbol_from_unresolvable_call() {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::$foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
@@ -327,6 +338,26 @@ public class ProjectSymbolTableTest {
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
     assertThat(optional).isEmpty();
+  }
+
+  @Test
+  public void get_method_with_yield_return() {
+    PhpFile file1 = file("file1.php", "<?php class A {public function foo(){yield 1;}}");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+
+    Optional<MethodDeclarationTree> methodDeclaration = firstDescendant(ast, MethodDeclarationTree.class);
+    MethodSymbol methodSymbol = Symbols.get(methodDeclaration.get());
+    assertThat(methodSymbol.hasReturn()).isTrue();
+  }
+
+  @Test
+  public void get_abstract_method() {
+    PhpFile file1 = file("file1.php", "<?php abstract class A {abstract public function foo(){}}");
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+
+    Optional<MethodDeclarationTree> methodDeclaration = firstDescendant(ast, MethodDeclarationTree.class);
+    MethodSymbol methodSymbol = Symbols.get(methodDeclaration.get());
+    assertThat(methodSymbol.isAbstract().isTrue()).isTrue();
   }
 
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {
