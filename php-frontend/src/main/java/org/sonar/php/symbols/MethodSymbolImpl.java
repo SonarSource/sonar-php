@@ -99,4 +99,8 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
     workList.addAll(classSymbol.implementedInterfaces());
   }
 
+  @Override
+  public Trilean isAbstract() {
+    return data.isAbstract() ? Trilean.TRUE : Trilean.FALSE;
+  }
 }

@@ -23,6 +23,7 @@ import com.google.common.collect.Iterators;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
@@ -35,7 +36,7 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
-public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarationTree {
+public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarationTree, HasMethodSymbol {
 
   private static final Kind KIND = Kind.METHOD_DECLARATION;
 

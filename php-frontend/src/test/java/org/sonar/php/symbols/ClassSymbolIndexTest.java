@@ -276,7 +276,7 @@ public class ClassSymbolIndexTest {
   }
 
   private MethodSymbolData method(String name) {
-    return new MethodSymbolData(someLocation(), name, emptyList(), new FunctionSymbolData.FunctionSymbolProperties(), Visibility.PUBLIC);
+    return new MethodSymbolData(someLocation(), name, emptyList(), new FunctionSymbolData.FunctionSymbolProperties(), Visibility.PUBLIC, false);
   }
 
   private LocationInFileImpl someLocation() {

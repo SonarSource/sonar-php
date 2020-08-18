@@ -1,6 +1,6 @@
 <?php
 
-$a = flush(); // Noncompliant {{Remove this use of the output from flush; flush doesn't return anything.}}
+$a = flush(); // Noncompliant {{Remove this use of the output from "flush"; "flush" doesn't return anything.}}
 //   ^^^^^
 
 $a = (Flush()); // Noncompliant
@@ -101,3 +101,29 @@ exit(0) ? 0 : 1; // Noncompliant
 $foo ? exit(0) : 42;
 $foo ? 42 : exit(0);
 
+function foo() {}
+$foo = foo(); // Noncompliant
+
+class Foo {
+  public static function a() {}
+  public function b() {
+    $a = $this->a(); // Noncompliant
+    $a = static::a(); // Noncompliant
+  }
+}
+
+$foo = Foo::a(); // Noncompliant
+
+
+abstract class A {
+  public function function1() {
+    $a = $this->function2(); // OK
+  }
+
+  abstract protected function function2() {}
+}
+
+function function3() {
+  yield "Word";
+}
+$o = function3(); // OK

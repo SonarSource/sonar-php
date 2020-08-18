@@ -21,9 +21,13 @@ package org.sonar.php.checks;
 
 import com.google.common.base.Preconditions;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.symbols.FunctionSymbol;
+import org.sonar.php.symbols.MethodSymbol;
+import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -33,9 +37,12 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 @Rule(key = "S3699")
 public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
+
+  private static final String MESSAGE = "Remove this use of the output from \"%s\"; \"%s\" doesn't return anything.";
 
   private static final Set<String> VOID_FUNCTIONS = CheckUtils.lowerCaseSet(
     // http://php.net/manual/en/function.halt-compiler.php
@@ -377,15 +384,46 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
     // http://php.net/manual/en/function.zip-close.php
     "zip_close");
 
+  private String functionName;
+  private FunctionSymbol functionSymbol;
+
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String name = CheckUtils.getFunctionName(tree);
-    if (name != null && VOID_FUNCTIONS.contains(name.toLowerCase(Locale.ROOT)) && parentUseValue(tree)) {
-      context().newIssue(this, tree.callee(), "Remove this use of the output from " + name + "; " + name + " doesn't return anything.");
+    if (parentUseValue(tree) && (isVoidBuiltin(tree) || isVoidSymbol(tree))) {
+      PreciseIssue issue = context().newIssue(this, tree.callee(), String.format(MESSAGE, functionName, functionName));
+      if (functionSymbol != null) {
+        issue.secondary(functionSymbol.location(), null);
+      }
     }
     super.visitFunctionCall(tree);
   }
 
+  /**
+   * Verify if the used function can be found in a list of known builtin functions with no return value.
+   */
+  private boolean isVoidBuiltin(FunctionCallTree fct) {
+    functionName = CheckUtils.getFunctionName(fct);
+    return functionName != null && VOID_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT));
+  }
+
+  /**
+   * If there is a symbol for the function, verify that the function has a return value.
+   * If the symbol belongs to a method, also verify that the method is not abstract.
+   */
+  private boolean isVoidSymbol(FunctionCallTree fct) {
+    functionSymbol = null;
+    Optional<FunctionSymbol> symbol = Symbols.get(fct);
+    if (symbol.isPresent()) {
+      functionSymbol = symbol.get();
+      return !functionSymbol.isUnknownSymbol() && !functionSymbol.hasReturn() &&
+        (!(functionSymbol instanceof MethodSymbol) || ((MethodSymbol) functionSymbol).isAbstract().isFalse());
+    }
+    return false;
+  }
+
+  /**
+   * Verify if a attempt is made to process the return value of a function
+   */
   private static boolean parentUseValue(Tree child) {
     Tree parent = child.getParent();
     Preconditions.checkNotNull(parent);

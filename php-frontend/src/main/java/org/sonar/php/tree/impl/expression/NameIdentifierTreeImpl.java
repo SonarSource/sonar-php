@@ -21,8 +21,10 @@ package org.sonar.php.tree.impl.expression;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
+import org.sonar.php.symbols.Symbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.symbols.HasSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -30,10 +32,11 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import java.util.Iterator;
 
-public class NameIdentifierTreeImpl extends PHPTree implements NameIdentifierTree {
+public class NameIdentifierTreeImpl extends PHPTree implements NameIdentifierTree, HasSymbol {
 
   private final InternalSyntaxToken nameToken;
   private static final Kind KIND = Kind.NAME_IDENTIFIER;
+  private Symbol symbol;
 
   public NameIdentifierTreeImpl(InternalSyntaxToken nameToken) {
     this.nameToken = Preconditions.checkNotNull(nameToken);
@@ -63,5 +66,13 @@ public class NameIdentifierTreeImpl extends PHPTree implements NameIdentifierTre
   @Override
   public void accept(VisitorCheck visitor) {
     visitor.visitNameIdentifier(this);
+  }
+
+  public Symbol symbol() {
+    return symbol;
+  }
+
+  public void setSymbol(Symbol symbol) {
+    this.symbol = symbol;
   }
 }

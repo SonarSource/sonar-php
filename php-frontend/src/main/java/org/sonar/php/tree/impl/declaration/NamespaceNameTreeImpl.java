@@ -24,6 +24,7 @@ import org.sonar.php.symbols.Symbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.symbols.HasSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -34,7 +35,7 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree {
+public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree, HasSymbol {
 
   private static final Kind KIND = Kind.NAMESPACE_NAME;
 
