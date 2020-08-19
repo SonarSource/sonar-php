@@ -25,4 +25,6 @@ public interface MethodSymbol extends FunctionSymbol {
   String name();
 
   Trilean isOverriding();
+
+  Trilean isImplementing();
 }

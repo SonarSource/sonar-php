@@ -44,4 +44,8 @@ public class UnknownMethodSymbol extends UnknownFunctionSymbol implements Method
     return Trilean.UNKNOWN;
   }
 
+  @Override
+  public Trilean isImplementing() {
+    return Trilean.UNKNOWN;
+  }
 }

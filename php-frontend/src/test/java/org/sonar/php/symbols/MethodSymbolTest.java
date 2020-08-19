@@ -72,6 +72,32 @@ public class MethodSymbolTest {
     assertThat(classes.get("A21").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.TRUE);
   }
 
+  @Test
+  public void isImplementing() {
+    Tree ast = parse("<?php",
+      "interface I1 extends I2, I3, I4 {public function method1($a);}",
+      "interface I2 {public function method2($a);}",
+      "interface I3 {}",
+      "abstract class A1 implements I1{}",
+      "abstract class A2{}",
+      "class C1 extends A1 implements I5{",
+        "public function method1($a) {}", // is implemented from I1 by extending A1
+        "public function method2($a) {}", // is implemented from I2 throw I1 by extending A1
+        "public function method3($a) {}}", // is unknown because I4 is unknown
+      "class C2 extends A3{public function method4($a) {}}", // is unknown because A2 is unknown
+      "class C3 implements I3{public function method5($a) {}}", // is not implemented because not declared in I3
+      "class C4 extends A2{public function method6($a) {}}"); // is not implemented because A2 does not implement an interface
+    Map<String, ClassSymbol> classes = TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
+      .collect(Collectors.toMap(c -> c.name().text(), ClassDeclarationTreeImpl::symbol));
+
+    assertThat(classes.get("C1").getDeclaredMethod("method1").isImplementing()).isEqualTo(Trilean.TRUE);
+    assertThat(classes.get("C1").getDeclaredMethod("method2").isImplementing()).isEqualTo(Trilean.TRUE);
+    assertThat(classes.get("C1").getDeclaredMethod("method3").isImplementing()).isEqualTo(Trilean.UNKNOWN);
+    assertThat(classes.get("C2").getDeclaredMethod("method4").isImplementing()).isEqualTo(Trilean.UNKNOWN);
+    assertThat(classes.get("C3").getDeclaredMethod("method5").isImplementing()).isEqualTo(Trilean.FALSE);
+    assertThat(classes.get("C4").getDeclaredMethod("method6").isImplementing()).isEqualTo(Trilean.FALSE);
+  }
+
   private CompilationUnitTree parse(String... lines) {
     String source = String.join("\n", lines);
     TestFile file = new TestFile(source, "file1.php");

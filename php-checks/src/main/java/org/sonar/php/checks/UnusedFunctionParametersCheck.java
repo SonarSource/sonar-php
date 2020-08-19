@@ -19,21 +19,18 @@
  */
 package org.sonar.php.checks;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.symbols.MethodSymbol;
+import org.sonar.php.symbols.Symbols;
+import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -43,30 +40,6 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1172";
   private static final String MESSAGE = "Remove the unused function parameter \"%s\".";
-
-  private Deque<Boolean> mayOverrideStack = new ArrayDeque<>();
-
-  @Override
-  public void visitClassDeclaration(ClassDeclarationTree tree) {
-    mayOverrideStack.addLast(mayOverride(tree));
-
-    super.visitClassDeclaration(tree);
-
-    mayOverrideStack.removeLast();
-  }
-
-  private static boolean mayOverride(ClassTree tree) {
-    return tree.superClass() != null || tree.implementsToken() != null;
-  }
-
-  @Override
-  public void visitAnonymousClass(AnonymousClassTree tree) {
-    mayOverrideStack.addLast(mayOverride(tree));
-
-    super.visitAnonymousClass(tree);
-
-    mayOverrideStack.removeLast();
-  }
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
@@ -105,10 +78,16 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     }
   }
 
+  /**
+   * Exclude methods from the check that are a declaration in an interface
+   * or that overwrite/implement a method and are not private.
+   */
   public boolean isExcluded(MethodDeclarationTree tree) {
-    return (mayOverrideStack.getLast() && !CheckUtils.hasModifier(tree.modifiers(), "private"))
-      || !tree.body().is(Tree.Kind.BLOCK)
-      || CheckUtils.isOverriding(tree);
+    MethodSymbol methodSymbol = Symbols.get(tree);
+    boolean isPrivate = methodSymbol.visibility().equals(Visibility.PRIVATE);
+    return !tree.body().is(Tree.Kind.BLOCK) // Interface method doesn't have a body block
+      || !(methodSymbol.isOverriding().isFalse() || isPrivate)
+      || !(methodSymbol.isImplementing().isFalse() || isPrivate);
   }
 
 }

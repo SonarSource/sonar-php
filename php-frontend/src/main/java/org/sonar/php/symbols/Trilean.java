@@ -34,4 +34,8 @@ public enum Trilean {
   public boolean isFalse() {
     return this == FALSE;
   }
+
+  public boolean isUnknown() {
+    return this == UNKNOWN;
+  }
 }

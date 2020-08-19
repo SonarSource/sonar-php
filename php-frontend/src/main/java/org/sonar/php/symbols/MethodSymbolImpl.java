@@ -19,6 +19,7 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.List;
 import java.util.Optional;
 
 public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
@@ -57,4 +58,58 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
     return Trilean.FALSE;
   }
 
+  /**
+   * Check all interfaces of a class before searching in the super class
+   * to validate if a method has been declared in an implemented interface
+   */
+  @Override
+  public Trilean isImplementing() {
+    boolean unknownInterface = false;
+    Optional<ClassSymbol> currentClass = Optional.of(owner);
+    while (currentClass.isPresent()) {
+      if (currentClass.get().isUnknownSymbol()) {
+        return Trilean.UNKNOWN;
+      }
+      Trilean inDeclaredInInterface = findDeclarationInInterfaces(currentClass.get().implementedInterfaces());
+      if (inDeclaredInInterface.isTrue()) {
+        return Trilean.TRUE;
+      }
+      if (inDeclaredInInterface.isUnknown()) {
+        unknownInterface = true;
+      }
+      currentClass = currentClass.get().superClass();
+    }
+    if (unknownInterface) {
+      return Trilean.UNKNOWN;
+    }
+    return Trilean.FALSE;
+  }
+
+  /**
+   * Loop over all implemented interfaces. Check whether the interface declares the method.
+   * If an interface implements other interfaces, check these recursive ones.
+   */
+  private Trilean findDeclarationInInterfaces(List<ClassSymbol> interfaces) {
+    boolean unknownSymbol = false;
+    for (ClassSymbol interfaceSymbol : interfaces) {
+      if (interfaceSymbol.isUnknownSymbol()) {
+        unknownSymbol = true;
+      }
+      if (!interfaceSymbol.getDeclaredMethod(name()).isUnknownSymbol()) {
+        return Trilean.TRUE;
+      }
+
+      Trilean inSuperClass = findDeclarationInInterfaces(interfaceSymbol.implementedInterfaces());
+      if (inSuperClass.isTrue()) {
+        return Trilean.TRUE;
+      }
+      if (inSuperClass.isUnknown()) {
+        unknownSymbol = true;
+      }
+    }
+    if (unknownSymbol) {
+      return Trilean.UNKNOWN;
+    }
+    return Trilean.FALSE;
+  }
 }
