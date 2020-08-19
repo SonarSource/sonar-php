@@ -85,7 +85,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   public boolean isExcluded(MethodDeclarationTree tree) {
     MethodSymbol methodSymbol = Symbols.get(tree);
     boolean isPrivate = methodSymbol.visibility().equals(Visibility.PRIVATE);
-    return !tree.body().is(Tree.Kind.BLOCK) // Interface method doesn't have a body block
+    return !tree.body().is(Tree.Kind.BLOCK)
       || !(methodSymbol.isOverriding().isFalse() || isPrivate)
       || !(methodSymbol.isImplementing().isFalse() || isPrivate);
   }
