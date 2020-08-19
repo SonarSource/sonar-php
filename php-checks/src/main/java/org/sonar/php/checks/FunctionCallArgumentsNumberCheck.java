@@ -27,6 +27,7 @@ import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -39,7 +40,7 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
   private static final String MESSAGE_FEWER = "Add more arguments or define default values.";
   private static final String MESSAGE_MORE = "Reduce provided arguments or add more parameters.";
 
-  private int actualArguments;
+  private int argumentCount;
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -55,11 +56,11 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
     FunctionSymbol symbol = Symbols.getFunction(callee);
 
     if (!symbol.isUnknownSymbol() && !symbol.hasFuncGetArgs()) {
-      actualArguments = fct.arguments().size();
+      argumentCount = fct.arguments().size();
       List<Parameter> parameters = symbol.parameters();
-      if (!hasEllipsisOperator(parameters) && actualArguments > maxArguments(parameters)) {
+      if (!hasEllipsisOperator(parameters) && argumentCount > maxArguments(parameters)) {
         addIssue(callee, symbol, MESSAGE_MORE, maxArguments(parameters));
-      } else if (actualArguments < minArguments(parameters)) {
+      } else if (!hasSpreadArgument(fct.arguments()) && argumentCount < minArguments(parameters)) {
         addIssue(callee, symbol, MESSAGE_FEWER, minArguments(parameters));
       }
     }
@@ -67,13 +68,17 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
 
   private void addIssue(NamespaceNameTree callee, FunctionSymbol symbol, String messageAddition, int expectedArguments) {
     String expectedWord = expectedArguments == 1 ? "" : "s";
-    String actualWord = actualArguments == 1 ? "was" : "were";
-    newIssue(callee, String.format(MESSAGE, callee.fullName(), expectedArguments, expectedWord, actualArguments, actualWord, messageAddition))
+    String actualWord = argumentCount == 1 ? "was" : "were";
+    newIssue(callee, String.format(MESSAGE, callee.fullName(), expectedArguments, expectedWord, argumentCount, actualWord, messageAddition))
       .secondary(symbol.location(), null);
   }
 
   private static boolean hasEllipsisOperator(List<Parameter> parameters) {
     return !parameters.isEmpty() && Iterables.getLast(parameters).hasEllipsisOperator();
+  }
+
+  private static boolean hasSpreadArgument(List<ExpressionTree> arguments) {
+    return arguments.stream().anyMatch(a -> a.is(Tree.Kind.SPREAD_ARGUMENT));
   }
 
   private static int minArguments(List<Parameter> parameters) {
