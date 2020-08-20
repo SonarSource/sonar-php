@@ -19,9 +19,8 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.ArrayDeque;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
@@ -30,7 +29,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
   private final ClassSymbol owner;
 
   private Trilean isOverriding;
-  private final Set<ClassSymbol> visitedClasses = new HashSet<>();
+  private final Set<ClassSymbol> visitedCaslasses = new HashSet<>();
 
   public MethodSymbolImpl(MethodSymbolData data, ClassSymbol owner) {
     super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties()));
@@ -56,84 +55,40 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
     return isOverriding;
   }
 
-  /**
-   * Check all interfaces of a class before searching in the super class
-   * to validate if a method has been declared in an implemented interface or extended super class
-   */
   private Trilean checkSuperClassesAndInterfacesForDeclaration() {
-    boolean unknownInterface = false;
-    boolean inSuperClass = false;
-    Optional<ClassSymbol> currentClass = Optional.of(owner);
-    while (currentClass.isPresent()) {
-      if (isLoop(currentClass.get())) {
-        return Trilean.UNKNOWN;
+    ArrayDeque<ClassSymbol> workList = new ArrayDeque<>();
+    HashSet<ClassSymbol> visitClasses = new HashSet<>();
+    visitClasses.add(owner);
+
+    pushOnWorkList(owner, workList, visitClasses);
+
+    boolean isUnknown = false;
+    while (!workList.isEmpty()) {
+      ClassSymbol visitClass = workList.removeLast();
+      if (visitClass.isUnknownSymbol()) {
+        isUnknown = true;
+        continue;
       }
 
-      if (currentClass.get().isUnknownSymbol()) {
-        return Trilean.UNKNOWN;
-      }
-      // check only super classes for method is declared
-      if (inSuperClass && !currentClass.get().getDeclaredMethod(name()).isUnknownSymbol()) {
+      if (!visitClass.getDeclaredMethod(name()).isUnknownSymbol()) {
         return Trilean.TRUE;
       }
 
-      // check all implemented interfaces recursively
-      Trilean isDeclaredInInterface = isDeclaredInInterface(currentClass.get().implementedInterfaces());
-      if (isDeclaredInInterface.isTrue()) {
-        return Trilean.TRUE;
-      }
-      if (isDeclaredInInterface.isUnknown()) {
-        unknownInterface = true;
-      }
-
-      currentClass = currentClass.get().superClass();
-      inSuperClass = true;
+      pushOnWorkList(visitClass, workList, visitClasses);
     }
-    // if there is no declaration identified
-    // and one or more unknown interface or super class were detected return UNKNOWN
-    if (unknownInterface) {
+
+    if (isUnknown) {
       return Trilean.UNKNOWN;
     }
     return Trilean.FALSE;
-  }
-
-  private boolean isLoop(ClassSymbol classSymbol) {
-    if (visitedClasses.contains(classSymbol)) {
-      return true;
-    }
-    visitedClasses.add(classSymbol);
-    return false;
   }
 
   /**
-   * Loop over all implemented interfaces. Check whether the interface declares the method.
-   * If an interface implements other interfaces, check these recursive ones.
+   * Push super classes and interfaces to the work list if they were not on the list.
    */
-  private Trilean isDeclaredInInterface(List<ClassSymbol> interfaces) {
-    boolean unknownSymbol = false;
-    for (ClassSymbol interfaceSymbol : interfaces) {
-      if (isLoop(interfaceSymbol)) {
-        return Trilean.UNKNOWN;
-      }
-
-      if (interfaceSymbol.isUnknownSymbol()) {
-        unknownSymbol = true;
-      }
-      if (!interfaceSymbol.getDeclaredMethod(name()).isUnknownSymbol()) {
-        return Trilean.TRUE;
-      }
-
-      Trilean inSuperClass = isDeclaredInInterface(interfaceSymbol.implementedInterfaces());
-      if (inSuperClass.isTrue()) {
-        return Trilean.TRUE;
-      }
-      if (inSuperClass.isUnknown()) {
-        unknownSymbol = true;
-      }
-    }
-    if (unknownSymbol) {
-      return Trilean.UNKNOWN;
-    }
-    return Trilean.FALSE;
+  private static void pushOnWorkList(ClassSymbol classSymbol, ArrayDeque<ClassSymbol> workList, HashSet<ClassSymbol> visitClasses) {
+    classSymbol.superClass().ifPresent(e -> {if (!visitClasses.contains(e)){visitClasses.add(e); workList.push(e);}});
+    classSymbol.implementedInterfaces().forEach(e -> {if (!visitClasses.contains(e)){visitClasses.add(e); workList.push(e);}});
   }
+
 }

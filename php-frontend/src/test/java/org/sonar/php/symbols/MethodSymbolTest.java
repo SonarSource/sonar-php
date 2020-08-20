@@ -109,8 +109,8 @@ public class MethodSymbolTest {
     Map<String, ClassSymbol> classes = TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
       .collect(Collectors.toMap(c -> c.name().text(), ClassDeclarationTreeImpl::symbol));
 
-    assertThat(classes.get("C1").getDeclaredMethod("method1").isOverriding()).isEqualTo(Trilean.UNKNOWN);
-    assertThat(classes.get("C2").getDeclaredMethod("method2").isOverriding()).isEqualTo(Trilean.UNKNOWN);
+    assertThat(classes.get("C1").getDeclaredMethod("method1").isOverriding()).isEqualTo(Trilean.FALSE);
+    assertThat(classes.get("C2").getDeclaredMethod("method2").isOverriding()).isEqualTo(Trilean.FALSE);
   }
 
   private CompilationUnitTree parse(String... lines) {

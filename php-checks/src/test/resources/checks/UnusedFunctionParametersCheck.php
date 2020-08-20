@@ -121,3 +121,7 @@ class ImplementingClass2 extends ImplementingClass1 implements UnknownInterface 
   private function foo($b) {} // Noncompliant
   public function interfaceMethod3($a) {} // OK - can be defined in UnknownInterface
 }
+
+class ImplementingClass3 implements Interface3 {
+  public function interfaceMethod5($a) {} // Noncompliant
+}
