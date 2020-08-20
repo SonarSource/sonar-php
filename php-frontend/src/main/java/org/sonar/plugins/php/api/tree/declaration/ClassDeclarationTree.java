@@ -72,14 +72,14 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
 
   @Override
   @Nullable
-  NamespaceNameTree superClass();
+  ClassNamespaceNameTree superClass();
 
   @Override
   @Nullable
   SyntaxToken implementsToken();
 
   @Override
-  SeparatedList<NamespaceNameTree> superInterfaces();
+  SeparatedList<ClassNamespaceNameTree> superInterfaces();
 
   @Override
   SyntaxToken openCurlyBraceToken();

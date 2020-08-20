@@ -33,6 +33,7 @@ import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -264,7 +265,7 @@ public class PHPGrammar {
         b.optional(b.firstOf(b.token(ABSTRACT), b.token(FINAL))),
         b.token(CLASS),
         NAME_IDENTIFIER(),
-        b.optional(f.newTuple(b.token(EXTENDS), NAMESPACE_NAME())),
+        b.optional(f.newTuple(b.token(EXTENDS), f.classNamespaceName(NAMESPACE_NAME()))),
         b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
@@ -408,11 +409,11 @@ public class PHPGrammar {
             STATIC_SCALAR()))));
   }
 
-  public SeparatedListImpl<NamespaceNameTree> INTERFACE_LIST() {
-    return b.<SeparatedListImpl<NamespaceNameTree>>nonterminal(PHPLexicalGrammar.INTERFACE_LIST).is(
+  public SeparatedListImpl<ClassNamespaceNameTree> INTERFACE_LIST() {
+    return b.<SeparatedListImpl<ClassNamespaceNameTree>>nonterminal(PHPLexicalGrammar.INTERFACE_LIST).is(
       f.interfaceList(
-        NAMESPACE_NAME(),
-        b.zeroOrMore(f.newTuple(b.token(COMMA), NAMESPACE_NAME()))));
+        f.classNamespaceName(NAMESPACE_NAME()),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), f.classNamespaceName(NAMESPACE_NAME())))));
   }
 
   public UseTraitDeclarationTree USE_TRAIT_DECLARATION() {
@@ -919,8 +920,8 @@ public class PHPGrammar {
       f.catchBlock(
         b.token(PHPKeyword.CATCH),
         b.token(PHPPunctuator.LPARENTHESIS),
-        NAMESPACE_NAME(),
-        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), NAMESPACE_NAME())),
+        f.classNamespaceName(NAMESPACE_NAME()),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), f.classNamespaceName(NAMESPACE_NAME()))),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
         b.token(PHPPunctuator.RPARENTHESIS),
         BLOCK()));
@@ -1707,7 +1708,7 @@ public class PHPGrammar {
         b.optional(b.token(PHPPunctuator.LPARENTHESIS)),
         ARGUMENTS(),
         b.optional(b.token(PHPPunctuator.RPARENTHESIS)),
-        b.optional(f.newTuple(b.token(EXTENDS), NAMESPACE_NAME())),
+        b.optional(f.newTuple(b.token(EXTENDS), f.classNamespaceName(NAMESPACE_NAME()))),
         b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),

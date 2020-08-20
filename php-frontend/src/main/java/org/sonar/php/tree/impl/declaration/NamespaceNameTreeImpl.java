@@ -20,11 +20,12 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.symbols.Symbol;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedListImpl;
-import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.symbols.HasSymbol;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -32,15 +33,12 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-
 public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree, HasSymbol {
 
   private static final Kind KIND = Kind.NAMESPACE_NAME;
 
   private final SyntaxToken absoluteSeparator;
-  private final SeparatedListImpl<NameIdentifierTree> namespaces;
+  private final SeparatedList<NameIdentifierTree> namespaces;
   private final IdentifierTree name;
 
   private final String fullName;
@@ -48,7 +46,7 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree,
 
   private Symbol symbol;
 
-  public NamespaceNameTreeImpl(@Nullable InternalSyntaxToken absoluteSeparator, SeparatedListImpl<NameIdentifierTree> namespaces, IdentifierTree name) {
+  public NamespaceNameTreeImpl(@Nullable SyntaxToken absoluteSeparator, SeparatedList<NameIdentifierTree> namespaces, IdentifierTree name) {
     this.absoluteSeparator = absoluteSeparator;
     this.namespaces = namespaces;
     this.name = name;
@@ -65,7 +63,7 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree,
   }
 
   @Override
-  public SeparatedListImpl<NameIdentifierTree> namespaces() {
+  public SeparatedList<NameIdentifierTree> namespaces() {
     return namespaces;
   }
 

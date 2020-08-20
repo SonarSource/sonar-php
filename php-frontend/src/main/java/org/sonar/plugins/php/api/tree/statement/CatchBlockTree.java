@@ -22,7 +22,7 @@ package org.sonar.plugins.php.api.tree.statement;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -39,7 +39,7 @@ public interface CatchBlockTree extends Tree {
 
   SyntaxToken openParenthesisToken();
 
-  SeparatedList<NamespaceNameTree> exceptionTypes();
+  SeparatedList<ClassNamespaceNameTree> exceptionTypes();
 
   VariableIdentifierTree variable();
 

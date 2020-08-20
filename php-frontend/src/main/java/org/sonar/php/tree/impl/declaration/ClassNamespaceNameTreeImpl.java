@@ -17,26 +17,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.tree.statement;
+package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
-/**
- * <a href="http://php.net/manual/en/language.oop5.traits.php">Trait precedence</a>
- * <pre>
- * {@link #methodReference()} insteadof {@link #traits()} ;
- * </pre>
- */
-@Beta
-public interface TraitPrecedenceTree extends TraitAdaptationStatementTree {
+public class ClassNamespaceNameTreeImpl extends NamespaceNameTreeImpl implements ClassNamespaceNameTree {
 
-  TraitMethodReferenceTree methodReference();
+  private ClassSymbol symbol;
 
-  SyntaxToken insteadOfToken();
+  public ClassNamespaceNameTreeImpl(NamespaceNameTree tree) {
+    super(tree.absoluteSeparator(), tree.namespaces(), tree.name());
+  }
 
-  SeparatedList<ClassNamespaceNameTree> traits();
+  public ClassSymbol symbol() {
+    return symbol;
+  }
 
+  public void setSymbol(ClassSymbol symbol) {
+    this.symbol = symbol;
+  }
 }

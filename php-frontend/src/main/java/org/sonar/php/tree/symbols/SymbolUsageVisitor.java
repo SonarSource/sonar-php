@@ -27,18 +27,16 @@ import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
+import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
-import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
-import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 
 import static org.sonar.php.utils.SymbolUtils.isFunctionCall;
 import static org.sonar.php.utils.SymbolUtils.isMethodCall;
@@ -59,23 +57,11 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
   }
 
   @Override
-  public void visitCatchBlock(CatchBlockTree tree) {
-    for (NamespaceNameTree exceptionType : tree.exceptionTypes()) {
-      resolveClassSymbol(exceptionType);
+  public void visitNamespaceName(NamespaceNameTree tree) {
+    if (tree instanceof ClassNamespaceNameTree) {
+      resolveClassSymbol((ClassNamespaceNameTree) tree);
     }
-    super.visitCatchBlock(tree);
-  }
-
-  @Override
-  public void visitNewExpression(NewExpressionTree tree) {
-    ExpressionTree expression = tree.expression();
-    if (expression.is(Tree.Kind.FUNCTION_CALL)) {
-      expression = ((FunctionCallTree) expression).callee();
-    }
-    if (expression.is(Tree.Kind.NAMESPACE_NAME)) {
-      resolveClassSymbol((NamespaceNameTree) expression);
-    }
-    super.visitNewExpression(tree);
+    super.visitNamespaceName(tree);
   }
 
   @Override
@@ -87,7 +73,7 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
       MemberAccessTree memberAccessTree = (MemberAccessTree) tree.callee();
 
       if (isResolvableMemberAccess(memberAccessTree)) {
-        resolveClassSymbol((NamespaceNameTree) memberAccessTree.object());
+        resolveClassSymbol((ClassNamespaceNameTree) memberAccessTree.object());
         receiverSymbol = Symbols.getClass((NamespaceNameTree) memberAccessTree.object());
       } else if (!currentClassSymbolStack.isEmpty() && isResolvableInnerMemberAccess(memberAccessTree)) {
         receiverSymbol = currentClassSymbolStack.getFirst();
@@ -118,10 +104,10 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
     currentClassSymbolStack.pop();
   }
 
-  private void resolveClassSymbol(NamespaceNameTree namespaceName) {
+  private void resolveClassSymbol(ClassNamespaceNameTree namespaceName) {
     QualifiedName fqn = getFullyQualifiedName(namespaceName, Symbol.Kind.CLASS);
     ClassSymbol classSymbol = classSymbolIndex.get(fqn);
-    ((HasSymbol) namespaceName).setSymbol(classSymbol);
+    ((ClassNamespaceNameTreeImpl) namespaceName).setSymbol(classSymbol);
   }
 
   private void resolveFunctionSymbol(NamespaceNameTree namespaceNameTree) {

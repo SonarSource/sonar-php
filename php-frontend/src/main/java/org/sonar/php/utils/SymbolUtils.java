@@ -90,7 +90,7 @@ public class SymbolUtils {
    * check whether member access of static method call is resolvable as known receiver call (e.g. KnownClass::foo())
    */
   public static boolean isResolvableMemberAccess(MemberAccessTree memberAccessTree) {
-    return memberAccessTree.member().is(NAME_IDENTIFIER) && memberAccessTree.object().is(NAMESPACE_NAME);
+    return memberAccessTree.is(CLASS_MEMBER_ACCESS) && memberAccessTree.member().is(NAME_IDENTIFIER) && memberAccessTree.object().is(NAMESPACE_NAME);
   }
 
   /**

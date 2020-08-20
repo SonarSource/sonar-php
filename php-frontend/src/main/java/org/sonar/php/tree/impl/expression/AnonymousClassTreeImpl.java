@@ -30,8 +30,8 @@ import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -46,9 +46,9 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   private final SeparatedList<ExpressionTree> arguments;
   private final SyntaxToken closeParenthesisToken;
   private final SyntaxToken extendsToken;
-  private final NamespaceNameTree superClass;
+  private final ClassNamespaceNameTree superClass;
   private final SyntaxToken implementsToken;
-  private final SeparatedListImpl<NamespaceNameTree> superInterfaces;
+  private final SeparatedListImpl<ClassNamespaceNameTree> superInterfaces;
   private final SyntaxToken openCurlyBraceToken;
   private final List<ClassMemberTree> members;
   private final SyntaxToken closeCurlyBraceToken;
@@ -57,8 +57,8 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   public AnonymousClassTreeImpl(
     SyntaxToken classToken,
     @Nullable SyntaxToken openParenthesisToken, SeparatedList<ExpressionTree> arguments, @Nullable SyntaxToken closeParenthesisToken,
-    @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
-    @Nullable SyntaxToken implementsToken, @Nullable SeparatedListImpl<NamespaceNameTree> superInterfaces,
+    @Nullable SyntaxToken extendsToken, @Nullable ClassNamespaceNameTree superClass,
+    @Nullable SyntaxToken implementsToken, @Nullable SeparatedListImpl<ClassNamespaceNameTree> superInterfaces,
     SyntaxToken openCurlyBraceToken,
     List<ClassMemberTree> members,
     SyntaxToken closeCurlyBraceToken
@@ -106,7 +106,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
 
   @Nullable
   @Override
-  public NamespaceNameTree superClass() {
+  public ClassNamespaceNameTree superClass() {
     return superClass;
   }
 
@@ -117,7 +117,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   }
 
   @Override
-  public SeparatedList<NamespaceNameTree> superInterfaces() {
+  public SeparatedList<ClassNamespaceNameTree> superInterfaces() {
     return superInterfaces;
   }
 

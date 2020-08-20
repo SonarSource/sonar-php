@@ -40,6 +40,7 @@ import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.BuiltInTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ConstantDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
@@ -133,6 +134,7 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -482,17 +484,17 @@ public class TreeFactory {
     return new ParameterTreeImpl(type.orNull(), ampersand.orNull(), ellipsis.orNull(), varIdentifier, eqToken, initValue);
   }
 
-  public SeparatedListImpl<NamespaceNameTree> interfaceList(NamespaceNameTree first, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> others) {
+  public SeparatedListImpl<ClassNamespaceNameTree> interfaceList(ClassNamespaceNameTree first, Optional<List<Tuple<InternalSyntaxToken, ClassNamespaceNameTree>>> others) {
     return separatedList(first, others);
   }
 
-  public UseTraitDeclarationTree useTraitDeclaration(InternalSyntaxToken useToken, SeparatedListImpl<NamespaceNameTree> traits, InternalSyntaxToken eosToken) {
+  public UseTraitDeclarationTree useTraitDeclaration(InternalSyntaxToken useToken, SeparatedListImpl<ClassNamespaceNameTree> traits, InternalSyntaxToken eosToken) {
     return new UseTraitDeclarationTreeImpl(useToken, traits, eosToken);
   }
 
   public UseTraitDeclarationTree useTraitDeclaration(
     InternalSyntaxToken useToken,
-    SeparatedListImpl<NamespaceNameTree> traits,
+    SeparatedListImpl<ClassNamespaceNameTree> traits,
     InternalSyntaxToken openCurlyBrace,
     Optional<List<TraitAdaptationStatementTree>> adaptations,
     InternalSyntaxToken closeCurlyBrace
@@ -503,7 +505,7 @@ public class TreeFactory {
   public TraitPrecedenceTree traitPrecedence(
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken insteadOfToken,
-    SeparatedListImpl<NamespaceNameTree> traits,
+    SeparatedListImpl<ClassNamespaceNameTree> traits,
     InternalSyntaxToken eosToken
   ) {
     return new TraitPrecedenceTreeImpl(methodReference, insteadOfToken, traits, eosToken);
@@ -538,11 +540,11 @@ public class TreeFactory {
 
   public ClassDeclarationTree interfaceDeclaration(
     InternalSyntaxToken interfaceToken, NameIdentifierTree name,
-    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> extendsClause,
+    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<ClassNamespaceNameTree>>> extendsClause,
     InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     InternalSyntaxToken extendsToken = null;
-    SeparatedListImpl<NamespaceNameTree> interfaceList = SeparatedListImpl.empty();
+    SeparatedListImpl<ClassNamespaceNameTree> interfaceList = SeparatedListImpl.empty();
     if (extendsClause.isPresent()) {
       extendsToken = extendsClause.get().first();
       interfaceList = extendsClause.get().second();
@@ -573,8 +575,8 @@ public class TreeFactory {
 
   public ClassDeclarationTree classDeclaration(
     Optional<InternalSyntaxToken> modifier, InternalSyntaxToken classToken, NameIdentifierTree name,
-    Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
-    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
+    Optional<Tuple<InternalSyntaxToken, ClassNamespaceNameTree>> extendsClause,
+    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<ClassNamespaceNameTree>>> implementsClause,
     InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace
   ) {
     return ClassDeclarationTreeImpl.createClass(
@@ -760,12 +762,16 @@ public class TreeFactory {
     }
   }
 
+  public ClassNamespaceNameTree classNamespaceName(NamespaceNameTree namespaceNameTree) {
+    return new ClassNamespaceNameTreeImpl(namespaceNameTree);
+  }
+
   public CatchBlockTree catchBlock(
     InternalSyntaxToken catchToken, InternalSyntaxToken lParenthesis,
-    NamespaceNameTree exceptionType, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> additionalTypes,
+    ClassNamespaceNameTree exceptionType, Optional<List<Tuple<InternalSyntaxToken, ClassNamespaceNameTree>>> additionalTypes,
     InternalSyntaxToken variable, InternalSyntaxToken rParenthsis, BlockTree block
   ) {
-    SeparatedListImpl<NamespaceNameTree> exceptionTypes = separatedList(exceptionType, additionalTypes);
+    SeparatedListImpl<ClassNamespaceNameTree> exceptionTypes = separatedList(exceptionType, additionalTypes);
     return new CatchBlockTreeImpl(
       catchToken,
       lParenthesis,
@@ -1545,6 +1551,15 @@ public class TreeFactory {
   }
 
   public NewExpressionTree newExpression(InternalSyntaxToken newToken, ExpressionTree expression) {
+    if (expression.is(Kind.FUNCTION_CALL)) {
+      FunctionCallTreeImpl callTree = (FunctionCallTreeImpl) expression;
+      ExpressionTree callee = callTree.callee();
+      if (callee.is(Kind.NAMESPACE_NAME)) {
+        callTree.complete(classNamespaceName((NamespaceNameTree) callee));
+      }
+    } else if (expression.is(Kind.NAMESPACE_NAME)) {
+      expression = classNamespaceName((NamespaceNameTree) expression);
+    }
     return new NewExpressionTreeImpl(newToken, expression);
   }
 
@@ -1670,8 +1685,8 @@ public class TreeFactory {
   public AnonymousClassTree anonymousClass(
     InternalSyntaxToken classToken,
     Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<ExpressionTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
-    Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
-    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
+    Optional<Tuple<InternalSyntaxToken, ClassNamespaceNameTree>> extendsClause,
+    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<ClassNamespaceNameTree>>> implementsClause,
     InternalSyntaxToken lCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken rCurlyBrace
   ) {
     return new AnonymousClassTreeImpl(
@@ -1687,20 +1702,20 @@ public class TreeFactory {
     );
   }
 
-  private static InternalSyntaxToken extendsToken(Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause) {
+  private static InternalSyntaxToken extendsToken(Optional<Tuple<InternalSyntaxToken, ClassNamespaceNameTree>> extendsClause) {
     return extendsClause.isPresent() ? extendsClause.get().first() : null;
   }
 
-  private static NamespaceNameTree superClass(Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause) {
+  private static ClassNamespaceNameTree superClass(Optional<Tuple<InternalSyntaxToken, ClassNamespaceNameTree>> extendsClause) {
     return extendsClause.isPresent() ? extendsClause.get().second() : null;
   }
 
-  private static InternalSyntaxToken implementsToken(Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause) {
+  private static InternalSyntaxToken implementsToken(Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<ClassNamespaceNameTree>>> implementsClause) {
     return implementsClause.isPresent() ? implementsClause.get().first() : null;
   }
 
-  private static SeparatedListImpl<NamespaceNameTree> superInterfaces(Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause) {
-    return implementsClause.isPresent() ? implementsClause.get().second() : SeparatedListImpl.<NamespaceNameTree>empty();
+  private static SeparatedListImpl<ClassNamespaceNameTree> superInterfaces(Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<ClassNamespaceNameTree>>> implementsClause) {
+    return implementsClause.isPresent() ? implementsClause.get().second() : SeparatedListImpl.<ClassNamespaceNameTree>empty();
   }
 
   public HeredocStringLiteralTree heredocStringLiteral(InternalSyntaxToken token) {

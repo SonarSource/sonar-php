@@ -17,26 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.tree.statement;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.SeparatedList;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-/**
- * <a href="http://php.net/manual/en/language.oop5.traits.php">Trait precedence</a>
- * <pre>
- * {@link #methodReference()} insteadof {@link #traits()} ;
- * </pre>
- */
-@Beta
-public interface TraitPrecedenceTree extends TraitAdaptationStatementTree {
-
-  TraitMethodReferenceTree methodReference();
-
-  SyntaxToken insteadOfToken();
-
-  SeparatedList<ClassNamespaceNameTree> traits();
-
+public interface ClassNamespaceNameTree extends NamespaceNameTree {
 }
