@@ -79,15 +79,12 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   }
 
   /**
-   * Exclude methods from the check that are a declaration in an interface
-   * or that overwrite/implement a method and are not private.
+   * Exclude methods from the check that is overriding/implementing a method and are not private.
    */
   public boolean isExcluded(MethodDeclarationTree tree) {
     MethodSymbol methodSymbol = Symbols.get(tree);
     boolean isPrivate = methodSymbol.visibility().equals(Visibility.PRIVATE);
-    return !tree.body().is(Tree.Kind.BLOCK)
-      || !(methodSymbol.isOverriding().isFalse() || isPrivate)
-      || !(methodSymbol.isImplementing().isFalse() || isPrivate);
+    return !tree.body().is(Tree.Kind.BLOCK) || !(methodSymbol.isOverriding().isFalse() || isPrivate);
   }
 
 }

@@ -19,13 +19,18 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
 
   private final MethodSymbolData data;
   private final ClassSymbol owner;
+
+  private Trilean isOverriding;
+  private final Set<ClassSymbol> visitedClasses = new HashSet<>();
 
   public MethodSymbolImpl(MethodSymbolData data, ClassSymbol owner) {
     super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties()));
@@ -45,53 +50,72 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
 
   @Override
   public Trilean isOverriding() {
-    Optional<ClassSymbol> superClass = owner.superClass();
-    while (superClass.isPresent()) {
-      if (superClass.get().isUnknownSymbol()) {
-        return Trilean.UNKNOWN;
-      }
-      if (!superClass.get().getDeclaredMethod(name()).isUnknownSymbol()) {
-        return Trilean.TRUE;
-      }
-      superClass = superClass.get().superClass();
+    if (isOverriding == null) {
+      isOverriding = checkSuperClassesAndInterfacesForDeclaration();
     }
-    return Trilean.FALSE;
+    return isOverriding;
   }
 
   /**
    * Check all interfaces of a class before searching in the super class
-   * to validate if a method has been declared in an implemented interface
+   * to validate if a method has been declared in an implemented interface or extended super class
    */
-  @Override
-  public Trilean isImplementing() {
+  private Trilean checkSuperClassesAndInterfacesForDeclaration() {
     boolean unknownInterface = false;
+    boolean inSuperClass = false;
     Optional<ClassSymbol> currentClass = Optional.of(owner);
     while (currentClass.isPresent()) {
+      if (isLoop(currentClass.get())) {
+        return Trilean.UNKNOWN;
+      }
+
       if (currentClass.get().isUnknownSymbol()) {
         return Trilean.UNKNOWN;
       }
-      Trilean inDeclaredInInterface = findDeclarationInInterfaces(currentClass.get().implementedInterfaces());
-      if (inDeclaredInInterface.isTrue()) {
+      // check only super classes for method is declared
+      if (inSuperClass && !currentClass.get().getDeclaredMethod(name()).isUnknownSymbol()) {
         return Trilean.TRUE;
       }
-      if (inDeclaredInInterface.isUnknown()) {
+
+      // check all implemented interfaces recursively
+      Trilean isDeclaredInInterface = isDeclaredInInterface(currentClass.get().implementedInterfaces());
+      if (isDeclaredInInterface.isTrue()) {
+        return Trilean.TRUE;
+      }
+      if (isDeclaredInInterface.isUnknown()) {
         unknownInterface = true;
       }
+
       currentClass = currentClass.get().superClass();
+      inSuperClass = true;
     }
+    // if there is no declaration identified
+    // and one or more unknown interface or super class were detected return UNKNOWN
     if (unknownInterface) {
       return Trilean.UNKNOWN;
     }
     return Trilean.FALSE;
   }
 
+  private boolean isLoop(ClassSymbol classSymbol) {
+    if (visitedClasses.contains(classSymbol)) {
+      return true;
+    }
+    visitedClasses.add(classSymbol);
+    return false;
+  }
+
   /**
    * Loop over all implemented interfaces. Check whether the interface declares the method.
    * If an interface implements other interfaces, check these recursive ones.
    */
-  private Trilean findDeclarationInInterfaces(List<ClassSymbol> interfaces) {
+  private Trilean isDeclaredInInterface(List<ClassSymbol> interfaces) {
     boolean unknownSymbol = false;
     for (ClassSymbol interfaceSymbol : interfaces) {
+      if (isLoop(interfaceSymbol)) {
+        return Trilean.UNKNOWN;
+      }
+
       if (interfaceSymbol.isUnknownSymbol()) {
         unknownSymbol = true;
       }
@@ -99,7 +123,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
         return Trilean.TRUE;
       }
 
-      Trilean inSuperClass = findDeclarationInInterfaces(interfaceSymbol.implementedInterfaces());
+      Trilean inSuperClass = isDeclaredInInterface(interfaceSymbol.implementedInterfaces());
       if (inSuperClass.isTrue()) {
         return Trilean.TRUE;
       }
