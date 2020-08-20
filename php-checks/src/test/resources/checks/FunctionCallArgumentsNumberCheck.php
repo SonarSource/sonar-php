@@ -40,6 +40,7 @@ $bar->foo();
 new Foo($a);
 
 function function9($a, ...$args) {
+  function1(...$args); // OK - spread argument
 }
 function9($a); // OK
 function9($a, $b); // OK
