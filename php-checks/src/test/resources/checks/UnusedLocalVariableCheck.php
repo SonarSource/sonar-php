@@ -358,7 +358,3 @@ function simple_for() {
     stmt();
   }
 }
-
-$backslash = <<<EOT
-\
-EOT;
