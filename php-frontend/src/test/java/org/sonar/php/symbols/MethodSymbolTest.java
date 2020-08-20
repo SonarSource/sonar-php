@@ -57,14 +57,13 @@ public class MethodSymbolTest {
 
   @Test
   public void isOverriding_by_super_classes() {
-    Tree ast = parse("<?php",
+    Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
       "class A { function foo() {} }",
       "class B extends X { function foo() {} }",
       "class A1 extends A { function foo() {} function bar() {} }",
       "class A2 extends A { }",
       "class A21 extends A2 { function foo() {} }");
-    Map<String, ClassSymbol> classes = TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
-      .collect(Collectors.toMap(c -> c.name().text(), ClassDeclarationTreeImpl::symbol));
+
     assertThat(classes.get("A").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.FALSE);
     assertThat(classes.get("B").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.UNKNOWN);
     assertThat(classes.get("A1").getDeclaredMethod("foo").isOverriding()).isEqualTo(Trilean.TRUE);
@@ -74,7 +73,7 @@ public class MethodSymbolTest {
 
   @Test
   public void isOverriding_by_interfaces() {
-    Tree ast = parse("<?php",
+    Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
       "interface I1 extends I2, I3, I4 {public function method1($a);}",
       "interface I2 {public function method2($a);}",
       "interface I3 {}",
@@ -87,8 +86,6 @@ public class MethodSymbolTest {
       "class C2 extends A3 {public function method4($a) {}}", // is unknown because A2 is unknown
       "class C3 implements I3 {public function method5($a) {}}", // is not implemented because not declared in I3
       "class C4 extends A2 {public function method6($a) {}}"); // is not implemented because A2 does not implement an interface
-    Map<String, ClassSymbol> classes = TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
-      .collect(Collectors.toMap(c -> c.name().text(), ClassDeclarationTreeImpl::symbol));
 
     assertThat(classes.get("C1").getDeclaredMethod("method1").isOverriding()).isEqualTo(Trilean.TRUE);
     assertThat(classes.get("C1").getDeclaredMethod("method2").isOverriding()).isEqualTo(Trilean.TRUE);
@@ -100,17 +97,49 @@ public class MethodSymbolTest {
 
   @Test
   public void catch_dead_loop_in_isDeclaredInInterface() {
-    Tree ast = parse("<?php",
+    Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
       "interface I1 extends I2 {}",
       "interface I2 extends I1 {}",
       "class C1 implements I1 {public function method1(){}}",
       "class C2 extends C3 {public function method2(){}}",
       "class C3 extends C2 {}");
-    Map<String, ClassSymbol> classes = TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
-      .collect(Collectors.toMap(c -> c.name().text(), ClassDeclarationTreeImpl::symbol));
 
     assertThat(classes.get("C1").getDeclaredMethod("method1").isOverriding()).isEqualTo(Trilean.FALSE);
     assertThat(classes.get("C2").getDeclaredMethod("method2").isOverriding()).isEqualTo(Trilean.FALSE);
+  }
+
+  @Test
+  public void private_method_does_not_override() {
+    Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
+      "class C1 {public function method1(){}}",
+      "class C2 extends C1 {private function method1(){}}");
+
+    assertThat(classes.get("C2").getDeclaredMethod("method1").isOverriding()).isEqualTo(Trilean.FALSE);
+  }
+
+  @Test
+  public void private_method_can_not_be_overridden() {
+    Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
+      "class C1 {private function method1(){}}",
+      "class C2 extends C1 {public function method1(){}}");
+
+    assertThat(classes.get("C2").getDeclaredMethod("method1").isOverriding()).isEqualTo(Trilean.FALSE);
+  }
+
+  @Test
+  public void stored_overriding_result() {
+    Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
+      "class C1 {public function method1(){}}",
+      "class C2 extends C1 {public function method1(){}}");
+
+    MethodSymbol methodSymbol = classes.get("C2").getDeclaredMethod("method1");
+    assertThat(methodSymbol.isOverriding()).isEqualTo(methodSymbol.isOverriding());
+  }
+
+  private Map<String, ClassSymbol> parseMultipleClasses(String... lines) {
+    Tree ast = parse(lines);
+    return TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
+      .collect(Collectors.toMap(c -> c.name().text(), ClassDeclarationTreeImpl::symbol));
   }
 
   private CompilationUnitTree parse(String... lines) {

@@ -20,6 +20,7 @@
 package org.sonar.php.symbols;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,9 +28,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
 
   private final MethodSymbolData data;
   private final ClassSymbol owner;
-
   private Trilean isOverriding;
-  private final Set<ClassSymbol> visitedCaslasses = new HashSet<>();
 
   public MethodSymbolImpl(MethodSymbolData data, ClassSymbol owner) {
     super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties()));
@@ -50,31 +49,40 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
   @Override
   public Trilean isOverriding() {
     if (isOverriding == null) {
-      isOverriding = checkSuperClassesAndInterfacesForDeclaration();
+      isOverriding = computeIsOverriding();
     }
     return isOverriding;
   }
 
-  private Trilean checkSuperClassesAndInterfacesForDeclaration() {
-    ArrayDeque<ClassSymbol> workList = new ArrayDeque<>();
-    HashSet<ClassSymbol> visitClasses = new HashSet<>();
+  private Trilean computeIsOverriding() {
+    if (visibility().equals(Visibility.PRIVATE)) {
+      return  Trilean.FALSE;
+    }
+
+    Deque<ClassSymbol> workList = new ArrayDeque<>();
+    Set<ClassSymbol> visitClasses = new HashSet<>();
     visitClasses.add(owner);
 
-    pushOnWorkList(owner, workList, visitClasses);
+    pushOnIsOverridingWorkList(owner, workList);
 
     boolean isUnknown = false;
     while (!workList.isEmpty()) {
       ClassSymbol visitClass = workList.removeLast();
+      if (!visitClasses.add(visitClass)) {
+        continue;
+      }
+
       if (visitClass.isUnknownSymbol()) {
         isUnknown = true;
         continue;
       }
 
-      if (!visitClass.getDeclaredMethod(name()).isUnknownSymbol()) {
+      MethodSymbol methodSymbol = visitClass.getDeclaredMethod(name());
+      if (!methodSymbol.isUnknownSymbol() && !methodSymbol.visibility().equals(Visibility.PRIVATE)) {
         return Trilean.TRUE;
       }
 
-      pushOnWorkList(visitClass, workList, visitClasses);
+      pushOnIsOverridingWorkList(visitClass, workList);
     }
 
     if (isUnknown) {
@@ -86,9 +94,9 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
   /**
    * Push super classes and interfaces to the work list if they were not on the list.
    */
-  private static void pushOnWorkList(ClassSymbol classSymbol, ArrayDeque<ClassSymbol> workList, HashSet<ClassSymbol> visitClasses) {
-    classSymbol.superClass().ifPresent(e -> {if (!visitClasses.contains(e)){visitClasses.add(e); workList.push(e);}});
-    classSymbol.implementedInterfaces().forEach(e -> {if (!visitClasses.contains(e)){visitClasses.add(e); workList.push(e);}});
+  private static void pushOnIsOverridingWorkList(ClassSymbol classSymbol, Deque<ClassSymbol> workList) {
+    classSymbol.superClass().ifPresent(workList::add);
+    workList.addAll(classSymbol.implementedInterfaces());
   }
 
 }
