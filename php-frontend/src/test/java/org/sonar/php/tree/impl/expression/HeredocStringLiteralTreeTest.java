@@ -156,6 +156,13 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     assertThat(closingToken.endColumn()).isEqualTo(3);
   }
 
+  @Test
+  public void parse_backslash() throws Exception {
+    String code = "<<<ABC\n\\\nABC";
+    HeredocStringLiteralTree tree = parseHeredoc(code);
+    assertThat(tree.strings().get(0).value()).isEqualTo("\\");
+  }
+
   private HeredocStringLiteralTree parseHeredoc(String code) throws Exception {
     HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
     assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();

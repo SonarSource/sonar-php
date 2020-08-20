@@ -83,12 +83,14 @@ public class LexicalConstant {
   private static final String NON_SPECIAL_CHARACTERS_EXECUTION = "(?:[^\\\\$\\{`])";
   private static final String NON_SPECIAL_CHARACTERS_HEREDOC = "(?:[^\\\\$\\{])";
   private static final String ESCAPED_CHARACTERS = "(?:\\\\[\\s\\S])";
+  private static final String STANDALONE_BACKSLASH = "(?:(\\\\s|\\\\$))";
 
   public static final String STRING_WITH_ENCAPS_VAR_CHARACTERS = "(?:(?:"
     + NON_SPECIAL_CHARACTERS
     + "|" + PERMITTED_EMBEDDED_DOLAR
     + "|" + PERMITTED_OPEN_CURLY_BRACE
     + "|" + ESCAPED_CHARACTERS
+    + "|" + STANDALONE_BACKSLASH
     + ")++)";
 
   public static final String STRING_CHARACTERS_EXECUTION = "(?:(?:"
@@ -96,6 +98,7 @@ public class LexicalConstant {
     + "|" + PERMITTED_EMBEDDED_DOLAR
     + "|" + PERMITTED_OPEN_CURLY_BRACE
     + "|" + ESCAPED_CHARACTERS
+    + "|" + STANDALONE_BACKSLASH
     + ")++)";
 
   public static final String HEREDOC_STRING_CHARACTERS = "(?:(?:"
@@ -103,6 +106,7 @@ public class LexicalConstant {
     + "|" + PERMITTED_EMBEDDED_DOLAR
     + "|" + PERMITTED_OPEN_CURLY_BRACE
     + "|" + ESCAPED_CHARACTERS
+    + "|" + STANDALONE_BACKSLASH
     + ")++)";
 
   /**
