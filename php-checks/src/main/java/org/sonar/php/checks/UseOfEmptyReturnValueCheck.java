@@ -42,7 +42,7 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 @Rule(key = "S3699")
 public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Remove this use of the output from \"%s\"; \"%s\" doesn't return anything.";
+  private static final String MESSAGE = "Remove this use of the output from \"%s\"; the call doesn't return anything.";
 
   private static final Set<String> VOID_FUNCTIONS = CheckUtils.lowerCaseSet(
     // http://php.net/manual/en/function.halt-compiler.php
@@ -389,7 +389,7 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
     String functionName = CheckUtils.getFunctionName(tree);
     FunctionSymbol functionSymbol = Symbols.get(tree);
     if (parentUseValue(tree) && (isVoidBuiltin(functionName) || isVoidSymbol(functionSymbol))) {
-      PreciseIssue issue = context().newIssue(this, tree.callee(), String.format(MESSAGE, functionName, functionName));
+      PreciseIssue issue = context().newIssue(this, tree.callee(), String.format(MESSAGE, functionName));
       if (functionSymbol != null) {
         issue.secondary(functionSymbol.location(), null);
       }

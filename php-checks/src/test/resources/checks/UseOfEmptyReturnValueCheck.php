@@ -1,6 +1,6 @@
 <?php
 
-$a = flush(); // Noncompliant {{Remove this use of the output from "flush"; "flush" doesn't return anything.}}
+$a = flush(); // Noncompliant {{Remove this use of the output from "flush"; the call doesn't return anything.}}
 //   ^^^^^
 
 $a = (Flush()); // Noncompliant
