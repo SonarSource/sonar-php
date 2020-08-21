@@ -22,8 +22,10 @@ package org.sonar.php.tree.impl.expression;
 import com.google.common.collect.Iterators;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -46,6 +48,9 @@ public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
   }
 
   public MemberAccessTree complete(ExpressionTree object) {
+    if (kind == Kind.CLASS_MEMBER_ACCESS && object.is(Kind.NAMESPACE_NAME)) {
+      object = new ClassNamespaceNameTreeImpl((NamespaceNameTree) object);
+    }
     this.object = object;
 
     return this;

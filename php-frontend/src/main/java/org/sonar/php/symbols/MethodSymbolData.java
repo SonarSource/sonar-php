@@ -27,15 +27,26 @@ import java.util.List;
 public class MethodSymbolData extends FunctionSymbolData {
   private Visibility visibility;
   private String name;
+  private boolean isAbstract;
 
   public MethodSymbolData(LocationInFile location,
     String name,
     List<Parameter> parameters,
     FunctionSymbolProperties properties,
     Visibility visibility) {
+    this(location, name, parameters, properties, visibility, false);
+  }
+
+  public MethodSymbolData(LocationInFile location,
+    String name,
+    List<Parameter> parameters,
+    FunctionSymbolProperties properties,
+    Visibility visibility,
+    boolean isAbstract) {
     super(location, QualifiedName.qualifiedName(name), parameters, properties);
     this.name = name;
     this.visibility = visibility;
+    this.isAbstract = isAbstract;
   }
 
   public Visibility visibility() {
@@ -46,4 +57,7 @@ public class MethodSymbolData extends FunctionSymbolData {
     return name;
   }
 
+  public boolean isAbstract() {
+    return isAbstract;
+  }
 }

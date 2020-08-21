@@ -44,12 +44,12 @@ public interface ClassTree extends Tree {
   SyntaxToken extendsToken();
 
   @Nullable
-  NamespaceNameTree superClass();
+  ClassNamespaceNameTree superClass();
 
   @Nullable
   SyntaxToken implementsToken();
 
-  SeparatedList<NamespaceNameTree> superInterfaces();
+  SeparatedList<ClassNamespaceNameTree> superInterfaces();
 
   SyntaxToken openCurlyBraceToken();
 

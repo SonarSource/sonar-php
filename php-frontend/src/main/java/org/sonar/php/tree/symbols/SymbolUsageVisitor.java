@@ -19,25 +19,42 @@
  */
 package org.sonar.php.tree.symbols;
 
+import java.util.ArrayDeque;
+import java.util.Optional;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolIndex;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.FunctionSymbolIndex;
-import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
+import org.sonar.php.symbols.MethodSymbol;
+import org.sonar.php.symbols.Symbols;
+import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
-import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+
+import static org.sonar.plugins.php.api.tree.Tree.Kind.CLASS_MEMBER_ACCESS;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.NAMESPACE_NAME;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.NAME_IDENTIFIER;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.NEW_EXPRESSION;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.OBJECT_MEMBER_ACCESS;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.VARIABLE_IDENTIFIER;
 
 class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
 
   private final ClassSymbolIndex classSymbolIndex;
   private final FunctionSymbolIndex functionSymbolIndex;
+
+  private final ArrayDeque<ClassSymbol> currentClassSymbolStack = new ArrayDeque<>();
 
   SymbolUsageVisitor(SymbolTableImpl symbolTable, ClassSymbolIndex classSymbolIndex, FunctionSymbolIndex functionSymbolIndex) {
     super(symbolTable);
@@ -46,51 +63,82 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
   }
 
   @Override
-  public void visitCatchBlock(CatchBlockTree tree) {
-    for (NamespaceNameTree exceptionType : tree.exceptionTypes()) {
-      resolveClassSymbol(exceptionType);
+  public void visitNamespaceName(NamespaceNameTree tree) {
+    if (tree instanceof ClassNamespaceNameTree) {
+      resolveClassSymbol((ClassNamespaceNameTree) tree);
     }
-    super.visitCatchBlock(tree);
-  }
-
-  @Override
-  public void visitNewExpression(NewExpressionTree tree) {
-    ExpressionTree expression = tree.expression();
-    if (expression.is(Tree.Kind.FUNCTION_CALL)) {
-      expression = ((FunctionCallTree) expression).callee();
-    }
-    if (expression.is(Tree.Kind.NAMESPACE_NAME)) {
-      resolveClassSymbol((NamespaceNameTree) expression);
-    }
-    super.visitNewExpression(tree);
+    super.visitNamespaceName(tree);
   }
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (!tree.getParent().is(Tree.Kind.NEW_EXPRESSION) && tree.callee().is(Tree.Kind.NAMESPACE_NAME)) {
-      resolveFunctionSymbol((NamespaceNameTree) tree.callee());
-    }
     super.visitFunctionCall(tree);
+
+    ExpressionTree callee = tree.callee();
+
+    if (callee.is(NAMESPACE_NAME) && !isNewExpressionCall(tree)) {
+      QualifiedName fqn = getFullyQualifiedName((NamespaceNameTree) callee, Symbol.Kind.FUNCTION);
+      FunctionSymbol functionSymbol = functionSymbolIndex.get(fqn);
+      ((FunctionCallTreeImpl) tree).setSymbol(functionSymbol);
+
+    } else if (callee.is(OBJECT_MEMBER_ACCESS, CLASS_MEMBER_ACCESS)) {
+      resolveMethodCall(tree, (MemberAccessTree) callee);
+    }
+  }
+
+  private void resolveMethodCall(FunctionCallTree tree, MemberAccessTree callee) {
+    ClassSymbol receiverSymbol = null;
+    ExpressionTree object = callee.object();
+
+    if (!currentClassSymbolStack.isEmpty() && (isSelfOrStatic(object) || isThis(object))) {
+      receiverSymbol = currentClassSymbolStack.getFirst();
+    } else if (callee.is(CLASS_MEMBER_ACCESS) && object.is(NAMESPACE_NAME)) {
+      receiverSymbol = Symbols.get((ClassNamespaceNameTree) object);
+    }
+
+    if (receiverSymbol != null && callee.member().is(NAME_IDENTIFIER)) {
+      String methodName = ((NameIdentifierTree) callee.member()).text();
+      MethodSymbol methodSymbol = receiverSymbol.getDeclaredMethod(methodName);
+      Optional<ClassSymbol> superClass = receiverSymbol.superClass();
+      while (superClass.isPresent() && methodSymbol.isUnknownSymbol()) {
+        methodSymbol = superClass.get().getDeclaredMethod(methodName);
+        superClass = superClass.get().superClass();
+      }
+      ((FunctionCallTreeImpl) tree).setSymbol(methodSymbol);
+    }
+  }
+
+  public static boolean isNewExpressionCall(FunctionCallTree functionCallTree) {
+    return functionCallTree.getParent() != null && functionCallTree.getParent().is(NEW_EXPRESSION);
+  }
+
+  public static boolean isThis(Tree object) {
+    return object.is(VARIABLE_IDENTIFIER) && ((VariableIdentifierTree) object).text().equals("$this");
+  }
+
+  public static boolean isSelfOrStatic(Tree object) {
+    return (object.is(NAMESPACE_NAME) && ((NamespaceNameTree) object).fullName().equals("self"))
+      || (object.is(NAME_IDENTIFIER) && ((NameIdentifierTree) object).text().equals("static"));
   }
 
   @Override
   public void visitAnonymousClass(AnonymousClassTree tree) {
-    if (tree.superClass() != null) {
-      resolveClassSymbol(tree.superClass());
-    }
-
+    currentClassSymbolStack.push(Symbols.get(tree));
     super.visitAnonymousClass(tree);
+    currentClassSymbolStack.pop();
   }
 
-  private void resolveClassSymbol(NamespaceNameTree namespaceName) {
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    currentClassSymbolStack.push(Symbols.get(tree));
+    super.visitClassDeclaration(tree);
+    currentClassSymbolStack.pop();
+  }
+
+  private void resolveClassSymbol(ClassNamespaceNameTree namespaceName) {
     QualifiedName fqn = getFullyQualifiedName(namespaceName, Symbol.Kind.CLASS);
     ClassSymbol classSymbol = classSymbolIndex.get(fqn);
-    ((NamespaceNameTreeImpl) namespaceName).setSymbol(classSymbol);
+    ((ClassNamespaceNameTreeImpl) namespaceName).setSymbol(classSymbol);
   }
 
-  private void resolveFunctionSymbol(NamespaceNameTree namespaceNameTree) {
-    QualifiedName fqn = getFullyQualifiedName(namespaceNameTree, Symbol.Kind.FUNCTION);
-    FunctionSymbol functionSymbol = functionSymbolIndex.get(fqn);
-    ((NamespaceNameTreeImpl) namespaceNameTree).setSymbol(functionSymbol);
-  }
 }

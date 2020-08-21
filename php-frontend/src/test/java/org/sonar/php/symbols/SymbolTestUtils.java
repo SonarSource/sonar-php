@@ -19,33 +19,21 @@
  */
 package org.sonar.php.symbols;
 
-import org.sonar.plugins.php.api.symbols.QualifiedName;
+import com.sonar.sslr.api.typed.ActionParser;
+import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 
-public class UnknownMethodSymbol extends UnknownFunctionSymbol implements MethodSymbol {
-  private final String name;
+public class SymbolTestUtils {
 
-  public UnknownMethodSymbol(String name) {
-    super(QualifiedName.qualifiedName(name));
-    this.name = name;
-  }
+  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser();
 
-  @Override
-  public Visibility visibility() {
-    return Visibility.PUBLIC;
-  }
-
-  @Override
-  public String name() {
-    return name;
-  }
-
-  @Override
-  public Trilean isOverriding() {
-    return Trilean.UNKNOWN;
-  }
-
-  @Override
-  public Trilean isAbstract() {
-    return Trilean.UNKNOWN;
+  public static CompilationUnitTree parse(String... lines) {
+    String source = String.join("\n", lines);
+    TestFile file = new TestFile(source, "file1.php");
+    CompilationUnitTree ast = (CompilationUnitTree) PARSER.parse(source);
+    SymbolTableImpl.create(ast, new ProjectSymbolData(), file);
+    return ast;
   }
 }

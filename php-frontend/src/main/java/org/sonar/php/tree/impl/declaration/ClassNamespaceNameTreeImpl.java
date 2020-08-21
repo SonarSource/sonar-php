@@ -17,35 +17,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
+package org.sonar.php.tree.impl.declaration;
 
-import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
-public class UnknownMethodSymbol extends UnknownFunctionSymbol implements MethodSymbol {
-  private final String name;
+public class ClassNamespaceNameTreeImpl extends NamespaceNameTreeImpl implements ClassNamespaceNameTree {
 
-  public UnknownMethodSymbol(String name) {
-    super(QualifiedName.qualifiedName(name));
-    this.name = name;
+  private ClassSymbol symbol;
+
+  public ClassNamespaceNameTreeImpl(NamespaceNameTree tree) {
+    super(tree.absoluteSeparator(), tree.namespaces(), tree.name());
   }
 
-  @Override
-  public Visibility visibility() {
-    return Visibility.PUBLIC;
+  public ClassSymbol symbol() {
+    return symbol;
   }
 
-  @Override
-  public String name() {
-    return name;
-  }
-
-  @Override
-  public Trilean isOverriding() {
-    return Trilean.UNKNOWN;
-  }
-
-  @Override
-  public Trilean isAbstract() {
-    return Trilean.UNKNOWN;
+  public void setSymbol(ClassSymbol symbol) {
+    this.symbol = symbol;
   }
 }

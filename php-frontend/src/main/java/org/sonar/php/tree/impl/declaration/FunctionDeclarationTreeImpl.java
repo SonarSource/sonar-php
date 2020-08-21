@@ -19,13 +19,13 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import com.google.common.collect.Iterators;
 import java.util.Iterator;
-
 import javax.annotation.Nullable;
-
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.symbols.HasFunctionSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
@@ -35,9 +35,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import com.google.common.collect.Iterators;
-
-public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDeclarationTree {
+public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDeclarationTree, HasFunctionSymbol {
 
   private static final Kind KIND = Kind.FUNCTION_DECLARATION;
 

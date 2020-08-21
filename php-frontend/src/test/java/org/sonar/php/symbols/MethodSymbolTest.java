@@ -19,25 +19,20 @@
  */
 package org.sonar.php.symbols;
 
-import com.sonar.sslr.api.typed.ActionParser;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.junit.Test;
-import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
-import org.sonar.php.tree.symbols.SymbolTableImpl;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.php.symbols.SymbolTestUtils.parse;
 import static org.sonar.php.tree.TreeUtils.firstDescendant;
 
 public class MethodSymbolTest {
-
-  private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
 
   @Test
   public void simple_method() {
@@ -130,13 +125,5 @@ public class MethodSymbolTest {
     Tree ast = parse(lines);
     return TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
       .collect(Collectors.toMap(c -> c.name().text(), ClassDeclarationTreeImpl::symbol));
-  }
-
-  private CompilationUnitTree parse(String... lines) {
-    String source = String.join("\n", lines);
-    TestFile file = new TestFile(source, "file1.php");
-    CompilationUnitTree ast = (CompilationUnitTree) parser.parse(source);
-    SymbolTableImpl.create(ast, new ProjectSymbolData(), file);
-    return ast;
   }
 }

@@ -20,25 +20,29 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import javax.annotation.Nullable;
+import org.sonar.php.symbols.FunctionSymbol;
+import org.sonar.php.symbols.UnknownFunctionSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-
 public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
 
   private static final Kind KIND = Kind.FUNCTION_CALL;
+  private static final QualifiedName UNKNOWN_FUNCTION_NAME = QualifiedName.qualifiedName("<unknown_function>");
   private ExpressionTree callee;
   private final InternalSyntaxToken openParenthesisToken;
   private final SeparatedListImpl<ExpressionTree> arguments;
   private final InternalSyntaxToken closeParenthesisToken;
+  private FunctionSymbol symbol = new UnknownFunctionSymbol(UNKNOWN_FUNCTION_NAME);
 
   public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl<ExpressionTree> arguments, InternalSyntaxToken closeParenthesisToken) {
     this.callee = callee;
@@ -107,4 +111,11 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     visitor.visitFunctionCall(this);
   }
 
+  public FunctionSymbol symbol() {
+    return symbol;
+  }
+
+  public void setSymbol(FunctionSymbol symbol) {
+    this.symbol = symbol;
+  }
 }

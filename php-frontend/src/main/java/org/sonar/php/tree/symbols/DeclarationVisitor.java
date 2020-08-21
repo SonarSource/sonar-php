@@ -49,7 +49,6 @@ import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -64,6 +63,7 @@ import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
@@ -116,7 +116,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     functionSymbolIndex = FunctionSymbolIndex.create(new HashSet<>(functionSymbolDataByTree.values()), projectSymbolData);
     functionSymbolDataByTree.forEach((declaration, symbolData) -> {
       FunctionSymbol symbol = functionSymbolIndex.get(symbolData);
-      ((FunctionDeclarationTreeImpl) declaration).setSymbol(symbol);
+      ((HasFunctionSymbol) declaration).setSymbol(symbol);
     });
   }
 
@@ -173,10 +173,14 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .findFirst()
       .orElse("PUBLIC");
 
+    boolean isAbstract = tree.modifiers().stream()
+      .map(m -> m.text().toUpperCase(Locale.ROOT))
+      .anyMatch(m -> m.equals("ABSTRACT"));
+
     super.visitMethodDeclaration(tree);
 
     MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), name.text(), parameters,
-      functionPropertiesStack.pop(), Visibility.valueOf(visibility));
+      functionPropertiesStack.pop(), Visibility.valueOf(visibility), isAbstract);
 
     methodTreeByData.put(methodSymbolData, (MethodDeclarationTreeImpl) tree);
     methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
@@ -208,8 +212,14 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   }
 
   @Override
+  public void visitYieldExpression(YieldExpressionTree tree) {
+    functionSymbolProperties().ifPresent(p -> p.hasReturn(true));
+    super.visitYieldExpression(tree);
+  }
+
+  @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    functionPropertiesStack.add(new FunctionSymbolProperties());
+    functionPropertiesStack.push(new FunctionSymbolProperties());
     super.visitFunctionExpression(tree);
     functionPropertiesStack.pop();
   }

@@ -53,7 +53,7 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
 
   private void checkArguments(FunctionCallTree fct) {
     NamespaceNameTree callee = (NamespaceNameTree) fct.callee();
-    FunctionSymbol symbol = Symbols.getFunction(callee);
+    FunctionSymbol symbol = Symbols.get(fct);
 
     if (!symbol.isUnknownSymbol() && !symbol.hasFuncGetArgs()) {
       argumentCount = fct.arguments().size();

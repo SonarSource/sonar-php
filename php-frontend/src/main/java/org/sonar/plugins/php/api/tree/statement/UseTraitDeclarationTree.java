@@ -19,13 +19,12 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import java.util.List;
 
 /**
  * <a href="http://php.net/manual/en/language.oop5.traits.php">Trait use</a>
@@ -38,7 +37,7 @@ public interface UseTraitDeclarationTree extends ClassMemberTree {
 
   SyntaxToken useToken();
 
-  SeparatedList<NamespaceNameTree> traits();
+  SeparatedList<ClassNamespaceNameTree> traits();
 
   @Nullable
   SyntaxToken openCurlyBraceToken();

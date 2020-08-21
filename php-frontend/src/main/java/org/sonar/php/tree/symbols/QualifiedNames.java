@@ -17,35 +17,17 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
+package org.sonar.php.tree.symbols;
 
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
-public class UnknownMethodSymbol extends UnknownFunctionSymbol implements MethodSymbol {
-  private final String name;
+public class QualifiedNames {
 
-  public UnknownMethodSymbol(String name) {
-    super(QualifiedName.qualifiedName(name));
-    this.name = name;
+  private QualifiedNames() {
   }
 
-  @Override
-  public Visibility visibility() {
-    return Visibility.PUBLIC;
+  public static QualifiedName memberName(QualifiedName owner, String memberName) {
+    return new MemberQualifiedName(owner, memberName);
   }
 
-  @Override
-  public String name() {
-    return name;
-  }
-
-  @Override
-  public Trilean isOverriding() {
-    return Trilean.UNKNOWN;
-  }
-
-  @Override
-  public Trilean isAbstract() {
-    return Trilean.UNKNOWN;
-  }
 }

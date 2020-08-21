@@ -26,4 +26,5 @@ public interface MethodSymbol extends FunctionSymbol {
 
   Trilean isOverriding();
 
+  Trilean isAbstract();
 }

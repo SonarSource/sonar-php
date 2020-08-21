@@ -19,19 +19,17 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import com.google.common.collect.Iterators;
 import java.util.Iterator;
-
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import com.google.common.collect.Iterators;
 
 public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceTree {
 
@@ -39,13 +37,13 @@ public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceT
 
   private final TraitMethodReferenceTree methodReference;
   private final InternalSyntaxToken insteadOfToken;
-  private final SeparatedListImpl<NamespaceNameTree> traits;
+  private final SeparatedListImpl<ClassNamespaceNameTree> traits;
   private final InternalSyntaxToken eosToken;
 
   public TraitPrecedenceTreeImpl(
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken insteadOfToken,
-    SeparatedListImpl<NamespaceNameTree> traits,
+    SeparatedListImpl<ClassNamespaceNameTree> traits,
     InternalSyntaxToken eosToken
     ) {
     this.methodReference = methodReference;
@@ -65,7 +63,7 @@ public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceT
   }
 
   @Override
-  public SeparatedListImpl<NamespaceNameTree> traits() {
+  public SeparatedListImpl<ClassNamespaceNameTree> traits() {
     return traits;
   }
 
