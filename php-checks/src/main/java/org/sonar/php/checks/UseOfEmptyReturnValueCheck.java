@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.base.Preconditions;
 import java.util.Locale;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.FunctionSymbol;
@@ -383,12 +384,11 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
     // http://php.net/manual/en/function.zip-close.php
     "zip_close");
 
-  private String functionName;
-  private FunctionSymbol functionSymbol;
-
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (parentUseValue(tree) && (isVoidBuiltin(tree) || isVoidSymbol(tree))) {
+    String functionName = CheckUtils.getFunctionName(tree);
+    FunctionSymbol functionSymbol = Symbols.get(tree);
+    if (parentUseValue(tree) && (isVoidBuiltin(functionName) || isVoidSymbol(functionSymbol))) {
       PreciseIssue issue = context().newIssue(this, tree.callee(), String.format(MESSAGE, functionName, functionName));
       if (functionSymbol != null) {
         issue.secondary(functionSymbol.location(), null);
@@ -400,8 +400,7 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
   /**
    * Verify if the used function can be found in a list of known builtin functions with no return value.
    */
-  private boolean isVoidBuiltin(FunctionCallTree fct) {
-    functionName = CheckUtils.getFunctionName(fct);
+  private static boolean isVoidBuiltin(@Nullable String functionName) {
     return functionName != null && VOID_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT));
   }
 
@@ -409,8 +408,7 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
    * If there is a symbol for the function, verify that the function has a return value.
    * If the symbol belongs to a method, also verify that the method is not abstract.
    */
-  private boolean isVoidSymbol(FunctionCallTree fct) {
-    functionSymbol = Symbols.get(fct);
+  private static boolean isVoidSymbol(FunctionSymbol functionSymbol) {
     return !functionSymbol.isUnknownSymbol() && !functionSymbol.hasReturn() &&
       (!(functionSymbol instanceof MethodSymbol) || ((MethodSymbol) functionSymbol).isAbstract().isFalse());
   }

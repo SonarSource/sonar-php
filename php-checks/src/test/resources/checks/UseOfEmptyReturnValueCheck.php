@@ -106,8 +106,10 @@ $foo = foo(); // Noncompliant
 
 class Foo {
   public static function a() {}
+//                       ^>
   public function b() {
     $a = $this->a(); // Noncompliant
+//       ^^^^^^^^
     $a = static::a(); // Noncompliant
   }
 }
