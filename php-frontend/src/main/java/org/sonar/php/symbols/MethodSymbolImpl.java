@@ -19,12 +19,16 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.Optional;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
 
   private final MethodSymbolData data;
   private final ClassSymbol owner;
+  private Trilean isOverriding;
 
   public MethodSymbolImpl(MethodSymbolData data, ClassSymbol owner) {
     super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties()));
@@ -44,17 +48,55 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
 
   @Override
   public Trilean isOverriding() {
-    Optional<ClassSymbol> superClass = owner.superClass();
-    while (superClass.isPresent()) {
-      if (superClass.get().isUnknownSymbol()) {
-        return Trilean.UNKNOWN;
+    if (isOverriding == null) {
+      isOverriding = computeIsOverriding();
+    }
+    return isOverriding;
+  }
+
+  private Trilean computeIsOverriding() {
+    if (visibility().equals(Visibility.PRIVATE)) {
+      return  Trilean.FALSE;
+    }
+
+    Deque<ClassSymbol> workList = new ArrayDeque<>();
+    Set<ClassSymbol> visitedClasses = new HashSet<>();
+    visitedClasses.add(owner);
+
+    pushOnIsOverridingWorkList(owner, workList);
+
+    boolean isUnknown = false;
+    while (!workList.isEmpty()) {
+      ClassSymbol visitedClass = workList.removeLast();
+      if (!visitedClasses.add(visitedClass)) {
+        continue;
       }
-      if (!superClass.get().getDeclaredMethod(name()).isUnknownSymbol()) {
+
+      if (visitedClass.isUnknownSymbol()) {
+        isUnknown = true;
+        continue;
+      }
+
+      MethodSymbol methodSymbol = visitedClass.getDeclaredMethod(name());
+      if (!methodSymbol.isUnknownSymbol() && !methodSymbol.visibility().equals(Visibility.PRIVATE)) {
         return Trilean.TRUE;
       }
-      superClass = superClass.get().superClass();
+
+      pushOnIsOverridingWorkList(visitedClass, workList);
+    }
+
+    if (isUnknown) {
+      return Trilean.UNKNOWN;
     }
     return Trilean.FALSE;
+  }
+
+  /**
+   * Push super classes and interfaces to the work list if they were not on the list.
+   */
+  private static void pushOnIsOverridingWorkList(ClassSymbol classSymbol, Deque<ClassSymbol> workList) {
+    classSymbol.superClass().ifPresent(workList::add);
+    workList.addAll(classSymbol.implementedInterfaces());
   }
 
 }

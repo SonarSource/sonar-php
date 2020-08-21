@@ -23,10 +23,7 @@ class C {
       return $p1;
   }
 
-  /*
-   * @inheritdoc
-   */
-  public function f2($p1) {              // OK
+  public function f2($p1) {              // Noncompliant
     return 1;
   }
 
@@ -35,6 +32,10 @@ class C {
 
 function f($p1, $p2) {                   // OK
   $p1 = $p2;
+}
+
+class A {
+  public function f1($p1) {$a = $p1;}
 }
 
 class D extends A {
@@ -92,4 +93,35 @@ class Foo {
 
 function executionOperator($p) {
   $result = `ls $p`;
+}
+
+//------------ INTERFACES--------------
+
+interface Interface1 extends Interface2, Interface3, UnknownInterface {
+  public function interfaceMethod1($a); // OK
+  public function interfaceMethod2($a); // OK
+}
+
+interface Interface2 {
+  public function interfaceMethod4($a);
+}
+
+interface Interface3 {
+  public function interfaceMethod4($a);
+}
+
+abstract class ImplementingClass1 implements Interface1 {
+  public function interfaceMethod1($a) {} // OK
+  private function foo($b) {return $b;}
+  public function interfaceMethod4($a) {}
+}
+
+class ImplementingClass2 extends ImplementingClass1 implements UnknownInterface {
+  public function interfaceMethod2($a) {} // OK
+  private function foo($b) {} // Noncompliant
+  public function interfaceMethod3($a) {} // OK - can be defined in UnknownInterface
+}
+
+class ImplementingClass3 implements Interface3 {
+  public function interfaceMethod5($a) {} // Noncompliant
 }
