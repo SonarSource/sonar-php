@@ -67,6 +67,8 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
+    super.visitFunctionCall(tree);
+
     if (isFunctionCall(tree)) {
       NamespaceNameTree namespaceNameTree = (NamespaceNameTree) tree.callee();
       QualifiedName fqn = getFullyQualifiedName(namespaceNameTree, Symbol.Kind.FUNCTION);
@@ -79,23 +81,17 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
       if (!currentClassSymbolStack.isEmpty() && isResolvableInnerMemberAccess(memberAccessTree)) {
         receiverSymbol = currentClassSymbolStack.getFirst();
       } else if (isResolvableMemberAccess(memberAccessTree)) {
-        resolveClassSymbol((ClassNamespaceNameTree) memberAccessTree.object());
-        receiverSymbol = Symbols.getClass((NamespaceNameTree) memberAccessTree.object());
+        receiverSymbol = Symbols.get((ClassNamespaceNameTree) memberAccessTree.object());
       }
 
       if (receiverSymbol != null) {
         resolveMethodSymbol(tree, (NameIdentifierTree) memberAccessTree.member(), receiverSymbol);
       }
     }
-
-    super.visitFunctionCall(tree);
   }
 
   @Override
   public void visitAnonymousClass(AnonymousClassTree tree) {
-    if (tree.superClass() != null) {
-      resolveClassSymbol(tree.superClass());
-    }
     currentClassSymbolStack.push(Symbols.get(tree));
     super.visitAnonymousClass(tree);
     currentClassSymbolStack.pop();
