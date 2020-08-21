@@ -29,3 +29,10 @@ $x = new class() {
   function __construct($p1, $p2, $p3, $p4, $p5, $p6, $p7) {
   }
 };
+
+class C1 extends C {
+  function f($p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8) {
+  }
+  function g($p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8) { // Noncompliant
+  }
+}
