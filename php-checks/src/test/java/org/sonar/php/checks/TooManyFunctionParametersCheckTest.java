@@ -36,7 +36,7 @@ public class TooManyFunctionParametersCheckTest {
 
   @Test
   public void default_parameter_values() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 24));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 24, 36));
   }
 
   @Test
@@ -48,7 +48,7 @@ public class TooManyFunctionParametersCheckTest {
   @Test
   public void custom_value_for_constructor_max() throws Exception {
     check.constructorMax = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 19, 24, 29));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 19, 24, 29, 36));
   }
 
   private List<PhpIssue> issues(int... lines) {
