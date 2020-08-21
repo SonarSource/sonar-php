@@ -28,7 +28,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitAdaptationStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
@@ -39,7 +39,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
   private static final Kind KIND = Kind.USE_TRAIT_DECLARATION;
 
   private final InternalSyntaxToken useToken;
-  private final SeparatedListImpl<ClassNamespaceNameTree> traits;
+  private final SeparatedListImpl<NamespaceNameTree> traits;
   private final InternalSyntaxToken openCurlyBraceToken;
   private final List<TraitAdaptationStatementTree> adaptations;
   private final InternalSyntaxToken closeCurlyBraceToken;
@@ -47,7 +47,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
 
   public UseTraitDeclarationTreeImpl(
     InternalSyntaxToken useToken,
-    SeparatedListImpl<ClassNamespaceNameTree> traits,
+    SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken eosToken
   ) {
     this.useToken = useToken;
@@ -60,7 +60,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
 
   public UseTraitDeclarationTreeImpl(
     InternalSyntaxToken useToken,
-    SeparatedListImpl<ClassNamespaceNameTree> traits,
+    SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken openCurlyBrace,
     List<TraitAdaptationStatementTree> adaptations,
     InternalSyntaxToken closeCurlyBrace
@@ -79,7 +79,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
   }
 
   @Override
-  public SeparatedListImpl<ClassNamespaceNameTree> traits() {
+  public SeparatedListImpl<NamespaceNameTree> traits() {
     return traits;
   }
 

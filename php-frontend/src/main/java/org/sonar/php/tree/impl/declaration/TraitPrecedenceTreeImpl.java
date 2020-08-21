@@ -25,7 +25,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
@@ -37,13 +37,13 @@ public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceT
 
   private final TraitMethodReferenceTree methodReference;
   private final InternalSyntaxToken insteadOfToken;
-  private final SeparatedListImpl<ClassNamespaceNameTree> traits;
+  private final SeparatedListImpl<NamespaceNameTree> traits;
   private final InternalSyntaxToken eosToken;
 
   public TraitPrecedenceTreeImpl(
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken insteadOfToken,
-    SeparatedListImpl<ClassNamespaceNameTree> traits,
+    SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken eosToken
     ) {
     this.methodReference = methodReference;
@@ -63,7 +63,7 @@ public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceT
   }
 
   @Override
-  public SeparatedListImpl<ClassNamespaceNameTree> traits() {
+  public SeparatedListImpl<NamespaceNameTree> traits() {
     return traits;
   }
 

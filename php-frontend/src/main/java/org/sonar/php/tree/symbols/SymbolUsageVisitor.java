@@ -33,7 +33,6 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -64,8 +63,8 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitNamespaceName(NamespaceNameTree tree) {
-    if (tree instanceof ClassNamespaceNameTree) {
-      resolveClassSymbol((ClassNamespaceNameTree) tree);
+    if (tree instanceof ClassNamespaceNameTreeImpl) {
+      resolveClassSymbol((ClassNamespaceNameTreeImpl) tree);
     }
     super.visitNamespaceName(tree);
   }
@@ -93,7 +92,7 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
     if (!currentClassSymbolStack.isEmpty() && (isSelfOrStatic(object) || isThis(object))) {
       receiverSymbol = currentClassSymbolStack.getFirst();
     } else if (callee.is(CLASS_MEMBER_ACCESS) && object.is(NAMESPACE_NAME)) {
-      receiverSymbol = Symbols.get((ClassNamespaceNameTree) object);
+      receiverSymbol = ((ClassNamespaceNameTreeImpl) object).symbol();
     }
 
     if (receiverSymbol != null && callee.member().is(NAME_IDENTIFIER)) {
@@ -135,10 +134,10 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
     currentClassSymbolStack.pop();
   }
 
-  private void resolveClassSymbol(ClassNamespaceNameTree namespaceName) {
+  private void resolveClassSymbol(ClassNamespaceNameTreeImpl namespaceName) {
     QualifiedName fqn = getFullyQualifiedName(namespaceName, Symbol.Kind.CLASS);
     ClassSymbol classSymbol = classSymbolIndex.get(fqn);
-    ((ClassNamespaceNameTreeImpl) namespaceName).setSymbol(classSymbol);
+    namespaceName.setSymbol(classSymbol);
   }
 
 }

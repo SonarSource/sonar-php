@@ -20,10 +20,9 @@
 package org.sonar.php.tree.impl.declaration;
 
 import org.sonar.php.symbols.ClassSymbol;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
-public class ClassNamespaceNameTreeImpl extends NamespaceNameTreeImpl implements ClassNamespaceNameTree {
+public class ClassNamespaceNameTreeImpl extends NamespaceNameTreeImpl {
 
   private ClassSymbol symbol;
 

@@ -25,7 +25,6 @@ import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
@@ -48,14 +47,10 @@ public class Symbols {
     return ((FunctionCallTreeImpl) functionCallTree).symbol();
   }
 
-  public static ClassSymbol get(ClassNamespaceNameTree classNamespaceNameTree) {
-    return ((ClassNamespaceNameTreeImpl) classNamespaceNameTree).symbol();
-  }
-
   @Deprecated
   public static ClassSymbol getClass(NamespaceNameTree namespaceNameTree) {
-    if (namespaceNameTree instanceof ClassNamespaceNameTree) {
-      return get((ClassNamespaceNameTree) namespaceNameTree);
+    if (namespaceNameTree instanceof ClassNamespaceNameTreeImpl) {
+      return ((ClassNamespaceNameTreeImpl) namespaceNameTree).symbol();
     }
     throw new IllegalStateException("No class symbol available on " + namespaceNameTree);
   }

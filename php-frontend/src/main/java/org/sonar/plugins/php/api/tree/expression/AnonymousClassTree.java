@@ -24,8 +24,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -55,14 +55,14 @@ public interface AnonymousClassTree extends ExpressionTree, ClassTree {
 
   @Override
   @Nullable
-  ClassNamespaceNameTree superClass();
+  NamespaceNameTree superClass();
 
   @Override
   @Nullable
   SyntaxToken implementsToken();
 
   @Override
-  SeparatedList<ClassNamespaceNameTree> superInterfaces();
+  SeparatedList<NamespaceNameTree> superInterfaces();
 
   @Override
   SyntaxToken openCurlyBraceToken();
