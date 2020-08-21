@@ -136,7 +136,7 @@ public class ProjectSymbolTableTest {
     Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
-    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
+    FunctionSymbol symbol = Symbols.get(functionCall.get());
 
     assertThat(symbol.location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 15, 1, 16));
     assertThat(symbol.parameters()).hasSize(3);
@@ -155,7 +155,7 @@ public class ProjectSymbolTableTest {
     Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
-    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
+    FunctionSymbol symbol = Symbols.get(functionCall.get());
 
     assertThat(symbol.hasReturn()).isTrue();
   }
@@ -167,7 +167,7 @@ public class ProjectSymbolTableTest {
     Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
-    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
+    FunctionSymbol symbol = Symbols.get(functionCall.get());
 
     assertThat(symbol.hasReturn()).isFalse();
   }
@@ -181,7 +181,7 @@ public class ProjectSymbolTableTest {
     SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
-    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
+    FunctionSymbol symbol = Symbols.get(functionCall.get());
 
     assertThat(symbol.hasFuncGetArgs()).isTrue();
   }
@@ -195,7 +195,7 @@ public class ProjectSymbolTableTest {
     SymbolTableImpl.create((CompilationUnitTree) ast, projectSymbolData, file2);
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
-    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
+    FunctionSymbol symbol = Symbols.get(functionCall.get());
 
     assertThat(symbol.hasFuncGetArgs()).isFalse();
   }
@@ -206,7 +206,7 @@ public class ProjectSymbolTableTest {
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
 
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
-    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree)functionCall.get().callee());
+    FunctionSymbol symbol = Symbols.get(functionCall.get());
 
     assertThat(symbol.isUnknownSymbol()).isTrue();
     assertThat(symbol.location()).isInstanceOf(UnknownLocationInFile.class);
@@ -221,18 +221,8 @@ public class ProjectSymbolTableTest {
     PhpFile file3 = file("file3.php", "<?php function f($p2) {}");
     Tree ast = getAst(file1, buildProjectSymbolData(file1, file2, file3));
     Optional<FunctionCallTree> functionCall = firstDescendant(ast, FunctionCallTree.class);
-    FunctionSymbol symbol = Symbols.getFunction((NamespaceNameTree) functionCall.get().callee());
+    FunctionSymbol symbol = Symbols.get(functionCall.get());
     assertThat(symbol.isUnknownSymbol()).isTrue();
-  }
-
-  @Test
-  public void no_function_symbol() {
-    PhpFile file1 = file("file1.php", "<?php new A();");
-    Tree ast = parser.parse(file1.contents());
-    NamespaceNameTree namespaceNameTree = firstDescendant(ast, NamespaceNameTree.class).get();
-    assertThatThrownBy(
-      () -> Symbols.getFunction(namespaceNameTree))
-      .isInstanceOf(IllegalStateException.class);
   }
 
   @Test
@@ -280,64 +270,57 @@ public class ProjectSymbolTableTest {
   public void get_function_symbol_from_call() {
     PhpFile file1 = file("file1.php", "<?php function foo() {} foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional).isPresent();
-    assertThat(optional.get()).isNotInstanceOf(MethodSymbol.class);
-    assertThat(optional.get().isUnknownSymbol()).isFalse();
+    FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(symbol).isNotInstanceOf(MethodSymbol.class);
+    assertThat(symbol.isUnknownSymbol()).isFalse();
   }
 
   @Test
   public void do_not_get_function_symbol_from_unresolvable_call() {
     PhpFile file1 = file("file1.php", "<?php function foo() {} $foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional).isEmpty();
+    assertThat(Symbols.get(firstDescendant(ast, FunctionCallTree.class).get()).isUnknownSymbol()).isTrue();
   }
 
   @Test
   public void get_method_symbol_from_call() {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional).isPresent();
-    assertThat(optional.get()).isInstanceOf(MethodSymbol.class);
-    assertThat(optional.get().isUnknownSymbol()).isFalse();
+    FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(symbol).isInstanceOf(MethodSymbol.class);
+    assertThat(symbol.isUnknownSymbol()).isFalse();
   }
 
   @Test
   public void get_method_symbol_from_extended_call() {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} class BAR extends FOO{} BAR::foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional).isPresent();
-    assertThat(optional.get()).isInstanceOf(MethodSymbol.class);
-    assertThat(optional.get().isUnknownSymbol()).isFalse();
+    FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(symbol).isInstanceOf(MethodSymbol.class);
+    assertThat(symbol.isUnknownSymbol()).isFalse();
   }
 
   @Test
   public void get_method_symbol_from_unknown_extended_call() {
     PhpFile file1 = file("file1.php", "<?php class BAR extends FOO{} BAR::foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional).isPresent();
-    assertThat(optional.get()).isInstanceOf(MethodSymbol.class);
-    assertThat(optional.get().isUnknownSymbol()).isTrue();
+    FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
+    assertThat(symbol).isInstanceOf(MethodSymbol.class);
+    assertThat(symbol.isUnknownSymbol()).isTrue();
   }
 
   @Test
   public void do_not_get_method_symbol_from_unresolvable_call() {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::$foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional).isEmpty();
+    assertThat(Symbols.get(firstDescendant(ast, FunctionCallTree.class).get()).isUnknownSymbol()).isTrue();
   }
 
   @Test
   public void do_not_get_function_symbol_from_new_expression_call() {
     PhpFile file1 = file("file1.php", "<?php class FOO{} new FOO();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    Optional<FunctionSymbol> optional = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(optional).isEmpty();
+    assertThat(Symbols.get(firstDescendant(ast, FunctionCallTree.class).get()).isUnknownSymbol()).isTrue();
   }
 
   @Test

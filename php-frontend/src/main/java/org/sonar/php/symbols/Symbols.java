@@ -19,26 +19,17 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.Optional;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
-import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
-import org.sonar.php.tree.impl.expression.NameIdentifierTreeImpl;
+import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
-import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
-
-import static org.sonar.php.utils.SymbolUtils.isFunctionCall;
-import static org.sonar.php.utils.SymbolUtils.isMethodCall;
-import static org.sonar.php.utils.SymbolUtils.isResolvable;
 
 /**
  * Utility class to retrieve symbols from the AST.
@@ -53,34 +44,20 @@ public class Symbols {
     return ((ClassDeclarationTreeImpl) classDeclarationTree).symbol();
   }
 
-  public static Optional<FunctionSymbol> get(FunctionCallTree functionCallTree) {
-    ExpressionTree callee = functionCallTree.callee();
-    if (isFunctionCall(functionCallTree)) {
-      return Optional.of(getFunction((NamespaceNameTree) functionCallTree.callee()));
-    } else if (isMethodCall(functionCallTree) && isResolvable((MemberAccessTree) callee)) {
-      return Optional.of(getMethod((NameIdentifierTree) ((MemberAccessTree) callee).member()));
-    }
-    return Optional.empty();
+  public static FunctionSymbol get(FunctionCallTree functionCallTree) {
+    return ((FunctionCallTreeImpl) functionCallTree).symbol();
   }
 
   public static ClassSymbol get(ClassNamespaceNameTree classNamespaceNameTree) {
     return ((ClassNamespaceNameTreeImpl) classNamespaceNameTree).symbol();
   }
 
+  @Deprecated
   public static ClassSymbol getClass(NamespaceNameTree namespaceNameTree) {
-    Symbol symbol = ((NamespaceNameTreeImpl) namespaceNameTree).symbol();
-    if (symbol instanceof ClassSymbol) {
-      return (ClassSymbol) symbol;
+    if (namespaceNameTree instanceof ClassNamespaceNameTree) {
+      return get((ClassNamespaceNameTree) namespaceNameTree);
     }
     throw new IllegalStateException("No class symbol available on " + namespaceNameTree);
-  }
-
-  public static FunctionSymbol getFunction(NamespaceNameTree namespaceNameTree) {
-    Symbol symbol = ((NamespaceNameTreeImpl) namespaceNameTree).symbol();
-    if (symbol instanceof FunctionSymbol) {
-      return (FunctionSymbol) symbol;
-    }
-    throw new IllegalStateException("No function symbol available on " + namespaceNameTree);
   }
 
   public static ClassSymbol get(AnonymousClassTree anonymousClassTree) {
@@ -89,13 +66,5 @@ public class Symbols {
 
   public static MethodSymbol get(MethodDeclarationTree methodDeclarationTree) {
     return ((MethodDeclarationTreeImpl) methodDeclarationTree).symbol();
-  }
-
-  public static MethodSymbol getMethod(NameIdentifierTree nameIdentifierTree) {
-    Symbol symbol = ((NameIdentifierTreeImpl) nameIdentifierTree).symbol();
-    if (symbol instanceof MethodSymbol) {
-      return (MethodSymbol) symbol;
-    }
-    throw new IllegalStateException("No method symbol available on " + nameIdentifierTree);
   }
 }

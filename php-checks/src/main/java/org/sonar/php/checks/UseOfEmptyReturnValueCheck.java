@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.base.Preconditions;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -411,14 +410,9 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
    * If the symbol belongs to a method, also verify that the method is not abstract.
    */
   private boolean isVoidSymbol(FunctionCallTree fct) {
-    functionSymbol = null;
-    Optional<FunctionSymbol> symbol = Symbols.get(fct);
-    if (symbol.isPresent()) {
-      functionSymbol = symbol.get();
-      return !functionSymbol.isUnknownSymbol() && !functionSymbol.hasReturn() &&
-        (!(functionSymbol instanceof MethodSymbol) || ((MethodSymbol) functionSymbol).isAbstract().isFalse());
-    }
-    return false;
+    functionSymbol = Symbols.get(fct);
+    return !functionSymbol.isUnknownSymbol() && !functionSymbol.hasReturn() &&
+      (!(functionSymbol instanceof MethodSymbol) || ((MethodSymbol) functionSymbol).isAbstract().isFalse());
   }
 
   /**

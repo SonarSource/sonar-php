@@ -81,7 +81,7 @@ $otherClass->testMethod($b, $a); // Compliant
 // -----------------
 TestClass::testMethod($a, $b); // Compliant
 TestClass::testMethod($f, $b); // Compliant
-TestClass::testMethod($b, $a); // False Negative
+TestClass::testMethod($b, $a); // Noncompliant
 OtherClass::testMethod($b, $a); // Compliant
 
 // -----------------
@@ -90,7 +90,7 @@ OtherClass::testMethod($b, $a); // Compliant
 $c = new class() {
    public function method1($a, $b) {}
    public function method2() {
-    $this->method1($b, $a);
+    $this->method1($b, $a); // Noncompliant
    }
 };
 
