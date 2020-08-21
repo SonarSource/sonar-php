@@ -62,7 +62,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
   }
 
   private Trilean computeIsOverriding() {
-    if (visibility().equals(Visibility.PRIVATE)) {
+    if (visibility().equals(Visibility.PRIVATE) || name().equals("__construct")) {
       return  Trilean.FALSE;
     }
 
