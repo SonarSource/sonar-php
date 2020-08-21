@@ -219,7 +219,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    functionPropertiesStack.add(new FunctionSymbolProperties());
+    functionPropertiesStack.push(new FunctionSymbolProperties());
     super.visitFunctionExpression(tree);
     functionPropertiesStack.pop();
   }
