@@ -29,9 +29,9 @@ import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
-import org.sonar.php.utils.SymbolUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -40,13 +40,14 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 
-import static org.sonar.php.utils.SymbolUtils.isSelfOrStatic;
-import static org.sonar.php.utils.SymbolUtils.isThis;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.CLASS_MEMBER_ACCESS;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.NAMESPACE_NAME;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.NAME_IDENTIFIER;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.NEW_EXPRESSION;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.OBJECT_MEMBER_ACCESS;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.VARIABLE_IDENTIFIER;
 
 class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
 
@@ -75,7 +76,7 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
 
     ExpressionTree callee = tree.callee();
 
-    if (callee.is(NAMESPACE_NAME) && !SymbolUtils.isNewExpressionCall(tree)) {
+    if (callee.is(NAMESPACE_NAME) && !isNewExpressionCall(tree)) {
       QualifiedName fqn = getFullyQualifiedName((NamespaceNameTree) callee, Symbol.Kind.FUNCTION);
       FunctionSymbol functionSymbol = functionSymbolIndex.get(fqn);
       ((FunctionCallTreeImpl) tree).setSymbol(functionSymbol);
@@ -105,6 +106,19 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
       }
       ((FunctionCallTreeImpl) tree).setSymbol(methodSymbol);
     }
+  }
+
+  public static boolean isNewExpressionCall(FunctionCallTree functionCallTree) {
+    return functionCallTree.getParent() != null && functionCallTree.getParent().is(NEW_EXPRESSION);
+  }
+
+  public static boolean isThis(Tree object) {
+    return object.is(VARIABLE_IDENTIFIER) && ((VariableIdentifierTree) object).text().equals("$this");
+  }
+
+  public static boolean isSelfOrStatic(Tree object) {
+    return (object.is(NAMESPACE_NAME) && ((NamespaceNameTree) object).fullName().equals("self"))
+      || (object.is(NAME_IDENTIFIER) && ((NameIdentifierTree) object).text().equals("static"));
   }
 
   @Override
