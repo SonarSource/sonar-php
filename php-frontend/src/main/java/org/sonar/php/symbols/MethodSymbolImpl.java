@@ -60,29 +60,29 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
     }
 
     Deque<ClassSymbol> workList = new ArrayDeque<>();
-    Set<ClassSymbol> visitClasses = new HashSet<>();
-    visitClasses.add(owner);
+    Set<ClassSymbol> visitedClasses = new HashSet<>();
+    visitedClasses.add(owner);
 
     pushOnIsOverridingWorkList(owner, workList);
 
     boolean isUnknown = false;
     while (!workList.isEmpty()) {
-      ClassSymbol visitClass = workList.removeLast();
-      if (!visitClasses.add(visitClass)) {
+      ClassSymbol visitedClass = workList.removeLast();
+      if (!visitedClasses.add(visitedClass)) {
         continue;
       }
 
-      if (visitClass.isUnknownSymbol()) {
+      if (visitedClass.isUnknownSymbol()) {
         isUnknown = true;
         continue;
       }
 
-      MethodSymbol methodSymbol = visitClass.getDeclaredMethod(name());
+      MethodSymbol methodSymbol = visitedClass.getDeclaredMethod(name());
       if (!methodSymbol.isUnknownSymbol() && !methodSymbol.visibility().equals(Visibility.PRIVATE)) {
         return Trilean.TRUE;
       }
 
-      pushOnIsOverridingWorkList(visitClass, workList);
+      pushOnIsOverridingWorkList(visitedClass, workList);
     }
 
     if (isUnknown) {

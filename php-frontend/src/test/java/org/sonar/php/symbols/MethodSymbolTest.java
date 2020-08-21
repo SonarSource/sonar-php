@@ -126,16 +126,6 @@ public class MethodSymbolTest {
     assertThat(classes.get("C2").getDeclaredMethod("method1").isOverriding()).isEqualTo(Trilean.FALSE);
   }
 
-  @Test
-  public void stored_overriding_result() {
-    Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
-      "class C1 {public function method1(){}}",
-      "class C2 extends C1 {public function method1(){}}");
-
-    MethodSymbol methodSymbol = classes.get("C2").getDeclaredMethod("method1");
-    assertThat(methodSymbol.isOverriding()).isEqualTo(methodSymbol.isOverriding());
-  }
-
   private Map<String, ClassSymbol> parseMultipleClasses(String... lines) {
     Tree ast = parse(lines);
     return TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)
