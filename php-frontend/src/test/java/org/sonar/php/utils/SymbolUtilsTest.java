@@ -43,35 +43,30 @@ public class SymbolUtilsTest{
   @Test
   public void verify_resolvable_inner_self_call() {
     MemberAccessTree memberAccessTree = get("<?php class Foo{function foo(){self::foo();}}", MemberAccessTree.class);
-    assertThat(SymbolUtils.isResolvable(memberAccessTree)).isTrue();
     assertThat(SymbolUtils.isResolvableInnerMemberAccess(memberAccessTree)).isTrue();
   }
 
   @Test
   public void verify_resolvable_inner_static_call() {
     MemberAccessTree memberAccessTree = get("<?php class Foo{function foo(){static::foo();}}", MemberAccessTree.class);
-    assertThat(SymbolUtils.isResolvable(memberAccessTree)).isTrue();
     assertThat(SymbolUtils.isResolvableInnerMemberAccess(memberAccessTree)).isTrue();
   }
 
   @Test
   public void verify_unresolvable_inner_call() {
     MemberAccessTree memberAccessTree = get("<?php class Foo{function foo(){self::$foo();}}", MemberAccessTree.class);
-    assertThat(SymbolUtils.isResolvable(memberAccessTree)).isFalse();
     assertThat(SymbolUtils.isResolvableInnerMemberAccess(memberAccessTree)).isFalse();
   }
 
   @Test
   public void verify_unresolvable_inner_self_call() {
     MemberAccessTree memberAccessTree = get("<?php class Foo{function foo(){Bar::foo();}}", MemberAccessTree.class);
-    assertThat(SymbolUtils.isResolvable(memberAccessTree)).isTrue();
     assertThat(SymbolUtils.isResolvableInnerMemberAccess(memberAccessTree)).isFalse();
   }
 
   @Test
   public void verify_unresolvable_inner_static_call() {
     MemberAccessTree memberAccessTree = get("<?php class Foo{function foo(){$foo::foo();}}", MemberAccessTree.class);
-    assertThat(SymbolUtils.isResolvable(memberAccessTree)).isFalse();
     assertThat(SymbolUtils.isResolvableInnerMemberAccess(memberAccessTree)).isFalse();
   }
 
