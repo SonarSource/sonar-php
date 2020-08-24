@@ -30,6 +30,8 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
+
 /**
  * Utility class to retrieve symbols from the AST.
  * We can drop this class as soon as we expose an equivalent API directly on the AST interfaces.
@@ -47,12 +49,11 @@ public class Symbols {
     return ((FunctionCallTreeImpl) functionCallTree).symbol();
   }
 
-  @Deprecated
   public static ClassSymbol getClass(NamespaceNameTree namespaceNameTree) {
     if (namespaceNameTree instanceof ClassNamespaceNameTreeImpl) {
       return ((ClassNamespaceNameTreeImpl) namespaceNameTree).symbol();
     }
-    throw new IllegalStateException("No class symbol available on " + namespaceNameTree);
+    return new UnknownClassSymbol(qualifiedName(namespaceNameTree.qualifiedName()));
   }
 
   public static ClassSymbol get(AnonymousClassTree anonymousClassTree) {
