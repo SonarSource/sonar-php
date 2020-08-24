@@ -51,6 +51,13 @@ public class MethodCallResolutionTest {
   }
 
   @Test
+  public void resolve_with_superclass_cycle() {
+    assertThat(callSymbol("<?php ",
+      "class A extends B { }",
+      "class B extends A { function g(){ $this->f(); } }")).isUnknown();
+  }
+
+  @Test
   public void resolve_self_and_static() {
     assertThat(callSymbol("<?php class A { function f(){} function g(){ self::f(); } }")).isKnown("A::f");
     assertThat(callSymbol("<?php class A { function f(){} function g(){ self::x(); } }")).isUnknown();

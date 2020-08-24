@@ -20,7 +20,9 @@
 package org.sonar.php.tree.symbols;
 
 import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolIndex;
 import org.sonar.php.symbols.FunctionSymbol;
@@ -99,7 +101,8 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
       String methodName = ((NameIdentifierTree) callee.member()).text();
       MethodSymbol methodSymbol = receiverSymbol.getDeclaredMethod(methodName);
       Optional<ClassSymbol> superClass = receiverSymbol.superClass();
-      while (superClass.isPresent() && methodSymbol.isUnknownSymbol()) {
+      Set<ClassSymbol> processedClasses = new HashSet<>();
+      while (superClass.isPresent() && methodSymbol.isUnknownSymbol() && processedClasses.add(superClass.get())) {
         methodSymbol = superClass.get().getDeclaredMethod(methodName);
         superClass = superClass.get().superClass();
       }
