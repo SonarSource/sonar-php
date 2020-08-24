@@ -123,7 +123,7 @@ public class ProjectSymbolTableTest {
     PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
     Tree ast = parser.parse(file1.contents());
     NamespaceNameTree namespaceNameTree = firstDescendant(ast, NamespaceNameTree.class).get();
-    assertThat(Symbols.getClass(namespaceNameTree)).isInstanceOf(UnknownClassSymbol.class);
+    assertThat(Symbols.getClass(namespaceNameTree).isUnknownSymbol()).isTrue();
   }
 
   @Test
