@@ -33,7 +33,6 @@ import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -409,8 +408,8 @@ public class PHPGrammar {
             STATIC_SCALAR()))));
   }
 
-  public SeparatedListImpl<ClassNamespaceNameTree> INTERFACE_LIST() {
-    return b.<SeparatedListImpl<ClassNamespaceNameTree>>nonterminal(PHPLexicalGrammar.INTERFACE_LIST).is(
+  public SeparatedListImpl<NamespaceNameTree> INTERFACE_LIST() {
+    return b.<SeparatedListImpl<NamespaceNameTree>>nonterminal(PHPLexicalGrammar.INTERFACE_LIST).is(
       f.interfaceList(
         f.classNamespaceName(NAMESPACE_NAME()),
         b.zeroOrMore(f.newTuple(b.token(COMMA), f.classNamespaceName(NAMESPACE_NAME())))));

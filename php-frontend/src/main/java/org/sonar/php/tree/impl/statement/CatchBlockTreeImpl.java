@@ -26,7 +26,7 @@ import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -39,7 +39,7 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
 
   private final InternalSyntaxToken catchToken;
   private final InternalSyntaxToken lParenthesis;
-  private final SeparatedList<ClassNamespaceNameTree> exceptionTypes;
+  private final SeparatedList<NamespaceNameTree> exceptionTypes;
   private final VariableIdentifierTreeImpl variable;
   private final InternalSyntaxToken rParenthsis;
   private final BlockTree block;
@@ -47,7 +47,7 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
   public CatchBlockTreeImpl(
       InternalSyntaxToken catchToken,
       InternalSyntaxToken lParenthesis,
-      SeparatedList<ClassNamespaceNameTree> exceptionTypes,
+      SeparatedList<NamespaceNameTree> exceptionTypes,
       VariableIdentifierTreeImpl variable,
       InternalSyntaxToken rParenthsis,
       BlockTree block
@@ -71,7 +71,7 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
   }
 
   @Override
-  public SeparatedList<ClassNamespaceNameTree> exceptionTypes() {
+  public SeparatedList<NamespaceNameTree> exceptionTypes() {
     return exceptionTypes;
   }
 

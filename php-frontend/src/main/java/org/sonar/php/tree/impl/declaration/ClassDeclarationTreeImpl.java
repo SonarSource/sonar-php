@@ -31,8 +31,8 @@ import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassNamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -45,9 +45,9 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   private final SyntaxToken classEntryTypeToken;
   private final NameIdentifierTree name;
   private final SyntaxToken extendsToken;
-  private final ClassNamespaceNameTree superClass;
+  private final NamespaceNameTree superClass;
   private final SyntaxToken implementsToken;
-  private final SeparatedListImpl<ClassNamespaceNameTree> superInterfaces;
+  private final SeparatedListImpl<NamespaceNameTree> superInterfaces;
   private final SyntaxToken openCurlyBraceToken;
   private final List<ClassMemberTree> members;
   private final SyntaxToken closeCurlyBraceToken;
@@ -56,8 +56,8 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   private ClassDeclarationTreeImpl(
       Kind kind,
       @Nullable SyntaxToken modifierToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,
-      @Nullable SyntaxToken extendsToken, @Nullable ClassNamespaceNameTree superClass,
-      @Nullable SyntaxToken implementsToken, SeparatedListImpl<ClassNamespaceNameTree> superInterfaces,
+      @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
+      @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken
   ) {
     this.kind = kind;
@@ -97,7 +97,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
 
   @Nullable
   @Override
-  public ClassNamespaceNameTree superClass() {
+  public NamespaceNameTree superClass() {
     return superClass;
   }
 
@@ -108,7 +108,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   @Override
-  public SeparatedListImpl<ClassNamespaceNameTree> superInterfaces() {
+  public SeparatedListImpl<NamespaceNameTree> superInterfaces() {
     return superInterfaces;
   }
 
@@ -172,7 +172,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
 
   public static ClassDeclarationTree createInterface(
       InternalSyntaxToken interfaceToken, NameIdentifierTree name,
-      @Nullable InternalSyntaxToken extendsToken, SeparatedListImpl<ClassNamespaceNameTree> interfaceList,
+      @Nullable InternalSyntaxToken extendsToken, SeparatedListImpl<NamespaceNameTree> interfaceList,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     return new ClassDeclarationTreeImpl(
@@ -211,8 +211,8 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
 
   public static ClassDeclarationTree createClass(
       @Nullable InternalSyntaxToken modifierToken, InternalSyntaxToken classToken, NameIdentifierTree name,
-      @Nullable InternalSyntaxToken extendsToken, @Nullable ClassNamespaceNameTree superClass,
-      @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<ClassNamespaceNameTree> superInterfaces,
+      @Nullable InternalSyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
+      @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
     return new ClassDeclarationTreeImpl(
         Kind.CLASS_DECLARATION,
