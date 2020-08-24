@@ -42,7 +42,6 @@ import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.php.tree.TreeUtils.firstDescendant;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
@@ -124,9 +123,7 @@ public class ProjectSymbolTableTest {
     PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
     Tree ast = parser.parse(file1.contents());
     NamespaceNameTree namespaceNameTree = firstDescendant(ast, NamespaceNameTree.class).get();
-    assertThatThrownBy(
-      () -> Symbols.getClass(namespaceNameTree))
-      .isInstanceOf(IllegalStateException.class);
+    assertThat(Symbols.getClass(namespaceNameTree).isUnknownSymbol()).isTrue();
   }
 
   @Test
