@@ -19,7 +19,33 @@
  */
 package org.sonar.php.checks;
 
+import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.TreeUtils;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.cfg.CfgBlock;
+import org.sonar.plugins.php.api.cfg.CfgBranchingBlock;
+import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -27,30 +53,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
-import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
-import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
-import org.sonar.plugins.php.api.tree.expression.VariableTree;
-import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import java.util.stream.Collectors;
 
 @Rule(key = "S836")
 public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
+  private static final String MESSAGE = "Review the data-flow - use of uninitialized value.";
 
   private static final Set<Kind> PARENT_INITIALIZATION_KIND = EnumSet.of(
     // Note: LEXICAL_VARIABLES are both, read and write, see VariableVisitor#visitFunctionExpression
@@ -87,15 +94,187 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     "$_SESSION",
     "$GLOBALS",
     "$HTTP_RAW_POST_DATA",
-    "$http_response_header",
-    "$php_errormsg",
+    "$HTTP_RESPONSE_HEADER",
+    "$PHP_ERRORMSG",
     // "$this" is defined only in method, but rule S2014 raises issues when it's used elsewhere
-    "$this"));
+    "$THIS"));
 
   private static final Set<String> FUNCTION_ALLOWING_ARGUMENT_CHECK;
   static {
     FUNCTION_ALLOWING_ARGUMENT_CHECK = new HashSet<>(IgnoredReturnValueCheck.PURE_FUNCTIONS);
+    FUNCTION_ALLOWING_ARGUMENT_CHECK.add("echo");
     FUNCTION_ALLOWING_ARGUMENT_CHECK.remove("isset");
+  }
+
+  @Override
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    checkFunction(tree);
+    super.visitFunctionDeclaration(tree);
+  }
+
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    checkFunction(tree);
+    super.visitMethodDeclaration(tree);
+  }
+
+  @Override
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    checkFunction(tree);
+    super.visitFunctionExpression(tree);
+  }
+
+  private void checkFunction(FunctionTree tree) {
+    ControlFlowGraph cfg = ControlFlowGraph.build(tree, context());
+    if (cfg == null) {
+      return;
+    }
+
+    Set<String> providedVariables = getParameterVariableNames(tree);
+    if (tree.is(Kind.FUNCTION_EXPRESSION)) {
+      providedVariables.addAll(getLexicalVariableNames((FunctionExpressionTree) tree));
+    }
+
+    // Catch clauses do not appear in the CFG. We collect all exception variables in the function body and consider them as provided in the whole function body to avoid false positives.
+    ExceptionVariablesExtractor exceptionVariablesExtractor = new ExceptionVariablesExtractor();
+    tree.accept(exceptionVariablesExtractor);
+    providedVariables.addAll(exceptionVariablesExtractor.variables);
+
+    Map<CfgBlock, BlockSummary> predecessorsSummary = new HashMap<>();
+    cfg.blocks().forEach(
+      b -> predecessorsSummary.put(b, new BlockSummary(new HashSet<>(providedVariables), false))
+    );
+    ArrayDeque<CfgBlock> workList = new ArrayDeque<>(cfg.blocks());
+
+    while (!workList.isEmpty()) {
+      CfgBlock block = workList.pop();
+
+      BlockSummary init = BlockSummary.copyOf(predecessorsSummary.get(block));
+      BlockSummary changesInBlock = initializedInThisBlock(block);
+      init.initializedVariables.addAll(changesInBlock.initializedVariables);
+      init.scopeWasChanged = changesInBlock.scopeWasChanged || init.scopeWasChanged;
+
+      for (CfgBlock successor : block.successors()) {
+        BlockSummary successorInit = predecessorsSummary.get(successor);
+        if (!successorInit.initializedVariables.containsAll(init.initializedVariables)
+          || successorInit.scopeWasChanged != init.scopeWasChanged) {
+          successorInit.initializedVariables.addAll(init.initializedVariables);
+          successorInit.scopeWasChanged = successorInit.scopeWasChanged || init.scopeWasChanged;
+          workList.add(successor);
+        }
+      }
+    }
+
+    Map<String, Set<Tree>> uninitializedVariableUses = new HashMap<>();
+    cfg.blocks().forEach(b -> checkBlock(b, predecessorsSummary.get(b))
+      .forEach((v, s) -> uninitializedVariableUses.computeIfAbsent(v, st -> new HashSet<>()).addAll(s)));
+    uninitializedVariableUses.forEach((v, trees) -> reportOnFirstTree(trees));
+  }
+
+  private void reportOnFirstTree(Set<Tree> trees) {
+    trees.stream()
+      .min(Comparator.comparingInt(a -> ((PHPTree)a).getFirstToken().line())
+        .thenComparing(a -> ((PHPTree)a).getFirstToken().column()))
+      .ifPresent(t -> newIssue(t, MESSAGE));
+  }
+
+  private Set<String> getLexicalVariableNames(FunctionExpressionTree tree) {
+    Set<String> result = new HashSet<>();
+
+    if (tree.lexicalVars() != null) {
+      tree.lexicalVars().variables().stream()
+        .map(VariableTree::variableExpression)
+        .filter(v -> v.is(Kind.VARIABLE_IDENTIFIER))
+        .forEach(v -> result.add(((VariableIdentifierTree)v).variableExpression().text()));
+    }
+
+    return result;
+  }
+
+  private Set<String> getParameterVariableNames(FunctionTree tree) {
+    return tree.parameters().parameters().stream()
+      .map(p -> p.variableIdentifier().variableExpression().text())
+      .collect(Collectors.toSet());
+  }
+
+  private Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {
+    Map<String, Set<Tree>> result = new HashMap<>();
+
+    BlockSummary summary = BlockSummary.copyOf(blockSummary);
+    for (Tree element : block.elements()) {
+      StatementVisitor visitor = new StatementVisitor(summary);
+      element.accept(visitor);
+      visitor.firstVariableReadAccess.entrySet().stream()
+        .filter(e -> !PREDEFINED_VARIABLES.contains(e.getKey().toUpperCase()))
+        .forEach(e -> result.computeIfAbsent(e.getKey(), v -> new HashSet<>()).add(e.getValue()));
+    }
+
+    return result;
+  }
+
+  private BlockSummary initializedInThisBlock(CfgBlock block) {
+    BlockSummary summary = new BlockSummary();
+
+    for (Tree element : block.elements()) {
+      StatementVisitor visitor = new StatementVisitor(summary);
+      element.accept(visitor);
+    }
+
+    if (block instanceof CfgBranchingBlock) {
+      Tree branchingTree = ((CfgBranchingBlock)block).branchingTree();
+      if (branchingTree.is(Kind.FOREACH_STATEMENT, Kind.ALTERNATIVE_FOREACH_STATEMENT)) {
+        summary.initializedVariables.addAll(getForEachVariables((ForEachStatementTree)branchingTree));
+      }
+    }
+
+    return summary;
+  }
+
+  private static class BlockSummary {
+    private final Set<String> initializedVariables;
+    private boolean scopeWasChanged;
+
+    private BlockSummary(Set<String> initializedVariables, boolean scopeWasChanged) {
+      this.initializedVariables = initializedVariables;
+      this.scopeWasChanged = scopeWasChanged;
+    }
+
+    private BlockSummary() {
+      this.initializedVariables = new HashSet<>();
+      this.scopeWasChanged = false;
+    }
+
+    private static BlockSummary copyOf(BlockSummary toCopy) {
+      return new BlockSummary(new HashSet<>(toCopy.initializedVariables), toCopy.scopeWasChanged);
+    }
+  }
+
+  private Set<String> getForEachVariables(ForEachStatementTree tree) {
+    Set<String> result = new HashSet<>();
+
+    if (tree.value() != null) {
+      if (tree.value().is(Kind.VARIABLE_IDENTIFIER)) {
+        result.add(((VariableIdentifierTree)tree.value()).variableExpression().text());
+      } else {
+        TreeUtils.descendants(tree.value(), VariableIdentifierTree.class)
+          .forEach(v -> result.add(v.variableExpression().text()));
+      }
+    }
+
+    if (tree.key() != null) {
+      if (tree.key().is(Kind.VARIABLE_IDENTIFIER)) {
+        result.add(((VariableIdentifierTree)tree.key()).variableExpression().text());
+      } else {
+        TreeUtils.descendants(tree.key(), VariableIdentifierTree.class).forEach(v -> result.add(v.variableExpression().text()));
+      }
+    }
+
+    return result;
+  }
+
+  private static boolean isReadAccess(Tree tree) {
+    Predicate<Tree> predicate = IS_READ_ACCESS_BY_PARENT_KIND.get(tree.getParent().getKind());
+    return predicate == null || predicate.test(tree);
   }
 
   private static final Map<Kind, Predicate<Tree>> IS_READ_ACCESS_BY_PARENT_KIND = initializeReadPredicate();
@@ -117,135 +296,6 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     return map;
   }
 
-  @Override
-  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    checkFunction(tree);
-    super.visitFunctionDeclaration(tree);
-  }
-
-  @Override
-  public void visitFunctionExpression(FunctionExpressionTree tree) {
-    checkFunction(tree);
-    super.visitFunctionExpression(tree);
-  }
-
-  @Override
-  public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    checkFunction(tree);
-    super.visitMethodDeclaration(tree);
-  }
-
-  private void checkFunction(FunctionTree function) {
-    VariableVisitor visitor = new VariableVisitor(function);
-    function.accept(visitor);
-    visitor.uninitializedStream()
-      .forEach(variable -> context().newIssue(this, variable, "Review the data-flow - use of uninitialized value."));
-  }
-
-  private static class VariableVisitor extends PHPVisitorCheck {
-
-    final FunctionTree currentFunction;
-
-    boolean trustVariables = true;
-
-    Map<String, VariableIdentifierTree> firstVariableReadAccess = new HashMap<>();
-
-    Set<String> initializedVariables = new HashSet<>();
-
-    VariableVisitor(FunctionTree currentFunction) {
-      this.currentFunction = currentFunction;
-    }
-
-    Stream<VariableIdentifierTree> uninitializedStream() {
-      if (!trustVariables) {
-        return Stream.empty();
-      }
-      return firstVariableReadAccess.entrySet().stream()
-        .filter(entry -> !initializedVariables.contains(entry.getKey()))
-        .map(Map.Entry::getValue);
-    }
-
-    @Override
-    public void visitVariableIdentifier(VariableIdentifierTree tree) {
-      if (isClassMemberAccess(tree) || uninitializedVariableDeclaration(tree)) {
-        return;
-      }
-      String name = tree.text();
-      if (!PREDEFINED_VARIABLES.contains(name)) {
-        if (isReadAccess(tree)) {
-          if (!firstVariableReadAccess.containsKey(name)) {
-            firstVariableReadAccess.put(name, tree);
-          }
-        } else {
-          initializedVariables.add(name);
-        }
-      }
-    }
-
-    @Override
-    public void visitFunctionCall(FunctionCallTree functionCall) {
-      if (FUNCTION_CHANGING_CURRENT_SCOPE.contains(CheckUtils.getLowerCaseFunctionName(functionCall))) {
-        trustVariables = false;
-      }
-      super.visitFunctionCall(functionCall);
-    }
-
-    @Override
-    public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-      if (tree == currentFunction) {
-        super.visitFunctionDeclaration(tree);
-      }
-      // else skip nested
-    }
-
-    @Override
-    public void visitFunctionExpression(FunctionExpressionTree tree) {
-      LexicalVariablesTree lexicalVars = tree.lexicalVars();
-      if (tree == currentFunction) {
-        if (lexicalVars != null) {
-          lexicalVars.variables().stream()
-            .map(VariableTree::variableExpression)
-            .filter(variable -> variable.is(Kind.VARIABLE_IDENTIFIER))
-            .map(variable -> ((VariableIdentifierTree) variable).text())
-            .forEach(initializedVariables::add);
-        }
-        super.visitFunctionExpression(tree);
-      } else {
-        if (lexicalVars != null) {
-          scan(lexicalVars.variables());
-        }
-        // skip nested
-      }
-    }
-
-    @Override
-    public void visitClassDeclaration(ClassDeclarationTree tree) {
-      // skip nested
-    }
-
-    @Override
-    public void visitAnonymousClass(AnonymousClassTree tree) {
-      // skip nested
-    }
-
-    private static boolean isClassMemberAccess(Tree tree) {
-      Tree child = skipParentArrayAccess(tree);
-      return (child.getParent().is(Kind.CLASS_MEMBER_ACCESS) &&
-        ((MemberAccessTree) child.getParent()).member() == child);
-    }
-
-    private static boolean uninitializedVariableDeclaration(Tree tree) {
-      return (tree.getParent().is(Kind.VARIABLE_DECLARATION) &&
-        ((VariableDeclarationTree) tree.getParent()).equalToken() == null);
-    }
-
-  }
-
-  private static boolean isReadAccess(Tree tree) {
-    Predicate<Tree> predicate = IS_READ_ACCESS_BY_PARENT_KIND.get(tree.getParent().getKind());
-    return predicate == null || predicate.test(tree);
-  }
-
   private static boolean isArrayAssignment(Tree tree) {
     Tree child = skipParentArrayAccess(tree);
     return child.getParent().is(Kind.ASSIGNMENT) &&
@@ -264,4 +314,72 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     return child;
   }
 
+  private static class StatementVisitor extends PHPVisitorCheck {
+    private final BlockSummary blockSummary;
+    private final Map<String, Tree> firstVariableReadAccess = new HashMap<>();
+
+    private StatementVisitor(BlockSummary blockSummary) {
+      this.blockSummary = blockSummary;
+    }
+
+    @Override
+    public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+      // do not visit nested functions
+    }
+
+    @Override
+    public void visitFunctionExpression(FunctionExpressionTree tree) {
+      if (tree.lexicalVars() != null) {
+        tree.lexicalVars().accept(this);
+      }
+      // do not visit nested body
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCallTree functionCall) {
+      if (FUNCTION_CHANGING_CURRENT_SCOPE.contains(CheckUtils.getLowerCaseFunctionName(functionCall))) {
+        blockSummary.scopeWasChanged = true;
+      }
+      super.visitFunctionCall(functionCall);
+    }
+
+    @Override
+    public void visitVariableIdentifier(VariableIdentifierTree tree) {
+      if (isClassMemberAccess(tree)) {
+        return;
+      }
+
+      String name = tree.variableExpression().text();
+      if (isReadAccess(tree)
+        && !blockSummary.initializedVariables.contains(name)
+        && !blockSummary.scopeWasChanged) {
+        firstVariableReadAccess.putIfAbsent(name, tree);
+      } else {
+        blockSummary.initializedVariables.add(name);
+      }
+
+      super.visitVariableIdentifier(tree);
+    }
+
+    private static boolean isClassMemberAccess(Tree tree) {
+      Tree child = skipParentArrayAccess(tree);
+      return (child.getParent().is(Kind.CLASS_MEMBER_ACCESS) &&
+              ((MemberAccessTree) child.getParent()).member() == child);
+    }
+
+    private static boolean uninitializedVariableDeclaration(Tree tree) {
+      return (tree.getParent().is(Kind.VARIABLE_DECLARATION) &&
+              ((VariableDeclarationTree) tree.getParent()).equalToken() == null);
+    }
+  }
+
+  private static class ExceptionVariablesExtractor extends PHPVisitorCheck {
+    private final Set<String> variables = new HashSet<>();
+
+    @Override
+    public void visitCatchBlock(CatchBlockTree tree) {
+      variables.add(tree.variable().variableExpression().text());
+      super.visitCatchBlock(tree);
+    }
+  }
 }

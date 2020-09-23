@@ -89,7 +89,7 @@ function f4() {
 function f5() {
   static $a = 3, $b;
   if ($a) {}
-  return $b; // Noncompliant
+  return $b; // Compliant
 }
 
 function f6() {
@@ -103,7 +103,7 @@ function f7() {
 }
 
 function f8() {
-  if ($a) {} // false-negative, need cfg
+  if ($a) {} // Noncompliant
   parse_str("a=3&b=4");
   return $b;
 }
@@ -289,4 +289,12 @@ function alternativeForeach() {
     foreach ($array as list($a, $b)) :
         echo "$a\n";
     endforeach;
+}
+
+function foo() {
+  if (bar()) {
+    $x = 1;
+  } else {
+    echo $x; // Noncompliant
+  }
 }
