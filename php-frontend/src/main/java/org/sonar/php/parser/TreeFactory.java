@@ -1408,6 +1408,21 @@ public class TreeFactory {
     return result;
   }
 
+  public ExpressionTree newObjectExpression(ExpressionTree object, Optional<List<ExpressionTree>> expressions) {
+    ExpressionTree result = object;
+
+    for (ExpressionTree expression : optionalList(expressions)) {
+      if (expression.is(Kind.CLASS_MEMBER_ACCESS)) {
+        result = ((MemberAccessTreeImpl) expression).complete(result);
+
+      } else if (expression.is(Kind.FUNCTION_CALL)) {
+        result = ((FunctionCallTreeImpl) expression).complete(result);
+      }
+    }
+
+    return result;
+  }
+
   public VariableTree lexicalVariable(Optional<InternalSyntaxToken> ampersandToken, VariableIdentifierTree variableIdentifier) {
     return ampersandToken.isPresent()
       ? new ReferenceVariableTreeImpl(ampersandToken.get(), variableIdentifier)
