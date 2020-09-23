@@ -22,12 +22,11 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
-import org.junit.Before;
+import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.sonar.wsclient.issue.IssueClient;
-import org.sonar.wsclient.issue.IssueQuery;
+import org.sonarqube.ws.Issues.Issue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,7 +37,6 @@ public class NoSonarTest {
   private static final String PROJECT_KEY = "nosonar-project";
   private static final String PROJECT_NAME = "NOSONAR Project";
 
-  private static IssueClient issueClient;
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("nosonar");
 
   @BeforeClass
@@ -55,19 +53,13 @@ public class NoSonarTest {
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 
-  @Before
-  public void setUp() {
-    issueClient = orchestrator.getServer().wsClient().issueClient();
-  }
 
   @Test
   public void test() {
-    assertThat(countIssues("php:S1116")).isEqualTo(1);
-    assertThat(countIssues("php:NoSonar")).isEqualTo(2);
-  }
+    List<Issue> issues = Tests.issuesForComponent(PROJECT_KEY);
 
-  private static int countIssues(String issueKey) {
-    return issueClient.find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules(issueKey)).list().size();
+    assertThat(Tests.issuesForRule(issues,"php:S1116")).hasSize(1);
+    assertThat(Tests.issuesForRule(issues,"php:NoSonar")).hasSize(2);
   }
 
 }

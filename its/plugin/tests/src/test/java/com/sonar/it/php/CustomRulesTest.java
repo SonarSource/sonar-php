@@ -25,11 +25,9 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.sonar.wsclient.issue.Issue;
-import org.sonar.wsclient.issue.IssueClient;
-import org.sonar.wsclient.issue.IssueQuery;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonarqube.ws.Issues.Issue;
 
 public class CustomRulesTest {
 
@@ -37,8 +35,7 @@ public class CustomRulesTest {
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "custom-rules";
   private static final String PROJECT_NAME = "Custom Rules";
-
-  private static IssueClient issueClient;
+  private static List<Issue> issues;
 
   @BeforeClass
   public static void prepare() {
@@ -50,40 +47,35 @@ public class CustomRulesTest {
       .setProjectVersion("1.0")
       .setSourceDirs("src");
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
-
-    issueClient = orchestrator.getServer().wsClient().issueClient();
+    issues = Tests.issuesForComponent(PROJECT_KEY);
   }
 
   @Test
   public void base_tree_visitor_check() {
-    List<Issue> issues = issueClient.find(IssueQuery.create().rules("php-custom-rules:visitor")).list();
-    assertSingleIssue(issues, 5, "Function expression.", "5min");
+    assertSingleIssue("php-custom-rules:visitor", 5, "Function expression.", "5min");
   }
 
   @Test
   public void subscription_base_visitor_check() {
-    List<Issue> issues = issueClient.find(IssueQuery.create().rules("php-custom-rules:subscription")).list();
-    assertSingleIssue(issues, 8, "For statement.", "10min");
+    assertSingleIssue("php-custom-rules:subscription", 8, "For statement.", "10min");
   }
 
   @Test
   public void legacy_base_tree_visitor_check() {
-    List<Issue> issues = issueClient.find(IssueQuery.create().rules("deprecated-php-custom-rules:visitor")).list();
-    assertSingleIssue(issues, 5, "Function expression.", "5min");
+    assertSingleIssue("deprecated-php-custom-rules:visitor", 5, "Function expression.", "5min");
   }
 
   @Test
   public void legacy_subscription_base_visitor_check() {
-    List<Issue> issues = issueClient.find(IssueQuery.create().rules("deprecated-php-custom-rules:subscription")).list();
-    assertSingleIssue(issues, 8, "For statement.", "10min");
+    assertSingleIssue("deprecated-php-custom-rules:subscription", 8, "For statement.", "10min");
   }
 
-  private void assertSingleIssue(List<Issue> issues, int expectedLine, String expectedMessage, String expectedDebt) {
-    assertThat(issues).hasSize(1);
-    Issue issue = issues.get(0);
-    assertThat(issue.line()).isEqualTo(expectedLine);
-    assertThat(issue.message()).isEqualTo(expectedMessage);
-    assertThat(issue.debt()).isEqualTo(expectedDebt);
+  private void assertSingleIssue(String ruleKey, int expectedLine, String expectedMessage, String expectedDebt) {
+    assertThat(Tests.issuesForRule(issues, ruleKey)).hasSize(1);
+    Issue issue = Tests.issuesForRule(issues, ruleKey).get(0);
+    assertThat(issue.getLine()).isEqualTo(expectedLine);
+    assertThat(issue.getMessage()).isEqualTo(expectedMessage);
+    assertThat(issue.getDebt()).isEqualTo(expectedDebt);
   }
 
 }

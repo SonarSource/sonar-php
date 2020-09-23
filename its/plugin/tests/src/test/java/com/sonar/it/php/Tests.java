@@ -27,6 +27,7 @@ import com.sonar.orchestrator.container.Server;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
@@ -34,11 +35,13 @@ import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.sonarqube.ws.Components;
+import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.Measures;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.WsClient;
 import org.sonarqube.ws.client.WsClientFactories;
 import org.sonarqube.ws.client.components.TreeRequest;
+import org.sonarqube.ws.client.issues.SearchRequest;
 import org.sonarqube.ws.client.measures.ComponentRequest;
 
 import static java.util.Collections.singletonList;
@@ -129,6 +132,19 @@ public class Tests {
     return WsClientFactories.getDefault().newClient(HttpConnector.newBuilder()
       .url(ORCHESTRATOR.getServer().getUrl())
       .build());
+  }
+
+  static List<Issues.Issue> issuesForComponent(String componentKey) {
+    return newWsClient()
+      .issues()
+      .search(new SearchRequest().setComponentKeys(Collections.singletonList(componentKey)))
+      .getIssuesList();
+  }
+
+  static List<Issues.Issue> issuesForRule(List<Issues.Issue> issues, String ruleKey) {
+    return issues.stream()
+      .filter(i -> i.getRule().equals(ruleKey))
+      .collect(Collectors.toList());
   }
 
   public static void executeBuildWithExpectedWarnings(Orchestrator orchestrator, SonarScanner build) {
