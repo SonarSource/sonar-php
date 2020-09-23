@@ -14,7 +14,6 @@ SomeException;    // OK
 
 throw new SomeException(); // OK
 
-new foo::SomeException(); // OK - No valid PHP syntax but is parsed
 $exception = new SomeException(); // OK
 
 $util->setLogger(new class {
