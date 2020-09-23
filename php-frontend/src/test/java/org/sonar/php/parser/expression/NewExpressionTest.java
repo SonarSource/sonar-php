@@ -29,11 +29,20 @@ public class NewExpressionTest {
   @Test
   public void test() {
     assertThat(Tree.Kind.NEW_EXPRESSION)
-    .matches("new Foo")
-    .matches("new Foo ()")
-    .matches("new Foo ($x, $y)")
-    .matches("new class {}")
-  ;
+      .matches("new Foo")
+      .matches("new Foo ()")
+      .matches("new Foo ($x, $y)")
+      .matches("new class {}")
+      .matches("new $foo")
+      .matches("new $foo()")
+      .matches("new Foo::$bar()")
+      .matches("new $foo::$bar()")
+
+      .notMatches("new $this->bar()")
+      .notMatches("new $foo->bar()")
+      .notMatches("new foo::bar()")
+      .notMatches("new $a.'bar'()")
+    ;
   }
 
 }
