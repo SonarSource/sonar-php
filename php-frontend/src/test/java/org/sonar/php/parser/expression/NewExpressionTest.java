@@ -46,8 +46,10 @@ public class NewExpressionTest {
       .matches("new Foo::$bar->foo()")
 
       .notMatches("new foo::bar()")
-      .notMatches("new $a.'bar'()")
+      .notMatches("new $a.'bar'()") // valid syntax - however, this is not only a new expression, but also a concat with a functions call
       .notMatches("new Foo::{'bar'}()")
+      .notMatches("new static::Foo()")
+      .notMatches("new Foo::class()")
     ;
   }
 
