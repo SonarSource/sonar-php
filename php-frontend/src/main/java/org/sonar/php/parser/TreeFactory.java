@@ -1414,10 +1414,6 @@ public class TreeFactory {
     for (ExpressionTree memberAccess : optionalList(memberAccesses)) {
       if (memberAccess.is(Kind.OBJECT_MEMBER_ACCESS, Kind.CLASS_MEMBER_ACCESS)) {
         result = ((MemberAccessTreeImpl) memberAccess).complete(result);
-
-      } else if (memberAccess.is(Kind.ARRAY_ACCESS)) {
-        result = ((ArrayAccessTreeImpl) memberAccess).complete(result);
-
       }
     }
 

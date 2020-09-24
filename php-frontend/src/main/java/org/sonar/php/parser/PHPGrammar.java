@@ -1707,8 +1707,7 @@ public class PHPGrammar {
         b.zeroOrMore(
           b.firstOf(
             OBJECT_MEMBER_ACCESS(),
-            NEW_OBJECT_CLASS_FIELD_ACCESS(),
-            DIMENSIONAL_OFFSET()
+            NEW_OBJECT_CLASS_FIELD_ACCESS()
           )),
         b.optional(FUNCTION_CALL_ARGUMENT_LIST())
       ));
