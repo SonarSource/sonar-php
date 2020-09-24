@@ -1408,16 +1408,21 @@ public class TreeFactory {
     return result;
   }
 
-  public ExpressionTree newObjectExpression(ExpressionTree object, Optional<List<ExpressionTree>> expressions) {
+  public ExpressionTree newObjectExpression(ExpressionTree object, Optional<List<ExpressionTree>> memberAccesses, Optional<FunctionCallTree> functionCall) {
     ExpressionTree result = object;
 
-    for (ExpressionTree expression : optionalList(expressions)) {
-      if (expression.is(Kind.CLASS_MEMBER_ACCESS)) {
-        result = ((MemberAccessTreeImpl) expression).complete(result);
+    for (ExpressionTree memberAccess : optionalList(memberAccesses)) {
+      if (memberAccess.is(Kind.OBJECT_MEMBER_ACCESS, Kind.CLASS_MEMBER_ACCESS)) {
+        result = ((MemberAccessTreeImpl) memberAccess).complete(result);
 
-      } else if (expression.is(Kind.FUNCTION_CALL)) {
-        result = ((FunctionCallTreeImpl) expression).complete(result);
+      } else if (memberAccess.is(Kind.ARRAY_ACCESS)) {
+        result = ((ArrayAccessTreeImpl) memberAccess).complete(result);
+
       }
+    }
+
+    if (functionCall.isPresent()) {
+      result = ((FunctionCallTreeImpl) functionCall.get()).complete(result);
     }
 
     return result;

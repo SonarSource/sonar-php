@@ -1705,9 +1705,18 @@ public class PHPGrammar {
       f.newObjectExpression(
         PRIMARY_EXPRESSION(),
         b.zeroOrMore(
-          b.firstOf(FUNCTION_CALL_ARGUMENT_LIST(), f.classMemberAccess(b.token(DOUBLECOLON), VARIABLE_WITHOUT_OBJECTS()))
-        )
-      )
+          b.firstOf(
+            OBJECT_MEMBER_ACCESS(),
+            NEW_OBJECT_CLASS_FIELD_ACCESS(),
+            DIMENSIONAL_OFFSET()
+          )),
+        b.optional(FUNCTION_CALL_ARGUMENT_LIST())
+      ));
+  }
+
+  public MemberAccessTree NEW_OBJECT_CLASS_FIELD_ACCESS() {
+    return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.NEW_OBJECT_CLASS_FIELD_ACCESS).is(
+      f.classMemberAccess(b.token(DOUBLECOLON), VARIABLE_WITHOUT_OBJECTS())
     );
   }
 
