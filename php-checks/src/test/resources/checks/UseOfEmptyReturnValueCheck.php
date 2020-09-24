@@ -108,7 +108,7 @@ class Foo {
   public static function a() {}
 //                       ^>
   public function b() {
-    $a = $this->a(); // Noncompliant
+    $a = $this->a(); // Noncompliant {{Remove this use of the output from "Foo::a"; the call doesn't return anything.}}
 //       ^^^^^^^^
     $a = static::a(); // Noncompliant
   }
@@ -138,3 +138,16 @@ function function4() {
   yield "Word";
 }
 $o = function4(); // OK
+
+trait Authorizable
+{
+  public function authorizeToView(Request $request)
+  {
+    return $this->authorizeTo($request, 'view') && $this->authorizeToViewAny($request); // Noncompliant {{Remove this use of the output from "Authorizable::authorizeTo"; the call doesn't return anything.}}
+  }
+
+  public function authorizeTo(Request $request, $ability)
+  {
+    throw_unless($this->authorizedTo($request, $ability), AuthorizationException::class);
+  }
+}

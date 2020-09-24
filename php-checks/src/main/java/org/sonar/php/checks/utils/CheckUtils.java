@@ -27,6 +27,7 @@ import com.google.common.collect.Iterables;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -173,7 +174,7 @@ public final class CheckUtils {
     } else if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       VariableIdentifierTree variableIdentifier = (VariableIdentifierTree) tree;
       if (variableIdentifier.text().equals("$this")) {
-        ClassDeclarationTree classDeclaration = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Kind.CLASS_DECLARATION));
+        ClassDeclarationTree classDeclaration = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree, EnumSet.of(Kind.CLASS_DECLARATION, Kind.TRAIT_DECLARATION));
         if (classDeclaration != null) {
           return nameOf(classDeclaration.name());
         }
