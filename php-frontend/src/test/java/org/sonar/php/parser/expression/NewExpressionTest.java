@@ -37,11 +37,17 @@ public class NewExpressionTest {
       .matches("new $foo()")
       .matches("new Foo::$bar()")
       .matches("new $foo::$bar()")
+      .matches("new $foo[0]()")
+      .matches("new $foo::$bar[0]()")
+      .matches("new $this->bar()")
+      .matches("new $foo->bar()")
+      .matches("new $foo->bar[$key]()")
+      .matches("new $foo->bar[$key][0]()")
+      .matches("new Foo::$bar->foo()")
 
-      .notMatches("new $this->bar()")
-      .notMatches("new $foo->bar()")
       .notMatches("new foo::bar()")
       .notMatches("new $a.'bar'()")
+      .notMatches("new Foo::{'bar'}()")
     ;
   }
 
