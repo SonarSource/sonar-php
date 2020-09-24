@@ -215,6 +215,7 @@ public class ClassSymbolIndexTest {
     ClassSymbol b = symbols.get(fqn("b"));
     assertThat(b.declaredMethods()).isEmpty();
     assertThat(b.getDeclaredMethod("methodA")).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(a.is(ClassSymbol.Kind.INTERFACE)).isFalse();
 
     ClassSymbol unknown = symbols.get(fqn("unknown"));
     assertThat(unknown.declaredMethods()).isEmpty();
