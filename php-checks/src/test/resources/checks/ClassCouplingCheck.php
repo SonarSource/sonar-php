@@ -64,13 +64,6 @@
      }
 
      /**
-      * No doc
-      */
-      public function i() {
-       return new static::Foo();      // Not supported
-      }
-
-     /**
       * @return \T13
       */
       public function i() {

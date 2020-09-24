@@ -1697,7 +1697,26 @@ public class PHPGrammar {
 
   public NewExpressionTree NEW_EXPRESSION() {
     return b.<NewExpressionTree>nonterminal(Kind.NEW_EXPRESSION).is(
-      f.newExpression(b.token(NEW), b.firstOf(MEMBER_EXPRESSION(), ANONYMOUS_CLASS())));
+      f.newExpression(b.token(NEW), b.firstOf(NEW_OBJECT_EXPRESSION(), ANONYMOUS_CLASS())));
+  }
+
+  public ExpressionTree NEW_OBJECT_EXPRESSION() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.NEW_OBJECT_EXPRESSION).is(
+      f.newObjectExpression(
+        PRIMARY_EXPRESSION(),
+        b.zeroOrMore(
+          b.firstOf(
+            OBJECT_MEMBER_ACCESS(),
+            NEW_OBJECT_CLASS_FIELD_ACCESS()
+          )),
+        b.optional(FUNCTION_CALL_ARGUMENT_LIST())
+      ));
+  }
+
+  public MemberAccessTree NEW_OBJECT_CLASS_FIELD_ACCESS() {
+    return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.NEW_OBJECT_CLASS_FIELD_ACCESS).is(
+      f.classMemberAccess(b.token(DOUBLECOLON), VARIABLE_WITHOUT_OBJECTS())
+    );
   }
 
   public AnonymousClassTree ANONYMOUS_CLASS() {
