@@ -48,4 +48,9 @@ public class UnknownMethodSymbol extends UnknownFunctionSymbol implements Method
   public Trilean isAbstract() {
     return Trilean.UNKNOWN;
   }
+
+  @Override
+  public ClassSymbol owner() {
+    return null;
+  }
 }
