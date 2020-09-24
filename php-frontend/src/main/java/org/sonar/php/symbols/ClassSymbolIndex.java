@@ -103,8 +103,8 @@ public class ClassSymbolIndex {
     }
 
     @Override
-    public boolean isInterface() {
-      return data.isInterface();
+    public boolean is(Kind kind) {
+      return kind == data.kind();
     }
 
     @Override

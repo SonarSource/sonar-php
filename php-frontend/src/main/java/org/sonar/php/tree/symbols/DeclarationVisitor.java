@@ -146,8 +146,22 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .map(name -> getFullyQualifiedName(name, Symbol.Kind.CLASS))
       .collect(Collectors.toList());
 
-    ClassSymbolData classSymbolData = new ClassSymbolData(location, qualifiedName, superClassName, interfaceNames,
-      tree.is(Tree.Kind.INTERFACE_DECLARATION), methodsByClassTree.getOrDefault(tree, Collections.emptyList()));
+    ClassSymbol.Kind kind = ClassSymbol.Kind.NORMAL;
+    if (tree.is(Tree.Kind.CLASS_DECLARATION) && isAbstract((ClassDeclarationTree)tree)) {
+      kind = ClassSymbol.Kind.ABSTRACT;
+    } else if (tree.is(Tree.Kind.INTERFACE_DECLARATION)) {
+      kind = ClassSymbol.Kind.INTERFACE;
+    }
+
+
+    ClassSymbolData classSymbolData = new ClassSymbolData(
+      location,
+      qualifiedName,
+      superClassName,
+      interfaceNames,
+      kind,
+      methodsByClassTree.getOrDefault(tree, Collections.emptyList())
+    );
     classSymbolDataByTree.put(tree, classSymbolData);
   }
 
@@ -269,4 +283,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       && ((NamespaceNameTree) fct.callee()).fullyQualifiedName().matches("func_get_arg(s)?");
   }
 
+  private static boolean isAbstract(ClassDeclarationTree tree) {
+    return tree.modifierToken() != null && tree.modifierToken().text().toUpperCase(Locale.ROOT).equals("ABSTRACT");
+  }
 }
