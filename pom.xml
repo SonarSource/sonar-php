@@ -64,12 +64,8 @@
   </scm>
   <issueManagement>
     <system>JIRA</system>
-    <url>http://jira.codehaus.org/browse/SONARPHP</url>
+    <url>https://jira.sonarsource.com/projects/SONARPHP</url>
   </issueManagement>
-  <ciManagement>
-    <system>Cloudbees</system>
-    <url>https://sonarplugins.ci.cloudbees.com/job/php/</url>
-  </ciManagement>
 
   <properties>
     <revision>3.10-SNAPSHOT</revision>
