@@ -40,6 +40,7 @@ public class MethodSymbolTest {
     ClassSymbol a = Symbols.get(firstDescendant(ast, ClassDeclarationTreeImpl.class).get());
     MethodSymbol foo = firstDescendant(ast, MethodDeclarationTreeImpl.class).get().symbol();
     assertThat(a.declaredMethods().get(0)).isSameAs(foo);
+    assertThat(foo.owner()).isSameAs(a);
   }
 
   @Test
@@ -48,6 +49,7 @@ public class MethodSymbolTest {
     ClassSymbol anonymous = Symbols.get(firstDescendant(ast, AnonymousClassTreeImpl.class).get());
     MethodSymbol foo = firstDescendant(ast, MethodDeclarationTreeImpl.class).get().symbol();
     assertThat(anonymous.declaredMethods().get(0)).isSameAs(foo);
+    assertThat(foo.owner()).isSameAs(anonymous);
   }
 
   @Test

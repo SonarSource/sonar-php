@@ -147,7 +147,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .collect(Collectors.toList());
 
     ClassSymbol.Kind kind = ClassSymbol.Kind.NORMAL;
-    if (tree.is(Tree.Kind.CLASS_DECLARATION) && isAbstract((ClassDeclarationTree)tree)) {
+    if (tree.is(Tree.Kind.CLASS_DECLARATION) && ((ClassDeclarationTree)tree).modifierToken() != null) {
       kind = ClassSymbol.Kind.ABSTRACT;
     } else if (tree.is(Tree.Kind.INTERFACE_DECLARATION)) {
       kind = ClassSymbol.Kind.INTERFACE;
@@ -281,9 +281,5 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private static boolean isFuncGetArgsCall(FunctionCallTree fct) {
     return fct.callee().is(Tree.Kind.NAMESPACE_NAME)
       && ((NamespaceNameTree) fct.callee()).fullyQualifiedName().matches("func_get_arg(s)?");
-  }
-
-  private static boolean isAbstract(ClassDeclarationTree tree) {
-    return tree.modifierToken() != null && tree.modifierToken().text().toUpperCase(Locale.ROOT).equals("ABSTRACT");
   }
 }
