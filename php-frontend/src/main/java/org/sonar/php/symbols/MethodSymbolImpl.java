@@ -110,4 +110,9 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
   public Trilean isAbstract() {
     return data.isAbstract() ? Trilean.TRUE : Trilean.FALSE;
   }
+
+  @Override
+  public ClassSymbol owner() {
+    return owner;
+  }
 }

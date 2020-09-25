@@ -22,8 +22,10 @@ package org.sonar.php.checks;
 import java.util.ArrayList;
 import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
+import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -82,7 +84,9 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
    */
   public boolean isExcluded(MethodDeclarationTree tree) {
     MethodSymbol methodSymbol = Symbols.get(tree);
-    return !tree.body().is(Tree.Kind.BLOCK) || !(methodSymbol.isOverriding().isFalse());
+    return !tree.body().is(Tree.Kind.BLOCK)
+      || !(methodSymbol.isOverriding().isFalse())
+      || (methodSymbol.visibility() != Visibility.PRIVATE && methodSymbol.owner().is(ClassSymbol.Kind.ABSTRACT));
   }
 
 }

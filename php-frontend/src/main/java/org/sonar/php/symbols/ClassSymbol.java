@@ -34,8 +34,6 @@ public interface ClassSymbol extends Symbol {
 
   List<ClassSymbol> implementedInterfaces();
 
-  boolean isInterface();
-
   Trilean isOrSubClassOf(QualifiedName qualifiedName);
 
   Trilean isSubTypeOf(QualifiedName typeName);
@@ -43,4 +41,12 @@ public interface ClassSymbol extends Symbol {
   List<MethodSymbol> declaredMethods();
 
   MethodSymbol getDeclaredMethod(String name);
+
+  boolean is(Kind kind);
+
+  enum Kind {
+    NORMAL,
+    ABSTRACT,
+    INTERFACE
+  }
 }

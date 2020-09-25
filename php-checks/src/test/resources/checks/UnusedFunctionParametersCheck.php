@@ -125,3 +125,9 @@ class ImplementingClass2 extends ImplementingClass1 implements UnknownInterface 
 class ImplementingClass3 implements Interface3 {
   public function interfaceMethod5($a) {} // Noncompliant
 }
+
+abstract class AbstractController {
+  public function publicMethod($request) {} // OK
+  private function privateMethod($request) {} // Noncompliant
+  protected function protectedMethod($request) {} // OK
+}

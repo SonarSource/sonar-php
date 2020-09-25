@@ -210,10 +210,12 @@ public class ClassSymbolIndexTest {
     assertThat(a.declaredMethods()).hasSize(2);
     assertThat(a.getDeclaredMethod("methodA").isUnknownSymbol()).isFalse();
     assertThat(a.getDeclaredMethod("random").isUnknownSymbol()).isTrue();
+    assertThat(a.is(ClassSymbol.Kind.NORMAL)).isTrue();
 
     ClassSymbol b = symbols.get(fqn("b"));
     assertThat(b.declaredMethods()).isEmpty();
     assertThat(b.getDeclaredMethod("methodA")).isInstanceOf(UnknownMethodSymbol.class);
+    assertThat(a.is(ClassSymbol.Kind.INTERFACE)).isFalse();
 
     ClassSymbol unknown = symbols.get(fqn("unknown"));
     assertThat(unknown.declaredMethods()).isEmpty();
@@ -226,10 +228,12 @@ public class ClassSymbolIndexTest {
 
     ClassSymbol classSymbol = symbols.get(fqn("x"));
     assertThat(classSymbol).isInstanceOf(UnknownClassSymbol.class);
+    assertThat(classSymbol.is(ClassSymbol.Kind.NORMAL)).isFalse();
 
     MethodSymbol methodSymbol = classSymbol.getDeclaredMethod("y");
     assertThat(methodSymbol).isInstanceOf(UnknownMethodSymbol.class);
     assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
+    assertThat(methodSymbol.owner()).isInstanceOf(UnknownClassSymbol.class);
   }
 
 
