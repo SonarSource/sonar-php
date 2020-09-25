@@ -127,5 +127,7 @@ class ImplementingClass3 implements Interface3 {
 }
 
 abstract class AbstractController {
-  public function handleRequest($request) {} // OK
+  public function publicMethod($request) {} // OK
+  private function privateMethod($request) {} // Noncompliant
+  protected function protectedMethod($request) {} // OK
 }
