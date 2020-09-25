@@ -233,7 +233,7 @@ public class ClassSymbolIndexTest {
     MethodSymbol methodSymbol = classSymbol.getDeclaredMethod("y");
     assertThat(methodSymbol).isInstanceOf(UnknownMethodSymbol.class);
     assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
-    assertThat(methodSymbol.owner()).isNull();
+    assertThat(methodSymbol.owner()).isInstanceOf(UnknownClassSymbol.class);
   }
 
 

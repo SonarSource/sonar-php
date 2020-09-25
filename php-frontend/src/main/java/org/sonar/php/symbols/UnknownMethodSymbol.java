@@ -51,6 +51,6 @@ public class UnknownMethodSymbol extends UnknownFunctionSymbol implements Method
 
   @Override
   public ClassSymbol owner() {
-    return null;
+    return new UnknownClassSymbol(QualifiedName.qualifiedName("unknown"));
   }
 }
