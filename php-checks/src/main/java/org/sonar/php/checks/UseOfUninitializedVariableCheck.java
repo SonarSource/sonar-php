@@ -43,15 +43,7 @@ import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -135,7 +127,8 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       providedVariables.addAll(getLexicalVariableNames((FunctionExpressionTree) tree));
     }
 
-    // Catch clauses do not appear in the CFG. We collect all exception variables in the function body and consider them as provided in the whole function body to avoid false positives.
+    // Catch clauses do not appear in the CFG. We collect all exception variables in the function body and
+    // consider them as provided in the whole function body to avoid false positives.
     ExceptionVariablesExtractor exceptionVariablesExtractor = new ExceptionVariablesExtractor();
     tree.accept(exceptionVariablesExtractor);
     providedVariables.addAll(exceptionVariablesExtractor.variables);
@@ -150,7 +143,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       CfgBlock block = workList.pop();
 
       BlockSummary init = BlockSummary.copyOf(predecessorsSummary.get(block));
-      BlockSummary changesInBlock = initializedInThisBlock(block);
+      BlockSummary changesInBlock = getBlockSummary(block);
       init.initializedVariables.addAll(changesInBlock.initializedVariables);
       init.scopeWasChanged = changesInBlock.scopeWasChanged || init.scopeWasChanged;
 
@@ -178,7 +171,22 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       .ifPresent(t -> newIssue(t, MESSAGE));
   }
 
-  private Set<String> getLexicalVariableNames(FunctionExpressionTree tree) {
+  private static Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {
+    Map<String, Set<Tree>> result = new HashMap<>();
+
+    BlockSummary summary = BlockSummary.copyOf(blockSummary);
+    for (Tree element : block.elements()) {
+      StatementVisitor visitor = new StatementVisitor(summary);
+      element.accept(visitor);
+      visitor.firstVariableReadAccess.entrySet().stream()
+        .filter(e -> !PREDEFINED_VARIABLES.contains(e.getKey().toUpperCase(Locale.ROOT)))
+        .forEach(e -> result.computeIfAbsent(e.getKey(), v -> new HashSet<>()).add(e.getValue()));
+    }
+
+    return result;
+  }
+
+  private static Set<String> getLexicalVariableNames(FunctionExpressionTree tree) {
     Set<String> result = new HashSet<>();
 
     if (tree.lexicalVars() != null) {
@@ -191,28 +199,36 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     return result;
   }
 
-  private Set<String> getParameterVariableNames(FunctionTree tree) {
+  private static Set<String> getParameterVariableNames(FunctionTree tree) {
     return tree.parameters().parameters().stream()
       .map(p -> p.variableIdentifier().variableExpression().text())
       .collect(Collectors.toSet());
   }
 
-  private Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {
-    Map<String, Set<Tree>> result = new HashMap<>();
+  private static Set<String> getForEachVariables(ForEachStatementTree tree) {
+    Set<String> result = new HashSet<>();
 
-    BlockSummary summary = BlockSummary.copyOf(blockSummary);
-    for (Tree element : block.elements()) {
-      StatementVisitor visitor = new StatementVisitor(summary);
-      element.accept(visitor);
-      visitor.firstVariableReadAccess.entrySet().stream()
-        .filter(e -> !PREDEFINED_VARIABLES.contains(e.getKey().toUpperCase()))
-        .forEach(e -> result.computeIfAbsent(e.getKey(), v -> new HashSet<>()).add(e.getValue()));
+    if (tree.value() != null) {
+      if (tree.value().is(Kind.VARIABLE_IDENTIFIER)) {
+        result.add(((VariableIdentifierTree)tree.value()).variableExpression().text());
+      } else {
+        TreeUtils.descendants(tree.value(), VariableIdentifierTree.class)
+          .forEach(v -> result.add(v.variableExpression().text()));
+      }
+    }
+
+    if (tree.key() != null) {
+      if (tree.key().is(Kind.VARIABLE_IDENTIFIER)) {
+        result.add(((VariableIdentifierTree)tree.key()).variableExpression().text());
+      } else {
+        TreeUtils.descendants(tree.key(), VariableIdentifierTree.class).forEach(v -> result.add(v.variableExpression().text()));
+      }
     }
 
     return result;
   }
 
-  private BlockSummary initializedInThisBlock(CfgBlock block) {
+  private BlockSummary getBlockSummary(CfgBlock block) {
     BlockSummary summary = new BlockSummary();
 
     for (Tree element : block.elements()) {
@@ -247,29 +263,6 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     private static BlockSummary copyOf(BlockSummary toCopy) {
       return new BlockSummary(new HashSet<>(toCopy.initializedVariables), toCopy.scopeWasChanged);
     }
-  }
-
-  private Set<String> getForEachVariables(ForEachStatementTree tree) {
-    Set<String> result = new HashSet<>();
-
-    if (tree.value() != null) {
-      if (tree.value().is(Kind.VARIABLE_IDENTIFIER)) {
-        result.add(((VariableIdentifierTree)tree.value()).variableExpression().text());
-      } else {
-        TreeUtils.descendants(tree.value(), VariableIdentifierTree.class)
-          .forEach(v -> result.add(v.variableExpression().text()));
-      }
-    }
-
-    if (tree.key() != null) {
-      if (tree.key().is(Kind.VARIABLE_IDENTIFIER)) {
-        result.add(((VariableIdentifierTree)tree.key()).variableExpression().text());
-      } else {
-        TreeUtils.descendants(tree.key(), VariableIdentifierTree.class).forEach(v -> result.add(v.variableExpression().text()));
-      }
-    }
-
-    return result;
   }
 
   private static boolean isReadAccess(Tree tree) {
@@ -365,11 +358,6 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       Tree child = skipParentArrayAccess(tree);
       return (child.getParent().is(Kind.CLASS_MEMBER_ACCESS) &&
               ((MemberAccessTree) child.getParent()).member() == child);
-    }
-
-    private static boolean uninitializedVariableDeclaration(Tree tree) {
-      return (tree.getParent().is(Kind.VARIABLE_DECLARATION) &&
-              ((VariableDeclarationTree) tree.getParent()).equalToken() == null);
     }
   }
 
