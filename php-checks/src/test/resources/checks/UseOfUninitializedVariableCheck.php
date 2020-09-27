@@ -298,3 +298,10 @@ function foo() {
     echo $x; // Noncompliant
   }
 }
+
+// Coverage
+function function54677() {
+  foreach(foo() as &$key => &$value()) {
+    echo $key;
+  }
+}

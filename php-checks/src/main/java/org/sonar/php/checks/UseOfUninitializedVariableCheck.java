@@ -216,13 +216,11 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   private static Set<String> getForEachVariables(ForEachStatementTree tree) {
     Set<String> result = new HashSet<>();
 
-    if (tree.value() != null) {
-      if (tree.value().is(Kind.VARIABLE_IDENTIFIER)) {
-        result.add(((VariableIdentifierTree)tree.value()).variableExpression().text());
-      } else {
-        TreeUtils.descendants(tree.value(), VariableIdentifierTree.class)
-          .forEach(v -> result.add(v.variableExpression().text()));
-      }
+    if (tree.value().is(Kind.VARIABLE_IDENTIFIER)) {
+      result.add(((VariableIdentifierTree)tree.value()).variableExpression().text());
+    } else {
+      TreeUtils.descendants(tree.value(), VariableIdentifierTree.class)
+        .forEach(v -> result.add(v.variableExpression().text()));
     }
 
     if (tree.key() != null) {
@@ -289,8 +287,6 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       FunctionCallTree functionCall = (FunctionCallTree) tree.getParent();
       return tree == functionCall.callee() || FUNCTION_ALLOWING_ARGUMENT_CHECK.contains(CheckUtils.getLowerCaseFunctionName(functionCall));
     });
-    map.put(Kind.FOREACH_STATEMENT, UseOfUninitializedVariableCheck::isInsideForEachExpression);
-    map.put(Kind.ALTERNATIVE_FOREACH_STATEMENT, UseOfUninitializedVariableCheck::isInsideForEachExpression);
     map.put(Kind.ARRAY_ACCESS, tree -> !isArrayAssignment(tree));
     map.put(Kind.PARENTHESISED_EXPRESSION, tree -> isReadAccess(tree.getParent()));
 
@@ -301,10 +297,6 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     Tree child = skipParentArrayAccess(tree);
     return child.getParent().is(Kind.ASSIGNMENT) &&
       ((AssignmentExpressionTree) child.getParent()).variable() == child;
-  }
-
-  private static boolean isInsideForEachExpression(Tree tree) {
-    return tree == ((ForEachStatementTree) tree.getParent()).expression();
   }
 
   private static Tree skipParentArrayAccess(Tree tree) {
