@@ -291,7 +291,7 @@ function alternativeForeach() {
     endforeach;
 }
 
-function foo() {
+function initAndReadOnSameCfgLevel() {
   if (bar()) {
     $x = 1;
   } else {
@@ -300,7 +300,7 @@ function foo() {
 }
 
 // Coverage
-function function54677() {
+function forEachWithReferenceKeyAndValue() {
   foreach(foo() as &$key => &$value()) {
     echo $key;
   }
