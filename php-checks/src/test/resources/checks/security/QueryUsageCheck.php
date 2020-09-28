@@ -85,3 +85,23 @@ $conn = new PDO($dsn, $user, $password);
 $conn->query();
 $conn->prepare();
 pg_query();
+
+$string = "foo";
+$integer = 12345;
+$boolean = false;
+$function = fooBar();
+$unknownVariable = $foo;
+
+mysql_query("select * from " . "table"); // OK
+mysql_query("select * from " . "table" . "_name"); // OK
+mysql_query("select * from " . $string); // OK
+mysql_query("select * from " . "table" . $string); // OK
+mysql_query("select * from " . $integer); // OK
+mysql_query("select * from " . $boolean); // OK
+mysql_query("select * from " . $function); // Noncompliant
+mysql_query("select * from " . fun_call()); // Noncompliant
+mysql_query("select * from " . $unknownVariable); // Noncompliant
+
+mysql_query("select * from $string"); // OK
+mysql_query("select * from ${string}"); // Noncompliant
+mysql_query("select * from ${$string}"); // Noncompliant
