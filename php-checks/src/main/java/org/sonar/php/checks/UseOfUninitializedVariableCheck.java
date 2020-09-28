@@ -101,6 +101,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     "$THIS"));
 
   private static final Set<String> FUNCTION_ALLOWING_ARGUMENT_CHECK;
+
   static {
     FUNCTION_ALLOWING_ARGUMENT_CHECK = new HashSet<>(IgnoredReturnValueCheck.PURE_FUNCTIONS);
     FUNCTION_ALLOWING_ARGUMENT_CHECK.add("echo");
@@ -172,8 +173,8 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
   private void reportOnFirstTree(Set<Tree> trees) {
     trees.stream()
-      .min(Comparator.comparingInt(a -> ((PHPTree)a).getFirstToken().line())
-        .thenComparing(a -> ((PHPTree)a).getFirstToken().column()))
+      .min(Comparator.comparingInt(a -> ((PHPTree) a).getFirstToken().line())
+        .thenComparing(a -> ((PHPTree) a).getFirstToken().column()))
       .ifPresent(t -> newIssue(t, MESSAGE));
   }
 
@@ -182,7 +183,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
     BlockSummary summary = BlockSummary.copy(blockSummary);
     for (Tree element : block.elements()) {
-      StatementVisitor visitor = new StatementVisitor(summary);
+      UninitializedUsageFindVisitor visitor = new UninitializedUsageFindVisitor(summary);
       element.accept(visitor);
       visitor.firstVariableReadAccess.entrySet().stream()
         .filter(e -> !PREDEFINED_VARIABLES.contains(e.getKey().toUpperCase(Locale.ROOT)))
@@ -199,7 +200,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       tree.lexicalVars().variables().stream()
         .map(VariableTree::variableExpression)
         .filter(v -> v.is(Kind.VARIABLE_IDENTIFIER))
-        .forEach(v -> result.add(((VariableIdentifierTree)v).variableExpression().text()));
+        .forEach(v -> result.add(((VariableIdentifierTree) v).variableExpression().text()));
     }
 
     return result;
@@ -215,7 +216,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     Set<String> result = new HashSet<>();
 
     if (tree.value().is(Kind.VARIABLE_IDENTIFIER)) {
-      result.add(((VariableIdentifierTree)tree.value()).variableExpression().text());
+      result.add(((VariableIdentifierTree) tree.value()).variableExpression().text());
     } else {
       TreeUtils.descendants(tree.value(), VariableIdentifierTree.class)
         .forEach(v -> result.add(v.variableExpression().text()));
@@ -223,7 +224,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
     if (tree.key() != null) {
       if (tree.key().is(Kind.VARIABLE_IDENTIFIER)) {
-        result.add(((VariableIdentifierTree)tree.key()).variableExpression().text());
+        result.add(((VariableIdentifierTree) tree.key()).variableExpression().text());
       } else {
         TreeUtils.descendants(tree.key(), VariableIdentifierTree.class).forEach(v -> result.add(v.variableExpression().text()));
       }
@@ -236,14 +237,14 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     BlockSummary summary = BlockSummary.copy(predecessorsSummary);
 
     for (Tree element : block.elements()) {
-      StatementVisitor visitor = new StatementVisitor(summary);
+      SummaryUpdateVisitor visitor = new SummaryUpdateVisitor(summary);
       element.accept(visitor);
     }
 
     if (block instanceof CfgBranchingBlock) {
-      Tree branchingTree = ((CfgBranchingBlock)block).branchingTree();
+      Tree branchingTree = ((CfgBranchingBlock) block).branchingTree();
       if (branchingTree.is(Kind.FOREACH_STATEMENT, Kind.ALTERNATIVE_FOREACH_STATEMENT)) {
-        summary.initializedInBlock.addAll(getForEachVariables((ForEachStatementTree)branchingTree));
+        summary.initializedInBlock.addAll(getForEachVariables((ForEachStatementTree) branchingTree));
       }
     }
 
@@ -316,11 +317,27 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     return child;
   }
 
-  private static class StatementVisitor extends PHPVisitorCheck {
-    private final BlockSummary blockSummary;
+  private static class UninitializedUsageFindVisitor extends SummaryUpdateVisitor {
     private final Map<String, Tree> firstVariableReadAccess = new HashMap<>();
 
-    private StatementVisitor(BlockSummary blockSummary) {
+    private UninitializedUsageFindVisitor(BlockSummary blockSummary) {
+      super(blockSummary);
+    }
+
+    @Override
+    protected void visitVariableRead(VariableIdentifierTree tree) {
+      String name = tree.variableExpression().text();
+      if (!blockSummary.wasInitialized(name)
+        && !blockSummary.scopeWasChanged) {
+        firstVariableReadAccess.putIfAbsent(name, tree);
+      }
+    }
+  }
+
+  private static class SummaryUpdateVisitor extends PHPVisitorCheck {
+    protected final BlockSummary blockSummary;
+
+    private SummaryUpdateVisitor(BlockSummary blockSummary) {
       this.blockSummary = blockSummary;
     }
 
@@ -351,23 +368,23 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
         return;
       }
 
-      String name = tree.variableExpression().text();
-      if (isReadAccess(tree)) {
-        if (!blockSummary.wasInitialized(name)
-          && !blockSummary.scopeWasChanged) {
-          firstVariableReadAccess.putIfAbsent(name, tree);
-        }
+      if (!isReadAccess(tree)) {
+        blockSummary.initializedInBlock.add(tree.variableExpression().text());
       } else {
-        blockSummary.initializedInBlock.add(name);
+        visitVariableRead(tree);
       }
 
       super.visitVariableIdentifier(tree);
     }
 
-    private static boolean isClassMemberAccess(Tree tree) {
+    protected void visitVariableRead(VariableIdentifierTree tree) {
+      // Allow child classes to handle variable reads.
+    }
+
+    protected static boolean isClassMemberAccess(Tree tree) {
       Tree child = skipParentArrayAccess(tree);
       return (child.getParent().is(Kind.CLASS_MEMBER_ACCESS) &&
-              ((MemberAccessTree) child.getParent()).member() == child);
+        ((MemberAccessTree) child.getParent()).member() == child);
     }
   }
 
