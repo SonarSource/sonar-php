@@ -47,6 +47,7 @@ import static org.sonar.plugins.php.api.tree.Tree.Kind.CONCATENATION;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.NULL_LITERAL;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.NUMERIC_LITERAL;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.REGULAR_STRING_LITERAL;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.VARIABLE_IDENTIFIER;
 
 @Rule(key = "S2077")
 public class QueryUsageCheck extends PHPVisitorCheck {
@@ -135,19 +136,13 @@ public class QueryUsageCheck extends PHPVisitorCheck {
   }
 
   private boolean isSuspiciousExpandableString(ExpandableStringLiteralTree tree) {
-    boolean isSuspicious = false;
-
     for (ExpressionTree element: tree.expressions()) {
-      switch (element.getKind()) {
-        case VARIABLE_IDENTIFIER:
-          isSuspicious = isSuspiciousVariable((VariableIdentifierTree) element);
-          break;
-        default:
-          isSuspicious = true;
+      if (!element.is(VARIABLE_IDENTIFIER) || isSuspiciousVariable((VariableIdentifierTree) element)) {
+        return true;
       }
     }
 
-    return isSuspicious;
+    return false;
   }
 
   private boolean isSuspiciousConcat(BinaryExpressionTree tree) {
