@@ -89,7 +89,7 @@ function f4() {
 function f5() {
   static $a = 3, $b;
   if ($a) {}
-  return $b; // Compliant
+  return $b; // Noncompliant
 }
 
 function f6() {
@@ -297,6 +297,14 @@ function initAndReadOnSameCfgLevel() {
   } else {
     echo $x; // Noncompliant
   }
+}
+
+function staticVariableInitializedAfterUsage() {
+  static $a;
+  if ($a != null) {
+    echo $a;
+  }
+  $a = 1;
 }
 
 // Coverage

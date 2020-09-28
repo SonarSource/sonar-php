@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableSet;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.TreeUtils;
@@ -31,6 +32,7 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -141,11 +143,11 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       providedVariables.addAll(getLexicalVariableNames((FunctionExpressionTree) tree));
     }
 
+    InitialDataCollector initialDataCollector = new InitialDataCollector();
+    tree.accept(initialDataCollector);
     // Catch clauses do not appear in the CFG. We collect all exception variables in the function body and
     // consider them as provided in the whole function body to avoid false positives.
-    ExceptionVariablesExtractor exceptionVariablesExtractor = new ExceptionVariablesExtractor();
-    tree.accept(exceptionVariablesExtractor);
-    providedVariables.addAll(exceptionVariablesExtractor.variables);
+    providedVariables.addAll(initialDataCollector.exceptionVariables);
 
     Map<CfgBlock, BlockSummary> predecessorsSummary = new HashMap<>();
     cfgBlocks.forEach(
@@ -172,7 +174,18 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     Map<String, Set<Tree>> uninitializedVariableUses = new HashMap<>();
     cfgBlocks.forEach(b -> checkBlock(b, predecessorsSummary.get(b))
       .forEach((v, s) -> uninitializedVariableUses.computeIfAbsent(v, st -> new HashSet<>()).addAll(s)));
-    uninitializedVariableUses.forEach((v, trees) -> reportOnFirstTree(trees));
+
+    // static variables could be initialized after first usage. We only raise an issue on them when they were never
+    // initialized (i.e., not initialized by predecessors of the end block)
+    uninitializedVariableUses.entrySet().stream()
+      .filter(e -> !isInitializedStaticVariable(e.getKey(),
+        initialDataCollector.uninitializedStaticVariables,
+        predecessorsSummary.get(cfg.end())))
+      .forEach(e -> reportOnFirstTree(e.getValue()));
+  }
+
+  private boolean isInitializedStaticVariable(String var, Set<String> uninitializedStaticVariables, BlockSummary endBlockSummary) {
+    return uninitializedStaticVariables.contains(var) && endBlockSummary.initializedFromPredecessors.contains(var);
   }
 
   private void reportOnFirstTree(Set<Tree> trees) {
@@ -325,6 +338,11 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     return child;
   }
 
+  private static boolean uninitializedVariableDeclaration(VariableIdentifierTree tree) {
+    return (tree.getParent().is(Kind.VARIABLE_DECLARATION) &&
+      ((VariableDeclarationTree) tree.getParent()).equalToken() == null);
+  }
+
   private static class UninitializedUsageFindVisitor extends SummaryUpdateVisitor {
     private final Map<String, Tree> firstVariableReadAccess = new HashMap<>();
 
@@ -372,7 +390,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
     @Override
     public void visitVariableIdentifier(VariableIdentifierTree tree) {
-      if (isClassMemberAccess(tree)) {
+      if (isClassMemberAccess(tree) || uninitializedVariableDeclaration(tree)) {
         return;
       }
 
@@ -396,13 +414,22 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     }
   }
 
-  private static class ExceptionVariablesExtractor extends PHPVisitorCheck {
-    private final Set<String> variables = new HashSet<>();
-
+  private static class InitialDataCollector extends PHPVisitorCheck {
+    private final Set<String> exceptionVariables = new HashSet<>();
+    private final Set<String> uninitializedStaticVariables = new HashSet<>();
+    
     @Override
     public void visitCatchBlock(CatchBlockTree tree) {
-      variables.add(tree.variable().variableExpression().text());
+      exceptionVariables.add(tree.variable().variableExpression().text());
       super.visitCatchBlock(tree);
+    }
+
+    @Override
+    public void visitVariableIdentifier(VariableIdentifierTree tree) {
+      if (uninitializedVariableDeclaration(tree)
+        && TreeUtils.findAncestorWithKind(tree, ImmutableSet.of(Kind.STATIC_STATEMENT)) != null)
+        uninitializedStaticVariables.add(tree.variableExpression().text());
+      super.visitVariableIdentifier(tree);
     }
   }
 }
