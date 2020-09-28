@@ -131,6 +131,10 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     if (cfg == null) {
       return;
     }
+    // Only consider reachable blocks to avoid confusing issues (+Unreachable blocks are reported by S1763)
+    Set<CfgBlock> cfgBlocks = cfg.blocks().stream()
+      .filter(b -> !blockIsUnreachable(b, cfg))
+      .collect(Collectors.toSet());
 
     Set<String> providedVariables = getParameterVariableNames(tree);
     if (tree.is(Kind.FUNCTION_EXPRESSION)) {
@@ -144,10 +148,10 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     providedVariables.addAll(exceptionVariablesExtractor.variables);
 
     Map<CfgBlock, BlockSummary> predecessorsSummary = new HashMap<>();
-    cfg.blocks().forEach(
+    cfgBlocks.forEach(
       b -> predecessorsSummary.put(b, new BlockSummary(new HashSet<>(providedVariables), new HashSet<>(), false))
     );
-    Deque<CfgBlock> workList = new ArrayDeque<>(cfg.blocks());
+    Deque<CfgBlock> workList = new ArrayDeque<>(cfgBlocks);
 
     while (!workList.isEmpty()) {
       CfgBlock block = workList.pop();
@@ -166,7 +170,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     }
 
     Map<String, Set<Tree>> uninitializedVariableUses = new HashMap<>();
-    cfg.blocks().forEach(b -> checkBlock(b, predecessorsSummary.get(b))
+    cfgBlocks.forEach(b -> checkBlock(b, predecessorsSummary.get(b))
       .forEach((v, s) -> uninitializedVariableUses.computeIfAbsent(v, st -> new HashSet<>()).addAll(s)));
     uninitializedVariableUses.forEach((v, trees) -> reportOnFirstTree(trees));
   }
@@ -176,6 +180,10 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       .min(Comparator.comparingInt(a -> ((PHPTree) a).getFirstToken().line())
         .thenComparing(a -> ((PHPTree) a).getFirstToken().column()))
       .ifPresent(t -> newIssue(t, MESSAGE));
+  }
+
+  private static boolean blockIsUnreachable(CfgBlock block, ControlFlowGraph cfg) {
+    return block.predecessors().isEmpty() && !block.equals(cfg.start());
   }
 
   private static Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {
