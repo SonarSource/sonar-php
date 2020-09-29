@@ -152,7 +152,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     // consider them as provided in the whole function body to avoid false positives.
     providedVariables.addAll(initialDataCollector.exceptionVariables);
 
-    blockSummaries.get(cfg.start()).predecessorsSummary.initializedVariables.addAll(providedVariables);
+    blockSummaries.get(cfg.start()).stateOnBlockStart.initializedVariables.addAll(providedVariables);
 
     Deque<CfgBlock> workList = new ArrayDeque<>(cfgBlocks);
     while (!workList.isEmpty()) {
@@ -160,9 +160,9 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       BlockSummary summary = blockSummaries.get(block);
 
       for (CfgBlock successor : block.successors()) {
-        PredecessorsSummary predecessorsSummary = blockSummaries.get(successor).predecessorsSummary;
-        if (!predecessorsSummary.containsBlockSummary(summary)) {
-          predecessorsSummary.addBlockSummary(summary);
+        StateOnBlockStart stateOnBlockStart = blockSummaries.get(successor).stateOnBlockStart;
+        if (!stateOnBlockStart.containsBlockSummary(summary)) {
+          stateOnBlockStart.addBlockSummary(summary);
           workList.add(successor);
         }
       }
@@ -182,7 +182,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   }
 
   private static boolean isInitializedStaticVariable(String var, Set<String> uninitializedStaticVariables, BlockSummary endBlockSummary) {
-    return uninitializedStaticVariables.contains(var) && endBlockSummary.predecessorsSummary.wasInitialized(var);
+    return uninitializedStaticVariables.contains(var) && endBlockSummary.stateOnBlockStart.wasInitialized(var);
   }
 
   private void reportOnFirstTree(Set<Tree> trees) {
@@ -219,7 +219,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   private static Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {
     Map<String, Set<Tree>> result = new HashMap<>();
 
-    UninitializedUsageFindVisitor visitor = new UninitializedUsageFindVisitor(blockSummary.predecessorsSummary);
+    UninitializedUsageFindVisitor visitor = new UninitializedUsageFindVisitor(blockSummary.stateOnBlockStart);
     for (Tree element : block.elements()) {
       element.accept(visitor);
     }
@@ -288,7 +288,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   }
 
   private static class BlockSummary {
-    protected final PredecessorsSummary predecessorsSummary = new PredecessorsSummary();
+    protected final StateOnBlockStart stateOnBlockStart = new StateOnBlockStart();
     protected Set<String> initializedVariables;
     protected boolean scopeWasChangedLocally;
 
@@ -299,16 +299,16 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
     protected Set<String> allVariables() {
       HashSet<String> result = new HashSet<>(initializedVariables);
-      result.addAll(predecessorsSummary.initializedVariables);
+      result.addAll(stateOnBlockStart.initializedVariables);
       return result;
     }
 
     private boolean scopeWasChanged() {
-      return scopeWasChangedLocally || predecessorsSummary.scopeWasChanged;
+      return scopeWasChangedLocally || stateOnBlockStart.scopeWasChanged;
     }
   }
 
-  private static class PredecessorsSummary {
+  private static class StateOnBlockStart {
     protected final Set<String> initializedVariables = new HashSet<>();
     protected boolean scopeWasChanged = false;
 
@@ -369,11 +369,11 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   }
 
   private static class UninitializedUsageFindVisitor extends ScopeVisitor {
-    private final PredecessorsSummary predecessorsSummary;
+    private final StateOnBlockStart stateOnBlockStart;
     private final Map<String, Tree> uninitializedVariableReads = new HashMap<>();
 
-    private UninitializedUsageFindVisitor(PredecessorsSummary predecessorsSummary) {
-      this.predecessorsSummary = predecessorsSummary;
+    private UninitializedUsageFindVisitor(StateOnBlockStart stateOnBlockStart) {
+      this.stateOnBlockStart = stateOnBlockStart;
     }
 
     @Override
@@ -393,11 +393,11 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     }
 
     private boolean isInitializedRead(String variable) {
-      if (scopeWasChanged || predecessorsSummary.scopeWasChanged) {
+      if (scopeWasChanged || stateOnBlockStart.scopeWasChanged) {
         return true;
       }
 
-      return initializedVariables.contains(variable) || predecessorsSummary.initializedVariables.contains(variable);
+      return initializedVariables.contains(variable) || stateOnBlockStart.initializedVariables.contains(variable);
     }
   }
 
