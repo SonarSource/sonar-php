@@ -120,6 +120,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
       // an URL (http://test.com) is parsed as label which is valid syntax, but will lead to false positives
       return !((BlockTree) ((MethodDeclarationTree) classDeclaration.members().get(0)).body()).statements().get(0).is(Tree.Kind.LABEL);
     } catch (Exception e) {
+      // continue on parser error
     }
 
     // try to parse in an inner class context which to cover statements which are only allowed in a class declaration
@@ -127,6 +128,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
       PARSER.parse(String.format(INNER_CLASS_SYNTAX_FORMAT, possibleCode));
       return true;
     } catch (Exception e) {
+      // continue on parser error
     }
 
     return false;
