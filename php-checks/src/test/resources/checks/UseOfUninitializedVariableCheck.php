@@ -103,7 +103,7 @@ function f7() {
 }
 
 function f8() {
-  if ($a) {} // false-negative, need cfg
+  if ($a) {} // Noncompliant
   parse_str("a=3&b=4");
   return $b;
 }
@@ -289,4 +289,38 @@ function alternativeForeach() {
     foreach ($array as list($a, $b)) :
         echo "$a\n";
     endforeach;
+}
+
+function initAndReadOnSameCfgLevel() {
+  if (bar()) {
+    $x = 1;
+  } else {
+    echo $x; // Noncompliant
+  }
+}
+
+function staticVariableInitializedAfterUsage() {
+  static $a;
+  if ($a != null) {
+    echo $a;
+  }
+  $a = 1;
+}
+
+function unreachableBlocks($p) {
+  return;
+  // unreachable
+  echo $a; // Ok
+  if ($b) { // Ok
+    // unreachable
+  }
+  // unreachable
+  echo $c; // Ok
+}
+
+// Coverage
+function forEachWithReferenceKeyAndValue() {
+  foreach(foo() as &$key => &$value()) {
+    echo $key;
+  }
 }
