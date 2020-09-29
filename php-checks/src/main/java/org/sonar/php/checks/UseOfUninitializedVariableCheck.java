@@ -149,27 +149,27 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     // consider them as provided in the whole function body to avoid false positives.
     providedVariables.addAll(initialDataCollector.exceptionVariables);
 
-    Map<CfgBlock, BlockSummary> predecessorsSummary = new HashMap<>();
-    cfgBlocks.forEach(b -> predecessorsSummary.put(b, getBlockSummary(b, providedVariables)));
+    Map<CfgBlock, BlockSummary> blockSummaries = new HashMap<>();
+    cfgBlocks.forEach(b -> blockSummaries.put(b, getBlockSummary(b)));
     Deque<CfgBlock> workList = new ArrayDeque<>(cfgBlocks);
+
+    blockSummaries.get(cfg.start()).predecessorsSummary.initializedVariables.addAll(providedVariables);
 
     while (!workList.isEmpty()) {
       CfgBlock block = workList.pop();
-      BlockSummary summary = predecessorsSummary.get(block);
+      BlockSummary summary = blockSummaries.get(block);
 
       for (CfgBlock successor : block.successors()) {
-        BlockSummary successorSummary = predecessorsSummary.get(successor);
-        if (!successorSummary.initializedFromPredecessors.containsAll(summary.initializedVariables())
-          || successorSummary.scopeWasChanged != summary.scopeWasChanged) {
-          successorSummary.initializedFromPredecessors.addAll(summary.initializedVariables());
-          successorSummary.scopeWasChanged = successorSummary.scopeWasChanged || summary.scopeWasChanged;
+        PredecessorsSummary successorSummary = blockSummaries.get(successor).predecessorsSummary;
+        if (!successorSummary.containsBlockSummary(summary)) {
+          successorSummary.addBlockSummary(summary);
           workList.add(successor);
         }
       }
     }
 
     Map<String, Set<Tree>> uninitializedVariableUses = new HashMap<>();
-    cfgBlocks.forEach(b -> checkBlock(b, predecessorsSummary.get(b))
+    cfgBlocks.forEach(b -> checkBlock(b, blockSummaries.get(b))
       .forEach((v, s) -> uninitializedVariableUses.computeIfAbsent(v, st -> new HashSet<>()).addAll(s)));
 
     // static variables could be initialized after first usage. We only raise an issue on them when they were never
@@ -177,12 +177,12 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     uninitializedVariableUses.entrySet().stream()
       .filter(e -> !isInitializedStaticVariable(e.getKey(),
         initialDataCollector.uninitializedStaticVariables,
-        predecessorsSummary.get(cfg.end())))
+        blockSummaries.get(cfg.end())))
       .forEach(e -> reportOnFirstTree(e.getValue()));
   }
 
   private static boolean isInitializedStaticVariable(String var, Set<String> uninitializedStaticVariables, BlockSummary endBlockSummary) {
-    return uninitializedStaticVariables.contains(var) && endBlockSummary.initializedFromPredecessors.contains(var);
+    return uninitializedStaticVariables.contains(var) && endBlockSummary.predecessorsSummary.wasInitialized(var);
   }
 
   private void reportOnFirstTree(Set<Tree> trees) {
@@ -250,8 +250,8 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     return result;
   }
 
-  private static BlockSummary getBlockSummary(CfgBlock block, Set<String> providedVariables) {
-    BlockSummary summary = new BlockSummary(providedVariables);
+  private static BlockSummary getBlockSummary(CfgBlock block) {
+    BlockSummary summary = new BlockSummary(new PredecessorsSummary());
 
     SummaryUpdateVisitor visitor = new SummaryUpdateVisitor(summary);
     for (Tree element : block.elements()) {
@@ -261,7 +261,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     if (block instanceof CfgBranchingBlock) {
       Tree branchingTree = ((CfgBranchingBlock) block).branchingTree();
       if (branchingTree.is(Kind.FOREACH_STATEMENT, Kind.ALTERNATIVE_FOREACH_STATEMENT)) {
-        summary.initializedInBlock.addAll(getForEachVariables((ForEachStatementTree) branchingTree));
+        summary.initializedVariables.addAll(getForEachVariables((ForEachStatementTree) branchingTree));
       }
     }
 
@@ -269,24 +269,45 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   }
 
   private static class BlockSummary {
-    private final Set<String> initializedFromPredecessors;
-    private final Set<String> initializedInBlock;
-    private boolean scopeWasChanged;
+    protected final PredecessorsSummary predecessorsSummary;
+    protected final Set<String> initializedVariables = new HashSet<>();
+    protected boolean scopeWasChangedLocally = false;
 
-    public BlockSummary(Set<String> initializedFromPredecessors) {
-      this.initializedFromPredecessors = new HashSet<>(initializedFromPredecessors);
-      initializedInBlock = new HashSet<>();
-      scopeWasChanged = false;
+    public BlockSummary(PredecessorsSummary predecessorsSummary) {
+      this.predecessorsSummary = predecessorsSummary;
     }
 
-    private boolean wasInitialized(String variable) {
-      return initializedFromPredecessors.contains(variable) || initializedInBlock.contains(variable);
+    protected boolean wasInitialized(String variable) {
+      return initializedVariables.contains(variable) || predecessorsSummary.wasInitialized(variable);
     }
 
-    private Set<String> initializedVariables() {
-      HashSet<String> result = new HashSet<>(initializedFromPredecessors);
-      result.addAll(initializedInBlock);
+    protected Set<String> allVariables() {
+      HashSet<String> result = new HashSet<>(initializedVariables);
+      result.addAll(predecessorsSummary.initializedVariables);
       return result;
+    }
+
+    private boolean scopeWasChanged() {
+      return scopeWasChangedLocally || predecessorsSummary.scopeWasChanged;
+    }
+  }
+
+  private static class PredecessorsSummary {
+    protected final Set<String> initializedVariables = new HashSet<>();
+    protected boolean scopeWasChanged = false;
+
+    protected boolean wasInitialized(String variable) {
+      return initializedVariables.contains(variable);
+    }
+
+    private boolean containsBlockSummary(BlockSummary blockSummary) {
+      return initializedVariables.containsAll(blockSummary.allVariables())
+        || scopeWasChanged != blockSummary.scopeWasChanged();
+    }
+
+    private void addBlockSummary(BlockSummary blockSummary) {
+      initializedVariables.addAll(blockSummary.allVariables());
+      scopeWasChanged = scopeWasChanged || blockSummary.scopeWasChanged();
     }
   }
 
@@ -342,7 +363,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     protected void visitVariableRead(VariableIdentifierTree tree) {
       String name = tree.variableExpression().text();
       if (!blockSummary.wasInitialized(name)
-        && !blockSummary.scopeWasChanged) {
+        && !blockSummary.scopeWasChangedLocally) {
         firstVariableReadAccess.putIfAbsent(name, tree);
       }
     }
@@ -371,7 +392,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     @Override
     public void visitFunctionCall(FunctionCallTree functionCall) {
       if (FUNCTION_CHANGING_CURRENT_SCOPE.contains(CheckUtils.getLowerCaseFunctionName(functionCall))) {
-        blockSummary.scopeWasChanged = true;
+        blockSummary.scopeWasChangedLocally = true;
       }
       super.visitFunctionCall(functionCall);
     }
@@ -383,7 +404,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       }
 
       if (!isReadAccess(tree)) {
-        blockSummary.initializedInBlock.add(tree.variableExpression().text());
+        blockSummary.initializedVariables.add(tree.variableExpression().text());
       } else {
         visitVariableRead(tree);
       }
