@@ -134,9 +134,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       return;
     }
     // Only consider reachable blocks to avoid confusing issues (+Unreachable blocks are reported by S1763)
-    Set<CfgBlock> cfgBlocks = cfg.blocks().stream()
-      .filter(b -> !blockIsUnreachable(b, cfg))
-      .collect(Collectors.toSet());
+    Set<CfgBlock> cfgBlocks = getReachableBlocks(cfg);
 
     Map<CfgBlock, BlockSummary> blockSummaries = new HashMap<>();
     cfgBlocks.forEach(b -> blockSummaries.put(b, getBlockSummary(b)));
@@ -192,28 +190,23 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       .ifPresent(t -> newIssue(t, MESSAGE));
   }
 
-  private static boolean blockIsUnreachable(CfgBlock block, ControlFlowGraph cfg) {
-    if (block.equals(cfg.start())) {
-      return false;
-    }
+  private static Set<CfgBlock> getReachableBlocks(ControlFlowGraph cfg) {
+    Set<CfgBlock> result = new HashSet<>();
+    result.add(cfg.start());
 
-    Set<CfgBlock> checked = new HashSet<>(block.predecessors());
-    Deque<CfgBlock> workList = new ArrayDeque<>(block.predecessors());
+    Deque<CfgBlock> workList = new ArrayDeque<>(result);
     while (!workList.isEmpty()) {
       CfgBlock item = workList.pop();
-      if (item.equals(cfg.start())) {
-        return false;
-      }
 
-      Set<CfgBlock> uncheckPredecessors = item.predecessors().stream()
-        .filter(b -> !checked.contains(b))
+      Set<CfgBlock> newSuccessors = item.successors().stream()
+        .filter(b -> !result.contains(b))
         .collect(Collectors.toSet());
 
-      checked.addAll(uncheckPredecessors);
-      workList.addAll(uncheckPredecessors);
+      result.addAll(newSuccessors);
+      workList.addAll(newSuccessors);
     }
 
-    return true;
+    return result;
   }
 
   private static Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {
