@@ -85,7 +85,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
   }
 
   // a continuous block has no free line and has the same commentary token.
-  private boolean isNewCommentBlock(SyntaxTrivia trivia) {
+  private static boolean isNewCommentBlock(SyntaxTrivia trivia) {
     SyntaxTrivia prevTrivia = singleLineTrivias.peekLast();
     return prevTrivia.line() + 1 != trivia.line()
       || prevTrivia.text().charAt(0) != trivia.text().charAt(0);
@@ -117,23 +117,19 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
     // this also covers all statements which are allowed in function or first layer context
     try {
       ClassDeclarationTree classDeclaration = (ClassDeclarationTree) PARSER.parse(String.format(INNER_METHOD_SYNTAX_FORMAT, possibleCode));
-      return !isPossibleUrl(((BlockTree) ((MethodDeclarationTree) classDeclaration.members().get(0)).body()).statements().get(0));
+      // an URL (http://test.com) is parsed as label which is valid syntax, but will lead to false positives
+      return !((BlockTree) ((MethodDeclarationTree) classDeclaration.members().get(0)).body()).statements().get(0).is(Tree.Kind.LABEL);
     } catch (Exception e) {
     }
 
     // try to parse in an inner class context which to cover statements which are only allowed in a class declaration
     try {
       ClassDeclarationTree classDeclaration = (ClassDeclarationTree) PARSER.parse(String.format(INNER_CLASS_SYNTAX_FORMAT, possibleCode));
-      return !isPossibleUrl(classDeclaration.members().get(0));
+      return true;
     } catch (Exception e) {
     }
 
     return false;
-  }
-
-  // an URL (http://test.com) is parsed as label which is valid syntax, but will lead to false positives
-  private boolean isPossibleUrl(Tree tree) {
-    return tree.is(Tree.Kind.LABEL);
   }
 
 }
