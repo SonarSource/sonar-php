@@ -19,21 +19,19 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
-import java.util.Set;
-import java.util.regex.Pattern;
-import javax.annotation.Nullable;
+import com.sonar.sslr.api.typed.ActionParser;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.recognizer.CodeRecognizer;
-import org.sonar.squidbridge.recognizer.ContainsDetector;
-import org.sonar.squidbridge.recognizer.Detector;
-import org.sonar.squidbridge.recognizer.EndWithDetector;
-import org.sonar.squidbridge.recognizer.KeywordsDetector;
-import org.sonar.squidbridge.recognizer.LanguageFootprint;
 
 @Rule(
   key = CommentedOutCodeCheck.KEY)
@@ -42,84 +40,100 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
   public static final String KEY = "S125";
   private static final String MESSAGE = "Remove this commented out code.";
 
-  private static final double THRESHOLD = 0.9;
+  private static final String MULTILINE_COMMENT_REPLACE = "((/\\*\\*?)|(\\n\\s+\\*(?!/))|(\\*/))";
+  private static final String SINGLE_LINE_COMMENT_REPLACE = "^((//)|(#))";
 
-  private final CodeRecognizer codeRecognizer = new CodeRecognizer(THRESHOLD, new PHPRecognizer());
-  private final Pattern regexpToDivideStringByLine = Pattern.compile("(\r?\n)|(\r)");
+  private static final String INNER_METHOD_SYNTAX_FORMAT = "class DummyClass{public function dummyMethod(){%s}}";
+  private static final String INNER_CLASS_SYNTAX_FORMAT = "class DummyClass{%s}";
 
-  private SyntaxTrivia previousTrivia;
-
-  private static class PHPRecognizer implements LanguageFootprint {
-
-    @Override
-    public Set<Detector> getDetectors() {
-      return ImmutableSet.of(
-        new EndWithDetector(0.95, '}', ';', '{'),
-        new KeywordsDetector(0.3, PHPKeyword.getKeywordValues()),
-        new ContainsDetector(0.95, "*=", "/=", "%=", "+=", "-=", "<<=", ">>=", "&=", "^=", "|="),
-        new ContainsDetector(0.95, "!=", "!=="));
-    }
-
-  }
+  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
+  private static final Deque<SyntaxTrivia> singleLineTrivias = new ArrayDeque<>();
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    previousTrivia = null;
     super.visitCompilationUnit(tree);
+
+    // check possible last single line comment and clean up afterwards
+    checkSingleLineComments();
   }
 
   @Override
   public void visitTrivia(SyntaxTrivia trivia) {
+    String comment = trivia.text();
+    if (comment.startsWith("/*") && isParsableCode(comment.replaceAll(MULTILINE_COMMENT_REPLACE, " "))) {
+      context().newIssue(this, trivia, MESSAGE);
+    }
+    if (comment.startsWith("//") || comment.startsWith("#")) {
+      collectSingleLineComment(trivia);
+    }
+
     super.visitTrivia(trivia);
+  }
 
-    if (isInlineComment(trivia)) {
-
-      if (isCommentedCode(getContents(trivia.text())) && !previousLineIsCommentedCode(trivia, previousTrivia)) {
-        reportIssue(trivia.line());
-      }
-
-    } else if (!isPHPDoc(trivia)) {
-      String[] lines = regexpToDivideStringByLine.split(getContents(trivia.text()));
-
-      for (int lineOffset = 0; lineOffset < lines.length; lineOffset++) {
-        if (isCommentedCode(lines[lineOffset])) {
-          reportIssue(trivia.line() + lineOffset);
-          break;
-        }
-      }
+  private void collectSingleLineComment(SyntaxTrivia trivia) {
+    // summarise previously collected single line comments if they have formed a consistent block.
+    if (!singleLineTrivias.isEmpty() && isNewCommentBlock(trivia)) {
+      checkSingleLineComments();
     }
-    previousTrivia = trivia;
-  }
 
-  private void reportIssue(int line) {
-    context().newLineIssue(this, line, MESSAGE);
-  }
-
-  private boolean previousLineIsCommentedCode(SyntaxTrivia trivia, @Nullable SyntaxTrivia previousTrivia) {
-    return previousTrivia != null && (trivia.line() == previousTrivia.line() + 1)
-      && isCommentedCode(previousTrivia.text());
-  }
-
-  private boolean isCommentedCode(String line) {
-    return codeRecognizer.isLineOfCode(line);
-  }
-
-  private static boolean isInlineComment(SyntaxTrivia trivia) {
-    return trivia.text().startsWith("//");
-  }
-
-  private static boolean isPHPDoc(SyntaxTrivia trivia) {
-    return trivia.text().startsWith("/**");
-  }
-
-  private static String getContents(String comment) {
-    if (comment.startsWith("//")) {
-      return comment.substring(2);
-    } else if (comment.charAt(0) == '#') {
-      return comment.substring(1);
+    // report valid syntax if it is the first line of a possible consistent block of single line comments
+    if (singleLineTrivias.isEmpty() && isParsableCode(trivia.text().replaceAll(SINGLE_LINE_COMMENT_REPLACE, " "))) {
+      context().newIssue(this, trivia, MESSAGE);
     } else {
-      return comment.substring(2, comment.length() - 2);
+      singleLineTrivias.addLast(trivia);
     }
+  }
+
+  // a continuous block has no free line and has the same commentary token.
+  private boolean isNewCommentBlock(SyntaxTrivia trivia) {
+    SyntaxTrivia prevTrivia = singleLineTrivias.peekLast();
+    return prevTrivia.line() + 1 != trivia.line()
+      || prevTrivia.text().charAt(0) != trivia.text().charAt(0);
+  }
+
+  private void checkSingleLineComments() {
+    StringBuilder mergedSingleLineComment = new StringBuilder();
+
+    singleLineTrivias
+      .iterator()
+      .forEachRemaining(t -> mergedSingleLineComment
+        .append(t.text().trim().replaceAll(SINGLE_LINE_COMMENT_REPLACE, "")));
+
+    if (isParsableCode(mergedSingleLineComment.toString())) {
+      SyntaxTrivia firstTrivia = singleLineTrivias.peekFirst();
+      SyntaxTrivia lastTrivia = singleLineTrivias.peekLast();
+      context().newIssue(this, firstTrivia, lastTrivia, MESSAGE);
+    }
+    singleLineTrivias.clear();
+  }
+
+  private boolean isParsableCode(String possibleCode) {
+    // empty comment should not be commented out code
+    if (possibleCode.replaceAll("\\R+", "").trim().length() == 0) {
+      return false;
+    }
+
+    // try to parse in an inner method context which to cover statements which are only allowed in a method declaration
+    // this also covers all statements which are allowed in function or first layer context
+    try {
+      ClassDeclarationTree classDeclaration = (ClassDeclarationTree) PARSER.parse(String.format(INNER_METHOD_SYNTAX_FORMAT, possibleCode));
+      return !isPossibleUrl(((BlockTree) ((MethodDeclarationTree) classDeclaration.members().get(0)).body()).statements().get(0));
+    } catch (Exception e) {
+    }
+
+    // try to parse in an inner class context which to cover statements which are only allowed in a class declaration
+    try {
+      ClassDeclarationTree classDeclaration = (ClassDeclarationTree) PARSER.parse(String.format(INNER_CLASS_SYNTAX_FORMAT, possibleCode));
+      return !isPossibleUrl(classDeclaration.members().get(0));
+    } catch (Exception e) {
+    }
+
+    return false;
+  }
+
+  // an URL (http://test.com) is parsed as label which is valid syntax, but will lead to false positives
+  private boolean isPossibleUrl(Tree tree) {
+    return tree.is(Tree.Kind.LABEL);
   }
 
 }
