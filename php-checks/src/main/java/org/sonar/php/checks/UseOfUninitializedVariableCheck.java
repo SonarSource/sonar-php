@@ -202,7 +202,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   private static Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {
     Map<String, Set<Tree>> result = new HashMap<>();
 
-    BlockSummary summary = BlockSummary.copy(blockSummary);
+    BlockSummary summary = blockSummary.copy();
     for (Tree element : block.elements()) {
       UninitializedUsageFindVisitor visitor = new UninitializedUsageFindVisitor(summary);
       element.accept(visitor);
@@ -255,7 +255,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   }
 
   private static BlockSummary getBlockSummary(CfgBlock block, BlockSummary predecessorsSummary) {
-    BlockSummary summary = BlockSummary.copy(predecessorsSummary);
+    BlockSummary summary = predecessorsSummary.copy();
 
     for (Tree element : block.elements()) {
       SummaryUpdateVisitor visitor = new SummaryUpdateVisitor(summary);
@@ -285,10 +285,10 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       this.scopeWasChanged = scopeWasChanged;
     }
 
-    private static BlockSummary copy(BlockSummary toCopy) {
-      return new BlockSummary(new HashSet<>(toCopy.initializedFromPredecessors),
-        new HashSet<>(toCopy.initializedInBlock),
-        toCopy.scopeWasChanged);
+    private BlockSummary copy() {
+      return new BlockSummary(new HashSet<>(initializedFromPredecessors),
+        new HashSet<>(initializedInBlock),
+        scopeWasChanged);
     }
 
     private boolean wasInitialized(String variable) {
