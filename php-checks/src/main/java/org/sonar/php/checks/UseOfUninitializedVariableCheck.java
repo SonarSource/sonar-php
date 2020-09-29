@@ -193,7 +193,27 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   }
 
   private static boolean blockIsUnreachable(CfgBlock block, ControlFlowGraph cfg) {
-    return block.predecessors().isEmpty() && !block.equals(cfg.start());
+    if (block.equals(cfg.start())) {
+      return false;
+    }
+
+    Set<CfgBlock> checked = new HashSet<>(block.predecessors());
+    Deque<CfgBlock> workList = new ArrayDeque<>(block.predecessors());
+    while (!workList.isEmpty()) {
+      CfgBlock item = workList.pop();
+      if (item.equals(cfg.start())) {
+        return false;
+      }
+
+      Set<CfgBlock> uncheckPredecessors = item.predecessors().stream()
+        .filter(b -> !checked.contains(b))
+        .collect(Collectors.toSet());
+
+      checked.addAll(uncheckPredecessors);
+      workList.addAll(uncheckPredecessors);
+    }
+
+    return true;
   }
 
   private static Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {

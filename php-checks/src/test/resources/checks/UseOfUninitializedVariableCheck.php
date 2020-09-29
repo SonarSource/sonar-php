@@ -307,6 +307,17 @@ function staticVariableInitializedAfterUsage() {
   $a = 1;
 }
 
+function unreachableBlocks($p) {
+  return;
+  // unreachable
+  echo $a; // Ok
+  if ($b) { // Ok
+    // unreachable
+  }
+  // unreachable
+  echo $c; // Ok
+}
+
 // Coverage
 function forEachWithReferenceKeyAndValue() {
   foreach(foo() as &$key => &$value()) {
