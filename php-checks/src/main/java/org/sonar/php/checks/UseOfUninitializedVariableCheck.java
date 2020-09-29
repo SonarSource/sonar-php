@@ -150,22 +150,19 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     providedVariables.addAll(initialDataCollector.exceptionVariables);
 
     Map<CfgBlock, BlockSummary> predecessorsSummary = new HashMap<>();
-    cfgBlocks.forEach(
-      b -> predecessorsSummary.put(b, new BlockSummary(new HashSet<>(providedVariables), new HashSet<>(), false))
-    );
+    cfgBlocks.forEach(b -> predecessorsSummary.put(b, getBlockSummary(b, providedVariables)));
     Deque<CfgBlock> workList = new ArrayDeque<>(cfgBlocks);
 
     while (!workList.isEmpty()) {
       CfgBlock block = workList.pop();
-
-      BlockSummary summary = getBlockSummary(block, predecessorsSummary.get(block));
+      BlockSummary summary = predecessorsSummary.get(block);
 
       for (CfgBlock successor : block.successors()) {
-        BlockSummary successorInit = predecessorsSummary.get(successor);
-        if (!successorInit.initializedFromPredecessors.containsAll(summary.initializedVariables())
-          || successorInit.scopeWasChanged != summary.scopeWasChanged) {
-          successorInit.initializedFromPredecessors.addAll(summary.initializedVariables());
-          successorInit.scopeWasChanged = successorInit.scopeWasChanged || summary.scopeWasChanged;
+        BlockSummary successorSummary = predecessorsSummary.get(successor);
+        if (!successorSummary.initializedFromPredecessors.containsAll(summary.initializedVariables())
+          || successorSummary.scopeWasChanged != summary.scopeWasChanged) {
+          successorSummary.initializedFromPredecessors.addAll(summary.initializedVariables());
+          successorSummary.scopeWasChanged = successorSummary.scopeWasChanged || summary.scopeWasChanged;
           workList.add(successor);
         }
       }
@@ -202,14 +199,13 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   private static Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {
     Map<String, Set<Tree>> result = new HashMap<>();
 
-    BlockSummary summary = blockSummary.copy();
+    UninitializedUsageFindVisitor visitor = new UninitializedUsageFindVisitor(blockSummary);
     for (Tree element : block.elements()) {
-      UninitializedUsageFindVisitor visitor = new UninitializedUsageFindVisitor(summary);
       element.accept(visitor);
-      visitor.firstVariableReadAccess.entrySet().stream()
-        .filter(e -> !PREDEFINED_VARIABLES.contains(e.getKey().toUpperCase(Locale.ROOT)))
-        .forEach(e -> result.computeIfAbsent(e.getKey(), v -> new HashSet<>()).add(e.getValue()));
     }
+    visitor.firstVariableReadAccess.entrySet().stream()
+      .filter(e -> !PREDEFINED_VARIABLES.contains(e.getKey().toUpperCase(Locale.ROOT)))
+      .forEach(e -> result.computeIfAbsent(e.getKey(), v -> new HashSet<>()).add(e.getValue()));
 
     return result;
   }
@@ -254,11 +250,11 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     return result;
   }
 
-  private static BlockSummary getBlockSummary(CfgBlock block, BlockSummary predecessorsSummary) {
-    BlockSummary summary = predecessorsSummary.copy();
+  private static BlockSummary getBlockSummary(CfgBlock block, Set<String> providedVariables) {
+    BlockSummary summary = new BlockSummary(providedVariables);
 
+    SummaryUpdateVisitor visitor = new SummaryUpdateVisitor(summary);
     for (Tree element : block.elements()) {
-      SummaryUpdateVisitor visitor = new SummaryUpdateVisitor(summary);
       element.accept(visitor);
     }
 
@@ -277,18 +273,10 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     private final Set<String> initializedInBlock;
     private boolean scopeWasChanged;
 
-    private BlockSummary(Set<String> initializedFromPredecessors,
-                         Set<String> initializedInBlock,
-                         boolean scopeWasChanged) {
-      this.initializedFromPredecessors = initializedFromPredecessors;
-      this.initializedInBlock = initializedInBlock;
-      this.scopeWasChanged = scopeWasChanged;
-    }
-
-    private BlockSummary copy() {
-      return new BlockSummary(new HashSet<>(initializedFromPredecessors),
-        new HashSet<>(initializedInBlock),
-        scopeWasChanged);
+    public BlockSummary(Set<String> initializedFromPredecessors) {
+      this.initializedFromPredecessors = new HashSet<>(initializedFromPredecessors);
+      initializedInBlock = new HashSet<>();
+      scopeWasChanged = false;
     }
 
     private boolean wasInitialized(String variable) {
