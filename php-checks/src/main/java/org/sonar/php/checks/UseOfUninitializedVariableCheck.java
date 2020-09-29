@@ -138,6 +138,9 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       .filter(b -> !blockIsUnreachable(b, cfg))
       .collect(Collectors.toSet());
 
+    Map<CfgBlock, BlockSummary> blockSummaries = new HashMap<>();
+    cfgBlocks.forEach(b -> blockSummaries.put(b, getBlockSummary(b)));
+
     Set<String> providedVariables = getParameterVariableNames(tree);
     if (tree.is(Kind.FUNCTION_EXPRESSION)) {
       providedVariables.addAll(getLexicalVariableNames((FunctionExpressionTree) tree));
@@ -149,20 +152,17 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     // consider them as provided in the whole function body to avoid false positives.
     providedVariables.addAll(initialDataCollector.exceptionVariables);
 
-    Map<CfgBlock, BlockSummary> blockSummaries = new HashMap<>();
-    cfgBlocks.forEach(b -> blockSummaries.put(b, getBlockSummary(b)));
-    Deque<CfgBlock> workList = new ArrayDeque<>(cfgBlocks);
-
     blockSummaries.get(cfg.start()).predecessorsSummary.initializedVariables.addAll(providedVariables);
 
+    Deque<CfgBlock> workList = new ArrayDeque<>(cfgBlocks);
     while (!workList.isEmpty()) {
       CfgBlock block = workList.pop();
       BlockSummary summary = blockSummaries.get(block);
 
       for (CfgBlock successor : block.successors()) {
-        PredecessorsSummary successorSummary = blockSummaries.get(successor).predecessorsSummary;
-        if (!successorSummary.containsBlockSummary(summary)) {
-          successorSummary.addBlockSummary(summary);
+        PredecessorsSummary predecessorsSummary = blockSummaries.get(successor).predecessorsSummary;
+        if (!predecessorsSummary.containsBlockSummary(summary)) {
+          predecessorsSummary.addBlockSummary(summary);
           workList.add(successor);
         }
       }
@@ -199,11 +199,11 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   private static Map<String, Set<Tree>> checkBlock(CfgBlock block, BlockSummary blockSummary) {
     Map<String, Set<Tree>> result = new HashMap<>();
 
-    UninitializedUsageFindVisitor visitor = new UninitializedUsageFindVisitor(blockSummary);
+    UninitializedUsageFindVisitor visitor = new UninitializedUsageFindVisitor(blockSummary.predecessorsSummary);
     for (Tree element : block.elements()) {
       element.accept(visitor);
     }
-    visitor.firstVariableReadAccess.entrySet().stream()
+    visitor.uninitializedVariableReads.entrySet().stream()
       .filter(e -> !PREDEFINED_VARIABLES.contains(e.getKey().toUpperCase(Locale.ROOT)))
       .forEach(e -> result.computeIfAbsent(e.getKey(), v -> new HashSet<>()).add(e.getValue()));
 
@@ -251,12 +251,11 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   }
 
   private static BlockSummary getBlockSummary(CfgBlock block) {
-    BlockSummary summary = new BlockSummary(new PredecessorsSummary());
-
-    SummaryUpdateVisitor visitor = new SummaryUpdateVisitor(summary);
+    SummaryCreationVisitor visitor = new SummaryCreationVisitor();
     for (Tree element : block.elements()) {
       element.accept(visitor);
     }
+    BlockSummary summary = new BlockSummary(visitor.initializedVariables, visitor.scopeWasChanged);
 
     if (block instanceof CfgBranchingBlock) {
       Tree branchingTree = ((CfgBranchingBlock) block).branchingTree();
@@ -269,16 +268,13 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   }
 
   private static class BlockSummary {
-    protected final PredecessorsSummary predecessorsSummary;
-    protected final Set<String> initializedVariables = new HashSet<>();
-    protected boolean scopeWasChangedLocally = false;
+    protected final PredecessorsSummary predecessorsSummary = new PredecessorsSummary();
+    protected Set<String> initializedVariables;
+    protected boolean scopeWasChangedLocally;
 
-    public BlockSummary(PredecessorsSummary predecessorsSummary) {
-      this.predecessorsSummary = predecessorsSummary;
-    }
-
-    protected boolean wasInitialized(String variable) {
-      return initializedVariables.contains(variable) || predecessorsSummary.wasInitialized(variable);
+    public BlockSummary(Set<String> initializedVariables, boolean scopeWasChangedLocally) {
+      this.initializedVariables = new HashSet<>(initializedVariables);
+      this.scopeWasChangedLocally = scopeWasChangedLocally;
     }
 
     protected Set<String> allVariables() {
@@ -302,7 +298,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
     private boolean containsBlockSummary(BlockSummary blockSummary) {
       return initializedVariables.containsAll(blockSummary.allVariables())
-        || scopeWasChanged != blockSummary.scopeWasChanged();
+        && scopeWasChanged == blockSummary.scopeWasChanged();
     }
 
     private void addBlockSummary(BlockSummary blockSummary) {
@@ -352,29 +348,58 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       ((VariableDeclarationTree) tree.getParent()).equalToken() == null);
   }
 
-  private static class UninitializedUsageFindVisitor extends SummaryUpdateVisitor {
-    private final Map<String, Tree> firstVariableReadAccess = new HashMap<>();
+  private static class UninitializedUsageFindVisitor extends ScopeVisitor {
+    private final PredecessorsSummary predecessorsSummary;
+    private final Map<String, Tree> uninitializedVariableReads = new HashMap<>();
 
-    private UninitializedUsageFindVisitor(BlockSummary blockSummary) {
-      super(blockSummary);
+    private UninitializedUsageFindVisitor(PredecessorsSummary predecessorsSummary) {
+      this.predecessorsSummary = predecessorsSummary;
     }
 
     @Override
-    protected void visitVariableRead(VariableIdentifierTree tree) {
-      String name = tree.variableExpression().text();
-      if (!blockSummary.wasInitialized(name)
-        && !blockSummary.scopeWasChangedLocally) {
-        firstVariableReadAccess.putIfAbsent(name, tree);
+    public void visitVariableIdentifier(VariableIdentifierTree tree) {
+      if (isClassMemberAccess(tree) || uninitializedVariableDeclaration(tree)) {
+        return;
       }
+
+      String name = tree.variableExpression().text();
+      if (!isReadAccess(tree)) {
+        initializedVariables.add(name);
+      } else if (!isInitializedRead(name)) {
+        uninitializedVariableReads.putIfAbsent(name, tree);
+      }
+
+      super.visitVariableIdentifier(tree);
+    }
+
+    private boolean isInitializedRead(String variable) {
+      if (scopeWasChanged || predecessorsSummary.scopeWasChanged) {
+        return true;
+      }
+
+      return initializedVariables.contains(variable) || predecessorsSummary.initializedVariables.contains(variable);
     }
   }
 
-  private static class SummaryUpdateVisitor extends PHPVisitorCheck {
-    protected final BlockSummary blockSummary;
 
-    private SummaryUpdateVisitor(BlockSummary blockSummary) {
-      this.blockSummary = blockSummary;
+  private static class SummaryCreationVisitor extends ScopeVisitor {
+    @Override
+    public void visitVariableIdentifier(VariableIdentifierTree tree) {
+      if (isClassMemberAccess(tree) || uninitializedVariableDeclaration(tree)) {
+        return;
+      }
+
+      if (!isReadAccess(tree)) {
+        initializedVariables.add(tree.variableExpression().text());
+      }
+
+      super.visitVariableIdentifier(tree);
     }
+  }
+
+  private static abstract class ScopeVisitor extends PHPVisitorCheck {
+    protected final Set<String> initializedVariables = new HashSet<>();
+    protected boolean scopeWasChanged = false;
 
     @Override
     public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
@@ -392,29 +417,11 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     @Override
     public void visitFunctionCall(FunctionCallTree functionCall) {
       if (FUNCTION_CHANGING_CURRENT_SCOPE.contains(CheckUtils.getLowerCaseFunctionName(functionCall))) {
-        blockSummary.scopeWasChangedLocally = true;
+        scopeWasChanged = true;
       }
       super.visitFunctionCall(functionCall);
     }
 
-    @Override
-    public void visitVariableIdentifier(VariableIdentifierTree tree) {
-      if (isClassMemberAccess(tree) || uninitializedVariableDeclaration(tree)) {
-        return;
-      }
-
-      if (!isReadAccess(tree)) {
-        blockSummary.initializedVariables.add(tree.variableExpression().text());
-      } else {
-        visitVariableRead(tree);
-      }
-
-      super.visitVariableIdentifier(tree);
-    }
-
-    protected void visitVariableRead(VariableIdentifierTree tree) {
-      // Allow child classes to handle variable reads.
-    }
 
     protected static boolean isClassMemberAccess(Tree tree) {
       Tree child = skipParentArrayAccess(tree);
