@@ -107,7 +107,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
     singleLineTrivias.clear();
   }
 
-  private boolean isParsableCode(String possibleCode) {
+  private static boolean isParsableCode(String possibleCode) {
     // empty comment should not be commented out code
     if (possibleCode.replaceAll("\\R+", "").trim().length() == 0) {
       return false;
@@ -124,7 +124,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
 
     // try to parse in an inner class context which to cover statements which are only allowed in a class declaration
     try {
-      ClassDeclarationTree classDeclaration = (ClassDeclarationTree) PARSER.parse(String.format(INNER_CLASS_SYNTAX_FORMAT, possibleCode));
+      PARSER.parse(String.format(INNER_CLASS_SYNTAX_FORMAT, possibleCode));
       return true;
     } catch (Exception e) {
     }
