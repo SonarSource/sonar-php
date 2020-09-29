@@ -417,7 +417,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     }
   }
 
-  private static abstract class ScopeVisitor extends PHPVisitorCheck {
+  private abstract static class ScopeVisitor extends PHPVisitorCheck {
     protected final Set<String> initializedVariables = new HashSet<>();
     protected boolean scopeWasChanged = false;
 
