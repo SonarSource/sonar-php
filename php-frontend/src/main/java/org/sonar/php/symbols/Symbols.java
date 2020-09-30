@@ -21,10 +21,12 @@ package org.sonar.php.symbols;
 
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
@@ -62,5 +64,9 @@ public class Symbols {
 
   public static MethodSymbol get(MethodDeclarationTree methodDeclarationTree) {
     return ((MethodDeclarationTreeImpl) methodDeclarationTree).symbol();
+  }
+
+  public static FunctionSymbol get(FunctionDeclarationTree functionDeclarationTree) {
+    return ((FunctionDeclarationTreeImpl) functionDeclarationTree).symbol();
   }
 }

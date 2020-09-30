@@ -63,8 +63,14 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   }
 
   private void checkParameters(FunctionTree tree) {
+    boolean hasFuncGetArgs = false;
+    if (tree instanceof FunctionDeclarationTree)
+      hasFuncGetArgs = Symbols.get((FunctionDeclarationTree) tree).hasFuncGetArgs();
+    if (tree instanceof MethodDeclarationTree)
+      hasFuncGetArgs = Symbols.get((MethodDeclarationTree) tree).hasFuncGetArgs();
+
     Scope scope = context().symbolTable().getScopeFor(tree);
-    if (scope != null && !scope.hasUnresolvedCompact()) {
+    if (scope != null && !scope.hasUnresolvedCompact() && !hasFuncGetArgs) {
       List<IdentifierTree> unused = new ArrayList<>();
 
       for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {

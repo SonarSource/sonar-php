@@ -8,12 +8,44 @@ function f($p1, $p2, $p3) {              // Noncompliant {{Remove the unused fun
 
 $a = function($p1, $p2) { return $p1; }; // Noncompliant {{Remove the unused function parameter "$p2".}}
 
-
 function f($p1, $p2) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
   function nestedF($p1, $p2) {           // Noncompliant {{Remove the unused function parameter "$p2".}}
     $p1 = 1;
   }
   return $p2;
+}
+
+function containing_func_get_args_with_one_not_explicitly_used_parameter($p1) {
+    func_get_args();
+    call($p2);
+}
+
+function containing_func_get_args_with_only_not_explicitly_used_parameters($p1, $p2) {
+    $args = func_get_args();
+}
+
+function containing_func_get_args_with_some_not_explicitly_used_parameters($p1, $p2, $p3) {
+    call($p2);
+    print_r(func_get_args());
+}
+
+function containing_func_get_args_with_explicitly_used_parameters($p1, $p2) {
+    func_get_args();
+    $p1 = $p2;
+    return $p3;
+}
+
+function containing_func_get_args_with_no_parameters() {
+    func_get_args();
+    $p1 = 42;
+    return $p1;
+}
+function f($p1, $p2) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
+    function containing_func_get_args_with_some_not_explicitly_used_parameters_in_a_nestedFunction($p1, $p2) {           
+        $p1 = 1;
+        func_get_args();
+    }
+    return $p2;
 }
 
 class C {
@@ -28,6 +60,12 @@ class C {
   }
 
   public function f3($p1);               // OK
+  
+  public function containing_func_get_args_with_some_not_explicitly_used_parameters_inside_a_class($p1, $p2, $p3,$p4) {
+      $p1 = $p2;
+      func_get_args();
+      return $p5;
+  }
 }
 
 function f($p1, $p2) {                   // OK
@@ -41,6 +79,10 @@ class A {
 class D extends A {
   public function f1($p1) {} // OK
   private function f2($p1) {}               // Noncompliant {{Remove the unused function parameter "$p1".}}
+  public function containing_func_get_args_with_only_not_explicitly_used_parameters_inside_a_subclass($p1, $p2, $p3,$p4) {
+      func_get_args();
+      return $p5;
+  }
 }
 
 class E implements B {
@@ -49,6 +91,11 @@ class E implements B {
 
   public function f2() {
     $f = function($p1) {};    // Noncompliant
+  }
+ 
+  public function containing_func_get_args_with_no_parameters_inside_a_class_implementing_an_interface($p1, $p2, $p3,$p4) {
+      func_get_args();
+      return $p5;
   }
 }
 
@@ -64,7 +111,6 @@ function foo($p1) {   // OK
      echo $p1;
    };
 }
-
 
 function foo($variable) {  // OK
     $array = compact('variable');
@@ -89,6 +135,16 @@ class Foo {
      private function f2($p1) {}               // Noncompliant {{Remove the unused function parameter "$p1".}}
     };
  }
+ 
+  public function f2($p1) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
+    $x = new class extends A {
+     public function f1($p1) {}                 // OK
+     private function containing_func_get_args_with_some_not_explicitly_used_parameters_inside_anonymous_subclass_($p1, $p2, $p3) {
+         call($p1);
+         func_get_args();
+     }
+    };
+  }
 }
 
 function executionOperator($p) {
