@@ -567,8 +567,8 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
       if (child != null && depth <= MAX_DEPTH) {
         depth++;
         child.accept(this);
+        depth--;
       }
-      depth--;
     }
   }
 
