@@ -114,7 +114,8 @@ import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
 public abstract class PHPVisitorCheck implements VisitorCheck {
-
+  private static final int MAX_DEPTH = 3000;
+  private int depth = 0;
   private CheckContext context;
 
   @Override
@@ -563,9 +564,11 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
     while (childrenIterator.hasNext()) {
       child = childrenIterator.next();
-      if (child != null) {
+      if (child != null && depth <= MAX_DEPTH) {
+        depth++;
         child.accept(this);
       }
+      depth--;
     }
   }
 
