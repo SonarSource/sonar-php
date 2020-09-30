@@ -75,3 +75,23 @@ $helper->log('Set header/footer');
 /*class Foo {
   const BAR = 1;
 }*/
+
+/**
+* class Foo {
+*   const BAR = 1;
+* }
+*/
+
+// namespace Foo\Bar;
+
+// echo $x;
+// echo $y;
+// echo $z;
+
+//php:S115 Types should be named in camel case
+
+// use Foo\Bar;
+
+// user-defined; not supported by PhpSpreadsheet
+
+// use Foo\Bar\{ Bla, Bli };

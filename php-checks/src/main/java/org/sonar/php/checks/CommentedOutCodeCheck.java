@@ -33,18 +33,23 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(
-  key = CommentedOutCodeCheck.KEY)
+@Rule(key = CommentedOutCodeCheck.KEY)
 public class CommentedOutCodeCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S125";
   private static final String MESSAGE = "Remove this commented out code.";
 
-  private static final String MULTILINE_COMMENT_REPLACE = "((/\\*\\*?)|(\\n\\s+\\*(?!/))|(\\*/))";
+  private static final String MULTILINE_COMMENT_REPLACE = "((/\\*\\*?)|(\\n\\s*\\*(?!/))|(\\*/))";
   private static final String SINGLE_LINE_COMMENT_REPLACE = "^((//)|(#))";
 
-  private static final String INNER_METHOD_SYNTAX_FORMAT = "class DummyClass{public function dummyMethod(){%s}}";
-  private static final String INNER_CLASS_SYNTAX_FORMAT = "class DummyClass{%s}";
+
+  private static final String INNER_CLASS_CONTEXT = "class DummyClass{%s}";
+  private static final String INNER_METHOD_CONTEXT = "class DummyClass{public function dummyMethod(){%s}}";
+
+  private static final Tree.Kind[] TOP_STATEMENTS = {
+    Tree.Kind.NAMESPACE_STATEMENT,
+    Tree.Kind.GROUP_USE_STATEMENT
+  };
 
   private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
   private static final Deque<SyntaxTrivia> singleLineTrivias = new ArrayDeque<>();
@@ -76,12 +81,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
       checkSingleLineComments();
     }
 
-    // report valid syntax if it is the first line of a possible consistent block of single line comments
-    if (singleLineTrivias.isEmpty() && isParsableCode(trivia.text().replaceAll(SINGLE_LINE_COMMENT_REPLACE, " "))) {
-      context().newIssue(this, trivia, MESSAGE);
-    } else {
-      singleLineTrivias.addLast(trivia);
-    }
+    singleLineTrivias.addLast(trivia);
   }
 
   // a continuous block has no free line and has the same commentary token.
@@ -113,20 +113,28 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
       return false;
     }
 
-    // try to parse in an inner method context which to cover statements which are only allowed in a method declaration
+    // try to parse in an inner method context to cover statements which are only allowed in a method declaration
     // this also covers all statements which are allowed in function or first layer context
     try {
-      ClassDeclarationTree classDeclaration = (ClassDeclarationTree) PARSER.parse(String.format(INNER_METHOD_SYNTAX_FORMAT, possibleCode));
+      ClassDeclarationTree classDeclaration = (ClassDeclarationTree) PARSER.parse(String.format(INNER_METHOD_CONTEXT, possibleCode));
       // an URL (http://test.com) is parsed as label which is valid syntax, but will lead to false positives
       return !((BlockTree) ((MethodDeclarationTree) classDeclaration.members().get(0)).body()).statements().get(0).is(Tree.Kind.LABEL);
     } catch (Exception e) {
       // continue on parser error
     }
 
-    // try to parse in an inner class context which to cover statements which are only allowed in a class declaration
+    // try to parse in an inner class context to cover statements which are only allowed in a class declaration
     try {
-      PARSER.parse(String.format(INNER_CLASS_SYNTAX_FORMAT, possibleCode));
+      PARSER.parse(String.format(INNER_CLASS_CONTEXT, possibleCode));
       return true;
+    } catch (Exception e) {
+      // continue on parser error
+    }
+
+    // try to parse in script context to cover 'namespace', 'use' or other top statements which can not be citizens of classes or methods
+    try {
+      Tree tree = PARSER.parse(possibleCode);
+      return tree.is(TOP_STATEMENTS);
     } catch (Exception e) {
       // continue on parser error
     }
