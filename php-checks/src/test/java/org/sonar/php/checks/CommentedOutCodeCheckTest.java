@@ -35,9 +35,19 @@ public class CommentedOutCodeCheckTest {
   @Test
   public void test() throws Exception {
     List<PhpIssue> issues = ImmutableList.of(
-      newIssue(9),
-      newIssue(16),
-      newIssue(25)
+      newIssue(13),
+      newIssue(18),
+      newIssue(31),
+      newIssue(33),
+      newIssue(39),
+      newIssue(56),
+      newIssue(60),
+      newIssue(75),
+      newIssue(79),
+      newIssue(85),
+      newIssue(87),
+      newIssue(93),
+      newIssue(97)
     );
 
     PHPCheckTest.check(CHECK, TestUtils.getCheckFile("CommentedOutCodeCheck.php"), issues);
