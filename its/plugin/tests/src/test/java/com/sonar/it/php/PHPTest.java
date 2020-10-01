@@ -23,10 +23,12 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.sonarqube.ws.Issues;
 
 import static com.sonar.it.php.Tests.getComponent;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
+import java.util.List;
 
 public class PHPTest {
 
@@ -104,6 +106,23 @@ public class PHPTest {
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     assertThat(getMeasureAsInt(EMPTY_FILE_PROJECT_KEY, "files")).isEqualTo(3);
+  }
+
+  @Test
+  public void should_not_fail_on_deeply_nested_trees() {
+    Tests.provisionProject("big_concat_key", "Big Concat", "php", "sleep-profile");
+    SonarScanner build = SonarScanner.create()
+      .setProjectKey("big_concat_key")
+      .setProjectName("Big Concat")
+      .setProjectVersion("1")
+      .setSourceEncoding("UTF-8")
+      .setSourceDirs(".")
+      .setProjectDir(Tests.projectDirectoryFor("big_concat"));
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+
+    List<Issues.Issue> issues = Tests.issuesForComponent("big_concat_key");
+    assertThat(issues).hasSize(1);
+    assertThat(issues.get(0).getLine()).isEqualTo(105);
   }
 
   private static String getResourceKey(String projectKey, String fileName) {
