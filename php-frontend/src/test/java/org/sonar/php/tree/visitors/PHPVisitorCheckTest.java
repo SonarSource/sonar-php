@@ -30,6 +30,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -113,6 +114,28 @@ public class PHPVisitorCheckTest {
     assertThat(issues.size()).isEqualTo(1);
     assertThat(issues.get(0)).isInstanceOf(PreciseIssue.class);
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo("testIssue");
+  }
+
+  @Test(timeout = 5000)
+  public void visiting_depth_is_limited() {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser();
+    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/long-concat.php"));
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
+
+    class BinaryExpressionVisitor extends PHPVisitorCheck {
+      public int visitedBinaryExpressions = 0;
+      @Override
+      public void visitBinaryExpression(BinaryExpressionTree tree) {
+        visitedBinaryExpressions++;
+        super.visitBinaryExpression(tree);
+      }
+    }
+
+    BinaryExpressionVisitor visitor = new BinaryExpressionVisitor();
+    visitor.analyze(file, tree);
+
+    // We subtract 3 as that is the depth to get to the binary expressions.
+    assertThat(visitor.visitedBinaryExpressions).isEqualTo(PHPVisitorCheck.MAX_DEPTH - 3);
   }
 
   private class ContextTestVisitor extends PHPVisitorCheck {
