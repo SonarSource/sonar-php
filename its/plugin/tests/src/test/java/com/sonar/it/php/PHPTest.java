@@ -121,6 +121,7 @@ public class PHPTest {
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     List<Issues.Issue> issues = Tests.issuesForComponent("big_concat_key");
+    // The file actually contains two calls to sleep(), but only one is visited due to the depth limit of the visitor.
     assertThat(issues).hasSize(1);
     assertThat(issues.get(0).getLine()).isEqualTo(105);
   }
