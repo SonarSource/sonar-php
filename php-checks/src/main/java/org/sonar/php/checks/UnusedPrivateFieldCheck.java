@@ -64,7 +64,7 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
     }
   }
 
-  private boolean isSelfConstantAccess(ExpressionTree tree) {
+  private static boolean isSelfConstantAccess(ExpressionTree tree) {
     if (tree.is(Tree.Kind.NAMESPACE_NAME)) {
       String className = ((NamespaceNameTree) tree).fullName();
       if (TreeUtils.findAncestorWithKind(tree, Collections.singleton(Tree.Kind.ANONYMOUS_CLASS)) == null && className.equals("self")) {
