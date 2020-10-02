@@ -21,13 +21,14 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -54,14 +55,25 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    super.visitCompilationUnit(tree);
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    super.visitClassDeclaration(tree);
 
-    for (Symbol fieldSymbol : context().symbolTable().getSymbols(Kind.FIELD)) {
+    for (Symbol fieldSymbol : getFieldSymbolsForCurrentClass(tree)) {
       if (fieldSymbol.hasModifier("private") && fieldSymbol.usages().isEmpty() && !constantUsedBeforeInit.contains(fieldSymbol.name())) {
         context().newIssue(this, fieldSymbol.declaration(), String.format(MESSAGE, fieldSymbol.name()));
       }
     }
+
+    constantUsedBeforeInit.clear();
+  }
+
+  private List<Symbol> getFieldSymbolsForCurrentClass(ClassDeclarationTree tree) {
+    List<Tree.Kind> classDeclarationKind = Collections.singletonList(Tree.Kind.CLASS_DECLARATION);
+
+    return context().symbolTable().getSymbols(Kind.FIELD).stream()
+      .filter(f -> TreeUtils.findAncestorWithKind(f.declaration(), Collections.singletonList(Tree.Kind.ANONYMOUS_CLASS)) == null)
+      .filter(f -> TreeUtils.findAncestorWithKind(f.declaration(), classDeclarationKind) == tree)
+      .collect(Collectors.toList());
   }
 
   private static boolean isSelfConstantAccess(ExpressionTree tree) {

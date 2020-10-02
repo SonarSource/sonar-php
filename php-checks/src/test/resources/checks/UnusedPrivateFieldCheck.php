@@ -58,7 +58,8 @@ class ConstantUsage {
 
   public function __construct()
   {
-    $clazz = new class {
+    $anonymousClass = new class {
+      private const ANONYMOUS_UNUSED_PRIVATE_CONST = "foo"; // FN - would made the check to complex
       public const PUBLIC_CONST = self::UNUSED_PRIVATE_CONST;
     };
   }
@@ -89,3 +90,13 @@ class CodeCoverageClass {
     echo $foo::BAR;
   }
 }
+
+class B {
+  public const A = self::B;
+  private const B = "foo";
+}
+
+class A {
+  private const B = "bar"; //Noncompliant
+}
+
