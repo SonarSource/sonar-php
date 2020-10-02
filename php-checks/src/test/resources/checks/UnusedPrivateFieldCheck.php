@@ -50,3 +50,53 @@ class HeredocUsage {
 EOF;
   }
 }
+
+/**
+ * https://jira.sonarsource.com/browse/SONARPHP-1049
+ */
+class ConstantUsage {
+
+  public function __construct()
+  {
+    $anonymousClass = new class {
+      private const ANONYMOUS_UNUSED_PRIVATE_CONST = "foo"; // FN - would made the check to complex
+      public const PUBLIC_CONST = self::UNUSED_PRIVATE_CONST;
+    };
+  }
+
+  private const UNUSED_PRIVATE_CONST = 'foo'; // Noncompliant
+  private const PRIVATE_CONST = 'foo';
+  public const PUBLIC_CONST = self::PRIVATE_CONST;
+
+  public const OTHER_PUBLIC_CONST = self::OTHER_PRIVATE_CONST;
+  private const OTHER_PRIVATE_CONST = 'foo';
+
+  public const ANOTHER_PUBLIC_CONST = ConstantUsage::ANOTHER_PRIVATE_CONST;
+  private const ANOTHER_PRIVATE_CONST = 'foo';
+
+  public const YET_ANOTHER_PUBLIC_CONST = OtherClass::OTHER_CONST;
+  public const LAST_PUBLIC_CONST = \OtherNamespace\ConstantUsage::OTHER_CONST;
+  private const OTHER_CONST = 'foo'; // Noncompliant
+
+  public const PURPOSES = [self::PURPOSE_FUNCTIONAL, self::PURPOSE_ANALYTICAL];
+  private const PURPOSE_ANALYTICAL = 'analytical';
+  private const PURPOSE_FUNCTIONAL = 'functional';
+}
+
+//code coverage
+class CodeCoverageClass {
+  public function codeCoverageMethod() {
+    echo self::$bar;
+    echo $foo::BAR;
+  }
+}
+
+class B {
+  public const A = self::B;
+  private const B = "foo";
+}
+
+class A {
+  private const B = "bar"; //Noncompliant
+}
+
