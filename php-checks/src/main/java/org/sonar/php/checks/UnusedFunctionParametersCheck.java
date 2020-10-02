@@ -19,7 +19,9 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.symbols.ClassSymbol;
@@ -27,11 +29,13 @@ import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.Scope;
+import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -41,30 +45,48 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1172";
   private static final String MESSAGE = "Remove the unused function parameter \"%s\".";
+  Deque<Boolean> hasFuncGetArgsStack = new ArrayDeque<>();
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    String callee = SourceBuilder.build(tree.callee()).trim();
+    if (callee.equals("func_get_args")) {
+      hasFuncGetArgsStack.pop();
+      hasFuncGetArgsStack.push(true);
+    }
+    super.visitFunctionCall(tree);
+  }
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    checkParameters(tree);
+    hasFuncGetArgsStack.push(false);
     super.visitFunctionDeclaration(tree);
+    if (!hasFuncGetArgsStack.pop()) {
+      checkParameters(tree);
+    }
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    checkParameters(tree);
+    hasFuncGetArgsStack.push(false);
     super.visitFunctionExpression(tree);
+    if (!hasFuncGetArgsStack.pop()) {
+      checkParameters(tree);
+    }
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (!isExcluded(tree)) {
+    hasFuncGetArgsStack.push(false);
+    super.visitMethodDeclaration(tree);
+    if (!(isExcluded(tree) || hasFuncGetArgsStack.pop())) {
       checkParameters(tree);
     }
-    super.visitMethodDeclaration(tree);
   }
 
   private void checkParameters(FunctionTree tree) {
     Scope scope = context().symbolTable().getScopeFor(tree);
-    if (scope != null && !scope.hasUnresolvedCompact()) {
+    if (!(scope == null || scope.hasUnresolvedCompact())) {
       List<IdentifierTree> unused = new ArrayList<>();
 
       for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {
