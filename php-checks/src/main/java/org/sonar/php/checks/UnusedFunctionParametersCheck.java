@@ -47,11 +47,6 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Remove the unused function parameter \"%s\".";
   Deque<Boolean> hasFuncGetArgsStack = new ArrayDeque<>();
 
-  /*
-   * TODO: Using the stack can be avoided when the new symbol table will be improved. In particular, when FunctionExpressionTreeImpl will
-   * implement the HasMethodSymbol interface.
-   */
-
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String callee = SourceBuilder.build(tree.callee()).trim();
@@ -66,8 +61,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     hasFuncGetArgsStack.push(false);
     super.visitFunctionDeclaration(tree);
-    boolean hasFuncGetArgs = hasFuncGetArgsStack.pop();
-    if (!hasFuncGetArgs) {
+    if (!hasFuncGetArgsStack.pop()) {
       checkParameters(tree);
     }
   }
@@ -76,8 +70,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   public void visitFunctionExpression(FunctionExpressionTree tree) {
     hasFuncGetArgsStack.push(false);
     super.visitFunctionExpression(tree);
-    boolean hasFuncGetArgs = hasFuncGetArgsStack.pop();
-    if (!hasFuncGetArgs) {
+    if (!hasFuncGetArgsStack.pop()) {
       checkParameters(tree);
     }
   }
@@ -86,8 +79,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     hasFuncGetArgsStack.push(false);
     super.visitMethodDeclaration(tree);
-    boolean hasFuncGetArgs = hasFuncGetArgsStack.pop();
-    if (!(isExcluded(tree) || hasFuncGetArgs)) {
+    if (!(isExcluded(tree) || hasFuncGetArgsStack.pop())) {
       checkParameters(tree);
     }
   }
