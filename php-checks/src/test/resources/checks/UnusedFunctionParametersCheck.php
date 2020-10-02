@@ -8,11 +8,29 @@ function f($p1, $p2, $p3) {              // Noncompliant {{Remove the unused fun
 
 $a = function($p1, $p2) { return $p1; }; // Noncompliant {{Remove the unused function parameter "$p2".}}
 
+$a = function($p1, $p2) {
+    func_get_args();
+    return $p1;
+}; 
+
 function f($p1, $p2) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
   function nestedF($p1, $p2) {           // Noncompliant {{Remove the unused function parameter "$p2".}}
     $p1 = 1;
   }
   return $p2;
+}
+
+function f($p1){
+    call($p2);
+    func_get_args();
+    call($p2);
+    $a = function($p2) {
+        func_get_args();
+        $b = function($p3){				// Noncompliant {{Remove the unused function parameter "$p3".}}
+        $c = function($p4){ func_get_args();};
+        };
+    };
+    call($p2);
 }
 
 function containing_func_get_args_with_one_not_explicitly_used_parameter($p1) {
@@ -29,6 +47,12 @@ function containing_func_get_args_with_some_not_explicitly_used_parameters($p1, 
     print_r(func_get_args());
 }
 
+// Noncompliant@+1 {{Remove the unused function parameter "$p1".}}
+function containing_commented_func_get_args_with_some_not_explicitly_used_parameters($p1, $p2, $p3) {     // Noncompliant {{Remove the unused function parameter "$p3".}}
+    call($p2);
+    //func_get_args();
+}
+
 function containing_func_get_args_with_explicitly_used_parameters($p1, $p2) {
     func_get_args();
     $p1 = $p2;
@@ -40,6 +64,7 @@ function containing_func_get_args_with_no_parameters() {
     $p1 = 42;
     return $p1;
 }
+
 function f($p1, $p2) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
     function containing_func_get_args_with_some_not_explicitly_used_parameters_in_a_nestedFunction($p1, $p2) {           
         $p1 = 1;
@@ -65,7 +90,7 @@ class C {
       $p1 = $p2;
       func_get_args();
       return $p5;
-  }
+  }  
 }
 
 function f($p1, $p2) {                   // OK
@@ -91,6 +116,11 @@ class E implements B {
 
   public function f2() {
     $f = function($p1) {};    // Noncompliant
+  }
+  public function f3() {
+    $f = function($p1) {
+        func_get_args();
+    };    
   }
  
   public function containing_func_get_args_with_no_parameters_inside_a_class_implementing_an_interface($p1, $p2, $p3,$p4) {
