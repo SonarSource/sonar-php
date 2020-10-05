@@ -536,6 +536,7 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
   }
 
   @Override
+  @Deprecated
   public void visitType(TypeTree tree) {
     scan(tree);
   }
