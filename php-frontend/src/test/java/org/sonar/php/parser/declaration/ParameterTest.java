@@ -37,6 +37,7 @@ public class ParameterTest {
       .matches("?int $a")
       .matches("&$a")
       .matches("...$a")
-      .matches("$a = \"foo\"");
+      .matches("$a = \"foo\"")
+      .matches("int|array|Foo $a");
   }
 }
