@@ -19,10 +19,14 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 
-@Beta
+/**
+ * <a href="https://wiki.php.net/rfc/union_types_v2">Union Types</a>
+ * <pre>
+ *  {@link #types()}
+ * </pre>
+ */
 public interface UnionTypeTree extends DeclaredTypeTree {
   SeparatedList<SimpleTypeTree> types();
 }
