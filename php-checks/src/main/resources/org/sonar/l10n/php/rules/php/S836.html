@@ -1,22 +1,32 @@
-<p>When a variable is not initialized before its use, it's a sign that the developer made a mistake.</p>
+<p>In PHP it is not required to initialize variables before their usage. However, using uninitialized variables is considered bad practice and should
+be avoided because of the following reasons:</p>
+<p> * The value and type of uninitialized variables depend on the context of their first usage. It is better to be explicit about those to avoid
+confusion.</p>
+<p> * The interpreter raises a warning or a notice in many cases.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-function fun($condition) {
-  $res = 1;
-  if ($condition) {
-    $res++;
-  }
-  return $result; // Noncompliant, "$result" instead of "$res"
+&lt;?php
+
+function getText(array $lines): string {
+    foreach ($lines as $line) {
+        $text .= $line;
+    }
+
+    return $text;
 }
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-function fun($condition) {
-  $res = 1;
-  if ($condition) {
-    $res++;
-  }
-  return $res;
+&lt;?php
+
+function getText(array $lines): string {
+    $text = "";
+
+    foreach ($lines as $line) {
+        $text .= $line;
+    }
+
+    return $text;
 }
 </pre>
 <h2>See</h2>
