@@ -34,7 +34,9 @@ public interface ReturnTypeClauseTree extends Tree {
 
   SyntaxToken colonToken();
 
-  //TODO: add message
+  /**
+   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
+   */
   @Deprecated
   TypeTree type();
 

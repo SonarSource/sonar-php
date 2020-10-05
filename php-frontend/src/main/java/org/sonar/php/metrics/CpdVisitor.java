@@ -53,7 +53,11 @@ public class CpdVisitor extends PHPVisitorCheck {
     // skip
   }
 
+  /**
+   * @deprecated since 3.11
+   */
   @Override
+  @Deprecated
   public void visitType(TypeTree tree) {
     // skip
     // The token is added on visitSimpleType

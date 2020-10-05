@@ -62,7 +62,11 @@ public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClaus
     return colonToken;
   }
 
+  /**
+   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
+   */
   @Override
+  @Deprecated
   public TypeTree type() {
     if (type.is(Kind.TYPE)) {
       return (TypeTree) type;

@@ -31,7 +31,7 @@ import java.util.Iterator;
 public class UnionTypeTreeImpl extends PHPTree implements UnionTypeTree {
   private static final Kind KIND = Kind.UNION_TYPE;
 
-  public SeparatedList<SimpleTypeTree> types;
+  private final SeparatedList<SimpleTypeTree> types;
 
   public UnionTypeTreeImpl(SeparatedList<SimpleTypeTree> types) {
     this.types = types;
