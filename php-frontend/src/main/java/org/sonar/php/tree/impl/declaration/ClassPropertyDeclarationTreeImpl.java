@@ -85,10 +85,12 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     return modifierTokens;
   }
 
+  /**
+   * @deprecated since 3.11 - use {@link #declaredType()} instead.
+   */
   @Nullable
   @Override
   @Deprecated
-  // TODO: write message
   public TypeTree typeAnnotation() {
     if (typeAnnotation == null) {
       return null;
@@ -99,6 +101,12 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     } else {
       return (TypeTree) ((UnionTypeTree) typeAnnotation).types().get(0);
     }
+  }
+
+  @Nullable
+  @Override
+  public DeclaredTypeTree declaredType() {
+    return typeAnnotation;
   }
 
   @Override

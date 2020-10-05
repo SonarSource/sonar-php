@@ -26,7 +26,6 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
-import org.sonar.plugins.php.api.tree.declaration.SimpleTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;

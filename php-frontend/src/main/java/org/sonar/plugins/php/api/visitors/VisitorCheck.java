@@ -145,8 +145,10 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitClassDeclaration(ClassDeclarationTree tree);
 
+  /**
+   * @deprecated since 3.11 - Use {@link #visitSimpleType(SimpleTypeTree)} instead.
+   */
   @Deprecated
-  //TODO: write message
   void visitType(TypeTree tree);
 
   void visitSimpleType(SimpleTypeTree tree);

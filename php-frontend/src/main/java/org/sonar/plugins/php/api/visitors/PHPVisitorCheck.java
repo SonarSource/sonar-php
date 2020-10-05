@@ -535,8 +535,11 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
     scan(tree);
   }
 
-  @Override
+  /**
+   * @deprecated since 3.11 - Use {@link #visitSimpleType(SimpleTypeTree)} instead.
+   */
   @Deprecated
+  @Override
   public void visitType(TypeTree tree) {
     scan(tree);
   }

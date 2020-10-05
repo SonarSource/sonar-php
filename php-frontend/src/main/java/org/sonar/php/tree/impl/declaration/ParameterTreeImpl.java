@@ -62,8 +62,12 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     this.initValue = initValue;
   }
 
+  /**
+   * @deprecated since 3.11 - Use declaredType() instead.
+   */
   @Nullable
   @Override
+  @Deprecated
   public TypeTree type() {
     if (type == null) {
       return null;
