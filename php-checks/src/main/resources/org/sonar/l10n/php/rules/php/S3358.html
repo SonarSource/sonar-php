@@ -4,17 +4,17 @@ scratching their heads and cursing.</p>
 <p>Instead, err on the side of clarity, and use another line to express the nested operation as a separate statement.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-function get_title($gender, $is_married) {
-  return $gender == "MALE" ? "Mr. " : ($is_married ? "Mrs. " : "Miss ");  // Noncompliant
+function get_readable_status($is_running, $has_errors) {
+  return $is_running ? "Running" : ($has_errors ? "Failure" : "Succeeded");  // Noncompliant
 }
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-function get_title($gender, $is_married) {
-  if ($gender == "MALE") {
-    return "Mr. ";
+function get_readable_status($is_running, $has_errors) {
+  if ($is_running) {
+    return "Running";
   }
-  return $is_married ? "Mrs. " : "Miss ";
+  return $has_errors ? "Failure. " : "Succeeded ";
 }
 </pre>
 
