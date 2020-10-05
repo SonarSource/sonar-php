@@ -33,6 +33,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -266,6 +267,11 @@ public interface Tree {
      * {@link TypeTree}
      */
     TYPE(TypeTree.class),
+
+    /**
+     * {@link UnionTypeTree}
+     */
+    UNION_TYPE(UnionTypeTree.class),
 
     /**
      * {@link NamespaceNameTree}

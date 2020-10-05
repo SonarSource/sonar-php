@@ -43,6 +43,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -496,6 +497,16 @@ public class PHPGrammar {
           b.token(PHPLexicalGrammar.INT),
           b.token(PHPLexicalGrammar.STRING))),
         NAMESPACE_NAME()
+      ));
+  }
+
+  public UnionTypeTree UNION_TYPE() {
+    return b.<UnionTypeTree>nonterminal(PHPLexicalGrammar.UNION_TYPE).is(
+      f.unionType(
+        TYPE(),
+        b.token(PHPPunctuator.OR),
+        TYPE(),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), TYPE()))
       ));
   }
 
