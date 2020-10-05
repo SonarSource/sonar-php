@@ -1684,7 +1684,7 @@ public class TreeFactory {
     return new BuiltInTypeTreeImpl(token);
   }
 
-  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken colonToken, TypeTree typeTree) {
+  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken colonToken, Tree typeTree) {
     return new ReturnTypeClauseTreeImpl(colonToken, typeTree);
   }
 

@@ -34,5 +34,5 @@ public interface ReturnTypeClauseTree extends Tree {
 
   SyntaxToken colonToken();
 
-  TypeTree type();
+  Tree type();
 }

@@ -25,7 +25,6 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
-import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -33,9 +32,9 @@ public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClaus
 
   private static final Kind KIND = Kind.RETURN_TYPE_CLAUSE;
   private final InternalSyntaxToken colonToken;
-  private final TypeTree type;
+  private final Tree type;
 
-  public ReturnTypeClauseTreeImpl(InternalSyntaxToken colonToken, TypeTree type) {
+  public ReturnTypeClauseTreeImpl(InternalSyntaxToken colonToken, Tree type) {
     this.colonToken = colonToken;
     this.type = type;
   }
@@ -61,7 +60,7 @@ public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClaus
   }
 
   @Override
-  public TypeTree type() {
+  public Tree type() {
     return type;
   }
 

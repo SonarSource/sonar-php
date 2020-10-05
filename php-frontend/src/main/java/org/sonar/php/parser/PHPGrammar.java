@@ -378,7 +378,7 @@ public class PHPGrammar {
 
   public ReturnTypeClauseTree RETURN_TYPE_CLAUSE() {
     return b.<ReturnTypeClauseTree>nonterminal(PHPLexicalGrammar.RETURN_TYPE_CLAUSE).is(
-      f.returnTypeClause(b.token(COLON), TYPE())
+      f.returnTypeClause(b.token(COLON), b.firstOf(UNION_TYPE(), TYPE()))
     );
   }
 

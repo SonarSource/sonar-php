@@ -27,6 +27,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
@@ -62,7 +63,7 @@ public class ArrowFunctionExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.referenceToken().text()).isEqualTo("&");
     assertThat(tree.parameters().parameters()).hasSize(1);
     assertThat(tree.parameters().parameters().get(0).variableIdentifier().text()).isEqualTo("$x");
-    assertThat(((BuiltInTypeTree) tree.returnTypeClause().type().typeName()).token().text()).isEqualTo("string");
+    assertThat(((BuiltInTypeTree) ((TypeTree)tree.returnTypeClause().type()).typeName()).token().text()).isEqualTo("string");
     assertThat(tree.doubleArrowToken().text()).isEqualTo("=>");
     assertThat(expressionToString(tree.body())).isEqualTo("$x . '_'");
   }
