@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
@@ -28,10 +29,8 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
-import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.Optional;
 
 @Rule(key = "S5632")
 public class ThrowThrowableCheck extends PHPVisitorCheck {
@@ -39,12 +38,12 @@ public class ThrowThrowableCheck extends PHPVisitorCheck {
   private static final QualifiedName THROWABLE_FQN = QualifiedName.qualifiedName("Throwable");
 
   @Override
-  public void visitThrowStatement(ThrowStatementTree tree) {
+  public void visitThrowExpression(ThrowExpressionTree tree) {
     if (tree.expression().is(Tree.Kind.NEW_EXPRESSION)) {
       extractNamespaceTree(((NewExpressionTree) tree.expression()).expression())
         .ifPresent(n -> verifyClass(n, tree));
     }
-    super.visitThrowStatement(tree);
+    super.visitThrowExpression(tree);
   }
 
   private static Optional<NamespaceNameTree> extractNamespaceTree(ExpressionTree expression) {
@@ -58,7 +57,7 @@ public class ThrowThrowableCheck extends PHPVisitorCheck {
     return Optional.empty();
   }
 
-  private void verifyClass(NamespaceNameTree namespaceNameTree, ThrowStatementTree tree) {
+  private void verifyClass(NamespaceNameTree namespaceNameTree, ThrowExpressionTree tree) {
     ClassSymbol classSymbol = Symbols.getClass(namespaceNameTree);
     if (classSymbol.isSubTypeOf(THROWABLE_FQN).isFalse()) {
       context().newIssue(this, tree, MESSAGE).

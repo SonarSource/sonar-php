@@ -57,4 +57,8 @@ public class GenericExceptionCheckTest {
     CheckVerifier.verify(check, TEST_DIR + "ko4.php");
   }
 
+  @Test
+  public void throw_expressions() throws Exception {
+    CheckVerifier.verify(check, TEST_DIR + "throw_expressions.php");
+  }
 }

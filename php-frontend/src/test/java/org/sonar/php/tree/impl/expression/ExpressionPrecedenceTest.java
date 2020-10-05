@@ -118,6 +118,10 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
     assertPrecedence("$x and $y ? $a : $b", "$x and ($y ? $a : $b)");
     assertPrecedence("- 3 ** 2", "- (3 ** 2)");
     assertPrecedence("(int) $a ** 2", "( int ) ($a ** 2)");
+    assertPrecedence("throw $a || $b", "throw ($a || $b)");
+    assertPrecedence("$a || throw $b", "$a || (throw $b)");
+    assertPrecedence("throw $a && $b", "throw ($a && $b)");
+    assertPrecedence("$a && throw $b", "$a && (throw $b)");
   }
 
   @Test
@@ -153,6 +157,7 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
     assertPrecedence("4 && $a = 3", "4 && ($a = 3)");
     assertPrecedence("$a = 3 && 4", "$a = (3 && 4)");
     assertPrecedence("$x and $a = $a ? 1 : 2", "$x and ($a = ($a ? 1 : 2))");
+    assertPrecedence("throw $a = $b", "throw ($a = $b)");
   }
 
   private void assertPrecedence(String code, String expected) throws Exception {

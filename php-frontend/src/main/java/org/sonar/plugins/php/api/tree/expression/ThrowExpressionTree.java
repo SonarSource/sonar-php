@@ -17,26 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.tree.impl.statement;
+package org.sonar.plugins.php.api.tree.expression;
 
-import org.junit.Test;
-import org.sonar.php.PHPTreeModelTest;
-import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.assertj.core.api.Assertions.assertThat;
+/**
+ * <a href="https://wiki.php.net/rfc/throw_expression">Throw expression</a>
+ * <pre>
+ *   throw {@link #expression()}
+ * </pre>
+ */
+public interface ThrowExpressionTree extends ExpressionTree {
 
-public class ThrowStatementTreeTest extends PHPTreeModelTest {
+  SyntaxToken throwToken();
 
-  @Test
-  public void test() throws Exception {
-    ThrowStatementTree tree = parse("throw $a ;", PHPLexicalGrammar.STATEMENT);
-
-    assertThat(tree.is(Kind.THROW_STATEMENT)).isTrue();
-    assertThat(tree.throwToken().text()).isEqualTo("throw");
-    assertThat(expressionToString(tree.expression())).isEqualTo("$a");
-    assertThat(tree.eosToken().text()).isEqualTo(";");
-  }
+  ExpressionTree expression();
 
 }

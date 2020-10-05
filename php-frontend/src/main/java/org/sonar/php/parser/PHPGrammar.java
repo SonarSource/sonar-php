@@ -71,6 +71,7 @@ import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
@@ -901,7 +902,7 @@ public class PHPGrammar {
 
   public ThrowStatementTree THROW_STATEMENT() {
     return b.<ThrowStatementTree>nonterminal(PHPLexicalGrammar.THROW_STATEMENT).is(
-      f.throwStatement(b.token(PHPKeyword.THROW), EXPRESSION(), EOS()));
+      f.throwStatement(THROW_EXPRESSION(), EOS()));
   }
 
   public EmptyStatementTree EMPTY_STATEMENT() {
@@ -1028,6 +1029,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.UNARY_EXPR).is(
       b.firstOf(
         YIELD_EXPRESSION(),
+        THROW_EXPRESSION(),
         f.prefixExpr(
           b.zeroOrMore(
             b.firstOf(
@@ -1346,6 +1348,11 @@ public class PHPGrammar {
   public ExpressionTree HEREDOC_STRING_CHARACTERS() {
     return b.<ExpandableStringCharactersTree>nonterminal(Kind.HEREDOC_STRING_CHARACTERS).is(
       f.heredocStringCharacters(b.token(PHPLexicalGrammar.HEREDOC_STRING_CHARACTERS)));
+  }
+
+  public ThrowExpressionTree THROW_EXPRESSION() {
+    return b.<ThrowExpressionTree>nonterminal(Kind.THROW_EXPRESSION).is(
+      f.throwExpression(b.token(PHPKeyword.THROW), EXPRESSION()));
   }
 
   public YieldExpressionTree YIELD_EXPRESSION() {
