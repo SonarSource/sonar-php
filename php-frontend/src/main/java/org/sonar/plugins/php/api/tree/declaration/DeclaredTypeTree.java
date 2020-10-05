@@ -21,5 +21,10 @@ package org.sonar.plugins.php.api.tree.declaration;
 
 import org.sonar.plugins.php.api.tree.Tree;
 
+/**
+ * Either a {@link SimpleTypeTree} or a {@link UnionTypeTree}
+ *
+ * @since 3.11
+ */
 public interface DeclaredTypeTree extends Tree {
 }

@@ -63,7 +63,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   }
 
   /**
-   * @deprecated since 3.11 - Use declaredType() instead.
+   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
    */
   @Nullable
   @Override
