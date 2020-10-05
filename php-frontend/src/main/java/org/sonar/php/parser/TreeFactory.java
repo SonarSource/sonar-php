@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
@@ -49,10 +50,10 @@ import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
 import org.sonar.php.tree.impl.declaration.ReturnTypeClauseTreeImpl;
+import org.sonar.php.tree.impl.declaration.SimpleTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
-import org.sonar.php.tree.impl.declaration.TypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.UnionTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
@@ -137,12 +138,14 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
+import org.sonar.plugins.php.api.tree.declaration.SimpleTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
@@ -425,7 +428,7 @@ public class TreeFactory {
 
   public ClassPropertyDeclarationTree classVariableDeclaration(
     List<SyntaxToken> modifierTokens,
-    Optional<TypeTree> typeAnnotation,
+    Optional<DeclaredTypeTree> typeAnnotation,
     VariableDeclarationTree firstVariable,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalVariables,
     InternalSyntaxToken eosToken
@@ -469,7 +472,7 @@ public class TreeFactory {
   }
 
   public ParameterTree parameter(
-    Optional<TypeTree> type,
+    Optional<DeclaredTypeTree> type,
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
     InternalSyntaxToken identifier,
@@ -717,8 +720,8 @@ public class TreeFactory {
     }
   }
 
-  public TypeTree type(Optional<InternalSyntaxToken> questionMarkToken, TypeNameTree typeName) {
-    return new TypeTreeImpl(questionMarkToken.orNull(), typeName);
+  public SimpleTypeTree simpleType(Optional<InternalSyntaxToken> questionMarkToken, TypeNameTree typeName) {
+    return new SimpleTypeTreeImpl(questionMarkToken.orNull(), typeName);
   }
 
   public NamespaceNameTree namespaceName(List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> tuples) {
@@ -1684,7 +1687,7 @@ public class TreeFactory {
     return new BuiltInTypeTreeImpl(token);
   }
 
-  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken colonToken, Tree typeTree) {
+  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken colonToken, DeclaredTypeTree typeTree) {
     return new ReturnTypeClauseTreeImpl(colonToken, typeTree);
   }
 
@@ -1796,8 +1799,8 @@ public class TreeFactory {
     return new ExecutionOperatorTreeImpl(literal);
   }
 
-  public UnionTypeTree unionType(TypeTree type1, InternalSyntaxToken token1, TypeTree type2, Optional<List<Tuple<InternalSyntaxToken, TypeTree>>> rest) {
-    ImmutableList.Builder<TypeTree> types = ImmutableList.builder();
+  public UnionTypeTree unionType(SimpleTypeTree type1, InternalSyntaxToken token1, SimpleTypeTree type2, Optional<List<Tuple<InternalSyntaxToken, SimpleTypeTree>>> rest) {
+    ImmutableList.Builder<SimpleTypeTree> types = ImmutableList.builder();
     ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
 
     types.add(type1);
@@ -1805,7 +1808,7 @@ public class TreeFactory {
     separators.add(token1);
 
     if (rest.isPresent()) {
-      for(Tuple<InternalSyntaxToken, TypeTree> tuple: rest.get()) {
+      for(Tuple<InternalSyntaxToken, SimpleTypeTree> tuple: rest.get()) {
         separators.add(tuple.first);
         types.add(tuple.second);
       }

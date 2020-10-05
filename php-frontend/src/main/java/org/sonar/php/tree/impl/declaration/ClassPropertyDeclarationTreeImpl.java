@@ -30,7 +30,9 @@ import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -41,12 +43,12 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   private final List<SyntaxToken> modifierTokens;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
   private final InternalSyntaxToken eosToken;
-  private final TypeTree typeAnnotation;
+  private final DeclaredTypeTree typeAnnotation;
 
   private ClassPropertyDeclarationTreeImpl(
     Kind kind,
     List<SyntaxToken> modifierTokens,
-    @Nullable TypeTree typeAnnotation,
+    @Nullable DeclaredTypeTree typeAnnotation,
     SeparatedListImpl<VariableDeclarationTree> declarations,
     InternalSyntaxToken eosToken
   ) {
@@ -58,7 +60,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   }
 
   public static ClassPropertyDeclarationTree variable(List<SyntaxToken> modifierTokens,
-                                                      @Nullable TypeTree typeAnnotation,
+                                                      @Nullable DeclaredTypeTree typeAnnotation,
                                                       SeparatedListImpl<VariableDeclarationTree> declarations,
                                                       InternalSyntaxToken eosToken) {
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION, modifierTokens, typeAnnotation,
@@ -85,8 +87,18 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
 
   @Nullable
   @Override
+  @Deprecated
+  // TODO: write message
   public TypeTree typeAnnotation() {
-    return typeAnnotation;
+    if (typeAnnotation == null) {
+      return null;
+    }
+
+    if (typeAnnotation.is(Kind.TYPE)) {
+      return (TypeTree) typeAnnotation;
+    } else {
+      return (TypeTree) ((UnionTypeTree) typeAnnotation).types().get(0);
+    }
   }
 
   @Override

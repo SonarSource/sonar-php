@@ -22,11 +22,14 @@ package org.sonar.php.tree.impl.declaration;
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import javax.annotation.Nullable;
+
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -36,7 +39,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   private static final Kind KIND = Kind.PARAMETER;
 
-  private final TypeTree type;
+  private final DeclaredTypeTree type;
   private final InternalSyntaxToken referenceToken;
   private final InternalSyntaxToken ellipsisToken;
   private final VariableIdentifierTree variableIdentifier;
@@ -44,7 +47,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private final ExpressionTree initValue;
 
   public ParameterTreeImpl(
-    @Nullable TypeTree type,
+    @Nullable DeclaredTypeTree type,
     @Nullable InternalSyntaxToken referenceToken,
     @Nullable InternalSyntaxToken ellipsisToken,
     VariableIdentifierTree variableIdentifier,
@@ -62,6 +65,18 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   @Nullable
   @Override
   public TypeTree type() {
+    if (type == null) {
+      return null;
+    }
+
+    if (type.is(Kind.TYPE)) {
+      return (TypeTree) type;
+    } else {
+      return (TypeTree) ((UnionTypeTree) type).types().get(0);
+    }
+  }
+
+  public DeclaredTypeTree declaredType() {
     return type;
   }
 

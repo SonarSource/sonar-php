@@ -24,6 +24,7 @@ import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.SimpleTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 
@@ -54,8 +55,8 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     FunctionDeclarationTree tree = parse("function f() : array {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.returnTypeClause()).isNotNull();
     assertThat(tree.returnTypeClause().colonToken().text()).isEqualTo(":");
-    assertThat(tree.returnTypeClause().type().is(Kind.TYPE)).isTrue();
-    assertThat(((TypeTree)tree.returnTypeClause().type()).typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
+    assertThat(tree.returnTypeClause().declaredType().is(Kind.TYPE)).isTrue();
+    assertThat(((SimpleTypeTree)tree.returnTypeClause().declaredType()).typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
   }
 
   @Test
@@ -63,7 +64,7 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     FunctionDeclarationTree tree = parse("function f() : array|int {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.returnTypeClause()).isNotNull();
     assertThat(tree.returnTypeClause().colonToken().text()).isEqualTo(":");
-    assertThat(tree.returnTypeClause().type().is(Kind.UNION_TYPE)).isTrue();
-    assertThat(((UnionTypeTree)tree.returnTypeClause().type()).types()).hasSize(2);
+    assertThat(tree.returnTypeClause().declaredType().is(Kind.UNION_TYPE)).isTrue();
+    assertThat(((UnionTypeTree)tree.returnTypeClause().declaredType()).types()).hasSize(2);
   }
 }

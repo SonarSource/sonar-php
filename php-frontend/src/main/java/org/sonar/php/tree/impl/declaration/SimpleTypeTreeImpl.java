@@ -20,24 +20,25 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
-import java.util.Iterator;
-import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.SimpleTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class TypeTreeImpl extends PHPTree implements TypeTree {
+import javax.annotation.Nullable;
+import java.util.Iterator;
 
+public class SimpleTypeTreeImpl extends PHPTree implements SimpleTypeTree, TypeTree {
   private static final Kind KIND = Kind.TYPE;
 
   private final SyntaxToken questionMarkToken;
 
   private final TypeNameTree typeName;
 
-  public TypeTreeImpl(@Nullable SyntaxToken questionMarkToken, TypeNameTree typeName) {
+  public SimpleTypeTreeImpl(@Nullable SyntaxToken questionMarkToken, TypeNameTree typeName) {
     this.questionMarkToken = questionMarkToken;
     this.typeName = typeName;
   }
@@ -55,6 +56,7 @@ public class TypeTreeImpl extends PHPTree implements TypeTree {
   @Override
   public void accept(VisitorCheck visitor) {
     visitor.visitType(this);
+    visitor.visitSimpleType(this);
   }
 
   @Override
@@ -67,5 +69,4 @@ public class TypeTreeImpl extends PHPTree implements TypeTree {
   public TypeNameTree typeName() {
     return typeName;
   }
-
 }

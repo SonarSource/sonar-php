@@ -22,7 +22,7 @@ package org.sonar.php.tree.impl.declaration;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.SimpleTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -31,14 +31,14 @@ import java.util.Iterator;
 public class UnionTypeTreeImpl extends PHPTree implements UnionTypeTree {
   private static final Kind KIND = Kind.UNION_TYPE;
 
-  public SeparatedList<TypeTree> types;
+  public SeparatedList<SimpleTypeTree> types;
 
-  public UnionTypeTreeImpl(SeparatedList<TypeTree> types) {
+  public UnionTypeTreeImpl(SeparatedList<SimpleTypeTree> types) {
     this.types = types;
   }
 
   @Override
-  public SeparatedList<TypeTree> types() {
+  public SeparatedList<SimpleTypeTree> types() {
     return types;
   }
 
