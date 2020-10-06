@@ -504,9 +504,7 @@ public class PHPGrammar {
     return b.<UnionTypeTree>nonterminal(PHPLexicalGrammar.UNION_TYPE).is(
       f.unionType(
         TYPE(),
-        b.token(PHPPunctuator.OR),
-        TYPE(),
-        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), TYPE()))
+        b.oneOrMore(f.newTuple(b.token(PHPPunctuator.OR), TYPE()))
       ));
   }
 

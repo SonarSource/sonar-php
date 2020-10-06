@@ -1798,19 +1798,15 @@ public class TreeFactory {
     return new ExecutionOperatorTreeImpl(literal);
   }
 
-  public UnionTypeTree unionType(TypeTree type1, SyntaxToken token1, TypeTree type2, Optional<List<Tuple<SyntaxToken, TypeTree>>> rest) {
+  public UnionTypeTree unionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
     ImmutableList.Builder<TypeTree> types = ImmutableList.builder();
     ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
 
     types.add(type1);
-    types.add(type2);
-    separators.add(token1);
 
-    if (rest.isPresent()) {
-      for(Tuple<SyntaxToken, TypeTree> tuple: rest.get()) {
-        separators.add(tuple.first);
-        types.add(tuple.second);
-      }
+    for(Tuple<SyntaxToken, TypeTree> tuple: rest) {
+      separators.add(tuple.first);
+      types.add(tuple.second);
     }
 
     return new UnionTypeTreeImpl(new SeparatedListImpl<>(types.build(), separators.build()));
