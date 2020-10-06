@@ -84,7 +84,7 @@ public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
   }
 
   @Override
-  public boolean isSafeObjectAccess() {
+  public boolean isNullSafeObjectAccess() {
     return accessToken.text().equals(SAFE_ARROW.getValue());
   }
 
