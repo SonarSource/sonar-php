@@ -28,5 +28,5 @@ import org.sonar.plugins.php.api.tree.SeparatedList;
  * </pre>
  */
 public interface UnionTypeTree extends DeclaredTypeTree {
-  SeparatedList<SimpleTypeTree> types();
+  SeparatedList<TypeTree> types();
 }

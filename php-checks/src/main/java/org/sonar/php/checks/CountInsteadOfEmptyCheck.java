@@ -29,7 +29,6 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
-import org.sonar.plugins.php.api.tree.declaration.SimpleTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -119,11 +118,11 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     DeclaredTypeTree parameterTypeTree = ((ParameterTree) declaration.getParent()).declaredType();
     if (parameterTypeTree == null
       || !parameterTypeTree.is(Tree.Kind.TYPE)
-      || !((SimpleTypeTree)parameterTypeTree).typeName().is(Tree.Kind.BUILT_IN_TYPE)) {
+      || !((TypeTree)parameterTypeTree).typeName().is(Tree.Kind.BUILT_IN_TYPE)) {
       return false;
     }
 
-    BuiltInTypeTree builtInType = ((BuiltInTypeTree) ((SimpleTypeTree)parameterTypeTree).typeName());
+    BuiltInTypeTree builtInType = ((BuiltInTypeTree) ((TypeTree)parameterTypeTree).typeName());
 
     return builtInType.token().text().equalsIgnoreCase("array");
   }

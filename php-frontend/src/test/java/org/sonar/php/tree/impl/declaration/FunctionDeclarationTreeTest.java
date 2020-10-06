@@ -24,7 +24,6 @@ import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.SimpleTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 
@@ -57,7 +56,7 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.returnTypeClause().colonToken().text()).isEqualTo(":");
     assertThat(tree.returnTypeClause().type().typeName().toString()).hasToString("array");
     assertThat(tree.returnTypeClause().declaredType().is(Kind.TYPE)).isTrue();
-    assertThat(((SimpleTypeTree)tree.returnTypeClause().declaredType()).typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
+    assertThat(((TypeTree)tree.returnTypeClause().declaredType()).typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
   }
 
   @Test

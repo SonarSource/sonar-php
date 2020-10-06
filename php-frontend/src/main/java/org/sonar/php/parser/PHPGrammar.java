@@ -41,8 +41,8 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
-import org.sonar.plugins.php.api.tree.declaration.SimpleTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
@@ -328,7 +328,7 @@ public class PHPGrammar {
         b.firstOf(
           f.singleToken(b.token(PHPKeyword.VAR)),
           b.oneOrMore(MEMBER_MODIFIER())),
-        b.optional(b.firstOf(UNION_TYPE(), SIMPLE_TYPE())),
+        b.optional(b.firstOf(UNION_TYPE(), TYPE())),
         VARIABLE_DECLARATION(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), VARIABLE_DECLARATION())),
         EOS()));
@@ -378,7 +378,7 @@ public class PHPGrammar {
 
   public ReturnTypeClauseTree RETURN_TYPE_CLAUSE() {
     return b.<ReturnTypeClauseTree>nonterminal(PHPLexicalGrammar.RETURN_TYPE_CLAUSE).is(
-      f.returnTypeClause(b.token(COLON), b.firstOf(UNION_TYPE(), SIMPLE_TYPE()))
+      f.returnTypeClause(b.token(COLON), b.firstOf(UNION_TYPE(), TYPE()))
     );
   }
 
@@ -399,7 +399,7 @@ public class PHPGrammar {
   public ParameterTree PARAMETER() {
     return b.<ParameterTree>nonterminal(PHPLexicalGrammar.PARAMETER).is(
       f.parameter(
-        b.optional(b.firstOf(UNION_TYPE(), SIMPLE_TYPE())),
+        b.optional(b.firstOf(UNION_TYPE(), TYPE())),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELLIPSIS)),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
@@ -475,9 +475,9 @@ public class PHPGrammar {
         b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD)));
   }
 
-  public SimpleTypeTree SIMPLE_TYPE() {
-    return b.<SimpleTypeTree>nonterminal(PHPLexicalGrammar.TYPE).is(
-      f.simpleType(
+  public TypeTree TYPE() {
+    return b.<TypeTree>nonterminal(PHPLexicalGrammar.TYPE).is(
+      f.type(
         b.optional(b.token(PHPPunctuator.QUERY)),
         TYPE_NAME()));
   }
@@ -503,10 +503,10 @@ public class PHPGrammar {
   public UnionTypeTree UNION_TYPE() {
     return b.<UnionTypeTree>nonterminal(PHPLexicalGrammar.UNION_TYPE).is(
       f.unionType(
-        SIMPLE_TYPE(),
+        TYPE(),
         b.token(PHPPunctuator.OR),
-        SIMPLE_TYPE(),
-        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), SIMPLE_TYPE()))
+        TYPE(),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), TYPE()))
       ));
   }
 

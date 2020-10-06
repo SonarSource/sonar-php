@@ -26,7 +26,6 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -51,16 +50,6 @@ public class CpdVisitor extends PHPVisitorCheck {
   @Override
   public void visitInlineHTML(InlineHTMLTree tree) {
     // skip
-  }
-
-  /**
-   * @deprecated since 3.11
-   */
-  @Override
-  @Deprecated
-  public void visitType(TypeTree tree) {
-    // skip
-    // The token is added on visitSimpleType
   }
 
   @Override

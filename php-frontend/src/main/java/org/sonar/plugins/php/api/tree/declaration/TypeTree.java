@@ -24,13 +24,10 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
- * @deprecated since 3.11 - Use {@link SimpleTypeTree} instead.
- *
  * This interface represents type clause (appearing in function return type or parameter type),
  * possibly prefixed with a <code>?</code> which stands for "optional".
  */
 @Beta
-@Deprecated
 public interface TypeTree extends DeclaredTypeTree {
 
   /**

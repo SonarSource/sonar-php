@@ -99,7 +99,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     if (typeAnnotation.is(Kind.TYPE)) {
       return (TypeTree) typeAnnotation;
     } else {
-      return (TypeTree) ((UnionTypeTree) typeAnnotation).types().get(0);
+      return ((UnionTypeTree) typeAnnotation).types().get(0);
     }
   }
 
