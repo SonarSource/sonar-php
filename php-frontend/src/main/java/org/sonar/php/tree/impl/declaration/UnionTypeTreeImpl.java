@@ -57,4 +57,8 @@ public class UnionTypeTreeImpl extends PHPTree implements UnionTypeTree {
     visitor.visitUnionType(this);
   }
 
+  @Override
+  public boolean isSimple() {
+    return false;
+  }
 }

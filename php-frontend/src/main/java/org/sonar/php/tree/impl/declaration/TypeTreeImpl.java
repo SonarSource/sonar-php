@@ -67,4 +67,9 @@ public class TypeTreeImpl extends PHPTree implements TypeTree {
   public TypeNameTree typeName() {
     return typeName;
   }
+
+  @Override
+  public boolean isSimple() {
+    return true;
+  }
 }

@@ -71,7 +71,7 @@ public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClaus
     if (type.is(Kind.TYPE)) {
       return (TypeTree) type;
     } else {
-      return (TypeTree) ((UnionTypeTree) type).types().get(0);
+      return ((UnionTypeTree) type).types().get(0);
     }
   }
 

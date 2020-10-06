@@ -117,7 +117,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
     DeclaredTypeTree parameterTypeTree = ((ParameterTree) declaration.getParent()).declaredType();
     if (parameterTypeTree == null
-      || !parameterTypeTree.is(Tree.Kind.TYPE)
+      || !parameterTypeTree.isSimple()
       || !((TypeTree)parameterTypeTree).typeName().is(Tree.Kind.BUILT_IN_TYPE)) {
       return false;
     }
