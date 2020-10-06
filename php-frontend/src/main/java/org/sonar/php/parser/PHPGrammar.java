@@ -35,6 +35,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -328,7 +329,7 @@ public class PHPGrammar {
         b.firstOf(
           f.singleToken(b.token(PHPKeyword.VAR)),
           b.oneOrMore(MEMBER_MODIFIER())),
-        b.optional(b.firstOf(UNION_TYPE(), TYPE())),
+        b.optional(DECLARED_TYPE()),
         VARIABLE_DECLARATION(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), VARIABLE_DECLARATION())),
         EOS()));
@@ -378,7 +379,7 @@ public class PHPGrammar {
 
   public ReturnTypeClauseTree RETURN_TYPE_CLAUSE() {
     return b.<ReturnTypeClauseTree>nonterminal(PHPLexicalGrammar.RETURN_TYPE_CLAUSE).is(
-      f.returnTypeClause(b.token(COLON), b.firstOf(UNION_TYPE(), TYPE()))
+      f.returnTypeClause(b.token(COLON), DECLARED_TYPE())
     );
   }
 
@@ -399,7 +400,7 @@ public class PHPGrammar {
   public ParameterTree PARAMETER() {
     return b.<ParameterTree>nonterminal(PHPLexicalGrammar.PARAMETER).is(
       f.parameter(
-        b.optional(b.firstOf(UNION_TYPE(), TYPE())),
+        b.optional(DECLARED_TYPE()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELLIPSIS)),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
@@ -506,6 +507,12 @@ public class PHPGrammar {
         TYPE(),
         b.oneOrMore(f.newTuple(b.token(PHPPunctuator.OR), TYPE()))
       ));
+  }
+
+  public DeclaredTypeTree DECLARED_TYPE() {
+    return b.<DeclaredTypeTree>nonterminal(PHPLexicalGrammar.DECLARED_TYPE).is(
+      b.firstOf(UNION_TYPE(), TYPE())
+    );
   }
 
   /**
