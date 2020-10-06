@@ -48,4 +48,11 @@ public class MethodDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.returnTypeClause()).isNotNull();
   }
 
+  @Test
+  public void return_type_union() throws Exception {
+    MethodDeclarationTree tree = parse("public function f() : bool|array {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.returnTypeClause()).isNotNull();
+    assertThat(tree.returnTypeClause().declaredType().isSimple()).isFalse();
+  }
+
 }
