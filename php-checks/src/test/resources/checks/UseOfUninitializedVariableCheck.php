@@ -215,6 +215,15 @@ function f25() {
   }
 }
 
+function f26() {
+    try {
+        throw new MyException();
+    } catch (MyException) {
+        return $x; // Noncompliant
+        //     ^^
+    }
+}
+
 function predefined_variables() {
   return $_COOKIE . $_ENV . $_FILES . $_GET . $_POST . $_REQUEST . $_SERVER . $_SESSION . $GLOBALS .
   $HTTP_RAW_POST_DATA . $http_response_header . $php_errormsg . $unknown_name; // Noncompliant

@@ -50,6 +50,17 @@ class MyTest extends TestCase
     } catch(ExpectationFailedException $e4) {
     }
 
+    try {
+        $this->assertEquals("foo", $bar); // Noncompliant {{Don't use this assertion inside a try-catch catching an assertion exception.}}
+//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    } catch(ExpectationFailedException) {
+          //^^^^^^^^^^^^^^^^^^^^^^^^^^< {{Exception type that catches assertion exceptions.}}
+    }
+
+    try {
+        $this->assertEquals("foo", $bar); // Compliant
+    } catch(SomeOtherException) {}
+    
   }
 }
 

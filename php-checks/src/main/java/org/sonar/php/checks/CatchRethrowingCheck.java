@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.SyntacticEquivalence;
@@ -29,8 +30,6 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.List;
 
 @Rule(key = CatchRethrowingCheck.KEY)
 public class CatchRethrowingCheck extends PHPVisitorCheck {
@@ -53,7 +52,7 @@ public class CatchRethrowingCheck extends PHPVisitorCheck {
 
   private static boolean isRetrowingException(CatchBlockTree catchBlock) {
     StatementTree statement = catchBlock.block().statements().get(0);
-    if (!statement.is(Tree.Kind.THROW_STATEMENT)) {
+    if (!statement.is(Tree.Kind.THROW_STATEMENT) || catchBlock.variable() == null) {
       return false;
     }
     ExpressionTree thrownExpression = CheckUtils.skipParenthesis(((ThrowStatementTree) statement).expression());

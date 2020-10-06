@@ -21,6 +21,7 @@ package org.sonar.php.tree.impl.statement;
 
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -45,12 +46,13 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
   private final BlockTree block;
 
   public CatchBlockTreeImpl(
-      InternalSyntaxToken catchToken,
-      InternalSyntaxToken lParenthesis,
-      SeparatedList<NamespaceNameTree> exceptionTypes,
-      VariableIdentifierTreeImpl variable,
-      InternalSyntaxToken rParenthsis,
-      BlockTree block
+    InternalSyntaxToken catchToken,
+    InternalSyntaxToken lParenthesis,
+    SeparatedList<NamespaceNameTree> exceptionTypes,
+    @Nullable
+    VariableIdentifierTreeImpl variable,
+    InternalSyntaxToken rParenthsis,
+    BlockTree block
   ) {
     this.catchToken = catchToken;
     this.lParenthesis = lParenthesis;

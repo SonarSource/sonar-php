@@ -20,6 +20,19 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.TreeUtils;
@@ -43,20 +56,6 @@ import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Rule(key = "S836")
 public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
@@ -449,7 +448,9 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     
     @Override
     public void visitCatchBlock(CatchBlockTree tree) {
-      exceptionVariables.add(tree.variable().variableExpression().text());
+      if (tree.variable() != null) {
+        exceptionVariables.add(tree.variable().variableExpression().text());
+      }
       super.visitCatchBlock(tree);
     }
 

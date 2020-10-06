@@ -20,14 +20,22 @@
 package org.sonar.php.checks.phpunit;
 
 import com.google.common.collect.ImmutableList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -38,12 +46,6 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 @Rule(key = "S5935")
 public class ExceptionTestingCheck extends PhpUnitCheck {
@@ -65,7 +67,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
       CatchBlockInspector catchBlockInspector = new CatchBlockInspector(tree.catchBlocks().get(0).variable(), context().symbolTable());
       tree.catchBlocks().get(0).block().accept(catchBlockInspector);
       if (!catchBlockInspector.didFindOtherCalls) {
-        raiseIssue(tree.catchBlocks().get(0).variable(), catchBlockInspector);
+        raiseIssue(tree.catchBlocks().get(0).exceptionTypes(), tree.catchBlocks().get(0).variable(), catchBlockInspector);
       }
     }
 
@@ -82,8 +84,13 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     return methodBody.statements().get(methodBody.statements().size() - 1) == tree;
   }
 
-  private void raiseIssue(VariableIdentifierTree variable, CatchBlockInspector catchBlockInspector) {
-    PreciseIssue issue = newIssue(variable, MESSAGE);
+  private void raiseIssue(SeparatedList<NamespaceNameTree> exceptionTypes, @Nullable VariableIdentifierTree variable, CatchBlockInspector catchBlockInspector) {
+    PreciseIssue issue = null;
+    if (variable == null) {
+      issue = context().newIssue(this, exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1), MESSAGE);
+    } else {
+      issue = newIssue(variable, MESSAGE);
+    }
     catchBlockInspector.foundExceptionAssertions.forEach(issue::secondary);
   }
 
@@ -108,9 +115,9 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     private boolean didFindOtherCalls = false;
     private final Map<Tree, String> foundExceptionAssertions = new HashMap<>();
 
-    public CatchBlockInspector(VariableIdentifierTree variable, SymbolTable symbolTable) {
+    public CatchBlockInspector(@Nullable VariableIdentifierTree variable, SymbolTable symbolTable) {
       this.symbolTable = symbolTable;
-      exceptionVariableSymbol = symbolTable.getSymbol(variable);
+      exceptionVariableSymbol = variable != null ? symbolTable.getSymbol(variable) : null;
     }
 
     @Override

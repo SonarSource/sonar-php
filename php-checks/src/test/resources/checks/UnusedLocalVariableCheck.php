@@ -233,6 +233,11 @@ function catch_exception() {
   this->result3 = 1;
 }
 
+function catch_without_variable_exception() {
+    try {} 
+    catch (InvalidArgumentException) {}    // OK
+}
+
 function foreach_key_declared_twice($arr) {
 
   foreach([1, 2] as $key => $val) {    // Noncompliant

@@ -20,6 +20,11 @@
 package org.sonar.php.checks.phpunit;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.symbols.Symbols;
@@ -30,11 +35,6 @@ import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Rule(key = "S5779")
 public class AssertionInTryCatchCheck extends PhpUnitCheck {
@@ -85,8 +85,8 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
     return result;
   }
 
-  private boolean variableIsUsed(VariableIdentifierTree variable) {
-    return !context().symbolTable().getSymbol(variable).usages().isEmpty();
+  private boolean variableIsUsed(@Nullable VariableIdentifierTree variable) {
+    return variable != null && !context().symbolTable().getSymbol(variable).usages().isEmpty();
   }
 
   private static boolean isRelevantExceptionType(NamespaceNameTree tree) {

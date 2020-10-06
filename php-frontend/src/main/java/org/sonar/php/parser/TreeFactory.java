@@ -768,14 +768,15 @@ public class TreeFactory {
   public CatchBlockTree catchBlock(
     InternalSyntaxToken catchToken, InternalSyntaxToken lParenthesis,
     NamespaceNameTree exceptionType, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> additionalTypes,
-    InternalSyntaxToken variable, InternalSyntaxToken rParenthsis, BlockTree block
+    Optional<InternalSyntaxToken> variable, InternalSyntaxToken rParenthsis, BlockTree block
   ) {
     SeparatedListImpl<NamespaceNameTree> exceptionTypes = separatedList(exceptionType, additionalTypes);
+    VariableIdentifierTreeImpl variableIdentifierTreeImpl = variable.isPresent() ? new VariableIdentifierTreeImpl(variable.get()) : null;
     return new CatchBlockTreeImpl(
       catchToken,
       lParenthesis,
       exceptionTypes,
-      new VariableIdentifierTreeImpl(variable),
+      variableIdentifierTreeImpl,
       rParenthsis,
       block
     );
