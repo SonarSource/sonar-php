@@ -85,7 +85,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
   }
 
   private void raiseIssue(SeparatedList<NamespaceNameTree> exceptionTypes, @Nullable VariableIdentifierTree variable, CatchBlockInspector catchBlockInspector) {
-    PreciseIssue issue = null;
+    PreciseIssue issue;
     if (variable == null) {
       issue = context().newIssue(this, exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1), MESSAGE);
     } else {
