@@ -33,6 +33,8 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import java.util.Iterator;
 
+import static org.sonar.php.api.PHPPunctuator.SAFE_ARROW;
+
 public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
 
   private final Kind kind;
@@ -79,6 +81,11 @@ public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
   @Override
   public boolean isStatic() {
     return PHPPunctuator.DOUBLECOLON.getValue().equals(accessToken.text());
+  }
+
+  @Override
+  public boolean isSafeObjectAccess() {
+    return accessToken.text().equals(SAFE_ARROW.getValue());
   }
 
   @Override

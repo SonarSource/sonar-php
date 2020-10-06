@@ -38,6 +38,7 @@ public class MemberAccessTreeTest extends PHPTreeModelTest {
     assertThat(tree.accessToken().text()).isEqualTo("->");
     assertThat(expressionToString(tree.member())).isEqualTo("member");
     assertThat(tree.isStatic()).isFalse();
+    assertThat(tree.isSafeObjectAccess()).isFalse();
   }
 
   @Test
@@ -49,6 +50,7 @@ public class MemberAccessTreeTest extends PHPTreeModelTest {
     assertThat(tree.accessToken().text()).isEqualTo("?->");
     assertThat(expressionToString(tree.member())).isEqualTo("member");
     assertThat(tree.isStatic()).isFalse();
+    assertThat(tree.isSafeObjectAccess()).isTrue();
   }
 
   @Test

@@ -42,4 +42,5 @@ public interface MemberAccessTree extends ExpressionTree {
 
   boolean isStatic();
 
+  boolean isSafeObjectAccess();
 }
