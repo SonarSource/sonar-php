@@ -72,6 +72,7 @@ public enum PHPPunctuator implements GrammarRuleKey {
   NULL_COALESCE("??"),
 
   ARROW("->"),
+  SAFE_ARROW("?->"),
   DOUBLEARROW("=>"),
 
   DOLLAR("$"),

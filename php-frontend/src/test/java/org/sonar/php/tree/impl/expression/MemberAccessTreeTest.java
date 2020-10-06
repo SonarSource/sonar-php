@@ -41,6 +41,17 @@ public class MemberAccessTreeTest extends PHPTreeModelTest {
   }
 
   @Test
+  public void null_safe_member_access() throws Exception {
+    MemberAccessTree tree = parse("$obj?->member", PHPLexicalGrammar.MEMBER_EXPRESSION);
+
+    assertThat(tree.is(Kind.OBJECT_MEMBER_ACCESS)).isTrue();
+    assertThat(expressionToString(tree.object())).isEqualTo("$obj");
+    assertThat(tree.accessToken().text()).isEqualTo("?->");
+    assertThat(expressionToString(tree.member())).isEqualTo("member");
+    assertThat(tree.isStatic()).isFalse();
+  }
+
+  @Test
   public void class_member_access() throws Exception {
     MemberAccessTree tree = parse("ClassName::MEMBER", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
