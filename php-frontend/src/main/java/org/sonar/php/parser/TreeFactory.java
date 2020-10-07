@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
@@ -49,10 +50,11 @@ import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
 import org.sonar.php.tree.impl.declaration.ReturnTypeClauseTreeImpl;
+import org.sonar.php.tree.impl.declaration.TypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
-import org.sonar.php.tree.impl.declaration.TypeTreeImpl;
+import org.sonar.php.tree.impl.declaration.UnionTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
@@ -136,6 +138,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -144,6 +147,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -423,7 +427,7 @@ public class TreeFactory {
 
   public ClassPropertyDeclarationTree classVariableDeclaration(
     List<SyntaxToken> modifierTokens,
-    Optional<TypeTree> typeAnnotation,
+    Optional<DeclaredTypeTree> typeAnnotation,
     VariableDeclarationTree firstVariable,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalVariables,
     InternalSyntaxToken eosToken
@@ -467,7 +471,7 @@ public class TreeFactory {
   }
 
   public ParameterTree parameter(
-    Optional<TypeTree> type,
+    Optional<DeclaredTypeTree> type,
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
     InternalSyntaxToken identifier,
@@ -1683,7 +1687,7 @@ public class TreeFactory {
     return new BuiltInTypeTreeImpl(token);
   }
 
-  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken colonToken, TypeTree typeTree) {
+  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken colonToken, DeclaredTypeTree typeTree) {
     return new ReturnTypeClauseTreeImpl(colonToken, typeTree);
   }
 
@@ -1793,6 +1797,20 @@ public class TreeFactory {
 
   public ExecutionOperatorTree executionOperator(ExpandableStringLiteralTree literal) {
     return new ExecutionOperatorTreeImpl(literal);
+  }
+
+  public UnionTypeTree unionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
+    ImmutableList.Builder<TypeTree> types = ImmutableList.builder();
+    ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
+
+    types.add(type1);
+
+    for(Tuple<SyntaxToken, TypeTree> tuple: rest) {
+      separators.add(tuple.first);
+      types.add(tuple.second);
+    }
+
+    return new UnionTypeTreeImpl(new SeparatedListImpl<>(types.build(), separators.build()));
   }
 
   /**

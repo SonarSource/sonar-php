@@ -17,27 +17,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-public class ParameterTest {
-
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.PARAMETER)
-      .matches("callable $a")
-      .matches("array $a")
-      .matches("int $a")
-      .matches("object $a")
-      .matches("Foo $a")
-      .matches("?int $a")
-      .matches("&$a")
-      .matches("...$a")
-      .matches("$a = \"foo\"")
-      .matches("int|array|Foo $a");
-  }
+/**
+ * Either a {@link TypeTree} or a {@link UnionTypeTree}
+ *
+ * @since 3.11
+ */
+public interface DeclaredTypeTree extends Tree {
+  boolean isSimple();
 }

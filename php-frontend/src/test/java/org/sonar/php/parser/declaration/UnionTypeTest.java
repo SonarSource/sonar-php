@@ -24,20 +24,14 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ParameterTest {
+public class UnionTypeTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.PARAMETER)
-      .matches("callable $a")
-      .matches("array $a")
-      .matches("int $a")
-      .matches("object $a")
-      .matches("Foo $a")
-      .matches("?int $a")
-      .matches("&$a")
-      .matches("...$a")
-      .matches("$a = \"foo\"")
-      .matches("int|array|Foo $a");
+    assertThat(PHPLexicalGrammar.UNION_TYPE)
+      .matches("int|array")
+      .matches("foo|bar|array")
+      .notMatches("int")
+    ;
   }
 }

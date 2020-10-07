@@ -24,8 +24,10 @@ import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -33,9 +35,9 @@ public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClaus
 
   private static final Kind KIND = Kind.RETURN_TYPE_CLAUSE;
   private final InternalSyntaxToken colonToken;
-  private final TypeTree type;
+  private final DeclaredTypeTree type;
 
-  public ReturnTypeClauseTreeImpl(InternalSyntaxToken colonToken, TypeTree type) {
+  public ReturnTypeClauseTreeImpl(InternalSyntaxToken colonToken, DeclaredTypeTree type) {
     this.colonToken = colonToken;
     this.type = type;
   }
@@ -60,8 +62,21 @@ public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClaus
     return colonToken;
   }
 
+  /**
+   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
+   */
   @Override
+  @Deprecated
   public TypeTree type() {
+    if (type.is(Kind.TYPE)) {
+      return (TypeTree) type;
+    } else {
+      return ((UnionTypeTree) type).types().get(0);
+    }
+  }
+
+  @Override
+  public DeclaredTypeTree declaredType() {
     return type;
   }
 

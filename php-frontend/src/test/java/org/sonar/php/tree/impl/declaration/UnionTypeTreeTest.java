@@ -17,27 +17,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.php.tree.impl.declaration;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class ParameterTest {
-
+public class UnionTypeTreeTest extends PHPTreeModelTest {
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.PARAMETER)
-      .matches("callable $a")
-      .matches("array $a")
-      .matches("int $a")
-      .matches("object $a")
-      .matches("Foo $a")
-      .matches("?int $a")
-      .matches("&$a")
-      .matches("...$a")
-      .matches("$a = \"foo\"")
-      .matches("int|array|Foo $a");
+  public void simple_content() throws Exception {
+    UnionTypeTree tree = parse("int|string", PHPLexicalGrammar.UNION_TYPE);
+
+    assertThat(tree.is(Tree.Kind.UNION_TYPE)).isTrue();
+    assertThat(tree.isSimple()).isFalse();
+    assertThat(tree.types()).hasSize(2);
+    assertThat(tree.types().get(0).typeName().is(Tree.Kind.BUILT_IN_TYPE)).isTrue();
+    assertThat(tree.types().get(1).typeName().is(Tree.Kind.BUILT_IN_TYPE)).isTrue();
   }
+
 }

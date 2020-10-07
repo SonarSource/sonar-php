@@ -41,8 +41,15 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 @Beta
 public interface ParameterTree extends Tree {
 
+  /**
+   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
+   */
   @Nullable
+  @Deprecated
   TypeTree type();
+
+  @Nullable
+  DeclaredTypeTree declaredType();
 
   @Nullable
   SyntaxToken referenceToken();

@@ -42,6 +42,13 @@ To submit a contribution, create a pull request for this repository. Please make
 ### Custom Rules
 If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP) available only for you.
 
+#### Custom Rules API Changes
+- **3.11**:
+    * `ParameterTree#type()` is deprecated. Use `ParameterTree#declaredType()` instead.
+    * `ReturnTypeClauseTree#type()` is deprecated. Use `ReturnTypeClauseTree#declaredType()` instead.
+    * `ClassPropertyDeclarationTree#typeAnnotation()` is deprecated. Use `ClassPropertyDeclarationTree#declaredType()` instead.
+    * `CatchBlockTree#variable()` can now return `NULL`.
+
 # <a name="testing"></a>Testing
 To run tests locally follow these instructions.
 

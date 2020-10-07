@@ -47,7 +47,13 @@ public interface ClassPropertyDeclarationTree extends ClassMemberTree {
 
   List<SyntaxToken> modifierTokens();
 
+  /**
+   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
+   */
+  @Deprecated
   @Nullable TypeTree typeAnnotation();
+
+  @Nullable DeclaredTypeTree declaredType();
 
   SeparatedList<VariableDeclarationTree> declarations();
 

@@ -30,6 +30,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -57,12 +58,13 @@ public class PHPVisitorCheckTest {
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
     assertThat(testVisitor.namespaceNameCounter).isEqualTo(3);
-    assertThat(testVisitor.varIdentifierCounter).isEqualTo(3);
+    assertThat(testVisitor.varIdentifierCounter).isEqualTo(4);
     // PHPCheck#init() is called by PHPAnalyzer
     assertThat(testVisitor.initCounter).isEqualTo(0);
     assertThat(testVisitor.literalCounter).isEqualTo(3);
-    assertThat(testVisitor.tokenCounter).isEqualTo(34);
+    assertThat(testVisitor.tokenCounter).isEqualTo(38);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
+    assertThat(testVisitor.unionTypesCounter).isEqualTo(1);
   }
 
   @Test
@@ -149,6 +151,7 @@ public class PHPVisitorCheckTest {
     int triviaCounter = 0;
     int tokenCounter = 0;
     int literalCounter = 0;
+    int unionTypesCounter = 0;
 
     @Override
     public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -172,6 +175,12 @@ public class PHPVisitorCheckTest {
     public void visitVariableIdentifier(VariableIdentifierTree tree) {
       super.visitVariableIdentifier(tree);
       varIdentifierCounter++;
+    }
+
+    @Override
+    public void visitUnionType(UnionTypeTree tree) {
+      super.visitUnionType(tree);
+      unionTypesCounter++;
     }
 
     @Override

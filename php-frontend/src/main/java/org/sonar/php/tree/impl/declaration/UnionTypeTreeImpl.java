@@ -19,27 +19,27 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class TypeTreeImpl extends PHPTree implements TypeTree {
-  private static final Kind KIND = Kind.TYPE;
+public class UnionTypeTreeImpl extends PHPTree implements UnionTypeTree {
+  private static final Kind KIND = Kind.UNION_TYPE;
 
-  private final SyntaxToken questionMarkToken;
+  private final SeparatedList<TypeTree> types;
 
-  private final TypeNameTree typeName;
+  public UnionTypeTreeImpl(SeparatedList<TypeTree> types) {
+    this.types = types;
+  }
 
-  public TypeTreeImpl(@Nullable SyntaxToken questionMarkToken, TypeNameTree typeName) {
-    this.questionMarkToken = questionMarkToken;
-    this.typeName = typeName;
+  @Override
+  public SeparatedList<TypeTree> types() {
+    return types;
   }
 
   @Override
@@ -49,27 +49,16 @@ public class TypeTreeImpl extends PHPTree implements TypeTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(questionMarkToken, typeName);
+    return types.elementsAndSeparators();
   }
 
   @Override
   public void accept(VisitorCheck visitor) {
-    visitor.visitType(this);
-  }
-
-  @Override
-  @Nullable
-  public SyntaxToken questionMarkToken() {
-    return questionMarkToken;
-  }
-
-  @Override
-  public TypeNameTree typeName() {
-    return typeName;
+    visitor.visitUnionType(this);
   }
 
   @Override
   public boolean isSimple() {
-    return true;
+    return false;
   }
 }

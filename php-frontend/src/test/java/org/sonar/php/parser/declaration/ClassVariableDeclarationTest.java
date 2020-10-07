@@ -42,6 +42,7 @@ public class ClassVariableDeclarationTest {
       .matches("public parent $x;")
       .matches("public object $x;")
       .matches("public array $x;")
+      .matches("public array|int $x;")
       .notMatches("public static var $a;")
       .notMatches("const $a;");
   }
