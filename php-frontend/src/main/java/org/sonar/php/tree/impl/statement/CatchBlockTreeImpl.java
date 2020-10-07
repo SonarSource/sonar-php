@@ -77,6 +77,7 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
     return exceptionTypes;
   }
 
+  @Nullable
   @Override
   public VariableIdentifierTree variable() {
     return variable;
