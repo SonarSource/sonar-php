@@ -1600,6 +1600,7 @@ public class PHPGrammar {
         b.token(LPARENTHESIS),
         LEXICAL_VARIABLE(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), LEXICAL_VARIABLE())),
+        b.optional(b.token(COMMA)),
         b.token(RPARENTHESIS)));
   }
 
