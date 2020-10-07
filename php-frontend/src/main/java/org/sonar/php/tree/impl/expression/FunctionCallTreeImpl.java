@@ -121,7 +121,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
       return argument;
     }
 
-    if (argumentTrees.size() >= position - 1 && argumentTrees.get(position).name() == null) {
+    if (argumentTrees.size() >= position + 1 && argumentTrees.get(position).name() == null) {
       return argumentTrees.get(position);
     }
 
