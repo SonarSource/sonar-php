@@ -456,12 +456,16 @@ public class TreeFactory {
 
   public ParameterListTree parameterList(
     InternalSyntaxToken leftParenthesis,
-    Optional<Tuple<ParameterTree, Optional<List<Tuple<InternalSyntaxToken, ParameterTree>>>>> parameters,
+    Optional<Tuple<Tuple<ParameterTree, Optional<List<Tuple<InternalSyntaxToken, ParameterTree>>>>, Optional<InternalSyntaxToken>>> parameters,
     InternalSyntaxToken rightParenthesis
   ) {
     SeparatedListImpl<ParameterTree> separatedList = SeparatedListImpl.empty();
     if (parameters.isPresent()) {
-      separatedList = separatedList(parameters.get().first(), parameters.get().second());
+      if (parameters.get().second().isPresent()) {
+        separatedList = separatedList(parameters.get().first().first(), parameters.get().first().second(), parameters.get().second().orNull());
+      } else {
+        separatedList = separatedList(parameters.get().first().first(), parameters.get().first().second());
+      }
     }
     return new ParameterListTreeImpl(leftParenthesis, separatedList, rightParenthesis);
   }
