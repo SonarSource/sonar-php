@@ -461,11 +461,7 @@ public class TreeFactory {
   ) {
     SeparatedListImpl<ParameterTree> separatedList = SeparatedListImpl.empty();
     if (parameters.isPresent()) {
-      if (parameters.get().second().isPresent()) {
-        separatedList = separatedList(parameters.get().first().first(), parameters.get().first().second(), parameters.get().second().orNull());
-      } else {
-        separatedList = separatedList(parameters.get().first().first(), parameters.get().first().second());
-      }
+      separatedList = separatedList(parameters.get().first().first(), parameters.get().first().second(), parameters.get().second().orNull());
     }
     return new ParameterListTreeImpl(leftParenthesis, separatedList, rightParenthesis);
   }
