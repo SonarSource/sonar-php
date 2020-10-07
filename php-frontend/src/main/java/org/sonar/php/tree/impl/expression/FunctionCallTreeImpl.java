@@ -49,7 +49,8 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   private final InternalSyntaxToken closeParenthesisToken;
   private FunctionSymbol symbol = new UnknownFunctionSymbol(UNKNOWN_FUNCTION_NAME);
 
-  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl<FunctionCallArgumentTree> arguments, InternalSyntaxToken closeParenthesisToken) {
+  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl<FunctionCallArgumentTree> arguments,
+                              InternalSyntaxToken closeParenthesisToken) {
     this.callee = callee;
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = argumentsValueList(arguments);
@@ -100,6 +101,31 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   @Override
   public SeparatedListImpl<ExpressionTree> arguments() {
     return arguments;
+  }
+
+  @Override
+  public SeparatedList<FunctionCallArgumentTree> argumentTrees() {
+    return argumentTrees;
+  }
+
+  @Override
+  @Nullable
+  public FunctionCallArgumentTree argument(int position, String name) {
+    FunctionCallArgumentTree argument = argumentTrees.stream()
+      .filter(a -> a.name() != null)
+      .filter(a -> a.name().text().equalsIgnoreCase(name))
+      .findFirst()
+      .orElse(null);
+
+    if (argument != null) {
+      return argument;
+    }
+
+    if (argumentTrees.size() >= position - 1 && argumentTrees.get(position).name() == null) {
+      return argumentTrees.get(position);
+    }
+
+    return null;
   }
 
   @Nullable

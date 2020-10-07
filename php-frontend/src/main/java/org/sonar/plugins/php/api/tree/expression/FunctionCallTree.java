@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
@@ -45,11 +46,23 @@ public interface FunctionCallTree extends ExpressionTree {
 
   SeparatedList<ExpressionTree> arguments();
 
+  SeparatedList<FunctionCallArgumentTree> argumentTrees();
+
+  /**
+   * Retrieves an argument based on position and name.
+   *
+   * If an argument with the given name exists, it is returned no matter the position.
+   * Else the argument at the supplied position is returned if it exists and is not named.
+   *
+   * @since 3.11
+   */
+  @Nullable
+  FunctionCallArgumentTree argument(int position, String name);
+
   /**
    * Nullable in case of internal function call with no parenthesis
    */
   @Nullable
-
   SyntaxToken closeParenthesisToken();
 
 }

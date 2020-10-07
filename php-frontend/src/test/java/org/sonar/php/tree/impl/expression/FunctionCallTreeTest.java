@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 public class FunctionCallTreeTest extends PHPTreeModelTest {
@@ -61,13 +62,11 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
   public void with_named_arguments() throws Exception {
     FunctionCallTree tree = parse("f(self::$p1, a: $p2)", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
-    assertThat(tree.is(Kind.FUNCTION_CALL)).isTrue();
-    assertThat(expressionToString(tree.callee())).isEqualTo("f");
-    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
+    assertThat(tree.argumentTrees()).hasSize(2);
 
-    assertThat(tree.arguments()).hasSize(2);
-    assertThat(tree.arguments().getSeparators()).hasSize(1);
+    assertThat(tree.argumentTrees().get(0).name()).isNull();
 
-    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
+    FunctionCallArgumentTree secondArgument = tree.argument(0, "a");
+    assertThat(tree.argumentTrees().get(1)).isEqualTo(secondArgument);
   }
 }
