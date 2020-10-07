@@ -389,11 +389,13 @@ public class PHPGrammar {
         b.token(PHPPunctuator.LPARENTHESIS),
         b.optional(
           f.newTuple(
+          f.newTuple(
             PARAMETER(),
             b.zeroOrMore(
               f.newTuple(
                 b.token(PHPPunctuator.COMMA),
-                PARAMETER())))),
+                  PARAMETER()))),
+            b.optional(b.token(COMMA)))),
         b.token(PHPPunctuator.RPARENTHESIS)));
   }
 
