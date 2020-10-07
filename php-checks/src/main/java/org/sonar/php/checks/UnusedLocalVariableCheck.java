@@ -85,7 +85,9 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCatchBlock(CatchBlockTree tree) {
-    exclusions.add(tree.variable());
+    if (tree.variable() != null) {
+      exclusions.add(tree.variable());
+    }
     super.visitCatchBlock(tree);
   }
 

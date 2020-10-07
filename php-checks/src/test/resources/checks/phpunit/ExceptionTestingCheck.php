@@ -84,6 +84,15 @@ class MyTest extends TestCase {
       $this->assertTrue(foo());
      }
   }
+  
+  public function testA5() {
+     try {
+      doSomething();
+      $this->fail();
+     } catch (Exception | MyException) { // Noncompliant {{Use expectException() to verify the exception throw.}}
+//            ^^^^^^^^^^^^^^^^^^^^^^^
+     }
+  }
 }
 
 // For coverage

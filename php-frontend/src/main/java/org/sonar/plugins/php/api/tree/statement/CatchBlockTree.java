@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -41,6 +42,7 @@ public interface CatchBlockTree extends Tree {
 
   SeparatedList<NamespaceNameTree> exceptionTypes();
 
+  @Nullable
   VariableIdentifierTree variable();
 
   SyntaxToken closeParenthesisToken();

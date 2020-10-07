@@ -921,7 +921,7 @@ public class PHPGrammar {
         b.token(PHPPunctuator.LPARENTHESIS),
         f.classNamespaceName(NAMESPACE_NAME()),
         b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), f.classNamespaceName(NAMESPACE_NAME()))),
-        b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
+        b.optional(b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER)),
         b.token(PHPPunctuator.RPARENTHESIS),
         BLOCK()));
   }
