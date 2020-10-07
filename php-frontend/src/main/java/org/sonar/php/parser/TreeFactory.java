@@ -1437,7 +1437,7 @@ public class TreeFactory {
     Optional<InternalSyntaxToken> trailingComma,
     InternalSyntaxToken closeParenthesis
   ) {
-    return new LexicalVariablesTreeImpl(useToken, openParenthesis, separatedList(variable, variableRest), closeParenthesis);
+    return new LexicalVariablesTreeImpl(useToken, openParenthesis, separatedList(variable, variableRest, trailingComma.orNull()), closeParenthesis);
   }
 
   public FunctionCallTree internalFunction(
