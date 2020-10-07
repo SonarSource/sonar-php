@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
+import org.sonar.php.tree.impl.declaration.FunctionCallArgumentTreeImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
@@ -308,6 +309,8 @@ public interface VisitorCheck extends PHPCheck {
    */
   @Deprecated
   void visitExpressionListStatement(ExpressionListStatementTree tree);
+
+  void visitFunctionCallArgument(FunctionCallArgumentTreeImpl functionCallArgumentTree);
 
   /**
    * [ END ] Expression

@@ -59,8 +59,15 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
 
   @Test
   public void with_named_arguments() throws Exception {
-    FunctionCallTree tree = parse("f($p1, a:$p2)", PHPLexicalGrammar.MEMBER_EXPRESSION);
+    FunctionCallTree tree = parse("f(self::$p1, a: $p2)", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
+    assertThat(tree.is(Kind.FUNCTION_CALL)).isTrue();
+    assertThat(expressionToString(tree.callee())).isEqualTo("f");
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
 
+    assertThat(tree.arguments()).hasSize(2);
+    assertThat(tree.arguments().getSeparators()).hasSize(1);
+
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
   }
 }

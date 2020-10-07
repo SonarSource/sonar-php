@@ -1544,13 +1544,19 @@ public class PHPGrammar {
   }
 
   public FunctionCallArgumentTree FUNCTION_CALL_ARGUMENT() {
-    return b.<FunctionCallArgumentTree>nonterminal().is(
-      f.functionCallArgument(b.optional(f.newTuple(NAME_IDENTIFIER(), b.token(COLON))),
-        b.firstOf(
-          REFERENCE_VARIABLE(),
-          SPREAD_ARGUMENT(),
-          EXPRESSION()))
-      );
+    return b.<FunctionCallArgumentTree>nonterminal(PHPLexicalGrammar.FUNCTION_CALL_ARGUMENT).is(
+      b.firstOf(
+        f.functionCallArgument(b.optional(f.newTuple(NAME_IDENTIFIER(), b.token(COLON))),
+          b.firstOf(
+            REFERENCE_VARIABLE(),
+            SPREAD_ARGUMENT(),
+            EXPRESSION())),
+        f.functionCallArgument(
+          b.firstOf(
+            REFERENCE_VARIABLE(),
+            SPREAD_ARGUMENT(),
+            EXPRESSION()))
+      ));
   }
 
   public ExpressionTree SPECIAL_CALL() {

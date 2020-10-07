@@ -1088,7 +1088,7 @@ public class TreeFactory {
       new FunctionCallTreeImpl(
         new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(haltCompilerToken)),
         openParenthesisToken,
-        SeparatedListImpl.<ExpressionTree>empty(),
+        SeparatedListImpl.<FunctionCallArgumentTree>empty(),
         closeParenthesisToken),
       eosToken);
   }
@@ -1098,15 +1098,10 @@ public class TreeFactory {
     SeparatedListImpl<FunctionCallArgumentTree> arguments,
     InternalSyntaxToken eosToken
   ) {
-    List<ExpressionTree> argumentValues = arguments.stream()
-      .map(FunctionCallArgumentTree::value)
-      .collect(Collectors.toList());
-
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
         new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(echoToken)),
-        new SeparatedListImpl<>(argumentValues, arguments.getSeparators()
-        )),
+        arguments),
       eosToken);
   }
 
@@ -1373,13 +1368,8 @@ public class TreeFactory {
     SeparatedListImpl<FunctionCallArgumentTree> arguments,
     InternalSyntaxToken closeParenthesis
   ) {
-    List<ExpressionTree> argumentValues = arguments.stream()
-      .map(FunctionCallArgumentTree::value)
-      .collect(Collectors.toList());
-
-
     return new FunctionCallTreeImpl(openParenthesis,
-      new SeparatedListImpl<>(argumentValues, arguments.getSeparators()),
+      new SeparatedListImpl<>(arguments, arguments.getSeparators()),
       closeParenthesis);
   }
 
@@ -1495,10 +1485,14 @@ public class TreeFactory {
     SeparatedListImpl<ExpressionTree> arguments,
     @Nullable InternalSyntaxToken closeParenthesis
   ) {
+    List<FunctionCallArgumentTree> functionCallArguments = arguments.stream()
+      .map(a -> new FunctionCallArgumentTreeImpl(null, a))
+      .collect(Collectors.toList());
+
     return new FunctionCallTreeImpl(
       new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(callee)),
       openParenthesis,
-      arguments,
+      new SeparatedListImpl<>(functionCallArguments, arguments.getSeparators()),
       closeParenthesis);
   }
 
@@ -1598,9 +1592,9 @@ public class TreeFactory {
   }
 
   public FunctionCallTreeImpl newExitExpression(InternalSyntaxToken openParenthesis, Optional<ExpressionTree> expressionTreeOptional, InternalSyntaxToken closeParenthesis) {
-    SeparatedListImpl<ExpressionTree> arguments;
+    SeparatedListImpl<FunctionCallArgumentTree> arguments;
     if (expressionTreeOptional.isPresent()) {
-      arguments = new SeparatedListImpl<>(ImmutableList.of(expressionTreeOptional.get()), Collections.<SyntaxToken>emptyList());
+      arguments = new SeparatedListImpl<>(ImmutableList.of(new FunctionCallArgumentTreeImpl(null, expressionTreeOptional.get())), Collections.<SyntaxToken>emptyList());
     } else {
       arguments = SeparatedListImpl.empty();
     }
@@ -1609,7 +1603,7 @@ public class TreeFactory {
 
   public FunctionCallTree completeExitExpression(InternalSyntaxToken exitOrDie, Optional<FunctionCallTreeImpl> partial) {
     NameIdentifierTreeImpl callee = new NameIdentifierTreeImpl(exitOrDie);
-    return partial.isPresent() ? partial.get().complete(callee) : new FunctionCallTreeImpl(callee, SeparatedListImpl.<ExpressionTree>empty());
+    return partial.isPresent() ? partial.get().complete(callee) : new FunctionCallTreeImpl(callee, SeparatedListImpl.empty());
   }
 
   public ExpressionTree combinedScalarOffset(ArrayInitializerTree arrayInitialiser, Optional<List<ArrayAccessTree>> offsets) {
@@ -1833,6 +1827,10 @@ public class TreeFactory {
 
   public FunctionCallArgumentTree functionCallArgument(Optional<Tuple<NameIdentifierTree, InternalSyntaxToken>> optional, ExpressionTree firstOf) {
     return new FunctionCallArgumentTreeImpl(optional.orNull(), firstOf);
+  }
+
+  public FunctionCallArgumentTree functionCallArgument(ExpressionTree value) {
+    return new FunctionCallArgumentTreeImpl(null, value);
   }
 
   /**

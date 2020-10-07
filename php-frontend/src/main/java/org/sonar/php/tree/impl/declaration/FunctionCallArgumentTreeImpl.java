@@ -19,7 +19,9 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import com.google.common.collect.Iterators;
 import org.sonar.php.parser.TreeFactory;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
@@ -29,8 +31,11 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
-public class FunctionCallArgumentTreeImpl implements FunctionCallArgumentTree {
+public class FunctionCallArgumentTreeImpl extends PHPTree implements FunctionCallArgumentTree {
+  private static final Kind KIND = Kind.FUNCTION_CALL_ARGUMENT;
+
   @Nullable
   private final NameIdentifierTree name;
   @Nullable
@@ -41,27 +46,6 @@ public class FunctionCallArgumentTreeImpl implements FunctionCallArgumentTree {
     this.name = nameAndToken != null ? nameAndToken.first() : null;
     this.nameSeparator = nameAndToken != null ? nameAndToken.second() : null;
     this.value = value;
-  }
-
-  @Override
-  public boolean is(Kind... kind) {
-    return false;
-  }
-
-  @Override
-  public void accept(VisitorCheck visitor) {
-
-  }
-
-  @Override
-  public Kind getKind() {
-    return null;
-  }
-
-  @Nullable
-  @Override
-  public Tree getParent() {
-    return null;
   }
 
   @Nullable
@@ -76,5 +60,20 @@ public class FunctionCallArgumentTreeImpl implements FunctionCallArgumentTree {
 
   public ExpressionTree value() {
     return value;
+  }
+
+  @Override
+  public Iterator<Tree> childrenIterator() {
+    return Iterators.forArray(name, nameSeparator, value);
+  }
+
+  @Override
+  public void accept(VisitorCheck visitor) {
+    visitor.visitFunctionCallArgument(this);
+  }
+
+  @Override
+  public Kind getKind() {
+    return KIND;
   }
 }
