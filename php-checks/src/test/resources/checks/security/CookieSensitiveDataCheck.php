@@ -26,3 +26,7 @@ setrawcookie($name); // Ok
 setrawcookie($name, NULL); // Ok
 setrawcookie($name, ""); // Ok
 setrawcookie($name, "   "); // Ok
+
+setcookie($name, secure:false, value:$value); // Noncompliant
+setcookie($name, secure:false, value:""); // Compliant
+
