@@ -139,6 +139,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
+import org.sonar.php.tree.impl.declaration.FunctionCallArgumentTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -163,6 +164,7 @@ import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
@@ -1093,13 +1095,18 @@ public class TreeFactory {
 
   public ExpressionStatementTree echoStatement(
     InternalSyntaxToken echoToken,
-    SeparatedListImpl<ExpressionTree> list,
+    SeparatedListImpl<FunctionCallArgumentTree> arguments,
     InternalSyntaxToken eosToken
   ) {
+    List<ExpressionTree> argumentValues = arguments.stream()
+      .map(FunctionCallArgumentTree::value)
+      .collect(Collectors.toList());
+
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
         new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(echoToken)),
-        list),
+        new SeparatedListImpl<>(argumentValues, arguments.getSeparators()
+        )),
       eosToken);
   }
 
@@ -1363,10 +1370,17 @@ public class TreeFactory {
 
   public FunctionCallTree functionCallParameterList(
     InternalSyntaxToken openParenthesis,
-    SeparatedListImpl<ExpressionTree> arguments,
+    SeparatedListImpl<FunctionCallArgumentTree> arguments,
     InternalSyntaxToken closeParenthesis
   ) {
-    return new FunctionCallTreeImpl(openParenthesis, arguments, closeParenthesis);
+    List<ExpressionTree> argumentValues = arguments.stream()
+      .map(FunctionCallArgumentTree::value)
+      .collect(Collectors.toList());
+
+
+    return new FunctionCallTreeImpl(openParenthesis,
+      new SeparatedListImpl<>(argumentValues, arguments.getSeparators()),
+      closeParenthesis);
   }
 
   public MemberAccessTree classMemberAccess(InternalSyntaxToken token, Tree member) {
@@ -1691,28 +1705,32 @@ public class TreeFactory {
     return new ReturnTypeClauseTreeImpl(colonToken, typeTree);
   }
 
-  public SeparatedListImpl<ExpressionTree> arguments(Optional<SeparatedListImpl<ExpressionTree>> arguments) {
+  public SeparatedListImpl<FunctionCallArgumentTree> arguments(Optional<SeparatedListImpl<FunctionCallArgumentTree>> arguments) {
     return arguments.or(SeparatedListImpl.empty());
   }
 
-  public SeparatedListImpl<ExpressionTree> argumentsList(
-    ExpressionTree firstArgument,
-    Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> otherArguments,
+  public SeparatedListImpl<FunctionCallArgumentTree> argumentsList(
+    FunctionCallArgumentTree firstArgument,
+    Optional<List<Tuple<InternalSyntaxToken, FunctionCallArgumentTree>>> otherArguments,
     Optional<InternalSyntaxToken> trailingComma) {
     return separatedList(firstArgument, otherArguments, trailingComma.orNull());
   }
 
   public AnonymousClassTree anonymousClass(
     InternalSyntaxToken classToken,
-    Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<ExpressionTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
+    Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<FunctionCallArgumentTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
     InternalSyntaxToken lCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken rCurlyBrace
   ) {
+    List<ExpressionTree> argumentValues = arguments.stream()
+      .map(FunctionCallArgumentTree::value)
+      .collect(Collectors.toList());
+
     return new AnonymousClassTreeImpl(
       classToken,
       lParenthesis.orNull(),
-      arguments,
+      new SeparatedListImpl<>(argumentValues, arguments.getSeparators()),
       rParenthesis.orNull(),
       extendsToken(extendsClause), superClass(extendsClause),
       implementsToken(implementsClause), superInterfaces(implementsClause),
@@ -1811,6 +1829,10 @@ public class TreeFactory {
     }
 
     return new UnionTypeTreeImpl(new SeparatedListImpl<>(types.build(), separators.build()));
+  }
+
+  public FunctionCallArgumentTree functionCallArgument(Optional<Tuple<NameIdentifierTree, InternalSyntaxToken>> optional, ExpressionTree firstOf) {
+    return new FunctionCallArgumentTreeImpl(optional.orNull(), firstOf);
   }
 
   /**

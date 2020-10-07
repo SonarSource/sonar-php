@@ -59,6 +59,7 @@ import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
@@ -1532,8 +1533,8 @@ public class PHPGrammar {
         b.token(RPARENTHESIS)));
   }
 
-  public SeparatedListImpl<ExpressionTree> ARGUMENTS() {
-    return b.<SeparatedListImpl<ExpressionTree>>nonterminal().is(
+  public SeparatedListImpl<FunctionCallArgumentTree> ARGUMENTS() {
+    return b.<SeparatedListImpl<FunctionCallArgumentTree>>nonterminal().is(
       f.arguments(b.optional(f.argumentsList(
         FUNCTION_CALL_ARGUMENT(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), FUNCTION_CALL_ARGUMENT())),
@@ -1542,12 +1543,14 @@ public class PHPGrammar {
     );
   }
 
-  public ExpressionTree FUNCTION_CALL_ARGUMENT() {
-    return b.<ExpressionTree>nonterminal().is(
-      b.firstOf(
-        REFERENCE_VARIABLE(),
-        SPREAD_ARGUMENT(),
-        EXPRESSION()));
+  public FunctionCallArgumentTree FUNCTION_CALL_ARGUMENT() {
+    return b.<FunctionCallArgumentTree>nonterminal().is(
+      f.functionCallArgument(b.optional(f.newTuple(NAME_IDENTIFIER(), b.token(COLON))),
+        b.firstOf(
+          REFERENCE_VARIABLE(),
+          SPREAD_ARGUMENT(),
+          EXPRESSION()))
+      );
   }
 
   public ExpressionTree SPECIAL_CALL() {
