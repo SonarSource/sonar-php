@@ -47,6 +47,7 @@ If you have an idea for a rule but you are not sure that everyone needs it you c
     * `ParameterTree#type()` is deprecated. Use `ParameterTree#declaredType()` instead.
     * `ReturnTypeClauseTree#type()` is deprecated. Use `ReturnTypeClauseTree#declaredType()` instead.
     * `ClassPropertyDeclarationTree#typeAnnotation()` is deprecated. Use `ClassPropertyDeclarationTree#declaredType()` instead.
+    * `CatchBlockTree#variable()` can now return `NULL`.
 
 # <a name="testing"></a>Testing
 To run tests locally follow these instructions.
