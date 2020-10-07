@@ -44,15 +44,19 @@ public interface FunctionCallTree extends ExpressionTree {
   @Nullable
   SyntaxToken openParenthesisToken();
 
+  /**
+   * @deprecated since 3.11 . Use {@link #callArguments()} instead.
+   */
+  @Deprecated
   SeparatedList<ExpressionTree> arguments();
 
-  SeparatedList<FunctionCallArgumentTree> argumentTrees();
+  SeparatedList<FunctionCallArgumentTree> callArguments();
 
   /**
    * Retrieves an argument based on position and name.
    *
    * If an argument with the given name exists, it is returned no matter the position.
-   * Else the argument at the supplied position is returned if it exists and is not named.
+   * Else, the argument at the supplied position is returned if it exists and is not named.
    *
    * @since 3.11
    */

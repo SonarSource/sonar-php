@@ -45,7 +45,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   private ExpressionTree callee;
   private final InternalSyntaxToken openParenthesisToken;
   private final SeparatedListImpl<ExpressionTree> arguments;
-  private final SeparatedList<FunctionCallArgumentTree> argumentTrees;
+  private final SeparatedList<FunctionCallArgumentTree> callArguments;
   private final InternalSyntaxToken closeParenthesisToken;
   private FunctionSymbol symbol = new UnknownFunctionSymbol(UNKNOWN_FUNCTION_NAME);
 
@@ -54,7 +54,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     this.callee = callee;
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = argumentsValueList(arguments);
-    this.argumentTrees = arguments;
+    this.callArguments = arguments;
     this.closeParenthesisToken = closeParenthesisToken;
   }
 
@@ -62,14 +62,14 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     this.callee = callee;
     this.openParenthesisToken = null;
     this.arguments = argumentsValueList(arguments);
-    this.argumentTrees = arguments;
+    this.callArguments = arguments;
     this.closeParenthesisToken = null;
   }
 
   public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedListImpl<FunctionCallArgumentTree> arguments, InternalSyntaxToken closeParenthesisToken) {
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = argumentsValueList(arguments);
-    this.argumentTrees = arguments;
+    this.callArguments = arguments;
     this.closeParenthesisToken = closeParenthesisToken;
   }
 
@@ -98,20 +98,24 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     return openParenthesisToken;
   }
 
+  /**
+   * @deprecated since 3.11 . Use {@link #callArguments()} instead.
+   */
+  @Deprecated
   @Override
   public SeparatedListImpl<ExpressionTree> arguments() {
     return arguments;
   }
 
   @Override
-  public SeparatedList<FunctionCallArgumentTree> argumentTrees() {
-    return argumentTrees;
+  public SeparatedList<FunctionCallArgumentTree> callArguments() {
+    return callArguments;
   }
 
   @Override
   @Nullable
   public FunctionCallArgumentTree argument(int position, String name) {
-    FunctionCallArgumentTree argument = argumentTrees.stream()
+    FunctionCallArgumentTree argument = callArguments.stream()
       .filter(a -> a.name() != null)
       .filter(a -> a.name().text().equalsIgnoreCase(name))
       .findFirst()
@@ -121,8 +125,8 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
       return argument;
     }
 
-    if (argumentTrees.size() >= position + 1 && argumentTrees.get(position).name() == null) {
-      return argumentTrees.get(position);
+    if (callArguments.size() >= position + 1 && callArguments.get(position).name() == null) {
+      return callArguments.get(position);
     }
 
     return null;
@@ -144,7 +148,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     return Iterators.concat(
       Iterators.singletonIterator(callee),
       Iterators.singletonIterator(openParenthesisToken),
-      argumentTrees.elementsAndSeparators(),
+      callArguments.elementsAndSeparators(),
       Iterators.singletonIterator(closeParenthesisToken));
   }
 
