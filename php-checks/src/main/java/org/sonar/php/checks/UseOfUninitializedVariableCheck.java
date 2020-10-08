@@ -332,6 +332,9 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     PARENT_INITIALIZATION_KIND.forEach(kind -> map.put(kind, tree -> false));
     map.put(Kind.ASSIGNMENT, tree -> tree == ((AssignmentExpressionTree) tree.getParent()).value());
     map.put(Kind.CALL_ARGUMENT, tree -> {
+      if (!tree.getParent().getParent().is(Kind.FUNCTION_CALL)) {
+        return false;
+      }
       FunctionCallTree functionCall = (FunctionCallTree) tree.getParent().getParent();
       return tree == functionCall.callee() || FUNCTION_ALLOWING_ARGUMENT_CHECK.contains(CheckUtils.getLowerCaseFunctionName(functionCall));
     });

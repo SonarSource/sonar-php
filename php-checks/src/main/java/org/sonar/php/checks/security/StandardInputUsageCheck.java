@@ -72,7 +72,7 @@ public class StandardInputUsageCheck extends PHPVisitorCheck {
   }
 
   private static boolean isArgumentOfSafeFunctionCall(Tree tree) {
-    if (!tree.getParent().is(Tree.Kind.CALL_ARGUMENT)) {
+    if (!tree.getParent().is(Tree.Kind.CALL_ARGUMENT) || !tree.getParent().getParent().is(Tree.Kind.FUNCTION_CALL)) {
       return false;
     }
 
