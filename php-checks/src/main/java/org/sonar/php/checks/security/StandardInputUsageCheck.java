@@ -76,15 +76,13 @@ public class StandardInputUsageCheck extends PHPVisitorCheck {
       return false;
     }
 
-    Tree parent = tree.getParent().getParent();
-    if (parent.is(Tree.Kind.FUNCTION_CALL)) {
-      FunctionCallTree functionCall = (FunctionCallTree) parent;
-      ExpressionTree callee = functionCall.callee();
-      if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
-        String qualifiedName = ((NamespaceNameTree) callee).qualifiedName();
-        return SAFE_FUNCTIONS.stream().anyMatch(qualifiedName::equalsIgnoreCase);
-      }
+    FunctionCallTree functionCall = (FunctionCallTree) tree.getParent().getParent();
+    ExpressionTree callee = functionCall.callee();
+    if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
+      String qualifiedName = ((NamespaceNameTree) callee).qualifiedName();
+      return SAFE_FUNCTIONS.stream().anyMatch(qualifiedName::equalsIgnoreCase);
     }
+
     return false;
   }
 
