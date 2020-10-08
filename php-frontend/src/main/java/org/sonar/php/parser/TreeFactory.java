@@ -1368,9 +1368,7 @@ public class TreeFactory {
     SeparatedListImpl<FunctionCallArgumentTree> arguments,
     InternalSyntaxToken closeParenthesis
   ) {
-    return new FunctionCallTreeImpl(openParenthesis,
-      new SeparatedListImpl<>(arguments, arguments.getSeparators()),
-      closeParenthesis);
+    return new FunctionCallTreeImpl(openParenthesis, arguments, closeParenthesis);
   }
 
   public MemberAccessTree classMemberAccess(InternalSyntaxToken token, Tree member) {
