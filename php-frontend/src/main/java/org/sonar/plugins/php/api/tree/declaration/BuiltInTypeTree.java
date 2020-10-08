@@ -29,6 +29,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   <li>mixed</li>
  *   <li>self</li>
  *   <li>parent</li>
+ *   <li>static</li>
  *   <li>array</li>
  *   <li>callable</li>
  *   <li>bool</li>
