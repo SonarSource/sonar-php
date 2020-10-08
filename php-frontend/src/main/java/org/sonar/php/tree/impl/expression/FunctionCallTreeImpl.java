@@ -49,27 +49,27 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   private final InternalSyntaxToken closeParenthesisToken;
   private FunctionSymbol symbol = new UnknownFunctionSymbol(UNKNOWN_FUNCTION_NAME);
 
-  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl<CallArgumentTree> arguments,
+  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl<CallArgumentTree> callArguments,
                               InternalSyntaxToken closeParenthesisToken) {
     this.callee = callee;
     this.openParenthesisToken = openParenthesisToken;
-    this.arguments = argumentsValueList(arguments);
-    this.callArguments = arguments;
+    this.arguments = argumentsValueList(callArguments);
+    this.callArguments = callArguments;
     this.closeParenthesisToken = closeParenthesisToken;
   }
 
-  public FunctionCallTreeImpl(ExpressionTree callee, SeparatedListImpl<CallArgumentTree> arguments) {
+  public FunctionCallTreeImpl(ExpressionTree callee, SeparatedListImpl<CallArgumentTree> callArguments) {
     this.callee = callee;
     this.openParenthesisToken = null;
-    this.arguments = argumentsValueList(arguments);
-    this.callArguments = arguments;
+    this.arguments = argumentsValueList(callArguments);
+    this.callArguments = callArguments;
     this.closeParenthesisToken = null;
   }
 
-  public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedListImpl<CallArgumentTree> arguments, InternalSyntaxToken closeParenthesisToken) {
+  public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedListImpl<CallArgumentTree> callArguments, InternalSyntaxToken closeParenthesisToken) {
     this.openParenthesisToken = openParenthesisToken;
-    this.arguments = argumentsValueList(arguments);
-    this.callArguments = arguments;
+    this.arguments = argumentsValueList(callArguments);
+    this.callArguments = callArguments;
     this.closeParenthesisToken = closeParenthesisToken;
   }
 

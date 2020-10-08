@@ -23,6 +23,7 @@ import com.google.common.annotations.Beta;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -44,7 +45,13 @@ public interface AnonymousClassTree extends ExpressionTree, ClassTree {
   @Nullable
   SyntaxToken openParenthesisToken();
 
+  /**
+   * @deprecated since 3.11 . Use {@link #callArguments()} instead.
+   */
+  @Deprecated
   SeparatedList<ExpressionTree> arguments();
+
+  SeparatedList<CallArgumentTree> callArguments();
 
   @Nullable
   SyntaxToken closeParenthesisToken();

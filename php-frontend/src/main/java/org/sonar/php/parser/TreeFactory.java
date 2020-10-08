@@ -1716,14 +1716,11 @@ public class TreeFactory {
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
     InternalSyntaxToken lCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken rCurlyBrace
   ) {
-    List<ExpressionTree> argumentValues = arguments.stream()
-      .map(CallArgumentTree::value)
-      .collect(Collectors.toList());
 
     return new AnonymousClassTreeImpl(
       classToken,
       lParenthesis.orNull(),
-      new SeparatedListImpl<>(argumentValues, arguments.getSeparators()),
+      arguments,
       rParenthesis.orNull(),
       extendsToken(extendsClause), superClass(extendsClause),
       implementsToken(implementsClause), superInterfaces(implementsClause),
