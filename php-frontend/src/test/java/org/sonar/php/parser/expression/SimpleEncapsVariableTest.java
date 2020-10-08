@@ -30,8 +30,9 @@ public class SimpleEncapsVariableTest {
   public void test() {
     assertThat(PHPLexicalGrammar.SIMPLE_ENCAPS_VARIABLE)
       .matches("$variable")
-      .matches("$variable [ offset ]")
-      .matches("$variable -> identifier");
+      .matches("$variable[offset]")
+      .matches("$variable->identifier")
+      .matches("$variable?->identifier");
   }
 
   @Test
