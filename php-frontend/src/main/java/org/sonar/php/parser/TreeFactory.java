@@ -139,7 +139,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
-import org.sonar.php.tree.impl.declaration.FunctionCallArgumentTreeImpl;
+import org.sonar.php.tree.impl.declaration.CallArgumentTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -164,7 +164,7 @@ import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
@@ -1088,14 +1088,14 @@ public class TreeFactory {
       new FunctionCallTreeImpl(
         new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(haltCompilerToken)),
         openParenthesisToken,
-        SeparatedListImpl.<FunctionCallArgumentTree>empty(),
+        SeparatedListImpl.<CallArgumentTree>empty(),
         closeParenthesisToken),
       eosToken);
   }
 
   public ExpressionStatementTree echoStatement(
     InternalSyntaxToken echoToken,
-    SeparatedListImpl<FunctionCallArgumentTree> arguments,
+    SeparatedListImpl<CallArgumentTree> arguments,
     InternalSyntaxToken eosToken
   ) {
     return new ExpressionStatementTreeImpl(
@@ -1365,7 +1365,7 @@ public class TreeFactory {
 
   public FunctionCallTree functionCallParameterList(
     InternalSyntaxToken openParenthesis,
-    SeparatedListImpl<FunctionCallArgumentTree> arguments,
+    SeparatedListImpl<CallArgumentTree> arguments,
     InternalSyntaxToken closeParenthesis
   ) {
     return new FunctionCallTreeImpl(openParenthesis, arguments, closeParenthesis);
@@ -1484,8 +1484,8 @@ public class TreeFactory {
     SeparatedListImpl<ExpressionTree> arguments,
     @Nullable InternalSyntaxToken closeParenthesis
   ) {
-    List<FunctionCallArgumentTree> functionCallArguments = arguments.stream()
-      .map(a -> new FunctionCallArgumentTreeImpl(null, a))
+    List<CallArgumentTree> functionCallArguments = arguments.stream()
+      .map(a -> new CallArgumentTreeImpl(null, a))
       .collect(Collectors.toList());
 
     return new FunctionCallTreeImpl(
@@ -1591,9 +1591,9 @@ public class TreeFactory {
   }
 
   public FunctionCallTreeImpl newExitExpression(InternalSyntaxToken openParenthesis, Optional<ExpressionTree> expressionTreeOptional, InternalSyntaxToken closeParenthesis) {
-    SeparatedListImpl<FunctionCallArgumentTree> arguments;
+    SeparatedListImpl<CallArgumentTree> arguments;
     if (expressionTreeOptional.isPresent()) {
-      arguments = new SeparatedListImpl<>(ImmutableList.of(new FunctionCallArgumentTreeImpl(null, expressionTreeOptional.get())), Collections.<SyntaxToken>emptyList());
+      arguments = new SeparatedListImpl<>(ImmutableList.of(new CallArgumentTreeImpl(null, expressionTreeOptional.get())), Collections.<SyntaxToken>emptyList());
     } else {
       arguments = SeparatedListImpl.empty();
     }
@@ -1698,26 +1698,26 @@ public class TreeFactory {
     return new ReturnTypeClauseTreeImpl(colonToken, typeTree);
   }
 
-  public SeparatedListImpl<FunctionCallArgumentTree> arguments(Optional<SeparatedListImpl<FunctionCallArgumentTree>> arguments) {
+  public SeparatedListImpl<CallArgumentTree> arguments(Optional<SeparatedListImpl<CallArgumentTree>> arguments) {
     return arguments.or(SeparatedListImpl.empty());
   }
 
-  public SeparatedListImpl<FunctionCallArgumentTree> argumentsList(
-    FunctionCallArgumentTree firstArgument,
-    Optional<List<Tuple<InternalSyntaxToken, FunctionCallArgumentTree>>> otherArguments,
+  public SeparatedListImpl<CallArgumentTree> argumentsList(
+    CallArgumentTree firstArgument,
+    Optional<List<Tuple<InternalSyntaxToken, CallArgumentTree>>> otherArguments,
     Optional<InternalSyntaxToken> trailingComma) {
     return separatedList(firstArgument, otherArguments, trailingComma.orNull());
   }
 
   public AnonymousClassTree anonymousClass(
     InternalSyntaxToken classToken,
-    Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<FunctionCallArgumentTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
+    Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<CallArgumentTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
     InternalSyntaxToken lCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken rCurlyBrace
   ) {
     List<ExpressionTree> argumentValues = arguments.stream()
-      .map(FunctionCallArgumentTree::value)
+      .map(CallArgumentTree::value)
       .collect(Collectors.toList());
 
     return new AnonymousClassTreeImpl(
@@ -1824,12 +1824,12 @@ public class TreeFactory {
     return new UnionTypeTreeImpl(new SeparatedListImpl<>(types.build(), separators.build()));
   }
 
-  public FunctionCallArgumentTree functionCallArgument(Optional<Tuple<NameIdentifierTree, InternalSyntaxToken>> optional, ExpressionTree firstOf) {
-    return new FunctionCallArgumentTreeImpl(optional.orNull(), firstOf);
+  public CallArgumentTree functionCallArgument(Optional<Tuple<NameIdentifierTree, InternalSyntaxToken>> optional, ExpressionTree firstOf) {
+    return new CallArgumentTreeImpl(optional.orNull(), firstOf);
   }
 
-  public FunctionCallArgumentTree functionCallArgument(ExpressionTree value) {
-    return new FunctionCallArgumentTreeImpl(null, value);
+  public CallArgumentTree functionCallArgument(ExpressionTree value) {
+    return new CallArgumentTreeImpl(null, value);
   }
 
   /**

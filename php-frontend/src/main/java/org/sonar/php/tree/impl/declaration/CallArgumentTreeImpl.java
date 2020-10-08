@@ -24,7 +24,7 @@ import org.sonar.php.parser.TreeFactory;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -33,8 +33,8 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class FunctionCallArgumentTreeImpl extends PHPTree implements FunctionCallArgumentTree {
-  private static final Kind KIND = Kind.FUNCTION_CALL_ARGUMENT;
+public class CallArgumentTreeImpl extends PHPTree implements CallArgumentTree {
+  private static final Kind KIND = Kind.CALL_ARGUMENT;
 
   @Nullable
   private final NameIdentifierTree name;
@@ -42,7 +42,7 @@ public class FunctionCallArgumentTreeImpl extends PHPTree implements FunctionCal
   private final SyntaxToken nameSeparator;
   private final ExpressionTree value;
 
-  public FunctionCallArgumentTreeImpl(@Nullable TreeFactory.Tuple<NameIdentifierTree, InternalSyntaxToken> nameAndToken, ExpressionTree value) {
+  public CallArgumentTreeImpl(@Nullable TreeFactory.Tuple<NameIdentifierTree, InternalSyntaxToken> nameAndToken, ExpressionTree value) {
     this.name = nameAndToken != null ? nameAndToken.first() : null;
     this.nameSeparator = nameAndToken != null ? nameAndToken.second() : null;
     this.value = value;
@@ -69,7 +69,7 @@ public class FunctionCallArgumentTreeImpl extends PHPTree implements FunctionCal
 
   @Override
   public void accept(VisitorCheck visitor) {
-    visitor.visitFunctionCallArgument(this);
+    visitor.visitCallArgument(this);
   }
 
   @Override

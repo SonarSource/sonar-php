@@ -21,7 +21,7 @@ package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
-import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
@@ -50,7 +50,7 @@ public interface FunctionCallTree extends ExpressionTree {
   @Deprecated
   SeparatedList<ExpressionTree> arguments();
 
-  SeparatedList<FunctionCallArgumentTree> callArguments();
+  SeparatedList<CallArgumentTree> callArguments();
 
   /**
    * Retrieves an argument based on position and name.
@@ -61,7 +61,7 @@ public interface FunctionCallTree extends ExpressionTree {
    * @since 3.11
    */
   @Nullable
-  FunctionCallArgumentTree argument(int position, String name);
+  CallArgumentTree argument(int position, String name);
 
   /**
    * Nullable in case of internal function call with no parenthesis

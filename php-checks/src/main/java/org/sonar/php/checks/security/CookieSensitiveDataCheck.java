@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -49,7 +49,7 @@ public class CookieSensitiveDataCheck extends PHPVisitorCheck {
   }
 
   private static boolean hasCookieValue(FunctionCallTree tree) {
-    FunctionCallArgumentTree argument = tree.argument(VALUE_PARAMETER_INDEX, VALUE_PARAMETER_NAME);
+    CallArgumentTree argument = tree.argument(VALUE_PARAMETER_INDEX, VALUE_PARAMETER_NAME);
 
     return argument != null && !CheckUtils.isNullOrEmptyString(argument.value());
   }

@@ -26,7 +26,7 @@ import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionCallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -260,9 +260,9 @@ public interface Tree {
     FUNCTION_CALL(FunctionCallTree.class),
 
     /**
-     * {@link FunctionCallArgumentTree}
+     * {@link CallArgumentTree}
      */
-    FUNCTION_CALL_ARGUMENT(FunctionCallArgumentTree.class),
+    CALL_ARGUMENT(CallArgumentTree.class),
 
     /**
      * {@link SpreadArgumentTree}

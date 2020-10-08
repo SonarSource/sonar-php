@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.visitors;
 import java.util.Iterator;
 import java.util.List;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.declaration.FunctionCallArgumentTreeImpl;
 import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -31,6 +30,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
@@ -561,7 +561,7 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
   }
 
   @Override
-  public void visitFunctionCallArgument(FunctionCallArgumentTreeImpl tree) {
+  public void visitCallArgument(CallArgumentTree tree) {
     scan(tree);
   }
 

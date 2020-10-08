@@ -24,7 +24,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-public interface FunctionCallArgumentTree extends Tree {
+public interface CallArgumentTree extends Tree {
   NameIdentifierTree name();
 
   SyntaxToken separator();

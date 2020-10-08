@@ -37,7 +37,7 @@ public class AssignmentInSubExpressionCheck extends PHPVisitorCheck {
   private static final Tree.Kind[] ALLOWED_PARENTS = new Tree.Kind[]{
     Tree.Kind.IF_STATEMENT,
     Tree.Kind.ELSEIF_CLAUSE,
-    Tree.Kind.FUNCTION_CALL_ARGUMENT,
+    Tree.Kind.CALL_ARGUMENT,
     Tree.Kind.EXPRESSION_STATEMENT,
     Tree.Kind.ASSIGNMENT_BY_REFERENCE,
     Tree.Kind.ASSIGNMENT,
