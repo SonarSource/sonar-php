@@ -65,12 +65,6 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
     assertThat(tree.callArguments()).hasSize(2);
 
     assertThat(tree.callArguments().get(0).name()).isNull();
-
-    assertThat(tree.argument(0, "someName")).isEqualTo(tree.callArguments().get(0));
-
-    CallArgumentTree secondArgument = tree.argument(0, "a");
-    assertThat(tree.callArguments().get(1)).isEqualTo(secondArgument);
-
-    assertThat(tree.argument(2, "someName")).isNull();
+    assertThat(tree.callArguments().get(1).name().toString()).isEqualTo("a");
   }
 }

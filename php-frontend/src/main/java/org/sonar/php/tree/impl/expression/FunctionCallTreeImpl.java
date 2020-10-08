@@ -112,26 +112,6 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     return callArguments;
   }
 
-  @Override
-  @Nullable
-  public CallArgumentTree argument(int position, String name) {
-    CallArgumentTree argument = callArguments.stream()
-      .filter(a -> a.name() != null)
-      .filter(a -> a.name().text().equalsIgnoreCase(name))
-      .findFirst()
-      .orElse(null);
-
-    if (argument != null) {
-      return argument;
-    }
-
-    if (callArguments.size() >= position + 1 && callArguments.get(position).name() == null) {
-      return callArguments.get(position);
-    }
-
-    return null;
-  }
-
   @Nullable
   @Override
   public SyntaxToken closeParenthesisToken() {

@@ -49,7 +49,7 @@ public class CookieSensitiveDataCheck extends PHPVisitorCheck {
   }
 
   private static boolean hasCookieValue(FunctionCallTree tree) {
-    CallArgumentTree argument = tree.argument(VALUE_PARAMETER_INDEX, VALUE_PARAMETER_NAME);
+    CallArgumentTree argument = CheckUtils.argument(tree, VALUE_PARAMETER_INDEX, VALUE_PARAMETER_NAME);
 
     return argument != null && !CheckUtils.isNullOrEmptyString(argument.value());
   }
