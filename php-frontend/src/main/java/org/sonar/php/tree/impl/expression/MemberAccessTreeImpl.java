@@ -33,7 +33,7 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import java.util.Iterator;
 
-import static org.sonar.php.api.PHPPunctuator.SAFE_ARROW;
+import static org.sonar.php.api.PHPPunctuator.NULL_SAFE_ARROW;
 
 public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
 
@@ -85,7 +85,7 @@ public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
 
   @Override
   public boolean isNullSafeObjectAccess() {
-    return accessToken.text().equals(SAFE_ARROW.getValue());
+    return accessToken.text().equals(NULL_SAFE_ARROW.getValue());
   }
 
   @Override

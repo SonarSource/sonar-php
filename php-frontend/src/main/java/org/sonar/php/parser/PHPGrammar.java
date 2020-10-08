@@ -161,7 +161,7 @@ import static org.sonar.php.api.PHPPunctuator.QUERY;
 import static org.sonar.php.api.PHPPunctuator.RBRACKET;
 import static org.sonar.php.api.PHPPunctuator.RCURLYBRACE;
 import static org.sonar.php.api.PHPPunctuator.RPARENTHESIS;
-import static org.sonar.php.api.PHPPunctuator.SAFE_ARROW;
+import static org.sonar.php.api.PHPPunctuator.NULL_SAFE_ARROW;
 import static org.sonar.php.api.PHPPunctuator.SL;
 import static org.sonar.php.api.PHPPunctuator.SPACESHIP;
 import static org.sonar.php.api.PHPPunctuator.SR;
@@ -1294,7 +1294,7 @@ public class PHPGrammar {
             b.firstOf(NAME_IDENTIFIER(), NUMERIC_LITERAL(), ENCAPSULATED_VARIABLE_IDENTIFIER()),
             b.token(RBRACKET)),
           f.expandableObjectMemberAccess(
-            b.firstOf(b.token(ARROW), b.token(SAFE_ARROW)),
+            b.firstOf(b.token(ARROW), b.token(NULL_SAFE_ARROW)),
             NAME_IDENTIFIER())))));
   }
 
@@ -1563,7 +1563,7 @@ public class PHPGrammar {
   public MemberAccessTree OBJECT_MEMBER_ACCESS() {
     return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.OBJECT_MEMBER_ACCESS).is(
       f.objectMemberAccess(
-        b.firstOf(b.token(ARROW), b.token(SAFE_ARROW)),
+        b.firstOf(b.token(ARROW), b.token(NULL_SAFE_ARROW)),
         b.firstOf(
           VARIABLE_WITHOUT_OBJECTS(),
           OBJECT_DIMENSIONAL_LIST(),
