@@ -491,6 +491,7 @@ public class PHPGrammar {
         f.builtInType(b.firstOf(
           b.token(ARRAY),
           b.token(CALLABLE),
+          b.token(PHPLexicalGrammar.MIXED),
           b.token(PHPLexicalGrammar.SELF),
           b.token(PHPLexicalGrammar.PARENT),
           b.token(PHPLexicalGrammar.ITERABLE),

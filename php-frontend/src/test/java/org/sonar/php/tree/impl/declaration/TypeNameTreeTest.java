@@ -39,6 +39,14 @@ public class TypeNameTreeTest extends PHPTreeModelTest {
   }
 
   @Test
+  public void built_in_mixed_type() throws Exception {
+    BuiltInTypeTree tree = parse("mixed", PHPLexicalGrammar.TYPE_NAME);
+
+    assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
+    assertThat(tree.token().text()).isEqualTo("mixed");
+  }
+
+  @Test
   public void built_in_type_capital_letter() throws Exception {
     BuiltInTypeTree tree = parse("Int", PHPLexicalGrammar.TYPE_NAME);
 
