@@ -158,12 +158,12 @@ import static org.sonar.php.api.PHPPunctuator.NOTEQUAL;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUAL2;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUALBIS;
 import static org.sonar.php.api.PHPPunctuator.NS_SEPARATOR;
+import static org.sonar.php.api.PHPPunctuator.NULL_SAFE_ARROW;
 import static org.sonar.php.api.PHPPunctuator.PLUS;
 import static org.sonar.php.api.PHPPunctuator.QUERY;
 import static org.sonar.php.api.PHPPunctuator.RBRACKET;
 import static org.sonar.php.api.PHPPunctuator.RCURLYBRACE;
 import static org.sonar.php.api.PHPPunctuator.RPARENTHESIS;
-import static org.sonar.php.api.PHPPunctuator.NULL_SAFE_ARROW;
 import static org.sonar.php.api.PHPPunctuator.SL;
 import static org.sonar.php.api.PHPPunctuator.SPACESHIP;
 import static org.sonar.php.api.PHPPunctuator.SR;
@@ -495,6 +495,7 @@ public class PHPGrammar {
           b.token(PHPLexicalGrammar.MIXED),
           b.token(PHPLexicalGrammar.SELF),
           b.token(PHPLexicalGrammar.PARENT),
+          b.token(PHPLexicalGrammar.STATIC),
           b.token(PHPLexicalGrammar.ITERABLE),
           b.token(PHPLexicalGrammar.OBJECT),
           b.token(PHPLexicalGrammar.BOOL),

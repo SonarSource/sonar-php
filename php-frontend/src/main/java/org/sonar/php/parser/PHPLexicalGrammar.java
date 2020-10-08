@@ -239,6 +239,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
   SELF,
   PARENT,
+  STATIC,
 
   MIXED,
   INTEGER,
@@ -333,6 +334,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
     b.rule(SELF).is(word(b, "SELF")).skip();
     b.rule(PARENT).is(word(b, "PARENT")).skip();
+    b.rule(STATIC).is(word(b, "STATIC")).skip();
 
     b.rule(MIXED).is(word(b, "MIXED")).skip();
     b.rule(INTEGER).is(word(b, "INTEGER")).skip();
