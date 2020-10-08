@@ -158,12 +158,12 @@ import static org.sonar.php.api.PHPPunctuator.NOTEQUAL;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUAL2;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUALBIS;
 import static org.sonar.php.api.PHPPunctuator.NS_SEPARATOR;
+import static org.sonar.php.api.PHPPunctuator.NULL_SAFE_ARROW;
 import static org.sonar.php.api.PHPPunctuator.PLUS;
 import static org.sonar.php.api.PHPPunctuator.QUERY;
 import static org.sonar.php.api.PHPPunctuator.RBRACKET;
 import static org.sonar.php.api.PHPPunctuator.RCURLYBRACE;
 import static org.sonar.php.api.PHPPunctuator.RPARENTHESIS;
-import static org.sonar.php.api.PHPPunctuator.NULL_SAFE_ARROW;
 import static org.sonar.php.api.PHPPunctuator.SL;
 import static org.sonar.php.api.PHPPunctuator.SPACESHIP;
 import static org.sonar.php.api.PHPPunctuator.SR;
@@ -294,7 +294,6 @@ public class PHPGrammar {
         b.zeroOrMore(CLASS_MEMBER()),
         b.token(RCURLYBRACE)));
   }
-
 
   public ClassMemberTree CLASS_MEMBER() {
     return b.<ClassMemberTree>nonterminal(PHPLexicalGrammar.CLASS_MEMBER).is(
@@ -1573,6 +1572,7 @@ public class PHPGrammar {
         b.zeroOrMore(
           b.firstOf(
             OBJECT_MEMBER_ACCESS(),
+            OBJECT_CLASS_NAME_ACCESS(),
             CLASS_MEMBER_ACCESS(),
             DIMENSIONAL_OFFSET(),
             FUNCTION_CALL_ARGUMENT_LIST()))
@@ -1587,6 +1587,11 @@ public class PHPGrammar {
           VARIABLE_WITHOUT_OBJECTS(),
           OBJECT_DIMENSIONAL_LIST(),
           NAME_IDENTIFIER_OR_KEYWORD())));
+  }
+
+  public MemberAccessTree OBJECT_CLASS_NAME_ACCESS() {
+    return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.OBJECT_CLASS_NAME_ACCESS).is(
+      f.objectMemberAccess(b.token(DOUBLECOLON), b.token(CLASS)));
   }
 
   public ExpressionTree OBJECT_DIMENSIONAL_LIST() {

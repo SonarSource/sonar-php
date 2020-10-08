@@ -31,7 +31,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
@@ -50,10 +49,10 @@ import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
 import org.sonar.php.tree.impl.declaration.ReturnTypeClauseTreeImpl;
-import org.sonar.php.tree.impl.declaration.TypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
+import org.sonar.php.tree.impl.declaration.TypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.UnionTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
@@ -1387,7 +1386,7 @@ public class TreeFactory {
     return new NameIdentifierTreeImpl(token);
   }
 
-  public MemberAccessTree objectMemberAccess(InternalSyntaxToken accessToken, ExpressionTree member) {
+  public MemberAccessTree objectMemberAccess(InternalSyntaxToken accessToken, Tree member) {
     return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, accessToken, member);
   }
 
