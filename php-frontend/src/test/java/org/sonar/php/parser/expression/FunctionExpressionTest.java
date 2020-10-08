@@ -34,6 +34,7 @@ public class FunctionExpressionTest {
       .matches("function () use ($a) {}")
       .matches("function () : bool {}")
       .matches("function () use ($a) : bool {}")
+      .matches("function () use ($a,) : bool {}")
     ;
   }
 

@@ -41,6 +41,7 @@ public class ParameterListTreeTest extends PHPTreeModelTest {
   public void not_empty() throws Exception {
     assertThat(parameterList("($p1)").parameters()).hasSize(1);
     assertThat(parameterList("($p1, $p2)").parameters()).hasSize(2);
+    assertThat(parameterList("($p1, $p2,)").parameters()).hasSize(2);
   }
 
   private ParameterListTree parameterList(String toParse) {

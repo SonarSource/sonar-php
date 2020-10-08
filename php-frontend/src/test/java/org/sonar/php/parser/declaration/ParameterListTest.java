@@ -19,10 +19,10 @@
  */
 package org.sonar.php.parser.declaration;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class ParameterListTest {
 
@@ -31,6 +31,7 @@ public class ParameterListTest {
     assertThat(PHPLexicalGrammar.PARAMETER_LIST)
       .matches("()")
       .matches("($a)")
-      .matches("($a, $b)");
+      .matches("($a, $b)")
+      .matches("($a, $b,)");
   }
 }
