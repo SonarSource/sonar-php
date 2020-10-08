@@ -64,6 +64,7 @@ import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
@@ -666,6 +667,11 @@ public interface Tree {
      * @since 3.0
      */
     PREFIXED_CAST_EXPRESSION(PrefixedCastExpressionTreeImpl.class),
+
+    /**
+     * {@link ThrowExpressionTree}
+     */
+    THROW_EXPRESSION(ThrowExpressionTree.class),
 
     /**
      * {@link LiteralTree}
