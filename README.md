@@ -49,6 +49,7 @@ If you have an idea for a rule but you are not sure that everyone needs it you c
     * `ClassPropertyDeclarationTree#typeAnnotation()` is deprecated. Use `ClassPropertyDeclarationTree#declaredType()` instead.
     * `CatchBlockTree#variable()` can now return `NULL`.
     * `FunctionCallTree#arguments()` is deprecated. Use `FunctionCallTree#callArguments()` instead.
+    * New tree: `CallArgumentTree`. This tree wraps expressions passed as arguments now.   
 
 # <a name="testing"></a>Testing
 To run tests locally follow these instructions.
