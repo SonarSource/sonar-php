@@ -39,6 +39,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.ScriptTreeImpl;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.impl.declaration.AttributeTreeImpl;
 import org.sonar.php.tree.impl.declaration.BuiltInTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
@@ -134,6 +135,7 @@ import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -1833,6 +1835,10 @@ public class TreeFactory {
 
   public CallArgumentTree functionCallArgument(ExpressionTree value) {
     return new CallArgumentTreeImpl(null, value);
+  }
+
+  public AttributeTree attribute(NamespaceNameTree name, Optional<FunctionCallTree> arguments) {
+    return new AttributeTreeImpl(name, arguments);
   }
 
   /**

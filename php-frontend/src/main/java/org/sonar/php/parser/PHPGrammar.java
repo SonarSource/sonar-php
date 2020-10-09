@@ -31,6 +31,7 @@ import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -1807,4 +1808,11 @@ public class PHPGrammar {
    * [ END ] Expression
    */
 
+  public AttributeTree ATTRIBUTE() {
+    return b.<AttributeTree>nonterminal(PHPLexicalGrammar.ATTRIBUTE).is(
+      f.attribute(
+        NAMESPACE_NAME(),
+        b.optional(FUNCTION_CALL_ARGUMENT_LIST())
+      ));
+  }
 }

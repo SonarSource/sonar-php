@@ -47,4 +47,10 @@ public class ScriptTest {
       .matches("<?php echo 42; $x ?>")
     ;
   }
+
+  @Test
+  public void attributes_test() {
+    assertThat(PHPLexicalGrammar.SCRIPT)
+      .matches("<?php #[someAttribute] class Foo {} ?>");
+  }
 }
