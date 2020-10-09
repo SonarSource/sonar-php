@@ -453,7 +453,14 @@ public class TreeFactory {
     Optional<ReturnTypeClauseTree> returnTypeClause,
     Tree body
   ) {
-    return new MethodDeclarationTreeImpl(attributes.or(Collections.emptyList()),optionalList(modifiers), functionToken, referenceToken.orNull(), name, parameters, returnTypeClause.orNull(), body);
+    return new MethodDeclarationTreeImpl(attributes.or(Collections.emptyList()),
+      optionalList(modifiers),
+      functionToken,
+      referenceToken.orNull(),
+      name,
+      parameters,
+      returnTypeClause.orNull(),
+      body);
   }
 
   public FunctionDeclarationTree functionDeclaration(

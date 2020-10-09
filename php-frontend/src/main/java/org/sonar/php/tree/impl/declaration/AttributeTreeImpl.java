@@ -41,7 +41,10 @@ public class AttributeTreeImpl extends PHPTree implements AttributeTree {
   @Nullable
   private final SyntaxToken closeParenthesisToken;
 
-  public AttributeTreeImpl(NamespaceNameTree name, @Nullable SyntaxToken openParenthesisToken, SeparatedListImpl<CallArgumentTree> arguments, @Nullable SyntaxToken closeParenthesisToken) {
+  public AttributeTreeImpl(NamespaceNameTree name,
+                           @Nullable SyntaxToken openParenthesisToken,
+                           SeparatedListImpl<CallArgumentTree> arguments,
+                           @Nullable SyntaxToken closeParenthesisToken) {
     this.name = name;
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = arguments;
