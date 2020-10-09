@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AttributeGroupTreeTest extends PHPTreeModelTest {
   @Test
   public void simple_group() throws Exception {
-    AttributeGroupTree tree = parse("#[A,B]", PHPLexicalGrammar.ATTRIBUTE_GROUP);
+    AttributeGroupTree tree = parse("#[A,B($x)]", PHPLexicalGrammar.ATTRIBUTE_GROUP);
 
     assertThat(tree.is(Tree.Kind.ATTRIBUTE_GROUP)).isTrue();
     assertThat(tree.attributes()).hasSize(2);
