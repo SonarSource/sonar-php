@@ -1572,7 +1572,6 @@ public class PHPGrammar {
         b.zeroOrMore(
           b.firstOf(
             OBJECT_MEMBER_ACCESS(),
-            OBJECT_CLASS_NAME_ACCESS(),
             CLASS_MEMBER_ACCESS(),
             DIMENSIONAL_OFFSET(),
             FUNCTION_CALL_ARGUMENT_LIST()))
@@ -1581,18 +1580,13 @@ public class PHPGrammar {
 
   public MemberAccessTree OBJECT_MEMBER_ACCESS() {
     return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.OBJECT_MEMBER_ACCESS).is(
-      f.objectMemberAccess(
-        b.firstOf(b.token(ARROW), b.token(NULL_SAFE_ARROW)),
-        b.firstOf(
-          VARIABLE_WITHOUT_OBJECTS(),
-          OBJECT_DIMENSIONAL_LIST(),
+        f.objectMemberAccess(
+          b.firstOf(b.token(ARROW), b.token(NULL_SAFE_ARROW)),
+          b.firstOf(
+            VARIABLE_WITHOUT_OBJECTS(),
+            OBJECT_DIMENSIONAL_LIST(),
           NAME_IDENTIFIER_OR_KEYWORD())));
-  }
-
-  public MemberAccessTree OBJECT_CLASS_NAME_ACCESS() {
-    return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.OBJECT_CLASS_NAME_ACCESS).is(
-      f.objectMemberAccess(b.token(DOUBLECOLON), b.token(CLASS)));
-  }
+    }
 
   public ExpressionTree OBJECT_DIMENSIONAL_LIST() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.OBJECT_DIM_LIST).is(

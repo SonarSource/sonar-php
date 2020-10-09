@@ -1386,7 +1386,7 @@ public class TreeFactory {
     return new NameIdentifierTreeImpl(token);
   }
 
-  public MemberAccessTree objectMemberAccess(InternalSyntaxToken accessToken, Tree member) {
+  public MemberAccessTree objectMemberAccess(InternalSyntaxToken accessToken, ExpressionTree member) {
     return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, accessToken, member);
   }
 
