@@ -30,6 +30,7 @@ public class TypeNameTest {
   public void test() {
     assertThat(PHPLexicalGrammar.TYPE_NAME)
       .matches("self")
+      .matches("static")
       .matches("array")
       .matches("callable")
       .matches("bool")

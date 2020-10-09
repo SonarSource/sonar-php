@@ -26,8 +26,10 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * <a href="http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration.types">Not custom types</a><p>
  * Valid built-in types:
  * <ul>
+ *   <li>mixed</li>
  *   <li>self</li>
  *   <li>parent</li>
+ *   <li>static</li>
  *   <li>array</li>
  *   <li>callable</li>
  *   <li>bool</li>

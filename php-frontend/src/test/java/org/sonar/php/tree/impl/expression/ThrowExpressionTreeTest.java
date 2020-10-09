@@ -17,30 +17,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.tree.expression;
+package org.sonar.php.tree.impl.expression;
 
+import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 
-import com.google.common.annotations.Beta;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * <a href="http://php.net/manual/en/language.oop5.properties.php">Object/Class Member</a> Access
- * <pre>
- *   {@link #object()} -> {@link #member()}
- *   {@link #object()} :: {@link #member()}
- * </pre>
- */
-@Beta
-public interface MemberAccessTree extends ExpressionTree {
+public class ThrowExpressionTreeTest extends PHPTreeModelTest {
 
-  ExpressionTree object();
+  @Test
+  public void test() throws Exception {
+    ThrowExpressionTree tree = parse("throw $a", PHPLexicalGrammar.EXPRESSION);
+    assertThat(tree.is(Tree.Kind.THROW_EXPRESSION)).isTrue();
+    assertThat(tree.throwToken().text()).isEqualTo("throw");
+    assertThat(expressionToString(tree.expression())).isEqualTo("$a");
+  }
 
-  SyntaxToken accessToken();
-
-  Tree member();
-
-  boolean isStatic();
-
-  boolean isNullSafeObjectAccess();
 }

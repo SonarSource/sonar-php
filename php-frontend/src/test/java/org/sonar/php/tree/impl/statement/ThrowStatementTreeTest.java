@@ -31,7 +31,7 @@ public class ThrowStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void test() throws Exception {
-    ThrowStatementTree tree = parse("throw $a ;", PHPLexicalGrammar.THROW_STATEMENT);
+    ThrowStatementTree tree = parse("throw $a ;", PHPLexicalGrammar.STATEMENT);
 
     assertThat(tree.is(Kind.THROW_STATEMENT)).isTrue();
     assertThat(tree.throwToken().text()).isEqualTo("throw");

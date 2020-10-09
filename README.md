@@ -51,6 +51,7 @@ If you have an idea for a rule but you are not sure that everyone needs it you c
     * `FunctionCallTree#arguments()` is deprecated. Use `FunctionCallTree#callArguments()` instead.
     * `AnonymousClassTree#arguments()` is deprecated. Use `AnonymousClassTree#callArguments()` instead.
     * New tree: `CallArgumentTree`. This tree wraps expressions passed as arguments now.   
+    * New kind of expression: `ThrowExpressionTree`.
 
 # <a name="testing"></a>Testing
 To run tests locally follow these instructions.

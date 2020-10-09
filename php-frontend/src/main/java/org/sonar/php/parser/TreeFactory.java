@@ -91,6 +91,7 @@ import org.sonar.php.tree.impl.expression.PrefixExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.PrefixedCastExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
+import org.sonar.php.tree.impl.expression.ThrowExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.VariableVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -177,6 +178,7 @@ import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
@@ -792,8 +794,8 @@ public class TreeFactory {
     return new EmptyStatementImpl(semicolonToken);
   }
 
-  public ThrowStatementTree throwStatement(InternalSyntaxToken throwToken, ExpressionTree expression, InternalSyntaxToken eosToken) {
-    return new ThrowStatementTreeImpl(throwToken, expression, eosToken);
+  public ThrowStatementTree throwStatement(ThrowExpressionTree throwExpression, InternalSyntaxToken eosToken) {
+    return new ThrowStatementTreeImpl(throwExpression, eosToken);
   }
 
   public ForEachStatementTree forEachStatement(ForEachStatementHeader header, StatementTree statement) {
@@ -1429,6 +1431,10 @@ public class TreeFactory {
     }
 
     return result;
+  }
+
+  public ThrowExpressionTree throwExpression(SyntaxToken throwToken, ExpressionTree expression) {
+    return new ThrowExpressionTreeImpl(throwToken, expression);
   }
 
   public VariableTree lexicalVariable(Optional<InternalSyntaxToken> ampersandToken, VariableIdentifierTree variableIdentifier) {

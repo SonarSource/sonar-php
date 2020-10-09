@@ -19,28 +19,18 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
-
 /**
- * <a href="http://php.net/manual/en/language.oop5.properties.php">Object/Class Member</a> Access
+ * <a href="https://wiki.php.net/rfc/throw_expression">Throw expression</a>
  * <pre>
- *   {@link #object()} -> {@link #member()}
- *   {@link #object()} :: {@link #member()}
+ *   throw {@link #expression()}
  * </pre>
  */
-@Beta
-public interface MemberAccessTree extends ExpressionTree {
+public interface ThrowExpressionTree extends ExpressionTree {
 
-  ExpressionTree object();
+  SyntaxToken throwToken();
 
-  SyntaxToken accessToken();
+  ExpressionTree expression();
 
-  Tree member();
-
-  boolean isStatic();
-
-  boolean isNullSafeObjectAccess();
 }

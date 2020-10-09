@@ -66,6 +66,7 @@ import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.PrefixedCastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
@@ -229,6 +230,7 @@ public interface VisitorCheck extends PHPCheck {
   /**
    * [ START ] Expression
    */
+  void visitThrowExpression(ThrowExpressionTree tree);
 
   void visitCastExpression(CastExpressionTree tree);
 
