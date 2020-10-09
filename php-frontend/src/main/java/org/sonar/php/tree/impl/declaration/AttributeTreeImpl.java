@@ -1,39 +1,40 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
-import com.sonar.sslr.api.typed.Optional;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import java.util.Collections;
+import javax.annotation.Nullable;
 import java.util.Iterator;
 
 public class AttributeTreeImpl extends PHPTree implements AttributeTree {
   private final NamespaceNameTree name;
-  private final SeparatedList<ExpressionTree> arguments;
+  @Nullable
+  private final SyntaxToken openParenthesisToken;
+  private final SeparatedListImpl<CallArgumentTree> arguments;
+  @Nullable
+  private final SyntaxToken closeParenthesisToken;
 
-  public AttributeTreeImpl(NamespaceNameTree name, Optional<FunctionCallTree> arguments) {
+  public AttributeTreeImpl(NamespaceNameTree name, @Nullable SyntaxToken openParenthesisToken, SeparatedListImpl<CallArgumentTree> arguments, @Nullable SyntaxToken closeParenthesisToken) {
     this.name = name;
-
-    if (arguments.isPresent()) {
-      this.arguments = arguments.get().arguments();
-    } else {
-      this.arguments = new SeparatedListImpl<>(Collections.emptyList(), Collections.emptyList());
-    }
+    this.openParenthesisToken = openParenthesisToken;
+    this.arguments = arguments;
+    this.closeParenthesisToken = closeParenthesisToken;
   }
 
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
-      Iterators.forArray(name),
-      arguments.elementsAndSeparators()
+      Iterators.forArray(name, openParenthesisToken),
+      arguments.elementsAndSeparators(),
+      Iterators.singletonIterator(closeParenthesisToken)
     );
   }
 
@@ -53,7 +54,17 @@ public class AttributeTreeImpl extends PHPTree implements AttributeTree {
   }
 
   @Override
-  public SeparatedList<ExpressionTree> arguments() {
+  public SyntaxToken openParenthesisToken() {
+    return openParenthesisToken;
+  }
+
+  @Override
+  public SeparatedList<CallArgumentTree> arguments() {
     return arguments;
+  }
+
+  @Override
+  public SyntaxToken closeParenthesisToken() {
+    return closeParenthesisToken;
   }
 }

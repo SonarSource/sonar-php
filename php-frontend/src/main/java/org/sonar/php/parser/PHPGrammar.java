@@ -1812,7 +1812,9 @@ public class PHPGrammar {
     return b.<AttributeTree>nonterminal(PHPLexicalGrammar.ATTRIBUTE).is(
       f.attribute(
         NAMESPACE_NAME(),
-        b.optional(FUNCTION_CALL_ARGUMENT_LIST())
+        b.optional(b.token(PHPPunctuator.LPARENTHESIS)),
+        ARGUMENTS(),
+        b.optional(b.token(PHPPunctuator.RPARENTHESIS))
       ));
   }
 }

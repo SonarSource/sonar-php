@@ -135,7 +135,6 @@ import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -1837,8 +1836,13 @@ public class TreeFactory {
     return new CallArgumentTreeImpl(null, value);
   }
 
-  public AttributeTree attribute(NamespaceNameTree name, Optional<FunctionCallTree> arguments) {
-    return new AttributeTreeImpl(name, arguments);
+  public AttributeTreeImpl attribute(NamespaceNameTree name,
+                                     Optional<SyntaxToken> lParenthesis, SeparatedListImpl<CallArgumentTree> arguments, Optional<SyntaxToken> rParenthesis) {
+    return new AttributeTreeImpl(name,
+      lParenthesis.orNull(),
+      arguments,
+      rParenthesis.orNull()
+    );
   }
 
   /**

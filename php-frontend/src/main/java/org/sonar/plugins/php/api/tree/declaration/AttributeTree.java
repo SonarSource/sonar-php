@@ -2,14 +2,20 @@ package org.sonar.plugins.php.api.tree.declaration;
 
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+
+import javax.annotation.Nullable;
 
 public interface AttributeTree extends Tree {
 
   NamespaceNameTree name();
 
-  // TODO: replace with CallArgument once rebased
+  @Nullable
+  SyntaxToken openParenthesisToken();
 
-  SeparatedList<ExpressionTree> arguments();
+  SeparatedList<CallArgumentTree> arguments();
+
+  @Nullable
+  SyntaxToken closeParenthesisToken();
 
 }
