@@ -39,6 +39,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.ScriptTreeImpl;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.impl.declaration.AttributeGroupTreeImpl;
 import org.sonar.php.tree.impl.declaration.AttributeTreeImpl;
 import org.sonar.php.tree.impl.declaration.BuiltInTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
@@ -135,6 +136,8 @@ import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -1843,6 +1846,16 @@ public class TreeFactory {
       arguments,
       rParenthesis.orNull()
     );
+  }
+
+  public SeparatedList<AttributeTree> attributeList(AttributeTree firstAttribute,
+                                                    Optional<List<Tuple<InternalSyntaxToken, AttributeTree>>> otherAttributes,
+                                                    Optional<InternalSyntaxToken> trailingComma) {
+    return separatedList(firstAttribute, otherAttributes, trailingComma.orNull());
+  }
+
+  public AttributeGroupTree attributeGroup(SyntaxToken startToken, SeparatedList<AttributeTree> attributes, SyntaxToken endToken) {
+    return new AttributeGroupTreeImpl(startToken, attributes, endToken);
   }
 
   /**

@@ -256,7 +256,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
   FROM,
 
-  ATTRIBUTE
+  ATTRIBUTE,
+  ATTRIBUTE_GROUP
   ;
 
   public static LexerlessGrammar createGrammar() {

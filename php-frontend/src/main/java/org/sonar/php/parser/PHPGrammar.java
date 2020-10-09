@@ -30,7 +30,9 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStateme
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -135,6 +137,7 @@ import static org.sonar.php.api.PHPKeyword.USE;
 import static org.sonar.php.api.PHPKeyword.YIELD;
 import static org.sonar.php.api.PHPPunctuator.AMPERSAND;
 import static org.sonar.php.api.PHPPunctuator.ARROW;
+import static org.sonar.php.api.PHPPunctuator.ATTRIBUTE_OPEN;
 import static org.sonar.php.api.PHPPunctuator.COLON;
 import static org.sonar.php.api.PHPPunctuator.COMMA;
 import static org.sonar.php.api.PHPPunctuator.DEC;
@@ -1815,6 +1818,25 @@ public class PHPGrammar {
         b.optional(b.token(PHPPunctuator.LPARENTHESIS)),
         ARGUMENTS(),
         b.optional(b.token(PHPPunctuator.RPARENTHESIS))
+      ));
+  }
+
+  public SeparatedList<AttributeTree> ATTRIBUTE_LIST() {
+    return b.<SeparatedList<AttributeTree>>nonterminal().is(
+      f.attributeList(
+        ATTRIBUTE(),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), ATTRIBUTE())),
+        b.optional(b.token(COMMA))
+      )
+    );
+  }
+
+  public AttributeGroupTree ATTRIBUTE_GROUP() {
+    return b.<AttributeGroupTree>nonterminal(PHPLexicalGrammar.ATTRIBUTE_GROUP).is(
+      f.attributeGroup(
+        b.token(ATTRIBUTE_OPEN),
+        ATTRIBUTE_LIST(),
+        b.token(RBRACKET)
       ));
   }
 }
