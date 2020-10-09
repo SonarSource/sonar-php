@@ -24,12 +24,15 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * Common interface for all kinds of <a href="http://php.net/manual/en/language.functions.php">function</a>.
  */
 @Beta
 public interface FunctionTree extends Tree {
+
+  List<AttributeGroupTree> attributes();
 
   SyntaxToken functionToken();
 

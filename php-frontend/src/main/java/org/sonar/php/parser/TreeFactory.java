@@ -444,6 +444,7 @@ public class TreeFactory {
   }
 
   public MethodDeclarationTree methodDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<List<SyntaxToken>> modifiers,
     InternalSyntaxToken functionToken,
     Optional<InternalSyntaxToken> referenceToken,
@@ -452,7 +453,7 @@ public class TreeFactory {
     Optional<ReturnTypeClauseTree> returnTypeClause,
     Tree body
   ) {
-    return new MethodDeclarationTreeImpl(optionalList(modifiers), functionToken, referenceToken.orNull(), name, parameters, returnTypeClause.orNull(), body);
+    return new MethodDeclarationTreeImpl(attributes.or(Collections.emptyList()),optionalList(modifiers), functionToken, referenceToken.orNull(), name, parameters, returnTypeClause.orNull(), body);
   }
 
   public FunctionDeclarationTree functionDeclaration(
@@ -1550,6 +1551,7 @@ public class TreeFactory {
   }
 
   public FunctionExpressionTree functionExpression(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<InternalSyntaxToken> staticToken,
     InternalSyntaxToken functionToken,
     Optional<InternalSyntaxToken> ampersandToken,
@@ -1560,6 +1562,7 @@ public class TreeFactory {
   ) {
 
     return new FunctionExpressionTreeImpl(
+      attributes.or(Collections.emptyList()),
       staticToken.orNull(),
       functionToken,
       ampersandToken.orNull(),
@@ -1570,6 +1573,7 @@ public class TreeFactory {
   }
 
   public ArrowFunctionExpressionTree arrowFunctionExpression(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<InternalSyntaxToken> staticToken,
     InternalSyntaxToken fnToken,
     Optional<InternalSyntaxToken> ampersandToken,
@@ -1579,6 +1583,7 @@ public class TreeFactory {
     ExpressionTree body
   ) {
     return new ArrowFunctionExpressionTreeImpl(
+      attributes.or(Collections.emptyList()),
       staticToken.orNull(),
       fnToken,
       ampersandToken.orNull(),

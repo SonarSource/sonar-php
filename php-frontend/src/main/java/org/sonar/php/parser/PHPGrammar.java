@@ -362,6 +362,7 @@ public class PHPGrammar {
   public MethodDeclarationTree METHOD_DECLARATION() {
     return b.<MethodDeclarationTree>nonterminal(PHPLexicalGrammar.METHOD_DECLARATION).is(
       f.methodDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.zeroOrMore(MEMBER_MODIFIER()),
         b.token(PHPKeyword.FUNCTION),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
@@ -1717,6 +1718,7 @@ public class PHPGrammar {
   public FunctionExpressionTree FUNCTION_EXPRESSION() {
     return b.<FunctionExpressionTree>nonterminal(Kind.FUNCTION_EXPRESSION).is(
       f.functionExpression(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(b.token(STATIC)),
         b.token(FUNCTION),
         b.optional(b.token(AMPERSAND)),
@@ -1729,6 +1731,7 @@ public class PHPGrammar {
   public ArrowFunctionExpressionTree ARROW_FUNCTION_EXPRESSION() {
     return b.<ArrowFunctionExpressionTree>nonterminal(Kind.ARROW_FUNCTION_EXPRESSION).is(
       f.arrowFunctionExpression(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(b.token(STATIC)),
         b.token(PHPKeyword.FN),
         b.optional(b.token(AMPERSAND)),

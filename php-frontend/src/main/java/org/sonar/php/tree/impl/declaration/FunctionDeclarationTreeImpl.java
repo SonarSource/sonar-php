@@ -113,7 +113,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
-      attributes.listIterator(),
+      attributes.iterator(),
       Iterators.forArray(functionToken, referenceToken, name, parameters, returnTypeClause, body)
     );
   }

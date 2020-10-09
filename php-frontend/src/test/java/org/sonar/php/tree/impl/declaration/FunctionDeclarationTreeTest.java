@@ -72,7 +72,8 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
   public void with_attributes() throws Exception {
-    FunctionDeclarationTree tree = parse("#[A1(8)] function f() {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
+    FunctionDeclarationTree tree = parse("#[A1(8), A2] function f() {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.attributes()).hasSize(1);
+    assertThat(tree.attributes().get(0).attributes()).hasSize(2);
   }
 }
