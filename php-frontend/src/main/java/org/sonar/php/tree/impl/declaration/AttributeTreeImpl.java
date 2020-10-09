@@ -62,7 +62,7 @@ public class AttributeTreeImpl extends PHPTree implements AttributeTree {
 
   @Override
   public void accept(VisitorCheck visitor) {
-
+    visitor.visitAttribute(this);
   }
 
   @Override

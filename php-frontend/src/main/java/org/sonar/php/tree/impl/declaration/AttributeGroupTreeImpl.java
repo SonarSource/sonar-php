@@ -52,7 +52,7 @@ public class AttributeGroupTreeImpl extends PHPTree implements AttributeGroupTre
 
   @Override
   public void accept(VisitorCheck visitor) {
-
+    visitor.visitAttributeGroup(this);
   }
 
   @Override
