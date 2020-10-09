@@ -559,6 +559,7 @@ public class TreeFactory {
   }
 
   public ClassDeclarationTree interfaceDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken interfaceToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> extendsClause,
     InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
@@ -570,6 +571,7 @@ public class TreeFactory {
       interfaceList = extendsClause.get().second();
     }
     return ClassDeclarationTreeImpl.createInterface(
+      attributes.or(Collections.emptyList()),
       interfaceToken,
       name,
       extendsToken,
@@ -581,10 +583,12 @@ public class TreeFactory {
   }
 
   public ClassDeclarationTree traitDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken traitToken, NameIdentifierTree name,
     InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     return ClassDeclarationTreeImpl.createTrait(
+      attributes.or(Collections.emptyList()),
       traitToken,
       name,
       openCurlyBraceToken,
@@ -594,12 +598,14 @@ public class TreeFactory {
   }
 
   public ClassDeclarationTree classDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<InternalSyntaxToken> modifier, InternalSyntaxToken classToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
     InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace
   ) {
     return ClassDeclarationTreeImpl.createClass(
+      attributes.or(Collections.emptyList()),
       modifier.orNull(), classToken, name,
       extendsToken(extendsClause), superClass(extendsClause),
       implementsToken(implementsClause), superInterfaces(implementsClause),
@@ -1733,6 +1739,7 @@ public class TreeFactory {
   }
 
   public AnonymousClassTree anonymousClass(
+    Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken classToken,
     Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<CallArgumentTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
@@ -1741,6 +1748,7 @@ public class TreeFactory {
   ) {
 
     return new AnonymousClassTreeImpl(
+      attributes.or(Collections.emptyList()),
       classToken,
       lParenthesis.orNull(),
       arguments,

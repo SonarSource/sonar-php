@@ -270,6 +270,7 @@ public class PHPGrammar {
   public ClassDeclarationTree CLASS_DECLARATION() {
     return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_DECLARATION).is(
       f.classDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(b.firstOf(b.token(ABSTRACT), b.token(FINAL))),
         b.token(CLASS),
         NAME_IDENTIFIER(),
@@ -283,6 +284,7 @@ public class PHPGrammar {
   public ClassDeclarationTree TRAIT_DECLARATION() {
     return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.TRAIT_DECLARATION).is(
       f.traitDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(TRAIT),
         NAME_IDENTIFIER(),
         b.token(LCURLYBRACE),
@@ -293,6 +295,7 @@ public class PHPGrammar {
   public ClassDeclarationTree INTERFACE_DECLARATION() {
     return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.INTERFACE_DECLARATION).is(
       f.interfaceDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(INTERFACE),
         NAME_IDENTIFIER(),
         b.optional(f.newTuple(b.token(EXTENDS), INTERFACE_LIST())),
@@ -1768,6 +1771,7 @@ public class PHPGrammar {
   public AnonymousClassTree ANONYMOUS_CLASS() {
     return b.<AnonymousClassTree>nonterminal(Kind.ANONYMOUS_CLASS).is(
       f.anonymousClass(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(CLASS),
         b.optional(b.token(PHPPunctuator.LPARENTHESIS)),
         ARGUMENTS(),

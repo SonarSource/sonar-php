@@ -29,6 +29,7 @@ import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -41,6 +42,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
 
   private final Kind kind;
 
+  private final List<AttributeGroupTree> attributes;
   private final SyntaxToken modifierToken;
   private final SyntaxToken classEntryTypeToken;
   private final NameIdentifierTree name;
@@ -55,12 +57,14 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
 
   private ClassDeclarationTreeImpl(
       Kind kind,
+      List<AttributeGroupTree> attributes,
       @Nullable SyntaxToken modifierToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,
       @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
       @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken
   ) {
     this.kind = kind;
+    this.attributes = attributes;
     this.modifierToken = modifierToken;
     this.classEntryTypeToken = classEntryTypeToken;
     this.name = name;
@@ -77,6 +81,11 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   @Override
   public SyntaxToken modifierToken() {
     return modifierToken;
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributes() {
+    return attributes;
   }
 
   @Override
@@ -157,6 +166,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
+        attributes.iterator(),
         Iterators.forArray(modifierToken, classEntryTypeToken, name, extendsToken, superClass, implementsToken),
         superInterfaces.elementsAndSeparators(),
         Iterators.singletonIterator(openCurlyBraceToken),
@@ -171,12 +181,14 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   public static ClassDeclarationTree createInterface(
+      List<AttributeGroupTree> attributes,
       InternalSyntaxToken interfaceToken, NameIdentifierTree name,
       @Nullable InternalSyntaxToken extendsToken, SeparatedListImpl<NamespaceNameTree> interfaceList,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     return new ClassDeclarationTreeImpl(
         Kind.INTERFACE_DECLARATION,
+        attributes,
         null,
         interfaceToken,
         name,
@@ -191,11 +203,13 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   public static ClassDeclarationTree createTrait(
+      List<AttributeGroupTree> attributes,
       InternalSyntaxToken traitToken, NameIdentifierTree name,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     return new ClassDeclarationTreeImpl(
         Kind.TRAIT_DECLARATION,
+        attributes,
         null,
         traitToken,
         name,
@@ -210,12 +224,14 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   public static ClassDeclarationTree createClass(
+      List<AttributeGroupTree> attributes,
       @Nullable InternalSyntaxToken modifierToken, InternalSyntaxToken classToken, NameIdentifierTree name,
       @Nullable InternalSyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
       @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
     return new ClassDeclarationTreeImpl(
         Kind.CLASS_DECLARATION,
+        attributes,
         modifierToken,
         classToken,
         name,

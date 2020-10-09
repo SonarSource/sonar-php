@@ -30,6 +30,7 @@ import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -43,6 +44,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
 
   private static final Kind KIND = Kind.ANONYMOUS_CLASS;
 
+  private final List<AttributeGroupTree> attributes;
   private final SyntaxToken classToken;
   private final SyntaxToken openParenthesisToken;
   private final SeparatedList<ExpressionTree> arguments;
@@ -58,6 +60,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   private ClassSymbol symbol;
 
   public AnonymousClassTreeImpl(
+    List<AttributeGroupTree> attributes,
     SyntaxToken classToken,
     @Nullable SyntaxToken openParenthesisToken, SeparatedList<CallArgumentTree> callArguments, @Nullable SyntaxToken closeParenthesisToken,
     @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
@@ -70,6 +73,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
       .map(CallArgumentTree::value)
       .collect(Collectors.toList());
 
+    this.attributes = attributes;
     this.classToken = classToken;
     this.openParenthesisToken = openParenthesisToken;
     this.callArguments = callArguments;
@@ -82,6 +86,11 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
     this.openCurlyBraceToken = openCurlyBraceToken;
     this.members = members;
     this.closeCurlyBraceToken = closeCurlyBraceToken;
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributes() {
+    return attributes;
   }
 
   @Override
@@ -175,6 +184,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
+      attributes.iterator(),
       Iterators.forArray(classToken, openParenthesisToken),
       callArguments.elementsAndSeparators(),
       Iterators.forArray(closeParenthesisToken, extendsToken, superClass, implementsToken),

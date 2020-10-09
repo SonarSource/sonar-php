@@ -30,6 +30,7 @@ public class TraitDeclarationTest {
   public void test() {
     assertThat(PHPLexicalGrammar.TRAIT_DECLARATION)
       .matches("trait T {}")
+      .matches("#[A1(1)] trait T {}")
       .notMatches("trait T extends C {}")
       .notMatches("trait T implement I {}");
   }
