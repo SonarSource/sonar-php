@@ -21,12 +21,14 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.symbols.HasFunctionSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
@@ -39,6 +41,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
 
   private static final Kind KIND = Kind.FUNCTION_DECLARATION;
 
+  private final List<AttributeGroupTree> attributes;
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
   private final NameIdentifierTree name;
@@ -48,6 +51,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
   private FunctionSymbol symbol;
 
   public FunctionDeclarationTreeImpl(
+    List<AttributeGroupTree> attributes,
     InternalSyntaxToken functionToken,
     @Nullable InternalSyntaxToken referenceToken,
     NameIdentifierTree name,
@@ -55,12 +59,18 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
     @Nullable ReturnTypeClauseTree returnTypeClause,
     BlockTree body
   ) {
+    this.attributes = attributes;
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;
     this.name = name;
     this.parameters = parameters;
     this.returnTypeClause = returnTypeClause;
     this.body = body;
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributes() {
+    return attributes;
   }
 
   @Override
@@ -102,7 +112,10 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(functionToken, referenceToken, name, parameters, returnTypeClause, body);
+    return Iterators.concat(
+      attributes.listIterator(),
+      Iterators.forArray(functionToken, referenceToken, name, parameters, returnTypeClause, body)
+    );
   }
 
   @Override

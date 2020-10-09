@@ -456,6 +456,7 @@ public class TreeFactory {
   }
 
   public FunctionDeclarationTree functionDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken functionToken,
     Optional<InternalSyntaxToken> referenceToken,
     NameIdentifierTree name,
@@ -463,7 +464,7 @@ public class TreeFactory {
     Optional<ReturnTypeClauseTree> returnTypeClauseTree,
     BlockTree body
   ) {
-    return new FunctionDeclarationTreeImpl(functionToken, referenceToken.orNull(), name, parameters, returnTypeClauseTree.orNull(), body);
+    return new FunctionDeclarationTreeImpl(attributes.or(Collections.emptyList()), functionToken, referenceToken.orNull(), name, parameters, returnTypeClauseTree.orNull(), body);
   }
 
   public ParameterListTree parameterList(

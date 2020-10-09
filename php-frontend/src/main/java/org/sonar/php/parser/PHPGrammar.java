@@ -376,6 +376,7 @@ public class PHPGrammar {
   public FunctionDeclarationTree FUNCTION_DECLARATION() {
     return b.<FunctionDeclarationTree>nonterminal(PHPLexicalGrammar.FUNCTION_DECLARATION).is(
       f.functionDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(PHPKeyword.FUNCTION),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         NAME_IDENTIFIER(),

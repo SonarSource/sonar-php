@@ -48,9 +48,4 @@ public class ScriptTest {
     ;
   }
 
-  @Test
-  public void attributes_test() {
-    assertThat(PHPLexicalGrammar.SCRIPT)
-      .matches("<?php #[someAttribute] class Foo {} ?>");
-  }
 }
