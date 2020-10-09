@@ -22,6 +22,7 @@ package org.sonar.php.tree.impl.expression;
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
@@ -29,6 +30,7 @@ import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -52,20 +54,26 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   private final SyntaxToken openCurlyBraceToken;
   private final List<ClassMemberTree> members;
   private final SyntaxToken closeCurlyBraceToken;
+  private final SeparatedList<CallArgumentTree> callArguments;
   private ClassSymbol symbol;
 
   public AnonymousClassTreeImpl(
     SyntaxToken classToken,
-    @Nullable SyntaxToken openParenthesisToken, SeparatedList<ExpressionTree> arguments, @Nullable SyntaxToken closeParenthesisToken,
+    @Nullable SyntaxToken openParenthesisToken, SeparatedList<CallArgumentTree> callArguments, @Nullable SyntaxToken closeParenthesisToken,
     @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
     @Nullable SyntaxToken implementsToken, @Nullable SeparatedListImpl<NamespaceNameTree> superInterfaces,
     SyntaxToken openCurlyBraceToken,
     List<ClassMemberTree> members,
     SyntaxToken closeCurlyBraceToken
   ) {
+    List<ExpressionTree> argumentValues = callArguments.stream()
+      .map(CallArgumentTree::value)
+      .collect(Collectors.toList());
+
     this.classToken = classToken;
     this.openParenthesisToken = openParenthesisToken;
-    this.arguments = arguments;
+    this.callArguments = callArguments;
+    this.arguments = new SeparatedListImpl<>(argumentValues, callArguments.getSeparators());
     this.closeParenthesisToken = closeParenthesisToken;
     this.extendsToken = extendsToken;
     this.superClass = superClass;
@@ -87,9 +95,18 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
     return openCurlyBraceToken;
   }
 
+  /**
+   * @deprecated since 3.11 . Use {@link #callArguments()} instead.
+   */
+  @Deprecated
   @Override
   public SeparatedList<ExpressionTree> arguments() {
     return arguments;
+  }
+
+  @Override
+  public SeparatedList<CallArgumentTree> callArguments() {
+    return callArguments;
   }
 
   @Nullable
@@ -159,7 +176,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       Iterators.forArray(classToken, openParenthesisToken),
-      arguments.elementsAndSeparators(),
+      callArguments.elementsAndSeparators(),
       Iterators.forArray(closeParenthesisToken, extendsToken, superClass, implementsToken),
       superInterfaces.elementsAndSeparators(),
       Iterators.singletonIterator(openCurlyBraceToken),

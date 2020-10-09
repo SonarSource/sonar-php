@@ -33,6 +33,7 @@ import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -47,6 +48,7 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.php.checks.utils.CheckUtils.argument;
 import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
 import static org.sonar.php.checks.utils.CheckUtils.functionName;
 import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
@@ -283,6 +285,19 @@ public class CheckUtilsTest {
 
     functionCall = (FunctionCallTree) expressionFromStatement("self::$foo();");
     assertThat(lowerCaseFunctionName(functionCall)).isNull();
+  }
+
+  @Test
+  public void test_named_argument_retrieval() {
+    Tree tree = expressionFromStatement("f(self::$p1, a: $p2);");
+    FunctionCallTree callTree = (FunctionCallTree) tree;
+
+    assertThat(callTree.callArguments()).hasSize(2);
+    assertThat(callTree.callArguments().get(0).name()).isNull();
+    assertThat(argument(callTree, 0, "someName")).isEqualTo(callTree.callArguments().get(0));
+    CallArgumentTree secondArgument = argument(callTree, 0, "a");
+    assertThat(callTree.callArguments().get(1)).isEqualTo(secondArgument);
+    assertThat(argument(callTree, 2, "someName")).isNull();
   }
 
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {

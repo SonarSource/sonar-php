@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
@@ -43,13 +44,18 @@ public interface FunctionCallTree extends ExpressionTree {
   @Nullable
   SyntaxToken openParenthesisToken();
 
+  /**
+   * @deprecated since 3.11 . Use {@link #callArguments()} instead.
+   */
+  @Deprecated
   SeparatedList<ExpressionTree> arguments();
+
+  SeparatedList<CallArgumentTree> callArguments();
 
   /**
    * Nullable in case of internal function call with no parenthesis
    */
   @Nullable
-
   SyntaxToken closeParenthesisToken();
 
 }

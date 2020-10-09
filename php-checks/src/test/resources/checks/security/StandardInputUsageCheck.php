@@ -42,3 +42,5 @@ $unknown(STDIN); // Noncompliant
 if ($a == STDIN || !STDIN) {
 }
 $a->STDIN();
+
+new class("php://stdin") {}; // Noncompliant

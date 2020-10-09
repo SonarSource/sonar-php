@@ -238,7 +238,7 @@ public class LiveVariablesAnalysis {
     @Override
     public void visitAssignmentExpression(AssignmentExpressionTree tree) {
       boolean isCompoundAssignment = !tree.is(Tree.Kind.ASSIGNMENT, Tree.Kind.NULL_COALESCING_ASSIGNMENT);
-      boolean isUsedAsNamedParameterOrReturn = tree.getParent().is(Tree.Kind.FUNCTION_CALL, Tree.Kind.RETURN_STATEMENT);
+      boolean isUsedAsNamedParameterOrReturn = tree.getParent().is(Tree.Kind.CALL_ARGUMENT, Tree.Kind.RETURN_STATEMENT);
       boolean isNullCoalescingAssignment = tree.is(Tree.Kind.NULL_COALESCING_ASSIGNMENT);
       if (isCompoundAssignment || isUsedAsNamedParameterOrReturn || isNullCoalescingAssignment) {
         visitReadVariable(tree.variable());

@@ -39,8 +39,10 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -335,5 +337,33 @@ public final class CheckUtils {
 
   public static boolean isAbstract(ClassDeclarationTree tree) {
     return tree.modifierToken() != null && tree.modifierToken().text().equals("abstract");
+  }
+
+  /**
+   * Retrieves an argument based on position and name.
+   *
+   * If an argument with the given name exists, it is returned no matter the position.
+   * Else, the argument at the supplied position is returned if it exists and is not named.
+   *
+   * @since 3.11
+   */
+  public static CallArgumentTree argument(FunctionCallTree call, int position, String name) {
+    SeparatedList<CallArgumentTree> callArguments = call.callArguments();
+
+    CallArgumentTree argument = callArguments.stream()
+      .filter(a -> a.name() != null)
+      .filter(a -> a.name().text().equalsIgnoreCase(name))
+      .findFirst()
+      .orElse(null);
+
+    if (argument != null) {
+      return argument;
+    }
+
+    if (callArguments.size() >= position + 1 && callArguments.get(position).name() == null) {
+      return callArguments.get(position);
+    }
+
+    return null;
   }
 }
