@@ -297,7 +297,6 @@ public class PHPGrammar {
         b.token(RCURLYBRACE)));
   }
 
-
   public ClassMemberTree CLASS_MEMBER() {
     return b.<ClassMemberTree>nonterminal(PHPLexicalGrammar.CLASS_MEMBER).is(
       b.firstOf(

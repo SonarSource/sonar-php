@@ -65,4 +65,10 @@ public class MemberAccessTreeTest extends PHPTreeModelTest {
     assertThat(tree.isNullSafeObjectAccess()).isFalse();
   }
 
+  @Test
+  public void object_member_class_name_access() throws Exception {
+    MemberAccessTree tree = parse("$obj::class", PHPLexicalGrammar.MEMBER_EXPRESSION);
+
+    assertThat(tree.is(Kind.CLASS_MEMBER_ACCESS)).isTrue();
+  }
 }
