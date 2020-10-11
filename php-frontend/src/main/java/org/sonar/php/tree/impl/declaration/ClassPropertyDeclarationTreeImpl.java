@@ -24,12 +24,14 @@ import com.google.common.collect.Iterators;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
@@ -41,7 +43,8 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPropertyDeclarationTree {
 
   private final Kind kind;
-  private final List<AttributeGroupTree> attributes;
+  private final List<AttributeTree> attributes;
+  private final List<AttributeGroupTree> attributeGroups;
   private final List<SyntaxToken> modifierTokens;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
   private final InternalSyntaxToken eosToken;
@@ -49,14 +52,15 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
 
   private ClassPropertyDeclarationTreeImpl(
     Kind kind,
-    List<AttributeGroupTree> attributes,
+    List<AttributeGroupTree> attributeGroups,
     List<SyntaxToken> modifierTokens,
     @Nullable DeclaredTypeTree typeAnnotation,
     SeparatedListImpl<VariableDeclarationTree> declarations,
     InternalSyntaxToken eosToken
   ) {
     this.kind = kind;
-    this.attributes = attributes;
+    this.attributes = attributeGroups.stream().flatMap(g -> g.attributes().stream()).collect(Collectors.toList());
+    this.attributeGroups = attributeGroups;
     this.modifierTokens = modifierTokens;
     this.typeAnnotation = typeAnnotation;
     this.declarations = declarations;
@@ -92,7 +96,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   }
 
   @Override
-  public List<AttributeGroupTree> attributes() {
+  public List<AttributeTree> attributes() {
     return attributes;
   }
 
@@ -163,7 +167,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
-      attributes.iterator(),
+      attributeGroups.iterator(),
       modifierTokens.iterator(),
       nullableIterator(typeAnnotation),
       declarations.elementsAndSeparators(),

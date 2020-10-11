@@ -45,7 +45,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 @Beta
 public interface ClassPropertyDeclarationTree extends ClassMemberTree {
 
-  List<AttributeGroupTree> attributes();
+  List<AttributeTree> attributes();
 
   List<SyntaxToken> modifierTokens();
 

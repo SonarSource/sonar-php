@@ -141,16 +141,18 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   public void variable_with_attributes() {
     ClassPropertyDeclarationTree tree = parse("#[A1(3)] public $x;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
 
-    // TODO: extend
     assertThat(tree.attributes()).hasSize(1);
+    assertThat(tree.attributes().get(0).name()).hasToString("A1");
+    assertThat(tree.attributes().get(0).arguments()).hasSize(1);
   }
 
   @Test
   public void constant_with_attributes() {
-    ClassPropertyDeclarationTree tree = parse("#[A1(2)] public const FOO = 'foo';", PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION);
+    ClassPropertyDeclarationTree tree = parse("#[A2(2, 3)] public const FOO = 'foo';", PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION);
 
-    // TODO: extend
     assertThat(tree.attributes()).hasSize(1);
+    assertThat(tree.attributes().get(0).name()).hasToString("A2");
+    assertThat(tree.attributes().get(0).arguments()).hasSize(2);
   }
 
   private static String builtinType(ClassPropertyDeclarationTree tree) {

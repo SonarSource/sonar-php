@@ -54,7 +54,7 @@ public class ParameterTreeTest extends PHPTreeModelTest {
 
   @Test
   public void with_attributes() throws Exception {
-    ParameterTree tree = parse("#[A1(5)] int $a", PHPLexicalGrammar.PARAMETER);
-    assertThat(tree.attributes()).hasSize(1);
+    ParameterTree tree = parse("#[A1(5)] #[A2(5)] int $a", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.attributes()).hasSize(2);
   }
 }

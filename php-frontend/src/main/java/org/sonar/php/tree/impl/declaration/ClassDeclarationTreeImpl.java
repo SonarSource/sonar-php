@@ -22,6 +22,7 @@ package org.sonar.php.tree.impl.declaration;
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
@@ -30,6 +31,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -42,7 +44,8 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
 
   private final Kind kind;
 
-  private final List<AttributeGroupTree> attributes;
+  private final List<AttributeGroupTree> attributeGroups;
+  private final List<AttributeTree> attributes;
   private final SyntaxToken modifierToken;
   private final SyntaxToken classEntryTypeToken;
   private final NameIdentifierTree name;
@@ -57,14 +60,15 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
 
   private ClassDeclarationTreeImpl(
       Kind kind,
-      List<AttributeGroupTree> attributes,
+      List<AttributeGroupTree> attributeGroups,
       @Nullable SyntaxToken modifierToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,
       @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
       @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken
   ) {
     this.kind = kind;
-    this.attributes = attributes;
+    this.attributeGroups = attributeGroups;
+    this.attributes = attributeGroups.stream().flatMap(g -> g.attributes().stream()).collect(Collectors.toList());
     this.modifierToken = modifierToken;
     this.classEntryTypeToken = classEntryTypeToken;
     this.name = name;
@@ -84,7 +88,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   @Override
-  public List<AttributeGroupTree> attributes() {
+  public List<AttributeTree> attributes() {
     return attributes;
   }
 
@@ -166,7 +170,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
-        attributes.iterator(),
+        attributeGroups.iterator(),
         Iterators.forArray(modifierToken, classEntryTypeToken, name, extendsToken, superClass, implementsToken),
         superInterfaces.elementsAndSeparators(),
         Iterators.singletonIterator(openCurlyBraceToken),

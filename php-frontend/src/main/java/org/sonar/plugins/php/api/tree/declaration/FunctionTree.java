@@ -32,7 +32,7 @@ import java.util.List;
 @Beta
 public interface FunctionTree extends Tree {
 
-  List<AttributeGroupTree> attributes();
+  List<AttributeTree> attributes();
 
   SyntaxToken functionToken();
 

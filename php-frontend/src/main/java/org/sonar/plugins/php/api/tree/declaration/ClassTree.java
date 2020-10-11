@@ -38,7 +38,7 @@ public interface ClassTree extends Tree {
    */
   String PHP5_CONSTRUCTOR_NAME = "__construct";
 
-  List<AttributeGroupTree> attributes();
+  List<AttributeTree> attributes();
 
   SyntaxToken classToken();
 

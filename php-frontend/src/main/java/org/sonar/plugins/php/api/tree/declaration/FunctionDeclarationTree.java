@@ -38,8 +38,6 @@ import java.util.List;
 @Beta
 public interface FunctionDeclarationTree extends FunctionTree, StatementTree {
 
-  List<AttributeGroupTree> attributes();
-
   @Override
   SyntaxToken functionToken();
 

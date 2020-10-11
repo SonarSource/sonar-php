@@ -43,7 +43,7 @@ import java.util.List;
 @Beta
 public interface ParameterTree extends Tree {
 
-  List<AttributeGroupTree> attributes();
+  List<AttributeTree> attributes();
 
   /**
    * @deprecated since 3.11 - Use {@link #declaredType()} instead.
