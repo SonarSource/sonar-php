@@ -137,6 +137,22 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(builtinType(tree)).isEqualTo("int");
   }
 
+  @Test
+  public void variable_with_attributes() {
+    ClassPropertyDeclarationTree tree = parse("#[A1(3)] public $x;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+
+    // TODO: extend
+    assertThat(tree.attributes()).hasSize(1);
+  }
+
+  @Test
+  public void constant_with_attributes() {
+    ClassPropertyDeclarationTree tree = parse("#[A1(2)] public const FOO = 'foo';", PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION);
+
+    // TODO: extend
+    assertThat(tree.attributes()).hasSize(1);
+  }
+
   private static String builtinType(ClassPropertyDeclarationTree tree) {
     return ((BuiltInTypeTree) tree.typeAnnotation().typeName()).token().text();
   }

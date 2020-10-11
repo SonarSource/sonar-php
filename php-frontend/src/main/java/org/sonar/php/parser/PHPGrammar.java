@@ -317,6 +317,7 @@ public class PHPGrammar {
   public ClassPropertyDeclarationTree CLASS_CONSTANT_DECLARATION() {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION).is(
       f.classConstantDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(VISIBILITY_MODIFIER()),
         b.token(PHPKeyword.CONST),
         MEMBER_CONST_DECLARATION(),
@@ -336,6 +337,7 @@ public class PHPGrammar {
   public ClassPropertyDeclarationTree CLASS_VARIABLE_DECLARATION() {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION).is(
       f.classVariableDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.firstOf(
           f.singleToken(b.token(PHPKeyword.VAR)),
           b.oneOrMore(MEMBER_MODIFIER())),

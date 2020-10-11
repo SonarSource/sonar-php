@@ -415,13 +415,18 @@ public class TreeFactory {
   }
 
   public ClassPropertyDeclarationTree classConstantDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<SyntaxToken> visibility,
     InternalSyntaxToken constToken,
     VariableDeclarationTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
     InternalSyntaxToken eosToken
   ) {
-    return ClassPropertyDeclarationTreeImpl.constant(visibility.orNull(), constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
+    return ClassPropertyDeclarationTreeImpl.constant(attributes.or(Collections.emptyList()),
+      visibility.orNull(),
+      constToken,
+      separatedList(firstDeclaration, additionalDeclarations),
+      eosToken);
   }
 
   public ConstantDeclarationTree constantDeclaration(
@@ -434,13 +439,18 @@ public class TreeFactory {
   }
 
   public ClassPropertyDeclarationTree classVariableDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     List<SyntaxToken> modifierTokens,
     Optional<DeclaredTypeTree> typeAnnotation,
     VariableDeclarationTree firstVariable,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalVariables,
     InternalSyntaxToken eosToken
   ) {
-    return ClassPropertyDeclarationTreeImpl.variable(modifierTokens, typeAnnotation.orNull(), separatedList(firstVariable, additionalVariables), eosToken);
+    return ClassPropertyDeclarationTreeImpl.variable(attributes.or(Collections.emptyList()),
+      modifierTokens,
+      typeAnnotation.orNull(),
+      separatedList(firstVariable, additionalVariables),
+      eosToken);
   }
 
   public MethodDeclarationTree methodDeclaration(
