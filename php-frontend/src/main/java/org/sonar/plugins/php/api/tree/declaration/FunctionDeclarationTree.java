@@ -26,7 +26,6 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * <p><a href="http://php.net/manual/en/functions.user-defined.php">Function Declaration</a>
