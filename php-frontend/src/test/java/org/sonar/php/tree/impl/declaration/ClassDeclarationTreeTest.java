@@ -25,6 +25,7 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -98,5 +99,11 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
 
     tree = parse("class A { function doSomething(); }", PHPLexicalGrammar.CLASS_DECLARATION);
     assertThat(tree.fetchConstructor()).isNull();
+  }
+
+  @Test
+  public void with_attributes() throws Exception {
+    ClassDeclarationTree tree = parse("#[A1,] class A {}", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree.attributes()).hasSize(1);
   }
 }
