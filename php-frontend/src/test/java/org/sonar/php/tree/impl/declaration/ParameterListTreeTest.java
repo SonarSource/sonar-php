@@ -44,6 +44,11 @@ public class ParameterListTreeTest extends PHPTreeModelTest {
     assertThat(parameterList("($p1, $p2,)").parameters()).hasSize(2);
   }
 
+  @Test
+  public void with_attributes() throws Exception {
+    assertThat(parameterList("(#[A1(5)] $p1, #[A1(6)] $p2)").parameters()).hasSize(2);
+  }
+
   private ParameterListTree parameterList(String toParse) {
     ParameterListTree tree = parse(toParse, PHPLexicalGrammar.PARAMETER_LIST);
     assertThat(tree.is(Kind.PARAMETER_LIST)).isTrue();

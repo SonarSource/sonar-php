@@ -21,11 +21,13 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nullable;
 
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
@@ -39,6 +41,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   private static final Kind KIND = Kind.PARAMETER;
 
+  private final List<AttributeGroupTree> attributes;
   private final DeclaredTypeTree type;
   private final InternalSyntaxToken referenceToken;
   private final InternalSyntaxToken ellipsisToken;
@@ -47,6 +50,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private final ExpressionTree initValue;
 
   public ParameterTreeImpl(
+    List<AttributeGroupTree> attributes,
     @Nullable DeclaredTypeTree type,
     @Nullable InternalSyntaxToken referenceToken,
     @Nullable InternalSyntaxToken ellipsisToken,
@@ -54,12 +58,18 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     @Nullable InternalSyntaxToken equalToken,
     @Nullable ExpressionTree initValue
    ) {
+    this.attributes = attributes;
     this.type = type;
     this.referenceToken = referenceToken;
     this.ellipsisToken = ellipsisToken;
     this.variableIdentifier = variableIdentifier;
     this.equalToken = equalToken;
     this.initValue = initValue;
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributes() {
+    return attributes;
   }
 
   /**
@@ -120,7 +130,10 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue);
+    return Iterators.concat(
+      attributes.iterator(),
+      Iterators.forArray(type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
+    );
   }
 
   @Override
