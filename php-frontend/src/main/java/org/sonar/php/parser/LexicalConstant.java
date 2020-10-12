@@ -65,7 +65,7 @@ public class LexicalConstant {
    */
   private static final String SINGLE_LINE_COMMENT_CONTENT = "(?:(?!" + PHP_CLOSING_TAG + ")[^\\n\\r])*+";
   private static final String SINGLE_LINE_COMMENT1 = "//" + SINGLE_LINE_COMMENT_CONTENT;
-  private static final String SINGLE_LINE_COMMENT2 = "#[^\\[]" + SINGLE_LINE_COMMENT_CONTENT;
+  private static final String SINGLE_LINE_COMMENT2 = "#(?!\\[)" + SINGLE_LINE_COMMENT_CONTENT;
   private static final String MULTI_LINE_COMMENT = "/\\*[\\s\\S]*?\\*/";
   public static final String COMMENT = "(?:" + SINGLE_LINE_COMMENT1 + "|" + SINGLE_LINE_COMMENT2 + "|" + MULTI_LINE_COMMENT + ")";
 
