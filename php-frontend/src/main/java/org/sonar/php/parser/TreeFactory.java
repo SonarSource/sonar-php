@@ -1877,13 +1877,13 @@ public class TreeFactory {
     return new CallArgumentTreeImpl(null, value);
   }
 
-  public AttributeTreeImpl attribute(NamespaceNameTree name,
-                                     Optional<SyntaxToken> lParenthesis, SeparatedListImpl<CallArgumentTree> arguments, Optional<SyntaxToken> rParenthesis) {
-    return new AttributeTreeImpl(name,
-      lParenthesis.orNull(),
-      arguments,
-      rParenthesis.orNull()
-    );
+  public AttributeTreeImpl attribute(NamespaceNameTree name, Optional<FunctionCallTree> callTree) {
+    if (callTree.isPresent()) {
+      FunctionCallTree tree = callTree.get();
+      return new AttributeTreeImpl(name, tree.openParenthesisToken(), tree.callArguments(), tree.closeParenthesisToken());
+    } else {
+      return new AttributeTreeImpl(name, null, SeparatedListImpl.empty(), null);
+    }
   }
 
   public SeparatedList<AttributeTree> attributeList(AttributeTree firstAttribute,

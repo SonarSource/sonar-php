@@ -21,7 +21,6 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
@@ -37,13 +36,13 @@ public class AttributeTreeImpl extends PHPTree implements AttributeTree {
   private final NamespaceNameTree name;
   @Nullable
   private final SyntaxToken openParenthesisToken;
-  private final SeparatedListImpl<CallArgumentTree> arguments;
+  private final SeparatedList<CallArgumentTree> arguments;
   @Nullable
   private final SyntaxToken closeParenthesisToken;
 
   public AttributeTreeImpl(NamespaceNameTree name,
                            @Nullable SyntaxToken openParenthesisToken,
-                           SeparatedListImpl<CallArgumentTree> arguments,
+                           SeparatedList<CallArgumentTree> arguments,
                            @Nullable SyntaxToken closeParenthesisToken) {
     this.name = name;
     this.openParenthesisToken = openParenthesisToken;
