@@ -67,9 +67,13 @@ public class FileHeaderCheckTest {
     check.headerFormat = "/*foo http://www.example.org*/";
     PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file3.php"), noIssue);
 
+    check.headerFormat = "// copyright 2012\n// foo";
+    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file5.php"), issue);
+
     check = new FileHeaderCheck();
     PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/empty.php"), noIssue);
     PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/emptyWithTag.php"), noIssue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/single_line_break.php"), noIssue);
   }
 
 }
