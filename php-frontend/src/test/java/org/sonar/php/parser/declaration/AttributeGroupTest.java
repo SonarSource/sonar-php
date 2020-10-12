@@ -32,7 +32,6 @@ public class AttributeGroupTest {
       .matches("#[A]")
       .matches("#[A,B]")
       .matches("#[A,B,]")
-      .matches("#[A,B,]")
       .matches("#[A()]")
       .matches("#[A($x)]")
       .matches("#[A(x:$x)]")
