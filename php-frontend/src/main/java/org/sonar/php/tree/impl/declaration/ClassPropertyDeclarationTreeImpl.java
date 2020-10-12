@@ -43,7 +43,6 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPropertyDeclarationTree {
 
   private final Kind kind;
-  private final List<AttributeTree> attributes;
   private final List<AttributeGroupTree> attributeGroups;
   private final List<SyntaxToken> modifierTokens;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
@@ -59,7 +58,6 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     InternalSyntaxToken eosToken
   ) {
     this.kind = kind;
-    this.attributes = attributeGroups.stream().flatMap(g -> g.attributes().stream()).collect(Collectors.toList());
     this.attributeGroups = attributeGroups;
     this.modifierTokens = modifierTokens;
     this.typeAnnotation = typeAnnotation;
@@ -96,8 +94,8 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   }
 
   @Override
-  public List<AttributeTree> attributes() {
-    return attributes;
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override

@@ -104,6 +104,7 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
   @Test
   public void with_attributes() throws Exception {
     ClassDeclarationTree tree = parse("#[A1,] class A {}", PHPLexicalGrammar.CLASS_DECLARATION);
-    assertThat(tree.attributes()).hasSize(1);
+    assertThat(tree.attributeGroups()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
   }
 }

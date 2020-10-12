@@ -53,6 +53,7 @@ public class AnonymousClassTreeTest extends PHPTreeModelTest {
   @Test
   public void with_attributes() throws Exception {
     AnonymousClassTree tree = parse("#[A1,] class {}", Kind.ANONYMOUS_CLASS);
-    assertThat(tree.attributes()).hasSize(1);
+    assertThat(tree.attributeGroups()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
   }
 }

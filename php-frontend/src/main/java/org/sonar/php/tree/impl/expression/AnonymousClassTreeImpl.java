@@ -31,7 +31,6 @@ import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
-import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -46,7 +45,6 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   private static final Kind KIND = Kind.ANONYMOUS_CLASS;
 
   private final List<AttributeGroupTree> attributeGroups;
-  private final List<AttributeTree> attributes;
   private final SyntaxToken classToken;
   private final SyntaxToken openParenthesisToken;
   private final SeparatedList<ExpressionTree> arguments;
@@ -76,7 +74,6 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
       .collect(Collectors.toList());
 
     this.attributeGroups = attributeGroups;
-    this.attributes = attributeGroups.stream().flatMap(g -> g.attributes().stream()).collect(Collectors.toList());
     this.classToken = classToken;
     this.openParenthesisToken = openParenthesisToken;
     this.callArguments = callArguments;
@@ -92,8 +89,8 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   }
 
   @Override
-  public List<AttributeTree> attributes() {
-    return attributes;
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override

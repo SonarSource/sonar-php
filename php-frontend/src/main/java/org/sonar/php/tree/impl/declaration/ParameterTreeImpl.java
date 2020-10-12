@@ -22,14 +22,12 @@ package org.sonar.php.tree.impl.declaration;
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
-import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
@@ -43,7 +41,6 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   private static final Kind KIND = Kind.PARAMETER;
 
-  private final List<AttributeTree> attributes;
   private final List<AttributeGroupTree> attributeGroups;
   private final DeclaredTypeTree type;
   private final InternalSyntaxToken referenceToken;
@@ -62,7 +59,6 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     @Nullable ExpressionTree initValue
    ) {
     this.attributeGroups = attributeGroups;
-    this.attributes = attributeGroups.stream().flatMap(g -> g.attributes().stream()).collect(Collectors.toList());
     this.type = type;
     this.referenceToken = referenceToken;
     this.ellipsisToken = ellipsisToken;
@@ -72,8 +68,8 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   }
 
   @Override
-  public List<AttributeTree> attributes() {
-    return attributes;
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   /**

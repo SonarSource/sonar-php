@@ -26,8 +26,6 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import java.util.List;
-
 /**
  * <a href="http://php.net/manual/en/functions.arguments.php">Function Argument</a>
  * <pre>
@@ -41,9 +39,7 @@ import java.util.List;
  *
  */
 @Beta
-public interface ParameterTree extends Tree {
-
-  List<AttributeTree> attributes();
+public interface ParameterTree extends Tree, HasAttributes {
 
   /**
    * @deprecated since 3.11 - Use {@link #declaredType()} instead.

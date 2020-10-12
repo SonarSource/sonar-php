@@ -19,27 +19,8 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import java.util.List;
 
-import javax.annotation.Nullable;
-
-/**
- * Common interface for all kinds of <a href="http://php.net/manual/en/language.functions.php">function</a>.
- */
-@Beta
-public interface FunctionTree extends Tree, HasAttributes {
-
-  SyntaxToken functionToken();
-
-  @Nullable
-  SyntaxToken referenceToken();
-
-  ParameterListTree parameters();
-
-  @Nullable
-  ReturnTypeClauseTree returnTypeClause();
-
-  Tree body();
+public interface HasAttributes {
+  List<AttributeGroupTree> attributeGroups();
 }

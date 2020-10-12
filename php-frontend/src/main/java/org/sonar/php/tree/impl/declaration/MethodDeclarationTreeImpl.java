@@ -26,7 +26,6 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
-import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
@@ -37,14 +36,12 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarationTree, HasMethodSymbol {
 
   private static final Kind KIND = Kind.METHOD_DECLARATION;
 
   private final List<AttributeGroupTree> attributeGroups;
-  private final List<AttributeTree> attributes;
   private final List<SyntaxToken> modifiersToken;
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
@@ -65,7 +62,6 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     Tree body
     ) {
     this.attributeGroups = attributeGroups;
-    this.attributes = attributeGroups.stream().flatMap(g -> g.attributes().stream()).collect(Collectors.toList());
     this.modifiersToken = modifiersToken;
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;
@@ -81,8 +77,8 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   }
 
   @Override
-  public List<AttributeTree> attributes() {
-    return attributes;
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override

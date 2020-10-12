@@ -22,13 +22,11 @@ package org.sonar.php.tree.impl.expression;
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
-import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
@@ -41,7 +39,6 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
   private static final Kind KIND = Kind.ARROW_FUNCTION_EXPRESSION;
 
   private final List<AttributeGroupTree> attributeGroups;
-  private final List<AttributeTree> attributes;
   private final InternalSyntaxToken staticToken;
   private final InternalSyntaxToken fnToken;
   private final InternalSyntaxToken referenceToken;
@@ -61,7 +58,6 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
     ExpressionTree body
   ) {
     this.attributeGroups = attributeGroups;
-    this.attributes = attributeGroups.stream().flatMap(g -> g.attributes().stream()).collect(Collectors.toList());
     this.staticToken = staticToken;
     this.fnToken = fnToken;
     this.referenceToken = referenceToken;
@@ -84,8 +80,8 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
   }
 
   @Override
-  public List<AttributeTree> attributes() {
-    return attributes;
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override
