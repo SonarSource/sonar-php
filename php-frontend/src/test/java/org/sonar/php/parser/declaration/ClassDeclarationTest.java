@@ -36,6 +36,7 @@ public class ClassDeclarationTest {
       .matches("class C extends A {}")
       .matches("class C implements B {}")
       .matches("class C extends A implements B {}")
+      .matches("#[A1(1)] class C {}")
 
       .notMatches("class A extends B, C {}");
   }

@@ -39,7 +39,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *
  */
 @Beta
-public interface ParameterTree extends Tree {
+public interface ParameterTree extends Tree, HasAttributes {
 
   /**
    * @deprecated since 3.11 - Use {@link #declaredType()} instead.

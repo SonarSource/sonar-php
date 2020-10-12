@@ -22,37 +22,29 @@ package org.sonar.php.tree.impl.declaration;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ParameterListTreeTest extends PHPTreeModelTest {
-
+public class AttributeTreeTest extends PHPTreeModelTest {
   @Test
-  public void empty() throws Exception {
-    ParameterListTree tree = parameterList("()");
-    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
-    assertThat(tree.parameters()).isEmpty();
-    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
-  }
+  public void simple_attribute() throws Exception {
+    AttributeTree tree = parse("A", PHPLexicalGrammar.ATTRIBUTE);
 
-  @Test
-  public void not_empty() throws Exception {
-    assertThat(parameterList("($p1)").parameters()).hasSize(1);
-    assertThat(parameterList("($p1, $p2)").parameters()).hasSize(2);
-    assertThat(parameterList("($p1, $p2,)").parameters()).hasSize(2);
+    assertThat(tree.is(Tree.Kind.ATTRIBUTE)).isTrue();
+    assertThat(tree.name()).hasToString("A");
   }
 
   @Test
-  public void with_attributes() throws Exception {
-    assertThat(parameterList("(#[A1(5)] $p1, #[A1(6)] $p2)").parameters()).hasSize(2);
-  }
+  public void with_arguments_and_fqn() throws Exception {
+    AttributeTree tree = parse("\\A\\B\\C($x, y: $y)", PHPLexicalGrammar.ATTRIBUTE);
 
-  private ParameterListTree parameterList(String toParse) {
-    ParameterListTree tree = parse(toParse, PHPLexicalGrammar.PARAMETER_LIST);
-    assertThat(tree.is(Kind.PARAMETER_LIST)).isTrue();
-    return tree;
-  }
+    assertThat(tree.is(Tree.Kind.ATTRIBUTE)).isTrue();
+    assertThat(tree.name()).hasToString("\\A\\B\\C");
 
+    assertThat(tree.arguments()).hasSize(2);
+    assertThat(tree.arguments().get(0).name()).isNull();
+    assertThat(tree.arguments().get(1).name()).hasToString("y");
+  }
 }

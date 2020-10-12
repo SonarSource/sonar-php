@@ -39,6 +39,7 @@ public class MethodDeclarationTest {
       .matches("function f () : bool {}")
       .matches("function f () : ?bool {}")
       .matches("function if() {}")
+      .matches("#[A1(4)] public function f() {}")
     ;
   }
 

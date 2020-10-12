@@ -32,6 +32,7 @@ public class InterfaceDeclarationTest {
       .matches("interface I {}")
       .matches("interface I extends A {}")
       .matches("interface I extends A, B {}")
+      .matches("#[A1(1)] interface I extends A, B {}")
 
       .notMatches("interface I implements A {}");
   }

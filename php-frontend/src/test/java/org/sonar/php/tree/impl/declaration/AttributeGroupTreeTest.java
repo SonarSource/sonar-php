@@ -17,23 +17,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.tree.impl.declaration;
 
 import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.php.PHPTreeModelTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class AnonymousClassTest {
-
+public class AttributeGroupTreeTest extends PHPTreeModelTest {
   @Test
-  public void test() {
-    assertThat(Kind.ANONYMOUS_CLASS)
-      .matches("class(1, foo()) extends A implements B, C {var $a;}")
-      .matches("class implements B {}")
-      .matches("class extends B {}")
-      .matches("class {}")
-      .matches("#[A1(7)] class () { }")
-    ;
+  public void simple_group() throws Exception {
+    AttributeGroupTree tree = parse("#[A,B($x)]", PHPLexicalGrammar.ATTRIBUTE_GROUP);
+
+    assertThat(tree.is(Tree.Kind.ATTRIBUTE_GROUP)).isTrue();
+    assertThat(tree.attributes()).hasSize(2);
+    assertThat(tree.startToken()).hasToString("#[");
+    assertThat(tree.endToken()).hasToString("]");
   }
 }

@@ -254,7 +254,10 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   BINARY,
   ITERABLE,
 
-  FROM
+  FROM,
+
+  ATTRIBUTE,
+  ATTRIBUTE_GROUP
   ;
 
   public static LexerlessGrammar createGrammar() {

@@ -93,7 +93,9 @@ public enum PHPPunctuator implements GrammarRuleKey {
   QUERY("?"),
   DOUBLECOLON("::"),
   COLON(":"),
-  NS_SEPARATOR("\\");
+  NS_SEPARATOR("\\"),
+
+  ATTRIBUTE_OPEN("#[");
 
   private final String value;
 

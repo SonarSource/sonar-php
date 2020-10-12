@@ -52,4 +52,9 @@ public class ParameterTreeTest extends PHPTreeModelTest {
     assertThat(tree.initValue().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
   }
 
+  @Test
+  public void with_attributes() throws Exception {
+    ParameterTree tree = parse("#[A1(5)] #[A2(5)] int $a", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.attributeGroups()).hasSize(2);
+  }
 }

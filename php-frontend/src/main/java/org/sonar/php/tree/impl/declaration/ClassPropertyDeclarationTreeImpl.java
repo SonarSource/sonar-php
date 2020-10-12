@@ -29,6 +29,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
@@ -40,6 +41,7 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPropertyDeclarationTree {
 
   private final Kind kind;
+  private final List<AttributeGroupTree> attributeGroups;
   private final List<SyntaxToken> modifierTokens;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
   private final InternalSyntaxToken eosToken;
@@ -47,27 +49,36 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
 
   private ClassPropertyDeclarationTreeImpl(
     Kind kind,
+    List<AttributeGroupTree> attributeGroups,
     List<SyntaxToken> modifierTokens,
     @Nullable DeclaredTypeTree typeAnnotation,
     SeparatedListImpl<VariableDeclarationTree> declarations,
     InternalSyntaxToken eosToken
   ) {
     this.kind = kind;
+    this.attributeGroups = attributeGroups;
     this.modifierTokens = modifierTokens;
     this.typeAnnotation = typeAnnotation;
     this.declarations = declarations;
     this.eosToken = eosToken;
   }
 
-  public static ClassPropertyDeclarationTree variable(List<SyntaxToken> modifierTokens,
+  public static ClassPropertyDeclarationTree variable(List<AttributeGroupTree> attributes,
+                                                      List<SyntaxToken> modifierTokens,
                                                       @Nullable DeclaredTypeTree typeAnnotation,
                                                       SeparatedListImpl<VariableDeclarationTree> declarations,
                                                       InternalSyntaxToken eosToken) {
-    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION, modifierTokens, typeAnnotation,
-      declarations, eosToken);
+    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION,
+      attributes,
+      modifierTokens,
+      typeAnnotation,
+      declarations,
+      eosToken);
   }
 
-  public static ClassPropertyDeclarationTree constant(@Nullable SyntaxToken visibility, SyntaxToken constToken,
+  public static ClassPropertyDeclarationTree constant(List<AttributeGroupTree> attributes,
+                                                      @Nullable SyntaxToken visibility,
+                                                      SyntaxToken constToken,
                                                       SeparatedListImpl<VariableDeclarationTree> declarations,
                                                       InternalSyntaxToken eosToken) {
 
@@ -77,7 +88,12 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     } else {
       modifierTokens = ImmutableList.of(constToken);
     }
-    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, modifierTokens, null, declarations, eosToken);
+    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, attributes, modifierTokens, null, declarations, eosToken);
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override
@@ -147,6 +163,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
+      attributeGroups.iterator(),
       modifierTokens.iterator(),
       nullableIterator(typeAnnotation),
       declarations.elementsAndSeparators(),
