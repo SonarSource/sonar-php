@@ -20,6 +20,8 @@ class MyTest extends TestCase
     self::assertFileExists('test/testbootstrap.php', 'Message'); // OK - No expected value
     $this->assertStringEqualsFile($targetFilePath, 'SOURCE FILE'); // Noncompliant
 
+    self::assertEquals(actual: $runner.getExitCode(), expected: 0);
+
     self::assertEquals($foo); // OK - No valid assertion of moodle test cases
     doSomethind($result->format('d-M-Y'), '31-Jan-2012'); // OK - No assertion
   }
