@@ -21,6 +21,7 @@ package org.sonar.php.checks.security;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -49,9 +50,9 @@ public class CookieSensitiveDataCheck extends PHPVisitorCheck {
   }
 
   private static boolean hasCookieValue(FunctionCallTree tree) {
-    CallArgumentTree argument = CheckUtils.argument(tree, VALUE_PARAMETER_INDEX, VALUE_PARAMETER_NAME);
+    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, VALUE_PARAMETER_NAME, VALUE_PARAMETER_INDEX);
 
-    return argument != null && !CheckUtils.isNullOrEmptyString(argument.value());
+    return argument.isPresent() && !CheckUtils.isNullOrEmptyString(argument.get().value());
   }
 
 }

@@ -31,6 +31,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -347,7 +348,7 @@ public final class CheckUtils {
    *
    * @since 3.11
    */
-  public static CallArgumentTree argument(FunctionCallTree call, int position, String name) {
+  public static Optional<CallArgumentTree> argument(FunctionCallTree call, String name, int position) {
     SeparatedList<CallArgumentTree> callArguments = call.callArguments();
 
     CallArgumentTree argument = callArguments.stream()
@@ -357,13 +358,13 @@ public final class CheckUtils {
       .orElse(null);
 
     if (argument != null) {
-      return argument;
+      return Optional.of(argument);
     }
 
     if (callArguments.size() >= position + 1 && callArguments.get(position).name() == null) {
-      return callArguments.get(position);
+      return Optional.of(callArguments.get(position));
     }
 
-    return null;
+    return Optional.empty();
   }
 }
