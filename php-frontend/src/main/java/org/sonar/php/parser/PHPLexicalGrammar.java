@@ -147,6 +147,9 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   FOREACH_STATEMENT,
   FOREACH_VARIABLE,
 
+  MATCH_EXPRESSION,
+  MATCH_CLAUSE,
+
   SWITCH_STATEMENT,
   SWITCH_CASE_CLAUSE,
 

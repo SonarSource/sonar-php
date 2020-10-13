@@ -39,6 +39,7 @@ import org.sonar.php.tree.impl.ScriptTreeImpl;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.BuiltInTypeTreeImpl;
+import org.sonar.php.tree.impl.declaration.CallArgumentTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
@@ -118,6 +119,9 @@ import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.IfStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.InlineHTMLTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
+import org.sonar.php.tree.impl.statement.MatchConditionClauseTreeImpl;
+import org.sonar.php.tree.impl.statement.MatchDefaultClauseTreeImpl;
+import org.sonar.php.tree.impl.statement.MatchExpressionTreeImpl;
 import org.sonar.php.tree.impl.statement.NamespaceStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.StaticStatementTreeImpl;
@@ -134,12 +138,12 @@ import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
-import org.sonar.php.tree.impl.declaration.CallArgumentTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -164,7 +168,6 @@ import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
@@ -203,6 +206,10 @@ import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.MatchClauseTree;
+import org.sonar.plugins.php.api.tree.statement.MatchConditionClauseTree;
+import org.sonar.plugins.php.api.tree.statement.MatchDefaultClauseTree;
+import org.sonar.plugins.php.api.tree.statement.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -1002,6 +1009,34 @@ public class TreeFactory {
       caseSeparatorToken,
       interposeEchoTagStatements(optionalList(statements))
     );
+  }
+
+  public MatchConditionClauseTree matchConditionClause(ExpressionTree firstCondition, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> otherconditions,
+    Optional<InternalSyntaxToken> trailingComma, SyntaxToken caseToExpressionToken, ExpressionTree expression) {
+    return new MatchConditionClauseTreeImpl(
+      separatedList(firstCondition, otherconditions, trailingComma.orNull()),
+      caseToExpressionToken,
+      expression);
+  }
+
+  public MatchDefaultClauseTree matchDefaultClause(SyntaxToken defaultToken, SyntaxToken caseToExpressionToken, ExpressionTree expression) {
+    return new MatchDefaultClauseTreeImpl(
+      defaultToken,
+      caseToExpressionToken,
+      expression);
+  }
+
+  public MatchExpressionTree matchExpression(SyntaxToken matchToken, ParenthesisedExpressionTree parenthesizedExpression, SyntaxToken openCurlyBraceToken,
+    MatchClauseTree firstClause, Optional<List<Tuple<InternalSyntaxToken, MatchClauseTree>>> otherClauses, Optional<InternalSyntaxToken> trailingComma,
+    SyntaxToken closeCurlyBraceToken) {
+    return new MatchExpressionTreeImpl(
+      matchToken,
+      parenthesizedExpression.openParenthesis(),
+      parenthesizedExpression.expression(),
+      parenthesizedExpression.closeParenthesis(),
+      openCurlyBraceToken,
+      separatedList(firstClause, otherClauses, trailingComma.orNull()),
+      closeCurlyBraceToken);
   }
 
   public UnsetVariableStatementTree unsetVariableStatement(

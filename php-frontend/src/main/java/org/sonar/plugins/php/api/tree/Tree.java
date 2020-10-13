@@ -23,10 +23,10 @@ import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.expression.PrefixedCastExpressionTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -93,6 +93,9 @@ import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.MatchConditionClauseTree;
+import org.sonar.plugins.php.api.tree.statement.MatchDefaultClauseTree;
+import org.sonar.plugins.php.api.tree.statement.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
@@ -850,6 +853,21 @@ public interface Tree {
      */
     ALTERNATIVE_SWITCH_STATEMENT(SwitchStatementTree.class),
 
+    /**
+     * {@link MatchConditionClauseTree}
+     */
+    MATCH_CONDITION_CLAUSE(MatchConditionClauseTree.class),
+
+    /**
+     * {@link MatchDefaultClauseTree}
+     */
+    MATCH_DEFAULT_CLAUSE(MatchDefaultClauseTree.class),
+
+    /**
+     * {@link MatchExpressionTree}
+     */
+    MATCH_EXPRESSION(MatchExpressionTree.class),
+    
     /**
      * {@link CaseClauseTree}
      */

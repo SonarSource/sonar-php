@@ -1,5 +1,9 @@
 <?php
 
+MATCH($args);
+
+MATCH ($a) {default=>1}; // Noncompliant
+
 require_once "foo.php";   // OK
 
   include_ONCE "bar.php";   // Noncompliant {{Write this "include_ONCE" keyword in lower case.}}

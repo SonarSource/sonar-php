@@ -101,6 +101,9 @@ import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.MatchConditionClauseTree;
+import org.sonar.plugins.php.api.tree.statement.MatchDefaultClauseTree;
+import org.sonar.plugins.php.api.tree.statement.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
@@ -248,6 +251,21 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitSwitchStatement(SwitchStatementTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitMatchConditionClause(MatchConditionClauseTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitMatchDefaultClause(MatchDefaultClauseTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitMatchExpression(MatchExpressionTree tree) {
     scan(tree);
   }
 

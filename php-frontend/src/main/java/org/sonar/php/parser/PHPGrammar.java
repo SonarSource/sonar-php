@@ -31,6 +31,7 @@ import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -59,7 +60,6 @@ import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
@@ -95,6 +95,8 @@ import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.MatchClauseTree;
+import org.sonar.plugins.php.api.tree.statement.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -756,6 +758,33 @@ public class PHPGrammar {
           b.zeroOrMore(INNER_STATEMENT()))));
   }
 
+  public MatchClauseTree MATCH_CLAUSE() {
+    return b.<MatchClauseTree>nonterminal(PHPLexicalGrammar.MATCH_CLAUSE).is(
+      b.firstOf(
+        f.matchConditionClause(
+          EXPRESSION(),
+          b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), EXPRESSION())),
+          b.optional(b.token(PHPPunctuator.COMMA)),
+          b.token(DOUBLEARROW),
+          EXPRESSION()),
+        f.matchDefaultClause(
+          b.token(PHPKeyword.DEFAULT),
+          b.token(DOUBLEARROW),
+          EXPRESSION())));
+  }
+
+  public MatchExpressionTree MATCH_EXPRESSION() {
+    return b.<MatchExpressionTree>nonterminal(PHPLexicalGrammar.MATCH_EXPRESSION).is(
+      f.matchExpression(
+        b.token(PHPKeyword.MATCH),
+        PARENTHESIZED_EXPRESSION(),
+        b.token(PHPPunctuator.LCURLYBRACE),
+        MATCH_CLAUSE(),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), MATCH_CLAUSE())),
+        b.optional(b.token(PHPPunctuator.COMMA)),
+        b.token(PHPPunctuator.RCURLYBRACE)));
+  }
+
   public WhileStatementTree WHILE_STATEMENT() {
     return b.<WhileStatementTree>nonterminal(PHPLexicalGrammar.WHILE_STATEMENT).is(
       b.firstOf(
@@ -1030,6 +1059,7 @@ public class PHPGrammar {
   public ExpressionTree UNARY_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.UNARY_EXPR).is(
       b.firstOf(
+        MATCH_EXPRESSION(),
         YIELD_EXPRESSION(),
         THROW_EXPRESSION(),
         f.prefixExpr(
