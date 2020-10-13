@@ -7,6 +7,7 @@ class MyTest extends TestCase {
     assertEquals(true, $x); // Noncompliant {{Use assertTrue() instead.}}
     assertEquals(false, $x); // Noncompliant {{Use assertFalse() instead.}}
     assertEquals(null, $x); // Noncompliant {{Use assertNull() instead.}}
+    assertEquals('str', $x);
 
     assertNotEquals(true, $x); // Noncompliant {{Use assertNotTrue() instead.}}
     assertNotEquals(false, $x); // Noncompliant {{Use assertNotFalse() instead.}}
@@ -22,6 +23,9 @@ class MyTest extends TestCase {
 
     assertEquals($x, true); // Noncompliant {{Use assertTrue() instead.}}
 
+    assertEquals();
+    assertEquals(true);
+
     assertTrue($x); // Compliant
     assertFalse($x); // Compliant
     assertNull($x); // Compliant
@@ -29,6 +33,12 @@ class MyTest extends TestCase {
 
     assertSame($x, $y); // Compliant
     assertContains(true, [true,false]); // Compliant
+  }
+
+  function namedArguments() {
+    assertEquals(message: '', actual: $x, expected: 0);
+    assertEquals(message: null, actual: $x, expected: 0);
+    assertEquals(message: '', actual: $x, expected: null); // Noncompliant {{Use assertNull() instead.}}
   }
 }
 
