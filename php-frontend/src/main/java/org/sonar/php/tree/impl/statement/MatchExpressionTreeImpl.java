@@ -89,7 +89,7 @@ public class MatchExpressionTreeImpl extends PHPTree implements MatchExpressionT
 
   @Override
   public SyntaxToken openCurlyBraceToken() {
-    return openCurlyBraceToken();
+    return openCurlyBraceToken;
   }
 
   @Override
@@ -99,7 +99,7 @@ public class MatchExpressionTreeImpl extends PHPTree implements MatchExpressionT
 
   @Override
   public SyntaxToken closeCurlyBraceToken() {
-    return closeCurlyBraceToken();
+    return closeCurlyBraceToken;
   }
 
   @Override

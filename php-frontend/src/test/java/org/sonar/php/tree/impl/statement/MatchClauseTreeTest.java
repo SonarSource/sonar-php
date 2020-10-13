@@ -56,5 +56,6 @@ public class MatchClauseTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.MATCH_DEFAULT_CLAUSE)).isTrue();
     assertThat(tree.defaultToken().text()).isEqualTo("default");
     assertThat(tree.caseToExpressionToken().text()).isEqualTo("=>");
+    assertThat(expressionToString(tree.expression())).isEqualTo("false");
   }
 }

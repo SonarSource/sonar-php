@@ -37,6 +37,10 @@ public class MatchExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.matchToken().text()).isEqualTo("match");
     assertThat(expressionToString(tree.expression())).isEqualTo("$a");
     assertThat(tree.cases()).hasSize(2);
+    assertThat(tree.openCurlyBraceToken().text()).isEqualTo("{");
+    assertThat(tree.closeCurlyBraceToken().text()).isEqualTo("}");
+    assertThat(tree.openParenthesis().text()).isEqualTo("(");
+    assertThat(tree.closeParenthesis().text()).isEqualTo(")");
   }
 
   @Test
