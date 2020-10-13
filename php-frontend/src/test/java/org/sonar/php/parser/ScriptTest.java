@@ -47,4 +47,5 @@ public class ScriptTest {
       .matches("<?php echo 42; $x ?>")
     ;
   }
+
 }

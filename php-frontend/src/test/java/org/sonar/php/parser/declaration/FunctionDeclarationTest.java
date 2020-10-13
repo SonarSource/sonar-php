@@ -34,6 +34,7 @@ public class FunctionDeclarationTest {
       .matches("function f() : bool {}")
       .matches("function f() : ?bool {}")
       .matches("function f() : object {}")
+      .matches("#[A1(8)] function f() {}")
     ;
   }
 }

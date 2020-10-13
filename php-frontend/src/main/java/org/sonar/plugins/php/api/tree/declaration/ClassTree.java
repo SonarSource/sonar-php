@@ -31,7 +31,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * Common interface for {@link ClassDeclarationTree} and {@link AnonymousClassTree}
  */
 @Beta
-public interface ClassTree extends Tree {
+public interface ClassTree extends Tree, HasAttributes {
   /**
    * PHP 5 introduce a new way to declare constructors: by defining a method named "__construct".
    * Previously constructors were declared by defining a method with the same name as the class.

@@ -17,23 +17,27 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.parser.declaration;
 
 import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class AnonymousClassTest {
+public class AttributeGroupTest {
 
   @Test
   public void test() {
-    assertThat(Kind.ANONYMOUS_CLASS)
-      .matches("class(1, foo()) extends A implements B, C {var $a;}")
-      .matches("class implements B {}")
-      .matches("class extends B {}")
-      .matches("class {}")
-      .matches("#[A1(7)] class () { }")
+    assertThat(PHPLexicalGrammar.ATTRIBUTE_GROUP)
+      .matches("#[A]")
+      .matches("#[A,B]")
+      .matches("#[A,B,]")
+      .matches("#[A()]")
+      .matches("#[A($x)]")
+      .matches("#[A(x:$x)]")
+      .matches("#[A(x:$x), B()]")
+      .notMatches("#[]")
     ;
   }
+
 }

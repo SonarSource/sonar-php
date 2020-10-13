@@ -22,6 +22,8 @@ package org.sonar.plugins.php.api.visitors;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -314,6 +316,10 @@ public interface VisitorCheck extends PHPCheck {
   void visitAnonymousClass(AnonymousClassTree tree);
 
   void visitHeredoc(HeredocStringLiteralTree tree);
+
+  void visitAttributeGroup(AttributeGroupTree tree);
+
+  void visitAttribute(AttributeTree tree);
 
   /**
    * @deprecated since 3.1. Use {@link #visitEchoTagStatement(EchoTagStatementTree)}

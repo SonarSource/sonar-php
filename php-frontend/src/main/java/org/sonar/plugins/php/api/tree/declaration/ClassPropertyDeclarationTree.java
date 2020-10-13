@@ -43,7 +43,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * </pre>
  */
 @Beta
-public interface ClassPropertyDeclarationTree extends ClassMemberTree {
+public interface ClassPropertyDeclarationTree extends ClassMemberTree, HasAttributes {
 
   List<SyntaxToken> modifierTokens();
 

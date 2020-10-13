@@ -38,6 +38,8 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.ScriptTreeImpl;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.impl.declaration.AttributeGroupTreeImpl;
+import org.sonar.php.tree.impl.declaration.AttributeTreeImpl;
 import org.sonar.php.tree.impl.declaration.BuiltInTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.CallArgumentTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
@@ -137,6 +139,8 @@ import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -417,13 +421,18 @@ public class TreeFactory {
   }
 
   public ClassPropertyDeclarationTree classConstantDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<SyntaxToken> visibility,
     InternalSyntaxToken constToken,
     VariableDeclarationTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
     InternalSyntaxToken eosToken
   ) {
-    return ClassPropertyDeclarationTreeImpl.constant(visibility.orNull(), constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
+    return ClassPropertyDeclarationTreeImpl.constant(attributes.or(Collections.emptyList()),
+      visibility.orNull(),
+      constToken,
+      separatedList(firstDeclaration, additionalDeclarations),
+      eosToken);
   }
 
   public ConstantDeclarationTree constantDeclaration(
@@ -436,16 +445,22 @@ public class TreeFactory {
   }
 
   public ClassPropertyDeclarationTree classVariableDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     List<SyntaxToken> modifierTokens,
     Optional<DeclaredTypeTree> typeAnnotation,
     VariableDeclarationTree firstVariable,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalVariables,
     InternalSyntaxToken eosToken
   ) {
-    return ClassPropertyDeclarationTreeImpl.variable(modifierTokens, typeAnnotation.orNull(), separatedList(firstVariable, additionalVariables), eosToken);
+    return ClassPropertyDeclarationTreeImpl.variable(attributes.or(Collections.emptyList()),
+      modifierTokens,
+      typeAnnotation.orNull(),
+      separatedList(firstVariable, additionalVariables),
+      eosToken);
   }
 
   public MethodDeclarationTree methodDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<List<SyntaxToken>> modifiers,
     InternalSyntaxToken functionToken,
     Optional<InternalSyntaxToken> referenceToken,
@@ -454,10 +469,18 @@ public class TreeFactory {
     Optional<ReturnTypeClauseTree> returnTypeClause,
     Tree body
   ) {
-    return new MethodDeclarationTreeImpl(optionalList(modifiers), functionToken, referenceToken.orNull(), name, parameters, returnTypeClause.orNull(), body);
+    return new MethodDeclarationTreeImpl(attributes.or(Collections.emptyList()),
+      optionalList(modifiers),
+      functionToken,
+      referenceToken.orNull(),
+      name,
+      parameters,
+      returnTypeClause.orNull(),
+      body);
   }
 
   public FunctionDeclarationTree functionDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken functionToken,
     Optional<InternalSyntaxToken> referenceToken,
     NameIdentifierTree name,
@@ -465,7 +488,7 @@ public class TreeFactory {
     Optional<ReturnTypeClauseTree> returnTypeClauseTree,
     BlockTree body
   ) {
-    return new FunctionDeclarationTreeImpl(functionToken, referenceToken.orNull(), name, parameters, returnTypeClauseTree.orNull(), body);
+    return new FunctionDeclarationTreeImpl(attributes.or(Collections.emptyList()), functionToken, referenceToken.orNull(), name, parameters, returnTypeClauseTree.orNull(), body);
   }
 
   public ParameterListTree parameterList(
@@ -481,6 +504,7 @@ public class TreeFactory {
   }
 
   public ParameterTree parameter(
+    Optional<List<AttributeGroupTree>> attributeGroups,
     Optional<DeclaredTypeTree> type,
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
@@ -494,7 +518,13 @@ public class TreeFactory {
       initValue = eqAndInitValue.get().second();
     }
     VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(identifier);
-    return new ParameterTreeImpl(type.orNull(), ampersand.orNull(), ellipsis.orNull(), varIdentifier, eqToken, initValue);
+    return new ParameterTreeImpl(attributeGroups.or(Collections.emptyList()),
+      type.orNull(),
+      ampersand.orNull(),
+      ellipsis.orNull(),
+      varIdentifier,
+      eqToken,
+      initValue);
   }
 
   public SeparatedListImpl<NamespaceNameTree> interfaceList(NamespaceNameTree first, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> others) {
@@ -552,6 +582,7 @@ public class TreeFactory {
   }
 
   public ClassDeclarationTree interfaceDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken interfaceToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> extendsClause,
     InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
@@ -563,6 +594,7 @@ public class TreeFactory {
       interfaceList = extendsClause.get().second();
     }
     return ClassDeclarationTreeImpl.createInterface(
+      attributes.or(Collections.emptyList()),
       interfaceToken,
       name,
       extendsToken,
@@ -574,10 +606,12 @@ public class TreeFactory {
   }
 
   public ClassDeclarationTree traitDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken traitToken, NameIdentifierTree name,
     InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     return ClassDeclarationTreeImpl.createTrait(
+      attributes.or(Collections.emptyList()),
       traitToken,
       name,
       openCurlyBraceToken,
@@ -587,12 +621,14 @@ public class TreeFactory {
   }
 
   public ClassDeclarationTree classDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<InternalSyntaxToken> modifier, InternalSyntaxToken classToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
     InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace
   ) {
     return ClassDeclarationTreeImpl.createClass(
+      attributes.or(Collections.emptyList()),
       modifier.orNull(), classToken, name,
       extendsToken(extendsClause), superClass(extendsClause),
       implementsToken(implementsClause), superInterfaces(implementsClause),
@@ -1579,6 +1615,7 @@ public class TreeFactory {
   }
 
   public FunctionExpressionTree functionExpression(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<InternalSyntaxToken> staticToken,
     InternalSyntaxToken functionToken,
     Optional<InternalSyntaxToken> ampersandToken,
@@ -1589,6 +1626,7 @@ public class TreeFactory {
   ) {
 
     return new FunctionExpressionTreeImpl(
+      attributes.or(Collections.emptyList()),
       staticToken.orNull(),
       functionToken,
       ampersandToken.orNull(),
@@ -1599,6 +1637,7 @@ public class TreeFactory {
   }
 
   public ArrowFunctionExpressionTree arrowFunctionExpression(
+    Optional<List<AttributeGroupTree>> attributes,
     Optional<InternalSyntaxToken> staticToken,
     InternalSyntaxToken fnToken,
     Optional<InternalSyntaxToken> ampersandToken,
@@ -1608,6 +1647,7 @@ public class TreeFactory {
     ExpressionTree body
   ) {
     return new ArrowFunctionExpressionTreeImpl(
+      attributes.or(Collections.emptyList()),
       staticToken.orNull(),
       fnToken,
       ampersandToken.orNull(),
@@ -1750,6 +1790,7 @@ public class TreeFactory {
   }
 
   public AnonymousClassTree anonymousClass(
+    Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken classToken,
     Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<CallArgumentTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
@@ -1758,6 +1799,7 @@ public class TreeFactory {
   ) {
 
     return new AnonymousClassTreeImpl(
+      attributes.or(Collections.emptyList()),
       classToken,
       lParenthesis.orNull(),
       arguments,
@@ -1867,6 +1909,25 @@ public class TreeFactory {
 
   public CallArgumentTree functionCallArgument(ExpressionTree value) {
     return new CallArgumentTreeImpl(null, value);
+  }
+
+  public AttributeTreeImpl attribute(NamespaceNameTree name, Optional<FunctionCallTree> callTree) {
+    if (callTree.isPresent()) {
+      FunctionCallTree tree = callTree.get();
+      return new AttributeTreeImpl(name, tree.openParenthesisToken(), tree.callArguments(), tree.closeParenthesisToken());
+    } else {
+      return new AttributeTreeImpl(name, null, SeparatedListImpl.empty(), null);
+    }
+  }
+
+  public SeparatedList<AttributeTree> attributeList(AttributeTree firstAttribute,
+                                                    Optional<List<Tuple<InternalSyntaxToken, AttributeTree>>> otherAttributes,
+                                                    Optional<InternalSyntaxToken> trailingComma) {
+    return separatedList(firstAttribute, otherAttributes, trailingComma.orNull());
+  }
+
+  public AttributeGroupTree attributeGroup(SyntaxToken startToken, SeparatedList<AttributeTree> attributes, SyntaxToken endToken) {
+    return new AttributeGroupTreeImpl(startToken, attributes, endToken);
   }
 
   /**

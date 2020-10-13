@@ -35,6 +35,7 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
   public void simple_declaration() throws Exception {
     FunctionDeclarationTree tree = parse("function f($p) {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.is(Kind.FUNCTION_DECLARATION)).isTrue();
+    assertThat(tree.attributeGroups()).isEmpty();
     assertThat(tree.functionToken().text()).isEqualTo("function");
     assertThat(tree.referenceToken()).isNull();
     assertThat(tree.name().text()).isEqualTo("f");
@@ -67,5 +68,12 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.returnTypeClause().type().typeName()).hasToString("array");
     assertThat(tree.returnTypeClause().declaredType().isSimple()).isFalse();
     assertThat(((UnionTypeTree)tree.returnTypeClause().declaredType()).types()).hasSize(2);
+  }
+
+  @Test
+  public void with_attributes() throws Exception {
+    FunctionDeclarationTree tree = parse("#[A1(8), A2] function f() {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
+    assertThat(tree.attributeGroups()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes()).hasSize(2);
   }
 }

@@ -25,6 +25,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
@@ -40,6 +41,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
 
   private static final Kind KIND = Kind.METHOD_DECLARATION;
 
+  private final List<AttributeGroupTree> attributeGroups;
   private final List<SyntaxToken> modifiersToken;
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
@@ -50,6 +52,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   private MethodSymbol symbol;
 
   public MethodDeclarationTreeImpl(
+    List<AttributeGroupTree> attributeGroups,
     List<SyntaxToken> modifiersToken,
     InternalSyntaxToken functionToken,
     @Nullable InternalSyntaxToken referenceToken,
@@ -58,6 +61,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     @Nullable ReturnTypeClauseTree returnTypeClause,
     Tree body
     ) {
+    this.attributeGroups = attributeGroups;
     this.modifiersToken = modifiersToken;
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;
@@ -70,6 +74,11 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   @Override
   public List<SyntaxToken> modifiers() {
     return modifiersToken;
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override
@@ -112,6 +121,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
+      attributeGroups.iterator(),
       modifiersToken.iterator(),
       Iterators.forArray(functionToken, referenceToken, name, parameters, returnTypeClause, body));
   }

@@ -28,6 +28,8 @@ import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
@@ -57,14 +59,16 @@ public class PHPVisitorCheckTest {
     testVisitor.analyze(file, tree);
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
-    assertThat(testVisitor.namespaceNameCounter).isEqualTo(3);
+    assertThat(testVisitor.namespaceNameCounter).isEqualTo(6);
     assertThat(testVisitor.varIdentifierCounter).isEqualTo(4);
     // PHPCheck#init() is called by PHPAnalyzer
     assertThat(testVisitor.initCounter).isEqualTo(0);
     assertThat(testVisitor.literalCounter).isEqualTo(3);
-    assertThat(testVisitor.tokenCounter).isEqualTo(38);
+    assertThat(testVisitor.tokenCounter).isEqualTo(47);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
     assertThat(testVisitor.unionTypesCounter).isEqualTo(1);
+    assertThat(testVisitor.attributeGroupsCounter).isEqualTo(2);
+    assertThat(testVisitor.attributesCounter).isEqualTo(3);
   }
 
   @Test
@@ -152,6 +156,8 @@ public class PHPVisitorCheckTest {
     int tokenCounter = 0;
     int literalCounter = 0;
     int unionTypesCounter = 0;
+    int attributeGroupsCounter = 0;
+    int attributesCounter = 0;
 
     @Override
     public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -181,6 +187,18 @@ public class PHPVisitorCheckTest {
     public void visitUnionType(UnionTypeTree tree) {
       super.visitUnionType(tree);
       unionTypesCounter++;
+    }
+
+    @Override
+    public void visitAttributeGroup(AttributeGroupTree tree) {
+      super.visitAttributeGroup(tree);
+      attributeGroupsCounter++;
+    }
+
+    @Override
+    public void visitAttribute(AttributeTree tree) {
+      super.visitAttribute(tree);
+      attributesCounter++;
     }
 
     @Override

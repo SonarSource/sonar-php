@@ -71,11 +71,18 @@ public class FileHeaderCheck extends PHPVisitorCheck {
       }
     }
 
-    for (String expectedLine : expectedLines) {
+    for (int i = 0; i < expectedLines.length; i++) {
+      if (i > 0) {
+        if (lines.hasNext()) {
+          line = lines.next();
+        } else {
+          return false;
+        }
+      }
+      String expectedLine = expectedLines[i];
       if (!line.equals(expectedLine)) {
         return false;
       }
-      line = lines.next();
     }
 
     return true;

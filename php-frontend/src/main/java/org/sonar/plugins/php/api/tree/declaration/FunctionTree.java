@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
  * Common interface for all kinds of <a href="http://php.net/manual/en/language.functions.php">function</a>.
  */
 @Beta
-public interface FunctionTree extends Tree {
+public interface FunctionTree extends Tree, HasAttributes {
 
   SyntaxToken functionToken();
 

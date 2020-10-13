@@ -22,6 +22,8 @@ package org.sonar.plugins.php.api.tree;
 import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.expression.PrefixedCastExpressionTreeImpl;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -1003,7 +1005,17 @@ public interface Tree {
     /**
      * {@link ReturnTypeClauseTree}
      */
-    RETURN_TYPE_CLAUSE(ReturnTypeClauseTree.class);
+    RETURN_TYPE_CLAUSE(ReturnTypeClauseTree.class),
+
+    /**
+     * {@link AttributeTree}
+     */
+    ATTRIBUTE(AttributeTree.class),
+
+    /**
+     * {@link AttributeGroupTree}
+     */
+    ATTRIBUTE_GROUP(AttributeGroupTree.class);
 
     final Class<? extends Tree> associatedInterface;
 

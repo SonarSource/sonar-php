@@ -55,4 +55,10 @@ public class MethodDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.returnTypeClause().declaredType().isSimple()).isFalse();
   }
 
+  @Test
+  public void with_attributes() throws Exception {
+    MethodDeclarationTree tree = parse("#[A1(8), A2] public static function f() {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.attributeGroups()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes()).hasSize(2);
+  }
 }

@@ -21,10 +21,12 @@ package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
@@ -35,6 +37,8 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFunctionExpressionTree {
 
   private static final Kind KIND = Kind.ARROW_FUNCTION_EXPRESSION;
+
+  private final List<AttributeGroupTree> attributeGroups;
   private final InternalSyntaxToken staticToken;
   private final InternalSyntaxToken fnToken;
   private final InternalSyntaxToken referenceToken;
@@ -44,6 +48,7 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
   private final ExpressionTree body;
 
   public ArrowFunctionExpressionTreeImpl(
+    List<AttributeGroupTree> attributeGroups,
     @Nullable InternalSyntaxToken staticToken,
     InternalSyntaxToken fnToken,
     @Nullable InternalSyntaxToken referenceToken,
@@ -52,6 +57,7 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
     InternalSyntaxToken doubleArrowToken,
     ExpressionTree body
   ) {
+    this.attributeGroups = attributeGroups;
     this.staticToken = staticToken;
     this.fnToken = fnToken;
     this.referenceToken = referenceToken;
@@ -71,6 +77,11 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
   @Override
   public SyntaxToken referenceToken() {
     return referenceToken;
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override
@@ -106,7 +117,10 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(staticToken, fnToken, referenceToken, parameters, returnTypeClause, doubleArrowToken, body);
+    return Iterators.concat(
+      attributeGroups.iterator(),
+      Iterators.forArray(staticToken, fnToken, referenceToken, parameters, returnTypeClause, doubleArrowToken, body)
+    );
   }
 
   @Override
