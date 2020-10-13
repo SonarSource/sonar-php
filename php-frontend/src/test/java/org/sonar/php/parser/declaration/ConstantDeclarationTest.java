@@ -31,6 +31,7 @@ public class ConstantDeclarationTest {
     assertThat(PHPLexicalGrammar.CONSTANT_DECLARATION)
       .matches("const A = 1 ;")
       .matches("const A = 1, B = 2 ;")
+      .matches("const MATCH = 2;")
       .notMatches("public const A = 1 ;")
       .notMatches("const A ;");
   }

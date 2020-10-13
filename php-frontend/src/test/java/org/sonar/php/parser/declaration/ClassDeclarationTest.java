@@ -30,6 +30,7 @@ public class ClassDeclarationTest {
   public void test() {
     assertThat(PHPLexicalGrammar.CLASS_DECLARATION)
       .matches("class C {}")
+      .matches("class match {}")
       .matches("abstract class C {}")
       .matches("final class C {}")
 
