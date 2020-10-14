@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.MatchExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

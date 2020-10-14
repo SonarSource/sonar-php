@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.tree.impl.statement;
+package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
@@ -25,9 +25,9 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.MatchClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.tree.statement.MatchClauseTree;
-import org.sonar.plugins.php.api.tree.statement.MatchExpressionTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 public class MatchExpressionTreeImpl extends PHPTree implements MatchExpressionTree {

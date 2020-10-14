@@ -28,8 +28,8 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.tree.statement.MatchExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = KeywordsAndConstantsNotLowerCaseCheck.KEY)

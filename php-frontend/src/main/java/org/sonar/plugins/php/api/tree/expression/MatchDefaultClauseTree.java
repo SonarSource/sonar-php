@@ -17,12 +17,19 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.tree.statement;
+package org.sonar.plugins.php.api.tree.expression;
 
+import com.google.common.annotations.Beta;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * Default match clause in <a href="https://wiki.php.net/rfc/match_expression_v2">match expression</a> (see {@link MatchClauseTree}).
+ * <pre>
+ *   default => {@link #expression()}
+ * </pre>
+ */
+@Beta
 public interface MatchDefaultClauseTree extends MatchClauseTree {
 
   SyntaxToken defaultToken();

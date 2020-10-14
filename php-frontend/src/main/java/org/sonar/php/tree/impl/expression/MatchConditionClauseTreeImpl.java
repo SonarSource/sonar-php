@@ -17,34 +17,35 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.tree.impl.statement;
+package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.MatchConditionClauseTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.tree.statement.MatchDefaultClauseTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class MatchDefaultClauseTreeImpl extends PHPTree implements MatchDefaultClauseTree {
+public class MatchConditionClauseTreeImpl extends PHPTree implements MatchConditionClauseTree {
 
-  private static final Kind KIND = Kind.MATCH_DEFAULT_CLAUSE;
+  private static final Kind KIND = Kind.MATCH_CONDITION_CLAUSE;
 
-  private final SyntaxToken defaultToken;
+  private final SeparatedList<ExpressionTree> conditions;
   private final SyntaxToken caseToExpressionToken;
   private final ExpressionTree expression;
 
-  public MatchDefaultClauseTreeImpl(SyntaxToken defaultToken, SyntaxToken caseToExpressionToken, ExpressionTree expression) {
-    this.defaultToken = defaultToken;
+  public MatchConditionClauseTreeImpl(SeparatedList<ExpressionTree> conditions, SyntaxToken caseToExpressionToken, ExpressionTree expression) {
+    this.conditions = conditions;
     this.caseToExpressionToken = caseToExpressionToken;
     this.expression = expression;
   }
 
   @Override
   public void accept(VisitorCheck visitor) {
-    visitor.visitMatchDefaultClause(this);
+    visitor.visitMatchConditionClause(this);
   }
 
   @Override
@@ -53,8 +54,8 @@ public class MatchDefaultClauseTreeImpl extends PHPTree implements MatchDefaultC
   }
 
   @Override
-  public SyntaxToken defaultToken() {
-    return defaultToken;
+  public SeparatedList<ExpressionTree> conditions() {
+    return conditions;
   }
 
   @Override
@@ -69,7 +70,7 @@ public class MatchDefaultClauseTreeImpl extends PHPTree implements MatchDefaultC
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(defaultToken, caseToExpressionToken, expression);
+    return Iterators.concat(conditions.elementsAndSeparators(), Iterators.forArray(caseToExpressionToken, expression));
   }
 
 }

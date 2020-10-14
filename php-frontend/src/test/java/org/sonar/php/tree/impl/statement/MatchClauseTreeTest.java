@@ -23,8 +23,8 @@ import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.MatchConditionClauseTree;
-import org.sonar.plugins.php.api.tree.statement.MatchDefaultClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchConditionClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchDefaultClauseTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

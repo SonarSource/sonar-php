@@ -17,32 +17,31 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.tree.statement;
+package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
-import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.SeparatedList;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
  * Starting from PHP 8.0
- * Condition clause in <a href="https://wiki.php.net/rfc/match_expression_v2">match expression</a> (see {@link MatchClauseTree}).
- * <pre>
- *   case {@link #expression()} : {@link #expression()}
- * </pre>
+ * <a href="https://wiki.php.net/rfc/match_expression_v2">Match expression</a>
  */
 @Beta
-public interface MatchConditionClauseTree extends MatchClauseTree {
+public interface MatchExpressionTree extends ExpressionTree {
 
-  SeparatedList<ExpressionTree> conditions();
+  SyntaxToken matchToken();
 
-  /**
-   * {@link PHPPunctuator#DOUBLEARROW =>}
-   */
-  @Override
-  SyntaxToken caseToExpressionToken();
+  SyntaxToken openParenthesis();
 
-  @Override
   ExpressionTree expression();
+
+  SyntaxToken closeParenthesis();
+
+  SyntaxToken openCurlyBraceToken();
+
+  SeparatedList<MatchClauseTree> cases();
+
+  SyntaxToken closeCurlyBraceToken();
+
 }
