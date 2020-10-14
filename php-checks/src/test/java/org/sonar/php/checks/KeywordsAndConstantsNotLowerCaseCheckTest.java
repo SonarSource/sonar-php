@@ -27,5 +27,6 @@ public class KeywordsAndConstantsNotLowerCaseCheckTest {
   @Test
   public void test() throws Exception {
     CheckVerifier.verify(new KeywordsAndConstantsNotLowerCaseCheck(), "KeywordsAndConstantsNotLowerCaseCheck.php");
+
   }
 }
