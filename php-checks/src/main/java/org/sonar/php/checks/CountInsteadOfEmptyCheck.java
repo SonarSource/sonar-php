@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.type.FunctionCall;
@@ -27,6 +28,7 @@ import org.sonar.php.checks.utils.type.TypePredicateList;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
@@ -57,7 +59,10 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(tree.arguments().get(0))) {
+    ExpressionTree argumentValue = CheckUtils.argument(tree, "array_or_countable", 0)
+      .map(CallArgumentTree::value)
+      .orElse(null);
+    if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(argumentValue)) {
       context().newIssue(this, tree.getParent(), "Use empty() to check whether the array is empty or not.");
     }
     super.visitFunctionCall(tree);
@@ -70,7 +75,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
     BinaryExpressionTree parentBinaryTree = (BinaryExpressionTree) tree.getParent();
 
-    boolean result = false;
+    boolean result;
     if (isEqualityExpression(parentBinaryTree)) {
       result = isZero(parentBinaryTree.leftOperand()) || isZero(parentBinaryTree.rightOperand());
     } else if(parentBinaryTree.is(Tree.Kind.GREATER_THAN) || parentBinaryTree.is(Tree.Kind.LESS_THAN_OR_EQUAL_TO)) {
@@ -84,11 +89,11 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   }
 
   private boolean isCountFunction(FunctionCallTree tree) {
-    return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable())) && !tree.arguments().isEmpty();
+    return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable()));
   }
 
-  private boolean isArrayVariable(ExpressionTree tree) {
-    if (!tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+  private boolean isArrayVariable(@Nullable ExpressionTree tree) {
+    if (tree == null || !tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       return false;
     }
 
