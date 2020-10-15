@@ -60,11 +60,11 @@ public class PHPVisitorCheckTest {
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
     assertThat(testVisitor.namespaceNameCounter).isEqualTo(6);
-    assertThat(testVisitor.varIdentifierCounter).isEqualTo(4);
+    assertThat(testVisitor.varIdentifierCounter).isEqualTo(6);
     // PHPCheck#init() is called by PHPAnalyzer
     assertThat(testVisitor.initCounter).isEqualTo(0);
-    assertThat(testVisitor.literalCounter).isEqualTo(3);
-    assertThat(testVisitor.tokenCounter).isEqualTo(47);
+    assertThat(testVisitor.literalCounter).isEqualTo(6);
+    assertThat(testVisitor.tokenCounter).isEqualTo(67);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
     assertThat(testVisitor.unionTypesCounter).isEqualTo(1);
     assertThat(testVisitor.attributeGroupsCounter).isEqualTo(2);

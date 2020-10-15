@@ -147,6 +147,9 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   FOREACH_STATEMENT,
   FOREACH_VARIABLE,
 
+  MATCH_EXPRESSION,
+  MATCH_CLAUSE,
+
   SWITCH_STATEMENT,
   SWITCH_CASE_CLAUSE,
 
@@ -300,7 +303,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(WHITESPACES).is(b.regexp("[" + LexicalConstant.WHITESPACE + "]*+"));
     b.rule(REGULAR_VAR_IDENTIFIER).is(SPACING, VARIABLE_IDENTIFIER).skip();
     b.rule(VARIABLE_IDENTIFIER).is(b.regexp(LexicalConstant.VAR_IDENTIFIER));
-    b.rule(IDENTIFIER).is(SPACING, b.nextNot(KEYWORDS), b.regexp(LexicalConstant.IDENTIFIER));
+    b.rule(IDENTIFIER).is(SPACING, b.firstOf(b.sequence(b.nextNot(KEYWORDS), b.regexp(LexicalConstant.IDENTIFIER)), b.regexp("(?i)match")));
     b.rule(IDENTIFIER_OR_KEYWORD).is(SPACING, b.regexp(LexicalConstant.IDENTIFIER));
 
     // Tags & Inline HTML

@@ -49,7 +49,7 @@ public class PHPSubscriptionCheckTest {
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
     assertThat(testVisitor.namespaceNameCounter).isEqualTo(6);
-    assertThat(testVisitor.varIdentifierCounter).isEqualTo(4);
+    assertThat(testVisitor.varIdentifierCounter).isEqualTo(6);
   }
 
   @Test

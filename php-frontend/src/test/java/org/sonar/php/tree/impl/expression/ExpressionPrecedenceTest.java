@@ -158,6 +158,7 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
     assertPrecedence("$a = 3 && 4", "$a = (3 && 4)");
     assertPrecedence("$x and $a = $a ? 1 : 2", "$x and ($a = ($a ? 1 : 2))");
     assertPrecedence("throw $a = $b", "throw ($a = $b)");
+    assertPrecedence("42 + match ($a) {default=>0}", "42 + (match ( $a ) { (default => 0) })");
   }
 
   private void assertPrecedence(String code, String expected) throws Exception {

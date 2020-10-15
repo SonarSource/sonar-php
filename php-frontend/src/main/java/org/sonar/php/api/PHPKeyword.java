@@ -70,6 +70,7 @@ public enum PHPKeyword implements GrammarRuleKey {
   INTERFACE("interface"),
   ISSET("isset"),
   LIST("list"),
+  MATCH("match"),
   NAMESPACE("namespace"),
   NEW("new"),
   OR("or"),
