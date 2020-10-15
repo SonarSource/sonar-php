@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
- * <a href="http://php.net/manual/en/functions.arguments.php">Function Argument</a>
+ * <a href="http://php.net/manual/en/functions.arguments.php">Function/method parameter</a>
  * <pre>
  *   {@link #variableIdentifier()}
  *
@@ -40,6 +40,9 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  */
 @Beta
 public interface ParameterTree extends Tree, HasAttributes {
+
+  @Nullable
+  SyntaxToken visibility();
 
   /**
    * @deprecated since 3.11 - Use {@link #declaredType()} instead.

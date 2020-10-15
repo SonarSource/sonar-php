@@ -22,6 +22,7 @@ package org.sonar.php.parser;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.Optional;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -469,6 +470,9 @@ public class TreeFactory {
     Optional<ReturnTypeClauseTree> returnTypeClause,
     Tree body
   ) {
+    if (!"__construct".equals(name.text())) {
+      throwOnParameterWithVisibility(parameters);
+    }
     return new MethodDeclarationTreeImpl(attributes.or(Collections.emptyList()),
       optionalList(modifiers),
       functionToken,
@@ -488,7 +492,17 @@ public class TreeFactory {
     Optional<ReturnTypeClauseTree> returnTypeClauseTree,
     BlockTree body
   ) {
+    throwOnParameterWithVisibility(parameters);
     return new FunctionDeclarationTreeImpl(attributes.or(Collections.emptyList()), functionToken, referenceToken.orNull(), name, parameters, returnTypeClauseTree.orNull(), body);
+  }
+
+  private static void throwOnParameterWithVisibility(ParameterListTree parameterList) {
+    parameterList.parameters().stream()
+      .filter(p -> p.visibility() != null)
+      .findFirst()
+      .ifPresent(p -> {
+        throw new RecognitionException(((PHPTree) p).getLine(), "Cannot declare parameter with visibility outside of constructor");
+      });
   }
 
   public ParameterListTree parameterList(
@@ -505,6 +519,7 @@ public class TreeFactory {
 
   public ParameterTree parameter(
     Optional<List<AttributeGroupTree>> attributeGroups,
+    Optional<SyntaxToken> visibility,
     Optional<DeclaredTypeTree> type,
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
@@ -519,6 +534,7 @@ public class TreeFactory {
     }
     VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(identifier);
     return new ParameterTreeImpl(attributeGroups.or(Collections.emptyList()),
+      visibility.orNull(),
       type.orNull(),
       ampersand.orNull(),
       ellipsis.orNull(),
