@@ -41,12 +41,8 @@ setrawcookie($name, $value, $expire, $path);  // Noncompliant
 session_set_cookie_params($lifetime, $path, $domain, false); // Noncompliant
 session_set_cookie_params($lifetime, $path, $domain, true);  
 
+$params = session_get_cookie_params();
+setcookie($name, $value, $params); // Compliant
 
-
-
-
-// $params = session_get_cookie_params();
-// setcookie($name, $value, $params); // Compliant
-
-// $expires = 42;
-// setcookie($name, $value, $expires); // false negative
+$expires = 42;
+setcookie($name, $value, $expires); // false negative

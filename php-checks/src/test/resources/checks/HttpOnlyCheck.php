@@ -27,3 +27,10 @@ setcookie($name, $value, $params); // Compliant
 $expires = 42;
 setcookie($name, $value, $expires); // false negative
 
+  setcookie($value, $expire, $path, $domain, httponly: false, expires: true, name: $name); // Noncompliant {{Make sure creating this cookie without the "httpOnly" flag is safe here.}}
+//^^^^^^^^^                                            ^^^^^ <
+  setrawcookie($name, httponly: false); // Noncompliant {{Make sure creating this cookie without the "httpOnly" flag is safe here.}}
+//^^^^^^^^^^^^                  ^^^^^ <
+
+  setcookie(httponly: foo(false));
+  setrawcookie(httponly: $httpOnly, name: $name);

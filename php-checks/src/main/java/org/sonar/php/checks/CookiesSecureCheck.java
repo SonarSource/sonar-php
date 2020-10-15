@@ -76,6 +76,10 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   }
 
   private void raiseIssueIfArgumentIsNotDefined(FunctionCallTree tree) {
+    if (tree.callArguments().size() == 3) {
+      // if only 3 argument are defined there is an ambiguity because of the other constructor, so we don't raise issue
+      return;
+    }
     if (SET_COOKIE_FUNCTIONS.contains(getLowerCaseFunctionName(tree)) && tree.callArguments().size() < SET_COOKIE_SECURE_PARAMETER) {
       context().newIssue(this, tree.callee(), MESSAGE);
     }
