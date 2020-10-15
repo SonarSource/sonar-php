@@ -416,6 +416,7 @@ public class PHPGrammar {
     return b.<ParameterTree>nonterminal(PHPLexicalGrammar.PARAMETER).is(
       f.parameter(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
+        b.optional(VISIBILITY_MODIFIER()),
         b.optional(DECLARED_TYPE()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELLIPSIS)),

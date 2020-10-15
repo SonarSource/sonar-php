@@ -19,6 +19,8 @@
  */
 package org.sonar.php.parser;
 
+import com.google.common.base.Throwables;
+import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -50,7 +52,12 @@ public class PHPParser extends ActionParser<Tree> {
 
   @Override
   public Tree parse(String source) {
-    return setParents(super.parse(source));
+    try {
+      return setParents(super.parse(source));
+    } catch (RuntimeException e) {
+      Throwable rootCause = Throwables.getRootCause(e);
+      throw (rootCause instanceof RecognitionException) ? (RecognitionException) rootCause : e;
+    }
   }
 
   private static Tree setParents(Tree tree) {
