@@ -26,7 +26,9 @@ import org.sonar.check.Rule;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.Symbols;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -42,7 +44,8 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     // only check method and function calls expect constructors with more than 1 argument
     FunctionSymbol symbol = Symbols.get(tree);
-    if (!symbol.isUnknownSymbol() && tree.arguments().size() > 1) {
+    SeparatedList<CallArgumentTree> arguments = tree.callArguments();
+    if (!symbol.isUnknownSymbol() && arguments.size() > 1 && arguments.stream().allMatch(a -> a.name() == null)) {
       checkFunctionCall(tree, symbol);
     }
 
