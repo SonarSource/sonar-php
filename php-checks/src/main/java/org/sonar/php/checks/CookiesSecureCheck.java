@@ -21,12 +21,14 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.phpini.PhpIniBoolean;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -57,27 +59,34 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
-    
-    if (SET_COOKIE_FUNCTIONS.contains(functionName)) {
-      raiseIssueIfBadFlag(tree, SET_COOKIE_SECURE_PARAMETER);
-    } else if (SESSION_COOKIE_FUNC.equals(functionName)) {
-      raiseIssueIfBadFlag(tree, SESSION_COOKIE_SECURE_PARAMETER);
-    }
+    Optional<CallArgumentTree> secureArgument = Optional.empty();
 
+    if (SET_COOKIE_FUNCTIONS.contains(functionName)) {
+      secureArgument = CheckUtils.argument(tree, "secure", SET_COOKIE_SECURE_PARAMETER);
+    }
+    if (SESSION_COOKIE_FUNC.equals(functionName)) {
+      secureArgument = CheckUtils.argument(tree, "secure", SESSION_COOKIE_SECURE_PARAMETER);
+    }
+    if (secureArgument.isPresent()) {
+      raiseIssueIfBadFlag(tree, secureArgument.get().value());
+    } else {
+      raiseIssueIfArgumentIsNotDefined(tree);
+    }
     super.visitFunctionCall(tree);
   }
 
-  private void raiseIssueIfBadFlag(FunctionCallTree tree, int argumentIndex) {
-    if (tree.arguments().size() > argumentIndex) {
-      ExpressionTree secureArgument = tree.arguments().get(argumentIndex);
-      if (CheckUtils.isFalseValue(secureArgument)) {
-        // if argument is defined to false
-        context().newIssue(this, tree.callee(), MESSAGE).secondary(tree.arguments().get(argumentIndex), null);
-      }
-    } else if(tree.arguments().size() != 3) {
-      // if only 3 argument are defined there is an ambiguity so we don't raise issue
+  private void raiseIssueIfArgumentIsNotDefined(FunctionCallTree tree) {
+    if (SET_COOKIE_FUNCTIONS.contains(getLowerCaseFunctionName(tree)) && tree.callArguments().size() < SET_COOKIE_SECURE_PARAMETER) {
+      context().newIssue(this, tree.callee(), MESSAGE);
+    }
+    if (SESSION_COOKIE_FUNC.equals(getLowerCaseFunctionName(tree)) && tree.callArguments().size() < SESSION_COOKIE_SECURE_PARAMETER) {
       context().newIssue(this, tree.callee(), MESSAGE);
     }
   }
-  
+
+  private void raiseIssueIfBadFlag(FunctionCallTree tree, ExpressionTree secureArgument) {
+    if (CheckUtils.isFalseValue(secureArgument)) {
+      context().newIssue(this, tree.callee(), MESSAGE).secondary(secureArgument, null);
+    }
+  }
 }

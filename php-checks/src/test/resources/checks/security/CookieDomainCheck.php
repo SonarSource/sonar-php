@@ -40,3 +40,9 @@ setcookie("TestCookie");
 session_set_cookie_params(3600);
 
 $notUsed = ".com"; // ignored
+
+setcookie(name: "TestCookie");
+setcookie(name: "TestCookie", domain: ".com", expires: 1); // Noncompliant
+setcookie(domain: ".myDomain.com");
+session_set_cookie_params("name", "Foo", domain: ".com", expires: 1); // Noncompliant
+session_set_cookie_params("name", domain: ".myDomain.com", expires: 1);

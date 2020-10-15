@@ -19,14 +19,17 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -39,22 +42,34 @@ public class CakePhpDebugModeCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
 
-  private static final Set<String> CAKE_DEBUG_FUNCTIONS = CheckUtils.lowerCaseSet("Configure::write", "Configure::config");
+  private static final String CAKE_WRITE_FUNCTION = "Configure::write".toLowerCase(Locale.ROOT);
+  private static final String CAKE_CONFIGURE_FUNCTION = "Configure::config".toLowerCase(Locale.ROOT);
+
+  private static final Map<String, String[]> FUNCTION_AND_PARAM_NAMES = ImmutableMap.of(
+    CAKE_WRITE_FUNCTION, new String[] {"config", "value"},
+    CAKE_CONFIGURE_FUNCTION, new String[] {"name", "engine"});
+
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-    if (CAKE_DEBUG_FUNCTIONS.contains(functionName) && tree.arguments().size() == 2) {
-      ExpressionTree firstArg = tree.arguments().get(0);
-      ExpressionTree secondArg = tree.arguments().get(1);
-      if (firstArg.is(Tree.Kind.REGULAR_STRING_LITERAL)
-        && trimQuotes((LiteralTree) firstArg).equals("debug")
-        && isTrue(secondArg)) {
-        context().newIssue(this, tree, MESSAGE);
+    if (functionName.equals(CAKE_WRITE_FUNCTION) || functionName.equals(CAKE_CONFIGURE_FUNCTION)) {
+      Optional<CallArgumentTree> firstArgument = CheckUtils.argument(tree, FUNCTION_AND_PARAM_NAMES.get(functionName)[0], 0);
+      Optional<CallArgumentTree> secondArgument = CheckUtils.argument(tree, FUNCTION_AND_PARAM_NAMES.get(functionName)[1], 1);
+      if (firstArgument.isPresent() && secondArgument.isPresent()) {
+        check(tree, firstArgument.get().value(), secondArgument.get().value());
       }
     }
+
     super.visitFunctionCall(tree);
+  }
+
+  private void check(FunctionCallTree tree, ExpressionTree firstArg, ExpressionTree secondArg) {
+    if (firstArg.is(Tree.Kind.REGULAR_STRING_LITERAL) && trimQuotes((LiteralTree) firstArg).equals("debug")
+      && isTrue(secondArg)) {
+      context().newIssue(this, tree, MESSAGE);
+    }
   }
 
   private boolean isTrue(ExpressionTree tree) {
