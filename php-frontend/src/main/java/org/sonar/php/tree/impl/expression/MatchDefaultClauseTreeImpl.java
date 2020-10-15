@@ -36,7 +36,7 @@ public class MatchDefaultClauseTreeImpl extends PHPTree implements MatchDefaultC
 
   private final SyntaxToken defaultToken;
   @Nullable
-  private SyntaxToken trailingComma;
+  private final SyntaxToken trailingComma;
   private final SyntaxToken doubleArrowToken;
   private final ExpressionTree expression;
 
