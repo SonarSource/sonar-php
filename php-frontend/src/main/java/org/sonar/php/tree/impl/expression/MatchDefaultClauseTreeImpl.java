@@ -20,7 +20,9 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
+import com.sonar.sslr.api.typed.Optional;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -33,12 +35,15 @@ public class MatchDefaultClauseTreeImpl extends PHPTree implements MatchDefaultC
   private static final Kind KIND = Kind.MATCH_DEFAULT_CLAUSE;
 
   private final SyntaxToken defaultToken;
-  private final SyntaxToken caseToExpressionToken;
+  @Nullable
+  private SyntaxToken trailingComma;
+  private final SyntaxToken doubleArrowToken;
   private final ExpressionTree expression;
 
-  public MatchDefaultClauseTreeImpl(SyntaxToken defaultToken, SyntaxToken caseToExpressionToken, ExpressionTree expression) {
+  public MatchDefaultClauseTreeImpl(SyntaxToken defaultToken, Optional<SyntaxToken> trailingComma, SyntaxToken doubleArrowToken, ExpressionTree expression) {
     this.defaultToken = defaultToken;
-    this.caseToExpressionToken = caseToExpressionToken;
+    this.trailingComma = trailingComma.orNull();
+    this.doubleArrowToken = doubleArrowToken;
     this.expression = expression;
   }
 
@@ -57,9 +62,15 @@ public class MatchDefaultClauseTreeImpl extends PHPTree implements MatchDefaultC
     return defaultToken;
   }
 
+  @Nullable
   @Override
-  public SyntaxToken caseToExpressionToken() {
-    return caseToExpressionToken;
+  public SyntaxToken trailingComma() {
+    return trailingComma;
+  }
+
+  @Override
+  public SyntaxToken doubleArrowToken() {
+    return doubleArrowToken;
   }
 
   @Override
@@ -69,7 +80,7 @@ public class MatchDefaultClauseTreeImpl extends PHPTree implements MatchDefaultC
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(defaultToken, caseToExpressionToken, expression);
+    return Iterators.forArray(defaultToken, trailingComma, doubleArrowToken, expression);
   }
 
 }

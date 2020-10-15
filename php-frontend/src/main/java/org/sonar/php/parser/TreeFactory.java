@@ -1048,17 +1048,19 @@ public class TreeFactory {
   }
 
   public MatchConditionClauseTree matchConditionClause(ExpressionTree firstCondition, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> otherconditions,
-    Optional<InternalSyntaxToken> trailingComma, SyntaxToken caseToExpressionToken, ExpressionTree expression) {
+    Optional<InternalSyntaxToken> trailingComma, SyntaxToken doubleArrowToken, ExpressionTree expression) {
     return new MatchConditionClauseTreeImpl(
       separatedList(firstCondition, otherconditions, trailingComma.orNull()),
-      caseToExpressionToken,
+      doubleArrowToken,
       expression);
   }
 
-  public MatchDefaultClauseTree matchDefaultClause(SyntaxToken defaultToken, SyntaxToken caseToExpressionToken, ExpressionTree expression) {
+  public MatchDefaultClauseTree matchDefaultClause(SyntaxToken defaultToken, Optional<SyntaxToken> trailingComma, SyntaxToken doubleArrowToken,
+    ExpressionTree expression) {
     return new MatchDefaultClauseTreeImpl(
       defaultToken,
-      caseToExpressionToken,
+      trailingComma,
+      doubleArrowToken,
       expression);
   }
 

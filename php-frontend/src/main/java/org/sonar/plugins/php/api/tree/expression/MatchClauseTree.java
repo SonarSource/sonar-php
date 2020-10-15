@@ -34,7 +34,7 @@ public interface MatchClauseTree extends Tree {
   /**
    * {@link PHPPunctuator#DOUBLEARROW =>}
    */
-  SyntaxToken caseToExpressionToken();
+  SyntaxToken doubleArrowToken();
 
   ExpressionTree expression();
 

@@ -107,6 +107,6 @@ public class MatchExpressionTreeImpl extends PHPTree implements MatchExpressionT
     return Iterators.concat(
       Iterators.forArray(matchToken, openParenthesis, expression, closeParenthesis, openCurlyBraceToken),
       cases.elementsAndSeparators(),
-      Iterators.forArray(closeCurlyBraceToken));
+      Iterators.singletonIterator(closeCurlyBraceToken()));
   }
 }

@@ -40,7 +40,7 @@ public interface MatchConditionClauseTree extends MatchClauseTree {
    * {@link PHPPunctuator#DOUBLEARROW =>}
    */
   @Override
-  SyntaxToken caseToExpressionToken();
+  SyntaxToken doubleArrowToken();
 
   @Override
   ExpressionTree expression();

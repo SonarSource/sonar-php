@@ -36,7 +36,7 @@ public class MatchClauseTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.MATCH_CONDITION_CLAUSE)).isTrue();
     assertThat(tree.conditions()).hasSize(1);
-    assertThat(tree.caseToExpressionToken().text()).isEqualTo("=>");
+    assertThat(tree.doubleArrowToken().text()).isEqualTo("=>");
     assertThat(tree.expression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
   }
 
@@ -46,7 +46,7 @@ public class MatchClauseTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.MATCH_CONDITION_CLAUSE)).isTrue();
     assertThat(tree.conditions()).hasSize(3);
-    assertThat(tree.caseToExpressionToken().text()).isEqualTo("=>");
+    assertThat(tree.doubleArrowToken().text()).isEqualTo("=>");
   }
 
   @Test
@@ -55,7 +55,19 @@ public class MatchClauseTreeTest extends PHPTreeModelTest {
     
     assertThat(tree.is(Kind.MATCH_DEFAULT_CLAUSE)).isTrue();
     assertThat(tree.defaultToken().text()).isEqualTo("default");
-    assertThat(tree.caseToExpressionToken().text()).isEqualTo("=>");
+    assertThat(tree.trailingComma()).isNull();
+    assertThat(tree.doubleArrowToken().text()).isEqualTo("=>");
     assertThat(expressionToString(tree.expression())).isEqualTo("false");
+  }
+
+  @Test
+  public void default_clause_with_trailing_comma() throws Exception {
+    MatchDefaultClauseTree tree = parse("default, => 1", PHPLexicalGrammar.MATCH_CLAUSE);
+
+    assertThat(tree.is(Kind.MATCH_DEFAULT_CLAUSE)).isTrue();
+    assertThat(tree.defaultToken().text()).isEqualTo("default");
+    assertThat(tree.trailingComma().text()).isEqualTo(",");
+    assertThat(tree.doubleArrowToken().text()).isEqualTo("=>");
+    assertThat(expressionToString(tree.expression())).isEqualTo("1");
   }
 }

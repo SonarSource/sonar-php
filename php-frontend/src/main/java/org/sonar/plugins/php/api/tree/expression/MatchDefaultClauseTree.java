@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -34,11 +35,14 @@ public interface MatchDefaultClauseTree extends MatchClauseTree {
 
   SyntaxToken defaultToken();
 
+  @Nullable
+  SyntaxToken trailingComma();
+
   /**
    * {@link PHPPunctuator#DOUBLEARROW =>}
    */
   @Override
-  SyntaxToken caseToExpressionToken();
+  SyntaxToken doubleArrowToken();
 
   @Override
   ExpressionTree expression();

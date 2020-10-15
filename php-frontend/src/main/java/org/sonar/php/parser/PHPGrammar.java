@@ -781,6 +781,7 @@ public class PHPGrammar {
           EXPRESSION()),
         f.matchDefaultClause(
           b.token(PHPKeyword.DEFAULT),
+          b.optional(b.token(PHPPunctuator.COMMA)),
           b.token(DOUBLEARROW),
           EXPRESSION())));
   }

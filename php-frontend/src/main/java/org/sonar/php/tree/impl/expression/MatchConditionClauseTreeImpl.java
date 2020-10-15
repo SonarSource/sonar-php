@@ -34,12 +34,12 @@ public class MatchConditionClauseTreeImpl extends PHPTree implements MatchCondit
   private static final Kind KIND = Kind.MATCH_CONDITION_CLAUSE;
 
   private final SeparatedList<ExpressionTree> conditions;
-  private final SyntaxToken caseToExpressionToken;
+  private final SyntaxToken doubleArrowToken;
   private final ExpressionTree expression;
 
-  public MatchConditionClauseTreeImpl(SeparatedList<ExpressionTree> conditions, SyntaxToken caseToExpressionToken, ExpressionTree expression) {
+  public MatchConditionClauseTreeImpl(SeparatedList<ExpressionTree> conditions, SyntaxToken doubleArrowToken, ExpressionTree expression) {
     this.conditions = conditions;
-    this.caseToExpressionToken = caseToExpressionToken;
+    this.doubleArrowToken = doubleArrowToken;
     this.expression = expression;
   }
 
@@ -59,8 +59,8 @@ public class MatchConditionClauseTreeImpl extends PHPTree implements MatchCondit
   }
 
   @Override
-  public SyntaxToken caseToExpressionToken() {
-    return caseToExpressionToken;
+  public SyntaxToken doubleArrowToken() {
+    return doubleArrowToken;
   }
 
   @Override
@@ -70,7 +70,7 @@ public class MatchConditionClauseTreeImpl extends PHPTree implements MatchCondit
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(conditions.elementsAndSeparators(), Iterators.forArray(caseToExpressionToken, expression));
+    return Iterators.concat(conditions.elementsAndSeparators(), Iterators.forArray(doubleArrowToken, expression));
   }
 
 }
