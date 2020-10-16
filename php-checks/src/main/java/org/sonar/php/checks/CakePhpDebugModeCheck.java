@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
@@ -42,19 +43,20 @@ public class CakePhpDebugModeCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
 
-  private static final String CAKE_WRITE_FUNCTION = "Configure::write".toLowerCase(Locale.ROOT);
-  private static final String CAKE_CONFIGURE_FUNCTION = "Configure::config".toLowerCase(Locale.ROOT);
+  private static final String CONFIG_FUNCTION = "Configure::config";
+  private static final String WRITE_FUNCTION = "Configure::write";
+  private static final Set<String> CAKE_DEBUG_FUNCTIONS = CheckUtils.lowerCaseSet(WRITE_FUNCTION, CONFIG_FUNCTION);
 
   private static final Map<String, String[]> FUNCTION_AND_PARAM_NAMES = ImmutableMap.of(
-    CAKE_WRITE_FUNCTION, new String[] {"config", "value"},
-    CAKE_CONFIGURE_FUNCTION, new String[] {"name", "engine"});
+    WRITE_FUNCTION.toLowerCase(Locale.ROOT), new String[] {"config", "value"},
+    CONFIG_FUNCTION.toLowerCase(Locale.ROOT), new String[] {"name", "engine"});
 
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-    if (functionName.equals(CAKE_WRITE_FUNCTION) || functionName.equals(CAKE_CONFIGURE_FUNCTION)) {
+    if (CAKE_DEBUG_FUNCTIONS.contains(functionName)) {
       Optional<CallArgumentTree> firstArgument = CheckUtils.argument(tree, FUNCTION_AND_PARAM_NAMES.get(functionName)[0], 0);
       Optional<CallArgumentTree> secondArgument = CheckUtils.argument(tree, FUNCTION_AND_PARAM_NAMES.get(functionName)[1], 1);
       if (firstArgument.isPresent() && secondArgument.isPresent()) {

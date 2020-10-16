@@ -65,8 +65,8 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     NULL_LITERAL,
     NUMERIC_LITERAL
   };
-  private static final String ARGUMENT_STATEMENT = "statement";
-  private static final String ARGUMENT_QUERY = "query";
+  private static final String STATEMENT = "statement";
+  private static final String QUERY = "query";
 
   private static final Map<String, Integer> SUSPICIOUS_GLOBAL_FUNCTIONS = buildSuspiciousGlobalFunctions();
 
@@ -88,10 +88,10 @@ public class QueryUsageCheck extends PHPVisitorCheck {
 
   private static final Predicate<TreeValues> SUSPICIOUS_PDO_QUERY_PREDICATES = new TypePredicateList(
     new ObjectMemberFunctionCall("exec", IS_PDO_OBJECT),
-    new ObjectMemberFunctionCall(ARGUMENT_QUERY, IS_PDO_OBJECT));
+    new ObjectMemberFunctionCall(QUERY, IS_PDO_OBJECT));
 
   private static final Predicate<TreeValues> SUSPICIOUS_MYSQLI_QUERY_PREDICATES = new TypePredicateList(
-    new ObjectMemberFunctionCall("query", IS_MYSQLI_OBJECT),
+    new ObjectMemberFunctionCall(QUERY, IS_MYSQLI_OBJECT),
     new ObjectMemberFunctionCall("real_query", IS_MYSQLI_OBJECT),
     new ObjectMemberFunctionCall("multi_query", IS_MYSQLI_OBJECT),
     new ObjectMemberFunctionCall("send_query", IS_MYSQLI_OBJECT));
@@ -122,17 +122,17 @@ public class QueryUsageCheck extends PHPVisitorCheck {
       String qualifiedNameLowerCase = ((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ENGLISH);
       if (SUSPICIOUS_GLOBAL_FUNCTIONS.containsKey(qualifiedNameLowerCase)) {
         Integer index = SUSPICIOUS_GLOBAL_FUNCTIONS.get(qualifiedNameLowerCase);
-        Optional<CallArgumentTree> argument = CheckUtils.argument(tree, ARGUMENT_QUERY, index);
+        Optional<CallArgumentTree> argument = CheckUtils.argument(tree, QUERY, index);
         return argument.isPresent() && isSuspiciousArgument(argument.get().value());
       } else if ("pg_query".equals(qualifiedNameLowerCase)) {
         // First argument of function 'pg_query' is optional
         SeparatedList<CallArgumentTree> callArguments = tree.callArguments();
         Optional<CallArgumentTree> argument = Optional.empty();
         if (callArguments.size() == 1) {
-          argument = CheckUtils.argument(tree, ARGUMENT_QUERY, 0);
+          argument = CheckUtils.argument(tree, QUERY, 0);
         }
         if (callArguments.size() == 2) {
-          argument = CheckUtils.argument(tree, ARGUMENT_QUERY, 1);
+          argument = CheckUtils.argument(tree, QUERY, 1);
         }
         return argument.isPresent() && isSuspiciousArgument(argument.get().value());
       }
@@ -142,18 +142,18 @@ public class QueryUsageCheck extends PHPVisitorCheck {
 
   private boolean isSuspiciousMemberFunction(FunctionCallTree tree, TreeValues possibleValues) {
     if (SUSPICIOUS_MYSQLI_QUERY_PREDICATES.test(possibleValues)) {
-      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, ARGUMENT_QUERY, 0);
+      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, QUERY, 0);
       return argument.isPresent() && isSuspiciousArgument(argument.get().value());
     }
     if (SUSPICIOUS_PDO_QUERY_PREDICATES.test(possibleValues)) {
-      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, ARGUMENT_STATEMENT, 0);
+      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, STATEMENT, 0);
       return argument.isPresent() && isSuspiciousArgument(argument.get().value());
     }
     return false;
   }
 
   private boolean isSuspiciousPrepareStatement(FunctionCallTree tree, TreeValues possibleValues) {
-    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, ARGUMENT_STATEMENT, 0);
+    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, STATEMENT, 0);
     return PDO_PREPARE_PREDICATE.test(possibleValues) && argument.isPresent() && isSuspiciousArgument(argument.get().value());
   }
 
