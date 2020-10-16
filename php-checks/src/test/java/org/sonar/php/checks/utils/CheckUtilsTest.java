@@ -298,6 +298,13 @@ public class CheckUtilsTest {
     assertThat(argument(callTree, "someName", 2)).isEmpty();
   }
 
+  @Test
+  public void hasNamedArgument() {
+    assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo();"))).isFalse();
+    assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo($a, $b);"))).isFalse();
+    assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo($a, b: $b);"))).isTrue();
+  }
+
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
     return Arrays.stream(values).map(value -> new LiteralTreeImpl(kind,
       new InternalSyntaxToken(1, 1, value, Collections.emptyList(), 0, false)));

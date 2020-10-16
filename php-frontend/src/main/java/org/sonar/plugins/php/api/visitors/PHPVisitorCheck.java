@@ -68,6 +68,9 @@ import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MatchConditionClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchDefaultClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
@@ -250,6 +253,21 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitSwitchStatement(SwitchStatementTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitMatchConditionClause(MatchConditionClauseTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitMatchDefaultClause(MatchDefaultClauseTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitMatchExpression(MatchExpressionTree tree) {
     scan(tree);
   }
 

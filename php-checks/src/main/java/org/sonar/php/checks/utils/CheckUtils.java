@@ -367,4 +367,8 @@ public final class CheckUtils {
 
     return Optional.empty();
   }
+
+  public static boolean hasNamedArgument(FunctionCallTree call) {
+    return call.callArguments().stream().anyMatch(arg -> arg.name() != null);
+  }
 }

@@ -10,5 +10,7 @@ class A extends B {
     $var = 1;
     foo(1, 2);
     `cat $var`;
+    match ($a) {1=>1};
+    match ($a) {default=>1};
   }
 }

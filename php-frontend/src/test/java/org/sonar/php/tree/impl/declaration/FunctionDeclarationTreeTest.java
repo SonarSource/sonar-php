@@ -19,6 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import com.sonar.sslr.api.RecognitionException;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -75,5 +76,10 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     FunctionDeclarationTree tree = parse("#[A1(8), A2] function f() {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(2);
+  }
+
+  @Test(expected = RecognitionException.class)
+  public void parameter_with_visibility_modifier() {
+    parse("function f(public $p) {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
   }
 }

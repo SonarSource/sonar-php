@@ -22,9 +22,11 @@ package org.sonar.php.checks.phpunit;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -82,17 +84,20 @@ public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
   }
 
   private static Optional<LiteralTreeImpl> findLiteralArgument(FunctionCallTree tree) {
-    if (tree.arguments().size() < 2) {
+    Optional<CallArgumentTree> expected = CheckUtils.argument(tree, "expected", 0);
+    Optional<CallArgumentTree> actual = CheckUtils.argument(tree, "actual", 1);
+
+    if (!expected.isPresent() || !actual.isPresent()) {
       return Optional.empty();
     }
 
-    ExpressionTree firstArgument = tree.arguments().get(0);
-    ExpressionTree secondArgument = tree.arguments().get(1);
+    ExpressionTree expectedValue = expected.get().value();
+    ExpressionTree actualValue = actual.get().value();
 
-    if (isLiteral(firstArgument)) {
-      return Optional.of((LiteralTreeImpl) firstArgument);
-    } else if (isLiteral(secondArgument)) {
-      return Optional.of((LiteralTreeImpl) secondArgument);
+    if (isLiteral(expectedValue)) {
+      return Optional.of((LiteralTreeImpl) expectedValue);
+    } else if (isLiteral(actualValue)) {
+      return Optional.of((LiteralTreeImpl) actualValue);
     }
 
     return Optional.empty();

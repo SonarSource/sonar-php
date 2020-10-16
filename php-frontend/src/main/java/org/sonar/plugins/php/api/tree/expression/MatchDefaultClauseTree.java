@@ -17,22 +17,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.expression;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
+import org.sonar.php.api.PHPPunctuator;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+/**
+ * Default match clause in <a href="https://wiki.php.net/rfc/match_expression_v2">match expression</a> (see {@link MatchClauseTree}).
+ * <pre>
+ *   default => {@link #expression()}
+ * </pre>
+ */
+@Beta
+public interface MatchDefaultClauseTree extends MatchClauseTree {
 
-public class ConstantDeclarationTest {
+  SyntaxToken defaultToken();
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.CONSTANT_DECLARATION)
-      .matches("const A = 1 ;")
-      .matches("const A = 1, B = 2 ;")
-      .matches("const MATCH = 2;")
-      .notMatches("public const A = 1 ;")
-      .notMatches("const A ;");
-  }
+  @Nullable
+  SyntaxToken trailingComma();
+
+  /**
+   * {@link PHPPunctuator#DOUBLEARROW =>}
+   */
+  @Override
+  SyntaxToken doubleArrowToken();
+
+  @Override
+  ExpressionTree expression();
 }

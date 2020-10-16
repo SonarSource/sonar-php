@@ -17,22 +17,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.expression;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import com.google.common.annotations.Beta;
+import org.sonar.php.api.PHPPunctuator;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+/**
+ * Starting from PHP 8.0
+ * <a href="https://wiki.php.net/rfc/match_expression_v2">Match expression</a>
+ */
+@Beta
+public interface MatchClauseTree extends Tree {
 
-public class ConstantDeclarationTest {
+  /**
+   * {@link PHPPunctuator#DOUBLEARROW =>}
+   */
+  SyntaxToken doubleArrowToken();
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.CONSTANT_DECLARATION)
-      .matches("const A = 1 ;")
-      .matches("const A = 1, B = 2 ;")
-      .matches("const MATCH = 2;")
-      .notMatches("public const A = 1 ;")
-      .notMatches("const A ;");
-  }
+  ExpressionTree expression();
+
 }

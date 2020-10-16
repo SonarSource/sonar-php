@@ -77,6 +77,7 @@ public class KeywordTest {
       .matches("interface")
       .matches("isset")
       .matches("list")
+      .matches("match")
       .matches("namespace")
       .matches("new")
       .matches("or")
@@ -102,7 +103,7 @@ public class KeywordTest {
 
   @Test
   public void getKeywordValues() {
-    Assertions.assertThat(PHPKeyword.getKeywordValues().length).isEqualTo(68);
+    Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(69);
   }
 
 }

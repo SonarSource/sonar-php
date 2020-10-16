@@ -15,3 +15,10 @@ if ($a == True) {         // Noncompliant {{Write this "True" constant in lower 
 } elseif ($a == false) {  // OK
 
 }
+
+match($a);
+match ($a) {$b=>42};
+MATCH ($a) {default=>1}; // Noncompliant
+MATCH(MATCH(1){1=>2}); //  Noncompliant
+   // ^^^^^
+MATCH($args); 

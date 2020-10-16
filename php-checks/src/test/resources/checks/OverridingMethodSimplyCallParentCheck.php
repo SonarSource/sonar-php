@@ -23,6 +23,10 @@ abstract class B extends A {
     parent::g2($p1, $p3, $p2);
   }
 
+  public function g3($p1, $p2, $p3) {   // OK
+    parent::g3($p1, p3: $p2, p2: $p3);
+  }
+
   public function e() {      // Noncompliant
     A::e();
   }

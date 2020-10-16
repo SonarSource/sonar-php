@@ -19,6 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import com.sonar.sslr.api.RecognitionException;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -60,5 +61,16 @@ public class MethodDeclarationTreeTest extends PHPTreeModelTest {
     MethodDeclarationTree tree = parse("#[A1(8), A2] public static function f() {}", PHPLexicalGrammar.METHOD_DECLARATION);
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(2);
+  }
+
+  @Test
+  public void constructor_property_promotion() {
+    MethodDeclarationTree tree = parse("public function __construct(public $p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.parameters().parameters().get(0).visibility().text()).isEqualTo("public");
+  }
+
+  @Test(expected = RecognitionException.class)
+  public void non_constructor_parameter_with_visibility_modifier() {
+    parse("public function nonConstructor(public $p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
   }
 }

@@ -33,7 +33,12 @@ public class ExpressionStatementTest {
       .matches("1 + 1;")
       .matches("yield $a;")
       .matches("yield +6;")
-      .matches("yield *6;");
+      .matches("yield *6;")
+      .matches("foo(MATCH);")
+      .matches("foo\\match();")
+      .matches("match($a);")
+      .matches("match($a) {$b=>2};")
+    ;
   }
 
 }

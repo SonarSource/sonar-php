@@ -42,6 +42,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private static final Kind KIND = Kind.PARAMETER;
 
   private final List<AttributeGroupTree> attributeGroups;
+  private final SyntaxToken visibility;
   private final DeclaredTypeTree type;
   private final InternalSyntaxToken referenceToken;
   private final InternalSyntaxToken ellipsisToken;
@@ -51,6 +52,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   public ParameterTreeImpl(
     List<AttributeGroupTree> attributeGroups,
+    @Nullable SyntaxToken visibility,
     @Nullable DeclaredTypeTree type,
     @Nullable InternalSyntaxToken referenceToken,
     @Nullable InternalSyntaxToken ellipsisToken,
@@ -59,6 +61,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     @Nullable ExpressionTree initValue
    ) {
     this.attributeGroups = attributeGroups;
+    this.visibility = visibility;
     this.type = type;
     this.referenceToken = referenceToken;
     this.ellipsisToken = ellipsisToken;
@@ -70,6 +73,12 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   @Override
   public List<AttributeGroupTree> attributeGroups() {
     return attributeGroups;
+  }
+
+  @Nullable
+  @Override
+  public SyntaxToken visibility() {
+    return visibility;
   }
 
   /**
@@ -132,7 +141,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       attributeGroups.iterator(),
-      Iterators.forArray(type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
+      Iterators.forArray(visibility, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
     );
   }
 
