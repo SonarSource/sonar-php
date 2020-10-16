@@ -210,8 +210,18 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
       this.raiseIssueOnMatch = raiseIssueOnMatch;
     }
 
+    public ArgumentVerifier(int position, String name, String value, boolean raiseIssueOnMatch) {
+      this(position, name, ImmutableSet.of(value));
+      this.raiseIssueOnMatch = raiseIssueOnMatch;
+    }
+
     public ArgumentVerifier(int position, Set<String> values, boolean raiseIssueOnMatch) {
       super(position, values);
+      this.raiseIssueOnMatch = raiseIssueOnMatch;
+    }
+
+    public ArgumentVerifier(int position, String name, Set<String> values, boolean raiseIssueOnMatch) {
+      super(position, name, values);
       this.raiseIssueOnMatch = raiseIssueOnMatch;
     }
 
