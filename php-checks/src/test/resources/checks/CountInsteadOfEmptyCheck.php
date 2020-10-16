@@ -135,3 +135,11 @@ if (count($z_6) === 2) { // Compliant
 if (count($z_8) >= "abc") { // Compliant
   echo $z_8[0];
 }
+
+function named_arguments() {
+  count(array_or_countable: $_POST) > 0; // Noncompliant
+  count(mode: 1, array_or_countable: $_POST) > 0; // Noncompliant
+  count(mode: 1, array_or_countable: $unknown_var) > 0;
+  sizeof(mode: 1, array_or_countable: $_POST) > 0; // Noncompliant
+  sizeof(mode: 1, array_or_countable: $unknown_var) > 0;
+}

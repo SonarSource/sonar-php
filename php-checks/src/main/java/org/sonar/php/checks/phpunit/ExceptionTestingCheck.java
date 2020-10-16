@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -124,13 +125,16 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
     public void visitFunctionCall(FunctionCallTree tree) {
       Optional<Assertion> assertion = getAssertion(tree);
 
-      if (!assertion.isPresent() || !RELEVANT_ASSERTIONS.contains(assertion.get().name()) || tree.arguments().size() < 2) {
+      if (!assertion.isPresent() || !RELEVANT_ASSERTIONS.contains(assertion.get().name())) {
         didFindOtherCalls = true;
         return;
       }
 
-      String exceptionMethodCall = getExceptionVariableMethodCall(tree.arguments().get(0))
-        .orElse(getExceptionVariableMethodCall(tree.arguments().get(1)).orElse(null));
+      CallArgumentTree arg1 = CheckUtils.argument(tree, "expected", 0).orElse(null);
+      CallArgumentTree arg2 = CheckUtils.argument(tree, "actual", 1).orElse(null);
+
+      String exceptionMethodCall = getExceptionVariableMethodCall(arg1)
+        .orElse(getExceptionVariableMethodCall(arg2).orElse(null));
 
       if ("getmessage".equals(exceptionMethodCall)) {
         foundExceptionAssertions.put(tree, MESSAGE_MESSAGE);
@@ -141,7 +145,12 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
       }
     }
 
-    private Optional<String> getExceptionVariableMethodCall(ExpressionTree expressionTree) {
+    private Optional<String> getExceptionVariableMethodCall(@Nullable CallArgumentTree callArgument) {
+      if (callArgument == null) {
+        return Optional.empty();
+      }
+
+      ExpressionTree expressionTree = callArgument.value();
       if (!expressionTree.is(Tree.Kind.FUNCTION_CALL) ||
         !((FunctionCallTree) expressionTree).callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
         return Optional.empty();

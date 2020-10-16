@@ -33,7 +33,6 @@ import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -49,8 +48,8 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.checks.utils.CheckUtils.argument;
-import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
 import static org.sonar.php.checks.utils.CheckUtils.functionName;
+import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
 import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
@@ -294,10 +293,16 @@ public class CheckUtilsTest {
 
     assertThat(callTree.callArguments()).hasSize(2);
     assertThat(callTree.callArguments().get(0).name()).isNull();
-    assertThat(argument(callTree, 0, "someName")).isEqualTo(callTree.callArguments().get(0));
-    CallArgumentTree secondArgument = argument(callTree, 0, "a");
-    assertThat(callTree.callArguments().get(1)).isEqualTo(secondArgument);
-    assertThat(argument(callTree, 2, "someName")).isNull();
+    assertThat(argument(callTree, "someName", 0)).contains(callTree.callArguments().get(0));
+    assertThat(argument(callTree, "a", 0)).contains(callTree.callArguments().get(1));
+    assertThat(argument(callTree, "someName", 2)).isEmpty();
+  }
+
+  @Test
+  public void hasNamedArgument() {
+    assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo();"))).isFalse();
+    assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo($a, $b);"))).isFalse();
+    assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo($a, b: $b);"))).isTrue();
   }
 
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {

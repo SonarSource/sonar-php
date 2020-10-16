@@ -22,9 +22,12 @@ package org.sonar.php.checks.phpunit;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
+import static org.sonar.php.checks.utils.CheckUtils.hasNamedArgument;
 import static org.sonar.plugins.php.api.tree.Tree.Kind;
 
 @Rule(key = "S3415")
@@ -44,9 +47,10 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
     }
 
     Optional<Assertion> assertion = getAssertion(tree);
-    if (tree.arguments().size() >= 2 && assertion.isPresent() && assertion.get().hasExpectedValue()) {
-      ExpressionTree expected = tree.arguments().get(0);
-      ExpressionTree actual = tree.arguments().get(1);
+    SeparatedList<CallArgumentTree> arguments = tree.callArguments();
+    if (arguments.size() >= 2 && assertion.isPresent() && assertion.get().hasExpectedValue() && !hasNamedArgument(tree)) {
+      ExpressionTree expected = arguments.get(0).value();
+      ExpressionTree actual = arguments.get(1).value();
       if (getAssignedValue(actual).is(LITERAL) && !getAssignedValue(expected).is(LITERAL)) {
         newIssue(actual, MESSAGE).secondary(expected, null);
       }

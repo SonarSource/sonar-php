@@ -93,6 +93,24 @@ class MyTest extends TestCase {
 //            ^^^^^^^^^^^^^^^^^^^^^^^
      }
   }
+
+  public function test_named_arguments_noncompliant() {
+    try {
+      doSomething();
+      $this->fail();
+    } catch (Exception $e) { // Noncompliant
+      $this->assertEquals(message: "", expected: "abc", actual: $e->getMessage());
+    }
+  }
+
+  public function test_named_arguments_compliant() {
+    try {
+      doSomething();
+      $this->fail();
+    } catch (Exception $e) {
+      $this->assertEquals(message: "", expected: "abc", actual: $something);
+    }
+  }
 }
 
 // For coverage

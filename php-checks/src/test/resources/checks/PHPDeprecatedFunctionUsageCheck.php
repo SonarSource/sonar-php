@@ -23,6 +23,7 @@ namespace {
   assert($foo);                // OK
   assert("$foo");              // Noncompliant {{Change this call to "assert" to not pass a string argument.}}
   assert('foo()');             // Noncompliant
+  assert(description: null, assertion: 'foo()'); // Noncompliant
 
   \A\call_user_method();       // OK
 
@@ -56,6 +57,8 @@ namespace A {
 define('BAR', 21);        // OK
 define('BAR', 21, false); // OK
 define('BAR', 21, null);
+define('BAR', case_insensitive:true, value:21); // Noncompliant
+define('BAR', case_insensitive:false, value:true);
 
 $a = FILTER_FLAG_SCHEME_REQUIRED; // Noncompliant {{Do not use this deprecated "FILTER_FLAG_SCHEME_REQUIRED" constant.}}
 //   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -146,3 +149,6 @@ $pos = strpos($mystring, 32);  // Noncompliant {{Convert this integer needle int
 $result = strchr($stringA); // coverage
 $result = strchr($stringA,$toFind);
 $result = strchr($stringA, 0); // Noncompliant {{Convert this integer needle into a string.}}
+
+strstr($mystring, before_needle: false, needle: 42); // Noncompliant
+strstr($mystring, before_needle: 42, needle: "ok");

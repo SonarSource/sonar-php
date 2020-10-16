@@ -14,6 +14,7 @@ testFunction($a, $e); // Compliant
 testFunction($f, $b); // Compliant
 testFunction($a); // Compliant
 otherFunction($b, $a); // Compliant
+testFunction(a:$b, b:$a); // Compliant
 
 
 //-----------------
