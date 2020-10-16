@@ -130,10 +130,11 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   private void checkArgument(FunctionCallTree tree, Tuple<String, Integer> tuple) {
     Optional<CallArgumentTree> argument = CheckUtils.argument(tree, tuple.first(), tuple.second());
+
     if (!argument.isPresent()) {
       return;
     }
-    // ExpressionTree arg = tree.callArguments().get(tuple.second()).value();
+
     ExpressionTree arg = argument.get().value();
     if (arg.is(Kind.REGULAR_STRING_LITERAL) && !isEmptyStringLiteral((LiteralTree) arg)) {
       context().newIssue(this, arg, MESSAGE_ARGUMENTS);
