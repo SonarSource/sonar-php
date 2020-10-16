@@ -38,7 +38,7 @@ public class SSLCertificatesVerificationDisabledCheck extends FunctionArgumentCh
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    checkArgument(tree, CURL_SETOPT, new ArgumentMatcher(1, CURLOPT_SSL_VERIFYPEER), new ArgumentVerifier(2, VERIFY_PEER_COMPLIANT_VALUES));
+    checkArgument(tree, CURL_SETOPT, new ArgumentMatcher(1, "option", CURLOPT_SSL_VERIFYPEER), new ArgumentVerifier(2, "value", VERIFY_PEER_COMPLIANT_VALUES));
 
     super.visitFunctionCall(tree);
   }
