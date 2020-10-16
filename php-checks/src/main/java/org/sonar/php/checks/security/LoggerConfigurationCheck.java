@@ -86,7 +86,7 @@ public class LoggerConfigurationCheck extends PHPVisitorCheck {
     String lowerCaseQualifiedName = ((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ROOT);
     if (ERROR_REPORTING.equals(lowerCaseQualifiedName)) {
       Optional<CallArgumentTree> arg = CheckUtils.argument(tree, "level", 0);
-      if (tree.callArguments().size() == 1 && arg.isPresent() && isSuspiciousDirective(ERROR_REPORTING, arg.get().value())) {
+      if (arg.isPresent() && isSuspiciousDirective(ERROR_REPORTING, arg.get().value())) {
         context().newIssue(this, tree, MESSAGE);
       }
     } else {

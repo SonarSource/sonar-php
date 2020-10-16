@@ -80,10 +80,10 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
       // if only 3 argument are defined there is an ambiguity because of the other constructor, so we don't raise issue
       return;
     }
-    if (SET_COOKIE_FUNCTIONS.contains(getLowerCaseFunctionName(tree)) && tree.callArguments().size() < SET_COOKIE_SECURE_PARAMETER) {
+    if (SET_COOKIE_FUNCTIONS.contains(getLowerCaseFunctionName(tree))) {
       context().newIssue(this, tree.callee(), MESSAGE);
     }
-    if (SESSION_COOKIE_FUNC.equals(getLowerCaseFunctionName(tree)) && tree.callArguments().size() < SESSION_COOKIE_SECURE_PARAMETER) {
+    if (SESSION_COOKIE_FUNC.equals(getLowerCaseFunctionName(tree))) {
       context().newIssue(this, tree.callee(), MESSAGE);
     }
   }

@@ -86,6 +86,9 @@ $conn->query();
 $conn->prepare();
 pg_query();
 
+$mysqli = new mysqli("localhost", "myUser", "myPassword", "myDatabase");
+$mysqli->query();
+
 $string = "foo";
 $integer = 12345;
 $boolean = false;
@@ -114,7 +117,9 @@ function named_arguments() {
     $conn->prepare(statement: $unknown_variable); // OK
     
     $mysqli = new mysqli("localhost", "myUser", "myPassword", "myDatabase");
-    $mysqli->query(query: "select * from db".$query); // Noncompliant 
+    $mysqli->query(query: "select * from db".$query); // Noncompliant
+    $mysqli->query(query: $unknown_variable); // OK
     
     pg_send_query (query: "INSERT INTO test (ID) VALUES ($query)", connection: $conn); // Noncompliant
+    
 }

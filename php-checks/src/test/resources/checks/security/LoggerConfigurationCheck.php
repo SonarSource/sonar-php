@@ -106,4 +106,7 @@ function named_arguments() {
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   ini_alter(newvalue: '3', varname: 'log_errors'); // Noncompliant
   ini_set(varname: 'log_errors', newvalue: '1');
+  
+  //Coverage
+  ini_set(newvalue: '1');
 }

@@ -91,7 +91,7 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     new ObjectMemberFunctionCall(ARGUMENT_QUERY, IS_PDO_OBJECT));
 
   private static final Predicate<TreeValues> SUSPICIOUS_MYSQLI_QUERY_PREDICATES = new TypePredicateList(
-    new ObjectMemberFunctionCall(ARGUMENT_QUERY, IS_MYSQLI_OBJECT),
+    new ObjectMemberFunctionCall("query", IS_MYSQLI_OBJECT),
     new ObjectMemberFunctionCall("real_query", IS_MYSQLI_OBJECT),
     new ObjectMemberFunctionCall("multi_query", IS_MYSQLI_OBJECT),
     new ObjectMemberFunctionCall("send_query", IS_MYSQLI_OBJECT));
@@ -127,10 +127,13 @@ public class QueryUsageCheck extends PHPVisitorCheck {
       } else if ("pg_query".equals(qualifiedNameLowerCase)) {
         // First argument of function 'pg_query' is optional
         SeparatedList<CallArgumentTree> callArguments = tree.callArguments();
-        if (callArguments.isEmpty()) {
-          return false;
+        Optional<CallArgumentTree> argument = Optional.empty();
+        if (callArguments.size() == 1) {
+          argument = CheckUtils.argument(tree, ARGUMENT_QUERY, 0);
         }
-        Optional<CallArgumentTree> argument = CheckUtils.argument(tree, ARGUMENT_QUERY, callArguments.size() - 1);
+        if (callArguments.size() == 2) {
+          argument = CheckUtils.argument(tree, ARGUMENT_QUERY, 1);
+        }
         return argument.isPresent() && isSuspiciousArgument(argument.get().value());
       }
     }

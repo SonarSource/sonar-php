@@ -47,3 +47,4 @@ setrawcookie(secure: false, name: "foo", domain: "my.com"); // Noncompliant
 setrawcookie(secure: true, name: "foo");
 session_set_cookie_params($lifetime, $path, secure: "");  // Noncompliant
 session_set_cookie_params($lifetime, $path, secure: 1);
+session_set_cookie_params(); // Noncompliant

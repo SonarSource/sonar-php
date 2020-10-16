@@ -54,6 +54,13 @@ public class FunctionArgumentCheckTest {
   }
 
   @Test
+  public void argument_verifier_with_name() {
+    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, "name", "VALUE");
+
+    assertThat(argumentVerifier.getName()).isEqualTo("name");
+  }
+
+  @Test
   public void argument_verifier_with_set() {
     ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, ImmutableSet.of("VALUE"), true);
 

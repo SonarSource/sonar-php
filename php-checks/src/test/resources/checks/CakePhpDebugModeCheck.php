@@ -38,3 +38,6 @@ Configure::config(engine: true, name: 'xxx');
 //Mixed named arguments
 Configure::write(config: 'debug', 1); // Noncompliant
 Configure::config(name: 'debug', false); 
+//Coverage
+Configure::config(name: 'debug'); //Ok
+Configure::config(config: 'debug'); //Ok
