@@ -24,8 +24,10 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.type.NewObjectCall;
 import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
@@ -33,7 +35,9 @@ import org.sonar.php.checks.utils.type.TypePredicateList;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
@@ -80,9 +84,12 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     return map;
   }
 
-  private static final Predicate<TreeValues> SUSPICIOUS_QUERY_PREDICATES = new TypePredicateList(
+  private static final Predicate<TreeValues> SUSPICIOUS_PDO_QUERY_PREDICATES = new TypePredicateList(
     new ObjectMemberFunctionCall("exec", IS_PDO_OBJECT),
-    new ObjectMemberFunctionCall("query", IS_PDO_OBJECT, IS_MYSQLI_OBJECT),
+    new ObjectMemberFunctionCall("query", IS_PDO_OBJECT));
+
+  private static final Predicate<TreeValues> SUSPICIOUS_MYSQLI_QUERY_PREDICATES = new TypePredicateList(
+    new ObjectMemberFunctionCall("query", IS_MYSQLI_OBJECT),
     new ObjectMemberFunctionCall("real_query", IS_MYSQLI_OBJECT),
     new ObjectMemberFunctionCall("multi_query", IS_MYSQLI_OBJECT),
     new ObjectMemberFunctionCall("send_query", IS_MYSQLI_OBJECT));
@@ -113,21 +120,36 @@ public class QueryUsageCheck extends PHPVisitorCheck {
       String qualifiedNameLowerCase = ((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ENGLISH);
       if (SUSPICIOUS_GLOBAL_FUNCTIONS.containsKey(qualifiedNameLowerCase)) {
         Integer index = SUSPICIOUS_GLOBAL_FUNCTIONS.get(qualifiedNameLowerCase);
-        return tree.arguments().size() > index && isSuspiciousArgument(tree.arguments().get(index));
+        Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "query", index);
+        return argument.isPresent() && isSuspiciousArgument(argument.get().value());
       } else if ("pg_query".equals(qualifiedNameLowerCase)) {
         // First argument of function 'pg_query' is optional
-        return !tree.arguments().isEmpty() && isSuspiciousArgument(tree.arguments().get(tree.arguments().size() - 1));
+        SeparatedList<CallArgumentTree> callArguments = tree.callArguments();
+        if (callArguments.isEmpty()) {
+          return false;
+        }
+        Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "query", callArguments.size() - 1);
+        return argument.isPresent() && isSuspiciousArgument(argument.get().value());
       }
     }
     return false;
   }
 
   private boolean isSuspiciousMemberFunction(FunctionCallTree tree, TreeValues possibleValues) {
-    return SUSPICIOUS_QUERY_PREDICATES.test(possibleValues) && !tree.arguments().isEmpty() && isSuspiciousArgument(tree.arguments().get(0));
+    if (SUSPICIOUS_MYSQLI_QUERY_PREDICATES.test(possibleValues)) {
+      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "query", 0);
+      return argument.isPresent() && isSuspiciousArgument(argument.get().value());
+    }
+    if (SUSPICIOUS_PDO_QUERY_PREDICATES.test(possibleValues)) {
+      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "statement", 0);
+      return argument.isPresent() && isSuspiciousArgument(argument.get().value());
+    }
+    return false;
   }
 
   private boolean isSuspiciousPrepareStatement(FunctionCallTree tree, TreeValues possibleValues) {
-    return PDO_PREPARE_PREDICATE.test(possibleValues) && !tree.arguments().isEmpty() && isSuspiciousArgument(tree.arguments().get(0));
+    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "statement", 0);
+    return PDO_PREPARE_PREDICATE.test(possibleValues) && argument.isPresent() && isSuspiciousArgument(argument.get().value());
   }
 
   private boolean isSuspiciousArgument(ExpressionTree expression) {
