@@ -64,10 +64,10 @@ public class EncryptionModeAndPaddingCheck extends FunctionArgumentCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     // by default OPENSSL_PKCS1_PADDING is used as padding mode argument
     if (!checkArgumentAbsence(tree, OPENSSL_PUBLIC_ENCRYPT, 3)) {
-      checkArgument(tree, OPENSSL_PUBLIC_ENCRYPT, new ArgumentVerifier(3, OPENSSL_PUBLIC_ENCRYPT_COMPLIANT_VALUE, false));
+      checkArgument(tree, OPENSSL_PUBLIC_ENCRYPT, new ArgumentVerifier(3, "padding", OPENSSL_PUBLIC_ENCRYPT_COMPLIANT_VALUE, false));
     }
-    checkArgument(tree, OPENSSL_ENCRYPT, new ArgumentVerifier(1, OPENSSL_ENCRYPT_NONCOMPLIANT_VALUES, true));
-    checkArgument(tree, MCRYPT_ENCRYPT, new ArgumentVerifier(3, MCRYPT_ENCRYPT_NONCOMPLIANT_VALUE, true));
+    checkArgument(tree, OPENSSL_ENCRYPT, new ArgumentVerifier(1, "method", OPENSSL_ENCRYPT_NONCOMPLIANT_VALUES, true));
+    checkArgument(tree, MCRYPT_ENCRYPT, new ArgumentVerifier(3, "mode", MCRYPT_ENCRYPT_NONCOMPLIANT_VALUE, true));
 
     super.visitFunctionCall(tree);
   }
