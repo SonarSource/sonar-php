@@ -33,7 +33,6 @@ import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.TreeFactory.Tuple;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -58,13 +57,12 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))..";
 
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
-  private static final Map<String, Tuple<String, Integer>> CONNECT_FUNCTIONS = initializeConnectFunctionsMap();
+  private static final Map<String, Parameter> CONNECT_FUNCTIONS = initializeConnectFunctionsMap();
 
   private static final String BIND_PASSWORD = "bind_password";
   private static final String PASSWD = "passwd";
   private static final String PASSWORD = "password";
   private static final String NEWPW = "newpw";
-
 
   @RuleProperty(
     key = "credentialWords",
@@ -75,25 +73,25 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   private List<Pattern> variablePatterns = null;
   private List<Pattern> literalPatterns = null;
 
-  private static Map<String, Tuple<String, Integer>> initializeConnectFunctionsMap() {
-    Map<String, Tuple<String, Integer>> connectFunctions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-    connectFunctions.put("ldap_bind", new Tuple<>(BIND_PASSWORD, 2));
-    connectFunctions.put("pdo", new Tuple<>(PASSWD, 2));
-    connectFunctions.put("mysqli", new Tuple<>(PASSWD, 2));
-    connectFunctions.put("mysqli_connect", new Tuple<>(PASSWD, 2));
-    connectFunctions.put("mysql_connect", new Tuple<>(PASSWORD, 2));
-    connectFunctions.put("oci_connect", new Tuple<>(PASSWORD, 1));
-    connectFunctions.put("ldap_exop_passwd", new Tuple<>(NEWPW, 3));
-    connectFunctions.put("mssql_connect", new Tuple<>(PASSWORD, 2));
-    connectFunctions.put("odbc_connect", new Tuple<>(PASSWORD, 2));
-    connectFunctions.put("db2_connect", new Tuple<>(PASSWORD, 2));
-    connectFunctions.put("cubrid_connect", new Tuple<>(PASSWD, 4));
-    connectFunctions.put("maxdb_connect", new Tuple<>(PASSWD, 2));
-    connectFunctions.put("maxdb_change_user", new Tuple<>(PASSWORD, 2));
-    connectFunctions.put("imap_open", new Tuple<>(PASSWORD, 2));
-    connectFunctions.put("ifx_connect", new Tuple<>(PASSWORD, 2));
-    connectFunctions.put("dbx_connect", new Tuple<>(PASSWORD, 4));
-    connectFunctions.put("fbsql_pconnect", new Tuple<>(PASSWORD, 2));
+  private static Map<String, Parameter> initializeConnectFunctionsMap() {
+    Map<String, Parameter> connectFunctions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    connectFunctions.put("ldap_bind", new Parameter(BIND_PASSWORD, 2));
+    connectFunctions.put("pdo", new Parameter(PASSWD, 2));
+    connectFunctions.put("mysqli", new Parameter(PASSWD, 2));
+    connectFunctions.put("mysqli_connect", new Parameter(PASSWD, 2));
+    connectFunctions.put("mysql_connect", new Parameter(PASSWORD, 2));
+    connectFunctions.put("oci_connect", new Parameter(PASSWORD, 1));
+    connectFunctions.put("ldap_exop_passwd", new Parameter(NEWPW, 3));
+    connectFunctions.put("mssql_connect", new Parameter(PASSWORD, 2));
+    connectFunctions.put("odbc_connect", new Parameter(PASSWORD, 2));
+    connectFunctions.put("db2_connect", new Parameter(PASSWORD, 2));
+    connectFunctions.put("cubrid_connect", new Parameter(PASSWD, 4));
+    connectFunctions.put("maxdb_connect", new Parameter(PASSWD, 2));
+    connectFunctions.put("maxdb_change_user", new Parameter(PASSWORD, 2));
+    connectFunctions.put("imap_open", new Parameter(PASSWORD, 2));
+    connectFunctions.put("ifx_connect", new Parameter(PASSWORD, 2));
+    connectFunctions.put("dbx_connect", new Parameter(PASSWORD, 4));
+    connectFunctions.put("fbsql_pconnect", new Parameter(PASSWORD, 2));
 
     return connectFunctions;
   }
@@ -128,8 +126,8 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
   }
 
-  private void checkArgument(FunctionCallTree tree, Tuple<String, Integer> tuple) {
-    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, tuple.first(), tuple.second());
+  private void checkArgument(FunctionCallTree tree, Parameter parameter) {
+    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, parameter.name, parameter.position);
 
     if (!argument.isPresent()) {
       return;
@@ -213,5 +211,14 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
     return pattern;
   }
 
+  private static class Parameter {
+    private @Nullable String name;
+    private int position;
 
+    public Parameter(String name, int position) {
+      this.name = name;
+      this.position = position;
+    }
+
+  }
 }

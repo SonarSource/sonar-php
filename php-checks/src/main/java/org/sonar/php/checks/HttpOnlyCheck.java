@@ -45,7 +45,6 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
   private static final String MESSAGE = "Make sure creating this cookie without the \"httpOnly\" flag is safe here.";
 
   private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
-  private static final int HTTP_ONLY_PARAMETER_INDEX = 6;
 
   @Override
   public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {

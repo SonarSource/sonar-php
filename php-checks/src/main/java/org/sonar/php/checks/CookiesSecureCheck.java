@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.phpini.PhpIniBoolean;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -59,20 +60,25 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
-    Optional<CallArgumentTree> secureArgument = Optional.empty();
+    Optional<CallArgumentTree> secureArgument;
 
     if (SET_COOKIE_FUNCTIONS.contains(functionName)) {
       secureArgument = CheckUtils.argument(tree, "secure", SET_COOKIE_SECURE_PARAMETER);
+      checkForIssues(tree, secureArgument.orElse(null));
     }
     if (SESSION_COOKIE_FUNC.equals(functionName)) {
       secureArgument = CheckUtils.argument(tree, "secure", SESSION_COOKIE_SECURE_PARAMETER);
+      checkForIssues(tree, secureArgument.orElse(null));
     }
-    if (secureArgument.isPresent()) {
-      raiseIssueIfBadFlag(tree, secureArgument.get().value());
+    super.visitFunctionCall(tree);
+  }
+
+  private void checkForIssues(FunctionCallTree tree, @Nullable CallArgumentTree secureArgument) {
+    if (secureArgument != null) {
+      raiseIssueIfBadFlag(tree, secureArgument.value());
     } else {
       raiseIssueIfArgumentIsNotDefined(tree);
     }
-    super.visitFunctionCall(tree);
   }
 
   private void raiseIssueIfArgumentIsNotDefined(FunctionCallTree tree) {
@@ -80,12 +86,7 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
       // if only 3 argument are defined there is an ambiguity because of the other constructor, so we don't raise issue
       return;
     }
-    if (SET_COOKIE_FUNCTIONS.contains(getLowerCaseFunctionName(tree))) {
-      context().newIssue(this, tree.callee(), MESSAGE);
-    }
-    if (SESSION_COOKIE_FUNC.equals(getLowerCaseFunctionName(tree))) {
-      context().newIssue(this, tree.callee(), MESSAGE);
-    }
+    context().newIssue(this, tree.callee(), MESSAGE);
   }
 
   private void raiseIssueIfBadFlag(FunctionCallTree tree, ExpressionTree secureArgument) {

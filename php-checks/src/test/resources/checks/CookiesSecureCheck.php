@@ -1,5 +1,6 @@
 <?php
 
+session_set_cookie_params(); // Noncompliant
 setcookie($name, $value); // Noncompliant
 setcookie($name, $value, $expire, $path, $domain, false); // Noncompliant
 SetCookie($name, $value, $expire, $path, $domain, false, true); // Noncompliant

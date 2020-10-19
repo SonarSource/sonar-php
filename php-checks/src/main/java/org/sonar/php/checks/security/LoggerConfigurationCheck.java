@@ -85,20 +85,16 @@ public class LoggerConfigurationCheck extends PHPVisitorCheck {
 
     String lowerCaseQualifiedName = ((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ROOT);
     if (ERROR_REPORTING.equals(lowerCaseQualifiedName)) {
-      Optional<CallArgumentTree> arg = CheckUtils.argument(tree, "level", 0);
-      if (arg.isPresent() && isSuspiciousDirective(ERROR_REPORTING, arg.get().value())) {
+      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "level", 0);
+      if (argument.isPresent() && isSuspiciousDirective(ERROR_REPORTING, argument.get().value())) {
         context().newIssue(this, tree, MESSAGE);
       }
     } else {
-      Optional<CallArgumentTree> arg1 = CheckUtils.argument(tree, "varname", 0);
-      Optional<CallArgumentTree> arg2 = CheckUtils.argument(tree, "newvalue", 1);
-      if (arg1.isPresent() && arg2.isPresent()
-        && tree.callArguments().size() == 2
-        && isSuspiciousGlobalConfiguration(lowerCaseQualifiedName, arg1.get().value(), arg2.get().value())) {
+      if (isSuspiciousGlobalConfiguration(lowerCaseQualifiedName, tree)) {
         context().newIssue(this, tree, MESSAGE);
+      }
+    }
   }
-  }
-}
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -132,9 +128,12 @@ public class LoggerConfigurationCheck extends PHPVisitorCheck {
       .forEach(superInterface -> context().newIssue(this, superInterface, MESSAGE));
   }
 
-  private static boolean isSuspiciousGlobalConfiguration(String lowerCaseQualifiedName, ExpressionTree argument1, ExpressionTree argument2) {
-    return GLOBAL_CONFIGURATION_FUNCTIONS.contains(lowerCaseQualifiedName)
-      && isSuspiciousDirective(getStringValue(argument1), argument2);
+  private static boolean isSuspiciousGlobalConfiguration(String lowerCaseQualifiedName, FunctionCallTree tree) {
+    Optional<CallArgumentTree> arg1 = CheckUtils.argument(tree, "varname", 0);
+    Optional<CallArgumentTree> arg2 = CheckUtils.argument(tree, "newvalue", 1);
+
+    return GLOBAL_CONFIGURATION_FUNCTIONS.contains(lowerCaseQualifiedName) && tree.callArguments().size() == 2
+      && arg1.isPresent() && arg2.isPresent() && isSuspiciousDirective(getStringValue(arg1.get().value()), arg2.get().value());
   }
 
   private static boolean isSuspiciousDirective(@Nullable String directive, ExpressionTree argumentValue) {

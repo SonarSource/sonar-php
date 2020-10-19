@@ -1,5 +1,7 @@
 <?php
 
+$str = "foo";
+
 hash($str);
 foo($str);
 sha1_file($str);

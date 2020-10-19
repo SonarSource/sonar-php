@@ -89,9 +89,9 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
   @Override
   public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {
     return phpIniFile.directivesForName("session.cookie_domain").stream()
-      .filter(d -> isFirstLevelDomain(d.value().text()))
-      .map(d -> BasePhpIniIssue.newIssue(MESSAGE).line(d.name().line()))
-      .collect(Collectors.toList());
+        .filter(d -> isFirstLevelDomain(d.value().text()))
+        .map(d -> BasePhpIniIssue.newIssue(MESSAGE).line(d.name().line()))
+        .collect(Collectors.toList());
   }
 
   private ExpressionTree getAssignedValue(ExpressionTree value) {
