@@ -28,3 +28,16 @@ Configure::xxx('debug', 1);
 
 $debug3 = doSomething();
 Configure::config('debug', $debug3);
+
+//Named arguments
+Configure::write(value: 1, config: 'debug'); // Noncompliant 
+Configure::write(value: 0, config: 'debug'); 
+Configure::config(engine: true, name: 'debug'); // Noncompliant
+Configure::config(engine: false, name: 'debug'); 
+Configure::config(engine: true, name: 'xxx'); 
+//Mixed named arguments
+Configure::write(config: 'debug', 1); // Noncompliant
+Configure::config(name: 'debug', false); 
+//Coverage
+Configure::config(name: 'debug'); //Ok
+Configure::config(config: 'debug'); //Ok

@@ -21,12 +21,15 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.phpini.PhpIniBoolean;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -42,7 +45,6 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
   private static final String MESSAGE = "Make sure creating this cookie without the \"httpOnly\" flag is safe here.";
 
   private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
-  private static final int HTTP_ONLY_PARAMETER_INDEX = 6;
 
   @Override
   public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {
@@ -55,14 +57,16 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-  
+
     if (isSetCookie(tree)) {
-      if (tree.arguments().size() > HTTP_ONLY_PARAMETER_INDEX) {
-        ExpressionTree httpOnlyArgument = tree.arguments().get(HTTP_ONLY_PARAMETER_INDEX);
+      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "httponly", 6);
+
+      if (argument.isPresent()) {
+        ExpressionTree httpOnlyArgument = argument.get().value();
         if (httpOnlyArgument.is(Kind.BOOLEAN_LITERAL) && isFalseValue(httpOnlyArgument)) {
-          context().newIssue(this, tree.callee(), MESSAGE).secondary(tree.arguments().get(HTTP_ONLY_PARAMETER_INDEX), null);  
+          context().newIssue(this, tree.callee(), MESSAGE).secondary(httpOnlyArgument, null);
         }
-      } else if (tree.arguments().size() != 3) {
+      } else if (tree.callArguments().size() != 3) {
         // if only 3 argument are defined there is an ambiguity so we don't raise issue
         context().newIssue(this, tree.callee(), MESSAGE);
       }

@@ -20,13 +20,12 @@
 package org.sonar.php.checks.security;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionArgumentCheck;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-
-import java.util.Set;
 
 @Rule(key = "S4790")
 public class CryptographicHashCheck extends FunctionArgumentCheck {
@@ -60,8 +59,8 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
     "MHASH_HAVAL224"
   );
 
-  private static final ArgumentVerifier hashArgumentVerifier = new ArgumentVerifier(0, WEAK_HASH_ARGUMENTS);
-  private static final ArgumentVerifier mHashArgumentVerifier = new ArgumentVerifier(0, WEAK_MHASH_ARGUMENTS);
+  private static final ArgumentVerifier hashArgumentVerifier = new ArgumentVerifier(0, "algo", WEAK_HASH_ARGUMENTS);
+  private static final ArgumentVerifier mHashArgumentVerifier = new ArgumentVerifier(0, "hash", WEAK_MHASH_ARGUMENTS);
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

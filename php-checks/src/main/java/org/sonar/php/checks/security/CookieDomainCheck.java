@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -36,6 +37,7 @@ import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -69,17 +71,17 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
   @Override
   protected void createIssue(FunctionCallTree tree) {
     int domainIndex = FUNCTION_AND_PARAM_INDEX.get(getLowerCaseFunctionName(tree));
-    List<ExpressionTree> args = tree.arguments();
-    if (args.size() <= domainIndex) {
-      return;
-    }
-    ExpressionTree argumentVariable = args.get(domainIndex);
-    ExpressionTree domainValue = getAssignedValue(argumentVariable);
-    if (domainValue.is(Tree.Kind.REGULAR_STRING_LITERAL) && isFirstLevelDomain(((LiteralTree) domainValue).value())) {
-      if (argumentVariable == domainValue) {
-        context().newIssue(this, domainValue, MESSAGE);
-      } else {
-        context().newIssue(this, domainValue, MESSAGE).secondary(argumentVariable, MESSAGE);
+
+    Optional<CallArgumentTree> domainArgument = CheckUtils.argument(tree, "domain", domainIndex);
+    if (domainArgument.isPresent()) {
+      ExpressionTree domainValue = getAssignedValue(domainArgument.get().value());
+
+      if (domainValue.is(Tree.Kind.REGULAR_STRING_LITERAL) && isFirstLevelDomain(((LiteralTree) domainValue).value())) {
+        if (domainArgument.get().value() == domainValue) {
+          context().newIssue(this, domainValue, MESSAGE);
+        } else {
+          context().newIssue(this, domainValue, MESSAGE).secondary(domainArgument.get(), MESSAGE);
+        }
       }
     }
   }
@@ -102,9 +104,9 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
   private static boolean isFirstLevelDomain(String domain) {
     String trimedFromQuotes = CheckUtils.trimQuotes(domain);
     return !trimedFromQuotes.isEmpty() && Arrays.stream(trimedFromQuotes.split("\\."))
-        .map(String::trim)
-        .filter(s -> !s.isEmpty())
-        .count() < 2;
+      .map(String::trim)
+      .filter(s -> !s.isEmpty())
+      .count() < 2;
   }
 
 }

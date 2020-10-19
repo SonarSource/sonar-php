@@ -1,5 +1,6 @@
 <?php
 
+session_set_cookie_params(); // Noncompliant
 setcookie($name, $value); // Noncompliant
 setcookie($name, $value, $expire, $path, $domain, false); // Noncompliant
 SetCookie($name, $value, $expire, $path, $domain, false, true); // Noncompliant
@@ -39,3 +40,12 @@ setcookie($name, $value, $params); // Compliant
 
 $expires = 42;
 setcookie($name, $value, $expires); // false negative
+
+setcookie($name, $value, secure: false); // Noncompliant
+setcookie($name, $value, secure: true, domain: "foo.com");
+setcookie($name, $value, secure: $secure);
+setrawcookie(secure: false, name: "foo", domain: "my.com"); // Noncompliant
+setrawcookie(secure: true, name: "foo");
+session_set_cookie_params($lifetime, $path, secure: "");  // Noncompliant
+session_set_cookie_params($lifetime, $path, secure: 1);
+session_set_cookie_params(); // Noncompliant

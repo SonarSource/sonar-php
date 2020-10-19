@@ -46,6 +46,11 @@ function testFunctions($inputs) {
     mb_ereg_search_regs(); // OK
     mb_ereg_search("/(a+)+/"); // Noncompliant
     mb_ereg_search(); // OK
+    
+    mb_ereg_search(pattern: "/(a+)+/"); // Noncompliant
+    mb_ereg_search_init(pattern: $input); // OK
+    eregi(string: $input, pattern: "/(a+)+/"); // Noncompliant
+    preg_replace_callback($input, callback: function ($matches) {return '';}, pattern: "/(a+)+/"); // Noncompliant
 }
 
 function testPattern() {

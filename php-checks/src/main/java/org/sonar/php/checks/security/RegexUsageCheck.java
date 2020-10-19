@@ -22,10 +22,13 @@ package org.sonar.php.checks.security;
 import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -75,28 +78,28 @@ public class RegexUsageCheck extends FunctionUsageCheck {
   @Override
   protected void createIssue(FunctionCallTree tree) {
     int index = getPatternArgumentIndex(tree);
-
-    if (tree.arguments().size() <= index) {
+    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "pattern", index);
+    if (!argument.isPresent()) {
       return;
     }
 
-    ExpressionTree patternArgument = tree.arguments().get(index);
-    if (patternArgument.is(Kind.REGULAR_STRING_LITERAL)) {
-      String value = ((LiteralTree) patternArgument).value();
+    ExpressionTree argumentValue = argument.get().value();
+    if (argumentValue.is(Kind.REGULAR_STRING_LITERAL)) {
+      String value = ((LiteralTree) argumentValue).value();
       if (value.length() >= MIN_PATTERN_LENGTH && hasEnoughNumberOfSpecialChars(value)) {
         context().newIssue(this, tree, MESSAGE);
       }
     }
   }
 
-  private int getPatternArgumentIndex(FunctionCallTree tree) {
+  private static int getPatternArgumentIndex(FunctionCallTree tree) {
     if (tree.callee().toString().equalsIgnoreCase(MB_EREG_SEARCH_INIT)) {
       return 1;
     }
     return 0;
   }
 
-  private boolean hasEnoughNumberOfSpecialChars(String value) {
+  private static boolean hasEnoughNumberOfSpecialChars(String value) {
     int numberOfSpecialChars = 0;
     for (char c : value.toCharArray()) {
       if (SPECIAL_CHARS.contains(c)) {

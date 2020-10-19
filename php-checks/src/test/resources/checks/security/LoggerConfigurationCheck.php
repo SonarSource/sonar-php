@@ -98,3 +98,14 @@ abstract class MyLogger7 {
 
 new class() extends abstractlogger { }; // Noncompliant
 new class() implements Log\LoggerInterface { }; // Noncompliant
+
+function named_arguments() {
+  error_reporting(level: E_RECOVERABLE_ERROR);// Noncompliant
+  ini_set(newvalue:'1', varname: 'docref_root');// Noncompliant
+  ini_alter(newvalue: '3', varname: 'log_errors'); // Noncompliant
+  ini_set(varname: 'log_errors', newvalue: '1');
+  
+  //Coverage
+  ini_set(arg1: 'log_errors', arg2: '1');
+  ini_set(arg1: 'log_errors', varname: '1');
+}

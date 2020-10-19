@@ -26,10 +26,12 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -62,11 +64,9 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
    */
   public void checkArgument(FunctionCallTree tree, String expectedFunctionName, ArgumentMatcher... expectedArgument) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-    List<ExpressionTree> arguments = tree.arguments();
-
     if (expectedFunctionName.equals(functionName)) {
       for (ArgumentMatcher argumentMatcher : expectedArgument) {
-        if (argumentMatcher.position >= arguments.size() || !verifyArgument(arguments, argumentMatcher)) {
+        if ((argumentMatcher.name == null && argumentMatcher.position >= tree.callArguments().size()) || !verifyArgument(tree, argumentMatcher)) {
           return;
         }
       }
@@ -90,23 +90,25 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     super.visitCompilationUnit(tree);
   }
 
-  private boolean verifyArgument(List<ExpressionTree> arguments, ArgumentMatcher argumentMatcher) {
-    ExpressionTree argument = arguments.get(argumentMatcher.position);
-    ExpressionTree argumentValue = getAssignedValue(argument);
+  private boolean verifyArgument(FunctionCallTree tree, ArgumentMatcher argumentMatcher) {
+    Optional<CallArgumentTree> optionalArgument = CheckUtils.argument(tree, argumentMatcher.name, argumentMatcher.position);
 
-    Optional<String> value = nameOf(argumentValue);
-    if (value.isPresent()) {
-      String quoteLessLowercaseValue = CheckUtils.trimQuotes(value.get()).toLowerCase(Locale.ENGLISH);
-      boolean containValues = argumentMatcher.values.contains(quoteLessLowercaseValue);
+    if (optionalArgument.isPresent()) {
 
-      if (argumentMatcher instanceof ArgumentVerifier && ((ArgumentVerifier) argumentMatcher).raiseIssueOnMatch == containValues) {
-        createIssue(argument);
-        return true;
-      }
+      ExpressionTree argument = optionalArgument.get().value();
+      ExpressionTree argumentValue = getAssignedValue(argument);
 
-      return containValues;
+      Optional<String> value = nameOf(argumentValue);
+      if (value.isPresent()) {
+        String quoteLessLowercaseValue = CheckUtils.trimQuotes(value.get()).toLowerCase(Locale.ENGLISH);
+        boolean containValues = argumentMatcher.values.contains(quoteLessLowercaseValue);
+
+        if (argumentMatcher instanceof ArgumentVerifier && ((ArgumentVerifier) argumentMatcher).raiseIssueOnMatch == containValues) {
+          createIssue(argument);
+        }
+        return containValues;
     }
-
+  }
     return false;
   }
 
@@ -137,22 +139,42 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
     private final int position;
 
+    @Nullable
+    private String name;
+
     private final Set<String> values;
 
+    @Deprecated
     public ArgumentMatcher(int position, String value) {
       this(position, ImmutableSet.of(value));
     }
 
+    @Deprecated
     public ArgumentMatcher(int position, Set<String> values) {
+      this(position, null, values);
+    }
+
+    public ArgumentMatcher(int position, @Nullable String name, String value) {
+      this(position, name, ImmutableSet.of(value));
+    }
+
+    public ArgumentMatcher(int position, @Nullable String name, Set<String> values) {
       this.position = position;
+      this.name = name;
       this.values = values.stream()
-        .map(name -> name.toLowerCase(Locale.ENGLISH))
+        .map(value -> value.toLowerCase(Locale.ENGLISH))
         .collect(Collectors.toSet());
     }
 
     @VisibleForTesting
     int getPosition() {
       return position;
+    }
+
+    @Nullable
+    @VisibleForTesting
+    String getName() {
+      return name;
     }
 
     @VisibleForTesting
@@ -165,12 +187,22 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
     private boolean raiseIssueOnMatch = true;
 
+    @Deprecated
     public ArgumentVerifier(int position, Set<String> values) {
       super(position, values);
     }
 
+    public ArgumentVerifier(int position, String name, Set<String> values) {
+      super(position, name, values);
+    }
+
+    @Deprecated
     public ArgumentVerifier(int position, String value) {
       this(position, ImmutableSet.of(value));
+    }
+
+    public ArgumentVerifier(int position, String name, String value) {
+      this(position, name, ImmutableSet.of(value));
     }
 
     public ArgumentVerifier(int position, String value, boolean raiseIssueOnMatch) {
