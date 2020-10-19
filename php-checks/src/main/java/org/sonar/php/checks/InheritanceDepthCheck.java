@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,7 +55,7 @@ public class InheritanceDepthCheck extends PHPVisitorCheck {
     description = "Classes to be filtered out of the count of inheritance. Ex : RuntimeException, Exception")
   public String filteredClasses = "";
 
-  private List<QualifiedName> filteredClassesList;
+  private Set<QualifiedName> filteredOutClassNames;
   private int inheritanceCounter = 0;
 
   @Override
@@ -88,7 +87,7 @@ public class InheritanceDepthCheck extends PHPVisitorCheck {
       ClassSymbol superClassSymbol = superClass.get();
       QualifiedName qualifiedName = superClassSymbol.qualifiedName();
 
-      if (getFilteredClasses().stream().anyMatch(e -> e.equals(qualifiedName)) || !superClasses.add(superClassSymbol)) {
+      if (getFilteredOutClasses().contains(qualifiedName) || !superClasses.add(superClassSymbol)) {
         break;
       }
 
@@ -104,13 +103,13 @@ public class InheritanceDepthCheck extends PHPVisitorCheck {
     inheritanceCounter = 0;
   }
 
-  private List<QualifiedName> getFilteredClasses() {
-    if (filteredClassesList == null) {
-      filteredClassesList = Arrays.stream(StringUtils.split(filteredClasses, ','))
+  private Set<QualifiedName> getFilteredOutClasses() {
+    if (filteredOutClassNames == null) {
+      filteredOutClassNames = Arrays.stream(StringUtils.split(filteredClasses, ','))
         .map(StringUtils::trim)
         .map(QualifiedName::qualifiedName)
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
     }
-    return filteredClassesList;
+    return filteredOutClassNames;
   }
 }
