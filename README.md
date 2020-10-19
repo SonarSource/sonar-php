@@ -4,8 +4,8 @@ This SonarSource project is a [static code analyser](https://en.wikipedia.org/wi
 
 
 # Features
-* 170+ rules
-* Support of PHP 7
+* 200+ rules
+* Supports up to PHP 8
 * Metrics (complexity, number of lines etc.)
 * Import of [unit test and coverage results](http://docs.sonarqube.org/display/PLUG/PHP+Unit+Test+and+Coverage+Results+Import)
 * Support of [custom rules](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP)
