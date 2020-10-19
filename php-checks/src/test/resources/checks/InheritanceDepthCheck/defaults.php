@@ -23,3 +23,9 @@ new class extends Class6 {}; // Noncompliant
 new class extends BuiltInClass {}; // FN - if BuiltInClass has 5 parents
 
 new class {};
+
+class ExtendingItself extends ExtendingItself {}
+
+class SuperclassCycleClass1 extends SuperclassCycleClass2 {}
+class SuperclassCycleClass2 extends SuperclassCycleClass3 {}
+class SuperclassCycleClass3 extends SuperclassCycleClass1 {}
