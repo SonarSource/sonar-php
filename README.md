@@ -43,7 +43,7 @@ To submit a contribution, create a pull request for this repository. Please make
 If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP) available only for you.
 
 #### Custom Rules API Changes
-- **3.11**:
+- **3.11**, support of PHP 8:
     * `ParameterTree#type()` is deprecated. Use `ParameterTree#declaredType()` instead.
     * `ReturnTypeClauseTree#type()` is deprecated. Use `ReturnTypeClauseTree#declaredType()` instead.
     * `ClassPropertyDeclarationTree#typeAnnotation()` is deprecated. Use `ClassPropertyDeclarationTree#declaredType()` instead.
@@ -52,6 +52,9 @@ If you have an idea for a rule but you are not sure that everyone needs it you c
     * `AnonymousClassTree#arguments()` is deprecated. Use `AnonymousClassTree#callArguments()` instead.
     * New tree: `CallArgumentTree`. This tree wraps expressions passed as arguments now.   
     * New kind of expression: `ThrowExpressionTree`.
+    * New kind of expression: `MatchExpressionTree`.
+    * `ParameterTree` now has a `visibility` method.
+    
 
 # <a name="testing"></a>Testing
 To run tests locally follow these instructions.
