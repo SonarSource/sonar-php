@@ -19,10 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Rule;
@@ -82,17 +83,16 @@ public class InheritanceDepthCheck extends PHPVisitorCheck {
 
   private void checkClassInheritance(ClassSymbol symbol, Tree tree) {
     Optional<ClassSymbol> superClass = symbol.superClass();
-    List<ClassSymbol> superClasses = new ArrayList<>();
+    Set<ClassSymbol> superClasses = new HashSet<>();
     while (superClass.filter(classSymbol -> !classSymbol.isUnknownSymbol()).isPresent() ) {
       ClassSymbol superClassSymbol = superClass.get();
       QualifiedName qualifiedName = superClassSymbol.qualifiedName();
 
-      if (getFilteredClasses().stream().anyMatch(e -> e.equals(qualifiedName))) {
+      if (getFilteredClasses().stream().anyMatch(e -> e.equals(qualifiedName)) || !superClasses.add(superClassSymbol)) {
         break;
       }
 
       inheritanceCounter++;
-      superClasses.add(superClassSymbol);
       superClass = superClassSymbol.superClass();
     }
 
