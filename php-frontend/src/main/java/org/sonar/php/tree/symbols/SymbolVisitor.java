@@ -48,7 +48,9 @@ import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
@@ -167,6 +169,16 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   @Override
   public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
     // do nothing as this symbols already saved during visiting class tree
+  }
+
+  @Override
+  public void visitParameterList(ParameterListTree tree) {
+    tree.parameters().stream()
+      .filter(t -> t.declaredType() != null)
+      .filter(t ->  t.declaredType().is(Kind.TYPE) && ((TypeTree)t.declaredType()).typeName().is(Kind.NAMESPACE_NAME))
+      .forEach(t -> lookupOrCreateUndeclaredSymbol((NamespaceNameTree) ((TypeTree)t.declaredType()).typeName()));
+
+    super.visitParameterList(tree);
   }
 
   @Override
