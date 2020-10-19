@@ -518,7 +518,7 @@ public class PHPGrammar {
           b.token(PHPLexicalGrammar.FLOAT),
           b.token(PHPLexicalGrammar.INT),
           b.token(PHPLexicalGrammar.STRING))),
-        NAMESPACE_NAME()
+        f.classNamespaceName(NAMESPACE_NAME())
       ));
   }
 
