@@ -16,6 +16,10 @@ $hash = hash_pbkdf2('sha256', $password, $salt, 100000); // Noncompliant
 
 $cryptoSalt = openssl_random_pseudo_bytes(16);
 $hash = hash_pbkdf2("sha256", $password, $cryptoSalt, $iterations, 20);
+$hash = hash_pbkdf2("sha256", $password, iterations:'', salt:$cryptoSalt);
+$hash = hash_pbkdf2("sha256", $password, iterations:$iterations, salt:$cryptoSalt);
+$hash = hash_pbkdf2("sha256", $password, iterations:$iterations, salt:''); // Noncompliant
+$hash = hash_pbkdf2("sha256", $password);
 
 $salt3 = $arr['email'];
 $hash = hash_pbkdf2("sha256", $password, $salt3, $iterations, 20);
@@ -34,6 +38,9 @@ $hash = crypt($password, 'xxxx'); // Noncompliant {{Use an unpredictable salt va
 $hash = crypt($password, $email); // Noncompliant
 
 $hash = crypt($password, $cryptoSalt);
+
+$hash = crypt(salt:$cryptoSalt, str:'');
+$hash = crypt(salt:'', str:$cryptoSalt); // Noncompliant
 
 $options = [
     'cost' => 11,

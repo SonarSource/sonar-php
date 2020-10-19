@@ -136,8 +136,14 @@ $ctx = stream_context_create([
                            STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT // Noncompliant
     ],
 ]);
+$ctx = stream_context_create(
+  params:['ssl' => ['crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT]],
+  options:['ssl' => ['crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT]] // Noncompliant
+);
 
 stream_socket_enable_crypto($fp, true, STREAM_CRYPTO_METHOD_TLSv1_2_SERVER | STREAM_CRYPTO_METHOD_TLSv1_1_SERVER); // Noncompliant
+stream_socket_enable_crypto($fp, crypto_type:STREAM_CRYPTO_METHOD_TLSv1_1_SERVER, enable:true); // Noncompliant
+stream_socket_enable_crypto($fp, crypto_type:STREAM_CRYPTO_METHOD_TLSv1_2_SERVER, enable:true);
 
 // Curl
 
@@ -164,3 +170,8 @@ curl_setopt($ch, CURLOPT_SSLVERSION, $sslv3);
 
 curl_setopt($ch, CURLOPT_OTHER_KEY, CURL_SSLVERSION_SSLv3);
 curl_setopt($ch, foo(), CURL_SSLVERSION_SSLv3);
+
+curl_setopt($ch, value:CURL_SSLVERSION_TLSv1_2, option:CURLOPT_SSLVERSION);
+curl_setopt($ch, value:CURL_SSLVERSION_TLSv1_1, option:CURLOPT_SSLVERSION); // Noncompliant
+curl_setopt($ch, value:CURL_SSLVERSION_TLSv1_1);
+curl_setopt($ch, option:CURLOPT_SSLVERSION);

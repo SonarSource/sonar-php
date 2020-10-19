@@ -32,6 +32,7 @@ import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -94,16 +95,22 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     List<ExpressionTree> arguments = tree.arguments();
-    if (STREAM_CONTEXT_CREATE.equals(functionName) && !arguments.isEmpty()) {
-      checkStreamSSLConfig(arguments.get(0));
+    if (STREAM_CONTEXT_CREATE.equals(functionName)) {
+      CheckUtils.argument(tree, "options", 0).ifPresent(
+        options -> checkStreamSSLConfig(options.value()));
     }
-    if (STREAM_SOCKET_ENABLE_CRYPTO.equals(functionName) && arguments.size() > 2) {
-      checkStreamWeakProtocol(getAssignedValue(arguments.get(2)), STREAM_SOCKET_ENABLE_CRYPTO);
+    if (STREAM_SOCKET_ENABLE_CRYPTO.equals(functionName)) {
+      CheckUtils.argument(tree, "crypto_type", 2).ifPresent(
+        cryptoType -> checkStreamWeakProtocol(getAssignedValue(cryptoType.value()), STREAM_SOCKET_ENABLE_CRYPTO));
     }
-    if (CURL_SETOPT.equals(functionName) && arguments.size() > 2) {
-      ExpressionTree optionArgument = arguments.get(1);
-      if (optionArgument.is(Tree.Kind.NAMESPACE_NAME) && "CURLOPT_SSLVERSION".equals(((NamespaceNameTree) optionArgument).name().text())) {
-        checkCURLWeakProtocol(getAssignedValue(arguments.get(2)));
+    if (CURL_SETOPT.equals(functionName)) {
+      Optional<CallArgumentTree> optionArgument = CheckUtils.argument(tree, "option", 1);
+      Optional<CallArgumentTree> valueArgument = CheckUtils.argument(tree, "value", 2);
+      if (optionArgument.isPresent() && valueArgument.isPresent()) {
+        ExpressionTree optionArgumentValue = optionArgument.get().value();
+        if (optionArgumentValue.is(Tree.Kind.NAMESPACE_NAME) && "CURLOPT_SSLVERSION".equals(((NamespaceNameTree) optionArgumentValue).name().text())) {
+          checkCURLWeakProtocol(getAssignedValue(valueArgument.get().value()));
+        }
       }
     }
     super.visitFunctionCall(tree);

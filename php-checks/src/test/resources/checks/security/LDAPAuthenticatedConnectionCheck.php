@@ -29,6 +29,13 @@ ldap_bind($ldapconn, $e, $f);
 ldap_bind($ldapconn, "username", "password");
 ldap_bind($ldapconn, $username, $password); // unknown variables
 
+ldap_bind(link_identifier:$ldapconn, bind_rdn:"username", bind_password:"password");
+ldap_bind(link_identifier:"", bind_rdn:"username", bind_password:"password");
+ldap_bind(bind_password:"password", bind_rdn:"username");
+ldap_bind(bind_password:"", bind_rdn:"username", link_identifier:$ldapconn); // Noncompliant
+ldap_bind(link_identifier:$ldapconn, bind_rdn:"username"); // Noncompliant
+ldap_bind(link_identifier:$ldapconn, bind_password:"password"); // Noncompliant
+
 function foobar($cond) {
   $g = "";
   $h = "";

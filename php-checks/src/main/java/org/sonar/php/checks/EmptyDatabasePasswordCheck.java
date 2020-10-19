@@ -21,14 +21,15 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -58,9 +59,9 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree functionCall) {
     String functionName = CheckUtils.getLowerCaseFunctionName(functionCall);
     if ("mysqli".equals(functionName) || "mysqli_connect".equals(functionName) || "PDO".equalsIgnoreCase(functionName)) {
-      checkPasswordArgument(functionCall, 2);
+      checkPasswordArgument(functionCall, "passwd", 2);
     } else if ("oci_connect".equals(functionName)) {
-      checkPasswordArgument(functionCall, 1);
+      checkPasswordArgument(functionCall, "password", 1);
     } else if ("sqlsrv_connect".equals(functionName)) {
       checkSqlServer(functionCall);
     } else if ("pg_connect".equals(functionName)) {
@@ -69,10 +70,10 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
     super.visitFunctionCall(functionCall);
   }
 
-  private void checkPasswordArgument(FunctionCallTree functionCall, int argumentIndex) {
-    SeparatedList<ExpressionTree> arguments = functionCall.arguments();
-    if (arguments.size() > argumentIndex) {
-      ExpressionTree passwordArgument = arguments.get(argumentIndex);
+  private void checkPasswordArgument(FunctionCallTree functionCall, String argumentName, int argumentIndex) {
+    Optional<CallArgumentTree> argument = CheckUtils.argument(functionCall, argumentName, argumentIndex);
+    if (argument.isPresent()) {
+      ExpressionTree passwordArgument = argument.get().value();
       if (hasEmptyValue(passwordArgument)) {
         context().newIssue(this, passwordArgument, MESSAGE);
       }
@@ -101,10 +102,9 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
   }
 
   private void checkSqlServer(FunctionCallTree functionCall) {
-    SeparatedList<ExpressionTree> arguments = functionCall.arguments();
-    int argumentIndex = 1;
-    if (arguments.size() > argumentIndex) {
-      ExpressionTree connectionInfo = arguments.get(argumentIndex);
+    Optional<CallArgumentTree> argument = CheckUtils.argument(functionCall, "connectionInfo", 1);
+    if (argument.isPresent()) {
+      ExpressionTree connectionInfo = argument.get().value();
       ExpressionTree password = sqlServerPassword(connectionInfo);
       if (password != null && hasEmptyValue(password)) {
         context().newIssue(this, password, MESSAGE);
@@ -130,11 +130,11 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
   }
 
   private void checkPostgresql(FunctionCallTree functionCall) {
-    SeparatedList<ExpressionTree> arguments = functionCall.arguments();
-    if (arguments.isEmpty()) {
+    Optional<CallArgumentTree> connectionStringArgument = CheckUtils.argument(functionCall, "connection_string", 0);
+    if (!connectionStringArgument.isPresent()) {
       return;
     }
-    ExpressionTree connectionString = arguments.get(0);
+    ExpressionTree connectionString = connectionStringArgument.get().value();
     Symbol connectionStringSymbol = context().symbolTable().getSymbol(connectionString);
     connectionString = assignmentExpressionVisitor
       .getUniqueAssignedValue(connectionStringSymbol)

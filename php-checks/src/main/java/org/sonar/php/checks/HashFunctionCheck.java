@@ -29,6 +29,7 @@ import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
@@ -54,18 +55,22 @@ public class HashFunctionCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-    if ("hash_pbkdf2".equals(functionName) && tree.arguments().size() >= 3) {
-      ExpressionTree saltArgument = tree.arguments().get(2);
-      if (isPredictable(saltArgument)) {
-        context().newIssue(this, saltArgument, MESSAGE);
+    if ("hash_pbkdf2".equals(functionName)) {
+      Optional<CallArgumentTree> saltArgument = CheckUtils.argument(tree, "salt", 2);
+      if (saltArgument.isPresent()) {
+        ExpressionTree saltArgumentValue = saltArgument.get().value();
+        if (isPredictable(saltArgumentValue)) {
+          context().newIssue(this, saltArgumentValue, MESSAGE);
+        }
       }
     } else if ("crypt".equals(functionName)) {
-      if (tree.arguments().size() < 2) {
+      Optional<CallArgumentTree> saltArgument = CheckUtils.argument(tree, "salt", 1);
+      if (!saltArgument.isPresent()) {
         context().newIssue(this, tree, MESSAGE_MISSING_SALT);
       } else {
-        ExpressionTree saltArgument = tree.arguments().get(1);
-        if (isPredictable(saltArgument)) {
-          context().newIssue(this, saltArgument, MESSAGE);
+        ExpressionTree saltArgumentValue = saltArgument.get().value();
+        if (isPredictable(saltArgumentValue)) {
+          context().newIssue(this, saltArgumentValue, MESSAGE);
         }
       }
     } else if ("password_hash".equals(functionName)) {

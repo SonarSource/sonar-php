@@ -18,6 +18,8 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); // Noncompliant {{Enable serv
 CURL_setopt($curl, CURLOPT_SSL_VERIFYPEER, $verify_peer_off); // Noncompliant
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, '0'); // Noncompliant
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // Noncompliant
+curl_setopt($curl, value:0, option:CURLOPT_SSL_VERIFYPEER); // Noncompliant
+curl_setopt($curl, value:1, option:CURLOPT_SSL_VERIFYPEER);
 
 
 function isVerifyPeer() { return false; }

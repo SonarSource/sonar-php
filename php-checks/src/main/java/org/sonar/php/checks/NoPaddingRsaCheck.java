@@ -20,9 +20,12 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Optional;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -43,8 +46,9 @@ public class NoPaddingRsaCheck extends FunctionUsageCheck {
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    if (tree.arguments().size() > PADDING_ARGUMENT_INDEX) {
-      ExpressionTree padding = tree.arguments().get(PADDING_ARGUMENT_INDEX);
+    Optional<CallArgumentTree> paddingArgument = CheckUtils.argument(tree, "padding", PADDING_ARGUMENT_INDEX);
+    if (paddingArgument.isPresent()) {
+      ExpressionTree padding = paddingArgument.get().value();
       if (padding.is(Kind.NAMESPACE_NAME) && !((NamespaceNameTree) padding).fullName().equals(SECURE_PADDING)) {
         context().newIssue(this, padding, MESSAGE);
       }
