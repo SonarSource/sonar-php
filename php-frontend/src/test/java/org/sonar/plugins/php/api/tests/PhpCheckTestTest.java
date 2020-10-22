@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.tests;
 
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -61,22 +62,25 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_error_unexpected_issue() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1;")))
+  public void test_error_unexpected_issue() throws Exception {
+    PhpFile file = createFile("<?php $a = 1;");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [UNEXPECTED_ISSUE] at line 1 with a message: \"message\"");
   }
 
   @Test
-  public void test_error_no_issue() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a += 1; // NOK")))
+  public void test_error_no_issue() throws Exception {
+    PhpFile file = createFile("<?php $a += 1; // NOK");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [NO_ISSUE] Expected but no issue on line 1.");
   }
 
   @Test
-  public void test_error_wrong_message() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK {{another message}}")))
+  public void test_error_wrong_message() throws Exception {
+    PhpFile file = createFile("<?php $a = 1; // NOK {{another message}}");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_MESSAGE] Issue at line 1 : \n"
         + "Expected message : another message\n"
@@ -84,16 +88,19 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_wrong_number() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a += 1; // NOK")))
+  public void test_wrong_number() throws Exception {
+    PhpFile file = createFile("<?php $a += 1; // NOK");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [NO_ISSUE] Expected but no issue on line 1.");
   }
 
   @Test
-  public void test_check_passing_issues_overrides_comment() {
+  public void test_check_passing_issues_overrides_comment() throws Exception {
     // The rule will raise an issue but by giving a empty list we say we expect no issue despite of the comment
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK {{message}}"), createIssuesForLines( /* None */)))
+    PhpFile file = createFile("<?php $a = 1; // NOK {{message}}");
+    List<PhpIssue> issues = createIssuesForLines( /* None */);
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file, issues))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [UNEXPECTED_ISSUE] at line 1 with a message: \"message\"");
   }
@@ -104,8 +111,10 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_multiple_issue_on_same_line_wrong_message() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; $a = 1; $a = 1;"), createIssuesForLines("another message", 1, 1, 1)))
+  public void test_multiple_issue_on_same_line_wrong_message() throws Exception {
+    PhpFile file = createFile("<?php $a = 1; $a = 1; $a = 1;");
+    List<PhpIssue> issues = createIssuesForLines("another message", 1, 1, 1);
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file, issues))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_MESSAGE] Issue at line 1 : \n"
         + "Expected message : another message\n"
@@ -113,15 +122,18 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_error_wrong_number1() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; $a = 1; // NOK")))
+  public void test_error_wrong_number1() throws Exception {
+    PhpFile file = createFile("<?php $a = 1; $a = 1; // NOK");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_NUMBER] Line 1: Expecting 1 issue, but actual issues number is 2");
   }
 
   @Test
-  public void test_error_wrong_number2() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK"), createIssuesForLines(1, 1)))
+  public void test_error_wrong_number2() throws Exception {
+    PhpFile file = createFile("<?php $a = 1; // NOK");
+    List<PhpIssue> issues = createIssuesForLines(1, 1);
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file, issues))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_NUMBER] Line 1: Expecting 2 issue, but actual issues number is 1");
   }
@@ -137,8 +149,10 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_wrong_cost() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=3]]")))
+  public void test_wrong_cost() throws Exception {
+    PHPCheck check = new DummyCheck(2);
+    PhpFile file = createFile("<?php $a = 1; // NOK [[effortToFix=3]]");
+    assertThatThrownBy(() ->  PHPCheckTest.check(check, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_COST] Issue at line 1 : \n"
         + "Expected cost : 3.0\n"
@@ -146,8 +160,9 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void missing_cost() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK [[effortToFix=3]]")))
+  public void missing_cost() throws Exception {
+    PhpFile file = createFile("<?php $a = 1; // NOK [[effortToFix=3]]");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_COST] Issue at line 1 : \n"
         + "Expected cost : 3.0\n"
@@ -161,22 +176,25 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_wrong_start_precise_location() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK\n//   ^^^^^^^      ")))
+  public void test_wrong_start_precise_location() throws Exception {
+    PhpFile file = createFile("<?php $a = 1; // NOK\n//   ^^^^^^^      ");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_PRIMARY_LOCATION] Line 1: actual start column is 6");
   }
 
   @Test
-  public void test_wrong_end_precise_location() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK\n//    ^^^^^       ")))
+  public void test_wrong_end_precise_location() throws Exception {
+    PhpFile file = createFile("<?php $a = 1; // NOK\n//    ^^^^^       ");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_PRIMARY_LOCATION] Line 1: actual end column is 12");
   }
 
   @Test
-  public void test_issue_without_precise_location() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php class A {} // NOK\n//    ^^^^^      ")))
+  public void test_issue_without_precise_location() throws Exception {
+    PhpFile file = createFile("<?php class A {} // NOK\n//    ^^^^^      ");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [NO_PRECISE_LOCATION] Line 1: issue with precise location is expected");
   }
@@ -188,22 +206,26 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_missing_secondary_location() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK [[secondary=+1]] {{message}}")))
+  public void test_missing_secondary_location() throws Exception {
+    PhpFile file = createFile("<?php $a = 1; // NOK [[secondary=+1]] {{message}}");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_SECONDARY_LOCATION] Line 1: missing secondary location at line 2");
   }
 
   @Test
-  public void test_unexpected_secondary_location() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK [[secondary=+0]] {{message}}")))
+  public void test_unexpected_secondary_location() throws Exception {
+    PhpFile file = createFile("<?php $a = 1; // NOK [[secondary=+0]] {{message}}");
+    assertThatThrownBy(() ->  PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_SECONDARY_LOCATION] Line 1: unexpected secondary location at line 1");
   }
 
   @Test
-  public void test_wrong_cost_with_secondary() {
-    assertThatThrownBy(() ->  PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=3;secondary=1,1]]")))
+  public void test_wrong_cost_with_secondary() throws Exception {
+    PHPCheck check = new DummyCheck(2);
+    PhpFile file = createFile("<?php $a = 1; // NOK [[effortToFix=3;secondary=1,1]]");
+    assertThatThrownBy(() ->  PHPCheckTest.check(check, file))
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("* [WRONG_COST] Issue at line 1 : \n"
         + "Expected cost : 3.0\n"

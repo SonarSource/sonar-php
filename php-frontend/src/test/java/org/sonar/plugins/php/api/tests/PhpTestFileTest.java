@@ -46,7 +46,8 @@ public class PhpTestFileTest {
 
   @Test
   public void load_invalid_show_filename() {
-    assertThatThrownBy(() -> new PhpTestFile(new File("invalid.php")))
+    File file = new File("invalid.php");
+    assertThatThrownBy(() -> new PhpTestFile(file))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("invalid.php");
   }
