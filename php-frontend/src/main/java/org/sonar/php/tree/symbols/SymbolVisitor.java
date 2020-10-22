@@ -30,6 +30,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
+import javax.lang.model.type.DeclaredType;
+
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.SourceBuilder;
@@ -45,6 +47,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -168,17 +171,21 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
+    resolveFullNamespaceName(tree.declaredType());
     // do nothing as this symbols already saved during visiting class tree
   }
 
   @Override
   public void visitParameterList(ParameterListTree tree) {
-    tree.parameters().stream()
-      .filter(t -> t.declaredType() != null)
-      .filter(t ->  t.declaredType().is(Kind.TYPE) && ((TypeTree)t.declaredType()).typeName().is(Kind.NAMESPACE_NAME))
-      .forEach(t -> lookupOrCreateUndeclaredSymbol((NamespaceNameTree) ((TypeTree)t.declaredType()).typeName()));
+    tree.parameters().forEach(t -> resolveFullNamespaceName(t.declaredType()));
 
     super.visitParameterList(tree);
+  }
+
+  private void resolveFullNamespaceName(@Nullable DeclaredTypeTree type) {
+    if (type != null && type.isSimple() && ((TypeTree)type).typeName().is(Kind.NAMESPACE_NAME)) {
+      lookupOrCreateUndeclaredSymbol((NamespaceNameTree) ((TypeTree)type).typeName());
+    }
   }
 
   @Override

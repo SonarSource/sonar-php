@@ -483,6 +483,14 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbol("foo")).isNotNull();
   }
 
+   @Test
+  public void namespace_declared_types() {
+    CompilationUnitTree cut = parse("symbols/namespace_declared_types.php");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+     assertThat(symbolTable.getSymbol("a\\b\\fieldtype")).isNotNull();
+     assertThat(symbolTable.getSymbol("a\\b\\paramtype")).isNotNull();
+  }
+
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
