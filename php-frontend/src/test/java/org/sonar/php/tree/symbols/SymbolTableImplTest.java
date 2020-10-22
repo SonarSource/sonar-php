@@ -489,6 +489,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
      assertThat(symbolTable.getSymbol("a\\b\\fieldtype")).isNotNull();
      assertThat(symbolTable.getSymbol("a\\b\\paramtype")).isNotNull();
+     assertThat(symbolTable.getSymbol("a\\b\\returntype")).isNotNull();
   }
 
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {

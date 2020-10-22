@@ -30,8 +30,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
-import javax.lang.model.type.DeclaredType;
-
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.SourceBuilder;
@@ -53,6 +51,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
@@ -144,6 +143,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     enterScope(tree);
+    resolveDeclaredTypeNamespaceName(tree.returnTypeClause());
     super.visitFunctionDeclaration(tree);
     leaveScope();
   }
@@ -165,24 +165,30 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     enterScope(tree);
+    resolveDeclaredTypeNamespaceName(tree.returnTypeClause());
     super.visitMethodDeclaration(tree);
     leaveScope();
   }
 
   @Override
   public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
-    resolveFullNamespaceName(tree.declaredType());
-    // do nothing as this symbols already saved during visiting class tree
+    resolveDeclaredTypeNamespaceName(tree.declaredType());
   }
 
   @Override
   public void visitParameterList(ParameterListTree tree) {
-    tree.parameters().forEach(t -> resolveFullNamespaceName(t.declaredType()));
+    tree.parameters().forEach(t -> resolveDeclaredTypeNamespaceName(t.declaredType()));
 
     super.visitParameterList(tree);
   }
 
-  private void resolveFullNamespaceName(@Nullable DeclaredTypeTree type) {
+  private void resolveDeclaredTypeNamespaceName(@Nullable ReturnTypeClauseTree returnType) {
+    if (returnType != null) {
+      resolveDeclaredTypeNamespaceName(returnType.declaredType());
+    }
+  }
+
+  private void resolveDeclaredTypeNamespaceName(@Nullable DeclaredTypeTree type) {
     if (type != null && type.isSimple() && ((TypeTree)type).typeName().is(Kind.NAMESPACE_NAME)) {
       lookupOrCreateUndeclaredSymbol((NamespaceNameTree) ((TypeTree)type).typeName());
     }
