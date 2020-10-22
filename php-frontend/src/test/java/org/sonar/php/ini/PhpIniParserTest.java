@@ -32,6 +32,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PhpIniParserTest {
 
@@ -153,13 +154,11 @@ public class PhpIniParserTest {
   }
 
   @Test
-  public void unknown_file() throws Exception {
-    PhpIniParser parser = new PhpIniParser();
+  public void unknown_file() {
     String fileName = "dir" + File.separator + "xxx.ini";
-    thrown.expect(IllegalStateException.class);
-    thrown.expectMessage(fileName);
-    PhpFile file = FileTestUtils.getFile(new File(fileName));
-    parser.parse(file);
+    assertThatThrownBy(() ->  FileTestUtils.getFile(new File(fileName)))
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessageContaining(fileName);
   }
 
   @Test

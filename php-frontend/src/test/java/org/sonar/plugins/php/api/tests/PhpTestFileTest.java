@@ -23,10 +23,10 @@ import java.io.File;
 import java.nio.file.Paths;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.matchers.JUnitMatchers;
 import org.junit.rules.ExpectedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PhpTestFileTest {
 
@@ -45,10 +45,10 @@ public class PhpTestFileTest {
   }
 
   @Test
-  public void load_invalid_show_filename() throws Exception {
-    expectedException.expect(IllegalArgumentException.class);
-    expectedException.expectMessage(JUnitMatchers.containsString("invalid.php"));
-    new PhpTestFile(new File("invalid.php"));
+  public void load_invalid_show_filename() {
+    assertThatThrownBy(() -> new PhpTestFile(new File("invalid.php")))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("invalid.php");
   }
 
 }
