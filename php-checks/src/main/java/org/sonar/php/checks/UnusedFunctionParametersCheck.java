@@ -23,6 +23,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.MethodSymbol;
@@ -46,6 +47,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   public static final String KEY = "S1172";
   private static final String MESSAGE = "Remove the unused function parameter \"%s\".";
   Deque<Boolean> hasFuncGetArgsStack = new ArrayDeque<>();
+  List<IdentifierTree> constructorPromotedProperties = new ArrayList<>();
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -80,8 +82,10 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     hasFuncGetArgsStack.push(false);
     super.visitMethodDeclaration(tree);
     if (!(isExcluded(tree) || hasFuncGetArgsStack.pop())) {
+      collectConstructorPromotedProperties(tree);
       checkParameters(tree);
     }
+    constructorPromotedProperties.clear();
   }
 
   private void checkParameters(FunctionTree tree) {
@@ -90,7 +94,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
       List<IdentifierTree> unused = new ArrayList<>();
 
       for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {
-        if (symbol.usages().isEmpty()) {
+        if (symbol.usages().isEmpty() && !constructorPromotedProperties.contains(symbol.declaration())) {
           unused.add(symbol.declaration());
         }
       }
@@ -101,10 +105,19 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     }
   }
 
+  private void collectConstructorPromotedProperties(MethodDeclarationTree tree) {
+    if (tree.name().text().equals("__construct")) {
+      constructorPromotedProperties = tree.parameters().parameters().stream()
+        .filter(p -> p.visibility() != null)
+        .map(p -> p.variableIdentifier().variableExpression())
+        .collect(Collectors.toList());
+    }
+  }
+
   /**
    * Exclude methods from the check that is overriding/implementing a method and are not private.
    */
-  public boolean isExcluded(MethodDeclarationTree tree) {
+  private boolean isExcluded(MethodDeclarationTree tree) {
     MethodSymbol methodSymbol = Symbols.get(tree);
     return !tree.body().is(Tree.Kind.BLOCK)
       || !(methodSymbol.isOverriding().isFalse())
