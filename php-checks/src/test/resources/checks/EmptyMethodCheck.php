@@ -101,3 +101,12 @@ function function9() {} // Noncompliant
  * CommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommententtCommentCommentCommentCommentCommentCommentCommentCommentent
  */
 function function10() {} // Compliant - is related to https://jira.sonarsource.com/browse/SONARPHP-1022
+
+class Php8Class
+{
+  public function __construct(private $a) {} // Compliant
+
+  public function __construct($a, private $b) {} // Compliant
+
+  public function __construct($a) {} // Noncompliant
+}
