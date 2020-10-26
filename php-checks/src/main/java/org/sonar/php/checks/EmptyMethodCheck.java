@@ -48,7 +48,8 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree) || hasCommentAbove(((PHPTree) tree).getFirstToken()))) {
+    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree)
+      || hasCommentAbove(((PHPTree) tree).getFirstToken()) || isConstructorPropertyPromotion(tree))) {
       commitIssue(tree, "method");
     }
 
@@ -87,6 +88,10 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   private static boolean isValuableComment(SyntaxToken trivia) {
     return VALUABLE_COMMENT_PATTERN.matcher(trivia.text()).find();
+  }
+
+  private static boolean isConstructorPropertyPromotion(MethodDeclarationTree tree) {
+    return tree.name().text().equalsIgnoreCase("__construct") && tree.parameters().parameters().stream().anyMatch(p -> p.visibility() != null);
   }
 
   private void commitIssue(FunctionTree tree, String type) {
