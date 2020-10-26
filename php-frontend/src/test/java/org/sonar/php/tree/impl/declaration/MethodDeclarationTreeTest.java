@@ -67,6 +67,9 @@ public class MethodDeclarationTreeTest extends PHPTreeModelTest {
   public void constructor_property_promotion() {
     MethodDeclarationTree tree = parse("public function __construct(public $p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
     assertThat(tree.parameters().parameters().get(0).visibility().text()).isEqualTo("public");
+
+    tree = parse("public function __CONSTRUCT(private $p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.parameters().parameters().get(0).visibility().text()).isEqualTo("private");
   }
 
   @Test(expected = RecognitionException.class)
