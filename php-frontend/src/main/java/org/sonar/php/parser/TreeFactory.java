@@ -470,7 +470,7 @@ public class TreeFactory {
     Optional<ReturnTypeClauseTree> returnTypeClause,
     Tree body
   ) {
-    if (!"__construct".equals(name.text())) {
+    if (!"__construct".equalsIgnoreCase(name.text())) {
       throwOnParameterWithVisibility(parameters);
     }
     return new MethodDeclarationTreeImpl(attributes.or(Collections.emptyList()),
