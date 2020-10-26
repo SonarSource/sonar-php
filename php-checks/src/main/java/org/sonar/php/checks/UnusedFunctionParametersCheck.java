@@ -106,7 +106,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   }
 
   private void collectConstructorPromotedProperties(MethodDeclarationTree tree) {
-    if (tree.name().text().equals("__construct")) {
+    if (tree.name().text().equalsIgnoreCase("__construct")) {
       constructorPromotedProperties = tree.parameters().parameters().stream()
         .filter(p -> p.visibility() != null)
         .map(p -> p.variableIdentifier().variableExpression())
