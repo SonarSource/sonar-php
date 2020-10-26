@@ -45,10 +45,14 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
@@ -139,6 +143,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     enterScope(tree);
+    resolveDeclaredTypeNamespaceName(tree.returnTypeClause());
     super.visitFunctionDeclaration(tree);
     leaveScope();
   }
@@ -160,13 +165,33 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     enterScope(tree);
+    resolveDeclaredTypeNamespaceName(tree.returnTypeClause());
     super.visitMethodDeclaration(tree);
     leaveScope();
   }
 
   @Override
   public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
-    // do nothing as this symbols already saved during visiting class tree
+    resolveDeclaredTypeNamespaceName(tree.declaredType());
+  }
+
+  @Override
+  public void visitParameterList(ParameterListTree tree) {
+    tree.parameters().forEach(t -> resolveDeclaredTypeNamespaceName(t.declaredType()));
+
+    super.visitParameterList(tree);
+  }
+
+  private void resolveDeclaredTypeNamespaceName(@Nullable ReturnTypeClauseTree returnType) {
+    if (returnType != null) {
+      resolveDeclaredTypeNamespaceName(returnType.declaredType());
+    }
+  }
+
+  private void resolveDeclaredTypeNamespaceName(@Nullable DeclaredTypeTree type) {
+    if (type != null && type.isSimple() && ((TypeTree)type).typeName().is(Kind.NAMESPACE_NAME)) {
+      lookupOrCreateUndeclaredSymbol((NamespaceNameTree) ((TypeTree)type).typeName());
+    }
   }
 
   @Override
