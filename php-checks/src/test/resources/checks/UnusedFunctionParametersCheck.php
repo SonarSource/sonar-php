@@ -11,7 +11,7 @@ $a = function($p1, $p2) { return $p1; }; // Noncompliant {{Remove the unused fun
 $a = function($p1, $p2) {
     func_get_args();
     return $p1;
-}; 
+};
 
 function f($p1, $p2) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
   function nestedF($p1, $p2) {           // Noncompliant {{Remove the unused function parameter "$p2".}}
@@ -66,7 +66,7 @@ function containing_func_get_args_with_no_parameters() {
 }
 
 function f($p1, $p2) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
-    function containing_func_get_args_with_some_not_explicitly_used_parameters_in_a_nestedFunction($p1, $p2) {           
+    function containing_func_get_args_with_some_not_explicitly_used_parameters_in_a_nestedFunction($p1, $p2) {
         $p1 = 1;
         func_get_args();
     }
@@ -85,12 +85,12 @@ class C {
   }
 
   public function f3($p1);               // OK
-  
+
   public function containing_func_get_args_with_some_not_explicitly_used_parameters_inside_a_class($p1, $p2, $p3,$p4) {
       $p1 = $p2;
       func_get_args();
       return $p5;
-  }  
+  }
 }
 
 function f($p1, $p2) {                   // OK
@@ -120,9 +120,9 @@ class E implements B {
   public function f3() {
     $f = function($p1) {
         func_get_args();
-    };    
+    };
   }
- 
+
   public function containing_func_get_args_with_no_parameters_inside_a_class_implementing_an_interface($p1, $p2, $p3,$p4) {
       func_get_args();
       return $p5;
@@ -165,7 +165,7 @@ class Foo {
      private function f2($p1) {}               // Noncompliant {{Remove the unused function parameter "$p1".}}
     };
  }
- 
+
   public function f2($p1) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
     $x = new class extends A {
      public function f1($p1) {}                 // OK
@@ -216,4 +216,14 @@ abstract class AbstractController {
   public function publicMethod($request) {} // OK
   private function privateMethod($request) {} // Noncompliant
   protected function protectedMethod($request) {} // OK
+}
+
+class Php8Class
+{
+  public function __construct(private $a) {} // Compliant
+
+  public function __construct($a) {} // Noncompliant
+
+  public function __construct(private $a, $b) {} // Noncompliant
+//                                        ^^
 }
