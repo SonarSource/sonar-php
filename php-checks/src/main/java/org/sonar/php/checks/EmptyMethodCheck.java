@@ -91,7 +91,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
   }
 
   private static boolean isConstructorPropertyPromotion(MethodDeclarationTree tree) {
-    return tree.name().text().equals("__construct") && tree.parameters().parameters().stream().anyMatch(p -> p.visibility() != null);
+    return tree.name().text().equalsIgnoreCase("__construct") && tree.parameters().parameters().stream().anyMatch(p -> p.visibility() != null);
   }
 
   private void commitIssue(FunctionTree tree, String type) {
