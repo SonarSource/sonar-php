@@ -15,6 +15,7 @@ namespace {
 
   __autoload();                // Noncompliant
   create_function('', 'echo 42;'); // Noncompliant
+  Create_function("", "");     // Noncompliant
   parse_str($str);             // Noncompliant {{Add a second argument to this call to "parse_str".}}
   parse_str($str, $array);     // OK
   gmp_random(4);               // Noncompliant

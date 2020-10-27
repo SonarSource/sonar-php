@@ -187,7 +187,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       checkSearchingStringArguments(tree);
 
     } else {
-      context().newIssue(this, tree.callee(), buildMessage(functionName));
+      context().newIssue(this, tree.callee(), buildMessage(functionName.toLowerCase(Locale.ROOT)));
     }
 
   }
