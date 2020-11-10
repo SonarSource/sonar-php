@@ -66,10 +66,7 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
           if (issue == null) {
             issue = context().newIssue(this, currentException, String.format(MESSAGE_DERIVATIVE, comparedSymbol.qualifiedName().toString()));
           }
-
-          for (NamespaceNameTree other : otherException.getValue()) {
-            issue.secondary(other, SECONDARY_LOCATION_DERIVATIVE);
-          }
+          addSecondaryLocations(issue, otherException.getValue());
         }
       }
     });
@@ -78,5 +75,11 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
   private static void addException(NamespaceNameTree exception, Map<ClassSymbol, List<NamespaceNameTree>> caughtExceptionsByFQN) {
     ClassSymbol classSymbol = Symbols.getClass(exception);
     caughtExceptionsByFQN.computeIfAbsent(classSymbol, k -> new ArrayList<>()).add(exception);
+  }
+
+  private static void addSecondaryLocations(PreciseIssue issue, List<NamespaceNameTree> others) {
+    for (NamespaceNameTree other : others) {
+      issue.secondary(other, SECONDARY_LOCATION_DERIVATIVE);
+    }
   }
 }
