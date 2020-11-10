@@ -43,6 +43,7 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Remove this use of the output from \"%1$s\"; \"%1$s\" doesn't return anything.";
+  private static final String SECONDARY_MESSAGE = "Function definition.";
 
   private static final Set<String> VOID_FUNCTIONS = CheckUtils.lowerCaseSet(
     // http://php.net/manual/en/function.halt-compiler.php
@@ -391,7 +392,7 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
     if (parentUseValue(tree) && (isVoidBuiltin(functionName) || isVoidSymbol(functionSymbol))) {
       PreciseIssue issue = context().newIssue(this, tree.callee(), String.format(MESSAGE, functionName));
       if (functionSymbol != null) {
-        issue.secondary(functionSymbol.location(), null);
+        issue.secondary(functionSymbol.location(), SECONDARY_MESSAGE);
       }
     }
     super.visitFunctionCall(tree);

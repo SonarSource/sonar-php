@@ -106,7 +106,7 @@ $foo = foo(); // Noncompliant
 
 class Foo {
   public static function a() {}
-//                       ^>
+//                       ^> {{Function definition.}}
   public function b() {
     $a = $this->a(); // Noncompliant {{Remove this use of the output from "Foo::a"; "Foo::a" doesn't return anything.}}
 //       ^^^^^^^^
