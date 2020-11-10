@@ -1,7 +1,7 @@
 <?php
 
 class NoThrowable {}
-//    ^^^^^^^^^^^>
+//    ^^^^^^^^^^^> {{Class definition.}}
 class SomeThrowable implements Throwable { /* Throwable methods implementation */ }
 class SomeCustomException extends Exception {};
 

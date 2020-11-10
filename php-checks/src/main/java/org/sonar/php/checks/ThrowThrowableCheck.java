@@ -35,6 +35,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S5632")
 public class ThrowThrowableCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Throw an object derived from \"Throwable\".";
+  private static final String SECONDARY_MESSAGE = "Class definition.";
   private static final QualifiedName THROWABLE_FQN = QualifiedName.qualifiedName("Throwable");
 
   @Override
@@ -61,7 +62,7 @@ public class ThrowThrowableCheck extends PHPVisitorCheck {
     ClassSymbol classSymbol = Symbols.getClass(namespaceNameTree);
     if (classSymbol.isSubTypeOf(THROWABLE_FQN).isFalse()) {
       context().newIssue(this, tree, MESSAGE).
-        secondary(classSymbol.location(), null);
+        secondary(classSymbol.location(), SECONDARY_MESSAGE);
     }
   }
 }
