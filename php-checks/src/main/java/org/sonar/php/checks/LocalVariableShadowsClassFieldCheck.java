@@ -54,6 +54,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1117";
   private static final String MESSAGE = "Rename \"%s\" which has the same name as the field declared at line %s.";
+  private static final String SECONDARY_MESSAGE = "Shadowed field.";
 
   private Deque<ClassState> classStates = new ArrayDeque<>();
   private Deque<FunctionTree> functions = new ArrayDeque<>();
@@ -204,7 +205,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   private void reportIssue(Tree tree, String varName) {
     SyntaxToken field = classStates.peek().getFieldNamed(varName);
     String message = String.format(MESSAGE, varName, field.line());
-    context().newIssue(this, tree, message).secondary(field, null);
+    context().newIssue(this, tree, message).secondary(field, SECONDARY_MESSAGE);
 
     classStates.peek().setAsCheckedVariable(varName);
   }
