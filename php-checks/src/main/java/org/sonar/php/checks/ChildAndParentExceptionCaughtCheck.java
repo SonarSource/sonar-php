@@ -36,6 +36,8 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE_DERIVATIVE = "Remove this useless Exception class; it derives from class %s which is already caught.";
   private static final String MESSAGE_DUPLICATE = "Remove this duplicate Exception class.";
+  private static final String SECONDARY_LOCATION_DERIVATIVE = "Parent class.";
+  private static final String SECONDARY_LOCATION_DUPLICATE = "Duplicate.";
 
   @Override
   public void visitCatchBlock(CatchBlockTree tree) {
@@ -54,7 +56,7 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
 
       if (caughtExceptionsWithSameSymbol.size() > 1) {
         PreciseIssue issue = context().newIssue(this, currentException, MESSAGE_DUPLICATE);
-        caughtExceptionsWithSameSymbol.stream().skip(1).forEach(e -> issue.secondary(e, null));
+        caughtExceptionsWithSameSymbol.stream().skip(1).forEach(e -> issue.secondary(e, SECONDARY_LOCATION_DUPLICATE));
       }
 
       PreciseIssue issue = null;
@@ -64,8 +66,10 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
           if (issue == null) {
             issue = context().newIssue(this, currentException, String.format(MESSAGE_DERIVATIVE, comparedSymbol.qualifiedName().toString()));
           }
-          addSecondaryLocations(issue, otherException.getValue());
-          issue.secondary(currentSymbol.location(), null);
+
+          for (NamespaceNameTree other : otherException.getValue()) {
+            issue.secondary(other, SECONDARY_LOCATION_DERIVATIVE);
+          }
         }
       }
     });
@@ -74,11 +78,5 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
   private static void addException(NamespaceNameTree exception, Map<ClassSymbol, List<NamespaceNameTree>> caughtExceptionsByFQN) {
     ClassSymbol classSymbol = Symbols.getClass(exception);
     caughtExceptionsByFQN.computeIfAbsent(classSymbol, k -> new ArrayList<>()).add(exception);
-  }
-
-  private static void addSecondaryLocations(PreciseIssue issue, List<NamespaceNameTree> others) {
-    for (NamespaceNameTree other : others) {
-      issue.secondary(other, null);
-    }
   }
 }
