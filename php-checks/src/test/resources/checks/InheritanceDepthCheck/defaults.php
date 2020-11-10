@@ -1,17 +1,17 @@
 <?php
 
 class Class1 {}
-//    ^^^^^^>
+//    ^^^^^^> {{Parent class.}}
 class Class2 extends Class1 {}
-//    ^^^^^^>
+//    ^^^^^^> {{Parent class.}}
 class Class3 extends Class2 {}
-//    ^^^^^^>
+//    ^^^^^^> {{Parent class.}}
 class Class4 extends Class3 {}
-//    ^^^^^^>
+//    ^^^^^^> {{Parent class.}}
 class Class5 extends Class4 {}
-//    ^^^^^^>
+//    ^^^^^^> {{Parent class.}}
 class Class6 extends Class5 {} // OK
-//    ^^^^^^>
+//    ^^^^^^> {{Parent class.}}
 class Class7 extends Class6 {} // Noncompliant {{This class has 6 parents which is greater than 5 authorized.}}
 //    ^^^^^^
 
