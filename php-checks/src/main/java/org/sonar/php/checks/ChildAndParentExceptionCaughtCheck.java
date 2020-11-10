@@ -34,7 +34,7 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 @Rule(key = "S5713")
 public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE_DERIVATIVE = "Remove this useless Exception class; it derives from another which is also caught.";
+  private static final String MESSAGE_DERIVATIVE = "Remove this useless Exception class; it derives from class %s which is already caught.";
   private static final String MESSAGE_DUPLICATE = "Remove this duplicate Exception class.";
 
   @Override
@@ -62,7 +62,7 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
         ClassSymbol comparedSymbol = otherException.getKey();
         if (currentSymbol != comparedSymbol && currentSymbol.isSubTypeOf(comparedSymbol.qualifiedName()).isTrue()) {
           if (issue == null) {
-            issue = context().newIssue(this, currentException, MESSAGE_DERIVATIVE);
+            issue = context().newIssue(this, currentException, String.format(MESSAGE_DERIVATIVE, comparedSymbol.qualifiedName().toString()));
           }
           addSecondaryLocations(issue, otherException.getValue());
           issue.secondary(currentSymbol.location(), null);

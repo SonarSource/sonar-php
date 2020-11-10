@@ -20,13 +20,13 @@ catch (CustomException | FooException | FooException $e) {} // Noncompliant
 class CustomException1 extends Exception {}
 //    ^^^^^^^^^^^^^^^^>
 try {}
-catch (Exception | CustomException1 $e) {} // Noncompliant {{Remove this useless Exception class; it derives from another which is also caught.}}
+catch (Exception | CustomException1 $e) {} // Noncompliant {{Remove this useless Exception class; it derives from class exception which is already caught.}}
 //     ^^^^^^^^^>  ^^^^^^^^^^^^^^^^
 
 class CustomException2 extends Exception {}
 //    ^^^^^^^^^^^^^^^^>
 try {}
-catch (CustomException2 | Exception $e) {} // Noncompliant
+catch (CustomException2 | Exception $e) {} // Noncompliant {{Remove this useless Exception class; it derives from class exception which is already caught.}}
 //     ^^^^^^^^^^^^^^^^   ^^^^^^^^^<
 
 try {}
