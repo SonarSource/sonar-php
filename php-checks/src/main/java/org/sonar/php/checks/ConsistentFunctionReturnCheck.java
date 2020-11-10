@@ -40,6 +40,8 @@ public class ConsistentFunctionReturnCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S3801";
 
+  private static final String MESSAGE = "Refactor this function to use \"return\" consistently.";
+
   @Override
   public List<Tree.Kind> nodesToVisit() {
     return Arrays.asList(Tree.Kind.FUNCTION_DECLARATION, Tree.Kind.METHOD_DECLARATION, Tree.Kind.FUNCTION_EXPRESSION);
@@ -53,7 +55,7 @@ public class ConsistentFunctionReturnCheck extends PHPSubscriptionCheck {
     if (numberReturn > 1) {
       long numberEmptyReturn = returnStatements.stream().map(ReturnStatementTree::expression).filter(Objects::isNull).count();
       if (numberEmptyReturn > 0 && numberEmptyReturn != numberReturn) {
-        PreciseIssue issue = context().newIssue(this, functionName(tree), "Refactor this function to use \"return\" consistently.");
+        PreciseIssue issue = context().newIssue(this, functionName(tree), MESSAGE);
         returnStatements.forEach(returnStatement -> issue.secondary(returnStatement, ""));
       }
     }
