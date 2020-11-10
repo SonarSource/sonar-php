@@ -41,6 +41,8 @@ public class ConsistentFunctionReturnCheck extends PHPSubscriptionCheck {
   public static final String KEY = "S3801";
 
   private static final String MESSAGE = "Refactor this function to use \"return\" consistently.";
+  private static final String MESSAGE_WITH_VALUE = "Return with value.";
+  private static final String MESSAGE_WITHOUT_VALUE = "Return without value.";
 
   @Override
   public List<Tree.Kind> nodesToVisit() {
@@ -56,7 +58,7 @@ public class ConsistentFunctionReturnCheck extends PHPSubscriptionCheck {
       long numberEmptyReturn = returnStatements.stream().map(ReturnStatementTree::expression).filter(Objects::isNull).count();
       if (numberEmptyReturn > 0 && numberEmptyReturn != numberReturn) {
         PreciseIssue issue = context().newIssue(this, functionName(tree), MESSAGE);
-        returnStatements.forEach(returnStatement -> issue.secondary(returnStatement, ""));
+        returnStatements.forEach(returnStatement -> addSecondaryLocation(issue, returnStatement));
       }
     }
   }
@@ -100,6 +102,11 @@ public class ConsistentFunctionReturnCheck extends PHPSubscriptionCheck {
     public void visitFunctionExpression(FunctionExpressionTree tree) {
       // skip other functions
     }
+  }
+
+  private static void addSecondaryLocation(PreciseIssue issue, ReturnStatementTree returnStatement) {
+    String secondaryLocation = returnStatement.expression() != null ? MESSAGE_WITH_VALUE : MESSAGE_WITHOUT_VALUE;
+    issue.secondary(returnStatement, secondaryLocation);
   }
 
 }
