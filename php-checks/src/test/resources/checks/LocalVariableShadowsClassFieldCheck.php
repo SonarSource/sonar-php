@@ -64,7 +64,7 @@ class A {
 
   public function f7() {
     $f = function () {
-      $field = 1;                        // NOK
+      $field = 1;                        // Noncompliant
     };
   }
 
@@ -91,7 +91,7 @@ $a = new class {
 
   public function f1($param) {          // OK
     $foo = 1;                           // OK
-    $field = 1;                         // Noncompliant {{Rename "$field" which has the same name as the field declared at line 88.}}
+    $field = 1;                         // Noncompliant {{Rename "$field" which has the same name as the field declared at line 89.}}
 //  ^^^^^^
   }
 
@@ -107,14 +107,14 @@ $a = new class {
     };
 
     $f2 = function () {
-      $field = 1;                       // NOK
+      $field = 1;                       // Noncompliant
       $field = 2;                       // OK
     };
   }
 
   public function __construct() {
-    $field = foo();                      // OK (Constructor)
-    $this->field = $field;
+    $otherfield = foo();                      // OK (Constructor)
+    $this->$otherfield = $otherfield;
   }
 
 };
