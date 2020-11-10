@@ -1,7 +1,7 @@
 <?php
 
   function function1($a, $b) {}
-//         ^^^^^^^^^>
+//         ^^^^^^^^^> {{Function definition.}}
   function1($a); // Noncompliant {{"function1" expects 2 arguments, but 1 was provided. Add more arguments or define default values.}}
 //^^^^^^^^^
 
