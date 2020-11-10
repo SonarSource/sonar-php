@@ -4,7 +4,7 @@ function f() {
   echo "hello";
   return;
 //^^^^^^^>
-  $a;            // Noncompliant {{Remove this unreachable code.}}
+  $a;            // Noncompliant {{Delete this unreachable code or refactor the code to make it reachable.}}
 //^^^
 
   if (true) {

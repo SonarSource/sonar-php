@@ -34,7 +34,7 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S1763";
-  private static final String MESSAGE = "Remove this unreachable code.";
+  private static final String MESSAGE = "Delete this unreachable code or refactor the code to make it reachable.";
 
   @Override
   public List<Kind> nodesToVisit() {
