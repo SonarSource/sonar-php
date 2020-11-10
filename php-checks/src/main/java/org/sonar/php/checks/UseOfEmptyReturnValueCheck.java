@@ -42,7 +42,7 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 @Rule(key = "S3699")
 public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Remove this use of the output from \"%s\"; the call doesn't return anything.";
+  private static final String MESSAGE = "Remove this use of the output from \"%1$s\"; \"%1$s\" doesn't return anything.";
 
   private static final Set<String> VOID_FUNCTIONS = CheckUtils.lowerCaseSet(
     // http://php.net/manual/en/function.halt-compiler.php
