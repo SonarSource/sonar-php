@@ -4,14 +4,18 @@
 //         ^
   if (a) {
     return true;
+//  ^^^^^^< {{"return" statement.}}
   } else {
     if (b) {
       return false;
+//    ^^^^^^< {{"return" statement.}}
     } else {
       return true;
+//    ^^^^^^< {{"return" statement.}}
     }
   }
   return false;
+//^^^^^^< {{"return" statement.}}
 }
 
 function f() {          // OK

@@ -39,6 +39,7 @@ public class TooManyReturnCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1142";
   private static final String MESSAGE = "This %s has %d returns, which is more than the %d allowed.";
+  private static final String SECONDARY_MESSAGE = "\"return\" statement.";
 
   private static final int DEFAULT = 3;
   private final Deque<Deque<SyntaxToken>> returnStatementCounter = new ArrayDeque<>();
@@ -93,7 +94,7 @@ public class TooManyReturnCheck extends PHPVisitorCheck {
     Deque<SyntaxToken> thisFunctionReturns = returnStatementCounter.pop();
     if (thisFunctionReturns.size() > max) {
       PreciseIssue issue = getIssue(tree, thisFunctionReturns.size());
-      thisFunctionReturns.forEach(returnToken -> issue.secondary(returnToken, null));
+      thisFunctionReturns.forEach(returnToken -> issue.secondary(returnToken, SECONDARY_MESSAGE));
     }
   }
 
