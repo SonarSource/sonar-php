@@ -9,9 +9,13 @@ echo "aa()";
 echo "aaaa()"; // Noncompliant {{Define a constant instead of duplicating this literal "aaaa()" 5 times.}}
 //   ^^^^^^^^
 echo "aaaa()";
+//   ^^^^^^^^< {{Duplication.}}
 echo "aaaa()";
+//   ^^^^^^^^< {{Duplication.}}
 echo "aaaa()";
+//   ^^^^^^^^< {{Duplication.}}
 echo "aaaa()";
+//   ^^^^^^^^< {{Duplication.}}
 
 echo "12aaaaa";  // Noncompliant {{Define a constant instead of duplicating this literal "12aaaaa" 5 times.}}
 //   ^^^^^^^^^
