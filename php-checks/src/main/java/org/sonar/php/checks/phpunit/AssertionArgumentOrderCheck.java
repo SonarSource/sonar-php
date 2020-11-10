@@ -34,6 +34,7 @@ import static org.sonar.plugins.php.api.tree.Tree.Kind;
 public class AssertionArgumentOrderCheck extends PhpUnitCheck {
 
   private static final String MESSAGE = "Swap these 2 arguments so they are in the correct order: expected value, actual value.";
+  private static final String SECONDARY_MESSAGE = "Other argument to swap.";
   private static final Kind[] LITERAL = {Kind.BOOLEAN_LITERAL, Kind.NULL_LITERAL, Kind.NUMERIC_LITERAL, Kind.EXPANDABLE_STRING_LITERAL, Kind.REGULAR_STRING_LITERAL};
 
   public AssertionArgumentOrderCheck() {
@@ -52,7 +53,7 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
       ExpressionTree expected = arguments.get(0).value();
       ExpressionTree actual = arguments.get(1).value();
       if (getAssignedValue(actual).is(LITERAL) && !getAssignedValue(expected).is(LITERAL)) {
-        newIssue(actual, MESSAGE).secondary(expected, null);
+        newIssue(actual, MESSAGE).secondary(expected, SECONDARY_MESSAGE);
       }
     }
 
