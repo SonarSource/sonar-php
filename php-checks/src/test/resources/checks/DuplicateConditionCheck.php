@@ -13,7 +13,7 @@ if ($x == 1) {
 
 switch($i) {
   case 1:
-//     ^> {{This case duplicates the one on line 20.}}
+//     ^> {{Original}}
     break;
   case 3:
     break;
