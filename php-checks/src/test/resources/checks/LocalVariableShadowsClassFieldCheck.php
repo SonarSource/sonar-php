@@ -7,6 +7,7 @@ interface I {
 class A {
 
   public $field;
+//       ^^^^^^> {{Shadowed field.}}
   public $otherField = $x = 1;
 
   public function setField($field) {    // OK
@@ -30,7 +31,7 @@ class A {
 
   public function f2($param) {          // OK
     $foo = 1;                           // OK
-    $field = 1;                         // NOK [[secondary=9]] {{Rename "$field" which has the same name as the field declared at line 9.}}
+    $field = 1;                         // Noncompliant {{Rename "$field" which has the same name as the field declared at line 9.}}
 //  ^^^^^^
   }
 
@@ -46,24 +47,24 @@ class A {
     };
 
     $f2 = function () {
-      $field = 1;                       // NOK
+      $field = 1;                       // Noncompliant
       $field = 2;                       // OK
     };
   }
 
   public function f5($param) {
-    $field =& $param;                    // NOK
+    $field =& $param;                    // Noncompliant
   }
 
   public function f6() {
-    $field = foo();                      // NOK
+    $field = foo();                      // Noncompliant
     callback(function() use ($field)  {  // OK
     });
   }
 
   public function f7() {
     $f = function () {
-      $field = 1;                        // NOK
+      $field = 1;                        // Noncompliant
     };
   }
 
@@ -86,10 +87,11 @@ $f = function ($field) {};               // OK
 $a = new class {
 
   public $field;
+//       ^^^^^^>  {{Shadowed field.}}
 
   public function f1($param) {          // OK
     $foo = 1;                           // OK
-    $field = 1;                         // NOK [[secondary=-4]] {{Rename "$field" which has the same name as the field declared at line 88.}}
+    $field = 1;                         // Noncompliant {{Rename "$field" which has the same name as the field declared at line 89.}}
 //  ^^^^^^
   }
 
@@ -105,14 +107,14 @@ $a = new class {
     };
 
     $f2 = function () {
-      $field = 1;                       // NOK
+      $field = 1;                       // Noncompliant
       $field = 2;                       // OK
     };
   }
 
   public function __construct() {
-    $field = foo();                      // OK (Constructor)
-    $this->field = $field;
+    $otherfield = foo();                      // OK (Constructor)
+    $this->$otherfield = $otherfield;
   }
 
 };
