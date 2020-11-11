@@ -1,6 +1,6 @@
 <?php
 if ($x == 1) {
-// ^^^^^^^^^> {{This branch duplicates the one on line 5.}}
+// ^^^^^^^^^> {{Original}}
 } elseif ($x == 2) {
 } elseif ($x == 1) { // Noncompliant {{This branch duplicates the one on line 2.}}
 //       ^^^^^^^^^
