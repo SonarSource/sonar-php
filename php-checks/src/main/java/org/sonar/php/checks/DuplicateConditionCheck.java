@@ -89,7 +89,7 @@ public class DuplicateConditionCheck extends AbstractDuplicateBranchCheck {
   private void raiseIssue(String branchType, Tree duplicatedTree, Tree duplicatingTree) {
     context()
       .newIssue(this, duplicatingTree, String.format(MESSAGE, branchType, ((PHPTree) duplicatedTree).getLine()))
-      .secondary(duplicatedTree, String.format(MESSAGE, branchType, ((PHPTree) duplicatingTree).getLine()));
+      .secondary(duplicatedTree, "Original");
   }
 
 }
