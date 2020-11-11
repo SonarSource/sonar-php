@@ -39,6 +39,7 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "\"%s\" expects %d argument%s, but %d %s provided. %s";
   private static final String MESSAGE_FEWER = "Add more arguments or define default values.";
   private static final String MESSAGE_MORE = "Reduce provided arguments or add more parameters.";
+  private static final String SECONDARY_MESSAGE = "Function definition.";
 
   private int argumentCount;
 
@@ -70,7 +71,7 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
     String expectedWord = expectedArguments == 1 ? "" : "s";
     String actualWord = argumentCount == 1 ? "was" : "were";
     newIssue(callee, String.format(MESSAGE, callee.fullName(), expectedArguments, expectedWord, argumentCount, actualWord, messageAddition))
-      .secondary(symbol.location(), null);
+      .secondary(symbol.location(), SECONDARY_MESSAGE);
   }
 
   private static boolean hasEllipsisOperator(List<Parameter> parameters) {
