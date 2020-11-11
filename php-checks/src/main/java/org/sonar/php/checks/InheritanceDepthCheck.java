@@ -41,6 +41,7 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 public class InheritanceDepthCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "This class has %d parents which is greater than %d authorized.";
+  private static final String SECONDARY_MESSAGE = "Parent class.";
 
   public static final int DEFAULT_MAX = 5;
 
@@ -98,7 +99,7 @@ public class InheritanceDepthCheck extends PHPVisitorCheck {
     if (inheritanceCounter > max) {
       PreciseIssue issue = newIssue(tree, String.format(MESSAGE, inheritanceCounter, max))
         .cost(inheritanceCounter - max);
-      superClasses.forEach(e -> issue.secondary(e.location(), null));
+      superClasses.forEach(e -> issue.secondary(e.location(), SECONDARY_MESSAGE));
     }
     inheritanceCounter = 0;
   }
