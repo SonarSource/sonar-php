@@ -24,6 +24,7 @@ import java.util.Deque;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -37,7 +38,8 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 public class TooManyReturnCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1142";
-  private static final String MESSAGE = "Reduce the number of returns of this function %s, down to the maximum allowed %s.";
+  private static final String MESSAGE = "This %s has %d returns, which is more than the %d allowed.";
+  private static final String SECONDARY_MESSAGE = "\"return\" statement.";
 
   private static final int DEFAULT = 3;
   private final Deque<Deque<SyntaxToken>> returnStatementCounter = new ArrayDeque<>();
@@ -91,9 +93,25 @@ public class TooManyReturnCheck extends PHPVisitorCheck {
   private void leaveFunction(FunctionTree tree) {
     Deque<SyntaxToken> thisFunctionReturns = returnStatementCounter.pop();
     if (thisFunctionReturns.size() > max) {
-      String message = String.format(MESSAGE, thisFunctionReturns.size(), max);
-      PreciseIssue issue = context().newIssue(this, tree.functionToken(), message);
-      thisFunctionReturns.forEach(returnToken -> issue.secondary(returnToken, null));
+      PreciseIssue issue = getIssue(tree, thisFunctionReturns.size());
+      thisFunctionReturns.forEach(returnToken -> issue.secondary(returnToken, SECONDARY_MESSAGE));
     }
+  }
+
+  private PreciseIssue getIssue(FunctionTree functionTree, int returns) {
+    String type = "function";
+
+    Tree tree;
+    if (functionTree.is((Tree.Kind.METHOD_DECLARATION))) {
+      type = "method";
+      tree = ((MethodDeclarationTree) functionTree).name();
+    } else if (functionTree.is((Tree.Kind.FUNCTION_DECLARATION))) {
+      tree = ((FunctionDeclarationTree) functionTree).name();
+    } else {
+      tree = functionTree.functionToken();
+    }
+
+    String message = String.format(MESSAGE, type, returns, max);
+    return context().newIssue(this, tree, message);
   }
 }

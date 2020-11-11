@@ -19,26 +19,21 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class TooManyReturnCheckTest {
 
   private TooManyReturnCheck check = new TooManyReturnCheck();
-  private String fileName = "TooManyReturnCheck.php";
 
   @Test
   public void defaultValue() throws Exception {
-    String message = "Reduce the number of returns of this function 4, down to the maximum allowed 3.";
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.of(new LegacyIssue(check, message).line(3)));
+    CheckVerifier.verify(check, "TooManyReturnCheck/default.php");
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
+    CheckVerifier.verify(check, "TooManyReturnCheck/custom.php");
   }
 }

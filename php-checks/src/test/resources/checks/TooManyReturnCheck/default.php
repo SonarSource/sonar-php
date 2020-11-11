@@ -1,20 +1,24 @@
 <?php
 
-  function f() {          // NOK [[secondary=+3,+6,+8,+11]] {{Reduce the number of returns of this function 4, down to the maximum allowed 2.}}
-//^^^^^^^^
+  function f() {          // Noncompliant {{This function has 4 returns, which is more than the 3 allowed.}}
+//         ^
   if (a) {
     return true;
+//  ^^^^^^< {{"return" statement.}}
   } else {
     if (b) {
       return false;
+//    ^^^^^^< {{"return" statement.}}
     } else {
       return true;
+//    ^^^^^^< {{"return" statement.}}
     }
   }
   return false;
+//^^^^^^< {{"return" statement.}}
 }
 
-function f() {          // NOK {{Reduce the number of returns of this function 3, down to the maximum allowed 2.}}
+function f() {          // OK
   if (a) {
     return true;
   } else if (b) {
@@ -23,7 +27,7 @@ function f() {          // NOK {{Reduce the number of returns of this function 3
   return false;
 }
 
-function f() {          // NOK {{Reduce the number of returns of this function 3, down to the maximum allowed 2.}}
+function f() {
 
   function nestedF() {
     return true;        // Should not count return of nested function in enclosing function return counter
@@ -51,7 +55,7 @@ if (a) {
 }
 
 // the issue is reported on the function signature and not the function body
-function f()  // NOK
+function f()
 {
   if (a) {
     return true;
@@ -60,3 +64,17 @@ function f()  // NOK
   }
   return false;
 }
+
+$function = function() { // Noncompliant {{This function has 4 returns, which is more than the 3 allowed.}}
+//          ^^^^^^^^
+  if (a) {
+    return true;
+  } else {
+    if (b) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  return false;
+};
