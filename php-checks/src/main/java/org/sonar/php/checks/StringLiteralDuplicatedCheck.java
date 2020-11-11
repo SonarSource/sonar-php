@@ -37,6 +37,7 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Define a constant instead of duplicating this literal \"%s\" %s times.";
+  private static final String SECONDARY_MESSAGE = "Duplication.";
 
   private static final Pattern ALLOWED_DUPLICATED_LITERALS = Pattern.compile("^[a-zA-Z][_\\-\\w]+$");
 
@@ -73,8 +74,11 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
       if (occurrences.size() >= threshold) {
         String literal = literalOccurrences.getKey();
         String message = String.format(MESSAGE, literal, occurrences.size());
-        PreciseIssue issue = context().newIssue(this, firstOccurrenceTrees.get(literal), message).cost(occurrences.size());
-        occurrences.forEach(occurrence -> issue.secondary(occurrence, null));
+        LiteralTree firstOccurrenceTree = firstOccurrenceTrees.get(literal);
+        PreciseIssue issue = context().newIssue(this, firstOccurrenceTree, message).cost(occurrences.size());
+        occurrences.stream()
+          .filter(o -> !o.equals(firstOccurrenceTree))
+          .forEach(occurrence -> issue.secondary(occurrence, SECONDARY_MESSAGE));
       }
     }
   }
