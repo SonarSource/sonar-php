@@ -3,8 +3,8 @@
 function f() {
   echo "hello";
   return;
-//^^^^^^^>
-  $a;            // Noncompliant {{Remove this unreachable code.}}
+//^^^^^^^> {{Statement exiting the current code block.}}
+  $a;            // Noncompliant {{Delete this unreachable code or refactor the code to make it reachable.}}
 //^^^
 
   if (true) {
