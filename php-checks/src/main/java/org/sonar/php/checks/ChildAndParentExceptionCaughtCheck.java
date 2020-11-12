@@ -34,8 +34,10 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 @Rule(key = "S5713")
 public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE_DERIVATIVE = "Remove this useless Exception class; it derives from another which is also caught.";
+  private static final String MESSAGE_DERIVATIVE = "Remove this useless Exception class; it derives from class %s which is already caught.";
   private static final String MESSAGE_DUPLICATE = "Remove this duplicate Exception class.";
+  private static final String SECONDARY_MESSAGE_DERIVATIVE = "Parent class.";
+  private static final String SECONDARY_MESSAGE_DUPLICATE = "Duplicate.";
 
   @Override
   public void visitCatchBlock(CatchBlockTree tree) {
@@ -54,7 +56,7 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
 
       if (caughtExceptionsWithSameSymbol.size() > 1) {
         PreciseIssue issue = context().newIssue(this, currentException, MESSAGE_DUPLICATE);
-        caughtExceptionsWithSameSymbol.stream().skip(1).forEach(e -> issue.secondary(e, null));
+        caughtExceptionsWithSameSymbol.stream().skip(1).forEach(e -> issue.secondary(e, SECONDARY_MESSAGE_DUPLICATE));
       }
 
       PreciseIssue issue = null;
@@ -62,10 +64,9 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
         ClassSymbol comparedSymbol = otherException.getKey();
         if (currentSymbol != comparedSymbol && currentSymbol.isSubTypeOf(comparedSymbol.qualifiedName()).isTrue()) {
           if (issue == null) {
-            issue = context().newIssue(this, currentException, MESSAGE_DERIVATIVE);
+            issue = context().newIssue(this, currentException, String.format(MESSAGE_DERIVATIVE, comparedSymbol.qualifiedName().toString()));
           }
           addSecondaryLocations(issue, otherException.getValue());
-          issue.secondary(currentSymbol.location(), null);
         }
       }
     });
@@ -78,7 +79,7 @@ public class ChildAndParentExceptionCaughtCheck extends PHPVisitorCheck {
 
   private static void addSecondaryLocations(PreciseIssue issue, List<NamespaceNameTree> others) {
     for (NamespaceNameTree other : others) {
-      issue.secondary(other, null);
+      issue.secondary(other, SECONDARY_MESSAGE_DERIVATIVE);
     }
   }
 }
