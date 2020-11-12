@@ -1,7 +1,7 @@
 <?php
 
 class NoThrowableA {}
-//    ^^^^^^^^^^^^>
+//    ^^^^^^^^^^^^> {{Class definition.}}
 try {
     foo();
 } catch (NoThrowableA $e) { // Noncompliant {{Change this type to be a class deriving from "Throwable".}}
