@@ -1,6 +1,6 @@
 <?php
 
-$a = flush(); // Noncompliant {{Remove this use of the output from "flush"; the call doesn't return anything.}}
+$a = flush(); // Noncompliant {{Remove this use of the output from "flush"; "flush" doesn't return anything.}}
 //   ^^^^^
 
 $a = (Flush()); // Noncompliant
@@ -106,9 +106,9 @@ $foo = foo(); // Noncompliant
 
 class Foo {
   public static function a() {}
-//                       ^>
+//                       ^> {{Function definition.}}
   public function b() {
-    $a = $this->a(); // Noncompliant {{Remove this use of the output from "Foo::a"; the call doesn't return anything.}}
+    $a = $this->a(); // Noncompliant {{Remove this use of the output from "Foo::a"; "Foo::a" doesn't return anything.}}
 //       ^^^^^^^^
     $a = static::a(); // Noncompliant
   }
@@ -143,7 +143,7 @@ trait Authorizable
 {
   public function authorizeToView(Request $request)
   {
-    return $this->authorizeTo($request, 'view') && $this->authorizeToViewAny($request); // Noncompliant {{Remove this use of the output from "Authorizable::authorizeTo"; the call doesn't return anything.}}
+    return $this->authorizeTo($request, 'view') && $this->authorizeToViewAny($request); // Noncompliant {{Remove this use of the output from "Authorizable::authorizeTo"; "Authorizable::authorizeTo" doesn't return anything.}}
   }
 
   public function authorizeTo(Request $request, $ability)
