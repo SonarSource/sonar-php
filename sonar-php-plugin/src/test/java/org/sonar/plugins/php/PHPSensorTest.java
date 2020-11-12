@@ -346,8 +346,7 @@ public class PHPSensorTest {
       f -> f.locations().get(0).inputComponent().toString(),
       f -> f.locations().get(0).textRange().start().line()
     ).containsExactly(
-      tuple("cross-file/A.php", 5),
-      tuple("cross-file/B.php", 6)
+      tuple("cross-file/A.php", 5)
     );
   }
 

@@ -31,12 +31,13 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 @Rule(key = "S1045")
 public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Catch this exception only once; it is already handled by a previous catch clause.";
+  private static final String PARENT_MESSAGE = "A parent exception class is caught here.";
+  private static final String SAME_MESSAGE = "The same exception class is caught here.";
 
   private static final BinaryOperator<NamespaceNameTree> DUPLICATE_RESOLUTION = (a, b) -> a;
 
@@ -59,11 +60,10 @@ public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
       if (caughtSuperClasses.values().stream().allMatch(Optional::isPresent)) {
         caughtInThisCatch.forEach((symbol, name) -> {
           ClassSymbol superClass = caughtSuperClasses.get(symbol).get();
-          PreciseIssue issue = context().newIssue(this, name, MESSAGE)
-            .secondary(previouslyCaught.get(superClass), null);
-          if (symbol != superClass) {
-            issue.secondary(symbol.location(), null);
-          }
+          NamespaceNameTree redundantCatch = previouslyCaught.get(superClass);
+          String secondaryMessage = redundantCatch.qualifiedName().equalsIgnoreCase(symbol.qualifiedName().simpleName()) ? SAME_MESSAGE : PARENT_MESSAGE;
+          context().newIssue(this, name, MESSAGE)
+            .secondary(previouslyCaught.get(superClass), secondaryMessage);
         });
       }
 
