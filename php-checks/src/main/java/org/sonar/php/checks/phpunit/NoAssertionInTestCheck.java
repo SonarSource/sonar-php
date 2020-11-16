@@ -33,6 +33,7 @@ import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -51,6 +52,12 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
     "marktestincomplete");
 
   private final Map<MethodDeclarationTree, Boolean> assertionInMethod = new HashMap<>();
+
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    assertionInMethod.clear();
+    super.visitCompilationUnit(tree);
+  }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
