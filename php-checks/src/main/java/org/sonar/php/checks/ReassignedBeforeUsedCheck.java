@@ -26,6 +26,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.cfg.LiveVariablesAnalysis;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
@@ -42,6 +43,12 @@ public class ReassignedBeforeUsedCheck extends PHPVisitorCheck {
   private static final String SECONDARY_MESSAGE = "Initial value.";
 
   private final Set<Symbol> investigatedParameters = new HashSet<>();
+
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    investigatedParameters.clear();
+    super.visitCompilationUnit(tree);
+  }
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
