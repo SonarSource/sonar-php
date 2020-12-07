@@ -1497,18 +1497,6 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS).is(
       f.variableWithoutObjects(
         b.zeroOrMore(b.token(PHPLexicalGrammar.VARIABLE_VARIABLE_DOLLAR)),
-        COMPOUND_VARIABLE(),
-        b.zeroOrMore(b.firstOf(
-          DIMENSIONAL_OFFSET(),
-          ALTERNATIVE_DIMENSIONAL_OFFSET()))));
-  }
-
-
-
-  public ExpressionTree VARIABLE_WITHOUT_OBJECTS_AND_DIMENSIONS() {
-    return b.<ExpressionTree>nonterminal().is(
-      f.variableWithoutObjectsAndDimensions(
-        b.zeroOrMore(b.token(PHPLexicalGrammar.VARIABLE_VARIABLE_DOLLAR)),
         COMPOUND_VARIABLE()));
   }
 
@@ -1654,7 +1642,7 @@ public class PHPGrammar {
       f.objectMemberAccess(
         b.firstOf(b.token(ARROW), b.token(NULL_SAFE_ARROW)),
         b.firstOf(
-          VARIABLE_WITHOUT_OBJECTS_AND_DIMENSIONS(),
+          VARIABLE_WITHOUT_OBJECTS(),
           OBJECT_DIMENSIONAL_LIST(),
           NAME_IDENTIFIER_OR_KEYWORD())));
   }

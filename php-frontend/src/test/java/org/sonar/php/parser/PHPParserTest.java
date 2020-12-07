@@ -49,12 +49,4 @@ public class PHPParserTest {
     Assertions.assertThat(tree.expression().getParent()).isSameAs(tree);
   }
 
-  @Test
-  public void array_access_on_field() throws Exception {
-    ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.MEMBER_EXPRESSION);
-    ArrayAccessTree tree = (ArrayAccessTree) parser.parse("$o->f[1]");
-    //Assertions.assertThat(tree.object()).isInstanceOf(FieldAcc)
-    System.out.println("a");
-
-  }
 }

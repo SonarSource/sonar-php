@@ -31,7 +31,7 @@ public class ArrayAccessTreeTest extends PHPTreeModelTest {
 
   @Test
   public void bracket_offset() throws Exception {
-    ArrayAccessTree tree = parse("$a[$offset]", PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS);
+    ArrayAccessTree tree = parse("$a[$offset]", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();
 
@@ -44,7 +44,7 @@ public class ArrayAccessTreeTest extends PHPTreeModelTest {
 
   @Test
   public void curly_brace_offset() throws Exception {
-    ArrayAccessTree tree = parse("$a{$offset}", PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS);
+    ArrayAccessTree tree = parse("$a{$offset}", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();
 

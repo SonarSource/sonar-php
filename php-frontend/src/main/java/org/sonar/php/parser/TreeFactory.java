@@ -1421,20 +1421,7 @@ public class TreeFactory {
     return new ArrayAccessTreeImpl(openCurly, closeCurly);
   }
 
-  public ExpressionTree variableWithoutObjects(Optional<List<InternalSyntaxToken>> dollars, VariableTree compoundVariable, Optional<List<ArrayAccessTree>> offsets) {
-    ExpressionTree result = compoundVariable;
-    for (ExpressionTree partialArrayAccess : optionalList(offsets)) {
-      result = ((ArrayAccessTreeImpl) partialArrayAccess).complete(result);
-    }
-
-    if (dollars.isPresent()) {
-      result = new VariableVariableTreeImpl(dollars.get(), result);
-    }
-
-    return result;
-  }
-
-  public ExpressionTree variableWithoutObjectsAndDimensions(Optional<List<InternalSyntaxToken>> dollars, VariableTree compoundVariable) {
+  public ExpressionTree variableWithoutObjects(Optional<List<InternalSyntaxToken>> dollars, VariableTree compoundVariable) {
     ExpressionTree result = compoundVariable;
 
     if (dollars.isPresent()) {
