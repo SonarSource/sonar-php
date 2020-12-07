@@ -1434,6 +1434,16 @@ public class TreeFactory {
     return result;
   }
 
+  public ExpressionTree variableWithoutObjectsAndDimensions(Optional<List<InternalSyntaxToken>> dollars, VariableTree compoundVariable) {
+    ExpressionTree result = compoundVariable;
+
+    if (dollars.isPresent()) {
+      result = new VariableVariableTreeImpl(dollars.get(), result);
+    }
+
+    return result;
+  }
+
   public ArrayAccessTree alternativeDimensionalOffset(InternalSyntaxToken openBrace, Optional<ExpressionTree> offset, InternalSyntaxToken closeBrace) {
     if (offset.isPresent()) {
       return new ArrayAccessTreeImpl(openBrace, offset.get(), closeBrace);
@@ -1465,12 +1475,8 @@ public class TreeFactory {
     return new MemberAccessTreeImpl(Kind.CLASS_MEMBER_ACCESS, token, member);
   }
 
-  public ExpressionTree objectDimensionalList(ExpressionTree variableName, Optional<List<ArrayAccessTree>> dimensionalOffsets) {
+  public ExpressionTree objectDimensionalList(ExpressionTree variableName) {
     ExpressionTree result = variableName;
-
-    for (ArrayAccessTree arrayAccess : optionalList(dimensionalOffsets)) {
-      result = ((ArrayAccessTreeImpl) arrayAccess).complete(result);
-    }
 
     return result;
   }
@@ -1479,7 +1485,7 @@ public class TreeFactory {
     return new NameIdentifierTreeImpl(token);
   }
 
-  public MemberAccessTree objectMemberAccess(InternalSyntaxToken accessToken, ExpressionTree member) {
+  public ExpressionTree objectMemberAccess(InternalSyntaxToken accessToken, ExpressionTree member) {
     return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, accessToken, member);
   }
 
@@ -1511,6 +1517,8 @@ public class TreeFactory {
     for (ExpressionTree memberAccess : optionalList(memberAccesses)) {
       if (memberAccess.is(Kind.OBJECT_MEMBER_ACCESS, Kind.CLASS_MEMBER_ACCESS)) {
         result = ((MemberAccessTreeImpl) memberAccess).complete(result);
+      } else if (memberAccess.is(Kind.ARRAY_ACCESS)) {
+        result = ((ArrayAccessTreeImpl) memberAccess).complete(result);
       }
     }
 

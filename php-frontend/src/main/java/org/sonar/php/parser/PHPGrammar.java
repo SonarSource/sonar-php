@@ -1503,6 +1503,15 @@ public class PHPGrammar {
           ALTERNATIVE_DIMENSIONAL_OFFSET()))));
   }
 
+
+
+  public ExpressionTree VARIABLE_WITHOUT_OBJECTS_AND_DIMENSIONS() {
+    return b.<ExpressionTree>nonterminal().is(
+      f.variableWithoutObjectsAndDimensions(
+        b.zeroOrMore(b.token(PHPLexicalGrammar.VARIABLE_VARIABLE_DOLLAR)),
+        COMPOUND_VARIABLE()));
+  }
+
   public ArrayAccessTree ALTERNATIVE_DIMENSIONAL_OFFSET() {
     return b.<ArrayAccessTree>nonterminal().is(
       f.alternativeDimensionalOffset(
@@ -1635,16 +1644,17 @@ public class PHPGrammar {
             OBJECT_MEMBER_ACCESS(),
             CLASS_MEMBER_ACCESS(),
             DIMENSIONAL_OFFSET(),
+            ALTERNATIVE_DIMENSIONAL_OFFSET(),
             FUNCTION_CALL_ARGUMENT_LIST()))
       ));
   }
 
-  public MemberAccessTree OBJECT_MEMBER_ACCESS() {
-    return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.OBJECT_MEMBER_ACCESS).is(
+  public ExpressionTree OBJECT_MEMBER_ACCESS() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.OBJECT_MEMBER_ACCESS).is(
       f.objectMemberAccess(
         b.firstOf(b.token(ARROW), b.token(NULL_SAFE_ARROW)),
         b.firstOf(
-          VARIABLE_WITHOUT_OBJECTS(),
+          VARIABLE_WITHOUT_OBJECTS_AND_DIMENSIONS(),
           OBJECT_DIMENSIONAL_LIST(),
           NAME_IDENTIFIER_OR_KEYWORD())));
   }
@@ -1655,11 +1665,7 @@ public class PHPGrammar {
         b.firstOf(
           NAME_IDENTIFIER(),
           f.variableName(b.token(PHPLexicalGrammar.KEYWORDS)),
-          COMPUTED_VARIABLE_NAME()),
-        b.zeroOrMore(
-          b.firstOf(
-            ALTERNATIVE_DIMENSIONAL_OFFSET(),
-            DIMENSIONAL_OFFSET()))));
+          COMPUTED_VARIABLE_NAME())));
   }
 
   public MemberAccessTree CLASS_MEMBER_ACCESS() {
@@ -1790,7 +1796,9 @@ public class PHPGrammar {
         b.zeroOrMore(
           b.firstOf(
             OBJECT_MEMBER_ACCESS(),
-            NEW_OBJECT_CLASS_FIELD_ACCESS()
+            NEW_OBJECT_CLASS_FIELD_ACCESS(),
+            DIMENSIONAL_OFFSET(),
+            ALTERNATIVE_DIMENSIONAL_OFFSET()
           )),
         b.optional(FUNCTION_CALL_ARGUMENT_LIST())
       ));

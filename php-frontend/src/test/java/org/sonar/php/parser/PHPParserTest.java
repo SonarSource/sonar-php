@@ -23,6 +23,7 @@ import com.sonar.sslr.api.typed.ActionParser;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 
@@ -46,5 +47,14 @@ public class PHPParserTest {
     ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.FOREACH_STATEMENT);
     ForEachStatementTree tree = (ForEachStatementTree) parser.parse("foreach ($arr as &$value) { }");
     Assertions.assertThat(tree.expression().getParent()).isSameAs(tree);
+  }
+
+  @Test
+  public void array_access_on_field() throws Exception {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.MEMBER_EXPRESSION);
+    ArrayAccessTree tree = (ArrayAccessTree) parser.parse("$o->f[1]");
+    //Assertions.assertThat(tree.object()).isInstanceOf(FieldAcc)
+    System.out.println("a");
+
   }
 }

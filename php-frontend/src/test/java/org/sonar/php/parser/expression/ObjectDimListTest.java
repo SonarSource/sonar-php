@@ -29,9 +29,6 @@ public class ObjectDimListTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.OBJECT_DIM_LIST)
-      .matches("foo")
-      .matches("foo[\"foo\"]")
-      .matches("foo[$a]{\"foo\"}")
-      .matches("foo[$a]{\"foo\"}[$b]");
+      .matches("foo");
   }
 }
