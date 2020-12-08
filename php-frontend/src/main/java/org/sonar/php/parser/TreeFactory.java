@@ -1421,11 +1421,8 @@ public class TreeFactory {
     return new ArrayAccessTreeImpl(openCurly, closeCurly);
   }
 
-  public ExpressionTree variableWithoutObjects(Optional<List<InternalSyntaxToken>> dollars, VariableTree compoundVariable, Optional<List<ArrayAccessTree>> offsets) {
+  public ExpressionTree variableWithoutObjects(Optional<List<InternalSyntaxToken>> dollars, VariableTree compoundVariable) {
     ExpressionTree result = compoundVariable;
-    for (ExpressionTree partialArrayAccess : optionalList(offsets)) {
-      result = ((ArrayAccessTreeImpl) partialArrayAccess).complete(result);
-    }
 
     if (dollars.isPresent()) {
       result = new VariableVariableTreeImpl(dollars.get(), result);
@@ -1465,12 +1462,8 @@ public class TreeFactory {
     return new MemberAccessTreeImpl(Kind.CLASS_MEMBER_ACCESS, token, member);
   }
 
-  public ExpressionTree objectDimensionalList(ExpressionTree variableName, Optional<List<ArrayAccessTree>> dimensionalOffsets) {
+  public ExpressionTree objectDimensionalList(ExpressionTree variableName) {
     ExpressionTree result = variableName;
-
-    for (ArrayAccessTree arrayAccess : optionalList(dimensionalOffsets)) {
-      result = ((ArrayAccessTreeImpl) arrayAccess).complete(result);
-    }
 
     return result;
   }
@@ -1511,6 +1504,8 @@ public class TreeFactory {
     for (ExpressionTree memberAccess : optionalList(memberAccesses)) {
       if (memberAccess.is(Kind.OBJECT_MEMBER_ACCESS, Kind.CLASS_MEMBER_ACCESS)) {
         result = ((MemberAccessTreeImpl) memberAccess).complete(result);
+      } else if (memberAccess.is(Kind.ARRAY_ACCESS)) {
+        result = ((ArrayAccessTreeImpl) memberAccess).complete(result);
       }
     }
 

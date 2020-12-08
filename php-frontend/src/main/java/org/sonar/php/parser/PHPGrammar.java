@@ -1497,10 +1497,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS).is(
       f.variableWithoutObjects(
         b.zeroOrMore(b.token(PHPLexicalGrammar.VARIABLE_VARIABLE_DOLLAR)),
-        COMPOUND_VARIABLE(),
-        b.zeroOrMore(b.firstOf(
-          DIMENSIONAL_OFFSET(),
-          ALTERNATIVE_DIMENSIONAL_OFFSET()))));
+        COMPOUND_VARIABLE()));
   }
 
   public ArrayAccessTree ALTERNATIVE_DIMENSIONAL_OFFSET() {
@@ -1635,6 +1632,7 @@ public class PHPGrammar {
             OBJECT_MEMBER_ACCESS(),
             CLASS_MEMBER_ACCESS(),
             DIMENSIONAL_OFFSET(),
+            ALTERNATIVE_DIMENSIONAL_OFFSET(),
             FUNCTION_CALL_ARGUMENT_LIST()))
       ));
   }
@@ -1645,21 +1643,8 @@ public class PHPGrammar {
         b.firstOf(b.token(ARROW), b.token(NULL_SAFE_ARROW)),
         b.firstOf(
           VARIABLE_WITHOUT_OBJECTS(),
-          OBJECT_DIMENSIONAL_LIST(),
-          NAME_IDENTIFIER_OR_KEYWORD())));
-  }
-
-  public ExpressionTree OBJECT_DIMENSIONAL_LIST() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.OBJECT_DIM_LIST).is(
-      f.objectDimensionalList(
-        b.firstOf(
-          NAME_IDENTIFIER(),
-          f.variableName(b.token(PHPLexicalGrammar.KEYWORDS)),
-          COMPUTED_VARIABLE_NAME()),
-        b.zeroOrMore(
-          b.firstOf(
-            ALTERNATIVE_DIMENSIONAL_OFFSET(),
-            DIMENSIONAL_OFFSET()))));
+          NAME_IDENTIFIER_OR_KEYWORD(),
+          COMPUTED_VARIABLE_NAME())));
   }
 
   public MemberAccessTree CLASS_MEMBER_ACCESS() {
@@ -1790,8 +1775,10 @@ public class PHPGrammar {
         b.zeroOrMore(
           b.firstOf(
             OBJECT_MEMBER_ACCESS(),
-            NEW_OBJECT_CLASS_FIELD_ACCESS()
-          )),
+            NEW_OBJECT_CLASS_FIELD_ACCESS(),
+            DIMENSIONAL_OFFSET(),
+            ALTERNATIVE_DIMENSIONAL_OFFSET()
+            )),
         b.optional(FUNCTION_CALL_ARGUMENT_LIST())
       ));
   }

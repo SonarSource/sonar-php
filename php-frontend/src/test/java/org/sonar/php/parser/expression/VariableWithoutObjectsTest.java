@@ -30,11 +30,7 @@ public class VariableWithoutObjectsTest {
   public void test() {
     assertThat(PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS)
     .matches("$a")
-    .matches("$$$a")
-    .matches("$a[$b]")
-    .matches("$a{\"foo\"}")
-    .matches("$a{\"foo\"}[$a]")
-    .matches("$a{\"foo\"}{\"foo\"}");
+    .matches("$$$a");
 
   }
 }
