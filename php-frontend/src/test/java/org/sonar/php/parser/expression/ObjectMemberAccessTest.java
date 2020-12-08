@@ -31,8 +31,6 @@ public class ObjectMemberAccessTest {
     assertThat(PHPLexicalGrammar.OBJECT_MEMBER_ACCESS)
       .matches("->b")
       .matches("->$a")
-      .matches("->$b[$c]{'d'}")
-      .matches("->$a[$a]")
       .matches("->{'b'}")
       .matches("->if");
   }

@@ -1421,11 +1421,8 @@ public class TreeFactory {
     return new ArrayAccessTreeImpl(openCurly, closeCurly);
   }
 
-  public ExpressionTree variableWithoutObjects(Optional<List<InternalSyntaxToken>> dollars, VariableTree compoundVariable, Optional<List<ArrayAccessTree>> offsets) {
+  public ExpressionTree variableWithoutObjects(Optional<List<InternalSyntaxToken>> dollars, VariableTree compoundVariable) {
     ExpressionTree result = compoundVariable;
-    for (ExpressionTree partialArrayAccess : optionalList(offsets)) {
-      result = ((ArrayAccessTreeImpl) partialArrayAccess).complete(result);
-    }
 
     if (dollars.isPresent()) {
       result = new VariableVariableTreeImpl(dollars.get(), result);
@@ -1465,20 +1462,6 @@ public class TreeFactory {
     return new MemberAccessTreeImpl(Kind.CLASS_MEMBER_ACCESS, token, member);
   }
 
-  public ExpressionTree objectDimensionalList(ExpressionTree variableName, Optional<List<ArrayAccessTree>> dimensionalOffsets) {
-    ExpressionTree result = variableName;
-
-    for (ArrayAccessTree arrayAccess : optionalList(dimensionalOffsets)) {
-      result = ((ArrayAccessTreeImpl) arrayAccess).complete(result);
-    }
-
-    return result;
-  }
-
-  public NameIdentifierTree variableName(InternalSyntaxToken token) {
-    return new NameIdentifierTreeImpl(token);
-  }
-
   public MemberAccessTree objectMemberAccess(InternalSyntaxToken accessToken, ExpressionTree member) {
     return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, accessToken, member);
   }
@@ -1505,12 +1488,14 @@ public class TreeFactory {
     return result;
   }
 
-  public ExpressionTree newObjectExpression(ExpressionTree object, Optional<List<ExpressionTree>> memberAccesses, Optional<FunctionCallTree> functionCall) {
+  public ExpressionTree newObjectExpression(ExpressionTree object, Optional<List<ExpressionTree>> accesses, Optional<FunctionCallTree> functionCall) {
     ExpressionTree result = object;
 
-    for (ExpressionTree memberAccess : optionalList(memberAccesses)) {
-      if (memberAccess.is(Kind.OBJECT_MEMBER_ACCESS, Kind.CLASS_MEMBER_ACCESS)) {
-        result = ((MemberAccessTreeImpl) memberAccess).complete(result);
+    for (ExpressionTree access : optionalList(accesses)) {
+      if (access.is(Kind.OBJECT_MEMBER_ACCESS, Kind.CLASS_MEMBER_ACCESS)) {
+        result = ((MemberAccessTreeImpl) access).complete(result);
+      } else {
+        result = ((ArrayAccessTreeImpl) access).complete(result);
       }
     }
 

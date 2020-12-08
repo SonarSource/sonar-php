@@ -31,7 +31,7 @@ public class ArrayAccessTreeTest extends PHPTreeModelTest {
 
   @Test
   public void bracket_offset() throws Exception {
-    ArrayAccessTree tree = parse("$a[$offset]", PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS);
+    ArrayAccessTree tree = parse("$a[$offset]", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();
 
@@ -44,7 +44,7 @@ public class ArrayAccessTreeTest extends PHPTreeModelTest {
 
   @Test
   public void curly_brace_offset() throws Exception {
-    ArrayAccessTree tree = parse("$a{$offset}", PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS);
+    ArrayAccessTree tree = parse("$a{$offset}", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();
 
@@ -55,4 +55,27 @@ public class ArrayAccessTreeTest extends PHPTreeModelTest {
     assertThat(tree.closeBraceToken().text()).isEqualTo("}");
   }
 
+  @Test
+  public void field_array_access() throws Exception {
+    ArrayAccessTree tree = parse("$o->f[$offset]", PHPLexicalGrammar.EXPRESSION);
+
+    assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();
+
+    assertThat(tree.object().is(Kind.OBJECT_MEMBER_ACCESS)).isTrue();
+    assertThat(expressionToString(tree.object())).isEqualTo("$o->f");
+    assertThat(tree.openBraceToken().text()).isEqualTo("[");
+    assertThat(expressionToString(tree.offset())).isEqualTo("$offset");
+    assertThat(tree.closeBraceToken().text()).isEqualTo("]");
+  }
+
+  @Test
+  public void field_array_access_static() throws Exception {
+    ArrayAccessTree tree = parse("SomeClass::$f[$offset]", PHPLexicalGrammar.EXPRESSION);
+
+    assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();
+
+    assertThat(tree.object().is(Kind.CLASS_MEMBER_ACCESS)).isTrue();
+    assertThat(expressionToString(tree.object())).isEqualTo("SomeClass::$f");
+    assertThat(expressionToString(tree.offset())).isEqualTo("$offset");
+  }
 }
