@@ -1462,16 +1462,6 @@ public class TreeFactory {
     return new MemberAccessTreeImpl(Kind.CLASS_MEMBER_ACCESS, token, member);
   }
 
-  public ExpressionTree objectDimensionalList(ExpressionTree variableName) {
-    ExpressionTree result = variableName;
-
-    return result;
-  }
-
-  public NameIdentifierTree variableName(InternalSyntaxToken token) {
-    return new NameIdentifierTreeImpl(token);
-  }
-
   public MemberAccessTree objectMemberAccess(InternalSyntaxToken accessToken, ExpressionTree member) {
     return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, accessToken, member);
   }
