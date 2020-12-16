@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
@@ -48,7 +47,7 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
     if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) && tree.member().is(Tree.Kind.NAME_IDENTIFIER) && isSelfConstantAccess(tree.object())) {
-      constantUsedBeforeInit.add(((NameIdentifierTree) tree.member()).text().toLowerCase(Locale.ROOT));
+      constantUsedBeforeInit.add(((NameIdentifierTree) tree.member()).text());
     }
 
     super.visitMemberAccess(tree);

@@ -122,7 +122,7 @@ public class SymbolImpl implements Symbol {
 
   @Override
   public boolean called(String name) {
-    if (kind == Kind.VARIABLE || kind == Kind.PARAMETER) {
+    if (kind == Kind.VARIABLE || kind == Kind.PARAMETER || kind == Kind.FIELD) {
       return name.equals(this.name);
     } else {
       return name.equalsIgnoreCase(this.name);

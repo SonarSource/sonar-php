@@ -20,14 +20,15 @@
 package org.sonar.php.tree.symbols;
 
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
 
 public class QualifiedNames {
 
   private QualifiedNames() {
   }
 
-  public static QualifiedName memberName(QualifiedName owner, String memberName) {
-    return new MemberQualifiedName(owner, memberName);
+  public static QualifiedName memberName(QualifiedName owner, String memberName, Symbol.Kind kind) {
+    return new MemberQualifiedName(owner, memberName, kind);
   }
 
 }
