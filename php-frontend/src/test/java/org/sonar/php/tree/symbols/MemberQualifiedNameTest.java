@@ -20,6 +20,7 @@
 package org.sonar.php.tree.symbols;
 
 import org.junit.Test;
+import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,18 +29,29 @@ public class MemberQualifiedNameTest {
   @Test
   public void test_equal() {
     SymbolQualifiedName classA = SymbolQualifiedName.create("n", "A");
-    MemberQualifiedName name1 = new MemberQualifiedName(classA, "foo");
-    MemberQualifiedName name2 = new MemberQualifiedName(SymbolQualifiedName.create("n", "a"), "foo");
+    MemberQualifiedName name1 = new MemberQualifiedName(classA, "foo", Kind.FUNCTION);
+    MemberQualifiedName name2 = new MemberQualifiedName(SymbolQualifiedName.create("n", "a"), "foo", Kind.FUNCTION);
     assertThat(name1).isEqualTo(name2);
   }
 
   @Test
   public void test_not_equal() {
     SymbolQualifiedName classA = SymbolQualifiedName.create("n", "A");
-    MemberQualifiedName name1 = new MemberQualifiedName(classA, "bar");
-    MemberQualifiedName name2 = new MemberQualifiedName(SymbolQualifiedName.create("n", "a"), "foo");
+    MemberQualifiedName name1 = new MemberQualifiedName(classA, "bar", Kind.FUNCTION);
+    MemberQualifiedName name2 = new MemberQualifiedName(SymbolQualifiedName.create("n", "a"), "foo", Kind.FUNCTION);
     assertThat(name1).isNotEqualTo(name2);
     assertThat(name1).isNotEqualTo(SymbolQualifiedName.create("n", "a", "bar"));
+  }
+
+  @Test
+  public void test_case_sensitive_members() {
+    SymbolQualifiedName classA = SymbolQualifiedName.create("n", "A");
+    MemberQualifiedName functionName1 = new MemberQualifiedName(classA, "Foo", Kind.FUNCTION);
+    MemberQualifiedName functionName2 = new MemberQualifiedName(classA, "foo", Kind.FUNCTION);
+    MemberQualifiedName fieldName1 = new MemberQualifiedName(classA, "Bar", Kind.FIELD);
+    MemberQualifiedName fieldName2 = new MemberQualifiedName(classA, "bar", Kind.FIELD);
+    assertThat(functionName1).isEqualTo(functionName2);
+    assertThat(fieldName1).isNotEqualTo(fieldName2);
   }
 
 }

@@ -28,7 +28,7 @@ public class MemberSymbolImpl extends SymbolImpl implements MemberSymbol {
   private final TypeSymbol owner;
 
   MemberSymbolImpl(IdentifierTree declaration, Kind kind, Scope scope, TypeSymbol owner) {
-    super(declaration, kind, scope, new MemberQualifiedName(owner.qualifiedName(), declaration.text()));
+    super(declaration, kind, scope, new MemberQualifiedName(owner.qualifiedName(), declaration.text(), kind));
     this.owner = owner;
   }
 

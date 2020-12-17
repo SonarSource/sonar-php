@@ -19,20 +19,20 @@
  */
 package org.sonar.php.tree.symbols;
 
-import com.google.common.base.Preconditions;
 import java.util.Locale;
 import java.util.Objects;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 
 class MemberQualifiedName implements QualifiedName {
 
   private final QualifiedName owner;
   private final String name;
 
-  MemberQualifiedName(QualifiedName owner, String name) {
-    this.owner = Preconditions.checkNotNull(owner);
-    this.name = Preconditions.checkNotNull(name).toLowerCase(Locale.ROOT);
+  MemberQualifiedName(QualifiedName owner, String name, @Nullable Kind kind) {
+    this.owner = owner;
+    this.name = Kind.FIELD == kind ? name : name.toLowerCase(Locale.ROOT);
   }
 
   @Override

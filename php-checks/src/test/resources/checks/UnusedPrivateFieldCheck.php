@@ -100,3 +100,16 @@ class A {
   private const B = "bar"; //Noncompliant
 }
 
+class CaseSensitiveClassMembers {
+  private $a = "foo"; //Noncompliant
+  private $A = "Foo";
+
+  private const b = "bar"; //Noncompliant
+  private const B = "bar";
+
+  public function action() {
+    echo $this->A;
+    echo self::B;
+  }
+}
+

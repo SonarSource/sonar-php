@@ -92,12 +92,20 @@ public class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   public void test_class_fields() {
-    Symbol field = SYMBOL_MODEL.getSymbols("$field1").get(0);
-    Symbol constantField = SYMBOL_MODEL.getSymbols("CONSTANT_FIELD").get(0);
+    String fieldName = "$fieldOne";
+    String constantName = "CONSTANT_FIELD";
 
+    assertThat(SYMBOL_MODEL.getSymbols(fieldName)).hasSize(1);
+    assertThat(SYMBOL_MODEL.getSymbols(constantName)).hasSize(1);
+
+    Symbol field = SYMBOL_MODEL.getSymbols(fieldName).get(0);
+    Symbol constantField = SYMBOL_MODEL.getSymbols(constantName).get(0);
+
+    assertThat(field.name()).isEqualTo(fieldName);
     assertThat(field.hasModifier("public")).isTrue();
     assertThat(field.is(Symbol.Kind.FIELD)).isTrue();
 
+    assertThat(constantField.name()).isEqualTo(constantName);
     assertThat(constantField.hasModifier("const")).isTrue();
     assertThat(constantField.is(Symbol.Kind.FIELD)).isTrue();
   }
@@ -410,7 +418,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     TypeSymbol classA = (TypeSymbol) symbolTable.getSymbol("n\\a");
     assertThat(classA.kind()).isEqualTo(Kind.CLASS);
     assertThat(classA.members()).extracting(m -> m.qualifiedName().toString())
-      .containsExactly("n\\a::a", "n\\a::foo");
+      .containsExactly("n\\a::A", "n\\a::foo");
     assertThat(classA.members()).extracting(MemberSymbol::owner).allMatch(classA::equals);
 
     TypeSymbol classB = (TypeSymbol) symbolTable.getSymbol("b");
@@ -423,7 +431,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   public void test_class_symbol_members_case_insensitive() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { class A { const A; function Foo() {} }  } ");
     TypeSymbol classA = (TypeSymbol) symbolTable.getSymbol("n\\a");
-    assertThat(classA.members()).extracting(m -> m.qualifiedName().simpleName()).containsExactly("a", "foo");
+    assertThat(classA.members()).extracting(m -> m.qualifiedName().simpleName()).containsExactly("A", "foo");
   }
 
   @Test

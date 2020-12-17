@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.sonar.php.tree.symbols.QualifiedNames;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
 
 public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl implements MethodSymbol {
 
@@ -50,7 +51,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
 
   @Override
   public QualifiedName qualifiedName() {
-    return QualifiedNames.memberName(owner.qualifiedName(), name());
+    return QualifiedNames.memberName(owner.qualifiedName(), name(), Symbol.Kind.FUNCTION);
   }
 
   @Override
