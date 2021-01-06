@@ -32,6 +32,7 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
@@ -64,9 +65,15 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
   private void handleListAssignment(ListExpressionTree lhs, ExpressionTree rhs) {
     List<ExpressionTree> values = new ArrayList<>();
     if (rhs.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
-      ((ArrayInitializerTree)rhs).arrayPairs().stream()
-        .filter(p -> p.key() == null)
-        .forEach(p -> values.add(p.value()));
+      for (ArrayPairTree arrayPair: ((ArrayInitializerTree)rhs).arrayPairs()) {
+        if (arrayPair.key() == null) {
+          values.add(arrayPair.value());
+        } else {
+          // keys are not supported yet
+          values.clear();
+          break;
+        }
+      }
     }
 
     int index = 0;

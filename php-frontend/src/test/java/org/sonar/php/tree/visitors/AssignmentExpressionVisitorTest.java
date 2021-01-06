@@ -90,8 +90,15 @@ public class AssignmentExpressionVisitorTest {
   }
 
   @Test
-  public void getAssignmentValue_list_keys_not_supported_yet() {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b, 99 => $c) = [1 => 'b', 0 => 'a', 99 => 'c'];");
+  public void getAssignmentValue_list_var_keys_not_supported_yet() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list(getAKey() => $a) = ['a'];");
+
+    assertThat(uniqueAssignedValue).isNotPresent();
+  }
+
+  @Test
+  public void getAssignmentValue_list_value_keys_not_supported_yet() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b) = [getAKey() => 'a', getBKey() => 'b'];");
 
     assertThat(uniqueAssignedValue).isNotPresent();
   }
