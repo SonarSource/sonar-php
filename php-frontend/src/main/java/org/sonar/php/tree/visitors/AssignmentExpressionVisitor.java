@@ -21,18 +21,26 @@ package org.sonar.php.tree.visitors;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public class AssignmentExpressionVisitor extends PHPVisitorCheck {
 
   private Map<Symbol, List<ExpressionTree>> assignedValuesBySymbol = new HashMap<>();
+  private Set<Symbol> assignedUnknown = new HashSet<>();
   private SymbolTable symbolTable;
 
   public AssignmentExpressionVisitor(SymbolTable symbolTable) {
@@ -41,20 +49,62 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree assignment) {
-    ExpressionTree variable = assignment.variable();
-    Symbol symbol = symbolTable.getSymbol(variable);
-    if (symbol != null) {
-      if (!assignedValuesBySymbol.containsKey(symbol)) {
-        assignedValuesBySymbol.put(symbol, new ArrayList<>());
-      }
-      assignedValuesBySymbol.get(symbol).add(assignment.value());
+    ExpressionTree lhs = assignment.variable();
+    ExpressionTree rhs = assignment.value();
+
+    if (lhs.is(Tree.Kind.LIST_EXPRESSION)) {
+      handleListAssignment((ListExpressionTree) lhs, rhs);
+    } else {
+      assign(lhs, rhs);
     }
+
     super.visitAssignmentExpression(assignment);
+  }
+
+  private void handleListAssignment(ListExpressionTree lhs, ExpressionTree rhs) {
+    List<ExpressionTree> values = new ArrayList<>();
+    if (rhs.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
+      ((ArrayInitializerTree)rhs).arrayPairs().stream()
+        .filter(p -> p.key() == null)
+        .forEach(p -> values.add(p.value()));
+    }
+
+    int index = 0;
+    final int numValues = values.size();
+    for(Optional<ArrayAssignmentPatternElementTree> element : lhs.elements()) {
+      if (!element.isPresent()) {
+        index++;
+        continue;
+      }
+
+      if (index >= numValues || element.get().key() != null) {
+        assignToUnknown(element.get().variable());
+        continue;
+      }
+
+      assign(element.get().variable(), values.get(index));
+
+      index++;
+    }
+  }
+
+  private void assign(Tree lhs, ExpressionTree rhs) {
+    Symbol symbol = symbolTable.getSymbol(lhs);
+    if (symbol != null) {
+      assignedValuesBySymbol.computeIfAbsent(symbol, v -> new ArrayList<>()).add(rhs);
+    }
+  }
+
+  private void assignToUnknown(Tree lhs) {
+    Symbol symbol = symbolTable.getSymbol(lhs);
+    if (symbol != null) {
+      assignedUnknown.add(symbol);
+    }
   }
 
   public Optional<ExpressionTree> getUniqueAssignedValue(Symbol symbol) {
     List<ExpressionTree> values = assignedValuesBySymbol.get(symbol);
-    return values != null && values.size() == 1 ? Optional.of(values.get(0)) : Optional.empty();
+    return values != null && values.size() == 1 && !assignedUnknown.contains(symbol) ? Optional.of(values.get(0)) : Optional.empty();
   }
 
 }
