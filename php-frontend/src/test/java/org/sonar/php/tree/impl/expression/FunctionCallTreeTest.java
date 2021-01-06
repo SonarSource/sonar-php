@@ -67,4 +67,12 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
     assertThat(tree.callArguments().get(0).name()).isNull();
     assertThat(tree.callArguments().get(1).name()).hasToString("a");
   }
+
+  @Test
+  public void with_named_keyword_argument() throws Exception {
+    FunctionCallTree tree = parse("f(if: $a)", PHPLexicalGrammar.MEMBER_EXPRESSION);
+
+    assertThat(tree.callArguments()).hasSize(1);
+    assertThat(tree.callArguments().get(0).name()).hasToString("if");
+  }
 }

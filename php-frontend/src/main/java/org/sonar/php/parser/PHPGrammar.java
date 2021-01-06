@@ -1598,7 +1598,7 @@ public class PHPGrammar {
   public CallArgumentTree FUNCTION_CALL_ARGUMENT() {
     return b.<CallArgumentTree>nonterminal(PHPLexicalGrammar.FUNCTION_CALL_ARGUMENT).is(
       b.firstOf(
-        f.functionCallArgument(b.optional(f.newTuple(NAME_IDENTIFIER(), b.token(COLON))),
+        f.functionCallArgument(b.optional(f.newTuple(NAME_IDENTIFIER_OR_KEYWORD(), b.token(COLON))),
           b.firstOf(
             REFERENCE_VARIABLE(),
             SPREAD_ARGUMENT(),
