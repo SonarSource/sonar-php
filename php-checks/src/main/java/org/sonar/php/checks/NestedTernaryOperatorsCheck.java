@@ -35,12 +35,15 @@ public class NestedTernaryOperatorsCheck extends PHPVisitorCheck {
   @Override
   public void visitConditionalExpression(ConditionalExpressionTree tree) {
     TernaryVisitor visitor = new TernaryVisitor();
-    tree.falseExpression().accept(visitor);
     ExpressionTree trueExpression = tree.trueExpression();
+    visitor.isShorthand = trueExpression == null;
+
+    tree.falseExpression().accept(visitor);
     if (trueExpression != null) {
       trueExpression.accept(visitor);
     }
     tree.condition().accept(visitor);
+
     if (!visitor.descendantTernaries.isEmpty()) {
       ConditionalExpressionTree first = visitor.descendantTernaries.get(0);
       PreciseIssue issue = context().newIssue(this, first, "Extract this nested ternary operation into an independent statement.");
@@ -52,12 +55,18 @@ public class NestedTernaryOperatorsCheck extends PHPVisitorCheck {
 
   private static class TernaryVisitor extends PHPVisitorCheck {
 
+    boolean isShorthand = false;
+
     List<ConditionalExpressionTree> descendantTernaries = new ArrayList<>();
 
     @Override
     public void visitConditionalExpression(ConditionalExpressionTree tree) {
-      descendantTernaries.add(tree);
-      // skip nested
+      if (isShorthand && tree.trueExpression() == null) {
+        super.visitConditionalExpression(tree);
+      } else {
+        descendantTernaries.add(tree);
+        // skip nested
+      }
     }
 
     @Override

@@ -16,4 +16,9 @@
     $is_married ? : "Miss ";
 
     echo ($gender ? (new class { function someMethod($foo) { return $foo ? "foo" : "bar"; } })->someMethod("foo") : "false");
+
+    $result = $gender ?: $is_married ?: 'Unknown'; // Exclusively chained shorthand are compliant
+    $result = $gender ?: ( $is_married ? "Mrs. " : "Miss "); // Noncompliant
+    $result = $gender ? ( $is_married ?: "Mrs.") : "Miss"; // Noncompliant
+    $result = $gender ?: $is_married ?:( $is_married ? "Mrs. " : "Miss ") ?: 'Unknown'; // Noncompliant
   }
