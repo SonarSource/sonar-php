@@ -62,6 +62,40 @@ public class AssignmentExpressionVisitorTest {
     assertThat(uniqueAssignedValue).isNotPresent();
   }
 
+  @Test
+  public void getAssignmentValue_list() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b) = [1, 2];");
+
+    assertThat(uniqueAssignedValue).isPresent();
+    ExpressionTree value = uniqueAssignedValue.get();
+    assertThat(value).isInstanceOf(LiteralTree.class);
+    assertThat(((LiteralTree) value).value()).isEqualTo("1");
+  }
+
+  @Test
+  public void getAssignmentValue_list_unknown_values() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1; list($a, $b) = getValues();");
+
+    assertThat(uniqueAssignedValue).isNotPresent();
+  }
+
+  @Test
+  public void getAssignmentValue_list_skipped_element() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$b").from("<?php list($a, , $b) = [1, 2, 3];");
+
+    assertThat(uniqueAssignedValue).isPresent();
+    ExpressionTree value = uniqueAssignedValue.get();
+    assertThat(value).isInstanceOf(LiteralTree.class);
+    assertThat(((LiteralTree) value).value()).isEqualTo("3");
+  }
+
+  @Test
+  public void getAssignmentValue_list_keys_not_supported_yet() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b, 99 => $c) = [1 => 'b', 0 => 'a', 99 => 'c'];");
+
+    assertThat(uniqueAssignedValue).isNotPresent();
+  }
+
   private static class UniqueAssignedValue extends PHPTreeModelTest {
     private String name;
 

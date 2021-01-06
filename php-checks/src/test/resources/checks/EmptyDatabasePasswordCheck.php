@@ -112,3 +112,13 @@ function postgresql() {
     $str3 = "host=localhost port=5432 dbname=test user=john password=secret";
     $conn = pg_connect($str3);
 }
+
+function withList() {
+  list($emptyUser, $emptyPwd) = ["", ""];
+  $conn = new mysqli($servername, $emptyUser, $emptyPwd); // Noncompliant
+
+  $user = '';
+  $pwd = '';
+  list($user, $pwd) = getConnectionData();
+  $conn = new mysqli($servername, $user, $pwd);
+}
