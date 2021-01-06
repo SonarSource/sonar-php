@@ -80,7 +80,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   private static final Set<String> BUILT_IN_VARIABLES = ImmutableSet.of(
-    "$THIS",
+    "$this",
     "$GLOBALS",
     "$_SERVER",
     "$_GET",
@@ -88,9 +88,9 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     "$_FILES",
     "$_SESSION",
     "$_ENV",
-    "$PHP_ERRORMSG",
+    "$php_errormsg",
     "$HTTP_RAW_POST_DATA",
-    "$HTTP_RESPONSE_HEADER",
+    "$http_response_header",
     "$_COOKIE",
     "$_REQUEST"
   );
@@ -379,7 +379,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   }
 
   private static boolean isBuiltInVariable(VariableIdentifierTree tree) {
-    return BUILT_IN_VARIABLES.contains(tree.text().toUpperCase(Locale.ENGLISH));
+    return BUILT_IN_VARIABLES.contains(tree.text());
   }
 
   @Override
