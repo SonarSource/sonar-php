@@ -17,4 +17,9 @@ function get_readable_status($is_running, $has_errors) {
   return $has_errors ? "Failure. " : "Succeeded ";
 }
 </pre>
+<h2>Exceptions</h2>
+<p>Exclusively chained shorthand ternary operators <code>?:</code> are excluded from this rule.</p>
+<pre>
+$result = $option1 ?: $option2 ?: 'default';
+</pre>
 
