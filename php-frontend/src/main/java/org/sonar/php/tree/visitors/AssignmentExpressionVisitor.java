@@ -79,13 +79,12 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
     int index = 0;
     final int numValues = values.size();
     for(Optional<ArrayAssignmentPatternElementTree> element : lhs.elements()) {
-      if (!element.isPresent()) {
-        index++;
-        continue;
-      }
-
-      if (index >= numValues || element.get().key() != null) {
-        assignToUnknown(element.get().variable());
+      if (!element.isPresent() || index >= numValues || element.get().key() != null) {
+        if (!element.isPresent()) {
+          index++;
+        } else {
+          assignToUnknown(element.get().variable());
+        }
         continue;
       }
 
