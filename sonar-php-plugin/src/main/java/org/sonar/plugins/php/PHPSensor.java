@@ -239,7 +239,7 @@ public class PHPSensor implements Sensor {
       NewIssue issue = context.newIssue();
 
       NewIssueLocation location = issue.newLocation()
-        .message(e.getMessage())
+        .message("A parsing error occurred in this file.")
         .on(inputFile)
         .at(inputFile.selectLine(e.getLine()));
 
