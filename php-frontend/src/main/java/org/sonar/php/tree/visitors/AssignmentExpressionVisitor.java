@@ -20,12 +20,14 @@
 package org.sonar.php.tree.visitors;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -65,31 +67,22 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
   private void handleListAssignment(ListExpressionTree lhs, ExpressionTree rhs) {
     List<ExpressionTree> values = new ArrayList<>();
     if (rhs.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
-      for (ArrayPairTree arrayPair: ((ArrayInitializerTree)rhs).arrayPairs()) {
-        if (arrayPair.key() == null) {
-          values.add(arrayPair.value());
-        } else {
-          // keys are not supported yet
-          values.clear();
-          break;
-        }
-      }
+      List<ArrayPairTree> valueArrayParis = ((ArrayInitializerTree)rhs).arrayPairs();
+      values = valueArrayParis.stream().anyMatch(p -> p.key() != null) ?
+        Collections.emptyList() : valueArrayParis.stream().map(ArrayPairTree::value).collect(Collectors.toList());
     }
 
     int index = 0;
     final int numValues = values.size();
     for(Optional<ArrayAssignmentPatternElementTree> element : lhs.elements()) {
-      if (!element.isPresent() || index >= numValues || element.get().key() != null) {
-        if (!element.isPresent()) {
-          index++;
-        } else {
+      if (element.isPresent()) {
+        if (index >= numValues || element.get().key() != null) {
           assignToUnknown(element.get().variable());
+          continue;
         }
-        continue;
+
+        assign(element.get().variable(), values.get(index));
       }
-
-      assign(element.get().variable(), values.get(index));
-
       index++;
     }
   }

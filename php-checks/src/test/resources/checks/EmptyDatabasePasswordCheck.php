@@ -121,4 +121,10 @@ function withList() {
   $pwd = '';
   list($user, $pwd) = getConnectionData();
   $conn = new mysqli($servername, $user, $pwd);
+
+  list(1 => $emptyUser_2, 0 => $emptyPwd_2) = ["", ""];
+  $conn = new mysqli($servername, $emptyUser_2, $emptyPwd_2); // FN - list() with keys is not handled
+
+  list($emptyUser_3, $emptyPwd_3) = [1 => "", 0 => ""];
+  $conn = new mysqli($servername, $emptyUser_3, $emptyPwd_3); // FN - list() with keys is not handled
 }
