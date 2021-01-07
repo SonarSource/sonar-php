@@ -180,9 +180,9 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbols("$_FILES")).isEmpty();
     assertThat(symbolTable.getSymbols("$_SESSION")).isEmpty();
     assertThat(symbolTable.getSymbols("$_ENV")).isEmpty();
-    assertThat(symbolTable.getSymbols("$PHP_ERRORMSG")).isEmpty();
+    assertThat(symbolTable.getSymbols("$php_errormsg")).isEmpty();
     assertThat(symbolTable.getSymbols("$HTTP_RAW_POST_DATA")).isEmpty();
-    assertThat(symbolTable.getSymbols("$HTTP_RESPONSE_HEADER")).isEmpty();
+    assertThat(symbolTable.getSymbols("$http_response_header")).isEmpty();
     assertThat(symbolTable.getSymbols("$ARGC")).isEmpty();
     assertThat(symbolTable.getSymbols("$argc")).hasSize(2);
     assertThat(symbolTable.getSymbols("$ARGV")).hasSize(1);
@@ -498,6 +498,14 @@ public class SymbolTableImplTest extends ParsingTestUtils {
      assertThat(symbolTable.getSymbol("a\\b\\fieldtype")).isNotNull();
      assertThat(symbolTable.getSymbol("a\\b\\paramtype")).isNotNull();
      assertThat(symbolTable.getSymbol("a\\b\\returntype")).isNotNull();
+  }
+
+  @Test
+  public void create_symbol_for_variable_with_builtin_name_but_different_casing() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php echo $globals . $_get . $THIS;");
+    assertThat(symbolTable.getSymbols("$globals")).hasSize(1);
+    assertThat(symbolTable.getSymbols("$_get")).hasSize(1);
+    assertThat(symbolTable.getSymbols("$THIS")).hasSize(1);
   }
 
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
