@@ -56,12 +56,11 @@ public class ElseIfWithoutElseCheck extends PHPVisitorCheck {
   public void visitIfStatement(IfStatementTree tree) {
     super.visitIfStatement(tree);
 
-    ElseClauseTree elseClause = tree.elseClause();
     List<ElseifClauseTree> elseifClauses = tree.elseifClauses();
     // Add all if body statements to  work list
     List<StatementTree> conditionBodies = new ArrayList<>(tree.statements());
 
-    if (elseClause == null && !elseifClauses.isEmpty()) {
+    if (tree.elseClause() == null && !elseifClauses.isEmpty()) {
       // Add all statements of each elseif body to work list
       elseifClauses.forEach(c -> conditionBodies.addAll(c.statements()));
       if (!hasExclusivelyExitBodies(conditionBodies)) {
@@ -75,10 +74,11 @@ public class ElseIfWithoutElseCheck extends PHPVisitorCheck {
   public void visitElseClause(ElseClauseTree tree) {
     super.visitElseClause(tree);
 
+    IfStatementTree parentIf = (IfStatementTree) tree.getParent();
     if (tree.statements().get(0).is(Kind.IF_STATEMENT)) {
       IfStatementTree nestedIf = (IfStatementTree) tree.statements().get(0);
       if (nestedIf.elseClause() == null && nestedIf.elseifClauses().isEmpty()) {
-        List<StatementTree> bodyStatements = new ArrayList<>(((IfStatementTree) tree.getParent()).statements());
+        List<StatementTree> bodyStatements = new ArrayList<>(parentIf.statements());
         bodyStatements.addAll(nestedIf.statements());
         if (!hasExclusivelyExitBodies(bodyStatements)) {
           context().newIssue(this, tree.elseToken(), nestedIf.ifToken(), MESSAGE);
@@ -86,7 +86,6 @@ public class ElseIfWithoutElseCheck extends PHPVisitorCheck {
       }
     } else {
       // If-else constructs which exit in both branches can be seen as exit statement
-      IfStatementTree parentIf = (IfStatementTree) tree.getParent();
       List<StatementTree> bodyStatements = new ArrayList<>(tree.statements());
       bodyStatements.addAll(parentIf.statements());
       if (hasExclusivelyExitBodies(bodyStatements)) {
