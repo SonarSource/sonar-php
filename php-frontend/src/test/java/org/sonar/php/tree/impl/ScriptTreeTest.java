@@ -39,22 +39,12 @@ public class ScriptTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void script_asp_style() throws Exception {
+  public void script_asp_style_not_supported() throws Exception {
+    // Support removed in SONARPHP-1087
     ScriptTree tree = parse("<% $a; %> <br/>", PHPLexicalGrammar.SCRIPT);
 
     assertThat(tree.is(Kind.SCRIPT)).isTrue();
-    assertThat(tree.fileOpeningTagToken().text()).isEqualTo("<%");
-    assertThat(tree.statements()).hasSize(2);
-
-    tree = parse("<%  %>", PHPLexicalGrammar.SCRIPT);
-
-    assertThat(tree.fileOpeningTagToken().text()).isEqualTo("<%");
-    assertThat(tree.statements()).hasSize(1);
-    assertThat(tree.statements().get(0).is(Kind.INLINE_HTML)).isTrue();
-    
-    tree = parse("<% ", PHPLexicalGrammar.SCRIPT);
-
-    assertThat(tree.fileOpeningTagToken().text()).isEqualTo("<%");
+    assertThat(tree.fileOpeningTagToken().text()).isEqualTo("<% $a; %> <br/>");
     assertThat(tree.statements()).hasSize(0);
   }
 
