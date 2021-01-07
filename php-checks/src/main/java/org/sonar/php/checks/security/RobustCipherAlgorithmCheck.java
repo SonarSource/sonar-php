@@ -41,12 +41,37 @@ public class RobustCipherAlgorithmCheck extends FunctionArgumentCheck {
       "mcrypt_rc4")));
 
     checkArgument(tree, "openssl_encrypt", new ArgumentVerifier(1, "method", ImmutableSet.of(
+      "bf-cbc",
+      "bf-cfb",
       "bf-ecb",
+      "bf-ofb",
+      "des-cbc",
+      "des-cfb",
+      "des-cfb1",
+      "des-cfb8",
+      "des-ecb",
+      "des-ede",
       "des-ede3",
+      "des-ede3-cbc",
+      "des-ede3-cfb",
+      "des-ede3-cfb1",
+      "des-ede3-cfb8",
+      "des-ede3-ofb",
+      "des-ede-cbc",
+      "des-ede-cfb",
+      "des-ede-ofb",
       "des-ofb",
+      "desx-cbc",
+      "rc2-40-cbc",
+      "rc2-64-cbc",
       "rc2-cbc",
-      "rc4"
-    )));
+      "rc2-cfb",
+      "rc2-ecb",
+      "rc2-ofb",
+      "rc4",
+      "rc4-40",
+      "rc4-hmac-md5"
+      )));
 
     super.visitFunctionCall(tree);
   }
