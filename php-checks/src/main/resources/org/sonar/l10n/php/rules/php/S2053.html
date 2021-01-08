@@ -1,15 +1,15 @@
 <p>In cryptography, "salt" is extra piece of data which is included in a hashing algorithm. It makes dictionary attacks more difficult. Using a
 cryptographic hash function without an unpredictable salt increases the likelihood that an attacker will be able to successfully guess a hashed value
 such as a password with a dictionary attack.</p>
-<p>This rule raises an issue when a hashing function which has been specifically designed for hashing sensitive data, such as pbkdf2, is used with a
+<p>This rule raises an issue when a hashing function which has been specifically designed for hashing sensitive data, such as PBKDF2, is used with a
 non-random, reused or too short salt value. It does not raise an issue on base hashing algorithms such as sha1 or md5 as these are often used for
 other purposes.</p>
 <h2>Recommended Secure Coding Practices</h2>
 <ul>
-  <li> use hashing functions generating their own salt or generate a long random salt of at least 32 bytes. </li>
-  <li> the salt is at least as long as the resulting hash value. </li>
-  <li> provide the salt to a safe hashing function such as PBKDF2. </li>
-  <li> save both the salt and the hashed value in the relevant database record; during future validation operations, the salt and hash can then be
+  <li> Use hashing functions generating their own salt or generate a long random salt of at least 32 bytes. </li>
+  <li> The salt is at least as long as the resulting hash value. </li>
+  <li> Provide the salt to a safe hashing function such as PBKDF2. </li>
+  <li> Save both the salt and the hashed value in the relevant database record; during future validation operations, the salt and hash can then be
   retrieved from the database. The hash is recalculated with the stored salt and the value being validated, and the result compared to the stored
   hash. </li>
 </ul>
@@ -26,8 +26,8 @@ function createMyAccount() {
 
   $hash = hash_pbkdf2('sha256', $password, 'D8VxSmTZt2E2YV454mkqAY5e', 100000); // Noncompliant; salt is hardcoded
 
-  $hash = crypt($password); // Noncompliant; salt is not provided
-  $hash = crypt($password, ""); // Noncompliant; salt is hardcoded
+  $hash = crypt($password); // Noncompliant; salt is not provided; fails in PHP 8
+  $hash = crypt($password, ""); // Noncompliant; salt is hardcoded; fails in PHP 8
 
   $options = [
     'cost' =&gt; 11,
