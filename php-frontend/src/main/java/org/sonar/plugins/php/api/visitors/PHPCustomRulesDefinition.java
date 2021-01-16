@@ -24,7 +24,7 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.api.ExtensionPoint;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
+import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
 
 /**
  * Extension point to create custom rule repository for PHP.
@@ -51,8 +51,7 @@ public abstract class PHPCustomRulesDefinition implements RulesDefinition, PHPCu
   public void define(RulesDefinition.Context context) {
     RulesDefinition.NewRepository repo = context.createRepository(repositoryKey(), LANGUAGE_KEY).setName(repositoryName());
 
-    // Load metadata from check classes' annotations
-    new AnnotationBasedRulesDefinition(repo, LANGUAGE_KEY).addRuleClasses(false, checkClasses());
+    new RulesDefinitionAnnotationLoader().load(repo, checkClasses().toArray(new Class[]{}));
 
     repo.done();
   }
