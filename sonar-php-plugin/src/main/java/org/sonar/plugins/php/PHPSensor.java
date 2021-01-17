@@ -63,7 +63,6 @@ import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
-import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.CoverageResultImporter;
@@ -98,9 +97,6 @@ public class PHPSensor implements Sensor {
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
     this.parsingErrorRuleKey = getParsingErrorRuleKey();
-    // Hack to have PHPCustomRulesDefinition referenced somewhere so that maven shade minimization
-    // includes PHPCustomRulesDefinition and its dependencies in the final jar.
-    PHPCustomRulesDefinition.class.getName();
   }
 
   @Override

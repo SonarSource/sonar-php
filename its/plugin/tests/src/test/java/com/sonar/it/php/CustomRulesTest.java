@@ -60,16 +60,6 @@ public class CustomRulesTest {
     assertSingleIssue("php-custom-rules:subscription", 8, "For statement.", "10min");
   }
 
-  @Test
-  public void legacy_base_tree_visitor_check() {
-    assertSingleIssue("deprecated-php-custom-rules:visitor", 5, "Function expression.", "5min");
-  }
-
-  @Test
-  public void legacy_subscription_base_visitor_check() {
-    assertSingleIssue("deprecated-php-custom-rules:subscription", 8, "For statement.", "10min");
-  }
-
   private void assertSingleIssue(String ruleKey, int expectedLine, String expectedMessage, String expectedDebt) {
     assertThat(Tests.issuesForRule(issues, ruleKey)).hasSize(1);
     Issue issue = Tests.issuesForRule(issues, ruleKey).get(0);
