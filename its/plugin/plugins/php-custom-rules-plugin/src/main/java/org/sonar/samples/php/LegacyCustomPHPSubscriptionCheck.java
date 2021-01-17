@@ -26,14 +26,12 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 @Rule(
   key = "subscription",
   priority = Priority.MINOR,
   name = "PHP subscription visitor check",
   description = "desc")
-@SqaleConstantRemediation("10min")
 public class LegacyCustomPHPSubscriptionCheck extends PHPSubscriptionCheck {
 
   @Override

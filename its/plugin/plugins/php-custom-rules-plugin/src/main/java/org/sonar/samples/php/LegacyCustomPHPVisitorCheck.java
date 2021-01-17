@@ -23,14 +23,12 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 @Rule(
   key = "visitor",
   priority = Priority.MINOR,
   name = "PHP visitor check",
   description = "desc")
-@SqaleConstantRemediation("5min")
 public class LegacyCustomPHPVisitorCheck extends PHPVisitorCheck {
 
   @Override
