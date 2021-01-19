@@ -31,10 +31,6 @@ public class AssertionCompareToSelfCheck extends PhpUnitCheck {
 
   private static final String MESSAGE = "Replace this assertion to not have the same actual and expected expression.";
 
-  public AssertionCompareToSelfCheck() {
-    super(true);
-  }
-
   @Override
   protected void visitPhpUnitAssertion(FunctionCallTree tree, Assertion assertion) {
     if(assertion.hasExpectedValue() && compareToSelf(tree.arguments())) {

@@ -32,9 +32,6 @@ import org.sonar.php.checks.utils.type.NewObjectCall;
 import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.php.checks.utils.type.TypePredicateList;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -70,8 +67,6 @@ public class QueryUsageCheck extends PHPVisitorCheck {
 
   private static final Map<String, Integer> SUSPICIOUS_GLOBAL_FUNCTIONS = buildSuspiciousGlobalFunctions();
 
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
-
   private static Map<String, Integer> buildSuspiciousGlobalFunctions() {
     Map<String, Integer> map = new HashMap<>();
     map.put("mssql_query", 0);
@@ -97,14 +92,6 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     new ObjectMemberFunctionCall("send_query", IS_MYSQLI_OBJECT));
 
   private static final Predicate<TreeValues> PDO_PREPARE_PREDICATE = new ObjectMemberFunctionCall("prepare", new NewObjectCall("PDO"));
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-
-    super.visitCompilationUnit(tree);
-  }
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -202,10 +189,6 @@ public class QueryUsageCheck extends PHPVisitorCheck {
   }
 
   private boolean isSuspiciousVariable(VariableIdentifierTree variable) {
-    Symbol variableSymbol = context().symbolTable().getSymbol(variable);
-    return!assignmentExpressionVisitor
-      .getUniqueAssignedValue(variableSymbol)
-      .orElse(variable)
-      .is(LITERALS);
+    return !CheckUtils.assignedValue(variable).is(LITERALS);
   }
 }

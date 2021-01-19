@@ -23,14 +23,12 @@ import java.util.Locale;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
@@ -42,8 +40,6 @@ public class CakePhpDebugModeCheck extends PHPVisitorCheck {
 
   private static final String CONFIG_FUNCTION = "Configure::config".toLowerCase(Locale.ROOT);
   private static final String WRITE_FUNCTION = "Configure::write".toLowerCase(Locale.ROOT);
-
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -74,20 +70,12 @@ public class CakePhpDebugModeCheck extends PHPVisitorCheck {
       return true;
     }
     if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      Symbol symbol = context().symbolTable().getSymbol(tree);
-      Optional<ExpressionTree> uniqueAssignedValue = assignmentExpressionVisitor.getUniqueAssignedValue(symbol);
+      Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue((VariableIdentifierTree) tree);
       if (uniqueAssignedValue.isPresent()) {
         ExpressionTree expressionTree = uniqueAssignedValue.get();
         return CheckUtils.isTrueValue(expressionTree);
       }
     }
     return false;
-  }
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    this.assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
   }
 }

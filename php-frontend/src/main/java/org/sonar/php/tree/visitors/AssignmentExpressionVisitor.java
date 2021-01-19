@@ -21,16 +21,12 @@ package org.sonar.php.tree.visitors;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.symbols.SymbolTable;
+import javax.annotation.CheckForNull;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
@@ -41,14 +37,6 @@ import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public class AssignmentExpressionVisitor extends PHPVisitorCheck {
-
-  private Map<Symbol, List<ExpressionTree>> assignedValuesBySymbol = new HashMap<>();
-  private Set<Symbol> assignedUnknown = new HashSet<>();
-  private SymbolTable symbolTable;
-
-  public AssignmentExpressionVisitor(SymbolTable symbolTable) {
-    this.symbolTable = symbolTable;
-  }
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree assignment) {
@@ -88,22 +76,24 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
   }
 
   private void assign(Tree lhs, ExpressionTree rhs) {
-    Symbol symbol = symbolTable.getSymbol(lhs);
+    SymbolImpl symbol = getSymbol(lhs);
     if (symbol != null) {
-      assignedValuesBySymbol.computeIfAbsent(symbol, v -> new ArrayList<>()).add(rhs);
+      symbol.assignValue(rhs);
     }
   }
 
   private void assignToUnknown(Tree lhs) {
-    Symbol symbol = symbolTable.getSymbol(lhs);
+    SymbolImpl symbol = getSymbol(lhs);
     if (symbol != null) {
-      assignedUnknown.add(symbol);
+      symbol.assignUnknown();
     }
   }
 
-  public Optional<ExpressionTree> getUniqueAssignedValue(Symbol symbol) {
-    List<ExpressionTree> values = assignedValuesBySymbol.get(symbol);
-    return values != null && values.size() == 1 && !assignedUnknown.contains(symbol) ? Optional.of(values.get(0)) : Optional.empty();
+  @CheckForNull
+  private static SymbolImpl getSymbol(Tree tree) {
+    if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      return ((VariableIdentifierTreeImpl) tree).symbol();
+    }
+    return null;
   }
-
 }

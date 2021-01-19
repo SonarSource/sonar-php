@@ -22,9 +22,6 @@ package org.sonar.php.checks.security;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -32,6 +29,7 @@ import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.argument;
@@ -41,15 +39,6 @@ import static org.sonar.plugins.php.api.tree.Tree.Kind;
 
 @Rule(key = "S2755")
 public class XxeCheck extends PHPVisitorCheck {
-
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
 
   @Override
   public void visitFunctionCall(FunctionCallTree call) {
@@ -77,8 +66,7 @@ public class XxeCheck extends PHPVisitorCheck {
     } else if (optionValue.is(Kind.PARENTHESISED_EXPRESSION)) {
       checkSimpleXmlOption(((ParenthesisedExpressionTree) optionValue).expression(), treeToReport);
     } else if (optionValue.is(Kind.VARIABLE_IDENTIFIER)) {
-      Symbol valueSymbol = context().symbolTable().getSymbol(optionValue);
-      assignmentExpressionVisitor.getUniqueAssignedValue(valueSymbol).ifPresent(x -> checkSimpleXmlOption(x, treeToReport));
+      CheckUtils.uniqueAssignedValue((VariableIdentifierTree) optionValue).ifPresent(x -> checkSimpleXmlOption(x, treeToReport));
     }
   }
 

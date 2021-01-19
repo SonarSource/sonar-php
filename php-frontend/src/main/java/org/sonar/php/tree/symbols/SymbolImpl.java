@@ -24,8 +24,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -39,6 +41,8 @@ public class SymbolImpl implements Symbol {
   private Scope scope;
   private List<SyntaxToken> usages = new LinkedList<>();
   private List<SyntaxToken> modifiers = new LinkedList<>();
+  private List<ExpressionTree> assignedValues = new LinkedList<>();
+  private boolean assignedUnknown = false;
 
   SymbolImpl(IdentifierTree declaration, Kind kind, Scope scope) {
     Preconditions.checkState(!kind.hasQualifiedName(), "Declaration of %s should provide qualified name", declaration);
@@ -142,5 +146,16 @@ public class SymbolImpl implements Symbol {
       ", kind=" + kind +
       ", scope=" + scope +
       '}';
+  }
+
+  public void assignValue(ExpressionTree value) {
+    assignedValues.add(value);
+  }
+  public void assignUnknown() {
+    assignedUnknown = true;
+  }
+
+  public Optional<ExpressionTree> uniqueAssignedValue() {
+    return !assignedUnknown && assignedValues.size() == 1 ? Optional.of(assignedValues.get(0)) : Optional.empty();
   }
 }

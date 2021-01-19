@@ -24,6 +24,7 @@ import com.sonarsource.checks.coverage.UtilityClass;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -31,6 +32,7 @@ import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -47,6 +49,8 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.sonar.php.checks.utils.CheckUtils.argument;
 import static org.sonar.php.checks.utils.CheckUtils.functionName;
 import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
@@ -303,6 +307,16 @@ public class CheckUtilsTest {
     assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo();"))).isFalse();
     assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo($a, $b);"))).isFalse();
     assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo($a, b: $b);"))).isTrue();
+  }
+
+  @Test
+  public void uniqueAssignedValue() {
+    VariableIdentifierTreeImpl var = mock(VariableIdentifierTreeImpl.class);
+    SymbolImpl symbol = mock(SymbolImpl.class);
+    when(symbol.uniqueAssignedValue()).thenReturn(Optional.of(mock(ExpressionTree.class)));
+    assertThat(CheckUtils.uniqueAssignedValue(var)).isNotPresent();
+    when(var.symbol()).thenReturn(symbol);
+    assertThat(CheckUtils.uniqueAssignedValue(var)).isPresent();
   }
 
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {

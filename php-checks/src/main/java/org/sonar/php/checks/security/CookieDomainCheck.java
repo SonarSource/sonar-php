@@ -33,9 +33,6 @@ import org.sonar.php.ini.BasePhpIniIssue;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -54,18 +51,9 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
     "setcookie", 4,
     "session_set_cookie_params", 2);
 
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
-
   @Override
   protected ImmutableSet<String> functionNames() {
     return ImmutableSet.copyOf(FUNCTION_AND_PARAM_INDEX.keySet());
-  }
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
   }
 
   @Override
@@ -74,7 +62,7 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
 
     Optional<CallArgumentTree> domainArgument = CheckUtils.argument(tree, "domain", domainIndex);
     if (domainArgument.isPresent()) {
-      ExpressionTree domainValue = getAssignedValue(domainArgument.get().value());
+      ExpressionTree domainValue = CheckUtils.assignedValue(domainArgument.get().value());
 
       if (domainValue.is(Tree.Kind.REGULAR_STRING_LITERAL) && isFirstLevelDomain(((LiteralTree) domainValue).value())) {
         if (domainArgument.get().value() == domainValue) {
@@ -92,13 +80,6 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
         .filter(d -> isFirstLevelDomain(d.value().text()))
         .map(d -> BasePhpIniIssue.newIssue(MESSAGE).line(d.name().line()))
         .collect(Collectors.toList());
-  }
-
-  private ExpressionTree getAssignedValue(ExpressionTree value) {
-    Symbol valueSymbol = context().symbolTable().getSymbol(value);
-    return assignmentExpressionVisitor
-      .getUniqueAssignedValue(valueSymbol)
-      .orElse(value);
   }
 
   private static boolean isFirstLevelDomain(String domain) {

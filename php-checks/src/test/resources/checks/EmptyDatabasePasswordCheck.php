@@ -84,6 +84,9 @@ function sqlServer() {
     $conn = sqlsrv_connect($sqlsrvName, $unknown);
 
     array( "Database"=>"myDB", "UID"=>$username, "PWD"=>'');
+
+    $conn = sqlsrv_connect($sqlsrvName, getConfig());
+    $conn = sqlsrv_connect($sqlsrvName, SQL_CONFIG);
 }
 
 // PostgreSQL

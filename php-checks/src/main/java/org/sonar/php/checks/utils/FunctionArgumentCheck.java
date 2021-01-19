@@ -27,9 +27,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -45,8 +42,6 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
  * {@link ArgumentMatcher} can be used. They are used as a condition for the verification.
  */
 public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
-
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   /**
    * Implement this method to create an issue with specific message for the certain check.
@@ -83,20 +78,13 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return false;
   }
 
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
-
   private boolean verifyArgument(FunctionCallTree tree, ArgumentMatcher argumentMatcher) {
     Optional<CallArgumentTree> optionalArgument = CheckUtils.argument(tree, argumentMatcher.name, argumentMatcher.position);
 
     if (optionalArgument.isPresent()) {
 
       ExpressionTree argument = optionalArgument.get().value();
-      ExpressionTree argumentValue = getAssignedValue(argument);
+      ExpressionTree argumentValue = CheckUtils.assignedValue(argument);
 
       Optional<String> value = nameOf(argumentValue);
       if (value.isPresent()) {
@@ -120,19 +108,6 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
       name = CheckUtils.nameOf(tree);
     }
     return Optional.ofNullable(name);
-  }
-
-  /**
-   * Try to resolve the value of a variable which is passed as argument.
-   */
-  private ExpressionTree getAssignedValue(ExpressionTree value) {
-    if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      Symbol valueSymbol = context().symbolTable().getSymbol(value);
-      return assignmentExpressionVisitor
-        .getUniqueAssignedValue(valueSymbol)
-        .orElse(value);
-    }
-    return value;
   }
 
   protected static class ArgumentMatcher {

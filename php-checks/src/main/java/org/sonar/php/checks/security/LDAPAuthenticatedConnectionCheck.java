@@ -24,10 +24,6 @@ import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -36,18 +32,10 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 public class LDAPAuthenticatedConnectionCheck extends FunctionUsageCheck {
 
   private static final String MESSAGE = "Provide username and password to authenticate the connection.";
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
   protected ImmutableSet<String> functionNames() {
     return ImmutableSet.of("ldap_bind");
-  }
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
   }
 
   @Override
@@ -60,20 +48,10 @@ public class LDAPAuthenticatedConnectionCheck extends FunctionUsageCheck {
   private boolean argumentIsNullOrEmptyString(FunctionCallTree tree, String argumentName, int argumentIndex) {
     Optional<CallArgumentTree> argument = CheckUtils.argument(tree, argumentName, argumentIndex);
     if (argument.isPresent()) {
-      ExpressionTree argumentValue = getAssignedValue(argument.get().value());
+      ExpressionTree argumentValue = CheckUtils.assignedValue(argument.get().value());
       return CheckUtils.isNullOrEmptyString(argumentValue);
     }
     return true;
-  }
-
-  private ExpressionTree getAssignedValue(ExpressionTree value) {
-    if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      Symbol valueSymbol = context().symbolTable().getSymbol(value);
-      return assignmentExpressionVisitor
-        .getUniqueAssignedValue(valueSymbol)
-        .orElse(value);
-    }
-    return value;
   }
 
 }

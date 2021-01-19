@@ -21,6 +21,7 @@ package org.sonar.php.checks.phpunit;
 
 import java.util.Optional;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -37,10 +38,6 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
   private static final String SECONDARY_MESSAGE = "Other argument to swap.";
   private static final Kind[] LITERAL = {Kind.BOOLEAN_LITERAL, Kind.NULL_LITERAL, Kind.NUMERIC_LITERAL, Kind.EXPANDABLE_STRING_LITERAL, Kind.REGULAR_STRING_LITERAL};
 
-  public AssertionArgumentOrderCheck() {
-    super(true);
-  }
-
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (!isPhpUnitTestMethod()) {
@@ -52,7 +49,7 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
     if (arguments.size() >= 2 && assertion.isPresent() && assertion.get().hasExpectedValue() && !hasNamedArgument(tree)) {
       ExpressionTree expected = arguments.get(0).value();
       ExpressionTree actual = arguments.get(1).value();
-      if (getAssignedValue(actual).is(LITERAL) && !getAssignedValue(expected).is(LITERAL)) {
+      if (CheckUtils.assignedValue(actual).is(LITERAL) && !CheckUtils.assignedValue(expected).is(LITERAL)) {
         newIssue(actual, MESSAGE).secondary(expected, SECONDARY_MESSAGE);
       }
     }
