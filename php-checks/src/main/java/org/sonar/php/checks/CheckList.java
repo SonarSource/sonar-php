@@ -43,6 +43,7 @@ import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
 import org.sonar.php.checks.phpunit.NotDiscoverableTestCheck;
 import org.sonar.php.checks.phpunit.TestClassNameCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
+import org.sonar.php.checks.security.ClearTextProtocolsCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
@@ -98,6 +99,7 @@ public class CheckList {
       ClassCouplingCheck.class,
       ClassNameCheck.class,
       ClassNamedLikeExceptionCheck.class,
+      ClearTextProtocolsCheck.class,
       ClosingTagInFullPHPFileCheck.class,
       CodeFollowingJumpStatementCheck.class,
       CollapsibleIfStatementCheck.class,
