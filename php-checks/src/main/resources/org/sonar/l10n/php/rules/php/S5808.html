@@ -1,0 +1,129 @@
+<p>Authorizations granted or not to users to access resources of an application should be based on strong decisions. For instance, checking whether
+the user is authenticated or not, has the right roles/privileges. It may also depend on the user's location, or the date, time when the user requests
+access.</p>
+<h2>Noncompliant Code Example</h2>
+<p>In a Symfony web application:</p>
+<ul>
+  <li> the <code>vote</code> method of a <a href="https://symfony.com/doc/current/security/voters.html">VoterInterface</a> type is not compliant when
+  it returns only an affirmative decision (<code>ACCESS_GRANTED</code>): </li>
+</ul>
+<pre>
+class NoncompliantVoterInterface implements VoterInterface
+{
+    public function vote(TokenInterface $token, $subject, array $attributes)
+    {
+        return self::ACCESS_GRANTED; // Noncompliant
+    }
+}
+</pre>
+<ul>
+  <li> the <code>voteOnAttribute</code> method of a <a href="https://symfony.com/doc/current/security/voters.html">Voter</a> type is not compliant
+  when it returns only an affirmative decision (<code>true</code>): </li>
+</ul>
+<pre>
+class NoncompliantVoter extends Voter
+{
+    protected function supports(string $attribute, $subject)
+    {
+        return true;
+    }
+
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    {
+        return true; // Noncompliant
+    }
+}
+</pre>
+<p>In a Laravel web application:</p>
+<ul>
+  <li> the <code>define</code>, <code>before</code>, and <code>after</code> methods of a <a href="https://laravel.com/docs/8.x/authorization">Gate</a>
+  are not compliant when they return only an affirmative decision (<code>true</code> or <code>Response::allow()</code>): </li>
+</ul>
+<pre>
+class NoncompliantGuard
+{
+    public function boot()
+    {
+        Gate::define('xxx', function ($user) {
+            return true; // Noncompliant
+        });
+
+        Gate::define('xxx', function ($user) {
+            return Response::allow(); // Noncompliant
+        });
+    }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<p>In a Symfony web application:</p>
+<ul>
+  <li> the <code>vote</code> method of a <a href="https://symfony.com/doc/current/security/voters.html">VoterInterface</a> type should return a
+  negative decision (<code>ACCESS_DENIED</code>) or abstain from making a decision (<code>ACCESS_ABSTAIN</code>): </li>
+</ul>
+<pre>
+class CompliantVoterInterface implements VoterInterface
+{
+    public function vote(TokenInterface $token, $subject, array $attributes)
+    {
+        if (foo()) {
+            return self::ACCESS_GRANTED; // Compliant
+        } else if (bar()) {
+            return self::ACCESS_ABSTAIN;
+        }
+        return self::ACCESS_DENIED;
+    }
+}
+</pre>
+<ul>
+  <li> the <code>voteOnAttribute</code> method of a <a href="https://symfony.com/doc/current/security/voters.html">Voter</a> type should return a
+  negative decision (<code>false</code>): </li>
+</ul>
+<pre>
+class CompliantVoter extends Voter
+{
+    protected function supports(string $attribute, $subject)
+    {
+        return true;
+    }
+
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    {
+        if (foo()) {
+            return true; // Compliant
+        }
+        return false;
+    }
+}
+</pre>
+<p>In a Laravel web application:</p>
+<ul>
+  <li> the <code>define</code>, <code>before</code>, and <code>after</code> methods of a <a href="https://laravel.com/docs/8.x/authorization">Gate</a>
+  should return a negative decision (<code>false</code> or <code>Response::deny()</code>) or abstain from making a decision (<code>null</code>): </li>
+</ul>
+<pre>
+class NoncompliantGuard
+{
+    public function boot()
+    {
+        Gate::define('xxx', function ($user) {
+            if (foo()) {
+                return true; // Compliant
+            }
+            return false;
+        });
+
+        Gate::define('xxx', function ($user) {
+            if (foo()) {
+                return Response::allow(); // Compliant
+            }
+            return Response::deny();
+        });
+    }
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A5-Broken_Access_Control">OWASP Top 10 2017 Category A5</a> - Boken Access Control </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/285.html">MITRE, CWE-285</a> - Improper Authorization </li>
+</ul>
+
