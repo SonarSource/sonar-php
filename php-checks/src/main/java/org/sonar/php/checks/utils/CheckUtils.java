@@ -57,6 +57,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -389,6 +390,15 @@ public final class CheckUtils {
     Symbol symbol = ((VariableIdentifierTreeImpl) tree).symbol();
     if (symbol != null) {
       return ((SymbolImpl) symbol).uniqueAssignedValue();
+    }
+    return Optional.empty();
+  }
+
+  public static Optional<String> resolveReceiver(MemberAccessTree tree) {
+    ExpressionTree receiver = skipParenthesis(assignedValue(tree.object()));
+    if (receiver.is(Kind.NEW_EXPRESSION)) {
+      ExpressionTree newExpression = ((NewExpressionTree) receiver).expression();
+      return Optional.ofNullable(newExpression.is(Kind.FUNCTION_CALL) ? functionName((FunctionCallTree) newExpression) : nameOf(newExpression));
     }
     return Optional.empty();
   }

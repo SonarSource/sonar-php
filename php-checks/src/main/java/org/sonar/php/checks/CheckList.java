@@ -39,8 +39,8 @@ import org.sonar.php.checks.phpunit.BooleanOrNullLiteralInAssertionsCheck;
 import org.sonar.php.checks.phpunit.ExceptionTestingCheck;
 import org.sonar.php.checks.phpunit.NoAssertionInTestCheck;
 import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
-import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
 import org.sonar.php.checks.phpunit.NotDiscoverableTestCheck;
+import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
 import org.sonar.php.checks.phpunit.TestClassNameCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
@@ -273,7 +273,8 @@ public class CheckList {
       VarKeywordUsageCheck.class,
       WeakSSLProtocolCheck.class,
       WrongAssignmentOperatorCheck.class,
-      XxeCheck.class);
+      XxeCheck.class,
+      ZipEntryCheck.class);
   }
 
   public static Iterable<Class> getPhpIniChecks() {
