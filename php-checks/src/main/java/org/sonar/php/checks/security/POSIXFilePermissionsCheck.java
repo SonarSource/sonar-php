@@ -26,12 +26,11 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S2612")
@@ -50,63 +49,70 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    ExpressionTree callee = tree.callee();
-    if (callee.is(Kind.OBJECT_MEMBER_ACCESS)) {
-      MemberAccessTree chmodAccessTree = (MemberAccessTree) callee;
-      if (chmodAccessTree.member().toString().equals("chmod")) {
-        chmodCheck(tree, tree.callArguments());
+    String functionName = CheckUtils.functionName(tree);
+    if (tree.callee().is(Kind.OBJECT_MEMBER_ACCESS)) {
+      if (functionName.equals("chmod")) {
+        chmodSymfonyAndLaravelCheck(tree);
       }
-    }
-    if (callee.toString().equals("chmod")) {
-      chmodCheck(tree, tree.callArguments());
-    }
-    if (callee.toString().equals("umask")) {
-      umaskCheck(tree, tree.callArguments());
+    } else if (functionName.equalsIgnoreCase("chmod")) {
+      chmodCoreCheck(tree);
+    } else if (functionName.equalsIgnoreCase("umask")) {
+      umaskCheck(tree);
     }
     super.visitFunctionCall(tree);
   }
 
-  private void chmodCheck(FunctionCallTree tree, SeparatedList<CallArgumentTree> arguments) {
-    if (arguments.size() >= 2) {
-      int mode = resolveArgument(arguments.get(1), 0);
-      int umask = arguments.size() >= 3 ? resolveArgument(arguments.get(2), 0) : 0;
-
-      if ((mode & ~umask) % 8 != 0) {
-        context().newIssue(this, tree, MESSAGE);
-      }
+  private void chmodCoreCheck(FunctionCallTree tree) {
+    Optional<CallArgumentTree> permissionsArgument = CheckUtils.argument(tree, "permissions", 1);
+    int mode = permissionsArgument.isPresent() ? resolveArgument(permissionsArgument.get(), 0) : 0;
+    if (mode % 8 != 0) {
+      context().newIssue(this, tree, MESSAGE);
     }
   }
 
-  private void umaskCheck(FunctionCallTree tree, SeparatedList<CallArgumentTree> arguments) {
-    if (!arguments.isEmpty()) {
-      int mask = resolveArgument(arguments.get(0), 7);
-      if (mask % 8 != 7) {
-        context().newIssue(this, tree, MESSAGE);
-      }
+  private void chmodSymfonyAndLaravelCheck(FunctionCallTree tree) {
+    Optional<CallArgumentTree> modeArgument = CheckUtils.argument(tree, "mode", 1);
+    Optional<CallArgumentTree> umaskArgument = CheckUtils.argument(tree, "umask", 2);
+    int mode = modeArgument.isPresent() ? resolveArgument(modeArgument.get(), 0) : 0;
+    int umask = umaskArgument.isPresent() ? resolveArgument(umaskArgument.get(), 0) : 0;
+
+    if ((mode & ~umask) % 8 != 0) {
+      context().newIssue(this, tree, MESSAGE);
     }
   }
 
-  private int resolveArgument(CallArgumentTree modeArgument, int defaultValue) {
-    if (modeArgument.value().is(Kind.VARIABLE_IDENTIFIER)) {
-      Symbol symbol = context().symbolTable().getSymbol(modeArgument.value());
-      Optional<ExpressionTree> uniqueAssignedValue = assignmentExpressionVisitor.getUniqueAssignedValue(symbol);
-      if (uniqueAssignedValue.isPresent()) {
-        return getDecimalRepresentation(uniqueAssignedValue.get().toString(), defaultValue);
-      }
+  private void umaskCheck(FunctionCallTree tree) {
+    Optional<CallArgumentTree> maskArgument = CheckUtils.argument(tree, "mask", 0);
+    int mask = maskArgument.isPresent() ? resolveArgument(maskArgument.get(), 7) : 7;
+    if (mask % 8 != 7) {
+      context().newIssue(this, tree, MESSAGE);
     }
-    return getDecimalRepresentation(modeArgument.value().toString(), defaultValue);
+  }
+
+  private int resolveArgument(CallArgumentTree argument, int defaultValue) {
+    Optional<ExpressionTree> uniqueAssignedValue = Optional.empty();
+    ExpressionTree argumentValue = argument.value();
+    if (argumentValue.is(Kind.VARIABLE_IDENTIFIER)) {
+      Symbol symbol = context().symbolTable().getSymbol(argumentValue);
+      uniqueAssignedValue = assignmentExpressionVisitor.getUniqueAssignedValue(symbol);
+    }
+    ExpressionTree argumentExpressionTree = uniqueAssignedValue.isPresent() ? uniqueAssignedValue.get() : argumentValue;
+    if (argumentExpressionTree.is(Kind.REGULAR_STRING_LITERAL, Kind.NUMERIC_LITERAL)) {
+      String literal = ((LiteralTree) argumentExpressionTree).value();
+      return getDecimalRepresentation(literal, defaultValue);
+    }
+    return defaultValue;
   }
 
   private static int getDecimalRepresentation(String argument, int defaultValue) {
-    int decimalValue = defaultValue;
     if (argument.matches("\"[0-9]*\"")) {
-      decimalValue = Integer.valueOf(CheckUtils.trimQuotes(argument));
+      return Integer.valueOf(CheckUtils.trimQuotes(argument));
     } else if (argument.matches("^0[0-7]*$")) {
-      decimalValue = Integer.parseInt(argument, 8);
+      return Integer.parseInt(argument, 8);
     } else if (StringUtils.isNumeric(argument)) {
-      decimalValue = Integer.valueOf(argument);
+      return Integer.valueOf(argument);
     }
-    return decimalValue;
+    return defaultValue;
   }
 
 }
