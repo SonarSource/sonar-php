@@ -23,7 +23,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -36,10 +35,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.symbols.SymbolImpl;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -370,5 +371,25 @@ public final class CheckUtils {
 
   public static boolean hasNamedArgument(FunctionCallTree call) {
     return call.callArguments().stream().anyMatch(arg -> arg.name() != null);
+  }
+
+  /**
+   * Checks if an expression is a variable, and returns the assigned value of the variable if clear, otherwise returns the original expression.
+   * This method is well suited if you want to compare the value of an expression with a scalar. It can resolve possible variables in the small scope.
+   * Thus, it is not necessary to consider beforehand whether the expression is already a scalar expression, a variable, or an expression that is not to be treated.
+   */
+  public static ExpressionTree assignedValue(ExpressionTree tree) {
+    if (tree.is(Kind.VARIABLE_IDENTIFIER)) {
+      return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) tree).orElse(tree);
+    }
+    return tree;
+  }
+
+  public static Optional<ExpressionTree> uniqueAssignedValue(VariableIdentifierTree tree) {
+    Symbol symbol = ((VariableIdentifierTreeImpl) tree).symbol();
+    if (symbol != null) {
+      return ((SymbolImpl) symbol).uniqueAssignedValue();
+    }
+    return Optional.empty();
   }
 }

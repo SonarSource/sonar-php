@@ -32,6 +32,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.symbols.MemberSymbol;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -589,6 +590,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
     if (symbol == null) {
       symbol = symbolTable.declareSymbol(identifier, kind, currentScope, currentNamespace());
+      assignSymbolToIdentifier(identifier, symbol);
     } else {
       associateSymbol(identifier, symbol);
     }
@@ -598,6 +600,13 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   private void associateSymbol(IdentifierTree tree, SymbolImpl symbol) {
     symbol.addUsage(tree);
     symbolTable.associateSymbol(tree, symbol);
+    assignSymbolToIdentifier(tree, symbol);
+  }
+
+  private static void assignSymbolToIdentifier(IdentifierTree tree, SymbolImpl symbol) {
+    if (tree instanceof VariableIdentifierTree) {
+      ((VariableIdentifierTreeImpl) tree).setSymbol(symbol);
+    }
   }
 
   private void associateSymbol(SyntaxToken token, SymbolImpl symbol) {

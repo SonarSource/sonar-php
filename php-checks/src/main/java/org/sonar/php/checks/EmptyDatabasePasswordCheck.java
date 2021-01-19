@@ -25,9 +25,6 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
@@ -36,6 +33,7 @@ import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
@@ -46,14 +44,6 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
   public static final String KEY = "S2115";
 
   private static final String MESSAGE = "Add password protection to this database.";
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    this.assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
 
   @Override
   public void visitFunctionCall(FunctionCallTree functionCall) {
@@ -92,9 +82,7 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
     if (isEmptyLiteral(expression)) {
       return true;
     } else if (expression.is(Kind.VARIABLE_IDENTIFIER)) {
-      Symbol expressionSymbol = context().symbolTable().getSymbol(expression);
-      return assignmentExpressionVisitor
-        .getUniqueAssignedValue(expressionSymbol)
+      return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) expression)
         .map(EmptyDatabasePasswordCheck::isEmptyLiteral)
         .orElse(false);
     }
@@ -121,12 +109,12 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
         }
       }
       return null;
+    } else if (connectionInfo.is(Kind.VARIABLE_IDENTIFIER)) {
+      return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) connectionInfo)
+        .map(this::sqlServerPassword)
+        .orElse(null);
     }
-    Symbol connectionInfoSymbol = context().symbolTable().getSymbol(connectionInfo);
-    return assignmentExpressionVisitor
-      .getUniqueAssignedValue(connectionInfoSymbol)
-      .map(this::sqlServerPassword)
-      .orElse(null);
+    return null;
   }
 
   private void checkPostgresql(FunctionCallTree functionCall) {
@@ -135,10 +123,9 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
       return;
     }
     ExpressionTree connectionString = connectionStringArgument.get().value();
-    Symbol connectionStringSymbol = context().symbolTable().getSymbol(connectionString);
-    connectionString = assignmentExpressionVisitor
-      .getUniqueAssignedValue(connectionStringSymbol)
-      .orElse(connectionString);
+    if (connectionString.is(Kind.VARIABLE_IDENTIFIER)) {
+      connectionString = CheckUtils.uniqueAssignedValue((VariableIdentifierTree) connectionString).orElse(connectionString);
+    }
     checkPostgresqlConnectionString(connectionString);
   }
 

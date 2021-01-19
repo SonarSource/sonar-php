@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -36,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AssignmentExpressionVisitorTest {
 
   @Test
-  public void getAssignmentValue() throws Exception {
+  public void getAssignmentValue() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php function foo() { $a = 1; }");
 
     assertThat(uniqueAssignedValue).isPresent();
@@ -46,7 +47,7 @@ public class AssignmentExpressionVisitorTest {
   }
 
   @Test
-  public void getAssignmentValue_global() throws Exception {
+  public void getAssignmentValue_global() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;");
 
     assertThat(uniqueAssignedValue).isPresent();
@@ -56,7 +57,7 @@ public class AssignmentExpressionVisitorTest {
   }
 
   @Test
-  public void getAssignmentValue_multiple() throws Exception {
+  public void getAssignmentValue_multiple() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;\n$a = 2;");
 
     assertThat(uniqueAssignedValue).isNotPresent();
@@ -117,12 +118,12 @@ public class AssignmentExpressionVisitorTest {
     Optional<ExpressionTree> from(String code) {
       CompilationUnitTree tree = parse(code, PHPLexicalGrammar.COMPILATION_UNIT);
       SymbolTable symbolTable = SymbolTableImpl.create(tree);
-
-      AssignmentExpressionVisitor assignmentExpressionVisitor = new AssignmentExpressionVisitor(symbolTable);
-      tree.accept(assignmentExpressionVisitor);
       IdentifierTree var = ((SymbolTableImpl) symbolTable).getSymbols(name).get(0).declaration();
       Symbol symbol = symbolTable.getSymbol(var);
-      return assignmentExpressionVisitor.getUniqueAssignedValue(symbol);
+      if (symbol != null) {
+        return ((SymbolImpl) symbol).uniqueAssignedValue();
+       }
+      return Optional.empty();
     }
   }
 

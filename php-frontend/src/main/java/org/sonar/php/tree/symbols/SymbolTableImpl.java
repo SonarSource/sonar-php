@@ -28,10 +28,10 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
-
+import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
-import org.sonar.php.symbols.ClassSymbolData;
+import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -69,6 +69,7 @@ public class SymbolTableImpl implements SymbolTable {
       declarationVisitor.classSymbolIndex(),
       declarationVisitor.functionSymbolIndex()
     ).visitCompilationUnit(compilationUnit);
+    compilationUnit.accept(new AssignmentExpressionVisitor());
     return symbolModel;
   }
 
