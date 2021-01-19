@@ -51,12 +51,12 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.functionName(tree);
     if (tree.callee().is(Kind.OBJECT_MEMBER_ACCESS)) {
-      if (functionName.equals("chmod")) {
+      if ("chmod".equals(functionName)) {
         chmodSymfonyAndLaravelCheck(tree);
       }
-    } else if (functionName.equalsIgnoreCase("chmod")) {
+    } else if ("chmod".equalsIgnoreCase(functionName)) {
       chmodCoreCheck(tree);
-    } else if (functionName.equalsIgnoreCase("umask")) {
+    } else if ("umask".equalsIgnoreCase(functionName)) {
       umaskCheck(tree);
     }
     super.visitFunctionCall(tree);
@@ -110,7 +110,7 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
     } else if (argument.matches("^0[0-7]*$")) {
       return Integer.parseInt(argument, 8);
     } else if (StringUtils.isNumeric(argument)) {
-      return Integer.valueOf(argument);
+      return Integer.parseInt(argument);
     }
     return defaultValue;
   }
