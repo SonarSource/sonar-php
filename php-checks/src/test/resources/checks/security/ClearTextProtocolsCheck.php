@@ -1,5 +1,5 @@
 <?php
-
+/** String literals **/
 $url = "http://"; // Noncompliant {{Using http protocol is insecure. Use https instead}}
 $url = "http://exemple.com"; // Noncompliant
 $url = "http://0001::1"; // Noncompliant
@@ -34,3 +34,10 @@ $url = "http://127.0.0.1"; // Compliant
 $url = "http://::1"; // Compliant
 $url = "ftp://user@localhost"; // Compliant
 $url = 123; // Compliant
+
+/** FTP **/
+ftp_connect('xxx'); // Noncompliant {{Using ftp_connect() can be insecure. use ftp_ssl_connect() instead}}
+\ftp_connect('xxx'); // Noncompliant
+ftp_connect('xxx', 1234); // Noncompliant
+ftp_ssl_connect('xxx'); // Compliant
+ftp_ssl_connect('xxx', 1234); // Compliant

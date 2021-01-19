@@ -22,6 +22,7 @@ package org.sonar.php.checks.security;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -48,6 +49,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6);
 
   private static final String MESSAGE_PROTOCOL = "Using %s protocol is insecure. Use %s instead";
+  private static final String MESSAGE_FTP = "Using ftp_connect() can be insecure. use ftp_ssl_connect() instead";
 
   @Override
   public void visitLiteral(LiteralTree tree) {
@@ -68,6 +70,15 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
         .orElseThrow(() -> new IllegalStateException("URL should start with unsafe protocol at this point"));
       context().newIssue(this, tree, String.format(MESSAGE_PROTOCOL, usedProtocol, ALTERNATIVE_PROTOCOLS.get(usedProtocol)));
     }
+  }
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    if("ftp_connect".equalsIgnoreCase(CheckUtils.getFunctionName(tree))) {
+      context().newIssue(this, tree.callee(), MESSAGE_FTP);
+    }
+
+    super.visitFunctionCall(tree);
   }
 
   private static boolean startsWithUnsafeProtocol(String value) {
