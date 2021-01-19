@@ -1,0 +1,83 @@
+<p>Cross-site request forgery (CSRF) vulnerabilities occur when attackers can trick a user to perform sensitive authenticated operations on a web
+application without his consent.</p>
+<p>Imagine a web application where an authenticated user can do actions like changing his email address and which has no CSRF protection. A malicious
+website could forge a web page form to send the HTTP request that change the user email. When the user visits the malicious web page, the form is
+automatically submitted in his name and his account email is changed to an arbitrary email.</p>
+<p>Such an attack is only possible if the web browser automatically sends authentication information to the trusted domain (e.g cookie based
+authentication) </p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> The web application uses cookies to authenticate users. </li>
+  <li> There exist sensitive operations in the web application that can be performed when the user is authenticated. </li>
+  <li> The state / resources of the web application can be modified by doing HTTP POST or HTTP DELETE requests for example. </li>
+</ul>
+<p>There is a risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<ul>
+  <li> Protection against CSRF attacks is strongly recommended:
+    <ul>
+      <li> to be activated by default for all <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Safe_methods">unsafe HTTP
+      methods</a>. </li>
+      <li> implemented, for example, with an unguessable CSRF token </li>
+    </ul> </li>
+  <li> Of course all sensitive operations should not be performed with <a
+  href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Safe_methods">safe HTTP</a> methods like <code>GET</code> which are designed to be
+  used only for information retrieval. </li>
+</ul>
+<h2>Sensitive Code Example</h2>
+<p>For <a href="https://laravel.com/docs/8.x/csrf#csrf-excluding-uris">Laravel VerifyCsrfToken middleware</a></p>
+<pre>
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
+
+class VerifyCsrfToken extends Middleware
+{
+    protected $except = [
+        'api/*'
+    ]; // Sensitive; disable CSRF protection for a list of routes
+}
+</pre>
+<p>For <a href="https://symfony.com/doc/current/security/csrf.html#csrf-protection-in-symfony-forms">Symfony Forms</a></p>
+<pre>
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+class Controller extends AbstractController {
+
+  public function action() {
+    $this-&gt;createForm('', null, [
+      'csrf_protection' =&gt; false, // Sensitive; disable CSRF protection for a single form
+    ]);
+  }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<p>For <a href="https://laravel.com/docs/8.x/csrf#csrf-excluding-uris">Laravel VerifyCsrfToken middleware</a></p>
+<pre>
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
+
+class VerifyCsrfToken extends Middleware
+{
+    protected $except = []; // Compliant
+}
+</pre>
+<p>Remember to add <a href="https://laravel.com/docs/8.x/blade#csrf-field">@csrf</a> blade directive to the relevant forms when removing an element
+from $except. Otherwise the form submission will stop working.</p>
+<p>For <a href="https://symfony.com/doc/current/security/csrf.html#csrf-protection-in-symfony-forms">Symfony Forms</a></p>
+<pre>
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+class Controller extends AbstractController {
+
+  public function action() {
+    $this-&gt;createForm('', null, []); // Compliant; CSRF protection is enabled by default
+  }
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://cwe.mitre.org/data/definitions/352.html">MITRE, CWE-352</a> - Cross-Site Request Forgery (CSRF) </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29">OWASP: Cross-Site Request Forgery</a> </li>
+  <li> <a href="https://www.sans.org/top25-software-errors/#cat1">SANS Top 25</a> - Insecure Interaction Between Components </li>
+</ul>
+

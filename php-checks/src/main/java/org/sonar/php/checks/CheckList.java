@@ -50,6 +50,7 @@ import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.DataEncryptionCheck;
+import org.sonar.php.checks.security.DisableCsrfCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 import org.sonar.php.checks.security.LoggerConfigurationCheck;
 import org.sonar.php.checks.security.POSIXFilePermissionsCheck;
@@ -124,6 +125,7 @@ public class CheckList {
       DeadStoreCheck.class,
       DeprecatedPredefinedVariablesUseCheck.class,
       DirectlyAccessingSuperGlobalCheck.class,
+      DisableCsrfCheck.class,
       DuplicateBranchImplementationCheck.class,
       DuplicateConditionCheck.class,
       DuplicatedArgumentCheck.class,
