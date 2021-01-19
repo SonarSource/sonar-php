@@ -43,7 +43,10 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     ALTERNATIVE_PROTOCOLS.put("ftp", "sftp, scp or ftps");
     ALTERNATIVE_PROTOCOLS.put("telnet", "ssh");
   }
-  private static final Pattern LOOPBACK_IP = Pattern.compile("^127(?:\\.[0-9]+){0,2}\\.[0-9]+$|^(?:0*:)*?:?0*1$");
+  private static final String LOOPBACK_IPV4 = "^127(?:\\.[0-9]+){0,2}\\.[0-9]+$";
+  private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
+  private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6);
+
   private static final String MESSAGE_PROTOCOL = "Using %s protocol is insecure. Use %s instead";
 
   @Override
