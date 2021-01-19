@@ -56,10 +56,10 @@ public class XxeCheck extends PHPVisitorCheck {
     String functionName = CheckUtils.lowerCaseFunctionName(call);
     ExpressionTree callee = call.callee();
     if (callee.is(Kind.NAMESPACE_NAME) && "simplexml_load_string".equals(functionName)) {
-      argument(call, "options", 2).ifPresent(x -> checkSimpleXmlOption(x.value()));
+      argument(call, "options", 2).ifPresent(x -> checkSimpleXmlOption(x.value(), x));
     } else if (callee.is(Kind.OBJECT_MEMBER_ACCESS)) {
       if ("load".equals(functionName) || "loadxml".equals(functionName)) {
-        argument(call, "options", 1).ifPresent(x -> checkSimpleXmlOption(x.value()));
+        argument(call, "options", 1).ifPresent(x -> checkSimpleXmlOption(x.value(), x));
       } else if ("setparserproperty".equals(functionName)) {
         checkSetParserProperty(call);
       }
@@ -67,18 +67,18 @@ public class XxeCheck extends PHPVisitorCheck {
     super.visitFunctionCall(call);
   }
 
-  private void checkSimpleXmlOption(ExpressionTree optionValue) {
+  private void checkSimpleXmlOption(ExpressionTree optionValue, Tree treeToReport) {
     if (optionValue.is(Kind.NAMESPACE_NAME) && "LIBXML_NOENT".equals(((NamespaceNameTree) optionValue).fullName())) {
-      createIssue(optionValue);
+      createIssue(treeToReport);
     } else if (optionValue.is(Kind.BITWISE_OR)) {
       BinaryExpressionTree orExpression = (BinaryExpressionTree) optionValue;
-      checkSimpleXmlOption(orExpression.leftOperand());
-      checkSimpleXmlOption(orExpression.rightOperand());
+      checkSimpleXmlOption(orExpression.leftOperand(), treeToReport);
+      checkSimpleXmlOption(orExpression.rightOperand(), treeToReport);
     } else if (optionValue.is(Kind.PARENTHESISED_EXPRESSION)) {
-      checkSimpleXmlOption(((ParenthesisedExpressionTree) optionValue).expression());
+      checkSimpleXmlOption(((ParenthesisedExpressionTree) optionValue).expression(), treeToReport);
     } else if (optionValue.is(Kind.VARIABLE_IDENTIFIER)) {
       Symbol valueSymbol = context().symbolTable().getSymbol(optionValue);
-      assignmentExpressionVisitor.getUniqueAssignedValue(valueSymbol).ifPresent(this::checkSimpleXmlOption);
+      assignmentExpressionVisitor.getUniqueAssignedValue(valueSymbol).ifPresent(x -> checkSimpleXmlOption(x, treeToReport));
     }
   }
 

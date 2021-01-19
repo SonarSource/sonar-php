@@ -8,7 +8,6 @@ function simpleXML() {
 //                                                       ^^^^^^^^^^^^
   $doc = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOBLANKS);
   $doc = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOBLANKS | LIBXML_NOENT); // Noncompliant
-//                                                                         ^^^^^^^^^^^^
   $doc = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_NOBLANKS); // Noncompliant
   $doc = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_COMPACT | LIBXML_NOBLANKS);
   $doc = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_COMPACT | (LIBXML_NOBLANKS | LIBXML_NOENT)); // Noncompliant
@@ -19,8 +18,8 @@ function simpleXML() {
   $doc = Simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOENT); // Noncompliant
   $doc = unrelated_function($xml, "SimpleXMLElement", LIBXML_NOENT);
 
-  $options1 = LIBXML_NOBLANKS | LIBXML_NOENT; // Noncompliant
-  $doc = simplexml_load_string($xml, "SimpleXMLElement", $options1);
+  $options1 = LIBXML_NOBLANKS | LIBXML_NOENT;
+  $doc = simplexml_load_string($xml, "SimpleXMLElement", $options1); // Noncompliant
 
   $options2 = LIBXML_NOBLANKS | LIBXML_NOENT;
   $doc = unrelated_function($xml, "SimpleXMLElement", $options2);
