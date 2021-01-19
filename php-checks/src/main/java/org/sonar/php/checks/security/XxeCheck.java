@@ -53,14 +53,14 @@ public class XxeCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree call) {
-    String functionName = CheckUtils.functionName(call);
+    String functionName = CheckUtils.lowerCaseFunctionName(call);
     ExpressionTree callee = call.callee();
     if (callee.is(Kind.NAMESPACE_NAME) && "simplexml_load_string".equals(functionName)) {
       argument(call, "options", 2).ifPresent(x -> checkSimpleXmlOption(x.value()));
     } else if (callee.is(Kind.OBJECT_MEMBER_ACCESS)) {
-      if ("load".equals(functionName) || "loadXML".equals(functionName)) {
+      if ("load".equals(functionName) || "loadxml".equals(functionName)) {
         argument(call, "options", 1).ifPresent(x -> checkSimpleXmlOption(x.value()));
-      } else if ("setParserProperty".equals(functionName)) {
+      } else if ("setparserproperty".equals(functionName)) {
         checkSetParserProperty(call);
       }
     }

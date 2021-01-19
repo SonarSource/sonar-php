@@ -15,6 +15,8 @@ function simpleXML() {
   $doc = simplexml_load_string($xml, LIBXML_NOENT);
   $doc = simplexml_load_string($xml, options: LIBXML_NOENT); // Noncompliant
   $doc = $obj->simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOENT);
+  $doc = \simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOENT); // Noncompliant
+  $doc = Simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOENT); // Noncompliant
   $doc = unrelated_function($xml, "SimpleXMLElement", LIBXML_NOENT);
 
   $options1 = LIBXML_NOBLANKS | LIBXML_NOENT; // Noncompliant
@@ -32,7 +34,9 @@ function domDocument($param) {
   $doc->load("xxe.xml", LIBXML_NOBLANKS | LIBXML_NOENT); // Noncompliant
   $doc->load(LIBXML_NOENT, "xxe.xml");
   $doc->load(options: LIBXML_NOENT, filename: "xxe.xml"); // Noncompliant
+  $doc->Load("xxe.xml", LIBXML_NOENT); // Noncompliant
   $doc->loadXML("xxe.xml", LIBXML_NOENT); // Noncompliant
+  $doc->LoadXML("xxe.xml", LIBXML_NOENT); // Noncompliant
   $doc->save("xxe.xml", LIBXML_NOENT);
   // we cannot be sure of the class of $param, but the method has the right name and LIBXML_NOENT is used
   $param->load("xxe.xml", LIBXML_NOENT); // Noncompliant
