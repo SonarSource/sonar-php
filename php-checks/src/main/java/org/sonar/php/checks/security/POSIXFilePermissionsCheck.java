@@ -49,14 +49,14 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = CheckUtils.functionName(tree);
+    String functionName = CheckUtils.lowerCaseFunctionName (tree);
     if (tree.callee().is(Kind.OBJECT_MEMBER_ACCESS)) {
       if ("chmod".equals(functionName)) {
         chmodSymfonyAndLaravelCheck(tree);
       }
-    } else if ("chmod".equalsIgnoreCase(functionName)) {
+    } else if ("chmod".equals(functionName)) {
       chmodCoreCheck(tree);
-    } else if ("umask".equalsIgnoreCase(functionName)) {
+    } else if ("umask".equals(functionName)) {
       umaskCheck(tree);
     }
     super.visitFunctionCall(tree);
@@ -96,7 +96,7 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
       Symbol symbol = context().symbolTable().getSymbol(argumentValue);
       uniqueAssignedValue = assignmentExpressionVisitor.getUniqueAssignedValue(symbol);
     }
-    ExpressionTree argumentExpressionTree = uniqueAssignedValue.isPresent() ? uniqueAssignedValue.get() : argumentValue;
+    ExpressionTree argumentExpressionTree = uniqueAssignedValue.orElse(argumentValue);
     if (argumentExpressionTree.is(Kind.REGULAR_STRING_LITERAL, Kind.NUMERIC_LITERAL)) {
       String literal = ((LiteralTree) argumentExpressionTree).value();
       return getDecimalRepresentation(literal, defaultValue);
