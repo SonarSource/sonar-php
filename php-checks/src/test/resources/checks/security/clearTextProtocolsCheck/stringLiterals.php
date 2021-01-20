@@ -35,9 +35,4 @@ $url = "http://::1"; // Compliant
 $url = "ftp://user@localhost"; // Compliant
 $url = 123; // Compliant
 
-/** FTP **/
-ftp_connect('xxx'); // Noncompliant {{Using ftp_connect() can be insecure. use ftp_ssl_connect() instead}}
-\ftp_connect('xxx'); // Noncompliant
-ftp_connect('xxx', 1234); // Noncompliant
-ftp_ssl_connect('xxx'); // Compliant
-ftp_ssl_connect('xxx', 1234); // Compliant
+return;

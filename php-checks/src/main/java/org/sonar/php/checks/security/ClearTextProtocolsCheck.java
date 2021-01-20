@@ -21,11 +21,17 @@ package org.sonar.php.checks.security;
 
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import javax.annotation.Nullable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -49,7 +55,20 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6);
 
   private static final String MESSAGE_PROTOCOL = "Using %s protocol is insecure. Use %s instead";
-  private static final String MESSAGE_FTP = "Using ftp_connect() can be insecure. use ftp_ssl_connect() instead";
+  private static final String MESSAGE_FTP = "Using ftp_connect() is insecure. Use ftp_ssl_connect() instead";
+  private static final String MESSAGE_LARAVEL = "Mail transport without encryption is insecure. Specify an encryption";
+
+  /**
+   * To avoid unnecessary steps, we check for clear-text laravel SMTP configuration only when we are in a file "config/mail.php"
+   * as the configuration is usually done in there.
+   */
+  private boolean inLaravelConfigFile;
+
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    inLaravelConfigFile = context().getPhpFile().uri().getPath().endsWith("config/mail.php");
+    super.visitCompilationUnit(tree);
+  }
 
   @Override
   public void visitLiteral(LiteralTree tree) {
@@ -79,6 +98,121 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     }
 
     super.visitFunctionCall(tree);
+  }
+
+  @Override
+  public void visitReturnStatement(ReturnStatementTree tree) {
+    if (inLaravelConfigFile && tree.expression() != null && tree.expression().is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
+      checkLaravelMailConfig((ArrayInitializerTree)tree.expression());
+    }
+    super.visitReturnStatement(tree);
+  }
+
+  private void checkLaravelMailConfig(ArrayInitializerTree tree) {
+    ArrayInitializerTree mailerConfigs = tree.arrayPairs().stream()
+      .filter(p -> p.key() != null)
+      .filter(p -> p.key().is(Tree.Kind.REGULAR_STRING_LITERAL))
+      .filter(p -> "mailers".equals(CheckUtils.trimQuotes((LiteralTree) p.key())))
+      .filter(p -> p.value().is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION))
+      .map(p -> ((ArrayInitializerTree)p.value()))
+      .findFirst().orElse(null);
+
+    if (mailerConfigs == null) {
+      return;
+    }
+
+    for (ArrayPairTree pairTree : mailerConfigs.arrayPairs()) {
+      if (pairTree.key() == null || !pairTree.value().is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
+        continue;
+      }
+
+      LaravelMailConfig config = LaravelMailConfig.of((ArrayInitializerTree) pairTree.value());
+      if (config.isSmtp() && config.isClearText()) {
+        if (config.encryption == null) {
+          context().newIssue(this, pairTree.key(), MESSAGE_LARAVEL);
+        } else {
+          context().newIssue(this, config.encryption, MESSAGE_LARAVEL);
+        }
+      }
+    }
+  }
+
+  private static class LaravelMailConfig {
+    private final ExpressionTree transport;
+    private final ExpressionTree host;
+    private final ExpressionTree encryption;
+
+    public LaravelMailConfig(@Nullable ExpressionTree transport, @Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
+      this.transport = transport;
+      this.host = host;
+      this.encryption = encryption;
+    }
+
+    private static LaravelMailConfig of(ArrayInitializerTree tree) {
+      ExpressionTree transport = null;
+      ExpressionTree host = null;
+      ExpressionTree encryption = null;
+
+      for (ArrayPairTree pairTree : tree.arrayPairs()) {
+        if (pairTree.key() == null || !pairTree.key().is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+          continue;
+        }
+
+        String key = CheckUtils.trimQuotes((LiteralTree) pairTree.key());
+
+        switch (key) {
+          case "transport":
+            transport = pairTree.value();
+            break;
+          case "host":
+            host = pairTree.value();
+            break;
+          case "encryption":
+            encryption = pairTree.value();
+            break;
+          default:
+        }
+      }
+
+      return new LaravelMailConfig(transport, host, encryption);
+    }
+
+    private boolean isClearText() {
+      return hasInsecureEncryption() && hasInsecureHost();
+    }
+
+    private boolean hasInsecureHost() {
+      if (host == null) {
+        return false;
+      }
+
+      ExpressionTree hostValueTree = CheckUtils.assignedValue(host);
+      if (!hostValueTree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+        // We don't know in this case
+        return false;
+      }
+
+      String hostValue = CheckUtils.trimQuotes((LiteralTree) hostValueTree).toLowerCase(Locale.ROOT);
+      return !(hostValue.startsWith("ssl://") || hostValue.startsWith("tls://")) && !LOOPBACK_IP.matcher(hostValue).matches();
+    }
+
+    private boolean hasInsecureEncryption() {
+      if (encryption == null) {
+        return true;
+      }
+
+      ExpressionTree encryptionValueTree = CheckUtils.assignedValue(encryption);
+      if (encryptionValueTree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+        String encryptionValue = CheckUtils.trimQuotes((LiteralTree) encryptionValueTree).toLowerCase(Locale.ROOT);
+        return !("ssl".equals(encryptionValue) || "tls".equals(encryptionValue));
+      }
+
+      return encryptionValueTree.is(Tree.Kind.NULL_LITERAL);
+    }
+
+    private boolean isSmtp() {
+      return transport != null && transport.is(Tree.Kind.REGULAR_STRING_LITERAL) && "smtp".equals(CheckUtils.trimQuotes((LiteralTree) transport));
+    }
   }
 
   private static boolean startsWithUnsafeProtocol(String value) {
