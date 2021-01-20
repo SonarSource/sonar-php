@@ -38,15 +38,6 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure this permission is safe.";
 
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
-
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.lowerCaseFunctionName (tree);
@@ -90,13 +81,7 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
   }
 
   private int resolveArgument(CallArgumentTree argument, int defaultValue) {
-    Optional<ExpressionTree> uniqueAssignedValue = Optional.empty();
-    ExpressionTree argumentValue = argument.value();
-    if (argumentValue.is(Kind.VARIABLE_IDENTIFIER)) {
-      Symbol symbol = context().symbolTable().getSymbol(argumentValue);
-      uniqueAssignedValue = assignmentExpressionVisitor.getUniqueAssignedValue(symbol);
-    }
-    ExpressionTree argumentExpressionTree = uniqueAssignedValue.orElse(argumentValue);
+    ExpressionTree argumentExpressionTree = CheckUtils.assignedValue(argument.value());
     if (argumentExpressionTree.is(Kind.REGULAR_STRING_LITERAL, Kind.NUMERIC_LITERAL)) {
       String literal = ((LiteralTree) argumentExpressionTree).value();
       return getDecimalRepresentation(literal, defaultValue);
