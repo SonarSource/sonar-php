@@ -23,11 +23,15 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -36,9 +40,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Rule(key = "S5332")
@@ -64,10 +71,14 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
    */
   private boolean inLaravelConfigFile;
 
+  private final Set<NewExpressionTree> suspiciousSwiftMailInstantiations = new HashSet<>();
+
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     inLaravelConfigFile = context().getPhpFile().uri().getPath().endsWith("config/mail.php");
     super.visitCompilationUnit(tree);
+    suspiciousSwiftMailInstantiations.forEach(s -> context().newIssue(this, s, MESSAGE_LARAVEL));
+    suspiciousSwiftMailInstantiations.clear();
   }
 
   @Override
@@ -110,6 +121,86 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     }
 
     super.visitReturnStatement(tree);
+  }
+
+  @Override
+  public void visitNewExpression(NewExpressionTree tree) {
+    if (isSuspiciousSwiftMailInstantiation(tree)) {
+      suspiciousSwiftMailInstantiations.add(tree);
+    }
+    super.visitNewExpression(tree);
+  }
+
+  @Override
+  public void visitMemberAccess(MemberAccessTree tree) {
+    super.visitMemberAccess(tree);
+    NewExpressionTree receiver = getOriginalNewExpression(tree.object());
+    if (receiver == null || !suspiciousSwiftMailInstantiations.contains(receiver)) {
+      return;
+    }
+
+    if (isSwiftMailSetEncryption(tree)) {
+      if (!isCorrectSetEncryption((FunctionCallTree) tree.getParent())) {
+        // TODO: change message
+        context().newIssue(this, tree.member(), MESSAGE_LARAVEL);
+      }
+      suspiciousSwiftMailInstantiations.remove(receiver);
+    }
+  }
+
+  private static boolean isCorrectSetEncryption(FunctionCallTree tree) {
+    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "encryption", 0);
+    if (!argument.isPresent()) {
+      return false;
+    }
+
+    ExpressionTree value = CheckUtils.assignedValue(argument.get().value());
+
+    if (value.is(Tree.Kind.NULL_LITERAL)) {
+      return false;
+    } else if (value.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+      String s = CheckUtils.trimQuotes((LiteralTree) value);
+      return "ssl".equalsIgnoreCase(s) || "tls".equalsIgnoreCase(s);
+    }
+
+    return true;
+  }
+
+  private static NewExpressionTree getOriginalNewExpression(ExpressionTree tree) {
+    ExpressionTree assignedValue = CheckUtils.skipParenthesis(CheckUtils.assignedValue(tree));
+    if (assignedValue.is(Tree.Kind.NEW_EXPRESSION)) {
+      return (NewExpressionTree) assignedValue;
+    }
+
+    return null;
+  }
+
+  private static boolean isSwiftMailSetEncryption(MemberAccessTree tree) {
+    if (!tree.getParent().is(Tree.Kind.FUNCTION_CALL)) {
+      return false;
+    }
+
+    Tree memberExpression = tree.member();
+    return memberExpression.is(Tree.Kind.NAME_IDENTIFIER) && "setEncryption".equalsIgnoreCase(((NameIdentifierTree) memberExpression).text());
+  }
+
+  private static boolean isSuspiciousSwiftMailInstantiation(NewExpressionTree tree) {
+    ExpressionTree expression = tree.expression();
+    if (expression.is(Tree.Kind.FUNCTION_CALL) && "Swift_SmtpTransport".equalsIgnoreCase(CheckUtils.functionName((FunctionCallTree) expression))) {
+      FunctionCallTree call = (FunctionCallTree) expression;
+      if (call.callArguments().size() < 2) {
+        return false;
+      }
+      // TODO: named argument
+      ExpressionTree host = CheckUtils.assignedValue(call.callArguments().get(0).value());
+      if (host.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+        String hostValue = CheckUtils.trimQuotes((LiteralTree) host).toLowerCase(Locale.ROOT);
+        return !("localhost".equals(hostValue) || LOOPBACK_IP.matcher(hostValue).matches())
+          && !(hostValue.startsWith("ssl://") || hostValue.startsWith("tls://"));
+      }
+    }
+
+    return false;
   }
 
   private void checkLaravelMailConfig(ArrayInitializerTree tree) {
