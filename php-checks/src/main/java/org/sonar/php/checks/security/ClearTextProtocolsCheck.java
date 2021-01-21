@@ -84,10 +84,9 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     }
 
     if (startsWithUnsafeProtocol(value) && !isLoopbackUrl(value)) {
-      String usedProtocol = ALTERNATIVE_PROTOCOLS.keySet().stream().filter(value::startsWith)
+      ALTERNATIVE_PROTOCOLS.keySet().stream().filter(value::startsWith)
         .findFirst()
-        .orElseThrow(() -> new IllegalStateException("URL should start with unsafe protocol at this point"));
-      context().newIssue(this, tree, String.format(MESSAGE_PROTOCOL, usedProtocol, ALTERNATIVE_PROTOCOLS.get(usedProtocol)));
+        .ifPresent(usedProtocol -> context().newIssue(this, tree, String.format(MESSAGE_PROTOCOL, usedProtocol, ALTERNATIVE_PROTOCOLS.get(usedProtocol))));
     }
   }
 
@@ -102,9 +101,14 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitReturnStatement(ReturnStatementTree tree) {
-    if (inLaravelConfigFile && tree.expression() != null && tree.expression().is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
-      checkLaravelMailConfig((ArrayInitializerTree)tree.expression());
+    if (inLaravelConfigFile) {
+      ExpressionTree returnExpression = tree.expression();
+
+      if (returnExpression != null && isArray(returnExpression)) {
+        checkLaravelMailConfig((ArrayInitializerTree)returnExpression);
+      }
     }
+
     super.visitReturnStatement(tree);
   }
 
@@ -113,7 +117,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       .filter(p -> p.key() != null)
       .filter(p -> p.key().is(Tree.Kind.REGULAR_STRING_LITERAL))
       .filter(p -> "mailers".equals(CheckUtils.trimQuotes((LiteralTree) p.key())))
-      .filter(p -> p.value().is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION))
+      .filter(p -> isArray(p.value()))
       .map(p -> ((ArrayInitializerTree)p.value()))
       .findFirst().orElse(null);
 
@@ -122,7 +126,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     }
 
     for (ArrayPairTree pairTree : mailerConfigs.arrayPairs()) {
-      if (pairTree.key() == null || !pairTree.value().is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
+      if (pairTree.key() == null || !isArray(pairTree.value())) {
         continue;
       }
 
@@ -235,5 +239,9 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     }
 
     return "localhost".equals(host) || LOOPBACK_IP.matcher(host).matches();
+  }
+
+  private static boolean isArray(Tree tree) {
+    return tree.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION);
   }
 }

@@ -82,6 +82,16 @@ return [
     ]
 ];
 
+$mailersConfigs = [
+	'mailers' => [
+		'smtp_sens1' => [
+			'transport' => 'smtp',
+			'host' => 'xxx',
+			'encryption' => null, // Compliant - FN not handled
+		]
+	]
+];
+return $mailersConfigs;
 
 return ["foo"];
 return;
