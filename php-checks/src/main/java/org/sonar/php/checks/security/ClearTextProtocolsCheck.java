@@ -40,23 +40,22 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 @Rule(key = "S5332")
 public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   private static final List<String> UNSAFE_PROTOCOLS = Arrays.asList("http://", "ftp://", "telnet://");
   private static final Map<String, String> ALTERNATIVE_PROTOCOLS = new HashMap<>();
+
   static {
     ALTERNATIVE_PROTOCOLS.put("http", "https");
     ALTERNATIVE_PROTOCOLS.put("ftp", "sftp, scp or ftps");
     ALTERNATIVE_PROTOCOLS.put("telnet", "ssh");
   }
+
   private static final String LOOPBACK_IPV4 = "^127(?:\\.[0-9]+){0,2}\\.[0-9]+$";
   private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
   private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6);
@@ -71,14 +70,22 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
    */
   private boolean inLaravelConfigFile;
 
-  private final Set<NewExpressionTree> suspiciousSwiftMailInstantiations = new HashSet<>();
+  private final Map<ExpressionTree, MailConfig> mailConfigs = new HashMap<>();
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     inLaravelConfigFile = context().getPhpFile().uri().getPath().endsWith("config/mail.php");
     super.visitCompilationUnit(tree);
-    suspiciousSwiftMailInstantiations.forEach(s -> context().newIssue(this, s, MESSAGE_LARAVEL));
-    suspiciousSwiftMailInstantiations.clear();
+    mailConfigs.forEach((definition, config) -> {
+      if (config.isClearText()) {
+        if (config.encryption != null) {
+          context().newIssue(this, config.encryption, MESSAGE_LARAVEL);
+        } else {
+          context().newIssue(this, definition, MESSAGE_LARAVEL);
+        }
+      }
+    });
+    mailConfigs.clear();
   }
 
   @Override
@@ -103,7 +110,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if("ftp_connect".equalsIgnoreCase(CheckUtils.getFunctionName(tree))) {
+    if ("ftp_connect".equalsIgnoreCase(CheckUtils.getFunctionName(tree))) {
       context().newIssue(this, tree.callee(), MESSAGE_FTP);
     }
 
@@ -116,7 +123,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       ExpressionTree returnExpression = tree.expression();
 
       if (returnExpression != null && isArray(returnExpression)) {
-        checkLaravelMailConfig((ArrayInitializerTree)returnExpression);
+        checkLaravelMailConfig((ArrayInitializerTree) returnExpression);
       }
     }
 
@@ -125,8 +132,8 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
-    if (isSuspiciousSwiftMailInstantiation(tree)) {
-      suspiciousSwiftMailInstantiations.add(tree);
+    if (SwiftMailConfig.isSwiftMailInstantiation(tree)) {
+      mailConfigs.putIfAbsent(tree, SwiftMailConfig.of(tree));
     }
     super.visitNewExpression(tree);
   }
@@ -135,35 +142,13 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   public void visitMemberAccess(MemberAccessTree tree) {
     super.visitMemberAccess(tree);
     NewExpressionTree receiver = getOriginalNewExpression(tree.object());
-    if (receiver == null || !suspiciousSwiftMailInstantiations.contains(receiver)) {
+    if (receiver == null || !mailConfigs.containsKey(receiver)) {
       return;
     }
 
-    if (isSwiftMailSetEncryption(tree)) {
-      if (!isCorrectSetEncryption((FunctionCallTree) tree.getParent())) {
-        // TODO: change message
-        context().newIssue(this, tree.member(), MESSAGE_LARAVEL);
-      }
-      suspiciousSwiftMailInstantiations.remove(receiver);
+    if (SwiftMailConfig.isSwiftMailSetEncryption(tree)) {
+      mailConfigs.get(receiver).setEncryption(((FunctionCallTree) tree.getParent()).callArguments().get(0).value());
     }
-  }
-
-  private static boolean isCorrectSetEncryption(FunctionCallTree tree) {
-    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "encryption", 0);
-    if (!argument.isPresent()) {
-      return false;
-    }
-
-    ExpressionTree value = CheckUtils.assignedValue(argument.get().value());
-
-    if (value.is(Tree.Kind.NULL_LITERAL)) {
-      return false;
-    } else if (value.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      String s = CheckUtils.trimQuotes((LiteralTree) value);
-      return "ssl".equalsIgnoreCase(s) || "tls".equalsIgnoreCase(s);
-    }
-
-    return true;
   }
 
   private static NewExpressionTree getOriginalNewExpression(ExpressionTree tree) {
@@ -175,41 +160,13 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     return null;
   }
 
-  private static boolean isSwiftMailSetEncryption(MemberAccessTree tree) {
-    if (!tree.getParent().is(Tree.Kind.FUNCTION_CALL)) {
-      return false;
-    }
-
-    Tree memberExpression = tree.member();
-    return memberExpression.is(Tree.Kind.NAME_IDENTIFIER) && "setEncryption".equalsIgnoreCase(((NameIdentifierTree) memberExpression).text());
-  }
-
-  private static boolean isSuspiciousSwiftMailInstantiation(NewExpressionTree tree) {
-    ExpressionTree expression = tree.expression();
-    if (expression.is(Tree.Kind.FUNCTION_CALL) && "Swift_SmtpTransport".equalsIgnoreCase(CheckUtils.functionName((FunctionCallTree) expression))) {
-      FunctionCallTree call = (FunctionCallTree) expression;
-      if (call.callArguments().size() < 2) {
-        return false;
-      }
-      // TODO: named argument
-      ExpressionTree host = CheckUtils.assignedValue(call.callArguments().get(0).value());
-      if (host.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-        String hostValue = CheckUtils.trimQuotes((LiteralTree) host).toLowerCase(Locale.ROOT);
-        return !("localhost".equals(hostValue) || LOOPBACK_IP.matcher(hostValue).matches())
-          && !(hostValue.startsWith("ssl://") || hostValue.startsWith("tls://"));
-      }
-    }
-
-    return false;
-  }
-
   private void checkLaravelMailConfig(ArrayInitializerTree tree) {
     ArrayInitializerTree mailerConfigs = tree.arrayPairs().stream()
       .filter(p -> p.key() != null)
       .filter(p -> p.key().is(Tree.Kind.REGULAR_STRING_LITERAL))
       .filter(p -> "mailers".equals(CheckUtils.trimQuotes((LiteralTree) p.key())))
       .filter(p -> isArray(p.value()))
-      .map(p -> ((ArrayInitializerTree)p.value()))
+      .map(p -> ((ArrayInitializerTree) p.value()))
       .findFirst().orElse(null);
 
     if (mailerConfigs == null) {
@@ -222,25 +179,18 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       }
 
       LaravelMailConfig config = LaravelMailConfig.of((ArrayInitializerTree) pairTree.value());
-      if (config.isSmtp() && config.isClearText()) {
-        if (config.encryption == null) {
-          context().newIssue(this, pairTree.key(), MESSAGE_LARAVEL);
-        } else {
-          context().newIssue(this, config.encryption, MESSAGE_LARAVEL);
-        }
+      if (config.isSmtp()) {
+        mailConfigs.put(pairTree.key(), config);
       }
     }
   }
 
-  private static class LaravelMailConfig {
+  private static class LaravelMailConfig extends MailConfig {
     private final ExpressionTree transport;
-    private final ExpressionTree host;
-    private final ExpressionTree encryption;
 
     public LaravelMailConfig(@Nullable ExpressionTree transport, @Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
+      super(host, encryption);
       this.transport = transport;
-      this.host = host;
-      this.encryption = encryption;
     }
 
     private static LaravelMailConfig of(ArrayInitializerTree tree) {
@@ -272,7 +222,47 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       return new LaravelMailConfig(transport, host, encryption);
     }
 
-    private boolean isClearText() {
+    private boolean isSmtp() {
+      return transport != null && transport.is(Tree.Kind.REGULAR_STRING_LITERAL) && "smtp".equals(CheckUtils.trimQuotes((LiteralTree) transport));
+    }
+  }
+
+  private static class SwiftMailConfig extends MailConfig {
+    public SwiftMailConfig(@Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
+      super(host, encryption);
+    }
+
+    private static SwiftMailConfig of(NewExpressionTree tree) {
+      FunctionCallTree initCall = (FunctionCallTree) tree.expression();
+      return new SwiftMailConfig(CheckUtils.argument(initCall, "host", 0).map(CallArgumentTree::value).orElse(null),
+        CheckUtils.argument(initCall, "encryption", 2).map(CallArgumentTree::value).orElse(null));
+    }
+
+    private static boolean isSwiftMailInstantiation(NewExpressionTree tree) {
+      ExpressionTree expression = tree.expression();
+      return expression.is(Tree.Kind.FUNCTION_CALL) && "Swift_SmtpTransport".equalsIgnoreCase(CheckUtils.functionName((FunctionCallTree) expression));
+    }
+
+    private static boolean isSwiftMailSetEncryption(MemberAccessTree tree) {
+      if (!tree.getParent().is(Tree.Kind.FUNCTION_CALL) || ((FunctionCallTree) tree.getParent()).callArguments().size() != 1) {
+        return false;
+      }
+
+      Tree memberExpression = tree.member();
+      return memberExpression.is(Tree.Kind.NAME_IDENTIFIER) && "setEncryption".equalsIgnoreCase(((NameIdentifierTree) memberExpression).text());
+    }
+  }
+
+  private static class MailConfig {
+    private ExpressionTree host;
+    protected ExpressionTree encryption;
+
+    public MailConfig(@Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
+      this.host = host;
+      this.encryption = encryption;
+    }
+
+    protected boolean isClearText() {
       return hasInsecureEncryption() && hasInsecureHost();
     }
 
@@ -288,7 +278,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       }
 
       String hostValue = CheckUtils.trimQuotes((LiteralTree) hostValueTree).toLowerCase(Locale.ROOT);
-      return !(hostValue.startsWith("ssl://") || hostValue.startsWith("tls://")) && !LOOPBACK_IP.matcher(hostValue).matches();
+      return !("localhost".equals(hostValue) || hostValue.startsWith("ssl://") || hostValue.startsWith("tls://")) && !LOOPBACK_IP.matcher(hostValue).matches();
     }
 
     private boolean hasInsecureEncryption() {
@@ -305,8 +295,12 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       return encryptionValueTree.is(Tree.Kind.NULL_LITERAL);
     }
 
-    private boolean isSmtp() {
-      return transport != null && transport.is(Tree.Kind.REGULAR_STRING_LITERAL) && "smtp".equals(CheckUtils.trimQuotes((LiteralTree) transport));
+    protected void setHost(ExpressionTree host) {
+      this.host = host;
+    }
+
+    protected void setEncryption(ExpressionTree encryption) {
+      this.encryption = encryption;
     }
   }
 
