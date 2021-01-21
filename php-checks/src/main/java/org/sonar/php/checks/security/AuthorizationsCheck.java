@@ -29,6 +29,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -70,17 +71,17 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Vote methods should return at least once a negative response";
 
-  private static final String SYMFONY_VOTER_INTERFACE_NAMESPACE = "Symfony\\Component\\Security\\Core\\Authorization\\Voter\\VoterInterface";
-  private static final String SYMFONY_VOTER_NAMESPACE = "Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter";
-  private static final String LARAVEL_GATE_NAMESPACE = "Illuminate\\Support\\Facades\\Gate";
+  private static final QualifiedName SYMFONY_VOTER_INTERFACE_NAMESPACE = qualifiedName("Symfony\\Component\\Security\\Core\\Authorization\\Voter\\VoterInterface");
+  private static final QualifiedName SYMFONY_VOTER_NAMESPACE = qualifiedName("Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter");
+  private static final QualifiedName LARAVEL_GATE_NAMESPACE = qualifiedName("Illuminate\\Support\\Facades\\Gate");
 
   private static final Set<String> VOTER_INTERFACE_COMPLIANT_RETURN_VALUES = new HashSet<>(Arrays.asList("ACCESS_ABSTAIN", "ACCESS_DENIED"));
   private static final Set<String> LARAVEL_GATE_CLOSURE_COMPLIANT_RETURN_VALUES = new HashSet<>(Arrays.asList("false", "null"));
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree methodDeclarationTree) {
-    String functionName = trimQuotes(getFunctionName(methodDeclarationTree));
     if (!hasModifier(methodDeclarationTree, "abstract")) {
+      String functionName = trimQuotes(getFunctionName(methodDeclarationTree));
       if ("vote".equalsIgnoreCase(functionName) && isMethodInheritedFromClassOrInterface(SYMFONY_VOTER_INTERFACE_NAMESPACE, methodDeclarationTree)) {
         checkReturnStatements(methodDeclarationTree, a -> (VOTER_INTERFACE_COMPLIANT_RETURN_VALUES.contains(a)));
       }
@@ -119,38 +120,21 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
     return method.is(Kind.NAME_IDENTIFIER) &&
       ((NameIdentifierTree) method).text().equals(expectedMethod) &&
       receiver.is(Kind.NAMESPACE_NAME) &&
-      getFullyQualifiedName((NamespaceNameTree) receiver).toString().equalsIgnoreCase(LARAVEL_GATE_NAMESPACE);
+      getFullyQualifiedName((NamespaceNameTree) receiver).equals(LARAVEL_GATE_NAMESPACE);
   }
 
-  private static boolean isMethodInheritedFromClassOrInterface(String qualifiedName, MethodDeclarationTree methodDeclarationTree) {
+  private static boolean isMethodInheritedFromClassOrInterface(QualifiedName symfonyVoterInterfaceNamespace, MethodDeclarationTree methodDeclarationTree) {
     ClassDeclarationTree classTree = (ClassDeclarationTree) findAncestorWithKind(methodDeclarationTree, singletonList(Kind.CLASS_DECLARATION));
     if (classTree != null) {
-      return get(classTree).isSubTypeOf(qualifiedName(qualifiedName)).isTrue();
+      return get(classTree).isSubTypeOf(symfonyVoterInterfaceNamespace).isTrue();
     }
     return false;
   }
 
   private void checkReturnStatements(FunctionTree methodDeclarationTree, Predicate<String> predicate) {
     List<ReturnStatementTree> returnStatements = descendants(methodDeclarationTree, ReturnStatementTree.class).collect(Collectors.toList());
-    boolean compliant = false;
     for (ReturnStatementTree returnStatementTree : returnStatements) {
-      ExpressionTree returnExpressionTree = returnStatementTree.expression();
-      if (returnExpressionTree.is(NUMERIC_LITERAL, REGULAR_STRING_LITERAL)) {
-        compliant = false;
-      } else if (returnExpressionTree.is(FUNCTION_CALL)) {
-        compliant = isFunctionCallCompliant((FunctionCallTree) returnExpressionTree);
-      } else if (returnExpressionTree.is(VARIABLE_IDENTIFIER)) {
-        compliant = isVariableValueCompliant((VariableIdentifierTree) returnExpressionTree, predicate);
-      } else if (returnExpressionTree.is(CLASS_MEMBER_ACCESS)) {
-        compliant = isMemberValueCompliant((MemberAccessTree) returnExpressionTree, predicate);
-      } else if (returnExpressionTree.is(NULL_LITERAL)) {
-        compliant = isNullValueCompliant((LiteralTree) returnExpressionTree, predicate);
-      } else if (returnExpressionTree.is(BOOLEAN_LITERAL)) {
-        compliant = isBooleanValueCompliant((LiteralTree) returnExpressionTree, predicate);
-      } else {
-        compliant = true;
-      }
-      if (compliant) {
+      if (CompliantResultStatement.isReturnStatementCompliant(returnStatementTree, predicate)) {
         return;
       }
     }
@@ -161,38 +145,50 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
     }
   }
 
-  private static boolean isFunctionCallCompliant(FunctionCallTree functionCallTree) {
-    return !nameOf(functionCallTree.callee()).equalsIgnoreCase("response::allow");
-  }
+  private static class CompliantResultStatement {
 
-  private static boolean isVariableValueCompliant(VariableIdentifierTree variableExpression, Predicate<String> predicate) {
-    Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue(variableExpression);
-    if (uniqueAssignedValue.isPresent()) {
-      ExpressionTree variableValue = uniqueAssignedValue.get();
-      if (variableValue.is(CLASS_MEMBER_ACCESS)) {
-        return isMemberValueCompliant((MemberAccessTree) variableValue, predicate);
-      }
-      if (variableValue.is(BOOLEAN_LITERAL)) {
-        return isBooleanValueCompliant((LiteralTree) variableValue, predicate);
-      }
-      if (variableValue.is(NULL_LITERAL)) {
-        return isNullValueCompliant((LiteralTree) variableValue, predicate);
-      }
-      return false;
+    private static boolean isReturnStatementCompliant(ReturnStatementTree returnStatementTree, Predicate<String> predicate) {
+      return isExpressionCompliant(returnStatementTree.expression(), predicate);
     }
-    return true;
-  }
 
-  private static boolean isBooleanValueCompliant(LiteralTree literalValue, Predicate<String> predicate) {
-    return predicate.test(literalValue.value().toLowerCase(Locale.ROOT));
-  }
+    private static boolean isExpressionCompliant(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
+      boolean compliant;
+      if (returnExpressionTree.is(NUMERIC_LITERAL, REGULAR_STRING_LITERAL)) {
+        compliant = false;
+      } else if (returnExpressionTree.is(FUNCTION_CALL)) {
+        compliant = isFunctionCallCompliant((FunctionCallTree) returnExpressionTree);
+      } else if (returnExpressionTree.is(VARIABLE_IDENTIFIER)) {
+        compliant = isVariableValueCompliant((VariableIdentifierTree) returnExpressionTree, predicate);
+      } else if (returnExpressionTree.is(CLASS_MEMBER_ACCESS)) {
+        compliant = isMemberValueCompliant((MemberAccessTree) returnExpressionTree, predicate);
+      } else if (returnExpressionTree.is(NULL_LITERAL)) {
+        compliant = isBooleanOrNullLiteralValueCompliant((LiteralTree) returnExpressionTree, predicate);
+      } else if (returnExpressionTree.is(BOOLEAN_LITERAL)) {
+        compliant = isBooleanOrNullLiteralValueCompliant((LiteralTree) returnExpressionTree, predicate);
+      } else {
+        compliant = true;
+      }
+      return compliant;
+    }
 
-  private static boolean isNullValueCompliant(LiteralTree literalValue, Predicate<String> predicate) {
-    return predicate.test(literalValue.value().toLowerCase(Locale.ROOT));
-  }
+    private static boolean isFunctionCallCompliant(FunctionCallTree functionCallTree) {
+      return !nameOf(functionCallTree.callee()).equalsIgnoreCase("response::allow");
+    }
 
-  private static boolean isMemberValueCompliant(MemberAccessTree memberAccessTree, Predicate<String> predicate) {
-    return predicate.test(nameOf(memberAccessTree.member()));
-  }
+    private static boolean isVariableValueCompliant(VariableIdentifierTree variableExpression, Predicate<String> predicate) {
+      Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue(variableExpression);
+      if (uniqueAssignedValue.isPresent()) {
+        return isExpressionCompliant(uniqueAssignedValue.get(), predicate);
+      }
+      return true;
+    }
 
+    private static boolean isBooleanOrNullLiteralValueCompliant(LiteralTree literalValue, Predicate<String> predicate) {
+      return predicate.test(literalValue.value().toLowerCase(Locale.ROOT));
+    }
+
+    private static boolean isMemberValueCompliant(MemberAccessTree memberAccessTree, Predicate<String> predicate) {
+      return predicate.test(nameOf(memberAccessTree.member()));
+    }
+  }
 }

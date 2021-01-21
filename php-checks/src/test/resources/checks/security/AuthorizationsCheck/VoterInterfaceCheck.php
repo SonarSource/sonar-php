@@ -151,6 +151,16 @@ class MultipleNoncompliantReturns implements VoterInterface
         }
         return true; // Noncompliant
     }
+
+    public function vote(TokenInterface $token, $subject, array $attributes)
+    {
+        if (foo()) {
+            return self::ACCESS_GRANTED;
+        } else if (bar()) {
+            return self::ACCESS_DENIED;
+        }
+        return true; // Compliant
+    }
 }
 
 class MultipleReturnsAtLeastOneIsCompliant implements VoterInterface
@@ -162,6 +172,20 @@ class MultipleReturnsAtLeastOneIsCompliant implements VoterInterface
             return self::ACCESS_DENIED;
         }
         return self::ACCESS_GRANTED; // Compliant
+    }
+}
+
+class AnotherMultipleReturnsAtLeastOneIsCompliant implements VoterInterface
+{
+
+    public function vote(TokenInterface $token, $subject, array $attributes)
+    {
+        if (foo()) {
+            return self::ACCESS_GRANTED;
+        } else if (bar()) {
+            return self::ACCESS_DENIED;
+        }
+        return true;
     }
 }
 
