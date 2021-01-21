@@ -134,7 +134,7 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
   private void checkReturnStatements(FunctionTree methodDeclarationTree, Predicate<String> predicate) {
     List<ReturnStatementTree> returnStatements = descendants(methodDeclarationTree, ReturnStatementTree.class).collect(Collectors.toList());
     for (ReturnStatementTree returnStatementTree : returnStatements) {
-      if (CompliantResultStatement.isReturnStatementCompliant(returnStatementTree, predicate)) {
+      if (CompliantResultStatement.create(returnStatementTree.expression(), predicate).isExpressionCompliant()) {
         return;
       }
     }
@@ -146,49 +146,56 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
   }
 
   private static class CompliantResultStatement {
+    private ExpressionTree returnExpressionTree;
+    private Predicate<String> predicate;
 
-    private static boolean isReturnStatementCompliant(ReturnStatementTree returnStatementTree, Predicate<String> predicate) {
-      return isExpressionCompliant(returnStatementTree.expression(), predicate);
+    private CompliantResultStatement(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
+      this.returnExpressionTree = returnExpressionTree;
+      this.predicate = predicate;
     }
 
-    private static boolean isExpressionCompliant(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
+    static CompliantResultStatement create(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
+      return new CompliantResultStatement(returnExpressionTree, predicate);
+    }
+
+    boolean isExpressionCompliant() {
       boolean compliant;
       if (returnExpressionTree.is(NUMERIC_LITERAL, REGULAR_STRING_LITERAL)) {
         compliant = false;
       } else if (returnExpressionTree.is(FUNCTION_CALL)) {
-        compliant = isFunctionCallCompliant((FunctionCallTree) returnExpressionTree);
+        compliant = isFunctionCallCompliant();
       } else if (returnExpressionTree.is(VARIABLE_IDENTIFIER)) {
-        compliant = isVariableValueCompliant((VariableIdentifierTree) returnExpressionTree, predicate);
+        compliant = isVariableValueCompliant();
       } else if (returnExpressionTree.is(CLASS_MEMBER_ACCESS)) {
-        compliant = isMemberValueCompliant((MemberAccessTree) returnExpressionTree, predicate);
+        compliant = isMemberValueCompliant();
       } else if (returnExpressionTree.is(NULL_LITERAL)) {
-        compliant = isBooleanOrNullLiteralValueCompliant((LiteralTree) returnExpressionTree, predicate);
+        compliant = isBooleanOrNullLiteralValueCompliant();
       } else if (returnExpressionTree.is(BOOLEAN_LITERAL)) {
-        compliant = isBooleanOrNullLiteralValueCompliant((LiteralTree) returnExpressionTree, predicate);
+        compliant = isBooleanOrNullLiteralValueCompliant();
       } else {
         compliant = true;
       }
       return compliant;
     }
 
-    private static boolean isFunctionCallCompliant(FunctionCallTree functionCallTree) {
-      return !nameOf(functionCallTree.callee()).equalsIgnoreCase("response::allow");
+    boolean isFunctionCallCompliant() {
+      return !nameOf(((FunctionCallTree) returnExpressionTree).callee()).equalsIgnoreCase("response::allow");
     }
 
-    private static boolean isVariableValueCompliant(VariableIdentifierTree variableExpression, Predicate<String> predicate) {
-      Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue(variableExpression);
+    boolean isVariableValueCompliant() {
+      Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue((VariableIdentifierTree) returnExpressionTree);
       if (uniqueAssignedValue.isPresent()) {
-        return isExpressionCompliant(uniqueAssignedValue.get(), predicate);
+        return create(uniqueAssignedValue.get(), predicate).isExpressionCompliant();
       }
       return true;
     }
 
-    private static boolean isBooleanOrNullLiteralValueCompliant(LiteralTree literalValue, Predicate<String> predicate) {
-      return predicate.test(literalValue.value().toLowerCase(Locale.ROOT));
+    boolean isBooleanOrNullLiteralValueCompliant() {
+      return predicate.test(((LiteralTree) returnExpressionTree).value().toLowerCase(Locale.ROOT));
     }
 
-    private static boolean isMemberValueCompliant(MemberAccessTree memberAccessTree, Predicate<String> predicate) {
-      return predicate.test(nameOf(memberAccessTree.member()));
+    boolean isMemberValueCompliant() {
+      return predicate.test(nameOf(((MemberAccessTree) returnExpressionTree).member()));
     }
   }
 }
