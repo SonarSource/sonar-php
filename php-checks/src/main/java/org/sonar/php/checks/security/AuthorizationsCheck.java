@@ -123,10 +123,10 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
       getFullyQualifiedName((NamespaceNameTree) receiver).equals(LARAVEL_GATE_NAMESPACE);
   }
 
-  private static boolean isMethodInheritedFromClassOrInterface(QualifiedName symfonyVoterInterfaceNamespace, MethodDeclarationTree methodDeclarationTree) {
+  private static boolean isMethodInheritedFromClassOrInterface(QualifiedName qualifiedName, MethodDeclarationTree methodDeclarationTree) {
     ClassDeclarationTree classTree = (ClassDeclarationTree) findAncestorWithKind(methodDeclarationTree, singletonList(Kind.CLASS_DECLARATION));
     if (classTree != null) {
-      return get(classTree).isSubTypeOf(symfonyVoterInterfaceNamespace).isTrue();
+      return get(classTree).isSubTypeOf(qualifiedName).isTrue();
     }
     return false;
   }
