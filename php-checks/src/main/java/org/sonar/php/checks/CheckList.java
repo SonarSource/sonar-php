@@ -42,6 +42,7 @@ import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
 import org.sonar.php.checks.phpunit.NotDiscoverableTestCheck;
 import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
 import org.sonar.php.checks.phpunit.TestClassNameCheck;
+import org.sonar.php.checks.security.AuthorizationsCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.ClearTextProtocolsCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
@@ -84,6 +85,7 @@ public class CheckList {
       AssertTrueInsteadOfDedicatedAssertCheck.class,
       AssignmentInSubExpressionCheck.class,
       AtLeastThreeCasesInSwitchCheck.class,
+      AuthorizationsCheck.class,
       AvoidDESCheck.class,
       BooleanEqualityComparisonCheck.class,
       BooleanOrNullLiteralInAssertionsCheck.class,
