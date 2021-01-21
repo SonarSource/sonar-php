@@ -57,14 +57,7 @@ import static org.sonar.php.symbols.Symbols.get;
 import static org.sonar.php.tree.TreeUtils.descendants;
 import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
-import static org.sonar.plugins.php.api.tree.Tree.Kind.BOOLEAN_LITERAL;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.CLASS_MEMBER_ACCESS;
-import static org.sonar.plugins.php.api.tree.Tree.Kind.FUNCTION_CALL;
-import static org.sonar.plugins.php.api.tree.Tree.Kind.FUNCTION_EXPRESSION;
-import static org.sonar.plugins.php.api.tree.Tree.Kind.NULL_LITERAL;
-import static org.sonar.plugins.php.api.tree.Tree.Kind.NUMERIC_LITERAL;
-import static org.sonar.plugins.php.api.tree.Tree.Kind.REGULAR_STRING_LITERAL;
-import static org.sonar.plugins.php.api.tree.Tree.Kind.VARIABLE_IDENTIFIER;
 
 @Rule(key = "S5808")
 public class AuthorizationsCheck extends PHPVisitorCheck {
@@ -104,12 +97,11 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
       if (isLaravelGateMethod(memberAccessTree, "before") || isLaravelGateMethod(memberAccessTree, "after")) {
         argument = argument(tree, "callback", 0);
       }
-      if (argument.isPresent()) {
-        ExpressionTree callArgumentTree = argument.get().value();
-        if (callArgumentTree.is(FUNCTION_EXPRESSION)) {
-          checkReturnStatements((FunctionExpressionTree) callArgumentTree, LARAVEL_GATE_CLOSURE_COMPLIANT_RETURN_VALUES::contains);
-        }
-      }
+      argument
+        .map(CallArgumentTree::value)
+        .filter(FunctionExpressionTree.class::isInstance)
+        .map(FunctionExpressionTree.class::cast)
+        .ifPresent(a -> checkReturnStatements(a, LARAVEL_GATE_CLOSURE_COMPLIANT_RETURN_VALUES::contains));
     }
     super.visitFunctionCall(tree);
   }
@@ -134,7 +126,7 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
   private void checkReturnStatements(FunctionTree methodDeclarationTree, Predicate<String> predicate) {
     List<ReturnStatementTree> returnStatements = descendants(methodDeclarationTree, ReturnStatementTree.class).collect(Collectors.toList());
     for (ReturnStatementTree returnStatementTree : returnStatements) {
-      if (CompliantResultStatement.create(returnStatementTree.expression(), predicate).isExpressionCompliant()) {
+      if (CompliantResultStatement.create(returnStatementTree.expression(), predicate).isCompliant()) {
         return;
       }
     }
@@ -158,34 +150,33 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
       return new CompliantResultStatement(returnExpressionTree, predicate);
     }
 
-    boolean isExpressionCompliant() {
-      boolean compliant;
-      if (returnExpressionTree.is(NUMERIC_LITERAL, REGULAR_STRING_LITERAL)) {
-        compliant = false;
-      } else if (returnExpressionTree.is(FUNCTION_CALL)) {
-        compliant = isFunctionCallCompliant();
-      } else if (returnExpressionTree.is(VARIABLE_IDENTIFIER)) {
-        compliant = isVariableValueCompliant();
-      } else if (returnExpressionTree.is(CLASS_MEMBER_ACCESS)) {
-        compliant = isMemberValueCompliant();
-      } else if (returnExpressionTree.is(NULL_LITERAL)) {
-        compliant = isBooleanOrNullLiteralValueCompliant();
-      } else if (returnExpressionTree.is(BOOLEAN_LITERAL)) {
-        compliant = isBooleanOrNullLiteralValueCompliant();
-      } else {
-        compliant = true;
+    boolean isCompliant() {
+      switch (returnExpressionTree.getKind()) {
+        case NUMERIC_LITERAL:
+        case REGULAR_STRING_LITERAL:
+          return false;
+        case FUNCTION_CALL:
+          return isFunctionCallCompliant();
+        case VARIABLE_IDENTIFIER:
+          return isVariableValueCompliant();
+        case CLASS_MEMBER_ACCESS:
+          return isMemberValueCompliant();
+        case NULL_LITERAL:
+        case BOOLEAN_LITERAL:
+          return isBooleanOrNullLiteralValueCompliant();
+        default:
+          return true;
       }
-      return compliant;
     }
 
     boolean isFunctionCallCompliant() {
-      return !nameOf(((FunctionCallTree) returnExpressionTree).callee()).equalsIgnoreCase("response::allow");
+      return !"response::allow".equalsIgnoreCase(nameOf(((FunctionCallTree) returnExpressionTree).callee()));
     }
 
     boolean isVariableValueCompliant() {
       Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue((VariableIdentifierTree) returnExpressionTree);
       if (uniqueAssignedValue.isPresent()) {
-        return create(uniqueAssignedValue.get(), predicate).isExpressionCompliant();
+        return create(uniqueAssignedValue.get(), predicate).isCompliant();
       }
       return true;
     }
