@@ -35,4 +35,6 @@ $url = "http://::1"; // Compliant
 $url = "ftp://user@localhost"; // Compliant
 $url = 123; // Compliant
 
+$url = "http:///www.php-fig.org/"; // Compliant - Malformed URL (no host part)
+
 return;
