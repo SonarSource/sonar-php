@@ -238,7 +238,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       host = uri.getAuthority();
     }
 
-    return "localhost".equals(host) || LOOPBACK_IP.matcher(host).matches();
+    return (host == null || "localhost".equals(host) || LOOPBACK_IP.matcher(host).matches());
   }
 
   private static boolean isArray(Tree tree) {
