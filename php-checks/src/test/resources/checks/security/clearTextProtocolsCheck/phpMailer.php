@@ -36,3 +36,13 @@ $mail9->Host = $host;
 
 $mail10 = new PHPMailer();
 $mail10->$field = "foo"; // Compliant - dynamic field access
+$mail10->noRelevant = "ssl";
+$mail10->SMTPSecure;
+$something = $mail10->SMTPSecure;
+
+$mail11 = new WrongNamespace\PHPMailer(); // Compliant
+$mail11->SMTPSecure = "";
+$mail12 = new $foo(); // Compliant
+$mail13 = new $foo; // Compliant
+$mail14 = new PHPMailer; // FN - non call construction is not handled
+$unknown->SMTPSecure = ''; // Compliant

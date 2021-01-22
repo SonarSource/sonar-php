@@ -43,3 +43,5 @@ $transport10->setHost("localhost");
 $transport25 = (new Swift_SmtpTransport('XXX', 1234))->$foo("bar"); // Compliant - dynamic method call
 $transport26 = (new Swift_SmtpTransport('XXX', 1234)); // Compliant - dynamic method call
 $transport26->$foo("bar");
+$transport26->notRelevant("tcp");
+$transport26->notRelevant2();
