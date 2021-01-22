@@ -42,4 +42,9 @@ public class ClearTextProtocolsCheckTest {
   public void swift_mailer() {
     CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/swiftMailer.php");
   }
+
+  @Test
+  public void php_mailer() {
+    CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/phpMailer.php");
+  }
 }

@@ -26,6 +26,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -130,6 +131,8 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   public void visitNewExpression(NewExpressionTree tree) {
     if (SwiftMailConfig.isSwiftMailInstantiation(tree)) {
       mailConfigs.putIfAbsent(tree, SwiftMailConfig.of(tree));
+    } else if (PhpMailerMailConfig.isPhpMailerInstantiation(tree)) {
+      mailConfigs.putIfAbsent(tree, new PhpMailerMailConfig(null, null));
     }
     super.visitNewExpression(tree);
   }
@@ -142,8 +145,11 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       return;
     }
 
-    if (tree.getParent().is(Tree.Kind.FUNCTION_CALL)) {
-      mailConfigs.get(receiver).handleMethodCall((FunctionCallTree) tree.getParent());
+    Tree parent = tree.getParent();
+    if (parent.is(Tree.Kind.FUNCTION_CALL)) {
+      mailConfigs.get(receiver).handleMethodCall((FunctionCallTree) parent);
+    } else if (parent.is(Tree.Kind.ASSIGNMENT) && ((AssignmentExpressionTree) parent).variable() == tree) {
+      mailConfigs.get(receiver).handleFieldAssignment((AssignmentExpressionTree) parent);
     }
   }
 
@@ -267,6 +273,42 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     }
   }
 
+  private static class PhpMailerMailConfig extends MailConfig {
+    private PhpMailerMailConfig(@Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
+      super(host, encryption);
+    }
+
+    private static boolean isPhpMailerInstantiation(NewExpressionTree tree) {
+      ExpressionTree expression = tree.expression();
+      if (!expression.is(Tree.Kind.FUNCTION_CALL) || !((FunctionCallTree)expression).callee().is(Tree.Kind.NAMESPACE_NAME)) {
+        return false;
+      }
+
+      // TODO: fully-qualified name should be used
+
+      return expression.is(Tree.Kind.FUNCTION_CALL) && "PHPMailer".equalsIgnoreCase(CheckUtils.functionName((FunctionCallTree) expression));
+    }
+
+    @Override
+    protected void handleFieldAssignment(AssignmentExpressionTree tree) {
+      Tree memberExpression = ((MemberAccessTree)tree.variable()).member();
+
+      if (!memberExpression.is(Tree.Kind.NAME_IDENTIFIER)) {
+        hasUnknownState = true;
+        return;
+      }
+
+      String fieldName = ((NameIdentifierTree) memberExpression).text();
+      ExpressionTree value = tree.value();
+
+      if ("SMTPSecure".equals(fieldName)) {
+        encryption = value;
+      } else if ("Host".equals(fieldName)) {
+        host = value;
+      }
+    }
+  }
+
   private static class MailConfig {
     protected ExpressionTree host;
     protected ExpressionTree encryption;
@@ -313,6 +355,10 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
 
     protected void handleMethodCall(FunctionCallTree tree) {
       // Parent classes can handle methods if necessary
+    }
+
+    protected void handleFieldAssignment(AssignmentExpressionTree tree) {
+      // Parent classes can handle field writes
     }
   }
 
