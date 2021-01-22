@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.symbols.ClassSymbol;
@@ -106,8 +105,8 @@ public class InheritanceDepthCheck extends PHPVisitorCheck {
 
   private Set<QualifiedName> getFilteredOutClasses() {
     if (filteredOutClassNames == null) {
-      filteredOutClassNames = Arrays.stream(StringUtils.split(filteredClasses, ','))
-        .map(StringUtils::trim)
+      filteredOutClassNames = Arrays.stream(filteredClasses.split( ","))
+        .map(String::trim)
         .map(QualifiedName::qualifiedName)
         .collect(Collectors.toSet());
     }
