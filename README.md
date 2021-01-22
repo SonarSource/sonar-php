@@ -21,7 +21,7 @@ This SonarSource project is a [static code analyser](https://en.wikipedia.org/wi
 
 # More documentation
 
-* [Control Flow Graph documentation](CFG.md)
+* [Control Flow Graph documentation](doc/CFG.md)
 
 Have question or feedback?
 --------------------------
@@ -43,6 +43,9 @@ To submit a contribution, create a pull request for this repository. Please make
 If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP) available only for you.
 
 #### Custom Rules API Changes
+- **3.15** (January 2021)
+    * `PHPCustomRulesDefinition` was removed, it was deprecated since version 2.13 (March 2018)
+    * Removed dependency on sslr-squid-bridge which is not maintained anymore
 - **3.11**, support of PHP 8:
     * `ParameterTree#type()` is deprecated. Use `ParameterTree#declaredType()` instead.
     * `ReturnTypeClauseTree#type()` is deprecated. Use `ReturnTypeClauseTree#declaredType()` instead.
@@ -107,6 +110,6 @@ sonar-php/its/ruling/src/test/resources/expected/
 
 ### License
 
-Copyright 2010-2020 SonarSource.
+Copyright 2010-2021 SonarSource.
 
 Licensed under the [GNU Lesser General Public License, Version 3.0](http://www.gnu.org/licenses/lgpl.txt)
