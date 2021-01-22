@@ -20,7 +20,6 @@
 package org.sonar.php.checks.security;
 
 import java.util.Optional;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -91,10 +90,12 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
       return Integer.valueOf(CheckUtils.trimQuotes(argument));
     } else if (argument.matches("^0[0-7]*$")) {
       return Integer.parseInt(argument, 8);
-    } else if (StringUtils.isNumeric(argument)) {
-      return Integer.parseInt(argument);
     }
-    return defaultValue;
+    try {
+      return Integer.parseInt(argument);
+    } catch (NumberFormatException e) {
+      return defaultValue;
+    }
   }
 
 }
