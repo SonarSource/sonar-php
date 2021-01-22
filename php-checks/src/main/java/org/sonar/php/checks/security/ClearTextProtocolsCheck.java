@@ -238,6 +238,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
         CheckUtils.argument(initCall, "encryption", 2).map(CallArgumentTree::value).orElse(null));
     }
 
+    @Override
     protected void handleMethodCall(FunctionCallTree tree) {
       if (tree.callArguments().size() != 1) {
         return;
@@ -246,6 +247,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       Tree memberExpression = ((MemberAccessTree)tree.callee()).member();
 
       if (!memberExpression.is(Tree.Kind.NAME_IDENTIFIER)) {
+        hasUnknownState = true;
         return;
       }
 
@@ -269,13 +271,15 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     protected ExpressionTree host;
     protected ExpressionTree encryption;
 
+    protected boolean hasUnknownState = false;
+
     public MailConfig(@Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
       this.host = host;
       this.encryption = encryption;
     }
 
     protected boolean isClearText() {
-      return hasInsecureEncryption() && hasInsecureHost();
+      return !hasUnknownState && hasInsecureEncryption() && hasInsecureHost();
     }
 
     private boolean hasInsecureHost() {
@@ -307,7 +311,9 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       return encryptionValueTree.is(Tree.Kind.NULL_LITERAL);
     }
 
-    protected void handleMethodCall(FunctionCallTree tree) {}
+    protected void handleMethodCall(FunctionCallTree tree) {
+      // Parent classes can handle methods if necessary
+    }
   }
 
   private static boolean startsWithUnsafeProtocol(String value) {

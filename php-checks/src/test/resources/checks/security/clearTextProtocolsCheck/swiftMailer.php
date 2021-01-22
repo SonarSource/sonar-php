@@ -29,14 +29,17 @@ $transport23 = (new Swift_SmtpTransport(encryption: 'tcp', host: 'localhost')); 
 $transport24 = (new Swift_SmtpTransport(encryption: 'tcp', host: 'smtp.example.org')); // Noncompliant
 
 $transport4 = (new Swift_SmtpTransport('smtp.example.org', 1234))->setEncryption('tls'); // Compliant
-
 $transport5 = (new Swift_SmtpTransport('smtp.example.org', 1234))->setEncryption('ssl'); // Compliant
-
 $transport6 = (new Swift_SmtpTransport('smtp.example.org', 1234))->setEncryption($encryption); // Compliant
 
 $transport7 = (new Swift_SmtpTransport('localhost', 1234)); // Compliant
 $transport8 = (new Swift_SmtpTransport('ssl://smtp.example.org', 1234)); // Compliant
 $transport9 = (new Swift_SmtpTransport('tls://smtp.example.org', 1234)); // Compliant
+$transport27 = (new Swift_SmtpTransport($host, 1234)); // Compliant
 
 $transport10 = new Swift_SmtpTransport('smtp.example.org', 1234); // Compliant
 $transport10->setHost("localhost");
+
+$transport25 = (new Swift_SmtpTransport('XXX', 1234))->$foo("bar"); // Compliant - dynamic method call
+$transport26 = (new Swift_SmtpTransport('XXX', 1234)); // Compliant - dynamic method call
+$transport26->$foo("bar");
