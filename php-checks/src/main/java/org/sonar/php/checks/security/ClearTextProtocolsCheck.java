@@ -21,9 +21,11 @@ package org.sonar.php.checks.security;
 
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -61,9 +63,12 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
   private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6);
 
+  private static final QualifiedName SWIFTMAILER_QN = QualifiedName.qualifiedName("Swift_SmtpTransport");
+  private static final QualifiedName PHPMAILER_QN = QualifiedName.qualifiedName("PHPMailer\\PHPMailer\\PHPMailer");
+
   private static final String MESSAGE_PROTOCOL = "Using %s protocol is insecure. Use %s instead";
   private static final String MESSAGE_FTP = "Using ftp_connect() is insecure. Use ftp_ssl_connect() instead";
-  private static final String MESSAGE_LARAVEL = "Mail transport without encryption is insecure. Specify an encryption";
+  private static final String MESSAGE_MAIL = "Mail transport without encryption is insecure. Specify an encryption";
 
   /**
    * To avoid unnecessary steps, we check for clear-text laravel SMTP configuration only when we are in a file "config/mail.php"
@@ -79,7 +84,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     super.visitCompilationUnit(tree);
     mailConfigs.forEach((definition, config) -> {
       if (config.isClearText()) {
-        context().newIssue(this, config.encryption != null ? config.encryption : definition, MESSAGE_LARAVEL);
+        context().newIssue(this, config.encryption != null ? config.encryption : definition, MESSAGE_MAIL);
       }
     });
     mailConfigs.clear();
@@ -129,12 +134,21 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
-    if (SwiftMailConfig.isSwiftMailInstantiation(tree)) {
+    if (isInstantiationOf(tree, SWIFTMAILER_QN)) {
       mailConfigs.putIfAbsent(tree, SwiftMailConfig.of(tree));
-    } else if (PhpMailerMailConfig.isPhpMailerInstantiation(tree)) {
+    } else if (isInstantiationOf(tree, PHPMAILER_QN)) {
       mailConfigs.putIfAbsent(tree, new PhpMailerMailConfig(null, null));
     }
     super.visitNewExpression(tree);
+  }
+
+  private boolean isInstantiationOf(NewExpressionTree tree, QualifiedName name) {
+    ExpressionTree expression = tree.expression();
+    if (!expression.is(Tree.Kind.FUNCTION_CALL) || !((FunctionCallTree)expression).callee().is(Tree.Kind.NAMESPACE_NAME)) {
+      return false;
+    }
+
+    return name.equals(getFullyQualifiedName((NamespaceNameTree) ((FunctionCallTree) expression).callee()));
   }
 
   @Override
@@ -266,27 +280,11 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
         host = argument;
       }
     }
-
-    private static boolean isSwiftMailInstantiation(NewExpressionTree tree) {
-      ExpressionTree expression = tree.expression();
-      return expression.is(Tree.Kind.FUNCTION_CALL) && "Swift_SmtpTransport".equalsIgnoreCase(CheckUtils.functionName((FunctionCallTree) expression));
-    }
   }
 
   private static class PhpMailerMailConfig extends MailConfig {
     private PhpMailerMailConfig(@Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
       super(host, encryption);
-    }
-
-    private static boolean isPhpMailerInstantiation(NewExpressionTree tree) {
-      ExpressionTree expression = tree.expression();
-      if (!expression.is(Tree.Kind.FUNCTION_CALL) || !((FunctionCallTree)expression).callee().is(Tree.Kind.NAMESPACE_NAME)) {
-        return false;
-      }
-
-      // TODO: fully-qualified name should be used
-
-      return expression.is(Tree.Kind.FUNCTION_CALL) && "PHPMailer".equalsIgnoreCase(CheckUtils.functionName((FunctionCallTree) expression));
     }
 
     @Override
@@ -315,7 +313,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
 
     protected boolean hasUnknownState = false;
 
-    public MailConfig(@Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
+    protected MailConfig(@Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
       this.host = host;
       this.encryption = encryption;
     }
