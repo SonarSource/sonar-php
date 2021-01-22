@@ -78,11 +78,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     super.visitCompilationUnit(tree);
     mailConfigs.forEach((definition, config) -> {
       if (config.isClearText()) {
-        if (config.encryption != null) {
-          context().newIssue(this, config.encryption, MESSAGE_LARAVEL);
-        } else {
-          context().newIssue(this, definition, MESSAGE_LARAVEL);
-        }
+        context().newIssue(this, config.encryption != null ? config.encryption : definition, MESSAGE_LARAVEL);
       }
     });
     mailConfigs.clear();
@@ -146,15 +142,19 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       return;
     }
 
-    if (SwiftMailConfig.isSwiftMailSetEncryption(tree)) {
-      mailConfigs.get(receiver).setEncryption(((FunctionCallTree) tree.getParent()).callArguments().get(0).value());
+    if (tree.getParent().is(Tree.Kind.FUNCTION_CALL)) {
+      mailConfigs.get(receiver).handleMethodCall((FunctionCallTree) tree.getParent());
     }
   }
 
   private static NewExpressionTree getOriginalNewExpression(ExpressionTree tree) {
     ExpressionTree assignedValue = CheckUtils.skipParenthesis(CheckUtils.assignedValue(tree));
+
     if (assignedValue.is(Tree.Kind.NEW_EXPRESSION)) {
       return (NewExpressionTree) assignedValue;
+    } else if(tree.is(Tree.Kind.FUNCTION_CALL) && ((FunctionCallTree)tree).callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
+      // Account for the SwiftMailer fluent interface
+      return getOriginalNewExpression(((MemberAccessTree)((FunctionCallTree)tree).callee()).object());
     }
 
     return null;
@@ -238,23 +238,35 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
         CheckUtils.argument(initCall, "encryption", 2).map(CallArgumentTree::value).orElse(null));
     }
 
+    protected void handleMethodCall(FunctionCallTree tree) {
+      if (tree.callArguments().size() != 1) {
+        return;
+      }
+
+      Tree memberExpression = ((MemberAccessTree)tree.callee()).member();
+
+      if (!memberExpression.is(Tree.Kind.NAME_IDENTIFIER)) {
+        return;
+      }
+
+      String methodName = ((NameIdentifierTree) memberExpression).text();
+      ExpressionTree argument = tree.callArguments().get(0).value();
+
+      if ("setEncryption".equalsIgnoreCase(methodName)) {
+        encryption = argument;
+      } else if ("setHost".equalsIgnoreCase(methodName)) {
+        host = argument;
+      }
+    }
+
     private static boolean isSwiftMailInstantiation(NewExpressionTree tree) {
       ExpressionTree expression = tree.expression();
       return expression.is(Tree.Kind.FUNCTION_CALL) && "Swift_SmtpTransport".equalsIgnoreCase(CheckUtils.functionName((FunctionCallTree) expression));
     }
-
-    private static boolean isSwiftMailSetEncryption(MemberAccessTree tree) {
-      if (!tree.getParent().is(Tree.Kind.FUNCTION_CALL) || ((FunctionCallTree) tree.getParent()).callArguments().size() != 1) {
-        return false;
-      }
-
-      Tree memberExpression = tree.member();
-      return memberExpression.is(Tree.Kind.NAME_IDENTIFIER) && "setEncryption".equalsIgnoreCase(((NameIdentifierTree) memberExpression).text());
-    }
   }
 
   private static class MailConfig {
-    private ExpressionTree host;
+    protected ExpressionTree host;
     protected ExpressionTree encryption;
 
     public MailConfig(@Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
@@ -295,13 +307,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       return encryptionValueTree.is(Tree.Kind.NULL_LITERAL);
     }
 
-    protected void setHost(ExpressionTree host) {
-      this.host = host;
-    }
-
-    protected void setEncryption(ExpressionTree encryption) {
-      this.encryption = encryption;
-    }
+    protected void handleMethodCall(FunctionCallTree tree) {}
   }
 
   private static boolean startsWithUnsafeProtocol(String value) {
