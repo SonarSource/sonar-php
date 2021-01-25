@@ -21,8 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import java.util.List;
-import java.util.Set;
 import org.sonar.php.checks.phpini.AllowUrlCheck;
 import org.sonar.php.checks.phpini.CgiForceRedirectCheck;
 import org.sonar.php.checks.phpini.EnableDlCheck;
@@ -57,12 +55,16 @@ import org.sonar.php.checks.security.POSIXFilePermissionsCheck;
 import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.QueryUsageCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
+import org.sonar.php.checks.security.RequestContentLengthCheck;
 import org.sonar.php.checks.security.RobustCipherAlgorithmCheck;
 import org.sonar.php.checks.security.SessionFixationCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 import org.sonar.php.checks.security.StandardInputUsageCheck;
 import org.sonar.php.checks.security.XxeCheck;
+
+import java.util.List;
+import java.util.Set;
 
 public class CheckList {
 
@@ -225,6 +227,7 @@ public class CheckList {
       ReferenceInFunctionCallCheck.class,
       RegexUsageCheck.class,
       RepeatedComplementOperatorCheck.class,
+      RequestContentLengthCheck.class,
       RequireIncludeInstructionsUsageCheck.class,
       RequireInsteadOfRequireOnceCheck.class,
       ReturnOfBooleanExpressionCheck.class,
