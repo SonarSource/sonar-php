@@ -21,6 +21,8 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import java.util.List;
+import java.util.Set;
 import org.sonar.php.checks.phpini.AllowUrlCheck;
 import org.sonar.php.checks.phpini.CgiForceRedirectCheck;
 import org.sonar.php.checks.phpini.EnableDlCheck;
@@ -62,9 +64,6 @@ import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 import org.sonar.php.checks.security.StandardInputUsageCheck;
 import org.sonar.php.checks.security.XxeCheck;
-
-import java.util.List;
-import java.util.Set;
 
 public class CheckList {
 

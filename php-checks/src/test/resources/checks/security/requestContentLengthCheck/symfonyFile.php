@@ -45,8 +45,20 @@ class Test
             'maxSize' => '7Mi', // Compliant
         ]));
 
-        $metadata->addPropertyConstraint('test', new NotFileConstraint([
-            'maxSize' => '7Mi', // Compliant
+        $metadata->addPropertyConstraint('test', new Assert\File([
+           'maxSize' => $unknown, // Compliant
         ]));
+
+        $metadata->addPropertyConstraint('test', new Assert\File([
+            'maxSize' => 'UnknownFormat', // Compliant
+        ]));
+
+        $metadata->addPropertyConstraint('test', new Assert\File()); // Compliant
+
+        $metadata->addPropertyConstraint('test', new NotFileConstraint(['maxSize' => '7Mi'])); // Compliant
+        $metadata->addPropertyConstraint('test', new NotFileConstraint); // Compliant
+        $metadata->addPropertyConstraint('test', new $unknown()); // Compliant
+
+        $metadata->addPropertyConstraint('test', new Assert\File($unknown)); // Compliant
     }
 }
