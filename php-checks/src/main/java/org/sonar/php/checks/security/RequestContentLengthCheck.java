@@ -48,7 +48,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   long fileUploadSizeLimit = DEFAULT;
 
   private static final QualifiedName SYMFONY_FILE_CONSTRAINT = qualifiedName("Symfony\\Component\\Validator\\Constraints\\File");
-  private static final Pattern SIZE_FORMAT = Pattern.compile("^([0-9]+)(k|M|Ki|Mi)?$");
+  private static final Pattern SIZE_FORMAT = Pattern.compile("^(?<number>[0-9]+)(?<unit>k|M|Ki|Mi)?$");
 
   private static final String MESSAGE = "Make sure the content length limit is safe here.";
 
@@ -85,9 +85,9 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
         return;
       }
 
-      setBytes = Long.parseLong(matcher.group(1));
+      setBytes = Long.parseLong(matcher.group("number"));
 
-      String unit = matcher.group(2) != null ? matcher.group(2) : "";
+      String unit = matcher.group("unit") != null ? matcher.group("unit") : "";
       switch (unit) {
         case "k":
           setBytes *= 1000;
