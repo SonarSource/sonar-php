@@ -30,7 +30,6 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.argument;
-import static org.sonar.php.checks.utils.CheckUtils.functionName;
 import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
 import static org.sonar.php.checks.utils.CheckUtils.nameOf;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
