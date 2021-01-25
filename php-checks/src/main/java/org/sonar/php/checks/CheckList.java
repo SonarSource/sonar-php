@@ -48,6 +48,7 @@ import org.sonar.php.checks.security.ClearTextProtocolsCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
+import org.sonar.php.checks.security.CORSPolicyCheck;
 import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.DataEncryptionCheck;
 import org.sonar.php.checks.security.DisableCsrfCheck;
@@ -119,6 +120,7 @@ public class CheckList {
       CookieSensitiveDataCheck.class,
       CookiesSecureCheck.class,
       CountInsteadOfEmptyCheck.class,
+      CORSPolicyCheck.class,
       CryptographicHashCheck.class,
       CryptographicKeySizeCheck.class,
       DataEncryptionCheck.class,
