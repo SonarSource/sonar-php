@@ -137,7 +137,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     if (isInstantiationOf(tree, SWIFTMAILER_QN)) {
       mailConfigs.putIfAbsent(tree, SwiftMailConfig.of(tree));
     } else if (isInstantiationOf(tree, PHPMAILER_QN)) {
-      mailConfigs.putIfAbsent(tree, new PhpMailerMailConfig(null, null));
+      mailConfigs.putIfAbsent(tree, new PhpMailerMailConfig());
     }
     super.visitNewExpression(tree);
   }
@@ -283,8 +283,8 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   }
 
   private static class PhpMailerMailConfig extends MailConfig {
-    private PhpMailerMailConfig(@Nullable ExpressionTree host, @Nullable ExpressionTree encryption) {
-      super(host, encryption);
+    private PhpMailerMailConfig() {
+      super(null, null);
     }
 
     @Override
