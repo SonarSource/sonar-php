@@ -39,6 +39,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -317,6 +318,14 @@ public class CheckUtilsTest {
     assertThat(CheckUtils.uniqueAssignedValue(var)).isNotPresent();
     when(var.symbol()).thenReturn(symbol);
     assertThat(CheckUtils.uniqueAssignedValue(var)).isPresent();
+  }
+
+  @Test
+  public void arrayValue() {
+    assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array('key' => 'value');"), "key")).isPresent();
+    assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array('other_key' => 'value');"), "key")).isNotPresent();
+    assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array($key => 'value');"), "key")).isNotPresent();
+    assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array('value');"), "key")).isNotPresent();
   }
 
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {

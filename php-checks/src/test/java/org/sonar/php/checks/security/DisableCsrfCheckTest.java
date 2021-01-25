@@ -17,36 +17,29 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
+package org.sonar.php.checks.security;
 
-import java.util.List;
-import java.util.Optional;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
+import org.junit.Test;
+import org.sonar.plugins.php.CheckVerifier;
 
-public interface ClassSymbol extends Symbol {
+public class DisableCsrfCheckTest {
+  @Test
+  public void testSymfonyController() {
+    CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/SymfonyController.php");
+  }
 
-  LocationInFile location();
+  @Test
+  public void testSymfonyForm() {
+    CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/SymfonyForm.php");
+  }
 
-  QualifiedName qualifiedName();
+  @Test
+  public void testSymfonyConfig() {
+    CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/config/packages/SymfonyConfig.php");
+  }
 
-  Optional<ClassSymbol> superClass();
-
-  List<ClassSymbol> implementedInterfaces();
-
-  Trilean isOrSubClassOf(QualifiedName qualifiedName);
-
-  Trilean isSubTypeOf(QualifiedName... typeName);
-
-  List<MethodSymbol> declaredMethods();
-
-  MethodSymbol getDeclaredMethod(String name);
-
-  boolean is(Kind kind);
-
-  enum Kind {
-    NORMAL,
-    ABSTRACT,
-    INTERFACE
+  @Test
+  public void testLaravelMiddleware() {
+    CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/LaravelMiddleware.php");
   }
 }

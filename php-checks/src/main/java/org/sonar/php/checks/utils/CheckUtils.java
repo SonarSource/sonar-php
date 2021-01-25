@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -52,6 +54,8 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -309,6 +313,10 @@ public final class CheckUtils {
     return tree != null && tree.is(Kind.REGULAR_STRING_LITERAL) && s.equalsIgnoreCase(trimQuotes((LiteralTree) tree));
   }
 
+  public static boolean argumentIsStringLiteralWithValue(CallArgumentTree argument, String s) {
+    return isStringLiteralWithValue(assignedValue(argument.value()), s);
+  }
+
   public static boolean isNullOrEmptyString(ExpressionTree tree) {
     if (tree.is(Kind.NULL_LITERAL)) {
       return true;
@@ -399,6 +407,20 @@ public final class CheckUtils {
     if (receiver.is(Kind.NEW_EXPRESSION)) {
       ExpressionTree newExpression = ((NewExpressionTree) receiver).expression();
       return Optional.ofNullable(newExpression.is(Kind.FUNCTION_CALL) ? functionName((FunctionCallTree) newExpression) : nameOf(newExpression));
+    }
+    return Optional.empty();
+  }
+
+  public static Optional<ExpressionTree> arrayValue(ArrayInitializerTree array, String searchKey) {
+    return arrayValue(array.arrayPairs(), searchKey);
+  }
+
+  public static Optional<ExpressionTree> arrayValue(List<ArrayPairTree> arrayPairs, String searchKey) {
+    for (ArrayPairTree arrayPair : arrayPairs) {
+      ExpressionTree key = arrayPair.key();
+      if (key != null && key.is(Kind.REGULAR_STRING_LITERAL) && searchKey.equals(trimQuotes((LiteralTree) key))) {
+        return Optional.of(arrayPair.value());
+      }
     }
     return Optional.empty();
   }
