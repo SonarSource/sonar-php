@@ -37,4 +37,14 @@ public class ClearTextProtocolsCheckTest {
   public void laravel_mail() {
     CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/laravel/config/mail.php");
   }
+
+  @Test
+  public void swift_mailer() {
+    CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/swiftMailer.php");
+  }
+
+  @Test
+  public void php_mailer() {
+    CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/phpMailer.php");
+  }
 }
