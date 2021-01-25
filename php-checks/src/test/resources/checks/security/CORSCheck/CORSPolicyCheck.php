@@ -13,17 +13,15 @@ header("Access-Control-Allow-Origin", "*");
 header("Other-Property: *"); // Compliant
 header(); // Compliant
 
-class A {
-    function foo() {
-        header("Access-Control-Allow-Origin: *"); // Noncompliant
-        header("Access-Control-Allow-Origin: foo"); // Compliant
-    }
-}
-
 namespace laravel;
 use Illuminate\Http\Response;
+use Illuminate\Http\Response as MyResponse;
 
-$response = new Response();
+$response = new Response($bar, 42, ['Access-Control-Allow-Origin' => '*']); // Noncompliant
+$response = new Response($bar, 42, ['Access-Control-Allow-Origin' => 42]); // Compliant
+$response = new response(headers:['  access-control-allow-origin  ' => '  *   '], status:42, content:$bar); // Noncompliant
+$response = new MyResponse($bar, 42, ['Access-Control-Allow-Origin' => '*']); // Noncompliant
+
 $response->header('Access-Control-Allow-Origin', "*"); // Noncompliant
 response()->header('Access-Control-Allow-Origin', "*"); // Noncompliant
 $response->HEADER('  access-control-allow-origin  ', "  *  "); // Noncompliant
@@ -33,26 +31,24 @@ $response->header('Access-Control-Allow-Origin', "foo"); // Compliant
 response()->header('Access-Control-Allow-Origin', "foo"); // Compliant
 $response->header('Other-Property', "*"); // Compliant
 
-
-
-class A {
-    function foo() {
-        $response = new Response();
-        $response->header('Access-Control-Allow-Origin', "*"); // Noncompliant
-        $response->header('Access-Control-Allow-Origin', "foo"); // Compliant
-    }
-}
-
 namespace symfony;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as MyResponse;
 
 $response = new Response($bar, 42, ['Access-Control-Allow-Origin' => '*']); // Noncompliant
 $response = new Response($bar, 42, Array('Access-Control-Allow-Origin' => '*')); // Noncompliant
 $response = new response(headers:['  access-control-allow-origin  ' => '  *   '], status:42, content:$bar); // Noncompliant
+$response = new MyResponse($bar, 42, ['Access-Control-Allow-Origin' => '*']); // Noncompliant
+
+$vuln = ['Access-Control-Allow-Origin' => '*'];
+$response = new Response($bar, 42, $vuln); // Noncompliant
+$safe = ['foo' => 'bar'];
+$response = new Response($bar, 42, $safe); // Compliant
 
 $response = new Response($bar, 42, ['Access-Control-Allow-Origin' => 42]); // Compliant
 $response = new Response($bar, 42, ['Other-Property' => '*']); // Compliant
 $response = new Foo($bar, 42, ['Access-Control-Allow-Origin' => '*']); // Compliant
+$response = new Response($bar, 42, [42]);  // Compliant
 
 $response->headers->set('  access-control-allow-origin  ', '  *  '); // Noncompliant
 $response->headers->Set(values:"*", key:'Access-Control-Allow-Origin'); // Noncompliant
@@ -61,13 +57,6 @@ $response->headers->set('Access-Control-Allow-Origin', 'foo'); // Compliant
 $response->headers->set('Other-Property', '*'); // Compliant
 $response->headers->foo('Access-Control-Allow-Origin', '*'); // Compliant
 set('Access-Control-Allow-Origin', '*'); // Compliant
-
-class A {
-    function foo() {
-        $response = new Response('Content', 42, ['Access-Control-Allow-Origin' => '*']); // Noncompliant
-        $response = new Response('Content', 42, ['Access-Control-Allow-Origin' => "foo"]); // Compliant
-    }
-}
 
 namespace foo;
 // FPs - we don't control the type of the receiver

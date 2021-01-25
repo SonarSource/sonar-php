@@ -29,7 +29,7 @@ public class CORSPolicyCheckTest {
     CheckVerifier.verify(new CORSPolicyCheck(), "security/CORSCheck/CORSPolicyCheck.php");
     CheckVerifier.verify(new CORSPolicyCheck(), "security/CORSCheck/cors.php");
     CheckVerifier.verifyNoIssue(new CORSPolicyCheck(), "security/CORSCheck/foo.php");
-    CheckVerifier.verifyNoIssue(new CORSPolicyCheck(), "security/CORSCheck/InvalidCorsFile/cors.php");
+    CheckVerifier.verifyNoIssue(new CORSPolicyCheck(), "security/CORSCheck/invalidCorsFile/cors.php");
   }
 
 }

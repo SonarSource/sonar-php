@@ -19,12 +19,19 @@
  */
 package org.sonar.php.checks.security;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.symbols.Symbols;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -33,9 +40,9 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.argument;
 import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
-import static org.sonar.php.checks.utils.CheckUtils.nameOf;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 import static org.sonar.php.tree.TreeUtils.firstDescendant;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.ARRAY_INITIALIZER_BRACKET;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.ARRAY_INITIALIZER_FUNCTION;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.NAMESPACE_NAME;
@@ -57,25 +64,25 @@ public class CORSPolicyCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree functionCallTree) {
-    FunctionCallHelper functionCallHelper = FunctionCallHelper.create(functionCallTree);
+    FunctionCallHelper call = FunctionCallHelper.create(functionCallTree);
 
-    if ((functionCallHelper.isResponseConstuctorVulnerable()) || (functionCallHelper.isCoreHeaderVulnerable()) || (functionCallHelper.isSetOrHeaderVulnerable())) {
+    if ((call.isResponseConstuctorVulnerable()) || (call.isCoreHeaderVulnerable()) || (call.isSetOrHeaderVulnerable())) {
       context().newIssue(this, functionCallTree, MESSAGE);
     }
     super.visitFunctionCall(functionCallTree);
   }
-  
+
   private void checkCorsPhpFile(ReturnStatementTree returnStatementTree) {
     ExpressionTree returnExpression = returnStatementTree.expression();
     if (returnExpression.is(ARRAY_INITIALIZER_BRACKET, ARRAY_INITIALIZER_FUNCTION)) {
       ((ArrayInitializerTree) returnExpression)
-      .arrayPairs().stream()
-      .filter(pair -> isLiteralTreeEqualsTo(pair.key(), "allowed_origins") && arrayContainsSensitiveValue(pair.value()))
-      .forEach(pair -> context().newIssue(this, pair, MESSAGE));
+        .arrayPairs().stream()
+        .filter(pair -> isLiteralTreeEqualsTo(pair.key(), "allowed_origins") && isSensitiveArray(pair.value()))
+        .forEach(pair -> context().newIssue(this, pair, MESSAGE));
     }
   }
 
-  private static boolean arrayContainsSensitiveValue(ExpressionTree arrayValue) {
+  private static boolean isSensitiveArray(ExpressionTree arrayValue) {
     return arrayValue.is(ARRAY_INITIALIZER_BRACKET, ARRAY_INITIALIZER_FUNCTION) &&
       ((ArrayInitializerTree) arrayValue)
         .arrayPairs().stream()
@@ -88,10 +95,14 @@ public class CORSPolicyCheck extends PHPVisitorCheck {
 
   private static class FunctionCallHelper {
 
-    private static final String HEADER = "header";
+    private static final QualifiedName HEADER_FUNCTION_NAME = qualifiedName("header");
 
     private FunctionCallTree functionCallTree;
     private ExpressionTree callee;
+
+    private static final Set<QualifiedName> RESPONSE_CLASSES = new HashSet<>(Arrays.asList(
+      qualifiedName("Symfony\\Component\\Httpfoundation\\Response"),
+      qualifiedName("Illuminate\\Http\\Response")));
 
     private FunctionCallHelper(FunctionCallTree functionCallTree) {
       this.functionCallTree = functionCallTree;
@@ -106,17 +117,23 @@ public class CORSPolicyCheck extends PHPVisitorCheck {
       return isResponseConstructorFunctionCall() &&
         argument(functionCallTree, "headers", 2)
           .map(CallArgumentTree::value)
+          .map(CheckUtils::assignedValue)
           .filter(ArrayInitializerTree.class::isInstance)
           .map(ArrayInitializerTree.class::cast)
           .filter(a -> a.arrayPairs()
             .stream()
-            .anyMatch(b -> isLiteralTreeEqualsTo(b.key(), "Access-Control-Allow-Origin") && isLiteralTreeEqualsTo(b.value(), "*")))
+            .anyMatch(FunctionCallHelper::isPairVulnerable))
           .isPresent();
+    }
+
+    private static boolean isPairVulnerable(ArrayPairTree pair) {
+      ExpressionTree key = pair.key();
+      return key != null && isLiteralTreeEqualsTo(key, "Access-Control-Allow-Origin") && isLiteralTreeEqualsTo(pair.value(), "*");
     }
 
     private boolean isCoreHeaderVulnerable() {
       return isCoreHeaderFunctionCall() &&
-        retrieveArgumentAndVerifyItIsEqualsTo(HEADER, 0, "Access-Control-Allow-Origin:*");
+        retrieveArgumentAndVerifyItIsEqualsTo("header", 0, "Access-Control-Allow-Origin:*");
     }
 
     private boolean isSetOrHeaderVulnerable() {
@@ -131,15 +148,16 @@ public class CORSPolicyCheck extends PHPVisitorCheck {
     }
 
     private boolean isResponseConstructorFunctionCall() {
-      return callee instanceof ClassNamespaceNameTreeImpl && "Response".equalsIgnoreCase(nameOf(callee));
+      return callee.is(NAMESPACE_NAME) && RESPONSE_CLASSES.contains(Symbols.getClass((NamespaceNameTree) callee).qualifiedName());
     }
 
     private boolean isCoreHeaderFunctionCall() {
-      return callee.is(NAMESPACE_NAME) && HEADER.equals(lowerCaseFunctionName(functionCallTree));
+      return Symbols.get(functionCallTree).qualifiedName().equals(HEADER_FUNCTION_NAME);
     }
 
     private boolean isSetOrHeaderFunctionCall() {
-      return callee.is(OBJECT_MEMBER_ACCESS) && ("set".equals(lowerCaseFunctionName(functionCallTree)) || HEADER.equals(lowerCaseFunctionName(functionCallTree)));
+      return callee.is(OBJECT_MEMBER_ACCESS)
+        && ("set".equals(lowerCaseFunctionName(functionCallTree)) || HEADER_FUNCTION_NAME.simpleName().equals(lowerCaseFunctionName(functionCallTree)));
     }
   }
 }
