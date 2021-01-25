@@ -26,7 +26,10 @@ public class CORSPolicyCheckTest {
 
   @Test
   public void test() {
-    CheckVerifier.verify(new CORSPolicyCheck(), "security/CORSPolicyCheck.php");
+    CheckVerifier.verify(new CORSPolicyCheck(), "security/CORSCheck/CORSPolicyCheck.php");
+    CheckVerifier.verify(new CORSPolicyCheck(), "security/CORSCheck/cors.php");
+    CheckVerifier.verifyNoIssue(new CORSPolicyCheck(), "security/CORSCheck/foo.php");
+    CheckVerifier.verifyNoIssue(new CORSPolicyCheck(), "security/CORSCheck/InvalidCorsFile/cors.php");
   }
 
 }

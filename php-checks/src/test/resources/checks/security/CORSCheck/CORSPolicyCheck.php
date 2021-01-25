@@ -47,6 +47,7 @@ namespace symfony;
 use Symfony\Component\HttpFoundation\Response;
 
 $response = new Response($bar, 42, ['Access-Control-Allow-Origin' => '*']); // Noncompliant
+$response = new Response($bar, 42, Array('Access-Control-Allow-Origin' => '*')); // Noncompliant
 $response = new response(headers:['  access-control-allow-origin  ' => '  *   '], status:42, content:$bar); // Noncompliant
 
 $response = new Response($bar, 42, ['Access-Control-Allow-Origin' => 42]); // Compliant
