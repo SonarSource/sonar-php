@@ -58,6 +58,7 @@ import org.sonar.php.checks.security.POSIXFilePermissionsCheck;
 import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.QueryUsageCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
+import org.sonar.php.checks.security.RequestContentLengthCheck;
 import org.sonar.php.checks.security.RobustCipherAlgorithmCheck;
 import org.sonar.php.checks.security.SessionFixationCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
@@ -227,6 +228,7 @@ public class CheckList {
       ReferenceInFunctionCallCheck.class,
       RegexUsageCheck.class,
       RepeatedComplementOperatorCheck.class,
+      RequestContentLengthCheck.class,
       RequireIncludeInstructionsUsageCheck.class,
       RequireInsteadOfRequireOnceCheck.class,
       ReturnOfBooleanExpressionCheck.class,
