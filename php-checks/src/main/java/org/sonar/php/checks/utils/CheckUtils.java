@@ -415,8 +415,8 @@ public final class CheckUtils {
     return arrayValue(array.arrayPairs(), searchKey);
   }
 
-  public static Optional<ExpressionTree> arrayValue(List<ArrayPairTree> arrayParis, String searchKey) {
-    for (ArrayPairTree arrayPair : arrayParis) {
+  public static Optional<ExpressionTree> arrayValue(List<ArrayPairTree> arrayPairs, String searchKey) {
+    for (ArrayPairTree arrayPair : arrayPairs) {
       ExpressionTree key = arrayPair.key();
       if (key != null && key.is(Kind.REGULAR_STRING_LITERAL) && searchKey.equals(trimQuotes((LiteralTree) key))) {
         return Optional.of(arrayPair.value());
