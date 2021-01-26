@@ -39,13 +39,15 @@ import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 public class SessionFixationStrategyCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Create a new session during user authentication to prevent session fixation attacks.";
+  private static final String SECURITY_COMPONENT = "security";
   private static final String SENSITIVE_VALUE = "none";
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = lowerCaseFunctionName(tree);
-    if (("loadfromextension".equals(functionName) && isArgumentEqualsTo(tree, "extension", 0, "security") && isArgumentSensitiveArray(tree, "values", 1)) ||
-      ("prependextensionconfig".equals(functionName) && isArgumentEqualsTo(tree, "name", 0, "security") && isArgumentSensitiveArray(tree, "config", 1))) {
+    if (("loadfromextension".equals(functionName) && isArgumentEqualsTo(tree, "extension", 0, SECURITY_COMPONENT) && isArgumentSensitiveArray(tree, "values", 1)) ||
+      (("extension".equals(functionName) && isArgumentEqualsTo(tree, "namespace", 0, SECURITY_COMPONENT) && isArgumentSensitiveArray(tree, "config", 1)) ||
+        ("prependextensionconfig".equals(functionName) && isArgumentEqualsTo(tree, "name", 0, SECURITY_COMPONENT) && isArgumentSensitiveArray(tree, "config", 1)))) {
       context().newIssue(this, tree, MESSAGE);
     }
     super.visitFunctionCall(tree);
@@ -57,7 +59,7 @@ public class SessionFixationStrategyCheck extends PHPVisitorCheck {
   }
 
   private static boolean isLiteralTreeEqualsTo(ExpressionTree tree, String expected) {
-    return tree.is(Kind.REGULAR_STRING_LITERAL) && expected.equalsIgnoreCase(trimQuotes(((LiteralTree) tree).value()));
+    return tree.is(Kind.REGULAR_STRING_LITERAL) && expected.equalsIgnoreCase(trimQuotes(((LiteralTree) tree)));
   }
 
   private static boolean isArgumentSensitiveArray(FunctionCallTree functionCallTree, String name, int index) {
@@ -68,11 +70,11 @@ public class SessionFixationStrategyCheck extends PHPVisitorCheck {
       .map(ArrayInitializerTree.class::cast)
       .filter(arrayTree -> arrayTree.arrayPairs()
         .stream()
-        .anyMatch(SessionFixationStrategyCheck::checkPair))
+        .anyMatch(SessionFixationStrategyCheck::isArrayPairSensitive))
       .isPresent();
   }
 
-  private static boolean checkPair(ArrayPairTree pair) {
+  private static boolean isArrayPairSensitive(ArrayPairTree pair) {
     ExpressionTree key = pair.key();
     return key != null && isLiteralTreeEqualsTo(pair.key(), "session_fixation_strategy") && isLiteralTreeEqualsTo(pair.value(), SENSITIVE_VALUE);
   }

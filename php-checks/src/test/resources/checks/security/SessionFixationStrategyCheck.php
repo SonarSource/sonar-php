@@ -20,6 +20,12 @@ $foo->loadFromExtension(['session_fixation_strategy' => 'none']);  // Compliant
 $foo->loadFromExtension('security', ['none']);  // Compliant
 $foo->loadFromExtension();  // Compliant
 
+$foo->extension('security', ['session_fixation_strategy' => 'none']);  // Noncompliant
+$foo->extension('security', ['session_fixation_strategy' => 'invalidate']);  // compliant
+
+$foo->Extension(config:['session_fixation_strategy' => 'none'], namespace:'security');  // Noncompliant
+$foo->extension('foo', ['session_fixation_strategy' => 'none']);  // compliant
+
 $foo->prependExtensionConfig('security', ['session_fixation_strategy' => 'none']);  // Noncompliant
 $foo->PrependExtensionConfig(config:['session_fixation_strategy' => 'none'], name:'security');  // Noncompliant
 
