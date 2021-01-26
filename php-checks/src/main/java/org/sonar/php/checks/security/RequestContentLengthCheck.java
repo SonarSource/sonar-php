@@ -22,19 +22,32 @@ package org.sonar.php.checks.security;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.sonar.php.checks.utils.CheckUtils.arrayValue;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
@@ -49,7 +62,8 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
 
   private static final QualifiedName SYMFONY_FILE_CONSTRAINT = qualifiedName("Symfony\\Component\\Validator\\Constraints\\File");
   private static final Pattern SIZE_FORMAT = Pattern.compile("^(?<number>[0-9]+)(?<unit>k|M|Ki|Mi)?$");
-
+  private static final Pattern LARAVEL_SIZE_FORMAT = Pattern.compile("^max:(?<size>[0-9]+)$");
+  private static final Tree.Kind[] ARRAY = {Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION};
   private static final String MESSAGE = "Make sure the content length limit is safe here.";
 
   @Override
@@ -60,10 +74,123 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
     super.visitNewExpression(tree);
   }
 
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    super.visitFunctionCall(tree);
+    if (!tree.callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS) || !(((MemberAccessTree) tree.callee()).object() instanceof VariableIdentifierTreeImpl)) {
+      return;
+    }
+
+    VariableIdentifierTreeImpl receiver = (VariableIdentifierTreeImpl) ((MemberAccessTree) tree.callee()).object();
+    Tree receiverDeclarationParent = receiver.symbol().declaration().getParent();
+    if (!receiverDeclarationParent.is(Tree.Kind.PARAMETER)) {
+      return;
+    }
+
+    String parameterType = parameterType((ParameterTree)receiverDeclarationParent);
+    if (parameterType == null) {
+      return;
+    }
+    String fullFunctionName = parameterType + "::" + CheckUtils.functionName(tree);
+
+    getLaravelValidationsArgument(tree, fullFunctionName).ifPresent(a ->
+      getLaravelFileValidations(a).stream()
+        .filter(v -> v.isMaxHigher(fileUploadSizeLimit))
+        .forEach(v -> context().newIssue(this, v.definition, MESSAGE))
+    );
+  }
+
+  private static Optional<ExpressionTree> getLaravelValidationsArgument(FunctionCallTree tree, String fullFunctionName) {
+    ExpressionTree result = null;
+
+    Optional<CallArgumentTree> argument = Optional.empty();
+    if ("illuminate\\http\\request::validate".equalsIgnoreCase(fullFunctionName) && tree.callArguments().size() == 1) {
+      argument = CheckUtils.argument(tree, "rules", 0);
+    } else if ("illuminate\\http\\request::validateWithBag".equalsIgnoreCase(fullFunctionName)) {
+      argument = CheckUtils.argument(tree, "rules", 1);
+    }
+
+    if (argument.isPresent()) {
+      result = argument.get().value();
+    }
+
+    return Optional.ofNullable(result);
+  }
+
+  private static Set<LaravelFileValidation> getLaravelFileValidations(ExpressionTree tree) {
+    Set<LaravelFileValidation> validations = new HashSet<>();
+
+    if (tree.is(ARRAY)) {
+      validations = ((ArrayInitializerTree)tree).arrayPairs().stream()
+        .map(ArrayPairTree::value)
+        .map(LaravelFileValidation::of)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toSet());
+    }
+
+    return validations;
+  }
+
+  private static class LaravelFileValidation {
+    ExpressionTree definition;
+    Long maxBytes;
+
+    public LaravelFileValidation(ExpressionTree definition, @Nullable Long maxBytes) {
+      this.definition = definition;
+      this.maxBytes = maxBytes;
+    }
+
+    private static @Nullable LaravelFileValidation of(ExpressionTree tree) {
+      Set<String> validationValues = new HashSet<>();
+
+      if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+        Collections.addAll(validationValues, CheckUtils.trimQuotes((LiteralTree) tree).split("\\|"));
+      } else if (tree.is(ARRAY)) {
+        validationValues = ((ArrayInitializerTree)tree).arrayPairs().stream()
+          .map(ArrayPairTree::value)
+          .filter(v -> v.is(Tree.Kind.REGULAR_STRING_LITERAL))
+          .map(v -> CheckUtils.trimQuotes((LiteralTree) v))
+          .collect(Collectors.toSet());
+      }
+
+      return ofArray(tree, validationValues);
+    }
+
+    private static @Nullable LaravelFileValidation ofArray(ExpressionTree definition, Set<String> validationValues) {
+      if (!validationValues.contains("file")) {
+        return null;
+      }
+
+      Long size = validationValues.stream()
+        .map(LARAVEL_SIZE_FORMAT::matcher)
+        .filter(Matcher::matches)
+        .map(m -> Long.parseLong(m.group("size")) * 1000)
+        .findFirst().orElse(null);
+
+      return new LaravelFileValidation(definition, size);
+    }
+
+    public boolean isMaxHigher(long v) {
+      return maxBytes == null || maxBytes > v;
+    }
+  }
+
+  private @Nullable String parameterType(ParameterTree parameter) {
+    String type = null;
+
+    if (parameter.declaredType() != null && parameter.declaredType().isSimple()) {
+      TypeNameTree typeNameTree = ((TypeTree) parameter.declaredType()).typeName();
+      if (typeNameTree.is(Tree.Kind.NAMESPACE_NAME)) {
+        type = getFullyQualifiedName((NamespaceNameTree) typeNameTree).toString();
+      }
+    }
+
+    return type;
+  }
+
   private void checkSymfonyFileConstraint(ExpressionTree tree) {
     ExpressionTree value = CheckUtils.assignedValue(tree);
-
-    if (!value.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
+    if (!value.is(ARRAY)) {
       return;
     }
 
