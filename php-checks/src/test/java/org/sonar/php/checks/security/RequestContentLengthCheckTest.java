@@ -27,4 +27,9 @@ public class RequestContentLengthCheckTest {
   public void symfony_file() {
     CheckVerifier.verify(new RequestContentLengthCheck(), "security/requestContentLengthCheck/symfonyFile.php");
   }
+
+  @Test
+  public void laravel_request() {
+    CheckVerifier.verify(new RequestContentLengthCheck(), "security/requestContentLengthCheck/laravelRequest.php");
+  }
 }
