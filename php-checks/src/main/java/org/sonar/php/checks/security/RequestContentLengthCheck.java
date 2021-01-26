@@ -78,49 +78,53 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     super.visitFunctionCall(tree);
-    if (!tree.callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS) || !(((MemberAccessTree) tree.callee()).object() instanceof VariableIdentifierTreeImpl)) {
+    String fullFunctionName = getFullFunctionName(tree);
+    if (fullFunctionName == null) {
       return;
+    }
+
+    getLaravelValidationsArgument(tree, fullFunctionName)
+      .map(CallArgumentTree::value)
+      .filter(ArrayInitializerTree.class::isInstance)
+      .map(ArrayInitializerTree.class::cast)
+      .ifPresent(a -> getLaravelFileValidations(a).stream()
+        .filter(v -> v.isMaxHigher(fileUploadSizeLimit))
+        .forEach(v -> context().newIssue(this, v.definition, MESSAGE))
+      );
+  }
+
+  private String getFullFunctionName(FunctionCallTree tree) {
+    if (!tree.callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS) || !(((MemberAccessTree) tree.callee()).object() instanceof VariableIdentifierTreeImpl)) {
+      return null;
     }
 
     VariableIdentifierTreeImpl receiver = (VariableIdentifierTreeImpl) ((MemberAccessTree) tree.callee()).object();
     Symbol receiverSymbol = receiver.symbol();
     if (receiverSymbol == null) {
-      return;
+      return null;
     }
 
     Tree receiverDeclarationParent = receiverSymbol.declaration().getParent();
     if (!receiverDeclarationParent.is(Tree.Kind.PARAMETER)) {
-      return;
+      return null;
     }
 
-    String parameterType = parameterType((ParameterTree)receiverDeclarationParent);
+    String parameterType = parameterType((ParameterTree) receiverDeclarationParent);
     if (parameterType == null) {
-      return;
+      return null;
     }
-    String fullFunctionName = parameterType + "::" + CheckUtils.functionName(tree);
 
-    getLaravelValidationsArgument(tree, fullFunctionName).ifPresent(a ->
-      getLaravelFileValidations(a).stream()
-        .filter(v -> v.isMaxHigher(fileUploadSizeLimit))
-        .forEach(v -> context().newIssue(this, v.definition, MESSAGE))
-    );
+    return parameterType + "::" + CheckUtils.functionName(tree);
   }
 
-  private static Optional<ExpressionTree> getLaravelValidationsArgument(FunctionCallTree tree, String fullFunctionName) {
-    ExpressionTree result = null;
-
-    Optional<CallArgumentTree> argument = Optional.empty();
+  private static Optional<CallArgumentTree> getLaravelValidationsArgument(FunctionCallTree tree, String fullFunctionName) {
     if ("illuminate\\http\\request::validate".equalsIgnoreCase(fullFunctionName)) {
-      argument = CheckUtils.argument(tree, "rules", 0);
+      return CheckUtils.argument(tree, "rules", 0);
     } else if ("illuminate\\http\\request::validateWithBag".equalsIgnoreCase(fullFunctionName)) {
-      argument = CheckUtils.argument(tree, "rules", 1);
+      return CheckUtils.argument(tree, "rules", 1);
     }
 
-    if (argument.isPresent()) {
-      result = argument.get().value();
-    }
-
-    return Optional.ofNullable(result);
+    return Optional.empty();
   }
 
   private static Set<LaravelFileValidation> getLaravelFileValidations(ExpressionTree tree) {
@@ -182,16 +186,14 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   }
 
   private @Nullable String parameterType(ParameterTree parameter) {
-    String type = null;
-
     if (parameter.declaredType() != null && parameter.declaredType().isSimple()) {
       TypeNameTree typeNameTree = ((TypeTree) parameter.declaredType()).typeName();
       if (typeNameTree.is(Tree.Kind.NAMESPACE_NAME)) {
-        type = getFullyQualifiedName((NamespaceNameTree) typeNameTree).toString();
+        return getFullyQualifiedName((NamespaceNameTree) typeNameTree).toString();
       }
     }
 
-    return type;
+    return null;
   }
 
   private void checkSymfonyFileConstraint(ExpressionTree tree) {
