@@ -24,6 +24,7 @@ import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -82,7 +83,12 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
     }
 
     VariableIdentifierTreeImpl receiver = (VariableIdentifierTreeImpl) ((MemberAccessTree) tree.callee()).object();
-    Tree receiverDeclarationParent = receiver.symbol().declaration().getParent();
+    Symbol receiverSymbol = receiver.symbol();
+    if (receiverSymbol == null) {
+      return;
+    }
+
+    Tree receiverDeclarationParent = receiverSymbol.declaration().getParent();
     if (!receiverDeclarationParent.is(Tree.Kind.PARAMETER)) {
       return;
     }
@@ -104,7 +110,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
     ExpressionTree result = null;
 
     Optional<CallArgumentTree> argument = Optional.empty();
-    if ("illuminate\\http\\request::validate".equalsIgnoreCase(fullFunctionName) && tree.callArguments().size() == 1) {
+    if ("illuminate\\http\\request::validate".equalsIgnoreCase(fullFunctionName)) {
       argument = CheckUtils.argument(tree, "rules", 0);
     } else if ("illuminate\\http\\request::validateWithBag".equalsIgnoreCase(fullFunctionName)) {
       argument = CheckUtils.argument(tree, "rules", 1);
