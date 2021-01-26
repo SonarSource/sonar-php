@@ -61,6 +61,7 @@ import org.sonar.php.checks.security.RegexUsageCheck;
 import org.sonar.php.checks.security.RequestContentLengthCheck;
 import org.sonar.php.checks.security.RobustCipherAlgorithmCheck;
 import org.sonar.php.checks.security.SessionFixationCheck;
+import org.sonar.php.checks.security.SessionFixationStrategyCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 import org.sonar.php.checks.security.StandardInputUsageCheck;
@@ -238,6 +239,7 @@ public class CheckList {
       SelfKeywordUsageCheck.class,
       SessionCookiePersistenceCheck.class,
       SessionFixationCheck.class,
+      SessionFixationStrategyCheck.class,
       SignallingProcessCheck.class,
       SilencedErrorsCheck.class,
       SleepFunctionUsageCheck.class,
