@@ -39,6 +39,11 @@ public class DisableCsrfCheckTest {
   }
 
   @Test
+  public void testSymfonyExtension() {
+    CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/SymfonyExtension.php");
+  }
+
+  @Test
   public void testLaravelMiddleware() {
     CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/LaravelMiddleware.php");
   }

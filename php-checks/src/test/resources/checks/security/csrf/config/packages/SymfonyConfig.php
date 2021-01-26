@@ -16,15 +16,17 @@ return static function (ContainerConfigurator $container) {
 //                                                 ^^^^^^^^^^
   $container->parameters()->set('something_else', null);
 
-  $container->loadFromExtension('framework', ['csrf_protection' => false,]);// Noncompliant
-//                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  $container->loadFromExtension('framework', ['something_else' => true, 'csrf_protection' => false,]);// Noncompliant
-  $container->loadFromExtension('framework', ['csrf_protection' => true,]);
-  $container->loadFromExtension('framework', ['csrf_protection' => null,]);
-  $container->loadFromExtension('something_else', ['csrf_protection' => false,]);
+  $container->extension('framework', ['csrf_protection' => false,]);// Noncompliant
+//                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  $container->extension('framework', ['something_else' => true, 'csrf_protection' => false,]);// Noncompliant
+  $container->extension('framework', ['csrf_protection' => true,]);
+  $container->extension('framework', ['csrf_protection' => null,]);
+  $container->extension('something_else', ['csrf_protection' => false,]);
 
   $csrfOption = false;
 //^^^^^^^^^^^^^^^^^^^> {{Setting variable to false.}}
-  $container->loadFromExtension('framework', ['csrf_protection' => $csrfOption,]);// Noncompliant {{Make sure disabling CSRF protection is safe here.}}
-//                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  $container->extension('framework', ['csrf_protection' => $csrfOption,]);// Noncompliant {{Make sure disabling CSRF protection is safe here.}}
+//                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
 };

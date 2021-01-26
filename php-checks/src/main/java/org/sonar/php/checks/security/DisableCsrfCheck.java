@@ -70,6 +70,8 @@ public class DisableCsrfCheck extends PHPVisitorCheck {
       call.argument( "defaults", 0).ifPresent(this::checkCsrfInSymfonyOptions);
     } else if (call.inPath("config/packages")) {
       checkCsrfInSymfonyConfig(call);
+    } else if (call.hasName("prependExtensionConfig") || call.hasName("loadFromExtension")) {
+      checkCsrfInSymfonyExtensionConfig(call);
     }
     super.visitFunctionCall(tree);
   }
@@ -90,7 +92,7 @@ public class DisableCsrfCheck extends PHPVisitorCheck {
   private void checkCsrfInSymfonyConfig(Call call) {
     if (call.hasName("set")) {
       checkCsrfInSymfonyParametersConfig(call);
-    } else if (call.hasName("loadFromExtension")) {
+    } else if (call.hasName("extension")) {
       checkCsrfInSymfonyExtensionConfig(call);
     }
   }
