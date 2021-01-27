@@ -22,11 +22,15 @@ package org.sonar.php.checks.security;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.symbols.Symbols;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
@@ -44,7 +48,10 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -53,6 +60,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Collections.singletonList;
 import static org.sonar.php.checks.utils.CheckUtils.arrayValue;
 import static org.sonar.php.tree.TreeUtils.descendants;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
@@ -69,8 +77,18 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   private static final Pattern SIZE_FORMAT = Pattern.compile("^(?<number>[0-9]+)(?<unit>k|M|Ki|Mi)?$");
   private static final Pattern LARAVEL_SIZE_FORMAT = Pattern.compile("^max:(?<size>[0-9]+)$");
   private static final Tree.Kind[] ARRAY = {Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION};
+
   private static final QualifiedName LARAVEL_FORM_REQUEST = qualifiedName("Illuminate\\Foundation\\Http\\FormRequest");
+  private static final QualifiedName LARAVEL_CONTROLLER = qualifiedName("App\\Http\\Controllers\\Controller");
   private static final String LARAVEL_RULES_KEY = "rules";
+  private static final Map<String, Integer> LARAVEL_RULES_ARGUMENT = new HashMap<>();
+  static {
+    LARAVEL_RULES_ARGUMENT.put("illuminate\\http\\request::validate", 0);
+    LARAVEL_RULES_ARGUMENT.put("illuminate\\http\\request::validatewithbag", 1);
+    LARAVEL_RULES_ARGUMENT.put("validator", 1);
+    LARAVEL_RULES_ARGUMENT.put("illuminate\\support\\facades\\validator::make", 1);
+  }
+
   private static final String MESSAGE = "Make sure the content length limit is safe here.";
 
   @Override
@@ -84,7 +102,14 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     super.visitFunctionCall(tree);
-    String fullFunctionName = getFullFunctionName(tree);
+
+    String fullFunctionName;
+    if (tree.callee().is(Tree.Kind.NAMESPACE_NAME)) {
+      fullFunctionName = CheckUtils.getLowerCaseFunctionName(tree);
+    } else {
+      fullFunctionName = getMethodName(tree);
+    }
+
     if (fullFunctionName == null) {
       return;
     }
@@ -120,38 +145,52 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
       .forEach(v -> context().newIssue(this, v.definition, MESSAGE));
   }
 
-  private String getFullFunctionName(FunctionCallTree tree) {
-    if (!tree.callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS) || !(((MemberAccessTree) tree.callee()).object() instanceof VariableIdentifierTreeImpl)) {
+  private String getMethodName(FunctionCallTree tree) {
+    ExpressionTree callee = tree.callee();
+    String className = null;
+
+    if (callee.is(Tree.Kind.CLASS_MEMBER_ACCESS) && (((MemberAccessTree) callee).object().is(Tree.Kind.NAMESPACE_NAME))) {
+      className = getFullyQualifiedName((NamespaceNameTree) ((MemberAccessTree) callee).object()).toString();
+    } else if (callee.is(Tree.Kind.OBJECT_MEMBER_ACCESS) && (((MemberAccessTree) callee).object() instanceof VariableIdentifierTreeImpl)) {
+      VariableIdentifierTreeImpl receiver = (VariableIdentifierTreeImpl) ((MemberAccessTree) callee).object();
+      Symbol receiverSymbol = receiver.symbol();
+      if (receiverSymbol == null) {
+        return null;
+      }
+
+      Tree receiverDeclarationParent = receiverSymbol.declaration().getParent();
+      if (!receiverDeclarationParent.is(Tree.Kind.PARAMETER)) {
+        return null;
+      }
+
+      className = parameterType((ParameterTree) receiverDeclarationParent);
+    }
+
+    if (className == null) {
       return null;
     }
 
-    VariableIdentifierTreeImpl receiver = (VariableIdentifierTreeImpl) ((MemberAccessTree) tree.callee()).object();
-    Symbol receiverSymbol = receiver.symbol();
-    if (receiverSymbol == null) {
-      return null;
-    }
-
-    Tree receiverDeclarationParent = receiverSymbol.declaration().getParent();
-    if (!receiverDeclarationParent.is(Tree.Kind.PARAMETER)) {
-      return null;
-    }
-
-    String parameterType = parameterType((ParameterTree) receiverDeclarationParent);
-    if (parameterType == null) {
-      return null;
-    }
-
-    return parameterType + "::" + CheckUtils.functionName(tree);
+    return (className + "::" + CheckUtils.functionName(tree)).toLowerCase(Locale.ROOT);
   }
 
   private static Optional<CallArgumentTree> getLaravelValidationsArgument(FunctionCallTree tree, String fullFunctionName) {
-    if ("illuminate\\http\\request::validate".equalsIgnoreCase(fullFunctionName)) {
-      return CheckUtils.argument(tree, LARAVEL_RULES_KEY, 0);
-    } else if ("illuminate\\http\\request::validateWithBag".equalsIgnoreCase(fullFunctionName)) {
-      return CheckUtils.argument(tree, LARAVEL_RULES_KEY, 1);
+    if (LARAVEL_RULES_ARGUMENT.containsKey(fullFunctionName)
+      && !("validator".equals(fullFunctionName) && !isInLaravelController(tree))) {
+      return CheckUtils.argument(tree, LARAVEL_RULES_KEY, LARAVEL_RULES_ARGUMENT.get(fullFunctionName));
     }
 
     return Optional.empty();
+  }
+
+  private static boolean isInLaravelController(FunctionCallTree tree) {
+    Tree classDeclaration = TreeUtils.findAncestorWithKind(tree, singletonList(Tree.Kind.CLASS_DECLARATION));
+    if (classDeclaration != null) {
+      ClassSymbol classSymbol = Symbols.get((ClassDeclarationTree) classDeclaration);
+      if (classSymbol != null) {
+        return classSymbol.isSubTypeOf(LARAVEL_CONTROLLER).isTrue();
+      }
+    }
+    return false;
   }
 
   private static Stream<LaravelFileValidation> getLaravelFileValidations(ArrayInitializerTree tree) {
