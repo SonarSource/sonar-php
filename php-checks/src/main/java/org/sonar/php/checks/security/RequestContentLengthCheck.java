@@ -27,7 +27,6 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
@@ -54,11 +53,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Collections.singletonList;
 import static org.sonar.php.checks.utils.CheckUtils.arrayValue;
-import static org.sonar.php.symbols.Symbols.get;
 import static org.sonar.php.tree.TreeUtils.descendants;
-import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 @Rule(key = "S5693")
@@ -100,7 +96,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     super.visitMethodDeclaration(tree);
-    if (isMethodInheritedFromClassOrInterface(LARAVEL_FORM_REQUEST, tree) && "rules".equalsIgnoreCase(tree.name().text())) {
+    if (CheckUtils.isMethodInheritedFromClassOrInterface(LARAVEL_FORM_REQUEST, tree) && "rules".equalsIgnoreCase(tree.name().text())) {
       checkLaravelFormRequestRulesReturns(tree);
     }
   }
@@ -121,14 +117,6 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
     getLaravelFileValidations((ArrayInitializerTree)tree)
       .filter(v -> v.isMaxHigher(fileUploadSizeLimit))
       .forEach(v -> context().newIssue(this, v.definition, MESSAGE));
-  }
-
-  private static boolean isMethodInheritedFromClassOrInterface(QualifiedName qualifiedName, MethodDeclarationTree methodDeclarationTree) {
-    ClassDeclarationTree classTree = (ClassDeclarationTree) findAncestorWithKind(methodDeclarationTree, singletonList(Tree.Kind.CLASS_DECLARATION));
-    if (classTree != null) {
-      return get(classTree).isSubTypeOf(qualifiedName).isTrue();
-    }
-    return false;
   }
 
   private String getFullFunctionName(FunctionCallTree tree) {

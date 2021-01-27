@@ -27,13 +27,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -47,15 +47,13 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import static java.util.Collections.singletonList;
 import static org.sonar.php.checks.utils.CheckUtils.argument;
 import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
 import static org.sonar.php.checks.utils.CheckUtils.hasModifier;
 import static org.sonar.php.checks.utils.CheckUtils.nameOf;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
-import static org.sonar.php.symbols.Symbols.get;
+import static org.sonar.php.checks.utils.CheckUtils.isMethodInheritedFromClassOrInterface;
 import static org.sonar.php.tree.TreeUtils.descendants;
-import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.CLASS_MEMBER_ACCESS;
 
@@ -113,14 +111,6 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
       ((NameIdentifierTree) method).text().equals(expectedMethod) &&
       receiver.is(Kind.NAMESPACE_NAME) &&
       getFullyQualifiedName((NamespaceNameTree) receiver).equals(LARAVEL_GATE_NAMESPACE);
-  }
-
-  private static boolean isMethodInheritedFromClassOrInterface(QualifiedName qualifiedName, MethodDeclarationTree methodDeclarationTree) {
-    ClassDeclarationTree classTree = (ClassDeclarationTree) findAncestorWithKind(methodDeclarationTree, singletonList(Kind.CLASS_DECLARATION));
-    if (classTree != null) {
-      return get(classTree).isSubTypeOf(qualifiedName).isTrue();
-    }
-    return false;
   }
 
   private void checkReturnStatements(FunctionTree methodDeclarationTree, Predicate<String> predicate) {
