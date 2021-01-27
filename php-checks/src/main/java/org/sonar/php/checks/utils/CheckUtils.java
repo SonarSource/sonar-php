@@ -42,6 +42,7 @@ import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.symbols.SymbolImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -69,6 +70,10 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
+
+import static java.util.Collections.singletonList;
+import static org.sonar.php.symbols.Symbols.get;
+import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
 
 public final class CheckUtils {
 
@@ -423,5 +428,13 @@ public final class CheckUtils {
       }
     }
     return Optional.empty();
+  }
+
+  public static boolean isMethodInheritedFromClassOrInterface(QualifiedName qualifiedName, MethodDeclarationTree methodDeclarationTree) {
+    ClassDeclarationTree classTree = (ClassDeclarationTree) findAncestorWithKind(methodDeclarationTree, singletonList(Tree.Kind.CLASS_DECLARATION));
+    if (classTree != null) {
+      return get(classTree).isSubTypeOf(qualifiedName).isTrue();
+    }
+    return false;
   }
 }

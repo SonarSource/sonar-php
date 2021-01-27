@@ -33,6 +33,7 @@ import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.symbols.SymbolImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -54,6 +55,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.php.checks.utils.CheckUtils.argument;
 import static org.sonar.php.checks.utils.CheckUtils.functionName;
+import static org.sonar.php.checks.utils.CheckUtils.isMethodInheritedFromClassOrInterface;
 import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
 import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
@@ -326,6 +328,12 @@ public class CheckUtilsTest {
     assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array('other_key' => 'value');"), "key")).isNotPresent();
     assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array($key => 'value');"), "key")).isNotPresent();
     assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array('value');"), "key")).isNotPresent();
+  }
+
+  @Test
+  public void noClass_methodInheritedFromClassOrInterface() {
+    MethodDeclarationTree method = (MethodDeclarationTree) ((ClassDeclarationTree) parse("trait Wrapper{public function foo() {}}")).members().get(0);
+    assertThat(isMethodInheritedFromClassOrInterface(QualifiedName.qualifiedName("A\\B"), method)).isFalse();
   }
 
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {

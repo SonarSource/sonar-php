@@ -27,6 +27,7 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
@@ -38,6 +39,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import javax.annotation.Nullable;
@@ -49,8 +51,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.sonar.php.checks.utils.CheckUtils.arrayValue;
+import static org.sonar.php.tree.TreeUtils.descendants;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 @Rule(key = "S5693")
@@ -65,6 +69,8 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   private static final Pattern SIZE_FORMAT = Pattern.compile("^(?<number>[0-9]+)(?<unit>k|M|Ki|Mi)?$");
   private static final Pattern LARAVEL_SIZE_FORMAT = Pattern.compile("^max:(?<size>[0-9]+)$");
   private static final Tree.Kind[] ARRAY = {Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION};
+  private static final QualifiedName LARAVEL_FORM_REQUEST = qualifiedName("Illuminate\\Foundation\\Http\\FormRequest");
+  private static final String LARAVEL_FORM_RULES_METHOD = "rules";
   private static final String MESSAGE = "Make sure the content length limit is safe here.";
 
   @Override
@@ -85,12 +91,33 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
 
     getLaravelValidationsArgument(tree, fullFunctionName)
       .map(CallArgumentTree::value)
-      .filter(ArrayInitializerTree.class::isInstance)
-      .map(ArrayInitializerTree.class::cast)
-      .ifPresent(a -> getLaravelFileValidations(a).stream()
-        .filter(v -> v.isMaxHigher(fileUploadSizeLimit))
-        .forEach(v -> context().newIssue(this, v.definition, MESSAGE))
-      );
+      .ifPresent(this::checkLaravelFileRules);
+  }
+
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    super.visitMethodDeclaration(tree);
+    if (CheckUtils.isMethodInheritedFromClassOrInterface(LARAVEL_FORM_REQUEST, tree) && LARAVEL_FORM_RULES_METHOD.equalsIgnoreCase(tree.name().text())) {
+      checkLaravelFormRequestRulesReturns(tree);
+    }
+  }
+
+  private void checkLaravelFormRequestRulesReturns(MethodDeclarationTree tree) {
+    descendants(tree, ReturnStatementTree.class)
+      .map(ReturnStatementTree::expression)
+      .filter(Objects::nonNull)
+      .map(CheckUtils::assignedValue)
+      .forEach(this::checkLaravelFileRules);
+  }
+
+  private void checkLaravelFileRules(ExpressionTree tree) {
+    if (!tree.is(ARRAY)) {
+      return;
+    }
+
+    getLaravelFileValidations((ArrayInitializerTree)tree)
+      .filter(v -> v.isMaxHigher(fileUploadSizeLimit))
+      .forEach(v -> context().newIssue(this, v.definition, MESSAGE));
   }
 
   private String getFullFunctionName(FunctionCallTree tree) {
@@ -127,18 +154,11 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
     return Optional.empty();
   }
 
-  private static Set<LaravelFileValidation> getLaravelFileValidations(ExpressionTree tree) {
-    Set<LaravelFileValidation> validations = new HashSet<>();
-
-    if (tree.is(ARRAY)) {
-      validations = ((ArrayInitializerTree)tree).arrayPairs().stream()
-        .map(ArrayPairTree::value)
-        .map(LaravelFileValidation::of)
-        .filter(Objects::nonNull)
-        .collect(Collectors.toSet());
-    }
-
-    return validations;
+  private static Stream<LaravelFileValidation> getLaravelFileValidations(ArrayInitializerTree tree) {
+    return tree.arrayPairs().stream()
+      .map(ArrayPairTree::value)
+      .map(LaravelFileValidation::of)
+      .filter(Objects::nonNull);
   }
 
   private static class LaravelFileValidation {

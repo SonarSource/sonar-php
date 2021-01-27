@@ -32,4 +32,9 @@ public class RequestContentLengthCheckTest {
   public void laravel_request() {
     CheckVerifier.verify(new RequestContentLengthCheck(), "security/requestContentLengthCheck/laravelRequest.php");
   }
+
+  @Test
+  public void laravel_form_request() {
+    CheckVerifier.verify(new RequestContentLengthCheck(), "security/requestContentLengthCheck/laravelFormRequest.php");
+  }
 }
