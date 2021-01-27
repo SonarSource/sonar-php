@@ -70,6 +70,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   private static final Pattern LARAVEL_SIZE_FORMAT = Pattern.compile("^max:(?<size>[0-9]+)$");
   private static final Tree.Kind[] ARRAY = {Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION};
   private static final QualifiedName LARAVEL_FORM_REQUEST = qualifiedName("Illuminate\\Foundation\\Http\\FormRequest");
+  private static final String LARAVEL_FORM_RULES_METHOD = "rules";
   private static final String MESSAGE = "Make sure the content length limit is safe here.";
 
   @Override
@@ -96,7 +97,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     super.visitMethodDeclaration(tree);
-    if (CheckUtils.isMethodInheritedFromClassOrInterface(LARAVEL_FORM_REQUEST, tree) && "rules".equalsIgnoreCase(tree.name().text())) {
+    if (CheckUtils.isMethodInheritedFromClassOrInterface(LARAVEL_FORM_REQUEST, tree) && LARAVEL_FORM_RULES_METHOD.equalsIgnoreCase(tree.name().text())) {
       checkLaravelFormRequestRulesReturns(tree);
     }
   }
