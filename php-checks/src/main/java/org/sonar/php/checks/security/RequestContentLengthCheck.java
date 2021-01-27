@@ -70,7 +70,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   private static final Pattern LARAVEL_SIZE_FORMAT = Pattern.compile("^max:(?<size>[0-9]+)$");
   private static final Tree.Kind[] ARRAY = {Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION};
   private static final QualifiedName LARAVEL_FORM_REQUEST = qualifiedName("Illuminate\\Foundation\\Http\\FormRequest");
-  private static final String LARAVEL_FORM_RULES_METHOD = "rules";
+  private static final String LARAVEL_RULES_KEY = "rules";
   private static final String MESSAGE = "Make sure the content length limit is safe here.";
 
   @Override
@@ -97,7 +97,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     super.visitMethodDeclaration(tree);
-    if (CheckUtils.isMethodInheritedFromClassOrInterface(LARAVEL_FORM_REQUEST, tree) && LARAVEL_FORM_RULES_METHOD.equalsIgnoreCase(tree.name().text())) {
+    if (CheckUtils.isMethodInheritedFromClassOrInterface(LARAVEL_FORM_REQUEST, tree) && LARAVEL_RULES_KEY.equalsIgnoreCase(tree.name().text())) {
       checkLaravelFormRequestRulesReturns(tree);
     }
   }
@@ -146,9 +146,9 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
 
   private static Optional<CallArgumentTree> getLaravelValidationsArgument(FunctionCallTree tree, String fullFunctionName) {
     if ("illuminate\\http\\request::validate".equalsIgnoreCase(fullFunctionName)) {
-      return CheckUtils.argument(tree, "rules", 0);
+      return CheckUtils.argument(tree, LARAVEL_RULES_KEY, 0);
     } else if ("illuminate\\http\\request::validateWithBag".equalsIgnoreCase(fullFunctionName)) {
-      return CheckUtils.argument(tree, "rules", 1);
+      return CheckUtils.argument(tree, LARAVEL_RULES_KEY, 1);
     }
 
     return Optional.empty();
