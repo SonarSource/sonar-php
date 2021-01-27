@@ -103,12 +103,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     super.visitFunctionCall(tree);
 
-    String fullFunctionName;
-    if (tree.callee().is(Tree.Kind.NAMESPACE_NAME)) {
-      fullFunctionName = CheckUtils.getLowerCaseFunctionName(tree);
-    } else {
-      fullFunctionName = getMethodName(tree);
-    }
+    String fullFunctionName = tree.callee().is(Tree.Kind.NAMESPACE_NAME) ? CheckUtils.getLowerCaseFunctionName(tree) : getMethodName(tree);
 
     if (fullFunctionName == null) {
       return;
