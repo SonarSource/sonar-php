@@ -109,6 +109,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
     descendants(tree, ReturnStatementTree.class)
       .map(ReturnStatementTree::expression)
       .filter(Objects::nonNull)
+      .map(CheckUtils::assignedValue)
       .forEach(this::checkLaravelFileRules);
   }
 
