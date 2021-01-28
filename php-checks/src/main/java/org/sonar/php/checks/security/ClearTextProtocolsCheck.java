@@ -43,9 +43,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Rule(key = "S5332")
@@ -65,6 +67,29 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
 
   private static final QualifiedName SWIFTMAILER_QN = QualifiedName.qualifiedName("Swift_SmtpTransport");
   private static final QualifiedName PHPMAILER_QN = QualifiedName.qualifiedName("PHPMailer\\PHPMailer\\PHPMailer");
+
+  private static final Set<String> EXCEPTION_FULL_HOSTS = new HashSet<>(Arrays.asList(
+    "www.w3.org",
+    "xml.apache.org",
+    "schemas.xmlsoap.org",
+    "schemas.openxmlformats.org",
+    "rdfs.org",
+    "purl.org",
+    "xmlns.com",
+    "schemas.google.com",
+    "a9.com",
+    "ns.adobe.com",
+    "ltsc.ieee.org",
+    "docbook.org",
+    "graphml.graphdrawing.org",
+    "json-schema.org"
+  ));
+
+  private static final Set<String> EXCEPTION_TOP_HOSTS = new HashSet<>(Arrays.asList(
+    "(.*\\.)?example\\.com$",
+    "(.*\\.)?example\\.org$",
+    "(.*\\.)?test\\.com$"
+  ));
 
   private static final String MESSAGE_PROTOCOL = "Using %s protocol is insecure. Use %s instead";
   private static final String MESSAGE_FTP = "Using ftp_connect() is insecure. Use ftp_ssl_connect() instead";
@@ -103,11 +128,19 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       return;
     }
 
-    if (startsWithUnsafeProtocol(value) && !isLoopbackUrl(value)) {
+    if (startsWithUnsafeProtocol(value) && !isExceptionUrl(value, tree)) {
       ALTERNATIVE_PROTOCOLS.keySet().stream().filter(value::startsWith)
         .findFirst()
         .ifPresent(usedProtocol -> context().newIssue(this, tree, String.format(MESSAGE_PROTOCOL, usedProtocol, ALTERNATIVE_PROTOCOLS.get(usedProtocol))));
     }
+  }
+
+  private static boolean isExceptionUrl(String value, LiteralTree tree) {
+    if (UNSAFE_PROTOCOLS.contains(value)) {
+      return !tree.getParent().is(Tree.Kind.CONCATENATION);
+    }
+
+    return hasExceptionHost(value);
   }
 
   @Override
@@ -364,11 +397,11 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     return UNSAFE_PROTOCOLS.stream().anyMatch(value::startsWith);
   }
 
-  private static boolean isLoopbackUrl(String value) {
+  private static boolean hasExceptionHost(String url) {
     URI uri;
 
     try {
-      uri = new URI(value);
+      uri = new URI(url);
     } catch (URISyntaxException e) {
       return false;
     }
@@ -379,7 +412,11 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
       host = uri.getAuthority();
     }
 
-    return (host == null || "localhost".equals(host) || LOOPBACK_IP.matcher(host).matches());
+    return host == null
+      || "localhost".equals(host)
+      || LOOPBACK_IP.matcher(host).matches()
+      || EXCEPTION_FULL_HOSTS.stream().anyMatch(host::equals)
+      || EXCEPTION_TOP_HOSTS.stream().anyMatch(host::matches);
   }
 
   private static boolean isArray(Tree tree) {
