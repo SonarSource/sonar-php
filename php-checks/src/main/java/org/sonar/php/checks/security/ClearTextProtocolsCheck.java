@@ -68,29 +68,28 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   private static final QualifiedName SWIFTMAILER_QN = QualifiedName.qualifiedName("Swift_SmtpTransport");
   private static final QualifiedName PHPMAILER_QN = QualifiedName.qualifiedName("PHPMailer\\PHPMailer\\PHPMailer");
 
-  private static final Set<String> EXCEPTION_FULL_HOSTS = new HashSet<>();
-  static {
-    EXCEPTION_FULL_HOSTS.add("www.w3.org");
-    EXCEPTION_FULL_HOSTS.add("xml.apache.org");
-    EXCEPTION_FULL_HOSTS.add("schemas.xmlsoap.org");
-    EXCEPTION_FULL_HOSTS.add("schemas.openxmlformats.org");
-    EXCEPTION_FULL_HOSTS.add("rdfs.org");
-    EXCEPTION_FULL_HOSTS.add("purl.org");
-    EXCEPTION_FULL_HOSTS.add("xmlns.com");
-    EXCEPTION_FULL_HOSTS.add("schemas.google.com");
-    EXCEPTION_FULL_HOSTS.add("a9.com");
-    EXCEPTION_FULL_HOSTS.add("ns.adobe.com");
-    EXCEPTION_FULL_HOSTS.add("ltsc.ieee.org");
-    EXCEPTION_FULL_HOSTS.add("docbook.org");
-    EXCEPTION_FULL_HOSTS.add("graphml.graphdrawing.org");
-    EXCEPTION_FULL_HOSTS.add("json-schema.org");
-  }
-  private static final Set<String> EXCEPTION_TOP_HOSTS = new HashSet<>();
-  static {
-    EXCEPTION_TOP_HOSTS.add(".*\\.?example\\.com$");
-    EXCEPTION_TOP_HOSTS.add(".*\\.?example\\.org$");
-    EXCEPTION_TOP_HOSTS.add(".*\\.?test\\.com$");
-  }
+  private static final Set<String> EXCEPTION_FULL_HOSTS = new HashSet<>(Arrays.asList(
+    "www.w3.org",
+    "xml.apache.org",
+    "schemas.xmlsoap.org",
+    "schemas.openxmlformats.org",
+    "rdfs.org",
+    "purl.org",
+    "xmlns.com",
+    "schemas.google.com",
+    "a9.com",
+    "ns.adobe.com",
+    "ltsc.ieee.org",
+    "docbook.org",
+    "graphml.graphdrawing.org",
+    "json-schema.org"
+  ));
+
+  private static final Set<String> EXCEPTION_TOP_HOSTS = new HashSet<>(Arrays.asList(
+    "(.*\\.)?example\\.com$",
+    "(.*\\.)?example\\.org$",
+    "(.*\\.)?test\\.com$"
+  ));
 
   private static final String MESSAGE_PROTOCOL = "Using %s protocol is insecure. Use %s instead";
   private static final String MESSAGE_FTP = "Using ftp_connect() is insecure. Use ftp_ssl_connect() instead";

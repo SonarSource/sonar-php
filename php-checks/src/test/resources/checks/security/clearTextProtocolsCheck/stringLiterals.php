@@ -39,6 +39,7 @@ $url = "telnet://"; // Compliant
 $url = "http://test.com"; // Compliant
 $url = "http://someSubdomain.test.com"; // Compliant
 $url = "http://someUrl.com?url=test.com"; // Noncompliant
+$url = "http://shortest.com"; // Noncompliant
 
 $url = "http://xmlns.com"; // Compliant
 $url = "http://someSubdomain.xmlns.com"; // Noncompliant
