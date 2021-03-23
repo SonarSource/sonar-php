@@ -21,9 +21,9 @@ package org.sonar.php.checks;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +39,7 @@ public class CheckListTest {
     int count = 0;
     List<File> files = new ArrayList<>();
     for (String folder : new String[] { "src/main/java/org/sonar/php/checks/", "src/main/java/org/sonar/php/checks/security", "src/main/java/org/sonar/php/checks/phpunit" }) {
-      files.addAll(FileUtils.listFiles(new File(folder), new String[]{"java"}, false));
+      files.addAll(Arrays.asList(new File(folder).listFiles((f, name) -> name.endsWith("java"))));
     }
     for (File file : files) {
       if (file.getName().endsWith("Check.java")) {
