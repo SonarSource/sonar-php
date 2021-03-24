@@ -1,27 +1,16 @@
 {
   "title": "\"file_uploads\" should be disabled",
   "type": "VULNERABILITY",
-  "status": "ready",
+  "status": "deprecated",
   "remediation": {
     "func": "Constant\/Issue",
     "constantCost": "5min"
   },
   "tags": [
-    "cwe",
-    "sans-top25-insecure",
-    "owasp-a6",
-    "php-ini"
+    
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-3338",
   "sqKey": "S3338",
-  "scope": "Main",
-  "securityStandards": {
-    "CWE": [
-      434
-    ],
-    "OWASP": [
-      "A6"
-    ]
-  }
+  "scope": "Main"
 }

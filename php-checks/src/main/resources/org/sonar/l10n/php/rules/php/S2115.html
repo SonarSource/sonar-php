@@ -1,34 +1,23 @@
-<p>Databases should always be password protected. The use of a database connection with an empty password is a clear indication of a database that is
-not protected.</p>
-<p>This rule flags database connections with empty passwords.</p>
+<p>When relying on the password authentication mode for the database connection, a secure password should be chosen.</p>
+<p>This rule raises an issue when an empty password is used.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-&lt;?php
-  $servername = "localhost";
-  $username = "AppLogin";
-  $password = "";
-
-  // MySQL
-  $conn = new mysqli($servername, $username, $password);
-  // MySQL
-  $conn = mysqli_connect($servername, $username, $password);
-  // PDO way
-  $conn = new PDO("mysql:host=$servername;dbname=myDB", $username, $password);
-  // Oracle
-  $conn = oci_connect($username, $password, "//localhost/orcl");
-  // MS SQL Server
-  $sqlsrvName = "serverName\sqlexpress";
-  $sqlsrvConnInfo = array( "Database"=&gt;"myDB", "UID"=&gt;$username, "PWD"=&gt;$password);
-  $conn = sqlsrv_connect( $sqlsrvName, $sqlsrvConnInfo);
-  // PosgreSQL
-  $pgConnInfo = "host=localhost port=5432 dbname=test user=" . $username . " password=" . $password;
-  $conn = pg_connect($pgConnInfo);
-?&gt;
+// example of an empty password when connecting to a mysql database
+$conn = new mysqli($servername, $username, "");
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+// generate a secure password, set it to the username database, and store it in a environment variable for instance
+$password = getenv('MYSQL_SECURE_PASSWORD');
+// then connect to the database
+$conn = new mysqli($servername, $username, $password);
 </pre>
 <h2>See</h2>
 <ul>
-  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
-  </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication.html">OWASP Top 10 2017 Category A2</a> - Broken
+  Authentication </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data
+  Exposure </li>
   <li> <a href="https://cwe.mitre.org/data/definitions/521.html">MITRE, CWE-521</a> - Weak Password Requirements </li>
 </ul>
 
