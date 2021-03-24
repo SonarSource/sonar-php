@@ -19,20 +19,17 @@ $c9 = openssl_encrypt($plaintext, "des-ede3", $key, $options=OPENSSL_RAW_DATA, $
 $c10 = openssl_encrypt($plaintext, "des-ofb", $key, $options=OPENSSL_RAW_DATA, $iv);  // Noncompliant: DES works with 56-bit keys allow attacks via exhaustive search
 $c11 = openssl_encrypt($plaintext, "rc2-cbc", $key, $options=OPENSSL_RAW_DATA, $iv); // Noncompliant: RC2 is vulnerable to a related-key attack
 $c12 = openssl_encrypt($plaintext, "rc4", $key, $options=OPENSSL_RAW_DATA, $iv);  // Noncompliant: vulnerable to several attacks (see https://en.wikipedia.org/wiki/RC4#Security)
-?&gt;
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
 &lt;?php
 $c1= openssl_encrypt($plaintext, "aes-256-gcm", $key, $options=OPENSSL_RAW_DATA, $iv); // Compliant
-?&gt;
 </pre>
 <h2>See</h2>
 <ul>
   <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
   </li>
-  <li> <a href="http://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-327</a> - Use of a Broken or Risky Cryptographic Algorithm </li>
-  <li> <a href="https://wiki.sei.cmu.edu/confluence/x/hDdGBQ">CERT, MSC61-J.</a> - Do not use insecure or weak cryptographic algorithms </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-327</a> - Use of a Broken or Risky Cryptographic Algorithm </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
 </ul>
 

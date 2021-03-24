@@ -11,7 +11,7 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);  // Noncompliant
 <h2>Compliant Solution</h2>
 <pre>
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // Compliant; default value is 2 to "check the existence of a common name and also verify that it matches the hostname provided" according to PHP's documentation
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // Compliant: From 7.66.0: treats 1 and 2 the same (https://curl.haxx.se/libcurl/c/CURLOPT_SSL_VERIFYHOST.html)
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // Compliant: starting from 7.66.0: treats 1 and 2 the same (https://curl.haxx.se/libcurl/c/CURLOPT_SSL_VERIFYHOST.html)
 </pre>
 <h2>See</h2>
 <ul>

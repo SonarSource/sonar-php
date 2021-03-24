@@ -1,7 +1,9 @@
 <p>There are several reasons for a method not to have a method body:</p>
-<p> * It is an unintentional omission and should be fixed to prevent unexpected behavior in production.</p>
-<p> * It is not yet, or never will be, supported. In this case an <code>UnsupportedOperationException</code> should be thrown.</p>
-<p> * The method is an intentionally-blank override. In this case a nested comment should explain the reason for the blank override.</p>
+<ul>
+  <li> It is an unintentional omission and should be fixed to prevent unexpected behavior in production. </li>
+  <li> It is not yet, or never will be, supported. In this case an <code>UnsupportedOperationException</code> should be thrown. </li>
+  <li> The method is an intentionally-blank override. In this case a nested comment should explain the reason for the blank override. </li>
+</ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
 public function doSomething() {

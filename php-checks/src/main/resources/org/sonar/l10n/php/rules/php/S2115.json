@@ -1,5 +1,5 @@
 {
-  "title": "Databases should be password-protected",
+  "title": "A secure password should be used when connecting to a database",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {
@@ -8,6 +8,7 @@
   },
   "tags": [
     "cwe",
+    "owasp-a2",
     "owasp-a3"
   ],
   "defaultSeverity": "Blocker",
@@ -19,6 +20,7 @@
       521
     ],
     "OWASP": [
+      "A2",
       "A3"
     ]
   }
