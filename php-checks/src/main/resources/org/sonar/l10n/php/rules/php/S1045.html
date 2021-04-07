@@ -1,0 +1,35 @@
+<p>Exceptions handlers (<code>catch</code>) are evaluated in the order they are written. Once a match is found, the evaluation stops.</p>
+<p>In some contexts a <code>catch</code> block is dead code as it will never catch any exception:</p>
+<ul>
+  <li> If there is a handler for a base class followed by a handler for class derived from that base class, the second handler will never trigger: the
+  handler for the base class will match the derived class, and will be the only executed handler. </li>
+  <li> When multiple <code>catch</code> blocks try to catch the same exception class, only the first one will be executed. </li>
+</ul>
+<p>This rule raises an issue when a <code>catch</code> block catches every exception before a later <code>catch</code> block could catch it.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+class MyException extends Exception {}
+class MySubException extends MyException {}
+
+try {
+  doSomething();
+} catch (MyException $e) {
+  echo $e;
+} catch (MySubException $e) { // Noncompliant: MySubException is a subclass of MyException
+  echo "Never executed";
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+class MyException extends Exception {}
+class MySubException extends MyException {}
+
+try {
+  doSomething();
+} catch (MySubException $e) {
+  echo "Executed";
+} catch (MyException $e) {
+  echo $e;
+}
+</pre>
+

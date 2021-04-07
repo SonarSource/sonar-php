@@ -99,3 +99,18 @@ class UsageInStringLiteral {
         usort($arr, ['self', 'COMPARATOR']);
     }
 }
+
+class ClassContainingAnonymousClass {
+
+  public function containsAnonymousClass($obj) {
+    $anonymousClass = new class(){};
+    $obj->foo();
+    echo "${$obj->bar()}";
+  }
+
+  private function foo() {
+  }
+
+  private function bar() {
+  }
+}

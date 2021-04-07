@@ -1,6 +1,6 @@
 {
-  "title": "应该在cookie上设置\"HttpOnly\"",
-  "type": "VULNERABILITY",
+  "title": "创建不带\"HttpOnly\"标志的cookie是安全性敏感行为",
+  "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
@@ -9,14 +9,10 @@
   "tags": [
     "cwe",
     "sans-top25-insecure",
+    "privacy",
     "owasp-a7"
   ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten",
-    "SANS Top 25"
-  ],
-  "defaultSeverity": "Critical",
+  "defaultSeverity": "Minor",
   "ruleSpecification": "RSPEC-3330",
   "sqKey": "S3330",
   "scope": "Main",

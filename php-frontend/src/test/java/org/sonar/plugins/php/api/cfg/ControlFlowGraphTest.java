@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -40,8 +40,10 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
@@ -126,6 +128,14 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     // function declaration
     verifyBlockCfg("" +
       "block( succ = [END], elem = 2 ); function foo(){}");
+
+    // function expression
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); $f = function(){ return 1; };");
+
+    // arrow function expression
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); $f = fn() => 1;");
 
     // class declaration
     verifyBlockCfg("" +
@@ -1508,12 +1518,13 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
         "}\n",
       PHPLexicalGrammar.COMPILATION_UNIT);
     FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
+    logTester.setLevel(LoggerLevel.DEBUG);
     ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
     assertThat(cfg).isNull();
-
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 2");
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build CFG");
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 2 (activate debug logs for more details)");
+    assertThat(logTester.logs(LoggerLevel.DEBUG)).hasOnlyOneElementSatisfying(s -> assertThat(s).contains("com.sonar.sslr.api.RecognitionException: Failed to build CFG"));
     logTester.clear();
+    logTester.setLevel(LoggerLevel.INFO);
 
     // testing mechanism avoiding reporting failure multiple times for the same tree
     cfg = ControlFlowGraph.build(func, checkContext);
@@ -1534,6 +1545,32 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     cfg = cfgForBlock("for (;;) {}");
     assertThat(cfg.start().toString()).isEqualTo("empty");
+  }
+
+  @Test
+  public void test_cfg_build_for_catch_block_only() {
+    CatchBlockTree block = parse("" +
+      "catch (Exception $e) {" +
+      " echo $e->message();" +
+      "}", PHPLexicalGrammar.CATCH_BLOCK
+    );
+
+    ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
+    assertThat(cfg).isNotNull();
+    assertThat(cfg.start().toString()).isEqualTo("echo $e->message();");
+  }
+
+  @Test
+  public void test_cfg_build_for_foreach_block_only() {
+    ForEachStatementTree block = parse("" +
+      "foreach ($array as $item) {" +
+      " echo $item;" +
+      "}", PHPLexicalGrammar.FOREACH_STATEMENT
+    );
+
+    ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
+    assertThat(cfg).isNotNull();
+    assertThat(cfg.start().toString()).isEqualTo("echo $item;");
   }
 
   private void verifyBlockCfg(String functionBody) {

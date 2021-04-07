@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -32,6 +32,7 @@ public class TryStatementTest {
       .matches("try {}")
       .matches("try {} finally {}")
       .matches("try {} catch(Exception $e) {}")
+      .matches("try {} catch(Exception) {}")
       .matches("try {} catch(Exception1 $e1) {} catch(Exception2 $e2) {}")
       .matches("try {} catch(\\NS\\Exception $e1) {}")
       .notMatches("try {} catch(finally $e1) {}");

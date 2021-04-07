@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,15 +22,17 @@ package org.sonar.php.tree.symbols;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import java.util.ArrayDeque;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.symbols.MemberSymbol;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -44,12 +46,17 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -67,17 +74,14 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
-import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
-import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class SymbolVisitor extends PHPVisitorCheck {
+public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   private static final Set<String> BUILT_IN_VARIABLES = ImmutableSet.of(
-    "$THIS",
+    "$this",
     "$GLOBALS",
     "$_SERVER",
     "$_GET",
@@ -85,17 +89,15 @@ public class SymbolVisitor extends PHPVisitorCheck {
     "$_FILES",
     "$_SESSION",
     "$_ENV",
-    "$PHP_ERRORMSG",
+    "$php_errormsg",
     "$HTTP_RAW_POST_DATA",
-    "$HTTP_RESPONSE_HEADER",
+    "$http_response_header",
     "$_COOKIE",
     "$_REQUEST"
   );
   private static final ImmutableSet<String> SELF_OBJECTS = ImmutableSet.of("$this", "self", "static");
 
-  private SymbolQualifiedName currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
-  private Map<String, SymbolQualifiedName> aliases = new HashMap<>();
-  private Scope classScope = null;
+  private Deque<Scope> classScopes = new ArrayDeque<>();
   private Map<Symbol, Scope> scopeBySymbol = new HashMap<>();
 
   static class ClassMemberUsageState {
@@ -115,6 +117,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
 
   public SymbolVisitor(SymbolTableImpl symbolTable) {
+    super(symbolTable);
     this.symbolTable = symbolTable;
     this.currentScope = null;
     this.globalScope = null;
@@ -130,55 +133,18 @@ public class SymbolVisitor extends PHPVisitorCheck {
   @Override
   public void visitNamespaceStatement(NamespaceStatementTree tree) {
     enterScope(tree);
-    NamespaceNameTree namespaceNameTree = tree.namespaceName();
-    currentNamespace = namespaceNameTree != null ? SymbolQualifiedName.create(namespaceNameTree) : SymbolQualifiedName.GLOBAL_NAMESPACE;
+
     super.visitNamespaceStatement(tree);
 
-    boolean isBracketedNamespace = tree.openCurlyBrace() != null;
-    if (isBracketedNamespace) {
+    if (isBracketedNamespace(tree)) {
       leaveScope();
-      currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
     }
   }
-
-  @Override
-  public void visitUseStatement(UseStatementTree tree) {
-    SymbolQualifiedName namespacePrefix = getPrefix(tree);
-
-    tree.clauses().forEach(useClauseTree -> {
-      String alias = getAliasName(useClauseTree);
-      SymbolQualifiedName originalName = getOriginalFullyQualifiedName(namespacePrefix, useClauseTree);
-      aliases.put(alias.toLowerCase(Locale.ROOT), originalName);
-    });
-  }
-
-  @Nullable
-  private static SymbolQualifiedName getPrefix(UseStatementTree useStatementTree) {
-    NamespaceNameTree prefix = useStatementTree.prefix();
-    return prefix == null ? null : SymbolQualifiedName.create(prefix);
-  }
-
-  private static SymbolQualifiedName getOriginalFullyQualifiedName(@Nullable SymbolQualifiedName namespacePrefix, UseClauseTree useClauseTree) {
-    SymbolQualifiedName originalName = SymbolQualifiedName.create(useClauseTree.namespaceName());
-    if (namespacePrefix != null) {
-      return namespacePrefix.resolve(originalName);
-    }
-    return originalName;
-  }
-
-  private static String getAliasName(UseClauseTree useClauseTree) {
-    NameIdentifierTree aliasNameTree = useClauseTree.alias();
-    if (aliasNameTree != null) {
-      return aliasNameTree.text();
-    } else {
-      return useClauseTree.namespaceName().name().text();
-    }
-  }
-
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     enterScope(tree);
+    resolveDeclaredTypeNamespaceName(tree.returnTypeClause());
     super.visitFunctionDeclaration(tree);
     leaveScope();
   }
@@ -191,15 +157,42 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   @Override
+  public void visitArrowFunctionExpression(ArrowFunctionExpressionTree tree) {
+    enterArrowFunctionScope(tree);
+    super.visitArrowFunctionExpression(tree);
+    leaveScope();
+  }
+
+  @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     enterScope(tree);
+    resolveDeclaredTypeNamespaceName(tree.returnTypeClause());
     super.visitMethodDeclaration(tree);
     leaveScope();
   }
 
   @Override
   public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
-    // do nothing as this symbols already saved during visiting class tree
+    resolveDeclaredTypeNamespaceName(tree.declaredType());
+  }
+
+  @Override
+  public void visitParameterList(ParameterListTree tree) {
+    tree.parameters().forEach(t -> resolveDeclaredTypeNamespaceName(t.declaredType()));
+
+    super.visitParameterList(tree);
+  }
+
+  private void resolveDeclaredTypeNamespaceName(@Nullable ReturnTypeClauseTree returnType) {
+    if (returnType != null) {
+      resolveDeclaredTypeNamespaceName(returnType.declaredType());
+    }
+  }
+
+  private void resolveDeclaredTypeNamespaceName(@Nullable DeclaredTypeTree type) {
+    if (type != null && type.isSimple() && ((TypeTree)type).typeName().is(Kind.NAMESPACE_NAME)) {
+      lookupOrCreateUndeclaredSymbol((NamespaceNameTree) ((TypeTree)type).typeName());
+    }
   }
 
   @Override
@@ -207,22 +200,22 @@ public class SymbolVisitor extends PHPVisitorCheck {
     TypeSymbolImpl classSymbol = (TypeSymbolImpl) symbolTable.getSymbol(tree.name());
     checkNotNull(classSymbol, "Symbol for %s not found", tree);
     enterScope(tree);
-    classScope = currentScope;
+    classScopes.push(currentScope);
     scan(tree.name());
     NamespaceNameTree superClass = tree.superClass();
     if (superClass != null) {
       Symbol superClassSymbol = lookupOrCreateUndeclaredSymbol(superClass);
-      classScope.superClassScope = scopeBySymbol.get(superClassSymbol);
+      currentClassScope().superClassScope = scopeBySymbol.get(superClassSymbol);
       classSymbol.setSuperClass(superClassSymbol);
     }
-    scopeBySymbol.put(classSymbol, classScope);
+    scopeBySymbol.put(classSymbol, currentClassScope());
     tree.superInterfaces().forEach(ifaceTree -> {
       Symbol ifaceSymbol = lookupOrCreateUndeclaredSymbol(ifaceTree);
       classSymbol.addInterface(ifaceSymbol);
     });
     createMemberSymbols(tree, classSymbol);
     scan(tree.members());
-    classScope = null;
+    classScopes.pop();
     leaveScope();
   }
 
@@ -247,7 +240,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     scan(tree.arguments());
 
     enterScope(tree);
-    classScope = currentScope;
+    classScopes.push(currentScope);
     createMemberSymbols(tree, null);
 
     // we've already scanned the arguments
@@ -260,7 +253,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     tree.superInterfaces().forEach(this::lookupOrCreateUndeclaredSymbol);
     scan(tree.members());
 
-    classScope = null;
+    classScopes.pop();
     leaveScope();
   }
 
@@ -289,11 +282,11 @@ public class SymbolVisitor extends PHPVisitorCheck {
   private SymbolImpl createMemberSymbol(@Nullable TypeSymbolImpl classSymbol, IdentifierTree identifier, Symbol.Kind kind) {
     SymbolImpl symbol;
     if (classSymbol != null) {
-      symbol = symbolTable.declareMemberSymbol(identifier, kind, classScope, classSymbol);
+      symbol = symbolTable.declareMemberSymbol(identifier, kind, currentClassScope(), classSymbol);
       classSymbol.addMember((MemberSymbol) symbol);
     } else {
       // anonymous class
-      symbol = symbolTable.declareSymbol(identifier, kind, currentScope, currentNamespace);
+      symbol = symbolTable.declareSymbol(identifier, kind, currentScope, currentNamespace());
     }
     return symbol;
   }
@@ -312,8 +305,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
         createOrUseVariableIdentifierSymbol(tree);
       } else {
 
-        if (classMemberUsageState.isSelfMember && classScope != null && classMemberUsageState.isStatic) {
-          SymbolImpl symbol = (SymbolImpl) classScope.getSymbol(tree.text(), Symbol.Kind.FIELD);
+        if (classMemberUsageState.isSelfMember && isInClassScope() && classMemberUsageState.isStatic) {
+          SymbolImpl symbol = (SymbolImpl) currentClassScope().getSymbol(tree.text(), Symbol.Kind.FIELD);
           if (symbol != null) {
             associateSymbol(tree, symbol);
           }
@@ -351,7 +344,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitNameIdentifier(NameIdentifierTree tree) {
-    if (classMemberUsageState != null && classScope != null) {
+    if (classMemberUsageState != null && isInClassScope()) {
       resolveProperty(tree);
     } else {
       resolveSymbol(tree);
@@ -380,14 +373,14 @@ public class SymbolVisitor extends PHPVisitorCheck {
       name = (classMemberUsageState.isConst ? "" : "$") + name;
       kind = Symbol.Kind.FIELD;
     }
-    SymbolImpl symbol = (SymbolImpl) classScope.getSymbol(name, kind);
+    SymbolImpl symbol = (SymbolImpl) currentClassScope().getSymbol(name, kind);
     if (symbol != null) {
       associateSymbol(tree, symbol);
     }
   }
 
   private static boolean isBuiltInVariable(VariableIdentifierTree tree) {
-    return BUILT_IN_VARIABLES.contains(tree.text().toUpperCase(Locale.ENGLISH));
+    return BUILT_IN_VARIABLES.contains(tree.text());
   }
 
   @Override
@@ -430,6 +423,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
         // consider 'global' has being a modifier for the variable
         symbol.addModifiers(Collections.singletonList(tree.globalToken()));
 
+      } else if (variable.is(Kind.COMPOUND_VARIABLE_NAME))  {
+        visitCompoundVariable((CompoundVariableTree) variable);
       }
     }
   }
@@ -464,7 +459,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
         if (symbol != null) {
           associateSymbol(identifier, symbol);
         } else if (variable.is(Kind.REFERENCE_VARIABLE)) {
-          symbolTable.declareSymbol(identifier, Symbol.Kind.VARIABLE, currentScope.outer(), currentNamespace);
+          symbolTable.declareSymbol(identifier, Symbol.Kind.VARIABLE, currentScope.outer(), currentNamespace());
         }
         createSymbol(identifier, Symbol.Kind.VARIABLE);
       }
@@ -548,58 +543,6 @@ public class SymbolVisitor extends PHPVisitorCheck {
     }
   }
 
-  /**
-   * Resolution rules are defined in http://php.net/manual/en/language.namespaces.rules.php
-   * <p>
-   * If unqualified name (see above link for definition) is a class symbol we resolve it in the current namespace. If it's a function we check
-   * if it's declared in current namespace, and if not we resolve as if it was in global namespace. This is imprecise
-   * heuristics, because function could be declared in current namespace, but in another source file, thus we will
-   * incorrectly consider such functions to be in the global namespace
-   */
-  private QualifiedName getFullyQualifiedName(NamespaceNameTree name, Symbol.Kind kind) {
-    if (name.isFullyQualified()) {
-      return SymbolQualifiedName.create(name);
-    }
-    SymbolQualifiedName alias = resolveAlias(name);
-    if (alias != null) {
-      return alias;
-    }
-    if (name.hasQualifiers()) {
-      return currentNamespace.resolve(SymbolQualifiedName.create(name));
-    }
-    if (kind == Symbol.Kind.CLASS) {
-      return currentNamespace.resolve(SymbolQualifiedName.create(name));
-    }
-    Symbol symbol = symbolTable.getSymbol(currentNamespace.resolve(SymbolQualifiedName.create(name)));
-    if (symbol != null) {
-      return symbol.qualifiedName();
-    }
-    return SymbolQualifiedName.create(name);
-  }
-
-  @CheckForNull
-  private SymbolQualifiedName resolveAlias(NamespaceNameTree namespaceNameTree) {
-    if (namespaceNameTree.isFullyQualified()) {
-      return null;
-    }
-    if (namespaceNameTree.namespaces().isEmpty()) {
-      return lookupAlias(namespaceNameTree.name());
-    }
-    // first namespace element is potentially an alias
-    NameIdentifierTree potentialAlias = namespaceNameTree.namespaces().iterator().next();
-    SymbolQualifiedName aliasedNamespace = lookupAlias(potentialAlias);
-    if (aliasedNamespace != null) {
-      return aliasedNamespace.resolveAliasedName(namespaceNameTree);
-    }
-    return null;
-  }
-
-  @CheckForNull
-  private SymbolQualifiedName lookupAlias(IdentifierTree identifierTree) {
-    String alias = identifierTree.text().toLowerCase(Locale.ROOT);
-    return aliases.get(alias);
-  }
-
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
     boolean functionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
@@ -635,14 +578,19 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   private void enterScope(Tree tree) {
-    currentScope = symbolTable.addScope(new Scope(currentScope, tree));
+    currentScope = symbolTable.addScope(new Scope(currentScope, tree, false));
+  }
+
+  private void enterArrowFunctionScope(Tree tree) {
+    currentScope = symbolTable.addScope(new Scope(currentScope, tree, true));
   }
 
   private SymbolImpl createSymbol(IdentifierTree identifier, Symbol.Kind kind) {
     SymbolImpl symbol = (SymbolImpl) currentScope.getSymbol(identifier.text(), kind);
 
     if (symbol == null) {
-      symbol = symbolTable.declareSymbol(identifier, kind, currentScope, currentNamespace);
+      symbol = symbolTable.declareSymbol(identifier, kind, currentScope, currentNamespace());
+      assignSymbolToIdentifier(identifier, symbol);
     } else {
       associateSymbol(identifier, symbol);
     }
@@ -652,6 +600,13 @@ public class SymbolVisitor extends PHPVisitorCheck {
   private void associateSymbol(IdentifierTree tree, SymbolImpl symbol) {
     symbol.addUsage(tree);
     symbolTable.associateSymbol(tree, symbol);
+    assignSymbolToIdentifier(tree, symbol);
+  }
+
+  private static void assignSymbolToIdentifier(IdentifierTree tree, SymbolImpl symbol) {
+    if (tree instanceof VariableIdentifierTree) {
+      ((VariableIdentifierTreeImpl) tree).setSymbol(symbol);
+    }
   }
 
   private void associateSymbol(SyntaxToken token, SymbolImpl symbol) {
@@ -659,5 +614,12 @@ public class SymbolVisitor extends PHPVisitorCheck {
     symbolTable.associateSymbol(token, symbol);
   }
 
+  private Scope currentClassScope() {
+    return classScopes.peek();
+  }
+
+  private boolean isInClassScope() {
+    return !classScopes.isEmpty();
+  }
 
 }

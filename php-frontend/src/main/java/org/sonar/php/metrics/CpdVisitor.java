@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ package org.sonar.php.metrics;
 import java.util.ArrayList;
 import java.util.List;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -87,8 +88,8 @@ public class CpdVisitor extends PHPVisitorCheck {
     // do not enter (in order to avoid use statement tokens be considered in duplication detection)
   }
 
-  public List<CpdToken> getCpdTokens(PhpFile file, CompilationUnitTree tree) {
-    super.analyze(file, tree);
+  public List<CpdToken> getCpdTokens(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
+    super.analyze(file, tree, symbolTable);
     return cpdTokens;
   }
 

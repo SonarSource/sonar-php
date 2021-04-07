@@ -1,21 +1,15 @@
 {
   "title": "不应使用DES(数据加密标准)或DESede(3 DES)",
   "type": "VULNERABILITY",
-  "status": "ready",
+  "status": "deprecated",
   "remediation": {
     "func": "Constant\/Issue",
     "constantCost": "20min"
   },
   "tags": [
     "cwe",
-    "cert",
     "owasp-a6",
     "sans-top25-porous"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten",
-    "SANS Top 25"
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-2278",

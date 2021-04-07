@@ -1,11 +1,11 @@
-# SonarPHP [![Build Status](https://travis-ci.org/SonarSource/sonar-php.svg?branch=master)](https://travis-ci.org/SonarSource/sonar-php)
+# Code Quality and Security for PHP [![Build Status](https://travis-ci.org/SonarSource/sonar-php.svg?branch=master)](https://travis-ci.org/SonarSource/sonar-php)
 
-SonarPHP is a [static code analyser](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](http://www.sonarqube.org/) platform. It will allow you to produce stable and easily supported code by helping you find and correct bugs, vulnerabilities and smells in your code.
+This SonarSource project is a [static code analyser](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](http://www.sonarqube.org/) platform. It will allow you to produce stable and easily supported code by helping you find and correct bugs, vulnerabilities and smells in your code.
 
 
 # Features
-* 140+ rules
-* Support of PHP 7
+* 200+ rules
+* Supports up to PHP 8
 * Metrics (complexity, number of lines etc.)
 * Import of [unit test and coverage results](http://docs.sonarqube.org/display/PLUG/PHP+Unit+Test+and+Coverage+Results+Import)
 * Support of [custom rules](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP)
@@ -13,34 +13,51 @@ SonarPHP is a [static code analyser](https://en.wikipedia.org/wiki/Static_progra
 # Useful links
 
 * [Project homepage](https://redirect.sonarsource.com/plugins/php.html)
-* [Documentation](https://docs.sonarqube.org/display/PLUG/SonarPHP)
+* [Documentation](https://docs.sonarqube.org/latest/analysis/languages/php/)
 * [Issue tracking](http://jira.sonarsource.com/browse/SONARPHP)
 * [Available rules](https://rules.sonarsource.com/php)
 * [SonarSource Community Forum](https://community.sonarsource.com/)
-* [Demo project analysis](https://sonarcloud.io/dashboard?id=drupal)
+* [Demo project analysis](https://sonarcloud.io/dashboard?id=monica)
 
 # More documentation
 
-* [Control Flow Graph documentation](CFG.md)
+* [Control Flow Graph documentation](doc/CFG.md)
 
 Have question or feedback?
 --------------------------
 
 To provide feedback (request a feature, report a bug etc.) use the [SonarSource Community Forum](https://community.sonarsource.com/). Please do not forget to specify the language (PHP!), plugin version and SonarQube version.
 
-If you have a question on how to use plugin (and the [docs](https://docs.sonarqube.org/display/PLUG/SonarPHP) don't help you), we also encourage you to use the community forum.
+If you have a question on how to use plugin (and the [docs](https://docs.sonarqube.org/latest/analysis/languages/php/) don't help you), we also encourage you to use the community forum.
 
 # Contributing
 
-### Topic in SonarQube Community Forum
+### Topic in SonarSource Community Forum
 
-To request a new feature, please create a new thread in [SonarQube Community Forum](https://community.sonarsource.com/). Even if you plan to implement it yourself and submit it back to the community, please start a new thread first to be sure that we can follow up on it.
+To request a new feature, please create a new thread in [SonarSource Community Forum](https://community.sonarsource.com/). Even if you plan to implement it yourself and submit it back to the community, please start a new thread first to be sure that we can follow up on it.
 
 ### Pull Request (PR)
 To submit a contribution, create a pull request for this repository. Please make sure that you follow our [code style](https://github.com/SonarSource/sonar-developer-toolset) and all [tests](#testing) are passing (Travis build is created for each PR).
 
 ### Custom Rules
 If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP) available only for you.
+
+#### Custom Rules API Changes
+- **3.15** (January 2021)
+    * `PHPCustomRulesDefinition` was removed, it was deprecated since version 2.13 (March 2018)
+    * Removed dependency on sslr-squid-bridge which is not maintained anymore
+- **3.11**, support of PHP 8:
+    * `ParameterTree#type()` is deprecated. Use `ParameterTree#declaredType()` instead.
+    * `ReturnTypeClauseTree#type()` is deprecated. Use `ReturnTypeClauseTree#declaredType()` instead.
+    * `ClassPropertyDeclarationTree#typeAnnotation()` is deprecated. Use `ClassPropertyDeclarationTree#declaredType()` instead.
+    * `CatchBlockTree#variable()` can now return `NULL`.
+    * `FunctionCallTree#arguments()` is deprecated. Use `FunctionCallTree#callArguments()` instead.
+    * `AnonymousClassTree#arguments()` is deprecated. Use `AnonymousClassTree#callArguments()` instead.
+    * New tree: `CallArgumentTree`. This tree wraps expressions passed as arguments now.   
+    * New kind of expression: `ThrowExpressionTree`.
+    * New kind of expression: `MatchExpressionTree`.
+    * `ParameterTree` now has a `visibility` method.
+    
 
 # <a name="testing"></a>Testing
 To run tests locally follow these instructions.
@@ -55,7 +72,7 @@ mvn clean install
 To run integration tests, you will need to create a properties file like the one shown below, and set its location in an environment variable named `ORCHESTRATOR_CONFIG_URL`.
 ```
 # version of SonarQube server
-sonar.runtimeVersion=6.2
+sonar.runtimeVersion=7.9
 
 orchestrator.updateCenterUrl=http://update.sonarsource.org/update-center-dev.properties
 ```
@@ -93,6 +110,6 @@ sonar-php/its/ruling/src/test/resources/expected/
 
 ### License
 
-Copyright 2010-2018 SonarSource.
+Copyright 2010-2021 SonarSource.
 
 Licensed under the [GNU Lesser General Public License, Version 3.0](http://www.gnu.org/licenses/lgpl.txt)

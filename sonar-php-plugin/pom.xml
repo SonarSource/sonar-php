@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.sonarsource.php</groupId>
     <artifactId>php</artifactId>
-    <version>3.1-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>sonar-php-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
 
-  <name>SonarPHP :: Sonar Plugin</name>
+  <name>SonarSource PHP analyzer :: Sonar Plugin</name>
   <description>Code Analyzer for PHP</description>
   <url>http://redirect.sonarsource.com/plugins/php.html</url>
 
@@ -24,7 +24,7 @@
 
   <properties>
     <sonar.pluginClass>org.sonar.plugins.php.PhpPlugin</sonar.pluginClass>
-    <sonar.pluginName>SonarPHP</sonar.pluginName>
+    <sonar.pluginName>PHP Code Quality and Security</sonar.pluginName>
     <!-- Those classes are excluded as they are just a temporary copy of Sonar core classes -->
     <sonar.exclusions>org/sonar/plugins/php/duplications/internal/*.java</sonar.exclusions>
   </properties>
@@ -88,7 +88,7 @@
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <filters>
                 <filter>
-                  <artifact>cglib:cglib-nodep</artifact>
+                  <artifact>xerces:xercesImpl</artifact>
                   <includes>
                     <include>**</include>
                   </includes>
@@ -110,8 +110,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>4800000</maxsize>
-                  <minsize>4600000</minsize>
+                  <maxsize>5600000</maxsize>
+                  <minsize>5000000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>
@@ -121,6 +121,7 @@
           </execution>
         </executions>
       </plugin>
+
     </plugins>
   </build>
 

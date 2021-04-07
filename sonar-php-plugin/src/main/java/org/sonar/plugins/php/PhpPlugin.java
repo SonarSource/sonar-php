@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -30,6 +30,8 @@ public class PhpPlugin implements Plugin {
   public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
   public static final String PHPUNIT_COVERAGE_REPORT_PATHS_KEY = "sonar.php.coverage.reportPaths";
   public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.php.tests.reportPath";
+  public static final String PHP_EXCLUSIONS_KEY = "sonar.php.exclusions";
+  public static final String PHP_EXCLUSIONS_DEFAULT_VALUE = "**/vendor/**";
 
   public static final String PHP_CATEGORY = "PHP";
   public static final String GENERAL_SUBCATEGORY = "General";
@@ -52,6 +54,8 @@ public class PhpPlugin implements Plugin {
       PSR2ProfileDefinition.class,
       DrupalProfileDefinition.class,
 
+      PhpExclusionsFileFilter.class,
+
       // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)
         .defaultValue(Php.DEFAULT_FILE_SUFFIXES)
@@ -61,7 +65,18 @@ public class PhpPlugin implements Plugin {
         .category(PHP_CATEGORY)
         .multiValues(true)
         .subCategory(GENERAL_SUBCATEGORY)
-        .build());
+        .build(),
+
+      PropertyDefinition.builder(PHP_EXCLUSIONS_KEY)
+        .defaultValue(PHP_EXCLUSIONS_DEFAULT_VALUE)
+        .name("PHP Exclusions")
+        .description("List of file path patterns to be excluded from analysis of PHP files.")
+        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .subCategory(GENERAL_SUBCATEGORY)
+        .multiValues(true)
+        .build()
+      );
 
     if (context.getRuntime().getProduct() != SonarProduct.SONARLINT) {
       context.addExtension(

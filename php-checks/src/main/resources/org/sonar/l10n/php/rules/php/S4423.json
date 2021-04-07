@@ -8,14 +8,10 @@
   },
   "tags": [
     "cwe",
+    "privacy",
     "owasp-a6",
     "sans-top25-porous",
     "owasp-a3"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten",
-    "SANS Top 25"
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-4423",
@@ -24,7 +20,8 @@
   "securityStandards": {
     "CWE": [
       327,
-      326
+      326,
+      295
     ],
     "OWASP": [
       "A3",

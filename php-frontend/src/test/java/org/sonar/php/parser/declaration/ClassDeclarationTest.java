@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -30,12 +30,14 @@ public class ClassDeclarationTest {
   public void test() {
     assertThat(PHPLexicalGrammar.CLASS_DECLARATION)
       .matches("class C {}")
+      .matches("class match {}")
       .matches("abstract class C {}")
       .matches("final class C {}")
 
       .matches("class C extends A {}")
       .matches("class C implements B {}")
       .matches("class C extends A implements B {}")
+      .matches("#[A1(1)] class C {}")
 
       .notMatches("class A extends B, C {}");
   }

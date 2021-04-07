@@ -7,6 +7,7 @@ class A {
 
   public $iReallyLikeLadyMarmalade = "haha"; // Noncompliant {{'marmalade' detected in this variable name, review this potentially hardcoded credential.}}
 //       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  public $someMarmalade = ""; // OK, empty
 
   private function foo() {
     $variable1 = "blabla";

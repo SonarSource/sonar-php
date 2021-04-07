@@ -1,26 +1,58 @@
-<p>“secure”属性阻止cookie通过明文连接(如HTTP)发送，因为它们很容易被窃听。相反，带有secure属性的cookie只通过加密的HTTPS连接发送。</p>
-<h2>推荐的安全编码实践</h2>
+<p>
+当Cookie的<code> secure </code>属性设置为<em> true </em>时，浏览器将不会通过未加密的HTTP请求发送它，因此，在中间人攻击中，未经授权的人将无法观察到Cookie。 
+</p>
+<h2>检查是否出现下述情况</h2>
 <ul>
-  <li> 将<code>setcookie</code>函数的最后一个参数设置为"true" </li>
-  <li> 在php.ini文件里设置<code>session.cookie_secure = 1</code> </li>
+  <li>例如，cookie是<em> session-cookie </em>，并非旨在通过非HTTPS通信发送。</li>
+  <li>不确定网站是否包含<a href="https://developer.mozilla.org/fr/docs/Web/Security/Mixed_content">混合内容</a>（或不包括HTTPS）</li>
 </ul>
-<h2>不合规的代码示例</h2>
+<p>若存在上述任何一种情况，则代码中包含风险</p>
+<h2>Recommended Secure Coding Practices</h2>
+<ul>
+  <li>建议在所有地方使用<code> HTTPs </code>，因此在创建cookie时，将<code> secure </code>标志设置为<em> true </em>应该是默认行为。</li>
+  <li>将会话cookie的<code> secure </code>标志设置为<em> true </em>。</li>
+</ul>
+<h2>敏感代码示例</h2>
+<p>在<em> php.ini </em>中，您可以为会话cookie指定安全敏感的标志：</p>
 <pre>
-; 在php.ini内
-session.cookie_secure = 0  ;不合规
-
-//使用PHP代码
-session_set_cookie_params($lifetime, $path, $domain, false); // 不合规，最后一个参数表示会话cookie应该不是安全的
-
-setcookie($name, $value, $expire, $path, $domain, false); // 不合规，最后一个参数表示cookie应该不是安全的
+session.cookie_secure = 0; // 敏感：此安全敏感的会话cookie是在将安全标志设置为false（cookie_secure = 0）的情况下创建的
+</pre>
+<p>PHP代码中的相同内容：</p>
+<pre>
+session_set_cookie_params($lifetime, $path, $domain, false);
+// 敏感：此安全敏感的会话cookie是在将安全标志（第四个参数）设置为_false_的情况下创建的
+</pre>
+<p>如果您在PHP代码中创建了一个自定义安全敏感的cookie，请执行以下操作：</p>
+<pre>
+$value = "sensitive data";
+setcookie($name, $value, $expire, $path, $domain, false);  // 敏感：创建安全敏感型cookie，并将安全标志（第六个参数）设置为_false_
+</pre>
+<p>默认情况下，<a href="https://www.php.net/manual/en/function.setcookie.php"><code> setcookie </code></a>和<a
+href ="https://www.php.net/manual/zh/function.setrawcookie.php"> <code> setrawcookie </code> </a>函数设置了第六个参数/ <code> secure </ code> 标记为<em> false：</ em></p>
+<pre>
+$value = "sensitive data";
+setcookie($name, $value, $expire, $path, $domain);  // 敏感：使用未定义的安全标志（第六个参数）创建一个安全敏感的cookie（默认为false）
+setrawcookie($name, $value, $expire, $path, $domain);  // 敏感：使用未定义的安全标志（第六个参数）创建一个安全敏感的cookie（默认为false）
+</pre>
+<h2>合规的方案</h2>
+<pre>
+session.cookie_secure = 1; // 合规：由于cookie_secure属性设置为1，敏感的cookie将不会在未加密的HTTP请求期间发送
+</pre>
+<pre>
+session_set_cookie_params($lifetime, $path, $domain, true); // 合规：由于将安全标志（fouth参数）设置为true，因此在未加密的HTTP请求期间不会发送敏感cookie
+</pre>
+<pre>
+$value = "sensitive data";
+setcookie($name, $value, $expire, $path, $domain, true); // 合规：由于将安全标志（第六个参数）设置为true，因此在未加密的HTTP请求期间不会发送敏感cookie
+setrawcookie($name, $value, $expire, $path, $domain, true);// 合规：由于将安全标志（第六个参数）设置为true，因此在未加密的HTTP请求期间不会发送敏感cookie
 </pre>
 <h2>请参阅</h2>
 <ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/311">MITRE, CWE-311</a> - Missing Encryption of Sensitive Data </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/315">MITRE, CWE-315</a> - Cleartext Storage of Sensitive Information in a Cookie </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/614">MITRE, CWE-614</a> - Sensitive Cookie in HTTPS Session Without 'Secure' Attribute </li>
-  <li> OWASP Top 10 2017 Category A2 - Broken Authentication </li>
-  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
 </ul>
 

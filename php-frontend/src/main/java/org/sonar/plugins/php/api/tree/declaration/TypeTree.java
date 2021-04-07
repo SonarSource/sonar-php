@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,7 +21,6 @@ package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -29,7 +28,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * possibly prefixed with a <code>?</code> which stands for "optional".
  */
 @Beta
-public interface TypeTree extends Tree {
+public interface TypeTree extends DeclaredTypeTree {
 
   /**
    * Optional leading <code>?</code> token, as in <code>?int</code>, to mark the object

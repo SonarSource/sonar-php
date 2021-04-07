@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,8 +19,13 @@
  */
 package org.sonar.php.checks;
 
+import java.util.Optional;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.symbols.Symbols;
+import org.sonar.php.symbols.Trilean;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -54,10 +59,17 @@ public class TooManyFunctionParametersCheck extends PHPVisitorCheck {
   public void visitParameterList(ParameterListTree parameterList) {
     int numberOfParameters = parameterList.parameters().size();
     int maxValue = isConstructorParameterList(parameterList) ? constructorMax : max;
-    if (numberOfParameters > maxValue) {
+    if (numberOfParameters > maxValue && isOverriding(parameterList.getParent()).isFalse()) {
       context().newIssue(this, parameterList, String.format(MESSAGE, numberOfParameters, maxValue));
     }
     super.visitParameterList(parameterList);
+  }
+
+  private static Trilean isOverriding(@Nullable Tree tree) {
+    return Optional.ofNullable(tree)
+      .filter(t -> t.is(Tree.Kind.METHOD_DECLARATION))
+      .map(t -> Symbols.get(((MethodDeclarationTree) t)).isOverriding())
+      .orElse(Trilean.FALSE);
   }
 
   private boolean isConstructorParameterList(ParameterListTree parameterList) {

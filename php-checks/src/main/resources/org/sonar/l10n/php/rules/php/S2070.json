@@ -1,33 +1,16 @@
 {
   "title": "SHA-1和消息摘要哈希算法不应在安全上下文中使用",
   "type": "VULNERABILITY",
-  "status": "ready",
+  "status": "deprecated",
   "remediation": {
     "func": "Constant\/Issue",
     "constantCost": "30min"
   },
   "tags": [
-    "cwe",
-    "spring",
-    "owasp-a6",
-    "sans-top25-porous"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten",
-    "SANS Top 25"
+    
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-2070",
   "sqKey": "S2070",
-  "scope": "Main",
-  "securityStandards": {
-    "CWE": [
-      328,
-      327
-    ],
-    "OWASP": [
-      "A6"
-    ]
-  }
+  "scope": "Main"
 }

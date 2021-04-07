@@ -8,12 +8,7 @@
   },
   "tags": [
     "cwe",
-    "cert",
     "owasp-a3"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten"
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-2245",
@@ -23,8 +18,7 @@
     "CWE": [
       338,
       330,
-      326,
-      310
+      326
     ],
     "OWASP": [
       "A3"

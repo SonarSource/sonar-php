@@ -1,6 +1,6 @@
 {
   "title": "凭证不应该硬编码",
-  "type": "VULNERABILITY",
+  "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
@@ -8,14 +8,8 @@
   },
   "tags": [
     "cwe",
-    "cert",
     "sans-top25-porous",
     "owasp-a2"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten",
-    "SANS Top 25"
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-2068",

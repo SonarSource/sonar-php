@@ -55,3 +55,109 @@ if ($a) {            // OK
   if ($a) {
   }
 }
+
+if ($a) {
+  break;
+} elseif ($b) {
+  break;
+}
+
+if ($a) {
+  break;
+} else if ($b) {
+  break;
+}
+
+if ($a) {
+  throw new Exception();
+} else if ($b) {
+  throw new Exception();
+}
+
+if ($a) {
+  return;
+} else if ($b) {
+  return;
+}
+
+if ($a) {
+  continue;
+} else if ($b) {
+  continue;
+}
+
+
+if ($a) {
+  break;
+} else if ($b) {} // Noncompliant
+
+if ($a) {
+  break;
+} elseif ($b) {} // Noncompliant
+
+if ($a) {
+} else if ($b) { // Noncompliant
+  break;
+}
+
+if ($a) {
+  if ($c) {
+    return;
+  } else {
+    return;
+  }
+} else if ($b) {
+  return;
+}
+
+if ($a) {
+  return;
+} else if ($b) {
+  if ($c) {
+    return;
+  } else {
+    return;
+  }
+}
+
+if ($a) {
+  return;
+} else if ($b) {
+  if ($c) {} else {}
+  return;
+}
+
+if ($a) {
+  return;
+} else if ($b) { // Noncompliant
+  if ($c) {
+    return;
+  } elseif ($d) {
+    return;
+  }
+  if ($e) {
+    return;
+  } else {
+    if ($g) { } else {
+      return;
+    }
+  }
+}
+
+if ($a) {
+  return;
+} elseif ($b) { // Noncompliant
+  if ($c) {
+    return;
+  } else if ($d) {
+    return;
+  }
+}
+
+if ($a) {
+  return;
+} else if ($b) { // Noncompliant
+  if ($c) {
+    return;
+  } else {}
+}

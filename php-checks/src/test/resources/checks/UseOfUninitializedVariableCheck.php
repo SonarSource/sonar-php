@@ -103,7 +103,7 @@ function f7() {
 }
 
 function f8() {
-  if ($a) {} // false-negative, need cfg
+  if ($a) {} // Noncompliant
   parse_str("a=3&b=4");
   return $b;
 }
@@ -215,6 +215,15 @@ function f25() {
   }
 }
 
+function f26() {
+    try {
+        throw new MyException();
+    } catch (MyException) {
+        return $x; // Noncompliant
+        //     ^^
+    }
+}
+
 function predefined_variables() {
   return $_COOKIE . $_ENV . $_FILES . $_GET . $_POST . $_REQUEST . $_SERVER . $_SESSION . $GLOBALS .
   $HTTP_RAW_POST_DATA . $http_response_header . $php_errormsg . $unknown_name; // Noncompliant
@@ -289,4 +298,38 @@ function alternativeForeach() {
     foreach ($array as list($a, $b)) :
         echo "$a\n";
     endforeach;
+}
+
+function initAndReadOnSameCfgLevel() {
+  if (bar()) {
+    $x = 1;
+  } else {
+    echo $x; // Noncompliant
+  }
+}
+
+function staticVariableInitializedAfterUsage() {
+  static $a;
+  if ($a != null) {
+    echo $a;
+  }
+  $a = 1;
+}
+
+function unreachableBlocks($p) {
+  return;
+  // unreachable
+  echo $a; // Ok
+  if ($b) { // Ok
+    // unreachable
+  }
+  // unreachable
+  echo $c; // Ok
+}
+
+// Coverage
+function forEachWithReferenceKeyAndValue() {
+  foreach(foo() as &$key => &$value()) {
+    echo $key;
+  }
 }

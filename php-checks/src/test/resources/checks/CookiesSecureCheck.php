@@ -1,13 +1,12 @@
 <?php
-  setcookie($name, $value, $expire, $path, $domain, false); // Noncompliant {{Make sure creating this cookie without the "secure" flag is safe here.}}
-//^^^^^^^^^
 
-  SetCookie($name, $value, $expire, $path, $domain, false, true); // Noncompliant {{Make sure creating this cookie without the "secure" flag is safe here.}}
-//^^^^^^^^^
-
-  setrawcookie($name, $value, $expire, $path, $domain, false); // Noncompliant {{Make sure creating this cookie without the "secure" flag is safe here.}}
+session_set_cookie_params(); // Noncompliant
+setcookie($name, $value); // Noncompliant
+setcookie($name, $value, $expire, $path, $domain, false); // Noncompliant
+SetCookie($name, $value, $expire, $path, $domain, false, true); // Noncompliant
+setrawcookie($name, $value); // Noncompliant
+  setrawcookie($name, $value, $expire, $path, $domain, false); // Noncompliant
 //^^^^^^^^^^^^
-
   setrawcookie($name, $value, $expire, $path, $domain, false, true); // Noncompliant {{Make sure creating this cookie without the "secure" flag is safe here.}}
 //^^^^^^^^^^^^
 
@@ -27,12 +26,26 @@ setrawcookie($name, $value, $expire, $path, $domain, False); // Noncompliant
 setrawcookie($name, $value, $expire, $path, $domain, 0); // Noncompliant
 setrawcookie($name, $value, $expire, $path, $domain, ""); // Noncompliant
 
-setrawcookie($name, $value, $expire, $path, $domain, $secure, false);
+setrawcookie($name, $value, $expire, $path, $domain, $secure, false);  
 setrawcookie($name, $value, $expire, $path, $domain, true);
-setrawcookie($name, $value, $expire, $path, $domain, foo(false));
+setrawcookie($name, $value, $expire, $path, $domain, foo(false)); 
 setrawcookie($name, $value, $expire, $path, $domain, $secure);
-setrawcookie($name, $value, $expire, $path); // Noncompliant
+setrawcookie($name, $value, $expire, $path);  // Noncompliant
 
 session_set_cookie_params($lifetime, $path, $domain, false); // Noncompliant
-session_set_cookie_params($lifetime, $path, $domain); // Noncompliant
-session_set_cookie_params($lifetime, $path, $domain, true);
+session_set_cookie_params($lifetime, $path, $domain, true);  
+
+$params = session_get_cookie_params();
+setcookie($name, $value, $params); // Compliant
+
+$expires = 42;
+setcookie($name, $value, $expires); // false negative
+
+setcookie($name, $value, secure: false); // Noncompliant
+setcookie($name, $value, secure: true, domain: "foo.com");
+setcookie($name, $value, secure: $secure);
+setrawcookie(secure: false, name: "foo", domain: "my.com"); // Noncompliant
+setrawcookie(secure: true, name: "foo");
+session_set_cookie_params($lifetime, $path, secure: "");  // Noncompliant
+session_set_cookie_params($lifetime, $path, secure: 1);
+session_set_cookie_params(); // Noncompliant

@@ -1,0 +1,33 @@
+<p>Nested <code>switch</code> structures are difficult to understand because you can easily confuse the cases of an inner <code>switch</code> as
+belonging to an outer statement. Therefore nested <code>switch</code> statements should be avoided.</p>
+<p>Specifically, you should structure your code to avoid the need for nested <code>switch</code> statements, but if you cannot, then consider moving
+the inner <code>switch</code> to another function.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+switch($a) {
+  case "foo":
+    switch($b) { // Noncompliant
+      case "bar":
+        doSomething();
+      break;
+    }
+  break;
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+function handleFoo($foo) {
+  switch($foo) {
+    case "bar":
+      doSomething();
+    break;
+  }
+}
+
+switch($a) {
+  case "foo":
+    handleFoo($b);
+  break;
+}
+</pre>
+

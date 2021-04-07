@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -30,11 +30,16 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStateme
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -43,6 +48,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -50,6 +56,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTr
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
@@ -62,12 +69,15 @@ import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MatchClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
@@ -129,6 +139,7 @@ import static org.sonar.php.api.PHPKeyword.USE;
 import static org.sonar.php.api.PHPKeyword.YIELD;
 import static org.sonar.php.api.PHPPunctuator.AMPERSAND;
 import static org.sonar.php.api.PHPPunctuator.ARROW;
+import static org.sonar.php.api.PHPPunctuator.ATTRIBUTE_OPEN;
 import static org.sonar.php.api.PHPPunctuator.COLON;
 import static org.sonar.php.api.PHPPunctuator.COMMA;
 import static org.sonar.php.api.PHPPunctuator.DEC;
@@ -137,7 +148,7 @@ import static org.sonar.php.api.PHPPunctuator.DOLLAR_LCURLY;
 import static org.sonar.php.api.PHPPunctuator.DOT;
 import static org.sonar.php.api.PHPPunctuator.DOUBLEARROW;
 import static org.sonar.php.api.PHPPunctuator.DOUBLECOLON;
-import static org.sonar.php.api.PHPPunctuator.ELIPSIS;
+import static org.sonar.php.api.PHPPunctuator.ELLIPSIS;
 import static org.sonar.php.api.PHPPunctuator.EQU;
 import static org.sonar.php.api.PHPPunctuator.EQUAL;
 import static org.sonar.php.api.PHPPunctuator.EQUAL2;
@@ -155,6 +166,7 @@ import static org.sonar.php.api.PHPPunctuator.NOTEQUAL;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUAL2;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUALBIS;
 import static org.sonar.php.api.PHPPunctuator.NS_SEPARATOR;
+import static org.sonar.php.api.PHPPunctuator.NULL_SAFE_ARROW;
 import static org.sonar.php.api.PHPPunctuator.PLUS;
 import static org.sonar.php.api.PHPPunctuator.QUERY;
 import static org.sonar.php.api.PHPPunctuator.RBRACKET;
@@ -260,10 +272,11 @@ public class PHPGrammar {
   public ClassDeclarationTree CLASS_DECLARATION() {
     return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_DECLARATION).is(
       f.classDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(b.firstOf(b.token(ABSTRACT), b.token(FINAL))),
         b.token(CLASS),
         NAME_IDENTIFIER(),
-        b.optional(f.newTuple(b.token(EXTENDS), NAMESPACE_NAME())),
+        b.optional(f.newTuple(b.token(EXTENDS), f.classNamespaceName(NAMESPACE_NAME()))),
         b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
@@ -273,6 +286,7 @@ public class PHPGrammar {
   public ClassDeclarationTree TRAIT_DECLARATION() {
     return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.TRAIT_DECLARATION).is(
       f.traitDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(TRAIT),
         NAME_IDENTIFIER(),
         b.token(LCURLYBRACE),
@@ -283,6 +297,7 @@ public class PHPGrammar {
   public ClassDeclarationTree INTERFACE_DECLARATION() {
     return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.INTERFACE_DECLARATION).is(
       f.interfaceDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(INTERFACE),
         NAME_IDENTIFIER(),
         b.optional(f.newTuple(b.token(EXTENDS), INTERFACE_LIST())),
@@ -290,7 +305,6 @@ public class PHPGrammar {
         b.zeroOrMore(CLASS_MEMBER()),
         b.token(RCURLYBRACE)));
   }
-
 
   public ClassMemberTree CLASS_MEMBER() {
     return b.<ClassMemberTree>nonterminal(PHPLexicalGrammar.CLASS_MEMBER).is(
@@ -304,6 +318,7 @@ public class PHPGrammar {
   public ClassPropertyDeclarationTree CLASS_CONSTANT_DECLARATION() {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION).is(
       f.classConstantDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(VISIBILITY_MODIFIER()),
         b.token(PHPKeyword.CONST),
         MEMBER_CONST_DECLARATION(),
@@ -323,9 +338,11 @@ public class PHPGrammar {
   public ClassPropertyDeclarationTree CLASS_VARIABLE_DECLARATION() {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION).is(
       f.classVariableDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.firstOf(
           f.singleToken(b.token(PHPKeyword.VAR)),
           b.oneOrMore(MEMBER_MODIFIER())),
+        b.optional(DECLARED_TYPE()),
         VARIABLE_DECLARATION(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), VARIABLE_DECLARATION())),
         EOS()));
@@ -351,6 +368,7 @@ public class PHPGrammar {
   public MethodDeclarationTree METHOD_DECLARATION() {
     return b.<MethodDeclarationTree>nonterminal(PHPLexicalGrammar.METHOD_DECLARATION).is(
       f.methodDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.zeroOrMore(MEMBER_MODIFIER()),
         b.token(PHPKeyword.FUNCTION),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
@@ -365,6 +383,7 @@ public class PHPGrammar {
   public FunctionDeclarationTree FUNCTION_DECLARATION() {
     return b.<FunctionDeclarationTree>nonterminal(PHPLexicalGrammar.FUNCTION_DECLARATION).is(
       f.functionDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(PHPKeyword.FUNCTION),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         NAME_IDENTIFIER(),
@@ -375,7 +394,7 @@ public class PHPGrammar {
 
   public ReturnTypeClauseTree RETURN_TYPE_CLAUSE() {
     return b.<ReturnTypeClauseTree>nonterminal(PHPLexicalGrammar.RETURN_TYPE_CLAUSE).is(
-      f.returnTypeClause(b.token(COLON), TYPE())
+      f.returnTypeClause(b.token(COLON), DECLARED_TYPE())
     );
   }
 
@@ -385,20 +404,24 @@ public class PHPGrammar {
         b.token(PHPPunctuator.LPARENTHESIS),
         b.optional(
           f.newTuple(
+          f.newTuple(
             PARAMETER(),
             b.zeroOrMore(
               f.newTuple(
                 b.token(PHPPunctuator.COMMA),
-                PARAMETER())))),
+                  PARAMETER()))),
+            b.optional(b.token(COMMA)))),
         b.token(PHPPunctuator.RPARENTHESIS)));
   }
 
   public ParameterTree PARAMETER() {
     return b.<ParameterTree>nonterminal(PHPLexicalGrammar.PARAMETER).is(
       f.parameter(
-        b.optional(TYPE()),
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
+        b.optional(VISIBILITY_MODIFIER()),
+        b.optional(DECLARED_TYPE()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
-        b.optional(b.token(PHPPunctuator.ELIPSIS)),
+        b.optional(b.token(PHPPunctuator.ELLIPSIS)),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
         b.optional(
           f.newTuple(
@@ -409,8 +432,8 @@ public class PHPGrammar {
   public SeparatedListImpl<NamespaceNameTree> INTERFACE_LIST() {
     return b.<SeparatedListImpl<NamespaceNameTree>>nonterminal(PHPLexicalGrammar.INTERFACE_LIST).is(
       f.interfaceList(
-        NAMESPACE_NAME(),
-        b.zeroOrMore(f.newTuple(b.token(COMMA), NAMESPACE_NAME()))));
+        f.classNamespaceName(NAMESPACE_NAME()),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), f.classNamespaceName(NAMESPACE_NAME())))));
   }
 
   public UseTraitDeclarationTree USE_TRAIT_DECLARATION() {
@@ -485,13 +508,32 @@ public class PHPGrammar {
         f.builtInType(b.firstOf(
           b.token(ARRAY),
           b.token(CALLABLE),
+          b.token(STATIC),
+          b.token(PHPLexicalGrammar.MIXED),
           b.token(PHPLexicalGrammar.SELF),
+          b.token(PHPLexicalGrammar.PARENT),
+          b.token(PHPLexicalGrammar.ITERABLE),
+          b.token(PHPLexicalGrammar.OBJECT),
           b.token(PHPLexicalGrammar.BOOL),
           b.token(PHPLexicalGrammar.FLOAT),
           b.token(PHPLexicalGrammar.INT),
           b.token(PHPLexicalGrammar.STRING))),
-        NAMESPACE_NAME()
+        f.classNamespaceName(NAMESPACE_NAME())
       ));
+  }
+
+  public UnionTypeTree UNION_TYPE() {
+    return b.<UnionTypeTree>nonterminal(PHPLexicalGrammar.UNION_TYPE).is(
+      f.unionType(
+        TYPE(),
+        b.oneOrMore(f.newTuple(b.token(PHPPunctuator.OR), TYPE()))
+      ));
+  }
+
+  public DeclaredTypeTree DECLARED_TYPE() {
+    return b.<DeclaredTypeTree>nonterminal(PHPLexicalGrammar.DECLARED_TYPE).is(
+      b.firstOf(UNION_TYPE(), TYPE())
+    );
   }
 
   /**
@@ -729,6 +771,34 @@ public class PHPGrammar {
           b.zeroOrMore(INNER_STATEMENT()))));
   }
 
+  public MatchClauseTree MATCH_CLAUSE() {
+    return b.<MatchClauseTree>nonterminal(PHPLexicalGrammar.MATCH_CLAUSE).is(
+      b.firstOf(
+        f.matchConditionClause(
+          EXPRESSION(),
+          b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), EXPRESSION())),
+          b.optional(b.token(PHPPunctuator.COMMA)),
+          b.token(DOUBLEARROW),
+          EXPRESSION()),
+        f.matchDefaultClause(
+          b.token(PHPKeyword.DEFAULT),
+          b.optional(b.token(PHPPunctuator.COMMA)),
+          b.token(DOUBLEARROW),
+          EXPRESSION())));
+  }
+
+  public MatchExpressionTree MATCH_EXPRESSION() {
+    return b.<MatchExpressionTree>nonterminal(PHPLexicalGrammar.MATCH_EXPRESSION).is(
+      f.matchExpression(
+        b.token(PHPKeyword.MATCH),
+        PARENTHESIZED_EXPRESSION(),
+        b.token(PHPPunctuator.LCURLYBRACE),
+        MATCH_CLAUSE(),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), MATCH_CLAUSE())),
+        b.optional(b.token(PHPPunctuator.COMMA)),
+        b.token(PHPPunctuator.RCURLYBRACE)));
+  }
+
   public WhileStatementTree WHILE_STATEMENT() {
     return b.<WhileStatementTree>nonterminal(PHPLexicalGrammar.WHILE_STATEMENT).is(
       b.firstOf(
@@ -877,7 +947,7 @@ public class PHPGrammar {
 
   public ThrowStatementTree THROW_STATEMENT() {
     return b.<ThrowStatementTree>nonterminal(PHPLexicalGrammar.THROW_STATEMENT).is(
-      f.throwStatement(b.token(PHPKeyword.THROW), EXPRESSION(), EOS()));
+      f.throwStatement(THROW_EXPRESSION(), EOS()));
   }
 
   public EmptyStatementTree EMPTY_STATEMENT() {
@@ -914,9 +984,9 @@ public class PHPGrammar {
       f.catchBlock(
         b.token(PHPKeyword.CATCH),
         b.token(PHPPunctuator.LPARENTHESIS),
-        NAMESPACE_NAME(),
-        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), NAMESPACE_NAME())),
-        b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
+        f.classNamespaceName(NAMESPACE_NAME()),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), f.classNamespaceName(NAMESPACE_NAME()))),
+        b.optional(b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER)),
         b.token(PHPPunctuator.RPARENTHESIS),
         BLOCK()));
   }
@@ -1003,7 +1073,9 @@ public class PHPGrammar {
   public ExpressionTree UNARY_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.UNARY_EXPR).is(
       b.firstOf(
+        MATCH_EXPRESSION(),
         YIELD_EXPRESSION(),
+        THROW_EXPRESSION(),
         f.prefixExpr(
           b.zeroOrMore(
             b.firstOf(
@@ -1288,7 +1360,7 @@ public class PHPGrammar {
             b.firstOf(NAME_IDENTIFIER(), NUMERIC_LITERAL(), ENCAPSULATED_VARIABLE_IDENTIFIER()),
             b.token(RBRACKET)),
           f.expandableObjectMemberAccess(
-            b.token(ARROW),
+            b.firstOf(b.token(ARROW), b.token(NULL_SAFE_ARROW)),
             NAME_IDENTIFIER())))));
   }
 
@@ -1322,6 +1394,11 @@ public class PHPGrammar {
   public ExpressionTree HEREDOC_STRING_CHARACTERS() {
     return b.<ExpandableStringCharactersTree>nonterminal(Kind.HEREDOC_STRING_CHARACTERS).is(
       f.heredocStringCharacters(b.token(PHPLexicalGrammar.HEREDOC_STRING_CHARACTERS)));
+  }
+
+  public ThrowExpressionTree THROW_EXPRESSION() {
+    return b.<ThrowExpressionTree>nonterminal(Kind.THROW_EXPRESSION).is(
+      f.throwExpression(b.token(PHPKeyword.THROW), EXPRESSION()));
   }
 
   public YieldExpressionTree YIELD_EXPRESSION() {
@@ -1420,10 +1497,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS).is(
       f.variableWithoutObjects(
         b.zeroOrMore(b.token(PHPLexicalGrammar.VARIABLE_VARIABLE_DOLLAR)),
-        COMPOUND_VARIABLE(),
-        b.zeroOrMore(b.firstOf(
-          DIMENSIONAL_OFFSET(),
-          ALTERNATIVE_DIMENSIONAL_OFFSET()))));
+        COMPOUND_VARIABLE()));
   }
 
   public ArrayAccessTree ALTERNATIVE_DIMENSIONAL_OFFSET() {
@@ -1482,6 +1556,7 @@ public class PHPGrammar {
         b.token(PHPPunctuator.SL_EQU),
         b.token(PHPPunctuator.SR_EQU),
         b.token(PHPPunctuator.CONCATEQUAL),
+        b.token(PHPPunctuator.NULL_COALESCING_EQU),
 
         b.token(PHPPunctuator.ANDEQUAL),
         b.token(PHPPunctuator.XOR_EQU),
@@ -1498,7 +1573,7 @@ public class PHPGrammar {
   public SpreadArgumentTree SPREAD_ARGUMENT() {
     return b.<SpreadArgumentTree>nonterminal(Kind.SPREAD_ARGUMENT).is(
       f.spreadArgument(
-        b.token(ELIPSIS),
+        b.token(ELLIPSIS),
         EXPRESSION()));
   }
 
@@ -1510,8 +1585,8 @@ public class PHPGrammar {
         b.token(RPARENTHESIS)));
   }
 
-  public SeparatedListImpl<ExpressionTree> ARGUMENTS() {
-    return b.<SeparatedListImpl<ExpressionTree>>nonterminal().is(
+  public SeparatedListImpl<CallArgumentTree> ARGUMENTS() {
+    return b.<SeparatedListImpl<CallArgumentTree>>nonterminal().is(
       f.arguments(b.optional(f.argumentsList(
         FUNCTION_CALL_ARGUMENT(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), FUNCTION_CALL_ARGUMENT())),
@@ -1520,12 +1595,32 @@ public class PHPGrammar {
     );
   }
 
-  public ExpressionTree FUNCTION_CALL_ARGUMENT() {
-    return b.<ExpressionTree>nonterminal().is(
+  public CallArgumentTree FUNCTION_CALL_ARGUMENT() {
+    return b.<CallArgumentTree>nonterminal(PHPLexicalGrammar.FUNCTION_CALL_ARGUMENT).is(
       b.firstOf(
-        REFERENCE_VARIABLE(),
-        SPREAD_ARGUMENT(),
-        EXPRESSION()));
+        f.functionCallArgument(b.optional(f.newTuple(NAME_IDENTIFIER_OR_KEYWORD(), b.token(COLON))),
+          b.firstOf(
+            REFERENCE_VARIABLE(),
+            SPREAD_ARGUMENT(),
+            EXPRESSION())),
+        f.functionCallArgument(
+          b.firstOf(
+            REFERENCE_VARIABLE(),
+            SPREAD_ARGUMENT(),
+            EXPRESSION()))
+      ));
+  }
+
+  public ExpressionTree SPECIAL_CALL() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SPECIAL_CALL).is(
+      f.memberExpression(
+        b.firstOf(
+          f.nullLiteral(b.token(PHPLexicalGrammar.NULL)),
+          ARRAY_INITIALIZER(),
+          STRING_LITERAL()),
+        FUNCTION_CALL_ARGUMENT_LIST()
+      )
+    );
   }
 
   public ExpressionTree MEMBER_EXPRESSION() {
@@ -1537,30 +1632,19 @@ public class PHPGrammar {
             OBJECT_MEMBER_ACCESS(),
             CLASS_MEMBER_ACCESS(),
             DIMENSIONAL_OFFSET(),
-            FUNCTION_CALL_ARGUMENT_LIST()))));
+            ALTERNATIVE_DIMENSIONAL_OFFSET(),
+            FUNCTION_CALL_ARGUMENT_LIST()))
+      ));
   }
 
   public MemberAccessTree OBJECT_MEMBER_ACCESS() {
     return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.OBJECT_MEMBER_ACCESS).is(
       f.objectMemberAccess(
-        b.token(ARROW),
+        b.firstOf(b.token(ARROW), b.token(NULL_SAFE_ARROW)),
         b.firstOf(
           VARIABLE_WITHOUT_OBJECTS(),
-          OBJECT_DIMENSIONAL_LIST(),
-          NAME_IDENTIFIER_OR_KEYWORD())));
-  }
-
-  public ExpressionTree OBJECT_DIMENSIONAL_LIST() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.OBJECT_DIM_LIST).is(
-      f.objectDimensionalList(
-        b.firstOf(
-          NAME_IDENTIFIER(),
-          f.variableName(b.token(PHPLexicalGrammar.KEYWORDS)),
-          COMPUTED_VARIABLE_NAME()),
-        b.zeroOrMore(
-          b.firstOf(
-            ALTERNATIVE_DIMENSIONAL_OFFSET(),
-            DIMENSIONAL_OFFSET()))));
+          NAME_IDENTIFIER_OR_KEYWORD(),
+          COMPUTED_VARIABLE_NAME())));
   }
 
   public MemberAccessTree CLASS_MEMBER_ACCESS() {
@@ -1581,6 +1665,7 @@ public class PHPGrammar {
         b.token(LPARENTHESIS),
         LEXICAL_VARIABLE(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), LEXICAL_VARIABLE())),
+        b.optional(b.token(COMMA)),
         b.token(RPARENTHESIS)));
   }
 
@@ -1645,13 +1730,17 @@ public class PHPGrammar {
   public ArrayPairTree ARRAY_PAIR() {
     return b.<ArrayPairTree>nonterminal(Kind.ARRAY_PAIR).is(
       b.firstOf(
+        f.arrayPair2(b.token(ELLIPSIS), EXPRESSION()),
         f.arrayPair1(EXPRESSION(), b.optional(f.newTuple(b.token(DOUBLEARROW), b.firstOf(REFERENCE_VARIABLE(), EXPRESSION())))),
-        f.arrayPair2(REFERENCE_VARIABLE())));
+        f.arrayPair2(REFERENCE_VARIABLE())
+        )
+    );
   }
 
   public FunctionExpressionTree FUNCTION_EXPRESSION() {
     return b.<FunctionExpressionTree>nonterminal(Kind.FUNCTION_EXPRESSION).is(
       f.functionExpression(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(b.token(STATIC)),
         b.token(FUNCTION),
         b.optional(b.token(AMPERSAND)),
@@ -1661,19 +1750,54 @@ public class PHPGrammar {
         BLOCK()));
   }
 
+  public ArrowFunctionExpressionTree ARROW_FUNCTION_EXPRESSION() {
+    return b.<ArrowFunctionExpressionTree>nonterminal(Kind.ARROW_FUNCTION_EXPRESSION).is(
+      f.arrowFunctionExpression(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
+        b.optional(b.token(STATIC)),
+        b.token(PHPKeyword.FN),
+        b.optional(b.token(AMPERSAND)),
+        PARAMETER_LIST(),
+        b.optional(RETURN_TYPE_CLAUSE()),
+        b.token(DOUBLEARROW),
+        EXPRESSION()));
+  }
+
   public NewExpressionTree NEW_EXPRESSION() {
     return b.<NewExpressionTree>nonterminal(Kind.NEW_EXPRESSION).is(
-      f.newExpression(b.token(NEW), b.firstOf(MEMBER_EXPRESSION(), ANONYMOUS_CLASS())));
+      f.newExpression(b.token(NEW), b.firstOf(NEW_OBJECT_EXPRESSION(), ANONYMOUS_CLASS())));
+  }
+
+  public ExpressionTree NEW_OBJECT_EXPRESSION() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.NEW_OBJECT_EXPRESSION).is(
+      f.newObjectExpression(
+        PRIMARY_EXPRESSION(),
+        b.zeroOrMore(
+          b.firstOf(
+            OBJECT_MEMBER_ACCESS(),
+            NEW_OBJECT_CLASS_FIELD_ACCESS(),
+            DIMENSIONAL_OFFSET(),
+            ALTERNATIVE_DIMENSIONAL_OFFSET()
+            )),
+        b.optional(FUNCTION_CALL_ARGUMENT_LIST())
+      ));
+  }
+
+  public MemberAccessTree NEW_OBJECT_CLASS_FIELD_ACCESS() {
+    return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.NEW_OBJECT_CLASS_FIELD_ACCESS).is(
+      f.classMemberAccess(b.token(DOUBLECOLON), VARIABLE_WITHOUT_OBJECTS())
+    );
   }
 
   public AnonymousClassTree ANONYMOUS_CLASS() {
     return b.<AnonymousClassTree>nonterminal(Kind.ANONYMOUS_CLASS).is(
       f.anonymousClass(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(CLASS),
         b.optional(b.token(PHPPunctuator.LPARENTHESIS)),
         ARGUMENTS(),
         b.optional(b.token(PHPPunctuator.RPARENTHESIS)),
-        b.optional(f.newTuple(b.token(EXTENDS), NAMESPACE_NAME())),
+        b.optional(f.newTuple(b.token(EXTENDS), f.classNamespaceName(NAMESPACE_NAME()))),
         b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
@@ -1697,8 +1821,10 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.POSTFIX_EXPR).is(
       f.postfixExpression(
         b.firstOf(
+          SPECIAL_CALL(),
           f.combinedScalarOffset(ARRAY_INITIALIZER(), b.zeroOrMore(DIMENSIONAL_OFFSET())),
           FUNCTION_EXPRESSION(),
+          ARROW_FUNCTION_EXPRESSION(),
           COMMON_SCALAR(),
           MEMBER_EXPRESSION(),
           NEW_EXPRESSION(),
@@ -1714,4 +1840,30 @@ public class PHPGrammar {
    * [ END ] Expression
    */
 
+  public AttributeTree ATTRIBUTE() {
+    return b.<AttributeTree>nonterminal(PHPLexicalGrammar.ATTRIBUTE).is(
+      f.attribute(
+        NAMESPACE_NAME(),
+        b.optional(FUNCTION_CALL_ARGUMENT_LIST())
+      ));
+  }
+
+  public SeparatedList<AttributeTree> ATTRIBUTE_LIST() {
+    return b.<SeparatedList<AttributeTree>>nonterminal().is(
+      f.attributeList(
+        ATTRIBUTE(),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), ATTRIBUTE())),
+        b.optional(b.token(COMMA))
+      )
+    );
+  }
+
+  public AttributeGroupTree ATTRIBUTE_GROUP() {
+    return b.<AttributeGroupTree>nonterminal(PHPLexicalGrammar.ATTRIBUTE_GROUP).is(
+      f.attributeGroup(
+        b.token(ATTRIBUTE_OPEN),
+        ATTRIBUTE_LIST(),
+        b.token(RBRACKET)
+      ));
+  }
 }

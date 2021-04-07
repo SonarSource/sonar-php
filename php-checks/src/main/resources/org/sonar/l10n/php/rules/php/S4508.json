@@ -1,29 +1,16 @@
 {
   "title": "从不可信源反序列化对象是安全敏感的",
   "type": "SECURITY_HOTSPOT",
-  "status": "ready",
+  "status": "deprecated",
   "remediation": {
     "func": "Constant\/Issue",
     "constantCost": "15min"
   },
   "tags": [
-    "cwe",
-    "owasp-a8"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten"
+    
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-4508",
   "sqKey": "S4508",
-  "scope": "Main",
-  "securityStandards": {
-    "CWE": [
-      502
-    ],
-    "OWASP": [
-      "A8"
-    ]
-  }
+  "scope": "Main"
 }

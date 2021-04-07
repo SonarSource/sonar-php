@@ -1,0 +1,39 @@
+<p>When specifying the class of objects in a catch clause it is important to make sure that the class exists.</p>
+<p>Since no PHP error will be raised if the class does not exist, this can lead to difficult to debug problems as the catch clause will have no effect
+and the reason might not be obvious.</p>
+<p>This mistake often occurs when being in a namespace and catching PHP built-in exception classes without escaping to the global namespace or
+importing the classes.</p>
+<p>This rule raises an issue when, being in a namespace, an undefined class belonging to that namespace is caught.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+namespace Foo\Bar;
+
+try {
+    doSomething();
+} catch (Exception $e) { // Noncompliant - Exception will never be caught because the class Exception does not exist in the namespace
+    echo $e-&gt;message;
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+namespace Foo\Bar;
+
+try {
+    doSomething();
+} catch (\Exception $e) { // Compliant used by global namespace
+    echo $e-&gt;message;
+}
+
+// or
+
+namespace Foo\Bar;
+
+use Exception;
+
+try {
+    doSomething();
+} catch (Exception $e) { // Compliant imported by use statement
+    echo $e-&gt;message;
+}
+</pre>
+

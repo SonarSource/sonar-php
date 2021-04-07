@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -24,11 +24,11 @@ public class LexicalConstant {
   /**
    * PHP TAGS & INLINE HTML
    */
-  public static final String PHP_OPENING_TAG = "(?i)(?:<\\?(?:php|=|)|<%)";
+  public static final String PHP_OPENING_TAG = "(?i)<\\?(?:php|=|)";
   // we use "[\s\S]" instead of "." as the dot doesn't consume line endings
-  private static final String ANY_CHAR_BUT_START_TAG = "((?!" + PHP_OPENING_TAG + ")[\\s\\S])";
-  public static final String PHP_CLOSING_TAG = "(?:[\\?%]>)";
-  public static final String PHP_START_TAG = ANY_CHAR_BUT_START_TAG + "*+(" + PHP_OPENING_TAG + ")";
+  private static final String ANY_CHAR_BUT_START_TAG = "(?:(?!" + PHP_OPENING_TAG + ")[\\s\\S])";
+  public static final String PHP_CLOSING_TAG = "\\?>";
+  public static final String PHP_START_TAG = ANY_CHAR_BUT_START_TAG + "*+(?:" + PHP_OPENING_TAG + ")";
   public static final String PHP_END_TAG = PHP_CLOSING_TAG + PHP_START_TAG + "?+";
   public static final String ANYTHING_BUT_START_TAG = ANY_CHAR_BUT_START_TAG + "++";
 
@@ -51,7 +51,7 @@ public class LexicalConstant {
    */
   private static final String IDENTIFIER_START = "[a-zA-Z_\\x7f-\\xff]";
   public static final String IDENTIFIER_PART = "[" + IDENTIFIER_START + "[0-9]]";
-  public static final String IDENTIFIER = IDENTIFIER_START + IDENTIFIER_PART + "*";
+  public static final String IDENTIFIER = IDENTIFIER_START + IDENTIFIER_PART + "*+";
 
   private static final String VAR_IDENTIFIER_START = "\\$";
   public static final String VAR_IDENTIFIER = VAR_IDENTIFIER_START + IDENTIFIER;
@@ -65,7 +65,7 @@ public class LexicalConstant {
    */
   private static final String SINGLE_LINE_COMMENT_CONTENT = "(?:(?!" + PHP_CLOSING_TAG + ")[^\\n\\r])*+";
   private static final String SINGLE_LINE_COMMENT1 = "//" + SINGLE_LINE_COMMENT_CONTENT;
-  private static final String SINGLE_LINE_COMMENT2 = "#" + SINGLE_LINE_COMMENT_CONTENT;
+  private static final String SINGLE_LINE_COMMENT2 = "#(?!\\[)" + SINGLE_LINE_COMMENT_CONTENT;
   private static final String MULTI_LINE_COMMENT = "/\\*[\\s\\S]*?\\*/";
   public static final String COMMENT = "(?:" + SINGLE_LINE_COMMENT1 + "|" + SINGLE_LINE_COMMENT2 + "|" + MULTI_LINE_COMMENT + ")";
 
@@ -82,63 +82,63 @@ public class LexicalConstant {
   private static final String NON_SPECIAL_CHARACTERS = "(?:[^\"\\\\$\\{])";
   private static final String NON_SPECIAL_CHARACTERS_EXECUTION = "(?:[^\\\\$\\{`])";
   private static final String NON_SPECIAL_CHARACTERS_HEREDOC = "(?:[^\\\\$\\{])";
-  private static final String ESCAPED_CHARACTERS = "(?:\\\\[\\s\\S])";
+  private static final String ESCAPED_CHARACTER_OR_STANDALONE_BACKSLASH = "(?:\\\\[\\s\\S]?)";
 
   public static final String STRING_WITH_ENCAPS_VAR_CHARACTERS = "(?:(?:"
     + NON_SPECIAL_CHARACTERS
     + "|" + PERMITTED_EMBEDDED_DOLAR
     + "|" + PERMITTED_OPEN_CURLY_BRACE
-    + "|" + ESCAPED_CHARACTERS
+    + "|" + ESCAPED_CHARACTER_OR_STANDALONE_BACKSLASH
     + ")++)";
 
   public static final String STRING_CHARACTERS_EXECUTION = "(?:(?:"
     + NON_SPECIAL_CHARACTERS_EXECUTION
     + "|" + PERMITTED_EMBEDDED_DOLAR
     + "|" + PERMITTED_OPEN_CURLY_BRACE
-    + "|" + ESCAPED_CHARACTERS
+    + "|" + ESCAPED_CHARACTER_OR_STANDALONE_BACKSLASH
     + ")++)";
 
   public static final String HEREDOC_STRING_CHARACTERS = "(?:(?:"
     + NON_SPECIAL_CHARACTERS_HEREDOC
     + "|" + PERMITTED_EMBEDDED_DOLAR
     + "|" + PERMITTED_OPEN_CURLY_BRACE
-    + "|" + ESCAPED_CHARACTERS
+    + "|" + ESCAPED_CHARACTER_OR_STANDALONE_BACKSLASH
     + ")++)";
 
   /**
    * Heredoc / Nowdoc
    */
   public static final String NEW_LINE = "(?:\r\n?+|\n)";
-  public static final String HEREDOC = "(?s)(<<<[ \t\u000B\f]*\"?([^\r\n'\"]++)\"?" + NEW_LINE + ")(?:(.*?)" + NEW_LINE + ")?[ \t]*+\\2(?!" + IDENTIFIER_PART + ")";
-  public static final String NOWDOC = "(?s)<<<[ \t\u000B\f]*'([^\r\n'\"]++)'" + NEW_LINE + "(?:.*?" + NEW_LINE + ")?[ \t]*+\\1(?!" + IDENTIFIER_PART + ")";
+  public static final String HEREDOC = "(?s)(<<<[ \t\u000B\f]*+\"?([^\r\n'\"]++)\"?" + NEW_LINE + ")(?:(.*?)" + NEW_LINE + ")?[ \t]*+\\2(?!" + IDENTIFIER_PART + ")";
+  public static final String NOWDOC = "(?s)<<<[ \t\u000B\f]*+'([^\r\n'\"]++)'" + NEW_LINE + "(?:.*?" + NEW_LINE + ")?[ \t]*+\\1(?!" + IDENTIFIER_PART + ")";
 
   /**
    * String
    */
   public static final String STRING_LITERAL = "(?:"
     + "\"" + STRING_WITH_ENCAPS_VAR_CHARACTERS + "?+" + "\""
-    + "|'([^'\\\\]*+(\\\\[\\s\\S])?+)*+'"
+    + "|'(?:[^'\\\\]*+(?:\\\\[\\s\\S])?+)*+'"
     + ")";
 
   /**
    * Integer
    */
-  private static final String DECIMAL = "[1-9][0-9]*+|0";
-  private static final String HEXADECIMAL = "0[xX][0-9a-fA-F]++";
-  private static final String OCTAL = "0[0-7]++";
-  private static final String BINARY = "0b[01]++";
-  private static final String INTEGER_LITERAL = OCTAL
-    + "|" + HEXADECIMAL
+  private static final String DECIMAL = "[1-9][0-9]*+(?:_[0-9]++)*+";
+  private static final String HEXADECIMAL = "0[xX][0-9a-fA-F]++(?:_[0-9a-fA-F]++)*+";
+  private static final String OCTAL = "0[0-7]*+(?:_[0-7]++)*+";
+  private static final String BINARY = "0[bB][01]++(?:_[01]++)*+";
+  private static final String INTEGER_LITERAL = HEXADECIMAL
     + "|" + BINARY
+    + "|" + OCTAL
     + "|" + DECIMAL;
 
   /**
    * Floating point
    */
-  private static final String LNUM = "[0-9]+";
-  private static final String DNUM = "([0-9]*[\\.]" + LNUM + ")"
-    + "|(" + LNUM + "[\\.][0-9]*)";
-  private static final String EXPONENT_DNUM = "((" + LNUM + "|" + DNUM + ")[eE][+-]?" + LNUM + ")";
+  private static final String LNUM = "[0-9]++(?:_[0-9]++)*+";
+  private static final String DNUM = "(?:(?:[0-9]++(?:_[0-9]++)*+)*+[\\.]" + LNUM + ")"
+    + "|(?:" + LNUM + "[\\.](?:[0-9]++(?:_[0-9]++)*+)*+)";
+  private static final String EXPONENT_DNUM = "(?:(?:" + LNUM + "|" + DNUM + ")[eE][+-]?" + LNUM + ")";
 
   /**
    * Numeric Literal

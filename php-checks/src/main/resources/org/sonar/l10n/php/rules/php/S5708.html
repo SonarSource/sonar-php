@@ -1,0 +1,37 @@
+<p>Instances of classes that do not derive from the "Throwable" interface cannot be used in a PHP "throw" statement. Thus, it does not make sense to
+try to catch such objects within a "try-catch" block.</p>
+<p>Many built-in exceptions such as "Exception" and the SPL exception classes do implement the "Throwable" interface and can be extended when creating
+custom exceptions.</p>
+<p>This rule raises an issue when the classes used to specify the type of objects to be caught in a "try-catch" block do not derive from "Throwable"
+.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+class NoThrowable {}
+
+try {
+    foo();
+} catch (NoThrowable $e) { // Noncompliant
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+&lt;?php
+
+class SomeThrowable implements Throwable {
+    // Implementation of the Throwable methods
+}
+
+try {
+    foo();
+} catch (SomeThrowable $e) { // Compliant
+}
+
+class SomeCustomException extends Exception {}
+
+try {
+    foo();
+} catch (SomeCustomException $e) { // Compliant
+}{code}
+&nbsp;
+</pre>
+

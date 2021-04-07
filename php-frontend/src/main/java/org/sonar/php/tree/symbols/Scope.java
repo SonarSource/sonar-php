@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ package org.sonar.php.tree.symbols;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -37,10 +38,12 @@ public class Scope {
   protected List<Symbol> symbols = new ArrayList<>();
   Scope superClassScope;
   private boolean unresolvedCompact;
+  private boolean captureOuterScope;
 
-  public Scope(Scope outer, Tree tree) {
+  public Scope(Scope outer, Tree tree, boolean captureOuterScope) {
     this.outer = Preconditions.checkNotNull(outer);
     this.tree = Preconditions.checkNotNull(tree);
+    this.captureOuterScope = captureOuterScope;
   }
 
   /**
@@ -50,6 +53,7 @@ public class Scope {
   public Scope(CompilationUnitTree compilationUnitTree) {
     this.outer = null;
     this.tree = compilationUnitTree;
+    this.captureOuterScope = false;
   }
 
   public Tree tree() {
@@ -87,16 +91,25 @@ public class Scope {
    * If no or more than one symbols meet conditions, then null is returned.
    */
   @Nullable
-  public Symbol getSymbol(String name, Kind ... kinds) {
+  public Symbol getSymbol(String name, Kind... kinds) {
     List<Kind> kindList = Arrays.asList(kinds);
     List<Symbol> result = new ArrayList<>();
     for (Symbol s : symbols) {
-      if (s.called(name) && (kindList.isEmpty() || kindList.contains(s.kind()))) {
-        result.add(s);
+      if (s.called(name)) {
+        if (kindList.isEmpty() || kindList.contains(s.kind())) {
+          result.add(s);
+        } else if (s.is(Kind.PARAMETER) && kindList.equals(Collections.singletonList(Kind.VARIABLE))) {
+          // parameter of a child scope shadows variable of the outer scope
+          return null;
+        }
       }
     }
-    if(result.isEmpty() && superClassScope != null) {
-      return superClassScope.getSymbol(name, kinds);
+    if (result.isEmpty()) {
+      if (superClassScope != null) {
+        return superClassScope.getSymbol(name, kinds);
+      } else if (captureOuterScope) {
+        return outer.getSymbol(name, kinds);
+      }
     }
 
     return result.size() == 1 ? result.get(0) : null;

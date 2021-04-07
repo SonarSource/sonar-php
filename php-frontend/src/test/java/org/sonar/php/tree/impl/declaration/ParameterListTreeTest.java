@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -41,6 +41,12 @@ public class ParameterListTreeTest extends PHPTreeModelTest {
   public void not_empty() throws Exception {
     assertThat(parameterList("($p1)").parameters()).hasSize(1);
     assertThat(parameterList("($p1, $p2)").parameters()).hasSize(2);
+    assertThat(parameterList("($p1, $p2,)").parameters()).hasSize(2);
+  }
+
+  @Test
+  public void with_attributes() throws Exception {
+    assertThat(parameterList("(#[A1(5)] $p1, #[A1(6)] $p2)").parameters()).hasSize(2);
   }
 
   private ParameterListTree parameterList(String toParse) {

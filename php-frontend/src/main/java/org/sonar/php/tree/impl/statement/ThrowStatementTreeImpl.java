@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,27 +20,24 @@
 package org.sonar.php.tree.impl.statement;
 
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class ThrowStatementTreeImpl extends PHPTree implements ThrowStatementTree {
 
   private static final Kind KIND = Kind.THROW_STATEMENT;
 
-  private final InternalSyntaxToken throwToken;
-  private final ExpressionTree expression;
-  private final InternalSyntaxToken eosToken;
+  private final ThrowExpressionTree throwExpression;
+  private final SyntaxToken eosToken;
 
-  public ThrowStatementTreeImpl(InternalSyntaxToken throwToken, ExpressionTree expression, InternalSyntaxToken eosToken) {
-    this.throwToken = throwToken;
-    this.expression = expression;
+  public ThrowStatementTreeImpl(ThrowExpressionTree throwExpression, SyntaxToken eosToken) {
+    this.throwExpression = throwExpression;
     this.eosToken = eosToken;
   }
 
@@ -51,17 +48,17 @@ public class ThrowStatementTreeImpl extends PHPTree implements ThrowStatementTre
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(throwToken, expression, eosToken);
+    return Iterators.forArray(throwExpression, eosToken);
   }
 
   @Override
   public SyntaxToken throwToken() {
-    return throwToken;
+    return throwExpression.throwToken();
   }
 
   @Override
   public ExpressionTree expression() {
-    return expression;
+    return throwExpression.expression();
   }
 
   @Override

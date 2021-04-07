@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -40,6 +40,10 @@ public class ConsistentFunctionReturnCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S3801";
 
+  private static final String MESSAGE = "Refactor this function to use \"return\" consistently.";
+  private static final String MESSAGE_WITH_VALUE = "Return with value.";
+  private static final String MESSAGE_WITHOUT_VALUE = "Return without value.";
+
   @Override
   public List<Tree.Kind> nodesToVisit() {
     return Arrays.asList(Tree.Kind.FUNCTION_DECLARATION, Tree.Kind.METHOD_DECLARATION, Tree.Kind.FUNCTION_EXPRESSION);
@@ -53,8 +57,8 @@ public class ConsistentFunctionReturnCheck extends PHPSubscriptionCheck {
     if (numberReturn > 1) {
       long numberEmptyReturn = returnStatements.stream().map(ReturnStatementTree::expression).filter(Objects::isNull).count();
       if (numberEmptyReturn > 0 && numberEmptyReturn != numberReturn) {
-        PreciseIssue issue = context().newIssue(this, functionName(tree), "Refactor this function to use \"return\" consistently.");
-        returnStatements.forEach(returnStatement -> issue.secondary(returnStatement, ""));
+        PreciseIssue issue = context().newIssue(this, functionName(tree), MESSAGE);
+        returnStatements.forEach(returnStatement -> addSecondaryLocation(issue, returnStatement));
       }
     }
   }
@@ -98,6 +102,11 @@ public class ConsistentFunctionReturnCheck extends PHPSubscriptionCheck {
     public void visitFunctionExpression(FunctionExpressionTree tree) {
       // skip other functions
     }
+  }
+
+  private static void addSecondaryLocation(PreciseIssue issue, ReturnStatementTree returnStatement) {
+    String secondaryLocation = returnStatement.expression() != null ? MESSAGE_WITH_VALUE : MESSAGE_WITHOUT_VALUE;
+    issue.secondary(returnStatement, secondaryLocation);
   }
 
 }

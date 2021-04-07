@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -32,6 +32,11 @@ public class PostfixExprTest {
       .matches("$a")
       .matches("array()[]")
       .matches("[][]")
-      .matches("$a instanceof class1");
+      .matches("$a instanceof class1")
+      .matches("['Test', 'method']()")
+      .matches("'Test::method'()")
+      .matches("(['Test', 'method'])()")
+      .matches("('Test::method')()")
+    ;
   }
 }

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,12 +21,17 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nullable;
+
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -36,7 +41,9 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   private static final Kind KIND = Kind.PARAMETER;
 
-  private final TypeTree type;
+  private final List<AttributeGroupTree> attributeGroups;
+  private final SyntaxToken visibility;
+  private final DeclaredTypeTree type;
   private final InternalSyntaxToken referenceToken;
   private final InternalSyntaxToken ellipsisToken;
   private final VariableIdentifierTree variableIdentifier;
@@ -44,13 +51,17 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private final ExpressionTree initValue;
 
   public ParameterTreeImpl(
-    @Nullable TypeTree type,
+    List<AttributeGroupTree> attributeGroups,
+    @Nullable SyntaxToken visibility,
+    @Nullable DeclaredTypeTree type,
     @Nullable InternalSyntaxToken referenceToken,
     @Nullable InternalSyntaxToken ellipsisToken,
     VariableIdentifierTree variableIdentifier,
     @Nullable InternalSyntaxToken equalToken,
     @Nullable ExpressionTree initValue
    ) {
+    this.attributeGroups = attributeGroups;
+    this.visibility = visibility;
     this.type = type;
     this.referenceToken = referenceToken;
     this.ellipsisToken = ellipsisToken;
@@ -59,9 +70,36 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     this.initValue = initValue;
   }
 
+  @Override
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
+  }
+
   @Nullable
   @Override
+  public SyntaxToken visibility() {
+    return visibility;
+  }
+
+  /**
+   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
+   */
+  @Nullable
+  @Override
+  @Deprecated
   public TypeTree type() {
+    if (type == null) {
+      return null;
+    }
+
+    if (type.is(Kind.TYPE)) {
+      return (TypeTree) type;
+    } else {
+      return ((UnionTypeTree) type).types().get(0);
+    }
+  }
+
+  public DeclaredTypeTree declaredType() {
     return type;
   }
 
@@ -101,7 +139,10 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue);
+    return Iterators.concat(
+      attributeGroups.iterator(),
+      Iterators.forArray(visibility, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
+    );
   }
 
   @Override

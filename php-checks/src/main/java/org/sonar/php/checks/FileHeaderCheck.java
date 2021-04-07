@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -71,11 +71,18 @@ public class FileHeaderCheck extends PHPVisitorCheck {
       }
     }
 
-    for (String expectedLine : expectedLines) {
+    for (int i = 0; i < expectedLines.length; i++) {
+      if (i > 0) {
+        if (lines.hasNext()) {
+          line = lines.next();
+        } else {
+          return false;
+        }
+      }
+      String expectedLine = expectedLines[i];
       if (!line.equals(expectedLine)) {
         return false;
       }
-      line = lines.next();
     }
 
     return true;

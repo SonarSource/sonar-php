@@ -1,31 +1,12 @@
 {
   "title": "使用套接字（Sockets）是安全敏感的",
   "type": "SECURITY_HOTSPOT",
-  "status": "ready",
+  "status": "deprecated",
   "tags": [
-    "cwe",
-    "owasp-a1",
-    "sans-top25-risky",
-    "sans-top25-porous",
-    "owasp-a3"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten"
+    
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-4818",
   "sqKey": "S4818",
-  "scope": "Main",
-  "securityStandards": {
-    "CWE": [
-      20,
-      200,
-      400
-    ],
-    "OWASP": [
-      "A1",
-      "A3"
-    ]
-  }
+  "scope": "Main"
 }

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,14 +22,18 @@ package org.sonar.php.tree.impl.expression;
 import com.google.common.collect.Iterators;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import java.util.Iterator;
+
+import static org.sonar.php.api.PHPPunctuator.NULL_SAFE_ARROW;
 
 public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
 
@@ -46,6 +50,9 @@ public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
   }
 
   public MemberAccessTree complete(ExpressionTree object) {
+    if (kind == Kind.CLASS_MEMBER_ACCESS && object.is(Kind.NAMESPACE_NAME)) {
+      object = new ClassNamespaceNameTreeImpl((NamespaceNameTree) object);
+    }
     this.object = object;
 
     return this;
@@ -74,6 +81,11 @@ public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
   @Override
   public boolean isStatic() {
     return PHPPunctuator.DOUBLECOLON.getValue().equals(accessToken.text());
+  }
+
+  @Override
+  public boolean isNullSafeObjectAccess() {
+    return accessToken.text().equals(NULL_SAFE_ARROW.getValue());
   }
 
   @Override

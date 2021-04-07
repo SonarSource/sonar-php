@@ -87,6 +87,8 @@ class E {
     $obj1->method();
     $obj2->method();
     $obj2::anotherClassMethod();
+    $anonymousClass = new class(){};
+    $obj2->method();
   }
 
 }

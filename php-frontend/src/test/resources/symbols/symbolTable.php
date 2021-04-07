@@ -17,10 +17,13 @@ function f() {                                // f
 }
 
 class A {                                     // A
-  public $field1, $field2 = 1;                // $field1, $field2
+  public $fieldOne, $field2 = 1;                // $field1, $field2
   const CONSTANT_FIELD;                       // $constantField
 
   public function f($p = 12) {                     // f, $p
   }
 }
 
+$x = function () use($a) {
+  echo $a;
+};

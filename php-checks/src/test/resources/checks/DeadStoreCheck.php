@@ -93,6 +93,13 @@ function compound_assignments() {
   return $fTerm; // OK
 }
 
+function compound_assignments_FN() {
+  $a = 42;
+  $a += 42; //FN here
+  $a = 10;
+  foo($a);
+}
+
 function array_assignment(){
   list($a, $b) = foo();  // reported by S1481 - unused local variable
 
@@ -106,6 +113,27 @@ function array_assignment(){
 function assignment_in_lhs() {
   $a = 43; // FN - we do not consider order inside expressions
   $b[$a = foo()] = bar($a);
+}
+
+function null_coalescing_assignment() {
+  $a = 42;
+  $a ??= 24; // ok
+  foo($a);
+}
+
+function null_coalescing_assignment_2() {
+  $a = 42; // Noncompliant
+  $a = 24; // ok
+  $a ??= 36;
+  foo($a);
+}
+
+function null_coalescing_assignment_FN() {
+  $a = 42;
+  $b ??= $a; // FN here: $b is considered read
+  $a = 24; // ok
+  $b = 55;
+  foo($a, $b);
 }
 
 /***************************
@@ -407,11 +435,9 @@ function nested_function_has_different_scope() {
 
 function anonymous_lambda_use($kernel)
 {
-    // false positive because $a is considered a different symbol inside the 'use',
-    // even though it's the same symbol
-    $a = 42; // Noncompliant
+    $a = 42; // Compliant
 
-    $foo->method(function ($x) use ($a) { // we don't realize $a is the same here
+    $foo->method(function ($x) use ($a) {
       return $a[$x];
     });
 
@@ -503,4 +529,29 @@ function use_of_unresolved_compact() {
 function return_object() {
   $obj = foo();
   return $obj->bar();
+}
+
+function parameter_by_reference(&$foo) {
+  if (cond()) {
+    $foo = '42';
+  }
+}
+
+function use_by_reference() {
+  $f = function($in) use(&$max) {
+    if($in > $max) {
+      $max = $in; // ok
+    }
+  };
+}
+
+function assign_by_reference() {
+ $ref = &$val; // ok
+ $ref = 'Hello';
+}
+
+function fn_assign_by_reference() {
+ $ref = '24'; // FN: we avoid reporting issues in presence of assignment by reference
+ $ref = &$val; // ok
+ $ref = 'Hello';
 }

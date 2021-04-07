@@ -1,0 +1,35 @@
+<p>PHPUnit provides helper functions and annotations to verify that a given block of code throws an exception and to assert different properties of
+that exception. The provided helper functions are:</p>
+<ul>
+  <li> <code>expectException()</code> </li>
+  <li> <code>expectExceptionCode()</code> </li>
+  <li> <code>expectExceptionMessage()</code> </li>
+  <li> <code>expectExceptionMessageRegExp()</code> </li>
+</ul>
+<p>This check raises an issue when the throw of an exception is verified using a <em>try-catch</em> approach instead of relying on the provided helper
+functions.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+public function testA()
+{
+    try {
+        doSomething();
+        $this-&gt;fail("Assertion should have been thrown");
+    } catch (MyException $e) {
+        assertEquals("Exception message", $e-&gt;getMessage());
+    }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+public function testB()
+{
+    $this-&gt;expectException(MyException::class);
+    $this-&gt;expectExceptionMessage("Exception message");
+
+    doSomething();
+}
+</pre>
+<h2>See</h2>
+<p>thePHP.cc: <a href="https://thephp.cc/news/2016/02/questioning-phpunit-best-practices">Questioning PHPUnit Best Practice</a></p>
+

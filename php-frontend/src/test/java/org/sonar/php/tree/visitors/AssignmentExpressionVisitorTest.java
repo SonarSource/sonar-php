@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -36,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AssignmentExpressionVisitorTest {
 
   @Test
-  public void getAssignmentValue() throws Exception {
+  public void getAssignmentValue() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php function foo() { $a = 1; }");
 
     assertThat(uniqueAssignedValue).isPresent();
@@ -46,7 +47,7 @@ public class AssignmentExpressionVisitorTest {
   }
 
   @Test
-  public void getAssignmentValue_global() throws Exception {
+  public void getAssignmentValue_global() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;");
 
     assertThat(uniqueAssignedValue).isPresent();
@@ -56,8 +57,49 @@ public class AssignmentExpressionVisitorTest {
   }
 
   @Test
-  public void getAssignmentValue_multiple() throws Exception {
+  public void getAssignmentValue_multiple() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;\n$a = 2;");
+
+    assertThat(uniqueAssignedValue).isNotPresent();
+  }
+
+  @Test
+  public void getAssignmentValue_list() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b) = [1, 2];");
+
+    assertThat(uniqueAssignedValue).isPresent();
+    ExpressionTree value = uniqueAssignedValue.get();
+    assertThat(value).isInstanceOf(LiteralTree.class);
+    assertThat(((LiteralTree) value).value()).isEqualTo("1");
+  }
+
+  @Test
+  public void getAssignmentValue_list_unknown_values() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1; list($a, $b) = getValues();");
+
+    assertThat(uniqueAssignedValue).isNotPresent();
+  }
+
+  @Test
+  public void getAssignmentValue_list_skipped_element() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$b").from("<?php list($a, , $b) = [1, 2, 3];");
+
+    assertThat(uniqueAssignedValue).isPresent();
+    ExpressionTree value = uniqueAssignedValue.get();
+    assertThat(value).isInstanceOf(LiteralTree.class);
+    assertThat(((LiteralTree) value).value()).isEqualTo("3");
+  }
+
+  @Test
+  public void getAssignmentValue_list_var_keys_not_supported_yet() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list(getAKey() => $a) = ['a'];");
+
+    assertThat(uniqueAssignedValue).isNotPresent();
+  }
+
+  @Test
+  public void getAssignmentValue_list_value_keys_not_supported_yet() {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b) = [getAKey() => 'a', getBKey() => 'b'];");
 
     assertThat(uniqueAssignedValue).isNotPresent();
   }
@@ -76,12 +118,12 @@ public class AssignmentExpressionVisitorTest {
     Optional<ExpressionTree> from(String code) {
       CompilationUnitTree tree = parse(code, PHPLexicalGrammar.COMPILATION_UNIT);
       SymbolTable symbolTable = SymbolTableImpl.create(tree);
-
-      AssignmentExpressionVisitor assignmentExpressionVisitor = new AssignmentExpressionVisitor(symbolTable);
-      tree.accept(assignmentExpressionVisitor);
       IdentifierTree var = ((SymbolTableImpl) symbolTable).getSymbols(name).get(0).declaration();
       Symbol symbol = symbolTable.getSymbol(var);
-      return assignmentExpressionVisitor.getUniqueAssignedValue(symbol);
+      if (symbol != null) {
+        return ((SymbolImpl) symbol).uniqueAssignedValue();
+       }
+      return Optional.empty();
     }
   }
 

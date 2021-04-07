@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.utils.log.LogTester;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
 
@@ -32,6 +33,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JUnitLogParserForPhpUnitTest {
 
   private JUnitLogParserForPhpUnit parser;
+
+  @org.junit.Rule
+  public LogTester logTester = new LogTester();
 
   @Before
   public void setUp() throws Exception {
@@ -67,6 +71,16 @@ public class JUnitLogParserForPhpUnitTest {
   @Test
   public void shouldParseComplexNestedSuites() throws Exception {
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-junit-report.xml"));
-    assertThat(suites.arrangeSuitesIntoTestFileReports().size()).isEqualTo(8);
+    List<TestFileReport> reportsPerFile = suites.arrangeSuitesIntoTestFileReports();
+    assertThat(reportsPerFile.size()).isEqualTo(8);
+    assertThat(reportsPerFile.get(5).getTests()).isEqualTo(3);
+    assertThat(logTester.logs()).doesNotContain("Test cases must always be descendants of a file-based suite, skipping : testCanBeUsedAsString with data set #0 in App3Test::testCanBeUsedAsString");
+  }
+
+  @Test
+  public void shouldWarnWhenFileAttributeDoesNotExist() throws Exception {
+    final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-no-file.xml"));
+    assertThat(suites.arrangeSuitesIntoTestFileReports().size()).isEqualTo(0);
+    assertThat(logTester.logs()).contains("Test cases must always be descendants of a file-based suite, skipping : HelloWorldTest.testFoo2 in HelloWorldTest");
   }
 }

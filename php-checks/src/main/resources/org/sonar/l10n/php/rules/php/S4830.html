@@ -1,22 +1,28 @@
-<p>禁用SSL/TLS证书信任验证链类似于信任链中的每一个证书，从而将应用程序暴露给中间人(man-in-the-middle, MITM)攻击。</p>
-<h2>不合规的代码示例</h2>
+<p>X.509证书的验证对于创建不易受到中间人攻击的安全SSL / TLS会话至关重要。</p>
+<p>证书链验证包括以下步骤：</p>
+<ul>
+  <li>证书由其父证书颁发机构或系统信任的根CA颁发。</li>
+  <li>每个CA都可以颁发证书。</li>
+  <li>链中的每个证书都不会过期。</li>
+</ul>
+<p>不建议通过实现自定义证书链验证来彻底改变这一现状。</p>
+<p>TLS库提供了应使用的内置证书验证功能。</p>
+<h2>不合规示例</h2>
 <pre>
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // 不合规；TRUE被转换为1，这不是一个安全配置
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-
-// 与/或
-
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); // 不合规
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);  // 不合规
 </pre>
-<h2>合规的的解决方案</h2>
+<h2>Compliant Solution</h2>
 <pre>
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // 合规的；根据PHP文档，默认值是2，用于“检查是否存在公共名称，并验证它是否匹配提供的主机名”
-
-// 与/或
-
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, TRUE); // 合规的；默认值为TRUE
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, TRUE); // 合规; 默认值为TRUE
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);  // 合规
 </pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/295.html">MITRE, CWE-295</a> - Improper Certificate Validation </li>
+</ul>
 

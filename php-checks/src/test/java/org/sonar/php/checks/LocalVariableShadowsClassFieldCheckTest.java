@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,13 +20,12 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class LocalVariableShadowsClassFieldCheckTest {
 
   @Test
   public void test() throws Exception {
-    PHPCheckTest.check(new LocalVariableShadowsClassFieldCheck(), TestUtils.getCheckFile("LocalVariableShadowsClassFieldCheck.php"));
+    CheckVerifier.verify(new LocalVariableShadowsClassFieldCheck(), "LocalVariableShadowsClassFieldCheck.php");
   }
 }

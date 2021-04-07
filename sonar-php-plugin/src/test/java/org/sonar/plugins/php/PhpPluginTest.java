@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.Plugin;
+import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.config.PropertyDefinition;
@@ -50,7 +51,7 @@ public class PhpPluginTest {
     Plugin.Context context = qubeContext(Version.create(6, 7));
     plugin.define(context);
 
-    assertThat(context.getExtensions()).hasSize(10);
+    assertThat(context.getExtensions()).hasSize(12);
   }
 
   @Test
@@ -59,7 +60,7 @@ public class PhpPluginTest {
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
 
-    assertThat(context.getExtensions()).hasSize(9);
+    assertThat(context.getExtensions()).hasSize(11);
   }
 
   @Test
@@ -72,7 +73,7 @@ public class PhpPluginTest {
   }
 
   private static Plugin.Context qubeContext(Version version) {
-    final SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(version, SonarQubeSide.SCANNER);
+    final SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(version, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
     return new Plugin.Context(runtime);
   }
 

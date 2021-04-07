@@ -1,47 +1,51 @@
-<p>控制权限是安全敏感的。它在过去导致了以下漏洞：</p>
+<p>必须正确实施应用程序的访问控制，以限制对授权实体的资源访问，否则可能导致漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-12999">CVE-2018-12999</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-10285">CVE-2018-10285</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7455">CVE-2017-7455</a> </li>
 </ul>
-<p>攻击者只能破坏他们所能访问的东西。因此，限制他们的访问是防止他们造成破坏的好方法，但必须正确地做。</p>
-<p>此规则标记控制对资源和操作的访问或配置此访问的代码。目标是指导安全代码审查。</p>
-<h2>检查是否有下列问题：</h2>
+<p>因此，必须谨慎地授予用户，应用程序，组或角色正确的权限并定义允许访问资源的所需权限。
+例如，很明显，只有具有管理员权限的用户才应被授权添加/删除另一个用户的管理员权限。</p>
+<h2>检查是否存在以下情况</h2>
 <ul>
-  <li> 至少有一个被访问的操作或资源是安全敏感的。</li>
-  <li> 没有适当的访问控制，或者它不能覆盖所有敏感的操作和资源。</li>
-  <li> 用户拥有他们不需要的权限。</li>
-  <li> 访问控制基于用户输入或其他一些不安全数据。</li>
-  <li> 权限很难删除或需要很长时间才能更新。</li>
+  <li>授予实体（用户，应用程序）的权限允许访问该实体不需要的信息或功能。</li>
+  <li>特权很容易获得（例如：根据用户的位置，由第三方定义的使用的设备类型不需要批准...）</li>
+  <li>继承的权限，默认权限，没有特权（例如：匿名用户）被授权访问受保护的资源。</li>
 </ul>
-<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<p>若存在以上情况，则代码存在风险</p>
 <h2>推荐的安全编码实践</h2>
-<p>第一步是将所有敏感操作限制为经过身份验证的用户。</p>
-<p>每个用户应该拥有尽可能低的特权。访问控制粒度应该匹配每个资源或操作的敏感性。它越敏感，人们接触它的机会就越少。</p>
-<p>不要将访问控制基于用户输入或可能被篡改的值。例如，开发人员不应该从HTTP cookie读取用户的权限，因为它可以在客户端修改。</p>
-<p>检查对每个操作和资源的访问是否受到了适当的限制。</p>
-<p>允许管理员在必要时快速删除权限。这使它们能够减少攻击者在发生攻击时访问您的系统的时间。</p>
-<p>记录和监视被拒绝的访问请求，因为它们可能揭示攻击。</p>
-<h2>可疑的代码示例</h2>
+<p>至少，访问控制系统应：</p>
+<ul>
+  <li>使用定义良好的访问控制模型，例如<a href="https://en.wikipedia.org/wiki/Role-based_access_control"> RBAC </a>或<a href ="https：//en.wikipedia.org/wiki/Access-control_list"> ACL </a></li>
+  <li>应该定期检查实体的权限，以删除不再需要的权限。</li>
+  <li>遵循<a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">最小特权原则</a> ("_实体只能访问其合法目的所需的信息和资源_"). </li>
+</ul>
+<h2>敏感代码示例</h2>
 <p>CakePHP</p>
 <pre>
 use Cake\Auth\BaseAuthorize;
 use Cake\Controller\Controller;
 
-abstract class MyAuthorize extends BaseAuthorize { // 可疑的。方法扩展 Cake\Auth\BaseAuthorize.
-    // ......
+abstract class MyAuthorize extends BaseAuthorize { // 敏感的。 扩展Cake\Auth\BaseAuthorize的方法。
+    // ...
 }
 
-// Note that "isAuthorized" methods will only be detected in direct subclasses of Cake\Controller\Controller.
+// 请注意，仅在Cake\Controller\Controller的直接子类中才能检测到“ isAuthorized”方法。
 abstract class MyController extends Controller {
-    public function isAuthorized($user) { // 可疑的。方法在 Cake\Controller\Controller中被授权。
+    public function isAuthorized($user) { // 敏感的。 在Cake\Controller\Controller中，名为isAuthorized的方法。
         return false;
     }
 }
 </pre>
-<h2>请参阅</h2>
+<h2>See</h2>
 <ul>
-  <li> OWASP Top 10 2017 Category A5 - Broken Access Control </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A5-Broken_Access_Control">OWASP Top 10 2017 Category A5</a> - Boken Access Control </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/276.html">MITRE, CWE-276</a> - Incorrect Default Permissions </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/732.html">MITRE, CWE-732</a> - Incorrect Permission Assignment for Critical Resource </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/668.html">MITRE, CWE-668</a> - Exposure of Resource to Wrong Sphere </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/277.html">MITRE, CWE-277</a> - Insecure Inherited Permissions </li>
 </ul>
+<h2>Deprecated</h2>
+<p>This rule is deprecated, and will eventually be removed.</p>
 

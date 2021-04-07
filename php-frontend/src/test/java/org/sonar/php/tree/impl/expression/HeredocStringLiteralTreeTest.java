@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -154,6 +154,13 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     assertThat(closingToken.endLine()).isEqualTo(4);
     assertThat(closingToken.column()).isEqualTo(5);
     assertThat(closingToken.endColumn()).isEqualTo(3);
+  }
+
+  @Test
+  public void parse_backslash() throws Exception {
+    String code = "<<<ABC\n\\\nABC";
+    HeredocStringLiteralTree tree = parseHeredoc(code);
+    assertThat(tree.strings().get(0).value()).isEqualTo("\\");
   }
 
   private HeredocStringLiteralTree parseHeredoc(String code) throws Exception {

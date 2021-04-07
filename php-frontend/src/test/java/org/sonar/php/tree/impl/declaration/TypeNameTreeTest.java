@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -36,6 +36,14 @@ public class TypeNameTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
     assertThat(tree.token().text()).isEqualTo("int");
+  }
+
+  @Test
+  public void built_in_mixed_type() throws Exception {
+    BuiltInTypeTree tree = parse("mixed", PHPLexicalGrammar.TYPE_NAME);
+
+    assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
+    assertThat(tree.token().text()).isEqualTo("mixed");
   }
 
   @Test

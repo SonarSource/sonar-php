@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,20 +21,19 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
@@ -45,22 +44,14 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
   public static final String KEY = "S2115";
 
   private static final String MESSAGE = "Add password protection to this database.";
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    this.assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
 
   @Override
   public void visitFunctionCall(FunctionCallTree functionCall) {
     String functionName = CheckUtils.getLowerCaseFunctionName(functionCall);
     if ("mysqli".equals(functionName) || "mysqli_connect".equals(functionName) || "PDO".equalsIgnoreCase(functionName)) {
-      checkPasswordArgument(functionCall, 2);
+      checkPasswordArgument(functionCall, "passwd", 2);
     } else if ("oci_connect".equals(functionName)) {
-      checkPasswordArgument(functionCall, 1);
+      checkPasswordArgument(functionCall, "password", 1);
     } else if ("sqlsrv_connect".equals(functionName)) {
       checkSqlServer(functionCall);
     } else if ("pg_connect".equals(functionName)) {
@@ -69,10 +60,10 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
     super.visitFunctionCall(functionCall);
   }
 
-  private void checkPasswordArgument(FunctionCallTree functionCall, int argumentIndex) {
-    SeparatedList<ExpressionTree> arguments = functionCall.arguments();
-    if (arguments.size() > argumentIndex) {
-      ExpressionTree passwordArgument = arguments.get(argumentIndex);
+  private void checkPasswordArgument(FunctionCallTree functionCall, String argumentName, int argumentIndex) {
+    Optional<CallArgumentTree> argument = CheckUtils.argument(functionCall, argumentName, argumentIndex);
+    if (argument.isPresent()) {
+      ExpressionTree passwordArgument = argument.get().value();
       if (hasEmptyValue(passwordArgument)) {
         context().newIssue(this, passwordArgument, MESSAGE);
       }
@@ -91,9 +82,7 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
     if (isEmptyLiteral(expression)) {
       return true;
     } else if (expression.is(Kind.VARIABLE_IDENTIFIER)) {
-      Symbol expressionSymbol = context().symbolTable().getSymbol(expression);
-      return assignmentExpressionVisitor
-        .getUniqueAssignedValue(expressionSymbol)
+      return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) expression)
         .map(EmptyDatabasePasswordCheck::isEmptyLiteral)
         .orElse(false);
     }
@@ -101,10 +90,9 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
   }
 
   private void checkSqlServer(FunctionCallTree functionCall) {
-    SeparatedList<ExpressionTree> arguments = functionCall.arguments();
-    int argumentIndex = 1;
-    if (arguments.size() > argumentIndex) {
-      ExpressionTree connectionInfo = arguments.get(argumentIndex);
+    Optional<CallArgumentTree> argument = CheckUtils.argument(functionCall, "connectionInfo", 1);
+    if (argument.isPresent()) {
+      ExpressionTree connectionInfo = argument.get().value();
       ExpressionTree password = sqlServerPassword(connectionInfo);
       if (password != null && hasEmptyValue(password)) {
         context().newIssue(this, password, MESSAGE);
@@ -121,24 +109,23 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
         }
       }
       return null;
+    } else if (connectionInfo.is(Kind.VARIABLE_IDENTIFIER)) {
+      return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) connectionInfo)
+        .map(this::sqlServerPassword)
+        .orElse(null);
     }
-    Symbol connectionInfoSymbol = context().symbolTable().getSymbol(connectionInfo);
-    return assignmentExpressionVisitor
-      .getUniqueAssignedValue(connectionInfoSymbol)
-      .map(this::sqlServerPassword)
-      .orElse(null);
+    return null;
   }
 
   private void checkPostgresql(FunctionCallTree functionCall) {
-    SeparatedList<ExpressionTree> arguments = functionCall.arguments();
-    if (arguments.isEmpty()) {
+    Optional<CallArgumentTree> connectionStringArgument = CheckUtils.argument(functionCall, "connection_string", 0);
+    if (!connectionStringArgument.isPresent()) {
       return;
     }
-    ExpressionTree connectionString = arguments.get(0);
-    Symbol connectionStringSymbol = context().symbolTable().getSymbol(connectionString);
-    connectionString = assignmentExpressionVisitor
-      .getUniqueAssignedValue(connectionStringSymbol)
-      .orElse(connectionString);
+    ExpressionTree connectionString = connectionStringArgument.get().value();
+    if (connectionString.is(Kind.VARIABLE_IDENTIFIER)) {
+      connectionString = CheckUtils.uniqueAssignedValue((VariableIdentifierTree) connectionString).orElse(connectionString);
+    }
     checkPostgresqlConnectionString(connectionString);
   }
 

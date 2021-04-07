@@ -1,5 +1,5 @@
 {
-  "title": "密码密钥不能太短",
+  "title": "密码学密钥应足够健壮",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {
@@ -8,11 +8,9 @@
   },
   "tags": [
     "cwe",
+    "privacy",
+    "owasp-a6",
     "owasp-a3"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten"
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-4426",
@@ -23,7 +21,8 @@
       326
     ],
     "OWASP": [
-      "A3"
+      "A3",
+      "A6"
     ]
   }
 }

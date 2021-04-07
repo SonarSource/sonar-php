@@ -7,17 +7,20 @@
     "constantCost": "45min"
   },
   "tags": [
+    "cwe",
+    "owasp-a2",
     "owasp-a3"
-  ],
-  "standards": [
-    "OWASP Top Ten"
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-2115",
   "sqKey": "S2115",
   "scope": "Main",
   "securityStandards": {
+    "CWE": [
+      521
+    ],
     "OWASP": [
+      "A2",
       "A3"
     ]
   }

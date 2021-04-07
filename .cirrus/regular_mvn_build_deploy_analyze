@@ -1,0 +1,184 @@
+#!/bin/bash
+# Regular way to build a SonarSource Maven project.
+# Requires the environment variables:
+# - SONAR_HOST_URL: URL of SonarQube server
+# - SONAR_TOKEN: access token to send analysis reports to $SONAR_HOST_URL
+# - GITHUB_TOKEN: access token to send analysis of pull requests to GibHub
+# - ARTIFACTORY_URL: URL to Artifactory repository
+# - ARTIFACTORY_DEPLOY_REPO: name of deployment repository
+# - ARTIFACTORY_DEPLOY_USERNAME: login to deploy to $ARTIFACTORY_DEPLOY_REPO
+# - ARTIFACTORY_DEPLOY_PASSWORD: password to deploy to $ARTIFACTORY_DEPLOY_REPO
+
+set -euo pipefail
+
+# Fetch all commit history so that SonarQube has exact blame information
+# for issue auto-assignment
+# This command can fail with "fatal: --unshallow on a complete repository does not make sense"
+# if there are not enough commits in the Git repository 
+# For this reason errors are ignored with "|| true"
+git fetch --unshallow || true
+
+# fetch references from github for PR analysis
+if [ ! -z "${GITHUB_BASE_BRANCH}" ]; then
+	git fetch origin ${GITHUB_BASE_BRANCH}
+fi
+
+# PIPELINE_ID is used by burgr to identify stages of the pipeline
+if [ -z "$PIPELINE_ID" ]; then
+  $PIPELINE_ID=$BUILD_NUMBER
+fi
+
+if [ "${GITHUB_BRANCH}" == "master" ] && [ "$PULL_REQUEST" == "false" ]; then
+  echo '======= Build, deploy and analyze master'
+
+  git fetch origin ${GITHUB_BRANCH}
+
+  # Analyze with SNAPSHOT version as long as SQ does not correctly handle
+  # purge of release data
+  CURRENT_VERSION=`maven_expression "project.version"`
+
+  . set_maven_build_version $BUILD_NUMBER
+
+  export MAVEN_OPTS="-Xmx1536m -Xms128m"
+  mvn deploy sonar:sonar \
+      -Pcoverage,deploy-sonarsource,release \
+      -Drevision=${PROJECT_VERSION} \
+      -Dmaven.test.redirectTestOutputToFile=false \
+      -Dsonar.host.url=$SONAR_HOST_URL \
+      -Dsonar.login=$SONAR_TOKEN \
+      -Dsonar.projectVersion=$CURRENT_VERSION \
+      -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
+      -Dsonar.analysis.pipeline=$PIPELINE_ID \
+      -Dsonar.analysis.sha1=$GIT_SHA1  \
+      -Dsonar.analysis.repository=$GITHUB_REPO \
+      -B -e -V $*
+
+elif [[ "${GITHUB_BRANCH}" == "branch-"* ]] && [ "$PULL_REQUEST" == "false" ]; then
+  # analyze maintenance branches as long-living branches
+
+  # Fetch all commit history so that SonarQube has exact blame information
+  # for issue auto-assignment
+  # This command can fail with "fatal: --unshallow on a complete repository does not make sense"
+  # if there are not enough commits in the Git repository 
+  # For this reason errors are ignored with "|| true"
+  git fetch --unshallow || true
+
+  git fetch origin ${GITHUB_BRANCH}
+  
+  export MAVEN_OPTS="-Xmx1536m -Xms128m"
+
+  # get current version from pom
+  CURRENT_VERSION=`maven_expression "project.version"`
+
+  if [[ $CURRENT_VERSION =~ "-SNAPSHOT" ]]; then
+    echo "======= Found SNAPSHOT version ======="
+    # Do not deploy a SNAPSHOT version but the release version related to this build
+    . set_maven_build_version $BUILD_NUMBER
+    mvn deploy \
+      -Drevision=${PROJECT_VERSION} \
+      -Pcoverage,deploy-sonarsource,release \
+      -B -e -V $*
+  else
+    echo "======= Found RELEASE version ======="
+    mvn deploy \
+      -Drevision=${PROJECT_VERSION} \
+      -Pcoverage,deploy-sonarsource,release \
+      -B -e -V $*
+  fi
+
+  mvn sonar:sonar \
+      -Drevision=${PROJECT_VERSION} \
+      -Dsonar.host.url=$SONAR_HOST_URL \
+      -Dsonar.login=$SONAR_TOKEN \
+      -Dsonar.branch.name=$GITHUB_BRANCH \
+      -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
+      -Dsonar.analysis.pipeline=$PIPELINE_ID \
+      -Dsonar.analysis.sha1=$GIT_SHA1  \
+      -Dsonar.analysis.repository=$GITHUB_REPO
+
+
+elif [ "$PULL_REQUEST" != "false" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
+  echo '======= Build and analyze pull request'
+
+  # Do not deploy a SNAPSHOT version but the release version related to this build and PR
+  . set_maven_build_version $BUILD_NUMBER
+
+  # No need for Maven phase "install" as the generated JAR files do not need to be installed
+  # in Maven local repository. Phase "verify" is enough.
+
+  export MAVEN_OPTS="-Xmx1G -Xms128m"
+  if [ "${DEPLOY_PULL_REQUEST:-}" == "true" ]; then
+    echo '======= with deploy'
+    mvn deploy sonar:sonar \
+      -Pcoverage,deploy-sonarsource \
+      -Drevision=${PROJECT_VERSION} \
+      -Dmaven.test.redirectTestOutputToFile=false \
+      -Dsonar.host.url=$SONAR_HOST_URL \
+      -Dsonar.login=$SONAR_TOKEN \
+      -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
+      -Dsonar.analysis.pipeline=$PIPELINE_ID \
+      -Dsonar.analysis.sha1=$GIT_SHA1  \
+      -Dsonar.analysis.repository=$GITHUB_REPO \
+      -Dsonar.analysis.prNumber=$PULL_REQUEST \
+      -Dsonar.pullrequest.branch=$GITHUB_BRANCH \
+      -Dsonar.pullrequest.base=$GITHUB_BASE_BRANCH \
+      -Dsonar.pullrequest.key=$PULL_REQUEST \
+      -B -e -V $*
+  else
+    echo '======= no deploy'
+    mvn verify sonar:sonar \
+      -Pcoverage \
+      -Drevision=${PROJECT_VERSION} \
+      -Dmaven.test.redirectTestOutputToFile=false \
+      -Dsonar.host.url=$SONAR_HOST_URL \
+      -Dsonar.login=$SONAR_TOKEN \
+      -Dsonar.analysis.buildNumber=$BUILD_NUMBER \
+      -Dsonar.analysis.pipeline=$PIPELINE_ID \
+      -Dsonar.analysis.sha1=$PULL_REQUEST_SHA  \
+      -Dsonar.analysis.repository=$GITHUB_REPO \
+      -Dsonar.analysis.prNumber=$PULL_REQUEST \
+      -Dsonar.pullrequest.branch=$GITHUB_BRANCH \
+      -Dsonar.pullrequest.base=$GITHUB_BASE_BRANCH \
+      -Dsonar.pullrequest.key=$PULL_REQUEST \
+      -B -e -V $*
+  fi
+
+elif [[ "$GITHUB_BRANCH" == "dogfood-on-"* ]] && [ "$PULL_REQUEST" == "false" ]; then
+  echo '======= Build dogfood branch'
+
+    # get current version from pom
+  CURRENT_VERSION=`maven_expression "project.version"`
+
+  . set_maven_build_version $BUILD_NUMBER  
+
+  mvn deploy \
+    -Pdeploy-sonarsource,release \
+    -Drevision=${PROJECT_VERSION} \
+    -B -e -V $*
+
+elif [[ "$GITHUB_BRANCH" == "feature/long/"* ]] && [ "$PULL_REQUEST" == "false" ]; then
+  echo '======= Build and analyze long lived feature branch'
+    
+  mvn verify sonar:sonar \
+    -Pcoverage \
+    -Drevision=${PROJECT_VERSION} \
+    -Dmaven.test.redirectTestOutputToFile=false \
+    -Dsonar.host.url=$SONAR_HOST_URL \
+    -Dsonar.login=$SONAR_TOKEN \
+    -Dsonar.branch.name=$GITHUB_BRANCH \
+    -Dsonar.analysis.buildNumber=$PULL_REQUEST \
+    -Dsonar.analysis.pipeline=$PIPELINE_ID \
+    -Dsonar.analysis.sha1=$GIT_SHA1  \
+    -Dsonar.analysis.repository=$GITHUB_REPO \
+    -B -e -V $*    
+        
+else
+  echo '======= Build, no analysis, no deploy'
+
+  # No need for Maven phase "install" as the generated JAR files do not need to be installed
+  # in Maven local repository. Phase "verify" is enough.
+
+  mvn verify \
+      -Dmaven.test.redirectTestOutputToFile=false \
+      -B -e -V $*
+fi

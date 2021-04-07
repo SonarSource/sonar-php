@@ -1,31 +1,23 @@
-<p>未能对数据库进行密码保护是粗心大意或幼稚的，甚至几乎是疏忽大意。数据库应该始终受到密码保护，但是使用空密码的数据库连接明显表明数据库没有受到保护。</p>
-<p>此规则用空密码标记数据库连接。</p>
+<p>当依靠密码认证模式进行数据库连接时，应选择一个安全密码。</p>
+<p>使用空密码时，此规则会引起问题。</p>
 <h2>不合规的代码示例</h2>
 <pre>
-&lt;?php
-  $servername = "localhost";
-  $username = "AppLogin";
-  $password = "";
-
-  // MySQL
-  $conn = new mysqli($servername, $username, $password);
-  // MySQL
-  $conn = mysqli_connect($servername, $username, $password);
-  // PDO way
-  $conn = new PDO("mysql:host=$servername;dbname=myDB", $username, $password);
-  // Oracle
-  $conn = oci_connect($username, $password, "//localhost/orcl");
-  // MS SQL Server
-  $sqlsrvName = "serverName\sqlexpress";
-  $sqlsrvConnInfo = array( "Database"=&gt;"myDB", "UID"=&gt;$username, "PWD"=&gt;$password);
-  $conn = sqlsrv_connect( $sqlsrvName, $sqlsrvConnInfo);
-  // PosgreSQL
-  $pgConnInfo = "host=localhost port=5432 dbname=test user=" . $username . " password=" . $password;
-  $conn = pg_connect($pgConnInfo);
-?&gt;
+// 连接到mysql数据库时空密码的示例
+$conn = new mysqli($servername, $username, "");
+</pre>
+<h2>合规的代码示例</h2>
+<pre>
+// 生成安全密码，将其设置为用户名数据库，并将其存储在例如环境变量中
+$password = getenv('MYSQL_SECURE_PASSWORD');
+// 然后连接到数据库
+$conn = new mysqli($servername, $username, $password);
 </pre>
 <h2>请参阅</h2>
 <ul>
-  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication.html">OWASP Top 10 2017 Category A2</a> - Broken
+  Authentication </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data
+  Exposure </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/521.html">MITRE, CWE-521</a> - Weak Password Requirements </li>
 </ul>
 

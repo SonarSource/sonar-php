@@ -1,0 +1,47 @@
+name: sonar-release
+# This workflow is triggered when publishing a new github release
+on:
+  release:
+    types:
+      - published
+
+env:
+  PYTHONUNBUFFERED: 1
+
+jobs:
+  sonar_release:
+    runs-on: ubuntu-latest
+    name: Start release process
+    steps:
+      - name: LT release
+        id: lt_release
+        with:
+          distribute: true
+          publish_to_binaries: true
+          attach_artifacts_to_github_release: true
+          run_rules_cov: true
+          slack_channel: lang-php
+        env:
+          ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
+          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+          BINTRAY_TOKEN: ${{ secrets.BINTRAY_TOKEN }}
+          BURGRX_USER: ${{ secrets.BURGRX_USER }}
+          BURGRX_PASSWORD: ${{ secrets.BURGRX_PASSWORD }}
+          CENTRAL_USER: ${{ secrets.CENTRAL_USER }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          CIRRUS_TOKEN: ${{ secrets.CIRRUS_TOKEN }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          PATH_PREFIX: ${{ secrets.BINARIES_PATH_PREFIX }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          RELEASE_SSH_USER: ${{ secrets.RELEASE_SSH_USER }}
+          RELEASE_SSH_KEY: ${{ secrets.RELEASE_SSH_KEY }}
+          SLACK_API_TOKEN: ${{secrets.SLACK_API_TOKEN }}
+        # Put your action repo here
+        uses: SonarSource/gh-action_LT_release@v2
+
+      - name: Check outputs
+        if: always()
+        run: |
+          echo "${{ steps.lt_release.outputs.releasability }}"
+          echo "${{ steps.lt_release.outputs.release }}"
+      

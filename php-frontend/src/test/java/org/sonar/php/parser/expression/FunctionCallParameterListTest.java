@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -40,6 +40,7 @@ public class FunctionCallParameterListTest {
       .matches("(yield $a)")
       .matches("($p1, & $p2, ...$p3, yield $p4)")
       .matches("('title', 'body','comments',)")
+      .matches("($a, fn($x) => $x + 1)")
       .notMatches("(,)")
       .notMatches("('function','bar',,)")
       .notMatches("(,'function','bar')");

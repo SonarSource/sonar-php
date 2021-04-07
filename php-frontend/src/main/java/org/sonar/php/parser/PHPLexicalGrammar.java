@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -56,6 +56,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   MEMBER_MODIFIER,
   VISIBILITY_MODIFIER,
   MEMBER_CONST_DECLARATION,
+  FUNCTION_CALL_ARGUMENT,
 
   TRAIT_METHOD_REFERENCE_FULLY_QUALIFIED,
   TRAIT_METHOD_REFERENCE,
@@ -65,6 +66,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   TYPE,
   TYPE_NAME,
   RETURN_TYPE_CLAUSE,
+  UNION_TYPE,
+  DECLARED_TYPE,
 
   /**
    * Lexical
@@ -144,6 +147,9 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   FOREACH_STATEMENT,
   FOREACH_VARIABLE,
 
+  MATCH_EXPRESSION,
+  MATCH_CLAUSE,
+
   SWITCH_STATEMENT,
   SWITCH_CASE_CLAUSE,
 
@@ -169,13 +175,15 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
    */
   PRIMARY_EXPRESSION,
   MEMBER_EXPRESSION,
+  NEW_OBJECT_EXPRESSION,
+  NEW_OBJECT_CLASS_FIELD_ACCESS,
+  SPECIAL_CALL,
   VARIABLE_WITHOUT_OBJECTS,
   CLASS_MEMBER_ACCESS,
   OBJECT_MEMBER_ACCESS,
   FUNCTION_CALL_PARAMETER_LIST,
   DIMENSIONAL_OFFSET,
   STATIC_SCALAR,
-  OBJECT_DIM_LIST,
   ARRAY_INIALIZER,
   COMMON_SCALAR,
   YIELD_SCALAR,
@@ -233,7 +241,9 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   PRINT,
 
   SELF,
+  PARENT,
 
+  MIXED,
   INTEGER,
   INT,
   DOUBLE,
@@ -244,8 +254,12 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   BOOLEAN,
   BOOL,
   BINARY,
+  ITERABLE,
 
-  FROM
+  FROM,
+
+  ATTRIBUTE,
+  ATTRIBUTE_GROUP
   ;
 
   public static LexerlessGrammar createGrammar() {
@@ -288,7 +302,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(WHITESPACES).is(b.regexp("[" + LexicalConstant.WHITESPACE + "]*+"));
     b.rule(REGULAR_VAR_IDENTIFIER).is(SPACING, VARIABLE_IDENTIFIER).skip();
     b.rule(VARIABLE_IDENTIFIER).is(b.regexp(LexicalConstant.VAR_IDENTIFIER));
-    b.rule(IDENTIFIER).is(SPACING, b.nextNot(KEYWORDS), b.regexp(LexicalConstant.IDENTIFIER));
+    b.rule(IDENTIFIER).is(SPACING, b.firstOf(b.sequence(b.nextNot(KEYWORDS), b.regexp(LexicalConstant.IDENTIFIER)), b.regexp("(?i)match")));
     b.rule(IDENTIFIER_OR_KEYWORD).is(SPACING, b.regexp(LexicalConstant.IDENTIFIER));
 
     // Tags & Inline HTML
@@ -324,7 +338,9 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(PRINT).is(word(b, "PRINT")).skip();
 
     b.rule(SELF).is(word(b, "SELF")).skip();
+    b.rule(PARENT).is(word(b, "PARENT")).skip();
 
+    b.rule(MIXED).is(word(b, "MIXED")).skip();
     b.rule(INTEGER).is(word(b, "INTEGER")).skip();
     b.rule(INT).is(word(b, "INT")).skip();
     b.rule(DOUBLE).is(word(b, "DOUBLE")).skip();
@@ -335,6 +351,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(BOOLEAN).is(word(b, "BOOLEAN")).skip();
     b.rule(BOOL).is(word(b, "BOOL")).skip();
     b.rule(BINARY).is(word(b, "BINARY")).skip();
+    b.rule(ITERABLE).is(word(b, "ITERABLE")).skip();
 
     b.rule(FROM).is(word(b, "FROM")).skip();
 

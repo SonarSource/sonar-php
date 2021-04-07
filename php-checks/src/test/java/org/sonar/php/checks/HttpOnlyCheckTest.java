@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ public class HttpOnlyCheckTest {
   @Test
   public void test_php_ini() {
     check(check, new File(dir, "http_only.ini"));
-    check(check, new File(dir, "empty.ini"), ImmutableList.of(issue("Set the \"session.cookie_httponly\" property to \"true\".")));
+    check(check, new File(dir, "empty.ini"), ImmutableList.of(issue("Set the \"session.cookie_httponly\" property to \"true\" if needed.")));
   }
 
 }

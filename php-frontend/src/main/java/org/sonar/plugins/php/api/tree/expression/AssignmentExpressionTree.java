@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -39,6 +39,7 @@ import org.sonar.plugins.php.api.tree.Tree;
  *   {@link #variable()} {@link Tree.Kind#OR_ASSIGNMENT |=} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#CONCATENATION_ASSIGNMENT .=} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#ASSIGNMENT_BY_REFERENCE =&} {@link #value()}
+ *   {@link #variable()} {@link Tree.Kind#NULL_COALESCING_ASSIGNMENT ??=} {@link #value()}
  * </pre>
  */
 @Beta

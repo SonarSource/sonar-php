@@ -1,18 +1,25 @@
-<p>仅仅因为你 <em>can</em> 可以做一些事，并不意味着您应该这样做，这就是嵌套三元操作的情况。嵌套三元运算符导致这类代码在编写时看起来很清晰，但是六个月后，维护者(或者更糟的是，或许就是你)会感到困惑和诅咒。</p>
-<p>相反，为了清晰起见，应该使用另一行来将嵌套操作表示为单独的语句。</p>
-<h2>不合规的代码示例</h2>
+<p>即时您<em>可以</em>做某事，并不意味着您应该做，嵌套三元运算就是这种情况。
+嵌套三元运算符会导致在您编写代码时看起来似乎很清晰的那种代码，
+但是六个月后，将使维护人员（或更糟糕的是，您将来可能会）陷入困境并大骂。</p>
+<p>相反，为了清楚起见，请使用另一行将嵌套操作表示为单独的语句。</p>
+<h2>不合规的示例</h2>
 <pre>
-function get_title($gender, $is_married) {
-  return $gender == "MALE" ? "Mr. " : ($is_married ? "Mrs. " : "Miss ");  // 不合规
+function get_readable_status($is_running, $has_errors) {
+  return $is_running ? "Running" : ($has_errors ? "Failure" : "Succeeded");  // 不合规
 }
 </pre>
-<h2>合规的解决方案</h2>
+<h2>合规的方案</h2>
 <pre>
-function get_title($gender, $is_married) {
-  if ($gender == "MALE") {
-    return "Mr. ";
+function get_readable_status($is_running, $has_errors) {
+  if ($is_running) {
+    return "Running";
   }
-  return $is_married ? "Mrs. " : "Miss ";
+  return $has_errors ? "Failure. " : "Succeeded ";
 }
+</pre>
+<h2>例外</h2>
+<p>此规则排除了排他性链接的速记三元运算符<code>?:</ code>。</p>
+<pre>
+$result = $option1 ?: $option2 ?: 'default';
 </pre>
 

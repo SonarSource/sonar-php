@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -33,7 +34,8 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S1763";
-  private static final String MESSAGE = "Remove this unreachable code.";
+  private static final String MESSAGE = "Delete this unreachable code or refactor the code to make it reachable.";
+  private static final String SECONDARY_MESSAGE = "Statement exiting the current code block.";
 
   @Override
   public List<Kind> nodesToVisit() {
@@ -52,14 +54,15 @@ public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
     for (CfgBlock cfgBlock : cfg.blocks()) {
       if (cfgBlock.predecessors().isEmpty() && !cfgBlock.equals(cfg.start()) && !cfgBlock.elements().isEmpty()) {
         Tree firstElement = cfgBlock.elements().get(0);
-        if (firstElement.is(Kind.BREAK_STATEMENT) && firstElement.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE)) {
+        if ((firstElement.is(Kind.BREAK_STATEMENT) && firstElement.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE))
+          || CheckUtils.isClosingTag(firstElement)) {
           continue;
         }
 
         PreciseIssue issue = context().newIssue(this, firstElement, MESSAGE);
         cfg.blocks().stream()
           .filter(block -> cfgBlock.equals(block.syntacticSuccessor()))
-          .forEach(block -> issue.secondary(block.elements().get(block.elements().size() - 1), null));
+          .forEach(block -> issue.secondary(block.elements().get(block.elements().size() - 1), SECONDARY_MESSAGE));
       }
     }
   }

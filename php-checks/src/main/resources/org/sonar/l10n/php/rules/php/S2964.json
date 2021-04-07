@@ -1,25 +1,16 @@
 {
   "title": "不应该调用\"sleep\"",
   "type": "VULNERABILITY",
-  "status": "ready",
+  "status": "deprecated",
   "remediation": {
     "func": "Constant\/Issue",
     "constantCost": "15min"
   },
   "tags": [
-    "denial-of-service",
-    "owasp-a6"
-  ],
-  "standards": [
-    "OWASP Top Ten"
+    
   ],
   "defaultSeverity": "Minor",
   "ruleSpecification": "RSPEC-2964",
   "sqKey": "S2964",
-  "scope": "Main",
-  "securityStandards": {
-    "OWASP": [
-      "A6"
-    ]
-  }
+  "scope": "Main"
 }

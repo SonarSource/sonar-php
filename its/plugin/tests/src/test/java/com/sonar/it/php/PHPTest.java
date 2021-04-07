@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2011-2019 SonarSource SA
+ * Copyright (C) 2011-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -23,16 +23,19 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.sonarqube.ws.Issues;
 
 import static com.sonar.it.php.Tests.getComponent;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
+import java.util.List;
 
 public class PHPTest {
 
   private static final String MULTI_MODULE_PROJECT_KEY = "multimodule-php";
   private static final String EMPTY_FILE_PROJECT_KEY = "empty_file_project_key";
   private static final String SEVERAL_EXTENSIONS_PROJECT_KEY = "project-with-several-extensions";
+  private static final String PROJECT_WITH_VENDOR_KEY = "project-with-vendor";
   private static final String SRC_DIR_NAME = "src";
 
   @ClassRule
@@ -52,6 +55,16 @@ public class PHPTest {
     assertThat(getMeasureAsInt(SEVERAL_EXTENSIONS_PROJECT_KEY, "files")).isEqualTo(3);
     assertThat(getMeasureAsInt(getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math2.myphp"), "lines")).isGreaterThan(1);
     assertThat(getComponent(SEVERAL_EXTENSIONS_PROJECT_KEY, getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math3.pgp"))).isNull();
+  }
+
+  @Test
+  public void should_exclude_vendor_dir() {
+    Tests.provisionProject(PROJECT_WITH_VENDOR_KEY, "Project with vendor dir", "php", "it-profile");
+    SonarScanner build = SonarScanner.create()
+      .setProjectDir(Tests.projectDirectoryFor("project-with-vendor"));
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+
+    assertThat(getMeasureAsInt(PROJECT_WITH_VENDOR_KEY, "files")).isEqualTo(1);
   }
 
   /**
@@ -93,6 +106,24 @@ public class PHPTest {
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     assertThat(getMeasureAsInt(EMPTY_FILE_PROJECT_KEY, "files")).isEqualTo(3);
+  }
+
+  @Test
+  public void should_not_fail_on_deeply_nested_trees() {
+    Tests.provisionProject("big_concat_key", "Big Concat", "php", "sleep-profile");
+    SonarScanner build = SonarScanner.create()
+      .setProjectKey("big_concat_key")
+      .setProjectName("Big Concat")
+      .setProjectVersion("1")
+      .setSourceEncoding("UTF-8")
+      .setSourceDirs(".")
+      .setProjectDir(Tests.projectDirectoryFor("big_concat"));
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+
+    List<Issues.Issue> issues = Tests.issuesForComponent("big_concat_key");
+    // The file actually contains two calls to sleep(), but only one is visited due to the depth limit of the visitor.
+    assertThat(issues).hasSize(1);
+    assertThat(issues.get(0).getLine()).isEqualTo(105);
   }
 
   private static String getResourceKey(String projectKey, String fileName) {

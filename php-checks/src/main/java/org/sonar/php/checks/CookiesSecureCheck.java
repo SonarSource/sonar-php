@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,12 +21,15 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.phpini.PhpIniBoolean;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -57,21 +60,38 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
-    if ((SET_COOKIE_FUNCTIONS.contains(functionName) && argumentSetToFalse(tree, SET_COOKIE_SECURE_PARAMETER))
-      || (SESSION_COOKIE_FUNC.equals(functionName) && argumentSetToFalse(tree, SESSION_COOKIE_SECURE_PARAMETER))) {
-      context().newIssue(this, tree.callee(), MESSAGE);
-    }
+    Optional<CallArgumentTree> secureArgument;
 
+    if (SET_COOKIE_FUNCTIONS.contains(functionName)) {
+      secureArgument = CheckUtils.argument(tree, "secure", SET_COOKIE_SECURE_PARAMETER);
+      checkForIssues(tree, secureArgument.orElse(null));
+    }
+    if (SESSION_COOKIE_FUNC.equals(functionName)) {
+      secureArgument = CheckUtils.argument(tree, "secure", SESSION_COOKIE_SECURE_PARAMETER);
+      checkForIssues(tree, secureArgument.orElse(null));
+    }
     super.visitFunctionCall(tree);
   }
 
-  private static boolean argumentSetToFalse(FunctionCallTree tree, int argumentIndex) {
-    if (tree.arguments().size() > argumentIndex) {
-      ExpressionTree secureArgument = tree.arguments().get(argumentIndex);
-      return CheckUtils.isFalseValue(secureArgument);
+  private void checkForIssues(FunctionCallTree tree, @Nullable CallArgumentTree secureArgument) {
+    if (secureArgument != null) {
+      raiseIssueIfBadFlag(tree, secureArgument.value());
+    } else {
+      raiseIssueIfArgumentIsNotDefined(tree);
     }
-
-    return true;
   }
 
+  private void raiseIssueIfArgumentIsNotDefined(FunctionCallTree tree) {
+    if (tree.callArguments().size() == 3) {
+      // if only 3 argument are defined there is an ambiguity because of the other constructor, so we don't raise issue
+      return;
+    }
+    context().newIssue(this, tree.callee(), MESSAGE);
+  }
+
+  private void raiseIssueIfBadFlag(FunctionCallTree tree, ExpressionTree secureArgument) {
+    if (CheckUtils.isFalseValue(secureArgument)) {
+      context().newIssue(this, tree.callee(), MESSAGE).secondary(secureArgument, null);
+    }
+  }
 }

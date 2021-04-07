@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,10 +20,16 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
+import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -32,14 +38,11 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
-
-public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclarationTree {
+public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclarationTree, HasClassSymbol {
 
   private final Kind kind;
 
+  private final List<AttributeGroupTree> attributeGroups;
   private final SyntaxToken modifierToken;
   private final SyntaxToken classEntryTypeToken;
   private final NameIdentifierTree name;
@@ -50,15 +53,18 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   private final SyntaxToken openCurlyBraceToken;
   private final List<ClassMemberTree> members;
   private final SyntaxToken closeCurlyBraceToken;
+  private ClassSymbol symbol;
 
   private ClassDeclarationTreeImpl(
       Kind kind,
+      List<AttributeGroupTree> attributeGroups,
       @Nullable SyntaxToken modifierToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,
       @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
       @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken
   ) {
     this.kind = kind;
+    this.attributeGroups = attributeGroups;
     this.modifierToken = modifierToken;
     this.classEntryTypeToken = classEntryTypeToken;
     this.name = name;
@@ -75,6 +81,11 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   @Override
   public SyntaxToken modifierToken() {
     return modifierToken;
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override
@@ -155,6 +166,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
+        attributeGroups.iterator(),
         Iterators.forArray(modifierToken, classEntryTypeToken, name, extendsToken, superClass, implementsToken),
         superInterfaces.elementsAndSeparators(),
         Iterators.singletonIterator(openCurlyBraceToken),
@@ -169,12 +181,14 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   public static ClassDeclarationTree createInterface(
+      List<AttributeGroupTree> attributes,
       InternalSyntaxToken interfaceToken, NameIdentifierTree name,
       @Nullable InternalSyntaxToken extendsToken, SeparatedListImpl<NamespaceNameTree> interfaceList,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     return new ClassDeclarationTreeImpl(
         Kind.INTERFACE_DECLARATION,
+        attributes,
         null,
         interfaceToken,
         name,
@@ -189,18 +203,20 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   public static ClassDeclarationTree createTrait(
+      List<AttributeGroupTree> attributes,
       InternalSyntaxToken traitToken, NameIdentifierTree name,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     return new ClassDeclarationTreeImpl(
         Kind.TRAIT_DECLARATION,
+        attributes,
         null,
         traitToken,
         name,
         null,
         null,
         null,
-        SeparatedListImpl.<NamespaceNameTree>empty(),
+        SeparatedListImpl.empty(),
         openCurlyBraceToken,
         members,
         closeCurlyBraceToken
@@ -208,12 +224,14 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   public static ClassDeclarationTree createClass(
+      List<AttributeGroupTree> attributes,
       @Nullable InternalSyntaxToken modifierToken, InternalSyntaxToken classToken, NameIdentifierTree name,
       @Nullable InternalSyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
       @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
     return new ClassDeclarationTreeImpl(
         Kind.CLASS_DECLARATION,
+        attributes,
         modifierToken,
         classToken,
         name,
@@ -225,5 +243,13 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
         members,
         closeCurlyBraceToken
     );
+  }
+
+  public ClassSymbol symbol() {
+    return symbol;
+  }
+
+  public void setSymbol(ClassSymbol symbol) {
+    this.symbol = symbol;
   }
 }

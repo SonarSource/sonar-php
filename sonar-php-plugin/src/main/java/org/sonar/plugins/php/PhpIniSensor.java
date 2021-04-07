@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -78,7 +78,7 @@ public class PhpIniSensor implements Sensor {
       try {
         phpIni = parser.parse(new PhpFileImpl(inputFile));
       } catch (RecognitionException e) {
-        LOG.error("Unable to parse file: " + inputFile.absolutePath());
+        LOG.error("Unable to parse file: " + inputFile.toString());
         LOG.error(e.getMessage());
         continue;
       }

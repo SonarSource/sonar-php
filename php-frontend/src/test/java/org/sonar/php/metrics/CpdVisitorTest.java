@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@ import org.junit.rules.TemporaryFolder;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -81,7 +82,7 @@ public class CpdVisitorTest {
     PhpFile testFile = FileTestUtils.getFile( tempFolder.newFile(), source);
     CpdVisitor cpdVisitor = new CpdVisitor();
     CompilationUnitTree tree = (CompilationUnitTree)p.parse(testFile.contents());
-    return cpdVisitor.getCpdTokens(testFile, tree);
+    return cpdVisitor.getCpdTokens(testFile, tree, SymbolTableImpl.create(tree));
   }
 
   private static List<String> getImagesList(List<CpdToken> tokens) {

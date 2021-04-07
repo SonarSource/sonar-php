@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,24 +19,23 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import java.nio.file.Path;
+import java.net.URI;
 
 /**
- * Class representing file being analysed by SonarPHP plugin.
+ * Class representing a file being analysed by our PHP analyzer.
  */
 public interface PhpFile {
-
-  /**
-   * @return path relative to project directory
-   * @deprecated since 2.14. Use {@link PhpFile#filename()} or {@link PhpFile#toString()} (returning a string to identify this file suitable for logs).
-   */
-  @Deprecated
-  Path relativePath();
 
   String contents();
 
   /**
-   * @return Filename for this file (inclusing extension). For example: MyFile.php.
+   * @return Filename for this file (including extension). For example: MyFile.php.
    */
   String filename();
+
+  /**
+   * @return Unique identifier of the file. It may not be a file:// URI, as it may not exist physically.
+   */
+  URI uri();
+
 }

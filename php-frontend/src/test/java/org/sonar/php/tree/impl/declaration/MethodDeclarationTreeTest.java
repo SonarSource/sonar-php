@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import com.sonar.sslr.api.RecognitionException;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -48,4 +49,31 @@ public class MethodDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.returnTypeClause()).isNotNull();
   }
 
+  @Test
+  public void return_type_union() throws Exception {
+    MethodDeclarationTree tree = parse("public function f() : bool|array {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.returnTypeClause()).isNotNull();
+    assertThat(tree.returnTypeClause().declaredType().isSimple()).isFalse();
+  }
+
+  @Test
+  public void with_attributes() throws Exception {
+    MethodDeclarationTree tree = parse("#[A1(8), A2] public static function f() {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.attributeGroups()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes()).hasSize(2);
+  }
+
+  @Test
+  public void constructor_property_promotion() {
+    MethodDeclarationTree tree = parse("public function __construct(public $p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.parameters().parameters().get(0).visibility().text()).isEqualTo("public");
+
+    tree = parse("public function __CONSTRUCT(private $p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.parameters().parameters().get(0).visibility().text()).isEqualTo("private");
+  }
+
+  @Test(expected = RecognitionException.class)
+  public void non_constructor_parameter_with_visibility_modifier() {
+    parse("public function nonConstructor(public $p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
+  }
 }

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -31,8 +31,6 @@ public class ObjectMemberAccessTest {
     assertThat(PHPLexicalGrammar.OBJECT_MEMBER_ACCESS)
       .matches("->b")
       .matches("->$a")
-      .matches("->$b[$c]{'d'}")
-      .matches("->$a[$a]")
       .matches("->{'b'}")
       .matches("->if");
   }

@@ -1,7 +1,7 @@
 <p>反序列化对象是安全敏感的。例如，它在过去导致了以下漏洞：</p>
 <ul>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-17672">CVE-2017-17672</a>: vBulletin: Unserialize PHP Code Execution </li>
-  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1000058">CVE-2018-1000058</a>: Jenkins Pipeline: arbitrary code execution
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1000167">CVE-2018-1000167</a>: Jenkins Pipeline: arbitrary code execution
   vulnerability </li>
 </ul>
 <p>来自不可信源的对象反序列化可能导致意外的代码执行。反序列化接受一个比特流，并将其转换为一个对象。如果流包含您期望的对象类型，则一切正常。但是如果您正在反序列化不可信的输入，并且攻击者插入了其他类型的对象，那么就有麻烦了。
@@ -21,9 +21,10 @@
 </ul>
 <h2>请参阅</h2>
 <ul>
+  <li> <a href="https://www.owasp.org/index.php/Deserialization_of_untrusted_data">OWASP - Deserialization of untrusted data</a> </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A8-Insecure_Deserialization">OWASP Top 10 2017 Category A8</a> - Insecure Deserialization
+  </li>
   <li> <a href="https://cwe.mitre.org/data/definitions/502.html">MITRE, CWE-502</a> - Deserialization of Untrusted Data </li>
-  <li> OWASP Top 10 2017 Category A8 - Insecure Deserialization </li>
-  <li> <a href="https://www.owasp.org/index.php/Deserialization_of_untrusted_data">OWASP Deserialization of untrusted data</a> </li>
   <li> Derived from FindSecBugs rule <a href="https://find-sec-bugs.github.io/bugs.htm#OBJECT_DESERIALIZATION">OBJECT_DESERIALIZATION </a> </li>
 </ul>
 

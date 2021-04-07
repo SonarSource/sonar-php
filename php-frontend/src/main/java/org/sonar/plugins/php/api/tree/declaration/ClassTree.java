@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -28,10 +28,10 @@ import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
- * Commont interface for {@link ClassDeclarationTree} and {@link AnonymousClassTree}
+ * Common interface for {@link ClassDeclarationTree} and {@link AnonymousClassTree}
  */
 @Beta
-public interface ClassTree extends Tree {
+public interface ClassTree extends Tree, HasAttributes {
   /**
    * PHP 5 introduce a new way to declare constructors: by defining a method named "__construct".
    * Previously constructors were declared by defining a method with the same name as the class.

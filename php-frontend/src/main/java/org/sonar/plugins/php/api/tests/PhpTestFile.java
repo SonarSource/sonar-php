@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -43,11 +44,6 @@ public class PhpTestFile implements PhpFile {
   }
 
   @Override
-  public Path relativePath() {
-    return relativePath;
-  }
-
-  @Override
   public String contents() {
     return contents;
   }
@@ -55,6 +51,11 @@ public class PhpTestFile implements PhpFile {
   @Override
   public String filename() {
     return relativePath.getFileName().toString();
+  }
+
+  @Override
+  public URI uri() {
+    return relativePath.toUri();
   }
 
   @Override

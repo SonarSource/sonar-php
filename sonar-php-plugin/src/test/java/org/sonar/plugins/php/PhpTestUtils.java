@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -23,8 +23,15 @@
 package org.sonar.plugins.php;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.plugins.php.api.Php;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,4 +65,20 @@ public class PhpTestUtils {
     assertThat(context.measure(componentKey, metric)).as("metric for: " + metric.getKey()).isNull();
   }
 
+  public static DefaultInputFile inputFile(String fileName, InputFile.Type type) {
+    try {
+      return TestInputFileBuilder.create("moduleKey", fileName)
+        .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
+        .setType(type)
+        .setCharset(Charset.defaultCharset())
+        .setLanguage(Php.KEY)
+        .initMetadata(new String(java.nio.file.Files.readAllBytes(new File("src/test/resources/" + fileName).toPath()), StandardCharsets.UTF_8)).build();
+    } catch (IOException e) {
+      throw new IllegalStateException("File not found", e);
+    }
+  }
+
+  public static DefaultInputFile inputFile(String fileName) {
+    return inputFile(fileName, InputFile.Type.MAIN);
+  }
 }

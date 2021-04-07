@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,40 +22,66 @@ package org.sonar.php.checks.utils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-import org.apache.commons.lang.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.symbols.SymbolImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
+
+import static java.util.Collections.singletonList;
+import static org.sonar.php.symbols.Symbols.get;
+import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
 
 public final class CheckUtils {
 
   private static final Kind[] FUNCTION_KINDS_ARRAY = {
     Kind.METHOD_DECLARATION,
     Kind.FUNCTION_DECLARATION,
-    Kind.FUNCTION_EXPRESSION};
+    Kind.FUNCTION_EXPRESSION,
+    Kind.ARROW_FUNCTION_EXPRESSION};
 
   public static final ImmutableList<Kind> FUNCTION_KINDS = ImmutableList.copyOf(FUNCTION_KINDS_ARRAY);
 
@@ -94,7 +120,7 @@ public final class CheckUtils {
   }
 
   /**
-   * @return Returns function or static method's name, like "f" or "A::f". Warning, use case insensitive comparison of the result.
+   * @return Returns function, static method's or known dynamic method's name, like "f" or "A::f". Warning, use case insensitive comparison of the result.
    */
   @Nullable
   public static String getFunctionName(FunctionCallTree functionCall) {
@@ -102,7 +128,7 @@ public final class CheckUtils {
   }
 
   /**
-   * @return Returns function or static method's lower case name, like "f" or "a::f".
+   * @return Returns function, static method's or known dynamic method's lower case name, like "f" or "a::f".
    */
   @Nullable
   public static String getLowerCaseFunctionName(FunctionCallTree functionCall) {
@@ -110,8 +136,37 @@ public final class CheckUtils {
     return name != null ? name.toLowerCase(Locale.ROOT) : null;
   }
 
+  /**
+   * @return Returns function or method's name without receiver, like "fooBar".
+   */
+  @Nullable
+  public static String functionName(FunctionCallTree functionCall) {
+    ExpressionTree callee = functionCall.callee();
+    if (callee.is(Kind.CLASS_MEMBER_ACCESS) || callee.is(Kind.OBJECT_MEMBER_ACCESS)) {
+      return nameOf(((MemberAccessTree) callee).member());
+    }
+    return getFunctionName(functionCall);
+  }
+
+  /**
+   * @return Returns function or method's lower case name without receiver, like "foobar".
+   */
+  @Nullable
+  public static String lowerCaseFunctionName(FunctionCallTree functionCall) {
+    String name = functionName(functionCall);
+    return name != null ? name.toLowerCase(Locale.ROOT) : null;
+  }
+
   public static Set<String> lowerCaseSet(String... names) {
     return Arrays.stream(names).map(name -> name.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+  }
+
+  public static String getClassName(ClassDeclarationTree classDeclaration) {
+    return Objects.requireNonNull(nameOf(classDeclaration.name()));
+  }
+
+  public static String getLowerCaseClassName(ClassDeclarationTree classDeclarationTree) {
+    return getClassName(classDeclarationTree).toLowerCase(Locale.ROOT);
   }
 
   /**
@@ -123,12 +178,20 @@ public final class CheckUtils {
       return ((NamespaceNameTree) tree).qualifiedName();
     } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
       return ((NameIdentifierTree) tree).text();
-    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)) {
+    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) || tree.is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
       MemberAccessTree memberAccess = (MemberAccessTree) tree;
       String className = nameOf(memberAccess.object());
       String memberName = nameOf(memberAccess.member());
       if (className != null && memberName != null) {
         return className + "::" + memberName;
+      }
+    } else if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      VariableIdentifierTree variableIdentifier = (VariableIdentifierTree) tree;
+      if (variableIdentifier.text().equals("$this")) {
+        ClassDeclarationTree classDeclaration = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree, EnumSet.of(Kind.CLASS_DECLARATION, Kind.TRAIT_DECLARATION));
+        if (classDeclaration != null) {
+          return nameOf(classDeclaration.name());
+        }
       }
     }
     return null;
@@ -154,6 +217,15 @@ public final class CheckUtils {
     return "die".equalsIgnoreCase(callee) || "exit".equalsIgnoreCase(callee);
   }
 
+  public static boolean hasModifier(ClassMemberTree tree, String toFind) {
+    if (tree.is(Kind.METHOD_DECLARATION)) {
+      return hasModifier(((MethodDeclarationTree) tree).modifiers(), toFind);
+    } else if (tree.is(Kind.CLASS_PROPERTY_DECLARATION)) {
+      return hasModifier(((ClassPropertyDeclarationTree) tree).modifierTokens(), toFind);
+    }
+    return false;
+  }
+
   public static boolean hasModifier(List<SyntaxToken> modifiers, String toFind) {
     for (SyntaxToken modifier : modifiers) {
       if (modifier.text().equalsIgnoreCase(toFind)) {
@@ -167,6 +239,13 @@ public final class CheckUtils {
     if (token.is(Kind.INLINE_HTML_TOKEN)) {
       String text = token.text().trim();
       return "?>".equals(text) || "%>".equals(text);
+    }
+    return false;
+  }
+
+  public static boolean isClosingTag(Tree tree) {
+    if (tree.is(Kind.INLINE_HTML)) {
+      return isClosingTag(((InlineHTMLTree) tree).inlineHTMLToken());
     }
     return false;
   }
@@ -239,6 +318,10 @@ public final class CheckUtils {
     return tree != null && tree.is(Kind.REGULAR_STRING_LITERAL) && s.equalsIgnoreCase(trimQuotes((LiteralTree) tree));
   }
 
+  public static boolean argumentIsStringLiteralWithValue(CallArgumentTree argument, String s) {
+    return isStringLiteralWithValue(assignedValue(argument.value()), s);
+  }
+
   public static boolean isNullOrEmptyString(ExpressionTree tree) {
     if (tree.is(Kind.NULL_LITERAL)) {
       return true;
@@ -250,4 +333,108 @@ public final class CheckUtils {
     return false;
   }
 
+  public static boolean hasAnnotation(Tree declaration, String annotation) {
+    if (!annotation.startsWith("@")) {
+      annotation = "@"+annotation;
+    }
+
+    List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
+
+    if (!trivias.isEmpty()) {
+      return StringUtils.containsIgnoreCase(Iterables.getLast(trivias).text(), annotation);
+    }
+
+    return false;
+  }
+
+  public static boolean isPublic(ClassMemberTree tree) {
+    return !tree.is(Kind.USE_TRAIT_DECLARATION) && !(hasModifier(tree, "private") || hasModifier(tree, "protected"));
+  }
+
+  public static boolean isAbstract(ClassDeclarationTree tree) {
+    return tree.modifierToken() != null && tree.modifierToken().text().equals("abstract");
+  }
+
+  /**
+   * Retrieves an argument based on position and name.
+   *
+   * If an argument with the given name exists, it is returned no matter the position.
+   * Else, the argument at the supplied position is returned if it exists and is not named.
+   *
+   * @since 3.11
+   */
+  public static Optional<CallArgumentTree> argument(FunctionCallTree call, String name, int position) {
+    SeparatedList<CallArgumentTree> callArguments = call.callArguments();
+
+    CallArgumentTree argument = callArguments.stream()
+      .filter(a -> a.name() != null)
+      .filter(a -> a.name().text().equalsIgnoreCase(name))
+      .findFirst()
+      .orElse(null);
+
+    if (argument != null) {
+      return Optional.of(argument);
+    }
+
+    if (callArguments.size() >= position + 1 && callArguments.get(position).name() == null) {
+      return Optional.of(callArguments.get(position));
+    }
+
+    return Optional.empty();
+  }
+
+  public static boolean hasNamedArgument(FunctionCallTree call) {
+    return call.callArguments().stream().anyMatch(arg -> arg.name() != null);
+  }
+
+  /**
+   * Checks if an expression is a variable, and returns the assigned value of the variable if clear, otherwise returns the original expression.
+   * This method is well suited if you want to compare the value of an expression with a scalar. It can resolve possible variables in the small scope.
+   * Thus, it is not necessary to consider beforehand whether the expression is already a scalar expression, a variable, or an expression that is not to be treated.
+   */
+  public static ExpressionTree assignedValue(ExpressionTree tree) {
+    if (tree.is(Kind.VARIABLE_IDENTIFIER)) {
+      return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) tree).orElse(tree);
+    }
+    return tree;
+  }
+
+  public static Optional<ExpressionTree> uniqueAssignedValue(VariableIdentifierTree tree) {
+    Symbol symbol = ((VariableIdentifierTreeImpl) tree).symbol();
+    if (symbol != null) {
+      return ((SymbolImpl) symbol).uniqueAssignedValue();
+    }
+    return Optional.empty();
+  }
+
+  public static Optional<String> resolveReceiver(MemberAccessTree tree) {
+    ExpressionTree receiver = skipParenthesis(assignedValue(tree.object()));
+    if (receiver.is(Kind.NEW_EXPRESSION)) {
+      ExpressionTree newExpression = ((NewExpressionTree) receiver).expression();
+      return Optional.ofNullable(newExpression.is(Kind.FUNCTION_CALL) ? functionName((FunctionCallTree) newExpression) : nameOf(newExpression));
+    }
+    return Optional.empty();
+  }
+
+  public static Optional<ExpressionTree> arrayValue(ArrayInitializerTree array, String searchKey) {
+    return arrayValue(array.arrayPairs(), searchKey);
+  }
+
+  public static Optional<ExpressionTree> arrayValue(List<ArrayPairTree> arrayPairs, String searchKey) {
+    for (ArrayPairTree arrayPair : arrayPairs) {
+      ExpressionTree key = arrayPair.key();
+      if (key != null && key.is(Kind.REGULAR_STRING_LITERAL) && searchKey.equals(trimQuotes((LiteralTree) key))) {
+        return Optional.of(arrayPair.value());
+      }
+    }
+    return Optional.empty();
+  }
+
+  public static boolean isMethodInheritedFromClassOrInterface(QualifiedName qualifiedName, MethodDeclarationTree methodDeclarationTree) {
+    ClassDeclarationTree classTree = (ClassDeclarationTree) findAncestorWithKind(methodDeclarationTree, singletonList(Tree.Kind.CLASS_DECLARATION));
+    if (classTree != null) {
+      return get(classTree).isSubTypeOf(qualifiedName).isTrue();
+    }
+    return false;
+  }
 }

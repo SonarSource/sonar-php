@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ public class ThrowStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void test() throws Exception {
-    ThrowStatementTree tree = parse("throw $a ;", PHPLexicalGrammar.THROW_STATEMENT);
+    ThrowStatementTree tree = parse("throw $a ;", PHPLexicalGrammar.STATEMENT);
 
     assertThat(tree.is(Kind.THROW_STATEMENT)).isTrue();
     assertThat(tree.throwToken().text()).isEqualTo("throw");

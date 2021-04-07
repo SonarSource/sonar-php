@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,9 +21,8 @@ package org.sonar.php.checks;
 
 import java.util.Optional;
 import org.sonar.check.Rule;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.php.utils.LiteralUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -33,6 +32,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
@@ -44,12 +44,8 @@ public class CryptographicKeySizeCheck extends PHPVisitorCheck {
   private static final int MIN_KEY_LENGTH = 2048;
   private static final String MESSAGE = "Use a key length of at least " + MIN_KEY_LENGTH + " bits";
 
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
-
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    this.assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
     super.visitCompilationUnit(tree);
   }
 
@@ -70,11 +66,10 @@ public class CryptographicKeySizeCheck extends PHPVisitorCheck {
   private boolean lessThanMinKeyLength(ExpressionTree keySize) {
     if (keySize.is(Kind.NUMERIC_LITERAL)) {
       LiteralTree literal = (LiteralTree) keySize;
-      int size = Integer.parseInt(literal.value());
+      long size = LiteralUtils.longLiteralValue(literal.value());
       return size < MIN_KEY_LENGTH;
     } else if (keySize.is(Kind.VARIABLE_IDENTIFIER)) {
-      Symbol keySizeSymbol = context().symbolTable().getSymbol(keySize);
-      return assignmentExpressionVisitor.getUniqueAssignedValue(keySizeSymbol)
+      return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) keySize)
         .map(this::lessThanMinKeyLength)
         .orElse(false);
     }
@@ -87,11 +82,10 @@ public class CryptographicKeySizeCheck extends PHPVisitorCheck {
         .filter(pair -> hasKey(pair, "private_key_bits"))
         .map(ArrayPairTree::value)
         .findFirst();
+    } else if (config.is(Kind.VARIABLE_IDENTIFIER)) {
+      return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) config).flatMap(this::getKeySize);
     }
-    Symbol configSymbol = context().symbolTable().getSymbol(config);
-    return assignmentExpressionVisitor
-      .getUniqueAssignedValue(configSymbol)
-      .flatMap(this::getKeySize);
+    return Optional.empty();
   }
 
   private static boolean hasKey(ArrayPairTree pair, String keyName) {

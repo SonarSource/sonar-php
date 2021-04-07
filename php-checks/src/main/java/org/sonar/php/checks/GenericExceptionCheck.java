@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -29,8 +29,8 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
-import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -52,14 +52,14 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitThrowStatement(ThrowStatementTree tree) {
+  public void visitThrowExpression(ThrowExpressionTree tree) {
     NamespaceNameTree namespaceName = getThrownClassName(tree);
 
     if (namespaceName != null && isGenericException(namespaceName)) {
       context().newIssue(this, namespaceName, MESSAGE);
     }
 
-    super.visitThrowStatement(tree);
+    super.visitThrowExpression(tree);
   }
 
   @Override
@@ -106,7 +106,7 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
   }
 
   @Nullable
-  private static NamespaceNameTree getThrownClassName(ThrowStatementTree tree) {
+  private static NamespaceNameTree getThrownClassName(ThrowExpressionTree tree) {
     if (tree.expression().is(Kind.NEW_EXPRESSION)) {
       NewExpressionTree newExpression = (NewExpressionTree) tree.expression();
 

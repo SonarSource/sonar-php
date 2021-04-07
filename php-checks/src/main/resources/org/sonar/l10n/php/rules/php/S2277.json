@@ -1,7 +1,7 @@
 {
   "title": "加密RSA算法应该始终结合OAEP(最优非对称加密填充)",
   "type": "VULNERABILITY",
-  "status": "ready",
+  "status": "deprecated",
   "remediation": {
     "func": "Constant\/Issue",
     "constantCost": "20min"
@@ -11,11 +11,6 @@
     "owasp-a6",
     "sans-top25-porous",
     "owasp-a3"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten",
-    "SANS Top 25"
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-2277",

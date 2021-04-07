@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -26,13 +26,18 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * <a href="http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration.types">Not custom types</a><p>
  * Valid built-in types:
  * <ul>
+ *   <li>mixed</li>
  *   <li>self</li>
+ *   <li>parent</li>
+ *   <li>static</li>
  *   <li>array</li>
  *   <li>callable</li>
  *   <li>bool</li>
  *   <li>float</li>
  *   <li>int</li>
  *   <li>string</li>
+ *   <li>iterable</li>
+ *   <li>object</li>
  * </ul>
  * <pre/>
  */

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,9 +20,12 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
+import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
@@ -34,10 +37,11 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
-public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarationTree {
+public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarationTree, HasMethodSymbol {
 
   private static final Kind KIND = Kind.METHOD_DECLARATION;
 
+  private final List<AttributeGroupTree> attributeGroups;
   private final List<SyntaxToken> modifiersToken;
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
@@ -45,8 +49,10 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   private final ParameterListTree parameters;
   private final ReturnTypeClauseTree returnTypeClause;
   private final Tree body;
+  private MethodSymbol symbol;
 
   public MethodDeclarationTreeImpl(
+    List<AttributeGroupTree> attributeGroups,
     List<SyntaxToken> modifiersToken,
     InternalSyntaxToken functionToken,
     @Nullable InternalSyntaxToken referenceToken,
@@ -55,6 +61,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     @Nullable ReturnTypeClauseTree returnTypeClause,
     Tree body
     ) {
+    this.attributeGroups = attributeGroups;
     this.modifiersToken = modifiersToken;
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;
@@ -67,6 +74,11 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   @Override
   public List<SyntaxToken> modifiers() {
     return modifiersToken;
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override
@@ -109,6 +121,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
+      attributeGroups.iterator(),
       modifiersToken.iterator(),
       Iterators.forArray(functionToken, referenceToken, name, parameters, returnTypeClause, body));
   }
@@ -118,4 +131,11 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     visitor.visitMethodDeclaration(this);
   }
 
+  public void setSymbol(MethodSymbol symbol) {
+    this.symbol = symbol;
+  }
+
+  public MethodSymbol symbol() {
+    return symbol;
+  }
 }

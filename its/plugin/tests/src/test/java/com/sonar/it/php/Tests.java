@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2011-2019 SonarSource SA
+ * Copyright (C) 2011-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ import com.sonar.orchestrator.container.Server;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
@@ -34,11 +35,13 @@ import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.sonarqube.ws.Components;
+import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.Measures;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.WsClient;
 import org.sonarqube.ws.client.WsClientFactories;
 import org.sonarqube.ws.client.components.TreeRequest;
+import org.sonarqube.ws.client.issues.SearchRequest;
 import org.sonarqube.ws.client.measures.ComponentRequest;
 
 import static java.util.Collections.singletonList;
@@ -74,14 +77,15 @@ public class Tests {
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
-      .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE[6.7]"))
+      .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE[7.9]"))
       // PHP Plugin
       .addPlugin(PHP_PLUGIN_LOCATION)
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
       // Custom rules plugin
       .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
-      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"));
+      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
+      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
   }
 
@@ -131,6 +135,19 @@ public class Tests {
       .build());
   }
 
+  static List<Issues.Issue> issuesForComponent(String componentKey) {
+    return newWsClient()
+      .issues()
+      .search(new SearchRequest().setComponentKeys(Collections.singletonList(componentKey)))
+      .getIssuesList();
+  }
+
+  static List<Issues.Issue> issuesForRule(List<Issues.Issue> issues, String ruleKey) {
+    return issues.stream()
+      .filter(i -> i.getRule().equals(ruleKey))
+      .collect(Collectors.toList());
+  }
+
   public static void executeBuildWithExpectedWarnings(Orchestrator orchestrator, SonarScanner build) {
     BuildResult result = orchestrator.executeBuild(build);
     assertAnalyzerLogs(result.getLogs());
@@ -151,6 +168,13 @@ public class Tests {
       .filter(line -> !line.startsWith("WARN: sonar.php.coverage.overallReportPath is deprecated as of SonarQube 6.2"))
       .filter(line -> !line.startsWith("WARN: Line with number 0 doesn't belong to file Math.php"))
       .filter(line -> !line.startsWith("WARN: Line with number 100 doesn't belong to file Math.php"))
+      .filter(line -> !line.startsWith("WARN: SonarQube scanners will require Java 11+ starting on next version"))
+      .filter(line -> !line.startsWith("WARNING: An illegal reflective access operation has occurred"))
+      .filter(line -> !line.startsWith("WARNING: Illegal reflective access"))
+      .filter(line -> !line.startsWith("WARNING: Please consider reporting this to the maintainers"))
+      .filter(line -> !line.startsWith("WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations"))
+      .filter(line -> !line.startsWith("WARNING: All illegal access operations will be denied in a future release"))
+      .filter(line -> !line.startsWith("Picked up JAVA_TOOL_OPTIONS:"))
       .collect(Collectors.toList());
 
     assertThat(unexpectedLogs).isEmpty();

@@ -5,10 +5,10 @@ class A {
 //         ^^^
     if ($a) {
       return false;
-//   <^^^^^^^^^^^^^
+//   <^^^^^^^^^^^^^ {{Return with value.}}
     }
     return;
-// <^^^^^^^
+// <^^^^^^^ {{Return without value.}}
   }
 }
 

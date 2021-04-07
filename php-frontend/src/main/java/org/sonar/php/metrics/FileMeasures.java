@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,33 +19,15 @@
  */
 package org.sonar.php.metrics;
 
-import org.sonar.api.ce.measure.RangeDistributionBuilder;
-
 public class FileMeasures {
-  private int functionNumber;
-  private int classNumber;
-  private int statementNumber;
-  private int classComplexity;
-  private int functionComplexity;
+  private int functionNumber = 0;
+  private int classNumber = 0;
+  private int statementNumber = 0;
   private int fileComplexity;
   private int fileCognitiveComplexity;
 
   private int linesOfCodeNumber;
   private int commentLinesNumber;
-
-  private RangeDistributionBuilder functionComplexityDistribution;
-
-  private RangeDistributionBuilder fileComplexityDistribution;
-
-  public FileMeasures(Number[] limitsComplexityFunctions, Number[] filesDistributionBottomLimits) {
-    functionNumber = 0;
-    classNumber = 0;
-    statementNumber = 0;
-    classComplexity = 0;
-    functionComplexity = 0;
-    functionComplexityDistribution = new RangeDistributionBuilder(limitsComplexityFunctions);
-    fileComplexityDistribution = new RangeDistributionBuilder(filesDistributionBottomLimits);
-  }
 
   public int getCommentLinesNumber() {
     return commentLinesNumber;
@@ -69,15 +51,6 @@ public class FileMeasures {
 
   public void setFileComplexity(int fileComplexity) {
     this.fileComplexity = fileComplexity;
-    fileComplexityDistribution.add(fileComplexity);
-  }
-
-  public RangeDistributionBuilder getFileComplexityDistribution() {
-    return fileComplexityDistribution;
-  }
-
-  public RangeDistributionBuilder getFunctionComplexityDistribution() {
-    return functionComplexityDistribution;
   }
 
   public int getFileCognitiveComplexity() {
@@ -86,14 +59,6 @@ public class FileMeasures {
 
   public void setFileCognitiveComplexity(int fileCognitiveComplexity) {
     this.fileCognitiveComplexity = fileCognitiveComplexity;
-  }
-
-  public int getFunctionComplexity() {
-    return functionComplexity;
-  }
-
-  public int getClassComplexity() {
-    return classComplexity;
   }
 
   public int getClassNumber() {
@@ -118,15 +83,6 @@ public class FileMeasures {
 
   public void setClassNumber(int classNumber) {
     this.classNumber = classNumber;
-  }
-
-  public void addClassComplexity(int classComplexity) {
-    this.classComplexity += classComplexity;
-  }
-
-  public void addFunctionComplexity(int functionComplexity) {
-    this.functionComplexity += functionComplexity;
-    functionComplexityDistribution.add(functionComplexity);
   }
 
 }

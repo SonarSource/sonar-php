@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -63,6 +63,15 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
     verifyLiveVariableAnalysis("" +
       "block( succ = [END], liveIn = [], liveOut = [], gen = [], kill = [foo, bar, qix]);" +
       "$foo = 1;" +
+      "$bar = bar();" +
+      "$qix = 1 + 2;");
+  }
+
+  @Test
+  public void test_null_coalescing() {
+    verifyLiveVariableAnalysis("" +
+      "block( succ = [END], liveIn = [foo], liveOut = [], gen = [foo], kill = [foo, bar, qix]);" +
+      "$foo ??= 1;" +
       "$bar = bar();" +
       "$qix = 1 + 2;");
   }
@@ -188,7 +197,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   @Test
   public void test_with_ignored_param() {
     verifyLiveVariableAnalysis("$a", "" +
-      "condition( succ = [insideIf], liveIn = [foo, bar], liveOut = [x], gen = [foo, bar], kill = [x,y,z,w]);" +
+      "condition( succ = [insideIf], liveIn = [foo, bar], liveOut = [x,a], gen = [foo, bar], kill = [x,y,z,w,a]);" +
       "$a = 42;" +
       "foo($a);" +
       "list(, , $x, $y) = array();" +
@@ -196,7 +205,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
       "list($z => $w ) = array('a' => 32);" +
       "foo($foo, $bar, $x);" +
       "if ($y) {" +
-      "  insideIf (succ = [END], liveIn = [x], liveOut = [], gen = [x]);" +
+      "  insideIf (succ = [END], liveIn = [x,a], liveOut = [], gen = [x,a]);" +
       "  foo($a, $x);" +
       "}");
   }

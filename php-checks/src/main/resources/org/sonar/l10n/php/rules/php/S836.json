@@ -8,10 +8,7 @@
   },
   "tags": [
     "cwe",
-    "misra"
-  ],
-  "standards": [
-    "CWE"
+    "symbolic-execution"
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-836",

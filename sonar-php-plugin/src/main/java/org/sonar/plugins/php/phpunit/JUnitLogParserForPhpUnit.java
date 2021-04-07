@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -74,6 +74,7 @@ public class JUnitLogParserForPhpUnit {
     String file = cursor.getAttrValue("file");
     double time = 0;
     String timeAttributeValue = cursor.getAttrValue("time");
+
     if (timeAttributeValue != null) {
       try {
         time = Double.parseDouble(timeAttributeValue);
@@ -84,7 +85,14 @@ public class JUnitLogParserForPhpUnit {
 
     List<TestCase> testCases = new ArrayList<>();
     List<TestSuite> nestedSuites = new ArrayList<>();
-    SMInputCursor childCursor = cursor.childCursor();
+
+    SMInputCursor childCursor;
+    if (file != null) {
+      childCursor = cursor.descendantElementCursor("testcase");
+    } else {
+      childCursor = cursor.childCursor();
+    }
+
     while (childCursor.getNext() != null) {
       String childName = childCursor.getLocalName();
       if ("testsuite".equals(childName)) {
@@ -103,9 +111,9 @@ public class JUnitLogParserForPhpUnit {
     String name = cursor.getAttrValue("name");
 
     SMInputCursor childCursor = cursor.childCursor();
-    Map<String,String> childValues = new HashMap<>();
+    Map<String, String> childValues = new HashMap<>();
     while (childCursor.getNext() != null) {
-      if(childCursor.getLocalName() != null) {
+      if (childCursor.getLocalName() != null) {
         childValues.put(childCursor.getLocalName(), childCursor.collectDescendantText(false));
       }
     }
@@ -117,5 +125,5 @@ public class JUnitLogParserForPhpUnit {
       childValues.get("failure"),
       childValues.get("skipped"));
   }
-  
+
 }

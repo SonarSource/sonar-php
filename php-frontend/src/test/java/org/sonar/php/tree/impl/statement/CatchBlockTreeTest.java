@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -26,13 +26,13 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNull;
 
 public class CatchBlockTreeTest extends PHPTreeModelTest {
 
   @Test
   public void test() throws Exception {
     CatchBlockTree tree = parse("catch (ExceptionType $e) {}", PHPLexicalGrammar.CATCH_BLOCK);
-
     assertThat(tree.is(Kind.CATCH_BLOCK)).isTrue();
     assertThat(tree.catchToken().text()).isEqualTo("catch");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
@@ -58,4 +58,11 @@ public class CatchBlockTreeTest extends PHPTreeModelTest {
     assertThat(expressionToString(tree.block())).isEqualTo("{}");
   }
 
+  @Test
+  public void catch_without_variable() throws Exception {
+    CatchBlockTree tree = parse("catch (ExceptionType) {}", PHPLexicalGrammar.CATCH_BLOCK);
+    assertThat(tree.exceptionTypes().get(0).fullName()).isEqualTo("ExceptionType");
+    assertNull(tree.variable());
+  }
+  
 }

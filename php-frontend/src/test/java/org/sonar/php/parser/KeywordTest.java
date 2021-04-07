@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -62,6 +62,7 @@ public class KeywordTest {
       .matches("extends")
       .matches("final")
       .matches("finally")
+      .matches("fn")
       .matches("for")
       .matches("foreach")
       .matches("function")
@@ -76,6 +77,7 @@ public class KeywordTest {
       .matches("interface")
       .matches("isset")
       .matches("list")
+      .matches("match")
       .matches("namespace")
       .matches("new")
       .matches("or")
@@ -101,7 +103,7 @@ public class KeywordTest {
 
   @Test
   public void getKeywordValues() {
-    Assertions.assertThat(PHPKeyword.getKeywordValues().length).isEqualTo(67);
+    Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(69);
   }
 
 }

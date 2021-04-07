@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -29,33 +29,40 @@ public class StatementTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.STATEMENT)
-    .matches("{}")
-    .matches("label:")
-    .matches("if ($a): endif;")
-    .matches("while($a) {}")
-    .matches("for ($i = 1; $i <= 10; $i++) {}")
-    .matches("switch ($a) {}")
-    .matches("break;")
-    .matches("continue;")
-    .matches("return;")
-    .matches(";")
-    .matches("yield $a;")
-    .matches("[$a, &$b] = $array;")
-    .matches("list($a, &$b) = $array;")
-    .matches("foreach ($array as list(&$a, $b)) { $a = 7; }")
-    .matches("global $a;")
-    .matches("echo \"Hi\";")
-    .matches("$a = b'hello';")
-    .matches("unset($a);")
-    .matches("yield yield;")
-    .matches("die(yield $foo);")
-    .matches("yield from [yield];")
-    .matches("list($value) = yield;")
-    .matches("var_dump(yield * -1);")
-    .matches("var_dump([yield \"k\" => \"a\" . \"b\"]);")
-    .matches("$$varName = yield;")
-    .matches("$gen = yield;")
-    .matches("$var = function () {};");
+      .matches("{}")
+      .matches("label:")
+      .matches("if ($a): endif;")
+      .matches("while($a) {}")
+      .matches("for ($i = 1; $i <= 10; $i++) {}")
+      .matches("switch ($a) {}")
+      .matches("break;")
+      .matches("continue;")
+      .matches("return;")
+      .matches(";")
+      .matches("yield $a;")
+      .matches("[$a, &$b] = $array;")
+      .matches("list($a, &$b) = $array;")
+      .matches("foreach ($array as list(&$a, $b)) { $a = 7; }")
+      .matches("global $a;")
+      .matches("echo \"Hi\";")
+      .matches("$a = b'hello';")
+      .matches("unset($a);")
+      .matches("yield yield;")
+      .matches("die(yield $foo);")
+      .matches("yield from [yield];")
+      .matches("list($value) = yield;")
+      .matches("var_dump(yield * -1);")
+      .matches("var_dump([yield \"k\" => \"a\" . \"b\"]);")
+      .matches("$$varName = yield;")
+      .matches("$gen = yield;")
+      .matches("$var = function () {};")
+      .matches("foo();")
+      .matches("Foo::bar();")
+      .matches("'Foo::bar'();")
+      .matches("['Foo','bar']();")
+      .matches("[A::class, $method_name]();")
+      .matches("null();")
+    ;
   }
 
   @Test

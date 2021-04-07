@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -57,4 +57,8 @@ public class GenericExceptionCheckTest {
     CheckVerifier.verify(check, TEST_DIR + "ko4.php");
   }
 
+  @Test
+  public void throw_expressions() throws Exception {
+    CheckVerifier.verify(check, TEST_DIR + "throw_expressions.php");
+  }
 }

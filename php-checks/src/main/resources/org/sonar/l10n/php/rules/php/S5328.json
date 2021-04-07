@@ -1,5 +1,5 @@
 {
-  "title": "设置会话ID是安全敏感的",
+  "title": "手动生成会话ID是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
@@ -7,18 +7,19 @@
     "constantCost": "15min"
   },
   "tags": [
-    "cwe"
+    "cwe",
+    "owasp-a6"
   ],
-  "standards": [
-    "CWE"
-  ],
-  "defaultSeverity": "Critical",
+  "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-5328",
   "sqKey": "S5328",
   "scope": "All",
   "securityStandards": {
     "CWE": [
-      384
+      330
+    ],
+    "OWASP": [
+      "A6"
     ]
   }
 }

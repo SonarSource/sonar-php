@@ -8,11 +8,7 @@
   },
   "tags": [
     "cwe",
-    "misra",
     "unused"
-  ],
-  "standards": [
-    "CWE"
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-905",

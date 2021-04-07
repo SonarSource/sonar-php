@@ -1,0 +1,13 @@
+{
+  "title": "Assertion failure exceptions should not be ignored",
+  "type": "BUG",
+  "status": "ready",
+  "tags": [
+    "tests",
+    "phpunit"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-5779",
+  "sqKey": "S5779",
+  "scope": "Tests"
+}

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,16 +20,24 @@
 package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.symbols.Symbols;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
+
 @Rule(key = "S3984")
 public class UnusedExceptionCheck extends PHPVisitorCheck {
+
+  private static final String MESSAGE = "Throw this exception or remove this useless statement";
+
+  private static final QualifiedName EXCEPTION_FQN = qualifiedName("Exception");
 
   @Override
   public void visitExpressionStatement(ExpressionStatementTree tree) {
@@ -39,8 +47,9 @@ public class UnusedExceptionCheck extends PHPVisitorCheck {
       if (checkForException.is(Tree.Kind.FUNCTION_CALL)) {
         checkForException = ((FunctionCallTree) checkForException).callee();
       }
-      if (((PHPTree) checkForException).getLastToken().text().endsWith("Exception")) {
-        context().newIssue(this, newExpressionTree, "Throw this exception or remove this useless statement");
+
+      if (checkForException.is(Tree.Kind.NAMESPACE_NAME) && Symbols.getClass((NamespaceNameTree) checkForException).isOrSubClassOf(EXCEPTION_FQN).isTrue()) {
+        context().newIssue(this, newExpressionTree, MESSAGE);
       }
     }
     super.visitExpressionStatement(tree);

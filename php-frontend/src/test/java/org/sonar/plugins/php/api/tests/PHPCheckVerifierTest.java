@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,9 +20,11 @@
 package org.sonar.plugins.php.api.tests;
 
 import java.io.File;
+import java.util.Collections;
 import org.junit.ComparisonFailure;
 import org.junit.Test;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -182,6 +184,34 @@ public class PHPCheckVerifierTest {
   }
 
   @Test
+  public void multiple_files() throws Exception {
+    PHPCheckVerifier.verify(
+      new PHPVisitorCheck() {
+        @Override
+        public void visitClassDeclaration(ClassDeclarationTree tree) {
+          context().newIssue(this, tree.classToken(), "class!");
+        }
+      },
+      new File("src/test/resources/tests/multifile/file1.php"),
+      new File("src/test/resources/tests/multifile/file2.php"));
+  }
+
+  @Test(expected = ComparisonFailure.class)
+  public void multiple_files_and_missing_issue() throws Exception {
+    PHPCheckVerifier.verify(
+      new PHPVisitorCheck() {
+        @Override
+        public void visitClassDeclaration(ClassDeclarationTree tree) {
+          if (context().getPhpFile().filename().equals("file1.php")) {
+            context().newIssue(this, tree.classToken(), "class!");
+          }
+        }
+      },
+      new File("src/test/resources/tests/multifile/file1.php"),
+      new File("src/test/resources/tests/multifile/file2.php"));
+  }
+
+  @Test
   public void ignore_expected_issues() throws Exception {
     class CustomVerifier extends PHPCheckVerifier {
       private CustomVerifier() {
@@ -189,7 +219,7 @@ public class PHPCheckVerifierTest {
       }
 
       private void verifyNoIssueIgnoringExpected(File sourceFile, PHPCheck check) {
-        createVerifier(sourceFile, check).assertNoIssues();
+        createVerifier(Collections.singletonList(sourceFile), check).assertNoIssues();
       }
     }
     new CustomVerifier().verifyNoIssueIgnoringExpected(new File("src/test/resources/tests/precise-issue.php"),

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,50 +20,70 @@
 package org.sonar.php.checks.security;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionArgumentCheck;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S4790")
-public class CryptographicHashCheck extends FunctionUsageCheck {
+public class CryptographicHashCheck extends FunctionArgumentCheck {
 
-  private static final String MESSAGE = "Make sure that hashing data is safe here.";
+  private static final String MESSAGE = "Make sure this weak hash algorithm is not used in a sensitive context here.";
 
-  private static final ImmutableSet<String> FUNCTION_NAMES = ImmutableSet.of(
-    "hash",
-    "hash_init",
-    "crypt",
-    "password_hash",
-    "hash_pbkdf2",
-    "openssl_pbkdf2",
+  private static final Set<String> WEAK_HASH_FUNCTIONS = ImmutableSet.of("md5", "sha1");
+  private static final Set<String> WEAK_HASH_ARGUMENTS = ImmutableSet.of(
+    "md2",
+    "md4",
     "md5",
-    "sha1");
+    "sha1",
+    "sha224",
+    "ripemd128",
+    "ripemd160",
+    "haval160,3",
+    "haval192,3",
+    "haval224,3"
+  );
+  private static final Set<String> WEAK_MHASH_ARGUMENTS = ImmutableSet.of(
+    "MHASH_MD2",
+    "MHASH_MD4",
+    "MHASH_MD5",
+    "MHASH_RIPEMD128",
+    "MHASH_SHA1",
+    "MHASH_SHA192",
+    "MHASH_SHA224",
+    "MHASH_HAVAL128",
+    "MHASH_HAVAL160",
+    "MHASH_HAVAL192",
+    "MHASH_HAVAL224"
+  );
+
+  private static final ArgumentVerifier hashArgumentVerifier = new ArgumentVerifier(0, "algo", WEAK_HASH_ARGUMENTS);
+  private static final ArgumentVerifier mHashArgumentVerifier = new ArgumentVerifier(0, "hash", WEAK_MHASH_ARGUMENTS);
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return FUNCTION_NAMES;
-  }
+  public void visitFunctionCall(FunctionCallTree tree) {
+    super.visitFunctionCall(tree);
 
-  @Override
-  protected void createIssue(FunctionCallTree tree) {
-    if (!isHashInitHMAC(tree)) {
-      context().newIssue(this, tree, MESSAGE);
+    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
+    if (WEAK_HASH_FUNCTIONS.contains(functionName)) {
+      createIssue(tree);
+      return;
     }
+
+    checkArgument(tree, "hash_init", hashArgumentVerifier);
+    checkArgument(tree, "hash", hashArgumentVerifier);
+    checkArgument(tree, "hash_pbkdf2", hashArgumentVerifier);
+    checkArgument(tree, "mhash", mHashArgumentVerifier);
   }
 
-  private static boolean isHashInitHMAC(FunctionCallTree tree) {
-    String qualifiedName = ((NamespaceNameTree) tree.callee()).qualifiedName();
-    return qualifiedName.equalsIgnoreCase("hash_init") &&
-      tree.arguments().size() >= 2 &&
-      isHMAC(tree.arguments().get(1));
+  protected void createIssue(FunctionCallTree tree) {
+    context().newIssue(this, tree.callee(), MESSAGE);
   }
 
-  private static boolean isHMAC(ExpressionTree option) {
-    return option.getKind() == Tree.Kind.NAMESPACE_NAME &&
-      ((NamespaceNameTree)option).qualifiedName().equals("HASH_HMAC");
+  @Override
+  protected void createIssue(ExpressionTree argument) {
+    context().newIssue(this, argument, MESSAGE);
   }
-
 }

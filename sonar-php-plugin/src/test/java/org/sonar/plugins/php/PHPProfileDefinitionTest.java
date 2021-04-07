@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@ package org.sonar.plugins.php;
 
 import com.sonar.plugins.security.api.PhpRules;
 import org.junit.Test;
+import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
@@ -39,7 +40,7 @@ public class PHPProfileDefinitionTest {
   public void should_create_sonar_way_profile() {
     ValidationMessages validation = ValidationMessages.create();
 
-    SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(7, 3), SonarQubeSide.SERVER);
+    SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(7, 3), SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
     BuiltInQualityProfilesDefinition.Context context = new BuiltInQualityProfilesDefinition.Context();
     PHPProfileDefinition definition = new PHPProfileDefinition(sonarRuntime);
     definition.define(context);

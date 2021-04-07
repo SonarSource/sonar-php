@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,13 +20,11 @@
 package org.sonar.php.checks.security;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -34,9 +32,6 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 public class LDAPAuthenticatedConnectionCheck extends FunctionUsageCheck {
 
   private static final String MESSAGE = "Provide username and password to authenticate the connection.";
-  private static final int USERNAME_ARG_INDEX = 1;
-  private static final int PASSWORD_ARG_INDEX = 2;
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
   protected ImmutableSet<String> functionNames() {
@@ -44,35 +39,19 @@ public class LDAPAuthenticatedConnectionCheck extends FunctionUsageCheck {
   }
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
-
-  @Override
   protected void createIssue(FunctionCallTree tree) {
-    if (argumentIsNullOrEmptyString(tree, USERNAME_ARG_INDEX) || argumentIsNullOrEmptyString(tree, PASSWORD_ARG_INDEX)) {
+    if (argumentIsNullOrEmptyString(tree, "bind_rdn", 1) || argumentIsNullOrEmptyString(tree, "bind_password", 2)) {
       context().newIssue(this, tree, MESSAGE);
     }
   }
 
-  private boolean argumentIsNullOrEmptyString(FunctionCallTree tree, int argumentIndex) {
-    if (tree.arguments().size() > argumentIndex) {
-      ExpressionTree valueArgument = getAssignedValue(tree.arguments().get(argumentIndex));
-      return CheckUtils.isNullOrEmptyString(valueArgument);
+  private boolean argumentIsNullOrEmptyString(FunctionCallTree tree, String argumentName, int argumentIndex) {
+    Optional<CallArgumentTree> argument = CheckUtils.argument(tree, argumentName, argumentIndex);
+    if (argument.isPresent()) {
+      ExpressionTree argumentValue = CheckUtils.assignedValue(argument.get().value());
+      return CheckUtils.isNullOrEmptyString(argumentValue);
     }
     return true;
-  }
-
-  private ExpressionTree getAssignedValue(ExpressionTree value) {
-    if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      Symbol valueSymbol = context().symbolTable().getSymbol(value);
-      return assignmentExpressionVisitor
-        .getUniqueAssignedValue(valueSymbol)
-        .orElse(value);
-    }
-    return value;
   }
 
 }

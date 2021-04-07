@@ -1,28 +1,37 @@
-<p>当一个变量在使用前没有初始化时表明开发人员犯了一个错误。</p>
-<h2>不合规的代码示例</h2>
+<p>在PHP中，不需要在使用变量之前初始化变量。
+但是，使用未初始化的变量被认为是不好的做法，由于以下原因，应避免使用它们：</p>
+<ul>
+  <li>未初始化变量的值和类型取决于其首次使用的上下文。 最好对这些内容进行明确说明，以免造成混淆。</li>
+  <li>在许多情况下，解释器会抛出warning或notice。</li>
+</ul>
+<h2>不合规示例</h2>
 <pre>
-function fun($condition) {
-  $res = 1;
-  if ($condition) {
-    $res++;
-  }
-  return $result; // 不合规, 用 "$res"代替 "$result"
+&lt;?php
+
+function getText(array $lines): string {
+    foreach ($lines as $line) {
+        $text .= $line;
+    }
+
+    return $text;
 }
 </pre>
-<h2>合规的解决方案</h2>
+<h2>合规示例</h2>
 <pre>
-function fun($condition) {
-  $res = 1;
-  if ($condition) {
-    $res++;
-  }
-  return $res;
+&lt;?php
+
+function getText(array $lines): string {
+    $text = "";
+
+    foreach ($lines as $line) {
+        $text .= $line;
+    }
+
+    return $text;
 }
 </pre>
 <h2>请参阅</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/457.html">MITRE, CWE-457</a> - Use of Uninitialized Variable </li>
-  <li> MISRA C:2004, 9.1 - All automatic variables shall have been assigned a value before being used. </li>
-  <li> MISRA C++:2008, 8-5-1 - All variables shall have a defined value before they are used. </li>
 </ul>
 

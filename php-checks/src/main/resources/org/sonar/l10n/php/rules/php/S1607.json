@@ -1,0 +1,19 @@
+{
+  "title": "A reason should be provided when skipping a test",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "tests",
+    "bad-practice",
+    "confusing",
+    "phpunit"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-1607",
+  "sqKey": "S1607",
+  "scope": "Tests"
+}

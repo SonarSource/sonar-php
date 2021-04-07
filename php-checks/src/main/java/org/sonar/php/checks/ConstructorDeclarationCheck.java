@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,8 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -49,12 +51,14 @@ public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
     MethodDeclarationTree oldStyleConstructor = null;
     MethodDeclarationTree newStyleConstructor = null;
 
+    boolean namespaceContext = isClassInNamespaceContext(classDec);
+
     for (ClassMemberTree member : classDec.members()) {
       if (member.is(Kind.METHOD_DECLARATION)) {
         MethodDeclarationTree method = (MethodDeclarationTree) member;
         String methodName = method.name().text();
 
-        if (classDec.name().text().equalsIgnoreCase(methodName)) {
+        if (classDec.name().text().equalsIgnoreCase(methodName) && !namespaceContext) {
           oldStyleConstructor = method;
 
         } else if (ClassTree.PHP5_CONSTRUCTOR_NAME.equalsIgnoreCase(methodName)) {
@@ -72,4 +76,9 @@ public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
     }
   }
 
+  private boolean isClassInNamespaceContext(ClassDeclarationTree classDec) {
+    Symbol symbol = context().symbolTable().getSymbol(classDec.name());
+    QualifiedName qualifiedName = symbol.qualifiedName();
+    return qualifiedName != null && !qualifiedName.toString().equals(symbol.name());
+  }
 }

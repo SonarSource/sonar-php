@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -28,15 +28,14 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
@@ -81,29 +80,27 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
     "CURL_SSLVERSION_TLSv1_1");
 
   private static final String MESSAGE = "Change this code to use a stronger protocol.";
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     List<ExpressionTree> arguments = tree.arguments();
-    if (STREAM_CONTEXT_CREATE.equals(functionName) && !arguments.isEmpty()) {
-      checkStreamSSLConfig(arguments.get(0));
+    if (STREAM_CONTEXT_CREATE.equals(functionName)) {
+      CheckUtils.argument(tree, "options", 0).ifPresent(
+        options -> checkStreamSSLConfig(options.value()));
     }
-    if (STREAM_SOCKET_ENABLE_CRYPTO.equals(functionName) && arguments.size() > 2) {
-      checkStreamWeakProtocol(getAssignedValue(arguments.get(2)), STREAM_SOCKET_ENABLE_CRYPTO);
+    if (STREAM_SOCKET_ENABLE_CRYPTO.equals(functionName)) {
+      CheckUtils.argument(tree, "crypto_type", 2).ifPresent(
+        cryptoType -> checkStreamWeakProtocol(getAssignedValue(cryptoType.value()), STREAM_SOCKET_ENABLE_CRYPTO));
     }
-    if (CURL_SETOPT.equals(functionName) && arguments.size() > 2) {
-      ExpressionTree optionArgument = arguments.get(1);
-      if (optionArgument.is(Tree.Kind.NAMESPACE_NAME) && "CURLOPT_SSLVERSION".equals(((NamespaceNameTree) optionArgument).name().text())) {
-        checkCURLWeakProtocol(getAssignedValue(arguments.get(2)));
+    if (CURL_SETOPT.equals(functionName)) {
+      Optional<CallArgumentTree> optionArgument = CheckUtils.argument(tree, "option", 1);
+      Optional<CallArgumentTree> valueArgument = CheckUtils.argument(tree, "value", 2);
+      if (optionArgument.isPresent() && valueArgument.isPresent()) {
+        ExpressionTree optionArgumentValue = optionArgument.get().value();
+        if (optionArgumentValue.is(Tree.Kind.NAMESPACE_NAME) && "CURLOPT_SSLVERSION".equals(((NamespaceNameTree) optionArgumentValue).name().text())) {
+          checkCURLWeakProtocol(getAssignedValue(valueArgument.get().value()));
+        }
       }
     }
     super.visitFunctionCall(tree);
@@ -175,10 +172,7 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
 
   private ExpressionTree getAssignedValue(ExpressionTree value) {
     if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      Symbol valueSymbol = context().symbolTable().getSymbol(value);
-      return assignmentExpressionVisitor
-        .getUniqueAssignedValue(valueSymbol)
-        .orElse(value);
+      return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) value).orElse(value);
     }
     return value;
   }

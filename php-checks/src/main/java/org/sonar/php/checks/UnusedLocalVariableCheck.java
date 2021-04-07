@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -85,7 +85,9 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCatchBlock(CatchBlockTree tree) {
-    exclusions.add(tree.variable());
+    if (tree.variable() != null) {
+      exclusions.add(tree.variable());
+    }
     super.visitCatchBlock(tree);
   }
 

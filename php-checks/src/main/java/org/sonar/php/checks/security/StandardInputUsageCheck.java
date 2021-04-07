@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -72,15 +72,17 @@ public class StandardInputUsageCheck extends PHPVisitorCheck {
   }
 
   private static boolean isArgumentOfSafeFunctionCall(Tree tree) {
-    Tree parent = tree.getParent();
-    if (parent.is(Tree.Kind.FUNCTION_CALL)) {
-      FunctionCallTree functionCall = (FunctionCallTree) parent;
-      ExpressionTree callee = functionCall.callee();
-      if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
-        String qualifiedName = ((NamespaceNameTree) callee).qualifiedName();
-        return SAFE_FUNCTIONS.stream().anyMatch(qualifiedName::equalsIgnoreCase);
-      }
+    if (!tree.getParent().is(Tree.Kind.CALL_ARGUMENT) || !tree.getParent().getParent().is(Tree.Kind.FUNCTION_CALL)) {
+      return false;
     }
+
+    FunctionCallTree functionCall = (FunctionCallTree) tree.getParent().getParent();
+    ExpressionTree callee = functionCall.callee();
+    if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
+      String qualifiedName = ((NamespaceNameTree) callee).qualifiedName();
+      return SAFE_FUNCTIONS.stream().anyMatch(qualifiedName::equalsIgnoreCase);
+    }
+
     return false;
   }
 

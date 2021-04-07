@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.visitors;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.plugins.php.api.tree.Tree;
 
 public class PreciseIssue implements PhpIssue {
@@ -47,12 +48,22 @@ public class PreciseIssue implements PhpIssue {
   }
 
   public PreciseIssue secondary(Tree tree, @Nullable String message) {
-    this.secondaryLocations.add(new IssueLocation(tree, message));
-    return this;
+    return secondary(new IssueLocation(tree, message));
   }
 
   public PreciseIssue secondary(Tree startTree, Tree endTree, @Nullable String message) {
-    this.secondaryLocations.add(new IssueLocation(startTree, endTree, message));
+    return secondary(new IssueLocation(startTree, endTree, message));
+  }
+
+  public PreciseIssue secondary(LocationInFile locationInFile, @Nullable String message) {
+    if (locationInFile == UnknownLocationInFile.UNKNOWN_LOCATION) {
+      return this;
+    }
+    return secondary(new IssueLocation(locationInFile, message));
+  }
+
+  private PreciseIssue secondary(IssueLocation issueLocation) {
+    this.secondaryLocations.add(issueLocation);
     return this;
   }
 

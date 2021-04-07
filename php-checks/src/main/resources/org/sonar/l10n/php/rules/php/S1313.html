@@ -1,9 +1,31 @@
 <p>将IP地址硬编码到源代码中是一个坏主意，原因如下：</p>
 <ul>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-5901">CVE-2006-5901</a> </li>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-3725">CVE-2005-3725</a> </li>
   <li> 它强制在每个环境(dev、sys、qa、prod)中使用相同的地址 </li>
   <li> 它将在生产中设置值的责任放在开发人员的身上 </li>
 </ul>
+<p>当今的服务由于其扩展性和冗余需求而具有不断变化的体系结构。 
+认为服务将始终具有相同的IP地址是错误的。 
+当确定发生更改时，硬编码IP也将必须进行修改。
+这将对产品开发，交付和部署产生影响：
+</p>
+<ul>
+  <li>开发人员每次发生这种情况时都必须进行快速修复，而不是让操作团队更改配置文件。</li>
+  <li>在每个环境（dev，sys，qa，prod）中使用相同的地址会产生误导。</li>
+</ul>
+<p>
+最后，它会影响应用程序的安全性。 攻击者可能能够对代码进行反编译，从而发现潜在的敏感地址。 他们可以对服务执行拒绝服务攻击，尝试访问系统或欺骗IP地址以绕过安全检查。 这样的攻击始终是可能的，但是在采用硬编码IP地址的情况下，解决此问题将花费更多时间，这将增加攻击的影响。
+</p>
+<h2>需考虑的问题</h2>
+<p>硬编码的IP是否是敏感的？例如：</p>
+<ul>
+  <li> 可以向攻击者提供有关网络拓扑的信息。 </li>
+  <li> 是否是一个个人（分配给可识别的人）IP地址。 </li>
+</ul>
+<p>若您对上述任何一个问题的回答为“是”，都有风险。</p>
 <h2>推荐的安全编码实践</h2>
+<p>不要在源代码中对IP地址进行硬编码，而应使用环境变量，配置文件或类似方法对其进行配置。 或者，如果不需要保密，则可以使用域名，因为它可以快速更改目的地而无需重建软件。</p>
 <ul>
   <li> 使IP地址可配置。</li>
 </ul>
@@ -12,13 +34,23 @@
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 socket_connect($socket, '8.8.8.8', 23);  // 不合规
 </pre>
+<h2>合规的代码示例</h2>
+<pre>
+$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+socket_connect($socket, IP_ADDRESS, 23);  // 合规
+</pre>
 <h2>例外</h2>
+<p>对于以下情况，未报告任何问题，因为它们不敏感：</p>
 <ul>
   <li> 127.0.0.1没有报告任何问题，因为回环不被认为是敏感的 </li>
+  <li> 广播地址 255.255.255.255 </li>
+  <li> 不可路由地址 0.0.0.0 </li>
+  <li> 从代码 <code>2.5.&lt;number&gt;.&lt;number&gt;</code> 中得到的字符串，因为它们 <a href="http://www.oid-info.com/introduction.htm">经常匹配到 Object Identifiers</a> (OID). </li>
 </ul>
 <h2>请参阅</h2>
 <ul>
-  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
-  <li> <a href="https://www.securecoding.cert.org/confluence/x/qQCHAQ">CERT, MSC03-J.</a> - Never hard code sensitive information </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="https://wiki.sei.cmu.edu/confluence/x/OjdGBQ">CERT, MSC03-J.</a> - Never hard code sensitive information </li>
 </ul>
 

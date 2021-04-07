@@ -1,34 +1,30 @@
-<p>设置会话(session)ID是安全敏感的。使用客户端提供的数据或不安全的哈希来动态设置会话ID可能会导致会话修复攻击，也可能使得攻击者劫持其他用户的会话。</p>
-<h2>检查是否有下列问题：</h2>
+<p>如果可以猜测会话ID（不是用安全的伪随机生成器生成的，或者长度不足...），则攻击者可能会劫持另一个用户的会话。</p>
+<h2>检查是否存在如下情况</h2>
 <ul>
-  <li> 会话ID不唯一 </li>
-  <li> 会话ID是从web表单的隐藏字段设置的 </li>
-  <li> 会话ID依赖于非安全加密的哈希 </li>
+  <li>会话ID不是唯一的。</li>
+  <li>会话ID是从用户控制的输入中设置的。</li>
+  <li>会话ID是使用不安全的伪随机生成器生成的。</li>
+  <li>会话ID的长度太短。</li>
 </ul>
-<p>如果对其中任何一个问题的回答是肯定的，那么就有风险。</p>
+<p>若存在上述情况，则代码存在风险</p>
 <h2>推荐的安全编码实践</h2>
-<ul>
-  <li> 不要手动生成会话ID，使用PHP自带的功能，例如 <code>session_regenerate_id()</code>. </li>
-  <li> 如果你必须要生成自己的会话ID，请使用安全的加密方法，例如 <code>bin2hex(random_bytes(16))</code> </li>
-</ul>
-<h2>不合规的代码示例</h2>
+<p>不要手动生成会话ID，而应使用基于语言的本机功能。</p>
+<h2>敏感代码示例</h2>
 <pre>
-session_id(customHash($user));
-// 或者
-session_id($_POST["hidden_session_id"]);
+session_id(bin2hex(random_bytes(4))); // 敏感：4个字节太短
+session_id($_POST["session_id"]); // 敏感：用户可以指定会话ID
 </pre>
-<h2>合规的解决方案</h2>
+<h2>合规的方案</h2>
 <pre>
-session_regenerate_id();
-// 或者
-$sessionId = bin2hex(random_bytes(16));
-session_id($sessionId);
+session_regenerate_id(); ; // 合规
+session_id(bin2hex(random_bytes(16))); // 合规
 </pre>
-<h2>请参阅</h2>
+<h2>See</h2>
 <ul>
-  <li> <a href="http://cwe.mitre.org/data/definitions/384.html">MITRE, CWE-384</a> - Session Fixation </li>
-  <li> OWASP Top 10 2017 Category A6 - Security Misconfiguration </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
   <li> <a href="https://www.owasp.org/index.php/Session_fixation">OWASP Sesssion Fixation</a> </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/330.html">MITRE, CWE-330</a> - Use of Insufficiently Random Values </li>
   <li> <a href="https://www.php.net/random-bytes">PHP: random_bytes()</a> </li>
   <li> <a href="https://www.php.net/session-regenerate-id">PHP: session_regenerate_id()</a> </li>
 </ul>

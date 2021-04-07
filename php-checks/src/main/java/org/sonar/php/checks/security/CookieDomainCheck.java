@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -32,10 +33,8 @@ import org.sonar.php.ini.BasePhpIniIssue;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -52,34 +51,25 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
     "setcookie", 4,
     "session_set_cookie_params", 2);
 
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
-
   @Override
   protected ImmutableSet<String> functionNames() {
     return ImmutableSet.copyOf(FUNCTION_AND_PARAM_INDEX.keySet());
   }
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
-  }
-
-  @Override
   protected void createIssue(FunctionCallTree tree) {
     int domainIndex = FUNCTION_AND_PARAM_INDEX.get(getLowerCaseFunctionName(tree));
-    List<ExpressionTree> args = tree.arguments();
-    if (args.size() <= domainIndex) {
-      return;
-    }
-    ExpressionTree argumentVariable = args.get(domainIndex);
-    ExpressionTree domainValue = getAssignedValue(argumentVariable);
-    if (domainValue.is(Tree.Kind.REGULAR_STRING_LITERAL) && isFirstLevelDomain(((LiteralTree) domainValue).value())) {
-      if (argumentVariable == domainValue) {
-        context().newIssue(this, domainValue, MESSAGE);
-      } else {
-        context().newIssue(this, domainValue, MESSAGE).secondary(argumentVariable, MESSAGE);
+
+    Optional<CallArgumentTree> domainArgument = CheckUtils.argument(tree, "domain", domainIndex);
+    if (domainArgument.isPresent()) {
+      ExpressionTree domainValue = CheckUtils.assignedValue(domainArgument.get().value());
+
+      if (domainValue.is(Tree.Kind.REGULAR_STRING_LITERAL) && isFirstLevelDomain(((LiteralTree) domainValue).value())) {
+        if (domainArgument.get().value() == domainValue) {
+          context().newIssue(this, domainValue, MESSAGE);
+        } else {
+          context().newIssue(this, domainValue, MESSAGE).secondary(domainArgument.get(), MESSAGE);
+        }
       }
     }
   }
@@ -92,19 +82,12 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
         .collect(Collectors.toList());
   }
 
-  private ExpressionTree getAssignedValue(ExpressionTree value) {
-    Symbol valueSymbol = context().symbolTable().getSymbol(value);
-    return assignmentExpressionVisitor
-      .getUniqueAssignedValue(valueSymbol)
-      .orElse(value);
-  }
-
   private static boolean isFirstLevelDomain(String domain) {
     String trimedFromQuotes = CheckUtils.trimQuotes(domain);
     return !trimedFromQuotes.isEmpty() && Arrays.stream(trimedFromQuotes.split("\\."))
-        .map(String::trim)
-        .filter(s -> !s.isEmpty())
-        .count() < 2;
+      .map(String::trim)
+      .filter(s -> !s.isEmpty())
+      .count() < 2;
   }
 
 }

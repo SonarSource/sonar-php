@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
@@ -33,10 +34,12 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
+import java.util.List;
 
 public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpressionTree {
 
   private static final Kind KIND = Kind.FUNCTION_EXPRESSION;
+  private final List<AttributeGroupTree> attributeGroups;
   private final InternalSyntaxToken staticToken;
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
@@ -46,6 +49,7 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
   private final BlockTree body;
 
   public FunctionExpressionTreeImpl(
+    List<AttributeGroupTree> attributeGroups,
     @Nullable InternalSyntaxToken staticToken,
     InternalSyntaxToken functionToken,
     @Nullable InternalSyntaxToken referenceToken,
@@ -54,6 +58,7 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
     @Nullable ReturnTypeClauseTree returnTypeClause,
     BlockTree body
   ) {
+    this.attributeGroups = attributeGroups;
     this.staticToken = staticToken;
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;
@@ -67,6 +72,11 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
   @Override
   public SyntaxToken staticToken() {
     return staticToken;
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override
@@ -109,7 +119,10 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(staticToken, functionToken, referenceToken, parameters, lexicalVars, returnTypeClause, body);
+    return Iterators.concat(
+      attributeGroups.listIterator(),
+      Iterators.forArray(staticToken, functionToken, referenceToken, parameters, lexicalVars, returnTypeClause, body)
+    );
   }
 
   @Override

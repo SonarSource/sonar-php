@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -55,6 +55,7 @@ public enum PHPKeyword implements GrammarRuleKey {
   EXTENDS("extends"),
   FINALLY("finally"),
   FINAL("final"),
+  FN("fn"),
   FOREACH("foreach"),
   FOR("for"),
   FUNCTION("function"),
@@ -69,6 +70,7 @@ public enum PHPKeyword implements GrammarRuleKey {
   INTERFACE("interface"),
   ISSET("isset"),
   LIST("list"),
+  MATCH("match"),
   NAMESPACE("namespace"),
   NEW("new"),
   OR("or"),

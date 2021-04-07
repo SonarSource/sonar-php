@@ -7,12 +7,7 @@
     "constantCost": "5min"
   },
   "tags": [
-    "cwe",
-    "misra",
-    "cert"
-  ],
-  "standards": [
-    "CWE"
+    "cwe"
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-131",

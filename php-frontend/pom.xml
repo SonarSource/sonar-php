@@ -4,13 +4,13 @@
 
   <parent>
     <groupId>org.sonarsource.php</groupId>
-    <version>3.1-SNAPSHOT</version>
+    <version>${revision}</version>
     <artifactId>php</artifactId>
   </parent>
 
   <artifactId>php-frontend</artifactId>
 
-  <name>SonarPHP :: Frontend</name>
+  <name>SonarSource PHP analyzer :: Frontend</name>
 
   <dependencies>
     <dependency>
@@ -24,10 +24,6 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.sonarsource.sslr-squid-bridge</groupId>
-      <artifactId>sslr-squid-bridge</artifactId>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.sslr</groupId>
@@ -55,8 +51,8 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
     </dependency>
   </dependencies>
 

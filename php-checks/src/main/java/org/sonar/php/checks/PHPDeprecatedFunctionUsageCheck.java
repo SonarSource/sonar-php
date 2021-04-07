@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -31,6 +32,7 @@ import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -170,7 +172,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     String functionName = ((NamespaceNameTree) tree.callee()).qualifiedName();
 
     if (SET_LOCALE_FUNCTION.equalsIgnoreCase(functionName)) {
-      checkLocalCategoryArgument(tree.arguments());
+      checkLocalCategoryArgument(tree.callArguments());
 
     } else if (PARSE_STR_FUNCTION.equalsIgnoreCase(functionName)) {
       checkParseStrArguments(tree);
@@ -185,7 +187,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       checkSearchingStringArguments(tree);
 
     } else {
-      context().newIssue(this, tree.callee(), buildMessage(functionName));
+      context().newIssue(this, tree.callee(), buildMessage(functionName.toLowerCase(Locale.ROOT)));
     }
 
   }
@@ -204,46 +206,48 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   /**
    * Raise an issue if the local category is passed as a String.
    */
-  private void checkLocalCategoryArgument(SeparatedList<ExpressionTree> arguments) {
-    if (!arguments.isEmpty() && arguments.get(0).is(Kind.REGULAR_STRING_LITERAL)) {
-      String firstArg = ((LiteralTree) arguments.get(0)).value();
+  private void checkLocalCategoryArgument(SeparatedList<CallArgumentTree> arguments) {
+    // PHP 8 doesn't support the deprecated feature anymore, so we don't need to care about named arguments
+    if (!arguments.isEmpty() && arguments.get(0).value().is(Kind.REGULAR_STRING_LITERAL)) {
+      String firstArg = ((LiteralTree) arguments.get(0).value()).value();
       String localCategory = firstArg.substring(1, firstArg.length() - 1);
 
       if (LOCALE_CATEGORY_CONSTANTS.contains(localCategory)) {
-        context().newIssue(this, arguments.get(0), String.format(MESSAGE_SET_LOCAL_ARG, localCategory));
+        context().newIssue(this, arguments.get(0).value(), String.format(MESSAGE_SET_LOCAL_ARG, localCategory));
       }
     }
   }
 
   private void checkParseStrArguments(FunctionCallTree tree) {
-    if (tree.arguments().size() < 2) {
+    // PHP 8 doesn't support the deprecated feature anymore, so we don't need to care about named arguments
+    if (tree.callArguments().size() < 2) {
       context().newIssue(this, tree, "Add a second argument to this call to \"parse_str\".");
     }
   }
 
   private void checkAssertArguments(FunctionCallTree tree) {
-    SeparatedList<ExpressionTree> arguments = tree.arguments();
-    if (!arguments.isEmpty() && arguments.get(0).is(Kind.REGULAR_STRING_LITERAL, Kind.EXPANDABLE_STRING_LITERAL)) {
+    Optional<CallArgumentTree> assertion = CheckUtils.argument(tree, "assertion", 0);
+    if (assertion.isPresent() && assertion.get().value().is(Kind.REGULAR_STRING_LITERAL, Kind.EXPANDABLE_STRING_LITERAL)) {
       context().newIssue(this, tree, "Change this call to \"assert\" to not pass a string argument.");
     }
   }
 
   private void checkDefineArguments(FunctionCallTree tree) {
-    SeparatedList<ExpressionTree> arguments = tree.arguments();
-    if (arguments.size() == 3) {
-      ExpressionTree caseInsensitiveArgument = arguments.get(2);
-      if (caseInsensitiveArgument.is(Kind.BOOLEAN_LITERAL) && "true".equalsIgnoreCase(((LiteralTree) caseInsensitiveArgument).value())) {
+    Optional<CallArgumentTree> caseInsensitiveArg = CheckUtils.argument(tree, "case_insensitive", 2);
+    if (caseInsensitiveArg.isPresent()) {
+      ExpressionTree argumentValue = caseInsensitiveArg.get().value();
+      if (argumentValue.is(Kind.BOOLEAN_LITERAL) && "true".equalsIgnoreCase(((LiteralTree) argumentValue).value())) {
         context().newIssue(this, tree, "Define this constant as case sensitive.");
       }
     }
   }
 
   private void checkSearchingStringArguments(FunctionCallTree tree) {
-    SeparatedList<ExpressionTree> arguments = tree.arguments();
-    if (arguments.size() >= 2) {
-      ExpressionTree needleArgument = arguments.get(1);
-      if (needleArgument.is(Kind.NUMERIC_LITERAL, Kind.UNARY_MINUS)) {
-        context().newIssue(this, needleArgument, "Convert this integer needle into a string.");
+    Optional<CallArgumentTree> needleArgument = CheckUtils.argument(tree, "needle", 1);
+    if (needleArgument.isPresent()) {
+      ExpressionTree needleValue = needleArgument.get().value();
+      if (needleValue.is(Kind.NUMERIC_LITERAL, Kind.UNARY_MINUS)) {
+        context().newIssue(this, needleValue, "Convert this integer needle into a string.");
       }
     }
   }

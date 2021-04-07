@@ -1,0 +1,16 @@
+{
+  "title": "函数参数名称应唯一",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "unused"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-1045",
+  "sqKey": "S1045",
+  "scope": "Main"
+}

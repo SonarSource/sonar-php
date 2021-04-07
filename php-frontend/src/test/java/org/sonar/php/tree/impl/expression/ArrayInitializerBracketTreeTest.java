@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,6 +70,16 @@ public class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
     assertThat(expressionToString(tree.arrayPairs().get(0))).isEqualTo("0");
 
     assertThat(tree.closeBracketToken().text()).isEqualTo("]");
+  }
+
+  @Test
+  public void spread_operator() throws Exception {
+    ArrayInitializerBracketTree tree = parse("[1, 2, ...$arr1, 5]", PHPLexicalGrammar.ARRAY_INIALIZER);
+    assertThat(tree.is(Kind.ARRAY_INITIALIZER_BRACKET)).isTrue();
+    assertThat(tree.arrayPairs()).hasSize(4);
+    ArrayPairTree spread = tree.arrayPairs().get(2);
+    assertThat(spread.ellipsisToken()).isNotNull();
+    assertThat(expressionToString(spread.value())).isEqualTo("$arr1");
   }
 
 }

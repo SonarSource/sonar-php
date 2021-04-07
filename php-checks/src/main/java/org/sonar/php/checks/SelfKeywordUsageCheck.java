@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -120,7 +120,7 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
       return isFinalClassStack.getLast()
         || isFinalOrPrivateMethod(member)
         || isPrivateProperty(member)
-        || isConstProperty(member);
+        || isConstPropertyAccess(tree);
     }
 
     return false;
@@ -134,9 +134,20 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
     return member.is(Tree.Kind.VARIABLE_IDENTIFIER) && privatePropertiesStack.getLast().contains(((IdentifierTree) member).text());
   }
 
-  private boolean isConstProperty(Tree member) {
-    Symbol symbol = context().symbolTable().getSymbol(member);
-    return symbol != null && symbol.hasModifier("const");
+  /**
+   * Contrary to variables, constant names in PHP do not start with "$".
+   * Thus, their name is NameIdentifierTree and not VariableIdentifierTree
+   * So we can differentiate constant accesses from variable accesses based on that.
+   */
+  private static boolean isConstPropertyAccess(MemberAccessTree tree) {
+    // The MemberAccessTree of method calls looks the same as of constant field accesses. We filter them out.
+    // If the parent tree of a MemberAccessTree is a method call it can also be the case that MemberAccessTree is an
+    // argument (i.e., $foo->method(self::ABC)) So we have to check if the MemberAccessTree is the callee tree.
+    if (tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTreeImpl) tree.getParent()).callee() == tree) {
+      return false;
+    }
+
+    return tree.member().is(Kind.NAME_IDENTIFIER);
   }
 
 }

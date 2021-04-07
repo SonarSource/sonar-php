@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -101,8 +101,8 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
       Map<Symbol, VariableUsage> usagesInElement = blockLiveVariables.getVariableUsages(element);
       for (Map.Entry<Symbol, VariableUsage> symbolWithUsage : usagesInElement.entrySet()) {
         Symbol symbol = symbolWithUsage.getKey();
-        if (!readSymbols.contains(symbol)) {
-          // will be reported by S1481
+        if (outOfScope(readSymbols, symbol)) {
+          // These cases are verified by other checks
           continue;
         }
         VariableUsage usage = symbolWithUsage.getValue();
@@ -118,8 +118,17 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
     }
   }
 
+  private static boolean outOfScope(Set<Symbol> readSymbols, Symbol symbol) {
+    return !readSymbols.contains(symbol) || symbol.is(Symbol.Kind.PARAMETER);
+  }
+
   private static boolean shouldSkip(Tree element, Symbol symbol) {
-    return symbol.hasModifier("static") || symbol.hasModifier("global") || isInitializedToBasicValue(element);
+    return symbol.hasModifier("static") || symbol.hasModifier("global") || isInitializedToBasicValue(element) || isReferenceValue(symbol);
+  }
+
+  private static boolean isReferenceValue(Symbol symbol) {
+    return symbol.declaration().getParent().is(Kind.REFERENCE_VARIABLE, Kind.ASSIGNMENT_BY_REFERENCE) ||
+      symbol.usages().stream().map(Tree::getParent).map(Tree::getParent).anyMatch(t -> t.is(Kind.ASSIGNMENT_BY_REFERENCE));
   }
 
   private static boolean isInitializedToBasicValue(Tree element) {

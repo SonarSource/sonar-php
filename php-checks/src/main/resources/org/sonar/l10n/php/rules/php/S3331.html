@@ -1,24 +1,43 @@
-<p>cookie的域指定哪些网站应该能够读取它。如果保留空白，浏览器应该只将cookie发送到与发送域完全匹配的站点。例如，如果cookie 是由<em>lovely.dream.com</em>设置的，那么它应该只由该域来读取，而不是由
-<em>nightmare.com</em> 或甚至 <em>strange.dream.com</em>读取。如果希望允许子域访问cookie，可以通过在cookie的域前面添加一个点来指定它，例如: <em>.dream.com</em>。但是cookie域应该始终至少使用两个级别。</p>
-<p>可以通过编程或配置来设置cookie域。当任何cookie域设置为单一级别时，正如 <em>.com</em>，此规则会引发一个问题。</p>
-<h2>不合规的代码示例</h2>
+<p>Cookie的域指定哪些网站应该能够读取它。
+若留空，浏览器应该仅将cookie发送到与发送域完全匹配的站点。
+例如，如果cookie是由<em> lovely.dream.com </em>设置的，则只能由该域读取，
+而不能由<em> nightmare.com </em>甚至是<em> strange.dream.com </em>读取。
+如果要允许对Cookie的子域访问，可以通过在Cookie的域之前添加一个点来指定它，例如：<em> .dream.com </em>。 
+但是cookie域应始终至少使用两个级别。</p>
+<p>Cookie域可以通过编程方式或通过配置来设置。
+当任何Cookie域设置为单个时，此规则会引起问题
+级别，例如<em> .com </em>。</p>
+<h2>检查是否出现以下情况</h2>
+<ul>
+  <li><code> domain </code>属性只有一个级别作为域命名。</li>
+</ul>
+<p>若存在上述情况，则代码存在风险</p>
+<h2>推荐的安全编码规范</h2>
+<ul>
+  <li>您应该检查<code> domain </code>属性是否已设置，并且其值具有一个以上级别的域nanimg，
+    例如：<em> sonarsource.com </em></li>
+</ul>
+<h2>不合规的示例</h2>
 <pre>
 setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // 不合规
 session_set_cookie_params(3600, "/~path/", ".com"); // 不合规
 
-// 在php.ini内部
+// inside php.ini
 session.cookie_domain=".com"; // 不合规
 </pre>
-<h2>合规的解决方案</h2>
+<h2>合规的方案</h2>
 <pre>
 setcookie("TestCookie", $value, time()+3600, "/~path/", ".myDomain.com", 1);
 session_set_cookie_params(3600, "/~path/", ".myDomain.com");
 
-// 在php.ini内部
+// inside php.ini
 session.cookie_domain=".myDomain.com";
 </pre>
-<h2>请参阅</h2>
+<h2>参阅</h2>
 <ul>
-  <li> OWASP Top 10 2017 Category A7 - Cross-Site Scripting (XSS) </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
 </ul>
+<h2>弃用</h2>
+<p>此规则将被弃用</p>
 

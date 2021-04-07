@@ -42,3 +42,13 @@ try {
   doSomething();
   throw $e;  // Compliant
 }
+
+try {
+} catch (Exception) {
+    doSomething();  
+}
+
+try {
+} catch (Exception) {
+    throw new Exception();
+}

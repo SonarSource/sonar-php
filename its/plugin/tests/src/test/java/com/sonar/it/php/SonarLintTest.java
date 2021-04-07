@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2011-2019 SonarSource SA
+ * Copyright (C) 2011-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,13 +21,12 @@ package com.sonar.it.php;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -35,6 +34,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonarsource.sonarlint.core.StandaloneSonarLintEngineImpl;
+import org.sonarsource.sonarlint.core.client.api.common.RuleKey;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.ClientInputFile;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.Issue;
 import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneAnalysisConfiguration;
@@ -77,13 +77,18 @@ public class SonarLintTest {
     ClientInputFile inputFile = prepareInputFile(filePath, false);
 
     List<Issue> issues = new ArrayList<>();
-    sonarlintEngine.analyze(
-      new StandaloneAnalysisConfiguration(baseDir, temp.newFolder().toPath(), Collections.singleton(inputFile), new HashMap<>()),
-      issues::add, null, null);
+    StandaloneAnalysisConfiguration configuration = StandaloneAnalysisConfiguration.builder()
+      .setBaseDir(baseDir)
+      .addInputFile(inputFile)
+      .addIncludedRules(
+        RuleKey.parse("php:S101"),
+        RuleKey.parse("php:S2964")
+      )
+      .build();
+    sonarlintEngine.analyze(configuration, issues::add, null, null);
 
     assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
       tuple("php:S101", 4, inputFile.getPath(), "MINOR"),
-      tuple("php:S1125", 20, inputFile.getPath(), "MINOR"),
       tuple("php:S2964", 9, inputFile.getPath(), "MINOR"));
   }
 
@@ -117,6 +122,16 @@ public class SonarLintTest {
       @Override
       public String contents() throws IOException {
         return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+      }
+
+      @Override
+      public String relativePath() {
+        return path.toString();
+      }
+
+      @Override
+      public URI uri() {
+        return path.toUri();
       }
 
       @Override

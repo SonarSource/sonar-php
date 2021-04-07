@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -47,6 +47,13 @@ public class ArrayPairTreeTest extends PHPTreeModelTest {
 
     assertThat(expressionToString(tree.key())).isEqualTo("$key");
     assertThat(tree.doubleArrowToken().text()).isEqualTo("=>");
+    assertThat(expressionToString(tree.value())).isEqualTo("$val");
+  }
+
+  @Test
+  public void spread_operator() throws Exception {
+    ArrayPairTree tree = parse("...$val", Kind.ARRAY_PAIR);
+    assertThat(tree.ellipsisToken().text()).isEqualTo("...");
     assertThat(expressionToString(tree.value())).isEqualTo("$val");
   }
 

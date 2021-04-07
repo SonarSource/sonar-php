@@ -1,5 +1,21 @@
-<p>在生成加密密钥(或密钥对)时，重要的是使用密钥长度提供足够的熵来抵御暴力攻击。对于RSA算法，它应该至少有2048位长。</p>
-<p>当RSA密钥对生成器初始化时长度参数太小时，此规则会引发问题。</p>
+<p>大多数密码系统需要足够的密钥大小，才能抵抗暴力攻击。</p>
+<p><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf">NIST 推荐方案</a> 用于检测此类情况
+</p>
+<p><strong>数字签名生成</strong> 和 <strong>验证:</strong> </p>
+<ul>
+  <li> 对于DSA， p ≥ 2048 且 q ≥ 224 (<code>p</code> 是密钥长度且 <code>q</code>是模数) </li>
+  <li> 对于RSA， n ≥ 2048 (<code>n</code> 是密钥长度) </li>
+</ul>
+<p><strong>密钥协商</strong>: </p>
+<ul>
+  <li> 对于 DH 和 MQV， p ≥ 2048 且 q ≥ 224 </li>
+  <li> 对于 ECDH 和 ECMQVn ≥ 224 for ECDH and ECMQV (如: 椭圆曲线<code>secp192r1</code> 不合规 (<code>n</code> &lt; 224) 但 <code>secp224k1</code> 是合规的 (<code>n</code> &gt;= 224)) </li>
+</ul>
+<p><strong>对称密钥</strong>: </p>
+<ul>
+  <li> 密钥长度 ≥ 128 bits </li>
+</ul>
+<p>对于像<code> DES </code>，<code> Blowfish </code>这样被认为较弱的密码算法（无论密钥大小），此规则都不会引起问题。</p>
 <h2>不合规的代码示例</h2>
 <pre>
 $config = array(
@@ -9,20 +25,23 @@ $config = array(
 );
 $res = openssl_pkey_new($config);
 </pre>
-<h2>合规的解决方案</h2>
+<h2>Compliant Solution</h2>
 <pre>
 $config = array(
     "digest_alg" =&gt; "sha512",
-    "private_key_bits" =&gt; 4096, // 合规的
+    "private_key_bits" =&gt; 2048 // 合规
     "private_key_type" =&gt; OPENSSL_KEYTYPE_RSA,
 );
 $res = openssl_pkey_new($config);
 </pre>
-<h2>请参阅</h2>
+<h2>See</h2>
 <ul>
-  <li> <a href="http://cwe.mitre.org/data/definitions/326.html">MITRE, CWE-326</a> - Inadequate Encryption Strength </li>
-  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
-  <li> Derived from FindSecBugs rule <a href="https://find-sec-bugs.github.io/bugs.htm#BLOWFISH_KEY_SIZE">BLOWFISH_KEY_SIZE</a> </li>
-  <li> Derived from FindSecBugs rule <a href="https://find-sec-bugs.github.io/bugs.htm#RSA_KEY_SIZE">RSA_KEY_SIZE</a> </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf">NIST 800-131A</a> - Recommendation for Transitioning the
+  Use of Cryptographic Algorithms and Key Lengths </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/326.html">MITRE, CWE-326</a> - Inadequate Encryption Strength </li>
 </ul>
 

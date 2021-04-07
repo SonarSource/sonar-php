@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -47,6 +47,17 @@ public class AssignmentExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(expressionToString(tree.variable())).isEqualTo("$a");
     assertThat(tree.operator()).isEqualTo("=&");
+    assertThat(tree.value().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.value())).isEqualTo("$b");
+  }
+
+  @Test
+  public void test_null_coalescing_assignment() {
+    AssignmentExpressionTree tree = parse("$a ??= $b", PHPLexicalGrammar.ASSIGNMENT_EXPRESSION);
+    assertThat(tree.is(Kind.NULL_COALESCING_ASSIGNMENT)).isTrue();
+    assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.variable())).isEqualTo("$a");
+    assertThat(tree.operator()).isEqualTo("??=");
     assertThat(tree.value().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(expressionToString(tree.value())).isEqualTo("$b");
   }

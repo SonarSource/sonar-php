@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,8 +22,14 @@ package org.sonar.php.tree.impl.declaration;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,6 +40,7 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     ClassPropertyDeclarationTree tree = parse("public final $a, $b, $c;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
     assertThat(tree.modifierTokens()).hasSize(2);
+    assertThat(tree.typeAnnotation()).isNull();
     assertThat(tree.declarations()).hasSize(3);
     assertThat(tree.eosToken().text()).isEqualTo(";");
 
@@ -63,4 +70,94 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.modifierTokens().get(1).text()).isEqualTo("const");
   }
 
+  @Test
+  public void type_annotation() throws Exception {
+    ClassPropertyDeclarationTree tree = parse("public int $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    assertThat(tree.typeAnnotation().typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
+    assertThat(tree.typeAnnotation().questionMarkToken()).isNull();
+    assertThat(builtinType(tree)).isEqualTo("int");
+
+    assertThat(((PHPTree) tree).childrenIterator()).containsExactly(
+      tree.modifierTokens().get(0),
+      tree.typeAnnotation(),
+      tree.declarations().get(0),
+      tree.eosToken()
+    );
+  }
+
+  @Test
+  public void type_annotation_classname() throws Exception {
+    ClassPropertyDeclarationTree tree = parse("public MyClass $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    assertThat(tree.typeAnnotation().typeName().is(Kind.NAMESPACE_NAME)).isTrue();
+    assertThat(((NamespaceNameTree) tree.typeAnnotation().typeName()).fullName()).isEqualTo("MyClass");
+  }
+
+  @Test
+  public void type_annotation_self_parent() throws Exception {
+    ClassPropertyDeclarationTree tree = parse("public self $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    assertThat(builtinType(tree)).isEqualTo("self");
+
+    tree = parse("public parent $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(builtinType(tree)).isEqualTo("parent");
+  }
+
+  @Test
+  public void static_type_annotation() throws Exception {
+    ClassPropertyDeclarationTree tree = parse("public static iterable $staticProp;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    assertThat(tree.modifierTokens()).extracting(SyntaxToken::text).containsExactly("public", "static");
+    assertThat(builtinType(tree)).isEqualTo("iterable");
+  }
+
+  @Test
+  public void type_annotation_default_value() throws Exception {
+    ClassPropertyDeclarationTree tree = parse("private string $str = \"foo\";", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    assertThat(builtinType(tree)).isEqualTo("string");
+    assertThat(((LiteralTree) tree.declarations().get(0).initValue()).value()).isEqualTo("\"foo\"");
+  }
+
+  @Test
+  public void type_annotation_var() throws Exception {
+    ClassPropertyDeclarationTree tree = parse("var bool $flag;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    assertThat(builtinType(tree)).isEqualTo("bool");
+    assertThat(tree.declarations().get(0).identifier().text()).isEqualTo("$flag");
+  }
+
+  @Test
+  public void type_annotation_nullable() throws Exception {
+    ClassPropertyDeclarationTree tree = parse("public ?int $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    TypeTree type = tree.typeAnnotation();
+    assertThat(type.questionMarkToken().text()).isEqualTo("?");
+    assertThat(builtinType(tree)).isEqualTo("int");
+  }
+
+  @Test
+  public void variable_with_attributes() {
+    ClassPropertyDeclarationTree tree = parse("#[A1(3)] public $x;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+
+    assertThat(tree.attributeGroups()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes().get(0).name()).hasToString("A1");
+    assertThat(tree.attributeGroups().get(0).attributes().get(0).arguments()).hasSize(1);
+  }
+
+  @Test
+  public void constant_with_attributes() {
+    ClassPropertyDeclarationTree tree = parse("#[A2(2, 3)] public const FOO = 'foo';", PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION);
+
+    assertThat(tree.attributeGroups()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes().get(0).name()).hasToString("A2");
+    assertThat(tree.attributeGroups().get(0).attributes().get(0).arguments()).hasSize(2);
+  }
+
+  private static String builtinType(ClassPropertyDeclarationTree tree) {
+    return ((BuiltInTypeTree) tree.typeAnnotation().typeName()).token().text();
+  }
 }

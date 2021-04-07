@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,43 +20,56 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.annotation.Nullable;
+import org.sonar.php.symbols.FunctionSymbol;
+import org.sonar.php.symbols.UnknownFunctionSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-
 public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
 
   private static final Kind KIND = Kind.FUNCTION_CALL;
+  private static final QualifiedName UNKNOWN_FUNCTION_NAME = QualifiedName.qualifiedName("<unknown_function>");
   private ExpressionTree callee;
   private final InternalSyntaxToken openParenthesisToken;
   private final SeparatedListImpl<ExpressionTree> arguments;
+  private final SeparatedList<CallArgumentTree> callArguments;
   private final InternalSyntaxToken closeParenthesisToken;
+  private FunctionSymbol symbol = new UnknownFunctionSymbol(UNKNOWN_FUNCTION_NAME);
 
-  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl<ExpressionTree> arguments, InternalSyntaxToken closeParenthesisToken) {
+  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl<CallArgumentTree> callArguments,
+                              InternalSyntaxToken closeParenthesisToken) {
     this.callee = callee;
     this.openParenthesisToken = openParenthesisToken;
-    this.arguments = arguments;
+    this.arguments = argumentsValueList(callArguments);
+    this.callArguments = callArguments;
     this.closeParenthesisToken = closeParenthesisToken;
   }
 
-  public FunctionCallTreeImpl(ExpressionTree callee, SeparatedListImpl<ExpressionTree> arguments) {
+  public FunctionCallTreeImpl(ExpressionTree callee, SeparatedListImpl<CallArgumentTree> callArguments) {
     this.callee = callee;
     this.openParenthesisToken = null;
-    this.arguments = arguments;
+    this.arguments = argumentsValueList(callArguments);
+    this.callArguments = callArguments;
     this.closeParenthesisToken = null;
   }
 
-  public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedListImpl<ExpressionTree> arguments, InternalSyntaxToken closeParenthesisToken) {
+  public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedListImpl<CallArgumentTree> callArguments, InternalSyntaxToken closeParenthesisToken) {
     this.openParenthesisToken = openParenthesisToken;
-    this.arguments = arguments;
+    this.arguments = argumentsValueList(callArguments);
+    this.callArguments = callArguments;
     this.closeParenthesisToken = closeParenthesisToken;
   }
 
@@ -64,6 +77,14 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     this.callee = callee;
 
     return this;
+  }
+
+  private static SeparatedListImpl<ExpressionTree> argumentsValueList(SeparatedListImpl<CallArgumentTree> arguments) {
+    List<ExpressionTree> argumentValues = arguments.stream()
+      .map(CallArgumentTree::value)
+      .collect(Collectors.toList());
+
+    return new SeparatedListImpl<>(argumentValues, arguments.getSeparators());
   }
 
   @Override
@@ -77,9 +98,18 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     return openParenthesisToken;
   }
 
+  /**
+   * @deprecated since 3.11 . Use {@link #callArguments()} instead.
+   */
+  @Deprecated
   @Override
   public SeparatedListImpl<ExpressionTree> arguments() {
     return arguments;
+  }
+
+  @Override
+  public SeparatedList<CallArgumentTree> callArguments() {
+    return callArguments;
   }
 
   @Nullable
@@ -98,7 +128,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     return Iterators.concat(
       Iterators.singletonIterator(callee),
       Iterators.singletonIterator(openParenthesisToken),
-      arguments.elementsAndSeparators(),
+      callArguments.elementsAndSeparators(),
       Iterators.singletonIterator(closeParenthesisToken));
   }
 
@@ -107,4 +137,11 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     visitor.visitFunctionCall(this);
   }
 
+  public FunctionSymbol symbol() {
+    return symbol;
+  }
+
+  public void setSymbol(FunctionSymbol symbol) {
+    this.symbol = symbol;
+  }
 }

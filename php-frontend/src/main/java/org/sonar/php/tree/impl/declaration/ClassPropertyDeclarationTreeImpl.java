@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -28,7 +29,11 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -36,28 +41,46 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPropertyDeclarationTree {
 
   private final Kind kind;
+  private final List<AttributeGroupTree> attributeGroups;
   private final List<SyntaxToken> modifierTokens;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
   private final InternalSyntaxToken eosToken;
+  private final DeclaredTypeTree typeAnnotation;
 
   private ClassPropertyDeclarationTreeImpl(
     Kind kind,
+    List<AttributeGroupTree> attributeGroups,
     List<SyntaxToken> modifierTokens,
+    @Nullable DeclaredTypeTree typeAnnotation,
     SeparatedListImpl<VariableDeclarationTree> declarations,
     InternalSyntaxToken eosToken
-    ) {
+  ) {
     this.kind = kind;
+    this.attributeGroups = attributeGroups;
     this.modifierTokens = modifierTokens;
+    this.typeAnnotation = typeAnnotation;
     this.declarations = declarations;
     this.eosToken = eosToken;
   }
 
-  public static ClassPropertyDeclarationTree variable(List<SyntaxToken> modifierTokens, SeparatedListImpl<VariableDeclarationTree> declarations, InternalSyntaxToken eosToken) {
-    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION, modifierTokens, declarations, eosToken);
+  public static ClassPropertyDeclarationTree variable(List<AttributeGroupTree> attributes,
+                                                      List<SyntaxToken> modifierTokens,
+                                                      @Nullable DeclaredTypeTree typeAnnotation,
+                                                      SeparatedListImpl<VariableDeclarationTree> declarations,
+                                                      InternalSyntaxToken eosToken) {
+    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION,
+      attributes,
+      modifierTokens,
+      typeAnnotation,
+      declarations,
+      eosToken);
   }
 
-  public static ClassPropertyDeclarationTree constant(@Nullable SyntaxToken visibility, SyntaxToken constToken, SeparatedListImpl<VariableDeclarationTree> declarations,
-    InternalSyntaxToken eosToken) {
+  public static ClassPropertyDeclarationTree constant(List<AttributeGroupTree> attributes,
+                                                      @Nullable SyntaxToken visibility,
+                                                      SyntaxToken constToken,
+                                                      SeparatedListImpl<VariableDeclarationTree> declarations,
+                                                      InternalSyntaxToken eosToken) {
 
     List<SyntaxToken> modifierTokens;
     if (visibility != null) {
@@ -65,12 +88,41 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     } else {
       modifierTokens = ImmutableList.of(constToken);
     }
-    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, modifierTokens, declarations, eosToken);
+    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, attributes, modifierTokens, null, declarations, eosToken);
+  }
+
+  @Override
+  public List<AttributeGroupTree> attributeGroups() {
+    return attributeGroups;
   }
 
   @Override
   public List<SyntaxToken> modifierTokens() {
     return modifierTokens;
+  }
+
+  /**
+   * @deprecated since 3.11 - use {@link #declaredType()} instead.
+   */
+  @Nullable
+  @Override
+  @Deprecated
+  public TypeTree typeAnnotation() {
+    if (typeAnnotation == null) {
+      return null;
+    }
+
+    if (typeAnnotation.is(Kind.TYPE)) {
+      return (TypeTree) typeAnnotation;
+    } else {
+      return ((UnionTypeTree) typeAnnotation).types().get(0);
+    }
+  }
+
+  @Nullable
+  @Override
+  public DeclaredTypeTree declaredType() {
+    return typeAnnotation;
   }
 
   @Override
@@ -111,9 +163,15 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
+      attributeGroups.iterator(),
       modifierTokens.iterator(),
+      nullableIterator(typeAnnotation),
       declarations.elementsAndSeparators(),
       Iterators.singletonIterator(eosToken));
+  }
+
+  private static Iterator<? extends Tree> nullableIterator(@Nullable Tree tree) {
+    return tree == null ? Collections.emptyIterator() : Iterators.singletonIterator(tree);
   }
 
   @Override

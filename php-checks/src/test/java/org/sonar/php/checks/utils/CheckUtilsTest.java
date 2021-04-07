@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,8 @@ import com.sonar.sslr.api.typed.ActionParser;
 import com.sonarsource.checks.coverage.UtilityClass;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -30,17 +32,32 @@ import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.symbols.SymbolImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.sonar.php.checks.utils.CheckUtils.argument;
+import static org.sonar.php.checks.utils.CheckUtils.functionName;
+import static org.sonar.php.checks.utils.CheckUtils.isMethodInheritedFromClassOrInterface;
 import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
+import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
 public class CheckUtilsTest {
@@ -75,6 +92,16 @@ public class CheckUtilsTest {
     assertThat(CheckUtils.getFunctionName(call)).isEqualTo("A::run");
     assertThat(CheckUtils.getLowerCaseFunctionName(call)).isEqualTo("a::run");
     assertThat(CheckUtils.getLowerCaseFunctionName((FunctionCallTree)expressionFromStatement("$var(2);"))).isNull();
+
+    root = ((ExpressionStatementTree) parseMethodStatement("$this->run(2);")).expression();
+    assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
+    call = (FunctionCallTree) root;
+    assertThat(CheckUtils.getFunctionName(call)).isEqualTo("Wrapper::run");
+
+    root = ((ExpressionStatementTree) parseMethodStatement("$foo->run(2);")).expression();
+    assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
+    call = (FunctionCallTree) root;
+    assertThat(CheckUtils.getFunctionName(call)).isNull();
   }
 
   @Test
@@ -190,6 +217,125 @@ public class CheckUtilsTest {
         .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
   }
 
+  @Test
+  public void has_annotation_of_function() {
+    FunctionDeclarationTree tree = (FunctionDeclarationTree) parse("/**\n * @annotation\n */\nfunction foo(){}");
+    assertThat(CheckUtils.hasAnnotation(tree, "@annotation")).isTrue();
+    assertThat(CheckUtils.hasAnnotation(tree, "annotation")).isTrue();
+    assertThat(CheckUtils.hasAnnotation(tree, "other_annotation")).isFalse();
+
+    tree = (FunctionDeclarationTree) parse("/**\n * annotation\n */\nfunction foo(){}");
+    assertThat(CheckUtils.hasAnnotation(tree, "@annotation")).isFalse();
+    assertThat(CheckUtils.hasAnnotation(tree, "annotation")).isFalse();
+  }
+
+  @Test
+  public void has_modifier() {
+    ClassMemberTree tree = parseClassMember("abstract protected function foo(){}");
+    assertThat(CheckUtils.hasModifier(tree, "abstract")).isTrue();
+    assertThat(CheckUtils.hasModifier(tree, "protected")).isTrue();
+
+    tree = parseClassMember("use MyTrait;");
+    assertThat(CheckUtils.hasModifier(tree, "private")).isFalse();
+  }
+
+
+  @Test
+  public void is_public() {
+    ClassMemberTree tree = parseClassMember("public function foo(){}");
+    assertThat(CheckUtils.isPublic(tree)).isTrue();
+
+    tree = parseClassMember("public $field = null;");
+    assertThat(CheckUtils.isPublic(tree)).isTrue();
+
+    tree = parseClassMember("private $field = null;");
+    assertThat(CheckUtils.isPublic(tree)).isFalse();
+
+    tree = parseClassMember("protected function foo(){}");
+    assertThat(CheckUtils.isPublic(tree)).isFalse();
+
+    tree = parseClassMember("function foo(){}");
+    assertThat(CheckUtils.isPublic(tree)).isTrue();
+
+    tree = parseClassMember("use MyTrait;");
+    assertThat(CheckUtils.isPublic(tree)).isFalse();
+  }
+
+  @Test
+  public void pure_function_name() {
+    FunctionCallTree functionCall = (FunctionCallTree) expressionFromStatement("fooBar();");
+    assertThat(functionName(functionCall)).isEqualTo("fooBar");
+    assertThat(functionName(functionCall)).isNotEqualTo("foobar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("$this->fooBar();");
+    assertThat(functionName(functionCall)).isEqualTo("fooBar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("self::fooBar();");
+    assertThat(functionName(functionCall)).isEqualTo("fooBar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("self::$foo();");
+    assertThat(functionName(functionCall)).isNull();
+  }
+
+  @Test
+  public void pure_lower_case_function_name() {
+    FunctionCallTree functionCall = (FunctionCallTree) expressionFromStatement("fooBar();");
+    assertThat(lowerCaseFunctionName(functionCall)).isEqualTo("foobar");
+    assertThat(lowerCaseFunctionName(functionCall)).isNotEqualTo("fooBar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("$this->fooBar();");
+    assertThat(lowerCaseFunctionName(functionCall)).isEqualTo("foobar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("self::fooBar();");
+    assertThat(lowerCaseFunctionName(functionCall)).isEqualTo("foobar");
+
+    functionCall = (FunctionCallTree) expressionFromStatement("self::$foo();");
+    assertThat(lowerCaseFunctionName(functionCall)).isNull();
+  }
+
+  @Test
+  public void test_named_argument_retrieval() {
+    Tree tree = expressionFromStatement("f(self::$p1, a: $p2);");
+    FunctionCallTree callTree = (FunctionCallTree) tree;
+
+    assertThat(callTree.callArguments()).hasSize(2);
+    assertThat(callTree.callArguments().get(0).name()).isNull();
+    assertThat(argument(callTree, "someName", 0)).contains(callTree.callArguments().get(0));
+    assertThat(argument(callTree, "a", 0)).contains(callTree.callArguments().get(1));
+    assertThat(argument(callTree, "someName", 2)).isEmpty();
+  }
+
+  @Test
+  public void hasNamedArgument() {
+    assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo();"))).isFalse();
+    assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo($a, $b);"))).isFalse();
+    assertThat(CheckUtils.hasNamedArgument((FunctionCallTree) expressionFromStatement("foo($a, b: $b);"))).isTrue();
+  }
+
+  @Test
+  public void uniqueAssignedValue() {
+    VariableIdentifierTreeImpl var = mock(VariableIdentifierTreeImpl.class);
+    SymbolImpl symbol = mock(SymbolImpl.class);
+    when(symbol.uniqueAssignedValue()).thenReturn(Optional.of(mock(ExpressionTree.class)));
+    assertThat(CheckUtils.uniqueAssignedValue(var)).isNotPresent();
+    when(var.symbol()).thenReturn(symbol);
+    assertThat(CheckUtils.uniqueAssignedValue(var)).isPresent();
+  }
+
+  @Test
+  public void arrayValue() {
+    assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array('key' => 'value');"), "key")).isPresent();
+    assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array('other_key' => 'value');"), "key")).isNotPresent();
+    assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array($key => 'value');"), "key")).isNotPresent();
+    assertThat(CheckUtils.arrayValue((ArrayInitializerTree) expressionFromStatement("array('value');"), "key")).isNotPresent();
+  }
+
+  @Test
+  public void noClass_methodInheritedFromClassOrInterface() {
+    MethodDeclarationTree method = (MethodDeclarationTree) ((ClassDeclarationTree) parse("trait Wrapper{public function foo() {}}")).members().get(0);
+    assertThat(isMethodInheritedFromClassOrInterface(QualifiedName.qualifiedName("A\\B"), method)).isFalse();
+  }
+
   private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
     return Arrays.stream(values).map(value -> new LiteralTreeImpl(kind,
       new InternalSyntaxToken(1, 1, value, Collections.emptyList(), 0, false)));
@@ -203,4 +349,20 @@ public class CheckUtilsTest {
     return parser.parse(toParse);
   }
 
+  private List<ClassMemberTree> parseClassMembers(String toParse) {
+    return ((ClassDeclarationTree) parse("class Wrapper{" + toParse+ "}")).members();
+  }
+
+  private ClassMemberTree parseClassMember(String toParse) {
+    return parseClassMembers(toParse).get(0);
+  }
+
+  private List<StatementTree> parseMethodStatements(String toParse) {
+    MethodDeclarationTree method = (MethodDeclarationTree) parseClassMembers("public function wrapperMethod() {"+ toParse +"}").get(0);
+    return ((BlockTree) method.body()).statements();
+  }
+
+  private StatementTree parseMethodStatement(String toParse) {
+    return parseMethodStatements(toParse).get(0);
+  }
 }

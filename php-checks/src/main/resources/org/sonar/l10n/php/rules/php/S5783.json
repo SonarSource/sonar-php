@@ -1,0 +1,13 @@
+{
+  "title": "Only one method invocation is expected when testing exceptions",
+  "type": "BUG",
+  "status": "ready",
+  "tags": [
+    "tests",
+    "phpunit"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-5783",
+  "sqKey": "S5783",
+  "scope": "Tests"
+}

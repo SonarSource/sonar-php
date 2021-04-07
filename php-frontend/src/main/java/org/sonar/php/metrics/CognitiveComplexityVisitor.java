@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -86,6 +87,11 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
 
       @Override
       public void visitFunctionExpression(FunctionExpressionTree tree) {
+        sumComplexity(tree);
+      }
+
+      @Override
+      public void visitArrowFunctionExpression(ArrowFunctionExpressionTree tree) {
         sumComplexity(tree);
       }
 
@@ -197,6 +203,11 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
     visitWithNesting(()-> super.visitFunctionExpression(tree));
+  }
+
+  @Override
+  public void visitArrowFunctionExpression(ArrowFunctionExpressionTree tree) {
+    visitWithNesting(()-> super.visitArrowFunctionExpression(tree));
   }
 
   @Override

@@ -8,11 +8,7 @@
   },
   "tags": [
     "cwe",
-    "error-handling",
-    "cert"
-  ],
-  "standards": [
-    "CWE"
+    "error-handling"
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-112",

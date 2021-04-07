@@ -1,7 +1,6 @@
 <p>使用cookie是安全敏感的。它过去导致了以下漏洞：</p>
 <ul>
-  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-7772">CVE-2018-7772</a> </li>
-  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-10085">CVE-2018-10085</a> </li>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-11639">CVE-2018-11639</a> </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-6537">CVE-2016-6537</a> </li>
 </ul>
 <p>击者可以使用广泛可用的工具来读取和修改cookie，因此：</p>
@@ -41,12 +40,10 @@ isset($HTTP_COOKIE_VARS["cookie"]); // 合规
 </pre>
 <h2>请参阅</h2>
 <ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/312.html">MITRE, CWE-312</a> - Cleartext Storage of Sensitive Information </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/315.html">MITRE, CWE-315</a> - Cleartext Storage of Sensitive Information in a Cookie </li>
-  <li> <a href="https://cwe.mitre.org/data/definitions/565.html">MITRE CWE-565</a> - Reliance on Cookies without Validation and Integrity Checking
-  </li>
-  <li> OWASP Top 10 2017 Category A1 - Injection </li>
-  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
   <li> <a href="https://wiki.sei.cmu.edu/confluence/display/java/FIO52-J.+Do+not+store+unencrypted+sensitive+information+on+the+client+side">CERT,
   FIO52-J.</a> - Do not store unencrypted sensitive information on the client side </li>
   <li> Derived from FindSecBugs rule <a href="https://find-sec-bugs.github.io/bugs.htm#COOKIE_USAGE">COOKIE_USAGE</a> </li>

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,27 +19,15 @@
  */
 package org.sonar.plugins.php;
 
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import org.sonar.api.profiles.ProfileDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.profiles.XMLProfileParser;
-import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
+import org.sonar.plugins.php.api.Php;
 
-public final class PSR2ProfileDefinition extends ProfileDefinition {
-
-  private final XMLProfileParser xmlProfileParser;
-
-  public PSR2ProfileDefinition(XMLProfileParser xmlProfileParser) {
-    this.xmlProfileParser = xmlProfileParser;
-  }
+public final class PSR2ProfileDefinition implements BuiltInQualityProfilesDefinition {
 
   @Override
-  public RulesProfile createProfile(ValidationMessages validation) {
-    InputStreamReader reader = new InputStreamReader(
-      getClass().getResourceAsStream("/org/sonar/plugins/php/profile/psr2-profile.xml"),
-      StandardCharsets.UTF_8);
-
-    return xmlProfileParser.parse(reader, validation);
+  public void define(Context context) {
+    NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile("PSR-2", Php.KEY);
+    XmlProfileParser.parse("org/sonar/plugins/php/profile/psr2-profile.xml", profile);
+    profile.done();
   }
 }

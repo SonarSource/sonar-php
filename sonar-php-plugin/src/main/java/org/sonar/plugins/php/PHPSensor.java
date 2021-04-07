@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,10 +22,10 @@ package org.sonar.plugins.php;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
+import java.io.File;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.api.SonarProduct;
@@ -50,21 +50,23 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
+import org.sonar.php.checks.UncatchableExceptionCheck;
+import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
+import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
-import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.CoverageResultImporter;
 import org.sonar.plugins.php.phpunit.TestResultImporter;
-import org.sonar.squidbridge.ProgressReport;
 
 public class PHPSensor implements Sensor {
 
@@ -83,15 +85,18 @@ public class PHPSensor implements Sensor {
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
     CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRuleRepository[] customRuleRepositories) {
 
-    this.checks = PHPChecks.createPHPCheck(checkFactory)
-      .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
-      .addCustomChecks(customRuleRepositories);
+    this(fileLinesContextFactory,
+      PHPChecks.createPHPCheck(checkFactory)
+        .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
+        .addCustomChecks(customRuleRepositories),
+      noSonarFilter);
+  }
+
+  PHPSensor(FileLinesContextFactory fileLinesContextFactory, PHPChecks checks, NoSonarFilter noSonarFilter) {
+    this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
     this.parsingErrorRuleKey = getParsingErrorRuleKey();
-    // Hack to have PHPCustomRulesDefinition referenced somewhere so that maven shade minimization
-    // includes PHPCustomRulesDefinition and its dependencies in the final jar.
-    PHPCustomRulesDefinition.class.getName();
   }
 
   @Override
@@ -106,21 +111,18 @@ public class PHPSensor implements Sensor {
   public void execute(SensorContext context) {
     FileSystem fileSystem = context.fileSystem();
 
-    FilePredicate mainFilePredicate = fileSystem.predicates().and(
-      fileSystem.predicates().hasType(InputFile.Type.MAIN),
-      fileSystem.predicates().hasLanguage(Php.KEY));
-
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(checks.all()), fileSystem.workDir());
+    FilePredicate phpFilePredicate = fileSystem.predicates().hasLanguage(Php.KEY);
 
     List<InputFile> inputFiles = new ArrayList<>();
-    fileSystem.inputFiles(mainFilePredicate).forEach(inputFiles::add);
+    fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
 
-    ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
-    progressReport.start(inputFiles.stream().map(InputFile::toString).collect(Collectors.toList()));
+    SymbolScanner symbolScanner = new SymbolScanner(context);
 
     try {
-      analyseFiles(context, phpAnalyzer, inputFiles, progressReport);
-      if (inSonarQube(context)) {
+      symbolScanner.execute(inputFiles);
+      ProjectSymbolData projectSymbolData = symbolScanner.getProjectSymbolData();
+      new AnalysisScanner(context, projectSymbolData).execute(inputFiles);
+      if (!inSonarLint(context)) {
         processTestsAndCoverage(context);
       }
     } catch (CancellationException e) {
@@ -128,8 +130,8 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private static boolean inSonarQube(SensorContext context) {
-    return context.runtime().getProduct() != SonarProduct.SONARLINT;
+  private static boolean inSonarLint(SensorContext context) {
+    return context.runtime().getProduct() == SonarProduct.SONARLINT;
   }
 
   private static void processTestsAndCoverage(SensorContext context) {
@@ -138,60 +140,73 @@ public class PHPSensor implements Sensor {
     CoverageResultImporter.multiCoverageImporter().importReport(context);
   }
 
-  void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, Iterable<InputFile> inputFiles, ProgressReport progressReport) {
-    boolean success = false;
-    try {
-      for (InputFile inputFile : inputFiles) {
-        checkCancelled(context);
-        progressReport.nextFile();
-        analyseFile(context, phpAnalyzer, inputFile);
+  private class AnalysisScanner extends Scanner {
+
+    PHPAnalyzer phpAnalyzer;
+
+    private final boolean hasTestFileChecks;
+
+    public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData) {
+      super(context);
+
+      List<PHPCheck> allChecks = checks.all();
+      if (inSonarLint(context)) {
+        allChecks = allChecks.stream()
+          .filter(e -> !(e instanceof UncatchableExceptionCheck))
+          .collect(Collectors.toList());
       }
-      success = true;
-    } finally {
-      stopProgressReport(progressReport, success);
+
+      List<PHPCheck> testFilesChecks  = allChecks.stream().
+        filter(c -> c instanceof PhpUnitCheck).
+        collect(Collectors.toList());
+      hasTestFileChecks = !testFilesChecks.isEmpty();
+
+      phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(allChecks), ImmutableList.copyOf(testFilesChecks), context.fileSystem().workDir(), projectSymbolData);
     }
-  }
 
-  private static void checkCancelled(SensorContext context) {
-    if (context.isCancelled()) {
-      throw new CancellationException("Analysis cancelled");
+    @Override
+    String name() {
+      return "PHP rules";
     }
-  }
 
-  private static void stopProgressReport(ProgressReport progressReport, boolean success) {
-    if (success) {
-      progressReport.stop();
-    } else {
-      progressReport.cancel();
-    }
-  }
+    @Override
+    void scanFile(InputFile inputFile) {
+      if (inputFile.type() == Type.TEST && !hasTestFileChecks) {
+        return;
+      }
 
-  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile) {
-    try {
-      phpAnalyzer.nextFile(new PhpFileImpl(inputFile));
+      try {
+        phpAnalyzer.nextFile(new PhpFileImpl(inputFile));
 
-      if (inSonarQube(context)) {
-        phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
-        phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
-        saveNewFileMeasures(context,
-          phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
-          inputFile);
-        if (inSonarQube(context)) {
-          saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
+        if (!inSonarLint(context)) {
+          phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
+          phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
+          if (inputFile.type() == Type.MAIN) {
+            saveNewFileMeasures(context,
+              phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
+              inputFile);
+            saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
+          }
         }
+
+        noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
+        saveIssues(context, inputFile.type() == Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
+      } catch (RecognitionException e) {
+        checkInterrupted(e);
+        LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
+        LOG.error(e.getMessage());
+        saveParsingIssue(context, e, inputFile);
       }
+    }
 
-      noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
-      saveIssues(context, phpAnalyzer.analyze(), inputFile);
+    @Override
+    void logException(Exception e, InputFile file) {
+      LOG.error("Could not analyse " + file.toString(), e);
+    }
 
-    } catch (RecognitionException e) {
-      checkInterrupted(e);
-      LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
-      LOG.error(e.getMessage());
-      saveParsingIssue(context, e, inputFile);
-    } catch (Exception e) {
-      checkInterrupted(e);
-      LOG.error("Could not analyse " + inputFile.filename(), e);
+    @Override
+    void onEnd() {
+      phpAnalyzer.terminate();
     }
   }
 
@@ -210,14 +225,6 @@ public class PHPSensor implements Sensor {
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getStatementNumber()).forMetric(CoreMetrics.STATEMENTS).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFileCognitiveComplexity()).forMetric(CoreMetrics.COGNITIVE_COMPLEXITY).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFileComplexity()).forMetric(CoreMetrics.COMPLEXITY).save();
-    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getClassComplexity()).forMetric(CoreMetrics.COMPLEXITY_IN_CLASSES).save();
-    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFunctionComplexity()).forMetric(CoreMetrics.COMPLEXITY_IN_FUNCTIONS).save();
-
-    String functionComplexityMeasure = fileMeasures.getFunctionComplexityDistribution().build();
-    context.<String>newMeasure().on(inputFile).withValue(functionComplexityMeasure).forMetric(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION).save();
-
-    String fileComplexityMeasure = fileMeasures.getFileComplexityDistribution().build();
-    context.<String>newMeasure().on(inputFile).withValue(fileComplexityMeasure).forMetric(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION).save();
   }
 
   /**
@@ -228,7 +235,7 @@ public class PHPSensor implements Sensor {
       NewIssue issue = context.newIssue();
 
       NewIssueLocation location = issue.newLocation()
-        .message(e.getMessage())
+        .message("A parsing error occurred in this file.")
         .on(inputFile)
         .at(inputFile.selectLine(e.getLine()));
 
@@ -292,10 +299,23 @@ public class PHPSensor implements Sensor {
         PreciseIssue preciseIssue = (PreciseIssue) issue;
 
         newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
-        preciseIssue.secondaryLocations().forEach(secondary -> newIssue.addLocation(newLocation(inputFile, newIssue, secondary)));
+        preciseIssue.secondaryLocations().forEach(secondary ->
+          addSecondaryLocation(context, inputFile, newIssue, secondary)
+        );
       }
 
       newIssue.save();
+    }
+  }
+
+  private static void addSecondaryLocation(SensorContext context, InputFile inputFile, NewIssue newIssue, IssueLocation secondary) {
+    InputFile file = inputFile;
+    String filePath = secondary.filePath();
+    if (filePath != null) {
+      file = context.fileSystem().inputFile(context.fileSystem().predicates().is(new File(filePath)));
+    }
+    if (file != null) {
+      newIssue.addLocation(newLocation(file, newIssue, secondary));
     }
   }
 
@@ -340,10 +360,4 @@ public class PHPSensor implements Sensor {
     newCpdTokens.save();
   }
 
-  private static class CancellationException extends RuntimeException {
-
-    CancellationException(String message) {
-      super(message);
-    }
-  }
 }

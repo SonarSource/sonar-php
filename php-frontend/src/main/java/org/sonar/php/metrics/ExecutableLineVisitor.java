@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -58,7 +58,6 @@ class ExecutableLineVisitor extends PHPTreeSubscriber {
       Kind.DO_WHILE_STATEMENT,
       Kind.FOREACH_STATEMENT,
       Kind.FOR_STATEMENT,
-      Kind.DECLARE_STATEMENT,
       Kind.EXPRESSION_STATEMENT,
       Kind.UNSET_VARIABLE_STATEMENT
     );

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -31,6 +31,7 @@ public class ConstantDeclarationTest {
     assertThat(PHPLexicalGrammar.CONSTANT_DECLARATION)
       .matches("const A = 1 ;")
       .matches("const A = 1, B = 2 ;")
+      .matches("const MATCH = 2;")
       .notMatches("public const A = 1 ;")
       .notMatches("const A ;");
   }

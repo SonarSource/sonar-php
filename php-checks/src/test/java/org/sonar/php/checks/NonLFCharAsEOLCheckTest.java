@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
-import java.io.IOException;
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,7 +28,6 @@ import org.junit.rules.TemporaryFolder;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.tests.PHPCheckVerifier;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
@@ -48,12 +47,12 @@ public class NonLFCharAsEOLCheckTest {
   }
 
   @Test
-  public void ok() throws IOException {
-    PHPCheckVerifier.verifyNoIssue(okFile, check);
+  public void ok() {
+    PHPCheckTest.check(check, okFile, Collections.emptyList());
   }
 
   @Test
-  public void ko() throws IOException {
+  public void ko() {
     ImmutableList<PhpIssue> issues = ImmutableList.<PhpIssue>of(
       new LegacyIssue(check, "Replace all non line feed end of line characters in this file \"" + koFile.filename() + "\" by LF."));
     PHPCheckTest.check(check, koFile, issues);

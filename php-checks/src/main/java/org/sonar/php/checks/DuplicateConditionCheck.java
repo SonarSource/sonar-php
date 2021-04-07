@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -87,8 +87,9 @@ public class DuplicateConditionCheck extends AbstractDuplicateBranchCheck {
   }
 
   private void raiseIssue(String branchType, Tree duplicatedTree, Tree duplicatingTree) {
-    String message = String.format(MESSAGE, branchType, ((PHPTree) duplicatedTree).getLine());
-    context().newIssue(this, duplicatingTree, message).secondary(duplicatedTree, null);
+    context()
+      .newIssue(this, duplicatingTree, String.format(MESSAGE, branchType, ((PHPTree) duplicatedTree).getLine()))
+      .secondary(duplicatedTree, "Original");
   }
 
 }

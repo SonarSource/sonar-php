@@ -7,7 +7,6 @@
     "constantCost": "5min"
   },
   "tags": [
-    "misra",
     "unused"
   ],
   "defaultSeverity": "Major",

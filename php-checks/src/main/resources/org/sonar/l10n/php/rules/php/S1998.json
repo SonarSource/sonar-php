@@ -12,9 +12,6 @@
     "obsolete",
     "pitfall"
   ],
-  "standards": [
-    "CWE"
-  ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-1998",
   "sqKey": "S1998",

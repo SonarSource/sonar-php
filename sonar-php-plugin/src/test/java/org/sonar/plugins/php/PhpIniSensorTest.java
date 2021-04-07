@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -34,6 +34,7 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
@@ -81,9 +82,9 @@ public class PhpIniSensorTest {
   public void parse_error() throws Exception {
     File baseDir = new File("src/test/resources/phpini-error");
     SensorContextTester context = SensorContextTester.create(baseDir);
-    DefaultInputFile file = setupSingleFile(baseDir, context);
+    setupSingleFile(baseDir, context);
     sensor().execute(context, checks());
-    assertThat(logTester.logs()).contains("Unable to parse file: " + file.absolutePath());
+    assertThat(logTester.logs()).contains("Unable to parse file: php.ini");
   }
 
   private static DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context) throws IOException {
@@ -96,9 +97,9 @@ public class PhpIniSensorTest {
   }
 
   private static Checks<PhpIniCheck> checks() {
+    NewActiveRule rule = new NewActiveRule.Builder().setRuleKey(RuleKey.of("repo1", "rule1")).build();
     ActiveRules activeRules = new ActiveRulesBuilder()
-      .create(RuleKey.of("repo1", "rule1"))
-      .activate()
+      .addRule(rule)
       .build();
     CheckFactory checkFactory = new CheckFactory(activeRules);
     return checkFactory.<PhpIniCheck>create("repo1").addAnnotatedChecks(MyCheck.class);

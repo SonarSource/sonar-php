@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +19,8 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.Collections;
@@ -34,6 +36,8 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 
 /**
@@ -79,6 +83,7 @@ public class ControlFlowGraph {
   /**
    * <b>WARNING:</b> This is an experimental API, it may change without notice.
    */
+  @VisibleForTesting
   public static ControlFlowGraph build(BlockTree body) {
     return new ControlFlowGraphBuilder(body.statements()).getGraph();
   }
@@ -86,8 +91,17 @@ public class ControlFlowGraph {
   /**
    * <b>WARNING:</b> This is an experimental API, it may change without notice.
    */
-  public static ControlFlowGraph build(ScriptTree scriptTree) {
+  @VisibleForTesting
+  static ControlFlowGraph build(ScriptTree scriptTree) {
     return new ControlFlowGraphBuilder(scriptTree.statements()).getGraph();
+  }
+
+  /**
+   * <b>WARNING:</b> This is an experimental API, it may change without notice.
+   */
+  @VisibleForTesting
+  static ControlFlowGraph build(ForEachStatementTree statementTree) {
+    return new ControlFlowGraphBuilder(statementTree.statements()).getGraph();
   }
 
   /**
@@ -113,12 +127,16 @@ public class ControlFlowGraph {
           }
         case SCRIPT:
           return build(((ScriptTree) tree));
+        case FOREACH_STATEMENT:
+          return build((ForEachStatementTree) tree);
+        case CATCH_BLOCK:
+          return build(((CatchBlockTree) tree).block());
         default:
           throw new IllegalStateException("Unexpected tree kind " + tree.getKind());
       }
     } catch (Exception e) {
-      LOG.warn("Failed to build control flow graph for file [{}] at line {}", context.getPhpFile().toString(), ((PHPTree) tree).getLine());
-      LOG.warn(e.getMessage(), e);
+      LOG.warn("Failed to build control flow graph for file [{}] at line {} (activate debug logs for more details)", context.getPhpFile().toString(), ((PHPTree) tree).getLine());
+      LOG.debug(() -> Throwables.getStackTraceAsString(e));
       failedTrees.add(tree);
     }
 

@@ -1,6 +1,6 @@
-<p>并不是所有的SSL协议都是平等创建的，一些像“SSL”这样的遗留协议已经被证明是不安全的。</p>
-<p>当使用不安全协议(即不同于“TLSv1.2”或“DTLSv1.2”的协议)创建SSL上下文时，此规则会引发一个问题。</p>
-<h2>不合规的代码示例</h2>
+<p>事实证明，较旧的SSL / TLS协议（例如“ SSLv3”）是不安全的。</p>
+<p>当使用不安全的协议版本（即：不同于“ TLSv1.2”，“ TLSv1.3”，“ DTLSv1.2”或“ DTLSv1.3”的协议）创建SSL / TLS上下文时，会引起问题。</p>
+<h2>不合规的示例</h2>
 <pre>
 $ctx = stream_context_create([
   'ssl' =&gt; [
@@ -9,7 +9,7 @@ $ctx = stream_context_create([
   ],
 ]);
 </pre>
-<h2>合规的解决方案</h2>
+<h2>合规的方案</h2>
 <pre>
 $ctx = stream_context_create([
     'ssl' =&gt; [
@@ -19,11 +19,14 @@ $ctx = stream_context_create([
 </pre>
 <h2>请参阅</h2>
 <ul>
-  <li> <a href="http://cwe.mitre.org/data/definitions/326.html">MITRE, CWE-327</a> - Inadequate Encryption Strength </li>
-  <li> <a href="http://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-326</a> - Use of a Broken or Risky Cryptographic Algorithm </li>
-  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
-  <li> OWASP Top 10 2017 Category A6 - Security Misconfiguration </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/326.html">MITRE, CWE-327</a> - Inadequate Encryption Strength </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-326</a> - Use of a Broken or Risky Cryptographic Algorithm </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
-  <li> <a href="https://blogs.oracle.com/java-platform-group/diagnosing-tls,-ssl,-and-https">Diagnosing TLS, SSL, and HTTPS</a> </li>
+  <li> <a href="https://github.com/ssllabs/research/wiki/SSL-and-TLS-Deployment-Best-Practices#22-use-secure-protocols">SSL and TLS Deployment Best
+  Practices - Use secure protocols</a> </li>
 </ul>
 

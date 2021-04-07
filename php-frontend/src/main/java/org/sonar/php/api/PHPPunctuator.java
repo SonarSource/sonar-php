@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -50,6 +50,7 @@ public enum PHPPunctuator implements GrammarRuleKey {
   SL("<<"),
   SR(">>"),
   XOR_EQU("^="),
+  NULL_COALESCING_EQU("??="),
 
   PLUS("+"),
   MINUS("-"),
@@ -71,6 +72,7 @@ public enum PHPPunctuator implements GrammarRuleKey {
   NULL_COALESCE("??"),
 
   ARROW("->"),
+  NULL_SAFE_ARROW("?->"),
   DOUBLEARROW("=>"),
 
   DOLLAR("$"),
@@ -84,14 +86,16 @@ public enum PHPPunctuator implements GrammarRuleKey {
   DOT("."),
   SEMICOLON(";"),
   COMMA(","),
-  ELIPSIS("..."),
+  ELLIPSIS("..."),
 
   AT("@"),
   BANG("!"),
   QUERY("?"),
   DOUBLECOLON("::"),
   COLON(":"),
-  NS_SEPARATOR("\\");
+  NS_SEPARATOR("\\"),
+
+  ATTRIBUTE_OPEN("#[");
 
   private final String value;
 

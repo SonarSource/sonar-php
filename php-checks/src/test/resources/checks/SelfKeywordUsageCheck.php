@@ -38,7 +38,7 @@ class A {
   public static function f2_public() {}
 
   static function f2_default() {}
- 
+
   public static final function f3() {
   }
 
@@ -60,7 +60,7 @@ class A {
     self::f2_protected();       // Noncompliant {{Use "static" keyword instead of "self".}}
     self::f2_public();          // Noncompliant
     self::f2_default();         // Noncompliant
-    
+
     self::f4();                 // OK, as function is private (and final as well)
 
     static::f2_private();       // OK, as always with "static"
@@ -113,7 +113,7 @@ class D {
     self::f2();                      // Noncompliant
     self::f3();                      // OK, function is private
   }
-  
+
   private static function f3() {}
 
   public static function f2() {}
@@ -180,4 +180,10 @@ class constantInParams {
  const DATASERIES_TYPE_STRING	= 'String';
  public function setDataType($dataType = self::DATASERIES_TYPE_STRING) {
  }
+}
+
+class NotFoundConstant extends SomeExternalClass {
+  public static function foo() {
+    echo self::SOME_RANDOM_CONSTANT; // OK
+  }
 }

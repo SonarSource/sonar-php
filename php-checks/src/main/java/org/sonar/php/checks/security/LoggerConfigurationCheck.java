@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -24,13 +24,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.expression.PrefixExpressionTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -83,13 +84,15 @@ public class LoggerConfigurationCheck extends PHPVisitorCheck {
     }
 
     String lowerCaseQualifiedName = ((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ROOT);
-    SeparatedList<ExpressionTree> arguments = tree.arguments();
     if (ERROR_REPORTING.equals(lowerCaseQualifiedName)) {
-      if (arguments.size() == 1 && isSuspiciousDirective(ERROR_REPORTING, arguments.get(0))) {
+      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "level", 0);
+      if (argument.isPresent() && isSuspiciousDirective(ERROR_REPORTING, argument.get().value())) {
         context().newIssue(this, tree, MESSAGE);
       }
-    } else if (isSuspiciousGlobalConfiguration(lowerCaseQualifiedName, arguments)) {
-      context().newIssue(this, tree, MESSAGE);
+    } else {
+      if (isSuspiciousGlobalConfiguration(lowerCaseQualifiedName, tree)) {
+        context().newIssue(this, tree, MESSAGE);
+      }
     }
   }
 
@@ -125,10 +128,12 @@ public class LoggerConfigurationCheck extends PHPVisitorCheck {
       .forEach(superInterface -> context().newIssue(this, superInterface, MESSAGE));
   }
 
-  private static boolean isSuspiciousGlobalConfiguration(String lowerCaseQualifiedName, SeparatedList<ExpressionTree> arguments) {
-    return GLOBAL_CONFIGURATION_FUNCTIONS.contains(lowerCaseQualifiedName)
-      && arguments.size() == 2
-      && isSuspiciousDirective(getStringValue(arguments.get(0)), arguments.get(1));
+  private static boolean isSuspiciousGlobalConfiguration(String lowerCaseQualifiedName, FunctionCallTree tree) {
+    Optional<CallArgumentTree> arg1 = CheckUtils.argument(tree, "varname", 0);
+    Optional<CallArgumentTree> arg2 = CheckUtils.argument(tree, "newvalue", 1);
+
+    return GLOBAL_CONFIGURATION_FUNCTIONS.contains(lowerCaseQualifiedName) && tree.callArguments().size() == 2
+      && arg1.isPresent() && arg2.isPresent() && isSuspiciousDirective(getStringValue(arg1.get().value()), arg2.get().value());
   }
 
   private static boolean isSuspiciousDirective(@Nullable String directive, ExpressionTree argumentValue) {

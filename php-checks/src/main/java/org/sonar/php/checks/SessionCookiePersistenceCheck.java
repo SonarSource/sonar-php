@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,15 +22,17 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.ini.BasePhpIniIssue;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.Directive;
 import org.sonar.php.ini.tree.PhpIniFile;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -39,7 +41,7 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 public class SessionCookiePersistenceCheck extends FunctionUsageCheck implements PhpIniCheck {
 
   private static final String PHP_INI_MESSAGE = "Configure \"session.cookie_lifetime\" to 0.";
-  private static final String PHP_CODE_MESSAGE = "Pass \"0\" as first argument.";
+  private static final String PHP_CODE_MESSAGE = "Set \"lifetime\" parameter to \"0\".";
 
   @Override
   public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {
@@ -60,13 +62,13 @@ public class SessionCookiePersistenceCheck extends FunctionUsageCheck implements
 
   @Override
   protected void createIssue(FunctionCallTree functionCall) {
-    SeparatedList<ExpressionTree> arguments = functionCall.arguments();
-    if (!arguments.isEmpty()) {
-      ExpressionTree firstArgument = arguments.get(0);
-      if (firstArgument.is(Kind.NUMERIC_LITERAL)) {
-        LiteralTree literal = (LiteralTree) firstArgument;
+    Optional<CallArgumentTree> lifetimeArgument = CheckUtils.argument(functionCall, "lifetime", 0);
+    if (lifetimeArgument.isPresent()) {
+      ExpressionTree lifetimeArgumentValue = lifetimeArgument.get().value();
+      if (lifetimeArgumentValue.is(Kind.NUMERIC_LITERAL)) {
+        LiteralTree literal = (LiteralTree) lifetimeArgumentValue;
         if (!"0".equals(literal.value())) {
-          context().newIssue(this, firstArgument, PHP_CODE_MESSAGE);
+          context().newIssue(this, lifetimeArgumentValue, PHP_CODE_MESSAGE);
         }
       }
     }

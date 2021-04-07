@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -35,66 +35,67 @@ public class MemberExpressionTest {
       .matches("a")
       .matches("$$a")
 
-    // callable_variable -> dereferencable '[' optional_expr ']' -> variable '[' optional_expr ']'
+      // callable_variable -> dereferencable '[' optional_expr ']' -> variable '[' optional_expr ']'
       .matches("$a[]")
       .matches("$a[$b+2]")
       .matches("$a($b)[]")
       .matches("$a[0][]")
-    // ??? callable_variable -> dereferencable '[' optional_expr ']' -> '(' expr ')' '[' optional_expr ']'
-    // ??? callable_variable -> dereferencable '[' optional_expr ']' -> dereferencable_scalar '[' optional_expr ']'
+      // ??? callable_variable -> dereferencable '[' optional_expr ']' -> '(' expr ')' '[' optional_expr ']'
+      // ??? callable_variable -> dereferencable '[' optional_expr ']' -> dereferencable_scalar '[' optional_expr ']'
 
-    // callable_variable -> constant '[' optional_expr ']' -> name '[' optional_expr ']'
-    .matches("a[3]")
-    // callable_variable -> constant '[' optional_expr ']' -> class_name :: T_STRING '[' optional_expr ']'
-    .matches("static::a[3]")
+      // callable_variable -> constant '[' optional_expr ']' -> name '[' optional_expr ']'
+      .matches("a[3]")
+      // callable_variable -> constant '[' optional_expr ']' -> class_name :: T_STRING '[' optional_expr ']'
+      .matches("static::a[3]")
 
-    // callable_variable -> dereferencable '{' expr '}' -> variable '{' expr '}'
-    .matches("$a{3+2}")
+      // callable_variable -> dereferencable '{' expr '}' -> variable '{' expr '}'
+      .matches("$a{3+2}")
 
-    // callable_variable -> dereferencable T_OBJECT_OPERATOR member_name argument_list
-    .matches("$a->$b($c)")
-    // callable_variable -> function_call
-    .matches("myfunction($a)")
-    .matches("$a()")
+      // callable_variable -> dereferencable T_OBJECT_OPERATOR member_name argument_list
+      .matches("$a->$b($c)")
+      // callable_variable -> function_call
+      .matches("myfunction($a)")
+      .matches("$a()")
 
-    // static_member
-    .matches("static::a")
-    .matches("class1::a")
-    .matches("class1::$a")
-    .matches("class1::if")
-    .matches("namespace1\\class1::a")
-    // static_member -> dereferencable :: simple_variable
-    .matches("$a::$b")
+      // static_member
+      .matches("static::a")
+      .matches("class1::a")
+      .matches("class1::$a")
+      .matches("class1::if")
+      .matches("namespace1\\class1::a")
+      // static_member -> dereferencable :: simple_variable
+      .matches("$a::$b")
 
-    // dereferencable T_OBJECT_OPERATOR member_name
-    .matches("$a->b")
-    .matches("$a->$b")
-    .matches("$a->if")
-    .matches("$a->b->$c")
+      // dereferencable T_OBJECT_OPERATOR member_name
+      .matches("$a->b")
+      .matches("$a->$b")
+      .matches("$a->if")
+      .matches("$a->b->$c")
 
-    .notMatches("(int) $a")
+      .notMatches("(int) $a")
 
-    // OLD TESTS
+      // OLD TESTS
 
-    .matches("$a[]")
-    .matches("$a()")
+      .matches("$a[]")
+      .matches("$a()")
 
-    .matches("$a->b")
-    .matches("$a->b()")
+      .matches("$a->b")
+      .matches("$a->b()")
 
-    .matches("$a::b()")
-    .matches("Foo::$a")
+      .matches("$a::b()")
+      .matches("Foo::$a")
 
-    .matches("$a->$b[$c]{'d'}")
+      .matches("$a->$b[$c]{'d'}")
 
-    .matches("$$a")
-    .matches("${'a'}")
-    .matches("$a{'a'}")
-    .matches("$a[$b]")
+      .matches("$$a")
+      .matches("${'a'}")
+      .matches("$a{'a'}")
+      .matches("$a[$b]")
 
-    .matches("f()->$a")
-    .matches("$a->{'b'}")
+      .matches("f()->$a")
+      .matches("$a->{'b'}")
 
-    .matches("A::class");
+      .matches("A::class")
+    ;
   }
 }

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,17 +19,16 @@
  */
 package org.sonar.php.checks;
 
+import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
@@ -39,22 +38,30 @@ public class CakePhpDebugModeCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
 
-  private static final Set<String> CAKE_DEBUG_FUNCTIONS = CheckUtils.lowerCaseSet("Configure::write", "Configure::config");
-  private AssignmentExpressionVisitor assignmentExpressionVisitor;
+  private static final String CONFIG_FUNCTION = "Configure::config".toLowerCase(Locale.ROOT);
+  private static final String WRITE_FUNCTION = "Configure::write".toLowerCase(Locale.ROOT);
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-    if (CAKE_DEBUG_FUNCTIONS.contains(functionName) && tree.arguments().size() == 2) {
-      ExpressionTree firstArg = tree.arguments().get(0);
-      ExpressionTree secondArg = tree.arguments().get(1);
-      if (firstArg.is(Tree.Kind.REGULAR_STRING_LITERAL)
-        && trimQuotes((LiteralTree) firstArg).equals("debug")
-        && isTrue(secondArg)) {
-        context().newIssue(this, tree, MESSAGE);
-      }
+
+    if (CONFIG_FUNCTION.equals(functionName)) {
+      checkArgs(tree, "name", "engine");
+    } else if (WRITE_FUNCTION.equals(functionName)) {
+      checkArgs(tree, "config", "value");
     }
     super.visitFunctionCall(tree);
+  }
+
+  private void checkArgs(FunctionCallTree tree, String arg1Name, String arg2Name) {
+    CallArgumentTree firstArgument = CheckUtils.argument(tree, arg1Name, 0).orElse(null);
+    CallArgumentTree secondArgument = CheckUtils.argument(tree, arg2Name, 1).orElse(null);
+    if (firstArgument != null && secondArgument != null
+      && firstArgument.value().is(Tree.Kind.REGULAR_STRING_LITERAL)
+      && trimQuotes((LiteralTree) firstArgument.value()).equals("debug")
+      && isTrue(secondArgument.value())) {
+      context().newIssue(this, tree, MESSAGE);
+    }
   }
 
   private boolean isTrue(ExpressionTree tree) {
@@ -63,20 +70,12 @@ public class CakePhpDebugModeCheck extends PHPVisitorCheck {
       return true;
     }
     if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      Symbol symbol = context().symbolTable().getSymbol(tree);
-      Optional<ExpressionTree> uniqueAssignedValue = assignmentExpressionVisitor.getUniqueAssignedValue(symbol);
+      Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue((VariableIdentifierTree) tree);
       if (uniqueAssignedValue.isPresent()) {
         ExpressionTree expressionTree = uniqueAssignedValue.get();
         return CheckUtils.isTrueValue(expressionTree);
       }
     }
     return false;
-  }
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    this.assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
-    tree.accept(assignmentExpressionVisitor);
-    super.visitCompilationUnit(tree);
   }
 }

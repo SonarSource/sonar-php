@@ -1,0 +1,36 @@
+<p>Session fixation attacks occur when an attacker can force a legitimate user to use a session ID that he knows. To avoid fixation attacks, it's a
+good practice to generate a new session each time a user authenticates and delete/invalidate the existing session (the one possibly known by the
+attacker).</p>
+<h2>Noncompliant Code Example</h2>
+<p>In a <a href="https://symfony.com/doc/current/reference/configuration/security.html#session-fixation-strategy">Symfony Security</a>'s context,
+session fixation protection can be disabled with the value <code>none</code> for the <code>session_fixation_strategy</code> attribute:</p>
+<pre>
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
+return static function (ContainerConfigurator $container) {
+    $container-&gt;extension('security', [
+        'session_fixation_strategy' =&gt; 'none', // Noncompliant
+    ]);
+};
+</pre>
+<h2>Compliant Solution</h2>
+<p>In a <a href="https://symfony.com/doc/current/reference/configuration/security.html#session-fixation-strategy">Symfony Security</a>'s context,
+session fixation protection is enabled by default. It can be explicitly enabled with the values <code>migrate</code> and <code>invalidate</code> for
+the <code>session_fixation_strategy</code> attribute:</p>
+<pre>
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
+return static function (ContainerConfigurator $container) {
+    $container-&gt;extension('security', [
+        'session_fixation_strategy' =&gt; 'migrate', // Compliant
+    ]);
+};
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A2-Broken_Authentication">OWASP Top 10 2017 Category A2</a> -
+  Broken Authentication </li>
+  <li> <a href="https://www.owasp.org/index.php/Session_fixation">OWASP Sesssion Fixation</a> </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/384.html">MITRE, CWE-384</a> - Session Fixation </li>
+</ul>
+

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -30,11 +30,7 @@ public class VariableWithoutObjectsTest {
   public void test() {
     assertThat(PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS)
     .matches("$a")
-    .matches("$$$a")
-    .matches("$a[$b]")
-    .matches("$a{\"foo\"}")
-    .matches("$a{\"foo\"}[$a]")
-    .matches("$a{\"foo\"}{\"foo\"}");
+    .matches("$$$a");
 
   }
 }

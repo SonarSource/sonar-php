@@ -1,6 +1,6 @@
 <?php
 
-$a = flush(); // Noncompliant {{Remove this use of the output from flush; flush doesn't return anything.}}
+$a = flush(); // Noncompliant {{Remove this use of the output from "flush"; "flush" doesn't return anything.}}
 //   ^^^^^
 
 $a = (Flush()); // Noncompliant
@@ -101,3 +101,53 @@ exit(0) ? 0 : 1; // Noncompliant
 $foo ? exit(0) : 42;
 $foo ? 42 : exit(0);
 
+function foo() {}
+$foo = foo(); // Noncompliant
+
+class Foo {
+  public static function a() {}
+//                       ^> {{Function definition.}}
+  public function b() {
+    $a = $this->a(); // Noncompliant {{Remove this use of the output from "Foo::a"; "Foo::a" doesn't return anything.}}
+//       ^^^^^^^^
+    $a = static::a(); // Noncompliant
+  }
+}
+
+$foo = Foo::a(); // Noncompliant
+
+
+abstract class B {
+  public function function1() {
+    $a = $this->function2(); // OK
+  }
+
+  abstract protected function function2() {}
+
+  protected function function3 () {}
+}
+
+class C extends B {
+  protected function function2() {
+    $foo = $this->function3(); // Noncompliant
+    return $foo;
+  }
+}
+
+function function4() {
+  yield "Word";
+}
+$o = function4(); // OK
+
+trait Authorizable
+{
+  public function authorizeToView(Request $request)
+  {
+    return $this->authorizeTo($request, 'view') && $this->authorizeToViewAny($request); // Noncompliant {{Remove this use of the output from "Authorizable::authorizeTo"; "Authorizable::authorizeTo" doesn't return anything.}}
+  }
+
+  public function authorizeTo(Request $request, $ability)
+  {
+    throw_unless($this->authorizedTo($request, $ability), AuthorizationException::class);
+  }
+}

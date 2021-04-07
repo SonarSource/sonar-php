@@ -1,0 +1,167 @@
+<p>Successful Zip Bomb attacks occur when an application expands untrusted archive files without controlling the size of the expanded data, which can
+lead to denial of service. A Zip bomb is usually a malicious archive file of a few kilobytes of compressed data but turned into gigabytes of
+uncompressed data. To achieve this extreme <a href="https://en.wikipedia.org/wiki/Data_compression_ratio">compression ratio</a>, attackers will
+compress irrelevant data (eg: a long string of repeated bytes). </p>
+<h2>Ask Yourself Whether</h2>
+<p>Archives to expand are untrusted and:</p>
+<ul>
+  <li> There is no validation of the number of entries in the archive. </li>
+  <li> There is no validation of the total size of the uncompressed data. </li>
+  <li> There is no validation of the ratio between the compressed and uncompressed archive entry. </li>
+</ul>
+<p>There is a risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<ul>
+  <li> Define and control the ratio between compressed and uncompressed data, in general the data compression ratio for most of the legit archives is
+  1 to 3. </li>
+  <li> Define and control the threshold for maximum total size of the uncompressed data. </li>
+  <li> Count the number of file entries extracted from the archive and abort the extraction if their number is greater than a predefined threshold, in
+  particular it's not recommended to recursively expand archives (an entry of an archive could be also an archive). </li>
+</ul>
+<h2>Sensitive Code Example</h2>
+<p>For <a href="https://www.php.net/manual/en/class.ziparchive.php">ZipArchive</a> module:</p>
+<pre>
+$zip = new ZipArchive();
+if ($zip-&gt;open($file) === true) {
+    $zip-&gt;extractTo('.'); // Sensitive
+    $zip-&gt;close();
+}
+</pre>
+<p>For <a href="https://www.php.net/manual/en/ref.zip.php">Zip</a> module:</p>
+<pre>
+$zip = zip_open($file);
+while ($file = zip_read($zip)) {
+    $filename = zip_entry_name($file);
+    $size = zip_entry_filesize($file);
+
+    if (substr($filename, -1) !== '/') {
+        $content = zip_entry_read($file, zip_entry_filesize($file)); // Sensitive - zip_entry_read() uses zip_entry_filesize()
+        file_put_contents($filename, $content);
+    } else {
+        mkdir($filename);
+    }
+}
+zip_close($zip);
+</pre>
+<h2>Compliant Solution</h2>
+<p>For <a href="https://www.php.net/manual/en/class.ziparchive.php">ZipArchive</a> module:</p>
+<pre>
+define('MAX_FILES', 10000);
+define('MAX_SIZE', 1000000000); // 1 GB
+define('MAX_RATIO', 10);
+define('READ_LENGTH', 1024);
+
+$fileCount = 0;
+$totalSize = 0;
+
+$zip = new ZipArchive();
+if ($zip-&gt;open($file) === true) {
+    for ($i = 0; $i &lt; $zip-&gt;numFiles; $i++) {
+        $filename = $zip-&gt;getNameIndex($i);
+        $stats = $zip-&gt;statIndex($i);
+
+        // Prevent ZipSlip path traversal (S6096)
+        if (strpos($filename, '../') !== false || substr($filename, 0, 1) === '/') {
+            throw new Exception();
+        }
+
+        if (substr($filename, -1) !== '/') {
+            $fileCount++;
+            if ($fileCount &gt; MAX_FILES) {
+                // Reached max. number of files
+                throw new Exception();
+            }
+
+            $fp = $zip-&gt;getStream($filename); // Compliant
+            $currentSize = 0;
+            while (!feof($fp)) {
+                $currentSize += READ_LENGTH;
+                $totalSize += READ_LENGTH;
+
+                if ($totalSize &gt; MAX_SIZE) {
+                    // Reached max. size
+                    throw new Exception();
+                }
+
+                // Additional protection: check compression ratio
+                if ($stats['comp_size'] &gt; 0) {
+                    $ratio = $currentSize / $stats['comp_size'];
+                    if ($ratio &gt; MAX_RATIO) {
+                        // Reached max. compression ratio
+                        throw new Exception();
+                    }
+                }
+
+                file_put_contents($filename, fread($fp, READ_LENGTH), FILE_APPEND);
+            }
+
+            fclose($fp);
+        } else {
+            mkdir($filename);
+        }
+    }
+    $zip-&gt;close();
+}
+</pre>
+<p>For <a href="https://www.php.net/manual/en/ref.zip.php">Zip</a> module:</p>
+<pre>
+define('MAX_FILES', 10000);
+define('MAX_SIZE', 1000000000); // 1 GB
+define('MAX_RATIO', 10);
+define('READ_LENGTH', 1024);
+
+$fileCount = 0;
+$totalSize = 0;
+
+$zip = zip_open($file);
+while ($file = zip_read($zip)) {
+    $filename = zip_entry_name($file);
+
+    // Prevent ZipSlip path traversal (S6096)
+    if (strpos($filename, '../') !== false || substr($filename, 0, 1) === '/') {
+        throw new Exception();
+    }
+
+    if (substr($filename, -1) !== '/') {
+        $fileCount++;
+        if ($fileCount &gt; MAX_FILES) {
+            // Reached max. number of files
+            throw new Exception();
+        }
+
+        $currentSize = 0;
+        while ($data = zip_entry_read($file, READ_LENGTH)) { // Compliant
+            $currentSize += READ_LENGTH;
+            $totalSize += READ_LENGTH;
+
+            if ($totalSize &gt; MAX_SIZE) {
+                // Reached max. size
+                throw new Exception();
+            }
+
+            // Additional protection: check compression ratio
+            if (zip_entry_compressedsize($file) &gt; 0) {
+                $ratio = $currentSize / zip_entry_compressedsize($file);
+                if ($ratio &gt; MAX_RATIO) {
+                    // Reached max. compression ratio
+                    throw new Exception();
+                }
+            }
+
+            file_put_contents($filename, $data, FILE_APPEND);
+        }
+    } else {
+        mkdir($filename);
+    }
+}
+zip_close($zip);
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> -
+  Security Misconfiguration </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/409.html">MITRE, CWE-409</a> - Improper Handling of Highly Compressed Data (Data Amplification)
+  </li>
+  <li> <a href="https://www.bamsoftware.com/hacks/zipbomb/">bamsoftware.com</a> - A better Zip Bomb </li>
+</ul>
+

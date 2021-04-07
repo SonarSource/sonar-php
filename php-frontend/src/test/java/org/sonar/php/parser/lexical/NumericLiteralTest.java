@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -33,8 +33,15 @@ public class NumericLiteralTest {
       .matches("1.2e3")
       .matches("1.234")
       .matches("0b11111111")
+      .matches("0B11111111")
       .matches("0x1A")
+      .matches("0X1A")
       .matches("0123")
-      .matches("1");
+      .matches("1")
+      .matches("0_0")
+      .matches("299_792_458")
+      .matches("0xCAFE_F00D")
+      .matches("0b0101_1111")
+      .matches("6.674_083e-11");
   }
 }

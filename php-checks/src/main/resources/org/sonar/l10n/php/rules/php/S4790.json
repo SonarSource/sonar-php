@@ -1,16 +1,13 @@
 {
-  "title": "哈希数据是安全敏感的",
+  "title": "使用弱哈希算法是安全敏感的",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "tags": [
     "cwe",
+    "spring",
+    "owasp-a6",
     "sans-top25-porous",
     "owasp-a3"
-  ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten",
-    "SANS Top 25"
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-4790",
@@ -18,12 +15,13 @@
   "scope": "Main",
   "securityStandards": {
     "CWE": [
-      759,
-      760,
-      916
+      916,
+      327,
+      328
     ],
     "OWASP": [
-      "A3"
+      "A3",
+      "A6"
     ]
   }
 }

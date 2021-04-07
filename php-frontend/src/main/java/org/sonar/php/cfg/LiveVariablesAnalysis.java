@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -237,9 +237,10 @@ public class LiveVariablesAnalysis {
 
     @Override
     public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-      boolean isCompoundAssignment = tree.getKind() != Tree.Kind.ASSIGNMENT;
-      boolean isUsedAsNamedParameterOrReturn = tree.getParent().is(Tree.Kind.FUNCTION_CALL, Tree.Kind.RETURN_STATEMENT);
-      if (isCompoundAssignment || isUsedAsNamedParameterOrReturn) {
+      boolean isCompoundAssignment = !tree.is(Tree.Kind.ASSIGNMENT, Tree.Kind.NULL_COALESCING_ASSIGNMENT);
+      boolean isUsedAsNamedParameterOrReturn = tree.getParent().is(Tree.Kind.CALL_ARGUMENT, Tree.Kind.RETURN_STATEMENT);
+      boolean isNullCoalescingAssignment = tree.is(Tree.Kind.NULL_COALESCING_ASSIGNMENT);
+      if (isCompoundAssignment || isUsedAsNamedParameterOrReturn || isNullCoalescingAssignment) {
         visitReadVariable(tree.variable());
       }
       if (!visitAssignedVariable(tree.variable())) {
@@ -324,7 +325,7 @@ public class LiveVariablesAnalysis {
     }
 
     private static boolean isLocalVariable(@Nullable Symbol symbol) {
-      return symbol != null && symbol.kind() == Symbol.Kind.VARIABLE;
+      return symbol != null && (symbol.is(Symbol.Kind.VARIABLE) || symbol.is(Symbol.Kind.PARAMETER));
     }
   }
 }

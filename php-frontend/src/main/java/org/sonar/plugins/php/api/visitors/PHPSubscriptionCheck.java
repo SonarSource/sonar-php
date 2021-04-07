@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ import java.util.List;
 import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements PHPCheck {
@@ -57,5 +58,10 @@ public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements 
     this.context = context;
     scanTree(context.tree());
     return context().getIssues();
+  }
+
+  @Override
+  public PreciseIssue newIssue(Tree tree, String message) {
+    return context().newIssue(this, tree, message);
   }
 }

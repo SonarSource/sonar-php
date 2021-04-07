@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -53,8 +54,14 @@ public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
   public void visitToken(SyntaxToken token) {
     super.visitToken(token);
 
-    if (KEYWORDS.contains(token.text().toLowerCase(Locale.ENGLISH))) {
-      check(token, token.text(), "keyword");
+    if (token.text().toLowerCase(Locale.ENGLISH).equals("match")) {
+      if (token.getParent() instanceof MatchExpressionTree) {
+        check(token, token.text(), "keyword");
+      }
+    } else {
+      if (KEYWORDS.contains(token.text().toLowerCase(Locale.ENGLISH))) {
+        check(token, token.text(), "keyword");
+      }
     }
   }
 

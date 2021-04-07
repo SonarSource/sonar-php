@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,7 +22,10 @@ package org.sonar.plugins.php.api.tree;
 import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.expression.PrefixedCastExpressionTreeImpl;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
@@ -33,6 +36,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -41,6 +45,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
@@ -56,12 +61,16 @@ import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MatchConditionClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchDefaultClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
@@ -257,6 +266,11 @@ public interface Tree {
     FUNCTION_CALL(FunctionCallTree.class),
 
     /**
+     * {@link CallArgumentTree}
+     */
+    CALL_ARGUMENT(CallArgumentTree.class),
+
+    /**
      * {@link SpreadArgumentTree}
      */
     SPREAD_ARGUMENT(SpreadArgumentTree.class),
@@ -265,6 +279,11 @@ public interface Tree {
      * {@link TypeTree}
      */
     TYPE(TypeTree.class),
+
+    /**
+     * {@link UnionTypeTree}
+     */
+    UNION_TYPE(UnionTypeTree.class),
 
     /**
      * {@link NamespaceNameTree}
@@ -290,6 +309,11 @@ public interface Tree {
      * {@link FunctionExpressionTree}
      */
     FUNCTION_EXPRESSION(FunctionExpressionTree.class),
+
+    /**
+     * {@link ArrowFunctionExpressionTree}
+     */
+    ARROW_FUNCTION_EXPRESSION(ArrowFunctionExpressionTree.class),
 
     /**
      * {@link LexicalVariablesTree}
@@ -332,6 +356,12 @@ public interface Tree {
      * {@code =}
      */
     ASSIGNMENT(AssignmentExpressionTree.class),
+
+    /**
+     * {@link AssignmentExpressionTree}
+     * {@code ??=}
+     */
+    NULL_COALESCING_ASSIGNMENT(AssignmentExpressionTree.class),
 
     /**
      * {@link AssignmentExpressionTree}
@@ -650,6 +680,11 @@ public interface Tree {
     PREFIXED_CAST_EXPRESSION(PrefixedCastExpressionTreeImpl.class),
 
     /**
+     * {@link ThrowExpressionTree}
+     */
+    THROW_EXPRESSION(ThrowExpressionTree.class),
+
+    /**
      * {@link LiteralTree}
      * {@code null}
      */
@@ -821,6 +856,21 @@ public interface Tree {
     ALTERNATIVE_SWITCH_STATEMENT(SwitchStatementTree.class),
 
     /**
+     * {@link MatchConditionClauseTree}
+     */
+    MATCH_CONDITION_CLAUSE(MatchConditionClauseTree.class),
+
+    /**
+     * {@link MatchDefaultClauseTree}
+     */
+    MATCH_DEFAULT_CLAUSE(MatchDefaultClauseTree.class),
+
+    /**
+     * {@link MatchExpressionTree}
+     */
+    MATCH_EXPRESSION(MatchExpressionTree.class),
+    
+    /**
      * {@link CaseClauseTree}
      */
     CASE_CLAUSE(CaseClauseTree.class),
@@ -955,7 +1005,17 @@ public interface Tree {
     /**
      * {@link ReturnTypeClauseTree}
      */
-    RETURN_TYPE_CLAUSE(ReturnTypeClauseTree.class);
+    RETURN_TYPE_CLAUSE(ReturnTypeClauseTree.class),
+
+    /**
+     * {@link AttributeTree}
+     */
+    ATTRIBUTE(AttributeTree.class),
+
+    /**
+     * {@link AttributeGroupTree}
+     */
+    ATTRIBUTE_GROUP(AttributeGroupTree.class);
 
     final Class<? extends Tree> associatedInterface;
 

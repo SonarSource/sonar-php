@@ -1,14 +1,20 @@
-<p>未经身份验证的LDAP连接可能导致没有访问控制的事务。身份验证及其访问控制是针对LDAP注入的最后一道防线，不应该禁用。</p>
-<p>当创建匿名LDAP连接时，此规则会引发问题。</p>
-<h2>不合规的代码示例</h2>
+<p>LDAP客户端使用“绑定请求”向LDAP服务器进行身份验证，该“绑定请求”提供了<a href ="https://ldapwiki.com/wiki/Simple%20Authentication">简单的身份验证方法</a>。</p>
+<p>LDAP中的简单身份验证可以与三种不同的机制一起使用：</p>
+<ul>
+  <li>通过使用用户名和密码长度为零的绑定请求执行<em>匿名身份验证机制</em>。</li>
+  <li>通过执行密码长度为零的绑定请求，实现<em>未经身份验证的身份验证机制</em>。</li>
+  <li><em>名称/密码验证机制</em>，方法是使用非零长度的密码值执行绑定请求。</li>
+</ul>
+<p>匿名绑定和未经身份验证的绑定允许在不提供密码的情况下访问LDAP目录中的信息，因此强烈建议不要使用它们。</p>
+<h2>不合规示例</h2>
 <pre>
 $ldapconn = ldap_connect("ldap.example.com");
 
 if ($ldapconn) {
-    $ldapbind = ldap_bind($ldapconn); // 不合规；匿名身份验证，不提供用户/密码
+    $ldapbind = ldap_bind($ldapconn); // 不合规； 匿名身份验证，未提供用户名/密码
 }
 </pre>
-<h2>合规的解决方案</h2>
+<h2>合规的方案</h2>
 <pre>
 $ldaprdn  = 'uname';
 $ldappass = 'password';
@@ -16,14 +22,13 @@ $ldappass = 'password';
 $ldapconn = ldap_connect("ldap.example.com");
 
 if ($ldapconn) {
-    $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass); // 合规的
+    $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass); // 合规
 }
 </pre>
 <h2>请参阅</h2>
 <ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication">OWASP Top 10 2017 Category A2</a> - Broken Authentication </li>
   <li> <a href="https://cwe.mitre.org/data/definitions/521.html">CWE-521</a> - Weak Password Requirements </li>
-  <li> OWASP Top 10 2017 Category A2 - Broken Authentication </li>
-  <li> <a href="https://docs.oracle.com/javase/tutorial/jndi/ldap/authentication.html">Modes of Authenticating to LDAP</a> </li>
-  <li> Derived from FindSecBugs rule <a href="https://find-sec-bugs.github.io/bugs.htm#LDAP_ANONYMOUS">LDAP_ANONYMOUS</a> </li>
+  <li> <a href="https://ldapwiki.com/wiki/Simple%20Authentication">ldapwiki.com</a>- Simple Authentication </li>
 </ul>
 

@@ -9,6 +9,7 @@ $a < 2;    // Noncompliant
 
 $funcExpr = function() {};
 function() {};    // Noncompliant
+fn() => NULL;     // Noncompliant
 
 echo "str";
 "str";            // Noncompliant
@@ -19,5 +20,8 @@ $a."str";         // Noncompliant
 $a != 1;  // Noncompliant
 $a === 1; // Noncompliant
 $a !== 1; // Noncompliant
+
+'@phan-var TaskSet $tasks'; // OK
+'literal'; // Noncompliant
 
 ?>

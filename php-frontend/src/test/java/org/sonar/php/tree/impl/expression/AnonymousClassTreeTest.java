@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -42,5 +42,18 @@ public class AnonymousClassTreeTest extends PHPTreeModelTest {
     assertThat(tree.implementsToken()).isNotNull();
     assertThat(tree.superInterfaces()).hasSize(2);
     assertThat(tree.members()).hasSize(1);
+  }
+
+  @Test
+  public void test_with_named_arguments() throws Exception {
+    AnonymousClassTree tree = parse("class (name: 'a') {}", Kind.ANONYMOUS_CLASS);
+    assertThat(tree.callArguments()).hasSize(1);
+  }
+
+  @Test
+  public void with_attributes() throws Exception {
+    AnonymousClassTree tree = parse("#[A1,] class {}", Kind.ANONYMOUS_CLASS);
+    assertThat(tree.attributeGroups()).hasSize(1);
+    assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
   }
 }

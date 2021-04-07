@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2011-2019 SonarSource SA
+ * Copyright (C) 2011-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -24,10 +24,11 @@ import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
+import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.sonar.wsclient.issue.IssueQuery;
+import org.sonarqube.ws.Issues;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,19 +65,13 @@ public class CommonRulesTest {
 
   @Test
   public void tests() throws Exception {
-    assertThat(orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules("common-php:DuplicatedBlocks")).list())
-      .hasSize(2);
-    assertThat(
-      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules("common-php:InsufficientCommentDensity"))
-        .list()).hasSize(2);
-    assertThat(orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules("common-php:FailedUnitTests")).list())
-      .hasSize(1);
-    assertThat(
-      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules("common-php:InsufficientLineCoverage")).list())
-      .hasSize(1);
-    assertThat(
-      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("BLOCKER").rules("php:S3334")).list())
-      .hasSize(1);
+    List<Issues.Issue> issues = Tests.issuesForComponent(PROJECT_KEY);
+
+    assertThat(Tests.issuesForRule(issues,"common-php:DuplicatedBlocks")).hasSize(2);
+    assertThat(Tests.issuesForRule(issues,"common-php:InsufficientCommentDensity")).hasSize(2);
+    assertThat(Tests.issuesForRule(issues,"common-php:FailedUnitTests")).hasSize(1);
+    assertThat(Tests.issuesForRule(issues,"common-php:InsufficientLineCoverage")).hasSize(1);
+    assertThat(Tests.issuesForRule(issues,"php:S3334")).hasSize(1);
   }
 
   /**

@@ -1,24 +1,54 @@
 <p>因为从已编译的应用程序中提取字符串很容易，所以不应该对凭证进行硬编码。这样做，它们几乎肯定会落入攻击者之手。对于分布式应用程序尤其如此。</p>
+<p>过去，它导致了以下漏洞：</p>
+<ul>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-13466">CVE-2019-13466</a> </li>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-15389">CVE-2018-15389</a> </li>
+</ul>
 <p>凭据应该存储在代码之外的强保护加密配置文件或数据库中。</p>
+<p>此规则标记数据库和LDAP连接中使用的硬编码凭据的实例。 它在连接字符串中查找硬编码的凭据，并查找与提供的列表中的任何模式匹配的变量名。</p>
+<p>建议使用其他凭据单词（例如“ oauthToken”，“ secret”，...）自定义此规则的配置。</p>
+<h2>检查是否出现以下情况：</h2>
+<ul>
+  <li> 凭据允许访问敏感组件，例如数据库，文件存储，API或服务。</li>
+  <li> 凭证用于生产环境。</li>
+  <li> 在更新凭据之前，需要重新分发应用程序。</li>
+</ul>
+<p>若出现上述任何情况，代码存在风险</p>
+<h2>推荐的安全编码实践</h2>
+<ul>
+  <li> 将凭据存储在未推送到代码存储库的配置文件中。</li>
+  <li> 将凭据存储在数据库中。 </li>
+  <li> 使用您的云提供商的服务来管理机密文件。 </li>
+  <li> 如果密码已通过源代码公开：请进行更改。</li>
+</ul>
+<h2>敏感代码示例</h2>
+<pre>
+$password = "65DBGgwe4uazdWQA"; // 敏感的
+
+$httpUrl = "https://example.domain?user=user&amp;password=65DBGgwe4uazdWQA" // 敏感的
+$sshUrl = "ssh://user:65DBGgwe4uazdWQA@example.domain" // 敏感的
+</pre>
 <h2>不合规的代码示例</h2>
 <pre>
 $uname = "steve";
 $password = "blue";
 connect($uname, $password);
 </pre>
-<h2>合规的解决方案</h2>
+<h2>Compliant Solution</h2>
 <pre>
-$uname = getEncryptedUser();
-$password = getEncryptedPass();
-connect($uname, $password);
+$user = getUser();
+$password = getPassword(); // Compliant
+
+$httpUrl = "https://example.domain?user=$user&amp;password=$password" // Compliant
+$sshUrl = "ssh://$user:$password@example.domain" // Compliant
 </pre>
 <h2>请参阅</h2>
 <ul>
-  <li> <a href="http://cwe.mitre.org/data/definitions/798">MITRE, CWE-798</a> - Use of Hard-coded Credentials </li>
-  <li> <a href="http://cwe.mitre.org/data/definitions/259">MITRE, CWE-259</a> - Use of Hard-coded Password </li>
-  <li> <a href="https://www.securecoding.cert.org/confluence/x/qQCHAQ">CERT, MSC03-J.</a> - Never hard code sensitive information </li>
-  <li> OWASP Top 10 2017 Category A2 - Broken Authentication </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication">OWASP Top 10 2017 Category A2</a> - Broken Authentication </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/798">MITRE, CWE-798</a> - Use of Hard-coded Credentials </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/259">MITRE, CWE-259</a> - Use of Hard-coded Password </li>
+  <li> <a href="https://wiki.sei.cmu.edu/confluence/x/OjdGBQ">CERT, MSC03-J.</a> - Never hard code sensitive information </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
-  <li> Derived from FindSecBugs rule <a href="http://h3xstream.github.io/find-sec-bugs/bugs.htm#HARD_CODE_PASSWORD">Hard Coded Password</a> </li>
+  <li> Derived from FindSecBugs rule <a href="https://h3xstream.github.io/find-sec-bugs/bugs.htm#HARD_CODE_PASSWORD">Hard Coded Password</a> </li>
 </ul>
 

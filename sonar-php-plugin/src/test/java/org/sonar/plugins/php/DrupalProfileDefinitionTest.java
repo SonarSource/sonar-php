@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,9 +20,10 @@
 package org.sonar.plugins.php;
 
 import org.junit.Test;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
-import org.sonar.php.checks.CheckList;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInActiveRule;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
 import org.sonar.plugins.php.api.Php;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,15 +32,19 @@ public class DrupalProfileDefinitionTest {
 
   @Test
   public void profile_creation() {
-    ValidationMessages validation = ValidationMessages.create();
+    Context context = new Context();
+    new DrupalProfileDefinition().define(context);
+    BuiltInQualityProfile profile = context.profile("php", "Drupal");
 
-    DrupalProfileDefinition definition = new DrupalProfileDefinition(new FakeProfileParser());
-    RulesProfile profile = definition.createProfile(validation);
+    assertThat(profile.language()).isEqualTo(Php.KEY);
+    assertThat(profile.name()).isEqualTo("Drupal");
+    assertThat(profile.rules()).hasSize(21);
 
-    assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
-    assertThat(profile.getName()).isEqualTo("Drupal");
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(21);
-    assertThat(validation.hasErrors()).isFalse();
+    BuiltInActiveRule lineLengthRule = profile.rule(RuleKey.of("php", "S103"));
+    assertThat(lineLengthRule.overriddenParam("maximumLineLength").overriddenValue()).isEqualTo("140");
+
+    BuiltInActiveRule ruleS4833 = profile.rule(RuleKey.of("php", "S4833"));
+    assertThat(ruleS4833.overriddenParams()).isEmpty();
   }
 
 }

@@ -1,5 +1,5 @@
 {
-  "title": "不应禁用SSL\/TLS证书链的信任验证",
+  "title": "在SSL \/ TLS连接期间应验证服务器证书",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {
@@ -7,10 +7,23 @@
     "constantCost": "5min"
   },
   "tags": [
-    "ssl"
+    "cwe",
+    "privacy",
+    "owasp-a6",
+    "ssl",
+    "owasp-a3"
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-4830",
   "sqKey": "S4830",
-  "scope": "Main"
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      295
+    ],
+    "OWASP": [
+      "A6",
+      "A3"
+    ]
+  }
 }

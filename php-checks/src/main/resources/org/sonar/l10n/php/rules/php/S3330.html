@@ -1,26 +1,63 @@
-<p>The <code>HttpOnly</code> cookie属性告诉浏览器要防止客户端脚本使用该属性读取cookie，使用该属性可以在很大程度上抵御跨站点脚本攻击(XSS)。
-因此，作为预防措施，应该在所有cookie集服务器端(如会话id cookie)上默认设置该属性。</p>
-<p>可以通过编程方式设置属性，也可以通过配置文件全局设置属性。</p>
-<p>这条规则引发了一个问题：</p>
+<p>
+当Cookie的<code> HttpOnly </code>属性设置为<em> true </em>时，
+浏览器保证没有客户端脚本将能够读取它。
+在大多数情况下，当创建cookie时，<code> HttpOnly </code>的默认值为<em> false </em>，
+这取决于开发人员来决定是否可以通过客户端脚本读取cookie的内容。
+由于大多数跨站点脚本（XSS）攻击都是针对会话cookie的盗窃，
+因此<code> HttpOnly </code>属性可以帮助减少其影响，因为无法利用XSS漏洞进行窃取会话cookie。
+</p>
+<h2>检查是否出现下述情况</h2>
 <ul>
-  <li> 当<code>php.ini</code> 中缺少<code>HttpOnly</code>或显式设置为false时 </li>
-  <li> 当<code>setcookie()</code>的最后一个参数被显式设置为false时 </li>
+  <li>Cookie是敏感的，用于验证用户身份，例如<em> session-cookie </em></li>
+  <li><code> HttpOnly </code>属性提供了额外的保护（例如，<em> XSRF-TOKEN cookie </em> / CSRF令牌不是这种情况）</li>
 </ul>
-<h2>不合规的代码示例</h2>
+<p>若存在上述任何一种情况，则代码存在风险</p>
+<h2>推荐的安全编码实践</h2>
+<ul>
+  <li>默认情况下，大多数cookie的<code> HttpOnly </code>标志应设置为<em> true </em>，对于会话/敏感安全性cookie来说，它是必需的。</li>
+</ul>
+<h2>敏感代码示例</h2>
+<p>在<em> php.ini </em>中，您可以为会话cookie指定安全敏感的标志：</p>
 <pre>
-; 在php.ini文件中
-session.cookie_httponly=false  ;不合规；显式设置为false
-
-// 在file.php文件中
-setcookie($name, $value, $expire, $path, $domain, $secure, false);  // 不合规；显式设置为false
+session.cookie_httponly = 0;  // 敏感：此敏感的会话cookie是在httponly标志设置为false的情况下创建的，因此在XSS漏洞的情况下很容易被盗
+</pre>
+<p>PHP代码中的相同内容：</p>
+<pre>
+session_set_cookie_params($lifetime, $path, $domain, true, false);  // 敏感：此敏感会话cookie是在httponly标志（第五个参数）设置为false的情况下创建的，因此在XSS漏洞的情况下很容易被盗
+</pre>
+<p>如果您在PHP代码中创建了一个自定义安全敏感的cookie，请执行以下操作：</p>
+<pre>
+$value = "sensitive data";
+setcookie($name, $value, $expire, $path, $domain, true, false); // 敏感：此敏感Cookie是通过将httponly标志（第七个参数）设置为false来创建的，因此在XSS漏洞的情况下可以很容易地将其窃取
+</pre>
+<p>默认情况下，<a href="https://www.php.net/manual/en/function.setcookie.php"><code> setcookie </code></a>和
+<a href ="https://www.php.net/manual/zh/function.setrawcookie.php"><code> setrawcookie </code></a>函数将<code> httpOnly </code>标志设置为
+<em> false </em>（第七个参数），因此，在XSS漏洞的情况下，可以很容易地窃取cookie：</p>
+<pre>
+$value = "sensitive data";
+setcookie($name, $value, $expire, $path, $domain, true); // 敏感：使用未定义的httponly标志（第七个参数）创建敏感cookie（默认设置为false）
+setrawcookie($name, $value, $expire, $path, $domain, true); // 敏感：使用未定义的httponly标志（第七个参数）创建敏感cookie（默认设置为false）
+</pre>
+<h2>合规的方案</h2>
+<pre>
+session.cookie_httponly = 1; // 合规：敏感cookie受到保护，以防盗窃（cookie_httponly = 1）
+</pre>
+<pre>
+session_set_cookie_params($lifetime, $path, $domain, true, true); // 合规：由于将第五个参数设置为true（HttpOnly = true），因此敏感的cookie可以防止盗窃
+</pre>
+<pre>
+$value = "sensitive data";
+setcookie($name, $value, $expire, $path, $domain, true, true); // 合规：由于将第七个参数设置为true（HttpOnly = true），因此敏感的cookie可以防止盗窃
+setrawcookie($name, $value, $expire, $path, $domain, true, true); // 合规：由于将第七个参数设置为true（HttpOnly = true），因此敏感的cookie可以防止盗窃
 </pre>
 <h2>请参阅</h2>
 <ul>
+  <li> <a href="https://www.owasp.org/index.php/HttpOnly">OWASP HttpOnly</a> </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A7-Cross-Site_Scripting_(XSS)">OWASP Top 10 2017 Category A7</a> - Cross-Site Scripting
+  (XSS) </li>
   <li> <a href="http://cwe.mitre.org/data/definitions/79.html">CWE-79</a> - Improper Neutralization of Input During Web Page Generation ('Cross-site
   Scripting') </li>
   <li> <a href="https://cwe.mitre.org/data/definitions/1004.html">CWE-1004</a> - Sensitive Cookie Without 'HttpOnly' Flag </li>
-  <li> OWASP Top 10 2017 Category A7 - Cross-Site Scripting (XSS) </li>
-  <li> <a href="https://www.owasp.org/index.php/HttpOnly">OWASP HttpOnly</a> </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat1">SANS Top 25</a> - Insecure Interaction Between Components </li>
   <li> Derived from FindSecBugs rule <a href="https://find-sec-bugs.github.io/bugs.htm#HTTPONLY_COOKIE">HTTPONLY_COOKIE</a> </li>
 </ul>

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2011-2019 SonarSource SA
+ * Copyright (C) 2011-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -62,9 +62,9 @@ public class PHPIntegrationTest {
   public void projectMetric() {
     SoftAssertions softly = new SoftAssertions();
     // Size
-    softly.assertThat(getProjectMeasureAsDouble("ncloc")).isEqualTo(47540d);
-    softly.assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(72334d);
-    softly.assertThat(getProjectMeasureAsDouble("files")).isEqualTo(784d);
+    softly.assertThat(getProjectMeasureAsDouble("ncloc")).isEqualTo(47539d);
+    softly.assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(72332d);
+    softly.assertThat(getProjectMeasureAsDouble("files")).isEqualTo(783d);
     softly.assertThat(getProjectMeasureAsDouble("classes")).isEqualTo(645d);
     softly.assertThat(getProjectMeasureAsDouble("functions")).isEqualTo(3394d);
 
@@ -76,16 +76,9 @@ public class PHPIntegrationTest {
     softly.assertThat(getProjectMeasureAsDouble("public_api")).isNull();
 
     // Complexity
-    softly.assertThat(getProjectMeasureAsDouble("function_complexity")).isEqualTo(2.1);
-    softly.assertThat(getProjectMeasureAsDouble("class_complexity")).isEqualTo(10.2);
     softly.assertThat(getProjectMeasureAsDouble("file_complexity")).isEqualTo(8.6);
-    softly.assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(6705.0);
-    softly.assertThat(getProjectMeasureAsDouble("cognitive_complexity")).isEqualTo(5083.0);
-    softly.assertThat(getProjectMeasure("function_complexity_distribution").getValue())
-      .isEqualTo("1=2408;2=580;4=203;6=77;8=48;10=14;12=64");
-    softly.assertThat(getProjectMeasure("file_complexity_distribution").getValue())
-      .isEqualTo("0=442;5=164;10=104;20=32;30=28;60=5;90=9");
-
+    softly.assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(6702.0);
+    softly.assertThat(getProjectMeasureAsDouble("cognitive_complexity")).isEqualTo(5080.0);
     softly.assertAll();
   }
 
@@ -114,8 +107,6 @@ public class PHPIntegrationTest {
     softly.assertThat(getFileMeasureAsDouble("public_api")).isNull();
 
     // Complexity
-    softly.assertThat(getFileMeasureAsDouble("function_complexity")).isEqualTo(2.7);
-    softly.assertThat(getFileMeasureAsDouble("class_complexity")).isEqualTo(8.0);
     softly.assertThat(getFileMeasureAsDouble("file_complexity")).isEqualTo(8.0);
     softly.assertThat(getFileMeasureAsDouble("complexity")).isEqualTo(8.0);
     softly.assertThat(getFileMeasureAsDouble("cognitive_complexity")).isEqualTo(5.0);

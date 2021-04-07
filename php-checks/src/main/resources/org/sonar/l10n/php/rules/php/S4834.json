@@ -1,21 +1,12 @@
 {
   "title": "控制权限是安全敏感的",
   "type": "SECURITY_HOTSPOT",
-  "status": "ready",
+  "status": "deprecated",
   "tags": [
-    "sans-top25-porous",
-    "owasp-a5"
+    
   ],
-  "standards": [
-    "OWASP Top Ten"
-  ],
-  "defaultSeverity": "Critical",
+  "defaultSeverity": "Minor",
   "ruleSpecification": "RSPEC-4834",
   "sqKey": "S4834",
-  "scope": "Main",
-  "securityStandards": {
-    "OWASP": [
-      "A5"
-    ]
-  }
+  "scope": "Main"
 }

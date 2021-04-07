@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -33,7 +33,12 @@ public class ExpressionStatementTest {
       .matches("1 + 1;")
       .matches("yield $a;")
       .matches("yield +6;")
-      .matches("yield *6;");
+      .matches("yield *6;")
+      .matches("foo(MATCH);")
+      .matches("foo\\match();")
+      .matches("match($a);")
+      .matches("match($a) {$b=>2};")
+    ;
   }
 
 }

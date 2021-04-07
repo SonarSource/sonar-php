@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -42,12 +42,6 @@ public class BooleanEqualityComparisonCheck extends PHPVisitorCheck {
     Kind.NOT_EQUAL_TO,
     Kind.ALTERNATIVE_NOT_EQUAL_TO
   };
-
-  @Override
-  public void visitConditionalExpression(ConditionalExpressionTree tree) {
-    check(tree.condition(), tree.falseExpression(), tree.trueExpression());
-    super.visitConditionalExpression(tree);
-  }
 
   @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {

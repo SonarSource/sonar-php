@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,7 +22,10 @@ package org.sonar.plugins.php.api.visitors;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
@@ -33,6 +36,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -41,6 +45,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
@@ -56,6 +61,9 @@ import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MatchConditionClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchDefaultClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
@@ -63,6 +71,7 @@ import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.PrefixedCastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
@@ -144,6 +153,8 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitType(TypeTree tree);
 
+  void visitUnionType(UnionTypeTree tree);
+
   void visitBuiltInType(BuiltInTypeTree tree);
 
   void visitReturnTypeClause(ReturnTypeClauseTree tree);
@@ -170,6 +181,12 @@ public interface VisitorCheck extends PHPCheck {
   void visitUseStatement(UseStatementTree tree);
 
   void visitUnsetVariableStatement(UnsetVariableStatementTree tree);
+
+  void visitMatchConditionClause(MatchConditionClauseTree tree);
+
+  void visitMatchDefaultClause(MatchDefaultClauseTree tree);
+
+  void visitMatchExpression(MatchExpressionTree tree);
 
   void visitDefaultClause(DefaultClauseTree tree);
 
@@ -224,6 +241,7 @@ public interface VisitorCheck extends PHPCheck {
   /**
    * [ START ] Expression
    */
+  void visitThrowExpression(ThrowExpressionTree tree);
 
   void visitCastExpression(CastExpressionTree tree);
 
@@ -287,6 +305,8 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitFunctionExpression(FunctionExpressionTree tree);
 
+  void visitArrowFunctionExpression(ArrowFunctionExpressionTree tree);
+
   void visitNewExpression(NewExpressionTree tree);
 
   void visitPostfixExpression(UnaryExpressionTree tree);
@@ -297,11 +317,17 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitHeredoc(HeredocStringLiteralTree tree);
 
+  void visitAttributeGroup(AttributeGroupTree tree);
+
+  void visitAttribute(AttributeTree tree);
+
   /**
    * @deprecated since 3.1. Use {@link #visitEchoTagStatement(EchoTagStatementTree)}
    */
   @Deprecated
   void visitExpressionListStatement(ExpressionListStatementTree tree);
+
+  void visitCallArgument(CallArgumentTree tree);
 
   /**
    * [ END ] Expression

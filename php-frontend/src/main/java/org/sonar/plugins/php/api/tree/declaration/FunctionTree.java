@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
  * Common interface for all kinds of <a href="http://php.net/manual/en/language.functions.php">function</a>.
  */
 @Beta
-public interface FunctionTree extends Tree {
+public interface FunctionTree extends Tree, HasAttributes {
 
   SyntaxToken functionToken();
 

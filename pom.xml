@@ -5,16 +5,16 @@
   <parent>
     <groupId>org.sonarsource.parent</groupId>
     <artifactId>parent</artifactId>
-    <version>49</version>
+    <version>55</version>
   </parent>
 
   <groupId>org.sonarsource.php</groupId>
   <artifactId>php</artifactId>
-  <version>3.1-SNAPSHOT</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
 
-  <name>SonarPHP</name>
-  <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
+  <name>SonarSource PHP analyzer</name>
+  <url>http://redirect.sonarsource.com/plugins/php.html</url>
   <inceptionYear>2010</inceptionYear>
   <organization>
     <name>SonarSource and Akram Ben Aissi</name>
@@ -64,14 +64,12 @@
   </scm>
   <issueManagement>
     <system>JIRA</system>
-    <url>http://jira.codehaus.org/browse/SONARPHP</url>
+    <url>https://jira.sonarsource.com/projects/SONARPHP</url>
   </issueManagement>
-  <ciManagement>
-    <system>Cloudbees</system>
-    <url>https://sonarplugins.ci.cloudbees.com/job/php/</url>
-  </ciManagement>
 
   <properties>
+    <revision>3.16-SNAPSHOT</revision>
+    <version.enforcer.plugin>3.0.0-M3</version.enforcer.plugin>
     <gitRepositoryName>sonar-php</gitRepositoryName>
     <license.title>SonarQube PHP Plugin</license.title>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
@@ -81,22 +79,23 @@
 
     <!-- JAR versions -->
     <version.assertj>3.5.2</version.assertj>
-    <version.commons-io>2.5</version.commons-io>
-    <version.commons-lang>2.6</version.commons-lang>
-    <version.junit>4.10</version.junit>
+    <version.commons-lang>3.10</version.commons-lang>
+    <version.junit>4.13.1</version.junit>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>2.21.0</version.mockito>
-    <version.sonar>7.3-alpha1</version.sonar>
+    <version.sonar>7.9</version.sonar>
     <version.staxmate>2.0.1</version.staxmate>
-    <version.sonar-orchestrator>3.24.0.1993</version.sonar-orchestrator>
-    <version.sslr>1.23</version.sslr>
-    <version.sslr-squid-bridge>2.7.0.377</version.sslr-squid-bridge>
+    <version.sonar-orchestrator>3.35.0.2707</version.sonar-orchestrator>
+    <version.sslr>1.24.0.633</version.sslr>
     <version.guava>26.0-jre</version.guava>
-    <version.sonarlint>3.0.0.1140</version.sonarlint>
+    <version.sonarlint>4.7.0.12286</version.sonarlint>
     <version.analyzer-commons>1.10.2.456</version.analyzer-commons>
 
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>
+
+    <!-- FIXME fix javadoc errors and remove this -->
+    <doclint>none</doclint>
   </properties>
 
   <dependencyManagement>
@@ -123,37 +122,9 @@
         <version>${version.sslr}</version>
       </dependency>
       <dependency>
-        <groupId>org.sonarsource.sslr-squid-bridge</groupId>
-        <artifactId>sslr-squid-bridge</artifactId>
-        <version>${version.sslr-squid-bridge}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.picocontainer</groupId>
-            <artifactId>picocontainer</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
         <version>${version.commons-lang}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>${version.commons-io}</version>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -250,6 +221,33 @@
   </dependencyManagement>
 
   <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.1.0</version>
+        <configuration>
+          <updatePomFile>true</updatePomFile>
+          <flattenMode>resolveCiFriendliesOnly</flattenMode>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>flatten.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -258,7 +256,7 @@
           <version>${version.sonar-packaging-maven-plugin}</version>
           <configuration>
             <sonarLintSupported>true</sonarLintSupported>
-            <sonarQubeMinVersion>6.7</sonarQubeMinVersion> <!-- allow to depend on API >=6.7 but run on LTS -->
+            <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
             <skipDependenciesPackaging>true</skipDependenciesPackaging>
           </configuration>
         </plugin>
@@ -272,6 +270,16 @@
       <modules>
         <module>its</module>
       </modules>
+    </profile>
+    <profile>
+      <!-- Use javac's release flag for Java 9 and higher -->
+      <id>java9+</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.release>8</maven.compiler.release>
+      </properties>
     </profile>
   </profiles>
 

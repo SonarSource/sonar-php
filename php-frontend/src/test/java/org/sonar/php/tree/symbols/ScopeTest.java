@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -69,6 +69,25 @@ public class ScopeTest extends ParsingTestUtils {
     Scope functionExprScope = getScopeFor(Kind.FUNCTION_EXPRESSION);
 
     assertNotNull(functionExprScope.getSymbol("$e"));
+  }
+
+  @Test
+  public void arrow_function_expression_scope() throws Exception {
+    Scope scope = getScopeFor(Kind.ARROW_FUNCTION_EXPRESSION);
+
+    assertThat(scope.getSymbols(Symbol.Kind.PARAMETER)).extracting(Symbol::name).containsExactlyInAnyOrder("$a", "$d");
+    assertThat(scope.getSymbols(Symbol.Kind.VARIABLE)).isEmpty();
+    Symbol symbolC = scope.getSymbol("$c");
+    Symbol symbolD = scope.getSymbol("$d");
+    assertThat(symbolC).isNotNull();
+    assertThat(symbolC.kind()).isEqualTo(Symbol.Kind.VARIABLE);
+    assertThat(symbolD).isNotNull();
+    assertThat(scope.getSymbol("$d", Symbol.Kind.PARAMETER)).isEqualTo(symbolD);
+    assertThat(scope.getSymbol("$d", Symbol.Kind.VARIABLE)).isNull();
+
+    Scope functionScope = getScopeFor(Kind.FUNCTION_DECLARATION);
+    assertThat(symbolC).isEqualTo(functionScope.getSymbol("$c"));
+    assertThat(symbolD).isNotEqualTo(functionScope.getSymbol("$d"));
   }
 
   @Test

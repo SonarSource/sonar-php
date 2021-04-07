@@ -1,0 +1,34 @@
+<p>The PHPUnit test runner does execute public methods defined within test classes that have a name starting with <em>"test"</em> or the
+<em>@test</em> annotation. Methods that do not convey to this will not get executed. </p>
+<p>This rule raises an issue on methods marked as test methods (by name or annotation) but do not have a public visibility. An issue is also raised on
+public methods that are not marked as tests, do contain assertions, and are not called from within another discoverable test method within the class.
+No issues are raised in abstract classes. </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+class MyTest extends \PHPUnit\Framework\TestCase {
+    private function testA() { // Noncompliant
+        $this-&gt;assertTrue(getValue());
+    }
+
+    public function b() { // Noncompliant
+        $this-&gt;assertTrue(getValue());
+    }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+class MyTest extends \PHPUnit\Framework\TestCase {
+    public function testA() { // Compliant
+        $this-&gt;assertTrue(getValue());
+    }
+
+    public function testB() {
+        $this-&gt;b();
+    }
+
+    public function b() { // Compliant
+        $this-&gt;assertTrue(getValue());
+    }
+}
+</pre>
+

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -39,6 +39,12 @@ public class MethodDeclarationTest {
       .matches("function f () : bool {}")
       .matches("function f () : ?bool {}")
       .matches("function if() {}")
+      .matches("function match() {}")
+      .matches("#[A1(4)] public function f() {}")
+      .matches("public function __construct(private $prop) {}")
+      .matches("public function __construct(public $prop) {}")
+      .matches("public function __construct(protected $prop) {}")
+      .notMatches("public function __construct(var $prop) {}")
     ;
   }
 

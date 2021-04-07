@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -23,7 +23,8 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.Tree;
 
 /**
- * This interface represents type clause (appearing in function return type or parameter type), which can be:
+ * This interface represents type clause (appearing in function return type, parameter type or class property type (since PHP 7.4),
+ * which can be:
  * <ul>
  *   <li>{@link Kind#BUILT_IN_TYPE} see {@link BuiltInTypeTree}
  *   <li>{@link Kind#NAMESPACE_NAME} for custom class or interface type

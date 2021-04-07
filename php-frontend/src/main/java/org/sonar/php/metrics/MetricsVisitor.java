@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -33,12 +34,10 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class MetricsVisitor extends PHPSubscriptionCheck {
 
-  private static final Number[] LIMITS_COMPLEXITY_FUNCTIONS = {1, 2, 4, 6, 8, 10, 12};
-  private static final Number[] FILES_DISTRIBUTION_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
-
   private static final Kind[] FUNCTION_NODES = {
     Kind.FUNCTION_DECLARATION,
     Kind.FUNCTION_EXPRESSION,
+    Kind.ARROW_FUNCTION_EXPRESSION,
     Kind.METHOD_DECLARATION,
   };
 
@@ -73,24 +72,20 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     if (tree.is(Kind.COMPILATION_UNIT)) {
       fileMeasures.setFileComplexity(ComplexityVisitor.complexity(tree));
       fileMeasures.setFileCognitiveComplexity(CognitiveComplexityVisitor.complexity((CompilationUnitTree) tree));
-    } else if (tree.is(CLASS_NODES)) {
-      fileMeasures.addClassComplexity(ComplexityVisitor.complexity(tree));
-
-    } else if (tree.is(FUNCTION_NODES)) {
-      fileMeasures.addFunctionComplexity(ComplexityVisitor.complexity(tree));
     }
   }
 
   public FileMeasures getFileMeasures(
     PhpFile file,
     CompilationUnitTree tree,
+    SymbolTable symbolTable,
     FileLinesContext fileLinesContext
   ) {
 
-    this.fileMeasures = new FileMeasures(LIMITS_COMPLEXITY_FUNCTIONS, FILES_DISTRIBUTION_BOTTOM_LIMITS);
+    this.fileMeasures = new FileMeasures();
     this.fileLinesContext = fileLinesContext;
 
-    super.analyze(file, tree);
+    super.analyze(file, tree, symbolTable);
 
     setCounterMeasures();
     setLineAndCommentMeasures();

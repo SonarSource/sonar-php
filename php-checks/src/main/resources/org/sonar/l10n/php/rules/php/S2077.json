@@ -1,5 +1,5 @@
 {
-  "title": "执行SQL查询是安全敏感的",
+  "title": "Executing SQL queries is security-sensitive",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
@@ -10,15 +10,10 @@
     "cwe",
     "owasp-a1",
     "sans-top25-insecure",
-    "cert",
+    "bad-practice",
     "sql"
   ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten",
-    "SANS Top 25"
-  ],
-  "defaultSeverity": "Critical",
+  "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-2077",
   "sqKey": "S2077",
   "scope": "Main",

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,9 +21,9 @@ package org.sonar.php.checks;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,8 +38,8 @@ public class CheckListTest {
   public void count() {
     int count = 0;
     List<File> files = new ArrayList<>();
-    for (String folder : new String[] { "src/main/java/org/sonar/php/checks/", "src/main/java/org/sonar/php/checks/security" }) {
-      files.addAll(FileUtils.listFiles(new File(folder), new String[]{"java"}, false));
+    for (String folder : new String[] { "src/main/java/org/sonar/php/checks/", "src/main/java/org/sonar/php/checks/security", "src/main/java/org/sonar/php/checks/phpunit" }) {
+      files.addAll(Arrays.asList(new File(folder).listFiles((f, name) -> name.endsWith("java"))));
     }
     for (File file : files) {
       if (file.getName().endsWith("Check.java")) {

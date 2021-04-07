@@ -28,6 +28,7 @@ $z = "schemeName:/path/\(filename)";
 preg_match('/^O\:\d+\:/', $process->getOutput());
 $v_path .= '/';
 
+$x = file_get_contents("http://www.mywebsite.com"); // Noncompliant
 $x = readfile("http://www.mywebsite.com"); // Noncompliant
 $x = ReadFile("http://www.mywebsite.com"); // Noncompliant
 $x = readfile("php://www.mywebsite.com"); // compliant

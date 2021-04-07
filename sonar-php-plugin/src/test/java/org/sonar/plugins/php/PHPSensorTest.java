@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,15 +21,10 @@ package org.sonar.plugins.php;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
-import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
 import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.lang.reflect.Field;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +32,8 @@ import java.util.stream.Collectors;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
@@ -49,6 +44,8 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
+import org.sonar.api.batch.sensor.cpd.internal.TokensLine;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
@@ -59,38 +56,36 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.scan.issue.filter.FilterableIssue;
-import org.sonar.api.scan.issue.filter.IssueFilterChain;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.duplications.internal.pmd.TokensLine;
-import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
-import org.sonar.php.checks.LeftCurlyBraceEndsLineCheck;
+import org.sonar.php.checks.UncatchableExceptionCheck;
+import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.ProgressReport;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 
 public class PHPSensorTest {
 
   @org.junit.Rule
   public LogTester logTester = new LogTester();
-
-  private ProgressReport progressReport = mock(ProgressReport.class);
 
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
 
@@ -98,16 +93,14 @@ public class PHPSensorTest {
 
   private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 7);
   private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(SONARLINT_DETECTABLE_VERSION);
-  private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION, SonarQubeSide.SERVER);
-  private static final SonarRuntime SONARQUBE_6_7 = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER);
+  private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION, SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
+  private static final SonarRuntime SONARQUBE_6_7 = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
 
   private static final String PARSE_ERROR_FILE = "parseError.php";
   private static final String ANALYZED_FILE = "PHPSquidSensor.php";
+  private static final String TEST_FILE = "Test.php";
 
   private Set<File> tempReportFiles = new HashSet<>();
-
-  @org.junit.Rule
-  public final ExpectedException thrown = ExpectedException.none();
 
   @org.junit.Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder();
@@ -146,6 +139,12 @@ public class PHPSensorTest {
     return new PHPSensor(createFileLinesContextFactory(), checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
+  private PHPSensor createSensor(PHPCheck check) {
+    PHPChecks checks = mock(PHPChecks.class);
+    when(checks.all()).thenReturn(ImmutableList.of(check));
+    return new PHPSensor(createFileLinesContextFactory(), checks, new NoSonarFilter());
+  }
+
   @Test
   public void sensor_descriptor() {
     DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
@@ -164,20 +163,13 @@ public class PHPSensorTest {
     analyseSingleFile(phpSensor, ANALYZED_FILE);
 
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 6);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 8);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COGNITIVE_COMPLEXITY, 6);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 9);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=0;2=2;4=1;6=0;8=0;10=0;12=0");
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, "0=0;5=1;10=0;20=0;30=0;60=0;90=0");
 
-    // the .php file contains NOSONAR at line 34
-    checkNoSonar(componentKey, 33, true, phpSensor);
-    checkNoSonar(componentKey, 34, false, phpSensor);
   }
 
   @Test
@@ -202,25 +194,18 @@ public class PHPSensorTest {
     assertThat(tokensLines.get(7).getValue()).isEqualTo(";");
   }
 
-  private static void checkNoSonar(String componentKey, int line, boolean expected, PHPSensor phpSensor) throws NoSuchFieldException, IllegalAccessException {
-    // retrieve the noSonarFilter, which is private
-    Field field = PHPSensor.class.getDeclaredField("noSonarFilter");
-    field.setAccessible(true);
-    NoSonarFilter noSonarFilter = (NoSonarFilter) field.get(phpSensor);
+  @Test
+  public void test_no_cpd_on_test_files() {
+    String fileName = "cpd.php";
+    String componentKey = "moduleKey:" + fileName;
 
-    // a filter chain that does nothing
-    IssueFilterChain chain = mock(IssueFilterChain.class);
-    when(chain.accept(any(FilterableIssue.class))).thenReturn(true);
+    PHPSensor phpSensor = createSensor();
+    InputFile testFile = inputFile(fileName, Type.TEST);
+    context.fileSystem().add(testFile);
+    phpSensor.execute(context);
 
-    // an issue
-    FilterableIssue issue = mock(FilterableIssue.class);
-    when(issue.line()).thenReturn(line);
-    when(issue.componentKey()).thenReturn(componentKey);
-    when(issue.ruleKey()).thenReturn(RuleKey.parse(CheckList.REPOSITORY_KEY + ":" + LeftCurlyBraceEndsLineCheck.KEY));
-
-    // test the noSonarFilter
-    boolean accepted = noSonarFilter.accept(issue, chain);
-    assertThat(accepted).as("response of noSonarFilter.accept for line " + line).isEqualTo(expected);
+    List<TokensLine> tokensLines = context.cpdTokens(componentKey);
+    assertThat(tokensLines).isNull();
   }
 
   @Test
@@ -259,51 +244,54 @@ public class PHPSensorTest {
     assertThat(context.allIssues()).as("One issue must be raised").isEmpty();
   }
 
+  @Test
+  public void parsing_error_should_not_fail_the_analysis_even_with_fail_fast() {
+    context.setSettings(new MapSettings().setProperty("sonar.internal.analysis.failFast", "true"));
+    analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
+    assertThat(context.allAnalysisErrors()).hasSize(1);
+  }
+
   private void analyseSingleFile(PHPSensor sensor, String fileName) {
-    context.fileSystem().add(inputFile(fileName));
+    addInputFiles(fileName);
     sensor.execute(context);
   }
 
-  private static DefaultInputFile inputFile(String fileName) {
-    try {
-      return TestInputFileBuilder.create("moduleKey", fileName)
-        .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
-        .setType(Type.MAIN)
-        .setCharset(Charset.defaultCharset())
-        .setLanguage(Php.KEY)
-        .initMetadata(new String(java.nio.file.Files.readAllBytes(new File("src/test/resources/" + fileName).toPath()), StandardCharsets.UTF_8)).build();
-    } catch (IOException e) {
-      throw new IllegalStateException("File not found", e);
+  private void addInputFiles(String... paths) {
+    for (String path : paths) {
+      context.fileSystem().add(inputFile(path));
     }
-
   }
 
   @Test
-  public void progress_report_should_be_stopped() throws Exception {
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(), null);
-    createSensor().analyseFiles(context, phpAnalyzer, Collections.emptyList(), progressReport);
-    verify(progressReport).stop();
+  public void init_and_terminate_method_called_only_once() throws Exception {
+    PHPCheck check = spy(new PHPVisitorCheck() {});
+
+    addInputFiles(ANALYZED_FILE, "cpd.php", "empty.php");
+    createSensor(check).execute(context);
+
+    verify(check, times(1)).init();
+    verify(check, times(1)).terminate();
   }
 
   @Test
   public void exception_should_report_file_name() throws Exception {
     PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException());
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
-    DefaultInputFile defaultInputFile = inputFile(ANALYZED_FILE);
-    createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.of(defaultInputFile), progressReport);
+    addInputFiles(ANALYZED_FILE);
+    createSensor(check).execute(context);
     assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Could not analyse PHPSquidSensor.php");
   }
 
   @Test
-  public void cancelled_analysis() throws Exception {
-    PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException(new InterruptedException()));
-    analyseFileWithException(check, inputFile(ANALYZED_FILE), "Analysis cancelled");
-  }
-
-  @Test
-  public void cancelled_analysis_causing_recognition_exception() throws Exception {
-    PHPCheck check = new ExceptionRaisingCheck(new RecognitionException(42, "message", new InterruptedIOException()));
-    analyseFileWithException(check, inputFile(ANALYZED_FILE), "Analysis cancelled");
+  public void exception_should_fail_analysis_if_configured_so() throws Exception {
+    RuntimeException exception = new NumberFormatException();
+    PHPCheck check = new ExceptionRaisingCheck(exception);
+    addInputFiles(ANALYZED_FILE);
+    context.setSettings(new MapSettings().setProperty("sonar.internal.analysis.failFast", "true"));
+    PHPSensor sensor = createSensor(check);
+    assertThatThrownBy(() -> sensor.execute(context))
+      .isInstanceOf(IllegalStateException.class)
+      .hasCause(exception)
+      .hasMessageContaining("PHPSquidSensor.php");
   }
 
   /**
@@ -313,10 +301,12 @@ public class PHPSensorTest {
     FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
 
     String parsingErrorCheckKey = "S2260";
-    ActiveRules activeRules = (new ActiveRulesBuilder())
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey))
+    NewActiveRule activeRule = new NewActiveRule.Builder()
+      .setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey))
       .setName(parsingErrorCheckKey)
-      .activate()
+      .build();
+    ActiveRules activeRules = new ActiveRulesBuilder()
+      .addRule(activeRule)
       .build();
     return new PHPSensor(fileLinesContextFactory, new CheckFactory(activeRules), new NoSonarFilter(), CUSTOM_RULES);
   }
@@ -343,6 +333,24 @@ public class PHPSensorTest {
   }
 
   @Test
+  public void cross_file_issue() {
+    checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S1045")).build());
+    addInputFiles("cross-file/A.php", "cross-file/B.php");
+    createSensor().execute(context);
+    assertThat(context.allIssues()).hasSize(1);
+    Issue issue = context.allIssues().iterator().next();
+    assertThat(issue.ruleKey().rule()).isEqualTo("S1045");
+    assertThat(issue.primaryLocation().inputComponent()).hasToString("cross-file/A.php");
+    assertThat(issue.primaryLocation().textRange().start().line()).isEqualTo(6);
+    assertThat(issue.flows()).extracting(
+      f -> f.locations().get(0).inputComponent().toString(),
+      f -> f.locations().get(0).textRange().start().line()
+    ).containsExactly(
+      tuple("cross-file/A.php", 5)
+    );
+  }
+
+  @Test
   public void should_stop_if_cancel() throws Exception {
     checkFactory = new CheckFactory(getActiveRules());
 
@@ -355,25 +363,24 @@ public class PHPSensorTest {
     context.setCancelled(false);
     analyseSingleFile(createSensor(), ANALYZED_FILE);
 
-    assertThat(context.allIssues()).as("Should have no issue").isNotEmpty();
+    assertThat(context.allIssues()).isNotEmpty();
     assertThat(context.measures("moduleKey:PHPSquidSensor.php")).isNotEmpty();
   }
 
   private static ActiveRules getActiveRules() {
-    return (new ActiveRulesBuilder())
-      // class name check -> PreciseIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S101"))
-      .activate()
-      // inline html in file check -> FileIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1997"))
-      .activate()
-      // line size -> LineIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S103"))
-      .activate()
-      // Modifiers order -> PreciseIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1124"))
-      .activate()
-      .build();
+    // class name check -> PreciseIssue
+    NewActiveRule s101 = newActiveRule("S101");
+    // inline html in file check -> FileIssue
+    NewActiveRule s1997 = newActiveRule("S1997");
+    // line size -> LineIssue
+    NewActiveRule s103 = newActiveRule("S103");
+    // Modifiers order -> PreciseIssue
+    NewActiveRule s1124 = newActiveRule("S1124");
+    return new ActiveRulesBuilder().addRule(s101).addRule(s1997).addRule(s103).addRule(s1124).build();
+  }
+
+  private static NewActiveRule newActiveRule(String ruleKey) {
+    return new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, ruleKey)).build();
   }
 
   @Test
@@ -443,6 +450,26 @@ public class PHPSensorTest {
   }
 
   @Test
+  public void no_measures_for_test_files() {
+    checkFactory = new CheckFactory(new ActiveRulesBuilder()
+      .addRule(newActiveRule("S2187"))
+      .build());
+
+    InputFile testFile = inputFile(TEST_FILE, Type.TEST);
+
+    String testFileKey = testFile.key();
+
+    context.fileSystem().add(testFile);
+    context.setRuntime(NOT_SONARLINT_RUNTIME);
+
+    createSensor().execute(context);
+
+    assertThat(context.allIssues()).isNotEmpty();
+    assertThat(context.measure(testFileKey, CoreMetrics.NCLOC)).isNull();
+
+  }
+
+  @Test
   public void should_use_multi_path_coverage() throws Exception {
     context.setRuntime(SONARQUBE_6_7);
 
@@ -481,6 +508,32 @@ public class PHPSensorTest {
     logTester.clear();
   }
 
+  @Test
+  public void should_disable_rules_for_sonarlint() {
+    checkFactory = new CheckFactory(new ActiveRulesBuilder()
+      .addRule(newActiveRule(UncatchableExceptionCheck.KEY))
+      .build());
+
+    // SonarLint Runtime
+    context.setRuntime(SONARLINT_RUNTIME);
+    analyseSingleFile(createSensor(), "disable_rules_for_sonarlint.php");
+    assertThat(context.allIssues()).hasSize(0);
+
+    // SonarQube Runtime
+    context.setRuntime(NOT_SONARLINT_RUNTIME);
+    analyseSingleFile(createSensor(), "disable_rules_for_sonarlint.php");
+    assertThat(context.allIssues()).hasSize(1);
+  }
+
+  @Test
+  public void should_use_test_file_checks() {
+    TestFileCheck check = new TestFileCheck();
+    InputFile testFile = inputFile(ANALYZED_FILE, Type.TEST);
+    context.fileSystem().add(testFile);
+    createSensor(check).execute(context);
+    assertThat(check.wasTriggered).isTrue();
+  }
+
   @After
   public void tearDown() {
     tempReportFiles.forEach(File::delete);
@@ -508,18 +561,7 @@ public class PHPSensorTest {
     }
   }
 
-  private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
-    thrown.expect(AnalysisException.class);
-    thrown.expectMessage(expectedMessageSubstring);
-    try {
-      createSensor().analyseFiles(context, phpAnalyzer, Collections.singletonList(inputFile), progressReport);
-    } finally {
-      verify(progressReport).cancel();
-    }
-  }
-
-  private static final class ExceptionRaisingCheck extends PHPVisitorCheck {
+  private static class ExceptionRaisingCheck extends PHPVisitorCheck {
 
     private final RuntimeException exception;
 
@@ -530,6 +572,15 @@ public class PHPSensorTest {
     @Override
     public void visitCompilationUnit(CompilationUnitTree tree) {
       throw exception;
+    }
+  }
+
+  private static class TestFileCheck extends PhpUnitCheck {
+    protected boolean wasTriggered = false;
+
+    @Override
+    public void visitCompilationUnit(CompilationUnitTree tree) {
+      wasTriggered = true;
     }
   }
 }

@@ -1,0 +1,16 @@
+{
+  "title": "Class of caught exception should be defined",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "pitfall"
+  ],
+  "defaultSeverity": "Blocker",
+  "ruleSpecification": "RSPEC-5911",
+  "sqKey": "S5911",
+  "scope": "All"
+}

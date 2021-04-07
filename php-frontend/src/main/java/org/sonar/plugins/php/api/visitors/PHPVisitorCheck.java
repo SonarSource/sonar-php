@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -29,7 +29,10 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
@@ -40,6 +43,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -48,6 +52,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
@@ -63,6 +68,9 @@ import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MatchConditionClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchDefaultClauseTree;
+import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
@@ -70,6 +78,7 @@ import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.PrefixedCastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
@@ -113,7 +122,8 @@ import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
 public abstract class PHPVisitorCheck implements VisitorCheck {
-
+  public static final int MAX_DEPTH = 1500;
+  private int depth;
   private CheckContext context;
 
   @Override
@@ -247,6 +257,21 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
   }
 
   @Override
+  public void visitMatchConditionClause(MatchConditionClauseTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitMatchDefaultClause(MatchDefaultClauseTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitMatchExpression(MatchExpressionTree tree) {
+    scan(tree);
+  }
+
+  @Override
   public void visitWhileStatement(WhileStatementTree tree) {
     scan(tree);
   }
@@ -358,6 +383,11 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitNamespaceStatement(NamespaceStatementTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitThrowExpression(ThrowExpressionTree tree) {
     scan(tree);
   }
 
@@ -507,6 +537,11 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
   }
 
   @Override
+  public void visitArrowFunctionExpression(ArrowFunctionExpressionTree tree) {
+    scan(tree);
+  }
+
+  @Override
   public void visitNewExpression(NewExpressionTree tree) {
     scan(tree);
   }
@@ -532,6 +567,11 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
   }
 
   @Override
+  public void visitUnionType(UnionTypeTree tree) {
+    scan(tree);
+  }
+
+  @Override
   public void visitBuiltInType(BuiltInTypeTree tree) {
     scan(tree);
   }
@@ -547,6 +587,21 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
   }
 
   @Override
+  public void visitCallArgument(CallArgumentTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitAttributeGroup(AttributeGroupTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitAttribute(AttributeTree tree) {
+    scan(tree);
+  }
+
+  @Override
   public CheckContext context() {
     return context;
   }
@@ -557,8 +612,10 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
     while (childrenIterator.hasNext()) {
       child = childrenIterator.next();
-      if (child != null) {
+      if (child != null && depth < MAX_DEPTH) {
+        depth++;
         child.accept(this);
+        depth--;
       }
     }
   }
@@ -582,6 +639,7 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public final List<PhpIssue> analyze(CheckContext context) {
+    depth = 0;
     this.context = context;
     visitCompilationUnit(context.tree());
     return context().getIssues();
@@ -593,5 +651,10 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
       throw new IllegalStateException("Symbol not found for " + namespaceNameTree + " at " + context.getPhpFile() + ":" + ((PHPTree) namespaceNameTree).getFirstToken().line());
     }
     return symbol.qualifiedName();
+  }
+
+  @Override
+  public PreciseIssue newIssue(Tree tree, String message) {
+    return context().newIssue(this, tree, message);
   }
 }

@@ -8,10 +8,6 @@
     "sans-top25-porous",
     "owasp-a3"
   ],
-  "standards": [
-    "CWE",
-    "OWASP Top Ten"
-  ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-4792",
   "sqKey": "S4792",

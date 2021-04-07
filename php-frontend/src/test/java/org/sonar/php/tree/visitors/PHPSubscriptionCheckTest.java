@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -30,8 +30,11 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class PHPSubscriptionCheckTest {
 
@@ -45,8 +48,32 @@ public class PHPSubscriptionCheckTest {
     testVisitor.analyze(file, tree);
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
-    assertThat(testVisitor.namespaceNameCounter).isEqualTo(3);
-    assertThat(testVisitor.varIdentifierCounter).isEqualTo(3);
+    assertThat(testVisitor.namespaceNameCounter).isEqualTo(6);
+    assertThat(testVisitor.varIdentifierCounter).isEqualTo(6);
+  }
+
+  @Test
+  public void test_newIssue() {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser();
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse("<?php phpinfo();");
+    PHPSubscriptionCheck testVisitor = new PHPSubscriptionCheck() {
+      @Override
+      public List<Tree.Kind> nodesToVisit() {
+        return ImmutableList.of(Tree.Kind.COMPILATION_UNIT);
+      }
+
+      @Override
+      public void visitNode(Tree tree) {
+        newIssue(tree, "testIssue");
+      }
+    };
+    testVisitor.analyze(new PHPCheckContext(mock(PhpFile.class), tree, null));
+
+    List<PhpIssue> issues = testVisitor.context().getIssues();
+
+    assertThat(issues.size()).isEqualTo(1);
+    assertThat(issues.get(0)).isInstanceOf(PreciseIssue.class);
+    assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo("testIssue");
   }
 
   private class TestSubscription extends PHPSubscriptionCheck {

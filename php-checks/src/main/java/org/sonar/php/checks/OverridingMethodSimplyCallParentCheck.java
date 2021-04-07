@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2019 SonarSource SA
+ * Copyright (C) 2010-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
@@ -109,15 +110,18 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
 
   private static boolean sameArguments(FunctionCallTree functionCallTree, MethodDeclarationTree method) {
     List<String> argumentNames = new ArrayList<>();
-    for (ExpressionTree argument : functionCallTree.arguments()) {
-      if (!argument.is(Kind.VARIABLE_IDENTIFIER)) {
+    for (CallArgumentTree argument : functionCallTree.callArguments()) {
+      if (!argument.value().is(Kind.VARIABLE_IDENTIFIER) || argument.name() != null) {
         return false;
       }
-      argumentNames.add(((VariableIdentifierTree) argument).variableExpression().text());
+      argumentNames.add(((VariableIdentifierTree) argument.value()).variableExpression().text());
     }
 
     List<String> parameterNames = new ArrayList<>();
     for (ParameterTree parameter : method.parameters().parameters()) {
+      if (parameter.initValue() != null) {
+        return false;
+      }
       parameterNames.add(parameter.variableIdentifier().variableExpression().text());
     }
 
