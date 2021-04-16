@@ -4,6 +4,9 @@ if(($str = "foo")) {
 }elseif(($str = "foo")) {}
 if($toto && $str = "foo") {} // Noncompliant
 
+if (($val = value()) && check() ) { // Noncompliant
+}
+
 isNull($str = "foo");
 if(empty(((toto && $str = "foo")))) { // Noncompliant
 }
