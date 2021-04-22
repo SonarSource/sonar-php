@@ -39,7 +39,7 @@ function l($p) {
 
 function l($p) {
   $a = 1;
-  $a += $p;                    // Noncompliant {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
+  $a += $p;                    // OK
   return $a;
 }
 
@@ -115,4 +115,16 @@ return $result;               // OK, global
 if (true) {
   $result = 1;
   return $result;               // OK, global
+}
+
+function value_depends_on_variable_1() {
+    $a = "a";
+    $a = str_replace( 'a', 'b', $a ); // OK
+    return $a;
+}
+
+function value_depends_on_variable_2() {
+    $a = "a";
+    $a = "b" . $a; // OK
+    return $a;
 }

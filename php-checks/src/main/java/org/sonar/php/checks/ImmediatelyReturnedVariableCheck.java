@@ -22,8 +22,10 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractStatementsCheck;
@@ -39,6 +41,7 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = ImmediatelyReturnedVariableCheck.KEY)
 public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
@@ -93,12 +96,14 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
 
   private static List<String> getAssignedVariablesNames(StatementTree currentStatement) {
     ExpressionTree variable = null;
+    ExpressionTree value = null;
 
     if (currentStatement.is(Kind.EXPRESSION_STATEMENT)) {
       ExpressionTree expression = ((ExpressionStatementTree) currentStatement).expression();
 
-      if (expression instanceof AssignmentExpressionTree) {
+      if (expression.is(Kind.ASSIGNMENT, Kind.ASSIGNMENT_BY_REFERENCE)) {
         variable = ((AssignmentExpressionTree) expression).variable();
+        value = ((AssignmentExpressionTree) expression).value();
       }
     }
 
@@ -112,6 +117,10 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
         names.addAll(getVariablesFromList((ListExpressionTree) variable));
       }
 
+      // Ignore assigned variables for which the assigned value depends on the variable itself.
+      UsedVariablesCollector usedVariablesCollector = new UsedVariablesCollector();
+      value.accept(usedVariablesCollector);
+      names.removeAll(usedVariablesCollector.usedVariables);
     }
 
     return names;
@@ -153,4 +162,13 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
     context().newIssue(this, tree, message);
   }
 
+  static class UsedVariablesCollector extends PHPVisitorCheck {
+    private final Set<String> usedVariables = new HashSet<>();
+
+    @Override
+    public void visitVariableIdentifier(VariableIdentifierTree tree) {
+      usedVariables.add(tree.variableExpression().text());
+      super.visitVariableIdentifier(tree);
+    }
+  }
 }
