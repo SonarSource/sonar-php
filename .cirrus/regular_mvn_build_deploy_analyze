@@ -41,7 +41,7 @@ if [ "${GITHUB_BRANCH}" == "master" ] && [ "$PULL_REQUEST" == "false" ]; then
 
   export MAVEN_OPTS="-Xmx1536m -Xms128m"
   mvn deploy sonar:sonar \
-      -Pcoverage,deploy-sonarsource,release \
+      -Pcoverage,deploy-sonarsource,release,sign \
       -Drevision=${PROJECT_VERSION} \
       -Dmaven.test.redirectTestOutputToFile=false \
       -Dsonar.host.url=$SONAR_HOST_URL \
@@ -76,7 +76,7 @@ elif [[ "${GITHUB_BRANCH}" == "branch-"* ]] && [ "$PULL_REQUEST" == "false" ]; t
     . set_maven_build_version $BUILD_NUMBER
     mvn deploy \
       -Drevision=${PROJECT_VERSION} \
-      -Pcoverage,deploy-sonarsource,release \
+      -Pcoverage,deploy-sonarsource,release,sign \
       -B -e -V $*
   else
     echo "======= Found RELEASE version ======="
