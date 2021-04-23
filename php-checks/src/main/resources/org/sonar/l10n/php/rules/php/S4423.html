@@ -1,6 +1,5 @@
-<p>Older versions of SSL/TLS protocol like "SSLv3" have been proven to be insecure.</p>
-<p>This rule raises an issue when an SSL/TLS context is created with an insecure protocol version (ie: a protocol different from "TLSv1.2", "TLSv1.3",
-"DTLSv1.2" or "DTLSv1.3").</p>
+<p>This rule raises an issue when an insecure TLS protocol version is used (ie: a protocol different from "TLSv1.2", "TLSv1.3", "DTLSv1.2" or
+"DTLSv1.3").</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 $ctx = stream_context_create([
