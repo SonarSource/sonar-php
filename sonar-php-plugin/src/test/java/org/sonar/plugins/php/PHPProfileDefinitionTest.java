@@ -40,9 +40,8 @@ public class PHPProfileDefinitionTest {
   public void should_create_sonar_way_profile() {
     ValidationMessages validation = ValidationMessages.create();
 
-    SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(7, 3), SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
     BuiltInQualityProfilesDefinition.Context context = new BuiltInQualityProfilesDefinition.Context();
-    PHPProfileDefinition definition = new PHPProfileDefinition(sonarRuntime);
+    PHPProfileDefinition definition = new PHPProfileDefinition();
     definition.define(context);
     BuiltInQualityProfilesDefinition.BuiltInQualityProfile profile = context.profile("php", "Sonar way");
     assertThat(profile.language()).isEqualTo(Php.KEY);

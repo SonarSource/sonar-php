@@ -21,6 +21,7 @@ package org.sonar.plugins.php;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -46,7 +47,7 @@ public class PHPChecks {
     return new PHPChecks(checkFactory);
   }
 
-  public PHPChecks addChecks(String repositoryKey, Iterable<Class> checkClass) {
+  public PHPChecks addChecks(String repositoryKey, Iterable<Class<?>> checkClass) {
     checksByRepository.add(checkFactory
       .<PHPCheck>create(repositoryKey)
       .addAnnotatedChecks(checkClass));

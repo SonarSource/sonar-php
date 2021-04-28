@@ -54,7 +54,7 @@ public class CheckListTest {
    */
   @Test
   public void test() {
-    Set<Class> checks = CheckList.getAllChecks();
+    Set<Class<?>> checks = CheckList.getAllChecks();
 
     for (Class<?> cls : checks) {
       if (cls != ParsingErrorCheck.class) {
