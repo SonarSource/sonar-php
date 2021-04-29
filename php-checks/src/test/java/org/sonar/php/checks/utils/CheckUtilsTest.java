@@ -20,7 +20,6 @@
 package org.sonar.php.checks.utils;
 
 import com.sonar.sslr.api.typed.ActionParser;
-import com.sonarsource.checks.coverage.UtilityClass;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +48,7 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonarsource.analyzer.commons.checks.coverage.UtilityClass;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

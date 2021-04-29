@@ -20,7 +20,6 @@
 package org.sonar.plugins.php;
 
 import java.util.ArrayList;
-import org.sonar.api.SonarRuntime;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
@@ -30,17 +29,12 @@ public class PHPRulesDefinition implements RulesDefinition {
 
   private static final String REPOSITORY_NAME = "SonarAnalyzer";
   static final String RESOURCE_BASE_PATH = "org/sonar/l10n/php/rules/php";
-  private final SonarRuntime sonarRuntime;
-
-  public PHPRulesDefinition(SonarRuntime sonarRuntime) {
-    this.sonarRuntime = sonarRuntime;
-  }
 
   @Override
   public void define(Context context) {
     NewRepository repository = context.createRepository(CheckList.REPOSITORY_KEY, Php.KEY).setName(REPOSITORY_NAME);
 
-    RuleMetadataLoader ruleMetadataLoader = new RuleMetadataLoader(RESOURCE_BASE_PATH, PHPProfileDefinition.SONAR_WAY_PATH, sonarRuntime);
+    RuleMetadataLoader ruleMetadataLoader = new RuleMetadataLoader(RESOURCE_BASE_PATH, PHPProfileDefinition.SONAR_WAY_PATH);
 
     ruleMetadataLoader.addRulesByAnnotatedClass(repository, new ArrayList<>(CheckList.getAllChecks()));
 

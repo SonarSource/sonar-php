@@ -74,8 +74,8 @@ public class CheckList {
   private CheckList() {
   }
 
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
+  public static List<Class<?>> getChecks() {
+    return ImmutableList.of(
       AbortedTestCaseCheck.class,
       AliasFunctionUsageCheck.class,
       AllBranchesIdenticalCheck.class,
@@ -289,8 +289,8 @@ public class CheckList {
       ZipEntryCheck.class);
   }
 
-  public static Iterable<Class> getPhpIniChecks() {
-    return ImmutableList.<Class>of(
+  public static Iterable<Class<?>> getPhpIniChecks() {
+    return ImmutableList.of(
       AllowUrlCheck.class,
       CookiesSecureCheck.class,
       CgiForceRedirectCheck.class,
@@ -302,8 +302,8 @@ public class CheckList {
       SessionUseTransSidCheck.class);
   }
 
-  public static Set<Class> getAllChecks() {
-    return ImmutableSet.<Class>builder()
+  public static Set<Class<?>> getAllChecks() {
+    return ImmutableSet.<Class<?>>builder()
       .addAll(CheckList.getChecks())
       .addAll(CheckList.getPhpIniChecks())
       .build();

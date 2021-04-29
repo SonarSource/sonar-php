@@ -20,13 +20,13 @@
 package org.sonar.php.checks.utils;
 
 import com.sonar.sslr.api.typed.ActionParser;
-import com.sonarsource.checks.coverage.UtilityClass;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonarsource.analyzer.commons.checks.coverage.UtilityClass;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

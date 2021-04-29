@@ -112,7 +112,7 @@ public class PHPSensorTest {
     }
 
     @Override
-    public ImmutableList<Class> checkClasses() {
+    public ImmutableList<Class<?>> checkClasses() {
       return ImmutableList.of(MyCustomRule.class);
     }
   }};

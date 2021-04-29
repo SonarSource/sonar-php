@@ -37,8 +37,7 @@ public class PHPRulesDefinitionTest {
 
   @Test
   public void testActivationSonarLint() {
-    SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(7, 3), SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
-    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition(sonarRuntime);
+    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository("php");

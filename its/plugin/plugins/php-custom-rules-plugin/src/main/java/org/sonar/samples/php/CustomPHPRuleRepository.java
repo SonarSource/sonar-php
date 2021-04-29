@@ -47,7 +47,7 @@ public class CustomPHPRuleRepository implements RulesDefinition, PHPCustomRuleRe
   }
 
   @Override
-  public List<Class> checkClasses() {
+  public List<Class<?>> checkClasses() {
     return Arrays.asList(CustomPHPVisitorCheck.class, CustomPHPSubscriptionCheck.class);
   }
 }

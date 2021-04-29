@@ -21,7 +21,6 @@ package org.sonar.plugins.php.api.tests;
 
 import com.google.common.base.Preconditions;
 import com.sonar.sslr.api.typed.ActionParser;
-import com.sonarsource.checks.verifier.MultiFileVerifier;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,6 +44,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+import org.sonarsource.analyzer.commons.checks.verifier.MultiFileVerifier;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

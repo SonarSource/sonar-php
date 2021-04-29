@@ -49,17 +49,11 @@ public final class PHPProfileDefinition implements BuiltInQualityProfilesDefinit
   public static final String SONAR_WAY_PROFILE = "Sonar way";
   public static final String SONAR_WAY_PATH = "org/sonar/l10n/php/rules/php/Sonar_way_profile.json";
 
-  private final SonarRuntime sonarRuntime;
-
-  public PHPProfileDefinition(SonarRuntime sonarRuntime) {
-    this.sonarRuntime = sonarRuntime;
-  }
-
   @Override
   public void define(Context context) {
     NewBuiltInQualityProfile sonarWay = context.createBuiltInQualityProfile(SONAR_WAY_PROFILE, Php.KEY);
     sonarWay.activateRule("common-" + Php.KEY, "DuplicatedBlocks");
-    BuiltInQualityProfileJsonLoader.load(sonarWay, CheckList.REPOSITORY_KEY, SONAR_WAY_PATH, RESOURCE_BASE_PATH, sonarRuntime);
+    BuiltInQualityProfileJsonLoader.load(sonarWay, CheckList.REPOSITORY_KEY, SONAR_WAY_PATH);
     getSecurityRuleKeys().forEach(key -> sonarWay.activateRule(key.repository(), key.rule()));
     sonarWay.done();
   }
