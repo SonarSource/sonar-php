@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -38,7 +37,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * </pre>
  *
  */
-@Beta
 public interface ParameterTree extends Tree, HasAttributes {
 
   @Nullable

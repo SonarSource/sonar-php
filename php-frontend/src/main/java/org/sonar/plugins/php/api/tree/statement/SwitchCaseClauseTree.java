@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -30,7 +29,6 @@ import java.util.List;
  * General interface for <a href="http://php.net/manual/en/control-structures.switch.php">switch</a> clauses.
  * Parent interface for {@link CaseClauseTree} and {@link DefaultClauseTree}.
  */
-@Beta
 public interface SwitchCaseClauseTree extends Tree {
 
   SyntaxToken caseToken();

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -43,7 +42,6 @@ import javax.annotation.Nullable;
  *  {@link #absoluteSeparator()} {@link #namespaces()} {@link #name()} // fully qualified
  * <pre/>
  */
-@Beta
 public interface NamespaceNameTree extends ExpressionTree, TypeNameTree {
 
   @Nullable

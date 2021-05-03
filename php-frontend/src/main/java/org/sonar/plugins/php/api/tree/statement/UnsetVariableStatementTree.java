@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -30,7 +29,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   unset ( {@link #variables()} ) ;
  * </pre>
  */
-@Beta
 public interface UnsetVariableStatementTree extends StatementTree {
 
   SyntaxToken unsetToken();

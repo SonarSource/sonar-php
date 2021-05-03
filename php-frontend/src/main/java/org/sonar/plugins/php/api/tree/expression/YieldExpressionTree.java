@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
@@ -33,7 +32,6 @@ import javax.annotation.Nullable;
  *  yield from {@link #value()}
  * </pre>
  */
-@Beta
 public interface YieldExpressionTree extends ExpressionTree {
 
   SyntaxToken yieldToken();

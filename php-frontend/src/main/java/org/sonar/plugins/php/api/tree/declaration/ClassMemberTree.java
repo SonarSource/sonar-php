@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.Tree;
 
 /**
@@ -30,6 +29,5 @@ import org.sonar.plugins.php.api.tree.Tree;
  *   <li>{@link Kind#USE_TRAIT_DECLARATION Trait use statement}
  * <ul/>
  */
-@Beta
 public interface ClassMemberTree extends Tree {
 }

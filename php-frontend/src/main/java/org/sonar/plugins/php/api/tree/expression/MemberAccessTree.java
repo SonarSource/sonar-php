@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.tree.expression;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
 
 /**
  * <a href="http://php.net/manual/en/language.oop5.properties.php">Object/Class Member</a> Access
@@ -31,7 +30,6 @@ import com.google.common.annotations.Beta;
  *   {@link #object()} :: {@link #member()}
  * </pre>
  */
-@Beta
 public interface MemberAccessTree extends ExpressionTree {
 
   ExpressionTree object();

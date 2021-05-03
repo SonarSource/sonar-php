@@ -19,13 +19,11 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.Tree;
 
 /**
  * Parent interface for all the trees representing expressions (e.g. {@link BinaryExpressionTree} or {@link AssignmentExpressionTree})
  */
-@Beta
 public interface ExpressionTree extends Tree {
 
 }

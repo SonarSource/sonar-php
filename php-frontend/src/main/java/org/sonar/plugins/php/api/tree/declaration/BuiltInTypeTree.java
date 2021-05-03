@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -41,7 +40,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * </ul>
  * <pre/>
  */
-@Beta
 public interface BuiltInTypeTree extends TypeNameTree {
   SyntaxToken token();
 }

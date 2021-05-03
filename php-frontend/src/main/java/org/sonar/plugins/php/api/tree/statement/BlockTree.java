@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import java.util.List;
@@ -31,7 +30,6 @@ import java.util.List;
  * { {@link #statements()} }
  * </pre>
  */
-@Beta
 public interface BlockTree extends StatementTree {
 
   SyntaxToken openCurlyBraceToken();

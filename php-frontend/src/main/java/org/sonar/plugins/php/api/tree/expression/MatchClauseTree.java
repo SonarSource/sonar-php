@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -28,7 +27,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * Starting from PHP 8.0
  * <a href="https://wiki.php.net/rfc/match_expression_v2">Match expression</a>
  */
-@Beta
 public interface MatchClauseTree extends Tree {
 
   /**

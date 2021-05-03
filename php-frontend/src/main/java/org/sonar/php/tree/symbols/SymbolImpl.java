@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.symbols;
 
-import com.google.common.annotations.Beta;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import java.util.LinkedList;
@@ -31,7 +30,6 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-@Beta
 public class SymbolImpl implements Symbol {
 
   private final String name;

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -34,7 +33,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   ${ $foo[1] }
  * </pre>
  */
-@Beta
 public interface CompoundVariableTree extends VariableTree {
 
   SyntaxToken openDollarCurlyBraceToken();

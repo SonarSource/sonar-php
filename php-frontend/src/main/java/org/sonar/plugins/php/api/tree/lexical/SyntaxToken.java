@@ -23,12 +23,10 @@ import java.util.List;
 
 import org.sonar.plugins.php.api.tree.Tree;
 
-import com.google.common.annotations.Beta;
 
 /**
  * Represents a token in the syntax tree.
  */
-@Beta
 public interface SyntaxToken extends Tree {
 
   String text();

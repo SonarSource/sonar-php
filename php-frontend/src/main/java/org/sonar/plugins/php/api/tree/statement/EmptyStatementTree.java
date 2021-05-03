@@ -19,13 +19,11 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
  * An empty statement is written as a single semicolon (<code>;</code>). The empty statement doesn't do anything.
  */
-@Beta
 public interface EmptyStatementTree extends StatementTree {
 
   SyntaxToken semicolonToken();

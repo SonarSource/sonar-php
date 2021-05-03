@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
@@ -48,7 +47,6 @@ import java.util.List;
  *  interface {@link #name()} extends {@link #superInterfaces()} { {@link #members()} }
  * </pre>
  */
-@Beta
 public interface ClassDeclarationTree extends StatementTree, ClassTree {
 
   /**

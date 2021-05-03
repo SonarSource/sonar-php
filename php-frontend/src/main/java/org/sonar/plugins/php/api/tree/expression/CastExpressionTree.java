@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.tree.expression;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
 
 /**
  * <a href="http://php.net/manual/en/language.types.type-juggling.php">Cast Expression</a>
@@ -30,7 +29,6 @@ import com.google.common.annotations.Beta;
  *   ( {@link #castType()} ) {@link #expression()}
  * </pre>
  */
-@Beta
 public interface CastExpressionTree extends ExpressionTree {
 
   SyntaxToken openParenthesisToken();

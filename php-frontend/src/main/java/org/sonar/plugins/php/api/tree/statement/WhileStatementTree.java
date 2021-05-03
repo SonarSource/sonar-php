@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -33,7 +32,6 @@ import java.util.List;
  *   while {@link #condition()} : {@link #statement()} endwhile ;    // alternative syntax
  * </pre>
  */
-@Beta
 public interface WhileStatementTree extends StatementTree {
 
   SyntaxToken whileToken();

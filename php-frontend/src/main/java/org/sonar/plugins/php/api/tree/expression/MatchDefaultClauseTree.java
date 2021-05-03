@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -30,7 +29,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   default => {@link #expression()}
  * </pre>
  */
-@Beta
 public interface MatchDefaultClauseTree extends MatchClauseTree {
 
   SyntaxToken defaultToken();

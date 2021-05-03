@@ -19,11 +19,9 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 // https://wiki.php.net/rfc/short_list_syntax
-@Beta
 public interface ArrayAssignmentPatternTree extends ArrayDestructuringTree {
 
   SyntaxToken openBracketToken();

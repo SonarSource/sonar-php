@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -34,7 +33,6 @@ import java.util.List;
  *   else {@link #statements()}   // here {@link #statements()} should contain one element
  * </pre>
  */
-@Beta
 public interface ElseClauseTree extends Tree {
 
   SyntaxToken elseToken();

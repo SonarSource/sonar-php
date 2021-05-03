@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
@@ -114,7 +113,6 @@ import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
-@Beta
 public interface VisitorCheck extends PHPCheck {
 
   void visitToken(SyntaxToken token);

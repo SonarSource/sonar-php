@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
@@ -42,7 +41,6 @@ import java.util.List;
  *  abstract public {@link #name()} ;
  * </pre>
  */
-@Beta
 public interface MethodDeclarationTree extends ClassMemberTree, FunctionTree {
 
   /**
