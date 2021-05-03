@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
@@ -39,6 +39,6 @@ public class ExpressionComplexityCheckTest {
   @Test
   public void custom() throws Exception {
     check.max = 5;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of(new LegacyIssue(check, null).line(11)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(new LegacyIssue(check, null).line(11)));
   }
 }

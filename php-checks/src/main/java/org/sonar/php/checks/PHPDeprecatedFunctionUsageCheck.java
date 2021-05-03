@@ -20,13 +20,14 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.checks.utils.type.NewObjectCall;
 import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
@@ -99,28 +100,23 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static final String PARSE_STR_FUNCTION = "parse_str";
   private static final String ASSERT_FUNCTION = "assert";
   private static final String DEFINE_FUNCTION = "define";
-  private static final ImmutableSet<String> LOCALE_CATEGORY_CONSTANTS = ImmutableSet.of(
+  private static final Set<String> LOCALE_CATEGORY_CONSTANTS = SetUtils.immutableSetOf(
     "LC_ALL", "LC_COLLATE", "LC_CTYPE", "LC_MONETARY", "LC_NUMERIC", "LC_TIME", "LC_MESSAGES");
 
-  private static final ImmutableSet<String> DEPRECATED_CASE_SENSITIVE_CONSTANTS = ImmutableSet.of(
+  private static final Set<String> DEPRECATED_CASE_SENSITIVE_CONSTANTS = SetUtils.immutableSetOf(
     "FILTER_FLAG_SCHEME_REQUIRED", "FILTER_FLAG_HOST_REQUIRED");
 
-  private static final ImmutableSet<String> SEARCHING_STRING_FUNCTIONS = ImmutableSet.of(
+  private static final Set<String> SEARCHING_STRING_FUNCTIONS = SetUtils.immutableSetOf(
     "stristr", "strrchr", "strstr", "strripos", "stripos", "strrpos", "strpos", "strchr");
 
   private static final Predicate<TreeValues> SPLFILEOBJECT_FGETSS = new ObjectMemberFunctionCall(FGETSS_FUNCTION, new NewObjectCall("SplFileObject"));
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.<String>builder()
-      .addAll(NEW_BY_DEPRECATED_FUNCTIONS.keySet())
-      .addAll(SEARCHING_STRING_FUNCTIONS)
-      .add(SET_LOCALE_FUNCTION)
-      .add(PARSE_STR_FUNCTION)
-      .add(ASSERT_FUNCTION)
-      .add(DEFINE_FUNCTION)
-      .build();
+  protected Set<String> functionNames() {
+    Set<String> functionNames = SetUtils.immutableSetOf(SET_LOCALE_FUNCTION, PARSE_STR_FUNCTION, ASSERT_FUNCTION, DEFINE_FUNCTION);
+    return SetUtils.concat(functionNames, NEW_BY_DEPRECATED_FUNCTIONS.keySet(), SEARCHING_STRING_FUNCTIONS);
   }
+
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     TreeValues possibleValues = TreeValues.of(tree, context().symbolTable());

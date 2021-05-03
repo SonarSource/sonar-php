@@ -19,13 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
-import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -41,7 +42,7 @@ public class RedundantJumpCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.copyOf(KINDS_WITH_CONTROL_FLOW);
+    return new ArrayList<>(KINDS_WITH_CONTROL_FLOW);
   }
 
   @Override
@@ -75,7 +76,7 @@ public class RedundantJumpCheck extends PHPSubscriptionCheck {
     }
 
     // ignore jumps in try statement because CFG is not precise
-    Tree tryAncestor = TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Kind.TRY_STATEMENT));
+    Tree tryAncestor = TreeUtils.findAncestorWithKind(tree, Collections.singletonList(Kind.TRY_STATEMENT));
     return tryAncestor != null;
   }
 }

@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
@@ -34,7 +34,7 @@ public class CommentedOutCodeCheckTest {
 
   @Test
   public void test() throws Exception {
-    List<PhpIssue> issues = ImmutableList.of(
+    List<PhpIssue> issues = Arrays.asList(
       newIssue(13),
       newIssue(18),
       newIssue(31),

@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
@@ -40,7 +40,7 @@ public class HttpOnlyCheckTest {
   @Test
   public void test_php_ini() {
     check(check, new File(dir, "http_only.ini"));
-    check(check, new File(dir, "empty.ini"), ImmutableList.of(issue("Set the \"session.cookie_httponly\" property to \"true\" if needed.")));
+    check(check, new File(dir, "empty.ini"), Collections.singletonList(issue("Set the \"session.cookie_httponly\" property to \"true\" if needed.")));
   }
 
 }

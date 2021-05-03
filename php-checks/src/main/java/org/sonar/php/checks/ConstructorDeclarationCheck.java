@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -41,7 +41,7 @@ public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.CLASS_DECLARATION);
+    return Collections.singletonList(Kind.CLASS_DECLARATION);
   }
 
   @Override

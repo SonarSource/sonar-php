@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -40,7 +40,7 @@ public class LowerCaseColorCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.REGULAR_STRING_LITERAL);
+    return Collections.singletonList(Kind.REGULAR_STRING_LITERAL);
   }
 
   @Override

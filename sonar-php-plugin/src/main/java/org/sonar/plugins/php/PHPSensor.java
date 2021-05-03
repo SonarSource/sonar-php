@@ -20,7 +20,6 @@
 package org.sonar.plugins.php;
 
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
 import java.io.InterruptedIOException;
@@ -161,7 +160,7 @@ public class PHPSensor implements Sensor {
         collect(Collectors.toList());
       hasTestFileChecks = !testFilesChecks.isEmpty();
 
-      phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(allChecks), ImmutableList.copyOf(testFilesChecks), context.fileSystem().workDir(), projectSymbolData);
+      phpAnalyzer = new PHPAnalyzer(allChecks, testFilesChecks, context.fileSystem().workDir(), projectSymbolData);
     }
 
     @Override

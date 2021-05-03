@@ -21,7 +21,6 @@ package org.sonar.plugins.php.api.cfg;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.Collections;
 import java.util.Set;
@@ -74,7 +73,7 @@ public class ControlFlowGraph {
   // we use WeakHashMap for implementation to allow the trees to be garbage collected
   private static Set<Tree> failedTrees = Collections.newSetFromMap(new WeakHashMap<>());
 
-  ControlFlowGraph(ImmutableSet<CfgBlock> blocks, CfgBlock start, PhpCfgEndBlock end) {
+  ControlFlowGraph(Set<CfgBlock> blocks, CfgBlock start, PhpCfgEndBlock end) {
     this.start = start;
     this.end = end;
     this.blocks = blocks;

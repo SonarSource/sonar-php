@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
@@ -40,8 +40,8 @@ public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE_FORMAT = "Either reverse the equality operator in the \"%s\" null test, or reverse the logical operator that follows it.";
 
-  private static final List<Kind> AND_KINDS = ImmutableList.of(Kind.CONDITIONAL_AND, Kind.ALTERNATIVE_CONDITIONAL_AND);
-  private static final List<Kind> OR_KINDS = ImmutableList.of(Kind.CONDITIONAL_OR, Kind.ALTERNATIVE_CONDITIONAL_OR);
+  private static final List<Kind> AND_KINDS = Arrays.asList(Kind.CONDITIONAL_AND, Kind.ALTERNATIVE_CONDITIONAL_AND);
+  private static final List<Kind> OR_KINDS = Arrays.asList(Kind.CONDITIONAL_OR, Kind.ALTERNATIVE_CONDITIONAL_OR);
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {

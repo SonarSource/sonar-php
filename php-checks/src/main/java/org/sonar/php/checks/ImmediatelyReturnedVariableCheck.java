@@ -19,8 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +28,7 @@ import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
@@ -53,11 +52,7 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    Builder<Kind> builder = ImmutableList.builder();
-    builder.addAll(CheckUtils.FUNCTION_KINDS);
-    builder.addAll(super.nodesToVisit());
-
-    return builder.build();
+    return ListUtils.concat(CheckUtils.FUNCTION_KINDS, super.nodesToVisit());
   }
 
   @Override

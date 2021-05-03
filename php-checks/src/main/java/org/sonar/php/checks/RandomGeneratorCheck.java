@@ -19,9 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S2245")
@@ -30,8 +31,8 @@ public class RandomGeneratorCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Make sure that using this pseudorandom number generator is safe here.";
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("rand", "mt_rand");
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf("rand", "mt_rand");
   }
 
   @Override

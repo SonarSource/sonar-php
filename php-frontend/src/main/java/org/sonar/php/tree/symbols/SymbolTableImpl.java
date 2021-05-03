@@ -19,13 +19,14 @@
  */
 package org.sonar.php.tree.symbols;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbolData;
@@ -78,8 +79,8 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   @Override
-  public ImmutableSet<Scope> getScopes() {
-    return ImmutableSet.copyOf(scopes.values());
+  public Set<Scope> getScopes() {
+    return new HashSet<>(scopes.values());
   }
 
   @Nullable
@@ -130,8 +131,8 @@ public class SymbolTableImpl implements SymbolTable {
   /**
    * Returns all symbols in script
    */
-  public ImmutableList<Symbol> getSymbols() {
-    return ImmutableList.copyOf(symbols);
+  public List<Symbol> getSymbols() {
+    return Collections.unmodifiableList(symbols);
   }
 
   /**

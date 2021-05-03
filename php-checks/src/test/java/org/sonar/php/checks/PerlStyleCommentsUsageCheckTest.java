@@ -19,7 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
@@ -36,7 +37,7 @@ public class PerlStyleCommentsUsageCheckTest {
   public void test() throws Exception {
     PhpFile file = TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php");
     String message = "Use \"//\" instead of \"#\" to start this comment";
-    ImmutableList<PhpIssue> issues = ImmutableList.<PhpIssue>of(new LegacyIssue(CHECK, message).line(3));
+    List<PhpIssue> issues = Collections.singletonList(new LegacyIssue(CHECK, message).line(3));
 
     PHPCheckTest.check(CHECK, file, issues);
   }

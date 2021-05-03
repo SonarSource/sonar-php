@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
@@ -32,7 +32,8 @@ public class MissingNewLineAtEOFCheckTest {
 
   private MissingNewLineAtEOFCheck check = new MissingNewLineAtEOFCheck();
   private static final String TEST_FILE_DIR = "MissingNewLineAtEOF/";
-  private List<PhpIssue> issue = ImmutableList.<PhpIssue>of(new LegacyIssue(check, "Add a new line at the end of this file."));
+  private List<PhpIssue> issue = Collections.singletonList(
+    new LegacyIssue(check, "Add a new line at the end of this file."));
 
   @Test
   public void noNewLine() throws Exception {

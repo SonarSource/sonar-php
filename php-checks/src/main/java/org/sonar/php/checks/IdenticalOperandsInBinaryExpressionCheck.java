@@ -19,10 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.SyntacticEquivalence;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -35,7 +35,7 @@ public class IdenticalOperandsInBinaryExpressionCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Identical sub-expressions on both sides of operator \"%s\"";
 
-  private static final Set<String> EXCLUDED_OPERATORS = ImmutableSet.of("*", "+", ".");
+  private static final Set<String> EXCLUDED_OPERATORS = SetUtils.immutableSetOf("*", "+", ".");
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree binaryExp) {

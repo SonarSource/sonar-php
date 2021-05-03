@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
@@ -41,7 +41,7 @@ public class CookiesSecureCheckTest {
   public void test_php_ini() {
     check(check, new File(dir, "cookie_secure.ini"));
     check(check, new File(dir, "empty.ini"),
-      ImmutableList.of(issue("Make sure creating the session cookie without the \"secure\" flag is safe here.")));
+      Collections.singletonList(issue("Make sure creating the session cookie without the \"secure\" flag is safe here.")));
   }
 
 }

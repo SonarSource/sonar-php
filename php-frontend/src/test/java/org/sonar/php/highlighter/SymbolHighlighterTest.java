@@ -19,11 +19,12 @@
  */
 package org.sonar.php.highlighter;
 
-import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Before;
@@ -86,7 +87,7 @@ public class SymbolHighlighterTest {
   public void test_usages() throws Exception {
     highlight("<?php   $a = 1; echo $a; $a = 4; ");
 
-    checkSymbolReferences(1, 8, ImmutableList.of(
+    checkSymbolReferences(1, 8, Arrays.asList(
       textRange(1, 21, 1, 23),
       textRange(1, 25, 1, 27)));
   }
@@ -95,7 +96,7 @@ public class SymbolHighlighterTest {
   public void test_compound_variable() throws Exception {
     highlight("<?php   $a = 1; echo \"${a}\"; echo \"$a\";");
 
-    checkSymbolReferences(1, 8, ImmutableList.of(textRange(1, 24, 1, 25), textRange(1, 35, 1, 37)));
+    checkSymbolReferences(1, 8, Arrays.asList(textRange(1, 24, 1, 25), textRange(1, 35, 1, 37)));
   }
 
   @Test
@@ -106,25 +107,25 @@ public class SymbolHighlighterTest {
     checkSymbolExistence(1, 15); // $f
 
     // global $b
-    checkSymbolReferences(1, 6, ImmutableList.of(textRange(1, 35, 1, 37)));
+    checkSymbolReferences(1, 6, Collections.singletonList(textRange(1, 35, 1, 37)));
     // local $b
-    checkSymbolReferences(1, 35, ImmutableList.of(textRange(1, 46, 1, 48)));
+    checkSymbolReferences(1, 35, Collections.singletonList(textRange(1, 46, 1, 48)));
   }
 
   @Test
   public void test_arrow_function() throws Exception {
     highlight("<?php $a = 1; $b = 2; $f = fn($b) => $a + $b; foo($a); foo($b);");
     // global $a
-    checkSymbolReferences(1, 6, ImmutableList.of(
+    checkSymbolReferences(1, 6, Arrays.asList(
       textRange(1, 37, 1, 39),
       textRange(1, 50, 1, 52)
       ));
     // global $b
-    checkSymbolReferences(1, 14, ImmutableList.of(
+    checkSymbolReferences(1, 14, Collections.singletonList(
       textRange(1, 59, 1, 61)
     ));
     // local $b
-    checkSymbolReferences(1, 30, ImmutableList.of(
+    checkSymbolReferences(1, 30, Collections.singletonList(
       textRange(1, 42, 1, 44)
     ));
   }

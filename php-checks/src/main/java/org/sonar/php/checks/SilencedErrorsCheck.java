@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -35,7 +35,7 @@ public class SilencedErrorsCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.ERROR_CONTROL);
+    return Collections.singletonList(Kind.ERROR_CONTROL);
   }
 
   @Override

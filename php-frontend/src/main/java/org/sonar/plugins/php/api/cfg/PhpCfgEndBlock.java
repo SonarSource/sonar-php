@@ -19,8 +19,9 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import org.sonar.plugins.php.api.tree.Tree;
 
 
@@ -30,8 +31,8 @@ import org.sonar.plugins.php.api.tree.Tree;
 class PhpCfgEndBlock extends PhpCfgBlock {
 
   @Override
-  public ImmutableSet<CfgBlock> successors() {
-    return ImmutableSet.of();
+  public Set<CfgBlock> successors() {
+    return Collections.emptySet();
   }
 
   @Override

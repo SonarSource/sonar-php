@@ -19,11 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Optional;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -40,8 +41,8 @@ public class NoPaddingRsaCheck extends FunctionUsageCheck {
   private static final String SECURE_PADDING = "OPENSSL_PKCS1_OAEP_PADDING";
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("openssl_public_encrypt");
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf("openssl_public_encrypt");
   }
 
   @Override

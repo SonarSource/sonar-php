@@ -19,12 +19,13 @@
  */
 package org.sonar.php;
 
-import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -55,8 +56,8 @@ public class PHPAnalyzer {
   private static final Logger LOG = Loggers.get(PHPAnalyzer.class);
 
   private final ActionParser<Tree> parser;
-  private final ImmutableList<PHPCheck> checks;
-  private final ImmutableList<PHPCheck> testFileChecks;
+  private final List<PHPCheck> checks;
+  private final List<PHPCheck> testFileChecks;
   @Nullable
   private final File workingDir;
   private final ProjectSymbolData projectSymbolData;
@@ -65,11 +66,11 @@ public class PHPAnalyzer {
   private PhpFile currentFile;
   private SymbolTable currentFileSymbolTable;
 
-  public PHPAnalyzer(ImmutableList<PHPCheck> checks, @Nullable File workingDir, ProjectSymbolData projectSymbolData) {
-    this(checks, ImmutableList.of(), workingDir, projectSymbolData);
+  public PHPAnalyzer(List<PHPCheck> checks, @Nullable File workingDir, ProjectSymbolData projectSymbolData) {
+    this(checks, Collections.emptyList(), workingDir, projectSymbolData);
   }
 
-  public PHPAnalyzer(ImmutableList<PHPCheck> checks, ImmutableList<PHPCheck> testFilesChecks, @Nullable File workingDir, ProjectSymbolData projectSymbolData) {
+  public PHPAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFilesChecks, @Nullable File workingDir, ProjectSymbolData projectSymbolData) {
     this.workingDir = workingDir;
     this.projectSymbolData = projectSymbolData;
     this.parser = PHPParserBuilder.createParser();
@@ -92,7 +93,7 @@ public class PHPAnalyzer {
   }
 
   public List<PhpIssue> analyze() {
-    ImmutableList.Builder<PhpIssue> issuesBuilder = ImmutableList.builder();
+    List<PhpIssue> allIssues = new ArrayList<>();
     for (PHPCheck check : checks) {
       PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
       List<PhpIssue> issues = Collections.emptyList();
@@ -102,20 +103,17 @@ public class PHPAnalyzer {
         LOG.error("Stack overflow of {} in file {}", check.getClass().getName(), currentFile.uri());
         throw e;
       }
-      issuesBuilder.addAll(issues);
+      allIssues.addAll(issues);
     }
-
-    return issuesBuilder.build();
+    return allIssues;
   }
 
   public List<PhpIssue> analyzeTest() {
-    ImmutableList.Builder<PhpIssue> issuesBuilder = ImmutableList.builder();
-    for (PHPCheck check : testFileChecks) {
-      PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
-      issuesBuilder.addAll(check.analyze(context));
-    }
-
-    return issuesBuilder.build();
+    PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
+    return testFileChecks.stream()
+      .map(check -> check.analyze(context))
+      .flatMap(List::stream)
+      .collect(Collectors.toList());
   }
 
   public void terminate() {

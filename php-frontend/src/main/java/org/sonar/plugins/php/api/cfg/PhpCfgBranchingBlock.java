@@ -19,8 +19,9 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Map;
+import java.util.Set;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 
 class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
@@ -52,8 +53,8 @@ class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
   }
 
   @Override
-  public ImmutableSet<CfgBlock> successors(){
-    return ImmutableSet.of(trueSuccessor, falseSuccessor);
+  public Set<CfgBlock> successors(){
+    return SetUtils.immutableSetOf(trueSuccessor, falseSuccessor);
   }
 
   @Override

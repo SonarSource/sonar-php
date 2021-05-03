@@ -19,13 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class FunctionComplexityCheckTest {
 
@@ -34,7 +33,7 @@ public class FunctionComplexityCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<PhpIssue>of(
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(
       new LegacyIssue(check, "The Cyclomatic Complexity of this function \"ko\" is 28 which is greater than 20 authorized.").line(3)));
   }
 

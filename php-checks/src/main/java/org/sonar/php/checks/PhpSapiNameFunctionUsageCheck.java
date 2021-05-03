@@ -19,9 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = PhpSapiNameFunctionUsageCheck.KEY)
@@ -31,8 +32,8 @@ public class PhpSapiNameFunctionUsageCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Use the \"PHP_SAPI\" constant instead.";
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("php_sapi_name");
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf("php_sapi_name");
   }
 
   @Override

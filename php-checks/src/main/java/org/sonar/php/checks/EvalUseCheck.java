@@ -19,10 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = EvalUseCheck.KEY)
@@ -32,8 +33,8 @@ public class EvalUseCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Make sure that this dynamic injection or execution of code is safe.";
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of(PHPKeyword.EVAL.getValue());
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf(PHPKeyword.EVAL.getValue());
   }
 
   @Override

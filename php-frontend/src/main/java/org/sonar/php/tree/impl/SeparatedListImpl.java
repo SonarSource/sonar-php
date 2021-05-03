@@ -22,16 +22,15 @@ package org.sonar.php.tree.impl;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.UnmodifiableIterator;
-import org.sonar.plugins.php.api.tree.SeparatedList;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
 
@@ -48,7 +47,7 @@ public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
   }
 
   public static <T extends Tree> SeparatedListImpl<T> empty() {
-    return new SeparatedListImpl<>(ImmutableList.<T>of(), ImmutableList.<SyntaxToken>of());
+    return new SeparatedListImpl<>(Collections.emptyList(), Collections.emptyList());
   }
 
   @Override

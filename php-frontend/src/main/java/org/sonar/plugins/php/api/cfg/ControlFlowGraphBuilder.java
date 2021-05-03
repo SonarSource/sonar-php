@@ -20,11 +20,10 @@
 package org.sonar.plugins.php.api.cfg;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +35,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.LiteralUtils;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -91,7 +91,7 @@ class ControlFlowGraphBuilder {
   }
 
   ControlFlowGraph getGraph() {
-    return new ControlFlowGraph(ImmutableSet.copyOf(blocks), start, end);
+    return new ControlFlowGraph(new HashSet<>(blocks), start, end);
   }
 
   private void computePredecessors() {
@@ -214,7 +214,7 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock buildTryStatement(TryStatementTree tree, PhpCfgBlock successor) {
     PhpCfgBlock exitBlock = exitTargets.peek().exitBlock;
-    PhpCfgBlock finallyBlockEnd = createMultiSuccessorBlock(ImmutableSet.of(successor, exitBlock));
+    PhpCfgBlock finallyBlockEnd = createMultiSuccessorBlock(SetUtils.immutableSetOf(successor, exitBlock));
     PhpCfgBlock finallyBlock;
     if (tree.finallyBlock() != null) {
       finallyBlock = build(tree.finallyBlock().statements(), finallyBlockEnd);
@@ -379,7 +379,7 @@ class ControlFlowGraphBuilder {
     conditionBlock.addElement(tree.condition().expression());
 
     addBreakable(successor, conditionBlock);
-    PhpCfgBlock loopBodyBlock = buildSubFlow(ImmutableList.of(tree.statement()), conditionBlock);
+    PhpCfgBlock loopBodyBlock = buildSubFlow(Collections.singletonList(tree.statement()), conditionBlock);
     removeBreakable();
 
     linkToBody.setSuccessor(loopBodyBlock);
@@ -473,9 +473,9 @@ class ControlFlowGraphBuilder {
     private PhpCfgBlock successor;
 
     @Override
-    public ImmutableSet<CfgBlock> successors() {
+    public Set<CfgBlock> successors() {
       Preconditions.checkState(successor != null, "No successor was set on %s", this);
-      return ImmutableSet.of(successor);
+      return SetUtils.immutableSetOf(successor);
     }
 
     @Override

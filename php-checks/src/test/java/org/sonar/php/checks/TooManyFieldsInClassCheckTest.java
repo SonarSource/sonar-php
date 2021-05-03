@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
@@ -49,7 +49,7 @@ public class TooManyFieldsInClassCheckTest {
     check.maximumFieldThreshold = 2;
     check.countNonpublicFields = false;
 
-    List<PhpIssue> issues = ImmutableList.<PhpIssue>of(
+    List<PhpIssue> issues = Arrays.asList(
       new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(3),
       new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(18)
     );

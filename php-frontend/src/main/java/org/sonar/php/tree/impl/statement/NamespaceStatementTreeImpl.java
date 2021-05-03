@@ -19,7 +19,10 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.utils.collections.IteratorUtils;
@@ -28,10 +31,6 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
 
 public class NamespaceStatementTreeImpl extends PHPTree implements NamespaceStatementTree {
 
@@ -50,7 +49,7 @@ public class NamespaceStatementTreeImpl extends PHPTree implements NamespaceStat
     this.eosToken = eosToken;
 
     this.openCurlyBrace = null;
-    this.statements = ImmutableList.of();
+    this.statements = Collections.emptyList();
     this.closeCurlyBrace = null;
   }
 

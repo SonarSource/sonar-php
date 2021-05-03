@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -53,7 +53,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
     this.useToken = useToken;
     this.traits = traits;
     this.openCurlyBraceToken = null;
-    this.adaptations = ImmutableList.of();
+    this.adaptations = Collections.emptyList();
     this.closeCurlyBraceToken = null;
     this.eosToken = eosToken;
   }

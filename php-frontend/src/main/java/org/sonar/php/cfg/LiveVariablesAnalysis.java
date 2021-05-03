@@ -20,9 +20,9 @@
 package org.sonar.php.cfg;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -142,11 +142,11 @@ public class LiveVariablesAnalysis {
     }
 
     public Set<Symbol> getIn() {
-      return ImmutableSet.copyOf(in);
+      return Collections.unmodifiableSet(in);
     }
 
     public Set<Symbol> getOut() {
-      return ImmutableSet.copyOf(out);
+      return Collections.unmodifiableSet(out);
     }
 
     public Map<Symbol, VariableUsage> getVariableUsages(Tree tree) {
@@ -154,11 +154,11 @@ public class LiveVariablesAnalysis {
     }
 
     public Set<Symbol> getGen() {
-      return ImmutableSet.copyOf(gen);
+      return Collections.unmodifiableSet(gen);
     }
 
     public Set<Symbol> getKill() {
-      return ImmutableSet.copyOf(kill);
+      return Collections.unmodifiableSet(kill);
     }
 
     /**

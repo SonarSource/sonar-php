@@ -19,10 +19,10 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 import org.sonar.php.checks.utils.FunctionArgumentCheck.ArgumentMatcher;
 import org.sonar.php.checks.utils.FunctionArgumentCheck.ArgumentVerifier;
+import org.sonar.php.utils.collections.SetUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,16 +32,16 @@ public class FunctionArgumentCheckTest {
   public void argument_indicator_with_string() {
     ArgumentMatcher argumentMatcher = new ArgumentMatcher(1, null, "VALUE");
 
-    assertThat(argumentMatcher.getValues()).isEqualTo(ImmutableSet.of("value"));
+    assertThat(argumentMatcher.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentMatcher.getPosition()).isEqualTo(1);
     assertThat(argumentMatcher.getName()).isNull();
   }
 
   @Test
   public void argument_indicator_with_set() {
-    ArgumentMatcher argumentMatcher = new ArgumentMatcher(1, "argumentName", ImmutableSet.of("VALUE"));
+    ArgumentMatcher argumentMatcher = new ArgumentMatcher(1, "argumentName", SetUtils.immutableSetOf("VALUE"));
 
-    assertThat(argumentMatcher.getValues()).isEqualTo(ImmutableSet.of("value"));
+    assertThat(argumentMatcher.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentMatcher.getName()).isEqualTo("argumentName");
   }
 
@@ -49,7 +49,7 @@ public class FunctionArgumentCheckTest {
   public void argument_verifier_with_value() {
     ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, "VALUE", false);
 
-    assertThat(argumentVerifier.getValues()).isEqualTo(ImmutableSet.of("value"));
+    assertThat(argumentVerifier.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isFalse();
   }
 
@@ -62,9 +62,9 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_verifier_with_set() {
-    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, ImmutableSet.of("VALUE"), true);
+    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, SetUtils.immutableSetOf("VALUE"), true);
 
-    assertThat(argumentVerifier.getValues()).isEqualTo(ImmutableSet.of("value"));
+    assertThat(argumentVerifier.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isTrue();
   }
 

@@ -19,7 +19,8 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
   private static final String MESSAGE_CODE = "Use expectExceptionCode() instead.";
   private static final String MESSAGE_MESSAGE = "Use expectExceptionMessage() instead.";
 
-  private static final List<String> RELEVANT_ASSERTIONS = ImmutableList.of(
+  private static final List<String> RELEVANT_ASSERTIONS = Arrays.asList(
     "assertEquals",
     "assertSame");
 
@@ -76,7 +77,7 @@ public class ExceptionTestingCheck extends PhpUnitCheck {
   }
 
   private static boolean isLastInMethodBody(TryStatementTree tree) {
-    MethodDeclarationTree method = (MethodDeclarationTree) TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Tree.Kind.METHOD_DECLARATION));
+    MethodDeclarationTree method = (MethodDeclarationTree) TreeUtils.findAncestorWithKind(tree, Collections.singletonList(Tree.Kind.METHOD_DECLARATION));
 
     Objects.requireNonNull(method);
 

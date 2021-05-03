@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +26,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -41,7 +41,7 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Don't use this assertion inside a try-catch catching an assertion exception.";
   private static final String SECONDARY_MESSAGE = "Exception type that catches assertion exceptions.";
 
-  private static final Set<String> RELEVANT_EXCEPTIONS = ImmutableSet.of(
+  private static final Set<String> RELEVANT_EXCEPTIONS = SetUtils.immutableSetOf(
     "exception",
     "phpunit\\framework\\expectationfailedexception",
     "phpunit\\framework\\assertionfailederror"

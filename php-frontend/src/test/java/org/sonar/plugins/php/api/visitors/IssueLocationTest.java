@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -76,7 +76,7 @@ public class IssueLocationTest {
   }
 
   private static Tree createToken(int line, int column, String tokenValue) {
-    return new InternalSyntaxToken(line, column, tokenValue, ImmutableList.of(), 0, false);
+    return new InternalSyntaxToken(line, column, tokenValue, Collections.emptyList(), 0, false);
   }
 
 }

@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks.phpini;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.ini.PhpIniCheck;
 
@@ -39,7 +39,7 @@ public class FileUploadsCheckTest {
 
   @Test
   public void file_issue() throws Exception {
-    check(check, new File(dir, "empty.ini"), ImmutableList.of(issue("Explicitly disable \"file_uploads\".")));
+    check(check, new File(dir, "empty.ini"), Collections.singletonList(issue("Explicitly disable \"file_uploads\".")));
   }
 
 }

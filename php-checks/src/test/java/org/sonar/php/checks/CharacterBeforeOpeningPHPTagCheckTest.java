@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
@@ -38,7 +38,7 @@ public class CharacterBeforeOpeningPHPTagCheckTest {
 
   @Test
   public void ko() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.of(new LegacyIssue(check, "Remove the extra characters before the open tag.").line(1)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LegacyIssue(check, "Remove the extra characters before the open tag.").line(1)));
   }
 
 }

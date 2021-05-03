@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.sonar.php.checks.phpini.AllowUrlCheck;
@@ -43,12 +43,12 @@ import org.sonar.php.checks.phpunit.NotDiscoverableTestCheck;
 import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
 import org.sonar.php.checks.phpunit.TestClassNameCheck;
 import org.sonar.php.checks.security.AuthorizationsCheck;
+import org.sonar.php.checks.security.CORSPolicyCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.ClearTextProtocolsCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
-import org.sonar.php.checks.security.CORSPolicyCheck;
 import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.DataEncryptionCheck;
 import org.sonar.php.checks.security.DisableCsrfCheck;
@@ -66,6 +66,7 @@ import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 import org.sonar.php.checks.security.StandardInputUsageCheck;
 import org.sonar.php.checks.security.XxeCheck;
+import org.sonar.php.utils.collections.SetUtils;
 
 public class CheckList {
 
@@ -75,7 +76,7 @@ public class CheckList {
   }
 
   public static List<Class<?>> getChecks() {
-    return ImmutableList.of(
+    return Arrays.asList(
       AbortedTestCaseCheck.class,
       AliasFunctionUsageCheck.class,
       AllBranchesIdenticalCheck.class,
@@ -289,8 +290,8 @@ public class CheckList {
       ZipEntryCheck.class);
   }
 
-  public static Iterable<Class<?>> getPhpIniChecks() {
-    return ImmutableList.of(
+  public static Set<Class<?>> getPhpIniChecks() {
+    return SetUtils.immutableSetOf(
       AllowUrlCheck.class,
       CookiesSecureCheck.class,
       CgiForceRedirectCheck.class,
@@ -303,9 +304,6 @@ public class CheckList {
   }
 
   public static Set<Class<?>> getAllChecks() {
-    return ImmutableSet.<Class<?>>builder()
-      .addAll(CheckList.getChecks())
-      .addAll(CheckList.getPhpIniChecks())
-      .build();
+    return SetUtils.concat(new HashSet<>(getChecks()), getPhpIniChecks());
   }
 }

@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,9 +30,9 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public abstract class FunctionUsageCheck extends PHPVisitorCheck {
 
-  private Set lowerCaseFunctionNames;
+  private Set<String> lowerCaseFunctionNames;
 
-  protected abstract ImmutableSet<String> functionNames();
+  protected abstract Set<String> functionNames();
 
   @Override
   public void init() {

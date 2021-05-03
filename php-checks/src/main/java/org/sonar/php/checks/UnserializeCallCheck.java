@@ -19,9 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = UnserializeCallCheck.KEY)
@@ -31,8 +32,8 @@ public class UnserializeCallCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Make sure deserializing objects is safe here.";
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("unserialize");
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf("unserialize");
   }
 
   @Override

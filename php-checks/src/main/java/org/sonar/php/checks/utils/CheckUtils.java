@@ -19,11 +19,8 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -36,8 +33,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-
 import org.apache.commons.lang3.StringUtils;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
@@ -83,7 +80,7 @@ public final class CheckUtils {
     Kind.FUNCTION_EXPRESSION,
     Kind.ARROW_FUNCTION_EXPRESSION};
 
-  public static final ImmutableList<Kind> FUNCTION_KINDS = ImmutableList.copyOf(FUNCTION_KINDS_ARRAY);
+  public static final List<Kind> FUNCTION_KINDS = Arrays.asList(FUNCTION_KINDS_ARRAY);
 
   public static final ImmutableMap<String, String> SUPERGLOBALS_BY_OLD_NAME = ImmutableMap.<String, String>builder()
     .put("$HTTP_SERVER_VARS", "$_SERVER")
@@ -94,7 +91,7 @@ public final class CheckUtils {
     .put("$HTTP_ENV_VARS", "$_ENV")
     .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
 
-  public static final ImmutableSet<String> SUPERGLOBALS = ImmutableSet.of(
+  public static final Set<String> SUPERGLOBALS = SetUtils.immutableSetOf(
       "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE", "$_SESSION", "$_REQUEST", "$_ENV");
 
   private CheckUtils() {

@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.cfg;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +27,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 
 class PhpCfgBlock implements CfgBlock {
@@ -40,12 +41,12 @@ class PhpCfgBlock implements CfgBlock {
   private LinkedList<Tree> elements = new LinkedList<>();
 
   private PhpCfgBlock(Set<PhpCfgBlock> successors, @Nullable PhpCfgBlock syntacticSuccessor) {
-    this.successors = ImmutableSet.copyOf(successors);
+    this.successors = Collections.unmodifiableSet(successors);
     this.syntacticSuccessor = syntacticSuccessor;
   }
 
   PhpCfgBlock(PhpCfgBlock successor, PhpCfgBlock syntacticSuccessor) {
-    this(ImmutableSet.of(successor), Preconditions.checkNotNull(syntacticSuccessor,
+    this(SetUtils.immutableSetOf(successor), Preconditions.checkNotNull(syntacticSuccessor,
       "Syntactic successor cannot be null"));
   }
 
@@ -54,7 +55,7 @@ class PhpCfgBlock implements CfgBlock {
   }
 
   PhpCfgBlock(PhpCfgBlock successor) {
-    this(ImmutableSet.of(successor));
+    this(SetUtils.immutableSetOf(successor));
   }
 
   PhpCfgBlock() {
@@ -95,7 +96,7 @@ class PhpCfgBlock implements CfgBlock {
   void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
     successors = successors.stream()
       .map(successor -> replacement(successor, replacements))
-      .collect(ImmutableSet.toImmutableSet());
+      .collect(Collectors.toSet());
     if (syntacticSuccessor != null) {
       syntacticSuccessor = replacement(syntacticSuccessor, replacements);
     }

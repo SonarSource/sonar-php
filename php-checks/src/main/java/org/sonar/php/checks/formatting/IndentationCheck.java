@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,7 +136,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
   private void checkImplementListIndentation(ClassDeclarationTree classTree) {
     if (check.isInterfacesIndentation && classTree.is(Tree.Kind.CLASS_DECLARATION) && !classTree.superInterfaces().isEmpty()) {
 
-      List<Tree> interfaceList = ImmutableList.<Tree>copyOf(classTree.superInterfaces());
+      List<Tree> interfaceList = new ArrayList<>(classTree.superInterfaces());
       SyntaxToken classToken = classTree.classToken();
       SyntaxToken lastInterfaceToken = ((PHPTree) Iterables.getLast(classTree.superInterfaces())).getFirstToken();
       int expectedColumn = classToken.column() + PSR2_INDENTATION;

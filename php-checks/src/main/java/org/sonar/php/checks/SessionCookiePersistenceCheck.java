@@ -19,13 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.ini.BasePhpIniIssue;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
@@ -56,8 +57,8 @@ public class SessionCookiePersistenceCheck extends FunctionUsageCheck implements
   }
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("session_set_cookie_params");
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf("session_set_cookie_params");
   }
 
   @Override

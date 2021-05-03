@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -48,7 +48,7 @@ public class ClassComplexityCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.CLASS_DECLARATION, Kind.ANONYMOUS_CLASS);
+    return Arrays.asList(Kind.CLASS_DECLARATION, Kind.ANONYMOUS_CLASS);
   }
 
   @Override

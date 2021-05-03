@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.api.batch.fs.TextRange;
@@ -113,7 +113,7 @@ public class PhpIniSensorTest {
   public static class MyCheck implements PhpIniCheck {
     @Override
     public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {
-      return ImmutableList.of(newIssue("message1").line(2));
+      return Collections.singletonList(newIssue("message1").line(2));
     }
   }
 

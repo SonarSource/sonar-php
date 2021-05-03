@@ -19,11 +19,12 @@
  */
 package org.sonar.php.checks.security;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Optional;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -34,8 +35,8 @@ public class LDAPAuthenticatedConnectionCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Provide username and password to authenticate the connection.";
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("ldap_bind");
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf("ldap_bind");
   }
 
   @Override

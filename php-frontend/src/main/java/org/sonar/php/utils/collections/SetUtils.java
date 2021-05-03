@@ -17,27 +17,34 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.utils.collections;
 
+import java.util.Arrays;
 import java.util.Collections;
-import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
-import org.sonar.plugins.php.CheckVerifier;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class ClosingTagInFullPHPFileCheckTest {
+/**
+ * This class is used for Java < 9 to simplify the creation of sets.
+ * After moving to Java > 9, should be replaced by Immutable Set Static Factory Methods
+ * @see <a href="https://docs.oracle.com/javase/9/docs/api/java/util/Set.html#immutable">Immutable Set Static Factory Methods</a>
+ */
+public class SetUtils {
 
-  private ClosingTagInFullPHPFileCheck check = new ClosingTagInFullPHPFileCheck();
-  private static final String TEST_DIR = "ClosingTagInFullPHPFileCheck/";
-
-  @Test
-  public void ok() throws Exception {
-    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
+  private SetUtils() {
   }
 
-  @Test
-  public void ko() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LegacyIssue(check, "Remove this closing tag \"?>\".").line(11)));
+  @SafeVarargs
+  public static <T> Set<T> immutableSetOf(T ... elements) {
+    Set<T> set = new HashSet<>(Arrays.asList(elements));
+    return Collections.unmodifiableSet(set);
+  }
+
+  @SafeVarargs
+  public static <T> Set<T> concat(Set<T>... sets) {
+    return Arrays.stream(sets)
+      .flatMap(Set::stream)
+      .collect(Collectors.toSet());
   }
 }

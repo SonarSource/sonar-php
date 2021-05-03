@@ -19,7 +19,10 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -30,10 +33,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
 
 public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatementTree {
 
@@ -50,7 +49,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
     this.declareStatementHead = declareStatementHead;
 
     this.colonToken = null;
-    this.statements = ImmutableList.of();
+    this.statements = Collections.emptyList();
     this.endDeclareToken = null;
 
     this.eosToken = eosToken;
@@ -58,7 +57,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
 
   public DeclareStatementTreeImpl(DeclareStatementHead declareStatementHead, StatementTree statement) {
     this.declareStatementHead = declareStatementHead;
-    this.statements = ImmutableList.of(statement);
+    this.statements = Collections.singletonList(statement);
 
     this.colonToken = null;
     this.endDeclareToken = null;

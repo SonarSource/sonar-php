@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.security;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -27,6 +26,7 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -44,7 +44,7 @@ public class RegexUsageCheck extends FunctionUsageCheck {
   // this function accepts pattern as second argument, all others as first
   private static final String MB_EREG_SEARCH_INIT = "mb_ereg_search_init";
 
-  private static final ImmutableSet<String> FUNCTION_NAMES = ImmutableSet.of(
+  private static final Set<String> FUNCTION_NAMES = SetUtils.immutableSetOf(
     "ereg",
     "ereg_replace",
     "eregi",
@@ -71,7 +71,7 @@ public class RegexUsageCheck extends FunctionUsageCheck {
     "spliti");
 
   @Override
-  protected ImmutableSet<String> functionNames() {
+  protected Set<String> functionNames() {
     return FUNCTION_NAMES;
   }
 

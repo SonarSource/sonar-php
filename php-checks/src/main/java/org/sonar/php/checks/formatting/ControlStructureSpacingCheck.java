@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -64,7 +64,7 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.copyOf(CONTROL_STRUCTURES);
+    return Arrays.asList(CONTROL_STRUCTURES);
   }
 
   @Override

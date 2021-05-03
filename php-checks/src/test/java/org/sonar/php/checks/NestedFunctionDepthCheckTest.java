@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
@@ -39,7 +39,7 @@ public class NestedFunctionDepthCheckTest {
   @Test
   public void custom() throws Exception {
     check.max = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of(
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Arrays.asList(
       issue(5),
       issue(17),
       issue(28)));

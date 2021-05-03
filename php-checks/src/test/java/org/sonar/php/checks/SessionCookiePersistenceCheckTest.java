@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
@@ -38,7 +38,7 @@ public class SessionCookiePersistenceCheckTest {
 
   @Test
   public void empty_phpini() throws Exception {
-    check(check, new File(dir, "empty.ini"), ImmutableList.of());
+    check(check, new File(dir, "empty.ini"), Collections.emptyList());
   }
 
   @Test
