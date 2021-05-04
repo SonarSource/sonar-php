@@ -19,17 +19,16 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class DoWhileStatementTreeImpl extends PHPTree implements DoWhileStatementTree {
 
@@ -85,7 +84,7 @@ public class DoWhileStatementTreeImpl extends PHPTree implements DoWhileStatemen
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(doToken, statement, whileToken, condition, eosToken);
+    return IteratorUtils.iteratorOf(doToken, statement, whileToken, condition, eosToken);
   }
 
   @Override

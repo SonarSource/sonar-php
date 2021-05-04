@@ -19,17 +19,16 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
 
 public class ConditionalExpressionTreeImpl extends PHPTree implements ConditionalExpressionTree {
 
@@ -88,7 +87,7 @@ public class ConditionalExpressionTreeImpl extends PHPTree implements Conditiona
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(condition, queryToken, trueExpression, colonToken, falseExpression);
+    return IteratorUtils.iteratorOf(condition, queryToken, trueExpression, colonToken, falseExpression);
   }
 
   @Override

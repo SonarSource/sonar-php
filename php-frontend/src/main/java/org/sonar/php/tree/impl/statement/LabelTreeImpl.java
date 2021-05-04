@@ -19,16 +19,15 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class LabelTreeImpl extends PHPTree implements LabelTree {
 
@@ -59,7 +58,7 @@ public class LabelTreeImpl extends PHPTree implements LabelTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(label, colonToken);
+    return IteratorUtils.iteratorOf(label, colonToken);
   }
 
   @Override

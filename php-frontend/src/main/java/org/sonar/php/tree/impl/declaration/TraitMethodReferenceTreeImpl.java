@@ -20,18 +20,15 @@
 package org.sonar.php.tree.impl.declaration;
 
 import java.util.Iterator;
-
 import javax.annotation.Nullable;
-
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import com.google.common.collect.Iterators;
 
 public class TraitMethodReferenceTreeImpl extends PHPTree implements TraitMethodReferenceTree {
 
@@ -77,7 +74,7 @@ public class TraitMethodReferenceTreeImpl extends PHPTree implements TraitMethod
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(trait, doubleColonToken, method);
+    return IteratorUtils.iteratorOf(trait, doubleColonToken, method);
   }
 
   @Override

@@ -19,11 +19,11 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -79,10 +79,10 @@ public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceT
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.forArray(methodReference, insteadOfToken),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(methodReference, insteadOfToken),
       traits.elementsAndSeparators(),
-      Iterators.singletonIterator(eosToken));
+      IteratorUtils.iteratorOf(eosToken));
   }
 
   @Override

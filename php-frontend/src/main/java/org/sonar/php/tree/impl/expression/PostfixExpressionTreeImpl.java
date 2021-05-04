@@ -19,15 +19,14 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class PostfixExpressionTreeImpl extends PHPTree implements UnaryExpressionTree {
 
@@ -58,7 +57,7 @@ public class PostfixExpressionTreeImpl extends PHPTree implements UnaryExpressio
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(expression, operator);
+    return IteratorUtils.iteratorOf(expression, operator);
   }
 
   @Override

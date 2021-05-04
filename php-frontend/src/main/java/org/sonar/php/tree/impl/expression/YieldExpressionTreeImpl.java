@@ -19,17 +19,16 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
 
 public class YieldExpressionTreeImpl extends PHPTree implements YieldExpressionTree {
 
@@ -100,7 +99,7 @@ public class YieldExpressionTreeImpl extends PHPTree implements YieldExpressionT
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(yieldToken, fromToken, key, doubleArrowToken, value);
+    return IteratorUtils.iteratorOf(yieldToken, fromToken, key, doubleArrowToken, value);
   }
 
   @Override

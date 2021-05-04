@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +28,7 @@ import org.sonar.php.symbols.UnknownFunctionSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -125,11 +125,11 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(callee),
-      Iterators.singletonIterator(openParenthesisToken),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(callee),
+      IteratorUtils.iteratorOf(openParenthesisToken),
       callArguments.elementsAndSeparators(),
-      Iterators.singletonIterator(closeParenthesisToken));
+      IteratorUtils.iteratorOf(closeParenthesisToken));
   }
 
   @Override

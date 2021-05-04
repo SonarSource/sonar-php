@@ -19,11 +19,14 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.symbols.HasMethodSymbol;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -32,10 +35,6 @@ import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
 
 public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarationTree, HasMethodSymbol {
 
@@ -120,10 +119,10 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
+    return IteratorUtils.concat(
       attributeGroups.iterator(),
       modifiersToken.iterator(),
-      Iterators.forArray(functionToken, referenceToken, name, parameters, returnTypeClause, body));
+      IteratorUtils.iteratorOf(functionToken, referenceToken, name, parameters, returnTypeClause, body));
   }
 
   @Override

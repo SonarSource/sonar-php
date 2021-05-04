@@ -19,16 +19,15 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class AttributeGroupTreeImpl extends PHPTree implements AttributeGroupTree {
   private final SyntaxToken startToken;
@@ -43,10 +42,10 @@ public class AttributeGroupTreeImpl extends PHPTree implements AttributeGroupTre
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(startToken),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(startToken),
       attributes.elementsAndSeparators(),
-      Iterators.singletonIterator(endToken)
+      IteratorUtils.iteratorOf(endToken)
     );
   }
 

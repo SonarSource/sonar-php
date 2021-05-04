@@ -19,21 +19,20 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
 
@@ -142,16 +141,16 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-        Iterators.forArray(forToken(), openParenthesisToken()),
-        init().elementsAndSeparators(),
-        Iterators.singletonIterator(firstSemicolonToken()),
-        condition().elementsAndSeparators(),
-        Iterators.singletonIterator(secondSemicolonToken()),
-        update().elementsAndSeparators(),
-        Iterators.forArray(closeParenthesisToken(), colonToken),
-        statements.iterator(),
-        Iterators.forArray(endForToken, eosToken));
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(forToken(), openParenthesisToken()),
+      init().elementsAndSeparators(),
+      IteratorUtils.iteratorOf(firstSemicolonToken()),
+      condition().elementsAndSeparators(),
+      IteratorUtils.iteratorOf(secondSemicolonToken()),
+      update().elementsAndSeparators(),
+      IteratorUtils.iteratorOf(closeParenthesisToken(), colonToken),
+      statements.iterator(),
+      IteratorUtils.iteratorOf(endForToken, eosToken));
   }
 
   @Override

@@ -20,9 +20,9 @@
 package org.sonar.php.tree.impl.statement;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
@@ -108,10 +108,10 @@ public class NamespaceStatementTreeImpl extends PHPTree implements NamespaceStat
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-        Iterators.forArray(namespaceToken, namespaceName, openCurlyBrace),
-        statements.iterator(),
-        Iterators.forArray(closeCurlyBrace, eosToken)
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(namespaceToken, namespaceName, openCurlyBrace),
+      statements.iterator(),
+      IteratorUtils.iteratorOf(closeCurlyBrace, eosToken)
     );
   }
 

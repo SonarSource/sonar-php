@@ -19,9 +19,9 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -70,7 +70,7 @@ public class MatchConditionClauseTreeImpl extends PHPTree implements MatchCondit
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(conditions.elementsAndSeparators(), Iterators.forArray(doubleArrowToken, expression));
+    return IteratorUtils.concat(conditions.elementsAndSeparators(), IteratorUtils.iteratorOf(doubleArrowToken, expression));
   }
 
 }

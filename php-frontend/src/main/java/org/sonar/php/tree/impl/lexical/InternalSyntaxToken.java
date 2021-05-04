@@ -19,11 +19,11 @@
  */
 package org.sonar.php.tree.impl.lexical;
 
-import com.google.common.collect.Iterators;
 import com.sonar.sslr.api.TokenType;
 import java.util.Iterator;
 import java.util.List;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
@@ -120,7 +120,7 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.<Tree>concat(trivias().iterator());
+    return IteratorUtils.concat(trivias().iterator());
   }
 
   @Override

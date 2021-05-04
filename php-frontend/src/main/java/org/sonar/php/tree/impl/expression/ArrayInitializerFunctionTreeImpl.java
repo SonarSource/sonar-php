@@ -19,17 +19,16 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class ArrayInitializerFunctionTreeImpl extends PHPTree implements ArrayInitializerFunctionTree {
 
@@ -78,11 +77,11 @@ public class ArrayInitializerFunctionTreeImpl extends PHPTree implements ArrayIn
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(arrayToken),
-      Iterators.singletonIterator(openParenthesis),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(arrayToken),
+      IteratorUtils.iteratorOf(openParenthesis),
       arrayPairs.elementsAndSeparators(),
-      Iterators.singletonIterator(closeParenthesis));
+      IteratorUtils.iteratorOf(closeParenthesis));
   }
 
   @Override

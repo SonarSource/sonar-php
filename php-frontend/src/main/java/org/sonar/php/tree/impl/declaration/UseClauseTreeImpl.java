@@ -19,18 +19,17 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
 
 public class UseClauseTreeImpl extends PHPTree implements UseClauseTree {
 
@@ -84,7 +83,7 @@ public class UseClauseTreeImpl extends PHPTree implements UseClauseTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(useTypeToken, namespaceName, asToken, alias);
+    return IteratorUtils.iteratorOf(useTypeToken, namespaceName, asToken, alias);
   }
 
   @Override

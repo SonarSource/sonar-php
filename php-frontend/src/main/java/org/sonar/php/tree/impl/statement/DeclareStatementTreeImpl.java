@@ -20,10 +20,10 @@
 package org.sonar.php.tree.impl.statement;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -127,12 +127,12 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-        Iterators.forArray(declareStatementHead.declareToken(), declareStatementHead.openParenthesisToken()),
-        declareStatementHead.directives().elementsAndSeparators(),
-        Iterators.forArray(declareStatementHead.closeParenthesisToken(), colonToken),
-        statements.iterator(),
-        Iterators.forArray(endDeclareToken, eosToken)
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(declareStatementHead.declareToken(), declareStatementHead.openParenthesisToken()),
+      declareStatementHead.directives().elementsAndSeparators(),
+      IteratorUtils.iteratorOf(declareStatementHead.closeParenthesisToken(), colonToken),
+      statements.iterator(),
+      IteratorUtils.iteratorOf(endDeclareToken, eosToken)
     );
   }
 

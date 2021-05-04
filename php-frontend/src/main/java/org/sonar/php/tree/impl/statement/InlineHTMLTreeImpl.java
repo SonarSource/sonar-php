@@ -19,15 +19,14 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class InlineHTMLTreeImpl extends PHPTree implements InlineHTMLTree {
 
@@ -51,7 +50,7 @@ public class InlineHTMLTreeImpl extends PHPTree implements InlineHTMLTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.<Tree>singletonIterator(inlineHTMLToken);
+    return IteratorUtils.iteratorOf(inlineHTMLToken);
   }
 
   @Override

@@ -20,16 +20,14 @@
 package org.sonar.php.tree.impl.expression;
 
 import java.util.Iterator;
-
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import com.google.common.collect.Iterators;
 
 public class CastExpressionTreeImpl extends PHPTree implements CastExpressionTree {
 
@@ -79,7 +77,7 @@ public class CastExpressionTreeImpl extends PHPTree implements CastExpressionTre
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(openParenthesisToken, castType, closeParenthesisToken, expression);
+    return IteratorUtils.iteratorOf(openParenthesisToken, castType, closeParenthesisToken, expression);
   }
 
   @Override

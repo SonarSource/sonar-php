@@ -20,13 +20,13 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -114,12 +114,12 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(useToken),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(useToken),
       traits.elementsAndSeparators(),
-      Iterators.singletonIterator(openCurlyBraceToken),
+      IteratorUtils.iteratorOf(openCurlyBraceToken),
       adaptations.iterator(),
-      Iterators.forArray(closeCurlyBraceToken, eosToken));
+      IteratorUtils.iteratorOf(closeCurlyBraceToken, eosToken));
   }
 
   @Override

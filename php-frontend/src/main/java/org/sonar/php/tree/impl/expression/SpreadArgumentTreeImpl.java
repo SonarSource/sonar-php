@@ -20,16 +20,14 @@
 package org.sonar.php.tree.impl.expression;
 
 import java.util.Iterator;
-
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import com.google.common.collect.Iterators;
 
 public class SpreadArgumentTreeImpl extends PHPTree implements SpreadArgumentTree {
 
@@ -59,7 +57,7 @@ public class SpreadArgumentTreeImpl extends PHPTree implements SpreadArgumentTre
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(ellipsisToken, argument);
+    return IteratorUtils.iteratorOf(ellipsisToken, argument);
   }
 
   @Override

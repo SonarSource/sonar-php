@@ -19,16 +19,15 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
 
 public class TypeTreeImpl extends PHPTree implements TypeTree {
   private static final Kind KIND = Kind.TYPE;
@@ -49,7 +48,7 @@ public class TypeTreeImpl extends PHPTree implements TypeTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(questionMarkToken, typeName);
+    return IteratorUtils.iteratorOf(questionMarkToken, typeName);
   }
 
   @Override

@@ -19,16 +19,15 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class AssignmentExpressionTreeImpl extends PHPTree implements AssignmentExpressionTree {
 
@@ -70,7 +69,7 @@ public class AssignmentExpressionTreeImpl extends PHPTree implements AssignmentE
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(variable, equalToken, value);
+    return IteratorUtils.iteratorOf(variable, equalToken, value);
   }
 
   @Override
