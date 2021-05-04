@@ -109,9 +109,8 @@ public class PHPAnalyzer {
   }
 
   public List<PhpIssue> analyzeTest() {
-    PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
     return testFileChecks.stream()
-      .map(check -> check.analyze(context))
+      .map(check -> check.analyze(new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable)))
       .flatMap(List::stream)
       .collect(Collectors.toList());
   }

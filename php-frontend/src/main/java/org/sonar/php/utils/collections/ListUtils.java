@@ -19,9 +19,8 @@
  */
 package org.sonar.php.utils.collections;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ListUtils {
 
@@ -30,8 +29,10 @@ public class ListUtils {
 
   @SafeVarargs
   public static <T> List<T> concat(List<? extends T>... lists) {
-    return Arrays.stream(lists)
-      .flatMap(List::stream)
-      .collect(Collectors.toList());
+    List<T> concatenatedList = new ArrayList<>();
+    for (List<? extends T> list : lists) {
+      concatenatedList.addAll(list);
+    }
+    return concatenatedList;
   }
 }

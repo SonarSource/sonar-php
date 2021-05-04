@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * This class is used for Java < 9 to simplify the creation of sets.
@@ -42,9 +41,11 @@ public class SetUtils {
   }
 
   @SafeVarargs
-  public static <T> Set<T> concat(Set<T>... sets) {
-    return Arrays.stream(sets)
-      .flatMap(Set::stream)
-      .collect(Collectors.toSet());
+  public static <T> Set<T> concat(Set<? extends T>... sets) {
+    Set<T> concatenatedSet = new HashSet<>();
+    for (Set<? extends T> set: sets) {
+      concatenatedSet.addAll(set);
+    }
+    return concatenatedSet;
   }
 }
