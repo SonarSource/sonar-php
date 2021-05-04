@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -27,7 +26,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * <p>
  * This tree has kind {@link Kind.EXPANDABLE_STRING_CHARACTERS} or {@link Kind.HEREDOC_STRING_CHARACTERS}
  */
-@Beta
 public interface ExpandableStringCharactersTree extends ExpressionTree {
 
   String value();

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -33,7 +32,6 @@ import java.util.List;
  *   switch {@link #expression()} : {@link #cases()} endswitch ;
  * </pre>
  */
-@Beta
 public interface SwitchStatementTree extends StatementTree {
 
   SyntaxToken switchToken();

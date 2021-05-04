@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -34,7 +33,6 @@ import javax.annotation.Nullable;
  *  function & {@link #name()} {@link #parameters()} {@link #body()}
  * </pre>
  */
-@Beta
 public interface FunctionDeclarationTree extends FunctionTree, StatementTree {
 
   @Override

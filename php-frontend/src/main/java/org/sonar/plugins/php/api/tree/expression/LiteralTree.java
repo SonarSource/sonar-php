@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -34,7 +33,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   {@link Kind#HEREDOC_LITERAL __CLASS__}          // magic constant
  * </pre>
  */
-@Beta
 public interface LiteralTree extends ExpressionTree {
 
   SyntaxToken token();

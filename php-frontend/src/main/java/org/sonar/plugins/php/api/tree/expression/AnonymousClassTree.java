@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -36,7 +35,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   class
  * </pre>
  */
-@Beta
 public interface AnonymousClassTree extends ExpressionTree, ClassTree {
 
   @Override

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.Tree;
 
 /**
@@ -42,7 +41,6 @@ import org.sonar.plugins.php.api.tree.Tree;
  *   {@link #variable()} {@link Tree.Kind#NULL_COALESCING_ASSIGNMENT ??=} {@link #value()}
  * </pre>
  */
-@Beta
 public interface AssignmentExpressionTree extends ExpressionTree {
 
   ExpressionTree variable();

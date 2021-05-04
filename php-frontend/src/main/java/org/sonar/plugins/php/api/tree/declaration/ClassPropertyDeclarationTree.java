@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -42,7 +41,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *  const {@link #declarations()} ;
  * </pre>
  */
-@Beta
 public interface ClassPropertyDeclarationTree extends ClassMemberTree, HasAttributes {
 
   List<SyntaxToken> modifierTokens();

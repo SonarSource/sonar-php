@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree;
 
-import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.expression.PrefixedCastExpressionTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
@@ -118,7 +117,6 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 /**
  * Common interface for all nodes in an abstract syntax tree.
  */
-@Beta
 public interface Tree {
 
   boolean is(Kind... kind);

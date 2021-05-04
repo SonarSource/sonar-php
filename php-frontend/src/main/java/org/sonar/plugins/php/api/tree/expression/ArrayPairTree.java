@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -32,7 +31,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *  {@link #key()} => {@link #value()}
  * </pre>
  */
-@Beta
 public interface ArrayPairTree extends Tree {
 
   @Nullable

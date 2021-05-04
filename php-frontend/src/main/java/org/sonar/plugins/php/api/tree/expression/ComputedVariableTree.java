@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -33,7 +32,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   $bar->{$foo[1]};
  * </pre>
  */
-@Beta
 public interface ComputedVariableTree extends VariableTree {
 
   SyntaxToken openCurlyBraceToken();

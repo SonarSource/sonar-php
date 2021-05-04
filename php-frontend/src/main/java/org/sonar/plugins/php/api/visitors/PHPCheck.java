@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import com.google.common.annotations.Beta;
 import java.util.List;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -30,7 +29,6 @@ import org.sonar.plugins.php.api.tree.Tree;
  *
  * To implement a check you should extend {@link PHPVisitorCheck} or {@link PHPSubscriptionCheck}.
  */
-@Beta
 public interface PHPCheck {
 
   CheckContext context();

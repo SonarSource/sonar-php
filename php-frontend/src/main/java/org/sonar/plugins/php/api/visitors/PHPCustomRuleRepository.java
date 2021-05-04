@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import com.google.common.annotations.Beta;
 import java.util.List;
 import org.sonar.api.ExtensionPoint;
 import org.sonar.api.batch.ScannerSide;
@@ -27,7 +26,6 @@ import org.sonar.api.batch.ScannerSide;
 /**
  * Extension point to create a custom rule repository for PHP.
  */
-@Beta
 @ScannerSide
 @ExtensionPoint
 public interface PHPCustomRuleRepository {

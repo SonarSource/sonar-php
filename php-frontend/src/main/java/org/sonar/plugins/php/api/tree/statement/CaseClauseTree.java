@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -34,7 +33,6 @@ import java.util.List;
  *   case {@link #expression()} ; {@link #statements()}
  * </pre>
  */
-@Beta
 public interface CaseClauseTree extends SwitchCaseClauseTree {
 
   @Override

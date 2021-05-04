@@ -19,12 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
 
 /**
  * <a href="https://www.php.net/manual/en/language.operators.execution.php">Execution Operator</a>
  */
-@Beta
 public interface ExecutionOperatorTree extends ExpressionTree {
 
   ExpandableStringLiteralTree literal();

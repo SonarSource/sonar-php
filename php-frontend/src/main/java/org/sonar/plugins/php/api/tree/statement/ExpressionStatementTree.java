@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.tree.statement;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
 
 /**
  * Expression statement is used for processing <a href="http://php.net/manual/en/language.expressions.php">expressions</a>, e.g. function call or assignment operations.
@@ -35,7 +34,6 @@ import com.google.common.annotations.Beta;
  *   $a = 1 ;
  * </pre>
  */
-@Beta
 public interface ExpressionStatementTree extends StatementTree {
 
   ExpressionTree expression();

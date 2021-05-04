@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -30,7 +29,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   static {@link #variables()} ;
  * </pre>
  */
-@Beta
 public interface StaticStatementTree extends StatementTree {
 
   SyntaxToken staticToken();

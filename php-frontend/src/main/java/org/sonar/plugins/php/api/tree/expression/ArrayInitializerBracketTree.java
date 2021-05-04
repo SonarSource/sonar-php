@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.tree.expression;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
 
 /**
  * <a href="http://php.net/manual/en/language.types.array.php">Array</a> Initializer Bracket
@@ -30,7 +29,6 @@ import com.google.common.annotations.Beta;
  *   [ {@link #arrayPairs()} ]
  * <pre/>
  */
-@Beta
 public interface ArrayInitializerBracketTree extends ArrayInitializerTree {
 
   SyntaxToken openBracketToken();

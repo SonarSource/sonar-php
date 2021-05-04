@@ -21,7 +21,6 @@ package org.sonar.plugins.php.api.tree.statement;
 
 import javax.annotation.Nullable;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -32,7 +31,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   return {@link #expression()} ;
  * </pre>
  */
-@Beta
 public interface ReturnStatementTree extends StatementTree {
 
   SyntaxToken returnToken();

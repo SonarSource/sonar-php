@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -33,7 +32,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   {@link #trait()} :: {@link #method()}
  * </pre>
  */
-@Beta
 public interface TraitMethodReferenceTree extends Tree {
 
   @Nullable

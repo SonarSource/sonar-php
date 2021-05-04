@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -30,7 +29,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   {@link #label()} :
  * </pre>
  */
-@Beta
 public interface LabelTree extends StatementTree {
 
   NameIdentifierTree label();

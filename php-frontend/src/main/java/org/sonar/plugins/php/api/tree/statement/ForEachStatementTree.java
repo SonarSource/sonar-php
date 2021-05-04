@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -35,7 +34,6 @@ import java.util.List;
  *   foreach ( {@link #expression()} as {@link #key()} ) : {@link #statement()} endforeach ;    // alternative syntax
  * </pre>
  */
-@Beta
 public interface ForEachStatementTree extends StatementTree {
 
   SyntaxToken foreachToken();

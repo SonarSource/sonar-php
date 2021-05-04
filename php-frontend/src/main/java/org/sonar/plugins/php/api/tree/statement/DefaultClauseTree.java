@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -32,7 +31,6 @@ import java.util.List;
  *   default ;
  * </pre>
  */
-@Beta
 public interface DefaultClauseTree extends SwitchCaseClauseTree {
 
   @Override

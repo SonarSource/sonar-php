@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
@@ -32,7 +31,6 @@ import java.util.List;
  *   try {@link #block()} {@link #catchBlocks()}
  * </pre>
  */
-@Beta
 public interface TryStatementTree extends StatementTree {
 
   SyntaxToken tryToken();
