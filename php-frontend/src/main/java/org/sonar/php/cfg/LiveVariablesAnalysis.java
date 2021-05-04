@@ -20,6 +20,7 @@
 package org.sonar.php.cfg;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.ArrayDeque;
 import java.util.Collections;
@@ -150,7 +151,7 @@ public class LiveVariablesAnalysis {
     }
 
     public Map<Symbol, VariableUsage> getVariableUsages(Tree tree) {
-      return ImmutableMap.copyOf(variableUsagesPerElement.get(tree));
+      return Collections.unmodifiableMap(variableUsagesPerElement.get(tree));
     }
 
     public Set<Symbol> getGen() {

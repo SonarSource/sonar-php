@@ -20,7 +20,9 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -31,6 +33,7 @@ import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.checks.utils.type.NewObjectCall;
 import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
+import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -53,7 +56,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static final String FGETSS_FUNCTION = "fgetss";
   private static final String GZGETSS_FUNCTION = "gzgetss";
 
-  private static final ImmutableMap<String, String> NEW_BY_DEPRECATED_FUNCTIONS = ImmutableMap.<String, String>builder()
+  private static final Map<String, String> NEW_BY_DEPRECATED_FUNCTIONS = MapBuilder.<String, String>builder()
     .put("call_user_method", "call_user_func()")
     .put("call_user_method_array", "call_user_func_array()")
     .put("define_syslog_variables", "")

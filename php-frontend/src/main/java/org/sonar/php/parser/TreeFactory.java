@@ -19,6 +19,7 @@
  */
 package org.sonar.php.parser;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
@@ -134,6 +135,7 @@ import org.sonar.php.tree.impl.statement.UnsetVariableStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.UseStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.VariableDeclarationTreeImpl;
 import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
+import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -235,7 +237,7 @@ import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
 public class TreeFactory {
 
-  private static final Map<String, Kind> BINARY_EXPRESSION_KINDS_BY_OPERATOR = ImmutableMap.<String, Kind>builder()
+  private static final Map<String, Kind> BINARY_EXPRESSION_KINDS_BY_OPERATOR = MapBuilder.<String, Kind>builder()
     .put(PHPPunctuator.DOT.getValue(), Kind.CONCATENATION)
     .put(PHPPunctuator.STAR_STAR.getValue(), Kind.POWER)
     .put(PHPPunctuator.STAR.getValue(), Kind.MULTIPLY)
@@ -266,7 +268,7 @@ public class TreeFactory {
     .put(PHPPunctuator.NULL_COALESCE.getValue(), Kind.NULL_COALESCING_EXPRESSION)
     .build();
 
-  private static final Map<String, Kind> UNARY_EXPRESSION_KINDS_BY_OPERATOR = ImmutableMap.<String, Kind>builder()
+  private static final Map<String, Kind> UNARY_EXPRESSION_KINDS_BY_OPERATOR = MapBuilder.<String, Kind>builder()
     .put(PHPPunctuator.INC.getValue(), Kind.PREFIX_INCREMENT)
     .put(PHPPunctuator.DEC.getValue(), Kind.PREFIX_DECREMENT)
     .put(PHPPunctuator.PLUS.getValue(), Kind.UNARY_PLUS)
@@ -1964,4 +1966,5 @@ public class TreeFactory {
   public List<SyntaxToken> singleToken(SyntaxToken token) {
     return Collections.singletonList(token);
   }
+
 }
