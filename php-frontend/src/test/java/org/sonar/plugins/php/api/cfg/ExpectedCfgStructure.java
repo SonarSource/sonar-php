@@ -19,8 +19,6 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,16 +44,11 @@ public class ExpectedCfgStructure {
 
   static final String EMPTY = "_empty";
   // The string value is the CfgBlock test id
-  private final BiMap<CfgBlock, String> testIds;
+  private final Map<CfgBlock, String> testIds = new HashMap<>();
 
   // The key is CfgBlock test id
-  private final Map<String, BlockExpectation> expectations;
+  private final Map<String, BlockExpectation> expectations = new HashMap<>();
   final List<BlockExpectation> emptyBlockExpectations = new ArrayList<>();
-
-  private ExpectedCfgStructure() {
-    testIds = HashBiMap.create();
-    expectations = new HashMap<>();
-  }
 
   static ExpectedCfgStructure parse(Set<CfgBlock> blocks) {
     return parse(blocks, Function.identity());
@@ -94,7 +87,11 @@ public class ExpectedCfgStructure {
   }
 
   CfgBlock cfgBlock(String testId) {
-    return testIds.inverse().get(testId);
+    return testIds.entrySet().stream()
+      .filter(e -> e.getValue().equals(testId))
+      .map(Map.Entry::getKey)
+      .findFirst()
+      .orElse(null);
   }
 
   List<String> expectedSucc(CfgBlock block) {
