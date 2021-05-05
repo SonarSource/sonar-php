@@ -19,10 +19,10 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -132,10 +132,10 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-        Iterators.singletonIterator(absoluteSeparator),
-        namespaces.elementsAndSeparators(),
-        Iterators.singletonIterator(name)
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(absoluteSeparator),
+      namespaces.elementsAndSeparators(),
+      IteratorUtils.iteratorOf(name)
     );
   }
 

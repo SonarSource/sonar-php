@@ -19,13 +19,12 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
-
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
@@ -139,9 +138,9 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
+    return IteratorUtils.concat(
       attributeGroups.iterator(),
-      Iterators.forArray(visibility, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
+      IteratorUtils.iteratorOf(visibility, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
     );
   }
 

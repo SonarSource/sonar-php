@@ -19,17 +19,16 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class ParameterListTreeImpl extends PHPTree implements ParameterListTree {
 
@@ -70,10 +69,10 @@ public class ParameterListTreeImpl extends PHPTree implements ParameterListTree 
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(openParenthesis),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(openParenthesis),
       parameters.elementsAndSeparators(),
-      Iterators.singletonIterator(closeParenthesis));
+      IteratorUtils.iteratorOf(closeParenthesis));
   }
 
   @Override

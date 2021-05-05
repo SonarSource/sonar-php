@@ -20,9 +20,9 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
@@ -60,7 +60,7 @@ public class VariableVariableTreeImpl extends PHPTree implements VariableVariabl
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(dollars.iterator(), Iterators.singletonIterator(variable));
+    return IteratorUtils.concat(dollars.iterator(), IteratorUtils.iteratorOf(variable));
   }
 
   @Override

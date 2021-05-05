@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
@@ -85,10 +86,10 @@ public class ExpandableStringLiteralTreeImpl extends PHPTree implements Expandab
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(openDoubleQuote),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(openDoubleQuote),
       elements.iterator(),
-      Iterators.singletonIterator(closeDoubleQuote));
+      IteratorUtils.iteratorOf(closeDoubleQuote));
   }
 
   @Override

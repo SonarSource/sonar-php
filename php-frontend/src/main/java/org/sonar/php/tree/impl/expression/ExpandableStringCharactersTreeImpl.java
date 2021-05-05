@@ -19,14 +19,13 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class ExpandableStringCharactersTreeImpl extends PHPTree implements ExpandableStringCharactersTree {
 
@@ -55,7 +54,7 @@ public class ExpandableStringCharactersTreeImpl extends PHPTree implements Expan
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.<Tree>singletonIterator(token);
+    return IteratorUtils.iteratorOf(token);
   }
 
   @Override

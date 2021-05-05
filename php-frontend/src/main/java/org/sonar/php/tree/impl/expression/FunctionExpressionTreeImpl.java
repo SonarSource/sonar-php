@@ -19,9 +19,12 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
@@ -31,10 +34,6 @@ import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
 
 public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpressionTree {
 
@@ -119,9 +118,9 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
+    return IteratorUtils.concat(
       attributeGroups.listIterator(),
-      Iterators.forArray(staticToken, functionToken, referenceToken, parameters, lexicalVars, returnTypeClause, body)
+      IteratorUtils.iteratorOf(staticToken, functionToken, referenceToken, parameters, lexicalVars, returnTypeClause, body)
     );
   }
 

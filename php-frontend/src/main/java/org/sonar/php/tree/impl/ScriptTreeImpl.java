@@ -19,16 +19,15 @@
  */
 package org.sonar.php.tree.impl;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
-import java.util.List;
 
 public class ScriptTreeImpl extends PHPTree implements ScriptTree {
 
@@ -49,8 +48,8 @@ public class ScriptTreeImpl extends PHPTree implements ScriptTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(fileOpeningTagToken),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(fileOpeningTagToken),
       statements.iterator()
     );
   }

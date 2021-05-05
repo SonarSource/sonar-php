@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +27,7 @@ import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.symbols.HasClassSymbol;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
@@ -183,15 +183,15 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
+    return IteratorUtils.concat(
       attributeGroups.iterator(),
-      Iterators.forArray(classToken, openParenthesisToken),
+      IteratorUtils.iteratorOf(classToken, openParenthesisToken),
       callArguments.elementsAndSeparators(),
-      Iterators.forArray(closeParenthesisToken, extendsToken, superClass, implementsToken),
+      IteratorUtils.iteratorOf(closeParenthesisToken, extendsToken, superClass, implementsToken),
       superInterfaces.elementsAndSeparators(),
-      Iterators.singletonIterator(openCurlyBraceToken),
+      IteratorUtils.iteratorOf(openCurlyBraceToken),
       members.iterator(),
-      Iterators.singletonIterator(closeCurlyBraceToken)
+      IteratorUtils.iteratorOf(closeCurlyBraceToken)
     );
   }
 

@@ -19,17 +19,16 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class LexicalVariablesTreeImpl extends PHPTree implements LexicalVariablesTree {
 
@@ -74,11 +73,11 @@ public class LexicalVariablesTreeImpl extends PHPTree implements LexicalVariable
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(useToken),
-      Iterators.singletonIterator(openParenthesisToken),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(useToken),
+      IteratorUtils.iteratorOf(openParenthesisToken),
       variables.elementsAndSeparators(),
-      Iterators.singletonIterator(closeParenthesisToken));
+      IteratorUtils.iteratorOf(closeParenthesisToken));
   }
 
   @Override

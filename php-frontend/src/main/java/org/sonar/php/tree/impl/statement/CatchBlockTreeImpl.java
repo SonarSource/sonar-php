@@ -19,12 +19,12 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -105,10 +105,10 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.forArray(catchToken, lParenthesis),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(catchToken, lParenthesis),
       exceptionTypes.elementsAndSeparators(),
-      Iterators.forArray(variable, rParenthsis, block));
+      IteratorUtils.iteratorOf(variable, rParenthsis, block));
   }
 
 }

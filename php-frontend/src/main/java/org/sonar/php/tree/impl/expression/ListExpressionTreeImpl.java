@@ -19,12 +19,12 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
@@ -81,11 +81,11 @@ public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTre
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(listToken),
-      Iterators.singletonIterator(openParenthesis),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(listToken),
+      IteratorUtils.iteratorOf(openParenthesis),
       elements.elementsAndSeparators().iterator(),
-      Iterators.singletonIterator(closeParenthesis));
+      IteratorUtils.iteratorOf(closeParenthesis));
   }
 
   @Override

@@ -19,11 +19,11 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import com.sonar.sslr.api.typed.Optional;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MatchDefaultClauseTree;
@@ -80,7 +80,7 @@ public class MatchDefaultClauseTreeImpl extends PHPTree implements MatchDefaultC
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(defaultToken, trailingComma, doubleArrowToken, expression);
+    return IteratorUtils.iteratorOf(defaultToken, trailingComma, doubleArrowToken, expression);
   }
 
 }

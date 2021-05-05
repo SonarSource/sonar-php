@@ -19,15 +19,14 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class EmptyStatementImpl extends PHPTree implements EmptyStatementTree {
 
@@ -51,7 +50,7 @@ public class EmptyStatementImpl extends PHPTree implements EmptyStatementTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.<Tree>singletonIterator(semicolonToken);
+    return IteratorUtils.iteratorOf(semicolonToken);
   }
 
   @Override

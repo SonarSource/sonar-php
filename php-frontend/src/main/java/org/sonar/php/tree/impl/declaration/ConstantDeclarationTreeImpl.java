@@ -20,17 +20,16 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.base.Functions;
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDeclarationTree {
 
@@ -71,10 +70,10 @@ public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDecl
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(constToken),
-      declarations.elementsAndSeparators(Functions.<VariableDeclarationTree>identity()),
-      Iterators.singletonIterator(eosToken));
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(constToken),
+      declarations.elementsAndSeparators(Functions.identity()),
+      IteratorUtils.iteratorOf(eosToken));
   }
 
   @Override

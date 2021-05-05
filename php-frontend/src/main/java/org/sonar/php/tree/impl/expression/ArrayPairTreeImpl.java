@@ -19,11 +19,11 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -82,7 +82,7 @@ public class ArrayPairTreeImpl extends PHPTree implements ArrayPairTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(ellipsis, key, doubleArrowToken, value);
+    return IteratorUtils.iteratorOf(ellipsis, key, doubleArrowToken, value);
   }
 
   @Override

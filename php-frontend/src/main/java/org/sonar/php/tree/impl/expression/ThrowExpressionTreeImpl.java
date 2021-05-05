@@ -19,9 +19,9 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
@@ -40,7 +40,7 @@ public class ThrowExpressionTreeImpl extends PHPTree implements ThrowExpressionT
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(throwToken, expression);
+    return IteratorUtils.iteratorOf(throwToken, expression);
   }
 
   @Override

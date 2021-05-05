@@ -19,9 +19,9 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -104,9 +104,9 @@ public class MatchExpressionTreeImpl extends PHPTree implements MatchExpressionT
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.forArray(matchToken, openParenthesis, expression, closeParenthesis, openCurlyBraceToken),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(matchToken, openParenthesis, expression, closeParenthesis, openCurlyBraceToken),
       cases.elementsAndSeparators(),
-      Iterators.singletonIterator(closeCurlyBraceToken));
+      IteratorUtils.iteratorOf(closeCurlyBraceToken));
   }
 }

@@ -19,17 +19,16 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
-import java.util.List;
 
 public class BlockTreeImpl extends PHPTree implements BlockTree {
 
@@ -67,10 +66,10 @@ public class BlockTreeImpl extends PHPTree implements BlockTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-        Iterators.singletonIterator(openCurlyBraceToken),
-        statements.iterator(),
-        Iterators.singletonIterator(closeCurlyBraceToken));
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(openCurlyBraceToken),
+      statements.iterator(),
+      IteratorUtils.iteratorOf(closeCurlyBraceToken));
   }
 
   @Override

@@ -19,16 +19,15 @@
  */
 package org.sonar.php.tree.impl;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
 
 public class CompilationUnitTreeImpl extends PHPTree implements CompilationUnitTree {
 
@@ -60,7 +59,7 @@ public class CompilationUnitTreeImpl extends PHPTree implements CompilationUnitT
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(script, eofToken);
+    return IteratorUtils.iteratorOf(script, eofToken);
   }
 
   @Override

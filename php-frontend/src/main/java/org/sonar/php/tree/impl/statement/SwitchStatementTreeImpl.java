@@ -19,19 +19,18 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
 
 public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementTree {
 
@@ -94,10 +93,10 @@ public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementT
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-        Iterators.forArray(switchToken, expression, openCurlyBraceToken, colonToken, semicolonToken),
-        cases.iterator(),
-        Iterators.forArray(closeCurlyBraceToken, endswitchToken, eosToken)
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(switchToken, expression, openCurlyBraceToken, colonToken, semicolonToken),
+      cases.iterator(),
+      IteratorUtils.iteratorOf(closeCurlyBraceToken, endswitchToken, eosToken)
     );
   }
 

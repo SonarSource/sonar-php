@@ -19,9 +19,9 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
@@ -44,7 +44,7 @@ public class ExecutionOperatorTreeImpl extends PHPTree implements ExecutionOpera
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.singletonIterator(literal);
+    return IteratorUtils.iteratorOf(literal);
   }
 
   @Override

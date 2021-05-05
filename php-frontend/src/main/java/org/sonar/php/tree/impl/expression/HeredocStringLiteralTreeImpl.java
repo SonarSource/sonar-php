@@ -22,7 +22,6 @@ package org.sonar.php.tree.impl.expression;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +32,7 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -87,10 +87,10 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(openingToken),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(openingToken),
       elements.iterator(),
-      Iterators.singletonIterator(closingToken));
+      IteratorUtils.iteratorOf(closingToken));
   }
 
   @Override

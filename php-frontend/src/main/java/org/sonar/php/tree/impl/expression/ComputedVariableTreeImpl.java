@@ -19,16 +19,15 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class ComputedVariableTreeImpl extends PHPTree implements ComputedVariableTree {
 
@@ -66,7 +65,7 @@ public class ComputedVariableTreeImpl extends PHPTree implements ComputedVariabl
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(openCurly, expression, closeCurly);
+    return IteratorUtils.iteratorOf(openCurly, expression, closeCurly);
   }
 
   @Override

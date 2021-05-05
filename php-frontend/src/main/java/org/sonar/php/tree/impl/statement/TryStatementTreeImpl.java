@@ -19,19 +19,18 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
 
 public class TryStatementTreeImpl extends PHPTree implements TryStatementTree {
 
@@ -62,10 +61,10 @@ public class TryStatementTreeImpl extends PHPTree implements TryStatementTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-        Iterators.forArray(tryToken, block),
-        catchBlocks.iterator(),
-        Iterators.forArray(finallyToken, finallyBlock)
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(tryToken, block),
+      catchBlocks.iterator(),
+      IteratorUtils.iteratorOf(finallyToken, finallyBlock)
     );
   }
 

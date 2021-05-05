@@ -19,9 +19,9 @@
  */
 package org.sonar.php.tree.impl;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import org.sonar.php.tree.symbols.SymbolImpl;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -45,7 +45,7 @@ public class VariableIdentifierTreeImpl extends PHPTree implements VariableIdent
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.<Tree>singletonIterator(token);
+    return IteratorUtils.iteratorOf(token);
   }
 
   @Override

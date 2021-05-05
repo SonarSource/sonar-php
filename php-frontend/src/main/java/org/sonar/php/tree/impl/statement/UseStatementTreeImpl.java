@@ -19,12 +19,12 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -140,10 +140,10 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.forArray(useToken, useTypeToken, prefix, nsSeparatorToken, openCurlyBraceToken),
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(useToken, useTypeToken, prefix, nsSeparatorToken, openCurlyBraceToken),
       clauses.elementsAndSeparators(),
-      Iterators.forArray(closeCurlyBraceToken, eosToken)
+      IteratorUtils.iteratorOf(closeCurlyBraceToken, eosToken)
       );
   }
 

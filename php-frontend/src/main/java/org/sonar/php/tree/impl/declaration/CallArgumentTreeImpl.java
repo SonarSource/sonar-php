@@ -19,19 +19,18 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.parser.TreeFactory;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
 
 public class CallArgumentTreeImpl extends PHPTree implements CallArgumentTree {
   private static final Kind KIND = Kind.CALL_ARGUMENT;
@@ -64,7 +63,7 @@ public class CallArgumentTreeImpl extends PHPTree implements CallArgumentTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(name, nameSeparator, value);
+    return IteratorUtils.iteratorOf(name, nameSeparator, value);
   }
 
   @Override

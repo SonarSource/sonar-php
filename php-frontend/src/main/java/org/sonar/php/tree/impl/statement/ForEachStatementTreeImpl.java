@@ -19,20 +19,19 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.collect.Iterators;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatementTree {
 
@@ -141,10 +140,10 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-        Iterators.forArray(foreachToken(), openParenthesisToken(), expression(), asToken(), key(), doubleArrowToken(), value(), closeParenthesisToken(), colonToken),
-        statements.iterator(),
-        Iterators.forArray(endforeachToken, eosToken));
+    return IteratorUtils.concat(
+      IteratorUtils.iteratorOf(foreachToken(), openParenthesisToken(), expression(), asToken(), key(), doubleArrowToken(), value(), closeParenthesisToken(), colonToken),
+      statements.iterator(),
+      IteratorUtils.iteratorOf(endforeachToken, eosToken));
   }
 
   @Override
