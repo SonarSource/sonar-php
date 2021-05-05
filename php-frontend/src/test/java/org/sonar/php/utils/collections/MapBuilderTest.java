@@ -43,8 +43,8 @@ public class MapBuilderTest {
       .build();
 
     assertThat(map).hasSize(2);
-    assertThat("value1").isEqualTo(map.get("key1"));
-    assertThat("value2").isEqualTo(map.get("key2"));
+    assertThat(map.get("key1")).isEqualTo("value1");
+    assertThat(map.get("key2")).isEqualTo("value2");
   }
 
   @Test
@@ -55,8 +55,8 @@ public class MapBuilderTest {
       .build();
 
     assertThat(map).hasSize(2);
-    assertThat(new Value("value1")).isEqualTo(map.get(new Key(1)));
-    assertThat(new Value("value2")).isEqualTo(map.get(new Key(2)));
+    assertThat(map.get(new Key(1))).isEqualTo(new Value("value1"));
+    assertThat(map.get(new Key(2))).isEqualTo(new Value("value2"));
   }
 
   private static class Key {
