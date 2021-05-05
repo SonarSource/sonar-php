@@ -19,11 +19,11 @@
  */
 package org.sonar.php.checks.security;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionArgumentCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -32,8 +32,8 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
 
   private static final String MESSAGE = "Make sure this weak hash algorithm is not used in a sensitive context here.";
 
-  private static final Set<String> WEAK_HASH_FUNCTIONS = ImmutableSet.of("md5", "sha1");
-  private static final Set<String> WEAK_HASH_ARGUMENTS = ImmutableSet.of(
+  private static final Set<String> WEAK_HASH_FUNCTIONS = SetUtils.immutableSetOf("md5", "sha1");
+  private static final Set<String> WEAK_HASH_ARGUMENTS = SetUtils.immutableSetOf(
     "md2",
     "md4",
     "md5",
@@ -45,7 +45,7 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
     "haval192,3",
     "haval224,3"
   );
-  private static final Set<String> WEAK_MHASH_ARGUMENTS = ImmutableSet.of(
+  private static final Set<String> WEAK_MHASH_ARGUMENTS = SetUtils.immutableSetOf(
     "MHASH_MD2",
     "MHASH_MD4",
     "MHASH_MD5",

@@ -19,33 +19,32 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import com.google.common.collect.ImmutableList;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Objects;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
-import java.util.Objects;
-
 @Rule(key = "S5915")
 public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Don't perform an assertion here; An exception is expected to be raised before its execution.";
   private static final String MESSAGE_SINGLE = "Refactor this test; if this assertion's argument raises an exception, the assertion will never get executed.";
 
-  private static final List<String> EXPECT_METHODS = ImmutableList.of(
+  private static final Set<String> EXPECT_METHODS = SetUtils.immutableSetOf(
     "expectexception",
     "expectexceptionmessage",
     "expectexceptionmessagematches",
     "exceptexceptioncode"
   );
-  private static final List<String> EXPECT_ANNOTATIONS = ImmutableList.of(
+  private static final Set<String> EXPECT_ANNOTATIONS = SetUtils.immutableSetOf(
     "expectedexception",
     "expectexceptionmessage",
     "expectedexceptionmessage",

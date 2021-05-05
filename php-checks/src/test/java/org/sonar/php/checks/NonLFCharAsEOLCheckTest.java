@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -53,7 +53,7 @@ public class NonLFCharAsEOLCheckTest {
 
   @Test
   public void ko() {
-    ImmutableList<PhpIssue> issues = ImmutableList.<PhpIssue>of(
+    List<PhpIssue> issues = Collections.singletonList(
       new LegacyIssue(check, "Replace all non line feed end of line characters in this file \"" + koFile.filename() + "\" by LF."));
     PHPCheckTest.check(check, koFile, issues);
   }

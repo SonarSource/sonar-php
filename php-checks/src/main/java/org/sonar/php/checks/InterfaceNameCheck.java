@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
@@ -53,7 +53,7 @@ public class InterfaceNameCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.INTERFACE_DECLARATION);
+    return Collections.singletonList(Kind.INTERFACE_DECLARATION);
   }
 
   @Override

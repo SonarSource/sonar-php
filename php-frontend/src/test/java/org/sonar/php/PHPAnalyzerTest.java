@@ -19,9 +19,10 @@
  */
 package org.sonar.php;
 
-import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
@@ -97,7 +98,7 @@ public class PHPAnalyzerTest {
   public void test_analyze_test_file() throws Exception {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();
-    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check, testCheck), ImmutableList.of(testCheck), tmpFolder.newFolder(), new ProjectSymbolData());
+    PHPAnalyzer analyzer = new PHPAnalyzer(Arrays.asList(check, testCheck), Collections.singletonList(testCheck), tmpFolder.newFolder(), new ProjectSymbolData());
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
     List<PhpIssue> issues = analyzer.analyze();
@@ -144,6 +145,6 @@ public class PHPAnalyzerTest {
   }
 
   private PHPAnalyzer createAnalyzer(PHPCheck... checks) throws IOException {
-    return new PHPAnalyzer(ImmutableList.copyOf(checks), tmpFolder.newFolder(), new ProjectSymbolData());
+    return new PHPAnalyzer(Arrays.asList(checks), tmpFolder.newFolder(), new ProjectSymbolData());
   }
 }

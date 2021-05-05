@@ -19,14 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
-
-import java.util.List;
 
 public class TrailingCommentCheckTest {
 
@@ -35,7 +34,7 @@ public class TrailingCommentCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    List<PhpIssue> issues = ImmutableList.of(
+    List<PhpIssue> issues = Arrays.asList(
       newIssue(4),
       newIssue(5)
     );
@@ -46,7 +45,7 @@ public class TrailingCommentCheckTest {
   @Test
   public void custom() throws Exception {
     check.legalCommentPattern = "";
-    List<PhpIssue> issues = ImmutableList.of(
+    List<PhpIssue> issues = Arrays.asList(
       newIssue(4),
       newIssue(5),
       newIssue(11),

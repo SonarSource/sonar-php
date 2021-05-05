@@ -20,11 +20,12 @@
 package org.sonar.php.checks.security;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -52,8 +53,8 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
     "session_set_cookie_params", 2);
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.copyOf(FUNCTION_AND_PARAM_INDEX.keySet());
+  protected Set<String> functionNames() {
+    return Collections.unmodifiableSet(FUNCTION_AND_PARAM_INDEX.keySet());
   }
 
   @Override

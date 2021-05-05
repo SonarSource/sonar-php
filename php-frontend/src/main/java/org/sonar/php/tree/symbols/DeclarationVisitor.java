@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.symbols;
 
-import com.google.common.collect.ImmutableSet;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -50,6 +49,7 @@ import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -88,7 +88,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private Deque<ClassTree> classTreeStack = new ArrayDeque<>();
   private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
 
-  private static final Set<String> VALID_VISIBILITIES = ImmutableSet.of("PUBLIC", "PRIVATE", "PROTECTED");
+  private static final Set<String> VALID_VISIBILITIES = SetUtils.immutableSetOf("PUBLIC", "PRIVATE", "PROTECTED");
   private static final QualifiedName ANONYMOUS_CLASS_NAME = QualifiedName.qualifiedName("<anonymous_class>");
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {

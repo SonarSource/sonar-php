@@ -19,9 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = SleepFunctionUsageCheck.KEY)
@@ -31,8 +32,8 @@ public class SleepFunctionUsageCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Remove this call to \"sleep\".";
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("sleep");
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf("sleep");
   }
 
   @Override

@@ -19,20 +19,20 @@
  */
 package org.sonar.php.checks.phpini;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
 import java.util.Set;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.ini.tree.Directive;
 
 public enum PhpIniBoolean {
 
-  ON(ImmutableSet.of("1", "ON", "TRUE", "YES")),
-  OFF(ImmutableSet.of("0", "OFF", "FALSE", "NO"));
+  ON("1", "ON", "TRUE", "YES"),
+  OFF("0", "OFF", "FALSE", "NO");
 
   private final Set<String> variants;
 
-  PhpIniBoolean(Set<String> variants) {
-    this.variants = variants;
+  PhpIniBoolean(String... variants) {
+    this.variants = SetUtils.immutableSetOf(variants);
   }
 
   public boolean matchesValue(Directive directive) {

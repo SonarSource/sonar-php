@@ -19,8 +19,8 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
+import java.util.Collections;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.fs.InputFile;
@@ -43,7 +43,7 @@ public class ScannerTest {
   @Test
   public void progress_report_should_be_stopped() {
     TestScanner scanner = new TestScanner(context);
-    scanner.execute(progressReport, ImmutableList.of(PhpTestUtils.inputFile("empty.php")));
+    scanner.execute(progressReport, Collections.singletonList(PhpTestUtils.inputFile("empty.php")));
     verify(progressReport).stop();
   }
 
@@ -53,7 +53,7 @@ public class ScannerTest {
     context.setCancelled(true);
     thrown.expectMessage("Analysis cancelled");
     try {
-      scanner.execute(progressReport, ImmutableList.of(PhpTestUtils.inputFile("empty.php")));
+      scanner.execute(progressReport, Collections.singletonList(PhpTestUtils.inputFile("empty.php")));
     } finally {
       verify(progressReport).cancel();
       verify(progressReport, never()).stop();

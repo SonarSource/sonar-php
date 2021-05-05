@@ -20,13 +20,12 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -80,7 +79,7 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
       tokenBeforeClosingToken.endLine(),
       tokenBeforeClosingToken.endColumn(),
       closingTag,
-      ImmutableList.of(),
+      Collections.emptyList(),
       startIndex + tokenText.length() - closingTag.length(),
       false);
   }
@@ -100,12 +99,15 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
 
   @Override
   public List<ExpandableStringCharactersTree> strings() {
-    return ImmutableList.copyOf(Iterables.filter(elements, ExpandableStringCharactersTree.class));
+    return elements.stream()
+      .filter(ExpandableStringCharactersTree.class::isInstance)
+      .map(ExpandableStringCharactersTree.class::cast)
+      .collect(Collectors.toList());
   }
 
   @Override
   public List<ExpressionTree> expressions() {
-    return ImmutableList.copyOf(Iterables.filter(elements, input -> !input.is(Kind.HEREDOC_STRING_CHARACTERS)));
+    return elements.stream().filter(input -> !input.is(Kind.HEREDOC_STRING_CHARACTERS)).collect(Collectors.toList());
   }
 
   @Override

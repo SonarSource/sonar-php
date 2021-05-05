@@ -19,9 +19,9 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,7 +49,7 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(
+    return Arrays.asList(
         Kind.SCRIPT,
         Kind.DECLARE_STATEMENT,
         Kind.IF_STATEMENT,

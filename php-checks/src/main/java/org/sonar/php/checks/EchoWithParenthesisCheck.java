@@ -19,9 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -32,8 +33,8 @@ public class EchoWithParenthesisCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Remove the parentheses from this \"echo\" call.";
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("echo");
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf("echo");
   }
 
   @Override

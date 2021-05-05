@@ -19,7 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -36,11 +40,6 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.visitors.PHPTreeSubscriber;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 @Rule(key = "S4143")
 public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
   private static final String MESSAGE = "Verify this is the array key that was intended to be written to; a value has already been saved for it and not used.";
@@ -48,7 +47,7 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Tree.Kind> nodesToVisit() {
-    return ImmutableList.of(Tree.Kind.BLOCK, Tree.Kind.SCRIPT);
+    return Arrays.asList(Tree.Kind.BLOCK, Tree.Kind.SCRIPT);
   }
 
   private Map<String, Symbol> namesToSymbols = new HashMap<>();
@@ -165,7 +164,7 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
 
     @Override
     public List<Tree.Kind> nodesToVisit() {
-      return ImmutableList.of(Tree.Kind.VARIABLE_IDENTIFIER,
+      return Arrays.asList(Tree.Kind.VARIABLE_IDENTIFIER,
         Tree.Kind.CONTINUE_STATEMENT,
         Tree.Kind.RETURN_STATEMENT,
         Tree.Kind.BREAK_STATEMENT,

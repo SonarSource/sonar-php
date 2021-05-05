@@ -19,21 +19,21 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.cfg.CfgBlock;
-import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.php.cfg.LiveVariablesAnalysis;
 import org.sonar.php.cfg.LiveVariablesAnalysis.LiveVariables;
 import org.sonar.php.cfg.LiveVariablesAnalysis.VariableUsage;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.tree.symbols.Scope;
+import org.sonar.plugins.php.api.cfg.CfgBlock;
+import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -47,7 +47,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S1854")
 public class DeadStoreCheck extends PHPSubscriptionCheck {
 
-  private static final Set<String> BASIC_LITERAL_VALUES = ImmutableSet.of(
+  private static final Set<String> BASIC_LITERAL_VALUES = SetUtils.immutableSetOf(
     "true",
     "false",
     "1",
@@ -63,7 +63,7 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Tree.Kind> nodesToVisit() {
-    return ImmutableList.of(
+    return Arrays.asList(
       Kind.FUNCTION_DECLARATION,
       Kind.FUNCTION_EXPRESSION,
       Kind.METHOD_DECLARATION);

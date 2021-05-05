@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -112,8 +112,8 @@ public class PHPSensorTest {
     }
 
     @Override
-    public ImmutableList<Class<?>> checkClasses() {
-      return ImmutableList.of(MyCustomRule.class);
+    public List<Class<?>> checkClasses() {
+      return Collections.singletonList(MyCustomRule.class);
     }
   }};
 
@@ -141,7 +141,7 @@ public class PHPSensorTest {
 
   private PHPSensor createSensor(PHPCheck check) {
     PHPChecks checks = mock(PHPChecks.class);
-    when(checks.all()).thenReturn(ImmutableList.of(check));
+    when(checks.all()).thenReturn(Collections.singletonList(check));
     return new PHPSensor(createFileLinesContextFactory(), checks, new NoSonarFilter());
   }
 

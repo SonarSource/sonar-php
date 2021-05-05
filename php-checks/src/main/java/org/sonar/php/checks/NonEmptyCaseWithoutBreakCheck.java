@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -73,7 +73,7 @@ public class NonEmptyCaseWithoutBreakCheck extends PHPVisitorCheck {
 
     @Override
     public List<Kind> nodesToVisit() {
-      return ImmutableList.of(
+      return Arrays.asList(
         Kind.FUNCTION_CALL,
         Kind.CONTINUE_STATEMENT,
         Kind.THROW_STATEMENT,

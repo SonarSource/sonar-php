@@ -19,9 +19,10 @@
  */
 package org.sonar.php.checks.security;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S4828")
@@ -29,10 +30,10 @@ public class SignallingProcessCheck extends FunctionUsageCheck {
 
   private static final String MESSAGE = "Make sure that sending signals is safe here.";
 
-  private static final ImmutableSet<String> FUNCTION_NAMES = ImmutableSet.of("posix_kill");
+  private static final Set<String> FUNCTION_NAMES = SetUtils.immutableSetOf("posix_kill");
 
   @Override
-  protected ImmutableSet<String> functionNames() {
+  protected Set<String> functionNames() {
     return FUNCTION_NAMES;
   }
 

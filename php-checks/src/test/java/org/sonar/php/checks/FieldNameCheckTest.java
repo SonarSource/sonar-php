@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
@@ -42,6 +42,6 @@ public class FieldNameCheckTest {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
     String message = "Rename this field \"$myVariable\" to match the regular expression " + check.format + ".";
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),
-      ImmutableList.of(new LegacyIssue(check, message).line(7)));
+      Collections.singletonList(new LegacyIssue(check, message).line(7)));
   }
 }

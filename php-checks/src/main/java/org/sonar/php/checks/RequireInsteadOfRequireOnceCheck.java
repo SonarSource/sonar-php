@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.sonar.check.Rule;
@@ -32,7 +32,7 @@ public class RequireInsteadOfRequireOnceCheck extends PHPVisitorCheck {
   public static final String KEY = "S2003";
   private static final String MESSAGE = "Replace \"%s\" with \"%s\".";
 
-  private static final List<String> WRONG_FUNCTIONS = ImmutableList.of("require", "include");
+  private static final List<String> WRONG_FUNCTIONS = Arrays.asList("require", "include");
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

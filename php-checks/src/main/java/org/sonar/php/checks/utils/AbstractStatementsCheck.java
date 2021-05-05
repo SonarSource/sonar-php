@@ -19,7 +19,9 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -36,14 +38,11 @@ import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
-import java.util.Collections;
-import java.util.List;
-
 public class AbstractStatementsCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(
+    return Arrays.asList(
       Kind.SCRIPT,
       Kind.BLOCK,
       Kind.CASE_CLAUSE,

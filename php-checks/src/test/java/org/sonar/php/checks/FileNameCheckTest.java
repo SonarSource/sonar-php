@@ -19,14 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
-
-import java.net.URISyntaxException;
 
 public class FileNameCheckTest {
 
@@ -56,14 +56,14 @@ public class FileNameCheckTest {
   }
 
   private void checkNoIssue(String fileName) throws URISyntaxException {
-    check(fileName, ImmutableList.<PhpIssue>of());
+    check(fileName, Collections.emptyList());
   }
 
   private void checkIssue(String fileName, String expectedIssueMessage) throws URISyntaxException {
-    check(fileName, ImmutableList.<PhpIssue>of(new LegacyIssue(check, expectedIssueMessage)));
+    check(fileName, Collections.singletonList(new LegacyIssue(check, expectedIssueMessage)));
   }
 
-  private void check(String fileName, ImmutableList<PhpIssue> expectedIssues) throws URISyntaxException {
+  private void check(String fileName, List<PhpIssue> expectedIssues) throws URISyntaxException {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + fileName), expectedIssues);
   }
 

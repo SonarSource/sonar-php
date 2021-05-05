@@ -20,11 +20,12 @@
 package org.sonar.php.checks.phpunit;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -38,7 +39,7 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
 
   private static final String MESSAGE = "Use %s instead.";
   private static final String SECONDARY_MESSAGE = "%s is performed here, which is better expressed with %s.";
-  private static final ImmutableSet<String> ASSERT_METHOD_NAMES = ImmutableSet.of("assertTrue", "assertFalse");
+  private static final Set<String> ASSERT_METHOD_NAMES = SetUtils.immutableSetOf("assertTrue", "assertFalse");
 
   private static final Map<ReplacementAssertion, ReplacementAssertion> COMPLEMENTS = ImmutableMap.<ReplacementAssertion, ReplacementAssertion>builder()
     .put(ReplacementAssertion.NULL, ReplacementAssertion.NOT_NULL)

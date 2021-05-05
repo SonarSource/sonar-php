@@ -20,7 +20,6 @@
 package org.sonar.php.tree.symbols;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import java.util.ArrayDeque;
 import java.util.Collections;
@@ -34,6 +33,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.utils.SourceBuilder;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.symbols.MemberSymbol;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -80,7 +80,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
-  private static final Set<String> BUILT_IN_VARIABLES = ImmutableSet.of(
+  private static final Set<String> BUILT_IN_VARIABLES = SetUtils.immutableSetOf(
     "$this",
     "$GLOBALS",
     "$_SERVER",
@@ -95,7 +95,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     "$_COOKIE",
     "$_REQUEST"
   );
-  private static final ImmutableSet<String> SELF_OBJECTS = ImmutableSet.of("$this", "self", "static");
+  private static final Set<String> SELF_OBJECTS = SetUtils.immutableSetOf("$this", "self", "static");
 
   private Deque<Scope> classScopes = new ArrayDeque<>();
   private Map<Symbol, Scope> scopeBySymbol = new HashMap<>();

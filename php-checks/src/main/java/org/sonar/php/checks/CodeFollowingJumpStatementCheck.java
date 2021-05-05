@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -39,7 +39,7 @@ public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.copyOf(ControlFlowGraph.KINDS_WITH_CONTROL_FLOW);
+    return new ArrayList<>(ControlFlowGraph.KINDS_WITH_CONTROL_FLOW);
   }
 
   @Override

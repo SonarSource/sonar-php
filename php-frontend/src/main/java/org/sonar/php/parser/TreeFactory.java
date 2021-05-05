@@ -19,7 +19,6 @@
  */
 package org.sonar.php.parser;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
@@ -302,8 +301,8 @@ public class TreeFactory {
     Optional<List<Tuple<InternalSyntaxToken, T>>> tuples,
     @Nullable InternalSyntaxToken trailingSeparator
   ) {
-    ImmutableList.Builder<T> elements = ImmutableList.builder();
-    ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
+    List<T> elements = new ArrayList<>();
+    List<SyntaxToken> separators = new ArrayList<>();
 
     elements.add(firstElement);
     if (tuples.isPresent()) {
@@ -317,7 +316,7 @@ public class TreeFactory {
       separators.add(trailingSeparator);
     }
 
-    return new SeparatedListImpl<>(elements.build(), separators.build());
+    return new SeparatedListImpl<>(elements, separators);
   }
 
 
@@ -368,7 +367,7 @@ public class TreeFactory {
   }
 
   public ScriptTree script(InternalSyntaxToken anythingButOpeningTagToken) {
-    return new ScriptTreeImpl(anythingButOpeningTagToken, ImmutableList.of());
+    return new ScriptTreeImpl(anythingButOpeningTagToken, Collections.emptyList());
   }
 
   public CompilationUnitTree compilationUnit(Optional<ScriptTree> script, Optional<InternalSyntaxToken> spacing, InternalSyntaxToken eofToken) {
@@ -739,8 +738,8 @@ public class TreeFactory {
   }
 
   public ExpressionListStatementTree expressionListStatement(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressions, InternalSyntaxToken eos) {
-    ImmutableList.Builder<ExpressionTree> elements = ImmutableList.builder();
-    ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
+    List<ExpressionTree> elements = new ArrayList<>();
+    List<SyntaxToken> separators = new ArrayList<>();
 
     elements.add(exp1);
 
@@ -751,7 +750,7 @@ public class TreeFactory {
       });
     }
 
-    return new ExpressionListStatementTreeImpl(new SeparatedListImpl<>(elements.build(), separators.build()), eos);
+    return new ExpressionListStatementTreeImpl(new SeparatedListImpl<>(elements, separators), eos);
   }
 
   public LabelTree label(InternalSyntaxToken identifier, InternalSyntaxToken colon) {
@@ -805,8 +804,8 @@ public class TreeFactory {
       return new NamespaceNameTreeImpl(absoluteSeparator, SeparatedListImpl.<NameIdentifierTree>empty(), lastPartIfNoTuples);
 
     } else {
-      ImmutableList.Builder<NameIdentifierTree> elements = ImmutableList.builder();
-      ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
+      List<NameIdentifierTree> elements = new ArrayList<>();
+      List<SyntaxToken> separators = new ArrayList<>();
 
       elements.add(lastPartIfNoTuples);
 
@@ -822,7 +821,7 @@ public class TreeFactory {
 
       return new NamespaceNameTreeImpl(
         absoluteSeparator,
-        new SeparatedListImpl<>(elements.build(), separators.build()),
+        new SeparatedListImpl<>(elements, separators),
         new NameIdentifierTreeImpl(lastTuple.second));
     }
   }
@@ -1545,7 +1544,7 @@ public class TreeFactory {
     return internalFunction(
       functionNameToken,
       openParenthesis,
-      new SeparatedListImpl(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()),
+      new SeparatedListImpl(Collections.singletonList(expression), Collections.emptyList()),
       closeParenthesis);
   }
 
@@ -1553,7 +1552,7 @@ public class TreeFactory {
     return internalFunction(
       includeOnceToken,
       null,
-      new SeparatedListImpl(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()),
+      new SeparatedListImpl(Collections.singletonList(expression), Collections.emptyList()),
       null);
   }
 
@@ -1606,14 +1605,14 @@ public class TreeFactory {
     return new ArrayInitializerFunctionTreeImpl(
       arrayToken,
       openParenthesis,
-      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<SyntaxToken>of()),
+      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(Collections.emptyList(), Collections.emptyList()),
       closeParenthesis);
   }
 
   public ArrayInitializerTree newArrayInitBracket(InternalSyntaxToken openBracket, Optional<SeparatedListImpl<ArrayPairTree>> elements, InternalSyntaxToken closeBracket) {
     return new ArrayInitializerBracketTreeImpl(
       openBracket,
-      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<SyntaxToken>of()),
+      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(Collections.emptyList(), Collections.emptyList()),
       closeBracket);
   }
 
@@ -1676,7 +1675,7 @@ public class TreeFactory {
   public FunctionCallTreeImpl newExitExpression(InternalSyntaxToken openParenthesis, Optional<ExpressionTree> expressionTreeOptional, InternalSyntaxToken closeParenthesis) {
     SeparatedListImpl<CallArgumentTree> arguments;
     if (expressionTreeOptional.isPresent()) {
-      arguments = new SeparatedListImpl<>(ImmutableList.of(new CallArgumentTreeImpl(null, expressionTreeOptional.get())), Collections.<SyntaxToken>emptyList());
+      arguments = new SeparatedListImpl<>(Collections.singletonList(new CallArgumentTreeImpl(null, expressionTreeOptional.get())), Collections.<SyntaxToken>emptyList());
     } else {
       arguments = SeparatedListImpl.empty();
     }
@@ -1893,8 +1892,8 @@ public class TreeFactory {
   }
 
   public UnionTypeTree unionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
-    ImmutableList.Builder<TypeTree> types = ImmutableList.builder();
-    ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
+    List<TypeTree> types = new ArrayList<>();
+    List<SyntaxToken> separators = new ArrayList<>();
 
     types.add(type1);
 
@@ -1903,7 +1902,7 @@ public class TreeFactory {
       types.add(tuple.second);
     }
 
-    return new UnionTypeTreeImpl(new SeparatedListImpl<>(types.build(), separators.build()));
+    return new UnionTypeTreeImpl(new SeparatedListImpl<>(types, separators));
   }
 
   public CallArgumentTree functionCallArgument(Optional<Tuple<NameIdentifierTree, InternalSyntaxToken>> optional, ExpressionTree firstOf) {
@@ -1963,7 +1962,6 @@ public class TreeFactory {
   }
 
   public List<SyntaxToken> singleToken(SyntaxToken token) {
-    return ImmutableList.of(token);
+    return Collections.singletonList(token);
   }
-
 }

@@ -19,12 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -39,7 +39,7 @@ public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Write this \"%s\" %s in lower case.";
 
   private static final Pattern PATTERN = Pattern.compile("[a-z_]+");
-  private static final Set<String> KEYWORDS = ImmutableSet.copyOf(PHPKeyword.getKeywordValues());
+  private static final Set<String> KEYWORDS = SetUtils.immutableSetOf(PHPKeyword.getKeywordValues());
 
   @Override
   public void visitLiteral(LiteralTree tree) {

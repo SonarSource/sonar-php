@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
@@ -63,24 +64,22 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.<Kind>builder()
-      .addAll(CheckUtils.FUNCTION_KINDS)
-      .add(Kind.ASSIGNMENT_BY_REFERENCE)
-      .add(
-        Kind.ASSIGNMENT,
-        Kind.POWER_ASSIGNMENT,
-        Kind.MULTIPLY_ASSIGNMENT,
-        Kind.DIVIDE_ASSIGNMENT,
-        Kind.REMAINDER_ASSIGNMENT,
-        Kind.PLUS_ASSIGNMENT,
-        Kind.MINUS_ASSIGNMENT,
-        Kind.LEFT_SHIFT_ASSIGNMENT,
-        Kind.RIGHT_SHIFT_ASSIGNMENT,
-        Kind.AND_ASSIGNMENT,
-        Kind.XOR_ASSIGNMENT,
-        Kind.OR_ASSIGNMENT,
-        Kind.CONCATENATION_ASSIGNMENT)
-      .build();
+    return ListUtils.concat(CheckUtils.FUNCTION_KINDS, Arrays.asList(
+      Kind.ASSIGNMENT_BY_REFERENCE,
+      Kind.ASSIGNMENT,
+      Kind.POWER_ASSIGNMENT,
+      Kind.MULTIPLY_ASSIGNMENT,
+      Kind.DIVIDE_ASSIGNMENT,
+      Kind.REMAINDER_ASSIGNMENT,
+      Kind.PLUS_ASSIGNMENT,
+      Kind.MINUS_ASSIGNMENT,
+      Kind.LEFT_SHIFT_ASSIGNMENT,
+      Kind.RIGHT_SHIFT_ASSIGNMENT,
+      Kind.AND_ASSIGNMENT,
+      Kind.XOR_ASSIGNMENT,
+      Kind.OR_ASSIGNMENT,
+      Kind.CONCATENATION_ASSIGNMENT
+    ));
   }
 
   @Override

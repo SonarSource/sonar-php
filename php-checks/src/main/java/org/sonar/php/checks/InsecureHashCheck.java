@@ -19,10 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
@@ -34,8 +35,8 @@ public class InsecureHashCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Use a stronger hashing algorithm than %s.";
 
   @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("md5", "sha1");
+  protected Set<String> functionNames() {
+    return SetUtils.immutableSetOf("md5", "sha1");
   }
 
   @Override

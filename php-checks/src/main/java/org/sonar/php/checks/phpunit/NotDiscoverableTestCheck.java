@@ -19,11 +19,18 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -33,24 +40,16 @@ import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
 @Rule(key = "S5899")
 public class NotDiscoverableTestCheck extends PhpUnitCheck {
   private static final String MESSAGE_VISIBLE = "Adjust the visibility of this test method so that it can be executed by the test runner.";
   private static final String MESSAGE_MARKED = "Mark this method as a test so that it can be executed by the test runner.";
-  private static final Set<String> OVERRIDABLE_METHODS = ImmutableSet.of(
+  private static final Set<String> OVERRIDABLE_METHODS = SetUtils.immutableSetOf(
     "setup",
     "teardown",
     "setupbeforeclass",
     "teardownafterclass");
-  private static final Set<String> SELF_OBJECTS = ImmutableSet.of("$this", "self", "static");
+  private static final Set<String> SELF_OBJECTS = SetUtils.immutableSetOf("$this", "self", "static");
 
   private Map<String, Set<String>> internalCalledMethods = new HashMap<>();
   private Set<String> testMethods = new HashSet<>();
@@ -176,7 +175,7 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
       if (isAssertion(tree)
-        && TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Tree.Kind.NEW_EXPRESSION)) == null) {
+        && TreeUtils.findAncestorWithKind(tree, Collections.singletonList(Tree.Kind.NEW_EXPRESSION)) == null) {
         hasFoundAssertion = true;
       }
 

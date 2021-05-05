@@ -19,9 +19,9 @@
  */
 package org.sonar.php.tree.visitors;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
@@ -109,8 +109,8 @@ public class PHPCheckContext implements CheckContext {
   }
 
   @Override
-  public ImmutableList<PhpIssue> getIssues() {
-    return ImmutableList.copyOf(issues);
+  public List<PhpIssue> getIssues() {
+    return Collections.unmodifiableList(issues);
   }
 
   @Override

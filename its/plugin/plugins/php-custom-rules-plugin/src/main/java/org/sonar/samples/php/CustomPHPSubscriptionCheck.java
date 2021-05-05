@@ -19,7 +19,7 @@
  */
 package org.sonar.samples.php;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -36,7 +36,7 @@ public class CustomPHPSubscriptionCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(
+    return Collections.singletonList(
       Kind.FOR_STATEMENT
     );
   }

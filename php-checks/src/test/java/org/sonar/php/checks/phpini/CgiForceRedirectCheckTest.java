@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks.phpini;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.ini.PhpIniCheck;
 
@@ -38,7 +38,7 @@ public class CgiForceRedirectCheckTest {
 
   @Test
   public void empty_file() throws Exception {
-    check(check, new File(dir, "empty.ini"), ImmutableList.of());
+    check(check, new File(dir, "empty.ini"), Collections.emptyList());
   }
 
 }

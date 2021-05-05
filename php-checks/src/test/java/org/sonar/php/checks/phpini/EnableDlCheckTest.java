@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks.phpini;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
+import java.util.Collections;
 import org.junit.Test;
 
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.issue;
@@ -37,7 +37,7 @@ public class EnableDlCheckTest {
 
   @Test
   public void file_issue() throws Exception {
-    PhpIniCheckTestUtils.check(check, new File(dir, "empty.ini"), ImmutableList.of(
+    PhpIniCheckTestUtils.check(check, new File(dir, "empty.ini"), Collections.singletonList(
       issue("Explicitly set \"enable_dl\" to 0.")));
   }
 

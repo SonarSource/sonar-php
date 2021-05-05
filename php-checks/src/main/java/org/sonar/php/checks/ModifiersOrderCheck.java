@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.sonar.check.Rule;
@@ -48,7 +48,7 @@ public class ModifiersOrderCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.METHOD_DECLARATION, Kind.CLASS_PROPERTY_DECLARATION);
+    return Arrays.asList(Kind.METHOD_DECLARATION, Kind.CLASS_PROPERTY_DECLARATION);
   }
 
   @Override

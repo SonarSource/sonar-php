@@ -24,8 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
@@ -196,7 +194,7 @@ public class ClassSymbolIndexTest {
 
   @Test
   public void get_method() {
-    ImmutableList<MethodSymbolData> methods = ImmutableList.of(
+    List<MethodSymbolData> methods = Arrays.asList(
       method("methodA"),
       method("methodB")
     );

@@ -19,10 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionArgumentCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -33,7 +33,7 @@ public class SSLHostVerificationDisabledCheck extends FunctionArgumentCheck {
 
   private static final String CURL_SETOPT = "curl_setopt";
   private static final String CURLOPT_SSL_VERIFYHOST = "CURLOPT_SSL_VERIFYHOST";
-  private static final Set<String> VERIFY_HOST_COMPLIANT_VALUES = ImmutableSet.of("1", "2", "TRUE");
+  private static final Set<String> VERIFY_HOST_COMPLIANT_VALUES = SetUtils.immutableSetOf("1", "2", "TRUE");
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

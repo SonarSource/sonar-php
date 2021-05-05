@@ -20,13 +20,11 @@
 package org.sonar.php.ini;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
 import com.sonar.sslr.api.RecognitionException;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 import org.sonar.php.ini.tree.Directive;
 import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -102,7 +100,7 @@ public class PhpIniParser {
     private final ListMultimap<String, Directive> directivesByName = ArrayListMultimap.create();
 
     public PhpIniFileImpl(List<Directive> directives) {
-      this.directives = ImmutableList.copyOf(directives);
+      this.directives = Collections.unmodifiableList(directives);
       for (Directive directive : directives) {
         directivesByName.put(directive.name().text(), directive);
       }
@@ -134,7 +132,7 @@ public class PhpIniParser {
 
     private static InternalSyntaxToken createToken(int lineNumber, String untrimmed, int offsetInLine) {
       int column = numberOfLeadingWhiteSpaces(untrimmed) + offsetInLine + 1;
-      return new InternalSyntaxToken(lineNumber, column, untrimmed.trim(), ImmutableList.of(), 0, false);
+      return new InternalSyntaxToken(lineNumber, column, untrimmed.trim(), Collections.emptyList(), 0, false);
     }
 
     private static int numberOfLeadingWhiteSpaces(String string) {

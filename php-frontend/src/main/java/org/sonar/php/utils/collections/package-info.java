@@ -17,27 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
-
-import java.util.Collections;
-import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
-import org.sonar.plugins.php.CheckVerifier;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-
-public class ClosingTagInFullPHPFileCheckTest {
-
-  private ClosingTagInFullPHPFileCheck check = new ClosingTagInFullPHPFileCheck();
-  private static final String TEST_DIR = "ClosingTagInFullPHPFileCheck/";
-
-  @Test
-  public void ok() throws Exception {
-    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
-  }
-
-  @Test
-  public void ko() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LegacyIssue(check, "Remove this closing tag \"?>\".").line(11)));
-  }
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package org.sonar.php.utils.collections;

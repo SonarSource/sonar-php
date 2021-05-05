@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php.api.tests;
 
-import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
@@ -243,18 +243,16 @@ public class PhpCheckTestTest {
     PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[secondary=1,1;effortToFix=2]]"));
   }
 
-  private ImmutableList<PhpIssue> createIssuesForLines(int... lines) {
+  private List<PhpIssue> createIssuesForLines(int... lines) {
     return createIssuesForLines("message", lines);
   }
 
-  private ImmutableList<PhpIssue> createIssuesForLines(String message, int... lines) {
-    ImmutableList.Builder<PhpIssue> issueBuilder = ImmutableList.builder();
-
+  private List<PhpIssue> createIssuesForLines(String message, int... lines) {
+    List<PhpIssue> issues = new ArrayList<>();
     for (int line : lines) {
-      issueBuilder.add(new LegacyIssue(CHECK, message).line(line));
+      issues.add(new LegacyIssue(CHECK, message).line(line));
     }
-
-    return issueBuilder.build();
+    return issues;
   }
 
   private PhpFile createFile(String content) throws Exception {

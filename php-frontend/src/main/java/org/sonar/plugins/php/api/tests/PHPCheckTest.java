@@ -19,13 +19,12 @@
  */
 package org.sonar.plugins.php.api.tests;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tests.TestIssue.Location;
@@ -94,13 +93,9 @@ public class PHPCheckTest {
   }
 
   private static List<TestIssue> toTestIssues(List<PhpIssue> phpIssues) {
-    Builder<TestIssue> builder = ImmutableList.builder();
-
-    for (PhpIssue phpIssue : phpIssues) {
-      builder.add(TestIssue.create(message(phpIssue), line(phpIssue)));
-    }
-
-    return builder.build();
+    return phpIssues.stream()
+      .map(phpIssue -> TestIssue.create(message(phpIssue), line(phpIssue)))
+      .collect(Collectors.toList());
   }
 
   private static void compare(List<PhpIssue> actualIssues, List<TestIssue> expectedIssues) {

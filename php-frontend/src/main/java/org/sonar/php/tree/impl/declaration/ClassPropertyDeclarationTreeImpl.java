@@ -19,8 +19,8 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -85,9 +85,9 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
 
     List<SyntaxToken> modifierTokens;
     if (visibility != null) {
-      modifierTokens = ImmutableList.of(visibility, constToken);
+      modifierTokens = Arrays.asList(visibility, constToken);
     } else {
-      modifierTokens = ImmutableList.of(constToken);
+      modifierTokens = Collections.singletonList(constToken);
     }
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, attributes, modifierTokens, null, declarations, eosToken);
   }

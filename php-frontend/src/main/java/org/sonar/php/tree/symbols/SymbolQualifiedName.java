@@ -19,33 +19,31 @@
  */
 package org.sonar.php.tree.symbols;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 
 public class SymbolQualifiedName implements QualifiedName {
 
-  static final SymbolQualifiedName GLOBAL_NAMESPACE = new SymbolQualifiedName(ImmutableList.of());
+  static final SymbolQualifiedName GLOBAL_NAMESPACE = new SymbolQualifiedName(Collections.emptyList());
 
-  private final ImmutableList<String> nameElements;
+  private final List<String> nameElements;
 
   private SymbolQualifiedName(List<String> parentNamespaces, String name) {
-    this(ImmutableList.<String>builder()
-      .addAll(parentNamespaces)
-      .add(name)
-      .build());
+    this(ListUtils.concat(parentNamespaces, Collections.singletonList(name)));
   }
 
   private SymbolQualifiedName(List<String> nameElements) {
-    ImmutableList.Builder<String> nameBuilder = ImmutableList.builder();
-    nameElements.forEach(name -> nameBuilder.add(name.toLowerCase(Locale.ROOT)));
-    this.nameElements = nameBuilder.build();
+    this.nameElements = nameElements.stream().map(name -> name.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
   }
 
   /**
@@ -62,7 +60,7 @@ public class SymbolQualifiedName implements QualifiedName {
     if (length == 0) {
       throw new IllegalStateException("Cannot create an empty qualified name");
     } else {
-      return new SymbolQualifiedName(ImmutableList.copyOf(names));
+      return new SymbolQualifiedName(Arrays.asList(names));
     }
   }
 
@@ -72,10 +70,7 @@ public class SymbolQualifiedName implements QualifiedName {
   }
 
   SymbolQualifiedName resolve(SymbolQualifiedName nameInNamespace) {
-    ImmutableList<String> newName = ImmutableList.<String>builder()
-      .addAll(this.nameElements)
-      .addAll(nameInNamespace.nameElements)
-      .build();
+    List<String> newName = ListUtils.concat(this.nameElements, nameInNamespace.nameElements);
     return new SymbolQualifiedName(newName);
   }
 
@@ -86,16 +81,15 @@ public class SymbolQualifiedName implements QualifiedName {
     if (namespaceNameTree.namespaces().isEmpty()) {
       throw new IllegalStateException("Unable to resolve " + namespaceNameTree + " which has only aliased name");
     }
-    ImmutableList.Builder<String> nameBuilder = ImmutableList.<String>builder()
-      .addAll(nameElements);
+    List<String> nameElements = new ArrayList<>(this.nameElements);
     // skip the first element of the namespace, because it's an alias
     namespaceNameTree.namespaces()
       .stream()
       .skip(1)
       .map(NameIdentifierTree::text)
-      .forEach(nameBuilder::add);
-    nameBuilder.add(namespaceNameTree.name().text());
-    return new SymbolQualifiedName(nameBuilder.build());
+      .forEach(nameElements::add);
+    nameElements.add(namespaceNameTree.name().text());
+    return new SymbolQualifiedName(nameElements);
   }
 
   SymbolQualifiedName resolve(String name) {

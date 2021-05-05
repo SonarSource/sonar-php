@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
@@ -46,7 +46,7 @@ public class ClassNameCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Tree.Kind> nodesToVisit() {
-    return ImmutableList.of(Tree.Kind.CLASS_DECLARATION);
+    return Collections.singletonList(Tree.Kind.CLASS_DECLARATION);
   }
 
   @Override

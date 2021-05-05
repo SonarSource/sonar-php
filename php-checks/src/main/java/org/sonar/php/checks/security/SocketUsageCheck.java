@@ -19,9 +19,10 @@
  */
 package org.sonar.php.checks.security;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S4818")
@@ -29,7 +30,7 @@ public class SocketUsageCheck extends FunctionUsageCheck {
 
   private static final String MESSAGE = "Make sure that sockets are used safely here.";
 
-  private static final ImmutableSet<String> FUNCTION_NAMES = ImmutableSet.of(
+  private static final Set<String> FUNCTION_NAMES = SetUtils.immutableSetOf(
     "socket_create",
     "socket_create_listen",
     "socket_addrinfo_bind",
@@ -42,7 +43,7 @@ public class SocketUsageCheck extends FunctionUsageCheck {
     "stream_socket_pair");
 
   @Override
-  protected ImmutableSet<String> functionNames() {
+  protected Set<String> functionNames() {
     return FUNCTION_NAMES;
   }
 

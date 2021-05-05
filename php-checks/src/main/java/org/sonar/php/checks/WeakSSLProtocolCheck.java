@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +71,7 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
       "STREAM_CRYPTO_METHOD_TLSv1_0_SERVER",
       "STREAM_CRYPTO_METHOD_TLSv1_1_SERVER"));
 
-  private static final List<String> CURL_WEAK_PROTOCOLS = ImmutableList.of(
+  private static final List<String> CURL_WEAK_PROTOCOLS = Arrays.asList(
     "CURL_SSLVERSION_TLSv1",
     "CURL_SSLVERSION_SSLv2",
     "CURL_SSLVERSION_SSLv3",

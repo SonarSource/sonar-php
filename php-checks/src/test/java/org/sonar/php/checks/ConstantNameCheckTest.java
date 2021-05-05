@@ -19,13 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class ConstantNameCheckTest {
 
@@ -41,7 +40,7 @@ public class ConstantNameCheckTest {
   @Test
   public void custom() throws Exception {
     check.format = "^[A-Z][a-z]*$";
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<PhpIssue>of(
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Arrays.asList(
       new LegacyIssue(check, "Rename this constant \"FOO\" to match the regular expression " + check.format + ".").line(9),
       new LegacyIssue(check, null).line(14),
       new LegacyIssue(check, null).line(18)));

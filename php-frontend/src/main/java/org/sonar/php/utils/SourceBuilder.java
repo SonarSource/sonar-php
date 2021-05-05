@@ -19,7 +19,7 @@
  */
 package org.sonar.php.utils;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -41,7 +41,7 @@ public class SourceBuilder extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.TOKEN, Kind.INLINE_HTML_TOKEN);
+    return Arrays.asList(Kind.TOKEN, Kind.INLINE_HTML_TOKEN);
   }
 
   @Override

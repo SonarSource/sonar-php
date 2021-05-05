@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -35,6 +34,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
@@ -460,7 +460,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     @Override
     public void visitVariableIdentifier(VariableIdentifierTree tree) {
       if (uninitializedVariableDeclaration(tree)
-        && TreeUtils.findAncestorWithKind(tree, ImmutableSet.of(Kind.STATIC_STATEMENT)) != null) {
+        && TreeUtils.findAncestorWithKind(tree, SetUtils.immutableSetOf(Kind.STATIC_STATEMENT)) != null) {
         uninitializedStaticVariables.add(tree.variableExpression().text());
       }
       super.visitVariableIdentifier(tree);

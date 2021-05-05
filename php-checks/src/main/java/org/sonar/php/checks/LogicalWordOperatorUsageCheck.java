@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
@@ -40,7 +40,7 @@ public class LogicalWordOperatorUsageCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(
+    return Arrays.asList(
       Kind.ALTERNATIVE_CONDITIONAL_AND,
       Kind.ALTERNATIVE_CONDITIONAL_OR);
   }

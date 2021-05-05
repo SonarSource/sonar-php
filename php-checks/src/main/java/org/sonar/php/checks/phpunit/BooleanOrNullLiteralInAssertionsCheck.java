@@ -20,32 +20,31 @@
 package org.sonar.php.checks.phpunit;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
 @Rule(key = "S2701")
 public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Use %s instead.";
 
-  private static final Set<String> HANDLED_ASSERTIONS = ImmutableSet.of(
+  private static final Set<String> HANDLED_ASSERTIONS = SetUtils.immutableSetOf(
     "assertEquals",
     "assertSame",
     "assertNotEquals",
     "assertNotSame");
 
-  private static final Set<String> INVERSE_ASSERTIONS = ImmutableSet.of("assertNotSame", "assertNotEquals");
+  private static final Set<String> INVERSE_ASSERTIONS = SetUtils.immutableSetOf("assertNotSame", "assertNotEquals");
 
   private static final Map<String, String> REPLACEMENT_ASSERTIONS = ImmutableMap.<String, String>builder().
     put("true", "assertTrue()").

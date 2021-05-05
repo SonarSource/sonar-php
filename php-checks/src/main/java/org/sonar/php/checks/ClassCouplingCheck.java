@@ -19,15 +19,15 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -55,17 +55,13 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
 
   public static final int DEFAULT = 20;
   private Deque<Set<String>> types = new ArrayDeque<>();
-  private static final Set<String> DOC_TAGS = ImmutableSet.of(
+  private static final Set<String> DOC_TAGS = SetUtils.immutableSetOf(
     "@var", "@global", "@staticvar", "@throws", "@param", "@return");
 
-  private static final Set<String> EXCLUDED_TYPES = Sets.newTreeSet(String.CASE_INSENSITIVE_ORDER);
-
-  static {
-    EXCLUDED_TYPES.addAll(ImmutableSet.of(
-      "INTEGER", "INT", "DOUBLE", "FLOAT",
-      "STRING", "ARRAY", "OBJECT", "BOOLEAN",
-      "BOOL", "BINARY", "NULL", "MIXED"));
-  }
+  private static final Set<String> EXCLUDED_TYPES = SetUtils.immutableSetOf(
+    "integer", "int", "double", "float",
+    "string", "array", "object", "boolean",
+    "bool", "binary", "null", "mixed");
 
   @RuleProperty(
     key = "max",
@@ -158,7 +154,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
       for (String type : commentLine[2].split("\\|")) {
         type = StringUtils.removeEnd(type, "[]");
 
-        if (!EXCLUDED_TYPES.contains(type)) {
+        if (!EXCLUDED_TYPES.contains(type.toLowerCase(Locale.ROOT))) {
           addType(type);
         }
       }

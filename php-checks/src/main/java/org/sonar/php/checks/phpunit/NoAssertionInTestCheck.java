@@ -19,8 +19,7 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +29,7 @@ import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -46,7 +46,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Add at least one assertion to this test case.";
 
   private static final Pattern ASSERTION_METHODS_PATTERN = Pattern.compile("(assert|verify|fail|pass|should|will|check|expect|validate|.*test).*");
-  private static final List<String> TEST_CONTROL_FUNCTIONS = ImmutableList.of(
+  private static final List<String> TEST_CONTROL_FUNCTIONS = Arrays.asList(
     "addtoassertioncount",
     "marktestskipped",
     "marktestincomplete");
@@ -147,7 +147,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       Symbol symbol = symbolTable.getSymbol(((MemberAccessTree) callee).member());
       if (symbol != null && symbol.is(Symbol.Kind.FUNCTION)) {
         return Optional.ofNullable((MethodDeclarationTree) TreeUtils.findAncestorWithKind(symbol.declaration(),
-          ImmutableSet.of(Tree.Kind.METHOD_DECLARATION)));
+          SetUtils.immutableSetOf(Tree.Kind.METHOD_DECLARATION)));
       }
 
       return Optional.empty();

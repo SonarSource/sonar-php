@@ -19,10 +19,12 @@
  */
 package org.sonar.php.highlighter;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
+import java.util.List;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
@@ -34,7 +36,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public class SyntaxHighlighterVisitor extends PHPVisitorCheck {
 
-  private static final ImmutableList<String> PHP_RESERVED_VARIABLES = ImmutableList.of(
+  private static final List<String> PHP_RESERVED_VARIABLES = Arrays.asList(
     "__FUNCTION__",
     "__CLASS__",
     "__METHOD__",
@@ -44,9 +46,7 @@ public class SyntaxHighlighterVisitor extends PHPVisitorCheck {
     "__LINE__",
     "$this");
 
-  private static final ImmutableList<String> WORDS_TO_HIGHLIGHT = ImmutableList.<String>builder()
-    .add(PHPKeyword.getKeywordValues())
-    .addAll(PHP_RESERVED_VARIABLES).build();
+  private static final List<String> WORDS_TO_HIGHLIGHT = ListUtils.concat(Arrays.asList(PHPKeyword.getKeywordValues()), PHP_RESERVED_VARIABLES);
 
   private NewHighlighting highlighting;
 

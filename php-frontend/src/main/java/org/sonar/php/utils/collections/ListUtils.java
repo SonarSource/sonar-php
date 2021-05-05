@@ -17,27 +17,22 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.utils.collections;
 
-import java.util.Collections;
-import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
-import org.sonar.plugins.php.CheckVerifier;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ClosingTagInFullPHPFileCheckTest {
+public class ListUtils {
 
-  private ClosingTagInFullPHPFileCheck check = new ClosingTagInFullPHPFileCheck();
-  private static final String TEST_DIR = "ClosingTagInFullPHPFileCheck/";
-
-  @Test
-  public void ok() throws Exception {
-    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
+  private ListUtils() {
   }
 
-  @Test
-  public void ko() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LegacyIssue(check, "Remove this closing tag \"?>\".").line(11)));
+  @SafeVarargs
+  public static <T> List<T> concat(List<? extends T>... lists) {
+    List<T> concatenatedList = new ArrayList<>();
+    for (List<? extends T> list : lists) {
+      concatenatedList.addAll(list);
+    }
+    return concatenatedList;
   }
 }

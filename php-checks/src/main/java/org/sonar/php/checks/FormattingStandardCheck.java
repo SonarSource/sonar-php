@@ -19,9 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
-import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
@@ -33,6 +32,7 @@ import org.sonar.php.checks.formatting.FunctionSpacingCheck;
 import org.sonar.php.checks.formatting.IndentationCheck;
 import org.sonar.php.checks.formatting.NamespaceAndUseStatementCheck;
 import org.sonar.php.checks.formatting.PunctuatorSpacingCheck;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -175,7 +175,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
     type = "BOOLEAN")
   public boolean isExtendsAndImplementsLine = true;
 
-  private static final List<String> INTERNAL_FUNCTIONS = ImmutableList.of(
+  private static final Set<String> INTERNAL_FUNCTIONS = SetUtils.immutableSetOf(
     PHPKeyword.ECHO.getValue(),
     PHPKeyword.ISSET.getValue(),
     PHPKeyword.EMPTY.getValue(),

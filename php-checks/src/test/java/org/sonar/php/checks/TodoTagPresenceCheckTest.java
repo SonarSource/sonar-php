@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
@@ -37,7 +37,7 @@ public class TodoTagPresenceCheckTest {
   public void test() throws Exception {
     PhpFile file = TestUtils.getCheckFile("TodoTagPresenceCheck.php");
 
-    List<PhpIssue> issues = ImmutableList.of(
+    List<PhpIssue> issues = Arrays.asList(
       newIssue(4),
       newIssue(8),
       newIssue(9),

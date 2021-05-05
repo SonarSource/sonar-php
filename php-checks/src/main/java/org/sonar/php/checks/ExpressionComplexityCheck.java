@@ -19,12 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
@@ -60,10 +61,7 @@ public class ExpressionComplexityCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.<Kind>builder()
-      .add(COMPLEXITY_INCREMENTING_KINDS)
-      .add(NESTING_KINDS)
-      .build();
+    return ListUtils.concat(Arrays.asList(COMPLEXITY_INCREMENTING_KINDS), Arrays.asList(NESTING_KINDS));
   }
 
   private static class ComplexExpression {

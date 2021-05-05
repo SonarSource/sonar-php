@@ -19,9 +19,10 @@
  */
 package org.sonar.php.tree.visitors;
 
-import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.php.FileTestUtils;
@@ -59,7 +60,7 @@ public class PHPSubscriptionCheckTest {
     PHPSubscriptionCheck testVisitor = new PHPSubscriptionCheck() {
       @Override
       public List<Tree.Kind> nodesToVisit() {
-        return ImmutableList.of(Tree.Kind.COMPILATION_UNIT);
+        return Collections.singletonList(Tree.Kind.COMPILATION_UNIT);
       }
 
       @Override
@@ -83,7 +84,7 @@ public class PHPSubscriptionCheckTest {
 
     @Override
     public List<Tree.Kind> nodesToVisit() {
-      return ImmutableList.of(
+      return Arrays.asList(
         Tree.Kind.CLASS_DECLARATION,
         Tree.Kind.NAMESPACE_NAME,
         Tree.Kind.VARIABLE_IDENTIFIER);

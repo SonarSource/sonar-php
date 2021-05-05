@@ -19,7 +19,7 @@
  */
 package org.sonar.php.metrics;
 
-import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +42,7 @@ class ExecutableLineVisitor extends PHPTreeSubscriber {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(
+    return Arrays.asList(
       Kind.RETURN_STATEMENT,
       Kind.CONTINUE_STATEMENT,
       Kind.BREAK_STATEMENT,
