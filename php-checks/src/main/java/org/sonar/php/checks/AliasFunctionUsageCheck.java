@@ -19,10 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableMap;
 import java.util.Locale;
 import java.util.Map;
 import org.sonar.check.Rule;
+import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -39,7 +39,7 @@ public class AliasFunctionUsageCheck extends PHPVisitorCheck {
 
   public static final String MESSAGE = "Replace this use of \"%s\" with \"%s\".";
 
-  private static final Map<String, String> ALIAS_FUNCTIONS = ImmutableMap.<String, String>builder()
+  private static final Map<String, String> ALIAS_FUNCTIONS = MapBuilder.<String, String>builder()
     .put("chop", "rtrim")
     .put("close", "closedir")
     .put("doubleval", "floatval")
