@@ -19,8 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

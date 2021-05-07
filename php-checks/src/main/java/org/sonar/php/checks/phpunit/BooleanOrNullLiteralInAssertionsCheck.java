@@ -19,8 +19,6 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;

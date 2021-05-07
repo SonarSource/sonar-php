@@ -19,8 +19,6 @@
  */
 package org.sonar.php.cfg;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.ArrayDeque;
 import java.util.Collections;

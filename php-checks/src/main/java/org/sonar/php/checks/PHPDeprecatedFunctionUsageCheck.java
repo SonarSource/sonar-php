@@ -19,8 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -29,11 +27,11 @@ import java.util.function.Predicate;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.checks.utils.type.NewObjectCall;
 import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.php.utils.collections.MapBuilder;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
