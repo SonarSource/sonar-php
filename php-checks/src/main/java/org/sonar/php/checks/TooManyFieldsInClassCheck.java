@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -89,7 +89,7 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
   }
 
   private static List<ClassPropertyDeclarationTree> getClassFields(ClassTree classDeclaration) {
-    List<ClassPropertyDeclarationTree> fields = Lists.newArrayList();
+    List<ClassPropertyDeclarationTree> fields = new ArrayList<>();
 
     for (ClassMemberTree classMember : classDeclaration.members()) {
       if (classMember.is(Kind.CLASS_PROPERTY_DECLARATION, Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)) {

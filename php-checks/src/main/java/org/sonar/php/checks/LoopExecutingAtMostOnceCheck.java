@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Sets;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
@@ -31,11 +30,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
 import org.sonar.plugins.php.api.cfg.CfgBranchingBlock;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
@@ -56,7 +56,7 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Refactor this loop to do more than one iteration.";
 
   // we don't include foreach loop because it is used to access first element of collection
-  private static final Set<Tree.Kind> LOOPS = Sets.immutableEnumSet(
+  private static final Set<Tree.Kind> LOOPS = SetUtils.immutableSetOf(
     Tree.Kind.WHILE_STATEMENT,
     Tree.Kind.DO_WHILE_STATEMENT,
     Tree.Kind.FOR_STATEMENT,

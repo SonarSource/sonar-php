@@ -48,4 +48,10 @@ public class SetUtils {
     }
     return concatenatedSet;
   }
+
+  public static <T> Set<T> difference(Set<T> set1, Set<T> set2) {
+    Set<T> newSet1 = new HashSet<>(set1);
+    newSet1.removeAll(set2);
+    return newSet1;
+  }
 }

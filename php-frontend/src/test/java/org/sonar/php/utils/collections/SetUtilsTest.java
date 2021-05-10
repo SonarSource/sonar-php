@@ -19,6 +19,7 @@
  */
 package org.sonar.php.utils.collections;
 
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import org.junit.Test;
@@ -78,6 +79,33 @@ public class SetUtilsTest {
         new SomeType("value11"), new SomeType("value12"),
         new SomeType("value13"), new SomeType("value14")
       );
+  }
+
+  @Test
+  public void test_no_difference() {
+    Set<String> set1 = SetUtils.immutableSetOf("A", "B", "C");
+    Set<String> set2 = SetUtils.immutableSetOf("A", "B", "C");
+
+    assertThat(SetUtils.difference(set1, set2))
+      .isEqualTo(Collections.emptySet());
+  }
+
+  @Test
+  public void test_no_difference_on_left() {
+    Set<String> set1 = SetUtils.immutableSetOf("A", "B", "C");
+    Set<String> set2 = SetUtils.immutableSetOf("A", "B", "C", "D", "E");
+
+    assertThat(SetUtils.difference(set1, set2))
+      .isEqualTo(Collections.emptySet());
+  }
+
+  @Test
+  public void test_difference() {
+    Set<String> set1 = SetUtils.immutableSetOf("A", "B", "C");
+    Set<String> set2 = SetUtils.immutableSetOf("A", "B", "C", "D", "E");
+
+    assertThat(SetUtils.difference(set2, set1))
+      .containsExactlyInAnyOrder("D", "E");
   }
 
   private static class SomeType {

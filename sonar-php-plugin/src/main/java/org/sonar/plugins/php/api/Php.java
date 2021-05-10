@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php.api;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.config.Configuration;
@@ -59,7 +59,7 @@ public final class Php extends AbstractLanguage {
   }
 
   private static String[] filterEmptyStrings(String[] stringArray) {
-    List<String> nonEmptyStrings = Lists.newArrayList();
+    List<String> nonEmptyStrings = new ArrayList<>();
     for (String string : stringArray) {
       if (StringUtils.isNotBlank(string.trim())) {
         nonEmptyStrings.add(string.trim());

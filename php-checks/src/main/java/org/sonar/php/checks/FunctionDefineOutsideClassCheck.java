@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Sets;
+import java.util.HashSet;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -38,7 +38,7 @@ public class FunctionDefineOutsideClassCheck extends PHPVisitorCheck {
   public static final String KEY = "S2007";
   private static final String MESSAGE = "Move this %s into a class.";
 
-  private final Set<String> globalVariableNames = Sets.newHashSet();
+  private final Set<String> globalVariableNames = new HashSet<>();
 
   @Override
   public void visitScript(ScriptTree tree) {

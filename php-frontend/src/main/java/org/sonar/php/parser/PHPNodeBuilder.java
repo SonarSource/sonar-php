@@ -19,7 +19,6 @@
  */
 package org.sonar.php.parser;
 
-import com.google.common.collect.Lists;
 import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Rule;
 import com.sonar.sslr.api.Token;
@@ -27,6 +26,9 @@ import com.sonar.sslr.api.TokenType;
 import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.api.typed.Input;
 import com.sonar.sslr.api.typed.NodeBuilder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxTrivia;
@@ -34,9 +36,6 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
-
-import java.util.Iterator;
-import java.util.List;
 
 public class PHPNodeBuilder implements NodeBuilder {
 
@@ -84,7 +83,7 @@ public class PHPNodeBuilder implements NodeBuilder {
   }
 
   private static List<SyntaxTrivia> createTrivias(List<Trivia> trivias, boolean hasByteOrderMark) {
-    List<SyntaxTrivia> result = Lists.newArrayList();
+    List<SyntaxTrivia> result = new ArrayList<>();
     for (Trivia trivia : trivias) {
       Token trivialToken = trivia.getToken();
       int column = column(hasByteOrderMark, trivialToken.getLine(), trivialToken.getColumn());

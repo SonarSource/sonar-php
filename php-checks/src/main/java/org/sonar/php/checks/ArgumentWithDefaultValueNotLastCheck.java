@@ -20,10 +20,10 @@
 package org.sonar.php.checks;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
@@ -61,10 +61,10 @@ public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
    * <pre>function f($p1, $p2 = 1, $p3, $p4 = 4) {...}</pre>
    */
   private static List<ParameterTree> getParametersToMove(ParameterListTree parameterList) {
-    List<ParameterTree> parametersToMove = Lists.newArrayList();
+    List<ParameterTree> parametersToMove = new ArrayList<>();
     boolean metParamWithoutDefault = false;
 
-    for (ParameterTree param : Lists.reverse(parameterList.parameters())) {
+    for (ParameterTree param : ListUtils.reverse(parameterList.parameters())) {
       boolean hasDefault = param.initValue() != null;
 
       if (!hasDefault && !metParamWithoutDefault) {
@@ -74,7 +74,7 @@ public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
       }
     }
 
-    return Lists.reverse(parametersToMove);
+    return ListUtils.reverse(parametersToMove);
   }
 
   private static String getNameListString(List<ParameterTree> params) {
