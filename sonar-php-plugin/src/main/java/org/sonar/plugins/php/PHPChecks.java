@@ -19,17 +19,16 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 
 /**
  * Wrapper around Checks Object to ease the manipulation of the different PHP rule repositories.
@@ -37,7 +36,7 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 public class PHPChecks {
 
   private final CheckFactory checkFactory;
-  private Set<Checks<PHPCheck>> checksByRepository = Sets.newHashSet();
+  private Set<Checks<PHPCheck>> checksByRepository = new HashSet<>();
 
   private PHPChecks(CheckFactory checkFactory) {
     this.checkFactory = checkFactory;
@@ -59,7 +58,7 @@ public class PHPChecks {
     if (customRuleRepositories != null) {
 
       for (PHPCustomRuleRepository ruleRepository : customRuleRepositories) {
-        addChecks(ruleRepository.repositoryKey(), Lists.newArrayList(ruleRepository.checkClasses()));
+        addChecks(ruleRepository.repositoryKey(), new ArrayList<>(ruleRepository.checkClasses()));
       }
     }
 
@@ -67,7 +66,7 @@ public class PHPChecks {
   }
 
   public List<PHPCheck> all() {
-    List<PHPCheck> allVisitors = Lists.newArrayList();
+    List<PHPCheck> allVisitors = new ArrayList<>();
 
     for (Checks<PHPCheck> checks : checksByRepository) {
       allVisitors.addAll(checks.all());

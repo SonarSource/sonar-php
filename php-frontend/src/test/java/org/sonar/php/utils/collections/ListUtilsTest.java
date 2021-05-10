@@ -59,6 +59,14 @@ public class ListUtilsTest {
       );
   }
 
+  @Test
+  public void test_reverse_any_list() {
+    List<SomeType> list = Arrays.asList(new SomeType("value1"), new SomeType("value2"));
+
+    assertThat(ListUtils.reverse(list))
+      .containsExactly(new SomeType("value2"), new SomeType("value1"));
+  }
+
   private static class SomeType {
     final String value;
 

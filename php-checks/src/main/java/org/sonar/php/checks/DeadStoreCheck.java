@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -30,8 +29,9 @@ import org.sonar.check.Rule;
 import org.sonar.php.cfg.LiveVariablesAnalysis;
 import org.sonar.php.cfg.LiveVariablesAnalysis.LiveVariables;
 import org.sonar.php.cfg.LiveVariablesAnalysis.VariableUsage;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.tree.symbols.Scope;
+import org.sonar.php.utils.collections.ListUtils;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -97,7 +97,7 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
    */
   private void verifyBlock(CfgBlock block, LiveVariables blockLiveVariables, Set<Symbol> readSymbols) {
     Set<Symbol> willBeRead = new HashSet<>(blockLiveVariables.getOut());
-    for (Tree element : Lists.reverse(block.elements())) {
+    for (Tree element : ListUtils.reverse(block.elements())) {
       Map<Symbol, VariableUsage> usagesInElement = blockLiveVariables.getVariableUsages(element);
       for (Map.Entry<Symbol, VariableUsage> symbolWithUsage : usagesInElement.entrySet()) {
         Symbol symbol = symbolWithUsage.getKey();

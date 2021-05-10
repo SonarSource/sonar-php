@@ -19,7 +19,6 @@
  */
 package org.sonar.php.cfg;
 
-import com.google.common.collect.Sets;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
@@ -28,6 +27,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -212,7 +212,7 @@ public class LiveVariablesAnalysis {
         .forEach(out::addAll);
       // in = gen + (out - kill)
       Set<Symbol> newIn = new HashSet<>(gen);
-      newIn.addAll(Sets.difference(out, kill));
+      newIn.addAll(SetUtils.difference(out, kill));
       boolean inHasChanged = !newIn.equals(in);
       in = newIn;
       return inHasChanged;

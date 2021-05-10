@@ -19,7 +19,6 @@
  */
 package org.sonar.php.parser;
 
-import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.Optional;
 import java.util.ArrayList;
@@ -133,6 +132,7 @@ import org.sonar.php.tree.impl.statement.UnsetVariableStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.UseStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.VariableDeclarationTreeImpl;
 import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
+import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -1213,7 +1213,7 @@ public class TreeFactory {
   public ExpressionTree prefixExpr(Optional<List<InternalSyntaxToken>> operators, ExpressionTree expression) {
     ExpressionTree result = expression;
     if (operators.isPresent()) {
-      for (InternalSyntaxToken operator : Lists.reverse(operators.get())) {
+      for (InternalSyntaxToken operator : ListUtils.reverse(operators.get())) {
         Kind kind = UNARY_EXPRESSION_KINDS_BY_OPERATOR.get(operator.text());
         if (kind == null) {
           throw new IllegalArgumentException("Mapping not found for unary operator " + operator.text());

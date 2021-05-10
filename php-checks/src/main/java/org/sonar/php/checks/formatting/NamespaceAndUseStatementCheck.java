@@ -20,7 +20,8 @@
 package org.sonar.php.checks.formatting;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -33,15 +34,13 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import java.util.List;
-
 public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements FormattingCheck {
 
   private static final String BLANK_LINE_NAMESPACE_MESSAGE = "Add a blank line after this \"namespace%s\" declaration.";
   private static final String BLANK_LINE_USE_MESSAGE = "Add a blank line after this \"use\" declaration.";
   private static final String USE_AFTER_NAMESPACE_MESSAGE = "Move the use declarations after the namespace declarations.";
 
-  private List<UseStatementTree> useStatements = Lists.newArrayList();
+  private List<UseStatementTree> useStatements = new ArrayList<>();
   private StatementTree nextStatement = null;
   private FormattingStandardCheck check = null;
 

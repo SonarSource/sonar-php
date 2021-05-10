@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.cfg;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import java.util.ArrayDeque;
 import java.util.Collections;
@@ -35,6 +34,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.LiteralUtils;
+import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -122,7 +122,7 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock build(List<? extends Tree> trees, PhpCfgBlock successor) {
     PhpCfgBlock currentBlock = successor;
-    for (Tree tree : Lists.reverse(trees)) {
+    for (Tree tree : ListUtils.reverse(trees)) {
       currentBlock = build(tree, currentBlock);
     }
 
@@ -195,7 +195,7 @@ class ControlFlowGraphBuilder {
     PhpCfgBlock nextCase = defaultBlock;
     PhpCfgBlock caseBody = successor;
     addBreakable(successor, successor);
-    for (SwitchCaseClauseTree caseTree : Lists.reverse(tree.cases())) {
+    for (SwitchCaseClauseTree caseTree : ListUtils.reverse(tree.cases())) {
       caseBody = buildSubFlow(caseTree.statements(), caseBody);
       if (caseTree.is(Tree.Kind.CASE_CLAUSE)) {
         PhpCfgBranchingBlock caseBranch = createBranchingBlock(caseTree, caseBody, nextCase);
@@ -357,18 +357,18 @@ class ControlFlowGraphBuilder {
 
     ForwardingBlock linkToCondition = createForwardingBlock();
     PhpCfgBlock updateBlock = createSimpleBlock(linkToCondition);
-    Lists.reverse(tree.update()).forEach(updateBlock::addElement);
+    ListUtils.reverse(tree.update()).forEach(updateBlock::addElement);
 
     addBreakable(successor, updateBlock);
     PhpCfgBlock loopBodyBlock = buildSubFlow(tree.statements(), updateBlock);
     removeBreakable();
 
     PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
-    Lists.reverse(tree.condition()).forEach(conditionBlock::addElement);
+    ListUtils.reverse(tree.condition()).forEach(conditionBlock::addElement);
     linkToCondition.setSuccessor(conditionBlock);
 
     PhpCfgBlock beforeFor = createSimpleBlock(conditionBlock);
-    Lists.reverse(tree.init()).forEach(beforeFor::addElement);
+    ListUtils.reverse(tree.init()).forEach(beforeFor::addElement);
 
     return beforeFor;
   }
@@ -423,7 +423,7 @@ class ControlFlowGraphBuilder {
       falseBlock = buildSubFlow(tree.elseClause().statements(), successor);
     }
     if (!tree.elseifClauses().isEmpty()) {
-      for (ElseifClauseTree elseifClause : Lists.reverse(tree.elseifClauses())) {
+      for (ElseifClauseTree elseifClause : ListUtils.reverse(tree.elseifClauses())) {
         falseBlock = buildElseIfStatement(elseifClause, successor, falseBlock);
       }
     }

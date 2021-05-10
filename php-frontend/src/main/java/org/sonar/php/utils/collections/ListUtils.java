@@ -20,6 +20,7 @@
 package org.sonar.php.utils.collections;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ListUtils {
@@ -34,5 +35,11 @@ public class ListUtils {
       concatenatedList.addAll(list);
     }
     return concatenatedList;
+  }
+
+  public static <T> List<T> reverse(List<T> list) {
+    List<T> reversed = new ArrayList<>(list);
+    Collections.reverse(reversed);
+    return reversed;
   }
 }

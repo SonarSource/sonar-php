@@ -19,9 +19,9 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,8 +37,8 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
   public static final String KEY = "S122";
   private static final String MESSAGE = "%s statements were found on this line. Reformat the code to have only one statement per line.";
 
-  private final Map<Integer, StatementCount> statementsPerLine = Maps.newHashMap();
-  private final Set<Integer> linesWithHtml = Sets.newHashSet();
+  private final Map<Integer, StatementCount> statementsPerLine = new HashMap<>();
+  private final Set<Integer> linesWithHtml = new HashSet<>();
   private boolean inFunctionExpression = false;
 
   private static class StatementCount {

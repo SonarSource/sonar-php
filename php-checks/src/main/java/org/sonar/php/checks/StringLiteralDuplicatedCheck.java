@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Maps;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -41,8 +41,8 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   private static final Pattern ALLOWED_DUPLICATED_LITERALS = Pattern.compile("^[a-zA-Z][_\\-\\w]+$");
 
-  private final Map<String, LiteralTree> firstOccurrenceTrees = Maps.newHashMap();
-  private final Map<String, List<LiteralTree>> sameLiteralOccurrences = Maps.newHashMap();
+  private final Map<String, LiteralTree> firstOccurrenceTrees = new HashMap<>();
+  private final Map<String, List<LiteralTree>> sameLiteralOccurrences = new HashMap<>();
 
   public static final int THRESHOLD_DEFAULT = 3;
   public static final int MINIMAL_LITERAL_LENGTH_DEFAULT = 5;

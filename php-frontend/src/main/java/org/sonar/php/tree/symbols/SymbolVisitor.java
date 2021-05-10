@@ -20,7 +20,6 @@
 package org.sonar.php.tree.symbols;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
@@ -294,7 +293,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   @Override
   public void visitConstDeclaration(ConstantDeclarationTree tree) {
     for (VariableDeclarationTree constant : tree.declarations()) {
-      createSymbol(constant.identifier(), Symbol.Kind.VARIABLE).addModifiers(Lists.newArrayList(tree.constToken()));
+      createSymbol(constant.identifier(), Symbol.Kind.VARIABLE).addModifiers(Collections.singletonList(tree.constToken()));
     }
   }
 

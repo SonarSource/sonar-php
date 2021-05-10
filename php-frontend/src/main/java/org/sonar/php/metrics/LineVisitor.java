@@ -19,7 +19,7 @@
  */
 package org.sonar.php.metrics;
 
-import com.google.common.collect.Sets;
+import java.util.HashSet;
 import java.util.Set;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -30,7 +30,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public class LineVisitor extends PHPVisitorCheck {
 
-  private Set<Integer> lines = Sets.newHashSet();
+  private Set<Integer> lines = new HashSet<>();
 
   private LineVisitor(Tree tree) {
     tree.accept(this);
