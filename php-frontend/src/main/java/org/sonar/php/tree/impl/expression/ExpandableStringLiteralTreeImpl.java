@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
