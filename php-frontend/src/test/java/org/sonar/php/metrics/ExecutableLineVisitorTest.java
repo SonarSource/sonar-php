@@ -40,7 +40,7 @@ public class ExecutableLineVisitorTest extends ParsingTestUtils {
     String filename = "metrics/executable_lines.php";
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/"+filename));
     Set<Integer> executableLines = new ExecutableLineVisitor(parse(filename)).getExecutableLines();
-    assertThat(executableLines).containsExactlyElementsOf(expectedExecutableLines(file));
+    assertThat(executableLines).containsOnlyElementsOf(expectedExecutableLines(file));
   }
 
   // returns lines marked with "// +1" comment
