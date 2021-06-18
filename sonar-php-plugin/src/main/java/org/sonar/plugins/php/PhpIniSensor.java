@@ -62,9 +62,8 @@ public class PhpIniSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-    Checks<PhpIniCheck> checks = checkFactory
-      .<PhpIniCheck>create(CheckList.REPOSITORY_KEY)
-      .addAnnotatedChecks(CheckList.getPhpIniChecks());
+    Checks<PhpIniCheck> checks = checkFactory.create(CheckList.REPOSITORY_KEY);
+    checks.addAnnotatedChecks((Iterable<?>) CheckList.getPhpIniChecks());
     execute(context, checks);
   }
 
