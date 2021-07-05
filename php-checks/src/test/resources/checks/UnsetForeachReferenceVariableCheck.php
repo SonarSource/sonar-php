@@ -58,3 +58,7 @@ $arr10 = array(1, 2, 3);
 foreach ($arr10 as $key => &$value10) { // Compliant
     $value10 = $value10 * 2;
 }
+
+foreach ($x as &$obj->prop) {
+    var_dump($obj->prop);
+}
