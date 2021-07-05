@@ -43,6 +43,9 @@ public class UnsetForeachReferenceVariableCheck extends PHPVisitorCheck {
     ReferenceVariableTree referenceVariable = (ReferenceVariableTree) tree.value();
 
     Symbol symbol = context().symbolTable().getSymbol(referenceVariable.variableExpression());
+    if (symbol == null) {
+      return;
+    }
 
     boolean usedBeforeUnset = false;
     boolean wasUnset = false;
