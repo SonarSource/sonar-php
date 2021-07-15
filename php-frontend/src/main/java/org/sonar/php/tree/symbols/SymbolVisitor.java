@@ -198,6 +198,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     TypeSymbolImpl classSymbol = (TypeSymbolImpl) symbolTable.getSymbol(tree.name());
     checkNotNull(classSymbol, "Symbol for %s not found", tree);
+    scan(tree.attributeGroups());
     enterScope(tree);
     classScopes.push(currentScope);
     scan(tree.name());

@@ -508,6 +508,14 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbols("$THIS")).hasSize(1);
   }
 
+  @Test
+  public void symbols_are_created_for_class_attribute_content() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php\n"
+                                                 + "#[MyAttribute(new stdClass)]\n"
+                                                 + "class Test1 {}");
+    assertThat(symbolTable.getSymbol("stdclass")).isNotNull();
+  }
+
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
