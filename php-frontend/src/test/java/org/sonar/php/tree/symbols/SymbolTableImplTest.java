@@ -509,11 +509,17 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void symbols_are_created_for_class_attribute_content() {
+  public void symbols_are_created_for_attribute_content() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php\n"
-                                                 + "#[MyAttribute(new stdClass)]\n"
-                                                 + "class Test1 {}");
-    assertThat(symbolTable.getSymbol("stdclass")).isNotNull();
+                                                 + "#[MyAttribute(new X0)]\n"
+                                                 + "class Test1 {\n"
+                                                 + "    function foo(#[A(new X2)] $param) {\n"
+                                                 + "        $x = new #[A(new X1)] class {};\n"
+                                                 + "    }\n"
+                                                 + "}");
+    assertThat(symbolTable.getSymbol("X0")).isNotNull();
+    assertThat(symbolTable.getSymbol("X1")).isNotNull();
+    assertThat(symbolTable.getSymbol("X2")).isNotNull();
   }
 
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
