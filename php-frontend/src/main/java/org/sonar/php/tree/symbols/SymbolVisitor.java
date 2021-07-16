@@ -172,6 +172,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
+    scan(tree.attributeGroups());
     resolveDeclaredTypeNamespaceName(tree.declaredType());
   }
 
@@ -198,6 +199,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     TypeSymbolImpl classSymbol = (TypeSymbolImpl) symbolTable.getSymbol(tree.name());
     checkNotNull(classSymbol, "Symbol for %s not found", tree);
+    scan(tree.attributeGroups());
     enterScope(tree);
     classScopes.push(currentScope);
     scan(tree.name());
@@ -237,7 +239,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   public void visitAnonymousClass(AnonymousClassTree tree) {
     // the arguments are passed from the outer scope
     scan(tree.arguments());
-
+    scan(tree.attributeGroups());
     enterScope(tree);
     classScopes.push(currentScope);
     createMemberSymbols(tree, null);
@@ -397,6 +399,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitParameter(ParameterTree tree) {
+    scan(tree.attributeGroups());
     createSymbol(tree.variableIdentifier(), Symbol.Kind.PARAMETER);
     ExpressionTree initValue = tree.initValue();
     if (initValue != null) {

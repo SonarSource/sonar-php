@@ -208,3 +208,6 @@ function myLaravelEncrypt($data)
     encrypt($data); // Noncompliant
     ABC::encryptString($data); // Ok - not from framework
 }
+
+#[MyAttribute(null, new stdClass)]
+class TestClassWithAttribute {} // SONARPHP-1153
