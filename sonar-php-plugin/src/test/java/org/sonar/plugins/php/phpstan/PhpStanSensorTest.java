@@ -177,7 +177,7 @@ public class PhpStanSensorTest {
   @Test
   public void issues_when_phpstan_line_errors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-line-and-message-error.json");
-    assertThat(externalIssues).hasSize(0);
+    assertThat(externalIssues).isEmpty();
 
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
       .contains("100 is not a valid line for pointer. File phpstan/file1.php has 6 line(s)");

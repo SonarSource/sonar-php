@@ -38,7 +38,7 @@ public class PhpStanRuleDefinitionTest {
     assertThat(repository).isNotNull();
     assertThat(repository.name()).isEqualTo("PHPStan");
     assertThat(repository.language()).isEqualTo("php");
-    assertThat(repository.isExternal()).isEqualTo(true);
+    assertThat(repository.isExternal()).isTrue();
     assertThat(repository.rules().size()).isEqualTo(1);
 
     RulesDefinition.Rule rule = repository.rule("finding");
