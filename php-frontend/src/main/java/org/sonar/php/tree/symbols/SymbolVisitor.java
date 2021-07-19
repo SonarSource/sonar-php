@@ -297,6 +297,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     for (VariableDeclarationTree constant : tree.declarations()) {
       createSymbol(constant.identifier(), Symbol.Kind.VARIABLE).addModifiers(Collections.singletonList(tree.constToken()));
     }
+    super.visitConstDeclaration(tree);
   }
 
   @Override
