@@ -1,0 +1,9 @@
+[
+  {
+    "key": "finding",
+    "name": "PHPStan Rule",
+    "tags": [
+      "phpstan"
+    ]
+  }
+]

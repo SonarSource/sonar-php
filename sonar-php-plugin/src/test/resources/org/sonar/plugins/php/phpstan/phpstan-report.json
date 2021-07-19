@@ -1,0 +1,33 @@
+{
+  "totals": {
+    "errors": 0,
+    "file_errors": 1
+  },
+  "files": {
+    "phpstan/file1.php": {
+      "errors": 1,
+      "messages": [
+        {
+          "message": "Parameter #1 $i of function foo expects int, string given.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file2.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        },
+        {
+          "message": "Call to method format() on an unknown class DateTimeImutable.",
+          "line": 7,
+          "ignorable": true
+        }
+      ]
+    }
+  },
+  "errors": []
+}
