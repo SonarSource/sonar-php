@@ -1,0 +1,224 @@
+{
+  "totals": {
+    "errors": 0,
+    "file_errors": 1
+  },
+  "files": {
+    "phpstan/file1.php": {
+      "errors": 1,
+      "messages": [
+        {
+          "message": "Parameter #1 $i of function foo expects int, string given.",
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file3.php": {
+      "messages": [
+        {
+          "line": 5,
+          "message": "Parameter #1 $i of function foo expects int, string given.",
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file4.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "ignorable": true
+        }
+      ]
+    },
+    "": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file6.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file7.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file8.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file9.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file10.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file11.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file12.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file13.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file14.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file15.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file16.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file17.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file18.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file19.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file20.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file21.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file22.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file23.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file24.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file25.php": {
+      "messages": [
+        {
+          "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
+          "line": 5,
+          "ignorable": true
+        }
+      ]
+    }
+  },
+  "errors": []
+}

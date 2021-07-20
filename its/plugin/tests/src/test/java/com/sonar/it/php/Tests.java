@@ -59,6 +59,7 @@ import static org.assertj.core.api.Assertions.assertThat;
   PHPUnitTest.class,
   ReportWithUnresolvedPathTest.class,
   SonarLintTest.class,
+  PhpStanReportTest.class
 })
 public class Tests {
 
@@ -81,6 +82,7 @@ public class Tests {
       // PHP Plugin
       .addPlugin(PHP_PLUGIN_LOCATION)
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
+      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
       // Custom rules plugin
       .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))

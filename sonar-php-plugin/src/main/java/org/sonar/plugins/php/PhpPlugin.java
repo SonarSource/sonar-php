@@ -24,6 +24,8 @@ import org.sonar.api.SonarProduct;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.phpstan.PhpStanRuleDefinition;
+import org.sonar.plugins.php.phpstan.PhpStanSensor;
 
 public class PhpPlugin implements Plugin {
 
@@ -36,6 +38,7 @@ public class PhpPlugin implements Plugin {
   public static final String PHP_CATEGORY = "PHP";
   public static final String GENERAL_SUBCATEGORY = "General";
   public static final String PHPUNIT_SUBCATEGORY = "PHPUnit";
+  private static final String EXTERNAL_ANALYZERS_SUBCATEGORY = "External Analyzers";
 
   @Override
   public void define(Context context) {
@@ -87,6 +90,7 @@ public class PhpPlugin implements Plugin {
           .category(PHP_CATEGORY)
           .subCategory(PHPUNIT_SUBCATEGORY)
           .build());
+      addPhpStanExtensions(context);
     }
     context.addExtension(PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
       .name("Coverage Reports")
@@ -97,6 +101,19 @@ public class PhpPlugin implements Plugin {
       .subCategory(PHPUNIT_SUBCATEGORY)
       .build());
 
+  }
+
+  private static void addPhpStanExtensions(Context context) {
+    context.addExtensions(PhpStanSensor.class,
+      PropertyDefinition.builder(PhpStanSensor.REPORT_PATH_KEY)
+        .name("PHPStan Report Files")
+        .description("Paths (absolute or relative) to report files with PHPStan issues.")
+        .category(EXTERNAL_ANALYZERS_SUBCATEGORY)
+        .subCategory(PHP_CATEGORY)
+        .onQualifiers(Qualifiers.PROJECT)
+        .multiValues(true)
+        .build(),
+      PhpStanRuleDefinition.class);
   }
 
 }

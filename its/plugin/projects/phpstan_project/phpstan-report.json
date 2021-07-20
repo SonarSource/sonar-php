@@ -1,0 +1,23 @@
+{
+  "totals": {
+    "errors": 0,
+    "file_errors": 1
+  },
+  "files": {
+    "src/test.php": {
+      "errors": 1,
+      "messages": [
+        {
+          "message": "Parameter #1 $i of function foo expects int, string given.",
+          "line": 5,
+          "ignorable": true
+        },
+        {
+          "message": "Message for issue without line.",
+          "ignorable": true
+        }
+      ]
+    }
+  },
+  "errors": []
+}
