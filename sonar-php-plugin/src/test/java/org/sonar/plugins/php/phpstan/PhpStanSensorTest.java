@@ -126,8 +126,8 @@ public class PhpStanSensorTest {
     List<ExternalIssue> externalIssues = executeSensorImporting("invalid-path.txt");
     assertThat(externalIssues).isEmpty();
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
-      .startsWith("No issues information will be saved as the report file '")
-      .contains("invalid-path.txt' can't be read.");
+      .startsWith("An error occurred when reading report file '")
+      .contains("invalid-path.txt', no issue will be imported from this report.");
   }
 
   @Test
@@ -135,8 +135,8 @@ public class PhpStanSensorTest {
     List<ExternalIssue> externalIssues = executeSensorImporting("not-phpstan-report.json");
     assertThat(externalIssues).isEmpty();
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
-      .startsWith("No issues information will be saved as the report file '")
-      .contains("not-phpstan-report.json' can't be read.");
+      .startsWith("An error occurred when reading report file '")
+      .contains("not-phpstan-report.json', no issue will be imported from this report.");
   }
 
   @Test

@@ -11,6 +11,10 @@
           "message": "Parameter #1 $i of function foo expects int, string given.",
           "line": 5,
           "ignorable": true
+        },
+        {
+          "message": "Message for issue without line.",
+          "ignorable": true
         }
       ]
     }

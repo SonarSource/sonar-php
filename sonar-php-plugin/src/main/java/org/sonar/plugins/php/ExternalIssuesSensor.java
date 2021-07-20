@@ -21,7 +21,7 @@ package org.sonar.plugins.php;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,7 +49,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-    Set<String> unresolvedInputFiles = new HashSet<>();
+    Set<String> unresolvedInputFiles = new LinkedHashSet<>();
     List<File> reportFiles = ExternalReportProvider.getReportFiles(context, reportPathKey());
     reportFiles.forEach(report -> importExternalReport(report, context, unresolvedInputFiles));
     logUnresolvedInputFiles(unresolvedInputFiles);
@@ -75,7 +75,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
   }
 
   private void logFileCantBeRead(Exception e, File reportPath) {
-    logger().error("No issues information will be saved as the report file '{}' can't be read. {}: {}"
+    logger().error("An error occurred when reading report file '{}', no issue will be imported from this report. {}: {}"
       , reportPath, e.getClass().getSimpleName(), e.getMessage());
   }
 

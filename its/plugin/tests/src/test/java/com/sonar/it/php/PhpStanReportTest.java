@@ -44,13 +44,23 @@ public class PhpStanReportTest {
     Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
 
     List<Issues.Issue> issues = Tests.issuesForComponent("phpstan_project");
-    assertThat(issues).hasSize(1);
-    Issues.Issue issue = issues.get(0);
-    assertThat(issue.getComponent()).isEqualTo("phpstan_project:src/test.php");
-    assertThat(issue.getRule()).isEqualTo("external_phpstan:phpstan.finding");
-    assertThat(issue.getMessage()).isEqualTo("Parameter #1 $i of function foo expects int, string given.");
-    assertThat(issue.getType()).isEqualTo(Common.RuleType.CODE_SMELL);
-    assertThat(issue.getSeverity()).isEqualTo(Common.Severity.MAJOR);
-    assertThat(issue.getEffort()).isEqualTo("5min");
+    assertThat(issues).hasSize(2);
+    Issues.Issue first = issues.get(0);
+    assertThat(first.getComponent()).isEqualTo("phpstan_project:src/test.php");
+    assertThat(first.getRule()).isEqualTo("external_phpstan:phpstan.finding");
+    assertThat(first.getMessage()).isEqualTo("Message for issue without line.");
+    assertThat(first.getType()).isEqualTo(Common.RuleType.CODE_SMELL);
+    assertThat(first.getSeverity()).isEqualTo(Common.Severity.MAJOR);
+    assertThat(first.getEffort()).isEqualTo("5min");
+    assertThat(first.getLine()).isZero();
+
+    Issues.Issue second = issues.get(1);
+    assertThat(second.getComponent()).isEqualTo("phpstan_project:src/test.php");
+    assertThat(second.getRule()).isEqualTo("external_phpstan:phpstan.finding");
+    assertThat(second.getMessage()).isEqualTo("Parameter #1 $i of function foo expects int, string given.");
+    assertThat(second.getType()).isEqualTo(Common.RuleType.CODE_SMELL);
+    assertThat(second.getSeverity()).isEqualTo(Common.Severity.MAJOR);
+    assertThat(second.getEffort()).isEqualTo("5min");
+    assertThat(second.getLine()).isEqualTo(5);
   }
 }

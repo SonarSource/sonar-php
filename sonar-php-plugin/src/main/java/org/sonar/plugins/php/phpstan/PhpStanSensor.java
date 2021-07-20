@@ -85,7 +85,7 @@ public class PhpStanSensor extends ExternalIssuesSensor {
   }
 
   private static boolean isEmpty(@Nullable String str) {
-    return str == null || str.length() == 0;
+    return str == null || str.trim().length() == 0;
   }
 
   @Override
