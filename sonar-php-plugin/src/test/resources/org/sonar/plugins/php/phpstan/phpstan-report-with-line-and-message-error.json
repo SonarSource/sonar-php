@@ -5,16 +5,33 @@
   },
   "files": {
     "phpstan/file1.php": {
+      "errors": 0
+    },
+    "unknownfile.php": {
       "errors": 1,
       "messages": [
         {
+          "line": 5,
           "message": "Parameter #1 $i of function foo expects int, string given.",
-          "line": 100,
+          "ignorable": true
+        }
+      ]
+    },
+    "phpstan/file2.php": {
+      "errors": 1,
+      "messages": [
+        {
+          "line": 5,
           "ignorable": true
         },
         {
           "message": "",
           "line": 5,
+          "ignorable": true
+        },
+        {
+          "message": "Parameter #1 $i of function foo expects int, string given.",
+          "line": 100,
           "ignorable": true
         }
       ]

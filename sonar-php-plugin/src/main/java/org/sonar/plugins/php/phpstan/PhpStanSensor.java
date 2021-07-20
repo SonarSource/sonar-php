@@ -54,7 +54,7 @@ public class PhpStanSensor extends ExternalIssuesSensor {
     PhpStanJsonReportReader.read(in, issue -> saveIssue(context, issue, unresolvedInputFiles));
   }
 
-  private void saveIssue(SensorContext context, PhpStanJsonReportReader.Issue issue, Set<String> unresolvedInputFiles) {
+  private static void saveIssue(SensorContext context, PhpStanJsonReportReader.Issue issue, Set<String> unresolvedInputFiles) {
     if (isEmpty(issue.filePath) || isEmpty(issue.message)) {
       LOG.debug("Missing information for filePath:'{}', message:'{}'", issue.filePath, issue.message);
       return;

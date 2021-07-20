@@ -17,7 +17,7 @@
       "messages": [
         {
           "line": 5,
-          "message": "",
+          "message": "Parameter #1 $i of function foo expects int, string given.",
           "ignorable": true
         }
       ]

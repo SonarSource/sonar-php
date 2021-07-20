@@ -163,26 +163,26 @@ public class PhpStanSensorTest {
 
     assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN)))
-      .isEqualTo("Failed to resolve 21 file path(s) in PHPStan report. No issues imported related to file(s): " +
+      .isEqualTo("Failed to resolve 22 file path(s) in PHPStan report. No issues imported related to file(s): " +
         "phpstan/file10.php;phpstan/file11.php;phpstan/file12.php;phpstan/file13.php;phpstan/file14.php;" +
         "phpstan/file15.php;phpstan/file16.php;phpstan/file17.php;phpstan/file18.php;phpstan/file19.php;" +
         "phpstan/file20.php;phpstan/file21.php;phpstan/file22.php;phpstan/file23.php;phpstan/file24.php;" +
-        "phpstan/file25.php;phpstan/file4.php;phpstan/file6.php;phpstan/file7.php;phpstan/file8.php;...");
-    assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactly(
-      "Missing information for filePath:'', message:'Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.'",
-      "Missing information for filePath:'phpstan/file3.php', message:''"
-    );
+        "phpstan/file25.php;phpstan/file3.php;phpstan/file4.php;phpstan/file6.php;phpstan/file7.php;...");
+    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.DEBUG)))
+      .isEqualTo("Missing information for filePath:'', message:'Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.'");
   }
 
   @Test
-  public void issues_when_phpstan_line_errors() throws IOException {
+  public void issues_when_phpstan_with_line_and_message_errors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-line-and-message-error.json");
     assertThat(externalIssues).isEmpty();
 
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
-      .contains("100 is not a valid line for pointer. File phpstan/file1.php has 6 line(s)");
+      .contains("100 is not a valid line for pointer. File phpstan/file2.php has 10 line(s)");
     assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty();
-    assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty();
+    assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactly(
+      "Missing information for filePath:'phpstan/file2.php', message:'null'",
+      "Missing information for filePath:'phpstan/file2.php', message:''");
   }
 
   private static List<ExternalIssue> executeSensorImporting(@Nullable String fileName) throws IOException {
