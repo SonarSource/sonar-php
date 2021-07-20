@@ -525,6 +525,13 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbol("X3")).isNotNull();
   }
 
+  @Test
+  public void constant_declaration() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php const CONST1 = new A1;");
+    assertThat(symbolTable.getSymbols("CONST1")).extracting(Symbol::kind).containsExactly(Kind.VARIABLE);
+    assertThat(symbolTable.getSymbol("A1").qualifiedName()).hasToString("a1");
+  }
+
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
