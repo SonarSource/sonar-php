@@ -32,7 +32,7 @@ import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseExcepti
 
 public class PsalmSensor extends ExternalIssuesSensor {
 
-  private static final Logger PSALM_LOG = Loggers.get(PsalmSensor.class);
+  private static final Logger LOG = Loggers.get(PsalmSensor.class);
 
   public static final String PSALM_REPORT_KEY = "psalm";
   public static final String PSALM_REPORT_NAME = "Psalm";
@@ -41,7 +41,7 @@ public class PsalmSensor extends ExternalIssuesSensor {
   @Override
   protected void importReport(File reportPath, SensorContext context) throws IOException, ParseException {
     InputStream in = new FileInputStream(reportPath);
-    PSALM_LOG.info("Importing {}", reportPath);
+    LOG.info("Importing {}", reportPath);
     PsalmJsonReportReader.read(in, issue -> saveIssue(context, issue));
   }
 
@@ -62,7 +62,7 @@ public class PsalmSensor extends ExternalIssuesSensor {
 
   @Override
   protected Logger logger() {
-    return PSALM_LOG;
+    return LOG;
   }
 
   @Override
