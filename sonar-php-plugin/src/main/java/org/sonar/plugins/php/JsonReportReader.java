@@ -17,23 +17,40 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.phpstan;
+package org.sonar.plugins.php;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.plugins.php.api.Php;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
+import javax.annotation.Nullable;
+import org.sonarsource.analyzer.commons.internal.json.simple.parser.JSONParser;
 
-import static org.sonar.plugins.php.phpstan.PhpStanSensor.PHPSTAN_REPORT_KEY;
-import static org.sonar.plugins.php.phpstan.PhpStanSensor.PHPSTAN_REPORT_NAME;
+public abstract class JsonReportReader {
 
-public class PhpStanRuleDefinition implements RulesDefinition {
+  public static class Issue {
+    @Nullable
+    public String filePath;
+    @Nullable
+    public String message;
+    @Nullable
+    public String ruleId;
+    @Nullable
+    public Integer startLine;
+    @Nullable
+    public Integer startColumn;
+    @Nullable
+    public Integer endLine;
+    @Nullable
+    public Integer endColumn;
+    @Nullable
+    public String type;
+    @Nullable
+    public String severity;
+  }
 
-  private static final String RULES_JSON = "org/sonar/plugins/php/phpstan/rules.json";
+  protected final JSONParser jsonParser = new JSONParser();
 
-  static final ExternalRuleLoader RULE_LOADER = new ExternalRuleLoader(PHPSTAN_REPORT_KEY, PHPSTAN_REPORT_NAME, RULES_JSON, Php.KEY);
-
-  @Override
-  public void define(Context context) {
-    RULE_LOADER.createExternalRuleRepository(context);
+  protected static Integer toInteger(Object value) {
+    if (value instanceof Number) {
+      return ((Number) value).intValue();
+    }
+    return null;
   }
 }

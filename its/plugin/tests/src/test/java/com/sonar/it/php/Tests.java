@@ -59,7 +59,8 @@ import static org.assertj.core.api.Assertions.assertThat;
   PHPUnitTest.class,
   ReportWithUnresolvedPathTest.class,
   SonarLintTest.class,
-  PhpStanReportTest.class
+  PhpStanReportTest.class,
+  PsalmReportTest.class
 })
 public class Tests {
 

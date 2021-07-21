@@ -1,0 +1,98 @@
+{
+  "issues": [
+    {
+      "engineId": "Psalm",
+      "ruleId": "Issue with empty message",
+      "primaryLocation": {
+        "message": "  ",
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 2,
+          "endLine": 2,
+          "startColumn": 100,
+          "endColumn": 10
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "Issue without message",
+      "primaryLocation": {
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 2,
+          "endLine": 2,
+          "startColumn": 100,
+          "endColumn": 10
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Issue without filePath",
+        "textRange": {
+          "startLine": 2,
+          "endLine": 2,
+          "startColumn": 100,
+          "endColumn": 10
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "UnknownRuleId",
+      "primaryLocation": {
+        "message": "Issue with to long startColumn and unknown ruleId",
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 2,
+          "endLine": 2,
+          "startColumn": 100,
+          "endColumn": 10
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Issue with to long endColumn",
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 2,
+          "endLine": 2,
+          "startColumn": 1,
+          "endColumn": 100
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Issue with unknownFile",
+        "filePath": "psalm/unknown.php",
+        "textRange": {
+          "startLine": 2,
+          "endLine": 2,
+          "startColumn": 1,
+          "endColumn": 10
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    }
+  ]
+}

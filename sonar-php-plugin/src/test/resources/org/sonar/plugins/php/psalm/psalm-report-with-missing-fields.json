@@ -1,0 +1,76 @@
+{
+  "issues": [
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Issue without type and severity",
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 5,
+          "endLine": 5,
+          "startColumn": 4,
+          "endColumn": 16
+        }
+      }
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Issue without textRange",
+        "filePath": "psalm/file1.php"
+      },
+      "type": "SECURITY_HOTSPOT",
+      "severity": "INFO"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Issue without endColumns and endLine",
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 2,
+          "startColumn": 4
+        }
+      },
+      "type": "VULNERABILITY",
+      "severity": "BLOCKER"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Issue without columns and endLine",
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 2
+        }
+      },
+      "type": "CODE_SMELL",
+      "severity": "MINOR"
+    },
+    {
+      "engineId": "Psalm",
+      "primaryLocation": {
+        "message": "Issue without ruleId",
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 2,
+          "endLine": 2,
+          "startColumn": 1,
+          "endColumn": 10
+        }
+      },
+      "type": "UNKNOWN",
+      "severity": "UNKNOWN"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "Missing primary location",
+      "type": "BUG",
+      "severity": "CRITICAL"
+    }
+  ]
+}

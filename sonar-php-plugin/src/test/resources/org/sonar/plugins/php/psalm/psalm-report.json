@@ -1,0 +1,52 @@
+{
+  "issues": [
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Argument 1 of foo expects int, \"not an int\" provided",
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 5,
+          "endLine": 5,
+          "startColumn": 4,
+          "endColumn": 16
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Second issue on file1.php",
+        "filePath": "psalm/file1.php",
+        "textRange": {
+          "startLine": 2,
+          "endLine": 2,
+          "startColumn": 1,
+          "endColumn": 10
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "Argument 1 of foo expects int, \"not an int\" provided",
+        "filePath": "psalm/file2.php",
+        "textRange": {
+          "startLine": 5,
+          "endLine": 5,
+          "startColumn": 4,
+          "endColumn": 16
+        }
+      },
+      "type": "BUG",
+      "severity": "MAJOR"
+    }
+  ]
+}

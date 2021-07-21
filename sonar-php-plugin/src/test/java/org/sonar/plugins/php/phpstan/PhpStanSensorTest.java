@@ -20,40 +20,31 @@
 package org.sonar.plugins.php.phpstan;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
-import javax.annotation.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.api.SonarEdition;
-import org.sonar.api.SonarQubeSide;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
-import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.rules.RuleType;
-import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.plugins.php.ExternalIssuesSensor;
+import org.sonar.plugins.php.ReportSensorTest;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PhpStanSensorTest {
+public class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "phpstan");
 
-  private static PhpStanSensor phpStanSensor = new PhpStanSensor();
+  protected static PhpStanSensor phpStanSensor = new PhpStanSensor();
 
   @Rule
   public LogTester logTester = new LogTester();
@@ -115,38 +106,6 @@ public class PhpStanSensorTest {
   }
 
   @Test
-  public void no_issues_without_report_paths_property() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting(null);
-    assertThat(externalIssues).isEmpty();
-    assertNoErrorWarnDebugLogs(logTester);
-  }
-
-  @Test
-  public void no_issues_with_invalid_report_path() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting("invalid-path.txt");
-    assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
-      .startsWith("An error occurred when reading report file '")
-      .contains("invalid-path.txt', no issue will be imported from this report.");
-  }
-
-  @Test
-  public void no_issues_with_invalid_phpstan_file() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting("not-phpstan-report.json");
-    assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
-      .startsWith("An error occurred when reading report file '")
-      .contains("not-phpstan-report.json', no issue will be imported from this report.");
-  }
-
-  @Test
-  public void no_issues_with_empty_phpstan_file() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-empty.json");
-    assertThat(externalIssues).isEmpty();
-    assertNoErrorWarnDebugLogs(logTester);
-  }
-
-  @Test
   public void issues_when_phpstan_file_has_errors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-error.json");
     assertThat(externalIssues).hasSize(1);
@@ -185,48 +144,13 @@ public class PhpStanSensorTest {
       "Missing information for filePath:'phpstan/file2.php', message:''");
   }
 
-  private static List<ExternalIssue> executeSensorImporting(@Nullable String fileName) throws IOException {
-    Path baseDir = PROJECT_DIR.getParent();
-    SensorContextTester context = SensorContextTester.create(baseDir);
-    try (Stream<Path> fileStream = Files.list(PROJECT_DIR)) {
-      fileStream.forEach(file -> addFileToContext(context, baseDir, file));
-      context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(8, 9), SonarQubeSide.SERVER, SonarEdition.DEVELOPER));
-      if (fileName != null) {
-        String path = PROJECT_DIR.resolve(fileName).toAbsolutePath().toString();
-        context.settings().setProperty("sonar.php.phpstan.reportPaths", path);
-      }
-      phpStanSensor.execute(context);
-      return new ArrayList<>(context.allExternalIssues());
-    }
+  @Override
+  protected ExternalIssuesSensor sensor() {
+    return phpStanSensor;
   }
 
-  private static void addFileToContext(SensorContextTester context, Path projectDir, Path file) {
-    try {
-      String projectId = projectDir.getFileName().toString() + "-project";
-      context.fileSystem().add(TestInputFileBuilder.create(projectId, projectDir.toFile(), file.toFile())
-        .setCharset(UTF_8)
-        .setLanguage(language(file))
-        .setContents(new String(Files.readAllBytes(file), UTF_8))
-        .setType(InputFile.Type.MAIN)
-        .build());
-    } catch (IOException e) {
-      throw new IllegalStateException(e);
-    }
-  }
-
-  private static String language(Path file) {
-    String path = file.toString();
-    return path.substring(path.lastIndexOf('.') + 1);
-  }
-
-  public static String onlyOneLogElement(List<String> elements) {
-    assertThat(elements).hasSize(1);
-    return elements.get(0);
-  }
-
-  public static void assertNoErrorWarnDebugLogs(LogTester logTester) {
-    org.assertj.core.api.Assertions.assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    org.assertj.core.api.Assertions.assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty();
-    org.assertj.core.api.Assertions.assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty();
+  @Override
+  protected LogTester logTester() {
+    return logTester;
   }
 }

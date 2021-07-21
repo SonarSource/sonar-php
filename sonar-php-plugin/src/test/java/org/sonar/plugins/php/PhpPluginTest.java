@@ -51,7 +51,7 @@ public class PhpPluginTest {
     Plugin.Context context = qubeContext(Version.create(6, 7));
     plugin.define(context);
 
-    assertThat(context.getExtensions()).hasSize(15);
+    assertThat(context.getExtensions()).hasSize(18);
   }
 
   @Test
