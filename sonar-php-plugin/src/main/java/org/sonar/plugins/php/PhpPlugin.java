@@ -26,6 +26,8 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpstan.PhpStanRuleDefinition;
 import org.sonar.plugins.php.phpstan.PhpStanSensor;
+import org.sonar.plugins.php.psalm.PsalmRulesDefinition;
+import org.sonar.plugins.php.psalm.PsalmSensor;
 
 public class PhpPlugin implements Plugin {
 
@@ -91,6 +93,7 @@ public class PhpPlugin implements Plugin {
           .subCategory(PHPUNIT_SUBCATEGORY)
           .build());
       addPhpStanExtensions(context);
+      addPsalmExtensions(context);
     }
     context.addExtension(PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
       .name("Coverage Reports")
@@ -114,6 +117,19 @@ public class PhpPlugin implements Plugin {
         .multiValues(true)
         .build(),
       PhpStanRuleDefinition.class);
+  }
+
+  private static void addPsalmExtensions(Context context) {
+    context.addExtensions(PsalmSensor.class,
+      PropertyDefinition.builder(PsalmSensor.REPORT_PATH_KEY)
+        .name("Psalm Report Files")
+        .description("Paths (absolute or relative) to report files with Psalm issues.")
+        .category(EXTERNAL_ANALYZERS_SUBCATEGORY)
+        .subCategory(PHP_CATEGORY)
+        .onQualifiers(Qualifiers.PROJECT)
+        .multiValues(true)
+        .build(),
+      PsalmRulesDefinition.class);
   }
 
 }

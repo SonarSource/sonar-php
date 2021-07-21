@@ -17,8 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.phpstan;
-
+package org.sonar.plugins.php.psalm;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,22 +27,24 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.ExternalIssuesSensor;
+import org.sonar.plugins.php.phpstan.PhpStanSensor;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
-public class PhpStanSensor extends ExternalIssuesSensor {
+public class PsalmSensor extends ExternalIssuesSensor {
 
   private static final Logger LOG = Loggers.get(PhpStanSensor.class);
 
-  public static final String REPORT_KEY = "phpstan";
-  public static final String REPORT_NAME = "PHPStan";
-  public static final String REPORT_PATH_KEY = "sonar.php.phpstan.reportPaths";
+  public static final String REPORT_KEY = "psalm";
+  public static final String REPORT_NAME = "Psalm";
+  public static final String REPORT_PATH_KEY = "sonar.php.psalm.reportPaths";
+  public static final String RULES_JSON = "org/sonar/plugins/php/psalm/rules.json";
 
   @Override
   protected void importReport(File reportPath, SensorContext context) throws IOException, ParseException {
     InputStream in = new FileInputStream(reportPath);
     LOG.info("Importing {}", reportPath);
-    PhpStanJsonReportReader.read(in, issue -> saveIssue(context, issue));
+    PsalmJsonReportReader.read(in, issue -> saveIssue(context, issue));
   }
 
   @Override
@@ -68,6 +69,6 @@ public class PhpStanSensor extends ExternalIssuesSensor {
 
   @Override
   protected ExternalRuleLoader externalRuleLoader() {
-    return PhpStanRuleDefinition.RULE_LOADER;
+    return PsalmRulesDefinition.RULE_LOADER;
   }
 }

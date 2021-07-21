@@ -1,0 +1,36 @@
+{
+  "issues": [
+    {
+      "engineId": "Psalm",
+      "ruleId": "InvalidScalarArgument",
+      "primaryLocation": {
+        "message": "First issue on test.php",
+        "filePath": "src/test.php",
+        "textRange": {
+          "startLine": 5,
+          "endLine": 5,
+          "startColumn": 4,
+          "endColumn": 16
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "UnknownRule",
+      "primaryLocation": {
+        "message": "Second issue on test.php",
+        "filePath": "src/test.php",
+        "textRange": {
+          "startLine": 2,
+          "endLine": 2,
+          "startColumn": 1,
+          "endColumn": 10
+        }
+      },
+      "type": "BUG",
+      "severity": "CRITICAL"
+    }
+  ]
+}

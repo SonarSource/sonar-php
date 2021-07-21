@@ -17,33 +17,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.phpstan;
+package org.sonar.plugins.php.psalm;
 
 import org.junit.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PhpStanRuleDefinitionTest {
+public class PsalmRuleDefinitionTest {
 
   @Test
-  public void phpstan_external_repository() {
+  public void psalm_external_repository() {
     RulesDefinition.Context context = new RulesDefinition.Context();
-    PhpStanRuleDefinition rulesDefinition = new PhpStanRuleDefinition();
+    PsalmRulesDefinition rulesDefinition = new PsalmRulesDefinition();
     rulesDefinition.define(context);
 
     assertThat(context.repositories()).hasSize(1);
-    RulesDefinition.Repository repository = context.repository("external_phpstan");
+    RulesDefinition.Repository repository = context.repository("external_psalm");
     assertThat(repository).isNotNull();
-    assertThat(repository.name()).isEqualTo("PHPStan");
+    assertThat(repository.name()).isEqualTo("Psalm");
     assertThat(repository.language()).isEqualTo("php");
-    assertThat(repository.isExternal()).isTrue();
-    assertThat(repository.rules().size()).isEqualTo(1);
+    assertThat(repository.isExternal()).isEqualTo(true);
+    assertThat(repository.rules().size()).isEqualTo(266);
 
-    RulesDefinition.Rule rule = repository.rule("finding");
+    RulesDefinition.Rule rule = repository.rule("AbstractMethodCall");
     assertThat(rule).isNotNull();
-    assertThat(rule.name()).isEqualTo("PHPStan Rule");
-    assertThat(rule.htmlDescription()).isEqualTo("This is external rule <code>phpstan:finding</code>. No details are available.");
+    assertThat(rule.name()).isEqualTo("AbstractMethodCall");
     assertThat(rule.tags()).isEmpty();
   }
 

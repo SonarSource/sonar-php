@@ -17,17 +17,17 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.phpstan;
+package org.sonar.plugins.php.psalm;
 
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.php.api.Php;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
-public class PhpStanRuleDefinition implements RulesDefinition {
+public class PsalmRulesDefinition implements RulesDefinition {
 
-  private static final String RULES_JSON = "org/sonar/plugins/php/phpstan/rules.json";
+  private static final String RULES_JSON = "org/sonar/plugins/php/psalm/rules.json";
 
-  static final ExternalRuleLoader RULE_LOADER = new ExternalRuleLoader(PhpStanSensor.REPORT_KEY, PhpStanSensor.REPORT_NAME, RULES_JSON, Php.KEY);
+  static final ExternalRuleLoader RULE_LOADER = new ExternalRuleLoader(PsalmSensor.REPORT_KEY, PsalmSensor.REPORT_NAME, RULES_JSON, Php.KEY);
 
   @Override
   public void define(Context context) {
