@@ -37,7 +37,7 @@ public class PsalmRuleDefinitionTest {
     assertThat(repository).isNotNull();
     assertThat(repository.name()).isEqualTo("Psalm");
     assertThat(repository.language()).isEqualTo("php");
-    assertThat(repository.isExternal()).isEqualTo(true);
+    assertThat(repository.isExternal()).isTrue();
     assertThat(repository.rules().size()).isEqualTo(266);
 
     RulesDefinition.Rule rule = repository.rule("AbstractMethodCall");

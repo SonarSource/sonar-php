@@ -21,8 +21,8 @@
         "message": "Issue without textRange",
         "filePath": "psalm/file1.php"
       },
-      "type": "BUG",
-      "severity": "CRITICAL"
+      "type": "SECURITY_HOTSPOT",
+      "severity": "INFO"
     },
     {
       "engineId": "Psalm",
@@ -35,8 +35,8 @@
           "startColumn": 4
         }
       },
-      "type": "BUG",
-      "severity": "CRITICAL"
+      "type": "VULNERABILITY",
+      "severity": "BLOCKER"
     },
     {
       "engineId": "Psalm",
@@ -48,8 +48,8 @@
           "startLine": 2
         }
       },
-      "type": "BUG",
-      "severity": "CRITICAL"
+      "type": "CODE_SMELL",
+      "severity": "MINOR"
     },
     {
       "engineId": "Psalm",
@@ -63,6 +63,12 @@
           "endColumn": 10
         }
       },
+      "type": "UNKNOWN",
+      "severity": "UNKNOWN"
+    },
+    {
+      "engineId": "Psalm",
+      "ruleId": "Missing primary location",
       "type": "BUG",
       "severity": "CRITICAL"
     }

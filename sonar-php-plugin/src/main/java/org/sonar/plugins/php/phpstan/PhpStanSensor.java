@@ -33,37 +33,37 @@ import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseExcepti
 
 public class PhpStanSensor extends ExternalIssuesSensor {
 
-  private static final Logger LOG = Loggers.get(PhpStanSensor.class);
+  private static final Logger PHPSTAN_LOG = Loggers.get(PhpStanSensor.class);
 
-  public static final String REPORT_KEY = "phpstan";
-  public static final String REPORT_NAME = "PHPStan";
-  public static final String REPORT_PATH_KEY = "sonar.php.phpstan.reportPaths";
+  public static final String PHPSTAN_REPORT_KEY = "phpstan";
+  public static final String PHPSTAN_REPORT_NAME = "PHPStan";
+  public static final String PHPSTAN_REPORT_PATH_KEY = "sonar.php.phpstan.reportPaths";
 
   @Override
   protected void importReport(File reportPath, SensorContext context) throws IOException, ParseException {
     InputStream in = new FileInputStream(reportPath);
-    LOG.info("Importing {}", reportPath);
+    PHPSTAN_LOG.info("Importing {}", reportPath);
     PhpStanJsonReportReader.read(in, issue -> saveIssue(context, issue));
   }
 
   @Override
   protected String reportName() {
-    return REPORT_NAME;
+    return PHPSTAN_REPORT_NAME;
   }
 
   @Override
   protected String reportKey() {
-    return REPORT_KEY;
+    return PHPSTAN_REPORT_KEY;
   }
 
   @Override
   protected String reportPathKey() {
-    return REPORT_PATH_KEY;
+    return PHPSTAN_REPORT_PATH_KEY;
   }
 
   @Override
   protected Logger logger() {
-    return LOG;
+    return PHPSTAN_LOG;
   }
 
   @Override

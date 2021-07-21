@@ -38,20 +38,18 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.psalm.PsalmJsonReportReader;
 import org.sonarsource.analyzer.commons.ExternalReportProvider;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
 public abstract class ExternalIssuesSensor implements Sensor {
-  public final String DEFAULT_RULE_ID = reportKey() + ".finding";
-
   private static final int MAX_LOGGED_FILE_NAMES = 20;
   protected static final Long DEFAULT_CONSTANT_DEBT_MINUTES = 5L;
 
   private static final RuleType DEFAULT_RULE_TYPE = RuleType.CODE_SMELL;
   private static final Severity DEFAULT_SEVERITY = Severity.MAJOR;
 
+  public final String defaultRuleId = reportKey() + ".finding";
   protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
 
   @Override
@@ -136,10 +134,14 @@ public abstract class ExternalIssuesSensor implements Sensor {
   private static RuleType toType(@Nullable String type) {
     if (type != null) {
       switch (type) {
-        case "BUG": return RuleType.BUG;
-        case "SECURITY_HOTSPOT": return RuleType.SECURITY_HOTSPOT;
-        case "VULNERABILITY": return RuleType.VULNERABILITY;
-        case "CODE_SMELL": return RuleType.CODE_SMELL;
+        case "BUG":
+          return RuleType.BUG;
+        case "SECURITY_HOTSPOT":
+          return RuleType.SECURITY_HOTSPOT;
+        case "VULNERABILITY":
+          return RuleType.VULNERABILITY;
+        case "CODE_SMELL":
+          return RuleType.CODE_SMELL;
       }
     }
     return DEFAULT_RULE_TYPE;
@@ -148,21 +150,26 @@ public abstract class ExternalIssuesSensor implements Sensor {
   private static Severity toSeverity(@Nullable String severity) {
     if (severity != null) {
       switch (severity) {
-        case "INFO": return Severity.INFO;
-        case "MINOR": return Severity.MINOR;
-        case "MAJOR": return Severity.MAJOR;
-        case "CRITICAL": return Severity.CRITICAL;
-        case "BLOCKER": return Severity.BLOCKER;
+        case "INFO":
+          return Severity.INFO;
+        case "MINOR":
+          return Severity.MINOR;
+        case "MAJOR":
+          return Severity.MAJOR;
+        case "CRITICAL":
+          return Severity.CRITICAL;
+        case "BLOCKER":
+          return Severity.BLOCKER;
       }
     }
     return DEFAULT_SEVERITY;
   }
 
   private String toRuleId(@Nullable String ruleId) {
-    return externalRuleLoader().ruleKeys().contains(ruleId) ? ruleId : DEFAULT_RULE_ID;
+    return ruleId != null && externalRuleLoader().ruleKeys().contains(ruleId) ? ruleId : defaultRuleId;
   }
 
-  private static void refinePrimaryLocation(NewIssueLocation primaryLocation, PsalmJsonReportReader.Issue issue, InputFile inputFile) {
+  private static void refinePrimaryLocation(NewIssueLocation primaryLocation, JsonReportReader.Issue issue, InputFile inputFile) {
     if (issue.startLine == null) {
       return;
     }

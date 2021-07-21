@@ -108,7 +108,7 @@ public class PhpPlugin implements Plugin {
 
   private static void addPhpStanExtensions(Context context) {
     context.addExtensions(PhpStanSensor.class,
-      PropertyDefinition.builder(PhpStanSensor.REPORT_PATH_KEY)
+      PropertyDefinition.builder(PhpStanSensor.PHPSTAN_REPORT_PATH_KEY)
         .name("PHPStan Report Files")
         .description("Paths (absolute or relative) to report files with PHPStan issues.")
         .category(EXTERNAL_ANALYZERS_SUBCATEGORY)
@@ -121,7 +121,7 @@ public class PhpPlugin implements Plugin {
 
   private static void addPsalmExtensions(Context context) {
     context.addExtensions(PsalmSensor.class,
-      PropertyDefinition.builder(PsalmSensor.REPORT_PATH_KEY)
+      PropertyDefinition.builder(PsalmSensor.PSALM_REPORT_PATH_KEY)
         .name("Psalm Report Files")
         .description("Paths (absolute or relative) to report files with Psalm issues.")
         .category(EXTERNAL_ANALYZERS_SUBCATEGORY)

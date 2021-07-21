@@ -27,44 +27,42 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.ExternalIssuesSensor;
-import org.sonar.plugins.php.phpstan.PhpStanSensor;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
 public class PsalmSensor extends ExternalIssuesSensor {
 
-  private static final Logger LOG = Loggers.get(PhpStanSensor.class);
+  private static final Logger PSALM_LOG = Loggers.get(PsalmSensor.class);
 
-  public static final String REPORT_KEY = "psalm";
-  public static final String REPORT_NAME = "Psalm";
-  public static final String REPORT_PATH_KEY = "sonar.php.psalm.reportPaths";
-  public static final String RULES_JSON = "org/sonar/plugins/php/psalm/rules.json";
+  public static final String PSALM_REPORT_KEY = "psalm";
+  public static final String PSALM_REPORT_NAME = "Psalm";
+  public static final String PSALM_REPORT_PATH_KEY = "sonar.php.psalm.reportPaths";
 
   @Override
   protected void importReport(File reportPath, SensorContext context) throws IOException, ParseException {
     InputStream in = new FileInputStream(reportPath);
-    LOG.info("Importing {}", reportPath);
+    PSALM_LOG.info("Importing {}", reportPath);
     PsalmJsonReportReader.read(in, issue -> saveIssue(context, issue));
   }
 
   @Override
   protected String reportName() {
-    return REPORT_NAME;
+    return PSALM_REPORT_NAME;
   }
 
   @Override
   protected String reportKey() {
-    return REPORT_KEY;
+    return PSALM_REPORT_KEY;
   }
 
   @Override
   protected String reportPathKey() {
-    return REPORT_PATH_KEY;
+    return PSALM_REPORT_PATH_KEY;
   }
 
   @Override
   protected Logger logger() {
-    return LOG;
+    return PSALM_LOG;
   }
 
   @Override

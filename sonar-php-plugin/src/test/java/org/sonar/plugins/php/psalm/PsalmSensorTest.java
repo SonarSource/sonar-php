@@ -133,8 +133,8 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(firstTextRange.end().lineOffset()).isEqualTo(16);
 
     ExternalIssue second = externalIssues.get(1);
-    assertThat(second.type()).isEqualTo(RuleType.BUG);
-    assertThat(second.severity()).isEqualTo(Severity.CRITICAL);
+    assertThat(second.type()).isEqualTo(RuleType.SECURITY_HOTSPOT);
+    assertThat(second.severity()).isEqualTo(Severity.INFO);
     assertThat(second.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation secondPrimaryLoc = second.primaryLocation();
     assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
@@ -143,8 +143,8 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(secondTextRange).isNull();
 
     ExternalIssue third = externalIssues.get(2);
-    assertThat(third.type()).isEqualTo(RuleType.BUG);
-    assertThat(third.severity()).isEqualTo(Severity.CRITICAL);
+    assertThat(third.type()).isEqualTo(RuleType.VULNERABILITY);
+    assertThat(third.severity()).isEqualTo(Severity.BLOCKER);
     assertThat(third.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
     assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
@@ -157,8 +157,8 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(thirdTextRange.end().lineOffset()).isEqualTo(5);
 
     ExternalIssue fourth = externalIssues.get(3);
-    assertThat(fourth.type()).isEqualTo(RuleType.BUG);
-    assertThat(fourth.severity()).isEqualTo(Severity.CRITICAL);
+    assertThat(fourth.type()).isEqualTo(RuleType.CODE_SMELL);
+    assertThat(fourth.severity()).isEqualTo(Severity.MINOR);
     assertThat(fourth.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation fourthPrimaryLoc = fourth.primaryLocation();
     assertThat(fourthPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
@@ -171,8 +171,8 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(fourthTextRange.end().lineOffset()).isEqualTo(22);
 
     ExternalIssue fifth = externalIssues.get(4);
-    assertThat(fifth.type()).isEqualTo(RuleType.BUG);
-    assertThat(fifth.severity()).isEqualTo(Severity.CRITICAL);
+    assertThat(fifth.type()).isEqualTo(RuleType.CODE_SMELL);
+    assertThat(fifth.severity()).isEqualTo(Severity.MAJOR);
     assertThat(fifth.ruleId()).isEqualTo("psalm.finding");
     IssueLocation fifthPrimaryLoc = fifth.primaryLocation();
     assertThat(fifthPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");

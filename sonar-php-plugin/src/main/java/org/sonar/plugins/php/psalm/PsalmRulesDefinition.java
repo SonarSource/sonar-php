@@ -23,11 +23,14 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.php.api.Php;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
+import static org.sonar.plugins.php.psalm.PsalmSensor.PSALM_REPORT_KEY;
+import static org.sonar.plugins.php.psalm.PsalmSensor.PSALM_REPORT_NAME;
+
 public class PsalmRulesDefinition implements RulesDefinition {
 
   private static final String RULES_JSON = "org/sonar/plugins/php/psalm/rules.json";
 
-  static final ExternalRuleLoader RULE_LOADER = new ExternalRuleLoader(PsalmSensor.REPORT_KEY, PsalmSensor.REPORT_NAME, RULES_JSON, Php.KEY);
+  static final ExternalRuleLoader RULE_LOADER = new ExternalRuleLoader(PSALM_REPORT_KEY, PSALM_REPORT_NAME, RULES_JSON, Php.KEY);
 
   @Override
   public void define(Context context) {
