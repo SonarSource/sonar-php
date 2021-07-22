@@ -66,7 +66,7 @@ public class PhpPlugin implements Plugin {
         .defaultValue(Php.DEFAULT_FILE_SUFFIXES)
         .name("File Suffixes")
         .description("List of suffixes of PHP files to analyze.")
-        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .onQualifiers(Qualifiers.PROJECT)
         .category(PHP_CATEGORY)
         .multiValues(true)
         .subCategory(GENERAL_SUBCATEGORY)
@@ -76,7 +76,7 @@ public class PhpPlugin implements Plugin {
         .defaultValue(PHP_EXCLUSIONS_DEFAULT_VALUE)
         .name("PHP Exclusions")
         .description("List of file path patterns to be excluded from analysis of PHP files.")
-        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .onQualifiers(Qualifiers.PROJECT)
         .category(PHP_CATEGORY)
         .subCategory(GENERAL_SUBCATEGORY)
         .multiValues(true)
@@ -84,26 +84,29 @@ public class PhpPlugin implements Plugin {
       );
 
     if (context.getRuntime().getProduct() != SonarProduct.SONARLINT) {
-      context.addExtension(
-        PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
-          .name("Unit Test Report")
-          .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
-          .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
-          .category(PHP_CATEGORY)
-          .subCategory(PHPUNIT_SUBCATEGORY)
-          .build());
+      addPhpUnitExtensions(context);
       addPhpStanExtensions(context);
       addPsalmExtensions(context);
     }
-    context.addExtension(PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
-      .name("Coverage Reports")
-      .description("List of PHPUnit code coverage report files. Each path can be either absolute or relative.")
-      .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
-      .category(PHP_CATEGORY)
-      .multiValues(true)
-      .subCategory(PHPUNIT_SUBCATEGORY)
-      .build());
+  }
 
+  private static void addPhpUnitExtensions(Context context) {
+    context.addExtensions(
+      PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
+        .name("Unit Test Report")
+        .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
+        .onQualifiers(Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .subCategory(PHPUNIT_SUBCATEGORY)
+        .build(),
+      PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
+        .name("Coverage Reports")
+        .description("List of PHPUnit code coverage report files. Each path can be either absolute or relative.")
+        .onQualifiers(Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .multiValues(true)
+        .subCategory(PHPUNIT_SUBCATEGORY)
+        .build());
   }
 
   private static void addPhpStanExtensions(Context context) {
