@@ -72,7 +72,7 @@ public abstract class ReportSensorTest {
       context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(8, 9), SonarQubeSide.SERVER, SonarEdition.DEVELOPER));
       if (fileName != null) {
         String path = PROJECT_DIR.resolve(fileName).toAbsolutePath().toString();
-        context.settings().setProperty("sonar.php."+SENSOR_KEY+".reportPaths", path);
+        context.settings().setProperty("sonar.php." + SENSOR_KEY + ".reportPaths", path);
       }
       sensor().execute(context);
       return new ArrayList<>(context.allExternalIssues());
