@@ -1,9 +1,6 @@
 [
   {
     "key": "finding",
-    "name": "PHPStan Rule",
-    "tags": [
-      "phpstan"
-    ]
+    "name": "PHPStan Rule"
   }
 ]

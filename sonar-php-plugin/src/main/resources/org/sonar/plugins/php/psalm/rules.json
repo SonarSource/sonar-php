@@ -1,0 +1,1332 @@
+[
+  {
+    "key": "fallback",
+    "name": "Psalm Rule",
+    "description": "This reporting may be triggered by a custom Psalm rule or by a default Psalm rule that has not yet been added to the SonarPHP analyzer."
+  },
+  {
+    "key": "AbstractInstantiation",
+    "name": "AbstractInstantiation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/AbstractInstantiation"
+  },
+  {
+    "key": "AbstractMethodCall",
+    "name": "AbstractMethodCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/AbstractMethodCall"
+  },
+  {
+    "key": "ArgumentTypeCoercion",
+    "name": "ArgumentTypeCoercion",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ArgumentTypeCoercion"
+  },
+  {
+    "key": "AssignmentToVoid",
+    "name": "AssignmentToVoid",
+    "url": "https://psalm.dev/docs/running_psalm/issues/AssignmentToVoid"
+  },
+  {
+    "key": "CircularReference",
+    "name": "CircularReference",
+    "url": "https://psalm.dev/docs/running_psalm/issues/CircularReference"
+  },
+  {
+    "key": "ComplexFunction",
+    "name": "ComplexFunction",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ComplexFunction"
+  },
+  {
+    "key": "ComplexMethod",
+    "name": "ComplexMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ComplexMethod"
+  },
+  {
+    "key": "ConflictingReferenceConstraint",
+    "name": "ConflictingReferenceConstraint",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ConflictingReferenceConstraint"
+  },
+  {
+    "key": "ConstructorSignatureMismatch",
+    "name": "ConstructorSignatureMismatch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ConstructorSignatureMismatch"
+  },
+  {
+    "key": "ContinueOutsideLoop",
+    "name": "ContinueOutsideLoop",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ContinueOutsideLoop"
+  },
+  {
+    "key": "DeprecatedClass",
+    "name": "DeprecatedClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedClass"
+  },
+  {
+    "key": "DeprecatedConstant",
+    "name": "DeprecatedConstant",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedConstant"
+  },
+  {
+    "key": "DeprecatedFunction",
+    "name": "DeprecatedFunction",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedFunction"
+  },
+  {
+    "key": "DeprecatedInterface",
+    "name": "DeprecatedInterface",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedInterface"
+  },
+  {
+    "key": "DeprecatedMethod",
+    "name": "DeprecatedMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedMethod"
+  },
+  {
+    "key": "DeprecatedProperty",
+    "name": "DeprecatedProperty",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedProperty"
+  },
+  {
+    "key": "DeprecatedTrait",
+    "name": "DeprecatedTrait",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedTrait"
+  },
+  {
+    "key": "DocblockTypeContradiction",
+    "name": "DocblockTypeContradiction",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DocblockTypeContradiction"
+  },
+  {
+    "key": "DuplicateArrayKey",
+    "name": "DuplicateArrayKey",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateArrayKey"
+  },
+  {
+    "key": "DuplicateClass",
+    "name": "DuplicateClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateClass"
+  },
+  {
+    "key": "DuplicateFunction",
+    "name": "DuplicateFunction",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateFunction"
+  },
+  {
+    "key": "DuplicateMethod",
+    "name": "DuplicateMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateMethod"
+  },
+  {
+    "key": "DuplicateParam",
+    "name": "DuplicateParam",
+    "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateParam"
+  },
+  {
+    "key": "EmptyArrayAccess",
+    "name": "EmptyArrayAccess",
+    "url": "https://psalm.dev/docs/running_psalm/issues/EmptyArrayAccess"
+  },
+  {
+    "key": "ExtensionRequirementViolation",
+    "name": "ExtensionRequirementViolation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ExtensionRequirementViolation"
+  },
+  {
+    "key": "FalsableReturnStatement",
+    "name": "FalsableReturnStatement",
+    "url": "https://psalm.dev/docs/running_psalm/issues/FalsableReturnStatement"
+  },
+  {
+    "key": "FalseOperand",
+    "name": "FalseOperand",
+    "url": "https://psalm.dev/docs/running_psalm/issues/FalseOperand"
+  },
+  {
+    "key": "ForbiddenCode",
+    "name": "ForbiddenCode",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ForbiddenCode"
+  },
+  {
+    "key": "ForbiddenEcho",
+    "name": "ForbiddenEcho",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ForbiddenEcho"
+  },
+  {
+    "key": "ImplementationRequirementViolation",
+    "name": "ImplementationRequirementViolation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImplementationRequirementViolation"
+  },
+  {
+    "key": "ImplementedParamTypeMismatch",
+    "name": "ImplementedParamTypeMismatch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImplementedParamTypeMismatch"
+  },
+  {
+    "key": "ImplementedReturnTypeMismatch",
+    "name": "ImplementedReturnTypeMismatch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImplementedReturnTypeMismatch"
+  },
+  {
+    "key": "ImplicitToStringCast",
+    "name": "ImplicitToStringCast",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImplicitToStringCast"
+  },
+  {
+    "key": "ImpureByReferenceAssignment",
+    "name": "ImpureByReferenceAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImpureByReferenceAssignment"
+  },
+  {
+    "key": "ImpureFunctionCall",
+    "name": "ImpureFunctionCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImpureFunctionCall"
+  },
+  {
+    "key": "ImpureMethodCall",
+    "name": "ImpureMethodCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImpureMethodCall"
+  },
+  {
+    "key": "ImpurePropertyAssignment",
+    "name": "ImpurePropertyAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImpurePropertyAssignment"
+  },
+  {
+    "key": "ImpurePropertyFetch",
+    "name": "ImpurePropertyFetch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImpurePropertyFetch"
+  },
+  {
+    "key": "ImpureStaticProperty",
+    "name": "ImpureStaticProperty",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImpureStaticProperty"
+  },
+  {
+    "key": "ImpureStaticVariable",
+    "name": "ImpureStaticVariable",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImpureStaticVariable"
+  },
+  {
+    "key": "ImpureVariable",
+    "name": "ImpureVariable",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ImpureVariable"
+  },
+  {
+    "key": "InaccessibleClassConstant",
+    "name": "InaccessibleClassConstant",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InaccessibleClassConstant"
+  },
+  {
+    "key": "InaccessibleMethod",
+    "name": "InaccessibleMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InaccessibleMethod"
+  },
+  {
+    "key": "InaccessibleProperty",
+    "name": "InaccessibleProperty",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InaccessibleProperty"
+  },
+  {
+    "key": "InterfaceInstantiation",
+    "name": "InterfaceInstantiation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InterfaceInstantiation"
+  },
+  {
+    "key": "InternalClass",
+    "name": "InternalClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InternalClass"
+  },
+  {
+    "key": "InternalMethod",
+    "name": "InternalMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InternalMethod"
+  },
+  {
+    "key": "InternalProperty",
+    "name": "InternalProperty",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InternalProperty"
+  },
+  {
+    "key": "InvalidArgument",
+    "name": "InvalidArgument",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidArgument"
+  },
+  {
+    "key": "InvalidArrayAccess",
+    "name": "InvalidArrayAccess",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidArrayAccess"
+  },
+  {
+    "key": "InvalidArrayAssignment",
+    "name": "InvalidArrayAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidArrayAssignment"
+  },
+  {
+    "key": "InvalidArrayOffset",
+    "name": "InvalidArrayOffset",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidArrayOffset"
+  },
+  {
+    "key": "InvalidAttribute",
+    "name": "InvalidAttribute",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidAttribute"
+  },
+  {
+    "key": "InvalidCast",
+    "name": "InvalidCast",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidCast"
+  },
+  {
+    "key": "InvalidCatch",
+    "name": "InvalidCatch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidCatch"
+  },
+  {
+    "key": "InvalidClass",
+    "name": "InvalidClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidClass"
+  },
+  {
+    "key": "InvalidClone",
+    "name": "InvalidClone",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidClone"
+  },
+  {
+    "key": "InvalidDocblock",
+    "name": "InvalidDocblock",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidDocblock"
+  },
+  {
+    "key": "InvalidDocblockParamName",
+    "name": "InvalidDocblockParamName",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidDocblockParamName"
+  },
+  {
+    "key": "InvalidExtendClass",
+    "name": "InvalidExtendClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidExtendClass"
+  },
+  {
+    "key": "InvalidFalsableReturnType",
+    "name": "InvalidFalsableReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidFalsableReturnType"
+  },
+  {
+    "key": "InvalidFunctionCall",
+    "name": "InvalidFunctionCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidFunctionCall"
+  },
+  {
+    "key": "InvalidGlobal",
+    "name": "InvalidGlobal",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidGlobal"
+  },
+  {
+    "key": "InvalidIterator",
+    "name": "InvalidIterator",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidIterator"
+  },
+  {
+    "key": "InvalidLiteralArgument",
+    "name": "InvalidLiteralArgument",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidLiteralArgument"
+  },
+  {
+    "key": "InvalidMethodCall",
+    "name": "InvalidMethodCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidMethodCall"
+  },
+  {
+    "key": "InvalidNamedArgument",
+    "name": "InvalidNamedArgument",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidNamedArgument"
+  },
+  {
+    "key": "InvalidNullableReturnType",
+    "name": "InvalidNullableReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidNullableReturnType"
+  },
+  {
+    "key": "InvalidOperand",
+    "name": "InvalidOperand",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidOperand"
+  },
+  {
+    "key": "InvalidParamDefault",
+    "name": "InvalidParamDefault",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidParamDefault"
+  },
+  {
+    "key": "InvalidParent",
+    "name": "InvalidParent",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidParent"
+  },
+  {
+    "key": "InvalidPassByReference",
+    "name": "InvalidPassByReference",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidPassByReference"
+  },
+  {
+    "key": "InvalidPropertyAssignment",
+    "name": "InvalidPropertyAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidPropertyAssignment"
+  },
+  {
+    "key": "InvalidPropertyAssignmentValue",
+    "name": "InvalidPropertyAssignmentValue",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidPropertyAssignmentValue"
+  },
+  {
+    "key": "InvalidPropertyFetch",
+    "name": "InvalidPropertyFetch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidPropertyFetch"
+  },
+  {
+    "key": "InvalidReturnStatement",
+    "name": "InvalidReturnStatement",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidReturnStatement"
+  },
+  {
+    "key": "InvalidReturnType",
+    "name": "InvalidReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidReturnType"
+  },
+  {
+    "key": "InvalidScalarArgument",
+    "name": "InvalidScalarArgument",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidScalarArgument"
+  },
+  {
+    "key": "InvalidScope",
+    "name": "InvalidScope",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidScope"
+  },
+  {
+    "key": "InvalidStaticInvocation",
+    "name": "InvalidStaticInvocation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidStaticInvocation"
+  },
+  {
+    "key": "InvalidStringClass",
+    "name": "InvalidStringClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidStringClass"
+  },
+  {
+    "key": "InvalidTemplateParam",
+    "name": "InvalidTemplateParam",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidTemplateParam"
+  },
+  {
+    "key": "InvalidThrow",
+    "name": "InvalidThrow",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidThrow"
+  },
+  {
+    "key": "InvalidToString",
+    "name": "InvalidToString",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidToString"
+  },
+  {
+    "key": "InvalidTraversableImplementation",
+    "name": "InvalidTraversableImplementation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidTraversableImplementation"
+  },
+  {
+    "key": "InvalidTypeImport",
+    "name": "InvalidTypeImport",
+    "url": "https://psalm.dev/docs/running_psalm/issues/InvalidTypeImport"
+  },
+  {
+    "key": "LessSpecificImplementedReturnType",
+    "name": "LessSpecificImplementedReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/LessSpecificImplementedReturnType"
+  },
+  {
+    "key": "LessSpecificReturnStatement",
+    "name": "LessSpecificReturnStatement",
+    "url": "https://psalm.dev/docs/running_psalm/issues/LessSpecificReturnStatement"
+  },
+  {
+    "key": "LessSpecificReturnType",
+    "name": "LessSpecificReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/LessSpecificReturnType"
+  },
+  {
+    "key": "LoopInvalidation",
+    "name": "LoopInvalidation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/LoopInvalidation"
+  },
+  {
+    "key": "MethodSignatureMismatch",
+    "name": "MethodSignatureMismatch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MethodSignatureMismatch"
+  },
+  {
+    "key": "MethodSignatureMustOmitReturnType",
+    "name": "MethodSignatureMustOmitReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MethodSignatureMustOmitReturnType"
+  },
+  {
+    "key": "MismatchingDocblockParamType",
+    "name": "MismatchingDocblockParamType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MismatchingDocblockParamType"
+  },
+  {
+    "key": "MismatchingDocblockPropertyType",
+    "name": "MismatchingDocblockPropertyType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MismatchingDocblockPropertyType"
+  },
+  {
+    "key": "MismatchingDocblockReturnType",
+    "name": "MismatchingDocblockReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MismatchingDocblockReturnType"
+  },
+  {
+    "key": "MissingClosureParamType",
+    "name": "MissingClosureParamType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingClosureParamType"
+  },
+  {
+    "key": "MissingClosureReturnType",
+    "name": "MissingClosureReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingClosureReturnType"
+  },
+  {
+    "key": "MissingConstructor",
+    "name": "MissingConstructor",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingConstructor"
+  },
+  {
+    "key": "MissingDependency",
+    "name": "MissingDependency",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingDependency"
+  },
+  {
+    "key": "MissingDocblockType",
+    "name": "MissingDocblockType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingDocblockType"
+  },
+  {
+    "key": "MissingFile",
+    "name": "MissingFile",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingFile"
+  },
+  {
+    "key": "MissingImmutableAnnotation",
+    "name": "MissingImmutableAnnotation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingImmutableAnnotation"
+  },
+  {
+    "key": "MissingParamType",
+    "name": "MissingParamType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingParamType"
+  },
+  {
+    "key": "MissingPropertyType",
+    "name": "MissingPropertyType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingPropertyType"
+  },
+  {
+    "key": "MissingReturnType",
+    "name": "MissingReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingReturnType"
+  },
+  {
+    "key": "MissingTemplateParam",
+    "name": "MissingTemplateParam",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingTemplateParam"
+  },
+  {
+    "key": "MissingThrowsDocblock",
+    "name": "MissingThrowsDocblock",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MissingThrowsDocblock"
+  },
+  {
+    "key": "MixedArgument",
+    "name": "MixedArgument",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedArgument"
+  },
+  {
+    "key": "MixedArgumentTypeCoercion",
+    "name": "MixedArgumentTypeCoercion",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedArgumentTypeCoercion"
+  },
+  {
+    "key": "MixedArrayAccess",
+    "name": "MixedArrayAccess",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedArrayAccess"
+  },
+  {
+    "key": "MixedArrayAssignment",
+    "name": "MixedArrayAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedArrayAssignment"
+  },
+  {
+    "key": "MixedArrayOffset",
+    "name": "MixedArrayOffset",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedArrayOffset"
+  },
+  {
+    "key": "MixedArrayTypeCoercion",
+    "name": "MixedArrayTypeCoercion",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedArrayTypeCoercion"
+  },
+  {
+    "key": "MixedAssignment",
+    "name": "MixedAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedAssignment"
+  },
+  {
+    "key": "MixedClone",
+    "name": "MixedClone",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedClone"
+  },
+  {
+    "key": "MixedFunctionCall",
+    "name": "MixedFunctionCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedFunctionCall"
+  },
+  {
+    "key": "MixedInferredReturnType",
+    "name": "MixedInferredReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedInferredReturnType"
+  },
+  {
+    "key": "MixedMethodCall",
+    "name": "MixedMethodCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedMethodCall"
+  },
+  {
+    "key": "MixedOperand",
+    "name": "MixedOperand",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedOperand"
+  },
+  {
+    "key": "MixedPropertyAssignment",
+    "name": "MixedPropertyAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedPropertyAssignment"
+  },
+  {
+    "key": "MixedPropertyFetch",
+    "name": "MixedPropertyFetch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedPropertyFetch"
+  },
+  {
+    "key": "MixedPropertyTypeCoercion",
+    "name": "MixedPropertyTypeCoercion",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedPropertyTypeCoercion"
+  },
+  {
+    "key": "MixedReturnStatement",
+    "name": "MixedReturnStatement",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedReturnStatement"
+  },
+  {
+    "key": "MixedReturnTypeCoercion",
+    "name": "MixedReturnTypeCoercion",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedReturnTypeCoercion"
+  },
+  {
+    "key": "MixedStringOffsetAssignment",
+    "name": "MixedStringOffsetAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MixedStringOffsetAssignment"
+  },
+  {
+    "key": "MoreSpecificImplementedParamType",
+    "name": "MoreSpecificImplementedParamType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MoreSpecificImplementedParamType"
+  },
+  {
+    "key": "MoreSpecificReturnType",
+    "name": "MoreSpecificReturnType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MoreSpecificReturnType"
+  },
+  {
+    "key": "MutableDependency",
+    "name": "MutableDependency",
+    "url": "https://psalm.dev/docs/running_psalm/issues/MutableDependency"
+  },
+  {
+    "key": "NamedArgumentNotAllowed",
+    "name": "NamedArgumentNotAllowed",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NamedArgumentNotAllowed"
+  },
+  {
+    "key": "NoInterfaceProperties",
+    "name": "NoInterfaceProperties",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NoInterfaceProperties"
+  },
+  {
+    "key": "NonInvariantDocblockPropertyType",
+    "name": "NonInvariantDocblockPropertyType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NonInvariantDocblockPropertyType"
+  },
+  {
+    "key": "NonInvariantPropertyType",
+    "name": "NonInvariantPropertyType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NonInvariantPropertyType"
+  },
+  {
+    "key": "NonStaticSelfCall",
+    "name": "NonStaticSelfCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NonStaticSelfCall"
+  },
+  {
+    "key": "NoValue",
+    "name": "NoValue",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NoValue"
+  },
+  {
+    "key": "NullableReturnStatement",
+    "name": "NullableReturnStatement",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullableReturnStatement"
+  },
+  {
+    "key": "NullArgument",
+    "name": "NullArgument",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullArgument"
+  },
+  {
+    "key": "NullArrayAccess",
+    "name": "NullArrayAccess",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullArrayAccess"
+  },
+  {
+    "key": "NullArrayOffset",
+    "name": "NullArrayOffset",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullArrayOffset"
+  },
+  {
+    "key": "NullFunctionCall",
+    "name": "NullFunctionCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullFunctionCall"
+  },
+  {
+    "key": "NullIterator",
+    "name": "NullIterator",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullIterator"
+  },
+  {
+    "key": "NullOperand",
+    "name": "NullOperand",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullOperand"
+  },
+  {
+    "key": "NullPropertyAssignment",
+    "name": "NullPropertyAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullPropertyAssignment"
+  },
+  {
+    "key": "NullPropertyFetch",
+    "name": "NullPropertyFetch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullPropertyFetch"
+  },
+  {
+    "key": "NullReference",
+    "name": "NullReference",
+    "url": "https://psalm.dev/docs/running_psalm/issues/NullReference"
+  },
+  {
+    "key": "OverriddenMethodAccess",
+    "name": "OverriddenMethodAccess",
+    "url": "https://psalm.dev/docs/running_psalm/issues/OverriddenMethodAccess"
+  },
+  {
+    "key": "OverriddenPropertyAccess",
+    "name": "OverriddenPropertyAccess",
+    "url": "https://psalm.dev/docs/running_psalm/issues/OverriddenPropertyAccess"
+  },
+  {
+    "key": "ParadoxicalCondition",
+    "name": "ParadoxicalCondition",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ParadoxicalCondition"
+  },
+  {
+    "key": "ParamNameMismatch",
+    "name": "ParamNameMismatch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ParamNameMismatch"
+  },
+  {
+    "key": "ParentNotFound",
+    "name": "ParentNotFound",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ParentNotFound"
+  },
+  {
+    "key": "ParseError",
+    "name": "ParseError",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ParseError"
+  },
+  {
+    "key": "PluginIssue",
+    "name": "PluginIssue",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PluginIssue"
+  },
+  {
+    "key": "PossibleRawObjectIteration",
+    "name": "PossibleRawObjectIteration",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossibleRawObjectIteration"
+  },
+  {
+    "key": "PossiblyFalseArgument",
+    "name": "PossiblyFalseArgument",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalseArgument"
+  },
+  {
+    "key": "PossiblyFalseIterator",
+    "name": "PossiblyFalseIterator",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalseIterator"
+  },
+  {
+    "key": "PossiblyFalseOperand",
+    "name": "PossiblyFalseOperand",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalseOperand"
+  },
+  {
+    "key": "PossiblyFalsePropertyAssignmentValue",
+    "name": "PossiblyFalsePropertyAssignmentValue",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalsePropertyAssignmentValue"
+  },
+  {
+    "key": "PossiblyFalseReference",
+    "name": "PossiblyFalseReference",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalseReference"
+  },
+  {
+    "key": "PossiblyInvalidArgument",
+    "name": "PossiblyInvalidArgument",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidArgument"
+  },
+  {
+    "key": "PossiblyInvalidArrayAccess",
+    "name": "PossiblyInvalidArrayAccess",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidArrayAccess"
+  },
+  {
+    "key": "PossiblyInvalidArrayAssignment",
+    "name": "PossiblyInvalidArrayAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidArrayAssignment"
+  },
+  {
+    "key": "PossiblyInvalidArrayOffset",
+    "name": "PossiblyInvalidArrayOffset",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidArrayOffset"
+  },
+  {
+    "key": "PossiblyInvalidCast",
+    "name": "PossiblyInvalidCast",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidCast"
+  },
+  {
+    "key": "PossiblyInvalidClone",
+    "name": "PossiblyInvalidClone",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidClone"
+  },
+  {
+    "key": "PossiblyInvalidFunctionCall",
+    "name": "PossiblyInvalidFunctionCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidFunctionCall"
+  },
+  {
+    "key": "PossiblyInvalidIterator",
+    "name": "PossiblyInvalidIterator",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidIterator"
+  },
+  {
+    "key": "PossiblyInvalidMethodCall",
+    "name": "PossiblyInvalidMethodCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidMethodCall"
+  },
+  {
+    "key": "PossiblyInvalidOperand",
+    "name": "PossiblyInvalidOperand",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidOperand"
+  },
+  {
+    "key": "PossiblyInvalidPropertyAssignment",
+    "name": "PossiblyInvalidPropertyAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidPropertyAssignment"
+  },
+  {
+    "key": "PossiblyInvalidPropertyAssignmentValue",
+    "name": "PossiblyInvalidPropertyAssignmentValue",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidPropertyAssignmentValue"
+  },
+  {
+    "key": "PossiblyInvalidPropertyFetch",
+    "name": "PossiblyInvalidPropertyFetch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidPropertyFetch"
+  },
+  {
+    "key": "PossiblyNullArgument",
+    "name": "PossiblyNullArgument",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullArgument"
+  },
+  {
+    "key": "PossiblyNullArrayAccess",
+    "name": "PossiblyNullArrayAccess",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullArrayAccess"
+  },
+  {
+    "key": "PossiblyNullArrayAssignment",
+    "name": "PossiblyNullArrayAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullArrayAssignment"
+  },
+  {
+    "key": "PossiblyNullArrayOffset",
+    "name": "PossiblyNullArrayOffset",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullArrayOffset"
+  },
+  {
+    "key": "PossiblyNullFunctionCall",
+    "name": "PossiblyNullFunctionCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullFunctionCall"
+  },
+  {
+    "key": "PossiblyNullIterator",
+    "name": "PossiblyNullIterator",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullIterator"
+  },
+  {
+    "key": "PossiblyNullOperand",
+    "name": "PossiblyNullOperand",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullOperand"
+  },
+  {
+    "key": "PossiblyNullPropertyAssignment",
+    "name": "PossiblyNullPropertyAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullPropertyAssignment"
+  },
+  {
+    "key": "PossiblyNullPropertyAssignmentValue",
+    "name": "PossiblyNullPropertyAssignmentValue",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullPropertyAssignmentValue"
+  },
+  {
+    "key": "PossiblyNullPropertyFetch",
+    "name": "PossiblyNullPropertyFetch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullPropertyFetch"
+  },
+  {
+    "key": "PossiblyNullReference",
+    "name": "PossiblyNullReference",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullReference"
+  },
+  {
+    "key": "PossiblyUndefinedArrayOffset",
+    "name": "PossiblyUndefinedArrayOffset",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedArrayOffset"
+  },
+  {
+    "key": "PossiblyUndefinedGlobalVariable",
+    "name": "PossiblyUndefinedGlobalVariable",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedGlobalVariable"
+  },
+  {
+    "key": "PossiblyUndefinedIntArrayOffset",
+    "name": "PossiblyUndefinedIntArrayOffset",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedIntArrayOffset"
+  },
+  {
+    "key": "PossiblyUndefinedMethod",
+    "name": "PossiblyUndefinedMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedMethod"
+  },
+  {
+    "key": "PossiblyUndefinedStringArrayOffset",
+    "name": "PossiblyUndefinedStringArrayOffset",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedStringArrayOffset"
+  },
+  {
+    "key": "PossiblyUndefinedVariable",
+    "name": "PossiblyUndefinedVariable",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedVariable"
+  },
+  {
+    "key": "PossiblyUnusedMethod",
+    "name": "PossiblyUnusedMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUnusedMethod"
+  },
+  {
+    "key": "PossiblyUnusedParam",
+    "name": "PossiblyUnusedParam",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUnusedParam"
+  },
+  {
+    "key": "PossiblyUnusedProperty",
+    "name": "PossiblyUnusedProperty",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUnusedProperty"
+  },
+  {
+    "key": "PropertyNotSetInConstructor",
+    "name": "PropertyNotSetInConstructor",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PropertyNotSetInConstructor"
+  },
+  {
+    "key": "PropertyTypeCoercion",
+    "name": "PropertyTypeCoercion",
+    "url": "https://psalm.dev/docs/running_psalm/issues/PropertyTypeCoercion"
+  },
+  {
+    "key": "RawObjectIteration",
+    "name": "RawObjectIteration",
+    "url": "https://psalm.dev/docs/running_psalm/issues/RawObjectIteration"
+  },
+  {
+    "key": "RedundantCast",
+    "name": "RedundantCast",
+    "url": "https://psalm.dev/docs/running_psalm/issues/RedundantCast"
+  },
+  {
+    "key": "RedundantCastGivenDocblockType",
+    "name": "RedundantCastGivenDocblockType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/RedundantCastGivenDocblockType"
+  },
+  {
+    "key": "RedundantCondition",
+    "name": "RedundantCondition",
+    "url": "https://psalm.dev/docs/running_psalm/issues/RedundantCondition"
+  },
+  {
+    "key": "RedundantConditionGivenDocblockType",
+    "name": "RedundantConditionGivenDocblockType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/RedundantConditionGivenDocblockType"
+  },
+  {
+    "key": "RedundantIdentityWithTrue",
+    "name": "RedundantIdentityWithTrue",
+    "url": "https://psalm.dev/docs/running_psalm/issues/RedundantIdentityWithTrue"
+  },
+  {
+    "key": "RedundantPropertyInitializationCheck",
+    "name": "RedundantPropertyInitializationCheck",
+    "url": "https://psalm.dev/docs/running_psalm/issues/RedundantPropertyInitializationCheck"
+  },
+  {
+    "key": "ReferenceConstraintViolation",
+    "name": "ReferenceConstraintViolation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ReferenceConstraintViolation"
+  },
+  {
+    "key": "ReservedWord",
+    "name": "ReservedWord",
+    "url": "https://psalm.dev/docs/running_psalm/issues/ReservedWord"
+  },
+  {
+    "key": "StringIncrement",
+    "name": "StringIncrement",
+    "url": "https://psalm.dev/docs/running_psalm/issues/StringIncrement"
+  },
+  {
+    "key": "TaintedCallable",
+    "name": "TaintedCallable",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedCallable"
+  },
+  {
+    "key": "TaintedCookie",
+    "name": "TaintedCookie",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedCookie"
+  },
+  {
+    "key": "TaintedCustom",
+    "name": "TaintedCustom",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedCustom"
+  },
+  {
+    "key": "TaintedEval",
+    "name": "TaintedEval",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedEval"
+  },
+  {
+    "key": "TaintedFile",
+    "name": "TaintedFile",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedFile"
+  },
+  {
+    "key": "TaintedHeader",
+    "name": "TaintedHeader",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedHeader"
+  },
+  {
+    "key": "TaintedHtml",
+    "name": "TaintedHtml",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedHtml"
+  },
+  {
+    "key": "TaintedInclude",
+    "name": "TaintedInclude",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedInclude"
+  },
+  {
+    "key": "TaintedInput",
+    "name": "TaintedInput",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedInput"
+  },
+  {
+    "key": "TaintedLdap",
+    "name": "TaintedLdap",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedLdap"
+  },
+  {
+    "key": "TaintedShell",
+    "name": "TaintedShell",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedShell"
+  },
+  {
+    "key": "TaintedSql",
+    "name": "TaintedSql",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedSql"
+  },
+  {
+    "key": "TaintedSSRF",
+    "name": "TaintedSSRF",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedSSRF"
+  },
+  {
+    "key": "TaintedSystemSecret",
+    "name": "TaintedSystemSecret",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedSystemSecret"
+  },
+  {
+    "key": "TaintedUnserialize",
+    "name": "TaintedUnserialize",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedUnserialize"
+  },
+  {
+    "key": "TaintedUserSecret",
+    "name": "TaintedUserSecret",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TaintedUserSecret"
+  },
+  {
+    "key": "TooFewArguments",
+    "name": "TooFewArguments",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TooFewArguments"
+  },
+  {
+    "key": "TooManyArguments",
+    "name": "TooManyArguments",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TooManyArguments"
+  },
+  {
+    "key": "TooManyTemplateParams",
+    "name": "TooManyTemplateParams",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TooManyTemplateParams"
+  },
+  {
+    "key": "Trace",
+    "name": "Trace",
+    "url": "https://psalm.dev/docs/running_psalm/issues/Trace"
+  },
+  {
+    "key": "TraitMethodSignatureMismatch",
+    "name": "TraitMethodSignatureMismatch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TraitMethodSignatureMismatch"
+  },
+  {
+    "key": "TypeDoesNotContainNull",
+    "name": "TypeDoesNotContainNull",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TypeDoesNotContainNull"
+  },
+  {
+    "key": "TypeDoesNotContainType",
+    "name": "TypeDoesNotContainType",
+    "url": "https://psalm.dev/docs/running_psalm/issues/TypeDoesNotContainType"
+  },
+  {
+    "key": "UncaughtThrowInGlobalScope",
+    "name": "UncaughtThrowInGlobalScope",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UncaughtThrowInGlobalScope"
+  },
+  {
+    "key": "UndefinedAttributeClass",
+    "name": "UndefinedAttributeClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedAttributeClass"
+  },
+  {
+    "key": "UndefinedClass",
+    "name": "UndefinedClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedClass"
+  },
+  {
+    "key": "UndefinedConstant",
+    "name": "UndefinedConstant",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedConstant"
+  },
+  {
+    "key": "UndefinedDocblockClass",
+    "name": "UndefinedDocblockClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedDocblockClass"
+  },
+  {
+    "key": "UndefinedFunction",
+    "name": "UndefinedFunction",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedFunction"
+  },
+  {
+    "key": "UndefinedGlobalVariable",
+    "name": "UndefinedGlobalVariable",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedGlobalVariable"
+  },
+  {
+    "key": "UndefinedInterface",
+    "name": "UndefinedInterface",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedInterface"
+  },
+  {
+    "key": "UndefinedInterfaceMethod",
+    "name": "UndefinedInterfaceMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedInterfaceMethod"
+  },
+  {
+    "key": "UndefinedMagicMethod",
+    "name": "UndefinedMagicMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedMagicMethod"
+  },
+  {
+    "key": "UndefinedMagicPropertyAssignment",
+    "name": "UndefinedMagicPropertyAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedMagicPropertyAssignment"
+  },
+  {
+    "key": "UndefinedMagicPropertyFetch",
+    "name": "UndefinedMagicPropertyFetch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedMagicPropertyFetch"
+  },
+  {
+    "key": "UndefinedMethod",
+    "name": "UndefinedMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedMethod"
+  },
+  {
+    "key": "UndefinedPropertyAssignment",
+    "name": "UndefinedPropertyAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedPropertyAssignment"
+  },
+  {
+    "key": "UndefinedPropertyFetch",
+    "name": "UndefinedPropertyFetch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedPropertyFetch"
+  },
+  {
+    "key": "UndefinedThisPropertyAssignment",
+    "name": "UndefinedThisPropertyAssignment",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedThisPropertyAssignment"
+  },
+  {
+    "key": "UndefinedThisPropertyFetch",
+    "name": "UndefinedThisPropertyFetch",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedThisPropertyFetch"
+  },
+  {
+    "key": "UndefinedTrace",
+    "name": "UndefinedTrace",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedTrace"
+  },
+  {
+    "key": "UndefinedTrait",
+    "name": "UndefinedTrait",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedTrait"
+  },
+  {
+    "key": "UndefinedVariable",
+    "name": "UndefinedVariable",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedVariable"
+  },
+  {
+    "key": "UnevaluatedCode",
+    "name": "UnevaluatedCode",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnevaluatedCode"
+  },
+  {
+    "key": "UnhandledMatchCondition",
+    "name": "UnhandledMatchCondition",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnhandledMatchCondition"
+  },
+  {
+    "key": "UnimplementedAbstractMethod",
+    "name": "UnimplementedAbstractMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnimplementedAbstractMethod"
+  },
+  {
+    "key": "UnimplementedInterfaceMethod",
+    "name": "UnimplementedInterfaceMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnimplementedInterfaceMethod"
+  },
+  {
+    "key": "UninitializedProperty",
+    "name": "UninitializedProperty",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UninitializedProperty"
+  },
+  {
+    "key": "UnnecessaryVarAnnotation",
+    "name": "UnnecessaryVarAnnotation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnnecessaryVarAnnotation"
+  },
+  {
+    "key": "UnrecognizedExpression",
+    "name": "UnrecognizedExpression",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnrecognizedExpression"
+  },
+  {
+    "key": "UnrecognizedStatement",
+    "name": "UnrecognizedStatement",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnrecognizedStatement"
+  },
+  {
+    "key": "UnresolvableInclude",
+    "name": "UnresolvableInclude",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnresolvableInclude"
+  },
+  {
+    "key": "UnsafeInstantiation",
+    "name": "UnsafeInstantiation",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnsafeInstantiation"
+  },
+  {
+    "key": "UnusedClass",
+    "name": "UnusedClass",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedClass"
+  },
+  {
+    "key": "UnusedClosureParam",
+    "name": "UnusedClosureParam",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedClosureParam"
+  },
+  {
+    "key": "UnusedConstructor",
+    "name": "UnusedConstructor",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedConstructor"
+  },
+  {
+    "key": "UnusedFunctionCall",
+    "name": "UnusedFunctionCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedFunctionCall"
+  },
+  {
+    "key": "UnusedMethod",
+    "name": "UnusedMethod",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedMethod"
+  },
+  {
+    "key": "UnusedMethodCall",
+    "name": "UnusedMethodCall",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedMethodCall"
+  },
+  {
+    "key": "UnusedParam",
+    "name": "UnusedParam",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedParam"
+  },
+  {
+    "key": "UnusedProperty",
+    "name": "UnusedProperty",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedProperty"
+  },
+  {
+    "key": "UnusedPsalmSuppress",
+    "name": "UnusedPsalmSuppress",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedPsalmSuppress"
+  },
+  {
+    "key": "UnusedVariable",
+    "name": "UnusedVariable",
+    "url": "https://psalm.dev/docs/running_psalm/issues/UnusedVariable"
+  }
+]
