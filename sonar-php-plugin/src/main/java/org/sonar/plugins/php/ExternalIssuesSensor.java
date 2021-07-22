@@ -176,7 +176,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
     if (issue.startColumn != null && issue.startColumn < inputFile.selectLine(issue.startLine).end().lineOffset()) {
       int endLine = issue.startLine;
       int endColumn = issue.startColumn + 1;
-      if (issue.endLine != null && issue.endColumn != null && issue.endColumn < inputFile.selectLine(issue.endLine).end().lineOffset()) {
+      if (issue.endLine != null && issue.endColumn != null && issue.endColumn <= inputFile.selectLine(issue.endLine).end().lineOffset()) {
         endLine = issue.endLine;
         endColumn = issue.endColumn;
       }
