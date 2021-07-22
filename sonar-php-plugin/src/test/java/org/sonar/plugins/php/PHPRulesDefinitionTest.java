@@ -22,13 +22,8 @@ package org.sonar.plugins.php;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.Test;
-import org.sonar.api.SonarEdition;
-import org.sonar.api.SonarQubeSide;
-import org.sonar.api.SonarRuntime;
-import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
-import org.sonar.api.utils.Version;
 import org.sonar.php.checks.CheckList;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +37,7 @@ public class PHPRulesDefinitionTest {
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository("php");
     assertThat(repository).isNotNull();
-    assertThat(repository.name()).isEqualTo("SonarAnalyzer");
+    assertThat(repository.name()).isEqualTo("SonarQube");
     assertThat(repository.language()).isEqualTo("php");
     assertThat(repository.rules()).hasSize(CheckList.getAllChecks().size());
 

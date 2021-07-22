@@ -27,7 +27,7 @@ import org.sonarsource.analyzer.commons.RuleMetadataLoader;
 
 public class PHPRulesDefinition implements RulesDefinition {
 
-  private static final String REPOSITORY_NAME = "SonarAnalyzer";
+  private static final String REPOSITORY_NAME = "SonarQube";
   static final String RESOURCE_BASE_PATH = "org/sonar/l10n/php/rules/php";
 
   @Override

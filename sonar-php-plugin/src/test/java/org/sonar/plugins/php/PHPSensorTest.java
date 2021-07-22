@@ -33,6 +33,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.Mockito;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
@@ -84,6 +85,9 @@ import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 
 public class PHPSensorTest {
 
+  protected static final NoSonarFilter noSonarFilter = Mockito.mock(NoSonarFilter.class);
+  private static final Version VERSION_8_9 = Version.create(8, 9);
+
   @org.junit.Rule
   public LogTester logTester = new LogTester();
 
@@ -91,10 +95,9 @@ public class PHPSensorTest {
 
   private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
 
-  private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 7);
-  private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(SONARLINT_DETECTABLE_VERSION);
-  private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION, SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
-  private static final SonarRuntime SONARQUBE_6_7 = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
+  private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(VERSION_8_9);
+  private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(VERSION_8_9, SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
+  private static final SonarRuntime SONARQUBE_8_9 = SonarRuntimeImpl.forSonarQube(VERSION_8_9, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
 
   private static final String PARSE_ERROR_FILE = "parseError.php";
   private static final String ANALYZED_FILE = "PHPSquidSensor.php";
@@ -136,13 +139,13 @@ public class PHPSensorTest {
   }
 
   private PHPSensor createSensor() {
-    return new PHPSensor(createFileLinesContextFactory(), checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    return new PHPSensor(createFileLinesContextFactory(), checkFactory, noSonarFilter, CUSTOM_RULES);
   }
 
   private PHPSensor createSensor(PHPCheck check) {
     PHPChecks checks = mock(PHPChecks.class);
     when(checks.all()).thenReturn(Collections.singletonList(check));
-    return new PHPSensor(createFileLinesContextFactory(), checks, new NoSonarFilter());
+    return new PHPSensor(createFileLinesContextFactory(), checks, noSonarFilter);
   }
 
   @Test
@@ -308,7 +311,7 @@ public class PHPSensorTest {
     ActiveRules activeRules = new ActiveRulesBuilder()
       .addRule(activeRule)
       .build();
-    return new PHPSensor(fileLinesContextFactory, new CheckFactory(activeRules), new NoSonarFilter(), CUSTOM_RULES);
+    return new PHPSensor(fileLinesContextFactory, new CheckFactory(activeRules), noSonarFilter, CUSTOM_RULES);
   }
 
   private static FileLinesContextFactory createFileLinesContextFactory() {
@@ -471,7 +474,7 @@ public class PHPSensorTest {
 
   @Test
   public void should_use_multi_path_coverage() throws Exception {
-    context.setRuntime(SONARQUBE_6_7);
+    context.setRuntime(SONARQUBE_8_9);
 
     context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY,
       String.join(",", PhpTestUtils.GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH,
@@ -499,7 +502,7 @@ public class PHPSensorTest {
   public void should_log_message_when_no_coverage_and_test_property() throws Exception {
     context.setSettings(new MapSettings());
 
-    context.setRuntime(SONARQUBE_6_7);
+    context.setRuntime(SONARQUBE_8_9);
     createSensor().execute(context);
     assertThat(logTester.logs()).contains(
       "No PHPUnit test report provided (see '" + PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY + "' property)",

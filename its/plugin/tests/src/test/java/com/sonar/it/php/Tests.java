@@ -79,7 +79,7 @@ public class Tests {
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
-      .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE[7.9]"))
+      .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE[8.9]"))
       // PHP Plugin
       .addPlugin(PHP_PLUGIN_LOCATION)
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
