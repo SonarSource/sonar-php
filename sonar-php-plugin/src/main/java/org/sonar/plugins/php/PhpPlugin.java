@@ -24,10 +24,10 @@ import org.sonar.api.SonarProduct;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.phpstan.PhpStanRuleDefinition;
-import org.sonar.plugins.php.phpstan.PhpStanSensor;
-import org.sonar.plugins.php.psalm.PsalmRulesDefinition;
-import org.sonar.plugins.php.psalm.PsalmSensor;
+import org.sonar.plugins.php.reports.phpstan.PhpStanRuleDefinition;
+import org.sonar.plugins.php.reports.phpstan.PhpStanSensor;
+import org.sonar.plugins.php.reports.psalm.PsalmRulesDefinition;
+import org.sonar.plugins.php.reports.psalm.PsalmSensor;
 
 public class PhpPlugin implements Plugin {
 

@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.phpstan;
+package org.sonar.plugins.php.reports.phpstan;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -34,15 +34,15 @@ import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.plugins.php.ExternalIssuesSensor;
-import org.sonar.plugins.php.ReportSensorTest;
+import org.sonar.plugins.php.reports.ExternalIssuesSensor;
+import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
-  private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "phpstan");
+  private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", "phpstan");
 
   protected static PhpStanSensor phpStanSensor = new PhpStanSensor();
 
@@ -73,7 +73,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(first.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation firstPrimaryLoc = first.primaryLocation();
-    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("php-project:phpstan/file1.php");
+    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file1.php");
     assertThat(firstPrimaryLoc.message())
       .isEqualTo("Parameter #1 $i of function foo expects int, string given.");
     TextRange firstTextRange = firstPrimaryLoc.textRange();
@@ -84,7 +84,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(second.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(second.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation secondPrimaryLoc = second.primaryLocation();
-    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("php-project:phpstan/file2.php");
+    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file2.php");
     assertThat(secondPrimaryLoc.message())
       .isEqualTo("Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.");
     TextRange secondTextRange = secondPrimaryLoc.textRange();
@@ -95,7 +95,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(third.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(third.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
-    assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("php-project:phpstan/file2.php");
+    assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file2.php");
     assertThat(thirdPrimaryLoc.message())
       .isEqualTo("Call to method format() on an unknown class DateTimeImutable.");
     TextRange thirdTextRange = thirdPrimaryLoc.textRange();
@@ -114,7 +114,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(first.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation firstPrimaryLoc = first.primaryLocation();
-    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("php-project:phpstan/file1.php");
+    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file1.php");
     assertThat(firstPrimaryLoc.message())
       .isEqualTo("Parameter #1 $i of function foo expects int, string given.");
     TextRange firstTextRange = firstPrimaryLoc.textRange();

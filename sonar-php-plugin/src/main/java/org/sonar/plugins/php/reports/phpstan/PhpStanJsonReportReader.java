@@ -17,60 +17,52 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.psalm;
+package org.sonar.plugins.php.reports.phpstan;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-import org.sonar.plugins.php.JsonReportReader;
+import org.sonar.plugins.php.reports.JsonReportReader;
 import org.sonarsource.analyzer.commons.internal.json.simple.JSONArray;
 import org.sonarsource.analyzer.commons.internal.json.simple.JSONObject;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class PsalmJsonReportReader extends JsonReportReader {
+public class PhpStanJsonReportReader extends JsonReportReader {
 
   private final Consumer<Issue> consumer;
 
-  private PsalmJsonReportReader(Consumer<Issue> consumer) {
+  private PhpStanJsonReportReader(Consumer<Issue> consumer) {
     this.consumer = consumer;
   }
 
   static void read(InputStream in, Consumer<Issue> consumer) throws IOException, ParseException {
-    new PsalmJsonReportReader(consumer).read(in);
+    new PhpStanJsonReportReader(consumer).read(in);
   }
 
   private void read(InputStream in) throws IOException, ParseException {
     JSONObject rootObject = (JSONObject) jsonParser.parse(new InputStreamReader(in, UTF_8));
-    JSONArray issues = (JSONArray) rootObject.get("issues");
-    if (issues != null) {
-      ((Stream<JSONObject>) issues.stream()).forEach(this::onIssue);
+    JSONObject files = (JSONObject) rootObject.get("files");
+    if (files != null) {
+      files.forEach((file, records) -> onFile((String) file, (JSONObject) records));
     }
   }
 
-  private void onIssue(JSONObject i) {
-    JSONObject primaryLocation = (JSONObject) i.get("primaryLocation");
-    if (primaryLocation != null) {
-      Issue issue = new Issue();
-      issue.ruleId = (String) i.get("ruleId");
-      issue.filePath = (String) primaryLocation.get("filePath");
-      issue.message = (String) primaryLocation.get("message");
-
-      JSONObject textRange = (JSONObject) primaryLocation.get("textRange");
-      if (textRange != null) {
-        issue.startLine = toInteger(textRange.get("startLine"));
-        issue.startColumn = toInteger(textRange.get("startColumn"));
-        issue.endLine = toInteger(textRange.get("endLine"));
-        issue.endColumn = toInteger(textRange.get("endColumn"));
-      }
-
-      issue.type = (String) i.get("type");
-      issue.severity = (String) i.get("severity");
-
-      consumer.accept(issue);
+  private void onFile(String file, JSONObject records) {
+    JSONArray messages = (JSONArray) records.get("messages");
+    if (messages != null) {
+      ((Stream<JSONObject>) messages.stream()).forEach(m -> onMessage(file, m));
     }
+  }
+
+  private void onMessage(String file, JSONObject message) {
+    Issue issue = new Issue();
+    issue.filePath = file;
+    issue.startLine = toInteger(message.get("line"));
+    issue.message = (String) message.get("message");
+    consumer.accept(issue);
   }
 }

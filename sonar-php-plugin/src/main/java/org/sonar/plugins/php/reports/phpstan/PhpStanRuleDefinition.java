@@ -17,7 +17,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-@ParametersAreNonnullByDefault
-package org.sonar.plugins.php.phpstan;
+package org.sonar.plugins.php.reports.phpstan;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.plugins.php.api.Php;
+import org.sonarsource.analyzer.commons.ExternalRuleLoader;
+
+import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_KEY;
+import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_NAME;
+
+public class PhpStanRuleDefinition implements RulesDefinition {
+
+  private static final String RULES_JSON = "org/sonar/plugins/php/reports/phpstan/rules.json";
+
+  static final ExternalRuleLoader RULE_LOADER = new ExternalRuleLoader(PHPSTAN_REPORT_KEY, PHPSTAN_REPORT_NAME, RULES_JSON, Php.KEY);
+
+  @Override
+  public void define(Context context) {
+    RULE_LOADER.createExternalRuleRepository(context);
+  }
+}

@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php;
+package org.sonar.plugins.php.reports;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -45,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public abstract class ReportSensorTest {
 
   private final String SENSOR_KEY = sensor().reportKey();
-  private final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", SENSOR_KEY);
+  private final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", SENSOR_KEY);
 
 
   public static String language(Path file) {
