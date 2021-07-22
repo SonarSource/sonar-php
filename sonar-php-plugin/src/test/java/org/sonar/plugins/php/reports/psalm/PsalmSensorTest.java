@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.psalm;
+package org.sonar.plugins.php.reports.psalm;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -34,15 +34,15 @@ import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.plugins.php.ExternalIssuesSensor;
-import org.sonar.plugins.php.ReportSensorTest;
+import org.sonar.plugins.php.reports.ExternalIssuesSensor;
+import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PsalmSensorTest extends ReportSensorTest {
 
   private static final String PSALM_PROPERTY = "sonar.php.psalm.reportPaths";
-  private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "psalm");
+  private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", "psalm");
 
   private static PsalmSensor psalmSensor = new PsalmSensor();
 
@@ -74,7 +74,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(first.severity()).isEqualTo(Severity.CRITICAL);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation firstPrimaryLoc = first.primaryLocation();
-    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
+    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
     assertThat(firstPrimaryLoc.message()).isEqualTo("Argument 1 of foo expects int, \"not an int\" provided");
     TextRange firstTextRange = firstPrimaryLoc.textRange();
     assertThat(firstTextRange).isNotNull();
@@ -88,7 +88,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(second.severity()).isEqualTo(Severity.CRITICAL);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation secondPrimaryLoc = second.primaryLocation();
-    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
+    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
     assertThat(secondPrimaryLoc.message()).isEqualTo("Second issue on file1.php");
     TextRange secondTextRange = secondPrimaryLoc.textRange();
     assertThat(secondTextRange).isNotNull();
@@ -101,7 +101,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(third.type()).isEqualTo(RuleType.BUG);
     assertThat(third.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
-    assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file2.php");
+    assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file2.php");
     assertThat(thirdPrimaryLoc.message()).isEqualTo("Argument 1 of foo expects int, \"not an int\" provided");
     TextRange thirdTextRange = thirdPrimaryLoc.textRange();
     assertThat(thirdTextRange).isNotNull();
@@ -123,7 +123,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(first.severity()).isEqualTo(Severity.MAJOR);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation firstPrimaryLoc = first.primaryLocation();
-    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
+    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
     assertThat(firstPrimaryLoc.message()).isEqualTo("Issue without type and severity");
     TextRange firstTextRange = firstPrimaryLoc.textRange();
     assertThat(firstTextRange).isNotNull();
@@ -137,7 +137,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(second.severity()).isEqualTo(Severity.INFO);
     assertThat(second.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation secondPrimaryLoc = second.primaryLocation();
-    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
+    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
     assertThat(secondPrimaryLoc.message()).isEqualTo("Issue without textRange");
     TextRange secondTextRange = secondPrimaryLoc.textRange();
     assertThat(secondTextRange).isNull();
@@ -147,7 +147,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(third.severity()).isEqualTo(Severity.BLOCKER);
     assertThat(third.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
-    assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
+    assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
     assertThat(thirdPrimaryLoc.message()).isEqualTo("Issue without endColumns and endLine");
     TextRange thirdTextRange = thirdPrimaryLoc.textRange();
     assertThat(thirdTextRange).isNotNull();
@@ -161,7 +161,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(fourth.severity()).isEqualTo(Severity.MINOR);
     assertThat(fourth.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation fourthPrimaryLoc = fourth.primaryLocation();
-    assertThat(fourthPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
+    assertThat(fourthPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
     assertThat(fourthPrimaryLoc.message()).isEqualTo("Issue without columns and endLine");
     TextRange fourthTextRange = fourthPrimaryLoc.textRange();
     assertThat(fourthTextRange).isNotNull();
@@ -175,7 +175,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(fifth.severity()).isEqualTo(Severity.MAJOR);
     assertThat(fifth.ruleId()).isEqualTo("psalm.finding");
     IssueLocation fifthPrimaryLoc = fifth.primaryLocation();
-    assertThat(fifthPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
+    assertThat(fifthPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
     assertThat(fifthPrimaryLoc.message()).isEqualTo("Issue without ruleId");
     TextRange fifthTextRange = fifthPrimaryLoc.textRange();
     assertThat(fifthTextRange).isNotNull();
@@ -206,7 +206,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     ExternalIssue second = externalIssues.get(1);
     assertThat(second.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation secondPrimaryLoc = second.primaryLocation();
-    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("php-project:psalm/file1.php");
+    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
     assertThat(secondPrimaryLoc.message()).isEqualTo("Issue with to long endColumn");
     TextRange secondTextRange = secondPrimaryLoc.textRange();
     assertThat(secondTextRange).isNotNull();
