@@ -27,8 +27,13 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -63,6 +68,36 @@ public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
         check(token, token.text(), "keyword");
       }
     }
+  }
+
+  @Override
+  public void visitNameIdentifier(NameIdentifierTree tree) {
+    // do nothing
+  }
+
+  // We usually don't want to check identifiers...
+  // except in some places where we use fake identifiers such as `echo` or `static`
+  private void checkForFakeIdentifier(Tree tree) {
+    if (tree.is(Kind.NAME_IDENTIFIER)) {
+      visitToken(((NameIdentifierTree) tree).token());
+    }
+  }
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    ExpressionTree callee = tree.callee();
+    if (callee.is(Kind.NAMESPACE_NAME)) {
+      NamespaceNameTree name = (NamespaceNameTree) callee;
+      callee = name.name();
+    }
+    checkForFakeIdentifier(callee);
+    super.visitFunctionCall(tree);
+  }
+
+  @Override
+  public void visitMemberAccess(MemberAccessTree tree) {
+    checkForFakeIdentifier(tree.object());
+    super.visitMemberAccess(tree);
   }
 
   private void check(Tree tree, String value, String kind) {
