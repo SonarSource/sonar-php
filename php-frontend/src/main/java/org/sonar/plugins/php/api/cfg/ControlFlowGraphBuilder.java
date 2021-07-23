@@ -46,6 +46,7 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
@@ -164,9 +165,10 @@ class ControlFlowGraphBuilder {
         return buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
       case LABEL:
         return createLabelBlock((LabelTree) tree, currentBlock);
+      case DECLARE_STATEMENT:
+        return buildDeclareStatement((DeclareStatementTree) tree, currentBlock);
       case GLOBAL_STATEMENT:
       case STATIC_STATEMENT:
-      case DECLARE_STATEMENT:
       case UNSET_VARIABLE_STATEMENT:
       case EXPRESSION_LIST_STATEMENT:
       case FUNCTION_DECLARATION:
@@ -187,6 +189,15 @@ class ControlFlowGraphBuilder {
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
     }
+  }
+
+  private PhpCfgBlock buildDeclareStatement(DeclareStatementTree declare, PhpCfgBlock successor) {
+    List<StatementTree> statements = declare.statements();
+    if (statements.isEmpty()) {
+      successor.addElement(declare);
+      return successor;
+    }
+    return build(statements, successor);
   }
 
   private PhpCfgBlock buildSwitchStatement(SwitchStatementTree tree, PhpCfgBlock successor) {
