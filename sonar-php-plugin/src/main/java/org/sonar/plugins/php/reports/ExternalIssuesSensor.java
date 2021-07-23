@@ -37,13 +37,14 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.utils.log.Logger;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonar.plugins.php.api.Php;
 import org.sonarsource.analyzer.commons.ExternalReportProvider;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
 public abstract class ExternalIssuesSensor implements Sensor {
-  private static final int MAX_LOGGED_FILE_NAMES = 20;
+  private static final int MAX_LOGGED_FILE_NAMES = 5;
   protected static final Long DEFAULT_CONSTANT_DEBT_MINUTES = 5L;
 
   private static final RuleType DEFAULT_RULE_TYPE = RuleType.CODE_SMELL;
@@ -51,6 +52,11 @@ public abstract class ExternalIssuesSensor implements Sensor {
 
   public final String defaultRuleId = reportKey() + ".finding";
   protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
+  private final AnalysisWarningsWrapper analysisWarningsWrapper;
+
+  public ExternalIssuesSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
+    this.analysisWarningsWrapper = analysisWarningsWrapper;
+  }
 
   @Override
   public void describe(SensorDescriptor descriptor) {
@@ -62,21 +68,23 @@ public abstract class ExternalIssuesSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-    unresolvedInputFiles.clear();
     List<File> reportFiles = ExternalReportProvider.getReportFiles(context, reportPathKey());
-    reportFiles.forEach(report -> importExternalReport(report, context));
-    logUnresolvedInputFiles();
+    reportFiles.forEach(report -> {
+      unresolvedInputFiles.clear();
+      importExternalReport(report, context);
+      logUnresolvedInputFiles(report, context);
+    });
   }
 
   private void importExternalReport(File reportPath, SensorContext context) {
     try {
       importReport(reportPath, context);
     } catch (IOException | ParseException | RuntimeException e) {
-      logFileCantBeRead(e, reportPath);
+      logFileCantBeRead(e, reportPath, context);
     }
   }
 
-  private void logUnresolvedInputFiles() {
+  private void logUnresolvedInputFiles(File reportPath, SensorContext context) {
     if (unresolvedInputFiles.isEmpty()) {
       return;
     }
@@ -84,12 +92,17 @@ public abstract class ExternalIssuesSensor implements Sensor {
     if (unresolvedInputFiles.size() > MAX_LOGGED_FILE_NAMES) {
       fileList += ";...";
     }
-    logger().warn("Failed to resolve {} file path(s) in " + reportName() + " report. No issues imported related to file(s): {}", unresolvedInputFiles.size(), fileList);
+    String msg = String.format("Failed to resolve %s file path(s) in %s %s report. No issues imported related to file(s): %s",
+      unresolvedInputFiles.size(), reportName(), reportPath.getName(), fileList);
+    logger().warn(msg);
+    analysisWarningsWrapper.addWarning(msg);
   }
 
-  private void logFileCantBeRead(Exception e, File reportPath) {
-    logger().error("An error occurred when reading report file '{}', no issue will be imported from this report. {}: {}"
+  private void logFileCantBeRead(Exception e, File reportPath, SensorContext context) {
+    String msg = String.format("An error occurred when reading report file '%s', no issue will be imported from this report. %s: %s"
       , reportPath, e.getClass().getSimpleName(), e.getMessage());
+    logger().error(msg);
+    analysisWarningsWrapper.addWarning(msg);
   }
 
   private static boolean isEmpty(@Nullable String str) {
