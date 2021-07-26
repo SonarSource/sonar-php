@@ -29,6 +29,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.ExternalReportProvider;
+import org.sonarsource.analyzer.commons.xml.ParseException;
 
 public abstract class SingleFileReportImporter implements ReportImporter {
   private static final int MAX_LOGGED_FILE_NAMES = 5;
@@ -57,12 +58,12 @@ public abstract class SingleFileReportImporter implements ReportImporter {
   protected void importExternalReport(File coverageReportFile, SensorContext context) {
     try {
       importReport(coverageReportFile, context);
-    } catch (IOException | RuntimeException e) {
+    } catch (IOException | ParseException e) {
       logFileCantBeRead(e, coverageReportFile.getPath());
     }
   }
 
-  abstract void importReport(File coverageReportFile, SensorContext context) throws IOException, RuntimeException;
+  abstract void importReport(File coverageReportFile, SensorContext context) throws IOException, ParseException;
 
   protected void logUnresolvedInputFiles(File reportPath) {
     if (unresolvedInputFiles.isEmpty()) {

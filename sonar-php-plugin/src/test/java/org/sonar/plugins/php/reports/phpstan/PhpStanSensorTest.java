@@ -38,7 +38,6 @@ import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -130,8 +129,8 @@ public class PhpStanSensorTest extends ReportSensorTest {
       .isEqualTo("Missing information for filePath:'', message:'Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.'");
 
     verify(analysisWarnings, times(1))
-      .addWarning(eq("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. No issues imported related to file(s): " +
-        "phpstan/file10.php;phpstan/file11.php;phpstan/file12.php;phpstan/file13.php;phpstan/file14.php;..."));
+      .addWarning("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. No issues imported related to file(s): " +
+        "phpstan/file10.php;phpstan/file11.php;phpstan/file12.php;phpstan/file13.php;phpstan/file14.php;...");
   }
 
   @Test

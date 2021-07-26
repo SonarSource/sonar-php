@@ -33,7 +33,7 @@ import org.sonarsource.analyzer.commons.xml.ParseException;
 
 public class TestResultImporter extends SingleFileReportImporter {
 
-  protected static final Logger LOG = Loggers.get(TestResultImporter.class);
+  private static final Logger LOG = Loggers.get(TestResultImporter.class);
 
   private final JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();
 

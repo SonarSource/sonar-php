@@ -54,7 +54,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
   protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
   private final AnalysisWarningsWrapper analysisWarningsWrapper;
 
-  public ExternalIssuesSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
+  protected ExternalIssuesSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
     this.analysisWarningsWrapper = analysisWarningsWrapper;
   }
 
