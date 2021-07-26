@@ -76,7 +76,7 @@ public class PHPSensor implements Sensor {
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
-  private AnalysisWarningsWrapper analysisWarningsWrapper;
+  private final AnalysisWarningsWrapper analysisWarningsWrapper;
 
   private RuleKey parsingErrorRuleKey;
 

@@ -31,14 +31,14 @@ import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.ExternalReportProvider;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 
-public abstract class SingleFileReportImporter implements ReportImporter {
+public abstract class PhpUnitReportImporter implements ReportImporter {
   private static final int MAX_LOGGED_FILE_NAMES = 5;
 
   protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
 
   protected AnalysisWarningsWrapper analysisWarningsWrapper;
 
-  protected SingleFileReportImporter(AnalysisWarningsWrapper analysisWarningsWrapper) {
+  protected PhpUnitReportImporter(AnalysisWarningsWrapper analysisWarningsWrapper) {
     this.analysisWarningsWrapper = analysisWarningsWrapper;
   }
 

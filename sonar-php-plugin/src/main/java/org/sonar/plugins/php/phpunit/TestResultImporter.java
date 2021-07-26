@@ -31,7 +31,7 @@ import org.sonar.plugins.php.phpunit.xml.TestSuites;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 
-public class TestResultImporter extends SingleFileReportImporter {
+public class TestResultImporter extends PhpUnitReportImporter {
 
   private static final Logger LOG = Loggers.get(TestResultImporter.class);
 

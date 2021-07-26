@@ -43,7 +43,7 @@ import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 
-public class CoverageResultImporter extends SingleFileReportImporter {
+public class CoverageResultImporter extends PhpUnitReportImporter {
 
   private static final Logger LOG = Loggers.get(CoverageResultImporter.class);
 
@@ -91,7 +91,6 @@ public class CoverageResultImporter extends SingleFileReportImporter {
    * Saves the required metrics found on the fileNode
    *
    * @param fileNode        the file
-   * @param unresolvedPaths list of paths which cannot be mapped to imported files
    */
   private void saveCoverageMeasure(FileNode fileNode, SensorContext context) {
     FileSystem fileSystem = context.fileSystem();
