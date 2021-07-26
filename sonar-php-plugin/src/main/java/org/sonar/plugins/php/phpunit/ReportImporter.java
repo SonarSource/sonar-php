@@ -22,5 +22,5 @@ package org.sonar.plugins.php.phpunit;
 import org.sonar.api.batch.sensor.SensorContext;
 
 public interface ReportImporter {
-  void importReport(SensorContext context);
+  void execute(SensorContext context);
 }

@@ -66,6 +66,9 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.CoverageResultImporter;
 import org.sonar.plugins.php.phpunit.TestResultImporter;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
+
+import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_ANALYSIS_WARNINGS;
 
 public class PHPSensor implements Sensor {
 
@@ -73,28 +76,37 @@ public class PHPSensor implements Sensor {
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
+  private AnalysisWarningsWrapper analysisWarningsWrapper;
 
   private RuleKey parsingErrorRuleKey;
 
-  public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
-    CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
-    this(fileLinesContextFactory, checkFactory, noSonarFilter, null);
+  public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
+    this(fileLinesContextFactory, checkFactory, noSonarFilter, null, NOOP_ANALYSIS_WARNINGS);
   }
 
-  public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
-    CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRuleRepository[] customRuleRepositories) {
+  public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
+    AnalysisWarningsWrapper analysisWarningsWrapper) {
+    this(fileLinesContextFactory, checkFactory, noSonarFilter, null, analysisWarningsWrapper);
+  }
 
+  public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
+    @Nullable PHPCustomRuleRepository[] customRuleRepositories) {
+    this(fileLinesContextFactory, checkFactory, noSonarFilter, customRuleRepositories , NOOP_ANALYSIS_WARNINGS);
+  }
+
+  public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
+    @Nullable PHPCustomRuleRepository[] customRuleRepositories, AnalysisWarningsWrapper analysisWarningsWrapper) {
     this(fileLinesContextFactory,
-      PHPChecks.createPHPCheck(checkFactory)
-        .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
-        .addCustomChecks(customRuleRepositories),
-      noSonarFilter);
+      PHPChecks.createPHPCheck(checkFactory).addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks()).addCustomChecks(customRuleRepositories),
+      noSonarFilter,
+      analysisWarningsWrapper);
   }
 
-  PHPSensor(FileLinesContextFactory fileLinesContextFactory, PHPChecks checks, NoSonarFilter noSonarFilter) {
+  PHPSensor(FileLinesContextFactory fileLinesContextFactory, PHPChecks checks, NoSonarFilter noSonarFilter, AnalysisWarningsWrapper analysisWarningsWrapper) {
     this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
+    this.analysisWarningsWrapper = analysisWarningsWrapper;
     this.parsingErrorRuleKey = getParsingErrorRuleKey();
   }
 
@@ -133,10 +145,9 @@ public class PHPSensor implements Sensor {
     return context.runtime().getProduct() == SonarProduct.SONARLINT;
   }
 
-  private static void processTestsAndCoverage(SensorContext context) {
-    new TestResultImporter().importReport(context);
-
-    CoverageResultImporter.multiCoverageImporter().importReport(context);
+  private void processTestsAndCoverage(SensorContext context) {
+    new TestResultImporter(analysisWarningsWrapper).execute(context);
+    new CoverageResultImporter(analysisWarningsWrapper).execute(context);
   }
 
   private class AnalysisScanner extends Scanner {

@@ -21,6 +21,7 @@ package org.sonar.plugins.php.phpunit;
 
 import com.google.common.io.Files;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
@@ -29,19 +30,23 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
-import org.mockito.Mockito;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.plugins.php.PhpPlugin;
+import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.startsWith;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class CoverageResultImporterTest {
 
@@ -51,16 +56,19 @@ public class CoverageResultImporterTest {
   private static final String SRC_TEST_RESOURCES = "src/test/resources/";
   private static final File MONKEY_FILE = new File(SRC_TEST_RESOURCES + BASE_DIR + MONKEY_FILE_NAME);
   private static final File BANANA_FILE = new File(SRC_TEST_RESOURCES + BASE_DIR + BANANA_FILE_NAME);
+  private final AnalysisWarningsWrapper analysisWarnings = spy(AnalysisWarningsWrapper.class);
+
+  private CoverageResultImporter importer;
+  private SensorContextTester context;
+
+  @Rule
+  public LogTester logTester = new LogTester();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Rule
   public TemporaryFolder folder = new TemporaryFolder();
-
-  private CoverageResultImporter importer;
-
-  private SensorContextTester context;
 
   @Before
   public void setUp() {
@@ -73,16 +81,19 @@ public class CoverageResultImporterTest {
       .build();
     context.fileSystem().add(monkeyFile);
 
-    importer = new CoverageResultImporter(
-      PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY,
-      "unit test coverage");
+    importer = new CoverageResultImporter(analysisWarnings);
   }
 
   @Test
-  public void should_throw_an_exception_when_report_not_found() {
-    thrown.expect(IllegalStateException.class);
-    thrown.expectMessage("Can't read phpUnit report:");
-    importer.importReport(new File("notfound.txt"), setUpForMockedSensorContext());
+  public void should_add_waring_and_log_when_report_not_found() throws IOException {
+    executeSensorImporting(new File("notfound.txt"));
+    assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
+    assertThat((logTester.logs(LoggerLevel.ERROR).get(0)))
+      .startsWith("An error occurred when reading report file '")
+      .contains("notfound.txt', nothing will be imported from this report.");
+
+    verify(analysisWarnings, times(1))
+      .addWarning(startsWith("An error occurred when reading report file '"));
   }
 
   @Test
@@ -95,12 +106,21 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_generate_coverage_measures() throws Exception {
-    String componentKey = "moduleKey:" + MONKEY_FILE_NAME;
-
-    importer.importReport(getReportsWithAbsolutePath("phpunit.coverage.xml"), context);
-
+  public void should_generate_coverage_measures_also_with_missing_files() throws Exception {
+    executeSensorImporting(getReportsWithAbsolutePath("phpunit.coverage.xml"));
+    String componentKey = componentKey(MONKEY_FILE_NAME);
     assertReport(componentKey);
+    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(3);
+    assertThat(logTester.logs(LoggerLevel.WARN).get(0))
+      .isEqualTo("Line with number 0 doesn't belong to file Monkey.php");
+    assertThat(logTester.logs(LoggerLevel.WARN).get(1))
+      .isEqualTo("Line with number 100 doesn't belong to file Monkey.php");
+    assertThat((logTester.logs(LoggerLevel.WARN).get(2)))
+      .startsWith("Failed to resolve 2 file path(s) in PHPUnit coverage")
+      .contains("Nothing is imported related to file(s):");
+
+    verify(analysisWarnings, times(1))
+      .addWarning(startsWith("Failed to resolve 2 file path(s) in PHPUnit coverage"));
   }
 
   @Test
@@ -178,12 +198,13 @@ public class CoverageResultImporterTest {
     return fileWIthAbsolutePaths;
   }
 
-  private static void assertCoverageLineHits(SensorContextTester context, String componentKey, int line, int expectedHits) {
-    assertThat(context.lineHits(componentKey, line)).as("coverage line hits for line: " + line).isEqualTo(expectedHits);
+  private void executeSensorImporting(File fileName) {
+    context.settings().setProperty(importer.reportPathKey(), fileName.getAbsolutePath());
+    importer.execute(context);
   }
 
-  private static SensorContext setUpForMockedSensorContext() {
-    return Mockito.mock(SensorContext.class);
+  private static void assertCoverageLineHits(SensorContextTester context, String componentKey, int line, int expectedHits) {
+    assertThat(context.lineHits(componentKey, line)).as("coverage line hits for line: " + line).isEqualTo(expectedHits);
   }
 
   private static String componentKey(String componentName) {

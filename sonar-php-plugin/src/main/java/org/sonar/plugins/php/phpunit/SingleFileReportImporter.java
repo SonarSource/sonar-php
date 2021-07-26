@@ -20,58 +20,79 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
+import org.sonarsource.analyzer.commons.ExternalReportProvider;
 
 public abstract class SingleFileReportImporter implements ReportImporter {
+  private static final int MAX_LOGGED_FILE_NAMES = 5;
 
-  private static final Logger LOG = Loggers.get(SingleFileReportImporter.class);
+  protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
 
-  private String reportPathKey;
-  private String msg;
+  protected AnalysisWarningsWrapper analysisWarningsWrapper;
 
-  protected SingleFileReportImporter(String reportPathKey, String msg) {
-    this.reportPathKey = reportPathKey;
-    this.msg = msg;
+  protected SingleFileReportImporter(AnalysisWarningsWrapper analysisWarningsWrapper) {
+    this.analysisWarningsWrapper = analysisWarningsWrapper;
   }
 
   @Override
-  public final void importReport(SensorContext context) {
-    Optional<String> reportPath = context.config().get(reportPathKey);
-    if (reportPath.isPresent()) {
-      importReport(reportPath.get(), msg, context);
-    } else {
-      LOG.info("No PHPUnit {} report provided (see '{}' property)", msg, reportPathKey);
-    }
-  }
-
-  final void importReport(String reportPath, String msg, SensorContext context) {
-    Optional<File> maybeFile = getIOFile(reportPath, context);
-    maybeFile.ifPresent(file -> {
-      LOG.info("Analyzing PHPUnit {} report: {}", msg, reportPath);
-      importReport(file, context);
+  public final void execute(SensorContext context) {
+    List<File> reportFiles = reportFiles(context);
+    reportFiles.forEach(report -> {
+      unresolvedInputFiles.clear();
+      importExternalReport(report, context);
+      logUnresolvedInputFiles(report);
     });
-  }
-
-  protected abstract void importReport(File coverageReportFile, SensorContext context);
-
-  /*
-   * Returns a java.io.File for the given path.
-   * If path is not absolute, returns a File with module base directory as parent path.
-   */
-  private Optional<File> getIOFile(String path, SensorContext context) {
-    File file = new File(path);
-    if (!file.isAbsolute()) {
-      file = new File(context.fileSystem().baseDir(), path);
-    }
-    if (file.exists()) {
-      return Optional.of(file);
-    } else {
-      LOG.warn("PHPUnit xml {} report not found: {}", msg, path);
-      return Optional.empty();
+    if (reportFiles.isEmpty()) {
+      logger().info("No {} reports provided (see '{}' property)", reportName(), reportPathKey());
     }
   }
+
+  protected void importExternalReport(File coverageReportFile, SensorContext context) {
+    try {
+      importReport(coverageReportFile, context);
+    } catch (IOException | RuntimeException e) {
+      logFileCantBeRead(e, coverageReportFile.getPath());
+    }
+  }
+
+  abstract void importReport(File coverageReportFile, SensorContext context) throws IOException, RuntimeException;
+
+  protected void logUnresolvedInputFiles(File reportPath) {
+    if (unresolvedInputFiles.isEmpty()) {
+      return;
+    }
+    String fileList = unresolvedInputFiles.stream().sorted().limit(MAX_LOGGED_FILE_NAMES).collect(Collectors.joining(";"));
+    if (unresolvedInputFiles.size() > MAX_LOGGED_FILE_NAMES) {
+      fileList += ";...";
+    }
+    String msg = String.format("Failed to resolve %s file path(s) in %s %s report. Nothing is imported related to file(s): %s",
+      unresolvedInputFiles.size(), reportName(), reportPath.getName(), fileList);
+    logger().warn(msg);
+    analysisWarningsWrapper.addWarning(msg);
+  }
+
+  protected void logFileCantBeRead(Exception e, String reportPath) {
+    String msg = String.format("An error occurred when reading report file '%s', nothing will be imported from this report. %s: %s"
+      , reportPath, e.getClass().getSimpleName(), e.getMessage());
+    logger().error(msg);
+    analysisWarningsWrapper.addWarning(msg);
+  }
+
+  protected List<File> reportFiles(SensorContext context) {
+    return ExternalReportProvider.getReportFiles(context, reportPathKey());
+  }
+
+  abstract String reportPathKey();
+
+  abstract String reportName();
+
+  abstract Logger logger();
 
 }

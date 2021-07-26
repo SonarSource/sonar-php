@@ -20,24 +20,70 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
+import org.sonarsource.analyzer.commons.xml.ParseException;
 
 public class TestResultImporter extends SingleFileReportImporter {
 
+  protected static final Logger LOG = Loggers.get(TestResultImporter.class);
+
   private final JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();
 
-  public TestResultImporter() {
-    super(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, "test");
+  public TestResultImporter(AnalysisWarningsWrapper analysisWarningsWrapper) {
+    super(analysisWarningsWrapper);
   }
 
   @Override
-  protected void importReport(File reportFile, SensorContext context) {
+  protected void importReport(File reportFile, SensorContext context) throws ParseException, IOException {
+    LOG.info("Importing {}", reportFile);
     TestSuites testSuites = parser.parse(reportFile);
     for (TestFileReport fileReport : testSuites.arrangeSuitesIntoTestFileReports()) {
-      fileReport.saveTestMeasures(context);
+      fileReport.saveTestMeasures(context, unresolvedInputFiles);
     }
   }
 
+  /**
+   * For PHPUnit tests report only a single file is expected compared to PHPUnit coverage reports
+   */
+  @Override
+  protected List<File> reportFiles(SensorContext context) {
+    return context.config().get(reportPathKey())
+      .map(report -> getIOFile(context.fileSystem().baseDir(), report))
+      .map(Collections::singletonList)
+      .orElse(Collections.emptyList());
+  }
+
+  /**
+   * Inspired by {@link org.sonarsource.analyzer.commons.ExternalReportProvider}
+   */
+  private static File getIOFile(File baseDir, String path) {
+    File file = new File(path);
+    if (!file.isAbsolute()) {
+      file = new File(baseDir, path);
+    }
+    return file;
+  }
+
+  @Override
+  String reportPathKey() {
+    return PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY;
+  }
+
+  @Override
+  String reportName() {
+    return "PHPUnit tests";
+  }
+
+  @Override
+  Logger logger() {
+    return LOG;
+  }
 }

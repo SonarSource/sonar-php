@@ -19,6 +19,9 @@
  */
 package org.sonar.plugins.php.warning;
 
+import org.sonar.api.scanner.ScannerSide;
+
+@ScannerSide
 public interface AnalysisWarningsWrapper {
   void addWarning(String text);
 }

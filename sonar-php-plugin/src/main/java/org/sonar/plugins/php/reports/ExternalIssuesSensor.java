@@ -72,7 +72,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
     reportFiles.forEach(report -> {
       unresolvedInputFiles.clear();
       importExternalReport(report, context);
-      logUnresolvedInputFiles(report, context);
+      logUnresolvedInputFiles(report);
     });
   }
 
@@ -80,11 +80,11 @@ public abstract class ExternalIssuesSensor implements Sensor {
     try {
       importReport(reportPath, context);
     } catch (IOException | ParseException | RuntimeException e) {
-      logFileCantBeRead(e, reportPath, context);
+      logFileCantBeRead(e, reportPath);
     }
   }
 
-  private void logUnresolvedInputFiles(File reportPath, SensorContext context) {
+  private void logUnresolvedInputFiles(File reportPath) {
     if (unresolvedInputFiles.isEmpty()) {
       return;
     }
@@ -98,7 +98,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
     analysisWarningsWrapper.addWarning(msg);
   }
 
-  private void logFileCantBeRead(Exception e, File reportPath, SensorContext context) {
+  private void logFileCantBeRead(Exception e, File reportPath) {
     String msg = String.format("An error occurred when reading report file '%s', no issue will be imported from this report. %s: %s"
       , reportPath, e.getClass().getSimpleName(), e.getMessage());
     logger().error(msg);

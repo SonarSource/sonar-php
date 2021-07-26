@@ -29,6 +29,16 @@ public class DefaultAnalysisWarningsWrapper implements AnalysisWarningsWrapper {
     this.analysisWarnings = analysisWarnings;
   }
 
+  /**
+   * Noop instance which can be used as placeholder when {@link AnalysisWarnings} is not supported
+   */
+  public static final AnalysisWarningsWrapper NOOP_ANALYSIS_WARNINGS = new DefaultAnalysisWarningsWrapper(null) {
+    @Override
+    public void addWarning(String text) {
+      // no operation
+    }
+  };
+
   public void addWarning(String text) {
     this.analysisWarnings.addUnique(text);
   }

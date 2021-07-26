@@ -20,6 +20,9 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
+import java.io.IOException;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
@@ -27,24 +30,50 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.startsWith;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class TestResultImporterTest {
 
+  private static final File BASE_DIR = new File("src/test/resources/org/sonar/plugins/php/phpunit/sensor/src/");
+  private final AnalysisWarningsWrapper analysisWarnings = spy(AnalysisWarningsWrapper.class);
   private TestResultImporter importer;
+  private SensorContextTester context;
+  private DefaultFileSystem fs;
 
-  private SensorContextTester setUpForSensorContextTester() {
-    SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
-    importer = new TestResultImporter();
-    return context;
+  @Rule
+  public LogTester logTester = new LogTester();
+
+  @Before
+  public void setUp() {
+    context = SensorContextTester.create(new File("src/test/resources"));
+    importer = new TestResultImporter(analysisWarnings);
+    fs = new DefaultFileSystem(BASE_DIR.getAbsoluteFile());
+  }
+
+  @Test
+  public void should_add_waring_and_log_when_report_not_found() throws IOException {
+    executeSensorImporting(new File("notfound.txt"));
+    assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
+    assertThat((logTester.logs(LoggerLevel.ERROR).get(0)))
+      .startsWith("An error occurred when reading report file '")
+      .contains("notfound.txt', nothing will be imported from this report.");
+
+    verify(analysisWarnings, times(1))
+      .addWarning(startsWith("An error occurred when reading report file '"));
   }
 
   @Test()
-  public void shouldGenerateTestsMeasures() {
-    SensorContextTester context = setUpForSensorContextTester();
-    File baseDir = new File("src/test/resources/org/sonar/plugins/php/phpunit/sensor/src/");
-    DefaultFileSystem fs = new DefaultFileSystem(baseDir.getAbsoluteFile());
+  public void shouldGenerateTestsMeasures() throws IOException {
     DefaultInputFile appTestFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
     DefaultInputFile appSkippedTestFile = TestInputFileBuilder.create("moduleKey", "src/AppSkipTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
 
@@ -55,8 +84,7 @@ public class TestResultImporterTest {
     String appTestFileKey = appTestFile.key();
     String appSkipTestFileKey = appSkippedTestFile.key();
 
-    importer = new TestResultImporter();
-    importer.importReport(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_NAME), context);
+    executeSensorImporting(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_NAME));
 
     PhpTestUtils.assertMeasure(context, appTestFileKey, CoreMetrics.TESTS, 1);
     PhpTestUtils.assertMeasure(context, appTestFileKey, CoreMetrics.TEST_FAILURES, 0);
@@ -69,6 +97,20 @@ public class TestResultImporterTest {
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.TEST_ERRORS, 0);
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.SKIPPED_TESTS, 1);
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.TEST_EXECUTION_TIME, 0L);
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
+    assertThat(logTester.logs(LoggerLevel.WARN).get(0))
+      .startsWith("Failed to resolve 6 file path(s) in PHPUnit tests")
+      .endsWith("Nothing is imported related to file(s): MegaAppTest.php;" +
+        "src/App2Test.php;src/App3Test.php;src/AppErrorTest.php;src/AppFailTest.php;...");
+
+    verify(analysisWarnings, times(1))
+      .addWarning(startsWith("Failed to resolve 6 file path(s) in PHPUnit tests"));
+  }
+
+  private void executeSensorImporting(File fileName) {
+    context.settings().setProperty(importer.reportPathKey(), fileName.getAbsolutePath());
+    importer.execute(context);
   }
 
 }
