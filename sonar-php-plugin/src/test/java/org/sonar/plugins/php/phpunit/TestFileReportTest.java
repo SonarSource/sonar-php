@@ -20,6 +20,8 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -31,11 +33,14 @@ import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class TestFileReportTest {
 
   private String componentKey;
   private String testFileName;
   private SensorContextTester context;
+  private Set<String> unresolvedInputFiles;
 
   @Before
   public void setUp() throws Exception {
@@ -44,6 +49,7 @@ public class TestFileReportTest {
     context = SensorContextTester.create(new File("src/test/resources"));
     context.fileSystem().add(testFile);
     componentKey = testFile.key();
+    unresolvedInputFiles = new LinkedHashSet<>();
   }
 
   @Test
@@ -53,18 +59,20 @@ public class TestFileReportTest {
     report.addTestCase(new TestCase(TestCase.Status.ERROR));
     report.addTestCase(new TestCase(TestCase.Status.FAILURE));
     report.addTestCase(new TestCase(TestCase.Status.FAILURE));
-    report.saveTestMeasures(context);
+    report.saveTestMeasures(context, unresolvedInputFiles);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TEST_EXECUTION_TIME, 3000l);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.SKIPPED_TESTS, 1);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TEST_ERRORS, 1);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TEST_FAILURES, 2);
+    assertThat(unresolvedInputFiles).isEmpty();
   }
 
   @Test
   public void shouldReportZeroTestsIfEmpty() throws Exception {
     final TestFileReport report = new TestFileReport(testFileName, 0d);
-    report.saveTestMeasures(context);
+    report.saveTestMeasures(context, unresolvedInputFiles);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TESTS, 0);
+    assertThat(unresolvedInputFiles).isEmpty();
   }
 
   @Test
@@ -74,8 +82,9 @@ public class TestFileReportTest {
     report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
     report.addTestCase(new TestCase(TestCase.Status.FAILURE));
     report.addTestCase(new TestCase(TestCase.Status.ERROR));
-    report.saveTestMeasures(context);
+    report.saveTestMeasures(context, unresolvedInputFiles);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TESTS, 3);
+    assertThat(unresolvedInputFiles).isEmpty();
   }
 
 }

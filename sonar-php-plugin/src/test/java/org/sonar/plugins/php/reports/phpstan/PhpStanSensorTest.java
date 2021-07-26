@@ -38,13 +38,15 @@ import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", "phpstan");
 
-  protected static PhpStanSensor phpStanSensor = new PhpStanSensor();
+  protected final PhpStanSensor phpStanSensor = new PhpStanSensor(analysisWarnings);
 
   @Rule
   public LogTester logTester = new LogTester();
@@ -121,14 +123,14 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(firstTextRange).isNull();
 
     assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN)))
-      .isEqualTo("Failed to resolve 22 file path(s) in PHPStan report. No issues imported related to file(s): " +
-        "phpstan/file10.php;phpstan/file11.php;phpstan/file12.php;phpstan/file13.php;phpstan/file14.php;" +
-        "phpstan/file15.php;phpstan/file16.php;phpstan/file17.php;phpstan/file18.php;phpstan/file19.php;" +
-        "phpstan/file20.php;phpstan/file21.php;phpstan/file22.php;phpstan/file23.php;phpstan/file24.php;" +
-        "phpstan/file25.php;phpstan/file3.php;phpstan/file4.php;phpstan/file6.php;phpstan/file7.php;...");
+    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).isEqualTo("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. No issues imported related to file(s): " +
+      "phpstan/file10.php;phpstan/file11.php;phpstan/file12.php;phpstan/file13.php;phpstan/file14.php;...");
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.DEBUG)))
       .isEqualTo("Missing information for filePath:'', message:'Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.'");
+
+    verify(analysisWarnings, times(1))
+      .addWarning("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. No issues imported related to file(s): " +
+        "phpstan/file10.php;phpstan/file11.php;phpstan/file12.php;phpstan/file13.php;phpstan/file14.php;...");
   }
 
   @Test
@@ -142,6 +144,11 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactly(
       "Missing information for filePath:'phpstan/file2.php', message:'null'",
       "Missing information for filePath:'phpstan/file2.php', message:''");
+  }
+
+  @Override
+  protected Path projectDir() {
+    return PROJECT_DIR;
   }
 
   @Override

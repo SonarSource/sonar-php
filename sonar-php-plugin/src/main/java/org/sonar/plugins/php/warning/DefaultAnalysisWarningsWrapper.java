@@ -17,10 +17,29 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.phpunit;
+package org.sonar.plugins.php.warning;
 
-import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.notifications.AnalysisWarnings;
 
-public interface ReportImporter {
-  void execute(SensorContext context);
+public class DefaultAnalysisWarningsWrapper implements AnalysisWarningsWrapper {
+
+  private final AnalysisWarnings analysisWarnings;
+
+  public DefaultAnalysisWarningsWrapper(AnalysisWarnings analysisWarnings) {
+    this.analysisWarnings = analysisWarnings;
+  }
+
+  /**
+   * Noop instance which can be used as placeholder when {@link AnalysisWarnings} is not supported
+   */
+  public static final AnalysisWarningsWrapper NOOP_ANALYSIS_WARNINGS = new DefaultAnalysisWarningsWrapper(null) {
+    @Override
+    public void addWarning(String text) {
+      // no operation
+    }
+  };
+
+  public void addWarning(String text) {
+    this.analysisWarnings.addUnique(text);
+  }
 }

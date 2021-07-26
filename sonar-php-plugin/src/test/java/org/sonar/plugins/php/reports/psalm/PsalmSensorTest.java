@@ -38,13 +38,14 @@ import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class PsalmSensorTest extends ReportSensorTest {
 
   private static final String PSALM_PROPERTY = "sonar.php.psalm.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", "psalm");
-
-  private static PsalmSensor psalmSensor = new PsalmSensor();
+  private final PsalmSensor psalmSensor = new PsalmSensor(analysisWarnings);
 
   @Rule
   public LogTester logTester = new LogTester();
@@ -221,8 +222,16 @@ public class PsalmSensorTest extends ReportSensorTest {
       "Missing information for filePath:'psalm/file1.php', message:'null'",
       "Missing information for filePath:'null', message:'Issue without filePath'");
     assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.WARN))).isEqualTo(
-      "Failed to resolve 1 file path(s) in Psalm report. No issues imported related to file(s): psalm/unknown.php"
+      "Failed to resolve 1 file path(s) in Psalm psalm-report-with-errors.json report. No issues imported related to file(s): psalm/unknown.php"
     );
+
+    verify(analysisWarnings, times(1))
+      .addWarning("Failed to resolve 1 file path(s) in Psalm psalm-report-with-errors.json report. No issues imported related to file(s): psalm/unknown.php");
+  }
+
+  @Override
+  protected Path projectDir() {
+    return PROJECT_DIR;
   }
 
   @Override

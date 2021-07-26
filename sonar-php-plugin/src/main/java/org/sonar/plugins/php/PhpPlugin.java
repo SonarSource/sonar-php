@@ -28,6 +28,7 @@ import org.sonar.plugins.php.reports.phpstan.PhpStanRuleDefinition;
 import org.sonar.plugins.php.reports.phpstan.PhpStanSensor;
 import org.sonar.plugins.php.reports.psalm.PsalmRulesDefinition;
 import org.sonar.plugins.php.reports.psalm.PsalmSensor;
+import org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper;
 
 public class PhpPlugin implements Plugin {
 
@@ -88,6 +89,8 @@ public class PhpPlugin implements Plugin {
       addPhpStanExtensions(context);
       addPsalmExtensions(context);
     }
+
+    context.addExtension(DefaultAnalysisWarningsWrapper.class);
   }
 
   private static void addPhpUnitExtensions(Context context) {

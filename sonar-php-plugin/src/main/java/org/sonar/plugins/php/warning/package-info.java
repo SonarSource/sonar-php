@@ -17,10 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.phpunit;
+@ParametersAreNonnullByDefault
+package org.sonar.plugins.php.warning;
 
-import org.sonar.api.batch.sensor.SensorContext;
-
-public interface ReportImporter {
-  void execute(SensorContext context);
-}
+import javax.annotation.ParametersAreNonnullByDefault;

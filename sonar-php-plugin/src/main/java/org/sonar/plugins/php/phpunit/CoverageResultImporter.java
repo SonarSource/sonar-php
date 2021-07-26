@@ -19,8 +19,9 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import com.ctc.wstx.exc.WstxIOException;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.xml.stream.XMLStreamException;
@@ -39,63 +40,49 @@ import org.sonar.plugins.php.phpunit.xml.FileNode;
 import org.sonar.plugins.php.phpunit.xml.LineNode;
 import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
+import org.sonarsource.analyzer.commons.xml.ParseException;
 
-public class CoverageResultImporter extends SingleFileReportImporter {
+public class CoverageResultImporter extends PhpUnitReportImporter {
 
   private static final Logger LOG = Loggers.get(CoverageResultImporter.class);
 
   private static final String WRONG_LINE_EXCEPTION_MESSAGE = "Line with number %s doesn't belong to file %s";
 
-  CoverageResultImporter(String reportPathKey, String msg) {
-    super(reportPathKey, msg);
-  }
-
-  public static ReportImporter multiCoverageImporter() {
-    String msg = "coverage";
-    String propertyKey = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
-
-    CoverageResultImporter singleReportImporter = new CoverageResultImporter(propertyKey, msg);
-
-    return new MultiPathImporter(singleReportImporter, propertyKey, msg);
+  public CoverageResultImporter(AnalysisWarningsWrapper analysisWarningsWrapper) {
+    super(analysisWarningsWrapper);
   }
 
   @Override
-  protected void importReport(File coverageReportFile, SensorContext context) {
-    LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
+  public void importReport(File coverageReportFile, SensorContext context) throws IOException, ParseException {
+    LOG.info("Importing {}", coverageReportFile);
     parseFile(coverageReportFile, context);
   }
 
-  private static void parseFile(File coverageReportFile, SensorContext context) {
+  private void parseFile(File coverageReportFile, SensorContext context) throws IOException, ParseException {
     CoverageNode coverage = getCoverage(coverageReportFile);
 
-    List<String> unresolvedPaths = new ArrayList<>();
     List<ProjectNode> projects = coverage.getProjects();
     if (projects != null && !projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      parseFileNodes(projectNode.getFiles(), unresolvedPaths, context);
-      parsePackagesNodes(projectNode.getPackages(), unresolvedPaths, context);
-    }
-    if (!unresolvedPaths.isEmpty()) {
-      LOG.warn(
-        String.format(
-          "Could not resolve %d file paths in %s, first unresolved path: %s",
-          unresolvedPaths.size(), coverageReportFile.getName(), unresolvedPaths.get(0)));
+      parseFileNodes(projectNode.getFiles(), context);
+      parsePackagesNodes(projectNode.getPackages(), context);
     }
   }
 
 
-  private static void parsePackagesNodes(@Nullable List<PackageNode> packages, List<String> unresolvedPaths, SensorContext context) {
+  private void parsePackagesNodes(@Nullable List<PackageNode> packages, SensorContext context) {
     if (packages != null) {
       for (PackageNode packageNode : packages) {
-        parseFileNodes(packageNode.getFiles(), unresolvedPaths, context);
+        parseFileNodes(packageNode.getFiles(), context);
       }
     }
   }
 
-  private static void parseFileNodes(@Nullable List<FileNode> fileNodes, List<String> unresolvedPaths, SensorContext context) {
+  private void parseFileNodes(@Nullable List<FileNode> fileNodes, SensorContext context) {
     if (fileNodes != null) {
       for (FileNode file : fileNodes) {
-        saveCoverageMeasure(file, unresolvedPaths, context);
+        saveCoverageMeasure(file, context);
       }
     }
   }
@@ -104,9 +91,8 @@ public class CoverageResultImporter extends SingleFileReportImporter {
    * Saves the required metrics found on the fileNode
    *
    * @param fileNode        the file
-   * @param unresolvedPaths list of paths which cannot be mapped to imported files
    */
-  private static void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, SensorContext context) {
+  private void saveCoverageMeasure(FileNode fileNode, SensorContext context) {
     FileSystem fileSystem = context.fileSystem();
     // PHP supports only absolute paths
     String path = fileNode.getName();
@@ -119,7 +105,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
 
       // Saving the uncovered statements (lines) is no longer needed because coverage metrics are internally derived by the NewCoverage
     } else {
-      unresolvedPaths.add(path);
+      unresolvedInputFiles.add(path);
     }
   }
 
@@ -146,7 +132,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
    * @param coverageReportFile the coverage report file
    * @return the coverage
    */
-  private static CoverageNode getCoverage(File coverageReportFile) {
+  private static CoverageNode getCoverage(File coverageReportFile) throws ParseException, IOException {
     SMInputFactory inputFactory = JUnitLogParserForPhpUnit.inputFactory();
     try {
       SMHierarchicCursor rootCursor = inputFactory.rootElementCursor(coverageReportFile);
@@ -155,8 +141,10 @@ public class CoverageResultImporter extends SingleFileReportImporter {
         throw new XMLStreamException("Report should start with <coverage>");
       }
       return parseCoverageNode(rootCursor);
+    } catch (WstxIOException e) {
+      throw new IOException(e.getMessage(), e.getCause());
     } catch (XMLStreamException e) {
-      throw new IllegalStateException("Can't read phpUnit report: " + coverageReportFile.getName(), e);
+      throw new ParseException(e);
     }
   }
 
@@ -214,4 +202,18 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     return Integer.parseInt(cursor.getAttrValue(name));
   }
 
+  @Override
+  String reportPathKey() {
+    return PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
+  }
+
+  @Override
+  String reportName() {
+    return "PHPUnit coverage";
+  }
+
+  @Override
+  Logger logger() {
+    return LOG;
+  }
 }

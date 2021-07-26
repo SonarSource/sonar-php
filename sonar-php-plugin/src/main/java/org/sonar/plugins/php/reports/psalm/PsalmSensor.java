@@ -26,6 +26,7 @@ import java.io.InputStream;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
@@ -37,6 +38,10 @@ public class PsalmSensor extends ExternalIssuesSensor {
   public static final String PSALM_REPORT_KEY = "psalm";
   public static final String PSALM_REPORT_NAME = "Psalm";
   public static final String PSALM_REPORT_PATH_KEY = "sonar.php.psalm.reportPaths";
+
+  public PsalmSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
+    super(analysisWarningsWrapper);
+  }
 
   @Override
   protected void importReport(File reportPath, SensorContext context) throws IOException, ParseException {

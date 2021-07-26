@@ -27,6 +27,7 @@ import java.io.InputStream;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
@@ -38,6 +39,10 @@ public class PhpStanSensor extends ExternalIssuesSensor {
   public static final String PHPSTAN_REPORT_KEY = "phpstan";
   public static final String PHPSTAN_REPORT_NAME = "PHPStan";
   public static final String PHPSTAN_REPORT_PATH_KEY = "sonar.php.phpstan.reportPaths";
+
+  public PhpStanSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
+    super(analysisWarningsWrapper);
+  }
 
   @Override
   protected void importReport(File reportPath, SensorContext context) throws IOException, ParseException {

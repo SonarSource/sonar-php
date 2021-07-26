@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -27,6 +28,7 @@ import org.junit.Test;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
+import org.sonarsource.analyzer.commons.xml.ParseException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,13 +45,13 @@ public class JUnitLogParserForPhpUnitTest {
   }
 
   @Test
-  public void shouldGenerateEmptyTestSuites() {
+  public void shouldGenerateEmptyTestSuites() throws Exception {
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"));
     assertThat(suites).isEqualTo(new TestSuites(Collections.emptyList()));
   }
 
   @Test
-  public void shouldParseTestSuitesWithoutTime() {
+  public void shouldParseTestSuitesWithoutTime() throws Exception {
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-junit-report-no-time.xml"));
     assertThat(suites).isNotNull();
     List<TestFileReport> reports = suites.arrangeSuitesIntoTestFileReports();
@@ -58,13 +60,13 @@ public class JUnitLogParserForPhpUnitTest {
     assertThat(reports.get(1).testDurationMilliseconds()).isEqualTo(0);
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void shouldThrowAnExceptionWhenReportIsInvalid() {
+  @Test(expected = ParseException.class)
+  public void shouldThrowAnExceptionWhenReportIsInvalid() throws IOException {
     parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"));
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void shouldThrowAnExceptionWhenReportDoesNotExist() throws Exception {
+  @Test(expected = IOException.class)
+  public void shouldThrowAnExceptionWhenReportDoesNotExist() throws IOException {
     parser.parse(new File("target/unexistingFile.xml"));
   }
 

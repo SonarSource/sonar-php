@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,8 +28,6 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 
@@ -39,7 +38,6 @@ import org.sonar.plugins.php.phpunit.xml.TestCase;
  */
 public class TestFileReport {
 
-  private static final Logger LOGGER = Loggers.get(TestResultImporter.class);
   private int errors = 0;
   private int failures = 0;
   private String file;
@@ -52,7 +50,7 @@ public class TestFileReport {
     this.testDuration = testDuration;
   }
 
-  public void saveTestMeasures(SensorContext context) {
+  public void saveTestMeasures(SensorContext context, Set<String> unresolvedInputFiles) {
     InputFile unitTestFile = getUnitTestInputFile(context.fileSystem());
     if (unitTestFile != null) {
       context.<Integer>newMeasure().on(unitTestFile).withValue(skipped).forMetric(CoreMetrics.SKIPPED_TESTS).save();
@@ -62,8 +60,7 @@ public class TestFileReport {
       context.<Integer>newMeasure().on(unitTestFile).withValue(errors).forMetric(CoreMetrics.TEST_ERRORS).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue(failures).forMetric(CoreMetrics.TEST_FAILURES).save();
     } else {
-      LOGGER.debug("Following file is not located in the test folder specified in the Sonar configuration: " + file
-        + ". The test results won't be reported in Sonar.");
+      unresolvedInputFiles.add(file);
     }
   }
 

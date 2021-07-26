@@ -22,7 +22,6 @@ package org.sonar.plugins.php.reports;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -38,41 +37,45 @@ import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.startsWith;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public abstract class ReportSensorTest {
-
-  private final String SENSOR_KEY = sensor().reportKey();
-  private final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", SENSOR_KEY);
+  protected final AnalysisWarningsWrapper analysisWarnings = spy(AnalysisWarningsWrapper.class);
 
 
-  public static String language(Path file) {
+  protected static String language(Path file) {
     String path = file.toString();
     return path.substring(path.lastIndexOf('.') + 1);
   }
 
-  public static String onlyOneLogElement(List<String> elements) {
+  protected static String onlyOneLogElement(List<String> elements) {
     assertThat(elements).hasSize(1);
     return elements.get(0);
   }
 
-  public static void assertNoErrorWarnDebugLogs(LogTester logTester) {
+  protected static void assertNoErrorWarnDebugLogs(LogTester logTester) {
     org.assertj.core.api.Assertions.assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
     org.assertj.core.api.Assertions.assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty();
     org.assertj.core.api.Assertions.assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty();
   }
 
   protected List<ExternalIssue> executeSensorImporting(@Nullable String fileName) throws IOException {
-    Path baseDir = PROJECT_DIR.getParent();
+    Path projectDir = projectDir();
+    Path baseDir = projectDir.getParent();
     SensorContextTester context = SensorContextTester.create(baseDir);
-    try (Stream<Path> fileStream = Files.list(PROJECT_DIR)) {
+    try (Stream<Path> fileStream = Files.list(projectDir)) {
       fileStream.forEach(file -> addFileToContext(context, baseDir, file));
       context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(8, 9), SonarQubeSide.SERVER, SonarEdition.DEVELOPER));
       if (fileName != null) {
-        String path = PROJECT_DIR.resolve(fileName).toAbsolutePath().toString();
-        context.settings().setProperty("sonar.php." + SENSOR_KEY + ".reportPaths", path);
+        String path = projectDir.resolve(fileName).toAbsolutePath().toString();
+        context.settings().setProperty("sonar.php." + sensor().reportKey() + ".reportPaths", path);
       }
       sensor().execute(context);
       return new ArrayList<>(context.allExternalIssues());
@@ -107,6 +110,9 @@ public abstract class ReportSensorTest {
     assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.ERROR)))
       .startsWith("An error occurred when reading report file '")
       .contains("invalid-path.txt', no issue will be imported from this report.");
+
+    verify(analysisWarnings, times(1))
+      .addWarning(startsWith("An error occurred when reading report file '"));
   }
 
   @Test
@@ -116,6 +122,9 @@ public abstract class ReportSensorTest {
     assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.ERROR)))
       .startsWith("An error occurred when reading report file '")
       .contains("no issue will be imported from this report.");
+
+    verify(analysisWarnings, times(1))
+      .addWarning(startsWith("An error occurred when reading report file '"));
   }
 
   @Test
@@ -124,6 +133,8 @@ public abstract class ReportSensorTest {
     assertThat(externalIssues).isEmpty();
     assertNoErrorWarnDebugLogs(logTester());
   }
+
+  protected abstract Path projectDir();
 
   protected abstract ExternalIssuesSensor sensor();
 

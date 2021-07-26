@@ -19,7 +19,9 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import com.ctc.wstx.exc.WstxIOException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
+import org.sonarsource.analyzer.commons.xml.ParseException;
 import org.sonarsource.analyzer.commons.xml.SafetyFactory;
 
 /**
@@ -43,11 +46,13 @@ import org.sonarsource.analyzer.commons.xml.SafetyFactory;
  */
 public class JUnitLogParserForPhpUnit {
 
-  public TestSuites parse(File report) {
+  public TestSuites parse(File report) throws ParseException, IOException {
     try {
       return processRoot(report, inputFactory());
+    } catch (WstxIOException e) {
+      throw new IOException(e.getMessage(), e.getCause());
     } catch (XMLStreamException e) {
-      throw new IllegalStateException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
+      throw new ParseException(e);
     }
   }
 
