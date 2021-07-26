@@ -40,10 +40,10 @@ public class PhpStanRuleDefinitionTest {
     assertThat(repository.isExternal()).isTrue();
     assertThat(repository.rules().size()).isEqualTo(1);
 
-    RulesDefinition.Rule rule = repository.rule("finding");
+    RulesDefinition.Rule rule = repository.rule("phpstan.finding");
     assertThat(rule).isNotNull();
     assertThat(rule.name()).isEqualTo("PHPStan Rule");
-    assertThat(rule.htmlDescription()).isEqualTo("This is external rule <code>phpstan:finding</code>. No details are available.");
+    assertThat(rule.htmlDescription()).isEqualTo("This is external rule <code>phpstan:phpstan.finding</code>. No details are available.");
     assertThat(rule.tags()).isEmpty();
   }
 
