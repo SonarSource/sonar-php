@@ -1239,6 +1239,29 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
+  public void simple_declare_statement() {
+    verifyBlockCfg("" +
+      "before(succ = [END], elem = 4);" +
+      "declare (ticks=1) {" +
+      "  stmt1();" +
+      "  stmt2();" +
+      "}" +
+      "stmt3();");
+  }
+
+  @Test
+  public void declare_statement_containing_blocks() {
+    verifyBlockCfg("" +
+      "before(succ = [insideDeclare]);" +
+      "declare (ticks=1) {" +
+      "  while(insideDeclare(succ = [whileBody, afterWhile])) {" +
+      "    whileBody(succ = [insideDeclare]);" +
+      "  }" +
+      "  afterWhile(succ = [END]);" +
+      "}");
+  }
+
+  @Test
   public void switch_with_break() {
     verifyBlockCfg("" +
       "before(succ = [case1]);" +

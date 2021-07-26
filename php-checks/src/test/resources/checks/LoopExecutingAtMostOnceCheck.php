@@ -179,3 +179,11 @@ function while_try()
         }
     }
 }
+
+function while_in_declare($condition) {
+  declare(ticks = 1) {
+    while ($condition) { // Noncompliant
+      break;
+    }
+  }
+}
