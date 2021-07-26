@@ -1,6 +1,6 @@
 [
   {
-    "key": "finding",
+    "key": "phpstan.finding",
     "name": "PHPStan Rule"
   }
 ]

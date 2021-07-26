@@ -1,6 +1,6 @@
 [
   {
-    "key": "fallback",
+    "key": "psalm.finding",
     "name": "Psalm Rule",
     "description": "This reporting may be triggered by a custom Psalm rule or by a default Psalm rule that has not yet been added to the SonarPHP analyzer."
   },
