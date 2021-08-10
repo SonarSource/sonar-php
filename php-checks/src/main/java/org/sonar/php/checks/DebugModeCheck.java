@@ -19,15 +19,23 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
+import java.util.Arrays;
+import org.sonar.check.Rule;
+import org.sonar.php.checks.wordpress.WordPressDebugModeCheckPart;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-public class CakePhpDebugModeCheckTest {
+@Rule(key = "S4507")
+public class DebugModeCheck extends PHPVisitorCheck implements CheckBundle {
 
-  @Test
-  public void defaultValue() throws Exception {
-    CheckVerifier.verify(new CakePhpDebugModeCheckPart(), "CakePhpDebugModeCheck.php");
+  PHPVisitorCheck[] debugModeChecks = {
+    new CakePhpDebugModeCheckPart(),
+    new WordPressDebugModeCheckPart()
+  };
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    Arrays.stream(debugModeChecks).forEach(check -> check.visitFunctionCall(tree));
+    super.visitFunctionCall(tree);
   }
-
-
 }

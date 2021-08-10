@@ -17,17 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
-
-import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
-
-public class CakePhpDebugModeCheckTest {
-
-  @Test
-  public void defaultValue() throws Exception {
-    CheckVerifier.verify(new CakePhpDebugModeCheckPart(), "CakePhpDebugModeCheck.php");
-  }
-
-
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package org.sonar.php.checks.wordpress;

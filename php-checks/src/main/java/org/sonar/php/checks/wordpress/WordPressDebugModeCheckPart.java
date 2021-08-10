@@ -17,17 +17,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.checks.wordpress;
 
-import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
+import java.util.Collections;
+import java.util.Set;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-public class CakePhpDebugModeCheckTest {
+public class WordPressDebugModeCheckPart extends WordPressConfigVisitor {
 
-  @Test
-  public void defaultValue() throws Exception {
-    CheckVerifier.verify(new CakePhpDebugModeCheckPart(), "CakePhpDebugModeCheck.php");
+  private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
+
+  @Override
+  protected Set<String> specificConfig() {
+    return Collections.singleton("WP_DEBUG");
   }
 
-
+  @Override
+  void visitConfigDeclaration(FunctionCallTree config) {
+    configValue(config).filter(CheckUtils::isTrueValue).ifPresent(v -> newIssue(config, MESSAGE));
+  }
 }

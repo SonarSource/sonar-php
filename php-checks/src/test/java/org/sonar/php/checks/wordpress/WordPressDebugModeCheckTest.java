@@ -17,17 +17,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.checks.wordpress;
 
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class CakePhpDebugModeCheckTest {
+public class WordPressDebugModeCheckTest {
 
   @Test
-  public void defaultValue() throws Exception {
-    CheckVerifier.verify(new CakePhpDebugModeCheckPart(), "CakePhpDebugModeCheck.php");
+  public void test() {
+    CheckVerifier.verify(new WordPressDebugModeCheckPart(), "wordpress/WordPressDebugModeCheck/wp-config.php");
   }
-
-
 }
