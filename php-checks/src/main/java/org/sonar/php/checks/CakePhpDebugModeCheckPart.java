@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.Locale;
 import java.util.Optional;
-import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -33,8 +32,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
-@Rule(key = "S4507")
-public class CakePhpDebugModeCheck extends PHPVisitorCheck {
+public class CakePhpDebugModeCheckPart extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
 
@@ -64,7 +62,7 @@ public class CakePhpDebugModeCheck extends PHPVisitorCheck {
     }
   }
 
-  private boolean isTrue(ExpressionTree tree) {
+  private static boolean isTrue(ExpressionTree tree) {
     if (tree.is(Tree.Kind.BOOLEAN_LITERAL, Tree.Kind.NUMERIC_LITERAL, Tree.Kind.REGULAR_STRING_LITERAL) &&
       CheckUtils.isTrueValue(tree)) {
       return true;

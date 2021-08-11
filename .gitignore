@@ -34,3 +34,4 @@ Desktop.ini
 .sonar
 .scannerwork
 
+rule-api-*.jar

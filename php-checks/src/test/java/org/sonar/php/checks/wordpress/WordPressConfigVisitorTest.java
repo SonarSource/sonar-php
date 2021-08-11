@@ -17,17 +17,30 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.checks.wordpress;
 
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-public class CakePhpDebugModeCheckTest {
+public class WordPressConfigVisitorTest {
 
   @Test
-  public void defaultValue() throws Exception {
-    CheckVerifier.verify(new CakePhpDebugModeCheck(), "CakePhpDebugModeCheck.php");
+  public void test() {
+    CheckVerifier.verify(new TestWordPressConfigVisitor(), "wordpress/WordPressConfigVisitor/wp-config.php");
   }
 
+  @Test
+  public void test_non_config_file() {
+    CheckVerifier.verifyNoIssue(new TestWordPressConfigVisitor(), "wordpress/WordPressConfigVisitor/file.php");
+  }
+
+  static class TestWordPressConfigVisitor extends WordPressConfigVisitor {
+
+    @Override
+    void visitConfigDeclaration(FunctionCallTree config) {
+      newIssue(config, "");
+    }
+  }
 
 }
