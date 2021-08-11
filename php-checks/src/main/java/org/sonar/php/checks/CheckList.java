@@ -45,7 +45,6 @@ import org.sonar.php.checks.phpunit.TestClassNameCheck;
 import org.sonar.php.checks.security.AuthorizationsCheck;
 import org.sonar.php.checks.security.CORSPolicyCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
-import org.sonar.php.checks.security.ClearTextProtocolsCheck;
 import org.sonar.php.checks.security.CommandLineArgumentCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;

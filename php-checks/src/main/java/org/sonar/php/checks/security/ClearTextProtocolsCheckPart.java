@@ -50,8 +50,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-@Rule(key = "S5332")
-public class ClearTextProtocolsCheck extends PHPVisitorCheck {
+
+public class ClearTextProtocolsCheckPart extends PHPVisitorCheck {
   private static final List<String> UNSAFE_PROTOCOLS = Arrays.asList("http://", "ftp://", "telnet://");
   private static final Map<String, String> ALTERNATIVE_PROTOCOLS = new HashMap<>();
 
