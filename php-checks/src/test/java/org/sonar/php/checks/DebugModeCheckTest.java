@@ -17,15 +17,17 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.wordpress;
+package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
 
-public class WordPressDebugModeCheckTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class DebugModeCheckTest {
 
   @Test
-  public void test() {
-    CheckVerifier.verify(new WordPressDebugModeCheckPart(), "wordpress/WordPressDebugModeCheck/wp-config.php");
+  public void test() throws Exception {
+    DebugModeCheck check = new DebugModeCheck();
+    assertThat(check.checks()).hasSize(2);
   }
 }

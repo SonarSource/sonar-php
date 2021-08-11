@@ -37,10 +37,13 @@ public abstract class WordPressConfigVisitor extends FunctionUsageCheck {
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    if (context().getPhpFile().filename().equals("wp-config.php")) {
-      if (specificConfig().isEmpty() || specificConfig().stream().anyMatch(configKey -> isConfigKey(tree, configKey)))
+    if (context().getPhpFile().filename().equals("wp-config.php") && matchSpecificConfig(tree)) {
       visitConfigDeclaration(tree);
     }
+  }
+
+  private boolean matchSpecificConfig(FunctionCallTree tree) {
+    return specificConfig().isEmpty() || specificConfig().stream().anyMatch(configKey -> isConfigKey(tree, configKey));
   }
 
   protected static Optional<ExpressionTree> configKey(FunctionCallTree tree) {

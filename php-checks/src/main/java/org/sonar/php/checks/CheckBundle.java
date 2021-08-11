@@ -19,5 +19,22 @@
  */
 package org.sonar.php.checks;
 
-public interface CheckBundle {
+import java.util.List;
+import java.util.stream.Collectors;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
+
+public abstract class CheckBundle extends PHPVisitorCheck {
+
+  @Override
+  public List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
+    return checks().stream().map(check -> check.analyze(file, tree, symbolTable)).flatMap(List::stream)
+      .collect(Collectors.toList());
+  }
+
+  protected abstract List<PHPCheck> checks();
 }

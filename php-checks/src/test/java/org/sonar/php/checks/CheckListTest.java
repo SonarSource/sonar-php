@@ -57,7 +57,7 @@ public class CheckListTest {
     Set<Class<?>> checks = CheckList.getAllChecks();
 
     for (Class<?> cls : checks) {
-      if (cls != ParsingErrorCheck.class && !CheckBundle.class.isAssignableFrom(cls)) {
+      if (cls != ParsingErrorCheck.class) {
         String testName = '/' + cls.getName().replace('.', '/') + "Test.class";
         assertThat(getClass().getResource(testName))
           .overridingErrorMessage("No test for " + cls.getSimpleName())

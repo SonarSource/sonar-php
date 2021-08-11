@@ -17,22 +17,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.checks.wordpress;
 
-import java.util.Arrays;
-import java.util.List;
-import org.sonar.check.Rule;
-import org.sonar.php.checks.wordpress.WordPressDebugModeCheckPart;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.junit.Test;
+import org.sonar.plugins.php.CheckVerifier;
 
-@Rule(key = "S4507")
-public class DebugModeCheck extends CheckBundle  {
+public class WordPressDebugModeCheckPartTest {
 
-  @Override
-  protected List<PHPCheck> checks() {
-    return Arrays.asList(
-      new CakePhpDebugModeCheckPart(),
-      new WordPressDebugModeCheckPart()
-    );
+  @Test
+  public void test() {
+    CheckVerifier.verify(new WordPressDebugModeCheckPart(), "wordpress/WordPressDebugModeCheck/wp-config.php");
   }
 }
