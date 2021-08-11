@@ -37,13 +37,13 @@ public abstract class WordPressConfigVisitor extends FunctionUsageCheck {
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    if (context().getPhpFile().filename().equals("wp-config.php") && matchSpecificConfig(tree)) {
+    if (context().getPhpFile().filename().equals("wp-config.php") && shouldVisitConfig(tree)) {
       visitConfigDeclaration(tree);
     }
   }
 
-  private boolean matchSpecificConfig(FunctionCallTree tree) {
-    return specificConfig().isEmpty() || specificConfig().stream().anyMatch(configKey -> isConfigKey(tree, configKey));
+  private boolean shouldVisitConfig(FunctionCallTree tree) {
+    return configsToVisit().isEmpty() || configsToVisit().stream().anyMatch(configKey -> isConfigKey(tree, configKey));
   }
 
   protected static Optional<ExpressionTree> configKey(FunctionCallTree tree) {
@@ -58,7 +58,7 @@ public abstract class WordPressConfigVisitor extends FunctionUsageCheck {
     return configKey(tree).filter(argument -> CheckUtils.isStringLiteralWithValue(argument, key)).isPresent();
   }
 
-  protected Set<String> specificConfig() {
+  protected Set<String> configsToVisit() {
     return Collections.emptySet();
   }
 

@@ -29,7 +29,7 @@ public class WordPressDebugModeCheckPart extends WordPressConfigVisitor {
   private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
 
   @Override
-  protected Set<String> specificConfig() {
+  protected Set<String> configsToVisit() {
     return Collections.singleton("WP_DEBUG");
   }
 

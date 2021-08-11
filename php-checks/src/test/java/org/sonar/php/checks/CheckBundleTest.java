@@ -42,11 +42,12 @@ public class CheckBundleTest {
   private static final SymbolTable TABLE = mock(SymbolTable.class);
 
   @Test
-  public void test() {
+  public void test_bundle_part_analysis() {
     CheckBundle bundle = new TestCheckBundle();
     assertThat(bundle.analyze(FILE, UNIT_TREE, TABLE)).hasSize(3);
   }
 
+  // Bundle which contains out of 3 identical parts which all raise a single dummy issue
   static class TestCheckBundle extends CheckBundle {
 
     @Override
