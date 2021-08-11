@@ -62,7 +62,7 @@ public class CakePhpDebugModeCheckPart extends PHPVisitorCheck {
     }
   }
 
-  private boolean isTrue(ExpressionTree tree) {
+  private static boolean isTrue(ExpressionTree tree) {
     if (tree.is(Tree.Kind.BOOLEAN_LITERAL, Tree.Kind.NUMERIC_LITERAL, Tree.Kind.REGULAR_STRING_LITERAL) &&
       CheckUtils.isTrueValue(tree)) {
       return true;
