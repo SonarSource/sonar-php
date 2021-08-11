@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.security;
 
-import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
