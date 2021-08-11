@@ -20,13 +20,16 @@
 package org.sonar.php.checks.wordpress;
 
 import java.util.Set;
+import org.sonar.php.checks.CheckBundle;
+import org.sonar.php.checks.CheckBundlePart;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-public class WordPressForceSslCheckPart extends WordPressConfigVisitor {
+public class WordPressForceSslCheckPart extends WordPressConfigVisitor implements CheckBundlePart {
 
   private static final String MESSAGE = "Using non SSL protocol is insecure. Force using SSL protocol instead.";
+  private CheckBundle bundle;
 
   @Override
   protected Set<String> configsToVisit() {
@@ -35,6 +38,16 @@ public class WordPressForceSslCheckPart extends WordPressConfigVisitor {
 
   @Override
   void visitConfigDeclaration(FunctionCallTree config) {
-    configValue(config).filter(CheckUtils::isFalseValue).ifPresent(v -> newIssue(config, MESSAGE));
+    configValue(config).filter(CheckUtils::isFalseValue).ifPresent(v -> context().newIssue(getBundle(), config, MESSAGE));
+  }
+
+  @Override
+  public void setBundle(CheckBundle bundle) {
+    this.bundle = bundle;
+  }
+
+  @Override
+  public CheckBundle getBundle() {
+    return bundle;
   }
 }

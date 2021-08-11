@@ -638,7 +638,7 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
   }
 
   @Override
-  public final List<PhpIssue> analyze(CheckContext context) {
+  public List<PhpIssue> analyze(CheckContext context) {
     depth = 0;
     this.context = context;
     visitCompilationUnit(context.tree());

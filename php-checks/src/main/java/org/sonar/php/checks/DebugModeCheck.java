@@ -23,13 +23,12 @@ import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.wordpress.WordPressDebugModeCheckPart;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 @Rule(key = "S4507")
 public class DebugModeCheck extends CheckBundle  {
 
   @Override
-  protected List<PHPCheck> checks() {
+  protected List<CheckBundlePart> checks() {
     return Arrays.asList(
       new CakePhpDebugModeCheckPart(),
       new WordPressDebugModeCheckPart()

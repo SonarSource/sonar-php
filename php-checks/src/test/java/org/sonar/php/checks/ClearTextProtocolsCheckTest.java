@@ -20,15 +20,38 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.sonar.plugins.php.CheckVerifier;
 
 
 public class ClearTextProtocolsCheckTest {
 
   @Test
-  public void test() {
-    CheckBundle bundle = new ClearTextProtocolsCheck();
-    assertThat(bundle.checks()).hasSize(2);
+  public void string_literals() {
+    CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/stringLiterals.php");
+  }
+
+  @Test
+  public void ftp() {
+    CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/ftp.php");
+  }
+
+  @Test
+  public void laravel_mail() {
+    CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/laravel/config/mail.php");
+  }
+
+  @Test
+  public void swift_mailer() {
+    CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/swiftMailer.php");
+  }
+
+  @Test
+  public void php_mailer() {
+    CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/phpMailer.php");
+  }
+
+  @Test
+  public void wordpress() {
+    CheckVerifier.verify(new ClearTextProtocolsCheck(), "wordpress/WordPressForceSslCheck/wp-config.php");
   }
 }

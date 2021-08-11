@@ -24,13 +24,12 @@ import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.security.ClearTextProtocolsCheckPart;
 import org.sonar.php.checks.wordpress.WordPressForceSslCheckPart;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 @Rule(key = "S5332")
 public class ClearTextProtocolsCheck extends CheckBundle {
 
   @Override
-  protected List<PHPCheck> checks() {
+  protected List<CheckBundlePart> checks() {
     return Arrays.asList(
       new ClearTextProtocolsCheckPart(),
       new WordPressForceSslCheckPart()

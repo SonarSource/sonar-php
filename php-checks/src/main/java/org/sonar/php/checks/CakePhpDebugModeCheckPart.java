@@ -32,12 +32,13 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
-public class CakePhpDebugModeCheckPart extends PHPVisitorCheck {
+public class CakePhpDebugModeCheckPart extends PHPVisitorCheck implements CheckBundlePart {
 
   private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
 
   private static final String CONFIG_FUNCTION = "Configure::config".toLowerCase(Locale.ROOT);
   private static final String WRITE_FUNCTION = "Configure::write".toLowerCase(Locale.ROOT);
+  private CheckBundle bundle;
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -58,7 +59,7 @@ public class CakePhpDebugModeCheckPart extends PHPVisitorCheck {
       && firstArgument.value().is(Tree.Kind.REGULAR_STRING_LITERAL)
       && trimQuotes((LiteralTree) firstArgument.value()).equals("debug")
       && isTrue(secondArgument.value())) {
-      context().newIssue(this, tree, MESSAGE);
+      context().newIssue(getBundle(), tree, MESSAGE);
     }
   }
 
@@ -75,5 +76,15 @@ public class CakePhpDebugModeCheckPart extends PHPVisitorCheck {
       }
     }
     return false;
+  }
+
+  @Override
+  public void setBundle(CheckBundle bundle) {
+    this.bundle = bundle;
+  }
+
+  @Override
+  public CheckBundle getBundle() {
+    return bundle;
   }
 }
