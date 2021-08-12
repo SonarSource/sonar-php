@@ -17,15 +17,22 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.wordpress;
+package org.sonar.php.checks;
 
-import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
+import java.util.Arrays;
+import java.util.List;
+import org.sonar.check.Rule;
+import org.sonar.php.checks.security.ClearTextProtocolsCheckPart;
+import org.sonar.php.checks.wordpress.WordPressForceSslCheckPart;
 
-public class WordPressDebugModeCheckPartTest {
+@Rule(key = "S5332")
+public class ClearTextProtocolsCheck extends CheckBundle {
 
-  @Test
-  public void test() {
-    CheckVerifier.verify(new WordPressDebugModeCheckPart(), "wordpress/WordPressDebugModeCheck/wp-config.php");
+  @Override
+  protected List<CheckBundlePart> checks() {
+    return Arrays.asList(
+      new ClearTextProtocolsCheckPart(),
+      new WordPressForceSslCheckPart()
+    );
   }
 }

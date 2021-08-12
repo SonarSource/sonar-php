@@ -19,7 +19,19 @@
  */
 package org.sonar.php.checks.security;
 
-import org.sonar.check.Rule;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+import javax.annotation.Nullable;
+import org.sonar.php.checks.CheckBundle;
+import org.sonar.php.checks.CheckBundlePart;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -38,20 +50,8 @@ import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import javax.annotation.Nullable;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
 
-@Rule(key = "S5332")
-public class ClearTextProtocolsCheck extends PHPVisitorCheck {
+public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements CheckBundlePart {
   private static final List<String> UNSAFE_PROTOCOLS = Arrays.asList("http://", "ftp://", "telnet://");
   private static final Map<String, String> ALTERNATIVE_PROTOCOLS = new HashMap<>();
 
@@ -102,6 +102,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   private boolean inLaravelConfigFile;
 
   private final Map<ExpressionTree, MailConfig> mailConfigs = new HashMap<>();
+  private CheckBundle bundle;
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
@@ -109,7 +110,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     super.visitCompilationUnit(tree);
     mailConfigs.forEach((definition, config) -> {
       if (config.isClearText()) {
-        context().newIssue(this, config.encryption != null ? config.encryption : definition, MESSAGE_MAIL);
+        context().newIssue(getBundle(), config.encryption != null ? config.encryption : definition, MESSAGE_MAIL);
       }
     });
     mailConfigs.clear();
@@ -131,7 +132,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
     if (startsWithUnsafeProtocol(value) && !isExceptionUrl(value, tree)) {
       ALTERNATIVE_PROTOCOLS.keySet().stream().filter(value::startsWith)
         .findFirst()
-        .ifPresent(usedProtocol -> context().newIssue(this, tree, String.format(MESSAGE_PROTOCOL, usedProtocol, ALTERNATIVE_PROTOCOLS.get(usedProtocol))));
+        .ifPresent(usedProtocol -> context().newIssue(getBundle(), tree, String.format(MESSAGE_PROTOCOL, usedProtocol, ALTERNATIVE_PROTOCOLS.get(usedProtocol))));
     }
   }
 
@@ -146,7 +147,7 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if ("ftp_connect".equalsIgnoreCase(CheckUtils.getFunctionName(tree))) {
-      context().newIssue(this, tree.callee(), MESSAGE_FTP);
+      context().newIssue(getBundle(), tree.callee(), MESSAGE_FTP);
     }
 
     super.visitFunctionCall(tree);
@@ -236,6 +237,16 @@ public class ClearTextProtocolsCheck extends PHPVisitorCheck {
         mailConfigs.put(pairTree.key(), config);
       }
     }
+  }
+
+  @Override
+  public void setBundle(CheckBundle bundle) {
+    this.bundle = bundle;
+  }
+
+  @Override
+  public CheckBundle getBundle() {
+    return bundle;
   }
 
   private static class LaravelMailConfig extends MailConfig {

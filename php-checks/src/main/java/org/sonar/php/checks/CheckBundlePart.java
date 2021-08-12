@@ -19,15 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 
-public class CakePhpDebugModeCheckPartTest {
+public interface CheckBundlePart extends PHPCheck {
 
-  @Test
-  public void defaultValue() throws Exception {
-    CheckVerifier.verify(new CakePhpDebugModeCheckPart(), "CakePhpDebugModeCheck.php");
-  }
+  void setBundle(CheckBundle bundle);
 
-
+  CheckBundle getBundle();
 }

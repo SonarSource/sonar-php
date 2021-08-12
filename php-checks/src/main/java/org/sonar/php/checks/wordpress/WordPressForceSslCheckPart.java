@@ -19,26 +19,26 @@
  */
 package org.sonar.php.checks.wordpress;
 
-import java.util.Collections;
 import java.util.Set;
 import org.sonar.php.checks.CheckBundle;
 import org.sonar.php.checks.CheckBundlePart;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-public class WordPressDebugModeCheckPart extends WordPressConfigVisitor implements CheckBundlePart {
+public class WordPressForceSslCheckPart extends WordPressConfigVisitor implements CheckBundlePart {
 
-  private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
+  private static final String MESSAGE = "Using non SSL protocol is insecure. Force using SSL protocol instead.";
   private CheckBundle bundle;
 
   @Override
   protected Set<String> configsToVisit() {
-    return Collections.singleton("WP_DEBUG");
+    return SetUtils.immutableSetOf("FORCE_SSL_ADMIN", "FORCE_SSL_LOGIN");
   }
 
   @Override
   void visitConfigDeclaration(FunctionCallTree config) {
-    configValue(config).filter(CheckUtils::isTrueValue).ifPresent(v -> context().newIssue(getBundle(), config, MESSAGE));
+    configValue(config).filter(CheckUtils::isFalseValue).ifPresent(v -> context().newIssue(getBundle(), config, MESSAGE));
   }
 
   @Override

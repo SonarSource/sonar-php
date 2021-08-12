@@ -20,14 +20,17 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class DebugModeCheckTest {
 
   @Test
-  public void test() throws Exception {
-    DebugModeCheck check = new DebugModeCheck();
-    assertThat(check.checks()).hasSize(2);
+  public void test_wordpress() {
+    CheckVerifier.verify(new DebugModeCheck(), "wordpress/WordPressDebugModeCheck/wp-config.php");
+  }
+
+  @Test
+  public void test_cakephp() {
+    CheckVerifier.verify(new DebugModeCheck(), "CakePhpDebugModeCheck.php");
   }
 }
