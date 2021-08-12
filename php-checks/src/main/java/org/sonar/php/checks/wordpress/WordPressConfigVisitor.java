@@ -37,9 +37,13 @@ public abstract class WordPressConfigVisitor extends FunctionUsageCheck {
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    if (context().getPhpFile().filename().equals("wp-config.php") && shouldVisitConfig(tree)) {
+    if (isWpConfigFile() && shouldVisitConfig(tree)) {
       visitConfigDeclaration(tree);
     }
+  }
+
+  protected boolean isWpConfigFile() {
+    return context().getPhpFile().filename().equals("wp-config.php");
   }
 
   private boolean shouldVisitConfig(FunctionCallTree tree) {
