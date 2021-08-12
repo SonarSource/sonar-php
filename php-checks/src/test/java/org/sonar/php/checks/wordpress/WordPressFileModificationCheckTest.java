@@ -21,29 +21,18 @@ package org.sonar.php.checks.wordpress;
 
 import java.io.IOException;
 import org.junit.Test;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
 
-public class WordPressFileEditorCheckTest extends AbstractWordPressCheckTest {
+public class WordPressFileModificationCheckTest extends AbstractWordPressCheckTest {
 
-  PHPCheck check = new WordPressFileEditorCheck();
+  private final WordPressFileModificationCheck check = new WordPressFileModificationCheck();
 
   @Test
-  public void edit_false() throws IOException {
-    wordPressVerifier.verify(check, "wordpress/WordPressFileEditorCheck/editFalse.php");
+  public void test_existing_config() throws IOException {
+    wordPressVerifier.verify(check, "wordpress/WordPressFileModificationCheck/existing_config.php");
   }
 
   @Test
-  public void edit_false_mods_true() throws IOException {
-    wordPressVerifier.verifyNoIssue(check, "wordpress/WordPressFileEditorCheck/editFalseModsTrue.php");
-  }
-
-  @Test
-  public void edit_false_mods_false() throws IOException {
-    wordPressVerifier.verify(check, "wordpress/WordPressFileEditorCheck/editFalseModsFalse.php");
-  }
-
-  @Test
-  public void edit_not_set_leads_to_file_issue() throws IOException {
-    wordPressVerifier.verifyAbsence(check, "Plugin and theme files editor is active");
+  public void test_absence_of_config() throws IOException {
+    wordPressVerifier.verifyAbsence(check, "Make sure allowing modification of themes and plugins is intended.");
   }
 }

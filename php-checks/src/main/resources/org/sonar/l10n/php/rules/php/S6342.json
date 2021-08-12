@@ -1,0 +1,31 @@
+{
+  "title": "Allowing themes and plugins to be managed in WordPress admin area is security-sensitive",
+  "type": "SECURITY_HOTSPOT",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "cwe",
+    "owasp-a1",
+    "owasp-a6",
+    "owasp-a7"
+  ],
+  "securityStandards": {
+    "CWE": [
+      79,
+      94,
+      95
+    ],
+    "OWASP": [
+      "A1",
+      "A6",
+      "A7"
+    ]
+  },
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6342",
+  "sqKey": "S6342",
+  "scope": "All"
+}

@@ -19,31 +19,18 @@
  */
 package org.sonar.php.checks.wordpress;
 
-import java.io.IOException;
-import org.junit.Test;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
+import org.sonar.plugins.php.WordPressVerifier;
 
-public class WordPressFileEditorCheckTest extends AbstractWordPressCheckTest {
+public abstract class AbstractWordPressCheckTest {
 
-  PHPCheck check = new WordPressFileEditorCheck();
+  @Rule
+  public TemporaryFolder folder = new TemporaryFolder();
 
-  @Test
-  public void edit_false() throws IOException {
-    wordPressVerifier.verify(check, "wordpress/WordPressFileEditorCheck/editFalse.php");
-  }
+  public WordPressVerifier wordPressVerifier;
 
-  @Test
-  public void edit_false_mods_true() throws IOException {
-    wordPressVerifier.verifyNoIssue(check, "wordpress/WordPressFileEditorCheck/editFalseModsTrue.php");
-  }
-
-  @Test
-  public void edit_false_mods_false() throws IOException {
-    wordPressVerifier.verify(check, "wordpress/WordPressFileEditorCheck/editFalseModsFalse.php");
-  }
-
-  @Test
-  public void edit_not_set_leads_to_file_issue() throws IOException {
-    wordPressVerifier.verifyAbsence(check, "Plugin and theme files editor is active");
+  public AbstractWordPressCheckTest() {
+    wordPressVerifier = new WordPressVerifier(folder);
   }
 }
