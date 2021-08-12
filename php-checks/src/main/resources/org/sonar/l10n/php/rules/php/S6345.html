@@ -1,0 +1,38 @@
+<p>External requests initiated by a WordPress server should be considered as security-sensitive. They may contain sensitive data which is stored in
+the files or in the database of the server. It’s important for the administrator of a WordPress server to understand what they contain and to which
+server they are sent.</p>
+<p>WordPress makes it possible to block external requests by setting the <code>WP_HTTP_BLOCK_EXTERNAL</code> option to <code>true</code>. It’s then
+possible to authorize requests to only a few servers using another option named <code>WP_ACCESSIBLE_HOSTS</code>.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> Your WordPress website contains code which may call external requests to servers you don’t know. </li>
+  <li> Your WordPress website may send sensitive data to other servers. </li>
+  <li> Your WordPress website uses a lot of plugins or themes. </li>
+</ul>
+<p>There is a risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<ul>
+  <li> Uninstall WordPress plugins which send requests to servers you don’t know. </li>
+  <li> Make sure that <code>WP_HTTP_BLOCK_EXTERNAL</code> is defined in <code>wp-config.php</code>. </li>
+  <li> Make sure that <code>WP_HTTP_BLOCK_EXTERNAL</code> is set to <code>true</code>. </li>
+  <li> Make sure that <code>WP_ACCESSIBLE_HOSTS</code> is configured to authorize requests to the servers you trust. </li>
+</ul>
+<h2>Sensitive Code Example</h2>
+<pre>
+define( 'WP_HTTP_BLOCK_EXTERNAL', false ); // Sensitive
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+define( 'WP_HTTP_BLOCK_EXTERNAL', true );
+define( 'WP_ACCESSIBLE_HOSTS', 'api.wordpress.org' );
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://wordpress.org/support/article/editing-wp-config-php/#block-external-url-requestsl">wordpress.org</a> - Block External URL
+  Requests </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://owasp.org/www-community/attacks/Server_Side_Request_Forgery">OWASP Attack Category</a> - Server Side Request Forgery </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/918">MITRE, CWE-918</a> - Server-Side Request Forgery (SSRF) </li>
+</ul>
+
