@@ -32,11 +32,11 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public class WordPressVerifier {
+public class WordPressConfigVerifier {
 
   private final TemporaryFolder folder;
 
-  public WordPressVerifier(TemporaryFolder folder) {
+  public WordPressConfigVerifier(TemporaryFolder folder) {
     this.folder = folder;
   }
 

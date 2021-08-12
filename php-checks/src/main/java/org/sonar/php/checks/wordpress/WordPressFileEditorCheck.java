@@ -50,6 +50,9 @@ public class WordPressFileEditorCheck extends WordPressConfigVisitor {
           .ifPresent(value -> newIssue(fileEditConfigTree, MESSAGE));
       }
     }
+
+    fileEditConfigTree = null;
+    fileModsConfigTree = null;
   }
 
   @Override

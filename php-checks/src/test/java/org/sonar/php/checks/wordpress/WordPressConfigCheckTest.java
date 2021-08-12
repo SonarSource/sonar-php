@@ -21,16 +21,16 @@ package org.sonar.php.checks.wordpress;
 
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.plugins.php.WordPressVerifier;
+import org.sonar.plugins.php.WordPressConfigVerifier;
 
-public abstract class AbstractWordPressCheckTest {
+public abstract class WordPressConfigCheckTest {
 
   @Rule
   public TemporaryFolder folder = new TemporaryFolder();
 
-  public WordPressVerifier wordPressVerifier;
+  public WordPressConfigVerifier wordPressVerifier;
 
-  public AbstractWordPressCheckTest() {
-    wordPressVerifier = new WordPressVerifier(folder);
+  public WordPressConfigCheckTest() {
+    wordPressVerifier = new WordPressConfigVerifier(folder);
   }
 }

@@ -22,7 +22,7 @@ package org.sonar.php.checks.wordpress;
 import java.io.IOException;
 import org.junit.Test;
 
-public class WordPressFileModificationCheckTest extends AbstractWordPressCheckTest {
+public class WordPressFileModificationCheckTest extends WordPressConfigCheckTest {
 
   private final WordPressFileModificationCheck check = new WordPressFileModificationCheck();
 

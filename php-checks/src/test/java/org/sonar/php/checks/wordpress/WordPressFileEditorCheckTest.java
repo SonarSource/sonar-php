@@ -23,7 +23,7 @@ import java.io.IOException;
 import org.junit.Test;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
-public class WordPressFileEditorCheckTest extends AbstractWordPressCheckTest {
+public class WordPressFileEditorCheckTest extends WordPressConfigCheckTest {
 
   PHPCheck check = new WordPressFileEditorCheck();
 
