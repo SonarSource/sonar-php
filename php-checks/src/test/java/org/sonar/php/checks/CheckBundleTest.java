@@ -43,7 +43,6 @@ public class CheckBundleTest {
     verify(BUNDLE_PART).analyze(any(CheckContext.class));
   }
 
-  // Bundle which contains out of 3 identical parts which all raise a single dummy issue
   static class TestCheckBundle extends CheckBundle {
 
     @Override
