@@ -1,0 +1,43 @@
+<p>WordPress makes it possible to edit theme and plugin files directly in the Administration Screens. While it may look like an easy way to customize
+a theme or do a quick change, it’s a dangerous feature. When visiting the theme or plugin editor for the first time, WordPress displays a warning to
+make it clear that using such a feature may break the web site by mistake. More importantly, users who have access to this feature can trigger the
+execution of any PHP code and may therefore take full control of the WordPress instance. This security risk could be exploited by an attacker who
+manages to get access to one of the authorized users. Setting the <code>DISALLOW_FILE_EDIT</code> option to <code>true</code> in
+<code>wp-config.php</code> disables this risky feature. The default value is <code>false</code>.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> You really need to use the theme and plugin editors. </li>
+  <li> The theme and plugin editors are available to users who cannot be fully trusted. </li>
+  <li> There’s a chance that the accounts of authorized users get compromised. </li>
+</ul>
+<p>There is a risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<ul>
+  <li> Modify the theme and plugin files using a local editor and deploy them to the server in a secure way. </li>
+  <li> Make sure that <code>DISALLOW_FILE_EDIT</code> is defined in <code>wp-config.php</code>. </li>
+  <li> Make sure that <code>DISALLOW_FILE_EDIT</code> is set to <code>true</code>. </li>
+</ul>
+<h2>Sensitive Code Example</h2>
+<pre>
+define( 'DISALLOW_FILE_EDIT', false ); // Sensitive
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+define( 'DISALLOW_FILE_EDIT', true );
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://wordpress.org/support/article/editing-wp-config-php/#disable-the-plugin-and-theme-editor">wordpress.org</a> - Disable the
+  Plugin and Theme Editor </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A1_2017-Injection">OWASP Top 10 2017 Category A1</a> - Injection </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A7_2017-Cross-Site_Scripting_(XSS)">OWASP Top 10 2017 Category A7</a> - Cross-Site
+  Scripting (XSS) </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/79">MITRE, CWE-79</a> - Improper Neutralization of Input During Web Page Generation
+  ('Cross-site Scripting') </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/94">MITRE, CWE-94</a> - Improper Control of Generation of Code ('Code Injection') </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/95">MITRE, CWE-95</a> - Improper Neutralization of Directives in Dynamically Evaluated Code
+  ('Eval Injection') </li>
+</ul>
+
