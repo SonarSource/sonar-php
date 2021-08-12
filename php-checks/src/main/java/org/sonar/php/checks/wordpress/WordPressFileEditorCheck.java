@@ -30,7 +30,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 @Rule(key="S6341")
 public class WordPressFileEditorCheck extends WordPressConfigVisitor {
 
-  private static final String MESSAGE = "Plugin and theme files editor is activated";
+  private static final String MESSAGE = "Plugin and theme files editor is active";
 
   private FunctionCallTree fileEditConfigTree;
   private FunctionCallTree fileModsConfigTree;
