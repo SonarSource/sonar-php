@@ -49,4 +49,9 @@ public class WordPressFileEditorCheckTest {
     PHPCheckTest.check(check, TestUtils.getCheckFile("wordpress/WordPressFileEditorCheck/notSet/wp-config.php"),
       Collections.singletonList(new FileIssue(check, "Plugin and theme files editor is active")));
   }
+
+  @Test
+  public void do_not_raise_file_issue_when_not_wp_config() {
+    CheckVerifier.verifyNoIssue(new WordPressFileEditorCheck(), "wordpress/WordPressFileEditorCheck/notWpConfig.php");
+  }
 }

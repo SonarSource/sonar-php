@@ -42,7 +42,7 @@ public class WordPressFileEditorCheck extends WordPressConfigVisitor {
 
     super.visitCompilationUnit(tree);
 
-    if (!fileModsDisallowed()) {
+    if (!fileModsDisallowed() && isWpConfigFile()) {
       if (fileEditConfigTree == null) {
         context().newFileIssue(this, MESSAGE);
       } else {
