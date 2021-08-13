@@ -71,6 +71,7 @@ import org.sonar.php.checks.wordpress.WordPressExternalRequestsCheck;
 import org.sonar.php.checks.wordpress.WordPressFileEditorCheck;
 import org.sonar.php.checks.wordpress.WordPressFileModificationCheck;
 import org.sonar.php.checks.wordpress.WordPressLateConfigCheck;
+import org.sonar.php.checks.wordpress.WordPressSaltsCheck;
 import org.sonar.php.utils.collections.SetUtils;
 
 public class CheckList {
@@ -297,6 +298,7 @@ public class CheckList {
       WordPressFileEditorCheck.class,
       WordPressFileModificationCheck.class,
       WordPressLateConfigCheck.class,
+      WordPressSaltsCheck.class,
       WrongAssignmentOperatorCheck.class,
       XxeCheck.class,
       ZipEntryCheck.class);
