@@ -65,6 +65,7 @@ import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 import org.sonar.php.checks.security.StandardInputUsageCheck;
 import org.sonar.php.checks.security.XxeCheck;
+import org.sonar.php.checks.wordpress.WordPressAutoUpdateCheck;
 import org.sonar.php.checks.wordpress.WordPressConfigNameCheck;
 import org.sonar.php.checks.wordpress.WordPressDbRepairCheck;
 import org.sonar.php.checks.wordpress.WordPressExternalRequestsCheck;
@@ -291,6 +292,7 @@ public class CheckList {
       VariableVariablesCheck.class,
       VarKeywordUsageCheck.class,
       WeakSSLProtocolCheck.class,
+      WordPressAutoUpdateCheck.class,
       WordPressDbRepairCheck.class,
       WordPressConfigNameCheck.class,
       WordPressExternalRequestsCheck.class,
