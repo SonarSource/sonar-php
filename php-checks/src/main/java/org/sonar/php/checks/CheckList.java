@@ -228,6 +228,7 @@ public class CheckList {
       QueryUsageCheck.class,
       RandomGeneratorCheck.class,
       ReassignedBeforeUsedCheck.class,
+      RedefineConstantCheck.class,
       RedundantFinalCheck.class,
       RedundantJumpCheck.class,
       RedundantParenthesesCheck.class,

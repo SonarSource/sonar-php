@@ -1,0 +1,14 @@
+{
+  "title": "Constants should not be redefined",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6344",
+  "sqKey": "S6344",
+  "scope": "All"
+}
