@@ -22,11 +22,13 @@ package org.sonar.php.checks.wordpress;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
+@Rule(key = "S6339")
 public class WordPressSaltsCheck extends WordPressConfigVisitor {
 
   private static final String DEFAULT_VALUE_MESSAGE = "default value";
