@@ -1,0 +1,21 @@
+{
+  "title": "Allowing unauthenticated database repair in WordPress is security-sensitive",
+  "type": "SECURITY_HOTSPOT",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "owasp-a6"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6346",
+  "sqKey": "S6346",
+  "scope": "All",
+  "securityStandards": {
+    "OWASP": [
+      "A6"
+    ]
+  }
+}
