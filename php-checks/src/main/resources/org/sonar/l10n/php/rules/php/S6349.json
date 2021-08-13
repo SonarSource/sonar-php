@@ -1,0 +1,14 @@
+{
+  "title": "WordPress option names should not be misspelled",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6349",
+  "sqKey": "S6349",
+  "scope": "All"
+}

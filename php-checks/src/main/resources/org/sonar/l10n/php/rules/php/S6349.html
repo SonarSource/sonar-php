@@ -1,0 +1,15 @@
+<p>WordPress relies a lot on the configuration located in a file named <code>wp-config.php</code>. This file contains mostly <code>define</code>
+statements and each of them creates a constant for a given WordPress option. However, no warning appears if an option is misspelled: the statement
+simply defines a constant which is never used.</p>
+<p>This rule raises an issue when a file named <code>wp-config.php</code> defines a constant whose name is slightly different from a known WordPress
+option.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+define( 'DISALLOW_FILE_MOD', true ); // Noncompliant
+define( 'Disallow_File_Mods', true ); // Noncompliant
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+define( 'DISALLOW_FILE_MODS', true );
+</pre>
+
