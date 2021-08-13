@@ -1,0 +1,12 @@
+<p>PHP doesn’t fail if two <code>define</code> statements assign a value to the same constant name: in such a case, PHP only issues a warning and
+ignores the second <code>define</code>. However, that code should be fixed. In the best case, the second <code>define</code> tries to assign the same
+value to the constant: it’s just useless code which can be removed. In the worst case, the second <code>define</code> attempts to assign a different
+value and is followed by code which wrongly assumes the value of the constant: it can be a nasty bug.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+define( 'WP_DEBUG', 1 );
+define( 'SCRIPT_DEBUG', 1 );
+define( 'WP_DEBUG', 0 ); // Noncompliant, redefines constant defined 2 lines above
+echo WP_DEBUG; // output "1"
+</pre>
+
