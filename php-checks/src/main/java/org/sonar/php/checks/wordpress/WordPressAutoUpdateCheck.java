@@ -25,10 +25,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 @Rule(key = "S6343")
 public class WordPressAutoUpdateCheck extends WordPressConfigVisitor {
@@ -42,10 +40,7 @@ public class WordPressAutoUpdateCheck extends WordPressConfigVisitor {
 
   @Override
   void visitConfigDeclaration(FunctionCallTree config) {
-    configKey(config)
-      .filter(c -> c.is(Tree.Kind.REGULAR_STRING_LITERAL))
-      .map(c -> CheckUtils.trimQuotes((LiteralTree) c))
-      .ifPresent(key -> {
+    configKeyString(config).ifPresent(key -> {
         if ("WP_AUTO_UPDATE_CORE".equals(key)) {
           raiseOnMatchingValue(config, CheckUtils::isFalseValue);
         } else {
