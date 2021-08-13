@@ -19,10 +19,10 @@
  */
 package org.sonar.php.checks.wordpress;
 
+import java.util.Collections;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S6346")
@@ -32,7 +32,7 @@ public class WordPressDbRepairCheck extends WordPressConfigVisitor {
 
   @Override
   protected Set<String> configsToVisit() {
-    return SetUtils.immutableSetOf("WP_ALLOW_REPAIR");
+    return Collections.singleton("WP_ALLOW_REPAIR");
   }
 
   @Override
