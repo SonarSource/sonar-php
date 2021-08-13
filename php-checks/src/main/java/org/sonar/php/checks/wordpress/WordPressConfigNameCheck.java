@@ -22,7 +22,6 @@ package org.sonar.php.checks.wordpress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -123,13 +122,10 @@ public class WordPressConfigNameCheck extends WordPressConfigVisitor {
   @Override
   public void init() {
     knownAndCustomOptions = new ArrayList<>(KNOWN_OPTIONS);
-    List<String> customOptionsList = Stream.of(customOptions.split(","))
+    Stream.of(customOptions.split(","))
       .map(String::trim)
       .filter(s -> !s.isEmpty())
-      .collect(Collectors.toList());
-    if (!customOptionsList.isEmpty()) {
-      knownAndCustomOptions.addAll(customOptionsList);
-    }
+      .forEach(knownAndCustomOptions::add);
     super.init();
   }
 
