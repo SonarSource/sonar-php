@@ -22,9 +22,12 @@ package org.sonar.php.checks.wordpress;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 
 @Rule(key = "S6347")
 public class WordPressLateConfigCheck extends WordPressConfigVisitor {
@@ -62,9 +65,15 @@ public class WordPressLateConfigCheck extends WordPressConfigVisitor {
   private static boolean isSettingsInclusion(FunctionCallTree tree) {
     return CheckUtils.argument(tree, "", 0)
       .map(CallArgumentTree::value)
-      .filter(BinaryExpressionTree.class::isInstance)
-      .map(a -> ((BinaryExpressionTree) a).rightOperand())
+      .map(WordPressLateConfigCheck::extractRelativePath)
       .filter(a -> CheckUtils.isStringLiteralWithValue(a, "wp-settings.php"))
       .isPresent();
+  }
+
+  private static ExpressionTree extractRelativePath(ExpressionTree argument) {
+    if (argument.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
+      argument = ((ParenthesisedExpressionTree) argument).expression();
+    }
+    return argument.is(Tree.Kind.CONCATENATION) ? ((BinaryExpressionTree) argument).rightOperand() : null;
   }
 }
