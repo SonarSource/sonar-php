@@ -31,9 +31,9 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 @Rule(key = "S6339")
 public class WordPressSaltsCheck extends WordPressConfigVisitor {
 
-  private static final String DEFAULT_VALUE_MESSAGE = "default value";
-  private static final String SHORT_LENGTH_MESSAGE = "too short";
-  private static final String EMPTY_MESSAGE = "is empty";
+  private static final String DEFAULT_VALUE_MESSAGE = "Using a default value is insecure.";
+  private static final String SHORT_LENGTH_MESSAGE = "Using a short value is insecure.";
+  private static final String EMPTY_MESSAGE = "Using an empty value is insecure.";
 
   private static final String DEFAULT_VALUE = "put your unique phrase here";
   private static final int MIN_LENGTH = 10;
