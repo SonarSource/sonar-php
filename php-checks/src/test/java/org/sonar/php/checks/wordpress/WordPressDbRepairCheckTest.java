@@ -22,8 +22,6 @@ package org.sonar.php.checks.wordpress;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-import static org.junit.Assert.*;
-
 public class WordPressDbRepairCheckTest {
 
   @Test
