@@ -21,6 +21,7 @@ package org.sonar.plugins.php;
 
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
@@ -39,8 +40,8 @@ class SymbolScanner extends Scanner {
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
   private final ProjectSymbolData projectSymbolData = new ProjectSymbolData();
 
-  SymbolScanner(SensorContext context) {
-    super(context);
+  SymbolScanner(SensorContext context, DurationStatistics statistics) {
+    super(context, statistics);
   }
 
   @Override
@@ -52,8 +53,8 @@ class SymbolScanner extends Scanner {
   void scanFile(InputFile file) {
     PhpFileImpl phpFile = new PhpFileImpl(file);
     try {
-      Tree ast = parser.parse(phpFile.contents());
-      SymbolTableImpl symbolTable = SymbolTableImpl.create((CompilationUnitTree) ast, new ProjectSymbolData(), phpFile);
+      Tree ast = statistics.time("ProjectSymbolParsing", () -> parser.parse(phpFile.contents()));
+      SymbolTableImpl symbolTable = statistics.time("ProjectSymbolTable", () -> SymbolTableImpl.create((CompilationUnitTree) ast, new ProjectSymbolData(), phpFile));
       symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
       symbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
     } catch (RecognitionException e) {

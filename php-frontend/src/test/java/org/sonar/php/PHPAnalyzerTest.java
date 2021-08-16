@@ -21,12 +21,15 @@ package org.sonar.php;
 
 import com.sonar.sslr.api.RecognitionException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.DurationStatistics;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
@@ -49,6 +52,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PHPAnalyzerTest {
+
+  private final SensorContextTester sensorContext = SensorContextTester.create(Paths.get("."));
 
   @Rule
   public LogTester logTester = new LogTester();
@@ -98,7 +103,7 @@ public class PHPAnalyzerTest {
   public void test_analyze_test_file() throws Exception {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();
-    PHPAnalyzer analyzer = new PHPAnalyzer(Arrays.asList(check, testCheck), Collections.singletonList(testCheck), tmpFolder.newFolder(), new ProjectSymbolData());
+    PHPAnalyzer analyzer = createAnalyzer(Arrays.asList(check, testCheck), Collections.singletonList(testCheck));
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
     List<PhpIssue> issues = analyzer.analyze();
@@ -145,6 +150,10 @@ public class PHPAnalyzerTest {
   }
 
   private PHPAnalyzer createAnalyzer(PHPCheck... checks) throws IOException {
-    return new PHPAnalyzer(Arrays.asList(checks), tmpFolder.newFolder(), new ProjectSymbolData());
+    return createAnalyzer(Arrays.asList(checks),  Collections.emptyList());
+  }
+
+  private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks) throws IOException {
+    return new PHPAnalyzer(checks,  testFileChecks, tmpFolder.newFolder(), new ProjectSymbolData(), new DurationStatistics(sensorContext.config()));
   }
 }

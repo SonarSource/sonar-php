@@ -22,11 +22,11 @@ package org.sonar.php;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
@@ -55,54 +55,47 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 public class PHPAnalyzer {
   private static final Logger LOG = Loggers.get(PHPAnalyzer.class);
 
-  private final ActionParser<Tree> parser;
+  private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
   private final List<PHPCheck> checks;
   private final List<PHPCheck> testFileChecks;
   @Nullable
   private final File workingDir;
   private final ProjectSymbolData projectSymbolData;
+  private final DurationStatistics statistics;
 
   private CompilationUnitTree currentFileTree;
   private PhpFile currentFile;
   private SymbolTable currentFileSymbolTable;
 
-  public PHPAnalyzer(List<PHPCheck> checks, @Nullable File workingDir, ProjectSymbolData projectSymbolData) {
-    this(checks, Collections.emptyList(), workingDir, projectSymbolData);
-  }
-
-  public PHPAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFilesChecks, @Nullable File workingDir, ProjectSymbolData projectSymbolData) {
+  public PHPAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks, @Nullable File workingDir, ProjectSymbolData projectSymbolData, DurationStatistics statistics) {
+    this.checks = checks;
+    this.testFileChecks = testFileChecks;
     this.workingDir = workingDir;
     this.projectSymbolData = projectSymbolData;
-    this.parser = PHPParserBuilder.createParser();
-    this.checks = checks;
-    this.testFileChecks = testFilesChecks;
-
+    this.statistics = statistics;
     for (PHPCheck check : checks) {
-      check.init();
-    }
-
-    for (PHPCheck check : testFilesChecks) {
       check.init();
     }
   }
 
   public void nextFile(PhpFile file) {
     currentFile = file;
-    currentFileTree = (CompilationUnitTree) parser.parse(file.contents());
-    currentFileSymbolTable = SymbolTableImpl.create(currentFileTree, projectSymbolData, file);
+    currentFileTree = (CompilationUnitTree) statistics.time("CheckParsing", () -> parser.parse(file.contents()));
+    currentFileSymbolTable = statistics.time("CheckSymbolTable", () -> SymbolTableImpl.create(currentFileTree, projectSymbolData, file));
   }
 
   public List<PhpIssue> analyze() {
     List<PhpIssue> allIssues = new ArrayList<>();
     for (PHPCheck check : checks) {
       PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
-      List<PhpIssue> issues = Collections.emptyList();
-      try {
-        issues = check.analyze(context);
-      } catch (StackOverflowError e) {
-        LOG.error("Stack overflow of {} in file {}", check.getClass().getName(), currentFile.uri());
-        throw e;
-      }
+      List<PhpIssue> issues = statistics.time( check.getClass().getSimpleName(), () -> {
+        try {
+          return check.analyze(context);
+        } catch (StackOverflowError e) {
+          LOG.error("Stack overflow of {} in file {}", check.getClass().getName(), currentFile.uri());
+          throw e;
+        }
+      });
       allIssues.addAll(issues);
     }
     return allIssues;
