@@ -3,156 +3,168 @@ the language. In effect, deprecation announces a grace period to allow the smoot
 use of the deprecated features should be added to the code, and all existing uses should be gradually removed.</p>
 <p>The following functions were deprecated in PHP 5:</p>
 <table>
-  <tbody>
+  <colgroup>
+    <col style="width: 50%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <thead>
     <tr>
       <th>Deprecated</th>
       <th>Use Instead</th>
     </tr>
+  </thead>
+  <tbody>
     <tr>
-      <td><code>call_user_method()</code></td>
-      <td><code>call_user_func()</code></td>
+      <td><p><code>call_user_method()</code></p></td>
+      <td><p><code>call_user_func()</code></p></td>
     </tr>
     <tr>
-      <td><code>call_user_method_array()</code></td>
-      <td><code>call_user_func_array()</code></td>
+      <td><p><code>call_user_method_array()</code></p></td>
+      <td><p><code>call_user_func_array()</code></p></td>
     </tr>
     <tr>
-      <td><code>define_syslog_variables()</code></td>
+      <td><p><code>define_syslog_variables()</code></p></td>
       <td></td>
     </tr>
     <tr>
-      <td><code>dl()</code></td>
+      <td><p><code>dl()</code></p></td>
       <td></td>
     </tr>
     <tr>
-      <td><code>ereg()</code></td>
-      <td><code>preg_match()</code></td>
+      <td><p><code>ereg()</code></p></td>
+      <td><p><code>preg_match()</code></p></td>
     </tr>
     <tr>
-      <td><code>ereg_replace()</code></td>
-      <td><code>preg_replace()</code> (note that this is deprecated in PHP 5.5)</td>
+      <td><p><code>ereg_replace()</code></p></td>
+      <td><p><code>preg_replace()</code> (note that this is deprecated in PHP 5.5)</p></td>
     </tr>
     <tr>
-      <td><code>eregi()</code></td>
-      <td><code>preg_match()</code> with 'i' modifier</td>
+      <td><p><code>eregi()</code></p></td>
+      <td><p><code>preg_match()</code> with 'i' modifier</p></td>
     </tr>
     <tr>
-      <td><code>eregi_replace()</code></td>
-      <td><code>preg_replace()</code> with 'i' modifier</td>
+      <td><p><code>eregi_replace()</code></p></td>
+      <td><p><code>preg_replace()</code> with 'i' modifier</p></td>
     </tr>
     <tr>
-      <td><code>set_magic_quotes_runtime()</code> and its alias, <code>magic_quotes_runtime()</code></td>
+      <td><p><code>set_magic_quotes_runtime()</code> and its alias, <code>magic_quotes_runtime()</code></p></td>
       <td></td>
     </tr>
     <tr>
-      <td><code>session_register()</code></td>
-      <td><code>$_SESSION</code> superglobal</td>
+      <td><p><code>session_register()</code></p></td>
+      <td><p><code>$_SESSION</code> superglobal</p></td>
     </tr>
     <tr>
-      <td><code>session_unregister()</code></td>
-      <td><code>$_SESSION</code> superglobal</td>
+      <td><p><code>session_unregister()</code></p></td>
+      <td><p><code>$_SESSION</code> superglobal</p></td>
     </tr>
     <tr>
-      <td><code>session_is_registered()</code></td>
-      <td><code>$_SESSION</code> superglobal</td>
+      <td><p><code>session_is_registered()</code></p></td>
+      <td><p><code>$_SESSION</code> superglobal</p></td>
     </tr>
     <tr>
-      <td><code>set_socket_blocking()</code></td>
-      <td><code>stream_set_blocking()</code></td>
+      <td><p><code>set_socket_blocking()</code></p></td>
+      <td><p><code>stream_set_blocking()</code></p></td>
     </tr>
     <tr>
-      <td><code>split()</code></td>
-      <td><code>preg_split()</code></td>
+      <td><p><code>split()</code></p></td>
+      <td><p><code>preg_split()</code></p></td>
     </tr>
     <tr>
-      <td><code>spliti()</code></td>
-      <td><code>preg_split()</code> with 'i' modifier</td>
+      <td><p><code>spliti()</code></p></td>
+      <td><p><code>preg_split()</code> with 'i' modifier</p></td>
     </tr>
     <tr>
-      <td><code>sql_regcase()</code></td>
+      <td><p><code>sql_regcase()</code></p></td>
       <td></td>
     </tr>
     <tr>
-      <td><code>mysql_db_query()</code></td>
-      <td><code>mysql_select_db()</code> and <code>mysql_query()</code></td>
+      <td><p><code>mysql_db_query()</code></p></td>
+      <td><p><code>mysql_select_db()</code> and <code>mysql_query()</code></p></td>
     </tr>
     <tr>
-      <td><code>mysql_escape_string()</code></td>
-      <td><code>mysql_real_escape_string()</code></td>
+      <td><p><code>mysql_escape_string()</code></p></td>
+      <td><p><code>mysql_real_escape_string()</code></p></td>
     </tr>
     <tr>
-      <td>Passing locale category names as strings</td>
-      <td>Use the LC_* family of constants</td>
+      <td><p>Passing locale category names as strings</p></td>
+      <td><p>Use the LC_* family of constants</p></td>
     </tr>
   </tbody>
 </table>
 <p>The following functions were deprecated in PHP 7:</p>
 <table>
-  <tbody>
+  <colgroup>
+    <col style="width: 50%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <thead>
     <tr>
       <th>Deprecated</th>
       <th>Use Instead</th>
     </tr>
+  </thead>
+  <tbody>
     <tr>
-      <td><code>__autoload()</code></td>
-      <td><code>spl_autoload_register()</code></td>
+      <td><p><code>__autoload()</code></p></td>
+      <td><p><code>spl_autoload_register()</code></p></td>
     </tr>
     <tr>
-      <td><code>create_function()</code></td>
-      <td>anonymous function</td>
+      <td><p><code>create_function()</code></p></td>
+      <td><p>anonymous function</p></td>
     </tr>
     <tr>
-      <td><code>parse_str()</code> without second argument</td>
-      <td><code>parse_str()</code> with second argument</td>
+      <td><p><code>parse_str()</code> without second argument</p></td>
+      <td><p><code>parse_str()</code> with second argument</p></td>
     </tr>
     <tr>
-      <td><code>gmp_random()</code></td>
-      <td><code>gmp_random_bits()</code> or <code>gmp_random_range()</code></td>
+      <td><p><code>gmp_random()</code></p></td>
+      <td><p><code>gmp_random_bits()</code> or <code>gmp_random_range()</code></p></td>
     </tr>
     <tr>
-      <td><code>each()</code></td>
-      <td><code>foreach</code></td>
+      <td><p><code>each()</code></p></td>
+      <td><p><code>foreach</code></p></td>
     </tr>
     <tr>
-      <td><code>assert()</code> with string argument</td>
-      <td> </td>
+      <td><p><code>assert()</code> with string argument</p></td>
+      <td></td>
     </tr>
     <tr>
-      <td>Defining case-insensitive constants by calling <code>define()</code> with <code>true</code> as third parameter</td>
-      <td><code>define("myconst", $value)</code> or <code>define("myconst", $value, false)</code></td>
+      <td><p>Defining case-insensitive constants by calling <code>define()</code> with <code>true</code> as third parameter</p></td>
+      <td><p><code>define("myconst", $value)</code> or <code>define("myconst", $value, false)</code></p></td>
     </tr>
     <tr>
-      <td><code>FILTER_FLAG_SCHEME_REQUIRED</code> and <code>FILTER_FLAG_HOST_REQUIRED</code> flags</td>
-      <td><code>FILTER_VALIDATE_URL</code> flag</td>
+      <td><p><code>FILTER_FLAG_SCHEME_REQUIRED</code> and <code>FILTER_FLAG_HOST_REQUIRED</code> flags</p></td>
+      <td><p><code>FILTER_VALIDATE_URL</code> flag</p></td>
     </tr>
     <tr>
-      <td><code>fgetss()</code> function, <code>"string.strip_tags"</code> stream filter name, <code>SplFileObject::fgetss()</code> method and
-      <code>gzgetss()</code> function</td>
-      <td> </td>
+      <td><p><code>fgetss()</code> function, <code>"string.strip_tags"</code> stream filter name, <code>SplFileObject::fgetss()</code> method and
+      <code>gzgetss()</code> function</p></td>
+      <td></td>
     </tr>
     <tr>
-      <td><code>mbregex_encoding()</code>, <code>mbereg()</code>, <code>mberegi()</code>, <code>mbereg_replace()</code>,
+      <td><p><code>mbregex_encoding()</code>, <code>mbereg()</code>, <code>mberegi()</code>, <code>mbereg_replace()</code>,
       <code>mberegi_replace()</code>, <code>mbsplit()</code>, <code>mbereg_match()</code>, <code>mbereg_search()</code>,
       <code>mbereg_search_pos()</code>, <code>mbereg_search_regs()</code>, <code>mbereg_search_init()</code>, <code>mbereg_search_getregs()</code>,
-      <code>mbereg_search_getpos()</code>, <code>mbereg_search_setpos()</code></td>
-      <td>Use the<br> corresponding <code>mb_ereg_*()</code> variants instead</td>
+      <code>mbereg_search_getpos()</code>, <code>mbereg_search_setpos()</code></p></td>
+      <td><p>Use the</p> <p> corresponding <code>mb_ereg_*()</code> variants instead</p></td>
     </tr>
     <tr>
-      <td>string search functions with integer needle (<code>stristr</code>, <code>strrchr</code>, <code>strstr</code>, <code>strripos</code>,
-      <code>stripos</code>, <code>strrpos</code>, <code>strpos</code>, <code>strchr</code>) </td>
-      <td>use a string needle instead</td>
+      <td><p>string search functions with integer needle (<code>stristr</code>, <code>strrchr</code>, <code>strstr</code>, <code>strripos</code>,
+      <code>stripos</code>, <code>strrpos</code>, <code>strpos</code>, <code>strchr</code>)</p></td>
+      <td><p>use a string needle instead</p></td>
     </tr>
     <tr>
-      <td><code>image2wbmp()</code></td>
-      <td><code>imagewbmp()</code></td>
+      <td><p><code>image2wbmp()</code></p></td>
+      <td><p><code>imagewbmp()</code></p></td>
     </tr>
     <tr>
-      <td><code>Normalizer::NONE</code></td>
-      <td> </td>
+      <td><p><code>Normalizer::NONE</code></p></td>
+      <td></td>
     </tr>
     <tr>
-      <td>Defining an <code>assert()</code> function inside a namespace</td>
-      <td>use the standard <code>assert()</code> function</td>
+      <td><p>Defining an <code>assert()</code> function inside a namespace</p></td>
+      <td><p>use the standard <code>assert()</code> function</p></td>
     </tr>
   </tbody>
 </table>

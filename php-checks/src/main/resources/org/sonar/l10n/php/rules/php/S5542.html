@@ -1,16 +1,16 @@
 <p>Encryption operation mode and the padding scheme should be chosen appropriately to guarantee data confidentiality, integrity and authenticity:</p>
 <ul>
-  <li> For block cipher encryption algorithms (like AES): </li>
-</ul>
-<p> <strong></strong> the GCM (Galois Counter Mode) mode which <a href="https://en.wikipedia.org/wiki/Galois/Counter_Mode#Mathematical_basis">works
-internally</a> with zero/no padding scheme, is recommended, as it is designed to provide both data authenticity (integrity) and confidentiality. Other
-similar modes are CCM, CWC, EAX, IAPM and OCB.</p>
-<p> <strong></strong> the CBC (Cipher Block Chaining) mode by itself provides only data confidentiality, it's recommended to use it along with Message
-Authentication Code or similar to achieve data authenticity (integrity) too and thus to <a
-href="https://en.wikipedia.org/wiki/Padding_oracle_attack">prevent padding oracle attacks</a>. </p>
-<p> <strong></strong> the ECB (Electronic Codebook) mode doesn't provide serious message confidentiality: under a given key any given plaintext block
-always gets encrypted to the same ciphertext block. This mode should not be used.</p>
-<ul>
+  <li> For block cipher encryption algorithms (like AES):
+    <ul>
+      <li> The GCM (Galois Counter Mode) mode which <a href="https://en.wikipedia.org/wiki/Galois/Counter_Mode#Mathematical_basis">works
+      internally</a> with zero/no padding scheme, is recommended, as it is designed to provide both data authenticity (integrity) and confidentiality.
+      Other similar modes are CCM, CWC, EAX, IAPM and OCB. </li>
+      <li> The CBC (Cipher Block Chaining) mode by itself provides only data confidentiality, it’s recommended to use it along with Message
+      Authentication Code or similar to achieve data authenticity (integrity) too and thus to <a
+      href="https://en.wikipedia.org/wiki/Padding_oracle_attack">prevent padding oracle attacks</a>. </li>
+      <li> The ECB (Electronic Codebook) mode doesn’t provide serious message confidentiality: under a given key any given plaintext block always gets
+      encrypted to the same ciphertext block. This mode should not be used. </li>
+    </ul>  </li>
   <li> For RSA encryption algorithm, the recommended padding scheme is OAEP. </li>
 </ul>
 <h2>Noncompliant Code Example</h2>

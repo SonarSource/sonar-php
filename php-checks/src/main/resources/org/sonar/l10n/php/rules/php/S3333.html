@@ -2,7 +2,7 @@
 <code>fopen()</code>. Leave it out, and there is no default limit, meaning that any file can be accessed. Include it, and PHP will refuse to access
 files outside the allowed path.</p>
 <p><code>open_basedir</code> should be configured with a directory, which will then be accessible recursively. However, the use of <code>.</code>
-(current directory) as an <code>open_basedir</code> value should be avoided since it's resolved dynamically during script execution, so a
+(current directory) as an <code>open_basedir</code> value should be avoided since it’s resolved dynamically during script execution, so a
 <code>chdir('/')</code> command could lay the whole server open to the script.</p>
 <p>This is not a fool-proof configuration; it can be reset or overridden at the script level. But its use should be seen as a minimum due diligence
 step. This rule raises an issue when <code>open_basedir</code> is not present in <em>php.ini</em>, and when <code>open_basedir</code> contains root,

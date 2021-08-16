@@ -42,6 +42,9 @@ $con = ftp_connect('example.com'); // Sensitive
 $trans = (new Swift_SmtpTransport('XXX', 1234)); // Sensitive
 
 $mailer = new PHPMailer(true); // Sensitive
+
+define( 'FORCE_SSL_ADMIN', false); // Sensitive
+define( 'FORCE_SSL_LOGIN', false); // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
@@ -57,6 +60,9 @@ $trans = (new Swift_SmtpTransport('smtp.example.org', 1234))
 
 $mailer = new PHPMailer(true);
 $mailer-&gt;SMTPSecure = 'tls'; // Compliant
+
+define( 'FORCE_SSL_ADMIN', true); // Compliant
+define( 'FORCE_SSL_LOGIN', true); // Compliant
 </pre>
 <h2>Exceptions</h2>
 <p>No issue is reported for the following cases because they are not considered sensitive:</p>

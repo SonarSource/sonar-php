@@ -42,7 +42,7 @@ the following characters <code>*+{</code>.</p>
 </ul>
 <p>Note that <code>ereg*</code> functions have been removed in PHP 7 and <strong>PHP 5 end of life date is the 1st of January 2019. Using PHP 5 is
 dangerous as there will be no security fix</strong>.</p>
-<p>This rule's goal is to guide security code reviews.</p>
+<p>This rule’s goal is to guide security code reviews.</p>
 <h2>Ask Yourself Whether</h2>
 <ul>
   <li> the executed regular expression is sensitive and a user can provide a string which will be analyzed by this regular expression. </li>
@@ -53,9 +53,9 @@ dangerous as there will be no security fix</strong>.</p>
 <p>Do not set the constant <code>pcre.backtrack_limit</code> to a high value as it will increase the resource consumption of PCRE functions.</p>
 <p>Check the error codes of PCRE functions via <code>preg_last_error</code>.</p>
 <p>Check whether your regular expression engine (the algorithm executing your regular expression) has any known vulnerabilities. Search for
-vulnerability reports mentioning the one engine you're are using. Do not run vulnerable regular expressions on user input.</p>
+vulnerability reports mentioning the one engine you’re are using. Do not run vulnerable regular expressions on user input.</p>
 <p>Use if possible a library which is not vulnerable to Redos Attacks such as <a href="https://github.com/google/re2">Google Re2</a>.</p>
-<p>Remember also that a ReDos attack is possible if a user-provided regular expression is executed. This rule won't detect this kind of injection.</p>
+<p>Remember also that a ReDos attack is possible if a user-provided regular expression is executed. This rule won’t detect this kind of injection.</p>
 <p>Avoid executing a user input string as a regular expression or use at least <code>preg_quote</code> to escape regular expression characters.</p>
 <h2>Exceptions</h2>
 <p>An issue will be created for the functions <code>mb_ereg_search_pos</code>, <code>mb_ereg_search_regs</code> and <code>mb_ereg_search</code> if and
@@ -75,6 +75,4 @@ $result = eregi($pattern, $input);  // No issue will be raised even if it is Sen
   </li>
   <li> OWASP Regular expression Denial of Service - ReDoS </li>
 </ul>
-<h2>Deprecated</h2>
-<p>This rule is deprecated; use {rule:php:S2631} instead.</p>
 
