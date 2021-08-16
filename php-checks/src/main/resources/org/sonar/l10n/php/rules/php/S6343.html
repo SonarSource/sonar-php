@@ -1,0 +1,32 @@
+<p>Automatic updates are a great way of making sure your application gets security updates as soon as they are available. Once a vendor releases a
+security update, it is crucial to apply it in a timely manner before malicious actors exploit the vulnerability. Relying on manual updates is usually
+too late, especially if the application is publicly accessible on the internet.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> there is no specific reason for deactivating all automatic updates. </li>
+  <li> you meant to deactivate only automatic major updates. </li>
+</ul>
+<p>There is a risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<p>Don’t deactivate automatic updates unless you have a good reason to do so. This way, you’ll be sure to receive security updates as soon as they are
+available. If you are worried about an automatic update breaking something, check if it is possible to only activate automatic updates for minor or
+security updates.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+define( 'WP_AUTO_UPDATE_CORE', false ); // Sensitive
+define( 'AUTOMATIC_UPDATER_DISABLED', true ); // Sensitive
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+define( 'WP_AUTO_UPDATE_CORE', true ); // Minor and major automatic updates enabled
+define( 'WP_AUTO_UPDATE_CORE', 'minor' ); // Only minor updates are enabled
+define( 'AUTOMATIC_UPDATER_DISABLED', false );
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://wordpress.org/support/article/editing-wp-config-php/#disable-wordpress-auto-updates">Wordpress.org</a> - Disable WordPress
+  Auto Updates </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+</ul>
+

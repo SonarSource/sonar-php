@@ -25,10 +25,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 @Rule(key = "S6349")
 public class WordPressConfigNameCheck extends WordPressConfigVisitor {
@@ -131,8 +128,7 @@ public class WordPressConfigNameCheck extends WordPressConfigVisitor {
 
   @Override
   void visitConfigDeclaration(FunctionCallTree config) {
-    configKey(config).filter(c -> c.is(Tree.Kind.REGULAR_STRING_LITERAL))
-      .ifPresent(c -> checkConfig(config, CheckUtils.trimQuotes(((LiteralTree) c).value())));
+    configKeyString(config).ifPresent(key -> checkConfig(config, key));
   }
 
   private void checkConfig(FunctionCallTree configTree, String configKey) {
