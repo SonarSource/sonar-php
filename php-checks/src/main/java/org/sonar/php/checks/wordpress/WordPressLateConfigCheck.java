@@ -21,7 +21,7 @@ package org.sonar.php.checks.wordpress;
 
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -36,11 +36,9 @@ public class WordPressLateConfigCheck extends WordPressConfigVisitor {
   private boolean endOfConfig;
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    if (isWpConfigFile()) {
-      endOfConfig = false;
-      super.visitCompilationUnit(tree);
-    }
+  public void visitScript(ScriptTree tree) {
+    endOfConfig = false;
+    super.visitScript(tree);
   }
 
   @Override

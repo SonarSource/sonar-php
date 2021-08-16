@@ -19,55 +19,35 @@
  */
 package org.sonar.php.checks.wordpress;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-@Rule(key="S6341")
-public class WordPressFileEditorCheck extends WordPressConfigVisitor {
-
-  private static final String MESSAGE = "Plugin and theme files editor is active";
-
-  private FunctionCallTree fileEditConfigTree;
-  private FunctionCallTree fileModsConfigTree;
-
-  @Override
-  public void visitScript(ScriptTree tree) {
-    fileEditConfigTree = null;
-    fileModsConfigTree = null;
-    super.visitScript(tree);
-    if (!fileModsDisallowed()) {
-      if (fileEditConfigTree == null) {
-        context().newFileIssue(this, MESSAGE);
-      } else {
-        configValue(fileEditConfigTree).filter(CheckUtils::isFalseValue)
-          .ifPresent(value -> newIssue(fileEditConfigTree, MESSAGE));
-      }
-    }
-    fileEditConfigTree = null;
-    fileModsConfigTree = null;
-  }
+@Rule(key = "S6348")
+public class WordPressUnfilteredHtmlCheck extends WordPressConfigVisitor {
+  private static final String MESSAGE = "Make sure allowing unfiltered HTML is intended.";
+  private boolean configOccurred;
 
   @Override
   protected Set<String> configsToVisit() {
-    return new HashSet<>(Arrays.asList("DISALLOW_FILE_EDIT", "DISALLOW_FILE_MODS"));
+    return Collections.singleton("DISALLOW_UNFILTERED_HTML");
+  }
+
+  @Override
+  public void visitScript(ScriptTree tree) {
+    configOccurred = false;
+    super.visitScript(tree);
+    if (!configOccurred) {
+      context().newFileIssue(this, MESSAGE);
+    }
   }
 
   @Override
   void visitConfigDeclaration(FunctionCallTree config) {
-    if (isConfigKey(config, "DISALLOW_FILE_EDIT")) {
-      fileEditConfigTree = config;
-    } else {
-      // DISALLOW_FILE_MODS
-      fileModsConfigTree = config;
-    }
-  }
-
-  private boolean fileModsDisallowed() {
-    return fileModsConfigTree != null && !configValue(fileModsConfigTree).filter(CheckUtils::isFalseValue).isPresent();
+    configOccurred = true;
+    configValue(config).filter(CheckUtils::isFalseValue).ifPresent(v -> newIssue(config, MESSAGE));
   }
 }

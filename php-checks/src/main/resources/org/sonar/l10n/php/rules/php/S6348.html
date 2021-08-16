@@ -1,0 +1,32 @@
+<p>By default, the WordPress administrator and editor roles can add unfiltered HTML content in various places, such as post content. This includes the
+capability to add JavaScript code.</p>
+<p>If an account with such a role gets hijacked, this capability can be used to plant malicious JavaScript code that gets executed whenever somebody
+visits the website.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> You really need the possibility to add unfiltered HTML with editor or administrator roles. </li>
+  <li> There’s a chance that the accounts of authorized users get compromised. </li>
+</ul>
+<p>There is a risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<p>The <code>unfiltered_html</code> capability should be granted to trusted roles that need to use markup when publishing dynamic content to the
+WordPress website. If this capability is not required for all users, including administrators and editors roles, then it’s recommended to set
+<code>DISALLOW_UNFILTERED_HTML</code> to <code>true</code>.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+define( 'DISALLOW_UNFILTERED_HTML', false ); // sensitive
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+define( 'DISALLOW_UNFILTERED_HTML', true );
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A7_2017-Cross-Site_Scripting_(XSS)">OWASP Top 10 2017 Category A7</a> - Cross-Site
+  Scripting (XSS) </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/79">MITRE, CWE-79</a> - Improper Neutralization of Input During Web Page Generation
+  ('Cross-site Scripting') </li>
+</ul>
+

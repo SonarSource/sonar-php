@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -31,20 +32,26 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 public abstract class WordPressConfigVisitor extends FunctionUsageCheck {
-
   @Override
   protected Set<String> functionNames() {
     return Collections.singleton("define");
   }
 
   @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    if (isWpConfigFile()) {
+      super.visitCompilationUnit(tree);
+    }
+  }
+
+  @Override
   protected void createIssue(FunctionCallTree tree) {
-    if (isWpConfigFile() && shouldVisitConfig(tree)) {
+    if (shouldVisitConfig(tree)) {
       visitConfigDeclaration(tree);
     }
   }
 
-  protected boolean isWpConfigFile() {
+  private boolean isWpConfigFile() {
     return context().getPhpFile().filename().equals("wp-config.php");
   }
 
