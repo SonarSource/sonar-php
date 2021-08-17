@@ -19,20 +19,14 @@
  */
 package org.sonar.php.checks.wordpress;
 
-import java.io.IOException;
 import org.junit.Test;
+import org.sonar.plugins.php.CheckVerifier;
 
-public class WordPressFileModificationCheckTest extends WordPressConfigCheckTest {
-
-  private final WordPressFileModificationCheck check = new WordPressFileModificationCheck();
-
-  @Test
-  public void test_existing_config() throws IOException {
-    wordPressVerifier.verify(check, "wordpress/WordPressFileModificationCheck/existing_config.php");
-  }
+public class WordPressAutoUpdateCheckTest {
 
   @Test
-  public void test_absence_of_config() throws IOException {
-    wordPressVerifier.verifyAbsence(check, "Make sure allowing modification of themes and plugins is intended.");
+  public void test() {
+    CheckVerifier.verify(new WordPressAutoUpdateCheck(), "wordpress/WordPressAutoUpdateCheck/wp-config.php");
   }
+
 }

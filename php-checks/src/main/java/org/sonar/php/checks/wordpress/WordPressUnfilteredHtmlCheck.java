@@ -23,32 +23,31 @@ import java.util.Collections;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-@Rule(key="S6342")
-public class WordPressFileModificationCheck extends WordPressConfigVisitor {
-
-  private static final String MESSAGE = "Make sure allowing modification of themes and plugins is intended.";
+@Rule(key = "S6348")
+public class WordPressUnfilteredHtmlCheck extends WordPressConfigVisitor {
+  private static final String MESSAGE = "Make sure allowing unfiltered HTML is intended.";
   private boolean configOccurred;
 
   @Override
   protected Set<String> configsToVisit() {
-    return Collections.singleton("DISALLOW_FILE_MODS");
+    return Collections.singleton("DISALLOW_UNFILTERED_HTML");
   }
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
+  public void visitScript(ScriptTree tree) {
     configOccurred = false;
-    super.visitCompilationUnit(tree);
-    if (!configOccurred && isWpConfigFile()) {
+    super.visitScript(tree);
+    if (!configOccurred) {
       context().newFileIssue(this, MESSAGE);
     }
   }
 
   @Override
   void visitConfigDeclaration(FunctionCallTree config) {
-    configValue(config).filter(CheckUtils::isFalseValue).ifPresent(v -> newIssue(config, MESSAGE));
     configOccurred = true;
+    configValue(config).filter(CheckUtils::isFalseValue).ifPresent(v -> newIssue(config, MESSAGE));
   }
 }

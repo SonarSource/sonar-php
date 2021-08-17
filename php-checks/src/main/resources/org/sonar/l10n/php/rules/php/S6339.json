@@ -1,0 +1,21 @@
+{
+  "title": "Secret keys and salt values should be robust",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "owasp-a3"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6339",
+  "sqKey": "S6339",
+  "scope": "All",
+  "securityStandards": {
+    "OWASP": [
+      "A3"
+    ]
+  }
+}

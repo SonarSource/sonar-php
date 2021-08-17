@@ -2,6 +2,10 @@
   "title": "Assertion failure exceptions should not be ignored",
   "type": "BUG",
   "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
   "tags": [
     "tests",
     "phpunit"

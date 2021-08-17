@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S6345")
@@ -33,10 +33,10 @@ public class WordPressExternalRequestsCheck extends WordPressConfigVisitor {
   private boolean configOccurred;
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
+  public void visitScript(ScriptTree tree) {
     configOccurred = false;
-    super.visitCompilationUnit(tree);
-    if (!configOccurred && isWpConfigFile()) {
+    super.visitScript(tree);
+    if (!configOccurred) {
       context().newFileIssue(this, MESSAGE);
     }
   }

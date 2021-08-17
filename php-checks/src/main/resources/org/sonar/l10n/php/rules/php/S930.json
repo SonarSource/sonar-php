@@ -7,8 +7,7 @@
     "constantCost": "10min"
   },
   "tags": [
-    "cwe",
-    "based-on-misra"
+    "cwe"
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-930",
@@ -17,6 +16,10 @@
   "securityStandards": {
     "CWE": [
       628
+    ],
+    "CERT": [
+      "EXP37-C.",
+      "DCL07-C."
     ]
   }
 }

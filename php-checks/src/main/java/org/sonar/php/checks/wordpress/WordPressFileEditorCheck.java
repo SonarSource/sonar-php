@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key="S6341")
@@ -36,13 +36,11 @@ public class WordPressFileEditorCheck extends WordPressConfigVisitor {
   private FunctionCallTree fileModsConfigTree;
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
+  public void visitScript(ScriptTree tree) {
     fileEditConfigTree = null;
     fileModsConfigTree = null;
-
-    super.visitCompilationUnit(tree);
-
-    if (!fileModsDisallowed() && isWpConfigFile()) {
+    super.visitScript(tree);
+    if (!fileModsDisallowed()) {
       if (fileEditConfigTree == null) {
         context().newFileIssue(this, MESSAGE);
       } else {
@@ -50,7 +48,6 @@ public class WordPressFileEditorCheck extends WordPressConfigVisitor {
           .ifPresent(value -> newIssue(fileEditConfigTree, MESSAGE));
       }
     }
-
     fileEditConfigTree = null;
     fileModsConfigTree = null;
   }
