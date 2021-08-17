@@ -41,7 +41,12 @@ build_task:
     DEPLOY_PULL_REQUEST: true
     CIRRUS_CLONE_DEPTH: 50
   maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository 
+    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
+  sonar_cache:
+    folder: ${HOME}/.sonar/cache
+    fingerprint_script:
+      - echo ${CIRRUS_OS}
+      - curl --silent ${SONAR_HOST_URL}/deploy/plugins/index.txt | sort
   build_script:
     - source cirrus-env BUILD
     - .cirrus/regular_mvn_build_deploy_analyze
