@@ -22,9 +22,9 @@ package org.sonar;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import org.sonar.api.config.Configuration;
@@ -37,23 +37,12 @@ public class DurationStatistics {
 
   private static final String PROPERTY_KEY = "sonar.php.duration.statistics";
 
-  private final Map<String, AtomicLong> stats = new ConcurrentHashMap<>();
+  private final Map<String, AtomicLong> stats = new HashMap<>();
 
   private final boolean recordStat;
 
   public DurationStatistics(Configuration config) {
     recordStat = config.getBoolean(PROPERTY_KEY).orElse(false);
-  }
-
-  public void time(String id, Runnable runnable) {
-    if (recordStat) {
-      time(id, () -> {
-        runnable.run();
-        return null;
-      });
-    } else {
-      runnable.run();
-    }
   }
 
   public <T> T time(String id, Supplier<T> supplier) {

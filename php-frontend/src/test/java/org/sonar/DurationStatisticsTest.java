@@ -67,9 +67,6 @@ public class DurationStatisticsTest {
   private void fillStatistics(DurationStatistics statistics) {
     StringBuilder txt = new StringBuilder();
     statistics.time("A", () -> txt.append("1")).append(2);
-    statistics.time("B", () -> {
-      txt.append("3");
-    });
-    assertThat((CharSequence) txt).hasToString("123");
+    assertThat((CharSequence) txt).hasToString("12");
   }
 }
