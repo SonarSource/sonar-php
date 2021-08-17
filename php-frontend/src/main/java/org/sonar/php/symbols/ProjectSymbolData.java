@@ -37,6 +37,8 @@ public class ProjectSymbolData {
   private final Map<QualifiedName, ClassSymbolData> classSymbolsByQualifiedName = new HashMap<>();
   private final Map<QualifiedName, List<FunctionSymbolData>> functionSymbolsByQualifiedName = new HashMap<>();
 
+  private final Map<String, List<String>> wpActions = new HashMap<>();
+
   public void add(ClassSymbolData classSymbolData) {
     classSymbolsByQualifiedName.put(classSymbolData.qualifiedName(), classSymbolData);
   }
@@ -54,5 +56,9 @@ public class ProjectSymbolData {
 
   public List<FunctionSymbolData> functionSymbolData(QualifiedName qualifiedName) {
     return functionSymbolsByQualifiedName.getOrDefault(qualifiedName, Collections.emptyList());
+  }
+
+  public void addWpActions(String hookName, List<String> callbacks) {
+    wpActions.computeIfAbsent(hookName, h -> new ArrayList<>()).addAll(callbacks);
   }
 }

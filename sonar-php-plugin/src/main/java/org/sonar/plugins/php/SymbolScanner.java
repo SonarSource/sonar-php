@@ -56,6 +56,13 @@ class SymbolScanner extends Scanner {
       SymbolTableImpl symbolTable = SymbolTableImpl.create((CompilationUnitTree) ast, new ProjectSymbolData(), phpFile);
       symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
       symbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
+
+      WpHookCollector wpCollector = new WpHookCollector();
+      wpCollector.init();
+      ast.accept(wpCollector);
+      wpCollector.wpActions.forEach(projectSymbolData::addWpActions);
+      System.out.println("foo");
+      
     } catch (RecognitionException e) {
       LOG.debug("Parsing error in " + file);
     }
