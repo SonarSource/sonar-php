@@ -20,6 +20,7 @@
 package org.sonar.php.symbols;
 
 import org.junit.Test;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static java.util.Collections.emptyList;

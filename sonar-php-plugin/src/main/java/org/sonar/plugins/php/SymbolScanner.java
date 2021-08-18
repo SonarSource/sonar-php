@@ -27,7 +27,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -57,12 +57,11 @@ class SymbolScanner extends Scanner {
       symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
       symbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
 
-      WpHookCollector wpCollector = new WpHookCollector();
+      WpHookCollector wpCollector = new WpHookCollector(projectSymbolData);
       wpCollector.init();
       ast.accept(wpCollector);
       wpCollector.wpActions.forEach(projectSymbolData::addWpActions);
-      System.out.println("foo");
-      
+
     } catch (RecognitionException e) {
       LOG.debug("Parsing error in " + file);
     }

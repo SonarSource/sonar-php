@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -45,17 +46,23 @@ public class PHPCheckContext implements CheckContext {
   private final File workingDirectory;
   private final SymbolTable symbolTable;
   private List<PhpIssue> issues;
+  private ProjectSymbolData projectData;
 
   public PHPCheckContext(PhpFile file, CompilationUnitTree tree, @Nullable File workingDirectory) {
-    this(file, tree, workingDirectory, SymbolTableImpl.create(tree));
+    this(file, tree, workingDirectory, SymbolTableImpl.create(tree), null);
   }
 
-  public PHPCheckContext(PhpFile file, CompilationUnitTree tree, @Nullable File workingDirectory, SymbolTable symbolTable) {
+  public PHPCheckContext(PhpFile file, CompilationUnitTree tree, @Nullable File workingDirectory, SymbolTable symbolTable, ProjectSymbolData projectData) {
     this.file = file;
     this.tree = tree;
     this.workingDirectory = workingDirectory;
     this.symbolTable = symbolTable;
     this.issues = new ArrayList<>();
+    this.projectData = projectData;
+  }
+
+  public PHPCheckContext(PhpFile file, CompilationUnitTree tree, @Nullable File workingDirectory, SymbolTable symbolTable) {
+    this(file, tree, workingDirectory, symbolTable, null);
   }
 
   @Override
@@ -121,5 +128,10 @@ public class PHPCheckContext implements CheckContext {
   @Override
   public File getWorkingDirectory() {
     return workingDirectory;
+  }
+
+  @Override
+  public ProjectSymbolData projectData() {
+    return projectData;
   }
 }

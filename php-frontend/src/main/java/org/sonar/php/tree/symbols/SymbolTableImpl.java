@@ -31,7 +31,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
-import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;

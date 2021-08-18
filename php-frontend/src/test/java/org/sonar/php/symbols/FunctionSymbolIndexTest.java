@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.junit.Test;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;

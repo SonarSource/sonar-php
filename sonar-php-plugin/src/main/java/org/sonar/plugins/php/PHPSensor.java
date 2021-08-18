@@ -54,7 +54,7 @@ import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
-import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.FileIssue;

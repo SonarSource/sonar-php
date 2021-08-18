@@ -19,6 +19,7 @@
  */
 package org.sonar.php.symbols;
 
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 

@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;

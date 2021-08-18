@@ -25,8 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -34,7 +38,14 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 public class WpHookCollector extends FunctionUsageCheck {
 
+  private static final Logger LOG = Loggers.get(WpHookCollector.class);
+
   public final Map<String, List<String>> wpActions = new HashMap<>();
+  private final ProjectSymbolData projectSymbolData;
+
+  public WpHookCollector(ProjectSymbolData projectSymbolData) {
+    this.projectSymbolData = projectSymbolData;
+  }
 
   @Override
   protected Set<String> functionNames() {
@@ -50,6 +61,7 @@ public class WpHookCollector extends FunctionUsageCheck {
     ExpressionTree hookNameArg = tree.callArguments().get(0).value();
     ExpressionTree callbackArg = tree.callArguments().get(1).value();
     if (!hookNameArg.is(Tree.Kind.REGULAR_STRING_LITERAL) || !callbackArg.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+      // TODO: only string second arguments are handled for testing
       return;
     }
 

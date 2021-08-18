@@ -31,6 +31,7 @@ import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;

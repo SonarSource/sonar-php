@@ -22,6 +22,7 @@ package org.sonar.php.symbols;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 

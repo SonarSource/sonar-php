@@ -31,7 +31,7 @@ import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.php.metrics.FileMeasures;
-import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PHPCheck;

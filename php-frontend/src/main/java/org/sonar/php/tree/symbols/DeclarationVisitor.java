@@ -44,7 +44,7 @@ import org.sonar.php.symbols.FunctionSymbolIndex;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.MethodSymbolData;
 import org.sonar.php.symbols.Parameter;
-import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.impl.PHPTree;

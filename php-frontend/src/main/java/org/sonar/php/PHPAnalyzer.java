@@ -42,7 +42,7 @@ import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -95,7 +95,7 @@ public class PHPAnalyzer {
   public List<PhpIssue> analyze() {
     List<PhpIssue> allIssues = new ArrayList<>();
     for (PHPCheck check : checks) {
-      PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
+      PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable, projectSymbolData);
       List<PhpIssue> issues = Collections.emptyList();
       try {
         issues = check.analyze(context);
@@ -110,7 +110,7 @@ public class PHPAnalyzer {
 
   public List<PhpIssue> analyzeTest() {
     return testFileChecks.stream()
-      .map(check -> check.analyze(new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable)))
+      .map(check -> check.analyze(new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable, projectSymbolData)))
       .flatMap(List::stream)
       .collect(Collectors.toList());
   }

@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
+package org.sonar.plugins.php.api.symbols;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.sonar.php.symbols.BuiltinSymbolData;
+import org.sonar.php.symbols.ClassSymbolData;
+import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 /**
@@ -56,6 +59,10 @@ public class ProjectSymbolData {
 
   public List<FunctionSymbolData> functionSymbolData(QualifiedName qualifiedName) {
     return functionSymbolsByQualifiedName.getOrDefault(qualifiedName, Collections.emptyList());
+  }
+
+  public List<String> callbacksRegisteredToWpAction(String hookName) {
+    return wpActions.getOrDefault(hookName, Collections.emptyList());
   }
 
   public void addWpActions(String hookName, List<String> callbacks) {
