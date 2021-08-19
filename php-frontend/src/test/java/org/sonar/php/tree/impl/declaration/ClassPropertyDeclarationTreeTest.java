@@ -19,10 +19,14 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -78,7 +82,13 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.typeAnnotation().questionMarkToken()).isNull();
     assertThat(builtinType(tree)).isEqualTo("int");
 
-    assertThat(((PHPTree) tree).childrenIterator()).containsExactly(
+    List<Tree> actualList = new ArrayList<>();
+    Iterator<Tree> iterator = ((PHPTree) tree).childrenIterator();
+    while (iterator.hasNext()) {
+      actualList.add(iterator.next());
+    }
+
+    assertThat(actualList).containsExactly(
       tree.modifierTokens().get(0),
       tree.typeAnnotation(),
       tree.declarations().get(0),

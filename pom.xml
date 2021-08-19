@@ -78,7 +78,7 @@
     <version.sonar-packaging-maven-plugin>1.17</version.sonar-packaging-maven-plugin>
 
     <!-- JAR versions -->
-    <version.assertj>3.5.2</version.assertj>
+    <version.assertj>3.19.0</version.assertj>
     <version.commons-lang>3.10</version.commons-lang>
     <version.junit>4.13.1</version.junit>
     <version.maven-project>2.0.6</version.maven-project>
@@ -89,7 +89,7 @@
     <version.sslr>1.24.0.633</version.sslr>
     <version.guava>30.1.1-jre</version.guava>
     <version.sonarlint>4.7.0.12286</version.sonarlint>
-    <version.analyzer-commons>1.14.1.690</version.analyzer-commons>
+    <version.analyzer-commons>1.16.0.719</version.analyzer-commons>
 
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>
@@ -176,6 +176,11 @@
       <dependency>
         <groupId>org.sonarsource.analyzer-commons</groupId>
         <artifactId>sonar-xml-parsing</artifactId>
+        <version>${version.analyzer-commons}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.sonarsource.analyzer-commons</groupId>
+        <artifactId>sonar-performance-measure</artifactId>
         <version>${version.analyzer-commons}</version>
       </dependency>
       <dependency>

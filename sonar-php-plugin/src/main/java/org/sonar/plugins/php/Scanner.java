@@ -27,6 +27,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonarsource.analyzer.commons.ProgressReport;
+import org.sonarsource.performance.measure.PerformanceMeasure;
 
 abstract class Scanner {
 
@@ -39,8 +40,10 @@ abstract class Scanner {
   }
 
   void execute(List<InputFile> files) {
+    PerformanceMeasure.Duration scannerDuration = PerformanceMeasure.start(this);
     ProgressReport progressReport = new ProgressReport("PHP analyzer progress", TimeUnit.SECONDS.toMillis(10));
     execute(progressReport, files);
+    scannerDuration.stop();
   }
 
   void execute(ProgressReport progressReport, List<InputFile> files) {

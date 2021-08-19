@@ -23,6 +23,7 @@ import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -88,7 +89,7 @@ public class PHPSensorTest {
   @org.junit.Rule
   public LogTester logTester = new LogTester();
 
-  private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
+  private SensorContextTester context;
 
   private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
 
@@ -118,6 +119,8 @@ public class PHPSensorTest {
     }
   }};
 
+  private static Path workDir;
+
   @Rule(
     key = "key",
     name = "name",
@@ -133,7 +136,9 @@ public class PHPSensorTest {
 
   @Before
   public void before() throws IOException {
-    context.fileSystem().setWorkDir(tmpFolder.newFolder().toPath());
+    context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
+    workDir = tmpFolder.newFolder().toPath();
+    context.fileSystem().setWorkDir(workDir);
   }
 
   private PHPSensor createSensor() {
@@ -538,6 +543,69 @@ public class PHPSensorTest {
     context.fileSystem().add(testFile);
     createSensor(check).execute(context);
     assertThat(check.wasTriggered).isTrue();
+  }
+
+  @Test
+  public void saving_performance_measure_not_activated_by_default() throws IOException {
+    TestFileCheck check = new TestFileCheck();
+    InputFile testFile = inputFile(ANALYZED_FILE, Type.TEST);
+    context.fileSystem().add(testFile);
+    createSensor(check).execute(context);
+
+    assertThat(context.allIssues()).isEmpty();
+    assertThat(logTester.logs(LoggerLevel.INFO)).noneMatch(s -> s.matches(".*performance measures.*"));
+    Path defaultPerformanceFile = workDir.resolve("sonar-python-performance-measure.json");
+    assertThat(defaultPerformanceFile).doesNotExist();
+  }
+
+  @Test
+  public void saving_performance_measure() throws IOException {
+    context.setSettings(new MapSettings().setProperty("sonar.php.performance.measure", "true"));
+
+    InputFile testFile = inputFile(ANALYZED_FILE, Type.TEST);
+    context.fileSystem().add(testFile);
+    createSensor(new TestFileCheck()).execute(context);
+
+    Path defaultPerformanceFile = workDir.resolve("sonar-php-performance-measure.json");
+    assertThat(logTester.logs(LoggerLevel.INFO)).anyMatch(s -> s.matches(".*performance measures.*"));
+    assertThat(defaultPerformanceFile).exists();
+    assertThat(new String(java.nio.file.Files.readAllBytes(defaultPerformanceFile), StandardCharsets.UTF_8)).contains("\"PhpSensor\"");
+  }
+
+  @Test
+  public void saving_performance_measure_custom_path() throws IOException {
+    Path customPerformanceFile = workDir.resolve("custom.performance.measure.json");
+    MapSettings mapSettings = new MapSettings();
+    mapSettings.setProperty("sonar.php.performance.measure", "true");
+    mapSettings.setProperty("sonar.php.performance.measure.path", customPerformanceFile.toString());
+    context.setSettings(mapSettings);
+
+    InputFile testFile = inputFile(ANALYZED_FILE, Type.TEST);
+    context.fileSystem().add(testFile);
+    createSensor(new TestFileCheck()).execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.INFO)).anyMatch(s -> s.matches(".*performance measures.*"));
+    Path defaultPerformanceFile = workDir.resolve("sonar-php-performance-measure.json");
+    assertThat(defaultPerformanceFile).doesNotExist();
+    assertThat(customPerformanceFile).exists();
+    assertThat(new String(java.nio.file.Files.readAllBytes(customPerformanceFile), StandardCharsets.UTF_8)).contains("\"PhpSensor\"");
+  }
+
+  @Test
+  public void saving_performance_measure_empty_path() throws IOException {
+    MapSettings mapSettings = new MapSettings();
+    mapSettings.setProperty("sonar.php.performance.measure", "true");
+    mapSettings.setProperty("sonar.php.performance.measure.path", "");
+    context.setSettings(mapSettings);
+
+    InputFile testFile = inputFile(ANALYZED_FILE, Type.TEST);
+    context.fileSystem().add(testFile);
+    createSensor(new TestFileCheck()).execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.INFO)).anyMatch(s -> s.matches(".*performance measures.*"));
+    Path defaultPerformanceFile = workDir.resolve("sonar-php-performance-measure.json");
+    assertThat(defaultPerformanceFile).exists();
+    assertThat(new String(java.nio.file.Files.readAllBytes(defaultPerformanceFile), StandardCharsets.UTF_8)).contains("\"PhpSensor\"");
   }
 
   @After

@@ -120,6 +120,7 @@ import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonarsource.performance.measure.PerformanceMeasure;
 
 public abstract class PHPVisitorCheck implements VisitorCheck {
   public static final int MAX_DEPTH = 1500;
@@ -639,9 +640,11 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public List<PhpIssue> analyze(CheckContext context) {
+    PerformanceMeasure.Duration visitorDuration = PerformanceMeasure.start(this);
     depth = 0;
     this.context = context;
     visitCompilationUnit(context.tree());
+    visitorDuration.stop();
     return context().getIssues();
   }
 

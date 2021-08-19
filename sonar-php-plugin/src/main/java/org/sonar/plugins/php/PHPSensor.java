@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.api.SonarProduct;
@@ -67,12 +68,18 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.CoverageResultImporter;
 import org.sonar.plugins.php.phpunit.TestResultImporter;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
+import org.sonarsource.performance.measure.PerformanceMeasure;
 
 import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_ANALYSIS_WARNINGS;
 
 public class PHPSensor implements Sensor {
 
   private static final Logger LOG = Loggers.get(PHPSensor.class);
+
+  private static final String PERFORMANCE_MEASURE_ACTIVATION_PROPERTY = "sonar.php.performance.measure";
+  private static final String PERFORMANCE_MEASURE_FILE_PATH_PROPERTY = "sonar.php.performance.measure.path";
+  private static final String PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar-php-performance-measure.json";
+
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
@@ -120,6 +127,8 @@ public class PHPSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
+    PerformanceMeasure.Duration sensorDuration = createPerformanceMeasureReport(context);
+
     FileSystem fileSystem = context.fileSystem();
 
     FilePredicate phpFilePredicate = fileSystem.predicates().hasLanguage(Php.KEY);
@@ -139,6 +148,20 @@ public class PHPSensor implements Sensor {
     } catch (CancellationException e) {
       LOG.info(e.getMessage());
     }
+    sensorDuration.stop();
+  }
+
+  private static PerformanceMeasure.Duration createPerformanceMeasureReport(SensorContext context) {
+    return PerformanceMeasure.reportBuilder()
+      .activate(context.config().get(PERFORMANCE_MEASURE_ACTIVATION_PROPERTY).filter("true"::equals).isPresent())
+      .toFile(context.config().get(PERFORMANCE_MEASURE_FILE_PATH_PROPERTY)
+        .filter(path -> !path.isEmpty())
+        .orElseGet(() -> Optional.ofNullable(context.fileSystem().workDir())
+          .filter(File::exists)
+          .map(file -> file.toPath().resolve(PERFORMANCE_MEASURE_DESTINATION_FILE).toString())
+          .orElse(null)))
+      .appendMeasurementCost()
+      .start("PhpSensor");
   }
 
   private static boolean inSonarLint(SensorContext context) {

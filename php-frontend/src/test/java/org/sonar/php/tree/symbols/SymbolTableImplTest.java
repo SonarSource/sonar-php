@@ -21,7 +21,8 @@ package org.sonar.php.tree.symbols;
 
 import com.google.common.collect.Iterables;
 import java.util.List;
-import org.assertj.core.api.ListAssert;
+import org.assertj.core.api.AbstractListAssert;
+import org.assertj.core.api.ObjectAssert;
 import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -532,13 +533,13 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbol("A1").qualifiedName()).hasToString("a1");
   }
 
-  private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
+  private static AbstractListAssert<?, List<? extends String>, String, ObjectAssert<String>> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
   }
 
-  private static ListAssert<String> assertFunctionSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
-    return assertThat(symbolTable.getSymbols(Kind.FUNCTION)).extracting(s -> s.qualifiedName().toString())
+  private static AbstractListAssert<?, List<?>, Object, ObjectAssert<Object>> assertFunctionSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
+    return assertThat(symbolTable.getSymbols(Kind.FUNCTION)).extracting(s -> s.qualifiedName().toString()).asList()
       .containsExactly(fullyQualifiedNames);
   }
 

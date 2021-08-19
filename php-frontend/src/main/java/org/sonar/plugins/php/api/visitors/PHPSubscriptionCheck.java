@@ -25,6 +25,7 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonarsource.performance.measure.PerformanceMeasure;
 
 public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements PHPCheck {
 
@@ -55,8 +56,10 @@ public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements 
 
   @Override
   public final List<PhpIssue> analyze(CheckContext context) {
+    PerformanceMeasure.Duration visitorDuration = PerformanceMeasure.start(this);
     this.context = context;
     scanTree(context.tree());
+    visitorDuration.stop();
     return context().getIssues();
   }
 
