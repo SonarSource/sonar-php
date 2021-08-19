@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.Collections;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -63,7 +62,7 @@ public class ScannerTest {
   private static class TestScanner extends Scanner {
 
    TestScanner(SensorContext context) {
-      super(context, new DurationStatistics(context.config()));
+      super(context);
     }
 
     @Override

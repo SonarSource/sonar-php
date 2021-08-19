@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.sonar.DurationStatistics;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
@@ -121,7 +120,6 @@ public class PHPSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-    DurationStatistics statistics = new DurationStatistics(context.config());
     FileSystem fileSystem = context.fileSystem();
 
     FilePredicate phpFilePredicate = fileSystem.predicates().hasLanguage(Php.KEY);
@@ -129,20 +127,18 @@ public class PHPSensor implements Sensor {
     List<InputFile> inputFiles = new ArrayList<>();
     fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
 
-    SymbolScanner symbolScanner = new SymbolScanner(context, statistics);
+    SymbolScanner symbolScanner = new SymbolScanner(context);
 
     try {
       symbolScanner.execute(inputFiles);
       ProjectSymbolData projectSymbolData = symbolScanner.getProjectSymbolData();
-      new AnalysisScanner(context, projectSymbolData, statistics).execute(inputFiles);
+      new AnalysisScanner(context, projectSymbolData).execute(inputFiles);
       if (!inSonarLint(context)) {
         processTestsAndCoverage(context);
       }
     } catch (CancellationException e) {
       LOG.info(e.getMessage());
     }
-
-    statistics.log();
   }
 
   private static boolean inSonarLint(SensorContext context) {
@@ -160,8 +156,8 @@ public class PHPSensor implements Sensor {
 
     private final boolean hasTestFileChecks;
 
-    public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData, DurationStatistics statistics) {
-      super(context, statistics);
+    public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData) {
+      super(context);
 
       List<PHPCheck> allChecks = checks.all();
       if (inSonarLint(context)) {
@@ -175,8 +171,7 @@ public class PHPSensor implements Sensor {
         collect(Collectors.toList());
       hasTestFileChecks = !testFilesChecks.isEmpty();
 
-      File workingDir = context.fileSystem().workDir();
-      phpAnalyzer = new PHPAnalyzer(allChecks, testFilesChecks, workingDir, projectSymbolData, statistics);
+      phpAnalyzer = new PHPAnalyzer(allChecks, testFilesChecks, context.fileSystem().workDir(), projectSymbolData);
     }
 
     @Override

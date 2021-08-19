@@ -22,7 +22,6 @@ package org.sonar.plugins.php;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
@@ -34,11 +33,9 @@ abstract class Scanner {
   private static final Logger LOG = Loggers.get(Scanner.class);
   private static final String FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast";
   protected final SensorContext context;
-  protected final DurationStatistics statistics;
 
-  Scanner(SensorContext context, DurationStatistics statistics) {
+  Scanner(SensorContext context) {
     this.context = context;
-    this.statistics = statistics;
   }
 
   void execute(List<InputFile> files) {
