@@ -23,6 +23,12 @@ use my\space\MyClass;       /* Noncompliant */ // no blank line after use
 {
 }
 
+use my\space\MyClass;
+use my\space\{C1, C2};
+use my\space\{C3, C4};       /* Noncompliant */ // no blank line after use
+{
+}
+
 namespace another\bar;      /* Noncompliant */ // no blank line after namespace
 // namespace
 {
