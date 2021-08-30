@@ -80,7 +80,7 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
   public void visitUseStatement(UseStatementTree tree) {
     useStatements.add(tree);
 
-    if (!nextStatement.is(Kind.USE_STATEMENT)) {
+    if (!nextStatement.is(Kind.USE_STATEMENT, Kind.GROUP_USE_STATEMENT)) {
       checkUsesAreBeforeNamespace();
       checkBlankLineAfterUses(tree);
       useStatements.clear();
