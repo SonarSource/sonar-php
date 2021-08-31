@@ -17,28 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.regex;
 
-import java.util.Set;
-import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import java.util.HashMap;
+import java.util.Map;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonarsource.analyzer.commons.regex.RegexParseResult;
+import org.sonarsource.analyzer.commons.regex.RegexParser;
+import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 
-@Rule(key = PhpSapiNameFunctionUsageCheck.KEY)
-public class PhpSapiNameFunctionUsageCheck extends FunctionUsageCheck {
+public final class RegexCache {
+  private final Map<LiteralTree, RegexParseResult> cache = new HashMap<>();
 
-  public static final String KEY = "S2044";
-  private static final String MESSAGE = "Use the \"PHP_SAPI\" constant instead.";
-
-  @Override
-  protected Set<String> expectedFunctions() {
-    return SetUtils.immutableSetOf("php_sapi_name");
+  public RegexParseResult getRegexForLiterals(FlagSet initialFlags, LiteralTree stringLiteral) {
+    return cache.computeIfAbsent(stringLiteral,
+      k -> new RegexParser(new PhpRegexSource(k), initialFlags).parse());
   }
-
-  @Override
-  protected void checkFunctionCall(FunctionCallTree tree) {
-    context().newIssue(this, tree.callee(), MESSAGE);
-  }
-
 }

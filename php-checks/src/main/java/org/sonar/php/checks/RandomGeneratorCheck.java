@@ -31,12 +31,12 @@ public class RandomGeneratorCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Make sure that using this pseudorandom number generator is safe here.";
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> expectedFunctions() {
     return SetUtils.immutableSetOf("rand", "mt_rand");
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     context().newIssue(this, tree, MESSAGE);  
   }
   

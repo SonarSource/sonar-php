@@ -17,28 +17,4 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
-
-import java.util.Set;
-import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-
-@Rule(key = PhpSapiNameFunctionUsageCheck.KEY)
-public class PhpSapiNameFunctionUsageCheck extends FunctionUsageCheck {
-
-  public static final String KEY = "S2044";
-  private static final String MESSAGE = "Use the \"PHP_SAPI\" constant instead.";
-
-  @Override
-  protected Set<String> expectedFunctions() {
-    return SetUtils.immutableSetOf("php_sapi_name");
-  }
-
-  @Override
-  protected void checkFunctionCall(FunctionCallTree tree) {
-    context().newIssue(this, tree.callee(), MESSAGE);
-  }
-
-}
+package org.sonar.php.checks.regex;

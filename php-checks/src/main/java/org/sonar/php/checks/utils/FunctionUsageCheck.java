@@ -32,28 +32,28 @@ public abstract class FunctionUsageCheck extends PHPVisitorCheck {
 
   private Set<String> lowerCaseFunctionNames;
 
-  protected abstract Set<String> functionNames();
+  protected abstract Set<String> expectedFunctions();
 
   @Override
   public void init() {
     super.init();
-    lowerCaseFunctionNames = functionNames().stream()
+    lowerCaseFunctionNames = expectedFunctions().stream()
       .map(name -> name.toLowerCase(Locale.ROOT))
       .collect(Collectors.toSet());
   }
 
-  protected abstract void createIssue(FunctionCallTree tree);
+  protected abstract void checkFunctionCall(FunctionCallTree tree);
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (isForbiddenFunction(tree.callee())) {
-      createIssue(tree);
+    if (isExpectedFunction(tree.callee())) {
+      checkFunctionCall(tree);
     }
 
     super.visitFunctionCall(tree);
   }
 
-  private boolean isForbiddenFunction(ExpressionTree callee) {
+  private boolean isExpectedFunction(ExpressionTree callee) {
     return callee.is(Kind.NAMESPACE_NAME) &&
       lowerCaseFunctionNames.contains(((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ROOT));
   }

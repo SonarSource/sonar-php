@@ -32,12 +32,12 @@ public class CallToIniSetCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Move this configuration into a configuration file.";
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> expectedFunctions() {
     return SetUtils.immutableSetOf("ini_set");
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     context().newIssue(this, tree.callee(), MESSAGE);
   }
 

@@ -57,12 +57,12 @@ public class SessionCookiePersistenceCheck extends FunctionUsageCheck implements
   }
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> expectedFunctions() {
     return SetUtils.immutableSetOf("session_set_cookie_params");
   }
 
   @Override
-  protected void createIssue(FunctionCallTree functionCall) {
+  protected void checkFunctionCall(FunctionCallTree functionCall) {
     Optional<CallArgumentTree> lifetimeArgument = CheckUtils.argument(functionCall, "lifetime", 0);
     if (lifetimeArgument.isPresent()) {
       ExpressionTree lifetimeArgumentValue = lifetimeArgument.get().value();

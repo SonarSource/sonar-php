@@ -33,7 +33,7 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 public abstract class WordPressConfigVisitor extends FunctionUsageCheck {
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> expectedFunctions() {
     return Collections.singleton("define");
   }
 
@@ -45,7 +45,7 @@ public abstract class WordPressConfigVisitor extends FunctionUsageCheck {
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     if (shouldVisitConfig(tree)) {
       visitConfigDeclaration(tree);
     }

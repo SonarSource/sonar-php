@@ -33,12 +33,12 @@ public class EchoWithParenthesisCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Remove the parentheses from this \"echo\" call.";
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> expectedFunctions() {
     return SetUtils.immutableSetOf("echo");
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     if (isParenthesized(tree)) {
       context().newIssue(this, tree.callee(), MESSAGE);
     }

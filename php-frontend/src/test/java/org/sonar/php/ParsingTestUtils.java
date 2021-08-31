@@ -28,16 +28,16 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 public class ParsingTestUtils {
 
-  protected ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
+  public static ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
 
-  protected CompilationUnitTree parse(String filename) {
+  public static CompilationUnitTree parse(String filename) {
     File file = new File("src/test/resources/", filename);
 
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     return (CompilationUnitTree) parser.parse(file);
   }
 
-  protected CompilationUnitTree parseSource(String sourceCode) {
+  public static CompilationUnitTree parseSource(String sourceCode) {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     return (CompilationUnitTree) parser.parse(sourceCode);
   }

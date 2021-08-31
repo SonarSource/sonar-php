@@ -71,12 +71,12 @@ public class RegexUsageCheck extends FunctionUsageCheck {
     "spliti");
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> expectedFunctions() {
     return FUNCTION_NAMES;
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     int index = getPatternArgumentIndex(tree);
     Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "pattern", index);
     if (!argument.isPresent()) {

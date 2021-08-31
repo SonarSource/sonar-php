@@ -384,6 +384,10 @@ public final class CheckUtils {
     return Optional.empty();
   }
 
+  public static Optional<ExpressionTree> argumentValue(FunctionCallTree call, String name, int position) {
+    return argument(call, name, position).map(CallArgumentTree::value);
+  }
+
   public static boolean hasNamedArgument(FunctionCallTree call) {
     return call.callArguments().stream().anyMatch(arg -> arg.name() != null);
   }
@@ -437,5 +441,12 @@ public final class CheckUtils {
       return get(classTree).isSubTypeOf(qualifiedName).isTrue();
     }
     return false;
+  }
+
+  public static Optional<String> getString(ExpressionTree tree) {
+    if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+      return Optional.of(trimQuotes((LiteralTree) tree));
+    }
+    return Optional.empty();
   }
 }
