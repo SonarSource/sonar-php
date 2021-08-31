@@ -16,3 +16,4 @@
   preg_replace($unknownPattern, "a", $input); // Compliant
 
   preg_replace("/+/", "a", $input); // Compliant
+  preg_replace(PATTERN, "a", $input); // Compliant

@@ -21,14 +21,17 @@ package org.sonar.php.regex;
 
 import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
+import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class RegexCacheTest {
 
@@ -52,10 +55,24 @@ public class RegexCacheTest {
     assertThat(s0.value()).isEqualTo(s1.value());
     assertThat(resultForS0)
       .isNotEqualTo(resultForS1)
-      // same input, same result
       .isSameAs(cache.getRegexForLiterals(new FlagSet(), s0));
 
     assertThat(resultForS1).isSameAs(cache.getRegexForLiterals(new FlagSet(), s1));
+  }
+
+  @Test
+  public void test_cache_via_context() {
+    CompilationUnitTree cut = ParsingTestUtils.parseSource("<?php" +
+      "$s0 = '/abc/';"
+    );
+    ExpressionStatementTree statement1 = (ExpressionStatementTree) cut.script().statements().get(0);
+    LiteralTree s0 = (LiteralTree) ((AssignmentExpressionTree) statement1.expression()).value();
+
+    PHPCheckContext phpCheckContext = new PHPCheckContext(mock(PhpFile.class), cut, null);
+
+    RegexParseResult result1 = phpCheckContext.regexForLiteral(new FlagSet(), s0);
+    RegexParseResult result2 = phpCheckContext.regexForLiteral(new FlagSet(), s0);
+    assertThat(result1).isSameAs(result2);
   }
 
 }

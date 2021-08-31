@@ -21,6 +21,7 @@ package org.sonar.php.regex;
 
 import java.util.List;
 import org.junit.Test;
+import org.sonarsource.analyzer.commons.regex.RegexDialect;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
@@ -50,14 +51,20 @@ public class PhpRegexSourceTest {
   @Test
   public void test_missing_delimiters() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> makeSource("'a\nb'"));
-    assertEquals(exception.getMessage(), "Regular expression does not contain delimiters");
+    assertEquals("Regular expression does not contain delimiters", exception.getMessage());
     assertThrows(IllegalArgumentException.class, () -> makeSource("'@'"));
   }
 
   @Test
   public void test_non_string_literal() {
     Exception exception = assertThrows(IllegalArgumentException.class, () -> makeSource("1"));
-    assertEquals(exception.getMessage(), "Only string literals allowed");
+    assertEquals("Only string literals allowed", exception.getMessage());
+  }
+
+  @Test
+  public void test_constant() {
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> makeSource("1"));
+    assertEquals("Only string literals allowed", exception.getMessage());
   }
 
   @Test
@@ -71,6 +78,12 @@ public class PhpRegexSourceTest {
     assertCharacter('a', items.get(0));
     assertCharacter('\n', items.get(1));
     assertCharacter('b', items.get(2));
+  }
+
+  @Test
+  public void test_dialect() {
+    RegexSource source = makeSource("'/a/'");
+    assertEquals(RegexDialect.PHP, source.dialect());
   }
 
   private static void assertCharacter(char expected, RegexTree tree) {

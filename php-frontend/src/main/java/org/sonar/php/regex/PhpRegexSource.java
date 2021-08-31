@@ -33,7 +33,7 @@ public class PhpRegexSource implements RegexSource {
   /**
    * The delimiter can be any character that is not a letter, number, backslash or space.
    */
-  private static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\d\\w\\r\\n\\t\\f\\v ]");
+  private static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\w\\r\\n\\t\\f\\v ]");
 
   public PhpRegexSource(LiteralTree stringLiteral) {
     sourceText = literalToString(stringLiteral);
@@ -54,10 +54,7 @@ public class PhpRegexSource implements RegexSource {
   }
 
   public static String trimQuotes(String value) {
-    if (value.length() > 1 && (value.startsWith("'") || value.startsWith("\""))) {
-      return value.substring(1, value.length() - 1);
-    }
-    return value;
+    return value.substring(1, value.length() - 1);
   }
 
   @Override

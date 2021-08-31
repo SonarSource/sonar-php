@@ -19,8 +19,6 @@
  */
 package org.sonar.php.checks.regex;
 
-import java.util.Collections;
-import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
@@ -31,11 +29,6 @@ import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 public class StringReplaceCheck extends AbstractRegexCheck {
 
   private static final String MESSAGE = "Replace this \"preg_replace()\" call by a \"str_replace()\" function call.";
-
-  @Override
-  protected Set<String> expectedFunctions() {
-    return Collections.singleton("preg_replace");
-  }
 
   @Override
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {

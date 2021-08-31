@@ -27,8 +27,6 @@ import org.sonarsource.analyzer.commons.regex.ast.SourceCharacter;
 
 public class PhpCharacterParser implements CharacterParser {
 
-  private final PhpRegexSource source;
-
   private final PhpUnicodeEscapeParser unicodeProcessedCharacters;
 
   /**
@@ -38,7 +36,6 @@ public class PhpCharacterParser implements CharacterParser {
   private SourceCharacter current;
 
   public PhpCharacterParser(PhpRegexSource source) {
-    this.source = source;
     this.unicodeProcessedCharacters = new PhpUnicodeEscapeParser(source);
     moveNext();
   }

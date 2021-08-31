@@ -64,10 +64,11 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   }
 
   @Override
+  // TODO: parse regex flags from pattern and dedicated arguments
   protected void checkFunctionCall(FunctionCallTree tree) {
     CheckUtils.argumentValue(tree, "pattern", 0)
       .flatMap(AbstractRegexCheck::getLiteral)
-      .map(pattern -> regexForLiteral(getFlagSet(tree), pattern))
+      .map(pattern -> regexForLiteral(new FlagSet(), pattern))
       .ifPresent(result -> checkRegex(result, tree));
   }
 
@@ -82,13 +83,6 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
 
   protected final RegexParseResult regexForLiteral(FlagSet flags, LiteralTree literals) {
     return regexContext.regexForLiteral(flags, literals);
-  }
-
-  /**
-   * TODO: parse regex flags from pattern and dedicated arguments
-   */
-  protected static FlagSet getFlagSet(FunctionCallTree tree) {
-    return new FlagSet();
   }
 
   public abstract void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall);
