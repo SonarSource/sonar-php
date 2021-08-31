@@ -442,11 +442,4 @@ public final class CheckUtils {
     }
     return false;
   }
-
-  public static Optional<String> getString(ExpressionTree tree) {
-    if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      return Optional.of(trimQuotes((LiteralTree) tree));
-    }
-    return Optional.empty();
-  }
 }
