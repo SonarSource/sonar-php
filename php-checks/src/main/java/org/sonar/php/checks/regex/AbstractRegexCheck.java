@@ -49,10 +49,10 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   private RegexCheckContext regexContext;
 
   // We want to report only one issue per element for one rule.
-  private final HashSet<RegexSyntaxElement> reportedRegexTrees = new HashSet<>();
+  private final Set<RegexSyntaxElement> reportedRegexTrees = new HashSet<>();
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return REGEX_FUNCTIONS;
   }
 

@@ -57,7 +57,7 @@ public class SessionCookiePersistenceCheck extends FunctionUsageCheck implements
   }
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("session_set_cookie_params");
   }
 

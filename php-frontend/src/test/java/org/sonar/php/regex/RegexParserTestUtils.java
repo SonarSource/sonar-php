@@ -48,7 +48,7 @@ public class RegexParserTestUtils {
   }
 
   // place the String which will contain the regex on 3rd line, starting from index 0
-  private static final String PHP_CODE = "<?php foo(%s);";
+  private static final String PHP_CODE = "<?php\nfoo(\n%s\n);";
 
   public static RegexSource makeSource(String content) {
     CompilationUnitTree tree = ParsingTestUtils.parseSource(String.format(PHP_CODE, content));

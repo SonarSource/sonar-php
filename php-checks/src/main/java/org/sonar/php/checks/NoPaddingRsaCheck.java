@@ -41,7 +41,7 @@ public class NoPaddingRsaCheck extends FunctionUsageCheck {
   private static final String SECURE_PADDING = "OPENSSL_PKCS1_OAEP_PADDING";
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("openssl_public_encrypt");
   }
 

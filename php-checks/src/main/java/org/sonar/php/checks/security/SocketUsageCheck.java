@@ -43,7 +43,7 @@ public class SocketUsageCheck extends FunctionUsageCheck {
     "stream_socket_pair");
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return FUNCTION_NAMES;
   }
 

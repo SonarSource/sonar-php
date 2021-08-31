@@ -35,7 +35,7 @@ public class LDAPAuthenticatedConnectionCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Provide username and password to authenticate the connection.";
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("ldap_bind");
   }
 

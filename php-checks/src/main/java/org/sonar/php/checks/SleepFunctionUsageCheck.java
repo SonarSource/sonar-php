@@ -32,7 +32,7 @@ public class SleepFunctionUsageCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Remove this call to \"sleep\".";
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("sleep");
   }
 

@@ -32,12 +32,12 @@ public abstract class FunctionUsageCheck extends PHPVisitorCheck {
 
   private Set<String> lowerCaseFunctionNames;
 
-  protected abstract Set<String> expectedFunctions();
+  protected abstract Set<String> lookedUpFunctionNames();
 
   @Override
   public void init() {
     super.init();
-    lowerCaseFunctionNames = expectedFunctions().stream()
+    lowerCaseFunctionNames = lookedUpFunctionNames().stream()
       .map(name -> name.toLowerCase(Locale.ROOT))
       .collect(Collectors.toSet());
   }

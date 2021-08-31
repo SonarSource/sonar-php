@@ -40,15 +40,18 @@ public class PhpCharacterParser implements CharacterParser {
     moveNext();
   }
 
+  @Override
   public void resetTo(int index) {
     unicodeProcessedCharacters.resetTo(index);
     moveNext();
   }
 
+  @Override
   public void moveNext() {
     current = parsePhpCharacter();
   }
 
+  @Override
   @Nonnull
   public SourceCharacter getCurrent() {
     if (current == null) {
@@ -57,6 +60,7 @@ public class PhpCharacterParser implements CharacterParser {
     return current;
   }
 
+  @Override
   public boolean isAtEnd() {
     return current == null;
   }

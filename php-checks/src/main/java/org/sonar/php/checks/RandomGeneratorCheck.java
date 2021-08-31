@@ -31,7 +31,7 @@ public class RandomGeneratorCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Make sure that using this pseudorandom number generator is safe here.";
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("rand", "mt_rand");
   }
 

@@ -35,7 +35,7 @@ public class InsecureHashCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Use a stronger hashing algorithm than %s.";
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("md5", "sha1");
   }
 

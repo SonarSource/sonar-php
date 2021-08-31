@@ -32,7 +32,7 @@ public class PhpSapiNameFunctionUsageCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Use the \"PHP_SAPI\" constant instead.";
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("php_sapi_name");
   }
 

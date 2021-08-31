@@ -31,8 +31,8 @@ import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 import static org.sonar.php.regex.RegexParserTestUtils.assertKind;
 import static org.sonar.php.regex.RegexParserTestUtils.assertSuccessfulParse;
 import static org.sonar.php.regex.RegexParserTestUtils.makeSource;
@@ -50,21 +50,16 @@ public class PhpRegexSourceTest {
 
   @Test
   public void test_missing_delimiters() {
-    Exception exception = assertThrows(IllegalArgumentException.class, () -> makeSource("'a\nb'"));
-    assertEquals("Regular expression does not contain delimiters", exception.getMessage());
-    assertThrows(IllegalArgumentException.class, () -> makeSource("'@'"));
+    assertThatThrownBy(() -> makeSource("'a\nb'"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Regular expression does not contain delimiters");
   }
 
   @Test
   public void test_non_string_literal() {
-    Exception exception = assertThrows(IllegalArgumentException.class, () -> makeSource("1"));
-    assertEquals("Only string literals allowed", exception.getMessage());
-  }
-
-  @Test
-  public void test_constant() {
-    Exception exception = assertThrows(IllegalArgumentException.class, () -> makeSource("1"));
-    assertEquals("Only string literals allowed", exception.getMessage());
+    assertThatThrownBy(() -> makeSource("1"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Only string literals allowed");
   }
 
   @Test

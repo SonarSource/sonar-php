@@ -32,7 +32,7 @@ public class UnserializeCallCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Make sure deserializing objects is safe here.";
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("unserialize");
   }
 

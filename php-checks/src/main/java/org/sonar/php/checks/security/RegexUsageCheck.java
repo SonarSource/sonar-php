@@ -71,7 +71,7 @@ public class RegexUsageCheck extends FunctionUsageCheck {
     "spliti");
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return FUNCTION_NAMES;
   }
 

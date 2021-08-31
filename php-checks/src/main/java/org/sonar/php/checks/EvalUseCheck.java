@@ -33,7 +33,7 @@ public class EvalUseCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Make sure that this dynamic injection or execution of code is safe.";
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf(PHPKeyword.EVAL.getValue());
   }
 

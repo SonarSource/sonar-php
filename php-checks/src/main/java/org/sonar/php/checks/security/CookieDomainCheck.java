@@ -54,7 +54,7 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
     .build();
 
   @Override
-  protected Set<String> expectedFunctions() {
+  protected Set<String> lookedUpFunctionNames() {
     return Collections.unmodifiableSet(FUNCTION_AND_PARAM_INDEX.keySet());
   }
 
