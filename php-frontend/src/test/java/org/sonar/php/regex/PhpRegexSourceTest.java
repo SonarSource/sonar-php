@@ -21,6 +21,7 @@ package org.sonar.php.regex;
 
 import java.util.List;
 import org.junit.Test;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonarsource.analyzer.commons.regex.RegexDialect;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.RegexParser;
@@ -70,9 +71,8 @@ public class PhpRegexSourceTest {
   }
 
   @Test
-  // TODO: Extend test with character location checks
   public void test_string_literal() {
-    RegexTree regex = assertSuccessfulParse("'/a\nb/'");
+    RegexTree regex = assertSuccessfulParse("'/a\nb/'"); // <?php foo('/a\db/');
     assertKind(RegexTree.Kind.SEQUENCE, regex);
     List<RegexTree> items = ((SequenceTree) regex).getItems();
     assertThat(items).hasSize(3);
@@ -80,6 +80,10 @@ public class PhpRegexSourceTest {
     assertCharacter('a', items.get(0));
     assertCharacter('\n', items.get(1));
     assertCharacter('b', items.get(2));
+
+    assertLocation(3, 2, 3, items.get(0));
+    assertLocation(3, 3, 4, items.get(1));
+    assertLocation(3, 4, 5, items.get(2));
   }
 
   @Test
@@ -91,6 +95,18 @@ public class PhpRegexSourceTest {
   private static void assertCharacter(char expected, RegexTree tree) {
     assertKind(RegexTree.Kind.CHARACTER, tree);
     assertEquals(expected, ((CharacterTree) tree).codePointOrUnit());
+  }
+
+  private static void assertLocation(int line, int startLineOffset, int endLineOffset, RegexTree tree) {
+    LocationInFile location = ((PhpRegexSource) tree.getSource()).locationInFileFor(tree.getRange());
+    assertLocation(line, startLineOffset, endLineOffset, location);
+  }
+
+  private static void assertLocation(int line, int startLineOffset, int endLineOffset, LocationInFile location) {
+    assertEquals(String.format("Expected line to be '%d' but got '%d'", line, location.startLine()), line, location.startLine());
+    assertEquals(String.format("Expected line to be '%d' but got '%d'", line, location.endLine()), line, location.endLine());
+    assertEquals(String.format("Expected start character to be '%d' but got '%d'", startLineOffset, location.startLineOffset()), startLineOffset, location.startLineOffset());
+    assertEquals(String.format("Expected end character to be '%d' but got '%d'", endLineOffset, location.endLineOffset()), endLineOffset, location.endLineOffset());
   }
 
 }

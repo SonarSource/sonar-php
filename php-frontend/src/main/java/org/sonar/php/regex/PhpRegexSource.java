@@ -20,15 +20,20 @@
 package org.sonar.php.regex;
 
 import java.util.regex.Pattern;
+import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonarsource.analyzer.commons.regex.CharacterParser;
 import org.sonarsource.analyzer.commons.regex.RegexDialect;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
+import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
 
 public class PhpRegexSource implements RegexSource {
 
   private final String sourceText;
+  private final int sourceLine;
+  private final int sourceStartOffset;
 
   /**
    * The delimiter can be any character that is not a letter, number, backslash or space.
@@ -37,6 +42,8 @@ public class PhpRegexSource implements RegexSource {
 
   public PhpRegexSource(LiteralTree stringLiteral) {
     sourceText = literalToString(stringLiteral);
+    sourceLine = stringLiteral.token().line();
+    sourceStartOffset = stringLiteral.token().column() + 2;
   }
 
   private static String literalToString(LiteralTree literal) {
@@ -70,5 +77,9 @@ public class PhpRegexSource implements RegexSource {
   @Override
   public RegexDialect dialect() {
     return RegexDialect.PHP;
+  }
+
+  public LocationInFile locationInFileFor(IndexRange range) {
+    return new LocationInFileImpl(null, sourceLine, sourceStartOffset + range.getBeginningOffset(), sourceLine,sourceStartOffset + range.getEndingOffset());
   }
 }

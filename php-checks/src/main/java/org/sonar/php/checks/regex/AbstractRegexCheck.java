@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.regex;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +27,7 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.regex.RegexCheck;
 import org.sonar.php.regex.RegexCheckContext;
+import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -41,10 +41,9 @@ import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
 public abstract class AbstractRegexCheck extends FunctionUsageCheck implements RegexCheck {
 
-  // TODO: Should be extended by all other regex methods we want to handle
-  protected static final Set<String> REGEX_FUNCTIONS = new HashSet<>(Collections.singletonList(
-    "preg_replace"
-  ));
+  protected static final Set<String> REGEX_FUNCTIONS = SetUtils.immutableSetOf(
+    "preg_replace", "preg_match", "preg_filter", "preg_replace_callback", "preg_split"
+  );
 
   private RegexCheckContext regexContext;
 
@@ -86,4 +85,10 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   }
 
   public abstract void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall);
+
+  public final void reportIssue(RegexSyntaxElement regexTree, String message, List<RegexCheck.RegexIssueLocation> secondaries) {
+    if (reportedRegexTrees.add(regexTree)) {
+      regexContext.newIssue(this, regexTree, message, secondaries);
+    }
+  }
 }

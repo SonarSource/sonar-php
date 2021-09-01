@@ -19,9 +19,15 @@
  */
 package org.sonar.php.regex;
 
+import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
 public interface RegexCheck extends PHPCheck {
 
-
+  class RegexIssueLocation extends IssueLocation {
+    public RegexIssueLocation(RegexSyntaxElement tree, String message) {
+      super(((PhpRegexSource) tree.getSource()).locationInFileFor(tree.getRange()), message);
+    }
+  }
 }

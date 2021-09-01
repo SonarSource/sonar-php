@@ -62,7 +62,7 @@ public class PreciseIssue implements PhpIssue {
     return secondary(new IssueLocation(locationInFile, message));
   }
 
-  private PreciseIssue secondary(IssueLocation issueLocation) {
+  public PreciseIssue secondary(IssueLocation issueLocation) {
     this.secondaryLocations.add(issueLocation);
     return this;
   }

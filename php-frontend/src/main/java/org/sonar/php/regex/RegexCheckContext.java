@@ -20,9 +20,15 @@
 package org.sonar.php.regex;
 
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
+import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
 public interface RegexCheckContext {
+
+  PreciseIssue newIssue(RegexCheck regexCheck, RegexSyntaxElement regexSyntaxElement, String message);
+
   RegexParseResult regexForLiteral(FlagSet initialFlags, LiteralTree stringLiteral);
+
 }
