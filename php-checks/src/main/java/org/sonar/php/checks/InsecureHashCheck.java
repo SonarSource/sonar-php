@@ -35,12 +35,12 @@ public class InsecureHashCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Use a stronger hashing algorithm than %s.";
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("md5", "sha1");
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     String functionName = getFunctionName(tree);
     context().newIssue(this, tree.callee(), String.format(MESSAGE, functionName.toUpperCase(Locale.ENGLISH)));
   }

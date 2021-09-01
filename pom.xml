@@ -89,7 +89,7 @@
     <version.sslr>1.24.0.633</version.sslr>
     <version.guava>30.1.1-jre</version.guava>
     <version.sonarlint>4.7.0.12286</version.sonarlint>
-    <version.analyzer-commons>1.14.1.690</version.analyzer-commons>
+    <version.analyzer-commons>1.16.0.724</version.analyzer-commons>
 
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>
@@ -176,6 +176,11 @@
       <dependency>
         <groupId>org.sonarsource.analyzer-commons</groupId>
         <artifactId>sonar-xml-parsing</artifactId>
+        <version>${version.analyzer-commons}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.sonarsource.analyzer-commons</groupId>
+        <artifactId>sonar-regex-parsing</artifactId>
         <version>${version.analyzer-commons}</version>
       </dependency>
       <dependency>

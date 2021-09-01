@@ -24,10 +24,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.sonar.php.regex.RegexCache;
+import org.sonar.php.regex.RegexCheckContext;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
@@ -36,8 +39,10 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+import org.sonarsource.analyzer.commons.regex.RegexParseResult;
+import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 
-public class PHPCheckContext implements CheckContext {
+public class PHPCheckContext implements CheckContext, RegexCheckContext {
 
   private final PhpFile file;
   private final CompilationUnitTree tree;
@@ -45,6 +50,7 @@ public class PHPCheckContext implements CheckContext {
   private final File workingDirectory;
   private final SymbolTable symbolTable;
   private List<PhpIssue> issues;
+  private final RegexCache regexCache;
 
   public PHPCheckContext(PhpFile file, CompilationUnitTree tree, @Nullable File workingDirectory) {
     this(file, tree, workingDirectory, SymbolTableImpl.create(tree));
@@ -56,6 +62,7 @@ public class PHPCheckContext implements CheckContext {
     this.workingDirectory = workingDirectory;
     this.symbolTable = symbolTable;
     this.issues = new ArrayList<>();
+    this.regexCache = new RegexCache();
   }
 
   @Override
@@ -85,6 +92,11 @@ public class PHPCheckContext implements CheckContext {
     issues.add(issue);
 
     return issue;
+  }
+
+  @Override
+  public RegexParseResult regexForLiteral(FlagSet initialFlags, LiteralTree stringLiteral) {
+    return regexCache.getRegexForLiterals(initialFlags, stringLiteral);
   }
 
   @Override

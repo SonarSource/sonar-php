@@ -42,6 +42,7 @@ import org.sonar.php.checks.phpunit.NoTestInTestClassCheck;
 import org.sonar.php.checks.phpunit.NotDiscoverableTestCheck;
 import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
 import org.sonar.php.checks.phpunit.TestClassNameCheck;
+import org.sonar.php.checks.regex.StringReplaceCheck;
 import org.sonar.php.checks.security.AuthorizationsCheck;
 import org.sonar.php.checks.security.CORSPolicyCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
@@ -319,7 +320,13 @@ public class CheckList {
       SessionUseTransSidCheck.class);
   }
 
+  public static Set<Class<?>> getRegexChecks() {
+    return SetUtils.immutableSetOf(
+      StringReplaceCheck.class
+    );
+  }
+
   public static Set<Class<?>> getAllChecks() {
-    return SetUtils.concat(new HashSet<>(getChecks()), getPhpIniChecks());
+    return SetUtils.concat(new HashSet<>(getChecks()), getPhpIniChecks(), getRegexChecks());
   }
 }

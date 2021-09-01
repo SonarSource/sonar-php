@@ -35,12 +35,12 @@ public class LDAPAuthenticatedConnectionCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Provide username and password to authenticate the connection.";
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("ldap_bind");
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     if (argumentIsNullOrEmptyString(tree, "bind_rdn", 1) || argumentIsNullOrEmptyString(tree, "bind_password", 2)) {
       context().newIssue(this, tree, MESSAGE);
     }

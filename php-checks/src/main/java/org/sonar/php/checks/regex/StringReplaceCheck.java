@@ -17,28 +17,30 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.checks.regex;
 
-import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonarsource.analyzer.commons.regex.RegexParseResult;
+import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
+import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 
-@Rule(key = CallToIniSetCheck.KEY)
-public class CallToIniSetCheck extends FunctionUsageCheck {
+@Rule(key = "S5361")
+public class StringReplaceCheck extends AbstractRegexCheck {
 
-  public static final String KEY = "S2918";
-  private static final String MESSAGE = "Move this configuration into a configuration file.";
-
-  @Override
-  protected Set<String> lookedUpFunctionNames() {
-    return SetUtils.immutableSetOf("ini_set");
-  }
+  private static final String MESSAGE = "Replace this \"preg_replace()\" call by a \"str_replace()\" function call.";
 
   @Override
-  protected void checkFunctionCall(FunctionCallTree tree) {
-    context().newIssue(this, tree.callee(), MESSAGE);
+  public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
+    RegexTree regex = regexParseResult.getResult();
+    if (!regexParseResult.hasSyntaxErrors() && isPlainString(regex)) {
+      newIssue(regexFunctionCall.callee(), MESSAGE);
+    }
   }
 
+  private static boolean isPlainString(RegexTree regex) {
+    return regex.is(RegexTree.Kind.CHARACTER)
+      || (regex.is(RegexTree.Kind.SEQUENCE)
+        && ((SequenceTree) regex).getItems().stream().allMatch(item -> item.is(RegexTree.Kind.CHARACTER)));
+  }
 }

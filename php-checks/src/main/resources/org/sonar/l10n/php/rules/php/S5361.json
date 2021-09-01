@@ -1,0 +1,17 @@
+{
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "regex",
+    "performance"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-5361",
+  "sqKey": "S5361",
+  "scope": "All",
+  "title": "`str_replace` should be preferred to `preg_replace`"
+}

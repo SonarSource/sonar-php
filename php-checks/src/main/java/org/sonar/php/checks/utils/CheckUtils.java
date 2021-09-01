@@ -384,6 +384,10 @@ public final class CheckUtils {
     return Optional.empty();
   }
 
+  public static Optional<ExpressionTree> argumentValue(FunctionCallTree call, String name, int position) {
+    return argument(call, name, position).map(CallArgumentTree::value);
+  }
+
   public static boolean hasNamedArgument(FunctionCallTree call) {
     return call.callArguments().stream().anyMatch(arg -> arg.name() != null);
   }

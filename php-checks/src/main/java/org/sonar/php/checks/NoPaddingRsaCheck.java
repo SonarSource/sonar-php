@@ -41,12 +41,12 @@ public class NoPaddingRsaCheck extends FunctionUsageCheck {
   private static final String SECURE_PADDING = "OPENSSL_PKCS1_OAEP_PADDING";
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> lookedUpFunctionNames() {
     return SetUtils.immutableSetOf("openssl_public_encrypt");
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     Optional<CallArgumentTree> paddingArgument = CheckUtils.argument(tree, "padding", PADDING_ARGUMENT_INDEX);
     if (paddingArgument.isPresent()) {
       ExpressionTree padding = paddingArgument.get().value();

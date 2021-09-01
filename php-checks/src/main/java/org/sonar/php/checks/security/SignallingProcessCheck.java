@@ -33,12 +33,12 @@ public class SignallingProcessCheck extends FunctionUsageCheck {
   private static final Set<String> FUNCTION_NAMES = SetUtils.immutableSetOf("posix_kill");
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> lookedUpFunctionNames() {
     return FUNCTION_NAMES;
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     context().newIssue(this, tree, MESSAGE);
   }
 

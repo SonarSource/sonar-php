@@ -113,7 +113,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static final Predicate<TreeValues> SPLFILEOBJECT_FGETSS = new ObjectMemberFunctionCall(FGETSS_FUNCTION, new NewObjectCall("SplFileObject"));
 
   @Override
-  protected Set<String> functionNames() {
+  protected Set<String> lookedUpFunctionNames() {
     Set<String> functionNames = SetUtils.immutableSetOf(SET_LOCALE_FUNCTION, PARSE_STR_FUNCTION, ASSERT_FUNCTION, DEFINE_FUNCTION);
     return SetUtils.concat(functionNames, NEW_BY_DEPRECATED_FUNCTIONS.keySet(), SEARCHING_STRING_FUNCTIONS);
   }
@@ -165,7 +165,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
+  protected void checkFunctionCall(FunctionCallTree tree) {
     String functionName = ((NamespaceNameTree) tree.callee()).qualifiedName();
 
     if (SET_LOCALE_FUNCTION.equalsIgnoreCase(functionName)) {
