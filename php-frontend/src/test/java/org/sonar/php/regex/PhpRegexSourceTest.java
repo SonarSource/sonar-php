@@ -56,6 +56,13 @@ public class PhpRegexSourceTest {
   }
 
   @Test
+  public void test_to_few_delimiters() {
+    assertThatThrownBy(() -> makeSource("'/'"))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Regular expression does not contain delimiters");
+  }
+
+  @Test
   public void test_non_string_literal() {
     assertThatThrownBy(() -> makeSource("1"))
       .isInstanceOf(IllegalArgumentException.class)
