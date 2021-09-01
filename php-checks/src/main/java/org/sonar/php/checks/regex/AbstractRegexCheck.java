@@ -86,9 +86,9 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
 
   public abstract void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall);
 
-  public final void reportIssue(RegexSyntaxElement regexTree, String message, List<RegexCheck.RegexIssueLocation> secondaries) {
+  public final void reportIssue(RegexSyntaxElement regexTree, String message) {
     if (reportedRegexTrees.add(regexTree)) {
-      regexContext.newIssue(this, regexTree, message, secondaries);
+      regexContext.newIssue(this, regexTree, message);
     }
   }
 }
