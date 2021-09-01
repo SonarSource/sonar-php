@@ -17,17 +17,17 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.regex;
+package org.sonar.php.checks.regex;
 
-import org.sonar.plugins.php.api.visitors.IssueLocation;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
+import org.junit.Test;
+import org.sonar.plugins.php.CheckVerifier;
 
-public interface RegexCheck extends PHPCheck {
 
-  class RegexIssueLocation extends IssueLocation {
-    public RegexIssueLocation(RegexSyntaxElement tree, String message) {
-      super(((PhpRegexSource) tree.getSource()).locationInFileFor(tree.getRange()), message);
-    }
+public class EmptyStringRepetitionCheckTest {
+
+  @Test
+  public void test() throws Exception {
+    CheckVerifier.verify(new EmptyStringRepetitionCheck(), "regex/EmptyStringRepetitionCheck.php");
   }
+
 }

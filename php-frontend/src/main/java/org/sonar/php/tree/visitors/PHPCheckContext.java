@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.regex.RegexCache;
+import org.sonar.php.regex.RegexCheck;
 import org.sonar.php.regex.RegexCheckContext;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -41,6 +42,7 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
+import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
 public class PHPCheckContext implements CheckContext, RegexCheckContext {
 
@@ -89,6 +91,14 @@ public class PHPCheckContext implements CheckContext, RegexCheckContext {
   @Override
   public PreciseIssue newIssue(PHPCheck check, Tree startTree, Tree endTree, String message) {
     PreciseIssue issue = new PreciseIssue(check, new IssueLocation(startTree, endTree, message));
+    issues.add(issue);
+
+    return issue;
+  }
+
+  @Override
+  public PreciseIssue newIssue(RegexCheck regexCheck, RegexSyntaxElement regexSyntaxElement, String message) {
+    PreciseIssue issue = new PreciseIssue(regexCheck, new RegexCheck.RegexIssueLocation(regexSyntaxElement, message));
     issues.add(issue);
 
     return issue;

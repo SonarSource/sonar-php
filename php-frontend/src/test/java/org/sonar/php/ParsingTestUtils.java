@@ -32,7 +32,10 @@ public class ParsingTestUtils {
 
   public static CompilationUnitTree parse(String filename) {
     File file = new File("src/test/resources/", filename);
+    return parse(file);
+  }
 
+  public static CompilationUnitTree parse(File file) {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     return (CompilationUnitTree) parser.parse(file);
   }
