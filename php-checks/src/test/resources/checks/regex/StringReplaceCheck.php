@@ -1,5 +1,7 @@
 <?php
 
+namespace checks\regex;
+
 class StringReplaceCheck
 {
   function noncompliant($input)

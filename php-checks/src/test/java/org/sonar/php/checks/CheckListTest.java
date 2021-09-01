@@ -40,19 +40,22 @@ public class CheckListTest {
     List<File> files = new ArrayList<>();
     String[] checkFolders = {
       "src/main/java/org/sonar/php/checks/",
+      "src/main/java/org/sonar/php/checks/phpini",
       "src/main/java/org/sonar/php/checks/phpunit",
       "src/main/java/org/sonar/php/checks/security",
-      "src/main/java/org/sonar/php/checks/wordpress"
+      "src/main/java/org/sonar/php/checks/wordpress",
+      "src/main/java/org/sonar/php/checks/regex"
     };
     for (String folder : checkFolders) {
       files.addAll(Arrays.asList(new File(folder).listFiles((f, name) -> name.endsWith("java"))));
     }
     for (File file : files) {
-      if (file.getName().endsWith("Check.java")) {
+      String fileName = file.getName();
+      if (fileName.endsWith("Check.java") && !fileName.startsWith("Abstract")) {
         count++;
       }
     }
-    assertThat(CheckList.getChecks()).hasSize(count);
+    assertThat(CheckList.getAllChecks()).hasSize(count);
   }
 
   /**

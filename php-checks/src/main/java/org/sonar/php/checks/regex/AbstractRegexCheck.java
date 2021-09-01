@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.regex;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,7 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
@@ -86,9 +88,14 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
 
   public abstract void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall);
 
-  public final void reportIssue(RegexSyntaxElement regexTree, String message) {
+  public final void newIssue(RegexSyntaxElement regexTree, String message) {
+    newIssue(regexTree, message, Collections.emptyList());
+  }
+
+  public final void newIssue(RegexSyntaxElement regexTree, String message, List<RegexIssueLocation> secondaries) {
     if (reportedRegexTrees.add(regexTree)) {
-      regexContext.newIssue(this, regexTree, message);
+      PreciseIssue issue = regexContext.newIssue(this, regexTree, message);
+      secondaries.forEach(issue::secondary);
     }
   }
 }
