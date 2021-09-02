@@ -19,8 +19,11 @@
  */
 package org.sonar.php.regex;
 
+import java.util.List;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
 public interface RegexCheck extends PHPCheck {
@@ -29,5 +32,24 @@ public interface RegexCheck extends PHPCheck {
     public RegexIssueLocation(RegexSyntaxElement tree, String message) {
       super(((PhpRegexSource) tree.getSource()).locationInFileFor(tree.getRange()), message);
     }
+
+    public RegexIssueLocation(List<RegexSyntaxElement> trees, String message) {
+      super(locationInFileFromRegexSyntaxElements(trees), message);
+    }
+
+    private static LocationInFile locationInFileFromRegexSyntaxElements(List<RegexSyntaxElement> trees) {
+      PhpRegexSource source = (PhpRegexSource) trees.get(0).getSource();
+      IndexRange current = null;
+      for (RegexSyntaxElement tree : trees) {
+        if (current == null) {
+          current = tree.getRange();
+        } else if (tree.getRange().getBeginningOffset() == current.getEndingOffset()) {
+          current = new IndexRange(current.getBeginningOffset(), tree.getRange().getEndingOffset());
+        }
+        // We do not combine RegexSyntaxElement which are not located side by side
+      }
+      return source.locationInFileFor(current);
+    }
+
   }
 }
