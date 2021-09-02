@@ -47,6 +47,7 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[\d1]/", $input); // Noncompliant
     preg_match("/[\d1-3]/", $input); // Noncompliant
     preg_match("/(?U)[\wa]/", $input); // Noncompliant
+    preg_match("/[\\\\abc]/", $input);
   }
 
   function compliant($input)
