@@ -69,8 +69,13 @@ public class LiteralUtilsTest {
     assertThat(stringLiteralValue("'\\v'")).isEqualTo("\\v");
     assertThat(stringLiteralValue("'\\e'")).isEqualTo("\\e");
     assertThat(stringLiteralValue("'\\f'")).isEqualTo("\\f");
+    assertThat(stringLiteralValue("'\\$'")).isEqualTo("\\$");
 
     assertThat(stringLiteralValue("'\\x41'")).isEqualTo("\\x41");
+
+    assertThat(stringLiteralValue("'\\102'")).isEqualTo("\\102");
+
+    assertThat(stringLiteralValue("'\\u{0043}'")).isEqualTo("\\u{0043}");
   }
 
   @Test
@@ -92,9 +97,15 @@ public class LiteralUtilsTest {
     assertThat(stringLiteralValue("\"\\v\"")).isEqualTo("\u000b");
     assertThat(stringLiteralValue("\"\\e\"")).isEqualTo("\u001b");
     assertThat(stringLiteralValue("\"\\f\"")).isEqualTo("\f");
+    assertThat(stringLiteralValue("\"\\$\"")).isEqualTo("$");
 
     assertThat(stringLiteralValue("\"\\x41\"")).isEqualTo("A");
     assertThat(stringLiteralValue("\"\\xx\"")).isEqualTo("\\xx");
     assertThat(stringLiteralValue("\"\\xa\"")).isEqualTo("\n");
+
+    assertThat(stringLiteralValue("\"\\102\"")).isEqualTo("B");
+
+    assertThat(stringLiteralValue("\"\\u{0043}\"")).isEqualTo("C");
+    assertThat(stringLiteralValue("\"\\ux\"")).isEqualTo("\\ux");
   }
 }

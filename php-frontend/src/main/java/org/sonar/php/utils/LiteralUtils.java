@@ -63,19 +63,21 @@ public class LiteralUtils {
     String stringValue() {
       StringBuilder stringValue = new StringBuilder();
       boolean isInEscapeSequence = false;
-      for (int i = 0; i < valueWithoutDelimiters.length(); i++) {
+      int i = 0;
+      while (i < valueWithoutDelimiters.length()) {
         char c = valueWithoutDelimiters.charAt(i);
         if (isInEscapeSequence) {
           String remainder = valueWithoutDelimiters.substring(i);
           int escapeSequenceLength = handleEscapeSequence(stringValue, c, remainder);
-          i += escapeSequenceLength - 2;
           isInEscapeSequence = false;
+          i += escapeSequenceLength - 1;
         } else {
           if (c == '\\') {
             isInEscapeSequence = true;
           } else {
             stringValue.append(c);
           }
+          i++;
         }
       }
       return stringValue.toString();
@@ -149,8 +151,28 @@ public class LiteralUtils {
             stringValue.append("\\x");
           }
           break;
+        case 'u':
+          Matcher unicodeMatcher = Pattern.compile("^u\\{([0-9A-Fa-f]+)}").matcher(remainder);
+          if (unicodeMatcher.find()) {
+            String hexValue = unicodeMatcher.group(1);
+            stringValue.append((char) Integer.parseInt(hexValue, 16));
+            return hexValue.length() + 4;
+          } else {
+            stringValue.append("\\u");
+          }
+          break;
+        case '$':
+          stringValue.append('$');
+          break;
         default:
-          stringValue.append('\\').append(charAfterBackslash);
+          Matcher octalMatcher = Pattern.compile("^([0-7]{1,3})").matcher(remainder);
+          if (octalMatcher.find()) {
+            String octalValue = octalMatcher.group(1);
+            stringValue.append((char) Integer.parseInt(octalValue, 8));
+            return octalValue.length() + 1;
+          } else {
+            stringValue.append('\\').append(charAfterBackslash);
+          }
       }
       return 2;
     }
