@@ -21,6 +21,7 @@ package org.sonar.php.regex;
 
 import java.util.regex.Pattern;
 import org.sonar.php.symbols.LocationInFileImpl;
+import org.sonar.php.utils.LiteralUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
@@ -48,7 +49,7 @@ public class PhpRegexSource implements RegexSource {
 
   private static String literalToString(LiteralTree literal) {
     if (literal.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      return stripDelimiters(trimQuotes(literal.value()));
+      return stripDelimiters(LiteralUtils.stringLiteralValue(literal.value()));
     }
     throw new IllegalArgumentException("Only string literals allowed");
   }
@@ -58,10 +59,6 @@ public class PhpRegexSource implements RegexSource {
       throw new IllegalArgumentException("Regular expression does not contain delimiters");
     }
     return pattern.substring(1, pattern.lastIndexOf(pattern.charAt(0)));
-  }
-
-  public static String trimQuotes(String value) {
-    return value.substring(1, value.length() - 1);
   }
 
   @Override

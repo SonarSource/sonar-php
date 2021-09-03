@@ -85,6 +85,7 @@ class DuplicatesInCharacterClassCheck
     preg_match("/(?i)[A-z_]/", $input); // FN because A-z gets misinterpreted as A-Za-z due to the way we handle case insensitivity
     preg_match("/[\p{Armenian}x]/", $input); // FN because we don't support \p at the moment
     preg_match("/[A-Za-z]/i", $input); // FN because we do not support flags right now
+    preg_match("/[\\\\abc]/", $input);
   }
 
   function emoji($input) {
