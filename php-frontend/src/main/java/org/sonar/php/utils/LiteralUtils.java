@@ -43,31 +43,31 @@ public class LiteralUtils {
 
   private abstract static class StringLiteralParser {
 
-    private final String valueWithoutDelimiters;
+    private final String valueWithoutQuotes;
 
     static String stringValue(String literalValue) {
-      String valueWithoutDelimiters = literalValue.substring(1, literalValue.length() - 1);
-      if (valueWithoutDelimiters.indexOf('\\') == -1) {
-        return valueWithoutDelimiters;
+      String valueWithoutQuotes = literalValue.substring(1, literalValue.length() - 1);
+      if (valueWithoutQuotes.indexOf('\\') == -1) {
+        return valueWithoutQuotes;
       }
       StringLiteralParser parser = (literalValue.charAt(0) == '\'')
-        ? new SingleQuotedStringLiteralParser(valueWithoutDelimiters)
-        : new DoubleQuotedStringLiteralParser(valueWithoutDelimiters);
+        ? new SingleQuotedStringLiteralParser(valueWithoutQuotes)
+        : new DoubleQuotedStringLiteralParser(valueWithoutQuotes);
       return parser.stringValue();
     }
 
-    StringLiteralParser(String valueWithoutDelimiters) {
-      this.valueWithoutDelimiters = valueWithoutDelimiters;
+    StringLiteralParser(String valueWithoutQuotes) {
+      this.valueWithoutQuotes = valueWithoutQuotes;
     }
 
     String stringValue() {
       StringBuilder stringValue = new StringBuilder();
       boolean isInEscapeSequence = false;
       int i = 0;
-      while (i < valueWithoutDelimiters.length()) {
-        char c = valueWithoutDelimiters.charAt(i);
+      while (i < valueWithoutQuotes.length()) {
+        char c = valueWithoutQuotes.charAt(i);
         if (isInEscapeSequence) {
-          String remainder = valueWithoutDelimiters.substring(i);
+          String remainder = valueWithoutQuotes.substring(i);
           int escapeSequenceLength = handleEscapeSequence(stringValue, c, remainder);
           isInEscapeSequence = false;
           i += escapeSequenceLength - 1;
@@ -118,28 +118,28 @@ public class LiteralUtils {
     int handleEscapeSequence(StringBuilder stringValue, char charAfterBackslash, String remainder) {
       switch (charAfterBackslash) {
         case '\\':
-          stringValue.append("\\");
+          stringValue.append('\\');
           break;
         case '"':
-          stringValue.append("\"");
+          stringValue.append('\"');
           break;
         case 'n':
-          stringValue.append("\n");
+          stringValue.append('\n');
           break;
         case 'r':
-          stringValue.append("\r");
+          stringValue.append('\r');
           break;
         case 't':
-          stringValue.append("\t");
+          stringValue.append('\t');
           break;
         case 'f':
-          stringValue.append("\f");
+          stringValue.append('\f');
           break;
         case 'v':
-          stringValue.append("\u000b");
+          stringValue.append('\u000b');
           break;
         case 'e':
-          stringValue.append("\u001b");
+          stringValue.append('\u001b');
           break;
         case 'x':
           Matcher matcher = Pattern.compile("^x([0-9A-Fa-f]{1,2})").matcher(remainder);
