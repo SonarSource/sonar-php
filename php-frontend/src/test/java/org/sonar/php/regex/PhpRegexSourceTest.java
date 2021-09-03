@@ -26,6 +26,7 @@ import org.sonarsource.analyzer.commons.regex.RegexDialect;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
+import org.sonarsource.analyzer.commons.regex.SyntaxError;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
@@ -65,7 +66,7 @@ public class PhpRegexSourceTest {
 
   @Test
   public void test_string_literal() {
-    RegexTree regex = assertSuccessfulParse("'/a\nb/'"); // <?php foo('/a\db/');
+    RegexTree regex = assertSuccessfulParse("'/a\nb/'"); // <?php foo('/a\nb/');
     assertKind(RegexTree.Kind.SEQUENCE, regex);
     List<RegexTree> items = ((SequenceTree) regex).getItems();
     assertThat(items).hasSize(3);
@@ -80,6 +81,17 @@ public class PhpRegexSourceTest {
   }
 
   @Test
+  public void single_quote_vs_double_quote() {
+    RegexParseResult singleQuoted = new RegexParser(makeSource("'/\\u{0041}/'"), new FlagSet()).parse();
+    assertThat(singleQuoted.getSyntaxErrors()).extracting(SyntaxError::getMessage).containsExactly("Expected hexadecimal digit, but found '{'");
+
+    RegexParseResult doubleQuoted = new RegexParser(makeSource("\"/\\u{0041}/\""), new FlagSet()).parse();
+    assertThat(doubleQuoted.getSyntaxErrors()).isEmpty();
+    assertThat(doubleQuoted.getResult().kind()).isEqualTo(RegexTree.Kind.CHARACTER);
+    assertThat(((CharacterTree) doubleQuoted.getResult()).characterAsString()).isEqualTo("A");
+  }
+
+  @Test
   public void test_string_literal_with_bracket_delimiters() {
     RegexTree regex = assertSuccessfulParse("'[a]'");
     assertKind(RegexTree.Kind.CHARACTER, regex);
@@ -91,6 +103,17 @@ public class PhpRegexSourceTest {
   public void test_dialect() {
     RegexSource source = makeSource("'/a/'");
     assertEquals(RegexDialect.PHP, source.dialect());
+  }
+
+  @Test
+  public void php_literal_escape_sequence() {
+    RegexTree regex = assertSuccessfulParse("'/a\\\\\\\\b/'");
+    assertKind(RegexTree.Kind.SEQUENCE, regex);
+    List<RegexTree> items = ((SequenceTree) regex).getItems();
+    assertThat(items).allMatch(t -> t.is(RegexTree.Kind.CHARACTER))
+      .extracting(t -> ((CharacterTree) t).characterAsString())
+      .containsExactly("a", "\\", "b");
+    assertLocation(3, 3, 7, items.get(1));
   }
 
   private static void assertCharacter(char expected, RegexTree tree) {
