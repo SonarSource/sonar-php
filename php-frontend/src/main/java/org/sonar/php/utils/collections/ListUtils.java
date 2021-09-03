@@ -37,6 +37,19 @@ public class ListUtils {
     return concatenatedList;
   }
 
+  @SafeVarargs
+  public static <T> List<T> merge(Iterable<? extends T>... iterables) {
+    List<T> concatenatedList = new ArrayList<>();
+    for (Iterable<? extends T> iterable : iterables) {
+      iterable.forEach(e -> {
+        if (!concatenatedList.contains(e)) {
+          concatenatedList.add(e);
+        }
+      });
+    }
+    return concatenatedList;
+  }
+
   public static <T> List<T> reverse(List<T> list) {
     List<T> reversed = new ArrayList<>(list);
     Collections.reverse(reversed);

@@ -50,13 +50,6 @@ public class PhpRegexSourceTest {
   }
 
   @Test
-  public void test_missing_delimiters() {
-    assertThatThrownBy(() -> makeSource("'a\nb'"))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessage("Regular expression does not contain delimiters");
-  }
-
-  @Test
   public void test_to_few_delimiters() {
     assertThatThrownBy(() -> makeSource("'/'"))
       .isInstanceOf(IllegalArgumentException.class)
@@ -84,6 +77,14 @@ public class PhpRegexSourceTest {
     assertLocation(3, 2, 3, items.get(0));
     assertLocation(3, 3, 4, items.get(1));
     assertLocation(3, 4, 5, items.get(2));
+  }
+
+  @Test
+  public void test_string_literal_with_bracket_delimiters() {
+    RegexTree regex = assertSuccessfulParse("'[a]'");
+    assertKind(RegexTree.Kind.CHARACTER, regex);
+    assertCharacter('a', regex);
+    assertLocation(3, 2, 3, regex);
   }
 
   @Test

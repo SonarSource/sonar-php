@@ -60,6 +60,26 @@ public class ListUtilsTest {
   }
 
   @Test
+  public void test_merge_without_duplicate() {
+    List<SomeType> list1 = Arrays.asList(new SomeType("value1"), new SomeType("value2"));
+    List<SomeType> list2 = Arrays.asList(new SomeType("value3"), new SomeType("value4"));
+
+    assertThat(ListUtils.merge(list1, list2))
+      .hasSize(4)
+      .containsExactly(new SomeType("value1"), new SomeType("value2"), new SomeType("value3"), new SomeType("value4"));
+  }
+
+  @Test
+  public void test_merge_with_duplicate() {
+    List<SomeType> list1 = Arrays.asList(new SomeType("value1"), new SomeType("value2"));
+    List<SomeType> list2 = Arrays.asList(new SomeType("value2"), new SomeType("value3"));
+
+    assertThat(ListUtils.merge(list1, list2))
+      .hasSize(3)
+      .containsExactly(new SomeType("value1"), new SomeType("value2"), new SomeType("value3"));
+  }
+
+  @Test
   public void test_reverse_any_list() {
     List<SomeType> list = Arrays.asList(new SomeType("value1"), new SomeType("value2"));
 

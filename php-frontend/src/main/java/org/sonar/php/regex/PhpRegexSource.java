@@ -19,7 +19,8 @@
  */
 package org.sonar.php.regex;
 
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Map;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.utils.LiteralUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -36,10 +37,16 @@ public class PhpRegexSource implements RegexSource {
   private final int sourceLine;
   private final int sourceStartOffset;
 
-  /**
-   * The delimiter can be any character that is not a letter, number, backslash or space.
-   */
-  private static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\w\\r\\n\\t\\f\\v ]");
+  public static final Map<Character, Character> BRACKET_DELIMITERS = bracketDelimiters();
+
+  private static Map<Character, Character> bracketDelimiters() {
+    Map<Character, Character> delimiters = new HashMap<>();
+    delimiters.put('[', ']');
+    delimiters.put('{','}');
+    delimiters.put('<', '>');
+    delimiters.put('(',')');
+    return delimiters;
+  }
 
   public PhpRegexSource(LiteralTree stringLiteral) {
     sourceText = literalToString(stringLiteral);
@@ -55,10 +62,12 @@ public class PhpRegexSource implements RegexSource {
   }
 
   private static String stripDelimiters(String pattern) {
-    if (pattern.length() < 2 || !DELIMITER_PATTERN.matcher(pattern).find()) {
-      throw new IllegalArgumentException("Regular expression does not contain delimiters");
+    if (pattern.length() >= 2) {
+      char startDelimiter = pattern.charAt(0);
+      char endDelimiter = BRACKET_DELIMITERS.getOrDefault(startDelimiter, startDelimiter);
+      return pattern.substring(1, pattern.lastIndexOf(endDelimiter));
     }
-    return pattern.substring(1, pattern.lastIndexOf(pattern.charAt(0)));
+    throw new IllegalArgumentException("Regular expression does not contain delimiters");
   }
 
   @Override
