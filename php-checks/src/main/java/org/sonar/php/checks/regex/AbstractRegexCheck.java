@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.regex;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;

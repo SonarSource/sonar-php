@@ -60,8 +60,11 @@ public class AbstractRegexCheckTest {
       assertThat(f.contains(AbstractRegexCheck.PCRE_CASELESS)).isTrue();
     });
 
-    assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/ix\""))).satisfies(f -> {
+    assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/ixmsu\""))).satisfies(f -> {
       assertThat(f.contains(AbstractRegexCheck.PCRE_CASELESS)).isTrue();
+      assertThat(f.contains(AbstractRegexCheck.PCRE_MULTILINE)).isTrue();
+      assertThat(f.contains(AbstractRegexCheck.PCRE_DOTALL)).isTrue();
+      assertThat(f.contains(AbstractRegexCheck.PCRE_UTF8)).isTrue();
       assertThat(f.contains(AbstractRegexCheck.PCRE_EXTENDED)).isTrue();
     });
 
