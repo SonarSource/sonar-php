@@ -7,7 +7,8 @@ class SingleCharacterAlternationCheck
 
   function noncompliant($input)
   {
-    preg_match("/a|b|c/", $str); // Noncompliant
+    preg_match("/a|b|c/", $str); // Noncompliant {{Replace this alternation with a character class.}}
+  //             ^^^^^
     preg_match("/a|(b|c)/", $str); // Noncompliant
     preg_match("/abcd|(e|f)gh/", $str); // Noncompliant
     preg_match("/(a|b|c)*/", $str); // Noncompliant
