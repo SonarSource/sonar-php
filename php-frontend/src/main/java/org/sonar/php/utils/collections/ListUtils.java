@@ -20,8 +20,10 @@
 package org.sonar.php.utils.collections;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ListUtils {
 
@@ -29,25 +31,17 @@ public class ListUtils {
   }
 
   @SafeVarargs
-  public static <T> List<T> concat(List<? extends T>... lists) {
+  public static <T> List<T> concat(Collection<? extends T>... collections) {
     List<T> concatenatedList = new ArrayList<>();
-    for (List<? extends T> list : lists) {
-      concatenatedList.addAll(list);
+    for (Collection<? extends T> collection : collections) {
+      concatenatedList.addAll(collection);
     }
     return concatenatedList;
   }
 
   @SafeVarargs
-  public static <T> List<T> merge(Iterable<? extends T>... iterables) {
-    List<T> concatenatedList = new ArrayList<>();
-    for (Iterable<? extends T> iterable : iterables) {
-      iterable.forEach(e -> {
-        if (!concatenatedList.contains(e)) {
-          concatenatedList.add(e);
-        }
-      });
-    }
-    return concatenatedList;
+  public static <T> List<T> merge(Collection<? extends T>... collections) {
+    return concat(collections).stream().distinct().collect(Collectors.toList());
   }
 
   public static <T> List<T> reverse(List<T> list) {

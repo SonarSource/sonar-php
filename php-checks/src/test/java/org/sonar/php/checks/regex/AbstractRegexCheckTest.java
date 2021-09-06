@@ -29,8 +29,6 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class AbstractRegexCheckTest {
 
@@ -45,12 +43,13 @@ public class AbstractRegexCheckTest {
     assertThat(AbstractRegexCheck.getLiteral(expr("'[FOO'"))).isNotPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("$unknownPattern"))).isNotPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("FOO"))).isNotPresent();
+    assertThat(AbstractRegexCheck.getLiteral(expr("'[FOO['"))).isNotPresent();
   }
 
   @Test
   public void test_isSingleLinePattern() {
-    assertTrue(AbstractRegexCheck.isSingleLinePattern((LiteralTree) expr("\"/ab/\"")));
-    assertFalse(AbstractRegexCheck.isSingleLinePattern((LiteralTree) expr("\"/a\nb/\"")));
+    assertThat(AbstractRegexCheck.isSingleLinePattern((LiteralTree) expr("\"/ab/\""))).isTrue();
+    assertThat(AbstractRegexCheck.isSingleLinePattern((LiteralTree) expr("\"/a\nb/\""))).isFalse();
   }
 
   private ExpressionTree expr(String pattern) {
