@@ -52,6 +52,25 @@ public class AbstractRegexCheckTest {
     assertThat(AbstractRegexCheck.isSingleLinePattern((LiteralTree) expr("\"/a\nb/\""))).isFalse();
   }
 
+  @Test
+  public void test_getFlagSet() {
+    assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/\"")).isEmpty()).isTrue();
+    assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/i\""))).satisfies(f -> {
+      assertThat(f.isEmpty()).isFalse();
+      assertThat(f.contains(AbstractRegexCheck.PCRE_CASELESS)).isTrue();
+    });
+
+    assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/ixmsu\""))).satisfies(f -> {
+      assertThat(f.contains(AbstractRegexCheck.PCRE_CASELESS)).isTrue();
+      assertThat(f.contains(AbstractRegexCheck.PCRE_MULTILINE)).isTrue();
+      assertThat(f.contains(AbstractRegexCheck.PCRE_DOTALL)).isTrue();
+      assertThat(f.contains(AbstractRegexCheck.PCRE_UTF8)).isTrue();
+      assertThat(f.contains(AbstractRegexCheck.PCRE_EXTENDED)).isTrue();
+    });
+
+    assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/U\"")).isEmpty()).isTrue();
+  }
+
   private ExpressionTree expr(String pattern) {
     return ((ExpressionStatementTree) parse(String.format("%s;", pattern))).expression();
   }

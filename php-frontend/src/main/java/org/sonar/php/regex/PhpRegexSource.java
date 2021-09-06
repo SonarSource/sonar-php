@@ -37,17 +37,6 @@ public class PhpRegexSource implements RegexSource {
   private final int sourceStartOffset;
   private final char quote;
 
-  public static final Map<Character, Character> BRACKET_DELIMITERS = bracketDelimiters();
-
-  private static Map<Character, Character> bracketDelimiters() {
-    Map<Character, Character> delimiters = new HashMap<>();
-    delimiters.put('[', ']');
-    delimiters.put('{','}');
-    delimiters.put('<', '>');
-    delimiters.put('(',')');
-    return delimiters;
-  }
-
   public PhpRegexSource(LiteralTree stringLiteral) {
     quote = stringLiteral.value().charAt(0);
     sourceText = literalToString(stringLiteral);
@@ -66,8 +55,7 @@ public class PhpRegexSource implements RegexSource {
 
   private static String stripDelimiters(String pattern) {
     if (pattern.length() >= 2) {
-      char startDelimiter = pattern.charAt(0);
-      char endDelimiter = BRACKET_DELIMITERS.getOrDefault(startDelimiter, startDelimiter);
+      Character endDelimiter = PhpRegexUtils.getEndDelimiter(pattern);
       return pattern.substring(1, pattern.lastIndexOf(endDelimiter));
     }
     throw new IllegalArgumentException("Regular expression does not contain delimiters");
