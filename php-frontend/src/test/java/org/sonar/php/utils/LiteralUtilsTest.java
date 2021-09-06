@@ -22,7 +22,6 @@ package org.sonar.php.utils;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.sonar.php.utils.LiteralUtils.stringLiteralValue;
 
 public class LiteralUtilsTest {
 
@@ -49,63 +48,5 @@ public class LiteralUtilsTest {
 
     assertThat(LiteralUtils.longLiteralValue("0X1F")).isEqualTo(31);
     assertThat(LiteralUtils.longLiteralValue("0X1_F")).isEqualTo(31);
-  }
-
-  @Test
-  public void single_quoted_string_value() {
-    assertThat(stringLiteralValue("''")).isEmpty();
-    assertThat(stringLiteralValue("'abc'")).isEqualTo("abc");
-
-    assertThat(stringLiteralValue("'\\''")).isEqualTo("'");
-    assertThat(stringLiteralValue("'\\\"'")).isEqualTo("\\\"");
-
-    assertThat(stringLiteralValue("'\\abc'")).isEqualTo("\\abc");
-    assertThat(stringLiteralValue("'\\\\abc'")).isEqualTo("\\abc");
-    assertThat(stringLiteralValue("'\\\\\\abc'")).isEqualTo("\\\\abc");
-
-    assertThat(stringLiteralValue("'\\n'")).isEqualTo("\\n");
-    assertThat(stringLiteralValue("'\\r'")).isEqualTo("\\r");
-    assertThat(stringLiteralValue("'\\t'")).isEqualTo("\\t");
-    assertThat(stringLiteralValue("'\\v'")).isEqualTo("\\v");
-    assertThat(stringLiteralValue("'\\e'")).isEqualTo("\\e");
-    assertThat(stringLiteralValue("'\\f'")).isEqualTo("\\f");
-    assertThat(stringLiteralValue("'\\$'")).isEqualTo("\\$");
-
-    assertThat(stringLiteralValue("'\\x41'")).isEqualTo("\\x41");
-
-    assertThat(stringLiteralValue("'\\102'")).isEqualTo("\\102");
-
-    assertThat(stringLiteralValue("'\\u{0043}'")).isEqualTo("\\u{0043}");
-  }
-
-  @Test
-  public void double_quoted_string_value() {
-    assertThat(stringLiteralValue("\"\"")).isEmpty();
-    assertThat(stringLiteralValue("\"abc\"")).isEqualTo("abc");
-
-    assertThat(stringLiteralValue("\"\\'\"")).isEqualTo("\\'");
-    assertThat(stringLiteralValue("\"\\\"\"")).isEqualTo("\"");
-
-    assertThat(stringLiteralValue("\"\\abc\"")).isEqualTo("\\abc");
-    assertThat(stringLiteralValue("\"\\\\abc\"")).isEqualTo("\\abc");
-    assertThat(stringLiteralValue("\"\\\\\\abc\"")).isEqualTo("\\\\abc");
-
-    assertThat(stringLiteralValue("\"\\\\n\"")).isEqualTo("\\n");
-    assertThat(stringLiteralValue("\"\\n\"")).isEqualTo("\n");
-    assertThat(stringLiteralValue("\"\\r\"")).isEqualTo("\r");
-    assertThat(stringLiteralValue("\"\\t\"")).isEqualTo("\t");
-    assertThat(stringLiteralValue("\"\\v\"")).isEqualTo("\u000b");
-    assertThat(stringLiteralValue("\"\\e\"")).isEqualTo("\u001b");
-    assertThat(stringLiteralValue("\"\\f\"")).isEqualTo("\f");
-    assertThat(stringLiteralValue("\"\\$\"")).isEqualTo("$");
-
-    assertThat(stringLiteralValue("\"\\x41\"")).isEqualTo("A");
-    assertThat(stringLiteralValue("\"\\xx\"")).isEqualTo("\\xx");
-    assertThat(stringLiteralValue("\"\\xa\"")).isEqualTo("\n");
-
-    assertThat(stringLiteralValue("\"\\102\"")).isEqualTo("B");
-
-    assertThat(stringLiteralValue("\"\\u{0043}\"")).isEqualTo("C");
-    assertThat(stringLiteralValue("\"\\ux\"")).isEqualTo("\\ux");
   }
 }

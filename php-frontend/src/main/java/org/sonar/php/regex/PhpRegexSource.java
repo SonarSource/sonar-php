@@ -22,7 +22,6 @@ package org.sonar.php.regex;
 import java.util.HashMap;
 import java.util.Map;
 import org.sonar.php.symbols.LocationInFileImpl;
-import org.sonar.php.utils.LiteralUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
@@ -36,6 +35,7 @@ public class PhpRegexSource implements RegexSource {
   private final String sourceText;
   private final int sourceLine;
   private final int sourceStartOffset;
+  private final char quote;
 
   public static final Map<Character, Character> BRACKET_DELIMITERS = bracketDelimiters();
 
@@ -49,6 +49,7 @@ public class PhpRegexSource implements RegexSource {
   }
 
   public PhpRegexSource(LiteralTree stringLiteral) {
+    quote = stringLiteral.value().charAt(0);
     sourceText = literalToString(stringLiteral);
     sourceLine = stringLiteral.token().line();
     sourceStartOffset = stringLiteral.token().column() + 2;
@@ -56,7 +57,9 @@ public class PhpRegexSource implements RegexSource {
 
   private static String literalToString(LiteralTree literal) {
     if (literal.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      return stripDelimiters(LiteralUtils.stringLiteralValue(literal.value()));
+      String literalValue = literal.value();
+      String valueWithoutQuotes = literalValue.substring(1, literalValue.length() - 1);
+      return stripDelimiters(valueWithoutQuotes);
     }
     throw new IllegalArgumentException("Only string literals allowed");
   }
@@ -72,7 +75,10 @@ public class PhpRegexSource implements RegexSource {
 
   @Override
   public CharacterParser createCharacterParser() {
-    return new PhpCharacterParser(this);
+    if (quote == '\'') {
+      return PhpStringCharacterParser.forSingleQuotedString(this);
+    }
+    return PhpStringCharacterParser.forDoubleQuotedString(this);
   }
 
   @Override
