@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.regex;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -26,8 +27,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.CheckForNull;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.regex.PhpRegexUtils;
 import org.sonar.php.regex.RegexCheck;
 import org.sonar.php.regex.RegexCheckContext;
 import org.sonar.php.utils.collections.SetUtils;
@@ -44,14 +47,20 @@ import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
-import static org.sonar.php.regex.PhpRegexSource.BRACKET_DELIMITERS;
+import static org.sonar.php.regex.PhpRegexUtils.BRACKET_DELIMITERS;
 
 public abstract class AbstractRegexCheck extends FunctionUsageCheck implements RegexCheck {
 
   private static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\w\\r\\n\\t\\f\\v ]");
 
+  public static final int PCRE_CASELESS = Pattern.CASE_INSENSITIVE;
+  public static final int PCRE_MULTILINE = Pattern.MULTILINE;
+  public static final int PCRE_DOTALL = Pattern.DOTALL;
+  public static final int PCRE_EXTENDED = Pattern.COMMENTS;
+  public static final int PCRE_UTF8 = Pattern.UNICODE_CHARACTER_CLASS;
+
   protected static final Set<String> REGEX_FUNCTIONS = SetUtils.immutableSetOf(
-    "preg_replace", "preg_match", "preg_filter", "preg_replace_callback", "preg_split"
+    "preg_replace", "preg_match", "preg_filter", "preg_replace_callback", "preg_split", "preg_match_all"
   );
 
   private RegexCheckContext regexContext;
@@ -72,18 +81,28 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   }
 
   @Override
-  // TODO: parse regex flags from pattern and dedicated arguments
   protected void checkFunctionCall(FunctionCallTree tree) {
     CheckUtils.argumentValue(tree, "pattern", 0)
       .flatMap(AbstractRegexCheck::getLiteral)
       .filter(AbstractRegexCheck::isSingleLinePattern)
-      .map(pattern -> regexForLiteral(new FlagSet(), pattern))
+      .map(pattern -> regexForLiteral(getFlagSet(pattern), pattern))
       .ifPresent(result -> checkRegex(result, tree));
   }
 
   protected static boolean isSingleLinePattern(LiteralTree literalTree) {
     SyntaxToken token = literalTree.token();
     return token.line() == token.endLine();
+  }
+
+  protected static FlagSet getFlagSet(LiteralTree literalTree) {
+    String pattern = CheckUtils.trimQuotes(literalTree);
+    Character endDelimiter = PhpRegexUtils.getEndDelimiter(pattern);
+    String patternModifiers = pattern.substring(pattern.lastIndexOf(endDelimiter) + 1);
+    FlagSet flags = new FlagSet();
+    for (char modifier: patternModifiers.toCharArray()) {
+      Optional.ofNullable(parseModifier(modifier)).ifPresent(flags::add);
+    }
+    return flags;
   }
 
   protected static Optional<LiteralTree> getLiteral(ExpressionTree expr) {
@@ -124,6 +143,24 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
     if (reportedRegexTrees.add(regexTree)) {
       PreciseIssue issue = regexContext.newIssue(this, regexTree, message);
       secondaries.forEach(issue::secondary);
+    }
+  }
+
+  @CheckForNull
+  public static Integer parseModifier(char ch) {
+    switch (ch) {
+      case 'i':
+        return PCRE_CASELESS;
+      case 'm':
+        return PCRE_MULTILINE;
+      case 's':
+        return PCRE_DOTALL;
+      case 'u':
+        return PCRE_UTF8;
+      case 'x':
+        return PCRE_EXTENDED;
+      default:
+        return null;
     }
   }
 }
