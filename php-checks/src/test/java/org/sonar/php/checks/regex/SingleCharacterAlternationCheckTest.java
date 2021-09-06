@@ -17,15 +17,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.regex;
+package org.sonar.php.checks.regex;
 
-import org.sonarsource.analyzer.commons.regex.JavaUnicodeEscapeParser;
-import org.sonarsource.analyzer.commons.regex.RegexSource;
+import junit.framework.TestCase;
+import org.sonar.plugins.php.CheckVerifier;
 
-public class PhpUnicodeEscapeParser extends JavaUnicodeEscapeParser {
+public class SingleCharacterAlternationCheckTest extends TestCase {
 
-  public PhpUnicodeEscapeParser(RegexSource source) {
-    super(source);
+  public void test() throws Exception {
+    CheckVerifier.verify(new SingleCharacterAlternationCheck(), "regex/SingleCharacterAlternationCheck.php");
   }
-
 }
