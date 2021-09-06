@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.regex.RegexCheck;
@@ -34,6 +36,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
@@ -41,7 +44,11 @@ import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
+import static org.sonar.php.regex.PhpRegexSource.BRACKET_DELIMITERS;
+
 public abstract class AbstractRegexCheck extends FunctionUsageCheck implements RegexCheck {
+
+  private static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\w\\r\\n\\t\\f\\v ]");
 
   protected static final Set<String> REGEX_FUNCTIONS = SetUtils.immutableSetOf(
     "preg_replace", "preg_match", "preg_filter", "preg_replace_callback", "preg_split"
@@ -69,17 +76,38 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   protected void checkFunctionCall(FunctionCallTree tree) {
     CheckUtils.argumentValue(tree, "pattern", 0)
       .flatMap(AbstractRegexCheck::getLiteral)
+      .filter(AbstractRegexCheck::isSingleLinePattern)
       .map(pattern -> regexForLiteral(new FlagSet(), pattern))
       .ifPresent(result -> checkRegex(result, tree));
   }
 
+  protected static boolean isSingleLinePattern(LiteralTree literalTree) {
+    SyntaxToken token = literalTree.token();
+    return token.line() == token.endLine();
+  }
+
   protected static Optional<LiteralTree> getLiteral(ExpressionTree expr) {
     if (expr.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      return Optional.of((LiteralTree) expr);
+      return patternWithDelimiter((LiteralTree) expr);
     } else if (expr.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) expr).flatMap(AbstractRegexCheck::getLiteral);
     }
     return Optional.empty();
+  }
+
+  protected static Optional<LiteralTree> patternWithDelimiter(LiteralTree tree) {
+    String pattern = CheckUtils.trimQuotes(tree);
+    if (pattern.length() >= 2) {
+      Matcher m = DELIMITER_PATTERN.matcher(pattern);
+      if (m.find() && containsEndDelimiter(pattern.substring(1), m.group().charAt(0))) {
+        return Optional.of(tree);
+      }
+    }
+    return Optional.empty();
+  }
+
+  protected static boolean containsEndDelimiter(String croppedPattern, Character startDelimiter) {
+    return croppedPattern.indexOf(BRACKET_DELIMITERS.getOrDefault(startDelimiter, startDelimiter)) >= 0;
   }
 
   protected final RegexParseResult regexForLiteral(FlagSet flags, LiteralTree literals) {

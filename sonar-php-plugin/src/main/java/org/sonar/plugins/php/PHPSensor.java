@@ -98,7 +98,7 @@ public class PHPSensor implements Sensor {
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
     @Nullable PHPCustomRuleRepository[] customRuleRepositories, AnalysisWarningsWrapper analysisWarningsWrapper) {
     this(fileLinesContextFactory,
-      PHPChecks.createPHPCheck(checkFactory).addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks()).addCustomChecks(customRuleRepositories),
+      PHPChecks.createPHPCheck(checkFactory).addChecks(CheckList.REPOSITORY_KEY, CheckList.getPhpChecks()).addCustomChecks(customRuleRepositories),
       noSonarFilter,
       analysisWarningsWrapper);
   }

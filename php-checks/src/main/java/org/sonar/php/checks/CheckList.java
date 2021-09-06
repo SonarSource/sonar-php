@@ -78,6 +78,7 @@ import org.sonar.php.checks.wordpress.WordPressFileEditorCheck;
 import org.sonar.php.checks.wordpress.WordPressLateConfigCheck;
 import org.sonar.php.checks.wordpress.WordPressSaltsCheck;
 import org.sonar.php.checks.wordpress.WordPressUnfilteredHtmlCheck;
+import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.php.utils.collections.SetUtils;
 
 public class CheckList {
@@ -87,7 +88,7 @@ public class CheckList {
   private CheckList() {
   }
 
-  public static List<Class<?>> getChecks() {
+  public static List<Class<?>> getGeneralChecks() {
     return Arrays.asList(
       AbortedTestCaseCheck.class,
       AliasFunctionUsageCheck.class,
@@ -334,7 +335,11 @@ public class CheckList {
     );
   }
 
+  public static List<Class<?>> getPhpChecks() {
+    return ListUtils.merge(getGeneralChecks(), getRegexChecks());
+  }
+
   public static Set<Class<?>> getAllChecks() {
-    return SetUtils.concat(new HashSet<>(getChecks()), getPhpIniChecks(), getRegexChecks());
+    return SetUtils.concat(new HashSet<>(getPhpChecks()), getPhpIniChecks(), getRegexChecks());
   }
 }
