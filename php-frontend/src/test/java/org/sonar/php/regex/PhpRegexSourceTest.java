@@ -24,7 +24,6 @@ import org.junit.Test;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonarsource.analyzer.commons.regex.RegexDialect;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
-import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
 import org.sonarsource.analyzer.commons.regex.SyntaxError;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;

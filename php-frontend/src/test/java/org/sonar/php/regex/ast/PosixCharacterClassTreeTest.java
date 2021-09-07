@@ -21,10 +21,8 @@ package org.sonar.php.regex.ast;
 
 
 import org.junit.Test;
-import org.sonarsource.analyzer.commons.regex.ast.AutomatonState;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassTree;
-import org.sonarsource.analyzer.commons.regex.ast.EscapedCharacterClassTree;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 
@@ -69,6 +67,12 @@ public class PosixCharacterClassTreeTest {
     assertPosixClass("'/[[:^>:]]/'", ">", true);
   }
 
+  @Test
+  public void nonPosixCharacterClasses() {
+    assertNonPosixClass("'/[[:alpha]]/'");
+    assertNonPosixClass("'/[[alpha]]/'");
+  }
+
   private void assertPosixClass(String regex, String expectedProperty, boolean isNegation) {
     RegexTree tree = assertSuccessfulParse(regex);
     assertPosixClass(tree, expectedProperty, isNegation);
@@ -82,6 +86,18 @@ public class PosixCharacterClassTreeTest {
     assertKind(CharacterClassElementTree.Kind.POSIX_CLASS, posixCharacterClass);
 
     assertThat(posixCharacterClass.property()).isNotNull().isEqualTo(expectedProperty);
-    assertThat(posixCharacterClass.isNegation()).isEqualTo(isNegation);;
+    assertThat(posixCharacterClass.isNegation()).isEqualTo(isNegation);
+    assertThat(posixCharacterClass.activeFlags().isEmpty()).isTrue();
+  }
+
+  private void assertNonPosixClass(String regex) {
+    RegexTree tree = assertSuccessfulParse(regex);
+    assertNonPosixClass(tree);
+  }
+
+  private void assertNonPosixClass(RegexSyntaxElement tree) {
+    assertThat(tree).isInstanceOf(CharacterClassTree.class);
+    CharacterClassElementTree classElementTree = ((CharacterClassTree)tree).getContents();
+    assertThat(classElementTree).isNotInstanceOf(PosixCharacterClassTree.class);
   }
 }
