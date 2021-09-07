@@ -87,6 +87,7 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[\p{Armenian}x]/", $input); // FN because we don't support \p at the moment
     preg_match("/[\\\\abc]/", $input);
     preg_match('/[ \s \' " \: \{ \} \[ \] , & \* \# \?]/x', $input);
+    preg_match("/[[:alnum:]alnum]/", $input);
   }
 
   function emoji($input) {

@@ -45,7 +45,7 @@ public class PhpRegexSourceTest {
   // TODO: Extend test with exact syntax error location check
   public void invalid_regex() {
     RegexSource source = makeSource("'/+/'");
-    RegexParseResult result = new RegexParser(source, new FlagSet()).parse();
+    RegexParseResult result = new PhpRegexParser(source, new FlagSet()).parse();
 
     assertThat(result.getSyntaxErrors()).isNotEmpty();
   }
@@ -82,10 +82,10 @@ public class PhpRegexSourceTest {
 
   @Test
   public void single_quote_vs_double_quote() {
-    RegexParseResult singleQuoted = new RegexParser(makeSource("'/\\u{0041}/'"), new FlagSet()).parse();
+    RegexParseResult singleQuoted = new PhpRegexParser(makeSource("'/\\u{0041}/'"), new FlagSet()).parse();
     assertThat(singleQuoted.getSyntaxErrors()).extracting(SyntaxError::getMessage).containsExactly("Expected hexadecimal digit, but found '{'");
 
-    RegexParseResult doubleQuoted = new RegexParser(makeSource("\"/\\u{0041}/\""), new FlagSet()).parse();
+    RegexParseResult doubleQuoted = new PhpRegexParser(makeSource("\"/\\u{0041}/\""), new FlagSet()).parse();
     assertThat(doubleQuoted.getSyntaxErrors()).isEmpty();
     assertThat(doubleQuoted.getResult().kind()).isEqualTo(RegexTree.Kind.CHARACTER);
     assertThat(((CharacterTree) doubleQuoted.getResult()).characterAsString()).isEqualTo("A");

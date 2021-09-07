@@ -17,20 +17,4 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.regex;
-
-import java.util.HashMap;
-import java.util.Map;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
-import org.sonarsource.analyzer.commons.regex.RegexParseResult;
-import org.sonarsource.analyzer.commons.regex.RegexParser;
-import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
-
-public final class RegexCache {
-  private final Map<LiteralTree, RegexParseResult> cache = new HashMap<>();
-
-  public RegexParseResult getRegexForLiterals(FlagSet initialFlags, LiteralTree stringLiteral) {
-    return cache.computeIfAbsent(stringLiteral,
-      k -> new PhpRegexParser(new PhpRegexSource(k), initialFlags).parse());
-  }
-}
+package org.sonar.php.regex.ast;
