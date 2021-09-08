@@ -37,6 +37,8 @@ public class AbstractRegexCheckTest {
   @Test
   public void test_getLiteral() {
     assertThat(AbstractRegexCheck.getLiteral(expr("'//'"))).isPresent();
+    assertThat(AbstractRegexCheck.getLiteral(expr("'/a/'"))).isPresent();
+    assertThat(AbstractRegexCheck.getLiteral(expr("' /a/'"))).isPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("'aFooa'"))).isNotPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("''"))).isNotPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("'[FOO]'"))).isPresent();

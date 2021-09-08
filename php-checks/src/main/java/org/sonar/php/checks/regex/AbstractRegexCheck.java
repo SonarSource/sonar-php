@@ -107,7 +107,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   }
 
   protected static Optional<LiteralTree> patternWithDelimiter(LiteralTree tree) {
-    String pattern = CheckUtils.trimQuotes(tree);
+    String pattern = CheckUtils.trimQuotes(tree).trim();
     if (pattern.length() >= 2) {
       Matcher m = DELIMITER_PATTERN.matcher(pattern);
       if (m.find() && containsEndDelimiter(pattern.substring(1), m.group().charAt(0))) {
