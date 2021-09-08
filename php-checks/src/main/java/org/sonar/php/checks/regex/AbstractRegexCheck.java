@@ -38,7 +38,6 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
@@ -83,14 +82,8 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   protected void checkFunctionCall(FunctionCallTree tree) {
     CheckUtils.argumentValue(tree, "pattern", 0)
       .flatMap(AbstractRegexCheck::getLiteral)
-      .filter(AbstractRegexCheck::isSingleLinePattern)
       .map(pattern -> regexForLiteral(getFlagSet(pattern), pattern))
       .ifPresent(result -> checkRegex(result, tree));
-  }
-
-  protected static boolean isSingleLinePattern(LiteralTree literalTree) {
-    SyntaxToken token = literalTree.token();
-    return token.line() == token.endLine();
   }
 
   protected static FlagSet getFlagSet(LiteralTree literalTree) {
