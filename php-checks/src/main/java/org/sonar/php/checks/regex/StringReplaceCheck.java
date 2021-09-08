@@ -41,7 +41,7 @@ public class StringReplaceCheck extends AbstractRegexCheck {
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
     RegexTree regex = regexParseResult.getResult();
     if (!regexParseResult.hasSyntaxErrors() && isPlainString(regex)) {
-      newIssue(regexFunctionCall.callee(), MESSAGE);
+      newIssue(regexFunctionCall.callee(), MESSAGE, Collections.singletonList(new RegexIssueLocation(regex, "Expression without regular expression features.")));
     }
   }
 
