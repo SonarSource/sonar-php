@@ -32,6 +32,7 @@ import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.regex.PhpRegexUtils;
 import org.sonar.php.regex.RegexCheck;
 import org.sonar.php.regex.RegexCheckContext;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -143,6 +144,11 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
       PreciseIssue issue = regexContext.newIssue(this, regexTree, message);
       secondaries.forEach(issue::secondary);
     }
+  }
+
+  public final void newIssue(Tree tree, String message, List<RegexIssueLocation> secondaries) {
+    PreciseIssue issue = newIssue(tree, message);
+    secondaries.forEach(issue::secondary);
   }
 
   @CheckForNull
