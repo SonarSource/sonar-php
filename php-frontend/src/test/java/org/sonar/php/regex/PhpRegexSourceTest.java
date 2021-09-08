@@ -24,7 +24,6 @@ import org.junit.Test;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonarsource.analyzer.commons.regex.RegexDialect;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
-import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
 import org.sonarsource.analyzer.commons.regex.SyntaxError;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;
@@ -45,7 +44,7 @@ public class PhpRegexSourceTest {
   // TODO: Extend test with exact syntax error location check
   public void invalid_regex() {
     RegexSource source = makeSource("'/+/'");
-    RegexParseResult result = new RegexParser(source, new FlagSet()).parse();
+    RegexParseResult result = new PhpRegexParser(source, new FlagSet()).parse();
 
     assertThat(result.getSyntaxErrors()).isNotEmpty();
   }
@@ -66,7 +65,7 @@ public class PhpRegexSourceTest {
 
   @Test
   public void test_string_literal() {
-    RegexTree regex = assertSuccessfulParse("'/a\nb/'"); // <?php foo('/a\nb/');
+    RegexTree regex = assertSuccessfulParse("'/a\\nb/'"); // <?php foo('/a\nb/');
     assertKind(RegexTree.Kind.SEQUENCE, regex);
     List<RegexTree> items = ((SequenceTree) regex).getItems();
     assertThat(items).hasSize(3);
@@ -76,16 +75,28 @@ public class PhpRegexSourceTest {
     assertCharacter('b', items.get(2));
 
     assertLocation(3, 2, 3, items.get(0));
-    assertLocation(3, 3, 4, items.get(1));
-    assertLocation(3, 4, 5, items.get(2));
+    assertLocation(3, 3, 5, items.get(1));
+    assertLocation(3, 5, 6, items.get(2));
+  }
+
+  @Test
+  public void multiline_string_literal() {
+    RegexTree regex = assertSuccessfulParse("'/a\nbc\r\nde/'");
+    assertKind(RegexTree.Kind.SEQUENCE, regex);
+    List<RegexTree> items = ((SequenceTree) regex).getItems();
+
+    assertCharacterLocation(items.get(0), 'a', 3, 2, 3);
+    assertCharacterLocation(items.get(2), 'b', 4, 0, 1);
+    assertCharacterLocation(items.get(3), 'c', 4, 1, 2);
+    assertCharacterLocation(items.get(6), 'd', 5, 0, 1);
   }
 
   @Test
   public void single_quote_vs_double_quote() {
-    RegexParseResult singleQuoted = new RegexParser(makeSource("'/\\u{0041}/'"), new FlagSet()).parse();
+    RegexParseResult singleQuoted = new PhpRegexParser(makeSource("'/\\u{0041}/'"), new FlagSet()).parse();
     assertThat(singleQuoted.getSyntaxErrors()).extracting(SyntaxError::getMessage).containsExactly("Expected hexadecimal digit, but found '{'");
 
-    RegexParseResult doubleQuoted = new RegexParser(makeSource("\"/\\u{0041}/\""), new FlagSet()).parse();
+    RegexParseResult doubleQuoted = new PhpRegexParser(makeSource("\"/\\u{0041}/\""), new FlagSet()).parse();
     assertThat(doubleQuoted.getSyntaxErrors()).isEmpty();
     assertThat(doubleQuoted.getResult().kind()).isEqualTo(RegexTree.Kind.CHARACTER);
     assertThat(((CharacterTree) doubleQuoted.getResult()).characterAsString()).isEqualTo("A");
@@ -114,6 +125,12 @@ public class PhpRegexSourceTest {
       .extracting(t -> ((CharacterTree) t).characterAsString())
       .containsExactly("a", "\\", "b");
     assertLocation(3, 3, 7, items.get(1));
+  }
+
+  private static void assertCharacterLocation(RegexTree tree, char expected, int line, int startLineOffset, int endLineOffset) {
+    assertKind(RegexTree.Kind.CHARACTER, tree);
+    assertThat((char) ((CharacterTree) tree).codePointOrUnit()).isEqualTo(expected);
+    assertLocation(line, startLineOffset, endLineOffset, tree);
   }
 
   private static void assertCharacter(char expected, RegexTree tree) {

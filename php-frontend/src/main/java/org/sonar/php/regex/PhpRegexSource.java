@@ -19,8 +19,9 @@
  */
 package org.sonar.php.regex;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -36,12 +37,14 @@ public class PhpRegexSource implements RegexSource {
   private final int sourceLine;
   private final int sourceStartOffset;
   private final char quote;
+  private final int[] lineStartOffsets;
 
   public PhpRegexSource(LiteralTree stringLiteral) {
     quote = stringLiteral.value().charAt(0);
     sourceText = literalToString(stringLiteral);
     sourceLine = stringLiteral.token().line();
     sourceStartOffset = stringLiteral.token().column() + 2;
+    lineStartOffsets = lineStartOffsets(sourceText);
   }
 
   private static String literalToString(LiteralTree literal) {
@@ -80,6 +83,44 @@ public class PhpRegexSource implements RegexSource {
   }
 
   public LocationInFile locationInFileFor(IndexRange range) {
-    return new LocationInFileImpl(null, sourceLine, sourceStartOffset + range.getBeginningOffset(), sourceLine,sourceStartOffset + range.getEndingOffset());
+    int[] startLineAndOffset = lineAndOffset(range.getBeginningOffset());
+    int[] endLineAndOffset = lineAndOffset(range.getEndingOffset());
+    return new LocationInFileImpl(null, startLineAndOffset[0], startLineAndOffset[1], endLineAndOffset[0], endLineAndOffset[1]);
+  }
+
+  private int[] lineAndOffset(int index) {
+    int line;
+    int offset;
+    int searchResult = Arrays.binarySearch(lineStartOffsets, index);
+    if (searchResult >= 0) {
+      line = sourceLine + searchResult;
+      offset = 0;
+    } else {
+      line = sourceLine - searchResult - 2;
+      offset = index - lineStartOffsets[- searchResult - 2];
+    }
+    if (line == sourceLine) {
+      offset += sourceStartOffset;
+    }
+    return new int[] { line, offset };
+  }
+
+  private static int[] lineStartOffsets(String text) {
+    List<Integer> lineStartOffsets = new ArrayList<>();
+    lineStartOffsets.add(0);
+    int length = text.length();
+    int i = 0;
+    while (i < length) {
+      if (text.charAt(i) == '\n' || text.charAt(i) == '\r') {
+        int nextLineStartOffset = i + 1;
+        if (i < (length - 1) && text.charAt(i) == '\r' && text.charAt(i + 1) == '\n') {
+          nextLineStartOffset = i + 2;
+          i++;
+        }
+        lineStartOffsets.add(nextLineStartOffset);
+      }
+      i++;
+    }
+    return lineStartOffsets.stream().mapToInt(x -> x).toArray();
   }
 }

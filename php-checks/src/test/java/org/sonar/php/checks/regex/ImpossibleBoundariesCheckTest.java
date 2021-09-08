@@ -17,20 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.regex;
+package org.sonar.php.checks.regex;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
-import org.sonarsource.analyzer.commons.regex.RegexParseResult;
-import org.sonarsource.analyzer.commons.regex.RegexParser;
-import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
+import org.junit.Test;
+import org.sonar.plugins.php.CheckVerifier;
 
-public final class RegexCache {
-  private final Map<LiteralTree, RegexParseResult> cache = new HashMap<>();
+public class ImpossibleBoundariesCheckTest {
 
-  public RegexParseResult getRegexForLiterals(FlagSet initialFlags, LiteralTree stringLiteral) {
-    return cache.computeIfAbsent(stringLiteral,
-      k -> new PhpRegexParser(new PhpRegexSource(k), initialFlags).parse());
+  @Test
+  public void test() throws Exception {
+    CheckVerifier.verify(new ImpossibleBoundariesCheck(), "regex/ImpossibleBoundariesCheck.php");
   }
+
 }

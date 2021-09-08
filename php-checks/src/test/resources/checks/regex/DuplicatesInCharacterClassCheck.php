@@ -91,6 +91,7 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[\\\\abc]/", $input);
     preg_match('/[ \s \' " \: \{ \} \[ \] , & \* \# \?]/x', $input);
     preg_match("/[0-9\\\d]/", $input); // Compliant
+    preg_match("/[[:alnum:]alnum]/", $input);
   }
 
   function emoji($input) {
