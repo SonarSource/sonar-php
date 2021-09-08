@@ -138,6 +138,11 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
     }
   }
 
+  public final void newIssue(Tree tree, String message, List<RegexIssueLocation> secondaries) {
+    PreciseIssue issue = newIssue(tree, message);
+    secondaries.forEach(issue::secondary);
+  }
+
   @CheckForNull
   public static Integer parseModifier(char ch) {
     switch (ch) {
