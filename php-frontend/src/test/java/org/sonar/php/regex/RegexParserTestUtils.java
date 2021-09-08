@@ -28,6 +28,7 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
+import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 
@@ -40,7 +41,7 @@ public class RegexParserTestUtils {
 
   public static RegexTree assertSuccessfulParse(String regex) {
     RegexSource source = makeSource(regex);
-    RegexParseResult result = new RegexParser(source, new FlagSet()).parse();
+    RegexParseResult result = new PhpRegexParser(source, new FlagSet()).parse();
     if (!result.getSyntaxErrors().isEmpty()) {
       throw new AssertionFailedError("Parsing should complete with no errors.");
     }
@@ -62,5 +63,11 @@ public class RegexParserTestUtils {
     assertEquals("Regex should have kind " + expected, expected, actual.kind());
     assertTrue("`is` should return true when the kinds match.", actual.is(expected));
     assertTrue("`is` should return true when one of the kinds match.", actual.is(RegexTree.Kind.CHARACTER, RegexTree.Kind.DISJUNCTION, expected));
+  }
+
+  public static void assertKind(CharacterClassElementTree.Kind expected, CharacterClassElementTree actual) {
+    assertEquals("Regex should have kind " + expected, expected, actual.characterClassElementKind());
+    assertTrue("`is` should return true when the kinds match.", actual.is(expected));
+    assertTrue("`is` should return true when one of the kinds match.", actual.is(CharacterClassElementTree.Kind.PLAIN_CHARACTER, expected));
   }
 }
