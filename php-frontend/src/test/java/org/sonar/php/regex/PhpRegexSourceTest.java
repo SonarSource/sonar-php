@@ -66,7 +66,7 @@ public class PhpRegexSourceTest {
 
   @Test
   public void test_string_literal() {
-    RegexTree regex = assertSuccessfulParse("'/a\nb/'"); // <?php foo('/a\nb/');
+    RegexTree regex = assertSuccessfulParse("'/a\\nb/'"); // <?php foo('/a\nb/');
     assertKind(RegexTree.Kind.SEQUENCE, regex);
     List<RegexTree> items = ((SequenceTree) regex).getItems();
     assertThat(items).hasSize(3);
@@ -76,8 +76,20 @@ public class PhpRegexSourceTest {
     assertCharacter('b', items.get(2));
 
     assertLocation(3, 2, 3, items.get(0));
-    assertLocation(3, 3, 4, items.get(1));
-    assertLocation(3, 4, 5, items.get(2));
+    assertLocation(3, 3, 5, items.get(1));
+    assertLocation(3, 5, 6, items.get(2));
+  }
+
+  @Test
+  public void multiline_string_literal() {
+    RegexTree regex = assertSuccessfulParse("'/a\nbc\r\nde/'");
+    assertKind(RegexTree.Kind.SEQUENCE, regex);
+    List<RegexTree> items = ((SequenceTree) regex).getItems();
+
+    assertCharacterLocation(items.get(0), 'a', 3, 2, 3);
+    assertCharacterLocation(items.get(2), 'b', 4, 0, 1);
+    assertCharacterLocation(items.get(3), 'c', 4, 1, 2);
+    assertCharacterLocation(items.get(6), 'd', 5, 0, 1);
   }
 
   @Test
@@ -114,6 +126,12 @@ public class PhpRegexSourceTest {
       .extracting(t -> ((CharacterTree) t).characterAsString())
       .containsExactly("a", "\\", "b");
     assertLocation(3, 3, 7, items.get(1));
+  }
+
+  private static void assertCharacterLocation(RegexTree tree, char expected, int line, int startLineOffset, int endLineOffset) {
+    assertKind(RegexTree.Kind.CHARACTER, tree);
+    assertThat((char) ((CharacterTree) tree).codePointOrUnit()).isEqualTo(expected);
+    assertLocation(line, startLineOffset, endLineOffset, tree);
   }
 
   private static void assertCharacter(char expected, RegexTree tree) {
