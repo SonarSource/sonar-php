@@ -7,10 +7,8 @@ class StringReplaceCheck
   function noncompliant($input)
   {
     $init = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
-    $plane = "/c/";
     preg_replace("/Bob is/", "It's", $init); // Noncompliant {{Replace this "preg_replace()" call by a "str_replace()" function call.}}
-  //^^^^^^^^^^^^
-    preg_replace($plane, "UFO", $init); // Noncompliant
+  //^^^^^^^^^^^^   ^^^^^^<
     preg_replace("/\.\.\./", ";", $init); // Noncompliant
     preg_replace("/\Q...\E/", ";", $init); // Noncompliant
     preg_replace("/\\\\/", "It's", $init); // Noncompliant
@@ -48,6 +46,13 @@ class StringReplaceCheck
     preg_replace("/[\\\\]/", "_", $init);
     preg_replace(PATTERN, "_", $init);
     preg_match($input, "/c/", $init);
+  }
+
+  function patternAsVariable() {
+    $plane = "/c/";
+  //           ^> {{Expression without regular expression features.}}
+    preg_replace($plane, "UFO", $init); // Noncompliant
+  //^^^^^^^^^^^^
   }
 
 }

@@ -47,12 +47,6 @@ public class AbstractRegexCheckTest {
   }
 
   @Test
-  public void test_isSingleLinePattern() {
-    assertThat(AbstractRegexCheck.isSingleLinePattern((LiteralTree) expr("\"/ab/\""))).isTrue();
-    assertThat(AbstractRegexCheck.isSingleLinePattern((LiteralTree) expr("\"/a\nb/\""))).isFalse();
-  }
-
-  @Test
   public void test_getFlagSet() {
     assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/\"")).isEmpty()).isTrue();
     assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/i\""))).satisfies(f -> {
