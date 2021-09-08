@@ -32,7 +32,6 @@ import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.regex.PhpRegexUtils;
 import org.sonar.php.regex.RegexCheck;
 import org.sonar.php.regex.RegexCheckContext;
-import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;

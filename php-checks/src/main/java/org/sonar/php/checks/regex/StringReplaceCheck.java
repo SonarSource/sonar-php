@@ -22,7 +22,6 @@ package org.sonar.php.checks.regex;
 import java.util.Collections;
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
