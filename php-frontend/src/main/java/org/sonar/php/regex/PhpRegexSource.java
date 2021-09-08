@@ -129,7 +129,7 @@ public class PhpRegexSource implements RegexSource {
   // To also have the possibility to calculate the offset when the source is empty,
   // we have to add the first delimiter to the offset.
   private int sourceStartOffset(LiteralTree tree, String stringWithoutQuotes) {
-    int skipLeadingWhiteSpaces = sourceText.isEmpty() ? 2 : stringWithoutQuotes.indexOf(sourceText) + 1;
+    int skipLeadingWhiteSpaces = sourceText.isEmpty() ? 2 : (stringWithoutQuotes.indexOf(sourceText) + 1);
     return tree.token().column() + skipLeadingWhiteSpaces;
   }
 }
