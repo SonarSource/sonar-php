@@ -30,6 +30,7 @@ import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
+import org.sonarsource.analyzer.commons.regex.ast.GroupTree;
 import org.sonarsource.analyzer.commons.regex.ast.SourceCharacter;
 
 public class PhpRegexParser extends RegexParser {
@@ -65,4 +66,11 @@ public class PhpRegexParser extends RegexParser {
     return parseCharacterClass();
   }
 
+  @Override
+  protected GroupTree parseNonCapturingGroup(SourceCharacter openingParen) {
+    if (characters.currentIs("?R)")) {
+      characters.moveNext();
+    }
+    return super.parseNonCapturingGroup(openingParen);
+  }
 }

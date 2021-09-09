@@ -28,6 +28,7 @@ import org.sonarsource.analyzer.commons.regex.RegexSource;
 import org.sonarsource.analyzer.commons.regex.SyntaxError;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
+import org.sonarsource.analyzer.commons.regex.ast.NonCapturingGroupTree;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 
@@ -133,6 +134,17 @@ public class PhpRegexSourceTest {
     assertKind(RegexTree.Kind.CHARACTER, regex);
     assertCharacter('a', regex);
     assertLocation(3, 6, 7, regex);
+  }
+
+  @Test
+  public void test_recursive_pattern() {
+    RegexTree regex = assertSuccessfulParse("'/(?R)/'");
+    assertKind(RegexTree.Kind.NON_CAPTURING_GROUP, regex);
+    assertThat(((NonCapturingGroupTree) regex).getElement()).isNull();
+
+    regex = assertSuccessfulParse("'/(?:R)/'");
+    assertKind(RegexTree.Kind.NON_CAPTURING_GROUP, regex);
+    assertThat(((NonCapturingGroupTree) regex).getElement()).isNotNull();
   }
 
   private static void assertCharacterLocation(RegexTree tree, char expected, int line, int startLineOffset, int endLineOffset) {

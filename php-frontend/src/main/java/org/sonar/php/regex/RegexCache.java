@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
-import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 
 public final class RegexCache {

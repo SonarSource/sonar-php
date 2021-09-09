@@ -19,6 +19,7 @@
  */
 package org.sonar.php.regex;
 
+import java.util.List;
 import junit.framework.AssertionFailedError;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -28,10 +29,12 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
+import org.sonarsource.analyzer.commons.regex.SyntaxError;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -39,9 +42,13 @@ public class RegexParserTestUtils {
 
   private RegexParserTestUtils() {}
 
-  public static RegexTree assertSuccessfulParse(String regex) {
+  public static RegexParseResult parseRegex(String regex) {
     RegexSource source = makeSource(regex);
-    RegexParseResult result = new PhpRegexParser(source, new FlagSet()).parse();
+    return new PhpRegexParser(source, new FlagSet()).parse();
+  }
+
+  public static RegexTree assertSuccessfulParse(String regex) {
+    RegexParseResult result = parseRegex(regex);
     if (!result.getSyntaxErrors().isEmpty()) {
       throw new AssertionFailedError("Parsing should complete with no errors.");
     }
