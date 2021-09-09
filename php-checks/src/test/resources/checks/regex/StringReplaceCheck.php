@@ -45,6 +45,7 @@ class StringReplaceCheck
     preg_replace("/x+/", "It's", $init);
     preg_replace("/[\\\\]/", "_", $init);
     preg_replace(PATTERN, "_", $init);
+    preg_replace("//u", "_", $init);
     preg_match($input, "/c/", $init);
   }
 

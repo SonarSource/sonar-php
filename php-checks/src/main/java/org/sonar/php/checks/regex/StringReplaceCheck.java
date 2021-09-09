@@ -48,6 +48,7 @@ public class StringReplaceCheck extends AbstractRegexCheck {
   private static boolean isPlainString(RegexTree regex) {
     return regex.is(RegexTree.Kind.CHARACTER)
       || (regex.is(RegexTree.Kind.SEQUENCE)
+        && !((SequenceTree) regex).getItems().isEmpty()
         && ((SequenceTree) regex).getItems().stream().allMatch(item -> item.is(RegexTree.Kind.CHARACTER)));
   }
 }
