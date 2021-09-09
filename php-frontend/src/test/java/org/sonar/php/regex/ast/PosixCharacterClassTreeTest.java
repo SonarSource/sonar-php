@@ -20,9 +20,12 @@
 package org.sonar.php.regex.ast;
 
 
+import java.util.List;
 import org.junit.Test;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassTree;
+import org.sonarsource.analyzer.commons.regex.ast.CharacterClassUnionTree;
+import org.sonarsource.analyzer.commons.regex.ast.CharacterRangeTree;
 import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
@@ -43,7 +46,7 @@ public class PosixCharacterClassTreeTest {
   private static final RegexBaseVisitor BASE_VISITOR = new RegexBaseVisitor();
 
   @Test
-  public void posixCharacterClasses() {
+  public void posixCharacterClassElements() {
     assertPosixClass("'/[[:alnum:]]/'", "alnum", false);
     assertPosixClass("'/[[:alpha:]]/'", "alpha", false);
     assertPosixClass("'/[[:ascii:]]/'", "ascii", false);
@@ -78,7 +81,19 @@ public class PosixCharacterClassTreeTest {
   }
 
   @Test
-  public void nonPosixCharacterClasses() {
+  public void posixCharacterClassElements_within_union() {
+    RegexTree tree = assertSuccessfulParse("'/[[:alnum:]0-9]/'");
+    CharacterClassTree characterClass = assertType(CharacterClassTree.class, tree);
+    CharacterClassUnionTree characterClassUnion = assertType(CharacterClassUnionTree.class, characterClass.getContents());
+
+    List<CharacterClassElementTree> classElementTrees = characterClassUnion.getCharacterClasses();
+    assertThat(classElementTrees).hasSize(2);
+    assertType(PosixCharacterClassElementTree.class, classElementTrees.get(0));
+    assertType(CharacterRangeTree.class, classElementTrees.get(1));
+  }
+
+  @Test
+  public void nonPosixCharacterClassElements() {
     assertNonPosixClass("'/[[:alpha]]/'");
     assertNonPosixClass("'/[[alpha]]/'");
   }
@@ -90,9 +105,7 @@ public class PosixCharacterClassTreeTest {
 
   private void assertPosixClass(RegexSyntaxElement tree, String expectedProperty, boolean isNegation) {
     CharacterClassTree characterClass = assertType(CharacterClassTree.class, tree);
-    PosixCharacterClassTree posixCharacterClass = assertType(PosixCharacterClassTree.class, characterClass.getContents());
-    assertThat(posixCharacterClass.isNegated()).isEqualTo(isNegation);
-    PosixCharacterClassElementTree posixCharacterClassElement = assertType(PosixCharacterClassElementTree.class, posixCharacterClass.getContents());
+    PosixCharacterClassElementTree posixCharacterClassElement = assertType(PosixCharacterClassElementTree.class, characterClass.getContents());
     assertKind(CharacterClassElementTree.Kind.POSIX_CLASS, posixCharacterClassElement);
     assertThat(posixCharacterClassElement.property()).isNotNull().isEqualTo(expectedProperty);
     assertThat(posixCharacterClassElement.activeFlags().isEmpty()).isTrue();

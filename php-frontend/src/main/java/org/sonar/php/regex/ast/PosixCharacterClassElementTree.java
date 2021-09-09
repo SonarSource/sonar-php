@@ -26,16 +26,23 @@ import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
 import org.sonarsource.analyzer.commons.regex.ast.RegexVisitor;
+import org.sonarsource.analyzer.commons.regex.ast.SourceCharacter;
 
 public class PosixCharacterClassElementTree extends AbstractRegexSyntaxElement implements CharacterClassElementTree {
 
   private final String property;
   private final FlagSet activeFlags;
+  private final boolean isNegation;
 
-  public PosixCharacterClassElementTree(RegexSource source, IndexRange range, String property, FlagSet activeFlags) {
+  public PosixCharacterClassElementTree(RegexSource source, IndexRange range, boolean isNegation, String property, FlagSet activeFlags) {
     super(source, range);
+    this.isNegation = isNegation;
     this.property = property;
     this.activeFlags = activeFlags;
+  }
+
+  public PosixCharacterClassElementTree(RegexSource source, SourceCharacter openBracket, SourceCharacter closingBracket, boolean isNegation, String property, FlagSet activeFlags) {
+    this(source, openBracket.getRange().merge(closingBracket.getRange()), isNegation, property, activeFlags);
   }
 
   @Nonnull
@@ -47,6 +54,10 @@ public class PosixCharacterClassElementTree extends AbstractRegexSyntaxElement i
   @Override
   public void accept(RegexVisitor visitor) {
     // do nothing
+  }
+
+  public boolean isNegation() {
+    return isNegation;
   }
 
   @Nonnull
