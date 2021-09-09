@@ -20,6 +20,7 @@
 package org.sonar.php.regex;
 
 import java.util.List;
+import javax.annotation.Nullable;
 import junit.framework.AssertionFailedError;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -76,5 +77,17 @@ public class RegexParserTestUtils {
     assertEquals("Regex should have kind " + expected, expected, actual.characterClassElementKind());
     assertTrue("`is` should return true when the kinds match.", actual.is(expected));
     assertTrue("`is` should return true when one of the kinds match.", actual.is(CharacterClassElementTree.Kind.PLAIN_CHARACTER, expected));
+  }
+
+  public static <T> T assertType(Class<T> klass, @Nullable Object o) {
+    if (o == null) {
+      throw new AssertionFailedError("Object should not be null.");
+    }
+    String actual = o.getClass().getSimpleName();
+    String expected = klass.getSimpleName();
+    if (!klass.isInstance(o)) {
+      throw new AssertionFailedError(String.format("Object should have the correct type. [expected: %s, actual: %s]", expected, actual));
+    }
+    return klass.cast(o);
   }
 }
