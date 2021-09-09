@@ -50,6 +50,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
 
   private static final RuleType DEFAULT_RULE_TYPE = RuleType.CODE_SMELL;
   private static final Severity DEFAULT_SEVERITY = Severity.MAJOR;
+  private static final String READ_ERROR_MSG_FORMAT = "An error occurred when reading report file '%s', no issue will be imported from this report.\n%s";
 
   public final String defaultRuleId = reportKey() + ".finding";
   protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
@@ -100,8 +101,6 @@ public abstract class ExternalIssuesSensor implements Sensor {
   }
 
   private void logFileCantBeRead(Exception e, File reportPath) {
-    String msgFormat = "An error occurred when reading report file '%s', no issue will be imported from this report.\n%s";
-
     String additionalMsg = e.getClass().getSimpleName() + ": " + e.getMessage();
     if (e instanceof ParseException || e instanceof ClassCastException) {
       additionalMsg = "The content of the file probably does not have the expected format.";
@@ -109,7 +108,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
       additionalMsg = "The file was not found.";
     }
 
-    String msg = String.format(msgFormat, reportPath, additionalMsg);
+    String msg = String.format(READ_ERROR_MSG_FORMAT, reportPath, additionalMsg);
     logger().error(msg);
     analysisWarningsWrapper.addWarning(msg);
   }
