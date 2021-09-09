@@ -23,15 +23,24 @@ package org.sonar.php.regex.ast;
 import org.junit.Test;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassTree;
+import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
+import org.sonarsource.analyzer.commons.regex.ast.RegexVisitor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.sonar.php.regex.RegexParserTestUtils.assertKind;
 import static org.sonar.php.regex.RegexParserTestUtils.assertSuccessfulParse;
 import static org.sonar.php.regex.RegexParserTestUtils.assertType;
 
 public class PosixCharacterClassTreeTest {
+
+  private static final RegexBaseVisitor BASE_VISITOR = new RegexBaseVisitor();
 
   @Test
   public void posixCharacterClasses() {
@@ -87,6 +96,10 @@ public class PosixCharacterClassTreeTest {
     assertKind(CharacterClassElementTree.Kind.POSIX_CLASS, posixCharacterClassElement);
     assertThat(posixCharacterClassElement.property()).isNotNull().isEqualTo(expectedProperty);
     assertThat(posixCharacterClassElement.activeFlags().isEmpty()).isTrue();
+
+    CharacterClassElementTree classElementTree = spy(posixCharacterClassElement);
+    BASE_VISITOR.visitInCharClass(classElementTree);
+    verify(classElementTree).accept(BASE_VISITOR);
   }
 
   private void assertNonPosixClass(String regex) {
