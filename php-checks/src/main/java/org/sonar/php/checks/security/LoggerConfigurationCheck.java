@@ -66,7 +66,7 @@ public class LoggerConfigurationCheck extends PHPVisitorCheck {
     map.put("display_errors", singletonList("0"));
     map.put("display_startup_errors", singletonList("0"));
     map.put("error_log", emptyList());
-    map.put(ERROR_REPORTING, asList("E_ALL", "32767", "-1"));
+    map.put(ERROR_REPORTING, singletonList("0"));
     map.put("log_errors", singletonList("1"));
     map.put("log_errors_max_length", singletonList("0"));
     map.put("ignore_repeated_errors", singletonList("0"));
