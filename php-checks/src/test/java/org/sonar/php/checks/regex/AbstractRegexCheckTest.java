@@ -37,6 +37,8 @@ public class AbstractRegexCheckTest {
   @Test
   public void test_getLiteral() {
     assertThat(AbstractRegexCheck.getLiteral(expr("'//'"))).isPresent();
+    assertThat(AbstractRegexCheck.getLiteral(expr("'/a/'"))).isPresent();
+    assertThat(AbstractRegexCheck.getLiteral(expr("' /a/'"))).isPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("'aFooa'"))).isNotPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("''"))).isNotPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("'[FOO]'"))).isPresent();
@@ -63,6 +65,7 @@ public class AbstractRegexCheckTest {
     });
 
     assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/U\"")).isEmpty()).isTrue();
+    assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"  /a/i\"")).getMask()).isEqualTo(AbstractRegexCheck.PCRE_CASELESS);
   }
 
   private ExpressionTree expr(String pattern) {
