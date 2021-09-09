@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.reports;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -99,8 +100,16 @@ public abstract class ExternalIssuesSensor implements Sensor {
   }
 
   private void logFileCantBeRead(Exception e, File reportPath) {
-    String msg = String.format("An error occurred when reading report file '%s', no issue will be imported from this report. %s: %s"
-      , reportPath, e.getClass().getSimpleName(), e.getMessage());
+    String msgFormat = "An error occurred when reading report file '%s', no issue will be imported from this report.\n%s";
+
+    String additionalMsg = e.getClass().getSimpleName() + ": " + e.getMessage();
+    if (e instanceof ParseException || e instanceof ClassCastException) {
+      additionalMsg = "The content of the file probably does not have the expected format.";
+    } else if (e instanceof FileNotFoundException) {
+      additionalMsg = "The file was not found.";
+    }
+
+    String msg = String.format(msgFormat, reportPath, additionalMsg);
     logger().error(msg);
     analysisWarningsWrapper.addWarning(msg);
   }
