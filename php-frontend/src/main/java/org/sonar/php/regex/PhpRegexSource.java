@@ -41,17 +41,17 @@ public class PhpRegexSource implements RegexSource {
 
   public PhpRegexSource(LiteralTree stringLiteral) {
     quote = stringLiteral.value().charAt(0);
-    sourceText = literalToString(stringLiteral);
+    String stringWithoutQuotes = literalToString(stringLiteral);
+    sourceText = stripDelimiters(stringWithoutQuotes.trim());
     sourceLine = stringLiteral.token().line();
-    sourceStartOffset = stringLiteral.token().column() + 2;
+    sourceStartOffset = sourceStartOffset(stringLiteral, stringWithoutQuotes);
     lineStartOffsets = lineStartOffsets(sourceText);
   }
 
   private static String literalToString(LiteralTree literal) {
     if (literal.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
       String literalValue = literal.value();
-      String valueWithoutQuotes = literalValue.substring(1, literalValue.length() - 1);
-      return stripDelimiters(valueWithoutQuotes);
+      return literalValue.substring(1, literalValue.length() - 1);
     }
     throw new IllegalArgumentException("Only string literals allowed");
   }
@@ -122,5 +122,14 @@ public class PhpRegexSource implements RegexSource {
       i++;
     }
     return lineStartOffsets.stream().mapToInt(x -> x).toArray();
+  }
+
+  // When calculating the start offset of the source, we have to take leading spaces into account.
+  // If there are truncated spaces, we simply add their number to the offset.
+  // To also have the possibility to calculate the offset when the source is empty,
+  // we have to add the first delimiter to the offset.
+  private int sourceStartOffset(LiteralTree tree, String stringWithoutQuotes) {
+    int skipLeadingWhiteSpaces = sourceText.isEmpty() ? 2 : (stringWithoutQuotes.indexOf(sourceText) + 1);
+    return tree.token().column() + skipLeadingWhiteSpaces;
   }
 }
