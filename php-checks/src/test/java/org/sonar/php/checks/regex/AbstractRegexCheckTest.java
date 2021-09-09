@@ -65,6 +65,7 @@ public class AbstractRegexCheckTest {
     });
 
     assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/U\"")).isEmpty()).isTrue();
+    assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"  /a/i\"")).getMask()).isEqualTo(AbstractRegexCheck.PCRE_CASELESS);
   }
 
   private ExpressionTree expr(String pattern) {

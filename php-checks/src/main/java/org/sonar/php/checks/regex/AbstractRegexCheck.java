@@ -87,7 +87,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   }
 
   protected static FlagSet getFlagSet(LiteralTree literalTree) {
-    String pattern = CheckUtils.trimQuotes(literalTree);
+    String pattern = trimPattern(literalTree);
     Character endDelimiter = PhpRegexUtils.getEndDelimiter(pattern);
     String patternModifiers = pattern.substring(pattern.lastIndexOf(endDelimiter) + 1);
     FlagSet flags = new FlagSet();
@@ -107,7 +107,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   }
 
   protected static Optional<LiteralTree> patternWithDelimiter(LiteralTree tree) {
-    String pattern = CheckUtils.trimQuotes(tree).trim();
+    String pattern = trimPattern(tree);
     if (pattern.length() >= 2) {
       Matcher m = DELIMITER_PATTERN.matcher(pattern);
       if (m.find() && containsEndDelimiter(pattern.substring(1), m.group().charAt(0))) {
@@ -115,6 +115,10 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
       }
     }
     return Optional.empty();
+  }
+
+  private static String trimPattern(LiteralTree tree) {
+    return CheckUtils.trimQuotes(tree).trim();
   }
 
   protected static boolean containsEndDelimiter(String croppedPattern, Character startDelimiter) {
