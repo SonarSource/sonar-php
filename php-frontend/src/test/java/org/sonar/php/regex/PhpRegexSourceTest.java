@@ -127,6 +127,14 @@ public class PhpRegexSourceTest {
     assertLocation(3, 3, 7, items.get(1));
   }
 
+  @Test
+  public void test_leading_whitespace_before_delimiter() {
+    RegexTree regex = assertSuccessfulParse("'    /a/'");
+    assertKind(RegexTree.Kind.CHARACTER, regex);
+    assertCharacter('a', regex);
+    assertLocation(3, 6, 7, regex);
+  }
+
   private static void assertCharacterLocation(RegexTree tree, char expected, int line, int startLineOffset, int endLineOffset) {
     assertKind(RegexTree.Kind.CHARACTER, tree);
     assertThat((char) ((CharacterTree) tree).codePointOrUnit()).isEqualTo(expected);
