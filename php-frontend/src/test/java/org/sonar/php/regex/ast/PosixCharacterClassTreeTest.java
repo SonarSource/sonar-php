@@ -29,6 +29,7 @@ import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.regex.RegexParserTestUtils.assertKind;
 import static org.sonar.php.regex.RegexParserTestUtils.assertSuccessfulParse;
+import static org.sonar.php.regex.RegexParserTestUtils.assertType;
 
 public class PosixCharacterClassTreeTest {
 
@@ -79,15 +80,13 @@ public class PosixCharacterClassTreeTest {
   }
 
   private void assertPosixClass(RegexSyntaxElement tree, String expectedProperty, boolean isNegation) {
-    assertThat(tree).isInstanceOf(CharacterClassTree.class);
-    CharacterClassElementTree classElementTree = ((CharacterClassTree)tree).getContents();
-    assertThat(classElementTree).isInstanceOf(PosixCharacterClassTree.class);
-    PosixCharacterClassTree posixCharacterClass = (PosixCharacterClassTree) classElementTree;
-    assertKind(CharacterClassElementTree.Kind.POSIX_CLASS, posixCharacterClass);
-
-    assertThat(posixCharacterClass.property()).isNotNull().isEqualTo(expectedProperty);
-    assertThat(posixCharacterClass.isNegation()).isEqualTo(isNegation);
-    assertThat(posixCharacterClass.activeFlags().isEmpty()).isTrue();
+    CharacterClassTree characterClass = assertType(CharacterClassTree.class, tree);
+    PosixCharacterClassTree posixCharacterClass = assertType(PosixCharacterClassTree.class, characterClass.getContents());
+    assertThat(posixCharacterClass.isNegated()).isEqualTo(isNegation);
+    PosixCharacterClassElementTree posixCharacterClassElement = assertType(PosixCharacterClassElementTree.class, posixCharacterClass.getContents());
+    assertKind(CharacterClassElementTree.Kind.POSIX_CLASS, posixCharacterClassElement);
+    assertThat(posixCharacterClassElement.property()).isNotNull().isEqualTo(expectedProperty);
+    assertThat(posixCharacterClassElement.activeFlags().isEmpty()).isTrue();
   }
 
   private void assertNonPosixClass(String regex) {
@@ -98,6 +97,6 @@ public class PosixCharacterClassTreeTest {
   private void assertNonPosixClass(RegexSyntaxElement tree) {
     assertThat(tree).isInstanceOf(CharacterClassTree.class);
     CharacterClassElementTree classElementTree = ((CharacterClassTree)tree).getContents();
-    assertThat(classElementTree).isNotInstanceOf(PosixCharacterClassTree.class);
+    assertThat(classElementTree).isNotInstanceOf(PosixCharacterClassElementTree.class);
   }
 }

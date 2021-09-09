@@ -19,31 +19,44 @@
  */
 package org.sonar.php.regex.ast;
 
+import javax.annotation.Nonnull;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
-import org.sonarsource.analyzer.commons.regex.ast.CharacterClassTree;
+import org.sonarsource.analyzer.commons.regex.ast.AbstractRegexSyntaxElement;
+import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
-import org.sonarsource.analyzer.commons.regex.ast.SourceCharacter;
+import org.sonarsource.analyzer.commons.regex.ast.RegexVisitor;
 
-public class PosixCharacterClassTree extends CharacterClassTree {
+public class PosixCharacterClassElementTree extends AbstractRegexSyntaxElement implements CharacterClassElementTree {
 
-  public PosixCharacterClassTree(RegexSource source, IndexRange range, SourceCharacter openingBracket,
-    boolean negation, String property, FlagSet activeFlags) {
-    super(source,
-      range,
-      openingBracket,
-      negation,
-      new PosixCharacterClassElementTree(source, new IndexRange(range.getBeginningOffset()+1, range.getEndingOffset()-1), property, activeFlags),
-      activeFlags);
+  private final String property;
+  private final FlagSet activeFlags;
+
+  public PosixCharacterClassElementTree(RegexSource source, IndexRange range, String property, FlagSet activeFlags) {
+    super(source, range);
+    this.property = property;
+    this.activeFlags = activeFlags;
   }
-  
-  public PosixCharacterClassTree(RegexSource source, SourceCharacter openingBracket, SourceCharacter closingBracket,
-    boolean negation, String property, FlagSet activeFlags) {
-    this(source,
-      openingBracket.getRange().merge(closingBracket.getRange()),
-      openingBracket,
-      negation,
-      property,
-      activeFlags);
+
+  @Nonnull
+  @Override
+  public CharacterClassElementTree.Kind characterClassElementKind() {
+    return CharacterClassElementTree.Kind.POSIX_CLASS;
+  }
+
+  @Override
+  public void accept(RegexVisitor visitor) {
+    // do nothing
+  }
+
+  @Nonnull
+  public String property() {
+    return property;
+  }
+
+  @Nonnull
+  @Override
+  public FlagSet activeFlags() {
+    return activeFlags;
   }
 }

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import org.sonar.php.regex.ast.PosixCharacterClassTree;
 import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
-import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
+import org.sonarsource.analyzer.commons.regex.ast.CharacterClassTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.GroupTree;
 import org.sonarsource.analyzer.commons.regex.ast.SourceCharacter;
@@ -51,7 +51,7 @@ public class PhpRegexParser extends RegexParser {
   }
 
   @Override
-  protected CharacterClassElementTree parsePosixClassOrCharacterClass() {
+  protected CharacterClassTree parseCharacterClass() {
     if (characters.lookAhead(1) == ':') {
       SourceCharacter openingBracket = characters.getCurrent();
       boolean isNegation = characters.lookAhead(2) == '^';
@@ -60,10 +60,10 @@ public class PhpRegexParser extends RegexParser {
         .filter(posix -> characters.currentIs(posix.getKey())).findFirst();
       if (posixClass.isPresent()) {
         characters.moveNext(posixClass.get().getKey().length());
-        return new PosixCharacterClassTree(source, openingBracket, characters.getCurrent(), posixClass.get().getValue(), isNegation, activeFlags);
+        return new PosixCharacterClassTree(source, openingBracket, characters.getCurrent(), isNegation, posixClass.get().getValue(), activeFlags);
       }
     }
-    return parseCharacterClass();
+    return super.parseCharacterClass();
   }
 
   @Override
