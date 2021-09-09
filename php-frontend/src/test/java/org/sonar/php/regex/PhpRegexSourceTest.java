@@ -35,7 +35,6 @@ import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
-import static org.sonar.php.regex.RegexParserTestUtils.assertFailParsing;
 import static org.sonar.php.regex.RegexParserTestUtils.assertKind;
 import static org.sonar.php.regex.RegexParserTestUtils.assertSuccessfulParse;
 import static org.sonar.php.regex.RegexParserTestUtils.makeSource;
@@ -143,7 +142,9 @@ public class PhpRegexSourceTest {
     assertKind(RegexTree.Kind.NON_CAPTURING_GROUP, regex);
     assertThat(((NonCapturingGroupTree) regex).getElement()).isNull();
 
-    assertFailParsing("'/(?RR)/'", "Expected flag or ':' or ')', but found 'R'");
+    regex = assertSuccessfulParse("'/(?:R)/'");
+    assertKind(RegexTree.Kind.NON_CAPTURING_GROUP, regex);
+    assertThat(((NonCapturingGroupTree) regex).getElement()).isNotNull();
   }
 
   private static void assertCharacterLocation(RegexTree tree, char expected, int line, int startLineOffset, int endLineOffset) {

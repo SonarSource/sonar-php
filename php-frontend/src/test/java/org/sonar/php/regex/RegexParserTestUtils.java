@@ -77,13 +77,4 @@ public class RegexParserTestUtils {
     assertTrue("`is` should return true when the kinds match.", actual.is(expected));
     assertTrue("`is` should return true when one of the kinds match.", actual.is(CharacterClassElementTree.Kind.PLAIN_CHARACTER, expected));
   }
-
-  public static void assertFailParsing(String regex, String expectedError) {
-    RegexParseResult result = parseRegex(regex);
-    List<SyntaxError> errors = result.getSyntaxErrors();
-    if (errors.isEmpty()) {
-      throw new AssertionFailedError("Expected error in parsing");
-    }
-    assertThat(errors.stream().map(SyntaxError::getMessage)).contains(expectedError);
-  }
 }
