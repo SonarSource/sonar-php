@@ -28,21 +28,21 @@ import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
 import org.sonarsource.analyzer.commons.regex.ast.RegexVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.SourceCharacter;
 
-public class PosixCharacterClassTree extends AbstractRegexSyntaxElement implements CharacterClassElementTree {
+public class PosixCharacterClassElementTree extends AbstractRegexSyntaxElement implements CharacterClassElementTree {
 
   private final String property;
-  private final boolean isNegation;
   private final FlagSet activeFlags;
+  private final boolean isNegation;
 
-  private PosixCharacterClassTree(RegexSource source, IndexRange range, String property, boolean isNegation, FlagSet activeFlags) {
+  public PosixCharacterClassElementTree(RegexSource source, IndexRange range, boolean isNegation, String property, FlagSet activeFlags) {
     super(source, range);
-    this.property = property;
     this.isNegation = isNegation;
+    this.property = property;
     this.activeFlags = activeFlags;
   }
 
-  public PosixCharacterClassTree(RegexSource source, SourceCharacter openingBracket, SourceCharacter closingBracket, String property, boolean isNegation, FlagSet activeFlags) {
-    this(source, openingBracket.getRange().merge(closingBracket.getRange()), property, isNegation, activeFlags);
+  public PosixCharacterClassElementTree(RegexSource source, SourceCharacter openBracket, SourceCharacter closingBracket, boolean isNegation, String property, FlagSet activeFlags) {
+    this(source, openBracket.getRange().merge(closingBracket.getRange()), isNegation, property, activeFlags);
   }
 
   @Nonnull
@@ -56,13 +56,13 @@ public class PosixCharacterClassTree extends AbstractRegexSyntaxElement implemen
     // do nothing
   }
 
+  public boolean isNegation() {
+    return isNegation;
+  }
+
   @Nonnull
   public String property() {
     return property;
-  }
-
-  public boolean isNegation() {
-    return isNegation;
   }
 
   @Nonnull
