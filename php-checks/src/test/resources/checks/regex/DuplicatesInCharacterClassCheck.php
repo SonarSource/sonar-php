@@ -51,6 +51,8 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[0-9\d]/", $input); // Noncompliant
     preg_match("/[0-9\\d]/", $input); // Noncompliant
     preg_match("/[0-9\\\\\d]/", $input); // Noncompliant
+    preg_match("/(?(?=1)[0-99])/", $input); // Noncompliant
+    preg_match("/(?(?=1)1|[0-99])/", $input); // Noncompliant
   }
 
   function compliant($input)

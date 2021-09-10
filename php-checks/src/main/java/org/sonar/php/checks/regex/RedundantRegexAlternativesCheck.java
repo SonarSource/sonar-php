@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.regex.ast.PhpRegexBaseVisitor;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.CapturingGroupTree;
@@ -60,7 +61,7 @@ public class RedundantRegexAlternativesCheck extends AbstractRegexCheck {
     newIssue(firstRedundantAlternatives, MESSAGE, secondaries);
   }
 
-  private class DisjunctionVisitor extends RegexBaseVisitor {
+  private class DisjunctionVisitor extends PhpRegexBaseVisitor {
 
     @Override
     public void visitDisjunction(DisjunctionTree tree) {
