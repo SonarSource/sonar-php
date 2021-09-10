@@ -131,10 +131,10 @@ public class PhpRegexSourceTest {
 
   @Test
   public void test_leading_whitespace_before_delimiter() {
-    RegexTree regex = assertSuccessfulParse("'    /a/'");
-    assertKind(RegexTree.Kind.CHARACTER, regex);
-    assertCharacter('a', regex);
-    assertLocation(3, 6, 7, regex);
+    assertCharacterLocation(assertSuccessfulParse("'    /a/'"), 'a', 3, 6, 7);
+    assertCharacterLocation(assertSuccessfulParse("'\n /a/'"), 'a', 4, 2, 3);
+    assertCharacterLocation(assertSuccessfulParse("'\r\n\n\r/a/'"), 'a', 3 + 3, 1, 2);
+    assertThatThrownBy(() -> parseRegex("'    '")).hasMessageContaining("does not contain delimiters");
   }
 
   @Test
