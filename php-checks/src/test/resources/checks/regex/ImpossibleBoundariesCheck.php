@@ -23,6 +23,14 @@ class ImpossibleBoundariesCheck
     preg_match('/abc(?<=$abc)/', $input); // Noncompliant
     preg_match('/abc(?<=abc$)def/', $input); // Noncompliant
     preg_match('/(?:abc(X|^))*Y?/', $input); // Noncompliant
+
+    preg_match('/a\Z\nb/m', $input); // Noncompliant
+    preg_match('/a\zb/m', $input); // Noncompliant
+
+    // False positives because the end delimiter does not capture the newlines
+    preg_match('/a$(\n)/', $input); // Noncompliant
+    preg_match('/a$./s', $input); // Noncompliant
+    preg_match('/a\Z(\n)/', $input); // Noncompliant
   }
 
   function probablyNonCompliant($input) {
@@ -70,5 +78,6 @@ class ImpossibleBoundariesCheck
     preg_match("/(?i)(true)(?=(?:[^']|'[^']*')*$)/", $input);
     preg_match('/(?:abc(X|$))*Y?/', $input);
     preg_match('/(?:x*(Xab|^)abc)*Y?/', $input);
+    preg_match('/a$\nb/m', $input);
   }
 }
