@@ -154,6 +154,12 @@ public class PhpRegexSourceTest {
     assertThat(regex.getSyntaxErrors()).isNotEmpty();
   }
 
+  @Test
+  public void test_conditionalSubpatterns_with_invalid_condition() {
+    RegexParseResult regex = parseRegex("'/(?(1|2)ab|cd|ef)/'");
+    assertThat(regex.getSyntaxErrors()).isNotEmpty();
+  }
+
   private static void assertCharacterLocation(RegexTree tree, char expected, int line, int startLineOffset, int endLineOffset) {
     assertKind(RegexTree.Kind.CHARACTER, tree);
     assertThat((char) ((CharacterTree) tree).codePointOrUnit()).isEqualTo(expected);

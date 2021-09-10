@@ -137,11 +137,13 @@ public class PhpRegexParser extends RegexParser {
     }
     if (inner.is(RegexTree.Kind.CHARACTER)) {
       reference.append(((CharacterTree) inner).characterAsString());
-    } else {
+    } else if (inner.is(RegexTree.Kind.SEQUENCE)){
       ((SequenceTree) inner).getItems().stream()
         .filter(CharacterTree.class::isInstance)
         .map(i -> ((CharacterTree) i).characterAsString())
         .forEach(reference::append);
+    } else {
+      error("Conditional subpattern has invalid condition.");
     }
     return new ReferenceConditionTree(source, range, reference.toString(), activeFlags);
   }
