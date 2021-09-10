@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
+import org.sonar.php.regex.ast.PhpRegexBaseVisitor;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.AutomatonState;
@@ -52,7 +53,7 @@ public class ImpossibleBoundariesCheck extends AbstractRegexCheck {
     new ImpossibleBoundaryFinder().visit(regexParseResult);
   }
 
-  private class ImpossibleBoundaryFinder extends RegexBaseVisitor {
+  private class ImpossibleBoundaryFinder extends PhpRegexBaseVisitor {
 
     private AutomatonState start;
     private AutomatonState end;

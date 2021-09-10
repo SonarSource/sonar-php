@@ -22,12 +22,12 @@ package org.sonar.php.checks.regex;
 import java.util.Collections;
 import org.sonar.check.Rule;
 import org.sonar.php.regex.RegexCheck;
+import org.sonar.php.regex.ast.PhpRegexBaseVisitor;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.AutomatonState;
 import org.sonarsource.analyzer.commons.regex.ast.FinalState;
 import org.sonarsource.analyzer.commons.regex.ast.Quantifier;
-import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 import org.sonarsource.analyzer.commons.regex.ast.RepetitionTree;
 import org.sonarsource.analyzer.commons.regex.helpers.RegexTreeHelper;
@@ -43,7 +43,7 @@ public class PossessiveQuantifierContinuationCheck extends AbstractRegexCheck {
     new Visitor(regexParseResult.getFinalState()).visit(regexParseResult);
   }
 
-  private class Visitor extends RegexBaseVisitor {
+  private class Visitor extends PhpRegexBaseVisitor {
 
     private final FinalState finalState;
 
