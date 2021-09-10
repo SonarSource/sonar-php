@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
+import org.sonar.php.regex.ast.PhpRegexBaseVisitor;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassUnionTree;
-import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 import org.sonarsource.analyzer.commons.regex.helpers.SimplifiedRegexCharacterClass;
 
@@ -42,7 +42,7 @@ public class DuplicatesInCharacterClassCheck extends AbstractRegexCheck {
     new DuplicateFinder().visit(regexParseResult);
   }
 
-  private class DuplicateFinder extends RegexBaseVisitor {
+  private class DuplicateFinder extends PhpRegexBaseVisitor {
 
     @Override
     public void visitCharacterClassUnion(CharacterClassUnionTree tree) {

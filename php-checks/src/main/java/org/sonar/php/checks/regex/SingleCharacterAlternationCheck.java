@@ -20,11 +20,11 @@
 package org.sonar.php.checks.regex;
 
 import org.sonar.check.Rule;
+import org.sonar.php.regex.ast.PhpRegexBaseVisitor;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.DisjunctionTree;
-import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 
 @Rule(key = "S6035")
 public class SingleCharacterAlternationCheck extends AbstractRegexCheck {
@@ -36,7 +36,7 @@ public class SingleCharacterAlternationCheck extends AbstractRegexCheck {
     new SingleCharacterAlternationFinder().visit(regexParseResult);
   }
 
-  class SingleCharacterAlternationFinder extends RegexBaseVisitor {
+  class SingleCharacterAlternationFinder extends PhpRegexBaseVisitor {
 
     @Override
     public void visitDisjunction(DisjunctionTree tree) {

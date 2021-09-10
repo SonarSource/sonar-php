@@ -25,12 +25,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
+import org.sonar.php.regex.ast.ConditionalSubpatternsTree;
+import org.sonar.php.regex.ast.ReferenceConditionTree;
 import org.sonar.php.regex.ast.PosixCharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
+import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;
+import org.sonarsource.analyzer.commons.regex.ast.DisjunctionTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.GroupTree;
+import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
+import org.sonarsource.analyzer.commons.regex.ast.LookAroundTree;
+import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
+import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 import org.sonarsource.analyzer.commons.regex.ast.SourceCharacter;
 
 public class PhpRegexParser extends RegexParser {
@@ -71,6 +80,69 @@ public class PhpRegexParser extends RegexParser {
     if (characters.currentIs("?R)")) {
       characters.moveNext();
     }
+    if (characters.currentIs("?(")) {
+      return parseConditionalSubpattern(openingParen);
+    }
     return super.parseNonCapturingGroup(openingParen);
+  }
+
+  private GroupTree parseConditionalSubpattern(SourceCharacter openingParen) {
+    // Discard '?'
+    characters.moveNext();
+    GroupTree condition = parseCondition();
+    RegexTree subpattern = parseDisjunction();
+    SourceCharacter closingParen = characters.getCurrent();
+    characters.moveNext();
+    if (subpattern.is(RegexTree.Kind.DISJUNCTION)) {
+      if (((DisjunctionTree) subpattern).getAlternatives().size() > 2) {
+        error("More than two alternatives in the subpattern");
+      }
+      DisjunctionTree disjunction = (DisjunctionTree) subpattern;
+      return new ConditionalSubpatternsTree(source, openingParen, closingParen, condition, disjunction.getAlternatives().get(0),
+        disjunction.getOrOperators().get(0), disjunction.getAlternatives().get(1), activeFlags);
+    } else {
+      return new ConditionalSubpatternsTree(source, openingParen, closingParen, condition, subpattern, activeFlags);
+    }
+  }
+
+  private GroupTree parseCondition() {
+    SourceCharacter openingParen = characters.getCurrent();
+    characters.moveNext();
+    if (characters.currentIs("?=")) {
+      characters.moveNext(2);
+      return finishGroup(openingParen, (range, inner) -> LookAroundTree.positiveLookAhead(source, range, inner, activeFlags));
+    } else if (characters.currentIs("?<=")) {
+      characters.moveNext(3);
+      return finishGroup(openingParen, (range, inner) -> LookAroundTree.positiveLookBehind(source, range, inner, activeFlags));
+    } else if (characters.currentIs("?!")) {
+      characters.moveNext(2);
+      return finishGroup(openingParen, (range, inner) -> LookAroundTree.negativeLookAhead(source, range, inner, activeFlags));
+    } else if (characters.currentIs("?<!")) {
+      characters.moveNext(3);
+      return finishGroup(openingParen, (range, inner) -> LookAroundTree.negativeLookBehind(source, range, inner, activeFlags));
+    } else if (characters.currentIs("+")) {
+      // Skip '+' as first character since it would be identified as quantifier at the beginning of a sequence
+      CharacterTree plus = readCharacter();
+      return finishGroup(openingParen, (range, inner) -> newReference(source, range, plus, inner, activeFlags));
+    } else {
+      // TODO Allow only valid conditions: signed sequence of digits or 'R'
+      return finishGroup(openingParen, (range, inner) -> newReference(source, range, null, inner, activeFlags));
+    }
+  }
+
+  public static ReferenceConditionTree newReference(RegexSource source, IndexRange range, @Nullable CharacterTree plus, RegexTree inner, FlagSet activeFlags) {
+    StringBuilder reference = new StringBuilder();
+    if (plus != null) {
+      reference.append('+');
+    }
+    if (inner.is(RegexTree.Kind.CHARACTER)) {
+      reference.append(((CharacterTree) inner).characterAsString());
+    } else if (inner.is(RegexTree.Kind.SEQUENCE)) {
+      ((SequenceTree) inner).getItems().stream()
+        .filter(CharacterTree.class::isInstance)
+        .map(i -> ((CharacterTree) i).characterAsString())
+        .forEach(reference::append);
+    }
+    return new ReferenceConditionTree(source, range, reference.toString(), activeFlags);
   }
 }

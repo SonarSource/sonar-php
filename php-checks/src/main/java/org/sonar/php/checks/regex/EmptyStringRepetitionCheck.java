@@ -20,11 +20,11 @@
 package org.sonar.php.checks.regex;
 
 import org.sonar.check.Rule;
+import org.sonar.php.regex.ast.PhpRegexBaseVisitor;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.DisjunctionTree;
 import org.sonarsource.analyzer.commons.regex.ast.GroupTree;
-import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 import org.sonarsource.analyzer.commons.regex.ast.RepetitionTree;
 import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
@@ -39,7 +39,7 @@ public class EmptyStringRepetitionCheck extends AbstractRegexCheck {
     new Visitor().visit(regexParseResult);
   }
 
-  private class Visitor extends RegexBaseVisitor {
+  private class Visitor extends PhpRegexBaseVisitor {
 
     @Override
     public void visitRepetition(RepetitionTree tree) {

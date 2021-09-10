@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.regex.RegexCheck;
+import org.sonar.php.regex.ast.PhpRegexBaseVisitor;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassTree;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassUnionTree;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;
-import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
 @Rule(key = "S5868")
@@ -42,7 +42,7 @@ public class GraphemeClustersInClassesCheck extends AbstractRegexCheck {
     new GraphemeInClassVisitor().visit(regexParseResult);
   }
 
-  private class GraphemeInClassVisitor extends RegexBaseVisitor {
+  private class GraphemeInClassVisitor extends PhpRegexBaseVisitor {
 
     private final List<RegexIssueLocation> graphemeClusters = new ArrayList<>();
 
