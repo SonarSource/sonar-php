@@ -27,7 +27,7 @@ class ImpossibleBoundariesCheck
     preg_match('/a\Z\nb/m', $input); // Noncompliant
     preg_match('/a\zb/m', $input); // Noncompliant
 
-    // False positives because the end delimiter does not capture the newlines
+    // False positives because the end delimiter does not capture the newlines (SONARPHP-1238)
     preg_match('/a$(\n)/', $input); // Noncompliant
     preg_match('/a$./s', $input); // Noncompliant
     preg_match('/a\Z(\n)/', $input); // Noncompliant
