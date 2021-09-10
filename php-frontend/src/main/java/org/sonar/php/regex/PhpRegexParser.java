@@ -123,21 +123,21 @@ public class PhpRegexParser extends RegexParser {
     } else if (characters.currentIs("+")) {
       // Skip '+' as first character since it would be identified as quantifier at the beginning of a sequence
       CharacterTree plus = readCharacter();
-      return finishGroup(openingParen, (range, inner) -> newReference(source, range, plus, inner, activeFlags));
+      return finishGroup(openingParen, (range, inner) -> reference(source, range, plus, inner, activeFlags));
     } else {
       // TODO Allow only valid conditions: signed sequence of digits or 'R'
-      return finishGroup(openingParen, (range, inner) -> newReference(source, range, null, inner, activeFlags));
+      return finishGroup(openingParen, (range, inner) -> reference(source, range, null, inner, activeFlags));
     }
   }
 
-  public static ReferenceConditionTree newReference(RegexSource source, IndexRange range, @Nullable CharacterTree plus, RegexTree inner, FlagSet activeFlags) {
+  public ReferenceConditionTree reference(RegexSource source, IndexRange range, @Nullable CharacterTree plus, RegexTree inner, FlagSet activeFlags) {
     StringBuilder reference = new StringBuilder();
     if (plus != null) {
       reference.append('+');
     }
     if (inner.is(RegexTree.Kind.CHARACTER)) {
       reference.append(((CharacterTree) inner).characterAsString());
-    } else if (inner.is(RegexTree.Kind.SEQUENCE)) {
+    } else {
       ((SequenceTree) inner).getItems().stream()
         .filter(CharacterTree.class::isInstance)
         .map(i -> ((CharacterTree) i).characterAsString())

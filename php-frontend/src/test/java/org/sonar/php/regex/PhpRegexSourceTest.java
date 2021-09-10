@@ -38,6 +38,7 @@ import static org.junit.Assert.assertEquals;
 import static org.sonar.php.regex.RegexParserTestUtils.assertKind;
 import static org.sonar.php.regex.RegexParserTestUtils.assertSuccessfulParse;
 import static org.sonar.php.regex.RegexParserTestUtils.makeSource;
+import static org.sonar.php.regex.RegexParserTestUtils.parseRegex;
 
 public class PhpRegexSourceTest {
 
@@ -145,6 +146,12 @@ public class PhpRegexSourceTest {
     regex = assertSuccessfulParse("'/(?:R)/'");
     assertKind(RegexTree.Kind.NON_CAPTURING_GROUP, regex);
     assertThat(((NonCapturingGroupTree) regex).getElement()).isNotNull();
+  }
+
+  @Test
+  public void test_conditionalSubpatterns_with_to_many_alternatives() {
+    RegexParseResult regex = parseRegex("'/(?(1)ab|cd|ef)/'");
+    assertThat(regex.getSyntaxErrors()).isNotEmpty();
   }
 
   private static void assertCharacterLocation(RegexTree tree, char expected, int line, int startLineOffset, int endLineOffset) {

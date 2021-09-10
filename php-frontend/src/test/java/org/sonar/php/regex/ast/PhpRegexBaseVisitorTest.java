@@ -20,10 +20,10 @@
 package org.sonar.php.regex.ast;
 
 import java.util.ArrayList;
-import java.util.List;
 import org.junit.Test;
 import org.sonar.php.regex.RegexParserTestUtils;
 import org.sonarsource.analyzer.commons.regex.ast.LookAroundTree;
+import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 
@@ -32,33 +32,54 @@ import static org.sonar.php.regex.RegexParserTestUtils.assertType;
 
 public class PhpRegexBaseVisitorTest {
 
+  private ArrayList<RegexTree> visitedItems = new ArrayList<>();
+
   @Test
-  public void test_visitConditionalSubpatterns() {
-    RegexTree tree = RegexParserTestUtils.assertSuccessfulParse("'/(?(?=1)ab|cd)/'");
-    List<RegexTree> items = new ArrayList<>();
-
-    PhpRegexBaseVisitor visitor = new PhpRegexBaseVisitor() {
-
-      @Override
-      public void visitSequence(SequenceTree tree) {
-        items.add(tree);
-        super.visitSequence(tree);
-      }
-
-      @Override
-      public void visitLookAround(LookAroundTree tree) {
-        items.add(tree);
-        super.visitLookAround(tree);
-      }
-    };
-
-    visitor.visit(tree);
-
+  public void test_visitConditionalSubpatterns_with_no_pattern() {
+    RegexTree tree = visitRegex("'/(?(?=1)ab|cd)/'", new ConditionalSubpatternsVisitor());
     ConditionalSubpatternsTree conditionalSubpatterns = assertType(ConditionalSubpatternsTree.class, tree);
-    assertThat(items).containsExactly(
+    assertThat(visitedItems).containsExactly(
       conditionalSubpatterns.getCondition(),
       conditionalSubpatterns.getYesPattern(),
       conditionalSubpatterns.getNoPattern());
+  }
 
+  @Test
+  public void test_visitConditionalSubpatterns_without_no_pattern() {
+    RegexTree tree = visitRegex("'/(?(?=1)ab)/'", new ConditionalSubpatternsVisitor());
+    ConditionalSubpatternsTree conditionalSubpatterns = assertType(ConditionalSubpatternsTree.class, tree);
+    assertThat(visitedItems).containsExactly(
+      conditionalSubpatterns.getCondition(),
+      conditionalSubpatterns.getYesPattern());
+  }
+
+  @Test
+  public void test_visitConditionalSubpatterns_with_reference_condition() {
+    RegexTree tree = visitRegex("'/(?(1)ab|cd)/'", new ConditionalSubpatternsVisitor());
+    ConditionalSubpatternsTree conditionalSubpatterns = assertType(ConditionalSubpatternsTree.class, tree);
+    assertThat(visitedItems).containsExactly(
+      conditionalSubpatterns.getYesPattern(),
+      conditionalSubpatterns.getNoPattern());
+  }
+
+  private RegexTree visitRegex(String regex, RegexBaseVisitor visitor) {
+    RegexTree tree = RegexParserTestUtils.assertSuccessfulParse(regex);
+    visitedItems.clear();
+    visitor.visit(tree);
+    return tree;
+  }
+
+  class ConditionalSubpatternsVisitor extends PhpRegexBaseVisitor {
+    @Override
+    public void visitSequence(SequenceTree tree) {
+      visitedItems.add(tree);
+      super.visitSequence(tree);
+    }
+
+    @Override
+    public void visitLookAround(LookAroundTree tree) {
+      visitedItems.add(tree);
+      super.visitLookAround(tree);
+    }
   }
 }

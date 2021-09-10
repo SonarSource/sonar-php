@@ -38,7 +38,8 @@ public class ConditionalSubpatternsTree extends GroupTree {
   @Nullable
   private final RegexTree noPattern;
 
-  public ConditionalSubpatternsTree(RegexSource source, SourceCharacter openingParen, SourceCharacter closingParen, GroupTree condition, RegexTree yesPattern, FlagSet activeFlags) {
+  public ConditionalSubpatternsTree(RegexSource source, SourceCharacter openingParen, SourceCharacter closingParen, GroupTree condition,
+    RegexTree yesPattern, FlagSet activeFlags) {
     this(source, openingParen, closingParen, condition, yesPattern, null, null, activeFlags);
   }
 

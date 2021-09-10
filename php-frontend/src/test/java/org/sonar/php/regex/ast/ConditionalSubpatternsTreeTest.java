@@ -19,9 +19,13 @@
  */
 package org.sonar.php.regex.ast;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import org.sonarsource.analyzer.commons.regex.ast.LookAroundTree;
+import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
+import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.regex.RegexParserTestUtils.assertSuccessfulParse;
@@ -51,6 +55,23 @@ public class ConditionalSubpatternsTreeTest {
     assertConditionalSubpatterns("'/(?(?![^a-z])2)/'", LookAroundTree.class, false);
     assertConditionalSubpatterns("'/(?(?<![^a-z])2)/'", LookAroundTree.class, false);
     assertConditionalSubpatterns("'/(?(?=[^a-z]*[a-z])\\d{2}-[a-z]{3}-\\d{2}|\\d{2}-\\d{2}-\\d{2} )/x'", LookAroundTree.class, true);
+  }
+
+  @Test
+  public void conditionalSubpatternTree_accept_without_PhpRegexBaseVisitor() {
+    List<RegexTree> items = new ArrayList<>();
+    RegexBaseVisitor visitor = new RegexBaseVisitor() {
+      @Override
+      public void visitSequence(SequenceTree tree) {
+        items.add(tree);
+        super.visitSequence(tree);
+      }
+    };
+
+    RegexTree tree = assertSuccessfulParse("'/(?(?=lookaround)subpattern1|subpattern2)/'");
+    tree.accept(visitor);
+    ConditionalSubpatternsTree conditionalSubpatterns = assertType(ConditionalSubpatternsTree.class, tree);
+    assertThat(items).doesNotContain(conditionalSubpatterns.getYesPattern());
   }
 
   private ConditionalSubpatternsTree assertConditionalSubpatterns(String regex, boolean hasNoPattern) {
