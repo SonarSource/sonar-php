@@ -21,6 +21,7 @@ package org.sonar.php.checks.regex;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.regex.ast.PhpRegexBaseVisitor;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -103,16 +104,24 @@ public class ImpossibleBoundariesCheck extends AbstractRegexCheck {
           }
           break;
         case LINE_END:
+          if (!boundaryTree.activeFlags().contains(Pattern.MULTILINE)) {
+            checkEndBoundary(boundaryTree);
+          }
+          break;
         case INPUT_END:
         case INPUT_END_FINAL_TERMINATOR:
-          if (!canReachWithoutConsumingInput(boundaryTree, end)) {
-            newIssue(boundaryTree, String.format(MESSAGE, "before"));
-          } else if (!excluded.contains(boundaryTree) && probablyShouldConsumeInput(boundaryTree, end)) {
-            newIssue(boundaryTree, String.format(SOFT_MESSAGE, "before"));
-          }
+          checkEndBoundary(boundaryTree);
           break;
         default:
           // Do nothing
+      }
+    }
+
+    private void checkEndBoundary(BoundaryTree boundaryTree) {
+      if (!canReachWithoutConsumingInput(boundaryTree, end)) {
+        newIssue(boundaryTree, String.format(MESSAGE, "before"));
+      } else if (!excluded.contains(boundaryTree) && probablyShouldConsumeInput(boundaryTree, end)) {
+        newIssue(boundaryTree, String.format(SOFT_MESSAGE, "before"));
       }
     }
 

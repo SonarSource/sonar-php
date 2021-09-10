@@ -37,12 +37,14 @@ function configure_logging() {
   ini_set('display_startup_errors', '0');
 
   error_reporting(); // Ok - returns current level of error_reporting
-  error_reporting(E_ALL);
-  error_reporting(32767);
-  error_reporting(-1);
-  ini_set('error_reporting', E_ALL);
-  ini_set('error_reporting', 32767);
-  ini_set('error_reporting', -1);
+  error_reporting(0); // Ok
+  error_reporting(E_ALL); // Noncompliant
+  error_reporting(32767); // Noncompliant
+  error_reporting(-1); // Noncompliant
+  ini_set('error_reporting', 0); // Ok
+  ini_set('error_reporting', E_ALL); // Noncompliant
+  ini_set('error_reporting', 32767); // Noncompliant
+  ini_set('error_reporting', -1); // Noncompliant
 
   ini_set('log_errors', '1');
   ini_set('log_errors_max_length', '0');
