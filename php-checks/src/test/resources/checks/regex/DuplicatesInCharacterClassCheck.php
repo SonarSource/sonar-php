@@ -74,6 +74,7 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[ab-z]/", $input);
     preg_match("/[[a][b]]/", $input);
     preg_match("/[[^a]a]/", $input);
+    preg_match("/[Z-ax]/i", $input);
     preg_match("/(?i)[a-Öö]/", $input);
     preg_match("/[0-9\Q.-_\E]/", $input); // This used to falsely interpret .-_ as a range and complain that it overlaps with 0-9
     preg_match("/[A-Z\Q-_.\E]/", $input);
