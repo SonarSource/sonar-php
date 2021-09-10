@@ -42,10 +42,26 @@ public class PhpRegexSource implements RegexSource {
   public PhpRegexSource(LiteralTree stringLiteral) {
     quote = stringLiteral.value().charAt(0);
     String stringWithoutQuotes = literalToString(stringLiteral);
+    String leadingWhitespaces = leadingWhitespaces(stringWithoutQuotes);
+    int[] leadingWhitespaceLineStartOffsets = lineStartOffsets(leadingWhitespaces);
+    sourceLine = stringLiteral.token().line() + leadingWhitespaceLineStartOffsets.length - 1;
+    int delimiterOffset = leadingWhitespaces.length() - leadingWhitespaceLineStartOffsets[leadingWhitespaceLineStartOffsets.length - 1];
+    if (leadingWhitespaceLineStartOffsets.length == 1) {
+      // usual case: no '\n' or '\r' before the opening delimiter
+      sourceStartOffset = stringLiteral.token().column() + delimiterOffset + 1 /* quote */ + 1 /* delimiter */;
+    } else {
+      sourceStartOffset = delimiterOffset + 1;
+    }
     sourceText = stripDelimiters(stringWithoutQuotes.trim());
-    sourceLine = stringLiteral.token().line();
-    sourceStartOffset = sourceStartOffset(stringLiteral, stringWithoutQuotes);
     lineStartOffsets = lineStartOffsets(sourceText);
+  }
+
+  private static String leadingWhitespaces(String s) {
+    int i = 0;
+    while (i < s.length() && Character.isWhitespace(s.charAt(i))) {
+      i++;
+    }
+    return s.substring(0, i);
   }
 
   private static String literalToString(LiteralTree literal) {
@@ -122,14 +138,5 @@ public class PhpRegexSource implements RegexSource {
       i++;
     }
     return lineStartOffsets.stream().mapToInt(x -> x).toArray();
-  }
-
-  // When calculating the start offset of the source, we have to take leading spaces into account.
-  // If there are truncated spaces, we simply add their number to the offset.
-  // To also have the possibility to calculate the offset when the source is empty,
-  // we have to add the first delimiter to the offset.
-  private int sourceStartOffset(LiteralTree tree, String stringWithoutQuotes) {
-    int skipLeadingWhiteSpaces = sourceText.isEmpty() ? 2 : (stringWithoutQuotes.indexOf(sourceText) + 1);
-    return tree.token().column() + skipLeadingWhiteSpaces;
   }
 }
