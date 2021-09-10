@@ -109,7 +109,7 @@ public abstract class ReportSensorTest {
     assertThat(externalIssues).isEmpty();
     assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.ERROR)))
       .startsWith("An error occurred when reading report file '")
-      .contains("invalid-path.txt', no issue will be imported from this report.");
+      .contains("invalid-path.txt', no issue will be imported from this report.\nThe file was not found.");
 
     verify(analysisWarnings, times(1))
       .addWarning(startsWith("An error occurred when reading report file '"));
@@ -121,7 +121,7 @@ public abstract class ReportSensorTest {
     assertThat(externalIssues).isEmpty();
     assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.ERROR)))
       .startsWith("An error occurred when reading report file '")
-      .contains("no issue will be imported from this report.");
+      .contains("no issue will be imported from this report.\nThe content of the file probably does not have the expected format.");
 
     verify(analysisWarnings, times(1))
       .addWarning(startsWith("An error occurred when reading report file '"));

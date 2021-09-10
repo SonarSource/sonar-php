@@ -146,6 +146,15 @@ public class PhpStanSensorTest extends ReportSensorTest {
       "Missing information for filePath:'phpstan/file2.php', message:''");
   }
 
+  @Test
+  public void no_object_as_root() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("no-object-as-root.php");
+    assertThat(externalIssues).isEmpty();
+    assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.ERROR)))
+      .startsWith("An error occurred when reading report file '")
+      .contains("no issue will be imported from this report.\nThe content of the file probably does not have the expected format.");
+  }
+
   @Override
   protected Path projectDir() {
     return PROJECT_DIR;
