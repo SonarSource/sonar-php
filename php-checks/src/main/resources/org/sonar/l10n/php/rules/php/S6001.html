@@ -7,12 +7,12 @@
 
 <h2>Noncompliant Code Example</h2>
 <pre>
-preg_match("\1(.)", $str); // Noncompliant, group 1 is defined after the back reference
-preg_match("(.)\2", $str); // Noncompliant, group 2 isn't defined at all
-preg_match("(.)|\1", $str); // Noncompliant, group 1 and the back reference are in different branches
-preg_match("(?&lt;x&gt;.)|\k&lt;x&gt;", $str); // Noncompliant, group x and the back reference are in different branches</pre>
+preg_match("/\1(.)/", $str); // Noncompliant, group 1 is defined after the back reference
+preg_match("/(.)\\2/", $str); // Noncompliant, group 2 isn't defined at all
+preg_match("/(.)|\\1/", $str); // Noncompliant, group 1 and the back reference are in different branches
+preg_match("/(?&lt;x&gt;.)|\\k&lt;x&gt;/", $str); // Noncompliant, group x and the back reference are in different branches</pre>
 <h2>Compliant Solution</h2>
 <pre>
-preg_match("(.)\1", $str);
-preg_match("(?&lt;x&gt;.)\k&lt;x&gt;", $str);
+preg_match("/(.)\\1/", $str);
+preg_match("(/?&lt;x&gt;.)\\k&lt;x&gt;/", $str);
 </pre>
