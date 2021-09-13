@@ -96,12 +96,12 @@ public class ImpossibleBoundariesCheck extends AbstractRegexCheck {
     public void visitBoundary(BoundaryTree boundaryTree) {
       switch (boundaryTree.type()) {
         case LINE_START:
-        case INPUT_START:
-          if (!canReachWithoutConsumingInput(start, boundaryTree)) {
-            newIssue(boundaryTree, String.format(MESSAGE, "after"));
-          } else if (!excluded.contains(boundaryTree) && probablyShouldConsumeInput(start, boundaryTree)) {
-            newIssue(boundaryTree, String.format(SOFT_MESSAGE, "after"));
+          if (!boundaryTree.activeFlags().contains(Pattern.MULTILINE)) {
+            checkStartBoundary(boundaryTree);
           }
+          break;
+        case INPUT_START:
+          checkStartBoundary(boundaryTree);
           break;
         case LINE_END:
           if (!boundaryTree.activeFlags().contains(Pattern.MULTILINE)) {
@@ -114,6 +114,14 @@ public class ImpossibleBoundariesCheck extends AbstractRegexCheck {
           break;
         default:
           // Do nothing
+      }
+    }
+
+    private void checkStartBoundary(BoundaryTree boundaryTree) {
+      if (!canReachWithoutConsumingInput(start, boundaryTree)) {
+        newIssue(boundaryTree, String.format(MESSAGE, "after"));
+      } else if (!excluded.contains(boundaryTree) && probablyShouldConsumeInput(start, boundaryTree)) {
+        newIssue(boundaryTree, String.format(SOFT_MESSAGE, "after"));
       }
     }
 
