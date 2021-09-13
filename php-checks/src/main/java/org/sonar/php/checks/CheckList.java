@@ -45,6 +45,7 @@ import org.sonar.php.checks.phpunit.TestClassNameCheck;
 import org.sonar.php.checks.regex.DuplicatesInCharacterClassCheck;
 import org.sonar.php.checks.regex.EmptyStringRepetitionCheck;
 import org.sonar.php.checks.regex.GraphemeClustersInClassesCheck;
+import org.sonar.php.checks.regex.ImpossibleBackReferenceCheck;
 import org.sonar.php.checks.regex.ImpossibleBoundariesCheck;
 import org.sonar.php.checks.regex.PossessiveQuantifierContinuationCheck;
 import org.sonar.php.checks.regex.RedundantRegexAlternativesCheck;
@@ -332,6 +333,7 @@ public class CheckList {
     return SetUtils.immutableSetOf(
       DuplicatesInCharacterClassCheck.class,
       EmptyStringRepetitionCheck.class,
+      ImpossibleBackReferenceCheck.class,
       ImpossibleBoundariesCheck.class,
       GraphemeClustersInClassesCheck.class,
       PossessiveQuantifierContinuationCheck.class,
