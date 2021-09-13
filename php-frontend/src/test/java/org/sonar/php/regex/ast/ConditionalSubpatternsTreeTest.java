@@ -80,10 +80,16 @@ public class ConditionalSubpatternsTreeTest {
   @Test
   public void elements_continuation() {
     ConditionalSubpatternsTree tree = (ConditionalSubpatternsTree) assertSuccessfulParse("'/(?(1)()|())/'");
+
     BranchState conditionContinuation = (BranchState) tree.getCondition().continuation();
+    assertThat(conditionContinuation.successors()).hasSize(2);
     assertThat(conditionContinuation.successors().get(0)).isEqualTo(tree.getYesPattern());
     assertThat(conditionContinuation.successors().get(1)).isEqualTo(tree.getNoPattern());
+
     assertThat(tree.getYesPattern().continuation()).isInstanceOf(EndOfConditionalSubpatternsState.class);
+    assertThat(tree.getYesPattern().continuation().incomingTransitionType()).isEqualTo(AutomatonState.TransitionType.EPSILON);
+    assertThat(tree.getYesPattern().continuation().continuation()).isInstanceOf(FinalState.class);
+
     assertThat(tree.getNoPattern().continuation()).isInstanceOf(EndOfConditionalSubpatternsState.class);
   }
 
