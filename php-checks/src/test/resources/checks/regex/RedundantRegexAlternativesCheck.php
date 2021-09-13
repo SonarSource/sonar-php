@@ -29,6 +29,9 @@ class RedundantRegexAlternativesCheck
     preg_match("/|a/", $input); // Compliant
     preg_match("/[ab]/", $input); // Compliant
     preg_match("/.*/", $input); // Compliant
+    preg_match("/[[:space:]]|x/", $input); // Compliant
+    preg_match("/x|[[:space:]]/", $input); // Compliant
+    preg_match("/[[:space:]]|\n/", $input); // Compliant, false negative
   }
 
 }
