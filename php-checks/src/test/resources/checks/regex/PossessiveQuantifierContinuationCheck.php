@@ -27,5 +27,6 @@ class PossessiveQuantifierContinuationCheck
     preg_match("/\d*+(?<=[02468])/", $input);
     preg_match("/(:[0-9])?+(:[0-9])?+/", $input);
     preg_match("/(bx++)+x/", $input); // FN because limitation of the algorithm when there's infinite loop
+    preg_match("/(?(1)(.*)|())/",$input);
   }
 }

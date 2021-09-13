@@ -19,9 +19,12 @@
  */
 package org.sonar.php.regex.ast;
 
+import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
+import org.sonarsource.analyzer.commons.regex.ast.AutomatonState;
+import org.sonarsource.analyzer.commons.regex.ast.BranchState;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.GroupTree;
 import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
@@ -55,6 +58,19 @@ public class ConditionalSubpatternsTree extends GroupTree {
     this.yesPattern = yesPattern;
     this.pipe = pipe;
     this.noPattern = noPattern;
+
+    EndOfConditionalSubpatternsState continuation = new EndOfConditionalSubpatternsState(this, activeFlags);
+    yesPattern.setContinuation(continuation);
+    if (noPattern != null) {
+      noPattern.setContinuation(continuation);
+    }
+  }
+
+  @Override
+  protected void setContinuation(AutomatonState continuation, @Nullable RegexTree element) {
+    super.setContinuation(continuation, element);
+    condition.setContinuation(new BranchState(this,
+      Arrays.asList(yesPattern, noPattern == null ? continuation : noPattern), activeFlags()));
   }
 
   @Override

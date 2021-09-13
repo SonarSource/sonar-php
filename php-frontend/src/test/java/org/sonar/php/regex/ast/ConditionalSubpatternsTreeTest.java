@@ -22,6 +22,9 @@ package org.sonar.php.regex.ast;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
+import org.sonarsource.analyzer.commons.regex.ast.AutomatonState;
+import org.sonarsource.analyzer.commons.regex.ast.BranchState;
+import org.sonarsource.analyzer.commons.regex.ast.FinalState;
 import org.sonarsource.analyzer.commons.regex.ast.LookAroundTree;
 import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
@@ -72,6 +75,30 @@ public class ConditionalSubpatternsTreeTest {
     tree.accept(visitor);
     ConditionalSubpatternsTree conditionalSubpatterns = assertType(ConditionalSubpatternsTree.class, tree);
     assertThat(items).doesNotContain(conditionalSubpatterns.getYesPattern());
+  }
+
+  @Test
+  public void elements_continuation() {
+    ConditionalSubpatternsTree tree = (ConditionalSubpatternsTree) assertSuccessfulParse("'/(?(1)()|())/'");
+
+    BranchState conditionContinuation = (BranchState) tree.getCondition().continuation();
+    assertThat(conditionContinuation.successors()).hasSize(2);
+    assertThat(conditionContinuation.successors().get(0)).isEqualTo(tree.getYesPattern());
+    assertThat(conditionContinuation.successors().get(1)).isEqualTo(tree.getNoPattern());
+
+    assertThat(tree.getYesPattern().continuation()).isInstanceOf(EndOfConditionalSubpatternsState.class);
+    assertThat(tree.getYesPattern().continuation().incomingTransitionType()).isEqualTo(AutomatonState.TransitionType.EPSILON);
+    assertThat(tree.getYesPattern().continuation().continuation()).isInstanceOf(FinalState.class);
+
+    assertThat(tree.getNoPattern().continuation()).isInstanceOf(EndOfConditionalSubpatternsState.class);
+  }
+
+  @Test
+  public void condition_continuation_without_noPattern() {
+    ConditionalSubpatternsTree tree = (ConditionalSubpatternsTree) assertSuccessfulParse("'/(?(1)())/'");
+    BranchState conditionContinuation = (BranchState) tree.getCondition().continuation();
+    assertThat(conditionContinuation.successors().get(0)).isEqualTo(tree.getYesPattern());
+    assertThat(conditionContinuation.successors().get(1)).isInstanceOf(FinalState.class);
   }
 
   private ConditionalSubpatternsTree assertConditionalSubpatterns(String regex, boolean hasNoPattern) {
