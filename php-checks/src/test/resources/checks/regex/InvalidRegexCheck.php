@@ -7,9 +7,18 @@ class InvalidRegexCheck
   function noncompliant($input)
   {
     preg_match('/(/', $input); // Noncompliant {{Fix the syntax error inside this regex.}}
+    //            ^
+    //            ^@-1< {{Expected ')', but found the end of the regex}}
     preg_match('/x{1,2,3}|(/', $input); // Noncompliant {{Fix the syntax errors inside this regex.}}
-    preg_match('/$[a-z^/', $input); // Noncompliant
-    preg_match("/(\\w+-(\\d+)/", $input); // Noncompliant
+    //                ^
+    //                ^@-1< {{Expected '}', but found ','}}
+    //                     ^@-2< {{Expected ')', but found the end of the regex}}
+    preg_match('/$[a-z^/', $input); // Noncompliant {{Fix the syntax error inside this regex.}}
+    //                 ^
+    //                 ^@-1< {{Expected ']', but found the end of the regex}}
+    preg_match("/(\\w+-(\\d+)/", $input); // Noncompliant {{Fix the syntax error inside this regex.}}
+    //                       ^
+    //                       ^@-1< {{Expected ')', but found the end of the regex}}
   }
 
   function falsePositives($input) {
