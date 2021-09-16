@@ -18,6 +18,7 @@ class ReluctantQuantifierWithEmptyContinuationCheck
   function compliant($input)
   {
     preg_match("/.*?x/", $input);
+    preg_match("/.*?x$/", $input);
     preg_match("/.*?[abc]/", $input);
   }
 
