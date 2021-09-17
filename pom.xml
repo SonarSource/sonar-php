@@ -89,7 +89,10 @@
     <version.sslr>1.24.0.633</version.sslr>
     <version.guava>30.1.1-jre</version.guava>
     <version.sonarlint>4.7.0.12286</version.sonarlint>
-    <version.analyzer-commons>1.18.0.756</version.analyzer-commons>
+    <!-- analyzer-commons is temporarily fixed to this unreleased build to make use of a fix in a RegexHelper class
+     https://github.com/SonarSource/sonar-analyzer-commons/issues/158.
+     TODO: Should be adapted before release-->
+    <version.analyzer-commons>1.19.0.759</version.analyzer-commons>
 
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>

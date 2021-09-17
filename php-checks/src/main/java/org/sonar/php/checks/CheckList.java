@@ -51,6 +51,7 @@ import org.sonar.php.checks.regex.ImpossibleBoundariesCheck;
 import org.sonar.php.checks.regex.InvalidRegexCheck;
 import org.sonar.php.checks.regex.PossessiveQuantifierContinuationCheck;
 import org.sonar.php.checks.regex.RedundantRegexAlternativesCheck;
+import org.sonar.php.checks.regex.ReluctantQuantifierWithEmptyContinuationCheck;
 import org.sonar.php.checks.regex.SingleCharacterAlternationCheck;
 import org.sonar.php.checks.regex.StringReplaceCheck;
 import org.sonar.php.checks.regex.UnicodeAwareCharClassesCheck;
@@ -343,6 +344,7 @@ public class CheckList {
       InvalidRegexCheck.class,
       PossessiveQuantifierContinuationCheck.class,
       RedundantRegexAlternativesCheck.class,
+      ReluctantQuantifierWithEmptyContinuationCheck.class,
       SingleCharacterAlternationCheck.class,
       StringReplaceCheck.class,
       UnicodeAwareCharClassesCheck.class
