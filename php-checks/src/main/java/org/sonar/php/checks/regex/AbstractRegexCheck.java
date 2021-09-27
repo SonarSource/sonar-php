@@ -136,9 +136,16 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
   }
 
   public final void newIssue(RegexSyntaxElement regexTree, String message, List<RegexIssueLocation> secondaries) {
+    newIssue(regexTree, message, secondaries, 0);
+  }
+
+  public final void newIssue(RegexSyntaxElement regexTree, String message, List<RegexIssueLocation> secondaries, double cost) {
     if (reportedRegexTrees.add(regexTree)) {
       PreciseIssue issue = regexContext.newIssue(this, regexTree, message);
       secondaries.forEach(issue::secondary);
+      if (cost != 0) {
+        issue.cost(cost);
+      }
     }
   }
 
