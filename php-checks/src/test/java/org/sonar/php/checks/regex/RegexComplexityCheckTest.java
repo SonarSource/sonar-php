@@ -28,4 +28,12 @@ public class RegexComplexityCheckTest {
   public void test() throws Exception {
     CheckVerifier.verify(new RegexComplexityCheck(), "regex/RegexComplexityCheck.php");
   }
+
+  @Test
+  public void test_max_parameter() throws Exception {
+    RegexComplexityCheck check = new RegexComplexityCheck();
+    check.max = 21;
+    CheckVerifier.verify(check, "regex/RegexComplexityCheck-21.php");
+  }
+
 }
