@@ -11,6 +11,8 @@ class RegexLookaheadCheck
     preg_match("/(?=a)bc/", $input); // Noncompliant
     preg_match("/(?!a)a/", $input); // Noncompliant
     preg_match("/(?!ab)ab/", $input); // Noncompliant
+    preg_match("/(?=a)[^ba]/", $input); // Noncompliant
+    preg_match("/(?!.)ab/", $input); // Noncompliant
   }
 
   function compliant($input)
