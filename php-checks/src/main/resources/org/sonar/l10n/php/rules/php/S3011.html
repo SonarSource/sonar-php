@@ -92,9 +92,4 @@ $meth4 = $objr-&gt;getMethods()[0];
 $clos4 = $meth4-&gt;getClosure($obj); // Noncompliant. It is possible to call private methods with closures.
 $meth4-&gt;setAccessible(true); // Noncompliant. Change accessibility of a method.
 </pre>
-<h2>See</h2>
-<ul>
-  <li> <a href="https://wiki.sei.cmu.edu/confluence/x/_jZGBQ">CERT, SEC05-J.</a> - Do not use reflection to increase accessibility of classes,
-  methods, or fields </li>
-</ul>
 

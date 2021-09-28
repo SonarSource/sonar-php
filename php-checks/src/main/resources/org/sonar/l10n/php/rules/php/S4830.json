@@ -25,6 +25,12 @@
     "OWASP": [
       "A6",
       "A3"
+    ],
+    "OWASP Mobile": [
+      "M3"
+    ],
+    "MASVS": [
+      "MSTG-NETWORK-3"
     ]
   }
 }

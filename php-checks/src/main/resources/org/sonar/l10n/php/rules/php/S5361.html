@@ -7,8 +7,8 @@ character or pattern.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 $str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
-$changed = preg_replace_all("Bob is", "It's", $str); // Noncompliant
-$changed = preg_replace_all("\.\.\.", ";", $changed); // Noncompliant
+$changed = preg_replace("/Bob is/", "It's", $str); // Noncompliant
+$changed = preg_replace("/\.\.\./", ";", $changed); // Noncompliant
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
@@ -19,7 +19,7 @@ $changed = str_replace("...", ";", $changed);
 <p>Or, with a regex:</p>
 <pre>
 $str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
-$changed = preg_replace_all("\w*\sis", "It's", $str);
-$changed = preg_replace_all("\.{3}", ";", $changed);
+$changed = preg_replace("/\w*\sis/", "It's", $str);
+$changed = preg_replace("/\.{3}/", ";", $changed);
 </pre>
 
