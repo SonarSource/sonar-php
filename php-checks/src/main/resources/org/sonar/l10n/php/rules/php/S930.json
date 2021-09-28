@@ -16,10 +16,6 @@
   "securityStandards": {
     "CWE": [
       628
-    ],
-    "CERT": [
-      "EXP37-C.",
-      "DCL07-C."
     ]
   }
 }
