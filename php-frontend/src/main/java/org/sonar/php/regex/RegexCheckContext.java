@@ -27,8 +27,7 @@ import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
 public interface RegexCheckContext {
 
-  PreciseIssue newIssue(RegexCheck regexCheck, RegexSyntaxElement regexSyntaxElement, String message);
-
   RegexParseResult regexForLiteral(FlagSet initialFlags, LiteralTree stringLiteral);
 
+  PreciseIssue newIssue(PhpRegexCheck check, RegexSyntaxElement regexTree, String message);
 }

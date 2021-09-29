@@ -92,7 +92,7 @@
     <!-- analyzer-commons is temporarily fixed to this unreleased build to make use of a fix in a RegexHelper class
      https://github.com/SonarSource/sonar-analyzer-commons/issues/158.
      TODO: Should be adapted before release-->
-    <version.analyzer-commons>1.19.0.759</version.analyzer-commons>
+    <version.analyzer-commons>1.19.0.781</version.analyzer-commons>
 
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>

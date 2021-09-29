@@ -12,15 +12,10 @@ function noncompliantCharRanges() {
 }
 
 function noncompliantPredefinedPosixClasses() {
-  preg_match("/\\p{Lower}/", $input); // Noncompliant {{Enable the "u" flag or use a Unicode-aware alternative.}}
-  preg_match("/\\p{Alnum}/", $input); // Noncompliant
-  preg_match("/\\p{Space}/", $input); // Noncompliant
   preg_match("/\\s/", $input); // Noncompliant
   preg_match("/\\S/", $input); // Noncompliant
   preg_match("/\\w/", $input); // Noncompliant
   preg_match("/\\W/", $input); // Noncompliant
-  preg_match("/\\s\\w\\p{Lower}/", $input); // Noncompliant
-  preg_match("/\\S\\p{Upper}\\w/", $input); // Noncompliant
 }
 
 function compliantCharRanges() {
@@ -31,10 +26,6 @@ function compliantCharRanges() {
 }
 
 function compliantPredefinedPosixClasses() {
-  preg_match("/\\p{ASCII}/", $input);
-  preg_match("/\\p{Cntrl}/", $input);
-  preg_match("/\\p{Lower}/u", $input);
-  preg_match("/(?U)\\p{Lower}/", $input);
   preg_match("/\\w/u", $input);
   preg_match("/(?U)\\w/", $input);
   preg_match("/(?U:\\w)/", $input);

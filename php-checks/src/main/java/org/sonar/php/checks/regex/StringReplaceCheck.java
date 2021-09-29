@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonarsource.analyzer.commons.regex.RegexCheck;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
@@ -41,7 +42,7 @@ public class StringReplaceCheck extends AbstractRegexCheck {
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
     RegexTree regex = regexParseResult.getResult();
     if (!regexParseResult.hasSyntaxErrors() && isPlainString(regex)) {
-      newIssue(regexFunctionCall.callee(), MESSAGE, Collections.singletonList(new RegexIssueLocation(regex, "Expression without regular expression features.")));
+      newIssue(regexFunctionCall.callee(), MESSAGE, null, Collections.singletonList(new RegexCheck.RegexIssueLocation(regex, "Expression without regular expression features.")));
     }
   }
 

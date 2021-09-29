@@ -19,104 +19,17 @@
  */
 package org.sonar.php.checks.regex;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.sonar.check.Rule;
-import org.sonar.php.utils.collections.MapBuilder;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
-import org.sonarsource.analyzer.commons.regex.ast.CharacterRangeTree;
-import org.sonarsource.analyzer.commons.regex.ast.EscapedCharacterClassTree;
-import org.sonarsource.analyzer.commons.regex.ast.NonCapturingGroupTree;
-import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
-import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
+import org.sonarsource.analyzer.commons.regex.finders.UnicodeUnawareCharClassFinder;
 
 @Rule(key = "S5867")
 public class UnicodeAwareCharClassesCheck extends AbstractRegexCheck {
 
-  private static final List<Character> unicodeAwareClassesWithFlag = Arrays.asList('s', 'S', 'w', 'W');
-  private static final Set<String> unicodeAwarePropertiesWithFlag = SetUtils.immutableSetOf(
-    "Lower", "Upper", "Alpha", "Alnum", "Punct", "Graph", "Print", "Blank", "Space");
-
-  private static final Map<Character, Character> unicodeUnawareCharacterRanges = MapBuilder.<Character, Character>builder()
-    .put('a', 'z')
-    .put('A', 'Z')
-    .build();
-
   @Override
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
-    new UnicodeUnawareCharClassFinder(regexFunctionCall).visit(regexParseResult);
-  }
-
-  private class UnicodeUnawareCharClassFinder extends RegexBaseVisitor {
-
-    private final FunctionCallTree methodInvocation;
-    private final List<CharacterRangeTree> unicodeUnawareRanges = new ArrayList<>();
-    private final List<RegexTree> unicodeAwareWithFlag = new ArrayList<>();
-    private boolean containsUnicodeCharacterFlag = false;
-
-    public UnicodeUnawareCharClassFinder(FunctionCallTree methodInvocation) {
-      this.methodInvocation = methodInvocation;
-    }
-
-    @Override
-    protected void before(RegexParseResult regexParseResult) {
-      containsUnicodeCharacterFlag |= regexParseResult.getInitialFlags().contains(Pattern.UNICODE_CHARACTER_CLASS);
-    }
-
-    @Override
-    protected void after(RegexParseResult regexParseResult) {
-      int unicodeUnawareRangeSize = unicodeUnawareRanges.size();
-      if (unicodeUnawareRangeSize == 1) {
-        newIssue(unicodeUnawareRanges.get(0), "Replace this character range with a Unicode-aware character class.");
-      } else if (unicodeUnawareRangeSize > 1) {
-        List<RegexIssueLocation> secondaries = unicodeUnawareRanges.stream()
-          .map(tree -> new RegexIssueLocation(tree, "Character range"))
-          .collect(Collectors.toList());
-        newIssue(regexParseResult.getResult(), "Replace these character ranges with Unicode-aware character classes.", secondaries);
-      }
-
-
-      if (!unicodeAwareWithFlag.isEmpty() && !containsUnicodeCharacterFlag) {
-        List<RegexIssueLocation> secondaries = unicodeAwareWithFlag.stream()
-          .map(tree -> new RegexIssueLocation(tree, "Predefined/POSIX character class"))
-          .collect(Collectors.toList());
-        newIssue(methodInvocation, "Enable the \"u\" flag or use a Unicode-aware alternative.", secondaries);
-      }
-    }
-
-    @Override
-    public void visitCharacterRange(CharacterRangeTree tree) {
-      int lowerBound = tree.getLowerBound().codePointOrUnit();
-      if (lowerBound < 0xFFFF) {
-        Character expectedUpperBoundChar = unicodeUnawareCharacterRanges.get((char) lowerBound);
-        if (expectedUpperBoundChar != null && expectedUpperBoundChar == tree.getUpperBound().codePointOrUnit()) {
-          unicodeUnawareRanges.add(tree);
-        }
-      }
-    }
-
-    @Override
-    public void visitEscapedCharacterClass(EscapedCharacterClassTree tree) {
-      String property = tree.property();
-      if ((property != null && unicodeAwarePropertiesWithFlag.contains(property)) ||
-        unicodeAwareClassesWithFlag.contains(tree.getType())) {
-
-        unicodeAwareWithFlag.add(tree);
-      }
-    }
-
-    @Override
-    public void visitNonCapturingGroup(NonCapturingGroupTree tree) {
-      containsUnicodeCharacterFlag |= tree.activeFlags().contains(Pattern.UNICODE_CHARACTER_CLASS);
-      super.visitNonCapturingGroup(tree);
-    }
+    new UnicodeUnawareCharClassFinder(this::newIssue, (message, cost, secondaries) -> newIssue(regexFunctionCall, message, cost, secondaries)).visit(regexParseResult);
   }
 
 }

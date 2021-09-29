@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.regex;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -27,10 +26,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.regex.PhpRegexCheck;
 import org.sonar.php.regex.PhpRegexUtils;
-import org.sonar.php.regex.RegexCheck;
 import org.sonar.php.regex.RegexCheckContext;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -41,13 +41,14 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+import org.sonarsource.analyzer.commons.regex.RegexCheck;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
 import static org.sonar.php.regex.PhpRegexUtils.BRACKET_DELIMITERS;
 
-public abstract class AbstractRegexCheck extends FunctionUsageCheck implements RegexCheck {
+public abstract class AbstractRegexCheck extends FunctionUsageCheck implements PhpRegexCheck {
 
   private static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\w\\r\\n\\t\\f\\v ]");
 
@@ -131,27 +132,22 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements R
 
   public abstract void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall);
 
-  public final void newIssue(RegexSyntaxElement regexTree, String message) {
-    newIssue(regexTree, message, Collections.emptyList());
-  }
-
-  public final void newIssue(RegexSyntaxElement regexTree, String message, List<RegexIssueLocation> secondaries) {
-    newIssue(regexTree, message, secondaries, 0);
-  }
-
-  public final void newIssue(RegexSyntaxElement regexTree, String message, List<RegexIssueLocation> secondaries, double cost) {
+  public void newIssue(RegexSyntaxElement regexTree, String message, @Nullable Integer cost, List<RegexCheck.RegexIssueLocation> secondaries) {
     if (reportedRegexTrees.add(regexTree)) {
       PreciseIssue issue = regexContext.newIssue(this, regexTree, message);
-      secondaries.forEach(issue::secondary);
-      if (cost != 0) {
+      secondaries.stream().map(PhpRegexCheck.PhpRegexIssueLocation::new).forEach(issue::secondary);
+      if (cost != null) {
         issue.cost(cost);
       }
     }
   }
 
-  public final void newIssue(Tree tree, String message, List<RegexIssueLocation> secondaries) {
+  public final void newIssue(Tree tree, String message, @Nullable Integer cost, List<RegexCheck.RegexIssueLocation> secondaries) {
     PreciseIssue issue = newIssue(tree, message);
-    secondaries.forEach(issue::secondary);
+    secondaries.stream().map(PhpRegexCheck.PhpRegexIssueLocation::new).forEach(issue::secondary);
+    if (cost != null) {
+      issue.cost(cost);
+    }
   }
 
   @CheckForNull

@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.sonar.php.regex.PhpRegexCheck;
 import org.sonar.php.regex.RegexCache;
-import org.sonar.php.regex.RegexCheck;
 import org.sonar.php.regex.RegexCheckContext;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -82,23 +82,21 @@ public class PHPCheckContext implements CheckContext, RegexCheckContext {
 
   @Override
   public PreciseIssue newIssue(PHPCheck check, Tree tree, String message) {
-    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(tree, message));
-    issues.add(issue);
-
-    return issue;
+    return newIssue(check, new IssueLocation(tree, message));
   }
 
   @Override
   public PreciseIssue newIssue(PHPCheck check, Tree startTree, Tree endTree, String message) {
-    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(startTree, endTree, message));
-    issues.add(issue);
-
-    return issue;
+    return newIssue(check, new IssueLocation(startTree, endTree, message));
   }
 
   @Override
-  public PreciseIssue newIssue(RegexCheck regexCheck, RegexSyntaxElement regexSyntaxElement, String message) {
-    PreciseIssue issue = new PreciseIssue(regexCheck, new RegexCheck.RegexIssueLocation(regexSyntaxElement, message));
+  public PreciseIssue newIssue(PhpRegexCheck check, RegexSyntaxElement regexTree, String message) {
+    return newIssue(check, new PhpRegexCheck.PhpRegexIssueLocation(regexTree, message));
+  }
+
+  private PreciseIssue newIssue(PHPCheck check, IssueLocation issueLocation) {
+    PreciseIssue issue = new PreciseIssue(check, issueLocation);
     issues.add(issue);
 
     return issue;

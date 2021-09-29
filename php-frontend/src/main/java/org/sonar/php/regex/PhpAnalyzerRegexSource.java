@@ -25,43 +25,34 @@ import java.util.List;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
-import org.sonarsource.analyzer.commons.regex.CharacterParser;
-import org.sonarsource.analyzer.commons.regex.RegexDialect;
-import org.sonarsource.analyzer.commons.regex.RegexSource;
 import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
+import org.sonarsource.analyzer.commons.regex.php.PhpRegexSource;
 
-public class PhpRegexSource implements RegexSource {
+public class PhpAnalyzerRegexSource extends PhpRegexSource {
 
-  private final String sourceText;
   private final int sourceLine;
   private final int sourceStartOffset;
-  private final char quote;
   private final int[] lineStartOffsets;
 
-  public PhpRegexSource(LiteralTree stringLiteral) {
-    quote = stringLiteral.value().charAt(0);
-    String stringWithoutQuotes = literalToString(stringLiteral);
-    String leadingWhitespaces = leadingWhitespaces(stringWithoutQuotes);
+  public PhpAnalyzerRegexSource(LiteralTree stringLiteral) {
+    this(literalToString(stringLiteral), stringLiteral.value().charAt(0), stringLiteral.token());
+  }
+
+  private PhpAnalyzerRegexSource(String literalToString, char quote, SyntaxToken token) {
+    super(stripDelimiters(literalToString.trim()), quote);
+    String leadingWhitespaces = leadingWhitespaces(literalToString);
     int[] leadingWhitespaceLineStartOffsets = lineStartOffsets(leadingWhitespaces);
-    sourceLine = stringLiteral.token().line() + leadingWhitespaceLineStartOffsets.length - 1;
+    sourceLine = token.line() + leadingWhitespaceLineStartOffsets.length - 1;
     int delimiterOffset = leadingWhitespaces.length() - leadingWhitespaceLineStartOffsets[leadingWhitespaceLineStartOffsets.length - 1];
     if (leadingWhitespaceLineStartOffsets.length == 1) {
       // usual case: no '\n' or '\r' before the opening delimiter
-      sourceStartOffset = stringLiteral.token().column() + delimiterOffset + 1 /* quote */ + 1 /* delimiter */;
+      sourceStartOffset = token.column() + delimiterOffset + 1 /* quote */ + 1 /* delimiter */;
     } else {
       sourceStartOffset = delimiterOffset + 1;
     }
-    sourceText = stripDelimiters(stringWithoutQuotes.trim());
-    lineStartOffsets = lineStartOffsets(sourceText);
-  }
-
-  private static String leadingWhitespaces(String s) {
-    int i = 0;
-    while (i < s.length() && Character.isWhitespace(s.charAt(i))) {
-      i++;
-    }
-    return s.substring(0, i);
+    lineStartOffsets = lineStartOffsets(getSourceText());
   }
 
   private static String literalToString(LiteralTree literal) {
@@ -80,22 +71,12 @@ public class PhpRegexSource implements RegexSource {
     throw new IllegalArgumentException("Regular expression does not contain delimiters");
   }
 
-  @Override
-  public CharacterParser createCharacterParser() {
-    if (quote == '\'') {
-      return PhpStringCharacterParser.forSingleQuotedString(this);
+  private static String leadingWhitespaces(String s) {
+    int i = 0;
+    while (i < s.length() && Character.isWhitespace(s.charAt(i))) {
+      i++;
     }
-    return PhpStringCharacterParser.forDoubleQuotedString(this);
-  }
-
-  @Override
-  public String getSourceText() {
-    return sourceText;
-  }
-
-  @Override
-  public RegexDialect dialect() {
-    return RegexDialect.PHP;
+    return s.substring(0, i);
   }
 
   public LocationInFile locationInFileFor(IndexRange range) {

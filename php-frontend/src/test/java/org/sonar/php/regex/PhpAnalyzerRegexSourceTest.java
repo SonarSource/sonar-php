@@ -23,7 +23,9 @@ import java.util.List;
 import org.junit.Test;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonarsource.analyzer.commons.regex.RegexDialect;
+import org.sonarsource.analyzer.commons.regex.RegexFeature;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
+import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
 import org.sonarsource.analyzer.commons.regex.SyntaxError;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;
@@ -40,13 +42,13 @@ import static org.sonar.php.regex.RegexParserTestUtils.assertSuccessfulParse;
 import static org.sonar.php.regex.RegexParserTestUtils.makeSource;
 import static org.sonar.php.regex.RegexParserTestUtils.parseRegex;
 
-public class PhpRegexSourceTest {
+public class PhpAnalyzerRegexSourceTest {
 
   @Test
   // TODO: Extend test with exact syntax error location check
   public void invalid_regex() {
     RegexSource source = makeSource("'/+/'");
-    RegexParseResult result = new PhpRegexParser(source, new FlagSet()).parse();
+    RegexParseResult result = new RegexParser(source, new FlagSet()).parse();
 
     assertThat(result.getSyntaxErrors()).isNotEmpty();
   }
@@ -95,10 +97,10 @@ public class PhpRegexSourceTest {
 
   @Test
   public void single_quote_vs_double_quote() {
-    RegexParseResult singleQuoted = new PhpRegexParser(makeSource("'/\\u{0041}/'"), new FlagSet()).parse();
+    RegexParseResult singleQuoted = new RegexParser(makeSource("'/\\u{0041}/'"), new FlagSet()).parse();
     assertThat(singleQuoted.getSyntaxErrors()).extracting(SyntaxError::getMessage).containsExactly("Expected hexadecimal digit, but found '{'");
 
-    RegexParseResult doubleQuoted = new PhpRegexParser(makeSource("\"/\\u{0041}/\""), new FlagSet()).parse();
+    RegexParseResult doubleQuoted = new RegexParser(makeSource("\"/\\u{0041}/\""), new FlagSet()).parse();
     assertThat(doubleQuoted.getSyntaxErrors()).isEmpty();
     assertThat(doubleQuoted.getResult().kind()).isEqualTo(RegexTree.Kind.CHARACTER);
     assertThat(((CharacterTree) doubleQuoted.getResult()).characterAsString()).isEqualTo("A");
@@ -116,6 +118,16 @@ public class PhpRegexSourceTest {
   public void test_dialect() {
     RegexSource source = makeSource("'/a/'");
     assertEquals(RegexDialect.PHP, source.dialect());
+  }
+
+  @Test
+  public void test_features() {
+    RegexSource source = makeSource("'/a/'");
+    assertThat(source.features()).containsExactlyInAnyOrder(
+      RegexFeature.RECURSION,
+      RegexFeature.CONDITIONAL_SUBPATTERN,
+      RegexFeature.POSIX_CHARACTER_CLASS
+    );
   }
 
   @Test
@@ -172,7 +184,7 @@ public class PhpRegexSourceTest {
   }
 
   private static void assertLocation(int line, int startLineOffset, int endLineOffset, RegexTree tree) {
-    LocationInFile location = ((PhpRegexSource) tree.getSource()).locationInFileFor(tree.getRange());
+    LocationInFile location = ((PhpAnalyzerRegexSource) tree.getSource()).locationInFileFor(tree.getRange());
     assertLocation(line, startLineOffset, endLineOffset, location);
   }
 

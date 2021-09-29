@@ -20,15 +20,25 @@
 package org.sonar.php.checks.regex;
 
 import com.sonar.sslr.api.typed.ActionParser;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.visitors.PHPCheckContext;
+import org.sonar.plugins.php.CheckVerifier;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class AbstractRegexCheckTest {
 
@@ -66,6 +76,17 @@ public class AbstractRegexCheckTest {
 
     assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/U\"")).isEmpty()).isTrue();
     assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"  /a/i\"")).getMask()).isEqualTo(AbstractRegexCheck.PCRE_CASELESS);
+  }
+
+  @Test
+  public void test_newIssue_on_regexFunctionCall_with_cost() {
+    AbstractRegexCheck check = new AbstractRegexCheck() {
+      @Override
+      public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
+        newIssue(regexFunctionCall, "TestMessage", 1, Collections.emptyList());
+      }
+    };
+    CheckVerifier.verify(check, "regex/AbstractRegexCheck.php");
   }
 
   private ExpressionTree expr(String pattern) {

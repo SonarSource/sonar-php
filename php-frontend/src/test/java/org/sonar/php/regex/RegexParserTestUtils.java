@@ -27,6 +27,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
+import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.RegexSource;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
@@ -41,7 +42,7 @@ public class RegexParserTestUtils {
 
   public static RegexParseResult parseRegex(String regex) {
     RegexSource source = makeSource(regex);
-    return new PhpRegexParser(source, new FlagSet()).parse();
+    return new RegexParser(source, new FlagSet()).parse();
   }
 
   public static RegexTree assertSuccessfulParse(String regex) {
@@ -60,7 +61,7 @@ public class RegexParserTestUtils {
     ExpressionStatementTree statement = (ExpressionStatementTree) tree.script().statements().get(0);
     FunctionCallTree call = (FunctionCallTree) statement.expression();
     LiteralTree expr = (LiteralTree) call.callArguments().get(0).value();
-    return new PhpRegexSource(expr);
+    return new PhpAnalyzerRegexSource(expr);
   }
 
   public static void assertKind(RegexTree.Kind expected, RegexTree actual) {

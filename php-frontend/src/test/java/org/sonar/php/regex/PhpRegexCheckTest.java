@@ -20,8 +20,10 @@
 package org.sonar.php.regex;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
+import org.sonarsource.analyzer.commons.regex.RegexCheck;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
@@ -32,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.sonar.php.regex.RegexParserTestUtils.assertKind;
 import static org.sonar.php.regex.RegexParserTestUtils.assertSuccessfulParse;
 
-public class RegexCheckTest {
+public class PhpRegexCheckTest {
 
   @Test
   public void regexLocationsToIssueLocations() {
@@ -84,17 +86,17 @@ public class RegexCheckTest {
     assertRange(2, 2, correspondingTextSpans(regex));
   }
 
-  private void assertRange(int startLineOffset, int endLineOffset, RegexCheck.RegexIssueLocation location) {
+  private void assertRange(int startLineOffset, int endLineOffset, PhpRegexCheck.PhpRegexIssueLocation location) {
     assertEquals(String.format("Expected start character to be '%d' but got '%d'", startLineOffset, location.startLineOffset()), startLineOffset, location.startLineOffset());
     assertEquals(String.format("Expected end character to be '%d' but got '%d'", endLineOffset, location.endLineOffset()), endLineOffset, location.endLineOffset());
   }
 
-  private static RegexCheck.RegexIssueLocation correspondingTextSpans(RegexTree tree) {
-    return new RegexCheck.RegexIssueLocation(tree, "message");
+  private static PhpRegexCheck.PhpRegexIssueLocation correspondingTextSpans(RegexTree tree) {
+    return correspondingTextSpans(Collections.singletonList(tree));
   }
 
-  private static RegexCheck.RegexIssueLocation correspondingTextSpans(List<RegexSyntaxElement> trees) {
-    return new RegexCheck.RegexIssueLocation(trees, "message");
+  private static PhpRegexCheck.PhpRegexIssueLocation correspondingTextSpans(List<RegexSyntaxElement> trees) {
+    return new PhpRegexCheck.PhpRegexIssueLocation(new RegexCheck.RegexIssueLocation(trees, "message"));
   }
 
 }
