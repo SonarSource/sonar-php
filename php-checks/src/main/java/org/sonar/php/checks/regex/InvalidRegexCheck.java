@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonarsource.analyzer.commons.regex.RegexCheck;
+import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.SyntaxError;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
@@ -44,8 +44,8 @@ public class InvalidRegexCheck extends AbstractRegexCheck {
   private void reportSyntaxErrors(List<SyntaxError> syntaxErrors) {
     // report on the first issue
     RegexSyntaxElement tree = syntaxErrors.get(0).getOffendingSyntaxElement();
-    List<RegexCheck.RegexIssueLocation> secondaries = syntaxErrors.stream()
-      .map(error -> new RegexCheck.RegexIssueLocation(error.getOffendingSyntaxElement(), error.getMessage()))
+    List<RegexIssueLocation> secondaries = syntaxErrors.stream()
+      .map(error -> new RegexIssueLocation(error.getOffendingSyntaxElement(), error.getMessage()))
       .collect(Collectors.toList());
 
     String msg = String.format(MESSAGE_FORMAT, secondaries.size() > 1 ? "s" : "");

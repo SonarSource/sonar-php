@@ -41,7 +41,7 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonarsource.analyzer.commons.regex.RegexCheck;
+import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
@@ -132,7 +132,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
 
   public abstract void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall);
 
-  public void newIssue(RegexSyntaxElement regexTree, String message, @Nullable Integer cost, List<RegexCheck.RegexIssueLocation> secondaries) {
+  public void newIssue(RegexSyntaxElement regexTree, String message, @Nullable Integer cost, List<RegexIssueLocation> secondaries) {
     if (reportedRegexTrees.add(regexTree)) {
       PreciseIssue issue = regexContext.newIssue(this, regexTree, message);
       secondaries.stream().map(PhpRegexCheck.PhpRegexIssueLocation::new).forEach(issue::secondary);
@@ -142,7 +142,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
     }
   }
 
-  public final void newIssue(Tree tree, String message, @Nullable Integer cost, List<RegexCheck.RegexIssueLocation> secondaries) {
+  public final void newIssue(Tree tree, String message, @Nullable Integer cost, List<RegexIssueLocation> secondaries) {
     PreciseIssue issue = newIssue(tree, message);
     secondaries.stream().map(PhpRegexCheck.PhpRegexIssueLocation::new).forEach(issue::secondary);
     if (cost != null) {

@@ -23,11 +23,11 @@ import java.util.List;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonarsource.analyzer.commons.regex.RegexCheck;
+import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;
 import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
-public interface PhpRegexCheck extends PHPCheck, RegexCheck {
+public interface PhpRegexCheck extends PHPCheck {
 
   class PhpRegexIssueLocation extends IssueLocation {
 
@@ -35,7 +35,7 @@ public interface PhpRegexCheck extends PHPCheck, RegexCheck {
       super(((PhpAnalyzerRegexSource) tree.getSource()).locationInFileFor(tree.getRange()), message);
     }
 
-    public PhpRegexIssueLocation(RegexCheck.RegexIssueLocation location) {
+    public PhpRegexIssueLocation(RegexIssueLocation location) {
       super(locationInFileFromRegexSyntaxElements(location.syntaxElements()), location.message());
     }
 

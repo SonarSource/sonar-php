@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-import org.sonarsource.analyzer.commons.regex.RegexCheck;
+import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
@@ -96,7 +96,7 @@ public class PhpRegexCheckTest {
   }
 
   private static PhpRegexCheck.PhpRegexIssueLocation correspondingTextSpans(List<RegexSyntaxElement> trees) {
-    return new PhpRegexCheck.PhpRegexIssueLocation(new RegexCheck.RegexIssueLocation(trees, "message"));
+    return new PhpRegexCheck.PhpRegexIssueLocation(new RegexIssueLocation(trees, "message"));
   }
 
 }
