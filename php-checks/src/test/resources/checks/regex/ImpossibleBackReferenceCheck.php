@@ -3,7 +3,7 @@
   function noncompliant($input) {
     preg_match("//\\1 (.)/", $input); // Noncompliant {{Fix this backreference, so that it refers to a group that can be matched before it.}}
     //            ^^^ ^^^<
-    preg_match("/\\k<name>(?<name>.)/", $input);// Noncompliant {{Fix this backreference, so that it refers to a group that can be matched before it.}}
+    preg_match("/\k<name>(?<name>.)/", $input);// Noncompliant {{Fix this backreference, so that it refers to a group that can be matched before it.}}
 
     preg_match("/(.)|\\1/", $input); // Noncompliant
     preg_match("/\\1/", $input); // Noncompliant {{Fix this backreference - it refers to a capturing group that doesn't exist.}}

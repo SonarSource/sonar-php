@@ -22,45 +22,13 @@ package org.sonar.php.checks.regex;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
-import org.sonarsource.analyzer.commons.regex.ast.AutomatonState;
-import org.sonarsource.analyzer.commons.regex.ast.Quantifier;
-import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor;
-import org.sonarsource.analyzer.commons.regex.ast.RepetitionTree;
-import org.sonarsource.analyzer.commons.regex.ast.StartState;
-import org.sonarsource.analyzer.commons.regex.helpers.RegexTreeHelper;
+import org.sonarsource.analyzer.commons.regex.finders.ReluctantQuantifierWithEmptyContinuationFinder;
 
 @Rule(key = "S6019")
 public class ReluctantQuantifierWithEmptyContinuationCheck extends AbstractRegexCheck {
 
-  private static final String MESSAGE_FIX = "Fix this reluctant quantifier that will only ever match %s repetition%s.";
-  private static final String MESSAGE_UNNECESSARY = "Remove the '?' from this unnecessarily reluctant quantifier.";
-
   @Override
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
-    new ReluctantQuantifierWithEmptyContinuationFinder().visit(regexParseResult);
-  }
-
-  private class ReluctantQuantifierWithEmptyContinuationFinder extends RegexBaseVisitor {
-    private AutomatonState endState;
-
-    @Override
-    protected void before(RegexParseResult regexParseResult) {
-      endState = regexParseResult.getFinalState();
-    }
-
-    @Override
-    public void visitRepetition(RepetitionTree tree) {
-      super.visitRepetition(tree);
-      if (tree.getQuantifier().getModifier() == Quantifier.Modifier.RELUCTANT) {
-        if (RegexTreeHelper.isAnchoredAtEnd(tree.continuation())) {
-          if (RegexTreeHelper.onlyMatchesEmptySuffix(tree.continuation())) {
-            newIssue(tree, MESSAGE_UNNECESSARY);
-          }
-        } else if (ImpossibleBoundariesCheck.canReachWithoutConsumingInput(new StartState(tree.continuation(), tree.activeFlags()), endState)) {
-          int minimumRepetitions = tree.getQuantifier().getMinimumRepetitions();
-          newIssue(tree, String.format(MESSAGE_FIX, minimumRepetitions, minimumRepetitions == 1 ? "" : "s"));
-        }
-      }
-    }
+    new ReluctantQuantifierWithEmptyContinuationFinder(this::newIssue).visit(regexParseResult);
   }
 }

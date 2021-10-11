@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
+import org.sonarsource.analyzer.commons.regex.RegexParser;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 
 public final class RegexCache {
@@ -30,6 +31,6 @@ public final class RegexCache {
 
   public RegexParseResult getRegexForLiterals(FlagSet initialFlags, LiteralTree stringLiteral) {
     return cache.computeIfAbsent(stringLiteral,
-      k -> new PhpRegexParser(new PhpRegexSource(k), initialFlags).parse());
+      k -> new RegexParser(new PhpAnalyzerRegexSource(k), initialFlags).parse());
   }
 }

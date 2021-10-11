@@ -20,50 +20,15 @@
 package org.sonar.php.checks.regex;
 
 import org.sonar.check.Rule;
-import org.sonar.php.regex.ast.PhpRegexBaseVisitor;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
-import org.sonarsource.analyzer.commons.regex.ast.FinalState;
-import org.sonarsource.analyzer.commons.regex.ast.LookAroundTree;
-import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
-import org.sonarsource.analyzer.commons.regex.helpers.RegexTreeHelper;
-import org.sonarsource.analyzer.commons.regex.helpers.SubAutomaton;
+import org.sonarsource.analyzer.commons.regex.finders.FailingLookaheadFinder;
 
 @Rule(key = "S6002")
 public class RegexLookaheadCheck extends AbstractRegexCheck {
 
-  private static final String MESSAGE = "Remove or fix this lookahead assertion that can never be true.";
-
   @Override
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
-    new LookaheadVisitor(regexParseResult.getFinalState()).visit(regexParseResult);
-  }
-
-  private class LookaheadVisitor extends PhpRegexBaseVisitor {
-
-    private final FinalState finalState;
-
-    public LookaheadVisitor(FinalState finalState) {
-      this.finalState = finalState;
-    }
-
-    @Override
-    public void visitLookAround(LookAroundTree tree) {
-      if (tree.getDirection() == LookAroundTree.Direction.AHEAD && doesLookaheadContinuationAlwaysFail(tree)) {
-        newIssue(tree, MESSAGE);
-      }
-      super.visitLookAround(tree);
-    }
-
-    private boolean doesLookaheadContinuationAlwaysFail(LookAroundTree lookAround) {
-      RegexTree lookAroundElement = lookAround.getElement();
-      SubAutomaton lookAroundSubAutomaton = new SubAutomaton(lookAroundElement, lookAroundElement.continuation(), true);
-      SubAutomaton continuationSubAutomaton = new SubAutomaton(lookAround.continuation(), finalState, true);
-
-      if (lookAround.getPolarity() == LookAroundTree.Polarity.NEGATIVE) {
-        return RegexTreeHelper.supersetOf(lookAroundSubAutomaton, continuationSubAutomaton, false);
-      }
-      return !RegexTreeHelper.intersects(lookAroundSubAutomaton, continuationSubAutomaton, true);
-    }
+    new FailingLookaheadFinder(this::newIssue, regexParseResult.getFinalState()).visit(regexParseResult);
   }
 }

@@ -20,11 +20,12 @@
 package org.sonar.php.tree.visitors;
 
 import java.io.File;
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.ParsingTestUtils;
-import org.sonar.php.regex.RegexCheck;
+import org.sonar.php.regex.PhpRegexCheck;
 import org.sonar.php.regex.RegexParserTestUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
@@ -52,7 +53,7 @@ public class PHPCheckContextTest {
 
   @Test
   public void test_regex_newIssue() {
-    RegexCheck regexCheck = new TestRegexCheck();
+    PhpRegexCheck regexCheck = new TestPhpRegexCheck();
     String regex = "'/x{42}|y{23}/'";
     RegexTree regexTree = RegexParserTestUtils.assertSuccessfulParse(regex);
     DisjunctionTree disjunctionTree = (DisjunctionTree) regexTree;
@@ -70,7 +71,6 @@ public class PHPCheckContextTest {
     assertThat(issueLocation.endLineOffset()).isEqualTo(13);
   }
 
-  static class TestRegexCheck extends PHPVisitorCheck implements RegexCheck {
-
+  static class TestPhpRegexCheck extends PHPVisitorCheck implements PhpRegexCheck {
   }
 }

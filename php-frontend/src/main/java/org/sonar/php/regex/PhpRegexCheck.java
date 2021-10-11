@@ -23,22 +23,24 @@ import java.util.List;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;
 import org.sonarsource.analyzer.commons.regex.ast.IndexRange;
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 
-public interface RegexCheck extends PHPCheck {
+public interface PhpRegexCheck extends PHPCheck {
 
-  class RegexIssueLocation extends IssueLocation {
-    public RegexIssueLocation(RegexSyntaxElement tree, String message) {
-      super(((PhpRegexSource) tree.getSource()).locationInFileFor(tree.getRange()), message);
+  class PhpRegexIssueLocation extends IssueLocation {
+
+    public PhpRegexIssueLocation(RegexSyntaxElement tree, String message) {
+      super(((PhpAnalyzerRegexSource) tree.getSource()).locationInFileFor(tree.getRange()), message);
     }
 
-    public RegexIssueLocation(List<RegexSyntaxElement> trees, String message) {
-      super(locationInFileFromRegexSyntaxElements(trees), message);
+    public PhpRegexIssueLocation(RegexIssueLocation location) {
+      super(locationInFileFromRegexSyntaxElements(location.syntaxElements()), location.message());
     }
 
     private static LocationInFile locationInFileFromRegexSyntaxElements(List<RegexSyntaxElement> trees) {
-      PhpRegexSource source = (PhpRegexSource) trees.get(0).getSource();
+      PhpAnalyzerRegexSource source = (PhpAnalyzerRegexSource) trees.get(0).getSource();
       IndexRange current = null;
       for (RegexSyntaxElement tree : trees) {
         if (current == null) {
