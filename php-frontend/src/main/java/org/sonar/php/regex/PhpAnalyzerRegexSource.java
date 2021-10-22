@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.sonar.php.symbols.LocationInFileImpl;
+import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -82,7 +83,7 @@ public class PhpAnalyzerRegexSource extends PhpRegexSource {
   public LocationInFile locationInFileFor(IndexRange range) {
     int[] startLineAndOffset = lineAndOffset(range.getBeginningOffset());
     int[] endLineAndOffset = lineAndOffset(range.getEndingOffset());
-    return new LocationInFileImpl(null, startLineAndOffset[0], startLineAndOffset[1], endLineAndOffset[0], endLineAndOffset[1]);
+    return new LocationInFileImpl(UnknownLocationInFile.UNKNOWN_LOCATION.filePath(), startLineAndOffset[0], startLineAndOffset[1], endLineAndOffset[0], endLineAndOffset[1]);
   }
 
   private int[] lineAndOffset(int index) {
