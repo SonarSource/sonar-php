@@ -73,8 +73,6 @@ To run integration tests, you will need to create a properties file like the one
 ```
 # version of SonarQube server
 sonar.runtimeVersion=8.9
-
-orchestrator.updateCenterUrl=https://update.sonarsource.org/update-center-dev.properties
 ```
 Before running any of integration tests make sure the submodules are checked out:
 ```
