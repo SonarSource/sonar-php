@@ -1,20 +1,20 @@
 # Code Quality and Security for PHP [![Build Status](https://travis-ci.org/SonarSource/sonar-php.svg?branch=master)](https://travis-ci.org/SonarSource/sonar-php)
 
-This SonarSource project is a [static code analyser](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](http://www.sonarqube.org/) platform. It will allow you to produce stable and easily supported code by helping you find and correct bugs, vulnerabilities and smells in your code.
+This SonarSource project is a [static code analyser](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](https://www.sonarqube.org/) platform. It will allow you to produce stable and easily supported code by helping you find and correct bugs, vulnerabilities and smells in your code.
 
 
 # Features
 * 200+ rules
 * Supports up to PHP 8
 * Metrics (complexity, number of lines etc.)
-* Import of [unit test and coverage results](http://docs.sonarqube.org/display/PLUG/PHP+Unit+Test+and+Coverage+Results+Import)
-* Support of [custom rules](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP)
+* Import of [unit test and coverage results](https://docs.sonarqube.org/latest/analysis/coverage/)
+* Support of [custom rules](https://docs.sonarqube.org/latest/analysis/languages/php/)
 
 # Useful links
 
-* [Project homepage](https://redirect.sonarsource.com/plugins/php.html)
+* [Project homepage](https://www.sonarsource.com/php/)
 * [Documentation](https://docs.sonarqube.org/latest/analysis/languages/php/)
-* [Issue tracking](http://jira.sonarsource.com/browse/SONARPHP)
+* [Issue tracking](https://jira.sonarsource.com/browse/SONARPHP)
 * [Available rules](https://rules.sonarsource.com/php)
 * [SonarSource Community Forum](https://community.sonarsource.com/)
 * [Demo project analysis](https://sonarcloud.io/dashboard?id=monica)
@@ -40,7 +40,7 @@ To request a new feature, please create a new thread in [SonarSource Community F
 To submit a contribution, create a pull request for this repository. Please make sure that you follow our [code style](https://github.com/SonarSource/sonar-developer-toolset) and all [tests](#testing) are passing (Travis build is created for each PR).
 
 ### Custom Rules
-If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP) available only for you.
+If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](https://docs.sonarqube.org/latest/analysis/languages/php/) available only for you.
 
 #### Custom Rules API Changes
 - **3.15** (January 2021)
@@ -63,7 +63,7 @@ If you have an idea for a rule but you are not sure that everyone needs it you c
 To run tests locally follow these instructions.
 
 ### Build the Project and Run Unit Tests
-To build the plugin and run its unit tests, execute this command from the project's root directory (you will need [Maven](http://maven.apache.org/)):
+To build the plugin and run its unit tests, execute this command from the project's root directory (you will need [Maven](https://maven.apache.org/)):
 ```
 mvn clean install
 ```
@@ -72,9 +72,7 @@ mvn clean install
 To run integration tests, you will need to create a properties file like the one shown below, and set its location in an environment variable named `ORCHESTRATOR_CONFIG_URL`.
 ```
 # version of SonarQube server
-sonar.runtimeVersion=7.9
-
-orchestrator.updateCenterUrl=http://update.sonarsource.org/update-center-dev.properties
+sonar.runtimeVersion=8.9
 ```
 Before running any of integration tests make sure the submodules are checked out:
 ```
@@ -112,4 +110,4 @@ sonar-php/its/ruling/src/test/resources/expected/
 
 Copyright 2010-2021 SonarSource.
 
-Licensed under the [GNU Lesser General Public License, Version 3.0](http://www.gnu.org/licenses/lgpl.txt)
+Licensed under the [GNU Lesser General Public License, Version 3.0](https://www.gnu.org/licenses/lgpl.txt)
