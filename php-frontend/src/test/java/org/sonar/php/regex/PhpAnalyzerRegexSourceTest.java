@@ -115,22 +115,6 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   @Test
-  public void test_dialect() {
-    RegexSource source = makeSource("'/a/'");
-    assertEquals(RegexDialect.PHP, source.dialect());
-  }
-
-  @Test
-  public void test_features() {
-    RegexSource source = makeSource("'/a/'");
-    assertThat(source.features()).containsExactlyInAnyOrder(
-      RegexFeature.RECURSION,
-      RegexFeature.CONDITIONAL_SUBPATTERN,
-      RegexFeature.POSIX_CHARACTER_CLASS
-    );
-  }
-
-  @Test
   public void php_literal_escape_sequence() {
     RegexTree regex = assertSuccessfulParse("'/a\\\\\\\\b/'");
     assertKind(RegexTree.Kind.SEQUENCE, regex);
