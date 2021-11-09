@@ -19,8 +19,11 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
+import javax.annotation.CheckForNull;
+
 public interface LocationInFile {
 
+  @CheckForNull
   String filePath();
 
   int startLine();

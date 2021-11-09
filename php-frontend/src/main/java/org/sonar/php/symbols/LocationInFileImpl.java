@@ -20,17 +20,20 @@
 package org.sonar.php.symbols;
 
 import java.util.Objects;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class LocationInFileImpl implements LocationInFile {
 
+  @Nullable
   private final String filePath;
   private final int startLine;
   private final int startLineOffset;
   private final int endLine;
   private final int endLineOffset;
 
-  public LocationInFileImpl(String filePath, int startLine, int startLineOffset, int endLine, int endLineOffset) {
+  public LocationInFileImpl(@Nullable String filePath, int startLine, int startLineOffset, int endLine, int endLineOffset) {
     this.filePath = filePath;
     this.startLine = startLine;
     this.startLineOffset = startLineOffset;
@@ -39,6 +42,7 @@ public class LocationInFileImpl implements LocationInFile {
   }
 
   @Override
+  @CheckForNull
   public String filePath() {
     return filePath;
   }
