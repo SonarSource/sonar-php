@@ -34,12 +34,6 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[\"\".]/", $input); // Noncompliant
     preg_match("/[\x{F600}-\x{F637}\x{F608}]/", $input); // Noncompliant
     preg_match("/[\Qxx\E]/", $input); // Noncompliant
-    preg_match("/[[a][a]]/", $input); // Noncompliant
-    preg_match("/[[abc][b]]/", $input); // Noncompliant
-    preg_match("/[[^a]b]/", $input); // Noncompliant
-    preg_match("/[[^a]z]/", $input); // Noncompliant
-    preg_match("/[a[^z]]/", $input); // Noncompliant
-    preg_match("/[z[^a]]/", $input); // Noncompliant
     preg_match("/[\s\Sx]/", $input); // Noncompliant
     preg_match("/(?U)[\s\Sx]/", $input); // Noncompliant
     preg_match("/[\w\d]/", $input); // Noncompliant
@@ -53,6 +47,8 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[0-9\\\\\d]/", $input); // Noncompliant
     preg_match("/(?(?=1)[0-99])/", $input); // Noncompliant
     preg_match("/(?(?=1)1|[0-99])/", $input); // Noncompliant
+    preg_match("/(?U)[[^\W]a]/", $input); // Noncompliant
+    preg_match("/[[^\s\S]x]/", $input); // Noncompliant
   }
 
   function compliant($input)
@@ -61,7 +57,6 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[0-9][0-9]?/", $input);
     preg_match("/[xX]/", $input);
     preg_match("/[\s\S]/", $input);
-    preg_match("/[[^\s\S]x]/", $input);
     preg_match("/(?U)[\s\S]/", $input);
     preg_match("/(?U)[\S\u0085\u2028\u2029]/", $input);
     preg_match("/[\d\D]/", $input);
@@ -85,8 +80,6 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[z-a9-0]/", $input); // Illegal character class should not make the check explode
     preg_match("/[aa/", $input); // Check should not run on syntactically invalid regexen
     preg_match("/(?U)[\wä]/", $input); // False negative because we don't support Unicode characters in \w and \W
-    preg_match("/(?U)[[^\W]a]/", $input); // False negative because once we negate a character class whose contents we don't
-                                  // fully understand, we ignore it to avoid false positives
     preg_match("/[[a-z&&b-e]c]/", $input); // FN because we don't support intersections
     preg_match("/(?i)[A-_d-{]/", $input); // FN because we ignore case insensitivity unless both ends of the ranges are letters
     preg_match("/(?i)[A-z_]/", $input); // FN because A-z gets misinterpreted as A-Za-z due to the way we handle case insensitivity

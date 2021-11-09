@@ -16,6 +16,7 @@ class StringReplaceCheck
     preg_replace("/!/", ".", $init); // Noncompliant
     preg_replace("/\n/", " ", $init); // Noncompliant
     preg_replace("/\"/", " ", $init); // Noncompliant
+    preg_replace("/{/", "It's", $init); // Noncompliant
   }
 
   function compliant($input)
@@ -34,7 +35,6 @@ class StringReplaceCheck
     preg_replace("/()/", "It's", $init);
     preg_replace("/[/", "It's", $init);
     preg_replace("/[a-z]]/", "It's", $init);
-    preg_replace("/{/", "It's", $init);
     preg_replace("/x{3}/", "It's", $init);
     preg_replace("/^/", "It's", $init);
     preg_replace("/?/", "It's", $init);
