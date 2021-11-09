@@ -70,7 +70,6 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.w3c.dom.Text;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
