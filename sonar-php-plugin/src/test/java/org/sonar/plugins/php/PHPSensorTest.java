@@ -49,6 +49,7 @@ import org.sonar.api.batch.sensor.cpd.internal.TokensLine;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.issue.NoSonarFilter;
@@ -99,6 +100,7 @@ public class PHPSensorTest {
 
   private static final String PARSE_ERROR_FILE = "parseError.php";
   private static final String ANALYZED_FILE = "PHPSquidSensor.php";
+  private static final String REGEX_FILE = "regexIssue.php";
   private static final String TEST_FILE = "Test.php";
 
   private Set<File> tempReportFiles = new HashSet<>();
@@ -332,6 +334,50 @@ public class PHPSensorTest {
       tuple("S103", 22),
       tuple("S1124", 22));
   }
+
+  @Test
+  public void test_regex_issues() {
+    // S5855: Regex alternatives should not be redundant
+    ActiveRules rules = new ActiveRulesBuilder()
+      .addRule(newActiveRule("S5855"))
+      .build();
+
+    checkFactory = new CheckFactory(rules);
+    analyseSingleFile(createSensor(), REGEX_FILE);
+
+    Collection<Issue> issues = context.allIssues();
+    assertThat(issues).hasSize(1);
+    Issue issue = issues.iterator().next();
+    assertLocation("Remove or rework this redundant alternative.", 3, 18, 3, 19,   issue.primaryLocation());
+
+    assertThat(issue.flows()).hasSize(1);
+    Issue.Flow secondaryFlow = issue.flows().get(0);
+    assertThat(secondaryFlow.locations()).hasSize(1);
+    assertLocation("Alternative to keep", 3, 13, 3, 17, secondaryFlow.locations().get(0));
+  }
+
+  private void assertLocation(String message, int startLine, int startLineOffset, int endLine, int endLineOffset, IssueLocation location) {
+    assertThat(location.message()).isEqualTo(message);
+    TextRange range = location.textRange();
+    assertThat(range).isNotNull();
+    assertRange(startLine, startLineOffset, endLine, endLineOffset,  range);
+  }
+
+  private void assertRange(int startLine, int startLineOffset, int endLine, int endLineOffset, TextRange textRange) {
+    assertThat(textRange.start().line())
+      .withFailMessage(String.format("Start line is expected to be %s, but get %s.", startLine, textRange.start().line()))
+      .isEqualTo(startLine);
+    assertThat(textRange.start().lineOffset())
+      .withFailMessage(String.format("Start line offset is expected to be %s, but get %s.", startLineOffset, textRange.start().lineOffset()))
+      .isEqualTo(startLineOffset);
+    assertThat(textRange.end().line())
+      .withFailMessage(String.format("End line is expected to be %s, but get %s.", endLine, textRange.end().line()))
+      .isEqualTo(endLine);
+    assertThat(textRange.end().lineOffset())
+      .withFailMessage(String.format("End line offset is expected to be %s, but get %s.", endLineOffset, textRange.end().lineOffset()))
+      .isEqualTo(endLineOffset);
+  }
+
 
   @Test
   public void cross_file_issue() {
