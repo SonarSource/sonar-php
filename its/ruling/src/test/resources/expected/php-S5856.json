@@ -11,6 +11,9 @@
 'project:Symfony/Component/Form/Util/StringUtil.php':[
 36,
 ],
+'project:Symfony/Component/Intl/Data/Util/LocaleScanner.php':[
+98,
+],
 'project:Symfony/Component/Serializer/Encoder/XmlEncoder.php':[
 247,
 ],
