@@ -96,6 +96,11 @@
 
     <!-- FIXME fix javadoc errors and remove this -->
     <doclint>none</doclint>
+
+    <!-- JDK -->
+    <jdk.min.version>11</jdk.min.version>
+    <jdk.source.version>11</jdk.source.version>
+    <jdk.target.version>11</jdk.target.version>
   </properties>
 
   <dependencyManagement>
@@ -275,16 +280,6 @@
       <modules>
         <module>its</module>
       </modules>
-    </profile>
-    <profile>
-      <!-- Use javac's release flag for Java 9 and higher -->
-      <id>java9+</id>
-      <activation>
-        <jdk>[9,)</jdk>
-      </activation>
-      <properties>
-        <maven.compiler.release>8</maven.compiler.release>
-      </properties>
     </profile>
   </profiles>
 
