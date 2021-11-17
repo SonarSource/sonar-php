@@ -75,7 +75,7 @@
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
     <!-- plugin versions -->
-    <version.sonar-packaging-maven-plugin>1.17</version.sonar-packaging-maven-plugin>
+    <version.sonar-packaging-maven-plugin>1.20.0.405</version.sonar-packaging-maven-plugin>
 
     <!-- JAR versions -->
     <version.assertj>3.5.2</version.assertj>
@@ -91,16 +91,19 @@
     <version.sonarlint>4.7.0.12286</version.sonarlint>
     <version.analyzer-commons>1.21.0.829</version.analyzer-commons>
 
+    <!-- Advertise minimal required JRE version -->
+    <jre.min.version>11</jre.min.version>
+
+    <!-- JDK Build versions -->
+    <jdk.min.version>11</jdk.min.version>
+    <jdk.source.version>11</jdk.source.version>
+    <jdk.target.version>11</jdk.target.version>
+
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>
 
     <!-- FIXME fix javadoc errors and remove this -->
     <doclint>none</doclint>
-
-    <!-- JDK -->
-    <jdk.min.version>11</jdk.min.version>
-    <jdk.source.version>11</jdk.source.version>
-    <jdk.target.version>11</jdk.target.version>
   </properties>
 
   <dependencyManagement>
@@ -268,6 +271,7 @@
             <sonarLintSupported>true</sonarLintSupported>
             <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
             <skipDependenciesPackaging>true</skipDependenciesPackaging>
+            <jreMinVersion>${jdk.min.version}</jreMinVersion>
           </configuration>
         </plugin>
       </plugins>
