@@ -126,6 +126,7 @@ promote_task:
   depends_on:
     - ruling
     - plugin_qa
+    - ws_scan
   <<: *ONLY_SONARSOURCE_QA
   gke_container:    
     <<: *CONTAINER_DEFINITION
