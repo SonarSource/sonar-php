@@ -271,7 +271,7 @@
             <sonarLintSupported>true</sonarLintSupported>
             <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
             <skipDependenciesPackaging>true</skipDependenciesPackaging>
-            <jreMinVersion>${jdk.min.version}</jreMinVersion>
+            <jreMinVersion>${jre.min.version}</jreMinVersion>
           </configuration>
         </plugin>
       </plugins>
