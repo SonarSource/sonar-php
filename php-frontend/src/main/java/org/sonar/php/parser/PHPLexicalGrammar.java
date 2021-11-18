@@ -171,6 +171,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   UNSET_VARIABLE_STATEMENT,
   UNSET_VARIABLES,
 
+  ENUM_CASE,
+
   /**
    * Expression
    */
