@@ -28,6 +28,7 @@ import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -159,6 +160,11 @@ public interface Tree {
     * {@link ClassDeclarationTree}
     */
     TRAIT_DECLARATION(ClassDeclarationTree.class),
+
+    /**
+     * {@link EnumDeclarationTree}
+     */
+    ENUM_DECLARATION(EnumDeclarationTree.class),
 
     /**
      * {@link MethodDeclarationTree}

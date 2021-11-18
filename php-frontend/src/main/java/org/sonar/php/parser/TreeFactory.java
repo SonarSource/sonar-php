@@ -44,6 +44,7 @@ import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ConstantDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.EnumDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
@@ -148,6 +149,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -649,6 +651,10 @@ public class TreeFactory {
       implementsToken(implementsClause), superInterfaces(implementsClause),
       openCurlyBrace, optionalList(members), closeCurlyBrace
     );
+  }
+
+  public EnumDeclarationTree enumDeclaration(InternalSyntaxToken enumToken, NameIdentifierTree name, InternalSyntaxToken openCurlyBraceToken, InternalSyntaxToken closeCurlyBraceToken) {
+    return new EnumDeclarationTreeImpl(enumToken, name, openCurlyBraceToken, closeCurlyBraceToken);
   }
 
   /**
@@ -1931,6 +1937,8 @@ public class TreeFactory {
   public AttributeGroupTree attributeGroup(SyntaxToken startToken, SeparatedList<AttributeTree> attributes, SyntaxToken endToken) {
     return new AttributeGroupTreeImpl(startToken, attributes, endToken);
   }
+
+
 
   /**
    * [ END ] Expression
