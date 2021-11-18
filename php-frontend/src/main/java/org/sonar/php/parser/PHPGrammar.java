@@ -577,6 +577,7 @@ public class PHPGrammar {
         TRAIT_DECLARATION(),
         FUNCTION_DECLARATION(),
         INTERFACE_DECLARATION(),
+        ENUM_DECLARATION(),
         NAMESPACE_STATEMENT(),
         GROUP_USE_STATEMENT(),
         USE_STATEMENT(),

@@ -31,6 +31,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -39,6 +40,7 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
@@ -64,11 +66,13 @@ public class PHPVisitorCheckTest {
     // PHPCheck#init() is called by PHPAnalyzer
     assertThat(testVisitor.initCounter).isEqualTo(0);
     assertThat(testVisitor.literalCounter).isEqualTo(6);
-    assertThat(testVisitor.tokenCounter).isEqualTo(67);
+    assertThat(testVisitor.tokenCounter).isEqualTo(77);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
     assertThat(testVisitor.unionTypesCounter).isEqualTo(1);
     assertThat(testVisitor.attributeGroupsCounter).isEqualTo(2);
     assertThat(testVisitor.attributesCounter).isEqualTo(3);
+    assertThat(testVisitor.enumsCounter).isEqualTo(1);
+    assertThat(testVisitor.enumCasesCounter).isEqualTo(2);
   }
 
   @Test
@@ -158,6 +162,8 @@ public class PHPVisitorCheckTest {
     int unionTypesCounter = 0;
     int attributeGroupsCounter = 0;
     int attributesCounter = 0;
+    int enumsCounter = 0;
+    int enumCasesCounter = 0;
 
     @Override
     public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -214,8 +220,8 @@ public class PHPVisitorCheckTest {
 
     @Override
     public void visitLiteral(LiteralTree tree) {
-      literalCounter++;
       super.visitLiteral(tree);
+      literalCounter++;
     }
 
     @Override
@@ -223,6 +229,17 @@ public class PHPVisitorCheckTest {
       triviaCounter++;
     }
 
+    @Override
+    public void visitEnumDeclaration(EnumDeclarationTree tree) {
+      super.visitEnumDeclaration(tree);
+      enumsCounter++;
+    }
+
+    @Override
+    public void visitEnumCase(EnumCaseTree tree) {
+      super.visitEnumCase(tree);
+      enumCasesCounter++;
+    }
   }
 
 }

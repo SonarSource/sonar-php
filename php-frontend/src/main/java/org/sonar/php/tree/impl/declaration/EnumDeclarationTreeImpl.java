@@ -62,7 +62,7 @@ public class EnumDeclarationTreeImpl extends PHPTree implements EnumDeclarationT
 
   @Override
   public void accept(VisitorCheck visitor) {
-
+    visitor.visitEnumDeclaration(this);
   }
 
   @Override

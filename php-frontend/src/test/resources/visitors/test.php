@@ -14,3 +14,8 @@ class A extends B {
     match ($a) {default=>1};
   }
 }
+
+enum A {
+  case A;
+  case B;
+}

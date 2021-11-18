@@ -43,6 +43,7 @@ public class EnumCaseTreeImpl extends PHPTree implements EnumCaseTree {
 
   @Override
   public void accept(VisitorCheck visitor) {
+    visitor.visitEnumCase(this);
   }
 
   @Override

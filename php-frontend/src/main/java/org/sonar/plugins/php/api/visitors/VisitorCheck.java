@@ -28,6 +28,7 @@ import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -89,6 +90,7 @@ import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
@@ -156,6 +158,8 @@ public interface VisitorCheck extends PHPCheck {
   void visitBuiltInType(BuiltInTypeTree tree);
 
   void visitReturnTypeClause(ReturnTypeClauseTree tree);
+
+  void visitEnumDeclaration(EnumDeclarationTree tree);
 
   /**
    * [ END ] Declaration
@@ -231,6 +235,8 @@ public interface VisitorCheck extends PHPCheck {
   void visitNamespaceStatement(NamespaceStatementTree tree);
 
   void visitEchoTagStatement(EchoTagStatementTree tree);
+
+  void visitEnumCase(EnumCaseTree tree);
 
   /**
    * [ END ] Statement
