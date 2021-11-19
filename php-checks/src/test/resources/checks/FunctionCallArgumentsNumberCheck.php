@@ -1,5 +1,7 @@
 <?php
 
+namespace Checks\FunctionCallArgumentsNumberCheck;
+
   function function1($a, $b) {}
 //         ^^^^^^^^^> {{Function definition.}}
   function1($a); // Noncompliant {{"function1" expects 2 arguments, but 1 was provided. Add more arguments or define default values.}}
@@ -45,3 +47,6 @@ function function9($a, ...$args) {
 function9($a); // OK
 function9($a, $b); // OK
 function9(); // Noncompliant {{"function9" expects 1 argument, but 0 were provided. Add more arguments or define default values.}}
+
+function function10($a = new A()) {}
+function10(); // Compliant

@@ -35,6 +35,9 @@ public class FunctionDeclarationTest {
       .matches("function f() : ?bool {}")
       .matches("function f() : object {}")
       .matches("#[A1(8)] function f() {}")
+      .matches("function f($prop) {}")
+      .matches("function f($prop = null) {}")
+      .matches("function f($prop = new Foo()) {}")
     ;
   }
 }
