@@ -19,14 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -47,15 +45,15 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
   private static final String STREAM_SOCKET_ENABLE_CRYPTO = "stream_socket_enable_crypto";
   private static final String CURL_SETOPT = "curl_setopt";
 
-  private static final Map<String, List<String>> STREAM_WEAK_PROTOCOLS = MapBuilder.<String, List<String>>builder()
-    .put(STREAM_CONTEXT_CREATE, Arrays.asList(
+  private static final Map<String, List<String>> STREAM_WEAK_PROTOCOLS = Map.of(
+    STREAM_CONTEXT_CREATE, List.of(
       "STREAM_CRYPTO_METHOD_ANY_CLIENT",
       "STREAM_CRYPTO_METHOD_ANY_SERVER",
       "STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT",
       "STREAM_CRYPTO_METHOD_TLSv1_0_SERVER",
       "STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT",
-      "STREAM_CRYPTO_METHOD_TLSv1_1_SERVER"))
-    .put(STREAM_SOCKET_ENABLE_CRYPTO, Arrays.asList(
+      "STREAM_CRYPTO_METHOD_TLSv1_1_SERVER"),
+    STREAM_SOCKET_ENABLE_CRYPTO, List.of(
       "STREAM_CRYPTO_METHOD_SSLv2_CLIENT",
       "STREAM_CRYPTO_METHOD_SSLv3_CLIENT",
       "STREAM_CRYPTO_METHOD_SSLv23_CLIENT",
@@ -69,10 +67,9 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
       "STREAM_CRYPTO_METHOD_ANY_SERVER",
       "STREAM_CRYPTO_METHOD_TLS_SERVER",
       "STREAM_CRYPTO_METHOD_TLSv1_0_SERVER",
-      "STREAM_CRYPTO_METHOD_TLSv1_1_SERVER"))
-    .build();
+      "STREAM_CRYPTO_METHOD_TLSv1_1_SERVER"));
 
-  private static final List<String> CURL_WEAK_PROTOCOLS = Arrays.asList(
+  private static final List<String> CURL_WEAK_PROTOCOLS = List.of(
     "CURL_SSLVERSION_TLSv1",
     "CURL_SSLVERSION_SSLv2",
     "CURL_SSLVERSION_SSLv3",

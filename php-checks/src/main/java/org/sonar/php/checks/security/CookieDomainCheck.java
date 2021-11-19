@@ -33,7 +33,6 @@ import org.sonar.php.ini.BasePhpIniIssue;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
-import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -48,10 +47,9 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
   private static final String MESSAGE = "Specify at least a second-level cookie domain.";
 
   // The key is the function name, the value is the index of the 'domain' parameter
-  private static final Map<String, Integer> FUNCTION_AND_PARAM_INDEX = MapBuilder.<String, Integer>builder()
-    .put("setcookie", 4)
-    .put("session_set_cookie_params", 2)
-    .build();
+  private static final Map<String, Integer> FUNCTION_AND_PARAM_INDEX = Map.of(
+    "setcookie", 4,
+    "session_set_cookie_params", 2);
 
   @Override
   protected Set<String> lookedUpFunctionNames() {

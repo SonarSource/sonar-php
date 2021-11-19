@@ -24,9 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class is used for Java < 9 to simplify the creation of maps.
- * After moving to Java > 9, should be replaced by Immutable Map Static Factory Methods
- * @see <a href="https://docs.oracle.com/javase/9/docs/api/java/util/Map.html#immutable">Immutable Map Static Factory Methods</a>
+ * This class is used to simplify the creation of large maps.
+ * <a href="https://docs.oracle.com/javase/9/docs/api/java/util/Map.html#immutable">Immutable Map Static Factory</a> with Maps::of is limited to 10 entries.
  */
 public final class MapBuilder<K, V> {
 
