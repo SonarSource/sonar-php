@@ -35,12 +35,6 @@ public class SetUtils {
   }
 
   @SafeVarargs
-  public static <T> Set<T> immutableSetOf(T ... elements) {
-    Set<T> set = new HashSet<>(Arrays.asList(elements));
-    return Collections.unmodifiableSet(set);
-  }
-
-  @SafeVarargs
   public static <T> Set<T> concat(Set<? extends T>... sets) {
     Set<T> concatenatedSet = new HashSet<>();
     for (Set<? extends T> set: sets) {
