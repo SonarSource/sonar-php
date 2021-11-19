@@ -19,6 +19,9 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.sonar.php.utils.collections.SetUtils;
@@ -54,7 +57,10 @@ class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
 
   @Override
   public Set<CfgBlock> successors(){
-    return SetUtils.immutableSetOf(trueSuccessor, falseSuccessor);
+    if (trueSuccessor.equals(falseSuccessor)) {
+      return Set.of(trueSuccessor);
+    }
+    return Set.of(trueSuccessor, falseSuccessor);
   }
 
   @Override

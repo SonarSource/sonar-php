@@ -79,7 +79,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
-  private static final Set<String> BUILT_IN_VARIABLES = SetUtils.immutableSetOf(
+  private static final Set<String> BUILT_IN_VARIABLES = Set.of(
     "$this",
     "$GLOBALS",
     "$_SERVER",
@@ -94,7 +94,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     "$_COOKIE",
     "$_REQUEST"
   );
-  private static final Set<String> SELF_OBJECTS = SetUtils.immutableSetOf("$this", "self", "static");
+  private static final Set<String> SELF_OBJECTS = Set.of("$this", "self", "static");
 
   private Deque<Scope> classScopes = new ArrayDeque<>();
   private Map<Symbol, Scope> scopeBySymbol = new HashMap<>();

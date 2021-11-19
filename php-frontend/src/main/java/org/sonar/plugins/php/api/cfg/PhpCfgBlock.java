@@ -46,7 +46,7 @@ class PhpCfgBlock implements CfgBlock {
   }
 
   PhpCfgBlock(PhpCfgBlock successor, PhpCfgBlock syntacticSuccessor) {
-    this(SetUtils.immutableSetOf(successor), Preconditions.checkNotNull(syntacticSuccessor,
+    this(Set.of(successor), Preconditions.checkNotNull(syntacticSuccessor,
       "Syntactic successor cannot be null"));
   }
 
@@ -55,7 +55,7 @@ class PhpCfgBlock implements CfgBlock {
   }
 
   PhpCfgBlock(PhpCfgBlock successor) {
-    this(SetUtils.immutableSetOf(successor));
+    this(Set.of(successor));
   }
 
   PhpCfgBlock() {

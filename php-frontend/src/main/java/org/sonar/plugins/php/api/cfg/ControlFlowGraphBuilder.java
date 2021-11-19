@@ -35,7 +35,6 @@ import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.LiteralUtils;
 import org.sonar.php.utils.collections.ListUtils;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -225,7 +224,7 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock buildTryStatement(TryStatementTree tree, PhpCfgBlock successor) {
     PhpCfgBlock exitBlock = exitTargets.peek().exitBlock;
-    PhpCfgBlock finallyBlockEnd = createMultiSuccessorBlock(SetUtils.immutableSetOf(successor, exitBlock));
+    PhpCfgBlock finallyBlockEnd = createMultiSuccessorBlock(Set.of(successor, exitBlock));
     PhpCfgBlock finallyBlock;
     if (tree.finallyBlock() != null) {
       finallyBlock = build(tree.finallyBlock().statements(), finallyBlockEnd);
@@ -486,7 +485,7 @@ class ControlFlowGraphBuilder {
     @Override
     public Set<CfgBlock> successors() {
       Preconditions.checkState(successor != null, "No successor was set on %s", this);
-      return SetUtils.immutableSetOf(successor);
+      return Set.of(successor);
     }
 
     @Override
