@@ -655,15 +655,16 @@ public class TreeFactory {
     );
   }
 
-  public EnumDeclarationTree enumDeclaration(SyntaxToken enumToken, NameIdentifierTree name,
+  public EnumDeclarationTree enumDeclaration(Optional<List<AttributeGroupTree>> attributes, SyntaxToken enumToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause, SyntaxToken openCurlyBraceToken,
     Optional<List<ClassMemberTree>> members, SyntaxToken closeCurlyBraceToken) {
-    return new EnumDeclarationTreeImpl(enumToken, name, implementsToken(implementsClause), superInterfaces(implementsClause),
-      openCurlyBraceToken, members.or(Collections.emptyList()), closeCurlyBraceToken);
+    return new EnumDeclarationTreeImpl(attributes.or(Collections.emptyList()), enumToken, name, implementsToken(implementsClause),
+      superInterfaces(implementsClause), openCurlyBraceToken, members.or(Collections.emptyList()), closeCurlyBraceToken);
   }
 
-  public EnumCaseTree enumCase(SyntaxToken caseToken, NameIdentifierTree name, SyntaxToken eosToken) {
-    return new EnumCaseTreeImpl(caseToken, name, eosToken);
+  public EnumCaseTree enumCase(Optional<List<AttributeGroupTree>> attributes, SyntaxToken caseToken,
+    NameIdentifierTree name, SyntaxToken eosToken) {
+    return new EnumCaseTreeImpl(attributes.or(Collections.emptyList()), caseToken, name, eosToken);
   }
 
   /**

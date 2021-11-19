@@ -30,6 +30,7 @@ public class EnumCaseTest {
   public void test() {
     assertThat(PHPLexicalGrammar.ENUM_CASE)
       .matches("case A;")
+      .matches("#[A1(1)] case A;")
       .notMatches("case A")
     ;
   }

@@ -313,6 +313,7 @@ public class PHPGrammar {
   public EnumDeclarationTree ENUM_DECLARATION() {
     return b.<EnumDeclarationTree>nonterminal(PHPLexicalGrammar.ENUM_DECLARATION).is(
       f.enumDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(ENUM),
         NAME_IDENTIFIER(),
         b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
@@ -336,6 +337,7 @@ public class PHPGrammar {
   public EnumCaseTree ENUM_CASE() {
     return b.<EnumCaseTree>nonterminal(PHPLexicalGrammar.ENUM_CASE).is(
       f.enumCase(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(CASE),
         NAME_IDENTIFIER(),
         EOS()));
