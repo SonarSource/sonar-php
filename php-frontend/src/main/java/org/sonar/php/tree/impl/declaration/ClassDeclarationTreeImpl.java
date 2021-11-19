@@ -55,7 +55,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   private final SyntaxToken closeCurlyBraceToken;
   private ClassSymbol symbol;
 
-  private ClassDeclarationTreeImpl(
+  protected ClassDeclarationTreeImpl(
       Kind kind,
       List<AttributeGroupTree> attributeGroups,
       @Nullable SyntaxToken modifierToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,

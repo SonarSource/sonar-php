@@ -31,7 +31,6 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -60,7 +59,7 @@ public class PHPVisitorCheckTest {
     TestVisitor testVisitor = new TestVisitor();
     testVisitor.analyze(file, tree);
 
-    assertThat(testVisitor.classCounter).isEqualTo(1);
+    assertThat(testVisitor.classCounter).isEqualTo(2);
     assertThat(testVisitor.namespaceNameCounter).isEqualTo(6);
     assertThat(testVisitor.varIdentifierCounter).isEqualTo(6);
     // PHPCheck#init() is called by PHPAnalyzer
@@ -169,6 +168,9 @@ public class PHPVisitorCheckTest {
     public void visitClassDeclaration(ClassDeclarationTree tree) {
       super.visitClassDeclaration(tree);
       classCounter++;
+      if (tree.is(Tree.Kind.ENUM_DECLARATION)) {
+        enumsCounter++;
+      }
     }
 
     @Override
@@ -227,12 +229,6 @@ public class PHPVisitorCheckTest {
     @Override
     public void visitTrivia(SyntaxTrivia trivia) {
       triviaCounter++;
-    }
-
-    @Override
-    public void visitEnumDeclaration(EnumDeclarationTree tree) {
-      super.visitEnumDeclaration(tree);
-      enumsCounter++;
     }
 
     @Override

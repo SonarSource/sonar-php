@@ -656,8 +656,8 @@ public class TreeFactory {
   }
 
   public EnumDeclarationTree enumDeclaration(SyntaxToken enumToken, NameIdentifierTree name, SyntaxToken openCurlyBraceToken,
-    Optional<List<EnumCaseTree>> cases, SyntaxToken closeCurlyBraceToken) {
-    return new EnumDeclarationTreeImpl(enumToken, name, openCurlyBraceToken, cases.or(Collections.emptyList()), closeCurlyBraceToken);
+    Optional<List<ClassMemberTree>> members, SyntaxToken closeCurlyBraceToken) {
+    return new EnumDeclarationTreeImpl(enumToken, name, openCurlyBraceToken, members.or(Collections.emptyList()), closeCurlyBraceToken);
   }
 
   public EnumCaseTree enumCase(SyntaxToken caseToken, NameIdentifierTree name, SyntaxToken eosToken) {
