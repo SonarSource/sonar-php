@@ -50,6 +50,7 @@ public enum PHPKeyword implements GrammarRuleKey {
   ENDIF("endif"),
   ENDSWITCH("endswitch"),
   ENDWHILE("endwhile"),
+  ENUM("enum"),
   EVAL("eval"),
   EXIT("exit"),
   EXTENDS("extends"),

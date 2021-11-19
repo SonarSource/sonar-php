@@ -39,6 +39,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   CLASS_DECLARATION,
   INTERFACE_DECLARATION,
   TRAIT_DECLARATION,
+  ENUM_DECLARATION,
 
   CLASS_MEMBER,
 
@@ -169,6 +170,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   STATIC_VAR,
   UNSET_VARIABLE_STATEMENT,
   UNSET_VARIABLES,
+
+  ENUM_CASE,
 
   /**
    * Expression

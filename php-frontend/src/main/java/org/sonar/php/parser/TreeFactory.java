@@ -44,6 +44,7 @@ import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ConstantDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.EnumDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
@@ -111,6 +112,7 @@ import org.sonar.php.tree.impl.statement.EchoTagStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseifClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.EmptyStatementImpl;
+import org.sonar.php.tree.impl.statement.EnumCaseTreeImpl;
 import org.sonar.php.tree.impl.statement.ExpressionListStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl;
@@ -148,6 +150,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -205,6 +208,7 @@ import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
@@ -649,6 +653,15 @@ public class TreeFactory {
       implementsToken(implementsClause), superInterfaces(implementsClause),
       openCurlyBrace, optionalList(members), closeCurlyBrace
     );
+  }
+
+  public EnumDeclarationTree enumDeclaration(SyntaxToken enumToken, NameIdentifierTree name, SyntaxToken openCurlyBraceToken,
+    Optional<List<EnumCaseTree>> cases, SyntaxToken closeCurlyBraceToken) {
+    return new EnumDeclarationTreeImpl(enumToken, name, openCurlyBraceToken, cases.or(Collections.emptyList()), closeCurlyBraceToken);
+  }
+
+  public EnumCaseTree enumCase(SyntaxToken caseToken, NameIdentifierTree name, SyntaxToken eosToken) {
+    return new EnumCaseTreeImpl(caseToken, name, eosToken);
   }
 
   /**
@@ -1931,6 +1944,8 @@ public class TreeFactory {
   public AttributeGroupTree attributeGroup(SyntaxToken startToken, SeparatedList<AttributeTree> attributes, SyntaxToken endToken) {
     return new AttributeGroupTreeImpl(startToken, attributes, endToken);
   }
+
+
 
   /**
    * [ END ] Expression

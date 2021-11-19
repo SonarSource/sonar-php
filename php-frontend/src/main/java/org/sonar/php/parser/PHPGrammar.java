@@ -40,6 +40,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -91,6 +92,7 @@ import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
@@ -120,9 +122,11 @@ import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.ARRAY;
 import static org.sonar.php.api.PHPKeyword.CALLABLE;
+import static org.sonar.php.api.PHPKeyword.CASE;
 import static org.sonar.php.api.PHPKeyword.CLASS;
 import static org.sonar.php.api.PHPKeyword.DIE;
 import static org.sonar.php.api.PHPKeyword.ECHO;
+import static org.sonar.php.api.PHPKeyword.ENUM;
 import static org.sonar.php.api.PHPKeyword.EXIT;
 import static org.sonar.php.api.PHPKeyword.EXTENDS;
 import static org.sonar.php.api.PHPKeyword.FINAL;
@@ -304,6 +308,28 @@ public class PHPGrammar {
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
         b.token(RCURLYBRACE)));
+  }
+
+  public EnumDeclarationTree ENUM_DECLARATION() {
+    return b.<EnumDeclarationTree>nonterminal(PHPLexicalGrammar.ENUM_DECLARATION).is(
+      f.enumDeclaration(
+        b.token(ENUM),
+        NAME_IDENTIFIER(),
+        b.token(LCURLYBRACE),
+        b.zeroOrMore(ENUM_CASE()),
+        b.token(RCURLYBRACE)
+      )
+    );
+  }
+
+  public EnumCaseTree ENUM_CASE() {
+    return b.<EnumCaseTree>nonterminal(PHPLexicalGrammar.ENUM_CASE).is(
+      f.enumCase(
+        b.token(CASE),
+        NAME_IDENTIFIER(),
+        EOS()
+      )
+    );
   }
 
   public ClassMemberTree CLASS_MEMBER() {
@@ -551,6 +577,7 @@ public class PHPGrammar {
         TRAIT_DECLARATION(),
         FUNCTION_DECLARATION(),
         INTERFACE_DECLARATION(),
+        ENUM_DECLARATION(),
         NAMESPACE_STATEMENT(),
         GROUP_USE_STATEMENT(),
         USE_STATEMENT(),

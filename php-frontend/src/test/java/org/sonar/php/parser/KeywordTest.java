@@ -57,6 +57,7 @@ public class KeywordTest {
       .matches("endif")
       .matches("endswitch")
       .matches("endwhile")
+      .matches("enum")
       .matches("eval")
       .matches("exit")
       .matches("extends")
@@ -103,7 +104,7 @@ public class KeywordTest {
 
   @Test
   public void getKeywordValues() {
-    Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(69);
+    Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(70);
   }
 
 }
