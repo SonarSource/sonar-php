@@ -51,9 +51,9 @@ import org.sonar.php.checks.regex.ImpossibleBoundariesCheck;
 import org.sonar.php.checks.regex.InvalidRegexCheck;
 import org.sonar.php.checks.regex.PossessiveQuantifierContinuationCheck;
 import org.sonar.php.checks.regex.RedundantRegexAlternativesCheck;
+import org.sonar.php.checks.regex.RegexComplexityCheck;
 import org.sonar.php.checks.regex.RegexLookaheadCheck;
 import org.sonar.php.checks.regex.ReluctantQuantifierCheck;
-import org.sonar.php.checks.regex.RegexComplexityCheck;
 import org.sonar.php.checks.regex.ReluctantQuantifierWithEmptyContinuationCheck;
 import org.sonar.php.checks.regex.SingleCharacterAlternationCheck;
 import org.sonar.php.checks.regex.StringReplaceCheck;
@@ -324,7 +324,7 @@ public class CheckList {
   }
 
   public static Set<Class<?>> getPhpIniChecks() {
-    return SetUtils.immutableSetOf(
+    return Set.of(
       AllowUrlCheck.class,
       CookiesSecureCheck.class,
       CgiForceRedirectCheck.class,
@@ -337,7 +337,7 @@ public class CheckList {
   }
 
   public static Set<Class<?>> getRegexChecks() {
-    return SetUtils.immutableSetOf(
+    return Set.of(
       AnchorPrecedenceCheck.class,
       DuplicatesInCharacterClassCheck.class,
       EmptyStringRepetitionCheck.class,

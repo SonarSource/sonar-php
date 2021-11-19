@@ -26,7 +26,6 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.ini.BasePhpIniIssue;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
@@ -58,7 +57,7 @@ public class SessionCookiePersistenceCheck extends FunctionUsageCheck implements
 
   @Override
   protected Set<String> lookedUpFunctionNames() {
-    return SetUtils.immutableSetOf("session_set_cookie_params");
+    return Set.of("session_set_cookie_params");
   }
 
   @Override

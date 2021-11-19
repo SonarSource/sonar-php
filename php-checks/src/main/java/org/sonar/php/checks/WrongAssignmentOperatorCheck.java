@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -34,7 +33,7 @@ import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 @Rule(key = "S2757")
 public class WrongAssignmentOperatorCheck extends PHPSubscriptionCheck {
 
-  private static final Set<String> SUSPICIOUS_TOKEN_VALUES = SetUtils.immutableSetOf("!", "+", "-");
+  private static final Set<String> SUSPICIOUS_TOKEN_VALUES = Set.of("!", "+", "-");
 
   @Override
   public List<Tree.Kind> nodesToVisit() {

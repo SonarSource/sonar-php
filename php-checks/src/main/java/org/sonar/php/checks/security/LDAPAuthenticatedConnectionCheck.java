@@ -24,7 +24,6 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -36,7 +35,7 @@ public class LDAPAuthenticatedConnectionCheck extends FunctionUsageCheck {
 
   @Override
   protected Set<String> lookedUpFunctionNames() {
-    return SetUtils.immutableSetOf("ldap_bind");
+    return Set.of("ldap_bind");
   }
 
   @Override

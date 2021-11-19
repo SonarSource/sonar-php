@@ -27,7 +27,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -55,10 +54,10 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
 
   public static final int DEFAULT = 20;
   private Deque<Set<String>> types = new ArrayDeque<>();
-  private static final Set<String> DOC_TAGS = SetUtils.immutableSetOf(
+  private static final Set<String> DOC_TAGS = Set.of(
     "@var", "@global", "@staticvar", "@throws", "@param", "@return");
 
-  private static final Set<String> EXCLUDED_TYPES = SetUtils.immutableSetOf(
+  private static final Set<String> EXCLUDED_TYPES = Set.of(
     "integer", "int", "double", "float",
     "string", "array", "object", "boolean",
     "bool", "binary", "null", "mixed");

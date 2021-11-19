@@ -26,7 +26,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -121,7 +120,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
     @Deprecated
     public ArgumentMatcher(int position, String value) {
-      this(position, SetUtils.immutableSetOf(value));
+      this(position, Set.of(value));
     }
 
     @Deprecated
@@ -130,7 +129,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     }
 
     public ArgumentMatcher(int position, @Nullable String name, String value) {
-      this(position, name, SetUtils.immutableSetOf(value));
+      this(position, name, Set.of(value));
     }
 
     public ArgumentMatcher(int position, @Nullable String name, Set<String> values) {
@@ -173,20 +172,20 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
 
     @Deprecated
     public ArgumentVerifier(int position, String value) {
-      this(position, SetUtils.immutableSetOf(value));
+      this(position, Set.of(value));
     }
 
     public ArgumentVerifier(int position, String name, String value) {
-      this(position, name, SetUtils.immutableSetOf(value));
+      this(position, name, Set.of(value));
     }
 
     public ArgumentVerifier(int position, String value, boolean raiseIssueOnMatch) {
-      this(position, SetUtils.immutableSetOf(value));
+      this(position, Set.of(value));
       this.raiseIssueOnMatch = raiseIssueOnMatch;
     }
 
     public ArgumentVerifier(int position, String name, String value, boolean raiseIssueOnMatch) {
-      this(position, name, SetUtils.immutableSetOf(value));
+      this(position, name, Set.of(value));
       this.raiseIssueOnMatch = raiseIssueOnMatch;
     }
 

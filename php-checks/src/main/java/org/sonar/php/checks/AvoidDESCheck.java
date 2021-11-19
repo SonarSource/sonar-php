@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import java.util.Locale;
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -34,7 +33,7 @@ public class AvoidDESCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Use the recommended AES (Advanced Encryption Standard) instead.";
 
-  private static final Set<String> MCRYPT_CIPHERS = SetUtils.immutableSetOf("MCRYPT_3DES", "MCRYPT_DES", "MCRYPT_DES_COMPAT",
+  private static final Set<String> MCRYPT_CIPHERS = Set.of("MCRYPT_3DES", "MCRYPT_DES", "MCRYPT_DES_COMPAT",
     "MCRYPT_TRIPLEDES");
   private static final String OPENSSL_DES = "des-ede3";
 
