@@ -315,6 +315,7 @@ public class PHPGrammar {
       f.enumDeclaration(
         b.token(ENUM),
         NAME_IDENTIFIER(),
+        b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(ENUM_MEMBER()),
         b.token(RCURLYBRACE)));

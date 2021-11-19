@@ -23,11 +23,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.SeparatedListImpl;
+import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
@@ -36,10 +39,11 @@ public class EnumDeclarationTreeImpl extends ClassDeclarationTreeImpl implements
 
   private final List<EnumCaseTree> cases;
 
-  public EnumDeclarationTreeImpl(SyntaxToken enumToken, NameIdentifierTree name, SyntaxToken openCurlyBraceToken,
-    List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken) {
+  public EnumDeclarationTreeImpl(SyntaxToken enumToken, NameIdentifierTree name, @Nullable InternalSyntaxToken implementsToken,
+    SeparatedListImpl<NamespaceNameTree> superInterfaces,  SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members,
+    SyntaxToken closeCurlyBraceToken) {
     super(Kind.ENUM_DECLARATION, Collections.emptyList(), null, enumToken, name, null, null,
-      null, new SeparatedListImpl<>(Collections.emptyList(), Collections.emptyList()), openCurlyBraceToken, members, closeCurlyBraceToken);
+      implementsToken, superInterfaces, openCurlyBraceToken, members, closeCurlyBraceToken);
     this.cases = members.stream().filter(m -> m.is(Kind.ENUM_CASE)).map(EnumCaseTree.class::cast).collect(Collectors.toList());
   }
 
@@ -50,7 +54,9 @@ public class EnumDeclarationTreeImpl extends ClassDeclarationTreeImpl implements
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return IteratorUtils.concat(IteratorUtils.iteratorOf(classToken(), name(), openCurlyBraceToken()),
+    return IteratorUtils.concat(IteratorUtils.iteratorOf(classToken(), name(), implementsToken()),
+      superInterfaces().elementsAndSeparators(),
+      IteratorUtils.iteratorOf(openCurlyBraceToken()),
       members().iterator(),
       IteratorUtils.iteratorOf(closeCurlyBraceToken()));
   }

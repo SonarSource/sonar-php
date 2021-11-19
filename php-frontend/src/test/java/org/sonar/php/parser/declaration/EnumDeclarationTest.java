@@ -34,9 +34,12 @@ public class EnumDeclarationTest {
       .matches("enum A {\n case A;\n case B; }")
       .matches("enum A { function foo() {} }")
       .matches("enum A { const CONSTANT = 'foo'; }")
+      .matches("enum A implements B {}")
+      .matches("enum A implements B,C {}")
       .notMatches("enum A {")
       .notMatches("enum A { case A}")
       .notMatches("enum A { public $property; }")
+      .notMatches("enum A extends B { }")
     ;
   }
 }
