@@ -341,6 +341,7 @@ public class PHPGrammar {
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(CASE),
         NAME_IDENTIFIER(),
+        b.optional(f.newTuple(b.token(EQU), STATIC_SCALAR())),
         EOS()));
   }
 

@@ -19,8 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.HasAttributes;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -29,6 +31,12 @@ public interface EnumCaseTree extends ClassMemberTree, HasAttributes {
   SyntaxToken caseToken();
 
   NameIdentifierTree name();
+
+  @Nullable
+  SyntaxToken equalToken();
+
+  @Nullable
+  ExpressionTree value();
 
   SyntaxToken eosToken();
 }

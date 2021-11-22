@@ -21,10 +21,12 @@ package org.sonar.php.tree.impl.statement;
 
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
@@ -35,12 +37,17 @@ public class EnumCaseTreeImpl extends PHPTree implements EnumCaseTree {
   private final List<AttributeGroupTree> attributeGroupTrees;
   private final SyntaxToken caseToken;
   private final NameIdentifierTree name;
+  private final SyntaxToken equalToken;
+  private final ExpressionTree value;
   private final SyntaxToken eosToken;
 
-  public EnumCaseTreeImpl(List<AttributeGroupTree> attributeGroups, SyntaxToken caseToken, NameIdentifierTree name, SyntaxToken eosToken) {
+  public EnumCaseTreeImpl(List<AttributeGroupTree> attributeGroups, SyntaxToken caseToken, NameIdentifierTree name,
+    @Nullable SyntaxToken equalToken, @Nullable ExpressionTree value, SyntaxToken eosToken) {
     this.attributeGroupTrees = attributeGroups;
     this.caseToken = caseToken;
     this.name = name;
+    this.equalToken = equalToken;
+    this.value = value;
     this.eosToken = eosToken;
   }
 
@@ -59,6 +66,18 @@ public class EnumCaseTreeImpl extends PHPTree implements EnumCaseTree {
     return name;
   }
 
+  @Nullable
+  @Override
+  public SyntaxToken equalToken() {
+    return equalToken;
+  }
+
+  @Nullable
+  @Override
+  public ExpressionTree value() {
+    return value;
+  }
+
   @Override
   public SyntaxToken eosToken() {
     return eosToken;
@@ -66,7 +85,7 @@ public class EnumCaseTreeImpl extends PHPTree implements EnumCaseTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return IteratorUtils.concat(attributeGroupTrees.iterator(), IteratorUtils.iteratorOf(caseToken, name, eosToken));
+    return IteratorUtils.concat(attributeGroupTrees.iterator(), IteratorUtils.iteratorOf(caseToken, name, equalToken, value, eosToken));
   }
 
   @Override

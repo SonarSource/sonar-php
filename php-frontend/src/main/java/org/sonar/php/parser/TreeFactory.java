@@ -670,9 +670,11 @@ public class TreeFactory {
       members.or(Collections.emptyList()), closeCurlyBraceToken);
   }
 
-  public EnumCaseTree enumCase(Optional<List<AttributeGroupTree>> attributes, SyntaxToken caseToken,
-    NameIdentifierTree name, SyntaxToken eosToken) {
-    return new EnumCaseTreeImpl(attributes.or(Collections.emptyList()), caseToken, name, eosToken);
+  public EnumCaseTree enumCase(Optional<List<AttributeGroupTree>> attributes, SyntaxToken caseToken, NameIdentifierTree name,
+    Optional<Tuple<InternalSyntaxToken, ExpressionTree>> equalAndValue, SyntaxToken eosToken) {
+    SyntaxToken equalToken = equalAndValue.isPresent() ? equalAndValue.get().first() : null;
+    ExpressionTree value = equalAndValue.isPresent() ? equalAndValue.get().second() : null;
+    return new EnumCaseTreeImpl(attributes.or(Collections.emptyList()), caseToken, name, equalToken, value, eosToken);
   }
 
   /**
