@@ -655,11 +655,19 @@ public class TreeFactory {
     );
   }
 
-  public EnumDeclarationTree enumDeclaration(Optional<List<AttributeGroupTree>> attributes, SyntaxToken enumToken, NameIdentifierTree name,
-    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause, SyntaxToken openCurlyBraceToken,
-    Optional<List<ClassMemberTree>> members, SyntaxToken closeCurlyBraceToken) {
-    return new EnumDeclarationTreeImpl(attributes.or(Collections.emptyList()), enumToken, name, implementsToken(implementsClause),
-      superInterfaces(implementsClause), openCurlyBraceToken, members.or(Collections.emptyList()), closeCurlyBraceToken);
+  public EnumDeclarationTree enumDeclaration(Optional<List<AttributeGroupTree>> attributes,
+    SyntaxToken enumToken,
+    NameIdentifierTree name,
+    Optional<Tuple<InternalSyntaxToken, TypeTree>> colonAndType,
+    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
+    SyntaxToken openCurlyBraceToken,
+    Optional<List<ClassMemberTree>> members,
+    SyntaxToken closeCurlyBraceToken) {
+    SyntaxToken typeColonToken = colonAndType.isPresent() ? colonAndType.get().first() : null;
+    TypeTree backingType = colonAndType.isPresent() ? colonAndType.get().second() : null;
+    return new EnumDeclarationTreeImpl(attributes.or(Collections.emptyList()), enumToken, name, typeColonToken, backingType,
+      implementsToken(implementsClause), superInterfaces(implementsClause), openCurlyBraceToken,
+      members.or(Collections.emptyList()), closeCurlyBraceToken);
   }
 
   public EnumCaseTree enumCase(Optional<List<AttributeGroupTree>> attributes, SyntaxToken caseToken,

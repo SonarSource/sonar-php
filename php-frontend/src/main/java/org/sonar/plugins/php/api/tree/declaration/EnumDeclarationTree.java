@@ -36,6 +36,12 @@ public interface EnumDeclarationTree extends ClassDeclarationTree {
   NameIdentifierTree name();
 
   @Nullable
+  SyntaxToken typeColonToken();
+
+  @Nullable
+  TypeTree backingType();
+
+  @Nullable
   @Override
   SyntaxToken implementsToken();
 

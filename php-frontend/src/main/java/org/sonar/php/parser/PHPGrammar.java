@@ -316,6 +316,7 @@ public class PHPGrammar {
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(ENUM),
         NAME_IDENTIFIER(),
+        b.optional(f.newTuple(b.token(COLON), TYPE())),
         b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(ENUM_MEMBER()),
