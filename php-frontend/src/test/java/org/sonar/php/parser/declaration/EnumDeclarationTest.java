@@ -37,10 +37,12 @@ public class EnumDeclarationTest {
       .matches("enum A implements B {}")
       .matches("enum A implements B,C {}")
       .matches("#[A1(1)] enum A {}")
+      .matches("enum A: string {}")
       .notMatches("enum A {")
       .notMatches("enum A { case A}")
       .notMatches("enum A { public $property; }")
       .notMatches("enum A extends B { }")
+      .notMatches("enum A: { }")
     ;
   }
 }

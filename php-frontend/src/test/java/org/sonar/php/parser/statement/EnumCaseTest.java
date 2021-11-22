@@ -31,6 +31,9 @@ public class EnumCaseTest {
     assertThat(PHPLexicalGrammar.ENUM_CASE)
       .matches("case A;")
       .matches("#[A1(1)] case A;")
+      .matches("case A = 'A';")
+      .matches("case A = 'A' . 'B';")
+      .matches("case A = MyClass::CONSTANT;")
       .notMatches("case A")
     ;
   }
