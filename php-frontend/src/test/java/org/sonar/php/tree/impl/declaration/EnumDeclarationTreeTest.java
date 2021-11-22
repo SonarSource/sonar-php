@@ -36,6 +36,8 @@ public class EnumDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.childrenIterator()).hasSize(7);
     assertThat(tree.classToken()).hasToString("enum");
     assertThat(tree.name()).hasToString("A");
+    assertThat(tree.typeColonToken()).isNull();
+    assertThat(tree.backingType()).isNull();
     assertThat(tree.openCurlyBraceToken()).hasToString("{");
     assertThat(tree.cases()).isEmpty();
     assertThat(tree.members()).isEmpty();
