@@ -32,6 +32,9 @@ public class EnumCaseTest {
       .matches("case A;")
       .matches("#[A1(1)] case A;")
       .matches("case Enum;")
+      .matches("case A = 'A';")
+      .matches("case A = 'A' . 'B';")
+      .matches("case A = MyClass::CONSTANT;")
       .notMatches("case A")
     ;
   }
