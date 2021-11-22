@@ -27,6 +27,7 @@ import org.sonar.plugins.php.api.tree.Tree;
  *   <li>{@link Kind#METHOD_DECLARATION Method declaration}
  *   <li>{@link Kind#CLASS_PROPERTY_DECLARATION Class variable declaration}
  *   <li>{@link Kind#USE_TRAIT_DECLARATION Trait use statement}
+ *   <li>{@link Kind#ENUM_CASE Enum case for enum declarations}
  * <ul/>
  */
 public interface ClassMemberTree extends Tree {

@@ -42,6 +42,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   ENUM_DECLARATION,
 
   CLASS_MEMBER,
+  ENUM_MEMBER,
 
   METHOD_DECLARATION,
   CLASS_VARIABLE_DECLARATION,

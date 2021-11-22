@@ -20,20 +20,47 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import java.util.List;
+import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
-import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
-public interface EnumDeclarationTree extends StatementTree {
+public interface EnumDeclarationTree extends ClassDeclarationTree {
 
-  SyntaxToken enumToken();
+  @Nullable
+  @Override
+  SyntaxToken modifierToken();
 
+  @Override
   NameIdentifierTree name();
 
+  @Nullable
+  SyntaxToken typeColonToken();
+
+  @Nullable
+  TypeTree backingType();
+
+  @Nullable
+  @Override
+  SyntaxToken implementsToken();
+
+  @Override
+  SeparatedList<NamespaceNameTree> superInterfaces();
+
+  @Override
   SyntaxToken openCurlyBraceToken();
 
+  @Override
+  List<ClassMemberTree> members();
+
+  /**
+   * The cases of the enumeration.
+   * These are also part of {@link EnumDeclarationTree#members()}
+   */
   List<EnumCaseTree> cases();
 
+  @Override
   SyntaxToken closeCurlyBraceToken();
+
 }
