@@ -24,15 +24,19 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ClassMemberTest {
+public class ClassVariableModifierTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.CLASS_MEMBER)
-      .matches("var $a;")
-      .matches("const A;")
-      .matches("private function f() {}")
-      .matches("public readonly string $prop;")
-    ;
+    assertThat(PHPLexicalGrammar.CLASS_VARIABLE_MODIFIER)
+      .matches("public")
+      .matches("protected")
+      .matches("private")
+      .matches("static")
+      .matches("abstract")
+      .matches("readonly")
+
+      .notMatches("const");
+
   }
 }

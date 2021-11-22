@@ -104,7 +104,7 @@ public class KeywordTest {
 
   @Test
   public void getKeywordValues() {
-    Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(70);
+    Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(71);
   }
 
 }

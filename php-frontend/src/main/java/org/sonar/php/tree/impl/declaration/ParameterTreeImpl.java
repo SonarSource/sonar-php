@@ -42,6 +42,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   private final List<AttributeGroupTree> attributeGroups;
   private final SyntaxToken visibility;
+  private final SyntaxToken readonly;
   private final DeclaredTypeTree type;
   private final InternalSyntaxToken referenceToken;
   private final InternalSyntaxToken ellipsisToken;
@@ -52,6 +53,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   public ParameterTreeImpl(
     List<AttributeGroupTree> attributeGroups,
     @Nullable SyntaxToken visibility,
+    @Nullable SyntaxToken readonly,
     @Nullable DeclaredTypeTree type,
     @Nullable InternalSyntaxToken referenceToken,
     @Nullable InternalSyntaxToken ellipsisToken,
@@ -61,6 +63,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
    ) {
     this.attributeGroups = attributeGroups;
     this.visibility = visibility;
+    this.readonly = readonly;
     this.type = type;
     this.referenceToken = referenceToken;
     this.ellipsisToken = ellipsisToken;
@@ -129,6 +132,17 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   @Override
   public ExpressionTree initValue() {
     return initValue;
+  }
+
+  @Nullable
+  @Override
+  public SyntaxToken readonlyToken() {
+    return null;
+  }
+
+  @Override
+  public boolean isReadonly() {
+    return readonly != null;
   }
 
   @Override

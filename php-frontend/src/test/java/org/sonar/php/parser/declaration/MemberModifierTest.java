@@ -36,7 +36,8 @@ public class MemberModifierTest {
     .matches("abstract")
     .matches("final")
 
-    .notMatches("const");
+    .notMatches("const")
+    .notMatches("readonly");
 
   }
 }

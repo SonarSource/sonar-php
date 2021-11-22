@@ -44,6 +44,7 @@ public class ModifiersOrderCheck extends PHPSubscriptionCheck {
     PHPKeyword.PUBLIC.getValue(),
     PHPKeyword.PROTECTED.getValue(),
     PHPKeyword.PRIVATE.getValue(),
+    PHPKeyword.READONLY.getValue(),
     PHPKeyword.STATIC.getValue()};
 
   @Override

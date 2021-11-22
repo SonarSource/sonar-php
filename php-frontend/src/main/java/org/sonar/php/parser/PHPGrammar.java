@@ -367,7 +367,7 @@ public class PHPGrammar {
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.firstOf(
           f.singleToken(b.token(PHPKeyword.VAR)),
-          b.oneOrMore(MEMBER_MODIFIER())),
+          b.oneOrMore(CLASS_VARIABLE_MODIFIER())),
         b.optional(DECLARED_TYPE()),
         VARIABLE_DECLARATION(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), VARIABLE_DECLARATION())),
@@ -380,6 +380,13 @@ public class PHPGrammar {
         b.token(PHPKeyword.PUBLIC),
         b.token(PHPKeyword.PROTECTED),
         b.token(PHPKeyword.PRIVATE)));
+  }
+
+  public SyntaxToken CLASS_VARIABLE_MODIFIER() {
+    return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.CLASS_VARIABLE_MODIFIER).is(
+      b.firstOf(
+        MEMBER_MODIFIER(),
+        b.token(PHPKeyword.READONLY)));
   }
 
   public SyntaxToken MEMBER_MODIFIER() {
@@ -445,6 +452,7 @@ public class PHPGrammar {
       f.parameter(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(VISIBILITY_MODIFIER()),
+        b.optional(b.token(PHPKeyword.READONLY)),
         b.optional(DECLARED_TYPE()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELLIPSIS)),

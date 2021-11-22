@@ -79,6 +79,7 @@ public enum PHPKeyword implements GrammarRuleKey {
   PRIVATE("private"),
   PROTECTED("protected"),
   PUBLIC("public"),
+  READONLY("readonly"),
   REQUIRE_ONCE("require_once"),
   REQUIRE("require"),
   RETURN("return"),
