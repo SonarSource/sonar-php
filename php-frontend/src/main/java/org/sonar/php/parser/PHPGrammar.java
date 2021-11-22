@@ -313,23 +313,34 @@ public class PHPGrammar {
   public EnumDeclarationTree ENUM_DECLARATION() {
     return b.<EnumDeclarationTree>nonterminal(PHPLexicalGrammar.ENUM_DECLARATION).is(
       f.enumDeclaration(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(ENUM),
         NAME_IDENTIFIER(),
+        b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
-        b.zeroOrMore(ENUM_CASE()),
-        b.token(RCURLYBRACE)
-      )
-    );
+        b.zeroOrMore(ENUM_MEMBER()),
+        b.token(RCURLYBRACE)));
+  }
+
+  /**
+   *  In contrast to class declarations, enums cannot contain properties. They do allow enum cases as an addition.
+   */
+  public ClassMemberTree ENUM_MEMBER() {
+    return b.<ClassMemberTree>nonterminal(PHPLexicalGrammar.ENUM_MEMBER).is(
+      b.firstOf(
+        METHOD_DECLARATION(),
+        CLASS_CONSTANT_DECLARATION(),
+        USE_TRAIT_DECLARATION(),
+        ENUM_CASE()));
   }
 
   public EnumCaseTree ENUM_CASE() {
     return b.<EnumCaseTree>nonterminal(PHPLexicalGrammar.ENUM_CASE).is(
       f.enumCase(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(CASE),
         NAME_IDENTIFIER(),
-        EOS()
-      )
-    );
+        EOS()));
   }
 
   public ClassMemberTree CLASS_MEMBER() {

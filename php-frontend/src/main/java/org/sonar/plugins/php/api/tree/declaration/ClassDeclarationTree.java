@@ -56,8 +56,8 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
   SyntaxToken modifierToken();
 
   /**
-   * Either {@link PHPKeyword#CLASS class}, {@link PHPKeyword#TRAIT trait}
-   * or {@link PHPKeyword#INTERFACE interface}
+   * Either {@link PHPKeyword#CLASS class}, {@link PHPKeyword#TRAIT trait},
+   *  {@link PHPKeyword#INTERFACE interface} or {@link PHPKeyword#ENUM enum}
    */
   @Override
   SyntaxToken classToken();
