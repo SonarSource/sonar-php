@@ -231,6 +231,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   BACKTICK,
   REGULAR_STRING_LITERAL,
   VARIABLE_VARIABLE_DOLLAR,
+  ENUM,
 
   ISSET,
   EMPTY,
@@ -325,6 +326,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(METHOD_CONSTANT).is(word(b, "__METHOD__")).skip();
     b.rule(NAMESPACE_CONSTANT).is(word(b, "__NAMESPACE__")).skip();
     b.rule(TRAIT_CONSTANT).is(word(b, "__TRAIT__")).skip();
+    b.rule(ENUM).is(word(b, "enum")).skip();
 
     b.rule(BOOLEAN_LITERAL).is(b.firstOf(word(b, "TRUE"), word(b, "FALSE")));
 

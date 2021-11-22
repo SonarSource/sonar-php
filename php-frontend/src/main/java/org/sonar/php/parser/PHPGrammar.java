@@ -126,7 +126,6 @@ import static org.sonar.php.api.PHPKeyword.CASE;
 import static org.sonar.php.api.PHPKeyword.CLASS;
 import static org.sonar.php.api.PHPKeyword.DIE;
 import static org.sonar.php.api.PHPKeyword.ECHO;
-import static org.sonar.php.api.PHPKeyword.ENUM;
 import static org.sonar.php.api.PHPKeyword.EXIT;
 import static org.sonar.php.api.PHPKeyword.EXTENDS;
 import static org.sonar.php.api.PHPKeyword.FINAL;
@@ -314,7 +313,7 @@ public class PHPGrammar {
     return b.<EnumDeclarationTree>nonterminal(PHPLexicalGrammar.ENUM_DECLARATION).is(
       f.enumDeclaration(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
-        b.token(ENUM),
+        b.token(PHPLexicalGrammar.ENUM),
         NAME_IDENTIFIER(),
         b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
