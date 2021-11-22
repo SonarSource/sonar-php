@@ -33,7 +33,7 @@ public class EnumDeclarationTreeTest extends PHPTreeModelTest {
   public void simple_enum_with_no_cases() {
     EnumDeclarationTreeImpl tree = parse("enum A {}", PHPLexicalGrammar.ENUM_DECLARATION);
     assertThat(tree.is(Tree.Kind.ENUM_DECLARATION)).isTrue();
-    assertThat(tree.childrenIterator()).hasSize(5);
+    assertThat(tree.childrenIterator()).hasSize(7);
     assertThat(tree.classToken()).hasToString("enum");
     assertThat(tree.name()).hasToString("A");
     assertThat(tree.openCurlyBraceToken()).hasToString("{");
@@ -79,5 +79,12 @@ public class EnumDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes().get(0).name()).hasToString("A1");
+  }
+
+  @Test
+  public void enum_with_backing_type() {
+    EnumDeclarationTree tree = parse("enum A: string {}", PHPLexicalGrammar.ENUM_DECLARATION);
+    assertThat(tree.typeColonToken()).hasToString(":");
+    assertThat(tree.backingType()).hasToString("string");
   }
 }
