@@ -32,9 +32,11 @@ public class EnumCaseTreeTest extends PHPTreeModelTest {
   public void simple_case() {
     EnumCaseTreeImpl tree = parse("case A;", PHPLexicalGrammar.ENUM_CASE);
     assertThat(tree.is(Tree.Kind.ENUM_CASE)).isTrue();
-    assertThat(tree.childrenIterator()).hasSize(3);
+    assertThat(tree.childrenIterator()).hasSize(5);
     assertThat(tree.caseToken()).hasToString("case");
     assertThat(tree.name()).hasToString("A");
+    assertThat(tree.equalToken()).isNull();
+    assertThat(tree.value()).isNull();
     assertThat(tree.eosToken()).hasToString(";");
   }
 
@@ -44,5 +46,12 @@ public class EnumCaseTreeTest extends PHPTreeModelTest {
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes().get(0).name()).hasToString("A1");
+  }
+
+  @Test
+  public void enum_case_with_value() {
+    EnumCaseTreeImpl tree = parse("case A = 'A';", PHPLexicalGrammar.ENUM_CASE);
+    assertThat(tree.equalToken()).hasToString("=");
+    assertThat(tree.value().is(Tree.Kind.REGULAR_STRING_LITERAL)).isTrue();
   }
 }
