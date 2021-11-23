@@ -42,6 +42,11 @@ public class NumericLiteralTest {
       .matches("299_792_458")
       .matches("0xCAFE_F00D")
       .matches("0b0101_1111")
-      .matches("6.674_083e-11");
+      .matches("016")
+      .matches("0o16")
+      .matches("0O16")
+
+      .notMatches("string")
+      .notMatches("o1234");
   }
 }

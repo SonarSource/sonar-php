@@ -125,7 +125,7 @@ public class LexicalConstant {
    */
   private static final String DECIMAL = "[1-9][0-9]*+(?:_[0-9]++)*+";
   private static final String HEXADECIMAL = "0[xX][0-9a-fA-F]++(?:_[0-9a-fA-F]++)*+";
-  private static final String OCTAL = "0[0-7]*+(?:_[0-7]++)*+";
+  private static final String OCTAL = "0[oO]?[0-7]*+(?:_[0-7]++)*+";
   private static final String BINARY = "0[bB][01]++(?:_[01]++)*+";
   private static final String INTEGER_LITERAL = HEXADECIMAL
     + "|" + BINARY
