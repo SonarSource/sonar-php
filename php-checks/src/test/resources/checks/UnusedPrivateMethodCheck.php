@@ -114,3 +114,17 @@ class ClassContainingAnonymousClass {
   private function bar() {
   }
 }
+
+// Enums
+enum SimpleEnum {
+  private function unused() {} // Noncompliant
+  // For enums private and protected are equivalent as inheritance is not allowed.
+  protected function unusedProtected() {} // Noncompliant
+
+  public function publicFunction() {$x = "appearsInAString";}
+  private function appearsInAString() {} // Compliant
+}
+
+trait SomeTrait {
+  private function privateTraitFunction() {}
+}

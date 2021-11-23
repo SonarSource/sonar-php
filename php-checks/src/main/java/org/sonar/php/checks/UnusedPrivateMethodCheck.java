@@ -36,20 +36,19 @@ import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = UnusedPrivateMethodCheck.KEY)
+@Rule(key = "S1144")
 public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1144";
   private static final String MESSAGE = "Remove this unused private \"%s\" method.";
 
-  private List<String> stringLiterals = new ArrayList<>();
+  private final List<String> stringLiterals = new ArrayList<>();
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     stringLiterals.clear();
     super.visitClassDeclaration(tree);
 
-    if (tree.is(Tree.Kind.CLASS_DECLARATION)) {
+    if (tree.is(Tree.Kind.CLASS_DECLARATION, Tree.Kind.ENUM_DECLARATION)) {
       checkClass(tree);
     }
   }
@@ -58,7 +57,9 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
     Scope classScope = context().symbolTable().getScopeFor(tree);
     for (Symbol methodSymbol : classScope.getSymbols(Kind.FUNCTION)) {
 
-      boolean ruleConditions = methodSymbol.hasModifier("private") && methodSymbol.usages().isEmpty();
+      // For enums private and protected are equivalent as inheritance is not allowed.
+      boolean ruleConditions = (methodSymbol.hasModifier("private") || isProtectedEnumMethod(tree, methodSymbol)) &&
+        methodSymbol.usages().isEmpty();
 
       if (ruleConditions
         && !isConstructor(methodSymbol.declaration(), tree)
@@ -84,6 +85,9 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
     }
   }
 
+  private static boolean isProtectedEnumMethod(ClassTree tree, Symbol methodSymbol) {
+    return tree.is(Tree.Kind.ENUM_DECLARATION) && methodSymbol.hasModifier("protected");
+  }
 
   private boolean isUsedInStringLiteral(Symbol methodSymbol) {
     for (String stringLiteral : stringLiterals) {
