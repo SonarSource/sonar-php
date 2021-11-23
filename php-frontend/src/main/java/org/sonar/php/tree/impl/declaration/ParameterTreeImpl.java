@@ -134,6 +134,12 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     return initValue;
   }
 
+  @Nullable
+  @Override
+  public SyntaxToken readonlyToken() {
+    return readonly;
+  }
+
   @Override
   public Kind getKind() {
     return KIND;
@@ -143,7 +149,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
-      IteratorUtils.iteratorOf(visibility, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
+      IteratorUtils.iteratorOf(visibility, readonly, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
     );
   }
 
