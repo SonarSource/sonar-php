@@ -73,7 +73,7 @@ public interface ParameterTree extends Tree, HasAttributes {
     return readonlyToken() != null;
   }
 
-  default boolean initProperty() {
+  default boolean isPropertyPromotion() {
     return visibility() != null;
   }
 
