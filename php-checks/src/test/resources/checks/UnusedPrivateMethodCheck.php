@@ -124,3 +124,7 @@ enum SimpleEnum {
   public function publicFunction() {$x = "appearsInAString";}
   private function appearsInAString() {} // Compliant
 }
+
+trait SomeTrait {
+  private function privateTraitFunction() {}
+}

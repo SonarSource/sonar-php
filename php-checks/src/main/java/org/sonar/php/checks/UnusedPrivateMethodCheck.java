@@ -85,7 +85,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
     }
   }
 
-  private boolean isProtectedEnumMethod(ClassTree tree, Symbol methodSymbol) {
+  private static boolean isProtectedEnumMethod(ClassTree tree, Symbol methodSymbol) {
     return tree.is(Tree.Kind.ENUM_DECLARATION) && methodSymbol.hasModifier("protected");
   }
 
