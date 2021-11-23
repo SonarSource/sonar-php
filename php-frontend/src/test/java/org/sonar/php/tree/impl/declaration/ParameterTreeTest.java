@@ -39,6 +39,9 @@ public class ParameterTreeTest extends PHPTreeModelTest {
     assertThat(tree.variableIdentifier().variableExpression().text()).isEqualTo("$param1");
     assertThat(tree.equalToken()).isNull();
     assertThat(tree.initValue()).isNull();
+    assertThat(tree.readonlyToken()).isNull();
+    assertThat(tree.isReadonly()).isFalse();
+    assertThat(tree.isPropertyPromotion()).isFalse();
   }
 
   @Test
@@ -56,5 +59,25 @@ public class ParameterTreeTest extends PHPTreeModelTest {
   public void with_attributes() throws Exception {
     ParameterTree tree = parse("#[A1(5)] #[A2(5)] int $a", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.attributeGroups()).hasSize(2);
+  }
+
+  @Test
+  public void init_property() throws Exception {
+    ParameterTree tree = parse("private int $a", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.isPropertyPromotion()).isTrue();
+    assertThat(tree.visibility().text()).isEqualTo("private");
+    assertThat(tree.declaredType()).isNotNull();
+    assertThat(tree.readonlyToken()).isNull();
+    assertThat(tree.isReadonly()).isFalse();
+  }
+
+  @Test
+  public void init_readonly_property() throws Exception {
+    ParameterTree tree = parse("private readonly int $a", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.isPropertyPromotion()).isTrue();
+    assertThat(tree.visibility().text()).isEqualTo("private");
+    assertThat(tree.declaredType()).isNotNull();
+    assertThat(tree.readonlyToken()).isNotNull();
+    assertThat(tree.isReadonly()).isTrue();
   }
 }

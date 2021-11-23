@@ -398,6 +398,7 @@ public class PHPGrammar {
     return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.MEMBER_MODIFIER).is(
       b.firstOf(
         VISIBILITY_MODIFIER(),
+        b.token(PHPKeyword.READONLY),
         b.token(PHPKeyword.STATIC),
         b.token(PHPKeyword.ABSTRACT),
         b.token(PHPKeyword.FINAL)));
@@ -457,6 +458,7 @@ public class PHPGrammar {
       f.parameter(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(VISIBILITY_MODIFIER()),
+        b.optional(b.token(PHPKeyword.READONLY)),
         b.optional(DECLARED_TYPE()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELLIPSIS)),

@@ -85,6 +85,7 @@ public class KeywordTest {
       .matches("private")
       .matches("protected")
       .matches("public")
+      .matches("readonly")
       .matches("require")
       .matches("require_once")
       .matches("return")
@@ -103,7 +104,7 @@ public class KeywordTest {
 
   @Test
   public void getKeywordValues() {
-    Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(69);
+    Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(70);
   }
 
 }

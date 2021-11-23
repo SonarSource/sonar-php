@@ -42,6 +42,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   private final List<AttributeGroupTree> attributeGroups;
   private final SyntaxToken visibility;
+  private final SyntaxToken readonlyToken;
   private final DeclaredTypeTree type;
   private final InternalSyntaxToken referenceToken;
   private final InternalSyntaxToken ellipsisToken;
@@ -52,6 +53,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   public ParameterTreeImpl(
     List<AttributeGroupTree> attributeGroups,
     @Nullable SyntaxToken visibility,
+    @Nullable SyntaxToken readonlyToken,
     @Nullable DeclaredTypeTree type,
     @Nullable InternalSyntaxToken referenceToken,
     @Nullable InternalSyntaxToken ellipsisToken,
@@ -61,6 +63,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
    ) {
     this.attributeGroups = attributeGroups;
     this.visibility = visibility;
+    this.readonlyToken = readonlyToken;
     this.type = type;
     this.referenceToken = referenceToken;
     this.ellipsisToken = ellipsisToken;
@@ -131,6 +134,12 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     return initValue;
   }
 
+  @Nullable
+  @Override
+  public SyntaxToken readonlyToken() {
+    return readonlyToken;
+  }
+
   @Override
   public Kind getKind() {
     return KIND;
@@ -140,7 +149,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
-      IteratorUtils.iteratorOf(visibility, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
+      IteratorUtils.iteratorOf(visibility, readonlyToken, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
     );
   }
 

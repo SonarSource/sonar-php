@@ -51,6 +51,15 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
+  public void readonly_variable_declaration() {
+    ClassPropertyDeclarationTree tree = parse("public readonly $prop;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    assertThat(tree.modifierTokens()).hasSize(2);
+    assertThat(tree.hasModifiers("public", "readonly")).isTrue();
+    assertThat(tree.hasModifiers("readonly")).isTrue();
+  }
+
+  @Test
   public void constant_declaration() throws Exception {
     ClassPropertyDeclarationTree tree = parse("const A, B;", PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION);
     assertThat(tree.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)).isTrue();

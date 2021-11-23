@@ -66,4 +66,15 @@ public interface ParameterTree extends Tree, HasAttributes {
   @Nullable
   ExpressionTree initValue();
 
+  @Nullable
+  SyntaxToken readonlyToken();
+
+  default boolean isReadonly() {
+    return readonlyToken() != null;
+  }
+
+  default boolean isPropertyPromotion() {
+    return visibility() != null;
+  }
+
 }
