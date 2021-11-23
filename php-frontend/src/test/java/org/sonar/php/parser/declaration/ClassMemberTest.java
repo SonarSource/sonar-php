@@ -31,6 +31,8 @@ public class ClassMemberTest {
     assertThat(PHPLexicalGrammar.CLASS_MEMBER)
       .matches("var $a;")
       .matches("const A;")
-      .matches("private function f() {}");
+      .matches("private function f() {}")
+      .matches("public readonly string $prop;")
+    ;
   }
 }

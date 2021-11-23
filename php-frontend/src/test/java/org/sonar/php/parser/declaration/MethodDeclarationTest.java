@@ -44,6 +44,7 @@ public class MethodDeclarationTest {
       .matches("public function __construct(private $prop) {}")
       .matches("public function __construct(public $prop) {}")
       .matches("public function __construct(protected $prop) {}")
+      .matches("public function __construct(protected readonly $prop) {}")
       .matches("public function f($prop) {}")
       .matches("public function f($prop = null) {}")
       .matches("public function f($prop = new Foo()) {}")
