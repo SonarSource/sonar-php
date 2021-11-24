@@ -123,14 +123,14 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(firstTextRange).isNull();
 
     assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).isEqualTo("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. No issues imported related to file(s): " +
-      "phpstan/file10.php;phpstan/file11.php;phpstan/file12.php;phpstan/file13.php;phpstan/file14.php;...");
+    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).isEqualTo("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. " +
+      "No issues imported related to file(s): phpstan/notExistingFile1.php;phpstan/notExistingFile10.php;phpstan/notExistingFile11.php;phpstan/notExistingFile12.php;phpstan/notExistingFile13.php;...");
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.DEBUG)))
       .isEqualTo("Missing information for filePath:'', message:'Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.'");
 
     verify(analysisWarnings, times(1))
-      .addWarning("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. No issues imported related to file(s): " +
-        "phpstan/file10.php;phpstan/file11.php;phpstan/file12.php;phpstan/file13.php;phpstan/file14.php;...");
+      .addWarning("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. " +
+        "No issues imported related to file(s): phpstan/notExistingFile1.php;phpstan/notExistingFile10.php;phpstan/notExistingFile11.php;phpstan/notExistingFile12.php;phpstan/notExistingFile13.php;...");
   }
 
   @Test
