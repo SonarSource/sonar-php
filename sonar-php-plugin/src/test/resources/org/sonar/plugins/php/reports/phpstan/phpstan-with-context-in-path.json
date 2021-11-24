@@ -1,0 +1,19 @@
+{
+  "totals": {
+    "errors": 0,
+    "file_errors": 1
+  },
+  "files": {
+    "phpstan/file3.php (in context of class Bar)": {
+      "errors": 1,
+      "messages": [
+        {
+          "message": "Call to an undefined method Bar::doFoo().",
+          "line": 6,
+          "ignorable": true
+        }
+      ]
+    }
+  },
+  "errors": []
+}

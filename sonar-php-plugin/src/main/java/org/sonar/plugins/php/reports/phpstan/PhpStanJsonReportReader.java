@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.sonar.plugins.php.reports.JsonReportReader;
 import org.sonarsource.analyzer.commons.internal.json.simple.JSONArray;
@@ -34,6 +35,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class PhpStanJsonReportReader extends JsonReportReader {
 
   private final Consumer<Issue> consumer;
+  private static final Pattern POSSIBLE_PATH_CONTEXT_PATTERN = Pattern.compile("\\s\\(in context of.*$");
 
   private PhpStanJsonReportReader(Consumer<Issue> consumer) {
     this.consumer = consumer;
@@ -47,7 +49,7 @@ public class PhpStanJsonReportReader extends JsonReportReader {
     JSONObject rootObject = (JSONObject) jsonParser.parse(new InputStreamReader(in, UTF_8));
     JSONObject files = (JSONObject) rootObject.get("files");
     if (files != null) {
-      files.forEach((file, records) -> onFile((String) file, (JSONObject) records));
+      files.forEach((file, records) -> onFile(cleanFilePath((String) file), (JSONObject) records));
     }
   }
 
@@ -64,5 +66,14 @@ public class PhpStanJsonReportReader extends JsonReportReader {
     issue.startLine = toInteger(message.get("line"));
     issue.message = (String) message.get("message");
     consumer.accept(issue);
+  }
+
+  /**
+   * The key containing the file path might contain additional context information when issues are related to traits. Example:
+   * <pre>phpstan/file3.php (in context of class Bar)</pre>. We do remove this additional information here.
+   * See SONARPHP-1262
+   */
+  private static String cleanFilePath(String file) {
+    return POSSIBLE_PATH_CONTEXT_PATTERN.matcher(file).replaceAll("");
   }
 }
