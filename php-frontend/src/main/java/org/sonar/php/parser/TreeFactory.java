@@ -70,6 +70,7 @@ import org.sonar.php.tree.impl.expression.ArrowFunctionExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentByReferenceTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.BinaryExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.CallableConvertTreeImpl;
 import org.sonar.php.tree.impl.expression.CastExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
@@ -169,6 +170,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
@@ -1485,6 +1487,10 @@ public class TreeFactory {
     return new FunctionCallTreeImpl(openParenthesis, arguments, closeParenthesis);
   }
 
+  public CallableConvertTree callableConvert(InternalSyntaxToken openParenthesis, InternalSyntaxToken ellipsisToken, InternalSyntaxToken closeParenthesis) {
+    return new CallableConvertTreeImpl(openParenthesis, ellipsisToken, closeParenthesis);
+  }
+
   public MemberAccessTree classMemberAccess(InternalSyntaxToken token, Tree member) {
     return new MemberAccessTreeImpl(Kind.CLASS_MEMBER_ACCESS, token, member);
   }
@@ -1493,8 +1499,12 @@ public class TreeFactory {
     return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, accessToken, member);
   }
 
-  public ExpressionTree memberExpression(ExpressionTree object, FunctionCallTree call) {
-    return  ((FunctionCallTreeImpl) call).complete(object);
+  public ExpressionTree memberExpression(ExpressionTree object, ExpressionTree call) {
+    if (call.is(Kind.FUNCTION_CALL)) {
+      return ((FunctionCallTreeImpl) call).complete(object);
+    } else {
+      return ((CallableConvertTreeImpl) call).complete(object);
+    }
   }
 
   public ExpressionTree memberExpression(ExpressionTree object, Optional<List<ExpressionTree>> memberAccesses) {
@@ -1503,12 +1513,12 @@ public class TreeFactory {
     for (ExpressionTree memberAccess : optionalList(memberAccesses)) {
       if (memberAccess.is(Kind.OBJECT_MEMBER_ACCESS, Kind.CLASS_MEMBER_ACCESS)) {
         result = ((MemberAccessTreeImpl) memberAccess).complete(result);
-
       } else if (memberAccess.is(Kind.ARRAY_ACCESS)) {
         result = ((ArrayAccessTreeImpl) memberAccess).complete(result);
-
       } else if (memberAccess.is(Kind.FUNCTION_CALL)) {
         result = ((FunctionCallTreeImpl) memberAccess).complete(result);
+      } else if (memberAccess.is(Kind.CALLABLE_CONVERT)) {
+        result = ((CallableConvertTreeImpl) memberAccess).complete(result);
       }
     }
 

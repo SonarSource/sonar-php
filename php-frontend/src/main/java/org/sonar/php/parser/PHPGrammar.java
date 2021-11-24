@@ -59,6 +59,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
@@ -1652,6 +1653,14 @@ public class PHPGrammar {
       ));
   }
 
+  public CallableConvertTree CALLABLE_CONVERT() {
+    return b.<CallableConvertTree>nonterminal(PHPLexicalGrammar.CALLABLE_CONVERT).is(
+      f.callableConvert(
+        b.token(LPARENTHESIS),
+        b.token(ELLIPSIS),
+        b.token(RPARENTHESIS)));
+  }
+
   public ExpressionTree SPECIAL_CALL() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SPECIAL_CALL).is(
       f.memberExpression(
@@ -1659,7 +1668,7 @@ public class PHPGrammar {
           f.nullLiteral(b.token(PHPLexicalGrammar.NULL)),
           ARRAY_INITIALIZER(),
           STRING_LITERAL()),
-        FUNCTION_CALL_ARGUMENT_LIST()
+        b.firstOf(FUNCTION_CALL_ARGUMENT_LIST(), CALLABLE_CONVERT())
       )
     );
   }
@@ -1674,7 +1683,8 @@ public class PHPGrammar {
             CLASS_MEMBER_ACCESS(),
             DIMENSIONAL_OFFSET(),
             ALTERNATIVE_DIMENSIONAL_OFFSET(),
-            FUNCTION_CALL_ARGUMENT_LIST()))
+            FUNCTION_CALL_ARGUMENT_LIST(),
+            CALLABLE_CONVERT()))
       ));
   }
 

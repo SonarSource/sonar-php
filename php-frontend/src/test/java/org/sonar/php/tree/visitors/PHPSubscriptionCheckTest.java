@@ -49,7 +49,7 @@ public class PHPSubscriptionCheckTest {
     testVisitor.analyze(file, tree);
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
-    assertThat(testVisitor.namespaceNameCounter).isEqualTo(6);
+    assertThat(testVisitor.namespaceNameCounter).isEqualTo(7);
     assertThat(testVisitor.varIdentifierCounter).isEqualTo(6);
   }
 
