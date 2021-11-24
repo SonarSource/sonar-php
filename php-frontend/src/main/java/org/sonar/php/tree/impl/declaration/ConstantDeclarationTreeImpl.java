@@ -21,6 +21,8 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.base.Functions;
 import java.util.Iterator;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -34,18 +36,28 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDeclarationTree {
 
   private static final Kind KIND = Kind.CONSTANT_DECLARATION;
+  @Nullable
+  private final SyntaxToken finalToken;
   private final SyntaxToken constToken;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
   private final InternalSyntaxToken eosToken;
 
   public ConstantDeclarationTreeImpl(
-      SyntaxToken constToken,
-      SeparatedListImpl<VariableDeclarationTree> declarations,
-      InternalSyntaxToken eosToken
+    @Nullable SyntaxToken finalToken,
+    SyntaxToken constToken,
+    SeparatedListImpl<VariableDeclarationTree> declarations,
+    InternalSyntaxToken eosToken
   ) {
+    this.finalToken = finalToken;
     this.constToken = constToken;
     this.declarations = declarations;
     this.eosToken = eosToken;
+  }
+
+  @CheckForNull
+  @Override
+  public SyntaxToken finalToken() {
+    return finalToken;
   }
 
   @Override
@@ -71,7 +83,7 @@ public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDecl
   @Override
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
-      IteratorUtils.iteratorOf(constToken),
+      IteratorUtils.iteratorOf(finalToken, constToken),
       declarations.elementsAndSeparators(Functions.identity()),
       IteratorUtils.iteratorOf(eosToken));
   }

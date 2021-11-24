@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -78,17 +78,20 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
 
   public static ClassPropertyDeclarationTree constant(List<AttributeGroupTree> attributes,
                                                       @Nullable SyntaxToken visibility,
+                                                      @Nullable SyntaxToken finalToken,
                                                       SyntaxToken constToken,
                                                       SeparatedListImpl<VariableDeclarationTree> declarations,
                                                       InternalSyntaxToken eosToken) {
 
-    List<SyntaxToken> modifierTokens;
+    List<SyntaxToken> modifierTokens = new ArrayList<>();
     if (visibility != null) {
-      modifierTokens = Arrays.asList(visibility, constToken);
-    } else {
-      modifierTokens = Collections.singletonList(constToken);
+      modifierTokens.add(visibility);
     }
-    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, attributes, modifierTokens, null, declarations, eosToken);
+    if (finalToken != null) {
+      modifierTokens.add(finalToken);
+    }
+    modifierTokens.add(constToken);
+    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, attributes, Collections.unmodifiableList(modifierTokens), null, declarations, eosToken);
   }
 
   @Override
