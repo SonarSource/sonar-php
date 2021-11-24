@@ -25,7 +25,6 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.sonar.api.SonarRuntime;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.api.utils.log.Logger;
@@ -33,8 +32,6 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
-
-import static org.sonar.plugins.php.PHPRulesDefinition.RESOURCE_BASE_PATH;
 
 /**
  * Sonar way profile.
