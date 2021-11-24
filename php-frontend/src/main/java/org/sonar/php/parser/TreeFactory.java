@@ -1930,7 +1930,7 @@ public class TreeFactory {
     return new ExecutionOperatorTreeImpl(literal);
   }
 
-  private SeparatedList<TypeTree> combinedTypes(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
+  private static SeparatedList<TypeTree> combinedTypes(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
     List<TypeTree> types = new ArrayList<>();
     List<SyntaxToken> separators = new ArrayList<>();
 
