@@ -358,6 +358,7 @@ public class PHPGrammar {
       f.classConstantDeclaration(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(VISIBILITY_MODIFIER()),
+        b.optional(b.token(PHPKeyword.FINAL)),
         b.token(PHPKeyword.CONST),
         MEMBER_CONST_DECLARATION(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_CONST_DECLARATION())),
@@ -367,6 +368,7 @@ public class PHPGrammar {
   public ConstantDeclarationTree CONSTANT_DECLARATION() {
     return b.<ConstantDeclarationTree>nonterminal(PHPLexicalGrammar.CONSTANT_DECLARATION).is(
       f.constantDeclaration(
+        b.optional(b.token(PHPKeyword.FINAL)),
         b.token(PHPKeyword.CONST),
         CONST_VAR(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), CONST_VAR())),

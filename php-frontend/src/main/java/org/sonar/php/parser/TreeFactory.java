@@ -427,6 +427,7 @@ public class TreeFactory {
   public ClassPropertyDeclarationTree classConstantDeclaration(
     Optional<List<AttributeGroupTree>> attributes,
     Optional<SyntaxToken> visibility,
+    Optional<SyntaxToken> finalToken,
     InternalSyntaxToken constToken,
     VariableDeclarationTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
@@ -434,18 +435,20 @@ public class TreeFactory {
   ) {
     return ClassPropertyDeclarationTreeImpl.constant(attributes.or(Collections.emptyList()),
       visibility.orNull(),
+      finalToken.orNull(),
       constToken,
       separatedList(firstDeclaration, additionalDeclarations),
       eosToken);
   }
 
   public ConstantDeclarationTree constantDeclaration(
+    Optional<SyntaxToken> finalToken,
     InternalSyntaxToken constToken,
     VariableDeclarationTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
     InternalSyntaxToken eosToken
   ) {
-    return new ConstantDeclarationTreeImpl(constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
+    return new ConstantDeclarationTreeImpl(finalToken.orNull(), constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
   }
 
   public ClassPropertyDeclarationTree classVariableDeclaration(
