@@ -42,6 +42,7 @@ import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
@@ -460,7 +461,7 @@ public class PHPGrammar {
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(VISIBILITY_MODIFIER()),
         b.optional(b.token(PHPKeyword.READONLY)),
-        b.optional(DECLARED_TYPE()),
+        b.optional(b.firstOf(INTERSECTION_TYPE(),DECLARED_TYPE())),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELLIPSIS)),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
@@ -570,6 +571,15 @@ public class PHPGrammar {
         b.oneOrMore(f.newTuple(b.token(PHPPunctuator.OR), TYPE()))
       ));
   }
+
+  public IntersectionTypeTree INTERSECTION_TYPE() {
+    return b.<IntersectionTypeTree>nonterminal(PHPLexicalGrammar.INTERSECTION_TYPE).is(
+      f.intersectionType(
+        TYPE(),
+        b.oneOrMore(f.newTuple(b.token(PHPPunctuator.AMPERSAND), TYPE()))
+      ));
+  }
+
 
   public DeclaredTypeTree DECLARED_TYPE() {
     return b.<DeclaredTypeTree>nonterminal(PHPLexicalGrammar.DECLARED_TYPE).is(

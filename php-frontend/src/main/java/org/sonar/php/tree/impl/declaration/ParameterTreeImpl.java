@@ -30,7 +30,6 @@ import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
-import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -97,7 +96,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     if (type.is(Kind.TYPE)) {
       return (TypeTree) type;
     } else {
-      return ((UnionTypeTree) type).types().get(0);
+      return ((CombinedTypeTreeImpl) type).types().get(0);
     }
   }
 
