@@ -22,13 +22,13 @@ package org.sonar.plugins.php.api.cfg;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Set;
 import java.util.WeakHashMap;
 import javax.annotation.CheckForNull;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -60,7 +60,7 @@ public class ControlFlowGraph {
 
   private static final Logger LOG = Loggers.get(ControlFlowGraph.class);
 
-  public static final Set<Tree.Kind> KINDS_WITH_CONTROL_FLOW = SetUtils.immutableSetOf(
+  public static final Set<Tree.Kind> KINDS_WITH_CONTROL_FLOW = EnumSet.of(
     Tree.Kind.FUNCTION_DECLARATION,
     Tree.Kind.FUNCTION_EXPRESSION,
     Tree.Kind.METHOD_DECLARATION,
