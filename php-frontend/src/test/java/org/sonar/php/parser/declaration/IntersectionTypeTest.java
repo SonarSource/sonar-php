@@ -24,22 +24,15 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class FunctionDeclarationTest {
+public class IntersectionTypeTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.FUNCTION_DECLARATION)
-      .matches("function f() {}")
-      .matches("function &f() {}")
-      .matches("function f() : bool {}")
-      .matches("function f() : ?bool {}")
-      .matches("function f() : object {}")
-      .matches("#[A1(8)] function f() {}")
-      .matches("function f($prop) {}")
-      .matches("function f($prop = null) {}")
-      .matches("function f($prop = new Foo()) {}")
-      .matches("function f(A&B $prop): A&B {}")
-      .matches("function f(A|B $prop): A|B {}")
+    assertThat(PHPLexicalGrammar.INTERSECTION_TYPE)
+      .matches("int&array")
+      .matches("foo&bar&array")
+      .notMatches("foo&bar|array")
+      .notMatches("int")
     ;
   }
 }

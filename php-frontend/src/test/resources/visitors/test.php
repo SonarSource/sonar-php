@@ -14,6 +14,10 @@ class A extends B {
     match ($a) {default=>1};
     f(...);
   }
+
+  public function bar(callable&iterable $b) {
+    return $b;
+  }
 }
 
 enum A {

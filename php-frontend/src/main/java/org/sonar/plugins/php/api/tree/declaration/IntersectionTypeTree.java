@@ -17,29 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-public class FunctionDeclarationTest {
-
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.FUNCTION_DECLARATION)
-      .matches("function f() {}")
-      .matches("function &f() {}")
-      .matches("function f() : bool {}")
-      .matches("function f() : ?bool {}")
-      .matches("function f() : object {}")
-      .matches("#[A1(8)] function f() {}")
-      .matches("function f($prop) {}")
-      .matches("function f($prop = null) {}")
-      .matches("function f($prop = new Foo()) {}")
-      .matches("function f(A&B $prop): A&B {}")
-      .matches("function f(A|B $prop): A|B {}")
-    ;
-  }
+/**
+ * <a href="https://wiki.php.net/rfc/pure-intersection-types">Intersection Types</a>
+ * <pre>
+ *  {@link #types()}
+ * </pre>
+ */
+public interface IntersectionTypeTree extends DeclaredTypeTree {
+  SeparatedList<TypeTree> types();
 }
