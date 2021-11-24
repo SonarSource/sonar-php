@@ -22,8 +22,6 @@ package org.sonar.php.checks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
