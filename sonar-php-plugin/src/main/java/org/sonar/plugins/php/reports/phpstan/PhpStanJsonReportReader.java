@@ -19,19 +19,18 @@
  */
 package org.sonar.plugins.php.reports.phpstan;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
 import org.sonar.plugins.php.reports.JsonReportReader;
 import org.sonarsource.analyzer.commons.internal.json.simple.JSONArray;
 import org.sonarsource.analyzer.commons.internal.json.simple.JSONObject;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class PhpStanJsonReportReader extends JsonReportReader {
 
