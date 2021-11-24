@@ -36,7 +36,7 @@ import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseExcepti
 public class PhpStanJsonReportReader extends JsonReportReader {
 
   private final Consumer<Issue> consumer;
-  private final static Pattern POSSIBLE_PATH_CONTEXT_PATTERN = Pattern.compile("\\s\\(in context of.*$");
+  private static final Pattern POSSIBLE_PATH_CONTEXT_PATTERN = Pattern.compile("\\s\\(in context of.*$");
 
   private PhpStanJsonReportReader(Consumer<Issue> consumer) {
     this.consumer = consumer;
