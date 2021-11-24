@@ -461,7 +461,7 @@ public class PHPGrammar {
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(VISIBILITY_MODIFIER()),
         b.optional(b.token(PHPKeyword.READONLY)),
-        b.optional(b.firstOf(INTERSECTION_TYPE(),DECLARED_TYPE())),
+        b.optional(DECLARED_TYPE()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELLIPSIS)),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
@@ -583,7 +583,7 @@ public class PHPGrammar {
 
   public DeclaredTypeTree DECLARED_TYPE() {
     return b.<DeclaredTypeTree>nonterminal(PHPLexicalGrammar.DECLARED_TYPE).is(
-      b.firstOf(UNION_TYPE(), TYPE())
+      b.firstOf(UNION_TYPE(), INTERSECTION_TYPE(), TYPE())
     );
   }
 

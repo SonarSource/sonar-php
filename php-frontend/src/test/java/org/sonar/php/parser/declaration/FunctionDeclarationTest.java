@@ -38,6 +38,8 @@ public class FunctionDeclarationTest {
       .matches("function f($prop) {}")
       .matches("function f($prop = null) {}")
       .matches("function f($prop = new Foo()) {}")
+      .matches("function f(A&B $prop): A&B {}")
+      .matches("function f(A|B $prop): A|B {}")
     ;
   }
 }
