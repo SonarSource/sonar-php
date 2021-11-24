@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -60,12 +61,12 @@ public class PHPVisitorCheckTest {
     testVisitor.analyze(file, tree);
 
     assertThat(testVisitor.classCounter).isEqualTo(2);
-    assertThat(testVisitor.namespaceNameCounter).isEqualTo(6);
+    assertThat(testVisitor.namespaceNameCounter).isEqualTo(7);
     assertThat(testVisitor.varIdentifierCounter).isEqualTo(6);
     // PHPCheck#init() is called by PHPAnalyzer
     assertThat(testVisitor.initCounter).isEqualTo(0);
     assertThat(testVisitor.literalCounter).isEqualTo(6);
-    assertThat(testVisitor.tokenCounter).isEqualTo(77);
+    assertThat(testVisitor.tokenCounter).isEqualTo(82);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
     assertThat(testVisitor.unionTypesCounter).isEqualTo(1);
     assertThat(testVisitor.attributeGroupsCounter).isEqualTo(2);
@@ -163,6 +164,7 @@ public class PHPVisitorCheckTest {
     int attributesCounter = 0;
     int enumsCounter = 0;
     int enumCasesCounter = 0;
+    int callableConvertCounter = 0;
 
     @Override
     public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -183,6 +185,12 @@ public class PHPVisitorCheckTest {
     public void visitFunctionCall(FunctionCallTree tree) {
       tree.callee().accept(this);
       scan(tree.arguments());
+    }
+
+    @Override
+    public void visitCallableConvert(CallableConvertTree tree) {
+      super.visitCallableConvert(tree);
+      callableConvertCounter++;
     }
 
     @Override

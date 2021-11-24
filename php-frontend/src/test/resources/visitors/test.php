@@ -12,6 +12,7 @@ class A extends B {
     `cat $var`;
     match ($a) {1=>1};
     match ($a) {default=>1};
+    f(...);
   }
 }
 

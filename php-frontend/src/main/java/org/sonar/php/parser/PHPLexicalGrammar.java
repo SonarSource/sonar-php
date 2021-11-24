@@ -216,6 +216,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   SIMPLE_ENCAPS_VARIABLE,
   ENCAPS_VAR,
   EXIT_EXPRESSION,
+  CALLABLE_CONVERT,
 
   NULL,
   CLASS_CONSTANT,
