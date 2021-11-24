@@ -155,6 +155,13 @@ public class PhpStanSensorTest extends ReportSensorTest {
       .contains("no issue will be imported from this report.\nThe content of the file probably does not have the expected format.");
   }
 
+  @Test
+  public void file_path_is_cleaned_when_it_contains_additional_context() throws Exception {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-with-context-in-path.json");
+    assertThat(externalIssues).hasSize(1);
+    assertThat(externalIssues.get(0).primaryLocation().inputComponent().key()).isEqualTo("reports-project:phpstan/file3.php");
+  }
+
   @Override
   protected Path projectDir() {
     return PROJECT_DIR;
