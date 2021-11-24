@@ -77,19 +77,12 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   }
 
   public static ClassPropertyDeclarationTree constant(List<AttributeGroupTree> attributes,
-                                                      @Nullable SyntaxToken visibility,
-                                                      @Nullable SyntaxToken finalToken,
+                                                      List<SyntaxToken> modifiers,
                                                       SyntaxToken constToken,
                                                       SeparatedListImpl<VariableDeclarationTree> declarations,
                                                       InternalSyntaxToken eosToken) {
 
-    List<SyntaxToken> modifierTokens = new ArrayList<>();
-    if (visibility != null) {
-      modifierTokens.add(visibility);
-    }
-    if (finalToken != null) {
-      modifierTokens.add(finalToken);
-    }
+    List<SyntaxToken> modifierTokens = new ArrayList<>(modifiers);
     modifierTokens.add(constToken);
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, attributes, Collections.unmodifiableList(modifierTokens), null, declarations, eosToken);
   }

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import javax.annotation.CheckForNull;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -32,17 +31,10 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
  */
 public interface ConstantDeclarationTree extends StatementTree {
 
-  @CheckForNull
-  SyntaxToken finalToken();
-
   SyntaxToken constToken();
 
   SeparatedList<VariableDeclarationTree> declarations();
 
   SyntaxToken eosToken();
-
-  default boolean isFinal() {
-    return finalToken() != null;
-  }
 
 }

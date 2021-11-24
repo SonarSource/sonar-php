@@ -36,16 +36,6 @@ public class ConstantDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.constToken().text()).isEqualTo("const");
     assertThat(tree.declarations()).hasSize(2);
     assertThat(tree.eosToken().text()).isEqualTo(";");
-    assertThat(tree.finalToken()).isNull();
-    assertThat(tree.isFinal()).isFalse();
-  }
-
-  @Test
-  public void final_constant() throws Exception {
-    ConstantDeclarationTree tree = parse("final const A = 1;", PHPLexicalGrammar.CONSTANT_DECLARATION);
-    assertThat(tree.is(Kind.CONSTANT_DECLARATION)).isTrue();
-    assertThat(tree.finalToken()).isNotNull();
-    assertThat(tree.isFinal()).isTrue();
   }
 
 }
