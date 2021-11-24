@@ -24,6 +24,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.ListMultimap;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,6 @@ import javax.annotation.CheckForNull;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
 import org.sonar.plugins.php.api.cfg.CfgBranchingBlock;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
@@ -56,7 +56,7 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Refactor this loop to do more than one iteration.";
 
   // we don't include foreach loop because it is used to access first element of collection
-  private static final Set<Tree.Kind> LOOPS = SetUtils.immutableSetOf(
+  private static final Set<Tree.Kind> LOOPS = EnumSet.of(
     Tree.Kind.WHILE_STATEMENT,
     Tree.Kind.DO_WHILE_STATEMENT,
     Tree.Kind.FOR_STATEMENT,
