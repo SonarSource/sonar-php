@@ -19,6 +19,9 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -77,6 +80,20 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.modifierTokens()).hasSize(2);
     assertThat(tree.modifierTokens().get(0).text()).isEqualTo("private");
     assertThat(tree.modifierTokens().get(1).text()).isEqualTo("const");
+  }
+
+  @Test
+  public void final_constant_declaration() {
+    ClassPropertyDeclarationTree tree = parse("final const A;", PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)).isTrue();
+    assertThat(modifier(tree)).containsExactly("final", "const");
+  }
+
+  @Test
+  public void protected_final_constant_declaration() {
+    ClassPropertyDeclarationTree tree = parse("protected final const A;", PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)).isTrue();
+    assertThat(modifier(tree)).containsExactly("protected", "final", "const");
   }
 
   @Test
@@ -164,6 +181,13 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes().get(0).name()).hasToString("A2");
     assertThat(tree.attributeGroups().get(0).attributes().get(0).arguments()).hasSize(2);
+  }
+
+  /**
+   * Get list of all modifier token texts
+   */
+  private static List<String> modifier(ClassPropertyDeclarationTree classPropertyDeclaration) {
+    return classPropertyDeclaration.modifierTokens().stream().map(SyntaxToken::text).collect(Collectors.toList());
   }
 
   private static String builtinType(ClassPropertyDeclarationTree tree) {

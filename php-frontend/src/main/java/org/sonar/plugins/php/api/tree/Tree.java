@@ -30,6 +30,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
@@ -300,6 +301,11 @@ public interface Tree {
      * {@link UnionTypeTree}
      */
     UNION_TYPE(UnionTypeTree.class),
+
+    /**
+     * {@link IntersectionTypeTree}
+     */
+    INTERSECTION_TYPE(IntersectionTypeTree.class),
 
     /**
      * {@link NamespaceNameTree}

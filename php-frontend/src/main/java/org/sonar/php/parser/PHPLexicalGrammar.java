@@ -56,6 +56,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
   VARIABLE_DECLARATION,
   MEMBER_MODIFIER,
+  CLASS_CONST_MODIFIER,
   VISIBILITY_MODIFIER,
   MEMBER_CONST_DECLARATION,
   FUNCTION_CALL_ARGUMENT,
@@ -69,6 +70,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   TYPE_NAME,
   RETURN_TYPE_CLAUSE,
   UNION_TYPE,
+  INTERSECTION_TYPE,
   DECLARED_TYPE,
 
   /**

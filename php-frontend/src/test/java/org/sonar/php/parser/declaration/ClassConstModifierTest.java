@@ -24,23 +24,17 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ClassConstDeclarationTest {
+public class ClassConstModifierTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION)
-      .matches("const A = 1 ;")
-      .matches("const A = 1, B = 2 ;")
-      .matches("const A;")
-      .matches("const A, B;")
-      .matches("const if = 1;")
-      .matches("const bar = [\"bar\" => 3];")
-      .matches("const bar = [\"bar\" => 3][\"bar\"];")
-      .matches("public const A = 1;")
-      .matches("protected const A = 1;")
-      .matches("private const A = 1;")
-      .matches("final const A = 1;")
-      .matches("private final const A = 2;")
-      .notMatches("static const A = 1;");
+    assertThat(PHPLexicalGrammar.CLASS_CONST_MODIFIER)
+    .matches("public")
+    .matches("protected")
+    .matches("private")
+    .matches("final")
+
+    .notMatches("readonly")
+    .notMatches("static");
   }
 }

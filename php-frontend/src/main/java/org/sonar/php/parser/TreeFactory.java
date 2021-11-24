@@ -43,6 +43,7 @@ import org.sonar.php.tree.impl.declaration.CallArgumentTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.CombinedTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.ConstantDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.EnumDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
@@ -55,7 +56,6 @@ import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TypeTreeImpl;
-import org.sonar.php.tree.impl.declaration.UnionTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
@@ -153,6 +153,7 @@ import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
@@ -428,14 +429,14 @@ public class TreeFactory {
 
   public ClassPropertyDeclarationTree classConstantDeclaration(
     Optional<List<AttributeGroupTree>> attributes,
-    Optional<SyntaxToken> visibility,
+    Optional<List<SyntaxToken>> modifiers,
     InternalSyntaxToken constToken,
     VariableDeclarationTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
     InternalSyntaxToken eosToken
   ) {
     return ClassPropertyDeclarationTreeImpl.constant(attributes.or(Collections.emptyList()),
-      visibility.orNull(),
+      modifiers.or(Collections.emptyList()),
       constToken,
       separatedList(firstDeclaration, additionalDeclarations),
       eosToken);
@@ -1929,7 +1930,7 @@ public class TreeFactory {
     return new ExecutionOperatorTreeImpl(literal);
   }
 
-  public UnionTypeTree unionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
+  private static SeparatedList<TypeTree> combinedTypes(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
     List<TypeTree> types = new ArrayList<>();
     List<SyntaxToken> separators = new ArrayList<>();
 
@@ -1940,7 +1941,15 @@ public class TreeFactory {
       types.add(tuple.second);
     }
 
-    return new UnionTypeTreeImpl(new SeparatedListImpl<>(types, separators));
+    return new SeparatedListImpl<>(types, separators);
+  }
+
+  public UnionTypeTree unionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
+    return new CombinedTypeTreeImpl.UnionTypeTreeImpl(combinedTypes(type1, rest));
+  }
+
+  public IntersectionTypeTree intersectionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
+    return new CombinedTypeTreeImpl.IntersectionTypeTreeImpl(combinedTypes(type1, rest));
   }
 
   public CallArgumentTree functionCallArgument(Optional<Tuple<NameIdentifierTree, InternalSyntaxToken>> optional, ExpressionTree firstOf) {
@@ -1969,8 +1978,6 @@ public class TreeFactory {
   public AttributeGroupTree attributeGroup(SyntaxToken startToken, SeparatedList<AttributeTree> attributes, SyntaxToken endToken) {
     return new AttributeGroupTreeImpl(startToken, attributes, endToken);
   }
-
-
 
   /**
    * [ END ] Expression
