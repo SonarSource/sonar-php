@@ -23,8 +23,6 @@ import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.utils.LiteralUtils;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
@@ -45,20 +43,12 @@ public class CryptographicKeySizeCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Use a key length of at least " + MIN_KEY_LENGTH + " bits";
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    super.visitCompilationUnit(tree);
-  }
-
-  @Override
   public void visitFunctionCall(FunctionCallTree functionCall) {
-    if ("openssl_pkey_new".equals(CheckUtils.getLowerCaseFunctionName(functionCall))) {
-      SeparatedList<ExpressionTree> arguments = functionCall.arguments();
-      if (arguments.size() == 1) {
-        ExpressionTree configArgument = arguments.get(0);
-        getKeySize(configArgument)
-          .filter(this::lessThanMinKeyLength)
-          .ifPresent(keySize -> context().newIssue(this, keySize, MESSAGE));
-      }
+    if ("openssl_pkey_new".equals(CheckUtils.lowerCaseFunctionName(functionCall))) {
+      CheckUtils.argumentValue(functionCall, "options", 0)
+        .flatMap(this::getKeySize)
+        .filter(this::lessThanMinKeyLength)
+        .ifPresent(keySize -> context().newIssue(this, keySize, MESSAGE));
     }
     super.visitFunctionCall(functionCall);
   }
