@@ -40,8 +40,14 @@ public class FunctionDeclarationTest {
       .matches("function f($prop = new Foo()) {}")
       .matches("function f(A&B $prop): A&B {}")
       .matches("function f(A|B $prop): A|B {}")
+      // readonly is a keyword, but it can be used as a function name
       .matches("function readonly() {}")
       .matches("function READONLY() {}")
+      // TODO: SONARPHP-1267 all keywords should be case-insensitive, so the below is currently falsely allowed
+      .matches("function ABSTRACT() {}")
+      .matches("function __HALT_COMPILER() {}")
+      .notMatches("function abstract() {}")
+      .notMatches("function __halt_compiler() {}")
     ;
   }
 }
