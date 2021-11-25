@@ -22,8 +22,6 @@ package org.sonar.php.checks;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;

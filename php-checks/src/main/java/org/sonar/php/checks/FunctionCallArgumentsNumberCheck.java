@@ -27,7 +27,6 @@ import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
