@@ -22,12 +22,13 @@ package org.sonar.php.checks;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -57,11 +58,11 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
     FunctionSymbol symbol = Symbols.get(fct);
 
     if (!symbol.isUnknownSymbol() && !symbol.hasFuncGetArgs()) {
-      argumentCount = fct.arguments().size();
+      argumentCount = fct.callArguments().size();
       List<Parameter> parameters = symbol.parameters();
       if (!hasEllipsisOperator(parameters) && argumentCount > maxArguments(parameters)) {
         addIssue(callee, symbol, MESSAGE_MORE, maxArguments(parameters));
-      } else if (!hasSpreadArgument(fct.arguments()) && argumentCount < minArguments(parameters)) {
+      } else if (!hasSpreadArgument(fct) && argumentCount < minArguments(parameters)) {
         addIssue(callee, symbol, MESSAGE_FEWER, minArguments(parameters));
       }
     }
@@ -78,8 +79,8 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
     return !parameters.isEmpty() && Iterables.getLast(parameters).hasEllipsisOperator();
   }
 
-  private static boolean hasSpreadArgument(List<ExpressionTree> arguments) {
-    return arguments.stream().anyMatch(a -> a.is(Tree.Kind.SPREAD_ARGUMENT));
+  private static boolean hasSpreadArgument(FunctionCallTree call) {
+    return !CheckUtils.argumentsOfKind(call, Tree.Kind.SPREAD_ARGUMENT).isEmpty();
   }
 
   private static int minArguments(List<Parameter> parameters) {

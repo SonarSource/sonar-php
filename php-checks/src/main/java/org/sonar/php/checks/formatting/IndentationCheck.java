@@ -28,13 +28,16 @@ import javax.annotation.Nullable;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -77,13 +80,22 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
 
     if (check.isFunctionCallsArgumentsIndentation && !check.isInternalFunction(tree.callee())) {
       SyntaxToken calleeLastToken = ((PHPTree) tree.callee()).getLastToken();
-
       checkArgumentsIndentation(
-        tree.arguments(),
+        callArgumentToExpression(tree.callArguments()),
         calleeLastToken,
         startColumnForLine(calleeLastToken.line()),
         tree.closeParenthesisToken(), true);
     }
+  }
+
+  private static SeparatedList<ExpressionTree> callArgumentToExpression(List<CallArgumentTree> callArguments) {
+    List<ExpressionTree> expressions = new ArrayList<>();
+    List<SyntaxToken> separators = new ArrayList<>();
+    callArguments.forEach(callArgument -> {
+      expressions.add(callArgument.value());
+      separators.add(callArgument.separator());
+    });
+    return new SeparatedListImpl<>(expressions, separators);
   }
 
   @Override

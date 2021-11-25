@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.Symbols;
@@ -63,8 +64,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
     }
   }
   private static boolean isWrongParameterSequence(FunctionCallTree call, List<String> parameters) {
-    List<String> arguments = call.arguments().stream()
-      .filter(e -> e.is(Kind.VARIABLE_IDENTIFIER))
+    List<String> arguments = CheckUtils.argumentsOfKind(call, Kind.VARIABLE_IDENTIFIER).stream()
       .map(e -> ((VariableIdentifierTree) e).text())
       .collect(Collectors.toList());
 

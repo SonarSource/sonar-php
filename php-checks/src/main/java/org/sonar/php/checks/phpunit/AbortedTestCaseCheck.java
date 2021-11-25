@@ -47,6 +47,6 @@ public class AbortedTestCaseCheck extends PhpUnitCheck {
   }
 
   private static boolean isAbortFunctionWithoutMessage(FunctionCallTree fct) {
-    return ABORT_FUNCTIONS.contains(lowerCaseFunctionName(fct)) && fct.arguments().isEmpty();
+    return ABORT_FUNCTIONS.contains(lowerCaseFunctionName(fct)) && fct.callArguments().isEmpty();
   }
 }

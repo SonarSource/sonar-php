@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.utils.collections.MapBuilder;
@@ -83,13 +84,14 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
   }
 
   private void checkBooleanExpressionInAssertMethod(FunctionCallTree problematicAssertionCall, String assertionName) {
-    ExpressionTree argumentExpression = problematicAssertionCall.arguments().get(0);
-    Optional<ReplacementAssertion> replacementAssertionOpt = getReplacementAssertion(argumentExpression);
-    if (assertionName.equals("assertFalse")) {
-      replacementAssertionOpt = replacementAssertionOpt.map(COMPLEMENTS::get);
-    }
+    CheckUtils.argumentValue(problematicAssertionCall, "", 0).ifPresent(argumentExpression -> {
+      Optional<ReplacementAssertion> replacementAssertionOpt = getReplacementAssertion(argumentExpression);
+      if (assertionName.equals("assertFalse")) {
+        replacementAssertionOpt = replacementAssertionOpt.map(COMPLEMENTS::get);
+      }
 
-    replacementAssertionOpt.ifPresent(replacementAssertion -> reportIssue(problematicAssertionCall, replacementAssertion, argumentExpression));
+      replacementAssertionOpt.ifPresent(replacementAssertion -> reportIssue(problematicAssertionCall, replacementAssertion, argumentExpression));
+    });
   }
 
   private void reportIssue(FunctionCallTree problematicAssertionCall, ReplacementAssertion replacementAssertion, ExpressionTree argumentExpression) {

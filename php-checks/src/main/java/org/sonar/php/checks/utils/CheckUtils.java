@@ -388,6 +388,13 @@ public final class CheckUtils {
     return argument(call, name, position).map(CallArgumentTree::value);
   }
 
+  public static List<ExpressionTree> argumentsOfKind(FunctionCallTree call, Kind kind) {
+    return call.callArguments().stream()
+      .map(CallArgumentTree::value)
+      .filter(arg -> arg.is(kind))
+      .collect(Collectors.toList());
+  }
+
   public static boolean hasNamedArgument(FunctionCallTree call) {
     return call.callArguments().stream().anyMatch(arg -> arg.name() != null);
   }

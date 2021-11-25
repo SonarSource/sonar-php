@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -40,12 +41,13 @@ public class EchoWithParenthesisCheck extends FunctionUsageCheck {
   @Override
   protected void checkFunctionCall(FunctionCallTree tree) {
     if (isParenthesized(tree)) {
-      context().newIssue(this, tree.callee(), MESSAGE);
+      newIssue(tree.callee(), MESSAGE);
     }
   }
 
   private static boolean isParenthesized(FunctionCallTree tree) {
-    return tree.arguments().size() == 1 && tree.arguments().get(0).is(Tree.Kind.PARENTHESISED_EXPRESSION);
+    return tree.callArguments().size() == 1 && CheckUtils.argumentValue(tree, "", 0).stream()
+      .anyMatch(arg -> arg.is(Tree.Kind.PARENTHESISED_EXPRESSION));
   }
 
 }

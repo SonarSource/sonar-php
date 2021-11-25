@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -134,7 +135,7 @@ public class HardCodedUriCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     if (functionName != null && (functionName.startsWith("http_") || WHITELIST.contains(functionName))) {
-      tree.arguments().forEach(this::checkExpression);
+      tree.callArguments().stream().map(CallArgumentTree::value).forEach(this::checkExpression);
     }
     super.visitFunctionCall(tree);
   }

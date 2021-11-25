@@ -24,9 +24,11 @@ import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
@@ -40,6 +42,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -482,7 +485,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
       ExpressionTree callee = ((FunctionCallTree) tree.expression()).callee();
       if (callee.is(Kind.NAMESPACE_NAME)) {
         usageForNamespaceName(((NamespaceNameTree) callee), Symbol.Kind.CLASS);
-        scan(((FunctionCallTree) tree.expression()).arguments());
+        scan(((FunctionCallTree) tree.expression()).callArguments());
         return;
       }
     }
@@ -498,10 +501,10 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     }
     String callee = SourceBuilder.build(tree.callee()).trim();
     if ("compact".equals(callee) || "\\compact".equals(callee)) {
-      visitCompactFunctionCall(tree.arguments());
+      visitCompactFunctionCall(tree.callArguments());
     }
 
-    scan(tree.arguments());
+    scan(tree.callArguments());
   }
 
   /**
@@ -509,17 +512,17 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
    *
    * @param arguments of call of "compact" function
    */
-  private void visitCompactFunctionCall(SeparatedList<ExpressionTree> arguments) {
-    for (ExpressionTree argument : arguments) {
-
-      if (argument.is(Kind.REGULAR_STRING_LITERAL)) {
-        String value = ((LiteralTree) argument).value();
+  private void visitCompactFunctionCall(SeparatedList<CallArgumentTree> arguments) {
+    for (CallArgumentTree argument : arguments) {
+      ExpressionTree argumentExpression = argument.value();
+      if (argumentExpression.is(Kind.REGULAR_STRING_LITERAL)) {
+        String value = ((LiteralTree) argumentExpression).value();
         String variableName = "$" + value.substring(1, value.length() - 1);
 
         SymbolImpl symbol = (SymbolImpl) currentScope.getSymbol(variableName, Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
 
         if (symbol != null) {
-          associateSymbol(((LiteralTree) argument).token(), symbol);
+          associateSymbol(((LiteralTree) argumentExpression).token(), symbol);
         }
       } else {
         // argument is array which can contain references to any variable
