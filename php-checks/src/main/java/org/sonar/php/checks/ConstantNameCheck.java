@@ -22,14 +22,13 @@ package org.sonar.php.checks;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -56,16 +55,11 @@ public class ConstantNameCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree functionCall) {
-    ExpressionTree callee = functionCall.callee();
-    if (callee.is(Kind.NAMESPACE_NAME) && "define".equalsIgnoreCase(((NamespaceNameTree) callee).fullName())) {
-      SeparatedList<ExpressionTree> arguments = functionCall.arguments();
-      if (!arguments.isEmpty()) {
-        ExpressionTree firstArgument = arguments.get(0);
-        if (firstArgument.is(Kind.REGULAR_STRING_LITERAL)) {
-          String constantName = ((LiteralTree) firstArgument).value();
-          checkConstantName(firstArgument, constantName.substring(1, constantName.length() - 1));
-        }
-      }
+    if ("define".equals(CheckUtils.getLowerCaseFunctionName(functionCall))) {
+      CheckUtils.argumentValue(functionCall, "constant_name", 0)
+        .filter(constantName -> constantName.is(Kind.REGULAR_STRING_LITERAL))
+        .map(LiteralTree.class::cast)
+        .ifPresent(constantName -> checkConstantName(constantName, CheckUtils.trimQuotes(constantName)));
     }
     super.visitFunctionCall(functionCall);
   }
