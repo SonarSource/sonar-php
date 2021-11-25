@@ -375,7 +375,12 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
       // PHP keywords are case insensitive
       b.rule(tokenType).is(SPACING, b.regexp("(?i)" + tokenType.getValue()), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))).skip();
       if (i > 1) {
-        rest[i - 2] = b.regexp("(?i)" + tokenType.getValue());
+        if (tokenType == PHPKeyword.READONLY) {
+          // Readonly is only a keyword when it is not used as a function name. SONARPHP-1266
+          rest[i - 2] = b.sequence(b.regexp("(?i)readonly"), b.nextNot(b.regexp("[\\s]*\\(")));
+        } else {
+          rest[i - 2] = b.regexp("(?i)" + tokenType.getValue());
+        }
       }
     }
 
