@@ -35,6 +35,7 @@ public class FunctionExpressionTest {
       .matches("function () : bool {}")
       .matches("function () use ($a) : bool {}")
       .matches("function () use ($a,) : bool {}")
+      .matches("function () { enum MyEnum{} }")
     ;
   }
 

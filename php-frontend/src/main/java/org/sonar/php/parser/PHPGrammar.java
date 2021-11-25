@@ -761,9 +761,9 @@ public class PHPGrammar {
         CLASS_DECLARATION(),
         TRAIT_DECLARATION(),
         INTERFACE_DECLARATION(),
+        ENUM_DECLARATION(),
         STATEMENT()));
   }
-
 
   public GlobalStatementTree GLOBAL_STATEMENT() {
     return b.<GlobalStatementTree>nonterminal(PHPLexicalGrammar.GLOBAL_STATEMENT).is(
