@@ -26,6 +26,13 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="https://www.php.net/manual/en/language.enumerations.php">Enumeration cases</a>
+ * <pre>
+ *   case {@link #name()};
+ *   case {@link #name()} = {@link #value()};
+ * </pre>
+ */
 public interface EnumCaseTree extends ClassMemberTree, HasAttributes {
 
   SyntaxToken caseToken();
