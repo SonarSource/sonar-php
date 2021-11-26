@@ -32,4 +32,6 @@ function x($obj){
   if(null == $obj && $obj->field == 0){}         // Noncompliant
   if ($obj->field == null && ($obj->field)->foo()) {}   // Noncompliant
   if (!is_null($obj->field) || ($obj->field)->foo()) {}   // Noncompliant
+
+  if (!foo($obj->field) || ($obj->field)->foo()) {}
 }
