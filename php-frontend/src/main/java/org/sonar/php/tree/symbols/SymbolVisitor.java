@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
@@ -502,7 +503,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
       visitCompactFunctionCall(tree.callArguments());
     }
 
-    scan(tree.callArguments());
+    scan(tree.callArguments().stream().map(CallArgumentTree::value).collect(Collectors.toList()));
   }
 
   /**

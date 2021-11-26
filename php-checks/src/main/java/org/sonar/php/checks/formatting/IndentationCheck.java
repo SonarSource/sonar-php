@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
@@ -81,21 +82,11 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     if (check.isFunctionCallsArgumentsIndentation && !check.isInternalFunction(tree.callee())) {
       SyntaxToken calleeLastToken = ((PHPTree) tree.callee()).getLastToken();
       checkArgumentsIndentation(
-        callArgumentToExpression(tree.callArguments()),
+        tree.callArguments().stream().map(CallArgumentTree::value).collect(Collectors.toList()),
         calleeLastToken,
         startColumnForLine(calleeLastToken.line()),
         tree.closeParenthesisToken(), true);
     }
-  }
-
-  private static SeparatedList<ExpressionTree> callArgumentToExpression(List<CallArgumentTree> callArguments) {
-    List<ExpressionTree> expressions = new ArrayList<>();
-    List<SyntaxToken> separators = new ArrayList<>();
-    callArguments.forEach(callArgument -> {
-      expressions.add(callArgument.value());
-      separators.add(callArgument.separator());
-    });
-    return new SeparatedListImpl<>(expressions, separators);
   }
 
   @Override
@@ -166,7 +157,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
   }
 
   private void checkArgumentsIndentation(
-    SeparatedList<? extends Tree> arguments,
+    List<? extends Tree> arguments,
     SyntaxToken functionName, int baseColumn,
     @Nullable SyntaxToken closeParenthesis,
     boolean isFunctionCall

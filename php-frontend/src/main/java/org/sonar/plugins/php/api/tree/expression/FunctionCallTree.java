@@ -28,8 +28,8 @@ import javax.annotation.Nullable;
 /**
  * <a href="http://php.net/manual/en/functions.user-defined.php">Function call</a>
  * <pre>
- *   {@link #callee()}
- *   {@link #callee()}
+ *   {@link #callee()} {@link #arguments()}
+ *   {@link #callee()} ( {@link #arguments()} )
  * </pre>
  */
 public interface FunctionCallTree extends ExpressionTree {
