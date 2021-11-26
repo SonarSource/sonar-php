@@ -23,6 +23,12 @@ import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="https://www.php.net/manual/de/language.attributes.overview.php">Attributes declaration</a>
+ * <pre>
+ *   #[ {@link #attributes()} ]
+ * </pre>
+ */
 public interface AttributeGroupTree extends Tree {
 
   SyntaxToken startToken();
