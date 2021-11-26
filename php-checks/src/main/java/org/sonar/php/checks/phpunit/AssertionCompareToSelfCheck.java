@@ -23,6 +23,7 @@ import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -33,16 +34,16 @@ public class AssertionCompareToSelfCheck extends PhpUnitCheck {
 
   @Override
   protected void visitPhpUnitAssertion(FunctionCallTree tree, Assertion assertion) {
-    if(assertion.hasExpectedValue() && compareToSelf(tree.arguments())) {
-      newIssue(tree.arguments().get(1), MESSAGE)
-        .secondary(tree.arguments().get(0), null);
+    if(assertion.hasExpectedValue() && compareToSelf(tree.callArguments())) {
+      List<CallArgumentTree> args = tree.callArguments();
+      newIssue(args.get(1).value(), MESSAGE).secondary(args.get(0).value(), null);
     }
   }
 
-  private boolean compareToSelf(List<ExpressionTree> args) {
+  private boolean compareToSelf(List<CallArgumentTree> args) {
     if (args.size() >= 2) {
-      Symbol expectedSymbol = getSymbol(args.get(0));
-      return expectedSymbol != null && expectedSymbol.equals(getSymbol(args.get(1)));
+      Symbol expectedSymbol = getSymbol(args.get(0).value());
+      return expectedSymbol != null && expectedSymbol.equals(getSymbol(args.get(1).value()));
     }
     return false;
   }

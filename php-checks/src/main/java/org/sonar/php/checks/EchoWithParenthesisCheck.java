@@ -40,12 +40,12 @@ public class EchoWithParenthesisCheck extends FunctionUsageCheck {
   @Override
   protected void checkFunctionCall(FunctionCallTree tree) {
     if (isParenthesized(tree)) {
-      context().newIssue(this, tree.callee(), MESSAGE);
+      newIssue(tree.callee(), MESSAGE);
     }
   }
 
   private static boolean isParenthesized(FunctionCallTree tree) {
-    return tree.arguments().size() == 1 && tree.arguments().get(0).is(Tree.Kind.PARENTHESISED_EXPRESSION);
+    return tree.callArguments().size() == 1 && tree.callArguments().get(0).value().is(Tree.Kind.PARENTHESISED_EXPRESSION);
   }
 
 }

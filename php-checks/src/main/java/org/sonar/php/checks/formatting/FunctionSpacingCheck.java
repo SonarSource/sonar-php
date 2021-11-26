@@ -62,7 +62,7 @@ public class FunctionSpacingCheck extends PHPVisitorCheck implements FormattingC
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (!check.isInternalFunction(tree.callee())) {
-      checkSpaceForComma(new TokenVisitor(tree), tree.arguments().getSeparators());
+      checkSpaceForComma(new TokenVisitor(tree), tree.callArguments().getSeparators());
       checkSpaceAfterFunctionName(((PHPTree) tree.callee()).getLastToken(), tree.openParenthesisToken());
     }
 

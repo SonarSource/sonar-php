@@ -160,7 +160,7 @@ public class PHPCheckVerifierTest {
         @Override
         public void visitFunctionCall(FunctionCallTree tree) {
           SyntaxToken echoToken = ((NamespaceNameTree) tree.callee()).name().token();
-          SyntaxToken literalToken = ((LiteralTree) tree.arguments().get(0)).token();
+          SyntaxToken literalToken = ((LiteralTree) tree.callArguments().get(0).value()).token();
           context().newIssue(this, echoToken, "Precise issue")
             .secondary(literalToken, "Secondary");
           super.visitFunctionCall(tree);
@@ -175,7 +175,7 @@ public class PHPCheckVerifierTest {
         @Override
         public void visitFunctionCall(FunctionCallTree tree) {
           SyntaxToken echoToken = ((NamespaceNameTree) tree.callee()).name().token();
-          SyntaxToken literalToken = ((LiteralTree) tree.arguments().get(0)).token();
+          SyntaxToken literalToken = ((LiteralTree) tree.callArguments().get(0).value()).token();
           context().newIssue(this, echoToken, "Precise issue")
             .secondary(literalToken, "Wrong message");
           super.visitFunctionCall(tree);

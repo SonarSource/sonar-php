@@ -37,7 +37,7 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.FUNCTION_CALL)).isTrue();
     assertThat(expressionToString(tree.callee())).isEqualTo("f");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
-    assertThat(tree.arguments()).isEmpty();
+    assertThat(tree.callArguments()).isEmpty();
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
   }
 
@@ -49,10 +49,10 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
     assertThat(expressionToString(tree.callee())).isEqualTo("f");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
 
-    assertThat(tree.arguments()).hasSize(2);
-    assertThat(tree.arguments().getSeparators()).hasSize(1);
-    assertThat(expressionToString(tree.arguments().get(0))).isEqualTo("$p1");
-    assertThat(expressionToString(tree.arguments().get(1))).isEqualTo("$p2");
+    assertThat(tree.callArguments()).hasSize(2);
+    assertThat(tree.callArguments().getSeparators()).hasSize(1);
+    assertThat(expressionToString(tree.callArguments().get(0).value())).isEqualTo("$p1");
+    assertThat(expressionToString(tree.callArguments().get(1).value())).isEqualTo("$p2");
 
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
   }

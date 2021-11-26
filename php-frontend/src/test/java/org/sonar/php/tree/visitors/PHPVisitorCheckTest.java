@@ -187,7 +187,7 @@ public class PHPVisitorCheckTest {
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
       tree.callee().accept(this);
-      scan(tree.arguments());
+      scan(tree.callArguments());
     }
 
     @Override

@@ -50,3 +50,8 @@ function9(); // Noncompliant {{"function9" expects 1 argument, but 0 were provid
 
 function function10($a = new A()) {}
 function10(); // Compliant
+
+function function11($a, ...$args) {
+  function1(...$args); // OK
+}
+function11(1);

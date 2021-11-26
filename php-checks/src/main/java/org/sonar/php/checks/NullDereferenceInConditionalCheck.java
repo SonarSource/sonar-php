@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -105,8 +106,8 @@ public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
 
   @Nullable
   private static ExpressionTree retrieveArgumentFromIsNullCall(FunctionCallTree functionCall) {
-    if ("is_null".equalsIgnoreCase(functionCall.callee().toString()) && functionCall.arguments().size() == 1) {
-      return functionCall.arguments().get(0);
+    if ("is_null".equals(CheckUtils.getLowerCaseFunctionName(functionCall))) {
+      return CheckUtils.argumentValue(functionCall, "value", 0).orElse(null);
     } else {
       return null;
     }
