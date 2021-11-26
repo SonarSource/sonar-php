@@ -26,6 +26,7 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -39,19 +40,19 @@ public class DuplicatedArgumentCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    SeparatedList<ExpressionTree> arguments = tree.arguments();
+    SeparatedList<CallArgumentTree> arguments = tree.callArguments();
     int arity = arguments.size();
     if (arity <= 1) {
       return;
     }
     Set<ExpressionTree> reported = new HashSet<>();
     for (int i = 0; i < arity; i++) {
-      ExpressionTree arg = CheckUtils.skipParenthesis(arguments.get(i));
+      ExpressionTree arg = CheckUtils.skipParenthesis(arguments.get(i).value());
       if (shouldBeSkipped(arg)) {
         continue;
       }
       for (int j = i + 1; j < arity; j++) {
-        ExpressionTree otherArg = CheckUtils.skipParenthesis(arguments.get(j));
+        ExpressionTree otherArg = CheckUtils.skipParenthesis(arguments.get(j).value());
         if (!reported.contains(otherArg) && SyntacticEquivalence.areSyntacticallyEquivalent(arg, otherArg)) {
           context()
             .newIssue(this, otherArg, String.format("Verify that this is the intended value; it is the same as the %s argument.", argumentNumber(i + 1)))

@@ -31,6 +31,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
@@ -233,7 +234,8 @@ public class ExpectedCfgStructure {
           throw new UnsupportedOperationException("CFG Block metadata is not in expected format");
         }
         BlockExpectation expectation = result.createExpectation(block, id);
-        for (ExpressionTree argument : blockFunction.arguments()) {
+        for (CallArgumentTree callArgumentTree : blockFunction.callArguments()) {
+          ExpressionTree argument = callArgumentTree.value();
           if (!argument.is(Tree.Kind.ASSIGNMENT)) {
             throw new UnsupportedOperationException("The arguments of block function call must be assignments");
           }
@@ -281,7 +283,7 @@ public class ExpectedCfgStructure {
         return null;
       }
       FunctionCallTree function = (FunctionCallTree) expressionTree;
-      if (function.arguments().isEmpty() ||
+      if (function.callArguments().isEmpty() ||
         !(function.callee() instanceof NamespaceNameTree)) {
         return null;
       }
