@@ -26,6 +26,14 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
 
+/**
+ * <a href="https://www.php.net/manual/en/language.enumerations.php">Enumerations</a>
+ * <pre>
+ *   enum {@link #name()} { {@link #members()} }
+ *   enum {@link #name()} : {@link #backingType()} { {@link #members()} }
+ *   enum {@link #name()} implements {@link #superInterfaces()} { {@link #members()} }
+ * </pre>
+ */
 public interface EnumDeclarationTree extends ClassDeclarationTree {
 
   @Nullable
