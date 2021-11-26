@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
@@ -54,7 +55,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
     "to reduce its dependencies on other classes from %s to the maximum authorized %s or less.";
 
   public static final int DEFAULT = 20;
-  private Deque<Set<String>> types = new ArrayDeque<>();
+  private final Deque<Set<String>> types = new ArrayDeque<>();
   private static final Set<String> DOC_TAGS = SetUtils.immutableSetOf(
     "@var", "@global", "@staticvar", "@throws", "@param", "@return");
 
@@ -98,7 +99,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
   }
 
   private void enterClass(ClassTree tree) {
-    types.addLast(new HashSet<String>());
+    types.addLast(new HashSet<>());
     retrieveCoupledTypes(tree);
   }
 
@@ -130,9 +131,9 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
 
   private void retrieveTypeFromParameter(MethodDeclarationTree methodDeclaration) {
     for (ParameterTree parameter : methodDeclaration.parameters().parameters()) {
-      TypeTree type = parameter.type();
-      if (type != null && type.typeName().is(Kind.NAMESPACE_NAME)) {
-        addType(getTypeName((NamespaceNameTree) type.typeName()));
+      DeclaredTypeTree type = parameter.declaredType();
+      if (type != null && type.isSimple() && ((TypeTree) type).typeName().is(Kind.NAMESPACE_NAME)) {
+        addType(getTypeName((NamespaceNameTree) ((TypeTree) type).typeName()));
       }
     }
   }

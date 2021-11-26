@@ -20,8 +20,8 @@
 package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -36,13 +36,10 @@ public class ReferenceInFunctionCallCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     super.visitFunctionCall(tree);
 
-    for (ExpressionTree argument : tree.arguments()) {
-
-      if (argument.is(Kind.REFERENCE_VARIABLE)) {
-        String message = String.format(MESSAGE, ((ReferenceVariableTree) argument).variableExpression().toString());
-        context().newIssue(this, argument, message);
-      }
-    }
+    CheckUtils.argumentsOfKind(tree, Kind.REFERENCE_VARIABLE).forEach(argument -> {
+      String message = String.format(MESSAGE, ((ReferenceVariableTree) argument).variableExpression().toString());
+      newIssue(argument, message);
+    });
   }
 
 }

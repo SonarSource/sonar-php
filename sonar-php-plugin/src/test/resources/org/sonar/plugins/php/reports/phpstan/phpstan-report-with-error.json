@@ -13,7 +13,7 @@
         }
       ]
     },
-    "phpstan/file3.php": {
+    "phpstan/notExistingFile1.php": {
       "messages": [
         {
           "line": 5,
@@ -22,7 +22,7 @@
         }
       ]
     },
-    "phpstan/file4.php": {
+    "phpstan/notExistingFile2.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -39,7 +39,7 @@
         }
       ]
     },
-    "phpstan/file6.php": {
+    "phpstan/notExistingFile3.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -48,7 +48,7 @@
         }
       ]
     },
-    "phpstan/file7.php": {
+    "phpstan/notExistingFile4.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -57,7 +57,7 @@
         }
       ]
     },
-    "phpstan/file8.php": {
+    "phpstan/notExistingFile5.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -66,7 +66,7 @@
         }
       ]
     },
-    "phpstan/file9.php": {
+    "phpstan/notExistingFile6.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -75,7 +75,7 @@
         }
       ]
     },
-    "phpstan/file10.php": {
+    "phpstan/notExistingFile7.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -84,7 +84,7 @@
         }
       ]
     },
-    "phpstan/file11.php": {
+    "phpstan/notExistingFile8.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -93,7 +93,7 @@
         }
       ]
     },
-    "phpstan/file12.php": {
+    "phpstan/notExistingFile9.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -102,7 +102,7 @@
         }
       ]
     },
-    "phpstan/file13.php": {
+    "phpstan/notExistingFile10.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -111,7 +111,7 @@
         }
       ]
     },
-    "phpstan/file14.php": {
+    "phpstan/notExistingFile11.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -120,7 +120,7 @@
         }
       ]
     },
-    "phpstan/file15.php": {
+    "phpstan/notExistingFile12.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -129,7 +129,7 @@
         }
       ]
     },
-    "phpstan/file16.php": {
+    "phpstan/notExistingFile13.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -138,7 +138,7 @@
         }
       ]
     },
-    "phpstan/file17.php": {
+    "phpstan/notExistingFile14.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -147,7 +147,7 @@
         }
       ]
     },
-    "phpstan/file18.php": {
+    "phpstan/notExistingFile15.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -156,7 +156,7 @@
         }
       ]
     },
-    "phpstan/file19.php": {
+    "phpstan/notExistingFile16.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -165,7 +165,7 @@
         }
       ]
     },
-    "phpstan/file20.php": {
+    "phpstan/notExistingFile17.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -174,7 +174,7 @@
         }
       ]
     },
-    "phpstan/file21.php": {
+    "phpstan/notExistingFile18.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -183,7 +183,7 @@
         }
       ]
     },
-    "phpstan/file22.php": {
+    "phpstan/notExistingFile19.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -192,7 +192,7 @@
         }
       ]
     },
-    "phpstan/file23.php": {
+    "phpstan/notExistingFile20.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -201,7 +201,7 @@
         }
       ]
     },
-    "phpstan/file24.php": {
+    "phpstan/notExistingFile21.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",
@@ -210,7 +210,7 @@
         }
       ]
     },
-    "phpstan/file25.php": {
+    "phpstan/notExistingFile22.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",

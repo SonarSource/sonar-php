@@ -17,30 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-public class ClassConstDeclarationTest {
-
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION)
-      .matches("const A = 1 ;")
-      .matches("const A = 1, B = 2 ;")
-      .matches("const A;")
-      .matches("const A, B;")
-      .matches("const if = 1;")
-      .matches("const bar = [\"bar\" => 3];")
-      .matches("const bar = [\"bar\" => 3][\"bar\"];")
-      .matches("public const A = 1;")
-      .matches("protected const A = 1;")
-      .matches("private const A = 1;")
-      .matches("final const A = 1;")
-      .matches("private final const A = 2;")
-      .notMatches("static const A = 1;");
-  }
+/**
+ * <a href="https://wiki.php.net/rfc/pure-intersection-types">Intersection Types</a>
+ * <pre>
+ *  {@link #types()}
+ * </pre>
+ */
+public interface IntersectionTypeTree extends DeclaredTypeTree {
+  SeparatedList<TypeTree> types();
 }

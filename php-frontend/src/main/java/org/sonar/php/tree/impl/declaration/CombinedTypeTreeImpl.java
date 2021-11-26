@@ -19,33 +19,49 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import java.util.Iterator;
+public abstract class CombinedTypeTreeImpl extends PHPTree {
 
-public class UnionTypeTreeImpl extends PHPTree implements UnionTypeTree {
-  private static final Kind KIND = Kind.UNION_TYPE;
-
+  private final Kind kind;
   private final SeparatedList<TypeTree> types;
 
-  public UnionTypeTreeImpl(SeparatedList<TypeTree> types) {
+  protected CombinedTypeTreeImpl(Tree.Kind kind, SeparatedList<TypeTree> types) {
+    this.kind = kind;
     this.types = types;
   }
 
-  @Override
-  public SeparatedList<TypeTree> types() {
-    return types;
+  public static class UnionTypeTreeImpl extends CombinedTypeTreeImpl implements UnionTypeTree {
+
+    public UnionTypeTreeImpl(SeparatedList<TypeTree> types) {
+      super(Kind.UNION_TYPE, types);
+    }
+
+    @Override
+    public void accept(VisitorCheck visitor) {
+      visitor.visitUnionType(this);
+    }
   }
 
-  @Override
-  public Kind getKind() {
-    return KIND;
+  public static class IntersectionTypeTreeImpl extends CombinedTypeTreeImpl implements IntersectionTypeTree {
+
+    public IntersectionTypeTreeImpl(SeparatedList<TypeTree> types) {
+      super(Kind.INTERSECTION_TYPE, types);
+    }
+
+    @Override
+    public void accept(VisitorCheck visitor) {
+      visitor.visitIntersectionType(this);
+    }
   }
+
 
   @Override
   public Iterator<Tree> childrenIterator() {
@@ -53,11 +69,14 @@ public class UnionTypeTreeImpl extends PHPTree implements UnionTypeTree {
   }
 
   @Override
-  public void accept(VisitorCheck visitor) {
-    visitor.visitUnionType(this);
+  public Kind getKind() {
+    return kind;
   }
 
-  @Override
+  public SeparatedList<TypeTree> types() {
+    return types;
+  }
+
   public boolean isSimple() {
     return false;
   }

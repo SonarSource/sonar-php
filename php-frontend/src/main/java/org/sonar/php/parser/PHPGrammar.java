@@ -42,6 +42,7 @@ import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
@@ -358,11 +359,18 @@ public class PHPGrammar {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION).is(
       f.classConstantDeclaration(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
-        b.optional(VISIBILITY_MODIFIER()),
+        b.zeroOrMore(CLASS_CONST_MODIFIER()),
         b.token(PHPKeyword.CONST),
         MEMBER_CONST_DECLARATION(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_CONST_DECLARATION())),
         EOS()));
+  }
+
+  public SyntaxToken CLASS_CONST_MODIFIER() {
+    return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.CLASS_CONST_MODIFIER).is(
+      b.firstOf(
+        VISIBILITY_MODIFIER(),
+        b.token(PHPKeyword.FINAL)));
   }
 
   public ConstantDeclarationTree CONSTANT_DECLARATION() {
@@ -571,9 +579,18 @@ public class PHPGrammar {
       ));
   }
 
+  public IntersectionTypeTree INTERSECTION_TYPE() {
+    return b.<IntersectionTypeTree>nonterminal(PHPLexicalGrammar.INTERSECTION_TYPE).is(
+      f.intersectionType(
+        TYPE(),
+        b.oneOrMore(f.newTuple(b.token(PHPPunctuator.AMPERSAND), TYPE()))
+      ));
+  }
+
+
   public DeclaredTypeTree DECLARED_TYPE() {
     return b.<DeclaredTypeTree>nonterminal(PHPLexicalGrammar.DECLARED_TYPE).is(
-      b.firstOf(UNION_TYPE(), TYPE())
+      b.firstOf(UNION_TYPE(), INTERSECTION_TYPE(), TYPE())
     );
   }
 
@@ -744,9 +761,9 @@ public class PHPGrammar {
         CLASS_DECLARATION(),
         TRAIT_DECLARATION(),
         INTERFACE_DECLARATION(),
+        ENUM_DECLARATION(),
         STATEMENT()));
   }
-
 
   public GlobalStatementTree GLOBAL_STATEMENT() {
     return b.<GlobalStatementTree>nonterminal(PHPLexicalGrammar.GLOBAL_STATEMENT).is(

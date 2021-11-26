@@ -84,7 +84,6 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-    List<ExpressionTree> arguments = tree.arguments();
     if (STREAM_CONTEXT_CREATE.equals(functionName)) {
       CheckUtils.argument(tree, "options", 0).ifPresent(
         options -> checkStreamSSLConfig(options.value()));

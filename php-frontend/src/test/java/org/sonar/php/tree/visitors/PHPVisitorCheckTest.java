@@ -31,6 +31,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -62,13 +63,14 @@ public class PHPVisitorCheckTest {
 
     assertThat(testVisitor.classCounter).isEqualTo(2);
     assertThat(testVisitor.namespaceNameCounter).isEqualTo(7);
-    assertThat(testVisitor.varIdentifierCounter).isEqualTo(6);
+    assertThat(testVisitor.varIdentifierCounter).isEqualTo(8);
     // PHPCheck#init() is called by PHPAnalyzer
     assertThat(testVisitor.initCounter).isEqualTo(0);
     assertThat(testVisitor.literalCounter).isEqualTo(6);
-    assertThat(testVisitor.tokenCounter).isEqualTo(82);
+    assertThat(testVisitor.tokenCounter).isEqualTo(96);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
     assertThat(testVisitor.unionTypesCounter).isEqualTo(1);
+    assertThat(testVisitor.intersectionTypeCounter).isEqualTo(1);
     assertThat(testVisitor.attributeGroupsCounter).isEqualTo(2);
     assertThat(testVisitor.attributesCounter).isEqualTo(3);
     assertThat(testVisitor.enumsCounter).isEqualTo(1);
@@ -165,6 +167,7 @@ public class PHPVisitorCheckTest {
     int enumsCounter = 0;
     int enumCasesCounter = 0;
     int callableConvertCounter = 0;
+    int intersectionTypeCounter = 0;
 
     @Override
     public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -184,7 +187,7 @@ public class PHPVisitorCheckTest {
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
       tree.callee().accept(this);
-      scan(tree.arguments());
+      scan(tree.callArguments());
     }
 
     @Override
@@ -203,6 +206,12 @@ public class PHPVisitorCheckTest {
     public void visitUnionType(UnionTypeTree tree) {
       super.visitUnionType(tree);
       unionTypesCounter++;
+    }
+
+    @Override
+    public void visitIntersectionType(IntersectionTypeTree tree) {
+      super.visitIntersectionType(tree);
+      intersectionTypeCounter++;
     }
 
     @Override
