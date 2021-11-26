@@ -46,8 +46,7 @@ public class EchoWithParenthesisCheck extends FunctionUsageCheck {
   }
 
   private static boolean isParenthesized(FunctionCallTree tree) {
-    return tree.callArguments().size() == 1 && CheckUtils.argumentValue(tree, "", 0).stream()
-      .anyMatch(arg -> arg.is(Tree.Kind.PARENTHESISED_EXPRESSION));
+    return tree.callArguments().size() == 1 && tree.callArguments().get(0).value().is(Tree.Kind.PARENTHESISED_EXPRESSION);
   }
 
 }
