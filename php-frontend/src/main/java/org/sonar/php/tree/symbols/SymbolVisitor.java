@@ -484,7 +484,8 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
       ExpressionTree callee = ((FunctionCallTree) tree.expression()).callee();
       if (callee.is(Kind.NAMESPACE_NAME)) {
         usageForNamespaceName(((NamespaceNameTree) callee), Symbol.Kind.CLASS);
-        scan(((FunctionCallTree) tree.expression()).callArguments());
+        FunctionCallTree functionCall = (FunctionCallTree) tree.expression();
+        scan(functionCall.callArguments().stream().map(CallArgumentTree::value).collect(Collectors.toList()));
         return;
       }
     }
