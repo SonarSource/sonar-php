@@ -42,7 +42,7 @@ public class PHPRulingTest {
   public static Orchestrator ORCHESTRATOR = Orchestrator.builderEnv()
     .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE[7.9]"))
     .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
-    .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin","sonar-lits-plugin", "0.8.0.1209"))
+    .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin","sonar-lits-plugin", "0.10.0.2181"))
     .build();
 
   @BeforeClass
@@ -77,11 +77,11 @@ public class PHPRulingTest {
       .setSourceDirs(".")
       .setSourceEncoding("UTF-8")
       .setProperty("sonar.import_unknown_files", "true")
-      .setProperty("dump.old", FileLocation.of("src/test/resources/expected").getFile().getAbsolutePath())
-      .setProperty("dump.new", FileLocation.of("target/actual").getFile().getAbsolutePath())
+      .setProperty("sonar.lits.dump.old", FileLocation.of("src/test/resources/expected").getFile().getAbsolutePath())
+      .setProperty("sonar.lits.dump.new", FileLocation.of("target/actual").getFile().getAbsolutePath())
       .setProperty("sonar.cpd.exclusions", "**/*")
       .setProperty("sonar.internal.analysis.failFast", "true")
-      .setProperty("lits.differences", LITS_DIFFERENCES_FILE.getAbsolutePath())
+      .setProperty("sonar.lits.differences", LITS_DIFFERENCES_FILE.getAbsolutePath())
       .setProperty("sonar.php.duration.statistics", "true");
     build.setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1000m");
     ORCHESTRATOR.executeBuild(build);
