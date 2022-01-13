@@ -164,6 +164,10 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     // const declaration
     verifyScriptTreeCfg("" +
       "block( succ = [END], elem = 2 ); const A = 1;");
+
+    // enum declaration
+    verifyScriptTreeCfg("" +
+      "block( succ = [END], elem = 1 ); enum Foo {}");
   }
 
   @Test

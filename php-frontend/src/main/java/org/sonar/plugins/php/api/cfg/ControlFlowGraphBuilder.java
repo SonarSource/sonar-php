@@ -185,6 +185,7 @@ class ControlFlowGraphBuilder {
       case INTERFACE_DECLARATION:
       case CLASS_DECLARATION:
       case EMPTY_STATEMENT:
+      case ENUM_DECLARATION:
         return currentBlock;
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
