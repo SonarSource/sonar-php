@@ -87,9 +87,8 @@ plugin_qa_task:
   env:
     CIRRUS_CLONE_DEPTH: 1
     matrix:
-      - SQ_VERSION: LATEST_RELEASE[7.9]
       - SQ_VERSION: LATEST_RELEASE
-      - SQ_VERSION: DOGFOOD
+      - SQ_VERSION: DEV
   maven_cache:
     folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   submodules_script:
