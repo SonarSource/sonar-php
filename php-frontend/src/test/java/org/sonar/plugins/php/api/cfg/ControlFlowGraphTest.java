@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -42,6 +43,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
@@ -164,6 +166,10 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     // const declaration
     verifyScriptTreeCfg("" +
       "block( succ = [END], elem = 2 ); const A = 1;");
+
+    // enum declaration
+    verifyScriptTreeCfg("" +
+      "block( succ = [END], elem = 1 ); enum Foo {}");
   }
 
   @Test
@@ -1413,6 +1419,25 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     MethodDeclarationTree abstractMethod = (MethodDeclarationTree) cls.members().get(1);
     cfg = ControlFlowGraph.build(abstractMethod, checkContext);
     assertThat(cfg).isNull();
+  }
+
+  @Test
+  public void test_buildCFG_with_method_in_enum() {
+    CompilationUnitTree tree = parse("<?php " +
+        "enum Foo {" +
+        "    case Bar;" +
+        "    function foo() {" +
+        "        echo 'Hello';" +
+        "    }" +
+        "}",
+      PHPLexicalGrammar.COMPILATION_UNIT);
+    EnumDeclarationTree enumDeclaration = (EnumDeclarationTree) tree.script().statements().get(0);
+    MethodDeclarationTree method = (MethodDeclarationTree) enumDeclaration.members().get(1);
+    StatementTree echo = ((BlockTree) method.body()).statements().get(0);
+
+    ControlFlowGraph cfg = ControlFlowGraph.build(method, checkContext);
+    assertThat(cfg).isNotNull();
+    assertThat(cfg.start().elements().get(0)).isEqualTo(echo);
   }
 
   @Test
