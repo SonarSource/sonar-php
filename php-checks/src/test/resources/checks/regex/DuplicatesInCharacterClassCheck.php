@@ -49,6 +49,8 @@ class DuplicatesInCharacterClassCheck
     preg_match("/(?(?=1)1|[0-99])/", $input); // Noncompliant
     preg_match("/(?U)[[^\W]a]/", $input); // Noncompliant
     preg_match("/[[^\s\S]x]/", $input); // Noncompliant
+    preg_match("/(?i)[A-_d-{]/", $input); // Noncompliant
+    preg_match("/(?i)[A-z_]/", $input); // Noncompliant
   }
 
   function compliant($input)
@@ -81,8 +83,6 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[aa/", $input); // Check should not run on syntactically invalid regexen
     preg_match("/(?U)[\wä]/", $input); // False negative because we don't support Unicode characters in \w and \W
     preg_match("/[[a-z&&b-e]c]/", $input); // FN because we don't support intersections
-    preg_match("/(?i)[A-_d-{]/", $input); // FN because we ignore case insensitivity unless both ends of the ranges are letters
-    preg_match("/(?i)[A-z_]/", $input); // FN because A-z gets misinterpreted as A-Za-z due to the way we handle case insensitivity
     preg_match("/[\p{Armenian}x]/", $input); // FN because we don't support \p at the moment
     preg_match("/[\\\\abc]/", $input);
     preg_match('/[ \s \' " \: \{ \} \[ \] , & \* \# \?]/x', $input);
