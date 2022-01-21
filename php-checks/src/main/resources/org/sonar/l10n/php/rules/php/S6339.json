@@ -16,6 +16,10 @@
   "securityStandards": {
     "OWASP": [
       "A3"
+    ],
+    "OWASP Top 10 2021": [
+      "A2"
     ]
-  }
+  },
+  "quickfix": "unknown"
 }

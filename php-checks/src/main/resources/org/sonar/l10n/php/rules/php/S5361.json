@@ -13,5 +13,6 @@
   "ruleSpecification": "RSPEC-5361",
   "sqKey": "S5361",
   "scope": "All",
+  "quickfix": "unknown",
   "title": "`str_replace` should be preferred to `preg_replace`"
 }
