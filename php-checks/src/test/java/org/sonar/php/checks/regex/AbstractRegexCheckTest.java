@@ -24,38 +24,52 @@ import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.CheckVerifier;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 public class AbstractRegexCheckTest {
 
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
+  private final AbstractRegexCheck check = new AbstractRegexCheck() {
+    @Override
+    protected void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
+      // do nothing
+    }
+  };
 
   @Test
   public void test_getLiteral() {
     assertThat(AbstractRegexCheck.getLiteral(expr("'//'"))).isPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("'/a/'"))).isPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("' /a/'"))).isPresent();
-    assertThat(AbstractRegexCheck.getLiteral(expr("'aFooa'"))).isNotPresent();
-    assertThat(AbstractRegexCheck.getLiteral(expr("''"))).isNotPresent();
+    assertThat(AbstractRegexCheck.getLiteral(expr("'aFooa'"))).isPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("'[FOO]'"))).isPresent();
-    assertThat(AbstractRegexCheck.getLiteral(expr("'[FOO'"))).isNotPresent();
+
     assertThat(AbstractRegexCheck.getLiteral(expr("$unknownPattern"))).isNotPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("FOO"))).isNotPresent();
-    assertThat(AbstractRegexCheck.getLiteral(expr("'[FOO['"))).isNotPresent();
+  }
+
+  @Test
+  public void testHasValidDelimiter() {
+    assertThat(check.hasValidDelimiters(pattern("'/Foo/'"))).isTrue();
+    assertThat(check.hasValidDelimiters(pattern("'/Foo\\/a/'"))).isTrue();
+    assertThat(check.hasValidDelimiters(pattern("'/Foo/mi'"))).isTrue();
+    assertThat(check.hasValidDelimiters(pattern("'~Foo~'"))).isTrue();
+    assertThat(check.hasValidDelimiters(pattern("'(Foo)'"))).isTrue();
+    assertThat(check.hasValidDelimiters(pattern("'#Foo#'"))).isTrue();
+    assertThat(check.hasValidDelimiters(pattern("'{Foo}'"))).isTrue();
+    assertThat(check.hasValidDelimiters(pattern("'[FOO]'"))).isTrue();
+
+    assertThat(check.hasValidDelimiters(pattern("'aFooa'"))).isFalse();
+    assertThat(check.hasValidDelimiters(pattern("''"))).isFalse();
+    assertThat(check.hasValidDelimiters(pattern("'[FOO['"))).isFalse();
   }
 
   @Test
@@ -87,6 +101,11 @@ public class AbstractRegexCheckTest {
       }
     };
     CheckVerifier.verify(check, "regex/AbstractRegexCheck.php");
+  }
+
+  private LiteralTree pattern(String pattern) {
+    return AbstractRegexCheck.getLiteral(expr(pattern))
+      .orElseThrow(() -> new AssertionError("Provided pattern string is not a valid literal"));
   }
 
   private ExpressionTree expr(String pattern) {
