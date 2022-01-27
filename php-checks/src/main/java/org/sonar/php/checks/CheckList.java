@@ -46,15 +46,16 @@ import org.sonar.php.checks.regex.AnchorPrecedenceCheck;
 import org.sonar.php.checks.regex.DuplicatesInCharacterClassCheck;
 import org.sonar.php.checks.regex.EmptyStringRepetitionCheck;
 import org.sonar.php.checks.regex.GraphemeClustersInClassesCheck;
+import org.sonar.php.checks.regex.GroupReplacementCheck;
 import org.sonar.php.checks.regex.ImpossibleBackReferenceCheck;
 import org.sonar.php.checks.regex.ImpossibleBoundariesCheck;
 import org.sonar.php.checks.regex.InvalidRegexCheck;
 import org.sonar.php.checks.regex.MultipleWhitespaceCheck;
 import org.sonar.php.checks.regex.PossessiveQuantifierContinuationCheck;
 import org.sonar.php.checks.regex.RedundantRegexAlternativesCheck;
+import org.sonar.php.checks.regex.RegexComplexityCheck;
 import org.sonar.php.checks.regex.RegexLookaheadCheck;
 import org.sonar.php.checks.regex.ReluctantQuantifierCheck;
-import org.sonar.php.checks.regex.RegexComplexityCheck;
 import org.sonar.php.checks.regex.ReluctantQuantifierWithEmptyContinuationCheck;
 import org.sonar.php.checks.regex.SingleCharacterAlternationCheck;
 import org.sonar.php.checks.regex.StringReplaceCheck;
@@ -343,6 +344,7 @@ public class CheckList {
       DuplicatesInCharacterClassCheck.class,
       EmptyStringRepetitionCheck.class,
       GraphemeClustersInClassesCheck.class,
+      GroupReplacementCheck.class,
       ImpossibleBackReferenceCheck.class,
       ImpossibleBoundariesCheck.class,
       InvalidRegexCheck.class,
