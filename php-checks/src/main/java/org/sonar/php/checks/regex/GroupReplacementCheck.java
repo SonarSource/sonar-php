@@ -42,7 +42,6 @@ public class GroupReplacementCheck extends AbstractRegexCheck {
 
   private final Set<CapturingGroupTree> groups = new HashSet<>();
 
-
   @Override
   protected Set<String> lookedUpFunctionNames() {
     return Set.of("preg_replace");
@@ -73,7 +72,7 @@ public class GroupReplacementCheck extends AbstractRegexCheck {
     );
   }
 
-  private List<Integer> collectReferences(String replacement) {
+  private static List<Integer> collectReferences(String replacement) {
     Matcher match = REFERENCE_PATTERN.matcher(replacement);
     List<Integer> references = new ArrayList<>();
     while (match.find()) {
