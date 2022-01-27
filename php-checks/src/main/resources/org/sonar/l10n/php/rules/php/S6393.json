@@ -1,0 +1,17 @@
+{
+  "title": "Regular expressions should have valid delimiters",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "regex"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-6393",
+  "sqKey": "S6393",
+  "scope": "All",
+  "quickfix": "unknown"
+}

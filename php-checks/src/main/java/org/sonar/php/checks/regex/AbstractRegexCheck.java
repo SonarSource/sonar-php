@@ -27,6 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
+import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.regex.PhpRegexCheck;
@@ -50,14 +51,13 @@ import static org.sonar.php.regex.PhpRegexUtils.BRACKET_DELIMITERS;
 
 public abstract class AbstractRegexCheck extends FunctionUsageCheck implements PhpRegexCheck {
 
-  private static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\w\\r\\n\\t\\f\\v ]");
-
   public static final int PCRE_CASELESS = Pattern.CASE_INSENSITIVE;
   public static final int PCRE_MULTILINE = Pattern.MULTILINE;
   public static final int PCRE_DOTALL = Pattern.DOTALL;
   public static final int PCRE_EXTENDED = Pattern.COMMENTS;
   public static final int PCRE_UTF8 = Pattern.UNICODE_CHARACTER_CLASS;
 
+  protected static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\w\\r\\n\\t\\f\\v ]");
   protected static final Set<String> REGEX_FUNCTIONS = SetUtils.immutableSetOf(
     "preg_replace", "preg_match", "preg_filter", "preg_replace_callback", "preg_split", "preg_match_all"
   );
@@ -83,11 +83,13 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
   protected void checkFunctionCall(FunctionCallTree tree) {
     CheckUtils.argumentValue(tree, "pattern", 0)
       .flatMap(AbstractRegexCheck::getLiteral)
+      .filter(this::hasValidDelimiters)
       .map(pattern -> regexForLiteral(getFlagSet(pattern), pattern))
       .ifPresent(result -> checkRegex(result, tree));
   }
 
-  protected static FlagSet getFlagSet(LiteralTree literalTree) {
+  @VisibleForTesting
+  static FlagSet getFlagSet(LiteralTree literalTree) {
     String pattern = trimPattern(literalTree);
     Character endDelimiter = PhpRegexUtils.getEndDelimiter(pattern);
     String patternModifiers = pattern.substring(pattern.lastIndexOf(endDelimiter) + 1);
@@ -98,27 +100,26 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
     return flags;
   }
 
-  protected static Optional<LiteralTree> getLiteral(ExpressionTree expr) {
+  @VisibleForTesting
+  static Optional<LiteralTree> getLiteral(ExpressionTree expr) {
     if (expr.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      return patternWithDelimiter((LiteralTree) expr);
+      return Optional.of((LiteralTree) expr);
     } else if (expr.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) expr).flatMap(AbstractRegexCheck::getLiteral);
     }
     return Optional.empty();
   }
 
-  protected static Optional<LiteralTree> patternWithDelimiter(LiteralTree tree) {
+  protected boolean hasValidDelimiters(LiteralTree tree) {
     String pattern = trimPattern(tree);
     if (pattern.length() >= 2) {
       Matcher m = DELIMITER_PATTERN.matcher(pattern);
-      if (m.find() && containsEndDelimiter(pattern.substring(1), m.group().charAt(0))) {
-        return Optional.of(tree);
-      }
+      return m.find() && containsEndDelimiter(pattern.substring(1), m.group().charAt(0));
     }
-    return Optional.empty();
+    return false;
   }
 
-  private static String trimPattern(LiteralTree tree) {
+  protected static String trimPattern(LiteralTree tree) {
     return CheckUtils.trimQuotes(tree).trim();
   }
 
@@ -130,9 +131,9 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
     return regexContext.regexForLiteral(flags, literals);
   }
 
-  public abstract void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall);
+  protected abstract void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall);
 
-  public void newIssue(RegexSyntaxElement regexTree, String message, @Nullable Integer cost, List<RegexIssueLocation> secondaries) {
+  protected void newIssue(RegexSyntaxElement regexTree, String message, @Nullable Integer cost, List<RegexIssueLocation> secondaries) {
     if (reportedRegexTrees.add(regexTree)) {
       PreciseIssue issue = regexContext.newIssue(this, regexTree, message);
       secondaries.stream().map(PhpRegexCheck.PhpRegexIssueLocation::new).forEach(issue::secondary);
@@ -142,7 +143,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
     }
   }
 
-  public final void newIssue(Tree tree, String message, @Nullable Integer cost, List<RegexIssueLocation> secondaries) {
+  protected final void newIssue(Tree tree, String message, @Nullable Integer cost, List<RegexIssueLocation> secondaries) {
     PreciseIssue issue = newIssue(tree, message);
     secondaries.stream().map(PhpRegexCheck.PhpRegexIssueLocation::new).forEach(issue::secondary);
     if (cost != null) {
@@ -151,7 +152,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
   }
 
   @CheckForNull
-  public static Integer parseModifier(char ch) {
+  private static Integer parseModifier(char ch) {
     switch (ch) {
       case 'i':
         return PCRE_CASELESS;

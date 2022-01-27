@@ -1,0 +1,31 @@
+<p>The pattern provided to PHP regular expression functions is required to be enclosed in valid delimiters. Failing to do so will result in a PHP
+warning and the pattern never matching. Since the warning only appears during runtime when the pattern is evaluated, such a mistake risks to get
+unnoticed into production.</p>
+<p>A delimiter can be any character that is not alphanumeric, a backslash, or a whitespace. Bracket style delimiters are also allowed.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+// Condition will always evaluate to false
+if (preg_match("/.*", $input)) {
+    echo "true";
+} else {
+    echo "false";
+}
+
+// Unclosed bracket delimiters
+$result = preg_match("[abc", $input);
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+if (preg_match("/.*/", $input)) {
+    echo "true";
+} else {
+    echo "false";
+}
+
+$result = preg_match("[abc]", $input);
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/regexp.reference.delimiters.php">Delimiters</a> - PHP Documentation </li>
+</ul>
+

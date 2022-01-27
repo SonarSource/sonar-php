@@ -48,6 +48,7 @@ import org.sonar.php.checks.regex.EmptyStringRepetitionCheck;
 import org.sonar.php.checks.regex.GraphemeClustersInClassesCheck;
 import org.sonar.php.checks.regex.ImpossibleBackReferenceCheck;
 import org.sonar.php.checks.regex.ImpossibleBoundariesCheck;
+import org.sonar.php.checks.regex.InvalidDelimiterCheck;
 import org.sonar.php.checks.regex.InvalidRegexCheck;
 import org.sonar.php.checks.regex.MultipleWhitespaceCheck;
 import org.sonar.php.checks.regex.PossessiveQuantifierContinuationCheck;
@@ -345,6 +346,7 @@ public class CheckList {
       GraphemeClustersInClassesCheck.class,
       ImpossibleBackReferenceCheck.class,
       ImpossibleBoundariesCheck.class,
+      InvalidDelimiterCheck.class,
       InvalidRegexCheck.class,
       MultipleWhitespaceCheck.class,
       PossessiveQuantifierContinuationCheck.class,
