@@ -384,6 +384,11 @@ public final class CheckUtils {
     return Optional.empty();
   }
 
+  public static Optional<LiteralTree> resolvedArgumentLiteral(FunctionCallTree call, String name, int position) {
+    return argumentValue(call, name, position).map(CheckUtils::assignedValue)
+      .filter(LiteralTree.class::isInstance).map(LiteralTree.class::cast);
+  }
+
   public static Optional<ExpressionTree> argumentValue(FunctionCallTree call, String name, int position) {
     return argument(call, name, position).map(CallArgumentTree::value);
   }
