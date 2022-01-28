@@ -62,6 +62,7 @@ import org.sonar.php.checks.regex.SingleCharacterAlternationCheck;
 import org.sonar.php.checks.regex.StringReplaceCheck;
 import org.sonar.php.checks.regex.SuperfluousCurlyBraceCheck;
 import org.sonar.php.checks.regex.UnicodeAwareCharClassesCheck;
+import org.sonar.php.checks.regex.UnquantifiedNonCapturingGroupCheck;
 import org.sonar.php.checks.regex.VerboseRegexCheck;
 import org.sonar.php.checks.security.AuthorizationsCheck;
 import org.sonar.php.checks.security.CORSPolicyCheck;
@@ -363,6 +364,7 @@ public class CheckList {
       StringReplaceCheck.class,
       SuperfluousCurlyBraceCheck.class,
       UnicodeAwareCharClassesCheck.class,
+      UnquantifiedNonCapturingGroupCheck.class,
       VerboseRegexCheck.class
     );
   }
