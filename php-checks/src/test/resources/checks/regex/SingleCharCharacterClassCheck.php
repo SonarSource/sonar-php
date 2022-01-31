@@ -27,5 +27,6 @@ class SingleCharCharacterClassCheck
     preg_match('/[[]/', $input);
     preg_match('/[0-1]/', $input);
     preg_match('/[^abc]/', $input);
+    preg_match('/[^a]/', $input);
   }
 }
