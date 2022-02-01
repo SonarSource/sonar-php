@@ -19,13 +19,17 @@
  */
 package org.sonar.php.checks.regex;
 
-import org.junit.Test;
-import org.sonar.plugins.php.CheckVerifier;
+import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonarsource.analyzer.commons.regex.RegexParseResult;
+import org.sonarsource.analyzer.commons.regex.finders.SingleCharCharacterClassFinder;
 
-public class SuperfluousCurlyBraceCheckTest {
+@Rule(key = "S6397")
+public class SingleCharCharacterClassCheck extends AbstractRegexCheck {
 
-  @Test
-  public void test() throws Exception {
-    CheckVerifier.verify(new SuperfluousCurlyBraceCheck(), "regex/SuperfluousCurlyBraceCheck.php");
+  @Override
+  protected void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
+    new SingleCharCharacterClassFinder(this::newIssue).visit(regexParseResult);
   }
+
 }

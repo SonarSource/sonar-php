@@ -22,10 +22,10 @@ package org.sonar.php.checks.regex;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class SuperfluousCurlyBraceCheckTest {
+public class SingleCharCharacterClassCheckTest {
 
   @Test
   public void test() throws Exception {
-    CheckVerifier.verify(new SuperfluousCurlyBraceCheck(), "regex/SuperfluousCurlyBraceCheck.php");
+    CheckVerifier.verify(new SingleCharCharacterClassCheck(), "regex/SingleCharCharacterClassCheck.php");
   }
 }
