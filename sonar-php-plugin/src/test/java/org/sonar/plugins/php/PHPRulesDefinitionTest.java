@@ -22,9 +22,6 @@ package org.sonar.plugins.php;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.Test;
-import org.sonar.api.SonarEdition;
-import org.sonar.api.SonarQubeSide;
-import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
@@ -37,7 +34,7 @@ public class PHPRulesDefinitionTest {
 
   @Test
   public void testActivationSonarLint() {
-    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition();
+    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition(SonarRuntimeImpl.forSonarLint(Version.create(8, 9)));
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository("php");
