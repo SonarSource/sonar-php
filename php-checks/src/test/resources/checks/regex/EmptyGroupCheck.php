@@ -9,10 +9,6 @@ class EmptyGroupCheck
   {
     preg_match("/foo()bar/", $input);    // Noncompliant {{Remove this empty group.}}
     //              ^^
-    preg_match("/foo(?-)bar/", $input);  // Noncompliant
-    //              ^^^^
-    preg_match("/foo(?-x)bar/", $input); // Noncompliant
-    //              ^^^^^
     preg_match("/foo(?:)bar/", $input);  // Noncompliant
     //              ^^^^
     preg_match("/foo(?>)bar/", $input);  // Noncompliant
@@ -28,8 +24,6 @@ class EmptyGroupCheck
 
     preg_match("/(foo()bar)/", $input);    // Noncompliant
     //               ^^
-    preg_match("/(foo(?-)bar)/", $input);  // Noncompliant
-    //               ^^^^
     preg_match("/(foo(?:)bar)/", $input);  // Noncompliant
     //               ^^^^
     preg_match("/(foo(?>)bar)/", $input);  // Noncompliant
@@ -46,6 +40,10 @@ class EmptyGroupCheck
 
   function compliant($input)
   {
+    preg_match("/foo(?-)bar/", $input);   // Compliant
+    preg_match("/foo(?-x)bar/", $input);  // Compliant
+    preg_match("/(foo(?-)bar)/", $input); // Compliant
+
     preg_match("/foo(x)bar/", $input);   // Compliant
     preg_match("/foo(?:x)bar/", $input); // Compliant
     preg_match("/foo(?>x)bar/", $input); // Compliant
