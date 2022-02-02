@@ -44,6 +44,7 @@ import org.sonar.php.checks.phpunit.OneExpectedCheckExceptionCheck;
 import org.sonar.php.checks.phpunit.TestClassNameCheck;
 import org.sonar.php.checks.regex.AnchorPrecedenceCheck;
 import org.sonar.php.checks.regex.DuplicatesInCharacterClassCheck;
+import org.sonar.php.checks.regex.EmptyGroupCheck;
 import org.sonar.php.checks.regex.EmptyStringRepetitionCheck;
 import org.sonar.php.checks.regex.GraphemeClustersInClassesCheck;
 import org.sonar.php.checks.regex.GroupReplacementCheck;
@@ -347,6 +348,7 @@ public class CheckList {
     return Set.of(
       AnchorPrecedenceCheck.class,
       DuplicatesInCharacterClassCheck.class,
+      EmptyGroupCheck.class,
       EmptyStringRepetitionCheck.class,
       GraphemeClustersInClassesCheck.class,
       GroupReplacementCheck.class,
