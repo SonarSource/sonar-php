@@ -151,3 +151,27 @@ trait Authorizable
     throw_unless($this->authorizedTo($request, $ability), AuthorizationException::class);
   }
 }
+
+class MatchCase {
+  public function X($input) {
+    match ($input) {
+      1 => voidFunction(1),
+      default => voidFunction(2)
+    };
+
+    $value = match ($input) {
+      1 => voidFunction(1), // Noncompliant
+      default => voidFunction(2) // Noncompliant
+    };
+  }
+}
+
+class ArrowFunctions {
+  public function X() {
+    $func = fn ($param) => voidFunction($param);
+  }
+}
+
+function voidFunction($param) {
+  echo $param;
+}
