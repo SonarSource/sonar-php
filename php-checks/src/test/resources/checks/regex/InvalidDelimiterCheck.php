@@ -27,5 +27,6 @@ class InvalidDelimiterCheck
     preg_match('~.*~', $input);
     preg_match('//', $input);
     preg_match('~', $input);              // to short
+    preg_match('_/continue$_', $input);
   }
 }

@@ -57,7 +57,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
   public static final int PCRE_EXTENDED = Pattern.COMMENTS;
   public static final int PCRE_UTF8 = Pattern.UNICODE_CHARACTER_CLASS;
 
-  protected static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\w\\r\\n\\t\\f\\v ]");
+  protected static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^\\w\\r\\n\\t\\f\\v ]|_");
   protected static final Set<String> REGEX_FUNCTIONS = SetUtils.immutableSetOf(
     "preg_replace", "preg_match", "preg_filter", "preg_replace_callback", "preg_split", "preg_match_all"
   );
