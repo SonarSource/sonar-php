@@ -421,21 +421,14 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
     Tree parent = child.getParent();
     Preconditions.checkNotNull(parent);
 
-    if (parent.is(Kind.NEW_EXPRESSION)) {
+    if (parent.is(Kind.NEW_EXPRESSION, Kind.EXPRESSION_STATEMENT, Kind.ARROW_FUNCTION_EXPRESSION)) {
       return false;
-
-    } else if (parent.is(Kind.PARENTHESISED_EXPRESSION, Kind.ERROR_CONTROL)) {
+    } else if (parent.is(Kind.PARENTHESISED_EXPRESSION, Kind.ERROR_CONTROL, Kind.MATCH_CONDITION_CLAUSE, Kind.MATCH_DEFAULT_CLAUSE, Kind.MATCH_EXPRESSION)) {
       return parentUseValue(parent);
-
     } else if (parent.is(Kind.CONDITIONAL_AND, Kind.ALTERNATIVE_CONDITIONAL_AND, Kind.CONDITIONAL_OR, Kind.ALTERNATIVE_CONDITIONAL_OR)) {
       return child == ((BinaryExpressionTree) parent).leftOperand() || parentUseValue(parent);
-
     } else if (parent.is(Kind.CONDITIONAL_EXPRESSION)) {
       return child == ((ConditionalExpressionTree) parent).condition() || parentUseValue(parent);
-
-    } else if (parent.is(Kind.EXPRESSION_STATEMENT)) {
-      return false;
-
     } else if (parent.is(Kind.FOR_STATEMENT)) {
       SeparatedList<ExpressionTree> conditions = ((ForStatementTree) parent).condition();
       ExpressionTree lastCondition = conditions.isEmpty() ? null : conditions.get(conditions.size() - 1);
