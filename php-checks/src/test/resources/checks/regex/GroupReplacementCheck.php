@@ -24,4 +24,11 @@ class GroupReplacementCheck
     preg_replace("/(a)(b)/", "\1 \2", "");
     preg_replace("/(a(b))/", "\1 \2", "");
   }
+
+  function unresolved_pattern() {
+    preg_replace($this->patterns->getSimpleEscapePattern(), '$1', "");
+    preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], '\1_\2', "");
+    preg_replace($regex, '<a href="http$1://$2$3$4" class="_blanktarget">$0</a>', "");
+    preg_replace('/&lt;'. $name .'([^&]+)+\&gt;/', '<span \\1>', "");
+  }
 }

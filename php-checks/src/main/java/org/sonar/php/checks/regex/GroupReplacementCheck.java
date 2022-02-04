@@ -40,26 +40,19 @@ public class GroupReplacementCheck extends AbstractRegexCheck {
   private static final String MESSAGE = "Referencing non-existing group%s: %s.";
   private static final Pattern REFERENCE_PATTERN = Pattern.compile("\\$(\\d+)|\\$\\{(\\d+)}|\\\\(\\d+)");
 
-  private final Set<CapturingGroupTree> groups = new HashSet<>();
-
   @Override
   protected Set<String> lookedUpFunctionNames() {
     return Set.of("preg_replace");
   }
 
   @Override
-  protected void checkFunctionCall(FunctionCallTree tree) {
-    super.checkFunctionCall(tree);
-    checkReplacement(tree);
-  }
-
-  @Override
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
-    groups.clear();
-    new GroupFinder().visit(regexParseResult);
+    GroupFinder groupFinder = new GroupFinder();
+    groupFinder.visit(regexParseResult);
+    checkReplacement(regexFunctionCall, groupFinder.groups);
   }
 
-  private void checkReplacement(FunctionCallTree tree) {
+  private void checkReplacement(FunctionCallTree tree, Set<CapturingGroupTree> groups) {
     CheckUtils.resolvedArgumentLiteral(tree, "replacement", 1).ifPresent(
       replacement -> {
         List<Integer> references = collectReferences(replacement.value());
@@ -84,7 +77,10 @@ public class GroupReplacementCheck extends AbstractRegexCheck {
     return references;
   }
 
-  class GroupFinder extends RegexBaseVisitor {
+  static class GroupFinder extends RegexBaseVisitor {
+
+    private final Set<CapturingGroupTree> groups = new HashSet<>();
+
     @Override
     public void visitCapturingGroup(CapturingGroupTree group) {
       groups.add(group);
