@@ -3,35 +3,35 @@ it bubble up automatically, but with more code and the additional detriment of l
 <p>Such clauses should either be eliminated or populated with the appropriate logic.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-$s = "";
+<code data-lang="php">$s = "";
 try {
   $s = readMyFile($fileName);
 } catch (Exception $e)  {
   throw $e;  // Noncompliant
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$s = "";
+<code data-lang="php">$s = "";
 try {
   $s = readMyFile($fileName);
 } catch (Exception $e) {
   error_log($e-&gt;getMessage());
   throw $e;  // Compliant
-}
+}</code>
 </pre>
 <p>or</p>
 <pre>
-$s = "";
+<code data-lang="php">$s = "";
 try {
   $s = readMyFile($fileName);
 } catch (Exception $e) {
   error_log($e-&gt;getMessage());
   throw new MyException("an exception occurred", 2, $e);  // Compliant
-}
+}</code>
 </pre>
 <p>or</p>
 <pre>
-$s = readMyFile($fileName);
+<code data-lang="php">$s = readMyFile($fileName);</code>
 </pre>
 

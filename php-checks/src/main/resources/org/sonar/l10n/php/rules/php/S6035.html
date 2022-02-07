@@ -2,12 +2,12 @@
 preferred because it is more efficient.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-preg_match("/a|b|c/", $str); // Noncompliant
+<code data-lang="php">preg_match("/a|b|c/", $str); // Noncompliant</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-preg_match("/[abc]/", $str);
+<code data-lang="php">preg_match("/[abc]/", $str);
 // or
-preg_match("/[a-c]/", $str);
+preg_match("/[a-c]/", $str);</code>
 </pre>
 

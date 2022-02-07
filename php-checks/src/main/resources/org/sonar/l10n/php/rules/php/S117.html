@@ -3,16 +3,16 @@ not match the provided regular expression.</p>
 <h2>Noncompliant Code Example</h2>
 <p>With the default regular expression <code>^[a-z][a-zA-Z0-9]*$</code>:</p>
 <pre>
-public function doSomething($my_param){
+<code data-lang="php">public function doSomething($my_param){
   $LOCAL;
   ...
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-public function doSomething($myParam){
+<code data-lang="php">public function doSomething($myParam){
   $local;
   ...
-}
+}</code>
 </pre>
 

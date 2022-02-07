@@ -3,14 +3,14 @@ the sets is precedence. Because <code>and</code> / <code>or</code> have a lower 
 <code>&amp;&amp;</code> / <code>||</code> may not have the result you expect.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-$have_time = true;
+<code data-lang="php">$have_time = true;
 $have_money = false;
-$take_vacation = $have_time and $have_money;  // Noncompliant. $take_vacation == true.
+$take_vacation = $have_time and $have_money;  // Noncompliant. $take_vacation == true.</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$have_time = true;
+<code data-lang="php">$have_time = true;
 $have_money = false;
-$take_vacation = $have_time &amp;&amp; $have_money;  // $take_vacation == false.
+$take_vacation = $have_time &amp;&amp; $have_money;  // $take_vacation == false.</code>
 </pre>
 

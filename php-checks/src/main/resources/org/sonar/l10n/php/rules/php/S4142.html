@@ -2,17 +2,17 @@
 intended for one of the arguments.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-if (compare($a+$x, $a+$x) != 0) { // Noncompliant
+<code data-lang="php">if (compare($a+$x, $a+$x) != 0) { // Noncompliant
 &nbsp;&nbsp;//...
 }
 
 if (compare(getValue($a), getValue($a)) != 0) { // Noncompliant
 &nbsp;&nbsp;// ...
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-if (compare($a+$y, $a+$x) != 0) {
+<code data-lang="php">if (compare($a+$y, $a+$x) != 0) {
 &nbsp;&nbsp;//...
 }
 
@@ -20,7 +20,7 @@ $v1 = getValue($a);
 $v2 = getValue($a);
 if (compare($v1, $v2) != 0) {
 &nbsp;&nbsp;// ...
-}
+}</code>
 </pre>
 <h2>Deprecated</h2>
 <p>This rule is deprecated, and will eventually be removed.</p>

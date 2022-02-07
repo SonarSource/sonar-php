@@ -3,19 +3,6 @@ href="https://www.w3.org/TR/xml/#sec-internal-ent">internal</a> or <a href="http
 <p>When parsing the XML file, the content of the external entities is retrieved from an external storage such as the file system or network, which may
 lead, if no restrictions are put in place, to arbitrary file disclosures or <a
 href="https://www.owasp.org/index.php/Server_Side_Request_Forgery">server-side request forgery (SSRF)</a> vulnerabilities.</p>
-<pre>
-&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;!DOCTYPE person [
-  &lt;!ENTITY file SYSTEM "file:///etc/passwd"&gt;
-  &lt;!ENTITY ssrf SYSTEM "https://internal.network/sensitive_information"&gt;
-]&gt;
-
-&lt;person&gt;
-  &lt;name&gt;&amp;file;&lt;/name&gt;
-  &lt;city&gt;&amp;ssrf;&lt;/city&gt;
-  &lt;age&gt;18&lt;/age&gt;
-&lt;/person&gt;
-</pre>
 <p>It’s recommended to limit resolution of external entities by using one of these solutions:</p>
 <ul>
   <li> If DOCTYPE is not necessary, completely disable all DOCTYPE declarations. </li>
@@ -29,36 +16,36 @@ href="https://www.owasp.org/index.php/Server_Side_Request_Forgery">server-side r
 <h2>Noncompliant Code Example</h2>
 <p><a href="https://www.php.net/manual/fr/function.simplexml-load-string.php">SimpleXML</a> object:</p>
 <pre>
-$xml = file_get_contents("xxe.xml");
-$doc = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOENT); // Noncompliant (LIBXML_NOENT enable external entities substitution)
+<code data-lang="php">$xml = file_get_contents("xxe.xml");
+$doc = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOENT); // Noncompliant (LIBXML_NOENT enable external entities substitution)</code>
 </pre>
 <p><a href="https://www.php.net/manual/fr/class.domdocument.php">DOMDocument</a> object:</p>
 <pre>
-$doc = new DOMDocument();
-$doc-&gt;load("xxe.xml", LIBXML_NOENT); // Noncompliant (LIBXML_NOENT enable external entities substitution)
+<code data-lang="php">$doc = new DOMDocument();
+$doc-&gt;load("xxe.xml", LIBXML_NOENT); // Noncompliant (LIBXML_NOENT enable external entities substitution)</code>
 </pre>
 <p><a href="https://www.php.net/manual/fr/xmlreader.xml.php">XMLReader</a> object:</p>
 <pre>
-$reader = new XMLReader();
+<code data-lang="php">$reader = new XMLReader();
 $reader-&gt;open("xxe.xml");
-$reader-&gt;setParserProperty(XMLReader::SUBST_ENTITIES, true); // Noncompliant (SUBST_ENTITIES enable external entities substitution)
+$reader-&gt;setParserProperty(XMLReader::SUBST_ENTITIES, true); // Noncompliant (SUBST_ENTITIES enable external entities substitution)</code>
 </pre>
 <h2>Compliant Solution</h2>
 <p><a href="https://www.php.net/manual/fr/function.simplexml-load-string.php">SimpleXML</a> object:</p>
 <pre>
-$xml = file_get_contents("xxe.xml");
-$doc = simplexml_load_string($xml, "SimpleXMLElement"); // Compliant (external entities substitution are disabled by default)
+<code data-lang="php">$xml = file_get_contents("xxe.xml");
+$doc = simplexml_load_string($xml, "SimpleXMLElement"); // Compliant (external entities substitution are disabled by default)</code>
 </pre>
 <p><a href="https://www.php.net/manual/fr/class.domdocument.php">DOMDocument</a> object:</p>
 <pre>
-$doc = new DOMDocument();
-$doc-&gt;load("xxe.xml"); // Compliant (external entities substitution are disabled by default)
+<code data-lang="php">$doc = new DOMDocument();
+$doc-&gt;load("xxe.xml"); // Compliant (external entities substitution are disabled by default)</code>
 </pre>
 <p><a href="https://www.php.net/manual/fr/xmlreader.xml.php">XMLReader</a> object:</p>
 <pre>
-$reader = new XMLReader();
+<code data-lang="php">$reader = new XMLReader();
 $reader-&gt;open("xxe.xml");
-$reader-&gt;setParserProperty(XMLReader::SUBST_ENTITIES, false); // Compliant (SUBST_ENTITIES set to false)
+$reader-&gt;setParserProperty(XMLReader::SUBST_ENTITIES, false); // Compliant (SUBST_ENTITIES set to false)</code>
 </pre>
 <h2>See</h2>
 <ul>

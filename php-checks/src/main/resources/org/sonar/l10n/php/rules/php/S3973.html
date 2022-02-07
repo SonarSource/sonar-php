@@ -3,27 +3,27 @@ and good practice, such lines are indented. In the absence of both curly braces 
 unclear and perhaps not actually what is executed. Additionally, such code is highly likely to be confusing to maintainers.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-if ($x &gt; 0)  // Noncompliant
+<code data-lang="php">if ($x &gt; 0)  // Noncompliant
 doTheThing();
 doTheOtherThing();
 
-foo();
+foo();</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-if ($x &gt; 0) {
+<code data-lang="php">if ($x &gt; 0) {
   doTheThing();
   doTheOtherThing();
 }
 
-foo();
+foo();</code>
 </pre>
 <p>or</p>
 <pre>
-if ($x &gt; 0)
+<code data-lang="php">if ($x &gt; 0)
     doTheThing();
 doTheOtherThing();
 
-foo();
+foo();</code>
 </pre>
 

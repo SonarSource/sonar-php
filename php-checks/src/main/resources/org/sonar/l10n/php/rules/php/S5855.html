@@ -4,12 +4,12 @@ serves no purpose.</p>
 does not match what it was intended to match and should be reworked.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-"/[ab]|a/"   // The "|a" is redundant because "[ab]" already matches "a"
-"/.*|a/"     // .* matches everything, so any other alternative is redundant
+<code data-lang="php">"/[ab]|a/"   // The "|a" is redundant because "[ab]" already matches "a"
+"/.*|a/"     // .* matches everything, so any other alternative is redundant</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-"/[ab]/"
-"/.*/"
+<code data-lang="php">"/[ab]/"
+"/.*/"</code>
 </pre>
 

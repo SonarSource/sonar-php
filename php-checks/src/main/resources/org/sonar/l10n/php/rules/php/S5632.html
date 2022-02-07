@@ -4,13 +4,13 @@ custom exceptions.</p>
 <p>This rule raises an issue when an instance of a class that does not implement the "Throwable" interface is used in a "throw" statement .</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-class NoThrowable {}
+<code data-lang="php">class NoThrowable {}
 
-throw new NoThrowable(); // Noncompliant
+throw new NoThrowable(); // Noncompliant</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-&lt;?php
+<code data-lang="php">&lt;?php
 
 class SomeThrowable implements Throwable {
     // Implementation of the Throwable methods
@@ -20,6 +20,6 @@ throw new SomeThrowable(); // Compliant
 
 class SomeCustomException extends Exception {}
 
-throw new SomeCustomException(); // Compliant{code}
+throw new SomeCustomException(); // Compliant{code}</code>
 </pre>
 

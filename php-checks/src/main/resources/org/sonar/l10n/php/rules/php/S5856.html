@@ -6,14 +6,14 @@ capturing groups should use the correctly spelled name or number of the group.</
 expressions should be used.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-preg_match("/([/", $input);
+<code data-lang="php">preg_match("/([/", $input);
 preg_replace("/[/", "{", $input);
-preg_replace("/(\\w+-(\\d+)/", "1234", $input);
+preg_replace("/(\\w+-(\\d+)/", "1234", $input);</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-preg_match("/\\(\\[/", $input);
+<code data-lang="php">preg_match("/\\(\\[/", $input);
 str_replace("([", "{", $input);
-preg_replace("/(\\w+)-(\\d+)/", "1234", $input);
+preg_replace("/(\\w+)-(\\d+)/", "1234", $input);</code>
 </pre>
 

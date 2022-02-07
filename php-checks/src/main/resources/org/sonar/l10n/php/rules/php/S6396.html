@@ -9,14 +9,14 @@ expression, and it can be removed to improve readability. This rule raises an is
 </ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
-"/ab{1,1}c/"
+<code data-lang="php">"/ab{1,1}c/"
 "/ab{1}c/"
 "/ab{0,0}c/"
-"/ab{0}c/"
+"/ab{0}c/"</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-"/abc/"
-"/ac/"
+<code data-lang="php">"/abc/"
+"/ac/"</code>
 </pre>
 

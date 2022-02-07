@@ -2,16 +2,16 @@
 on the alternative functions <em>assertTrue()</em>, <em>assertFalse()</em>, assertNull(), and <em>assertNotNull()</em>.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-assertEquals(true, $x); // Noncompliant {{Use assertTrue() instead.}}
+<code data-lang="php">assertEquals(true, $x); // Noncompliant {{Use assertTrue() instead.}}
 assertNotEquals(false, $x); // Noncompliant {{Use assertTrue() instead.}}
 assertSame(null, $x); // Noncompliant {{Use assertNull() instead.}}
-assertNotSame(true, $x); // Noncompliant {{Use assertFalse() instead.}}
+assertNotSame(true, $x); // Noncompliant {{Use assertFalse() instead.}}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-assertTrue($x); // Compliant
+<code data-lang="php">assertTrue($x); // Compliant
 assertFalse($x); // Compliant
 assertNull($x); // Compliant
-assertNotNull($x); // Compliant
+assertNotNull($x); // Compliant</code>
 </pre>
 

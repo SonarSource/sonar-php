@@ -6,7 +6,7 @@ the omission of curly braces means the lines will be unconditionally executed on
 look fine in your editor but are confusing when you change the size of tabs.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-if ($condition)
+<code data-lang="php">if ($condition)
   firstActionInBlock();
   secondAction();  // Noncompliant; executed unconditionally
 thirdAction();
@@ -19,11 +19,11 @@ if($condition) firstActionInBlock();  // Noncompliant
 $str = null;
 for ($i = 0; $i &lt; count($array); $i++)
   $str = $array[$i];
-  doTheThing($str);  // Noncompliant; executed only on last array element
+  doTheThing($str);  // Noncompliant; executed only on last array element</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-if ($condition) {
+<code data-lang="php">if ($condition) {
   firstActionInBlock();
   secondAction();
 }
@@ -40,7 +40,7 @@ $str = null;
 for ($i = 0; $i &lt; count($array); $i++) {
   $str = $array[$i];
   doTheThing($str);
-}
+}</code>
 </pre>
 <h2>See</h2>
 <ul>

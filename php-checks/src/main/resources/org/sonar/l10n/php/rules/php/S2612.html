@@ -32,24 +32,24 @@ $fs-&gt;chmod("foo", 0777); // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-chmod("foo", 0750); // Compliant
+<code data-lang="php">chmod("foo", 0750); // Compliant</code>
 </pre>
 <pre>
-umask(0027); // Compliant
+<code data-lang="php">umask(0027); // Compliant</code>
 </pre>
 <p>For <a href="https://symfony.com/doc/current/components/filesystem.html">Symfony Filesystem</a>:</p>
 <pre>
-use Symfony\Component\Filesystem\Filesystem;
+<code data-lang="php">use Symfony\Component\Filesystem\Filesystem;
 
 $fs = new Filesystem();
-$fs-&gt;chmod("foo", 0750); // Compliant
+$fs-&gt;chmod("foo", 0750); // Compliant</code>
 </pre>
 <p>For <a href="https://laravel.com/api/8.x/Illuminate/Filesystem/Filesystem.html">Laravel Filesystem</a>:</p>
 <pre>
-use Illuminate\Filesystem\Filesystem;
+<code data-lang="php">use Illuminate\Filesystem\Filesystem;
 
 $fs = new Filesystem();
-$fs-&gt;chmod("foo", 0750); // Compliant
+$fs-&gt;chmod("foo", 0750); // Compliant</code>
 </pre>
 <h2>See</h2>
 <ul>

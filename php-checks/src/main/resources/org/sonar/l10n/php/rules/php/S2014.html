@@ -2,7 +2,7 @@
 is not available to them. Using <code>$this</code> in a static context will result in a fatal error at runtime.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-class Clazz {
+<code data-lang="php">class Clazz {
   $name=NULL;  // instance variable
 
   public static function foo(){
@@ -10,11 +10,11 @@ class Clazz {
       // ...
     }
   }
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-class Clazz {
+<code data-lang="php">class Clazz {
   $name=NULL;  // instance variable
 
   public static function foo($nameParam){
@@ -22,6 +22,6 @@ class Clazz {
       // ...
     }
   }
-}
+}</code>
 </pre>
 

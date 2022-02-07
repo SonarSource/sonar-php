@@ -2,12 +2,12 @@
 with multiple arguments will result in a parse error.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-echo("Hello");  // Noncompliant, but it works
-echo("Hello", "World"); // Noncompliant. Parse error
+<code data-lang="php">echo("Hello");  // Noncompliant, but it works
+echo("Hello", "World"); // Noncompliant. Parse error</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-echo "Hello";
-echo "Hello","World!";
+<code data-lang="php">echo "Hello";
+echo "Hello","World!";</code>
 </pre>
 

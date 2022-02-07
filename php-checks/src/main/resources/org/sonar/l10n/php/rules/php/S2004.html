@@ -2,13 +2,13 @@
 <h2>Noncompliant Code Example</h2>
 <p>With the default threshold of 3:</p>
 <pre>
-function f () {
+<code data-lang="php">function f () {
   function f_inner () {
     function f_inner_inner() {
       function f_inner_inner_inner() { // Noncompliant
       }
     }
   }
-}
+}</code>
 </pre>
 

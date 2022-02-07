@@ -4,20 +4,20 @@ may be used wrongly in the rest of the code. For this reason, it is recommended 
 <code>foreach</code> to avoid any unexpected side effects.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-$arr = array(1, 2, 3);
+<code data-lang="php">$arr = array(1, 2, 3);
 foreach ($arr as &amp;$value) { // Noncompliant; $value is still alive after the loop and references the last item of the array: $arr[2]
     $value = $value * 2;
 }
-$value = 'x';
+$value = 'x';</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$arr = array(1, 2, 3);
+<code data-lang="php">$arr = array(1, 2, 3);
 foreach ($arr as &amp;$value) { // Compliant; there is no risk to use by mistake the content of $value pointing to $arr[2]
     $value = $value * 2;
 }
 unset($value);
-$value = 'x';
+$value = 'x';</code>
 </pre>
 <h2>See</h2>
 <ul>

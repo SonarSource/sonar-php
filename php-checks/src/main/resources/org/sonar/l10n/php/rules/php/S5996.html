@@ -5,11 +5,11 @@ only at the end.</p>
 match.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-// This can never match because $ and ^ have been switched around
-preg_match("/$[a-z]+^/", $str); // Noncompliant
+<code data-lang="php">// This can never match because $ and ^ have been switched around
+preg_match("/$[a-z]+^/", $str); // Noncompliant</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-preg_match("/^[a-z]+$/", $str);
+<code data-lang="php">preg_match("/^[a-z]+$/", $str);</code>
 </pre>
 

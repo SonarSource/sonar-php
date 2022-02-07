@@ -4,23 +4,23 @@ what is exactly tested.</p>
 tested.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-public function testSomething()
+<code data-lang="php">public function testSomething()
 {
   try {
     g(y(1)); // Noncompliant
     $this-&gt;fail('RuntimeException is not thrown');
   } catch (RuntimeException $e) {}
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-public function testSomething()
+<code data-lang="php">public function testSomething()
 {
   $y = y(1);
   try {
     g($y);
     $this-&gt;fail('RuntimeException is not thrown by g()');
   } catch (RuntimeException $e) {}
-}
+}</code>
 </pre>
 

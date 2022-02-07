@@ -39,15 +39,15 @@ setrawcookie($name, $value, $expire, $path, $domain, true); // Sensitive: a sens
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-session.cookie_httponly = 1; // Compliant: the sensitive cookie is protected against theft thanks (cookie_httponly=1)
+<code data-lang="php">session.cookie_httponly = 1; // Compliant: the sensitive cookie is protected against theft thanks (cookie_httponly=1)</code>
 </pre>
 <pre>
-session_set_cookie_params($lifetime, $path, $domain, true, true); // Compliant: the sensitive cookie is protected against theft thanks to the fifth argument set to true (HttpOnly=true)
+<code data-lang="php">session_set_cookie_params($lifetime, $path, $domain, true, true); // Compliant: the sensitive cookie is protected against theft thanks to the fifth argument set to true (HttpOnly=true)</code>
 </pre>
 <pre>
-$value = "sensitive data";
+<code data-lang="php">$value = "sensitive data";
 setcookie($name, $value, $expire, $path, $domain, true, true); // Compliant: the sensitive cookie is protected against theft thanks to the seventh argument set to true (HttpOnly=true)
-setrawcookie($name, $value, $expire, $path, $domain, true, true); // Compliant: the sensitive cookie is protected against theft thanks to the seventh argument set to true (HttpOnly=true)
+setrawcookie($name, $value, $expire, $path, $domain, true, true); // Compliant: the sensitive cookie is protected against theft thanks to the seventh argument set to true (HttpOnly=true)</code>
 </pre>
 <h2>See</h2>
 <ul>

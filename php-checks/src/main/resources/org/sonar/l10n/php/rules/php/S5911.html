@@ -6,17 +6,17 @@ importing the classes.</p>
 <p>This rule raises an issue when, being in a namespace, an undefined class belonging to that namespace is caught.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-namespace Foo\Bar;
+<code data-lang="php">namespace Foo\Bar;
 
 try {
     doSomething();
 } catch (Exception $e) { // Noncompliant - Exception will never be caught because the class Exception does not exist in the namespace
     echo $e-&gt;message;
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-namespace Foo\Bar;
+<code data-lang="php">namespace Foo\Bar;
 
 try {
     doSomething();
@@ -34,6 +34,6 @@ try {
     doSomething();
 } catch (Exception $e) { // Compliant imported by use statement
     echo $e-&gt;message;
-}
+}</code>
 </pre>
 

@@ -3,19 +3,19 @@ issue when <code>openssl_public_encrypt</code> is used with one the following pa
 <code>OPENSSL_PKCS1_PADDING</code> or <code>OPENSSL_SSLV23_PADDING</code>.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-function encrypt($data, $key) {
+<code data-lang="php">function encrypt($data, $key) {
   $crypted='';
   openssl_public_encrypt($data, $crypted, $key, OPENSSL_NO_PADDING); // Noncompliant
   return $crypted;
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-function encrypt($data, $key) {
+<code data-lang="php">function encrypt($data, $key) {
   $crypted='';
   openssl_public_encrypt($data, $crypted, $key, OPENSSL_PKCS1_OAEP_PADDING);
   return $crypted;
-}
+}</code>
 </pre>
 <h2>See</h2>
 <ul>

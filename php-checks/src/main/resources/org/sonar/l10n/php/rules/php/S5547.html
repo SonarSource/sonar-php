@@ -4,7 +4,7 @@ are not vulnerable to well-known attacks like brute force attacks for example.</
 <p>More specifically for block cipher, it’s not recommended to use algorithm with a block size inferior than 128 bits.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-&lt;?php
+<code data-lang="php">&lt;?php
 // mcrypt_encrypt is deprecated since PHP 7.1
 $c1 = mcrypt_encrypt(MCRYPT_DES, $key, $plaintext, $mode);  // Noncompliant: DES works with 56-bit keys allow attacks via exhaustive search
 $c2 = mcrypt_encrypt(MCRYPT_DES_COMPAT, $key, $plaintext, $mode); // Noncompliant: DES works with 56-bit keys allow attacks via exhaustive search
@@ -18,12 +18,12 @@ $c8 = openssl_encrypt($plaintext, "bf-ecb", $key, $options=OPENSSL_RAW_DATA, $iv
 $c9 = openssl_encrypt($plaintext, "des-ede3", $key, $options=OPENSSL_RAW_DATA, $iv);  // Noncompliant: Triple DES is vulnerable to meet-in-the-middle attack
 $c10 = openssl_encrypt($plaintext, "des-ofb", $key, $options=OPENSSL_RAW_DATA, $iv);  // Noncompliant: DES works with 56-bit keys allow attacks via exhaustive search
 $c11 = openssl_encrypt($plaintext, "rc2-cbc", $key, $options=OPENSSL_RAW_DATA, $iv); // Noncompliant: RC2 is vulnerable to a related-key attack
-$c12 = openssl_encrypt($plaintext, "rc4", $key, $options=OPENSSL_RAW_DATA, $iv);  // Noncompliant: vulnerable to several attacks (see https://en.wikipedia.org/wiki/RC4#Security)
+$c12 = openssl_encrypt($plaintext, "rc4", $key, $options=OPENSSL_RAW_DATA, $iv);  // Noncompliant: vulnerable to several attacks (see https://en.wikipedia.org/wiki/RC4#Security)</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-&lt;?php
-$c1= openssl_encrypt($plaintext, "aes-256-gcm", $key, $options=OPENSSL_RAW_DATA, $iv); // Compliant
+<code data-lang="php">&lt;?php
+$c1= openssl_encrypt($plaintext, "aes-256-gcm", $key, $options=OPENSSL_RAW_DATA, $iv); // Compliant</code>
 </pre>
 <h2>See</h2>
 <ul>

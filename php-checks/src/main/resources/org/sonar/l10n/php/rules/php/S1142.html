@@ -3,7 +3,7 @@ return statement is encountered. This makes it harder to read and understand the
 <h2>Noncompliant Code Example</h2>
 <p>With the default threshold of 3:</p>
 <pre>
-function myFunction(){ // Noncompliant as there are 4 return statements
+<code data-lang="php">function myFunction(){ // Noncompliant as there are 4 return statements
   if (condition1) {
     return true;
   } else {
@@ -14,6 +14,6 @@ function myFunction(){ // Noncompliant as there are 4 return statements
     }
   }
   return false;
-}
+}</code>
 </pre>
 

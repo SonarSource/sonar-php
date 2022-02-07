@@ -3,7 +3,7 @@ However, if <code>define</code> statements are located at the end of this file, 
 <code>define</code> statement appears after <code>wp-settings.php</code> is loaded.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-// in wp-config.php
+<code data-lang="php">// in wp-config.php
 
 define( 'WP_DEBUG', false );
 
@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 require_once ABSPATH . 'wp-settings.php';
 
-define( 'WP_POST_REVISIONS', 3 ); // Noncompliant
+define( 'WP_POST_REVISIONS', 3 ); // Noncompliant</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-// in wp-config.php
+<code data-lang="php">// in wp-config.php
 
 define( 'WP_DEBUG', false );
 
@@ -34,6 +34,6 @@ define( 'WP_POST_REVISIONS', 3 ); // Noncompliant
 if ( ! defined( 'ABSPATH' ) ) {
         define( 'ABSPATH', __DIR__ . '/' );
 }
-require_once ABSPATH . 'wp-settings.php';
+require_once ABSPATH . 'wp-settings.php';</code>
 </pre>
 
