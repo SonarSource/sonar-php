@@ -7,12 +7,12 @@ characters. Otherwise, possessive quantifiers consume all characters that could 
 following sub-patterns.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-"/a++abc/"              // Noncompliant, the second 'a' never matches
-"/\d*+[02468]/"         // Noncompliant, the sub-pattern "[02468]" never matches
+<code data-lang="php">"/a++abc/"              // Noncompliant, the second 'a' never matches
+"/\d*+[02468]/"         // Noncompliant, the sub-pattern "[02468]" never matches</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-"/aa++bc/"              // Compliant, for example it can match "aaaabc"
-"/\d*+(?&lt;=[02468])/"    // Compliant, for example it can match an even number like "1234"
+<code data-lang="php">"/aa++bc/"              // Compliant, for example it can match "aaaabc"
+"/\d*+(?&lt;=[02468])/"    // Compliant, for example it can match an even number like "1234"</code>
 </pre>
 

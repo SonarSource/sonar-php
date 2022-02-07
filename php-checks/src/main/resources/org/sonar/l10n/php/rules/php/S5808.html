@@ -8,20 +8,20 @@ access.</p>
   it returns only an affirmative decision (<code>ACCESS_GRANTED</code>): </li>
 </ul>
 <pre>
-class NoncompliantVoterInterface implements VoterInterface
+<code data-lang="php">class NoncompliantVoterInterface implements VoterInterface
 {
     public function vote(TokenInterface $token, $subject, array $attributes)
     {
         return self::ACCESS_GRANTED; // Noncompliant
     }
-}
+}</code>
 </pre>
 <ul>
   <li> the <code>voteOnAttribute</code> method of a <a href="https://symfony.com/doc/current/security/voters.html">Voter</a> type is not compliant
   when it returns only an affirmative decision (<code>true</code>): </li>
 </ul>
 <pre>
-class NoncompliantVoter extends Voter
+<code data-lang="php">class NoncompliantVoter extends Voter
 {
     protected function supports(string $attribute, $subject)
     {
@@ -32,7 +32,7 @@ class NoncompliantVoter extends Voter
     {
         return true; // Noncompliant
     }
-}
+}</code>
 </pre>
 <p>In a Laravel web application:</p>
 <ul>
@@ -40,7 +40,7 @@ class NoncompliantVoter extends Voter
   are not compliant when they return only an affirmative decision (<code>true</code> or <code>Response::allow()</code>): </li>
 </ul>
 <pre>
-class NoncompliantGuard
+<code data-lang="php">class NoncompliantGuard
 {
     public function boot()
     {
@@ -52,7 +52,7 @@ class NoncompliantGuard
             return Response::allow(); // Noncompliant
         });
     }
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <p>In a Symfony web application:</p>
@@ -61,7 +61,7 @@ class NoncompliantGuard
   negative decision (<code>ACCESS_DENIED</code>) or abstain from making a decision (<code>ACCESS_ABSTAIN</code>): </li>
 </ul>
 <pre>
-class CompliantVoterInterface implements VoterInterface
+<code data-lang="php">class CompliantVoterInterface implements VoterInterface
 {
     public function vote(TokenInterface $token, $subject, array $attributes)
     {
@@ -72,14 +72,14 @@ class CompliantVoterInterface implements VoterInterface
         }
         return self::ACCESS_DENIED;
     }
-}
+}</code>
 </pre>
 <ul>
   <li> the <code>voteOnAttribute</code> method of a <a href="https://symfony.com/doc/current/security/voters.html">Voter</a> type should return a
   negative decision (<code>false</code>): </li>
 </ul>
 <pre>
-class CompliantVoter extends Voter
+<code data-lang="php">class CompliantVoter extends Voter
 {
     protected function supports(string $attribute, $subject)
     {
@@ -93,7 +93,7 @@ class CompliantVoter extends Voter
         }
         return false;
     }
-}
+}</code>
 </pre>
 <p>In a Laravel web application:</p>
 <ul>
@@ -101,7 +101,7 @@ class CompliantVoter extends Voter
   should return a negative decision (<code>false</code> or <code>Response::deny()</code>) or abstain from making a decision (<code>null</code>): </li>
 </ul>
 <pre>
-class NoncompliantGuard
+<code data-lang="php">class NoncompliantGuard
 {
     public function boot()
     {
@@ -119,7 +119,7 @@ class NoncompliantGuard
             return Response::deny();
         });
     }
-}
+}</code>
 </pre>
 <h2>See</h2>
 <ul>

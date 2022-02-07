@@ -13,14 +13,14 @@ available. If you are worried about an automatic update breaking something, chec
 security updates.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-define( 'WP_AUTO_UPDATE_CORE', false ); // Sensitive
-define( 'AUTOMATIC_UPDATER_DISABLED', true ); // Sensitive
+<code data-lang="php">define( 'WP_AUTO_UPDATE_CORE', false ); // Sensitive
+define( 'AUTOMATIC_UPDATER_DISABLED', true ); // Sensitive</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-define( 'WP_AUTO_UPDATE_CORE', true ); // Minor and major automatic updates enabled
+<code data-lang="php">define( 'WP_AUTO_UPDATE_CORE', true ); // Minor and major automatic updates enabled
 define( 'WP_AUTO_UPDATE_CORE', 'minor' ); // Only minor updates are enabled
-define( 'AUTOMATIC_UPDATER_DISABLED', false );
+define( 'AUTOMATIC_UPDATER_DISABLED', false );</code>
 </pre>
 <h2>See</h2>
 <ul>

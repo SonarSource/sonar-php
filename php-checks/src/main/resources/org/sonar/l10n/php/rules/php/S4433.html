@@ -10,22 +10,22 @@ href="https://ldapwiki.com/wiki/Simple%20Authentication">simple authentication m
 strongly discouraged.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-$ldapconn = ldap_connect("ldap.example.com");
+<code data-lang="php">$ldapconn = ldap_connect("ldap.example.com");
 
 if ($ldapconn) {
     $ldapbind = ldap_bind($ldapconn); // Noncompliant; anonymous authentication, no user/password provided
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$ldaprdn  = 'uname';
+<code data-lang="php">$ldaprdn  = 'uname';
 $ldappass = 'password';
 
 $ldapconn = ldap_connect("ldap.example.com");
 
 if ($ldapconn) {
     $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass); // Compliant
-}
+}</code>
 </pre>
 <h2>See</h2>
 <ul>

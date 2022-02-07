@@ -6,21 +6,21 @@
 </ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
-public function doSomething() {
+<code data-lang="php">public function doSomething() {
 }
 
 public function doSomethingElse() {
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-public function doSomething() {
+<code data-lang="php">public function doSomething() {
   // Do nothing because of X and Y.
 }
 
 public function doSomethingElse() {
   throw new UnsupportedOperationException();
-}
+}</code>
 </pre>
 <h2>Exceptions</h2>
 <p>Empty methods in abstract classes</p>

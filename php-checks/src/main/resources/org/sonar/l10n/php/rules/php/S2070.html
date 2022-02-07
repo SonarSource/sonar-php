@@ -5,7 +5,7 @@ MD4, MD6, HAVAL-128, HMAC-MD5, DSA (which uses SHA-1), RIPEMD, RIPEMD-128, RIPEM
 <p>Consider using safer alternatives, such as SHA-256, SHA-512 or SHA-3.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-$password = ...
+<code data-lang="php">$password = ...
 
 if (md5($password) === '1f3870be274f6c49b3e31a0c6728957f') { // Noncompliant; md5() hashing algorithm is not secure for password management
    [...]
@@ -13,7 +13,7 @@ if (md5($password) === '1f3870be274f6c49b3e31a0c6728957f') { // Noncompliant; md
 
 if (sha1($password) === 'd0be2dc421be4fcd0172e5afceea3970e2f3d940') { // Noncompliant; sha1() hashing algorithm is not secure for password management
    [...]
-}
+}</code>
 </pre>
 <h2>See</h2>
 <ul>

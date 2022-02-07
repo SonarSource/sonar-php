@@ -32,11 +32,11 @@ $sshUrl = "ssh://user:65DBGgwe4uazdWQA@example.domain" // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$user = getUser();
+<code data-lang="php">$user = getUser();
 $password = getPassword(); // Compliant
 
 $httpUrl = "https://example.domain?user=$user&amp;password=$password" // Compliant
-$sshUrl = "ssh://$user:$password@example.domain" // Compliant
+$sshUrl = "ssh://$user:$password@example.domain" // Compliant</code>
 </pre>
 <h2>See</h2>
 <ul>

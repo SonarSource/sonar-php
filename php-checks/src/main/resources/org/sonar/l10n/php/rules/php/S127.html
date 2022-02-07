@@ -10,17 +10,17 @@ introduction of errors in the future.</p>
 </ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
-for ($i = 0; $i &lt; 10; $i++) {
+<code data-lang="php">for ($i = 0; $i &lt; 10; $i++) {
   echo $i;
   if(condition) {
     $i = 20;
   }
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-for ($i = 0; $i &lt; 10; $i++) {
+<code data-lang="php">for ($i = 0; $i &lt; 10; $i++) {
   echo $i;
-}
+}</code>
 </pre>
 

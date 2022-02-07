@@ -4,18 +4,18 @@ scratching their heads and cursing.</p>
 <p>Instead, err on the side of clarity, and use another line to express the nested operation as a separate statement.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-function get_readable_status($is_running, $has_errors) {
+<code data-lang="php">function get_readable_status($is_running, $has_errors) {
   return $is_running ? "Running" : ($has_errors ? "Failure" : "Succeeded");  // Noncompliant
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-function get_readable_status($is_running, $has_errors) {
+<code data-lang="php">function get_readable_status($is_running, $has_errors) {
   if ($is_running) {
     return "Running";
   }
   return $has_errors ? "Failure. " : "Succeeded ";
-}
+}</code>
 </pre>
 <h2>Exceptions</h2>
 <p>Exclusively chained shorthand ternary operators <code>?:</code> are excluded from this rule.</p>

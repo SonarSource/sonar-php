@@ -4,10 +4,10 @@ operators it contains.</p>
 <h2>Noncompliant Code Example</h2>
 <p>With the default threshold value of 3</p>
 <pre>
-if ((($condition1 &amp;&amp; $condition2) || ($condition3 &amp;&amp; $condition4)) &amp;&amp; $condition5) { ... }
+<code data-lang="php">if ((($condition1 &amp;&amp; $condition2) || ($condition3 &amp;&amp; $condition4)) &amp;&amp; $condition5) { ... }</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-if ( (my_first_condition() || my_second_condition()) &amp;&amp; my_last_condition()) { ... }
+<code data-lang="php">if ( (my_first_condition() || my_second_condition()) &amp;&amp; my_last_condition()) { ... }</code>
 </pre>
 

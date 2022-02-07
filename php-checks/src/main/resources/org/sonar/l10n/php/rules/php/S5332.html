@@ -69,7 +69,7 @@ define( 'FORCE_SSL_LOGIN', false); // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$url = "https://example.com"; // Compliant
+<code data-lang="php">$url = "https://example.com"; // Compliant
 $url = "sftp://anonymous@example.com"; // Compliant
 $url = "ssh://anonymous@example.com"; // Compliant
 
@@ -83,7 +83,7 @@ $mailer = new PHPMailer(true);
 $mailer-&gt;SMTPSecure = 'tls'; // Compliant
 
 define( 'FORCE_SSL_ADMIN', true); // Compliant
-define( 'FORCE_SSL_LOGIN', true); // Compliant
+define( 'FORCE_SSL_LOGIN', true); // Compliant</code>
 </pre>
 <h2>Exceptions</h2>
 <p>No issue is reported for the following cases because they are not considered sensitive:</p>

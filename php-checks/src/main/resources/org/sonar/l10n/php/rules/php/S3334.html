@@ -5,14 +5,14 @@ today, are you prepared to bet your site that it will always be perfect in the f
 enabled, is not explicitly disabled.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-; php.ini  Noncompliant; allow_url_fopen not explicitly disabled
-allow_url_include=1  ; Noncompliant
+<code data-lang="php">; php.ini  Noncompliant; allow_url_fopen not explicitly disabled
+allow_url_include=1  ; Noncompliant</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-; php.ini
+<code data-lang="php">; php.ini
 allow_url_fopen=0
-allow_url_include=0
+allow_url_include=0</code>
 </pre>
 <h2>See</h2>
 <ul>

@@ -14,11 +14,11 @@ WordPress website. If this capability is not required for all users, including a
 <code>DISALLOW_UNFILTERED_HTML</code> to <code>true</code>.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-define( 'DISALLOW_UNFILTERED_HTML', false ); // sensitive
+<code data-lang="php">define( 'DISALLOW_UNFILTERED_HTML', false ); // sensitive</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-define( 'DISALLOW_UNFILTERED_HTML', true );
+<code data-lang="php">define( 'DISALLOW_UNFILTERED_HTML', true );</code>
 </pre>
 <h2>See</h2>
 <ul>

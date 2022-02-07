@@ -4,15 +4,15 @@ lead to an unexpected behavior in production.</p>
 called directly.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-if ($x &lt; 0) {
+<code data-lang="php">if ($x &lt; 0) {
   new foo;  // Noncompliant
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$var = NULL;
+<code data-lang="php">$var = NULL;
 if ($x &lt; 0) {
   $var = new foo;
-}
+}</code>
 </pre>
 

@@ -2,14 +2,14 @@
 and some other value or variable was intended for the assignment instead.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-public function setName($name) {
+<code data-lang="php">public function setName($name) {
     $name = $name;
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-public function setName($name) {
+<code data-lang="php">public function setName($name) {
     $this-&gt;name = $name;
-}
+}</code>
 </pre>
 

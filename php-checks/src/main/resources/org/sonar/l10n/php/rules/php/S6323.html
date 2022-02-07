@@ -2,12 +2,12 @@
 match any input, which is most probably a mistake.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-preg_match("/Jack|Peter|/", "John"); // Noncompliant - returns 1
-preg_match("/Jack||Peter/", "John"); // Noncompliant - returns 1
+<code data-lang="php">preg_match("/Jack|Peter|/", "John"); // Noncompliant - returns 1
+preg_match("/Jack||Peter/", "John"); // Noncompliant - returns 1</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-preg_match("/Jack|Peter/", "John"); // returns 0
+<code data-lang="php">preg_match("/Jack|Peter/", "John"); // returns 0</code>
 </pre>
 <h2>Exceptions</h2>
 <p>One could use an empty alternation to make a regular expression group optional. Rule will not report on such cases.</p>

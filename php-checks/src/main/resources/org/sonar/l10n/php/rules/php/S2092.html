@@ -38,15 +38,15 @@ setrawcookie($name, $value, $expire, $path, $domain);  // Sensitive: a security-
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-session.cookie_secure = 1; // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to cookie_secure property set to 1
+<code data-lang="php">session.cookie_secure = 1; // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to cookie_secure property set to 1</code>
 </pre>
 <pre>
-session_set_cookie_params($lifetime, $path, $domain, true); // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the fouth argument) set to true
+<code data-lang="php">session_set_cookie_params($lifetime, $path, $domain, true); // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the fouth argument) set to true</code>
 </pre>
 <pre>
-$value = "sensitive data";
+<code data-lang="php">$value = "sensitive data";
 setcookie($name, $value, $expire, $path, $domain, true); // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the sixth  argument) set to true
-setrawcookie($name, $value, $expire, $path, $domain, true);// Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the sixth argument) set to true
+setrawcookie($name, $value, $expire, $path, $domain, true);// Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the sixth argument) set to true</code>
 </pre>
 <h2>See</h2>
 <ul>

@@ -1,18 +1,18 @@
 <p>Having characters before <code>&lt;?php</code> can cause "Cannot modify header information" errors and similar problems with Ajax requests.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-test&lt;?php  //Noncompliant
-// ...
+<code data-lang="php">test&lt;?php  //Noncompliant
+// ...</code>
 </pre>
 <p>and</p>
 <pre>
-// Noncompliant; newline before opening tag
+<code data-lang="php">// Noncompliant; newline before opening tag
 &lt;?php
-// ...
+// ...</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-&lt;?php
-// ...
+<code data-lang="php">&lt;?php
+// ...</code>
 </pre>
 

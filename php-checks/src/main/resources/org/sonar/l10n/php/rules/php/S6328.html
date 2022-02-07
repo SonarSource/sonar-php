@@ -5,11 +5,11 @@
 unnoticed since no warning is raised.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-preg_replace("/(a)(b)(c)/", "\\1, \\9, \\3", "abc"); // Noncompliant - result is "a, , c"
+<code data-lang="php">preg_replace("/(a)(b)(c)/", "\\1, \\9, \\3", "abc"); // Noncompliant - result is "a, , c"</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-preg_replace("/(a)(b)(c)/", "\\1, \\2, \\3", "abc");
+<code data-lang="php">preg_replace("/(a)(b)(c)/", "\\1, \\2, \\3", "abc");</code>
 </pre>
 <h2>See</h2>
 <ul>

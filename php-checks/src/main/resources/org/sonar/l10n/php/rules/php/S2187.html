@@ -3,7 +3,7 @@ PHPUnit\Framework\TestCase but no tests in the file. Doing either of these thing
 Add some test method or make the class abstract if it is used by a real test case class.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-use PHPUnit\Framework\TestCase;
+<code data-lang="php">use PHPUnit\Framework\TestCase;
 
 class MyTest extends TestCase {
 
@@ -15,11 +15,11 @@ class MyTest extends TestCase {
   private function doSomethind() {
     //...
   }
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-use PHPUnit\Framework\TestCase;
+<code data-lang="php">use PHPUnit\Framework\TestCase;
 
 class MyTest extends TestCase {
 
@@ -42,6 +42,6 @@ abstract class MyAbstractTest extends TestCase {
  private function doSomethind() {
    //...
  }
-}
+}</code>
 </pre>
 

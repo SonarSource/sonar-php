@@ -2,11 +2,11 @@
 have experience with them. They may not recognize octal values as such, mistaking them instead for decimal values.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-$myNumber = 023; # Noncompliant myNumber will hold 19, not 23 - was this really expected?
+<code data-lang="php">$myNumber = 023; # Noncompliant myNumber will hold 19, not 23 - was this really expected?</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$myNumber = 19;
+<code data-lang="php">$myNumber = 19;</code>
 </pre>
 <h2>Exceptions</h2>
 <p>This rule does not apply to values smaller than 8 and octal values having 3 digits, since 3 digits octal values are often used as file permission

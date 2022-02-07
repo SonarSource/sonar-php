@@ -3,9 +3,9 @@ ties up a thread, each request takes longer to serve that it otherwise would, ma
 than less.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-if (is_bad_ip($requester)) {
+<code data-lang="php">if (is_bad_ip($requester)) {
   sleep(5);  // Noncompliant
-}
+}</code>
 </pre>
 <h2>See</h2>
 <ul>

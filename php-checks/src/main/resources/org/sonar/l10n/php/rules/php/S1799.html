@@ -6,22 +6,22 @@ exceptions should be caught just before leaving the application to specify the e
 statements.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-class Foo {
+<code data-lang="php">class Foo {
     public function bar($param)  {
         if ($param === 42) {
             exit(23);
         }
     }
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-class Foo {
+<code data-lang="php">class Foo {
     public function bar($param)  {
         if ($param === 42) {
             throw new Exception('Value 42 is not expected.');
         }
     }
-}
+}</code>
 </pre>
 

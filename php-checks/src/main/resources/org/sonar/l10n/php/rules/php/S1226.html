@@ -2,12 +2,12 @@
 Instead, initial values of parameters should be, if not treated as read-only, then at least read before reassignment.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-function foo($str, $array) {
+<code data-lang="php">function foo($str, $array) {
   $str = "name; // Noncompliant
 
   foreach ($array as $item) {
     $item = "hello world";  // Noncompliant
   }
-}
+}</code>
 </pre>
 

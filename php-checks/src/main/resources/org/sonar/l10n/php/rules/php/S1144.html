@@ -4,7 +4,7 @@ decreases the size of the maintained codebase, making it easier to understand th
 is not allowed.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-class Foo {
+<code data-lang="php">class Foo {
   private function __construct() {}   // Compliant, private empty constructor intentionally used to prevent any direct instantiation of a class.
 
   public static function doSomething() {
@@ -20,16 +20,16 @@ enum ExampleEnum {
 
   private function unusedPrivateFunction() {} // Noncompliant
   protected function unusedProtectedFunction() {} // Noncompliant
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-class Foo {
+<code data-lang="php">class Foo {
   private function __construct() {}   // Compliant, private empty constructor intentionally used to prevent any direct instantiation of a class.
 
   public static function doSomething() {
     $foo = new Foo();
   }
-}
+}</code>
 </pre>
 

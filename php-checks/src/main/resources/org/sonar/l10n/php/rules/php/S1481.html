@@ -2,15 +2,15 @@
 not wonder what the variable is used for.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-function numberOfMinutes($hours) {
+<code data-lang="php">function numberOfMinutes($hours) {
   $seconds = 0;   // seconds is never used
   return hours * 60;
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-function numberOfMinutes($hours) {
+<code data-lang="php">function numberOfMinutes($hours) {
   return hours * 60;
-}
+}</code>
 </pre>
 

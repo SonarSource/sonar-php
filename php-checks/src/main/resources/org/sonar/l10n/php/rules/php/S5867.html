@@ -5,12 +5,12 @@ incorrectly handle input containing such letters.</p>
 <code>\p{L}</code>.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-preg_match("/[a-zA-Z]/", "ö"); // returns 0
-preg_match("/\w/", "ö"); // returns 0
+<code data-lang="php">preg_match("/[a-zA-Z]/", "ö"); // returns 0
+preg_match("/\w/", "ö"); // returns 0</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-preg_match("/\w/u", "ö"); // returns 1
-preg_match("/\p{L}/", "ö"); // return 1
+<code data-lang="php">preg_match("/\w/u", "ö"); // returns 1
+preg_match("/\p{L}/", "ö"); // return 1</code>
 </pre>
 

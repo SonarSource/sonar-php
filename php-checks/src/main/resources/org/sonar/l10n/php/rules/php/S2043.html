@@ -2,10 +2,10 @@
 practice. Instead, they should be accessed through an object or framework that handles sanitation and validation.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-$name = $_POST['name'];
+<code data-lang="php">$name = $_POST['name'];</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$name = $this-&gt;params()-&gt;fromPost('name');
+<code data-lang="php">$name = $this-&gt;params()-&gt;fromPost('name');</code>
 </pre>
 

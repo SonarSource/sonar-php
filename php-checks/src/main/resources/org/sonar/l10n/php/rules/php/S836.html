@@ -7,7 +7,7 @@ be avoided because of the following reasons:</p>
 </ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
-&lt;?php
+<code data-lang="php">&lt;?php
 
 function getText(array $lines): string {
     foreach ($lines as $line) {
@@ -15,11 +15,11 @@ function getText(array $lines): string {
     }
 
     return $text;
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-&lt;?php
+<code data-lang="php">&lt;?php
 
 function getText(array $lines): string {
     $text = "";
@@ -29,7 +29,7 @@ function getText(array $lines): string {
     }
 
     return $text;
-}
+}</code>
 </pre>
 <h2>See</h2>
 <ul>

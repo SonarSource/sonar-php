@@ -8,10 +8,10 @@
 parentheses were intended and were not escaped.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-"/foo()/"  // Noncompliant, will match only 'foo'
+<code data-lang="php">"/foo()/"  // Noncompliant, will match only 'foo'</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-"/foo\(\)/"  // Matches 'foo()'
+<code data-lang="php">"/foo\(\)/"  // Matches 'foo()'</code>
 </pre>
 

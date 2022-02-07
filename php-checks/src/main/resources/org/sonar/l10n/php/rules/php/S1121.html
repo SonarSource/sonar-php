@@ -2,19 +2,19 @@
 side-effects.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-if (($val = value()) &amp;&amp; check()) { // Noncompliant
-}
+<code data-lang="php">if (($val = value()) &amp;&amp; check()) { // Noncompliant
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$val = value();
+<code data-lang="php">$val = value();
 if ($val &amp;&amp; check()) {
-}
+}</code>
 </pre>
 <p>or</p>
 <pre>
-if ($val == value() &amp;&amp; check()) { // Perhaps in fact the equality operator was expected
-}
+<code data-lang="php">if ($val == value() &amp;&amp; check()) { // Perhaps in fact the equality operator was expected
+}</code>
 </pre>
 <h2>Exceptions</h2>
 <p>Assignments in <code>while</code> statement conditions, and assignments enclosed in relational expressions are allowed.</p>

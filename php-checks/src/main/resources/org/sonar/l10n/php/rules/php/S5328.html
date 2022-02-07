@@ -17,8 +17,8 @@ session_id($_POST["session_id"]); // Sensitive: session ID can be specified by t
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-session_regenerate_id(); ; // Compliant
-session_id(bin2hex(random_bytes(16))); // Compliant
+<code data-lang="php">session_regenerate_id(); ; // Compliant
+session_id(bin2hex(random_bytes(16))); // Compliant</code>
 </pre>
 <h2>See</h2>
 <ul>

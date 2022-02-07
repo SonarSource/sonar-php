@@ -2,21 +2,21 @@
 <p>For just one or two cases however, the code will be more readable with <code>if</code> statements.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-switch ($variable) {
+<code data-lang="php">switch ($variable) {
   case 0:
     do_something();
     break;
   default:
     do_something_else();
     break;
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-if ($variable == 0) {
+<code data-lang="php">if ($variable == 0) {
   do_something();
 } else {
   do_something_else();
-}
+}</code>
 </pre>
 

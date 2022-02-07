@@ -3,7 +3,7 @@ the names match, but are passed in a different order than the method arguments, 
 to unexpected results.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-public function divide($divisor, $dividend) {
+<code data-lang="php">public function divide($divisor, $dividend) {
   return $divisor/$dividend;
 }
 
@@ -12,11 +12,11 @@ public function doTheThing() {
   $dividend = 5;
 
   $result = $this-&gt;divide($dividend, $divisor);  // Noncompliant; operation succeeds, but result is unexpected
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-public function divide($divisor, $dividend) {
+<code data-lang="php">public function divide($divisor, $dividend) {
   return $divisor/$dividend;
 }
 
@@ -26,6 +26,6 @@ public function doTheThing() {
 
   $result = $this-&gt;divide($divisor, $dividend); // Compliant
 }{code}
-h4. &nbsp;
+h4. &nbsp;</code>
 </pre>
 

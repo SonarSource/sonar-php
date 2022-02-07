@@ -4,16 +4,16 @@ awaited properties. Having an assertion at the end of such a test method, means 
 an exception was thrown before getting to that point.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-public function testA() {
+<code data-lang="php">public function testA() {
     $o = new MyClass();
     $this-&gt;expectException(\Exception::class);
     $o-&gt;doSomething();
     $this-&gt;assertTrue($o-&gt;hasProperty()); // Noncompliant - This assertion might never get evaluated
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-public function testA() {
+<code data-lang="php">public function testA() {
     $o = new MyClass();
     $this-&gt;expectException(\Exception::class);
     $o-&gt;doSomething();
@@ -22,6 +22,6 @@ public function testA() {
 public function testB() {
     $o = new MyClass();
     $this-&gt;assertTrue($o-&gt;hasProperty());
-}
+}</code>
 </pre>
 

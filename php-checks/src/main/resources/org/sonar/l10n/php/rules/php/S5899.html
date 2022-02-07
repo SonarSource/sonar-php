@@ -5,7 +5,7 @@ public methods that are not marked as tests, do contain assertions, and are not 
 No issues are raised in abstract classes.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-class MyTest extends \PHPUnit\Framework\TestCase {
+<code data-lang="php">class MyTest extends \PHPUnit\Framework\TestCase {
     private function testA() { // Noncompliant
         $this-&gt;assertTrue(getValue());
     }
@@ -13,11 +13,11 @@ class MyTest extends \PHPUnit\Framework\TestCase {
     public function b() { // Noncompliant
         $this-&gt;assertTrue(getValue());
     }
-}
+}</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-class MyTest extends \PHPUnit\Framework\TestCase {
+<code data-lang="php">class MyTest extends \PHPUnit\Framework\TestCase {
     public function testA() { // Compliant
         $this-&gt;assertTrue(getValue());
     }
@@ -29,6 +29,6 @@ class MyTest extends \PHPUnit\Framework\TestCase {
     public function b() { // Compliant
         $this-&gt;assertTrue(getValue());
     }
-}
+}</code>
 </pre>
 

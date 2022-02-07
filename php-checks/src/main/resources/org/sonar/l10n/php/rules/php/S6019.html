@@ -4,12 +4,12 @@ match zero times for <code>*?</code> or one time for <code>+?</code>. If a reluc
 <p>This is likely a sign that the regex does not work as intended.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-preg_replace("/start\w*?(end)?/", "x", "start123endstart456"); // Noncompliant. In contrast to what one would expect, the result is not "xx".
-preg_match("/^\d*?$/", "123456789"); // Noncompliant. Matches the same as "/^\d*$/", but will backtrack in every position.
+<code data-lang="php">preg_replace("/start\w*?(end)?/", "x", "start123endstart456"); // Noncompliant. In contrast to what one would expect, the result is not "xx".
+preg_match("/^\d*?$/", "123456789"); // Noncompliant. Matches the same as "/^\d*$/", but will backtrack in every position.</code>
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-preg_replace("/start\w*?(end|$)/", "x", "start123endstart456"); // Result is "xx".
-preg_match("/^\d*$/", "123456789");
+<code data-lang="php">preg_replace("/start\w*?(end|$)/", "x", "start123endstart456"); // Result is "xx".
+preg_match("/^\d*$/", "123456789");</code>
 </pre>
 
