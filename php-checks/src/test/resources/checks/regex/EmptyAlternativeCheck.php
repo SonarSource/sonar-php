@@ -20,11 +20,21 @@ class EmptyAlternativeCheck
                 |               # or
                 \S              # - a non-whitespace character
                 )/x", $input);
+
+    preg_match("/|mandatory|-optional/", $input);              // Noncompliant
+    preg_match("/(mandatory|(|O|o|)ptional|)/", $input);       // Noncompliant
+    preg_match("/(|mandatory|optional)?/", $input);            // Noncompliant
+    //            ^
+    preg_match("/mandatory(-optional|){2}/", $input);          // Noncompliant
+    //                              ^
   }
 
   function compliant($input) {
     preg_match("/(mandatory|optional|)/", $input);
     preg_match("/mandatory(-optional|)/", $input);
     preg_match("/mandatory(|-optional)/", $input);
+    preg_match("/mandatory(|-optional)/", $input);
+    preg_match("/mandatory(-optional|)/", $input);
+    preg_match("/(mandatory(|-optional))?/", $input);
   }
 }

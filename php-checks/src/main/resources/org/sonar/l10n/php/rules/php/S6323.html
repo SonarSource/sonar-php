@@ -12,7 +12,11 @@ preg_match("/Jack||Peter/", "John"); // Noncompliant - returns 1</code>
 <h2>Exceptions</h2>
 <p>One could use an empty alternation to make a regular expression group optional. Rule will not report on such cases.</p>
 <pre>
-preg_match("/mandatory(-optional|)/", "mandatory"); // returns 1
-preg_match("/mandatory(-optional|)/", "mandatory-optional"); // returns 1
+<code data-lang="php">preg_match("/mandatory(-optional|)/", "mandatory"); // returns 1
+preg_match("/mandatory(-optional|)/", "mandatory-optional"); // returns 1</code>
+</pre>
+<p>However, if there is a quantifier after the group the issue will be reported as using both <code>|</code> and quantifier is redundant.</p>
+<pre>
+<code data-lang="php">preg_match("/mandatory(-optional|)?/", "mandatory-optional"); // Noncompliant - using both `|` inside the group and `?` for the group.</code>
 </pre>
 
