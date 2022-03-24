@@ -30,5 +30,6 @@ class GroupReplacementCheck
     preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], '\1_\2', "");
     preg_replace($regex, '<a href="http$1://$2$3$4" class="_blanktarget">$0</a>', "");
     preg_replace('/&lt;'. $name .'([^&]+)+\&gt;/', '<span \\1>', "");
+    preg_replace('/(?<=\\pL)(\\p{Lu})/u', '_\\1', ""); // Parsing error on the regex should not cause an issue
   }
 }
