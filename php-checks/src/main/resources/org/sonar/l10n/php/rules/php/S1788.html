@@ -4,14 +4,14 @@ or as few arguments as they want while getting the same functionality and minimi
 impossible for callers to take advantage of defaults; they must re-specify the defaulted values in order to "get to" the non-default arguments.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">function makeyogurt($type = "acidophilus", $flavor){...}  // Noncompliant
+function makeyogurt($type = "acidophilus", $flavor){...}  // Noncompliant
 
-makeyogurt("raspberry")}}  // Runtime error: Missing argument 2 in call to makeyogurt()</code>
+makeyogurt("raspberry")}}  // Runtime error: Missing argument 2 in call to makeyogurt()
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">function makeyogurt($flavor, $type = "acidophilus", ){...}
+function makeyogurt($flavor, $type = "acidophilus", ){...}
 
-makeyogurt("raspberry")}} // Works as expected</code>
+makeyogurt("raspberry")}} // Works as expected
 </pre>
 

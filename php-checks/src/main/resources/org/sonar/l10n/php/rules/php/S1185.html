@@ -3,7 +3,7 @@ this is justified is in <code>final</code> overriding methods, where the effect 
 overrides of <code>equals</code>, <code>hashCode</code> and <code>toString</code>.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">class Child extends Parent {
+class Child extends Parent {
 
   public function func($n,$m) {
     parent::func($n$m);  // Noncompliant
@@ -14,11 +14,11 @@ class Parent {
   public function func($n, $m) {
     // do something
   }
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">class Child extends Parent {
+class Child extends Parent {
 
   public function func($n,$m) {
     parent::func($n$m);
@@ -30,11 +30,11 @@ class Parent {
   public function func($n, $m) {
     // do something
   }
-}</code>
+}
 </pre>
 <p>or</p>
 <pre>
-<code data-lang="php">class Child extends Parent {
+class Child extends Parent {
   // function eliminated
 }
 
@@ -42,6 +42,6 @@ class Parent {
   public function func($n, $m) {
     // do something
   }
-}</code>
+}
 </pre>
 

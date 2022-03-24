@@ -47,10 +47,10 @@
 </table>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">echo 'Name parameter value: ' . $HTTP_GET_VARS["name"];</code>
+echo 'Name parameter value: ' . $HTTP_GET_VARS["name"];
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">echo 'Name parameter value: ' . $_GET["name"];</code>
+echo 'Name parameter value: ' . $_GET["name"];
 </pre>
 

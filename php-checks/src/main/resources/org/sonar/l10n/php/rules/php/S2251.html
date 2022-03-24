@@ -2,14 +2,14 @@
 reach its stop condition, but in doing so, it will run many, many more times than anticipated, potentially causing unexpected behavior.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">for ($i = 0; $i &lt; $length; $i--) { // Noncompliant
+for ($i = 0; $i &lt; $length; $i--) { // Noncompliant
   //...
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">for ($i = 0; $i &lt; $length; $i++) {
+for ($i = 0; $i &lt; $length; $i++) {
   //...
-}</code>
+}
 </pre>
 

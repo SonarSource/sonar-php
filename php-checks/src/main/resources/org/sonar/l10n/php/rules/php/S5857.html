@@ -5,18 +5,18 @@ instead use a greedily or possessively quantified negated character class contai
 should be replaced with <code>&lt;[^&gt;]++&gt;</code>.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">/&lt;.+?&gt;/
-/".*?"/</code>
+/&lt;.+?&gt;/
+/".*?"/
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">/&lt;[^&gt;]++&gt;/
-/"[^"]*+"/</code>
+/&lt;[^&gt;]++&gt;/
+/"[^"]*+"/
 </pre>
 <p>or</p>
 <pre>
-<code data-lang="php">/&lt;[^&gt;]+&gt;/
-/"[^"]*"/</code>
+/&lt;[^&gt;]+&gt;/
+/"[^"]*"/
 </pre>
 <h2>Exceptions</h2>
 <p>This rule only applies in cases where the reluctant quantifier can easily be replaced with a negated character class. That means the repetition has

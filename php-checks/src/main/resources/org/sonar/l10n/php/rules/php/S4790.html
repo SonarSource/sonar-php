@@ -21,11 +21,11 @@ $hash = sha1($data);   // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">// for a password
+// for a password
 $hash = password_hash($password, PASSWORD_BCRYPT); // Compliant
 
 // other context
-$hash = hash("sha512", $data);</code>
+$hash = hash("sha512", $data);
 </pre>
 <h2>See</h2>
 <ul>

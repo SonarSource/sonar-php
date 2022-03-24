@@ -2,7 +2,7 @@
 be confusing to maintainers. In the latter case, one implementation should invoke the other.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">class A {
+class A {
     private const CODE = "bounteous";
 
     public function getCode() {
@@ -14,11 +14,11 @@ be confusing to maintainers. In the latter case, one implementation should invok
         doTheThing();
         return A::CODE;
     }
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">class A {
+class A {
     private const CODE = "bounteous";
 
     public function getCode() {
@@ -29,7 +29,7 @@ be confusing to maintainers. In the latter case, one implementation should invok
     public function getName() {
         return $this-&gt;getCode();
     }
-}</code>
+}
 </pre>
 <h2>Exceptions</h2>
 <p>Methods that are not accessors (getters and setters), with fewer than 2 statements are ignored.</p>

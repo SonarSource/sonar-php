@@ -2,21 +2,21 @@
 but jump statements that direct the control flow to the original direction are just a waste of keystrokes.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">function foo($p) {
+function foo($p) {
   $i = $p;
   while ($i &gt; 0) {
     $i--;
     continue; // Noncompliant
   }
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">function foo($p) {
+function foo($p) {
   $i = $p;
   while ($i &gt; 0) {
     $i--;
   }
-}</code>
+}
 </pre>
 

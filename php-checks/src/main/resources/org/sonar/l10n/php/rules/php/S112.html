@@ -3,13 +3,13 @@ catch all exceptions, including unknown exceptions that they do not know how to 
 <p>Instead, either throw a subtype that already exists in the Standard PHP Library, or create your own type that derives from Exception.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">throw new Exception();  // Noncompliant</code>
+throw new Exception();  // Noncompliant
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">throw new InvalidArgumentException();
+throw new InvalidArgumentException();
 // or
-throw new UnexpectedValueException();</code>
+throw new UnexpectedValueException();
 </pre>
 <h2>See</h2>
 <ul>

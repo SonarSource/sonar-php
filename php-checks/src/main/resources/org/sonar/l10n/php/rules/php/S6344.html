@@ -4,9 +4,9 @@ value to the constant: it’s just useless code which can be removed. In the wor
 value and is followed by code which wrongly assumes the value of the constant: it can be a nasty bug.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">define( 'WP_DEBUG', 1 );
+define( 'WP_DEBUG', 1 );
 define( 'SCRIPT_DEBUG', 1 );
 define( 'WP_DEBUG', 0 ); // Noncompliant, redefines constant defined 2 lines above
-echo WP_DEBUG; // output "1"</code>
+echo WP_DEBUG; // output "1"
 </pre>
 

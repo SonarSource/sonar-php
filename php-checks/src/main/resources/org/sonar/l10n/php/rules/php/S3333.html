@@ -9,16 +9,16 @@ step. This rule raises an issue when <code>open_basedir</code> is not present in
 or the current directory (<code>.</code>) symbol.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">; php.ini try 1
+; php.ini try 1
 ; open_basedir="${USER}/scripts/data"  Noncompliant; commented out
 
 ; php.ini try 2
-open_basedir="/:${USER}/scripts/data"  ; Noncompliant; root directory in the list</code>
+open_basedir="/:${USER}/scripts/data"  ; Noncompliant; root directory in the list
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">; php.ini try 1
-open_basedir="${USER}/scripts/data"</code>
+; php.ini try 1
+open_basedir="${USER}/scripts/data"
 </pre>
 <h2>See</h2>
 <ul>

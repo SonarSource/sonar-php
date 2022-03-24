@@ -11,17 +11,17 @@ side-effect-only files. The type of operation which is not allowed in a symbol-d
 </ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">&lt;?php
+&lt;?php
 
 print "Include worked!";
 
 class foo {
   // ...
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">&lt;?php
+&lt;?php
 
 class foo {
 
@@ -29,7 +29,7 @@ class foo {
     print "Include worked!";
   }
 
-}</code>
+}
 </pre>
 <h2>See</h2>
 <ul>

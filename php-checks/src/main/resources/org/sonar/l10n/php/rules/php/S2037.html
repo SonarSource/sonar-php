@@ -4,7 +4,7 @@ original definition of the member, i.e. the superclass version, rather than any 
 hand, references the class that was called at runtime.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">&lt;?php
+&lt;?php
 
 class Toy {
 
@@ -25,11 +25,11 @@ class Ball extends Toy {
 }
 
 $myBall = new Ball();
-$myBall::status();  // Prints "Sticks are fun!"</code>
+$myBall::status();  // Prints "Sticks are fun!"
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">&lt;?php
+&lt;?php
 
 class Toy {
 
@@ -50,7 +50,7 @@ class Ball extends Toy {
 }
 
 $myBall = new Ball();
-$myBall::status();  // Prints "Balls are fun!"</code>
+$myBall::status();  // Prints "Balls are fun!"
 </pre>
 <h2>Exceptions</h2>
 <p>No issue is raised when <code>self</code> is used on a constant field, a private field or a private method.</p>

@@ -27,7 +27,7 @@ while ($row = mysql_fetch_object($result)) {
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">$id = $_GET['id'];
+$id = $_GET['id'];
 try {
     $conn = new PDO('mysql:host=localhost;dbname=myDatabase', $username, $password);
     $conn-&gt;setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -40,7 +40,7 @@ try {
     }
 } catch(PDOException $e) {
     echo 'ERROR: ' . $e-&gt;getMessage();
-}</code>
+}
 </pre>
 <h2>Exceptions</h2>
 <p>No issue will be raised if one of the functions is called with hard-coded string (no concatenation) and this string does not contain a "$"

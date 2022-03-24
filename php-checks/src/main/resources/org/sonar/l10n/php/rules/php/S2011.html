@@ -3,20 +3,20 @@
 reusability. Instead, the global variable should be passed as a parameter to the function.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="text">$myGlobalVariable;
+$myGlobalVariable;
 
 function foo()
 {
   global $myGlobalVariable; // Noncompliant
   $GLOBALS['myGlobalVariable']; // Noncompliant
   // ...
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="text">function foo($myStateVariable)
+function foo($myStateVariable)
 {
   // ...
-}</code>
+}
 </pre>
 

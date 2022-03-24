@@ -8,12 +8,12 @@ Another common cause is forgetting to escape the <code>-</code> character, creat
 character class.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">"/[0-99]/" // Noncompliant, this won't actually match strings with two digits
-"/[0-9.-_]/" // Noncompliant, .-_ is a range that already contains 0-9 (as well as various other characters such as capital letters)</code>
+"/[0-99]/" // Noncompliant, this won't actually match strings with two digits
+"/[0-9.-_]/" // Noncompliant, .-_ is a range that already contains 0-9 (as well as various other characters such as capital letters)
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">"/[0-9]{1,2}/"
-"/[0-9.\\-_]/"</code>
+"/[0-9]{1,2}/"
+"/[0-9.\\-_]/"
 </pre>
 

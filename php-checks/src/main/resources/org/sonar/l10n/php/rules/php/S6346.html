@@ -13,12 +13,12 @@ authentication mechanism might not work.</p>
 database issue is resolved.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">define( 'WP_ALLOW_REPAIR', true ); // Sensitive</code>
+define( 'WP_ALLOW_REPAIR', true ); // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">// The default value is false, so the value does not have to be expilicitly set.
-define( 'WP_ALLOW_REPAIR', false );</code>
+// The default value is false, so the value does not have to be expilicitly set.
+define( 'WP_ALLOW_REPAIR', false );
 </pre>
 <h2>See</h2>
 <ul>

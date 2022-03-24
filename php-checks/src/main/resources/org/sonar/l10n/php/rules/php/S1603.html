@@ -4,14 +4,14 @@ the <code>__construct</code> method name should be used instead. If both styles 
 <p>This rule rule raises an issue for each method with the same name as the enclosing class.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">class Foo {
+class Foo {
   function Foo(){...}
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">class Foo {
+class Foo {
   function __construct(){...}
-}</code>
+}
 </pre>
 

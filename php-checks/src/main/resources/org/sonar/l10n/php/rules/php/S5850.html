@@ -7,18 +7,18 @@ that they apply to will make it explicit which parts are anchored and avoid read
 mistakenly assume the precedence was not intended.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">/^a|b|c$/</code>
+/^a|b|c$/
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">/^(?:a|b|c)$/</code>
+/^(?:a|b|c)$/
 </pre>
 <p>or</p>
 <pre>
-<code data-lang="php">/^a$|^b$|^c$/</code>
+/^a$|^b$|^c$/
 </pre>
 <p>or, if you do want the anchors to only apply to <code>a</code> and <code>c</code> respectively:</p>
 <pre>
-<code data-lang="php">/(?:^a)|b|(?:c$)/</code>
+/(?:^a)|b|(?:c$)/
 </pre>
 

@@ -5,20 +5,20 @@ door to downgrade attacks: a malicious actor who is able to intercept the connec
 less secure version.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">$ctx = stream_context_create([
+$ctx = stream_context_create([
   'ssl' =&gt; [
     'crypto_method' =&gt;
       STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT // Noncompliant
   ],
-]);</code>
+]);
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">$ctx = stream_context_create([
+$ctx = stream_context_create([
     'ssl' =&gt; [
         'crypto_method' =&gt; STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT
     ],
-]);</code>
+]);
 </pre>
 <h2>See</h2>
 <ul>

@@ -8,7 +8,7 @@ there is the risk in this situation that future maintenance will be done on the 
 that.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">if ($param == 1)
+if ($param == 1)
   openWindow();
 else if ($param == 2)
   closeWindow();
@@ -29,11 +29,11 @@ switch($i) {
   default:
     // ...
     break;
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">if ($param == 1)
+if ($param == 1)
   openWindow();
 else if ($param == 2)
   closeWindow();
@@ -50,6 +50,6 @@ switch($i) {
   default:
     // ...
     break;
-}</code>
+}
 </pre>
 

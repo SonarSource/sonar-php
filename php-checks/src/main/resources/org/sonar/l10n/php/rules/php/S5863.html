@@ -2,16 +2,16 @@
 <p>This rule raises an issue when the actual expression matches the expected expression.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">assertEqual($a, $a); // Noncompliant
+assertEqual($a, $a); // Noncompliant
 assertSame($a, $a); // Noncompliant
 assertNotEqual($a, $a); // Noncompliant
-assertNotSame($a, $a); // Noncompliant</code>
+assertNotSame($a, $a); // Noncompliant
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">assertEqual($expected, $a);
+assertEqual($expected, $a);
 assertSame($expected, $a);
 assertNotEqual($expected, $a);
-assertNotSame($expected, $a);</code>
+assertNotSame($expected, $a);
 </pre>
 

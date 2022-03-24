@@ -5,7 +5,7 @@
 </ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">function doSomething() {
+function doSomething() {
   ;                                              // Noncompliant - was used as a kind of TODO marker
 }
 
@@ -13,11 +13,11 @@ function doSomethingElse($p) {
   echo $p;;                                      // Noncompliant - double ;
 }
 
-for ($i = 1; $i &lt;= 10; doSomething($i), $i++);   // Noncompliant - Rarely, they are used on purpose as the body of a loop. It is a bad practice to have side-effects outside of the loop body</code>
+for ($i = 1; $i &lt;= 10; doSomething($i), $i++);   // Noncompliant - Rarely, they are used on purpose as the body of a loop. It is a bad practice to have side-effects outside of the loop body
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">function doSomething() {}
+function doSomething() {}
 
 function doSomethingElse($p) {
   echo $p;
@@ -25,6 +25,6 @@ function doSomethingElse($p) {
   for ($i = 1; $i &lt;= 10; $i++) {
     doSomething($i);
   }
-}</code>
+}
 </pre>
 

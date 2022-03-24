@@ -6,16 +6,16 @@
 </ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">$u8a = ++$u8b + $u8c--;
-$foo = $bar++ / 4;</code>
+$u8a = ++$u8b + $u8c--;
+$foo = $bar++ / 4;
 </pre>
 <h2>Compliant Solution</h2>
 <p>The following sequence is clearer and therefore safer:</p>
 <pre>
-<code data-lang="php">++$u8b;
+++$u8b;
 $u8a = $u8b + $u8c;
 $u8c--;
 $foo = $bar / 4;
-$bar++;</code>
+$bar++;
 </pre>
 

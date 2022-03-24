@@ -7,7 +7,7 @@
 <p>For similar reasons, RC2 should also be avoided.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">&lt;?php
+&lt;?php
   $ciphertext = mcrypt_encrypt(MCRYPT_DES, $key, $plaintext, $mode); // Noncompliant
   // ...
   $ciphertext = mcrypt_encrypt(MCRYPT_DES_COMPAT, $key, $plaintext, $mode); // Noncompliant
@@ -18,13 +18,13 @@
 
   $cipher = "des-ede3-cfb";  // Noncompliant
   $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
-?&gt;</code>
+?&gt;
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">&lt;?php
+&lt;?php
   $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $plaintext, MCRYPT_MODE_CBC, $iv);
-?&gt;</code>
+?&gt;
 </pre>
 <h2>See</h2>
 <ul>

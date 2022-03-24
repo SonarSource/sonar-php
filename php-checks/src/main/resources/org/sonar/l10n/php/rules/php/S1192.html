@@ -3,21 +3,21 @@
 <h2>Noncompliant Code Example</h2>
 <p>With the default threshold of 3:</p>
 <pre>
-<code data-lang="php">function run() {
+function run() {
   prepare('this is a duplicate'); // Non-Compliant - 'this is a duplicate' is duplicated 3 times
   execute('this is a duplicate');
   release('this is a duplicate');
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">MESSAGE = 'this is a duplicate';
+MESSAGE = 'this is a duplicate';
 
 function run() {
   prepare(MESSAGE);
   execute(MESSAGE);
   release(MESSAGE);
-}</code>
+}
 </pre>
 <h2>Exceptions</h2>
 <p>No issue will be raised on:</p>

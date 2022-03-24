@@ -3,18 +3,18 @@ a suitable comment as to why no action is taken. Even when the <code>switch</cod
 should still be used because there is no guarantee that the <code>enum</code> won’t be extended.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">switch ($param) {  //missing default clause
+switch ($param) {  //missing default clause
   case 0:
     do_something();
     break;
   case 1:
     do_something_else();
     break;
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">switch ($param) {
+switch ($param) {
   case 0:
     do_something();
     break;
@@ -24,7 +24,7 @@ should still be used because there is no guarantee that the <code>enum</code> wo
   default:
     error();
     break;
-}</code>
+}
 </pre>
 <h2>See</h2>
 <ul>

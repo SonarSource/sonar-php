@@ -10,11 +10,11 @@ PSR-4 standard and therefore should no longer rely on <code>include</code> or <c
 <code>require_once</code> functions.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">require_once('./modules/vegetable/src/Entity/Tomato.php');</code>
+require_once('./modules/vegetable/src/Entity/Tomato.php');
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">use Drupal\vegetable\Entity\Tomato</code>
+use Drupal\vegetable\Entity\Tomato
 </pre>
 <h2>Exceptions</h2>
 <p>This rule doesn’t raise issues on <code>autoload.php</code> or <code>ScriptHandler.php</code> files.</p>

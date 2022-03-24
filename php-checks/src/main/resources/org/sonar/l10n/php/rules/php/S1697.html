@@ -3,22 +3,22 @@ null-testing the object before dereferencing it. Unfortunately the effect is jus
 <em>only</em> if it is null, leading to a guaranteed null pointer dereference.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">if ($obj == null &amp;&amp; $obj-&gt;isOpen()) {
+if ($obj == null &amp;&amp; $obj-&gt;isOpen()) {
   echo "Object is open";
 }
 
 if ($obj != null || $obj-&gt;isOpen()) {
   echo "Object is not open";
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">if ($obj == null || $obj-&gt;isOpen()) {
+if ($obj == null || $obj-&gt;isOpen()) {
   echo "Object is open";
 }
 
 if ($obj != null &amp;&amp; !$obj-&gt;isOpen()) {
   echo "Object is not open";
-}</code>
+}
 </pre>
 

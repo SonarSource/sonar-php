@@ -6,16 +6,16 @@ custom exceptions.</p>
 .</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">class NoThrowable {}
+class NoThrowable {}
 
 try {
     foo();
 } catch (NoThrowable $e) { // Noncompliant
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">&lt;?php
+&lt;?php
 
 class SomeThrowable implements Throwable {
     // Implementation of the Throwable methods
@@ -32,6 +32,6 @@ try {
     foo();
 } catch (SomeCustomException $e) { // Compliant
 }{code}
-&nbsp;</code>
+&nbsp;
 </pre>
 

@@ -3,18 +3,18 @@ typically caused by accidentally double-tapping the key in question without noti
 called once, or misleading if done on purpose.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">$a = 0;
+$a = 0;
 $b = false;
 
 $c = !!$a; // Noncompliant
-$d = ~~$b; // Noncompliant</code>
+$d = ~~$b; // Noncompliant
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">$a = 0;
+$a = 0;
 $b = false;
 
 $c = !$a; // Compliant
-$d = ~$b; // Compliant</code>
+$d = ~$b; // Compliant
 </pre>
 

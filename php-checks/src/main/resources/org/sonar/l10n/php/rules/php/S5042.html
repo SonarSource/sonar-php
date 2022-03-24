@@ -46,7 +46,7 @@ zip_close($zip);
 <h2>Compliant Solution</h2>
 <p>For <a href="https://www.php.net/manual/en/class.ziparchive.php">ZipArchive</a> module:</p>
 <pre>
-<code data-lang="php">define('MAX_FILES', 10000);
+define('MAX_FILES', 10000);
 define('MAX_SIZE', 1000000000); // 1 GB
 define('MAX_RATIO', 10);
 define('READ_LENGTH', 1024);
@@ -60,7 +60,7 @@ if ($zip-&gt;open($file) === true) {
         $filename = $zip-&gt;getNameIndex($i);
         $stats = $zip-&gt;statIndex($i);
 
-        // Prevent ZipSlip path traversal ({rule:php:S6096})
+        // Prevent ZipSlip path traversal (S6096)
         if (strpos($filename, '../') !== false || substr($filename, 0, 1) === '/') {
             throw new Exception();
         }
@@ -101,11 +101,11 @@ if ($zip-&gt;open($file) === true) {
         }
     }
     $zip-&gt;close();
-}</code>
+}
 </pre>
 <p>For <a href="https://www.php.net/manual/en/ref.zip.php">Zip</a> module:</p>
 <pre>
-<code data-lang="php">define('MAX_FILES', 10000);
+define('MAX_FILES', 10000);
 define('MAX_SIZE', 1000000000); // 1 GB
 define('MAX_RATIO', 10);
 define('READ_LENGTH', 1024);
@@ -117,7 +117,7 @@ $zip = zip_open($file);
 while ($file = zip_read($zip)) {
     $filename = zip_entry_name($file);
 
-    // Prevent ZipSlip path traversal ({rule:php:S6096})
+    // Prevent ZipSlip path traversal (S6096)
     if (strpos($filename, '../') !== false || substr($filename, 0, 1) === '/') {
         throw new Exception();
     }
@@ -154,7 +154,7 @@ while ($file = zip_read($zip)) {
         mkdir($filename);
     }
 }
-zip_close($zip);</code>
+zip_close($zip);
 </pre>
 <h2>See</h2>
 <ul>

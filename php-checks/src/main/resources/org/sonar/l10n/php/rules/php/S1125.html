@@ -1,17 +1,17 @@
 <p>Redundant Boolean literals should be removed from expressions to improve readability.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">if ($booleanVariable == true) { /* ... */ }
+if ($booleanVariable == true) { /* ... */ }
 if ($booleanVariable != true) { /* ... */ }
 if ($booleanVariable || false) { /* ... */ }
-doSomething(!false);</code>
+doSomething(!false);
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">if ($booleanVariable) { /* ... */ }
+if ($booleanVariable) { /* ... */ }
 if (!$booleanVariable) { /* ... */ }
 if ($booleanVariable) { /* ... */ }
-doSomething(true);</code>
+doSomething(true);
 </pre>
 <h2>Exceptions</h2>
 <p>The use of literal booleans in comparisons which use identity operators (<code>===</code> and <code>!==</code>) are ignored.</p>

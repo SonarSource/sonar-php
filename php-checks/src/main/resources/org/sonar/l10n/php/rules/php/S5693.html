@@ -50,7 +50,7 @@ class TestController extends Controller
 <h2>Compliant Solution</h2>
 <p>For <a href="https://symfony.com/doc/current/reference/constraints/File.html#maxsize">Symfony Constraints</a>:</p>
 <pre>
-<code data-lang="php">use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 class TestEntity
@@ -61,11 +61,11 @@ class TestEntity
             'maxSize' =&gt; '8M', // Compliant
         ]));
     }
-}</code>
+}
 </pre>
 <p>For <a href="https://laravel.com/docs/8.x/validation#rule-max">Laravel Validator</a>:</p>
 <pre>
-<code data-lang="php">use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -76,7 +76,7 @@ class TestController extends Controller
             'upload' =&gt; 'required|file|max:8000', // Compliant
         ]);
     }
-}</code>
+}
 </pre>
 <h2>See</h2>
 <ul>

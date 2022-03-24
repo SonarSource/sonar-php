@@ -2,22 +2,22 @@
 redundant pairs of parentheses could be misleading, and should be removed.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">$x = ($y / 2 + 1); // Compliant even if the parenthesis are ignored by the compiler
+$x = ($y / 2 + 1); // Compliant even if the parenthesis are ignored by the compiler
 
 if ($a &amp;&amp; (($x + $y &gt; 0))) { // Noncompliant
   //...
 }
 
-return (($x + 1)); // Noncompliant</code>
+return (($x + 1)); // Noncompliant
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">$x = ($y / 2 + 1);
+$x = ($y / 2 + 1);
 
 if ($a &amp;&amp; ($x + $y &gt; 0)) {
   //...
 }
 
-return ($x + 1);</code>
+return ($x + 1);
 </pre>
 

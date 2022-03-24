@@ -5,11 +5,11 @@ lookahead does not match the pattern inside the lookahead. This makes the lookah
 regular expression that should be fixed.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">preg_match("/(?=a)b/", $str); // Noncompliant, the same character can't be equal to 'a' and 'b' at the same time</code>
+preg_match("/(?=a)b/", $str); // Noncompliant, the same character can't be equal to 'a' and 'b' at the same time
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">preg_match("/(?&lt;=a)b/", $str);
-preg_match("/a(?=b)/", $str);</code>
+preg_match("/(?&lt;=a)b/", $str);
+preg_match("/a(?=b)/", $str);
 </pre>
 
