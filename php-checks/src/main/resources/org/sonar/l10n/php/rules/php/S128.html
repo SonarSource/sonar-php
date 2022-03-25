@@ -2,7 +2,7 @@
 this is sometimes intentional, it often is a mistake which leads to unexpected behavior.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">switch ($myVariable) {
+switch ($myVariable) {
   case 1:
     foo();
     break;
@@ -11,11 +11,11 @@ this is sometimes intentional, it often is a mistake which leads to unexpected b
   default:
     do_something_else();
    break;
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">switch ($myVariable) {
+switch ($myVariable) {
   case 1:
     foo();
     break;
@@ -25,7 +25,7 @@ this is sometimes intentional, it often is a mistake which leads to unexpected b
   default:
     do_something_else();
    break;
-}</code>
+}
 </pre>
 <h2>Exceptions</h2>
 <p>This rule is relaxed in following cases:</p>

@@ -3,22 +3,22 @@ documentation. Toward that end, methods returning a boolean property should have
 <p>Note that this rule will only apply to functions that are documented to return a boolean.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="text">/**
+/**
  * @return boolean
  */
 public function getFoo() // Noncompliant
 {
   return foo;
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="text">/**
+/**
  * @return boolean
  */
 public function isFoo()
 {
   return true;
-}</code>
+}
 </pre>
 

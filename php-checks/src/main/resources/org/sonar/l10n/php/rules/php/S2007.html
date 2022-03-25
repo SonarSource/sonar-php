@@ -11,7 +11,7 @@ be used without a class instance.</p>
 <p>This rule checks that only object-oriented programming is used and that no functions or procedures are declared outside of a class.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="text">&lt;?php
+&lt;?php
 
 $name = "Bob"; // Noncompliant
 
@@ -21,11 +21,11 @@ function doSomething($arg) {   // Noncompliant
 
 class MyClass {
     //...
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="text">&lt;?php
+&lt;?php
 class MyClass {
 
   public static $name = "Bob"; // Compliant
@@ -34,6 +34,6 @@ class MyClass {
     //...
   }
   //...
-}</code>
+}
 </pre>
 

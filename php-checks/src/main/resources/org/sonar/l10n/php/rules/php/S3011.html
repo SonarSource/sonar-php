@@ -3,7 +3,7 @@ field value. Altering or bypassing the accessibility of classes, methods, or fie
 errors.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">class MyClass
+class MyClass
 {
     public static $publicstatic = 'Static';
     private static $privatestatic = 'private Static';
@@ -90,6 +90,6 @@ $meth3-&gt;setAccessible(true); // Noncompliant. Change accessibility of a metho
 
 $meth4 = $objr-&gt;getMethods()[0];
 $clos4 = $meth4-&gt;getClosure($obj); // Noncompliant. It is possible to call private methods with closures.
-$meth4-&gt;setAccessible(true); // Noncompliant. Change accessibility of a method.</code>
+$meth4-&gt;setAccessible(true); // Noncompliant. Change accessibility of a method.
 </pre>
 

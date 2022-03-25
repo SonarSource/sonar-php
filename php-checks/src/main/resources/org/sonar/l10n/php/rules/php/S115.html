@@ -2,18 +2,18 @@
 <h2>Noncompliant Code Example</h2>
 <p>With the default regular expression <code>^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$</code>:</p>
 <pre>
-<code data-lang="php">define("const1", true);
+define("const1", true);
 
 class Foo {
     const const2 = "bar";
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">define("CONST1", true);
+define("CONST1", true);
 
 class Foo {
     const CONST2 = "bar";
-}</code>
+}
 </pre>
 

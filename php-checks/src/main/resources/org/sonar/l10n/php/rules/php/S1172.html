@@ -1,15 +1,15 @@
 <p>Unused parameters are misleading. Whatever the value passed to such parameters is, the behavior will be the same.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">function doSomething($a, $b) { // "$a" is unused
+function doSomething($a, $b) { // "$a" is unused
   return compute($b);
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">function doSomething($b) {
+function doSomething($b) {
   return compute($b);
-}</code>
+}
 </pre>
 <h2>Exceptions</h2>
 <p>Functions in classes that override a class or implement interfaces are ignored.</p>

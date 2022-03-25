@@ -2,11 +2,11 @@
 then indicate with a quantifier how many spaces are expected.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">"/Hello,   world!/"</code>
+"/Hello,   world!/"
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">"/Hello, {3}world!/"</code>
+"/Hello, {3}world!/"
 </pre>
 <h2>Exceptions</h2>
 <p>If the extended modife is set, whitespaces are ignored. In this case no issue should be triggered, because the whitespaces may be intended to

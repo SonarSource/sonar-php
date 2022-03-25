@@ -36,17 +36,17 @@ define( 'WP_DEBUG', true ); // Sensitive: development mode
 <h2>Compliant Solution</h2>
 <p>CakePHP 1.2:</p>
 <pre>
-<code data-lang="php">Configure::write('debug', 0); // Compliant; this is the production mode</code>
+Configure::write('debug', 0); // Compliant; this is the production mode
 </pre>
 <p>CakePHP 3.0:</p>
 <pre>
-<code data-lang="php">use Cake\Core\Configure;
+use Cake\Core\Configure;
 
-Configure::config('debug', false); // Compliant:  "0" or "false" for CakePHP 3.x is suitable (production mode) to not leak sensitive data on the logs.</code>
+Configure::config('debug', false); // Compliant:  "0" or "false" for CakePHP 3.x is suitable (production mode) to not leak sensitive data on the logs.
 </pre>
 <p>WordPress:</p>
 <pre>
-<code data-lang="php">define( 'WP_DEBUG', false ); // Compliant</code>
+define( 'WP_DEBUG', false ); // Compliant
 </pre>
 <h2>See</h2>
 <ul>

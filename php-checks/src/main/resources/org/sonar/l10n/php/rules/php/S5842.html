@@ -2,15 +2,15 @@
 redundant or does not do what the author intended.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">"/(?:)*/"      // same as the empty regex, the '*' accomplishes nothing
+"/(?:)*/"      // same as the empty regex, the '*' accomplishes nothing
 "/(?:|x)*/"    // same as the empty regex, the alternative has no effect
 "/(?:x|)*/"    // same as 'x*', the empty alternative has no effect
 "/(?:x*|y*)*/" // same as 'x*', the first alternative would always match, y* is never tried
 "/(?:x?)*/"    // same as 'x*'
-"/(?:x?)+/"    // same as 'x*'</code>
+"/(?:x?)+/"    // same as 'x*'
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">"/x*/"</code>
+"/x*/"
 </pre>
 

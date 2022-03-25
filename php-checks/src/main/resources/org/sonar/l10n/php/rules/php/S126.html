@@ -5,21 +5,21 @@ should be followed by an <code>else</code> statement.</p>
 consistent with the requirement to have a final <code>default</code> clause in a <code>switch</code> statement.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">if (condition1) {
+if (condition1) {
   do_something();
 } elseif (condition2) {
   do_something_else();
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">if (condition1) {
+if (condition1) {
   do_something();
 } elseif (condition2) {
   do_something_else();
 } else {
   throw new InvalidArgumentException('message');
-}</code>
+}
 </pre>
 <h2>Exceptions</h2>
 <p>When all branches of an <code>if-elseif</code> end with <code>return</code>, <code>break</code>, <code>continue</code> or <code>throw</code>, the

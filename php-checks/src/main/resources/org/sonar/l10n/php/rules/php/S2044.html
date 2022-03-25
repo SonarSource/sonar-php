@@ -2,10 +2,10 @@
 referencing the constant.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">if (php_sapi_name() == 'test') { ... }</code>
+if (php_sapi_name() == 'test') { ... }
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">if (PHP_SAPI == 'test') { ... }</code>
+if (PHP_SAPI == 'test') { ... }
 </pre>
 

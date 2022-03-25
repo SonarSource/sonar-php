@@ -10,7 +10,7 @@ that exception. The provided helper functions are:</p>
 functions.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">public function testA()
+public function testA()
 {
     try {
         doSomething();
@@ -18,17 +18,17 @@ functions.</p>
     } catch (MyException $e) {
         assertEquals("Exception message", $e-&gt;getMessage());
     }
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">public function testB()
+public function testB()
 {
     $this-&gt;expectException(MyException::class);
     $this-&gt;expectExceptionMessage("Exception message");
 
     doSomething();
-}</code>
+}
 </pre>
 <h2>See</h2>
 <p>thePHP.cc: <a href="https://thephp.cc/news/2016/02/questioning-phpunit-best-practices">Questioning PHPUnit Best Practice</a></p>

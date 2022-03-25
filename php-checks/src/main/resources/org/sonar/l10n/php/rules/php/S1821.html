@@ -4,7 +4,7 @@ belonging to an outer statement. Therefore nested <code>switch</code> statements
 the inner <code>switch</code> to another function.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">switch($a) {
+switch($a) {
   case "foo":
     switch($b) { // Noncompliant
       case "bar":
@@ -12,11 +12,11 @@ the inner <code>switch</code> to another function.</p>
       break;
     }
   break;
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">function handleFoo($foo) {
+function handleFoo($foo) {
   switch($foo) {
     case "bar":
       doSomething();
@@ -28,6 +28,6 @@ switch($a) {
   case "foo":
     handleFoo($b);
   break;
-}</code>
+}
 </pre>
 

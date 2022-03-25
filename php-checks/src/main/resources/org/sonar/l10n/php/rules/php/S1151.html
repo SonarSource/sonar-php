@@ -4,7 +4,7 @@ clause contains too many statements this highly decreases the readability of the
 <h2>Noncompliant Code Example</h2>
 <p>With a threshold of 5:</p>
 <pre>
-<code data-lang="php">switch ($var) {
+switch ($var) {
   case 0:  // 6 lines till next case
     methodCall1();
     methodCall2();
@@ -13,11 +13,11 @@ clause contains too many statements this highly decreases the readability of the
     break;
   default:
     break;
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">switch ($var) {
+switch ($var) {
   case 0:
     doSomething();
     break;
@@ -30,6 +30,6 @@ function doSomething(){
   methodCall2("");
   methodCall3("");
   methodCall4("");
-}</code>
+}
 </pre>
 

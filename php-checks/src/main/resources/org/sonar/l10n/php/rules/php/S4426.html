@@ -19,21 +19,21 @@ use-cases:</p>
 <p>This rule will not raise issues for ciphers that are considered weak (no matter the key size) like <code>DES</code>, <code>Blowfish</code>.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">$config = array(
+$config = array(
     "digest_alg" =&gt; "sha512",
     "private_key_bits" =&gt; 1024, // Noncompliant
     "private_key_type" =&gt; OPENSSL_KEYTYPE_RSA,
 );
-$res = openssl_pkey_new($config);</code>
+$res = openssl_pkey_new($config);
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">$config = array(
+$config = array(
     "digest_alg" =&gt; "sha512",
     "private_key_bits" =&gt; 2048 // Compliant
     "private_key_type" =&gt; OPENSSL_KEYTYPE_RSA,
 );
-$res = openssl_pkey_new($config);</code>
+$res = openssl_pkey_new($config);
 </pre>
 <h2>See</h2>
 <ul>

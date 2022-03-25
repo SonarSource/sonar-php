@@ -50,25 +50,25 @@ class Controller extends AbstractController {
 <h2>Compliant Solution</h2>
 <p>For <a href="https://laravel.com/docs/8.x/csrf#csrf-excluding-uris">Laravel VerifyCsrfToken middleware</a></p>
 <pre>
-<code data-lang="php">use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 
 class VerifyCsrfToken extends Middleware
 {
     protected $except = []; // Compliant
-}</code>
+}
 </pre>
 <p>Remember to add <a href="https://laravel.com/docs/8.x/blade#csrf-field">@csrf</a> blade directive to the relevant forms when removing an element
 from $except. Otherwise the form submission will stop working.</p>
 <p>For <a href="https://symfony.com/doc/current/security/csrf.html#csrf-protection-in-symfony-forms">Symfony Forms</a></p>
 <pre>
-<code data-lang="php">use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class Controller extends AbstractController {
 
   public function action() {
     $this-&gt;createForm('', null, []); // Compliant; CSRF protection is enabled by default
   }
-}</code>
+}
 </pre>
 <h2>See</h2>
 <ul>

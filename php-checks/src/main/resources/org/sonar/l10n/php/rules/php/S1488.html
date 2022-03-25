@@ -4,15 +4,15 @@ variable is an internal implementation detail that is not exposed to the callers
 know exactly what will be returned.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">function computeDurationInMilliseconds() {
+function computeDurationInMilliseconds() {
   $duration = ((($hours * 60) + $minutes) * 60 + $seconds ) * 1000 ;
   return $duration;
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">function computeDurationInMilliseconds() {
+function computeDurationInMilliseconds() {
   return ((($hours * 60) + $minutes) * 60 + $seconds ) * 1000;
-}</code>
+}
 </pre>
 

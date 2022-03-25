@@ -2,10 +2,10 @@
 pain, nor PHP errors should be ignored.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">@doSomethingDangerous($password);  // Noncompliant; '@' silences errors from function call</code>
+@doSomethingDangerous($password);  // Noncompliant; '@' silences errors from function call
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">doSomethingDangerous($password);</code>
+doSomethingDangerous($password);
 </pre>
 

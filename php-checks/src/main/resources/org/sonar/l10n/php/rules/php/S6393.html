@@ -4,7 +4,7 @@ unnoticed into production.</p>
 <p>A delimiter can be any character that is not alphanumeric, a backslash, or a whitespace. Bracket style delimiters are also allowed.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">// Condition will always evaluate to false
+// Condition will always evaluate to false
 if (preg_match("/.*", $input)) {
     echo "true";
 } else {
@@ -12,17 +12,17 @@ if (preg_match("/.*", $input)) {
 }
 
 // Unclosed bracket delimiters
-$result = preg_match("[abc", $input);</code>
+$result = preg_match("[abc", $input);
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">if (preg_match("/.*/", $input)) {
+if (preg_match("/.*/", $input)) {
     echo "true";
 } else {
     echo "false";
 }
 
-$result = preg_match("[abc]", $input);</code>
+$result = preg_match("[abc]", $input);
 </pre>
 <h2>See</h2>
 <ul>

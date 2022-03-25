@@ -2,18 +2,18 @@
 the PHP5 <code>__construct</code> name, nested calls to parent constructors should also use the new <code>__constructor</code> name.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">class Foo extends Bar {
+class Foo extends Bar {
   function __construct() {
     parent::Bar();
   }
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">class Foo extends Bar {
+class Foo extends Bar {
   function __construct() {
     parent::__construct();
   }
-}</code>
+}
 </pre>
 

@@ -2,24 +2,24 @@
 dedicated assertion.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">assertTrue($a === $b);
+assertTrue($a === $b);
 assertTrue($a == $b);
 assertTrue($a === null);
 assertTrue($a !== null);
 assertTrue($a !== $b);
 assertTrue($a != $b);
 assertFalse($a === $b);
-assertFalse($a == $b);</code>
+assertFalse($a == $b);
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">assertEquals($a, $b);
+assertEquals($a, $b);
 assertSame($a, $b);
 assertNull($a);
 assertNotNull($a);
 assertNotEquals($a, $b);
 assertNotSame($a, $b);
 assertNotEquals($a, $b);
-assertNotSame($a, $b);</code>
+assertNotSame($a, $b);
 </pre>
 

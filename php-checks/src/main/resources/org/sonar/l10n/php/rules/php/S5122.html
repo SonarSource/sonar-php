@@ -43,22 +43,22 @@ $response-&gt;headers-&gt;set('Access-Control-Allow-Origin', '*'); // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">header("Access-Control-Allow-Origin: $trusteddomain"); // Compliant</code>
+header("Access-Control-Allow-Origin: $trusteddomain"); // Compliant
 </pre>
 <p>Laravel</p>
 <pre>
-<code data-lang="php">response()-&gt;header('Access-Control-Allow-Origin', $trusteddomain); /// Compliant</code>
+response()-&gt;header('Access-Control-Allow-Origin', $trusteddomain); /// Compliant
 </pre>
 <p>Symfony</p>
 <pre>
-<code data-lang="php">use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 $response = new Response(
     'Content',
     Response::HTTP_OK,
     ['Access-Control-Allow-Origin' =&gt; $trusteddomain] /// Compliant
 
-$response-&gt;headers-&gt;set('Access-Control-Allow-Origin',$trusteddomain); // Compliant</code>
+$response-&gt;headers-&gt;set('Access-Control-Allow-Origin',$trusteddomain); // Compliant
 </pre>
 <h2>See</h2>
 <ul>

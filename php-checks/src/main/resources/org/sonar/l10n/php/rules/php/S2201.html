@@ -2,10 +2,10 @@
 the function call is useless and should be dropped, or the source code doesn’t behave as expected.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">strlen($name); // Noncompliant; "strlen" has no side effect</code>
+strlen($name); // Noncompliant; "strlen" has no side effect
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">$length = strlen($name);</code>
+$length = strlen($name);
 </pre>
 

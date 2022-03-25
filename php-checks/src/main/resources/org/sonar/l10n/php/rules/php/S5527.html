@@ -5,13 +5,13 @@ certificate.</p>
 <p>TLS/SSL libraries provide built-in hostname verification functions that should be used.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE); // Noncompliant
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);  // Noncompliant</code>
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE); // Noncompliant
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);  // Noncompliant
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // Compliant; default value is 2 to "check the existence of a common name and also verify that it matches the hostname provided" according to PHP's documentation
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // Compliant: starting from 7.66.0: treats 1 and 2 the same (https://curl.haxx.se/libcurl/c/CURLOPT_SSL_VERIFYHOST.html)</code>
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // Compliant; default value is 2 to "check the existence of a common name and also verify that it matches the hostname provided" according to PHP's documentation
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // Compliant: starting from 7.66.0: treats 1 and 2 the same (https://curl.haxx.se/libcurl/c/CURLOPT_SSL_VERIFYHOST.html)
 </pre>
 <h2>See</h2>
 <ul>

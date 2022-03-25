@@ -6,22 +6,22 @@ not rethrown, PHPUnit does not notice the assertion failure.</p>
 variable holding the exception.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">public function testA() {
+public function testA() {
     try {
         assertTrue(getValue()); // Noncompliant
     } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
 
     }
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">public function testB() {
+public function testB() {
     try {
         assertTrue(getValue()); // Compliant
     } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
         assertEquals("Some message", $e-&gt;getMessage());
     }
-}</code>
+}
 </pre>
 

@@ -32,8 +32,8 @@ socket_connect($socket, '8.8.8.8', 23);  // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-socket_connect($socket, IP_ADDRESS, 23);  // Compliant</code>
+$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+socket_connect($socket, IP_ADDRESS, 23);  // Compliant
 </pre>
 <h2>Exceptions</h2>
 <p>No issue is reported for the following cases because they are not considered sensitive:</p>

@@ -2,13 +2,13 @@
 code. Further, it could lead maintainers to introduce bugs because they think they’re using one variable but are really using another.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">class Foo {
+class Foo {
   public $myField;
 
   public function doSomething() {
     $myField = 0;
     ...
   }
-}</code>
+}
 </pre>
 

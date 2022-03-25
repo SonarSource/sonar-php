@@ -16,19 +16,19 @@ level, as in <em>.com</em>.</p>
 </ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant
+setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant
 session_set_cookie_params(3600, "/~path/", ".com"); // Noncompliant
 
 // inside php.ini
-session.cookie_domain=".com"; // Noncompliant</code>
+session.cookie_domain=".com"; // Noncompliant
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">setcookie("TestCookie", $value, time()+3600, "/~path/", ".myDomain.com", 1);
+setcookie("TestCookie", $value, time()+3600, "/~path/", ".myDomain.com", 1);
 session_set_cookie_params(3600, "/~path/", ".myDomain.com");
 
 // inside php.ini
-session.cookie_domain=".myDomain.com";</code>
+session.cookie_domain=".myDomain.com";
 </pre>
 <h2>See</h2>
 <ul>

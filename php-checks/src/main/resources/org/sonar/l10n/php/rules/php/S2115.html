@@ -2,15 +2,15 @@
 <p>This rule raises an issue when an empty password is used.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">// example of an empty password when connecting to a mysql database
-$conn = new mysqli($servername, $username, "");</code>
+// example of an empty password when connecting to a mysql database
+$conn = new mysqli($servername, $username, "");
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">// generate a secure password, set it to the username database, and store it in a environment variable for instance
+// generate a secure password, set it to the username database, and store it in a environment variable for instance
 $password = getenv('MYSQL_SECURE_PASSWORD');
 // then connect to the database
-$conn = new mysqli($servername, $username, $password);</code>
+$conn = new mysqli($servername, $username, $password);
 </pre>
 <h2>See</h2>
 <ul>

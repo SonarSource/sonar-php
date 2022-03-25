@@ -8,10 +8,10 @@ single codepoint, which is extremely unlikely to be the intended behavior.</p>
 <p>This rule raises an issue every time Unicode Grapheme Clusters are used within a character class of a regular expression.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">preg_replace("/[c̈d̈]/", "X", "cc̈d̈d"); // Noncompliant, print "XXXXXX" instead of expected "cXXd".</code>
+preg_replace("/[c̈d̈]/", "X", "cc̈d̈d"); // Noncompliant, print "XXXXXX" instead of expected "cXXd".
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">preg_replace("/c̈|d̈/", "X", "cc̈d̈d"); // print "cXXd"</code>
+preg_replace("/c̈|d̈/", "X", "cc̈d̈d"); // print "cXXd"
 </pre>
 

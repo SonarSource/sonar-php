@@ -9,17 +9,17 @@ statements with conditions that are always true are completely redundant, and ma
 <p>In any of these cases, unconditional <code>if</code> statements should be removed.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">if (true) {  // Noncompliant
+if (true) {  // Noncompliant
   doSomething();
 }
 ...
 if (false) {  // Noncompliant
   doSomethingElse();
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">doSomething();</code>
+doSomething();
 </pre>
 <h2>See</h2>
 <ul>

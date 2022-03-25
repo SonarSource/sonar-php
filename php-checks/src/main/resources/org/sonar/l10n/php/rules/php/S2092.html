@@ -38,19 +38,19 @@ setrawcookie($name, $value, $expire, $path, $domain);  // Sensitive: a security-
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">session.cookie_secure = 1; // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to cookie_secure property set to 1</code>
+session.cookie_secure = 1; // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to cookie_secure property set to 1
 </pre>
 <pre>
-<code data-lang="php">session_set_cookie_params($lifetime, $path, $domain, true); // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the fouth argument) set to true</code>
+session_set_cookie_params($lifetime, $path, $domain, true); // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the fouth argument) set to true
 </pre>
 <pre>
-<code data-lang="php">$value = "sensitive data";
+$value = "sensitive data";
 setcookie($name, $value, $expire, $path, $domain, true); // Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the sixth  argument) set to true
-setrawcookie($name, $value, $expire, $path, $domain, true);// Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the sixth argument) set to true</code>
+setrawcookie($name, $value, $expire, $path, $domain, true);// Compliant: the sensitive cookie will not be send during an unencrypted HTTP request thanks to the secure flag (the sixth argument) set to true
 </pre>
 <h2>See</h2>
 <ul>
-  <li> <a href="https://owasp.org/Top10/A03_2021-Injection/">OWASP Top 10 2021 Category A4</a> - Insecure Design </li>
+  <li> <a href="https://owasp.org/Top10/A04_2021-Insecure_Design/">OWASP Top 10 2021 Category A4</a> - Insecure Design </li>
   <li> <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP Top 10 2021 Category A5</a> - Security Misconfiguration </li>
   <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
   </li>

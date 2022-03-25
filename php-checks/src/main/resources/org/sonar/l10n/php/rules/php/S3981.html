@@ -3,18 +3,18 @@ to zero doesn’t make sense, since the result is always <code>true</code>. Simi
 <code>false</code>. Perhaps the intent was to check the non-emptiness of the object or array instead.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">if (count($arr) &gt;= 0) { ... }
+if (count($arr) &gt;= 0) { ... }
 
 if (count($arr) &lt; 0) { ... }
 
 $result = count($arr) &gt;= 0;
 
-if (0 &gt; count($arr)) { ... }</code>
+if (0 &gt; count($arr)) { ... }
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">if (count($arr) != 0) { ... }
+if (count($arr) != 0) { ... }
 
-if (count($arr) &gt; 0) { ... }</code>
+if (count($arr) &gt; 0) { ... }
 </pre>
 

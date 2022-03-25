@@ -6,20 +6,20 @@ exactly the same thing as <code>preg_replace</code> without the performance draw
 character or pattern.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">$str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
+$str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
 $changed = preg_replace("/Bob is/", "It's", $str); // Noncompliant
-$changed = preg_replace("/\.\.\./", ";", $changed); // Noncompliant</code>
+$changed = preg_replace("/\.\.\./", ";", $changed); // Noncompliant
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">$str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
+$str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
 $changed = str_replace("Bob is", "It's", $str);
-$changed = str_replace("...", ";", $changed);</code>
+$changed = str_replace("...", ";", $changed);
 </pre>
 <p>Or, with a regex:</p>
 <pre>
-<code data-lang="php">$str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
+$str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
 $changed = preg_replace("/\w*\sis/", "It's", $str);
-$changed = preg_replace("/\.{3}/", ";", $changed);</code>
+$changed = preg_replace("/\.{3}/", ";", $changed);
 </pre>
 

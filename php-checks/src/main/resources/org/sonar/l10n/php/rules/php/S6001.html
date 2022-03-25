@@ -4,14 +4,14 @@ references throw a warning in that case; numeric back references fail silently w
 situation where the back reference can never match.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">preg_match("/\\1(.)/", $str); // Noncompliant, group 1 is defined after the back reference
+preg_match("/\\1(.)/", $str); // Noncompliant, group 1 is defined after the back reference
 preg_match("/(.)\\2/", $str); // Noncompliant, group 2 isn't defined at all
 preg_match("/(.)|\\1/", $str); // Noncompliant, group 1 and the back reference are in different branches
-preg_match("/(?&lt;x&gt;.)|\k&lt;x&gt;/", $str); // Noncompliant, group x and the back reference are in different branches</code>
+preg_match("/(?&lt;x&gt;.)|\k&lt;x&gt;/", $str); // Noncompliant, group x and the back reference are in different branches
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">preg_match("/(.)\\1/", $str);
-preg_match("/(?&lt;x&gt;.)\\k&lt;x&gt;/", $str);</code>
+preg_match("/(.)\\1/", $str);
+preg_match("/(?&lt;x&gt;.)\\k&lt;x&gt;/", $str);
 </pre>
 

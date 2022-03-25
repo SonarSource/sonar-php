@@ -9,16 +9,16 @@ and <code>include_once</code> - the "_once" versions ensure that the specified f
 possible error conditions have been checked beforehand.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">include 'code.php';  //Noncompliant; not a "_once" usage and not conditional
+include 'code.php';  //Noncompliant; not a "_once" usage and not conditional
 include $user.'_history.php'; // Noncompliant
-require 'more_code.php';  // Noncompliant; not a "_once" usage</code>
+require 'more_code.php';  // Noncompliant; not a "_once" usage
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">require_once 'code.php';
+require_once 'code.php';
 if (is_member($user)) {
   include_once $user.'_history.php';
 }
-require_once 'more_code.php';</code>
+require_once 'more_code.php';
 </pre>
 

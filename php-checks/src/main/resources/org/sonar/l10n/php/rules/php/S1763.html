@@ -3,18 +3,18 @@ expressions move control flow out of the current code block. So any unlabeled st
 dead code should be removed, or the logic should be corrected.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">function fun($a) {
+function fun($a) {
   $i = 10;
   return $i + $a;
   $i++;             // dead code
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">function fun($a) {
+function fun($a) {
   $i = 10;
   return $i + $a;
-}</code>
+}
 </pre>
 <h2>See</h2>
 <ul>

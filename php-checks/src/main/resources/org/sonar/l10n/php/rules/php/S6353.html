@@ -11,18 +11,18 @@ This rule recommends to replace some bulky quantifiers and character classes wit
 </ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">"/[0-9]/" // Noncompliant - same as "/\d/"
-/[^0-9]/" // Noncompliant - same as "/\D/"
+"/[0-9]/" // Noncompliant - same as "/\d/"
+"/[^0-9]/" // Noncompliant - same as "/\D/"
 "/[A-Za-z0-9_]/" // Noncompliant - same as "/\w/"
 "/[\w\W]/" // Noncompliant - same as "/./"
-"/a{0,}/" // Noncompliant - same as "/a*/"</code>
+"/a{0,}/" // Noncompliant - same as "/a*/"
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">"/\d/"
+"/\d/"
 "/\D/"
 "/\w/"
 "/./"
-"/a*/"</code>
+"/a*/"
 </pre>
 

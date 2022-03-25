@@ -3,20 +3,20 @@ dependent object (or client) and are made part of the client’s state. The patt
 behavior, which allows program designs to be loosely coupled and to follow the dependency inversion and single responsibility principles.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="text">class SomeClass {
+class SomeClass {
 
   public function __construct() {
     $this-&gt;object = new SomeOtherClass();  // Noncompliant
   }
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="text">class SomeClass {
+class SomeClass {
 
   public function __construct(SomeOtherClass $object) {
     $this-&gt;object = $object;
   }
-}</code>
+}
 </pre>
 

@@ -5,7 +5,7 @@ properly considered.</p>
 first or the last one of the <code>switch</code>'s cases.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">switch ($param) {
+switch ($param) {
   case 0:
     doSomething();
     break;
@@ -15,11 +15,11 @@ first or the last one of the <code>switch</code>'s cases.</p>
   case 1:
     doSomethingElse();
     break;
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">switch ($param) {
+switch ($param) {
   case 0:
     doSomething();
     break;
@@ -29,6 +29,6 @@ first or the last one of the <code>switch</code>'s cases.</p>
   default:
     error();
     break;
-}</code>
+}
 </pre>
 

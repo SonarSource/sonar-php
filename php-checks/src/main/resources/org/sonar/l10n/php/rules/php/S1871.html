@@ -3,7 +3,7 @@ best duplicate code, and at worst a coding error. If the same logic is truly nee
 be combined, or for a <code>switch</code>, one should fall through to the other.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">switch ($i) {
+switch ($i) {
   case 1:
     doFirst();
     doSomething();
@@ -29,7 +29,7 @@ else if ($a &gt;= 10 &amp;&amp; $a &lt; 20) {
 else if ($a &gt;= 20 &amp;&amp; $a &lt; 50) {
   doFirst();
   doTheThing();  // Noncompliant; duplicates first condition
-}</code>
+}
 </pre>
 <h2>Exceptions</h2>
 <p>Blocks in an <code>if</code> chain that contain a single line of code are ignored, as are blocks in a <code>switch</code> statement that contain a

@@ -8,7 +8,7 @@
 <p>This rule raises an issue when a <code>catch</code> block catches every exception before a later <code>catch</code> block could catch it.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-<code data-lang="php">class MyException extends Exception {}
+class MyException extends Exception {}
 class MySubException extends MyException {}
 
 try {
@@ -17,11 +17,11 @@ try {
   echo $e;
 } catch (MySubException $e) { // Noncompliant: MySubException is a subclass of MyException
   echo "Never executed";
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">class MyException extends Exception {}
+class MyException extends Exception {}
 class MySubException extends MyException {}
 
 try {
@@ -30,6 +30,6 @@ try {
   echo "Executed";
 } catch (MyException $e) {
   echo $e;
-}</code>
+}
 </pre>
 

@@ -3,7 +3,7 @@ standard. The default parameter values conform to the PSR2 standard.</p>
 <h2>Noncompliant Code Example</h2>
 <p>With the default PSR2 parameter values:</p>
 <pre>
-<code data-lang="php">use FooClass;              // Noncompliant; the "use" declaration should be placed after the "namespace" declaration
+use FooClass;              // Noncompliant; the "use" declaration should be placed after the "namespace" declaration
 
 namespace Vendor\Package;
 use FooClass;              // Noncompliant; the "namespace" declaration should be followed by a blank line
@@ -76,11 +76,11 @@ class ClassC extends ParentClass implements \ArrayAccess, \Countable,
       ...
     };
   }
-}</code>
+}
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-<code data-lang="php">namespace Vendor\Package; // Compliant; the "namespace" declaration is followed by a blank line
+namespace Vendor\Package; // Compliant; the "namespace" declaration is followed by a blank line
 
 use FooClass;             // Compliant; the "use" declaration is placed after the "namespace" declaration
                           // Compliant; the "use" declaration is followed by a blank line
@@ -186,6 +186,6 @@ class ClassC extends ParentClass implements
       ...
     };
   }
-}</code>
+}
 </pre>
 
