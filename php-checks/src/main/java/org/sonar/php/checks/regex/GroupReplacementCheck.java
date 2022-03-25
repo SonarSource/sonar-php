@@ -47,6 +47,9 @@ public class GroupReplacementCheck extends AbstractRegexCheck {
 
   @Override
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
+    if (regexParseResult.hasSyntaxErrors()) {
+      return;
+    }
     GroupFinder groupFinder = new GroupFinder();
     groupFinder.visit(regexParseResult);
     checkReplacement(regexFunctionCall, groupFinder.groups);
