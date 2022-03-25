@@ -58,18 +58,21 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "namespace_blank_line",
     defaultValue = "true",
+    description = "Enables the validation of required blank lines after namespace declaration.",
     type = "BOOLEAN")
   public boolean hasNamespaceBlankLine = true;
 
   @RuleProperty(
     key = "use_after_namespace",
     defaultValue = "true",
+    description = "Enables the validation of the order of namespace declaration and use statements",
     type = "BOOLEAN")
   public boolean isUseAfterNamespace = true;
 
   @RuleProperty(
     key = "use_blank_line",
     defaultValue = "true",
+    description = "Enables the validation of required blank lines after use statements.",
     type = "BOOLEAN")
   public boolean hasUseBlankLine = true;
 
@@ -79,18 +82,21 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "open_curly_brace_classes_functions",
     defaultValue = "true",
+    description = "Enables the validation of the open curly brace positions for function and class declarations.",
     type = "BOOLEAN")
   public boolean isOpenCurlyBraceForClassAndFunction = true;
 
   @RuleProperty(
     key = "open_curly_brace_control_structures",
     defaultValue = "true",
+    description = "Enables the validation of the open curly brace positions for control structures.",
     type = "BOOLEAN")
   public boolean isOpenCurlyBraceForControlStructures = true;
 
   @RuleProperty(
     key = "closing_curly_brace",
     defaultValue = "true",
+    description = "Enables the validation of the closing curly brace positions.",
     type = "BOOLEAN")
   public boolean isClosingCurlyNextToKeyword = true;
 
@@ -100,48 +106,56 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "one_space_after",
     defaultValue = "true",
+    description = "Enables the validation of a single space between parameter lists and open curly braces.",
     type = "BOOLEAN")
   public boolean isOneSpaceBetweenRParentAndLCurly = true;
 
   @RuleProperty(
     key = "one_space_before",
     defaultValue = "true",
+    description = "Enables the validation of a single space between keyword and next tokens.",
     type = "BOOLEAN")
   public boolean isOneSpaceBetweenKeywordAndNextToken = true;
 
   @RuleProperty(
     key = "one_space_for",
     defaultValue = "true",
+    description = "Enables the validation of a single space after loop semicolons.",
     type = "BOOLEAN")
   public boolean isOneSpaceAfterForLoopSemicolon = true;
 
   @RuleProperty(
     key = "space_comma",
     defaultValue = "true",
+    description = "Enables the validation of a single space after commas.",
     type = "BOOLEAN")
   public boolean isOneSpaceAfterComma = true;
 
   @RuleProperty(
     key = "no_space_method_name",
     defaultValue = "true",
+    description = "Enables the validation of no space after method names.",
     type = "BOOLEAN")
   public boolean isNoSpaceAfterMethodName = true;
 
   @RuleProperty(
     key = "foreach_space",
     defaultValue = "true",
+    description = "Enables the validation of spaces in foreach statements.",
     type = "BOOLEAN")
   public boolean isSpaceForeachStatement = true;
 
   @RuleProperty(
     key = "no_space",
     defaultValue = "true",
+    description = "Enables the validation of no spaces after open and before closing parenthesis.",
     type = "BOOLEAN")
   public boolean isNoSpaceParenthesis = true;
 
   @RuleProperty(
     key = "closure_format",
     defaultValue = "true",
+    description = "Enables the validation of spaces in closure declarations.",
     type = "BOOLEAN")
   public boolean isClosureSpacing = true;
 
@@ -151,18 +165,21 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "function_declaration_arguments_indentation",
     defaultValue = "true",
+    description = "Enables the validation of parameter indentation in function declarations.",
     type = "BOOLEAN")
   public boolean isMethodArgumentsIndentation = true;
 
   @RuleProperty(
     key = "function_calls_arguments_indentation",
     defaultValue = "true",
+    description = "Enables the validation of argument indentation in function calls.",
     type = "BOOLEAN")
   public boolean isFunctionCallsArgumentsIndentation = true;
 
   @RuleProperty(
     key = "interfaces_indentation",
     defaultValue = "true",
+    description = "Enables the validation of interface indentation in call declarations.",
     type = "BOOLEAN")
   public boolean isInterfacesIndentation = true;
 
@@ -172,6 +189,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "extends_implements_line",
     defaultValue = "true",
+    description = "Enables the validation of interface indentation in call declarations.",
     type = "BOOLEAN")
   public boolean isExtendsAndImplementsLine = true;
 
