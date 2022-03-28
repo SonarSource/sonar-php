@@ -82,21 +82,21 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "open_curly_brace_classes_functions",
     defaultValue = "true",
-    description = "Enables the validation of the open curly brace positions for function and class declarations.",
+    description = "Enables the validation of open curly braces on new lines for function and class declarations.",
     type = "BOOLEAN")
   public boolean isOpenCurlyBraceForClassAndFunction = true;
 
   @RuleProperty(
     key = "open_curly_brace_control_structures",
     defaultValue = "true",
-    description = "Enables the validation of the open curly brace positions for control structures.",
+    description = "Enables the validation of open curly braces on new lines for control structures.",
     type = "BOOLEAN")
   public boolean isOpenCurlyBraceForControlStructures = true;
 
   @RuleProperty(
     key = "closing_curly_brace",
     defaultValue = "true",
-    description = "Enables the validation of the closing curly brace positions.",
+    description = "Enables the verification that closing curly braces which follow keywords are on the same line as the keyword.",
     type = "BOOLEAN")
   public boolean isClosingCurlyNextToKeyword = true;
 
@@ -189,7 +189,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "extends_implements_line",
     defaultValue = "true",
-    description = "Enables the validation of interface indentation in call declarations.",
+    description = "Enables the verification that \"extends\" and \"implements\" are on the same line as class declarations.",
     type = "BOOLEAN")
   public boolean isExtendsAndImplementsLine = true;
 
