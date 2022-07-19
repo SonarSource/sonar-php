@@ -525,8 +525,7 @@ public class TreeFactory {
 
   public ParameterTree parameter(
     Optional<List<AttributeGroupTree>> attributeGroups,
-    Optional<SyntaxToken> visibility,
-    Optional<SyntaxToken> readonly,
+    Optional<List<SyntaxToken>> visibilityAndReadonly,
     Optional<DeclaredTypeTree> type,
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
@@ -539,10 +538,22 @@ public class TreeFactory {
       eqToken = eqAndInitValue.get().first();
       initValue = eqAndInitValue.get().second();
     }
+
+    SyntaxToken visibility = null;
+    SyntaxToken readonly = null;
+
+    for (SyntaxToken token : visibilityAndReadonly.or(Collections.emptyList())) {
+      if ("readonly".equals(token.text())) {
+        readonly = token;
+      } else {
+        visibility = token;
+      }
+    }
+
     VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(identifier);
     return new ParameterTreeImpl(attributeGroups.or(Collections.emptyList()),
-      visibility.orNull(),
-      readonly.orNull(),
+      visibility,
+      readonly,
       type.orNull(),
       ampersand.orNull(),
       ellipsis.orNull(),

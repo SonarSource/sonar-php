@@ -41,13 +41,23 @@ public class MethodDeclarationTest {
       .matches("function if() {}")
       .matches("function match() {}")
       .matches("#[A1(4)] public function f() {}")
+      .matches("public function f($prop) {}")
+      .matches("public function f($prop = null) {}")
+      .matches("public function f($prop = new Foo()) {}")
+    ;
+  }
+
+  @Test
+  public void construct() {
+    assertThat(PHPLexicalGrammar.METHOD_DECLARATION)
       .matches("public function __construct(private $prop) {}")
       .matches("public function __construct(public $prop) {}")
       .matches("public function __construct(protected $prop) {}")
       .matches("public function __construct(protected readonly $prop) {}")
-      .matches("public function f($prop) {}")
-      .matches("public function f($prop = null) {}")
-      .matches("public function f($prop = new Foo()) {}")
+      .matches("public function __construct(protected readonly string $prop) {}")
+      .matches("public function __construct(readonly protected $prop) {}")
+      .matches("public function __construct(readonly protected string $prop) {}")
+      .matches("public function __construct(readonly $prop) {}")
       .notMatches("public function __construct(var $prop) {}")
     ;
   }
