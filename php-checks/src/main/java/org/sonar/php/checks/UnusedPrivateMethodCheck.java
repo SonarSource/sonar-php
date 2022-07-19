@@ -20,8 +20,10 @@
 package org.sonar.php.checks;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.symbols.Scope;
@@ -34,14 +36,17 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S1144")
 public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Remove this unused private \"%s\" method.";
+  private static final Pattern USES_PHPDOC_PATTERN = Pattern.compile("@uses\\s+(\\w+::)?(\\w+)");
 
   private final List<String> stringLiterals = new ArrayList<>();
+  private final List<String> dynamicUsedMethods = new ArrayList<>();
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -53,9 +58,25 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
     }
   }
 
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    SyntaxToken firstToken = tree.modifiers().stream().findFirst().orElse(tree.functionToken());
+    firstToken.trivias().stream()
+      .flatMap(trivia -> USES_PHPDOC_PATTERN.matcher(trivia.text()).results())
+      .map(result -> result.group(2))
+      .map(methodName -> methodName.toLowerCase(Locale.ROOT))
+      .forEach(dynamicUsedMethods::add);
+
+    super.visitMethodDeclaration(tree);
+  }
+
   private void checkClass(ClassTree tree) {
     Scope classScope = context().symbolTable().getScopeFor(tree);
     for (Symbol methodSymbol : classScope.getSymbols(Kind.FUNCTION)) {
+
+      if (dynamicUsedMethods.contains(methodSymbol.name())) {
+        continue;
+      }
 
       // For enums private and protected are equivalent as inheritance is not allowed.
       boolean ruleConditions = (methodSymbol.hasModifier("private") || isProtectedEnumMethod(tree, methodSymbol)) &&

@@ -128,3 +128,35 @@ enum SimpleEnum {
 trait SomeTrait {
   private function privateTraitFunction() {}
 }
+
+class DynamicClass
+{
+  /**
+   * @uses one
+   * @uses two()
+   * @uses DynamicClass::three()
+   * @uses DynamicClass::four
+   */
+  public function callDynamic(string $method): void
+  {
+    call_user_func([$this, $method]);
+    // or
+    $this->{$method}();
+  }
+
+  private function one(): void
+  {
+  }
+
+  private function two(): void
+  {
+  }
+
+  private function three(): void
+  {
+  }
+
+  private function four(): void
+  {
+  }
+}
