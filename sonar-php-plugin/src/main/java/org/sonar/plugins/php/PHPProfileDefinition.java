@@ -49,7 +49,6 @@ public final class PHPProfileDefinition implements BuiltInQualityProfilesDefinit
   @Override
   public void define(Context context) {
     NewBuiltInQualityProfile sonarWay = context.createBuiltInQualityProfile(SONAR_WAY_PROFILE, Php.KEY);
-    sonarWay.activateRule("common-" + Php.KEY, "DuplicatedBlocks");
     BuiltInQualityProfileJsonLoader.load(sonarWay, CheckList.REPOSITORY_KEY, SONAR_WAY_PATH);
     getSecurityRuleKeys().forEach(key -> sonarWay.activateRule(key.repository(), key.rule()));
     sonarWay.done();

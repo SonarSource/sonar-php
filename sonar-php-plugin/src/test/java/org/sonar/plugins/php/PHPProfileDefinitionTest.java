@@ -21,14 +21,9 @@ package org.sonar.plugins.php;
 
 import com.sonar.plugins.security.api.PhpRules;
 import org.junit.Test;
-import org.sonar.api.SonarEdition;
-import org.sonar.api.SonarQubeSide;
-import org.sonar.api.SonarRuntime;
-import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.api.utils.Version;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 
@@ -48,7 +43,6 @@ public class PHPProfileDefinitionTest {
     assertThat(profile.name()).isEqualTo(PHPProfileDefinition.SONAR_WAY_PROFILE);
     assertThat(profile.rules().size()).isGreaterThan(50);
     assertThat(profile.rules().size()).isLessThan(CheckList.getAllChecks().size());
-    assertThat(profile.rules()).extracting("ruleKey").contains("DuplicatedBlocks");
     assertThat(validation.hasErrors()).isFalse();
   }
 
