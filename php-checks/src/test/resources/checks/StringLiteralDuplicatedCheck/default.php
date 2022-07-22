@@ -44,3 +44,9 @@ $a["name1/name2"];
 $a["name1/name2"];
 $a["name1/name2"];
 
+$database = config('connections.read.database');    // OK - Only alphanumeric, -, _ and .
+$database = config('connections.read.database');
+$database = config('connections.read.database');
+$database = config('connections.read.database');
+$database = config('connections.read.database');
+
