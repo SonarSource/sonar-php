@@ -31,6 +31,7 @@ public class KeywordTest {
   public void test() {
     // Exact list of keywords from PHP reference manual
     assertThat(PHPLexicalGrammar.KEYWORDS)
+      .matches("__halt_compiler")
       .matches("abstract")
       .matches("and")
       .matches("array")

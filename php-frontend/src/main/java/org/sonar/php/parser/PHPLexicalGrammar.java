@@ -386,8 +386,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
     b.rule(KEYWORDS).is(SPACING,
       b.firstOf(
-        PHPKeyword.getKeywordValues()[0],
-        PHPKeyword.getKeywordValues()[1],
+        b.regexp("(?i)" + PHPKeyword.getKeywordValues()[0]),
+        b.regexp("(?i)" + PHPKeyword.getKeywordValues()[1]),
         rest),
       b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))
       );
