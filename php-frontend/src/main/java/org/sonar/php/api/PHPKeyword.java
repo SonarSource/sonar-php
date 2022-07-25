@@ -25,7 +25,6 @@ public enum PHPKeyword implements GrammarRuleKey {
 
   HALT_COMPILER("__halt_compiler"),
   ABSTRACT("abstract"),
-  // First two values should be kept as they are for now until SONARPHP-1267 is handled to avoid regression.
   AND("and"),
   ARRAY("array"),
   AS("as"),
