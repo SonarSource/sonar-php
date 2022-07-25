@@ -236,28 +236,6 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void parsing_error_should_raise_an_issue_with_uppercase_keyword() {
-    analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "parseErrorKeyword1.php");
-    assertThat(context.allIssues()).as("One issue must be raised").hasSize(1);
-    Issue issue = context.allIssues().iterator().next();
-    assertThat(issue.ruleKey().rule()).as("A parsing error must be raised").isEqualTo("S2260");
-  }
-
-  @Test
-  public void parsing_error_should_raise_an_issue_with_lowercase_keyword() {
-    analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "parseErrorKeyword2.php");
-    assertThat(context.allIssues()).as("One issue must be raised").hasSize(1);
-    Issue issue = context.allIssues().iterator().next();
-    assertThat(issue.ruleKey().rule()).as("A parsing error must be raised").isEqualTo("S2260");
-  }
-
-  @Test
-  public void parsing_error_should_not_raise_an_issue_with_keyword() {
-    analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "parseKeyword.php");
-    assertThat(context.allIssues()).as("One issue must be raised").isEmpty();
-  }
-
-  @Test
   public void parsing_error_should_raise_be_reported_in_sensor_context() throws Exception {
     analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
     assertThat(context.allAnalysisErrors()).hasSize(1);

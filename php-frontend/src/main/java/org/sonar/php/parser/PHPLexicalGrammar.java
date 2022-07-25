@@ -373,21 +373,21 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
       PHPKeyword tokenType = PHPKeyword.values()[i];
 
       // PHP keywords are case insensitive
-      b.rule(tokenType).is(SPACING, b.regexp("(?i)" + tokenType.getValue()), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))).skip();
+      b.rule(tokenType).is(SPACING, keywordRegexp(b, tokenType.getValue()), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))).skip();
       if (i > 1) {
         if (tokenType == PHPKeyword.READONLY) {
           // Readonly is only a keyword when it is not used as a function name. SONARPHP-1266
-          rest[i - 2] = b.sequence(b.regexp("(?i)readonly"), b.nextNot(b.regexp("[\\s]*\\(")));
+          rest[i - 2] = b.sequence(keywordRegexp(b,"readonly"), b.nextNot(b.regexp("[\\s]*\\(")));
         } else {
-          rest[i - 2] = b.regexp("(?i)" + tokenType.getValue());
+          rest[i - 2] = keywordRegexp(b, tokenType.getValue());
         }
       }
     }
 
     b.rule(KEYWORDS).is(SPACING,
       b.firstOf(
-        b.regexp("(?i)" + PHPKeyword.getKeywordValues()[0]),
-        b.regexp("(?i)" + PHPKeyword.getKeywordValues()[1]),
+        keywordRegexp(b, PHPKeyword.getKeywordValues()[0]),
+        keywordRegexp(b, PHPKeyword.getKeywordValues()[1]),
         rest),
       b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))
       );
@@ -403,4 +403,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     return b.sequence(SPACING, b.regexp("(?i)" + word), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART)));
   }
 
+  private static Object keywordRegexp(LexerlessGrammarBuilder b, String keywordValue){
+    return b.regexp("(?i)" + keywordValue);
+  }
 }
