@@ -39,7 +39,7 @@ public class PHPRulesDefinitionTest {
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository("php");
     assertThat(repository).isNotNull();
-    assertThat(repository.name()).isEqualTo("SonarAnalyzer");
+    assertThat(repository.name()).isEqualTo("SonarQube");
     assertThat(repository.language()).isEqualTo("php");
     assertThat(repository.rules()).hasSize(CheckList.getAllChecks().size());
 

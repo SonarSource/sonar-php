@@ -27,7 +27,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
-import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.regex.PhpRegexCheck;
@@ -88,7 +87,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
       .ifPresent(result -> checkRegex(result, tree));
   }
 
-  @VisibleForTesting
+  // Visible for testing
   static FlagSet getFlagSet(LiteralTree literalTree) {
     String pattern = trimPattern(literalTree);
     Character endDelimiter = PhpRegexUtils.getEndDelimiter(pattern);
@@ -100,7 +99,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
     return flags;
   }
 
-  @VisibleForTesting
+  // Visible for testing
   static Optional<LiteralTree> getLiteral(ExpressionTree expr) {
     if (expr.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
       return Optional.of((LiteralTree) expr);
