@@ -341,7 +341,7 @@ public class PHPGrammar {
       f.enumCase(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(CASE),
-        NAME_IDENTIFIER(),
+        NAME_IDENTIFIER_OR_KEYWORD(),
         b.optional(f.newTuple(b.token(EQU), STATIC_SCALAR())),
         EOS()));
   }

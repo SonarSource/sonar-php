@@ -35,6 +35,9 @@ public class EnumCaseTest {
       .matches("case A = 'A';")
       .matches("case A = 'A' . 'B';")
       .matches("case A = MyClass::CONSTANT;")
+      .matches("case NEW = 1;")
+      .matches("case CLASS = 'a';")
+      .matches("case EVAL = 'c';")
       .notMatches("case A")
     ;
   }
