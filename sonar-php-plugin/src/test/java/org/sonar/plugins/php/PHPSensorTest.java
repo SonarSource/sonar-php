@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -542,9 +543,10 @@ public class PHPSensorTest {
     assertThat(context.lineHits(mainFileKey, 7)).isEqualTo(1);
 
     assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
+    String resourcesFolder = FilenameUtils.separatorsToSystem("/src/test/resources");
     assertThat(logTester.logs(LoggerLevel.ERROR).get(0))
       .startsWith("An error occurred when reading report file")
-      .contains("/src/test/resources', nothing will be imported from this report.");
+      .contains(resourcesFolder + "', nothing will be imported from this report.");
   }
 
   @Test
