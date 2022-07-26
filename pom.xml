@@ -154,6 +154,12 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>org.sonarsource.sonarqube</groupId>
+        <artifactId>sonar-plugin-api-impl</artifactId>
+        <version>${version.sonar}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>org.sonarsource.sslr</groupId>
         <artifactId>sslr-testing-harness</artifactId>
         <version>${version.sslr}</version>
