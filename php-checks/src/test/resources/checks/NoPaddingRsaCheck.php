@@ -1,5 +1,11 @@
 <?php
 
+namespace ns1 {
+  function foo($data, $crypted, $key) {
+    openssl_public_encrypt($data, $crypted, $key, \OPENSSL_PKCS1_OAEP_PADDING);
+  }
+}
+
 function f() {
   openssl_public_encrypt($data, $crypted, $key, OPENSSL_NO_PADDING);    // Noncompliant {{Use an RSA algorithm with a OAEP padding: OPENSSL_PKCS1_OAEP_PADDING.}}
 //                                              ^^^^^^^^^^^^^^^^^^
