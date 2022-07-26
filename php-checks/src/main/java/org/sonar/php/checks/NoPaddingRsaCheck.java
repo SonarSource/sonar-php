@@ -50,7 +50,7 @@ public class NoPaddingRsaCheck extends FunctionUsageCheck {
     Optional<CallArgumentTree> paddingArgument = CheckUtils.argument(tree, "padding", PADDING_ARGUMENT_INDEX);
     if (paddingArgument.isPresent()) {
       ExpressionTree padding = paddingArgument.get().value();
-      if (padding.is(Kind.NAMESPACE_NAME) && !((NamespaceNameTree) padding).fullName().equals(SECURE_PADDING)) {
+      if (padding.is(Kind.NAMESPACE_NAME) && !((NamespaceNameTree) padding).unqualifiedName().equals(SECURE_PADDING)) {
         context().newIssue(this, padding, MESSAGE);
       }
     } else {
