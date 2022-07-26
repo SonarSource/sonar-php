@@ -58,6 +58,10 @@
       <groupId>org.sonarsource.analyzer-commons</groupId>
       <artifactId>sonar-regex-parsing</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-plugin-api-impl</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

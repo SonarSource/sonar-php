@@ -47,6 +47,10 @@
       <artifactId>sonar-testing-harness</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-plugin-api-impl</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.sonarsource.sslr</groupId>
       <artifactId>sslr-testing-harness</artifactId>
     </dependency>

@@ -51,9 +51,9 @@ import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
+import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
@@ -140,13 +140,13 @@ public class PHPSensorTest {
   }
 
   private PHPSensor createSensor() {
-    return new PHPSensor(createFileLinesContextFactory(), checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    return new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter(), CUSTOM_RULES);
   }
 
   private PHPSensor createSensor(PHPCheck check) {
     PHPChecks checks = mock(PHPChecks.class);
     when(checks.all()).thenReturn(Collections.singletonList(check));
-    return new PHPSensor(createFileLinesContextFactory(), checks, new NoSonarFilter(), NOOP_ANALYSIS_WARNINGS);
+    return new PHPSensor(createFileLinesContextFactory(), checks, new DefaultNoSonarFilter(), NOOP_ANALYSIS_WARNINGS);
   }
 
   @Test
@@ -312,7 +312,7 @@ public class PHPSensorTest {
     ActiveRules activeRules = new ActiveRulesBuilder()
       .addRule(activeRule)
       .build();
-    return new PHPSensor(fileLinesContextFactory, new CheckFactory(activeRules), new NoSonarFilter(), CUSTOM_RULES);
+    return new PHPSensor(fileLinesContextFactory, new CheckFactory(activeRules), new DefaultNoSonarFilter(), CUSTOM_RULES);
   }
 
   private static FileLinesContextFactory createFileLinesContextFactory() {
