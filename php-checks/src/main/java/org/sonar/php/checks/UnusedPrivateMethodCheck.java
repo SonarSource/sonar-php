@@ -22,8 +22,10 @@ package org.sonar.php.checks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
@@ -40,8 +42,10 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Remove this unused private \"%s\" method.";
+  private static final Pattern USES_PHPDOC_PATTERN = Pattern.compile("@uses\\s+(\\w+::)?(\\w+)");
 
   private final List<String> stringLiterals = new ArrayList<>();
+  private final List<String> dynamicUsedMethods = new ArrayList<>();
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -53,6 +57,17 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
     }
   }
 
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    ((PHPTree) tree).getFirstToken().trivias().stream()
+      .flatMap(trivia -> USES_PHPDOC_PATTERN.matcher(trivia.text()).results())
+      .map(result -> result.group(2))
+      .map(methodName -> methodName.toLowerCase(Locale.ROOT))
+      .forEach(dynamicUsedMethods::add);
+
+    super.visitMethodDeclaration(tree);
+  }
+
   private void checkClass(ClassTree tree) {
     Scope classScope = context().symbolTable().getScopeFor(tree);
     for (Symbol methodSymbol : classScope.getSymbols(Kind.FUNCTION)) {
@@ -62,6 +77,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
         methodSymbol.usages().isEmpty();
 
       if (ruleConditions
+        && !dynamicUsedMethods.contains(methodSymbol.name())
         && !isConstructor(methodSymbol.declaration(), tree)
         && !isMagicMethod(methodSymbol.name())
         && !isUsedInStringLiteral(methodSymbol)) {
