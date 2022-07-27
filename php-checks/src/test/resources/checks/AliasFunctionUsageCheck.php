@@ -62,6 +62,12 @@ class Foo
 
     strchr($param1);         // Noncompliant {{Replace this use of "strchr" with "strstr".}}
     strstr($param1);         // OK
+
+    \chop($p);               // Noncompliant {{Replace this use of "chop" with "rtrim".}}
+    ns1\chop($p);            // OK
+
+    \pos($param1);            // Noncompliant {{Replace this use of "pos" with "current".}}
+    \current($param1);        // OK
  }
 
 }

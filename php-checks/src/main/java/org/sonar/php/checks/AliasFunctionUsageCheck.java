@@ -63,7 +63,7 @@ public class AliasFunctionUsageCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
-      String name = ((NamespaceNameTree) callee).fullName();
+      String name = ((NamespaceNameTree) callee).qualifiedName();
       String replacementName = ALIAS_FUNCTIONS.get(name.toLowerCase(Locale.ROOT));
       if (replacementName != null) {
         context().newIssue(this, callee, String.format(MESSAGE, name, replacementName));
