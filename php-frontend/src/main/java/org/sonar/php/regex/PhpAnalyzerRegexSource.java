@@ -32,6 +32,8 @@ import org.sonarsource.analyzer.commons.regex.php.PhpRegexSource;
 
 public class PhpAnalyzerRegexSource extends PhpRegexSource {
 
+  private static final IndexRange OPENER_RANGE = new IndexRange(-1, 0);
+
   private final int sourceLine;
   private final int sourceStartOffset;
   private final int[] lineStartOffsets;
@@ -80,6 +82,10 @@ public class PhpAnalyzerRegexSource extends PhpRegexSource {
   }
 
   public LocationInFile locationInFileFor(IndexRange range) {
+    if (OPENER_RANGE.equals(range)) {
+      return new LocationInFileImpl(null, sourceLine, sourceStartOffset - 2, sourceLine, sourceStartOffset - 1);
+    }
+
     int[] startLineAndOffset = lineAndOffset(range.getBeginningOffset());
     int[] endLineAndOffset = lineAndOffset(range.getEndingOffset());
     return new LocationInFileImpl(null, startLineAndOffset[0], startLineAndOffset[1], endLineAndOffset[0], endLineAndOffset[1]);

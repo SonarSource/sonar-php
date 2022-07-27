@@ -4,6 +4,7 @@ function character_classes($input) {
   preg_match('/[a][b][c][d][e][f][g][h][i][j][k][l][m][n][o][p][q][r][s][t]/', $input);
   // Noncompliant@+1 {{Simplify this regular expression to reduce its complexity from 21 to the 20 allowed.}}
   preg_match('/[a][b][c][d][e][f][g][h][i][j][k][l][m][n][o][p][q][r][s][t][u]/', $input);
+  //         ^
 }
 
 function disjunction($input) {
