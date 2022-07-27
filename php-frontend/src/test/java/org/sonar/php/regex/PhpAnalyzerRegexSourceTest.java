@@ -29,6 +29,7 @@ import org.sonarsource.analyzer.commons.regex.SyntaxError;
 import org.sonarsource.analyzer.commons.regex.ast.CharacterTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.NonCapturingGroupTree;
+import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 
@@ -152,6 +153,14 @@ public class PhpAnalyzerRegexSourceTest {
   public void test_conditionalSubpatterns_with_invalid_condition() {
     RegexParseResult regex = parseRegex("'/(?(1|2)ab|cd|ef)/'");
     assertThat(regex.getSyntaxErrors()).isNotEmpty();
+  }
+
+  @Test
+  public void test_location_on_regex_opener() {
+    RegexParseResult regex = parseRegex("'/(?(1|2)ab|cd|ef)/'");
+    RegexSyntaxElement openingQuote = regex.openingQuote();
+    LocationInFile locationInFile = ((PhpAnalyzerRegexSource) openingQuote.getSource()).locationInFileFor(openingQuote.getRange());
+    assertLocation(3,0,1, locationInFile);
   }
 
   private static void assertCharacterLocation(RegexTree tree, char expected, int line, int startLineOffset, int endLineOffset) {
