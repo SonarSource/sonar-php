@@ -159,4 +159,8 @@ class DynamicClass
   private function four(): void
   {
   }
+
+  private function five(): void // Noncompliant
+  {
+  }
 }
