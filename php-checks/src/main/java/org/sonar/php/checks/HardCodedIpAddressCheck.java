@@ -33,7 +33,8 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
 
   private static final String LOOPBACK_IPV4 = "^127(?:\\.[0-9]+){0,2}\\.[0-9]+$";
   private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
-  private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6);
+  private static final String LOOPBACK_IPV4_MAPPED_TO_IPV6 = "^(::(?i)ffff(:0{1,4})?):127$";
+  private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6 + "|" + LOOPBACK_IPV4_MAPPED_TO_IPV6);
 
   private static final String PROTOCOL = "((\\w+:)?\\/\\/)?";
   private static final String IP_V4 = "(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[1-9])(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}(?!\\d)";
