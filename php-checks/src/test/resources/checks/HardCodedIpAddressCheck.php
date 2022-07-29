@@ -45,3 +45,14 @@ $randomText = "sdfsdfsdf asda sd::2";
 $randomText = "sdfsdfsdf asda 8.8.8.8";
 $class = $string . '::' . $string;
 $class = self::class.'::controller';
+
+// local IPv4-mapped IPv6 address
+$serverAddress = "::ffff:0:127.0.0.1";
+$serverAddress = "::FFFF:0:127.0.0.1";
+$serverAddress = "::ffff:0000:127.0.0.1";
+$serverAddress = "::ffff:127.0.0.1";
+$serverAddress = "::ffff:0:127.128.128.128";
+$serverAddress = "::ffff:0:127.255.255.255";
+$serverAddress = "::ffff:0:128.0.0.1";                           // Noncompliant
+$serverAddress = "::ffff:200.0.0.1";                             // Noncompliant
+//               ^^^^^^^^^^^^^^^^^^
