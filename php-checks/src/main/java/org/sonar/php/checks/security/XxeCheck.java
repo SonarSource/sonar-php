@@ -19,26 +19,36 @@
  */
 package org.sonar.php.checks.security;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.sonar.php.checks.utils.CheckUtils.argument;
+import static org.sonar.php.checks.utils.CheckUtils.arrayValue;
+import static org.sonar.php.checks.utils.CheckUtils.isFalseValue;
 import static org.sonar.php.checks.utils.CheckUtils.isTrueValue;
 import static org.sonar.php.checks.utils.CheckUtils.nameOf;
 import static org.sonar.plugins.php.api.tree.Tree.Kind;
 
 @Rule(key = "S2755")
 public class XxeCheck extends PHPVisitorCheck {
+
+  private static final String MESSAGE = "Disable access to external entities in XML parsing.";
+  private static final String SECONDARY_MESSAGE = "This value enables external entities in XML parsing.";
+  private static final Tree.Kind[] ARRAY = {Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION};
 
   @Override
   public void visitFunctionCall(FunctionCallTree call) {
@@ -52,6 +62,8 @@ public class XxeCheck extends PHPVisitorCheck {
       } else if ("setparserproperty".equals(functionName)) {
         checkSetParserProperty(call);
       }
+    } else if (callee.is(Kind.CLASS_MEMBER_ACCESS) && "Xml::build".equals(callee.toString())) {
+      argument(call, "values", 1).ifPresent(x -> checkXmlBuildOption(x.value(), x));
     }
     super.visitFunctionCall(call);
   }
@@ -80,8 +92,38 @@ public class XxeCheck extends PHPVisitorCheck {
     }
   }
 
-  private void createIssue(Tree tree) {
-    context().newIssue(this, tree, "Disable access to external entities in XML parsing.");
+  private void checkXmlBuildOption(ExpressionTree valueTree, Tree primaryTree) {
+    if (valueTree.is(Kind.VARIABLE_IDENTIFIER)) {
+      CheckUtils.uniqueAssignedValue((VariableIdentifierTree) valueTree).ifPresent(x -> checkXmlBuildOption(x, primaryTree));
+    } else if (valueTree.is(ARRAY)) {
+      arrayValue((ArrayInitializerTree) valueTree, "loadEntities")
+        .ifPresent(x -> raiseIssueIfTrue(x, primaryTree));
+    }
+  }
+
+  private void raiseIssueIfTrue(ExpressionTree value, Tree treeToReport) {
+    ExpressionTree assignedValue = CheckUtils.assignedValue(value);
+    List<Tree> secondaryTrees = new ArrayList<>();
+    while (assignedValue.is(Kind.VARIABLE_IDENTIFIER)) {
+      secondaryTrees.add(assignedValue);
+      assignedValue = CheckUtils.assignedValue(assignedValue);
+    }
+    secondaryTrees.add(assignedValue);
+    if (!isNotTrue(assignedValue)) {
+      PreciseIssue issue = createIssue(treeToReport);
+      if (value != treeToReport) {
+        secondaryTrees.forEach(tree -> issue.secondary(tree, SECONDARY_MESSAGE));
+      }
+    }
+  }
+
+  private static boolean isNotTrue(ExpressionTree tree) {
+    return tree.is(Tree.Kind.NULL_LITERAL) || isFalseValue(tree);
+  }
+
+
+  private PreciseIssue createIssue(Tree tree) {
+    return context().newIssue(this, tree, MESSAGE);
   }
 
 }
