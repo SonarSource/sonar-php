@@ -1,5 +1,12 @@
 <?php
 
+namespace ns1 {
+  function simpleXML() {
+    $xml = \file_get_contents("xxe.xml");
+    $doc = \simplexml_load_string($xml, "SimpleXMLElement", \LIBXML_NOENT); // Noncompliant
+  }
+}
+
 function simpleXML() {
   $xml = file_get_contents("xxe.xml");
   $doc = simplexml_load_string($xml, "SimpleXMLElement");
