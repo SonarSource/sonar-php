@@ -109,18 +109,11 @@ public class XxeCheck extends PHPVisitorCheck {
       assignedValue = CheckUtils.assignedValue(assignedValue);
     }
     secondaryTrees.add(assignedValue);
-    if (!isNotTrue(assignedValue)) {
+    if (!isFalseValue(assignedValue)) {
       PreciseIssue issue = createIssue(treeToReport);
-      if (value != treeToReport) {
-        secondaryTrees.forEach(tree -> issue.secondary(tree, SECONDARY_MESSAGE));
-      }
+      secondaryTrees.forEach(tree -> issue.secondary(tree, SECONDARY_MESSAGE));
     }
   }
-
-  private static boolean isNotTrue(ExpressionTree tree) {
-    return tree.is(Tree.Kind.NULL_LITERAL) || isFalseValue(tree);
-  }
-
 
   private PreciseIssue createIssue(Tree tree) {
     return context().newIssue(this, tree, MESSAGE);

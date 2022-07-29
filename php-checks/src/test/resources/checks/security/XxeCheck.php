@@ -108,4 +108,7 @@ function xmlBuild($param) {
   $options2 = array('loadEntities' => false);
   $xml = Xml::build($content, $options2);                     // Compliant
   $xml = Xml::build($content, $valueOutOfScope);              // Compliant if value is unknown
+  $xml = Xml::build($content, ['loadEntities' => NULL]);     // Compliant
+
+  $valueForCoverage = Xml::otherFunction();
 }
