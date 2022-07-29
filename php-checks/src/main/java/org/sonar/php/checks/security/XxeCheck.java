@@ -69,7 +69,7 @@ public class XxeCheck extends PHPVisitorCheck {
   }
 
   private void checkSimpleXmlOption(ExpressionTree optionValue, Tree treeToReport) {
-    if (optionValue.is(Kind.NAMESPACE_NAME) && "LIBXML_NOENT".equals(((NamespaceNameTree) optionValue).fullName())) {
+    if (optionValue.is(Kind.NAMESPACE_NAME) && "LIBXML_NOENT".equals(((NamespaceNameTree) optionValue).unqualifiedName())) {
       createIssue(treeToReport);
     } else if (optionValue.is(Kind.BITWISE_OR)) {
       BinaryExpressionTree orExpression = (BinaryExpressionTree) optionValue;
