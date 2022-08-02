@@ -34,4 +34,8 @@ function x($obj){
   if (!is_null($obj->field) || ($obj->field)->foo()) {}   // Noncompliant
 
   if (!foo($obj->field) || ($obj->field)->foo()) {}
+
+  if (!$x && $x->method()) {}
+  if ($x || $x->method()) {}
+  if (($x = f()) || $x->method()) {}
 }
