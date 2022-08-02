@@ -13,5 +13,5 @@
   "ruleSpecification": "RSPEC-6326",
   "sqKey": "S6326",
   "scope": "Main",
-  "quickfix": "unknown"
+  "quickfix": "targeted"
 }
