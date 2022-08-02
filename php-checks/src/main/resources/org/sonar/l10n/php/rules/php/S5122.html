@@ -23,14 +23,15 @@ href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">CORS</a>, that act
   allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks). </li>
 </ul>
 <h2>Sensitive Code Example</h2>
+<p>PHP built-in header function:</p>
 <pre>
 header("Access-Control-Allow-Origin: *"); // Sensitive
 </pre>
-<p>Laravel</p>
+<p>Laravel:</p>
 <pre>
 response()-&gt;header('Access-Control-Allow-Origin', "*"); // Sensitive
 </pre>
-<p>Symfony</p>
+<p>Symfony:</p>
 <pre>
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,24 +42,46 @@ $response = new Response(
 );
 $response-&gt;headers-&gt;set('Access-Control-Allow-Origin', '*'); // Sensitive
 </pre>
+<p>User-controlled origin:</p>
+<pre>
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+
+$origin = $request-&gt;headers-&gt;get('Origin');
+
+$response-&gt;headers-&gt;set('Access-Control-Allow-Origin', $origin); // Sensitive
+</pre>
 <h2>Compliant Solution</h2>
+<p>PHP built-in header function:</p>
 <pre>
-header("Access-Control-Allow-Origin: $trusteddomain"); // Compliant
+header("Access-Control-Allow-Origin: $trusteddomain");
 </pre>
-<p>Laravel</p>
+<p>Laravel:</p>
 <pre>
-response()-&gt;header('Access-Control-Allow-Origin', $trusteddomain); /// Compliant
+response()-&gt;header('Access-Control-Allow-Origin', $trusteddomain);
 </pre>
-<p>Symfony</p>
+<p>Symfony:</p>
 <pre>
 use Symfony\Component\HttpFoundation\Response;
 
 $response = new Response(
     'Content',
     Response::HTTP_OK,
-    ['Access-Control-Allow-Origin' =&gt; $trusteddomain] /// Compliant
+    ['Access-Control-Allow-Origin' =&gt; $trusteddomain]
+);
 
-$response-&gt;headers-&gt;set('Access-Control-Allow-Origin',$trusteddomain); // Compliant
+$response-&gt;headers-&gt;set('Access-Control-Allow-Origin', $trusteddomain);
+</pre>
+<p>User-controlled origin validated with an allow-list:</p>
+<pre>
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+
+$origin = $request-&gt;headers-&gt;get('Origin');
+
+if (in_array($origin, $trustedOrigins)) {
+    $response-&gt;headers-&gt;set('Access-Control-Allow-Origin', $origin);
+}
 </pre>
 <h2>See</h2>
 <ul>
@@ -67,12 +90,12 @@ $response-&gt;headers-&gt;set('Access-Control-Allow-Origin',$trusteddomain); // 
   Authentication Failures </li>
   <li> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">developer.mozilla.org</a> - CORS </li>
   <li> <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">developer.mozilla.org</a> - Same origin policy </li>
-  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
   Misconfiguration </li>
-  <li> <a href="https://www.owasp.org/index.php/HTML5_Security_Cheat_Sheet#Cross_Origin_Resource_Sharing">OWASP HTML5 Security Cheat Sheet</a> - Cross
-  Origin Resource Sharing </li>
-  <li> <a href="https://cwe.mitre.org/data/definitions/346.html">MITRE, CWE-346</a> - Origin Validation Error </li>
-  <li> <a href="https://cwe.mitre.org/data/definitions/942.html">MITRE, CWE-942</a> - Overly Permissive Cross-domain Whitelist </li>
+  <li> <a href="https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html#cross-origin-resource-sharing">OWASP HTML5 Security
+  Cheat Sheet</a> - Cross Origin Resource Sharing </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/346">MITRE, CWE-346</a> - Origin Validation Error </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/942">MITRE, CWE-942</a> - Overly Permissive Cross-domain Whitelist </li>
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
 </ul>
 
