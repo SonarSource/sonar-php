@@ -38,6 +38,7 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.utils.log.Logger;
+import org.sonar.plugins.php.ExternalReportFileHandler;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonar.plugins.php.api.Php;
 import org.sonarsource.analyzer.commons.ExternalReportProvider;
@@ -55,6 +56,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
   public final String defaultRuleId = reportKey() + ".finding";
   protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
   private final AnalysisWarningsWrapper analysisWarningsWrapper;
+  protected ExternalReportFileHandler fileHandler;
 
   protected ExternalIssuesSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
     this.analysisWarningsWrapper = analysisWarningsWrapper;
@@ -70,6 +72,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
+    fileHandler = ExternalReportFileHandler.create(context);
     List<File> reportFiles = ExternalReportProvider.getReportFiles(context, reportPathKey());
     reportFiles.forEach(report -> {
       unresolvedInputFiles.clear();
@@ -118,8 +121,9 @@ public abstract class ExternalIssuesSensor implements Sensor {
   }
 
   @CheckForNull
-  private static InputFile inputFile(SensorContext context, String filePath) {
-    return context.fileSystem().inputFile(context.fileSystem().predicates().hasPath(filePath));
+  private InputFile inputFile(SensorContext context, String filePath) {
+    String relativePath = fileHandler.relativePath(filePath);
+    return context.fileSystem().inputFile(context.fileSystem().predicates().hasPath(relativePath));
   }
 
   protected void saveIssue(SensorContext context, JsonReportReader.Issue issue) {

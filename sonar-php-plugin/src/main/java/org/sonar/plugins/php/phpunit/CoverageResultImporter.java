@@ -95,7 +95,7 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
   private void saveCoverageMeasure(FileNode fileNode, SensorContext context) {
     FileSystem fileSystem = context.fileSystem();
     // PHP supports only absolute paths
-    String path = fileNode.getName();
+    String path = fileHandler.relativePath(fileNode.getName());
     InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasPath(path));
 
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the

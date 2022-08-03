@@ -19,8 +19,6 @@
  */
 package com.sonar.it.php;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
@@ -46,9 +44,8 @@ public class PHPUnitTest {
   private static final String REPORTS_DIR = "reports";
 
   @BeforeClass
-  public static void startServer() throws Exception {
+  public static void startServer() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
-    createReportsWithAbsolutePath();
 
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
@@ -57,10 +54,10 @@ public class PHPUnitTest {
       .setProjectVersion("1.0")
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
-      .setProperty("sonar.php.coverage.reportPaths", REPORTS_DIR + "/.coverage-with-absolute-path.xml,"
-        + REPORTS_DIR + "/.it-coverage-with-absolute-path.xml,"
-        + REPORTS_DIR + "/.overall-coverage-with-absolute-path.xml")
-      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml");
+      .setProperty("sonar.php.coverage.reportPaths", REPORTS_DIR + "/phpunit.coverage.xml,"
+        + REPORTS_DIR + "/phpunit.it.coverage.xml,"
+        + REPORTS_DIR + "/phpunit.overall.coverage.xml")
+      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/phpunit.xml");
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 
@@ -72,7 +69,7 @@ public class PHPUnitTest {
   }
 
   @Test
-  public void coverage() throws Exception {
+  public void coverage() {
     assertThat(getProjectMeasureAsInt("conditions_to_cover")).isNull();
     assertThat(getProjectMeasureAsInt("uncovered_conditions")).isNull();
 
@@ -102,33 +99,5 @@ public class PHPUnitTest {
 
   private Integer getUnCoveredFileMeasureAsInt(String metricKey) {
     return getMeasureAsInt(PROJECT_KEY + ":src/Math2.php", metricKey);
-  }
-
-  /**
-   * Replace file name with absolute path in test and coverage report.
-   * <p/>
-   * This hack allow to have this integration test, as only absolute path
-   * in report is supported.
-   */
-  static void createReportsWithAbsolutePath() throws Exception {
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.overall.coverage.xml"), Charsets.UTF_8)
-        .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.overall-coverage-with-absolute-path.xml"), Charsets.UTF_8);
-
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.it.coverage.xml"), Charsets.UTF_8)
-        .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.it-coverage-with-absolute-path.xml"), Charsets.UTF_8);
-
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.coverage.xml"), Charsets.UTF_8)
-        .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.coverage-with-absolute-path.xml"), Charsets.UTF_8);
-
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.xml"), Charsets.UTF_8)
-        .replace("SomeTest.php", new File(PROJECT_DIR, TESTS_DIR + "/SomeTest.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.tests-with-absolute-path.xml"), Charsets.UTF_8);
   }
 }

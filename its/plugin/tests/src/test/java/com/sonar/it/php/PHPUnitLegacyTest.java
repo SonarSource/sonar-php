@@ -26,7 +26,6 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import static com.sonar.it.php.PHPUnitTest.createReportsWithAbsolutePath;
 import static com.sonar.it.php.Tests.ORCHESTRATOR;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,8 +44,7 @@ public class PHPUnitLegacyTest {
   private static final String REPORTS_DIR = "reports";
 
   @BeforeClass
-  public static void startServer() throws Exception {
-    createReportsWithAbsolutePath();
+  public static void startServer() {
 
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = SonarScanner.create()
@@ -56,7 +54,7 @@ public class PHPUnitLegacyTest {
       .setProjectVersion("1.0")
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
-      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml");
+      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/phpunit.xml");
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 

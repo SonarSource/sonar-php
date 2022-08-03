@@ -115,6 +115,14 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
+  public void raise_issue_file_has_fqn_paths() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-fqn.json");
+    assertThat(externalIssues).hasSize(3);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  @Test
   public void raise_issue_with_missing_fields() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-with-missing-fields.json");
     assertThat(externalIssues).hasSize(5);

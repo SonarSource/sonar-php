@@ -108,6 +108,14 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
+  public void issues_when_phpstan_file_has_fqn_paths() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-fqn.json");
+    assertThat(externalIssues).hasSize(3);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  @Test
   public void issues_when_phpstan_file_has_errors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-error.json");
     assertThat(externalIssues).hasSize(1);
