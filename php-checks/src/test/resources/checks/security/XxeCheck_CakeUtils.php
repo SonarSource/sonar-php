@@ -80,3 +80,9 @@ namespace ns6 {
   }
 
 }
+
+namespace ns7 {
+  use Xml;
+  $xml = Xml::build($content, ['loadEntities' => true]);                        // Compliant as not using Cake\Utility\Xml
+  $notCakeCoverage = XmlNotCAKE::build($content, ['loadEntities' => true]);     // Compliant as not using Cake\Utility\Xml
+}
