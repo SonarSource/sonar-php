@@ -1,7 +1,5 @@
 <?php
 
-use Cake\Utility\Xml;
-
 namespace ns1 {
   function simpleXML() {
     $xml = \file_get_contents("xxe.xml");
@@ -68,47 +66,4 @@ function xmlReader($param) {
   $reader->setParserProperty(value:true, property:XMLReader::SUBST_ENTITIES); // Noncompliant
   // we cannot be sure of the class of $param, but the method has the right name and XMLReader::SUBST_ENTITIES is used
   $param->setParserProperty(XMLReader::SUBST_ENTITIES, true); // Noncompliant
-}
-
-function trueValue() {
-  return true;
-}
-
-function trueEntities() {
-  return array("loadEntities" => true);
-}
-
-
-function xmlBuild($param) {
-
-  $xml = Xml::build($content, ['loadEntities' => true]);      // Noncompliant {{Disable access to external entities in XML parsing.}}
-//                            ^^^^^^^^^^^^^^^^^^^^^^^^
-
-  $val = true;
-//       ^^^^> {{This value enables external entities in XML parsing.}}
-  $xml = Xml::build($content, ['loadEntities' => $val]);      // Noncompliant
-//                            ^^^^^^^^^^^^^^^^^^^^^^^^
-  $options = array('loadEntities' => true);
-//                                   ^^^^>
-  $xml = Xml::build($content, $options);                      // Noncompliant
-//                            ^^^^^^^^
-  $var = true;
-//       ^^^^> {{This value enables external entities in XML parsing.}}
-  $secondValue = $var;
-//               ^^^^> {{This value enables external entities in XML parsing.}}
-  $xml = Xml::build($content, ['loadEntities' => $secondValue]); // Noncompliant {{Disable access to external entities in XML parsing.}}
-//                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-  $xml = Xml::build($content, ['loadEntities' => trueValue()]);// Noncompliant
-
-  $xml = Xml::build($content, trueEntities());                // FN should raise issue
-
-  $xml = Xml::build($content);                                // Compliant by default
-  $xml = Xml::build($content, ['loadEntities' => false]);     // Compliant
-  $options2 = array('loadEntities' => false);
-  $xml = Xml::build($content, $options2);                     // Compliant
-  $xml = Xml::build($content, $valueOutOfScope);              // Compliant if value is unknown
-  $xml = Xml::build($content, ['loadEntities' => NULL]);     // Compliant
-
-  $valueForCoverage = Xml::otherFunction();
 }

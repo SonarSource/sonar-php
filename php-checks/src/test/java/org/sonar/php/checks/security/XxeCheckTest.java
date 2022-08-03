@@ -27,6 +27,7 @@ public class XxeCheckTest {
   @Test
   public void test() {
     CheckVerifier.verify(new XxeCheck(), "security/XxeCheck.php");
+    CheckVerifier.verify(new XxeCheck(), "security/XxeCheck_CakeUtils.php");
   }
 
 }

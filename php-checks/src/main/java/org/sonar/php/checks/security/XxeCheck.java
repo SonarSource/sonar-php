@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -48,6 +50,9 @@ public class XxeCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Disable access to external entities in XML parsing.";
   private static final String SECONDARY_MESSAGE = "This value enables external entities in XML parsing.";
+  private static final String PROPAGATED_MESSAGE = "Propagated settings.";
+
+  private static final String OPTIONS = "options";
   private static final Tree.Kind[] ARRAY = {Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION};
 
   @Override
@@ -55,18 +60,20 @@ public class XxeCheck extends PHPVisitorCheck {
     String functionName = CheckUtils.lowerCaseFunctionName(call);
     ExpressionTree callee = call.callee();
     if (callee.is(Kind.NAMESPACE_NAME) && "simplexml_load_string".equals(functionName)) {
-      argument(call, "options", 2).ifPresent(x -> checkSimpleXmlOption(x.value(), x));
+      argument(call, OPTIONS, 2).ifPresent(options -> checkSimpleXmlOption(options.value(), options));
     } else if (callee.is(Kind.OBJECT_MEMBER_ACCESS)) {
       if ("load".equals(functionName) || "loadxml".equals(functionName)) {
-        argument(call, "options", 1).ifPresent(x -> checkSimpleXmlOption(x.value(), x));
+        argument(call, OPTIONS, 1).ifPresent(options -> checkSimpleXmlOption(options.value(), options));
       } else if ("setparserproperty".equals(functionName)) {
         checkSetParserProperty(call);
       }
-    } else if (callee.is(Kind.CLASS_MEMBER_ACCESS) && "Xml::build".equals(callee.toString())) {
-      argument(call, "values", 1).ifPresent(x -> checkXmlBuildOption(x.value(), x));
+    } else if (callee.is(Kind.CLASS_MEMBER_ACCESS) && "build".equals(functionName) &&
+      ("Cake\\Utility\\Xml").equalsIgnoreCase(namespaceMemberFullQualifiedName(callee))) {
+      argument(call, OPTIONS, 1).ifPresent(options -> checkXmlBuildOption(options.value(), options));
     }
     super.visitFunctionCall(call);
   }
+
 
   private void checkSimpleXmlOption(ExpressionTree optionValue, Tree treeToReport) {
     if (optionValue.is(Kind.NAMESPACE_NAME) && "LIBXML_NOENT".equals(((NamespaceNameTree) optionValue).unqualifiedName())) {
@@ -92,12 +99,14 @@ public class XxeCheck extends PHPVisitorCheck {
     }
   }
 
-  private void checkXmlBuildOption(ExpressionTree valueTree, Tree primaryTree) {
-    if (valueTree.is(Kind.VARIABLE_IDENTIFIER)) {
-      CheckUtils.uniqueAssignedValue((VariableIdentifierTree) valueTree).ifPresent(x -> checkXmlBuildOption(x, primaryTree));
-    } else if (valueTree.is(ARRAY)) {
-      arrayValue((ArrayInitializerTree) valueTree, "loadEntities")
-        .ifPresent(x -> raiseIssueIfTrue(x, primaryTree));
+  private void checkXmlBuildOption(ExpressionTree optionValue, Tree optionArgument) {
+    if (optionValue.is(Kind.VARIABLE_IDENTIFIER)) {
+      CheckUtils.uniqueAssignedValue((VariableIdentifierTree) optionValue)
+        .filter(uniqueValue -> !uniqueValue.toString().equals(optionArgument.toString()))
+        .ifPresent(assignedValue -> checkXmlBuildOption(assignedValue, optionArgument));
+    } else if (optionValue.is(ARRAY)) {
+      arrayValue((ArrayInitializerTree) optionValue, "loadEntities")
+        .ifPresent(loadEntitiesValue -> raiseIssueIfTrue(loadEntitiesValue, optionArgument));
     }
   }
 
@@ -108,15 +117,22 @@ public class XxeCheck extends PHPVisitorCheck {
       secondaryTrees.add(assignedValue);
       assignedValue = CheckUtils.assignedValue(assignedValue);
     }
-    secondaryTrees.add(assignedValue);
     if (!isFalseValue(assignedValue)) {
       PreciseIssue issue = createIssue(treeToReport);
-      secondaryTrees.forEach(tree -> issue.secondary(tree, SECONDARY_MESSAGE));
+      issue.secondary(assignedValue, SECONDARY_MESSAGE);
+      secondaryTrees.forEach(tree -> issue.secondary(tree, PROPAGATED_MESSAGE));
     }
   }
 
   private PreciseIssue createIssue(Tree tree) {
     return context().newIssue(this, tree, MESSAGE);
+  }
+
+  private static String namespaceMemberFullQualifiedName(ExpressionTree callee) {
+    return ((ClassNamespaceNameTreeImpl) ((MemberAccessTreeImpl) callee).object())
+      .symbol()
+      .qualifiedName()
+      .toString();
   }
 
 }
