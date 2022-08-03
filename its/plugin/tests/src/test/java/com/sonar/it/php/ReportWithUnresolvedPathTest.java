@@ -23,7 +23,6 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
-import java.util.regex.Pattern;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -39,7 +38,7 @@ public class ReportWithUnresolvedPathTest {
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("phpunit");
 
   @Test
-  public void should_log_a_warning() throws Exception {
+  public void should_log_a_warning() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
@@ -48,11 +47,10 @@ public class ReportWithUnresolvedPathTest {
       .setProjectVersion("1.0")
       .setSourceDirs("src")
       .setTestDirs("tests")
-      .setProperty("sonar.php.coverage.reportPaths", "reports/phpunit.coverage.xml");
+      .setProperty("sonar.php.coverage.reportPaths", "reports/phpunit.coverage.unknown.xml");
     BuildResult result = orchestrator.executeBuild(build);
-    String logs = result.getLogs();
-    Pattern expected = Pattern.compile("WARN:\\s+Failed to resolve 1 file path\\(s\\) in PHPUnit coverage phpunit\\.coverage\\.xml report\\. Nothing is imported related to file\\(s\\): Math\\.php");
-    assertThat(expected.matcher(logs).find()).isTrue();
+    assertThat(result.getLogs()).contains("WARN: Failed to resolve 1 file path(s) in PHPUnit coverage phpunit.coverage.unknown.xml report. " +
+      "Nothing is imported related to file(s): /arbitrary/absolute/path/src/Unknown.php");
   }
 
 }

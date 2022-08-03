@@ -22,7 +22,6 @@ package org.sonar.plugins.php.phpunit;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Paths;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -126,16 +125,6 @@ public class CoverageResultImporterTest {
     assertThat(logTester.logs(LoggerLevel.WARN)).containsExactly(warning);
 
     verify(analysisWarnings, times(1)).addWarning(warning);
-  }
-
-  @Test
-  public void should_work_with_relative_paths() throws Exception {
-    String componentKey = componentKey(MONKEY_FILE_NAME);
-
-    String reportName = "phpunit.coverage.xml";
-    File reportFile = Paths.get(SRC_TEST_RESOURCES, PhpTestUtils.PHPUNIT_REPORT_DIR, reportName).toFile();
-    importer.importReport(reportFile, context);
-    assertReport(componentKey);
   }
 
   private void assertReport(String componentKey) {
