@@ -15,12 +15,25 @@ env:
   BURGR_PASSWORD: ENCRYPTED[!83e130718e92b8c9de7c5226355f730e55fb46e45869149a9223e724bb99656878ef9684c5f8cfef434aa716e87f4cf2!]
   GITHUB_TOKEN: ENCRYPTED[!f458126aa9ed2ac526f220c5acb51dd9cc255726b34761a56fc78d4294c11089502a882888cef0ca7dd4085e72e611a5!]
   PATH: ${CIRRUS_WORKING_DIR}/.cirrus:${PATH}
+  # Use bash (instead of sh on linux or cmd.exe on windows)
+  CIRRUS_SHELL: bash
 
 container_definition: &CONTAINER_DEFINITION
   image: eu.gcr.io/release-engineering-ci-prod/base:j11-latest
   cluster_name: cirrus-ci
   zone: europe-west4-b
   namespace: default
+
+win_vm_definition: &WINDOWS_VM_DEFINITION
+  gce_instance:
+    image_project: release-engineering-ci-prod
+    image_family: lt-base-windows-jdk11
+    platform: windows
+    zone: europe-west4-b
+    preemptible: false
+    disk: 128
+    type: n1-standard-8
+    use_ssd: true
 
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*" || $CIRRUS_BRANCH =~ "release.*")
@@ -48,9 +61,24 @@ build_task:
       - echo ${CIRRUS_OS}
       - curl --silent ${SONAR_HOST_URL}/deploy/plugins/index.txt | sort
   build_script:
+    - git submodule update --init
     - source cirrus-env BUILD
     - .cirrus/regular_mvn_build_deploy_analyze
   cleanup_before_cache_script: cleanup_maven_repository
+
+build_win_task:
+  <<: *WINDOWS_VM_DEFINITION
+  <<: *ONLY_SONARSOURCE_QA
+  depends_on:
+    - build
+  maven_cache:
+    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
+    folder: ~/.m2/repository
+  build_script:
+    - git config --global core.autocrlf input
+    - git submodule update --init
+    - source cirrus-env CI
+    - mvn.cmd package
 
 ws_scan_task:
   depends_on:
@@ -100,6 +128,19 @@ plugin_qa_task:
     - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} -Dmaven.test.redirectTestOutputToFile=false -B -e -V
   cleanup_before_cache_script: cleanup_maven_repository
 
+qa_os_win_task:
+  <<: *WINDOWS_VM_DEFINITION
+  <<: *ONLY_SONARSOURCE_QA
+  depends_on:
+    - build
+  maven_cache:
+    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
+    folder: ~/.m2/repository
+  build_script:
+    - source cirrus-env CI
+    - mvn.cmd clean verify
+  cleanup_before_cache_script: cleanup_maven_repository
+
 ruling_task:
   depends_on:
     - build
@@ -125,6 +166,7 @@ promote_task:
   depends_on:
     - ruling
     - plugin_qa
+    - qa_os_win
     - ws_scan
   <<: *ONLY_SONARSOURCE_QA
   gke_container:    
