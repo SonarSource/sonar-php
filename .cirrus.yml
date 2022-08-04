@@ -22,6 +22,17 @@ container_definition: &CONTAINER_DEFINITION
   zone: europe-west4-b
   namespace: default
 
+win_vm_definition: &WINDOWS_VM_DEFINITION
+  gce_instance:
+    image_project: release-engineering-ci-prod
+    image_family: lt-base-windows-jdk11
+    platform: windows
+    zone: europe-west4-b
+    preemptible: false
+    disk: 128
+    type: n1-standard-8
+    use_ssd: true
+
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*" || $CIRRUS_BRANCH =~ "release.*")
 
@@ -51,6 +62,20 @@ build_task:
     - source cirrus-env BUILD
     - .cirrus/regular_mvn_build_deploy_analyze
   cleanup_before_cache_script: cleanup_maven_repository
+
+build_win_task:
+  <<: *WINDOWS_VM_DEFINITION
+  <<: *ONLY_SONARSOURCE_QA
+  depends_on:
+    - build
+  maven_cache:
+    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
+    folder: ~/.m2/repository
+  build_script:
+    - git config --global core.autocrlf input
+    - git submodule update --init
+    - source cirrus-env CI
+    - mvn.cmd package
 
 ws_scan_task:
   depends_on:
@@ -98,6 +123,19 @@ plugin_qa_task:
     - source .cirrus/set_maven_build_version $BUILD_NUMBER
     - cd its/plugin
     - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} -Dmaven.test.redirectTestOutputToFile=false -B -e -V
+  cleanup_before_cache_script: cleanup_maven_repository
+
+qa_os_win_task:
+  <<: *WINDOWS_VM_DEFINITION
+  <<: *ONLY_SONARSOURCE_QA
+  depends_on:
+    - build
+  maven_cache:
+    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
+    folder: ~/.m2/repository
+  build_script:
+    - source cirrus-env CI
+    - mvn.cmd clean verify
   cleanup_before_cache_script: cleanup_maven_repository
 
 ruling_task:
