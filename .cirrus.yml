@@ -59,6 +59,7 @@ build_task:
       - echo ${CIRRUS_OS}
       - curl --silent ${SONAR_HOST_URL}/deploy/plugins/index.txt | sort
   build_script:
+    - git submodule update --init
     - source cirrus-env BUILD
     - .cirrus/regular_mvn_build_deploy_analyze
   cleanup_before_cache_script: cleanup_maven_repository
@@ -163,6 +164,7 @@ promote_task:
   depends_on:
     - ruling
     - plugin_qa
+    - qa_os_win
     - ws_scan
   <<: *ONLY_SONARSOURCE_QA
   gke_container:    
