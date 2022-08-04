@@ -129,10 +129,13 @@ public class XxeCheck extends PHPVisitorCheck {
   }
 
   private static String namespaceMemberFullQualifiedName(ExpressionTree callee) {
-    return ((ClassNamespaceNameTreeImpl) ((MemberAccessTreeImpl) callee).object())
-      .symbol()
-      .qualifiedName()
-      .toString();
+    return Optional.of(callee)
+      .filter(MemberAccessTreeImpl.class::isInstance)
+      .map(c -> ((MemberAccessTreeImpl) c).object())
+      .filter(ClassNamespaceNameTreeImpl.class::isInstance)
+      .map(ClassNamespaceNameTreeImpl.class::cast)
+      .map(c -> c.symbol().qualifiedName().toString())
+      .orElse("");
   }
 
 }
