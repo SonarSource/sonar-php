@@ -68,7 +68,7 @@ public class XxeCheck extends PHPVisitorCheck {
         checkSetParserProperty(call);
       }
     } else if (callee.is(Kind.CLASS_MEMBER_ACCESS) && "build".equals(functionName) &&
-      ("Cake\\Utility\\Xml").equalsIgnoreCase(namespaceMemberFullQualifiedName(callee))) {
+      isNamespaceMemberEqualTo("Cake\\Utility\\Xml", callee)) {
       argument(call, OPTIONS, 1).ifPresent(options -> checkXmlBuildOption(options.value(), options));
     }
     super.visitFunctionCall(call);
@@ -128,14 +128,19 @@ public class XxeCheck extends PHPVisitorCheck {
     return context().newIssue(this, tree, MESSAGE);
   }
 
-  private static String namespaceMemberFullQualifiedName(ExpressionTree callee) {
+  private static Optional<String> namespaceMemberFullQualifiedName(ExpressionTree callee) {
     return Optional.of(callee)
       .filter(MemberAccessTreeImpl.class::isInstance)
       .map(c -> ((MemberAccessTreeImpl) c).object())
       .filter(ClassNamespaceNameTreeImpl.class::isInstance)
       .map(ClassNamespaceNameTreeImpl.class::cast)
-      .map(c -> c.symbol().qualifiedName().toString())
-      .orElse("");
+      .map(c -> c.symbol().qualifiedName().toString());
+  }
+
+  private static boolean isNamespaceMemberEqualTo(String targetNamespace, ExpressionTree callee){
+    return namespaceMemberFullQualifiedName(callee)
+      .filter(targetNamespace::equalsIgnoreCase)
+      .isPresent();
   }
 
 }
