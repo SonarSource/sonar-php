@@ -72,33 +72,34 @@ public class PhpStanSensorTest extends ReportSensorTest {
     List<ExternalIssue> externalIssues = executeSensorImporting(reportPath("phpstan-report.json"));
     assertThat(externalIssues).hasSize(3);
 
-    ExternalIssue first = externalIssues.get(0);
+    List<Integer> orderOfIssues = SEPARATOR_CHAR == '\\' ? List.of(2, 0, 1) : List.of(0, 1, 2);
+    ExternalIssue first = externalIssues.get(orderOfIssues.get(0));
     assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(first.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation firstPrimaryLoc = first.primaryLocation();
-    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:"+osIndependentPath("phpstan/file1.php"));
+    assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file1.php");
     assertThat(firstPrimaryLoc.message())
       .isEqualTo("Parameter #1 $i of function foo expects int, string given.");
     TextRange firstTextRange = firstPrimaryLoc.textRange();
     assertThat(firstTextRange).isNotNull();
     assertThat(firstTextRange.start().line()).isEqualTo(5);
 
-    ExternalIssue second = externalIssues.get(1);
+    ExternalIssue second = externalIssues.get(orderOfIssues.get(1));
     assertThat(second.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(second.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation secondPrimaryLoc = second.primaryLocation();
-    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:"+osIndependentPath("phpstan/file2.php"));
+    assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file2.php");
     assertThat(secondPrimaryLoc.message())
       .isEqualTo("Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.");
     TextRange secondTextRange = secondPrimaryLoc.textRange();
     assertThat(secondTextRange).isNotNull();
     assertThat(secondTextRange.start().line()).isEqualTo(5);
 
-    ExternalIssue third = externalIssues.get(2);
+    ExternalIssue third = externalIssues.get(orderOfIssues.get(2));
     assertThat(third.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(third.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
-    assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:"+osIndependentPath("phpstan/file2.php"));
+    assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file2.php");
     assertThat(thirdPrimaryLoc.message())
       .isEqualTo("Call to method format() on an unknown class DateTimeImutable.");
     TextRange thirdTextRange = thirdPrimaryLoc.textRange();
