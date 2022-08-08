@@ -86,3 +86,14 @@ namespace ns7 {
   $xml = Xml::build($content, ['loadEntities' => true]);                        // Compliant as not using Cake\Utility\Xml
   $notCakeCoverage = XmlNotCAKE::build($content, ['loadEntities' => true]);     // Compliant as not using Cake\Utility\Xml
 }
+
+namespace ns8 {
+  class Nav
+  {
+      public static function add($url)
+      {
+          $r = parse_url($url);
+          static::build($r);                                                   // Compliant
+      }
+  }
+}
