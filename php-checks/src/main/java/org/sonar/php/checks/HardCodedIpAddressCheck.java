@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
@@ -58,6 +59,13 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
     ")(?![\\d\\w:])";
   private static final Pattern IP_PATTERN = Pattern.compile(String.format("%s(?<ip>((%s)|(%s)))", PROTOCOL, IP_V4, IP_V6));
 
+  private static final List<String> RESERVED_IP_PREFIXES = List.of(
+    "192.0.2.",
+    "198.51.100.",
+    "203.0.113.",
+    "2001:db8:"
+  );
+
   private static final String MESSAGE = "Make sure using this hardcoded IP address is safe here.";
 
   @Override
@@ -67,7 +75,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
       Matcher matcher = IP_PATTERN.matcher(literalValue);
       if (matcher.find() && matcher.start() == 0) {
         String ip = matcher.group("ip");
-        if (!isLoopback(ip)) {
+        if (!isLoopback(ip) && !isReservedIP(ip)) {
           context().newIssue(this, tree, MESSAGE);
         }
       }
@@ -78,5 +86,9 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
   private static boolean isLoopback(String ip) {
     ip = ip.replace("[", "");
     return LOOPBACK_IP.matcher(ip).find();
+  }
+
+  private static boolean isReservedIP(String ip) {
+    return RESERVED_IP_PREFIXES.stream().anyMatch(ip::startsWith);
   }
 }
