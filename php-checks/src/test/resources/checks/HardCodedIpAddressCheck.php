@@ -24,16 +24,16 @@ const notRouteable = "0.0.0.0"; // Compliant
 
 // IPv6 like strings
 
-$serverAddress = "[2001:db8:a0b:12f0::1]:21";                   // Noncompliant
+$serverAddress = "[2003:db8:a0b:12f0::1]:21";                   // Noncompliant
 //               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-$serverAddress = "2001:db8:a0b:12f0::1";                        // Noncompliant
-$serverAddress = "2001:db8:a0b:12f0:12:1";                      // Compliant
-$serverAddress = "2001:0db8:0a0b:12f0:0000:0000:0000:0001";     // Noncompliant
+$serverAddress = "2003:db8:a0b:12f0::1";                        // Noncompliant
+$serverAddress = "2003:db8:a0b:12f0:12:1";                      // Compliant
+$serverAddress = "2003:0db8:0a0b:12f0:0000:0000:0000:0001";     // Noncompliant
 $serverAddress = "::1";                                         // Compliant - Loopback address
 $serverAddress = "[::1]";                                       // Compliant - Loopback address
 $serverAddress = "0:0:0:0:0:0:0:1";                             // Compliant - Loopback address
 $serverAddress = "::2";                                         // Noncompliant
-$serverAddress = "2001:db8:3:4::192.0.2.33";                    // Noncompliant
+$serverAddress = "2003:db8:3:4::192.0.2.33";                    // Noncompliant
 $serverAddress = "1234:::1";                                    // Compliant - no IPv6
 $serverAddress = '0:1234:dc0:41:216:3eff:fe67:3e01';            // Noncompliant
 
@@ -56,3 +56,9 @@ $serverAddress = "::ffff:0:127.255.255.255";
 $serverAddress = "::ffff:0:128.0.0.1";                           // Noncompliant
 $serverAddress = "::ffff:200.0.0.1";                             // Noncompliant
 //               ^^^^^^^^^^^^^^^^^^
+
+# RFC 3849
+$serverAddress = "192.0.2.1";
+$serverAddress = "198.51.100.1";
+$serverAddress = "203.0.113.1";
+$serverAddress = "2001:db8:0a0b:12f0:0000:0000:0000:0001";
