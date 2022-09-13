@@ -54,7 +54,7 @@ public class PHPUnitLegacyTest {
       .setProjectVersion("1.0")
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
-      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/phpunit.xml");
+      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/phpunit.tests.xml");
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 

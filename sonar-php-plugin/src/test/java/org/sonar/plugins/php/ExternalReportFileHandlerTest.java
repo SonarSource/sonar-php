@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -35,8 +34,6 @@ public class ExternalReportFileHandlerTest {
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "FileHandler");
   private static final String MODULE_KEY = "ExternalReportFileHandler";
 
-  private static final char DS = File.separatorChar;
-
   private ExternalReportFileHandler fileHandler;
 
   private SensorContextTester context;
@@ -44,50 +41,67 @@ public class ExternalReportFileHandlerTest {
   @Before
   public void setup() {
     context =  SensorContextTester.create(PROJECT_DIR);
-    addInputFile("index.php", "subfolder/index.php");
+    addInputFiles("index.php", "subfolder/index.php");
     fileHandler = ExternalReportFileHandler.create(context);
   }
 
   @Test
   public void should_return_relative_path_when_all_files_are_known() {
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "index.php")).isEqualTo("index.php");
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "subfolder" + DS + "index.php")).isEqualTo("subfolder" + DS + "index.php");
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "index.php"))).isEqualTo("index.php");
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "subfolder", "index.php"))).isEqualTo(path("subfolder", "index.php"));
   }
 
   @Test
   public void should_return_relative_path_when_first_file_is_in_subfolder() {
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "subfolder" + DS + "index.php")).isEqualTo("subfolder" + DS + "index.php");
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "index.php")).isEqualTo("index.php");
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "subfolder", "index.php"))).isEqualTo(path("subfolder", "index.php"));
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "index.php"))).isEqualTo("index.php");
   }
 
 
   @Test
   public void should_not_return_relative_when_files_are_unknown() {
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "unknown.php")).isEqualTo(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "unknown.php");
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "subfolder" + DS + "unknown.php")).isEqualTo(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "subfolder" + DS + "unknown.php");
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "unknown.php"))).isEqualTo(path("foo", "bar", "FileHandler", "unknown.php"));
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "subfolder", "unknown.php"))).isEqualTo(path("foo", "bar", "FileHandler", "subfolder", "unknown.php"));
   }
 
   @Test
   public void should_return_relative_when_first_file_is_unknown() {
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "unknown.php")).isEqualTo(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "unknown.php");
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "subfolder" + DS + "index.php")).isEqualTo("subfolder" + DS + "index.php");
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "index.php")).isEqualTo("index.php");
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "unknown.php"))).isEqualTo(path("foo", "bar", "FileHandler", "unknown.php"));
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "subfolder", "index.php"))).isEqualTo(path("subfolder", "index.php"));
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "index.php"))).isEqualTo("index.php");
   }
 
   @Test
   public void should_return_relative_path_when_already_relative() {
     assertThat(fileHandler.relativePath("index.php")).isEqualTo("index.php");
-    assertThat(fileHandler.relativePath("subfolder" + DS + "index.php")).isEqualTo("subfolder" + DS + "index.php");
+    assertThat(fileHandler.relativePath(path("subfolder", "index.php"))).isEqualTo(path("subfolder", "index.php"));
   }
 
   @Test
   public void should_return_relative_path_for_second_file_when_unknown() {
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "index.php")).isEqualTo("index.php");
-    assertThat(fileHandler.relativePath(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "subfolder" + DS + "unknown.php")).isEqualTo(DS + "foo" + DS + "bar" + DS + "FileHandler" + DS + "subfolder" + DS + "unknown.php");
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "index.php"))).isEqualTo("index.php");
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "subfolder", "unknown.php"))).isEqualTo(path("foo", "bar", "FileHandler", "subfolder", "unknown.php"));
   }
 
-  private void addInputFile(String... paths) {
+  @Test
+  public void should_return_relative_path_for_unix_path() {
+    assertThat(fileHandler.relativePath("/foo/bar/FileHandler/index.php")).isEqualTo("index.php");
+    assertThat(fileHandler.relativePath("/foo/bar/FileHandler/subfolder/index.php")).isEqualTo(path("subfolder", "index.php"));
+  }
+
+  @Test
+  public void should_return_relative_path_for_windows_path() {
+    assertThat(fileHandler.relativePath("C:\\foo\\bar\\FileHandler\\index.php")).isEqualTo("index.php");
+    assertThat(fileHandler.relativePath("C:\\foo\\bar\\FileHandler\\subfolder\\index.php")).isEqualTo(path("subfolder", "index.php"));
+  }
+
+
+  private void addInputFiles(String... paths) {
     Arrays.stream(paths).forEach(path -> context.fileSystem().add(TestInputFileBuilder.create(MODULE_KEY, path).build()));
+  }
+
+  private static String path(String first, String... more) {
+    return Path.of(first, more).toString();
   }
 
 
