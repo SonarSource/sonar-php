@@ -22,6 +22,7 @@ package org.sonar.plugins.php.reports.phpstan;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -47,10 +48,11 @@ public class PhpStanJsonReportReader extends JsonReportReader {
 
   private void read(InputStream in) throws IOException, ParseException {
     JSONObject rootObject = (JSONObject) jsonParser.parse(new InputStreamReader(in, UTF_8));
-    JSONObject files = (JSONObject) rootObject.get("files");
-    if (files != null) {
-      files.forEach((file, records) -> onFile(cleanFilePath((String) file), (JSONObject) records));
-    }
+    // SONARPHP-1316 : in case there is no issue in the report, 'files' in a JSONArray and not a JSONObject
+    Optional.ofNullable(rootObject.get("files"))
+      .filter(JSONObject.class::isInstance).map(JSONObject.class::cast)
+      .ifPresent(files ->
+        files.forEach((file, records) -> onFile(cleanFilePath((String) file), (JSONObject) records)));
   }
 
   private void onFile(String file, JSONObject records) {
