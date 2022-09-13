@@ -48,7 +48,7 @@ public class RedundantFinalCheck extends PHPSubscriptionCheck {
   public void visitNode(Tree tree) {
     ClassDeclarationTree classDeclaration = (ClassDeclarationTree) tree;
 
-    if (isFinalModifier(classDeclaration.modifierToken())) {
+    if (classDeclaration.isFinal()) {
       for (ClassMemberTree classMember : classDeclaration.members()) {
         checkClassMember(classMember);
       }

@@ -56,7 +56,7 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    isFinalClassStack.addLast(isFinalClass(tree));
+    isFinalClassStack.addLast(tree.isFinal());
     finalOrPrivateMethodsStack.addLast(getFinalOrPrivateMethods(tree));
     privatePropertiesStack.addLast(getPrivateProperties(tree));
 
@@ -95,10 +95,6 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
       }
     }
     return privateProperties;
-  }
-
-  private static boolean isFinalClass(ClassDeclarationTree tree) {
-    return tree.modifierToken() != null && "final".equals(tree.modifierToken().text());
   }
 
   @Override

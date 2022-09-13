@@ -138,6 +138,7 @@ import static org.sonar.php.api.PHPKeyword.INSTANCEOF;
 import static org.sonar.php.api.PHPKeyword.INTERFACE;
 import static org.sonar.php.api.PHPKeyword.LIST;
 import static org.sonar.php.api.PHPKeyword.NEW;
+import static org.sonar.php.api.PHPKeyword.READONLY;
 import static org.sonar.php.api.PHPKeyword.STATIC;
 import static org.sonar.php.api.PHPKeyword.TRAIT;
 import static org.sonar.php.api.PHPKeyword.USE;
@@ -278,7 +279,7 @@ public class PHPGrammar {
     return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_DECLARATION).is(
       f.classDeclaration(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
-        b.optional(b.firstOf(b.token(ABSTRACT), b.token(FINAL))),
+        b.zeroOrMore(b.firstOf(b.token(READONLY), b.token(ABSTRACT), b.token(FINAL))),
         b.token(CLASS),
         NAME_IDENTIFIER(),
         b.optional(f.newTuple(b.token(EXTENDS), f.classNamespaceName(NAMESPACE_NAME()))),

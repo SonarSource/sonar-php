@@ -56,7 +56,7 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    if (CheckUtils.isAbstract(tree) || CheckUtils.getClassName(tree).endsWith("TestCase")) {
+    if (tree.isAbstract() || CheckUtils.getClassName(tree).endsWith("TestCase")) {
       return;
     }
 

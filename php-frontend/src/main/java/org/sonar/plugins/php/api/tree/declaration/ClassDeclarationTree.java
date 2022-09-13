@@ -52,8 +52,7 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
   /**
    * Either {@link PHPKeyword#ABSTRACT abstract} or {@link PHPKeyword#FINAL final}
    */
-  @Nullable
-  SyntaxToken modifierToken();
+  List<SyntaxToken> modifiersToken();
 
   /**
    * Either {@link PHPKeyword#CLASS class}, {@link PHPKeyword#TRAIT trait},
@@ -87,4 +86,8 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
 
   @Override
   SyntaxToken closeCurlyBraceToken();
+
+  boolean isAbstract();
+  boolean isFinal();
+  boolean isReadOnly();
 }

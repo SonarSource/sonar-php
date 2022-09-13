@@ -36,9 +36,8 @@ import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
  */
 public interface EnumDeclarationTree extends ClassDeclarationTree {
 
-  @Nullable
   @Override
-  SyntaxToken modifierToken();
+  List<SyntaxToken> modifiersToken();
 
   @Override
   NameIdentifierTree name();
