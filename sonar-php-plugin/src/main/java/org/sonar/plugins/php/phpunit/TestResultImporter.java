@@ -46,7 +46,7 @@ public class TestResultImporter extends PhpUnitReportImporter {
     LOG.info("Importing {}", reportFile);
     TestSuites testSuites = parser.parse(reportFile);
     for (TestFileReport fileReport : testSuites.arrangeSuitesIntoTestFileReports()) {
-      fileReport.saveTestMeasures(context, unresolvedInputFiles);
+      fileReport.saveTestMeasures(context, fileHandler, unresolvedInputFiles);
     }
   }
 

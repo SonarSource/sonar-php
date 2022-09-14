@@ -52,7 +52,7 @@ public class ReportWithUnresolvedPathTest {
       .setProjectVersion("1.0")
       .setSourceDirs("src")
       .setTestDirs("tests")
-      .setProperty("sonar.php.coverage.reportPaths", "reports/phpunit.coverage.xml");
+      .setProperty("sonar.php.coverage.reportPaths", "reports/phpunit.coverage.unknown.xml");
     BuildResult result = orchestrator.executeBuild(build);
 
     Pattern coverageWarningPattern = Pattern.compile("Failed to resolve 1 file path\\(s\\) in PHPUnit coverage " +

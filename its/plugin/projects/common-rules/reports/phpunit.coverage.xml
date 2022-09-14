@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <coverage generated="1394164581">
   <project timestamp="1394164581">
-    <file name="Math.php">
+    <file name="src/Math.php">
       <class name="Example_Math" namespace="global" fullPackage="Example" package="Example">
         <metrics methods="4" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="6" coveredelements="4"/>
       </class>

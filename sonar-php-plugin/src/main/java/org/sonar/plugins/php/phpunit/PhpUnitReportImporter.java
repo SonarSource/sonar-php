@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
+import org.sonar.plugins.php.ExternalReportFileHandler;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.ExternalReportProvider;
 import org.sonarsource.analyzer.commons.xml.ParseException;
@@ -37,6 +38,7 @@ public abstract class PhpUnitReportImporter implements ReportImporter {
   protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
 
   protected AnalysisWarningsWrapper analysisWarningsWrapper;
+  protected ExternalReportFileHandler fileHandler;
 
   protected PhpUnitReportImporter(AnalysisWarningsWrapper analysisWarningsWrapper) {
     this.analysisWarningsWrapper = analysisWarningsWrapper;
@@ -44,6 +46,7 @@ public abstract class PhpUnitReportImporter implements ReportImporter {
 
   @Override
   public final void execute(SensorContext context) {
+    fileHandler = ExternalReportFileHandler.create(context);
     List<File> reportFiles = reportFiles(context);
     reportFiles.forEach(report -> {
       unresolvedInputFiles.clear();
