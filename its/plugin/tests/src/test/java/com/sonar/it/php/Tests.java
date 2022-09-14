@@ -34,12 +34,16 @@ import javax.annotation.CheckForNull;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.sonarqube.ws.Ce;
 import org.sonarqube.ws.Components;
 import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.Measures;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.WsClient;
 import org.sonarqube.ws.client.WsClientFactories;
+import org.sonarqube.ws.client.ce.ActivityRequest;
+import org.sonarqube.ws.client.ce.CeService;
+import org.sonarqube.ws.client.ce.TaskRequest;
 import org.sonarqube.ws.client.components.TreeRequest;
 import org.sonarqube.ws.client.issues.SearchRequest;
 import org.sonarqube.ws.client.measures.ComponentRequest;
@@ -77,9 +81,11 @@ public class Tests {
 
   public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
 
+  private static final TaskRequest TASK_REQUEST = new TaskRequest().setAdditionalFields(Collections.singletonList("warnings"));
+
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
-      .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE[7.9]"))
+      .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
       // PHP Plugin
       .addPlugin(PHP_PLUGIN_LOCATION)
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
@@ -98,7 +104,7 @@ public class Tests {
     server.associateProjectToQualityProfile(projectKey, languageKey, profileName);
   }
 
-  public static final File projectDirectoryFor(String projectDirName) {
+  static File projectDirectoryFor(String projectDirName) {
     return new File(Tests.PROJECT_ROOT_DIR + projectDirName + "/");
   }
 
@@ -132,9 +138,24 @@ public class Tests {
     return components.size() == 1 ? components.get(0) : null;
   }
 
+  /**
+   * Extract analysis warnings from component task to evaluate if expected warnings are send to the server
+   */
+  static List<String> getAnalysisWarnings(String projectName) throws AssertionError {
+    CeService service = newWsClient().ce();
+    Ce.ActivityResponse activityResponse = service.activity(new ActivityRequest().setComponent(projectName));
+    if (activityResponse.getTasksCount() != 1) {
+      throw new AssertionError(String.format("Expect to have a single task exists for the component '%s' on the instance, but there are %d tasks",
+        projectName, activityResponse.getTasksCount()));
+    }
+    Ce.Task task = activityResponse.getTasks(0);
+    return service.task(TASK_REQUEST.setId(task.getId())).getTask().getWarningsList();
+  }
+
   static WsClient newWsClient() {
     return WsClientFactories.getDefault().newClient(HttpConnector.newBuilder()
       .url(ORCHESTRATOR.getServer().getUrl())
+      .credentials("admin", "admin")
       .build());
   }
 
