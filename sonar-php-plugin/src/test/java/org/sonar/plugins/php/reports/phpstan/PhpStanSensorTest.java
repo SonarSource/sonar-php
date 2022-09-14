@@ -156,6 +156,13 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
+  public void report_without_issue() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-no-issue.json");
+    assertThat(externalIssues).isEmpty();
+    assertThat(logTester().logs(LoggerLevel.ERROR)).isEmpty();
+  }
+
+  @Test
   public void file_path_is_cleaned_when_it_contains_additional_context() throws Exception {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-with-context-in-path.json");
     assertThat(externalIssues).hasSize(1);
