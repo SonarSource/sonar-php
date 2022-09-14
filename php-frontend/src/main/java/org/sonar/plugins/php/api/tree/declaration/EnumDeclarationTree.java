@@ -37,7 +37,7 @@ import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
 public interface EnumDeclarationTree extends ClassDeclarationTree {
 
   /**
-   * @deprecated since SonarQube 9.7 - Use {@link #modifiersToken()} instead.
+   * @deprecated - Use {@link #modifiersToken()} instead.
    */
   @Nullable
   @Override

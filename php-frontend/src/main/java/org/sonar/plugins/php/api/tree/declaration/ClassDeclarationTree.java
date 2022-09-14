@@ -51,7 +51,7 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
 
   /**
    * Either {@link PHPKeyword#ABSTRACT abstract} or {@link PHPKeyword#FINAL final}
-   * @deprecated since SonarQube 9.7 - Use {@link #modifiersToken()} instead.
+   * @deprecated - Use {@link #modifiersToken()} instead.
    */
   @Nullable
   @Deprecated(since = "SonarQube 9.7", forRemoval = true)
