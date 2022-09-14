@@ -51,6 +51,15 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
 
   /**
    * Either {@link PHPKeyword#ABSTRACT abstract} or {@link PHPKeyword#FINAL final}
+   * @deprecated since 3.25 - Use {@link #modifiersToken()} instead.
+   */
+  @Nullable
+  @Deprecated
+  SyntaxToken modifierToken();
+
+  /**
+   * Contain modifier tokens : {@link PHPKeyword#ABSTRACT abstract},
+   * {@link PHPKeyword#FINAL final} and/or {@link PHPKeyword#READONLY readonly}
    */
   List<SyntaxToken> modifiersToken();
 

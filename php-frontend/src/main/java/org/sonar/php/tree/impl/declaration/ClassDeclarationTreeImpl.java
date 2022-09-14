@@ -22,6 +22,8 @@ package org.sonar.php.tree.impl.declaration;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
+
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
@@ -77,7 +79,20 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
     this.closeCurlyBraceToken = closeCurlyBraceToken;
   }
 
+  /**
+   * @deprecated since 3.25 - Use {@link #modifiersToken()} instead.
+   */
   @Nullable
+  @Override
+  @Deprecated
+  public SyntaxToken modifierToken() {
+    return modifiersToken.stream()
+            .filter(modifier -> modifier.text().equalsIgnoreCase("final")
+              || modifier.text().equalsIgnoreCase("abstract"))
+            .findFirst()
+            .orElse(null);
+  }
+
   @Override
   public List<SyntaxToken> modifiersToken() {
     return modifiersToken;
