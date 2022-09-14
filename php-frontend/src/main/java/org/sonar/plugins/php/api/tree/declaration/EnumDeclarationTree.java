@@ -41,7 +41,7 @@ public interface EnumDeclarationTree extends ClassDeclarationTree {
    */
   @Nullable
   @Override
-  @Deprecated
+  @Deprecated(since = "SonarQube 9.7", forRemoval = true)
   SyntaxToken modifierToken();
 
   @Override

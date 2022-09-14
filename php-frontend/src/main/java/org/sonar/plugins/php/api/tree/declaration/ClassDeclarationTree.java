@@ -54,7 +54,7 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
    * @deprecated since SonarQube 9.7 - Use {@link #modifiersToken()} instead.
    */
   @Nullable
-  @Deprecated
+  @Deprecated(since = "SonarQube 9.7", forRemoval = true)
   SyntaxToken modifierToken();
 
   /**

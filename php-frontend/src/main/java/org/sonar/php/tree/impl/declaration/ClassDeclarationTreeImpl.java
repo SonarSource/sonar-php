@@ -78,12 +78,8 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
     this.closeCurlyBraceToken = closeCurlyBraceToken;
   }
 
-  /**
-   * @deprecated since SonarQube 9.7 - Use {@link #modifiersToken()} instead.
-   */
   @Nullable
   @Override
-  @Deprecated
   public SyntaxToken modifierToken() {
     return modifiersToken.stream()
             .filter(modifier -> modifier.text().equalsIgnoreCase("final")

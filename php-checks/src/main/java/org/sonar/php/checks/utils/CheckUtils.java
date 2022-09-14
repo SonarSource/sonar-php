@@ -353,15 +353,6 @@ public final class CheckUtils {
   }
 
   /**
-   * @deprecated since SonarQube 9.7 - Use {@link ClassDeclarationTree#isAbstract()} instead.
-   */
-  @Deprecated
-  public static boolean isAbstract(ClassDeclarationTree tree) {
-    SyntaxToken token = tree.modifierToken();
-    return token != null && token.text().equals("abstract");
-  }
-
-  /**
    * Retrieves an argument based on position and name.
    *
    * If an argument with the given name exists, it is returned no matter the position.

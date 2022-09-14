@@ -262,18 +262,6 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void is_abstract() {
-    ClassDeclarationTree tree = parseClass("class A { public $var; }");
-    assertThat(CheckUtils.isAbstract(tree)).isFalse();
-
-    tree = parseClass("abstract class A { public $var; }");
-    assertThat(CheckUtils.isAbstract(tree)).isTrue();
-
-    tree = parseClass("final class A { public $var; }");
-    assertThat(CheckUtils.isAbstract(tree)).isFalse();
-  }
-
-  @Test
   public void pure_function_name() {
     FunctionCallTree functionCall = (FunctionCallTree) expressionFromStatement("fooBar();");
     assertThat(functionName(functionCall)).isEqualTo("fooBar");
