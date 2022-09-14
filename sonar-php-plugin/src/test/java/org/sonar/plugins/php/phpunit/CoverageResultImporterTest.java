@@ -50,7 +50,6 @@ public class CoverageResultImporterTest {
   private static final String BASE_DIR = "/org/sonar/plugins/php/phpunit/sensor/";
   private static final String MONKEY_FILE_NAME = "src/Monkey.php";
   private static final String SRC_TEST_RESOURCES = "src/test/resources/";
-  private static final char SEPARATOR_CHAR = File.separatorChar;
   private final AnalysisWarningsWrapper analysisWarnings = spy(AnalysisWarningsWrapper.class);
 
   private CoverageResultImporter importer;
@@ -118,10 +117,22 @@ public class CoverageResultImporterTest {
 
   @Test
   public void should_generate_coverage_measures_with_fqn_paths() {
-    String warning = "Failed to resolve 2 file path(s) in PHPUnit coverage "+reportPath("phpunit.coverage-fqn.xml")+" report. " +
-      "Nothing is imported related to file(s): "+osIndependentPath("/foo/bar/src/Banana.php;/foo/bar/src/IndexControllerTest.php");
+    String warning = "Failed to resolve 2 file path(s) in PHPUnit coverage phpunit.coverage-fqn.xml report. " +
+      "Nothing is imported related to file(s): /foo/bar/src/Banana.php;/foo/bar/src/IndexControllerTest.php";
 
-    executeSensorImporting(getReportFile(reportPath("phpunit.coverage-fqn.xml")));
+    executeSensorImporting(getReportFile("phpunit.coverage-fqn.xml"));
+    assertReport(componentKey(MONKEY_FILE_NAME));
+    assertThat(logTester.logs(LoggerLevel.WARN)).containsExactly(warning);
+
+    verify(analysisWarnings, times(1)).addWarning(warning);
+  }
+
+  @Test
+  public void should_generate_coverage_measures_with_windows_fqn_paths() {
+    String warning = "Failed to resolve 2 file path(s) in PHPUnit coverage phpunit.coverage-fqn_win.xml report. " +
+      "Nothing is imported related to file(s): C:\\foo\\bar\\src\\Banana.php;C:\\foo\\bar\\src\\IndexControllerTest.php";
+
+    executeSensorImporting(getReportFile("phpunit.coverage-fqn_win.xml"));
     assertReport(componentKey(MONKEY_FILE_NAME));
     assertThat(logTester.logs(LoggerLevel.WARN)).containsExactly(warning);
 
@@ -190,24 +201,5 @@ public class CoverageResultImporterTest {
 
   private static String componentKey(String componentName) {
     return "moduleKey:" + componentName;
-  }
-
-  private static String osIndependentPath(String path){
-    if (SEPARATOR_CHAR =='\\'){
-      path =  path.replace("/", "\\");
-    }
-    return path;
-  }
-
-  private static String reportPath(String path){
-
-    if (SEPARATOR_CHAR == '\\'){
-      path =  path.replace("/", "\\");
-      StringBuilder builder = new StringBuilder(path);
-      int index = builder.lastIndexOf(".");
-      builder.replace(index, index+1, "_win.");
-      return builder.toString();
-    }
-    return path;
   }
 }

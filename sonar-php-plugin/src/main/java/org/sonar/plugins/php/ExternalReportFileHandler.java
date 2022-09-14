@@ -61,7 +61,7 @@ public class ExternalReportFileHandler {
     // If we already calculated the offset of the relative path we can apply it to the other paths
     if (relativePathOffset > 0) {
       newPath = separatorsAdjustedPath.substring(relativePathOffset);
-      return knownFile(newPath) ? newPath : separatorsAdjustedPath;
+      return knownFile(newPath) ? newPath : path;
     }
 
     newPath = separatorsAdjustedPath;
