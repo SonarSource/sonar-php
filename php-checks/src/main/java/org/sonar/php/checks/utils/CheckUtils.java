@@ -353,7 +353,7 @@ public final class CheckUtils {
   }
 
   /**
-   * @deprecated since 3.25 - Use {@link ClassDeclarationTree#isAbstract()} instead.
+   * @deprecated since SonarQube 9.7 - Use {@link ClassDeclarationTree#isAbstract()} instead.
    */
   @Deprecated
   public static boolean isAbstract(ClassDeclarationTree tree) {

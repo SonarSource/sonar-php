@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
@@ -80,7 +79,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   /**
-   * @deprecated since 3.25 - Use {@link #modifiersToken()} instead.
+   * @deprecated since SonarQube 9.7 - Use {@link #modifiersToken()} instead.
    */
   @Nullable
   @Override
