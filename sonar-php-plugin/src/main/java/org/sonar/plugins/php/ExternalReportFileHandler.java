@@ -49,19 +49,26 @@ public class ExternalReportFileHandler {
    * to subsequent file paths.
    */
   public String relativePath(String path) {
+    if (isKnownFile(path)) {
+      return path;
+    }
+
     // Adapt file path separator to the analyzer context separator
     String separatorsAdjustedPath = separatorsToSystem(path);
 
     // If given path is known by the file system, we don't need to adjust the path
-    if (knownFile(separatorsAdjustedPath)) {
+    if (isKnownFile(separatorsAdjustedPath)) {
       return separatorsAdjustedPath;
     }
 
     String newPath;
     // If we already calculated the offset of the relative path we can apply it to the other paths
     if (relativePathOffset > 0) {
+      if (separatorsAdjustedPath.length() < relativePathOffset) {
+        return path;
+      }
       newPath = separatorsAdjustedPath.substring(relativePathOffset);
-      return knownFile(newPath) ? newPath : path;
+      return isKnownFile(newPath) ? newPath : path;
     }
 
     newPath = separatorsAdjustedPath;
@@ -69,7 +76,7 @@ public class ExternalReportFileHandler {
     do {
       // Skip possible first file separator because it could be part of some absolute paths
       newPath = newPath.substring(newPath.indexOf(File.separatorChar, 1) + 1);
-      if (knownFile(newPath)) {
+      if (isKnownFile(newPath)) {
         relativePathOffset = separatorsAdjustedPath.indexOf(newPath);
         return newPath;
       }
@@ -97,7 +104,7 @@ public class ExternalReportFileHandler {
   /**
    * Checks whether a file exists in the analyzer file system for the specified path.
    */
-  private boolean knownFile(String path) {
+  private boolean isKnownFile(String path) {
     return fileSystem.hasFiles(fileSystem.predicates().hasPath(path));
   }
 

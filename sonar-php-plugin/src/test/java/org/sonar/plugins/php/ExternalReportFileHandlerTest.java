@@ -78,6 +78,12 @@ public class ExternalReportFileHandlerTest {
   }
 
   @Test
+  public void test() {
+    assertThat(fileHandler.relativePath(path("unknown", "index.php"))).isEqualTo(path("index.php"));
+    assertThat(fileHandler.relativePath("index.php")).isEqualTo("index.php");
+  }
+
+  @Test
   public void should_return_relative_path_for_second_file_when_unknown() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "index.php"))).isEqualTo("index.php");
     assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "subfolder", "unknown.php"))).isEqualTo(path("foo", "bar", "FileHandler", "subfolder", "unknown.php"));
@@ -90,9 +96,21 @@ public class ExternalReportFileHandlerTest {
   }
 
   @Test
-  public void should_return_relative_path_for_windows_path() {
+  public void should_return_relative_path_for_fqn_windows_path() {
     assertThat(fileHandler.relativePath("C:\\foo\\bar\\FileHandler\\index.php")).isEqualTo("index.php");
     assertThat(fileHandler.relativePath("C:\\foo\\bar\\FileHandler\\subfolder\\index.php")).isEqualTo(path("subfolder", "index.php"));
+  }
+
+  @Test
+  public void should_return_relative_path_for_relative_windows_path() {
+    assertThat(fileHandler.relativePath("index.php")).isEqualTo("index.php");
+    assertThat(fileHandler.relativePath("subfolder\\index.php")).isEqualTo("subfolder\\index.php");
+  }
+
+  @Test
+  public void should_return_handle_shorter_path() {
+    assertThat(fileHandler.relativePath(path("foo", "bar", "FileHandler", "index.php"))).isEqualTo("index.php");
+    assertThat(fileHandler.relativePath(path("bar",  "index.php"))).isEqualTo(path("bar","index.php"));
   }
 
 
