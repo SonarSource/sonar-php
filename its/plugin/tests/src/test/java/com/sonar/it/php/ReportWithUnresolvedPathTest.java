@@ -24,7 +24,6 @@ import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -55,9 +54,7 @@ public class ReportWithUnresolvedPathTest {
       .setProperty("sonar.php.coverage.reportPaths", "reports/phpunit.coverage.unknown.xml");
     BuildResult result = orchestrator.executeBuild(build);
 
-    Pattern coverageWarningPattern = Pattern.compile("Failed to resolve 1 file path\\(s\\) in PHPUnit coverage " +
-      "phpunit\\.coverage\\.xml report\\. Nothing is imported related to file\\(s\\): Math\\.php");
-    Predicate<String> coverageWarning = s -> coverageWarningPattern.matcher(s).find();
+    Predicate<String> coverageWarning = s -> s.contains("Failed to resolve 1 file path(s) in PHPUnit coverage phpunit.coverage.unknown.xml report.");
 
     assertThat(result.getLogsLines(WARNING).stream().anyMatch(coverageWarning)).isTrue();
     assertThat(getAnalysisWarnings(PROJECT_NAME).stream().anyMatch(coverageWarning)).isTrue();

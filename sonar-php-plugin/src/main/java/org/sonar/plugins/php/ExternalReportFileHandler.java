@@ -19,7 +19,8 @@
  */
 package org.sonar.plugins.php;
 
-import java.io.File;
+import java.nio.file.Path;
+import org.apache.commons.io.FilenameUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 
@@ -48,62 +49,50 @@ public class ExternalReportFileHandler {
    * by one folder level to get the correct relative path to the project. This adjustment is then also tried to be applied
    * to subsequent file paths.
    */
-  public String relativePath(String path) {
-    if (isKnownFile(path)) {
-      return path;
-    }
-
-    // Adapt file path separator to the analyzer context separator
-    String separatorsAdjustedPath = separatorsToSystem(path);
-
+  public String relativePath(String fileName) {
     // If given path is known by the file system, we don't need to adjust the path
-    if (isKnownFile(separatorsAdjustedPath)) {
-      return separatorsAdjustedPath;
+    if (isKnownFile(fileName)) {
+      return fileName;
     }
 
-    String newPath;
+    Path path = Path.of(normalize(fileName));
+    int pathNameCount = path.getNameCount();
     // If we already calculated the offset of the relative path we can apply it to the other paths
     if (relativePathOffset > 0) {
-      if (separatorsAdjustedPath.length() < relativePathOffset) {
-        return path;
+      if (path.getNameCount() > relativePathOffset) {
+        path = path.subpath(relativePathOffset, pathNameCount);
+        if (isKnownFile(path)) {
+          return path.toString();
+        }
       }
-      newPath = separatorsAdjustedPath.substring(relativePathOffset);
-      return isKnownFile(newPath) ? newPath : path;
+      return fileName;
     }
 
-    newPath = separatorsAdjustedPath;
     // Reduce the file path by directories until the path is relative to the project directory and known by the file system
-    do {
+    for (int i = 1; i < pathNameCount; i++) {
       // Skip possible first file separator because it could be part of some absolute paths
-      newPath = newPath.substring(newPath.indexOf(File.separatorChar, 1) + 1);
-      if (isKnownFile(newPath)) {
-        relativePathOffset = separatorsAdjustedPath.indexOf(newPath);
-        return newPath;
+      Path subpath = path.subpath(i, pathNameCount);
+      if (isKnownFile(subpath)) {
+        relativePathOffset = i;
+        return subpath.toString();
       }
-    } while (newPath.contains(File.separator));
+    }
 
-    return path;
+    return fileName;
   }
 
-  /**
-   * Changes the path from the report accordingly for the file system of the analyzer context.
-   * Thus, analyzer and report creation can take place on different file systems.
-   * Inspired by <a href="https://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/FilenameUtils.html#separatorsToSystem-java.lang.String-">
-   * org.apache.commons.io.FilenameUtils::separatorsToSystem</a>
-   */
-  private static String separatorsToSystem(String path) {
-    if (File.separatorChar=='\\') {
-      // From Windows to Linux/Mac
-      return path.replace('/', File.separatorChar);
-    } else {
-      // From Linux/Mac to Windows
-      return path.replace('\\', File.separatorChar);
-    }
+  public static String normalize(String fileName) {
+    String relativeName = fileName.substring(FilenameUtils.getPrefix(fileName).length());
+    return FilenameUtils.separatorsToSystem(relativeName);
   }
 
   /**
    * Checks whether a file exists in the analyzer file system for the specified path.
    */
+  private boolean isKnownFile(Path path) {
+    return isKnownFile(path.toString());
+  }
+
   private boolean isKnownFile(String path) {
     return fileSystem.hasFiles(fileSystem.predicates().hasPath(path));
   }
