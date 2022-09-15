@@ -19,8 +19,6 @@
  */
 package com.sonar.it.php;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
@@ -47,8 +45,6 @@ public class CommonRulesTest {
 
   @BeforeClass
   public static void startServer() throws Exception {
-    createReportsWithAbsolutePath();
-
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
@@ -57,8 +53,8 @@ public class CommonRulesTest {
       .setProjectVersion("1.0")
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
-      .setProperty("sonar.php.coverage.reportPaths", REPORTS_DIR + "/.coverage-with-absolute-path.xml")
-      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml");
+      .setProperty("sonar.php.coverage.reportPaths", REPORTS_DIR + "/phpunit.coverage.xml")
+      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/phpunit.xml");
 
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
@@ -72,24 +68,6 @@ public class CommonRulesTest {
     assertThat(Tests.issuesForRule(issues,"common-php:FailedUnitTests")).hasSize(1);
     assertThat(Tests.issuesForRule(issues,"common-php:InsufficientLineCoverage")).hasSize(1);
     assertThat(Tests.issuesForRule(issues,"php:S3334")).hasSize(1);
-  }
-
-  /**
-   * Replace file name with absolute path in test and coverage report.
-   * <p/>
-   * This hack allow to have this integration test, as only absolute path
-   * in report is supported.
-   */
-  private static void createReportsWithAbsolutePath() throws Exception {
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.coverage.xml"), Charsets.UTF_8)
-        .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.coverage-with-absolute-path.xml"), Charsets.UTF_8);
-
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.xml"), Charsets.UTF_8)
-        .replace("SomeTest.php", new File(PROJECT_DIR, TESTS_DIR + "/SomeTest.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.tests-with-absolute-path.xml"), Charsets.UTF_8);
   }
 
 }

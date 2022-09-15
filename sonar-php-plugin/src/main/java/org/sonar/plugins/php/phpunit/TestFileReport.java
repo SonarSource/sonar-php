@@ -28,6 +28,7 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.plugins.php.ExternalReportFileHandler;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 
@@ -50,7 +51,8 @@ public class TestFileReport {
     this.testDuration = testDuration;
   }
 
-  public void saveTestMeasures(SensorContext context, Set<String> unresolvedInputFiles) {
+  public void saveTestMeasures(SensorContext context, ExternalReportFileHandler fileHandler, Set<String> unresolvedInputFiles) {
+    file = fileHandler.relativePath(file);
     InputFile unitTestFile = getUnitTestInputFile(context.fileSystem());
     if (unitTestFile != null) {
       context.<Integer>newMeasure().on(unitTestFile).withValue(skipped).forMetric(CoreMetrics.SKIPPED_TESTS).save();

@@ -19,9 +19,8 @@
  */
 package com.sonar.it.php;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
+import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
 import org.junit.BeforeClass;
@@ -44,91 +43,116 @@ public class PHPUnitTest {
   private static final String SOURCE_DIR = "src";
   private static final String TESTS_DIR = "tests";
   private static final String REPORTS_DIR = "reports";
+  private static final String COVERED_FILE = "src/Math.php";
+  private static final String UNCOVERED_FILE = "src/Math2.php";
+
+  private static final String TEST_FILE = "tests/SomeTest.php";
+
+
+  private final SonarScanner BUILD = SonarScanner.create()
+    .setProjectDir(PROJECT_DIR)
+    .setProjectKey(PROJECT_KEY)
+    .setProjectName(PROJECT_NAME)
+    .setProjectVersion("1.0")
+    .setSourceDirs(SOURCE_DIR)
+    .setTestDirs(TESTS_DIR);
 
   @BeforeClass
-  public static void startServer() throws Exception {
+  public static void startServer() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
-    createReportsWithAbsolutePath();
+  }
 
-    SonarScanner build = SonarScanner.create()
-      .setProjectDir(PROJECT_DIR)
-      .setProjectKey(PROJECT_KEY)
-      .setProjectName(PROJECT_NAME)
-      .setProjectVersion("1.0")
-      .setSourceDirs(SOURCE_DIR)
-      .setTestDirs(TESTS_DIR)
-      .setProperty("sonar.php.coverage.reportPaths", REPORTS_DIR + "/.coverage-with-absolute-path.xml,"
-        + REPORTS_DIR + "/.it-coverage-with-absolute-path.xml,"
-        + REPORTS_DIR + "/.overall-coverage-with-absolute-path.xml")
-      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml");
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+  public void setTestReportPath(String reportPath) {
+    BUILD.setProperty("sonar.php.tests.reportPath", reportPath);
+  }
+
+  public void setCoverageReportPaths(String reportPaths) {
+    BUILD.setProperty("sonar.php.coverage.reportPaths", reportPaths);
+  }
+
+  public BuildResult executeBuild() {
+    return orchestrator.executeBuild(BUILD);
   }
 
   @Test
-  public void tests() throws Exception {
-    assertThat(getProjectMeasureAsInt("tests")).isEqualTo(3);
-    assertThat(getProjectMeasureAsInt("test_failures")).isEqualTo(1);
-    assertThat(getProjectMeasureAsInt("test_errors")).isEqualTo(0);
+  public void tests_report_with_absolute_unix_file_paths() {
+    setTestReportPath(REPORTS_DIR + "/phpunit.tests.xml");
+    BuildResult result = executeBuild();
+
+    assertThat(getProjectMetrics("tests")).isEqualTo(3);
+    assertThat(getProjectMetrics("test_failures")).isEqualTo(1);
+    assertThat(getProjectMetrics("test_errors")).isZero();
+
+    assertThat(getFileMetrics(TEST_FILE, "tests")).isEqualTo(3);
+    assertThat(getFileMetrics(TEST_FILE, "test_failures")).isEqualTo(1);
+    assertThat(getFileMetrics(TEST_FILE, "test_errors")).isZero();
+
+    assertThat(result.getLogs()).doesNotContain("Failed to resolve 1 file path(s) in PHPUnit tests");
   }
 
   @Test
-  public void coverage() throws Exception {
-    assertThat(getProjectMeasureAsInt("conditions_to_cover")).isNull();
-    assertThat(getProjectMeasureAsInt("uncovered_conditions")).isNull();
+  public void tests_report_with_unknown_file_paths() {
+    setTestReportPath(REPORTS_DIR + "/phpunit.tests.unknown.xml");
+    BuildResult result = executeBuild();
 
-    assertThat(getCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
-    assertThat(getCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
+    assertThat(getProjectMetrics("tests")).isNull();
+    assertThat(getProjectMetrics("test_failures")).isNull();
+    assertThat(getProjectMetrics("test_errors")).isNull();
 
-    assertThat(getUnCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
-    assertThat(getUnCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
+    assertThat(getFileMetrics(TEST_FILE, "tests")).isNull();
+    assertThat(getFileMetrics(TEST_FILE, "test_failures")).isZero();
+    assertThat(getFileMetrics(TEST_FILE, "test_errors")).isZero();
 
-    assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(9);
-    assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(5);
-
-    assertThat(getCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(6);
-    assertThat(getCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(2);
-
-    assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(3);
-    assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(3);
+    assertThat(result.getLogs()).contains("Failed to resolve 1 file path(s) in PHPUnit tests");
   }
 
-  private Integer getProjectMeasureAsInt(String metricKey) {
+  @Test
+  public void coverage_report_with_absolute_unix_file_paths() {
+    setCoverageReportPaths(REPORTS_DIR + "/phpunit.coverage.xml");
+    BuildResult result = executeBuild();
+
+    assertThat(getProjectMetrics("conditions_to_cover")).isNull();
+    assertThat(getFileMetrics(COVERED_FILE,"conditions_to_cover")).isNull();
+    assertThat(getFileMetrics(UNCOVERED_FILE, "conditions_to_cover")).isNull();
+
+    assertThat(getProjectMetrics("uncovered_conditions")).isNull();
+    assertThat(getFileMetrics(COVERED_FILE,"uncovered_conditions")).isNull();
+    assertThat(getFileMetrics(UNCOVERED_FILE, "uncovered_conditions")).isNull();
+
+    assertThat(getProjectMetrics("lines_to_cover")).isEqualTo(9);
+    assertThat(getFileMetrics(COVERED_FILE, "lines_to_cover")).isEqualTo(6);
+    assertThat(getFileMetrics(UNCOVERED_FILE, "lines_to_cover")).isEqualTo(3);
+
+    assertThat(getProjectMetrics("uncovered_lines")).isEqualTo(5);
+    assertThat(getFileMetrics(COVERED_FILE, "uncovered_lines")).isEqualTo(2);
+    assertThat(getFileMetrics(UNCOVERED_FILE,"uncovered_lines")).isEqualTo(3);
+
+    assertThat(result.getLogs()).doesNotContain("Failed to resolve 1 file path(s) in PHPUnit coverage");
+  }
+
+  @Test
+  public void coverage_report_with_absolute_windows_file_paths() {
+    setCoverageReportPaths(REPORTS_DIR + "/phpunit.coverage.windows.xml");
+    executeBuild();
+
+    assertThat(getFileMetrics(COVERED_FILE, "uncovered_lines")).isEqualTo(2);
+  }
+
+  @Test
+  public void coverage_report_with_unknown_file_paths() {
+    setCoverageReportPaths(REPORTS_DIR + "/phpunit.coverage.unknown.xml");
+    BuildResult result = executeBuild();
+
+    assertThat(getFileMetrics(COVERED_FILE, "uncovered_lines")).isEqualTo(3);
+
+    assertThat(result.getLogs()).contains("Failed to resolve 1 file path(s) in PHPUnit coverage");
+  }
+
+  private Integer getProjectMetrics(String metricKey) {
     return getMeasureAsInt(PROJECT_KEY, metricKey);
   }
 
-  private Integer getCoveredFileMeasureAsInt(String metricKey) {
-    return getMeasureAsInt(PROJECT_KEY + ":src/Math.php", metricKey);
-  }
-
-  private Integer getUnCoveredFileMeasureAsInt(String metricKey) {
-    return getMeasureAsInt(PROJECT_KEY + ":src/Math2.php", metricKey);
-  }
-
-  /**
-   * Replace file name with absolute path in test and coverage report.
-   * <p/>
-   * This hack allow to have this integration test, as only absolute path
-   * in report is supported.
-   */
-  static void createReportsWithAbsolutePath() throws Exception {
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.overall.coverage.xml"), Charsets.UTF_8)
-        .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.overall-coverage-with-absolute-path.xml"), Charsets.UTF_8);
-
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.it.coverage.xml"), Charsets.UTF_8)
-        .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.it-coverage-with-absolute-path.xml"), Charsets.UTF_8);
-
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.coverage.xml"), Charsets.UTF_8)
-        .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.coverage-with-absolute-path.xml"), Charsets.UTF_8);
-
-    Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.xml"), Charsets.UTF_8)
-        .replace("SomeTest.php", new File(PROJECT_DIR, TESTS_DIR + "/SomeTest.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.tests-with-absolute-path.xml"), Charsets.UTF_8);
+  private Integer getFileMetrics(String file, String metricKey) {
+    return getMeasureAsInt(PROJECT_KEY + ":" + file, metricKey);
   }
 }
