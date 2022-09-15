@@ -156,7 +156,7 @@ public class PHPSensorTest {
 
     assertThat(descriptor.name()).isEqualTo("PHP sensor");
     assertThat(descriptor.languages()).containsOnly("php");
-    assertThat(descriptor.type()).isEqualTo(Type.MAIN);
+    assertThat(descriptor.type()).isNull();
   }
 
   @Test
@@ -173,7 +173,6 @@ public class PHPSensorTest {
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
-
   }
 
   @Test

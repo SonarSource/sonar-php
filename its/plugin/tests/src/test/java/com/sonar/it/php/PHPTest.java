@@ -34,6 +34,7 @@ public class PHPTest {
 
   private static final String MULTI_MODULE_PROJECT_KEY = "multimodule-php";
   private static final String EMPTY_FILE_PROJECT_KEY = "empty_file_project_key";
+  private static final String PROJECT_WITH_MAIN_AND_TEST_KEY = "project-with-main-and-test";
   private static final String SEVERAL_EXTENSIONS_PROJECT_KEY = "project-with-several-extensions";
   private static final String PROJECT_WITH_VENDOR_KEY = "project-with-vendor";
   private static final String SRC_DIR_NAME = "src";
@@ -124,6 +125,22 @@ public class PHPTest {
     // The file actually contains two calls to sleep(), but only one is visited due to the depth limit of the visitor.
     assertThat(issues).hasSize(1);
     assertThat(issues.get(0).getLine()).isEqualTo(105);
+  }
+
+  @Test
+  public void should_handle_project_with_only_test_files() {
+    Tests.provisionProject(PROJECT_WITH_MAIN_AND_TEST_KEY, "project main and test files", "php", "it-profile");
+    SonarScanner build = SonarScanner.create()
+      .setProjectKey(PROJECT_WITH_MAIN_AND_TEST_KEY)
+      .setProjectName("Test project")
+      .setProjectVersion("1.0")
+      .setSourceEncoding("UTF-8")
+      .setTestDirs("tests")
+      .setProjectDir(Tests.projectDirectoryFor("project-with-main-and-test"));
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+
+    List<Issues.Issue> issues = Tests.issuesForComponent(PROJECT_WITH_MAIN_AND_TEST_KEY);
+    assertThat(issues).hasSize(1);
   }
 
   private static String getResourceKey(String projectKey, String fileName) {
