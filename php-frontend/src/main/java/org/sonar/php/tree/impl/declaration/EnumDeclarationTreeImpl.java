@@ -46,7 +46,7 @@ public class EnumDeclarationTreeImpl extends ClassDeclarationTreeImpl implements
     @Nullable SyntaxToken typeColonToken, @Nullable TypeTree backingType,
     @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces, SyntaxToken openCurlyBraceToken,
     List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken) {
-    super(Kind.ENUM_DECLARATION, attributeGroups, null, enumToken, name, null, null,
+    super(Kind.ENUM_DECLARATION, attributeGroups, List.of(), enumToken, name, null, null,
       implementsToken, superInterfaces, openCurlyBraceToken, members, closeCurlyBraceToken);
     this.typeColonToken = typeColonToken;
     this.backingType = backingType;

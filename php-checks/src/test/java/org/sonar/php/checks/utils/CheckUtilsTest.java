@@ -349,6 +349,10 @@ public class CheckUtilsTest {
     return parser.parse(toParse);
   }
 
+  private ClassDeclarationTree parseClass(String toParse) {
+    return (ClassDeclarationTree) parse(toParse);
+  }
+
   private List<ClassMemberTree> parseClassMembers(String toParse) {
     return ((ClassDeclarationTree) parse("class Wrapper{" + toParse+ "}")).members();
   }

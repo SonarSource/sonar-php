@@ -147,7 +147,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .collect(Collectors.toList());
 
     ClassSymbol.Kind kind = ClassSymbol.Kind.NORMAL;
-    if (tree.is(Tree.Kind.CLASS_DECLARATION) && ((ClassDeclarationTree)tree).modifierToken() != null) {
+    if (tree.is(Tree.Kind.CLASS_DECLARATION) && ((ClassDeclarationTree)tree).isAbstract()) {
       kind = ClassSymbol.Kind.ABSTRACT;
     } else if (tree.is(Tree.Kind.INTERFACE_DECLARATION)) {
       kind = ClassSymbol.Kind.INTERFACE;

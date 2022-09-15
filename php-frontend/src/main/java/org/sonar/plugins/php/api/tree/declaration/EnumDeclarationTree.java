@@ -36,9 +36,16 @@ import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
  */
 public interface EnumDeclarationTree extends ClassDeclarationTree {
 
+  /**
+   * @deprecated - Use {@link #modifiersToken()} instead.
+   */
   @Nullable
   @Override
+  @Deprecated(since = "SonarQube 9.7", forRemoval = true)
   SyntaxToken modifierToken();
+
+  @Override
+  List<SyntaxToken> modifiersToken();
 
   @Override
   NameIdentifierTree name();

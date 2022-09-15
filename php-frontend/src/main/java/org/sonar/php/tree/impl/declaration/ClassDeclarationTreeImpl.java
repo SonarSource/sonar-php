@@ -22,6 +22,7 @@ package org.sonar.php.tree.impl.declaration;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
+
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
@@ -43,7 +44,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   private final Kind kind;
 
   private final List<AttributeGroupTree> attributeGroups;
-  private final SyntaxToken modifierToken;
+  private final List<SyntaxToken> modifiersToken;
   private final SyntaxToken classEntryTypeToken;
   private final NameIdentifierTree name;
   private final SyntaxToken extendsToken;
@@ -58,14 +59,14 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   protected ClassDeclarationTreeImpl(
       Kind kind,
       List<AttributeGroupTree> attributeGroups,
-      @Nullable SyntaxToken modifierToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,
+      List<SyntaxToken> modifiersToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,
       @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
       @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken
   ) {
     this.kind = kind;
     this.attributeGroups = attributeGroups;
-    this.modifierToken = modifierToken;
+    this.modifiersToken = modifiersToken;
     this.classEntryTypeToken = classEntryTypeToken;
     this.name = name;
     this.extendsToken = extendsToken;
@@ -80,7 +81,16 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   @Nullable
   @Override
   public SyntaxToken modifierToken() {
-    return modifierToken;
+    return modifiersToken.stream()
+            .filter(modifier -> modifier.text().equalsIgnoreCase("final")
+              || modifier.text().equalsIgnoreCase("abstract"))
+            .findFirst()
+            .orElse(null);
+  }
+
+  @Override
+  public List<SyntaxToken> modifiersToken() {
+    return modifiersToken;
   }
 
   @Override
@@ -136,6 +146,21 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
     return closeCurlyBraceToken;
   }
 
+  @Override
+  public boolean isAbstract() {
+    return modifiersToken.stream().anyMatch(token -> token.text().equalsIgnoreCase("abstract"));
+  }
+
+  @Override
+  public boolean isFinal() {
+    return modifiersToken.stream().anyMatch(token -> token.text().equalsIgnoreCase("final"));
+  }
+
+  @Override
+  public boolean isReadOnly() {
+    return modifiersToken.stream().anyMatch(token -> token.text().equalsIgnoreCase("readonly"));
+  }
+
   @Nullable
   @Override
   public MethodDeclarationTree fetchConstructor() {
@@ -167,7 +192,8 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
-      IteratorUtils.iteratorOf(modifierToken, classEntryTypeToken, name, extendsToken, superClass, implementsToken),
+      modifiersToken.iterator(),
+      IteratorUtils.iteratorOf(classEntryTypeToken, name, extendsToken, superClass, implementsToken),
       superInterfaces.elementsAndSeparators(),
       IteratorUtils.iteratorOf(openCurlyBraceToken),
       members.iterator(),
@@ -189,7 +215,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
     return new ClassDeclarationTreeImpl(
         Kind.INTERFACE_DECLARATION,
         attributes,
-        null,
+        List.of(),
         interfaceToken,
         name,
         extendsToken,
@@ -210,7 +236,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
     return new ClassDeclarationTreeImpl(
         Kind.TRAIT_DECLARATION,
         attributes,
-        null,
+        List.of(),
         traitToken,
         name,
         null,
@@ -224,15 +250,15 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   public static ClassDeclarationTree createClass(
-      List<AttributeGroupTree> attributes,
-      @Nullable InternalSyntaxToken modifierToken, InternalSyntaxToken classToken, NameIdentifierTree name,
+      List<AttributeGroupTree> attributes, List<SyntaxToken> modifiersToken,
+      InternalSyntaxToken classToken, NameIdentifierTree name,
       @Nullable InternalSyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
       @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
     return new ClassDeclarationTreeImpl(
         Kind.CLASS_DECLARATION,
         attributes,
-        modifierToken,
+        modifiersToken,
         classToken,
         name,
         extendsToken,

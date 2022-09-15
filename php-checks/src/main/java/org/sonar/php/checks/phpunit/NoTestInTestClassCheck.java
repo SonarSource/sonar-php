@@ -34,7 +34,7 @@ public class NoTestInTestClassCheck extends PhpUnitCheck {
 
   @Override
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {
-    if (!CheckUtils.isAbstract(tree)) {
+    if (!tree.isAbstract()) {
       boolean hasTestMethod = false;
       for (ClassMemberTree member : tree.members()) {
         if (member.is(Tree.Kind.METHOD_DECLARATION) && isTestCaseMethod((MethodDeclarationTree) member)) {

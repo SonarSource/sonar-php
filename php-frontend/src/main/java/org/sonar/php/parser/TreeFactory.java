@@ -656,16 +656,15 @@ public class TreeFactory {
   }
 
   public ClassDeclarationTree classDeclaration(
-    Optional<List<AttributeGroupTree>> attributes,
-    Optional<InternalSyntaxToken> modifier, InternalSyntaxToken classToken, NameIdentifierTree name,
+    Optional<List<AttributeGroupTree>> attributes, Optional<List<SyntaxToken>> modifiers,
+    InternalSyntaxToken classToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
-    InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace
-  ) {
+    InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace) {
     return ClassDeclarationTreeImpl.createClass(
       attributes.or(Collections.emptyList()),
-      modifier.orNull(), classToken, name,
-      extendsToken(extendsClause), superClass(extendsClause),
+      modifiers.or(Collections.emptyList()),
+      classToken, name, extendsToken(extendsClause), superClass(extendsClause),
       implementsToken(implementsClause), superInterfaces(implementsClause),
       openCurlyBrace, optionalList(members), closeCurlyBrace
     );

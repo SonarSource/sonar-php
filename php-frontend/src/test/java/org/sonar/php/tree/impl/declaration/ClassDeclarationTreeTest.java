@@ -25,7 +25,6 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
-import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,7 +35,8 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
     ClassDeclarationTree tree = parse("final class A extends B implements C, D { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
 
     assertThat(tree.is(Kind.CLASS_DECLARATION)).isTrue();
-    assertThat(tree.modifierToken().text()).isEqualTo("final");
+    assertThat(tree.modifiersToken()).hasSize(1);
+    assertThat(tree.modifiersToken().get(0).text()).isEqualTo("final");
     assertThat(tree.classToken().text()).isEqualTo("class");
     assertThat(tree.name().text()).isEqualTo("A");
     assertThat(tree.extendsToken().text()).isEqualTo("extends");
@@ -51,7 +51,7 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
     ClassDeclarationTree tree = parse("class A { }", PHPLexicalGrammar.CLASS_DECLARATION);
 
     assertThat(tree.is(Kind.CLASS_DECLARATION)).isTrue();
-    assertThat(tree.modifierToken()).isNull();
+    assertThat(tree.modifiersToken()).isEmpty();
     assertThat(tree.extendsToken()).isNull();
     assertThat(tree.superClass()).isNull();
     assertThat(tree.implementsToken()).isNull();
@@ -64,7 +64,7 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
     ClassDeclarationTree tree = parse("trait A { function foo(){} }", PHPLexicalGrammar.TRAIT_DECLARATION);
 
     assertThat(tree.is(Kind.TRAIT_DECLARATION)).isTrue();
-    assertThat(tree.modifierToken()).isNull();
+    assertThat(tree.modifiersToken()).isEmpty();
     assertThat(tree.classToken().text()).isEqualTo("trait");
     assertThat(tree.name().text()).isEqualTo("A");
     assertThat(tree.extendsToken()).isNull();
@@ -79,7 +79,7 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
     ClassDeclarationTree tree = parse("interface A extends B, C { function foo(); }", PHPLexicalGrammar.INTERFACE_DECLARATION);
 
     assertThat(tree.is(Kind.INTERFACE_DECLARATION)).isTrue();
-    assertThat(tree.modifierToken()).isNull();
+    assertThat(tree.modifiersToken()).isEmpty();
     assertThat(tree.classToken().text()).isEqualTo("interface");
     assertThat(tree.name().text()).isEqualTo("A");
     assertThat(tree.extendsToken()).isNotNull();
@@ -106,5 +106,65 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
     ClassDeclarationTree tree = parse("#[A1,] class A {}", PHPLexicalGrammar.CLASS_DECLARATION);
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
+  }
+
+  @Test
+  public void readonly_class_declaration() {
+    ClassDeclarationTree tree1 = parse("readonly class A { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree1.is(Kind.CLASS_DECLARATION)).isTrue();
+    assertThat(tree1.modifiersToken()).hasSize(1);
+    assertThat(tree1.modifiersToken().get(0).text()).isEqualTo("readonly");
+    assertThat(tree1.members()).hasSize(1);
+
+    ClassDeclarationTree tree2 = parse("abstract readonly class A { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree2.is(Kind.CLASS_DECLARATION)).isTrue();
+    assertThat(tree2.modifiersToken()).hasSize(2);
+    assertThat(tree2.modifiersToken().get(1).text()).isEqualTo("readonly");
+    assertThat(tree2.members()).hasSize(1);
+
+    ClassDeclarationTree tree3 = parse("readonly abstract class A { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree3.is(Kind.CLASS_DECLARATION)).isTrue();
+    assertThat(tree3.modifiersToken()).hasSize(2);
+    assertThat(tree3.modifiersToken().get(0).text()).isEqualTo("readonly");
+    assertThat(tree3.members()).hasSize(1);
+  }
+
+  @Test
+  public void class_declaration_tree_helpers() {
+    ClassDeclarationTree tree1 = parse("class A { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree1.isAbstract()).isFalse();
+    assertThat(tree1.isFinal()).isFalse();
+    assertThat(tree1.isReadOnly()).isFalse();
+    assertThat(tree1.modifierToken()).isNull();
+
+    ClassDeclarationTree tree2 = parse("abstract class A { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree2.isAbstract()).isTrue();
+    assertThat(tree2.isFinal()).isFalse();
+    assertThat(tree2.isReadOnly()).isFalse();
+    assertThat(tree2.modifierToken().text()).isEqualTo("abstract");
+
+    ClassDeclarationTree tree3 = parse("final class A { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree3.isAbstract()).isFalse();
+    assertThat(tree3.isFinal()).isTrue();
+    assertThat(tree3.isReadOnly()).isFalse();
+    assertThat(tree3.modifierToken().text()).isEqualTo("final");
+
+    ClassDeclarationTree tree4 = parse("readonly class A { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree4.isAbstract()).isFalse();
+    assertThat(tree4.isFinal()).isFalse();
+    assertThat(tree4.isReadOnly()).isTrue();
+    assertThat(tree4.modifierToken()).isNull();
+
+    ClassDeclarationTree tree5 = parse("abstract readonly class A { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree5.isAbstract()).isTrue();
+    assertThat(tree5.isFinal()).isFalse();
+    assertThat(tree5.isReadOnly()).isTrue();
+    assertThat(tree5.modifierToken().text()).isEqualTo("abstract");
+
+    ClassDeclarationTree tree6 = parse("final readonly class A { public $var; }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree6.isAbstract()).isFalse();
+    assertThat(tree6.isFinal()).isTrue();
+    assertThat(tree6.isReadOnly()).isTrue();
+    assertThat(tree6.modifierToken().text()).isEqualTo("final");
   }
 }

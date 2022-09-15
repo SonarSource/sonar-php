@@ -51,9 +51,17 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
 
   /**
    * Either {@link PHPKeyword#ABSTRACT abstract} or {@link PHPKeyword#FINAL final}
+   * @deprecated - Use {@link #modifiersToken()} instead.
    */
   @Nullable
+  @Deprecated(since = "SonarQube 9.7", forRemoval = true)
   SyntaxToken modifierToken();
+
+  /**
+   * Contain modifier tokens : {@link PHPKeyword#ABSTRACT abstract},
+   * {@link PHPKeyword#FINAL final} and/or {@link PHPKeyword#READONLY readonly}
+   */
+  List<SyntaxToken> modifiersToken();
 
   /**
    * Either {@link PHPKeyword#CLASS class}, {@link PHPKeyword#TRAIT trait},
@@ -87,4 +95,8 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
 
   @Override
   SyntaxToken closeCurlyBraceToken();
+
+  boolean isAbstract();
+  boolean isFinal();
+  boolean isReadOnly();
 }
