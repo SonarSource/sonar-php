@@ -23,10 +23,12 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import static com.sonar.it.php.Tests.getAnalysisWarnings;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReportWithUnresolvedPathTest {
@@ -34,25 +36,31 @@ public class ReportWithUnresolvedPathTest {
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "report-with-unresolved-path";
-  private static final String PROJECT_NAME = "Report With Unresolved Path";
+  private static final String PROJECT_NAME = "ReportWithUnresolvedPath";
 
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("phpunit");
 
+  private static final Predicate<String> WARNING = s -> s.startsWith("WARN:");
+
   @Test
-  public void should_log_a_warning() throws Exception {
+  public void should_log_a_warning() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
-      .setProjectKey("project")
-      .setProjectName("project")
+      .setProjectKey(PROJECT_NAME)
+      .setProjectName(PROJECT_KEY)
       .setProjectVersion("1.0")
       .setSourceDirs("src")
       .setTestDirs("tests")
       .setProperty("sonar.php.coverage.reportPaths", "reports/phpunit.coverage.xml");
     BuildResult result = orchestrator.executeBuild(build);
-    String logs = result.getLogs();
-    Pattern expected = Pattern.compile("WARN:\\s+Failed to resolve 1 file path\\(s\\) in PHPUnit coverage phpunit\\.coverage\\.xml report\\. Nothing is imported related to file\\(s\\): Math\\.php");
-    assertThat(expected.matcher(logs).find()).isTrue();
+
+    Pattern coverageWarningPattern = Pattern.compile("Failed to resolve 1 file path\\(s\\) in PHPUnit coverage " +
+      "phpunit\\.coverage\\.xml report\\. Nothing is imported related to file\\(s\\): Math\\.php");
+    Predicate<String> coverageWarning = s -> coverageWarningPattern.matcher(s).find();
+
+    assertThat(result.getLogsLines(WARNING).stream().anyMatch(coverageWarning)).isTrue();
+    assertThat(getAnalysisWarnings(PROJECT_NAME).stream().anyMatch(coverageWarning)).isTrue();
   }
 
 }
