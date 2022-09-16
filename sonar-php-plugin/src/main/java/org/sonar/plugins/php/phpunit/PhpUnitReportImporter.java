@@ -28,11 +28,12 @@ import java.util.stream.Collectors;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.plugins.php.ExternalReportFileHandler;
+import org.sonar.plugins.php.ReportImporter;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.ExternalReportProvider;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 
-public abstract class PhpUnitReportImporter implements ReportImporter {
+public abstract class PhpUnitReportImporter extends ReportImporter {
   private static final int MAX_LOGGED_FILE_NAMES = 5;
 
   protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
@@ -46,6 +47,7 @@ public abstract class PhpUnitReportImporter implements ReportImporter {
 
   @Override
   public final void execute(SensorContext context) {
+    prepareExclusions(context);
     fileHandler = ExternalReportFileHandler.create(context);
     List<File> reportFiles = reportFiles(context);
     reportFiles.forEach(report -> {

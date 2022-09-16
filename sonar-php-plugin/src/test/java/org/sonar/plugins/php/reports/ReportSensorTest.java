@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.junit.Test;
@@ -33,6 +35,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
+import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.LogTester;
@@ -67,6 +70,10 @@ public abstract class ReportSensorTest {
   }
 
   protected List<ExternalIssue> executeSensorImporting(@Nullable String fileName) throws IOException {
+    return executeSensorImporting(fileName, Collections.emptyMap());
+  }
+
+  protected List<ExternalIssue> executeSensorImporting(@Nullable String fileName, Map<String, String> additionalProperties) throws IOException {
     Path projectDir = projectDir();
     Path baseDir = projectDir.getParent();
     SensorContextTester context = SensorContextTester.create(baseDir);
@@ -74,8 +81,10 @@ public abstract class ReportSensorTest {
       fileStream.forEach(file -> addFileToContext(context, baseDir, file));
       context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(8, 9), SonarQubeSide.SERVER, SonarEdition.DEVELOPER));
       if (fileName != null) {
+        MapSettings settings = context.settings();
         String path = projectDir.resolve(fileName).toAbsolutePath().toString();
-        context.settings().setProperty("sonar.php." + sensor().reportKey() + ".reportPaths", path);
+        settings.setProperty("sonar.php." + sensor().reportKey() + ".reportPaths", path);
+        additionalProperties.forEach(settings::setProperty);
       }
       sensor().execute(context);
       return new ArrayList<>(context.allExternalIssues());

@@ -104,7 +104,7 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
       saveCoverageLineHitsData(fileNode, inputFile, context);
 
       // Saving the uncovered statements (lines) is no longer needed because coverage metrics are internally derived by the NewCoverage
-    } else {
+    } else if (!isExcluded(path)) {
       unresolvedInputFiles.add(path);
     }
   }
