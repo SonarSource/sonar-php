@@ -24,6 +24,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.io.FilenameUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.sonar.api.batch.fs.TextRange;
@@ -40,6 +43,7 @@ import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -48,7 +52,6 @@ public class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", "phpstan");
-
   protected final PhpStanSensor phpStanSensor = new PhpStanSensor(analysisWarnings);
 
   @Rule
@@ -70,7 +73,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue() throws IOException {
+  public void raise_issue_with_unix_path() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report.json");
     assertThat(externalIssues).hasSize(3);
 
@@ -111,6 +114,29 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
+  public void raise_issue_with_windows_path() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report_win.json");
+    assertThat(externalIssues).hasSize(3);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  @Test
+  public void issues_when_phpstan_file_with_absolute_unix_paths() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-abs.json");
+    assertThat(externalIssues).hasSize(3);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+  @Test
+  public void issues_when_phpstan_file_with_absolute_windows_paths() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-abs_win.json");
+    assertThat(externalIssues).hasSize(3);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  @Test
   public void issues_when_phpstan_file_has_errors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-error.json");
     assertThat(externalIssues).hasSize(1);
@@ -126,14 +152,12 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(firstTextRange).isNull();
 
     assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).isEqualTo("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. " +
-      "No issues imported related to file(s): phpstan/notExistingFile1.php;phpstan/notExistingFile10.php;phpstan/notExistingFile11.php;phpstan/notExistingFile12.php;phpstan/notExistingFile13.php;...");
+    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).startsWith("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report.");
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.DEBUG)))
       .isEqualTo("Missing information for filePath:'', message:'Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.'");
 
     verify(analysisWarnings, times(1))
-      .addWarning("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. " +
-        "No issues imported related to file(s): phpstan/notExistingFile1.php;phpstan/notExistingFile10.php;phpstan/notExistingFile11.php;phpstan/notExistingFile12.php;phpstan/notExistingFile13.php;...");
+      .addWarning(startsWith("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report."));
   }
 
   @Test
@@ -194,5 +218,14 @@ public class PhpStanSensorTest extends ReportSensorTest {
   @Override
   protected LogTester logTester() {
     return logTester;
+  }
+
+  private static String loggedFilePaths(boolean overflow, String... filePath) {
+    List<String> pathList = Stream.of(filePath).limit(5).map(FilenameUtils::separatorsToSystem).collect(Collectors.toList());
+    String log = String.join(";", pathList);
+    if (overflow) {
+      log += ";...";
+    }
+    return log;
   }
 }
