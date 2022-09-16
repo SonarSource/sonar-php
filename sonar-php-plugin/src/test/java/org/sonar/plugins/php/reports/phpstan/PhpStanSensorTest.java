@@ -115,7 +115,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
 
   @Test
   public void raise_issue_with_windows_path() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report_win.json ");
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report_win.json");
     assertThat(externalIssues).hasSize(3);
 
     assertNoErrorWarnDebugLogs(logTester);
