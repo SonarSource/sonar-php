@@ -115,8 +115,7 @@ public class PHPSensor implements Sensor {
   public void describe(SensorDescriptor descriptor) {
     descriptor
       .onlyOnLanguage(Php.KEY)
-      .name("PHP sensor")
-      .onlyOnFileType(Type.MAIN);
+      .name("PHP sensor");
   }
 
   @Override
