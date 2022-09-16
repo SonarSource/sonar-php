@@ -25,6 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.io.FilenameUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.sonar.api.batch.fs.TextRange;
@@ -71,8 +74,8 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting(reportPath("phpstan-report.json"));
+  public void raise_issue_with_unix_path() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report.json");
     assertThat(externalIssues).hasSize(3);
 
     List<Integer> orderOfIssues = SEPARATOR_CHAR == '\\' ? List.of(2, 0, 1) : List.of(0, 1, 2);
@@ -113,8 +116,23 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void issues_when_phpstan_file_has_fqn_paths() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting(reportPath("phpstan-report-fqn.json"));
+  public void raise_issue_with_windows_path() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report_win.json ");
+    assertThat(externalIssues).hasSize(3);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  @Test
+  public void issues_when_phpstan_file_with_absolute_unix_paths() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-abs.json");
+    assertThat(externalIssues).hasSize(3);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+  @Test
+  public void issues_when_phpstan_file_with_absolute_windows_paths() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-abs_win.json");
     assertThat(externalIssues).hasSize(3);
 
     assertNoErrorWarnDebugLogs(logTester);
@@ -122,7 +140,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
 
   @Test
   public void issues_when_phpstan_file_has_errors() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting(reportPath("phpstan-report-with-error.json"));
+    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-error.json");
     assertThat(externalIssues).hasSize(1);
 
     ExternalIssue first = externalIssues.get(0);
@@ -135,15 +153,17 @@ public class PhpStanSensorTest extends ReportSensorTest {
     TextRange firstTextRange = firstPrimaryLoc.textRange();
     assertThat(firstTextRange).isNull();
 
+    String loggedFilePaths = loggedFilePaths(true,"phpstan/notExistingFile1.php", "phpstan/notExistingFile10.php", "phpstan/notExistingFile11.php", "phpstan/notExistingFile12.php", "phpstan/notExistingFile13.php");
+
     assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).isEqualTo("Failed to resolve 22 file path(s) in PHPStan "+reportPath("phpstan-report-with-error.json")+" report. " +
-      "No issues imported related to file(s): "+osIndependentPath("phpstan/notExistingFile1.php;phpstan/notExistingFile10.php;phpstan/notExistingFile11.php;phpstan/notExistingFile12.php;phpstan/notExistingFile13.php;..."));
+    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).isEqualTo("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. " +
+      "No issues imported related to file(s): " + loggedFilePaths);
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.DEBUG)))
       .isEqualTo("Missing information for filePath:'', message:'Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.'");
 
     verify(analysisWarnings, times(1))
-      .addWarning("Failed to resolve 22 file path(s) in PHPStan "+reportPath("phpstan-report-with-error.json")+" report. " +
-        "No issues imported related to file(s): "+osIndependentPath("phpstan/notExistingFile1.php;phpstan/notExistingFile10.php;phpstan/notExistingFile11.php;phpstan/notExistingFile12.php;phpstan/notExistingFile13.php;..."));
+      .addWarning("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. " +
+        "No issues imported related to file(s): " + loggedFilePaths);
   }
 
   @Test
@@ -206,21 +226,12 @@ public class PhpStanSensorTest extends ReportSensorTest {
     return logTester;
   }
 
-  private static String osIndependentPath(String path){
-    if (SEPARATOR_CHAR == '\\'){
-      path =  path.replace("/", "\\");
+  private static String loggedFilePaths(boolean overflow, String... filePath) {
+    List<String> pathList = Stream.of(filePath).limit(5).map(FilenameUtils::separatorsToSystem).collect(Collectors.toList());
+    String log = String.join(";", pathList);
+    if (overflow) {
+      log += ";...";
     }
-    return path;
-  }
-
-  private static String reportPath(String path){
-    if (SEPARATOR_CHAR == '\\'){
-      path =  path.replace("/", "\\");
-      StringBuilder builder = new StringBuilder(path);
-      int index = builder.lastIndexOf(".");
-      builder.replace(index, index+1, "_win.");
-      return builder.toString();
-    }
-    return path;
+    return log;
   }
 }

@@ -4,7 +4,7 @@
     "file_errors": 1
   },
   "files": {
-    "\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\phpstan\\file1.php": {
+    "C:\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\phpstan\\file1.php": {
       "errors": 1,
       "messages": [
         {
@@ -14,7 +14,7 @@
         }
       ]
     },
-    "\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\phpstan\\file2.php": {
+    "C:\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\phpstan\\file2.php": {
       "messages": [
         {
           "message": "Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.",

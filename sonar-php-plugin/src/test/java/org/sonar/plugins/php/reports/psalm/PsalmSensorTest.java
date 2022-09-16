@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.reports.psalm;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -119,8 +118,16 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue_file_has_fqn_paths() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting(reportPath("psalm-report-fqn.json"));
+  public void raise_issue_file_has_unix_absolute_paths() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-abs.json");
+    assertThat(externalIssues).hasSize(3);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  @Test
+  public void raise_issue_file_has_windows_absolute_paths() throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-abs_win.json");
     assertThat(externalIssues).hasSize(3);
 
     assertNoErrorWarnDebugLogs(logTester);
@@ -263,16 +270,5 @@ public class PsalmSensorTest extends ReportSensorTest {
   @Override
   protected LogTester logTester() {
     return logTester;
-  }
-
-  private static String reportPath(String path){
-    if (File.separatorChar =='\\'){
-      path =  path.replace("/", "\\");
-      StringBuilder builder = new StringBuilder(path);
-      int index = builder.lastIndexOf(".");
-      builder.replace(index, index+1, "_win.");
-      return builder.toString();
-    }
-    return path;
   }
 }

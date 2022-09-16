@@ -5,7 +5,7 @@
       "ruleId": "InvalidScalarArgument",
       "primaryLocation": {
         "message": "Argument 1 of foo expects int, \"not an int\" provided",
-        "filePath": "\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\psalm\\file1.php",
+        "filePath": "C:\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\psalm\\file1.php",
         "textRange": {
           "startLine": 5,
           "endLine": 5,
@@ -21,7 +21,7 @@
       "ruleId": "InvalidScalarArgument",
       "primaryLocation": {
         "message": "Second issue on file1.php",
-        "filePath": "\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\psalm\\file1.php",
+        "filePath": "C:\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\psalm\\file1.php",
         "textRange": {
           "startLine": 2,
           "endLine": 2,
@@ -37,7 +37,7 @@
       "ruleId": "InvalidScalarArgument",
       "primaryLocation": {
         "message": "Argument 1 of foo expects int, \"not an int\" provided",
-        "filePath": "\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\psalm\\file2.php",
+        "filePath": "C:\\foo\\bar\\src\\test\\resources\\org\\sonar\\plugins\\php\\reports\\psalm\\file2.php",
         "textRange": {
           "startLine": 5,
           "endLine": 5,
