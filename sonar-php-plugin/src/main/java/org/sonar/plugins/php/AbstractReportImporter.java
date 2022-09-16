@@ -19,9 +19,12 @@
  */
 package org.sonar.plugins.php;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.PathUtils;
 import org.sonar.api.utils.WildcardPattern;
@@ -42,6 +45,27 @@ public abstract class AbstractReportImporter implements ReportImporter {
   public void execute(SensorContext context) {
     exclusionPatterns = ExclusionPattern.create(context.config().getStringArray("sonar.exclusion"));
     fileHandler = ExternalReportFileHandler.create(context);
+    List<File> reportFiles = getReportFiles(context);
+
+    reportFiles.forEach(report -> {
+      unresolvedInputFiles.clear();
+      importExternalReport(report, context);
+      logUnresolvedInputFiles(report);
+    });
+  }
+
+  protected void importExternalReport(File reportPath, SensorContext context) {
+    try {
+      importReport(reportPath, context);
+    } catch (Exception e) {
+      logFileCantBeRead(e, reportPath);
+    }
+  }
+
+  public void logFileCantBeRead(Exception e, File reportPath) {
+    String msg = getFileReadErrorMessage(e, reportPath);
+    logger().error(msg);
+    analysisWarningsWrapper.addWarning(msg);
   }
 
   protected void addUnresolvedInputFile(String filePath) {
@@ -62,6 +86,20 @@ public abstract class AbstractReportImporter implements ReportImporter {
       }
     }
     return false;
+  }
+
+  private void logUnresolvedInputFiles(File reportPath) {
+    if (unresolvedInputFiles.isEmpty()) {
+      return;
+    }
+    String fileList = unresolvedInputFiles.stream().sorted().limit(MAX_LOGGED_FILE_NAMES).collect(Collectors.joining(";"));
+    if (unresolvedInputFiles.size() > MAX_LOGGED_FILE_NAMES) {
+      fileList += ";...";
+    }
+    String msg = String.format(getUnresolvedInputFileMessageFormat(),
+      unresolvedInputFiles.size(), reportName(), reportPath.getName(), fileList);
+    logger().warn(msg);
+    analysisWarningsWrapper.addWarning(msg);
   }
 
   /**

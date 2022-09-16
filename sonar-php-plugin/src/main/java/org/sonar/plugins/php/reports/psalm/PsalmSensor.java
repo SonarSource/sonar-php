@@ -44,7 +44,7 @@ public class PsalmSensor extends ExternalIssuesSensor {
   }
 
   @Override
-  protected void importReport(File reportPath, SensorContext context) throws IOException, ParseException {
+  public void importReport(File reportPath, SensorContext context) throws IOException, ParseException {
     InputStream in = new FileInputStream(reportPath);
     LOG.info("Importing {}", reportPath);
     PsalmJsonReportReader.read(in, issue -> saveIssue(context, issue));

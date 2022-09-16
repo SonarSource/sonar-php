@@ -19,6 +19,8 @@
  */
 package org.sonar.plugins.php;
 
+import java.io.File;
+import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 
@@ -33,5 +35,12 @@ public interface ReportImporter {
   String reportName();
 
   Logger logger();
+
+  List<File> getReportFiles(SensorContext context);
+
+  void importReport(File coverageReportFile, SensorContext context) throws Exception;
+  String getFileReadErrorMessage(Exception e, File reportPath);
+
+  String getUnresolvedInputFileMessageFormat();
 
 }

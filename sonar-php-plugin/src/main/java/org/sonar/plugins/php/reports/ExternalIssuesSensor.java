@@ -21,9 +21,7 @@ package org.sonar.plugins.php.reports;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.api.batch.fs.InputFile;
@@ -49,6 +47,7 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   private static final Severity DEFAULT_SEVERITY = Severity.MAJOR;
   private static final String READ_ERROR_MSG_FORMAT = "An error occurred when reading report file '%s', no issue will be imported from this report.\n%s";
 
+  private static final String UNRESOLVED_INPUT_FILE_MESSAGE_FORMAT = "Failed to resolve %s file path(s) in %s %s report. No issues imported related to file(s): %s";
   public final String defaultRuleId = reportKey() + ".finding";
 
 
@@ -65,39 +64,15 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   }
 
   @Override
-  public void execute(SensorContext context) {
-    super.execute(context);
-    List<File> reportFiles = ExternalReportProvider.getReportFiles(context, reportPathKey());
-    reportFiles.forEach(report -> {
-      unresolvedInputFiles.clear();
-      importExternalReport(report, context);
-      logUnresolvedInputFiles(report);
-    });
+  public List<File> getReportFiles(SensorContext context) {
+    return ExternalReportProvider.getReportFiles(context, reportPathKey());
   }
 
-  private void importExternalReport(File reportPath, SensorContext context) {
-    try {
-      importReport(reportPath, context);
-    } catch (IOException | ParseException | RuntimeException e) {
-      logFileCantBeRead(e, reportPath);
-    }
+  public String getUnresolvedInputFileMessageFormat() {
+    return UNRESOLVED_INPUT_FILE_MESSAGE_FORMAT;
   }
 
-  private void logUnresolvedInputFiles(File reportPath) {
-    if (unresolvedInputFiles.isEmpty()) {
-      return;
-    }
-    String fileList = unresolvedInputFiles.stream().sorted().limit(MAX_LOGGED_FILE_NAMES).collect(Collectors.joining(";"));
-    if (unresolvedInputFiles.size() > MAX_LOGGED_FILE_NAMES) {
-      fileList += ";...";
-    }
-    String msg = String.format("Failed to resolve %s file path(s) in %s %s report. No issues imported related to file(s): %s",
-      unresolvedInputFiles.size(), reportName(), reportPath.getName(), fileList);
-    logger().warn(msg);
-    analysisWarningsWrapper.addWarning(msg);
-  }
-
-  private void logFileCantBeRead(Exception e, File reportPath) {
+  public String getFileReadErrorMessage(Exception e, File reportPath) {
     String additionalMsg = e.getClass().getSimpleName() + ": " + e.getMessage();
     if (e instanceof ParseException || e instanceof ClassCastException) {
       additionalMsg = "The content of the file probably does not have the expected format.";
@@ -105,9 +80,7 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
       additionalMsg = "The file was not found.";
     }
 
-    String msg = String.format(READ_ERROR_MSG_FORMAT, reportPath, additionalMsg);
-    logger().error(msg);
-    analysisWarningsWrapper.addWarning(msg);
+    return String.format(READ_ERROR_MSG_FORMAT, reportPath, additionalMsg);
   }
 
   private static boolean isEmpty(@Nullable String str) {
@@ -208,8 +181,6 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   protected boolean shouldExecute(Configuration conf) {
     return conf.hasKey(reportPathKey());
   }
-
-  protected abstract void importReport(File reportPath, SensorContext context) throws IOException, ParseException;
 
   protected abstract String reportKey();
 
