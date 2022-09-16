@@ -33,7 +33,6 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.plugins.php.ExternalReportFileHandler;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -75,7 +74,6 @@ public class CoverageResultImporterTest {
     context.fileSystem().add(monkeyFile);
 
     importer = new CoverageResultImporter(analysisWarnings);
-    importer.fileHandler = ExternalReportFileHandler.create(context);
   }
 
   @Test
@@ -94,7 +92,7 @@ public class CoverageResultImporterTest {
   public void should_parse_even_with_package_node() throws Exception {
     String componentKey = componentKey(MONKEY_FILE_NAME);
 
-    importer.importReport(getReportFile("phpunit.coverage-with-package.xml"), context);
+    executeSensorImporting(getReportFile("phpunit.coverage-with-package.xml"));
 
     assertCoverageLineHits(context, componentKey, 34, 1);
   }
@@ -168,7 +166,7 @@ public class CoverageResultImporterTest {
   public void should_not_fail_if_no_statement_count() throws Exception {
     String componentKey = componentKey(MONKEY_FILE_NAME);
 
-    importer.importReport(getReportFile("phpunit.coverage-with-no-statements-covered.xml"), context);
+    executeSensorImporting(getReportFile("phpunit.coverage-with-no-statements-covered.xml"));
 
     assertCoverageLineHits(context, componentKey, 31, 0);
   }
@@ -179,9 +177,9 @@ public class CoverageResultImporterTest {
   @Test
   public void should_not_fail_if_no_line_for_file_node() throws Exception {
     try {
-      importer.importReport(getReportFile("phpunit.coverage-with-filenode-without-line.xml"), context);
+      executeSensorImporting(getReportFile("phpunit.coverage-with-filenode-without-line.xml"));
     } catch (Exception e) {
-      fail("Shound never happen");
+      fail("Should never happen");
     }
   }
 
@@ -189,7 +187,7 @@ public class CoverageResultImporterTest {
   public void should_not_set_metrics_to_ncloc_for_missing_files_sq_62() throws Exception {
     String componentKey = componentKey("Monkey.php");
 
-    importer.importReport(getReportFile("phpunit.coverage-empty.xml"), context);
+    executeSensorImporting(getReportFile("phpunit.coverage-empty.xml"));
 
     // since SQ 6.2 these are not saved
     assertThat(context.measure(componentKey, CoreMetrics.LINES_TO_COVER)).isNull();

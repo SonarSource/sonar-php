@@ -46,7 +46,7 @@ public class TestResultImporter extends PhpUnitReportImporter {
     LOG.info("Importing {}", reportFile);
     TestSuites testSuites = parser.parse(reportFile);
     for (TestFileReport fileReport : testSuites.arrangeSuitesIntoTestFileReports()) {
-      fileReport.saveTestMeasures(context, fileHandler, unresolvedInputFiles, this::isExcluded);
+      fileReport.saveTestMeasures(context, fileHandler, this::addUnresolvedInputFile);
     }
   }
 
@@ -73,17 +73,17 @@ public class TestResultImporter extends PhpUnitReportImporter {
   }
 
   @Override
-  String reportPathKey() {
+  public String reportPathKey() {
     return PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY;
   }
 
   @Override
-  String reportName() {
+  public String reportName() {
     return "PHPUnit tests";
   }
 
   @Override
-  Logger logger() {
+  public Logger logger() {
     return LOG;
   }
 }

@@ -22,9 +22,7 @@ package org.sonar.plugins.php.reports;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
@@ -37,17 +35,14 @@ import org.sonar.api.batch.sensor.issue.NewExternalIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.rules.RuleType;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.plugins.php.ReportImporter;
-import org.sonar.plugins.php.ExternalReportFileHandler;
-import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
+import org.sonar.plugins.php.AbstractReportImporter;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.ExternalReportProvider;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
-public abstract class ExternalIssuesSensor extends ReportImporter implements Sensor {
-  private static final int MAX_LOGGED_FILE_NAMES = 5;
+public abstract class ExternalIssuesSensor extends AbstractReportImporter implements Sensor {
   protected static final Long DEFAULT_CONSTANT_DEBT_MINUTES = 5L;
 
   private static final RuleType DEFAULT_RULE_TYPE = RuleType.CODE_SMELL;
@@ -55,12 +50,10 @@ public abstract class ExternalIssuesSensor extends ReportImporter implements Sen
   private static final String READ_ERROR_MSG_FORMAT = "An error occurred when reading report file '%s', no issue will be imported from this report.\n%s";
 
   public final String defaultRuleId = reportKey() + ".finding";
-  protected final Set<String> unresolvedInputFiles = new LinkedHashSet<>();
-  private final AnalysisWarningsWrapper analysisWarningsWrapper;
-  protected ExternalReportFileHandler fileHandler;
+
 
   protected ExternalIssuesSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
-    this.analysisWarningsWrapper = analysisWarningsWrapper;
+    super(analysisWarningsWrapper);
   }
 
   @Override
@@ -73,8 +66,7 @@ public abstract class ExternalIssuesSensor extends ReportImporter implements Sen
 
   @Override
   public void execute(SensorContext context) {
-    prepareExclusions(context);
-    fileHandler = ExternalReportFileHandler.create(context);
+    super.execute(context);
     List<File> reportFiles = ExternalReportProvider.getReportFiles(context, reportPathKey());
     reportFiles.forEach(report -> {
       unresolvedInputFiles.clear();
@@ -136,9 +128,7 @@ public abstract class ExternalIssuesSensor extends ReportImporter implements Sen
 
     InputFile inputFile = inputFile(context, issue.filePath);
     if (inputFile == null) {
-      if (!isExcluded(issue.filePath)) {
-        unresolvedInputFiles.add(issue.filePath);
-      }
+      addUnresolvedInputFile(issue.filePath);
       return;
     }
 
@@ -221,13 +211,7 @@ public abstract class ExternalIssuesSensor extends ReportImporter implements Sen
 
   protected abstract void importReport(File reportPath, SensorContext context) throws IOException, ParseException;
 
-  protected abstract String reportName();
-
   protected abstract String reportKey();
-
-  protected abstract String reportPathKey();
-
-  protected abstract Logger logger();
 
   protected abstract ExternalRuleLoader externalRuleLoader();
 
