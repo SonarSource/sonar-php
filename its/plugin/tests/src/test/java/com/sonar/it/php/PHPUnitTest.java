@@ -28,6 +28,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import static com.sonar.it.php.Tests.ORCHESTRATOR;
+import static com.sonar.it.php.Tests.getAnalysisWarnings;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +47,7 @@ public class PHPUnitTest {
   private static final String COVERED_FILE = "src/Math.php";
   private static final String UNCOVERED_FILE = "src/Math2.php";
 
-  private static final String TEST_FILE = "tests/SomeTest.php";
+  private static final String TEST_FILE = "tests/MathTest.php";
 
 
   private final SonarScanner BUILD = SonarScanner.create()
@@ -79,15 +80,16 @@ public class PHPUnitTest {
     setTestReportPath(REPORTS_DIR + "/phpunit.tests.xml");
     BuildResult result = executeBuild();
 
-    assertThat(getProjectMetrics("tests")).isEqualTo(3);
+    assertThat(getProjectMetrics("tests")).isEqualTo(2);
     assertThat(getProjectMetrics("test_failures")).isEqualTo(1);
     assertThat(getProjectMetrics("test_errors")).isZero();
 
-    assertThat(getFileMetrics(TEST_FILE, "tests")).isEqualTo(3);
+    assertThat(getFileMetrics(TEST_FILE, "tests")).isEqualTo(2);
     assertThat(getFileMetrics(TEST_FILE, "test_failures")).isEqualTo(1);
     assertThat(getFileMetrics(TEST_FILE, "test_errors")).isZero();
 
     assertThat(result.getLogs()).doesNotContain("Failed to resolve 1 file path(s) in PHPUnit tests");
+    assertThat(getAnalysisWarnings(result)).isEmpty();
   }
 
   @Test
@@ -104,6 +106,8 @@ public class PHPUnitTest {
     assertThat(getFileMetrics(TEST_FILE, "test_errors")).isZero();
 
     assertThat(result.getLogs()).contains("Failed to resolve 1 file path(s) in PHPUnit tests");
+    assertThat(getAnalysisWarnings(result)).hasSize(1);
+    assertThat(getAnalysisWarnings(result).get(0)).contains("Failed to resolve 1 file path(s) in PHPUnit tests");
   }
 
   @Test
@@ -119,15 +123,16 @@ public class PHPUnitTest {
     assertThat(getFileMetrics(COVERED_FILE,"uncovered_conditions")).isNull();
     assertThat(getFileMetrics(UNCOVERED_FILE, "uncovered_conditions")).isNull();
 
-    assertThat(getProjectMetrics("lines_to_cover")).isEqualTo(9);
+    assertThat(getProjectMetrics("lines_to_cover")).isEqualTo(12);
     assertThat(getFileMetrics(COVERED_FILE, "lines_to_cover")).isEqualTo(6);
-    assertThat(getFileMetrics(UNCOVERED_FILE, "lines_to_cover")).isEqualTo(3);
+    assertThat(getFileMetrics(UNCOVERED_FILE, "lines_to_cover")).isEqualTo(6);
 
-    assertThat(getProjectMetrics("uncovered_lines")).isEqualTo(5);
+    assertThat(getProjectMetrics("uncovered_lines")).isEqualTo(8);
     assertThat(getFileMetrics(COVERED_FILE, "uncovered_lines")).isEqualTo(2);
-    assertThat(getFileMetrics(UNCOVERED_FILE,"uncovered_lines")).isEqualTo(3);
+    assertThat(getFileMetrics(UNCOVERED_FILE,"uncovered_lines")).isEqualTo(6);
 
     assertThat(result.getLogs()).doesNotContain("Failed to resolve 1 file path(s) in PHPUnit coverage");
+    assertThat(getAnalysisWarnings(result)).isEmpty();
   }
 
   @Test
@@ -146,6 +151,7 @@ public class PHPUnitTest {
     assertThat(getFileMetrics(COVERED_FILE, "uncovered_lines")).isEqualTo(3);
 
     assertThat(result.getLogs()).contains("Failed to resolve 1 file path(s) in PHPUnit coverage");
+    assertThat(getAnalysisWarnings(result)).hasSize(1);
   }
 
   private Integer getProjectMetrics(String metricKey) {

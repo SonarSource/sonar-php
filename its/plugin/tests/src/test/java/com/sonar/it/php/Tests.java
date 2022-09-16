@@ -29,19 +29,19 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.sonarqube.ws.Ce;
 import org.sonarqube.ws.Components;
 import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.Measures;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.WsClient;
 import org.sonarqube.ws.client.WsClientFactories;
-import org.sonarqube.ws.client.ce.ActivityRequest;
 import org.sonarqube.ws.client.ce.CeService;
 import org.sonarqube.ws.client.ce.TaskRequest;
 import org.sonarqube.ws.client.components.TreeRequest;
@@ -59,9 +59,7 @@ import static org.assertj.core.api.Assertions.assertThat;
   NoSonarTest.class,
   PHPIntegrationTest.class,
   PHPTest.class,
-  PHPUnitLegacyTest.class,
   PHPUnitTest.class,
-  ReportWithUnresolvedPathTest.class,
   SonarLintTest.class,
   PhpStanReportTest.class,
   PsalmReportTest.class
@@ -82,6 +80,8 @@ public class Tests {
   public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
 
   private static final TaskRequest TASK_REQUEST = new TaskRequest().setAdditionalFields(Collections.singletonList("warnings"));
+
+  private static final Pattern TASK_ID_PATTERN = Pattern.compile("/api/ce/task\\?id=(\\w+)");
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
@@ -141,15 +141,22 @@ public class Tests {
   /**
    * Extract analysis warnings from component task to evaluate if expected warnings are send to the server
    */
-  static List<String> getAnalysisWarnings(String projectName) throws AssertionError {
-    CeService service = newWsClient().ce();
-    Ce.ActivityResponse activityResponse = service.activity(new ActivityRequest().setComponent(projectName));
-    if (activityResponse.getTasksCount() != 1) {
-      throw new AssertionError(String.format("Expect to have a single task exists for the component '%s' on the instance, but there are %d tasks",
-        projectName, activityResponse.getTasksCount()));
+  static List<String> getAnalysisWarnings(BuildResult result) {
+    String taskId = getTaskId(result);
+    if (taskId == null) {
+      throw new RuntimeException("Task id can not be processed from BuildResult");
     }
-    Ce.Task task = activityResponse.getTasks(0);
-    return service.task(TASK_REQUEST.setId(task.getId())).getTask().getWarningsList();
+    CeService service = newWsClient().ce();
+    return service.task(TASK_REQUEST.setId(taskId)).getTask().getWarningsList();
+  }
+
+  @CheckForNull
+  static String getTaskId(BuildResult result) {
+    Matcher m = TASK_ID_PATTERN.matcher(result.getLogs());
+    if (m.find()) {
+      return m.group(1);
+    }
+    return null;
   }
 
   static WsClient newWsClient() {
