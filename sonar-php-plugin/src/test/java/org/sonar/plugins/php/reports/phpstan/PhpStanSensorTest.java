@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.reports.phpstan;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,6 +43,7 @@ import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -52,7 +52,6 @@ public class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", "phpstan");
-  private static final char SEPARATOR_CHAR = File.separatorChar;
   protected final PhpStanSensor phpStanSensor = new PhpStanSensor(analysisWarnings);
 
   @Rule
@@ -78,8 +77,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report.json");
     assertThat(externalIssues).hasSize(3);
 
-    List<Integer> orderOfIssues = SEPARATOR_CHAR == '\\' ? List.of(2, 0, 1) : List.of(0, 1, 2);
-    ExternalIssue first = externalIssues.get(orderOfIssues.get(0));
+    ExternalIssue first = externalIssues.get(0);
     assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(first.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation firstPrimaryLoc = first.primaryLocation();
@@ -90,7 +88,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(firstTextRange).isNotNull();
     assertThat(firstTextRange.start().line()).isEqualTo(5);
 
-    ExternalIssue second = externalIssues.get(orderOfIssues.get(1));
+    ExternalIssue second = externalIssues.get(1);
     assertThat(second.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(second.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation secondPrimaryLoc = second.primaryLocation();
@@ -101,7 +99,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertThat(secondTextRange).isNotNull();
     assertThat(secondTextRange.start().line()).isEqualTo(5);
 
-    ExternalIssue third = externalIssues.get(orderOfIssues.get(2));
+    ExternalIssue third = externalIssues.get(2);
     assertThat(third.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(third.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
@@ -153,17 +151,13 @@ public class PhpStanSensorTest extends ReportSensorTest {
     TextRange firstTextRange = firstPrimaryLoc.textRange();
     assertThat(firstTextRange).isNull();
 
-    String loggedFilePaths = loggedFilePaths(true,"phpstan/notExistingFile1.php", "phpstan/notExistingFile10.php", "phpstan/notExistingFile11.php", "phpstan/notExistingFile12.php", "phpstan/notExistingFile13.php");
-
     assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).isEqualTo("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. " +
-      "No issues imported related to file(s): " + loggedFilePaths);
+    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).startsWith("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report.");
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.DEBUG)))
       .isEqualTo("Missing information for filePath:'', message:'Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.'");
 
     verify(analysisWarnings, times(1))
-      .addWarning("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. " +
-        "No issues imported related to file(s): " + loggedFilePaths);
+      .addWarning(startsWith("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report."));
   }
 
   @Test
