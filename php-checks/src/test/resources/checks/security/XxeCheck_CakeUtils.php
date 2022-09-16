@@ -1,8 +1,20 @@
 <?php
+use Cake\Utility\Xml as GlobalCakeXML;
+
+namespace ns_nocake_before_other_ns_cake {
+  $xml = Xml::build($content, ['loadEntities' => true]);
+  $globalXml = GlobalCakeXML::build($content, ['loadEntities' => true]);  // Noncompliant
+}
 
 namespace ns1 {
   use Cake\Utility\Xml;
   $xml = Xml::build($content, ['loadEntities' => true]);                  // Noncompliant
+  $globalXml = GlobalCakeXML::build($content, ['loadEntities' => true]);  // Noncompliant
+}
+
+namespace ns_nocake_after_other_ns_cake {
+  $xml = Xml::build($content, ['loadEntities' => true]);
+  $globalXml = GlobalCakeXML::build($content, ['loadEntities' => true]);  // Noncompliant
 }
 
 namespace ns2 {

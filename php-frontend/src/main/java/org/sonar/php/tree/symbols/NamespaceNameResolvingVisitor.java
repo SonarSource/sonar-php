@@ -37,10 +37,11 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 class NamespaceNameResolvingVisitor extends PHPVisitorCheck {
 
   private final SymbolTableImpl symbolTable;
-  private final Map<String, SymbolQualifiedName> aliases = new HashMap<>();
+  private final Map<SymbolQualifiedName, Map<String, SymbolQualifiedName>> aliasesPerNamespace = new HashMap<>();
   private SymbolQualifiedName currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
 
   public NamespaceNameResolvingVisitor(SymbolTableImpl symbolTable) {
+    this.aliasesPerNamespace.put(SymbolQualifiedName.GLOBAL_NAMESPACE, new HashMap<>());
     this.symbolTable = symbolTable;
   }
 
@@ -70,7 +71,10 @@ class NamespaceNameResolvingVisitor extends PHPVisitorCheck {
     tree.clauses().forEach(useClauseTree -> {
       String alias = getAliasName(useClauseTree);
       SymbolQualifiedName originalName = getOriginalFullyQualifiedName(namespacePrefix, useClauseTree);
-      aliases.put(alias.toLowerCase(Locale.ROOT), originalName);
+      if (!aliasesPerNamespace.containsKey(currentNamespace)) {
+        aliasesPerNamespace.put(currentNamespace, new HashMap<>());
+      }
+      aliasesPerNamespace.get(currentNamespace).put(alias.toLowerCase(Locale.ROOT), originalName);
     });
   }
 
@@ -146,7 +150,11 @@ class NamespaceNameResolvingVisitor extends PHPVisitorCheck {
   @CheckForNull
   private SymbolQualifiedName lookupAlias(IdentifierTree identifierTree) {
     String alias = identifierTree.text().toLowerCase(Locale.ROOT);
-    return aliases.get(alias);
+    if (aliasesPerNamespace.containsKey(currentNamespace) && aliasesPerNamespace.get(currentNamespace).containsKey(alias)) {
+      return aliasesPerNamespace.get(currentNamespace).get(alias);
+    }
+    return aliasesPerNamespace.get(SymbolQualifiedName.GLOBAL_NAMESPACE).get(alias);
+
   }
 
 }
