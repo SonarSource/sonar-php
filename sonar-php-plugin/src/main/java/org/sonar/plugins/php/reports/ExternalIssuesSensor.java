@@ -38,13 +38,14 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.utils.log.Logger;
+import org.sonar.plugins.php.ReportImporter;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonar.plugins.php.api.Php;
 import org.sonarsource.analyzer.commons.ExternalReportProvider;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
-public abstract class ExternalIssuesSensor implements Sensor {
+public abstract class ExternalIssuesSensor extends ReportImporter implements Sensor {
   private static final int MAX_LOGGED_FILE_NAMES = 5;
   protected static final Long DEFAULT_CONSTANT_DEBT_MINUTES = 5L;
 
@@ -70,6 +71,7 @@ public abstract class ExternalIssuesSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
+    prepareExclusions(context);
     List<File> reportFiles = ExternalReportProvider.getReportFiles(context, reportPathKey());
     reportFiles.forEach(report -> {
       unresolvedInputFiles.clear();
@@ -130,7 +132,9 @@ public abstract class ExternalIssuesSensor implements Sensor {
 
     InputFile inputFile = inputFile(context, issue.filePath);
     if (inputFile == null) {
-      unresolvedInputFiles.add(issue.filePath);
+      if (!isExcluded(issue.filePath)) {
+        unresolvedInputFiles.add(issue.filePath);
+      }
       return;
     }
 

@@ -40,7 +40,9 @@ import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.startsWith;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -113,6 +115,14 @@ public class CoverageResultImporterTest {
 
     verify(analysisWarnings, times(1))
       .addWarning(startsWith("Failed to resolve 2 file path(s) in PHPUnit coverage"));
+  }
+
+  @Test
+  public void should_not_raise_warning_for_excluded_files() throws Exception {
+    context.settings().setProperty("sonar.exclusion", "**/IndexControllerTest.php,**/Banana.php");
+    executeSensorImporting(getReportFile("phpunit.coverage.xml"));
+    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(2);
+    verify(analysisWarnings,never()).addWarning(anyString());
   }
 
   @Test

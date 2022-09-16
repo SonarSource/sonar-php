@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
 import org.sonar.api.batch.fs.TextRange;
@@ -38,6 +39,8 @@ import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -227,6 +230,15 @@ public class PsalmSensorTest extends ReportSensorTest {
 
     verify(analysisWarnings, times(1))
       .addWarning("Failed to resolve 1 file path(s) in Psalm psalm-report-with-errors.json report. No issues imported related to file(s): psalm/unknown.php");
+  }
+
+  @Test
+  public void excluded_files_will_not_be_logged() throws IOException {
+    executeSensorImporting("psalm-report-with-errors.json", Map.of("sonar.exclusion", "*/**/unknown.php"));
+
+    assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
+    assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty();
+    verify(analysisWarnings, never()).addWarning(anyString());
   }
 
   @Override

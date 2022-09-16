@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
 import org.sonar.api.batch.fs.TextRange;
@@ -38,6 +39,8 @@ import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -131,6 +134,15 @@ public class PhpStanSensorTest extends ReportSensorTest {
     verify(analysisWarnings, times(1))
       .addWarning("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report. " +
         "No issues imported related to file(s): phpstan/notExistingFile1.php;phpstan/notExistingFile10.php;phpstan/notExistingFile11.php;phpstan/notExistingFile12.php;phpstan/notExistingFile13.php;...");
+  }
+
+  @Test
+  public void excluded_files_will_not_be_logged() throws IOException {
+    executeSensorImporting("phpstan-report-with-error.json", Map.of("sonar.exclusion", "*/**/notExisting*.php"));
+
+    assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
+    assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty();
+    verify(analysisWarnings, never()).addWarning(anyString());
   }
 
   @Test

@@ -108,6 +108,22 @@ public class TestResultImporterTest {
       .addWarning(startsWith("Failed to resolve 6 file path(s) in PHPUnit tests"));
   }
 
+  @Test
+  public void should_not_raise_warnings_for_excluded_files() {
+    DefaultInputFile appTestFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
+    DefaultInputFile appSkippedTestFile = TestInputFileBuilder.create("moduleKey", "src/AppSkipTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
+
+    fs.add(appTestFile);
+    fs.add(appSkippedTestFile);
+    context.setFileSystem(fs);
+
+    context.settings().setProperty("sonar.exclusion", "**/MegaAppTest.php");
+    executeSensorImporting(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_NAME));
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
+    assertThat(logTester.logs(LoggerLevel.WARN).get(0)).doesNotContain("MegaAppTest.php");
+  }
+
   private void executeSensorImporting(File fileName) {
     context.settings().setProperty(importer.reportPathKey(), fileName.getAbsolutePath());
     importer.execute(context);
