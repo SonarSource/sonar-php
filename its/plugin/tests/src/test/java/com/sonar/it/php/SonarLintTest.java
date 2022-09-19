@@ -82,17 +82,19 @@ public class SonarLintTest {
       .addInputFile(inputFile)
       .addIncludedRules(
         RuleKey.parse("php:S101"),
-        RuleKey.parse("php:S2964")
+        RuleKey.parse("php:S2964"),
+        RuleKey.parse("php:S1808")
       )
       .build();
     sonarlintEngine.analyze(configuration, issues::add, null, null);
 
     assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
       tuple("php:S101", 4, inputFile.getPath(), "MINOR"),
-      tuple("php:S2964", 9, inputFile.getPath(), "MINOR"));
+      tuple("php:S2964", 9, inputFile.getPath(), "MINOR"),
+      tuple("php:S1808", 18, inputFile.getPath(), "MINOR"));
   }
 
-  private ClientInputFile prepareInputFile(Path filePath, final boolean isTest) throws IOException {
+  private ClientInputFile prepareInputFile(Path filePath, final boolean isTest) {
     return createInputFile(filePath, isTest);
   }
 
