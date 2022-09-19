@@ -22,23 +22,22 @@ package org.sonar.plugins.php.reports.phpunit.xml;
 import java.util.Collection;
 import org.junit.Test;
 import org.sonar.plugins.php.reports.phpunit.TestFileReport;
-import org.sonar.plugins.php.reports.phpunit.xml.TestSuite;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestSuiteTest {
 
   @Test
-  public void shouldCreateReportOnlyIfFileBased() throws Exception {
+  public void shouldCreateReportOnlyIfFileBased() {
     final TestSuite fileSuite = new TestSuite("file");
-    assertThat(fileSuite.generateReports().size()).isEqualTo(1);
+    assertThat(fileSuite.generateReports()).hasSize(1);
     assertThat(fileSuite.generateReports().iterator().next()).isEqualTo(new TestFileReport("file", 0d));
     final TestSuite notFileSuite = new TestSuite(null);
-    assertThat(notFileSuite.generateReports().isEmpty()).isTrue();
+    assertThat(notFileSuite.generateReports()).isEmpty();
   }
 
   @Test
-  public void shouldDrillDownUntilItFindsAFileBasedSuite() throws Exception {
+  public void shouldDrillDownUntilItFindsAFileBasedSuite() {
     final TestSuite rootSuite = new TestSuite(null);
     final TestSuite intermediateSuite = new TestSuite(null);
     rootSuite.addNested(intermediateSuite);
@@ -48,7 +47,7 @@ public class TestSuiteTest {
   }
 
   @Test
-  public void shouldCreateOneReportForEveryNestedFileBasedSuite() throws Exception {
+  public void shouldCreateOneReportForEveryNestedFileBasedSuite() {
     final TestSuite rootSuite = new TestSuite(null);
     final TestSuite fileSuite1 = new TestSuite("file1");
     rootSuite.addNested(fileSuite1);
@@ -57,8 +56,9 @@ public class TestSuiteTest {
     intermediateSuite.addNested(fileSuite2);
     rootSuite.addNested(intermediateSuite);
     final Collection<TestFileReport> reports = rootSuite.generateReports();
-    assertThat(reports).contains(fileSuite1.generateReports().iterator().next());
-    assertThat(reports).contains(fileSuite2.generateReports().iterator().next());
+    assertThat(reports)
+      .contains(fileSuite1.generateReports().iterator().next())
+      .contains(fileSuite2.generateReports().iterator().next());
   }
 
   /**
@@ -66,10 +66,9 @@ public class TestSuiteTest {
    * possible output of phpunit junit result log, a file-based suite within another file-based suite.
    * Feel free to remove this test if it becomes cumbersome in future evolutions.
    *
-   * @throws Exception
    */
   @Test
-  public void shouldCreateAReportForSuiteNestedWithinAnotherFileBasedSuite() throws Exception {
+  public void shouldCreateAReportForSuiteNestedWithinAnotherFileBasedSuite() {
     final TestSuite fileSuite = new TestSuite("file");
     final TestSuite nestedFileSuite = new TestSuite("nestedFile");
     fileSuite.addNested(nestedFileSuite);

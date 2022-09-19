@@ -56,8 +56,8 @@ public class JUnitLogParserForPhpUnitTest {
     assertThat(suites).isNotNull();
     List<TestFileReport> reports = suites.arrangeSuitesIntoTestFileReports();
     assertThat(reports).hasSize(2);
-    assertThat(reports.get(0).testDurationMilliseconds()).isEqualTo(0);
-    assertThat(reports.get(1).testDurationMilliseconds()).isEqualTo(0);
+    assertThat(reports.get(0).testDurationMilliseconds()).isZero();
+    assertThat(reports.get(1).testDurationMilliseconds()).isZero();
   }
 
   @Test(expected = ParseException.class)
@@ -74,7 +74,7 @@ public class JUnitLogParserForPhpUnitTest {
   public void shouldParseComplexNestedSuites() throws Exception {
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-junit-report.xml"));
     List<TestFileReport> reportsPerFile = suites.arrangeSuitesIntoTestFileReports();
-    assertThat(reportsPerFile.size()).isEqualTo(8);
+    assertThat(reportsPerFile).hasSize(8);
     assertThat(reportsPerFile.get(5).getTests()).isEqualTo(3);
     assertThat(logTester.logs()).doesNotContain("Test cases must always be descendants of a file-based suite, skipping : testCanBeUsedAsString with data set #0 in App3Test::testCanBeUsedAsString");
   }
@@ -82,7 +82,7 @@ public class JUnitLogParserForPhpUnitTest {
   @Test
   public void shouldWarnWhenFileAttributeDoesNotExist() throws Exception {
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-no-file.xml"));
-    assertThat(suites.arrangeSuitesIntoTestFileReports().size()).isEqualTo(0);
+    assertThat(suites.arrangeSuitesIntoTestFileReports()).hasSize(0);
     assertThat(logTester.logs()).contains("Test cases must always be descendants of a file-based suite, skipping : HelloWorldTest.testFoo2 in HelloWorldTest");
   }
 }

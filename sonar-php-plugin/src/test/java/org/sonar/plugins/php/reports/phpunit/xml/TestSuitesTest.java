@@ -26,8 +26,6 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.plugins.php.reports.phpunit.TestFileReport;
-import org.sonar.plugins.php.reports.phpunit.xml.TestSuite;
-import org.sonar.plugins.php.reports.phpunit.xml.TestSuites;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,9 +37,9 @@ public class TestSuitesTest {
     final String testFile2 = "two.php";
     final TestSuites testSuites = new TestSuites(Arrays.asList(new TestSuite(testFile1), new TestSuite(testFile2)));
     final List<TestFileReport> reports = testSuites.arrangeSuitesIntoTestFileReports();
-    assertThat(reports.size()).isEqualTo(2);
-    assertThat(reports).contains(new TestFileReport(testFile1, 0d));
-    assertThat(reports).contains(new TestFileReport(testFile2, 0d));
+    assertThat(reports).containsExactly(
+      new TestFileReport(testFile1, 0d),
+      new TestFileReport(testFile2, 0d));
   }
 
 }
