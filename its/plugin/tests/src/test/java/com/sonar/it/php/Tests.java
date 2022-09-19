@@ -81,7 +81,7 @@ public class Tests {
 
   private static final TaskRequest TASK_REQUEST = new TaskRequest().setAdditionalFields(Collections.singletonList("warnings"));
 
-  private static final Pattern TASK_ID_PATTERN = Pattern.compile("/api/ce/task\\?id=(\\w+)");
+  private static final Pattern TASK_ID_PATTERN = Pattern.compile("/api/ce/task\\?id=(\\S+)");
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
