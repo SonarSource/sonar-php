@@ -35,9 +35,6 @@ import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
 
 /**
  * Sonar way profile.
- * <p>
- * We currently also define two other profiles, see {@link DrupalProfileDefinition} and {@link PSR2ProfileDefinition}.
- *
  */
 public final class PHPProfileDefinition implements BuiltInQualityProfilesDefinition {
 

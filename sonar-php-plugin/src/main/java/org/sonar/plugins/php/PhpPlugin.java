@@ -57,9 +57,6 @@ public class PhpPlugin implements Plugin {
       // Rules and profiles
       PHPRulesDefinition.class,
       PHPProfileDefinition.class,
-      PSR2ProfileDefinition.class,
-      DrupalProfileDefinition.class,
-
       PhpExclusionsFileFilter.class,
 
       // Properties
