@@ -1,0 +1,32 @@
+= PHPUnit report processing
+
+Our analyzer is able to process test and coverage reports from PHPUnit. This integration test is to test this processing. For this purpose different reports are tested. To cover the different cases the reports are artificially modified, but based on one project and one original report file. It is to be noted that the report format selected by us contains exclusively absolute paths. The following instructions show the requirements and steps necessary to reproduce the original report.
+
+'''
+
+== Requirements
+
+* PHP 8.*
+* https://getcomposer.org/[Composer] 2.*
+* https://xdebug.org[Xdebug]
+
+== Prepare Project
+Install PHPUnit dependency
+[source]
+----
+composer install
+----
+Enable coverage generation of Xdebug
+[source]
+----
+export XDEBUG_MODE=coverage
+----
+
+== Create reports
+
+[source]
+----
+vendor/bin/phpunit tests \
+--coverage-clover=reports/phpunit.coverage.local.xml \
+--log-junit=reports/phpunit.tests.local.xml
+----
