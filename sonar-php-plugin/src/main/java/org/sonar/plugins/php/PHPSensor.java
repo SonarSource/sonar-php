@@ -65,8 +65,8 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.plugins.php.phpunit.CoverageResultImporter;
-import org.sonar.plugins.php.phpunit.TestResultImporter;
+import org.sonar.plugins.php.reports.phpunit.CoverageResultImporter;
+import org.sonar.plugins.php.reports.phpunit.TestResultImporter;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_ANALYSIS_WARNINGS;

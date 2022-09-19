@@ -47,7 +47,7 @@ import static org.mockito.Mockito.verify;
 public class PsalmSensorTest extends ReportSensorTest {
 
   private static final String PSALM_PROPERTY = "sonar.php.psalm.reportPaths";
-  private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", "psalm");
+  private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "psalm");
   private final PsalmSensor psalmSensor = new PsalmSensor(analysisWarnings);
 
   @Rule
