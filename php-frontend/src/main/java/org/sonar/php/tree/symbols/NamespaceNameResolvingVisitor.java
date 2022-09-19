@@ -22,6 +22,7 @@ package org.sonar.php.tree.symbols;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -71,10 +72,7 @@ class NamespaceNameResolvingVisitor extends PHPVisitorCheck {
     tree.clauses().forEach(useClauseTree -> {
       String alias = getAliasName(useClauseTree);
       SymbolQualifiedName originalName = getOriginalFullyQualifiedName(namespacePrefix, useClauseTree);
-      if (!aliasesPerNamespace.containsKey(currentNamespace)) {
-        aliasesPerNamespace.put(currentNamespace, new HashMap<>());
-      }
-      aliasesPerNamespace.get(currentNamespace).put(alias.toLowerCase(Locale.ROOT), originalName);
+      aliasesPerNamespace.computeIfAbsent(currentNamespace, k -> new HashMap<>()).put(alias.toLowerCase(Locale.ROOT), originalName);
     });
   }
 
@@ -150,11 +148,10 @@ class NamespaceNameResolvingVisitor extends PHPVisitorCheck {
   @CheckForNull
   private SymbolQualifiedName lookupAlias(IdentifierTree identifierTree) {
     String alias = identifierTree.text().toLowerCase(Locale.ROOT);
-    if (aliasesPerNamespace.containsKey(currentNamespace) && aliasesPerNamespace.get(currentNamespace).containsKey(alias)) {
-      return aliasesPerNamespace.get(currentNamespace).get(alias);
-    }
-    return aliasesPerNamespace.get(SymbolQualifiedName.GLOBAL_NAMESPACE).get(alias);
-
+    return Optional.ofNullable(aliasesPerNamespace.get(currentNamespace))
+      .filter(map -> map.containsKey(alias))
+      .orElse(aliasesPerNamespace.get(SymbolQualifiedName.GLOBAL_NAMESPACE))
+      .get(alias);
   }
 
 }
