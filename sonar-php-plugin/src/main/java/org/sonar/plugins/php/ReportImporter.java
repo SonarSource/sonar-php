@@ -19,57 +19,28 @@
  */
 package org.sonar.plugins.php;
 
-import java.nio.file.Path;
+import java.io.File;
+import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.utils.PathUtils;
-import org.sonar.api.utils.WildcardPattern;
+import org.sonar.api.utils.log.Logger;
 
-public abstract class ReportImporter {
+public interface ReportImporter {
 
-  private ExclusionPattern[] exclusionPatterns = {};
+  int MAX_LOGGED_FILE_NAMES = 5;
 
-  public abstract void execute(SensorContext context);
+  void execute(SensorContext context);
 
-  protected void prepareExclusions(SensorContext context) {
-    exclusionPatterns = ExclusionPattern.create(context.config().getStringArray("sonar.exclusion"));
-  }
+  String reportPathKey();
 
-  protected boolean isExcluded(String filePath) {
-    if (exclusionPatterns.length == 0) {
-      return false;
-    }
+  String reportName();
 
-    Path path = Path.of(filePath);
-    for (ExclusionPattern exclusionPattern : exclusionPatterns) {
-      if (exclusionPattern.match(path)) {
-        return true;
-      }
-    }
-    return false;
-  }
+  Logger logger();
 
-  /**
-   * Inspired by org.sonar.api.batch.fs.internal.PathPattern
-   */
-  private static class ExclusionPattern {
+  List<File> getReportFiles(SensorContext context);
 
-    final WildcardPattern pattern;
+  void importReport(File coverageReportFile, SensorContext context) throws Exception;
+  String getFileReadErrorMessage(Exception e, File reportPath);
 
-    private ExclusionPattern(String pattern) {
-      this.pattern = WildcardPattern.create(pattern);
-    }
+  String getUnresolvedInputFileMessageFormat();
 
-    static ExclusionPattern[] create(String[] s) {
-      ExclusionPattern[] result = new ExclusionPattern[s.length];
-      for (int i = 0; i < s.length; i++) {
-        result[i] = new ExclusionPattern(s[i]);
-      }
-      return result;
-    }
-
-    boolean match(Path relativePath) {
-      String path = PathUtils.sanitize(relativePath.toString());
-      return path != null && pattern.match(path);
-    }
-  }
 }

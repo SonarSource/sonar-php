@@ -19,8 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.util.Set;
-import java.util.function.Predicate;
+import java.util.function.Consumer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -52,7 +51,7 @@ public class TestFileReport {
     this.testDuration = testDuration;
   }
 
-  public void saveTestMeasures(SensorContext context, ExternalReportFileHandler fileHandler, Set<String> unresolvedInputFiles, Predicate<String> fileExclusion) {
+  public void saveTestMeasures(SensorContext context, ExternalReportFileHandler fileHandler, Consumer<String> addUnresolvedInputFiles) {
     file = fileHandler.relativePath(file);
     InputFile unitTestFile = getUnitTestInputFile(context.fileSystem());
     if (unitTestFile != null) {
@@ -62,8 +61,8 @@ public class TestFileReport {
       context.<Integer>newMeasure().on(unitTestFile).withValue((int) liveTests()).forMetric(CoreMetrics.TESTS).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue(errors).forMetric(CoreMetrics.TEST_ERRORS).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue(failures).forMetric(CoreMetrics.TEST_FAILURES).save();
-    } else if (! fileExclusion.test(file)){
-      unresolvedInputFiles.add(file);
+    } else {
+      addUnresolvedInputFiles.accept(file);
     }
   }
 

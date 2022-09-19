@@ -104,8 +104,8 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
       saveCoverageLineHitsData(fileNode, inputFile, context);
 
       // Saving the uncovered statements (lines) is no longer needed because coverage metrics are internally derived by the NewCoverage
-    } else if (!isExcluded(path)) {
-      unresolvedInputFiles.add(path);
+    } else {
+      addUnresolvedInputFile(path);
     }
   }
 
@@ -203,17 +203,17 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
   }
 
   @Override
-  String reportPathKey() {
+  public String reportPathKey() {
     return PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
   }
 
   @Override
-  String reportName() {
+  public String reportName() {
     return "PHPUnit coverage";
   }
 
   @Override
-  Logger logger() {
+  public Logger logger() {
     return LOG;
   }
 }

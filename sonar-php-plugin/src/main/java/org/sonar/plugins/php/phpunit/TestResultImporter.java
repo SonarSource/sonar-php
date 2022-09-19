@@ -42,11 +42,11 @@ public class TestResultImporter extends PhpUnitReportImporter {
   }
 
   @Override
-  protected void importReport(File reportFile, SensorContext context) throws ParseException, IOException {
+  public void importReport(File reportFile, SensorContext context) throws ParseException, IOException {
     LOG.info("Importing {}", reportFile);
     TestSuites testSuites = parser.parse(reportFile);
     for (TestFileReport fileReport : testSuites.arrangeSuitesIntoTestFileReports()) {
-      fileReport.saveTestMeasures(context, fileHandler, unresolvedInputFiles, this::isExcluded);
+      fileReport.saveTestMeasures(context, fileHandler, this::addUnresolvedInputFile);
     }
   }
 
@@ -54,7 +54,7 @@ public class TestResultImporter extends PhpUnitReportImporter {
    * For PHPUnit tests report only a single file is expected compared to PHPUnit coverage reports
    */
   @Override
-  protected List<File> reportFiles(SensorContext context) {
+  public List<File> getReportFiles(SensorContext context) {
     return context.config().get(reportPathKey())
       .map(report -> getIOFile(context.fileSystem().baseDir(), report))
       .map(Collections::singletonList)
@@ -73,17 +73,17 @@ public class TestResultImporter extends PhpUnitReportImporter {
   }
 
   @Override
-  String reportPathKey() {
+  public String reportPathKey() {
     return PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY;
   }
 
   @Override
-  String reportName() {
+  public String reportName() {
     return "PHPUnit tests";
   }
 
   @Override
-  Logger logger() {
+  public Logger logger() {
     return LOG;
   }
 }

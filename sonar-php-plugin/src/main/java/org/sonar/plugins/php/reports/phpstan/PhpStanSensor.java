@@ -45,14 +45,14 @@ public class PhpStanSensor extends ExternalIssuesSensor {
   }
 
   @Override
-  protected void importReport(File reportPath, SensorContext context) throws IOException, ParseException {
+  public void importReport(File reportPath, SensorContext context) throws IOException, ParseException {
     InputStream in = new FileInputStream(reportPath);
     LOG.info("Importing {}", reportPath);
     PhpStanJsonReportReader.read(in, issue -> saveIssue(context, issue));
   }
 
   @Override
-  protected String reportName() {
+  public String reportName() {
     return PHPSTAN_REPORT_NAME;
   }
 
@@ -62,12 +62,12 @@ public class PhpStanSensor extends ExternalIssuesSensor {
   }
 
   @Override
-  protected String reportPathKey() {
+  public String reportPathKey() {
     return PHPSTAN_REPORT_PATH_KEY;
   }
 
   @Override
-  protected Logger logger() {
+  public Logger logger() {
     return LOG;
   }
 
