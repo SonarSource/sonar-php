@@ -51,7 +51,7 @@ import static org.mockito.Mockito.verify;
 public class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
-  private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org", "sonar", "plugins", "php", "reports", "phpstan");
+  private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "phpstan");
   protected final PhpStanSensor phpStanSensor = new PhpStanSensor(analysisWarnings);
 
   @Rule
