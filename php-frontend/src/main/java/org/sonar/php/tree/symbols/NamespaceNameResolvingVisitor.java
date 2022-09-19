@@ -22,6 +22,7 @@ package org.sonar.php.tree.symbols;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -37,10 +38,11 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 class NamespaceNameResolvingVisitor extends PHPVisitorCheck {
 
   private final SymbolTableImpl symbolTable;
-  private final Map<String, SymbolQualifiedName> aliases = new HashMap<>();
+  private final Map<SymbolQualifiedName, Map<String, SymbolQualifiedName>> aliasesPerNamespace = new HashMap<>();
   private SymbolQualifiedName currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
 
   public NamespaceNameResolvingVisitor(SymbolTableImpl symbolTable) {
+    this.aliasesPerNamespace.put(SymbolQualifiedName.GLOBAL_NAMESPACE, new HashMap<>());
     this.symbolTable = symbolTable;
   }
 
@@ -70,7 +72,7 @@ class NamespaceNameResolvingVisitor extends PHPVisitorCheck {
     tree.clauses().forEach(useClauseTree -> {
       String alias = getAliasName(useClauseTree);
       SymbolQualifiedName originalName = getOriginalFullyQualifiedName(namespacePrefix, useClauseTree);
-      aliases.put(alias.toLowerCase(Locale.ROOT), originalName);
+      aliasesPerNamespace.computeIfAbsent(currentNamespace, k -> new HashMap<>()).put(alias.toLowerCase(Locale.ROOT), originalName);
     });
   }
 
@@ -146,7 +148,10 @@ class NamespaceNameResolvingVisitor extends PHPVisitorCheck {
   @CheckForNull
   private SymbolQualifiedName lookupAlias(IdentifierTree identifierTree) {
     String alias = identifierTree.text().toLowerCase(Locale.ROOT);
-    return aliases.get(alias);
+    return Optional.ofNullable(aliasesPerNamespace.get(currentNamespace))
+      .filter(map -> map.containsKey(alias))
+      .orElse(aliasesPerNamespace.get(SymbolQualifiedName.GLOBAL_NAMESPACE))
+      .get(alias);
   }
 
 }

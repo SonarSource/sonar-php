@@ -20,10 +20,12 @@
 package org.sonar.php.checks.security;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -35,6 +37,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
@@ -139,8 +142,14 @@ public class XxeCheck extends PHPVisitorCheck {
 
   private static boolean isNamespaceMemberEqualTo(String targetNamespace, ExpressionTree callee){
     return namespaceMemberFullQualifiedName(callee)
-      .filter(targetNamespace::equalsIgnoreCase)
+      .filter(name -> targetNamespace.equalsIgnoreCase(name) || isNameInNamespaceEqualTo(targetNamespace, callee, name))
       .isPresent();
   }
 
+  private static boolean isNameInNamespaceEqualTo(String targetNamespace, ExpressionTree callee, String name) {
+    return Optional.ofNullable((NamespaceStatementTree) TreeUtils.findAncestorWithKind(callee, Collections.singletonList(Kind.NAMESPACE_STATEMENT)))
+      .map(NamespaceStatementTree::namespaceName)
+      .filter(nsName -> (nsName.fullName() + "\\" + targetNamespace).equalsIgnoreCase(name))
+      .isPresent();
+  }
 }
