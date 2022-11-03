@@ -19,8 +19,10 @@
  */
 package org.sonar.plugins.php.reports;
 
+import java.io.File;
 import java.nio.file.Path;
-import org.apache.commons.io.FilenameUtils;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 
@@ -55,7 +57,12 @@ public class ExternalReportFileHandler {
       return fileName;
     }
 
-    Path path = Path.of(normalize(fileName));
+    String normalizedPath = separatorsToSystem(fileName);
+    if (normalizedPath == null) {
+      return fileName;
+    }
+
+    Path path = Path.of(normalizedPath);
     int pathNameCount = path.getNameCount();
     // If we already calculated the offset of the relative path we can apply it to the other paths
     if (relativePathOffset > 0) {
@@ -81,11 +88,6 @@ public class ExternalReportFileHandler {
     return fileName;
   }
 
-  public static String normalize(String fileName) {
-    String relativeName = fileName.substring(FilenameUtils.getPrefix(fileName).length());
-    return FilenameUtils.separatorsToSystem(relativeName);
-  }
-
   /**
    * Checks whether a file exists in the analyzer file system for the specified path.
    */
@@ -95,6 +97,27 @@ public class ExternalReportFileHandler {
 
   private boolean isKnownFile(String path) {
     return fileSystem.hasFiles(fileSystem.predicates().hasPath(path));
+  }
+
+  @CheckForNull
+  private static String separatorsToSystem(@Nullable String path) {
+    if (path == null) {
+      return null;
+    } else {
+      return isSystemWindows() ? separatorsToWindows(path) : separatorsToUnix(path);
+    }
+  }
+
+  private static boolean isSystemWindows() {
+    return File.separatorChar == '\\';
+  }
+
+  private static String separatorsToUnix(@Nullable String path) {
+    return path != null && path.indexOf(92) != -1 ? path.replace('\\', '/') : path;
+  }
+
+  private static String separatorsToWindows(@Nullable String path) {
+    return path != null && path.indexOf(47) != -1 ? path.replace('/', '\\') : path;
   }
 
 }
