@@ -16,6 +16,7 @@ class PossessiveQuantifierContinuationCheck
     preg_match("/.*+\w/", $input); // Noncompliant
     preg_match("/.*+\w+/", $input); // Noncompliant
     preg_match("/(a|b|c)*+(a|b)/", $input); // Noncompliant
+    preg_match("/(bx++)+x/", $input); // Noncompliant
   }
 
   public function compliant($input)
@@ -26,7 +27,6 @@ class PossessiveQuantifierContinuationCheck
     preg_match("/aa++bc/", $input);
     preg_match("/\d*+(?<=[02468])/", $input);
     preg_match("/(:[0-9])?+(:[0-9])?+/", $input);
-    preg_match("/(bx++)+x/", $input); // FN because limitation of the algorithm when there's infinite loop
     preg_match("/(?(1)(.*)|())/",$input);
   }
 }
