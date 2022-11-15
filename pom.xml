@@ -85,7 +85,7 @@
     <version.mockito>2.21.0</version.mockito>
     <version.sonar>9.3.0.51899</version.sonar>
     <version.staxmate>2.0.1</version.staxmate>
-    <version.sonar-orchestrator>3.35.0.2707</version.sonar-orchestrator>
+    <version.sonar-orchestrator>3.40.0.183</version.sonar-orchestrator>
     <version.sslr>1.24.0.633</version.sslr>
     <version.guava>30.1.1-jre</version.guava>
     <version.sonarlint>4.7.0.12286</version.sonarlint>
