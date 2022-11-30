@@ -64,30 +64,30 @@ To run tests locally follow these instructions.
 
 ### Build the Project and Run Unit Tests
 To build the plugin and run its unit tests, execute this command from the project's root directory (you will need [Maven](https://maven.apache.org/)):
-```
+```shell
 mvn clean install
 ```
 
 ### Integration Tests
 To run integration tests, you will need to create a properties file like the one shown below, and set its location in an environment variable named `ORCHESTRATOR_CONFIG_URL`.
-```
+```properties
 # version of SonarQube server
 sonar.runtimeVersion=8.9
 ```
 Before running any of integration tests make sure the submodules are checked out:
-```
+```shell
   git submodule init
   git submodule update
 ```
 #### Plugin Test
 The "Plugin Test" is an additional integration test which verifies plugin features such as metric calculation, coverage etc. To launch it, execute this command from directory `its/plugin`:
-```
+```shell
 mvn clean install
 ```
 
 #### Ruling Test
 The "Ruling Test" is a special integration test which launches the analysis of a large code base, saves the issues created by the plugin in report files, and then compares those results to the set of expected issues (stored as JSON files). To launch ruling test:
-```
+```shell
 cd its/ruling
 mvn clean install
 ```

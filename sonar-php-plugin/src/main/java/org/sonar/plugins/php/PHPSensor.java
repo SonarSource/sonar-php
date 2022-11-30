@@ -48,6 +48,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.PHPAnalyzer;
+import org.sonar.php.cache.CacheContext;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
@@ -65,6 +66,8 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+import org.sonar.plugins.php.cache.Cache;
+import org.sonar.plugins.php.cache.CacheContextImpl;
 import org.sonar.plugins.php.reports.phpunit.CoverageResultImporter;
 import org.sonar.plugins.php.reports.phpunit.TestResultImporter;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -128,11 +131,15 @@ public class PHPSensor implements Sensor {
     List<InputFile> inputFiles = new ArrayList<>();
     fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
 
-    SymbolScanner symbolScanner = new SymbolScanner(context, statistics);
+    CacheContext cacheContext = CacheContextImpl.of(context);
+    Cache cache = new Cache(cacheContext);
+
+    SymbolScanner symbolScanner = new SymbolScanner(context, statistics, cache);
 
     try {
       symbolScanner.execute(inputFiles);
       ProjectSymbolData projectSymbolData = symbolScanner.getProjectSymbolData();
+      cache.write(projectSymbolData);
       new AnalysisScanner(context, projectSymbolData, statistics).execute(inputFiles);
       if (!inSonarLint(context)) {
         processTestsAndCoverage(context);
@@ -170,7 +177,7 @@ public class PHPSensor implements Sensor {
       }
 
       List<PHPCheck> testFilesChecks  = allChecks.stream().
-        filter(c -> c instanceof PhpUnitCheck).
+        filter(PhpUnitCheck.class::isInstance).
         collect(Collectors.toList());
       hasTestFileChecks = !testFilesChecks.isEmpty();
 
@@ -353,7 +360,7 @@ public class PHPSensor implements Sensor {
 
   private RuleKey getParsingErrorRuleKey() {
     List<RuleKey> keys = checks.all().stream()
-      .filter(check -> check instanceof ParsingErrorCheck)
+      .filter(ParsingErrorCheck.class::isInstance)
       .map(checks::ruleKeyFor)
       .collect(Collectors.toList());
 
