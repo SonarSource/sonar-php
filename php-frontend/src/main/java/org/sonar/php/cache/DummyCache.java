@@ -17,26 +17,29 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.cache;
+package org.sonar.php.cache;
 
-import org.sonar.api.batch.sensor.cache.WriteCache;
-import org.sonar.php.cache.PhpWriteCache;
+import javax.annotation.CheckForNull;
 
-public class PhpWriteCacheImpl implements PhpWriteCache {
-
-  private final WriteCache writeCache;
-
-  public PhpWriteCacheImpl(WriteCache writeCache) {
-    this.writeCache = writeCache;
-  }
-
+public class DummyCache implements PhpWriteCache, PhpReadCache {
   @Override
   public void write(String key, byte[] data) {
-    writeCache.write(key, data);
+    throw new IllegalArgumentException(String.format("Same key cannot be written to multiple times (%s)", key));
   }
 
   @Override
   public void copyFromPrevious(String key) {
-    writeCache.copyFromPrevious(key);
+    throw new IllegalArgumentException("No cache data available");
+  }
+
+  @Override
+  @CheckForNull
+  public byte[] readBytes(String key) {
+    return null;
+  }
+
+  @Override
+  public boolean contains(String key) {
+    return false;
   }
 }

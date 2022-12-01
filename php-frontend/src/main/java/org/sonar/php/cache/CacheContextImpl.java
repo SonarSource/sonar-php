@@ -17,34 +17,43 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.cache;
+package org.sonar.php.cache;
 
 import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.Version;
-import org.sonar.php.cache.CacheContext;
-import org.sonar.php.cache.PhpWriteCache;
 
 public class CacheContextImpl implements CacheContext {
 
+  public static final Version MINIMUM_RUNTIME_VERSION = Version.create(9, 7);
   private final boolean isCacheEnabled;
   private final PhpWriteCache writeCache;
+  private final PhpReadCacheImpl readCache;
 
-  public CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache) {
+  public CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCacheImpl readCache) {
     this.isCacheEnabled = isCacheEnabled;
     this.writeCache = writeCache;
+    this.readCache = readCache;
   }
 
   public static CacheContextImpl of(SensorContext context) {
-    if (!context.runtime().getProduct().equals(SonarProduct.SONARLINT) && context.runtime().getApiVersion().isGreaterThanOrEqual(Version.create(9, 7))) {
-      return new CacheContextImpl(context.isCacheEnabled(), new PhpWriteCacheImpl(context.nextCache()));
+    if (!context.runtime().getProduct().equals(SonarProduct.SONARLINT)
+      && context.runtime().getApiVersion().isGreaterThanOrEqual(MINIMUM_RUNTIME_VERSION)) {
+      return new CacheContextImpl(context.isCacheEnabled(),
+        new PhpWriteCacheImpl(context.nextCache()),
+        new PhpReadCacheImpl(context.previousCache()));
     }
-    return new CacheContextImpl(false, new DummyCache());
+    return new CacheContextImpl(false, new DummyCache(), new PhpReadCacheImpl(context.previousCache()));
   }
 
   @Override
   public boolean isCacheEnabled() {
     return isCacheEnabled;
+  }
+
+  @Override
+  public PhpReadCache getReadCache() {
+    return readCache;
   }
 
   @Override

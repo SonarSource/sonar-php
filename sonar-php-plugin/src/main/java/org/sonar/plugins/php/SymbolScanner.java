@@ -33,9 +33,9 @@ import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.cache.Cache;
+import org.sonar.php.cache.Cache;
 
-class SymbolScanner extends Scanner {
+public class SymbolScanner extends Scanner {
 
   private static final Logger LOG = Loggers.get(SymbolScanner.class);
 
@@ -43,7 +43,7 @@ class SymbolScanner extends Scanner {
   private final ProjectSymbolData projectSymbolData = new ProjectSymbolData();
   private final Cache cache;
 
-  SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cacheContext) {
+  public SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cacheContext) {
     super(context, statistics);
     this.cache = cacheContext;
   }

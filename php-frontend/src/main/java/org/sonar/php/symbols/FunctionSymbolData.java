@@ -20,6 +20,7 @@
 package org.sonar.php.symbols;
 
 import java.util.List;
+import java.util.Objects;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
@@ -60,6 +61,29 @@ public class FunctionSymbolData {
     return properties;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    FunctionSymbolData that = (FunctionSymbolData) o;
+    return Objects.equals(location, that.location) && Objects.equals(qualifiedName, that.qualifiedName) && Objects.equals(parameters, that.parameters) && Objects.equals(properties, that.properties);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(location, qualifiedName, parameters, properties);
+  }
+
+  @Override
+  public String toString() {
+    return "FunctionSymbolData{" +
+      "location=" + location +
+      ", qualifiedName=" + qualifiedName +
+      ", parameters=" + parameters +
+      ", properties=" + properties +
+      '}';
+  }
+
   public static class FunctionSymbolProperties {
     private boolean hasReturn = false;
     private boolean hasFuncGetArgs = false;
@@ -86,6 +110,19 @@ public class FunctionSymbolData {
 
     public void hasFuncGetArgs(boolean hasFuncGetArgs) {
       this.hasFuncGetArgs = hasFuncGetArgs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      FunctionSymbolProperties that = (FunctionSymbolProperties) o;
+      return hasReturn == that.hasReturn && hasFuncGetArgs == that.hasFuncGetArgs;
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(hasReturn, hasFuncGetArgs);
     }
 
     @Override

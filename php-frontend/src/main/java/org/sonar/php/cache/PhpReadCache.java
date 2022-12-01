@@ -19,10 +19,18 @@
  */
 package org.sonar.php.cache;
 
-public interface CacheContext {
-  boolean isCacheEnabled();
+import javax.annotation.CheckForNull;
 
-  PhpReadCache getReadCache();
+public interface PhpReadCache {
 
-  PhpWriteCache getWriteCache();
+  /**
+   * @return the array of bytes stored for the given key, if any. {@code null} otherwise.
+   */
+  @CheckForNull
+  byte[] readBytes(String key);
+
+  /**
+   * Checks whether the cache contains the provided {@code key}.
+   */
+  boolean contains(String key);
 }

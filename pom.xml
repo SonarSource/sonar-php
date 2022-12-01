@@ -78,7 +78,7 @@
     <version.sonar-packaging-maven-plugin>1.20.0.405</version.sonar-packaging-maven-plugin>
 
     <!-- JAR versions -->
-    <version.assertj>3.23.1</version.assertj>
+    <version.assertj>3.5.2</version.assertj>
     <version.commons-lang>3.10</version.commons-lang>
     <version.junit>4.13.1</version.junit>
     <version.maven-project>2.0.6</version.maven-project>

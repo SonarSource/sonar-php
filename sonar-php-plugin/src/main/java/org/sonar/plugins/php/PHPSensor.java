@@ -66,8 +66,8 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.plugins.php.cache.Cache;
-import org.sonar.plugins.php.cache.CacheContextImpl;
+import org.sonar.php.cache.Cache;
+import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.plugins.php.reports.phpunit.CoverageResultImporter;
 import org.sonar.plugins.php.reports.phpunit.TestResultImporter;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -139,7 +139,6 @@ public class PHPSensor implements Sensor {
     try {
       symbolScanner.execute(inputFiles);
       ProjectSymbolData projectSymbolData = symbolScanner.getProjectSymbolData();
-      cache.write(projectSymbolData);
       new AnalysisScanner(context, projectSymbolData, statistics).execute(inputFiles);
       if (!inSonarLint(context)) {
         processTestsAndCoverage(context);
@@ -220,6 +219,87 @@ public class PHPSensor implements Sensor {
       }
     }
 
+    private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {
+      for (PhpIssue issue : issues) {
+        RuleKey ruleKey = checks.ruleKeyFor(issue.check());
+        NewIssue newIssue = context.newIssue()
+          .forRule(ruleKey)
+          .gap(issue.cost());
+
+        if (issue instanceof LegacyIssue) {
+          // todo: this block should be removed as PHPIssue's usages will be removed
+          LegacyIssue legacyIssue = (LegacyIssue) issue;
+
+          NewIssueLocation location = newIssue.newLocation()
+            .message(legacyIssue.message())
+            .on(inputFile);
+
+          if (legacyIssue.line() > 0) {
+            location.at(inputFile.selectLine(legacyIssue.line()));
+          }
+
+          newIssue.at(location);
+
+        } else if (issue instanceof LineIssue) {
+
+          LineIssue lineIssue = (LineIssue) issue;
+
+          NewIssueLocation location = newIssue.newLocation()
+            .message(lineIssue.message())
+            .on(inputFile)
+            .at(inputFile.selectLine(lineIssue.line()));
+
+          newIssue.at(location);
+
+        } else if (issue instanceof FileIssue) {
+
+          FileIssue fileIssue = (FileIssue) issue;
+
+          NewIssueLocation location = newIssue.newLocation()
+            .message(fileIssue.message())
+            .on(inputFile);
+
+          newIssue.at(location);
+
+        } else {
+
+          PreciseIssue preciseIssue = (PreciseIssue) issue;
+
+          newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
+          preciseIssue.secondaryLocations().forEach(secondary ->
+            addSecondaryLocation(context, inputFile, newIssue, secondary)
+          );
+        }
+
+        newIssue.save();
+      }
+    }
+
+    /**
+     * Creates and saves an issue for a parsing error.
+     */
+    private void saveParsingIssue(SensorContext context, RecognitionException e, InputFile inputFile) {
+      if (parsingErrorRuleKey != null) {
+        NewIssue issue = context.newIssue();
+
+        NewIssueLocation location = issue.newLocation()
+          .message("A parsing error occurred in this file.")
+          .on(inputFile)
+          .at(inputFile.selectLine(e.getLine()));
+
+        issue
+          .forRule(parsingErrorRuleKey)
+          .at(location)
+          .save();
+      }
+
+      context.newAnalysisError()
+        .onFile(inputFile)
+        .at(inputFile.newPointer(e.getLine(), 0))
+        .message(e.getMessage())
+        .save();
+    }
+
     @Override
     void logException(Exception e, InputFile file) {
       LOG.error("Could not analyse " + file.toString(), e);
@@ -246,87 +326,6 @@ public class PHPSensor implements Sensor {
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getStatementNumber()).forMetric(CoreMetrics.STATEMENTS).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFileCognitiveComplexity()).forMetric(CoreMetrics.COGNITIVE_COMPLEXITY).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFileComplexity()).forMetric(CoreMetrics.COMPLEXITY).save();
-  }
-
-  /**
-   * Creates and saves an issue for a parsing error.
-   */
-  private void saveParsingIssue(SensorContext context, RecognitionException e, InputFile inputFile) {
-    if (parsingErrorRuleKey != null) {
-      NewIssue issue = context.newIssue();
-
-      NewIssueLocation location = issue.newLocation()
-        .message("A parsing error occurred in this file.")
-        .on(inputFile)
-        .at(inputFile.selectLine(e.getLine()));
-
-      issue
-        .forRule(parsingErrorRuleKey)
-        .at(location)
-        .save();
-    }
-
-    context.newAnalysisError()
-      .onFile(inputFile)
-      .at(inputFile.newPointer(e.getLine(), 0))
-      .message(e.getMessage())
-      .save();
-  }
-
-  private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {
-    for (PhpIssue issue : issues) {
-      RuleKey ruleKey = checks.ruleKeyFor(issue.check());
-      NewIssue newIssue = context.newIssue()
-        .forRule(ruleKey)
-        .gap(issue.cost());
-
-      if (issue instanceof LegacyIssue) {
-        // todo: this block should be removed as PHPIssue's usages will be removed
-        LegacyIssue legacyIssue = (LegacyIssue) issue;
-
-        NewIssueLocation location = newIssue.newLocation()
-          .message(legacyIssue.message())
-          .on(inputFile);
-
-        if (legacyIssue.line() > 0) {
-          location.at(inputFile.selectLine(legacyIssue.line()));
-        }
-
-        newIssue.at(location);
-
-      } else if (issue instanceof LineIssue) {
-
-        LineIssue lineIssue = (LineIssue) issue;
-
-        NewIssueLocation location = newIssue.newLocation()
-          .message(lineIssue.message())
-          .on(inputFile)
-          .at(inputFile.selectLine(lineIssue.line()));
-
-        newIssue.at(location);
-
-      } else if (issue instanceof FileIssue) {
-
-        FileIssue fileIssue = (FileIssue) issue;
-
-        NewIssueLocation location = newIssue.newLocation()
-          .message(fileIssue.message())
-          .on(inputFile);
-
-        newIssue.at(location);
-
-      } else {
-
-        PreciseIssue preciseIssue = (PreciseIssue) issue;
-
-        newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
-        preciseIssue.secondaryLocations().forEach(secondary ->
-          addSecondaryLocation(context, inputFile, newIssue, secondary)
-        );
-      }
-
-      newIssue.save();
-    }
   }
 
   private static void addSecondaryLocation(SensorContext context, InputFile inputFile, NewIssue newIssue, IssueLocation secondary) {

@@ -215,7 +215,7 @@ public class PHPSensorTest {
   public void empty_file_should_raise_no_issue() throws Exception {
     analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "empty.php");
 
-    assertThat(context.allIssues()).as("No issue must be raised").hasSize(0);
+    assertThat(context.allIssues()).as("No issue must be raised").isEmpty();
   }
 
   @Test
@@ -230,7 +230,7 @@ public class PHPSensorTest {
     TextRange range = issue.primaryLocation().textRange();
     assertThat(range).isNotNull();
     assertThat(range.start().line()).isEqualTo(2);
-    assertThat(range.start().lineOffset()).isEqualTo(0);
+    assertThat(range.start().lineOffset()).isZero();
     assertThat(range.end().line()).isEqualTo(2);
     assertThat(range.end().lineOffset()).isEqualTo(16);
   }
@@ -570,7 +570,7 @@ public class PHPSensorTest {
     // SonarLint Runtime
     context.setRuntime(SONARLINT_RUNTIME);
     analyseSingleFile(createSensor(), "disable_rules_for_sonarlint.php");
-    assertThat(context.allIssues()).hasSize(0);
+    assertThat(context.allIssues()).isEmpty();
 
     // SonarQube Runtime
     context.setRuntime(NOT_SONARLINT_RUNTIME);

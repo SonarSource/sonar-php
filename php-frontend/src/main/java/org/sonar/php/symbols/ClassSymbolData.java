@@ -20,6 +20,7 @@
 package org.sonar.php.symbols;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -72,5 +73,30 @@ public class ClassSymbolData {
 
   public ClassSymbol.Kind kind() {
     return kind;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ClassSymbolData that = (ClassSymbolData) o;
+    return Objects.equals(location, that.location) && Objects.equals(qualifiedName, that.qualifiedName) && Objects.equals(superClass, that.superClass) && Objects.equals(implementedInterfaces, that.implementedInterfaces) && kind == that.kind && Objects.equals(methods, that.methods);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(location, qualifiedName, superClass, implementedInterfaces, kind, methods);
+  }
+
+  @Override
+  public String toString() {
+    return "ClassSymbolData{" +
+      "location=" + location +
+      ", qualifiedName=" + qualifiedName +
+      ", superClass=" + superClass +
+      ", implementedInterfaces=" + implementedInterfaces +
+      ", kind=" + kind +
+      ", methods=" + methods +
+      '}';
   }
 }

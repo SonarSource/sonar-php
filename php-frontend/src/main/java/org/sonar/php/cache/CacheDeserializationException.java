@@ -17,21 +17,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.cache;
+package org.sonar.php.cache;
 
-import org.sonar.php.cache.CacheContext;
-import org.sonar.php.symbols.ProjectSymbolData;
-
-public class Cache {
-
-  private final CacheContext cacheContext;
-
-  public Cache(CacheContext cacheContext) {
-    this.cacheContext = cacheContext;
-  }
-
-  public void write(ProjectSymbolData projectSymbolData) {
-    byte[] bytes = ProjectSymbolDataSerializer.toBinary(projectSymbolData);
-    cacheContext.getWriteCache().write("php.projectSymbolData.classSymbolsByQualifiedName", bytes);
+public class CacheDeserializationException extends RuntimeException {
+  public CacheDeserializationException(String message, Exception cause) {
+    super(message, cause);
   }
 }

@@ -19,6 +19,7 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.Objects;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
@@ -59,5 +60,27 @@ public class MethodSymbolData extends FunctionSymbolData {
 
   public boolean isAbstract() {
     return isAbstract;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    MethodSymbolData that = (MethodSymbolData) o;
+    return isAbstract == that.isAbstract && visibility == that.visibility && Objects.equals(name, that.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(visibility, name, isAbstract);
+  }
+
+  @Override
+  public String toString() {
+    return "MethodSymbolData{" +
+      "visibility=" + visibility +
+      ", name='" + name + '\'' +
+      ", isAbstract=" + isAbstract +
+      "} " + super.toString();
   }
 }
