@@ -28,9 +28,9 @@ public class CacheContextImpl implements CacheContext {
   public static final Version MINIMUM_RUNTIME_VERSION = Version.create(9, 7);
   private final boolean isCacheEnabled;
   private final PhpWriteCache writeCache;
-  private final PhpReadCacheImpl readCache;
+  private final PhpReadCache readCache;
 
-  public CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCacheImpl readCache) {
+  public CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCache readCache) {
     this.isCacheEnabled = isCacheEnabled;
     this.writeCache = writeCache;
     this.readCache = readCache;
