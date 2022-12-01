@@ -93,7 +93,7 @@ public class ProjectSymbolDataSerializerTest {
     ProjectSymbolDataSerializer.SerializationData binary = ProjectSymbolDataSerializer.toBinary(projectSymbolData);
     ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(binary.data(), binary.stringTable());
 
-    assertThat(actual).isEqualTo(projectSymbolData);
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
   }
 
   @Test
@@ -107,6 +107,6 @@ public class ProjectSymbolDataSerializerTest {
     ProjectSymbolDataSerializer.SerializationData binary = ProjectSymbolDataSerializer.toBinary(projectSymbolData);
     ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(binary.data(), binary.stringTable());
 
-    assertThat(actual).isEqualTo(projectSymbolData);
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
   }
 }
