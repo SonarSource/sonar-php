@@ -64,6 +64,14 @@ public class FunctionSymbolData {
     private boolean hasReturn = false;
     private boolean hasFuncGetArgs = false;
 
+    public FunctionSymbolProperties() {
+    }
+
+    public FunctionSymbolProperties(boolean hasReturn, boolean hasFuncGetArgs) {
+      this.hasReturn = hasReturn;
+      this.hasFuncGetArgs = hasFuncGetArgs;
+    }
+
     public boolean hasReturn() {
       return hasReturn;
     }
@@ -78,6 +86,14 @@ public class FunctionSymbolData {
 
     public void hasFuncGetArgs(boolean hasFuncGetArgs) {
       this.hasFuncGetArgs = hasFuncGetArgs;
+    }
+
+    @Override
+    public String toString() {
+      return "FunctionSymbolProperties{" +
+        "hasReturn=" + hasReturn +
+        ", hasFuncGetArgs=" + hasFuncGetArgs +
+        '}';
     }
   }
 }
