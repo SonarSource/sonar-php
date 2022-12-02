@@ -38,6 +38,8 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class ProjectSymbolDataSerializerTest {
 
+  public static final String PLUGIN_VERSION = "1.2.3";
+
   @Test
   public void shouldSerializeAndDeserializeExampleData() {
     ProjectSymbolData projectSymbolData = new ProjectSymbolData();
@@ -82,8 +84,8 @@ public class ProjectSymbolDataSerializerTest {
     );
     projectSymbolData.add(functionSymbolData);
 
-    ProjectSymbolDataSerializer.SerializationData binary = ProjectSymbolDataSerializer.toBinary(projectSymbolData);
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(binary.data(), binary.stringTable());
+    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
+    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
   }
@@ -100,7 +102,7 @@ public class ProjectSymbolDataSerializerTest {
       List.of());
     projectSymbolData.add(classSymbolData);
 
-    Throwable throwable = catchThrowable(() -> ProjectSymbolDataSerializer.toBinary(projectSymbolData));
+    Throwable throwable = catchThrowable(() -> ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION)));
 
     assertThat(throwable)
       .isInstanceOf(IllegalStateException.class)
@@ -119,7 +121,7 @@ public class ProjectSymbolDataSerializerTest {
     );
     projectSymbolData.add(functionSymbolData);
 
-    Throwable throwable = catchThrowable(() -> ProjectSymbolDataSerializer.toBinary(projectSymbolData));
+    Throwable throwable = catchThrowable(() -> ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION)));
 
     assertThat(throwable)
       .isInstanceOf(IllegalStateException.class)
@@ -139,8 +141,8 @@ public class ProjectSymbolDataSerializerTest {
       List.of());
     projectSymbolData.add(classSymbolData);
 
-    ProjectSymbolDataSerializer.SerializationData binary = ProjectSymbolDataSerializer.toBinary(projectSymbolData);
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(binary.data(), binary.stringTable());
+    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
+    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
   }
@@ -158,8 +160,8 @@ public class ProjectSymbolDataSerializerTest {
       List.of());
     projectSymbolData.add(classSymbolData);
 
-    ProjectSymbolDataSerializer.SerializationData binary = ProjectSymbolDataSerializer.toBinary(projectSymbolData);
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(binary.data(), binary.stringTable());
+    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
+    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
   }
@@ -175,11 +177,13 @@ public class ProjectSymbolDataSerializerTest {
     );
     projectSymbolData.add(functionSymbolData);
 
-    ProjectSymbolDataSerializer.SerializationData binary = ProjectSymbolDataSerializer.toBinary(projectSymbolData);
+    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
     Throwable throwable = catchThrowable(() -> ProjectSymbolDataDeserializer.fromBinary(
-      binary.data(),
-      corruptBit(binary.stringTable())
-      ));
+      new DeserializationInput(
+        binary.data(),
+        corruptBit(binary.stringTable()),
+        PLUGIN_VERSION
+      )));
 
     assertThat(throwable)
       .isInstanceOf(IllegalStateException.class)
@@ -197,14 +201,35 @@ public class ProjectSymbolDataSerializerTest {
     );
     projectSymbolData.add(functionSymbolData);
 
-    ProjectSymbolDataSerializer.SerializationData binary = ProjectSymbolDataSerializer.toBinary(projectSymbolData);
+    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
     Throwable throwable = catchThrowable(() -> ProjectSymbolDataDeserializer.fromBinary(
+      new DeserializationInput(
       corruptBit(binary.data()),
-      binary.stringTable()));
+      binary.stringTable(),
+        PLUGIN_VERSION)));
 
     assertThat(throwable)
       .isInstanceOf(IllegalStateException.class)
       .hasMessage("Can't read data from cache");
+  }
+
+  @Test
+  public void shouldReturnNullWhenWrongPluginVersion() {
+    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+
+    ClassSymbolData classSymbolData = new ClassSymbolData(
+      UnknownLocationInFile.UNKNOWN_LOCATION,
+      SymbolQualifiedName.qualifiedName("dummy"),
+      SymbolQualifiedName.qualifiedName("dummy"),
+      List.of(),
+      ClassSymbol.Kind.NORMAL,
+      List.of());
+    projectSymbolData.add(classSymbolData);
+
+    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
+    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), "5.5.5"));
+
+    assertThat(actual).isNull();
   }
 
   private byte[] corruptBit(byte[] input) {

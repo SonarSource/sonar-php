@@ -45,14 +45,17 @@ public class ProjectSymbolDataSerializer {
     stringTable = new StringTable();
   }
 
-  public static SerializationData toBinary(ProjectSymbolData projectSymbolData) {
+  public static SerializationResult toBinary(SerializationInput serializationInput) {
     ProjectSymbolDataSerializer serializer = new ProjectSymbolDataSerializer();
-    return serializer.convert(projectSymbolData);
+    return serializer.convert(serializationInput);
   }
 
 
-  private SerializationData convert(ProjectSymbolData projectSymbolData) {
+  private SerializationResult convert(SerializationInput serializationInput) {
     try {
+      String pluginVersion = serializationInput.pluginVersion();
+      writeText(pluginVersion);
+      ProjectSymbolData projectSymbolData = serializationInput.projectSymbolData();
       Collection<ClassSymbolData> classSymbols = projectSymbolData.classSymbolsByQualifiedName().values();
       writeInt(classSymbols.size());
       for (ClassSymbolData classSymbol : classSymbols) {
@@ -65,7 +68,7 @@ public class ProjectSymbolDataSerializer {
       }
       out.writeUTF("END");
 
-      return new SerializationData(stream.toByteArray(), writeStringTable());
+      return new SerializationResult(stream.toByteArray(), writeStringTable());
     } catch (IOException e) {
       throw new IllegalStateException("Can't store data in cache", e);
     } finally {
@@ -169,22 +172,5 @@ public class ProjectSymbolDataSerializer {
 
     output.writeUTF("END");
     return stringTableStream.toByteArray();
-  }
-
-  public static class SerializationData {
-    private final byte [] data;
-    private final byte [] stringTable;
-
-    public SerializationData(byte[] data, byte[] stringTable) {
-      this.data = data;
-      this.stringTable = stringTable;
-    }
-
-    public byte [] data() {
-      return data;
-    }
-    public byte [] stringTable() {
-      return stringTable;
-    }
   }
 }

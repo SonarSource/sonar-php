@@ -22,6 +22,7 @@ package org.sonar.php.cache;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.CheckForNull;
 import org.sonar.api.internal.apachecommons.io.IOUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
@@ -40,18 +41,22 @@ public class ProjectSymbolDataDeserializer {
 
   private final VarLengthInputStream in;
   private final VarLengthInputStream stringTableIn;
+  private final String pluginVersion;
 
   private StringTable stringTable;
 
-  private ProjectSymbolDataDeserializer(VarLengthInputStream in, VarLengthInputStream stringTableIn) {
+  private ProjectSymbolDataDeserializer(VarLengthInputStream in, VarLengthInputStream stringTableIn, String pluginVersion) {
     this.in = in;
     this.stringTableIn = stringTableIn;
+    this.pluginVersion = pluginVersion;
   }
 
-  public static ProjectSymbolData fromBinary(byte[] projectSymbolDataBytes, byte[] stringTable) {
+  @CheckForNull
+  public static ProjectSymbolData fromBinary(DeserializationInput input) {
     ProjectSymbolDataDeserializer deserializer = new ProjectSymbolDataDeserializer(
-      new VarLengthInputStream(projectSymbolDataBytes),
-      new VarLengthInputStream(stringTable));
+      new VarLengthInputStream(input.projectSymbolDataBytes()),
+      new VarLengthInputStream(input.stringTable()),
+      input.pluginVersion());
     return deserializer.convert();
   }
 
@@ -59,6 +64,10 @@ public class ProjectSymbolDataDeserializer {
     try {
       ProjectSymbolData projectSymbolData = new ProjectSymbolData();
       stringTable = readStringTable();
+      String pluginVersionText = readString();
+      if(!pluginVersionText.equals(pluginVersion)) {
+        return null;
+      }
       int sizeOfClassSymbols = readInt();
       for (int i = 0; i < sizeOfClassSymbols; i++) {
         ClassSymbolData data = readClassSymbolData();
