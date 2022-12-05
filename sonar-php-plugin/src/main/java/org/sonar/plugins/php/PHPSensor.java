@@ -181,6 +181,11 @@ public class PHPSensor implements Sensor {
     }
 
     @Override
+    protected boolean fileShouldBeProcessed(InputFile file) {
+      return file.status() == null || !file.status().equals(InputFile.Status.SAME);
+    }
+
+    @Override
     String name() {
       return "PHP rules";
     }

@@ -46,6 +46,7 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
+import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.cpd.internal.TokensLine;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -585,6 +586,14 @@ public class PHPSensorTest {
     context.fileSystem().add(testFile);
     createSensor(check).execute(context);
     assertThat(check.wasTriggered).isTrue();
+  }
+
+  @Test
+  public void should_not_analyze_unchanged_file() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isEmpty();
   }
 
   @After

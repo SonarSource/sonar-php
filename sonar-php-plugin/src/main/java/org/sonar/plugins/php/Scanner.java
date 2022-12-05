@@ -57,7 +57,11 @@ abstract class Scanner {
         if (context.isCancelled()) {
           throw new CancellationException();
         }
-        processFile(file);
+
+        if (fileShouldBeProcessed(file)) {
+          processFile(file);
+        }
+
         progressReport.nextFile();
       }
       onEnd();
@@ -65,6 +69,10 @@ abstract class Scanner {
     } finally {
       stopProgressReport(progressReport, success);
     }
+  }
+
+  protected boolean fileShouldBeProcessed(InputFile file) {
+    return true;
   }
 
   private void processFile(InputFile file) {
