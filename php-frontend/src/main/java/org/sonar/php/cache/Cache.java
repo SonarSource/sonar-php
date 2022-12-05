@@ -23,8 +23,8 @@ import org.sonar.php.symbols.ProjectSymbolData;
 
 public class Cache {
 
-  public static final String CACHE_KEY_DATA = "php.projectSymbolData.classSymbolsByQualifiedName.data";
-  public static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.classSymbolsByQualifiedName.data";
+  public static final String CACHE_KEY_DATA = "php.projectSymbolData.data";
+  public static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable";
   private final CacheContext cacheContext;
 
   public Cache(CacheContext cacheContext) {

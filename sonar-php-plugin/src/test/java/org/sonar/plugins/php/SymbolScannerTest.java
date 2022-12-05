@@ -19,10 +19,20 @@
  */
 package org.sonar.plugins.php;
 
-import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.DurationStatistics;
+import org.sonar.api.SonarEdition;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.SonarRuntime;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.internal.SonarRuntimeImpl;
+import org.sonar.api.utils.Version;
 import org.sonar.php.cache.Cache;
 import org.sonar.php.cache.CacheContext;
 import org.sonar.php.cache.CacheContextImpl;
@@ -38,17 +48,56 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SymbolScannerTest {
   @Test
   public void shouldSerializeAndDeserializeData() {
-    SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
+    SymbolScanner symbolScanner = createScaner();
 
-    DurationStatistics statistics = new DurationStatistics(context.config());
-    CacheContext cacheContext = CacheContextImpl.of(context);
-    Cache cache = new Cache(cacheContext);
-    SymbolScanner symbolScanner = new SymbolScanner(context, statistics, cache);
+    List<InputFile> inputFiles = exampleFiles("Mail.php", "cpd.php", "Math2.php", "Math3.php", "PHPSquidSensor.php",
+      "cross-file/A.php", "cross-file/B.php"
+    );
+
+    symbolScanner.execute(inputFiles);
+
     ProjectSymbolData projectSymbolData = symbolScanner.getProjectSymbolData();
+    assertThat(projectSymbolData.classSymbolsByQualifiedName()).isNotEmpty();
 
     SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, "1.2.3"));
     ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), "1.2.3"));
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
+  }
+
+  private static SymbolScanner createScaner() {
+    SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(9, 7), SonarQubeSide.SCANNER, SonarEdition.DEVELOPER);
+    SensorContextTester context = SensorContextTester.create(PhpTestUtils.getModuleBaseDir())
+      .setRuntime(runtime);
+    context.setCacheEnabled(true);
+    ReadWriteInMemoryCache cacheMock = new ReadWriteInMemoryCache();
+    context.setNextCache(cacheMock);
+    context.setPreviousCache(cacheMock);
+
+    DurationStatistics statistics = new DurationStatistics(context.config());
+    CacheContext cacheContext = CacheContextImpl.of(context);
+    Cache cache = new Cache(cacheContext);
+    SymbolScanner symbolScanner = new SymbolScanner(context, statistics, cache);
+    return symbolScanner;
+  }
+
+  private static List<InputFile> exampleFiles(String... fileNames) {
+    List<InputFile> inputFiles = new ArrayList<>();
+
+    for (String fileName : fileNames) {
+      DefaultInputFile inputFile = file(fileName);
+      inputFiles.add(inputFile);
+    }
+    return inputFiles;
+  }
+
+  private static DefaultInputFile file(String name) {
+    DefaultInputFile inputFile = TestInputFileBuilder.create(PhpTestUtils.getModuleBaseDir().getPath(), name)
+      .setLanguage("php")
+      .setType(InputFile.Type.MAIN)
+      .initMetadata("<?php ")
+      .setCharset(StandardCharsets.UTF_8)
+      .build();
+    return inputFile;
   }
 }

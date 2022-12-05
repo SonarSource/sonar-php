@@ -19,17 +19,23 @@
  */
 package org.sonar.php.cache;
 
+import java.util.List;
 import org.junit.Test;
+import org.sonar.php.symbols.FunctionSymbolData;
+import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 public class CacheTest {
 
-  private static final String CACHE_KEY_DATA = "php.projectSymbolData.classSymbolsByQualifiedName.data";
-  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.classSymbolsByQualifiedName.data";
+  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data";
+  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable";
 
   private PhpWriteCache writeCache = mock(PhpWriteCache.class);
   private PhpReadCache readCache = mock(PhpReadCache.class);
@@ -38,7 +44,7 @@ public class CacheTest {
   public void shouldWriteToCacheOnlyIfItsEnabled() {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache);
     Cache cache = new Cache(context);
-    ProjectSymbolData data = new ProjectSymbolData();
+    ProjectSymbolData data = exampleProjectSymbolData();
 
     cache.write(data);
 
@@ -56,5 +62,41 @@ public class CacheTest {
     cache.write(data);
 
     verifyZeroInteractions(writeCache);
+  }
+
+  @Test
+  public void shouldReadFromCache() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache);
+    Cache cache = new Cache(context);
+    ProjectSymbolData data = exampleProjectSymbolData();
+    SerializationInput serializationInput = new SerializationInput(data, "1.2.3");
+    SerializationResult serializationData = ProjectSymbolDataSerializer.toBinary(serializationInput);
+    when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(serializationData.data());
+    when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(serializationData.stringTable());
+
+    ProjectSymbolData actual = cache.read();
+
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(data);
+  }
+
+  @Test
+  public void shouldReturnNullWhenCacheDisabled() {
+    CacheContext context = new CacheContextImpl(false, writeCache, readCache);
+    Cache cache = new Cache(context);
+
+    ProjectSymbolData actual = cache.read();
+
+    assertThat(actual).isNull();
+  }
+
+  private static ProjectSymbolData exampleProjectSymbolData() {
+    ProjectSymbolData data = new ProjectSymbolData();
+    data.add(new FunctionSymbolData(
+      new LocationInFileImpl("abc.php", 1, 1, 1, 10),
+      QualifiedName.qualifiedName("funcName"),
+      List.of(),
+      new FunctionSymbolData.FunctionSymbolProperties(false, false)
+    ));
+    return data;
   }
 }

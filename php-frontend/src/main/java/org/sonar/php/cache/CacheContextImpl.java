@@ -30,7 +30,7 @@ public class CacheContextImpl implements CacheContext {
   private final PhpWriteCache writeCache;
   private final PhpReadCache readCache;
 
-  public CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCache readCache) {
+  CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCache readCache) {
     this.isCacheEnabled = isCacheEnabled;
     this.writeCache = writeCache;
     this.readCache = readCache;
@@ -43,7 +43,7 @@ public class CacheContextImpl implements CacheContext {
         new PhpWriteCacheImpl(context.nextCache()),
         new PhpReadCacheImpl(context.previousCache()));
     }
-    return new CacheContextImpl(false, new DummyCache(), new PhpReadCacheImpl(context.previousCache()));
+    return new CacheContextImpl(false, new DummyCache(), new DummyCache());
   }
 
   @Override
