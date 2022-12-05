@@ -59,8 +59,8 @@ public class CacheContextImplTest {
     CacheContextImpl context = CacheContextImpl.of(sensorContext);
 
     assertThat(context.isCacheEnabled()).isFalse();
-    assertThat(context.getReadCache()).isInstanceOf(DummyCache.class);
-    assertThat(context.getWriteCache()).isInstanceOf(DummyCache.class);
+    assertThat(context.getReadCache()).isNull();
+    assertThat(context.getWriteCache()).isNull();
   }
 
   @Test
@@ -74,7 +74,7 @@ public class CacheContextImplTest {
     CacheContextImpl context = CacheContextImpl.of(sensorContext);
 
     assertThat(context.isCacheEnabled()).isFalse();
-    assertThat(context.getReadCache()).isInstanceOf(DummyCache.class);
-    assertThat(context.getWriteCache()).isInstanceOf(DummyCache.class);
+    assertThat(context.getReadCache()).isNull();
+    assertThat(context.getWriteCache()).isNull();
   }
 }

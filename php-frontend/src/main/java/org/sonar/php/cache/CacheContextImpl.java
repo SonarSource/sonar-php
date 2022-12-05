@@ -48,7 +48,7 @@ public class CacheContextImpl implements CacheContext {
         new PhpReadCacheImpl(context.previousCache()),
         pluginVersion);
     }
-    return new CacheContextImpl(false, new DummyCache(), new DummyCache(), pluginVersion);
+    return new CacheContextImpl(false, null, null, pluginVersion);
   }
 
   @Override

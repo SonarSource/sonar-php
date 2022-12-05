@@ -35,8 +35,8 @@ public class PhpReadCacheImpl implements PhpReadCache {
     this.readCache = readCache;
   }
 
-  @CheckForNull
   @Override
+  @CheckForNull
   public byte[] readBytes(String key) {
     if (readCache.contains(key)) {
       try (var in = readCache.read(key)) {

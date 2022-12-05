@@ -48,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SymbolScannerTest {
   @Test
   public void shouldSerializeAndDeserializeData() {
-    SymbolScanner symbolScanner = createScaner();
+    SymbolScanner symbolScanner = createScanner();
 
     List<InputFile> inputFiles = exampleFiles("Mail.php", "cpd.php", "Math2.php", "Math3.php", "PHPSquidSensor.php",
       "cross-file/A.php", "cross-file/B.php"
@@ -65,7 +65,7 @@ public class SymbolScannerTest {
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
   }
 
-  private static SymbolScanner createScaner() {
+  private static SymbolScanner createScanner() {
     SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(9, 7), SonarQubeSide.SCANNER, SonarEdition.DEVELOPER);
     SensorContextTester context = SensorContextTester.create(PhpTestUtils.getModuleBaseDir())
       .setRuntime(runtime);
