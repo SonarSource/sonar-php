@@ -25,4 +25,6 @@ public interface CacheContext {
   PhpReadCache getReadCache();
 
   PhpWriteCache getWriteCache();
+
+  String pluginVersion();
 }

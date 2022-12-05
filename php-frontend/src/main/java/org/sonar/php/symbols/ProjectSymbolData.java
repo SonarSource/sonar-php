@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
@@ -63,19 +62,6 @@ public class ProjectSymbolData {
 
   public Map<QualifiedName, List<FunctionSymbolData>> functionSymbolsByQualifiedName() {
     return functionSymbolsByQualifiedName;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    ProjectSymbolData that = (ProjectSymbolData) o;
-    return Objects.equals(classSymbolsByQualifiedName, that.classSymbolsByQualifiedName) && Objects.equals(functionSymbolsByQualifiedName, that.functionSymbolsByQualifiedName);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(classSymbolsByQualifiedName, functionSymbolsByQualifiedName);
   }
 
   @Override

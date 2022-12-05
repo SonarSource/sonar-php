@@ -22,6 +22,7 @@ package org.sonar.php.cache;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.Version;
+import org.sonar.php.symbols.ProjectSymbolData;
 
 public class CacheContextImpl implements CacheContext {
 
@@ -29,21 +30,25 @@ public class CacheContextImpl implements CacheContext {
   private final boolean isCacheEnabled;
   private final PhpWriteCache writeCache;
   private final PhpReadCache readCache;
+  private final String pluginVersion;
 
-  CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCache readCache) {
+  CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCache readCache, String pluginVersion) {
     this.isCacheEnabled = isCacheEnabled;
     this.writeCache = writeCache;
     this.readCache = readCache;
+    this.pluginVersion = pluginVersion;
   }
 
   public static CacheContextImpl of(SensorContext context) {
+    String pluginVersion = getImplementationVersion(ProjectSymbolData.class);
     if (!context.runtime().getProduct().equals(SonarProduct.SONARLINT)
       && context.runtime().getApiVersion().isGreaterThanOrEqual(MINIMUM_RUNTIME_VERSION)) {
       return new CacheContextImpl(context.isCacheEnabled(),
         new PhpWriteCacheImpl(context.nextCache()),
-        new PhpReadCacheImpl(context.previousCache()));
+        new PhpReadCacheImpl(context.previousCache()),
+        pluginVersion);
     }
-    return new CacheContextImpl(false, new DummyCache(), new DummyCache());
+    return new CacheContextImpl(false, new DummyCache(), new DummyCache(), pluginVersion);
   }
 
   @Override
@@ -59,5 +64,15 @@ public class CacheContextImpl implements CacheContext {
   @Override
   public PhpWriteCache getWriteCache() {
     return writeCache;
+  }
+
+  @Override
+  public String pluginVersion() {
+    return pluginVersion;
+  }
+
+  public static String getImplementationVersion(Class<?> cls) {
+    String implementationVersion = cls.getPackage().getImplementationVersion();
+    return implementationVersion != null ? implementationVersion : "unknown";
   }
 }

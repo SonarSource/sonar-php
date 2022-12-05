@@ -33,7 +33,8 @@ public class Cache {
 
   public void write(ProjectSymbolData projectSymbolData) {
     if (cacheContext.isCacheEnabled()) {
-      SerializationInput serializationInput = new SerializationInput(projectSymbolData, "1.2.3");
+      String pluginVersion = cacheContext.pluginVersion();
+      SerializationInput serializationInput = new SerializationInput(projectSymbolData, pluginVersion);
       SerializationResult serializationData = ProjectSymbolDataSerializer.toBinary(serializationInput);
       cacheContext.getWriteCache().write(CACHE_KEY_DATA, serializationData.data());
       cacheContext.getWriteCache().write(CACHE_KEY_STRING_TABLE, serializationData.stringTable());
@@ -42,9 +43,10 @@ public class Cache {
 
   public ProjectSymbolData read() {
     if (cacheContext.isCacheEnabled()) {
+      String pluginVersion = cacheContext.pluginVersion();
       byte[] data = cacheContext.getReadCache().readBytes(CACHE_KEY_DATA);
       byte[] stringTable = cacheContext.getReadCache().readBytes(CACHE_KEY_STRING_TABLE);
-      return ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(data, stringTable, "1.2.3"));
+      return ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(data, stringTable, pluginVersion));
     }
     return null;
   }

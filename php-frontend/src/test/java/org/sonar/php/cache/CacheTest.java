@@ -36,26 +36,27 @@ public class CacheTest {
 
   private static final String CACHE_KEY_DATA = "php.projectSymbolData.data";
   private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable";
+  private static final String PLUGIN_VERSION = "1.2.3";
 
   private PhpWriteCache writeCache = mock(PhpWriteCache.class);
   private PhpReadCache readCache = mock(PhpReadCache.class);
 
   @Test
   public void shouldWriteToCacheOnlyIfItsEnabled() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     ProjectSymbolData data = exampleProjectSymbolData();
 
     cache.write(data);
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(data, "1.2.3"));
+    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(data, PLUGIN_VERSION));
     verify(writeCache).write(CACHE_KEY_DATA, binary.data());
     verify(writeCache).write(CACHE_KEY_STRING_TABLE, binary.stringTable());
   }
 
   @Test
   public void shouldNotWriteToCacheIfItsDisabled() {
-    CacheContext context = new CacheContextImpl(false, writeCache, readCache);
+    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     ProjectSymbolData data = new ProjectSymbolData();
 
@@ -66,10 +67,10 @@ public class CacheTest {
 
   @Test
   public void shouldReadFromCache() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     ProjectSymbolData data = exampleProjectSymbolData();
-    SerializationInput serializationInput = new SerializationInput(data, "1.2.3");
+    SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = ProjectSymbolDataSerializer.toBinary(serializationInput);
     when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(serializationData.data());
     when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(serializationData.stringTable());
@@ -81,7 +82,7 @@ public class CacheTest {
 
   @Test
   public void shouldReturnNullWhenCacheDisabled() {
-    CacheContext context = new CacheContextImpl(false, writeCache, readCache);
+    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
 
     ProjectSymbolData actual = cache.read();
