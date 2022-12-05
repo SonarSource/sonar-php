@@ -56,16 +56,8 @@ public class VarLengthInputStream implements Closeable {
     return result;
   }
 
-  public long readLong() throws IOException {
-    return in.readLong();
-  }
-
   public boolean readBoolean() throws IOException {
     return in.readBoolean();
-  }
-
-  public void readFully(byte[] b) throws IOException {
-    in.readFully(b);
   }
 
   public byte readByte() throws IOException {
