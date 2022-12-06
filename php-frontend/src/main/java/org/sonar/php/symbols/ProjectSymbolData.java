@@ -63,12 +63,4 @@ public class ProjectSymbolData {
   public Map<QualifiedName, List<FunctionSymbolData>> functionSymbolsByQualifiedName() {
     return functionSymbolsByQualifiedName;
   }
-
-  @Override
-  public String toString() {
-    return "ProjectSymbolData{" +
-      "classSymbolsByQualifiedName=" + classSymbolsByQualifiedName +
-      ", functionSymbolsByQualifiedName=" + functionSymbolsByQualifiedName +
-      '}';
-  }
 }

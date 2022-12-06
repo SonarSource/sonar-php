@@ -23,7 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import org.sonar.api.internal.apachecommons.io.IOUtils;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.MethodSymbolData;
@@ -52,7 +51,7 @@ public class ProjectSymbolDataSerializer {
 
 
   private SerializationResult convert(SerializationInput serializationInput) {
-    try {
+    try (out; stream) {
       String pluginVersion = serializationInput.pluginVersion();
       writeText(pluginVersion);
       ProjectSymbolData projectSymbolData = serializationInput.projectSymbolData();
@@ -71,8 +70,6 @@ public class ProjectSymbolDataSerializer {
       return new SerializationResult(stream.toByteArray(), writeStringTable());
     } catch (IOException e) {
       throw new IllegalStateException("Can't store data in cache", e);
-    } finally {
-      IOUtils.closeQuietly(out, stream);
     }
   }
 

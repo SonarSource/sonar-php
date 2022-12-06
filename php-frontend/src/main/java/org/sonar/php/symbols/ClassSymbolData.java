@@ -73,16 +73,4 @@ public class ClassSymbolData {
   public ClassSymbol.Kind kind() {
     return kind;
   }
-
-  @Override
-  public String toString() {
-    return "ClassSymbolData{" +
-      "location=" + location +
-      ", qualifiedName=" + qualifiedName +
-      ", superClass=" + superClass +
-      ", implementedInterfaces=" + implementedInterfaces +
-      ", kind=" + kind +
-      ", methods=" + methods +
-      '}';
-  }
 }

@@ -62,14 +62,4 @@ public class Parameter {
   public boolean hasEllipsisOperator() {
     return hasEllipsisOperator;
   }
-
-  @Override
-  public String toString() {
-    return "Parameter{" +
-      "name='" + name + '\'' +
-      ", type='" + type + '\'' +
-      ", hasDefault=" + hasDefault +
-      ", hasEllipsisOperator=" + hasEllipsisOperator +
-      '}';
-  }
 }

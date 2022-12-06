@@ -59,13 +59,4 @@ public class MethodSymbolData extends FunctionSymbolData {
   public boolean isAbstract() {
     return isAbstract;
   }
-
-  @Override
-  public String toString() {
-    return "MethodSymbolData{" +
-      "visibility=" + visibility +
-      ", name='" + name + '\'' +
-      ", isAbstract=" + isAbstract +
-      "} " + super.toString();
-  }
 }

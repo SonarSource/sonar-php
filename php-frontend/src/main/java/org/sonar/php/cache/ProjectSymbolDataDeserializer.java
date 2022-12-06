@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.CheckForNull;
-import org.sonar.api.internal.apachecommons.io.IOUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
@@ -61,7 +60,7 @@ public class ProjectSymbolDataDeserializer {
   }
 
   private ProjectSymbolData convert() {
-    try {
+    try (in; stringTableIn) {
       ProjectSymbolData projectSymbolData = new ProjectSymbolData();
       stringTable = readStringTable();
       String pluginVersionText = readString();
@@ -84,8 +83,6 @@ public class ProjectSymbolDataDeserializer {
       return projectSymbolData;
     } catch (IOException e) {
       throw new IllegalStateException("Can't read data from cache", e);
-    } finally {
-      IOUtils.closeQuietly(in, stringTableIn);
     }
   }
 

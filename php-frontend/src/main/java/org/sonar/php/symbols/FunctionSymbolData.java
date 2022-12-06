@@ -60,16 +60,6 @@ public class FunctionSymbolData {
     return properties;
   }
 
-  @Override
-  public String toString() {
-    return "FunctionSymbolData{" +
-      "location=" + location +
-      ", qualifiedName=" + qualifiedName +
-      ", parameters=" + parameters +
-      ", properties=" + properties +
-      '}';
-  }
-
   public static class FunctionSymbolProperties {
     private boolean hasReturn = false;
     private boolean hasFuncGetArgs = false;
@@ -96,14 +86,6 @@ public class FunctionSymbolData {
 
     public void hasFuncGetArgs(boolean hasFuncGetArgs) {
       this.hasFuncGetArgs = hasFuncGetArgs;
-    }
-
-    @Override
-    public String toString() {
-      return "FunctionSymbolProperties{" +
-        "hasReturn=" + hasReturn +
-        ", hasFuncGetArgs=" + hasFuncGetArgs +
-        '}';
     }
   }
 }
