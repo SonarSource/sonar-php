@@ -19,12 +19,17 @@
  */
 package org.sonar.php.cache;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.Version;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.symbols.ProjectSymbolData;
 
 public class CacheContextImpl implements CacheContext {
+
+  private static final Logger LOG = Loggers.get(CacheContextImpl.class);
 
   public static final Version MINIMUM_RUNTIME_VERSION = Version.create(9, 7);
   private final boolean isCacheEnabled;
@@ -44,8 +49,14 @@ public class CacheContextImpl implements CacheContext {
   public static CacheContextImpl of(SensorContext context) {
     String pluginVersion = getImplementationVersion(ProjectSymbolData.class);
     String projectKey = context.project().key();
+    String sonarModules = context.config().get("sonar.modules").orElse("");
+    if (StringUtils.isNotBlank(sonarModules) && context.isCacheEnabled()) {
+      LOG.warn("The sonar.modules is not blank so the scanner cache can't be used, it will be disabled. " +
+        "Please remove sonar.modules from properties to have scanner cache enabled.");
+    }
     if (!context.runtime().getProduct().equals(SonarProduct.SONARLINT)
-      && context.runtime().getApiVersion().isGreaterThanOrEqual(MINIMUM_RUNTIME_VERSION)) {
+      && context.runtime().getApiVersion().isGreaterThanOrEqual(MINIMUM_RUNTIME_VERSION)
+      && StringUtils.isBlank(sonarModules)) {
       return new CacheContextImpl(context.isCacheEnabled(),
         new PhpWriteCacheImpl(context.nextCache()),
         new PhpReadCacheImpl(context.previousCache()),
