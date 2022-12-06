@@ -48,9 +48,22 @@ public class PhpReadCacheImplTest {
   @Test
   public void shouldReturnNullWhenIoException() throws IOException {
     ReadCache readCache = mock(ReadCache.class);
+    when(readCache.contains("key")).thenReturn(true);
     InputStream inputStream = mock(InputStream.class);
     when(inputStream.readAllBytes()).thenThrow(new IOException());
     when(readCache.read("key")).thenReturn(inputStream);
+
+    PhpReadCacheImpl phpReadCache = new PhpReadCacheImpl(readCache);
+
+    byte[] actual = phpReadCache.readBytes("key");
+
+    assertThat(actual).isNull();
+  }
+
+  @Test
+  public void shouldReturnNullWhenDoesntContainsKey() throws IOException {
+    ReadCache readCache = mock(ReadCache.class);
+    when(readCache.contains("key")).thenReturn(false);
 
     PhpReadCacheImpl phpReadCache = new PhpReadCacheImpl(readCache);
 

@@ -92,9 +92,6 @@ public class ProjectSymbolDataDeserializer {
   private FunctionSymbolData readFunctionSymbolDataList() throws IOException {
     LocationInFile location = readLocation();
     QualifiedName qualifiedName = readQualifiedName();
-    if (qualifiedName == null) {
-      throw new IOException("Can't read data from cache, format corrupted, the qualifiedName can't be null for FunctionSymbolData");
-    }
     List<Parameter> parameters = readParameters();
     FunctionSymbolData.FunctionSymbolProperties properties = readProperties();
     return new FunctionSymbolData(location, qualifiedName, parameters, properties);
@@ -109,6 +106,11 @@ public class ProjectSymbolDataDeserializer {
 
   private QualifiedName readQualifiedName() throws IOException {
     String name = readString();
+    return SymbolQualifiedName.qualifiedName(name);
+  }
+
+  private QualifiedName readQualifiedNameOrNull() throws IOException {
+    String name = readString();
     if (name.isBlank()) {
       return null;
     }
@@ -118,10 +120,7 @@ public class ProjectSymbolDataDeserializer {
   private ClassSymbolData readClassSymbolData() throws IOException {
     LocationInFile location = readLocation();
     QualifiedName qualifiedName = readQualifiedName();
-    if (qualifiedName == null) {
-      throw new IOException("Can't read data from cache, format corrupted, qualifiedName for ClassSymbolData needs to be not null");
-    }
-    QualifiedName superClass = readQualifiedName();
+    QualifiedName superClass = readQualifiedNameOrNull();
     int sizeOfImplementedInterfaces = readInt();
     List<QualifiedName> implementedInterfaces = new ArrayList<>();
     for (int i = 0; i < sizeOfImplementedInterfaces; i++) {

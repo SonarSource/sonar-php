@@ -84,15 +84,6 @@ public class PHPSensor implements Sensor {
 
   private RuleKey parsingErrorRuleKey;
 
-  public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
-    this(fileLinesContextFactory, checkFactory, noSonarFilter, null, NOOP_ANALYSIS_WARNINGS);
-  }
-
-  public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
-    AnalysisWarningsWrapper analysisWarningsWrapper) {
-    this(fileLinesContextFactory, checkFactory, noSonarFilter, null, analysisWarningsWrapper);
-  }
-
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
     @Nullable PHPCustomRuleRepository[] customRuleRepositories) {
     this(fileLinesContextFactory, checkFactory, noSonarFilter, customRuleRepositories , NOOP_ANALYSIS_WARNINGS);
