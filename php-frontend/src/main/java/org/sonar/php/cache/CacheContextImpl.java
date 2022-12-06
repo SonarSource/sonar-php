@@ -31,24 +31,28 @@ public class CacheContextImpl implements CacheContext {
   private final PhpWriteCache writeCache;
   private final PhpReadCache readCache;
   private final String pluginVersion;
+  private final String projectKey;
 
-  CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCache readCache, String pluginVersion) {
+  CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCache readCache, String pluginVersion, String projectKey) {
     this.isCacheEnabled = isCacheEnabled;
     this.writeCache = writeCache;
     this.readCache = readCache;
     this.pluginVersion = pluginVersion;
+    this.projectKey = projectKey;
   }
 
   public static CacheContextImpl of(SensorContext context) {
     String pluginVersion = getImplementationVersion(ProjectSymbolData.class);
+    String projectKey = context.project().key();
     if (!context.runtime().getProduct().equals(SonarProduct.SONARLINT)
       && context.runtime().getApiVersion().isGreaterThanOrEqual(MINIMUM_RUNTIME_VERSION)) {
       return new CacheContextImpl(context.isCacheEnabled(),
         new PhpWriteCacheImpl(context.nextCache()),
         new PhpReadCacheImpl(context.previousCache()),
-        pluginVersion);
+        pluginVersion,
+        projectKey);
     }
-    return new CacheContextImpl(false, null, null, pluginVersion);
+    return new CacheContextImpl(false, null, null, pluginVersion, projectKey);
   }
 
   @Override
@@ -69,6 +73,11 @@ public class CacheContextImpl implements CacheContext {
   @Override
   public String pluginVersion() {
     return pluginVersion;
+  }
+
+  @Override
+  public String projectKey() {
+    return projectKey;
   }
 
   public static String getImplementationVersion(Class<?> cls) {

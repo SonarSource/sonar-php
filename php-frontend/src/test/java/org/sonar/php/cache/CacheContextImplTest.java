@@ -22,6 +22,7 @@ package org.sonar.php.cache;
 import org.junit.Test;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.scanner.fs.InputProject;
 import org.sonar.api.utils.Version;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,6 +36,9 @@ public class CacheContextImplTest {
   @Test
   public void shouldCreateEnabledCacheContext() {
     SensorContext sensorContext = mock(SensorContext.class);
+    InputProject project = mock(InputProject.class);
+    when(project.key()).thenReturn("projectKey");
+    when(sensorContext.project()).thenReturn(project);
     SonarRuntime runtime = mock(SonarRuntime.class);
     when(runtime.getApiVersion()).thenReturn(Version.parse("9.7"));
     when(runtime.getProduct()).thenReturn(SONARQUBE);
@@ -51,6 +55,9 @@ public class CacheContextImplTest {
   @Test
   public void shouldCreateDisabledCacheContextForSonarLint() {
     SensorContext sensorContext = mock(SensorContext.class);
+    InputProject project = mock(InputProject.class);
+    when(project.key()).thenReturn("projectKey");
+    when(sensorContext.project()).thenReturn(project);
     SonarRuntime runtime = mock(SonarRuntime.class);
     when(runtime.getApiVersion()).thenReturn(Version.parse("9.7"));
     when(runtime.getProduct()).thenReturn(SONARLINT);
@@ -66,6 +73,9 @@ public class CacheContextImplTest {
   @Test
   public void shouldCreateDisabledCacheContextForOldSonarQube() {
     SensorContext sensorContext = mock(SensorContext.class);
+    InputProject project = mock(InputProject.class);
+    when(project.key()).thenReturn("projectKey");
+    when(sensorContext.project()).thenReturn(project);
     SonarRuntime runtime = mock(SonarRuntime.class);
     when(runtime.getApiVersion()).thenReturn(Version.parse("9.6"));
     when(runtime.getProduct()).thenReturn(SONARQUBE);

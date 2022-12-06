@@ -34,16 +34,17 @@ import static org.mockito.Mockito.when;
 
 public class CacheTest {
 
-  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data";
-  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable";
+  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:projectKey";
+  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:projectKey";
   private static final String PLUGIN_VERSION = "1.2.3";
+  private static final String PROJECT_KEY = "projectKey";
 
   private PhpWriteCache writeCache = mock(PhpWriteCache.class);
   private PhpReadCache readCache = mock(PhpReadCache.class);
 
   @Test
   public void shouldWriteToCacheOnlyIfItsEnabled() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
     ProjectSymbolData data = exampleProjectSymbolData();
 
@@ -56,7 +57,7 @@ public class CacheTest {
 
   @Test
   public void shouldNotWriteToCacheIfItsDisabled() {
-    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
+    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
     ProjectSymbolData data = new ProjectSymbolData();
 
@@ -67,7 +68,7 @@ public class CacheTest {
 
   @Test
   public void shouldReadFromCache() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
     ProjectSymbolData data = exampleProjectSymbolData();
     SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
@@ -82,7 +83,7 @@ public class CacheTest {
 
   @Test
   public void shouldReturnNullWhenCacheDisabled() {
-    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
+    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
 
     ProjectSymbolData actual = cache.read();
