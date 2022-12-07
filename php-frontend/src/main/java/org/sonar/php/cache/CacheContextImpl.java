@@ -51,8 +51,7 @@ public class CacheContextImpl implements CacheContext {
     String projectKey = context.project().key();
     String sonarModules = context.config().get("sonar.modules").orElse("");
     if (StringUtils.isNotBlank(sonarModules) && context.isCacheEnabled()) {
-      LOG.warn("The sonar.modules is not blank so the scanner cache can't be used, it will be disabled. " +
-        "Please remove sonar.modules from properties to have scanner cache enabled.");
+      LOG.warn("The sonar.modules is a deprecated property and should not be used anymore, it inhibits an optimized analysis");
     }
     if (!context.runtime().getProduct().equals(SonarProduct.SONARLINT)
       && context.runtime().getApiVersion().isGreaterThanOrEqual(MINIMUM_RUNTIME_VERSION)

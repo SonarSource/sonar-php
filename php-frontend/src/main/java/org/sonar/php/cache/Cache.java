@@ -37,8 +37,8 @@ public class Cache {
       String projectKey = cacheContext.projectKey();
       SerializationInput serializationInput = new SerializationInput(projectSymbolData, pluginVersion);
       SerializationResult serializationData = ProjectSymbolDataSerializer.toBinary(serializationInput);
-      cacheContext.getWriteCache().write(CACHE_KEY_DATA + projectKey, serializationData.data());
-      cacheContext.getWriteCache().write(CACHE_KEY_STRING_TABLE + projectKey, serializationData.stringTable());
+      cacheContext.getWriteCache().writeBytes(CACHE_KEY_DATA + projectKey, serializationData.data());
+      cacheContext.getWriteCache().writeBytes(CACHE_KEY_STRING_TABLE + projectKey, serializationData.stringTable());
     }
   }
 

@@ -51,8 +51,8 @@ public class CacheTest {
     cache.write(data);
 
     SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(data, PLUGIN_VERSION));
-    verify(writeCache).write(CACHE_KEY_DATA, binary.data());
-    verify(writeCache).write(CACHE_KEY_STRING_TABLE, binary.stringTable());
+    verify(writeCache).writeBytes(CACHE_KEY_DATA, binary.data());
+    verify(writeCache).writeBytes(CACHE_KEY_STRING_TABLE, binary.stringTable());
   }
 
   @Test

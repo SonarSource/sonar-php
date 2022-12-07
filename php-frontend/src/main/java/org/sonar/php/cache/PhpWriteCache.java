@@ -24,7 +24,7 @@ public interface PhpWriteCache {
    * Save a new entry in the cache.
    * @throws {@code IllegalArgumentException} if the cache already contains the key.
    */
-  void write(String key, byte[] data);
+  void writeBytes(String key, byte[] data);
 
   /**
    * Copy a cached entry from the previous cache to the new one.

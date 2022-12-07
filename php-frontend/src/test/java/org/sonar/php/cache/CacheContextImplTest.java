@@ -19,110 +19,73 @@
  */
 package org.sonar.php.cache;
 
-import java.util.Optional;
+import java.io.File;
 import org.junit.Test;
-import org.sonar.api.SonarRuntime;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.config.Configuration;
-import org.sonar.api.scanner.fs.InputProject;
+import org.sonar.api.SonarEdition;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.config.internal.MapSettings;
+import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.sonar.api.SonarProduct.SONARLINT;
-import static org.sonar.api.SonarProduct.SONARQUBE;
 
 public class CacheContextImplTest {
 
+  private final SensorContextTester sensorContext = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
+
   @Test
   public void shouldCreateEnabledCacheContext() {
-    SensorContext sensorContext = mock(SensorContext.class);
-    InputProject project = mock(InputProject.class);
-    when(project.key()).thenReturn("projectKey");
-    when(sensorContext.project()).thenReturn(project);
-    SonarRuntime runtime = mock(SonarRuntime.class);
-    when(runtime.getApiVersion()).thenReturn(Version.parse("9.7"));
-    when(runtime.getProduct()).thenReturn(SONARQUBE);
-    when(sensorContext.runtime()).thenReturn(runtime);
-    when(sensorContext.isCacheEnabled()).thenReturn(true);
-    Configuration config = mock(Configuration.class);
-    when(sensorContext.config()).thenReturn(config);
+    sensorContext.setCacheEnabled(true);
 
-    CacheContextImpl context = CacheContextImpl.of(sensorContext);
+    CacheContext cacheContext = CacheContextImpl.of(sensorContext);
 
-    assertThat(context.isCacheEnabled()).isTrue();
-    assertThat(context.getReadCache()).isInstanceOf(PhpReadCacheImpl.class);
-    assertThat(context.getWriteCache()).isInstanceOf(PhpWriteCacheImpl.class);
-    assertThat(context.pluginVersion()).isEqualTo("unknown");
-    assertThat(context.projectKey()).isEqualTo("projectKey");
+    assertThat(cacheContext.isCacheEnabled()).isTrue();
+    assertThat(cacheContext.getReadCache()).isInstanceOf(PhpReadCacheImpl.class);
+    assertThat(cacheContext.getWriteCache()).isInstanceOf(PhpWriteCacheImpl.class);
+    assertThat(cacheContext.pluginVersion()).isEqualTo("unknown");
+    assertThat(cacheContext.projectKey()).isEqualTo("projectKey");
   }
 
   @Test
   public void shouldCreateDisabledCacheContextForSonarLint() {
-    SensorContext sensorContext = mock(SensorContext.class);
-    InputProject project = mock(InputProject.class);
-    when(project.key()).thenReturn("projectKey");
-    when(sensorContext.project()).thenReturn(project);
-    SonarRuntime runtime = mock(SonarRuntime.class);
-    when(runtime.getApiVersion()).thenReturn(Version.parse("9.7"));
-    when(runtime.getProduct()).thenReturn(SONARLINT);
-    when(sensorContext.runtime()).thenReturn(runtime);
-    Configuration config = mock(Configuration.class);
-    when(sensorContext.config()).thenReturn(config);
+    sensorContext.setRuntime(SonarRuntimeImpl.forSonarLint(Version.create(1, 2)));
+    CacheContext cacheContext = CacheContextImpl.of(sensorContext);
 
-    CacheContextImpl context = CacheContextImpl.of(sensorContext);
-
-    assertThat(context.isCacheEnabled()).isFalse();
-    assertThat(context.getReadCache()).isNull();
-    assertThat(context.getWriteCache()).isNull();
-    assertThat(context.pluginVersion()).isEqualTo("unknown");
-    assertThat(context.projectKey()).isEqualTo("projectKey");
+    assertThat(cacheContext.isCacheEnabled()).isFalse();
+    assertThat(cacheContext.getReadCache()).isNull();
+    assertThat(cacheContext.getWriteCache()).isNull();
+    assertThat(cacheContext.pluginVersion()).isEqualTo("unknown");
+    assertThat(cacheContext.projectKey()).isEqualTo("projectKey");
   }
 
   @Test
   public void shouldCreateDisabledCacheContextForOldSonarQube() {
-    SensorContext sensorContext = mock(SensorContext.class);
-    InputProject project = mock(InputProject.class);
-    when(project.key()).thenReturn("projectKey");
-    when(sensorContext.project()).thenReturn(project);
-    SonarRuntime runtime = mock(SonarRuntime.class);
-    when(runtime.getApiVersion()).thenReturn(Version.parse("9.6"));
-    when(runtime.getProduct()).thenReturn(SONARQUBE);
-    when(sensorContext.runtime()).thenReturn(runtime);
-    Configuration config = mock(Configuration.class);
-    when(sensorContext.config()).thenReturn(config);
+    sensorContext.setRuntime(SonarRuntimeImpl.forSonarQube(
+      Version.parse("9.6"),
+      SonarQubeSide.SCANNER,
+      SonarEdition.DEVELOPER));
 
-    CacheContextImpl context = CacheContextImpl.of(sensorContext);
+    CacheContext cacheContext = CacheContextImpl.of(sensorContext);
 
-    assertThat(context.isCacheEnabled()).isFalse();
-    assertThat(context.getReadCache()).isNull();
-    assertThat(context.getWriteCache()).isNull();
-    assertThat(context.pluginVersion()).isEqualTo("unknown");
-    assertThat(context.projectKey()).isEqualTo("projectKey");
+    assertThat(cacheContext.isCacheEnabled()).isFalse();
+    assertThat(cacheContext.getReadCache()).isNull();
+    assertThat(cacheContext.getWriteCache()).isNull();
+    assertThat(cacheContext.pluginVersion()).isEqualTo("unknown");
+    assertThat(cacheContext.projectKey()).isEqualTo("projectKey");
   }
 
   @Test
   public void shouldCreateDisabledCacheContextForEnabledSonarModules() {
-    SensorContext sensorContext = mock(SensorContext.class);
-    InputProject project = mock(InputProject.class);
-    when(project.key()).thenReturn("projectKey");
-    when(sensorContext.project()).thenReturn(project);
-    SonarRuntime runtime = mock(SonarRuntime.class);
-    when(runtime.getApiVersion()).thenReturn(Version.parse("9.7"));
-    when(runtime.getProduct()).thenReturn(SONARQUBE);
-    when(sensorContext.runtime()).thenReturn(runtime);
-    when(sensorContext.isCacheEnabled()).thenReturn(true);
-    Configuration config = mock(Configuration.class);
-    when(config.get("sonar.modules")).thenReturn(Optional.of("module1,module2"));
-    when(sensorContext.config()).thenReturn(config);
+    sensorContext.setSettings(new MapSettings().setProperty("sonar.modules", "module1,module2"));
+    sensorContext.setCacheEnabled(true);
 
-    CacheContextImpl context = CacheContextImpl.of(sensorContext);
+    CacheContext cacheContext = CacheContextImpl.of(sensorContext);
 
-    assertThat(context.isCacheEnabled()).isFalse();
-    assertThat(context.getReadCache()).isNull();
-    assertThat(context.getWriteCache()).isNull();
-    assertThat(context.pluginVersion()).isEqualTo("unknown");
-    assertThat(context.projectKey()).isEqualTo("projectKey");
+    assertThat(cacheContext.isCacheEnabled()).isFalse();
+    assertThat(cacheContext.getReadCache()).isNull();
+    assertThat(cacheContext.getWriteCache()).isNull();
+    assertThat(cacheContext.pluginVersion()).isEqualTo("unknown");
+    assertThat(cacheContext.projectKey()).isEqualTo("projectKey");
   }
 }

@@ -30,7 +30,7 @@ public class PhpWriteCacheImpl implements PhpWriteCache {
   }
 
   @Override
-  public void write(String key, byte[] data) {
+  public void writeBytes(String key, byte[] data) {
     writeCache.write(key, data);
   }
 

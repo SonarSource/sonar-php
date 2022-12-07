@@ -35,7 +35,7 @@ public class PhpWriteCacheImplTest {
     WriteCache writeCache = mock(WriteCache.class);
     PhpWriteCacheImpl cache = new PhpWriteCacheImpl(writeCache);
 
-    cache.write("key", bytes);
+    cache.writeBytes("key", bytes);
 
     verify(writeCache).write("key", bytes);
   }
