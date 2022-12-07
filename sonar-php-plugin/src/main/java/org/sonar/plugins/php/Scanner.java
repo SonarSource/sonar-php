@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.sonar.DurationStatistics;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
@@ -30,15 +31,24 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 abstract class Scanner {
-
   private static final Logger LOG = Loggers.get(Scanner.class);
+
+  /**
+   * Describes if an optimized analysis of unchanged files by skipping some rules is enabled.
+   * By default, the property is not set (null), leaving SQ/SC to decide whether to enable this behavior.
+   * Setting it to true or false, forces the behavior from the analyzer independently of the server.
+   */
+  public static final String SONAR_CAN_SKIP_UNCHANGED_FILES_KEY = "sonar.php.skipUnchanged";
   private static final String FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast";
   protected final SensorContext context;
   protected final DurationStatistics statistics;
+  protected final boolean optimizedAnalysis;
+
 
   Scanner(SensorContext context, DurationStatistics statistics) {
     this.context = context;
     this.statistics = statistics;
+    optimizedAnalysis = shouldOptimizeAnalysis();
   }
 
   void execute(List<InputFile> files) {
@@ -71,6 +81,14 @@ abstract class Scanner {
     }
   }
 
+  private static boolean inSonarLint(SensorContext context) {
+    return context.runtime().getProduct() == SonarProduct.SONARLINT;
+  }
+
+  private boolean shouldOptimizeAnalysis() {
+    return !(inSonarLint(context)) &&
+      (context.canSkipUnchangedFiles() || context.config().getBoolean(SONAR_CAN_SKIP_UNCHANGED_FILES_KEY).orElse(false));
+  }
   protected boolean fileCanBeSkipped(InputFile file) {
     return false;
   }

@@ -40,7 +40,7 @@ public class SymbolScanner extends Scanner {
   private static final Logger LOG = Loggers.get(SymbolScanner.class);
 
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
-  private final ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+  private ProjectSymbolData projectSymbolData = new ProjectSymbolData();
   private final Cache cache;
 
   public SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cacheContext) {
@@ -55,6 +55,9 @@ public class SymbolScanner extends Scanner {
 
   @Override
   void execute(List<InputFile> files) {
+    if (optimizedAnalysis) {
+      projectSymbolData = cache.read();
+    }
     super.execute(files);
     cache.write(projectSymbolData);
   }
@@ -63,8 +66,8 @@ public class SymbolScanner extends Scanner {
   void scanFile(InputFile file) {
     PhpFileImpl phpFile = new PhpFileImpl(file);
     try {
-      Tree ast = statistics.time("ProjectSymbolParsing", () -> parser.parse(phpFile.contents()));
-      SymbolTableImpl symbolTable = statistics.time("ProjectSymbolTable", () -> SymbolTableImpl.create((CompilationUnitTree) ast, new ProjectSymbolData(), phpFile));
+      CompilationUnitTree ast = (CompilationUnitTree) statistics.time("ProjectSymbolParsing", () -> parser.parse(phpFile.contents()));
+      SymbolTableImpl symbolTable = statistics.time("ProjectSymbolTable", () -> SymbolTableImpl.create(ast, projectSymbolData, phpFile));
       symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
       symbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
     } catch (RecognitionException e) {
