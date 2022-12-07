@@ -77,7 +77,7 @@ import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_
 public class PHPSensor implements Sensor {
 
   /**
-   * Describes if an optimized analysis of unchanged by skipping some rules is enabled.
+   * Describes if an optimized analysis of unchanged files by skipping some rules is enabled.
    * By default, the property is not set (null), leaving SQ/SC to decide whether to enable this behavior.
    * Setting it to true or false, forces the behavior from the analyzer independently of the server.
    */
@@ -162,11 +162,6 @@ public class PHPSensor implements Sensor {
     new CoverageResultImporter(analysisWarningsWrapper).execute(context);
   }
 
-  private static boolean shouldOptimizeAnalysis(SensorContext context) {
-    return !(inSonarLint(context)) &&
-      (context.canSkipUnchangedFiles() || context.config().getBoolean(SONAR_CAN_SKIP_UNCHANGED_FILES_KEY).orElse(false));
-  }
-
   private class AnalysisScanner extends Scanner {
 
     PHPAnalyzer phpAnalyzer;
@@ -188,10 +183,15 @@ public class PHPSensor implements Sensor {
         filter(PhpUnitCheck.class::isInstance).
         collect(Collectors.toList());
       hasTestFileChecks = !testFilesChecks.isEmpty();
-      optimizedAnalysis = shouldOptimizeAnalysis(context);
+      optimizedAnalysis = shouldOptimizeAnalysis();
 
       File workingDir = context.fileSystem().workDir();
       phpAnalyzer = new PHPAnalyzer(allChecks, testFilesChecks, workingDir, projectSymbolData, statistics);
+    }
+
+    private boolean shouldOptimizeAnalysis() {
+      return !(inSonarLint(context)) &&
+        (context.canSkipUnchangedFiles() || context.config().getBoolean(SONAR_CAN_SKIP_UNCHANGED_FILES_KEY).orElse(false));
     }
 
     @Override

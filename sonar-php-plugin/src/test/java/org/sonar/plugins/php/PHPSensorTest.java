@@ -616,12 +616,21 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_not_analyze_unchanged_file_if_internal_property_is_set() {
+  public void should_not_analyze_unchanged_file_if_enabled_by_property() {
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
     context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
     createSensor().execute(context);
     assertThat(context.allIssues()).isEmpty();
+  }
+
+  @Test
+  public void should_not_analyze_unchanged_file_if_disabled_by_property() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "false"));
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isNotEmpty();
   }
 
   @Test
