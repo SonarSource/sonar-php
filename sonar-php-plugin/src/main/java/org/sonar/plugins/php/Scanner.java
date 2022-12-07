@@ -58,7 +58,7 @@ abstract class Scanner {
           throw new CancellationException();
         }
 
-        if (fileShouldBeProcessed(file)) {
+        if (!fileCanBeSkipped(file)) {
           processFile(file);
         }
 
@@ -71,8 +71,8 @@ abstract class Scanner {
     }
   }
 
-  protected boolean fileShouldBeProcessed(InputFile file) {
-    return true;
+  protected boolean fileCanBeSkipped(InputFile file) {
+    return false;
   }
 
   private void processFile(InputFile file) {

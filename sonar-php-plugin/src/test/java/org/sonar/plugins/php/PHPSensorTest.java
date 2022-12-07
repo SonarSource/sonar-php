@@ -589,12 +589,51 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_not_analyze_unchanged_file() {
+  public void should_not_analyze_unchanged_file_if_setting_is_enabled() {
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setCanSkipUnchangedFiles(true);
     createSensor().execute(context);
     assertThat(context.allIssues()).isEmpty();
   }
+
+  @Test
+  public void should_analyze_file_without_status_if_setting_is_enabled() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, null));
+    context.setCanSkipUnchangedFiles(true);
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isNotEmpty();
+  }
+
+  @Test
+  public void should_analyze_changed_file_if_setting_is_enabled() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.CHANGED));
+    context.setCanSkipUnchangedFiles(true);
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isNotEmpty();
+  }
+
+  @Test
+  public void should_not_analyze_unchanged_file_if_internal_property_is_set() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isEmpty();
+  }
+
+  @Test
+  public void should_analyze_unchanged_file_in_sonarlint_context() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
+    context.setRuntime(SONARLINT_RUNTIME);
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isNotEmpty();
+  }
+
 
   @After
   public void tearDown() {

@@ -76,6 +76,13 @@ import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_
 
 public class PHPSensor implements Sensor {
 
+  /**
+   * Describes if an optimized analysis of unchanged by skipping some rules is enabled.
+   * By default, the property is not set (null), leaving SQ/SC to decide whether to enable this behavior.
+   * Setting it to true or false, forces the behavior from the analyzer independently of the server.
+   */
+  public static final String SONAR_CAN_SKIP_UNCHANGED_FILES_KEY = "sonar.php.skipUnchanged";
+
   private static final Logger LOG = Loggers.get(PHPSensor.class);
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
@@ -155,11 +162,17 @@ public class PHPSensor implements Sensor {
     new CoverageResultImporter(analysisWarningsWrapper).execute(context);
   }
 
+  private static boolean shouldOptimizeAnalysis(SensorContext context) {
+    return !(inSonarLint(context)) &&
+      (context.canSkipUnchangedFiles() || context.config().getBoolean(SONAR_CAN_SKIP_UNCHANGED_FILES_KEY).orElse(false));
+  }
+
   private class AnalysisScanner extends Scanner {
 
     PHPAnalyzer phpAnalyzer;
 
     private final boolean hasTestFileChecks;
+    private final boolean optimizedAnalysis;
 
     public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData, DurationStatistics statistics) {
       super(context, statistics);
@@ -175,14 +188,15 @@ public class PHPSensor implements Sensor {
         filter(PhpUnitCheck.class::isInstance).
         collect(Collectors.toList());
       hasTestFileChecks = !testFilesChecks.isEmpty();
+      optimizedAnalysis = shouldOptimizeAnalysis(context);
 
       File workingDir = context.fileSystem().workDir();
       phpAnalyzer = new PHPAnalyzer(allChecks, testFilesChecks, workingDir, projectSymbolData, statistics);
     }
 
     @Override
-    protected boolean fileShouldBeProcessed(InputFile file) {
-      return file.status() == null || !file.status().equals(InputFile.Status.SAME);
+    protected boolean fileCanBeSkipped(InputFile file) {
+      return optimizedAnalysis && file.status() != null && file.status().equals(InputFile.Status.SAME);
     }
 
     @Override
