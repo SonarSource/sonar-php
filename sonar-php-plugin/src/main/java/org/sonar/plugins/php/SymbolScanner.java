@@ -21,6 +21,7 @@ package org.sonar.plugins.php;
 
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+import java.util.List;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -32,21 +33,30 @@ import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.php.cache.Cache;
 
-class SymbolScanner extends Scanner {
+public class SymbolScanner extends Scanner {
 
   private static final Logger LOG = Loggers.get(SymbolScanner.class);
 
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
   private final ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+  private final Cache cache;
 
-  SymbolScanner(SensorContext context, DurationStatistics statistics) {
+  public SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cacheContext) {
     super(context, statistics);
+    this.cache = cacheContext;
   }
 
   @Override
   String name() {
     return "PHP symbol indexer";
+  }
+
+  @Override
+  void execute(List<InputFile> files) {
+    super.execute(files);
+    cache.write(projectSymbolData);
   }
 
   @Override

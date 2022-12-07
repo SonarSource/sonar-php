@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.CheckForNull;
-import org.sonar.api.internal.apachecommons.io.IOUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
@@ -61,7 +60,7 @@ public class ProjectSymbolDataDeserializer {
   }
 
   private ProjectSymbolData convert() {
-    try {
+    try (in; stringTableIn) {
       ProjectSymbolData projectSymbolData = new ProjectSymbolData();
       stringTable = readStringTable();
       String pluginVersionText = readString();
@@ -84,8 +83,6 @@ public class ProjectSymbolDataDeserializer {
       return projectSymbolData;
     } catch (IOException e) {
       throw new IllegalStateException("Can't read data from cache", e);
-    } finally {
-      IOUtils.closeQuietly(in, stringTableIn);
     }
   }
 
@@ -106,13 +103,21 @@ public class ProjectSymbolDataDeserializer {
 
   private QualifiedName readQualifiedName() throws IOException {
     String name = readString();
-    return SymbolQualifiedName.create(name);
+    return SymbolQualifiedName.qualifiedName(name);
+  }
+
+  private QualifiedName readQualifiedNameOrNull() throws IOException {
+    String name = readString();
+    if (name.isBlank()) {
+      return null;
+    }
+    return SymbolQualifiedName.qualifiedName(name);
   }
 
   private ClassSymbolData readClassSymbolData() throws IOException {
     LocationInFile location = readLocation();
     QualifiedName qualifiedName = readQualifiedName();
-    QualifiedName superClass = readQualifiedName();
+    QualifiedName superClass = readQualifiedNameOrNull();
     int sizeOfImplementedInterfaces = readInt();
     List<QualifiedName> implementedInterfaces = new ArrayList<>();
     for (int i = 0; i < sizeOfImplementedInterfaces; i++) {

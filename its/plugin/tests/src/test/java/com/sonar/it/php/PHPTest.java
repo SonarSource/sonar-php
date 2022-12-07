@@ -78,13 +78,8 @@ public class PHPTest {
       .setProjectDir(Tests.projectDirectoryFor("multimodule"));
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
-    String componentKey1 = MULTI_MODULE_PROJECT_KEY + ":module1";
-    String componentKey2 = MULTI_MODULE_PROJECT_KEY + ":module2";
-    if (isGreater75()) {
-      // starting 7.6, modules were dropped https://jira.sonarsource.com/browse/MMF-365 and are not considered as a component in SQ API
-      componentKey1 += "/src";
-      componentKey2 += "/src";
-    }
+    String componentKey1 = MULTI_MODULE_PROJECT_KEY + ":module1/src";
+    String componentKey2 = MULTI_MODULE_PROJECT_KEY + ":module2/src";
 
     assertThat(getMeasureAsInt(componentKey1, "files")).isEqualTo(4);
     assertThat(getMeasureAsInt(componentKey2, "files")).isEqualTo(2);

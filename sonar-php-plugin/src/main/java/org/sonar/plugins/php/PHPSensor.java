@@ -48,6 +48,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.PHPAnalyzer;
+import org.sonar.php.cache.CacheContext;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
@@ -65,6 +66,8 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+import org.sonar.php.cache.Cache;
+import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.plugins.php.reports.phpunit.CoverageResultImporter;
 import org.sonar.plugins.php.reports.phpunit.TestResultImporter;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -81,13 +84,9 @@ public class PHPSensor implements Sensor {
 
   private RuleKey parsingErrorRuleKey;
 
+  // Needed for SonarLint
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
     this(fileLinesContextFactory, checkFactory, noSonarFilter, null, NOOP_ANALYSIS_WARNINGS);
-  }
-
-  public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
-    AnalysisWarningsWrapper analysisWarningsWrapper) {
-    this(fileLinesContextFactory, checkFactory, noSonarFilter, null, analysisWarningsWrapper);
   }
 
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
@@ -128,7 +127,10 @@ public class PHPSensor implements Sensor {
     List<InputFile> inputFiles = new ArrayList<>();
     fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
 
-    SymbolScanner symbolScanner = new SymbolScanner(context, statistics);
+    CacheContext cacheContext = CacheContextImpl.of(context);
+    Cache cache = new Cache(cacheContext);
+
+    SymbolScanner symbolScanner = new SymbolScanner(context, statistics, cache);
 
     try {
       symbolScanner.execute(inputFiles);
@@ -170,7 +172,7 @@ public class PHPSensor implements Sensor {
       }
 
       List<PHPCheck> testFilesChecks  = allChecks.stream().
-        filter(c -> c instanceof PhpUnitCheck).
+        filter(PhpUnitCheck.class::isInstance).
         collect(Collectors.toList());
       hasTestFileChecks = !testFilesChecks.isEmpty();
 
@@ -213,6 +215,87 @@ public class PHPSensor implements Sensor {
       }
     }
 
+    private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {
+      for (PhpIssue issue : issues) {
+        RuleKey ruleKey = checks.ruleKeyFor(issue.check());
+        NewIssue newIssue = context.newIssue()
+          .forRule(ruleKey)
+          .gap(issue.cost());
+
+        if (issue instanceof LegacyIssue) {
+          // todo: this block should be removed as PHPIssue's usages will be removed
+          LegacyIssue legacyIssue = (LegacyIssue) issue;
+
+          NewIssueLocation location = newIssue.newLocation()
+            .message(legacyIssue.message())
+            .on(inputFile);
+
+          if (legacyIssue.line() > 0) {
+            location.at(inputFile.selectLine(legacyIssue.line()));
+          }
+
+          newIssue.at(location);
+
+        } else if (issue instanceof LineIssue) {
+
+          LineIssue lineIssue = (LineIssue) issue;
+
+          NewIssueLocation location = newIssue.newLocation()
+            .message(lineIssue.message())
+            .on(inputFile)
+            .at(inputFile.selectLine(lineIssue.line()));
+
+          newIssue.at(location);
+
+        } else if (issue instanceof FileIssue) {
+
+          FileIssue fileIssue = (FileIssue) issue;
+
+          NewIssueLocation location = newIssue.newLocation()
+            .message(fileIssue.message())
+            .on(inputFile);
+
+          newIssue.at(location);
+
+        } else {
+
+          PreciseIssue preciseIssue = (PreciseIssue) issue;
+
+          newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
+          preciseIssue.secondaryLocations().forEach(secondary ->
+            addSecondaryLocation(context, inputFile, newIssue, secondary)
+          );
+        }
+
+        newIssue.save();
+      }
+    }
+
+    /**
+     * Creates and saves an issue for a parsing error.
+     */
+    private void saveParsingIssue(SensorContext context, RecognitionException e, InputFile inputFile) {
+      if (parsingErrorRuleKey != null) {
+        NewIssue issue = context.newIssue();
+
+        NewIssueLocation location = issue.newLocation()
+          .message("A parsing error occurred in this file.")
+          .on(inputFile)
+          .at(inputFile.selectLine(e.getLine()));
+
+        issue
+          .forRule(parsingErrorRuleKey)
+          .at(location)
+          .save();
+      }
+
+      context.newAnalysisError()
+        .onFile(inputFile)
+        .at(inputFile.newPointer(e.getLine(), 0))
+        .message(e.getMessage())
+        .save();
+    }
+
     @Override
     void logException(Exception e, InputFile file) {
       LOG.error("Could not analyse " + file.toString(), e);
@@ -239,87 +322,6 @@ public class PHPSensor implements Sensor {
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getStatementNumber()).forMetric(CoreMetrics.STATEMENTS).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFileCognitiveComplexity()).forMetric(CoreMetrics.COGNITIVE_COMPLEXITY).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFileComplexity()).forMetric(CoreMetrics.COMPLEXITY).save();
-  }
-
-  /**
-   * Creates and saves an issue for a parsing error.
-   */
-  private void saveParsingIssue(SensorContext context, RecognitionException e, InputFile inputFile) {
-    if (parsingErrorRuleKey != null) {
-      NewIssue issue = context.newIssue();
-
-      NewIssueLocation location = issue.newLocation()
-        .message("A parsing error occurred in this file.")
-        .on(inputFile)
-        .at(inputFile.selectLine(e.getLine()));
-
-      issue
-        .forRule(parsingErrorRuleKey)
-        .at(location)
-        .save();
-    }
-
-    context.newAnalysisError()
-      .onFile(inputFile)
-      .at(inputFile.newPointer(e.getLine(), 0))
-      .message(e.getMessage())
-      .save();
-  }
-
-  private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {
-    for (PhpIssue issue : issues) {
-      RuleKey ruleKey = checks.ruleKeyFor(issue.check());
-      NewIssue newIssue = context.newIssue()
-        .forRule(ruleKey)
-        .gap(issue.cost());
-
-      if (issue instanceof LegacyIssue) {
-        // todo: this block should be removed as PHPIssue's usages will be removed
-        LegacyIssue legacyIssue = (LegacyIssue) issue;
-
-        NewIssueLocation location = newIssue.newLocation()
-          .message(legacyIssue.message())
-          .on(inputFile);
-
-        if (legacyIssue.line() > 0) {
-          location.at(inputFile.selectLine(legacyIssue.line()));
-        }
-
-        newIssue.at(location);
-
-      } else if (issue instanceof LineIssue) {
-
-        LineIssue lineIssue = (LineIssue) issue;
-
-        NewIssueLocation location = newIssue.newLocation()
-          .message(lineIssue.message())
-          .on(inputFile)
-          .at(inputFile.selectLine(lineIssue.line()));
-
-        newIssue.at(location);
-
-      } else if (issue instanceof FileIssue) {
-
-        FileIssue fileIssue = (FileIssue) issue;
-
-        NewIssueLocation location = newIssue.newLocation()
-          .message(fileIssue.message())
-          .on(inputFile);
-
-        newIssue.at(location);
-
-      } else {
-
-        PreciseIssue preciseIssue = (PreciseIssue) issue;
-
-        newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
-        preciseIssue.secondaryLocations().forEach(secondary ->
-          addSecondaryLocation(context, inputFile, newIssue, secondary)
-        );
-      }
-
-      newIssue.save();
-    }
   }
 
   private static void addSecondaryLocation(SensorContext context, InputFile inputFile, NewIssue newIssue, IssueLocation secondary) {
@@ -353,7 +355,7 @@ public class PHPSensor implements Sensor {
 
   private RuleKey getParsingErrorRuleKey() {
     List<RuleKey> keys = checks.all().stream()
-      .filter(check -> check instanceof ParsingErrorCheck)
+      .filter(ParsingErrorCheck.class::isInstance)
       .map(checks::ruleKeyFor)
       .collect(Collectors.toList());
 

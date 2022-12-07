@@ -167,6 +167,44 @@ public class ProjectSymbolDataSerializerTest {
   }
 
   @Test
+  public void shouldSerializeAndDeserializeClassWithNullSuperClass() {
+    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+
+    ClassSymbolData classSymbolData = new ClassSymbolData(
+      UnknownLocationInFile.UNKNOWN_LOCATION,
+      SymbolQualifiedName.qualifiedName("dummy"),
+      null,
+      List.of(),
+      ClassSymbol.Kind.NORMAL,
+      List.of());
+    projectSymbolData.add(classSymbolData);
+
+    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
+    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
+  }
+
+  @Test
+  public void shouldSerializeAndDeserializeClassWithQualifiedNameContainsBackslash() {
+    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+
+    ClassSymbolData classSymbolData = new ClassSymbolData(
+      UnknownLocationInFile.UNKNOWN_LOCATION,
+      SymbolQualifiedName.qualifiedName("symfony\\bridge\\monolog\\handler\\helper"),
+      null,
+      List.of(),
+      ClassSymbol.Kind.NORMAL,
+      List.of());
+    projectSymbolData.add(classSymbolData);
+
+    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
+    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
+  }
+
+  @Test
   public void shouldThrowExceptionWhenStringTableCorrupted() {
     ProjectSymbolData projectSymbolData = new ProjectSymbolData();
     FunctionSymbolData functionSymbolData = new FunctionSymbolData(

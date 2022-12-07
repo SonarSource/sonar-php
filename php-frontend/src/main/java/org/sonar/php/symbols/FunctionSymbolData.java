@@ -87,13 +87,5 @@ public class FunctionSymbolData {
     public void hasFuncGetArgs(boolean hasFuncGetArgs) {
       this.hasFuncGetArgs = hasFuncGetArgs;
     }
-
-    @Override
-    public String toString() {
-      return "FunctionSymbolProperties{" +
-        "hasReturn=" + hasReturn +
-        ", hasFuncGetArgs=" + hasFuncGetArgs +
-        '}';
-    }
   }
 }

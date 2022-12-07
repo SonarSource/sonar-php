@@ -19,9 +19,8 @@
  */
 package org.sonar.php.symbols;
 
-import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
-
 import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 
 public class Parameter {
   private final String name;
@@ -38,7 +37,7 @@ public class Parameter {
 
   public static Parameter fromTree(ParameterTree parameter) {
     String parameterName = parameter.variableIdentifier().text();
-    String parameterType = parameter.type() != null ? parameter.type().toString() : null;
+    String parameterType = parameter.declaredType() != null ? parameter.declaredType().toString() : null;
 
     return new Parameter(
       parameterName,
