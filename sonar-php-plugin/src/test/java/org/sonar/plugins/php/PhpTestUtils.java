@@ -65,17 +65,22 @@ public class PhpTestUtils {
     assertThat(context.measure(componentKey, metric)).as("metric for: " + metric.getKey()).isNull();
   }
 
-  public static DefaultInputFile inputFile(String fileName, InputFile.Type type) {
+  public static DefaultInputFile inputFile(String fileName, InputFile.Type type, InputFile.Status status) {
     try {
       return TestInputFileBuilder.create("moduleKey", fileName)
         .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
         .setType(type)
         .setCharset(Charset.defaultCharset())
         .setLanguage(Php.KEY)
+        .setStatus(status)
         .initMetadata(new String(java.nio.file.Files.readAllBytes(new File("src/test/resources/" + fileName).toPath()), StandardCharsets.UTF_8)).build();
     } catch (IOException e) {
       throw new IllegalStateException("File not found", e);
     }
+  }
+
+  public static DefaultInputFile inputFile(String fileName, InputFile.Type type) {
+    return inputFile(fileName, type, InputFile.Status.ADDED);
   }
 
   public static DefaultInputFile inputFile(String fileName) {

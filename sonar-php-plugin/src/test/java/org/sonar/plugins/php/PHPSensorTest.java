@@ -46,6 +46,7 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
+import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.cpd.internal.TokensLine;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -586,6 +587,62 @@ public class PHPSensorTest {
     createSensor(check).execute(context);
     assertThat(check.wasTriggered).isTrue();
   }
+
+  @Test
+  public void should_not_analyze_unchanged_file_if_setting_is_enabled() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setCanSkipUnchangedFiles(true);
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isEmpty();
+  }
+
+  @Test
+  public void should_analyze_file_without_status_if_setting_is_enabled() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, null));
+    context.setCanSkipUnchangedFiles(true);
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isNotEmpty();
+  }
+
+  @Test
+  public void should_analyze_changed_file_if_setting_is_enabled() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.CHANGED));
+    context.setCanSkipUnchangedFiles(true);
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isNotEmpty();
+  }
+
+  @Test
+  public void should_not_analyze_unchanged_file_if_enabled_by_property() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isEmpty();
+  }
+
+  @Test
+  public void should_not_analyze_unchanged_file_if_disabled_by_property() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "false"));
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isNotEmpty();
+  }
+
+  @Test
+  public void should_analyze_unchanged_file_in_sonarlint_context() {
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
+    context.setRuntime(SONARLINT_RUNTIME);
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isNotEmpty();
+  }
+
 
   @After
   public void tearDown() {
