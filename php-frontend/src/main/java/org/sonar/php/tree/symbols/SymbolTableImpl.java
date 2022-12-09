@@ -74,6 +74,13 @@ public class SymbolTableImpl implements SymbolTable {
     return symbolModel;
   }
 
+  public static SymbolTableImpl create(Collection<ClassSymbolData> classSymbolData, Collection<FunctionSymbolData> functionSymbolData) {
+    SymbolTableImpl symbolTable = new SymbolTableImpl();
+    symbolTable.classSymbolData = classSymbolData;
+    symbolTable.functionSymbolData = functionSymbolData;
+    return symbolTable;
+  }
+
   Scope addScope(Scope scope) {
     return scopes.computeIfAbsent(scope.tree(), t -> scope);
   }

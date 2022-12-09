@@ -29,10 +29,10 @@ import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.MethodSymbolData;
 import org.sonar.php.symbols.Parameter;
-import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.SymbolQualifiedName;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
@@ -51,7 +51,7 @@ public class SymbolTableDeserializer {
   }
 
   @CheckForNull
-  public static ProjectSymbolData fromBinary(DeserializationInput input) {
+  public static SymbolTableImpl fromBinary(DeserializationInput input) {
     SymbolTableDeserializer deserializer = new SymbolTableDeserializer(
       new VarLengthInputStream(input.projectSymbolDataBytes()),
       new VarLengthInputStream(input.stringTable()),
@@ -59,9 +59,10 @@ public class SymbolTableDeserializer {
     return deserializer.convert();
   }
 
-  private ProjectSymbolData convert() {
+  private SymbolTableImpl convert() {
     try (in; stringTableIn) {
-      ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+      List<ClassSymbolData> classSymbolData = new ArrayList<>();
+      List<FunctionSymbolData> functionSymbolData = new ArrayList<>();
       stringTable = readStringTable();
       String pluginVersionText = readString();
       if(!pluginVersionText.equals(pluginVersion)) {
@@ -70,17 +71,17 @@ public class SymbolTableDeserializer {
       int sizeOfClassSymbols = readInt();
       for (int i = 0; i < sizeOfClassSymbols; i++) {
         ClassSymbolData data = readClassSymbolData();
-        projectSymbolData.add(data);
+        classSymbolData.add(data);
       }
       int sizeOfFuncSymbols = readInt();
       for (int i = 0; i < sizeOfFuncSymbols; i++) {
         FunctionSymbolData data = readFunctionSymbolDataList();
-        projectSymbolData.add(data);
+        functionSymbolData.add(data);
       }
       if (!"END".equals(in.readUTF())) {
         throw new IOException("Can't read data from cache, format corrupted");
       }
-      return projectSymbolData;
+      return SymbolTableImpl.create(classSymbolData, functionSymbolData);
     } catch (IOException e) {
       throw new IllegalStateException("Can't read data from cache", e);
     }

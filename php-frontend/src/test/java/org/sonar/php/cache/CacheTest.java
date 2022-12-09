@@ -23,7 +23,7 @@ import java.util.List;
 import org.junit.Test;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.LocationInFileImpl;
-import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.cache.PhpReadCache;
 import org.sonar.plugins.php.api.cache.PhpWriteCache;
@@ -49,7 +49,7 @@ public class CacheTest {
   public void shouldWriteToCacheOnlyIfItsEnabled() {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
-    ProjectSymbolData data = exampleProjectSymbolData();
+    SymbolTableImpl data = exampleSymbolTable();
 
     cache.write("key", data);
 
@@ -62,7 +62,7 @@ public class CacheTest {
   public void shouldNotWriteToCacheIfItsDisabled() {
     CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
-    ProjectSymbolData data = new ProjectSymbolData();
+    SymbolTableImpl data = emptySymbolTable();
 
     cache.write("key", data);
 
@@ -73,13 +73,13 @@ public class CacheTest {
   public void shouldReadFromCache() {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
-    ProjectSymbolData data = exampleProjectSymbolData();
+    SymbolTableImpl data = exampleSymbolTable();
     SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
     when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(serializationData.data());
     when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(serializationData.stringTable());
 
-    ProjectSymbolData actual = cache.read("key");
+    SymbolTableImpl actual = cache.read("key");
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(data);
   }
@@ -91,7 +91,7 @@ public class CacheTest {
     when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(null);
     when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(null);
 
-    ProjectSymbolData actual = cache.read("key");
+    SymbolTableImpl actual = cache.read("key");
 
     assertThat(actual).isNull();
   }
@@ -101,19 +101,22 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
 
-    ProjectSymbolData actual = cache.read("key");
+    SymbolTableImpl actual = cache.read("key");
 
     assertThat(actual).isNull();
   }
 
-  private static ProjectSymbolData exampleProjectSymbolData() {
-    ProjectSymbolData data = new ProjectSymbolData();
-    data.add(new FunctionSymbolData(
+  private static SymbolTableImpl exampleSymbolTable() {
+    SymbolTableImpl data = SymbolTableImpl.create(List.of(), List.of(new FunctionSymbolData(
       new LocationInFileImpl("abc.php", 1, 1, 1, 10),
       QualifiedName.qualifiedName("funcName"),
       List.of(),
       new FunctionSymbolData.FunctionSymbolProperties(false, false)
-    ));
+    )));
     return data;
+  }
+
+  private SymbolTableImpl emptySymbolTable() {
+    return SymbolTableImpl.create(List.of(), List.of());
   }
 }

@@ -34,6 +34,7 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.api.batch.sensor.cache.WriteCache;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.utils.ParsingUtils;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.cache.DeserializationInput;
 import org.sonar.php.cache.SymbolTableDeserializer;
@@ -41,6 +42,7 @@ import org.sonar.php.cache.SymbolTableSerializer;
 import org.sonar.php.cache.SerializationInput;
 import org.sonar.php.cache.SerializationResult;
 import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,25 +68,6 @@ public class SymbolScannerTest {
     context.setNextCache(nextCache);
 
     statistics = new DurationStatistics(context.config());
-  }
-
-  @Test
-  public void shouldSerializeAndDeserializeData() {
-    SymbolScanner symbolScanner = createScanner();
-
-    List<InputFile> inputFiles = exampleFiles("Mail.php", "cpd.php", "Math2.php", "Math3.php", "PHPSquidSensor.php",
-      "cross-file/A.php", "cross-file/B.php"
-    );
-
-    symbolScanner.execute(inputFiles);
-
-    ProjectSymbolData projectSymbolData = symbolScanner.getProjectSymbolData();
-    assertThat(projectSymbolData.classSymbolsByQualifiedName()).isNotEmpty();
-
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(projectSymbolData, "1.2.3"));
-    ProjectSymbolData actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), "1.2.3"));
-
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
   }
 
   @Test

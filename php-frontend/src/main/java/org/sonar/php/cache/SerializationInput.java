@@ -19,19 +19,19 @@
  */
 package org.sonar.php.cache;
 
-import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
 
 public class SerializationInput {
-  private final ProjectSymbolData projectSymbolData;
+  private final SymbolTableImpl symbolTable;
   private final String pluginVersion;
 
-  public SerializationInput(ProjectSymbolData projectSymbolData, String pluginVersion) {
-    this.projectSymbolData = projectSymbolData;
+  public SerializationInput(SymbolTableImpl symbolTable, String pluginVersion) {
+    this.symbolTable = symbolTable;
     this.pluginVersion = pluginVersion;
   }
 
-  public ProjectSymbolData projectSymbolData() {
-    return projectSymbolData;
+  public SymbolTableImpl symbolTable() {
+    return symbolTable;
   }
 
   public String pluginVersion() {
