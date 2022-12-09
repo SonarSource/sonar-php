@@ -19,42 +19,93 @@
  */
 package org.sonar.php.cache;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.CheckForNull;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.cache.CacheContext;
+import org.sonar.plugins.php.api.cache.PhpWriteCache;
 
 public class Cache {
 
   public static final String CACHE_KEY_DATA = "php.projectSymbolData.data:";
   public static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:";
   private final CacheContext cacheContext;
+  private final String pluginVersion;
+  private final String projectKey;
+
+  Map<InputFile, BigInteger> hashes = new HashMap<>();
 
   public Cache(CacheContext cacheContext) {
     this.cacheContext = cacheContext;
+    this.pluginVersion = cacheContext.pluginVersion();
+    this.projectKey = cacheContext.projectKey();
   }
 
-  public void write(String key, SymbolTableImpl symbolTable) {
+  public void write(InputFile file, SymbolTableImpl symbolTable) {
     if (cacheContext.isCacheEnabled()) {
-      String pluginVersion = cacheContext.pluginVersion();
-      String projectKey = cacheContext.projectKey();
       SerializationInput serializationInput = new SerializationInput(symbolTable, pluginVersion);
       SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
-      cacheContext.getWriteCache().writeBytes(CACHE_KEY_DATA + projectKey + ":" + key, serializationData.data());
-      cacheContext.getWriteCache().writeBytes(CACHE_KEY_STRING_TABLE + projectKey + ":" + key, serializationData.stringTable());
+      PhpWriteCache writeCache = cacheContext.getWriteCache();
+      writeCache.writeBytes(getDataCacheKey(file), serializationData.data());
+      writeCache.writeBytes(getStringTableCacheKey(file), serializationData.stringTable());
     }
   }
 
   @CheckForNull
-  public SymbolTableImpl read(String key) {
+  public SymbolTableImpl read(InputFile file) {
     if (cacheContext.isCacheEnabled()) {
-      String pluginVersion = cacheContext.pluginVersion();
-      String projectKey = cacheContext.projectKey();
-      byte[] data = cacheContext.getReadCache().readBytes(CACHE_KEY_DATA + projectKey +  ":" + key);
-      byte[] stringTable = cacheContext.getReadCache().readBytes(CACHE_KEY_STRING_TABLE + projectKey + ":" + key);
+      byte[] data = cacheContext.getReadCache().readBytes(getDataCacheKey(file));
+      byte[] stringTable = cacheContext.getReadCache().readBytes(getStringTableCacheKey(file));
       if (data != null && stringTable != null) {
         return SymbolTableDeserializer.fromBinary(new DeserializationInput(data, stringTable, pluginVersion));
       }
     }
     return null;
+  }
+
+  private String getDataCacheKey(InputFile file) {
+    return CACHE_KEY_DATA + projectKey + ":" + getCacheFileName(file);
+  }
+
+  private String getStringTableCacheKey(InputFile file) {
+    return CACHE_KEY_STRING_TABLE + projectKey + ":" + getCacheFileName(file);
+  }
+
+  private String getCacheFileName(InputFile file) {
+    MessageDigest digest = getMessageDigest();
+    digest.update(computeFileHash(file).toByteArray());
+    return new BigInteger(1, digest.digest()).toString();
+  }
+
+  public BigInteger computeFileHash(InputFile file) {
+    return hashes.computeIfAbsent(file, s -> {
+      try(InputStream is = file.inputStream()) {
+        byte[] bytes = is.readAllBytes();
+        return hash(bytes);
+      } catch (IOException e) {
+        throw new IllegalStateException(e);
+      }
+    });
+  }
+
+  public static BigInteger hash(byte[] bytes) {
+    return new BigInteger(1, getMessageDigest().digest(bytes));
+  }
+
+  private static MessageDigest getMessageDigest() {
+    final java.security.MessageDigest digest;
+    try {
+      digest = java.security.MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException e) {
+      throw new IllegalStateException(e);
+    }
+    return digest;
   }
 }

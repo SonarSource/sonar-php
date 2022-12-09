@@ -21,6 +21,8 @@ package org.sonar.plugins.php;
 
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+import java.util.List;
+import javax.annotation.CheckForNull;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -41,12 +43,22 @@ public class SymbolScanner extends Scanner {
   private static final Logger LOG = Loggers.get(SymbolScanner.class);
 
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
-  private ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+  private final ProjectSymbolData projectSymbolData = new ProjectSymbolData();
   private final Cache cache;
+
+  private int symbolTablesFromCache = 0;
 
   public SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cache) {
     super(context, statistics);
     this.cache = cache;
+  }
+
+  @Override
+  void execute(List<InputFile> files) {
+    super.execute(files);
+    LOG.info("Cached information of global symbols will be used for {} out of {} files. Global symbols were recomputed for the remaining files.",
+      symbolTablesFromCache,
+      files.size());
   }
 
   public static SymbolScanner create(SensorContext context, DurationStatistics statistics) {
@@ -63,25 +75,39 @@ public class SymbolScanner extends Scanner {
 
   @Override
   void scanFile(InputFile file) {
-    PhpFileImpl phpFile = new PhpFileImpl(file);
-    try {
-      SymbolTableImpl fileSymbolTable = null;
-      if (fileCanBeSkipped(file)) {
-        fileSymbolTable = cache.read(file.uri().toString());
-      }
-
-      if (fileSymbolTable == null) {
-        CompilationUnitTree ast = (CompilationUnitTree) statistics.time("ProjectSymbolParsing", () -> parser.parse(phpFile.contents()));
-        fileSymbolTable = statistics.time("ProjectSymbolTable", () -> SymbolTableImpl.create(ast, new ProjectSymbolData(), phpFile));
-      }
-
-      fileSymbolTable.classSymbolDatas().forEach(projectSymbolData::add);
-      fileSymbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
-
-      cache.write(file.uri().toString(), fileSymbolTable);
-    } catch (RecognitionException e) {
-      LOG.debug("Parsing error in " + file);
+    SymbolTableImpl fileSymbolTable = null;
+    if (fileCanBeSkipped(file)) {
+      fileSymbolTable = readSymbolTableFromCache(file);
     }
+
+    if (fileSymbolTable == null) {
+      try {
+        fileSymbolTable = createSymbolTable(file);
+      } catch (RecognitionException e) {
+        LOG.warn("Can not create symbols for file: " + file.filename());
+        return;
+      }
+    }
+
+    fileSymbolTable.classSymbolDatas().forEach(projectSymbolData::add);
+    fileSymbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
+
+    cache.write(file, fileSymbolTable);
+  }
+
+   @CheckForNull
+  private SymbolTableImpl readSymbolTableFromCache(InputFile file) {
+    SymbolTableImpl fileSymbolTable = cache.read(file);
+    if (fileSymbolTable != null) {
+      symbolTablesFromCache++;
+    }
+    return fileSymbolTable;
+  }
+
+  private SymbolTableImpl createSymbolTable(InputFile file) throws RecognitionException {
+    PhpFileImpl phpFile = new PhpFileImpl(file);
+    CompilationUnitTree ast = (CompilationUnitTree) statistics.time("ProjectSymbolParsing", () -> parser.parse(phpFile.contents()));
+    return statistics.time("ProjectSymbolTable", () -> SymbolTableImpl.create(ast, new ProjectSymbolData(), phpFile));
   }
 
   @Override
