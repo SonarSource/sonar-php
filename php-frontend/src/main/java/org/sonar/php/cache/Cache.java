@@ -52,17 +52,20 @@ public class Cache {
     if (cacheContext.isCacheEnabled()) {
       SerializationInput serializationInput = new SerializationInput(symbolTable, pluginVersion);
       SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
+
+      String cacheFileName = getCacheFileName(file);
       PhpWriteCache writeCache = cacheContext.getWriteCache();
-      writeCache.writeBytes(getDataCacheKey(file), serializationData.data());
-      writeCache.writeBytes(getStringTableCacheKey(file), serializationData.stringTable());
+      writeCache.writeBytes(getDataCacheKey(cacheFileName), serializationData.data());
+      writeCache.writeBytes(getStringTableCacheKey(cacheFileName), serializationData.stringTable());
     }
   }
 
   @CheckForNull
   public SymbolTableImpl read(InputFile file) {
     if (cacheContext.isCacheEnabled()) {
-      byte[] data = cacheContext.getReadCache().readBytes(getDataCacheKey(file));
-      byte[] stringTable = cacheContext.getReadCache().readBytes(getStringTableCacheKey(file));
+      String cacheFileName = getCacheFileName(file);
+      byte[] data = cacheContext.getReadCache().readBytes(getDataCacheKey(cacheFileName));
+      byte[] stringTable = cacheContext.getReadCache().readBytes(getStringTableCacheKey(cacheFileName));
       if (data != null && stringTable != null) {
         return SymbolTableDeserializer.fromBinary(new DeserializationInput(data, stringTable, pluginVersion));
       }
@@ -70,15 +73,15 @@ public class Cache {
     return null;
   }
 
-  private String getDataCacheKey(InputFile file) {
-    return CACHE_KEY_DATA + projectKey + ":" + getCacheFileName(file);
+  private String getDataCacheKey(String cacheFileName) {
+    return CACHE_KEY_DATA + projectKey + ":" + cacheFileName;
   }
 
-  private String getStringTableCacheKey(InputFile file) {
-    return CACHE_KEY_STRING_TABLE + projectKey + ":" + getCacheFileName(file);
+  private String getStringTableCacheKey(String cacheFileName) {
+    return CACHE_KEY_STRING_TABLE + projectKey + ":" + cacheFileName;
   }
 
-  private String getCacheFileName(InputFile file) {
+  public String getCacheFileName(InputFile file) {
     MessageDigest digest = getMessageDigest();
     digest.update(computeFileHash(file).toByteArray());
     return new BigInteger(1, digest.digest()).toString();
@@ -86,8 +89,8 @@ public class Cache {
 
   public BigInteger computeFileHash(InputFile file) {
     return hashes.computeIfAbsent(file, s -> {
-      try(InputStream is = file.inputStream()) {
-        byte[] bytes = is.readAllBytes();
+      try {
+        byte[] bytes = file.contents().getBytes();
         return hash(bytes);
       } catch (IOException e) {
         throw new IllegalStateException(e);

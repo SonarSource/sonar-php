@@ -21,6 +21,8 @@ package org.sonar.php.cache;
 
 import java.util.List;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
@@ -34,13 +36,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.sonar.php.FileTestUtils.getFile;
 
 public class CacheTest {
 
-  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:projectKey:key";
-  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:projectKey:key";
+  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:projectKey:";
+  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:projectKey:";
   private static final String PLUGIN_VERSION = "1.2.3";
   private static final String PROJECT_KEY = "projectKey";
+  private static final InputFile DEFAULT_INPUT_FILE = inputFile("default");
+
 
   private PhpWriteCache writeCache = mock(PhpWriteCache.class);
   private PhpReadCache readCache = mock(PhpReadCache.class);
@@ -50,12 +55,13 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
+    cache.write(DEFAULT_INPUT_FILE, data);
 
-    cache.write("key", data);
-
+    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
     SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(data, PLUGIN_VERSION));
-    verify(writeCache).writeBytes(CACHE_KEY_DATA, binary.data());
-    verify(writeCache).writeBytes(CACHE_KEY_STRING_TABLE, binary.stringTable());
+
+    verify(writeCache).writeBytes(CACHE_KEY_DATA + cacheFileName, binary.data());
+    verify(writeCache).writeBytes(CACHE_KEY_STRING_TABLE + cacheFileName, binary.stringTable());
   }
 
   @Test
@@ -64,7 +70,7 @@ public class CacheTest {
     Cache cache = new Cache(context);
     SymbolTableImpl data = emptySymbolTable();
 
-    cache.write("key", data);
+    cache.write(DEFAULT_INPUT_FILE, data);
 
     verifyZeroInteractions(writeCache);
   }
@@ -74,13 +80,9 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
-    SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
-    SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
-    when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(serializationData.data());
-    when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(serializationData.stringTable());
+    warmupReadCache(cache, data);
 
-    SymbolTableImpl actual = cache.read("key");
-
+    SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(data);
   }
 
@@ -88,10 +90,13 @@ public class CacheTest {
   public void shouldReturnNullWhenCacheEntryDoesNotExist() {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
-    when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(null);
-    when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(null);
 
-    SymbolTableImpl actual = cache.read("key");
+    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
+
+    when(readCache.readBytes(CACHE_KEY_DATA + cacheFileName)).thenReturn(null);
+    when(readCache.readBytes(CACHE_KEY_DATA + cacheFileName)).thenReturn(null);
+
+    SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
 
     assertThat(actual).isNull();
   }
@@ -100,10 +105,22 @@ public class CacheTest {
   public void shouldReturnNullWhenCacheDisabled() {
     CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
+    SymbolTableImpl data = exampleSymbolTable();
+    warmupReadCache(cache, data);
 
-    SymbolTableImpl actual = cache.read("key");
+    SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
 
     assertThat(actual).isNull();
+  }
+
+  void warmupReadCache(Cache cache, SymbolTableImpl data) {
+    SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
+    SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
+
+    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
+
+    when(readCache.readBytes(CACHE_KEY_DATA + cacheFileName)).thenReturn(serializationData.data());
+    when(readCache.readBytes(CACHE_KEY_STRING_TABLE + cacheFileName)).thenReturn(serializationData.stringTable());
   }
 
   private static SymbolTableImpl exampleSymbolTable() {
@@ -118,5 +135,11 @@ public class CacheTest {
 
   private SymbolTableImpl emptySymbolTable() {
     return SymbolTableImpl.create(List.of(), List.of());
+  }
+
+  private static InputFile inputFile(String content) {
+    return new TestInputFileBuilder("projectKey", "symbols/symbolTable.php")
+      .setContents(content)
+      .build();
   }
 }

@@ -48,7 +48,7 @@ public class SymbolScanner extends Scanner {
 
   private int symbolTablesFromCache = 0;
 
-  public SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cache) {
+  SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cache) {
     super(context, statistics);
     this.cache = cache;
   }

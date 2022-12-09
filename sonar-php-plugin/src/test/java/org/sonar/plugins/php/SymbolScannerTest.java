@@ -22,6 +22,7 @@ package org.sonar.plugins.php;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +30,16 @@ import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.php.cache.Cache;
+import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
@@ -87,45 +93,27 @@ public class SymbolScannerTest {
     ClassSymbolData newClassSymbol = newSymbolTable.classSymbolData(CLASS_NAME).orElse(null);
     assertThat(newClassSymbol.methods()).hasSize(2);
     // verify if cache was used
-    assertThat(previousCache.readKeys().get(0)).startsWith("php.projectSymbolData.data:projectKey:");
-    assertThat(previousCache.readKeys().get(0)).endsWith("incremental/baseFile.php");
-    assertThat(previousCache.readKeys().get(1)).startsWith("php.projectSymbolData.stringTable:projectKey:");
-    assertThat(previousCache.readKeys().get(1)).endsWith("incremental/baseFile.php");
+
+    String cacheFileName = "22146621043327621015461537661717798110946814184349681185080520559963237469803";
+
+    assertThat(previousCache.readKeys().get(0)).startsWith("php.projectSymbolData.data:projectKey:" + cacheFileName);
+    assertThat(previousCache.readKeys().get(1)).startsWith("php.projectSymbolData.stringTable:projectKey:" + cacheFileName);
     assertThat(previousCache.readKeys()).hasSize(2);
   }
 
   @Test
-  public void shouldOverrideSymbol() {
-    ProjectSymbolData cachedSymbolTable = buildBaseProjectSymbolDataAndCache();
-
-    context.setPreviousCache((ReadCache) nextCache);
-    SymbolScanner symbolScanner = createScanner();
-    InputFile changedFile = inputFile("incremental/changedFile.php", InputFile.Type.MAIN, InputFile.Status.CHANGED);
-    symbolScanner.execute(List.of(changedFile));
-    ProjectSymbolData newSymbolTable = symbolScanner.getProjectSymbolData();
-
-    ClassSymbolData cachedClassSymbol = cachedSymbolTable.classSymbolData(CLASS_NAME).orElse(null);
-    ClassSymbolData newClassSymbol = newSymbolTable.classSymbolData(CLASS_NAME).orElse(null);
-
-//    assertThat(cachedClassSymbol).isNotNull();
-//    assertThat(newClassSymbol).isNotNull();
-
-    assertThat(cachedClassSymbol.methods()).hasSize(2);
-    assertThat(newClassSymbol.methods()).hasSize(3);
-  }
-
-  @Test
-  public void shouldCreateNewSymbolIfCacheIsOutdated() {
+  public void shouldCreateProjectSymbolDataWithSymbolWhenFileIsDeleted() {
     buildBaseProjectSymbolDataAndCache();
 
-    context.setPreviousCache((ReadCache) nextCache);
+    previousCache = nextCache.copy();
+    context.setPreviousCache(previousCache);
+    context.setCanSkipUnchangedFiles(true);
     SymbolScanner symbolScanner = createScanner();
-    InputFile changedFile = inputFile("incremental/baseFile.php", InputFile.Type.MAIN, InputFile.Status.CHANGED);
-    symbolScanner.execute(List.of(changedFile));
-    ProjectSymbolData newSymbolTable = symbolScanner.getProjectSymbolData();
+    symbolScanner.execute(Collections.emptyList());
 
-    ClassSymbolData newClassSymbol = newSymbolTable.classSymbolData(CLASS_NAME).orElse(null);
-    assertThat(newClassSymbol.methods()).hasSize(2);
+    ProjectSymbolData symbolTable = symbolScanner.getProjectSymbolData();
+
+    assertThat(symbolTable.classSymbolData(CLASS_NAME)).isEmpty();
   }
 
   private ProjectSymbolData buildBaseProjectSymbolDataAndCache() {
