@@ -20,6 +20,7 @@
 package org.sonar.php.cache;
 
 import org.sonar.api.batch.sensor.cache.WriteCache;
+import org.sonar.plugins.php.api.cache.PhpWriteCache;
 
 public class PhpWriteCacheImpl implements PhpWriteCache {
 

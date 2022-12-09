@@ -48,7 +48,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.PHPAnalyzer;
-import org.sonar.php.cache.CacheContext;
+import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
@@ -127,10 +127,7 @@ public class PHPSensor implements Sensor {
     List<InputFile> inputFiles = new ArrayList<>();
     fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
 
-    CacheContext cacheContext = CacheContextImpl.of(context);
-    Cache cache = new Cache(cacheContext);
-
-    SymbolScanner symbolScanner = new SymbolScanner(context, statistics, cache);
+    SymbolScanner symbolScanner = SymbolScanner.create(context, statistics);
 
     try {
       symbolScanner.execute(inputFiles);
@@ -181,18 +178,13 @@ public class PHPSensor implements Sensor {
     }
 
     @Override
-    protected boolean fileCanBeSkipped(InputFile file) {
-      return optimizedAnalysis && file.status() != null && file.status().equals(InputFile.Status.SAME);
-    }
-
-    @Override
     String name() {
       return "PHP rules";
     }
 
     @Override
     void scanFile(InputFile inputFile) {
-      if (inputFile.type() == Type.TEST && !hasTestFileChecks) {
+      if (fileCanBeSkipped(inputFile) || (inputFile.type() == Type.TEST && !hasTestFileChecks)) {
         return;
       }
 

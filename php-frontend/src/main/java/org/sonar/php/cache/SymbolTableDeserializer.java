@@ -36,7 +36,7 @@ import org.sonar.php.tree.symbols.SymbolQualifiedName;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-public class ProjectSymbolDataDeserializer {
+public class SymbolTableDeserializer {
 
   private final VarLengthInputStream in;
   private final VarLengthInputStream stringTableIn;
@@ -44,7 +44,7 @@ public class ProjectSymbolDataDeserializer {
 
   private StringTable stringTable;
 
-  private ProjectSymbolDataDeserializer(VarLengthInputStream in, VarLengthInputStream stringTableIn, String pluginVersion) {
+  private SymbolTableDeserializer(VarLengthInputStream in, VarLengthInputStream stringTableIn, String pluginVersion) {
     this.in = in;
     this.stringTableIn = stringTableIn;
     this.pluginVersion = pluginVersion;
@@ -52,7 +52,7 @@ public class ProjectSymbolDataDeserializer {
 
   @CheckForNull
   public static ProjectSymbolData fromBinary(DeserializationInput input) {
-    ProjectSymbolDataDeserializer deserializer = new ProjectSymbolDataDeserializer(
+    SymbolTableDeserializer deserializer = new SymbolTableDeserializer(
       new VarLengthInputStream(input.projectSymbolDataBytes()),
       new VarLengthInputStream(input.stringTable()),
       input.pluginVersion());

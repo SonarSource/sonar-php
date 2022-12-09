@@ -32,20 +32,20 @@ import org.sonar.php.tree.symbols.SymbolQualifiedName;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-public class ProjectSymbolDataSerializer {
+public class SymbolTableSerializer {
 
   private final ByteArrayOutputStream stream;
   private final VarLengthOutputStream out;
   private final StringTable stringTable;
 
-  private ProjectSymbolDataSerializer() {
+  private SymbolTableSerializer() {
     stream = new ByteArrayOutputStream();
     out = new VarLengthOutputStream(stream);
     stringTable = new StringTable();
   }
 
   public static SerializationResult toBinary(SerializationInput serializationInput) {
-    ProjectSymbolDataSerializer serializer = new ProjectSymbolDataSerializer();
+    SymbolTableSerializer serializer = new SymbolTableSerializer();
     return serializer.convert(serializationInput);
   }
 

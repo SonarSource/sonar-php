@@ -29,7 +29,7 @@ import org.sonar.api.batch.sensor.cache.WriteCache;
 
 public class ReadWriteInMemoryCache implements ReadCache, WriteCache {
 
-  private Map<String, byte[]> storage = new HashMap<>();
+  Map<String, byte[]> storage = new HashMap<>();
 
   @Override
   public InputStream read(String key) {

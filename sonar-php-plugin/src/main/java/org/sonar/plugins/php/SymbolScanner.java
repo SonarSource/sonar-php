@@ -21,19 +21,21 @@ package org.sonar.plugins.php;
 
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
-import java.util.List;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.php.cache.Cache;
+import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.cache.CacheContext;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.php.cache.Cache;
 
 public class SymbolScanner extends Scanner {
 
@@ -43,9 +45,15 @@ public class SymbolScanner extends Scanner {
   private ProjectSymbolData projectSymbolData = new ProjectSymbolData();
   private final Cache cache;
 
-  public SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cacheContext) {
+  public SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cache) {
     super(context, statistics);
-    this.cache = cacheContext;
+    this.cache = cache;
+  }
+
+  public static SymbolScanner create(SensorContext context, DurationStatistics statistics) {
+    CacheContext cacheContext = CacheContextImpl.of(context);
+    Cache cache = new Cache(cacheContext);
+    return new SymbolScanner(context, statistics, cache);
   }
 
   @Override
@@ -53,23 +61,26 @@ public class SymbolScanner extends Scanner {
     return "PHP symbol indexer";
   }
 
-  @Override
-  void execute(List<InputFile> files) {
-    if (optimizedAnalysis) {
-      projectSymbolData = cache.read();
-    }
-    super.execute(files);
-    cache.write(projectSymbolData);
-  }
 
   @Override
   void scanFile(InputFile file) {
     PhpFileImpl phpFile = new PhpFileImpl(file);
     try {
-      CompilationUnitTree ast = (CompilationUnitTree) statistics.time("ProjectSymbolParsing", () -> parser.parse(phpFile.contents()));
-      SymbolTableImpl symbolTable = statistics.time("ProjectSymbolTable", () -> SymbolTableImpl.create(ast, projectSymbolData, phpFile));
-      symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
-      symbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
+      SymbolTableImpl fileSymbolTable = null;
+      if (fileCanBeSkipped(file)) {
+        // load fileSymbolTable from cache
+        fileSymbolTable = cache.read("key");
+      }
+
+      if (fileSymbolTable == null) {
+        CompilationUnitTree ast = (CompilationUnitTree) statistics.time("ProjectSymbolParsing", () -> parser.parse(phpFile.contents()));
+        fileSymbolTable = statistics.time("ProjectSymbolTable", () -> SymbolTableImpl.create(ast, new ProjectSymbolData(), phpFile));
+      }
+
+      fileSymbolTable.classSymbolDatas().forEach(projectSymbolData::add);
+      fileSymbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
+
+      cache.write("key", fileSymbolTable);
     } catch (RecognitionException e) {
       LOG.debug("Parsing error in " + file);
     }
@@ -77,7 +88,7 @@ public class SymbolScanner extends Scanner {
 
   @Override
   void logException(Exception e, InputFile file) {
-    LOG.debug("Unable to analyze file: " + file.toString(), e);
+    LOG.debug("Unable to analyze file: " + file, e);
   }
 
   public ProjectSymbolData getProjectSymbolData() {

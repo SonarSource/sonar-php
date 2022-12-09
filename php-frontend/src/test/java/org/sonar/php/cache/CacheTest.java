@@ -24,6 +24,9 @@ import org.junit.Test;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.cache.CacheContext;
+import org.sonar.plugins.php.api.cache.PhpReadCache;
+import org.sonar.plugins.php.api.cache.PhpWriteCache;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,8 +37,8 @@ import static org.mockito.Mockito.when;
 
 public class CacheTest {
 
-  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:projectKey";
-  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:projectKey";
+  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:projectKey:key";
+  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:projectKey:key";
   private static final String PLUGIN_VERSION = "1.2.3";
   private static final String PROJECT_KEY = "projectKey";
 
@@ -48,9 +51,9 @@ public class CacheTest {
     Cache cache = new Cache(context);
     ProjectSymbolData data = exampleProjectSymbolData();
 
-    cache.write(data);
+    cache.write("key", data);
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(data, PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(data, PLUGIN_VERSION));
     verify(writeCache).writeBytes(CACHE_KEY_DATA, binary.data());
     verify(writeCache).writeBytes(CACHE_KEY_STRING_TABLE, binary.stringTable());
   }
@@ -61,7 +64,7 @@ public class CacheTest {
     Cache cache = new Cache(context);
     ProjectSymbolData data = new ProjectSymbolData();
 
-    cache.write(data);
+    cache.write("key", data);
 
     verifyZeroInteractions(writeCache);
   }
@@ -72,13 +75,25 @@ public class CacheTest {
     Cache cache = new Cache(context);
     ProjectSymbolData data = exampleProjectSymbolData();
     SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
-    SerializationResult serializationData = ProjectSymbolDataSerializer.toBinary(serializationInput);
+    SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
     when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(serializationData.data());
     when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(serializationData.stringTable());
 
-    ProjectSymbolData actual = cache.read();
+    ProjectSymbolData actual = cache.read("key");
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(data);
+  }
+
+  @Test
+  public void shouldReturnNullWhenCacheEntryDoesNotExist() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    Cache cache = new Cache(context);
+    when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(null);
+    when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(null);
+
+    ProjectSymbolData actual = cache.read("key");
+
+    assertThat(actual).isNull();
   }
 
   @Test
@@ -86,7 +101,7 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
 
-    ProjectSymbolData actual = cache.read();
+    ProjectSymbolData actual = cache.read("key");
 
     assertThat(actual).isNull();
   }

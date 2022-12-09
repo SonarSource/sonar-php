@@ -42,7 +42,7 @@ abstract class Scanner {
   private static final String FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast";
   protected final SensorContext context;
   protected final DurationStatistics statistics;
-  protected final boolean optimizedAnalysis;
+  protected boolean optimizedAnalysis;
 
 
   Scanner(SensorContext context, DurationStatistics statistics) {
@@ -67,11 +67,7 @@ abstract class Scanner {
         if (context.isCancelled()) {
           throw new CancellationException();
         }
-
-        if (!fileCanBeSkipped(file)) {
-          processFile(file);
-        }
-
+        processFile(file);
         progressReport.nextFile();
       }
       onEnd();
@@ -90,7 +86,7 @@ abstract class Scanner {
       (context.canSkipUnchangedFiles() || context.config().getBoolean(SONAR_CAN_SKIP_UNCHANGED_FILES_KEY).orElse(false));
   }
   protected boolean fileCanBeSkipped(InputFile file) {
-    return false;
+    return optimizedAnalysis && file.status() != null && file.status().equals(InputFile.Status.SAME);
   }
 
   private void processFile(InputFile file) {

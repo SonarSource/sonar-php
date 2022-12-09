@@ -26,6 +26,9 @@ import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.cache.CacheContext;
+import org.sonar.plugins.php.api.cache.PhpReadCache;
+import org.sonar.plugins.php.api.cache.PhpWriteCache;
 
 public class CacheContextImpl implements CacheContext {
 

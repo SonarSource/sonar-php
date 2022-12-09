@@ -19,7 +19,9 @@
  */
 package org.sonar.php.cache;
 
-import org.sonar.php.symbols.ProjectSymbolData;
+import javax.annotation.CheckForNull;
+import org.sonar.plugins.php.api.cache.CacheContext;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 
 public class Cache {
 
@@ -31,24 +33,27 @@ public class Cache {
     this.cacheContext = cacheContext;
   }
 
-  public void write(ProjectSymbolData projectSymbolData) {
+  public void write(String key, SymbolTable symbolTable) {
     if (cacheContext.isCacheEnabled()) {
       String pluginVersion = cacheContext.pluginVersion();
       String projectKey = cacheContext.projectKey();
       SerializationInput serializationInput = new SerializationInput(projectSymbolData, pluginVersion);
-      SerializationResult serializationData = ProjectSymbolDataSerializer.toBinary(serializationInput);
-      cacheContext.getWriteCache().writeBytes(CACHE_KEY_DATA + projectKey, serializationData.data());
-      cacheContext.getWriteCache().writeBytes(CACHE_KEY_STRING_TABLE + projectKey, serializationData.stringTable());
+      SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
+      cacheContext.getWriteCache().writeBytes(CACHE_KEY_DATA + projectKey + ":" + key, serializationData.data());
+      cacheContext.getWriteCache().writeBytes(CACHE_KEY_STRING_TABLE + projectKey + ":" + key, serializationData.stringTable());
     }
   }
 
-  public ProjectSymbolData read() {
+  @CheckForNull
+  public SymbolTable read(String key) {
     if (cacheContext.isCacheEnabled()) {
       String pluginVersion = cacheContext.pluginVersion();
       String projectKey = cacheContext.projectKey();
-      byte[] data = cacheContext.getReadCache().readBytes(CACHE_KEY_DATA + projectKey);
-      byte[] stringTable = cacheContext.getReadCache().readBytes(CACHE_KEY_STRING_TABLE + projectKey);
-      return ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(data, stringTable, pluginVersion));
+      byte[] data = cacheContext.getReadCache().readBytes(CACHE_KEY_DATA + projectKey +  ":" + key);
+      byte[] stringTable = cacheContext.getReadCache().readBytes(CACHE_KEY_STRING_TABLE + projectKey + ":" + key);
+      if (data != null && stringTable != null) {
+        return SymbolTableDeserializer.fromBinary(new DeserializationInput(data, stringTable, pluginVersion));
+      }
     }
     return null;
   }
