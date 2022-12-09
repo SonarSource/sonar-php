@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.CheckForNull;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
@@ -37,6 +39,8 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class SymbolTableDeserializer {
+
+  private static final Logger LOG = Loggers.get(SymbolTableDeserializer.class);
 
   private final VarLengthInputStream in;
   private final VarLengthInputStream stringTableIn;
@@ -83,7 +87,8 @@ public class SymbolTableDeserializer {
       }
       return SymbolTableImpl.create(classSymbolData, functionSymbolData);
     } catch (IOException e) {
-      throw new IllegalStateException("Can't read data from cache", e);
+      LOG.debug("Can't deserialize data from the cache", e);
+      return null;
     }
   }
 

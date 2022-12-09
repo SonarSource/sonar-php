@@ -208,7 +208,7 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldThrowExceptionWhenStringTableCorrupted() {
+  public void shouldReturnsNullWhenStringTableCorrupted() {
     FunctionSymbolData functionSymbolData = new FunctionSymbolData(
       new LocationInFileImpl("file1.php", 2,9,2,12),
       SymbolQualifiedName.qualifiedName("name"),
@@ -218,20 +218,18 @@ public class SymbolTableSerializerTest {
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
     SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
-    Throwable throwable = catchThrowable(() -> SymbolTableDeserializer.fromBinary(
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(
       new DeserializationInput(
         binary.data(),
         corruptBit(binary.stringTable()),
         PLUGIN_VERSION
-      )));
+      ));
 
-    assertThat(throwable)
-      .isInstanceOf(IllegalStateException.class)
-      .hasMessage("Can't read data from cache");
+    assertThat(actual).isNull();
   }
 
   @Test
-  public void shouldThrowExceptionWhenProjectSymbolDataCorrupted() {
+  public void shouldReturnsNullWhenProjectSymbolDataCorrupted() {
     FunctionSymbolData functionSymbolData = new FunctionSymbolData(
       new LocationInFileImpl("file1.php", 2,9,2,12),
       SymbolQualifiedName.qualifiedName("name"),
@@ -241,15 +239,13 @@ public class SymbolTableSerializerTest {
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
     SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
-    Throwable throwable = catchThrowable(() -> SymbolTableDeserializer.fromBinary(
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(
       new DeserializationInput(
-      corruptBit(binary.data()),
-      binary.stringTable(),
-        PLUGIN_VERSION)));
+        corruptBit(binary.data()),
+        binary.stringTable(),
+        PLUGIN_VERSION));
 
-    assertThat(throwable)
-      .isInstanceOf(IllegalStateException.class)
-      .hasMessage("Can't read data from cache");
+    assertThat(actual).isNull();
   }
 
   @Test

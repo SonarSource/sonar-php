@@ -22,17 +22,21 @@ package org.sonar.plugins.php;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.api.batch.sensor.cache.WriteCache;
 
 public class ReadWriteInMemoryCache implements ReadCache, WriteCache {
 
-  Map<String, byte[]> storage = new HashMap<>();
+  private Map<String, byte[]> storage = new HashMap<>();
+  private List<String> readKeys = new ArrayList<>();
 
   @Override
   public InputStream read(String key) {
+    readKeys.add(key);
     byte[] bytes = storage.get(key);
     return new ByteArrayInputStream(bytes);
   }
@@ -59,5 +63,15 @@ public class ReadWriteInMemoryCache implements ReadCache, WriteCache {
   @Override
   public void copyFromPrevious(String key) {
 
+  }
+
+  public ReadWriteInMemoryCache copy() {
+    ReadWriteInMemoryCache newCache = new ReadWriteInMemoryCache();
+    newCache.storage = storage;
+    return newCache;
+  }
+
+  public List<String> readKeys() {
+    return readKeys;
   }
 }

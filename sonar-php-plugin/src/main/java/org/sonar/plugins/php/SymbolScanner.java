@@ -33,7 +33,6 @@ import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.cache.CacheContext;
-import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 
@@ -68,8 +67,7 @@ public class SymbolScanner extends Scanner {
     try {
       SymbolTableImpl fileSymbolTable = null;
       if (fileCanBeSkipped(file)) {
-        // load fileSymbolTable from cache
-        fileSymbolTable = cache.read("key");
+        fileSymbolTable = cache.read(file.uri().toString());
       }
 
       if (fileSymbolTable == null) {
@@ -80,7 +78,7 @@ public class SymbolScanner extends Scanner {
       fileSymbolTable.classSymbolDatas().forEach(projectSymbolData::add);
       fileSymbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
 
-      cache.write("key", fileSymbolTable);
+      cache.write(file.uri().toString(), fileSymbolTable);
     } catch (RecognitionException e) {
       LOG.debug("Parsing error in " + file);
     }
