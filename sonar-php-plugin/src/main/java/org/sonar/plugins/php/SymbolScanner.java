@@ -95,7 +95,7 @@ public class SymbolScanner extends Scanner {
     cache.write(file, fileSymbolTable);
   }
 
-   @CheckForNull
+  @CheckForNull
   private SymbolTableImpl readSymbolTableFromCache(InputFile file) {
     SymbolTableImpl fileSymbolTable = cache.read(file);
     if (fileSymbolTable != null) {

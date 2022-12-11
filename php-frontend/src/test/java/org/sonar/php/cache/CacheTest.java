@@ -33,10 +33,10 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static org.sonar.php.FileTestUtils.getFile;
 
 public class CacheTest {
 
@@ -65,6 +65,21 @@ public class CacheTest {
   }
 
   @Test
+  public void shouldWriteToCacheOnceIfHashIsIdentical() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    Cache cache = new Cache(context);
+    SymbolTableImpl data = exampleSymbolTable();
+
+    cache.write(DEFAULT_INPUT_FILE, data);
+    cache.write(DEFAULT_INPUT_FILE, data);
+
+    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(data, PLUGIN_VERSION));
+
+    verify(writeCache, times(1)).writeBytes(CACHE_KEY_DATA + cacheFileName, binary.data());
+  }
+
+  @Test
   public void shouldNotWriteToCacheIfItsDisabled() {
     CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
@@ -87,14 +102,37 @@ public class CacheTest {
   }
 
   @Test
-  public void shouldReturnNullWhenCacheEntryDoesNotExist() {
+  public void shouldReturnNullWhenDataCacheEntryDoesNotExist() {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
 
     String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
 
+    SymbolTableImpl data = exampleSymbolTable();
+    SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
+    SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
+
     when(readCache.readBytes(CACHE_KEY_DATA + cacheFileName)).thenReturn(null);
-    when(readCache.readBytes(CACHE_KEY_DATA + cacheFileName)).thenReturn(null);
+    when(readCache.readBytes(CACHE_KEY_STRING_TABLE + cacheFileName)).thenReturn(serializationData.stringTable());
+
+    SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
+
+    assertThat(actual).isNull();
+  }
+
+  @Test
+  public void shouldReturnNullWhenStringTableCacheEntryDoesNotExist() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    Cache cache = new Cache(context);
+
+    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
+
+    SymbolTableImpl data = exampleSymbolTable();
+    SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
+    SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
+
+    when(readCache.readBytes(CACHE_KEY_DATA + cacheFileName)).thenReturn(serializationData.data());
+    when(readCache.readBytes(CACHE_KEY_STRING_TABLE + cacheFileName)).thenReturn(null);
 
     SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
 

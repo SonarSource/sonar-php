@@ -20,12 +20,13 @@
 package org.sonar.php.cache;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.CheckForNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
@@ -39,8 +40,8 @@ public class Cache {
   private final CacheContext cacheContext;
   private final String pluginVersion;
   private final String projectKey;
-
-  Map<InputFile, BigInteger> hashes = new HashMap<>();
+  private final Map<InputFile, BigInteger> fileHashes = new HashMap<>();
+  private final Set<String> cachedFileNames = new HashSet();
 
   public Cache(CacheContext cacheContext) {
     this.cacheContext = cacheContext;
@@ -54,9 +55,11 @@ public class Cache {
       SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
       String cacheFileName = getCacheFileName(file);
-      PhpWriteCache writeCache = cacheContext.getWriteCache();
-      writeCache.writeBytes(getDataCacheKey(cacheFileName), serializationData.data());
-      writeCache.writeBytes(getStringTableCacheKey(cacheFileName), serializationData.stringTable());
+      if (cachedFileNames.add(cacheFileName)) {
+        PhpWriteCache writeCache = cacheContext.getWriteCache();
+        writeCache.writeBytes(getDataCacheKey(cacheFileName), serializationData.data());
+        writeCache.writeBytes(getStringTableCacheKey(cacheFileName), serializationData.stringTable());
+      }
     }
   }
 
@@ -88,7 +91,7 @@ public class Cache {
   }
 
   public BigInteger computeFileHash(InputFile file) {
-    return hashes.computeIfAbsent(file, s -> {
+    return fileHashes.computeIfAbsent(file, s -> {
       try {
         byte[] bytes = file.contents().getBytes();
         return hash(bytes);
@@ -103,9 +106,9 @@ public class Cache {
   }
 
   private static MessageDigest getMessageDigest() {
-    final java.security.MessageDigest digest;
+    final MessageDigest digest;
     try {
-      digest = java.security.MessageDigest.getInstance("SHA-256");
+      digest = MessageDigest.getInstance("SHA-256");
     } catch (NoSuchAlgorithmException e) {
       throw new IllegalStateException(e);
     }
