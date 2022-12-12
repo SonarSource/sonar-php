@@ -643,6 +643,17 @@ public class PHPSensorTest {
     assertThat(context.allIssues()).isNotEmpty();
   }
 
+  @Test
+  public void create_sensor_for_sonar_lint() {
+    DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
+    PHPSensor phpSensor = new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter());
+    phpSensor.describe(descriptor);
+
+    assertThat(descriptor.name()).isEqualTo("PHP sensor");
+    assertThat(descriptor.languages()).containsOnly("php");
+    assertThat(descriptor.type()).isNull();
+  }
+
 
   @After
   public void tearDown() {
