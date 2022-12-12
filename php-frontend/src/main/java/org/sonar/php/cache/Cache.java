@@ -41,7 +41,7 @@ public class Cache {
   private final String pluginVersion;
   private final String projectKey;
   private final Map<InputFile, BigInteger> fileHashes = new HashMap<>();
-  private final Set<String> cachedFileNames = new HashSet();
+  private final Set<String> cachedFileNames = new HashSet<>();
 
   public Cache(CacheContext cacheContext) {
     this.cacheContext = cacheContext;
@@ -50,16 +50,14 @@ public class Cache {
   }
 
   public void write(InputFile file, SymbolTableImpl symbolTable) {
-    if (cacheContext.isCacheEnabled()) {
+    String cacheFileName = getCacheFileName(file);
+    if (cacheContext.isCacheEnabled() && cachedFileNames.add(cacheFileName)) {
       SerializationInput serializationInput = new SerializationInput(symbolTable, pluginVersion);
       SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
-      String cacheFileName = getCacheFileName(file);
-      if (cachedFileNames.add(cacheFileName)) {
-        PhpWriteCache writeCache = cacheContext.getWriteCache();
-        writeCache.writeBytes(getDataCacheKey(cacheFileName), serializationData.data());
-        writeCache.writeBytes(getStringTableCacheKey(cacheFileName), serializationData.stringTable());
-      }
+      PhpWriteCache writeCache = cacheContext.getWriteCache();
+      writeCache.writeBytes(getDataCacheKey(cacheFileName), serializationData.data());
+      writeCache.writeBytes(getStringTableCacheKey(cacheFileName), serializationData.stringTable());
     }
   }
 
@@ -106,12 +104,10 @@ public class Cache {
   }
 
   private static MessageDigest getMessageDigest() {
-    final MessageDigest digest;
     try {
-      digest = MessageDigest.getInstance("SHA-256");
+      return MessageDigest.getInstance("SHA-256");
     } catch (NoSuchAlgorithmException e) {
       throw new IllegalStateException(e);
     }
-    return digest;
   }
 }

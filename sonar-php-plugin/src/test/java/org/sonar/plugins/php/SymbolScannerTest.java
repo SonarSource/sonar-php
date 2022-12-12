@@ -140,30 +140,4 @@ public class SymbolScannerTest {
 
     return SymbolScanner.create(sensorContext, statistics);
   }
-
-
-//  private static List<InputFile> exampleFiles(String... fileNames) {
-//    List<InputFile> inputFiles = new ArrayList<>();
-//
-//    for (String fileName : fileNames) {
-//      DefaultInputFile inputFile = file(fileName);
-//      inputFiles.add(inputFile);
-//    }
-//    return inputFiles;
-//  }
-
-//  private static DefaultInputFile file(String name) {
-//    return file(name, InputFile.Status.CHANGED);
-//  }
-
-//  private static DefaultInputFile file(String name, InputFile.Status status) {
-//    DefaultInputFile inputFile = TestInputFileBuilder.create(PhpTestUtils.getModuleBaseDir().getPath(), name)
-//      .setLanguage("php")
-//      .setType(InputFile.Type.MAIN)
-//      .initMetadata("<?php ")
-//      .setStatus(status)
-//      .setCharset(StandardCharsets.UTF_8)
-//      .build();
-//    return inputFile;
-//  }
 }
