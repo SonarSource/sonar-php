@@ -77,7 +77,7 @@ abstract class Scanner {
     }
   }
 
-  private static boolean inSonarLint(SensorContext context) {
+  protected static boolean inSonarLint(SensorContext context) {
     return context.runtime().getProduct() == SonarProduct.SONARLINT;
   }
 
