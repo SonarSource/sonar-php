@@ -17,18 +17,22 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.cache;
+package org.sonar.plugins.php.api.cache;
 
-public interface PhpWriteCache {
-  /**
-   * Save a new entry in the cache.
-   * @throws {@code IllegalArgumentException} if the cache already contains the key.
-   */
-  void writeBytes(String key, byte[] data);
+import javax.annotation.CheckForNull;
+import org.sonar.api.Beta;
+
+@Beta
+public interface PhpReadCache {
 
   /**
-   * Copy a cached entry from the previous cache to the new one.
-   * @throws {@code IllegalArgumentException} if the previous cache doesn't contain given key or if this cache already contains the key.
+   * @return the array of bytes stored for the given key, if any. {@code null} otherwise.
    */
-  void copyFromPrevious(String key);
+  @CheckForNull
+  byte[] readBytes(String key);
+
+  /**
+   * Checks whether the cache contains the provided {@code key}.
+   */
+  boolean contains(String key);
 }

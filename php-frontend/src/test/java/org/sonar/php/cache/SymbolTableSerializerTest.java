@@ -19,9 +19,16 @@
  */
 package org.sonar.php.cache;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
@@ -32,17 +39,20 @@ import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.SymbolQualifiedName;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class ProjectSymbolDataSerializerTest {
+public class SymbolTableSerializerTest {
 
   public static final String PLUGIN_VERSION = "1.2.3";
 
   @Test
   public void shouldSerializeAndDeserializeExampleData() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+    List<ClassSymbolData> classSymbolDatas = new ArrayList<>();
+    List<FunctionSymbolData> functionSymbolDatas = new ArrayList<>();
     List<MethodSymbolData> methods = new ArrayList<>();
     methods.add(new MethodSymbolData(
       new LocationInFileImpl("Mail.php", 183, 27, 183, 46),
@@ -75,24 +85,24 @@ public class ProjectSymbolDataSerializerTest {
       List.of(),
       ClassSymbol.Kind.NORMAL,
       methods);
-    projectSymbolData.add(classSymbolData);
+    classSymbolDatas.add(classSymbolData);
     FunctionSymbolData functionSymbolData = new FunctionSymbolData(
       new LocationInFileImpl("file1.php", 2,9,2,12),
       SymbolQualifiedName.qualifiedName("foo"),
       List.of(new Parameter("$i", "int", false, false)),
       new FunctionSymbolData.FunctionSymbolProperties(false, false)
     );
-    projectSymbolData.add(functionSymbolData);
+    functionSymbolDatas.add(functionSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(classSymbolDatas, functionSymbolDatas);
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
 
   @Test
   public void shouldThrowExceptionWhenNotSymbolQualifiedName() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
     ClassSymbolData classSymbolData = new ClassSymbolData(
       new LocationInFileImpl("Mail.php", 52, 6, 52, 15),
       () -> "dummy",
@@ -100,9 +110,9 @@ public class ProjectSymbolDataSerializerTest {
       List.of(),
       ClassSymbol.Kind.NORMAL,
       List.of());
-    projectSymbolData.add(classSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    Throwable throwable = catchThrowable(() -> ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION)));
+    Throwable throwable = catchThrowable(() -> SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION)));
 
     assertThat(throwable)
       .isInstanceOf(IllegalStateException.class)
@@ -111,7 +121,6 @@ public class ProjectSymbolDataSerializerTest {
 
   @Test
   public void shouldThrowExceptionWhenNotFunctionSymbolData() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
     FunctionSymbolData functionSymbolData = new MethodSymbolData(
       new LocationInFileImpl("file1.php", 2,9,2,12),
       "name",
@@ -119,9 +128,9 @@ public class ProjectSymbolDataSerializerTest {
       new FunctionSymbolData.FunctionSymbolProperties(false, false),
       Visibility.PUBLIC
     );
-    projectSymbolData.add(functionSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
-    Throwable throwable = catchThrowable(() -> ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION)));
+    Throwable throwable = catchThrowable(() -> SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION)));
 
     assertThat(throwable)
       .isInstanceOf(IllegalStateException.class)
@@ -130,7 +139,6 @@ public class ProjectSymbolDataSerializerTest {
 
   @Test
   public void shouldSerializeAndDeserializeClassWithImplementedInterface() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
 
     ClassSymbolData classSymbolData = new ClassSymbolData(
       new LocationInFileImpl("Mail.php", 52, 6, 52, 15),
@@ -139,18 +147,16 @@ public class ProjectSymbolDataSerializerTest {
       List.of(SymbolQualifiedName.qualifiedName("some_interface")),
       ClassSymbol.Kind.NORMAL,
       List.of());
-    projectSymbolData.add(classSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
 
   @Test
   public void shouldSerializeAndDeserializeClassWithUnknownLocation() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
-
     ClassSymbolData classSymbolData = new ClassSymbolData(
       UnknownLocationInFile.UNKNOWN_LOCATION,
       SymbolQualifiedName.qualifiedName("dummy"),
@@ -158,18 +164,16 @@ public class ProjectSymbolDataSerializerTest {
       List.of(),
       ClassSymbol.Kind.NORMAL,
       List.of());
-    projectSymbolData.add(classSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
 
   @Test
   public void shouldSerializeAndDeserializeClassWithNullSuperClass() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
-
     ClassSymbolData classSymbolData = new ClassSymbolData(
       UnknownLocationInFile.UNKNOWN_LOCATION,
       SymbolQualifiedName.qualifiedName("dummy"),
@@ -177,18 +181,17 @@ public class ProjectSymbolDataSerializerTest {
       List.of(),
       ClassSymbol.Kind.NORMAL,
       List.of());
-    projectSymbolData.add(classSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
 
   @Test
   public void shouldSerializeAndDeserializeClassWithQualifiedNameContainsBackslash() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
-
     ClassSymbolData classSymbolData = new ClassSymbolData(
       UnknownLocationInFile.UNKNOWN_LOCATION,
       SymbolQualifiedName.qualifiedName("symfony\\bridge\\monolog\\handler\\helper"),
@@ -196,65 +199,57 @@ public class ProjectSymbolDataSerializerTest {
       List.of(),
       ClassSymbol.Kind.NORMAL,
       List.of());
-    projectSymbolData.add(classSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
+    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
 
   @Test
-  public void shouldThrowExceptionWhenStringTableCorrupted() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+  public void shouldReturnsNullWhenStringTableCorrupted() {
     FunctionSymbolData functionSymbolData = new FunctionSymbolData(
       new LocationInFileImpl("file1.php", 2,9,2,12),
       SymbolQualifiedName.qualifiedName("name"),
       List.of(),
       new FunctionSymbolData.FunctionSymbolProperties(false, false)
     );
-    projectSymbolData.add(functionSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
-    Throwable throwable = catchThrowable(() -> ProjectSymbolDataDeserializer.fromBinary(
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(
       new DeserializationInput(
         binary.data(),
         corruptBit(binary.stringTable()),
         PLUGIN_VERSION
-      )));
+      ));
 
-    assertThat(throwable)
-      .isInstanceOf(IllegalStateException.class)
-      .hasMessage("Can't read data from cache");
+    assertThat(actual).isNull();
   }
 
   @Test
-  public void shouldThrowExceptionWhenProjectSymbolDataCorrupted() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+  public void shouldReturnsNullWhenProjectSymbolDataCorrupted() {
     FunctionSymbolData functionSymbolData = new FunctionSymbolData(
       new LocationInFileImpl("file1.php", 2,9,2,12),
       SymbolQualifiedName.qualifiedName("name"),
       List.of(),
       new FunctionSymbolData.FunctionSymbolProperties(false, false)
     );
-    projectSymbolData.add(functionSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
-    Throwable throwable = catchThrowable(() -> ProjectSymbolDataDeserializer.fromBinary(
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(
       new DeserializationInput(
-      corruptBit(binary.data()),
-      binary.stringTable(),
-        PLUGIN_VERSION)));
+        corruptBit(binary.data()),
+        binary.stringTable(),
+        PLUGIN_VERSION));
 
-    assertThat(throwable)
-      .isInstanceOf(IllegalStateException.class)
-      .hasMessage("Can't read data from cache");
+    assertThat(actual).isNull();
   }
 
   @Test
   public void shouldReturnNullWhenWrongPluginVersion() {
-    ProjectSymbolData projectSymbolData = new ProjectSymbolData();
-
     ClassSymbolData classSymbolData = new ClassSymbolData(
       UnknownLocationInFile.UNKNOWN_LOCATION,
       SymbolQualifiedName.qualifiedName("dummy"),
@@ -262,12 +257,30 @@ public class ProjectSymbolDataSerializerTest {
       List.of(),
       ClassSymbol.Kind.NORMAL,
       List.of());
-    projectSymbolData.add(classSymbolData);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, PLUGIN_VERSION));
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), "5.5.5"));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), "5.5.5"));
 
     assertThat(actual).isNull();
+  }
+
+  @Test
+  public void shouldSerializeAndDeserializeData() {
+    for (File file : FileUtils.listFiles(new File("src/test/resources"), new String[]{"php"}, true)) {
+      CompilationUnitTree unitTree = ParsingTestUtils.parse(file);
+      SymbolTableImpl symbolTable = SymbolTableImpl.create(unitTree);
+
+      SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, "1.2.3"));
+      SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), "1.2.3"));
+
+      assertThat(actual.classSymbolDatas())
+        .usingRecursiveFieldByFieldElementComparator()
+        .isEqualTo(symbolTable.classSymbolDatas());
+      assertThat(actual.functionSymbolDatas())
+        .usingRecursiveFieldByFieldElementComparator()
+        .isEqualTo(symbolTable.functionSymbolDatas());
+    }
   }
 
   private byte[] corruptBit(byte[] input) {

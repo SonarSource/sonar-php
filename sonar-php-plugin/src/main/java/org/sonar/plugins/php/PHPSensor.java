@@ -48,7 +48,6 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.PHPAnalyzer;
-import org.sonar.php.cache.CacheContext;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
@@ -75,13 +74,6 @@ import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_ANALYSIS_WARNINGS;
 
 public class PHPSensor implements Sensor {
-
-  /**
-   * Describes if an optimized analysis of unchanged files by skipping some rules is enabled.
-   * By default, the property is not set (null), leaving SQ/SC to decide whether to enable this behavior.
-   * Setting it to true or false, forces the behavior from the analyzer independently of the server.
-   */
-  public static final String SONAR_CAN_SKIP_UNCHANGED_FILES_KEY = "sonar.php.skipUnchanged";
 
   private static final Logger LOG = Loggers.get(PHPSensor.class);
   private final FileLinesContextFactory fileLinesContextFactory;
@@ -134,10 +126,7 @@ public class PHPSensor implements Sensor {
     List<InputFile> inputFiles = new ArrayList<>();
     fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
 
-    CacheContext cacheContext = CacheContextImpl.of(context);
-    Cache cache = new Cache(cacheContext);
-
-    SymbolScanner symbolScanner = new SymbolScanner(context, statistics, cache);
+    SymbolScanner symbolScanner = SymbolScanner.create(context, statistics);
 
     try {
       symbolScanner.execute(inputFiles);
@@ -167,7 +156,6 @@ public class PHPSensor implements Sensor {
     PHPAnalyzer phpAnalyzer;
 
     private final boolean hasTestFileChecks;
-    private final boolean optimizedAnalysis;
 
     public AnalysisScanner(SensorContext context, ProjectSymbolData projectSymbolData, DurationStatistics statistics) {
       super(context, statistics);
@@ -183,20 +171,9 @@ public class PHPSensor implements Sensor {
         filter(PhpUnitCheck.class::isInstance).
         collect(Collectors.toList());
       hasTestFileChecks = !testFilesChecks.isEmpty();
-      optimizedAnalysis = shouldOptimizeAnalysis();
 
       File workingDir = context.fileSystem().workDir();
       phpAnalyzer = new PHPAnalyzer(allChecks, testFilesChecks, workingDir, projectSymbolData, statistics);
-    }
-
-    private boolean shouldOptimizeAnalysis() {
-      return !(inSonarLint(context)) &&
-        (context.canSkipUnchangedFiles() || context.config().getBoolean(SONAR_CAN_SKIP_UNCHANGED_FILES_KEY).orElse(false));
-    }
-
-    @Override
-    protected boolean fileCanBeSkipped(InputFile file) {
-      return optimizedAnalysis && file.status() != null && file.status().equals(InputFile.Status.SAME);
     }
 
     @Override
@@ -206,7 +183,7 @@ public class PHPSensor implements Sensor {
 
     @Override
     void scanFile(InputFile inputFile) {
-      if (inputFile.type() == Type.TEST && !hasTestFileChecks) {
+      if (fileCanBeSkipped(inputFile) || (inputFile.type() == Type.TEST && !hasTestFileChecks)) {
         return;
       }
 

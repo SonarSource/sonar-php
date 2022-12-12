@@ -27,6 +27,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
+import org.sonar.plugins.php.api.cache.CacheContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

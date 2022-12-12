@@ -27,25 +27,25 @@ import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.MethodSymbolData;
 import org.sonar.php.symbols.Parameter;
-import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolQualifiedName;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-public class ProjectSymbolDataSerializer {
+public class SymbolTableSerializer {
 
   private final ByteArrayOutputStream stream;
   private final VarLengthOutputStream out;
   private final StringTable stringTable;
 
-  private ProjectSymbolDataSerializer() {
+  private SymbolTableSerializer() {
     stream = new ByteArrayOutputStream();
     out = new VarLengthOutputStream(stream);
     stringTable = new StringTable();
   }
 
   public static SerializationResult toBinary(SerializationInput serializationInput) {
-    ProjectSymbolDataSerializer serializer = new ProjectSymbolDataSerializer();
+    SymbolTableSerializer serializer = new SymbolTableSerializer();
     return serializer.convert(serializationInput);
   }
 
@@ -54,15 +54,15 @@ public class ProjectSymbolDataSerializer {
     try (out; stream) {
       String pluginVersion = serializationInput.pluginVersion();
       writeText(pluginVersion);
-      ProjectSymbolData projectSymbolData = serializationInput.projectSymbolData();
-      Collection<ClassSymbolData> classSymbols = projectSymbolData.classSymbolsByQualifiedName().values();
+      SymbolTableImpl projectSymbolData = serializationInput.symbolTable();
+      Collection<ClassSymbolData> classSymbols = projectSymbolData.classSymbolDatas();
       writeInt(classSymbols.size());
       for (ClassSymbolData classSymbol : classSymbols) {
         write(classSymbol);
       }
-      Collection<List<FunctionSymbolData>> nameFuncSymbolData = projectSymbolData.functionSymbolsByQualifiedName().values();
+      Collection<FunctionSymbolData> nameFuncSymbolData = projectSymbolData.functionSymbolDatas();
       writeInt(nameFuncSymbolData.size());
-      for (List<FunctionSymbolData> value : nameFuncSymbolData) {
+      for (FunctionSymbolData value : nameFuncSymbolData) {
         write(value);
       }
       out.writeUTF("END");
@@ -129,16 +129,14 @@ public class ProjectSymbolDataSerializer {
     }
   }
 
-  private void write(List<FunctionSymbolData> symbolDataList) throws IOException {
-    for (FunctionSymbolData data : symbolDataList) {
-      if (data instanceof MethodSymbolData) {
-        throw new  IllegalStateException("The FunctionSymbolData of type " + data.getClass().getName() + " is not supported");
-      }
-      write(data.location());
-      write(data.qualifiedName());
-      writeParameters(data.parameters());
-      write(data.properties());
+  private void write(FunctionSymbolData data) throws IOException {
+    if (data instanceof MethodSymbolData) {
+      throw new  IllegalStateException("The FunctionSymbolData of type " + data.getClass().getName() + " is not supported");
     }
+    write(data.location());
+    write(data.qualifiedName());
+    writeParameters(data.parameters());
+    write(data.properties());
   }
 
   private void write(FunctionSymbolData.FunctionSymbolProperties properties) throws IOException {

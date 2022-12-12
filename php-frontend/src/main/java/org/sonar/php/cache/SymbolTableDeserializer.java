@@ -23,20 +23,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.CheckForNull;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.MethodSymbolData;
 import org.sonar.php.symbols.Parameter;
-import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.SymbolQualifiedName;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-public class ProjectSymbolDataDeserializer {
+public class SymbolTableDeserializer {
+
+  private static final Logger LOG = Loggers.get(SymbolTableDeserializer.class);
 
   private final VarLengthInputStream in;
   private final VarLengthInputStream stringTableIn;
@@ -44,24 +48,25 @@ public class ProjectSymbolDataDeserializer {
 
   private StringTable stringTable;
 
-  private ProjectSymbolDataDeserializer(VarLengthInputStream in, VarLengthInputStream stringTableIn, String pluginVersion) {
+  private SymbolTableDeserializer(VarLengthInputStream in, VarLengthInputStream stringTableIn, String pluginVersion) {
     this.in = in;
     this.stringTableIn = stringTableIn;
     this.pluginVersion = pluginVersion;
   }
 
   @CheckForNull
-  public static ProjectSymbolData fromBinary(DeserializationInput input) {
-    ProjectSymbolDataDeserializer deserializer = new ProjectSymbolDataDeserializer(
+  public static SymbolTableImpl fromBinary(DeserializationInput input) {
+    SymbolTableDeserializer deserializer = new SymbolTableDeserializer(
       new VarLengthInputStream(input.projectSymbolDataBytes()),
       new VarLengthInputStream(input.stringTable()),
       input.pluginVersion());
     return deserializer.convert();
   }
 
-  private ProjectSymbolData convert() {
+  private SymbolTableImpl convert() {
     try (in; stringTableIn) {
-      ProjectSymbolData projectSymbolData = new ProjectSymbolData();
+      List<ClassSymbolData> classSymbolData = new ArrayList<>();
+      List<FunctionSymbolData> functionSymbolData = new ArrayList<>();
       stringTable = readStringTable();
       String pluginVersionText = readString();
       if(!pluginVersionText.equals(pluginVersion)) {
@@ -70,19 +75,20 @@ public class ProjectSymbolDataDeserializer {
       int sizeOfClassSymbols = readInt();
       for (int i = 0; i < sizeOfClassSymbols; i++) {
         ClassSymbolData data = readClassSymbolData();
-        projectSymbolData.add(data);
+        classSymbolData.add(data);
       }
       int sizeOfFuncSymbols = readInt();
       for (int i = 0; i < sizeOfFuncSymbols; i++) {
         FunctionSymbolData data = readFunctionSymbolDataList();
-        projectSymbolData.add(data);
+        functionSymbolData.add(data);
       }
       if (!"END".equals(in.readUTF())) {
         throw new IOException("Can't read data from cache, format corrupted");
       }
-      return projectSymbolData;
+      return SymbolTableImpl.create(classSymbolData, functionSymbolData);
     } catch (IOException e) {
-      throw new IllegalStateException("Can't read data from cache", e);
+      LOG.debug("Can't deserialize data from the cache", e);
+      return null;
     }
   }
 

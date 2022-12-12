@@ -19,85 +19,125 @@
  */
 package org.sonar.plugins.php;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 import org.sonar.DurationStatistics;
-import org.sonar.api.SonarEdition;
-import org.sonar.api.SonarQubeSide;
-import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.utils.Version;
 import org.sonar.php.cache.Cache;
-import org.sonar.php.cache.CacheContext;
 import org.sonar.php.cache.CacheContextImpl;
-import org.sonar.php.cache.DeserializationInput;
-import org.sonar.php.cache.ProjectSymbolDataDeserializer;
-import org.sonar.php.cache.ProjectSymbolDataSerializer;
-import org.sonar.php.cache.SerializationInput;
-import org.sonar.php.cache.SerializationResult;
+import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.PhpTestUtils.inputFile;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class SymbolScannerTest {
+
+  public static final QualifiedName CLASS_NAME = qualifiedName("app\\test\\controller");
+  private static ReadWriteInMemoryCache previousCache;
+  private static ReadWriteInMemoryCache nextCache;
+  private SensorContextTester context;
+  private DurationStatistics statistics;
+
+  @Before
+  public void init() throws IOException {
+    context = SensorContextTester.create(PhpTestUtils.getModuleBaseDir());
+    Path workDir = Files.createTempDirectory("workDir");
+    context.fileSystem().setWorkDir(workDir);
+    context.setCacheEnabled(true);
+    previousCache = new ReadWriteInMemoryCache();
+    nextCache = new ReadWriteInMemoryCache();
+    context.setPreviousCache(previousCache);
+    context.setNextCache(nextCache);
+
+    statistics = new DurationStatistics(context.config());
+  }
+
   @Test
-  public void shouldSerializeAndDeserializeData() {
-    SymbolScanner symbolScanner = createScanner();
+  public void shouldCreateProjectSymbolDataWhenCacheIsDisabled() throws IOException {
+    SymbolScanner symbolScanner = createScannerCacheDisabled();
+    InputFile baseFile = inputFile("incremental/baseFile.php", InputFile.Type.MAIN, InputFile.Status.ADDED);
 
-    List<InputFile> inputFiles = exampleFiles("Mail.php", "cpd.php", "Math2.php", "Math3.php", "PHPSquidSensor.php",
-      "cross-file/A.php", "cross-file/B.php"
-    );
-
-    symbolScanner.execute(inputFiles);
+    symbolScanner.execute(List.of(baseFile));
 
     ProjectSymbolData projectSymbolData = symbolScanner.getProjectSymbolData();
-    assertThat(projectSymbolData.classSymbolsByQualifiedName()).isNotEmpty();
-
-    SerializationResult binary = ProjectSymbolDataSerializer.toBinary(new SerializationInput(projectSymbolData, "1.2.3"));
-    ProjectSymbolData actual = ProjectSymbolDataDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), "1.2.3"));
-
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(projectSymbolData);
+    ClassSymbolData classSymbolData = projectSymbolData.classSymbolData(CLASS_NAME).orElse(null);
+    assertThat(classSymbolData.methods()).hasSize(2);
   }
 
-  private static SymbolScanner createScanner() {
-    SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(9, 7), SonarQubeSide.SCANNER, SonarEdition.DEVELOPER);
-    SensorContextTester context = SensorContextTester.create(PhpTestUtils.getModuleBaseDir())
-      .setRuntime(runtime);
-    context.setCacheEnabled(true);
-    ReadWriteInMemoryCache cacheMock = new ReadWriteInMemoryCache();
-    context.setNextCache(cacheMock);
-    context.setPreviousCache(cacheMock);
+  @Test
+  public void shouldCreateProjectSymbolDataFromCache() {
+    buildBaseProjectSymbolDataAndCache();
 
-    DurationStatistics statistics = new DurationStatistics(context.config());
-    CacheContext cacheContext = CacheContextImpl.of(context);
-    Cache cache = new Cache(cacheContext);
-    SymbolScanner symbolScanner = new SymbolScanner(context, statistics, cache);
-    return symbolScanner;
+    previousCache = nextCache.copy();
+    context.setPreviousCache(previousCache);
+    context.setCanSkipUnchangedFiles(true);
+    SymbolScanner symbolScanner = createScanner();
+    InputFile changedFile = inputFile("incremental/baseFile.php", InputFile.Type.MAIN, InputFile.Status.SAME);
+    symbolScanner.execute(List.of(changedFile));
+
+    ProjectSymbolData newSymbolTable = symbolScanner.getProjectSymbolData();
+
+    ClassSymbolData newClassSymbol = newSymbolTable.classSymbolData(CLASS_NAME).orElse(null);
+    assertThat(newClassSymbol.methods()).hasSize(2);
+    // verify if cache was used
+
+    String cacheFileName = "22146621043327621015461537661717798110946814184349681185080520559963237469803";
+
+    assertThat(previousCache.readKeys().get(0)).startsWith("php.projectSymbolData.data:projectKey:" + cacheFileName);
+    assertThat(previousCache.readKeys().get(1)).startsWith("php.projectSymbolData.stringTable:projectKey:" + cacheFileName);
+    assertThat(previousCache.readKeys()).hasSize(2);
   }
 
-  private static List<InputFile> exampleFiles(String... fileNames) {
-    List<InputFile> inputFiles = new ArrayList<>();
+  @Test
+  public void shouldCreateProjectSymbolDataWithSymbolWhenFileIsDeleted() {
+    buildBaseProjectSymbolDataAndCache();
 
-    for (String fileName : fileNames) {
-      DefaultInputFile inputFile = file(fileName);
-      inputFiles.add(inputFile);
-    }
-    return inputFiles;
+    previousCache = nextCache.copy();
+    context.setPreviousCache(previousCache);
+    context.setCanSkipUnchangedFiles(true);
+    SymbolScanner symbolScanner = createScanner();
+    symbolScanner.execute(Collections.emptyList());
+
+    ProjectSymbolData symbolTable = symbolScanner.getProjectSymbolData();
+
+    assertThat(symbolTable.classSymbolData(CLASS_NAME)).isEmpty();
   }
 
-  private static DefaultInputFile file(String name) {
-    DefaultInputFile inputFile = TestInputFileBuilder.create(PhpTestUtils.getModuleBaseDir().getPath(), name)
-      .setLanguage("php")
-      .setType(InputFile.Type.MAIN)
-      .initMetadata("<?php ")
-      .setCharset(StandardCharsets.UTF_8)
-      .build();
-    return inputFile;
+  private ProjectSymbolData buildBaseProjectSymbolDataAndCache() {
+    SymbolScanner symbolScanner = createScanner();
+    InputFile baseFile = inputFile("incremental/baseFile.php", InputFile.Type.MAIN, InputFile.Status.ADDED);
+    symbolScanner.execute(List.of(baseFile));
+    return symbolScanner.getProjectSymbolData();
+  }
+
+  private SymbolScanner createScanner() {
+    return SymbolScanner.create(context, statistics);
+  }
+
+  private SymbolScanner createScannerCacheDisabled() throws IOException {
+    SensorContextTester sensorContext = SensorContextTester.create(PhpTestUtils.getModuleBaseDir());
+    Path workDir = Files.createTempDirectory("workDir");
+    sensorContext.fileSystem().setWorkDir(workDir);
+    sensorContext.setCacheEnabled(false);
+    previousCache = new ReadWriteInMemoryCache();
+    nextCache = new ReadWriteInMemoryCache();
+    sensorContext.setPreviousCache(previousCache);
+    sensorContext.setNextCache(nextCache);
+    statistics = new DurationStatistics(sensorContext.config());
+
+    return SymbolScanner.create(sensorContext, statistics);
   }
 }

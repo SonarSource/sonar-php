@@ -24,6 +24,7 @@ import javax.annotation.CheckForNull;
 import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.php.api.cache.PhpReadCache;
 
 public class PhpReadCacheImpl implements PhpReadCache {
 
