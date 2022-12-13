@@ -161,7 +161,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void analyse() throws NoSuchFieldException, IllegalAccessException {
+  public void analyse() {
     String componentKey = "moduleKey:" + ANALYZED_FILE;
 
     PHPSensor phpSensor = createSensor();
@@ -177,7 +177,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void test_cpd() throws NoSuchFieldException, IllegalAccessException {
+  public void test_cpd() {
     String fileName = "cpd.php";
     String componentKey = "moduleKey:" + fileName;
 
@@ -652,6 +652,23 @@ public class PHPSensorTest {
     assertThat(descriptor.name()).isEqualTo("PHP sensor");
     assertThat(descriptor.languages()).containsOnly("php");
     assertThat(descriptor.type()).isNull();
+  }
+
+  @Test
+  public void sensor_for_sonar_lint_doesnt_provide_metrics() {
+    String componentKey = "moduleKey:" + ANALYZED_FILE;
+    PHPSensor phpSensor = new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter());
+    context.setRuntime(SONARLINT_RUNTIME);
+
+    analyseSingleFile(phpSensor, ANALYZED_FILE);
+
+    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.NCLOC);
+    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.COMMENT_LINES);
+    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.COGNITIVE_COMPLEXITY);
+    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.COMPLEXITY);
+    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.CLASSES);
+    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.STATEMENTS);
+    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.FUNCTIONS);
   }
 
 
