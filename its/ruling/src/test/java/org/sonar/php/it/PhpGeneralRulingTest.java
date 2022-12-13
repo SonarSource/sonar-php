@@ -22,7 +22,6 @@ package org.sonar.php.it;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
-import com.sonar.orchestrator.locator.MavenLocation;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.HashSet;
@@ -34,17 +33,12 @@ import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PHPRulingTest {
+public class PhpGeneralRulingTest {
 
-  private static final File LITS_DIFFERENCES_FILE = FileLocation.of("target/differences").getFile();
+  private static final String PROJECT_KEY = "project";
 
   @ClassRule
-  public static Orchestrator ORCHESTRATOR = Orchestrator.builderEnv()
-    .useDefaultAdminCredentialsForBuilds(true)
-    .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
-    .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
-    .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin","sonar-lits-plugin", "0.10.0.2181"))
-    .build();
+  public static Orchestrator ORCHESTRATOR = RulingHelper.getOrchestrator();
 
   @BeforeClass
   public static void prepare_quality_profile() {
@@ -69,25 +63,18 @@ public class PHPRulingTest {
 
   @Test
   public void test() throws Exception {
-    ORCHESTRATOR.getServer().provisionProject("project", "project");
-    ORCHESTRATOR.getServer().associateProjectToQualityProfile("project", "php", "rules");
-    SonarScanner build = SonarScanner.create(FileLocation.of("../sources/src").getFile())
-      .setProjectKey("project")
-      .setProjectName("project")
-      .setProjectVersion("1")
-      .setSourceDirs(".")
-      .setSourceEncoding("UTF-8")
+    ORCHESTRATOR.getServer().provisionProject(PROJECT_KEY, PROJECT_KEY);
+    ORCHESTRATOR.getServer().associateProjectToQualityProfile(PROJECT_KEY, "php", "rules");
+    File litsDifferencesFile = FileLocation.of("target/differences").getFile();
+    File projectLocation = FileLocation.of("../sources/src").getFile();
+    SonarScanner build = RulingHelper.prepareScanner(projectLocation, PROJECT_KEY, "expected", litsDifferencesFile)
       .setProperty("sonar.import_unknown_files", "true")
-      .setProperty("sonar.lits.dump.old", FileLocation.of("src/test/resources/expected").getFile().getAbsolutePath())
-      .setProperty("sonar.lits.dump.new", FileLocation.of("target/actual").getFile().getAbsolutePath())
-      .setProperty("sonar.cpd.exclusions", "**/*")
-      .setProperty("sonar.internal.analysis.failFast", "true")
-      .setProperty("sonar.lits.differences", LITS_DIFFERENCES_FILE.getAbsolutePath())
       .setProperty("sonar.php.duration.statistics", "true");
-    build.setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1000m");
+
     ORCHESTRATOR.executeBuild(build);
 
-    assertThat(new String(Files.readAllBytes(LITS_DIFFERENCES_FILE.toPath()))).isEmpty();
+    String litsDifferences = new String(Files.readAllBytes(litsDifferencesFile.toPath()));
+    assertThat(litsDifferences).isEmpty();
   }
 
 }
