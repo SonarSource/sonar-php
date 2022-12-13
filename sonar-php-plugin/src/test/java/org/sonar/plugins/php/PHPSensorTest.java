@@ -83,6 +83,8 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.PhpTestUtils.assertMeasure;
+import static org.sonar.plugins.php.PhpTestUtils.assertNoMeasure;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_ANALYSIS_WARNINGS;
 
@@ -167,13 +169,13 @@ public class PHPSensorTest {
     PHPSensor phpSensor = createSensor();
     analyseSingleFile(phpSensor, ANALYZED_FILE);
 
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COGNITIVE_COMPLEXITY, 6);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 9);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
+    assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
+    assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
+    assertMeasure(context, componentKey, CoreMetrics.COGNITIVE_COMPLEXITY, 6);
+    assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 9);
+    assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
+    assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
+    assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
   }
 
   @Test
@@ -185,17 +187,16 @@ public class PHPSensorTest {
     analyseSingleFile(phpSensor, fileName);
 
     List<TokensLine> tokensLines = context.cpdTokens(componentKey);
-    assertThat(tokensLines)
-      .isNotNull()
-      .hasSize(8);
-    assertThat(tokensLines.get(0).getValue()).isEqualTo("require_once$CHARS;");
-    assertThat(tokensLines.get(1).getValue()).isEqualTo("classAextendsB");
-    assertThat(tokensLines.get(2).getValue()).isEqualTo("{");
-    assertThat(tokensLines.get(3).getValue()).isEqualTo("protected$a=$CHARS;");
-    assertThat(tokensLines.get(4).getValue()).isEqualTo("public$b=$NUMBER;");
-    assertThat(tokensLines.get(5).getValue()).isEqualTo("}");
-    assertThat(tokensLines.get(6).getValue()).isEqualTo("echo$CHARS");
-    assertThat(tokensLines.get(7).getValue()).isEqualTo(";");
+    assertThat(tokensLines.stream().map(TokensLine::getValue)).containsExactly(
+      "require_once$CHARS;",
+      "classAextendsB",
+      "{",
+      "protected$a=$CHARS;",
+      "public$b=$NUMBER;",
+      "}",
+      "echo$CHARS",
+      ";"
+    );
   }
 
   @Test
@@ -213,14 +214,14 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void empty_file_should_raise_no_issue() throws Exception {
+  public void empty_file_should_raise_no_issue() {
     analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "empty.php");
 
     assertThat(context.allIssues()).as("No issue must be raised").isEmpty();
   }
 
   @Test
-  public void parsing_error_should_raise_an_issue_if_check_rule_is_activated() throws Exception {
+  public void parsing_error_should_raise_an_issue_if_check_rule_is_activated() {
     analyseSingleFile(createSensorWithParsingErrorCheckActivated(), PARSE_ERROR_FILE);
 
     assertThat(context.allIssues()).as("One issue must be raised").hasSize(1);
@@ -229,21 +230,17 @@ public class PHPSensorTest {
     assertThat(issue.ruleKey().rule()).as("A parsing error must be raised").isEqualTo("S2260");
 
     TextRange range = issue.primaryLocation().textRange();
-    assertThat(range).isNotNull();
-    assertThat(range.start().line()).isEqualTo(2);
-    assertThat(range.start().lineOffset()).isZero();
-    assertThat(range.end().line()).isEqualTo(2);
-    assertThat(range.end().lineOffset()).isEqualTo(16);
+    assertRange(2, 0, 2, 16, range);
   }
 
   @Test
-  public void parsing_error_should_raise_be_reported_in_sensor_context() throws Exception {
+  public void parsing_error_should_raise_be_reported_in_sensor_context() {
     analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
     assertThat(context.allAnalysisErrors()).hasSize(1);
   }
 
   @Test
-  public void parsing_error_should_raise_no_issue_if_check_rule_is_not_activated() throws Exception {
+  public void parsing_error_should_raise_no_issue_if_check_rule_is_not_activated() {
     analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
     assertThat(context.allIssues()).as("One issue must be raised").isEmpty();
   }
@@ -267,7 +264,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void init_and_terminate_method_called_only_once() throws Exception {
+  public void init_and_terminate_method_called_only_once() {
     PHPCheck check = spy(new PHPVisitorCheck() {});
 
     addInputFiles(ANALYZED_FILE, "cpd.php", "empty.php");
@@ -278,7 +275,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void exception_should_report_file_name() throws Exception {
+  public void exception_should_report_file_name() {
     PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException());
     addInputFiles(ANALYZED_FILE);
     createSensor(check).execute(context);
@@ -286,7 +283,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void exception_should_fail_analysis_if_configured_so() throws Exception {
+  public void exception_should_fail_analysis_if_configured_so() {
     RuntimeException exception = new NumberFormatException();
     PHPCheck check = new ExceptionRaisingCheck(exception);
     addInputFiles(ANALYZED_FILE);
@@ -323,7 +320,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void test_issues() throws Exception {
+  public void test_issues() {
     checkFactory = new CheckFactory(getActiveRules());
     analyseSingleFile(createSensor(), ANALYZED_FILE);
 
@@ -361,7 +358,7 @@ public class PHPSensorTest {
     assertThat(location.message()).isEqualTo(message);
     TextRange range = location.textRange();
     assertThat(range).isNotNull();
-    assertRange(startLine, startLineOffset, endLine, endLineOffset,  range);
+    assertRange(startLine, startLineOffset, endLine, endLineOffset, range);
   }
 
   private void assertRange(int startLine, int startLineOffset, int endLine, int endLineOffset, TextRange textRange) {
@@ -399,7 +396,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_stop_if_cancel() throws Exception {
+  public void should_stop_if_cancel() {
     checkFactory = new CheckFactory(getActiveRules());
 
     context.setCancelled(true);
@@ -441,7 +438,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_disable_unnecessary_features_for_sonarlint() throws Exception {
+  public void should_disable_unnecessary_features_for_sonarlint() {
     context.settings().setProperty(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpTestUtils.PHPUNIT_REPORT_NAME);
     context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY, PhpTestUtils.PHPUNIT_COVERAGE_REPORT);
     DefaultInputFile inputFile = inputFile(ANALYZED_FILE);
@@ -467,13 +464,13 @@ public class PHPSensorTest {
     assertThat(context.highlightingTypeAt(mainFileKey, 1, 0)).isEmpty();
 
     // no tests
-    assertThat(context.measure(testFileKey, CoreMetrics.TESTS)).isNull();
+    assertNoMeasure(context, testFileKey, CoreMetrics.TESTS);
 
     // no coverage
-    assertThat(context.measure(testFileKey, CoreMetrics.LINES_TO_COVER)).isNull();
+    assertNoMeasure(context, testFileKey, CoreMetrics.LINES_TO_COVER);
 
     // metrics are not saved
-    assertThat(context.measure(mainFileKey, CoreMetrics.NCLOC)).isNull();
+    assertNoMeasure(context, testFileKey, CoreMetrics.NCLOC);
 
     // no symbol highlighting
     assertThat(context.referencesForSymbolAt(mainFileKey, 6, 7)).isNull();
@@ -488,10 +485,10 @@ public class PHPSensorTest {
     assertThat(context.highlightingTypeAt(mainFileKey, 2, 0)).isNotEmpty();
 
     // tests exist
-    assertThat(context.measure(testFileKey, CoreMetrics.TESTS)).isNotNull();
+    assertMeasure(context, testFileKey, CoreMetrics.TESTS, 1);
 
     // metrics are saved
-    assertThat(context.measure(mainFileKey, CoreMetrics.NCLOC)).isNotNull();
+    assertMeasure(context, mainFileKey, CoreMetrics.NCLOC, 32);
 
     // symbol highlighting is there
     assertThat(context.referencesForSymbolAt(mainFileKey, 6, 7)).isNotNull();
@@ -518,7 +515,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_use_multi_path_coverage() throws Exception {
+  public void should_use_multi_path_coverage() throws IOException {
     context.setRuntime(SONARQUBE_7_9);
 
     context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY,
@@ -550,7 +547,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_log_message_when_no_coverage_and_test_property() throws Exception {
+  public void should_log_message_when_no_coverage_and_test_property() {
     context.setSettings(new MapSettings());
 
     context.setRuntime(SONARQUBE_7_9);
@@ -662,15 +659,14 @@ public class PHPSensorTest {
 
     analyseSingleFile(phpSensor, ANALYZED_FILE);
 
-    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.NCLOC);
-    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.COMMENT_LINES);
-    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.COGNITIVE_COMPLEXITY);
-    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.COMPLEXITY);
-    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.CLASSES);
-    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.STATEMENTS);
-    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.FUNCTIONS);
+    assertNoMeasure(context, componentKey, CoreMetrics.NCLOC);
+    assertNoMeasure(context, componentKey, CoreMetrics.COMMENT_LINES);
+    assertNoMeasure(context, componentKey, CoreMetrics.COGNITIVE_COMPLEXITY);
+    assertNoMeasure(context, componentKey, CoreMetrics.COMPLEXITY);
+    assertNoMeasure(context, componentKey, CoreMetrics.CLASSES);
+    assertNoMeasure(context, componentKey, CoreMetrics.STATEMENTS);
+    assertNoMeasure(context, componentKey, CoreMetrics.FUNCTIONS);
   }
-
 
   @After
   public void tearDown() {
@@ -683,7 +679,7 @@ public class PHPSensorTest {
    * This hack allow to have this unit test, as only absolute path
    * in report is supported.
    * */
-  private void createReportWithAbsolutePath(String generatedReportRelativePath, String relativeReportPath, InputFile inputFile) throws Exception {
+  private void createReportWithAbsolutePath(String generatedReportRelativePath, String relativeReportPath, InputFile inputFile) throws IOException {
     File tempReport = new File(context.fileSystem().baseDir(), generatedReportRelativePath);
     if (tempReport.createNewFile()) {
       File originalReport = new File(context.fileSystem().baseDir(), relativeReportPath);
