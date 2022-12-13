@@ -33,7 +33,7 @@ import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PhpRulingTest {
+public class PhpGeneralRulingTest {
 
   private static final String PROJECT_KEY = "project";
 
