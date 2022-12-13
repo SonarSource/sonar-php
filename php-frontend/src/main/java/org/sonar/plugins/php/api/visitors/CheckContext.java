@@ -22,6 +22,8 @@ package org.sonar.plugins.php.api.visitors;
 import java.io.File;
 import java.util.List;
 import javax.annotation.CheckForNull;
+import org.sonar.api.Beta;
+import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -127,4 +129,8 @@ public interface CheckContext {
 
   @CheckForNull
   File getWorkingDirectory();
+
+  @Beta
+  @CheckForNull
+  CacheContext cacheContext();
 }

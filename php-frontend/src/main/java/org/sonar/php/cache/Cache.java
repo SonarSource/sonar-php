@@ -19,14 +19,6 @@
  */
 package org.sonar.php.cache;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import javax.annotation.CheckForNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
@@ -39,34 +31,28 @@ public class Cache {
   public static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:";
   private final CacheContext cacheContext;
   private final String pluginVersion;
-  private final String projectKey;
-  private final Map<InputFile, BigInteger> fileHashes = new HashMap<>();
-  private final Set<String> cachedFileNames = new HashSet<>();
 
   public Cache(CacheContext cacheContext) {
     this.cacheContext = cacheContext;
     this.pluginVersion = cacheContext.pluginVersion();
-    this.projectKey = cacheContext.projectKey();
   }
 
   public void write(InputFile file, SymbolTableImpl symbolTable) {
-    String cacheFileName = getCacheFileName(file);
-    if (cacheContext.isCacheEnabled() && cachedFileNames.add(cacheFileName)) {
+    if (cacheContext.isCacheEnabled()) {
       SerializationInput serializationInput = new SerializationInput(symbolTable, pluginVersion);
       SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
       PhpWriteCache writeCache = cacheContext.getWriteCache();
-      writeCache.writeBytes(getDataCacheKey(cacheFileName), serializationData.data());
-      writeCache.writeBytes(getStringTableCacheKey(cacheFileName), serializationData.stringTable());
+      writeCache.writeBytes(getDataCacheKey(file.key()), serializationData.data());
+      writeCache.writeBytes(getStringTableCacheKey(file.key()), serializationData.stringTable());
     }
   }
 
   @CheckForNull
   public SymbolTableImpl read(InputFile file) {
     if (cacheContext.isCacheEnabled()) {
-      String cacheFileName = getCacheFileName(file);
-      byte[] data = cacheContext.getReadCache().readBytes(getDataCacheKey(cacheFileName));
-      byte[] stringTable = cacheContext.getReadCache().readBytes(getStringTableCacheKey(cacheFileName));
+      byte[] data = cacheContext.getReadCache().readBytes(getDataCacheKey(file.key()));
+      byte[] stringTable = cacheContext.getReadCache().readBytes(getStringTableCacheKey(file.key()));
       if (data != null && stringTable != null) {
         return SymbolTableDeserializer.fromBinary(new DeserializationInput(data, stringTable, pluginVersion));
       }
@@ -75,39 +61,10 @@ public class Cache {
   }
 
   private String getDataCacheKey(String cacheFileName) {
-    return CACHE_KEY_DATA + projectKey + ":" + cacheFileName;
+    return CACHE_KEY_DATA + cacheFileName;
   }
 
   private String getStringTableCacheKey(String cacheFileName) {
-    return CACHE_KEY_STRING_TABLE + projectKey + ":" + cacheFileName;
-  }
-
-  public String getCacheFileName(InputFile file) {
-    MessageDigest digest = getMessageDigest();
-    digest.update(computeFileHash(file).toByteArray());
-    return new BigInteger(1, digest.digest()).toString();
-  }
-
-  public BigInteger computeFileHash(InputFile file) {
-    return fileHashes.computeIfAbsent(file, s -> {
-      try {
-        byte[] bytes = file.contents().getBytes();
-        return hash(bytes);
-      } catch (IOException e) {
-        throw new IllegalStateException(e);
-      }
-    });
-  }
-
-  public static BigInteger hash(byte[] bytes) {
-    return new BigInteger(1, getMessageDigest().digest(bytes));
-  }
-
-  private static MessageDigest getMessageDigest() {
-    try {
-      return MessageDigest.getInstance("SHA-256");
-    } catch (NoSuchAlgorithmException e) {
-      throw new IllegalStateException(e);
-    }
+    return CACHE_KEY_STRING_TABLE + cacheFileName;
   }
 }

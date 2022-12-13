@@ -19,6 +19,7 @@
  */
 package org.sonar.php;
 
+import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.util.ArrayList;
@@ -45,11 +46,13 @@ import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.php.tree.visitors.PHPCheckContext;
+import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class PHPAnalyzer {
@@ -62,24 +65,34 @@ public class PHPAnalyzer {
   private final File workingDir;
   private final ProjectSymbolData projectSymbolData;
   private final DurationStatistics statistics;
+  private final CacheContext cacheContext;
+
+  private PhpInputFileContext currentFileContext;
 
   private CompilationUnitTree currentFileTree;
   private PhpFile currentFile;
   private SymbolTable currentFileSymbolTable;
 
-  public PHPAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks, @Nullable File workingDir, ProjectSymbolData projectSymbolData, DurationStatistics statistics) {
+  public PHPAnalyzer(List<PHPCheck> checks,
+                     List<PHPCheck> testFileChecks,
+                     @Nullable File workingDir,
+                     ProjectSymbolData projectSymbolData,
+                     DurationStatistics statistics,
+                     @Nullable CacheContext cacheContext) {
     this.checks = checks;
     this.testFileChecks = testFileChecks;
     this.workingDir = workingDir;
     this.projectSymbolData = projectSymbolData;
     this.statistics = statistics;
+    this.cacheContext = cacheContext;
     for (PHPCheck check : checks) {
       check.init();
     }
   }
 
-  public void nextFile(PhpFile file) {
+  public void nextFile(PhpFile file) throws RecognitionException {
     currentFile = file;
+    currentFileContext = new PhpInputFileContext(currentFile, workingDir, cacheContext);
     currentFileTree = (CompilationUnitTree) statistics.time("CheckParsing", () -> parser.parse(file.contents()));
     currentFileSymbolTable = statistics.time("CheckSymbolTable", () -> SymbolTableImpl.create(currentFileTree, projectSymbolData, file));
   }
@@ -87,7 +100,7 @@ public class PHPAnalyzer {
   public List<PhpIssue> analyze() {
     List<PhpIssue> allIssues = new ArrayList<>();
     for (PHPCheck check : checks) {
-      PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
+      PHPCheckContext context = new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable);
       List<PhpIssue> issues = statistics.time( check.getClass().getSimpleName(), () -> {
         try {
           return check.analyze(context);
@@ -103,7 +116,7 @@ public class PHPAnalyzer {
 
   public List<PhpIssue> analyzeTest() {
     return testFileChecks.stream()
-      .map(check -> check.analyze(new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable)))
+      .map(check -> check.analyze(new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable)))
       .flatMap(List::stream)
       .collect(Collectors.toList());
   }

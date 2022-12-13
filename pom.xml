@@ -279,6 +279,11 @@
             <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
             <skipDependenciesPackaging>true</skipDependenciesPackaging>
             <jreMinVersion>${jre.min.version}</jreMinVersion>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+            </archive>
           </configuration>
         </plugin>
       </plugins>

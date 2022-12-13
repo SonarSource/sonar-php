@@ -101,7 +101,8 @@ public class PHPSensor implements Sensor {
         fileLinesContextFactory,
         noSonarFilter,
         projectSymbolData,
-        statistics);
+        statistics,
+        symbolScanner.cacheContext());
       analysisScanner.execute(inputFiles);
       if (!inSonarLint(context)) {
         processTestsAndCoverage(context);

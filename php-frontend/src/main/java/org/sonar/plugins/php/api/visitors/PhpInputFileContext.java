@@ -17,39 +17,41 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
+package org.sonar.plugins.php.api.visitors;
 
-import java.net.URI;
-import java.nio.file.Paths;
-import org.sonar.plugins.php.api.visitors.PhpFile;
+import java.io.File;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.cache.CacheContext;
 
-public class TestFile implements PhpFile {
+public final class PhpInputFileContext {
 
-  private final String content;
-  private final String name;
+  private final PhpFile phpFile;
 
-  public TestFile(String content, String name) {
-    this.content = content;
-    this.name = name;
+  @Nullable
+  private final File workingDirectory;
+
+  @Nullable
+  private final CacheContext cacheContext;
+
+
+  public PhpInputFileContext(PhpFile phpFile, @Nullable File workingDirectory, @Nullable CacheContext cacheContext) {
+    this.phpFile = phpFile;
+    this.workingDirectory = workingDirectory;
+    this.cacheContext = cacheContext;
   }
 
-  @Override
-  public String contents() {
-    return content;
+  public PhpFile phpFile() {
+    return phpFile;
   }
 
-  @Override
-  public String filename() {
-    return name;
+  @CheckForNull
+  public File workingDirectory() {
+    return workingDirectory;
   }
 
-  @Override
-  public URI uri() {
-    return Paths.get(name).toUri();
-  }
-
-  @Override
-  public String key() {
-    return "moduleKey:" + filename();
+  @CheckForNull
+  public CacheContext cacheContext() {
+    return cacheContext;
   }
 }

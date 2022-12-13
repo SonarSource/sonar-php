@@ -94,10 +94,8 @@ public class SymbolScannerTest {
     assertThat(newClassSymbol.methods()).hasSize(2);
     // verify if cache was used
 
-    String cacheFileName = "22146621043327621015461537661717798110946814184349681185080520559963237469803";
-
-    assertThat(previousCache.readKeys().get(0)).startsWith("php.projectSymbolData.data:projectKey:" + cacheFileName);
-    assertThat(previousCache.readKeys().get(1)).startsWith("php.projectSymbolData.stringTable:projectKey:" + cacheFileName);
+    assertThat(previousCache.readKeys().get(0)).startsWith("php.projectSymbolData.data:" + changedFile.key());
+    assertThat(previousCache.readKeys().get(1)).startsWith("php.projectSymbolData.stringTable:" + changedFile.key());
     assertThat(previousCache.readKeys()).hasSize(2);
   }
 

@@ -38,4 +38,6 @@ public interface PhpFile {
    */
   URI uri();
 
+  String key();
+
 }
