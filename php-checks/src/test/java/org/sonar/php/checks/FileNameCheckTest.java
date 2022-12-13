@@ -23,9 +23,9 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class FileNameCheckTest {
@@ -60,7 +60,7 @@ public class FileNameCheckTest {
   }
 
   private void checkIssue(String fileName, String expectedIssueMessage) throws URISyntaxException {
-    check(fileName, Collections.singletonList(new LegacyIssue(check, expectedIssueMessage)));
+    check(fileName, Collections.singletonList(new LineIssue(check, 0, expectedIssueMessage)));
   }
 
   private void check(String fileName, List<PhpIssue> expectedIssues) throws URISyntaxException {

@@ -22,10 +22,10 @@ package org.sonar.php.checks;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class MissingNewLineAtEOFCheckTest {
@@ -33,20 +33,20 @@ public class MissingNewLineAtEOFCheckTest {
   private MissingNewLineAtEOFCheck check = new MissingNewLineAtEOFCheck();
   private static final String TEST_FILE_DIR = "MissingNewLineAtEOF/";
   private List<PhpIssue> issue = Collections.singletonList(
-    new LegacyIssue(check, "Add a new line at the end of this file."));
+    new LineIssue(check, 0,"Add a new line at the end of this file."));
 
   @Test
-  public void noNewLine() throws Exception {
+  public void noNewLine() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "MissingNewLineAtEOF.php"), issue);
   }
 
   @Test
-  public void emptyFile() throws Exception {
+  public void emptyFile() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "EmptyFile.php"), issue);
   }
 
   @Test
-  public void newLine() throws Exception {
+  public void newLine() {
     CheckVerifier.verifyNoIssue(check, TEST_FILE_DIR + "NewLineAtEOF.php");
   }
 

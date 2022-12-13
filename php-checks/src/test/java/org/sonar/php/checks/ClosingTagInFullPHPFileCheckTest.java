@@ -21,10 +21,10 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 
 public class ClosingTagInFullPHPFileCheckTest {
 
@@ -38,6 +38,6 @@ public class ClosingTagInFullPHPFileCheckTest {
 
   @Test
   public void ko() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LegacyIssue(check, "Remove this closing tag \"?>\".").line(11)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LineIssue(check, 11, "Remove this closing tag \"?>\".")));
   }
 }

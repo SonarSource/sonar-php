@@ -22,10 +22,10 @@ package org.sonar.php.checks;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class TooManyMethodsInClassCheckTest {
@@ -50,8 +50,8 @@ public class TooManyMethodsInClassCheckTest {
     check.countNonpublicMethods = false;
 
     List<PhpIssue> issues = Arrays.asList(
-      new LegacyIssue(check, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3),
-      new LegacyIssue(check, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(35)
+      new LineIssue(check, 3, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes."),
+      new LineIssue(check, 35, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.")
     );
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues);
   }

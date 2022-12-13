@@ -22,9 +22,9 @@ package org.sonar.php.checks;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class TrailingCommentCheckTest {
@@ -56,6 +56,6 @@ public class TrailingCommentCheckTest {
 
   private PhpIssue newIssue(int line) {
     String message = "Move this trailing comment on the previous empty line.";
-    return new LegacyIssue(check, message).line(line);
+    return new LineIssue(check, line, message);
   }
 }

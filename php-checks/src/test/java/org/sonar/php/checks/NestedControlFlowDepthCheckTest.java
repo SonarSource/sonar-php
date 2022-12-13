@@ -21,10 +21,10 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 
 public class NestedControlFlowDepthCheckTest {
 
@@ -39,6 +39,6 @@ public class NestedControlFlowDepthCheckTest {
   @Test
   public void custom() throws Exception {
     check.max = 5;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(new LegacyIssue(check, null).line(32)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(new LineIssue(check, 32, null)));
   }
 }

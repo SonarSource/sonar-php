@@ -21,10 +21,10 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 
 public class TooManyLinesInFileCheckTest {
 
@@ -39,8 +39,9 @@ public class TooManyLinesInFileCheckTest {
   @Test
   public void custom() throws Exception {
     check.max = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), Collections.singletonList(new LegacyIssue(
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), Collections.singletonList(new LineIssue(
       check,
+      0,
       "File \"TooManyLinesInFileCheck.php\" has 3 lines, which is greater than " + check.max + " authorized. Split it into smaller files.")));
   }
 }

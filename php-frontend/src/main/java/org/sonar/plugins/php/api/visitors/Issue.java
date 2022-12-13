@@ -22,6 +22,10 @@ package org.sonar.plugins.php.api.visitors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 
+/**
+ * @deprecated since 3.26 and will be removed by next SonarQube major version update. Use {@link PhpIssue} instead.
+ */
+@Deprecated(since = "3.26", forRemoval = true)
 public interface Issue extends PhpIssue {
 
   @Override

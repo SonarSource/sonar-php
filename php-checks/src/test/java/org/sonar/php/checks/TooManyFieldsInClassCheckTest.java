@@ -22,10 +22,10 @@ package org.sonar.php.checks;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class TooManyFieldsInClassCheckTest {
@@ -50,8 +50,8 @@ public class TooManyFieldsInClassCheckTest {
     check.countNonpublicFields = false;
 
     List<PhpIssue> issues = Arrays.asList(
-      new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(3),
-      new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(18)
+      new LineIssue(check, 3, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has."),
+      new LineIssue(check, 18, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.")
     );
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues);
   }
