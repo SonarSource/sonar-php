@@ -29,7 +29,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class PhpFileImplTest {
-  private InputFile inputFile = mock(InputFile.class);
+  private final InputFile inputFile = mock(InputFile.class);
 
   @Test
   public void test() throws Exception {
@@ -39,6 +39,7 @@ public class PhpFileImplTest {
     when(inputFile.filename()).thenReturn("file.php");
     when(inputFile.toString()).thenReturn("to string");
     when(inputFile.uri()).thenReturn(uri);
+    when(inputFile.key()).thenReturn("moduleKey:file.php");
 
     PhpFile phpFile = new PhpFileImpl(inputFile);
 
@@ -47,6 +48,7 @@ public class PhpFileImplTest {
     assertThat(phpFile.filename()).isEqualTo("file.php");
     assertThat(phpFile.toString()).isEqualTo("to string");
     assertThat(phpFile.uri()).isEqualTo(uri);
+    assertThat(phpFile.key()).isEqualTo("moduleKey:file.php");
   }
 
 }

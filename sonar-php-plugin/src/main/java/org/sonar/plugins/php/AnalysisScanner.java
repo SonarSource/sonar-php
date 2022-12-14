@@ -116,10 +116,6 @@ class AnalysisScanner extends Scanner {
   }
 
   private boolean scanFileWithoutParsing(InputFile inputFile) {
-    if (inputFile.type() == InputFile.Type.TEST && !hasTestFileChecks) {
-      return true;
-    }
-
     for (PHPCheck check : checks.all()) {
       PhpFile pythonFile = PhpFileImpl.create(inputFile);
       PhpInputFileContext inputFileContext = new PhpInputFileContext(pythonFile, context.fileSystem().workDir(), cacheContext);
@@ -164,6 +160,11 @@ class AnalysisScanner extends Scanner {
 
     noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
     saveIssues(context, inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
+  }
+
+  @Override
+  protected boolean fileCanBeSkipped(InputFile file) {
+    return super.fileCanBeSkipped(file) || (file.type() == InputFile.Type.TEST && !hasTestFileChecks);
   }
 
   private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {

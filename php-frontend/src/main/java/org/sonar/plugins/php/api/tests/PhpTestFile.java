@@ -65,6 +65,6 @@ public class PhpTestFile implements PhpFile {
 
   @Override
   public String key() {
-    return "moduleKey:" + filename();
+    return "testFileModule:" + filename();
   }
 }
