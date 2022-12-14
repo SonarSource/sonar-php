@@ -143,7 +143,7 @@ public class SymbolTableDeserializer {
 
   private LocationInFile readLocation() throws IOException {
     String filePath = readString();
-    if (filePath.equals("[unknown file]")) {
+    if ("[unknown file]".equals(filePath)) {
       return UnknownLocationInFile.UNKNOWN_LOCATION;
     } else {
       int startLine = readInt();

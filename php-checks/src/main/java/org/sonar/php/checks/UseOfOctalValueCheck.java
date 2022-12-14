@@ -33,7 +33,7 @@ public class UseOfOctalValueCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Use decimal rather than octal values.";
 
   // Pattern syntax from https://www.php.net/manual/en/language.types.integer.php#language.types.integer.syntax
-  private static final Pattern OCTAL_NUMERIC_PATTERN = Pattern.compile("^0[0-7]+(_[0-7]+)*$");
+  private static final Pattern OCTAL_NUMERIC_PATTERN = Pattern.compile("^0[0-7]+(_[0-7]+)?+$");
 
   @Override
   public void visitLiteral(LiteralTree tree) {
