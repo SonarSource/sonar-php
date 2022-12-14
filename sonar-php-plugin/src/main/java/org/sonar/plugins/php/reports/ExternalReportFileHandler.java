@@ -21,8 +21,6 @@ package org.sonar.plugins.php.reports;
 
 import java.io.File;
 import java.nio.file.Path;
-import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 
@@ -99,25 +97,20 @@ public class ExternalReportFileHandler {
     return fileSystem.hasFiles(fileSystem.predicates().hasPath(path));
   }
 
-  @CheckForNull
-  private static String separatorsToSystem(@Nullable String path) {
-    if (path == null) {
-      return null;
-    } else {
-      return isSystemWindows() ? separatorsToWindows(path) : separatorsToUnix(path);
-    }
+  private static String separatorsToSystem(String path) {
+    return isSystemWindows() ? separatorsToWindows(path) : separatorsToUnix(path);
   }
 
   private static boolean isSystemWindows() {
     return File.separatorChar == '\\';
   }
 
-  private static String separatorsToUnix(@Nullable String path) {
-    return path != null && path.indexOf(92) != -1 ? path.replace('\\', '/') : path;
+  private static String separatorsToUnix(String path) {
+    return path.indexOf(92) != -1 ? path.replace('\\', '/') : path;
   }
 
-  private static String separatorsToWindows(@Nullable String path) {
-    return path != null && path.indexOf(47) != -1 ? path.replace('/', '\\') : path;
+  private static String separatorsToWindows(String path) {
+    return path.indexOf(47) != -1 ? path.replace('/', '\\') : path;
   }
 
 }
