@@ -154,6 +154,6 @@ public class PHPAnalyzerTest {
   }
 
   private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks) throws IOException {
-    return new PHPAnalyzer(checks,  testFileChecks, tmpFolder.newFolder(), new ProjectSymbolData(), new DurationStatistics(sensorContext.config()));
+    return new PHPAnalyzer(checks,  testFileChecks, tmpFolder.newFolder(), new ProjectSymbolData(), new DurationStatistics(sensorContext.config()), null);
   }
 }

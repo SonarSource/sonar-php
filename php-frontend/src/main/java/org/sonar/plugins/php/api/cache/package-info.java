@@ -17,39 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
-
-import java.net.URI;
-import java.nio.file.Paths;
-import org.sonar.plugins.php.api.visitors.PhpFile;
-
-public class TestFile implements PhpFile {
-
-  private final String content;
-  private final String name;
-
-  public TestFile(String content, String name) {
-    this.content = content;
-    this.name = name;
-  }
-
-  @Override
-  public String contents() {
-    return content;
-  }
-
-  @Override
-  public String filename() {
-    return name;
-  }
-
-  @Override
-  public URI uri() {
-    return Paths.get(name).toUri();
-  }
-
-  @Override
-  public String key() {
-    return "moduleKey:" + filename();
-  }
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package org.sonar.plugins.php.api.cache;

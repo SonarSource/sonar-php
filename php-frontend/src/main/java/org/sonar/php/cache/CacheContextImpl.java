@@ -39,14 +39,12 @@ public class CacheContextImpl implements CacheContext {
   private final PhpWriteCache writeCache;
   private final PhpReadCache readCache;
   private final String pluginVersion;
-  private final String projectKey;
 
   CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCache readCache, String pluginVersion, String projectKey) {
     this.isCacheEnabled = isCacheEnabled;
     this.writeCache = writeCache;
     this.readCache = readCache;
     this.pluginVersion = pluginVersion;
-    this.projectKey = projectKey;
   }
 
   public static CacheContextImpl of(SensorContext context) {
@@ -86,11 +84,6 @@ public class CacheContextImpl implements CacheContext {
   @Override
   public String pluginVersion() {
     return pluginVersion;
-  }
-
-  @Override
-  public String projectKey() {
-    return projectKey;
   }
 
   public static String getImplementationVersion(Class<?> cls) {

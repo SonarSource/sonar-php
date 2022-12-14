@@ -72,6 +72,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -107,6 +108,9 @@ public class PHPSensorTest {
   private static final String REGEX_FILE = "regexIssue.php";
   private static final String TEST_FILE = "Test.php";
 
+  private static final String CUSTOM_REPOSITORY_KEY = "customKey";
+  private static final String CUSTOM_RULE_KEY = "key";
+
   private Set<File> tempReportFiles = new HashSet<>();
 
   @org.junit.Rule
@@ -115,7 +119,7 @@ public class PHPSensorTest {
   private static final PHPCustomRuleRepository[] CUSTOM_RULES = {new PHPCustomRuleRepository() {
     @Override
     public String repositoryKey() {
-      return "customKey";
+      return CUSTOM_REPOSITORY_KEY;
     }
 
     @Override
@@ -125,7 +129,7 @@ public class PHPSensorTest {
   }};
 
   @Rule(
-    key = "key",
+    key = CUSTOM_RULE_KEY,
     name = "name",
     description = "desc",
     tags = {"bug"})
@@ -135,6 +139,11 @@ public class PHPSensorTest {
       description = "Custom parameter",
       defaultValue = "value")
     public String customParam = "value";
+
+    @Override
+    public boolean scanWithoutParsing(PhpInputFileContext phpInputFileContext) {
+      return false;
+    }
   }
 
   @Before
@@ -626,6 +635,39 @@ public class PHPSensorTest {
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
     context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "false"));
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isNotEmpty();
+  }
+
+  @Test
+  public void should_not_raise_issue_on_same_file_when_no_check_requires_parsing() {
+    ActiveRules rules = new ActiveRulesBuilder()
+      .addRule(new NewActiveRule.Builder()
+        .setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S101"))
+        .build())
+      .build();
+    checkFactory = new CheckFactory(rules);
+
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
+    createSensor().execute(context);
+    assertThat(context.allIssues()).isEmpty();
+  }
+
+  @Test
+  public void should_raise_issue_on_same_file_when_one_check_requires_parsing() {
+    ActiveRules rules = new ActiveRulesBuilder()
+      .addRule(new NewActiveRule.Builder()
+        .setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S101"))
+        .build())
+      .addRule(new NewActiveRule.Builder()
+        .setRuleKey(RuleKey.of(CUSTOM_REPOSITORY_KEY, CUSTOM_RULE_KEY))
+        .build())
+      .build();
+    checkFactory = new CheckFactory(rules);
+
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
     createSensor().execute(context);
     assertThat(context.allIssues()).isNotEmpty();
   }

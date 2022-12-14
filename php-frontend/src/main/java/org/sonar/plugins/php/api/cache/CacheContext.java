@@ -30,6 +30,4 @@ public interface CacheContext {
   PhpWriteCache getWriteCache();
 
   String pluginVersion();
-
-  String projectKey();
 }

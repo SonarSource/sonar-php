@@ -37,6 +37,7 @@ public class PhpTestFileTest {
     String expectedPath = Paths.get("src", "test", "resources", "tests", "testfile.php").toString();
     assertThat(file.toString()).isEqualTo(expectedPath);
     assertThat(file.uri()).isEqualTo(physicalFile.toURI());
+    assertThat(file.key()).isEqualTo("testFileModule:testfile.php");
   }
 
   @Test

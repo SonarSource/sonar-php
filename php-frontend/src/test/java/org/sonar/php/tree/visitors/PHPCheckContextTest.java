@@ -27,10 +27,15 @@ import org.sonar.php.FileTestUtils;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.regex.PhpRegexCheck;
 import org.sonar.php.regex.RegexParserTestUtils;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonarsource.analyzer.commons.regex.ast.CurlyBraceQuantifier;
 import org.sonarsource.analyzer.commons.regex.ast.DisjunctionTree;
@@ -38,21 +43,20 @@ import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 import org.sonarsource.analyzer.commons.regex.ast.RepetitionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class PHPCheckContextTest {
 
+  private static final File WORKDIR = new File("src/test/resources/visitors");
   private static final File PHP_FILE = new File("src/test/resources/visitors/test.php");
   private static final PhpFile PHP_INPUT_FILE = FileTestUtils.getFile(PHP_FILE);
-  private PHPCheckContext context;
+  private static final CompilationUnitTree TREE = ParsingTestUtils.parse(PHP_FILE);
 
-  @Before
-  public void setUp() throws Exception {
-    CompilationUnitTree compilationUnitTree = ParsingTestUtils.parse(PHP_FILE);
-    context = new PHPCheckContext(PHP_INPUT_FILE, compilationUnitTree, PHP_FILE);
-  }
+  private static final CacheContext CACHE_CONTEXT = mock(CacheContext.class);
 
   @Test
   public void test_regex_newIssue() {
+    PHPCheckContext context = new PHPCheckContext(PHP_INPUT_FILE, TREE, PHP_FILE);
     PhpRegexCheck regexCheck = new TestPhpRegexCheck();
     String regex = "'/x{42}|y{23}/'";
     RegexTree regexTree = RegexParserTestUtils.assertSuccessfulParse(regex);
@@ -69,6 +73,13 @@ public class PHPCheckContextTest {
     assertThat(issueLocation.startLineOffset()).isEqualTo(9);
     assertThat(issueLocation.endLine()).isEqualTo(3);
     assertThat(issueLocation.endLineOffset()).isEqualTo(13);
+  }
+
+  @Test
+  public void should_return_cache_context_when_constructed_with_PhpInputFileContext() {
+    PhpInputFileContext inputFileContext = new PhpInputFileContext(PHP_INPUT_FILE, WORKDIR, CACHE_CONTEXT);
+    CheckContext checkContext = new PHPCheckContext(inputFileContext, TREE, SymbolTableImpl.create(TREE));
+    assertThat(checkContext.cacheContext()).isEqualTo(CACHE_CONTEXT);
   }
 
   static class TestPhpRegexCheck extends PHPVisitorCheck implements PhpRegexCheck {

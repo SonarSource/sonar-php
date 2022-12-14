@@ -26,10 +26,14 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class PhpFileImpl implements PhpFile {
 
-  private final InputFile wrapped;
+  private final InputFile inputFile;
 
-  public PhpFileImpl(InputFile wrapped) {
-    this.wrapped = wrapped;
+  private PhpFileImpl(InputFile inputFile) {
+    this.inputFile = inputFile;
+  }
+
+  public static PhpFile create(InputFile inputFile) {
+    return new PhpFileImpl(inputFile);
   }
 
   static class InputFileIOException extends RuntimeException {
@@ -41,7 +45,7 @@ public class PhpFileImpl implements PhpFile {
   @Override
   public String contents() {
     try {
-      return wrapped.contents();
+      return inputFile.contents();
     } catch (IOException e) {
       throw new InputFileIOException(e);
     }
@@ -49,16 +53,21 @@ public class PhpFileImpl implements PhpFile {
 
   @Override
   public String filename() {
-    return wrapped.filename();
+    return inputFile.filename();
   }
 
   @Override
   public URI uri() {
-    return wrapped.uri();
+    return inputFile.uri();
   }
 
   @Override
   public String toString() {
-    return wrapped.toString();
+    return inputFile.toString();
+  }
+
+  @Override
+  public String key() {
+    return inputFile.key();
   }
 }

@@ -48,7 +48,7 @@ public class FileTestUtils {
         .setModuleBaseDir(file.getParentFile().toPath())
         .setCharset(Charset.defaultCharset())
         .initMetadata(new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset())).build();
-      return new PhpFileImpl(inputFile);
+      return PhpFileImpl.create(inputFile);
     } catch (IOException e) {
       throw new IllegalStateException("Failed to create test file from: " + file.getAbsolutePath());
     }

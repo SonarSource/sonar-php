@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.visitors;
 
 import java.util.List;
+import org.sonar.api.Beta;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -52,4 +53,8 @@ public interface PHPCheck {
 
   PreciseIssue newIssue(Tree tree, String message);
 
+  @Beta
+  default boolean scanWithoutParsing(PhpInputFileContext phpInputFileContext) {
+    return true;
+  }
 }

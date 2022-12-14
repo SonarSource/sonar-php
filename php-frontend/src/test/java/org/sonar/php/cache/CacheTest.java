@@ -33,22 +33,20 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class CacheTest {
 
-  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:projectKey:";
-  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:projectKey:";
+  private static final InputFile DEFAULT_INPUT_FILE = inputFile("default");
+  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:" + DEFAULT_INPUT_FILE.key();
+  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:" + DEFAULT_INPUT_FILE.key();
   private static final String PLUGIN_VERSION = "1.2.3";
   private static final String PROJECT_KEY = "projectKey";
-  private static final InputFile DEFAULT_INPUT_FILE = inputFile("default");
 
-
-  private PhpWriteCache writeCache = mock(PhpWriteCache.class);
-  private PhpReadCache readCache = mock(PhpReadCache.class);
+  private final PhpWriteCache writeCache = mock(PhpWriteCache.class);
+  private final PhpReadCache readCache = mock(PhpReadCache.class);
 
   @Test
   public void shouldWriteToCacheOnlyIfItsEnabled() {
@@ -57,26 +55,10 @@ public class CacheTest {
     SymbolTableImpl data = exampleSymbolTable();
     cache.write(DEFAULT_INPUT_FILE, data);
 
-    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
     SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(data, PLUGIN_VERSION));
 
-    verify(writeCache).writeBytes(CACHE_KEY_DATA + cacheFileName, binary.data());
-    verify(writeCache).writeBytes(CACHE_KEY_STRING_TABLE + cacheFileName, binary.stringTable());
-  }
-
-  @Test
-  public void shouldWriteToCacheOnceIfHashIsIdentical() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
-    Cache cache = new Cache(context);
-    SymbolTableImpl data = exampleSymbolTable();
-
-    cache.write(DEFAULT_INPUT_FILE, data);
-    cache.write(DEFAULT_INPUT_FILE, data);
-
-    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(data, PLUGIN_VERSION));
-
-    verify(writeCache, times(1)).writeBytes(CACHE_KEY_DATA + cacheFileName, binary.data());
+    verify(writeCache).writeBytes(CACHE_KEY_DATA, binary.data());
+    verify(writeCache).writeBytes(CACHE_KEY_STRING_TABLE, binary.stringTable());
   }
 
   @Test
@@ -95,7 +77,7 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
-    warmupReadCache(cache, data);
+    warmupReadCache(data);
 
     SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(data);
@@ -106,14 +88,13 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
 
-    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
 
     SymbolTableImpl data = exampleSymbolTable();
     SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
-    when(readCache.readBytes(CACHE_KEY_DATA + cacheFileName)).thenReturn(null);
-    when(readCache.readBytes(CACHE_KEY_STRING_TABLE + cacheFileName)).thenReturn(serializationData.stringTable());
+    when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(null);
+    when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(serializationData.stringTable());
 
     SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
 
@@ -125,14 +106,12 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
 
-    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
-
     SymbolTableImpl data = exampleSymbolTable();
     SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
-    when(readCache.readBytes(CACHE_KEY_DATA + cacheFileName)).thenReturn(serializationData.data());
-    when(readCache.readBytes(CACHE_KEY_STRING_TABLE + cacheFileName)).thenReturn(null);
+    when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(serializationData.data());
+    when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(null);
 
     SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
 
@@ -144,21 +123,19 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
-    warmupReadCache(cache, data);
+    warmupReadCache(data);
 
     SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
 
     assertThat(actual).isNull();
   }
 
-  void warmupReadCache(Cache cache, SymbolTableImpl data) {
+  void warmupReadCache(SymbolTableImpl data) {
     SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
-    String cacheFileName = cache.getCacheFileName(DEFAULT_INPUT_FILE);
-
-    when(readCache.readBytes(CACHE_KEY_DATA + cacheFileName)).thenReturn(serializationData.data());
-    when(readCache.readBytes(CACHE_KEY_STRING_TABLE + cacheFileName)).thenReturn(serializationData.stringTable());
+    when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(serializationData.data());
+    when(readCache.readBytes(CACHE_KEY_STRING_TABLE)).thenReturn(serializationData.stringTable());
   }
 
   private static SymbolTableImpl exampleSymbolTable() {

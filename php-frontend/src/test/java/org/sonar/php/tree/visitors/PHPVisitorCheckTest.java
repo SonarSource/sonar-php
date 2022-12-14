@@ -22,9 +22,11 @@ package org.sonar.php.tree.visitors;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -42,8 +44,10 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
@@ -51,6 +55,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class PHPVisitorCheckTest {
+
+  private static final String WORKDIR = "src/test/resources/visitors/";
+
+  private PhpInputFileContext fileContext;
+  private CacheContext cacheContext;
+
+  @Before
+  public void setUp() throws Exception {
+    PhpFile file = FileTestUtils.getFile(new File(WORKDIR + "test.php"));
+    cacheContext = mock(CacheContext.class);
+    fileContext = new PhpInputFileContext(file, new File(WORKDIR), cacheContext);
+  }
 
   @Test
   public void should_visit_tree_elements() {
@@ -149,6 +165,24 @@ public class PHPVisitorCheckTest {
     // We subtract 3 as that is the depth to get to the binary expressions.
     assertThat(visitor.visitedBinaryExpressions).isEqualTo(PHPVisitorCheck.MAX_DEPTH - 3);
   }
+
+  @Test
+  public void default_scanWithoutParsing() {
+    PHPCheck check = new PHPVisitorCheck() {};
+    assertThat(check.scanWithoutParsing(fileContext)).isTrue();
+  }
+
+  @Test
+  public void override_scanWithoutParsing() {
+    PHPCheck check = new PHPVisitorCheck() {
+      @Override
+      public boolean scanWithoutParsing(PhpInputFileContext phpInputFileContext) {
+        return phpInputFileContext.cacheContext() == cacheContext;
+      }
+    };
+    assertThat(check.scanWithoutParsing(fileContext)).isTrue();
+  }
+
 
   private class ContextTestVisitor extends PHPVisitorCheck {
   }

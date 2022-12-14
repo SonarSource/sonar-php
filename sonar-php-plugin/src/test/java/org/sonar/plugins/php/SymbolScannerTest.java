@@ -28,18 +28,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.php.cache.Cache;
 import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
@@ -94,10 +90,8 @@ public class SymbolScannerTest {
     assertThat(newClassSymbol.methods()).hasSize(2);
     // verify if cache was used
 
-    String cacheFileName = "22146621043327621015461537661717798110946814184349681185080520559963237469803";
-
-    assertThat(previousCache.readKeys().get(0)).startsWith("php.projectSymbolData.data:projectKey:" + cacheFileName);
-    assertThat(previousCache.readKeys().get(1)).startsWith("php.projectSymbolData.stringTable:projectKey:" + cacheFileName);
+    assertThat(previousCache.readKeys().get(0)).startsWith("php.projectSymbolData.data:" + changedFile.key());
+    assertThat(previousCache.readKeys().get(1)).startsWith("php.projectSymbolData.stringTable:" + changedFile.key());
     assertThat(previousCache.readKeys()).hasSize(2);
   }
 
@@ -124,7 +118,7 @@ public class SymbolScannerTest {
   }
 
   private SymbolScanner createScanner() {
-    return SymbolScanner.create(context, statistics);
+    return SymbolScanner.create(context, statistics, CacheContextImpl.of(context));
   }
 
   private SymbolScanner createScannerCacheDisabled() throws IOException {
@@ -138,6 +132,6 @@ public class SymbolScannerTest {
     sensorContext.setNextCache(nextCache);
     statistics = new DurationStatistics(sensorContext.config());
 
-    return SymbolScanner.create(sensorContext, statistics);
+    return SymbolScanner.create(sensorContext, statistics, CacheContextImpl.of(context));
   }
 }

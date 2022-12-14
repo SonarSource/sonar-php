@@ -62,4 +62,9 @@ public class PhpTestFile implements PhpFile {
   public String toString() {
     return relativePath.toString();
   }
+
+  @Override
+  public String key() {
+    return "testFileModule:" + filename();
+  }
 }

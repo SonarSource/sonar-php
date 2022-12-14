@@ -47,10 +47,13 @@ import org.sonar.php.metrics.CpdVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.visitors.LegacyIssue;
+import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
@@ -60,40 +63,67 @@ class AnalysisScanner extends Scanner {
   private final PHPChecks checks;
   private final FileLinesContextFactory fileLinesContextFactory;
   private final NoSonarFilter noSonarFilter;
-  private RuleKey parsingErrorRuleKey;
+  private final RuleKey parsingErrorRuleKey;
 
   private final boolean hasTestFileChecks;
-  private PHPAnalyzer phpAnalyzer;
+
+  private final CacheContext cacheContext;
+  private final PHPAnalyzer phpAnalyzer;
 
 
   public AnalysisScanner(SensorContext context,
-    PHPChecks checks,
-    FileLinesContextFactory fileLinesContextFactory,
-    NoSonarFilter noSonarFilter,
-    ProjectSymbolData projectSymbolData,
-    DurationStatistics statistics) {
-
+                         PHPChecks checks,
+                         FileLinesContextFactory fileLinesContextFactory,
+                         NoSonarFilter noSonarFilter,
+                         ProjectSymbolData projectSymbolData,
+                         DurationStatistics statistics,
+                         CacheContext cacheContext) {
     super(context, statistics);
     this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
     this.parsingErrorRuleKey = getParsingErrorRuleKey();
+    this.cacheContext = cacheContext;
 
+    List<PHPCheck> mainFileChecks = getMainFileChecks();
+    List<PHPCheck> testFileChecks = getTestFileChecks();
+    hasTestFileChecks = !testFileChecks.isEmpty();
 
-    List<PHPCheck> allChecks = this.checks.all();
+    File workingDir = context.fileSystem().workDir();
+    phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext);
+  }
+
+  /**
+   * These checks will be applied on main files
+   */
+  private List<PHPCheck> getMainFileChecks() {
+    List<PHPCheck> applicableChecks = this.checks.all();
     if (inSonarLint(context)) {
-      allChecks = allChecks.stream()
+      applicableChecks = applicableChecks.stream()
         .filter(e -> !(e instanceof UncatchableExceptionCheck))
         .collect(Collectors.toList());
     }
+    return applicableChecks;
+  }
 
-    List<PHPCheck> testFilesChecks = allChecks.stream().
-      filter(PhpUnitCheck.class::isInstance).
-      collect(Collectors.toList());
-    hasTestFileChecks = !testFilesChecks.isEmpty();
+  /**
+   * These checks will be applied on test files
+   */
+  private List<PHPCheck> getTestFileChecks() {
+    return this.checks.all().stream()
+      .filter(PhpUnitCheck.class::isInstance)
+      .collect(Collectors.toList());
+  }
 
-    File workingDir = context.fileSystem().workDir();
-    phpAnalyzer = new PHPAnalyzer(allChecks, testFilesChecks, workingDir, projectSymbolData, statistics);
+  private boolean scanFileWithoutParsing(InputFile inputFile) {
+    for (PHPCheck check : checks.all()) {
+      PhpFile pythonFile = PhpFileImpl.create(inputFile);
+      PhpInputFileContext inputFileContext = new PhpInputFileContext(pythonFile, context.fileSystem().workDir(), cacheContext);
+      if (!check.scanWithoutParsing(inputFileContext)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override
@@ -103,32 +133,38 @@ class AnalysisScanner extends Scanner {
 
   @Override
   void scanFile(InputFile inputFile) {
-    if (fileCanBeSkipped(inputFile) || (inputFile.type() == InputFile.Type.TEST && !hasTestFileChecks)) {
+    if (fileCanBeSkipped(inputFile) && scanFileWithoutParsing(inputFile)) {
       return;
     }
 
     try {
-      phpAnalyzer.nextFile(new PhpFileImpl(inputFile));
-
-      if (!inSonarLint(context)) {
-        phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
-        phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
-        if (inputFile.type() == InputFile.Type.MAIN) {
-          saveNewFileMeasures(context,
-            phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
-            inputFile);
-          saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
-        }
-      }
-
-      noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
-      saveIssues(context, inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
+      phpAnalyzer.nextFile(PhpFileImpl.create(inputFile));
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
       LOG.error(e.getMessage());
       saveParsingIssue(context, e, inputFile);
+      return;
     }
+
+    if (!inSonarLint(context)) {
+      phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
+      phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
+      if (inputFile.type() == InputFile.Type.MAIN) {
+        saveNewFileMeasures(context,
+          phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
+          inputFile);
+        saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
+      }
+    }
+
+    noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
+    saveIssues(context, inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
+  }
+
+  @Override
+  protected boolean fileCanBeSkipped(InputFile file) {
+    return super.fileCanBeSkipped(file) || (file.type() == InputFile.Type.TEST && !hasTestFileChecks);
   }
 
   private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {

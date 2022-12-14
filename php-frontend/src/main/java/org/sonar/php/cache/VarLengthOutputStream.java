@@ -48,10 +48,6 @@ public class VarLengthOutputStream implements Closeable {
     } while (value != 0);
   }
 
-  public void writeLong(long value) throws IOException {
-    out.writeLong(value);
-  }
-
   public void writeUTF(String string) throws IOException {
     byte[] bytes;
     if (string == null) {

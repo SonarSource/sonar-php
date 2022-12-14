@@ -35,9 +35,11 @@ import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.reports.phpunit.CoverageResultImporter;
 import org.sonar.plugins.php.reports.phpunit.TestResultImporter;
@@ -91,7 +93,8 @@ public class PHPSensor implements Sensor {
     DurationStatistics statistics = new DurationStatistics(context.config());
     List<InputFile> inputFiles = getInputFiles(context);
 
-    SymbolScanner symbolScanner = SymbolScanner.create(context, statistics);
+    CacheContext cacheContext = CacheContextImpl.of(context);
+    SymbolScanner symbolScanner = SymbolScanner.create(context, statistics, cacheContext);
 
     try {
       symbolScanner.execute(inputFiles);
@@ -101,7 +104,8 @@ public class PHPSensor implements Sensor {
         fileLinesContextFactory,
         noSonarFilter,
         projectSymbolData,
-        statistics);
+        statistics,
+        cacheContext);
       analysisScanner.execute(inputFiles);
       if (!inSonarLint(context)) {
         processTestsAndCoverage(context);

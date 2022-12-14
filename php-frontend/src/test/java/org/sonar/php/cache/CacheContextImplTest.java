@@ -45,7 +45,6 @@ public class CacheContextImplTest {
     assertThat(cacheContext.getReadCache()).isInstanceOf(PhpReadCacheImpl.class);
     assertThat(cacheContext.getWriteCache()).isInstanceOf(PhpWriteCacheImpl.class);
     assertThat(cacheContext.pluginVersion()).isEqualTo("unknown");
-    assertThat(cacheContext.projectKey()).isEqualTo("projectKey");
   }
 
   @Test
@@ -57,7 +56,6 @@ public class CacheContextImplTest {
     assertThat(cacheContext.getReadCache()).isNull();
     assertThat(cacheContext.getWriteCache()).isNull();
     assertThat(cacheContext.pluginVersion()).isEqualTo("unknown");
-    assertThat(cacheContext.projectKey()).isEqualTo("projectKey");
   }
 
   @Test
@@ -73,7 +71,6 @@ public class CacheContextImplTest {
     assertThat(cacheContext.getReadCache()).isNull();
     assertThat(cacheContext.getWriteCache()).isNull();
     assertThat(cacheContext.pluginVersion()).isEqualTo("unknown");
-    assertThat(cacheContext.projectKey()).isEqualTo("projectKey");
   }
 
   @Test
@@ -87,6 +84,5 @@ public class CacheContextImplTest {
     assertThat(cacheContext.getReadCache()).isNull();
     assertThat(cacheContext.getWriteCache()).isNull();
     assertThat(cacheContext.pluginVersion()).isEqualTo("unknown");
-    assertThat(cacheContext.projectKey()).isEqualTo("projectKey");
   }
 }

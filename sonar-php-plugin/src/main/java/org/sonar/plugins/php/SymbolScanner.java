@@ -29,7 +29,6 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.cache.Cache;
-import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.symbols.ProjectSymbolData;
@@ -37,6 +36,7 @@ import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class SymbolScanner extends Scanner {
 
@@ -45,7 +45,6 @@ public class SymbolScanner extends Scanner {
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
   private final ProjectSymbolData projectSymbolData = new ProjectSymbolData();
   private final Cache cache;
-
   private int symbolTablesFromCache = 0;
 
   SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cache) {
@@ -61,8 +60,7 @@ public class SymbolScanner extends Scanner {
       files.size());
   }
 
-  public static SymbolScanner create(SensorContext context, DurationStatistics statistics) {
-    CacheContext cacheContext = CacheContextImpl.of(context);
+  public static SymbolScanner create(SensorContext context, DurationStatistics statistics, CacheContext cacheContext) {
     Cache cache = new Cache(cacheContext);
     return new SymbolScanner(context, statistics, cache);
   }
@@ -105,7 +103,7 @@ public class SymbolScanner extends Scanner {
   }
 
   private SymbolTableImpl createSymbolTable(InputFile file) throws RecognitionException {
-    PhpFileImpl phpFile = new PhpFileImpl(file);
+    PhpFile phpFile = PhpFileImpl.create(file);
     CompilationUnitTree ast = (CompilationUnitTree) statistics.time("ProjectSymbolParsing", () -> parser.parse(phpFile.contents()));
     return statistics.time("ProjectSymbolTable", () -> SymbolTableImpl.create(ast, new ProjectSymbolData(), phpFile));
   }
