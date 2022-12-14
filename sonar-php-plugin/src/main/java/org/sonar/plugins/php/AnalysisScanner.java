@@ -138,7 +138,7 @@ class AnalysisScanner extends Scanner {
     }
 
     try {
-      phpAnalyzer.nextFile(new PhpFileImpl(inputFile));
+      phpAnalyzer.nextFile(PhpFileImpl.create(inputFile));
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());

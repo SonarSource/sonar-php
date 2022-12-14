@@ -41,7 +41,7 @@ public class PhpFileImplTest {
     when(inputFile.uri()).thenReturn(uri);
     when(inputFile.key()).thenReturn("moduleKey:file.php");
 
-    PhpFile phpFile = new PhpFileImpl(inputFile);
+    PhpFile phpFile = PhpFileImpl.create(inputFile);
 
     assertThat(phpFile).isExactlyInstanceOf(PhpFileImpl.class);
     assertThat(phpFile.contents()).isEqualTo("Input file content");

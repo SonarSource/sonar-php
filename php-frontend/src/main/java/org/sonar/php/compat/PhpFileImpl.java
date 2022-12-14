@@ -28,7 +28,7 @@ public class PhpFileImpl implements PhpFile {
 
   private final InputFile inputFile;
 
-  public PhpFileImpl(InputFile inputFile) {
+  private PhpFileImpl(InputFile inputFile) {
     this.inputFile = inputFile;
   }
 

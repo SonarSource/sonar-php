@@ -36,6 +36,7 @@ import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class SymbolScanner extends Scanner {
 
@@ -104,7 +105,7 @@ public class SymbolScanner extends Scanner {
   }
 
   private SymbolTableImpl createSymbolTable(InputFile file) throws RecognitionException {
-    PhpFileImpl phpFile = new PhpFileImpl(file);
+    PhpFile phpFile = PhpFileImpl.create(file);
     CompilationUnitTree ast = (CompilationUnitTree) statistics.time("ProjectSymbolParsing", () -> parser.parse(phpFile.contents()));
     return statistics.time("ProjectSymbolTable", () -> SymbolTableImpl.create(ast, new ProjectSymbolData(), phpFile));
   }
