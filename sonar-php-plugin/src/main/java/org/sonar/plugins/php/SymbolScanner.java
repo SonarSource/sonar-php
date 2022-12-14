@@ -34,6 +34,7 @@ import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -45,14 +46,14 @@ public class SymbolScanner extends Scanner {
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
   private final ProjectSymbolData projectSymbolData = new ProjectSymbolData();
   private final Cache cache;
-  private final CacheContextImpl cacheContext;
+  private final CacheContext cacheContext;
 
   private int symbolTablesFromCache = 0;
 
-  SymbolScanner(SensorContext context, DurationStatistics statistics) {
+  SymbolScanner(SensorContext context, DurationStatistics statistics, CacheContext cacheContext, Cache cache) {
     super(context, statistics);
-    this.cacheContext = CacheContextImpl.of(context);
-    this.cache = new Cache(cacheContext);
+    this.cacheContext = cacheContext;
+    this.cache = cache;
   }
 
   @Override
@@ -64,7 +65,9 @@ public class SymbolScanner extends Scanner {
   }
 
   public static SymbolScanner create(SensorContext context, DurationStatistics statistics) {
-    return new SymbolScanner(context, statistics);
+    CacheContext cacheContext = CacheContextImpl.of(context);
+    Cache cache = new Cache(cacheContext);
+    return new SymbolScanner(context, statistics, cacheContext, cache);
   }
 
   @Override

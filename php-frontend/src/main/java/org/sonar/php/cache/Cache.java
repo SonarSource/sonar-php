@@ -27,8 +27,8 @@ import org.sonar.plugins.php.api.cache.PhpWriteCache;
 
 public class Cache {
 
-  public static final String CACHE_KEY_DATA = "php.projectSymbolData.data:";
-  public static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:";
+  public static final String DATA_CACHE_PREFIX = "php.projectSymbolData.data:";
+  public static final String STRING_TABLE_CACHE_PREFIX = "php.projectSymbolData.stringTable:";
   private final CacheContext cacheContext;
   private final String pluginVersion;
 
@@ -43,16 +43,16 @@ public class Cache {
       SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
       PhpWriteCache writeCache = cacheContext.getWriteCache();
-      writeCache.writeBytes(getDataCacheKey(file.key()), serializationData.data());
-      writeCache.writeBytes(getStringTableCacheKey(file.key()), serializationData.stringTable());
+      writeCache.writeBytes(cacheKey(DATA_CACHE_PREFIX, file.key()), serializationData.data());
+      writeCache.writeBytes(cacheKey(STRING_TABLE_CACHE_PREFIX, file.key()), serializationData.stringTable());
     }
   }
 
   @CheckForNull
   public SymbolTableImpl read(InputFile file) {
     if (cacheContext.isCacheEnabled()) {
-      byte[] data = cacheContext.getReadCache().readBytes(getDataCacheKey(file.key()));
-      byte[] stringTable = cacheContext.getReadCache().readBytes(getStringTableCacheKey(file.key()));
+      byte[] data = cacheContext.getReadCache().readBytes(cacheKey(DATA_CACHE_PREFIX, file.key()));
+      byte[] stringTable = cacheContext.getReadCache().readBytes(cacheKey(STRING_TABLE_CACHE_PREFIX, file.key()));
       if (data != null && stringTable != null) {
         return SymbolTableDeserializer.fromBinary(new DeserializationInput(data, stringTable, pluginVersion));
       }
@@ -60,11 +60,7 @@ public class Cache {
     return null;
   }
 
-  private String getDataCacheKey(String cacheFileName) {
-    return CACHE_KEY_DATA + cacheFileName;
-  }
-
-  private String getStringTableCacheKey(String cacheFileName) {
-    return CACHE_KEY_STRING_TABLE + cacheFileName;
+  private static String cacheKey(String prefix, String file) {
+    return prefix + file.replace('\\', '/');
   }
 }
