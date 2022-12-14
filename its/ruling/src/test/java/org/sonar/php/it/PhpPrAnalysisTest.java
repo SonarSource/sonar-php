@@ -99,8 +99,7 @@ public class PhpPrAnalysisTest {
     setUpChanges(tempDirectory, scenario);
     SonarScanner build = RulingHelper.prepareScanner(tempDirectory, PROJECT_KEY, "expected_pr_analysis/" + scenario, litsDifferencesFile)
       .setProperty("sonar.pullrequest.key", "1")
-      .setProperty("sonar.pullrequest.branch", "incremental")
-      .setEnvironmentVariable("SONAR_SCANNER_DEBUG_OPTS", "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005");
+      .setProperty("sonar.pullrequest.branch", "incremental");
 
     BuildResult result = ORCHESTRATOR.executeBuild(build);
     assertPrAnalysisLogs(result);
