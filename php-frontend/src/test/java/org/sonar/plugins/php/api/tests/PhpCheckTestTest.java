@@ -26,8 +26,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.php.FileTestUtils;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.php.utils.DummyCheck;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
@@ -250,7 +250,7 @@ public class PhpCheckTestTest {
   private List<PhpIssue> createIssuesForLines(String message, int... lines) {
     List<PhpIssue> issues = new ArrayList<>();
     for (int line : lines) {
-      issues.add(new LegacyIssue(CHECK, message).line(line));
+      issues.add(new LineIssue(CHECK, line, message));
     }
     return issues;
   }

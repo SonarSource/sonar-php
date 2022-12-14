@@ -22,9 +22,9 @@ package org.sonar.php.checks;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
@@ -50,7 +50,7 @@ public class FixmeTagPresenceCheckTest {
 
   private static PhpIssue newIssue(int line) {
     String message = "Take the required action to fix the issue indicated by this \"FIXME\" comment.";
-    return new LegacyIssue(CHECK, message).line(line);
+    return new LineIssue(CHECK, line, message);
   }
 
 }

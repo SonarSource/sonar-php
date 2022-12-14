@@ -22,10 +22,10 @@ package org.sonar.php.checks;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class TooManyFunctionParametersCheckTest {
@@ -54,7 +54,7 @@ public class TooManyFunctionParametersCheckTest {
   private List<PhpIssue> issues(int... lines) {
     List<PhpIssue> list = new ArrayList<>();
     for (int line : lines) {
-      list.add(new LegacyIssue(check, null).line(line));
+      list.add(new LineIssue(check, line, null));
     }
     return list;
   }

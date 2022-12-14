@@ -22,10 +22,10 @@ package org.sonar.php.checks;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class FileWithSymbolsAndSideEffectsCheckTest {
@@ -34,7 +34,7 @@ public class FileWithSymbolsAndSideEffectsCheckTest {
   private final FileWithSymbolsAndSideEffectsCheck check = new FileWithSymbolsAndSideEffectsCheck();
 
   private final List<PhpIssue> issue = Collections.singletonList(
-    new LegacyIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
+    new FileIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
 
 
   @Test

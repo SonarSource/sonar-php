@@ -22,9 +22,9 @@ package org.sonar.php.checks;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
@@ -34,7 +34,7 @@ public class TrailingWhitespaceCheckTest {
   public void test() throws Exception {
     PHPCheck check = new TrailingWhitespaceCheck();
 
-    List<PhpIssue> issues = Collections.singletonList(new LegacyIssue(check, "Remove the useless trailing whitespaces at the end of this line.").line(5));
+    List<PhpIssue> issues = Collections.singletonList(new LineIssue(check, 5, "Remove the useless trailing whitespaces at the end of this line."));
     PHPCheckTest.check(check, TestUtils.getCheckFile("TrailingWhitespaceCheck.php"), issues);
   }
 }

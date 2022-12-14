@@ -21,10 +21,10 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 
 public class FieldNameCheckTest {
 
@@ -42,6 +42,6 @@ public class FieldNameCheckTest {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
     String message = "Rename this field \"$myVariable\" to match the regular expression " + check.format + ".";
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),
-      Collections.singletonList(new LegacyIssue(check, message).line(7)));
+      Collections.singletonList(new LineIssue(check, 7, message)));
   }
 }

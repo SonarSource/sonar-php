@@ -21,10 +21,10 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 
 public class CharacterBeforeOpeningPHPTagCheckTest {
 
@@ -38,7 +38,7 @@ public class CharacterBeforeOpeningPHPTagCheckTest {
 
   @Test
   public void ko() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LegacyIssue(check, "Remove the extra characters before the open tag.").line(1)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LineIssue(check, 1, "Remove the extra characters before the open tag.")));
   }
 
 }

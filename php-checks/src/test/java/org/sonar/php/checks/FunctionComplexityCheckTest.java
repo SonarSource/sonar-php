@@ -21,10 +21,10 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 
 public class FunctionComplexityCheckTest {
 
@@ -34,7 +34,7 @@ public class FunctionComplexityCheckTest {
   @Test
   public void defaultValue() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(
-      new LegacyIssue(check, "The Cyclomatic Complexity of this function \"ko\" is 28 which is greater than 20 authorized.").line(3)));
+      new LineIssue(check, 3, "The Cyclomatic Complexity of this function \"ko\" is 28 which is greater than 20 authorized.")));
   }
 
   @Test
