@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class FileWithSymbolsAndSideEffectsCheckTest {
@@ -34,7 +34,7 @@ public class FileWithSymbolsAndSideEffectsCheckTest {
   private final FileWithSymbolsAndSideEffectsCheck check = new FileWithSymbolsAndSideEffectsCheck();
 
   private final List<PhpIssue> issue = Collections.singletonList(
-    new LineIssue(check, 0, "Refactor this file to either declare symbols or cause side effects, but not both."));
+    new FileIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
 
 
   @Test

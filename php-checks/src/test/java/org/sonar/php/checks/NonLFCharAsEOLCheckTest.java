@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
@@ -54,7 +54,7 @@ public class NonLFCharAsEOLCheckTest {
   @Test
   public void ko() {
     List<PhpIssue> issues = Collections.singletonList(
-      new LineIssue(check, 0, "Replace all non line feed end of line characters in this file \"" + koFile.filename() + "\" by LF."));
+      new FileIssue(check, "Replace all non line feed end of line characters in this file \"" + koFile.filename() + "\" by LF."));
     PHPCheckTest.check(check, koFile, issues);
   }
 

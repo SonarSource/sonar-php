@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class MissingNewLineAtEOFCheckTest {
@@ -33,7 +33,7 @@ public class MissingNewLineAtEOFCheckTest {
   private MissingNewLineAtEOFCheck check = new MissingNewLineAtEOFCheck();
   private static final String TEST_FILE_DIR = "MissingNewLineAtEOF/";
   private List<PhpIssue> issue = Collections.singletonList(
-    new LineIssue(check, 0,"Add a new line at the end of this file."));
+    new FileIssue(check,"Add a new line at the end of this file."));
 
   @Test
   public void noNewLine() {

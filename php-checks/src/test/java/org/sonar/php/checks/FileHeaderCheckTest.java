@@ -24,7 +24,7 @@ import java.util.List;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class FileHeaderCheckTest {
@@ -34,7 +34,7 @@ public class FileHeaderCheckTest {
 
   @Test
   public void test() throws Exception {
-    List<PhpIssue> issue = Collections.singletonList(new LineIssue(check, 0, "Add or update the header of this file."));
+    List<PhpIssue> issue = Collections.singletonList(new FileIssue(check, "Add or update the header of this file."));
     List<PhpIssue> noIssue = Collections.emptyList();
 
     check.headerFormat = "// copyright 2005";

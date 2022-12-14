@@ -19,13 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class FileNameCheckTest {
@@ -34,36 +33,36 @@ public class FileNameCheckTest {
   private static final String TEST_DIR = "FileNameCheck/";
 
   @Test
-  public void ok_defaultValue() throws Exception {
+  public void ok_defaultValue() {
     checkNoIssue("ok.php");
   }
 
   @Test
-  public void ko_defaultValue() throws Exception {
+  public void ko_defaultValue() {
     checkIssue("_ko.php", "Rename this file to match this regular expression: \"" + FileNameCheck.DEFAULT + "\"");
   }
 
   @Test
-  public void ok_custom() throws Exception {
+  public void ok_custom() {
     check.format = "_[a-z][A-Za-z0-9]+.php";
     checkNoIssue("_ko.php");
   }
 
   @Test
-  public void ko_custom() throws Exception {
+  public void ko_custom() {
     check.format = "_[a-z][A-Za-z0-9]+.php";
     checkIssue("ok.php", "Rename this file to match this regular expression: \"" + check.format + "\"");
   }
 
-  private void checkNoIssue(String fileName) throws URISyntaxException {
+  private void checkNoIssue(String fileName) {
     check(fileName, Collections.emptyList());
   }
 
-  private void checkIssue(String fileName, String expectedIssueMessage) throws URISyntaxException {
-    check(fileName, Collections.singletonList(new LineIssue(check, 0, expectedIssueMessage)));
+  private void checkIssue(String fileName, String expectedIssueMessage) {
+    check(fileName, Collections.singletonList(new FileIssue(check, expectedIssueMessage)));
   }
 
-  private void check(String fileName, List<PhpIssue> expectedIssues) throws URISyntaxException {
+  private void check(String fileName, List<PhpIssue> expectedIssues) {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + fileName), expectedIssues);
   }
 
