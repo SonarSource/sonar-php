@@ -22,6 +22,8 @@ package org.sonar.php.metrics;
 import java.util.ArrayList;
 import java.util.List;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.cache.CacheContext;
+import org.sonar.plugins.php.api.cache.PhpReadCache;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -33,9 +35,11 @@ import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 
 public class CpdVisitor extends PHPVisitorCheck {
 
+  public static final String CACHE_DATA_PREFIX = "php.cpd.data:";
   private List<CpdToken> cpdTokens = new ArrayList<>();
 
   private static final String NORMALIZED_NUMERIC_LITERAL = "$NUMBER";
@@ -90,7 +94,34 @@ public class CpdVisitor extends PHPVisitorCheck {
 
   public List<CpdToken> getCpdTokens(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
     super.analyze(file, tree, symbolTable);
+    storeCpdTokens();
     return cpdTokens;
+  }
+
+  @Override
+  public boolean scanWithoutParsing(PhpInputFileContext phpInputFileContext) {
+    CacheContext cacheContext = phpInputFileContext.cacheContext();
+    if (cacheContext != null) {
+      List<CpdToken> restoredTokens = restoreCpdTokens(phpInputFileContext);
+      if (restoredTokens != null) {
+        cpdTokens = restoredTokens;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private List<CpdToken> restoreCpdTokens(PhpInputFileContext phpInputFileContext) {
+    CacheContext cacheContext = phpInputFileContext.cacheContext();
+    PhpReadCache readCache = cacheContext.getReadCache();
+    String key = CACHE_DATA_PREFIX + phpInputFileContext.phpFile().key();
+    //TODO implement
+    return null;
+  }
+
+
+  private void storeCpdTokens() {
+    // TODO implement
   }
 
   public static class CpdToken {

@@ -50,7 +50,7 @@ public class CacheTest {
 
   @Test
   public void shouldWriteToCacheOnlyIfItsEnabled() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
     cache.write(DEFAULT_INPUT_FILE, data);
@@ -63,7 +63,7 @@ public class CacheTest {
 
   @Test
   public void shouldNotWriteToCacheIfItsDisabled() {
-    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = emptySymbolTable();
 
@@ -74,7 +74,7 @@ public class CacheTest {
 
   @Test
   public void shouldReadFromCache() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
     warmupReadCache(data);
@@ -85,7 +85,7 @@ public class CacheTest {
 
   @Test
   public void shouldReturnNullWhenDataCacheEntryDoesNotExist() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
 
 
@@ -103,7 +103,7 @@ public class CacheTest {
 
   @Test
   public void shouldReturnNullWhenStringTableCacheEntryDoesNotExist() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
 
     SymbolTableImpl data = exampleSymbolTable();
@@ -120,7 +120,7 @@ public class CacheTest {
 
   @Test
   public void shouldReturnNullWhenCacheDisabled() {
-    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
     warmupReadCache(data);

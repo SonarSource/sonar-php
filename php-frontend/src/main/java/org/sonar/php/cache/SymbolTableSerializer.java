@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.MethodSymbolData;
@@ -144,7 +145,7 @@ public class SymbolTableSerializer {
     writeBoolean(properties.hasFuncGetArgs());
   }
 
-  private void writeText(String text) throws IOException {
+  private void writeText(@Nullable String text) throws IOException {
     out.writeInt(stringTable.getIndex(text));
   }
 

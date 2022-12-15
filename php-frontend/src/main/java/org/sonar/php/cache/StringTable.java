@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public class StringTable {
   private final Map<String, Integer> table;
@@ -42,7 +43,7 @@ public class StringTable {
     }
   }
 
-  public int getIndex(String string) {
+  public int getIndex(@Nullable String string) {
     return table.computeIfAbsent(string, s -> {
       byIndex.add(s);
       return byIndex.size() - 1;
