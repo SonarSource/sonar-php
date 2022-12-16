@@ -139,13 +139,11 @@ public class PHPCheckContext implements CheckContext, RegexCheckContext {
     return symbolTable;
   }
 
-  @Nullable
   @Override
   public File getWorkingDirectory() {
     return inputFileContext.workingDirectory();
   }
 
-  @Nullable
   @Override
   public CacheContext cacheContext() {
     return inputFileContext.cacheContext();

@@ -131,6 +131,5 @@ public interface CheckContext {
   File getWorkingDirectory();
 
   @Beta
-  @CheckForNull
   CacheContext cacheContext();
 }
