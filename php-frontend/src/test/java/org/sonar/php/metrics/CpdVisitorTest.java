@@ -82,10 +82,11 @@ public class CpdVisitorTest {
     PhpFile testFile = FileTestUtils.getFile( tempFolder.newFile(), source);
     CpdVisitor cpdVisitor = new CpdVisitor();
     CompilationUnitTree tree = (CompilationUnitTree)p.parse(testFile.contents());
-    return cpdVisitor.getCpdTokens(testFile, tree, SymbolTableImpl.create(tree));
+    cpdVisitor.analyze(testFile, tree, SymbolTableImpl.create(tree));
+    return cpdVisitor.getCpdTokens();
   }
 
   private static List<String> getImagesList(List<CpdToken> tokens) {
-    return tokens.stream().map(CpdToken::image).collect(Collectors.toList());
+    return tokens.stream().map(CpdToken::text).collect(Collectors.toList());
   }
 }

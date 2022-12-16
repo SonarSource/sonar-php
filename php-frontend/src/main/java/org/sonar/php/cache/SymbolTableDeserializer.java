@@ -55,7 +55,7 @@ public class SymbolTableDeserializer {
   }
 
   @CheckForNull
-  public static SymbolTableImpl fromBinary(DeserializationInput input) {
+  public static SymbolTableImpl fromBinary(SymbolTableDeserializationInput input) {
     SymbolTableDeserializer deserializer = new SymbolTableDeserializer(
       new VarLengthInputStream(input.projectSymbolDataBytes()),
       new VarLengthInputStream(input.stringTable()),

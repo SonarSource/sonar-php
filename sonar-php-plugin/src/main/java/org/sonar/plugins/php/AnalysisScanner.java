@@ -92,6 +92,7 @@ class AnalysisScanner extends Scanner {
 
     File workingDir = context.fileSystem().workDir();
     phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext);
+
   }
 
   /**
@@ -141,9 +142,9 @@ class AnalysisScanner extends Scanner {
 
     if (fileCanBeSkipped(inputFile)
       && scanFileWithoutParsing(inputFile)
-      && !inSonarLint(context)
       && cpdVisitor.scanWithoutParsing(phpInputFileContext)) {
-      computeMeasuresAndSaveCpdData(inputFile);
+
+      saveCpdData(inputFile);
       return;
     }
 
@@ -172,13 +173,23 @@ class AnalysisScanner extends Scanner {
           phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
           inputFile);
         PhpFile phpFile = PhpFileImpl.create(inputFile);
-        List<CpdVisitor.CpdToken> cpdTokens = cpdVisitor.getCpdTokens(
-          phpFile,
-          phpAnalyzer.currentFileTree(),
-          phpAnalyzer.currentFileSymbolTable());
-        saveCpdData(cpdTokens, inputFile, context);
+        cpdVisitor.analyze(phpFile, phpAnalyzer.currentFileTree(), phpAnalyzer.currentFileSymbolTable(), cacheContext);
+        saveCpdData(inputFile);
       }
     }
+  }
+
+  private void saveCpdData(InputFile inputFile) {
+    List<CpdVisitor.CpdToken> cpdTokens = cpdVisitor.getCpdTokens();
+    NewCpdTokens newCpdTokens = context.newCpdTokens().onFile(inputFile);
+    cpdTokens.forEach(cpdToken -> newCpdTokens.addToken(
+      cpdToken.line(),
+      cpdToken.column(),
+      cpdToken.endLine(),
+      cpdToken.endColumn(),
+      cpdToken.text()));
+
+    newCpdTokens.save();
   }
 
   @Override
@@ -297,20 +308,6 @@ class AnalysisScanner extends Scanner {
     if (file != null) {
       newIssue.addLocation(newLocation(file, newIssue, secondary));
     }
-  }
-
-  private static void saveCpdData(List<CpdVisitor.CpdToken> cpdTokens, InputFile inputFile, SensorContext context) {
-    NewCpdTokens newCpdTokens = context.newCpdTokens().onFile(inputFile);
-
-    cpdTokens.forEach(cpdToken -> newCpdTokens.addToken(
-      inputFile.newRange(
-        cpdToken.syntaxToken().line(),
-        cpdToken.syntaxToken().column(),
-        cpdToken.syntaxToken().endLine(),
-        cpdToken.syntaxToken().endColumn()),
-      cpdToken.image()));
-
-    newCpdTokens.save();
   }
 
   private static NewIssueLocation newLocation(InputFile inputFile, NewIssue issue, IssueLocation location) {

@@ -19,23 +19,20 @@
  */
 package org.sonar.php.cache;
 
-public class DeserializationInput {
-  private final byte[] projectSymbolDataBytes;
-  private final byte[] stringTable;
+import java.util.List;
+import org.sonar.php.metrics.CpdVisitor;
+
+public class CpdSerializationInput {
+  private final List<CpdVisitor.CpdToken> cpdTokens;
   private final String pluginVersion;
 
-  public DeserializationInput(byte[] projectSymbolDataBytes, byte[] stringTable, String pluginVersion) {
-    this.projectSymbolDataBytes = projectSymbolDataBytes;
-    this.stringTable = stringTable;
+  public CpdSerializationInput(List<CpdVisitor.CpdToken> cpdTokens, String pluginVersion) {
+    this.cpdTokens = cpdTokens;
     this.pluginVersion = pluginVersion;
   }
 
-  public byte[] projectSymbolDataBytes() {
-    return projectSymbolDataBytes;
-  }
-
-  public byte[] stringTable() {
-    return stringTable;
+  public List<CpdVisitor.CpdToken> cpdTokens() {
+    return cpdTokens;
   }
 
   public String pluginVersion() {

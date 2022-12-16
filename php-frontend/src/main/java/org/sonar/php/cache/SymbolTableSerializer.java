@@ -45,17 +45,16 @@ public class SymbolTableSerializer {
     stringTable = new StringTable();
   }
 
-  public static SerializationResult toBinary(SerializationInput serializationInput) {
+  public static SerializationResult toBinary(SymbolTableSerializationInput serializationInput) {
     SymbolTableSerializer serializer = new SymbolTableSerializer();
     return serializer.convert(serializationInput);
   }
 
-
-  private SerializationResult convert(SerializationInput serializationInput) {
+  private SerializationResult convert(SymbolTableSerializationInput symbolTableSerializationInput) {
     try (out; stream) {
-      String pluginVersion = serializationInput.pluginVersion();
+      String pluginVersion = symbolTableSerializationInput.pluginVersion();
       writeText(pluginVersion);
-      SymbolTableImpl projectSymbolData = serializationInput.symbolTable();
+      SymbolTableImpl projectSymbolData = symbolTableSerializationInput.symbolTable();
       Collection<ClassSymbolData> classSymbols = projectSymbolData.classSymbolDatas();
       writeInt(classSymbols.size());
       for (ClassSymbolData classSymbol : classSymbols) {

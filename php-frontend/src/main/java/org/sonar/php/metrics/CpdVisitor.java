@@ -21,9 +21,17 @@ package org.sonar.php.metrics;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
+import org.sonar.php.cache.CpdDeserializationInput;
+import org.sonar.php.cache.CpdDeserializer;
+import org.sonar.php.cache.CpdSerializationInput;
+import org.sonar.php.cache.CpdSerializer;
+import org.sonar.php.cache.SerializationResult;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.cache.PhpReadCache;
+import org.sonar.plugins.php.api.cache.PhpWriteCache;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -36,10 +44,12 @@ import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class CpdVisitor extends PHPVisitorCheck {
 
   public static final String CACHE_DATA_PREFIX = "php.cpd.data:";
+  public static final String CACHE_STRING_TABLE_PREFIX = "php.stringTable.data:";
   private List<CpdToken> cpdTokens = new ArrayList<>();
 
   private static final String NORMALIZED_NUMERIC_LITERAL = "$NUMBER";
@@ -84,7 +94,7 @@ public class CpdVisitor extends PHPVisitorCheck {
   }
 
   private void addToken(SyntaxToken token, String text) {
-    cpdTokens.add(new CpdToken(token, text));
+    cpdTokens.add(CpdToken.create(token, text));
   }
 
   @Override
@@ -92,9 +102,17 @@ public class CpdVisitor extends PHPVisitorCheck {
     // do not enter (in order to avoid use statement tokens be considered in duplication detection)
   }
 
-  public List<CpdToken> getCpdTokens(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
-    super.analyze(file, tree, symbolTable);
-    storeCpdTokens();
+  public List<PhpIssue> analyze(PhpFile file,
+    CompilationUnitTree tree,
+    SymbolTable symbolTable,
+    @Nullable CacheContext cacheContext) {
+
+    List<PhpIssue> analyze = super.analyze(file, tree, symbolTable);
+    storeCpdTokensInCache(file, cacheContext);
+    return analyze;
+  }
+
+  public List<CpdToken> getCpdTokens() {
     return cpdTokens;
   }
 
@@ -102,7 +120,7 @@ public class CpdVisitor extends PHPVisitorCheck {
   public boolean scanWithoutParsing(PhpInputFileContext phpInputFileContext) {
     CacheContext cacheContext = phpInputFileContext.cacheContext();
     if (cacheContext != null) {
-      List<CpdToken> restoredTokens = restoreCpdTokens(phpInputFileContext);
+      List<CpdToken> restoredTokens = restoreCpdTokensFromCache(phpInputFileContext);
       if (restoredTokens != null) {
         cpdTokens = restoredTokens;
         return true;
@@ -111,35 +129,76 @@ public class CpdVisitor extends PHPVisitorCheck {
     return false;
   }
 
-  private List<CpdToken> restoreCpdTokens(PhpInputFileContext phpInputFileContext) {
+  @CheckForNull
+  private List<CpdToken> restoreCpdTokensFromCache(PhpInputFileContext phpInputFileContext) {
     CacheContext cacheContext = phpInputFileContext.cacheContext();
-    PhpReadCache readCache = cacheContext.getReadCache();
-    String key = CACHE_DATA_PREFIX + phpInputFileContext.phpFile().key();
-    //TODO implement
+    if (cacheContext != null) {
+      PhpReadCache readCache = cacheContext.getReadCache();
+      if (readCache != null) {
+        byte[] dataBytes = readCache.readBytes(CACHE_DATA_PREFIX + phpInputFileContext.phpFile().key());
+        byte[] stringTableBytes = readCache.readBytes(CACHE_STRING_TABLE_PREFIX + phpInputFileContext.phpFile().key());
+        if (dataBytes != null && stringTableBytes != null) {
+          CpdDeserializationInput input = new CpdDeserializationInput(dataBytes, stringTableBytes, cacheContext.pluginVersion());
+          return CpdDeserializer.fromBinary(input);
+        }
+      }
+    }
     return null;
   }
 
-
-  private void storeCpdTokens() {
-    // TODO implement
+  private void storeCpdTokensInCache(PhpFile file, @Nullable CacheContext cacheContext) {
+    if (cacheContext != null) {
+      PhpWriteCache writeCache = cacheContext.getWriteCache();
+      if (writeCache != null) {
+        CpdSerializationInput input = new CpdSerializationInput(cpdTokens, cacheContext.pluginVersion());
+        SerializationResult serializationResult = CpdSerializer.toBinary(input);
+        writeCache.writeBytes(CACHE_DATA_PREFIX + file.key(), serializationResult.data());
+        writeCache.writeBytes(CACHE_STRING_TABLE_PREFIX + file.key(), serializationResult.stringTable());
+      }
+    }
   }
 
   public static class CpdToken {
+    private final int line;
+    private final int column;
+    private final int endLine;
+    private final int endColumn;
+    private final String text;
 
-    private SyntaxToken syntaxToken;
-    private String image;
-
-    public CpdToken(SyntaxToken syntaxToken, String image) {
-      this.syntaxToken = syntaxToken;
-      this.image = image;
+    public CpdToken(int line, int column, int endLine, int endColumn, String text) {
+      this.line = line;
+      this.column = column;
+      this.endLine = endLine;
+      this.endColumn = endColumn;
+      this.text = text;
     }
 
-    public SyntaxToken syntaxToken() {
-      return syntaxToken;
+    public static CpdToken create(SyntaxToken token, String text) {
+      return new CpdToken(token.line(),
+        token.column(),
+        token.endLine(),
+        token.endColumn(), 
+        text);
     }
 
-    public String image() {
-      return image;
+    public int line() {
+      return line;
+    }
+
+    public int column() {
+      return column;
+    }
+
+    public int endLine() {
+      return endLine;
+    }
+
+    public int endColumn() {
+      return endColumn;
+    }
+
+    public String text() {
+      return text;
     }
   }
 }

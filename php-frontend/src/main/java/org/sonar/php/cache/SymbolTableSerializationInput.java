@@ -21,11 +21,11 @@ package org.sonar.php.cache;
 
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 
-public class SerializationInput {
+public class SymbolTableSerializationInput {
   private final SymbolTableImpl symbolTable;
   private final String pluginVersion;
 
-  public SerializationInput(SymbolTableImpl symbolTable, String pluginVersion) {
+  public SymbolTableSerializationInput(SymbolTableImpl symbolTable, String pluginVersion) {
     this.symbolTable = symbolTable;
     this.pluginVersion = pluginVersion;
   }
