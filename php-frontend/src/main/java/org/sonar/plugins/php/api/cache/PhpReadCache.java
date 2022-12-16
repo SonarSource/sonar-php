@@ -19,11 +19,17 @@
  */
 package org.sonar.plugins.php.api.cache;
 
+import java.io.InputStream;
 import javax.annotation.CheckForNull;
 import org.sonar.api.Beta;
 
 @Beta
 public interface PhpReadCache {
+
+  /**
+   * Returns an input stream for the data cached with the provided {@code key}. It is the responsibility of the caller to close the stream.
+   */
+  InputStream read(String key);
 
   /**
    * @return the array of bytes stored for the given key, if any. {@code null} otherwise.

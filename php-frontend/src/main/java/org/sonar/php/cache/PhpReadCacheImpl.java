@@ -20,6 +20,7 @@
 package org.sonar.php.cache;
 
 import java.io.IOException;
+import java.io.InputStream;
 import javax.annotation.CheckForNull;
 import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.api.utils.log.Logger;
@@ -40,7 +41,7 @@ public class PhpReadCacheImpl implements PhpReadCache {
   @CheckForNull
   public byte[] readBytes(String key) {
     if (readCache.contains(key)) {
-      try (var in = readCache.read(key)) {
+      try (var in = read(key)) {
         return in.readAllBytes();
       } catch (IOException e) {
         LOG.debug("Unable to read data for key: \"{}\"", key);
@@ -49,6 +50,11 @@ public class PhpReadCacheImpl implements PhpReadCache {
       LOG.trace(() -> String.format("Cache miss for key '%s'", key));
     }
     return null;
+  }
+
+  @Override
+  public InputStream read(String key) {
+    return readCache.read(key);
   }
 
   @Override
