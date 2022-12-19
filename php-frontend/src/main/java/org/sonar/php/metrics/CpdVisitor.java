@@ -49,7 +49,7 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 public class CpdVisitor extends PHPVisitorCheck {
 
   public static final String CACHE_DATA_PREFIX = "php.cpd.data:";
-  public static final String CACHE_STRING_TABLE_PREFIX = "php.stringTable.data:";
+  public static final String CACHE_STRING_TABLE_PREFIX = "php.cpd.stringTable:";
   private List<CpdToken> cpdTokens = new ArrayList<>();
 
   private static final String NORMALIZED_NUMERIC_LITERAL = "$NUMBER";
@@ -147,7 +147,7 @@ public class CpdVisitor extends PHPVisitorCheck {
   }
 
   private void storeCpdTokensInCache(PhpFile file, @Nullable CacheContext cacheContext) {
-    if (cacheContext != null) {
+    if (cacheContext != null && cacheContext.isCacheEnabled()) {
       PhpWriteCache writeCache = cacheContext.getWriteCache();
       if (writeCache != null) {
         CpdSerializationInput input = new CpdSerializationInput(cpdTokens, cacheContext.pluginVersion());

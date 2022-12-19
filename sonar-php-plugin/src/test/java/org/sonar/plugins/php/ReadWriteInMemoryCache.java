@@ -32,7 +32,8 @@ import org.sonar.api.batch.sensor.cache.WriteCache;
 public class ReadWriteInMemoryCache implements ReadCache, WriteCache {
 
   private Map<String, byte[]> storage = new HashMap<>();
-  private List<String> readKeys = new ArrayList<>();
+  private final List<String> readKeys = new ArrayList<>();
+  private final List<String> writeKeys = new ArrayList<>();
 
   @Override
   public InputStream read(String key) {
@@ -48,6 +49,7 @@ public class ReadWriteInMemoryCache implements ReadCache, WriteCache {
 
   @Override
   public void write(String key, InputStream data) {
+    writeKeys.add(key);
     try {
       storage.put(key, data.readAllBytes());
     } catch (IOException e) {
@@ -57,6 +59,7 @@ public class ReadWriteInMemoryCache implements ReadCache, WriteCache {
 
   @Override
   public void write(String key, byte[] data) {
+    writeKeys.add(key);
     storage.put(key, data);
   }
 
@@ -73,5 +76,18 @@ public class ReadWriteInMemoryCache implements ReadCache, WriteCache {
 
   public List<String> readKeys() {
     return readKeys;
+  }
+
+  public List<String> writeKeys() {
+    return writeKeys;
+  }
+
+  @Override
+  public String toString() {
+    return "ReadWriteInMemoryCache{" +
+      "readKeys=" + readKeys +
+      ", writeKeys=" + writeKeys +
+      ", storage=" + storage +
+      '}';
   }
 }
