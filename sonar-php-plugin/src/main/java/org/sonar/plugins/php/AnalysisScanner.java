@@ -74,8 +74,6 @@ class AnalysisScanner extends Scanner {
   private final CacheContext cacheContext;
   private final PHPAnalyzer phpAnalyzer;
 
-  private final CpdVisitor cpdVisitor = new CpdVisitor();
-
   public AnalysisScanner(SensorContext context,
                          PHPChecks checks,
                          FileLinesContextFactory fileLinesContextFactory,
@@ -139,6 +137,7 @@ class AnalysisScanner extends Scanner {
 
   @Override
   void scanFile(InputFile inputFile) {
+    CpdVisitor cpdVisitor = new CpdVisitor();
     PhpInputFileContext phpInputFileContext = new PhpInputFileContext(
       PhpFileImpl.create(inputFile),
       context.fileSystem().workDir(),
@@ -148,7 +147,7 @@ class AnalysisScanner extends Scanner {
       && scanFileWithoutParsing(inputFile)
       && cpdVisitor.scanWithoutParsing(phpInputFileContext)) {
 
-      saveCpdData(inputFile);
+      saveCpdData(inputFile, cpdVisitor);
       return;
     }
 
@@ -162,13 +161,13 @@ class AnalysisScanner extends Scanner {
       return;
     }
 
-    computeMeasuresAndSaveCpdData(inputFile);
+    computeMeasuresAndSaveCpdData(inputFile, cpdVisitor);
 
     noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
     saveIssues(context, inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
   }
 
-  private void computeMeasuresAndSaveCpdData(InputFile inputFile) {
+  private void computeMeasuresAndSaveCpdData(InputFile inputFile, CpdVisitor cpdVisitor) {
     if (!inSonarLint(context)) {
       saveSyntaxHighlighting(inputFile);
       saveSymbolHighlighting(inputFile);
@@ -179,7 +178,7 @@ class AnalysisScanner extends Scanner {
           inputFile);
         PhpFile phpFile = PhpFileImpl.create(inputFile);
         cpdVisitor.analyze(phpFile, phpAnalyzer.currentFileTree(), phpAnalyzer.currentFileSymbolTable(), cacheContext);
-        saveCpdData(inputFile);
+        saveCpdData(inputFile, cpdVisitor);
       }
     }
   }
@@ -196,7 +195,7 @@ class AnalysisScanner extends Scanner {
     symbolTable.save();
   }
 
-  private void saveCpdData(InputFile inputFile) {
+  private void saveCpdData(InputFile inputFile, CpdVisitor cpdVisitor) {
     List<CpdVisitor.CpdToken> cpdTokens = cpdVisitor.getCpdTokens();
     NewCpdTokens newCpdTokens = context.newCpdTokens().onFile(inputFile);
     cpdTokens.forEach(cpdToken -> newCpdTokens.addToken(
