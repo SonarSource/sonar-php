@@ -118,19 +118,28 @@ public class CpdVisitor extends PHPVisitorCheck {
 
   @Override
   public boolean scanWithoutParsing(PhpInputFileContext phpInputFileContext) {
-    CacheContext cacheContext = phpInputFileContext.cacheContext();
-    if (cacheContext != null) {
-      List<CpdToken> restoredTokens = restoreCpdTokensFromCache(phpInputFileContext);
-      if (restoredTokens != null) {
-        cpdTokens = restoredTokens;
-        return true;
-      }
+    List<CpdToken> restoredTokens = restoreCpdTokensFromCache(phpInputFileContext);
+    if (restoredTokens != null) {
+      cpdTokens = restoredTokens;
+      return true;
     }
     return false;
   }
 
+  private void storeCpdTokensInCache(PhpFile file, @Nullable CacheContext cacheContext) {
+    if (cacheContext != null && cacheContext.isCacheEnabled()) {
+      PhpWriteCache writeCache = cacheContext.getWriteCache();
+      if (writeCache != null) {
+        CpdSerializationInput input = new CpdSerializationInput(cpdTokens, cacheContext.pluginVersion());
+        SerializationResult serializationResult = CpdSerializer.toBinary(input);
+        writeCache.writeBytes(CACHE_DATA_PREFIX + file.key(), serializationResult.data());
+        writeCache.writeBytes(CACHE_STRING_TABLE_PREFIX + file.key(), serializationResult.stringTable());
+      }
+    }
+  }
+
   @CheckForNull
-  private List<CpdToken> restoreCpdTokensFromCache(PhpInputFileContext phpInputFileContext) {
+  private static List<CpdToken> restoreCpdTokensFromCache(PhpInputFileContext phpInputFileContext) {
     CacheContext cacheContext = phpInputFileContext.cacheContext();
     if (cacheContext != null) {
       PhpReadCache readCache = cacheContext.getReadCache();
@@ -144,18 +153,6 @@ public class CpdVisitor extends PHPVisitorCheck {
       }
     }
     return null;
-  }
-
-  private void storeCpdTokensInCache(PhpFile file, @Nullable CacheContext cacheContext) {
-    if (cacheContext != null && cacheContext.isCacheEnabled()) {
-      PhpWriteCache writeCache = cacheContext.getWriteCache();
-      if (writeCache != null) {
-        CpdSerializationInput input = new CpdSerializationInput(cpdTokens, cacheContext.pluginVersion());
-        SerializationResult serializationResult = CpdSerializer.toBinary(input);
-        writeCache.writeBytes(CACHE_DATA_PREFIX + file.key(), serializationResult.data());
-        writeCache.writeBytes(CACHE_STRING_TABLE_PREFIX + file.key(), serializationResult.stringTable());
-      }
-    }
   }
 
   public static class CpdToken {

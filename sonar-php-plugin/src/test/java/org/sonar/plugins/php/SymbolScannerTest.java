@@ -32,10 +32,10 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.utils.ReadWriteInMemoryCache;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 

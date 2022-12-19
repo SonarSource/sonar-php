@@ -28,7 +28,10 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 public class SymbolHighlighter {
 
-  public void highlight(SymbolTable symbolTable, NewSymbolTable newSymbolTable) {
+  private SymbolHighlighter() {
+  }
+
+  public static void highlight(SymbolTable symbolTable, NewSymbolTable newSymbolTable) {
     for (Symbol symbol : ((SymbolTableImpl) symbolTable).getSymbols()) {
       SyntaxToken token = symbol.declaration().token();
       NewSymbol newSymbol = newSymbolTable.newSymbol(token.line(), token.column(), token.endLine(), token.endColumn());

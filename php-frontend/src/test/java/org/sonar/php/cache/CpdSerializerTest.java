@@ -70,6 +70,20 @@ public class CpdSerializerTest {
   }
 
   @Test
+  public void shouldReturnsNullWhenStringTableDataCorrupted() {
+    List<CpdVisitor.CpdToken> cpdTokens = List.of(new CpdVisitor.CpdToken(3, 0, 3, 3, "try"));
+
+    SerializationResult binary = CpdSerializer.toBinary(new CpdSerializationInput(cpdTokens, PLUGIN_VERSION));
+    List<CpdVisitor.CpdToken> actual = CpdDeserializer.fromBinary(
+      new CpdDeserializationInput(
+        binary.data(),
+        corruptBit(binary.stringTable()),
+        PLUGIN_VERSION));
+
+    assertThat(actual).isNull();
+  }
+
+  @Test
   public void shouldReturnNullWhenWrongPluginVersion() {
     List<CpdVisitor.CpdToken> cpdTokens = List.of(new CpdVisitor.CpdToken(3, 0, 3, 3, "try"));
 

@@ -30,8 +30,10 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
+import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
@@ -43,6 +45,8 @@ import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.compat.PhpFileImpl;
+import org.sonar.php.highlighter.SymbolHighlighter;
+import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.CpdVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
@@ -166,8 +170,9 @@ class AnalysisScanner extends Scanner {
 
   private void computeMeasuresAndSaveCpdData(InputFile inputFile) {
     if (!inSonarLint(context)) {
-      phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
-      phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
+      saveSyntaxHighlighting(inputFile);
+      saveSymbolHighlighting(inputFile);
+
       if (inputFile.type() == InputFile.Type.MAIN) {
         saveNewFileMeasures(context,
           phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
@@ -177,6 +182,18 @@ class AnalysisScanner extends Scanner {
         saveCpdData(inputFile);
       }
     }
+  }
+
+  private void saveSyntaxHighlighting(InputFile inputFile) {
+    NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
+    SyntaxHighlighterVisitor.highlight(phpAnalyzer.currentFileTree(), highlighting);
+    highlighting.save();
+  }
+
+  private void saveSymbolHighlighting(InputFile inputFile) {
+    NewSymbolTable symbolTable = context.newSymbolTable().onFile(inputFile);
+    SymbolHighlighter.highlight(phpAnalyzer.currentFileSymbolTable(), symbolTable);
+    symbolTable.save();
   }
 
   private void saveCpdData(InputFile inputFile) {

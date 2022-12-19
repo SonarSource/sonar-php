@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -37,6 +38,9 @@ import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.utils.DummyCheck;
+import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
@@ -83,6 +87,12 @@ public class PHPAnalyzerTest {
 
     FileMeasures measures = analyzer.computeMeasures(mock(FileLinesContext.class));
     assertThat(measures.getLinesOfCodeNumber()).isEqualTo(1);
+    Set<Integer> noSonarLines = analyzer.computeNoSonarLines();
+    assertThat(noSonarLines).isEmpty();
+    CompilationUnitTree compilationUnitTree = analyzer.currentFileTree();
+    assertThat(compilationUnitTree.toString()).hasToString("<?php $a = 1;");
+    SymbolTable symbolTable = analyzer.currentFileSymbolTable();
+    assertThat(symbolTable.getSymbols(Symbol.Kind.VARIABLE).get(0).name()).isEqualTo("$a");
   }
 
   @Test
@@ -115,16 +125,6 @@ public class PHPAnalyzerTest {
     assertThat(issues.get(0).check()).isEqualTo(testCheck);
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo(DummyCheck.MESSAGE);
   }
-
-  //TODO uncomment and fix
-//  @Test
-//  public void test_cpd() throws Exception {
-//    PHPAnalyzer analyzer = createAnalyzer();
-//    PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
-//    analyzer.nextFile(file);
-//
-//    assertThat(analyzer.computeCpdTokens()).hasSize(4);
-//  }
 
   @Test
   public void terminate_call_forwarded_to_checks() throws Exception {

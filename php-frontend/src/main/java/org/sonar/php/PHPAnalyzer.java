@@ -29,15 +29,10 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
-import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.compat.PhpFileImpl;
-import org.sonar.php.highlighter.SymbolHighlighter;
-import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.CommentLineVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
@@ -132,18 +127,6 @@ public class PHPAnalyzer {
 
   public FileMeasures computeMeasures(FileLinesContext fileLinesContext) {
     return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, currentFileSymbolTable, fileLinesContext);
-  }
-
-  public NewHighlighting getSyntaxHighlighting(SensorContext context, InputFile inputFile) {
-    NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
-    SyntaxHighlighterVisitor.highlight(currentFileTree, highlighting);
-    return highlighting;
-  }
-
-  public NewSymbolTable getSymbolHighlighting(SensorContext context, InputFile inputFile) {
-    NewSymbolTable symbolTable = context.newSymbolTable().onFile(inputFile);
-    new SymbolHighlighter().highlight(currentFileSymbolTable, symbolTable);
-    return symbolTable;
   }
 
   public Set<Integer> computeNoSonarLines() {

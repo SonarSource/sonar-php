@@ -68,6 +68,7 @@ import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.utils.ReadWriteInMemoryCache;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -256,7 +257,6 @@ public class PHPSensorTest {
   public void should_read_cpd_from_cache() {
     enableCache();
     String fileName = "cpd.php";
-    String componentKey = "moduleKey:" + fileName;
 
     PHPSensor phpSensor = createSensor();
     analyseSingleFile(phpSensor, fileName);

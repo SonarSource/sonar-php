@@ -41,7 +41,7 @@ public class CacheContextImpl implements CacheContext {
   private final PhpReadCache readCache;
   private final String pluginVersion;
 
-  CacheContextImpl(boolean isCacheEnabled, @Nullable PhpWriteCache writeCache, @Nullable PhpReadCache readCache, String pluginVersion) {
+  public CacheContextImpl(boolean isCacheEnabled, @Nullable PhpWriteCache writeCache, @Nullable PhpReadCache readCache, String pluginVersion) {
     this.isCacheEnabled = isCacheEnabled;
     this.writeCache = writeCache;
     this.readCache = readCache;
