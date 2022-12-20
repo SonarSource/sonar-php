@@ -87,7 +87,7 @@ public class PHPAnalyzer {
   public void nextFile(InputFile inputFile) throws RecognitionException {
     currentFile = PhpFileImpl.create(inputFile);
     currentFileContext = new PhpInputFileContext(currentFile, workingDir, cacheContext);
-    currentFileTree = (CompilationUnitTree) statistics.time("CheckParsing", () -> parser.parse(PhpFileImpl.create(inputFile).contents()));
+    currentFileTree = (CompilationUnitTree) statistics.time("CheckParsing", () -> parser.parse(currentFile.contents()));
     currentFileSymbolTable = statistics.time("CheckSymbolTable", () -> SymbolTableImpl.create(currentFileTree, projectSymbolData, PhpFileImpl.create(inputFile)));
   }
 

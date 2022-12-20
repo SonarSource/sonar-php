@@ -119,15 +119,15 @@ class AnalysisScanner extends Scanner {
       .collect(Collectors.toList());
   }
 
-  private boolean scanFileWithoutParsing(InputFile inputFile) {
+  private boolean scanFileWithoutParsing(InputFile inputFile, CpdVisitor cpdVisitor) {
+    PhpFile pythonFile = PhpFileImpl.create(inputFile);
+    PhpInputFileContext inputFileContext = new PhpInputFileContext(pythonFile, context.fileSystem().workDir(), cacheContext);
     for (PHPCheck check : checks.all()) {
-      PhpFile pythonFile = PhpFileImpl.create(inputFile);
-      PhpInputFileContext inputFileContext = new PhpInputFileContext(pythonFile, context.fileSystem().workDir(), cacheContext);
       if (!check.scanWithoutParsing(inputFileContext)) {
         return false;
       }
     }
-    return true;
+    return cpdVisitor.scanWithoutParsing(inputFileContext);
   }
 
   @Override
@@ -138,16 +138,11 @@ class AnalysisScanner extends Scanner {
   @Override
   void scanFile(InputFile inputFile) {
     CpdVisitor cpdVisitor = new CpdVisitor();
-    PhpInputFileContext phpInputFileContext = new PhpInputFileContext(
-      PhpFileImpl.create(inputFile),
-      context.fileSystem().workDir(),
-      cacheContext);
 
     if (fileCanBeSkipped(inputFile)
-      && scanFileWithoutParsing(inputFile)
-      && cpdVisitor.scanWithoutParsing(phpInputFileContext)) {
+      && scanFileWithoutParsing(inputFile, cpdVisitor)) {
 
-      saveCpdData(inputFile, cpdVisitor);
+      saveCpdData(inputFile, cpdVisitor.getCpdTokens());
       return;
     }
 
@@ -177,8 +172,8 @@ class AnalysisScanner extends Scanner {
           phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
           inputFile);
         PhpFile phpFile = PhpFileImpl.create(inputFile);
-        cpdVisitor.analyze(phpFile, phpAnalyzer.currentFileTree(), phpAnalyzer.currentFileSymbolTable(), cacheContext);
-        saveCpdData(inputFile, cpdVisitor);
+        List<CpdVisitor.CpdToken> cpdTokens = cpdVisitor.computeCpdTokens(phpFile, phpAnalyzer.currentFileTree(), phpAnalyzer.currentFileSymbolTable(), cacheContext);
+        saveCpdData(inputFile, cpdTokens);
       }
     }
   }
@@ -195,8 +190,7 @@ class AnalysisScanner extends Scanner {
     symbolTable.save();
   }
 
-  private void saveCpdData(InputFile inputFile, CpdVisitor cpdVisitor) {
-    List<CpdVisitor.CpdToken> cpdTokens = cpdVisitor.getCpdTokens();
+  private void saveCpdData(InputFile inputFile, List<CpdVisitor.CpdToken> cpdTokens) {
     NewCpdTokens newCpdTokens = context.newCpdTokens().onFile(inputFile);
     cpdTokens.forEach(cpdToken -> newCpdTokens.addToken(
       cpdToken.line(),

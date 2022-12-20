@@ -218,16 +218,14 @@ public class CpdVisitorTest {
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), source);
     CpdVisitor cpdVisitor = new CpdVisitor();
     CompilationUnitTree tree = (CompilationUnitTree)p.parse(testFile.contents());
-    cpdVisitor.analyze(testFile, tree, SymbolTableImpl.create(tree));
-    return cpdVisitor.getCpdTokens();
+    return cpdVisitor.computeCpdTokens(testFile, tree, SymbolTableImpl.create(tree), null);
   }
 
   private List<CpdToken> scan(String source, @Nullable CacheContext cacheContext) throws IOException {
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), source);
     CpdVisitor cpdVisitor = new CpdVisitor();
     CompilationUnitTree tree = (CompilationUnitTree)p.parse(testFile.contents());
-    cpdVisitor.analyze(testFile, tree, SymbolTableImpl.create(tree), cacheContext);
-    return cpdVisitor.getCpdTokens();
+    return cpdVisitor.computeCpdTokens(testFile, tree, SymbolTableImpl.create(tree), cacheContext);
   }
 
   private static List<String> getImagesList(List<CpdToken> tokens) {

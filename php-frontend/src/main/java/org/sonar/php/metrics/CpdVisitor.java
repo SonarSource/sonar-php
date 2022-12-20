@@ -44,7 +44,6 @@ import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class CpdVisitor extends PHPVisitorCheck {
 
@@ -102,14 +101,14 @@ public class CpdVisitor extends PHPVisitorCheck {
     // do not enter (in order to avoid use statement tokens be considered in duplication detection)
   }
 
-  public List<PhpIssue> analyze(PhpFile file,
+  public List<CpdToken> computeCpdTokens(PhpFile file,
     CompilationUnitTree tree,
     SymbolTable symbolTable,
     @Nullable CacheContext cacheContext) {
 
-    List<PhpIssue> analyze = super.analyze(file, tree, symbolTable);
+    super.analyze(file, tree, symbolTable);
     storeCpdTokensInCache(file, cacheContext);
-    return analyze;
+    return cpdTokens;
   }
 
   public List<CpdToken> getCpdTokens() {
@@ -132,8 +131,12 @@ public class CpdVisitor extends PHPVisitorCheck {
       if (writeCache != null) {
         CpdSerializationInput input = new CpdSerializationInput(cpdTokens, cacheContext.pluginVersion());
         SerializationResult serializationResult = CpdSerializer.toBinary(input);
-        writeCache.writeBytes(CACHE_DATA_PREFIX + file.key(), serializationResult.data());
-        writeCache.writeBytes(CACHE_STRING_TABLE_PREFIX + file.key(), serializationResult.stringTable());
+
+        String dataKey = CACHE_DATA_PREFIX + file.key();
+        writeCache.writeBytes(dataKey, serializationResult.data());
+
+        String stringTableKey = CACHE_STRING_TABLE_PREFIX + file.key();
+        writeCache.writeBytes(stringTableKey, serializationResult.stringTable());
       }
     }
   }

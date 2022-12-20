@@ -100,8 +100,7 @@ public class CpdSerializerTest {
       CpdVisitor cpdVisitor = new CpdVisitor();
       SymbolTableImpl symbolTable = SymbolTableImpl.create(unitTree);
       InputFile inputFile = TestInputFileBuilder.create("", file.getPath()).build();
-      cpdVisitor.analyze(PhpFileImpl.create(inputFile), unitTree, symbolTable);
-      List<CpdVisitor.CpdToken> cpdTokens = cpdVisitor.getCpdTokens();
+      List<CpdVisitor.CpdToken> cpdTokens = cpdVisitor.computeCpdTokens(PhpFileImpl.create(inputFile), unitTree, symbolTable, null);
 
       SerializationResult binary = CpdSerializer.toBinary(new CpdSerializationInput(cpdTokens, PLUGIN_VERSION));
       List<CpdVisitor.CpdToken> actual = CpdDeserializer.fromBinary(new CpdDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));

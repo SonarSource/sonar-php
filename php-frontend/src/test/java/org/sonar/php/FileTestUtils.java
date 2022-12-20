@@ -47,9 +47,9 @@ public class FileTestUtils {
     return PhpFileImpl.create(getInputFile(file));
   }
 
-  public static InputFile getInputFile(File file, String contents) {
+  public static InputFile getInputFile(File file, String content) {
     try {
-      Files.write(file.toPath(), contents.getBytes(Charset.defaultCharset()));
+      Files.write(file.toPath(), content.getBytes(Charset.defaultCharset()));
     } catch (IOException e) {
       throw new IllegalStateException("Failed to write test file: " + file.getAbsolutePath());
     }
