@@ -19,42 +19,26 @@
  */
 package org.sonar.php.cache;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Nullable;
+public class CpdDeserializationInput {
+  private final byte[] cpdTokensBytes;
+  private final byte[] stringTable;
+  private final String pluginVersion;
 
-public class StringTable {
-  private final Map<String, Integer> table;
-  private final List<String> byIndex;
-
-  public StringTable() {
-    this.table = new HashMap<>();
-    this.byIndex = new ArrayList<>();
+  public CpdDeserializationInput(byte[] cpdTokensBytes, byte[] stringTable, String pluginVersion) {
+    this.cpdTokensBytes = cpdTokensBytes;
+    this.stringTable = stringTable;
+    this.pluginVersion = pluginVersion;
   }
 
-  public StringTable(List<String> byIndex) {
-    this.table = new HashMap<>();
-    this.byIndex = byIndex;
-    for (int i = 0; i < byIndex.size(); i++) {
-      table.put(byIndex.get(i), i);
-    }
+  public byte[] cpdTokensBytes() {
+    return cpdTokensBytes;
   }
 
-  public int getIndex(@Nullable String string) {
-    return table.computeIfAbsent(string, s -> {
-      byIndex.add(s);
-      return byIndex.size() - 1;
-    });
+  public byte[] stringTable() {
+    return stringTable;
   }
 
-  public String getString(int index) {
-    return byIndex.get(index);
-  }
-
-  public List<String> getStringList() {
-    return Collections.unmodifiableList(byIndex);
+  public String pluginVersion() {
+    return pluginVersion;
   }
 }

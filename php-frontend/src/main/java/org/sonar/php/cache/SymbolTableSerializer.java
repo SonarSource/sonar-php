@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.MethodSymbolData;
@@ -44,17 +45,16 @@ public class SymbolTableSerializer {
     stringTable = new StringTable();
   }
 
-  public static SerializationResult toBinary(SerializationInput serializationInput) {
+  public static SerializationResult toBinary(SymbolTableSerializationInput serializationInput) {
     SymbolTableSerializer serializer = new SymbolTableSerializer();
     return serializer.convert(serializationInput);
   }
 
-
-  private SerializationResult convert(SerializationInput serializationInput) {
+  private SerializationResult convert(SymbolTableSerializationInput symbolTableSerializationInput) {
     try (out; stream) {
-      String pluginVersion = serializationInput.pluginVersion();
+      String pluginVersion = symbolTableSerializationInput.pluginVersion();
       writeText(pluginVersion);
-      SymbolTableImpl projectSymbolData = serializationInput.symbolTable();
+      SymbolTableImpl projectSymbolData = symbolTableSerializationInput.symbolTable();
       Collection<ClassSymbolData> classSymbols = projectSymbolData.classSymbolDatas();
       writeInt(classSymbols.size());
       for (ClassSymbolData classSymbol : classSymbols) {
@@ -144,7 +144,7 @@ public class SymbolTableSerializer {
     writeBoolean(properties.hasFuncGetArgs());
   }
 
-  private void writeText(String text) throws IOException {
+  private void writeText(@Nullable String text) throws IOException {
     out.writeInt(stringTable.getIndex(text));
   }
 

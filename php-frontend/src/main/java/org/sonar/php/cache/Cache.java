@@ -39,7 +39,7 @@ public class Cache {
 
   public void write(InputFile file, SymbolTableImpl symbolTable) {
     if (cacheContext.isCacheEnabled()) {
-      SerializationInput serializationInput = new SerializationInput(symbolTable, pluginVersion);
+      SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(symbolTable, pluginVersion);
       SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
       PhpWriteCache writeCache = cacheContext.getWriteCache();
@@ -54,7 +54,7 @@ public class Cache {
       byte[] data = cacheContext.getReadCache().readBytes(cacheKey(DATA_CACHE_PREFIX, file.key()));
       byte[] stringTable = cacheContext.getReadCache().readBytes(cacheKey(STRING_TABLE_CACHE_PREFIX, file.key()));
       if (data != null && stringTable != null) {
-        return SymbolTableDeserializer.fromBinary(new DeserializationInput(data, stringTable, pluginVersion));
+        return SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(data, stringTable, pluginVersion));
       }
     }
     return null;

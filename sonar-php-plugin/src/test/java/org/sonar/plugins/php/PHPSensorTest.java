@@ -47,6 +47,7 @@ import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.api.batch.sensor.cpd.internal.TokensLine;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -67,6 +68,7 @@ import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.utils.ReadWriteInMemoryCache;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -111,6 +113,9 @@ public class PHPSensorTest {
   private static final String CUSTOM_REPOSITORY_KEY = "customKey";
   private static final String CUSTOM_RULE_KEY = "key";
 
+  private ReadWriteInMemoryCache previousCache;
+  private ReadWriteInMemoryCache nextCache;
+
   private Set<File> tempReportFiles = new HashSet<>();
 
   @org.junit.Rule
@@ -149,6 +154,32 @@ public class PHPSensorTest {
   @Before
   public void before() throws IOException {
     context.fileSystem().setWorkDir(tmpFolder.newFolder().toPath());
+    disableCache();
+  }
+
+  private void disableCache() {
+    context.setCacheEnabled(false);
+    context.setCanSkipUnchangedFiles(false);
+    previousCache = null;
+    nextCache = null;
+    context.setPreviousCache(previousCache);
+    context.setNextCache(nextCache);
+  }
+
+  private void enableCache() {
+    context.setCacheEnabled(true);
+    context.setCanSkipUnchangedFiles(true);
+    previousCache = new ReadWriteInMemoryCache();
+    nextCache = new ReadWriteInMemoryCache();
+    context.setPreviousCache(previousCache);
+    context.setNextCache(nextCache);
+  }
+
+  private void setCacheFromPreviousAnalysis() {
+    previousCache = nextCache;
+    nextCache = new ReadWriteInMemoryCache();
+    context.setPreviousCache(previousCache);
+    context.setNextCache(nextCache);
   }
 
   private PHPSensor createSensor() {
@@ -220,6 +251,42 @@ public class PHPSensorTest {
 
     List<TokensLine> tokensLines = context.cpdTokens(componentKey);
     assertThat(tokensLines).isNull();
+  }
+
+  @Test
+  public void should_read_cpd_from_cache() {
+    enableCache();
+    String fileName = "cpd.php";
+
+    PHPSensor phpSensor = createSensor();
+    analyseSingleFile(phpSensor, fileName);
+
+    setCacheFromPreviousAnalysis();
+    context.fileSystem().add(inputFile(fileName, Type.MAIN, InputFile.Status.SAME));
+    phpSensor.execute(context);
+
+    assertThat(previousCache.readKeys()).containsExactly(
+      "php.projectSymbolData.data:moduleKey:cpd.php",
+      "php.projectSymbolData.stringTable:moduleKey:cpd.php",
+      "php.cpd.data:moduleKey:cpd.php",
+      "php.cpd.stringTable:moduleKey:cpd.php"
+    );
+  }
+
+  @Test
+  public void should_store_cpd_in_cache() {
+    enableCache();
+    String fileName = "cpd.php";
+
+    PHPSensor phpSensor = createSensor();
+    analyseSingleFile(phpSensor, fileName);
+
+    assertThat(nextCache.writeKeys()).containsExactly(
+      "php.projectSymbolData.data:moduleKey:cpd.php",
+      "php.projectSymbolData.stringTable:moduleKey:cpd.php",
+      "php.cpd.data:moduleKey:cpd.php",
+      "php.cpd.stringTable:moduleKey:cpd.php"
+    );
   }
 
   @Test

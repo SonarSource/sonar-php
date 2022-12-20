@@ -19,6 +19,7 @@
  */
 package org.sonar.php.cache;
 
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -40,7 +41,7 @@ public class CacheContextImpl implements CacheContext {
   private final PhpReadCache readCache;
   private final String pluginVersion;
 
-  CacheContextImpl(boolean isCacheEnabled, PhpWriteCache writeCache, PhpReadCache readCache, String pluginVersion, String projectKey) {
+  public CacheContextImpl(boolean isCacheEnabled, @Nullable PhpWriteCache writeCache, @Nullable PhpReadCache readCache, String pluginVersion) {
     this.isCacheEnabled = isCacheEnabled;
     this.writeCache = writeCache;
     this.readCache = readCache;
@@ -49,7 +50,6 @@ public class CacheContextImpl implements CacheContext {
 
   public static CacheContextImpl of(SensorContext context) {
     String pluginVersion = getImplementationVersion(ProjectSymbolData.class);
-    String projectKey = context.project().key();
     String sonarModules = context.config().get("sonar.modules").orElse("");
     if (StringUtils.isNotBlank(sonarModules) && context.isCacheEnabled()) {
       LOG.warn("The sonar.modules is a deprecated property and should not be used anymore, it inhibits an optimized analysis");
@@ -60,10 +60,9 @@ public class CacheContextImpl implements CacheContext {
       return new CacheContextImpl(context.isCacheEnabled(),
         new PhpWriteCacheImpl(context.nextCache()),
         new PhpReadCacheImpl(context.previousCache()),
-        pluginVersion,
-        projectKey);
+        pluginVersion);
     }
-    return new CacheContextImpl(false, null, null, pluginVersion, projectKey);
+    return new CacheContextImpl(false, null, null, pluginVersion);
   }
 
   @Override

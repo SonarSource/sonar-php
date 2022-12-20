@@ -24,6 +24,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import javax.annotation.Nullable;
 
 /**
  * Use variable length encoding for integers.
@@ -48,7 +49,7 @@ public class VarLengthOutputStream implements Closeable {
     } while (value != 0);
   }
 
-  public void writeUTF(String string) throws IOException {
+  public void writeUTF(@Nullable String string) throws IOException {
     byte[] bytes;
     if (string == null) {
       bytes = "".getBytes(StandardCharsets.UTF_8);

@@ -29,17 +29,11 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
-import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.php.highlighter.SymbolHighlighter;
-import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
+import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.metrics.CommentLineVisitor;
-import org.sonar.php.metrics.CpdVisitor;
-import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -90,11 +84,11 @@ public class PHPAnalyzer {
     }
   }
 
-  public void nextFile(PhpFile file) throws RecognitionException {
-    currentFile = file;
+  public void nextFile(InputFile inputFile) throws RecognitionException {
+    currentFile = PhpFileImpl.create(inputFile);
     currentFileContext = new PhpInputFileContext(currentFile, workingDir, cacheContext);
-    currentFileTree = (CompilationUnitTree) statistics.time("CheckParsing", () -> parser.parse(file.contents()));
-    currentFileSymbolTable = statistics.time("CheckSymbolTable", () -> SymbolTableImpl.create(currentFileTree, projectSymbolData, file));
+    currentFileTree = (CompilationUnitTree) statistics.time("CheckParsing", () -> parser.parse(currentFile.contents()));
+    currentFileSymbolTable = statistics.time("CheckSymbolTable", () -> SymbolTableImpl.create(currentFileTree, projectSymbolData, PhpFileImpl.create(inputFile)));
   }
 
   public List<PhpIssue> analyze() {
@@ -135,23 +129,15 @@ public class PHPAnalyzer {
     return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, currentFileSymbolTable, fileLinesContext);
   }
 
-  public NewHighlighting getSyntaxHighlighting(SensorContext context, InputFile inputFile) {
-    NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
-    SyntaxHighlighterVisitor.highlight(currentFileTree, highlighting);
-    return highlighting;
-  }
-
-  public NewSymbolTable getSymbolHighlighting(SensorContext context, InputFile inputFile) {
-    NewSymbolTable symbolTable = context.newSymbolTable().onFile(inputFile);
-    new SymbolHighlighter().highlight(currentFileSymbolTable, symbolTable);
-    return symbolTable;
-  }
-
-  public List<CpdToken> computeCpdTokens() {
-    return new CpdVisitor().getCpdTokens(currentFile, currentFileTree, currentFileSymbolTable);
-  }
-
   public Set<Integer> computeNoSonarLines() {
     return new CommentLineVisitor(currentFileTree).noSonarLines();
+  }
+
+  public CompilationUnitTree currentFileTree() {
+    return currentFileTree;
+  }
+
+  public SymbolTable currentFileSymbolTable() {
+    return currentFileSymbolTable;
   }
 }

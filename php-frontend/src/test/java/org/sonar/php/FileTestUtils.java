@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.compat.PhpFileImpl;
@@ -43,16 +44,27 @@ public class FileTestUtils {
   }
 
   public static PhpFile getFile(File file) {
+    return PhpFileImpl.create(getInputFile(file));
+  }
+
+  public static InputFile getInputFile(File file, String content) {
+    try {
+      Files.write(file.toPath(), content.getBytes(Charset.defaultCharset()));
+    } catch (IOException e) {
+      throw new IllegalStateException("Failed to write test file: " + file.getAbsolutePath());
+    }
+    return getInputFile(file);
+  }
+
+  public static InputFile getInputFile(File file) {
     try {
       DefaultInputFile inputFile = TestInputFileBuilder.create("moduleKey", file.getName())
         .setModuleBaseDir(file.getParentFile().toPath())
         .setCharset(Charset.defaultCharset())
         .initMetadata(new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset())).build();
-      return PhpFileImpl.create(inputFile);
+      return inputFile;
     } catch (IOException e) {
       throw new IllegalStateException("Failed to create test file from: " + file.getAbsolutePath());
     }
-
   }
-
 }

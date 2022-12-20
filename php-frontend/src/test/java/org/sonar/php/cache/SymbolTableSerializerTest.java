@@ -21,13 +21,9 @@ package org.sonar.php.cache;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
@@ -35,7 +31,6 @@ import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.MethodSymbolData;
 import org.sonar.php.symbols.Parameter;
-import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.SymbolQualifiedName;
@@ -95,8 +90,8 @@ public class SymbolTableSerializerTest {
     functionSymbolDatas.add(functionSymbolData);
     SymbolTableImpl symbolTable = SymbolTableImpl.create(classSymbolDatas, functionSymbolDatas);
 
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
-    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
@@ -112,7 +107,7 @@ public class SymbolTableSerializerTest {
       List.of());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    Throwable throwable = catchThrowable(() -> SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION)));
+    Throwable throwable = catchThrowable(() -> SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION)));
 
     assertThat(throwable)
       .isInstanceOf(IllegalStateException.class)
@@ -130,7 +125,7 @@ public class SymbolTableSerializerTest {
     );
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
-    Throwable throwable = catchThrowable(() -> SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION)));
+    Throwable throwable = catchThrowable(() -> SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION)));
 
     assertThat(throwable)
       .isInstanceOf(IllegalStateException.class)
@@ -149,8 +144,8 @@ public class SymbolTableSerializerTest {
       List.of());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
-    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
@@ -166,8 +161,8 @@ public class SymbolTableSerializerTest {
       List.of());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
-    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
@@ -184,8 +179,8 @@ public class SymbolTableSerializerTest {
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
 
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
-    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
@@ -201,8 +196,8 @@ public class SymbolTableSerializerTest {
       List.of());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
-    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
     assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
   }
@@ -217,9 +212,9 @@ public class SymbolTableSerializerTest {
     );
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
     SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(
-      new DeserializationInput(
+      new SymbolTableDeserializationInput(
         binary.data(),
         corruptBit(binary.stringTable()),
         PLUGIN_VERSION
@@ -238,9 +233,9 @@ public class SymbolTableSerializerTest {
     );
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
     SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(
-      new DeserializationInput(
+      new SymbolTableDeserializationInput(
         corruptBit(binary.data()),
         binary.stringTable(),
         PLUGIN_VERSION));
@@ -259,8 +254,8 @@ public class SymbolTableSerializerTest {
       List.of());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, PLUGIN_VERSION));
-    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), "5.5.5"));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
+    SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), "5.5.5"));
 
     assertThat(actual).isNull();
   }
@@ -271,8 +266,8 @@ public class SymbolTableSerializerTest {
       CompilationUnitTree unitTree = ParsingTestUtils.parse(file);
       SymbolTableImpl symbolTable = SymbolTableImpl.create(unitTree);
 
-      SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(symbolTable, "1.2.3"));
-      SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new DeserializationInput(binary.data(), binary.stringTable(), "1.2.3"));
+      SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
+      SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
       assertThat(actual.classSymbolDatas())
         .usingRecursiveFieldByFieldElementComparator()

@@ -43,19 +43,18 @@ public class CacheTest {
   private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:" + DEFAULT_INPUT_FILE.key();
   private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:" + DEFAULT_INPUT_FILE.key();
   private static final String PLUGIN_VERSION = "1.2.3";
-  private static final String PROJECT_KEY = "projectKey";
 
   private final PhpWriteCache writeCache = mock(PhpWriteCache.class);
   private final PhpReadCache readCache = mock(PhpReadCache.class);
 
   @Test
   public void shouldWriteToCacheOnlyIfItsEnabled() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
     cache.write(DEFAULT_INPUT_FILE, data);
 
-    SerializationResult binary = SymbolTableSerializer.toBinary(new SerializationInput(data, PLUGIN_VERSION));
+    SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(data, PLUGIN_VERSION));
 
     verify(writeCache).writeBytes(CACHE_KEY_DATA, binary.data());
     verify(writeCache).writeBytes(CACHE_KEY_STRING_TABLE, binary.stringTable());
@@ -63,7 +62,7 @@ public class CacheTest {
 
   @Test
   public void shouldNotWriteToCacheIfItsDisabled() {
-    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = emptySymbolTable();
 
@@ -74,7 +73,7 @@ public class CacheTest {
 
   @Test
   public void shouldReadFromCache() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
     warmupReadCache(data);
@@ -85,12 +84,12 @@ public class CacheTest {
 
   @Test
   public void shouldReturnNullWhenDataCacheEntryDoesNotExist() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
 
 
     SymbolTableImpl data = exampleSymbolTable();
-    SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
+    SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
     when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(null);
@@ -103,11 +102,11 @@ public class CacheTest {
 
   @Test
   public void shouldReturnNullWhenStringTableCacheEntryDoesNotExist() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
 
     SymbolTableImpl data = exampleSymbolTable();
-    SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
+    SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
     when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(serializationData.data());
@@ -120,7 +119,7 @@ public class CacheTest {
 
   @Test
   public void shouldReturnNullWhenCacheDisabled() {
-    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION, PROJECT_KEY);
+    CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
     warmupReadCache(data);
@@ -131,7 +130,7 @@ public class CacheTest {
   }
 
   void warmupReadCache(SymbolTableImpl data) {
-    SerializationInput serializationInput = new SerializationInput(data, PLUGIN_VERSION);
+    SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
     when(readCache.readBytes(CACHE_KEY_DATA)).thenReturn(serializationData.data());

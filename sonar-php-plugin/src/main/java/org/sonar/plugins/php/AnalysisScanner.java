@@ -30,8 +30,10 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
+import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
@@ -43,6 +45,8 @@ import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.compat.PhpFileImpl;
+import org.sonar.php.highlighter.SymbolHighlighter;
+import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.CpdVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
@@ -70,7 +74,6 @@ class AnalysisScanner extends Scanner {
   private final CacheContext cacheContext;
   private final PHPAnalyzer phpAnalyzer;
 
-
   public AnalysisScanner(SensorContext context,
                          PHPChecks checks,
                          FileLinesContextFactory fileLinesContextFactory,
@@ -91,6 +94,7 @@ class AnalysisScanner extends Scanner {
 
     File workingDir = context.fileSystem().workDir();
     phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext);
+
   }
 
   /**
@@ -115,15 +119,15 @@ class AnalysisScanner extends Scanner {
       .collect(Collectors.toList());
   }
 
-  private boolean scanFileWithoutParsing(InputFile inputFile) {
+  private boolean scanFileWithoutParsing(InputFile inputFile, CpdVisitor cpdVisitor) {
+    PhpFile pythonFile = PhpFileImpl.create(inputFile);
+    PhpInputFileContext inputFileContext = new PhpInputFileContext(pythonFile, context.fileSystem().workDir(), cacheContext);
     for (PHPCheck check : checks.all()) {
-      PhpFile pythonFile = PhpFileImpl.create(inputFile);
-      PhpInputFileContext inputFileContext = new PhpInputFileContext(pythonFile, context.fileSystem().workDir(), cacheContext);
       if (!check.scanWithoutParsing(inputFileContext)) {
         return false;
       }
     }
-    return true;
+    return cpdVisitor.scanWithoutParsing(inputFileContext);
   }
 
   @Override
@@ -133,12 +137,17 @@ class AnalysisScanner extends Scanner {
 
   @Override
   void scanFile(InputFile inputFile) {
-    if (fileCanBeSkipped(inputFile) && scanFileWithoutParsing(inputFile)) {
+    CpdVisitor cpdVisitor = new CpdVisitor();
+
+    if (fileCanBeSkipped(inputFile)
+      && scanFileWithoutParsing(inputFile, cpdVisitor)) {
+
+      saveCpdData(inputFile, cpdVisitor.getCpdTokens());
       return;
     }
 
     try {
-      phpAnalyzer.nextFile(PhpFileImpl.create(inputFile));
+      phpAnalyzer.nextFile(inputFile);
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
@@ -147,19 +156,50 @@ class AnalysisScanner extends Scanner {
       return;
     }
 
+    computeMeasuresAndSaveCpdData(inputFile, cpdVisitor);
+
+    noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
+    saveIssues(context, inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
+  }
+
+  private void computeMeasuresAndSaveCpdData(InputFile inputFile, CpdVisitor cpdVisitor) {
     if (!inSonarLint(context)) {
-      phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
-      phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
+      saveSyntaxHighlighting(inputFile);
+      saveSymbolHighlighting(inputFile);
+
       if (inputFile.type() == InputFile.Type.MAIN) {
         saveNewFileMeasures(context,
           phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
           inputFile);
-        saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
+        PhpFile phpFile = PhpFileImpl.create(inputFile);
+        List<CpdVisitor.CpdToken> cpdTokens = cpdVisitor.computeCpdTokens(phpFile, phpAnalyzer.currentFileTree(), phpAnalyzer.currentFileSymbolTable(), cacheContext);
+        saveCpdData(inputFile, cpdTokens);
       }
     }
+  }
 
-    noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
-    saveIssues(context, inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
+  private void saveSyntaxHighlighting(InputFile inputFile) {
+    NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
+    SyntaxHighlighterVisitor.highlight(phpAnalyzer.currentFileTree(), highlighting);
+    highlighting.save();
+  }
+
+  private void saveSymbolHighlighting(InputFile inputFile) {
+    NewSymbolTable symbolTable = context.newSymbolTable().onFile(inputFile);
+    SymbolHighlighter.highlight(phpAnalyzer.currentFileSymbolTable(), symbolTable);
+    symbolTable.save();
+  }
+
+  private void saveCpdData(InputFile inputFile, List<CpdVisitor.CpdToken> cpdTokens) {
+    NewCpdTokens newCpdTokens = context.newCpdTokens().onFile(inputFile);
+    cpdTokens.forEach(cpdToken -> newCpdTokens.addToken(
+      cpdToken.line(),
+      cpdToken.column(),
+      cpdToken.endLine(),
+      cpdToken.endColumn(),
+      cpdToken.text()));
+
+    newCpdTokens.save();
   }
 
   @Override
@@ -278,20 +318,6 @@ class AnalysisScanner extends Scanner {
     if (file != null) {
       newIssue.addLocation(newLocation(file, newIssue, secondary));
     }
-  }
-
-  private static void saveCpdData(List<CpdVisitor.CpdToken> cpdTokens, InputFile inputFile, SensorContext context) {
-    NewCpdTokens newCpdTokens = context.newCpdTokens().onFile(inputFile);
-
-    cpdTokens.forEach(cpdToken -> newCpdTokens.addToken(
-      inputFile.newRange(
-        cpdToken.syntaxToken().line(),
-        cpdToken.syntaxToken().column(),
-        cpdToken.syntaxToken().endLine(),
-        cpdToken.syntaxToken().endColumn()),
-      cpdToken.image()));
-
-    newCpdTokens.save();
   }
 
   private static NewIssueLocation newLocation(InputFile inputFile, NewIssue issue, IssueLocation location) {

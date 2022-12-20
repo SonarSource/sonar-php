@@ -43,6 +43,12 @@
       <artifactId>sonar-plugin-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.sonarsource.php</groupId>
+      <artifactId>php-frontend</artifactId>
+      <classifier>tests</classifier>
+      <version>${revision}</version>
+   </dependency>
+    <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-testing-harness</artifactId>
     </dependency>

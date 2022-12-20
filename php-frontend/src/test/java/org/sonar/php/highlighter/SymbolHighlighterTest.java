@@ -142,7 +142,7 @@ public class SymbolHighlighterTest {
 
     NewSymbolTable newSymbolTable = context.newSymbolTable().onFile(inputFile);
     Tree tree = PARSER.parse(s);
-    new SymbolHighlighter().highlight(SymbolTableImpl.create((CompilationUnitTree) tree), newSymbolTable);
+    SymbolHighlighter.highlight(SymbolTableImpl.create((CompilationUnitTree) tree), newSymbolTable);
     newSymbolTable.save();
   }
 
