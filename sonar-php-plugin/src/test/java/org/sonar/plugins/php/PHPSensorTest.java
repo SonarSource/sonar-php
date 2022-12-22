@@ -46,8 +46,6 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
-import org.sonar.api.batch.sensor.Sensor;
-import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.api.batch.sensor.cpd.internal.TokensLine;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -116,7 +114,7 @@ public class PHPSensorTest {
   private ReadWriteInMemoryCache previousCache;
   private ReadWriteInMemoryCache nextCache;
 
-  private Set<File> tempReportFiles = new HashSet<>();
+  private final Set<File> tempReportFiles = new HashSet<>();
 
   @org.junit.Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder();
