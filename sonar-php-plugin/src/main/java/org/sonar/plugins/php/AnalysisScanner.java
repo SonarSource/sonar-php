@@ -73,6 +73,7 @@ class AnalysisScanner extends Scanner {
 
   private final CacheContext cacheContext;
   private final PHPAnalyzer phpAnalyzer;
+  private int numScannedWithoutParsing = 0;
 
   public AnalysisScanner(SensorContext context,
                          PHPChecks checks,
@@ -95,6 +96,17 @@ class AnalysisScanner extends Scanner {
     File workingDir = context.fileSystem().workDir();
     phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext);
 
+  }
+
+  @Override
+  void execute(List<InputFile> files) {
+    super.execute(files);
+    reportStatistics(numScannedWithoutParsing, files.size());
+  }
+
+  private static void reportStatistics(int numSkippedFiles, int numTotalFiles) {
+    LOG.info("The PHP analyzer was able to leverage cached data from previous analyses for {} out of {} files. These files were not parsed.",
+      numSkippedFiles, numTotalFiles);
   }
 
   /**
@@ -139,10 +151,9 @@ class AnalysisScanner extends Scanner {
   void scanFile(InputFile inputFile) {
     CpdVisitor cpdVisitor = new CpdVisitor();
 
-    if (fileCanBeSkipped(inputFile)
-      && scanFileWithoutParsing(inputFile, cpdVisitor)) {
-
+    if (fileCanBeSkipped(inputFile) && scanFileWithoutParsing(inputFile, cpdVisitor)) {
       saveCpdData(inputFile, cpdVisitor.getCpdTokens());
+      numScannedWithoutParsing++;
       return;
     }
 
