@@ -73,7 +73,7 @@ public class PhpPrAnalysisTest {
     ORCHESTRATOR.getServer().provisionProject(PROJECT_KEY, PROJECT_KEY);
 
     // Create and load quality profile
-    String profile = profile(INCREMENTAL_ANALYSIS_PROFILE, List.of("S1172"));
+    String profile = profile(INCREMENTAL_ANALYSIS_PROFILE, List.of("S1172", "S1808"));
     loadProfile(ORCHESTRATOR, profile);
     ORCHESTRATOR.getServer().associateProjectToQualityProfile(PROJECT_KEY, "php", INCREMENTAL_ANALYSIS_PROFILE);
   }
@@ -82,8 +82,9 @@ public class PhpPrAnalysisTest {
   public static Collection<Object[]> data() {
     return List.of(new Object[][] {
       // {<scenario>, <total files>, <skipped>, <deleted>}
-      {"newFile", 3, 2, Collections.emptyList()},
-      {"deletedFile", 1, 0, List.of("AbstractController.php")}
+      {"added", 3, 2, Collections.emptyList()},
+      {"changed", 2, 1, Collections.emptyList()},
+      {"deleted", 1, 1, List.of("AbstractController.php")}
     });
   }
 
@@ -132,9 +133,9 @@ public class PhpPrAnalysisTest {
   }
 
   private void analyzeAndAssertBaseCommit(File tempFile, File litsDifferencesFile) throws IOException {
-    FileUtils.copyDirectory(new File("../sources_pr_analysis", "baseCommit"), tempFile);
+    FileUtils.copyDirectory(new File("../sources_pr_analysis", "base"), tempFile);
 
-    SonarScanner build = RulingHelper.prepareScanner(tempFile, PROJECT_KEY, "expected_pr_analysis/baseCommit", litsDifferencesFile);
+    SonarScanner build = RulingHelper.prepareScanner(tempFile, PROJECT_KEY, "expected_pr_analysis/base", litsDifferencesFile);
     ORCHESTRATOR.executeBuild(build);
 
     String litsDifferences = new String(Files.readAllBytes(litsDifferencesFile.toPath()), UTF_8);

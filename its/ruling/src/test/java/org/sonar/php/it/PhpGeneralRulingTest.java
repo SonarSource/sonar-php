@@ -69,7 +69,9 @@ public class PhpGeneralRulingTest {
     File projectLocation = FileLocation.of("../sources/src").getFile();
     SonarScanner build = RulingHelper.prepareScanner(projectLocation, PROJECT_KEY, "expected", litsDifferencesFile)
       .setProperty("sonar.import_unknown_files", "true")
-      .setProperty("sonar.php.duration.statistics", "true");
+      .setProperty("sonar.php.duration.statistics", "true")
+      .setProperty("sonar.cpd.exclusions", "**/*")
+      .setProperty("sonar.scm.disabled", "true");
 
     ORCHESTRATOR.executeBuild(build);
 
