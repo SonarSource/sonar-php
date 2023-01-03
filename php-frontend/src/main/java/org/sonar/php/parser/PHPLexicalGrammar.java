@@ -50,6 +50,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   TRAIT_USE_STATEMENT,
 
   NAMESPACE_NAME,
+  NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD,
+  NS_SEPARATOR_WITHOUT_SPACE,
   INTERFACE_LIST,
   PARAMETER_LIST,
   PARAMETER,
@@ -267,8 +269,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   FROM,
 
   ATTRIBUTE,
-  ATTRIBUTE_GROUP
-  ;
+  ATTRIBUTE_GROUP;
 
   public static LexerlessGrammar createGrammar() {
     return createGrammarBuilder().build();
@@ -312,6 +313,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(VARIABLE_IDENTIFIER).is(b.regexp(LexicalConstant.VAR_IDENTIFIER));
     b.rule(IDENTIFIER).is(SPACING, b.firstOf(b.sequence(b.nextNot(KEYWORDS), b.regexp(LexicalConstant.IDENTIFIER)), b.regexp("(?i)match")));
     b.rule(IDENTIFIER_OR_KEYWORD).is(SPACING, b.regexp(LexicalConstant.IDENTIFIER));
+    b.rule(NS_SEPARATOR_WITHOUT_SPACE).is(b.regexp("\\\\"));
 
     // Tags & Inline HTML
     b.rule(FILE_OPENING_TAG).is(SPACING, b.regexp(LexicalConstant.PHP_START_TAG)).skip();

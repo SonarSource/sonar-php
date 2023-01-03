@@ -30,7 +30,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class NamespaceNameTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void absolute() throws Exception {
+  public void simple_absolute_namespace() {
+    NamespaceNameTree tree = parse("\\a", PHPLexicalGrammar.NAMESPACE_NAME);
+    assertThat(tree.namespaces()).isEmpty();
+    assertThat(tree.name().text()).isEqualTo("a");
+  }
+
+  @Test
+  public void absolute_namespace() {
     NamespaceNameTree tree = parse("\\ns1\\ns2\\name", PHPLexicalGrammar.NAMESPACE_NAME);
 
     assertThat(tree.is(Kind.NAMESPACE_NAME)).isTrue();
@@ -41,7 +48,7 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void relative() throws Exception {
+  public void relative_namespace() {
     NamespaceNameTree tree = parse("ns1\\ns2\\name", PHPLexicalGrammar.NAMESPACE_NAME);
 
     assertThat(tree.is(Kind.NAMESPACE_NAME)).isTrue();
@@ -52,13 +59,16 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_namespace_keyword() throws Exception {
-    NamespaceNameTree tree = parse("namespace\\subNS\\name", PHPLexicalGrammar.NAMESPACE_NAME);
-    assertThat(tree.namespaces().get(0).text()).isEqualTo("namespace");
+  public void relative_namespace_with_keyword() {
+    NamespaceNameTree tree = parse("foo\\while\\if", PHPLexicalGrammar.NAMESPACE_NAME);
+    assertThat(tree.namespaces()).hasSize(2);
+    assertThat(tree.name().text()).isEqualTo("if");
   }
 
   @Test
-  public void test_simple() throws Exception {
-    parse("\\a", PHPLexicalGrammar.NAMESPACE_NAME);
+  public void absolute_namespace_with_keyword() {
+    NamespaceNameTree tree = parse("\\for\\while\\if", PHPLexicalGrammar.NAMESPACE_NAME);
+    assertThat(tree.namespaces()).hasSize(2);
+    assertThat(tree.name().text()).isEqualTo("if");
   }
 }

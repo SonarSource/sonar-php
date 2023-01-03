@@ -825,14 +825,19 @@ public class TreeFactory {
     return new TypeTreeImpl(questionMarkToken.orNull(), typeName);
   }
 
-  public NamespaceNameTree namespaceName(List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> tuples) {
-    NameIdentifierTree lastPartIfOneTuple = new NameIdentifierTreeImpl(tuples.get(0).second());
-    return namespaceName(lastPartIfOneTuple, tuples.get(0).first(), tuples.subList(1, tuples.size()));
+  public NamespaceNameTree namespaceName(Tuple<InternalSyntaxToken, InternalSyntaxToken> firstTuple, Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional) {
+    NameIdentifierTree lastPartIfOneTuple = new NameIdentifierTreeImpl(firstTuple.second());
+    return namespaceName(lastPartIfOneTuple, firstTuple.first(), listOptional.or(Collections.emptyList()));
   }
 
-  public NamespaceNameTree namespaceName(InternalSyntaxToken token, Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional) {
-    NameIdentifierTree lastPartIfNoTuples = new NameIdentifierTreeImpl(token);
-    return namespaceName(lastPartIfNoTuples, null, listOptional.or(Collections.<Tuple<InternalSyntaxToken,InternalSyntaxToken>>emptyList()));
+  public NamespaceNameTree namespaceName(InternalSyntaxToken token, List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> list) {
+    NameIdentifierTree name = new NameIdentifierTreeImpl(token);
+    return namespaceName(name, null, list);
+  }
+
+  // Single name namespace names with keywords are not allowed as primary expression
+  public NamespaceNameTree namespaceName(InternalSyntaxToken token) {
+    return namespaceName(new NameIdentifierTreeImpl(token), null, Collections.emptyList());
   }
 
   private static NamespaceNameTree namespaceName(

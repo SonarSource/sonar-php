@@ -36,8 +36,9 @@ public class NamespaceNameTest {
       .matches("namespace\\NS")
       .matches("namespace\\NS1\\NS2\\Name")
 
+      .notMatches("\\Foo  \\Bar")
+      .notMatches("new \\Foo")
       .notMatches("\\Foo\\")
-      .notMatches("namespace\\namespace\\Name")
       .notMatches("namespace\\\\NS");
   }
 

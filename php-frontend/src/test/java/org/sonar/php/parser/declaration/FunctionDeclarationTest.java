@@ -43,6 +43,8 @@ public class FunctionDeclarationTest {
       // readonly is a keyword, but it can be used as a function name
       .matches("function readonly() {}")
       .matches("function READONLY() {}")
+      .matches("function f(var\\foo $prop) {}")
+      .notMatches("function f(var $prop) {}")
       .notMatches("function ABSTRACT() {}")
       .notMatches("function __HALT_COMPILER() {}")
       .notMatches("function abstract() {}")

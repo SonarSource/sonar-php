@@ -235,15 +235,28 @@ public class PHPGrammar {
   public NamespaceNameTree NAMESPACE_NAME() {
     return b.<NamespaceNameTree>nonterminal(PHPLexicalGrammar.NAMESPACE_NAME).is(
       b.firstOf(
+        NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD(),
         f.namespaceName(
-          b.oneOrMore(f.newTuple(
+          b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD))));
+  }
+
+  public NamespaceNameTree NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD() {
+    return b.<NamespaceNameTree>nonterminal(PHPLexicalGrammar.NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD).is(
+      b.firstOf(
+        f.namespaceName(
+          f.newTuple(
             b.token(PHPPunctuator.NS_SEPARATOR),
-            b.token(PHPLexicalGrammar.IDENTIFIER)))),
-        f.namespaceName(
-          b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER), b.token(PHPKeyword.NAMESPACE)),
+            b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD)),
           b.zeroOrMore(f.newTuple(
-            b.token(PHPPunctuator.NS_SEPARATOR),
-            b.token(PHPLexicalGrammar.IDENTIFIER))))));
+            b.token(PHPLexicalGrammar.NS_SEPARATOR_WITHOUT_SPACE),
+            b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD)))),
+        f.namespaceName(
+          b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD),
+          b.oneOrMore(f.newTuple(
+            b.token(PHPLexicalGrammar.NS_SEPARATOR_WITHOUT_SPACE),
+            b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD)))),
+        f.namespaceName(
+          b.token(PHPLexicalGrammar.IDENTIFIER))));
   }
 
   public UseClauseTree GROUP_USE_CLAUSE() {
@@ -568,7 +581,7 @@ public class PHPGrammar {
           b.token(PHPLexicalGrammar.FLOAT),
           b.token(PHPLexicalGrammar.INT),
           b.token(PHPLexicalGrammar.STRING))),
-        f.classNamespaceName(NAMESPACE_NAME())
+        f.classNamespaceName(NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD())
       ));
   }
 
@@ -1044,8 +1057,8 @@ public class PHPGrammar {
       f.catchBlock(
         b.token(PHPKeyword.CATCH),
         b.token(PHPPunctuator.LPARENTHESIS),
-        f.classNamespaceName(NAMESPACE_NAME()),
-        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), f.classNamespaceName(NAMESPACE_NAME()))),
+        f.classNamespaceName(NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD()),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), f.classNamespaceName(NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD()))),
         b.optional(b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER)),
         b.token(PHPPunctuator.RPARENTHESIS),
         BLOCK()));
@@ -1580,7 +1593,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.PRIMARY_EXPRESSION).is(
       b.firstOf(
         f.newStaticIdentifier(b.token(STATIC)),
-        NAMESPACE_NAME(),
+        NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD(),
         VARIABLE_WITHOUT_OBJECTS(),
         PARENTHESIZED_EXPRESSION()));
   }
