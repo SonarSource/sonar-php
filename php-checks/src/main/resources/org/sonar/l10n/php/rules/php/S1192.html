@@ -4,7 +4,7 @@
 <p>With the default threshold of 3:</p>
 <pre>
 function run() {
-  prepare('this is a duplicate'); // Non-Compliant - 'this is a duplicate' is duplicated 3 times
+  prepare('this is a duplicate'); // Noncompliant - 'this is a duplicate' is duplicated 3 times
   execute('this is a duplicate');
   release('this is a duplicate');
 }
@@ -26,6 +26,6 @@ function run() {
   <li> strings with only letters, numbers, underscores, hyphens and periods </li>
 </ul>
 <pre>
-$severity = $request-&gt;getParam('severity-score');{code}
+$severity = $request-&gt;getParam('severity-score');
 </pre>
 
