@@ -33,6 +33,8 @@ public class NamespaceStatementTest {
       .matches("namespace NS {}")
       .matches("namespace {}")
       .matches("namespace NS\\SubLevel;")
+      .matches("namespace if;")
+      .matches("namespace for\\while;")
 
       .notMatches("namespace;");
   }

@@ -826,13 +826,8 @@ public class TreeFactory {
   }
 
   public NamespaceNameTree namespaceName(Tuple<InternalSyntaxToken, InternalSyntaxToken> firstTuple, Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional) {
-    List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> tuples = new ArrayList<>();
-    tuples.add(firstTuple);
-    if (listOptional.isPresent()) {
-      tuples.addAll(listOptional.get());
-    }
-    NameIdentifierTree lastPartIfOneTuple = new NameIdentifierTreeImpl(tuples.get(0).second());
-    return namespaceName(lastPartIfOneTuple, tuples.get(0).first(), tuples.subList(1, tuples.size()));
+    NameIdentifierTree lastPartIfOneTuple = new NameIdentifierTreeImpl(firstTuple.second());
+    return namespaceName(lastPartIfOneTuple, firstTuple.first(), listOptional.or(Collections.emptyList()));
   }
 
   public NamespaceNameTree namespaceName(InternalSyntaxToken token, List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> list) {
