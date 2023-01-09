@@ -55,4 +55,16 @@ public class HashProviderTest {
 
     assertThat(hash).isEqualTo("38491341469434520286006021855476626548128507421389423066319086850845792271303");
   }
+
+  @Test
+  public void shouldReturnsNullWhenFileDoesntExist() {
+    File file = new File("don_not_exist_file.php");
+    DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
+      .setCharset(StandardCharsets.UTF_8)
+      .build();
+
+    String hash = HashProvider.hash(inputFile);
+
+    assertThat(hash).isNull();
+  }
 }

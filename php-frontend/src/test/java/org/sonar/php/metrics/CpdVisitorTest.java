@@ -27,10 +27,13 @@ import javax.annotation.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.cache.PhpReadCacheImpl;
 import org.sonar.php.cache.PhpWriteCacheImpl;
+import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
@@ -42,6 +45,7 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class CpdVisitorTest {
 
@@ -136,6 +140,26 @@ public class CpdVisitorTest {
   }
 
   @Test
+  public void should_not_store_cpd_in_cache_when_no_file_content() throws IOException {
+    ReadWriteInMemoryCache writeCache = new ReadWriteInMemoryCache();
+    CacheContext cacheContext = new CacheContextImpl(true,
+      new PhpWriteCacheImpl(writeCache),
+      new PhpReadCacheImpl(new ReadWriteInMemoryCache()),
+      "1.2.3");
+    InputFile file = new TestInputFileBuilder("projectKey", "do_not_exist.php")
+      .build();
+    PhpFile testFile = PhpFileImpl.create(file);
+    CpdVisitor cpdVisitor = new CpdVisitor();
+    String contents = FileTestUtils.getFile(tempFolder.newFile(), EXAMPLE_CODE).contents();
+    CompilationUnitTree tree = (CompilationUnitTree) p.parse(contents);
+
+    Throwable throwable = catchThrowable(() -> cpdVisitor.computeCpdTokens(testFile, tree, SymbolTableImpl.create(tree), cacheContext));
+
+    assertThat(throwable).isInstanceOf(RuntimeException.class);
+    assertThat(writeCache.writeKeys()).isEmpty();
+  }
+
+  @Test
   public void should_restore_from_cache() throws IOException {
     CpdVisitor cpdVisitor = new CpdVisitor();
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), EXAMPLE_CODE);
@@ -213,6 +237,25 @@ public class CpdVisitorTest {
     boolean actual = cpdVisitor.scanWithoutParsing(fileContext);
 
     assertThat(actual).isFalse();
+  }
+
+  @Test
+  public void should_restore_from_cache_when_no_content() throws IOException {
+    CpdVisitor cpdVisitor = new CpdVisitor();
+    InputFile file = new TestInputFileBuilder("projectKey", "do_not_exist.php")
+      .build();
+    PhpFile testFile = PhpFileImpl.create(file);
+    ReadWriteInMemoryCache readCache = new ReadWriteInMemoryCache();
+    CacheContext cacheContext = new CacheContextImpl(true,
+      new PhpWriteCacheImpl(new ReadWriteInMemoryCache()),
+      new PhpReadCacheImpl(readCache),
+      "1.2.3");
+    PhpInputFileContext fileContext = new PhpInputFileContext(testFile, tempFolder.getRoot(), cacheContext);
+
+    Throwable throwable = catchThrowable(() -> cpdVisitor.scanWithoutParsing(fileContext));
+
+    assertThat(throwable).isInstanceOf(RuntimeException.class);
+    assertThat(readCache.readKeys()).isEmpty();
   }
 
   private List<CpdToken> scan(String source) throws IOException {

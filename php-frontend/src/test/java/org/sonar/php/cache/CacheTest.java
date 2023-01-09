@@ -22,6 +22,7 @@ package org.sonar.php.cache;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.LocationInFileImpl;
@@ -129,6 +130,30 @@ public class CacheTest {
     assertThat(actual).isNull();
   }
 
+  @Test
+  public void shouldNotWriteToCacheWhenNoContent() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+    Cache cache = new Cache(context);
+    SymbolTableImpl data = exampleSymbolTable();
+
+    cache.write(notExistingFile(), data);
+
+    verifyZeroInteractions(writeCache);
+  }
+
+  @Test
+  public void shouldNotReadFromCacheWhenNoContent() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+    Cache cache = new Cache(context);
+    SymbolTableImpl data = exampleSymbolTable();
+    warmupReadCache(data);
+
+    SymbolTableImpl actual = cache.read(notExistingFile());
+
+    assertThat(actual).isNull();
+    verifyZeroInteractions(readCache);
+  }
+
   void warmupReadCache(SymbolTableImpl data) {
     SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
@@ -154,6 +179,11 @@ public class CacheTest {
   private static InputFile inputFile(String content) {
     return new TestInputFileBuilder("projectKey", "symbols/symbolTable.php")
       .setContents(content)
+      .build();
+  }
+
+  private static DefaultInputFile notExistingFile() {
+    return new TestInputFileBuilder("projectKey", "do_not_exist.php")
       .build();
   }
 }
