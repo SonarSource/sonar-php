@@ -40,8 +40,8 @@ import static org.mockito.Mockito.when;
 public class CacheTest {
 
   private static final InputFile DEFAULT_INPUT_FILE = inputFile("default");
-  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:" + DEFAULT_INPUT_FILE.key();
-  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:" + DEFAULT_INPUT_FILE.key();
+  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:" + DEFAULT_INPUT_FILE.key() + ":25175684819567447236028535606709408689196170707889726761316626252728215038095";
+  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:" + DEFAULT_INPUT_FILE.key() + ":25175684819567447236028535606709408689196170707889726761316626252728215038095";
   private static final String PLUGIN_VERSION = "1.2.3";
 
   private final PhpWriteCache writeCache = mock(PhpWriteCache.class);
