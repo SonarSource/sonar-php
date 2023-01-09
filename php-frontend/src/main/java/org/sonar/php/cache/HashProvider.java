@@ -32,33 +32,30 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 public class HashProvider {
   private static final Logger LOG = Loggers.get(HashProvider.class);
 
-  private static MessageDigest sha256;
-
-  static {
-    try {
-      sha256 = MessageDigest.getInstance("SHA-256");
-    } catch (NoSuchAlgorithmException e) {
-      LOG.warn("Not found SHA-256 algorithm for hash computation for cache entries");
-    }
-  }
-
   private HashProvider() {
   }
 
   public static String hash(InputFile file) {
     try {
       String content = file.contents();
+      MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
       byte[] digest = sha256.digest(content.getBytes(StandardCharsets.UTF_8));
       return new BigInteger(digest).toString();
-    } catch (IOException e) {
-      LOG.error("Can't read content of " + file.filename(), e);
+    } catch (NoSuchAlgorithmException | IOException e) {
+      LOG.error("Error calculation hash for: " + file.filename(), e);
     }
     return null;
   }
 
   public static String hash(PhpFile file) {
-    String content = file.contents();
-    byte[] digest = sha256.digest(content.getBytes(StandardCharsets.UTF_8));
-    return new BigInteger(digest).toString();
+    try {
+      String content = file.contents();
+      MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+      byte[] digest = sha256.digest(content.getBytes(StandardCharsets.UTF_8));
+      return new BigInteger(digest).toString();
+    } catch (NoSuchAlgorithmException e) {
+      LOG.error("Error calculation hash for: " + file.filename(), e);
+    }
+    return null;
   }
 }
