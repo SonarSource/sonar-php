@@ -53,8 +53,8 @@ public class HashProvider {
       return hash(file.contents(), file.filename());
     } catch (RuntimeException e) {
       LOG.error(ERROR_MESSAGE + file.filename(), e);
-      return null;
     }
+    return null;
   }
 
   private static String hash(String content, String filename) {

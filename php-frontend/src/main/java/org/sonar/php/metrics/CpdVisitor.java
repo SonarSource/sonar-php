@@ -145,6 +145,11 @@ public class CpdVisitor extends PHPVisitorCheck {
     }
   }
 
+  /**
+   * This method try to read a CPD (Copy-Paste Detection) tokens from cache, if it's available.
+   * The hash of the file content is stored as a part of the key in the cache.
+   * If there is a data in the cache and deserialization is successful, there is no need to recreate CPD tokens.
+   */
   @CheckForNull
   private static List<CpdToken> restoreCpdTokensFromCache(PhpInputFileContext phpInputFileContext) {
     CacheContext cacheContext = phpInputFileContext.cacheContext();
