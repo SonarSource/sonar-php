@@ -153,9 +153,8 @@ public class CpdVisitorTest {
     String contents = FileTestUtils.getFile(tempFolder.newFile(), EXAMPLE_CODE).contents();
     CompilationUnitTree tree = (CompilationUnitTree) p.parse(contents);
 
-    Throwable throwable = catchThrowable(() -> cpdVisitor.computeCpdTokens(testFile, tree, SymbolTableImpl.create(tree), cacheContext));
+    cpdVisitor.computeCpdTokens(testFile, tree, SymbolTableImpl.create(tree), cacheContext);
 
-    assertThat(throwable).isInstanceOf(RuntimeException.class);
     assertThat(writeCache.writeKeys()).isEmpty();
   }
 
@@ -240,7 +239,7 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void should_restore_from_cache_when_no_content() {
+  public void should_not_restore_from_cache_when_no_content() {
     CpdVisitor cpdVisitor = new CpdVisitor();
     InputFile file = new TestInputFileBuilder("projectKey", "do_not_exist.php")
       .build();
@@ -252,9 +251,8 @@ public class CpdVisitorTest {
       "1.2.3");
     PhpInputFileContext fileContext = new PhpInputFileContext(testFile, tempFolder.getRoot(), cacheContext);
 
-    Throwable throwable = catchThrowable(() -> cpdVisitor.scanWithoutParsing(fileContext));
+    cpdVisitor.scanWithoutParsing(fileContext);
 
-    assertThat(throwable).isInstanceOf(RuntimeException.class);
     assertThat(readCache.readKeys()).isEmpty();
   }
 

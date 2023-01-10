@@ -69,6 +69,18 @@ public class HashProviderTest {
   }
 
   @Test
+  public void shouldReturnsNullWhenPhpFileDoesntExist() {
+    File file = new File("do_not_exist_file.php");
+    DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
+      .setCharset(StandardCharsets.UTF_8)
+      .build();
+
+    String hash = HashProvider.hash(PhpFileImpl.create(inputFile));
+
+    assertThat(hash).isNull();
+  }
+
+  @Test
   public void shouldReturnHashForEmptyFile() {
     File file = new File("empty.php");
     DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())

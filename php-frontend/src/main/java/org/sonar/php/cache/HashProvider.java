@@ -32,6 +32,7 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class HashProvider {
   private static final Logger LOG = Loggers.get(HashProvider.class);
+  private static final String ERROR_MESSAGE = "Error calculation hash for: ";
 
   private HashProvider() {
   }
@@ -41,14 +42,19 @@ public class HashProvider {
     try {
       return hash(file.contents(), file.filename());
     } catch (IOException e) {
-      LOG.error("Error calculation hash for: " + file.filename(), e);
+      LOG.error(ERROR_MESSAGE + file.filename(), e);
     }
     return null;
   }
 
   @CheckForNull
   public static String hash(PhpFile file) {
-    return hash(file.contents(), file.filename());
+    try {
+      return hash(file.contents(), file.filename());
+    } catch (RuntimeException e) {
+      LOG.error(ERROR_MESSAGE + file.filename(), e);
+      return null;
+    }
   }
 
   private static String hash(String content, String filename) {
@@ -57,7 +63,7 @@ public class HashProvider {
       byte[] digest = sha256.digest(content.getBytes(StandardCharsets.UTF_8));
       return new BigInteger(digest).toString();
     } catch (NoSuchAlgorithmException e) {
-      LOG.error("Error calculation hash for: " + filename, e);
+      LOG.error(ERROR_MESSAGE + filename, e);
     }
     return null;
   }
