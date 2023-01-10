@@ -24,6 +24,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import javax.annotation.CheckForNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -35,26 +36,28 @@ public class HashProvider {
   private HashProvider() {
   }
 
+  @CheckForNull
   public static String hash(InputFile file) {
     try {
-      String content = file.contents();
-      MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-      byte[] digest = sha256.digest(content.getBytes(StandardCharsets.UTF_8));
-      return new BigInteger(digest).toString();
-    } catch (NoSuchAlgorithmException | IOException e) {
+      return hash(file.contents(), file.filename());
+    } catch (IOException e) {
       LOG.error("Error calculation hash for: " + file.filename(), e);
     }
     return null;
   }
 
+  @CheckForNull
   public static String hash(PhpFile file) {
+    return hash(file.contents(), file.filename());
+  }
+
+  private static String hash(String content, String filename) {
     try {
-      String content = file.contents();
       MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
       byte[] digest = sha256.digest(content.getBytes(StandardCharsets.UTF_8));
       return new BigInteger(digest).toString();
     } catch (NoSuchAlgorithmException e) {
-      LOG.error("Error calculation hash for: " + file.filename(), e);
+      LOG.error("Error calculation hash for: " + filename, e);
     }
     return null;
   }

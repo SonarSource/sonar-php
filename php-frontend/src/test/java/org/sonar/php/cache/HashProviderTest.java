@@ -58,7 +58,7 @@ public class HashProviderTest {
 
   @Test
   public void shouldReturnsNullWhenFileDoesntExist() {
-    File file = new File("don_not_exist_file.php");
+    File file = new File("do_not_exist_file.php");
     DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
       .setCharset(StandardCharsets.UTF_8)
       .build();
@@ -66,5 +66,18 @@ public class HashProviderTest {
     String hash = HashProvider.hash(inputFile);
 
     assertThat(hash).isNull();
+  }
+
+  @Test
+  public void shouldReturnHashForEmptyFile() {
+    File file = new File("empty.php");
+    DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
+      .setCharset(StandardCharsets.UTF_8)
+      .setContents("")
+      .build();
+
+    String hash = HashProvider.hash(inputFile);
+
+    assertThat(hash).isEqualTo("-12804752987762098394035772686106585063470084017442529046078187006797464553387");
   }
 }

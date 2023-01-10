@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.cache.CpdDeserializationInput;
 import org.sonar.php.cache.CpdDeserializer;
 import org.sonar.php.cache.CpdSerializationInput;
@@ -135,7 +134,7 @@ public class CpdVisitor extends PHPVisitorCheck {
         SerializationResult serializationResult = CpdSerializer.toBinary(input);
 
         String hash = HashProvider.hash(file);
-        if(StringUtils.isNotBlank(hash)) {
+        if(hash != null) {
           String dataKey = cacheKey(CACHE_DATA_PREFIX, file, hash);
           writeCache.writeBytes(dataKey, serializationResult.data());
 
@@ -153,7 +152,7 @@ public class CpdVisitor extends PHPVisitorCheck {
       PhpReadCache readCache = cacheContext.getReadCache();
       if (readCache != null) {
         String hash = HashProvider.hash(phpInputFileContext.phpFile());
-        if(StringUtils.isNotBlank(hash)) {
+        if(hash != null) {
           String dataKey = cacheKey(CACHE_DATA_PREFIX, phpInputFileContext.phpFile(), hash);
           byte[] dataBytes = readCache.readBytes(dataKey);
           String stringTableKey = cacheKey(CACHE_STRING_TABLE_PREFIX, phpInputFileContext.phpFile(), hash);

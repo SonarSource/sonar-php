@@ -91,7 +91,7 @@ import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_
 
 public class PHPSensorTest {
 
-  private static final String CDP_PHP_SUFFIX = ":-48105726093887243531901456656006067184643440204539543308932903788567430402130";
+  private static final String CPD_PHP_SUFFIX = ":-48105726093887243531901456656006067184643440204539543308932903788567430402130";
 
   private static final Version VERSION_7_9 = Version.create(7, 9);
   private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(VERSION_7_9);
@@ -247,10 +247,10 @@ public class PHPSensorTest {
     phpSensor.execute(context);
 
     assertThat(previousCache.readKeys()).containsExactly(
-      "php.projectSymbolData.data:moduleKey:cpd.php" + CDP_PHP_SUFFIX,
-      "php.projectSymbolData.stringTable:moduleKey:cpd.php" + CDP_PHP_SUFFIX,
-      "php.cpd.data:moduleKey:cpd.php" + CDP_PHP_SUFFIX,
-      "php.cpd.stringTable:moduleKey:cpd.php" + CDP_PHP_SUFFIX
+      "php.projectSymbolData.data:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
+      "php.projectSymbolData.stringTable:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
+      "php.cpd.data:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
+      "php.cpd.stringTable:moduleKey:cpd.php" + CPD_PHP_SUFFIX
     );
   }
 
@@ -263,10 +263,10 @@ public class PHPSensorTest {
     analyseSingleFile(phpSensor, fileName);
 
     assertThat(nextCache.writeKeys()).containsExactly(
-      "php.projectSymbolData.data:moduleKey:cpd.php" + CDP_PHP_SUFFIX,
-      "php.projectSymbolData.stringTable:moduleKey:cpd.php" + CDP_PHP_SUFFIX,
-      "php.cpd.data:moduleKey:cpd.php" + CDP_PHP_SUFFIX,
-      "php.cpd.stringTable:moduleKey:cpd.php" + CDP_PHP_SUFFIX
+      "php.projectSymbolData.data:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
+      "php.projectSymbolData.stringTable:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
+      "php.cpd.data:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
+      "php.cpd.stringTable:moduleKey:cpd.php" + CPD_PHP_SUFFIX
     );
   }
 
