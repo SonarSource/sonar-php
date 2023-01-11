@@ -69,21 +69,21 @@ define( 'FORCE_SSL_LOGIN', false); // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$url = "https://example.com"; // Compliant
-$url = "sftp://anonymous@example.com"; // Compliant
-$url = "ssh://anonymous@example.com"; // Compliant
+$url = "https://example.com";
+$url = "sftp://anonymous@example.com";
+$url = "ssh://anonymous@example.com";
 
-$con = ftp_ssl_connect('example.com'); // Compliant
+$con = ftp_ssl_connect('example.com');
 
 $trans = (new Swift_SmtpTransport('smtp.example.org', 1234))
-  -&gt;setEncryption('tls') // Compliant
+  -&gt;setEncryption('tls')
 ;
 
 $mailer = new PHPMailer(true);
-$mailer-&gt;SMTPSecure = 'tls'; // Compliant
+$mailer-&gt;SMTPSecure = 'tls';
 
-define( 'FORCE_SSL_ADMIN', true); // Compliant
-define( 'FORCE_SSL_LOGIN', true); // Compliant
+define( 'FORCE_SSL_ADMIN', true);
+define( 'FORCE_SSL_LOGIN', true);
 </pre>
 <h2>Exceptions</h2>
 <p>No issue is reported for the following cases because they are not considered sensitive:</p>
