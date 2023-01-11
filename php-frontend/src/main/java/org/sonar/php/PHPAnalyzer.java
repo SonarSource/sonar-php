@@ -88,7 +88,7 @@ public class PHPAnalyzer {
     currentFile = PhpFileImpl.create(inputFile);
     currentFileContext = new PhpInputFileContext(currentFile, workingDir, cacheContext);
     currentFileTree = (CompilationUnitTree) statistics.time("CheckParsing", () -> parser.parse(currentFile.contents()));
-    currentFileSymbolTable = statistics.time("CheckSymbolTable", () -> SymbolTableImpl.create(currentFileTree, projectSymbolData, PhpFileImpl.create(inputFile)));
+    currentFileSymbolTable = statistics.time("CheckSymbolTable", () -> SymbolTableImpl.create(currentFileTree, projectSymbolData, currentFile));
   }
 
   public List<PhpIssue> analyze() {

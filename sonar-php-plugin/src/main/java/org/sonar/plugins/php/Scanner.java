@@ -85,8 +85,11 @@ abstract class Scanner {
     return !(inSonarLint(context)) &&
       (context.canSkipUnchangedFiles() || context.config().getBoolean(SONAR_CAN_SKIP_UNCHANGED_FILES_KEY).orElse(false));
   }
+
+  // This method can be overwrite and may need a file as argument
+  @SuppressWarnings("java:S1172")
   protected boolean fileCanBeSkipped(InputFile file) {
-    return optimizedAnalysis && file.status() != null && file.status().equals(InputFile.Status.SAME);
+    return optimizedAnalysis;
   }
 
   private void processFile(InputFile file) {

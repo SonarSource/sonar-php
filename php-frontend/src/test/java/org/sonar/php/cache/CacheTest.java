@@ -22,6 +22,7 @@ package org.sonar.php.cache;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.LocationInFileImpl;
@@ -40,8 +41,8 @@ import static org.mockito.Mockito.when;
 public class CacheTest {
 
   private static final InputFile DEFAULT_INPUT_FILE = inputFile("default");
-  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:" + DEFAULT_INPUT_FILE.key();
-  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:" + DEFAULT_INPUT_FILE.key();
+  private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:" + DEFAULT_INPUT_FILE.key() + ":25175684819567447236028535606709408689196170707889726761316626252728215038095";
+  private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:" + DEFAULT_INPUT_FILE.key() + ":25175684819567447236028535606709408689196170707889726761316626252728215038095";
   private static final String PLUGIN_VERSION = "1.2.3";
 
   private final PhpWriteCache writeCache = mock(PhpWriteCache.class);
@@ -129,6 +130,30 @@ public class CacheTest {
     assertThat(actual).isNull();
   }
 
+  @Test
+  public void shouldNotWriteToCacheWhenNoContent() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+    Cache cache = new Cache(context);
+    SymbolTableImpl data = exampleSymbolTable();
+
+    cache.write(notExistingFile(), data);
+
+    verifyZeroInteractions(writeCache);
+  }
+
+  @Test
+  public void shouldNotReadFromCacheWhenNoContent() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+    Cache cache = new Cache(context);
+    SymbolTableImpl data = exampleSymbolTable();
+    warmupReadCache(data);
+
+    SymbolTableImpl actual = cache.read(notExistingFile());
+
+    assertThat(actual).isNull();
+    verifyZeroInteractions(readCache);
+  }
+
   void warmupReadCache(SymbolTableImpl data) {
     SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
@@ -154,6 +179,11 @@ public class CacheTest {
   private static InputFile inputFile(String content) {
     return new TestInputFileBuilder("projectKey", "symbols/symbolTable.php")
       .setContents(content)
+      .build();
+  }
+
+  private static DefaultInputFile notExistingFile() {
+    return new TestInputFileBuilder("projectKey", "do_not_exist.php")
       .build();
   }
 }

@@ -39,28 +39,34 @@ public class Cache {
 
   public void write(InputFile file, SymbolTableImpl symbolTable) {
     if (cacheContext.isCacheEnabled()) {
-      SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(symbolTable, pluginVersion);
-      SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
+      String hash = HashProvider.hash(file);
+      if (hash != null) {
+        SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(symbolTable, pluginVersion);
+        SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
 
-      PhpWriteCache writeCache = cacheContext.getWriteCache();
-      writeCache.writeBytes(cacheKey(DATA_CACHE_PREFIX, file.key()), serializationData.data());
-      writeCache.writeBytes(cacheKey(STRING_TABLE_CACHE_PREFIX, file.key()), serializationData.stringTable());
+        PhpWriteCache writeCache = cacheContext.getWriteCache();
+        writeCache.writeBytes(cacheKey(DATA_CACHE_PREFIX, file, hash), serializationData.data());
+        writeCache.writeBytes(cacheKey(STRING_TABLE_CACHE_PREFIX, file, hash), serializationData.stringTable());
+      }
     }
   }
 
   @CheckForNull
   public SymbolTableImpl read(InputFile file) {
     if (cacheContext.isCacheEnabled()) {
-      byte[] data = cacheContext.getReadCache().readBytes(cacheKey(DATA_CACHE_PREFIX, file.key()));
-      byte[] stringTable = cacheContext.getReadCache().readBytes(cacheKey(STRING_TABLE_CACHE_PREFIX, file.key()));
-      if (data != null && stringTable != null) {
-        return SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(data, stringTable, pluginVersion));
+      String hash = HashProvider.hash(file);
+      if (hash != null) {
+        byte[] data = cacheContext.getReadCache().readBytes(cacheKey(DATA_CACHE_PREFIX, file, hash));
+        byte[] stringTable = cacheContext.getReadCache().readBytes(cacheKey(STRING_TABLE_CACHE_PREFIX, file, hash));
+        if (data != null && stringTable != null) {
+          return SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(data, stringTable, pluginVersion));
+        }
       }
     }
     return null;
   }
 
-  private static String cacheKey(String prefix, String file) {
-    return prefix + file.replace('\\', '/');
+  private static String cacheKey(String prefix, InputFile file, String suffix) {
+    return prefix + file.key().replace('\\', '/') + ":" + suffix;
   }
 }
