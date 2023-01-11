@@ -35,7 +35,7 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 public class CacheTest {
@@ -69,7 +69,7 @@ public class CacheTest {
 
     cache.write(DEFAULT_INPUT_FILE, data);
 
-    verifyZeroInteractions(writeCache);
+    verifyNoInteractions(writeCache);
   }
 
   @Test
@@ -138,7 +138,7 @@ public class CacheTest {
 
     cache.write(notExistingFile(), data);
 
-    verifyZeroInteractions(writeCache);
+    verifyNoInteractions(writeCache);
   }
 
   @Test
@@ -151,7 +151,7 @@ public class CacheTest {
     SymbolTableImpl actual = cache.read(notExistingFile());
 
     assertThat(actual).isNull();
-    verifyZeroInteractions(readCache);
+    verifyNoInteractions(readCache);
   }
 
   void warmupReadCache(SymbolTableImpl data) {

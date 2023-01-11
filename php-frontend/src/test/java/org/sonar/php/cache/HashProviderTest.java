@@ -21,22 +21,24 @@ package org.sonar.php.cache;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import org.junit.Test;
+import org.mockito.MockedStatic;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mockStatic;
 
 public class HashProviderTest {
 
   @Test
   public void shouldProvideHashForInputFile() {
-    File file = new File("src/test/resources/symbols/symbolTable.php");
-    DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
-      .setCharset(StandardCharsets.UTF_8)
-      .build();
+    DefaultInputFile inputFile = exampleInputFile();
 
     String hash = HashProvider.hash(inputFile);
 
@@ -45,10 +47,7 @@ public class HashProviderTest {
 
   @Test
   public void shouldProvideHashForPhpFile() {
-    File file = new File("src/test/resources/symbols/symbolTable.php");
-    DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
-      .setCharset(StandardCharsets.UTF_8)
-      .build();
+    DefaultInputFile inputFile = exampleInputFile();
     PhpFile phpFile = PhpFileImpl.create(inputFile);
 
     String hash = HashProvider.hash(phpFile);
@@ -58,10 +57,7 @@ public class HashProviderTest {
 
   @Test
   public void shouldReturnsNullWhenFileDoesntExist() {
-    File file = new File("do_not_exist_file.php");
-    DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
-      .setCharset(StandardCharsets.UTF_8)
-      .build();
+    DefaultInputFile inputFile = notExistingFile();
 
     String hash = HashProvider.hash(inputFile);
 
@@ -70,10 +66,7 @@ public class HashProviderTest {
 
   @Test
   public void shouldReturnsNullWhenPhpFileDoesntExist() {
-    File file = new File("do_not_exist_file.php");
-    DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
-      .setCharset(StandardCharsets.UTF_8)
-      .build();
+    DefaultInputFile inputFile = notExistingFile();
 
     String hash = HashProvider.hash(PhpFileImpl.create(inputFile));
 
@@ -91,5 +84,35 @@ public class HashProviderTest {
     String hash = HashProvider.hash(inputFile);
 
     assertThat(hash).isEqualTo("-12804752987762098394035772686106585063470084017442529046078187006797464553387");
+  }
+
+  @Test
+  public void shouldReturnWhenHashAlgorithmNotAvailable() {
+    try (MockedStatic<MessageDigest> messageDigest = mockStatic(MessageDigest.class)) {
+      messageDigest.when(() -> MessageDigest.getInstance(any()))
+        .thenThrow(new NoSuchAlgorithmException());
+
+      DefaultInputFile inputFile = exampleInputFile();
+
+      String hash = HashProvider.hash(inputFile);
+
+      assertThat(hash).isNull();
+    }
+  }
+
+  private static DefaultInputFile exampleInputFile() {
+    File file = new File("src/test/resources/symbols/symbolTable.php");
+    DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
+      .setCharset(StandardCharsets.UTF_8)
+      .build();
+    return inputFile;
+  }
+
+  private static DefaultInputFile notExistingFile() {
+    File file = new File("do_not_exist_file.php");
+    DefaultInputFile inputFile = new TestInputFileBuilder("", file.getPath())
+      .setCharset(StandardCharsets.UTF_8)
+      .build();
+    return inputFile;
   }
 }
