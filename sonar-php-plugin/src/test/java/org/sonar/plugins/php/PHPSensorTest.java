@@ -23,6 +23,7 @@ import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -100,7 +101,7 @@ public class PHPSensorTest {
   @org.junit.Rule
   public LogTester logTester = new LogTester();
 
-  private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
+  private SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
 
   private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
 
@@ -121,6 +122,8 @@ public class PHPSensorTest {
   private ReadWriteInMemoryCache nextCache;
 
   private final Set<File> tempReportFiles = new HashSet<>();
+
+  private Path tmpFolderPath;
 
   @org.junit.Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder();
@@ -157,8 +160,14 @@ public class PHPSensorTest {
 
   @Before
   public void before() throws IOException {
-    context.fileSystem().setWorkDir(tmpFolder.newFolder().toPath());
+    tmpFolderPath = tmpFolder.newFolder().toPath();
+    resetContext();
     disableCache();
+  }
+
+  private void resetContext() {
+    context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
+    context.fileSystem().setWorkDir(tmpFolderPath);
   }
 
   private void disableCache() {
@@ -689,8 +698,8 @@ public class PHPSensorTest {
   @Test
   public void should_not_analyze_unchanged_file_if_setting_is_enabled() {
     checkFactory = new CheckFactory(getActiveRules());
-    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
-    context.setCanSkipUnchangedFiles(true);
+    InputFile inputFile = inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME);
+    analyzeBaseCommit(inputFile);
     createSensor().execute(context);
     assertThat(context.allIssues()).isEmpty();
   }
@@ -717,8 +726,11 @@ public class PHPSensorTest {
   @Test
   public void should_not_analyze_unchanged_file_if_enabled_by_property() {
     checkFactory = new CheckFactory(getActiveRules());
-    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
-    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
+
+    InputFile inputFile = inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME);
+    analyzeBaseCommit(inputFile);
+    context.fileSystem().add(inputFile);
+
     createSensor().execute(context);
     assertThat(context.allIssues()).isEmpty();
   }
@@ -741,8 +753,10 @@ public class PHPSensorTest {
       .build();
     checkFactory = new CheckFactory(rules);
 
-    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
-    context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
+    InputFile inputFile = inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME);
+    analyzeBaseCommit(inputFile);
+
+    context.fileSystem().add(inputFile);
     createSensor().execute(context);
     assertThat(context.allIssues()).isEmpty();
   }
@@ -834,6 +848,17 @@ public class PHPSensorTest {
 
       tempReportFiles.add(tempReport);
     }
+  }
+
+  private void analyzeBaseCommit(InputFile inputFile) {
+    enableCache();
+    context.fileSystem().add(inputFile);
+    context.setCanSkipUnchangedFiles(true);
+    createSensor().execute(context);
+    resetContext();
+    context.setCacheEnabled(true);
+    context.setCanSkipUnchangedFiles(true);
+    setCacheFromPreviousAnalysis();
   }
 
   private static class ExceptionRaisingCheck extends PHPVisitorCheck {

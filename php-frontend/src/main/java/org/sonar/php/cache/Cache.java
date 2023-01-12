@@ -50,8 +50,10 @@ public class Cache {
   }
 
   public void writeFileContentHash(InputFile file, byte[] hash) {
-    String cacheKey = cacheKey(CONTENT_HASHES_KEY, file.key());
-    cacheContext.getWriteCache().writeBytes(cacheKey, hash);
+    if (cacheContext.isCacheEnabled()) {
+      String cacheKey = cacheKey(CONTENT_HASHES_KEY, file.key());
+      cacheContext.getWriteCache().writeBytes(cacheKey, hash);
+    }
   }
 
   @CheckForNull
@@ -66,9 +68,13 @@ public class Cache {
     return null;
   }
 
+  @CheckForNull
   public byte[] readFileContentHash(InputFile file) {
-    String cacheKey = cacheKey(CONTENT_HASHES_KEY, file.key());
-    return cacheContext.getReadCache().readBytes(cacheKey);
+    if (cacheContext.isCacheEnabled()) {
+      String cacheKey = cacheKey(CONTENT_HASHES_KEY, file.key());
+      return cacheContext.getReadCache().readBytes(cacheKey);
+    }
+    return null;
   }
 
   private static String cacheKey(String prefix, String file) {
