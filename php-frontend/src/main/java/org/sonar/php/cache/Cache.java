@@ -29,6 +29,7 @@ public class Cache {
 
   public static final String DATA_CACHE_PREFIX = "php.projectSymbolData.data:";
   public static final String STRING_TABLE_CACHE_PREFIX = "php.projectSymbolData.stringTable:";
+  public static final String CONTENT_HASHES_KEY = "php.contentHashes:";
   private final CacheContext cacheContext;
   private final String pluginVersion;
 
@@ -37,7 +38,7 @@ public class Cache {
     this.pluginVersion = cacheContext.pluginVersion();
   }
 
-  public void write(InputFile file, SymbolTableImpl symbolTable) {
+  public void writeFileSymbolTable(InputFile file, SymbolTableImpl symbolTable) {
     if (cacheContext.isCacheEnabled()) {
       SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(symbolTable, pluginVersion);
       SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
@@ -46,6 +47,11 @@ public class Cache {
       writeCache.writeBytes(cacheKey(DATA_CACHE_PREFIX, file.key()), serializationData.data());
       writeCache.writeBytes(cacheKey(STRING_TABLE_CACHE_PREFIX, file.key()), serializationData.stringTable());
     }
+  }
+
+  public void writeFileContentHash(InputFile file, byte[] hash) {
+    String cacheKey = cacheKey(CONTENT_HASHES_KEY, file.key());
+    cacheContext.getWriteCache().writeBytes(cacheKey, hash);
   }
 
   @CheckForNull
@@ -60,7 +66,13 @@ public class Cache {
     return null;
   }
 
+  public byte[] readFileContentHash(InputFile file) {
+    String cacheKey = cacheKey(CONTENT_HASHES_KEY, file.key());
+    return cacheContext.getReadCache().readBytes(cacheKey);
+  }
+
   private static String cacheKey(String prefix, String file) {
     return prefix + file.replace('\\', '/');
   }
+
 }

@@ -41,6 +41,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.PHPAnalyzer;
+import org.sonar.php.cache.Cache;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.checks.utils.PhpUnitCheck;
@@ -82,7 +83,7 @@ class AnalysisScanner extends Scanner {
                          ProjectSymbolData projectSymbolData,
                          DurationStatistics statistics,
                          CacheContext cacheContext) {
-    super(context, statistics);
+    super(context, statistics, new Cache(cacheContext));
     this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;

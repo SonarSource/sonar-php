@@ -19,6 +19,9 @@
  */
 package org.sonar.plugins.php;
 
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -28,6 +31,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.php.cache.Cache;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 abstract class Scanner {
@@ -42,12 +46,14 @@ abstract class Scanner {
   private static final String FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast";
   protected final SensorContext context;
   protected final DurationStatistics statistics;
+  protected final Cache cache;
   protected boolean optimizedAnalysis;
 
 
-  Scanner(SensorContext context, DurationStatistics statistics) {
+  Scanner(SensorContext context, DurationStatistics statistics, Cache cache) {
     this.context = context;
     this.statistics = statistics;
+    this.cache = cache;
     optimizedAnalysis = shouldOptimizeAnalysis();
   }
 
@@ -86,7 +92,23 @@ abstract class Scanner {
       (context.canSkipUnchangedFiles() || context.config().getBoolean(SONAR_CAN_SKIP_UNCHANGED_FILES_KEY).orElse(false));
   }
   protected boolean fileCanBeSkipped(InputFile file) {
-    return optimizedAnalysis && file.status() != null && file.status().equals(InputFile.Status.SAME);
+    return optimizedAnalysis && fileIsUnchanged(file);
+  }
+
+  private boolean fileIsUnchanged(InputFile inputFile) {
+    if (inputFile.status() != null && !inputFile.status().equals(InputFile.Status.SAME)) {
+      return false;
+    }
+    byte[] fileHash = cache.readFileContentHash(inputFile);
+    // InputFile.Status is not reliable in some cases
+    // We use the hash of the file's content to double-check the content is the same.
+    try {
+      byte[] bytes = FileHashingUtils.inputFileContentHash(inputFile);
+      return MessageDigest.isEqual(fileHash, bytes);
+    } catch (IOException | NoSuchAlgorithmException e) {
+      LOG.debug("Failed to compute content hash for file {}", inputFile.key());
+      return false;
+    }
   }
 
   private void processFile(InputFile file) {

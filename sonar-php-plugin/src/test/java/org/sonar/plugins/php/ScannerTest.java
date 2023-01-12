@@ -27,6 +27,7 @@ import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.php.cache.Cache;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 import static org.mockito.Mockito.mock;
@@ -63,7 +64,7 @@ public class ScannerTest {
   private static class TestScanner extends Scanner {
 
    TestScanner(SensorContext context) {
-      super(context, new DurationStatistics(context.config()));
+      super(context, new DurationStatistics(context.config()), mock(Cache.class));
     }
 
     @Override

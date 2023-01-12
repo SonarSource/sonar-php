@@ -23,6 +23,8 @@ import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,6 +36,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
@@ -84,9 +88,11 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.FileHashingUtils.inputFileContentHash;
 import static org.sonar.plugins.php.PhpTestUtils.assertMeasure;
 import static org.sonar.plugins.php.PhpTestUtils.assertNoMeasure;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
+import static org.sonar.plugins.php.PhpTestUtils.inputFileHashCacheKey;
 import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_ANALYSIS_WARNINGS;
 
 public class PHPSensorTest {
@@ -252,23 +258,42 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_read_cpd_from_cache() {
+  public void should_read_cpd_from_cache() throws IOException, NoSuchAlgorithmException {
     enableCache();
     String fileName = "cpd.php";
+    InputFile inputFile = inputFile(fileName, Type.MAIN, InputFile.Status.SAME);
 
     PHPSensor phpSensor = createSensor();
-    analyseSingleFile(phpSensor, fileName);
+    context.fileSystem().add(inputFile);
+    phpSensor.execute(context);
 
     setCacheFromPreviousAnalysis();
-    context.fileSystem().add(inputFile(fileName, Type.MAIN, InputFile.Status.SAME));
+    previousCache.write(inputFileHashCacheKey(inputFile), inputFileContentHash(inputFile));
+
     phpSensor.execute(context);
 
     assertThat(previousCache.readKeys()).containsExactly(
+      "php.contentHashes:moduleKey:cpd.php",
       "php.projectSymbolData.data:moduleKey:cpd.php",
       "php.projectSymbolData.stringTable:moduleKey:cpd.php",
+      "php.contentHashes:moduleKey:cpd.php",
       "php.cpd.data:moduleKey:cpd.php",
       "php.cpd.stringTable:moduleKey:cpd.php"
     );
+  }
+
+  @Test
+  public void hash_exception_when_trying_to_compare_hash() {
+    enableCache();
+    InputFile inputFile = inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME);
+    PHPSensor phpSensor = createSensor();
+    context.fileSystem().add(inputFile);
+
+    try (MockedStatic<FileHashingUtils> FileHashingUtilsStaticMock = Mockito.mockStatic(FileHashingUtils.class)) {
+      FileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IOException("BOOM!"));
+      phpSensor.execute(context);
+      assertThat(logTester.logs(LoggerLevel.DEBUG)).contains("Failed to compute content hash for file moduleKey:PHPSquidSensor.php");
+    }
   }
 
   @Test
@@ -280,6 +305,7 @@ public class PHPSensorTest {
     analyseSingleFile(phpSensor, fileName);
 
     assertThat(nextCache.writeKeys()).containsExactly(
+      "php.contentHashes:moduleKey:cpd.php",
       "php.projectSymbolData.data:moduleKey:cpd.php",
       "php.projectSymbolData.stringTable:moduleKey:cpd.php",
       "php.cpd.data:moduleKey:cpd.php",
@@ -358,6 +384,7 @@ public class PHPSensorTest {
 
   @Test
   public void exception_should_fail_analysis_if_configured_so() {
+    enableCache();
     RuntimeException exception = new NumberFormatException();
     PHPCheck check = new ExceptionRaisingCheck(exception);
     addInputFiles(ANALYZED_FILE);
@@ -670,6 +697,7 @@ public class PHPSensorTest {
 
   @Test
   public void should_analyze_file_without_status_if_setting_is_enabled() {
+    enableCache();
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, null));
     context.setCanSkipUnchangedFiles(true);
@@ -720,7 +748,9 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_raise_issue_on_same_file_when_one_check_requires_parsing() {
+  public void should_raise_issue_on_same_file_when_one_check_requires_parsing() throws IOException, NoSuchAlgorithmException {
+    enableCache();
+
     ActiveRules rules = new ActiveRulesBuilder()
       .addRule(new NewActiveRule.Builder()
         .setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S101"))
@@ -731,8 +761,12 @@ public class PHPSensorTest {
       .build();
     checkFactory = new CheckFactory(rules);
 
-    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
+    InputFile inputFile = inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME);
+
+    context.fileSystem().add(inputFile);
     context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
+    previousCache.write(inputFileHashCacheKey(inputFile), inputFileContentHash(inputFile));
+
     createSensor().execute(context);
     assertThat(context.allIssues()).isNotEmpty();
   }

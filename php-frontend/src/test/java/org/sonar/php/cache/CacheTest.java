@@ -34,7 +34,7 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 public class CacheTest {
@@ -42,6 +42,7 @@ public class CacheTest {
   private static final InputFile DEFAULT_INPUT_FILE = inputFile("default");
   private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:" + DEFAULT_INPUT_FILE.key();
   private static final String CACHE_KEY_STRING_TABLE = "php.projectSymbolData.stringTable:" + DEFAULT_INPUT_FILE.key();
+  private static final String CACHE_KEY_HASH = "php.contentHashes:" + DEFAULT_INPUT_FILE.key();
   private static final String PLUGIN_VERSION = "1.2.3";
 
   private final PhpWriteCache writeCache = mock(PhpWriteCache.class);
@@ -52,7 +53,7 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
-    cache.write(DEFAULT_INPUT_FILE, data);
+    cache.writeFileSymbolTable(DEFAULT_INPUT_FILE, data);
 
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(data, PLUGIN_VERSION));
 
@@ -66,9 +67,9 @@ public class CacheTest {
     Cache cache = new Cache(context);
     SymbolTableImpl data = emptySymbolTable();
 
-    cache.write(DEFAULT_INPUT_FILE, data);
+    cache.writeFileSymbolTable(DEFAULT_INPUT_FILE, data);
 
-    verifyZeroInteractions(writeCache);
+    verifyNoInteractions(writeCache);
   }
 
   @Test
@@ -127,6 +128,27 @@ public class CacheTest {
     SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
 
     assertThat(actual).isNull();
+  }
+
+  @Test
+  public void readFileContentHash() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+    Cache cache = new Cache(context);
+    byte[] hash = "hash".getBytes();
+
+    when(readCache.readBytes(CACHE_KEY_HASH)).thenReturn(hash);
+
+    assertThat(cache.readFileContentHash(DEFAULT_INPUT_FILE)).isEqualTo(hash);
+  }
+
+  @Test
+  public void writeFileContentHash() {
+    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+    Cache cache = new Cache(context);
+    byte[] hash = "hash".getBytes();
+    cache.writeFileContentHash(DEFAULT_INPUT_FILE, hash);
+
+    verify(writeCache).writeBytes(CACHE_KEY_HASH, hash);
   }
 
   void warmupReadCache(SymbolTableImpl data) {

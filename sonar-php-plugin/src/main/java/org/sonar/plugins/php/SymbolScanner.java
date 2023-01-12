@@ -21,6 +21,8 @@ package org.sonar.plugins.php;
 
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.annotation.CheckForNull;
 import org.sonar.DurationStatistics;
@@ -44,12 +46,10 @@ public class SymbolScanner extends Scanner {
 
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
   private final ProjectSymbolData projectSymbolData = new ProjectSymbolData();
-  private final Cache cache;
   private int symbolTablesFromCache = 0;
 
   SymbolScanner(SensorContext context, DurationStatistics statistics, Cache cache) {
-    super(context, statistics);
-    this.cache = cache;
+    super(context, statistics, cache);
   }
 
   @Override
@@ -90,7 +90,15 @@ public class SymbolScanner extends Scanner {
     fileSymbolTable.classSymbolDatas().forEach(projectSymbolData::add);
     fileSymbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
 
-    cache.write(file, fileSymbolTable);
+    byte[] contentHash;
+    try {
+      contentHash = FileHashingUtils.inputFileContentHash(file);
+    } catch (IOException | NoSuchAlgorithmException e) {
+      LOG.debug("Failed to compute content hash for file {}", file.key());
+      return;
+    }
+    cache.writeFileContentHash(file, contentHash);
+    cache.writeFileSymbolTable(file, fileSymbolTable);
   }
 
   @CheckForNull
