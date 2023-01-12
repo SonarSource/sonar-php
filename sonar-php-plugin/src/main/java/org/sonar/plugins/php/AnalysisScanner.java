@@ -131,11 +131,6 @@ class AnalysisScanner extends Scanner {
       .collect(Collectors.toList());
   }
 
-  /**
-   * The decision whether a file is parsed can be determined by the individual checks.
-   * The recovery of CPD tokens of a file is also relevant.
-   * Using content hashes, new, changed and unchanged files are identified.
-   */
   private boolean scanFileWithoutParsing(InputFile inputFile, CpdVisitor cpdVisitor) {
     PhpFile pythonFile = PhpFileImpl.create(inputFile);
     PhpInputFileContext inputFileContext = new PhpInputFileContext(pythonFile, context.fileSystem().workDir(), cacheContext);

@@ -91,7 +91,12 @@ import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_
 
 public class PHPSensorTest {
 
-  private static final String CPD_PHP_SUFFIX = ":-48105726093887243531901456656006067184643440204539543308932903788567430402130";
+  @org.junit.Rule
+  public LogTester logTester = new LogTester();
+
+  private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
+
+  private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
 
   private static final Version VERSION_7_9 = Version.create(7, 9);
   private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(VERSION_7_9);
@@ -106,6 +111,14 @@ public class PHPSensorTest {
   private static final String CUSTOM_REPOSITORY_KEY = "customKey";
   private static final String CUSTOM_RULE_KEY = "key";
 
+  private ReadWriteInMemoryCache previousCache;
+  private ReadWriteInMemoryCache nextCache;
+
+  private final Set<File> tempReportFiles = new HashSet<>();
+
+  @org.junit.Rule
+  public TemporaryFolder tmpFolder = new TemporaryFolder();
+
   private static final PHPCustomRuleRepository[] CUSTOM_RULES = {new PHPCustomRuleRepository() {
     @Override
     public String repositoryKey() {
@@ -118,19 +131,23 @@ public class PHPSensorTest {
     }
   }};
 
-  private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
+  @Rule(
+    key = CUSTOM_RULE_KEY,
+    name = "name",
+    description = "desc",
+    tags = {"bug"})
+  public static class MyCustomRule extends PHPVisitorCheck {
+    @RuleProperty(
+      key = "customParam",
+      description = "Custom parameter",
+      defaultValue = "value")
+    public String customParam = "value";
 
-  private final Set<File> tempReportFiles = new HashSet<>();
-
-  @org.junit.Rule
-  public LogTester logTester = new LogTester();
-
-  @org.junit.Rule
-  public TemporaryFolder tmpFolder = new TemporaryFolder();
-
-  private ReadWriteInMemoryCache previousCache;
-  private ReadWriteInMemoryCache nextCache;
-  private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
+    @Override
+    public boolean scanWithoutParsing(PhpInputFileContext phpInputFileContext) {
+      return false;
+    }
+  }
 
   @Before
   public void before() throws IOException {
@@ -247,10 +264,10 @@ public class PHPSensorTest {
     phpSensor.execute(context);
 
     assertThat(previousCache.readKeys()).containsExactly(
-      "php.projectSymbolData.data:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
-      "php.projectSymbolData.stringTable:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
-      "php.cpd.data:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
-      "php.cpd.stringTable:moduleKey:cpd.php" + CPD_PHP_SUFFIX
+      "php.projectSymbolData.data:moduleKey:cpd.php",
+      "php.projectSymbolData.stringTable:moduleKey:cpd.php",
+      "php.cpd.data:moduleKey:cpd.php",
+      "php.cpd.stringTable:moduleKey:cpd.php"
     );
   }
 
@@ -263,10 +280,10 @@ public class PHPSensorTest {
     analyseSingleFile(phpSensor, fileName);
 
     assertThat(nextCache.writeKeys()).containsExactly(
-      "php.projectSymbolData.data:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
-      "php.projectSymbolData.stringTable:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
-      "php.cpd.data:moduleKey:cpd.php" + CPD_PHP_SUFFIX,
-      "php.cpd.stringTable:moduleKey:cpd.php" + CPD_PHP_SUFFIX
+      "php.projectSymbolData.data:moduleKey:cpd.php",
+      "php.projectSymbolData.stringTable:moduleKey:cpd.php",
+      "php.cpd.data:moduleKey:cpd.php",
+      "php.cpd.stringTable:moduleKey:cpd.php"
     );
   }
 
@@ -653,7 +670,6 @@ public class PHPSensorTest {
 
   @Test
   public void should_analyze_file_without_status_if_setting_is_enabled() {
-    enableCache();
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, null));
     context.setCanSkipUnchangedFiles(true);
@@ -663,7 +679,6 @@ public class PHPSensorTest {
 
   @Test
   public void should_analyze_changed_file_if_setting_is_enabled() {
-    enableCache();
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.CHANGED));
     context.setCanSkipUnchangedFiles(true);
@@ -807,24 +822,6 @@ public class PHPSensorTest {
     @Override
     public void visitCompilationUnit(CompilationUnitTree tree) {
       wasTriggered = true;
-    }
-  }
-
-  @Rule(
-    key = CUSTOM_RULE_KEY,
-    name = "name",
-    description = "desc",
-    tags = {"bug"})
-  public static class MyCustomRule extends PHPVisitorCheck {
-    @RuleProperty(
-      key = "customParam",
-      description = "Custom parameter",
-      defaultValue = "value")
-    public String customParam = "value";
-
-    @Override
-    public boolean scanWithoutParsing(PhpInputFileContext phpInputFileContext) {
-      return false;
     }
   }
 }
