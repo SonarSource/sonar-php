@@ -34,6 +34,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.php.api.Php;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.php.cache.Cache.CONTENT_HASHES_KEY;
 
 public class PhpTestUtils {
 
@@ -85,5 +86,9 @@ public class PhpTestUtils {
 
   public static DefaultInputFile inputFile(String fileName) {
     return inputFile(fileName, InputFile.Type.MAIN);
+  }
+
+  public static String inputFileHashCacheKey(InputFile inputFile) {
+    return CONTENT_HASHES_KEY + inputFile.key();
   }
 }

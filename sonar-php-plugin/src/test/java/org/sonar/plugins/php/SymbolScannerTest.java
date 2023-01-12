@@ -22,13 +22,18 @@ package org.sonar.plugins.php;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
@@ -36,10 +41,16 @@ import org.sonar.php.utils.ReadWriteInMemoryCache;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.sonar.plugins.php.FileHashingUtils.inputFileContentHash;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
+import static org.sonar.plugins.php.PhpTestUtils.inputFileHashCacheKey;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class SymbolScannerTest {
+
+  @org.junit.Rule
+  public LogTester logTester = new LogTester();
 
   public static final QualifiedName CLASS_NAME = qualifiedName("app\\test\\controller");
   private static ReadWriteInMemoryCache previousCache;
@@ -74,25 +85,33 @@ public class SymbolScannerTest {
   }
 
   @Test
-  public void shouldCreateProjectSymbolDataFromCache() {
+  public void shouldCreateProjectSymbolDataFromCache() throws IOException, NoSuchAlgorithmException {
     buildBaseProjectSymbolDataAndCache();
 
     previousCache = nextCache.copy();
     context.setPreviousCache(previousCache);
     context.setCanSkipUnchangedFiles(true);
     SymbolScanner symbolScanner = createScanner();
-    InputFile changedFile = inputFile("incremental/baseFile.php", InputFile.Type.MAIN, InputFile.Status.SAME);
-    symbolScanner.execute(List.of(changedFile));
+    InputFile inputFile = inputFile("incremental/baseFile.php", InputFile.Type.MAIN, InputFile.Status.SAME);
+    symbolScanner.execute(List.of(inputFile));
 
     ProjectSymbolData newSymbolTable = symbolScanner.getProjectSymbolData();
 
     ClassSymbolData newClassSymbol = newSymbolTable.classSymbolData(CLASS_NAME).orElse(null);
     assertThat(newClassSymbol.methods()).hasSize(2);
-    // verify if cache was used
 
-    assertThat(previousCache.readKeys().get(0)).startsWith("php.projectSymbolData.data:" + changedFile.key());
-    assertThat(previousCache.readKeys().get(1)).startsWith("php.projectSymbolData.stringTable:" + changedFile.key());
-    assertThat(previousCache.readKeys()).hasSize(2);
+    assertThat(previousCache.readKeys()).containsExactly("php.contentHashes:moduleKey:incremental/baseFile.php",
+      "php.projectSymbolData.data:moduleKey:incremental/baseFile.php",
+      "php.projectSymbolData.stringTable:moduleKey:incremental/baseFile.php");
+  }
+
+  @Test
+  public void hashExceptionWhenTryingToSaveHash() {
+    try (MockedStatic<FileHashingUtils> FileHashingUtilsStaticMock = Mockito.mockStatic(FileHashingUtils.class)) {
+      FileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IOException("BOOM!"));
+      buildBaseProjectSymbolDataAndCache();
+      assertThat(logTester.logs(LoggerLevel.DEBUG)).contains("Failed to compute content hash for file moduleKey:incremental/baseFile.php");
+    }
   }
 
   @Test
