@@ -27,7 +27,6 @@ import org.sonar.php.cache.CpdDeserializationInput;
 import org.sonar.php.cache.CpdDeserializer;
 import org.sonar.php.cache.CpdSerializationInput;
 import org.sonar.php.cache.CpdSerializer;
-import org.sonar.php.cache.HashProvider;
 import org.sonar.php.cache.SerializationResult;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.cache.CacheContext;
@@ -133,47 +132,30 @@ public class CpdVisitor extends PHPVisitorCheck {
         CpdSerializationInput input = new CpdSerializationInput(cpdTokens, cacheContext.pluginVersion());
         SerializationResult serializationResult = CpdSerializer.toBinary(input);
 
-        String hash = HashProvider.hash(file);
-        if(hash != null) {
-          String dataKey = cacheKey(CACHE_DATA_PREFIX, file, hash);
-          writeCache.writeBytes(dataKey, serializationResult.data());
+        String dataKey = CACHE_DATA_PREFIX + file.key();
+        writeCache.writeBytes(dataKey, serializationResult.data());
 
-          String stringTableKey = cacheKey(CACHE_STRING_TABLE_PREFIX, file, hash);
-          writeCache.writeBytes(stringTableKey, serializationResult.stringTable());
-        }
+        String stringTableKey = CACHE_STRING_TABLE_PREFIX + file.key();
+        writeCache.writeBytes(stringTableKey, serializationResult.stringTable());
       }
     }
   }
 
-  /**
-   * This method try to read a CPD (Copy-Paste Detection) tokens from cache, if it's available.
-   * The hash of the file content is stored as a part of the key in the cache.
-   * If there is a data in the cache and deserialization is successful, there is no need to recreate CPD tokens.
-   */
   @CheckForNull
   private static List<CpdToken> restoreCpdTokensFromCache(PhpInputFileContext phpInputFileContext) {
     CacheContext cacheContext = phpInputFileContext.cacheContext();
     if (cacheContext != null) {
       PhpReadCache readCache = cacheContext.getReadCache();
       if (readCache != null) {
-        String hash = HashProvider.hash(phpInputFileContext.phpFile());
-        if(hash != null) {
-          String dataKey = cacheKey(CACHE_DATA_PREFIX, phpInputFileContext.phpFile(), hash);
-          byte[] dataBytes = readCache.readBytes(dataKey);
-          String stringTableKey = cacheKey(CACHE_STRING_TABLE_PREFIX, phpInputFileContext.phpFile(), hash);
-          byte[] stringTableBytes = readCache.readBytes(stringTableKey);
-          if (dataBytes != null && stringTableBytes != null) {
-            CpdDeserializationInput input = new CpdDeserializationInput(dataBytes, stringTableBytes, cacheContext.pluginVersion());
-            return CpdDeserializer.fromBinary(input);
-          }
+        byte[] dataBytes = readCache.readBytes(CACHE_DATA_PREFIX + phpInputFileContext.phpFile().key());
+        byte[] stringTableBytes = readCache.readBytes(CACHE_STRING_TABLE_PREFIX + phpInputFileContext.phpFile().key());
+        if (dataBytes != null && stringTableBytes != null) {
+          CpdDeserializationInput input = new CpdDeserializationInput(dataBytes, stringTableBytes, cacheContext.pluginVersion());
+          return CpdDeserializer.fromBinary(input);
         }
       }
     }
     return null;
-  }
-
-  private static String cacheKey(String prefix, PhpFile file, String suffix) {
-    return prefix + file.key().replace('\\', '/') + ":" + suffix;
   }
 
   public static class CpdToken {
