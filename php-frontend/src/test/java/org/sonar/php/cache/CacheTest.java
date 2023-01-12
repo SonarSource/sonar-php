@@ -131,8 +131,8 @@ public class CacheTest {
   }
 
   @Test
-  public void readFileContentHash() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+  public void readFileContentHashWhenCacheIsEnabled() {
+    CacheContext context = new CacheContextImpl(true, null, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     byte[] hash = "hash".getBytes();
 
@@ -142,13 +142,31 @@ public class CacheTest {
   }
 
   @Test
-  public void writeFileContentHash() {
-    CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
+  public void readFileContentHashWhenCacheIsDisabled() {
+    CacheContext context = new CacheContextImpl(false, null, readCache, PLUGIN_VERSION);
+    Cache cache = new Cache(context);
+
+    assertThat(cache.readFileContentHash(DEFAULT_INPUT_FILE)).isNull();
+  }
+
+  @Test
+  public void writeFileContentHashWhenCacheIsEnabled() {
+    CacheContext context = new CacheContextImpl(true, writeCache, null, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     byte[] hash = "hash".getBytes();
     cache.writeFileContentHash(DEFAULT_INPUT_FILE, hash);
 
     verify(writeCache).writeBytes(CACHE_KEY_HASH, hash);
+  }
+
+  @Test
+  public void writeFileContentHashWhenCacheIsDisabled() {
+    CacheContext context = new CacheContextImpl(false, writeCache, null, PLUGIN_VERSION);
+    Cache cache = new Cache(context);
+    byte[] hash = "hash".getBytes();
+    cache.writeFileContentHash(DEFAULT_INPUT_FILE, hash);
+
+    verifyNoInteractions(writeCache);
   }
 
   void warmupReadCache(SymbolTableImpl data) {
