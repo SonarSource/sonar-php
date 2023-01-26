@@ -715,12 +715,34 @@ public class PHPSensorTest {
   }
 
   @Test
+  public void should_analyze_test_file_without_status_if_setting_is_enabled() {
+    enableCache();
+    TestFileCheck check = new TestFileCheck();
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.TEST, null));
+    context.setCanSkipUnchangedFiles(true);
+    createSensor(check).execute(context);
+    assertThat(check.wasTriggered).isTrue();
+  }
+
+  @Test
   public void should_analyze_changed_file_if_setting_is_enabled() {
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.CHANGED));
     context.setCanSkipUnchangedFiles(true);
     createSensor().execute(context);
     assertThat(context.allIssues()).isNotEmpty();
+  }
+
+  @Test
+  public void should_analyze_changed_test_file_if_setting_is_enabled() {
+    enableCache();
+    TestFileCheck check = new TestFileCheck();
+    checkFactory = new CheckFactory(getActiveRules());
+    context.fileSystem().add(inputFile(ANALYZED_FILE, Type.TEST, InputFile.Status.CHANGED));
+    context.setCanSkipUnchangedFiles(true);
+    createSensor(check).execute(context);
+    assertThat(check.wasTriggered).isTrue();
   }
 
   @Test
