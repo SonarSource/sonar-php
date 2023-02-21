@@ -94,7 +94,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
     return LOOPBACK_IP.matcher(ip).find();
   }
 
-  private static boolean isBroadCast(String ip) {
+  private static boolean isBroadcast(String ip) {
     return BROADCAST_IPV4.equals(ip);
   }
 
