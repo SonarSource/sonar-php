@@ -20,9 +20,15 @@
 package org.sonar.php.checks.regex;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
@@ -32,6 +38,7 @@ import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 public class StringReplaceCheck extends AbstractRegexCheck {
 
   private static final String MESSAGE = "Replace this \"preg_replace()\" call by a \"str_replace()\" function call.";
+  private static final int LIMIT_PARAM_INDEX = 3;
 
   @Override
   protected Set<String> lookedUpFunctionNames() {
@@ -41,9 +48,21 @@ public class StringReplaceCheck extends AbstractRegexCheck {
   @Override
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
     RegexTree regex = regexParseResult.getResult();
-    if (!regexParseResult.hasSyntaxErrors() && isPlainString(regex)) {
+    if (limitParameterIsNotUsed(regexFunctionCall) && !regexParseResult.hasSyntaxErrors() && isPlainString(regex)) {
       newIssue(regexFunctionCall.callee(), MESSAGE, null, Collections.singletonList(new RegexIssueLocation(regex, "Expression without regular expression features.")));
     }
+  }
+  private static boolean limitParameterIsNotUsed(FunctionCallTree regexFunctionCall) {
+    Optional<ExpressionTree> limitParamTree = CheckUtils.argumentValue(regexFunctionCall, "limit", LIMIT_PARAM_INDEX);
+    return limitParamTree.isEmpty() || isValueEqualsToLimitDefaultValue(limitParamTree.get());
+  }
+
+  private static boolean isValueEqualsToLimitDefaultValue(ExpressionTree expr) {
+    if(!expr.is(Tree.Kind.UNARY_MINUS)) return false;
+    UnaryExpressionTree value = (UnaryExpressionTree)expr;
+    ExpressionTree expression = value.expression();
+
+    return expression.is(Tree.Kind.NUMERIC_LITERAL) && "1".equals(((LiteralTree)expression).value());
   }
 
   private static boolean isPlainString(RegexTree regex) {
