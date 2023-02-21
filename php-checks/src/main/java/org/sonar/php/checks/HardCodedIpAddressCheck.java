@@ -86,7 +86,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
   }
 
   private static boolean isSensitive(String ip) {
-    return !isLoopback(ip) && !isBroadCast(ip) && !isReservedIP(ip) ;
+    return !isLoopback(ip) && !isBroadcast(ip) && !isReservedIP(ip) ;
   }
 
   private static boolean isLoopback(String ip) {
