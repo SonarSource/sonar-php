@@ -65,7 +65,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
     "203.0.113.",
     "2001:0db8:",
     "2001:db8:"
-    );
+  );
 
   private static final String MESSAGE = "Make sure using this hardcoded IP address is safe here.";
   private static final String BROADCAST_IPV4 = "255.255.255.255";
