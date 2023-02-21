@@ -17,7 +17,6 @@ function foo($socket) {
 }
 
 const localhost = "127.0.0.1"; // Compliant - Loopback address
-
 const localhostUrl = "ftp://127.0.0.1:22/bla"; // Compliant - exception for localhost
 const notIPAddress = "1.20.33.345"; // Compliant - segment > 255
 const notRouteable = "0.0.0.0"; // Compliant
