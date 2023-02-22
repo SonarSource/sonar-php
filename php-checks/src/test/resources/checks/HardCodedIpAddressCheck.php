@@ -62,3 +62,7 @@ $serverAddress = "192.0.2.1";
 $serverAddress = "198.51.100.1";
 $serverAddress = "203.0.113.1";
 $serverAddress = "2001:db8:0a0b:12f0:0000:0000:0000:0001";
+$serverAddress = "2001:0db8:0a0b::::0000:0001";
+
+// Broadcast addresses should be ignored
+const broadCastIpV4 = "255.255.255.255";

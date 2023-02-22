@@ -32,7 +32,7 @@ import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 @Rule(key = "S1313")
 public class HardCodedIpAddressCheck extends PHPVisitorCheck {
 
-  private static final String LOOPBACK_IPV4 = "^127(?:\\.[0-9]+){0,2}\\.[0-9]+$";
+  private static final String LOOPBACK_IPV4 = "^127(?:\\.\\d+){0,2}\\.\\d+$";
   private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
   private static final String LOOPBACK_IPV4_MAPPED_TO_IPV6 = "^(::(?i)ffff(:0{1,4})?):127$";
   private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6 + "|" + LOOPBACK_IPV4_MAPPED_TO_IPV6);
@@ -63,10 +63,12 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
     "192.0.2.",
     "198.51.100.",
     "203.0.113.",
+    "2001:0db8:",
     "2001:db8:"
   );
 
   private static final String MESSAGE = "Make sure using this hardcoded IP address is safe here.";
+  private static final String BROADCAST_IPV4 = "255.255.255.255";
 
   @Override
   public void visitLiteral(LiteralTree tree) {
@@ -75,7 +77,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
       Matcher matcher = IP_PATTERN.matcher(literalValue);
       if (matcher.find() && matcher.start() == 0) {
         String ip = matcher.group("ip");
-        if (!isLoopback(ip) && !isReservedIP(ip)) {
+        if (isSensitive(ip)) {
           context().newIssue(this, tree, MESSAGE);
         }
       }
@@ -83,9 +85,17 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
     super.visitLiteral(tree);
   }
 
+  private static boolean isSensitive(String ip) {
+    return !isLoopback(ip) && !isBroadcast(ip) && !isReservedIP(ip) ;
+  }
+
   private static boolean isLoopback(String ip) {
     ip = ip.replace("[", "");
     return LOOPBACK_IP.matcher(ip).find();
+  }
+
+  private static boolean isBroadcast(String ip) {
+    return BROADCAST_IPV4.equals(ip);
   }
 
   private static boolean isReservedIP(String ip) {
