@@ -39,6 +39,8 @@ public class StringReplaceCheck extends AbstractRegexCheck {
 
   private static final String MESSAGE = "Replace this \"preg_replace()\" call by a \"str_replace()\" function call.";
   private static final int LIMIT_PARAM_INDEX = 3;
+  private static final String LIMIT_PARAM_NAME = "limit";
+
 
   @Override
   protected Set<String> lookedUpFunctionNames() {
@@ -53,7 +55,7 @@ public class StringReplaceCheck extends AbstractRegexCheck {
     }
   }
   private static boolean limitParameterIsNotUsed(FunctionCallTree regexFunctionCall) {
-    Optional<ExpressionTree> limitParamTree = CheckUtils.argumentValue(regexFunctionCall, "limit", LIMIT_PARAM_INDEX);
+    Optional<ExpressionTree> limitParamTree = CheckUtils.argumentValue(regexFunctionCall, LIMIT_PARAM_NAME, LIMIT_PARAM_INDEX);
     return limitParamTree.isEmpty() || isValueEqualsToLimitDefaultValue(limitParamTree.get());
   }
 
