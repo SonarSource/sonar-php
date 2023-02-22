@@ -50,3 +50,6 @@ $database = config('connections.read.database');
 $database = config('connections.read.database');
 $database = config('connections.read.database');
 
+$score = $request->getParam('_score'); // OK - Only alphanumeric, -, _ and .
+$score = $request->getParam('_score');
+$score = $request->getParam('_score');
