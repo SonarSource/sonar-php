@@ -74,14 +74,6 @@ public class PHPCheckContext implements CheckContext, RegexCheckContext {
   }
 
   @Override
-  public LegacyIssue newIssue(PHPCheck check, String message) {
-    LegacyIssue issue = new LegacyIssue(check, message);
-    issues.add(issue);
-
-    return issue;
-  }
-
-  @Override
   public PreciseIssue newIssue(PHPCheck check, Tree tree, String message) {
     return newIssue(check, new IssueLocation(tree, message));
   }

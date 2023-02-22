@@ -32,7 +32,6 @@ import java.util.Map;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
@@ -123,24 +122,12 @@ public class PHPCheckVerifier {
   }
 
   private static MultiFileVerifier.Issue addIssue(MultiFileVerifier verifier, PhpIssue issue, PhpFile file) {
-    if (issue instanceof LegacyIssue) {
-      return addLegacyIssue(verifier, (LegacyIssue) issue, file);
-    } else if (issue instanceof LineIssue) {
+    if (issue instanceof LineIssue) {
       return addLineIssue(verifier, (LineIssue) issue, file);
     } else if (issue instanceof FileIssue) {
       return addFileIssue(verifier, (FileIssue) issue, file);
     } else {
       return addPreciseIssue(verifier, (PreciseIssue) issue, file);
-    }
-  }
-
-  private static MultiFileVerifier.Issue addLegacyIssue(MultiFileVerifier verifier, LegacyIssue legacyIssue, PhpFile file) {
-    if (legacyIssue.line() > 0) {
-      return verifier.reportIssue(path(file), legacyIssue.message())
-        .onLine(legacyIssue.line());
-    } else {
-      return verifier.reportIssue(path(file), legacyIssue.message())
-        .onFile();
     }
   }
 

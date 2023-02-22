@@ -37,25 +37,6 @@ public interface CheckContext {
 
   /**
    *
-   * <p> To set line and cost use {@link Issue#line(int)} and {@link Issue#cost(double)}. Note, that these calls could be chained.
-   * <pre>
-   *   newIssue(myCheck, "Some message")
-   *     .line(105)
-   *     .cost(3);
-   * </pre>
-   *
-   * @param check the instance of the rule for which issue should be created
-   * @param message message of the issue
-   * @return instance of Issue
-   *
-   * @deprecated since 2.9. Use {@link CheckContext#newIssue(PHPCheck, Tree, String)}, {@link CheckContext#newLineIssue(PHPCheck, int, String)} or
-   * {@link CheckContext#newFileIssue(PHPCheck, String)}
-   */
-  @Deprecated
-  Issue newIssue(PHPCheck check, String message);
-
-  /**
-   *
    * <p> To add secondary locations and cost use {@link PreciseIssue#secondary(Tree, String)} and {@link PreciseIssue#cost(double)}. Note, that these calls could be chained.
    * <pre>
    *   newIssue(myCheck, primaryTree, "Primary message")

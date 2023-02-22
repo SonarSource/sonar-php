@@ -47,7 +47,7 @@ public class PHPCheckVerifierTest {
       new PHPVisitorCheck() {
         @Override
         public void visitCompilationUnit(CompilationUnitTree tree) {
-          context().newIssue(this, "File issue").cost(2.5d);
+          context().newFileIssue(this, "File issue").cost(2.5d);
         }
       });
   }
@@ -58,7 +58,7 @@ public class PHPCheckVerifierTest {
       new PHPVisitorCheck() {
         @Override
         public void visitCompilationUnit(CompilationUnitTree tree) {
-          context().newIssue(this, "Wrong message").cost(2.5d);
+          context().newFileIssue(this, "Wrong message").cost(2.5d);
         }
       });
   }
@@ -69,7 +69,7 @@ public class PHPCheckVerifierTest {
       new PHPVisitorCheck() {
         @Override
         public void visitCompilationUnit(CompilationUnitTree tree) {
-          context().newIssue(this, "File issue").cost(5.2d);
+          context().newFileIssue(this, "File issue").cost(5.2d);
         }
       });
   }
@@ -82,7 +82,7 @@ public class PHPCheckVerifierTest {
         public void visitCompilationUnit(CompilationUnitTree tree) {
           PHPVisitorCheck otherCheck = new PHPVisitorCheck() {
           };
-          context().newIssue(otherCheck, "File issue").cost(2.5d);
+          context().newFileIssue(otherCheck, "File issue").cost(2.5d);
         }
       });
   }
@@ -93,7 +93,7 @@ public class PHPCheckVerifierTest {
       new PHPVisitorCheck() {
         @Override
         public void visitCompilationUnit(CompilationUnitTree tree) {
-          context().newIssue(this, "Line issue").line(2);
+          context().newLineIssue(this, 2, "Line issue");
         }
       });
   }
@@ -104,7 +104,7 @@ public class PHPCheckVerifierTest {
       new PHPVisitorCheck() {
         @Override
         public void visitCompilationUnit(CompilationUnitTree tree) {
-          context().newIssue(this, "Wrong message").line(2);
+          context().newLineIssue(this, 2, "Wrong message");
         }
       });
   }
