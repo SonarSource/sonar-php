@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tests.TestIssue.Location;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -135,10 +134,7 @@ public class PHPCheckTest {
   }
 
   private static int line(PhpIssue issue) {
-    if (issue instanceof LegacyIssue) {
-      return ((LegacyIssue) issue).line();
-
-    } else if (issue instanceof LineIssue) {
+    if (issue instanceof LineIssue) {
       return ((LineIssue) issue).line();
 
     } else if (issue instanceof FileIssue) {
@@ -149,10 +145,7 @@ public class PHPCheckTest {
   }
 
   private static String message(PhpIssue issue) {
-    if (issue instanceof LegacyIssue) {
-      return ((LegacyIssue) issue).message();
-
-    } else if (issue instanceof LineIssue) {
+    if (issue instanceof LineIssue) {
       return ((LineIssue) issue).message();
 
     } else if (issue instanceof FileIssue) {

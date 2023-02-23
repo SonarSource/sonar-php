@@ -51,7 +51,6 @@ import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.CpdVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
-import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
@@ -226,21 +225,7 @@ class AnalysisScanner extends Scanner {
         .forRule(ruleKey)
         .gap(issue.cost());
 
-      if (issue instanceof LegacyIssue) {
-        // todo: this block should be removed as PHPIssue's usages will be removed
-        LegacyIssue legacyIssue = (LegacyIssue) issue;
-
-        NewIssueLocation location = newIssue.newLocation()
-          .message(legacyIssue.message())
-          .on(inputFile);
-
-        if (legacyIssue.line() > 0) {
-          location.at(inputFile.selectLine(legacyIssue.line()));
-        }
-
-        newIssue.at(location);
-
-      } else if (issue instanceof LineIssue) {
+      if (issue instanceof LineIssue) {
 
         LineIssue lineIssue = (LineIssue) issue;
 
