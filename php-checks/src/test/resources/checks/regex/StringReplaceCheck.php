@@ -64,6 +64,8 @@ class StringReplaceCheck
     // test when fourth param is a variable
     $varIndex=3;
     preg_replace("/\n/", " ", "source string", $varIndex);
+    preg_replace("/\n/", " ", "source string", -$varIndex);
+
 
     // test with named parameters
     preg_replace(pattern: "/\n/", replacement: " ", limit: 2, subject: $init);

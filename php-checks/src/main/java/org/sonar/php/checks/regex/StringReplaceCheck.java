@@ -27,7 +27,6 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
@@ -60,11 +59,10 @@ public class StringReplaceCheck extends AbstractRegexCheck {
   }
 
   private static boolean isValueEqualsToLimitDefaultValue(ExpressionTree expr) {
-    if(!expr.is(Tree.Kind.UNARY_MINUS)) return false;
+    if( !expr.is(Tree.Kind.UNARY_MINUS)) return false;
     UnaryExpressionTree value = (UnaryExpressionTree)expr;
     ExpressionTree expression = value.expression();
-
-    return expression.is(Tree.Kind.NUMERIC_LITERAL) && "1".equals(((LiteralTree)expression).value());
+    return expression.is(Tree.Kind.NUMERIC_LITERAL); // only expected negative numeric value is -1 which is the default value
   }
 
   private static boolean isPlainString(RegexTree regex) {
