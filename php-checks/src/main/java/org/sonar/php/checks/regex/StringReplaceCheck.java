@@ -27,7 +27,6 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
@@ -40,29 +39,30 @@ public class StringReplaceCheck extends AbstractRegexCheck {
   private static final int LIMIT_PARAM_INDEX = 3;
   private static final String LIMIT_PARAM_NAME = "limit";
 
-
   @Override
   protected Set<String> lookedUpFunctionNames() {
     return Collections.singleton("preg_replace");
   }
 
   @Override
+  protected void checkFunctionCall(FunctionCallTree tree) {
+    if (limitParameterIsNotUsedOrSetToDefault(tree)) {
+      super.checkFunctionCall(tree);
+    }
+  }
+
+  @Override
   public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
     RegexTree regex = regexParseResult.getResult();
-    if (limitParameterIsNotUsed(regexFunctionCall) && !regexParseResult.hasSyntaxErrors() && isPlainString(regex)) {
+    if (!regexParseResult.hasSyntaxErrors() && isPlainString(regex)) {
       newIssue(regexFunctionCall.callee(), MESSAGE, null, Collections.singletonList(new RegexIssueLocation(regex, "Expression without regular expression features.")));
     }
   }
-  private static boolean limitParameterIsNotUsed(FunctionCallTree regexFunctionCall) {
-    Optional<ExpressionTree> limitParamTree = CheckUtils.argumentValue(regexFunctionCall, LIMIT_PARAM_NAME, LIMIT_PARAM_INDEX);
-    return limitParamTree.isEmpty() || isValueEqualsToLimitDefaultValue(limitParamTree.get());
-  }
 
-  private static boolean isValueEqualsToLimitDefaultValue(ExpressionTree expr) {
-    if( !expr.is(Tree.Kind.UNARY_MINUS)) return false;
-    UnaryExpressionTree value = (UnaryExpressionTree)expr;
-    ExpressionTree expression = value.expression();
-    return expression.is(Tree.Kind.NUMERIC_LITERAL); // only expected negative numeric value is -1 which is the default value
+  private static boolean limitParameterIsNotUsedOrSetToDefault(FunctionCallTree regexFunctionCall) {
+    Optional<ExpressionTree> limitParamTree = CheckUtils.argumentValue(regexFunctionCall, LIMIT_PARAM_NAME, LIMIT_PARAM_INDEX);
+    // only expected negative numeric value is -1 which is the default value
+    return limitParamTree.isEmpty() || limitParamTree.get().is(Tree.Kind.UNARY_MINUS);
   }
 
   private static boolean isPlainString(RegexTree regex) {
