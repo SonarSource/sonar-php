@@ -36,7 +36,6 @@ import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -144,10 +143,9 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
 
       if (!TokenUtils.isOnSameLine(classToken, lastInterfaceToken)) {
 
-        if (!isCorrectlySplitOnLines(classToken.line(), interfaceList)) {
+        if (areIncorrectlySplitOnLines(classToken.line(), interfaceList)) {
           check.reportIssue(String.format(INTERFACE_SPLIT_MESSAGE, classToken.line()), classTree.superInterfaces().get(0));
-
-        } else if (!isCorrectlyIndented(expectedColumn, interfaceList)) {
+        } else if (areIncorrectlyIndented(expectedColumn, interfaceList)) {
           check.reportIssue(String.format(INTERFACE_INDENTATION, expectedColumn), classTree.superInterfaces().get(0));
         }
       }
@@ -168,16 +166,16 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
 
       if (!allArgumentsOnSameLine(functionName, arguments)) {
 
-        if (!isCorrectlySplitOnLines(callingLine, arguments)) {
+        if (areIncorrectlySplitOnLines(callingLine, arguments)) {
           check.reportIssue(String.format(ARGUMENT_LINE_SPLIT_MESSAGE, expectedIndentationColumn, callingLine), firstArg);
 
-        } else if (!isCorrectlyIndented(expectedIndentationColumn, arguments)) {
+        } else if (areIncorrectlyIndented(expectedIndentationColumn, arguments)) {
           check.reportIssue(String.format(ARGUMENT_INDENTATION_MESSAGE, expectedIndentationColumn), firstArg);
         }
 
         // Checking parenthesis
         if (closeParenthesis != null) {
-          checkClosingParenthesisLocation((Tree) Iterables.getLast(arguments), closeParenthesis, isFunctionCall);
+          checkClosingParenthesisLocation(Iterables.getLast(arguments), closeParenthesis, isFunctionCall);
         }
       }
     }
@@ -208,21 +206,34 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     }
   }
 
-  private static boolean isCorrectlyIndented(int expectedColumn, List<? extends Tree> items) {
+  private static boolean areIncorrectlyIndented(int expectedColumn, List<? extends Tree> items) {
     for (Tree item : items) {
-      if (((PHPTree) item).getFirstToken().column() != expectedColumn) {
-        return false;
+      if (isIncorrectlyIndented(expectedColumn, (PHPTree) item)) {
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
-  private static boolean isCorrectlySplitOnLines(int referenceLine, List<? extends Tree> items) {
+  private static boolean isIncorrectlyIndented(int expectedColumn, PHPTree item) {
+    if (isNamedArgument(item)) {
+      return ((PHPTree) item.getParent()).getFirstToken().column() != expectedColumn;
+    } else {
+      return item.getFirstToken().column() != expectedColumn;
+    }
+  }
+
+  private static boolean isNamedArgument(PHPTree item) {
+    PHPTree parent = (PHPTree) item.getParent();
+    return parent.is(Kind.CALL_ARGUMENT) && ((CallArgumentTree) parent).name() != null;
+  }
+
+  private static boolean areIncorrectlySplitOnLines(int referenceLine, List<? extends Tree> items) {
     int expectedLine = referenceLine + 1;
 
     for (Tree item : items) {
       if (getStartLine(item) < expectedLine) {
-        return false;
+        return true;
       }
 
       if (item.is(Kind.ARRAY_INITIALIZER_BRACKET, Kind.FUNCTION_EXPRESSION)) {
@@ -232,7 +243,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
       }
     }
 
-    return true;
+    return false;
   }
 
   private static int getStartLine(Tree tree) {
