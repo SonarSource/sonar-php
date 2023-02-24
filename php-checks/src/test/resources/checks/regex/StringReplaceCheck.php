@@ -17,6 +17,9 @@ class StringReplaceCheck
     preg_replace("/\n/", " ", $init); // Noncompliant
     preg_replace("/\"/", " ", $init); // Noncompliant
     preg_replace("/{/", "It's", $init); // Noncompliant
+
+    // as -1 is the limit default value, we should report, even if the limit parameter is set
+    preg_replace("/\n/", " ", "source string", -1); // Noncompliant
   }
 
   function compliant($input)
@@ -47,6 +50,9 @@ class StringReplaceCheck
     preg_replace(PATTERN, "_", $init);
     preg_replace("//u", "_", $init);
     preg_match($input, "/c/", $init);
+
+    // as limit parameter is set, we should not report, str replace is not a proper replacement.
+    preg_replace("/\n/", " ", $init, 2);
   }
 
   function patternAsVariable() {

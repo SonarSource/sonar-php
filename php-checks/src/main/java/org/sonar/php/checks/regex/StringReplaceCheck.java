@@ -20,8 +20,12 @@
 package org.sonar.php.checks.regex;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
@@ -32,10 +36,19 @@ import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 public class StringReplaceCheck extends AbstractRegexCheck {
 
   private static final String MESSAGE = "Replace this \"preg_replace()\" call by a \"str_replace()\" function call.";
+  private static final int LIMIT_PARAM_INDEX = 3;
+  private static final String LIMIT_PARAM_NAME = "limit";
 
   @Override
   protected Set<String> lookedUpFunctionNames() {
     return Collections.singleton("preg_replace");
+  }
+
+  @Override
+  protected void checkFunctionCall(FunctionCallTree tree) {
+    if (limitParameterIsNotUsedOrSetToDefault(tree)) {
+      super.checkFunctionCall(tree);
+    }
   }
 
   @Override
@@ -44,6 +57,12 @@ public class StringReplaceCheck extends AbstractRegexCheck {
     if (!regexParseResult.hasSyntaxErrors() && isPlainString(regex)) {
       newIssue(regexFunctionCall.callee(), MESSAGE, null, Collections.singletonList(new RegexIssueLocation(regex, "Expression without regular expression features.")));
     }
+  }
+
+  private static boolean limitParameterIsNotUsedOrSetToDefault(FunctionCallTree tree) {
+    Optional<ExpressionTree> limitParamTree = CheckUtils.argumentValue(tree, LIMIT_PARAM_NAME, LIMIT_PARAM_INDEX);
+    // only expected negative numeric value is -1 which is the default value
+    return limitParamTree.isEmpty() || limitParamTree.get().is(Tree.Kind.UNARY_MINUS);
   }
 
   private static boolean isPlainString(RegexTree regex) {
