@@ -59,8 +59,8 @@ public class StringReplaceCheck extends AbstractRegexCheck {
     }
   }
 
-  private static boolean limitParameterIsNotUsedOrSetToDefault(FunctionCallTree regexFunctionCall) {
-    Optional<ExpressionTree> limitParamTree = CheckUtils.argumentValue(regexFunctionCall, LIMIT_PARAM_NAME, LIMIT_PARAM_INDEX);
+  private static boolean limitParameterIsNotUsedOrSetToDefault(FunctionCallTree tree) {
+    Optional<ExpressionTree> limitParamTree = CheckUtils.argumentValue(tree, LIMIT_PARAM_NAME, LIMIT_PARAM_INDEX);
     // only expected negative numeric value is -1 which is the default value
     return limitParamTree.isEmpty() || limitParamTree.get().is(Tree.Kind.UNARY_MINUS);
   }
