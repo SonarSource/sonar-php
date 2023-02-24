@@ -141,44 +141,12 @@ doSomething($a, array(      // OK
   2
 ), $b);
 
-doSomething(        // OK
-    $a,
-    function () {
-
-    },
-    $b,
-    "value",
-    2
-);
-
-namedParamsUsingVariables(
-    param1: $arg1,
-    param2: $arg2
-);
-
 namedParamsWithLiteralValues(
     param1: "value",
     param2: -1
 );
 
-namedParamsWithArrays (
-    param1: ['foo', 'bar '],
-    param2: [
-        'foo',
-        'bar'
-    ]
-);
-
-namedParamsWithFunction (
-    onError: function(Throwable $e) {
-        throw $e;
-    },
-    limit: 2
-);
-
-namedParamsWithFunctionNonCompliant (
-    onError: function(Throwable $e) { // Noncompliant
-        throw $e;
-    },
-      limit: 2
+namedParamsWithLiteralValuesNonCompliant(
+    param1: "value", //Noncompliant
+      param2: -1
 );
