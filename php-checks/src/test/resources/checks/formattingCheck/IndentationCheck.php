@@ -150,3 +150,23 @@ namedParamsWithLiteralValuesNonCompliant(
     param1: "value", //Noncompliant
       param2: -1
 );
+
+namedParamsWithArrays (
+    param1: ['foo', 'bar '], // Noncompliant {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "154".}}
+    param2: [
+        'foo',
+        'bar',
+        'foo'
+    ], param3: 4
+);
+
+
+/**
+ * Class with method declaration
+ **/
+ class C6
+ {
+     public function k($p1, $p2)
+     {
+     }
+ }

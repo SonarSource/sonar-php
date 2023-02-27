@@ -156,27 +156,20 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     List<? extends Tree> arguments,
     SyntaxToken functionName, int baseColumn,
     @Nullable SyntaxToken closeParenthesis,
-    boolean isFunctionCall
-  ) {
-    if (arguments.size() > 1) {
-      Tree firstArg = arguments.get(0);
-
+    boolean isFunctionCall) {
+    if (arguments.size() > 1 && !allArgumentsOnSameLine(functionName, arguments)) {
       int expectedIndentationColumn = baseColumn + PSR2_INDENTATION;
       int callingLine = functionName.line();
+      Tree firstArg = arguments.get(0);
+      if (areIncorrectlySplitOnLines(callingLine, arguments)) {
+        check.reportIssue(String.format(ARGUMENT_LINE_SPLIT_MESSAGE, expectedIndentationColumn, callingLine), firstArg);
+      } else if (areIncorrectlyIndented(expectedIndentationColumn, arguments)) {
+        check.reportIssue(String.format(ARGUMENT_INDENTATION_MESSAGE, expectedIndentationColumn), firstArg);
+      }
 
-      if (!allArgumentsOnSameLine(functionName, arguments)) {
-
-        if (areIncorrectlySplitOnLines(callingLine, arguments)) {
-          check.reportIssue(String.format(ARGUMENT_LINE_SPLIT_MESSAGE, expectedIndentationColumn, callingLine), firstArg);
-
-        } else if (areIncorrectlyIndented(expectedIndentationColumn, arguments)) {
-          check.reportIssue(String.format(ARGUMENT_INDENTATION_MESSAGE, expectedIndentationColumn), firstArg);
-        }
-
-        // Checking parenthesis
-        if (closeParenthesis != null) {
-          checkClosingParenthesisLocation(Iterables.getLast(arguments), closeParenthesis, isFunctionCall);
-        }
+      // Checking parenthesis
+      if (closeParenthesis != null) {
+        checkClosingParenthesisLocation(Iterables.getLast(arguments), closeParenthesis, isFunctionCall);
       }
     }
   }
@@ -217,7 +210,12 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
 
   private static boolean isIncorrectlyIndented(int expectedColumn, PHPTree item) {
     if (isNamedArgument(item)) {
-      return ((PHPTree) item.getParent()).getFirstToken().column() != expectedColumn;
+      PHPTree parent = (PHPTree) item.getParent();
+      if(parent==null) {
+        throw new IllegalArgumentException("Item is supposed to have a parent.");
+      }
+      SyntaxToken firstToken = parent.getFirstToken();
+      return firstToken !=null && firstToken.column() != expectedColumn;
     } else {
       return item.getFirstToken().column() != expectedColumn;
     }
@@ -225,7 +223,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
 
   private static boolean isNamedArgument(PHPTree item) {
     PHPTree parent = (PHPTree) item.getParent();
-    return parent.is(Kind.CALL_ARGUMENT) && ((CallArgumentTree) parent).name() != null;
+    return parent!=null && parent.is(Kind.CALL_ARGUMENT) && ((CallArgumentTree) parent).name() != null;
   }
 
   private static boolean areIncorrectlySplitOnLines(int referenceLine, List<? extends Tree> items) {
