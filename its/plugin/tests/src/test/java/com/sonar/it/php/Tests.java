@@ -53,7 +53,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-  CommonRulesTest.class,
   CustomRulesTest.class,
   NonPhpProjectTest.class,
   NoSonarTest.class,
