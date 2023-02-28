@@ -99,7 +99,6 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
     connectFunctions.put("ifx_connect", new Parameter(PASSWORD, 2));
     connectFunctions.put("dbx_connect", new Parameter(PASSWORD, 4));
     connectFunctions.put("fbsql_pconnect", new Parameter(PASSWORD, 2));
-    connectFunctions.put("Encrypter", new Parameter(ENCRYPTER_KEY, 0));
 
     return connectFunctions;
   }
@@ -129,7 +128,10 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
     String functionName = callee.toString();
-    if (isLaravelEncryptConstructorCall(callee) || CONNECT_FUNCTIONS.containsKey(functionName)) {
+    if (isLaravelEncryptConstructorCall(callee)) {
+      checkArgument(tree, new Parameter(ENCRYPTER_KEY, 0));
+    }
+    if (CONNECT_FUNCTIONS.containsKey(functionName)) {
       checkArgument(tree, CONNECT_FUNCTIONS.get(functionName));
     }
     super.visitFunctionCall(tree);

@@ -113,3 +113,7 @@ $conection = new PDO(passwd: "p4ssw0rd"); // Noncompliant
 namespace laravel;
 use Illuminate\Encryption\Encrypter;
 $enc = new Encrypter('staticKey'); // Noncompliant
+
+namespace notlaravel;
+use my\Other\Encrypter;
+$enc = new Encrypter('staticKey'); // Compliant
