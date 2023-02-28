@@ -147,7 +147,7 @@ namedParamsWithLiteralValues(
 );
 
 namedParamsWithLiteralValuesNonCompliant(
-    param1: "value", //Noncompliant
+    param1: "value", // Noncompliant
       param2: -1
 );
 

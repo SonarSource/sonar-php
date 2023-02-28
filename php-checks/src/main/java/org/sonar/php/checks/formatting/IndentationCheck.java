@@ -209,8 +209,8 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
   }
 
   private static boolean isIncorrectlyIndented(int expectedColumn, PHPTree item) {
-    if (isNamedArgument(item)) {
-      PHPTree parent = (PHPTree) item.getParent();
+    PHPTree parent = (PHPTree) item.getParent();
+    if (isNamedArgument(parent)) {
       SyntaxToken firstToken = parent.getFirstToken();
       return firstToken.column() != expectedColumn;
     } else {
@@ -218,9 +218,8 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     }
   }
 
-  private static boolean isNamedArgument(PHPTree item) {
-    PHPTree parent = (PHPTree) item.getParent();
-    return parent!=null && parent.is(Kind.CALL_ARGUMENT) && ((CallArgumentTree) parent).name() != null;
+  private static boolean isNamedArgument(PHPTree parent) {
+    return parent.is(Kind.CALL_ARGUMENT) && ((CallArgumentTree) parent).name() != null;
   }
 
   private static boolean areIncorrectlySplitOnLines(int referenceLine, List<? extends Tree> items) {
