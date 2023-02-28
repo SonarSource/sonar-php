@@ -109,3 +109,11 @@ ldap_bind("a", "b", 2, 3, $par, bind_password: "p4ssw0rd"); // Noncompliant
 ldap_bind("a", "b", 2, 3, $par, password: "p4ssw0rd"); // Compliant
 mysqli_connect("a", "b", passwd: "p4ssw0rd"); // Noncompliant
 $conection = new PDO(passwd: "p4ssw0rd"); // Noncompliant
+
+namespace laravel;
+use Illuminate\Encryption\Encrypter;
+$enc = new Encrypter('staticKey'); // Noncompliant
+
+namespace notlaravel;
+use my\Other\Encrypter;
+$enc = new Encrypter('staticKey'); // Compliant

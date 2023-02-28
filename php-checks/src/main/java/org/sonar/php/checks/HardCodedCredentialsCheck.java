@@ -34,9 +34,11 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -44,6 +46,8 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 @Rule(key = HardCodedCredentialsCheck.KEY)
 public class HardCodedCredentialsCheck extends PHPVisitorCheck {
@@ -59,10 +63,13 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
   private static final Map<String, Parameter> CONNECT_FUNCTIONS = initializeConnectFunctionsMap();
 
+  private static final QualifiedName LARAVEL_ENCRYPTER = qualifiedName("illuminate\\encryption\\encrypter");
+
   private static final String BIND_PASSWORD = "bind_password";
   private static final String PASSWD = "passwd";
   private static final String PASSWORD = "password";
   private static final String NEWPW = "newpw";
+  private static final String ENCRYPTER_KEY = "key";
 
   @RuleProperty(
     key = "credentialWords",
@@ -119,11 +126,19 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = tree.callee().toString();
+    ExpressionTree callee = tree.callee();
+    String functionName = callee.toString();
+    if (isLaravelEncryptConstructorCall(callee)) {
+      checkArgument(tree, new Parameter(ENCRYPTER_KEY, 0));
+    }
     if (CONNECT_FUNCTIONS.containsKey(functionName)) {
       checkArgument(tree, CONNECT_FUNCTIONS.get(functionName));
     }
     super.visitFunctionCall(tree);
+  }
+
+  private boolean isLaravelEncryptConstructorCall(ExpressionTree expressionTree) {
+    return expressionTree.is(Kind.NAMESPACE_NAME) && getFullyQualifiedName((NamespaceNameTree) expressionTree).equals(LARAVEL_ENCRYPTER);
   }
 
   private void checkArgument(FunctionCallTree tree, Parameter parameter) {
