@@ -218,8 +218,8 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     }
   }
 
-  private static boolean isNamedArgument(PHPTree parent) {
-    return parent.is(Kind.CALL_ARGUMENT) && ((CallArgumentTree) parent).name() != null;
+  private static boolean isNamedArgument(PHPTree tree) {
+    return tree.is(Kind.CALL_ARGUMENT) && ((CallArgumentTree) tree).name() != null;
   }
 
   private static boolean areIncorrectlySplitOnLines(int referenceLine, List<? extends Tree> items) {
