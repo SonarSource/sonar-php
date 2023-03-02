@@ -48,6 +48,7 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
   private static final Logger LOG = Loggers.get(CoverageResultImporter.class);
 
   private static final String WRONG_LINE_EXCEPTION_MESSAGE = "Line with number %s doesn't belong to file %s";
+  public static final String COVERAGE_REPORT_DOES_NOT_CONTAINS_ANY_RECORD = "Coverage report does not contains any record in file %s";
 
   public CoverageResultImporter(AnalysisWarningsWrapper analysisWarningsWrapper) {
     super(analysisWarningsWrapper);
@@ -65,26 +66,40 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
     List<ProjectNode> projects = coverage.getProjects();
     if (projects != null && !projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      parseFileNodes(projectNode.getFiles(), context);
-      parsePackagesNodes(projectNode.getPackages(), context);
-    }
-  }
-
-
-  private void parsePackagesNodes(@Nullable List<PackageNode> packages, SensorContext context) {
-    if (packages != null) {
-      for (PackageNode packageNode : packages) {
-        parseFileNodes(packageNode.getFiles(), context);
+      boolean noParsedFile = !parseFileNodes(projectNode.getFiles(), context);
+      boolean noParsedFileInPackage = !parsePackagesNodes(projectNode.getPackages(), context);
+      if (noParsedFile && noParsedFileInPackage) {
+        formatAndCreateWarning(coverageReportFile);
       }
     }
   }
 
-  private void parseFileNodes(@Nullable List<FileNode> fileNodes, SensorContext context) {
+  private void formatAndCreateWarning(File coverageReportFile) {
+    String warning = String.format(COVERAGE_REPORT_DOES_NOT_CONTAINS_ANY_RECORD, coverageReportFile.getAbsolutePath());
+    LOG.warn(warning);
+    analysisWarningsWrapper.addWarning(warning);
+  }
+
+
+  private boolean parsePackagesNodes(@Nullable List<PackageNode> packages, SensorContext context) {
+    boolean atLeastOneFileAsCoverage = false;
+    if (packages != null) {
+      for (PackageNode packageNode : packages) {
+        atLeastOneFileAsCoverage |= parseFileNodes(packageNode.getFiles(), context);
+      }
+    }
+    return atLeastOneFileAsCoverage;
+  }
+
+  private boolean parseFileNodes(@Nullable List<FileNode> fileNodes, SensorContext context) {
+    boolean atLeastOneFileAsCoverage = false;
     if (fileNodes != null) {
       for (FileNode file : fileNodes) {
         saveCoverageMeasure(file, context);
+        atLeastOneFileAsCoverage=true;
       }
     }
+    return atLeastOneFileAsCoverage;
   }
 
   /**
@@ -216,4 +231,5 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
   public Logger logger() {
     return LOG;
   }
+
 }

@@ -17,9 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- *
- */
+
 package org.sonar.plugins.php;
 
 import java.io.File;
@@ -27,6 +25,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -40,6 +39,8 @@ public class PhpTestUtils {
 
   public static final String PHPUNIT_REPORT_DIR = "reports/phpunit/";
   public static final String PHPUNIT_REPORT_NAME = PHPUNIT_REPORT_DIR + "phpunit-junit-report.xml";
+  public static final String PHPUNIT_EMPTY_REPORT_NAME = PHPUNIT_REPORT_DIR + "phpunit-junit-report-empty.xml";
+
   public static final String PHPUNIT_COVERAGE_REPORT = PHPUNIT_REPORT_DIR + "phpunit.coverage.xml";
 
   public static final String SENSOR_TEST_PHPUNIT_REPORT_DIR = "phpunit-reports/";
@@ -74,7 +75,7 @@ public class PhpTestUtils {
         .setCharset(Charset.defaultCharset())
         .setLanguage(Php.KEY)
         .setStatus(status)
-        .initMetadata(new String(java.nio.file.Files.readAllBytes(new File("src/test/resources/" + fileName).toPath()), StandardCharsets.UTF_8)).build();
+        .initMetadata(Files.readString(new File("src/test/resources/" + fileName).toPath(), StandardCharsets.UTF_8)).build();
     } catch (IOException e) {
       throw new IllegalStateException("File not found", e);
     }

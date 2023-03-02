@@ -154,6 +154,15 @@ public class PHPUnitTest {
     assertThat(getAnalysisWarnings(result)).hasSize(1);
   }
 
+  @Test
+  public void coverage_report_with_no_package_nor_file() {
+    setCoverageReportPaths(REPORTS_DIR + "/phpunit.coverage-empty.xml");
+    BuildResult result = executeBuild();
+
+    assertThat(result.getLogs()).contains("Coverage report does not contains any record");
+    assertThat(getAnalysisWarnings(result)).hasSize(1);
+  }
+
   private Integer getProjectMetrics(String metricKey) {
     return getMeasureAsInt(PROJECT_KEY, metricKey);
   }
