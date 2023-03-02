@@ -55,4 +55,10 @@ public abstract class PhpUnitReportImporter extends AbstractReportImporter {
     return ExternalReportProvider.getReportFiles(context, reportPathKey());
   }
 
+  protected void formatAndCreateWarning(String warningFormat, File coverageReportFile) {
+    String warning = String.format(warningFormat, coverageReportFile.getAbsolutePath());
+    logger().warn(warning);
+    analysisWarningsWrapper.addWarning(warning);
+  }
+
 }

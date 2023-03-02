@@ -46,25 +46,18 @@ public class TestResultImporter extends PhpUnitReportImporter {
   public void importReport(File reportFile, SensorContext context) throws ParseException, IOException {
     LOG.info("Importing {}", reportFile);
     TestSuites testSuites = parser.parse(reportFile);
-    extracted(reportFile, context, testSuites);
+    List<TestFileReport> testFileReports = testSuites.arrangeSuitesIntoTestFileReports();
+    if (testFileReports.isEmpty()) {
+      formatAndCreateWarning(TEST_REPORT_DOES_NOT_CONTAINS_ANY_RECORD, reportFile);
+    } else {
+      saveTestReports(context, testFileReports);
+    }
   }
 
-  private void extracted(File reportFile, SensorContext context, TestSuites testSuites) {
-    List<TestFileReport> testFileReports = testSuites.arrangeSuitesIntoTestFileReports();
-    if(testFileReports.isEmpty()) {
-      formatAndCreateWarning(reportFile);
-      return;
-    }
-    
+  private void saveTestReports(SensorContext context, List<TestFileReport> testFileReports) {
     for (TestFileReport fileReport : testFileReports) {
       fileReport.saveTestMeasures(context, fileHandler, this::addUnresolvedInputFile);
     }
-  }
-
-  private void formatAndCreateWarning(File coverageReportFile) {
-    String warning = String.format(TEST_REPORT_DOES_NOT_CONTAINS_ANY_RECORD, coverageReportFile.getAbsolutePath());
-    LOG.warn(warning);
-    analysisWarningsWrapper.addWarning(warning);
   }
 
   /**
