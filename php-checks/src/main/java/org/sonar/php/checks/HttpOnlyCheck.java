@@ -28,15 +28,22 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
+import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.phpini.PhpIniFiles.checkRequiredBoolean;
 import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseFunctionName;
 import static org.sonar.php.checks.utils.CheckUtils.isFalseValue;
+import static org.sonar.php.checks.utils.CheckUtils.nameOf;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.CLASS_MEMBER_ACCESS;
 
 @Rule(key = "S3330")
 public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
@@ -45,6 +52,7 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
   private static final String MESSAGE = "Make sure creating this cookie without the \"httpOnly\" flag is safe here.";
 
   private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
+  private static final QualifiedName SYMFONY_COOKIE = qualifiedName("Symfony\\Component\\HttpFoundation\\Cookie");
 
   @Override
   public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {
@@ -71,6 +79,12 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
         context().newIssue(this, tree.callee(), MESSAGE);
       }
     }
+    if (isSymfonyCookieCreation(tree)) {
+      Optional<CallArgumentTree> httpOnly = CheckUtils.argument(tree, "$httpOnly", 6);
+      if (httpOnly.isPresent() && isFalseValue(httpOnly.get().value())) {
+        context().newIssue(this, tree.callee(), MESSAGE);
+      }
+    }
 
     super.visitFunctionCall(tree);
   }
@@ -78,5 +92,20 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
   private static boolean isSetCookie(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
     return functionName != null && SET_COOKIE_FUNCTIONS.contains(functionName);
+  }
+
+  private boolean isSymfonyCookieCreation(FunctionCallTree tree) {
+    ExpressionTree callee = tree.callee();
+
+    if (callee.is(CLASS_MEMBER_ACCESS)) {
+      MemberAccessTree memberAccessTree = (MemberAccessTree) callee;
+      ExpressionTree receiver = memberAccessTree.object();
+      String method = nameOf(memberAccessTree.member());
+      return "create".equals(method) && receiver.is(Kind.NAMESPACE_NAME) && SYMFONY_COOKIE.equals(getFullyQualifiedName((NamespaceNameTree) receiver));
+    }
+    if (callee instanceof ClassNamespaceNameTreeImpl) {
+      return ((ClassNamespaceNameTreeImpl) callee).symbol().qualifiedName().equals(SYMFONY_COOKIE);
+    }
+    return false;
   }
 }
