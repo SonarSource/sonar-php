@@ -46,7 +46,7 @@ class CoverageFileParserForPhpUnit {
   protected void consumeAllFileNodes(File coverageReportFile, Consumer<FileNode> fileNodeConsumer) throws IOException {
     CoverageNode coverage = getCoverage(coverageReportFile);
     List<ProjectNode> projects = coverage.getProjects();
-    if (projects != null && !projects.isEmpty()) {
+    if (!projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
       consumeFileNodesInProject(projectNode, fileNodeConsumer);
     }
