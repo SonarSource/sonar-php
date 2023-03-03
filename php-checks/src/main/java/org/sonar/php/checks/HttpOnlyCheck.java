@@ -108,7 +108,7 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
   }
 
   private void createIssueIfHttpOnlyIsFalse(ExpressionTree argument, FunctionCallTree tree) {
-    if (argument.is(Kind.BOOLEAN_LITERAL) && isFalseValue(argument)) {
+    if (isFalseValue(argument)) {
       context().newIssue(this, tree.callee(), MESSAGE).secondary(argument, null);
     }
   }
