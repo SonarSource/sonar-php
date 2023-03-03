@@ -39,9 +39,9 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
   private static final Logger LOG = Loggers.get(CoverageResultImporter.class);
 
   private static final String WRONG_LINE_EXCEPTION_MESSAGE = "Line with number %s doesn't belong to file %s";
-  private static final String COVERAGE_REPORT_DOES_NOT_CONTAINS_ANY_RECORD = "Coverage report does not contains any record in file %s";
+  private static final String COVERAGE_REPORT_DOES_NOT_CONTAIN_ANY_RECORD = "Coverage report does not contain any record in file %s";
 
-  final CoverageFileParserForPhpUnit parser = new CoverageFileParserForPhpUnit();
+  private final CoverageFileParserForPhpUnit parser = new CoverageFileParserForPhpUnit();
 
   public CoverageResultImporter(AnalysisWarningsWrapper analysisWarningsWrapper) {
     super(analysisWarningsWrapper);
@@ -52,9 +52,10 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
     LOG.info("Importing {}", coverageReportFile);
 
     CoverageMeasureRecorder recorder = new CoverageMeasureRecorder(this, context);
-    parser.consumeAllFileNodes(coverageReportFile, recorder);
-    if (recorder.getFileNodeCount() == 0) {
-      formatAndCreateWarning(COVERAGE_REPORT_DOES_NOT_CONTAINS_ANY_RECORD, coverageReportFile);
+    parser.parse(coverageReportFile, recorder);
+
+    if (recorder.fileNodeCount == 0) {
+      createWarning(COVERAGE_REPORT_DOES_NOT_CONTAIN_ANY_RECORD, coverageReportFile);
     }
   }
 
@@ -113,21 +114,17 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
   }
 
   /**
-   * Small class that save Coverage for each found fileNode and keep track of count.
+   * Class used to count the encountered fileNodes and save the coverage measurements for each of them.
    */
   private static class CoverageMeasureRecorder implements Consumer<FileNode> {
 
     private final CoverageResultImporter importer;
     SensorContext context;
-    int fileNodeCount=0;
+    protected int fileNodeCount = 0;
 
     public CoverageMeasureRecorder(CoverageResultImporter importer, SensorContext context) {
       this.importer = importer;
       this.context = context;
-    }
-
-    public int getFileNodeCount() {
-      return fileNodeCount;
     }
 
     @Override

@@ -60,7 +60,7 @@ public class TestResultImporterTest {
   }
 
   @Test
-  public void should_add_waring_and_log_when_report_not_found() {
+  public void should_add_warning_and_log_when_report_not_found() {
     executeSensorImporting(new File("notfound.txt"));
     assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
     assertThat((logTester.logs(LoggerLevel.ERROR).get(0)))
@@ -72,15 +72,15 @@ public class TestResultImporterTest {
   }
 
   @Test
-  public void should_add_waring_and_log_when_report_does_not_contain_any_record() {
+  public void should_add_warning_and_log_when_report_does_not_contain_any_record() {
     executeSensorImporting(new File(PhpTestUtils.getModuleBaseDir(), PhpTestUtils.PHPUNIT_EMPTY_REPORT_PATH));
     assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
     assertThat((logTester.logs(LoggerLevel.WARN).get(0)))
-      .startsWith("PHPUnit test report does not contains any record in file")
+      .startsWith("PHPUnit test report does not contain any record in file")
       .contains(PhpTestUtils.PHPUNIT_EMPTY_REPORT_NAME);
 
     verify(analysisWarnings, times(1))
-      .addWarning(startsWith("PHPUnit test report does not contains any record in file"));
+      .addWarning(startsWith("PHPUnit test report does not contain any record in file"));
   }
 
 

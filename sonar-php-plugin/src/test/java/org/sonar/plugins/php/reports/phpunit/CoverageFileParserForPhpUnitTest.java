@@ -22,65 +22,58 @@ package org.sonar.plugins.php.reports.phpunit;
 import java.io.File;
 import java.io.IOException;
 import java.util.function.Consumer;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.plugins.php.reports.phpunit.xml.FileNode;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.junit.Assert.assertThrows;
 
 public class CoverageFileParserForPhpUnitTest {
-  final static String NO_PROJECT_FILE = "phpunit.coverage-no-project.xml";
 
-  final static String INVALID_COVERAGE_FILE="phpunit.coverage-invalid.xml";
-
+  private final static String NO_PROJECT_FILE = "phpunit.coverage-no-project.xml";
+  private final static String INVALID_COVERAGE_FILE = "phpunit.coverage-invalid.xml";
   private static final String SRC_TEST_RESOURCES = "src/test/resources/";
-
   private static final String BASE_DIR = "/reports/phpunit/";
 
-  @org.junit.Rule
+  @Rule
   public LogTester logTester = new LogTester();
+  private CoverageFileParserForPhpUnit parser;
+
+  @Before
+  public void setUp() {
+    parser = new CoverageFileParserForPhpUnit();
+  }
 
   @Test
-  public void should_parse_when_there_is_no_project() {
-    CoverageFileParserForPhpUnit parser = new CoverageFileParserForPhpUnit();
-    try {
-      CountConsumer counter = new CountConsumer();
-      parser.consumeAllFileNodes(getReportFile(NO_PROJECT_FILE), counter);
-      assertThat(counter.getCount()).isZero();
-    } catch(IOException ex) {
-      fail("Not suppose to throw an Exception.");
-    }
+  public void should_parse_when_there_is_no_project() throws IOException {
+    CountConsumer counter = new CountConsumer();
+    parser.parse(reportFile(NO_PROJECT_FILE), counter);
+    assertThat(counter.count).isZero();
   }
 
-  @Test(expected = ParseException.class)
+  @Test
   public void should_fail_when_xml_root_node_is_not_coverage() {
-    CoverageFileParserForPhpUnit parser = new CoverageFileParserForPhpUnit();
-    try {
-      CountConsumer counter = new CountConsumer();
-      parser.consumeAllFileNodes(getReportFile(INVALID_COVERAGE_FILE), counter);
-      fail("should not parse this file");
-    } catch(IOException ex) {
-      fail("Not suppose to throw an Exception.");
-    }
+    CountConsumer counter = new CountConsumer();
+    File reportFile = reportFile(INVALID_COVERAGE_FILE);
+    assertThrows(ParseException.class, () -> parser.parse(reportFile, counter));
   }
 
-
-
-  private static File getReportFile(String file) {
+  private static File reportFile(String file) {
     return new File(SRC_TEST_RESOURCES + BASE_DIR + file);
   }
 
   static class CountConsumer implements Consumer<FileNode> {
-    int count = 0;
+
+    protected int count = 0;
+
     @Override
     public void accept(FileNode fileNode) {
-        count++;
+      count++;
     }
 
-    public int getCount() {
-      return count;
-    }
   }
 }

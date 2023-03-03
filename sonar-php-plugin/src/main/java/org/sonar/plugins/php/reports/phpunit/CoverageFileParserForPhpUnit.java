@@ -38,28 +38,29 @@ import org.sonarsource.analyzer.commons.xml.ParseException;
 class CoverageFileParserForPhpUnit {
 
   /**
-   * Read the coverage report file and call consumer for each FileNode
-   * @param coverageReportFile parse file
-   * @param fileNodeConsumer consumer that will be call for each FileNode in coverage file.
-   * @throws IOException when I/O error occurs during file parse.
+   * Read the coverage report file and call the consumer for each FileNode
    */
-  protected void consumeAllFileNodes(File coverageReportFile, Consumer<FileNode> fileNodeConsumer) throws IOException {
+  protected void parse(File coverageReportFile, Consumer<FileNode> fileNodeConsumer) throws IOException {
     CoverageNode coverage = getCoverage(coverageReportFile);
     List<ProjectNode> projects = coverage.getProjects();
     if (!projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      consumeFileNodesInProject(projectNode, fileNodeConsumer);
+      parse(projectNode, fileNodeConsumer);
     }
   }
 
-  private static void consumeFileNodesInProject(ProjectNode projectNode, Consumer<FileNode> fileNodeConsumer) {
-    projectNode.getFiles().forEach(fileNodeConsumer);
-    consumeFileNodesInPackages(projectNode.getPackages(), fileNodeConsumer);
+  private static void parse(ProjectNode projectNode, Consumer<FileNode> fileNodeConsumer) {
+    consumeFileNodes(projectNode.getFiles(), fileNodeConsumer);
+    parse(projectNode.getPackages(), fileNodeConsumer);
   }
 
-  private static void consumeFileNodesInPackages(List<PackageNode> packages, Consumer<FileNode> fileNodeConsumer) {
+  private static void consumeFileNodes(List<FileNode> fileNodes, Consumer<FileNode> fileNodeConsumer) {
+    fileNodes.forEach(fileNodeConsumer);
+  }
+
+  private static void parse(List<PackageNode> packages, Consumer<FileNode> fileNodeConsumer) {
     for (PackageNode packageNode : packages) {
-      packageNode.getFiles().forEach(fileNodeConsumer);
+      consumeFileNodes(packageNode.getFiles(),fileNodeConsumer);
     }
   }
 

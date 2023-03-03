@@ -72,7 +72,7 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_add_waring_and_log_when_report_not_found() {
+  public void should_add_warning_and_log_when_report_not_found() {
     executeSensorImporting(new File("notfound.txt"));
     assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
     assertThat((logTester.logs(LoggerLevel.ERROR).get(0)))
@@ -143,15 +143,15 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_add_waring_and_log_when_report_is_empty() {
-    executeSensorImporting(getReportFile("phpunit.coverage-empty.xml"));
+  public void should_add_warning_and_log_when_report_is_empty() {
+    executeSensorImporting(getReportFile("phpunit.coverage-no-record.xml"));
     assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
     assertThat(logTester.logs(LoggerLevel.WARN).get(0))
-      .startsWith("Coverage report does not contains any record ")
-      .contains("phpunit.coverage-empty.xml");
+      .startsWith("Coverage report does not contain any record ")
+      .contains("phpunit.coverage-no-record.xml");
 
     verify(analysisWarnings, times(1))
-      .addWarning(startsWith("Coverage report does not contains any record "));
+      .addWarning(startsWith("Coverage report does not contain any record "));
   }
   private void assertReport(String componentKey) {
     // UNCOVERED_LINES is implicitly stored in the NewCoverage
@@ -193,7 +193,7 @@ public class CoverageResultImporterTest {
   public void should_not_set_metrics_to_ncloc_for_missing_files_sq_62() {
     String componentKey = componentKey("Monkey.php");
 
-    executeSensorImporting(getReportFile("phpunit.coverage-empty.xml"));
+    executeSensorImporting(getReportFile("phpunit.coverage-no-record.xml"));
 
     // since SQ 6.2 these are not saved
     assertThat(context.measure(componentKey, CoreMetrics.LINES_TO_COVER)).isNull();

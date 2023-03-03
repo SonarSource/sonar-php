@@ -155,11 +155,11 @@ public class PHPUnitTest {
   }
 
   @Test
-  public void coverage_report_with_no_package_nor_file() {
-    setCoverageReportPaths(REPORTS_DIR + "/phpunit.coverage-empty.xml");
+  public void coverage_report_with_no_file_record() {
+    setCoverageReportPaths(REPORTS_DIR + "/phpunit.coverage-no-record.xml");
     BuildResult result = executeBuild();
 
-    assertThat(result.getLogs()).contains("Coverage report does not contains any record");
+    assertThat(result.getLogs()).contains("Coverage report does not contain any record");
     assertThat(getAnalysisWarnings(result)).hasSize(1);
   }
 
