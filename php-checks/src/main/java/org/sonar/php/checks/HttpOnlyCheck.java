@@ -70,19 +70,17 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
       Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "httponly", 6);
 
       if (argument.isPresent()) {
-        ExpressionTree httpOnlyArgument = argument.get().value();
-        if (httpOnlyArgument.is(Kind.BOOLEAN_LITERAL) && isFalseValue(httpOnlyArgument)) {
-          context().newIssue(this, tree.callee(), MESSAGE).secondary(httpOnlyArgument, null);
-        }
+        createIssueIfHttpOnlyIsFalse(argument.get().value(), tree);
       } else if (tree.callArguments().size() != 3) {
         // if only 3 argument are defined there is an ambiguity so we don't raise issue
         context().newIssue(this, tree.callee(), MESSAGE);
       }
     }
     if (isSymfonyCookieCreation(tree)) {
-      Optional<CallArgumentTree> httpOnly = CheckUtils.argument(tree, "$httpOnly", 6);
-      if (httpOnly.isPresent() && isFalseValue(httpOnly.get().value())) {
-        context().newIssue(this, tree.callee(), MESSAGE);
+      Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "httpOnly", 6);
+
+      if (argument.isPresent()) {
+        createIssueIfHttpOnlyIsFalse(argument.get().value(), tree);
       }
     }
 
@@ -107,5 +105,11 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
       return ((ClassNamespaceNameTreeImpl) callee).symbol().qualifiedName().equals(SYMFONY_COOKIE);
     }
     return false;
+  }
+
+  private void createIssueIfHttpOnlyIsFalse(ExpressionTree argument, FunctionCallTree tree) {
+    if (argument.is(Kind.BOOLEAN_LITERAL) && isFalseValue(argument)) {
+      context().newIssue(this, tree.callee(), MESSAGE).secondary(argument, null);
+    }
   }
 }

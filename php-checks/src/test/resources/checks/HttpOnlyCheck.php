@@ -35,16 +35,26 @@ setcookie($name, $value, $expires); // false negative
   setcookie(httponly: foo(false));
   setrawcookie(httponly: $httpOnly, name: $name);
 
+
 use Symfony\Component\HttpFoundation\Cookie;
 
-Cookie::create('name', 'value', $minutes, $path, $domain, $secure, FALSE); // Noncompliant
+  Cookie::create('name', 'value', $minutes, $path, $domain, $secure, FALSE); // Noncompliant {{Make sure creating this cookie without the "httpOnly" flag is safe here.}}
+//^^^^^^^^^^^^^^                                                     ^^^^^ <
 Cookie::create('name', 'value', $minutes, $path, $domain, $secure, TRUE);
+Cookie::create('name', 'value', $minutes, $path, $domain, $secure, $httpOnly);
 Cookie::create('name', 'value', $minutes, $path, $domain, $secure);
+
+  Cookie::create(name:'name', value:'value', httpOnly:FALSE); // Noncompliant
+//^^^^^^^^^^^^^^                                      ^^^^^ <
+
 Cookie::otherMethod('name', 'value', $minutes, $path, $domain, $secure, FALSE);
 OtherClass::create('name', 'value', $minutes, $path, $domain, $secure, FALSE);
 $otherClass::create('name', 'value', $minutes, $path, $domain, $secure, FALSE);
 
 new Cookie($name, $value, $expire, $path, $domain, $secure, FALSE); // Noncompliant
+//  ^^^^^^                                                  ^^^^^ <
+new Cookie(httpOnly: FALSE); // Noncompliant
+
 new Cookie($name, $value, $expire, $path, $domain, $secure, TRUE);
 new Cookie($name, $value, $expire, $path, $domain, $secure);
 
