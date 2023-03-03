@@ -73,7 +73,7 @@ public class TestResultImporterTest {
 
   @Test
   public void should_add_waring_and_log_when_report_does_not_contain_any_record() {
-    executeSensorImporting(new File(PhpTestUtils.getModuleBaseDir(), PhpTestUtils.PHPUNIT_EMPTY_REPORT_NAME));
+    executeSensorImporting(new File(PhpTestUtils.getModuleBaseDir(), PhpTestUtils.PHPUNIT_EMPTY_REPORT_PATH));
     assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
     assertThat((logTester.logs(LoggerLevel.WARN).get(0)))
       .startsWith("PHPUnit test report does not contains any record in file")

@@ -39,7 +39,9 @@ public class PhpTestUtils {
 
   public static final String PHPUNIT_REPORT_DIR = "reports/phpunit/";
   public static final String PHPUNIT_REPORT_NAME = PHPUNIT_REPORT_DIR + "phpunit-junit-report.xml";
-  public static final String PHPUNIT_EMPTY_REPORT_NAME = PHPUNIT_REPORT_DIR + "phpunit-junit-report-empty.xml";
+
+  public static final String PHPUNIT_EMPTY_REPORT_NAME = "phpunit-junit-report-empty.xml";
+  public static final String PHPUNIT_EMPTY_REPORT_PATH = PHPUNIT_REPORT_DIR + PHPUNIT_EMPTY_REPORT_NAME;
 
   public static final String PHPUNIT_COVERAGE_REPORT = PHPUNIT_REPORT_DIR + "phpunit.coverage.xml";
 
