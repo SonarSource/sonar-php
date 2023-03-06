@@ -34,7 +34,7 @@ import org.sonarsource.analyzer.commons.xml.ParseException;
 public class TestResultImporter extends PhpUnitReportImporter {
 
   private static final Logger LOG = Loggers.get(TestResultImporter.class);
-  private static final String TEST_REPORT_DOES_NOT_CONTAINS_ANY_RECORD = "PHPUnit test report does not contain any record in file %s.";
+  private static final String TEST_REPORT_DOES_NOT_CONTAIN_ANY_RECORD = "PHPUnit test report does not contain any record in file %s.";
 
   private final JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();
 
@@ -48,7 +48,7 @@ public class TestResultImporter extends PhpUnitReportImporter {
     TestSuites testSuites = parser.parse(reportFile);
     List<TestFileReport> testFileReports = testSuites.arrangeSuitesIntoTestFileReports();
     if (testFileReports.isEmpty()) {
-      createWarning(TEST_REPORT_DOES_NOT_CONTAINS_ANY_RECORD, reportFile);
+      createWarning(TEST_REPORT_DOES_NOT_CONTAIN_ANY_RECORD, reportFile);
     } else {
       saveTestReports(context, testFileReports);
     }

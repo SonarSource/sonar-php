@@ -34,8 +34,8 @@ import static org.junit.Assert.assertThrows;
 
 public class CoverageFileParserForPhpUnitTest {
 
-  private final static String NO_PROJECT_FILE = "phpunit.coverage-no-project.xml";
-  private final static String INVALID_COVERAGE_FILE = "phpunit.coverage-invalid.xml";
+  private static final String NO_PROJECT_FILE = "phpunit.coverage-no-project.xml";
+  private static final String INVALID_COVERAGE_FILE = "phpunit.coverage-invalid.xml";
   private static final String SRC_TEST_RESOURCES = "src/test/resources/";
   private static final String BASE_DIR = "/reports/phpunit/";
 

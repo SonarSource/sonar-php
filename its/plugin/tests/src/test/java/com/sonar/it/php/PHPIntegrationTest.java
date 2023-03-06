@@ -40,7 +40,7 @@ public class PHPIntegrationTest {
   private static final String PROJECT_KEY = "php-integration";
   private static final String PROJECT_NAME = "PHP Integration";
 
-  public final static String FILE_TOKEN_PARSER = PROJECT_KEY + ":Bridge/Twig/TokenParser/TransChoiceTokenParser.php";
+  public static final String FILE_TOKEN_PARSER = PROJECT_KEY + ":Bridge/Twig/TokenParser/TransChoiceTokenParser.php";
 
   @BeforeClass
   public static void startServer() {
