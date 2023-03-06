@@ -48,14 +48,14 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
   }
 
   @Override
-  public void importReport(File coverageReportFile, SensorContext context) throws IOException, ParseException {
-    LOG.info("Importing {}", coverageReportFile);
+  public void importReport(File report, SensorContext context) throws IOException, ParseException {
+    LOG.info("Importing {}", report);
 
     CoverageMeasureRecorder recorder = new CoverageMeasureRecorder(this, context);
-    parser.parse(coverageReportFile, recorder);
+    parser.parse(report, recorder);
 
     if (recorder.fileNodeCount == 0) {
-      createWarning(COVERAGE_REPORT_DOES_NOT_CONTAIN_ANY_RECORD, coverageReportFile);
+      createWarning(COVERAGE_REPORT_DOES_NOT_CONTAIN_ANY_RECORD, report);
     }
   }
 

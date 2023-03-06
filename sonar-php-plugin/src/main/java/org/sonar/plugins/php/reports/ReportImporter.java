@@ -38,7 +38,7 @@ public interface ReportImporter {
 
   List<File> getReportFiles(SensorContext context);
 
-  void importReport(File coverageReportFile, SensorContext context) throws Exception;
+  void importReport(File report, SensorContext context) throws Exception;
   String getFileReadErrorMessage(Exception e, File reportPath);
 
   String getUnresolvedInputFileMessageFormat();

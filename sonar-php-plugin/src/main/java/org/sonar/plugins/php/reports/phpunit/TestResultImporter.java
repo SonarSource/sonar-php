@@ -43,12 +43,12 @@ public class TestResultImporter extends PhpUnitReportImporter {
   }
 
   @Override
-  public void importReport(File reportFile, SensorContext context) throws ParseException, IOException {
-    LOG.info("Importing {}", reportFile);
-    TestSuites testSuites = parser.parse(reportFile);
+  public void importReport(File report, SensorContext context) throws ParseException, IOException {
+    LOG.info("Importing {}", report);
+    TestSuites testSuites = parser.parse(report);
     List<TestFileReport> testFileReports = testSuites.arrangeSuitesIntoTestFileReports();
     if (testFileReports.isEmpty()) {
-      createWarning(TEST_REPORT_DOES_NOT_CONTAIN_ANY_RECORD, reportFile);
+      createWarning(TEST_REPORT_DOES_NOT_CONTAIN_ANY_RECORD, report);
     } else {
       saveTestReports(context, testFileReports);
     }
