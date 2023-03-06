@@ -40,34 +40,34 @@ class CoverageFileParserForPhpUnit {
   /**
    * Read the coverage report file and call the consumer for each FileNode
    */
-  protected void parse(File coverageReportFile, Consumer<FileNode> fileNodeConsumer) throws IOException {
-    CoverageNode coverage = getCoverage(coverageReportFile);
+  protected void parse(File report, Consumer<FileNode> consumer) throws IOException {
+    CoverageNode coverage = getCoverage(report);
     List<ProjectNode> projects = coverage.getProjects();
     if (!projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      parse(projectNode, fileNodeConsumer);
+      parse(projectNode, consumer);
     }
   }
 
-  private static void parse(ProjectNode projectNode, Consumer<FileNode> fileNodeConsumer) {
-    consumeFileNodes(projectNode.getFiles(), fileNodeConsumer);
-    parse(projectNode.getPackages(), fileNodeConsumer);
+  private static void parse(ProjectNode projectNode, Consumer<FileNode> consumer) {
+    consumeFileNodes(projectNode.getFiles(), consumer);
+    parse(projectNode.getPackages(), consumer);
   }
 
-  private static void consumeFileNodes(List<FileNode> fileNodes, Consumer<FileNode> fileNodeConsumer) {
-    fileNodes.forEach(fileNodeConsumer);
+  private static void consumeFileNodes(List<FileNode> fileNodes, Consumer<FileNode> consumer) {
+    fileNodes.forEach(consumer);
   }
 
-  private static void parse(List<PackageNode> packages, Consumer<FileNode> fileNodeConsumer) {
+  private static void parse(List<PackageNode> packages, Consumer<FileNode> consumer) {
     for (PackageNode packageNode : packages) {
-      consumeFileNodes(packageNode.getFiles(),fileNodeConsumer);
+      consumeFileNodes(packageNode.getFiles(),consumer);
     }
   }
 
-  private static CoverageNode getCoverage(File coverageReportFile) throws ParseException, IOException {
+  private static CoverageNode getCoverage(File report) throws ParseException, IOException {
     SMInputFactory inputFactory = JUnitLogParserForPhpUnit.inputFactory();
     try {
-      SMHierarchicCursor rootCursor = inputFactory.rootElementCursor(coverageReportFile);
+      SMHierarchicCursor rootCursor = inputFactory.rootElementCursor(report);
       rootCursor.advance();
       if (!"coverage".equals(rootCursor.getLocalName())) {
         throw new XMLStreamException("Report should start with <coverage>");
