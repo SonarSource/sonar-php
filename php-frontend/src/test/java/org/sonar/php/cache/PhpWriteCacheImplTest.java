@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 
 public class PhpWriteCacheImplTest {
 
-  private final static byte [] bytes = new byte[] {1, 2, 3};
+  private static final byte [] bytes = new byte[] {1, 2, 3};
 
   @Test
   public void shouldWriteFromWriteCache() {

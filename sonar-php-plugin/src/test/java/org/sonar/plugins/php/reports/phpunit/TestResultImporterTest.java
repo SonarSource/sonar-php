@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.reports.phpunit;
 
 import java.io.File;
-import java.io.IOException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -61,7 +60,7 @@ public class TestResultImporterTest {
   }
 
   @Test
-  public void should_add_waring_and_log_when_report_not_found() throws IOException {
+  public void should_add_warning_and_log_when_report_not_found() {
     executeSensorImporting(new File("notfound.txt"));
     assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
     assertThat((logTester.logs(LoggerLevel.ERROR).get(0)))
@@ -72,8 +71,21 @@ public class TestResultImporterTest {
       .addWarning(startsWith("An error occurred when reading report file '"));
   }
 
+  @Test
+  public void should_add_warning_and_log_when_report_does_not_contain_any_record() {
+    executeSensorImporting(new File(PhpTestUtils.getModuleBaseDir(), PhpTestUtils.PHPUNIT_EMPTY_REPORT_PATH));
+    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
+    assertThat((logTester.logs(LoggerLevel.WARN).get(0)))
+      .startsWith("PHPUnit test report does not contain any record in file")
+      .contains(PhpTestUtils.PHPUNIT_EMPTY_REPORT_NAME);
+
+    verify(analysisWarnings, times(1))
+      .addWarning(startsWith("PHPUnit test report does not contain any record in file"));
+  }
+
+
   @Test()
-  public void shouldGenerateTestsMeasures() throws IOException {
+  public void shouldGenerateTestsMeasures() {
     DefaultInputFile appTestFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
     DefaultInputFile appSkippedTestFile = TestInputFileBuilder.create("moduleKey", "src/AppSkipTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
 
