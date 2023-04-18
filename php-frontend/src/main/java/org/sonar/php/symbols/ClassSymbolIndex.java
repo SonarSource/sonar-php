@@ -114,7 +114,7 @@ public class ClassSymbolIndex {
 
     @Override
     public MethodSymbol getDeclaredMethod(String name) {
-      return methods.getOrDefault(name.toLowerCase(Locale.ROOT), new UnknownMethodSymbol(name));
+      return methods.getOrDefault(name.toLowerCase(Locale.ROOT), new UnknownMethodSymbol(qualifiedName() + "::" + name));
     }
 
     @Override
