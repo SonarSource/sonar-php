@@ -61,7 +61,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     FunctionCallTreeImpl functionCall = TreeUtils.firstDescendant(cut, FunctionCallTreeImpl.class).get();
     FunctionSymbol memberSymbol = functionCall.symbol();
     assertThat(memberSymbol.isUnknownSymbol()).isTrue();
-    assertThat(memberSymbol.qualifiedName().toString()).isEqualTo("defuse\\crypto\\keyorpassword::createfrompassword");
+    assertThat(memberSymbol.qualifiedName()).hasToString("defuse\\crypto\\keyorpassword::createfrompassword");
   }
 
   @Test
@@ -74,7 +74,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     FunctionCallTreeImpl functionCall = TreeUtils.firstDescendant(cut, FunctionCallTreeImpl.class).get();
     FunctionSymbol memberSymbol = functionCall.symbol();
     assertThat(memberSymbol.isUnknownSymbol()).isTrue();
-    assertThat(memberSymbol.qualifiedName().toString()).isEqualTo("defuse\\crypto\\keyorpassword::createfrompassword");
+    assertThat(memberSymbol.qualifiedName()).hasToString("defuse\\crypto\\keyorpassword::createfrompassword");
   }
 
   @Test
