@@ -93,7 +93,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private static final Set<String> VALID_VISIBILITIES = SetUtils.immutableSetOf("PUBLIC", "PRIVATE", "PROTECTED");
   private static final QualifiedName ANONYMOUS_CLASS_NAME = QualifiedName.qualifiedName("<anonymous_class>");
 
-  DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, PhpFile file) {
+  DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
     this.projectSymbolData = projectSymbolData;
     this.filePath = pathOf(file);
