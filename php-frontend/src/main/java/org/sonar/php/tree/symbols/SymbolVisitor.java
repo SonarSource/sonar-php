@@ -98,8 +98,8 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   );
   private static final Set<String> SELF_OBJECTS = SetUtils.immutableSetOf("$this", "self", "static");
 
-  private Deque<Scope> classScopes = new ArrayDeque<>();
-  private Map<Symbol, Scope> scopeBySymbol = new HashMap<>();
+  private final Deque<Scope> classScopes = new ArrayDeque<>();
+  private final Map<Symbol, Scope> scopeBySymbol = new HashMap<>();
 
   static class ClassMemberUsageState {
     boolean isStatic = false;
@@ -111,7 +111,6 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     boolean isConst = false;
   }
 
-  private SymbolTableImpl symbolTable;
   private Scope currentScope;
   private Scope globalScope;
   private ClassMemberUsageState classMemberUsageState = null;
@@ -119,7 +118,6 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   public SymbolVisitor(SymbolTableImpl symbolTable) {
     super(symbolTable);
-    this.symbolTable = symbolTable;
     this.currentScope = null;
     this.globalScope = null;
   }
