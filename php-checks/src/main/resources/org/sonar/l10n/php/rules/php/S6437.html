@@ -1,0 +1,66 @@
+<p>A hard-coded secret has been found in your code. You should quickly list where this secret is used, revoke it, and then change it in every system
+that uses it.</p>
+<p>Passwords, secrets, and any type of credentials should only be used to authenticate a single entity (a person or a system).</p>
+<p>If you allow third parties to authenticate as another system or person, they can impersonate legitimate identities and undermine trust within the
+organization.<br> It does not matter if the impersonation is malicious: In either case, it is a clear breach of trust in the system, as the systems
+involved falsely assume that the authenticated entity is who it claims to be.<br> The consequences can be catastrophic.</p>
+<p>Keeping credentials in plain text in a code base is tantamount to sharing that password with anyone who has access to the source code and runtime
+servers.<br> Thus, it is a breach of trust, as these individuals have the ability to impersonate others.</p>
+<p>Secret management services are the most efficient tools to store credentials and protect the identities associated with them.<br> Cloud providers
+and on-premise services can be used for this purpose.</p>
+<p>If storing credentials in a secret data management service is not possible, follow these guidelines:</p>
+<ul>
+  <li> Do not store credentials in a file that an excessive number of people can access.
+    <ul>
+      <li> For example, not in code, not in a spreadsheet, not on a sticky note, and not on a shared drive. </li>
+    </ul>  </li>
+  <li> Use the production operating system to protect password access control.
+    <ul>
+      <li> For example, in a file whose permissions are restricted and protected with chmod and chown. </li>
+    </ul>  </li>
+</ul>
+<h2>Noncompliant Code Example</h2>
+<pre>
+use Defuse\Crypto\KeyOrPassword;
+
+function createKey() {
+    $password = "example";
+    return KeyOrPassword::createFromPassword($password); // Noncompliant
+}
+</pre>
+<h2>Compliant Solution</h2>
+<p>Modern web frameworks tend to provide a secure way to pass passwords and secrets to the code. For example, in Symfony you can use <a
+href="https://symfony.com/doc/current/configuration/secrets.html">vaults</a> to store your secrets. The secret values are referenced in the same way
+as environment variables, so you can easily access them through <a
+href="https://symfony.com/doc/current/configuration.html#configuration-parameters">configuration parameters</a>.</p>
+<pre>
+use Defuse\Crypto\KeyOrPassword;
+
+class PasswordService
+{
+    private string $password;
+
+    public function setPassword(string $password): void
+    {
+        $this-&gt;password = $password;
+    }
+
+    public function createKey(): KeyOrPassword
+    {
+        return KeyOrPassword::createFromPassword($this-&gt;password);
+    }
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/">OWASP Top 10 2021 Category A7</a> - Identification and
+  Authentication Failures </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A2-Broken_Authentication">OWASP Top 10 2017 Category A2</a> - Broken Authentication </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/798.html">MITRE, CWE-798</a> - Use of Hard-coded Credentials </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/259.html">MITRE, CWE-259</a> - Use of Hard-coded Password </li>
+  <li> <a href="https://wiki.sei.cmu.edu/confluence/x/OjdGBQ">CERT, MSC03-J.</a> - Never hard code sensitive information </li>
+  <li> <a href="https://symfony.com/doc/current/configuration/env_var_processors.html">Symfony</a> - Environment Variable Processors </li>
+  <li> <a href="https://symfony.com/doc/current/configuration.html#configuration-parameters">Symfony</a> - Configuring Symfony </li>
+  <li> <a href="https://symfony.com/doc/current/configuration/secrets.html">Symfony</a> - How to Keep Sensitive Information Secret </li>
+</ul>
+

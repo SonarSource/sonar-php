@@ -21,6 +21,7 @@ package org.sonar.php.checks.security;
 
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.ArgumentVerifierValueContainment;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionArgumentCheck;
 import org.sonar.php.utils.collections.SetUtils;
@@ -59,8 +60,8 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
     "MHASH_HAVAL224"
   );
 
-  private static final ArgumentVerifier hashArgumentVerifier = new ArgumentVerifier(0, "algo", WEAK_HASH_ARGUMENTS);
-  private static final ArgumentVerifier mHashArgumentVerifier = new ArgumentVerifier(0, "hash", WEAK_MHASH_ARGUMENTS);
+  private static final ArgumentVerifierValueContainment hashArgumentVerifier = new ArgumentVerifierValueContainment(0, "algo", WEAK_HASH_ARGUMENTS);
+  private static final ArgumentVerifierValueContainment mHashArgumentVerifier = new ArgumentVerifierValueContainment(0, "hash", WEAK_MHASH_ARGUMENTS);
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

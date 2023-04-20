@@ -200,6 +200,7 @@ public class CheckList {
       GotoUseCheck.class,
       HashFunctionCheck.class,
       HardCodedCredentialsCheck.class,
+      HardCodedCredentialsInFunctionCallsCheck.class,
       HardCodedIpAddressCheck.class,
       HardCodedUriCheck.class,
       HttpOnlyCheck.class,

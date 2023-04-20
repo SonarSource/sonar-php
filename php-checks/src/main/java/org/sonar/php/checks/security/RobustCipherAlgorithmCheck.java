@@ -20,6 +20,7 @@
 package org.sonar.php.checks.security;
 
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.ArgumentVerifierValueContainment;
 import org.sonar.php.checks.utils.FunctionArgumentCheck;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -31,7 +32,7 @@ public class RobustCipherAlgorithmCheck extends FunctionArgumentCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    checkArgument(tree, "mcrypt_encrypt", new ArgumentVerifier(0, "cipher", SetUtils.immutableSetOf(
+    checkArgument(tree, "mcrypt_encrypt", new ArgumentVerifierValueContainment(0, "cipher", SetUtils.immutableSetOf(
       "mcrypt_des",
       "mcrypt_des_compat",
       "mcrypt_tripledes",
@@ -40,7 +41,7 @@ public class RobustCipherAlgorithmCheck extends FunctionArgumentCheck {
       "mcrypt_rc2",
       "mcrypt_rc4")));
 
-    checkArgument(tree, "openssl_encrypt", new ArgumentVerifier(1, "method", SetUtils.immutableSetOf(
+    checkArgument(tree, "openssl_encrypt", new ArgumentVerifierValueContainment(1, "method", SetUtils.immutableSetOf(
       "bf-cbc",
       "bf-cfb",
       "bf-ecb",

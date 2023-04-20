@@ -20,8 +20,6 @@
 package org.sonar.php.checks.utils;
 
 import org.junit.Test;
-import org.sonar.php.checks.utils.FunctionArgumentCheck.ArgumentMatcher;
-import org.sonar.php.checks.utils.FunctionArgumentCheck.ArgumentVerifier;
 import org.sonar.php.utils.collections.SetUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +28,7 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_indicator_with_string() {
-    ArgumentMatcher argumentMatcher = new ArgumentMatcher(1, null, "VALUE");
+    ArgumentMatcherValueContainment argumentMatcher = new ArgumentMatcherValueContainment(1, null, "VALUE");
 
     assertThat(argumentMatcher.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentMatcher.getPosition()).isEqualTo(1);
@@ -39,7 +37,8 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_indicator_with_set() {
-    ArgumentMatcher argumentMatcher = new ArgumentMatcher(1, "argumentName", SetUtils.immutableSetOf("VALUE"));
+    ArgumentMatcherValueContainment argumentMatcher = new ArgumentMatcherValueContainment(1, "argumentName", SetUtils.immutableSetOf(
+      "VALUE"));
 
     assertThat(argumentMatcher.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentMatcher.getName()).isEqualTo("argumentName");
@@ -47,7 +46,7 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_verifier_with_value() {
-    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, "VALUE", false);
+    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, "VALUE", false);
 
     assertThat(argumentVerifier.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isFalse();
@@ -55,14 +54,14 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_verifier_with_name() {
-    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, "name", "VALUE");
+    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, "name", "VALUE");
 
     assertThat(argumentVerifier.getName()).isEqualTo("name");
   }
 
   @Test
   public void argument_verifier_with_set() {
-    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, SetUtils.immutableSetOf("VALUE"), true);
+    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, SetUtils.immutableSetOf("VALUE"), true);
 
     assertThat(argumentVerifier.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isTrue();
@@ -70,7 +69,7 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void argument_verifier_with_default() {
-    ArgumentVerifier argumentVerifier = new ArgumentVerifier(1, "VALUE");
+    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, "VALUE");
 
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isTrue();
   }

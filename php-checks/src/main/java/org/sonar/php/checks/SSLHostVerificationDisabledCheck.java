@@ -21,6 +21,8 @@ package org.sonar.php.checks;
 
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.ArgumentMatcherValueContainment;
+import org.sonar.php.checks.utils.ArgumentVerifierValueContainment;
 import org.sonar.php.checks.utils.FunctionArgumentCheck;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -37,7 +39,7 @@ public class SSLHostVerificationDisabledCheck extends FunctionArgumentCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    checkArgument(tree, CURL_SETOPT, new ArgumentMatcher(1, "option", CURLOPT_SSL_VERIFYHOST), new ArgumentVerifier(2, "value", VERIFY_HOST_COMPLIANT_VALUES, false));
+    checkArgument(tree, CURL_SETOPT, new ArgumentMatcherValueContainment(1, "option", CURLOPT_SSL_VERIFYHOST), new ArgumentVerifierValueContainment(2, "value", VERIFY_HOST_COMPLIANT_VALUES, false));
 
     super.visitFunctionCall(tree);
   }
