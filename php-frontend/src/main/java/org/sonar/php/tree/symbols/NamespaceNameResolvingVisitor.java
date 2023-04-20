@@ -37,7 +37,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 class NamespaceNameResolvingVisitor extends PHPVisitorCheck {
 
-  private final SymbolTableImpl symbolTable;
+  protected final SymbolTableImpl symbolTable;
   private final Map<SymbolQualifiedName, Map<String, SymbolQualifiedName>> aliasesPerNamespace = new HashMap<>();
   private SymbolQualifiedName currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
 

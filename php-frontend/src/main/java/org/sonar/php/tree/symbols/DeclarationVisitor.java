@@ -19,6 +19,8 @@
  */
 package org.sonar.php.tree.symbols;
 
+import java.net.URI;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
@@ -73,10 +76,9 @@ import static org.sonar.plugins.php.api.symbols.Symbol.Kind.FUNCTION;
 
 public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
-  private final SymbolTableImpl symbolTable;
-  private ProjectSymbolData projectSymbolData;
+  private final ProjectSymbolData projectSymbolData;
   @Nullable
-  private String filePath;
+  private final String filePath;
   private Scope globalScope;
   private final Map<ClassTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
   private ClassSymbolIndex classSymbolIndex;
@@ -85,17 +87,16 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
 
-  private Deque<ClassTree> classTreeStack = new ArrayDeque<>();
-  private Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
+  private final Deque<ClassTree> classTreeStack = new ArrayDeque<>();
+  private final Deque<FunctionSymbolProperties> functionPropertiesStack = new ArrayDeque<>();
 
   private static final Set<String> VALID_VISIBILITIES = SetUtils.immutableSetOf("PUBLIC", "PRIVATE", "PROTECTED");
   private static final QualifiedName ANONYMOUS_CLASS_NAME = QualifiedName.qualifiedName("<anonymous_class>");
 
   DeclarationVisitor(SymbolTableImpl symbolTable, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
     super(symbolTable);
-    this.symbolTable = symbolTable;
     this.projectSymbolData = projectSymbolData;
-    this.filePath = file == null ? null : Paths.get(file.uri()).toString();
+    this.filePath = pathOf(file);
   }
 
   @Override
@@ -281,5 +282,26 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   private static boolean isFuncGetArgsCall(FunctionCallTree fct) {
     return fct.callee().is(Tree.Kind.NAMESPACE_NAME)
       && ((NamespaceNameTree) fct.callee()).fullyQualifiedName().matches("func_get_arg(s)?");
+  }
+
+
+  /**
+   * Provide the path of the file from the URI in case the PhpFile is located on the local filesystem
+   */
+  @CheckForNull
+  protected static String pathOf(@Nullable PhpFile file) {
+    if (file == null) {
+      return null;
+    }
+
+    try {
+      URI uri = file.uri();
+      if ("file".equalsIgnoreCase(uri.getScheme())) {
+        return Paths.get(uri).toString();
+      }
+      return null;
+    } catch (InvalidPathException e) {
+      return null;
+    }
   }
 }
