@@ -34,12 +34,13 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonarsource.sonarlint.core.StandaloneSonarLintEngineImpl;
-import org.sonarsource.sonarlint.core.client.api.common.RuleKey;
-import org.sonarsource.sonarlint.core.client.api.common.analysis.ClientInputFile;
+import org.sonarsource.sonarlint.core.analysis.api.ClientInputFile;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.Issue;
 import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneAnalysisConfiguration;
 import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneGlobalConfiguration;
 import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneSonarLintEngine;
+import org.sonarsource.sonarlint.core.commons.IssueSeverity;
+import org.sonarsource.sonarlint.core.commons.Language;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -56,7 +57,8 @@ public class SonarLintTest {
   @BeforeClass
   public static void prepare() throws Exception {
     StandaloneGlobalConfiguration sonarLintConfig = StandaloneGlobalConfiguration.builder()
-      .addPlugin(Tests.PHP_PLUGIN_LOCATION.getFile().toURI().toURL())
+      .addPlugin(Tests.PHP_PLUGIN_LOCATION.getFile().toPath())
+      .addEnabledLanguages(Language.PHP)
       .setSonarLintUserHome(temp.newFolder().toPath())
       .setLogOutput((formattedMessage, level) -> {
         /* Don't pollute logs */ })
@@ -71,31 +73,21 @@ public class SonarLintTest {
   }
 
   @Test
-  public void should_raise_issues() throws IOException {
+  public void shouldRaiseIssue() throws IOException {
     Path filePath = Tests.projectDirectoryFor("sonarlint").toPath().resolve("Math.php");
     filePath = Files.copy(filePath, baseDir.resolve("Math.php"));
-    ClientInputFile inputFile = prepareInputFile(filePath, false);
+    ClientInputFile inputFile = createInputFile(filePath, false);
 
     List<Issue> issues = new ArrayList<>();
     StandaloneAnalysisConfiguration configuration = StandaloneAnalysisConfiguration.builder()
       .setBaseDir(baseDir)
       .addInputFile(inputFile)
-      .addIncludedRules(
-        RuleKey.parse("php:S101"),
-        RuleKey.parse("php:S2964"),
-        RuleKey.parse("php:S1808")
-      )
       .build();
     sonarlintEngine.analyze(configuration, issues::add, null, null);
 
     assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
-      tuple("php:S101", 4, inputFile.getPath(), "MINOR"),
-      tuple("php:S2964", 9, inputFile.getPath(), "MINOR"),
-      tuple("php:S1808", 18, inputFile.getPath(), "MINOR"));
-  }
-
-  private ClientInputFile prepareInputFile(Path filePath, final boolean isTest) {
-    return createInputFile(filePath, isTest);
+      tuple("php:S101", 4, inputFile.relativePath(), IssueSeverity.MINOR),
+      tuple("php:S1808", 18, inputFile.relativePath(), IssueSeverity.MINOR));
   }
 
   private ClientInputFile createInputFile(final Path path, final boolean isTest) {
@@ -140,7 +132,6 @@ public class SonarLintTest {
       public InputStream inputStream() throws IOException {
         return Files.newInputStream(path);
       }
-
     };
   }
 
