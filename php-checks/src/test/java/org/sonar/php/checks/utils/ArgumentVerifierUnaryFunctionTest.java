@@ -19,32 +19,21 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.util.function.Function;
-import javax.annotation.Nullable;
+import org.junit.Test;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 
-public class ArgumentVerifierUnaryFunction extends ArgumentMatcher implements IssueRaiser {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  private final Function<ExpressionTree, Boolean> matchingFunction;
+public class ArgumentVerifierUnaryFunctionTest {
 
-  public ArgumentVerifierUnaryFunction(int position, @Nullable String name, Function<ExpressionTree, Boolean> matchingFunction) {
-    super(position, name);
-    this.matchingFunction = matchingFunction;
-  }
+  @Test
+  public void argument_verifier_with_value() {
+    Function<ExpressionTree, Boolean> testFunction = s -> true;
+    ArgumentVerifierUnaryFunction argumentVerifier = new ArgumentVerifierUnaryFunction(1, "name", testFunction);
 
-  @Override
-  public boolean matches(ExpressionTree argumentValue) {
-    return matchingFunction.apply(argumentValue);
-  }
-
-  @Override
-  public boolean shouldRaiseIssue(boolean matchingSuccessful, ExpressionTree argumentValue) {
-    return matchingSuccessful;
-  }
-
-  @VisibleForTesting
-  Function<ExpressionTree, Boolean> getMatchingFunction() {
-    return matchingFunction;
+    assertThat(argumentVerifier.getPosition()).isEqualTo(1);
+    assertThat(argumentVerifier.getName()).isEqualTo("name");
+    assertThat(argumentVerifier.getMatchingFunction()).isEqualTo(testFunction);
   }
 }

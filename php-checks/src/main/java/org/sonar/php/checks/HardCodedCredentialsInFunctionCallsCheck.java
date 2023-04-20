@@ -26,11 +26,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
@@ -39,6 +39,8 @@ import org.sonar.php.checks.utils.ArgumentVerifierUnaryFunction;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionArgumentCheck;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -66,9 +68,8 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   public void visitNewExpression(NewExpressionTree tree) {
     FunctionCallTree functionCallTree = (FunctionCallTree) tree.expression();
     ClassNamespaceNameTreeImpl callee = (ClassNamespaceNameTreeImpl) functionCallTree.callee();
-    String fqn = callee.symbol().qualifiedName().toString();
-    String methodName = "__construct";
-    checkForSensitiveMethod(functionCallTree, fqn + "::" + methodName);
+    QualifiedName fqn = callee.symbol().qualifiedName();
+    checkForSensitiveMethod(functionCallTree, fqn + "::" + "__construct");
 
     super.visitNewExpression(tree);
   }
@@ -77,20 +78,13 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   public void visitFunctionCall(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
 
-    if (callee.is(Kind.OBJECT_MEMBER_ACCESS)) {
-      // Is it even possible?
-      // TODO: Remove after more testing
-      throw new RuntimeException("Delete me after testing!");
-    }
-
     if (callee.is(Kind.CLASS_MEMBER_ACCESS)) {
       MemberAccessTree memberAccessTreeCallee = (MemberAccessTree) callee;
-      // TODO: Use Nils method
-      // TODO: How will this work, if method is not static? -> Test me!
-      String fqn = ((ClassNamespaceNameTreeImpl) memberAccessTreeCallee.object()).symbol().qualifiedName().toString();
+      QualifiedName fqn = ((ClassNamespaceNameTreeImpl) memberAccessTreeCallee.object()).symbol().qualifiedName();
 
-      String methodName = memberAccessTreeCallee.member().toString();
-      checkForSensitiveMethod(tree, fqn + "::" + methodName);
+
+      Tree method = memberAccessTreeCallee.member();
+      checkForSensitiveMethod(tree, fqn + "::" + method);
     }
     super.visitFunctionCall(tree);
   }
@@ -98,13 +92,15 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   private void checkForSensitiveMethod(FunctionCallTree tree, String fqnMethodName) {
     if (SENSITIVE_FUNCTIONS.containsKey(fqnMethodName)) {
       SensitiveMethod sensitiveMethod = SENSITIVE_FUNCTIONS.get(fqnMethodName);
-      ArgumentMatcher[] methodMatchers = sensitiveMethod.getCorrespondingMatchers();
+      Set<ArgumentMatcher> methodMatchers = sensitiveMethod.getCorrespondingMatchers();
 
       String lowerCaseFunctionName = CheckUtils.getLowerCaseFunctionName(tree);
-      if (lowerCaseFunctionName == null) {
-        return;
+      if (lowerCaseFunctionName != null) {
+        for (ArgumentMatcher methodMatcher : methodMatchers) {
+          checkArgument(tree, lowerCaseFunctionName, methodMatcher);
+        }
       }
-      checkArgument(tree, lowerCaseFunctionName, methodMatchers);
+
     }
   }
 
@@ -114,19 +110,17 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   }
 
   private static class SensitiveMethod {
+    private static final Map<String, ArgumentMatcher> matcherMap = new HashMap<>();
     private final String name;
     private final String cls;
-
-    //TODO: Check if this is used somehow?
-    private final String type;
     private final Set<Integer> sensitiveIndices;
 
     private final List<String> orderedArguments;
 
-    public SensitiveMethod(String name, String cls, String type, Set<Integer> sensitiveIndices, List<String> orderedArguments) {
+
+    public SensitiveMethod(String name, String cls, Set<Integer> sensitiveIndices, List<String> orderedArguments) {
       this.name = name;
       this.cls = cls;
-      this.type = type;
       this.sensitiveIndices = sensitiveIndices;
       this.orderedArguments = orderedArguments;
     }
@@ -135,20 +129,13 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
       return cls + "::" + name;
     }
 
-    public ArgumentMatcher[] getCorrespondingMatchers() {
+    public Set<ArgumentMatcher> getCorrespondingMatchers() {
       Function<ExpressionTree, Boolean> isRegularStringLiteral = tree -> tree.is(Kind.REGULAR_STRING_LITERAL);
 
-      ArgumentMatcher[] matchers = new ArgumentMatcher[sensitiveIndices.size()];
-
-      Iterator<Integer> iterator = sensitiveIndices.iterator();
-      int matcherIndex = 0;
-      while (iterator.hasNext()) {
-        Integer index = iterator.next();
-        matchers[matcherIndex] = new ArgumentVerifierUnaryFunction(index, orderedArguments.get(index), isRegularStringLiteral);
-        matcherIndex++;
-      }
-
-      return matchers;
+      return sensitiveIndices.stream()
+        .map(index -> matcherMap.computeIfAbsent(index + ";" + orderedArguments.get(index),
+          key -> new ArgumentVerifierUnaryFunction(index, orderedArguments.get(index), isRegularStringLiteral)))
+        .collect(Collectors.toSet());
     }
   }
 
@@ -164,13 +151,12 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
           JSONObject castElement = (JSONObject) element;
           String cls = (String) castElement.get("cls");
           String name = (String) castElement.get("name");
-          String type = (String) castElement.get("type");
 
           JSONArray args = (JSONArray) castElement.get("args");
           JSONArray indices = (JSONArray) castElement.get("indices");
 
 
-          SensitiveMethod sensitiveMethod = new SensitiveMethod(name, cls, type, retrieveSensitiveIndices(indices),
+          SensitiveMethod sensitiveMethod = new SensitiveMethod(name, cls, retrieveSensitiveIndices(indices),
             retrieveActualArguments(args));
           sensitiveFunctions.put(sensitiveMethod.uniqueName(), sensitiveMethod);
         }

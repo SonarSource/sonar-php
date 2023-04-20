@@ -1,8 +1,22 @@
 <?php
 
 use Abraham\TwitterOAuth\TwitterOAuth;
-$key2 = "example";
-new TwitterOAuth("test1", $key2); // Noncompliant
+
+class PasswordService
+{
+    private string $shouldBePassing;
+
+    public function setPassword(string $shouldBePassing): void
+    {
+        $this->shouldBePassing = $shouldBePassing;
+    }
+
+    public function createKey(): KeyOrPassword
+    {
+        $password = "example";
+        new TwitterOAuth("shouldBePassing", $shouldBePassing, $password); // Noncompliant
+    }
+}
 
 
 use Defuse\Crypto\KeyOrPassword;
@@ -13,6 +27,12 @@ KeyOrPassword::createFromPassword(password: $key); // Noncompliant
 $password = "example";
 KeyOrPassword::createFromPassword(password: $password); // Noncompliant
 KeyOrPassword::createFromPassword($password); // Noncompliant
+
+$duplicateAssignment ="example";
+$duplicateAssignment ="example";
+KeyOrPassword::createFromPassword($duplicateAssignment); // FN, parser not able to resolve multiple assignments to one variable
+
+KeyOrPassword::notASensitiveMethod($password);
 
 
 class PasswordService
@@ -31,7 +51,7 @@ class PasswordService
 }
 
 
-class PasswordService
+class PasswordServiceSecond
 {
     private string $password;
 
