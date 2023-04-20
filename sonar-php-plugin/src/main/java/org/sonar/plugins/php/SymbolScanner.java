@@ -82,7 +82,7 @@ public class SymbolScanner extends Scanner {
       try {
         fileSymbolTable = createSymbolTable(file);
       } catch (RecognitionException e) {
-        LOG.warn("Can not create symbols for file: " + file.filename());
+        LOG.debug("Can not create symbols for file: " + file.filename());
         return;
       }
     }
