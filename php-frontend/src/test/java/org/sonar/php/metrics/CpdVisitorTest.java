@@ -214,6 +214,22 @@ public class CpdVisitorTest {
     assertThat(actual).isFalse();
   }
 
+  @Test
+  public void should_not_compute_cpt_tokens_for_attributes() throws IOException {
+    String source = "<?php\n" +
+      "    #[Route(\n" +
+      "        path: '/v1/infocontroller/{id}',\n" +
+      "        name: 'info',\n" +
+      "        requirements: [\"id\"=>\"\\d+\"],\n" +
+      "        methods: ['GET']\n" +
+      "    )]\n" +
+      "    function foo(){}";
+
+    List<CpdToken> tokens = scan(source);
+
+    assertThat(getImagesList(tokens)).containsExactly("function", "foo", "(", ")", "{", "}");
+  }
+
   private List<CpdToken> scan(String source) throws IOException {
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), source);
     CpdVisitor cpdVisitor = new CpdVisitor();
