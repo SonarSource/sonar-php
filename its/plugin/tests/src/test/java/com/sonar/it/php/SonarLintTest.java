@@ -83,7 +83,8 @@ public class SonarLintTest {
       .addIncludedRules(
         RuleKey.parse("php:S101"),
         RuleKey.parse("php:S2964"),
-        RuleKey.parse("php:S1808")
+        RuleKey.parse("php:S1808"),
+        RuleKey.parse("php:S6600")
       )
       .build();
     sonarlintEngine.analyze(configuration, issues::add, null, null);
@@ -91,7 +92,9 @@ public class SonarLintTest {
     assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
       tuple("php:S101", 4, inputFile.getPath(), "MINOR"),
       tuple("php:S2964", 9, inputFile.getPath(), "MINOR"),
-      tuple("php:S1808", 18, inputFile.getPath(), "MINOR"));
+      tuple("php:S1808", 18, inputFile.getPath(), "MINOR"),
+      tuple("php:S6600", 10, inputFile.getPath(), "CRITICAL"),
+      tuple("php:S6600", 15, inputFile.getPath(), "CRITICAL"));
   }
 
   private ClientInputFile prepareInputFile(Path filePath, final boolean isTest) {
