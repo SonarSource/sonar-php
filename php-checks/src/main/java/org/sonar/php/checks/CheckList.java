@@ -149,6 +149,7 @@ public class CheckList {
       ConditionalOnNewLineCheck.class,
       ConsistentFunctionReturnCheck.class,
       ConstantNameCheck.class,
+      ConstructWithParenthesesCheck.class,
       ConstructorDeclarationCheck.class,
       ConstructorDependencyInversionCheck.class,
       CookieDomainCheck.class,

@@ -86,8 +86,10 @@ public class SonarLintTest {
     sonarlintEngine.analyze(configuration, issues::add, null, null);
 
     assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
-      tuple("php:S101", 4, inputFile.relativePath(), IssueSeverity.MINOR),
-      tuple("php:S1808", 18, inputFile.relativePath(), IssueSeverity.MINOR));
+      tuple("php:S101", 4, inputFile.getPath(), "MINOR"),
+      tuple("php:S1808", 18, inputFile.getPath(), "MINOR"),
+      tuple("php:S6600", 10, inputFile.getPath(), "CRITICAL"),
+      tuple("php:S6600", 15, inputFile.getPath(), "CRITICAL"));
   }
 
   private ClientInputFile createInputFile(final Path path, final boolean isTest) {
