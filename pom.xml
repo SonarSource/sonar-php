@@ -89,7 +89,7 @@
     <version.sslr>1.24.0.633</version.sslr>
     <version.guava>30.1.1-jre</version.guava>
     <version.sonarlint>4.7.0.12286</version.sonarlint>
-    <version.analyzer-commons>2.1.0.1111</version.analyzer-commons>
+    <version.analyzer-commons>2.4.0.1317</version.analyzer-commons>
     <version.plugin-api>9.11.0.290</version.plugin-api>
 
     <!-- Advertise minimal required JRE version -->
