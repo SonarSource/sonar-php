@@ -38,10 +38,9 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = ConstructWithParenthesesCheck.KEY)
+@Rule(key = "S6600")
 public class ConstructWithParenthesesCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S6600";
   private static final String MESSAGE = "Remove the parentheses from this \"%s\" call.";
   private static final Set<String> CONSTRUCT_FUNCTION = Set.of("echo", "clone", "include", "include_once", "require", "require_once", "print");
 
@@ -101,20 +100,20 @@ public class ConstructWithParenthesesCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String constructName = getConstructName(tree.callee());
-    if (isConstructFunction(constructName) && isParenthesized(tree)) {
-      newIssue(tree, String.format(MESSAGE, constructName));
+    String calleeName = getCalleeName(tree.callee());
+    if (isConstructFunction(calleeName) && hasParenthesizedArgument(tree)) {
+      newIssue(tree, String.format(MESSAGE, calleeName));
     }
     super.visitFunctionCall(tree);
   }
 
-  private static boolean isParenthesized(FunctionCallTree tree) {
-    return tree.callArguments().size() == 1 && isParenthesizedArgument(tree.callArguments().get(0).value());
+  private static boolean hasParenthesizedArgument(FunctionCallTree tree) {
+    return tree.callArguments().size() == 1 && isParenthesized(tree.callArguments().get(0).value());
   }
 
-  private static boolean isParenthesizedArgument(ExpressionTree expression) {
-    return expression.is(Tree.Kind.PARENTHESISED_EXPRESSION)
-      || (expression instanceof BinaryExpressionTree && isParenthesizedArgument(((BinaryExpressionTree) expression).leftOperand()));
+  private static boolean isParenthesized(ExpressionTree argument) {
+    return argument.is(Tree.Kind.PARENTHESISED_EXPRESSION)
+      || (argument instanceof BinaryExpressionTree && isParenthesized(((BinaryExpressionTree) argument).leftOperand()));
   }
 
   private static boolean isConstructFunction(@Nullable String constructName) {
@@ -122,7 +121,7 @@ public class ConstructWithParenthesesCheck extends PHPVisitorCheck {
   }
 
   @CheckForNull
-  private static String getConstructName(ExpressionTree callee) {
+  private static String getCalleeName(ExpressionTree callee) {
     return Optional.of(callee)
       .filter(cal -> cal.is(Tree.Kind.NAMESPACE_NAME))
       .map(cal -> ((NamespaceNameTree) cal).qualifiedName().toLowerCase(Locale.ROOT))
