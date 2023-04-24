@@ -61,35 +61,35 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void test_use() throws Exception {
+  public void testUse() throws Exception {
     List<CpdToken> tokens = scan("<?php use a\\b;\n");
 
     assertThat(getImagesList(tokens)).containsExactly();
   }
 
   @Test
-  public void test_expandable_string() throws Exception {
+  public void testExpandableString() throws Exception {
     List<CpdToken> tokens = scan("<?php \"abc$x!abc\";");
 
     assertThat(getImagesList(tokens)).containsExactly("\"", "$CHARS", "$x", "$CHARS", "\"", ";");
   }
 
   @Test
-  public void test_heredoc_string() throws Exception {
+  public void testHeredocString() throws Exception {
     List<CpdToken> tokens = scan("<?php <<<EOF\nabc$x!abc\nabc\nEOF;");
 
     assertThat(getImagesList(tokens)).containsExactly("<<<EOF\n", "$CHARS", "$x", "$CHARS", "\nEOF", ";");
   }
 
   @Test
-  public void should_not_include_tags() throws Exception {
+  public void shouldNotIncludeTags() throws Exception {
     List<CpdToken> tokens = scan("<a/><?php $x; ?><b/>\n");
 
     assertThat(getImagesList(tokens)).containsExactly("$x", ";");
   }
 
   @Test
-  public void should_store_cpd_in_cache() throws IOException {
+  public void shouldStoreCpdInCache() throws IOException {
     ReadWriteInMemoryCache writeCache = new ReadWriteInMemoryCache();
     CacheContext cacheContext = new CacheContextImpl(true,
       new PhpWriteCacheImpl(writeCache),
@@ -103,7 +103,7 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void should_not_store_cpd_when_cache_disabled() throws IOException {
+  public void shouldNotStoreCpdWhenCacheDisabled() throws IOException {
     ReadWriteInMemoryCache writeCache = new ReadWriteInMemoryCache();
     CacheContext cacheContext = new CacheContextImpl(false,
       new PhpWriteCacheImpl(writeCache),
@@ -116,14 +116,14 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void should_not_store_cpd_when_cache_is_null() throws IOException {
+  public void shouldNotStoreCpdWhenCacheIsNull() throws IOException {
     List<CpdToken> tokens = scan(EXAMPLE_CODE, null);
 
     assertThat(getImagesList(tokens)).containsExactly("$x", "=", "$NUMBER", ";", "$y", "=", "$CHARS", "+", "$x", ";");
   }
 
   @Test
-  public void should_not_store_cpd_when_write_cache_is_null() throws IOException {
+  public void shouldNotStoreCpdWhenWriteCacheIsNull() throws IOException {
     CacheContext cacheContext = new CacheContextImpl(true,
       null,
       new PhpReadCacheImpl(new ReadWriteInMemoryCache()),
@@ -135,7 +135,7 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void should_restore_from_cache() throws IOException {
+  public void shouldRestoreFromCache() throws IOException {
     CpdVisitor cpdVisitor = new CpdVisitor();
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), EXAMPLE_CODE);
     ReadWriteInMemoryCache readCache = new ReadWriteInMemoryCache();
@@ -155,7 +155,7 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void should_not_restore_from_cache_when_cache_is_null() throws IOException {
+  public void shouldNotRestoreFromCacheWhenCacheIsNull() throws IOException {
     CpdVisitor cpdVisitor = new CpdVisitor();
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), EXAMPLE_CODE);
     PhpInputFileContext fileContext = new PhpInputFileContext(testFile, tempFolder.getRoot(), null);
@@ -166,7 +166,7 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void should_not_restore_from_cache_when_read_cache_is_null() throws IOException {
+  public void shouldNotRestoreFromCacheWhenReadCacheIsNull() throws IOException {
     CpdVisitor cpdVisitor = new CpdVisitor();
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), EXAMPLE_CODE);
     CacheContext cacheContext = new CacheContextImpl(true,
@@ -181,7 +181,7 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void should_not_restore_from_cache_when_data_bytes_are_null() throws IOException {
+  public void shouldNotRestoreFromCacheWhenDataBytesAreNull() throws IOException {
     CpdVisitor cpdVisitor = new CpdVisitor();
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), EXAMPLE_CODE);
     ReadWriteInMemoryCache readCache = new ReadWriteInMemoryCache();
@@ -198,7 +198,7 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void should_not_restore_from_cache_when_string_table_are_null() throws IOException {
+  public void shouldNotRestoreFromCacheWhenStringTableAreNull() throws IOException {
     CpdVisitor cpdVisitor = new CpdVisitor();
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), EXAMPLE_CODE);
     ReadWriteInMemoryCache readCache = new ReadWriteInMemoryCache();
@@ -215,7 +215,7 @@ public class CpdVisitorTest {
   }
 
   @Test
-  public void should_not_compute_cpt_tokens_for_attributes() throws IOException {
+  public void shouldNotComputeCptTokensForAttributes() throws IOException {
     String source = "<?php\n" +
       "    #[Route(\n" +
       "        path: '/v1/infocontroller/{id}',\n" +
