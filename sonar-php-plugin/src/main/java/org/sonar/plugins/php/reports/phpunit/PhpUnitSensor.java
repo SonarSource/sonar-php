@@ -19,9 +19,17 @@
  */
 package org.sonar.plugins.php.reports.phpunit;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.util.Iterator;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
@@ -29,6 +37,8 @@ public class PhpUnitSensor implements Sensor {
 
   public static final String PHPUNIT_COVERAGE_REPORT_PATHS_KEY = "sonar.php.coverage.reportPaths";
   public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.php.tests.reportPath";
+  private static final Logger LOG = Loggers.get(PhpUnitSensor.class);
+  private static final FilePredicate PHPUNIT_TEST_FILE_PREDICATE = new TestCaseFilePredicate();
   private final TestResultImporter testResultImporter;
   private final CoverageResultImporter coverageResultImporter;
 
@@ -48,5 +58,40 @@ public class PhpUnitSensor implements Sensor {
   public void execute(SensorContext context) {
     testResultImporter.execute(context);
     coverageResultImporter.execute(context);
+
+    if (!context.config().hasKey("sonar.tests")) {
+      detectUndeclaredTestCases(context);
+    }
   }
+
+  private static void detectUndeclaredTestCases(SensorContext context) {
+    FileSystem fs = context.fileSystem();
+    Iterator<InputFile> inputFiles = fs.inputFiles(PHPUNIT_TEST_FILE_PREDICATE).iterator();
+    if (inputFiles.hasNext()) {
+      LOG.warn("PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results.");
+    }
+    while (inputFiles.hasNext()) {
+      LOG.debug("Detected and undeclared test case in: {}", inputFiles.next().uri());
+    }
+  }
+
+  static class TestCaseFilePredicate implements FilePredicate {
+
+    private static final int DEFAULT_BUFFER_SIZE = 1024;
+    private static final String PHPUNIT_TEST_CASE_FQN = "PHPUnit\\Framework\\TestCase";
+
+    @Override
+    public boolean apply(InputFile inputFile) {
+      try (BufferedInputStream bufferedInputStream = new BufferedInputStream(inputFile.inputStream())) {
+        // Only the first bytes are read to avoid slow execution for large single-line files
+        byte[] bytes = bufferedInputStream.readNBytes(DEFAULT_BUFFER_SIZE);
+        String text = new String(bytes, inputFile.charset());
+        return text.contains(PHPUNIT_TEST_CASE_FQN);
+      } catch (IOException e) {
+        // ignore file
+      }
+      return false;
+    }
+  }
+
 }

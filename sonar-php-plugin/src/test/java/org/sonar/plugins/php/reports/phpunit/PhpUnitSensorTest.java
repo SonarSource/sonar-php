@@ -36,6 +36,7 @@ import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.internal.SonarRuntimeImpl;
@@ -111,6 +112,35 @@ public class PhpUnitSensorTest {
     assertThat(logTester.logs(LoggerLevel.ERROR).get(0))
       .startsWith("An error occurred when reading report file")
       .contains(resourcesFolder + "', nothing will be imported from this report.");
+  }
+
+  @Test
+  public void shouldLogWarningWhenTestCaseIsDetectedWithoutDeclaration() {
+    Set.of("src/App.php", "src/EmailTest.php").forEach(
+      file -> context.fileSystem().add(inputFile(file))
+    );
+
+    Sensor sensor = createSensor();
+    sensor.execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains("PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results.");
+    assertThat(logTester.logs(LoggerLevel.DEBUG)).hasSize(1);
+    assertThat(logTester.logs(LoggerLevel.DEBUG).get(0)).startsWith("Detected and undeclared test case in").endsWith("src/EmailTest.php");
+  }
+
+  @Test
+  public void shouldNotLogWarningWhenTestCaseIsDetectedWithDeclaration() {
+    Set.of("src/App.php", "src/EmailTest.php").forEach(
+      file -> context.fileSystem().add(inputFile(file))
+    );
+
+    context.settings().setProperty("sonar.tests", "tests");
+
+    Sensor sensor = createSensor();
+    sensor.execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain("PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results.");
+    assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty();
   }
 
   private PhpUnitSensor createSensor() {
