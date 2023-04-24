@@ -26,6 +26,7 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.reports.phpstan.PhpStanRuleDefinition;
 import org.sonar.plugins.php.reports.phpstan.PhpStanSensor;
+import org.sonar.plugins.php.reports.phpunit.PhpUnitSensor;
 import org.sonar.plugins.php.reports.psalm.PsalmRulesDefinition;
 import org.sonar.plugins.php.reports.psalm.PsalmSensor;
 import org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper;
@@ -33,8 +34,6 @@ import org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper;
 public class PhpPlugin implements Plugin {
 
   public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
-  public static final String PHPUNIT_COVERAGE_REPORT_PATHS_KEY = "sonar.php.coverage.reportPaths";
-  public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.php.tests.reportPath";
   public static final String PHP_EXCLUSIONS_KEY = "sonar.php.exclusions";
   public static final String PHP_EXCLUSIONS_DEFAULT_VALUE = "**/vendor/**";
 
@@ -91,15 +90,15 @@ public class PhpPlugin implements Plugin {
   }
 
   private static void addPhpUnitExtensions(Context context) {
-    context.addExtensions(
-      PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
+    context.addExtensions(PhpUnitSensor.class,
+      PropertyDefinition.builder(PhpUnitSensor.PHPUNIT_TESTS_REPORT_PATH_KEY)
         .name("Unit Test Report")
         .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
         .onQualifiers(Qualifiers.PROJECT)
         .category(PHP_CATEGORY)
         .subCategory(PHPUNIT_SUBCATEGORY)
         .build(),
-      PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
+      PropertyDefinition.builder(PhpUnitSensor.PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
         .name("Coverage Reports")
         .description("List of PHPUnit code coverage report files. Each path can be either absolute or relative.")
         .onQualifiers(Qualifiers.PROJECT)

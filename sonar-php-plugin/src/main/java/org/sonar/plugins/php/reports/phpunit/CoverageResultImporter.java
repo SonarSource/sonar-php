@@ -28,7 +28,6 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.reports.phpunit.xml.FileNode;
 import org.sonar.plugins.php.reports.phpunit.xml.LineNode;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -100,7 +99,7 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
 
   @Override
   public String reportPathKey() {
-    return PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
+    return PhpUnitSensor.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
   }
 
   @Override

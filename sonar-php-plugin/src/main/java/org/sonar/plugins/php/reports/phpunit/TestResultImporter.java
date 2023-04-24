@@ -26,7 +26,6 @@ import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.reports.phpunit.xml.TestSuites;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.xml.ParseException;
@@ -84,7 +83,7 @@ public class TestResultImporter extends PhpUnitReportImporter {
 
   @Override
   public String reportPathKey() {
-    return PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY;
+    return PhpUnitSensor.PHPUNIT_TESTS_REPORT_PATH_KEY;
   }
 
   @Override

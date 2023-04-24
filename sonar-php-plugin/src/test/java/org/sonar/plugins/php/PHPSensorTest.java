@@ -19,21 +19,13 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.apache.commons.io.FilenameUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -78,6 +70,7 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
+import org.sonar.plugins.php.reports.phpunit.PhpUnitSensor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -94,7 +87,6 @@ import static org.sonar.plugins.php.PhpTestUtils.assertMeasure;
 import static org.sonar.plugins.php.PhpTestUtils.assertNoMeasure;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 import static org.sonar.plugins.php.PhpTestUtils.inputFileHashCacheKey;
-import static org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper.NOOP_ANALYSIS_WARNINGS;
 
 public class PHPSensorTest {
 
@@ -108,8 +100,6 @@ public class PHPSensorTest {
   private static final Version VERSION_7_9 = Version.create(7, 9);
   private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(VERSION_7_9);
   private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(VERSION_7_9, SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
-  private static final SonarRuntime SONARQUBE_7_9 = SonarRuntimeImpl.forSonarQube(VERSION_7_9, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
-
   private static final String PARSE_ERROR_FILE = "parseError.php";
   private static final String ANALYZED_FILE = "PHPSquidSensor.php";
   private static final String REGEX_FILE = "regexIssue.php";
@@ -120,8 +110,6 @@ public class PHPSensorTest {
 
   private ReadWriteInMemoryCache previousCache;
   private ReadWriteInMemoryCache nextCache;
-
-  private final Set<File> tempReportFiles = new HashSet<>();
 
   private Path tmpFolderPath;
 
@@ -202,7 +190,7 @@ public class PHPSensorTest {
   private PHPSensor createSensor(PHPCheck check) {
     PHPChecks checks = mock(PHPChecks.class);
     when(checks.all()).thenReturn(Collections.singletonList(check));
-    return new PHPSensor(createFileLinesContextFactory(), checks, new DefaultNoSonarFilter(), NOOP_ANALYSIS_WARNINGS);
+    return new PHPSensor(createFileLinesContextFactory(), checks, new DefaultNoSonarFilter());
   }
 
   @Test
@@ -549,8 +537,8 @@ public class PHPSensorTest {
 
   @Test
   public void should_disable_unnecessary_features_for_sonarlint() {
-    context.settings().setProperty(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpTestUtils.PHPUNIT_REPORT_NAME);
-    context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY, PhpTestUtils.PHPUNIT_COVERAGE_REPORT);
+    context.settings().setProperty(PhpUnitSensor.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpTestUtils.PHPUNIT_REPORT_NAME);
+    context.settings().setProperty(PhpUnitSensor.PHPUNIT_COVERAGE_REPORT_PATHS_KEY, PhpTestUtils.PHPUNIT_COVERAGE_REPORT);
     DefaultInputFile inputFile = inputFile(ANALYZED_FILE);
 
     DefaultInputFile testFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php")
@@ -595,7 +583,7 @@ public class PHPSensorTest {
     assertThat(context.highlightingTypeAt(mainFileKey, 2, 0)).isNotEmpty();
 
     // tests exist
-    assertMeasure(context, testFileKey, CoreMetrics.TESTS, 1);
+    assertNoMeasure(context, testFileKey, CoreMetrics.TESTS);
 
     // metrics are saved
     assertMeasure(context, mainFileKey, CoreMetrics.NCLOC, 32);
@@ -622,51 +610,6 @@ public class PHPSensorTest {
     assertThat(context.allIssues()).isNotEmpty();
     assertThat(context.measure(testFileKey, CoreMetrics.NCLOC)).isNull();
 
-  }
-
-  @Test
-  public void should_use_multi_path_coverage() throws IOException {
-    context.setRuntime(SONARQUBE_7_9);
-
-    context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY,
-      String.join(",", PhpTestUtils.GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH,
-        // should not fail with empty path, it should be ignored
-        " ",
-        PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH));
-
-    DefaultInputFile inputFile = inputFile("src/App.php");
-
-    createReportWithAbsolutePath(PhpTestUtils.GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.UT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
-    createReportWithAbsolutePath(PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.IT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
-    createReportWithAbsolutePath(PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.OVERALL_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
-
-    String mainFileKey = inputFile.key();
-    context.fileSystem().add(inputFile);
-
-    createSensor().execute(context);
-
-    assertThat(context.lineHits(mainFileKey, 3)).isEqualTo(3);
-    assertThat(context.lineHits(mainFileKey, 6)).isEqualTo(2);
-    assertThat(context.lineHits(mainFileKey, 7)).isEqualTo(1);
-
-    assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
-    String resourcesFolder = FilenameUtils.separatorsToSystem("/src/test/resources");
-    assertThat(logTester.logs(LoggerLevel.ERROR).get(0))
-      .startsWith("An error occurred when reading report file")
-      .contains(resourcesFolder + "', nothing will be imported from this report.");
-  }
-
-  @Test
-  public void should_log_message_when_no_coverage_and_test_property() {
-    context.setSettings(new MapSettings());
-
-    context.setRuntime(SONARQUBE_7_9);
-    createSensor().execute(context);
-    assertThat(logTester.logs()).contains(
-      "No PHPUnit tests reports provided (see '" + PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY + "' property)",
-      "No PHPUnit coverage reports provided (see '" + PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY + "' property)");
-
-    logTester.clear();
   }
 
   @Test
@@ -821,33 +764,6 @@ public class PHPSensorTest {
     assertNoMeasure(context, componentKey, CoreMetrics.CLASSES);
     assertNoMeasure(context, componentKey, CoreMetrics.STATEMENTS);
     assertNoMeasure(context, componentKey, CoreMetrics.FUNCTIONS);
-  }
-
-  @After
-  public void tearDown() {
-    tempReportFiles.forEach(File::delete);
-  }
-
-  /**
-   * Creates a file name with absolute path in coverage report.
-   *
-   * This hack allow to have this unit test, as only absolute path
-   * in report is supported.
-   * */
-  private void createReportWithAbsolutePath(String generatedReportRelativePath, String relativeReportPath, InputFile inputFile) throws IOException {
-    File tempReport = new File(context.fileSystem().baseDir(), generatedReportRelativePath);
-    if (tempReport.createNewFile()) {
-      File originalReport = new File(context.fileSystem().baseDir(), relativeReportPath);
-
-      String content = Files.readLines(originalReport, StandardCharsets.UTF_8)
-        .stream()
-        .collect(Collectors.joining("\n"))
-        .replace(inputFile.relativePath(), inputFile.absolutePath());
-
-      Files.asCharSink(tempReport, StandardCharsets.UTF_8).write(content);
-
-      tempReportFiles.add(tempReport);
-    }
   }
 
   private void analyzeBaseCommit(InputFile inputFile) {
