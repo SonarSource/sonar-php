@@ -47,6 +47,8 @@ import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 
 public class PhpUnitSensorTest {
@@ -58,6 +60,8 @@ public class PhpUnitSensorTest {
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
   private static final SonarRuntime SONARQUBE_9_9 = SonarRuntimeImpl.forSonarQube(Version.create(9,9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
   private final Set<File> tempReports = new HashSet<>();
+
+  private static final String EXPECTED_MESSAGE = "PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results.";
 
   @Test
   public void shouldProvideDescription() {
@@ -123,7 +127,7 @@ public class PhpUnitSensorTest {
     Sensor sensor = createSensor();
     sensor.execute(context);
 
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains("PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results.");
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains(EXPECTED_MESSAGE);
     assertThat(logTester.logs(LoggerLevel.DEBUG)).hasSize(1);
     assertThat(logTester.logs(LoggerLevel.DEBUG).get(0)).startsWith("Detected and undeclared test case in").endsWith("src/EmailTest.php");
   }
@@ -139,8 +143,29 @@ public class PhpUnitSensorTest {
     Sensor sensor = createSensor();
     sensor.execute(context);
 
-    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain("PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results.");
+    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
     assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty();
+  }
+
+  @Test
+  public void shouldNotLogWarningWhenNoTestCaseIsDetectedWithoutDeclaration() {
+    context.fileSystem().add(inputFile("src/App.php"));
+
+    Sensor sensor = createSensor();
+    sensor.execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
+  }
+
+  @Test
+  public void shouldNotCrashWhenReadingInvalidFile() throws IOException {
+    InputFile corruptInputFile = mock(InputFile.class);
+    when(corruptInputFile.inputStream()).thenThrow(IOException.class);
+
+    Sensor sensor = createSensor();
+    sensor.execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
   }
 
   private PhpUnitSensor createSensor() {
