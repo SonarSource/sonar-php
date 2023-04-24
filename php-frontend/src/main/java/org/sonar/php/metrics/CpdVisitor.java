@@ -36,6 +36,7 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -99,6 +100,11 @@ public class CpdVisitor extends PHPVisitorCheck {
   @Override
   public void visitUseStatement(UseStatementTree tree) {
     // do not enter (in order to avoid use statement tokens be considered in duplication detection)
+  }
+
+  @Override
+  public void visitAttributeGroup(AttributeGroupTree tree) {
+    // do not enter (in order to avoid attribute groups tokens be considered in duplication detection)
   }
 
   public List<CpdToken> computeCpdTokens(PhpFile file,
