@@ -20,6 +20,7 @@
 package org.sonar.php.checks.utils;
 
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 
@@ -27,26 +28,18 @@ public class ArgumentVerifierValueContainment extends ArgumentMatcherValueContai
 
   private boolean raiseIssueOnMatch = true;
 
-  @Deprecated
-  public ArgumentVerifierValueContainment(int position, Set<String> values) {
-    super(position, values);
-  }
 
-  public ArgumentVerifierValueContainment(int position, String name, Set<String> values) {
+  public ArgumentVerifierValueContainment(int position, @Nullable String name, Set<String> values) {
     super(position, name, values);
   }
 
-  @Deprecated
-  public ArgumentVerifierValueContainment(int position, String value) {
-    this(position, SetUtils.immutableSetOf(value));
-  }
 
-  public ArgumentVerifierValueContainment(int position, String name, String value) {
+  public ArgumentVerifierValueContainment(int position, @Nullable String name, String value) {
     this(position, name, SetUtils.immutableSetOf(value));
   }
 
   public ArgumentVerifierValueContainment(int position, String value, boolean raiseIssueOnMatch) {
-    this(position, SetUtils.immutableSetOf(value));
+    this(position, null, SetUtils.immutableSetOf(value));
     this.raiseIssueOnMatch = raiseIssueOnMatch;
   }
 
@@ -56,7 +49,7 @@ public class ArgumentVerifierValueContainment extends ArgumentMatcherValueContai
   }
 
   public ArgumentVerifierValueContainment(int position, Set<String> values, boolean raiseIssueOnMatch) {
-    super(position, values);
+    super(position, null, values);
     this.raiseIssueOnMatch = raiseIssueOnMatch;
   }
 

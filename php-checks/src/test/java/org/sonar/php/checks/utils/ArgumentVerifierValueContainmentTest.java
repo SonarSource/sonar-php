@@ -51,7 +51,7 @@ public class ArgumentVerifierValueContainmentTest {
 
   @Test
   public void argument_verifier_with_default() {
-    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, "VALUE");
+    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, null, "VALUE");
 
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isTrue();
   }

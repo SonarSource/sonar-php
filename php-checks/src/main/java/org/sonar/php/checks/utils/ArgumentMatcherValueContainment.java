@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
@@ -34,15 +33,6 @@ public class ArgumentMatcherValueContainment extends ArgumentMatcher {
 
   private final Set<String> values;
 
-  @Deprecated
-  public ArgumentMatcherValueContainment(int position, String value) {
-    this(position, SetUtils.immutableSetOf(value));
-  }
-
-  @Deprecated
-  public ArgumentMatcherValueContainment(int position, Set<String> values) {
-    this(position, null, values);
-  }
 
   public ArgumentMatcherValueContainment(int position, @Nullable String name, String value) {
     this(position, name, SetUtils.immutableSetOf(value));
