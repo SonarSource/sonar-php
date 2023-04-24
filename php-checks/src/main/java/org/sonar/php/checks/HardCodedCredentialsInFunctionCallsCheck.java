@@ -62,6 +62,8 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
 
   private static final Map<String, SensitiveMethod> SENSITIVE_FUNCTIONS = JsonSensitiveFunctionsReader.parseSensitiveFunctions();
 
+  private static final Map<String, ArgumentMatcher> matcherMap = new HashMap<>();
+
   private static final Logger LOG = Loggers.get(HardCodedCredentialsInFunctionCallsCheck.class);
 
   @Override
@@ -100,7 +102,6 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
           checkArgument(tree, lowerCaseFunctionName, methodMatcher);
         }
       }
-
     }
   }
 
@@ -110,7 +111,6 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   }
 
   private static class SensitiveMethod {
-    private static final Map<String, ArgumentMatcher> matcherMap = new HashMap<>();
     private final String name;
     private final String cls;
     private final Set<Integer> sensitiveIndices;
@@ -132,10 +132,9 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     public Set<ArgumentMatcher> getCorrespondingMatchers() {
       Function<ExpressionTree, Boolean> isRegularStringLiteral = tree -> tree.is(Kind.REGULAR_STRING_LITERAL);
 
-      return sensitiveIndices.stream()
-        .map(index -> matcherMap.computeIfAbsent(index + ";" + orderedArguments.get(index),
-          key -> new ArgumentVerifierUnaryFunction(index, orderedArguments.get(index), isRegularStringLiteral)))
-        .collect(Collectors.toSet());
+      return sensitiveIndices.stream().map(index -> matcherMap.computeIfAbsent(index + ";" + orderedArguments.get(index),
+        key -> new ArgumentVerifierUnaryFunction(index,
+        orderedArguments.get(index), isRegularStringLiteral))).collect(Collectors.toSet());
     }
   }
 

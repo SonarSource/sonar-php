@@ -19,72 +19,52 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.sonar.sslr.api.RecognitionException;
-import com.sonar.sslr.api.typed.ActionParser;
 import java.util.Set;
 import java.util.function.Function;
 import org.junit.Test;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.php.utils.SourceBuilder;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class FunctionArgumentCheckTest {
-
+public class FunctionArgumentCheckTest extends PhpTreeModelTest {
 
   private static final Function<ExpressionTree, Boolean> trueFunction = s -> true;
 
   @Test
   public void checkArgumentRaisesIssueBecausePositionMatches() {
-    FunctionCallTree tree = parse("methodName(\"first\", \"second\", \"third\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
+    FunctionCallTree tree = parse("methodName(\"firstValue\", \"secondValue\", \"thirdValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
-    ArgumentVerifierUnaryFunction name = new ArgumentVerifierUnaryFunction(2, "name", trueFunction);
+    ArgumentVerifierUnaryFunction matcher = new ArgumentVerifierUnaryFunction(2, "name", trueFunction);
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
-    testCheck.checkArgument(tree, "methodname", name);
+    testCheck.checkArgument(tree, "methodname", matcher);
     verify(testCheck).createIssue(any());
   }
 
   @Test
   public void checkArgumentRaisesIssueBecauseNameMatches() {
-    FunctionCallTree tree = parse("methodName(firstVar:\"first\", secondVar:\"second\", thirdVar:\"third\")",
+    FunctionCallTree tree = parse("methodName(firstVar:\"firstValue\", secondVar:\"secondValue\", thirdVar:\"thirdValue\")",
       PHPLexicalGrammar.MEMBER_EXPRESSION);
 
-    ArgumentVerifierUnaryFunction name = new ArgumentVerifierUnaryFunction(10, "thirdVar", trueFunction);
+    ArgumentVerifierUnaryFunction matcher = new ArgumentVerifierUnaryFunction(10, "thirdVar", trueFunction);
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
-    testCheck.checkArgument(tree, "methodname", name);
+    testCheck.checkArgument(tree, "methodname", matcher);
     verify(testCheck).createIssue(any());
   }
 
   @Test
-  public void checkArgumentRaisesNoIssueBecauseOfSequentialOrderedMatchers() {
-    FunctionCallTree tree = parse("methodName(\"first\", secondVar:\"second\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
-
-    ArgumentVerifierUnaryFunction shouldNotMatch = new ArgumentVerifierUnaryFunction(2, "test", trueFunction);
-    ArgumentVerifierUnaryFunction shouldMatch = new ArgumentVerifierUnaryFunction(1, "secondVar", trueFunction);
-
-    TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
-
-    testCheck.checkArgument(tree, "methodname", shouldNotMatch, shouldMatch);
-    verify(testCheck, times(0)).createIssue(any());
-  }
-
-  @Test
   public void checkArgumentRaisesIssueBecauseOrderOfSequentialMatchers() {
-    FunctionCallTree tree = parse("methodName(\"first\", secondVar:\"second\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
+    FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     ArgumentVerifierUnaryFunction shouldNotMatch = new ArgumentVerifierUnaryFunction(2, "test", trueFunction);
     ArgumentVerifierUnaryFunction shouldMatch = new ArgumentVerifierUnaryFunction(1, "secondVar", trueFunction);
@@ -97,8 +77,8 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void checkArgumentRaisesIssuesOnBothMatchers() {
-
-    FunctionCallTree tree = parse("methodName(\"first\", secondVar:\"second\", thirdVar:\"third\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
+    FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\", thirdVar:\"thirdValue\")",
+      PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     ArgumentVerifierUnaryFunction shouldMatchOnSecondVar = new ArgumentVerifierUnaryFunction(1, "secondVar", trueFunction);
     ArgumentVerifierUnaryFunction shouldMatchOnThirdVar = new ArgumentVerifierUnaryFunction(2, "thirdVar", trueFunction);
@@ -110,9 +90,35 @@ public class FunctionArgumentCheckTest {
   }
 
   @Test
+  public void checkArgumentRaisesNoIssueBecauseMatchedPositionIsNamed() {
+    FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\", thirdVar:\"thirdValue\")",
+      PHPLexicalGrammar.MEMBER_EXPRESSION);
+
+    ArgumentVerifierUnaryFunction matcher = new ArgumentVerifierUnaryFunction(2, "name", trueFunction);
+
+    TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
+
+    testCheck.checkArgument(tree, "methodname", matcher);
+    verify(testCheck, times(0)).createIssue(any());
+  }
+
+  @Test
+  public void checkArgumentRaisesNoIssueBecauseOfSequentialOrderedMatchers() {
+    FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
+
+    ArgumentVerifierUnaryFunction shouldNotMatch = new ArgumentVerifierUnaryFunction(2, "test", trueFunction);
+    ArgumentVerifierUnaryFunction shouldMatch = new ArgumentVerifierUnaryFunction(1, "secondVar", trueFunction);
+
+    TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
+
+    testCheck.checkArgument(tree, "methodname", shouldNotMatch, shouldMatch);
+    verify(testCheck, times(0)).createIssue(any());
+  }
+
+  @Test
   public void checkArgumentRaisesIssueMethodNameInMatcherIsNull() {
-    FunctionCallTree tree = parse("methodName(\"first\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
-    ArgumentVerifierValueContainment matcher = new ArgumentVerifierValueContainment(0, null, Set.of("first"));
+    FunctionCallTree tree = parse("methodName(\"firstValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
+    ArgumentVerifierValueContainment matcher = new ArgumentVerifierValueContainment(0, null, Set.of("firstValue"));
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -122,8 +128,8 @@ public class FunctionArgumentCheckTest {
 
   @Test
   public void checkArgumentRaisesNoIssueMethodNameInMatcherIsNull() {
-    FunctionCallTree tree = parse("methodName(\"first\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
-    ArgumentMatcherValueContainment matcher = new ArgumentMatcherValueContainment(10, null, Set.of("first"));
+    FunctionCallTree tree = parse("methodName(\"firstValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
+    ArgumentMatcherValueContainment matcher = new ArgumentMatcherValueContainment(10, null, Set.of("firstValue"));
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -141,44 +147,6 @@ public class FunctionArgumentCheckTest {
     testCheck.checkArgument(tree, "methodname", matcher);
     verify(testCheck, times(0)).createIssue(any());
   }
-
-  //TODO: Refactor this code snippet below
-  protected ActionParser<Tree> p;
-
-  /**
-   * Parse the given string and return the first descendant of the given kind.
-   *
-   * @param s        the string to parse
-   * @param rootRule the rule to start parsing from
-   * @return the node found for the given kind, null if not found.
-   */
-  protected <T extends Tree> T parse(String s, GrammarRuleKey rootRule) {
-    p = PHPParserBuilder.createParser(rootRule);
-    Tree node = p.parse(s);
-    checkFullFidelity(node, s.trim());
-    return (T) node;
-  }
-
-  /**
-   * Return the concatenation of all the given node tokens value.
-   */
-  protected static String expressionToString(Tree node) {
-    return SourceBuilder.build(node).trim();
-  }
-
-  private static void checkFullFidelity(Tree tree, String inputString) {
-    String resultString = expressionToString(tree);
-    if (!inputString.equals(resultString)) {
-      if (inputString.startsWith(resultString)) {
-        String message = "Only beginning of the input string is parsed: " + resultString;
-        throw new RecognitionException(0, message);
-      } else {
-        String message = "Some tokens are lost. See result tree string: " + resultString;
-        throw new RecognitionException(0, message);
-      }
-    }
-  }
-
 }
 
 class TestFunctionArgumentCheck extends FunctionArgumentCheck {

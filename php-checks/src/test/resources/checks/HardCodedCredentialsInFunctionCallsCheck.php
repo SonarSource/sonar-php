@@ -2,7 +2,7 @@
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 
-class PasswordService
+class ConstructorTestService
 {
     private string $shouldBePassing;
 
@@ -15,6 +15,22 @@ class PasswordService
     {
         $password = "example";
         new TwitterOAuth("shouldBePassing", $shouldBePassing, $password); // Noncompliant
+    }
+}
+
+class ConstructorTestService
+{
+    private string $shouldBePassing;
+
+    public function setPassword(string $shouldBePassing): void
+    {
+        $this->shouldBePassing = $shouldBePassing;
+    }
+
+    public function createKey(): KeyOrPassword
+    {
+        $password = "example";
+        new TwitterOAuth("shouldBePassing", $shouldBePassing, $shouldBePassing);
     }
 }
 
@@ -34,6 +50,9 @@ KeyOrPassword::createFromPassword($duplicateAssignment); // FN, parser not able 
 
 KeyOrPassword::notASensitiveMethod($password);
 
+$obj = new KeyOrPassword();
+$obj->createFromPassword($key); // FN, parser is not able to resolve fqn of object
+
 
 class PasswordService
 {
@@ -49,7 +68,6 @@ class PasswordService
         return KeyOrPassword::createFromPassword($password);
     }
 }
-
 
 class PasswordServiceSecond
 {
