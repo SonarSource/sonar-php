@@ -50,9 +50,11 @@ KeyOrPassword::createFromPassword($duplicateAssignment); // FN, parser not able 
 
 KeyOrPassword::notASensitiveMethod($password);
 
-$obj = new KeyOrPassword();
-$obj->createFromPassword($key); // FN, parser is not able to resolve fqn of object
+$keyOrPwObj = new KeyOrPassword();
+$keyOrPwObj->createFromPassword($key); // FN, parser is not able to resolve fqn of object
 
+$otherKeyOrPwObj = 'Defuse\Crypto\KeyOrPassword';
+$otherKeyOrPwObj::createFromPassword($key); // FN, parser not able to resolve fqn
 
 class PasswordService
 {
@@ -84,7 +86,6 @@ class PasswordServiceSecond
         return KeyOrPassword::createFromPassword($password); // Noncompliant
     }
 }
-
 
 
 

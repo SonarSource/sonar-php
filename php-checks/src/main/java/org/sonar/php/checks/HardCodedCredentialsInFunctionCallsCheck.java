@@ -58,7 +58,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
 
   private static final String MESSAGE = "Revoke and change this password, as it is compromised.";
 
-  private static final String JSON_LOCATION = "org/sonar/php/checks/hardCodedCredentialsInFunctionCallsCheck/sensitiveFunctions.json";
+  private static final String JSON_LOCATION = "/org/sonar/php/checks/hardCodedCredentialsInFunctionCallsCheck/sensitiveFunctions.json";
 
   private static final Map<String, SensitiveMethod> SENSITIVE_FUNCTIONS = JsonSensitiveFunctionsReader.parseSensitiveFunctions();
 
@@ -66,10 +66,14 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
-    FunctionCallTree functionCallTree = (FunctionCallTree) tree.expression();
-    ClassNamespaceNameTreeImpl callee = (ClassNamespaceNameTreeImpl) functionCallTree.callee();
-    QualifiedName fqn = callee.symbol().qualifiedName();
-    checkForSensitiveMethod(functionCallTree, fqn + "::" + "__construct");
+    if (tree.expression().is(Kind.FUNCTION_CALL)) {
+      FunctionCallTree functionCallTree = (FunctionCallTree) tree.expression();
+      if (functionCallTree.callee().is(Kind.NAMESPACE_NAME)) {
+        ClassNamespaceNameTreeImpl callee = (ClassNamespaceNameTreeImpl) functionCallTree.callee();
+        QualifiedName fqn = callee.symbol().qualifiedName();
+        checkForSensitiveMethod(functionCallTree, fqn + "::" + "__construct");
+      }
+    }
 
     super.visitNewExpression(tree);
   }
@@ -78,10 +82,9 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   public void visitFunctionCall(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
 
-    if (callee.is(Kind.CLASS_MEMBER_ACCESS)) {
+    if (callee.is(Kind.CLASS_MEMBER_ACCESS) && ((MemberAccessTree) callee).object().is(Kind.NAMESPACE_NAME)) {
       MemberAccessTree memberAccessTreeCallee = (MemberAccessTree) callee;
       QualifiedName fqn = ((ClassNamespaceNameTreeImpl) memberAccessTreeCallee.object()).symbol().qualifiedName();
-
 
       Tree method = memberAccessTreeCallee.member();
       checkForSensitiveMethod(tree, fqn + "::" + method);
@@ -89,7 +92,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     super.visitFunctionCall(tree);
   }
 
-  private void checkForSensitiveMethod(FunctionCallTree tree, String fqnMethodName) {
+  void checkForSensitiveMethod(FunctionCallTree tree, String fqnMethodName) {
     if (SENSITIVE_FUNCTIONS.containsKey(fqnMethodName)) {
       SensitiveMethod sensitiveMethod = SENSITIVE_FUNCTIONS.get(fqnMethodName);
       Set<ArgumentMatcher> methodMatchers = sensitiveMethod.getCorrespondingMatchers();
@@ -132,7 +135,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
 
       return sensitiveIndices.stream().map(index -> matcherMap.computeIfAbsent(index + ";" + orderedArguments.get(index),
         key -> new ArgumentVerifierUnaryFunction(index,
-        orderedArguments.get(index), isRegularStringLiteral))).collect(Collectors.toSet());
+          orderedArguments.get(index), isRegularStringLiteral))).collect(Collectors.toSet());
     }
   }
 
@@ -166,8 +169,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     }
 
     private static JSONArray parseResource() throws IOException, ParseException {
-      ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-      InputStream in = classloader.getResourceAsStream(JSON_LOCATION);
+      InputStream in = JsonSensitiveFunctionsReader.class.getResourceAsStream(JSON_LOCATION);
 
       if (in == null) {
         throw new FileNotFoundException(String.format("Json file with name %s not found.", JSON_LOCATION));
