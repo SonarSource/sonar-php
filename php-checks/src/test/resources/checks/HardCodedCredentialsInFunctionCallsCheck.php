@@ -88,4 +88,9 @@ class PasswordServiceSecond
 }
 
 
+use PHPUnit\Framework\AssertionFailedError;
+$error;
+$this->error = new $AssertionFailedError('Only tests with the `@group legacy` annotation can have `@expectedDeprecation`.');
+
+
 

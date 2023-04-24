@@ -139,16 +139,19 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     }
   }
 
-  private static class JsonSensitiveFunctionsReader {
+  static class JsonSensitiveFunctionsReader {
     private static final JSONParser jsonParser = new JSONParser();
 
     private static final Logger LOG = Loggers.get(JsonSensitiveFunctionsReader.class);
+
+    private JsonSensitiveFunctionsReader() {
+    }
 
     private static Map<String, SensitiveMethod> parseSensitiveFunctions() {
       Map<String, SensitiveMethod> sensitiveFunctions = new HashMap<>();
 
       try {
-        JSONArray readArray = parseResource();
+        JSONArray readArray = parseResource(JSON_LOCATION);
         for (Object element : readArray) {
           JSONObject castElement = (JSONObject) element;
           String cls = (String) castElement.get("cls");
@@ -168,11 +171,12 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
       return sensitiveFunctions;
     }
 
-    private static JSONArray parseResource() throws IOException, ParseException {
-      InputStream in = JsonSensitiveFunctionsReader.class.getResourceAsStream(JSON_LOCATION);
+
+    static JSONArray parseResource(String location) throws IOException, ParseException {
+      InputStream in = JsonSensitiveFunctionsReader.class.getResourceAsStream(location);
 
       if (in == null) {
-        throw new FileNotFoundException(String.format("Json file with name %s not found.", JSON_LOCATION));
+        throw new FileNotFoundException(String.format("Json file with name %s not found.", location));
       }
 
       return (JSONArray) jsonParser.parse(new InputStreamReader(in, UTF_8));
@@ -200,7 +204,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
       return indices;
     }
 
-    private static Integer toInteger(Object value) {
+    static Integer toInteger(Object value) {
       if (value instanceof Number) {
         return ((Number) value).intValue();
       }
