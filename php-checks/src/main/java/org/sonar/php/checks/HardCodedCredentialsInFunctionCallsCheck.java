@@ -58,13 +58,11 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
 
   private static final String MESSAGE = "Revoke and change this password, as it is compromised.";
 
-  private static final String JSON_LOCATION = "HardCodedCredentialsSensitiveFunctions.json";
+  private static final String JSON_LOCATION = "org/sonar/php/checks/hardCodedCredentialsInFunctionCallsCheck/sensitiveFunctions.json";
 
   private static final Map<String, SensitiveMethod> SENSITIVE_FUNCTIONS = JsonSensitiveFunctionsReader.parseSensitiveFunctions();
 
   private static final Map<String, ArgumentMatcher> matcherMap = new HashMap<>();
-
-  private static final Logger LOG = Loggers.get(HardCodedCredentialsInFunctionCallsCheck.class);
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
@@ -141,6 +139,8 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   private static class JsonSensitiveFunctionsReader {
     private static final JSONParser jsonParser = new JSONParser();
 
+    private static final Logger LOG = Loggers.get(JsonSensitiveFunctionsReader.class);
+
     private static Map<String, SensitiveMethod> parseSensitiveFunctions() {
       Map<String, SensitiveMethod> sensitiveFunctions = new HashMap<>();
 
@@ -160,7 +160,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
           sensitiveFunctions.put(sensitiveMethod.uniqueName(), sensitiveMethod);
         }
       } catch (IOException | ParseException e) {
-        LOG.warn("Json containing the sensitive functions for hard coded credentials couldn't be read correctly.");
+        LOG.error("Json containing the sensitive functions for hard coded credentials couldn't be read correctly.");
       }
       return sensitiveFunctions;
     }
