@@ -24,9 +24,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
+import org.junit.After;
 import org.junit.Test;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
@@ -53,6 +56,7 @@ public class PhpUnitSensorTest {
   private final AnalysisWarningsWrapper analysisWarningsWrapper = analysisWarnings::add;
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
   private static final SonarRuntime SONARQUBE_9_9 = SonarRuntimeImpl.forSonarQube(Version.create(9,9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
+  private final Set<File> tempReports = new HashSet<>();
 
   @Test
   public void shouldProvideDescription() {
@@ -130,5 +134,11 @@ public class PhpUnitSensorTest {
 
       Files.asCharSink(tempReport, StandardCharsets.UTF_8).write(content);
     }
+    tempReports.add(tempReport);
+  }
+
+  @After
+  public void tearDown() {
+    tempReports.forEach(File::deleteOnExit);
   }
 }
