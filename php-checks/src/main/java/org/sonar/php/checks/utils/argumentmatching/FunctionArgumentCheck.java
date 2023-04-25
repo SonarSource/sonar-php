@@ -17,13 +17,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.utils;
+package org.sonar.php.checks.utils.argumentmatching;
 
 import java.util.Optional;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
 
 /**
  * This abstract class simplifies the checking of function calls for the specific arguments.
@@ -86,4 +88,9 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
     return false;
   }
 
+  public interface IssueRaiser {
+    boolean shouldRaiseIssue(boolean matchingSuccessful, ExpressionTree argumentValue);
+  }
+
 }
+

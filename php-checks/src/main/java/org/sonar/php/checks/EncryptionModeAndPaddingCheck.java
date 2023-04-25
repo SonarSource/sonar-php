@@ -21,8 +21,8 @@ package org.sonar.php.checks;
 
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.ArgumentVerifierValueContainment;
-import org.sonar.php.checks.utils.FunctionArgumentCheck;
+import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierValueContainment;
+import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -65,10 +65,29 @@ public class EncryptionModeAndPaddingCheck extends FunctionArgumentCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     // by default OPENSSL_PKCS1_PADDING is used as padding mode argument
     if (!checkArgumentAbsence(tree, OPENSSL_PUBLIC_ENCRYPT, 3)) {
-      checkArgument(tree, OPENSSL_PUBLIC_ENCRYPT, new ArgumentVerifierValueContainment(3, "padding", OPENSSL_PUBLIC_ENCRYPT_COMPLIANT_VALUE, false));
+      ArgumentVerifierValueContainment opensslPublicEncryptMatcher = ArgumentVerifierValueContainment.builder()
+        .position(3)
+        .name("padding")
+        .values(OPENSSL_PUBLIC_ENCRYPT_COMPLIANT_VALUE)
+        .raiseIssueOnMatch(false)
+        .build();
+      checkArgument(tree, OPENSSL_PUBLIC_ENCRYPT, opensslPublicEncryptMatcher);
     }
-    checkArgument(tree, OPENSSL_ENCRYPT, new ArgumentVerifierValueContainment(1, "method", OPENSSL_ENCRYPT_NONCOMPLIANT_VALUES, true));
-    checkArgument(tree, MCRYPT_ENCRYPT, new ArgumentVerifierValueContainment(3, "mode", MCRYPT_ENCRYPT_NONCOMPLIANT_VALUE, true));
+    ArgumentVerifierValueContainment opensslMatcher = ArgumentVerifierValueContainment.builder()
+      .position(1)
+      .name("method")
+      .values(OPENSSL_ENCRYPT_NONCOMPLIANT_VALUES)
+      .raiseIssueOnMatch(true)
+      .build();
+    ArgumentVerifierValueContainment mcryptMatcher = ArgumentVerifierValueContainment.builder()
+      .position(3)
+      .name("mode")
+      .values(MCRYPT_ENCRYPT_NONCOMPLIANT_VALUE)
+      .raiseIssueOnMatch(true)
+      .build();
+
+    checkArgument(tree, OPENSSL_ENCRYPT, opensslMatcher);
+    checkArgument(tree, MCRYPT_ENCRYPT, mcryptMatcher);
 
     super.visitFunctionCall(tree);
   }

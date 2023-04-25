@@ -24,14 +24,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.sonar.php.symbols.ClassSymbol;
-import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
@@ -237,7 +233,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    isPhpUnitTestCase = isSubClassOfTestCase(tree);
+    isPhpUnitTestCase = CheckUtils.isSubClassOfTestCase(tree);
     if (isPhpUnitTestCase) {
       visitPhpUnitTestCase(tree);
     }
@@ -270,12 +266,6 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   protected boolean isTestCaseMethod(MethodDeclarationTree tree) {
     return isPhpUnitTestCase && CheckUtils.isPublic(tree)
       && (tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test"));
-  }
-
-  protected static boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
-    ClassSymbol symbol = Symbols.get(tree);
-    return symbol.isSubTypeOf(qualifiedName("PHPUnit\\Framework\\TestCase")).isTrue()
-       || symbol.isSubTypeOf(qualifiedName("PHPUnit_Framework_TestCase")).isTrue();
   }
 
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {

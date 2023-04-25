@@ -46,7 +46,7 @@ public class TooManyLinesInFunctionCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return CheckUtils.FUNCTION_KINDS;
+    return CheckUtils.getFunctionKinds();
   }
 
   @Override

@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.utils;
+package org.sonar.php.checks.utils.argumentmatching;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -38,10 +38,14 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   private static final Function<ExpressionTree, Boolean> trueFunction = s -> true;
 
   @Test
-  public void checkArgumentRaisesIssueBecausePositionMatches() {
+  public void checkArgumentRaisesIssueWhenPositionMatches() {
     FunctionCallTree tree = parse("methodName(\"firstValue\", \"secondValue\", \"thirdValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
-    ArgumentVerifierUnaryFunction matcher = new ArgumentVerifierUnaryFunction(2, "name", trueFunction);
+    ArgumentVerifierUnaryFunction matcher = ArgumentVerifierUnaryFunction.builder()
+      .position(2)
+      .name("name")
+      .matchingFunction(trueFunction)
+      .build();
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -50,11 +54,15 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesIssueBecauseNameMatches() {
+  public void checkArgumentRaisesIssueWhenNameMatches() {
     FunctionCallTree tree = parse("methodName(firstVar:\"firstValue\", secondVar:\"secondValue\", thirdVar:\"thirdValue\")",
       PHPLexicalGrammar.MEMBER_EXPRESSION);
 
-    ArgumentVerifierUnaryFunction matcher = new ArgumentVerifierUnaryFunction(10, "thirdVar", trueFunction);
+    ArgumentVerifierUnaryFunction matcher = ArgumentVerifierUnaryFunction.builder()
+      .position(10)
+      .name("thirdVar")
+      .matchingFunction(trueFunction)
+      .build();
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -66,8 +74,17 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   public void checkArgumentRaisesIssueBecauseOrderOfSequentialMatchers() {
     FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
-    ArgumentVerifierUnaryFunction shouldNotMatch = new ArgumentVerifierUnaryFunction(2, "test", trueFunction);
-    ArgumentVerifierUnaryFunction shouldMatch = new ArgumentVerifierUnaryFunction(1, "secondVar", trueFunction);
+    ArgumentVerifierUnaryFunction shouldNotMatch = ArgumentVerifierUnaryFunction.builder()
+      .position(2)
+      .name("test")
+      .matchingFunction(trueFunction)
+      .build();
+
+    ArgumentVerifierUnaryFunction shouldMatch = ArgumentVerifierUnaryFunction.builder()
+      .position(1)
+      .name("secondVar")
+      .matchingFunction(trueFunction)
+      .build();
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -80,8 +97,17 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
     FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\", thirdVar:\"thirdValue\")",
       PHPLexicalGrammar.MEMBER_EXPRESSION);
 
-    ArgumentVerifierUnaryFunction shouldMatchOnSecondVar = new ArgumentVerifierUnaryFunction(1, "secondVar", trueFunction);
-    ArgumentVerifierUnaryFunction shouldMatchOnThirdVar = new ArgumentVerifierUnaryFunction(2, "thirdVar", trueFunction);
+    ArgumentVerifierUnaryFunction shouldMatchOnSecondVar = ArgumentVerifierUnaryFunction.builder()
+      .position(1)
+      .name("secondVar")
+      .matchingFunction(trueFunction)
+      .build();
+
+    ArgumentVerifierUnaryFunction shouldMatchOnThirdVar = ArgumentVerifierUnaryFunction.builder()
+      .position(2)
+      .name("thirdVar")
+      .matchingFunction(trueFunction)
+      .build();
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -90,11 +116,15 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesNoIssueBecauseMatchedPositionIsNamed() {
+  public void checkArgumentRaisesNoIssueWhenMatchedPositionIsNamed() {
     FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\", thirdVar:\"thirdValue\")",
       PHPLexicalGrammar.MEMBER_EXPRESSION);
 
-    ArgumentVerifierUnaryFunction matcher = new ArgumentVerifierUnaryFunction(2, "name", trueFunction);
+    ArgumentVerifierUnaryFunction matcher = ArgumentVerifierUnaryFunction.builder()
+      .position(2)
+      .name("name")
+      .matchingFunction(trueFunction)
+      .build();
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -106,8 +136,17 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   public void checkArgumentRaisesNoIssueBecauseOfSequentialOrderedMatchers() {
     FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
-    ArgumentVerifierUnaryFunction shouldNotMatch = new ArgumentVerifierUnaryFunction(2, "test", trueFunction);
-    ArgumentVerifierUnaryFunction shouldMatch = new ArgumentVerifierUnaryFunction(1, "secondVar", trueFunction);
+    ArgumentVerifierUnaryFunction shouldNotMatch = ArgumentVerifierUnaryFunction.builder()
+      .position(2)
+      .name("test")
+      .matchingFunction(trueFunction)
+      .build();
+
+    ArgumentVerifierUnaryFunction shouldMatch = ArgumentVerifierUnaryFunction.builder()
+      .position(1)
+      .name("secondVar")
+      .matchingFunction(trueFunction)
+      .build();
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -116,9 +155,13 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesIssueMethodNameInMatcherIsNull() {
+  public void checkArgumentRaisesIssueWhenMethodNameInMatcherIsNull() {
     FunctionCallTree tree = parse("methodName(\"firstValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
-    ArgumentVerifierValueContainment matcher = new ArgumentVerifierValueContainment(0, null, Set.of("firstValue"));
+
+    ArgumentVerifierValueContainment matcher = ArgumentVerifierValueContainment.builder()
+      .position(0)
+      .values(Set.of("firstValue"))
+      .build();
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -127,9 +170,13 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesNoIssueMethodNameInMatcherIsNull() {
+  public void checkArgumentRaisesNoIssueWhenMethodNameInMatcherIsNull() {
     FunctionCallTree tree = parse("methodName(\"firstValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
-    ArgumentMatcherValueContainment matcher = new ArgumentMatcherValueContainment(10, null, Set.of("firstValue"));
+
+    ArgumentMatcherValueContainment matcher = ArgumentMatcherValueContainment.builder()
+      .position(10)
+      .values(Set.of("firstValue"))
+      .build();
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 
@@ -138,9 +185,14 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesIssuePositionInMatcherIsOutOfBounds() {
+  public void checkArgumentRaisesIssueWhenPositionInMatcherIsOutOfBounds() {
     FunctionCallTree tree = parse("methodName(\"first\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
-    ArgumentMatcherValueContainment matcher = new ArgumentMatcherValueContainment(10, "name", Set.of("first"));
+
+    ArgumentMatcherValueContainment matcher = ArgumentMatcherValueContainment.builder()
+      .position(10)
+      .name("name")
+      .values(Set.of("firstValue"))
+      .build();
 
     TestFunctionArgumentCheck testCheck = spy(new TestFunctionArgumentCheck());
 

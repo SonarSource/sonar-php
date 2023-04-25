@@ -64,7 +64,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ListUtils.concat(CheckUtils.FUNCTION_KINDS, Arrays.asList(
+    return ListUtils.concat(CheckUtils.getFunctionKinds(), Arrays.asList(
       Kind.ASSIGNMENT_BY_REFERENCE,
       Kind.ASSIGNMENT,
       Kind.POWER_ASSIGNMENT,
@@ -154,7 +154,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
   }
 
   private void enterScope() {
-    checkedVariables.push(new HashSet<String>());
+    checkedVariables.push(new HashSet<>());
   }
 
   private void leaveScope() {

@@ -21,9 +21,9 @@ package org.sonar.php.checks;
 
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.ArgumentMatcherValueContainment;
-import org.sonar.php.checks.utils.ArgumentVerifierValueContainment;
-import org.sonar.php.checks.utils.FunctionArgumentCheck;
+import org.sonar.php.checks.utils.argumentmatching.ArgumentMatcherValueContainment;
+import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierValueContainment;
+import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -40,8 +40,19 @@ public class SSLCertificatesVerificationDisabledCheck extends FunctionArgumentCh
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    checkArgument(tree, CURL_SETOPT, new ArgumentMatcherValueContainment(1, "option", CURLOPT_SSL_VERIFYPEER),
-      new ArgumentVerifierValueContainment(2, "value", VERIFY_PEER_COMPLIANT_VALUES));
+    ArgumentMatcherValueContainment curlMatcher = ArgumentMatcherValueContainment.builder()
+      .position(1)
+      .name("option")
+      .values(CURLOPT_SSL_VERIFYPEER)
+      .build();
+
+    ArgumentVerifierValueContainment verifyPeerMatcher = ArgumentVerifierValueContainment.builder()
+      .position(2)
+      .name("value")
+      .values(VERIFY_PEER_COMPLIANT_VALUES)
+      .build();
+
+    checkArgument(tree, CURL_SETOPT, curlMatcher, verifyPeerMatcher);
 
     super.visitFunctionCall(tree);
   }

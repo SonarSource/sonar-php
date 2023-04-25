@@ -17,34 +17,49 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.utils;
+package org.sonar.php.checks.utils.argumentmatching;
 
-import com.google.common.annotations.VisibleForTesting;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 
-public class ArgumentVerifierUnaryFunction extends ArgumentMatcher implements IssueRaiser {
+public abstract class ArgumentMatcher {
 
-  private final Function<ExpressionTree, Boolean> matchingFunction;
+  private final int position;
+  @Nullable
+  private final String name;
 
-  public ArgumentVerifierUnaryFunction(int position, @Nullable String name, Function<ExpressionTree, Boolean> matchingFunction) {
-    super(position, name);
-    this.matchingFunction = matchingFunction;
+  <T extends ArgumentMatcherBuilder<T>> ArgumentMatcher(ArgumentMatcherBuilder<T> builder) {
+    this.position = builder.position;
+    this.name = builder.name;
   }
 
-  @Override
-  public boolean matches(ExpressionTree argumentValue) {
-    return matchingFunction.apply(argumentValue);
+  abstract boolean matches(ExpressionTree argument);
+
+  int getPosition() {
+    return position;
   }
 
-  @Override
-  public boolean shouldRaiseIssue(boolean matchingSuccessful, ExpressionTree argumentValue) {
-    return matchingSuccessful;
+  @Nullable
+  String getName() {
+    return name;
   }
 
-  @VisibleForTesting
-  Function<ExpressionTree, Boolean> getMatchingFunction() {
-    return matchingFunction;
+  abstract static class ArgumentMatcherBuilder<T extends ArgumentMatcherBuilder<T>> {
+
+    private int position;
+
+    private String name;
+
+    public T position(int position) {
+      this.position = position;
+      return (T) this;
+    }
+
+    public T name(String name) {
+      this.name = name;
+      return (T) this;
+    }
+
+    public abstract ArgumentMatcher build();
   }
 }

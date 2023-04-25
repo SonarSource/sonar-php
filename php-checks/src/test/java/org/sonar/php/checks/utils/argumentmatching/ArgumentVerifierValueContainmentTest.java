@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.utils;
+package org.sonar.php.checks.utils.argumentmatching;
 
 import org.junit.Test;
 import org.sonar.php.utils.collections.SetUtils;
@@ -27,31 +27,51 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ArgumentVerifierValueContainmentTest {
 
   @Test
-  public void argument_verifier_with_value() {
-    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, "VALUE", false);
+  public void argumentVerifierWithValue() {
+    ArgumentVerifierValueContainment argumentVerifier = ArgumentVerifierValueContainment.builder()
+      .raiseIssueOnMatch(false)
+      .position(1)
+      .values("VALUE")
+      .build();
 
     assertThat(argumentVerifier.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isFalse();
   }
 
   @Test
-  public void argument_verifier_with_name() {
-    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, "name", "VALUE");
+  public void argumentVerifierWithName() {
+    ArgumentVerifierValueContainment argumentVerifier = ArgumentVerifierValueContainment.builder()
+      .position(1)
+      .name("name")
+      .values("VALUE")
+      .build();
 
     assertThat(argumentVerifier.getName()).isEqualTo("name");
-  }
-
-  @Test
-  public void argument_verifier_with_set() {
-    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, SetUtils.immutableSetOf("VALUE"), true);
-
-    assertThat(argumentVerifier.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
+    assertThat(argumentVerifier.getValues()).containsOnly("value");
+    assertThat(argumentVerifier.getPosition()).isEqualTo(1);
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isTrue();
   }
 
   @Test
-  public void argument_verifier_with_default() {
-    ArgumentVerifierValueContainment argumentVerifier = new ArgumentVerifierValueContainment(1, null, "VALUE");
+  public void argumentVerifierWithSet() {
+    ArgumentVerifierValueContainment argumentVerifier = ArgumentVerifierValueContainment.builder()
+      .position(1)
+      .values(SetUtils.immutableSetOf("VALUE"))
+      .raiseIssueOnMatch(true)
+      .build();
+
+    assertThat(argumentVerifier.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
+    assertThat(argumentVerifier.isRaiseIssueOnMatch()).isTrue();
+    assertThat(argumentVerifier.getName()).isNull();
+    assertThat(argumentVerifier.getPosition()).isEqualTo(1);
+  }
+
+  @Test
+  public void argumentVerifierWithDefault() {
+    ArgumentVerifierValueContainment argumentVerifier = ArgumentVerifierValueContainment.builder()
+      .position(1)
+      .values("VALUE")
+      .build();
 
     assertThat(argumentVerifier.isRaiseIssueOnMatch()).isTrue();
   }

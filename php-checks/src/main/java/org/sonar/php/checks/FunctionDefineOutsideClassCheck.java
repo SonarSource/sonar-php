@@ -77,7 +77,7 @@ public class FunctionDefineOutsideClassCheck extends PHPVisitorCheck {
   }
 
   private static boolean isSuperGlobal(String varName) {
-    return "$GLOBALS".equals(varName) || CheckUtils.SUPERGLOBALS_BY_OLD_NAME.values().contains(varName);
+    return "$GLOBALS".equals(varName) || CheckUtils.getSuperGlobalsByOldName().containsValue(varName);
   }
 
 }

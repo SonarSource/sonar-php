@@ -17,31 +17,28 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.utils;
+package org.sonar.php.checks.utils.argumentmatching;
 
-import javax.annotation.Nullable;
+import java.util.function.Function;
+import org.junit.Test;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 
-public abstract class ArgumentMatcher {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  private final int position;
-  @Nullable
-  private final String name;
+public class ArgumentVerifierUnaryFunctionTest {
 
-  protected ArgumentMatcher(int position, @Nullable String name) {
-    this.position = position;
-    this.name = name;
+  @Test
+  public void argumentVerifierConstructionTest() {
+    Function<ExpressionTree, Boolean> testFunction = s -> true;
 
-  }
+    ArgumentVerifierUnaryFunction verifier = ArgumentVerifierUnaryFunction.builder()
+      .matchingFunction(testFunction)
+      .position(1)
+      .name("name")
+      .build();
 
-  abstract boolean matches(ExpressionTree argument);
-
-  int getPosition() {
-    return position;
-  }
-
-  @Nullable
-  String getName() {
-    return name;
+    assertThat(verifier.getPosition()).isEqualTo(1);
+    assertThat(verifier.getName()).isEqualTo("name");
+    assertThat(verifier.getMatchingFunction()).isEqualTo(testFunction);
   }
 }

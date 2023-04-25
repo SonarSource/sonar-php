@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.utils;
+package org.sonar.php.checks.utils.argumentmatching;
 
 import org.junit.Test;
 import org.sonar.php.utils.collections.SetUtils;
@@ -27,8 +27,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ArgumentMatcherValueContainmentTest {
 
   @Test
-  public void argument_indicator_with_string() {
-    ArgumentMatcherValueContainment argumentMatcher = new ArgumentMatcherValueContainment(1, null, "VALUE");
+  public void argumentIndicatorWithString() {
+    ArgumentMatcherValueContainment argumentMatcher = ArgumentMatcherValueContainment.builder()
+      .values("VALUE")
+      .position(1)
+      .name(null)
+      .build();
 
     assertThat(argumentMatcher.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentMatcher.getPosition()).isEqualTo(1);
@@ -36,9 +40,13 @@ public class ArgumentMatcherValueContainmentTest {
   }
 
   @Test
-  public void argument_indicator_with_set() {
-    ArgumentMatcherValueContainment argumentMatcher = new ArgumentMatcherValueContainment(1, "argumentName", SetUtils.immutableSetOf(
-      "VALUE"));
+  public void argumentIndicatorWithSet() {
+    ArgumentMatcherValueContainment argumentMatcher = ArgumentMatcherValueContainment.builder()
+      .values(SetUtils.immutableSetOf(
+        "VALUE"))
+      .position(1)
+      .name("argumentName")
+      .build();
 
     assertThat(argumentMatcher.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
     assertThat(argumentMatcher.getName()).isEqualTo("argumentName");

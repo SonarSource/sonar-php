@@ -34,6 +34,34 @@ class ConstructorTestService
     }
 }
 
+class TestClass extends PHPUnit\Framework\TestCase
+{
+    public function createKey(): KeyOrPassword
+    {
+        $password = "example";
+        new TwitterOAuth("shouldBePassing", $shouldBePassing, $password); // Compliant, as inside test class
+    }
+}
+
+use PHPUnit\Framework\TestCase;
+
+class TestClass extends TestCase
+{
+    public function createKey(): KeyOrPassword
+    {
+        $password = "example";
+        new TwitterOAuth("shouldBePassing", $shouldBePassing, $password); // Compliant, as inside test class
+    }
+}
+
+class NoClass
+{
+    public function createKey(): KeyOrPassword
+    {
+        $password = "example";
+        new TwitterOAuth("shouldBePassing", $shouldBePassing, $password); // Noncompliant
+    }
+}
 
 use Defuse\Crypto\KeyOrPassword;
 
@@ -91,6 +119,8 @@ class PasswordServiceSecond
 use PHPUnit\Framework\AssertionFailedError;
 $error;
 $this->error = new $AssertionFailedError('Only tests with the `@group legacy` annotation can have `@expectedDeprecation`.');
+
+new Foo;
 
 
 

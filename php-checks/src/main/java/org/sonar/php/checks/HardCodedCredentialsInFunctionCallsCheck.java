@@ -34,14 +34,15 @@ import java.util.stream.Collectors;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.ArgumentMatcher;
-import org.sonar.php.checks.utils.ArgumentVerifierUnaryFunction;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.FunctionArgumentCheck;
+import org.sonar.php.checks.utils.argumentmatching.ArgumentMatcher;
+import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierUnaryFunction;
+import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -64,9 +65,21 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
 
   private static final Map<String, ArgumentMatcher> matcherMap = new HashMap<>();
 
+  private boolean isPhpUnitTestCase = false;
+
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    isPhpUnitTestCase = CheckUtils.isSubClassOfTestCase(tree);
+
+    super.visitClassDeclaration(tree);
+
+    isPhpUnitTestCase = false;
+  }
+
+
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
-    if (tree.expression().is(Kind.FUNCTION_CALL)) {
+    if (!isPhpUnitTestCase && tree.expression().is(Kind.FUNCTION_CALL)) {
       FunctionCallTree functionCallTree = (FunctionCallTree) tree.expression();
       if (functionCallTree.callee().is(Kind.NAMESPACE_NAME)) {
         ClassNamespaceNameTreeImpl callee = (ClassNamespaceNameTreeImpl) functionCallTree.callee();
@@ -82,7 +95,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   public void visitFunctionCall(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
 
-    if (callee.is(Kind.CLASS_MEMBER_ACCESS) && ((MemberAccessTree) callee).object().is(Kind.NAMESPACE_NAME)) {
+    if (!isPhpUnitTestCase && callee.is(Kind.CLASS_MEMBER_ACCESS) && ((MemberAccessTree) callee).object().is(Kind.NAMESPACE_NAME)) {
       MemberAccessTree memberAccessTreeCallee = (MemberAccessTree) callee;
       QualifiedName fqn = ((ClassNamespaceNameTreeImpl) memberAccessTreeCallee.object()).symbol().qualifiedName();
 
@@ -134,8 +147,12 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
       Function<ExpressionTree, Boolean> isRegularStringLiteral = tree -> tree.is(Kind.REGULAR_STRING_LITERAL);
 
       return sensitiveIndices.stream().map(index -> matcherMap.computeIfAbsent(index + ";" + orderedArguments.get(index),
-        key -> new ArgumentVerifierUnaryFunction(index,
-          orderedArguments.get(index), isRegularStringLiteral))).collect(Collectors.toSet());
+          key -> ArgumentVerifierUnaryFunction.builder()
+            .position(index)
+            .name(orderedArguments.get(index))
+            .matchingFunction(isRegularStringLiteral)
+            .build()))
+        .collect(Collectors.toSet());
     }
   }
 

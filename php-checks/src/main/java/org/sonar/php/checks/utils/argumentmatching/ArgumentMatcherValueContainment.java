@@ -17,13 +17,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.utils;
+package org.sonar.php.checks.utils.argumentmatching;
 
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.annotation.Nullable;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -34,15 +34,9 @@ public class ArgumentMatcherValueContainment extends ArgumentMatcher {
   private final Set<String> values;
 
 
-  public ArgumentMatcherValueContainment(int position, @Nullable String name, String value) {
-    this(position, name, SetUtils.immutableSetOf(value));
-  }
-
-  public ArgumentMatcherValueContainment(int position, @Nullable String name, Set<String> values) {
-    super(position, name);
-    this.values = values.stream()
-      .map(value -> value.toLowerCase(Locale.ENGLISH))
-      .collect(Collectors.toSet());
+  <T extends ArgumentMatcherValueContainmentBuilder<T>> ArgumentMatcherValueContainment(ArgumentMatcherValueContainmentBuilder<T> builder) {
+    super(builder);
+    this.values = builder.values;
   }
 
   @Override
@@ -69,5 +63,29 @@ public class ArgumentMatcherValueContainment extends ArgumentMatcher {
 
   Set<String> getValues() {
     return values;
+  }
+
+  public static <T extends ArgumentMatcherValueContainmentBuilder<T>> ArgumentMatcherValueContainmentBuilder<T> builder() {
+    return new ArgumentMatcherValueContainmentBuilder<>();
+  }
+
+  public static class ArgumentMatcherValueContainmentBuilder<T extends ArgumentMatcherValueContainmentBuilder<T>> extends ArgumentMatcherBuilder<T> {
+    private Set<String> values;
+
+    public T values(String value) {
+      return values(SetUtils.immutableSetOf(value));
+    }
+
+    public T values(Set<String> values) {
+      this.values = values.stream()
+        .map(value -> value.toLowerCase(Locale.ENGLISH))
+        .collect(Collectors.toSet());
+      return (T) this;
+    }
+
+    @Override
+    public ArgumentMatcherValueContainment build() {
+      return new ArgumentMatcherValueContainment(this);
+    }
   }
 }
