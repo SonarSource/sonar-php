@@ -63,6 +63,7 @@ import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.utils.ReadWriteInMemoryCache;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -184,13 +185,17 @@ public class PHPSensorTest {
   }
 
   private PHPSensor createSensor() {
-    return new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter(), CUSTOM_RULES);
+    return new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter(), CUSTOM_RULES, new SuppressWarningFilter());
+  }
+
+  private PHPSensor createSensorNoWarningSuppressor() {
+    return new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter(), CUSTOM_RULES, null);
   }
 
   private PHPSensor createSensor(PHPCheck check) {
     PHPChecks checks = mock(PHPChecks.class);
     when(checks.all()).thenReturn(Collections.singletonList(check));
-    return new PHPSensor(createFileLinesContextFactory(), checks, new DefaultNoSonarFilter());
+    return new PHPSensor(createFileLinesContextFactory(), checks, new DefaultNoSonarFilter(), new SuppressWarningFilter());
   }
 
   @Test
@@ -407,7 +412,7 @@ public class PHPSensorTest {
     ActiveRules activeRules = new ActiveRulesBuilder()
       .addRule(activeRule)
       .build();
-    return new PHPSensor(fileLinesContextFactory, new CheckFactory(activeRules), new DefaultNoSonarFilter(), CUSTOM_RULES);
+    return new PHPSensor(fileLinesContextFactory, new CheckFactory(activeRules), new DefaultNoSonarFilter(), CUSTOM_RULES, new SuppressWarningFilter());
   }
 
   private static FileLinesContextFactory createFileLinesContextFactory() {
@@ -429,6 +434,33 @@ public class PHPSensorTest {
       tuple("S1997", null),
       tuple("S103", 22),
       tuple("S1124", 22));
+  }
+
+  @Test
+  public void testSuppressWarningsIssues() {
+    final String FILE_TO_ANALYZE = "suppressWarnings.php";
+
+    checkFactory = new CheckFactory(getActiveRules());
+    analyseSingleFile(createSensor(), FILE_TO_ANALYZE);
+    Collection<Issue> issuesWithSuppressedWarnings = context.allIssues();
+
+    assertThat(issuesWithSuppressedWarnings).extracting("ruleKey.rule", "primaryLocation.textRange.start.line").containsOnly(
+      tuple("S103", 8),
+      tuple("S1124", 8));
+  }
+
+  @Test
+  public void testDisabledSuppressWarningsIssues() {
+    final String FILE_TO_ANALYZE = "suppressWarnings.php";
+
+    checkFactory = new CheckFactory(getActiveRules());
+    analyseSingleFile(createSensorNoWarningSuppressor(), FILE_TO_ANALYZE);
+    Collection<Issue> issuesWithoutSuppressedWarnings = context.allIssues();
+
+    assertThat(issuesWithoutSuppressedWarnings).extracting("ruleKey.rule", "primaryLocation.textRange.start.line").containsOnly(
+      tuple("S101", 7),
+      tuple("S103", 8),
+      tuple("S1124", 8));
   }
 
   @Test
@@ -741,7 +773,7 @@ public class PHPSensorTest {
   @Test
   public void create_sensor_for_sonar_lint() {
     DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
-    PHPSensor phpSensor = new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter());
+    PHPSensor phpSensor = new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter(), new SuppressWarningFilter());
     phpSensor.describe(descriptor);
 
     assertThat(descriptor.name()).isEqualTo("PHP sensor");
@@ -752,7 +784,7 @@ public class PHPSensorTest {
   @Test
   public void sensor_for_sonar_lint_doesnt_provide_metrics() {
     String componentKey = "moduleKey:" + ANALYZED_FILE;
-    PHPSensor phpSensor = new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter());
+    PHPSensor phpSensor = new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter(), new SuppressWarningFilter());
     context.setRuntime(SONARLINT_RUNTIME);
 
     analyseSingleFile(phpSensor, ANALYZED_FILE);

@@ -20,6 +20,7 @@
 package org.sonar.php;
 
 import com.sonar.sslr.api.RecognitionException;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.utils.DummyCheck;
@@ -66,7 +68,7 @@ public class PHPAnalyzerTest {
   public TemporaryFolder tmpFolder = new TemporaryFolder();
 
   @Test(expected = RecognitionException.class)
-  public void parsing_failure_should_raise_an_exception() throws IOException {
+  public void parsingFailureShouldRaiseAnException() throws IOException {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = createAnalyzer(check);
     InputFile file = FileTestUtils.getInputFile(tmpFolder.newFile(), "<?php if(condition): ?>");
@@ -74,7 +76,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void test_analyze() throws Exception {
+  public void testAnalyze() throws Exception {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = createAnalyzer(check);
     InputFile file = FileTestUtils.getInputFile(tmpFolder.newFile(), "<?php $a = 1;");
@@ -96,7 +98,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void test_analyse_with_stack_overflow() throws Exception {
+  public void testAnalyseWithStackOverflow() throws Exception {
     PHPCheck check = spy(PHPCheck.class);
     when(check.analyze(any(CheckContext.class))).thenThrow(StackOverflowError.class);
 
@@ -110,7 +112,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void test_analyze_test_file() throws Exception {
+  public void testAnalyzeTestFile() throws Exception {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();
     PHPAnalyzer analyzer = createAnalyzer(Arrays.asList(check, testCheck), Collections.singletonList(testCheck));
@@ -127,7 +129,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void terminate_call_forwarded_to_checks() throws Exception {
+  public void terminateCallForwardedToChecks() throws Exception {
     PHPCheck check1 = spy(new DummyCheck());
     PHPCheck check2 = spy(new DummyCheck());
     PHPAnalyzer analyzer = createAnalyzer(check1, check2);
@@ -138,7 +140,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void log_error_and_continue_when_exception_in_terminate() throws Exception {
+  public void logErrorAndContinueWhenExceptionInTerminate() throws Exception {
     PHPCheck check1 = spy(new DummyCheck());
     doThrow(new RuntimeException("myError")).when(check1).terminate();
     PHPCheck check2 = spy(new DummyCheck());
@@ -150,11 +152,40 @@ public class PHPAnalyzerTest {
     assertThat(logTester.logs(LoggerLevel.WARN)).contains("An error occurred while trying to terminate checks:");
   }
 
+  @Test
+  public void testSuppressWarningFilterForMainAndTestFile() throws IOException {
+    PHPCheck check = new DummyCheck();
+    PHPCheck testCheck = new DummyCheck();
+    SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
+    PHPAnalyzer analyzer = createAnalyzer(List.of(check), List.of(testCheck), suppressWarningFilter);
+    File tmpFile = tmpFolder.newFile();
+    String fileUri = tmpFile.getCanonicalFile().toPath().toUri().toString();
+    InputFile file = FileTestUtils.getInputFile(tmpFile, "<?php\n//@SuppressWarnings(\"S11\")\n$a = 1;");
+
+    analyzer.nextFile(file);
+
+    List<PhpIssue> issues = analyzer.analyze();
+    assertThat(issues).hasSize(1);
+    assertThat(suppressWarningFilter.accept(fileUri, "S11", 3)).isFalse();
+    assertThat(suppressWarningFilter.accept(fileUri, "S11", 2)).isTrue();
+
+    suppressWarningFilter.reset();
+    issues = analyzer.analyzeTest();
+    assertThat(issues).hasSize(1);
+    assertThat(suppressWarningFilter.accept(fileUri, "S11", 3)).isFalse();
+    assertThat(suppressWarningFilter.accept(fileUri, "S11", 2)).isTrue();
+  }
+
   private PHPAnalyzer createAnalyzer(PHPCheck... checks) throws IOException {
     return createAnalyzer(Arrays.asList(checks),  Collections.emptyList());
   }
 
   private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks) throws IOException {
     return new PHPAnalyzer(checks,  testFileChecks, tmpFolder.newFolder(), new ProjectSymbolData(), new DurationStatistics(sensorContext.config()), null, null);
+  }
+
+  private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks, SuppressWarningFilter suppressWarningFilter) throws IOException {
+    return new PHPAnalyzer(checks,  testFileChecks, tmpFolder.newFolder(), new ProjectSymbolData(),
+      new DurationStatistics(sensorContext.config()), null, suppressWarningFilter);
   }
 }

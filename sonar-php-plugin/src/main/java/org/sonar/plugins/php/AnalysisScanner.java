@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.InterruptedIOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
@@ -73,8 +74,9 @@ class AnalysisScanner extends Scanner {
   private final boolean hasTestFileChecks;
 
   private final CacheContext cacheContext;
-  private final SuppressWarningFilter suppressWarningFilter;
   private final PHPAnalyzer phpAnalyzer;
+  @Nullable
+  private final SuppressWarningFilter suppressWarningFilter;
   private int numScannedWithoutParsing = 0;
 
   public AnalysisScanner(SensorContext context,
@@ -84,14 +86,14 @@ class AnalysisScanner extends Scanner {
                          ProjectSymbolData projectSymbolData,
                          DurationStatistics statistics,
                          CacheContext cacheContext,
-                         SuppressWarningFilter suppressWarningFilter) {
+                         @Nullable SuppressWarningFilter suppressWarningFilter) {
     super(context, statistics, new Cache(cacheContext));
     this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
     this.parsingErrorRuleKey = getParsingErrorRuleKey();
     this.cacheContext = cacheContext;
-    this.suppressWarningFilter  =suppressWarningFilter;
+    this.suppressWarningFilter = suppressWarningFilter;
 
     List<PHPCheck> mainFileChecks = getMainFileChecks();
     List<PHPCheck> testFileChecks = getTestFileChecks();
@@ -173,7 +175,9 @@ class AnalysisScanner extends Scanner {
     computeMeasuresAndSaveCpdData(inputFile, cpdVisitor);
 
     noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
-    saveIssues(context, inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
+    List<PhpIssue> issues = inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest();
+    issues = filterIssuesByWarningSuppressor(inputFile, issues);
+    saveIssues(context, issues, inputFile);
   }
 
   private void computeMeasuresAndSaveCpdData(InputFile inputFile, CpdVisitor cpdVisitor) {
@@ -219,6 +223,27 @@ class AnalysisScanner extends Scanner {
   @Override
   protected boolean fileCanBeSkipped(InputFile file) {
     return super.fileCanBeSkipped(file) || (file.type() == InputFile.Type.TEST && !hasTestFileChecks);
+  }
+
+  private List<PhpIssue> filterIssuesByWarningSuppressor(InputFile inputFile, List<PhpIssue> issues) {
+    return issues.stream()
+      .filter(issue -> !isSuppressed(inputFile, issue))
+      .collect(Collectors.toList());
+  }
+
+  private boolean isSuppressed(InputFile inputFile, PhpIssue issue) {
+    RuleKey ruleKey = checks.ruleKeyFor(issue.check());
+    if (ruleKey != null) {
+      if (issue instanceof LineIssue) {
+        LineIssue lineIssue = (LineIssue) issue;
+        return suppressWarningFilter != null && !suppressWarningFilter.accept(inputFile.uri().toString(), ruleKey.rule(), lineIssue.line());
+      } else if (issue instanceof PreciseIssue) {
+        PreciseIssue preciseIssue = (PreciseIssue) issue;
+        return suppressWarningFilter != null && !suppressWarningFilter.accept(inputFile.uri().toString(), ruleKey.rule(), preciseIssue.primaryLocation().startLine());
+      }
+    }
+
+    return false;
   }
 
   private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {

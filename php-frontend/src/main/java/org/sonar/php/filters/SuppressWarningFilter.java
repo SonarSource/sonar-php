@@ -1,3 +1,22 @@
+/*
+ * SonarQube PHP Plugin
+ * Copyright (C) 2010-2023 SonarSource SA
+ * mailto:info AT sonarsource DOT com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 package org.sonar.php.filters;
 
 import java.util.Arrays;
@@ -11,6 +30,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -21,7 +41,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class SuppressWarningFilter extends PHPVisitorCheck implements FilterPhpIssue {
 
   private final Map<String, Map<Integer, Set<String>>> suppressedRulesPerLinePerFile = new HashMap<>();
-  private String currentComponent;
+  private String fileUri;
 
   private static final String ARGUMENT_FORMAT = "\"[a-zA-Z0-9:]++\"";
   private static final String ARGUMENTS_FORMAT = ARGUMENT_FORMAT + "(?:\\s*+,\\s*+"+ARGUMENT_FORMAT+")*+";
@@ -31,8 +51,8 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements FilterPhpI
     suppressedRulesPerLinePerFile.clear();
   }
 
-  public void scanCompilationUnit(String componentName, CompilationUnitTree tree) {
-    this.currentComponent = componentName;
+  public void scanCompilationUnit(String fileUri, CompilationUnitTree tree) {
+    this.fileUri = fileUri;
     super.visitCompilationUnit(tree);
   }
 
@@ -44,15 +64,21 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements FilterPhpI
 
   @Override
   public void visitAttribute(AttributeTree tree) {
-    int lineSuppressed = tree.closeParenthesisToken().line() + 1; // TODO: replace this "ignore next line issue" by "the scope of parent group attribute"
     Set<String> rulesSuppressed = tree.arguments().stream()
       .map(CallArgumentTree::value)
-      .filter(expr -> expr.is(Tree.Kind.REGULAR_STRING_LITERAL)).map(LiteralTree.class::cast) // consider only string literal
+      // consider only string literal
+      .filter(expr -> expr.is(Tree.Kind.REGULAR_STRING_LITERAL)).map(LiteralTree.class::cast)
       .map(LiteralTree::value)
       .map(SuppressWarningFilter::stripDoubleQuotes)
       .collect(Collectors.toSet());
-    suppressedRulesPerLinePerFile.computeIfAbsent(currentComponent, key -> new HashMap<>()).put(lineSuppressed, rulesSuppressed);
+    suppressedRulesPerLinePerFile.computeIfAbsent(fileUri, key -> new HashMap<>()).put(getAttributeLine(tree), rulesSuppressed);
     super.visitAttribute(tree);
+  }
+
+  public int getAttributeLine(AttributeTree tree) {
+    // TODO: SONARPHP-1368 replace this logic "ignore next line issue" by more advanced "the scope of parent group attribute"
+    AttributeGroupTree parent = (AttributeGroupTree) tree.getParent();
+    return parent.endToken().endLine()+1;
   }
 
   @Override
@@ -72,7 +98,7 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements FilterPhpI
         .map(str -> stripDoubleQuotes(str.trim()))
         .forEach(ruleName -> {
           for (int line = token.line(); line <= token.endLine(); line++) {
-            suppressedRulesPerLinePerFile.computeIfAbsent(currentComponent, key -> new HashMap<>())
+            suppressedRulesPerLinePerFile.computeIfAbsent(fileUri, key -> new HashMap<>())
               .computeIfAbsent(line, key -> new HashSet<>()).add(ruleName);
           }
         });

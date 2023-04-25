@@ -111,12 +111,15 @@ public class PHPAnalyzer {
       allIssues.addAll(issues);
     }
     if (suppressWarningFilter != null) {
-      suppressWarningFilter.scanCompilationUnit(currentFile.filename(), currentFileTree);
+      suppressWarningFilter.scanCompilationUnit(currentFile.uri().toString(), currentFileTree);
     }
     return allIssues;
   }
 
   public List<PhpIssue> analyzeTest() {
+    if (suppressWarningFilter != null) {
+      suppressWarningFilter.scanCompilationUnit(currentFile.uri().toString(), currentFileTree);
+    }
     return testFileChecks.stream()
       .map(check -> check.analyze(new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable)))
       .flatMap(List::stream)

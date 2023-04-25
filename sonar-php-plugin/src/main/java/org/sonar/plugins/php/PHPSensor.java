@@ -48,6 +48,7 @@ public class PHPSensor implements Sensor {
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
+  @Nullable
   private final SuppressWarningFilter suppressWarningFilter;
 
 
@@ -57,13 +58,13 @@ public class PHPSensor implements Sensor {
   }
 
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
-    @Nullable PHPCustomRuleRepository[] customRuleRepositories, SuppressWarningFilter suppressWarningFilter) {
+    @Nullable PHPCustomRuleRepository[] customRuleRepositories, @Nullable SuppressWarningFilter suppressWarningFilter) {
     this(fileLinesContextFactory,
       PHPChecks.createPHPCheck(checkFactory).addChecks(CheckList.REPOSITORY_KEY, CheckList.getPhpChecks()).addCustomChecks(customRuleRepositories),
       noSonarFilter, suppressWarningFilter);
   }
 
-  PHPSensor(FileLinesContextFactory fileLinesContextFactory, PHPChecks checks, NoSonarFilter noSonarFilter, SuppressWarningFilter suppressWarningFilter) {
+  PHPSensor(FileLinesContextFactory fileLinesContextFactory, PHPChecks checks, NoSonarFilter noSonarFilter, @Nullable SuppressWarningFilter suppressWarningFilter) {
     this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
