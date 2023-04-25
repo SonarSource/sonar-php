@@ -24,7 +24,6 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierValueContainment;
 import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -33,8 +32,8 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
 
   private static final String MESSAGE = "Make sure this weak hash algorithm is not used in a sensitive context here.";
 
-  private static final Set<String> WEAK_HASH_FUNCTIONS = SetUtils.immutableSetOf("md5", "sha1");
-  private static final Set<String> WEAK_HASH_ARGUMENTS = SetUtils.immutableSetOf(
+  private static final Set<String> WEAK_HASH_FUNCTIONS = Set.of("md5", "sha1");
+  private static final Set<String> WEAK_HASH_ARGUMENTS = Set.of(
     "md2",
     "md4",
     "md5",
@@ -46,7 +45,7 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
     "haval192,3",
     "haval224,3"
   );
-  private static final Set<String> WEAK_MHASH_ARGUMENTS = SetUtils.immutableSetOf(
+  private static final Set<String> WEAK_MHASH_ARGUMENTS = Set.of(
     "MHASH_MD2",
     "MHASH_MD4",
     "MHASH_MD5",
@@ -76,7 +75,7 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
     super.visitFunctionCall(tree);
 
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
-    if (WEAK_HASH_FUNCTIONS.contains(functionName)) {
+    if (functionName != null && WEAK_HASH_FUNCTIONS.contains(functionName)) {
       createIssue(tree);
       return;
     }

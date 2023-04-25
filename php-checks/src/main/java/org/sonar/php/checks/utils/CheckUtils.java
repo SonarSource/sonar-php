@@ -41,7 +41,6 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.php.utils.collections.MapBuilder;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -96,7 +95,7 @@ public final class CheckUtils {
     .put("$HTTP_COOKIE_VARS", "$_COOKIE")
     .build();
 
-  public static final Set<String> SUPERGLOBALS = SetUtils.immutableSetOf(
+  public static final Set<String> SUPERGLOBALS = Set.of(
     "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE", "$_SESSION", "$_REQUEST", "$_ENV");
 
   private CheckUtils() {

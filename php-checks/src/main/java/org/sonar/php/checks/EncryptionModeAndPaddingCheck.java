@@ -23,7 +23,6 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierValueContainment;
 import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -42,7 +41,7 @@ public class EncryptionModeAndPaddingCheck extends FunctionArgumentCheck {
   private static final String MCRYPT_ENCRYPT_NONCOMPLIANT_VALUE = "ecb";
 
   private static Set<String> opensslPublicEncryptNoncompliantValues() {
-    return SetUtils.immutableSetOf(
+    return Set.of(
       "aes-128-ecb",
       "aes-192-ecb",
       "aes-256-ecb",

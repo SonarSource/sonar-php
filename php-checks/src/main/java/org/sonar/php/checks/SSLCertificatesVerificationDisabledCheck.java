@@ -24,7 +24,6 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.argumentmatching.ArgumentMatcherValueContainment;
 import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierValueContainment;
 import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -36,7 +35,7 @@ public class SSLCertificatesVerificationDisabledCheck extends FunctionArgumentCh
 
   private static final String CURL_SETOPT = "curl_setopt";
   private static final String CURLOPT_SSL_VERIFYPEER = "CURLOPT_SSL_VERIFYPEER";
-  private static final Set<String> VERIFY_PEER_COMPLIANT_VALUES = SetUtils.immutableSetOf("false", "0");
+  private static final Set<String> VERIFY_PEER_COMPLIANT_VALUES = Set.of("false", "0");
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

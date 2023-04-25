@@ -128,9 +128,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     private final String name;
     private final String cls;
     private final Set<Integer> sensitiveIndices;
-
     private final List<String> orderedArguments;
-
 
     public SensitiveMethod(String name, String cls, Set<Integer> sensitiveIndices, List<String> orderedArguments) {
       this.name = name;

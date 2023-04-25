@@ -24,7 +24,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -73,7 +72,7 @@ public class ArgumentMatcherValueContainment extends ArgumentMatcher {
     private Set<String> values;
 
     public T values(String value) {
-      return values(SetUtils.immutableSetOf(value));
+      return values(Set.of(value));
     }
 
     public T values(Set<String> values) {

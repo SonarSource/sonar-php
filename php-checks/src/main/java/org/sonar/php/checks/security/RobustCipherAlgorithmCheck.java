@@ -19,10 +19,10 @@
  */
 package org.sonar.php.checks.security;
 
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierValueContainment;
 import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -35,7 +35,7 @@ public class RobustCipherAlgorithmCheck extends FunctionArgumentCheck {
     ArgumentVerifierValueContainment mcryptMatcher = ArgumentVerifierValueContainment.builder()
       .position(0)
       .name("cipher")
-      .values(SetUtils.immutableSetOf(
+      .values(Set.of(
         "mcrypt_des",
         "mcrypt_des_compat",
         "mcrypt_tripledes",
@@ -50,7 +50,7 @@ public class RobustCipherAlgorithmCheck extends FunctionArgumentCheck {
     ArgumentVerifierValueContainment opensslMatcher = ArgumentVerifierValueContainment.builder()
       .position(1)
       .name("method")
-      .values(SetUtils.immutableSetOf(
+      .values(Set.of(
         "bf-cbc",
         "bf-cfb",
         "bf-ecb",

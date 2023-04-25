@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks.utils.argumentmatching;
 
+import java.util.Set;
 import org.junit.Test;
-import org.sonar.php.utils.collections.SetUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,7 +34,7 @@ public class ArgumentMatcherValueContainmentTest {
       .name(null)
       .build();
 
-    assertThat(argumentMatcher.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
+    assertThat(argumentMatcher.getValues()).isEqualTo(Set.of("value"));
     assertThat(argumentMatcher.getPosition()).isEqualTo(1);
     assertThat(argumentMatcher.getName()).isNull();
   }
@@ -42,13 +42,13 @@ public class ArgumentMatcherValueContainmentTest {
   @Test
   public void argumentIndicatorWithSet() {
     ArgumentMatcherValueContainment argumentMatcher = ArgumentMatcherValueContainment.builder()
-      .values(SetUtils.immutableSetOf(
+      .values(Set.of(
         "VALUE"))
       .position(1)
       .name("argumentName")
       .build();
 
-    assertThat(argumentMatcher.getValues()).isEqualTo(SetUtils.immutableSetOf("value"));
+    assertThat(argumentMatcher.getValues()).isEqualTo(Set.of("value"));
     assertThat(argumentMatcher.getName()).isEqualTo("argumentName");
   }
 }
