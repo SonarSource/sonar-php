@@ -36,6 +36,7 @@ import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.internal.SonarRuntimeImpl;
@@ -46,6 +47,8 @@ import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 
 public class PhpUnitSensorTest {
@@ -57,6 +60,8 @@ public class PhpUnitSensorTest {
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
   private static final SonarRuntime SONARQUBE_9_9 = SonarRuntimeImpl.forSonarQube(Version.create(9,9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
   private final Set<File> tempReports = new HashSet<>();
+
+  private static final String EXPECTED_MESSAGE = "PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results.";
 
   @Test
   public void shouldProvideDescription() {
@@ -111,6 +116,61 @@ public class PhpUnitSensorTest {
     assertThat(logTester.logs(LoggerLevel.ERROR).get(0))
       .startsWith("An error occurred when reading report file")
       .contains(resourcesFolder + "', nothing will be imported from this report.");
+  }
+
+  @Test
+  public void shouldLogWarningWhenTestCaseIsDetectedWithoutDeclaration() {
+    Set.of("src/App.php", "src/EmailTest.php").forEach(
+      file -> context.fileSystem().add(inputFile(file))
+    );
+
+    Sensor sensor = createSensor();
+    sensor.execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains(EXPECTED_MESSAGE);
+    assertThat(logTester.logs(LoggerLevel.DEBUG)).hasSize(1);
+    assertThat(logTester.logs(LoggerLevel.DEBUG).get(0))
+      .startsWith("Detected and undeclared test case in").endsWith("src/EmailTest.php");
+  }
+
+  @Test
+  public void shouldNotLogWarningWhenTestCaseIsDetectedWithDeclaration() {
+    Set.of("src/App.php", "src/EmailTest.php").forEach(
+      file -> context.fileSystem().add(inputFile(file))
+    );
+
+    context.settings().setProperty("sonar.tests", "src");
+
+    Sensor sensor = createSensor();
+    sensor.execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
+    assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty();
+  }
+
+  @Test
+  public void shouldNotLogWarningWhenNoTestCaseIsDetectedWithoutDeclaration() {
+    context.fileSystem().add(inputFile("src/App.php"));
+
+    Sensor sensor = createSensor();
+    sensor.execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
+  }
+
+  @Test
+  public void shouldNotCrashWhenReadingInvalidFile() throws IOException {
+    InputFile corruptInputFile = spy(inputFile("src/App.php"));
+    when(corruptInputFile.inputStream()).thenThrow(IOException.class);
+    context.fileSystem().add(corruptInputFile);
+
+    Sensor sensor = createSensor();
+    sensor.execute(context);
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
+    assertThat(logTester.logs(LoggerLevel.DEBUG)).hasSize(1);
+    assertThat(logTester.logs(LoggerLevel.DEBUG).get(0))
+      .startsWith("Can not read file").endsWith("src/App.php");
   }
 
   private PhpUnitSensor createSensor() {
