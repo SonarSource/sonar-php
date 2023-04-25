@@ -19,9 +19,10 @@
  */
 package org.sonar.php.checks.security;
 
+import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.FunctionArgumentCheck;
-import org.sonar.php.utils.collections.SetUtils;
+import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierValueContainment;
+import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -31,47 +32,59 @@ public class RobustCipherAlgorithmCheck extends FunctionArgumentCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    checkArgument(tree, "mcrypt_encrypt", new ArgumentVerifier(0, "cipher", SetUtils.immutableSetOf(
-      "mcrypt_des",
-      "mcrypt_des_compat",
-      "mcrypt_tripledes",
-      "mcrypt_3des",
-      "mcrypt_blowfish",
-      "mcrypt_rc2",
-      "mcrypt_rc4")));
+    ArgumentVerifierValueContainment mcryptMatcher = ArgumentVerifierValueContainment.builder()
+      .position(0)
+      .name("cipher")
+      .values(Set.of(
+        "mcrypt_des",
+        "mcrypt_des_compat",
+        "mcrypt_tripledes",
+        "mcrypt_3des",
+        "mcrypt_blowfish",
+        "mcrypt_rc2",
+        "mcrypt_rc4"))
+      .build();
 
-    checkArgument(tree, "openssl_encrypt", new ArgumentVerifier(1, "method", SetUtils.immutableSetOf(
-      "bf-cbc",
-      "bf-cfb",
-      "bf-ecb",
-      "bf-ofb",
-      "des-cbc",
-      "des-cfb",
-      "des-cfb1",
-      "des-cfb8",
-      "des-ecb",
-      "des-ede",
-      "des-ede3",
-      "des-ede3-cbc",
-      "des-ede3-cfb",
-      "des-ede3-cfb1",
-      "des-ede3-cfb8",
-      "des-ede3-ofb",
-      "des-ede-cbc",
-      "des-ede-cfb",
-      "des-ede-ofb",
-      "des-ofb",
-      "desx-cbc",
-      "rc2-40-cbc",
-      "rc2-64-cbc",
-      "rc2-cbc",
-      "rc2-cfb",
-      "rc2-ecb",
-      "rc2-ofb",
-      "rc4",
-      "rc4-40",
-      "rc4-hmac-md5"
-      )));
+    checkArgument(tree, "mcrypt_encrypt", mcryptMatcher);
+
+    ArgumentVerifierValueContainment opensslMatcher = ArgumentVerifierValueContainment.builder()
+      .position(1)
+      .name("method")
+      .values(Set.of(
+        "bf-cbc",
+        "bf-cfb",
+        "bf-ecb",
+        "bf-ofb",
+        "des-cbc",
+        "des-cfb",
+        "des-cfb1",
+        "des-cfb8",
+        "des-ecb",
+        "des-ede",
+        "des-ede3",
+        "des-ede3-cbc",
+        "des-ede3-cfb",
+        "des-ede3-cfb1",
+        "des-ede3-cfb8",
+        "des-ede3-ofb",
+        "des-ede-cbc",
+        "des-ede-cfb",
+        "des-ede-ofb",
+        "des-ofb",
+        "desx-cbc",
+        "rc2-40-cbc",
+        "rc2-64-cbc",
+        "rc2-cbc",
+        "rc2-cfb",
+        "rc2-ecb",
+        "rc2-ofb",
+        "rc4",
+        "rc4-40",
+        "rc4-hmac-md5"
+      ))
+      .build();
+
+    checkArgument(tree, "openssl_encrypt", opensslMatcher);
 
     super.visitFunctionCall(tree);
   }

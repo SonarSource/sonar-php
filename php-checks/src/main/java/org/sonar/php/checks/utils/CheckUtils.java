@@ -20,7 +20,6 @@
 package org.sonar.php.checks.utils;
 
 import com.google.common.collect.Iterables;
-
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -34,9 +33,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.php.utils.collections.SetUtils;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.symbols.Symbols;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
@@ -74,6 +73,7 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 import static java.util.Collections.singletonList;
 import static org.sonar.php.symbols.Symbols.get;
 import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public final class CheckUtils {
 
@@ -83,9 +83,9 @@ public final class CheckUtils {
     Kind.FUNCTION_EXPRESSION,
     Kind.ARROW_FUNCTION_EXPRESSION};
 
-  public static final List<Kind> FUNCTION_KINDS = Arrays.asList(FUNCTION_KINDS_ARRAY);
+  static final List<Kind> FUNCTION_KINDS = Arrays.asList(FUNCTION_KINDS_ARRAY);
 
-  public static final Map<String, String> SUPERGLOBALS_BY_OLD_NAME = MapBuilder.<String, String>builder()
+  static final Map<String, String> SUPERGLOBALS_BY_OLD_NAME = MapBuilder.<String, String>builder()
     .put("$HTTP_SERVER_VARS", "$_SERVER")
     .put("$HTTP_GET_VARS", "$_GET")
     .put("$HTTP_POST_VARS", "$_POST")
@@ -95,10 +95,18 @@ public final class CheckUtils {
     .put("$HTTP_COOKIE_VARS", "$_COOKIE")
     .build();
 
-  public static final Set<String> SUPERGLOBALS = SetUtils.immutableSetOf(
-      "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE", "$_SESSION", "$_REQUEST", "$_ENV");
+  public static final Set<String> SUPERGLOBALS = Set.of(
+    "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE", "$_SESSION", "$_REQUEST", "$_ENV");
 
   private CheckUtils() {
+  }
+
+  public static Map<String, String> getSuperGlobalsByOldName() {
+    return SUPERGLOBALS_BY_OLD_NAME;
+  }
+
+  public static List<Kind> getFunctionKinds() {
+    return FUNCTION_KINDS;
   }
 
   public static boolean isFunction(Tree tree) {
@@ -121,7 +129,8 @@ public final class CheckUtils {
   }
 
   /**
-   * @return Returns function, static method's or known dynamic method's name, like "f" or "A::f". Warning, use case insensitive comparison of the result.
+   * @return Returns function, static method's or known dynamic method's name, like "f" or "A::f". Warning, use case insensitive
+   * comparison of the result.
    */
   @Nullable
   public static String getFunctionName(FunctionCallTree functionCall) {
@@ -189,7 +198,8 @@ public final class CheckUtils {
     } else if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       VariableIdentifierTree variableIdentifier = (VariableIdentifierTree) tree;
       if (variableIdentifier.text().equals("$this")) {
-        ClassDeclarationTree classDeclaration = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree, EnumSet.of(Kind.CLASS_DECLARATION, Kind.TRAIT_DECLARATION));
+        ClassDeclarationTree classDeclaration = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree,
+          EnumSet.of(Kind.CLASS_DECLARATION, Kind.TRAIT_DECLARATION));
         if (classDeclaration != null) {
           return nameOf(classDeclaration.name());
         }
@@ -336,7 +346,7 @@ public final class CheckUtils {
 
   public static boolean hasAnnotation(Tree declaration, String annotation) {
     if (!annotation.startsWith("@")) {
-      annotation = "@"+annotation;
+      annotation = "@" + annotation;
     }
 
     List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
@@ -401,9 +411,12 @@ public final class CheckUtils {
   }
 
   /**
-   * Checks if an expression is a variable, and returns the assigned value of the variable if clear, otherwise returns the original expression.
-   * This method is well suited if you want to compare the value of an expression with a scalar. It can resolve possible variables in the small scope.
-   * Thus, it is not necessary to consider beforehand whether the expression is already a scalar expression, a variable, or an expression that is not to be treated.
+   * Checks if an expression is a variable, and returns the assigned value of the variable if clear, otherwise returns the original
+   * expression.
+   * This method is well suited if you want to compare the value of an expression with a scalar. It can resolve possible variables in the
+   * small scope.
+   * Thus, it is not necessary to consider beforehand whether the expression is already a scalar expression, a variable, or an expression
+   * that is not to be treated.
    */
   public static ExpressionTree assignedValue(ExpressionTree tree) {
     if (tree.is(Kind.VARIABLE_IDENTIFIER)) {
@@ -424,7 +437,8 @@ public final class CheckUtils {
     ExpressionTree receiver = skipParenthesis(assignedValue(tree.object()));
     if (receiver.is(Kind.NEW_EXPRESSION)) {
       ExpressionTree newExpression = ((NewExpressionTree) receiver).expression();
-      return Optional.ofNullable(newExpression.is(Kind.FUNCTION_CALL) ? functionName((FunctionCallTree) newExpression) : nameOf(newExpression));
+      return Optional.ofNullable(newExpression.is(Kind.FUNCTION_CALL) ? functionName((FunctionCallTree) newExpression) :
+        nameOf(newExpression));
     }
     return Optional.empty();
   }
@@ -444,10 +458,17 @@ public final class CheckUtils {
   }
 
   public static boolean isMethodInheritedFromClassOrInterface(QualifiedName qualifiedName, MethodDeclarationTree methodDeclarationTree) {
-    ClassDeclarationTree classTree = (ClassDeclarationTree) findAncestorWithKind(methodDeclarationTree, singletonList(Tree.Kind.CLASS_DECLARATION));
+    ClassDeclarationTree classTree = (ClassDeclarationTree) findAncestorWithKind(methodDeclarationTree,
+      singletonList(Tree.Kind.CLASS_DECLARATION));
     if (classTree != null) {
       return get(classTree).isSubTypeOf(qualifiedName).isTrue();
     }
     return false;
+  }
+
+  public static boolean isSubClassOfTestCase(ClassDeclarationTree tree) {
+    ClassSymbol symbol = Symbols.get(tree);
+    return symbol.isSubTypeOf(qualifiedName("PHPUnit\\Framework\\TestCase")).isTrue()
+      || symbol.isSubTypeOf(qualifiedName("PHPUnit_Framework_TestCase")).isTrue();
   }
 }

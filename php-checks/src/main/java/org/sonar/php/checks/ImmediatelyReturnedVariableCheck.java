@@ -52,7 +52,7 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ListUtils.concat(CheckUtils.FUNCTION_KINDS, super.nodesToVisit());
+    return ListUtils.concat(CheckUtils.getFunctionKinds(), super.nodesToVisit());
   }
 
   @Override
