@@ -21,6 +21,7 @@ package org.sonar.php;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -43,5 +44,9 @@ public class ParsingTestUtils {
   public static CompilationUnitTree parseSource(String sourceCode) {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     return (CompilationUnitTree) parser.parse(sourceCode);
+  }
+
+  public static String code(String... args) {
+    return StringUtils.join(args, System.lineSeparator());
   }
 }

@@ -46,6 +46,7 @@ import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.compat.PhpFileImpl;
+import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.highlighter.SymbolHighlighter;
 import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.CpdVisitor;
@@ -72,6 +73,7 @@ class AnalysisScanner extends Scanner {
   private final boolean hasTestFileChecks;
 
   private final CacheContext cacheContext;
+  private final SuppressWarningFilter suppressWarningFilter;
   private final PHPAnalyzer phpAnalyzer;
   private int numScannedWithoutParsing = 0;
 
@@ -81,21 +83,22 @@ class AnalysisScanner extends Scanner {
                          NoSonarFilter noSonarFilter,
                          ProjectSymbolData projectSymbolData,
                          DurationStatistics statistics,
-                         CacheContext cacheContext) {
+                         CacheContext cacheContext,
+                         SuppressWarningFilter suppressWarningFilter) {
     super(context, statistics, new Cache(cacheContext));
     this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
     this.parsingErrorRuleKey = getParsingErrorRuleKey();
     this.cacheContext = cacheContext;
+    this.suppressWarningFilter  =suppressWarningFilter;
 
     List<PHPCheck> mainFileChecks = getMainFileChecks();
     List<PHPCheck> testFileChecks = getTestFileChecks();
     hasTestFileChecks = !testFileChecks.isEmpty();
 
     File workingDir = context.fileSystem().workDir();
-    phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext);
-
+    phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext, suppressWarningFilter);
   }
 
   @Override
