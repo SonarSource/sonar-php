@@ -66,7 +66,10 @@ public class PhpUnitSensor implements Sensor {
 
   private static void detectUndeclaredTestCases(SensorContext context) {
     FileSystem fs = context.fileSystem();
-    Iterator<InputFile> inputFiles = fs.inputFiles(PHPUNIT_TEST_FILE_PREDICATE).iterator();
+    Iterator<InputFile> inputFiles = fs.inputFiles(
+      fs.predicates().and(fs.predicates().hasLanguage(Php.KEY), PHPUNIT_TEST_FILE_PREDICATE)
+    ).iterator();
+
     if (inputFiles.hasNext()) {
       LOG.warn("PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results.");
     }
@@ -89,8 +92,9 @@ public class PhpUnitSensor implements Sensor {
         return text.contains(PHPUNIT_TEST_CASE_FQN);
       } catch (IOException e) {
         // ignore file
+        LOG.debug("Can not read file: {}", inputFile.uri());
+        return false;
       }
-      return false;
     }
   }
 

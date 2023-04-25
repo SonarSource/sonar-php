@@ -47,7 +47,7 @@ import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 
@@ -129,7 +129,8 @@ public class PhpUnitSensorTest {
 
     assertThat(logTester.logs(LoggerLevel.WARN)).contains(EXPECTED_MESSAGE);
     assertThat(logTester.logs(LoggerLevel.DEBUG)).hasSize(1);
-    assertThat(logTester.logs(LoggerLevel.DEBUG).get(0)).startsWith("Detected and undeclared test case in").endsWith("src/EmailTest.php");
+    assertThat(logTester.logs(LoggerLevel.DEBUG).get(0))
+      .startsWith("Detected and undeclared test case in").endsWith("src/EmailTest.php");
   }
 
   @Test
@@ -138,7 +139,7 @@ public class PhpUnitSensorTest {
       file -> context.fileSystem().add(inputFile(file))
     );
 
-    context.settings().setProperty("sonar.tests", "tests");
+    context.settings().setProperty("sonar.tests", "src");
 
     Sensor sensor = createSensor();
     sensor.execute(context);
@@ -159,13 +160,17 @@ public class PhpUnitSensorTest {
 
   @Test
   public void shouldNotCrashWhenReadingInvalidFile() throws IOException {
-    InputFile corruptInputFile = mock(InputFile.class);
+    InputFile corruptInputFile = spy(inputFile("src/App.php"));
     when(corruptInputFile.inputStream()).thenThrow(IOException.class);
+    context.fileSystem().add(corruptInputFile);
 
     Sensor sensor = createSensor();
     sensor.execute(context);
 
     assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
+    assertThat(logTester.logs(LoggerLevel.DEBUG)).hasSize(1);
+    assertThat(logTester.logs(LoggerLevel.DEBUG).get(0))
+      .startsWith("Can not read file").endsWith("src/App.php");
   }
 
   private PhpUnitSensor createSensor() {
