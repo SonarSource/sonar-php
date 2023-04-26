@@ -149,7 +149,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     }
 
     public String uniqueName() {
-      return cls.isEmpty() ? name : cls + "::" + name;
+      return cls.isEmpty() ? name : (cls + "::" + name);
     }
 
     public Set<ArgumentMatcher> getCorrespondingMatchers() {
