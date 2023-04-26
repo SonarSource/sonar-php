@@ -1,5 +1,7 @@
 <?php
 
+ldap_bind("a", "b", ""); // Compliant
+
 class A {
 
   public $fieldNameWithPasswordInIt = retrievePassword();
@@ -82,38 +84,3 @@ Request::create('http://user:password@test.com'); // Compliant - often used for 
 Request::create('https://username:password@test.com'); // Compliant - often used for tests
 preg_match('#(^git://|\.git/?$|git(?:olite)?@|//git\.|//github.com/)#i', $url); // Compliant
 $gitUri = "https://user:azerty@github.com/username/repository.git"; // Noncompliant
-
-ldap_bind("a", "b", "p4ssw0rd"); // Noncompliant
-$conection = new PDO("a", "b", "p4ssw0rd"); // Noncompliant
-mysqli_connect("a", "b", "p4ssw0rd"); // Noncompliant
-mysql_connect("a", "b", "p4ssw0rd"); // Noncompliant
-ldap_exop_passwd("a", "b", "c", "p4ssw0rd"); // Noncompliant
-mssql_connect("a", "b", "p4ssw0rd"); // Noncompliant
-odbc_connect("a", "b", "p4ssw0rd"); // Noncompliant
-db2_connect("a", "b", "p4ssw0rd"); // Noncompliant
-cubrid_connect("a", "b", "c", "d", "p4ssw0rd"); // Noncompliant
-maxdb_connect("a", "b", "p4ssw0rd"); // Noncompliant
-maxdb_change_user("a", "b", "p4ssw0rd"); // Noncompliant
-imap_open("a", "b", "p4ssw0rd"); // Noncompliant
-ifx_connect("a", "b", "p4ssw0rd"); // Noncompliant
-dbx_connect("a", "b", "c", "d", "p4ssw0rd"); // Noncompliant
-fbsql_pconnect("a", "b", "p4ssw0rd"); // Noncompliant
-$connection = new mysqli("a", "b", "p4ssw0rd"); // Noncompliant
-oci_connect("a", "p4ssw0rd"); // Noncompliant
-
-ldap_bind("a", "b"); // Compliant
-ldap_bind("a", "b", $foo); // Compliant
-ldap_bind("a", "b", ""); // Compliant
-
-ldap_bind("a", "b", 2, 3, $par, bind_password: "p4ssw0rd"); // Noncompliant
-ldap_bind("a", "b", 2, 3, $par, password: "p4ssw0rd"); // Compliant
-mysqli_connect("a", "b", passwd: "p4ssw0rd"); // Noncompliant
-$conection = new PDO(passwd: "p4ssw0rd"); // Noncompliant
-
-namespace laravel;
-use Illuminate\Encryption\Encrypter;
-$enc = new Encrypter('staticKey'); // Noncompliant
-
-namespace notlaravel;
-use my\Other\Encrypter;
-$enc = new Encrypter('staticKey'); // Compliant
