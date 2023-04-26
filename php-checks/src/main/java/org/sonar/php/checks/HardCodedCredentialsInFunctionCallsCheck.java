@@ -39,12 +39,14 @@ import org.sonar.php.checks.utils.argumentmatching.ArgumentMatcher;
 import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierUnaryFunction;
 import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonarsource.analyzer.commons.internal.json.simple.JSONArray;
@@ -59,8 +61,10 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
 
   private static final String MESSAGE = "Revoke and change this password, as it is compromised.";
 
-  private static final String JSON_LOCATION = "/org/sonar/php/checks/hardCodedCredentialsInFunctionCallsCheck/sensitiveFunctions.json";
-
+  private static final String LOCATION_OF_FUNCTIONS_JSON = "/org/sonar/php/checks/hardCodedCredentialsInFunctionCallsCheck/";
+  private static final Set<String> SENSITIVE_FUNCTIONS_JSON = Set.of(
+    "generatedSensitiveFunctions.json",
+    "manuallyCreatedSensitiveFunctions.json");
   private static final Map<String, SensitiveMethod> SENSITIVE_FUNCTIONS = JsonSensitiveFunctionsReader.parseSensitiveFunctions();
 
   private static final Map<String, ArgumentMatcher> matcherMap = new HashMap<>();
@@ -75,7 +79,6 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
 
     isPhpUnitTestCase = false;
   }
-
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
@@ -95,12 +98,17 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   public void visitFunctionCall(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
 
-    if (!isPhpUnitTestCase && callee.is(Kind.CLASS_MEMBER_ACCESS) && ((MemberAccessTree) callee).object().is(Kind.NAMESPACE_NAME)) {
-      MemberAccessTree memberAccessTreeCallee = (MemberAccessTree) callee;
-      QualifiedName fqn = ((ClassNamespaceNameTreeImpl) memberAccessTreeCallee.object()).symbol().qualifiedName();
+    if (!isPhpUnitTestCase) {
+      if (callee.is(Kind.CLASS_MEMBER_ACCESS) && ((MemberAccessTree) callee).object().is(Kind.NAMESPACE_NAME)) {
+        MemberAccessTree memberAccessTreeCallee = (MemberAccessTree) callee;
+        QualifiedName fqn = ((ClassNamespaceNameTreeImpl) memberAccessTreeCallee.object()).symbol().qualifiedName();
 
-      Tree method = memberAccessTreeCallee.member();
-      checkForSensitiveMethod(tree, fqn + "::" + method);
+        Tree method = memberAccessTreeCallee.member();
+        checkForSensitiveMethod(tree, fqn + "::" + method);
+      } else if (callee.is(Kind.NAMESPACE_NAME)) {
+        NamespaceNameTreeImpl namespaceNameTree = (NamespaceNameTreeImpl) callee;
+        checkForSensitiveMethod(tree, namespaceNameTree.qualifiedName());
+      }
     }
     super.visitFunctionCall(tree);
   }
@@ -138,11 +146,12 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     }
 
     public String uniqueName() {
-      return cls + "::" + name;
+      return cls.isEmpty() ? name : (cls + "::" + name);
     }
 
     public Set<ArgumentMatcher> getCorrespondingMatchers() {
-      Function<ExpressionTree, Boolean> isRegularStringLiteral = tree -> tree.is(Kind.REGULAR_STRING_LITERAL);
+      Function<ExpressionTree, Boolean> isRegularStringLiteral =
+        tree -> tree.is(Kind.REGULAR_STRING_LITERAL) && !isEmptyStringLiteral((LiteralTree) tree);
 
       return sensitiveIndices.stream().map(index -> matcherMap.computeIfAbsent(index + ";" + orderedArguments.get(index),
           key -> ArgumentVerifierUnaryFunction.builder()
@@ -151,6 +160,10 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
             .matchingFunction(isRegularStringLiteral)
             .build()))
         .collect(Collectors.toSet());
+    }
+
+    private static boolean isEmptyStringLiteral(LiteralTree literal) {
+      return literal.value().substring(1, literal.value().length() - 1).isEmpty();
     }
   }
 
@@ -165,27 +178,29 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     private static Map<String, SensitiveMethod> parseSensitiveFunctions() {
       Map<String, SensitiveMethod> sensitiveFunctions = new HashMap<>();
 
-      try {
-        JSONArray readArray = parseResource(JSON_LOCATION);
-        for (Object element : readArray) {
-          JSONObject castElement = (JSONObject) element;
-          String cls = (String) castElement.get("cls");
-          String name = (String) castElement.get("name");
+      for (String json_location : SENSITIVE_FUNCTIONS_JSON) {
+        try {
+          JSONArray readArray = parseResource(LOCATION_OF_FUNCTIONS_JSON + json_location);
+          for (Object element : readArray) {
+            JSONObject castElement = (JSONObject) element;
+            String cls = (String) castElement.get("cls");
+            String name = (String) castElement.get("name");
 
-          JSONArray args = (JSONArray) castElement.get("args");
-          JSONArray indices = (JSONArray) castElement.get("indices");
+            JSONArray args = (JSONArray) castElement.get("args");
+            JSONArray indices = (JSONArray) castElement.get("indices");
 
 
-          SensitiveMethod sensitiveMethod = new SensitiveMethod(name, cls, retrieveSensitiveIndices(indices),
-            retrieveActualArguments(args));
-          sensitiveFunctions.put(sensitiveMethod.uniqueName(), sensitiveMethod);
+            SensitiveMethod sensitiveMethod = new SensitiveMethod(name, cls, retrieveSensitiveIndices(indices),
+              retrieveActualArguments(args));
+            sensitiveFunctions.put(sensitiveMethod.uniqueName(), sensitiveMethod);
+          }
+        } catch (IOException | ParseException e) {
+          LOG.error(String.format("JSON containing the sensitive functions for hard coded credentials couldn't be read correctly from " +
+            "resources at %s.", json_location));
         }
-      } catch (IOException | ParseException e) {
-        LOG.error("Json containing the sensitive functions for hard coded credentials couldn't be read correctly.");
       }
       return sensitiveFunctions;
     }
-
 
     static JSONArray parseResource(String location) throws IOException, ParseException {
       InputStream in = JsonSensitiveFunctionsReader.class.getResourceAsStream(location);

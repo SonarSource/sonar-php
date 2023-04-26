@@ -22,18 +22,18 @@ package org.sonar.php.checks;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class HardCodedCredentialsCheckTest {
+public class HardCodedCredentialsInVariablesAndUrisCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    CheckVerifier.verify(new HardCodedCredentialsCheck(), "HardCodedCredentialsCheck.php");
+    CheckVerifier.verify(new HardCodedCredentialsInVariablesAndUrisCheck(), "HardCodedCredentialsInVariablesAndUrisCheck.php");
   }
 
   @Test
   public void custom() throws Exception {
-    HardCodedCredentialsCheck check = new HardCodedCredentialsCheck();
+    HardCodedCredentialsInVariablesAndUrisCheck check = new HardCodedCredentialsInVariablesAndUrisCheck();
     check.credentialWords = "marmalade,bazooka";
-    CheckVerifier.verify(check, "HardCodedCredentialsCheckCustom.php");
+    CheckVerifier.verify(check, "HardCodedCredentialsInVariablesAndUrisCheckCustom.php");
   }
 
 }
