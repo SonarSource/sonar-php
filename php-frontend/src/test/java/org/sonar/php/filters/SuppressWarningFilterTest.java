@@ -19,14 +19,25 @@
  */
 package org.sonar.php.filters;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.php.ParsingTestUtils;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 class SuppressWarningFilterTest extends ParsingTestUtils {
+
+  private PhpFile prepareFile(String path) throws URISyntaxException {
+    PhpFile file = spy(PhpFile.class);
+    when(file.uri()).thenReturn(new URI(path));
+    return file;
+  }
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -36,12 +47,13 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
     "/* @SuppressWarnings(\"php:S1234\") */",
     "/* Test comment @SuppressWarnings  (  \"php:S1234\"  )   */",
   })
-  void filterOutIssueNextLine(String suppressWarning) {
-    String code = code("<?php",
+  void filterOutIssueNextLine(String suppressWarning) throws URISyntaxException {
+    PhpFile file = prepareFile("myFile.php");
+    String code = asCode("<?php",
       suppressWarning,
       "function foo(){}");
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
-    suppressWarningFilter.scanCompilationUnit("myFile.php", parseSource(code));
+    suppressWarningFilter.analyze(file, parseSource(code));
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 3)).isFalse();
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S4657", 3)).isTrue();
     assertThat(suppressWarningFilter.accept("notMyFile.php", "php:S1234", 3)).isTrue();
@@ -54,12 +66,13 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
     "# @SuppressWarnings(\"php:S1234\")",
     "/* @SuppressWarnings(\"php:S1234\") */",
   })
-  void filterOutIssueCommentOnSameLineButApplyToNextLine(String suppressWarning) {
-    String code = code("<?php",
+  void filterOutIssueCommentOnSameLineButApplyToNextLine(String suppressWarning) throws URISyntaxException {
+    PhpFile file = prepareFile("myFile.php");
+    String code = asCode("<?php",
       "function foo(){} " + suppressWarning,
       "function bar(){} ");
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
-    suppressWarningFilter.scanCompilationUnit("myFile.php", parseSource(code));
+    suppressWarningFilter.analyze(file, parseSource(code));
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 2)).isTrue();
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 3)).isFalse();
   }
@@ -73,12 +86,13 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
     "/* Test comment @SuppressWarnings  (  \"php:S1234\", \"php:S4567\"  )   */",
     "/*@SuppressWarnings(\"php:S1234\",\"php:S4567\")*/",
   })
-  void filterOutIssueMultipleRule(String suppressWarning) {
-    String code = code("<?php",
+  void filterOutIssueMultipleRule(String suppressWarning) throws URISyntaxException {
+    PhpFile file = prepareFile("myFile.php");
+    String code = asCode("<?php",
       suppressWarning,
       "function foo(){}");
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
-    suppressWarningFilter.scanCompilationUnit("myFile.php", parseSource(code));
+    suppressWarningFilter.analyze(file, parseSource(code));
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 3)).isFalse();
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S4567", 3)).isFalse();
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S8888", 3)).isTrue();
@@ -91,49 +105,76 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
     "# @SuppressWarnings(\"php:S1234\")",
     "/* @SuppressWarnings(\"php:S1234\") */",
   })
-  void filterOutIssueCommentSeparatedByEmptyLine(String suppressWarning) {
-    String code = code("<?php",
+  void filterOutIssueCommentSeparatedByEmptyLine(String suppressWarning) throws URISyntaxException {
+    PhpFile file = prepareFile("myFile.php");
+    String code = asCode("<?php",
       suppressWarning,
       "",
       "function foo(){} ");
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
-    suppressWarningFilter.scanCompilationUnit("myFile.php", parseSource(code));
+    suppressWarningFilter.analyze(file, parseSource(code));
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 4)).isFalse();
   }
 
   @Test
-  void noFilterOutIssue() {
-    String code = code("<?php",
+  void noFilterOutIssue() throws URISyntaxException {
+    PhpFile file = prepareFile("myFile.php");
+    String code = asCode("<?php",
       "",
       "function foo(){}");
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
-    suppressWarningFilter.scanCompilationUnit("myFile.php", parseSource(code));
+    suppressWarningFilter.analyze(file, parseSource(code));
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 3)).isTrue();
   }
 
   @Test
-  void testReset() {
-    String code = code("<?php",
+  void testReset() throws URISyntaxException {
+    PhpFile file = prepareFile("myFile.php");
+    String code = asCode("<?php",
       "#[SuppressWarnings(\"php:S1234\")]",
       "function foo(){}");
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
-    suppressWarningFilter.scanCompilationUnit("myFile.php", parseSource(code));
+    suppressWarningFilter.analyze(file, parseSource(code));
+    assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 3)).isFalse();
     suppressWarningFilter.reset();
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 3)).isTrue();
   }
 
   @Test
-  void filterOutMultipleIssue() {
-    String code = code("<?php",
+  void filterOutMultipleIssue() throws URISyntaxException {
+    PhpFile file = prepareFile("myFile.php");
+    String code = asCode("<?php",
       "#[SuppressWarnings(\"php:S1234\")]",
       "function foo(){}",
       "// @SuppressWarnings(\"php:S4567\")",
       "function bar(){}");
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
-    suppressWarningFilter.scanCompilationUnit("myFile.php", parseSource(code));
+    suppressWarningFilter.analyze(file, parseSource(code));
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 3)).isFalse();
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S4567", 3)).isTrue();
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S1234", 5)).isTrue();
     assertThat(suppressWarningFilter.accept("myFile.php", "php:S4567", 5)).isFalse();
+  }
+
+  @Test
+  void filterOutOnMultipleFile() throws URISyntaxException {
+    SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
+
+    PhpFile file1 = prepareFile("myFile1.php");
+    String code1 = asCode("<?php",
+      "#[SuppressWarnings(\"php:S1234\")]",
+      "function foo(){}");
+    suppressWarningFilter.analyze(file1, parseSource(code1));
+
+    PhpFile file2 = prepareFile("myFile2.php");
+    String code2 = asCode("<?php",
+      "#[SuppressWarnings(\"php:S4567\")]",
+      "function foo(){}");
+    suppressWarningFilter.analyze(file2, parseSource(code2));
+
+    assertThat(suppressWarningFilter.accept("myFile1.php", "php:S1234", 3)).isFalse();
+    assertThat(suppressWarningFilter.accept("myFile1.php", "php:S4567", 3)).isTrue();
+    assertThat(suppressWarningFilter.accept("myFile2.php", "php:S1234", 3)).isTrue();
+    assertThat(suppressWarningFilter.accept("myFile2.php", "php:S4567", 3)).isFalse();
   }
 }

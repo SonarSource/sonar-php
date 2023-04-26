@@ -46,7 +46,7 @@ public class ParsingTestUtils {
     return (CompilationUnitTree) parser.parse(sourceCode);
   }
 
-  public static String code(String... args) {
+  public static String asCode(String... args) {
     return StringUtils.join(args, System.lineSeparator());
   }
 }

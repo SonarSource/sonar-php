@@ -19,7 +19,7 @@
  */
 package org.sonar.php.filters;
 
-public interface FilterPhpIssue {
+public interface PHPIssueFilter {
 
   boolean accept(String fileName, String ruleName, int line);
 }

@@ -27,18 +27,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.FileLinesContext;
-import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LogTesterJUnit5;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -57,26 +59,31 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class PHPAnalyzerTest {
+class PHPAnalyzerTest {
 
   private final SensorContextTester sensorContext = SensorContextTester.create(Paths.get("."));
 
-  @Rule
-  public LogTester logTester = new LogTester();
+  @RegisterExtension
+  private final LogTesterJUnit5 logTester = new LogTesterJUnit5();
+  private final TemporaryFolder tmpFolder = new TemporaryFolder();
 
-  @Rule
-  public TemporaryFolder tmpFolder = new TemporaryFolder();
-
-  @Test(expected = RecognitionException.class)
-  public void parsingFailureShouldRaiseAnException() throws IOException {
-    PHPCheck check = new DummyCheck();
-    PHPAnalyzer analyzer = createAnalyzer(check);
-    InputFile file = FileTestUtils.getInputFile(tmpFolder.newFile(), "<?php if(condition): ?>");
-    analyzer.nextFile(file);
+  @BeforeEach
+  void before() throws IOException {
+    tmpFolder.create();
   }
 
   @Test
-  public void testAnalyze() throws Exception {
+  void parsingFailureShouldRaiseAnException() throws IOException {
+    PHPCheck check = new DummyCheck();
+    PHPAnalyzer analyzer = createAnalyzer(check);
+    InputFile file = FileTestUtils.getInputFile(tmpFolder.newFile(), "<?php if(condition): ?>");
+    Assertions.assertThrows(RecognitionException.class, () -> {
+      analyzer.nextFile(file);
+    });
+  }
+
+  @Test
+  void testAnalyze() throws Exception {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = createAnalyzer(check);
     InputFile file = FileTestUtils.getInputFile(tmpFolder.newFile(), "<?php $a = 1;");
@@ -98,7 +105,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void testAnalyseWithStackOverflow() throws Exception {
+  void testAnalyseWithStackOverflow() throws Exception {
     PHPCheck check = spy(PHPCheck.class);
     when(check.analyze(any(CheckContext.class))).thenThrow(StackOverflowError.class);
 
@@ -112,7 +119,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void testAnalyzeTestFile() throws Exception {
+  void testAnalyzeTestFile() throws Exception {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();
     PHPAnalyzer analyzer = createAnalyzer(Arrays.asList(check, testCheck), Collections.singletonList(testCheck));
@@ -129,7 +136,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void terminateCallForwardedToChecks() throws Exception {
+  void terminateCallForwardedToChecks() throws Exception {
     PHPCheck check1 = spy(new DummyCheck());
     PHPCheck check2 = spy(new DummyCheck());
     PHPAnalyzer analyzer = createAnalyzer(check1, check2);
@@ -140,7 +147,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void logErrorAndContinueWhenExceptionInTerminate() throws Exception {
+  void logErrorAndContinueWhenExceptionInTerminate() throws Exception {
     PHPCheck check1 = spy(new DummyCheck());
     doThrow(new RuntimeException("myError")).when(check1).terminate();
     PHPCheck check2 = spy(new DummyCheck());
@@ -153,7 +160,7 @@ public class PHPAnalyzerTest {
   }
 
   @Test
-  public void testSuppressWarningFilterForMainAndTestFile() throws IOException {
+  void testSuppressWarningFilterForMainAndTestFile() throws IOException {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
@@ -181,11 +188,11 @@ public class PHPAnalyzerTest {
   }
 
   private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks) throws IOException {
-    return new PHPAnalyzer(checks,  testFileChecks, tmpFolder.newFolder(), new ProjectSymbolData(), new DurationStatistics(sensorContext.config()), null, null);
+    return createAnalyzer(checks, testFileChecks, new SuppressWarningFilter());
   }
 
   private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks, SuppressWarningFilter suppressWarningFilter) throws IOException {
-    return new PHPAnalyzer(checks,  testFileChecks, tmpFolder.newFolder(), new ProjectSymbolData(),
+    return new PHPAnalyzer(checks, testFileChecks, tmpFolder.newFolder(), new ProjectSymbolData(),
       new DurationStatistics(sensorContext.config()), null, suppressWarningFilter);
   }
 }

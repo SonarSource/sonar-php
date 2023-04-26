@@ -23,7 +23,6 @@ import org.sonar.api.Plugin;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
-import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.reports.phpstan.PhpStanRuleDefinition;
 import org.sonar.plugins.php.reports.phpstan.PhpStanSensor;
@@ -58,9 +57,6 @@ public class PhpPlugin implements Plugin {
       PHPRulesDefinition.class,
       PHPProfileDefinition.class,
       PhpExclusionsFileFilter.class,
-
-      // Filter
-      SuppressWarningFilter.class,
 
       // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)

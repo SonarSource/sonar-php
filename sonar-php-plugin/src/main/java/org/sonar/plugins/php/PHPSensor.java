@@ -36,7 +36,6 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.checks.CheckList;
-import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.cache.CacheContext;
@@ -48,27 +47,24 @@ public class PHPSensor implements Sensor {
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
-  @Nullable
-  private final SuppressWarningFilter suppressWarningFilter;
 
 
   // Needed for SonarLint
-  public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter, SuppressWarningFilter suppressWarningFilter) {
-    this(fileLinesContextFactory, checkFactory, noSonarFilter, null, suppressWarningFilter);
+  public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
+    this(fileLinesContextFactory, checkFactory, noSonarFilter, null);
   }
 
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter,
-    @Nullable PHPCustomRuleRepository[] customRuleRepositories, @Nullable SuppressWarningFilter suppressWarningFilter) {
+    @Nullable PHPCustomRuleRepository[] customRuleRepositories) {
     this(fileLinesContextFactory,
       PHPChecks.createPHPCheck(checkFactory).addChecks(CheckList.REPOSITORY_KEY, CheckList.getPhpChecks()).addCustomChecks(customRuleRepositories),
-      noSonarFilter, suppressWarningFilter);
+      noSonarFilter);
   }
 
-  PHPSensor(FileLinesContextFactory fileLinesContextFactory, PHPChecks checks, NoSonarFilter noSonarFilter, @Nullable SuppressWarningFilter suppressWarningFilter) {
+  PHPSensor(FileLinesContextFactory fileLinesContextFactory, PHPChecks checks, NoSonarFilter noSonarFilter) {
     this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
-    this.suppressWarningFilter = suppressWarningFilter;
   }
 
   @Override
@@ -95,8 +91,7 @@ public class PHPSensor implements Sensor {
         noSonarFilter,
         projectSymbolData,
         statistics,
-        cacheContext,
-        suppressWarningFilter);
+        cacheContext);
       analysisScanner.execute(inputFiles);
     } catch (CancellationException e) {
       LOG.info(e.getMessage());

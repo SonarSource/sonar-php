@@ -61,7 +61,6 @@ public class PHPAnalyzer {
   private final ProjectSymbolData projectSymbolData;
   private final DurationStatistics statistics;
   private final CacheContext cacheContext;
-  @Nullable
   private final SuppressWarningFilter suppressWarningFilter;
 
   private PhpInputFileContext currentFileContext;
@@ -76,7 +75,7 @@ public class PHPAnalyzer {
                      ProjectSymbolData projectSymbolData,
                      DurationStatistics statistics,
                      @Nullable CacheContext cacheContext,
-                     @Nullable SuppressWarningFilter suppressWarningFilter) {
+                     SuppressWarningFilter suppressWarningFilter) {
     this.checks = checks;
     this.testFileChecks = testFileChecks;
     this.workingDir = workingDir;
@@ -110,16 +109,15 @@ public class PHPAnalyzer {
       });
       allIssues.addAll(issues);
     }
-    if (suppressWarningFilter != null) {
-      suppressWarningFilter.scanCompilationUnit(currentFile.uri().toString(), currentFileTree);
-    }
+    PHPCheckContext context = new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable);
+    suppressWarningFilter.analyze(context);
+
     return allIssues;
   }
 
   public List<PhpIssue> analyzeTest() {
-    if (suppressWarningFilter != null) {
-      suppressWarningFilter.scanCompilationUnit(currentFile.uri().toString(), currentFileTree);
-    }
+    PHPCheckContext context = new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable);
+    suppressWarningFilter.analyze(context);
     return testFileChecks.stream()
       .map(check -> check.analyze(new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable)))
       .flatMap(List::stream)

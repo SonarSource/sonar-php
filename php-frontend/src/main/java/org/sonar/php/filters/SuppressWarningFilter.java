@@ -20,15 +20,16 @@
 package org.sonar.php.filters;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
@@ -38,44 +39,41 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-public class SuppressWarningFilter extends PHPVisitorCheck implements FilterPhpIssue {
+public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFilter {
 
-  private final Map<String, Map<Integer, Set<String>>> suppressedRulesPerLinePerFile = new HashMap<>();
-  private String fileUri;
+  private final SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
 
   private static final String ARGUMENT_FORMAT = "\"[a-zA-Z0-9:]++\"";
   private static final String ARGUMENTS_FORMAT = ARGUMENT_FORMAT + "(?:\\s*+,\\s*+"+ARGUMENT_FORMAT+")*+";
   private static final Pattern SUPPRESS_WARNING_COMMENT_PATTERN = Pattern.compile("@SuppressWarnings\\s*+\\(\\s*+(?<arguments>"+ARGUMENTS_FORMAT+")\\s*+\\)");
 
   public void reset() {
-    suppressedRulesPerLinePerFile.clear();
-  }
-
-  public void scanCompilationUnit(String fileUri, CompilationUnitTree tree) {
-    this.fileUri = fileUri;
-    super.visitCompilationUnit(tree);
+    suppressedWarnings.clear();
   }
 
   @Override
-  public boolean accept(String fileName, String ruleName, int line) {
-    return !suppressedRulesPerLinePerFile.getOrDefault(fileName, Collections.emptyMap())
-      .getOrDefault(line, Collections.emptySet()).contains(ruleName);
+  public boolean accept(String fileUri, String ruleName, int line) {
+    return !suppressedWarnings.hasSuppressedWarnings(fileUri, line, ruleName);
   }
 
   @Override
   public void visitAttribute(AttributeTree tree) {
-    Set<String> rulesSuppressed = tree.arguments().stream()
-      .map(CallArgumentTree::value)
-      // consider only string literal
-      .filter(expr -> expr.is(Tree.Kind.REGULAR_STRING_LITERAL)).map(LiteralTree.class::cast)
-      .map(LiteralTree::value)
-      .map(SuppressWarningFilter::stripDoubleQuotes)
-      .collect(Collectors.toSet());
-    suppressedRulesPerLinePerFile.computeIfAbsent(fileUri, key -> new HashMap<>()).put(getAttributeLine(tree), rulesSuppressed);
+    List<String> rulesSuppressed = extractedSuppressedWarningsFromArgument(tree.arguments());
+    suppressedWarnings.addSuppressedWarning(getFileUri(), retrieveAttributeLine(tree), rulesSuppressed);
     super.visitAttribute(tree);
   }
 
-  public int getAttributeLine(AttributeTree tree) {
+  public List<String> extractedSuppressedWarningsFromArgument(Collection<CallArgumentTree> arguments) {
+    return arguments.stream()
+      .map(CallArgumentTree::value)
+      // consider only string literal
+      .filter(expr -> expr.is(Tree.Kind.REGULAR_STRING_LITERAL))
+      .map(LiteralTree.class::cast)
+      .map(literal -> stripDoubleQuotes(literal.value()))
+      .collect(Collectors.toList());
+  }
+
+  public int retrieveAttributeLine(AttributeTree tree) {
     // TODO: SONARPHP-1368 replace this logic "ignore next line issue" by more advanced "the scope of parent group attribute"
     AttributeGroupTree parent = (AttributeGroupTree) tree.getParent();
     return parent.endToken().endLine()+1;
@@ -98,11 +96,14 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements FilterPhpI
         .map(str -> stripDoubleQuotes(str.trim()))
         .forEach(ruleName -> {
           for (int line = token.line(); line <= token.endLine(); line++) {
-            suppressedRulesPerLinePerFile.computeIfAbsent(fileUri, key -> new HashMap<>())
-              .computeIfAbsent(line, key -> new HashSet<>()).add(ruleName);
+            suppressedWarnings.addSuppressedWarning(getFileUri(), line, ruleName);
           }
         });
     }
+  }
+
+  private String getFileUri() {
+    return this.context().getPhpFile().uri().toString();
   }
 
   private static String getContents(String comment) {
@@ -120,5 +121,31 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements FilterPhpI
       return str.substring(1, str.length()-1);
     }
     return str;
+  }
+
+  static class SuppressedWarnings {
+    private final Map<String, Map<Integer, Set<String>>> suppressedRulesPerLinePerFile = new HashMap<>();
+
+    public void addSuppressedWarning(String fileUri, int line, String ruleName) {
+      addSuppressedWarning(fileUri, line, List.of(ruleName));
+    }
+
+    public void addSuppressedWarning(String fileUri, int line, Collection<String> ruleName) {
+      suppressedRulesPerLinePerFile
+        .computeIfAbsent(fileUri, key -> new HashMap<>())
+        .computeIfAbsent(line, key -> new HashSet<>())
+        .addAll(ruleName);
+    }
+
+    public boolean hasSuppressedWarnings(String fileUri, int line, String ruleName) {
+      return suppressedRulesPerLinePerFile
+        .getOrDefault(fileUri, Collections.emptyMap())
+        .getOrDefault(line, Collections.emptySet())
+        .contains(ruleName);
+    }
+
+    public void clear() {
+      suppressedRulesPerLinePerFile.clear();
+    }
   }
 }
