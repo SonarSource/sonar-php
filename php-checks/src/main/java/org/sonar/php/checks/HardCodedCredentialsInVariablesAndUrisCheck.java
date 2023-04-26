@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -95,7 +94,7 @@ public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck
 
   private void checkForCredentialUri(LiteralTree literal) {
     String possibleUrl = CheckUtils.trimQuotes(literal.value());
-    URI uri = null;
+    URI uri;
 
     try {
       uri = new URI(possibleUrl);
@@ -105,10 +104,13 @@ public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck
 
     if (uri.getUserInfo() != null) {
       String userInfo = uri.getUserInfo();
-      Matcher m = Pattern.compile("(\\S+):(\\S+)").matcher(userInfo);
-      if (m.find() && !m.group(1).equals(m.group(2)) && !userInfo.equals("user:password") && !userInfo.equals("username:password")) {
-        context().newIssue(this, literal, MESSAGE_URI);
+
+      String[] splitUserInfo = userInfo.split(":");
+      if (splitUserInfo.length == 1 || splitUserInfo[0].equals(splitUserInfo[1]) || "user:password".equals(userInfo)
+        || ("username:password").equals(userInfo)) {
+        return;
       }
+      context().newIssue(this, literal, MESSAGE_URI);
     }
   }
 
