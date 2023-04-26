@@ -122,7 +122,8 @@ $this->error = new $AssertionFailedError('Only tests with the `@group legacy` an
 
 new Foo;
 
-ldap_bind("a", "b", "p4ssw0rd"); // Noncompliant
+ldap_bind("a", "b", "p4ssw0rd"); // Noncompliant {{Revoke and change this password, as it is compromised.}}
+//                  ^^^^^^^^^^
 $test_connection_1 = new PDO("a", "b", "p4ssw0rd"); // Noncompliant
 mysqli_connect("a", "b", "p4ssw0rd"); // Noncompliant
 mysql_connect("a", "b", "p4ssw0rd"); // Noncompliant

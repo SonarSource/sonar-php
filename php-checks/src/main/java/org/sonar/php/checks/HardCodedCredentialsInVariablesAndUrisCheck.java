@@ -106,8 +106,7 @@ public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck
       String userInfo = uri.getUserInfo();
 
       String[] splitUserInfo = userInfo.split(":");
-      if (splitUserInfo.length == 1 || splitUserInfo[0].equals(splitUserInfo[1]) || "user:password".equals(userInfo)
-        || ("username:password").equals(userInfo)) {
+      if (splitUserInfo.length == 1 || splitUserInfo[0].equals(splitUserInfo[1]) || isCommonTestCredential(userInfo)) {
         return;
       }
       context().newIssue(this, literal, MESSAGE_URI);
@@ -151,5 +150,10 @@ public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck
       return pattern.substring(0, pattern.length() - LITERAL_PATTERN_SUFFIX_LENGTH);
     }
     return pattern;
+  }
+
+  private static boolean isCommonTestCredential(String userInfo) {
+    return "user:password".equals(userInfo)
+      || "username:password".equals(userInfo);
   }
 }

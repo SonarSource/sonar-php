@@ -61,13 +61,10 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
 
   private static final String MESSAGE = "Revoke and change this password, as it is compromised.";
 
-  private static final String LOCATION_OF_GENERATED_FUNCTIONS_JSON = "/org/sonar/php/checks/hardCodedCredentialsInFunctionCallsCheck" +
-    "/generatedSensitiveFunctions.json";
-  private static final String LOCATION_OF_MANUALLY_CREATED_FUNCTIONS_JSON = "/org/sonar/php/checks" +
-    "/hardCodedCredentialsInFunctionCallsCheck/manuallyCreatedSensitiveFunctions.json";
-
-  private static final Set<String> LOCATION_OF_SENSITIVE_FUNCTIONS_JSON = Set.of(LOCATION_OF_GENERATED_FUNCTIONS_JSON,
-    LOCATION_OF_MANUALLY_CREATED_FUNCTIONS_JSON);
+  private static final String LOCATION_OF_FUNCTIONS_JSON = "/org/sonar/php/checks/hardCodedCredentialsInFunctionCallsCheck/";
+  private static final Set<String> SENSITIVE_FUNCTIONS_JSON = Set.of(
+    "generatedSensitiveFunctions.json",
+    "manuallyCreatedSensitiveFunctions.json");
   private static final Map<String, SensitiveMethod> SENSITIVE_FUNCTIONS = JsonSensitiveFunctionsReader.parseSensitiveFunctions();
 
   private static final Map<String, ArgumentMatcher> matcherMap = new HashMap<>();
@@ -181,9 +178,9 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     private static Map<String, SensitiveMethod> parseSensitiveFunctions() {
       Map<String, SensitiveMethod> sensitiveFunctions = new HashMap<>();
 
-      for (String json_location : LOCATION_OF_SENSITIVE_FUNCTIONS_JSON) {
+      for (String json_location : SENSITIVE_FUNCTIONS_JSON) {
         try {
-          JSONArray readArray = parseResource(json_location);
+          JSONArray readArray = parseResource(LOCATION_OF_FUNCTIONS_JSON + json_location);
           for (Object element : readArray) {
             JSONObject castElement = (JSONObject) element;
             String cls = (String) castElement.get("cls");
