@@ -1,5 +1,9 @@
 {
-'project:Symfony/Component/Process/Pipes/AbstractPipes.php':[
-138,
+'project:PHP_CodeSniffer/src/Standards/Generic/Tests/CodeAnalysis/ForLoopShouldBeWhileLoopUnitTest.inc':[
+6,
+10,
+],
+'project:PHP_CodeSniffer/src/Standards/Squiz/Tests/WhiteSpace/SemicolonSpacingUnitTest.inc':[
+26,
 ],
 }

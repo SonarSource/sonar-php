@@ -1,0 +1,13 @@
+{
+'project:PHP_CodeSniffer/src/Standards/Squiz/Tests/Strings/EchoedStringsUnitTest.inc':[
+5,
+6,
+7,
+8,
+9,
+13,
+],
+'project:flysystem/test_files/wait_for_sftp.php':[
+28,
+],
+}

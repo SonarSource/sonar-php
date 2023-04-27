@@ -1,5 +1,8 @@
 {
-'project:Symfony/Component/HttpKernel/Tests/EventListener/ExceptionListenerTest.php':[
-195,
+'project:Symfony/Component/ErrorHandler/Exception/FlattenException.php':[
+29,
+],
+'project:Symfony/Component/HttpKernel/Tests/EventListener/ErrorListenerTest.php':[
+308,
 ],
 }

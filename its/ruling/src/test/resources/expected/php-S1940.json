@@ -1,8 +1,10 @@
 {
-'project:PhpSpreadsheet/src/PhpSpreadsheet/Chart/Renderer/JpGraph.php':[
-403,
+'project:PHPWord/src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+3635,
+3894,
+4003,
 ],
-'project:PhpSpreadsheet/src/PhpSpreadsheet/Worksheet/Worksheet.php':[
-3062,
+'project:PhpSpreadsheet/src/PhpSpreadsheet/Style/Font.php':[
+392,
 ],
 }

@@ -1,9 +1,13 @@
 {
-'project:Symfony/Bundle/FrameworkBundle/Tests/DependencyInjection/FrameworkExtensionTest.php':[
-816,
-843,
+'project:PHPWord/tests/PhpWordTests/Shared/XMLReaderTest.php':[
+106,
+107,
+],
+'project:Symfony/Bundle/FrameworkBundle/Tests/DependencyInjection/FrameworkExtensionTestCase.php':[
+1320,
+1347,
 ],
 'project:Symfony/Component/Routing/Tests/RouteTest.php':[
-251,
+289,
 ],
 }
