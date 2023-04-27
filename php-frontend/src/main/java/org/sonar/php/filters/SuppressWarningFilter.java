@@ -82,7 +82,7 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
   @Override
   public void visitToken(SyntaxToken token) {
     for (SyntaxTrivia trivia : token.trivias()) {
-      String comment = getContents(trivia.text());
+      String comment = retrieveContents(trivia.text());
       processSuppressedWarningsInComment(token, comment);
     }
     super.visitToken(token);
@@ -106,7 +106,7 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
     return this.context().getPhpFile().uri().toString();
   }
 
-  private static String getContents(String comment) {
+  private static String retrieveContents(String comment) {
     if (comment.startsWith("//")) {
       return comment.substring(2);
     } else if (comment.startsWith("#")) {

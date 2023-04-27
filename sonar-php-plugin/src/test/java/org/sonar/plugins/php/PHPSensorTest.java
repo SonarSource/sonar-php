@@ -433,10 +433,8 @@ public class PHPSensorTest {
 
   @Test
   public void testSuppressWarningsIssues() {
-    final String FILE_TO_ANALYZE = "suppressWarnings.php";
-
     checkFactory = new CheckFactory(getActiveRules());
-    analyseSingleFile(createSensor(), FILE_TO_ANALYZE);
+    analyseSingleFile(createSensor(), "suppressWarnings.php");
     Collection<Issue> issuesWithSuppressedWarnings = context.allIssues();
 
     assertThat(issuesWithSuppressedWarnings).extracting("ruleKey.rule", "primaryLocation.textRange.start.line").containsOnly(
