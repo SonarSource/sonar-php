@@ -41,6 +41,7 @@ yield 1 => 2;
 yield 1 => (2);
 yield(1) => (2); // Noncompliant
 echo ("string"), "string";
+echo ($a != $b ? "str1" : "str2")."rest";
 
 // case with binary expression
 print("string") && false; // Noncompliant
@@ -51,7 +52,7 @@ if ( print  "string"  && false  ) {}
 if ( print ("string") && false  ) {} // Noncompliant
 //   ^^^^^^^^^^^^^^^^^^^^^^^^^
 if ( print ("string") == false  ) {} // Noncompliant
-if ( print ("string") .  "str"  ) {} // Noncompliant
+if ( print ("string") .  "str"  ) {}
 if ( print ("string"  .  "str") ) {} // Noncompliant
 if ( print~("string")           ) {}
 if ( print (~"string")          ) {} // Noncompliant
@@ -59,6 +60,29 @@ if ( print (~"string")          ) {} // Noncompliant
 if ( print ("string") || false || true ) {}          // Noncompliant
 if ( print ("string") || false && true ) {}          // Noncompliant
 if ( print ("string") ^ false xor true && true ) {}  // Noncompliant
+
+// Binary expression: operations are compliant while comparison are not
+print("string") . "";
+print("string") + 1;
+print("string") - 1;
+print("string") * 1;
+print("string") / 1;
+print("string") % 1;
+print("string") ** 1;
+print("string") << 1;
+print("string") >> 1;
+print("string") == 1;  // Noncompliant
+print("string") != 1;  // Noncompliant
+print("string") <> 1;  // Noncompliant
+print("string") === 1; // Noncompliant
+print("string") !== 1; // Noncompliant
+print("string") <=> 1; // Noncompliant
+print("string") > 1;   // Noncompliant
+print("string") < 1;   // Noncompliant
+print("string") >= 1;  // Noncompliant
+print("string") <= 1;  // Noncompliant
+print("string") <=> 1; // Noncompliant
+
 
 // other cases
 echof("string");
