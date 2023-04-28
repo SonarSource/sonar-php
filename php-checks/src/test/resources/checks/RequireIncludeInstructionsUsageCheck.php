@@ -15,4 +15,5 @@ require_once "./modules/vegetable/src/Entity/Tomato.php"; // Noncompliant {{Repl
 require_once("./modules/vegetable/src/Entity/Tomato.php"); // Noncompliant {{Replace "require_once" with namespace import mechanism through the "use" keyword.}}
 
 require 'vendor/autoload.php'; // Compliant
+include 'vendor/autoload.php'; // Noncompliant
 require __DIR__ . '/vendor/autoload.php'; // Compliant
