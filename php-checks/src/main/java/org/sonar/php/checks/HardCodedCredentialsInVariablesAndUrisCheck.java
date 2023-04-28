@@ -40,8 +40,8 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S2068")
 public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck {
-  private static final String MESSAGE = "'%s' detected in this variable name, review this potentially hardcoded credential.";
-  private static final String MESSAGE_URI = "detected URI with password, review this potentially hardcoded credential.";
+  private static final String MESSAGE = "Detected '%s' in this variable name, review this potentially hardcoded credential.";
+  private static final String MESSAGE_URI = "Detected URI with password, review this potentially hardcoded credential.";
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
 
   private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))..";
