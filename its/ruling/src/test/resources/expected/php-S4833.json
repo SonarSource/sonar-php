@@ -1,13 +1,6 @@
 {
-'project:PHPMailer/get_oauth_token.php':[
-59,
-],
 'project:PHPMailer/src/PHPMailer.php':[
 2046,
-],
-'project:PHPMailer/test/bootstrap.php':[
-7,
-9,
 ],
 'project:PHPMailer/test/phpmailerLangTest.php':[
 59,
@@ -43,10 +36,6 @@
 21,
 22,
 23,
-],
-'project:PHP_CodeSniffer/tests/bootstrap.php':[
-23,
-25,
 ],
 'project:PhpSpreadsheet/samples/Autofilter/10_Autofilter.php':[
 5,
@@ -745,9 +734,6 @@
 26,
 42,
 ],
-'project:Symfony/Component/HttpFoundation/Tests/Fixtures/response-functional/common.inc':[
-19,
-],
 'project:Symfony/Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_max_age.php':[
 5,
 ],
@@ -765,9 +751,6 @@
 ],
 'project:Symfony/Component/HttpFoundation/Tests/Fixtures/response-functional/invalid_cookie_name.php':[
 5,
-],
-'project:Symfony/Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/common.inc':[
-19,
 ],
 'project:Symfony/Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/empty_destroys.php':[
 3,
@@ -806,7 +789,6 @@
 ],
 'project:Symfony/Component/Intl/Resources/bin/update-data.php':[
 30,
-31,
 ],
 'project:Symfony/Component/Messenger/Tests/Transport/AmqpExt/Fixtures/long_receiver.php':[
 13,

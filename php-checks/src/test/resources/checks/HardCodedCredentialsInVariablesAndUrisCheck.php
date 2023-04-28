@@ -80,6 +80,7 @@ $uri = "https://user@domain.com:80"; // Compliant
 $uri = "http://user@domain.com"; // Compliant
 $uri = "https://domain.com/user:azerty123"; // Compliant - valid url without credentials
 $uri = "https://admin:admin@domain.com"; // Compliant
+$uri = "scheme://:@localhost"; // Compliant
 Request::create('http://user:password@test.com'); // Compliant - often used for tests
 Request::create('https://username:password@test.com'); // Compliant - often used for tests
 preg_match('#(^git://|\.git/?$|git(?:olite)?@|//git\.|//github.com/)#i', $url); // Compliant

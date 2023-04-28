@@ -13,3 +13,7 @@ include_once "./modules/vegetable/src/Entity/Tomato.php"; // Noncompliant {{Repl
 include_once("./modules/vegetable/src/Entity/Tomato.php"); // Noncompliant {{Replace "include_once" with namespace import mechanism through the "use" keyword.}}
 require_once "./modules/vegetable/src/Entity/Tomato.php"; // Noncompliant {{Replace "require_once" with namespace import mechanism through the "use" keyword.}}
 require_once("./modules/vegetable/src/Entity/Tomato.php"); // Noncompliant {{Replace "require_once" with namespace import mechanism through the "use" keyword.}}
+
+require 'vendor/autoload.php'; // Compliant
+include 'vendor/autoload.php'; // Compliant
+require __DIR__ . '/vendor/autoload.php'; // Compliant
