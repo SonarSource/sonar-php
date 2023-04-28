@@ -194,7 +194,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void sensor_descriptor() {
+  public void sensorDescriptor() {
     DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
     createSensor().describe(descriptor);
 
@@ -220,7 +220,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void test_cpd() {
+  public void testCpd() {
     String fileName = "cpd.php";
     String componentKey = "moduleKey:" + fileName;
 
@@ -241,7 +241,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void test_no_cpd_on_test_files() {
+  public void testNoCpdOnTestFiles() {
     String fileName = "cpd.php";
     String componentKey = "moduleKey:" + fileName;
 
@@ -255,7 +255,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_read_cpd_from_cache() throws IOException, NoSuchAlgorithmException {
+  public void shouldReadCpdFromCache() throws IOException, NoSuchAlgorithmException {
     enableCache();
     String fileName = "cpd.php";
     InputFile inputFile = inputFile(fileName, Type.MAIN, InputFile.Status.SAME);
@@ -280,7 +280,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void hash_exception_when_trying_to_compare_hash() {
+  public void hashExceptionWhenTryingToCompareHash() {
     enableCache();
     InputFile inputFile = inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME);
     PHPSensor phpSensor = createSensor();
@@ -294,7 +294,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_store_cpd_in_cache() {
+  public void shouldStoreCpdInCache() {
     enableCache();
     String fileName = "cpd.php";
 
@@ -311,14 +311,14 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void empty_file_should_raise_no_issue() {
+  public void emptyFileShouldRaiseNoIssue() {
     analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "empty.php");
 
     assertThat(context.allIssues()).as("No issue must be raised").isEmpty();
   }
 
   @Test
-  public void parsing_error_should_raise_an_issue_if_check_rule_is_activated() {
+  public void parsingErrorShouldRaiseAnIssueIfCheckRuleIsActivated() {
     analyseSingleFile(createSensorWithParsingErrorCheckActivated(), PARSE_ERROR_FILE);
 
     assertThat(context.allIssues()).as("One issue must be raised").hasSize(1);
@@ -331,19 +331,19 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void parsing_error_should_raise_be_reported_in_sensor_context() {
+  public void parsingErrorShouldRaiseBeReportedInSensoCcontext() {
     analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
     assertThat(context.allAnalysisErrors()).hasSize(1);
   }
 
   @Test
-  public void parsing_error_should_raise_no_issue_if_check_rule_is_not_activated() {
+  public void parsingErrorShouldRaiseNoIssueIfCheckRuleIsNotActivated() {
     analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
     assertThat(context.allIssues()).as("One issue must be raised").isEmpty();
   }
 
   @Test
-  public void parsing_error_should_not_fail_the_analysis_even_with_fail_fast() {
+  public void parsingErrorShouldNotFailTheAnalysisEvenWithFailFast() {
     context.setSettings(new MapSettings().setProperty("sonar.internal.analysis.failFast", "true"));
     analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
     assertThat(context.allAnalysisErrors()).hasSize(1);
@@ -361,7 +361,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void init_and_terminate_method_called_only_once() {
+  public void initAndTerminateMethodCalledOnlyOnce() {
     PHPCheck check = spy(new PHPVisitorCheck() {});
 
     addInputFiles(ANALYZED_FILE, "cpd.php", "empty.php");
@@ -372,7 +372,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void exception_should_report_file_name() {
+  public void exceptionShouldReportFileName() {
     PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException());
     addInputFiles(ANALYZED_FILE);
     createSensor(check).execute(context);
@@ -380,7 +380,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void exception_should_fail_analysis_if_configured_so() {
+  public void exceptionShouldFailAnalysisIfConfiguredSo() {
     enableCache();
     RuntimeException exception = new NumberFormatException();
     PHPCheck check = new ExceptionRaisingCheck(exception);
@@ -418,7 +418,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void test_issues() {
+  public void testIssues() {
     checkFactory = new CheckFactory(getActiveRules());
     analyseSingleFile(createSensor(), ANALYZED_FILE);
 
@@ -432,7 +432,18 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void test_regex_issues() {
+  public void testSuppressWarningsIssues() {
+    checkFactory = new CheckFactory(getActiveRules());
+    analyseSingleFile(createSensor(), "suppressWarnings.php");
+    Collection<Issue> issuesWithSuppressedWarnings = context.allIssues();
+
+    assertThat(issuesWithSuppressedWarnings).extracting("ruleKey.rule", "primaryLocation.textRange.start.line").containsOnly(
+      tuple("S103", 8),
+      tuple("S1124", 8));
+  }
+
+  @Test
+  public void testRegexIssues() {
     // S5855: Regex alternatives should not be redundant
     ActiveRules rules = new ActiveRulesBuilder()
       .addRule(newActiveRule("S5855"))
@@ -476,7 +487,7 @@ public class PHPSensorTest {
 
 
   @Test
-  public void cross_file_issue() {
+  public void crossFileIssue() {
     checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S1045")).build());
     addInputFiles("cross-file/A.php", "cross-file/B.php");
     createSensor().execute(context);
@@ -494,7 +505,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_stop_if_cancel() {
+  public void shouldStopIfCancel() {
     checkFactory = new CheckFactory(getActiveRules());
 
     context.setCancelled(true);
@@ -527,7 +538,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void test_file_with_bom() {
+  public void testFileWithBom() {
     try {
       analyseSingleFile(createSensor(), "fileWithBom.php");
     } catch (Exception e) {
@@ -536,7 +547,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_disable_unnecessary_features_for_sonarlint() {
+  public void shouldDisableUnnecessaryFeaturesForSonarlint() {
     context.settings().setProperty(PhpUnitSensor.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpTestUtils.PHPUNIT_REPORT_NAME);
     context.settings().setProperty(PhpUnitSensor.PHPUNIT_COVERAGE_REPORT_PATHS_KEY, PhpTestUtils.PHPUNIT_COVERAGE_REPORT);
     DefaultInputFile inputFile = inputFile(ANALYZED_FILE);
@@ -593,7 +604,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void no_measures_for_test_files() {
+  public void noMeasuresForTestFiles() {
     checkFactory = new CheckFactory(new ActiveRulesBuilder()
       .addRule(newActiveRule("S2187"))
       .build());
@@ -613,7 +624,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_disable_rules_for_sonarlint() {
+  public void shouldDisableRulesForSonarlint() {
     checkFactory = new CheckFactory(new ActiveRulesBuilder()
       .addRule(newActiveRule(UncatchableExceptionCheck.KEY))
       .build());
@@ -630,7 +641,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_use_test_file_checks() {
+  public void shouldUseTestFileChecks() {
     TestFileCheck check = new TestFileCheck();
     InputFile testFile = inputFile(ANALYZED_FILE, Type.TEST);
     context.fileSystem().add(testFile);
@@ -639,7 +650,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_not_analyze_unchanged_file_if_setting_is_enabled() {
+  public void shouldNotAnalyzeUnchangedFileIfSettingIsEnabled() {
     checkFactory = new CheckFactory(getActiveRules());
     InputFile inputFile = inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME);
     analyzeBaseCommit(inputFile);
@@ -648,7 +659,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_analyze_file_without_status_if_setting_is_enabled() {
+  public void shouldAnalyzeFileWithoutStatusIfSettingIsEnabled() {
     enableCache();
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, null));
@@ -658,7 +669,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_analyze_changed_file_if_setting_is_enabled() {
+  public void shouldAnalyzeChangedFileIfSettingIsEnabled() {
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.CHANGED));
     context.setCanSkipUnchangedFiles(true);
@@ -667,7 +678,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_not_analyze_unchanged_file_if_enabled_by_property() {
+  public void shouldNotAnalyzeUnchangedFileIfEnabledByProperty() {
     checkFactory = new CheckFactory(getActiveRules());
 
     InputFile inputFile = inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME);
@@ -679,7 +690,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_not_analyze_unchanged_file_if_disabled_by_property() {
+  public void shouldNotAnalyzeUnchangedFileIfDisabledByProperty() {
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
     context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "false"));
@@ -688,7 +699,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_not_raise_issue_on_same_file_when_no_check_requires_parsing() {
+  public void shouldNotRaiseIssueOnSameFileWhenNoCheckRequiresParsing() {
     ActiveRules rules = new ActiveRulesBuilder()
       .addRule(new NewActiveRule.Builder()
         .setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "S101"))
@@ -705,7 +716,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_raise_issue_on_same_file_when_one_check_requires_parsing() throws IOException, NoSuchAlgorithmException {
+  public void shouldRaiseIssueOnSameFileWhenOneCheckRequiresParsing() throws IOException, NoSuchAlgorithmException {
     enableCache();
 
     ActiveRules rules = new ActiveRulesBuilder()
@@ -729,7 +740,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void should_analyze_unchanged_file_in_sonarlint_context() {
+  public void shouldAnalyzeUnchangedFileInSonarlintContext() {
     checkFactory = new CheckFactory(getActiveRules());
     context.fileSystem().add(inputFile(ANALYZED_FILE, Type.MAIN, InputFile.Status.SAME));
     context.setSettings(new MapSettings().setProperty("sonar.php.skipUnchanged", "true"));
@@ -739,7 +750,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void create_sensor_for_sonar_lint() {
+  public void createSensorForSonarLint() {
     DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
     PHPSensor phpSensor = new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter());
     phpSensor.describe(descriptor);
@@ -750,7 +761,7 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void sensor_for_sonar_lint_doesnt_provide_metrics() {
+  public void sensorForSonarLintDoesntProvideMetrics() {
     String componentKey = "moduleKey:" + ANALYZED_FILE;
     PHPSensor phpSensor = new PHPSensor(createFileLinesContextFactory(), checkFactory, new DefaultNoSonarFilter());
     context.setRuntime(SONARLINT_RUNTIME);

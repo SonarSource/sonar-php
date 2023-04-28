@@ -46,6 +46,7 @@ import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.compat.PhpFileImpl;
+import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.highlighter.SymbolHighlighter;
 import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.CpdVisitor;
@@ -73,6 +74,7 @@ class AnalysisScanner extends Scanner {
 
   private final CacheContext cacheContext;
   private final PHPAnalyzer phpAnalyzer;
+  private final SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
   private int numScannedWithoutParsing = 0;
 
   public AnalysisScanner(SensorContext context,
@@ -94,8 +96,7 @@ class AnalysisScanner extends Scanner {
     hasTestFileChecks = !testFileChecks.isEmpty();
 
     File workingDir = context.fileSystem().workDir();
-    phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext);
-
+    phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext, suppressWarningFilter);
   }
 
   @Override
@@ -170,7 +171,9 @@ class AnalysisScanner extends Scanner {
     computeMeasuresAndSaveCpdData(inputFile, cpdVisitor);
 
     noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
-    saveIssues(context, inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest(), inputFile);
+    List<PhpIssue> issues = inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest();
+    issues = filterIssuesByWarningSuppressor(inputFile, issues);
+    saveIssues(context, issues, inputFile);
   }
 
   private void computeMeasuresAndSaveCpdData(InputFile inputFile, CpdVisitor cpdVisitor) {
@@ -216,6 +219,26 @@ class AnalysisScanner extends Scanner {
   @Override
   protected boolean fileCanBeSkipped(InputFile file) {
     return super.fileCanBeSkipped(file) || (file.type() == InputFile.Type.TEST && !hasTestFileChecks);
+  }
+
+  private List<PhpIssue> filterIssuesByWarningSuppressor(InputFile inputFile, List<PhpIssue> issues) {
+    return issues.stream()
+      .filter(issue -> isIncluded(inputFile, issue))
+      .collect(Collectors.toList());
+  }
+
+  private boolean isIncluded(InputFile inputFile, PhpIssue issue) {
+    RuleKey ruleKey = checks.ruleKeyFor(issue.check());
+    if (ruleKey != null) {
+      if (issue instanceof LineIssue) {
+        LineIssue lineIssue = (LineIssue) issue;
+        return suppressWarningFilter.accept(inputFile.uri().toString(), ruleKey.toString(), lineIssue.line());
+      } else if (issue instanceof PreciseIssue) {
+        PreciseIssue preciseIssue = (PreciseIssue) issue;
+        return suppressWarningFilter.accept(inputFile.uri().toString(), ruleKey.toString(), preciseIssue.primaryLocation().startLine());
+      }
+    }
+    return true;
   }
 
   private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {

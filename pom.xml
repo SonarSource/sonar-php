@@ -81,6 +81,7 @@
     <version.assertj>3.5.2</version.assertj>
     <version.commons-lang>3.10</version.commons-lang>
     <version.junit>4.13.1</version.junit>
+    <version.junit-jupiter>5.9.2</version.junit-jupiter>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>4.11.0</version.mockito>
     <version.sonar>9.7.1.62043</version.sonar>
@@ -202,6 +203,12 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${version.junit}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${version.junit-jupiter}</version>
         <scope>test</scope>
       </dependency>
       <dependency>

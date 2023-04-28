@@ -33,6 +33,7 @@ import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.compat.PhpFileImpl;
+import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.metrics.CommentLineVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
@@ -60,6 +61,7 @@ public class PHPAnalyzer {
   private final ProjectSymbolData projectSymbolData;
   private final DurationStatistics statistics;
   private final CacheContext cacheContext;
+  private final SuppressWarningFilter suppressWarningFilter;
 
   private PhpInputFileContext currentFileContext;
 
@@ -72,13 +74,15 @@ public class PHPAnalyzer {
                      @Nullable File workingDir,
                      ProjectSymbolData projectSymbolData,
                      DurationStatistics statistics,
-                     @Nullable CacheContext cacheContext) {
+                     @Nullable CacheContext cacheContext,
+                     SuppressWarningFilter suppressWarningFilter) {
     this.checks = checks;
     this.testFileChecks = testFileChecks;
     this.workingDir = workingDir;
     this.projectSymbolData = projectSymbolData;
     this.statistics = statistics;
     this.cacheContext = cacheContext;
+    this.suppressWarningFilter = suppressWarningFilter;
     for (PHPCheck check : checks) {
       check.init();
     }
@@ -105,10 +109,15 @@ public class PHPAnalyzer {
       });
       allIssues.addAll(issues);
     }
+    PHPCheckContext context = new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable);
+    suppressWarningFilter.analyze(context);
+
     return allIssues;
   }
 
   public List<PhpIssue> analyzeTest() {
+    PHPCheckContext context = new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable);
+    suppressWarningFilter.analyze(context);
     return testFileChecks.stream()
       .map(check -> check.analyze(new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable)))
       .flatMap(List::stream)
