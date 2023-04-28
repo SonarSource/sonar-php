@@ -61,6 +61,29 @@ if ( print ("string") || false || true ) {}          // Noncompliant
 if ( print ("string") || false && true ) {}          // Noncompliant
 if ( print ("string") ^ false xor true && true ) {}  // Noncompliant
 
+// Binary expression: operations are compliant while comparison are not
+print("string") . "";
+print("string") + 1;
+print("string") - 1;
+print("string") * 1;
+print("string") / 1;
+print("string") % 1;
+print("string") ** 1;
+print("string") << 1;
+print("string") >> 1;
+print("string") == 1;  // Noncompliant
+print("string") != 1;  // Noncompliant
+print("string") <> 1;  // Noncompliant
+print("string") === 1; // Noncompliant
+print("string") !== 1; // Noncompliant
+print("string") <=> 1; // Noncompliant
+print("string") > 1;   // Noncompliant
+print("string") < 1;   // Noncompliant
+print("string") >= 1;  // Noncompliant
+print("string") <= 1;  // Noncompliant
+print("string") <=> 1; // Noncompliant
+
+
 // other cases
 echof("string");
 $var = "echo";
