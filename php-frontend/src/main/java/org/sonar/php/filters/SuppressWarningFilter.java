@@ -64,18 +64,19 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
   public void visitAttribute(AttributeTree tree) {
     List<String> rulesSuppressed = extractedSuppressedWarningsFromArgument(tree.arguments());
     AttributeGroupTree parent = (AttributeGroupTree) tree.getParent();
-    PHPTree phpTree = findFarthestPhpTreeParent(parent.startToken());
-    if (phpTree != null) {
-      int startLine = Optional.ofNullable(phpTree)
-        .map(PHPTree::getFirstToken)
-        .map(SyntaxToken::line)
-        .orElse(parent.startToken().line());
-      int endLine = Optional.ofNullable(phpTree)
-        .map(PHPTree::getLastToken)
-        .map(SyntaxToken::endLine)
-        .orElse(parent.endToken().endLine());
-      suppressedWarnings.addSuppressedWarning(getFileUri(), rulesSuppressed, startLine, endLine);
-    }
+    PHPTree phpTreeParent = findFarthestPhpTreeParent(parent.startToken());
+
+    Optional.ofNullable(phpTreeParent)
+      .ifPresent(phpTree -> {
+        int startLine = Optional.ofNullable(phpTree.getFirstToken())
+          .map(SyntaxToken::line)
+          .orElse(parent.startToken().line());
+        int endLine = Optional.ofNullable(phpTree.getLastToken())
+          .map(SyntaxToken::endLine)
+          .orElse(parent.endToken().endLine());
+        suppressedWarnings.addSuppressedWarning(getFileUri(), rulesSuppressed, startLine, endLine);
+      });
+
     super.visitAttribute(tree);
   }
 
@@ -129,14 +130,12 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
     PHPTree result = null;
     Tree parent = token.getParent();
     while (parent != null) {
-      if (parent instanceof PHPTree) {
-        PHPTree parentPhp = (PHPTree) parent;
-        if (parentPhp.getFirstToken() == token) {
-          result = parentPhp;
-        } else {
-          // we stepped out of the provided token, we stop here and return the last PHPTree found
-          return result;
-        }
+      PHPTree parentPhp = (PHPTree) parent;
+      if (parentPhp.getFirstToken() == token) {
+        result = parentPhp;
+      } else {
+        // we stepped out of the provided token, we stop here and return the last PHPTree found
+        return result;
       }
       parent = parent.getParent();
     }

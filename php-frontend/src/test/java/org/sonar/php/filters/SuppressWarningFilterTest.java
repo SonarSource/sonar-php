@@ -74,7 +74,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   })
   void filterOutIssueCommentOnSameLineButApplyToNextLine(String suppressWarning) throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "function foo(){} " + suppressWarning,
       "php:S1234", "function foo(){} "
     );
@@ -109,7 +109,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   })
   void filterOutIssueCommentSeparatedByEmptyLine(String suppressWarning) throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          suppressWarning,
       "",          "",
       "php:S1234", "function foo(){} "
@@ -119,7 +119,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutIssueAttributeSeparatedByEmptyLine() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "php:S1234", "#[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", "",
       "php:S1234", "function foo(){} "
@@ -140,7 +140,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   })
   void filterOutOnFullScopeUsingComment(String scopeDeclaration, String scopeEnd) throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "// @SuppressWarnings(\"php:S1234\")",
       "php:S1234", scopeDeclaration,
       "php:S1234", "  // in the scope",
@@ -159,7 +159,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   })
   void filterOutOnFullScopeUsingAttribute(String scopeDeclaration, String scopeEnd) throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "php:S1234", "#[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", scopeDeclaration,
       "php:S1234", "  // in the scope",
@@ -171,7 +171,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutCommentOnMethod() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "class Foo {",
       "",          "  public $name;",
       "",          "  // @SuppressWarnings(\"php:S1234\")",
@@ -186,7 +186,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutAttributeOnMethod() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "class Foo {",
       "",          "  public $name;",
       "php:S1234", "  #[SuppressWarnings(\"php:S1234\")]",
@@ -201,7 +201,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutAttributeOnClassVariableDeclaration() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "class Foo {",
       "php:S1234", "  #[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", "  ",
@@ -214,7 +214,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutAttributeOnClassConstantDeclaration() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "class Foo {",
       "php:S1234", "  #[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", "  const CONSTANT = 'constant value';",
@@ -226,7 +226,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutAttributeOnParameter() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "function foo (",
       "php:S1234", "  #[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", "  $x,",
@@ -240,7 +240,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutAttributeOnAnonymousClass() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "$x = new",
       "php:S1234", "#[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", "class {",
@@ -253,7 +253,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutAttributeOnFunctionExpression() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "$x =",
       "php:S1234", "#[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", "function ($x) {",
@@ -266,7 +266,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutAttributeOnArrowFunctionExpression() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "$x =",
       "php:S1234", "#[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", "fn($x, $y) => ",
@@ -278,7 +278,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutAttributeOnEnumCase() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "",          "enum Color {",
       "",          "  case Red;",
       "php:S1234", "  #[SuppressWarnings(\"php:S1234\")]",
@@ -316,7 +316,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutMultipleIssueOnDifferentScope() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",  "<?php",
+      "",          "<?php",
       "php:S1234", "#[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", "function foo(){}",
       "",          "// @SuppressWarnings(\"php:S4567\")",
@@ -326,7 +326,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutMultipleIssueInSingleComment() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",            "<?php",
+      "",                    "<?php",
       "",                    "/* @SuppressWarnings(\"php:S1234\")",
       "",                    "   @SuppressWarnings(\"php:S4567\") */",
       "php:S1234,php:S4567", "function foo(){}",
@@ -336,7 +336,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
   @Test
   void filterOutMultipleIssueInSingleSuppressWarningsInstruction() throws URISyntaxException {
     assertScopeOfSuppressWarningInstruction(
-      "",            "<?php",
+      "",                    "<?php",
       "",                    "// @SuppressWarnings(\"php:S1234\", \"php:S4567\")",
       "php:S1234,php:S4567", "function foo(){}",
       "",                    "$x = 3;");
