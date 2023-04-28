@@ -5,7 +5,7 @@ ldap_bind("a", "b", ""); // Compliant
 class A {
 
   public $fieldNameWithPasswordInIt = retrievePassword();
-  public $fieldNameWithPasswordInIt = "xxx"; // Noncompliant {{'password' detected in this variable name, review this potentially hardcoded credential.}}
+  public $fieldNameWithPasswordInIt = "xxx"; // Noncompliant {{Detected 'password' in this variable name, review this potentially hardcoded credential.}}
 //       ^^^^^^^^^^^^^^^^^^^^^^^^^^
   public $fieldNameWithPasswordInIt = ""; // OK, empty
   public $fieldNameWithPasswordInIt = ''; // OK, empty
@@ -14,12 +14,12 @@ class A {
   public $otherFieldName = "";
 
   // only a single issue even if multiple occurence of forbidden words
-  public $myPasswordIsPWD = "something"; // Noncompliant {{'password' detected in this variable name, review this potentially hardcoded credential.}}
+  public $myPasswordIsPWD = "something"; // Noncompliant {{Detected 'password' in this variable name, review this potentially hardcoded credential.}}
   public $myPasswordIsPWD = ""; // OK, empty
 
   private function a() {
     $variable1 = "blabla";
-    $variable2 = "login=a&pwd=xxx"; // Noncompliant {{'pwd' detected in this variable name, review this potentially hardcoded credential.}}
+    $variable2 = "login=a&pwd=xxx"; // Noncompliant {{Detected 'pwd' in this variable name, review this potentially hardcoded credential.}}
 //               ^^^^^^^^^^^^^^^^^
     $variable3 = "login=a&password=";
     $variable4 = "login=a&password=$password";
@@ -71,7 +71,7 @@ const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password'; // Compliant
 // The literal string doesn't contain the wordlist item matched on the variable name
 const DEFAULT_AMQP_PASSWORD = 'pwd'; // Noncompliant
 
-$uri = "ftp://user:azerty123@domain.com"; // Noncompliant
+$uri = "ftp://user:azerty123@domain.com"; // Noncompliant {{Detected URI with password, review this potentially hardcoded credential.}}
 $uri = "ssh://user:azerty123@domain.com"; // Noncompliant
 $uri = "https://user:azerty123@domain.com"; // Noncompliant
 $uri = "http://user:azerty123@domain.com"; // Noncompliant
