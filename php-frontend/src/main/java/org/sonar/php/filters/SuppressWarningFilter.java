@@ -68,13 +68,8 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
 
     Optional.ofNullable(phpTreeParent)
       .ifPresent(phpTree -> {
-        int startLine = Optional.ofNullable(phpTree.getFirstToken())
-          .map(SyntaxToken::line)
-          .orElse(parent.startToken().line());
-        int endLine = Optional.ofNullable(phpTree.getLastToken())
-          .map(SyntaxToken::endLine)
-          .orElse(parent.endToken().endLine());
-        suppressedWarnings.addSuppressedWarning(getFileUri(), rulesSuppressed, startLine, endLine);
+        Range<Integer> range = computeLineRange(phpTree, parent.startToken(), parent.endToken());
+        suppressedWarnings.addSuppressedWarning(getFileUri(), rulesSuppressed, range);
       });
 
     super.visitAttribute(tree);
@@ -104,22 +99,26 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
 
     if (matcher.find()) {
       PHPTree parent = findFarthestPhpTreeParent(token);
-      int startLine = Optional.ofNullable(parent)
-        .map(PHPTree::getFirstToken)
-        .map(SyntaxToken::line)
-        .orElse(token.line());
-      int endLine = Optional.ofNullable(parent)
-        .map(PHPTree::getLastToken)
-        .map(SyntaxToken::endLine)
-        .orElse(token.endLine());
-
+      Range<Integer> range = computeLineRange(parent, token, token);
       do {
         String arguments = matcher.group("arguments");
         Arrays.stream(arguments.split(","))
           .map(str -> stripDoubleQuotes(str.trim()))
-          .forEach(ruleName -> suppressedWarnings.addSuppressedWarning(getFileUri(), ruleName, startLine, endLine));
-      } while(matcher.find());
+          .forEach(ruleName -> suppressedWarnings.addSuppressedWarning(getFileUri(), ruleName, range));
+      } while (matcher.find());
     }
+  }
+
+  private static Range<Integer> computeLineRange(PHPTree phpTree, SyntaxToken startToken, SyntaxToken endToken) {
+    int startLine = Optional.ofNullable(phpTree)
+      .map(PHPTree::getFirstToken)
+      .map(SyntaxToken::line)
+      .orElse(startToken.line());
+    int endLine = Optional.ofNullable(phpTree)
+      .map(PHPTree::getLastToken)
+      .map(SyntaxToken::endLine)
+      .orElse(endToken.endLine());
+    return Range.closed(startLine, endLine);
   }
 
   /**
@@ -131,12 +130,11 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
     Tree parent = token.getParent();
     while (parent != null) {
       PHPTree parentPhp = (PHPTree) parent;
-      if (parentPhp.getFirstToken() == token) {
-        result = parentPhp;
-      } else {
+      if (parentPhp.getFirstToken() != token) {
         // we stepped out of the provided token, we stop here and return the last PHPTree found
         return result;
       }
+      result = parentPhp;
       parent = parent.getParent();
     }
     return result;
@@ -164,28 +162,28 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
   }
 
   static class SuppressedWarnings {
-    private final Map<String, Map<String, RangeSet<Integer>>> suppressedRulesPerLinePerFile = new HashMap<>();
+    private final Map<String, Map<String, RangeSet<Integer>>> suppressedRangePerRulesPerFile = new HashMap<>();
 
-    public void addSuppressedWarning(String fileUri, String ruleName, int startLine, int endLine) {
-      suppressedRulesPerLinePerFile
+    public void addSuppressedWarning(String fileUri, String ruleName, Range<Integer> range) {
+      suppressedRangePerRulesPerFile
         .computeIfAbsent(fileUri, key -> new HashMap<>())
         .computeIfAbsent(ruleName, key -> TreeRangeSet.create())
-        .add(Range.closed(startLine, endLine));
+        .add(range);
     }
 
-    public void addSuppressedWarning(String fileUri, Collection<String> ruleNames, int startLine, int endLine) {
-      ruleNames.forEach(ruleName -> addSuppressedWarning(fileUri, ruleName, startLine, endLine));
+    public void addSuppressedWarning(String fileUri, Collection<String> ruleNames, Range<Integer> range) {
+      ruleNames.forEach(ruleName -> addSuppressedWarning(fileUri, ruleName, range));
     }
 
     public boolean hasSuppressedWarnings(String fileUri, String ruleName, int line) {
-      return suppressedRulesPerLinePerFile
+      return suppressedRangePerRulesPerFile
         .getOrDefault(fileUri, Collections.emptyMap())
         .getOrDefault(ruleName, TreeRangeSet.create())
         .contains(line);
     }
 
     public void clear() {
-      suppressedRulesPerLinePerFile.clear();
+      suppressedRangePerRulesPerFile.clear();
     }
   }
 }
