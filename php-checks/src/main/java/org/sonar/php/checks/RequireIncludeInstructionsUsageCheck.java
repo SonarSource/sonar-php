@@ -53,7 +53,7 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
 
     String callee = tree.callee().toString();
 
-    if (WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH)) && !isRequireAutoload(tree)) {
+    if (WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH)) && !isAutoloadImport(tree)) {
       String message = String.format(MESSAGE, callee);
       context().newIssue(this, tree.callee(), message);
     }
@@ -64,7 +64,7 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
     return EXCLUDED_FILES.contains(filename);
   }
 
-  private static boolean isRequireAutoload(FunctionCallTree tree) {
+  private static boolean isAutoloadImport(FunctionCallTree tree) {
     String call = tree.toString();
     return (call.startsWith("include") || call.startsWith("require")) && call.endsWith("autoload.php'") ;
   }
