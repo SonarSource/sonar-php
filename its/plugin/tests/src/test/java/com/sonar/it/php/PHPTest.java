@@ -21,6 +21,7 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
+import java.util.List;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.sonarqube.ws.Issues;
@@ -28,7 +29,6 @@ import org.sonarqube.ws.Issues;
 import static com.sonar.it.php.Tests.getComponent;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
-import java.util.List;
 
 public class PHPTest {
 
@@ -140,10 +140,6 @@ public class PHPTest {
 
   private static String getResourceKey(String projectKey, String fileName) {
     return projectKey + ":" + SRC_DIR_NAME + "/" + fileName;
-  }
-
-  private static boolean isGreater75() {
-    return orchestrator.getServer().version().isGreaterThanOrEquals(7, 6);
   }
 
 }
