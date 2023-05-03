@@ -1,14 +1,12 @@
 {
   "title": "Parentheses should not be used for calls to \"echo\"",
   "type": "CODE_SMELL",
-  "status": "ready",
+  "status": "deprecated",
   "remediation": {
     "func": "Constant\/Issue",
     "constantCost": "2min"
   },
-  "tags": [
-    "pitfall"
-  ],
+  "tags": [],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-2041",
   "sqKey": "S2041",

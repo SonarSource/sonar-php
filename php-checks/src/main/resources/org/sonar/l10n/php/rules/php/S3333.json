@@ -8,7 +8,6 @@
   },
   "tags": [
     "cwe",
-    "owasp-a6",
     "php-ini"
   ],
   "defaultSeverity": "Blocker",

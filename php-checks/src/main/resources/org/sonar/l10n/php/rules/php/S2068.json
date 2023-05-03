@@ -7,9 +7,7 @@
     "constantCost": "30min"
   },
   "tags": [
-    "cwe",
-    "sans-top25-porous",
-    "owasp-a2"
+    "cwe"
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-2068",
