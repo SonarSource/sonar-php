@@ -166,7 +166,7 @@ class PHPAnalyzerTest {
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
     PHPAnalyzer analyzer = createAnalyzer(List.of(check), List.of(testCheck), suppressWarningFilter);
     File tmpFile = tmpFolder.newFile();
-    String fileUri = tmpFile.getCanonicalFile().toPath().toUri().toString();
+    String fileUri = tmpFile.toPath().toUri().toString();
     InputFile file = FileTestUtils.getInputFile(tmpFile, "<?php\n//@SuppressWarnings(\"S11\")\n$a = 1;");
 
     analyzer.nextFile(file);
