@@ -3,9 +3,7 @@
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "tags": [
-    "cwe",
-    "owasp-a6",
-    "sans-top25-porous"
+    "cwe"
   ],
   "defaultSeverity": "Minor",
   "ruleSpecification": "RSPEC-5122",

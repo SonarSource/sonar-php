@@ -6,9 +6,7 @@
     "func": "Constant\/Issue",
     "constantCost": "5min"
   },
-  "tags": [
-    "owasp-a6"
-  ],
+  "tags": [],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-6343",
   "sqKey": "S6343",

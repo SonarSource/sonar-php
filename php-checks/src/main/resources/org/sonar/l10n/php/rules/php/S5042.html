@@ -60,7 +60,6 @@ if ($zip-&gt;open($file) === true) {
         $filename = $zip-&gt;getNameIndex($i);
         $stats = $zip-&gt;statIndex($i);
 
-        // Prevent ZipSlip path traversal (S6096)
         if (strpos($filename, '../') !== false || substr($filename, 0, 1) === '/') {
             throw new Exception();
         }
@@ -117,7 +116,6 @@ $zip = zip_open($file);
 while ($file = zip_read($zip)) {
     $filename = zip_entry_name($file);
 
-    // Prevent ZipSlip path traversal (S6096)
     if (strpos($filename, '../') !== false || substr($filename, 0, 1) === '/') {
         throw new Exception();
     }
