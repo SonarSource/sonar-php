@@ -34,6 +34,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.utils.log.LogTesterJUnit5;
@@ -165,9 +166,10 @@ class PHPAnalyzerTest {
     PHPCheck testCheck = new DummyCheck();
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
     PHPAnalyzer analyzer = createAnalyzer(List.of(check), List.of(testCheck), suppressWarningFilter);
-    File tmpFile = tmpFolder.newFile();
-    String fileUri = tmpFile.getCanonicalFile().toPath().toUri().toString();
-    InputFile file = FileTestUtils.getInputFile(tmpFile, "<?php\n//@SuppressWarnings(\"S11\")\n$a = 1;");
+    InputFile file = new TestInputFileBuilder("projectKey", "file.php")
+      .setContents("<?php\n//@SuppressWarnings(\"S11\")\n$a = 1;")
+      .build();
+    String fileUri = file.uri().toString();
 
     analyzer.nextFile(file);
 
