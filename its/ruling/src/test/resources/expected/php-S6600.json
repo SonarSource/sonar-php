@@ -215,9 +215,6 @@
 'project:PHP_CodeSniffer/src/Util/Cache.php':[
 346,
 ],
-'project:PhpSpreadsheet/src/PhpSpreadsheet/Helper/Sample.php':[
-205,
-],
 'project:Symfony/Component/DependencyInjection/Tests/Fixtures/php/autowire_closure.php':[
 55,
 ],
@@ -243,9 +240,6 @@
 'project:Symfony/Component/DependencyInjection/Tests/Fixtures/php/services_uninitialized_ref.php':[
 68,
 72,
-],
-'project:Symfony/Component/ErrorHandler/Resources/views/traces_text.html.php':[
-34,
 ],
 'project:Symfony/Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher3.php':[
 29,

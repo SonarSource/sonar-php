@@ -1,4 +1,7 @@
 {
+'project:PHP_CodeSniffer/src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc':[
+65,
+],
 'project:PHP_CodeSniffer/src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc':[
 208,
 ],
