@@ -19,7 +19,7 @@ Discover and update the PHP-specific [properties](/analysis/analysis-parameters/
 
 The best way to deactivate an individual issue you don't intend to fix is to mark it "Won't Fix" or "False Positive" through the Sonar UI.
 
-If you need to deactivate a rule (or all rules) for an entire file, then issue exclusions are the way to go. But if you only want to deactivate a rule across a subset of a file - all the lines of a method or a class - you can use a PHPDoc comment `/* @SuppressWarnings("php:S2077") */` or an annotation `#[SuppressWarnings("php:S2077")]`.
+If you need to deactivate a rule (or all rules) for an entire file, then issue exclusions are the way to go. But if you only want to deactivate a rule across a subset of a file - all the lines of a method or a class - you can use a PHPDoc comment `/* @SuppressWarnings("php:S2077") */` or an attribute `#[SuppressWarnings("php:S2077")]`.
 
 ## Analyze php.ini Files
 
