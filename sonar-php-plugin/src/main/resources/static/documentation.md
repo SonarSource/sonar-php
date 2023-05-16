@@ -3,15 +3,23 @@ title: PHP
 key: php
 ---
 
-<!-- static -->
-<!-- update_center:php -->
-<!-- /static -->
+## Supported Versions
 
-
+| Version | Status          |
+|---------|-----------------|
+| 5.x     | Fully Supported |
+| 7.x     | Fully Supported |
+| 8.x     | Fully Supported |
 
 ## Language-Specific Properties
 
 Discover and update the PHP-specific [properties](/analysis/analysis-parameters/) in: <!-- sonarcloud -->Project <!-- /sonarcloud -->**[Administration > General Settings > PHP](/#sonarqube-admin#/admin/settings?category=php)**
+
+## Turning issues off
+
+The best way to deactivate an individual issue you don't intend to fix is to mark it "Won't Fix" or "False Positive" through the Sonar UI.
+
+If you need to deactivate a rule (or all rules) for an entire file, then issue exclusions are the way to go. But if you only want to deactivate a rule across a subset of a file - all the lines of a method or a class - you can use a PHPDoc comment `/* @SuppressWarnings("php:S2077") */` or an annotation `#[SuppressWarnings("php:S2077")]`.
 
 ## Analyze php.ini Files
 
@@ -88,6 +96,7 @@ Comment syntax is described [here](https://github.com/SonarSource/sonar-analyzer
 
 ## Related Pages
 
+* [External Analyzer Reports](/#sonarqube-admin#/admin/settings?category=external+analyzers) ([PHPStan](https://phpstan.org/), [Psalm](https://psalm.dev/))
 * [Test Coverage & Execution](/analysis/coverage/)
 <!-- sonarqube -->
 * [Adding Coding Rules](/extend/adding-coding-rules/)
