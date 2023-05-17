@@ -1,0 +1,8 @@
+{
+'PHP_CodeSniffer:tests/Core/File/FindExtendedClassNameTest.php':[
+31,
+],
+'PHP_CodeSniffer:tests/Core/File/FindImplementedInterfaceNamesTest.php':[
+30,
+],
+}

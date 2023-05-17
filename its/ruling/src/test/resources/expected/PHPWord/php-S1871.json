@@ -1,0 +1,16 @@
+{
+'PHPWord:src/PhpWord/Element/Text.php':[
+82,
+],
+'PHPWord:src/PhpWord/Element/TextBreak.php':[
+74,
+],
+'PHPWord:src/PhpWord/Reader/ODText/Content.php':[
+69,
+],
+'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+1563,
+4527,
+5330,
+],
+}

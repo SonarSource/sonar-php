@@ -1,0 +1,17 @@
+{
+'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php':[
+24,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php':[
+46,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php':[
+34,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php':[
+30,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx.php':[
+37,
+],
+}

@@ -145,7 +145,7 @@ qa_os_win_task:
     - mvn.cmd clean verify
   cleanup_before_cache_script: cleanup_maven_repository
 
-ruling_task:
+pr_analysis_task:
   depends_on:
     - build
   <<: *ONLY_SONARSOURCE_QA
@@ -164,12 +164,42 @@ ruling_task:
     - source cirrus-env QA
     - source set_maven_build_version $BUILD_NUMBER
     - cd its/ruling
-    - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
+    - mvn test -Dtest=PhpPrAnalysisTest -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
   cleanup_before_cache_script: cleanup_maven_repository
- 
+
+ruling_task:
+  depends_on:
+    - build
+  <<: *ONLY_SONARSOURCE_QA
+  eks_container:
+    <<: *QA_CONTAINER_DEFINITION
+    cpu: 4
+    memory: 8G
+  env:
+    CIRRUS_CLONE_DEPTH: 1
+    matrix:
+      - PHP_PROJECT: "Flysystem"
+      - PHP_PROJECT: "Monica"
+      - PHP_PROJECT: "PhpCodeSniffer"
+      - PHP_PROJECT: "PhpMailer"
+      - PHP_PROJECT: "Psysh"
+      - PHP_PROJECT: "PhpWord"
+      - PHP_PROJECT: "RubixML"
+  maven_cache:
+    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
+  submodules_script:
+    - git submodule update --init
+  ruling_script:
+    - source cirrus-env QA
+    - source set_maven_build_version $BUILD_NUMBER
+    - cd its/ruling
+    - mvn test -Dtest=PhpGeneralRulingTest#test${PHP_PROJECT} -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
+  cleanup_before_cache_script: cleanup_maven_repository
+
 promote_task:
   depends_on:
     - ruling
+    - pr_analysis
     - plugin_qa
     - qa_os_win
     - ws_scan

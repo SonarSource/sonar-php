@@ -1,0 +1,17 @@
+{
+'monica:app/Console/Commands/PingVersionServer.php':[
+39,
+],
+'monica:app/Http/Controllers/ContactsController.php':[
+569,
+],
+'monica:app/Models/Contact/Contact.php':[
+1337,
+],
+'monica:app/Providers/RouteServiceProvider.php':[
+52,
+],
+'monica:tests/Browser/Auth/AuthControllerTest.php':[
+166,
+],
+}

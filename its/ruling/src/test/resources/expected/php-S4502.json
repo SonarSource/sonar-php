@@ -1,8 +1,0 @@
-{
-'project:Symfony/Bundle/FrameworkBundle/Tests/DependencyInjection/Fixtures/php/form_csrf_disabled.php':[
-4,
-],
-'project:monica/app/Http/Middleware/VerifyCsrfToken.php':[
-21,
-],
-}

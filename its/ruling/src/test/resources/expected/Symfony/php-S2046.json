@@ -1,0 +1,14 @@
+{
+'Symfony:Component/ErrorHandler/Resources/bin/extract-tentative-return-types.php':[
+1,
+],
+'Symfony:Component/Intl/Resources/emoji/build.php':[
+1,
+],
+'Symfony:Component/Mailer/Tests/Transport/Fixtures/fake-sendmail.php':[
+1,
+],
+'Symfony:Component/Validator/Resources/bin/sync-iban-formats.php':[
+1,
+],
+}

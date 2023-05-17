@@ -1,0 +1,8 @@
+{
+'Symfony:Bundle/SecurityBundle/Tests/Functional/Bundle/AuthenticatorBundle/ApiAuthenticator.php':[
+49,
+],
+'Symfony:Bundle/SecurityBundle/Tests/Functional/SecurityTest.php':[
+255,
+],
+}

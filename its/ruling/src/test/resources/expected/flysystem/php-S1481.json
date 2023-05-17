@@ -1,0 +1,8 @@
+{
+'flysystem:src/FileAttributesTest.php':[
+99,
+],
+'flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapter.php':[
+112,
+],
+}

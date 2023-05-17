@@ -1,0 +1,14 @@
+{
+'flysystem:src/ExceptionInformationTest.php':[
+30,
+],
+'flysystem:src/FilesystemTest.php':[
+314,
+],
+'flysystem:src/Local/LocalFilesystemAdapterTest.php':[
+106,
+],
+'flysystem:src/MountManagerTest.php':[
+78,
+],
+}

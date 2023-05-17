@@ -1,0 +1,14 @@
+{
+'monica:app/Console/Kernel.php':[
+33,
+],
+'monica:public/index.php':[
+38,
+],
+'monica:scripts/tests/server-cc.php':[
+34,
+],
+'monica:tests/Traits/CreatesApplication.php':[
+18,
+],
+}

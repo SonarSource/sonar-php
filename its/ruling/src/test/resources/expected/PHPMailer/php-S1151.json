@@ -1,0 +1,16 @@
+{
+'PHPMailer:src/PHPMailer.php':[
+924,
+1390,
+2865,
+2879,
+2916,
+2943,
+2985,
+],
+'PHPMailer:src/SMTP.php':[
+295,
+558,
+576,
+],
+}

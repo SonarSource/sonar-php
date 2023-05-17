@@ -1,0 +1,15 @@
+{
+'monica:app/Models/Contact/Contact.php':[
+744,
+744,
+],
+'monica:app/Services/Account/Photo/UploadPhoto.php':[
+195,
+],
+'monica:app/Services/DavClient/CreateAddressBookSubscription.php':[
+53,
+],
+'monica:app/Services/VCard/ImportVCard.php':[
+743,
+],
+}

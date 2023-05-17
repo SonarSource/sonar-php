@@ -1,0 +1,16 @@
+{
+'PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/NestingLevelUnitTest.inc':[
+55,
+82,
+],
+'PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc':[
+50,
+55,
+],
+'PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc':[
+258,
+268,
+278,
+283,
+],
+}

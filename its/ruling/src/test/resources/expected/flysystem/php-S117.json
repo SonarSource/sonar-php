@@ -1,0 +1,10 @@
+{
+'flysystem:src/PhpseclibV2/SftpStub.php':[
+65,
+69,
+],
+'flysystem:src/PhpseclibV3/SftpStub.php':[
+63,
+67,
+],
+}

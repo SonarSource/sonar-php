@@ -28,14 +28,13 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PhpGeneralRulingTest {
-
-  private static final String PROJECT_KEY = "project";
 
   @ClassRule
   public static Orchestrator ORCHESTRATOR = RulingHelper.getOrchestrator();
@@ -62,12 +61,53 @@ public class PhpGeneralRulingTest {
   }
 
   @Test
-  public void test() throws Exception {
-    ORCHESTRATOR.getServer().provisionProject(PROJECT_KEY, PROJECT_KEY);
-    ORCHESTRATOR.getServer().associateProjectToQualityProfile(PROJECT_KEY, "php", "rules");
+  public void testFlysystem() throws Exception {
+    testProject("flysystem");
+  }
+
+  @Test
+  public void testMonica() throws Exception {
+    testProject("monica");
+  }
+
+
+  @Test
+  public void testPhpCodeSniffer() throws Exception {
+    testProject("PHP_CodeSniffer");
+  }
+
+  @Test
+  public void testPhpMailer() throws Exception {
+    testProject("PHPMailer");
+  }
+
+  @Test
+  public void testPsysh() throws Exception {
+    testProject("psysh");
+  }
+
+  @Test
+  public void testPhpWord() throws Exception {
+    testProject("PHPWord");
+  }
+
+  @Test
+  public void testRubixML() throws Exception {
+    testProject("RubixML");
+  }
+
+  @Test
+  @Ignore("Due to around 8600 files this project should not be part of the regular integration test run")
+  public void testSymfony() throws Exception {
+    testProject("Symfony");
+  }
+
+  private void testProject(String project) throws Exception {
+    ORCHESTRATOR.getServer().provisionProject(project, project);
+    ORCHESTRATOR.getServer().associateProjectToQualityProfile(project, "php", "rules");
     File litsDifferencesFile = FileLocation.of("target/differences").getFile();
-    File projectLocation = FileLocation.of("../sources/src").getFile();
-    SonarScanner build = RulingHelper.prepareScanner(projectLocation, PROJECT_KEY, "expected", litsDifferencesFile)
+    File projectLocation = FileLocation.of("../sources/src/" + project).getFile();
+    SonarScanner build = RulingHelper.prepareScanner(projectLocation, project, "expected/" + project, litsDifferencesFile)
       .setProperty("sonar.import_unknown_files", "true")
       .setProperty("sonar.php.duration.statistics", "true")
       .setProperty("sonar.cpd.exclusions", "**/*")

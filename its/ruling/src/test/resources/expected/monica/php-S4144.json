@@ -1,0 +1,14 @@
+{
+'monica:tests/Api/ApiRelationshipControllerTest.php':[
+297,
+],
+'monica:tests/Api/ApiTaskControllerTest.php':[
+190,
+],
+'monica:tests/Unit/Jobs/Dav/GetMultipleVCardTest.php':[
+102,
+],
+'monica:tests/Unit/Models/RelationshipTest.php':[
+65,
+],
+}
