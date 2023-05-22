@@ -1,0 +1,17 @@
+{
+'flysystem:src/CalculateChecksumFromStream.php':[
+0,
+],
+'flysystem:src/ChecksumAlgoIsNotSupported.php':[
+0,
+],
+'flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapterWithoutAclTest.php':[
+0,
+],
+'flysystem:src/UrlGeneration/TemporaryUrlGenerator.php':[
+0,
+],
+'flysystem:src/WebDAV/UrlPrefixingClientStub.php':[
+0,
+],
+}

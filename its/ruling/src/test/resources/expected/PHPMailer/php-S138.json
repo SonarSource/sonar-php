@@ -1,0 +1,15 @@
+{
+'PHPMailer:src/PHPMailer.php':[
+1535,
+2100,
+2809,
+4407,
+4864,
+],
+'PHPMailer:test/PHPMailer/ParseAddressesTest.php':[
+190,
+],
+'PHPMailer:test/PHPMailer/ValidateAddressTest.php':[
+281,
+],
+}

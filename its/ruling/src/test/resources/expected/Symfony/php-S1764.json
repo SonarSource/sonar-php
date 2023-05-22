@@ -1,0 +1,8 @@
+{
+'Symfony:Bridge/PhpUnit/Tests/DeprecationErrorHandler/ConfigurationTest.php':[
+491,
+],
+'Symfony:Component/DependencyInjection/Tests/ContainerBuilderTest.php':[
+268,
+],
+}

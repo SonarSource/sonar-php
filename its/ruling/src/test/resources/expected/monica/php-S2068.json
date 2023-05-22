@@ -1,0 +1,14 @@
+{
+'monica:app/Console/Commands/CreateAccount.php':[
+18,
+],
+'monica:app/Console/Commands/NewAddressBookSubscription.php':[
+17,
+],
+'monica:app/Console/Commands/SetupProduction.php':[
+17,
+],
+'monica:tests/Unit/Models/AddressBookSubscriptionTest.php':[
+71,
+],
+}

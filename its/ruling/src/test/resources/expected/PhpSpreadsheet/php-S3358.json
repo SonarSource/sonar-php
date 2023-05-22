@@ -1,0 +1,17 @@
+{
+'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Helpers.php':[
+109,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/DefinedName.php':[
+73,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php':[
+132,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/RowCellIterator.php':[
+131,
+],
+'PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/StringHelperTest.php':[
+85,
+],
+}

@@ -11,25 +11,65 @@ env:
   #Possible values for ARTIFACTORY_DEPLOY_REPO: sonarsource-private-qa, sonarsource-public-qa
   ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
   ARTIFACTORY_ACCESS_TOKEN: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-private-reader access_token]
-  # burgr notification
-  BURGR_URL: VAULT[development/kv/data/burgr data.url]
-  BURGR_USERNAME: VAULT[development/kv/data/burgr data.cirrus_username]
-  BURGR_PASSWORD: VAULT[development/kv/data/burgr data.cirrus_password]
   PATH: ${CIRRUS_WORKING_DIR}/.cirrus:${PATH}
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
 
-container_definition: &CONTAINER_DEFINITION
-  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j11-latest
+maven_cache: &MAVEN_CACHE
+  maven_cache:
+    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
+    fingerprint_script: cat **/pom.xml
+
+win_maven_cache: &WIN_MAVEN_CACHE
+  maven_cache:
+    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
+    folder: ~/.m2/repository
+
+build_secrets: &BUILD_SECRETS
+  GITHUB_TOKEN: ENCRYPTED[!f458126aa9ed2ac526f220c5acb51dd9cc255726b34761a56fc78d4294c11089502a882888cef0ca7dd4085e72e611a5!]
+  SIGN_KEY: VAULT[development/kv/data/sign data.key]
+  PGP_PASSPHRASE: VAULT[development/kv/data/sign data.passphrase]
+  # analysis on next
+  SONAR_TOKEN: VAULT[development/kv/data/next data.token]
+  SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
+
+pr_analysis_secrets: &PR_ANALYSIS_SECRETS
+  GITHUB_TOKEN: VAULT[development/github/token/licenses-ro token]
+
+mend_scan_secrets: &MEND_SCAN_SECRETS
+  WS_APIKEY: VAULT[development/kv/data/mend data.apikey]
+
+promote_secrets: &PROMOTE_SECRETS
+  GCF_ACCESS_TOKEN: VAULT[development/kv/data/promote data.token]
+  PROMOTE_URL: VAULT[development/kv/data/promote data.url]
+  GITHUB_TOKEN: VAULT[development/github/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promotion token]
+  # burgr notification
+  BURGR_URL: VAULT[development/kv/data/burgr data.url]
+  BURGR_USERNAME: VAULT[development/kv/data/burgr data.cirrus_username]
+  BURGR_PASSWORD: VAULT[development/kv/data/burgr data.cirrus_password]
+
+# ----------------------------------------------
+# -------------CONTAINER DEFINITIONS------------
+# ----------------------------------------------
+
+default_container_definition: &DEFAULT_CONTAINER_DEFINITION
   cluster_name: ${CIRRUS_CLUSTER_NAME}
   region: eu-central-1
   namespace: default
 
+container_definition: &CONTAINER_DEFINITION
+  eks_container:
+    image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j11-latest
+    <<: *DEFAULT_CONTAINER_DEFINITION
+    cpu: 2
+    memory: 2G
+
 qa_container_definition: &QA_CONTAINER_DEFINITION
-  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-latest
-  cluster_name: ${CIRRUS_CLUSTER_NAME}
-  region: eu-central-1
-  namespace: default
+  eks_container:
+    image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-latest
+    <<: *DEFAULT_CONTAINER_DEFINITION
+    cpu: 4
+    memory: 8G
 
 win_vm_definition: &WINDOWS_VM_DEFINITION
   ec2_instance:
@@ -41,25 +81,30 @@ win_vm_definition: &WINDOWS_VM_DEFINITION
     subnet_id: ${CIRRUS_AWS_SUBNET}
     use_ssd: true
 
+# ----------------------------------------------
+# ------------------FILTERS---------------------
+# ----------------------------------------------
+
+depends_on_build: &DEPENDS_ON_BUILD
+  depends_on:
+    - Build (Linux)
+
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*" || $CIRRUS_BRANCH =~ "release.*")
 
+# ----------------------------------------------
+# -------------------TASKS----------------------
+# ----------------------------------------------
+
 build_task:
-  eks_container:
-    <<: *CONTAINER_DEFINITION
-    cpu: 2
-    memory: 2G
+  name: Build (Linux)
+  <<: *CONTAINER_DEFINITION
+  <<: *MAVEN_CACHE
   env:
-    SIGN_KEY: VAULT[development/kv/data/sign data.key]
-    PGP_PASSPHRASE: VAULT[development/kv/data/sign data.passphrase]
-    # analysis on next
-    SONAR_TOKEN: VAULT[development/kv/data/next data.token]
-    SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
+    <<: *BUILD_SECRETS
     #allow deployment of pull request artifacts to repox
     DEPLOY_PULL_REQUEST: true
     CIRRUS_CLONE_DEPTH: 50
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   sonar_cache:
     folder: ${HOME}/.sonar/cache
     fingerprint_script:
@@ -72,32 +117,87 @@ build_task:
   cleanup_before_cache_script: cleanup_maven_repository
 
 build_win_task:
+  name: Build (Windows)
   <<: *WINDOWS_VM_DEFINITION
   <<: *ONLY_SONARSOURCE_QA
-  depends_on:
-    - build
-  maven_cache:
-    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
-    folder: ~/.m2/repository
+  <<: *DEPENDS_ON_BUILD
+  <<: *WIN_MAVEN_CACHE
   build_script:
     - git config --global core.autocrlf input
-    - git submodule update --init
     - source cirrus-env CI
-    - mvn.cmd package
+    - mvn.cmd clean install
 
-ws_scan_task:
-  depends_on:
-    - build
-  eks_container:
-    <<: *CONTAINER_DEFINITION
-    cpu: 2
-    memory: 2G
-  # run only on master and long-term branches
-  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && ($CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*")
+plugin_qa_task:
+  name: Integration Test (Plugin)
+  <<: *ONLY_SONARSOURCE_QA
+  <<: *DEPENDS_ON_BUILD
+  <<: *QA_CONTAINER_DEFINITION
+  <<: *MAVEN_CACHE
   env:
-    WS_APIKEY: VAULT[development/kv/data/mend data.apikey]
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
+    CIRRUS_CLONE_DEPTH: 1
+    matrix:
+      - SQ_VERSION: LATEST_RELEASE
+      - SQ_VERSION: DEV
+  submodules_script:
+    - git submodule update --init
+  qa_script:
+    - source cirrus-env QA
+    - source set_maven_build_version $BUILD_NUMBER
+    - cd its/plugin
+    - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} -Dmaven.test.redirectTestOutputToFile=false -B -e -V
+  cleanup_before_cache_script: cleanup_maven_repository
+
+ruling_task:
+  name: Integration Test (Ruling)
+  <<: *ONLY_SONARSOURCE_QA
+  <<: *DEPENDS_ON_BUILD
+  <<: *QA_CONTAINER_DEFINITION
+  <<: *MAVEN_CACHE
+  env:
+    CIRRUS_CLONE_DEPTH: 1
+    matrix:
+      - PHP_PROJECT: "Flysystem"
+      - PHP_PROJECT: "Monica"
+      - PHP_PROJECT: "PhpCodeSniffer"
+      - PHP_PROJECT: "PhpMailer"
+      - PHP_PROJECT: "Psysh"
+      - PHP_PROJECT: "PhpWord"
+      - PHP_PROJECT: "RubixML"
+  submodules_script:
+    - git submodule update --init
+  ruling_script:
+    - source cirrus-env QA
+    - source set_maven_build_version $BUILD_NUMBER
+    - cd its/ruling
+    - mvn test -Dtest=PhpGeneralRulingTest#test${PHP_PROJECT} -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
+  cleanup_before_cache_script: cleanup_maven_repository
+
+pr_analysis_task:
+  name: Integration Test (PR Analysis)
+  <<: *ONLY_SONARSOURCE_QA
+  <<: *DEPENDS_ON_BUILD
+  <<: *QA_CONTAINER_DEFINITION
+  <<: *MAVEN_CACHE
+  env:
+    <<: *PR_ANALYSIS_SECRETS
+    CIRRUS_CLONE_DEPTH: 1
+  submodules_script:
+    - git submodule update --init
+  ruling_script:
+    - source cirrus-env QA
+    - source set_maven_build_version $BUILD_NUMBER
+    - cd its/ruling
+    - mvn test -Dtest=PhpPrAnalysisTest -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
+  cleanup_before_cache_script: cleanup_maven_repository
+
+mend_scan_task:
+  name: Mend SCA
+  <<: *ONLY_SONARSOURCE_QA
+  <<: *DEPENDS_ON_BUILD
+  <<: *CONTAINER_DEFINITION
+  <<: *MAVEN_CACHE
+  env:
+    <<: *MEND_SCAN_SECRETS
   whitesource_script:
     - source cirrus-env QA
     - source set_maven_build_version $BUILD_NUMBER
@@ -108,84 +208,19 @@ ws_scan_task:
     ws_artifacts:
       path: "whitesource/**/*"
 
-plugin_qa_task:
-  depends_on:
-    - build
-  <<: *ONLY_SONARSOURCE_QA
-  eks_container:
-    <<: *QA_CONTAINER_DEFINITION
-    cpu: 3
-    memory: 8G
-  env:
-    CIRRUS_CLONE_DEPTH: 1
-    matrix:
-      - SQ_VERSION: LATEST_RELEASE
-      - SQ_VERSION: DEV
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
-  submodules_script:
-    - git submodule update --init
-  qa_script:
-    - source cirrus-env QA
-    - source set_maven_build_version $BUILD_NUMBER
-    - cd its/plugin
-    - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} -Dmaven.test.redirectTestOutputToFile=false -B -e -V
-  cleanup_before_cache_script: cleanup_maven_repository
 
-qa_os_win_task:
-  <<: *WINDOWS_VM_DEFINITION
-  <<: *ONLY_SONARSOURCE_QA
-  depends_on:
-    - build
-  maven_cache:
-    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
-    folder: ~/.m2/repository
-  build_script:
-    - source cirrus-env CI
-    - mvn.cmd clean verify
-  cleanup_before_cache_script: cleanup_maven_repository
-
-ruling_task:
-  depends_on:
-    - build
-  <<: *ONLY_SONARSOURCE_QA
-  eks_container:
-    <<: *QA_CONTAINER_DEFINITION
-    cpu: 4
-    memory: 8G
-  env:
-    CIRRUS_CLONE_DEPTH: 1
-    GITHUB_TOKEN: VAULT[development/github/token/licenses-ro token]
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
-  submodules_script:
-    - git submodule update --init
-  ruling_script:
-    - source cirrus-env QA
-    - source set_maven_build_version $BUILD_NUMBER
-    - cd its/ruling
-    - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
-  cleanup_before_cache_script: cleanup_maven_repository
- 
 promote_task:
+  name: Promote Artifact
   depends_on:
-    - ruling
-    - plugin_qa
-    - qa_os_win
-    - ws_scan
+    - Integration Test (Ruling)
+    - Integration Test (PR Analysis)
+    - Integration Test (Plugin)
   <<: *ONLY_SONARSOURCE_QA
-  eks_container:    
-    <<: *CONTAINER_DEFINITION
-    cpu: 1
-    memory: 1G
+  <<: *CONTAINER_DEFINITION
+  <<: *MAVEN_CACHE
   env:
-    #promotion cloud function
-    GCF_ACCESS_TOKEN: VAULT[development/kv/data/promote data.token]
-    PROMOTE_URL: VAULT[development/kv/data/promote data.url]
-    GITHUB_TOKEN: VAULT[development/github/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promotion token]
+    <<: *PROMOTE_SECRETS
     #artifacts that will have downloadable links in burgr
     ARTIFACTS: org.sonarsource.php:sonar-php-plugin:jar
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   script: cirrus_promote_maven
   cleanup_before_cache_script: cleanup_maven_repository

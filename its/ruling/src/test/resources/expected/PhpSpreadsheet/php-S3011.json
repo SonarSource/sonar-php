@@ -1,0 +1,12 @@
+{
+'PhpSpreadsheet:infra/DocumentGenerator.php':[
+38,
+],
+'PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xls/WorkbookTest.php':[
+49,
+50,
+56,
+78,
+80,
+],
+}

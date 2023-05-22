@@ -1,0 +1,17 @@
+{
+'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php':[
+1238,
+1270,
+4396,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php':[
+942,
+944,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Workbook.php':[
+912,
+],
+'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php':[
+1275,
+],
+}

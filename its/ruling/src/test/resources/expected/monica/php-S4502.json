@@ -1,0 +1,5 @@
+{
+'monica:app/Http/Middleware/VerifyCsrfToken.php':[
+21,
+],
+}

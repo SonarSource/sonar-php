@@ -1,0 +1,11 @@
+{
+'Symfony:Bridge/Monolog/Tests/Handler/ConsoleHandlerTest.php':[
+70,
+],
+'Symfony:Component/Console/Tests/Logger/ConsoleLoggerTest.php':[
+158,
+],
+'Symfony:Component/HttpKernel/Tests/Log/LoggerTest.php':[
+139,
+],
+}

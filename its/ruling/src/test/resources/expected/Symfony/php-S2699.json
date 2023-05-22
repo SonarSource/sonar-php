@@ -1,0 +1,16 @@
+{
+'Symfony:Bridge/Doctrine/Tests/Form/Type/EntityTypePerformanceTest.php':[
+89,
+106,
+125,
+],
+'Symfony:Component/Form/Tests/CompoundFormPerformanceTest.php':[
+26,
+],
+'Symfony:Component/Form/Tests/Extension/Core/Type/ChoiceTypePerformanceTest.php':[
+27,
+],
+'Symfony:Component/Form/Tests/Extension/Validator/Constraints/FormValidatorPerformanceTest.php':[
+35,
+],
+}

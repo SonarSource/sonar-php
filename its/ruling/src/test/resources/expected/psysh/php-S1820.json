@@ -1,0 +1,14 @@
+{
+'psysh:src/Configuration.php':[
+34,
+],
+'psysh:src/Readline/Hoa/ConsoleProcessus.php':[
+42,
+],
+'psysh:src/Shell.php':[
+50,
+],
+'psysh:src/TabCompletion/Matcher/AbstractMatcher.php':[
+19,
+],
+}

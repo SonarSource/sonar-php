@@ -1,0 +1,12 @@
+{
+'monica:tests/Feature/AccountSubscriptionTest.php':[
+221,
+226,
+],
+'monica:tests/Feature/SettingsTest.php':[
+58,
+],
+'monica:tests/Helpers/DavTester.php':[
+73,
+],
+}

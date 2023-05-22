@@ -1,0 +1,12 @@
+{
+'PHP_CodeSniffer:autoload.php':[
+285,
+304,
+],
+'PHP_CodeSniffer:scripts/build-phar.php':[
+57,
+],
+'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc':[
+21,
+],
+}
