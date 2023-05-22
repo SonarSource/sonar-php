@@ -15,7 +15,6 @@ env:
   BURGR_URL: VAULT[development/kv/data/burgr data.url]
   BURGR_USERNAME: VAULT[development/kv/data/burgr data.cirrus_username]
   BURGR_PASSWORD: VAULT[development/kv/data/burgr data.cirrus_password]
-  GITHUB_TOKEN: ENCRYPTED[!f458126aa9ed2ac526f220c5acb51dd9cc255726b34761a56fc78d4294c11089502a882888cef0ca7dd4085e72e611a5!]
   PATH: ${CIRRUS_WORKING_DIR}/.cirrus:${PATH}
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
@@ -51,7 +50,6 @@ build_task:
     cpu: 2
     memory: 2G
   env:
-    GITHUB_TOKEN: ENCRYPTED[!f458126aa9ed2ac526f220c5acb51dd9cc255726b34761a56fc78d4294c11089502a882888cef0ca7dd4085e72e611a5!]
     SIGN_KEY: VAULT[development/kv/data/sign data.key]
     PGP_PASSPHRASE: VAULT[development/kv/data/sign data.passphrase]
     # analysis on next
@@ -157,6 +155,7 @@ ruling_task:
     memory: 8G
   env:
     CIRRUS_CLONE_DEPTH: 1
+    GITHUB_TOKEN: VAULT[development/github/token/licenses-ro token]
   maven_cache:
     folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   submodules_script:
