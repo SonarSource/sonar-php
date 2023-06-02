@@ -1,25 +1,32 @@
-<p>The PHP 4 method of declaring a variable, using the <code>var</code> keyword, was deprecated in early versions of PHP 5. Even though it’s not
-considered deprecated in the most recent versions, it’s nonetheless not best practice to use it. When <code>var</code> does appear, it is interpreted
-as a synonym for <code>public</code> and treated as such. Therefore <code>public</code> should be used instead.</p>
-<p>From the PHP Manual:</p>
-<blockquote>
-  <p>The PHP 4 method of declaring a variable with the var keyword is still supported for compatibility reasons (as a synonym for the public keyword).
-  In PHP 5 before 5.1.3, its usage would generate an E_STRICT warning.</p>
-</blockquote>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>The <code>var</code> keyword in PHP was historically used to declare class properties with default public visibility. However, its usage is
+discouraged as it lacks clarity and explicit visibility declaration.</p>
+<p>Instead, PHP introduced the keywords <code>public</code>, <code>protected</code>, and <code>private</code> to clearly define the visibility of
+class properties. This enhances code readability and maintainability, as it becomes easier to understand and control access to class members.
+Additionally, using the keywords for explicit visibility helps prevent unintended modifications or security vulnerabilities that may arise from the
+ambiguity of the <code>var</code> keyword.</p>
+<h3>Noncompliant code example</h3>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 &lt;?php
 class Foo
 {
     var $bar = 1;
 }
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h3>Compliant solution</h3>
+<pre data-diff-id="1" data-diff-type="compliant">
 &lt;?php
 class Foo
 {
     public $bar = 1;
 }
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.oop5.visibility.php">PHP Manual - Visibility</a> </li>
+  <li> <a
+  href="https://www.w3schools.com/php/keyword_var.asp#:~:text=The%20var%20keyword%20creates%20a,public%20should%20be%20used%20instead">W3Schools - var
+  Keyword</a> </li>
+</ul>
 

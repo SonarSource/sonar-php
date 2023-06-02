@@ -1,17 +1,25 @@
+<h2>Why is this an issue?</h2>
+<p>In PHP, references allow you to create multiple names for the same variable, enabling you to access and manipulate its value through different
+identifiers. They are denoted by the ampersand symbol &amp; placed before the variable name during declaration or assignment.</p>
 <p>When a reference is used in a <code>foreach</code> loop instead of using a simple variable, the reference remains assigned and keeps its "value"
-which is a reference, even after the <code>foreach</code> execution. Most of the time, this is not what the developer is expecting and the reference
-may be used wrongly in the rest of the code. For this reason, it is recommended to always <code>unset</code> a reference that is used in a
-<code>foreach</code> to avoid any unexpected side effects.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+which is a reference, even after the <code>foreach</code> execution.</p>
+<h3>What is the potential impact?</h3>
+<p>Not unsetting the reference can lead to bugs later in the code, as most of the time, this behavior is different from what the developer is
+expecting. For example, the reference may be used incorrectly with the previous value.</p>
+<p>To avoid unexpected side effects, it is recommended to always <code>unset</code> a reference that is used in a <code>foreach</code> loop.</p>
+<h2>How to fix it in Core PHP</h2>
+<p>Unset the reference that is used in the <code>foreach</code> loop.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 $arr = array(1, 2, 3);
 foreach ($arr as &amp;$value) { // Noncompliant; $value is still alive after the loop and references the last item of the array: $arr[2]
     $value = $value * 2;
 }
 $value = 'x';
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 $arr = array(1, 2, 3);
 foreach ($arr as &amp;$value) { // Compliant; there is no risk to use by mistake the content of $value pointing to $arr[2]
     $value = $value * 2;
@@ -19,9 +27,15 @@ foreach ($arr as &amp;$value) { // Compliant; there is no risk to use by mistake
 unset($value);
 $value = 'x';
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<p>PHP Documentation:</p>
 <ul>
-  <li> PHP Documentation: <a href="https://php.net/manual/en/control-structures.foreach.php">Foreach </a> </li>
+  <li> <a href="https://www.php.net/manual/en/language.references.php">References</a> </li>
+  <li> <a href="https://php.net/manual/en/control-structures.foreach.php">Foreach</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
   <li> <a href="https://schlueters.de/blog/archives/141-References-and-foreach.html">References and Foreach</a> </li>
 </ul>
 

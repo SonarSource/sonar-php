@@ -1,8 +1,9 @@
+<h2>Why is this an issue?</h2>
 <p>In PHPUnit, to test that an exception is thrown in a given piece of code, the <em>expectException*()</em> methods or the
 <em>@expectedException*</em> annotations can be used. For such a test to succeed, something in the test method has to throw an exception with the
 awaited properties. Having an assertion at the end of such a test method, means that, if the test succeeds, that assertion was never evaluated because
 an exception was thrown before getting to that point.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 public function testA() {
     $o = new MyClass();
@@ -11,7 +12,7 @@ public function testA() {
     $this-&gt;assertTrue($o-&gt;hasProperty()); // Noncompliant - This assertion might never get evaluated
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 public function testA() {
     $o = new MyClass();

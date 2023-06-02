@@ -1,10 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>A value that is incremented or decremented and then not stored is at best wasted code and at worst a bug.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
   $i = 0;
   $i = $i++; // Noncompliant; i is still zero
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
   $i = 0;
   $i++;

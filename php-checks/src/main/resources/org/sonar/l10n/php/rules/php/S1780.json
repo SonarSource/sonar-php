@@ -7,7 +7,7 @@
     "constantCost": "2min"
   },
   "tags": [
-    "psr2",
+    "per",
     "bad-practice"
   ],
   "defaultSeverity": "Minor",

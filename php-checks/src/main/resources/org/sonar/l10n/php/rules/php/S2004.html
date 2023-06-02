@@ -1,7 +1,10 @@
-<p>Nesting functions can quickly turn your code into "spaghetti code". Such code is hard to read, refactor and therefore to maintain.</p>
-<h2>Noncompliant Code Example</h2>
-<p>With the default threshold of 3:</p>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>In PHP, nested functions are functions, which are defined inside other functions. They have access to the variables of the enclosing functions.
+Once the parent function declares the nested function, the nested function becomes available to the global scope.</p>
+<p>Code that uses nested functions can become difficult to read, refactor and to maintain and should therefore be avoided.</p>
+<h3>Noncompliant code example</h3>
+<p>With the default threshold of 3 level:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 function f () {
   function f_inner () {
     function f_inner_inner() {
@@ -11,4 +14,9 @@ function f () {
   }
 }
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/functions.user-defined.php">PHP Manual - User defined functions</a> </li>
+</ul>
 

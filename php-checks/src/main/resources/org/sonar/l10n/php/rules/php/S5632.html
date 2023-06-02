@@ -1,14 +1,15 @@
+<h2>Why is this an issue?</h2>
 <p>Instances of classes that do not derive from the "Throwable" interface cannot be used in a PHP "throw" statement.</p>
 <p>Many built-in exceptions such as "Exception" and the SPL exception classes do implement the "Throwable" interface and can be extended when creating
 custom exceptions.</p>
 <p>This rule raises an issue when an instance of a class that does not implement the "Throwable" interface is used in a "throw" statement .</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 class NoThrowable {}
 
 throw new NoThrowable(); // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 &lt;?php
 

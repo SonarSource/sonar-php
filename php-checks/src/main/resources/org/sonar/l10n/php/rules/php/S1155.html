@@ -1,14 +1,31 @@
-<p>Using <code>count()</code> to test for emptiness works, but using <code>empty()</code> makes the code more readable and can be more performant</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
-if (count($a) &gt; 0) { // Noncompliant
+<h2>Why is this an issue?</h2>
+<p>The <code>empty()</code> function in PHP is specifically designed to check if a variable is empty, and it returns true if the variable is empty or
+evaluates to false. It handles various types of values, such as empty strings, zero, null, and arrays with no elements. This makes the code more
+readable because it clearly expresses the intention of checking for emptiness.</p>
+<p>On the other hand, the <code>count()</code> function in PHP is primarily used to count the number of elements in an array or the properties of an
+object. It’s less explicit and may be less intuitive for someone reading the code.</p>
+<h3>What is the potential impact?</h3>
+<p>In terms of performance, <code>empty()</code> is generally faster than <code>count()</code> because it doesn’t need to iterate over all the
+elements in an array to count them. Instead, it directly checks if the variable is empty or evaluates to false. This can be advantageous when dealing
+with large arrays or performance-sensitive code.</p>
+<h2>How to fix it</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+if (count($a) === 0) { // Noncompliant
  echo $a[0];
 }
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
-if (!empty($a)) {
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+if (empty($a)) {
   echo $a[0];
 }
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/function.empty">PHP Manual - empty</a> </li>
+  <li> <a href="https://www.php.net/manual/en/function.count.php">PHP Manual - count</a> </li>
+</ul>
 

@@ -1,6 +1,12 @@
-<p>PHP’s "variable variables" feature (dynamically-named variables) is temptingly powerful, but can lead to unmaintainable code.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>Variable variables in PHP allow you to use the value of a variable as the name of another variable. This feature can be useful in dynamic
+programming scenarios where variable names need to be dynamically determined and manipulated.</p>
+<h3>What is the potential impact?</h3>
+<p>The use of variable variables in PHP can make code harder to read and understand, as it introduces a level of indirection and can lead to
+confusion. It can also increase the risk of security vulnerabilities, such as allowing user input to directly manipulate variable names, potentially
+leading to injection attacks or unintended behavior.</p>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 $var = 'foo';
 $$var = 'bar';      //Noncompliant
 $$$var = 'hello';  //Noncompliant
@@ -8,4 +14,9 @@ $$$var = 'hello';  //Noncompliant
 echo $foo; //will display 'bar'
 echo $bar; //will display 'hello'
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> PHP Manual - <a href="https://www.php.net/manual/en/language.variables.variable.php">Variable variables</a> </li>
+</ul>
 

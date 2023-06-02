@@ -1,24 +1,39 @@
+<h2>Why is this an issue?</h2>
 <p>At root, <code>require</code>, <code>require_once</code>, <code>include</code>, and <code>include_once</code> all perform the same task of
 including one file in another. However, the way they perform that task differs, and they should not be used interchangeably.</p>
-<p><code>require</code> includes a file but generates a fatal error if an error occurs in the process.</p>
-<p><code>include</code> also includes a file, but generates only a warning if an error occurs.</p>
+<ul>
+  <li> <code>require</code> includes a file but generates a fatal error if an error occurs in the process. </li>
+  <li> <code>include</code> also includes a file, but generates only a warning if an error occurs. </li>
+</ul>
 <p>Predictably, the difference between <code>require</code> and <code>require_once</code> is the same as the difference between <code>include</code>
-and <code>include_once</code> - the "_once" versions ensure that the specified file is only included once.</p>
-<p>Because including the same file multiple times could have unpredictable results, the "once" versions are preferred.</p>
-<p>Because <code>include_once</code> generates only warnings, it should be used only when the file is being included conditionally, i.e. when all
-possible error conditions have been checked beforehand.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+and <code>include_once</code>. The <code>_once</code> versions ensure that the specified file is only included once.</p>
+<h3>What is the potential impact?</h3>
+<p>Including the same file multiple times could have unpredictable results, the <code>_once</code> versions are preferred. Additionally, as
+<code>include_once</code> generates only warnings, it should be used only when the file is being included conditionally, i.e. when all possible error
+conditions have been checked beforehand.</p>
+<h2>How to fix it</h2>
+<p>Rewrite your code to only contain <code>require_once</code> and conditional <code>include_once</code> calls.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 include 'code.php';  //Noncompliant; not a "_once" usage and not conditional
 include $user.'_history.php'; // Noncompliant
 require 'more_code.php';  // Noncompliant; not a "_once" usage
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 require_once 'code.php';
 if (is_member($user)) {
   include_once $user.'_history.php';
 }
 require_once 'more_code.php';
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/function.require-once.php">PHP Manual - require-once</a> </li>
+  <li> <a href="https://www.php.net/manual/en/function.require.php">PHP Manual - require</a> </li>
+  <li> <a href="https://www.php.net/manual/en/function.include-once.php">PHP Manual - include-once</a> </li>
+  <li> <a href="https://www.php.net/manual/en/function.include.php">PHP Manual - include</a> </li>
+</ul>
 

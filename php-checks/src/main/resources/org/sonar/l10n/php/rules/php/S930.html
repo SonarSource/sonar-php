@@ -1,7 +1,8 @@
+<h2>Why is this an issue?</h2>
 <p>Calling a function or a method with fewer or more arguments than expected will raise a TypeError. This is usually a bug and should be fixed.</p>
 <p>Provide missing arguments to the call, or define default values if there are fewer arguments.</p>
 <p>Reduce the number of arguments provided by the function call, or add more parameter if there are more arguments than expected.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 function myFunction($a, $b, $c = null) {
   //...
@@ -9,7 +10,7 @@ function myFunction($a, $b, $c = null) {
 
 myFunction($a); // Noncompliant - 2 arguments are required
 </pre>
-<h2>Exceptions</h2>
+<h3>Exceptions</h3>
 <p>No issue is reported when arguments are used in the body of the function being called.</p>
 <pre>
 function myFunction() {
@@ -19,7 +20,7 @@ function myFunction() {
 
 myFunction($a, $b);
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/628">MITRE, CWE-628</a> - Function Call with Incorrectly Specified Arguments </li>
 </ul>

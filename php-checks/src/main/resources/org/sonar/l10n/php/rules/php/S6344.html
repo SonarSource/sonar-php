@@ -1,12 +1,36 @@
-<p>PHP doesn’t fail if two <code>define</code> statements assign a value to the same constant name: in such a case, PHP only issues a warning and
-ignores the second <code>define</code>. However, that code should be fixed. In the best case, the second <code>define</code> tries to assign the same
-value to the constant: it’s just useless code which can be removed. In the worst case, the second <code>define</code> attempts to assign a different
-value and is followed by code which wrongly assumes the value of the constant: it can be a nasty bug.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
-define( 'WP_DEBUG', 1 );
+<h2>Why is this an issue?</h2>
+<p>In PHP, the <code>define</code> function allows you to define a named constant with a specific value, which cannot be changed later in the code.
+Once a constant has been defined, it can be used throughout the entire script, including in function and class definitions.</p>
+<p>Assigning a value to the same constant name using two or more <code>define</code> statements does not cause PHP to fail. In such a case, PHP only
+issues a warning and ignores the second and further <code>define</code>.</p>
+<h3>What is the potential impact?</h3>
+<p>Using duplicate define statements can lead to unnecessary code that can be safely removed in the best case scenario.</p>
+<p>It is important to note that in the worst case, duplicate define statements may assign different values, which can result in hard-to-debug issues
+when other parts of the code make incorrect assumptions about the constant’s value.</p>
+<p>It is advisable to avoid duplicate define statements to prevent potential unexpected behavior and to ensure code clarity and correctness.</p>
+<h2>How to fix it</h2>
+<p>Remove duplicate <code>define</code> statements and only keep the intended one.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+define( 'CONSTANT_VALUE', 'old value' );
 define( 'SCRIPT_DEBUG', 1 );
-define( 'WP_DEBUG', 0 ); // Noncompliant, redefines constant defined 2 lines above
-echo WP_DEBUG; // output "1"
+
+// Noncompliant, tries to redefine constant defined 2 lines above
+define( 'CONSTANT_VALUE', 'intended value' );
+echo CONSTANT_VALUE; // output: 'old value'
 </pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+define( 'SCRIPT_DEBUG', 1 );
+
+// Compliant
+define( 'CONSTANT_VALUE', 'intended value' );
+echo CONSTANT_VALUE; // output: 'intended value'
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.constants.syntax.php">PHP Manual - Constants Syntax</a> </li>
+</ul>
 

@@ -1,3 +1,9 @@
+<h2>Why is this an issue?</h2>
+<p>Deprecated predefined variables in PHP should not be used because they may lead to compatibility issues and unpredictable behavior in future
+versions of PHP. Relying on deprecated variables can result in code that is difficult to maintain and may break when migrating to newer PHP
+versions.</p>
+<p>It is recommended to use the recommended alternatives or custom variables to ensure long-term compatibility and stability of PHP code.</p>
+<h2>How to fix it</h2>
 <p>The following predefined variables are deprecated and should be replaced by the new versions:</p>
 <table>
   <colgroup>
@@ -45,12 +51,9 @@
     </tr>
   </tbody>
 </table>
-<h2>Noncompliant Code Example</h2>
-<pre>
-echo 'Name parameter value: ' . $HTTP_GET_VARS["name"];
-</pre>
-<h2>Compliant Solution</h2>
-<pre>
-echo 'Name parameter value: ' . $_GET["name"];
-</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/reserved.variables.php">PHP Manual - Predefined Variables</a> </li>
+</ul>
 

@@ -1,10 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>PHPUnit assertions do throw a <em>PHPUnit\Framework\ExpectationFailedException</em> exception when they fail. This is how PHPUnit internally
 notices when assertions within testcases fail. However, if such an exception type or one of its parent types is captured within a try-catch block and
 not rethrown, PHPUnit does not notice the assertion failure.</p>
 <p>This check raises an issue on assertions within the <em>try</em> body of a <em>try-catch</em> block that do catch exceptions of the type
 <em>PHPUnit\Framework\ExpectationFailedException</em>, <em>PHPUnit\Framework\AssertionFailedError</em>, or <em>Exception</em>, and do not handle the
 variable holding the exception.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 public function testA() {
     try {
@@ -14,7 +15,7 @@ public function testA() {
     }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 public function testB() {
     try {

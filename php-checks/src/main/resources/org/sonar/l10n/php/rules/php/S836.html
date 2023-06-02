@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>In PHP it is not required to initialize variables before their usage. However, using uninitialized variables is considered bad practice and should
 be avoided because of the following reasons:</p>
 <ul>
@@ -5,7 +6,7 @@ be avoided because of the following reasons:</p>
   confusion. </li>
   <li> The interpreter raises a warning or a notice in many cases. </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 &lt;?php
 
@@ -17,7 +18,7 @@ function getText(array $lines): string {
     return $text;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 &lt;?php
 
@@ -31,7 +32,7 @@ function getText(array $lines): string {
     return $text;
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/457">MITRE, CWE-457</a> - Use of Uninitialized Variable </li>
 </ul>

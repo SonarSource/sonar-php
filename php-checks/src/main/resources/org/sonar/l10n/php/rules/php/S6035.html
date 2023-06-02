@@ -1,10 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>When an alternation contains multiple alternatives that consist of a single character, it can be rewritten as a character class. This should be
 preferred because it is more efficient.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 preg_match("/a|b|c/", $str); // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 preg_match("/[abc]/", $str);
 // or
