@@ -86,7 +86,7 @@ win_vm_definition: &WINDOWS_VM_DEFINITION
 
 depends_on_build: &DEPENDS_ON_BUILD
   depends_on:
-    - Build (Linux)
+    - build
 
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*" || $CIRRUS_BRANCH =~ "release.*")
@@ -96,7 +96,6 @@ only_sonarsource_qa: &ONLY_SONARSOURCE_QA
 # ----------------------------------------------
 
 build_task:
-  name: Build (Linux)
   <<: *CONTAINER_DEFINITION
   <<: *MAVEN_CACHE
   env:
@@ -116,7 +115,6 @@ build_task:
   cleanup_before_cache_script: cleanup_maven_repository
 
 build_win_task:
-  name: Build (Windows)
   <<: *WINDOWS_VM_DEFINITION
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
@@ -127,7 +125,6 @@ build_win_task:
     - mvn.cmd clean install
 
 plugin_qa_task:
-  name: Integration Test (Plugin)
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
@@ -147,7 +144,6 @@ plugin_qa_task:
   cleanup_before_cache_script: cleanup_maven_repository
 
 ruling_task:
-  name: Integration Test (Ruling)
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
@@ -172,7 +168,6 @@ ruling_task:
   cleanup_before_cache_script: cleanup_maven_repository
 
 pr_analysis_task:
-  name: Integration Test (PR Analysis)
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
@@ -189,8 +184,7 @@ pr_analysis_task:
     - mvn test -Dtest=PhpPrAnalysisTest -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
   cleanup_before_cache_script: cleanup_maven_repository
 
-mend_scan_task:
-  name: Mend SCA
+ws_scan_task:
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *CONTAINER_DEFINITION
@@ -209,11 +203,10 @@ mend_scan_task:
 
 
 promote_task:
-  name: Promote Artifact
   depends_on:
-    - Integration Test (Ruling)
-    - Integration Test (PR Analysis)
-    - Integration Test (Plugin)
+    - ruling
+    - pr_analysis
+    - plugin_qa
   <<: *ONLY_SONARSOURCE_QA
   <<: *CONTAINER_DEFINITION
   <<: *MAVEN_CACHE
