@@ -86,7 +86,7 @@ win_vm_definition: &WINDOWS_VM_DEFINITION
 
 depends_on_build: &DEPENDS_ON_BUILD
   depends_on:
-    - build_task
+    - build
 
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*" || $CIRRUS_BRANCH =~ "release.*")
