@@ -1,14 +1,15 @@
+<h2>Why is this an issue?</h2>
 <p>Shared naming conventions allow teams to collaborate efficiently. This rule checks that all function names match a provided regular expression.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <p>With default provided regular expression: <code>^[a-z][a-zA-Z0-9]*$</code>:</p>
 <pre>
 function DoSomething(){...}
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 function doSomething(){...}
 </pre>
-<h2>Exceptions</h2>
+<h3>Exceptions</h3>
 <p>Methods with an <code>@inheritdoc</code> annotation, as well as magic methods (<code>__construct()</code>, <code>__destruct()</code>,
 <code>__call()</code>, <code>__callStatic()</code>, <code>__get()</code>, <code>__set()</code>, <code>__isset()</code>, <code>__unset()</code>,
 <code>__sleep()</code>, <code>__wakeup()</code>, <code>__toString()</code>, <code>__invoke()</code>, <code>__set_state()</code>,

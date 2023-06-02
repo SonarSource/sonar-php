@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>The <code>open_basedir</code> configuration in <em>php.ini</em> limits the files the script can access using, for example, <code>include</code> and
 <code>fopen()</code>. Leave it out, and there is no default limit, meaning that any file can be accessed. Include it, and PHP will refuse to access
 files outside the allowed path.</p>
@@ -7,7 +8,7 @@ files outside the allowed path.</p>
 <p>This is not a fool-proof configuration; it can be reset or overridden at the script level. But its use should be seen as a minimum due diligence
 step. This rule raises an issue when <code>open_basedir</code> is not present in <em>php.ini</em>, and when <code>open_basedir</code> contains root,
 or the current directory (<code>.</code>) symbol.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 ; php.ini try 1
 ; open_basedir="${USER}/scripts/data"  Noncompliant; commented out
@@ -15,12 +16,12 @@ or the current directory (<code>.</code>) symbol.</p>
 ; php.ini try 2
 open_basedir="/:${USER}/scripts/data"  ; Noncompliant; root directory in the list
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 ; php.ini try 1
 open_basedir="${USER}/scripts/data"
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">OWASP Top 10 2021 Category A1</a> - Broken Access Control </li>
   <li> <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP Top 10 2021 Category A5</a> - Security Misconfiguration </li>

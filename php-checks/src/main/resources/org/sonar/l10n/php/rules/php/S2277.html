@@ -1,7 +1,8 @@
+<h2>Why is this an issue?</h2>
 <p>Without OAEP in RSA encryption, it takes less work for an attacker to decrypt the data or infer patterns from the ciphertext. This rule logs an
 issue when <code>openssl_public_encrypt</code> is used with one the following padding constants: <code>OPENSSL_NO_PADDING</code> or
 <code>OPENSSL_PKCS1_PADDING</code> or <code>OPENSSL_SSLV23_PADDING</code>.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 function encrypt($data, $key) {
   $crypted='';
@@ -9,7 +10,7 @@ function encrypt($data, $key) {
   return $crypted;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 function encrypt($data, $key) {
   $crypted='';
@@ -17,7 +18,7 @@ function encrypt($data, $key) {
   return $crypted;
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/">OWASP Top 10 2021 Category A2</a> - Cryptographic Failures </li>
   <li> <a href="https://www.owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data

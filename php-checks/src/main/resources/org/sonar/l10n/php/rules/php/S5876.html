@@ -1,7 +1,8 @@
+<h2>Why is this an issue?</h2>
 <p>Session fixation attacks occur when an attacker can force a legitimate user to use a session ID that he knows. To avoid fixation attacks, it’s a
 good practice to generate a new session each time a user authenticates and delete/invalidate the existing session (the one possibly known by the
 attacker).</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <p>In a <a href="https://symfony.com/doc/current/reference/configuration/security.html#session-fixation-strategy">Symfony Security</a>'s context,
 session fixation protection can be disabled with the value <code>none</code> for the <code>session_fixation_strategy</code> attribute:</p>
 <pre>
@@ -13,7 +14,7 @@ return static function (ContainerConfigurator $container) {
     ]);
 };
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <p>In a <a href="https://symfony.com/doc/current/reference/configuration/security.html#session-fixation-strategy">Symfony Security</a>'s context,
 session fixation protection is enabled by default. It can be explicitly enabled with the values <code>migrate</code> and <code>invalidate</code> for
 the <code>session_fixation_strategy</code> attribute:</p>
@@ -26,7 +27,7 @@ return static function (ContainerConfigurator $container) {
     ]);
 };
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/">OWASP Top 10 2021 Category A7</a> - Identification and
   Authentication Failures </li>

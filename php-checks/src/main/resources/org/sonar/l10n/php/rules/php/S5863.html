@@ -1,13 +1,14 @@
+<h2>Why is this an issue?</h2>
 <p>Assertions comparing an object to itself are more likely to be bugs due to developer’s carelessness.</p>
 <p>This rule raises an issue when the actual expression matches the expected expression.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 assertEqual($a, $a); // Noncompliant
 assertSame($a, $a); // Noncompliant
 assertNotEqual($a, $a); // Noncompliant
 assertNotSame($a, $a); // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 assertEqual($expected, $a);
 assertSame($expected, $a);

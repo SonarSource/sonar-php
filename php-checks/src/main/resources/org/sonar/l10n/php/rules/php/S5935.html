@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>PHPUnit provides helper functions and annotations to verify that a given block of code throws an exception and to assert different properties of
 that exception. The provided helper functions are:</p>
 <ul>
@@ -8,7 +9,7 @@ that exception. The provided helper functions are:</p>
 </ul>
 <p>This check raises an issue when the throw of an exception is verified using a <em>try-catch</em> approach instead of relying on the provided helper
 functions.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 public function testA()
 {
@@ -20,7 +21,7 @@ public function testA()
     }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 public function testB()
 {
@@ -30,6 +31,6 @@ public function testB()
     doSomething();
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <p>thePHP.cc: <a href="https://thephp.cc/articles/questioning-phpunit-best-practices">Questioning PHPUnit Best Practice</a></p>
 

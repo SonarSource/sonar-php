@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>Defining and using global variables and global functions, when the convention dictates OOP can be confusing and difficult to use properly for
 multiple reasons:</p>
 <ul>
@@ -9,7 +10,7 @@ multiple reasons:</p>
 <p>Instead of being declared globally, such variables and functions should be moved into a class, potentially marked <code>static</code>, so they can
 be used without a class instance.</p>
 <p>This rule checks that only object-oriented programming is used and that no functions or procedures are declared outside of a class.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 &lt;?php
 
@@ -23,7 +24,7 @@ class MyClass {
     //...
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 &lt;?php
 class MyClass {

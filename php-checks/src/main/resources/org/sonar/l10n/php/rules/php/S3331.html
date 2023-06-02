@@ -14,7 +14,7 @@ level, as in <em>.com</em>.</p>
   <li> You should check the <code>domain</code> attribute has been set and its value has more than one level of domain nanimg, like:
   <em>sonarsource.com</em> </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h2>Sensitive Code Example</h2>
 <pre>
 setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant
 session_set_cookie_params(3600, "/~path/", ".com"); // Noncompliant

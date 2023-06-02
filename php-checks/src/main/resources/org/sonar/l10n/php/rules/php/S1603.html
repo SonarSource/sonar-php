@@ -1,17 +1,26 @@
-<p>In PHP 4, any function with the same name as the nesting class was considered a class constructor. In PHP 5, this mechanism has been deprecated and
-the <code>__construct</code> method name should be used instead. If both styles are present in the same class, PHP 5 will treat the function named
-<code>__construct</code> as the class constructor.</p>
-<p>This rule rule raises an issue for each method with the same name as the enclosing class.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>Using a function in PHP with the same name as the nesting class was historically used to declare a class constructor. However, as of PHP 8.0.0,
+this declaration is discouraged and will provoke an <code>E_DEPRECATED</code> error, albeit it functions as a constructor.</p>
+<p>Instead, users should explicitly define the constructor by declaring a <code>__construct(…​)</code> function. However, if both styles are present
+in the same class, PHP will treat the <code>__construct</code> function as the class constructor, which can cause unintended behavior.</p>
+<p>Adhering to this convention improves readability and maintainability by ensuring that the constructor declaration is named uniformly throughout the
+codebase.</p>
+<h3>Noncompliant code example</h3>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 class Foo {
-  function Foo(){...}
+  function Foo() {...}
 }
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h3>Compliant solution</h3>
+<pre data-diff-id="1" data-diff-type="compliant">
 class Foo {
-  function __construct(){...}
+  function __construct() {...}
 }
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.oop5.decon.php">PHP Manual - Constructors and Destructors</a> </li>
+  <li> <a href="https://www.phptutorial.net/php-oop/php-constructors/">PHP Tutorial - Constructors</a> </li>
+</ul>
 

@@ -12,7 +12,7 @@ visits the website.</p>
 <p>The <code>unfiltered_html</code> capability should be granted to trusted roles that need to use markup when publishing dynamic content to the
 WordPress website. If this capability is not required for all users, including administrators and editors roles, then it’s recommended to set
 <code>DISALLOW_UNFILTERED_HTML</code> to <code>true</code>.</p>
-<h2>Noncompliant Code Example</h2>
+<h2>Sensitive Code Example</h2>
 <pre>
 define( 'DISALLOW_UNFILTERED_HTML', false ); // sensitive
 </pre>

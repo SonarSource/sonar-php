@@ -1,16 +1,30 @@
-<p>PHP has two sets of logical operators: <code>&amp;&amp;</code> / <code>||</code>, and <code>and</code> / <code>or</code>. The difference between
-the sets is precedence. Because <code>and</code> / <code>or</code> have a lower precedence than almost any other operator, using them instead of
-<code>&amp;&amp;</code> / <code>||</code> may not have the result you expect.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
-$have_time = true;
-$have_money = false;
-$take_vacation = $have_time and $have_money;  // Noncompliant. $take_vacation == true.
+<h2>Why is this an issue?</h2>
+<p>Boolean operators are used to combine conditional statements based on their value. In PHP, there are two different sets of operators to use for AND
+and OR:</p>
+<ul>
+  <li> <code>&amp;&amp;</code> / <code>||</code> </li>
+  <li> <code>and</code> / <code>or</code> </li>
+</ul>
+<p>The difference between these sets is the precedence, which specifies how "tightly" two expressions are bound together. Because <code>and</code> /
+<code>or</code> have a lower precedence than almost any other operator, using them instead of <code>&amp;&amp;</code> / <code>||</code> may not have
+the result you expect.</p>
+<h3>Noncompliant code example</h3>
+<p>In both cases, the assignment has a higher precedence over the boolean operation.</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+$resultAnd = true and false; // Noncompliant: $resultAnd == true
+
+$resultOr = false or true; // Noncompliant: $resultOr == false
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
-$have_time = true;
-$have_money = false;
-$take_vacation = $have_time &amp;&amp; $have_money;  // $take_vacation == false.
+<h3>Compliant solution</h3>
+<pre data-diff-id="1" data-diff-type="compliant">
+$resultAnd = true &amp;&amp; false; // $resultAnd == false
+
+$resultOr = false || true; // $resultOr == true
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.operators.logical.php">PHP Manual - Logical Operators</a> </li>
+  <li> <a href="https://www.php.net/manual/en/language.operators.precedence.php">PHP Manual - Operator Precedence</a> </li>
+</ul>
 

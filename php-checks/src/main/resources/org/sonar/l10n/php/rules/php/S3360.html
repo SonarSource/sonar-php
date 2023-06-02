@@ -1,18 +1,35 @@
-<p>By default, PHPUnit CLI only executes test classes with names that end in "Test". Name your class "TestClassX.php", for instance, and it will be
-skipped.</p>
-<p>This rule raises an issue for each test class with a name not ending in "Test".</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>For better organization and clarity in test suites, test classes should end with <code>*Test.php</code>. This naming convention helps to easily
+identify and distinguish test classes from other classes in the codebase. It allows for automated test runners or frameworks to locate and execute the
+tests systematically.</p>
+<p>The PHPUnit command-line test runner will look for <code>*Test.php</code> files. In that case, test files without this pattern are ignored and not
+executed without warning.</p>
+<h3>What is the potential impact?</h3>
+<p>When tests are ignored or skipped, there can be several negative impacts on the development process and code quality.</p>
+<p>Firstly, ignoring tests can lead to undetected bugs and vulnerabilities, as the skipped tests are not being executed and their associated
+functionality is not being thoroughly tested. This increases the risk of releasing software with undiscovered issues.</p>
+<p>Furthermore, skipped tests can result in a false sense of confidence, as developers might assume that the code is functioning correctly without
+proper validation.</p>
+<p>This can lead to regression issues or unexpected behavior in the future when changes are made to the codebase.</p>
+<h2>How to fix it</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 class TestClassX extends PHPUnit\Framework\TestCase {  // Noncompliant
 
   public void testDoTheThing() {
     //...
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 class ClassXTest extends PHPUnit\Framework\TestCase {
 
   public void testDoTheThing() {
     //...
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://phpunit.de/documentation.html">PHPUnit documentation</a> </li>
+</ul>
 

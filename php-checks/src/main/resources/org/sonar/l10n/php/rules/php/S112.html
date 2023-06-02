@@ -1,17 +1,18 @@
+<h2>Why is this an issue?</h2>
 <p>If you throw a general exception type, such as ErrorException, RuntimeException, or Exception in a library or framework, it forces consumers to
 catch all exceptions, including unknown exceptions that they do not know how to handle.</p>
 <p>Instead, either throw a subtype that already exists in the Standard PHP Library, or create your own type that derives from Exception.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 throw new Exception();  // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 throw new InvalidArgumentException();
 // or
 throw new UnexpectedValueException();
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/397">MITRE, CWE-397</a> - Declaration of Throws for Generic Exception </li>
 </ul>

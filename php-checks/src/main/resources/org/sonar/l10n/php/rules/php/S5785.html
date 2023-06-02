@@ -1,6 +1,7 @@
+<h2>Why is this an issue?</h2>
 <p>Testing equality or nullness with PHPUnit’s <code>assertTrue()</code> or <code>assertFalse()</code> should be simplified to the corresponding
 dedicated assertion.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 assertTrue($a === $b);
 assertTrue($a == $b);
@@ -11,7 +12,7 @@ assertTrue($a != $b);
 assertFalse($a === $b);
 assertFalse($a == $b);
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 assertEquals($a, $b);
 assertSame($a, $b);

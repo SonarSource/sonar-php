@@ -1,6 +1,7 @@
+<h2>Why is this an issue?</h2>
 <p>Shared naming conventions allow teams to collaborate effectively. This rule raises an issue when a local variable or function parameter name does
 not match the provided regular expression.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <p>With the default regular expression <code>^[a-z][a-zA-Z0-9]*$</code>:</p>
 <pre>
 public function doSomething($my_param){
@@ -8,7 +9,7 @@ public function doSomething($my_param){
   ...
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 public function doSomething($myParam){
   $local;

@@ -1,5 +1,5 @@
 {
-  "title": "PHP 4 constructor declarations should not be used ",
+  "title": "Deprecated constructor declarations should not be used ",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
