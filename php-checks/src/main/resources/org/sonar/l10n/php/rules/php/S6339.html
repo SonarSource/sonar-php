@@ -1,22 +1,23 @@
+<h2>Why is this an issue?</h2>
 <p>Secret keys are used in combination with an algorithm to encrypt data. A typical use case is an authentication system. For such a system to be
 secure, the secret key should have a value which cannot be guessed and which is long enough to not be vulnerable to brute-force attacks.</p>
 <p>A "salt" is an extra piece of data which is included when hashing data such as a password. Its value should have the same properties as a secret
 key.</p>
 <p>This rule raises an issue when it detects that a secret key or a salt has a predictable value or that it’s not long enough.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <p>WordPress:</p>
 <pre>
 define('AUTH_KEY', 'hello'); // Noncompliant
 define('AUTH_SALT', 'hello'); // Noncompliant
 define('AUTH_KEY', 'put your unique phrase here'); // Noncompliant, this is the default value
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <p>WordPress:</p>
 <pre>
 define('AUTH_KEY', 'D&amp;ovlU#|CvJ##uNq}bel+^MFtT&amp;.b9{UvR]g%ixsXhGlRJ7q!h}XWdEC[BOKXssj');
 define('AUTH_SALT', 'FIsAsXJKL5ZlQo)iD-pt??eUbdc{_Cn&lt;4!d~yqz))&amp;B D?AwK%)+)F2aNwI|siOe');
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/">OWASP Top 10 2021 Category A2</a> - Cryptographic Failures </li>
   <li> <a href="https://wordpress.org/support/article/editing-wp-config-php/#security-keys">wordpress.org</a> - WordPress Security Keys </li>

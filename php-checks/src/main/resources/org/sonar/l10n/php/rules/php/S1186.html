@@ -1,10 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>There are several reasons for a method not to have a method body:</p>
 <ul>
   <li> It is an unintentional omission and should be fixed to prevent unexpected behavior in production. </li>
   <li> It is not yet, or never will be, supported. In this case an <code>UnsupportedOperationException</code> should be thrown. </li>
   <li> The method is an intentionally-blank override. In this case a nested comment should explain the reason for the blank override. </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 public function doSomething() {
 }
@@ -12,7 +13,7 @@ public function doSomething() {
 public function doSomethingElse() {
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 public function doSomething() {
   // Do nothing because of X and Y.
@@ -22,7 +23,7 @@ public function doSomethingElse() {
   throw new UnsupportedOperationException();
 }
 </pre>
-<h2>Exceptions</h2>
+<h3>Exceptions</h3>
 <p>Empty methods in abstract classes</p>
 <pre>
 abstract class Animal {

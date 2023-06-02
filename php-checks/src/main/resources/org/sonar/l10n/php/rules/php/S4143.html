@@ -1,5 +1,6 @@
+<h2>Why is this an issue?</h2>
 <p>It is highly suspicious when a value is saved for a key or index and then unconditionally overwritten. Such replacements are likely errors.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 $someArray[1] = "someValue";
 $someArray[1] = "someOtherValue"; // The intention here was probably to write to another array key.

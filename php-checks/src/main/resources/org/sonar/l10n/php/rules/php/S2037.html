@@ -1,8 +1,9 @@
+<h2>Why is this an issue?</h2>
 <p>References in a class to static class members (fields or methods) can be made using either <code>self::$var</code> or <code>static::$var</code>
 (introduced in 5.3). The difference between the two is one of scope. Confusingly, in subclasses, the use of <code>self::</code> references the
 original definition of the member, i.e. the superclass version, rather than any override at the subclass level. <code>static::</code>, on the other
 hand, references the class that was called at runtime.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 &lt;?php
 
@@ -27,7 +28,7 @@ class Ball extends Toy {
 $myBall = new Ball();
 $myBall::status();  // Prints "Sticks are fun!"
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 &lt;?php
 
@@ -52,7 +53,7 @@ class Ball extends Toy {
 $myBall = new Ball();
 $myBall::status();  // Prints "Balls are fun!"
 </pre>
-<h2>Exceptions</h2>
+<h3>Exceptions</h3>
 <p>No issue is raised when <code>self</code> is used on a constant field, a private field or a private method.</p>
 <pre>
 class A

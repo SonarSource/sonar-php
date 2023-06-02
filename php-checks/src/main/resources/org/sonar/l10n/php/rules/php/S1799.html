@@ -1,10 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>The <code>exit(...)</code> and <code>die(...)</code> statements should absolutely not be used in Web PHP pages as this might lead to a very bad
 user experience. In such case, the end user might have the feeling that the web site is down or has encountered a fatal error.</p>
 <p>But of course PHP can also be used to develop command line application and in such case use of <code>exit(...)</code> or <code>die(...)</code>
 statement can be justified but must remain limited and not spread all over the application. We expect exceptions to be used to handle errors and those
 exceptions should be caught just before leaving the application to specify the exit code with help of <code>exit(...)</code> or <code>die(...)</code>
 statements.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 class Foo {
     public function bar($param)  {
@@ -14,7 +15,7 @@ class Foo {
     }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 class Foo {
     public function bar($param)  {

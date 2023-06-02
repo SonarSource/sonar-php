@@ -1,11 +1,19 @@
-<p>Using indifferently lower or upper case for PHP keywords and constants "true", "false" and "null" can impact the readability of PHP source
-code.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>In PHP, keywords and constants are case-insensitive, meaning they can be written in either lower case or upper case without affecting their
+functionality. This allows for more flexibility and ease of use when writing code.</p>
+<p>However, it is generally recommended to follow a consistent casing convention for readability and maintainability purposes. Relevant constants are
+<code>true</code>, <code>false</code> and <code>null</code>.</p>
+<h3>Noncompliant code example</h3>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 &lt;?php ECHO 'Hello World'; ?&gt;
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h3>Compliant solution</h3>
+<pre data-diff-id="1" data-diff-type="compliant">
 &lt;?php echo 'Hello World'; ?&gt;
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/reserved.constants.php">PHP Manual - Predefined Constants</a> </li>
+</ul>
 

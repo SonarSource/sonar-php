@@ -1,21 +1,29 @@
-<p>According to the PSR2 coding standard:</p>
-<blockquote>
-  <p>The keyword <code>elseif</code> SHOULD be used instead of <code>else if</code> so that all control keywords look like single words.</p>
-</blockquote>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>The <code>elseif</code> keyword is preferred over the <code>else if</code> keywords in PHP due to its consistency with other programming
+languages.</p>
+<p><code>elseif</code> is a single token, making it more efficient for the PHP parser to process. Additionally, using <code>elseif</code> encourages
+developers to follow a unified coding style and maintain a consistent syntax throughout their PHP codebase.</p>
+<p>Overall, the use of <code>elseif</code> improves code clarity, reduces potential errors, and enhances the overall maintainability of PHP
+projects.</p>
+<h3>Noncompliant code example</h3>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 if ($expr1) {
   ...
 } else if ($expr2) {
   ...
 } else {...}
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h3>Compliant solution</h3>
+<pre data-diff-id="1" data-diff-type="compliant">
 if ($expr1) {
   ...
 } elseif ($expr2) {
   ...
 } else {...}
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/de/control-structures.elseif.php">PHP Manual - elseif/else if</a> </li>
+</ul>
 

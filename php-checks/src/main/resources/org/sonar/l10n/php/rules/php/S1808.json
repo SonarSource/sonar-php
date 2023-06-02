@@ -8,7 +8,7 @@
   },
   "tags": [
     "convention",
-    "psr2"
+    "per"
   ],
   "defaultSeverity": "Minor",
   "ruleSpecification": "RSPEC-1808",

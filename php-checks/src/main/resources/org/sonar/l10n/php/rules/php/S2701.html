@@ -1,13 +1,14 @@
+<h2>Why is this an issue?</h2>
 <p>Instead of using boolean literals or <em>null</em> in an equality with <em>assertSame()</em> or <em>assertEquals()</em>, it is recommended to rely
 on the alternative functions <em>assertTrue()</em>, <em>assertFalse()</em>, assertNull(), and <em>assertNotNull()</em>.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 assertEquals(true, $x); // Noncompliant {{Use assertTrue() instead.}}
 assertNotEquals(false, $x); // Noncompliant {{Use assertTrue() instead.}}
 assertSame(null, $x); // Noncompliant {{Use assertNull() instead.}}
 assertNotSame(true, $x); // Noncompliant {{Use assertFalse() instead.}}
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 assertTrue($x); // Compliant
 assertFalse($x); // Compliant

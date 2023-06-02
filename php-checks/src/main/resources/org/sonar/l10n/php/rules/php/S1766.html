@@ -1,14 +1,21 @@
-<p>For better readability, do not put multiple property declarations in the same statement.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>It is recommended not to declare more than one property per statement for the sake of code readability and maintainability. Declaring multiple
+properties in a single statement can make the code harder to understand and debug. It also increases the risk of introducing errors or overlooking
+specific property assignments.</p>
+<h2>How to fix it</h2>
+<p>By declaring one property per statement, developers can easily identify and modify individual properties, improving code clarity and reducing
+potential mistakes.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 &lt;?php
 class Foo
 {
    private $bar = 1, $bar2 = 2;
 }
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 &lt;?php
 class Foo
 {
@@ -16,4 +23,10 @@ class Foo
    private $bar2 = 2;
 }
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.oop5.properties.php">PHP Manual - Properties</a> </li>
+  <li> <a href="https://www.php.net/manual/en/language.operators.assignment.php">PHP Manual - Assignment Operators</a> </li>
+</ul>
 

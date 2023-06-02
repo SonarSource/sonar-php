@@ -1,27 +1,37 @@
-<p><code>$this</code> refers to the current class instance. But static methods can be accessed without instantiating the class, and <code>$this</code>
-is not available to them. Using <code>$this</code> in a static context will result in a fatal error at runtime.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>To reference the current class instance the keyword $this can be used. Through the use of this keyword you have access to class properties and
+methods.</p>
+<p>Static methods can be accessed without instantiating the class, so <code>$this</code> is not available for them. Using <code>$this</code> in a
+static context will result in a runtime error.</p>
+<h2>How to fix it</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 class Clazz {
-  $name=NULL;  // instance variable
+  public $name = NULL;  // instance variable
 
-  public static function foo(){
+  public static function foo() {
     if ($this-&gt;name != NULL) {
       // ...
     }
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 class Clazz {
-  $name=NULL;  // instance variable
+  public $name = NULL;  // instance variable
 
-  public static function foo($nameParam){
+  public static function foo($nameParam) {
     if ($nameParam != NULL) {
       // ...
     }
   }
 }
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.oop5.basic.php">PHP Manual - Classes and Objects Basics</a> </li>
+</ul>
 

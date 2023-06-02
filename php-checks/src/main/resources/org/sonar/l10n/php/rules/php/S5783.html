@@ -1,8 +1,9 @@
+<h2>Why is this an issue?</h2>
 <p>When verifying that code raises an exception, a good practice is to avoid having multiple method calls inside the tested code, to be explicit about
 what is exactly tested.</p>
 <p>When two of the methods can raise the same exception, not respecting this good practice is a bug, since it is not possible to know what is really
 tested.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 public function testSomething()
 {
@@ -12,7 +13,7 @@ public function testSomething()
   } catch (RuntimeException $e) {}
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 public function testSomething()
 {

@@ -1,11 +1,32 @@
-<p>Class methods may be defined as public, private, or protected. Methods declared without any explicit visibility keyword are defined as public. To
-prevent any misunderstanding, this visibility should always be explicitly declared.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>Explicitly declaring method visibility provides clarity and improves code readability. This leads to:</p>
+<ul>
+  <li> Simplifying access to and use of the methods for other developers, enhancing the maintainability of the codebase. </li>
+  <li> Promoting the principle of encapsulation, allowing you to control the accessibility of methods and prevent unintended access or modifications
+  from external code. </li>
+</ul>
+<p>By explicitly stating the visibility, you establish a clear contract for how the methods should be interacted with, making it easier to understand
+and reason about the behavior of the code.</p>
+<p>Available access modifiers are:</p>
+<ul>
+  <li> <code>private</code> - access allowed only within the same class </li>
+  <li> <code>protected</code> - access allowed to the class and its child classes </li>
+  <li> <code>public</code> - unfettered access by all (default) </li>
+</ul>
+<h2>How to fix it</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 function foo(){...}
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
-public function foo(){...}
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+private function foo(){...}
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.oop5.visibility.php">PHP Manual - Visibility</a> </li>
+  <li> <a href="https://www.w3schools.com/php/php_oop_access_modifiers.asp">W3Schools - Access Modifiers</a> </li>
+</ul>
 

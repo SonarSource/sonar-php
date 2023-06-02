@@ -1,7 +1,8 @@
+<h2>Why is this an issue?</h2>
 <p>Some statements (<code>return</code>, <code>break</code>, <code>continue</code>, <code>goto</code>, <code>switch</code>) and <code>throw</code>
 expressions move control flow out of the current code block. So any unlabeled statements that come after such a jump are unreachable, and either this
 dead code should be removed, or the logic should be corrected.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 function fun($a) {
   $i = 10;
@@ -9,14 +10,14 @@ function fun($a) {
   $i++;             // dead code
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 function fun($a) {
   $i = 10;
   return $i + $a;
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/561">MITRE, CWE-561</a> - Dead Code </li>
 </ul>

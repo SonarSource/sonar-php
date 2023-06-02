@@ -1,9 +1,18 @@
-<p>The pattern provided to PHP regular expression functions is required to be enclosed in valid delimiters. Failing to do so will result in a PHP
-warning and the pattern never matching. Since the warning only appears during runtime when the pattern is evaluated, such a mistake risks to get
-unnoticed into production.</p>
-<p>A delimiter can be any character that is not alphanumeric, a backslash, or a whitespace. Bracket style delimiters are also allowed.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>Regular expressions are patterns used to match and manipulate strings based on specific rules.</p>
+<p>The pattern provided to PHP regular expression functions is required to be enclosed in valid delimiters to be working correctly.</p>
+<h3>What is the potential impact?</h3>
+<p>Failing to enclose the pattern with valid delimiters will result in a PHP warning and the pattern never matching. Since the warning only appears
+during runtime when the pattern is evaluated, such a mistake risks to get unnoticed into production.</p>
+<p>The use of suppressed warnings in PHP can further complicate this issue. As regex pattern are often used for validation or sanitization, the
+suppress warnings feature can obscure any problems regarding incorrect patterns. As the incorrect patterns are not recognized and have no effect, this
+could lead to more serious security issues.</p>
+<h2>How to fix it in Core PHP</h2>
+<p>The provided pattern should be enclosed in valid delimiters. A delimiter can be any character that is not alphanumeric, a backslash, or a
+whitespace. Bracket style delimiters are also allowed. Further information about possible delimiters can be found in the provided resources.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 // Condition will always evaluate to false
 if (preg_match("/.*", $input)) {
     echo "true";
@@ -14,8 +23,8 @@ if (preg_match("/.*", $input)) {
 // Unclosed bracket delimiters
 $result = preg_match("[abc", $input);
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 if (preg_match("/.*/", $input)) {
     echo "true";
 } else {
@@ -24,7 +33,7 @@ if (preg_match("/.*/", $input)) {
 
 $result = preg_match("[abc]", $input);
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://www.php.net/manual/en/regexp.reference.delimiters.php">Delimiters</a> - PHP Documentation </li>
 </ul>

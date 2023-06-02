@@ -1,13 +1,14 @@
+<h2>Why is this an issue?</h2>
 <p>When a reluctant (or lazy) quantifier is followed by a pattern that can match the empty string or directly by the end of the regex, it will always
 match zero times for <code>*?</code> or one time for <code>+?</code>. If a reluctant quantifier is followed directly by the end anchor
 (<code>$</code>), it behaves indistinguishably from a greedy quantifier while being less efficient.</p>
 <p>This is likely a sign that the regex does not work as intended.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 preg_replace("/start\w*?(end)?/", "x", "start123endstart456"); // Noncompliant. In contrast to what one would expect, the result is not "xx".
 preg_match("/^\d*?$/", "123456789"); // Noncompliant. Matches the same as "/^\d*$/", but will backtrack in every position.
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 preg_replace("/start\w*?(end|$)/", "x", "start123endstart456"); // Result is "xx".
 preg_match("/^\d*$/", "123456789");

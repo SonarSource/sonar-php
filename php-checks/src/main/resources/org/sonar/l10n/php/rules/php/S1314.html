@@ -1,14 +1,15 @@
+<h2>Why is this an issue?</h2>
 <p>Integer literals starting with a zero are octal rather than decimal values. While using octal values is fully supported, most developers do not
 have experience with them. They may not recognize octal values as such, mistaking them instead for decimal values.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 $myNumber = 023; # Noncompliant myNumber will hold 19, not 23 - was this really expected?
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 $myNumber = 19;
 </pre>
-<h2>Exceptions</h2>
+<h3>Exceptions</h3>
 <p>This rule does not apply to values smaller than 8 and octal values having 3 digits, since 3 digits octal values are often used as file permission
 masks.</p>
 <p>Example:</p>

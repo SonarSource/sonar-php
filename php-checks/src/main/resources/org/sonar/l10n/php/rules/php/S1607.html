@@ -1,8 +1,9 @@
+<h2>Why is this an issue?</h2>
 <p>When a test fails due, for example, to infrastructure issues, you might want to ignore it temporarily. But without some kind of notation about why
 the test is being ignored, it may never be reactivated. Such tests are difficult to address without comprehensive knowledge of the project, and end up
 polluting their projects.</p>
 <p>This rule raises an issue on each test that is marked as incomplete or skipped without a message explaining the reasoning behind it.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 protected function setUp() {
   if (!extension_loaded('mysqli')) {
@@ -16,7 +17,7 @@ public function testSomething()
   $this-&gt;markTestIncomplete(); // Noncompliant
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 protected function setUp() {
   if (!extension_loaded('mysqli')) {

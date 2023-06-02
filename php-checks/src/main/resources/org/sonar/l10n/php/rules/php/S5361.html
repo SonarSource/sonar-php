@@ -1,16 +1,17 @@
+<h2>Why is this an issue?</h2>
 <p>An <code>preg_replace</code> call always performs an evaluation of the first argument as a regular expression, even if no regular expression
 features were used. This has a significant performance cost and therefore should be used with care.</p>
 <p>When <code>preg_replace</code> is used, the first argument should be a real regular expression. If it’s not the case, <code>str_replace</code> does
 exactly the same thing as <code>preg_replace</code> without the performance drawback of the regex.</p>
 <p>This rule raises an issue for each <code>preg_replace</code> used with a simple string as first argument which doesn’t contains special regex
 character or pattern.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 $str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
 $changed = preg_replace("/Bob is/", "It's", $str); // Noncompliant
 $changed = preg_replace("/\.\.\./", ";", $changed); // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 $str = "Bob is a Bird... Bob is a Plane... Bob is Superman!";
 $changed = str_replace("Bob is", "It's", $str);

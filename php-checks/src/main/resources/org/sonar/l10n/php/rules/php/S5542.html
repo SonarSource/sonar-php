@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>Encryption algorithms should use secure modes and padding schemes where appropriate to guarantee data confidentiality and integrity.</p>
 <ul>
   <li> For block cipher encryption algorithms (like AES):
@@ -14,7 +15,7 @@
     </ul>  </li>
   <li> For RSA encryption algorithm, the recommended padding scheme is OAEP. </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 $c01 = mcrypt_encrypt(MCRYPT_DES, $key, $plaintext, "ecb"); // Noncompliant: ECB doesn't provide serious message confidentiality
 $c02 = mcrypt_encrypt(MCRYPT_DES_COMPAT, $key, $plaintext, "ecb"); // Noncompliant: ECB doesn't provide serious message confidentiality
@@ -36,7 +37,7 @@ $c3 = openssl_encrypt($plaintext, "bf-ecb", $key, $options=OPENSSL_RAW_DATA, $iv
 $c4= openssl_encrypt($plaintext, "des-ecb", $key, $options=OPENSSL_RAW_DATA, $iv); // Noncompliant: ECB doesn't provide serious message confidentiality
 $c5 = openssl_encrypt($plaintext, "rc2-ecb", $key, $options=OPENSSL_RAW_DATA, $iv); // Noncompliant: ECB doesn't provide serious message confidentiality
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 $c6 = openssl_encrypt($plaintext, "aes-256-gcm", $key, $options=OPENSSL_RAW_DATA, $iv); // Compliant
 
@@ -47,7 +48,7 @@ function encrypt2($data, $key) {
   return $crypted;
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/">OWASP Top 10 2021 Category A2</a> - Cryptographic Failures </li>
   <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security

@@ -1,6 +1,7 @@
+<h2>Why is this an issue?</h2>
 <p>While it is technically correct to assign to parameters from within function bodies, doing so before the parameter value is read is likely a bug.
 Instead, initial values of parameters should be, if not treated as read-only, then at least read before reassignment.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 function foo($str, $array) {
   $str = "name; // Noncompliant

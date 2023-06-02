@@ -1,18 +1,19 @@
+<h2>Why is this an issue?</h2>
 <p>Redundant Boolean literals should be removed from expressions to improve readability.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 if ($booleanVariable == true) { /* ... */ }
 if ($booleanVariable != true) { /* ... */ }
 if ($booleanVariable || false) { /* ... */ }
 doSomething(!false);
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 if ($booleanVariable) { /* ... */ }
 if (!$booleanVariable) { /* ... */ }
 if ($booleanVariable) { /* ... */ }
 doSomething(true);
 </pre>
-<h2>Exceptions</h2>
+<h3>Exceptions</h3>
 <p>The use of literal booleans in comparisons which use identity operators (<code>===</code> and <code>!==</code>) are ignored.</p>
 

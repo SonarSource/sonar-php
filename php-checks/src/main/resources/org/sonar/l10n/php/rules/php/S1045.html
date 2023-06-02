@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>Exceptions handlers (<code>catch</code>) are evaluated in the order they are written. Once a match is found, the evaluation stops.</p>
 <p>In some contexts a <code>catch</code> block is dead code as it will never catch any exception:</p>
 <ul>
@@ -6,7 +7,7 @@
   <li> When multiple <code>catch</code> blocks try to catch the same exception class, only the first one will be executed. </li>
 </ul>
 <p>This rule raises an issue when a <code>catch</code> block catches every exception before a later <code>catch</code> block could catch it.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 class MyException extends Exception {}
 class MySubException extends MyException {}
@@ -19,7 +20,7 @@ try {
   echo "Never executed";
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 class MyException extends Exception {}
 class MySubException extends MyException {}

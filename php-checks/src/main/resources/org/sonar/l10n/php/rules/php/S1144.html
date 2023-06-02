@@ -1,8 +1,9 @@
+<h2>Why is this an issue?</h2>
 <p><code>private</code> methods that are never executed are dead code: unnecessary, inoperative code that should be removed. Cleaning out dead code
 decreases the size of the maintained codebase, making it easier to understand the program and preventing bugs from being introduced.</p>
 <p>This rule also raises on unused protected methods in PHP enumerations. In PHP enumerations private and protected are equivalent because inheritance
 is not allowed.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 class Foo {
   private function __construct() {}   // Compliant, private empty constructor intentionally used to prevent any direct instantiation of a class.
@@ -22,7 +23,7 @@ enum ExampleEnum {
   protected function unusedProtectedFunction() {} // Noncompliant
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 class Foo {
   private function __construct() {}   // Compliant, private empty constructor intentionally used to prevent any direct instantiation of a class.

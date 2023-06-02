@@ -1,8 +1,9 @@
+<h2>Why is this an issue?</h2>
 <p>Because it is dynamically typed, PHP does not enforce a return type on a function. This means that different paths through a function can return
 different types of values, which can be very confusing to the user and significantly harder to maintain.</p>
 <p>In particular, it is consequently also possible to mix empty <code>return</code> statements (implicitly returning <code>null</code>) with some
 returning an expression. This rule verifies that all the <code>return</code> statements from a function are consistent.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 function foo($a) { // Noncompliant, function will return "true" or null
   if ($a == 1) {
@@ -11,7 +12,7 @@ function foo($a) { // Noncompliant, function will return "true" or null
   return;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 function foo($a) {
   if ($a == 1) {

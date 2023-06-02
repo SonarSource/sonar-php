@@ -1,13 +1,14 @@
+<h2>Why is this an issue?</h2>
 <p><code>sleep</code> is sometimes used in a mistaken attempt to prevent Denial of Service (DoS) attacks by throttling response rate. But because it
 ties up a thread, each request takes longer to serve that it otherwise would, making the application <em>more</em> vulnerable to DoS attacks, rather
 than less.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 if (is_bad_ip($requester)) {
   sleep(5);  // Noncompliant
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
   Misconfiguration </li>
