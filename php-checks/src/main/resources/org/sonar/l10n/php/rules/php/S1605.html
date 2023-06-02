@@ -1,19 +1,26 @@
-<p>In PHP 5 both the way to declare a constructor and the way to make a call to a parent constructor have evolved. When declaring constructors with
-the PHP5 <code>__construct</code> name, nested calls to parent constructors should also use the new <code>__constructor</code> name.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>In PHP both the way to declare a constructor and the way to make a call to a parent constructor have evolved. When declaring constructors with the
+<code>__construct</code> name, nested calls to parent constructors should also use the new <code>__constructor</code> name.</p>
+<h3>Noncompliant code example</h3>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 class Foo extends Bar {
   function __construct() {
     parent::Bar();
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h3>Compliant solution</h3>
+<pre data-diff-id="1" data-diff-type="compliant">
 class Foo extends Bar {
   function __construct() {
     parent::__construct();
   }
 }
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.oop5.decon.php">PHP Manual - Constructors and Destructors</a> </li>
+  <li> <a href="https://www.phptutorial.net/php-oop/php-call-parent-constructor/">PHP Tutorial - How to Call the Parent Constructor</a> </li>
+</ul>
 

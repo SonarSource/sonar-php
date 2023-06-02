@@ -1,17 +1,18 @@
+<h2>Why is this an issue?</h2>
 <p>The PHP function <code>preg_replace</code> can be used to perform a search and replace based on regular expression matches. The
 <code>$replacement</code> parameter can contain references to capturing groups used in the <code>$pattern</code> parameter. This can be achieved with
 <code>\n</code> or <code>$n</code> to reference the n’th group.</p>
 <p>When referencing a nonexistent group, it will be substituted with an empty string. This is in general not the intended behavior, and might stay
 unnoticed since no warning is raised.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 preg_replace("/(a)(b)(c)/", "\\1, \\9, \\3", "abc"); // Noncompliant - result is "a, , c"
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 preg_replace("/(a)(b)(c)/", "\\1, \\2, \\3", "abc");
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://www.php.net/manual/en/function.preg-replace.php">preg_replace</a> - PHP Documentation </li>
 </ul>

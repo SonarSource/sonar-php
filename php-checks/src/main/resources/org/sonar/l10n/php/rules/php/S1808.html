@@ -1,8 +1,12 @@
+<h2>Why is this an issue?</h2>
 <p>Shared coding conventions make it possible for a team to collaborate efficiently. This rule raises issues for failures to comply with formatting
-standard. The default parameter values conform to the PSR2 standard.</p>
-<h2>Noncompliant Code Example</h2>
-<p>With the default PSR2 parameter values:</p>
-<pre>
+standard.</p>
+<p>By default, this rule conforms to the PER (PHP Evolving Recommendation) standard.</p>
+<h2>How to fix it</h2>
+<p>Fix the issue related to conforming to formatting standards.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 use FooClass;              // Noncompliant; the "use" declaration should be placed after the "namespace" declaration
 
 namespace Vendor\Package;
@@ -78,8 +82,8 @@ class ClassC extends ParentClass implements \ArrayAccess, \Countable,
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 namespace Vendor\Package; // Compliant; the "namespace" declaration is followed by a blank line
 
 use FooClass;             // Compliant; the "use" declaration is placed after the "namespace" declaration
@@ -188,4 +192,9 @@ class ClassC extends ParentClass implements
   }
 }
 </pre>
+<h2>Resources</h2>
+<h3>Standards</h3>
+<ul>
+  <li> <a href="https://www.php-fig.org/per/coding-style/#22-files">PER Coding Style 2.0 - Files</a> </li>
+</ul>
 

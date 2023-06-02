@@ -1,14 +1,15 @@
+<h2>Why is this an issue?</h2>
 <p>A test case without assertions ensures only that no exceptions are thrown. Beyond basic runnability, it ensures nothing about the behavior of the
 code under test.</p>
 <p>This rule raised an issue when no assertions are found within a PHPUnit test method.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 public function testDoSomething() {  // Compliant
   $myClass = new MyClass();
   $myClass-&gt;getSomething();
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 public function testDoSomething() {  // Noncompliant
   $myClass = new MyClass();

@@ -1,12 +1,13 @@
+<h2>Why is this an issue?</h2>
 <p>The <code>cgi.force_redirect</code> <em>php.ini</em> configuration is on by default, and it prevents unauthenticated access to scripts when PHP is
 running as a CGI. Unfortunately, it must be disabled on IIS, OmniHTTPD and Xitami, but in all other cases it should be on.</p>
 <p>This rule raises an issue when when <code>cgi.force_redirect</code> is explicitly disabled.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 ; php.ini
 cgi.force_redirect=0  ; Noncompliant
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP Top 10 2021 Category A5</a> - Security Misconfiguration </li>
   <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security

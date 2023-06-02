@@ -1,10 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>Instances of classes that do not derive from the "Throwable" interface cannot be used in a PHP "throw" statement. Thus, it does not make sense to
 try to catch such objects within a "try-catch" block.</p>
 <p>Many built-in exceptions such as "Exception" and the SPL exception classes do implement the "Throwable" interface and can be extended when creating
 custom exceptions.</p>
 <p>This rule raises an issue when the classes used to specify the type of objects to be caught in a "try-catch" block do not derive from "Throwable"
 .</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 class NoThrowable {}
 
@@ -13,7 +14,7 @@ try {
 } catch (NoThrowable $e) { // Noncompliant
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 &lt;?php
 

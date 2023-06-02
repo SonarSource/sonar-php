@@ -1,9 +1,10 @@
+<h2>Why is this an issue?</h2>
 <p>Repeating an exception class in a single <code>catch</code> clause will not fail but it is not what the developer intended. Either the class is not
 the one which should be caught, or this is dead code.</p>
 <p>Having a subclass and a parent class in the same <code>catch</code> clause is also useless. It is enough to keep only the parent class.</p>
 <p>This rule raises an issue when an exception class is duplicated in a <code>catch</code> clause, or when an exception class has a parent class in
 the same <code>catch</code> clause.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 try {
     throw new CustomException();
@@ -17,7 +18,7 @@ try {
  &nbsp;&nbsp; echo $e-&gt;message();
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 try {
     throw new CustomException();
@@ -33,7 +34,7 @@ try {
     echo $e-&gt;message();
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> RFC - <a href="https://wiki.php.net/rfc/multiple-catch">Catching Multiple Exception Types</a> </li>
 </ul>

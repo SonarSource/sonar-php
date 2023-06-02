@@ -1,11 +1,20 @@
-<p>When specifying the class of objects in a catch clause it is important to make sure that the class exists.</p>
-<p>Since no PHP error will be raised if the class does not exist, this can lead to difficult to debug problems as the catch clause will have no effect
-and the reason might not be obvious.</p>
-<p>This mistake often occurs when being in a namespace and catching PHP built-in exception classes without escaping to the global namespace or
+<h2>Why is this an issue?</h2>
+<p>Exception handling provides a way to help developers handle and recover from runtime errors and unexpected events during program execution. When an
+error occurs, an exception is thrown and can be caught by an appropriate try-catch block, allowing the program to handle the exception and prevent the
+program from crashing.</p>
+<p>A problem arises, when an exception or error class — an instance of <code>Throwable</code> — in a catch clause does not exist, as PHP won’t
+generate an error.</p>
+<p>This typically occurs when being in a namespace trying to catch PHP built-in exception classes without escaping to the global namespace or
 importing the classes.</p>
-<p>This rule raises an issue when, being in a namespace, an undefined class belonging to that namespace is caught.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<p>In summary, this rule raises an issue when, being in a namespace, an undefined class belonging to that namespace is caught.</p>
+<h3>What is the potential impact?</h3>
+<p>Initially, since the exception is not being caught, it will cause a runtime error in production.</p>
+<p>Additionally, this can lead to complex debugging problems as the root cause of the issue may not be obvious.</p>
+<h2>How to fix it in Core PHP</h2>
+<p>Escape the caught exception to the global namespace or import the class.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 namespace Foo\Bar;
 
 try {
@@ -14,26 +23,30 @@ try {
     echo $e-&gt;message;
 }
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 namespace Foo\Bar;
 
 try {
     doSomething();
-} catch (\Exception $e) { // Compliant used by global namespace
+} catch (\Exception $e) { // Compliant: Used by global namespace
     echo $e-&gt;message;
 }
-
-// or
-
+</pre>
+<pre data-diff-id="1" data-diff-type="compliant">
 namespace Foo\Bar;
 
 use Exception;
 
 try {
     doSomething();
-} catch (Exception $e) { // Compliant imported by use statement
+} catch (Exception $e) { // Compliant: Imported by use statement
     echo $e-&gt;message;
 }
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.exceptions.php">PHP Manual - Exceptions</a> </li>
+</ul>
 

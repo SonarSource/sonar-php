@@ -1,15 +1,16 @@
+<h2>Why is this an issue?</h2>
 <p>Alternation is used to match a single regular expression out of several possible regular expressions. If one of the alternatives is empty it would
 match any input, which is most probably a mistake.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 preg_match("/Jack|Peter|/", "John"); // Noncompliant - returns 1
 preg_match("/Jack||Peter/", "John"); // Noncompliant - returns 1
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 preg_match("/Jack|Peter/", "John"); // returns 0
 </pre>
-<h2>Exceptions</h2>
+<h3>Exceptions</h3>
 <p>One could use an empty alternation to make a regular expression group optional. Note that the empty alternation should be the first or the last
 within the group, or else the rule will still report.</p>
 <pre>

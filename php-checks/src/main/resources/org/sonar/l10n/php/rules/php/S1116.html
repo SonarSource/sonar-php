@@ -1,9 +1,10 @@
+<h2>Why is this an issue?</h2>
 <p>Empty statements, i.e. <code>;</code>, are usually introduced by mistake, for example because:</p>
 <ul>
   <li> It was meant to be replaced by an actual statement, but this was forgotten. </li>
   <li> There was a typo which lead the semicolon to be doubled, i.e. <code>;;</code>. </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 function doSomething() {
   ;                                              // Noncompliant - was used as a kind of TODO marker
@@ -15,7 +16,7 @@ function doSomethingElse($p) {
 
 for ($i = 1; $i &lt;= 10; doSomething($i), $i++);   // Noncompliant - Rarely, they are used on purpose as the body of a loop. It is a bad practice to have side-effects outside of the loop body
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 function doSomething() {}
 

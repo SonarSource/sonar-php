@@ -1,15 +1,23 @@
-<p>Coding conventions allow teams to collaborate effectively. For maximum standardization and readability, PHP code should use the long <code>&lt;?php
-?&gt;</code> tags or the short-echo <code>&lt;?= ?&gt;</code> tags; it should not use the other tag variations.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+<h2>Why is this an issue?</h2>
+<p>The <code>&lt;?php</code> tag is used to explicitly mark the start of PHP code in a file. It is considered the recommended and portable way to open
+PHP blocks. On the other hand, the <code>&lt;?=</code> tag is a shorthand for <code>&lt;?php</code> echo and is specifically used to output variables
+or expressions directly without using the echo statement. Not using these tags can make the code less readable and harder to maintain, as it deviates
+from the standard conventions followed by most PHP developers.</p>
+<h3>Noncompliant code example</h3>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 &lt;?
 $foo = 1;
 ?&gt;
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h3>Compliant solution</h3>
+<pre data-diff-id="1" data-diff-type="compliant">
 &lt;?php
 $foo = 1;
 ?&gt;
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://www.php.net/manual/en/language.basic-syntax.phptags.php">PHP Manual - PHP tags</a> </li>
+</ul>
 

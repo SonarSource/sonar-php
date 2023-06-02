@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p><code>if</code> statements with conditions that are always false have the effect of making blocks of code non-functional. <code>if</code>
 statements with conditions that are always true are completely redundant, and make the code less readable.</p>
 <p>There are three possible causes for the presence of such code:</p>
@@ -7,7 +8,7 @@ statements with conditions that are always true are completely redundant, and ma
   <li> Some logic is not doing what the programmer thought it did. </li>
 </ul>
 <p>In any of these cases, unconditional <code>if</code> statements should be removed.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 if (true) {  // Noncompliant
   doSomething();
@@ -17,11 +18,11 @@ if (false) {  // Noncompliant
   doSomethingElse();
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 doSomething();
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/489">MITRE, CWE-489</a> - Active Debug Code </li>
   <li> <a href="https://cwe.mitre.org/data/definitions/570">MITRE, CWE-570</a> - Expression is Always False </li>

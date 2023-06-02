@@ -1,6 +1,7 @@
+<h2>Why is this an issue?</h2>
 <p><code>goto</code> is an unstructured control flow statement. It makes code less readable and maintainable. Structured control flow statements such
 as <code>if</code>, <code>for</code>, <code>while</code>, <code>continue</code> or <code>break</code> should be used instead.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 $i = 0;
 loop:
@@ -10,7 +11,7 @@ loop:
     goto loop;
   }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 for ($i = 0; $i &lt; 10; $i++){
   echo("i = $i");

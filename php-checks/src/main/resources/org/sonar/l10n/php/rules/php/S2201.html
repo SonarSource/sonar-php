@@ -1,10 +1,11 @@
+<h2>Why is this an issue?</h2>
 <p>When the call to a function doesn’t have any side effect, what is the point of making the call if the results are ignored? In such cases, either
 the function call is useless and should be dropped, or the source code doesn’t behave as expected.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 strlen($name); // Noncompliant; "strlen" has no side effect
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 $length = strlen($name);
 </pre>

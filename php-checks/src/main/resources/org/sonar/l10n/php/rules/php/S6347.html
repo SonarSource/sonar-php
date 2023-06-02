@@ -1,8 +1,15 @@
+<h2>Why is this an issue?</h2>
 <p>WordPress makes it possible to define options using <code>define</code> statements inside a configuration file named <code>wp-config.php</code>.
-However, if <code>define</code> statements are located at the end of this file, they are ignored by WordPress. This rule raises an issue when a
-<code>define</code> statement appears after <code>wp-settings.php</code> is loaded.</p>
-<h2>Noncompliant Code Example</h2>
-<pre>
+However, if the statements are located after the settings are loaded at the end of this file, they are not taken into account by WordPress. This rule
+raises an issue when a <code>define</code> statement appears after <code>wp-settings.php</code> is loaded.</p>
+<h3>What is the potential impact?</h3>
+<p>This issue could entail more serious problems. A configuration that is security related could be ignored and not considered without any
+warning.</p>
+<h2>How to fix it in WordPress</h2>
+<p>Move the <code>define</code> statement before the statement loading <code>wp-settings.php</code>.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 // in wp-config.php
 
 define( 'WP_DEBUG', false );
@@ -19,8 +26,8 @@ require_once ABSPATH . 'wp-settings.php';
 
 define( 'WP_POST_REVISIONS', 3 ); // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 // in wp-config.php
 
 define( 'WP_DEBUG', false );
@@ -36,4 +43,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 require_once ABSPATH . 'wp-settings.php';
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://developer.wordpress.org/apis/wp-config-php/">WordPress Developer Resources - wp-config-php</a> </li>
+</ul>
 

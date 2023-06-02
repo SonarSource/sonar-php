@@ -1,6 +1,7 @@
+<h2>Why is this an issue?</h2>
 <p>There are valid cases for passing a variable multiple times into the same method call, but usually doing so is a mistake, and something else was
 intended for one of the arguments.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 if (compare($a+$x, $a+$x) != 0) { // Noncompliant
 &nbsp;&nbsp;//...
@@ -10,7 +11,7 @@ if (compare(getValue($a), getValue($a)) != 0) { // Noncompliant
 &nbsp;&nbsp;// ...
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 if (compare($a+$y, $a+$x) != 0) {
 &nbsp;&nbsp;//...

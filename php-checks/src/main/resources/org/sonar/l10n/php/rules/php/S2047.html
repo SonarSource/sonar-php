@@ -1,7 +1,8 @@
+<h2>Why is this an issue?</h2>
 <p>Well-named functions can allow the users of your code to understand at a glance what to expect from the function - even before reading the
 documentation. Toward that end, methods returning a boolean property should have names that start with "is" or "has" rather than with "get".</p>
 <p>Note that this rule will only apply to functions that are documented to return a boolean.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 /**
  * @return boolean
@@ -11,7 +12,7 @@ public function getFoo() // Noncompliant
   return foo;
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 /**
  * @return boolean

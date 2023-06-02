@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>PHP’s <code>session.use_trans_sid</code> automatically appends the user’s session id to urls when cookies are disabled. On the face of it, this
 seems like a nice way to let uncookie-able users use your site anyway. In reality, it makes those users vulnerable to having their sessions hijacked
 by anyone who might:</p>
@@ -9,12 +10,12 @@ by anyone who might:</p>
 </ul>
 <p>For that reason, it’s better to practice a little "tough love" with your users and force them to turn on cookies.</p>
 <p>Since <code>session.use_trans_sid</code> is off by default, this rule raises an issue when it is explicitly enabled.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 ; php.ini
 session.use_trans_sid=1  ; Noncompliant
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP Top 10 2021 Category A5</a> - Security Misconfiguration </li>
   <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
