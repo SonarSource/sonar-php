@@ -204,9 +204,9 @@ ws_scan_task:
 
 promote_task:
   depends_on:
-    - ruling_task
-    - pr_analysis_task
-    - plugin_qa_task
+    - ruling
+    - pr_analysis
+    - plugin_qa
   <<: *ONLY_SONARSOURCE_QA
   <<: *CONTAINER_DEFINITION
   <<: *MAVEN_CACHE
