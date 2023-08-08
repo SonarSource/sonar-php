@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.tree.statement;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-
 /**
  * <a href="http://php.net/manual/en/control-structures.goto.php">Goto statement</a>
  * <pre>

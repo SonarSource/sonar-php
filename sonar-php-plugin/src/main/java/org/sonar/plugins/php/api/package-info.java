@@ -21,4 +21,3 @@
 package org.sonar.plugins.php.api;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-

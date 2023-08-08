@@ -43,7 +43,8 @@ public interface PHPCheck {
    * Terminates the check, doing cleanup and postprocessing after the analysis of all project files if necessary.
    * This method is called once.
    */
-  default void terminate() {}
+  default void terminate() {
+  }
 
   List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree);
 

@@ -149,7 +149,7 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
   public void visitSwitchStatement(SwitchStatementTree tree) {
     complexity.addComplexityWithNesting(tree.switchToken());
 
-    visitWithNesting(()-> super.visitSwitchStatement(tree));
+    visitWithNesting(() -> super.visitSwitchStatement(tree));
   }
 
   @Override
@@ -192,27 +192,27 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
   public void visitCatchBlock(CatchBlockTree tree) {
     complexity.addComplexityWithNesting(tree.catchToken());
 
-    visitWithNesting(()-> super.visitCatchBlock(tree));
+    visitWithNesting(() -> super.visitCatchBlock(tree));
   }
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    visitWithNesting(()-> super.visitFunctionDeclaration(tree));
+    visitWithNesting(() -> super.visitFunctionDeclaration(tree));
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    visitWithNesting(()-> super.visitFunctionExpression(tree));
+    visitWithNesting(() -> super.visitFunctionExpression(tree));
   }
 
   @Override
   public void visitArrowFunctionExpression(ArrowFunctionExpressionTree tree) {
-    visitWithNesting(()-> super.visitArrowFunctionExpression(tree));
+    visitWithNesting(() -> super.visitArrowFunctionExpression(tree));
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    visitWithNesting(()-> super.visitMethodDeclaration(tree));
+    visitWithNesting(() -> super.visitMethodDeclaration(tree));
   }
 
   @Override
@@ -285,8 +285,7 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
   }
 
   private void visitWithNesting(List<StatementTree> statements) {
-    visitWithNesting(() ->
-      statements.forEach(statementTree -> statementTree.accept(this)));
+    visitWithNesting(() -> statements.forEach(statementTree -> statementTree.accept(this)));
   }
 
   private void visitWithNesting(Runnable action) {

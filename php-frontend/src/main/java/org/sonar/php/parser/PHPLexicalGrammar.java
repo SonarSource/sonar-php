@@ -290,8 +290,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
       b.skippedTrivia(b.regexp("[" + LexicalConstant.LINE_TERMINATOR + LexicalConstant.WHITESPACE + "]*+")),
       b.zeroOrMore(
         b.commentTrivia(b.regexp(LexicalConstant.COMMENT)),
-        b.skippedTrivia(b.regexp("[" + LexicalConstant.LINE_TERMINATOR + LexicalConstant.WHITESPACE + "]*+")))
-      ).skip();
+        b.skippedTrivia(b.regexp("[" + LexicalConstant.LINE_TERMINATOR + LexicalConstant.WHITESPACE + "]*+"))))
+      .skip();
 
     // Literals
     b.rule(NOWDOC).is(SPACING, b.regexp(LexicalConstant.NOWDOC));
@@ -379,7 +379,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
       if (i > 1) {
         if (tokenType == PHPKeyword.READONLY) {
           // Readonly is only a keyword when it is not used as a function name. SONARPHP-1266
-          rest[i - 2] = b.sequence(keywordRegexp(b,"readonly"), b.nextNot(b.regexp("[\\s]*\\(")));
+          rest[i - 2] = b.sequence(keywordRegexp(b, "readonly"), b.nextNot(b.regexp("[\\s]*\\(")));
         } else {
           rest[i - 2] = keywordRegexp(b, tokenType.getValue());
         }
@@ -391,8 +391,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
         keywordRegexp(b, PHPKeyword.getKeywordValues()[0]),
         keywordRegexp(b, PHPKeyword.getKeywordValues()[1]),
         rest),
-      b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))
-      );
+      b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART)));
   }
 
   private static void punctuators(LexerlessGrammarBuilder b) {
@@ -405,7 +404,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     return b.sequence(SPACING, b.regexp("(?i)" + word), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART)));
   }
 
-  private static Object keywordRegexp(LexerlessGrammarBuilder b, String keywordValue){
+  private static Object keywordRegexp(LexerlessGrammarBuilder b, String keywordValue) {
     return b.regexp("(?i)" + keywordValue);
   }
 }

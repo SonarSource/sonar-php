@@ -58,8 +58,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
 
   protected static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^a-zA-Z\\d\\r\\n\\t\\f\\v]");
   protected static final Set<String> REGEX_FUNCTIONS = SetUtils.immutableSetOf(
-    "preg_replace", "preg_match", "preg_filter", "preg_replace_callback", "preg_split", "preg_match_all"
-  );
+    "preg_replace", "preg_match", "preg_filter", "preg_replace_callback", "preg_split", "preg_match_all");
 
   private RegexCheckContext regexContext;
 
@@ -93,7 +92,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
     Character endDelimiter = PhpRegexUtils.getEndDelimiter(pattern);
     String patternModifiers = pattern.substring(pattern.lastIndexOf(endDelimiter) + 1);
     FlagSet flags = new FlagSet();
-    for (char modifier: patternModifiers.toCharArray()) {
+    for (char modifier : patternModifiers.toCharArray()) {
       Optional.ofNullable(parseModifier(modifier)).ifPresent(flags::add);
     }
     return flags;

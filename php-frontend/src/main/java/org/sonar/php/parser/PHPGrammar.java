@@ -274,8 +274,7 @@ public class PHPGrammar {
     return b.<InternalSyntaxToken>nonterminal().is(
       b.firstOf(
         b.token(PHPKeyword.CONST),
-        b.token(PHPKeyword.FUNCTION))
-    );
+        b.token(PHPKeyword.FUNCTION)));
   }
 
   public UseClauseTree USE_CLAUSE() {
@@ -456,8 +455,7 @@ public class PHPGrammar {
 
   public ReturnTypeClauseTree RETURN_TYPE_CLAUSE() {
     return b.<ReturnTypeClauseTree>nonterminal(PHPLexicalGrammar.RETURN_TYPE_CLAUSE).is(
-      f.returnTypeClause(b.token(COLON), DECLARED_TYPE())
-    );
+      f.returnTypeClause(b.token(COLON), DECLARED_TYPE()));
   }
 
   public ParameterListTree PARAMETER_LIST() {
@@ -466,11 +464,11 @@ public class PHPGrammar {
         b.token(PHPPunctuator.LPARENTHESIS),
         b.optional(
           f.newTuple(
-          f.newTuple(
-            PARAMETER(),
-            b.zeroOrMore(
-              f.newTuple(
-                b.token(PHPPunctuator.COMMA),
+            f.newTuple(
+              PARAMETER(),
+              b.zeroOrMore(
+                f.newTuple(
+                  b.token(PHPPunctuator.COMMA),
                   PARAMETER()))),
             b.optional(b.token(COMMA)))),
         b.token(PHPPunctuator.RPARENTHESIS)));
@@ -581,31 +579,26 @@ public class PHPGrammar {
           b.token(PHPLexicalGrammar.FLOAT),
           b.token(PHPLexicalGrammar.INT),
           b.token(PHPLexicalGrammar.STRING))),
-        f.classNamespaceName(NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD())
-      ));
+        f.classNamespaceName(NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD())));
   }
 
   public UnionTypeTree UNION_TYPE() {
     return b.<UnionTypeTree>nonterminal(PHPLexicalGrammar.UNION_TYPE).is(
       f.unionType(
         TYPE(),
-        b.oneOrMore(f.newTuple(b.token(PHPPunctuator.OR), TYPE()))
-      ));
+        b.oneOrMore(f.newTuple(b.token(PHPPunctuator.OR), TYPE()))));
   }
 
   public IntersectionTypeTree INTERSECTION_TYPE() {
     return b.<IntersectionTypeTree>nonterminal(PHPLexicalGrammar.INTERSECTION_TYPE).is(
       f.intersectionType(
         TYPE(),
-        b.oneOrMore(f.newTuple(b.token(PHPPunctuator.AMPERSAND), TYPE()))
-      ));
+        b.oneOrMore(f.newTuple(b.token(PHPPunctuator.AMPERSAND), TYPE()))));
   }
-
 
   public DeclaredTypeTree DECLARED_TYPE() {
     return b.<DeclaredTypeTree>nonterminal(PHPLexicalGrammar.DECLARED_TYPE).is(
-      b.firstOf(UNION_TYPE(), INTERSECTION_TYPE(), TYPE())
-    );
+      b.firstOf(UNION_TYPE(), INTERSECTION_TYPE(), TYPE()));
   }
 
   /**
@@ -647,8 +640,7 @@ public class PHPGrammar {
         f.namespaceStatement(
           b.token(PHPKeyword.NAMESPACE),
           NAMESPACE_NAME(),
-          EOS()
-        ),
+          EOS()),
         f.blockNamespaceStatement(
           b.token(PHPKeyword.NAMESPACE),
           b.optional(NAMESPACE_NAME()),
@@ -739,12 +731,10 @@ public class PHPGrammar {
       b.firstOf(
         f.shortDeclareStatement(
           DECLARE_STATEMENT_HEAD(),
-          EOS()
-        ),
+          EOS()),
         f.declareStatementWithOneStatement(
           DECLARE_STATEMENT_HEAD(),
-          STATEMENT()
-        ),
+          STATEMENT()),
         f.alternativeDeclareStatement(
           DECLARE_STATEMENT_HEAD(),
           b.token(COLON),
@@ -817,8 +807,7 @@ public class PHPGrammar {
           b.token(PHPPunctuator.LCURLYBRACE),
           b.optional(b.token(PHPPunctuator.SEMICOLON)),
           b.zeroOrMore(SWITCH_CASE_CLAUSE()),
-          b.token(PHPPunctuator.RCURLYBRACE)
-        ),
+          b.token(PHPPunctuator.RCURLYBRACE)),
         f.alternativeSwitchStatement(
           b.token(PHPKeyword.SWITCH),
           PARENTHESIZED_EXPRESSION(),
@@ -836,8 +825,7 @@ public class PHPGrammar {
           b.token(PHPKeyword.CASE),
           EXPRESSION(),
           b.firstOf(b.token(PHPPunctuator.COLON), b.token(PHPPunctuator.SEMICOLON)),
-          b.zeroOrMore(INNER_STATEMENT())
-        ),
+          b.zeroOrMore(INNER_STATEMENT())),
         f.defaultClause(
           b.token(PHPKeyword.DEFAULT),
           b.firstOf(b.token(PHPPunctuator.COLON), b.token(PHPPunctuator.SEMICOLON)),
@@ -878,8 +866,7 @@ public class PHPGrammar {
         f.whileStatement(
           b.token(PHPKeyword.WHILE),
           PARENTHESIZED_EXPRESSION(),
-          STATEMENT()
-        ),
+          STATEMENT()),
         f.alternativeWhileStatement(
           b.token(PHPKeyword.WHILE),
           PARENTHESIZED_EXPRESSION(),
@@ -1278,8 +1265,7 @@ public class PHPGrammar {
       f.completeConditionalExpr(
         NULL_COALESCING_EXPRESSION(),
         b.zeroOrMore(
-          f.newConditionalExpr(b.token(QUERY), b.optional(CONDITIONAL_EXPR()), b.token(COLON), NULL_COALESCING_EXPRESSION())
-        )));
+          f.newConditionalExpr(b.token(QUERY), b.optional(CONDITIONAL_EXPR()), b.token(COLON), NULL_COALESCING_EXPRESSION()))));
   }
 
   public ExpressionTree ALTERNATIVE_CONDITIONAL_AND_EXPR() {
@@ -1484,7 +1470,7 @@ public class PHPGrammar {
 
   public YieldExpressionTree YIELD_SCALAR() {
     return b.<YieldExpressionTree>nonterminal(PHPLexicalGrammar.YIELD_SCALAR).is(
-        f.yieldExpression(b.token(YIELD)));
+      f.yieldExpression(b.token(YIELD)));
   }
 
   public ParenthesisedExpressionTree PARENTHESIZED_EXPRESSION() {
@@ -1503,12 +1489,11 @@ public class PHPGrammar {
   public ListExpressionTree LIST_EXPRESSION() {
     return b.<ListExpressionTree>nonterminal(Kind.LIST_EXPRESSION)
       .is(f.listExpression(
-          b.token(LIST),
-          b.token(LPARENTHESIS),
-          b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()),
-          b.zeroOrMore(f.newTuple(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
-          b.token(RPARENTHESIS))
-      );
+        b.token(LIST),
+        b.token(LPARENTHESIS),
+        b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
+        b.token(RPARENTHESIS)));
   }
 
   public AssignmentExpressionTree ARRAY_DESTRUCTURING_ASSIGNMENT() {
@@ -1611,8 +1596,7 @@ public class PHPGrammar {
       f.assignmentExpression(MEMBER_EXPRESSION(), ASSIGNMENT_OPERATOR(), CONDITIONAL_EXPR()),
       ASSIGNMENT_BY_REFERENCE(),
       LIST_EXPRESSION_ASSIGNMENT(),
-      ARRAY_DESTRUCTURING_ASSIGNMENT()
-    ));
+      ARRAY_DESTRUCTURING_ASSIGNMENT()));
   }
 
   public InternalSyntaxToken ASSIGNMENT_OPERATOR() {
@@ -1664,8 +1648,7 @@ public class PHPGrammar {
         FUNCTION_CALL_ARGUMENT(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), FUNCTION_CALL_ARGUMENT())),
         // PHP 7.3: last argument can be suffixed with an extra comma
-        b.optional(b.token(COMMA)))))
-    );
+        b.optional(b.token(COMMA))))));
   }
 
   public CallArgumentTree FUNCTION_CALL_ARGUMENT() {
@@ -1680,8 +1663,7 @@ public class PHPGrammar {
           b.firstOf(
             REFERENCE_VARIABLE(),
             SPREAD_ARGUMENT(),
-            EXPRESSION()))
-      ));
+            EXPRESSION()))));
   }
 
   public CallableConvertTree CALLABLE_CONVERT() {
@@ -1699,9 +1681,7 @@ public class PHPGrammar {
           f.nullLiteral(b.token(PHPLexicalGrammar.NULL)),
           ARRAY_INITIALIZER(),
           STRING_LITERAL()),
-        b.firstOf(FUNCTION_CALL_ARGUMENT_LIST(), CALLABLE_CONVERT())
-      )
-    );
+        b.firstOf(FUNCTION_CALL_ARGUMENT_LIST(), CALLABLE_CONVERT())));
   }
 
   public ExpressionTree MEMBER_EXPRESSION() {
@@ -1715,8 +1695,7 @@ public class PHPGrammar {
             DIMENSIONAL_OFFSET(),
             ALTERNATIVE_DIMENSIONAL_OFFSET(),
             FUNCTION_CALL_ARGUMENT_LIST(),
-            CALLABLE_CONVERT()))
-      ));
+            CALLABLE_CONVERT()))));
   }
 
   public MemberAccessTree OBJECT_MEMBER_ACCESS() {
@@ -1814,9 +1793,7 @@ public class PHPGrammar {
       b.firstOf(
         f.arrayPair2(b.token(ELLIPSIS), EXPRESSION()),
         f.arrayPair1(EXPRESSION(), b.optional(f.newTuple(b.token(DOUBLEARROW), b.firstOf(REFERENCE_VARIABLE(), EXPRESSION())))),
-        f.arrayPair2(REFERENCE_VARIABLE())
-        )
-    );
+        f.arrayPair2(REFERENCE_VARIABLE())));
   }
 
   public FunctionExpressionTree FUNCTION_EXPRESSION() {
@@ -1859,16 +1836,13 @@ public class PHPGrammar {
             OBJECT_MEMBER_ACCESS(),
             NEW_OBJECT_CLASS_FIELD_ACCESS(),
             DIMENSIONAL_OFFSET(),
-            ALTERNATIVE_DIMENSIONAL_OFFSET()
-            )),
-        b.optional(FUNCTION_CALL_ARGUMENT_LIST())
-      ));
+            ALTERNATIVE_DIMENSIONAL_OFFSET())),
+        b.optional(FUNCTION_CALL_ARGUMENT_LIST())));
   }
 
   public MemberAccessTree NEW_OBJECT_CLASS_FIELD_ACCESS() {
     return b.<MemberAccessTree>nonterminal(PHPLexicalGrammar.NEW_OBJECT_CLASS_FIELD_ACCESS).is(
-      f.classMemberAccess(b.token(DOUBLECOLON), VARIABLE_WITHOUT_OBJECTS())
-    );
+      f.classMemberAccess(b.token(DOUBLECOLON), VARIABLE_WITHOUT_OBJECTS()));
   }
 
   public AnonymousClassTree ANONYMOUS_CLASS() {
@@ -1883,8 +1857,7 @@ public class PHPGrammar {
         b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
-        b.token(RCURLYBRACE))
-    );
+        b.token(RCURLYBRACE)));
   }
 
   public FunctionCallTree EXIT_EXPRESSION() {
@@ -1926,8 +1899,7 @@ public class PHPGrammar {
     return b.<AttributeTree>nonterminal(PHPLexicalGrammar.ATTRIBUTE).is(
       f.attribute(
         NAMESPACE_NAME(),
-        b.optional(FUNCTION_CALL_ARGUMENT_LIST())
-      ));
+        b.optional(FUNCTION_CALL_ARGUMENT_LIST())));
   }
 
   public SeparatedList<AttributeTree> ATTRIBUTE_LIST() {
@@ -1935,9 +1907,7 @@ public class PHPGrammar {
       f.attributeList(
         ATTRIBUTE(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), ATTRIBUTE())),
-        b.optional(b.token(COMMA))
-      )
-    );
+        b.optional(b.token(COMMA))));
   }
 
   public AttributeGroupTree ATTRIBUTE_GROUP() {
@@ -1945,7 +1915,6 @@ public class PHPGrammar {
       f.attributeGroup(
         b.token(ATTRIBUTE_OPEN),
         ATTRIBUTE_LIST(),
-        b.token(RBRACKET)
-      ));
+        b.token(RBRACKET)));
   }
 }

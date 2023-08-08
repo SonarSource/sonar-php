@@ -41,7 +41,6 @@ public class OneExpectedCheckExceptionCheck extends PhpUnitCheck {
   private final Set<FunctionCallTree> functionCallCount = new HashSet<>();
   private final TryBlockVisitor tryBlockVisitor = new TryBlockVisitor();
 
-
   @Override
   public void visitTryStatement(TryStatementTree tree) {
     if (!isPhpUnitTestMethod()) {

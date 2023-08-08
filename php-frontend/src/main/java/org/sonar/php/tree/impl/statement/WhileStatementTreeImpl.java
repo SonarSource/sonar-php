@@ -57,9 +57,8 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
   }
 
   public WhileStatementTreeImpl(
-      InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
-      List<StatementTree> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
+    List<StatementTree> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken) {
     this.kind = Kind.ALTERNATIVE_WHILE_STATEMENT;
 
     this.whileToken = whileToken;
@@ -81,8 +80,7 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(whileToken, condition, colonToken),
       statements.iterator(),
-      IteratorUtils.iteratorOf(endwhileToken, eosToken)
-    );
+      IteratorUtils.iteratorOf(endwhileToken, eosToken));
   }
 
   @Override

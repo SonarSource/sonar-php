@@ -35,8 +35,7 @@ public class MatchClauseTest {
       .matches("1,2,4=>true")
       .matches("1,$c=$d,=>true")
       .matches("default=>$result=f()")
-      .matches("default,=>$result=f()")
-      ;
+      .matches("default,=>$result=f()");
   }
 
 }

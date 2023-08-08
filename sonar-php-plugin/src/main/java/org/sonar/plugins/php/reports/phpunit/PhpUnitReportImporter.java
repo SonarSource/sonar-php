@@ -47,8 +47,8 @@ public abstract class PhpUnitReportImporter extends AbstractReportImporter {
   }
 
   public String getFileReadErrorMessage(Exception e, File reportPath) {
-    return String.format("An error occurred when reading report file '%s', nothing will be imported from this report. %s: %s"
-      , reportPath, e.getClass().getSimpleName(), e.getMessage());
+    return String.format("An error occurred when reading report file '%s', nothing will be imported from this report. %s: %s", reportPath, e.getClass().getSimpleName(),
+      e.getMessage());
   }
 
   public List<File> getReportFiles(SensorContext context) {

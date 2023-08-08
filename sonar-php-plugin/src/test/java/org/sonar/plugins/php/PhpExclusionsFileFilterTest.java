@@ -153,5 +153,4 @@ public class PhpExclusionsFileFilterTest {
     return parts[parts.length - 1];
   }
 
-  
 }

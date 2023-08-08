@@ -47,8 +47,7 @@ public class UnreachableCatchBlockCheck extends PHPVisitorCheck {
 
     for (CatchBlockTree catchBlock : tree.catchBlocks()) {
 
-      Map<ClassSymbol, NamespaceNameTree> caughtInThisCatch =
-        catchBlock.exceptionTypes().stream().collect(Collectors.toMap(Symbols::getClass, e -> e, DUPLICATE_RESOLUTION));
+      Map<ClassSymbol, NamespaceNameTree> caughtInThisCatch = catchBlock.exceptionTypes().stream().collect(Collectors.toMap(Symbols::getClass, e -> e, DUPLICATE_RESOLUTION));
 
       Map<ClassSymbol, Optional<ClassSymbol>> caughtSuperClasses = caughtInThisCatch.keySet().stream()
         .collect(Collectors.toMap(

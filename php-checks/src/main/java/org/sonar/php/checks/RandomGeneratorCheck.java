@@ -37,7 +37,7 @@ public class RandomGeneratorCheck extends FunctionUsageCheck {
 
   @Override
   protected void checkFunctionCall(FunctionCallTree tree) {
-    context().newIssue(this, tree, MESSAGE);  
+    context().newIssue(this, tree, MESSAGE);
   }
-  
+
 }

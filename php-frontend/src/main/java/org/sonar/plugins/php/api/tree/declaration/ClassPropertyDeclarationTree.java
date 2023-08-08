@@ -49,9 +49,11 @@ public interface ClassPropertyDeclarationTree extends ClassMemberTree, HasAttrib
    * @deprecated since 3.11 - Use {@link #declaredType()} instead.
    */
   @Deprecated
-  @Nullable TypeTree typeAnnotation();
+  @Nullable
+  TypeTree typeAnnotation();
 
-  @Nullable DeclaredTypeTree declaredType();
+  @Nullable
+  DeclaredTypeTree declaredType();
 
   SeparatedList<VariableDeclarationTree> declarations();
 

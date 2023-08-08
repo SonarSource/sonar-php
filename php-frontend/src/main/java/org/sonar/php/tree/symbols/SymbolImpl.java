@@ -148,6 +148,7 @@ public class SymbolImpl implements Symbol {
   public void assignValue(ExpressionTree value) {
     assignedValues.add(value);
   }
+
   public void assignUnknown() {
     assignedUnknown = true;
   }

@@ -96,6 +96,8 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
   SyntaxToken closeCurlyBraceToken();
 
   boolean isAbstract();
+
   boolean isFinal();
+
   boolean isReadOnly();
 }

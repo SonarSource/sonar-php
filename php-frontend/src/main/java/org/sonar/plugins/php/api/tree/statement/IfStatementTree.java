@@ -55,4 +55,3 @@ public interface IfStatementTree extends StatementTree {
   SyntaxToken eosToken();
 
 }
-

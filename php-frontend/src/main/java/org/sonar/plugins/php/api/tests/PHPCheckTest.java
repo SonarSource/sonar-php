@@ -39,7 +39,6 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.sonar.php.utils.ExpectedIssuesParser.parseExpectedIssues;
 
-
 /**
  * Helper class for checks unit test.
  *
@@ -81,7 +80,7 @@ public class PHPCheckTest {
    * @param expectedIssues expected issues that should be raise. Overrides the comments in the code sample.
    */
   public static void check(PHPCheck check, PhpFile file, List<PhpIssue> expectedIssues) {
-    CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file.contents());
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
     check.init();
     List<PhpIssue> actualIssues = getActualIssues(check, file, tree);
     compare(actualIssues, toTestIssues(expectedIssues));

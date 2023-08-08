@@ -150,16 +150,16 @@ public class ScopeTest extends ParsingTestUtils {
     assertThat(scope.getSymbol("FOO", Symbol.Kind.CLASS)).isNotNull();
   }
 
-  private Scope getScopeFor(Tree.Kind kind, SymbolTable symbolTable){
-    for (Scope scope: symbolTable.getScopes()){
-      if (scope.tree().is(kind)){
+  private Scope getScopeFor(Tree.Kind kind, SymbolTable symbolTable) {
+    for (Scope scope : symbolTable.getScopes()) {
+      if (scope.tree().is(kind)) {
         return scope;
       }
     }
     throw new IllegalStateException();
   }
 
-  private Scope getScopeFor(Tree.Kind kind){
+  private Scope getScopeFor(Tree.Kind kind) {
     return getScopeFor(kind, SYMBOL_TABLE);
   }
 

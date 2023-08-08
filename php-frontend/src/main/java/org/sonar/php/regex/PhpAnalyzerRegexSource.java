@@ -100,12 +100,12 @@ public class PhpAnalyzerRegexSource extends PhpRegexSource {
       offset = 0;
     } else {
       line = sourceLine - searchResult - 2;
-      offset = index - lineStartOffsets[- searchResult - 2];
+      offset = index - lineStartOffsets[-searchResult - 2];
     }
     if (line == sourceLine) {
       offset += sourceStartOffset;
     }
-    return new int[] { line, offset };
+    return new int[] {line, offset};
   }
 
   private static int[] lineStartOffsets(String text) {

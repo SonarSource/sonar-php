@@ -90,6 +90,7 @@
     <version.sonar-orchestrator>3.41.0.295</version.sonar-orchestrator>
     <version.sslr>1.24.0.633</version.sslr>
     <version.guava>30.1.1-jre</version.guava>
+    <version.spotless>2.34.0</version.spotless>
     <version.sonarlint>8.16.0.67686</version.sonarlint>
     <version.analyzer-commons>2.5.0.1358</version.analyzer-commons>
     <version.plugin-api>10.0.0.695</version.plugin-api>
@@ -322,6 +323,31 @@
                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               </manifest>
             </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.diffplug.spotless</groupId>
+          <artifactId>spotless-maven-plugin</artifactId>
+          <version>${version.spotless}</version>
+          <executions>
+            <execution>
+              <id>spotless-check</id>
+              <!-- Runs in install phase to fail fast in case of formatting issues.-->
+              <phase>install</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <encoding>UTF-8</encoding>
+            <java>
+              <toggleOffOn />
+              <eclipse>
+                <version>4.21.0</version>
+                <file>https://raw.githubusercontent.com/SonarSource/sonar-developer-toolset/master/eclipse/sonar-formatter.xml</file>
+              </eclipse>
+            </java>
           </configuration>
         </plugin>
       </plugins>

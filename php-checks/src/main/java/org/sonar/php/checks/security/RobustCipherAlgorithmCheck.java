@@ -80,8 +80,7 @@ public class RobustCipherAlgorithmCheck extends FunctionArgumentCheck {
         "rc2-ofb",
         "rc4",
         "rc4-40",
-        "rc4-hmac-md5"
-      ))
+        "rc4-hmac-md5"))
       .build();
 
     checkArgument(tree, "openssl_encrypt", opensslMatcher);

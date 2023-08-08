@@ -50,7 +50,6 @@ import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-
 public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements CheckBundlePart {
   private static final List<String> UNSAFE_PROTOCOLS = Arrays.asList("http://", "ftp://", "telnet://");
   private static final Map<String, String> ALTERNATIVE_PROTOCOLS = new HashMap<>();
@@ -82,14 +81,12 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
     "ltsc.ieee.org",
     "docbook.org",
     "graphml.graphdrawing.org",
-    "json-schema.org"
-  ));
+    "json-schema.org"));
 
   private static final Set<String> EXCEPTION_TOP_HOSTS = new HashSet<>(Arrays.asList(
     "(.*\\.)?example\\.com$",
     "(.*\\.)?example\\.org$",
-    "(.*\\.)?test\\.com$"
-  ));
+    "(.*\\.)?test\\.com$"));
 
   private static final String MESSAGE_PROTOCOL = "Using %s protocol is insecure. Use %s instead";
   private static final String MESSAGE_FTP = "Using ftp_connect() is insecure. Use ftp_ssl_connect() instead";
@@ -178,7 +175,7 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
 
   private boolean isInstantiationOf(NewExpressionTree tree, QualifiedName name) {
     ExpressionTree expression = tree.expression();
-    if (!expression.is(Tree.Kind.FUNCTION_CALL) || !((FunctionCallTree)expression).callee().is(Tree.Kind.NAMESPACE_NAME)) {
+    if (!expression.is(Tree.Kind.FUNCTION_CALL) || !((FunctionCallTree) expression).callee().is(Tree.Kind.NAMESPACE_NAME)) {
       return false;
     }
 
@@ -206,9 +203,9 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
 
     if (assignedValue.is(Tree.Kind.NEW_EXPRESSION)) {
       return (NewExpressionTree) assignedValue;
-    } else if(tree.is(Tree.Kind.FUNCTION_CALL) && ((FunctionCallTree)tree).callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
+    } else if (tree.is(Tree.Kind.FUNCTION_CALL) && ((FunctionCallTree) tree).callee().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
       // Account for the SwiftMailer fluent interface
-      return getOriginalNewExpression(((MemberAccessTree)((FunctionCallTree)tree).callee()).object());
+      return getOriginalNewExpression(((MemberAccessTree) ((FunctionCallTree) tree).callee()).object());
     }
 
     return null;
@@ -308,7 +305,7 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
         return;
       }
 
-      Tree memberExpression = ((MemberAccessTree)tree.callee()).member();
+      Tree memberExpression = ((MemberAccessTree) tree.callee()).member();
 
       if (!memberExpression.is(Tree.Kind.NAME_IDENTIFIER)) {
         hasUnknownState = true;
@@ -333,7 +330,7 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
 
     @Override
     protected void handleFieldAssignment(AssignmentExpressionTree tree) {
-      Tree memberExpression = ((MemberAccessTree)tree.variable()).member();
+      Tree memberExpression = ((MemberAccessTree) tree.variable()).member();
 
       if (!memberExpression.is(Tree.Kind.NAME_IDENTIFIER)) {
         hasUnknownState = true;

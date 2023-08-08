@@ -38,7 +38,8 @@ import static org.junit.Assert.assertTrue;
 
 public class RegexParserTestUtils {
 
-  private RegexParserTestUtils() {}
+  private RegexParserTestUtils() {
+  }
 
   public static RegexParseResult parseRegex(String regex) {
     RegexSource source = makeSource(regex);

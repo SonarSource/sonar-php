@@ -38,8 +38,7 @@ public class ArrayAssignmentPatternTest {
       .matches("[,$a]")
       .matches("[,,,$a,]")
       .notMatches("[]")
-      .notMatches("[42]")
-    ;
+      .notMatches("[42]");
   }
 
 }

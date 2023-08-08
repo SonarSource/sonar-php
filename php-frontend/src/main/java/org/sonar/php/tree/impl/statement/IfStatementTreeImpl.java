@@ -49,9 +49,8 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   private final InternalSyntaxToken eosToken;
 
   public IfStatementTreeImpl(
-      InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, StatementTree statement,
-      List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause
-  ) {
+    InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, StatementTree statement,
+    List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause) {
     kind = Kind.IF_STATEMENT;
 
     this.ifToken = ifToken;
@@ -66,10 +65,9 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   }
 
   public IfStatementTreeImpl(
-      InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
-      List<StatementTree> statements, List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause,
-      InternalSyntaxToken endifToken, InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
+    List<StatementTree> statements, List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause,
+    InternalSyntaxToken endifToken, InternalSyntaxToken eosToken) {
     kind = Kind.ALTERNATIVE_IF_STATEMENT;
 
     this.ifToken = ifToken;
@@ -138,8 +136,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
       IteratorUtils.iteratorOf(ifToken, condition, colonToken),
       statements.iterator(),
       elseifClauses.iterator(),
-      IteratorUtils.iteratorOf(elseClause, endifToken, eosToken)
-    );
+      IteratorUtils.iteratorOf(elseClause, endifToken, eosToken));
   }
 
   @Override

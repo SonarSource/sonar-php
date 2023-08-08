@@ -78,7 +78,7 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
   }
 
   private static boolean isDuplicateCandidate(MethodDeclarationTree tree) {
-    return tree.body().is(Tree.Kind.BLOCK) && (((BlockTree) tree.body()).statements().size() >=2 || isAccessor(tree));
+    return tree.body().is(Tree.Kind.BLOCK) && (((BlockTree) tree.body()).statements().size() >= 2 || isAccessor(tree));
   }
 
   private static boolean isAccessor(MethodDeclarationTree tree) {

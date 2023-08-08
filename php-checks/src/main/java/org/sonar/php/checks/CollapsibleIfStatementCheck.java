@@ -74,5 +74,4 @@ public class CollapsibleIfStatementCheck extends PHPVisitorCheck {
     return ifStatement.elseClause() != null || !ifStatement.elseifClauses().isEmpty();
   }
 
-
 }

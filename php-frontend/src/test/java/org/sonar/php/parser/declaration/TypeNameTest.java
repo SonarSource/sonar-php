@@ -43,7 +43,6 @@ public class TypeNameTest {
       .matches("namespace\\MyInterface")
       .matches("\\A\\MyInterface")
       .matches("\\MyInterface")
-      .matches("NS\\MyInterface")
-    ;
+      .matches("NS\\MyInterface");
   }
 }

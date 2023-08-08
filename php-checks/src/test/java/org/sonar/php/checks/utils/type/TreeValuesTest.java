@@ -46,8 +46,8 @@ public class TreeValuesTest {
   public void lookup() {
     CompilationUnitTree unit = (CompilationUnitTree) PARSER.parse("<?php f(); $a = 1; $b =& $a; $a = 2; $a += 3; $a = ((4));");
     ExpressionTree f = expression(unit, 0);
-    ExpressionTree a = ((AssignmentExpressionTree)expression(unit, 1)).variable();
-    ExpressionTree b = ((AssignmentExpressionTree)expression(unit, 2)).variable();
+    ExpressionTree a = ((AssignmentExpressionTree) expression(unit, 1)).variable();
+    ExpressionTree b = ((AssignmentExpressionTree) expression(unit, 2)).variable();
     ExpressionTree unknownVariable = new VariableIdentifierTreeImpl(
       new InternalSyntaxToken(1, 1, "$x", Collections.emptyList(), 1, false));
 
@@ -64,7 +64,7 @@ public class TreeValuesTest {
   @Test
   public void lookup_foreach() {
     CompilationUnitTree unit = (CompilationUnitTree) PARSER.parse("<?php $a = 1; foreach($arr as $a) { };");
-    ExpressionTree a = ((AssignmentExpressionTree)expression(unit, 0)).variable();
+    ExpressionTree a = ((AssignmentExpressionTree) expression(unit, 0)).variable();
     ForEachStatementTree forEachStatement = (ForEachStatementTree) unit.script().statements().get(1);
     SymbolTable symbolTable = SymbolTableImpl.create(unit);
 

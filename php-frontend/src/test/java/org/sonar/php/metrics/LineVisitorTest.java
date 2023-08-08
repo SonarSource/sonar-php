@@ -29,7 +29,6 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class LineVisitorTest extends ParsingTestUtils {
 
   private static final String LOC_FILE = "metrics/lines_of_code.php";

@@ -68,8 +68,7 @@ public class SymbolTableImpl implements SymbolTable {
     new SymbolUsageVisitor(
       symbolModel,
       declarationVisitor.classSymbolIndex(),
-      declarationVisitor.functionSymbolIndex()
-    ).visitCompilationUnit(compilationUnit);
+      declarationVisitor.functionSymbolIndex()).visitCompilationUnit(compilationUnit);
     compilationUnit.accept(new AssignmentExpressionVisitor());
     return symbolModel;
   }

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.reports.phpstan;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

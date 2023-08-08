@@ -20,18 +20,19 @@
 package org.sonar.php.cache;
 
 public class SerializationResult {
-  private final byte [] data;
-  private final byte [] stringTable;
+  private final byte[] data;
+  private final byte[] stringTable;
 
   public SerializationResult(byte[] data, byte[] stringTable) {
     this.data = data;
     this.stringTable = stringTable;
   }
 
-  public byte [] data() {
+  public byte[] data() {
     return data;
   }
-  public byte [] stringTable() {
+
+  public byte[] stringTable() {
     return stringTable;
   }
 }

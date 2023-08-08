@@ -48,7 +48,7 @@ public class WordPressConfigVerifier {
     PHPCheckVerifier.verifyNoIssue(checkFile(relativePath), check);
   }
 
-  public void verifyAbsence(PHPCheck check,  String message) throws IOException {
+  public void verifyAbsence(PHPCheck check, String message) throws IOException {
     File emptyFile = configFile();
     Files.write(emptyFile.toPath(), "<?php\n".getBytes(Charset.defaultCharset()));
     PHPCheckTest.check(check, TestUtils.getFile(emptyFile), Collections.singletonList(new FileIssue(check, message)));

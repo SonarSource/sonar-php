@@ -56,13 +56,12 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   private ClassSymbol symbol;
 
   protected ClassDeclarationTreeImpl(
-      Kind kind,
-      List<AttributeGroupTree> attributeGroups,
-      List<SyntaxToken> modifiersToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,
-      @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
-      @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
-      SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken
-  ) {
+    Kind kind,
+    List<AttributeGroupTree> attributeGroups,
+    List<SyntaxToken> modifiersToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,
+    @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
+    @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
+    SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken) {
     this.kind = kind;
     this.attributeGroups = attributeGroups;
     this.modifiersToken = modifiersToken;
@@ -81,10 +80,10 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   @Override
   public SyntaxToken modifierToken() {
     return modifiersToken.stream()
-            .filter(modifier -> modifier.text().equalsIgnoreCase("final")
-              || modifier.text().equalsIgnoreCase("abstract"))
-            .findFirst()
-            .orElse(null);
+      .filter(modifier -> modifier.text().equalsIgnoreCase("final")
+        || modifier.text().equalsIgnoreCase("abstract"))
+      .findFirst()
+      .orElse(null);
   }
 
   @Override
@@ -196,8 +195,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
       superInterfaces.elementsAndSeparators(),
       IteratorUtils.iteratorOf(openCurlyBraceToken),
       members.iterator(),
-      IteratorUtils.iteratorOf(closeCurlyBraceToken)
-    );
+      IteratorUtils.iteratorOf(closeCurlyBraceToken));
   }
 
   @Override
@@ -206,68 +204,63 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   public static ClassDeclarationTree createInterface(
-      List<AttributeGroupTree> attributes,
-      InternalSyntaxToken interfaceToken, NameIdentifierTree name,
-      @Nullable InternalSyntaxToken extendsToken, SeparatedListImpl<NamespaceNameTree> interfaceList,
-      InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken
-  ) {
+    List<AttributeGroupTree> attributes,
+    InternalSyntaxToken interfaceToken, NameIdentifierTree name,
+    @Nullable InternalSyntaxToken extendsToken, SeparatedListImpl<NamespaceNameTree> interfaceList,
+    InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
     return new ClassDeclarationTreeImpl(
-        Kind.INTERFACE_DECLARATION,
-        attributes,
-        List.of(),
-        interfaceToken,
-        name,
-        extendsToken,
-        null,
-        null,
-        interfaceList,
-        openCurlyBraceToken,
-        members,
-        closeCurlyBraceToken
-    );
+      Kind.INTERFACE_DECLARATION,
+      attributes,
+      List.of(),
+      interfaceToken,
+      name,
+      extendsToken,
+      null,
+      null,
+      interfaceList,
+      openCurlyBraceToken,
+      members,
+      closeCurlyBraceToken);
   }
 
   public static ClassDeclarationTree createTrait(
-      List<AttributeGroupTree> attributes,
-      InternalSyntaxToken traitToken, NameIdentifierTree name,
-      InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken
-  ) {
+    List<AttributeGroupTree> attributes,
+    InternalSyntaxToken traitToken, NameIdentifierTree name,
+    InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
     return new ClassDeclarationTreeImpl(
-        Kind.TRAIT_DECLARATION,
-        attributes,
-        List.of(),
-        traitToken,
-        name,
-        null,
-        null,
-        null,
-        SeparatedListImpl.empty(),
-        openCurlyBraceToken,
-        members,
-        closeCurlyBraceToken
-    );
+      Kind.TRAIT_DECLARATION,
+      attributes,
+      List.of(),
+      traitToken,
+      name,
+      null,
+      null,
+      null,
+      SeparatedListImpl.empty(),
+      openCurlyBraceToken,
+      members,
+      closeCurlyBraceToken);
   }
 
   public static ClassDeclarationTree createClass(
-      List<AttributeGroupTree> attributes, List<SyntaxToken> modifiersToken,
-      InternalSyntaxToken classToken, NameIdentifierTree name,
-      @Nullable InternalSyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
-      @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
-      InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
+    List<AttributeGroupTree> attributes, List<SyntaxToken> modifiersToken,
+    InternalSyntaxToken classToken, NameIdentifierTree name,
+    @Nullable InternalSyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
+    @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
+    InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
     return new ClassDeclarationTreeImpl(
-        Kind.CLASS_DECLARATION,
-        attributes,
-        modifiersToken,
-        classToken,
-        name,
-        extendsToken,
-        superClass,
-        implementsToken,
-        superInterfaces,
-        openCurlyBraceToken,
-        members,
-        closeCurlyBraceToken
-    );
+      Kind.CLASS_DECLARATION,
+      attributes,
+      modifiersToken,
+      classToken,
+      name,
+      extendsToken,
+      superClass,
+      implementsToken,
+      superInterfaces,
+      openCurlyBraceToken,
+      members,
+      closeCurlyBraceToken);
   }
 
   public ClassSymbol symbol() {

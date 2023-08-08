@@ -29,14 +29,14 @@ public class MemberModifierTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.MEMBER_MODIFIER)
-    .matches("public")
-    .matches("protected")
-    .matches("private")
-    .matches("static")
-    .matches("abstract")
-    .matches("final")
-    .matches("readonly")
+      .matches("public")
+      .matches("protected")
+      .matches("private")
+      .matches("static")
+      .matches("abstract")
+      .matches("final")
+      .matches("readonly")
 
-    .notMatches("const");
+      .notMatches("const");
   }
 }

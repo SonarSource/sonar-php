@@ -28,7 +28,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
  */
 @Rule(key = ParsingErrorCheck.KEY)
 public class ParsingErrorCheck extends PHPVisitorCheck {
-  
+
   public static final String KEY = "S2260";
 
 }

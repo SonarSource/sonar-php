@@ -60,7 +60,6 @@ public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
     return separators;
   }
 
-
   @Override
   public int size() {
     return list.size();

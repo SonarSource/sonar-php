@@ -59,8 +59,7 @@ class ExecutableLineVisitor extends PHPTreeSubscriber {
       Kind.FOREACH_STATEMENT,
       Kind.FOR_STATEMENT,
       Kind.EXPRESSION_STATEMENT,
-      Kind.UNSET_VARIABLE_STATEMENT
-    );
+      Kind.UNSET_VARIABLE_STATEMENT);
   }
 
   public Set<Integer> getExecutableLines() {

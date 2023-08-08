@@ -150,7 +150,7 @@ public class QueryUsageCheck extends PHPVisitorCheck {
   }
 
   private boolean isSuspiciousExpandableString(ExpandableStringLiteralTree tree) {
-    for (ExpressionTree element: tree.expressions()) {
+    for (ExpressionTree element : tree.expressions()) {
       if (!element.is(VARIABLE_IDENTIFIER) || isSuspiciousVariable((VariableIdentifierTree) element)) {
         return true;
       }

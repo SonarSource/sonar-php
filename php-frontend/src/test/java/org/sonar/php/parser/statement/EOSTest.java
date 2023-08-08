@@ -29,9 +29,9 @@ public class EOSTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.EOS)
-        .matches(";")
-        .matches("?><a>Link</a>")
-        .matches("?>")
-        .notMatches("<?php");
+      .matches(";")
+      .matches("?><a>Link</a>")
+      .matches("?>")
+      .notMatches("<?php");
   }
 }

@@ -22,7 +22,6 @@ package org.sonar.php.checks.regex;
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-
 public class EmptyStringRepetitionCheckTest {
 
   @Test

@@ -111,7 +111,6 @@ public class CurlyBraceCheck extends PHPVisitorCheck implements FormattingCheck 
     super.visitElseifClause(tree);
   }
 
-
   @Override
   public void visitIfStatement(IfStatementTree tree) {
     checkControlStructureOpenCurly(tree.condition().closeParenthesis(), getOpenCurlyIfBlock(tree.statements()));

@@ -396,7 +396,6 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     }
   }
 
-
   private static class SummaryCreationVisitor extends ScopeVisitor {
     @Override
     public void visitVariableIdentifier(VariableIdentifierTree tree) {
@@ -437,7 +436,6 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       super.visitFunctionCall(functionCall);
     }
 
-
     protected static boolean isClassMemberAccess(Tree tree) {
       Tree child = skipParentArrayAccess(tree);
       return (child.getParent().is(Kind.CLASS_MEMBER_ACCESS) &&
@@ -448,7 +446,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   private static class InitialDataCollector extends PHPVisitorCheck {
     private final Set<String> exceptionVariables = new HashSet<>();
     private final Set<String> uninitializedStaticVariables = new HashSet<>();
-    
+
     @Override
     public void visitCatchBlock(CatchBlockTree tree) {
       if (tree.variable() != null) {

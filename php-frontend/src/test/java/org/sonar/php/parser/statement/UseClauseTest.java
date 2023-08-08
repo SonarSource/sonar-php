@@ -48,5 +48,4 @@ public class UseClauseTest {
       .notMatches("My\\Full\\functionName as");
   }
 
-
 }

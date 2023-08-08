@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 public class VarLengthInputStream implements Closeable {
   private final DataInputStream in;
 
-  public VarLengthInputStream(byte [] input) {
+  public VarLengthInputStream(byte[] input) {
     this.in = new DataInputStream(new ByteArrayInputStream(input));
   }
 

@@ -80,9 +80,9 @@ public class MethodSymbolTest {
       "abstract class A1 implements I1 {}",
       "abstract class A2 {}",
       "class C1 extends A1 implements I5 {",
-        "public function method1($a) {}", // is implemented from I1 by extending A1
-        "public function method2($a) {}", // is implemented from I2 through I1 by extending A1
-        "public function method3($a) {}}", // is unknown because I4 is unknown
+      "public function method1($a) {}", // is implemented from I1 by extending A1
+      "public function method2($a) {}", // is implemented from I2 through I1 by extending A1
+      "public function method3($a) {}}", // is unknown because I4 is unknown
       "class C2 extends A3 {public function method4($a) {}}", // is unknown because A2 is unknown
       "class C3 implements I3 {public function method5($a) {}}", // is not implemented because not declared in I3
       "class C4 extends A2 {public function method6($a) {}}"); // is not implemented because A2 does not implement an interface

@@ -43,7 +43,7 @@ public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
     }
     super.visitParameterList(parameterList);
   }
-  
+
   private static boolean isVariableLengthParameterList(ParameterListTree parameterList) {
     SeparatedList<ParameterTree> parameters = parameterList.parameters();
     if (!parameters.isEmpty()) {

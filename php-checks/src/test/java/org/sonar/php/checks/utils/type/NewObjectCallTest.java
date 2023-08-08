@@ -32,10 +32,10 @@ public class NewObjectCallTest {
   @Test
   public void test() {
     CompilationUnitTree unit = (CompilationUnitTree) TreeValuesTest.PARSER.parse("<?php " +
-      /* expr0 */ "new A();" +
-      /* expr1 */ "new $name();" +
-      /* expr2 */ "new class{};" +
-      /* expr3 */ "NULL;");
+    /* expr0 */ "new A();" +
+    /* expr1 */ "new $name();" +
+    /* expr2 */ "new class{};" +
+    /* expr3 */ "NULL;");
     SymbolTable symbolTable = SymbolTableImpl.create(unit);
     TreeValues expr0 = TreeValues.of(expression(unit, 0), symbolTable);
     TreeValues expr1 = TreeValues.of(expression(unit, 1), symbolTable);

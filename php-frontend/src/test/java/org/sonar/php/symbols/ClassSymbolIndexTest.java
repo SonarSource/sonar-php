@@ -196,13 +196,11 @@ public class ClassSymbolIndexTest {
   public void get_method() {
     List<MethodSymbolData> methods = Arrays.asList(
       method("methodA"),
-      method("methodB")
-    );
+      method("methodB"));
 
     ClassSymbolIndex symbols = createSymbols(
       data("a", methods),
-      data("b")
-    );
+      data("b"));
 
     ClassSymbol a = symbols.get(fqn("a"));
     assertThat(a.declaredMethods()).hasSize(2);
@@ -233,7 +231,6 @@ public class ClassSymbolIndexTest {
     assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
     assertThat(methodSymbol.owner()).isInstanceOf(UnknownClassSymbol.class);
   }
-
 
   private ClassSymbolIndex createSymbols(ClassSymbolData... data) {
     return createSymbols(new ProjectSymbolData(), data);

@@ -71,12 +71,12 @@ public class MatchExpressionTreeImpl extends PHPTree implements MatchExpressionT
   public SyntaxToken matchToken() {
     return matchToken;
   }
-  
+
   @Override
   public SyntaxToken openParenthesis() {
     return openParenthesis;
   }
-  
+
   @Override
   public SyntaxToken closeParenthesis() {
     return closeParenthesis;

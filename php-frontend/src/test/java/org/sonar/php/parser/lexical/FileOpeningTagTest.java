@@ -24,7 +24,6 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-
 public class FileOpeningTagTest {
 
   @Test

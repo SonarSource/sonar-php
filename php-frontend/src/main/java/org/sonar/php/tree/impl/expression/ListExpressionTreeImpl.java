@@ -41,8 +41,7 @@ public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTre
 
   public ListExpressionTreeImpl(
     InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis,
-    ArrayAssignmentPatternElements elements, InternalSyntaxToken closeParenthesis
-  ) {
+    ArrayAssignmentPatternElements elements, InternalSyntaxToken closeParenthesis) {
     this.listToken = listToken;
     this.openParenthesis = openParenthesis;
     this.elements = elements;

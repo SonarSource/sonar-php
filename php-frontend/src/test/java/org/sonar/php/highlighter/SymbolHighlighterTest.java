@@ -118,16 +118,13 @@ public class SymbolHighlighterTest {
     // global $a
     checkSymbolReferences(1, 6, Arrays.asList(
       textRange(1, 37, 1, 39),
-      textRange(1, 50, 1, 52)
-      ));
+      textRange(1, 50, 1, 52)));
     // global $b
     checkSymbolReferences(1, 14, Collections.singletonList(
-      textRange(1, 59, 1, 61)
-    ));
+      textRange(1, 59, 1, 61)));
     // local $b
     checkSymbolReferences(1, 30, Collections.singletonList(
-      textRange(1, 42, 1, 44)
-    ));
+      textRange(1, 42, 1, 44)));
   }
 
   private void highlight(String s) {

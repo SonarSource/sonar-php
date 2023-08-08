@@ -57,8 +57,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
     NameIdentifierTree name,
     ParameterListTree parameters,
     @Nullable ReturnTypeClauseTree returnTypeClause,
-    BlockTree body
-  ) {
+    BlockTree body) {
     this.attributeGroups = attributeGroups;
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;
@@ -114,8 +113,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
-      IteratorUtils.iteratorOf(functionToken, referenceToken, name, parameters, returnTypeClause, body)
-    );
+      IteratorUtils.iteratorOf(functionToken, referenceToken, name, parameters, returnTypeClause, body));
   }
 
   @Override

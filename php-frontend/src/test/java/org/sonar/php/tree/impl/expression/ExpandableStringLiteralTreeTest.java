@@ -99,7 +99,6 @@ public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
     assertFirstString(literal, "ls dir");
   }
 
-
   private static void assertExpandableStringLiteral(ExpandableStringLiteralTree tree, int stringsSize, int expressionsSize) {
     assertThat(tree.is(Kind.EXPANDABLE_STRING_LITERAL)).isTrue();
 

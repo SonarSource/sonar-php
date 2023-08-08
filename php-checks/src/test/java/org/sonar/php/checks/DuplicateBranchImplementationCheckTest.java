@@ -26,6 +26,6 @@ public class DuplicateBranchImplementationCheckTest {
 
   @Test
   public void test() throws Exception {
-    CheckVerifier.verify(new DuplicateBranchImplementationCheck(),"DuplicateBranchImplementationCheck.php");
+    CheckVerifier.verify(new DuplicateBranchImplementationCheck(), "DuplicateBranchImplementationCheck.php");
   }
 }

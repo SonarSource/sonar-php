@@ -50,5 +50,4 @@ public class AllBranchesIdenticalCheck extends AbstractDuplicateBranchImplementa
     // is handled by S1871 (DuplicateBranchImplementationCheck)
   }
 
-
 }

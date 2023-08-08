@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key=UncatchableExceptionCheck.KEY)
+@Rule(key = UncatchableExceptionCheck.KEY)
 public class UncatchableExceptionCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S5911";

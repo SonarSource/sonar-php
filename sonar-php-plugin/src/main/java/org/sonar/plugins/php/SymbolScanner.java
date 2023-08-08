@@ -70,7 +70,6 @@ public class SymbolScanner extends Scanner {
     return "PHP symbol indexer";
   }
 
-
   @Override
   void scanFile(InputFile file) {
     SymbolTableImpl fileSymbolTable = null;

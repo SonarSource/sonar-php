@@ -40,7 +40,6 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
   private static final Logger LOG = LoggerFactory.getLogger(PhpExclusionsFileFilter.class);
   private static final int DEFAULT_AVERAGE_LINE_LENGTH_THRESHOLD = 220;
 
-
   public PhpExclusionsFileFilter(Configuration configuration) {
     excludedPatterns = configuration.getStringArray(PhpPlugin.PHP_EXCLUSIONS_KEY);
   }
@@ -65,7 +64,6 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
 
     return true;
   }
-
 
   /**
    * An instance of this class computes the average line length of file.
@@ -105,7 +103,6 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
 
       return nbLines > 0 ? (int) (nbCharacters / nbLines) : 0;
     }
-
 
     private static List<String> fileLines(InputFile inputFile) {
       List<String> lines = new ArrayList<>();

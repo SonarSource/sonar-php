@@ -42,14 +42,12 @@ public enum BuiltinSymbolData {
     List<ClassSymbolData> data = Arrays.asList(
       new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Throwable"), null, emptyList(), ClassSymbol.Kind.ABSTRACT, Collections.emptyList()),
       new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Exception"), null, singletonList(qualifiedName("Throwable")), Collections.emptyList()),
-      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("RuntimeException"), qualifiedName("Exception"), emptyList(), Collections.emptyList())
-    );
+      new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("RuntimeException"), qualifiedName("Exception"), emptyList(), Collections.emptyList()));
     return data.stream().collect(Collectors.toMap(ClassSymbolData::qualifiedName, a -> a));
   }
 
   public Optional<ClassSymbolData> classSymbolData(QualifiedName qualifiedName) {
     return Optional.ofNullable(classSymbolsByQualifiedName.get(qualifiedName));
   }
-
 
 }

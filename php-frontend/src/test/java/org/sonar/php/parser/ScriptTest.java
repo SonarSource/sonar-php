@@ -32,8 +32,7 @@ public class ScriptTest {
       .matches("<?php const A = 1; function foo(){}")
 
       .notMatches("\n")
-      .notMatches("")
-    ;
+      .notMatches("");
   }
 
   @Test
@@ -44,8 +43,7 @@ public class ScriptTest {
       // matches due our grammar permissiveness
       // parsing error in interpreter
       .matches("<?php $x ?>")
-      .matches("<?php echo 42; $x ?>")
-    ;
+      .matches("<?php echo 42; $x ?>");
   }
 
 }

@@ -34,7 +34,6 @@ public final class PhpInputFileContext {
   @Nullable
   private final CacheContext cacheContext;
 
-
   public PhpInputFileContext(PhpFile phpFile, @Nullable File workingDirectory, @Nullable CacheContext cacheContext) {
     this.phpFile = phpFile;
     this.workingDirectory = workingDirectory;

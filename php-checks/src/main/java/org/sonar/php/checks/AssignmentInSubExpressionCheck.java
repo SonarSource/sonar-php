@@ -33,8 +33,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S1121")
 public class AssignmentInSubExpressionCheck extends PHPVisitorCheck {
 
-
-  private static final Tree.Kind[] ALLOWED_PARENTS = new Tree.Kind[]{
+  private static final Tree.Kind[] ALLOWED_PARENTS = new Tree.Kind[] {
     Tree.Kind.IF_STATEMENT,
     Tree.Kind.ELSEIF_CLAUSE,
     Tree.Kind.CALL_ARGUMENT,
@@ -55,14 +54,14 @@ public class AssignmentInSubExpressionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitForStatement(ForStatementTree tree) {
-    //ignore init and update
+    // ignore init and update
     scan(tree.condition());
     scan(tree.statements());
   }
 
   @Override
   public void visitWhileStatement(WhileStatementTree tree) {
-    //ignore while condition
+    // ignore while condition
     scan(tree.statements());
   }
 
@@ -73,7 +72,7 @@ public class AssignmentInSubExpressionCheck extends PHPVisitorCheck {
   }
 
   private static SyntaxToken getToken(AssignmentExpressionTree tree) {
-    if(tree.is(Tree.Kind.ASSIGNMENT_BY_REFERENCE)) {
+    if (tree.is(Tree.Kind.ASSIGNMENT_BY_REFERENCE)) {
       return ((AssignmentByReferenceTreeImpl) tree).equalToken();
     }
     return ((AssignmentExpressionTreeImpl) tree).equalToken();

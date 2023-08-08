@@ -179,5 +179,4 @@ public class HardCodedUriCheck extends PHPVisitorCheck {
     context().newIssue(this, hardcodedURI, "Refactor your code to get this URI from a customizable parameter.");
   }
 
-
 }

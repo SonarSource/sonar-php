@@ -41,10 +41,9 @@ public class UnsetVariableStatementTreeImpl extends PHPTree implements UnsetVari
   private final InternalSyntaxToken eosToken;
 
   public UnsetVariableStatementTreeImpl(
-      InternalSyntaxToken unsetToken, InternalSyntaxToken openParenthesisToken,
-      SeparatedListImpl<ExpressionTree> variables,
-      InternalSyntaxToken closeParenthesisToken, InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken unsetToken, InternalSyntaxToken openParenthesisToken,
+    SeparatedListImpl<ExpressionTree> variables,
+    InternalSyntaxToken closeParenthesisToken, InternalSyntaxToken eosToken) {
     this.unsetToken = unsetToken;
     this.openParenthesisToken = openParenthesisToken;
     this.variables = variables;
@@ -62,8 +61,7 @@ public class UnsetVariableStatementTreeImpl extends PHPTree implements UnsetVari
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(unsetToken, openParenthesisToken),
       variables.elementsAndSeparators(),
-      IteratorUtils.iteratorOf(closeParenthesisToken, eosToken)
-    );
+      IteratorUtils.iteratorOf(closeParenthesisToken, eosToken));
   }
 
   @Override

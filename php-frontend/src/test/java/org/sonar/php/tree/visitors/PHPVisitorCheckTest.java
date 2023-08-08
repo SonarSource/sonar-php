@@ -152,6 +152,7 @@ public class PHPVisitorCheckTest {
 
     class BinaryExpressionVisitor extends PHPVisitorCheck {
       public int visitedBinaryExpressions = 0;
+
       @Override
       public void visitBinaryExpression(BinaryExpressionTree tree) {
         visitedBinaryExpressions++;
@@ -168,7 +169,8 @@ public class PHPVisitorCheckTest {
 
   @Test
   public void default_scanWithoutParsing() {
-    PHPCheck check = new PHPVisitorCheck() {};
+    PHPCheck check = new PHPVisitorCheck() {
+    };
     assertThat(check.scanWithoutParsing(fileContext)).isTrue();
   }
 
@@ -182,7 +184,6 @@ public class PHPVisitorCheckTest {
     };
     assertThat(check.scanWithoutParsing(fileContext)).isTrue();
   }
-
 
   private class ContextTestVisitor extends PHPVisitorCheck {
   }

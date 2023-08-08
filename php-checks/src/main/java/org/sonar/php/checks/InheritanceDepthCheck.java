@@ -83,7 +83,7 @@ public class InheritanceDepthCheck extends PHPVisitorCheck {
   private void checkClassInheritance(ClassSymbol symbol, Tree tree) {
     Optional<ClassSymbol> superClass = symbol.superClass();
     Set<ClassSymbol> superClasses = new HashSet<>();
-    while (superClass.filter(classSymbol -> !classSymbol.isUnknownSymbol()).isPresent() ) {
+    while (superClass.filter(classSymbol -> !classSymbol.isUnknownSymbol()).isPresent()) {
       ClassSymbol superClassSymbol = superClass.get();
       QualifiedName qualifiedName = superClassSymbol.qualifiedName();
 
@@ -105,7 +105,7 @@ public class InheritanceDepthCheck extends PHPVisitorCheck {
 
   private Set<QualifiedName> getFilteredOutClasses() {
     if (filteredOutClassNames == null) {
-      filteredOutClassNames = Arrays.stream(filteredClasses.split( ","))
+      filteredOutClassNames = Arrays.stream(filteredClasses.split(","))
         .map(String::trim)
         .map(QualifiedName::qualifiedName)
         .collect(Collectors.toSet());

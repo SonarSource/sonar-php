@@ -49,7 +49,6 @@ abstract class Scanner {
   protected final Cache cache;
   protected boolean optimizedAnalysis;
 
-
   Scanner(SensorContext context, DurationStatistics statistics, Cache cache) {
     this.context = context;
     this.statistics = statistics;
@@ -92,6 +91,7 @@ abstract class Scanner {
     return !(inSonarLint(context)) &&
       (context.canSkipUnchangedFiles() || context.config().getBoolean(SONAR_CAN_SKIP_UNCHANGED_FILES_KEY).orElse(false));
   }
+
   protected boolean fileCanBeSkipped(InputFile file) {
     return optimizedAnalysis && fileIsUnchanged(file);
   }

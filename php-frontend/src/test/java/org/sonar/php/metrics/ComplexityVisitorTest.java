@@ -109,14 +109,14 @@ public class ComplexityVisitorTest {
   }
 
   private int expressionComplexity(String toParse) {
-    ExpressionStatementTree tree = (ExpressionStatementTree)parser.parse(toParse);
+    ExpressionStatementTree tree = (ExpressionStatementTree) parser.parse(toParse);
     return ComplexityVisitor.complexity(tree.expression());
   }
 
   private int complexityWithoutNestedFunctions(String toParse) {
     Tree tree = parser.parse(toParse);
     if (tree.is(Tree.Kind.EXPRESSION_STATEMENT)) {
-      tree = ((ExpressionStatementTree)tree).expression();
+      tree = ((ExpressionStatementTree) tree).expression();
     }
     return ComplexityVisitor.complexityNodesWithoutNestedFunctions(tree).size();
   }

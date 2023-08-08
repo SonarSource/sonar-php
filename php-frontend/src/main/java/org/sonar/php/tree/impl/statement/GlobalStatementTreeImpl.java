@@ -69,8 +69,7 @@ public class GlobalStatementTreeImpl extends PHPTree implements GlobalStatementT
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(globalToken),
       variables.elementsAndSeparators(),
-      IteratorUtils.iteratorOf(eosToken)
-    );
+      IteratorUtils.iteratorOf(eosToken));
   }
 
   @Override

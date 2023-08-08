@@ -33,7 +33,6 @@ public class AnonymousClassTest {
       .matches("class implements B {}")
       .matches("class extends B {}")
       .matches("class {}")
-      .matches("#[A1(7)] class () { }")
-    ;
+      .matches("#[A1(7)] class () { }");
   }
 }

@@ -49,8 +49,7 @@ public class UseStatementTest {
 
       // matches but it's not a valid PHP code
       .matches("use const My\\Full\\{const Name1};")
-      .matches("use function My\\Full\\{function Name1};")
-    ;
+      .matches("use function My\\Full\\{function Name1};");
   }
 
 }

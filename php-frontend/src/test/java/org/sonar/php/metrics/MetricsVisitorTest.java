@@ -38,7 +38,7 @@ public class MetricsVisitorTest extends ParsingTestUtils {
   @Test
   public void test() {
     String filename = "metrics/lines_of_code.php";
-    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/"+filename));
+    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/" + filename));
 
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     CompilationUnitTree ast = parse(filename);

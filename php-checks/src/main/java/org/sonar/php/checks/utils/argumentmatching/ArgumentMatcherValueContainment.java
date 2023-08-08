@@ -32,7 +32,6 @@ public class ArgumentMatcherValueContainment extends ArgumentMatcher {
 
   private final Set<String> values;
 
-
   <T extends ArgumentMatcherValueContainmentBuilder<T>> ArgumentMatcherValueContainment(ArgumentMatcherValueContainmentBuilder<T> builder) {
     super(builder);
     this.values = builder.values;

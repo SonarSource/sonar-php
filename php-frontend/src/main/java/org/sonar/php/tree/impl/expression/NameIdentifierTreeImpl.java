@@ -44,7 +44,6 @@ public class NameIdentifierTreeImpl extends PHPTree implements NameIdentifierTre
     return KIND;
   }
 
-
   @Override
   public SyntaxToken token() {
     return nameToken;

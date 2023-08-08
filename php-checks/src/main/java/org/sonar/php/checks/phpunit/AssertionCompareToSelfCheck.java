@@ -34,7 +34,7 @@ public class AssertionCompareToSelfCheck extends PhpUnitCheck {
 
   @Override
   protected void visitPhpUnitAssertion(FunctionCallTree tree, Assertion assertion) {
-    if(assertion.hasExpectedValue() && compareToSelf(tree.callArguments())) {
+    if (assertion.hasExpectedValue() && compareToSelf(tree.callArguments())) {
       List<CallArgumentTree> args = tree.callArguments();
       newIssue(args.get(1).value(), MESSAGE).secondary(args.get(0).value(), null);
     }

@@ -43,7 +43,6 @@ public class ClassNameCheck extends PHPSubscriptionCheck {
     defaultValue = DEFAULT)
   String format = DEFAULT;
 
-
   @Override
   public List<Tree.Kind> nodesToVisit() {
     return Collections.singletonList(Tree.Kind.CLASS_DECLARATION);

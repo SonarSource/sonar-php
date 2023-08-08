@@ -187,8 +187,8 @@ public class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   public void retrieve_symbol_by_tree() {
-    ExpressionTree dollarAUsage = ((AssignmentExpressionTree) ((ExpressionStatementTree)
-      ((FunctionDeclarationTree) cut.script().statements().get(5)).body().statements().get(3)).expression()).variable();
+    ExpressionTree dollarAUsage = ((AssignmentExpressionTree) ((ExpressionStatementTree) ((FunctionDeclarationTree) cut.script().statements().get(5)).body().statements().get(3))
+      .expression()).variable();
     Symbol symbol = SYMBOL_MODEL.getSymbol(dollarAUsage);
     assertThat(symbol).isNotNull();
     assertThat(symbol.name()).isEqualTo("$a");
@@ -250,7 +250,6 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertClassSymbols(symbolTable, "n1\\a");
     assertSymbolUsages(symbolTable, "n1\\a", 3, 5);
   }
-
 
   @Test
   public void use_statements() {
@@ -432,7 +431,6 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(iface2).isInstanceOf(UndeclaredSymbol.class);
   }
 
-
   @Test
   public void test_anonymous_class() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { $x = new class { function foo() {} }; } ");
@@ -511,10 +509,11 @@ public class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   public void lexical_vars_tree_symbol_association() {
-    FunctionExpressionTree functionExpression = (FunctionExpressionTree) ((AssignmentExpressionTree)((ExpressionStatementTree) cut.script().statements().get(7)).expression()).value();
+    FunctionExpressionTree functionExpression = (FunctionExpressionTree) ((AssignmentExpressionTree) ((ExpressionStatementTree) cut.script().statements().get(7)).expression())
+      .value();
     Symbol symbol = SYMBOL_MODEL.getSymbol(functionExpression.lexicalVars().variables().get(0));
     assertThat(symbol).isNotNull();
-    assertThat(((PHPTree)symbol.declaration()).getLine()).isEqualTo(3);
+    assertThat(((PHPTree) symbol.declaration()).getLine()).isEqualTo(3);
   }
 
   @Test
@@ -523,13 +522,13 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbol("foo")).isNotNull();
   }
 
-   @Test
+  @Test
   public void namespace_declared_types() {
     CompilationUnitTree cut = parse("symbols/namespace_declared_types.php");
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
-     assertThat(symbolTable.getSymbol("a\\b\\fieldtype")).isNotNull();
-     assertThat(symbolTable.getSymbol("a\\b\\paramtype")).isNotNull();
-     assertThat(symbolTable.getSymbol("a\\b\\returntype")).isNotNull();
+    assertThat(symbolTable.getSymbol("a\\b\\fieldtype")).isNotNull();
+    assertThat(symbolTable.getSymbol("a\\b\\paramtype")).isNotNull();
+    assertThat(symbolTable.getSymbol("a\\b\\returntype")).isNotNull();
   }
 
   @Test
@@ -580,12 +579,10 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbol.usages()).extracting(SyntaxToken::line).containsExactly(lines);
   }
 
-
   private SymbolTableImpl symbolTableFor(String source) {
     CompilationUnitTree cut = parseSource(source);
     return SymbolTableImpl.create(cut);
   }
-
 
   private static Symbol getUniqueSymbol(String name, SymbolTableImpl table) {
     List<Symbol> symbols = table.getSymbols(name);

@@ -55,14 +55,13 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
   private void handleListAssignment(ListExpressionTree lhs, ExpressionTree rhs) {
     List<ExpressionTree> values = new ArrayList<>();
     if (rhs.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
-      List<ArrayPairTree> valueArrayParis = ((ArrayInitializerTree)rhs).arrayPairs();
-      values = valueArrayParis.stream().anyMatch(p -> p.key() != null) ?
-        Collections.emptyList() : valueArrayParis.stream().map(ArrayPairTree::value).collect(Collectors.toList());
+      List<ArrayPairTree> valueArrayParis = ((ArrayInitializerTree) rhs).arrayPairs();
+      values = valueArrayParis.stream().anyMatch(p -> p.key() != null) ? Collections.emptyList() : valueArrayParis.stream().map(ArrayPairTree::value).collect(Collectors.toList());
     }
 
     int index = 0;
     final int numValues = values.size();
-    for(Optional<ArrayAssignmentPatternElementTree> element : lhs.elements()) {
+    for (Optional<ArrayAssignmentPatternElementTree> element : lhs.elements()) {
       if (element.isPresent()) {
         if (index >= numValues || element.get().key() != null) {
           assignToUnknown(element.get().variable());

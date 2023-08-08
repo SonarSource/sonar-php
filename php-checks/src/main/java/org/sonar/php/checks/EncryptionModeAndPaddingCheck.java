@@ -56,8 +56,7 @@ public class EncryptionModeAndPaddingCheck extends FunctionArgumentCheck {
       "des-ecb",
       "rc2-ecb",
       "seed-ecb",
-      "sm4-ecb"
-    );
+      "sm4-ecb");
   }
 
   @Override

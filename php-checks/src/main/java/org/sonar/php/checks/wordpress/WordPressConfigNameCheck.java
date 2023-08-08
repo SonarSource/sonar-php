@@ -106,8 +106,7 @@ public class WordPressConfigNameCheck extends WordPressConfigVisitor {
     "WP_PLUGIN_DIR",
     "WP_PLUGIN_URL",
     "WP_POST_REVISIONS",
-    "WP_SITEURL"
-  );
+    "WP_SITEURL");
 
   @RuleProperty(
     key = "customOptions",

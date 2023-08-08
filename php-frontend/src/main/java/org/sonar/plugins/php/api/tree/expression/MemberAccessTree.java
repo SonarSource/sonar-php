@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.tree.expression;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-
 /**
  * <a href="http://php.net/manual/en/language.oop5.properties.php">Object/Class Member</a> Access
  * <pre>

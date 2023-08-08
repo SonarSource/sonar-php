@@ -62,7 +62,6 @@ public abstract class CombinedTypeTreeImpl extends PHPTree {
     }
   }
 
-
   @Override
   public Iterator<Tree> childrenIterator() {
     return types.elementsAndSeparators();

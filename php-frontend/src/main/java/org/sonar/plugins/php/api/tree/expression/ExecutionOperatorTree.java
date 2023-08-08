@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-
 /**
  * <a href="https://www.php.net/manual/en/language.operators.execution.php">Execution Operator</a>
  */

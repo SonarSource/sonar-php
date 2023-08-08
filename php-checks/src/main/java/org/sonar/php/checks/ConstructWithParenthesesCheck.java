@@ -114,7 +114,7 @@ public class ConstructWithParenthesesCheck extends PHPVisitorCheck {
   private static boolean isParenthesized(ExpressionTree argument) {
     return argument.is(Tree.Kind.PARENTHESISED_EXPRESSION)
       || (argument instanceof BinaryExpressionTree && !isExcludedBinaryExpression((BinaryExpressionTree) argument)
-      && isParenthesized(((BinaryExpressionTree) argument).leftOperand()));
+        && isParenthesized(((BinaryExpressionTree) argument).leftOperand()));
   }
 
   private static boolean isExcludedBinaryExpression(BinaryExpressionTree binaryExpression) {

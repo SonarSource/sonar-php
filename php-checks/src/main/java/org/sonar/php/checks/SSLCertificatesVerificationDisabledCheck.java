@@ -27,7 +27,6 @@ import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-
 @Rule(key = "S4830")
 public class SSLCertificatesVerificationDisabledCheck extends FunctionArgumentCheck {
 

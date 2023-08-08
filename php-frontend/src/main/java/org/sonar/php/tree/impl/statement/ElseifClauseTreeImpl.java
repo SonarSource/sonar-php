@@ -92,8 +92,7 @@ public class ElseifClauseTreeImpl extends PHPTree implements ElseifClauseTree {
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(elseifToken, condition, colonToken),
-      statements.iterator()
-    );
+      statements.iterator());
   }
 
   @Override

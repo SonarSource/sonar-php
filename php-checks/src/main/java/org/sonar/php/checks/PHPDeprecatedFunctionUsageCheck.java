@@ -195,9 +195,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static String buildMessage(String functionName) {
     String replacement = NEW_BY_DEPRECATED_FUNCTIONS.get(functionName);
 
-    return replacement.isEmpty() ?
-      String.format(MESSAGE_WITHOUT_REPLACEMENT, functionName) :
-      String.format(MESSAGE_WITH_REPLACEMENT, functionName, replacement);
+    return replacement.isEmpty() ? String.format(MESSAGE_WITHOUT_REPLACEMENT, functionName) : String.format(MESSAGE_WITH_REPLACEMENT, functionName, replacement);
   }
 
   /**

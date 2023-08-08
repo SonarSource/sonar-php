@@ -48,7 +48,6 @@ public class PHPSensor implements Sensor {
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
 
-
   // Needed for SonarLint
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
     this(fileLinesContextFactory, checkFactory, noSonarFilter, null);

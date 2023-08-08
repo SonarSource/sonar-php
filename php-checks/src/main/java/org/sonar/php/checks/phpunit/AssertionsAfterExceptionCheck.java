@@ -42,14 +42,12 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
     "expectexception",
     "expectexceptionmessage",
     "expectexceptionmessagematches",
-    "exceptexceptioncode"
-  );
+    "exceptexceptioncode");
   private static final Set<String> EXPECT_ANNOTATIONS = SetUtils.immutableSetOf(
     "expectedexception",
     "expectexceptionmessage",
     "expectedexceptionmessage",
-    "expectedexceptionmessageregexp"
-  );
+    "expectedexceptionmessageregexp");
 
   private FunctionCallTree expectExceptionCall;
   private FunctionCallTree lastFunctionCall;

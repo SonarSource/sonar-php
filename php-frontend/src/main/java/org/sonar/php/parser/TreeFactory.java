@@ -239,7 +239,6 @@ import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
-
 public class TreeFactory {
 
   private static final Map<String, Kind> BINARY_EXPRESSION_KINDS_BY_OPERATOR = MapBuilder.<String, Kind>builder()
@@ -306,8 +305,7 @@ public class TreeFactory {
   private static <T extends Tree> SeparatedListImpl<T> separatedList(
     T firstElement,
     Optional<List<Tuple<InternalSyntaxToken, T>>> tuples,
-    @Nullable InternalSyntaxToken trailingSeparator
-  ) {
+    @Nullable InternalSyntaxToken trailingSeparator) {
     List<T> elements = new ArrayList<>();
     List<SyntaxToken> separators = new ArrayList<>();
 
@@ -325,7 +323,6 @@ public class TreeFactory {
 
     return new SeparatedListImpl<>(elements, separators);
   }
-
 
   public ScriptTree script(InternalSyntaxToken fileOpeningTagToken, Optional<List<StatementTree>> statements) {
     return new ScriptTreeImpl(fileOpeningTagToken, interposeEchoTagStatements(fileOpeningTagToken, optionalList(statements)));
@@ -418,8 +415,7 @@ public class TreeFactory {
   public UseClauseTree groupUseClause(
     Optional<InternalSyntaxToken> useTypeToken,
     NamespaceNameTree namespaceName,
-    Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias
-  ) {
+    Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
     if (alias.isPresent()) {
       NameIdentifierTreeImpl aliasName = new NameIdentifierTreeImpl(alias.get().second());
       return new UseClauseTreeImpl(useTypeToken.orNull(), namespaceName, alias.get().first(), aliasName);
@@ -433,8 +429,7 @@ public class TreeFactory {
     InternalSyntaxToken constToken,
     VariableDeclarationTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return ClassPropertyDeclarationTreeImpl.constant(attributes.or(Collections.emptyList()),
       modifiers.or(Collections.emptyList()),
       constToken,
@@ -446,8 +441,7 @@ public class TreeFactory {
     InternalSyntaxToken constToken,
     VariableDeclarationTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return new ConstantDeclarationTreeImpl(constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
   }
 
@@ -457,8 +451,7 @@ public class TreeFactory {
     Optional<DeclaredTypeTree> typeAnnotation,
     VariableDeclarationTree firstVariable,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalVariables,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return ClassPropertyDeclarationTreeImpl.variable(attributes.or(Collections.emptyList()),
       modifierTokens,
       typeAnnotation.orNull(),
@@ -474,8 +467,7 @@ public class TreeFactory {
     NameIdentifierTree name,
     ParameterListTree parameters,
     Optional<ReturnTypeClauseTree> returnTypeClause,
-    Tree body
-  ) {
+    Tree body) {
     if (!"__construct".equalsIgnoreCase(name.text())) {
       throwOnParameterWithVisibility(parameters);
     }
@@ -496,8 +488,7 @@ public class TreeFactory {
     NameIdentifierTree name,
     ParameterListTree parameters,
     Optional<ReturnTypeClauseTree> returnTypeClauseTree,
-    BlockTree body
-  ) {
+    BlockTree body) {
     throwOnParameterWithVisibility(parameters);
     return new FunctionDeclarationTreeImpl(attributes.or(Collections.emptyList()), functionToken, referenceToken.orNull(), name, parameters, returnTypeClauseTree.orNull(), body);
   }
@@ -514,8 +505,7 @@ public class TreeFactory {
   public ParameterListTree parameterList(
     InternalSyntaxToken leftParenthesis,
     Optional<Tuple<Tuple<ParameterTree, Optional<List<Tuple<InternalSyntaxToken, ParameterTree>>>>, Optional<InternalSyntaxToken>>> parameters,
-    InternalSyntaxToken rightParenthesis
-  ) {
+    InternalSyntaxToken rightParenthesis) {
     SeparatedListImpl<ParameterTree> separatedList = SeparatedListImpl.empty();
     if (parameters.isPresent()) {
       separatedList = separatedList(parameters.get().first().first(), parameters.get().first().second(), parameters.get().second().orNull());
@@ -530,8 +520,7 @@ public class TreeFactory {
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
     InternalSyntaxToken identifier,
-    Optional<Tuple<InternalSyntaxToken, ExpressionTree>> eqAndInitValue
-  ) {
+    Optional<Tuple<InternalSyntaxToken, ExpressionTree>> eqAndInitValue) {
     InternalSyntaxToken eqToken = null;
     ExpressionTree initValue = null;
     if (eqAndInitValue.isPresent()) {
@@ -575,8 +564,7 @@ public class TreeFactory {
     SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken openCurlyBrace,
     Optional<List<TraitAdaptationStatementTree>> adaptations,
-    InternalSyntaxToken closeCurlyBrace
-  ) {
+    InternalSyntaxToken closeCurlyBrace) {
     return new UseTraitDeclarationTreeImpl(useToken, traits, openCurlyBrace, optionalList(adaptations), closeCurlyBrace);
   }
 
@@ -584,8 +572,7 @@ public class TreeFactory {
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken insteadOfToken,
     SeparatedListImpl<NamespaceNameTree> traits,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return new TraitPrecedenceTreeImpl(methodReference, insteadOfToken, traits, eosToken);
   }
 
@@ -594,8 +581,7 @@ public class TreeFactory {
     InternalSyntaxToken asToken,
     Optional<SyntaxToken> modifier,
     NameIdentifierTree alias,
-    InternalSyntaxToken eos
-  ) {
+    InternalSyntaxToken eos) {
     return new TraitAliasTreeImpl(methodReference, asToken, modifier.orNull(), alias, eos);
   }
 
@@ -603,8 +589,7 @@ public class TreeFactory {
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken asToken,
     SyntaxToken modifier,
-    InternalSyntaxToken eos
-  ) {
+    InternalSyntaxToken eos) {
     return new TraitAliasTreeImpl(methodReference, asToken, modifier, null, eos);
   }
 
@@ -620,8 +605,7 @@ public class TreeFactory {
     Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken interfaceToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> extendsClause,
-    InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
-  ) {
+    InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken) {
     InternalSyntaxToken extendsToken = null;
     SeparatedListImpl<NamespaceNameTree> interfaceList = SeparatedListImpl.empty();
     if (extendsClause.isPresent()) {
@@ -636,23 +620,20 @@ public class TreeFactory {
       interfaceList,
       openCurlyBraceToken,
       optionalList(members),
-      closeCurlyBraceToken
-    );
+      closeCurlyBraceToken);
   }
 
   public ClassDeclarationTree traitDeclaration(
     Optional<List<AttributeGroupTree>> attributes,
     InternalSyntaxToken traitToken, NameIdentifierTree name,
-    InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
-  ) {
+    InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken) {
     return ClassDeclarationTreeImpl.createTrait(
       attributes.or(Collections.emptyList()),
       traitToken,
       name,
       openCurlyBraceToken,
       optionalList(members),
-      closeCurlyBraceToken
-    );
+      closeCurlyBraceToken);
   }
 
   public ClassDeclarationTree classDeclaration(
@@ -666,8 +647,7 @@ public class TreeFactory {
       modifiers.or(Collections.emptyList()),
       classToken, name, extendsToken(extendsClause), superClass(extendsClause),
       implementsToken(implementsClause), superInterfaces(implementsClause),
-      openCurlyBrace, optionalList(members), closeCurlyBrace
-    );
+      openCurlyBrace, optionalList(members), closeCurlyBrace);
   }
 
   public EnumDeclarationTree enumDeclaration(Optional<List<AttributeGroupTree>> attributes,
@@ -696,20 +676,17 @@ public class TreeFactory {
    * [ END ] Declarations
    */
 
-
   /**
    * [ START ] Statement
    */
 
   public GlobalStatementTree globalStatement(
     InternalSyntaxToken globalToken, VariableTree variable,
-    Optional<List<Tuple<InternalSyntaxToken, VariableTree>>> variableRest, InternalSyntaxToken eosToken
-  ) {
+    Optional<List<Tuple<InternalSyntaxToken, VariableTree>>> variableRest, InternalSyntaxToken eosToken) {
     return new GlobalStatementTreeImpl(
       globalToken,
       separatedList(variable, variableRest),
-      eosToken
-    );
+      eosToken);
   }
 
   public VariableTree globalVar(Optional<List<InternalSyntaxToken>> dollars, VariableTree variableTree) {
@@ -724,8 +701,7 @@ public class TreeFactory {
     Optional<InternalSyntaxToken> useTypeToken,
     UseClauseTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, UseClauseTree>>> additionalDeclarations,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     SeparatedListImpl<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations);
     return UseStatementTreeImpl.createUseStatement(useToken, useTypeToken.orNull(), declarations, eosToken);
   }
@@ -740,8 +716,7 @@ public class TreeFactory {
     Optional<List<Tuple<InternalSyntaxToken, UseClauseTree>>> additionalDeclarations,
     Optional<InternalSyntaxToken> trailingComma,
     InternalSyntaxToken rCurlyBrace,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     SeparatedListImpl<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations, trailingComma.orNull());
     return UseStatementTreeImpl.createGroupUseStatement(
       useToken,
@@ -798,26 +773,22 @@ public class TreeFactory {
     return new LabelTreeImpl(new NameIdentifierTreeImpl(identifier), colon);
   }
 
-
   public TryStatementTree tryStatement(
     InternalSyntaxToken tryToken, BlockTree blockTree,
     Optional<List<CatchBlockTree>> catchBlocks,
-    Optional<Tuple<InternalSyntaxToken, BlockTree>> finallyBlock
-  ) {
+    Optional<Tuple<InternalSyntaxToken, BlockTree>> finallyBlock) {
     if (finallyBlock.isPresent()) {
       return new TryStatementTreeImpl(
         tryToken,
         blockTree,
         optionalList(catchBlocks),
         finallyBlock.get().first(),
-        finallyBlock.get().second()
-      );
+        finallyBlock.get().second());
     } else {
       return new TryStatementTreeImpl(
         tryToken,
         blockTree,
-        optionalList(catchBlocks)
-      );
+        optionalList(catchBlocks));
     }
   }
 
@@ -843,8 +814,7 @@ public class TreeFactory {
   private static NamespaceNameTree namespaceName(
     NameIdentifierTree lastPartIfNoTuples,
     @Nullable InternalSyntaxToken absoluteSeparator,
-    List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> separatorIdentifierTuples
-  ) {
+    List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> separatorIdentifierTuples) {
 
     if (separatorIdentifierTuples.isEmpty()) {
       return new NamespaceNameTreeImpl(absoluteSeparator, SeparatedListImpl.<NameIdentifierTree>empty(), lastPartIfNoTuples);
@@ -879,8 +849,7 @@ public class TreeFactory {
   public CatchBlockTree catchBlock(
     InternalSyntaxToken catchToken, InternalSyntaxToken lParenthesis,
     NamespaceNameTree exceptionType, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> additionalTypes,
-    Optional<InternalSyntaxToken> variable, InternalSyntaxToken rParenthsis, BlockTree block
-  ) {
+    Optional<InternalSyntaxToken> variable, InternalSyntaxToken rParenthsis, BlockTree block) {
     SeparatedListImpl<NamespaceNameTree> exceptionTypes = separatedList(exceptionType, additionalTypes);
     VariableIdentifierTreeImpl variableIdentifierTreeImpl = variable.isPresent() ? new VariableIdentifierTreeImpl(variable.get()) : null;
     return new CatchBlockTreeImpl(
@@ -889,8 +858,7 @@ public class TreeFactory {
       exceptionTypes,
       variableIdentifierTreeImpl,
       rParenthsis,
-      block
-    );
+      block);
   }
 
   public EmptyStatementTree emptyStatement(InternalSyntaxToken semicolonToken) {
@@ -907,21 +875,18 @@ public class TreeFactory {
 
   public ForEachStatementTree forEachStatementAlternative(
     ForEachStatementHeader header,
-    InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken) {
     return new ForEachStatementTreeImpl(header, colonToken, interposeEchoTagStatements(optionalList(statements)), endForEachToken, eosToken);
   }
 
   public ForEachStatementHeader forEachStatementHeader(
     InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
     ExpressionTree expression, InternalSyntaxToken asToken, Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey, ExpressionTree value,
-    InternalSyntaxToken closeParenthesisToken
-  ) {
+    InternalSyntaxToken closeParenthesisToken) {
     return new ForEachStatementHeader(
       forEachToken, openParenthesisToken,
       expression, asToken, getForEachKey(optionalKey), getForEachArrow(optionalKey), value,
-      closeParenthesisToken
-    );
+      closeParenthesisToken);
   }
 
   @Nullable
@@ -946,8 +911,7 @@ public class TreeFactory {
     InternalSyntaxToken forToken, InternalSyntaxToken lParenthesis,
     Optional<SeparatedListImpl<ExpressionTree>> init, InternalSyntaxToken semicolon1,
     Optional<SeparatedListImpl<ExpressionTree>> condition, InternalSyntaxToken semicolon2,
-    Optional<SeparatedListImpl<ExpressionTree>> update, InternalSyntaxToken rParenthesis
-  ) {
+    Optional<SeparatedListImpl<ExpressionTree>> update, InternalSyntaxToken rParenthesis) {
     return new ForStatementHeader(
       forToken, lParenthesis,
       optionalSeparatedList(init),
@@ -955,8 +919,7 @@ public class TreeFactory {
       optionalSeparatedList(condition),
       semicolon2,
       optionalSeparatedList(update),
-      rParenthesis
-    );
+      rParenthesis);
   }
 
   public ForStatementTree forStatement(ForStatementHeader forStatementHeader, StatementTree statement) {
@@ -965,8 +928,7 @@ public class TreeFactory {
 
   public ForStatementTree forStatementAlternative(
     ForStatementHeader forStatementHeader, InternalSyntaxToken colonToken,
-    Optional<List<StatementTree>> statements, InternalSyntaxToken endForToken, InternalSyntaxToken eos
-  ) {
+    Optional<List<StatementTree>> statements, InternalSyntaxToken endForToken, InternalSyntaxToken eos) {
     return new ForStatementTreeImpl(forStatementHeader, colonToken, interposeEchoTagStatements(optionalList(statements)), endForToken, eos);
   }
 
@@ -980,8 +942,7 @@ public class TreeFactory {
 
   public IfStatementTree ifStatement(
     InternalSyntaxToken ifToken, ParenthesisedExpressionTree expression, StatementTree statement,
-    Optional<List<ElseifClauseTree>> elseIfClauses, Optional<ElseClauseTree> elseClause
-  ) {
+    Optional<List<ElseifClauseTree>> elseIfClauses, Optional<ElseClauseTree> elseClause) {
     return new IfStatementTreeImpl(ifToken, expression, statement, optionalList(elseIfClauses), elseClause.orNull());
   }
 
@@ -992,8 +953,7 @@ public class TreeFactory {
   public IfStatementTree alternativeIfStatement(
     InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
     Optional<List<StatementTree>> statements, Optional<List<ElseifClauseTree>> elseifClauses, Optional<ElseClauseTree> elseClause,
-    InternalSyntaxToken endIfToken, InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken endIfToken, InternalSyntaxToken eosToken) {
     return new IfStatementTreeImpl(
       ifToken,
       condition,
@@ -1002,42 +962,36 @@ public class TreeFactory {
       optionalList(elseifClauses),
       elseClause.orNull(),
       endIfToken,
-      eosToken
-    );
+      eosToken);
   }
 
   public ElseClauseTree alternativeElseClause(InternalSyntaxToken elseToken, InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements) {
     return new ElseClauseTreeImpl(
       elseToken,
       colonToken,
-      interposeEchoTagStatements(optionalList(statements))
-    );
+      interposeEchoTagStatements(optionalList(statements)));
   }
 
   public ElseifClauseTree alternativeElseifClause(
     InternalSyntaxToken elseifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
-    Optional<List<StatementTree>> statements
-  ) {
+    Optional<List<StatementTree>> statements) {
     return new ElseifClauseTreeImpl(
       elseifToken,
       condition,
       colonToken,
-      interposeEchoTagStatements(optionalList(statements))
-    );
+      interposeEchoTagStatements(optionalList(statements)));
   }
 
   public DoWhileStatementTree doWhileStatement(
     InternalSyntaxToken doToken, StatementTree statement,
     InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return new DoWhileStatementTreeImpl(
       doToken,
       statement,
       whileToken,
       condition,
-      eosToken
-    );
+      eosToken);
   }
 
   public WhileStatementTree whileStatement(InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, StatementTree statement) {
@@ -1046,40 +1000,35 @@ public class TreeFactory {
 
   public WhileStatementTree alternativeWhileStatement(
     InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
-    Optional<List<StatementTree>> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken
-  ) {
+    Optional<List<StatementTree>> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken) {
     return new WhileStatementTreeImpl(
       whileToken,
       condition,
       colonToken,
       interposeEchoTagStatements(optionalList(statements)),
       endwhileToken,
-      eosToken
-    );
+      eosToken);
   }
 
   public SwitchStatementTree switchStatement(
     InternalSyntaxToken switchToken, ParenthesisedExpressionTree expression, InternalSyntaxToken openCurlyBraceToken,
     Optional<InternalSyntaxToken> semicolonToken,
     Optional<List<SwitchCaseClauseTree>> switchCaseClauses,
-    InternalSyntaxToken closeCurlyBraceToken
-  ) {
+    InternalSyntaxToken closeCurlyBraceToken) {
     return new SwitchStatementTreeImpl(
       switchToken,
       expression,
       openCurlyBraceToken,
       semicolonToken.orNull(),
       optionalList(switchCaseClauses),
-      closeCurlyBraceToken
-    );
+      closeCurlyBraceToken);
   }
 
   public SwitchStatementTree alternativeSwitchStatement(
     InternalSyntaxToken switchToken, ParenthesisedExpressionTree expression, InternalSyntaxToken colonToken,
     Optional<InternalSyntaxToken> semicolonToken,
     Optional<List<SwitchCaseClauseTree>> switchCaseClauses,
-    InternalSyntaxToken endswitchToken, InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken endswitchToken, InternalSyntaxToken eosToken) {
     return new SwitchStatementTreeImpl(
       switchToken,
       expression,
@@ -1087,8 +1036,7 @@ public class TreeFactory {
       semicolonToken.orNull(),
       optionalList(switchCaseClauses),
       endswitchToken,
-      eosToken
-    );
+      eosToken);
   }
 
   public CaseClauseTree caseClause(InternalSyntaxToken caseToken, ExpressionTree expression, InternalSyntaxToken caseSeparatorToken, Optional<List<StatementTree>> statements) {
@@ -1096,16 +1044,14 @@ public class TreeFactory {
       caseToken,
       expression,
       caseSeparatorToken,
-      interposeEchoTagStatements(optionalList(statements))
-    );
+      interposeEchoTagStatements(optionalList(statements)));
   }
 
   public DefaultClauseTree defaultClause(InternalSyntaxToken defaultToken, InternalSyntaxToken caseSeparatorToken, Optional<List<StatementTree>> statements) {
     return new DefaultClauseTreeImpl(
       defaultToken,
       caseSeparatorToken,
-      interposeEchoTagStatements(optionalList(statements))
-    );
+      interposeEchoTagStatements(optionalList(statements)));
   }
 
   public MatchConditionClauseTree matchConditionClause(ExpressionTree firstCondition, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> otherconditions,
@@ -1147,29 +1093,25 @@ public class TreeFactory {
       openParenthesisToken,
       separatedList(expression, list, trailingComma.orNull()),
       closeParenthesisToken,
-      eosToken
-    );
+      eosToken);
   }
 
   public NamespaceStatementTree namespaceStatement(InternalSyntaxToken namespaceToken, NamespaceNameTree namespaceName, InternalSyntaxToken eosToken) {
     return new NamespaceStatementTreeImpl(
       namespaceToken,
       namespaceName,
-      eosToken
-    );
+      eosToken);
   }
 
   public NamespaceStatementTree blockNamespaceStatement(
     InternalSyntaxToken namespaceToken, Optional<NamespaceNameTree> namespaceName,
-    InternalSyntaxToken openCurlyBrace, Optional<List<StatementTree>> statements, InternalSyntaxToken closeCurlyBrace
-  ) {
+    InternalSyntaxToken openCurlyBrace, Optional<List<StatementTree>> statements, InternalSyntaxToken closeCurlyBrace) {
     return new NamespaceStatementTreeImpl(
       namespaceToken,
       namespaceName.orNull(),
       openCurlyBrace,
       interposeEchoTagStatements(optionalList(statements)),
-      closeCurlyBrace
-    );
+      closeCurlyBrace);
   }
 
   public InlineHTMLTree inlineHTML(InternalSyntaxToken inlineHTMLToken) {
@@ -1183,14 +1125,12 @@ public class TreeFactory {
   public DeclareStatementHead declareStatementHead(
     InternalSyntaxToken declareToken, InternalSyntaxToken openParenthesisToken,
     VariableDeclarationTree firstDirective, Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> optionalDirectives,
-    InternalSyntaxToken closeParenthesisToken
-  ) {
+    InternalSyntaxToken closeParenthesisToken) {
     return new DeclareStatementHead(
       declareToken,
       openParenthesisToken,
       separatedList(firstDirective, optionalDirectives),
-      closeParenthesisToken
-    );
+      closeParenthesisToken);
   }
 
   public DeclareStatementTree declareStatementWithOneStatement(DeclareStatementHead declareStatementHead, StatementTree statement) {
@@ -1200,16 +1140,14 @@ public class TreeFactory {
   public DeclareStatementTree alternativeDeclareStatement(
     DeclareStatementHead declareStatementHead, InternalSyntaxToken colonToken,
     Optional<List<StatementTree>> statements,
-    InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken) {
     return new DeclareStatementTreeImpl(declareStatementHead, colonToken, interposeEchoTagStatements(optionalList(statements)), enddeclareToken, eosToken);
   }
 
   public StaticStatementTree staticStatement(
     InternalSyntaxToken staticToken, VariableDeclarationTree variable,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> listOptional,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return new StaticStatementTreeImpl(staticToken, separatedList(variable, listOptional), eosToken);
   }
 
@@ -1217,8 +1155,7 @@ public class TreeFactory {
     InternalSyntaxToken haltCompilerToken,
     InternalSyntaxToken openParenthesisToken,
     InternalSyntaxToken closeParenthesisToken,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
         new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(haltCompilerToken)),
@@ -1231,8 +1168,7 @@ public class TreeFactory {
   public ExpressionStatementTree echoStatement(
     InternalSyntaxToken echoToken,
     SeparatedListImpl<CallArgumentTree> arguments,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
         new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(echoToken)),
@@ -1401,8 +1337,7 @@ public class TreeFactory {
   public ExpandableStringLiteralTree expandableStringLiteral(
     Tree spacing, InternalSyntaxToken openDoubleQuote,
     List<ExpressionTree> expressions,
-    InternalSyntaxToken closeDoubleQuote
-  ) {
+    InternalSyntaxToken closeDoubleQuote) {
     return new ExpandableStringLiteralTreeImpl(openDoubleQuote, expressions, closeDoubleQuote);
   }
 
@@ -1430,8 +1365,7 @@ public class TreeFactory {
     InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis,
     Optional<ArrayAssignmentPatternElementTree> firstElement,
     Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest,
-    InternalSyntaxToken closeParenthesis
-  ) {
+    InternalSyntaxToken closeParenthesis) {
     return new ListExpressionTreeImpl(
       listToken,
       openParenthesis,
@@ -1498,8 +1432,7 @@ public class TreeFactory {
   public FunctionCallTree functionCallParameterList(
     InternalSyntaxToken openParenthesis,
     SeparatedListImpl<CallArgumentTree> arguments,
-    InternalSyntaxToken closeParenthesis
-  ) {
+    InternalSyntaxToken closeParenthesis) {
     return new FunctionCallTreeImpl(openParenthesis, arguments, closeParenthesis);
   }
 
@@ -1573,16 +1506,14 @@ public class TreeFactory {
     InternalSyntaxToken useToken, InternalSyntaxToken openParenthesis,
     VariableTree variable, Optional<List<Tuple<InternalSyntaxToken, VariableTree>>> variableRest,
     Optional<InternalSyntaxToken> trailingComma,
-    InternalSyntaxToken closeParenthesis
-  ) {
+    InternalSyntaxToken closeParenthesis) {
     return new LexicalVariablesTreeImpl(useToken, openParenthesis, separatedList(variable, variableRest, trailingComma.orNull()), closeParenthesis);
   }
 
   public FunctionCallTree internalFunction(
     InternalSyntaxToken issetToken, InternalSyntaxToken openParenthesis,
     ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressionRest,
-    Optional<InternalSyntaxToken> trailingComma, InternalSyntaxToken closeParenthesis
-  ) {
+    Optional<InternalSyntaxToken> trailingComma, InternalSyntaxToken closeParenthesis) {
     return internalFunction(
       issetToken,
       openParenthesis,
@@ -1593,8 +1524,7 @@ public class TreeFactory {
   public FunctionCallTree internalFunction(
     InternalSyntaxToken functionNameToken, InternalSyntaxToken openParenthesis,
     ExpressionTree expression,
-    InternalSyntaxToken closeParenthesis
-  ) {
+    InternalSyntaxToken closeParenthesis) {
     return internalFunction(
       functionNameToken,
       openParenthesis,
@@ -1614,8 +1544,7 @@ public class TreeFactory {
     InternalSyntaxToken callee,
     @Nullable InternalSyntaxToken openParenthesis,
     SeparatedListImpl<ExpressionTree> arguments,
-    @Nullable InternalSyntaxToken closeParenthesis
-  ) {
+    @Nullable InternalSyntaxToken closeParenthesis) {
     List<CallArgumentTree> functionCallArguments = arguments.stream()
       .map(a -> new CallArgumentTreeImpl(null, a))
       .collect(Collectors.toList());
@@ -1634,7 +1563,6 @@ public class TreeFactory {
     return new ArrayPairTreeImpl(null, expression);
   }
 
-
   public ArrayPairTree arrayPair2(InternalSyntaxToken ellipsis, ExpressionTree expressionTree) {
     return new ArrayPairTreeImpl(ellipsis, expressionTree);
   }
@@ -1646,16 +1574,14 @@ public class TreeFactory {
   public SeparatedListImpl<ArrayPairTree> arrayInitializerList(
     ArrayPairTree firstElement,
     Optional<List<Tuple<InternalSyntaxToken, ArrayPairTree>>> restElements,
-    Optional<InternalSyntaxToken> trailingComma
-  ) {
+    Optional<InternalSyntaxToken> trailingComma) {
     return separatedList(firstElement, restElements, trailingComma.orNull());
   }
 
   public ArrayInitializerTree newArrayInitFunction(
     InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis,
     Optional<SeparatedListImpl<ArrayPairTree>> elements,
-    InternalSyntaxToken closeParenthesis
-  ) {
+    InternalSyntaxToken closeParenthesis) {
     return new ArrayInitializerFunctionTreeImpl(
       arrayToken,
       openParenthesis,
@@ -1678,8 +1604,7 @@ public class TreeFactory {
     ParameterListTree parameters,
     Optional<LexicalVariablesTree> lexicalVariables,
     Optional<ReturnTypeClauseTree> returnTypeClause,
-    BlockTree block
-  ) {
+    BlockTree block) {
 
     return new FunctionExpressionTreeImpl(
       attributes.or(Collections.emptyList()),
@@ -1700,8 +1625,7 @@ public class TreeFactory {
     ParameterListTree parameters,
     Optional<ReturnTypeClauseTree> returnTypeClause,
     InternalSyntaxToken doubleArrowToken,
-    ExpressionTree body
-  ) {
+    ExpressionTree body) {
     return new ArrowFunctionExpressionTreeImpl(
       attributes.or(Collections.emptyList()),
       staticToken.orNull(),
@@ -1811,8 +1735,7 @@ public class TreeFactory {
 
   public ConditionalExpressionTreeImpl newConditionalExpr(
     InternalSyntaxToken queryToken, Optional<ExpressionTree> trueExpression,
-    InternalSyntaxToken colonToken, ExpressionTree falseExpression
-  ) {
+    InternalSyntaxToken colonToken, ExpressionTree falseExpression) {
     return new ConditionalExpressionTreeImpl(queryToken, trueExpression.orNull(), colonToken, falseExpression);
   }
 
@@ -1851,8 +1774,7 @@ public class TreeFactory {
     Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<CallArgumentTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
-    InternalSyntaxToken lCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken rCurlyBrace
-  ) {
+    InternalSyntaxToken lCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken rCurlyBrace) {
 
     return new AnonymousClassTreeImpl(
       attributes.or(Collections.emptyList()),
@@ -1864,8 +1786,7 @@ public class TreeFactory {
       implementsToken(implementsClause), superInterfaces(implementsClause),
       lCurlyBrace,
       optionalList(members),
-      rCurlyBrace
-    );
+      rCurlyBrace);
   }
 
   private static InternalSyntaxToken extendsToken(Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause) {
@@ -1896,16 +1817,14 @@ public class TreeFactory {
     InternalSyntaxToken lBracket,
     Optional<ArrayAssignmentPatternElementTree> firstElement,
     Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest,
-    InternalSyntaxToken rBracket
-  ) {
+    InternalSyntaxToken rBracket) {
 
     return new ArrayAssignmentPatternTreeImpl(lBracket, arrayAssignmentPatternElements(firstElement, rest), rBracket);
   }
 
   private ArrayAssignmentPatternElements arrayAssignmentPatternElements(
     Optional<ArrayAssignmentPatternElementTree> firstElement,
-    Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest
-  ) {
+    Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest) {
     List<Tuple<SyntaxToken, java.util.Optional<ArrayAssignmentPatternElementTree>>> otherElements = Collections.emptyList();
     if (rest.isPresent()) {
       otherElements = rest.get().stream()
@@ -1923,14 +1842,12 @@ public class TreeFactory {
     InternalSyntaxToken lBracket,
     ArrayAssignmentPatternElementTree firstElement,
     Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest,
-    InternalSyntaxToken rBracket
-  ) {
+    InternalSyntaxToken rBracket) {
     return arrayAssignmentPattern(lBracket, Optional.of(firstElement), rest, rBracket);
   }
 
   public ArrayAssignmentPatternTree arrayAssignmentPattern(
-    InternalSyntaxToken lBracket, List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>> rest, InternalSyntaxToken rBracket
-  ) {
+    InternalSyntaxToken lBracket, List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>> rest, InternalSyntaxToken rBracket) {
     return arrayAssignmentPattern(lBracket, Optional.absent(), Optional.of(rest), rBracket);
   }
 
@@ -1951,7 +1868,7 @@ public class TreeFactory {
 
     types.add(type1);
 
-    for(Tuple<SyntaxToken, TypeTree> tuple: rest) {
+    for (Tuple<SyntaxToken, TypeTree> tuple : rest) {
       separators.add(tuple.first);
       types.add(tuple.second);
     }
@@ -1985,8 +1902,8 @@ public class TreeFactory {
   }
 
   public SeparatedList<AttributeTree> attributeList(AttributeTree firstAttribute,
-                                                    Optional<List<Tuple<InternalSyntaxToken, AttributeTree>>> otherAttributes,
-                                                    Optional<InternalSyntaxToken> trailingComma) {
+    Optional<List<Tuple<InternalSyntaxToken, AttributeTree>>> otherAttributes,
+    Optional<InternalSyntaxToken> trailingComma) {
     return separatedList(firstAttribute, otherAttributes, trailingComma.orNull());
   }
 

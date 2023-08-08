@@ -42,6 +42,7 @@ public class NamespaceStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.openCurlyBrace()).isNull();
     assertThat(tree.closeCurlyBrace()).isNull();
   }
+
   @Test
   public void block_syntax() throws Exception {
     NamespaceStatementTree tree = parse("namespace { $a; }", PHPLexicalGrammar.NAMESPACE_STATEMENT);

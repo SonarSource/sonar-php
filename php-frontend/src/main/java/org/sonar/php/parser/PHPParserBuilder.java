@@ -25,7 +25,7 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 
 public class PHPParserBuilder {
 
-  private PHPParserBuilder(){
+  private PHPParserBuilder() {
   }
 
   public static ActionParser<Tree> createParser() {

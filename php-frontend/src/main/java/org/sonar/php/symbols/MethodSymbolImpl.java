@@ -64,7 +64,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
 
   private Trilean computeIsOverriding() {
     if (visibility().equals(Visibility.PRIVATE) || name().equals("__construct")) {
-      return  Trilean.FALSE;
+      return Trilean.FALSE;
     }
 
     Deque<ClassSymbol> workList = new ArrayDeque<>();

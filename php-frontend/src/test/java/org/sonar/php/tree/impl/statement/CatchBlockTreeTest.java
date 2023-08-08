@@ -64,5 +64,5 @@ public class CatchBlockTreeTest extends PHPTreeModelTest {
     assertThat(tree.exceptionTypes().get(0).fullName()).isEqualTo("ExceptionType");
     assertNull(tree.variable());
   }
-  
+
 }

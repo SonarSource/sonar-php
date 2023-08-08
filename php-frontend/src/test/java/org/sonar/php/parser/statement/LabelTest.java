@@ -29,9 +29,9 @@ public class LabelTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.LABEL)
-        .matches("a :")
-        .matches("a:")
-        .matches(" abc:")
-        .notMatches("$a :");
+      .matches("a :")
+      .matches("a:")
+      .matches(" abc:")
+      .notMatches("$a :");
   }
 }

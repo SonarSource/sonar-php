@@ -36,8 +36,7 @@ public class ArrayAssignmentPatternElements {
 
   public ArrayAssignmentPatternElements(
     @Nullable ArrayAssignmentPatternElementTree firstElement,
-    List<Tuple<SyntaxToken,Optional<ArrayAssignmentPatternElementTree>>> rest
-  ) {
+    List<Tuple<SyntaxToken, Optional<ArrayAssignmentPatternElementTree>>> rest) {
     elements.add(Optional.ofNullable(firstElement));
     if (firstElement != null) {
       elementsAndSeparators.add(firstElement);

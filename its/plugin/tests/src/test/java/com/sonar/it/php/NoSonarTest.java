@@ -53,13 +53,12 @@ public class NoSonarTest {
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 
-
   @Test
   public void test() {
     List<Issue> issues = Tests.issuesForComponent(PROJECT_KEY);
 
-    assertThat(Tests.issuesForRule(issues,"php:S1116")).hasSize(1);
-    assertThat(Tests.issuesForRule(issues,"php:NoSonar")).hasSize(2);
+    assertThat(Tests.issuesForRule(issues, "php:S1116")).hasSize(1);
+    assertThat(Tests.issuesForRule(issues, "php:NoSonar")).hasSize(2);
   }
 
 }

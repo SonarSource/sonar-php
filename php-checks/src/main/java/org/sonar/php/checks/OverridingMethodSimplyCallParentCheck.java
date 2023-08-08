@@ -72,7 +72,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
 
   private void checkMethod(MethodDeclarationTree method, String superClass) {
     if (method.body().is(Kind.BLOCK)) {
-      BlockTree blockTree = (BlockTree)method.body();
+      BlockTree blockTree = (BlockTree) method.body();
 
       if (blockTree.statements().size() == 1) {
         StatementTree statementTree = blockTree.statements().get(0);
@@ -92,10 +92,10 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
 
   private void checkExpression(@Nullable ExpressionTree expressionTree, MethodDeclarationTree method, String superClass) {
     if (expressionTree != null && expressionTree.is(Kind.FUNCTION_CALL)) {
-      FunctionCallTree functionCallTree = (FunctionCallTree)expressionTree;
+      FunctionCallTree functionCallTree = (FunctionCallTree) expressionTree;
 
       if (functionCallTree.callee().is(Kind.CLASS_MEMBER_ACCESS)) {
-        MemberAccessTree memberAccessTree = (MemberAccessTree)functionCallTree.callee();
+        MemberAccessTree memberAccessTree = (MemberAccessTree) functionCallTree.callee();
 
         String methodName = method.name().text();
         boolean sameMethodName = memberAccessTree.member().toString().equals(methodName);

@@ -50,7 +50,7 @@ public class ReturnOfBooleanExpressionCheck extends PHPVisitorCheck {
 
   private static boolean returnsBoolean(@Nullable StatementTree statement) {
     if (statement != null && statement.is(Kind.RETURN_STATEMENT)) {
-      ReturnStatementTree returnStatement = (ReturnStatementTree)statement;
+      ReturnStatementTree returnStatement = (ReturnStatementTree) statement;
 
       if (returnStatement.expression() != null && returnStatement.expression().is(Kind.BOOLEAN_LITERAL)) {
         return true;

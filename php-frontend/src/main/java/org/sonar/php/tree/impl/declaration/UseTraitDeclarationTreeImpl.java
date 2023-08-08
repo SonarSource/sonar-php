@@ -48,8 +48,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
   public UseTraitDeclarationTreeImpl(
     InternalSyntaxToken useToken,
     SeparatedListImpl<NamespaceNameTree> traits,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     this.useToken = useToken;
     this.traits = traits;
     this.openCurlyBraceToken = null;
@@ -63,8 +62,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
     SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken openCurlyBrace,
     List<TraitAdaptationStatementTree> adaptations,
-    InternalSyntaxToken closeCurlyBrace
-  ) {
+    InternalSyntaxToken closeCurlyBrace) {
     this.useToken = useToken;
     this.traits = traits;
     this.openCurlyBraceToken = openCurlyBrace;

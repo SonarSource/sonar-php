@@ -44,8 +44,7 @@ import static org.sonar.php.utils.collections.ListUtils.getLast;
 
 public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck {
 
-  private static final String ARGUMENT_LINE_SPLIT_MESSAGE =
-    "Either split this list into multiple lines, aligned at column \"%s\" or put all arguments on line \"%s\".";
+  private static final String ARGUMENT_LINE_SPLIT_MESSAGE = "Either split this list into multiple lines, aligned at column \"%s\" or put all arguments on line \"%s\".";
   private static final String ARGUMENT_INDENTATION_MESSAGE = "Align all arguments in this list at column \"%s\".";
   private static final int PSR2_INDENTATION = 4;
   private static final String FUNCTION_CALL_PARENTHESIS_MESSAGE = "Move the closing parenthesis on the next line.";

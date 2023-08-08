@@ -44,8 +44,7 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
   private static final Set<String> RELEVANT_EXCEPTIONS = SetUtils.immutableSetOf(
     "exception",
     "phpunit\\framework\\expectationfailedexception",
-    "phpunit\\framework\\assertionfailederror"
-  );
+    "phpunit\\framework\\assertionfailederror");
 
   @Override
   public void visitTryStatement(TryStatementTree tree) {
@@ -70,16 +69,13 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
 
   private List<NamespaceNameTree> getCaughtRelevantExceptionTypes(List<CatchBlockTree> catchBlocks) {
     List<NamespaceNameTree> result = new ArrayList<>();
-    for(CatchBlockTree catchBlockTree : catchBlocks) {
+    for (CatchBlockTree catchBlockTree : catchBlocks) {
       if (variableIsUsed(catchBlockTree.variable())) {
         continue;
       }
 
       result.addAll(
-        catchBlockTree.exceptionTypes().stream().
-          filter(AssertionInTryCatchCheck::isRelevantExceptionType).
-          collect(Collectors.toList())
-      );
+        catchBlockTree.exceptionTypes().stream().filter(AssertionInTryCatchCheck::isRelevantExceptionType).collect(Collectors.toList()));
     }
 
     return result;

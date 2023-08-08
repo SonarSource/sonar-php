@@ -57,7 +57,7 @@ public class CpdDeserializer {
     try (in; stringTableIn) {
       stringTable = readStringTable();
       String pluginVersionText = readString();
-      if(!pluginVersionText.equals(pluginVersion)) {
+      if (!pluginVersionText.equals(pluginVersion)) {
         return null;
       }
       int sizeOfCpdTokens = readInt();
@@ -83,8 +83,7 @@ public class CpdDeserializer {
       readInt(),
       readInt(),
       readInt(),
-      readString()
-    ));
+      readString()));
   }
 
   private int readInt() throws IOException {

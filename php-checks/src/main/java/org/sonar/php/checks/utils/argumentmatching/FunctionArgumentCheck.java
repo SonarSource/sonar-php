@@ -26,7 +26,6 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-
 /**
  * This abstract class simplifies the checking of function calls for the specific arguments.
  * {@link ArgumentVerifierValueContainment} can be used to check whether an argument corresponds to a certain value or a set of values.
@@ -93,4 +92,3 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
   }
 
 }
-

@@ -31,7 +31,6 @@ public class UnionTypeTest {
     assertThat(PHPLexicalGrammar.UNION_TYPE)
       .matches("int|array")
       .matches("foo|bar|array")
-      .notMatches("int")
-    ;
+      .notMatches("int");
   }
 }

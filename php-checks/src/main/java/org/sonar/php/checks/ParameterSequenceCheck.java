@@ -34,7 +34,6 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-
 @Rule(key = "S2234")
 public class ParameterSequenceCheck extends PHPVisitorCheck {
 
@@ -63,6 +62,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
         .secondary(symbol.location(), SECONDARY_MESSAGE);
     }
   }
+
   private static boolean isWrongParameterSequence(FunctionCallTree call, List<String> parameters) {
     List<String> arguments = CheckUtils.argumentsOfKind(call, Kind.VARIABLE_IDENTIFIER).stream()
       .map(e -> ((VariableIdentifierTree) e).text())

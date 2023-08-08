@@ -48,7 +48,6 @@ public class FunctionDeclarationTest {
       .notMatches("function ABSTRACT() {}")
       .notMatches("function __HALT_COMPILER() {}")
       .notMatches("function abstract() {}")
-      .notMatches("function __halt_compiler() {}")
-    ;
+      .notMatches("function __halt_compiler() {}");
   }
 }

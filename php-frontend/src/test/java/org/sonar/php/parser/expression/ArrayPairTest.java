@@ -36,8 +36,7 @@ public class ArrayPairTest {
       .matches("$a=>&$b")
       .matches("...$a")
       .matches("...getArr()")
-      .notMatches("...&$arr")
-    ;
+      .notMatches("...&$arr");
   }
 
 }

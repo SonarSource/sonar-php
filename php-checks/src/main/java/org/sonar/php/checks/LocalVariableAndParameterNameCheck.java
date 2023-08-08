@@ -78,8 +78,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
       Kind.AND_ASSIGNMENT,
       Kind.XOR_ASSIGNMENT,
       Kind.OR_ASSIGNMENT,
-      Kind.CONCATENATION_ASSIGNMENT
-    ));
+      Kind.CONCATENATION_ASSIGNMENT));
   }
 
   @Override

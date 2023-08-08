@@ -64,5 +64,3 @@ public class LiteralTreeImpl extends PHPTree implements LiteralTree {
     visitor.visitLiteral(this);
   }
 }
-
-

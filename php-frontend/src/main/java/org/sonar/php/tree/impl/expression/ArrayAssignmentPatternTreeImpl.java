@@ -40,8 +40,7 @@ public class ArrayAssignmentPatternTreeImpl extends PHPTree implements ArrayAssi
   public ArrayAssignmentPatternTreeImpl(
     SyntaxToken openBracket,
     ArrayAssignmentPatternElements elements,
-    SyntaxToken closeBracket
-  ) {
+    SyntaxToken closeBracket) {
     this.openBracket = openBracket;
     this.elements = elements;
     this.closeBracket = closeBracket;

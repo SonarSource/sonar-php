@@ -57,7 +57,7 @@ public class ElseIfWithoutElseCheck extends PHPVisitorCheck {
     super.visitIfStatement(tree);
 
     List<ElseifClauseTree> elseifClauses = tree.elseifClauses();
-    // Add all if body statements to  work list
+    // Add all if body statements to work list
     List<StatementTree> conditionBodies = new ArrayList<>(tree.statements());
 
     if (tree.elseClause() == null && !elseifClauses.isEmpty()) {

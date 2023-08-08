@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key="S5708")
+@Rule(key = "S5708")
 public class CatchThrowableCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Change this type to be a class deriving from \"Throwable\".";
   private static final String SECONDARY_MESSAGE = "Class definition.";
@@ -35,10 +35,10 @@ public class CatchThrowableCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCatchBlock(CatchBlockTree tree) {
-    tree.exceptionTypes().stream().
-      filter(type -> !Symbols.getClass(type).is(ClassSymbol.Kind.INTERFACE)).
-      filter(type -> Symbols.getClass(type).isSubTypeOf(THROWABLE_FQN).isFalse()).
-      forEach(this::addIssue);
+    tree.exceptionTypes().stream()
+      .filter(type -> !Symbols.getClass(type).is(ClassSymbol.Kind.INTERFACE))
+      .filter(type -> Symbols.getClass(type).isSubTypeOf(THROWABLE_FQN).isFalse())
+      .forEach(this::addIssue);
     super.visitCatchBlock(tree);
   }
 

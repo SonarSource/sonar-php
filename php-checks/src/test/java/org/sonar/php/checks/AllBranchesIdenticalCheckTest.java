@@ -29,5 +29,4 @@ public class AllBranchesIdenticalCheckTest {
     CheckVerifier.verify(new AllBranchesIdenticalCheck(), "AllBranchesIdenticalCheck.php");
   }
 
-
 }

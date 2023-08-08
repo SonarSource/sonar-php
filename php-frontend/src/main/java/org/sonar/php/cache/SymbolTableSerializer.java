@@ -74,7 +74,7 @@ public class SymbolTableSerializer {
   }
 
   private void write(QualifiedName qualifiedName) throws IOException {
-    if(!(qualifiedName instanceof SymbolQualifiedName)) {
+    if (!(qualifiedName instanceof SymbolQualifiedName)) {
       throw new IllegalStateException("The QualifiedName of type " + qualifiedName.getClass().getSimpleName() + " is not supported");
     }
     writeText(qualifiedName.toString());
@@ -118,7 +118,7 @@ public class SymbolTableSerializer {
 
   private void write(LocationInFile location) throws IOException {
     String filePath = location.filePath();
-    if("[unknown file]".equals(filePath)) {
+    if ("[unknown file]".equals(filePath)) {
       writeText(filePath);
     } else {
       writeText(filePath);
@@ -131,7 +131,7 @@ public class SymbolTableSerializer {
 
   private void write(FunctionSymbolData data) throws IOException {
     if (data instanceof MethodSymbolData) {
-      throw new  IllegalStateException("The FunctionSymbolData of type " + data.getClass().getName() + " is not supported");
+      throw new IllegalStateException("The FunctionSymbolData of type " + data.getClass().getName() + " is not supported");
     }
     write(data.location());
     write(data.qualifiedName());

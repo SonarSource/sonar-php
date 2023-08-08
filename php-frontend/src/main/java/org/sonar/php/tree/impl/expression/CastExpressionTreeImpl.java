@@ -42,8 +42,7 @@ public class CastExpressionTreeImpl extends PHPTree implements CastExpressionTre
     InternalSyntaxToken openParenthesisToken,
     InternalSyntaxToken castType,
     InternalSyntaxToken closeParenthesisToken,
-    ExpressionTree expression
-  ) {
+    ExpressionTree expression) {
     this.openParenthesisToken = openParenthesisToken;
     this.castType = castType;
     this.closeParenthesisToken = closeParenthesisToken;

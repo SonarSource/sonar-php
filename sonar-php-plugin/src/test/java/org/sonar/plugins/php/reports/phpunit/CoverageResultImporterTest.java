@@ -115,7 +115,7 @@ public class CoverageResultImporterTest {
     context.settings().setProperty("sonar.exclusion", "**/IndexControllerTest.php,**/Banana.php");
     executeSensorImporting(getReportFile("phpunit.coverage.xml"));
     assertThat(logTester.logs(Level.WARN)).hasSize(2);
-    verify(analysisWarnings,never()).addWarning(anyString());
+    verify(analysisWarnings, never()).addWarning(anyString());
   }
 
   @Test
@@ -153,6 +153,7 @@ public class CoverageResultImporterTest {
     verify(analysisWarnings, times(1))
       .addWarning(startsWith("Coverage report does not contain any record "));
   }
+
   private void assertReport(String componentKey) {
     // UNCOVERED_LINES is implicitly stored in the NewCoverage
     PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES);

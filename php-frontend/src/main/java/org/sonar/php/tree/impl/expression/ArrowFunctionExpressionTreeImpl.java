@@ -55,8 +55,7 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
     ParameterListTree parameters,
     @Nullable ReturnTypeClauseTree returnTypeClause,
     InternalSyntaxToken doubleArrowToken,
-    ExpressionTree body
-  ) {
+    ExpressionTree body) {
     this.attributeGroups = attributeGroups;
     this.staticToken = staticToken;
     this.fnToken = fnToken;
@@ -119,8 +118,7 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
-      IteratorUtils.iteratorOf(staticToken, fnToken, referenceToken, parameters, returnTypeClause, doubleArrowToken, body)
-    );
+      IteratorUtils.iteratorOf(staticToken, fnToken, referenceToken, parameters, returnTypeClause, doubleArrowToken, body));
   }
 
   @Override

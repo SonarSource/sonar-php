@@ -48,17 +48,15 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
   }
 
   public ForEachStatementTreeImpl(
-      ForEachStatementHeader header, InternalSyntaxToken colonToken,
-      List<StatementTree> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken
-  ) {
+    ForEachStatementHeader header, InternalSyntaxToken colonToken,
+    List<StatementTree> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken) {
     this(Kind.ALTERNATIVE_FOREACH_STATEMENT, header, colonToken, statements, endForEachToken, eosToken);
   }
 
   private ForEachStatementTreeImpl(
-      Kind kind,
-      ForEachStatementHeader header, @Nullable InternalSyntaxToken colonToken,
-      List<StatementTree> statements, @Nullable InternalSyntaxToken endForEachToken, @Nullable InternalSyntaxToken eosToken
-  ) {
+    Kind kind,
+    ForEachStatementHeader header, @Nullable InternalSyntaxToken colonToken,
+    List<StatementTree> statements, @Nullable InternalSyntaxToken endForEachToken, @Nullable InternalSyntaxToken eosToken) {
     this.header = header;
     this.colonToken = colonToken;
     this.statements = statements;
@@ -166,10 +164,9 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
     private final InternalSyntaxToken closeParenthesisToken;
 
     public ForEachStatementHeader(
-        InternalSyntaxToken foreachToken, InternalSyntaxToken openParenthesisToken,
-        ExpressionTree expression, InternalSyntaxToken asToken, ExpressionTree key, InternalSyntaxToken doubleArrowToken, ExpressionTree value,
-        InternalSyntaxToken closeParenthesisToken
-    ) {
+      InternalSyntaxToken foreachToken, InternalSyntaxToken openParenthesisToken,
+      ExpressionTree expression, InternalSyntaxToken asToken, ExpressionTree key, InternalSyntaxToken doubleArrowToken, ExpressionTree value,
+      InternalSyntaxToken closeParenthesisToken) {
       this.foreachToken = foreachToken;
       this.openParenthesisToken = openParenthesisToken;
       this.expression = expression;

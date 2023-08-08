@@ -76,7 +76,6 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
       tokenVisitor.nextToken(tree.openCurlyBraceToken()));
   }
 
-
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     super.visitFunctionDeclaration(tree);
@@ -105,8 +104,7 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
         tree.openCurlyBraceToken(),
         tree.closeCurlyBraceToken(),
         tokenVisitor.prevToken(tree.openCurlyBraceToken()),
-        tokenVisitor.nextToken(tree.openCurlyBraceToken())
-      );
+        tokenVisitor.nextToken(tree.openCurlyBraceToken()));
     }
   }
 
@@ -215,7 +213,7 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
 
   private void checkBlock(Tree body, SyntaxToken prevToken) {
     if (body.is(Kind.BLOCK)) {
-      BlockTree blockTree = (BlockTree)body;
+      BlockTree blockTree = (BlockTree) body;
       SyntaxToken nextToken = getFirstToken(blockTree.statements());
       if (nextToken == null) {
         nextToken = blockTree.closeCurlyBraceToken();

@@ -54,9 +54,8 @@ public class NamespaceStatementTreeImpl extends PHPTree implements NamespaceStat
   }
 
   public NamespaceStatementTreeImpl(
-      InternalSyntaxToken namespaceToken, @Nullable NamespaceNameTree namespaceName,
-      InternalSyntaxToken openCurlyBrace, List<StatementTree> statements, InternalSyntaxToken closeCurlyBrace
-  ) {
+    InternalSyntaxToken namespaceToken, @Nullable NamespaceNameTree namespaceName,
+    InternalSyntaxToken openCurlyBrace, List<StatementTree> statements, InternalSyntaxToken closeCurlyBrace) {
     this.namespaceToken = namespaceToken;
     this.namespaceName = namespaceName;
     this.openCurlyBrace = openCurlyBrace;
@@ -110,8 +109,7 @@ public class NamespaceStatementTreeImpl extends PHPTree implements NamespaceStat
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(namespaceToken, namespaceName, openCurlyBrace),
       statements.iterator(),
-      IteratorUtils.iteratorOf(closeCurlyBrace, eosToken)
-    );
+      IteratorUtils.iteratorOf(closeCurlyBrace, eosToken));
   }
 
   @Override

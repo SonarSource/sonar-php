@@ -44,8 +44,7 @@ public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceT
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken insteadOfToken,
     SeparatedListImpl<NamespaceNameTree> traits,
-    InternalSyntaxToken eosToken
-    ) {
+    InternalSyntaxToken eosToken) {
     this.methodReference = methodReference;
     this.insteadOfToken = insteadOfToken;
     this.traits = traits;

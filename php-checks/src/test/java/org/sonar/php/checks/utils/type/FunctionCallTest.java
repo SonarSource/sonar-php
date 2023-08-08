@@ -32,11 +32,11 @@ public class FunctionCallTest {
   @Test
   public void test() {
     CompilationUnitTree unit = (CompilationUnitTree) TreeValuesTest.PARSER.parse("<?php " +
-      /* expr0 */ "m();" +
-      /* expr1 */ "$x->m();" +
-      /* expr2 */ "NULL;" +
-      /* expr3 */ "$x->$var();" +
-      /* expr4 */ "AClass::m();");
+    /* expr0 */ "m();" +
+    /* expr1 */ "$x->m();" +
+    /* expr2 */ "NULL;" +
+    /* expr3 */ "$x->$var();" +
+    /* expr4 */ "AClass::m();");
     SymbolTable symbolTable = SymbolTableImpl.create(unit);
     TreeValues expr0 = TreeValues.of(expression(unit, 0), symbolTable);
     TreeValues expr1 = TreeValues.of(expression(unit, 1), symbolTable);

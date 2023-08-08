@@ -45,11 +45,10 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
   private final InternalSyntaxToken eosToken;
 
   private ForStatementTreeImpl(
-      Kind kind,
-      ForStatementHeader header,
-      @Nullable InternalSyntaxToken colonToken, List<StatementTree> statements,
-      @Nullable InternalSyntaxToken endForToken, @Nullable InternalSyntaxToken eosToken
-  ) {
+    Kind kind,
+    ForStatementHeader header,
+    @Nullable InternalSyntaxToken colonToken, List<StatementTree> statements,
+    @Nullable InternalSyntaxToken endForToken, @Nullable InternalSyntaxToken eosToken) {
     this.header = header;
     this.colonToken = colonToken;
     this.endForToken = endForToken;
@@ -60,15 +59,14 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
   }
 
   public ForStatementTreeImpl(
-      ForStatementHeader header, InternalSyntaxToken colonToken,
-      List<StatementTree> statements,
-      InternalSyntaxToken endForToken, InternalSyntaxToken eosToken
-  ) {
+    ForStatementHeader header, InternalSyntaxToken colonToken,
+    List<StatementTree> statements,
+    InternalSyntaxToken endForToken, InternalSyntaxToken eosToken) {
     this(Kind.ALTERNATIVE_FOR_STATEMENT, header, colonToken, statements, endForToken, eosToken);
   }
 
   public ForStatementTreeImpl(ForStatementHeader header, StatementTree statement) {
-    this(Kind.FOR_STATEMENT, header, null, Collections.singletonList(statement), null,  null);
+    this(Kind.FOR_STATEMENT, header, null, Collections.singletonList(statement), null, null);
   }
 
   @Override
@@ -173,11 +171,10 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
     private final InternalSyntaxToken closeParenthesisToken;
 
     public ForStatementHeader(
-        InternalSyntaxToken forToken, InternalSyntaxToken openParenthesisToken,
-        SeparatedListImpl<ExpressionTree> init, InternalSyntaxToken firstSemicolonToken,
-        SeparatedListImpl<ExpressionTree> condition, InternalSyntaxToken secondSemicolonToken,
-        SeparatedListImpl<ExpressionTree> update, InternalSyntaxToken closeParenthesisToken
-    ) {
+      InternalSyntaxToken forToken, InternalSyntaxToken openParenthesisToken,
+      SeparatedListImpl<ExpressionTree> init, InternalSyntaxToken firstSemicolonToken,
+      SeparatedListImpl<ExpressionTree> condition, InternalSyntaxToken secondSemicolonToken,
+      SeparatedListImpl<ExpressionTree> update, InternalSyntaxToken closeParenthesisToken) {
       this.forToken = forToken;
       this.openParenthesisToken = openParenthesisToken;
       this.init = init;

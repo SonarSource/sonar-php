@@ -65,9 +65,9 @@ public class DisableCsrfCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     Call call = new Call(tree, context());
     if (call.hasName("createForm") && call.inClass(SYMFONY_ABSTRACT_CONTROLLER, SYMFONY_CONTROLLER)) {
-      call.argument( "options", 2).ifPresent(this::checkCsrfInSymfonyOptions);
+      call.argument("options", 2).ifPresent(this::checkCsrfInSymfonyOptions);
     } else if (call.hasName("setDefaults") && call.inClass(SYMFONY_ABSTRACT_TYPE)) {
-      call.argument( "defaults", 0).ifPresent(this::checkCsrfInSymfonyOptions);
+      call.argument("defaults", 0).ifPresent(this::checkCsrfInSymfonyOptions);
     } else if (call.inPath("config/packages")) {
       checkCsrfInSymfonyConfig(call);
     } else if (call.hasName("prependExtensionConfig") || call.hasName("loadFromExtension")) {
@@ -172,7 +172,7 @@ public class DisableCsrfCheck extends PHPVisitorCheck {
     }
   }
 
-  private static class Call extends Component{
+  private static class Call extends Component {
     CheckContext context;
 
     public Call(FunctionCallTree tree, CheckContext context) {

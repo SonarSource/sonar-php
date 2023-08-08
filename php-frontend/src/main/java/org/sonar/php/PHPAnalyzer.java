@@ -70,12 +70,12 @@ public class PHPAnalyzer {
   private SymbolTable currentFileSymbolTable;
 
   public PHPAnalyzer(List<PHPCheck> checks,
-                     List<PHPCheck> testFileChecks,
-                     @Nullable File workingDir,
-                     ProjectSymbolData projectSymbolData,
-                     DurationStatistics statistics,
-                     @Nullable CacheContext cacheContext,
-                     SuppressWarningFilter suppressWarningFilter) {
+    List<PHPCheck> testFileChecks,
+    @Nullable File workingDir,
+    ProjectSymbolData projectSymbolData,
+    DurationStatistics statistics,
+    @Nullable CacheContext cacheContext,
+    SuppressWarningFilter suppressWarningFilter) {
     this.checks = checks;
     this.testFileChecks = testFileChecks;
     this.workingDir = workingDir;
@@ -99,7 +99,7 @@ public class PHPAnalyzer {
     List<PhpIssue> allIssues = new ArrayList<>();
     for (PHPCheck check : checks) {
       PHPCheckContext context = new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable);
-      List<PhpIssue> issues = statistics.time( check.getClass().getSimpleName(), () -> {
+      List<PhpIssue> issues = statistics.time(check.getClass().getSimpleName(), () -> {
         try {
           return check.analyze(context);
         } catch (StackOverflowError e) {

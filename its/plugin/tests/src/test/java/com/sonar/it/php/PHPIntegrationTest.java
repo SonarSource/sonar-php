@@ -89,9 +89,11 @@ public class PHPIntegrationTest {
     assertThat(getFileMeasureAsDouble("classes")).isEqualTo(1d);
     assertThat(getFileMeasureAsDouble("functions")).isEqualTo(3d);
     assertThat(lineNumbersInDataMeasure(getFileMeasure("ncloc_data").getValue()))
-      .isEqualTo(lineNumbersInDataMeasure("12=1;14=1;15=1;16=1;17=1;18=1;19=1;20=1;21=1;28=1;29=1;30=1;31=1;32=1;33=1;35=1;36=1;37=1;38=1;39=1;40=1;42=1;43=1;44=1;46=1;48=1;49=1;50=1;52=1;54=1;55=1;56=1;58=1;60=1;61=1;62=1;63=1;64=1;65=1;68=1;69=1;71=1;72=1;73=1;75=1;77=1;78=1;80=1;81=1;82=1;83=1;85=1;86=1;87=1;88=1;89=1"));
+      .isEqualTo(lineNumbersInDataMeasure(
+        "12=1;14=1;15=1;16=1;17=1;18=1;19=1;20=1;21=1;28=1;29=1;30=1;31=1;32=1;33=1;35=1;36=1;37=1;38=1;39=1;40=1;42=1;43=1;44=1;46=1;48=1;49=1;50=1;52=1;54=1;55=1;56=1;58=1;60=1;61=1;62=1;63=1;64=1;65=1;68=1;69=1;71=1;72=1;73=1;75=1;77=1;78=1;80=1;81=1;82=1;83=1;85=1;86=1;87=1;88=1;89=1"));
     assertThat(lineNumbersInDataMeasure(getFileMeasure("executable_lines_data").getValue()))
-      .isEqualTo(lineNumbersInDataMeasure("68=1;69=1;71=1;72=1;75=1;77=1;82=1;87=1;32=1;33=1;35=1;36=1;37=1;38=1;39=1;40=1;42=1;43=1;46=1;48=1;49=1;52=1;54=1;55=1;58=1;60=1;61=1;63=1"));
+      .isEqualTo(
+        lineNumbersInDataMeasure("68=1;69=1;71=1;72=1;75=1;77=1;82=1;87=1;32=1;33=1;35=1;36=1;37=1;38=1;39=1;40=1;42=1;43=1;46=1;48=1;49=1;52=1;54=1;55=1;58=1;60=1;61=1;63=1"));
     assertThat(getFileMeasureAsDouble("lines_to_cover")).isEqualTo(28d);
     assertThat(getFileMeasureAsDouble("uncovered_lines")).isEqualTo(28d);
 

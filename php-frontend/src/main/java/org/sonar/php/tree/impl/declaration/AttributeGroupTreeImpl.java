@@ -45,8 +45,7 @@ public class AttributeGroupTreeImpl extends PHPTree implements AttributeGroupTre
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(startToken),
       attributes.elementsAndSeparators(),
-      IteratorUtils.iteratorOf(endToken)
-    );
+      IteratorUtils.iteratorOf(endToken));
   }
 
   @Override

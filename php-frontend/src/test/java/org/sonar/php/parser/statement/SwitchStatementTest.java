@@ -34,7 +34,6 @@ public class SwitchStatementTest {
       .matches("switch ($a): endswitch;")
       .matches("switch ($a): ; endswitch;")
 
-      .matches("switch ($a) { case $a : default : }")
-    ;
+      .matches("switch ($a) { case $a : default : }");
   }
 }

@@ -86,19 +86,19 @@ public class UsagesTest extends ParsingTestUtils {
         }
 
       } else if (tree.is(Tree.Kind.CLASS_DECLARATION)) {
-        String className = ((ClassDeclarationTree)tree).name().text();
+        String className = ((ClassDeclarationTree) tree).name().text();
         if ("A".equals(className)) {
           test_class(scope);
         }
       } else if (tree.is(Tree.Kind.METHOD_DECLARATION)) {
-        String methodName = ((MethodDeclarationTree)tree).name().text();
+        String methodName = ((MethodDeclarationTree) tree).name().text();
         if ("method".equals(methodName)) {
           test_method(scope);
         } else if ("__construct".equals(methodName)) {
           test_anonymous_class_method(scope);
         }
       } else if (tree.is(Tree.Kind.ANONYMOUS_CLASS)) {
-        if (((AnonymousClassTree)tree).arguments().size() == 2) {
+        if (((AnonymousClassTree) tree).arguments().size() == 2) {
           test_anonymous_class(scope);
         }
       }
@@ -191,7 +191,5 @@ public class UsagesTest extends ParsingTestUtils {
     }
     throw new IllegalStateException();
   }
-
-
 
 }

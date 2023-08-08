@@ -92,8 +92,8 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
-    if (isInstantiationOf(tree, SYMFONY_FILE_CONSTRAINT) && ((FunctionCallTree)tree.expression()).callArguments().size() == 1) {
-      checkSymfonyFileConstraint(((FunctionCallTree)tree.expression()).callArguments().get(0).value());
+    if (isInstantiationOf(tree, SYMFONY_FILE_CONSTRAINT) && ((FunctionCallTree) tree.expression()).callArguments().size() == 1) {
+      checkSymfonyFileConstraint(((FunctionCallTree) tree.expression()).callArguments().get(0).value());
     }
     super.visitNewExpression(tree);
   }
@@ -134,7 +134,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
       return;
     }
 
-    getLaravelFileValidations((ArrayInitializerTree)tree)
+    getLaravelFileValidations((ArrayInitializerTree) tree)
       .filter(v -> v.isMaxHigher(fileUploadSizeLimit))
       .forEach(v -> context().newIssue(this, v.definition, MESSAGE));
   }
@@ -209,7 +209,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
       if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
         Collections.addAll(validationValues, CheckUtils.trimQuotes((LiteralTree) tree).split("\\|"));
       } else if (tree.is(ARRAY)) {
-        validationValues = ((ArrayInitializerTree)tree).arrayPairs().stream()
+        validationValues = ((ArrayInitializerTree) tree).arrayPairs().stream()
           .map(ArrayPairTree::value)
           .filter(v -> v.is(Tree.Kind.REGULAR_STRING_LITERAL))
           .map(v -> CheckUtils.trimQuotes((LiteralTree) v))
@@ -268,7 +268,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
     long setBytes = 0;
 
     if (sizeValue.is(Tree.Kind.NUMERIC_LITERAL, Tree.Kind.REGULAR_STRING_LITERAL)) {
-      Matcher matcher = SIZE_FORMAT.matcher(sizeValue.is(Tree.Kind.REGULAR_STRING_LITERAL) ? CheckUtils.trimQuotes((LiteralTree) sizeValue) : ((LiteralTree)sizeValue).value());
+      Matcher matcher = SIZE_FORMAT.matcher(sizeValue.is(Tree.Kind.REGULAR_STRING_LITERAL) ? CheckUtils.trimQuotes((LiteralTree) sizeValue) : ((LiteralTree) sizeValue).value());
       if (!matcher.matches()) {
         return;
       }
@@ -303,7 +303,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
 
   private boolean isInstantiationOf(NewExpressionTree tree, QualifiedName name) {
     ExpressionTree expression = tree.expression();
-    if (!expression.is(Tree.Kind.FUNCTION_CALL) || !((FunctionCallTree)expression).callee().is(Tree.Kind.NAMESPACE_NAME)) {
+    if (!expression.is(Tree.Kind.FUNCTION_CALL) || !((FunctionCallTree) expression).callee().is(Tree.Kind.NAMESPACE_NAME)) {
       return false;
     }
 

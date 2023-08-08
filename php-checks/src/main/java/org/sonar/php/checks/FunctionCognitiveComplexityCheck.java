@@ -68,10 +68,9 @@ public class FunctionCognitiveComplexityCheck extends PHPVisitorCheck {
       int cost = complexity.getValue() - threshold;
       PreciseIssue issue = context().newIssue(this, (functionTree).functionToken(), message).cost(cost);
 
-      complexity.getComplexityComponents().forEach(complexityComponent ->
-        issue.secondary(
-          complexityComponent.tree(),
-          secondaryMessage(complexityComponent.addedComplexity())));
+      complexity.getComplexityComponents().forEach(complexityComponent -> issue.secondary(
+        complexityComponent.tree(),
+        secondaryMessage(complexityComponent.addedComplexity())));
     }
   }
 
@@ -79,7 +78,7 @@ public class FunctionCognitiveComplexityCheck extends PHPVisitorCheck {
     if (complexity == 1) {
       return "+1";
 
-    } else{
+    } else {
       return String.format("+%s (incl. %s for nesting)", complexity, complexity - 1);
     }
   }

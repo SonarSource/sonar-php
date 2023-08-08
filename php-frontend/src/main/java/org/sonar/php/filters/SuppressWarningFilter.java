@@ -48,8 +48,8 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
   private final SuppressedWarnings suppressedWarnings = new SuppressedWarnings();
 
   private static final String ARGUMENT_FORMAT = "\"[a-zA-Z0-9:]++\"";
-  private static final String ARGUMENTS_FORMAT = ARGUMENT_FORMAT + "(?:\\s*+,\\s*+"+ARGUMENT_FORMAT+")*+";
-  private static final Pattern SUPPRESS_WARNING_COMMENT_PATTERN = Pattern.compile("@SuppressWarnings\\s*+\\(\\s*+(?<arguments>"+ARGUMENTS_FORMAT+")\\s*+\\)");
+  private static final String ARGUMENTS_FORMAT = ARGUMENT_FORMAT + "(?:\\s*+,\\s*+" + ARGUMENT_FORMAT + ")*+";
+  private static final Pattern SUPPRESS_WARNING_COMMENT_PATTERN = Pattern.compile("@SuppressWarnings\\s*+\\(\\s*+(?<arguments>" + ARGUMENTS_FORMAT + ")\\s*+\\)");
 
   public void reset() {
     suppressedWarnings.clear();
@@ -156,7 +156,7 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
 
   private static String stripDoubleQuotes(String str) {
     if (str.startsWith("\"") && str.endsWith("\"")) {
-      return str.substring(1, str.length()-1);
+      return str.substring(1, str.length() - 1);
     }
     return str;
   }

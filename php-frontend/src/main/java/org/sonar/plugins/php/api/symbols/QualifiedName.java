@@ -33,7 +33,6 @@ public interface QualifiedName {
    */
   String simpleName();
 
-
   static QualifiedName qualifiedName(String qualifiedNameString) {
     return SymbolQualifiedName.qualifiedName(qualifiedNameString);
   }

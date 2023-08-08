@@ -107,8 +107,7 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
       tree.modifierTokens().get(0),
       tree.typeAnnotation(),
       tree.declarations().get(0),
-      tree.eosToken()
-    );
+      tree.eosToken());
   }
 
   @Test

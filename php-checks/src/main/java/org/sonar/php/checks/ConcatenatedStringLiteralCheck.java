@@ -39,7 +39,6 @@ public class ConcatenatedStringLiteralCheck extends PHPVisitorCheck {
     Kind.EXPANDABLE_STRING_LITERAL
   };
 
-
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
     List<ExpressionTree> arguments = getFlatConcatenationArguments(tree);

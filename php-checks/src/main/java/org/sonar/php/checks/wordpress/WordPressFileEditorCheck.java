@@ -27,7 +27,7 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-@Rule(key="S6341")
+@Rule(key = "S6341")
 public class WordPressFileEditorCheck extends WordPressConfigVisitor {
 
   private static final String MESSAGE = "Plugin and theme files editor is active";
