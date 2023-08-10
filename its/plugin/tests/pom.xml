@@ -24,17 +24,23 @@
       <artifactId>sonar-orchestrator</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-ws</artifactId>
+      <version>${version.sonar}</version>
+    </dependency>
+    <dependency>
       <groupId>org.sonarsource.sonarlint.core</groupId>
       <artifactId>sonarlint-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.protobuf</groupId>
+          <artifactId>protobuf-java</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.sonarlint.core</groupId>
       <artifactId>sonarlint-plugin-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-ws</artifactId>
-      <version>${version.sonar}</version>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.api.plugin</groupId>
