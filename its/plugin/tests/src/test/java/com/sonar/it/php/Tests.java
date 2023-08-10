@@ -25,14 +25,6 @@ import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.container.Server;
 import com.sonar.orchestrator.locator.FileLocation;
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import javax.annotation.CheckForNull;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -42,11 +34,17 @@ import org.sonarqube.ws.Measures;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.WsClient;
 import org.sonarqube.ws.client.WsClientFactories;
-import org.sonarqube.ws.client.ce.CeService;
 import org.sonarqube.ws.client.ce.TaskRequest;
 import org.sonarqube.ws.client.components.TreeRequest;
 import org.sonarqube.ws.client.issues.SearchRequest;
 import org.sonarqube.ws.client.measures.ComponentRequest;
+import javax.annotation.CheckForNull;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,7 +89,7 @@ public class Tests {
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
       // Custom rules plugin
-      .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
+      //.addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"));
@@ -132,31 +130,10 @@ public class Tests {
   @CheckForNull
   static Components.Component getComponent(String projectKey, String componentKey) {
     List<Components.Component> components = newWsClient().components().tree(new TreeRequest()
-      .setComponent(projectKey)
-      .setQ(componentKey))
+        .setComponent(projectKey)
+        .setQ(componentKey))
       .getComponentsList();
     return components.size() == 1 ? components.get(0) : null;
-  }
-
-  /**
-   * Extract analysis warnings from component task to evaluate if expected warnings are send to the server
-   */
-  static List<String> getAnalysisWarnings(BuildResult result) {
-    String taskId = getTaskId(result);
-    if (taskId == null) {
-      throw new RuntimeException("Task id can not be processed from BuildResult");
-    }
-    CeService service = newWsClient().ce();
-    return service.task(TASK_REQUEST.setId(taskId)).getTask().getWarningsList();
-  }
-
-  @CheckForNull
-  static String getTaskId(BuildResult result) {
-    Matcher m = TASK_ID_PATTERN.matcher(result.getLogs());
-    if (m.find()) {
-      return m.group(1);
-    }
-    return null;
   }
 
   static WsClient newWsClient() {
@@ -182,6 +159,13 @@ public class Tests {
   public static void executeBuildWithExpectedWarnings(Orchestrator orchestrator, SonarScanner build) {
     BuildResult result = orchestrator.executeBuild(build);
     assertAnalyzerLogs(result.getLogs());
+  }
+
+  static void assertNumberOfWarnings(String logs, int expectedWarnings) {
+    List<String> lines = Arrays.asList(logs.split("[\r\n]+"));
+    long numberOfWarnings = lines.stream().filter(line -> line.startsWith("WARN")).count();
+
+    assertThat(numberOfWarnings).isEqualTo(expectedWarnings);
   }
 
   private static void assertAnalyzerLogs(String logs) {
