@@ -62,6 +62,8 @@
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
+            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+            <reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
             <includes>
               <include>com/sonar/it/php/Tests.java</include>
             </includes>
