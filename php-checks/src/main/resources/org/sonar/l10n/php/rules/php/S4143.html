@@ -1,8 +1,10 @@
 <h2>Why is this an issue?</h2>
-<p>It is highly suspicious when a value is saved for a key or index and then unconditionally overwritten. Such replacements are likely errors.</p>
-<h3>Noncompliant code example</h3>
+<p>Storing a value inside a collection at a given key or index and then unconditionally overwriting it without reading the initial value is a case of
+a "dead store".</p>
 <pre>
 $someArray[1] = "someValue";
-$someArray[1] = "someOtherValue"; // The intention here was probably to write to another array key.
+$someArray[1] = "someOtherValue"; // Noncompliant
 </pre>
+<p>This practice is redundant and will cause confusion for the reader. More importantly, it is often an error and not what the developer intended to
+do.</p>
 

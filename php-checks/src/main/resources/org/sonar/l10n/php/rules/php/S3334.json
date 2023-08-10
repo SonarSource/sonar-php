@@ -1,6 +1,12 @@
 {
   "title": "\"allow_url_fopen\" and \"allow_url_include\" should be disabled",
   "type": "VULNERABILITY",
+  "code": {
+    "impacts": {
+      "SECURITY": "HIGH"
+    },
+    "attribute": "COMPLETE"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

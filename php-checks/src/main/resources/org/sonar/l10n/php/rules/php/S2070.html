@@ -1,3 +1,4 @@
+<p>This rule is deprecated; use {rule:php:S4790} instead.</p>
 <h2>Why is this an issue?</h2>
 <p>The MD5 algorithm and its successor, SHA-1, are no longer considered secure, because it is too easy to create hash collisions with them. That is,
 it takes too little computational effort to come up with a different input that produces the same MD5 or SHA-1 hash, and using the new, same-hash
@@ -25,6 +26,4 @@ if (sha1($password) === 'd0be2dc421be4fcd0172e5afceea3970e2f3d940') { // Noncomp
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
   <li> <a href="https://shattered.io/">SHAttered</a> - The first concrete collision attack against SHA-1. </li>
 </ul>
-<h2>Deprecated</h2>
-<p>This rule is deprecated; use {rule:php:S4790} instead.</p>
 

@@ -1,6 +1,12 @@
 {
   "title": "Assertions should not be made at the end of blocks expecting an exception",
   "type": "BUG",
+  "code": {
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    },
+    "attribute": "TESTED"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

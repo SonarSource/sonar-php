@@ -1,6 +1,12 @@
 {
   "title": "Local variables should not have the same name as class fields",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "CLEAR"
+  },
   "status": "deprecated",
   "remediation": {
     "func": "Constant\/Issue",

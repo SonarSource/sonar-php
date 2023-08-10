@@ -1,6 +1,12 @@
 {
   "title": "\"\u003c?php\" and \"\u003c?\u003d\" tags should be used",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    },
+    "attribute": "CONVENTIONAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

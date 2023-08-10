@@ -1,32 +1,63 @@
+<p>This vulnerability makes it possible that the cleartext of the encrypted message might be recoverable without prior knowledge of the key.</p>
 <h2>Why is this an issue?</h2>
-<p><a href="https://en.wikipedia.org/wiki/Strong_cryptography">Strong cipher algorithms</a> are cryptographic systems resistant to cryptanalysis, they
-are not vulnerable to well-known attacks like brute force attacks for example.</p>
-<p>A general recommendation is to only use cipher algorithms intensively tested and promoted by the cryptographic community.</p>
-<p>More specifically for block cipher, it’s not recommended to use algorithm with a block size inferior than 128 bits.</p>
-<h3>Noncompliant code example</h3>
-<pre>
-&lt;?php
-// mcrypt_encrypt is deprecated since PHP 7.1
-$c1 = mcrypt_encrypt(MCRYPT_DES, $key, $plaintext, $mode);  // Noncompliant: DES works with 56-bit keys allow attacks via exhaustive search
-$c2 = mcrypt_encrypt(MCRYPT_DES_COMPAT, $key, $plaintext, $mode); // Noncompliant: DES works with 56-bit keys allow attacks via exhaustive search
-$c3 = mcrypt_encrypt(MCRYPT_TRIPLEDES, $key, $plaintext, $mode) // Noncompliant: Triple DES is vulnerable to meet-in-the-middle attack
-$c4 = mcrypt_encrypt(MCRYPT_3DES, $key, $plaintext, $mode);  // Noncompliant: Triple DES is vulnerable to meet-in-the-middle attack
-$c5 = mcrypt_encrypt(MCRYPT_BLOWFISH, $key, $plaintext, $mode);  // Noncompliant: Blowfish use a 64-bit block size makes it vulnerable to birthday attacks
-$c6 = mcrypt_encrypt(MCRYPT_RC2, $key, $plaintext, $mode);  // Noncompliant: RC2 is vulnerable to a related-key attack
-$c7 = mcrypt_encrypt(MCRYPT_RC4, $key, $plaintext, $mode);  // Noncompliant: vulnerable to several attacks (see https://en.wikipedia.org/wiki/RC4#Security)
-
-$c8 = openssl_encrypt($plaintext, "bf-ecb", $key, $options=OPENSSL_RAW_DATA, $iv); // Noncompliant: Blowfish use a 64-bit block size makes it vulnerable to birthday attacks
-$c9 = openssl_encrypt($plaintext, "des-ede3", $key, $options=OPENSSL_RAW_DATA, $iv);  // Noncompliant: Triple DES is vulnerable to meet-in-the-middle attack
-$c10 = openssl_encrypt($plaintext, "des-ofb", $key, $options=OPENSSL_RAW_DATA, $iv);  // Noncompliant: DES works with 56-bit keys allow attacks via exhaustive search
-$c11 = openssl_encrypt($plaintext, "rc2-cbc", $key, $options=OPENSSL_RAW_DATA, $iv); // Noncompliant: RC2 is vulnerable to a related-key attack
-$c12 = openssl_encrypt($plaintext, "rc4", $key, $options=OPENSSL_RAW_DATA, $iv);  // Noncompliant: vulnerable to several attacks (see https://en.wikipedia.org/wiki/RC4#Security)
+<p>Encryption algorithms are essential for protecting sensitive information and ensuring secure communication in various domains. They are used for
+several important reasons:</p>
+<ul>
+  <li> Confidentiality, privacy, and intellectual property protection. </li>
+  <li> Security during transmission or on storage devices. </li>
+  <li> Data integrity, general trust, and authentication. </li>
+</ul>
+<p>When selecting encryption algorithms, tools, or combinations, you should also consider two things:</p>
+<ol>
+  <li> No encryption is unbreakable. </li>
+  <li> The strength of an encryption algorithm is usually measured by the effort required to crack it within a reasonable time frame. </li>
+</ol>
+<p>For these reasons, as soon as cryptography is included in a project, it is important to choose encryption algorithms that are considered strong and
+secure by the cryptography community.</p>
+<h3>What is the potential impact?</h3>
+<p>The cleartext of an encrypted message might be recoverable. Additionally, it might be possible to modify the cleartext of an encrypted message.</p>
+<p>Below are some real-world scenarios that illustrate some impacts of an attacker exploiting the vulnerability.</p>
+<h4>Theft of sensitive data</h4>
+<p>The encrypted message might contain data that is considered sensitive and should not be known to third parties.</p>
+<p>By using a weak algorithm the likelihood that an attacker might be able to recover the cleartext drastically increases.</p>
+<h4>Additional attack surface</h4>
+<p>By modifying the cleartext of the encrypted message it might be possible for an attacker to trigger other vulnerabilities in the code. Encrypted
+values are often considered trusted, since under normal circumstances it would not be possible for a third party to modify them.</p>
+<h2>How to fix it in Mcrypt</h2>
+<h3>Code examples</h3>
+<p>The following code contains examples of algorithms that are not considered highly resistant to cryptanalysis and thus should be avoided.</p>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+mcrypt_encrypt(MCRYPT_DES, $key, $plaintext, $mode); // Noncompliant
 </pre>
-<h3>Compliant solution</h3>
-<pre>
-&lt;?php
-$c1= openssl_encrypt($plaintext, "aes-256-gcm", $key, $options=OPENSSL_RAW_DATA, $iv); // Compliant
+<h4>Compliant solution</h4>
+<p>Mcrypt is deprecated and should not be used. You can use <a href="https://www.php.net/manual/en/book.sodium.php">Sodium</a> instead.</p>
+<pre data-diff-id="1" data-diff-type="compliant">
+sodium_crypto_aead_aes256gcm_encrypt($plaintext, '', $nonce, $key);
 </pre>
+<h3>How does this work?</h3>
+<h4>Use a secure algorithm</h4>
+<p>It is highly recommended to use an algorithm that is currently considered secure by the cryptographic community. A common choice for such an
+algorithm is the Advanced Encryption Standard (AES).</p>
+<p>For block ciphers, it is not recommended to use algorithms with a block size that is smaller than 128 bits.</p>
+<h2>How to fix it in OpenSSL</h2>
+<h3>Code examples</h3>
+<p>The following code contains examples of algorithms that are not considered highly resistant to cryptanalysis and thus should be avoided.</p>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="11" data-diff-type="noncompliant">
+openssl_encrypt($plaintext, "des-ofb", $key, $options=OPENSSL_RAW_DATA, $iv); // Noncompliant
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="11" data-diff-type="compliant">
+openssl_encrypt($plaintext, "aes-256-gcm", $key, $options=OPENSSL_RAW_DATA, $iv);
+</pre>
+<h3>How does this work?</h3>
+<h4>Use a secure algorithm</h4>
+<p>It is highly recommended to use an algorithm that is currently considered secure by the cryptographic community. A common choice for such an
+algorithm is the Advanced Encryption Standard (AES).</p>
+<p>For block ciphers, it is not recommended to use algorithms with a block size that is smaller than 128 bits.</p>
 <h2>Resources</h2>
+<h3>Standards</h3>
 <ul>
   <li> <a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/">OWASP Top 10 2021 Category A2</a> - Cryptographic Failures </li>
   <li> <a href="https://www.owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data

@@ -1,6 +1,12 @@
 {
   "title": "A subclass should not be in the same \"catch\" clause as a parent class",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    },
+    "attribute": "LOGICAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

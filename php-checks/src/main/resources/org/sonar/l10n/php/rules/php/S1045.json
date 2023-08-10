@@ -1,6 +1,12 @@
 {
   "title": "All \"catch\" blocks should be able to catch exceptions",
   "type": "BUG",
+  "code": {
+    "impacts": {
+      "RELIABILITY": "MEDIUM"
+    },
+    "attribute": "LOGICAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

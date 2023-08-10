@@ -1,3 +1,4 @@
+<p>This rule is deprecated; use {rule:php:S5542} instead.</p>
 <h2>Why is this an issue?</h2>
 <p>Without OAEP in RSA encryption, it takes less work for an attacker to decrypt the data or infer patterns from the ciphertext. This rule logs an
 issue when <code>openssl_public_encrypt</code> is used with one the following padding constants: <code>OPENSSL_NO_PADDING</code> or
@@ -30,6 +31,4 @@ function encrypt($data, $key) {
   <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
   <li> Derived from FindSecBugs rule <a href="https://h3xstream.github.io/find-sec-bugs/bugs.htm#RSA_NO_PADDING">RSA NoPadding Unsafe</a> </li>
 </ul>
-<h2>Deprecated</h2>
-<p>This rule is deprecated; use {rule:php:S5542} instead.</p>
 

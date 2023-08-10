@@ -1,96 +1,18 @@
 <h2>Why is this an issue?</h2>
+<p>Altering or bypassing the accessibility of classes, methods, or fields through reflection violates the encapsulation principle. This can break the
+internal contracts of the accessed target and lead to maintainability issues and runtime errors.</p>
 <p>This rule raises an issue when reflection is used to change the visibility of a class, method or field, and when it is used to directly update a
-field value. Altering or bypassing the accessibility of classes, methods, or fields violates the encapsulation principle and could lead to run-time
-errors.</p>
-<h3>Noncompliant code example</h3>
+field value.</p>
 <pre>
-class MyClass
-{
-    public static $publicstatic = 'Static';
-    private static $privatestatic = 'private Static';
-    private $private = 'Private';
-    private const CONST_PRIVATE = 'Private CONST';
-    public $myfield = 42;
+$reflectionMethod = new ReflectionMethod(MyClass::class, "privateMethode");
+$reflectionMethod-&gt;setAccessible(true);
 
-    private function __construct() {}
-    private function privateMethod() {}
-    public function __set($property, $value)  {}
-    public function __get($property) {}
-}
-
-$clazz = new ReflectionClass('MyClass');
-
-$clazz-&gt;getstaticProperties(); // Noncompliant . This gives access to private static properties
-
-$clazz-&gt;setStaticPropertyValue('publicstatic', '42'); // OK as there is no overloading to bypass and it respects access control.
-$clazz-&gt;getStaticPropertyValue('publicstatic'); // OK as there is no overloading to bypass and it respects access control.
-
-// The following calls can access private or protected constants.
-$clazz-&gt;getConstant('CONST_PRIVATE'); // Noncompliant.
-$clazz-&gt;getConstants(); // Noncompliant.
-$clazz-&gt;getReflectionConstant('CONST_PRIVATE'); // Noncompliant.
-$clazz-&gt;getReflectionConstants(); // Noncompliant.
-
-$obj = $clazz-&gt;newInstanceWithoutConstructor(); // Noncompliant. Bypassing private constructor.
-
-$constructor = $clazz-&gt;getConstructor();
-$constructorClosure = $constructor-&gt;getClosure($obj); // Noncompliant. It is possible to call private methods with closures.
-$constructor-&gt;setAccessible(true); // Noncompliant. Bypassing constructor accessibility.
-
-$prop = new ReflectionProperty('MyClass', 'private');
-$prop-&gt;setAccessible(true); // Noncompliant. Change accessibility of a property.
-$prop-&gt;setValue($obj, "newValue"); // Noncompliant. Bypass of the __set method.
-$prop-&gt;getValue($obj); // Noncompliant. Bypass of the __get method.
-
-$prop2 = $clazz-&gt;getProperties()[2];
-$prop2-&gt;setAccessible(true); // Noncompliant. Change accessibility of a property.
-$prop2-&gt;setValue($obj, "newValue"); // Noncompliant. Bypass of the __set method.
-$prop2-&gt;getValue($obj); // Noncompliant. Bypass of the __get method.
-
-$meth = new ReflectionMethod('MyClass', 'privateMethod');
-$clos = $meth-&gt;getClosure($obj); // Noncompliant. It is possible to call private methods with closures.
-$meth-&gt;setAccessible(true); // Noncompliant. Change accessibility of a method.
-
-$meth2 = $clazz-&gt;getMethods()[0];
-$clos2 = $meth2-&gt;getClosure($obj); // Noncompliant. It is possible to call private methods with closures.
-$meth2-&gt;setAccessible(true); // Noncompliant. Change accessibility of a method.
-
-// Using a ReflectionObject instead of the class
-
-$objr = new ReflectionObject($obj);
-$objr-&gt;newInstanceWithoutConstructor(); // Noncompliant. Bypassing private constructor.
-
-$objr-&gt;getStaticPropertyValue("publicstatic"); // OK as there is no overloading to bypass and it respects access control.
-$objr-&gt;setStaticPropertyValue("publicstatic", "newValue"); // OK as there is no overloading to bypass and it respects access control.
-
-$objr-&gt;getStaticProperties(); // Noncompliant. This gives access to private static properties
-
-// The following calls can access private or protected constants.
-$objr-&gt;getConstant('CONST_PRIVATE'); // Noncompliant.
-$objr-&gt;getConstants(); // Noncompliant.
-$objr-&gt;getReflectionConstant('CONST_PRIVATE'); // Noncompliant.
-$objr-&gt;getReflectionConstants(); // Noncompliant.
-
-$constructor = $objr-&gt;getConstructor();
-$constructorClosure = $constructor-&gt;getClosure($obj); // Noncompliant. It is possible to call private methods with closures.
-$constructor-&gt;setAccessible(true); // Noncompliant. Bypassing constructor accessibility.
-
-$prop3 = $objr-&gt;getProperty('private');
-$prop3-&gt;setAccessible(true); // Noncompliant. Change accessibility of a property.
-$prop3-&gt;setValue($obj, "newValue"); // Noncompliant. Bypass of the __set method.
-$prop3-&gt;getValue($obj); // Noncompliant. Bypass of the __get method.
-
-$prop4 = $objr-&gt;getProperties()[2];
-$prop4-&gt;setAccessible(true); // Noncompliant. Change accessibility of a property.
-$prop4-&gt;setValue($obj, "newValue"); // Noncompliant. Bypass of the __set method.
-$prop4-&gt;getValue($obj); // Noncompliant. Bypass of the __get method.
-
-$meth3 = $objr-&gt;getMethod('privateMethod');
-$clos3 = $meth3-&gt;getClosure($obj); // Noncompliant. It is possible to call private methods with closures.
-$meth3-&gt;setAccessible(true); // Noncompliant. Change accessibility of a method.
-
-$meth4 = $objr-&gt;getMethods()[0];
-$clos4 = $meth4-&gt;getClosure($obj); // Noncompliant. It is possible to call private methods with closures.
-$meth4-&gt;setAccessible(true); // Noncompliant. Change accessibility of a method.
+$reflectionProperty = new ReflectionProperty(MyClass::class, "privateProperty");
+$reflectionProperty-&gt;setAccessible(true);
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://en.wikipedia.org/wiki/Encapsulation_(computer_programming)">Wikipedia definition of Encapsulation</a> </li>
+</ul>
 

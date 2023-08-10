@@ -1,12 +1,19 @@
+<p>This rule raises an issue when a function call result is used, even though the function does not return anything.</p>
 <h2>Why is this an issue?</h2>
 <p>If a function does not return anything, it makes no sense to use its output. Specifically, passing it to another function, or assigning its
 "result" to a variable is probably a bug because such functions return nothing, which is probably not what was intended.</p>
-<h3>Noncompliant code example</h3>
-<pre>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 $result = closedir($dir_handle); // Noncompliant, "closedir" does not return anything.
 </pre>
-<h3>Compliant solution</h3>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 closedir($dir_handle);
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> PHP documentation - <a href="https://www.php.net/manual/en/functions.returning-values.php">Returning values</a> </li>
+</ul>
 

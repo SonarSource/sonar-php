@@ -1,6 +1,12 @@
 {
   "title": "PHP keywords and constants \"true\", \"false\", \"null\" should be lower case",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    },
+    "attribute": "FORMATTED"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
