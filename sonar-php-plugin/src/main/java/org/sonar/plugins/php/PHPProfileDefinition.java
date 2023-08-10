@@ -27,8 +27,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
@@ -38,7 +38,7 @@ import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
  */
 public final class PHPProfileDefinition implements BuiltInQualityProfilesDefinition {
 
-  private static final Logger LOG = Loggers.get(PHPProfileDefinition.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PHPProfileDefinition.class);
 
   public static final String SONAR_WAY_PROFILE = "Sonar way";
   public static final String SONAR_WAY_PATH = "org/sonar/l10n/php/rules/php/Sonar_way_profile.json";
@@ -63,13 +63,13 @@ public final class PHPProfileDefinition implements BuiltInQualityProfilesDefinit
       return ruleKeys.stream().map(k -> RuleKey.of(repositoryKey, k)).collect(Collectors.toSet());
 
     } catch (ClassNotFoundException e) {
-      LOG.debug("com.sonar.plugins.security.api.PhpRules is not found, " + securityRuleMessage(e));
+      LOG.debug("com.sonar.plugins.security.api.PhpRules is not found, {}", securityRuleMessage(e));
     } catch (NoSuchMethodException e) {
-      LOG.debug("Method not found on com.sonar.plugins.security.api.PhpRules, " + securityRuleMessage(e));
+      LOG.debug("Method not found on com.sonar.plugins.security.api.PhpRules, {}", securityRuleMessage(e));
     } catch (IllegalAccessException e) {
-      LOG.debug("[IllegalAccessException] " + securityRuleMessage(e));
+      LOG.debug("[IllegalAccessException] {}", securityRuleMessage(e));
     } catch (InvocationTargetException e) {
-      LOG.debug("[InvocationTargetException] " + securityRuleMessage(e));
+      LOG.debug("[InvocationTargetException] {}", securityRuleMessage(e));
     }
 
     return new HashSet<>();

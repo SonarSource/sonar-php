@@ -32,8 +32,8 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.symbols.ProjectSymbolData;
@@ -43,7 +43,7 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 
 public class PHPSensor implements Sensor {
 
-  private static final Logger LOG = Loggers.get(PHPSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PHPSensor.class);
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;

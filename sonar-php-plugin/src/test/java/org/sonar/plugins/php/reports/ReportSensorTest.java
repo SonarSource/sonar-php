@@ -38,8 +38,8 @@ import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTester;
+import org.slf4j.event.Level;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -64,9 +64,9 @@ public abstract class ReportSensorTest {
   }
 
   protected static void assertNoErrorWarnDebugLogs(LogTester logTester) {
-    org.assertj.core.api.Assertions.assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    org.assertj.core.api.Assertions.assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty();
-    org.assertj.core.api.Assertions.assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty();
+    org.assertj.core.api.Assertions.assertThat(logTester.logs(Level.ERROR)).isEmpty();
+    org.assertj.core.api.Assertions.assertThat(logTester.logs(Level.WARN)).isEmpty();
+    org.assertj.core.api.Assertions.assertThat(logTester.logs(Level.DEBUG)).isEmpty();
   }
 
   protected List<ExternalIssue> executeSensorImporting(@Nullable String fileName) throws IOException {
@@ -116,7 +116,7 @@ public abstract class ReportSensorTest {
   public void no_issues_with_invalid_report_path() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("invalid-path.txt");
     assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.ERROR)))
+    assertThat(onlyOneLogElement(logTester().logs(Level.ERROR)))
       .startsWith("An error occurred when reading report file '")
       .contains("invalid-path.txt', no issue will be imported from this report.\nThe file was not found.");
 
@@ -128,7 +128,7 @@ public abstract class ReportSensorTest {
   public void no_issues_with_invalid_file() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("not-" + sensor().reportKey() + "-report.json");
     assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.ERROR)))
+    assertThat(onlyOneLogElement(logTester().logs(Level.ERROR)))
       .startsWith("An error occurred when reading report file '")
       .contains("no issue will be imported from this report.\nThe content of the file probably does not have the expected format.");
 

@@ -19,18 +19,12 @@
  */
 package org.sonar.plugins.php;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.slf4j.event.Level;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
@@ -55,9 +49,8 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.api.utils.Version;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.CheckList;
@@ -71,6 +64,13 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.reports.phpunit.PhpUnitSensor;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -91,7 +91,7 @@ import static org.sonar.plugins.php.PhpTestUtils.inputFileHashCacheKey;
 public class PHPSensorTest {
 
   @org.junit.Rule
-  public LogTester logTester = new LogTester();
+  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
 
   private SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
 
@@ -289,7 +289,7 @@ public class PHPSensorTest {
     try (MockedStatic<FileHashingUtils> FileHashingUtilsStaticMock = Mockito.mockStatic(FileHashingUtils.class)) {
       FileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IOException("BOOM!"));
       phpSensor.execute(context);
-      assertThat(logTester.logs(LoggerLevel.DEBUG)).contains("Failed to compute content hash for file moduleKey:PHPSquidSensor.php");
+      assertThat(logTester.logs(Level.DEBUG)).contains("Failed to compute content hash for file moduleKey:PHPSquidSensor.php");
     }
   }
 
@@ -362,7 +362,8 @@ public class PHPSensorTest {
 
   @Test
   public void initAndTerminateMethodCalledOnlyOnce() {
-    PHPCheck check = spy(new PHPVisitorCheck() {});
+    PHPCheck check = spy(new PHPVisitorCheck() {
+    });
 
     addInputFiles(ANALYZED_FILE, "cpd.php", "empty.php");
     createSensor(check).execute(context);
@@ -376,7 +377,7 @@ public class PHPSensorTest {
     PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException());
     addInputFiles(ANALYZED_FILE);
     createSensor(check).execute(context);
-    assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Could not analyse PHPSquidSensor.php");
+    assertThat(logTester.logs(Level.ERROR)).contains("Could not analyse PHPSquidSensor.php");
   }
 
   @Test
@@ -455,7 +456,7 @@ public class PHPSensorTest {
     Collection<Issue> issues = context.allIssues();
     assertThat(issues).hasSize(1);
     Issue issue = issues.iterator().next();
-    assertLocation("Remove or rework this redundant alternative.", 3, 18, 3, 19,   issue.primaryLocation());
+    assertLocation("Remove or rework this redundant alternative.", 3, 18, 3, 19, issue.primaryLocation());
 
     assertThat(issue.flows()).hasSize(1);
     Issue.Flow secondaryFlow = issue.flows().get(0);

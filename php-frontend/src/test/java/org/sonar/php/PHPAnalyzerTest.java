@@ -37,8 +37,8 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.FileLinesContext;
-import org.sonar.api.utils.log.LogTesterJUnit5;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
+import org.slf4j.event.Level;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.filters.SuppressWarningFilter;
@@ -115,8 +115,8 @@ class PHPAnalyzerTest {
     analyzer.nextFile(file);
 
     assertThatExceptionOfType(StackOverflowError.class).isThrownBy(analyzer::analyze);
-    assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
-    assertThat(logTester.logs(LoggerLevel.ERROR).get(0)).startsWith("Stack overflow");
+    assertThat(logTester.logs(Level.ERROR)).hasSize(1);
+    assertThat(logTester.logs(Level.ERROR).get(0)).startsWith("Stack overflow");
   }
 
   @Test
@@ -157,7 +157,7 @@ class PHPAnalyzerTest {
 
     verify(check1).terminate();
     verify(check2).terminate();
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains("An error occurred while trying to terminate checks:");
+    assertThat(logTester.logs(Level.WARN)).contains("An error occurred while trying to terminate checks:");
   }
 
   @Test

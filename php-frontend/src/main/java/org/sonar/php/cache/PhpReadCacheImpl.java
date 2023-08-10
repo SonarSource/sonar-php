@@ -23,13 +23,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.annotation.CheckForNull;
 import org.sonar.api.batch.sensor.cache.ReadCache;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.php.api.cache.PhpReadCache;
 
 public class PhpReadCacheImpl implements PhpReadCache {
 
-  private static final Logger LOG = Loggers.get(PhpReadCacheImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpReadCacheImpl.class);
 
   private final ReadCache readCache;
 
@@ -47,7 +47,7 @@ public class PhpReadCacheImpl implements PhpReadCache {
         LOG.debug("Unable to read data for key: \"{}\"", key);
       }
     } else {
-      LOG.trace(() -> String.format("Cache miss for key '%s'", key));
+      LOG.trace("Cache miss for key '{}'", key);
     }
     return null;
   }

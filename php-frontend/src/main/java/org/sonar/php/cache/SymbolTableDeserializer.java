@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.CheckForNull;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
@@ -40,7 +40,7 @@ import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class SymbolTableDeserializer {
 
-  private static final Logger LOG = Loggers.get(SymbolTableDeserializer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SymbolTableDeserializer.class);
 
   private final VarLengthInputStream in;
   private final VarLengthInputStream stringTableIn;

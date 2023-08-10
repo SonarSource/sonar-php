@@ -19,16 +19,10 @@
  */
 package org.sonar.plugins.php.reports.phpstan;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
@@ -36,10 +30,16 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -55,7 +55,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   protected final PhpStanSensor phpStanSensor = new PhpStanSensor(analysisWarnings);
 
   @Rule
-  public LogTester logTester = new LogTester();
+  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
 
   @Test
   public void test_descriptor() {
@@ -128,6 +128,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
 
     assertNoErrorWarnDebugLogs(logTester);
   }
+
   @Test
   public void issues_when_phpstan_file_with_absolute_windows_paths() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-abs_win.json");
@@ -151,9 +152,9 @@ public class PhpStanSensorTest extends ReportSensorTest {
     TextRange firstTextRange = firstPrimaryLoc.textRange();
     assertThat(firstTextRange).isNull();
 
-    assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.WARN))).startsWith("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report.");
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.DEBUG)))
+    assertThat(logTester.logs(Level.ERROR)).isEmpty();
+    assertThat(onlyOneLogElement(logTester.logs(Level.WARN))).startsWith("Failed to resolve 22 file path(s) in PHPStan phpstan-report-with-error.json report.");
+    assertThat(onlyOneLogElement(logTester.logs(Level.DEBUG)))
       .isEqualTo("Missing information for filePath:'', message:'Parameter $date of method HelloWorld::sayHello() has invalid typehint type DateTimeImutable.'");
 
     verify(analysisWarnings, times(1))
@@ -164,8 +165,8 @@ public class PhpStanSensorTest extends ReportSensorTest {
   public void excluded_files_will_not_be_logged() throws IOException {
     executeSensorImporting("phpstan-report-with-error.json", Map.of("sonar.exclusion", "*/**/notExisting*.php"));
 
-    assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty();
+    assertThat(logTester.logs(Level.ERROR)).isEmpty();
+    assertThat(logTester.logs(Level.WARN)).isEmpty();
     verify(analysisWarnings, never()).addWarning(anyString());
   }
 
@@ -174,10 +175,10 @@ public class PhpStanSensorTest extends ReportSensorTest {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-line-and-message-error.json");
     assertThat(externalIssues).isEmpty();
 
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+    assertThat(onlyOneLogElement(logTester.logs(Level.ERROR)))
       .contains("100 is not a valid line for pointer. File phpstan/file2.php has 10 line(s)");
-    assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty();
-    assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactly(
+    assertThat(logTester.logs(Level.WARN)).isEmpty();
+    assertThat(logTester.logs(Level.DEBUG)).containsExactly(
       "Missing information for filePath:'phpstan/file2.php', message:'null'",
       "Missing information for filePath:'phpstan/file2.php', message:''");
   }
@@ -186,7 +187,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   public void no_object_as_root() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("no-object-as-root.php");
     assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.ERROR)))
+    assertThat(onlyOneLogElement(logTester().logs(Level.ERROR)))
       .startsWith("An error occurred when reading report file '")
       .contains("no issue will be imported from this report.\nThe content of the file probably does not have the expected format.");
   }
@@ -195,7 +196,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   public void report_without_issue() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-no-issue.json");
     assertThat(externalIssues).isEmpty();
-    assertThat(logTester().logs(LoggerLevel.ERROR)).isEmpty();
+    assertThat(logTester().logs(Level.ERROR)).isEmpty();
   }
 
   @Test

@@ -26,8 +26,8 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.php.reports.phpunit.xml.FileNode;
 import org.sonar.plugins.php.reports.phpunit.xml.LineNode;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -35,9 +35,9 @@ import org.sonarsource.analyzer.commons.xml.ParseException;
 
 public class CoverageResultImporter extends PhpUnitReportImporter {
 
-  private static final Logger LOG = Loggers.get(CoverageResultImporter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CoverageResultImporter.class);
 
-  private static final String WRONG_LINE_EXCEPTION_MESSAGE = "Line with number %s doesn't belong to file %s";
+  private static final String WRONG_LINE_EXCEPTION_MESSAGE = "Line with number {} doesn't belong to file {}";
   private static final String COVERAGE_REPORT_DOES_NOT_CONTAIN_ANY_RECORD = "Coverage report does not contain any record in file %s";
 
   private final CoverageFileParserForPhpUnit parser = new CoverageFileParserForPhpUnit();
@@ -89,7 +89,8 @@ public class CoverageResultImporter extends PhpUnitReportImporter {
         if (lineNum > 0 && lineNum <= inputFile.lines()) {
           newCoverage.lineHits(line.getNum(), line.getCount());
         } else {
-          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, inputFile.filename()));
+          String filename = inputFile.filename();
+          LOG.warn(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, filename);
         }
       }
     }

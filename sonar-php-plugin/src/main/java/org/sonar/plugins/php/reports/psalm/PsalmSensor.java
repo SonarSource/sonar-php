@@ -24,8 +24,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
@@ -33,7 +33,7 @@ import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseExcepti
 
 public class PsalmSensor extends ExternalIssuesSensor {
 
-  private static final Logger LOG = Loggers.get(PsalmSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PsalmSensor.class);
 
   public static final String PSALM_REPORT_KEY = "psalm";
   public static final String PSALM_REPORT_NAME = "Psalm";

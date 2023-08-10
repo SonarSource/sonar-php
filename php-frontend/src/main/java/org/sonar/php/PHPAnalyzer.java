@@ -30,8 +30,8 @@ import javax.annotation.Nullable;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.FileLinesContext;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.metrics.CommentLineVisitor;
@@ -51,7 +51,7 @@ import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class PHPAnalyzer {
-  private static final Logger LOG = Loggers.get(PHPAnalyzer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PHPAnalyzer.class);
 
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
   private final List<PHPCheck> checks;

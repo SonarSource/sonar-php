@@ -23,13 +23,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.CheckForNull;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.metrics.CpdVisitor;
 
 public class CpdDeserializer {
 
-  private static final Logger LOG = Loggers.get(CpdDeserializer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CpdDeserializer.class);
 
   private final VarLengthInputStream in;
   private final VarLengthInputStream stringTableIn;

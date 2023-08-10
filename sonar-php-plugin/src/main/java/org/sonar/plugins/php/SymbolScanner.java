@@ -28,8 +28,8 @@ import javax.annotation.CheckForNull;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.cache.Cache;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -42,7 +42,7 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class SymbolScanner extends Scanner {
 
-  private static final Logger LOG = Loggers.get(SymbolScanner.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SymbolScanner.class);
 
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
   private final ProjectSymbolData projectSymbolData = new ProjectSymbolData();
@@ -82,7 +82,7 @@ public class SymbolScanner extends Scanner {
       try {
         fileSymbolTable = createSymbolTable(file);
       } catch (RecognitionException e) {
-        LOG.debug("Can not create symbols for file: " + file.filename());
+        LOG.debug("Can not create symbols for file: {}", file.filename());
         return;
       }
     }
