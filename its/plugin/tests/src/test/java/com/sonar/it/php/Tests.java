@@ -34,7 +34,6 @@ import org.sonarqube.ws.Measures;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.WsClient;
 import org.sonarqube.ws.client.WsClientFactories;
-import org.sonarqube.ws.client.ce.TaskRequest;
 import org.sonarqube.ws.client.components.TreeRequest;
 import org.sonarqube.ws.client.issues.SearchRequest;
 import org.sonarqube.ws.client.measures.ComponentRequest;
@@ -43,7 +42,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
@@ -76,9 +74,6 @@ public class Tests {
 
   public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
 
-  private static final TaskRequest TASK_REQUEST = new TaskRequest().setAdditionalFields(Collections.singletonList("warnings"));
-
-  private static final Pattern TASK_ID_PATTERN = Pattern.compile("/api/ce/task\\?id=(\\S+)");
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
