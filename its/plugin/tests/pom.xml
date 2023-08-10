@@ -30,7 +30,7 @@
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-ws</artifactId>
-      <version>${version.sonar}</version>
+      <version>${version.sonar.ws}</version>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.api.plugin</groupId>
