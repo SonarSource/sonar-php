@@ -92,7 +92,6 @@
     <version.sonarlint>4.7.0.12286</version.sonarlint>
     <version.analyzer-commons>2.5.0.1358</version.analyzer-commons>
     <version.plugin-api>10.0.0.695</version.plugin-api>
-    <version.sonar.ws>9.7.1.62043</version.sonar.ws>
     <version.slf4j>1.7.30</version.slf4j>
 
     <!-- Advertise minimal required JRE version -->
