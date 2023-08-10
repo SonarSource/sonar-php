@@ -28,9 +28,13 @@
       <artifactId>sonarlint-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.sonarsource.sonarlint.core</groupId>
+      <artifactId>sonarlint-plugin-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-ws</artifactId>
-      <version>${version.sonar.ws}</version>
+      <version>${version.sonar}</version>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.api.plugin</groupId>

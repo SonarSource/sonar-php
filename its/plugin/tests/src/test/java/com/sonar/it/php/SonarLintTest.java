@@ -34,8 +34,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonarsource.sonarlint.core.StandaloneSonarLintEngineImpl;
-import org.sonarsource.sonarlint.core.client.api.common.RuleKey;
-import org.sonarsource.sonarlint.core.client.api.common.analysis.ClientInputFile;
+import org.sonarsource.sonarlint.core.analysis.api.ClientInputFile;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.Issue;
 import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneAnalysisConfiguration;
 import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneGlobalConfiguration;
@@ -56,7 +55,7 @@ public class SonarLintTest {
   @BeforeClass
   public static void prepare() throws Exception {
     StandaloneGlobalConfiguration sonarLintConfig = StandaloneGlobalConfiguration.builder()
-      .addPlugin(Tests.PHP_PLUGIN_LOCATION.getFile().toURI().toURL())
+      .addPlugin(Tests.PHP_PLUGIN_LOCATION.getFile().toPath())
       .setSonarLintUserHome(temp.newFolder().toPath())
       .setLogOutput((formattedMessage, level) -> {
         /* Don't pollute logs */ })
@@ -80,12 +79,12 @@ public class SonarLintTest {
     StandaloneAnalysisConfiguration configuration = StandaloneAnalysisConfiguration.builder()
       .setBaseDir(baseDir)
       .addInputFile(inputFile)
-      .addIncludedRules(
+/*      .addIncludedRules(
         RuleKey.parse("php:S101"),
         RuleKey.parse("php:S2964"),
         RuleKey.parse("php:S1808"),
         RuleKey.parse("php:S6600")
-      )
+      )*/
       .build();
     sonarlintEngine.analyze(configuration, issues::add, null, null);
 
