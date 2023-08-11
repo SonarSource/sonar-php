@@ -26,8 +26,8 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.WeakHashMap;
 import javax.annotation.CheckForNull;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -58,7 +58,7 @@ import org.sonar.plugins.php.api.visitors.CheckContext;
  */
 public class ControlFlowGraph {
 
-  private static final Logger LOG = Loggers.get(ControlFlowGraph.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ControlFlowGraph.class);
 
   public static final Set<Tree.Kind> KINDS_WITH_CONTROL_FLOW = EnumSet.of(
     Tree.Kind.FUNCTION_DECLARATION,
@@ -134,8 +134,8 @@ public class ControlFlowGraph {
           throw new IllegalStateException("Unexpected tree kind " + tree.getKind());
       }
     } catch (Exception e) {
-      LOG.warn("Failed to build control flow graph for file [{}] at line {} (activate debug logs for more details)", context.getPhpFile().toString(), ((PHPTree) tree).getLine());
-      LOG.debug(() -> Throwables.getStackTraceAsString(e));
+      LOG.warn("Failed to build control flow graph for file [{}] at line {} (activate debug logs for more details)", context.getPhpFile(), ((PHPTree) tree).getLine());
+      LOG.debug(Throwables.getStackTraceAsString(e));
       failedTrees.add(tree);
     }
 

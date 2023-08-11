@@ -31,8 +31,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.argumentmatching.ArgumentMatcher;
@@ -170,7 +170,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   static class JsonSensitiveFunctionsReader {
     private static final JSONParser jsonParser = new JSONParser();
 
-    private static final Logger LOG = Loggers.get(JsonSensitiveFunctionsReader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JsonSensitiveFunctionsReader.class);
 
     private JsonSensitiveFunctionsReader() {
     }
@@ -195,8 +195,8 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
             sensitiveFunctions.put(sensitiveMethod.uniqueName(), sensitiveMethod);
           }
         } catch (IOException | ParseException e) {
-          LOG.error(String.format("JSON containing the sensitive functions for hard coded credentials couldn't be read correctly from " +
-            "resources at %s.", json_location));
+          LOG.error("JSON containing the sensitive functions for hard coded credentials couldn't be read correctly from " +
+            "resources at {}.", json_location);
         }
       }
       return sensitiveFunctions;

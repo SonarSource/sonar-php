@@ -19,38 +19,36 @@
  */
 package org.sonar.plugins.php;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.slf4j.event.Level;
+import org.sonar.DurationStatistics;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.php.cache.CacheContextImpl;
+import org.sonar.php.symbols.ClassSymbolData;
+import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.utils.ReadWriteInMemoryCache;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.sonar.DurationStatistics;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.php.cache.CacheContextImpl;
-import org.sonar.php.symbols.ClassSymbolData;
-import org.sonar.php.symbols.ProjectSymbolData;
-import org.sonar.php.utils.ReadWriteInMemoryCache;
-import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.sonar.plugins.php.FileHashingUtils.inputFileContentHash;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
-import static org.sonar.plugins.php.PhpTestUtils.inputFileHashCacheKey;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class SymbolScannerTest {
 
   @org.junit.Rule
-  public LogTester logTester = new LogTester();
+  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
 
   public static final QualifiedName CLASS_NAME = qualifiedName("app\\test\\controller");
   private static ReadWriteInMemoryCache previousCache;
@@ -110,7 +108,7 @@ public class SymbolScannerTest {
     try (MockedStatic<FileHashingUtils> FileHashingUtilsStaticMock = Mockito.mockStatic(FileHashingUtils.class)) {
       FileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IOException("BOOM!"));
       buildBaseProjectSymbolDataAndCache();
-      assertThat(logTester.logs(LoggerLevel.DEBUG)).contains("Failed to compute content hash for file moduleKey:incremental/baseFile.php");
+      assertThat(logTester.logs(Level.DEBUG)).contains("Failed to compute content hash for file moduleKey:incremental/baseFile.php");
     }
   }
 

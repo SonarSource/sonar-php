@@ -19,6 +19,19 @@
  */
 package org.sonar.php.checks.security;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -45,20 +58,6 @@ import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
 import static org.sonar.php.checks.utils.CheckUtils.arrayValue;

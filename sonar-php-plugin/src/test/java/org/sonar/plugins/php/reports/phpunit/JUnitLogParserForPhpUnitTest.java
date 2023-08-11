@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.reports.phpunit.xml.TestSuites;
 import org.sonarsource.analyzer.commons.xml.ParseException;
@@ -82,7 +82,7 @@ public class JUnitLogParserForPhpUnitTest {
   @Test
   public void shouldWarnWhenFileAttributeDoesNotExist() throws Exception {
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-no-file.xml"));
-    assertThat(suites.arrangeSuitesIntoTestFileReports()).hasSize(0);
+    assertThat(suites.arrangeSuitesIntoTestFileReports()).isEmpty();
     assertThat(logTester.logs()).contains("Test cases must always be descendants of a file-based suite, skipping : HelloWorldTest.testFoo2 in HelloWorldTest");
   }
 }

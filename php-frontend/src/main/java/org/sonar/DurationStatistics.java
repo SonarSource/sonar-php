@@ -27,13 +27,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 public class DurationStatistics {
 
-  private static final Logger LOG = Loggers.get(DurationStatistics.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DurationStatistics.class);
 
   private static final String PROPERTY_KEY = "sonar.php.duration.statistics";
 
@@ -74,7 +74,8 @@ public class DurationStatistics {
           .append(" ")
           .append(format.format(e.getValue().get() / 1_000_000L))
           .append(" ms"));
-      LOG.info(out.toString());
+      String message = out.toString();
+      LOG.info(message);
     }
   }
 }

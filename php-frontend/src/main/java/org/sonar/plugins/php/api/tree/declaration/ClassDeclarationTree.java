@@ -19,14 +19,13 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * <p><a href="http://php.net/manual/en/language.oop5.php">Class</a> and <a href="http://php.net/manual/en/language.oop5.traits.php">Trait</a>

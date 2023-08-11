@@ -21,7 +21,8 @@ package org.sonar.plugins.php;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.sonar.sslr.api.RecognitionException;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.CheckFactory;
@@ -32,8 +33,6 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.ini.PhpIniCheck;
@@ -41,10 +40,11 @@ import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.PhpIniParser;
 import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.plugins.php.api.Php;
+import java.util.List;
 
 public class PhpIniSensor implements Sensor {
 
-  private static final Logger LOG = Loggers.get(PhpIniSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpIniSensor.class);
 
   private final CheckFactory checkFactory;
 
@@ -63,7 +63,7 @@ public class PhpIniSensor implements Sensor {
   @Override
   public void execute(SensorContext context) {
     Checks<PhpIniCheck> checks = checkFactory.create(CheckList.REPOSITORY_KEY);
-    checks.addAnnotatedChecks((Iterable<?>) CheckList.getPhpIniChecks());
+    checks.addAnnotatedChecks(CheckList.getPhpIniChecks());
     execute(context, checks);
   }
 
@@ -77,7 +77,7 @@ public class PhpIniSensor implements Sensor {
       try {
         phpIni = parser.parse(PhpFileImpl.create(inputFile));
       } catch (RecognitionException e) {
-        LOG.error("Unable to parse file: " + inputFile.toString());
+        LOG.error("Unable to parse file: {}", inputFile);
         LOG.error(e.getMessage());
         continue;
       }

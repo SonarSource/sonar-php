@@ -29,8 +29,8 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTester;
+import org.slf4j.event.Level;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -62,8 +62,8 @@ public class TestResultImporterTest {
   @Test
   public void should_add_warning_and_log_when_report_not_found() {
     executeSensorImporting(new File("notfound.txt"));
-    assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
-    assertThat((logTester.logs(LoggerLevel.ERROR).get(0)))
+    assertThat(logTester.logs(Level.ERROR)).hasSize(1);
+    assertThat((logTester.logs(Level.ERROR).get(0)))
       .startsWith("An error occurred when reading report file '")
       .contains("notfound.txt', nothing will be imported from this report.");
 
@@ -74,8 +74,8 @@ public class TestResultImporterTest {
   @Test
   public void should_add_warning_and_log_when_report_does_not_contain_any_record() {
     executeSensorImporting(new File(PhpTestUtils.getModuleBaseDir(), PhpTestUtils.PHPUNIT_EMPTY_REPORT_PATH));
-    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
-    assertThat((logTester.logs(LoggerLevel.WARN).get(0)))
+    assertThat(logTester.logs(Level.WARN)).hasSize(1);
+    assertThat((logTester.logs(Level.WARN).get(0)))
       .startsWith("PHPUnit test report does not contain any record in file")
       .contains(PhpTestUtils.PHPUNIT_EMPTY_REPORT_NAME);
 
@@ -110,8 +110,8 @@ public class TestResultImporterTest {
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.SKIPPED_TESTS, 1);
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.TEST_EXECUTION_TIME, 0L);
 
-    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
-    assertThat(logTester.logs(LoggerLevel.WARN).get(0))
+    assertThat(logTester.logs(Level.WARN)).hasSize(1);
+    assertThat(logTester.logs(Level.WARN).get(0))
       .startsWith("Failed to resolve 6 file path(s) in PHPUnit tests")
       .endsWith("Nothing is imported related to file(s): MegaAppTest.php;" +
         "src/App2Test.php;src/App3Test.php;src/AppErrorTest.php;src/AppFailTest.php;...");
@@ -132,8 +132,8 @@ public class TestResultImporterTest {
     context.settings().setProperty("sonar.exclusion", "**/MegaAppTest.php");
     executeSensorImporting(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_NAME));
 
-    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
-    assertThat(logTester.logs(LoggerLevel.WARN).get(0)).doesNotContain("MegaAppTest.php");
+    assertThat(logTester.logs(Level.WARN)).hasSize(1);
+    assertThat(logTester.logs(Level.WARN).get(0)).doesNotContain("MegaAppTest.php");
   }
 
   private void executeSensorImporting(File fileName) {

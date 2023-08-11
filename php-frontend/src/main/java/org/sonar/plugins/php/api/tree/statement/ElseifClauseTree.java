@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * <a href="http://php.net/manual/en/control-structures.elseif.php">Else-if clause</a>

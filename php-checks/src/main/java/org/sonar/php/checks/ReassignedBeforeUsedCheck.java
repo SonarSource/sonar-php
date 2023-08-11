@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.sonar.check.Rule;
 import org.sonar.php.cfg.LiveVariablesAnalysis;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;

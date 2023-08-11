@@ -19,9 +19,8 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
 import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
  * <a href="http://php.net/manual/en/language.types.array.php">Array</a> Access

@@ -33,8 +33,8 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTester;
+import org.slf4j.event.Level;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
@@ -51,7 +51,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   private final PsalmSensor psalmSensor = new PsalmSensor(analysisWarnings);
 
   @Rule
-  public LogTester logTester = new LogTester();
+  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
 
   @Test
   public void test_descriptor() {
@@ -186,7 +186,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     TextRange fourthTextRange = fourthPrimaryLoc.textRange();
     assertThat(fourthTextRange).isNotNull();
     assertThat(fourthTextRange.start().line()).isEqualTo(2);
-    assertThat(fourthTextRange.start().lineOffset()).isEqualTo(0);
+    assertThat(fourthTextRange.start().lineOffset()).isZero();
     assertThat(fourthTextRange.end().line()).isEqualTo(2);
     assertThat(fourthTextRange.end().lineOffset()).isEqualTo(22);
 
@@ -219,7 +219,7 @@ public class PsalmSensorTest extends ReportSensorTest {
     TextRange firstTextRange = firstPrimaryLoc.textRange();
     assertThat(firstTextRange).isNotNull();
     assertThat(firstTextRange.start().line()).isEqualTo(2);
-    assertThat(firstTextRange.start().lineOffset()).isEqualTo(0);
+    assertThat(firstTextRange.start().lineOffset()).isZero();
     assertThat(firstTextRange.end().line()).isEqualTo(2);
     assertThat(firstTextRange.end().lineOffset()).isEqualTo(22);
 
@@ -235,12 +235,12 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(secondTextRange.end().line()).isEqualTo(2);
     assertThat(secondTextRange.end().lineOffset()).isEqualTo(2);
 
-    assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactly(
+    assertThat(logTester.logs(Level.ERROR)).isEmpty();
+    assertThat(logTester.logs(Level.DEBUG)).containsExactly(
       "Missing information for filePath:'psalm/file1.php', message:'  '",
       "Missing information for filePath:'psalm/file1.php', message:'null'",
       "Missing information for filePath:'null', message:'Issue without filePath'");
-    assertThat(onlyOneLogElement(logTester().logs(LoggerLevel.WARN))).isEqualTo(
+    assertThat(onlyOneLogElement(logTester().logs(Level.WARN))).isEqualTo(
       "Failed to resolve 1 file path(s) in Psalm psalm-report-with-errors.json report. No issues imported related to file(s): psalm/unknown.php"
     );
 
@@ -252,8 +252,8 @@ public class PsalmSensorTest extends ReportSensorTest {
   public void excluded_files_will_not_be_logged() throws IOException {
     executeSensorImporting("psalm-report-with-errors.json", Map.of("sonar.exclusion", "*/**/unknown.php"));
 
-    assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty();
+    assertThat(logTester.logs(Level.ERROR)).isEmpty();
+    assertThat(logTester.logs(Level.WARN)).isEmpty();
     verify(analysisWarnings, never()).addWarning(anyString());
   }
 

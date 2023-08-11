@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
 import org.junit.Test;
+import org.slf4j.event.Level;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
@@ -40,9 +41,8 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.internal.SonarRuntimeImpl;
+import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.api.utils.Version;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
@@ -54,11 +54,11 @@ import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 public class PhpUnitSensorTest {
 
   @org.junit.Rule
-  public LogTester logTester = new LogTester();
+  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
   private final List<String> analysisWarnings = new ArrayList<>();
   private final AnalysisWarningsWrapper analysisWarningsWrapper = analysisWarnings::add;
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
-  private static final SonarRuntime SONARQUBE_9_9 = SonarRuntimeImpl.forSonarQube(Version.create(9,9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
+  private static final SonarRuntime SONARQUBE_9_9 = SonarRuntimeImpl.forSonarQube(Version.create(9, 9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
   private final Set<File> tempReports = new HashSet<>();
 
   private static final String EXPECTED_MESSAGE = "PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results.";
@@ -91,8 +91,7 @@ public class PhpUnitSensorTest {
       PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH,
       // should not fail with empty path, it should be ignored
       " ",
-      PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH
-    );
+      PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH);
 
     context.settings().setProperty("sonar.php.coverage.reportPaths", String.join(", ", reportPaths));
 
@@ -111,9 +110,9 @@ public class PhpUnitSensorTest {
     assertThat(context.lineHits(mainFileKey, 6)).isEqualTo(2);
     assertThat(context.lineHits(mainFileKey, 7)).isEqualTo(1);
 
-    assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
+    assertThat(logTester.logs(Level.ERROR)).hasSize(1);
     String resourcesFolder = FilenameUtils.separatorsToSystem("/src/test/resources");
-    assertThat(logTester.logs(LoggerLevel.ERROR).get(0))
+    assertThat(logTester.logs(Level.ERROR).get(0))
       .startsWith("An error occurred when reading report file")
       .contains(resourcesFolder + "', nothing will be imported from this report.");
   }
@@ -121,31 +120,29 @@ public class PhpUnitSensorTest {
   @Test
   public void shouldLogWarningWhenTestCaseIsDetectedWithoutDeclaration() {
     Set.of("src/App.php", "src/EmailTest.php").forEach(
-      file -> context.fileSystem().add(inputFile(file))
-    );
+      file -> context.fileSystem().add(inputFile(file)));
 
     Sensor sensor = createSensor();
     sensor.execute(context);
 
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains(EXPECTED_MESSAGE);
-    assertThat(logTester.logs(LoggerLevel.DEBUG)).hasSize(1);
-    assertThat(logTester.logs(LoggerLevel.DEBUG).get(0))
+    assertThat(logTester.logs(Level.WARN)).contains(EXPECTED_MESSAGE);
+    assertThat(logTester.logs(Level.DEBUG)).hasSize(1);
+    assertThat(logTester.logs(Level.DEBUG).get(0))
       .startsWith("Detected and undeclared test case in").endsWith("src/EmailTest.php");
   }
 
   @Test
   public void shouldNotLogWarningWhenTestCaseIsDetectedWithDeclaration() {
     Set.of("src/App.php", "src/EmailTest.php").forEach(
-      file -> context.fileSystem().add(inputFile(file))
-    );
+      file -> context.fileSystem().add(inputFile(file)));
 
     context.settings().setProperty("sonar.tests", "src");
 
     Sensor sensor = createSensor();
     sensor.execute(context);
 
-    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
-    assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty();
+    assertThat(logTester.logs(Level.WARN)).doesNotContain(EXPECTED_MESSAGE);
+    assertThat(logTester.logs(Level.DEBUG)).isEmpty();
   }
 
   @Test
@@ -155,7 +152,7 @@ public class PhpUnitSensorTest {
     Sensor sensor = createSensor();
     sensor.execute(context);
 
-    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
+    assertThat(logTester.logs(Level.WARN)).doesNotContain(EXPECTED_MESSAGE);
   }
 
   @Test
@@ -167,9 +164,9 @@ public class PhpUnitSensorTest {
     Sensor sensor = createSensor();
     sensor.execute(context);
 
-    assertThat(logTester.logs(LoggerLevel.WARN)).doesNotContain(EXPECTED_MESSAGE);
-    assertThat(logTester.logs(LoggerLevel.DEBUG)).hasSize(1);
-    assertThat(logTester.logs(LoggerLevel.DEBUG).get(0))
+    assertThat(logTester.logs(Level.WARN)).doesNotContain(EXPECTED_MESSAGE);
+    assertThat(logTester.logs(Level.DEBUG)).hasSize(1);
+    assertThat(logTester.logs(Level.DEBUG).get(0))
       .startsWith("Can not read file").endsWith("src/App.php");
   }
 
@@ -181,7 +178,7 @@ public class PhpUnitSensorTest {
    * Creates a file name with absolute path in coverage report.
    * This hack allow to have this unit test, as only absolute path
    * in report is supported.
-   * */
+   */
   private void createReportWithAbsolutePath(String generatedReportRelativePath, String relativeReportPath, InputFile inputFile) throws IOException {
     File tempReport = new File(context.fileSystem().baseDir(), generatedReportRelativePath);
     if (tempReport.createNewFile()) {

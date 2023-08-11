@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.plugins.php.reports.phpunit.xml.FileNode;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 

@@ -19,12 +19,11 @@
  */
 package org.sonar.php.checks;
 
+import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.regex.Pattern;
 
 @Rule(key = UseOfOctalValueCheck.KEY)
 public class UseOfOctalValueCheck extends PHPVisitorCheck {

@@ -19,11 +19,10 @@
  */
 package org.sonar.php.checks.utils;
 
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
 
 public final class SyntacticEquivalence {
 

@@ -19,12 +19,11 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
-
-import javax.annotation.Nullable;
 
 /**
  * <p><a href="http://php.net/manual/en/functions.user-defined.php">Function Declaration</a>

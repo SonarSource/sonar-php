@@ -19,10 +19,9 @@
  */
 package org.sonar.plugins.php.api.tree;
 
+import java.util.List;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
-
-import java.util.List;
 
 /**
  * PHP Script

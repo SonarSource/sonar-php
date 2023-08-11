@@ -84,14 +84,15 @@
     <version.junit-jupiter>5.9.2</version.junit-jupiter>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>4.11.0</version.mockito>
-    <version.sonar>9.7.1.62043</version.sonar>
+    <version.sonar>10.1.0.73491</version.sonar>
     <version.staxmate>2.0.1</version.staxmate>
     <version.sonar-orchestrator>3.41.0.295</version.sonar-orchestrator>
     <version.sslr>1.24.0.633</version.sslr>
     <version.guava>30.1.1-jre</version.guava>
-    <version.sonarlint>4.7.0.12286</version.sonarlint>
+    <version.sonarlint>8.16.0.67686</version.sonarlint>
     <version.analyzer-commons>2.5.0.1358</version.analyzer-commons>
-    <version.plugin-api>9.11.0.290</version.plugin-api>
+    <version.plugin-api>10.0.0.695</version.plugin-api>
+    <version.slf4j>1.7.30</version.slf4j>
 
     <!-- Advertise minimal required JRE version -->
     <jre.min.version>11</jre.min.version>
@@ -146,9 +147,20 @@
         <artifactId>jsr305</artifactId>
         <version>1.3.9</version>
       </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${version.slf4j}</version>
+      </dependency>
 
 
       <!-- Test dependencies -->
+      <dependency>
+        <groupId>org.sonarsource.api.plugin</groupId>
+        <artifactId>sonar-plugin-api-test-fixtures</artifactId>
+        <version>${version.plugin-api}</version>
+        <scope>test</scope>
+      </dependency>
       <dependency>
         <groupId>org.sonarsource.sonarqube</groupId>
         <artifactId>sonar-testing-harness</artifactId>
@@ -176,6 +188,12 @@
       <dependency>
         <groupId>org.sonarsource.sonarlint.core</groupId>
         <artifactId>sonarlint-core</artifactId>
+        <version>${version.sonarlint}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.sonarsource.sonarlint.core</groupId>
+        <artifactId>sonarlint-plugin-api</artifactId>
         <version>${version.sonarlint}</version>
         <scope>test</scope>
       </dependency>

@@ -22,8 +22,8 @@ package org.sonar.php.checks.utils.argumentmatching;
 import java.util.Set;
 import java.util.function.Function;
 import org.junit.Test;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -202,7 +202,7 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
 }
 
 class TestFunctionArgumentCheck extends FunctionArgumentCheck {
-  private static final Logger LOG = Loggers.get(TestFunctionArgumentCheck.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TestFunctionArgumentCheck.class);
 
   @Override
   protected void createIssue(ExpressionTree argument) {

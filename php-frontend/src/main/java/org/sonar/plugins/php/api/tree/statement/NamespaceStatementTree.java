@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-
-import java.util.List;
 
 /**
  * <a href="http://php.net/manual/en/language.namespaces.php">Namespace</a> definition

@@ -29,13 +29,13 @@ import org.sonar.DurationStatistics;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.cache.Cache;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
 abstract class Scanner {
-  private static final Logger LOG = Loggers.get(Scanner.class);
+  private static final Logger LOG = LoggerFactory.getLogger(Scanner.class);
 
   /**
    * Describes if an optimized analysis of unchanged files by skipping some rules is enabled.
@@ -63,7 +63,8 @@ abstract class Scanner {
   }
 
   void execute(ProgressReport progressReport, List<InputFile> files) {
-    LOG.info("Starting " + this.name());
+    String name = this.name();
+    LOG.info("Starting {}", name);
     List<String> filenames = files.stream().map(InputFile::toString).collect(Collectors.toList());
     progressReport.start(filenames);
 

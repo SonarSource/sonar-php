@@ -28,8 +28,8 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
@@ -37,7 +37,7 @@ public class PhpUnitSensor implements Sensor {
 
   public static final String PHPUNIT_COVERAGE_REPORT_PATHS_KEY = "sonar.php.coverage.reportPaths";
   public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.php.tests.reportPath";
-  private static final Logger LOG = Loggers.get(PhpUnitSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitSensor.class);
   private static final FilePredicate PHPUNIT_TEST_FILE_PREDICATE = new TestCaseFilePredicate();
   private final TestResultImporter testResultImporter;
   private final CoverageResultImporter coverageResultImporter;

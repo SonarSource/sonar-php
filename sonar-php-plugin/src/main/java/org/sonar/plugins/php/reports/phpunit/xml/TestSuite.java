@@ -28,13 +28,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.php.reports.phpunit.TestFileReport;
 
 public final class TestSuite {
 
-  private static final Logger LOGGER = Loggers.get(TestSuite.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestSuite.class);
 
   private String name;
 
@@ -74,7 +74,7 @@ public final class TestSuite {
   }
 
   private void logMisplacedTestCases() {
-    testCases.forEach(testCase -> LOGGER.warn("Test cases must always be descendants of a file-based suite, skipping : " + testCase.fullName() + " in " + name));
+    testCases.forEach(testCase -> LOGGER.warn("Test cases must always be descendants of a file-based suite, skipping : {} in {}", testCase.fullName(), name));
   }
 
   /**

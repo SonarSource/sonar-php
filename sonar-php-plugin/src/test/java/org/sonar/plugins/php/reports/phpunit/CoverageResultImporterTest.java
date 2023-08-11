@@ -29,8 +29,8 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTester;
+import org.slf4j.event.Level;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -74,8 +74,8 @@ public class CoverageResultImporterTest {
   @Test
   public void should_add_warning_and_log_when_report_not_found() {
     executeSensorImporting(new File("notfound.txt"));
-    assertThat(logTester.logs(LoggerLevel.ERROR)).hasSize(1);
-    assertThat((logTester.logs(LoggerLevel.ERROR).get(0)))
+    assertThat(logTester.logs(Level.ERROR)).hasSize(1);
+    assertThat((logTester.logs(Level.ERROR).get(0)))
       .startsWith("An error occurred when reading report file '")
       .contains("notfound.txt', nothing will be imported from this report.");
 
@@ -97,12 +97,12 @@ public class CoverageResultImporterTest {
     executeSensorImporting(getReportFile("phpunit.coverage.xml"));
     String componentKey = componentKey(MONKEY_FILE_NAME);
     assertReport(componentKey);
-    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(3);
-    assertThat(logTester.logs(LoggerLevel.WARN).get(0))
+    assertThat(logTester.logs(Level.WARN)).hasSize(3);
+    assertThat(logTester.logs(Level.WARN).get(0))
       .isEqualTo("Line with number 0 doesn't belong to file Monkey.php");
-    assertThat(logTester.logs(LoggerLevel.WARN).get(1))
+    assertThat(logTester.logs(Level.WARN).get(1))
       .isEqualTo("Line with number 100 doesn't belong to file Monkey.php");
-    assertThat((logTester.logs(LoggerLevel.WARN).get(2)))
+    assertThat((logTester.logs(Level.WARN).get(2)))
       .startsWith("Failed to resolve 2 file path(s) in PHPUnit coverage")
       .contains("Nothing is imported related to file(s):");
 
@@ -114,7 +114,7 @@ public class CoverageResultImporterTest {
   public void should_not_raise_warning_for_excluded_files() {
     context.settings().setProperty("sonar.exclusion", "**/IndexControllerTest.php,**/Banana.php");
     executeSensorImporting(getReportFile("phpunit.coverage.xml"));
-    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(2);
+    assertThat(logTester.logs(Level.WARN)).hasSize(2);
     verify(analysisWarnings,never()).addWarning(anyString());
   }
 
@@ -125,7 +125,7 @@ public class CoverageResultImporterTest {
 
     executeSensorImporting(getReportFile("phpunit.coverage-fqn.xml"));
     assertReport(componentKey(MONKEY_FILE_NAME));
-    assertThat(logTester.logs(LoggerLevel.WARN)).containsExactly(warning);
+    assertThat(logTester.logs(Level.WARN)).containsExactly(warning);
 
     verify(analysisWarnings, times(1)).addWarning(warning);
   }
@@ -137,7 +137,7 @@ public class CoverageResultImporterTest {
 
     executeSensorImporting(getReportFile("phpunit.coverage-fqn_win.xml"));
     assertReport(componentKey(MONKEY_FILE_NAME));
-    assertThat(logTester.logs(LoggerLevel.WARN)).containsExactly(warning);
+    assertThat(logTester.logs(Level.WARN)).containsExactly(warning);
 
     verify(analysisWarnings, times(1)).addWarning(warning);
   }
@@ -145,8 +145,8 @@ public class CoverageResultImporterTest {
   @Test
   public void should_add_warning_and_log_when_report_is_empty() {
     executeSensorImporting(getReportFile("phpunit.coverage-no-record.xml"));
-    assertThat(logTester.logs(LoggerLevel.WARN)).hasSize(1);
-    assertThat(logTester.logs(LoggerLevel.WARN).get(0))
+    assertThat(logTester.logs(Level.WARN)).hasSize(1);
+    assertThat(logTester.logs(Level.WARN).get(0))
       .startsWith("Coverage report does not contain any record ")
       .contains("phpunit.coverage-no-record.xml");
 

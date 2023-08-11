@@ -19,15 +19,14 @@
  */
 package org.sonar.php.checks.formatting;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 public class PunctuatorSpacingCheck extends PHPVisitorCheck implements FormattingCheck {
 

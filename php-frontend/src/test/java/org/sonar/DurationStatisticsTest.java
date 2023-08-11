@@ -22,9 +22,9 @@ package org.sonar;
 import java.nio.file.Paths;
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTester;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,7 +40,7 @@ public class DurationStatisticsTest {
     DurationStatistics statistics = new DurationStatistics(sensorContext.config());
     fillStatistics(statistics);
     statistics.log();
-    assertThat(logTester.logs(LoggerLevel.INFO)).isEmpty();
+    assertThat(logTester.logs(Level.INFO)).isEmpty();
   }
 
   @Test
@@ -49,8 +49,8 @@ public class DurationStatisticsTest {
     DurationStatistics statistics = new DurationStatistics(sensorContext.config());
     fillStatistics(statistics);
     statistics.log();
-    assertThat(logTester.logs(LoggerLevel.INFO)).hasSize(1);
-    assertThat(logTester.logs(LoggerLevel.INFO).get(0)).startsWith("Duration Statistics, ");
+    assertThat(logTester.logs(Level.INFO)).hasSize(1);
+    assertThat(logTester.logs(Level.INFO).get(0)).startsWith("Duration Statistics, ");
   }
 
   @Test
@@ -60,8 +60,8 @@ public class DurationStatisticsTest {
     statistics.addRecord("A", 12_000_000L);
     statistics.addRecord("B", 15_000_000_000L);
     statistics.log();
-    assertThat(logTester.logs(LoggerLevel.INFO)).hasSize(1);
-    assertThat(logTester.logs(LoggerLevel.INFO).get(0)).isEqualTo("Duration Statistics, B 15'000 ms, A 12 ms");
+    assertThat(logTester.logs(Level.INFO)).hasSize(1);
+    assertThat(logTester.logs(Level.INFO).get(0)).isEqualTo("Duration Statistics, B 15'000 ms, A 12 ms");
   }
 
   private void fillStatistics(DurationStatistics statistics) {

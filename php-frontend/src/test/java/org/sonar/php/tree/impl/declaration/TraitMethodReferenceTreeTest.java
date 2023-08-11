@@ -19,13 +19,13 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TraitMethodReferenceTreeTest extends PHPTreeModelTest {
 

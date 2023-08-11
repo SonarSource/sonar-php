@@ -19,14 +19,13 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
+import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import java.util.List;
 
 /**
  * <p>Class <a href="http://php.net/manual/en/language.oop5.basic.php">Methods</a>

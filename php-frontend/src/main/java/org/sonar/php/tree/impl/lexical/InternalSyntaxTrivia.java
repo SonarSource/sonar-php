@@ -19,15 +19,14 @@
  */
 package org.sonar.php.tree.impl.lexical;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 public class InternalSyntaxTrivia extends PHPTree implements SyntaxTrivia {
 

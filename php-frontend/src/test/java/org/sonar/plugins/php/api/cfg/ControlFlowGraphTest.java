@@ -23,8 +23,8 @@ import com.sonar.sslr.api.RecognitionException;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTester;
+import org.slf4j.event.Level;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
@@ -764,7 +764,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "  qix();" +
       "}");
     CfgBlock block = cfg.start();
-    assertThat(block instanceof PhpCfgBranchingBlock).isTrue();
+    assertThat(block).isInstanceOf(PhpCfgBranchingBlock.class);
     PhpCfgBranchingBlock ifBlock = (PhpCfgBranchingBlock) block;
     assertThat(ifBlock.branchingTree().getKind()).isEqualTo(Tree.Kind.IF_STATEMENT);
   }
@@ -1552,10 +1552,10 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     List<Tree> elements = cfg.start().elements();
     assertThat(elements).hasSize(2);
     assertThat(elements.get(0).getKind()).isEqualTo(Tree.Kind.INLINE_HTML);
-    assertThat(((InlineHTMLTree)elements.get(0)).inlineHTMLToken().text()).isEqualTo("?><?=");
+    assertThat(((InlineHTMLTree) elements.get(0)).inlineHTMLToken().text()).isEqualTo("?><?=");
     assertThat(elements.get(1).getKind()).isEqualTo(Tree.Kind.ECHO_TAG_STATEMENT);
-    assertThat(((EchoTagStatementTree)elements.get(1)).expressions().get(0).getKind()).isEqualTo(Tree.Kind.REGULAR_STRING_LITERAL);
-    assertThat(((EchoTagStatementTree)elements.get(1)).eosToken().text()).isEqualTo("?><?php");
+    assertThat(((EchoTagStatementTree) elements.get(1)).expressions().get(0).getKind()).isEqualTo(Tree.Kind.REGULAR_STRING_LITERAL);
+    assertThat(((EchoTagStatementTree) elements.get(1)).eosToken().text()).isEqualTo("?><?php");
   }
 
   @Test
@@ -1566,13 +1566,13 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
         "}\n",
       PHPLexicalGrammar.COMPILATION_UNIT);
     FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
-    logTester.setLevel(LoggerLevel.DEBUG);
+    logTester.setLevel(Level.DEBUG);
     ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
     assertThat(cfg).isNull();
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 2 (activate debug logs for more details)");
-    assertThat(logTester.logs(LoggerLevel.DEBUG)).hasOnlyOneElementSatisfying(s -> assertThat(s).contains("com.sonar.sslr.api.RecognitionException: Failed to build CFG"));
+    assertThat(logTester.logs(Level.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 2 (activate debug logs for more details)");
+    assertThat(logTester.logs(Level.DEBUG)).hasOnlyOneElementSatisfying(s -> assertThat(s).contains("com.sonar.sslr.api.RecognitionException: Failed to build CFG"));
     logTester.clear();
-    logTester.setLevel(LoggerLevel.INFO);
+    logTester.setLevel(Level.INFO);
 
     // testing mechanism avoiding reporting failure multiple times for the same tree
     cfg = ControlFlowGraph.build(func, checkContext);
@@ -1585,14 +1585,14 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     ControlFlowGraph cfg = cfgForBlock("" +
       "label: " +
       "    $i++;");
-    assertThat(cfg.start().toString()).isEqualTo("$i++;");
-    assertThat(cfg.end().toString()).isEqualTo("END");
+    assertThat(cfg.start()).hasToString("$i++;");
+    assertThat(cfg.end()).hasToString("END");
 
     cfg = cfgForBlock("foo();");
-    assertThat(cfg.start().toString()).isEqualTo("foo();");
+    assertThat(cfg.start()).hasToString("foo();");
 
     cfg = cfgForBlock("for (;;) {}");
-    assertThat(cfg.start().toString()).isEqualTo("empty");
+    assertThat(cfg.start()).hasToString("empty");
   }
 
   @Test
@@ -1605,7 +1605,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
     assertThat(cfg).isNotNull();
-    assertThat(cfg.start().toString()).isEqualTo("echo $e->message();");
+    assertThat(cfg.start()).hasToString("echo $e->message();");
   }
 
   @Test
@@ -1618,7 +1618,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
     assertThat(cfg).isNotNull();
-    assertThat(cfg.start().toString()).isEqualTo("echo $item;");
+    assertThat(cfg.start()).hasToString("echo $item;");
   }
 
   private void verifyBlockCfg(String functionBody) {

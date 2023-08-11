@@ -19,13 +19,12 @@
  */
 package org.sonar.php.metrics;
 
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
 public class CounterVisitor extends PHPSubscriptionCheck {
 

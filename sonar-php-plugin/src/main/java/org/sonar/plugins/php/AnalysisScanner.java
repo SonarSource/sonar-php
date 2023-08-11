@@ -21,10 +21,8 @@ package org.sonar.plugins.php;
 
 import com.google.common.base.Throwables;
 import com.sonar.sslr.api.RecognitionException;
-import java.io.File;
-import java.io.InterruptedIOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
@@ -38,8 +36,6 @@ import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.cache.Cache;
 import org.sonar.php.checks.ParsingErrorCheck;
@@ -61,10 +57,14 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+import java.io.File;
+import java.io.InterruptedIOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 class AnalysisScanner extends Scanner {
 
-  private static final Logger LOG = Loggers.get(AnalysisScanner.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AnalysisScanner.class);
   private final PHPChecks checks;
   private final FileLinesContextFactory fileLinesContextFactory;
   private final NoSonarFilter noSonarFilter;
@@ -310,7 +310,7 @@ class AnalysisScanner extends Scanner {
 
   @Override
   void logException(Exception e, InputFile file) {
-    LOG.error("Could not analyse " + file, e);
+    LOG.error("Could not analyse {}", file, e);
   }
 
   @Override

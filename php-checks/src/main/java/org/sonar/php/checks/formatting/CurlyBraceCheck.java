@@ -19,6 +19,8 @@
  */
 package org.sonar.php.checks.formatting;
 
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.checks.utils.TokenVisitor;
@@ -42,9 +44,6 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class CurlyBraceCheck extends PHPVisitorCheck implements FormattingCheck {
 

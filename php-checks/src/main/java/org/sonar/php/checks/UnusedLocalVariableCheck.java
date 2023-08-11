@@ -31,7 +31,6 @@ import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;

@@ -22,7 +22,6 @@ package org.sonar.php.utils;
 import com.google.common.base.Splitter;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.sonar.plugins.php.api.tests.TestIssue;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;

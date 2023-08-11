@@ -20,6 +20,7 @@
 package org.sonar.plugins.php;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -28,15 +29,15 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFileFilter;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.utils.WildcardPattern;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.plugins.php.api.Php;
 
 public class PhpExclusionsFileFilter implements InputFileFilter {
 
   private final String[] excludedPatterns;
-  private static final Logger LOG = Loggers.get(PhpExclusionsFileFilter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpExclusionsFileFilter.class);
   private static final int DEFAULT_AVERAGE_LINE_LENGTH_THRESHOLD = 220;
 
 
@@ -50,14 +51,15 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
       return true;
     }
 
-    String relativePath = inputFile.uri().toString();
+    URI fileUri = inputFile.uri();
+    String relativePath = fileUri.toString();
     if (WildcardPattern.match(WildcardPattern.create(excludedPatterns), relativePath)) {
-      LOG.debug("File [" + inputFile.uri() + "] is excluded by '" + PhpPlugin.PHP_EXCLUSIONS_KEY + "' property and will not be analyzed");
+      LOG.debug("File [{}] is excluded by '{}' property and will not be analyzed", fileUri, PhpPlugin.PHP_EXCLUSIONS_KEY);
       return false;
     }
 
     if (new AverageLineLengthCalculator(inputFile).getAverageLineLength() > DEFAULT_AVERAGE_LINE_LENGTH_THRESHOLD) {
-      LOG.debug("File [" + inputFile.uri() + "] is excluded because it is considered generated (average line length is too big).");
+      LOG.debug("File [{}] is excluded because it is considered generated (average line length is too big).", fileUri);
       return false;
     }
 

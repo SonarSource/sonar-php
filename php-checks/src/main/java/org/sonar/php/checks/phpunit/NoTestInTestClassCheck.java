@@ -20,7 +20,6 @@
 package org.sonar.php.checks.phpunit;
 
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;

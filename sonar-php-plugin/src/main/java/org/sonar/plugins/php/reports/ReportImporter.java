@@ -22,7 +22,7 @@ package org.sonar.plugins.php.reports;
 import java.io.File;
 import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.utils.log.Logger;
+import org.slf4j.Logger;
 
 public interface ReportImporter {
 

@@ -19,13 +19,12 @@
  */
 package org.sonar.php.symbols;
 
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class FunctionSymbolIndex {
   private final Map<QualifiedName, FunctionSymbol> symbolsByQualifiedName = new HashMap<>();

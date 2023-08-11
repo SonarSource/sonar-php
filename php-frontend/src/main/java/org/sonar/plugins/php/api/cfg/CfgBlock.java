@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.cfg;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
-
 import org.sonar.plugins.php.api.tree.Tree;
 
 /**

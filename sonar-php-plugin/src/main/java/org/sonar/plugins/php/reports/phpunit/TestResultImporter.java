@@ -24,15 +24,15 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.php.reports.phpunit.xml.TestSuites;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 
 public class TestResultImporter extends PhpUnitReportImporter {
 
-  private static final Logger LOG = Loggers.get(TestResultImporter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TestResultImporter.class);
   private static final String TEST_REPORT_DOES_NOT_CONTAIN_ANY_RECORD = "PHPUnit test report does not contain any record in file %s.";
 
   private final JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();

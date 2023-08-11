@@ -19,21 +19,20 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.PhpUnitCheck;
-import org.sonar.php.utils.collections.SetUtils;
-import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
-import org.sonar.php.utils.collections.MapBuilder;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
+import org.sonar.php.utils.collections.MapBuilder;
+import org.sonar.php.utils.collections.SetUtils;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S2701")
 public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {

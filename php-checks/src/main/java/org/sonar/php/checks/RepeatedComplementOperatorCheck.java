@@ -19,14 +19,13 @@
  */
 package org.sonar.php.checks;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Rule(key = "S2761")
 public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
