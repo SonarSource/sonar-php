@@ -22,9 +22,9 @@ package org.sonar;
 import java.nio.file.Paths;
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.testfixtures.log.LogTester;
-import org.slf4j.event.Level;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

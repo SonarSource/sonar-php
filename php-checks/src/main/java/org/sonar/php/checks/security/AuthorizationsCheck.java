@@ -27,7 +27,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -50,9 +49,9 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import static org.sonar.php.checks.utils.CheckUtils.argument;
 import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
 import static org.sonar.php.checks.utils.CheckUtils.hasModifier;
+import static org.sonar.php.checks.utils.CheckUtils.isMethodInheritedFromClassOrInterface;
 import static org.sonar.php.checks.utils.CheckUtils.nameOf;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
-import static org.sonar.php.checks.utils.CheckUtils.isMethodInheritedFromClassOrInterface;
 import static org.sonar.php.tree.TreeUtils.descendants;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.CLASS_MEMBER_ACCESS;

@@ -20,7 +20,6 @@
 package org.sonar.php.tree.impl.expression;
 
 import java.util.Iterator;
-
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;

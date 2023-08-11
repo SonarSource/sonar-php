@@ -19,11 +19,10 @@
  */
 package org.sonar.php.symbols;
 
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
-
 import java.util.Collections;
 import java.util.List;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class UnknownFunctionSymbol implements FunctionSymbol {
   private final QualifiedName qualifiedName;

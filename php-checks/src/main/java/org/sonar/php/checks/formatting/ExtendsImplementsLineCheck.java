@@ -19,14 +19,13 @@
  */
 package org.sonar.php.checks.formatting;
 
+import javax.annotation.Nullable;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import javax.annotation.Nullable;
 
 public class ExtendsImplementsLineCheck extends PHPVisitorCheck implements FormattingCheck {
 

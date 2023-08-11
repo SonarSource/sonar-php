@@ -19,13 +19,12 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
-
-import javax.annotation.Nullable;
 
 /**
  * <p><a href="http://php.net/manual/en/functions.anonymous.php">Anonymous Function</a>

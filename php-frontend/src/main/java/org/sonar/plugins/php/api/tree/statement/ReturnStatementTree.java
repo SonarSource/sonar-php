@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import javax.annotation.Nullable;
-
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 

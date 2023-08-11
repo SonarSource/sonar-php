@@ -19,6 +19,8 @@
  */
 package org.sonar.php.checks;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -26,9 +28,6 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Rule(key = "S1940")
 public class InvertedBooleanCheck extends PHPVisitorCheck {

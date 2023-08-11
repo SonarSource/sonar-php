@@ -22,9 +22,9 @@ package org.sonar.php.cache;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.annotation.CheckForNull;
-import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.sensor.cache.ReadCache;
 import org.sonar.plugins.php.api.cache.PhpReadCache;
 
 public class PhpReadCacheImpl implements PhpReadCache {

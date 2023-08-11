@@ -19,12 +19,12 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParenthesizedExpressionTreeTest extends PHPTreeModelTest {
 

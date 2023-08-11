@@ -21,6 +21,11 @@ package org.sonar.plugins.php.api.cfg;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+import java.util.WeakHashMap;
+import javax.annotation.CheckForNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.php.tree.impl.PHPTree;
@@ -33,11 +38,6 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
-import javax.annotation.CheckForNull;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.WeakHashMap;
 
 /**
  * The <a href="https://en.wikipedia.org/wiki/Control_flow_graph">Control Flow Graph</a>

@@ -21,8 +21,8 @@ package org.sonar.php.checks.phpini;
 
 import java.util.Locale;
 import java.util.Set;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.php.ini.tree.Directive;
+import org.sonar.php.utils.collections.SetUtils;
 
 public enum PhpIniBoolean {
 

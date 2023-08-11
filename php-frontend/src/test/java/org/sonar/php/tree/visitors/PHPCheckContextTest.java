@@ -20,8 +20,6 @@
 package org.sonar.php.tree.visitors;
 
 import java.io.File;
-import java.util.Collections;
-import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.ParsingTestUtils;
@@ -30,7 +28,6 @@ import org.sonar.php.regex.RegexParserTestUtils;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;

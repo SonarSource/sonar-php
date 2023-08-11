@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import javax.annotation.Nullable;
 
 /**
  * <a href="https://www.php.net/manual/de/language.attributes.syntax.php">Attributes</a>

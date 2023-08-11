@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * Represents <a href="http://php.net/manual/en/control-structures.foreach.php">foreach statement</a> and alternative foreach statement syntax as well.

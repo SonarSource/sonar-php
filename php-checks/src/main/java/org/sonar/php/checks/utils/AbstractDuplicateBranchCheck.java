@@ -20,6 +20,8 @@
 package org.sonar.php.checks.utils;
 
 import com.google.common.base.Preconditions;
+import java.util.ArrayList;
+import java.util.List;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,9 +29,6 @@ import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractDuplicateBranchCheck extends PHPVisitorCheck {
 

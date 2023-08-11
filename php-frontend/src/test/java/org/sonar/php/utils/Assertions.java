@@ -19,8 +19,11 @@
  */
 package org.sonar.php.utils;
 
+import com.google.common.base.Preconditions;
+import com.sonar.sslr.api.RecognitionException;
+import com.sonar.sslr.api.Rule;
+import com.sonar.sslr.api.typed.ActionParser;
 import java.nio.charset.StandardCharsets;
-
 import org.fest.assertions.GenericAssert;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -34,11 +37,6 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
 import org.sonar.sslr.tests.ParsingResultComparisonFailure;
 import org.sonar.sslr.tests.RuleAssert;
-
-import com.google.common.base.Preconditions;
-import com.sonar.sslr.api.RecognitionException;
-import com.sonar.sslr.api.Rule;
-import com.sonar.sslr.api.typed.ActionParser;
 
 public class Assertions {
 

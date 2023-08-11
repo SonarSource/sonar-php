@@ -20,6 +20,14 @@
 package org.sonar.plugins.php.reports.phpunit;
 
 import com.google.common.io.Files;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
 import org.junit.Test;
@@ -37,14 +45,6 @@ import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
@@ -91,8 +91,7 @@ public class PhpUnitSensorTest {
       PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH,
       // should not fail with empty path, it should be ignored
       " ",
-      PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH
-    );
+      PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH);
 
     context.settings().setProperty("sonar.php.coverage.reportPaths", String.join(", ", reportPaths));
 
@@ -121,8 +120,7 @@ public class PhpUnitSensorTest {
   @Test
   public void shouldLogWarningWhenTestCaseIsDetectedWithoutDeclaration() {
     Set.of("src/App.php", "src/EmailTest.php").forEach(
-      file -> context.fileSystem().add(inputFile(file))
-    );
+      file -> context.fileSystem().add(inputFile(file)));
 
     Sensor sensor = createSensor();
     sensor.execute(context);
@@ -136,8 +134,7 @@ public class PhpUnitSensorTest {
   @Test
   public void shouldNotLogWarningWhenTestCaseIsDetectedWithDeclaration() {
     Set.of("src/App.php", "src/EmailTest.php").forEach(
-      file -> context.fileSystem().add(inputFile(file))
-    );
+      file -> context.fileSystem().add(inputFile(file)));
 
     context.settings().setProperty("sonar.tests", "src");
 

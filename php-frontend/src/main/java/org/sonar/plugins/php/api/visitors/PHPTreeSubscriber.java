@@ -19,13 +19,12 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 public abstract class PHPTreeSubscriber {
 

@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import java.util.List;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import java.util.List;
 
 /**
  * General interface for <a href="http://php.net/manual/en/control-structures.switch.php">switch</a> clauses.

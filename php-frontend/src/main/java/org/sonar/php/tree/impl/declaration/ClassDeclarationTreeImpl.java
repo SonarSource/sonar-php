@@ -22,7 +22,6 @@ package org.sonar.php.tree.impl.declaration;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
-
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;

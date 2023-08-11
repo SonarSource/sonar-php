@@ -19,6 +19,7 @@
  */
 package org.sonar.php.cache;
 
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,6 @@ import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.cache.PhpReadCache;
 import org.sonar.plugins.php.api.cache.PhpWriteCache;
-import javax.annotation.Nullable;
 
 public class CacheContextImpl implements CacheContext {
 
