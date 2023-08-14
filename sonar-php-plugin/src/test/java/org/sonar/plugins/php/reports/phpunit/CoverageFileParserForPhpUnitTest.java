@@ -23,9 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.function.Consumer;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.plugins.php.reports.phpunit.xml.FileNode;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 
@@ -39,8 +37,6 @@ public class CoverageFileParserForPhpUnitTest {
   private static final String SRC_TEST_RESOURCES = "src/test/resources/";
   private static final String BASE_DIR = "/reports/phpunit/";
 
-  @Rule
-  public LogTester logTester = new LogTester();
   private CoverageFileParserForPhpUnit parser;
 
   @Before

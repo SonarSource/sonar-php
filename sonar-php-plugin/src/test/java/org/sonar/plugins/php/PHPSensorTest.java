@@ -19,6 +19,13 @@
  */
 package org.sonar.plugins.php;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -64,13 +71,6 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.reports.phpunit.PhpUnitSensor;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -91,7 +91,7 @@ import static org.sonar.plugins.php.PhpTestUtils.inputFileHashCacheKey;
 public class PHPSensorTest {
 
   @org.junit.Rule
-  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
 
   private SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
 
@@ -236,8 +236,7 @@ public class PHPSensorTest {
       "public$b=$NUMBER;",
       "}",
       "echo$CHARS",
-      ";"
-    );
+      ";");
   }
 
   @Test
@@ -275,8 +274,7 @@ public class PHPSensorTest {
       "php.projectSymbolData.stringTable:moduleKey:cpd.php",
       "php.contentHashes:moduleKey:cpd.php",
       "php.cpd.data:moduleKey:cpd.php",
-      "php.cpd.stringTable:moduleKey:cpd.php"
-    );
+      "php.cpd.stringTable:moduleKey:cpd.php");
   }
 
   @Test
@@ -306,8 +304,7 @@ public class PHPSensorTest {
       "php.projectSymbolData.data:moduleKey:cpd.php",
       "php.projectSymbolData.stringTable:moduleKey:cpd.php",
       "php.cpd.data:moduleKey:cpd.php",
-      "php.cpd.stringTable:moduleKey:cpd.php"
-    );
+      "php.cpd.stringTable:moduleKey:cpd.php");
   }
 
   @Test
@@ -486,7 +483,6 @@ public class PHPSensorTest {
       .isEqualTo(endLineOffset);
   }
 
-
   @Test
   public void crossFileIssue() {
     checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S1045")).build());
@@ -499,10 +495,8 @@ public class PHPSensorTest {
     assertThat(issue.primaryLocation().textRange().start().line()).isEqualTo(6);
     assertThat(issue.flows()).extracting(
       f -> f.locations().get(0).inputComponent().toString(),
-      f -> f.locations().get(0).textRange().start().line()
-    ).containsExactly(
-      tuple("cross-file/A.php", 5)
-    );
+      f -> f.locations().get(0).textRange().start().line()).containsExactly(
+        tuple("cross-file/A.php", 5));
   }
 
   @Test

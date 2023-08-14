@@ -21,10 +21,11 @@ package org.sonar.plugins.php.api.cfg;
 
 import com.sonar.sslr.api.RecognitionException;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
@@ -43,7 +44,6 @@ import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
-import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
@@ -52,6 +52,7 @@ import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -77,20 +78,20 @@ import static org.mockito.Mockito.when;
  */
 public class ControlFlowGraphTest extends PHPTreeModelTest {
 
-  @org.junit.Rule
-  public LogTester logTester = new LogTester();
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   private CheckContext checkContext;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     PhpFile file = mock(PhpFile.class);
     when(file.toString()).thenReturn("mock.php");
     checkContext = new PHPCheckContext(file, mock(CompilationUnitTreeImpl.class), null, mock(SymbolTable.class));
   }
 
   @Test
-  public void different_statements() {
+  void differentStatements() {
     // empty statement
     verifyBlockCfg("" +
       "block( succ = [END], elem = 1 ); ;");
@@ -173,7 +174,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void not_remove_empty_with_many_successors() {
+  void notRemoveEmptyWithManySuccessors() {
     ControlFlowGraph cfg = cfgForBlock("" +
       "try {" +
       "  tryBody( succ = [catchBody] );" +
@@ -190,7 +191,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void replace_empty_start() {
+  void replaceEmptyStart() {
     ControlFlowGraph cfg = cfgForBlock("" +
       "foreach($x as $y) {" +
       "  return $y;" +
@@ -201,7 +202,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void infinite_for() throws Exception {
+  void infiniteFor() throws Exception {
     ControlFlowGraph cfg = cfgForBlock("" +
       "for(;;) {" +
       " " +
@@ -213,7 +214,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void try_stmt() {
+  void tryStmt() {
     verifyBlockCfg("" +
       "try {" +
       "  tryBody( succ = [catchBody1, catchBody2, finallyBody] );" +
@@ -228,7 +229,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void try_finally() {
+  void tryFinally() {
     verifyBlockCfg("" +
       "try {" +
       "  tryBody( succ = [finallyBody] );" +
@@ -239,7 +240,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void try_catch() {
+  void tryCatch() {
     ControlFlowGraph actualCfg = cfgForBlock("" +
       "try {" +
       "  tryBody( succ = [catchBody, _empty] );" +
@@ -257,22 +258,22 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void try_return_finally() {
+  void tryReturnFinally() {
     verifyBlockCfg("" +
       "try {" +
       "  tryBody( succ = [finallyBody], syntSucc = finallyBody );" +
       "  return;" +
       "} finally {" +
-      "  finallyBody( succ = [after,END] );" +  // note that "after" is in fact not a successor, this is known limitation
+      "  finallyBody( succ = [after,END] );" + // note that "after" is in fact not a successor, this is known limitation
       "}" +
       "after( succ = [END]);");
   }
 
   @Test
-  public void try_return_catch() {
+  void tryReturnCatch() {
     ControlFlowGraph actualCfg = cfgForBlock("" +
       "try {" +
-      "    tryBody(succ = [_empty], pred = [], syntSucc = _empty);" +  // syntSucc should be after, but we are not able to remove _empty block
+      "    tryBody(succ = [_empty], pred = [], syntSucc = _empty);" + // syntSucc should be after, but we are not able to remove _empty block
       "    return;" +
       "} catch (Exception $e) {" +
       "    catchBody(succ=[_empty], pred = [_empty]);" +
@@ -281,7 +282,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
       expected.createEmptyBlockExpectation()
         .withPredecessorIds("tryBody")
-        .withSuccessorsIds("catchBody", "_empty");  // _empty is finally block
+        .withSuccessorsIds("catchBody", "_empty"); // _empty is finally block
       expected.createEmptyBlockExpectation()
         .withPredecessorIds("catchBody", "_empty")
         .withSuccessorsIds("after", "END");
@@ -291,10 +292,10 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void try_return_catch_finally() {
+  void tryReturnCatchFinally() {
     ControlFlowGraph actualCfg = cfgForBlock("" +
       "try {" +
-      "    tryBody(succ = [_empty], syntSucc = _empty);" +  // syntSucc should be finallyBody but we are not able to remove _empty
+      "    tryBody(succ = [_empty], syntSucc = _empty);" + // syntSucc should be finallyBody but we are not able to remove _empty
       "    return;" +
       "} catch (Exception $e) {" +
       "    catchBody1(succ=[finallyBody], pred = [_empty]);" +
@@ -314,11 +315,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void nested_try_return_catch_finally() {
+  void nestedTryReturnCatchFinally() {
     ControlFlowGraph actualCfg = cfgForBlock("" +
       "try { " +
       "    try {" +
-      "        tryBody(succ = [_empty], syntSucc = _empty);" +  // syntSucc should be finallyBody
+      "        tryBody(succ = [_empty], syntSucc = _empty);" + // syntSucc should be finallyBody
       "        return;" +
       "    } catch (Exception $e) {" +
       "        catchBody(succ=[finallyBody], pred = [_empty]);" +
@@ -338,9 +339,8 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     new Validator(expectedCfgStructure).assertCfg(actualCfg);
   }
 
-
   @Test
-  public void throw_outside_try() {
+  void throwOutsideTry() {
     verifyBlockCfg("body( succ = [END], elem = 2, syntSucc = END ); throw new Exception();");
 
     verifyBlockCfg("" +
@@ -378,7 +378,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void throw_inside_try_catch_finally() {
+  void throwInsideTryCatchFinally() {
     ControlFlowGraph actualCfg = cfgForBlock("" +
       "try {" +
       "  tryBody( succ = [catchBody1], syntSucc = dead );" +
@@ -390,20 +390,20 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "} catch (Type2 $e) {" +
       "  catchBody2( succ = [finallyBody] );" +
       "} finally {" +
-      "  finallyBody( succ = [END], syntSucc = _empty );" +  // syntSucc should be after, but we are not able to remove empty block
+      "  finallyBody( succ = [END], syntSucc = _empty );" + // syntSucc should be after, but we are not able to remove empty block
       "  throw $e;" +
       "}" +
       "after( succ = [END]);");
     ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
       expected.createEmptyBlockExpectation()
-        .withSuccessorsIds("after", "END");  // empty block created for finallyBody which is dead because of throw
+        .withSuccessorsIds("after", "END"); // empty block created for finallyBody which is dead because of throw
       return expected;
     });
     new Validator(expectedCfgStructure).assertCfg(actualCfg);
   }
 
   @Test
-  public void throw_inside_nested_try_catch_finally() {
+  void throwInsideNestedTryCatchFinally() {
     ControlFlowGraph actualCfg = cfgForBlock("" +
       "try {" +
       "  try {" +
@@ -432,7 +432,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void return_stmt() {
+  void returnStmt() {
     verifyBlockCfg("body( succ = [END], elem = 1 );");
     verifyBlockCfg("body( succ = [END], elem = 2, syntSucc = END ); return;");
     verifyBlockCfg("body( succ = [END], elem = 2, syntSucc = END ); return 42;");
@@ -453,7 +453,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void break_without_argument() {
+  void breakWithoutArgument() {
     verifyBlockCfg("" +
       "while (cond( succ = [body, END], elem = 1 )) {" +
       "  body( succ = [END], elem = 2, syntSucc = cond );" +
@@ -493,7 +493,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void continue_without_argument() {
+  void continueWithoutArgument() {
     verifyBlockCfg("" +
       "while (cond( succ = [body, END], elem = 1 )) {" +
       "  body( succ = [cond], elem = 2, syntSucc = dead );" +
@@ -525,7 +525,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void break_with_argument() {
+  void breakWithArgument() {
     String breakInnerLoop = "" +
       "while (outerCond( succ = [innerCond, END] )) {" +
       "  while (innerCond( succ = [ifCond, outerCond] )) {" +
@@ -580,7 +580,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void continue_with_argument() {
+  void continueWithArgument() {
     String continueInnerLoop = "" +
       "while (outerCond( succ = [innerCond, END] )) {" +
       "  while (innerCond( succ = [ifCond, outerCond] )) {" +
@@ -648,37 +648,41 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   // supported by PHP <5.4
-  @Test(expected = RecognitionException.class)
-  public void break_unsupported_with_expression() {
-    cfgForBlock("" +
-      "while (cond) {" +
-      "  break 2 - 1;" +
-      "}");
-  }
-
-  @Test(expected = RecognitionException.class)
-  public void break_outside_loop() {
-    cfgForBlock("break 2;");
-  }
-
-  @Test(expected = RecognitionException.class)
-  public void break_invalid_level() {
-    cfgForBlock("" +
-      "while (cond) {" +
-      "  break 2;" +
-      "}");
-  }
-
-  @Test(expected = RecognitionException.class)
-  public void break_invalid_argument() {
-    cfgForBlock("" +
-      "while (cond) {" +
-      "  break 2.1;" +
-      "}");
+  @Test
+  void breakUnsupportedWithExpression() {
+    assertThatExceptionOfType(RecognitionException.class).isThrownBy(
+      () -> cfgForBlock("" +
+        "while (cond) {" +
+        "  break 2 - 1;" +
+        "}"));
   }
 
   @Test
-  public void do_while() {
+  void breakOutsideLoop() {
+    assertThatExceptionOfType(RecognitionException.class).isThrownBy(
+      () -> cfgForBlock("break 2;"));
+  }
+
+  @Test
+  void breakInvalidLevel() {
+    assertThatExceptionOfType(RecognitionException.class).isThrownBy(
+      () -> cfgForBlock("" +
+        "while (cond) {" +
+        "  break 2;" +
+        "}"));
+  }
+
+  @Test
+  void breakInvalidArgument() {
+    assertThatExceptionOfType(RecognitionException.class).isThrownBy(
+      () -> cfgForBlock("" +
+        "while (cond) {" +
+        "  break 2.1;" +
+        "}"));
+  }
+
+  @Test
+  void doWhile() {
     verifyBlockCfg("" +
       "before( succ = [body] );" +
       "do {" +
@@ -688,7 +692,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void do_while_with_nested_if() {
+  void doWhileWithNestedIf() {
     verifyBlockCfg("" +
       "before( succ = [ifCond] );" +
       "do {" +
@@ -700,7 +704,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void simple_while() {
+  void simpleWhile() {
     verifyBlockCfg("" +
       "before( succ = [cond] );" +
       "while (cond( succ = [body, after] )) {" +
@@ -717,7 +721,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void while_with_nested_if() {
+  void whileWithNestedIf() {
     verifyBlockCfg("" +
       "before( succ = [whileCond] );" +
       "while (whileCond( succ = [ifCond, after] )) {" +
@@ -729,7 +733,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_with_nested_while() {
+  void ifWithNestedWhile() {
     verifyBlockCfg("" +
       "before( succ = [ifBody, after], elem = 2 );" +
       "if (condition) {" +
@@ -743,7 +747,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_start_is_first_block() {
+  void testStartIsFirstBlock() {
     ControlFlowGraph cfg = cfgForBlock("" +
       "foo();" +
       "if (a) {" +
@@ -758,7 +762,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_branching_tree() {
+  void testBranchingTree() {
     ControlFlowGraph cfg = cfgForBlock("" +
       "if (a) {" +
       "  qix();" +
@@ -770,7 +774,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void simple_for() {
+  void simpleFor() {
     verifyBlockCfg("" +
       "before(succ = [cond], elem = 3);" +
       "for ($i=1, $j=1 ; cond(succ = [forBody, END], elem=3), $i < 1, $j < 1; update(succ = [cond], elem=2), $i++) {" +
@@ -783,7 +787,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void for_with_nested_if() {
+  void forWithNestedIf() {
     verifyBlockCfg("" +
       "for ( ; forCond( succ = [ifCond, END]); ) {" +
       "  if (ifCond( succ = [ifBody, forCond] )) {" +
@@ -793,7 +797,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void for_with_nested_ifs() {
+  void forWithNestedIfs() {
     verifyBlockCfg("" +
       "for ( ; forCond( succ = [ifCondOne, END]); ) {" +
       "  if (ifCondOne( succ = [ifBodyOne, ifCondTwo] )) {" +
@@ -808,7 +812,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_with_nested_for() {
+  void ifWithNestedFor() {
     verifyBlockCfg("" +
       "ifCond(succ = [forCond, END]);" +
       "if (a) {" +
@@ -822,7 +826,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_with_nested_for_nested_do_while() {
+  void ifWithNestedForNestedDoWhile() {
     verifyBlockCfg("" +
       "ifCond(succ = [forCond, END]);" +
       "if (a) {" +
@@ -839,7 +843,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void simple_foreach() {
+  void simpleForeach() {
     verifyBlockCfg("" +
       "before(succ = [cond], elem = 1);" +
       "foreach ( cond(succ = [body, END], elem = 1) as $foo) {" +
@@ -852,7 +856,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void foreach_with_nested_if() {
+  void foreachWithNestedIf() {
     verifyBlockCfg("" +
       "before(succ = [cond]);" +
       "foreach ( cond(succ = [ifCond, END]) as $foo) {" +
@@ -863,7 +867,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_with_nested_foreach() {
+  void ifWithNestedForeach() {
     verifyBlockCfg("" +
       "ifCond(succ = [forCond, END]);" +
       "if (a) {" +
@@ -877,7 +881,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_with_nested_foreach_nested_do_while() {
+  void ifWithNestedForeachNestedDoWhile() {
     verifyBlockCfg("" +
       "if (ifCond(succ = [forCond, END])) {" +
       "  foreach ( forCond(succ = [innerIfCond, END]) as $foo) {" +
@@ -893,7 +897,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_empty_block_removal() {
+  void testEmptyBlockRemoval() {
     ControlFlowGraph cfg = cfgForBlock("" +
       "if (a) {" +
       "  bar();" +
@@ -905,7 +909,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_with_script_tree() {
+  void testWithScriptTree() {
     verifyScriptTreeCfg("" +
       "b0( succ = [b1, b2], elem = 3 );" +
       "foo();" +
@@ -919,7 +923,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
    * The predecessors are constructed based on the successors, so we should not test them all the time
    */
   @Test
-  public void if_then_test_predecessors() {
+  void ifThenTestPredecessors() {
     verifyBlockCfg("" +
       "b0( succ = [b1, b2], pred = [] );" +
       "foo();" +
@@ -930,7 +934,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_nested() {
+  void ifNested() {
     verifyBlockCfg("" +
       "b0( succ = [b1, b6] );" +
       "if (a?b:c) {" +
@@ -963,7 +967,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_multiple() {
+  void ifMultiple() {
     verifyBlockCfg("" +
       "b0( succ = [b1, b2] );" +
       "if (a) {" +
@@ -977,7 +981,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_else() {
+  void ifElse() {
     verifyBlockCfg("" +
       "before( succ = [insideIf, insideElse] );" +
       "if (a) {" +
@@ -988,7 +992,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_elseif() {
+  void ifElseif() {
     verifyBlockCfg("" +
       "beforeIf( succ = [insideIf, elseIfCond] );" +
       "if (a) {" +
@@ -1006,7 +1010,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_else_if() {
+  void ifElseIf() {
     verifyBlockCfg("" +
       "beforeIf( succ = [insideIf, else_if] );" +
       "if (a) {" +
@@ -1017,7 +1021,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_elseif_else() {
+  void ifElseifElse() {
     verifyBlockCfg("" +
       "beforeIf( succ = [insideIf, firstElseIf] );" +
       "if (a) {" +
@@ -1032,7 +1036,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_elseif_with_nested_while() {
+  void ifElseifWithNestedWhile() {
     verifyBlockCfg("" +
       "before( succ = [ifBody, else_if] );" +
       "if (condition) {" +
@@ -1047,29 +1051,27 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void empty_switch_statement() {
+  void emptySwitchStatement() {
     verifyBlockCfg("" +
       "before(succ = [after]);" +
       "switch ($expr) {" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
   }
 
   @Test
-  public void switch_statement_single_case() {
+  void switchStatementSingleCase() {
     verifyBlockCfg("" +
       "before(succ = [c1]);" +
       "switch ($expr) {" +
       "    case c1(succ = [case1,after]):" +
       "        case1(succ = [after]);" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
   }
 
   @Test
-  public void switch_statement_more_case() {
+  void switchStatementMoreCase() {
     verifyBlockCfg("" +
       "before(succ = [case1]);" +
       "switch ($expr) {" +
@@ -1080,24 +1082,22 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "    case case3(succ = [case3Body,after]):" +
       "        case3Body(succ = [after]);" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
   }
 
   @Test
-  public void switch_statement_with_default() {
+  void switchStatementWithDefault() {
     verifyBlockCfg("" +
       "before(succ = [default_]);" +
       "switch ($expr) {" +
       "    default: " +
       "        default_(succ = [after]);" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
   }
 
   @Test
-  public void switch_statement_with_default_and_case() {
+  void switchStatementWithDefaultAndCase() {
     verifyBlockCfg("" +
       "before(succ = [case1]);" +
       "switch ($expr) {" +
@@ -1108,12 +1108,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "    default: " +
       "        default_(succ = [after]);" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
   }
 
   @Test
-  public void switch_statement_with_default_first() {
+  void switchStatementWithDefaultFirst() {
     verifyBlockCfg("" +
       "before(succ = [case1]);" +
       "switch ($expr) {" +
@@ -1124,12 +1123,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "    case case2(succ = [case2Body,default_]):" +
       "        case2Body(succ = [after]);" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
   }
 
   @Test
-  public void switch_statement_case_without_body() {
+  void switchStatementCaseWithoutBody() {
     verifyBlockCfg("" +
       "before(succ = [case1]);" +
       "switch ($expr) {" +
@@ -1137,12 +1135,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "    case case2(succ = [case2Body,after]):" +
       "        case2Body(succ = [after]);" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
   }
 
   @Test
-  public void switch_with_case_using_same_block_as_default() throws Exception {
+  void switchWithCaseUsingSameBlockAsDefault() throws Exception {
     verifyBlockCfg("" +
       "before(succ = [case1]);" +
       "switch ($expr) {" +
@@ -1156,7 +1153,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void simple_goto() {
+  void simpleGoto() {
     verifyBlockCfg("" +
       "before( succ = [fooBlock], elem = 2, syntSucc = dead );" +
       "goto fooLabel;" +
@@ -1172,7 +1169,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void multiple_gotos_to_same_label() {
+  void multipleGotosToSameLabel() {
     verifyBlockCfg("" +
       "before( succ = [fooBlock], elem = 2, syntSucc = deadOne );" +
       "goto fooLabel;" +
@@ -1185,7 +1182,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void goto_nested_one_level() {
+  void gotoNestedOneLevel() {
     verifyBlockCfg("" +
       "while ( cond( succ = [body, afterWhile] )) {" +
       "  body( succ = [fooBlock], syntSucc = cond );" +
@@ -1205,7 +1202,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void goto_nested_two_levels() {
+  void gotoNestedTwoLevels() {
     verifyBlockCfg("" +
       "while (outerCond( succ = [innerCond, fooBlock] )) {" +
       "  while (innerCond( succ = [bodyInner, ifCond] )) {" +
@@ -1245,7 +1242,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void simple_declare_statement() {
+  void simpleDeclareStatement() {
     verifyBlockCfg("" +
       "before(succ = [END], elem = 4);" +
       "declare (ticks=1) {" +
@@ -1256,7 +1253,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void declare_statement_containing_blocks() {
+  void declareStatementContainingBlocks() {
     verifyBlockCfg("" +
       "before(succ = [insideDeclare]);" +
       "declare (ticks=1) {" +
@@ -1268,7 +1265,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void switch_with_break() {
+  void switchWithBreak() {
     verifyBlockCfg("" +
       "before(succ = [case1]);" +
       "switch ($expr) {" +
@@ -1299,7 +1296,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void switch_statement_with_default_first_break() {
+  void switchStatementWithDefaultFirstBreak() {
     verifyBlockCfg("" +
       "before(succ = [case1]);" +
       "switch ($expr) {" +
@@ -1313,13 +1310,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "        case2Body(succ = [after], syntSucc = after);" +
       "        break;" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
   }
 
-
   @Test
-  public void switch_statement_with_loop_and_continue() {
+  void switchStatementWithLoopAndContinue() {
     verifyBlockCfg("" +
       "before(succ = [whileCond]);" +
       "while (whileCond(succ=[whileBody,after])) {" +
@@ -1343,12 +1338,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "    }" +
       "    whileBodyEnd(succ=[whileCond]);" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
   }
 
   @Test
-  public void switch_for_break() {
+  void switchForBreak() {
     verifyBlockCfg("" +
       "before(succ = [forCond]);" +
       "for ($i = 0; forCond(succ = [loop, END]);) {" +
@@ -1372,12 +1366,12 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_buildCFG() {
+  void testBuildCFG() {
     CompilationUnitTree tree = parse("<?php " +
-        "function foo() {" +
-        "    $expr = function() {echo 'Hello';};" +
-        "}" +
-        "echo 'Hello';",
+      "function foo() {" +
+      "    $expr = function() {echo 'Hello';};" +
+      "}" +
+      "echo 'Hello';",
       PHPLexicalGrammar.COMPILATION_UNIT);
     FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
     ExpressionStatementTree expr = (ExpressionStatementTree) func.body().statements().get(0);
@@ -1399,14 +1393,14 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_buildCFG_with_method() {
+  void testBuildCFGWithMethod() {
     CompilationUnitTree tree = parse("<?php " +
-        "class A {" +
-        "    function foo() {" +
-        "        echo 'Hello';" +
-        "    }" +
-        "    abstract function bar();" +
-        "}",
+      "class A {" +
+      "    function foo() {" +
+      "        echo 'Hello';" +
+      "    }" +
+      "    abstract function bar();" +
+      "}",
       PHPLexicalGrammar.COMPILATION_UNIT);
     ClassDeclarationTree cls = (ClassDeclarationTree) tree.script().statements().get(0);
     MethodDeclarationTree method = (MethodDeclarationTree) cls.members().get(0);
@@ -1422,14 +1416,14 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_buildCFG_with_method_in_enum() {
+  void testBuildCFGWithMethodInEnum() {
     CompilationUnitTree tree = parse("<?php " +
-        "enum Foo {" +
-        "    case Bar;" +
-        "    function foo() {" +
-        "        echo 'Hello';" +
-        "    }" +
-        "}",
+      "enum Foo {" +
+      "    case Bar;" +
+      "    function foo() {" +
+      "        echo 'Hello';" +
+      "    }" +
+      "}",
       PHPLexicalGrammar.COMPILATION_UNIT);
     EnumDeclarationTree enumDeclaration = (EnumDeclarationTree) tree.script().statements().get(0);
     MethodDeclarationTree method = (MethodDeclarationTree) enumDeclaration.members().get(1);
@@ -1441,7 +1435,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void while_try_break_finally() {
+  void whileTryBreakFinally() {
     verifyBlockCfg("" +
       "while (cond(succ=[tryBody, END])) {" +
       "   try {" +
@@ -1455,7 +1449,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void while_try_continue_finally() {
+  void whileTryContinueFinally() {
     verifyBlockCfg("" +
       "while (cond(succ=[tryBody, END])) {" +
       "   try {" +
@@ -1468,7 +1462,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void while_try_break_catch() {
+  void whileTryBreakCatch() {
     ControlFlowGraph actualCfg = cfgForBlock("" +
       "while (cond(succ=[tryBody, after])) {" +
       "   try {" +
@@ -1483,17 +1477,17 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
       expected.createEmptyBlockExpectation()
         .withPredecessorIds("tryBody")
-        .withSuccessorsIds("catchBody", "_empty");  // _empty is finally block
+        .withSuccessorsIds("catchBody", "_empty"); // _empty is finally block
       expected.createEmptyBlockExpectation()
         .withPredecessorIds("catchBody", "_empty")
-        .withSuccessorsIds("afterTry", "END");   // afterTry is executed in case tryBody throws
+        .withSuccessorsIds("afterTry", "END"); // afterTry is executed in case tryBody throws
       return expected;
     });
     new Validator(expectedCfgStructure).assertCfg(actualCfg);
   }
 
   @Test
-  public void while_try_continue_catch() {
+  void whileTryContinueCatch() {
     ControlFlowGraph actualCfg = cfgForBlock("" +
       "while (cond(succ=[tryBody, after])) {" +
       "   try {" +
@@ -1507,17 +1501,17 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
       expected.createEmptyBlockExpectation()
         .withPredecessorIds("tryBody")
-        .withSuccessorsIds("catchBody", "_empty");  // _empty is finally block
+        .withSuccessorsIds("catchBody", "_empty"); // _empty is finally block
       expected.createEmptyBlockExpectation()
         .withPredecessorIds("catchBody", "_empty")
-        .withSuccessorsIds("cond", "END");   // note that path to cond is actually impossible
+        .withSuccessorsIds("cond", "END"); // note that path to cond is actually impossible
       return expected;
     });
     new Validator(expectedCfgStructure).assertCfg(actualCfg);
   }
 
   @Test
-  public void while_try_break_catch_finally() {
+  void whileTryBreakCatchFinally() {
     ControlFlowGraph actualCfg = cfgForBlock("" +
       "while (cond(succ=[tryBody, after])) {" +
       "   try {" +
@@ -1526,7 +1520,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "   } catch (Exception $e) {" +
       "      catchBody(succ = [finallyBody]);" +
       "  } finally {" +
-      "      finallyBody(succ = [cond, END]);" +  // branch to cond is actually infeasible
+      "      finallyBody(succ = [cond, END]);" + // branch to cond is actually infeasible
       "  }" +
       "}" +
       "after(succ=[END]);");
@@ -1540,11 +1534,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void echo_tag() {
+  void echoTag() {
     CompilationUnitTree tree = parse("<?php\n" +
-        "function foo() {\n" +
-        "     ?><?= 'Hello' ?><?php\n" +
-        "}\n",
+      "function foo() {\n" +
+      "     ?><?= 'Hello' ?><?php\n" +
+      "}\n",
       PHPLexicalGrammar.COMPILATION_UNIT);
     FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
     ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
@@ -1559,11 +1553,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_cfg_failure_logs() {
+  void testCfgFailureLogs() {
     CompilationUnitTree tree = parse("<?php\n" +
-        "function foo() {\n" +
-        "     break;\n" +
-        "}\n",
+      "function foo() {\n" +
+      "     break;\n" +
+      "}\n",
       PHPLexicalGrammar.COMPILATION_UNIT);
     FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
     logTester.setLevel(Level.DEBUG);
@@ -1581,7 +1575,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_block_tostring() {
+  void testBlockToString() {
     ControlFlowGraph cfg = cfgForBlock("" +
       "label: " +
       "    $i++;");
@@ -1596,12 +1590,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_cfg_build_for_catch_block_only() {
+  void testCfgBuildForCatchBlockOnly() {
     CatchBlockTree block = parse("" +
       "catch (Exception $e) {" +
       " echo $e->message();" +
-      "}", PHPLexicalGrammar.CATCH_BLOCK
-    );
+      "}", PHPLexicalGrammar.CATCH_BLOCK);
 
     ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
     assertThat(cfg).isNotNull();
@@ -1609,12 +1602,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_cfg_build_for_foreach_block_only() {
+  void testCfgBuildForForeachBlockOnly() {
     ForEachStatementTree block = parse("" +
       "foreach ($array as $item) {" +
       " echo $item;" +
-      "}", PHPLexicalGrammar.FOREACH_STATEMENT
-    );
+      "}", PHPLexicalGrammar.FOREACH_STATEMENT);
 
     ControlFlowGraph cfg = ControlFlowGraph.build(block, checkContext);
     assertThat(cfg).isNotNull();

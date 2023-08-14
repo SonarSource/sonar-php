@@ -24,13 +24,13 @@ import java.nio.charset.Charset;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.testfixtures.log.LogTester;
-import org.slf4j.event.Level;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -55,7 +55,7 @@ public class CoverageResultImporterTest {
   private SensorContextTester context;
 
   @Rule
-  public LogTester logTester = new LogTester();
+  public final LogTester logTester = new LogTester();
 
   @Before
   public void setUp() {

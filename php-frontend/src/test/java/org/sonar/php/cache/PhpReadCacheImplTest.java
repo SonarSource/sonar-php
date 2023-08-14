@@ -21,7 +21,7 @@ package org.sonar.php.cache;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.sensor.cache.ReadCache;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,10 +29,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class PhpReadCacheImplTest {
+class PhpReadCacheImplTest {
 
   @Test
-  public void shouldReadBytesFromReadCache() {
+  void shouldReadBytesFromReadCache() {
     ReadCache readCache = mock(ReadCache.class);
     when(readCache.contains("key")).thenReturn(true);
     InputStream inputStream = mock(InputStream.class);
@@ -46,7 +46,7 @@ public class PhpReadCacheImplTest {
   }
 
   @Test
-  public void shouldReturnNullWhenIoException() throws IOException {
+  void shouldReturnNullWhenIoException() throws IOException {
     ReadCache readCache = mock(ReadCache.class);
     when(readCache.contains("key")).thenReturn(true);
     InputStream inputStream = mock(InputStream.class);
@@ -61,7 +61,7 @@ public class PhpReadCacheImplTest {
   }
 
   @Test
-  public void shouldReturnNullWhenDoesntContainsKey() throws IOException {
+  void shouldReturnNullWhenDoesntContainsKey() throws IOException {
     ReadCache readCache = mock(ReadCache.class);
     when(readCache.contains("key")).thenReturn(false);
 
@@ -73,7 +73,7 @@ public class PhpReadCacheImplTest {
   }
 
   @Test
-  public void shouldCheckContainsInReadCache() {
+  void shouldCheckContainsInReadCache() {
     ReadCache readCache = mock(ReadCache.class);
     PhpReadCacheImpl phpReadCache = new PhpReadCacheImpl(readCache);
 

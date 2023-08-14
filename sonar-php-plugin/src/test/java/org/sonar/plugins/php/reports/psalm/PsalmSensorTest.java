@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
@@ -34,7 +35,6 @@ import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTester;
-import org.slf4j.event.Level;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
@@ -51,7 +51,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   private final PsalmSensor psalmSensor = new PsalmSensor(analysisWarnings);
 
   @Rule
-  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
 
   @Test
   public void test_descriptor() {
@@ -241,8 +241,7 @@ public class PsalmSensorTest extends ReportSensorTest {
       "Missing information for filePath:'psalm/file1.php', message:'null'",
       "Missing information for filePath:'null', message:'Issue without filePath'");
     assertThat(onlyOneLogElement(logTester().logs(Level.WARN))).isEqualTo(
-      "Failed to resolve 1 file path(s) in Psalm psalm-report-with-errors.json report. No issues imported related to file(s): psalm/unknown.php"
-    );
+      "Failed to resolve 1 file path(s) in Psalm psalm-report-with-errors.json report. No issues imported related to file(s): psalm/unknown.php");
 
     verify(analysisWarnings, times(1))
       .addWarning("Failed to resolve 1 file path(s) in Psalm psalm-report-with-errors.json report. No issues imported related to file(s): psalm/unknown.php");

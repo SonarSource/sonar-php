@@ -20,23 +20,23 @@
 package org.sonar;
 
 import java.nio.file.Paths;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DurationStatisticsTest {
+class DurationStatisticsTest {
 
   private final SensorContextTester sensorContext = SensorContextTester.create(Paths.get("."));
 
-  @Rule
-  public LogTester logTester = new LogTester();
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Test
-  public void statistics_disabled() {
+  void statisticsDisabled() {
     DurationStatistics statistics = new DurationStatistics(sensorContext.config());
     fillStatistics(statistics);
     statistics.log();
@@ -44,7 +44,7 @@ public class DurationStatisticsTest {
   }
 
   @Test
-  public void statistics_activated() {
+  void statisticsActivated() {
     sensorContext.settings().setProperty("sonar.php.duration.statistics", "true");
     DurationStatistics statistics = new DurationStatistics(sensorContext.config());
     fillStatistics(statistics);
@@ -54,7 +54,7 @@ public class DurationStatisticsTest {
   }
 
   @Test
-  public void statistics_format() {
+  void statisticsFormat() {
     sensorContext.settings().setProperty("sonar.php.duration.statistics", "true");
     DurationStatistics statistics = new DurationStatistics(sensorContext.config());
     statistics.addRecord("A", 12_000_000L);

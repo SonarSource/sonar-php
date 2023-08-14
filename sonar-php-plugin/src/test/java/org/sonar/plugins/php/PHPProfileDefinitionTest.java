@@ -20,7 +20,7 @@
 package org.sonar.plugins.php;
 
 import com.sonar.plugins.security.api.PhpRules;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.api.utils.ValidationMessages;
@@ -29,10 +29,10 @@ import org.sonar.plugins.php.api.Php;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PHPProfileDefinitionTest {
+class PHPProfileDefinitionTest {
 
   @Test
-  public void should_create_sonar_way_profile() {
+  void shouldCreateSonarWayProfile() {
     ValidationMessages validation = ValidationMessages.create();
 
     BuiltInQualityProfilesDefinition.Context context = new BuiltInQualityProfilesDefinition.Context();
@@ -47,7 +47,7 @@ public class PHPProfileDefinitionTest {
   }
 
   @Test
-  public void should_contains_security_rules_if_present() {
+  void shouldContainsSecurityRulesIfPresent() {
     // no security rule available
     PhpRules.getRuleKeys().clear();
     assertThat(PHPProfileDefinition.getSecurityRuleKeys()).isEmpty();

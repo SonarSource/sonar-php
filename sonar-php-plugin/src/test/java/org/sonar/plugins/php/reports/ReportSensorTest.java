@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.junit.Test;
+import org.slf4j.event.Level;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.batch.fs.InputFile;
@@ -37,9 +38,8 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.utils.Version;
 import org.sonar.api.testfixtures.log.LogTester;
-import org.slf4j.event.Level;
+import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -51,7 +51,6 @@ import static org.mockito.Mockito.verify;
 
 public abstract class ReportSensorTest {
   protected final AnalysisWarningsWrapper analysisWarnings = spy(AnalysisWarningsWrapper.class);
-
 
   protected static String language(Path file) {
     String path = file.toString();

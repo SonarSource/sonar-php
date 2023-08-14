@@ -19,7 +19,14 @@
  */
 package org.sonar.plugins.php;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -33,12 +40,6 @@ import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.utils.ReadWriteInMemoryCache;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,8 +48,8 @@ import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class SymbolScannerTest {
 
-  @org.junit.Rule
-  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @Rule
+  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
 
   public static final QualifiedName CLASS_NAME = qualifiedName("app\\test\\controller");
   private static ReadWriteInMemoryCache previousCache;
