@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.reports.phpunit.xml;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -47,7 +46,6 @@ public final class TestCase {
     this.skipped = skipped;
   }
 
-  @VisibleForTesting
   public TestCase(Status status) {
     if (status == Status.ERROR) {
       this.error = status.toString();

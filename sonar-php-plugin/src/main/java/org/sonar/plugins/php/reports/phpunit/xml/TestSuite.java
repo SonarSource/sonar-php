@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.reports.phpunit.xml;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,7 +43,6 @@ public final class TestSuite {
 
   private List<TestSuite> testSuites = new ArrayList<>();
 
-  @VisibleForTesting
   List<TestCase> testCases;
 
   public TestSuite(@Nullable String name, @Nullable String file, double time, List<TestCase> testCases) {

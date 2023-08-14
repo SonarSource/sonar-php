@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -51,7 +50,6 @@ public final class PHPProfileDefinition implements BuiltInQualityProfilesDefinit
     sonarWay.done();
   }
 
-  @VisibleForTesting
   static Set<RuleKey> getSecurityRuleKeys() {
     try {
 

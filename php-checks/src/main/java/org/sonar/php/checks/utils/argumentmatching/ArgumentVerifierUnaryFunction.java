@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.utils.argumentmatching;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.util.function.Function;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 
@@ -42,7 +41,6 @@ public class ArgumentVerifierUnaryFunction extends ArgumentMatcher implements Fu
     return matchingSuccessful;
   }
 
-  @VisibleForTesting
   Function<ExpressionTree, Boolean> getMatchingFunction() {
     return matchingFunction;
   }
