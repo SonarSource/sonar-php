@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.sonar.sslr.api.RecognitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +66,6 @@ public class PhpIniSensor implements Sensor {
     execute(context, checks);
   }
 
-  @VisibleForTesting
   protected void execute(SensorContext context, Checks<PhpIniCheck> checks) {
     PhpIniParser parser = new PhpIniParser();
     FileSystem fs = context.fileSystem();

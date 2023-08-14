@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.base.Preconditions;
 import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -29,13 +28,15 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
+import static java.util.Objects.requireNonNull;
+
 public class NameIdentifierTreeImpl extends PHPTree implements NameIdentifierTree {
 
   private final InternalSyntaxToken nameToken;
   private static final Kind KIND = Kind.NAME_IDENTIFIER;
 
   public NameIdentifierTreeImpl(InternalSyntaxToken nameToken) {
-    this.nameToken = Preconditions.checkNotNull(nameToken);
+    this.nameToken = requireNonNull(nameToken);
   }
 
   @Override

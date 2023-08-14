@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.symbols;
 
-import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,6 +30,8 @@ import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 
+import static java.util.Objects.requireNonNull;
+
 public class Scope {
 
   private final Scope outer;
@@ -41,14 +42,13 @@ public class Scope {
   private boolean captureOuterScope;
 
   public Scope(Scope outer, Tree tree, boolean captureOuterScope) {
-    this.outer = Preconditions.checkNotNull(outer);
-    this.tree = Preconditions.checkNotNull(tree);
+    this.outer = requireNonNull(outer);
+    this.tree = requireNonNull(tree);
     this.captureOuterScope = captureOuterScope;
   }
 
   /**
    * Used for global scope
-   *
    */
   public Scope(CompilationUnitTree compilationUnitTree) {
     this.outer = null;

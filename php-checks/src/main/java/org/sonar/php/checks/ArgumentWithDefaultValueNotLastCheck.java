@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.base.Joiner;
 import java.util.ArrayList;
 import java.util.List;
 import org.sonar.check.Rule;
@@ -82,7 +81,7 @@ public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
     for (ParameterTree parameter : params) {
       parameterNames.add("\"" + parameter.variableIdentifier().variableExpression().text() + "\"");
     }
-    return Joiner.on(", ").join(parameterNames);
+    return String.join(", ", parameterNames);
   }
 
 }

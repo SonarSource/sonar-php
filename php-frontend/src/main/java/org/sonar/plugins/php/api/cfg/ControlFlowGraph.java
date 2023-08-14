@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -82,7 +81,6 @@ public class ControlFlowGraph {
   /**
    * <b>WARNING:</b> This is an experimental API, it may change without notice.
    */
-  @VisibleForTesting
   public static ControlFlowGraph build(BlockTree body) {
     return new ControlFlowGraphBuilder(body.statements()).getGraph();
   }
@@ -90,7 +88,6 @@ public class ControlFlowGraph {
   /**
    * <b>WARNING:</b> This is an experimental API, it may change without notice.
    */
-  @VisibleForTesting
   static ControlFlowGraph build(ScriptTree scriptTree) {
     return new ControlFlowGraphBuilder(scriptTree.statements()).getGraph();
   }
@@ -98,7 +95,6 @@ public class ControlFlowGraph {
   /**
    * <b>WARNING:</b> This is an experimental API, it may change without notice.
    */
-  @VisibleForTesting
   static ControlFlowGraph build(ForEachStatementTree statementTree) {
     return new ControlFlowGraphBuilder(statementTree.statements()).getGraph();
   }

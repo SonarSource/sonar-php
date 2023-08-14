@@ -77,7 +77,7 @@ import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
@@ -198,7 +198,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     TypeSymbolImpl classSymbol = (TypeSymbolImpl) symbolTable.getSymbol(tree.name());
-    checkNotNull(classSymbol, "Symbol for %s not found", tree);
+    requireNonNull(classSymbol, () -> String.format("Symbol for %s not found", tree));
     scan(tree.attributeGroups());
     enterScope(tree);
     classScopes.push(currentScope);
