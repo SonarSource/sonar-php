@@ -20,6 +20,9 @@
 'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.inc':[
 0,
 ],
+'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc':[
+0,
+],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UselessOverridingMethodUnitTest.inc':[
 0,
 ],
@@ -30,6 +33,9 @@
 0,
 ],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneObjectStructurePerFileUnitTest.inc':[
+0,
+],
+'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc':[
 0,
 ],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc':[

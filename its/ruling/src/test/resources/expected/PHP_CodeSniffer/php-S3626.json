@@ -11,6 +11,10 @@
 'PHP_CodeSniffer:src/Standards/Generic/Sniffs/NamingConventions/CamelCapsFunctionNameSniff.php':[
 171,
 ],
+'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc':[
+29,
+83,
+],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc':[
 191,
 195,

@@ -61,6 +61,9 @@
 129,
 231,
 ],
+'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc':[
+147,
+],
 'PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php':[
 217,
 218,
