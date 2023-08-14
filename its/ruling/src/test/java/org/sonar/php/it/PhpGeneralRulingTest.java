@@ -111,7 +111,8 @@ public class PhpGeneralRulingTest {
       .setProperty("sonar.import_unknown_files", "true")
       .setProperty("sonar.php.duration.statistics", "true")
       .setProperty("sonar.cpd.exclusions", "**/*")
-      .setProperty("sonar.scm.disabled", "true");
+      .setProperty("sonar.scm.disabled", "true")
+      .setProperty("sonar.exclusions", "**/CommentedOutCodeUnitTest.inc, **/UnusedFunctionParameterUnitTest.inc, **/FunctionCallArgumentSpacingUnitTest.inc");
 
     ORCHESTRATOR.executeBuild(build);
 

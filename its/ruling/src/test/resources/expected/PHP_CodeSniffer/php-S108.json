@@ -142,10 +142,6 @@
 73,
 84,
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc':[
-87,
-88,
-],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.inc':[
 25,
 26,

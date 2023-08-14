@@ -53,9 +53,6 @@
 'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.inc':[
 0,
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc':[
-0,
-],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UselessOverridingMethodUnitTest.inc':[
 0,
 ],
@@ -192,9 +189,6 @@
 0,
 ],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/SpaceAfterNotUnitTest.inc':[
-0,
-],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc':[
 0,
 ],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc':[
@@ -723,9 +717,6 @@
 0,
 ],
 'PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ValidLogicalOperatorsUnitTest.inc':[
-0,
-],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc':[
 0,
 ],
 'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowBooleanStatementUnitTest.inc':[
