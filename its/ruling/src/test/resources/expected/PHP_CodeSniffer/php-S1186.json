@@ -11,11 +11,6 @@
 27,
 28,
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc':[
-29,
-33,
-38,
-],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc':[
 96,
 107,
@@ -351,9 +346,7 @@
 'PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc':[
 133,
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc':[
-46,
-],
+
 'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc':[
 10,
 ],

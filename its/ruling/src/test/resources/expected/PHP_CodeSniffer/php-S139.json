@@ -1167,9 +1167,6 @@
 50,
 53,
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc':[
-44,
-],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.php':[
 30,
 55,
@@ -1354,12 +1351,6 @@
 37,
 52,
 55,
-],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc':[
-91,
-92,
-93,
-133,
 ],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.php':[
 60,
@@ -3659,9 +3650,7 @@
 49,
 52,
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc':[
-48,
-],
+
 'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.php':[
 30,
 71,

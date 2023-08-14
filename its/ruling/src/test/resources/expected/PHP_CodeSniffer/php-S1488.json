@@ -15,9 +15,6 @@
 'PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php':[
 710,
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc':[
-64,
-],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/CamelCapsFunctionNameUnitTest.php':[
 28,
 ],
