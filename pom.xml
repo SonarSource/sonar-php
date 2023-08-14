@@ -82,6 +82,7 @@
     <version.commons-lang>3.10</version.commons-lang>
     <version.junit>4.13.1</version.junit>
     <version.junit-jupiter>5.9.2</version.junit-jupiter>
+    <version.junit-vintage>5.10.0</version.junit-vintage>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>4.11.0</version.mockito>
     <version.sonar>10.1.0.73491</version.sonar>
@@ -227,6 +228,12 @@
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter</artifactId>
         <version>${version.junit-jupiter}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.vintage</groupId>
+        <artifactId>junit-vintage-engine</artifactId>
+        <version>${version.junit-vintage}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
