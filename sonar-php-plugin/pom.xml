@@ -127,7 +127,8 @@
                 </filter>
               </filters>
             </configuration>
-          </execution></executions>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-enforcer-plugin</artifactId>

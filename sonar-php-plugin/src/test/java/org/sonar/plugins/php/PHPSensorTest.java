@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -57,7 +56,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.testfixtures.log.LogTesterJUnit5;
+import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.api.utils.Version;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -91,8 +90,8 @@ import static org.sonar.plugins.php.PhpTestUtils.inputFileHashCacheKey;
 
 public class PHPSensorTest {
 
-  @RegisterExtension
-  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
+  @org.junit.Rule
+  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
 
   private SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
 

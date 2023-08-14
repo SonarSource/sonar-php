@@ -22,15 +22,15 @@ package org.sonar.plugins.php.reports.phpunit;
 import java.io.File;
 import java.nio.charset.Charset;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.testfixtures.log.LogTesterJUnit5;
+import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -54,8 +54,8 @@ public class CoverageResultImporterTest {
   private CoverageResultImporter importer;
   private SensorContextTester context;
 
-  @RegisterExtension
-  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
+  @Rule
+  public final LogTester logTester = new LogTester();
 
   @Before
   public void setUp() {

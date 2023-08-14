@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.io.FilenameUtils;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.Severity;
@@ -37,6 +37,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
+import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
@@ -54,8 +55,8 @@ public class PhpStanSensorTest extends ReportSensorTest {
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "phpstan");
   protected final PhpStanSensor phpStanSensor = new PhpStanSensor(analysisWarnings);
 
-  @RegisterExtension
-  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
+  @Rule
+  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
 
   @Test
   public void test_descriptor() {
@@ -217,7 +218,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Override
-  protected LogTesterJUnit5 logTester() {
+  protected LogTester logTester() {
     return logTester;
   }
 

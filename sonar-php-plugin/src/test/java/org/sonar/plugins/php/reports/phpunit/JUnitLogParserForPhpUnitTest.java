@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
-import org.sonar.api.testfixtures.log.LogTesterJUnit5;
+import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.reports.phpunit.xml.TestSuites;
 import org.sonarsource.analyzer.commons.xml.ParseException;
@@ -37,8 +37,8 @@ public class JUnitLogParserForPhpUnitTest {
 
   private JUnitLogParserForPhpUnit parser;
 
-  @RegisterExtension
-  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
+  @Rule
+  public final LogTester logTester = new LogTester();
 
   @Before
   public void setUp() throws Exception {
@@ -77,7 +77,8 @@ public class JUnitLogParserForPhpUnitTest {
     List<TestFileReport> reportsPerFile = suites.arrangeSuitesIntoTestFileReports();
     assertThat(reportsPerFile).hasSize(8);
     assertThat(reportsPerFile.get(5).getTests()).isEqualTo(3);
-    assertThat(logTester.logs()).doesNotContain("Test cases must always be descendants of a file-based suite, skipping : testCanBeUsedAsString with data set #0 in App3Test::testCanBeUsedAsString");
+    assertThat(logTester.logs())
+      .doesNotContain("Test cases must always be descendants of a file-based suite, skipping : testCanBeUsedAsString with data set #0 in App3Test::testCanBeUsedAsString");
   }
 
   @Test
