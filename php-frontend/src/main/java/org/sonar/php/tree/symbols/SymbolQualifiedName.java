@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.symbols;
 
-import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,6 +30,8 @@ import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+
+import static org.sonar.php.utils.collections.ListUtils.getLast;
 
 public class SymbolQualifiedName implements QualifiedName {
 
@@ -98,7 +99,7 @@ public class SymbolQualifiedName implements QualifiedName {
 
   @Override
   public String simpleName() {
-    return Iterables.getLast(nameElements);
+    return getLast(nameElements);
   }
 
   @Override

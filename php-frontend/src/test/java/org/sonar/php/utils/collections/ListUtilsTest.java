@@ -25,8 +25,55 @@ import java.util.Objects;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ListUtilsTest {
+
+  @Test
+  public void get_last_on_list() {
+    List<String> list = List.of("value1", "value2");
+    assertThat(ListUtils.getLast(list)).isEqualTo("value2");
+  }
+
+  @Test
+  public void get_last_on_empty_list() {
+    List<String> list = List.of();
+    assertThatThrownBy(() -> ListUtils.getLast(list)).isInstanceOf(IndexOutOfBoundsException.class);
+  }
+
+  @Test
+  public void get_last_default_on_list() {
+    List<String> list = List.of("value1", "value2");
+    assertThat(ListUtils.getLast(list, "default")).isEqualTo("value2");
+  }
+
+  @Test
+  public void get_last_default_on_empty_list() {
+    List<String> list = List.of();
+    assertThat(ListUtils.getLast(list, "default")).isEqualTo("default");
+  }
+
+  @Test
+  public void get_only_element_on_single_element_list() {
+    List<String> list = List.of("value");
+    assertThat(ListUtils.getOnlyElement(list)).isEqualTo("value");
+  }
+
+  @Test
+  public void get_only_element_on_multiple_element_list() {
+    List<String> list = List.of("value1", "value2");
+    assertThatThrownBy(() -> ListUtils.getOnlyElement(list))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Expected list of size 1, but was list of size 2.");
+  }
+
+  @Test
+  public void get_only_element_on_empty_list() {
+    List<String> list = List.of();
+    assertThatThrownBy(() -> ListUtils.getOnlyElement(list))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Expected list of size 1, but was list of size 0.");
+  }
 
   @Test
   public void test_concat_any_list() {

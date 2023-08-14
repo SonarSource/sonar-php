@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.symbols;
 
-import com.google.common.collect.Iterables;
 import java.util.List;
 import org.assertj.core.api.ListAssert;
 import org.junit.Test;
@@ -354,7 +353,8 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
     Symbol symbol = symbolTable.getSymbol("pdo");
     assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
-    SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
+    assertThat(symbol.usages()).hasSize(1);
+    SyntaxToken usage = symbol.usages().get(0);
     assertThat(usage.line()).isEqualTo(1);
     assertThat(usage.column()).isEqualTo(17);
   }
@@ -364,7 +364,8 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new \\PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
     Symbol symbol = symbolTable.getSymbol("pdo");
     assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
-    SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
+    assertThat(symbol.usages()).hasSize(1);
+    SyntaxToken usage = symbol.usages().get(0);
     assertThat(usage.line()).isEqualTo(1);
     assertThat(usage.column()).isEqualTo(18);
   }
@@ -374,7 +375,8 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace A { $a = new A('odbc:sample', 'db2inst1', 'ibmdb2'); }");
     Symbol symbol = symbolTable.getSymbol("A\\A");
     assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
-    SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
+    assertThat(symbol.usages()).hasSize(1);
+    SyntaxToken usage = symbol.usages().get(0);
     assertThat(usage.line()).isEqualTo(1);
     assertThat(usage.column()).isEqualTo(30);
   }
@@ -435,7 +437,9 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   public void test_anonymous_class() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { $x = new class { function foo() {} }; } ");
     assertThat(symbolTable.getSymbols()).hasSize(2);
-    Symbol fooSymbol = Iterables.getOnlyElement(symbolTable.getSymbols("foo"));
+    List<Symbol> symbols = symbolTable.getSymbols("foo");
+    assertThat(symbols).hasSize(1);
+    Symbol fooSymbol = symbols.get(0);
     // TODO qualified name for methods of anonymous class are wrong, because we don't create correct symbols
     assertThat(fooSymbol.qualifiedName().toString()).isEqualTo("n\\foo");
   }

@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +31,7 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
+import static org.sonar.php.utils.collections.ListUtils.getLast;
 import static org.sonar.plugins.php.api.cfg.ControlFlowGraph.KINDS_WITH_CONTROL_FLOW;
 
 @Rule(key = RedundantJumpCheck.KEY)
@@ -56,7 +56,7 @@ public class RedundantJumpCheck extends PHPSubscriptionCheck {
   private void checkCfg(ControlFlowGraph cfg) {
     for (CfgBlock cfgBlock : cfg.blocks()) {
       if (cfgBlock.successors().size() == 1 && cfgBlock.successors().contains(cfgBlock.syntacticSuccessor())) {
-        Tree lastElement = Iterables.getLast(cfgBlock.elements());
+        Tree lastElement = getLast(cfgBlock.elements());
         if (isIgnoredJump(lastElement)) {
           continue;
         }

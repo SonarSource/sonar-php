@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.collect.Iterables;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -73,6 +72,7 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 import static java.util.Collections.singletonList;
 import static org.sonar.php.symbols.Symbols.get;
 import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
+import static org.sonar.php.utils.collections.ListUtils.getLast;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public final class CheckUtils {
@@ -352,7 +352,7 @@ public final class CheckUtils {
     List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
 
     if (!trivias.isEmpty()) {
-      return StringUtils.containsIgnoreCase(Iterables.getLast(trivias).text(), annotation);
+      return StringUtils.containsIgnoreCase(getLast(trivias).text(), annotation);
     }
 
     return false;

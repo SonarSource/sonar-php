@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.ListMultimap;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -48,6 +47,7 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
 import static org.sonar.php.tree.TreeUtils.isDescendant;
+import static org.sonar.php.utils.collections.ListUtils.getOnlyElement;
 
 @Rule(key = LoopExecutingAtMostOnceCheck.KEY)
 public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
@@ -162,6 +162,6 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
       .filter(CfgBranchingBlock.class::isInstance)
       .filter(b -> ((CfgBranchingBlock) b).branchingTree().equals(loop)).collect(Collectors.toList());
 
-    return  ((CfgBranchingBlock) Iterables.getOnlyElement(loopBlocks));
+    return ((CfgBranchingBlock) getOnlyElement(loopBlocks));
   }
 }
