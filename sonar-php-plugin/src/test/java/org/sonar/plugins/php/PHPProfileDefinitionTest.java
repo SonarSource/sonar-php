@@ -21,15 +21,25 @@ package org.sonar.plugins.php;
 
 import com.sonar.plugins.security.api.PhpRules;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.slf4j.event.Level;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.plugins.php.PHPProfileDefinition.REPOSITORY_KEYS_METHOD_NAME;
+import static org.sonar.plugins.php.PHPProfileDefinition.RULES_KEYS_METHOD_NAME;
+import static org.sonar.plugins.php.PHPProfileDefinition.SECURITY_RULES_CLASS;
+import static org.sonar.plugins.php.PHPProfileDefinition.getSecurityRuleKeys;
 
 class PHPProfileDefinitionTest {
+
+  @RegisterExtension
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
 
   @Test
   void shouldCreateSonarWayProfile() {
@@ -50,10 +60,28 @@ class PHPProfileDefinitionTest {
   void shouldContainsSecurityRulesIfPresent() {
     // no security rule available
     PhpRules.getRuleKeys().clear();
-    assertThat(PHPProfileDefinition.getSecurityRuleKeys()).isEmpty();
+    assertThat(getSecurityRuleKeys(SECURITY_RULES_CLASS, RULES_KEYS_METHOD_NAME, REPOSITORY_KEYS_METHOD_NAME)).isEmpty();
 
     // one security rule available
     PhpRules.getRuleKeys().add("S3649");
-    assertThat(PHPProfileDefinition.getSecurityRuleKeys()).containsOnly(RuleKey.of("phpsecurity", "S3649"));
+    assertThat(getSecurityRuleKeys(SECURITY_RULES_CLASS, RULES_KEYS_METHOD_NAME, REPOSITORY_KEYS_METHOD_NAME))
+      .containsOnly(RuleKey.of("phpsecurity", "S3649"));
   }
+
+  @Test
+  void shouldLogExceptionOnInvalidClassName() {
+    getSecurityRuleKeys("invalidClassName", RULES_KEYS_METHOD_NAME, REPOSITORY_KEYS_METHOD_NAME);
+
+    assertThat(logTester.logs()).hasSize(1);
+    assertThat(logTester.logs().get(0)).contains("com.sonar.plugins.security.api.PhpRules is not found");
+  }
+
+  @Test
+  void shouldLogExceptionOnInvalidMethodName() {
+    getSecurityRuleKeys(SECURITY_RULES_CLASS, "invalidMethodName", REPOSITORY_KEYS_METHOD_NAME);
+
+    assertThat(logTester.logs()).hasSize(1);
+    assertThat(logTester.logs().get(0)).contains("Method not found on com.sonar.plugins.security.api.PhpRules");
+  }
+
 }
