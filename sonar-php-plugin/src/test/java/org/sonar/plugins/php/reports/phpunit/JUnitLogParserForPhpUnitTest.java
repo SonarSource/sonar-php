@@ -25,7 +25,8 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.reports.phpunit.xml.TestSuites;
 import org.sonarsource.analyzer.commons.xml.ParseException;
@@ -36,8 +37,8 @@ public class JUnitLogParserForPhpUnitTest {
 
   private JUnitLogParserForPhpUnit parser;
 
-  @org.junit.Rule
-  public LogTester logTester = new LogTester();
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Before
   public void setUp() throws Exception {

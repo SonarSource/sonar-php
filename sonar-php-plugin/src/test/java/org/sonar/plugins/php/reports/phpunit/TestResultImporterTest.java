@@ -21,16 +21,16 @@ package org.sonar.plugins.php.reports.phpunit;
 
 import java.io.File;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.testfixtures.log.LogTester;
-import org.slf4j.event.Level;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -49,8 +49,8 @@ public class TestResultImporterTest {
   private SensorContextTester context;
   private DefaultFileSystem fs;
 
-  @Rule
-  public LogTester logTester = new LogTester();
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Before
   public void setUp() {
@@ -82,7 +82,6 @@ public class TestResultImporterTest {
     verify(analysisWarnings, times(1))
       .addWarning(startsWith("PHPUnit test report does not contain any record in file"));
   }
-
 
   @Test()
   public void shouldGenerateTestsMeasures() {

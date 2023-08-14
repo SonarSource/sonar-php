@@ -20,7 +20,7 @@
 package org.sonar.php.cache;
 
 import java.io.File;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -31,12 +31,12 @@ import org.sonar.plugins.php.api.cache.CacheContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CacheContextImplTest {
+class CacheContextImplTest {
 
   private final SensorContextTester sensorContext = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
 
   @Test
-  public void shouldCreateEnabledCacheContext() {
+  void shouldCreateEnabledCacheContext() {
     sensorContext.setCacheEnabled(true);
 
     CacheContext cacheContext = CacheContextImpl.of(sensorContext);
@@ -48,7 +48,7 @@ public class CacheContextImplTest {
   }
 
   @Test
-  public void shouldCreateDisabledCacheContextForSonarLint() {
+  void shouldCreateDisabledCacheContextForSonarLint() {
     sensorContext.setRuntime(SonarRuntimeImpl.forSonarLint(Version.create(1, 2)));
     CacheContext cacheContext = CacheContextImpl.of(sensorContext);
 
@@ -59,7 +59,7 @@ public class CacheContextImplTest {
   }
 
   @Test
-  public void shouldCreateDisabledCacheContextForOldSonarQube() {
+  void shouldCreateDisabledCacheContextForOldSonarQube() {
     sensorContext.setRuntime(SonarRuntimeImpl.forSonarQube(
       Version.parse("9.6"),
       SonarQubeSide.SCANNER,
@@ -74,7 +74,7 @@ public class CacheContextImplTest {
   }
 
   @Test
-  public void shouldCreateDisabledCacheContextForEnabledSonarModules() {
+  void shouldCreateDisabledCacheContextForEnabledSonarModules() {
     sensorContext.setSettings(new MapSettings().setProperty("sonar.modules", "module1,module2"));
     sensorContext.setCacheEnabled(true);
 

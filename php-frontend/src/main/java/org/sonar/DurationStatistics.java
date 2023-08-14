@@ -37,7 +37,7 @@ public class DurationStatistics {
 
   private static final String PROPERTY_KEY = "sonar.php.duration.statistics";
 
-  private final Map<String, AtomicLong> stats = new HashMap<>();
+  private final Map<String, AtomicLong> statistics = new HashMap<>();
 
   private final boolean recordStat;
 
@@ -57,7 +57,7 @@ public class DurationStatistics {
   }
 
   void addRecord(String id, long elapsedTime) {
-    stats.computeIfAbsent(id, key -> new AtomicLong(0)).addAndGet(elapsedTime);
+    statistics.computeIfAbsent(id, key -> new AtomicLong(0)).addAndGet(elapsedTime);
   }
 
   public void log() {
@@ -67,7 +67,7 @@ public class DurationStatistics {
       symbols.setGroupingSeparator('\'');
       NumberFormat format = new DecimalFormat("#,###", symbols);
       out.append("Duration Statistics");
-      stats.entrySet().stream()
+      statistics.entrySet().stream()
         .sorted((a, b) -> Long.compare(b.getValue().get(), a.getValue().get()))
         .forEach(e -> out.append(", ")
           .append(e.getKey())

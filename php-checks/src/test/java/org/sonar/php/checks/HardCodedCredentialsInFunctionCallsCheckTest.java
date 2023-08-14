@@ -20,27 +20,27 @@
 package org.sonar.php.checks;
 
 import java.io.FileNotFoundException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class HardCodedCredentialsInFunctionCallsCheckTest {
+class HardCodedCredentialsInFunctionCallsCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new HardCodedCredentialsInFunctionCallsCheck(), "HardCodedCredentialsInFunctionCallsCheck.php");
   }
 
   @Test
-  public void parseResourceThrowsException() {
+  void parseResourceThrowsException() {
     assertThatThrownBy(() -> HardCodedCredentialsInFunctionCallsCheck.JsonSensitiveFunctionsReader.parseResource("no_valid_file_location" +
       ".json")).isInstanceOf(FileNotFoundException.class);
   }
 
   @Test
-  public void toIntegerReturnsNull() {
+  void toIntegerReturnsNull() {
     Integer integer = HardCodedCredentialsInFunctionCallsCheck.JsonSensitiveFunctionsReader.toInteger("string");
     assertThat(integer).isNull();
   }

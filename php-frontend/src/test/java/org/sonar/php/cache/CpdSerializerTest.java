@@ -22,7 +22,7 @@ package org.sonar.php.cache;
 import java.io.File;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.ParsingTestUtils;
@@ -33,12 +33,12 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CpdSerializerTest {
+class CpdSerializerTest {
 
-  public static final String PLUGIN_VERSION = "1.2.3";
+  static final String PLUGIN_VERSION = "1.2.3";
 
   @Test
-  public void shouldSerializeAndDeserializeExampleData() {
+  void shouldSerializeAndDeserializeExampleData() {
     CpdVisitor.CpdToken cpd1 = new CpdVisitor.CpdToken(3, 0, 3, 3, "try");
     CpdVisitor.CpdToken cpd2 = new CpdVisitor.CpdToken(3, 4, 3, 5, "{");
     CpdVisitor.CpdToken cpd3 = new CpdVisitor.CpdToken(4, 2, 4, 5, "foo");
@@ -56,7 +56,7 @@ public class CpdSerializerTest {
   }
 
   @Test
-  public void shouldReturnsNullWhenProjectSymbolDataCorrupted() {
+  void shouldReturnsNullWhenProjectSymbolDataCorrupted() {
     List<CpdVisitor.CpdToken> cpdTokens = List.of(new CpdVisitor.CpdToken(3, 0, 3, 3, "try"));
 
     SerializationResult binary = CpdSerializer.toBinary(new CpdSerializationInput(cpdTokens, PLUGIN_VERSION));
@@ -70,7 +70,7 @@ public class CpdSerializerTest {
   }
 
   @Test
-  public void shouldReturnsNullWhenStringTableDataCorrupted() {
+  void shouldReturnsNullWhenStringTableDataCorrupted() {
     List<CpdVisitor.CpdToken> cpdTokens = List.of(new CpdVisitor.CpdToken(3, 0, 3, 3, "try"));
 
     SerializationResult binary = CpdSerializer.toBinary(new CpdSerializationInput(cpdTokens, PLUGIN_VERSION));
@@ -84,7 +84,7 @@ public class CpdSerializerTest {
   }
 
   @Test
-  public void shouldReturnNullWhenWrongPluginVersion() {
+  void shouldReturnNullWhenWrongPluginVersion() {
     List<CpdVisitor.CpdToken> cpdTokens = List.of(new CpdVisitor.CpdToken(3, 0, 3, 3, "try"));
 
     SerializationResult binary = CpdSerializer.toBinary(new CpdSerializationInput(cpdTokens, PLUGIN_VERSION));
@@ -94,8 +94,8 @@ public class CpdSerializerTest {
   }
 
   @Test
-  public void shouldSerializeAndDeserializeData() {
-    for (File file : FileUtils.listFiles(new File("src/test/resources"), new String[]{"php"}, true)) {
+  void shouldSerializeAndDeserializeData() {
+    for (File file : FileUtils.listFiles(new File("src/test/resources"), new String[] {"php"}, true)) {
       CompilationUnitTree unitTree = ParsingTestUtils.parse(file);
       CpdVisitor cpdVisitor = new CpdVisitor();
       SymbolTableImpl symbolTable = SymbolTableImpl.create(unitTree);

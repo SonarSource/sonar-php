@@ -26,7 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -39,7 +40,7 @@ import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.check.Rule;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
@@ -48,20 +49,20 @@ import org.sonar.php.ini.tree.PhpIniFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.ini.BasePhpIniIssue.newIssue;
 
-public class PhpIniSensorTest {
+class PhpIniSensorTest {
 
-  @org.junit.Rule
-  public LogTester logTester = new LogTester();
+  @RegisterExtension
+  final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Test
-  public void describe() throws Exception {
+  void describe() throws Exception {
     DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
     sensor().describe(descriptor);
     assertThat(descriptor.name()).isEqualTo("Analyzer for \"php.ini\" files");
   }
 
   @Test
-  public void single_file() throws Exception {
+  void single_file() throws Exception {
     File baseDir = new File("src/test/resources/phpini");
     SensorContextTester context = SensorContextTester.create(baseDir);
     DefaultInputFile file1 = setupSingleFile(baseDir, context);
@@ -79,7 +80,7 @@ public class PhpIniSensorTest {
   }
 
   @Test
-  public void parse_error() throws Exception {
+  void parse_error() throws Exception {
     File baseDir = new File("src/test/resources/phpini-error");
     SensorContextTester context = SensorContextTester.create(baseDir);
     setupSingleFile(baseDir, context);

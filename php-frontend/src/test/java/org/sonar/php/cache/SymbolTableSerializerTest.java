@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.ClassSymbolData;
@@ -40,12 +40,12 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class SymbolTableSerializerTest {
+class SymbolTableSerializerTest {
 
-  public static final String PLUGIN_VERSION = "1.2.3";
+  static final String PLUGIN_VERSION = "1.2.3";
 
   @Test
-  public void shouldSerializeAndDeserializeExampleData() {
+  void shouldSerializeAndDeserializeExampleData() {
     List<ClassSymbolData> classSymbolDatas = new ArrayList<>();
     List<FunctionSymbolData> functionSymbolDatas = new ArrayList<>();
     List<MethodSymbolData> methods = new ArrayList<>();
@@ -53,7 +53,7 @@ public class SymbolTableSerializerTest {
       new LocationInFileImpl("Mail.php", 183, 27, 183, 46),
       "setDefaultTransport",
       List.of(new Parameter("$transport", "Zend_Mail_Transport_Abstract", false, false)),
-    new FunctionSymbolData.FunctionSymbolProperties(false, false),
+      new FunctionSymbolData.FunctionSymbolProperties(false, false),
       Visibility.PUBLIC,
       false));
     methods.add(new MethodSymbolData(
@@ -70,8 +70,7 @@ public class SymbolTableSerializerTest {
       List.of(new Parameter("$charset", null, true, false)),
       new FunctionSymbolData.FunctionSymbolProperties(false, false),
       Visibility.PUBLIC,
-      false
-    ));
+      false));
 
     ClassSymbolData classSymbolData = new ClassSymbolData(
       new LocationInFileImpl("Mail.php", 52, 6, 52, 15),
@@ -82,11 +81,10 @@ public class SymbolTableSerializerTest {
       methods);
     classSymbolDatas.add(classSymbolData);
     FunctionSymbolData functionSymbolData = new FunctionSymbolData(
-      new LocationInFileImpl("file1.php", 2,9,2,12),
+      new LocationInFileImpl("file1.php", 2, 9, 2, 12),
       SymbolQualifiedName.qualifiedName("foo"),
       List.of(new Parameter("$i", "int", false, false)),
-      new FunctionSymbolData.FunctionSymbolProperties(false, false)
-    );
+      new FunctionSymbolData.FunctionSymbolProperties(false, false));
     functionSymbolDatas.add(functionSymbolData);
     SymbolTableImpl symbolTable = SymbolTableImpl.create(classSymbolDatas, functionSymbolDatas);
 
@@ -97,7 +95,7 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldThrowExceptionWhenNotSymbolQualifiedName() {
+  void shouldThrowExceptionWhenNotSymbolQualifiedName() {
     ClassSymbolData classSymbolData = new ClassSymbolData(
       new LocationInFileImpl("Mail.php", 52, 6, 52, 15),
       () -> "dummy",
@@ -115,14 +113,13 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldThrowExceptionWhenNotFunctionSymbolData() {
+  void shouldThrowExceptionWhenNotFunctionSymbolData() {
     FunctionSymbolData functionSymbolData = new MethodSymbolData(
-      new LocationInFileImpl("file1.php", 2,9,2,12),
+      new LocationInFileImpl("file1.php", 2, 9, 2, 12),
       "name",
       List.of(new Parameter("$i", "int", false, false)),
       new FunctionSymbolData.FunctionSymbolProperties(false, false),
-      Visibility.PUBLIC
-    );
+      Visibility.PUBLIC);
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
     Throwable throwable = catchThrowable(() -> SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION)));
@@ -133,7 +130,7 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldSerializeAndDeserializeClassWithImplementedInterface() {
+  void shouldSerializeAndDeserializeClassWithImplementedInterface() {
 
     ClassSymbolData classSymbolData = new ClassSymbolData(
       new LocationInFileImpl("Mail.php", 52, 6, 52, 15),
@@ -151,7 +148,7 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldSerializeAndDeserializeClassWithUnknownLocation() {
+  void shouldSerializeAndDeserializeClassWithUnknownLocation() {
     ClassSymbolData classSymbolData = new ClassSymbolData(
       UnknownLocationInFile.UNKNOWN_LOCATION,
       SymbolQualifiedName.qualifiedName("dummy"),
@@ -168,7 +165,7 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldSerializeAndDeserializeClassWithNullSuperClass() {
+  void shouldSerializeAndDeserializeClassWithNullSuperClass() {
     ClassSymbolData classSymbolData = new ClassSymbolData(
       UnknownLocationInFile.UNKNOWN_LOCATION,
       SymbolQualifiedName.qualifiedName("dummy"),
@@ -178,7 +175,6 @@ public class SymbolTableSerializerTest {
       List.of());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(classSymbolData), List.of());
 
-
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
     SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
@@ -186,7 +182,7 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldSerializeAndDeserializeClassWithQualifiedNameContainsBackslash() {
+  void shouldSerializeAndDeserializeClassWithQualifiedNameContainsBackslash() {
     ClassSymbolData classSymbolData = new ClassSymbolData(
       UnknownLocationInFile.UNKNOWN_LOCATION,
       SymbolQualifiedName.qualifiedName("symfony\\bridge\\monolog\\handler\\helper"),
@@ -203,13 +199,12 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldReturnsNullWhenStringTableCorrupted() {
+  void shouldReturnsNullWhenStringTableCorrupted() {
     FunctionSymbolData functionSymbolData = new FunctionSymbolData(
-      new LocationInFileImpl("file1.php", 2,9,2,12),
+      new LocationInFileImpl("file1.php", 2, 9, 2, 12),
       SymbolQualifiedName.qualifiedName("name"),
       List.of(),
-      new FunctionSymbolData.FunctionSymbolProperties(false, false)
-    );
+      new FunctionSymbolData.FunctionSymbolProperties(false, false));
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
@@ -217,20 +212,18 @@ public class SymbolTableSerializerTest {
       new SymbolTableDeserializationInput(
         binary.data(),
         corruptBit(binary.stringTable()),
-        PLUGIN_VERSION
-      ));
+        PLUGIN_VERSION));
 
     assertThat(actual).isNull();
   }
 
   @Test
-  public void shouldReturnsNullWhenProjectSymbolDataCorrupted() {
+  void shouldReturnsNullWhenProjectSymbolDataCorrupted() {
     FunctionSymbolData functionSymbolData = new FunctionSymbolData(
-      new LocationInFileImpl("file1.php", 2,9,2,12),
+      new LocationInFileImpl("file1.php", 2, 9, 2, 12),
       SymbolQualifiedName.qualifiedName("name"),
       List.of(),
-      new FunctionSymbolData.FunctionSymbolProperties(false, false)
-    );
+      new FunctionSymbolData.FunctionSymbolProperties(false, false));
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
@@ -244,7 +237,7 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldReturnNullWhenWrongPluginVersion() {
+  void shouldReturnNullWhenWrongPluginVersion() {
     ClassSymbolData classSymbolData = new ClassSymbolData(
       UnknownLocationInFile.UNKNOWN_LOCATION,
       SymbolQualifiedName.qualifiedName("dummy"),
@@ -261,8 +254,8 @@ public class SymbolTableSerializerTest {
   }
 
   @Test
-  public void shouldSerializeAndDeserializeData() {
-    for (File file : FileUtils.listFiles(new File("src/test/resources"), new String[]{"php"}, true)) {
+  void shouldSerializeAndDeserializeData() {
+    for (File file : FileUtils.listFiles(new File("src/test/resources"), new String[] {"php"}, true)) {
       CompilationUnitTree unitTree = ParsingTestUtils.parse(file);
       SymbolTableImpl symbolTable = SymbolTableImpl.create(unitTree);
 
