@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tests;
 
-import com.google.common.base.Preconditions;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.nio.file.Path;
@@ -46,6 +45,7 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonarsource.analyzer.commons.checks.verifier.MultiFileVerifier;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Objects.requireNonNull;
 
 public class PHPCheckVerifier {
 
@@ -144,7 +144,7 @@ public class PHPCheckVerifier {
   private static MultiFileVerifier.Issue addPreciseIssue(MultiFileVerifier verifier, PreciseIssue preciseIssue, PhpFile file) {
     IssueLocation location = preciseIssue.primaryLocation();
     String message = location.message();
-    Preconditions.checkNotNull(message, "Primary location message should never be null.");
+    requireNonNull(message, "Primary location message should never be null.");
     MultiFileVerifier.Issue issueBuilder = verifier.reportIssue(path(file), message)
       .onRange(location.startLine(), location.startLineOffset() + 1, location.endLine(), location.endLineOffset());
     for (IssueLocation secondary : preciseIssue.secondaryLocations()) {

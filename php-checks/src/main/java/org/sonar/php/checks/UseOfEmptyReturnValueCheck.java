@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.base.Preconditions;
 import java.util.Locale;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -38,6 +37,8 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+
+import static java.util.Objects.requireNonNull;
 
 @Rule(key = "S3699")
 public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
@@ -419,7 +420,7 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
    */
   private static boolean parentUseValue(Tree child) {
     Tree parent = child.getParent();
-    Preconditions.checkNotNull(parent);
+    requireNonNull(parent);
 
     if (parent.is(Kind.NEW_EXPRESSION, Kind.EXPRESSION_STATEMENT, Kind.ARROW_FUNCTION_EXPRESSION)) {
       return false;

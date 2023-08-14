@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.base.Preconditions;
 import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.collections.IteratorUtils;
@@ -28,13 +27,15 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
+import static java.util.Objects.requireNonNull;
+
 public class LiteralTreeImpl extends PHPTree implements LiteralTree {
 
   private final Kind kind;
   private final SyntaxToken token;
 
   public LiteralTreeImpl(Kind kind, SyntaxToken token) {
-    this.kind = Preconditions.checkNotNull(kind);
+    this.kind = requireNonNull(kind);
     this.token = token;
   }
 
