@@ -68,6 +68,9 @@
 'PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php':[
 187,
 ],
+'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc':[
+20,
+],
 'PHP_CodeSniffer:src/Standards/Generic/Tests/Files/ExecutableFileUnitTest.php':[
 28,
 ],
