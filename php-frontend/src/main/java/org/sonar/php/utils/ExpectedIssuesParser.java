@@ -19,7 +19,6 @@
  */
 package org.sonar.php.utils;
 
-import com.google.common.base.Splitter;
 import java.util.ArrayList;
 import java.util.List;
 import org.sonar.plugins.php.api.tests.TestIssue;
@@ -99,7 +98,7 @@ public class ExpectedIssuesParser extends PHPVisitorCheck {
   }
 
   private static void addParams(TestIssue issue, String params) {
-    for (String param : Splitter.on(';').split(params)) {
+    for (String param : params.split(";")) {
       int equalIndex = getEqualIndex(param, issue);
       String name = param.substring(0, equalIndex);
       String value = param.substring(equalIndex + 1);
@@ -110,7 +109,7 @@ public class ExpectedIssuesParser extends PHPVisitorCheck {
       } else if ("secondary".equalsIgnoreCase(name)) {
         List<Integer> secondaryLines = new ArrayList<>();
         if (!"".equals(value)) {
-          for (String secondary : Splitter.on(',').split(value)) {
+          for (String secondary : value.split(",")) {
             secondaryLines.add(lineValue(issue.line(), secondary));
           }
         }
