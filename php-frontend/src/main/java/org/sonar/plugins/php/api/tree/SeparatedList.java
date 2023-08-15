@@ -19,9 +19,9 @@
  */
 package org.sonar.plugins.php.api.tree;
 
-import com.google.common.base.Function;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 public interface SeparatedList<T extends Tree> extends List<T> {
