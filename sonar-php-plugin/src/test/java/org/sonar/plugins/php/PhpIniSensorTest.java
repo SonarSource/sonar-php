@@ -19,10 +19,10 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +46,7 @@ import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
 
+import static java.nio.file.Files.readString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -121,9 +122,10 @@ class PhpIniSensorTest {
   }
 
   private static DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context) throws IOException {
+    String content = readString(Path.of(new File(baseDir, "php.ini").getPath()));
     DefaultInputFile file1 = TestInputFileBuilder.create("moduleKey", baseDir, new File(baseDir, "php.ini"))
       .setCharset(StandardCharsets.UTF_8)
-      .initMetadata(Files.asCharSource(new File(baseDir, "php.ini"), StandardCharsets.UTF_8).read())
+      .initMetadata(content)
       .build();
     context.fileSystem().add(file1);
     return file1;

@@ -19,13 +19,13 @@
  */
 package org.sonar.php.tree.impl;
 
-import com.google.common.base.Preconditions;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.function.Function;
+import org.sonar.api.utils.Preconditions;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -84,7 +84,7 @@ public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
   }
 
   @Override
-  public <T> T[] toArray(T[] a) {
+  public <U> U[] toArray(U[] a) {
     return list.toArray(a);
   }
 

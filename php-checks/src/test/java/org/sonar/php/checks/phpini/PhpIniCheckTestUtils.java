@@ -19,13 +19,12 @@
  */
 package org.sonar.php.checks.phpini;
 
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Ints;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -87,9 +86,14 @@ public class PhpIniCheckTestUtils {
   }
 
   private static void compare(List<PhpIniIssue> actualIssues, List<PhpIniIssue> expectedIssues) {
-    Ordering<PhpIniIssue> issueOrdering = Ordering.from((i1, i2) -> Ints.compare(i1.line(), i2.line()));
-    Iterator<PhpIniIssue> sortedActualIssues = issueOrdering.sortedCopy(actualIssues).iterator();
-    Iterator<PhpIniIssue> sortedExpectedIssues = issueOrdering.sortedCopy(expectedIssues).iterator();
+    Comparator<PhpIniIssue> lineComparator = Comparator.comparing(PhpIniIssue::line);
+    List<PhpIniIssue> sortedActual = new ArrayList<>(actualIssues);
+    List<PhpIniIssue> sortedExpected = new ArrayList<>(expectedIssues);
+    sortedActual.sort(lineComparator);
+    sortedExpected.sort(lineComparator);
+
+    Iterator<PhpIniIssue> sortedActualIssues = sortedActual.iterator();
+    Iterator<PhpIniIssue> sortedExpectedIssues = sortedExpected.iterator();
     while (sortedActualIssues.hasNext() && sortedExpectedIssues.hasNext()) {
       PhpIniIssue actual = sortedActualIssues.next();
       PhpIniIssue expected = sortedExpectedIssues.next();
