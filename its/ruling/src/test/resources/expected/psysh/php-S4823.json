@@ -1,9 +1,9 @@
 {
-'psysh:src/Readline/Hoa/Protocol.php':[
-90,
+"psysh:src/Readline/Hoa/Protocol.php": [
+90
 ],
-'psysh:src/functions.php':[
+"psysh:src/functions.php": [
 400,
-400,
-],
+400
+]
 }

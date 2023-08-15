@@ -1,8 +1,8 @@
 {
-'psysh:src/Command/ParseCommand.php':[
-74,
+"psysh:src/Command/ParseCommand.php": [
+74
 ],
-'psysh:src/Shell.php':[
-331,
-],
+"psysh:src/Shell.php": [
+331
+]
 }

@@ -1,123 +1,123 @@
 {
-'psysh:src/CodeCleaner.php':[
-317,
+"psysh:src/CodeCleaner.php": [
+317
 ],
-'psysh:src/CodeCleaner/UseStatementPass.php':[
-71,
+"psysh:src/CodeCleaner/UseStatementPass.php": [
+71
 ],
-'psysh:src/Command/ListCommand/ClassConstantEnumerator.php':[
-25,
+"psysh:src/Command/ListCommand/ClassConstantEnumerator.php": [
+25
 ],
-'psysh:src/Command/ListCommand/ConstantEnumerator.php':[
-125,
+"psysh:src/Command/ListCommand/ConstantEnumerator.php": [
+125
 ],
-'psysh:src/Command/ListCommand/FunctionEnumerator.php':[
-25,
+"psysh:src/Command/ListCommand/FunctionEnumerator.php": [
+25
 ],
-'psysh:src/Command/ListCommand/GlobalVariableEnumerator.php':[
+"psysh:src/Command/ListCommand/GlobalVariableEnumerator.php": [
+24
+],
+"psysh:src/Command/ListCommand/MethodEnumerator.php": [
+24
+],
+"psysh:src/Command/ListCommand/PropertyEnumerator.php": [
 24,
+147
 ],
-'psysh:src/Command/ListCommand/MethodEnumerator.php':[
-24,
-],
-'psysh:src/Command/ListCommand/PropertyEnumerator.php':[
-24,
-147,
-],
-'psysh:src/Command/ListCommand/VariableEnumerator.php':[
+"psysh:src/Command/ListCommand/VariableEnumerator.php": [
 48,
-82,
+82
 ],
-'psysh:src/Command/ReflectingCommand.php':[
+"psysh:src/Command/ReflectingCommand.php": [
 84,
-120,
+120
 ],
-'psysh:src/ConfigPaths.php':[
-409,
+"psysh:src/ConfigPaths.php": [
+409
 ],
-'psysh:src/Configuration.php':[
+"psysh:src/Configuration.php": [
 280,
 819,
-1810,
+1810
 ],
-'psysh:src/Context.php':[
-47,
+"psysh:src/Context.php": [
+47
 ],
-'psysh:src/Formatter/CodeFormatter.php':[
-180,
+"psysh:src/Formatter/CodeFormatter.php": [
+180
 ],
-'psysh:src/Formatter/SignatureFormatter.php':[
+"psysh:src/Formatter/SignatureFormatter.php": [
 34,
-177,
+177
 ],
-'psysh:src/Readline/GNUReadline.php':[
-124,
+"psysh:src/Readline/GNUReadline.php": [
+124
 ],
-'psysh:src/Readline/Hoa/AutocompleterPath.php':[
-85,
+"psysh:src/Readline/Hoa/AutocompleterPath.php": [
+85
 ],
-'psysh:src/Readline/Hoa/Console.php':[
-119,
+"psysh:src/Readline/Hoa/Console.php": [
+119
 ],
-'psysh:src/Readline/Hoa/ConsoleWindow.php':[
-97,
+"psysh:src/Readline/Hoa/ConsoleWindow.php": [
+97
 ],
-'psysh:src/Readline/Hoa/FileDirectory.php':[
-185,
+"psysh:src/Readline/Hoa/FileDirectory.php": [
+185
 ],
-'psysh:src/Readline/Hoa/Protocol.php':[
-148,
+"psysh:src/Readline/Hoa/Protocol.php": [
+148
 ],
-'psysh:src/Readline/Hoa/ProtocolNode.php':[
-136,
+"psysh:src/Readline/Hoa/ProtocolNode.php": [
+136
 ],
-'psysh:src/Readline/Hoa/ProtocolWrapper.php':[
-431,
+"psysh:src/Readline/Hoa/ProtocolWrapper.php": [
+431
 ],
-'psysh:src/Readline/Hoa/Readline.php':[
+"psysh:src/Readline/Hoa/Readline.php": [
 140,
 203,
-734,
+734
 ],
-'psysh:src/Readline/Hoa/Stream.php':[
-246,
+"psysh:src/Readline/Hoa/Stream.php": [
+246
 ],
-'psysh:src/Readline/Hoa/Ustring.php':[
-68,
+"psysh:src/Readline/Hoa/Ustring.php": [
+68
 ],
-'psysh:src/Readline/Hoa/Xcallable.php':[
+"psysh:src/Readline/Hoa/Xcallable.php": [
 85,
-209,
+209
 ],
-'psysh:src/Shell.php':[
-1293,
+"psysh:src/Shell.php": [
+1293
 ],
-'psysh:src/Sudo/SudoVisitor.php':[
-52,
+"psysh:src/Sudo/SudoVisitor.php": [
+52
 ],
-'psysh:src/TabCompletion/Matcher/ClassMethodDefaultParametersMatcher.php':[
-42,
+"psysh:src/TabCompletion/Matcher/ClassMethodDefaultParametersMatcher.php": [
+42
 ],
-'psysh:src/TabCompletion/Matcher/FunctionDefaultParametersMatcher.php':[
-33,
+"psysh:src/TabCompletion/Matcher/FunctionDefaultParametersMatcher.php": [
+33
 ],
-'psysh:src/TabCompletion/Matcher/ObjectAttributesMatcher.php':[
-29,
+"psysh:src/TabCompletion/Matcher/ObjectAttributesMatcher.php": [
+29
 ],
-'psysh:src/TabCompletion/Matcher/ObjectMethodDefaultParametersMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ObjectMethodDefaultParametersMatcher.php": [
 16,
-49,
+49
 ],
-'psysh:src/TabCompletion/Matcher/ObjectMethodsMatcher.php':[
-29,
+"psysh:src/TabCompletion/Matcher/ObjectMethodsMatcher.php": [
+29
 ],
-'psysh:src/Util/Mirror.php':[
-46,
+"psysh:src/Util/Mirror.php": [
+46
 ],
-'psysh:src/Util/Str.php':[
-72,
+"psysh:src/Util/Str.php": [
+72
 ],
-'psysh:src/VersionUpdater/SelfUpdate.php':[
-100,
-],
+"psysh:src/VersionUpdater/SelfUpdate.php": [
+100
+]
 }

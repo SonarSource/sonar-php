@@ -1,93 +1,93 @@
 {
-'psysh:src/CodeCleaner/CalledClassPass.php':[
-56,
+"psysh:src/CodeCleaner/CalledClassPass.php": [
+56
 ],
-'psysh:src/CodeCleaner/NamespaceAwarePass.php':[
+"psysh:src/CodeCleaner/NamespaceAwarePass.php": [
 28,
-42,
+42
 ],
-'psysh:src/CodeCleaner/PassableByReferencePass.php':[
-42,
+"psysh:src/CodeCleaner/PassableByReferencePass.php": [
+42
 ],
-'psysh:src/CodeCleaner/RequirePass.php':[
+"psysh:src/CodeCleaner/RequirePass.php": [
 83,
-89,
+89
 ],
-'psysh:src/CodeCleaner/ValidFunctionNamePass.php':[
-50,
+"psysh:src/CodeCleaner/ValidFunctionNamePass.php": [
+50
 ],
-'psysh:src/Command/DocCommand.php':[
-150,
+"psysh:src/Command/DocCommand.php": [
+150
 ],
-'psysh:src/Command/ListCommand.php':[
+"psysh:src/Command/ListCommand.php": [
 131,
-267,
+267
 ],
-'psysh:src/Command/ListCommand/ClassConstantEnumerator.php':[
-34,
+"psysh:src/Command/ListCommand/ClassConstantEnumerator.php": [
+34
 ],
-'psysh:src/Configuration.php':[
+"psysh:src/Configuration.php": [
 211,
 869,
-988,
+988
 ],
-'psysh:src/ExecutionLoop/RunkitReloader.php':[
-38,
+"psysh:src/ExecutionLoop/RunkitReloader.php": [
+38
 ],
-'psysh:src/ExecutionLoopClosure.php':[
-20,
+"psysh:src/ExecutionLoopClosure.php": [
+20
 ],
-'psysh:src/Formatter/CodeFormatter.php':[
+"psysh:src/Formatter/CodeFormatter.php": [
 72,
-143,
+143
 ],
-'psysh:src/Formatter/SignatureFormatter.php':[
-341,
+"psysh:src/Formatter/SignatureFormatter.php": [
+341
 ],
-'psysh:src/Readline/Hoa/File.php':[
-192,
+"psysh:src/Readline/Hoa/File.php": [
+192
 ],
-'psysh:src/Reflection/ReflectionLanguageConstruct.php':[
-132,
+"psysh:src/Reflection/ReflectionLanguageConstruct.php": [
+132
 ],
-'psysh:src/Reflection/ReflectionLanguageConstructParameter.php':[
+"psysh:src/Reflection/ReflectionLanguageConstructParameter.php": [
 35,
-56,
+56
 ],
-'psysh:src/Shell.php':[
+"psysh:src/Shell.php": [
 365,
 453,
 1215,
-1594,
+1594
 ],
-'psysh:src/Sudo/SudoVisitor.php':[
-34,
+"psysh:src/Sudo/SudoVisitor.php": [
+34
 ],
-'psysh:src/Util/Docblock.php':[
-219,
+"psysh:src/Util/Docblock.php": [
+219
 ],
-'psysh:src/functions.php':[
+"psysh:src/functions.php": [
 102,
 232,
 329,
-466,
+466
 ],
-'psysh:test/CodeCleaner/IssetPassTest.php':[
-111,
+"psysh:test/CodeCleaner/IssetPassTest.php": [
+111
 ],
-'psysh:test/Command/ListCommand/ClassConstantEnumeratorTest.php':[
-158,
+"psysh:test/Command/ListCommand/ClassConstantEnumeratorTest.php": [
+158
 ],
-'psysh:test/Formatter/SignatureFormatterTest.php':[
-80,
+"psysh:test/Formatter/SignatureFormatterTest.php": [
+80
 ],
-'psysh:test/Input/ShellInputTest.php':[
-154,
+"psysh:test/Input/ShellInputTest.php": [
+154
 ],
-'psysh:test/TabCompletion/AutoCompleterTest.php':[
-79,
+"psysh:test/TabCompletion/AutoCompleterTest.php": [
+79
 ],
-'psysh:test/TestCase.php':[
-16,
-],
+"psysh:test/TestCase.php": [
+16
+]
 }

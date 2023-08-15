@@ -1,159 +1,159 @@
 {
-'psysh:src/Command/HistoryCommand.php':[
-117,
+"psysh:src/Command/HistoryCommand.php": [
+117
 ],
-'psysh:src/Command/ReflectingCommand.php':[
-143,
+"psysh:src/Command/ReflectingCommand.php": [
+143
 ],
-'psysh:src/Command/TimeitCommand.php':[
-158,
+"psysh:src/Command/TimeitCommand.php": [
+158
 ],
-'psysh:src/ConfigPaths.php':[
+"psysh:src/ConfigPaths.php": [
 145,
-421,
+421
 ],
-'psysh:src/ExecutionLoop/ProcessForker.php':[
+"psysh:src/ExecutionLoop/ProcessForker.php": [
 47,
 47,
 47,
-47,
+47
 ],
-'psysh:src/Formatter/CodeFormatter.php':[
-88,
+"psysh:src/Formatter/CodeFormatter.php": [
+88
 ],
-'psysh:src/Formatter/SignatureFormatter.php':[
+"psysh:src/Formatter/SignatureFormatter.php": [
 110,
 144,
-218,
+218
 ],
-'psysh:src/Readline/GNUReadline.php':[
-50,
+"psysh:src/Readline/GNUReadline.php": [
+50
 ],
-'psysh:src/Readline/Hoa/Console.php':[
+"psysh:src/Readline/Hoa/Console.php": [
 131,
 163,
 164,
 222,
 234,
 245,
-256,
+256
 ],
-'psysh:src/Readline/Hoa/Event.php':[
+"psysh:src/Readline/Hoa/Event.php": [
 97,
 172,
-177,
+177
 ],
-'psysh:src/Readline/Hoa/ExceptionIdle.php':[
-264,
+"psysh:src/Readline/Hoa/ExceptionIdle.php": [
+264
 ],
-'psysh:src/Readline/Hoa/FileDirectory.php':[
+"psysh:src/Readline/Hoa/FileDirectory.php": [
 87,
 124,
-131,
+131
 ],
-'psysh:src/Reflection/ReflectionConstant_.php':[
+"psysh:src/Reflection/ReflectionConstant_.php": [
 49,
-53,
+53
 ],
-'psysh:src/Reflection/ReflectionLanguageConstruct.php':[
-79,
+"psysh:src/Reflection/ReflectionLanguageConstruct.php": [
+79
 ],
-'psysh:src/Shell.php':[
-1523,
+"psysh:src/Shell.php": [
+1523
 ],
-'psysh:src/TabCompletion/Matcher/AbstractMatcher.php':[
+"psysh:src/TabCompletion/Matcher/AbstractMatcher.php": [
 67,
 82,
-86,
+86
 ],
-'psysh:src/TabCompletion/Matcher/ClassAttributesMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ClassAttributesMatcher.php": [
 32,
 80,
 80,
-81,
+81
 ],
-'psysh:src/TabCompletion/Matcher/ClassMethodDefaultParametersMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ClassMethodDefaultParametersMatcher.php": [
 52,
-58,
+58
 ],
-'psysh:src/TabCompletion/Matcher/ClassMethodsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ClassMethodsMatcher.php": [
 32,
 45,
 77,
 77,
-78,
+78
 ],
-'psysh:src/TabCompletion/Matcher/ClassNamesMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ClassNamesMatcher.php": [
 64,
 65,
 68,
 69,
 70,
-71,
+71
 ],
-'psysh:src/TabCompletion/Matcher/CommandsMatcher.php':[
-101,
+"psysh:src/TabCompletion/Matcher/CommandsMatcher.php": [
+101
 ],
-'psysh:src/TabCompletion/Matcher/ConstantsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ConstantsMatcher.php": [
 44,
 45,
 47,
-48,
+48
 ],
-'psysh:src/TabCompletion/Matcher/FunctionDefaultParametersMatcher.php':[
-43,
+"psysh:src/TabCompletion/Matcher/FunctionDefaultParametersMatcher.php": [
+43
 ],
-'psysh:src/TabCompletion/Matcher/FunctionsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/FunctionsMatcher.php": [
 47,
 49,
-50,
+50
 ],
-'psysh:src/TabCompletion/Matcher/KeywordsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/KeywordsMatcher.php": [
 73,
 75,
 76,
-77,
+77
 ],
-'psysh:src/TabCompletion/Matcher/MongoClientMatcher.php':[
+"psysh:src/TabCompletion/Matcher/MongoClientMatcher.php": [
 31,
 64,
-65,
+65
 ],
-'psysh:src/TabCompletion/Matcher/MongoDatabaseMatcher.php':[
+"psysh:src/TabCompletion/Matcher/MongoDatabaseMatcher.php": [
 31,
 60,
-61,
+61
 ],
-'psysh:src/TabCompletion/Matcher/ObjectAttributesMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ObjectAttributesMatcher.php": [
 34,
 71,
-72,
+72
 ],
-'psysh:src/TabCompletion/Matcher/ObjectMethodDefaultParametersMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ObjectMethodDefaultParametersMatcher.php": [
 59,
-65,
+65
 ],
-'psysh:src/TabCompletion/Matcher/ObjectMethodsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ObjectMethodsMatcher.php": [
 34,
 73,
-74,
+74
 ],
-'psysh:src/TabCompletion/Matcher/VariablesMatcher.php':[
+"psysh:src/TabCompletion/Matcher/VariablesMatcher.php": [
 43,
-45,
+45
 ],
-'psysh:src/Util/Docblock.php':[
+"psysh:src/Util/Docblock.php": [
 147,
 156,
 170,
 175,
 178,
 180,
-191,
+191
 ],
-'psysh:src/VarDumper/Dumper.php':[
+"psysh:src/VarDumper/Dumper.php": [
 74,
 77,
-79,
-],
+79
+]
 }

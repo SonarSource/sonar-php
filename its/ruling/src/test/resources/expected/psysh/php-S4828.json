@@ -1,7 +1,7 @@
 {
-'psysh:src/ExecutionLoop/ProcessForker.php':[
+"psysh:src/ExecutionLoop/ProcessForker.php": [
 191,
 209,
-234,
-],
+234
+]
 }

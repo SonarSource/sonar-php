@@ -1,12 +1,12 @@
 {
-'psysh:test/ClassWithSecrets.php':[
+"psysh:test/ClassWithSecrets.php": [
 20,
-29,
+29
 ],
-'psysh:test/Command/ListCommand/Fixtures/ClassAlfa.php':[
-28,
+"psysh:test/Command/ListCommand/Fixtures/ClassAlfa.php": [
+28
 ],
-'psysh:test/Command/ListCommand/Fixtures/ClassBravo.php':[
-30,
-],
+"psysh:test/Command/ListCommand/Fixtures/ClassBravo.php": [
+30
+]
 }
