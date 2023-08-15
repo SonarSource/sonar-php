@@ -1,18 +1,18 @@
 {
-'PHPWord:src/PhpWord/Reader/Word2007/Footnotes.php':[
-59,
+"PHPWord:src/PhpWord/Reader/Word2007/Footnotes.php": [
+59
 ],
-'PHPWord:src/PhpWord/Shared/OLERead.php':[
-275,
+"PHPWord:src/PhpWord/Shared/OLERead.php": [
+275
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/Text.php':[
+"PHPWord:src/PhpWord/Writer/HTML/Element/Text.php": [
 169,
-204,
+204
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Part/Content.php':[
-96,
+"PHPWord:src/PhpWord/Writer/ODText/Part/Content.php": [
+96
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Element/Text.php':[
-78,
-],
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Text.php": [
+78
+]
 }

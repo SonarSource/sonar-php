@@ -1,38 +1,38 @@
 {
-'PHPWord:src/PhpWord/Element/Table.php':[
-87,
+"PHPWord:src/PhpWord/Element/Table.php": [
+87
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
+"PHPWord:src/PhpWord/Shared/Html.php": [
 351,
-514,
+514
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 1053,
 2120,
 4792,
 4802,
 4966,
-5360,
+5360
 ],
-'PHPWord:src/PhpWord/Style/Font.php':[
-291,
+"PHPWord:src/PhpWord/Style/Font.php": [
+291
 ],
-'PHPWord:src/PhpWord/Style/Paragraph.php':[
-221,
+"PHPWord:src/PhpWord/Style/Paragraph.php": [
+221
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
-538,
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+538
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/ListItemRun.php':[
-39,
+"PHPWord:src/PhpWord/Writer/HTML/Element/ListItemRun.php": [
+39
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/Title.php':[
-52,
+"PHPWord:src/PhpWord/Writer/HTML/Element/Title.php": [
+52
 ],
-'PHPWord:src/PhpWord/Writer/RTF/Element/AbstractElement.php':[
-177,
+"PHPWord:src/PhpWord/Writer/RTF/Element/AbstractElement.php": [
+177
 ],
-'PHPWord:tests/PhpWordTests/Escaper/RtfEscaper2Test.php':[
-34,
-],
+"PHPWord:tests/PhpWordTests/Escaper/RtfEscaper2Test.php": [
+34
+]
 }

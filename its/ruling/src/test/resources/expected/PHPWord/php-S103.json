@@ -1,44 +1,44 @@
 {
-'PHPWord:bootstrap.php':[
-24,
+"PHPWord:bootstrap.php": [
+24
 ],
-'PHPWord:samples/Sample_09_Tables.php':[
+"PHPWord:samples/Sample_09_Tables.php": [
 34,
-151,
+151
 ],
-'PHPWord:samples/Sample_12_HeaderFooter.php':[
-21,
+"PHPWord:samples/Sample_12_HeaderFooter.php": [
+21
 ],
-'PHPWord:samples/Sample_13_Images.php':[
-36,
+"PHPWord:samples/Sample_13_Images.php": [
+36
 ],
-'PHPWord:samples/Sample_26_Html.php':[
+"PHPWord:samples/Sample_26_Html.php": [
 23,
-74,
+74
 ],
-'PHPWord:samples/Sample_32_Chart.php':[
+"PHPWord:samples/Sample_32_Chart.php": [
 20,
-21,
+21
 ],
-'PHPWord:samples/Sample_36_RTL.php':[
-20,
+"PHPWord:samples/Sample_36_RTL.php": [
+20
 ],
-'PHPWord:samples/Sample_41_TemplateSetChart.php':[
+"PHPWord:samples/Sample_41_TemplateSetChart.php": [
 12,
-13,
+13
 ],
-'PHPWord:samples/Sample_Header.php':[
-162,
+"PHPWord:samples/Sample_Header.php": [
+162
 ],
-'PHPWord:samples/index.php':[
+"PHPWord:samples/index.php": [
 18,
 21,
-22,
+22
 ],
-'PHPWord:src/PhpWord/Element/Chart.php':[
-90,
+"PHPWord:src/PhpWord/Element/Chart.php": [
+90
 ],
-'PHPWord:src/PhpWord/Element/Field.php':[
+"PHPWord:src/PhpWord/Element/Field.php": [
 59,
 60,
 61,
@@ -47,27 +47,27 @@
 66,
 67,
 68,
-249,
+249
 ],
-'PHPWord:src/PhpWord/Escaper/Rtf.php':[
-87,
+"PHPWord:src/PhpWord/Escaper/Rtf.php": [
+87
 ],
-'PHPWord:src/PhpWord/Reader/MsDoc.php':[
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
 1121,
 1125,
 2376,
-2378,
+2378
 ],
-'PHPWord:src/PhpWord/Reader/ODText/Content.php':[
-101,
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
+101
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php':[
-235,
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+235
 ],
-'PHPWord:src/PhpWord/Shared/AbstractEnum.php':[
-76,
+"PHPWord:src/PhpWord/Shared/AbstractEnum.php": [
+76
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
+"PHPWord:src/PhpWord/Shared/Html.php": [
 609,
 610,
 611,
@@ -85,13 +85,13 @@
 630,
 631,
 632,
-633,
+633
 ],
-'PHPWord:src/PhpWord/Shared/Microsoft/PasswordEncoder.php':[
+"PHPWord:src/PhpWord/Shared/Microsoft/PasswordEncoder.php": [
 42,
-217,
+217
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 1403,
 1418,
 1432,
@@ -150,12 +150,12 @@
 4527,
 4853,
 4913,
-4982,
+4982
 ],
-'PHPWord:src/PhpWord/Style/Table.php':[
-181,
+"PHPWord:src/PhpWord/Style/Table.php": [
+181
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
 379,
 383,
 384,
@@ -178,44 +178,44 @@
 1262,
 1282,
 1417,
-1419,
+1419
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/Link.php':[
-43,
+"PHPWord:src/PhpWord/Writer/HTML/Element/Link.php": [
+43
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Part/Head.php':[
-66,
+"PHPWord:src/PhpWord/Writer/HTML/Part/Head.php": [
+66
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Part/Styles.php':[
-87,
+"PHPWord:src/PhpWord/Writer/ODText/Part/Styles.php": [
+87
 ],
-'PHPWord:src/PhpWord/Writer/RTF/Part/Document.php':[
-96,
+"PHPWord:src/PhpWord/Writer/RTF/Part/Document.php": [
+96
 ],
-'PHPWord:src/PhpWord/Writer/RTF/Style/Section.php':[
-56,
+"PHPWord:src/PhpWord/Writer/RTF/Style/Section.php": [
+56
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php':[
-200,
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php": [
+200
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Style/Font.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Style/Font.php": [
 92,
-121,
+121
 ],
-'PHPWord:tests/PhpWordTests/AbstractTestReader.php':[
+"PHPWord:tests/PhpWordTests/AbstractTestReader.php": [
 29,
 30,
 31,
 32,
-33,
+33
 ],
-'PHPWord:tests/PhpWordTests/Reader/Word2007/ElementTest.php':[
-299,
+"PHPWord:tests/PhpWordTests/Reader/Word2007/ElementTest.php": [
+299
 ],
-'PHPWord:tests/PhpWordTests/Reader/Word2007/StyleTest.php':[
-80,
+"PHPWord:tests/PhpWordTests/Reader/Word2007/StyleTest.php": [
+80
 ],
-'PHPWord:tests/PhpWordTests/Shared/HtmlTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
 329,
 381,
 382,
@@ -232,12 +232,12 @@
 811,
 937,
 940,
-1095,
+1095
 ],
-'PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php':[
-104,
+"PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
+104
 ],
-'PHPWord:tests/PhpWordTests/TemplateProcessorTest.php':[
+"PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
 649,
 650,
 651,
@@ -259,20 +259,20 @@
 1266,
 1267,
 1279,
-1322,
+1322
 ],
-'PHPWord:tests/PhpWordTests/Writer/HTML/ElementTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/HTML/ElementTest.php": [
 107,
 109,
 214,
-215,
+215
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/Style/ParagraphTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/ODText/Style/ParagraphTest.php": [
 167,
 168,
-169,
+169
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/Style/SectionTest.php':[
-182,
-],
+"PHPWord:tests/PhpWordTests/Writer/ODText/Style/SectionTest.php": [
+182
+]
 }

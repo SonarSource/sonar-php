@@ -1,31 +1,31 @@
 {
-'PHPWord:src/PhpWord/Element/AbstractContainer.php':[
-85,
+"PHPWord:src/PhpWord/Element/AbstractContainer.php": [
+85
 ],
-'PHPWord:src/PhpWord/Element/Image.php':[
-330,
+"PHPWord:src/PhpWord/Element/Image.php": [
+330
 ],
-'PHPWord:src/PhpWord/Element/Section.php':[
-209,
+"PHPWord:src/PhpWord/Element/Section.php": [
+209
 ],
-'PHPWord:src/PhpWord/PhpWord.php':[
-114,
+"PHPWord:src/PhpWord/PhpWord.php": [
+114
 ],
-'PHPWord:src/PhpWord/Reader/RTF/Document.php':[
-389,
+"PHPWord:src/PhpWord/Reader/RTF/Document.php": [
+389
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/Footnotes.php':[
+"PHPWord:src/PhpWord/Reader/Word2007/Footnotes.php": [
 60,
-84,
+84
 ],
-'PHPWord:src/PhpWord/Shared/Css.php':[
-40,
+"PHPWord:src/PhpWord/Shared/Css.php": [
+40
 ],
-'PHPWord:src/PhpWord/Shared/OLERead.php':[
+"PHPWord:src/PhpWord/Shared/OLERead.php": [
 226,
-248,
+248
 ],
-'PHPWord:src/PhpWord/Shared/ZipArchive.php':[
+"PHPWord:src/PhpWord/Shared/ZipArchive.php": [
 138,
 235,
 287,
@@ -33,25 +33,25 @@
 321,
 355,
 385,
-404,
+404
 ],
-'PHPWord:src/PhpWord/Style/ListItem.php':[
-167,
+"PHPWord:src/PhpWord/Style/ListItem.php": [
+167
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
-1028,
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+1028
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php": [
 300,
-341,
+341
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Footnotes.php':[
-110,
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Footnotes.php": [
+110
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Style/AbstractStyle.php':[
-148,
+"PHPWord:src/PhpWord/Writer/Word2007/Style/AbstractStyle.php": [
+148
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Style/Cell.php':[
-49,
-],
+"PHPWord:src/PhpWord/Writer/Word2007/Style/Cell.php": [
+49
+]
 }

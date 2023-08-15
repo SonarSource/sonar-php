@@ -1,13 +1,13 @@
 {
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 3473,
-5381,
+5381
 ],
-'PHPWord:src/PhpWord/Shared/XMLWriter.php':[
+"PHPWord:src/PhpWord/Shared/XMLWriter.php": [
 147,
-167,
+167
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Style/AbstractStyle.php':[
-125,
-],
+"PHPWord:src/PhpWord/Writer/HTML/Style/AbstractStyle.php": [
+125
+]
 }

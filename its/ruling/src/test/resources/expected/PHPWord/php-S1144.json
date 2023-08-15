@@ -1,23 +1,23 @@
 {
-'PHPWord:src/PhpWord/Writer/Word2007/Element/FormField.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Element/FormField.php": [
 110,
 124,
-145,
+145
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Element/SDT.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Element/SDT.php": [
 82,
 110,
-120,
+120
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Element/Shape.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Shape.php": [
 81,
 92,
 115,
-123,
+123
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Styles.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Styles.php": [
 166,
 232,
-262,
-],
+262
+]
 }

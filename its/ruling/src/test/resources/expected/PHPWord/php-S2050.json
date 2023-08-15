@@ -1,5 +1,5 @@
 {
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 294,
 368,
 469,
@@ -39,6 +39,6 @@
 5144,
 5157,
 5205,
-5207,
-],
+5207
+]
 }

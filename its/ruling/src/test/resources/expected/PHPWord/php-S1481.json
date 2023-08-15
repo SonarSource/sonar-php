@@ -1,11 +1,11 @@
 {
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 497,
 629,
 1111,
 2080,
 2114,
 3183,
-4461,
-],
+4461
+]
 }
