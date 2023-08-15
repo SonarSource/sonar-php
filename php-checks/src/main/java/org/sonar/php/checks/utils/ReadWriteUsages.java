@@ -49,8 +49,8 @@ public class ReadWriteUsages {
   private final Set<SyntaxToken> writes = new HashSet<>();
   private final Set<SyntaxToken> readAssignment = new HashSet<>();
   private final Set<SyntaxToken> declarations = new HashSet<>();
-  private final Map<Symbol,List<Symbol>> inheritedVariablesByParent = new HashMap<>();
-  private final Map<Symbol,Symbol> parentSymbolByInheritedReference = new HashMap<>();
+  private final Map<Symbol, List<Symbol>> inheritedVariablesByParent = new HashMap<>();
+  private final Map<Symbol, Symbol> parentSymbolByInheritedReference = new HashMap<>();
 
   public ReadWriteUsages(Tree tree, SymbolTable symbolTable) {
     this.symbolTable = symbolTable;

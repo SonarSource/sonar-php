@@ -184,6 +184,8 @@ import static org.sonar.php.api.PHPPunctuator.SR;
 import static org.sonar.php.api.PHPPunctuator.STAR;
 import static org.sonar.php.api.PHPPunctuator.STAR_STAR;
 
+// Ignore uppercase method names warning
+@SuppressWarnings("java:S100")
 public class PHPGrammar {
 
   private final GrammarBuilder<InternalSyntaxToken> b;
@@ -1260,6 +1262,8 @@ public class PHPGrammar {
           CONDITIONAL_OR_EXPR()))));
   }
 
+  // Seemingly infinite recursion is correctly handled by SSLR
+  @SuppressWarnings("javabugs:S2190")
   public ExpressionTree CONDITIONAL_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_EXPRESSION).is(
       f.completeConditionalExpr(
