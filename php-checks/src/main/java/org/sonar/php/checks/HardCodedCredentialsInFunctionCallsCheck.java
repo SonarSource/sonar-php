@@ -178,9 +178,9 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     static Map<String, SensitiveMethod> parseSensitiveFunctions(String location, Set<String> fileNames) {
       Map<String, SensitiveMethod> sensitiveFunctions = new HashMap<>();
 
-      for (String json_location : fileNames) {
+      for (String fileName : fileNames) {
         try {
-          JSONArray readArray = parseResource(location + json_location);
+          JSONArray readArray = parseResource(location + fileName);
           for (Object element : readArray) {
             JSONObject castElement = (JSONObject) element;
             String cls = (String) castElement.get("cls");
@@ -195,7 +195,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
           }
         } catch (IOException | ParseException e) {
           LOG.error("JSON containing the sensitive functions for hard coded credentials couldn't be read correctly from " +
-            "resources at {}.", json_location);
+            "resources at {}.", fileName);
         }
       }
       return sensitiveFunctions;

@@ -69,10 +69,8 @@ public final class PHPProfileDefinition implements BuiltInQualityProfilesDefinit
       LOG.debug("com.sonar.plugins.security.api.PhpRules is not found, {}", securityRuleMessage(e));
     } catch (NoSuchMethodException e) {
       LOG.debug("Method not found on com.sonar.plugins.security.api.PhpRules, {}", securityRuleMessage(e));
-    } catch (IllegalAccessException e) {
-      LOG.debug("[IllegalAccessException] {}", securityRuleMessage(e));
-    } catch (InvocationTargetException e) {
-      LOG.debug("[InvocationTargetException] {}", securityRuleMessage(e));
+    } catch (IllegalAccessException | InvocationTargetException e) {
+      LOG.debug("[{}] {}", e.getClass().getSimpleName(), securityRuleMessage(e));
     }
 
     return new HashSet<>();

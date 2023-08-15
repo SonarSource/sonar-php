@@ -84,7 +84,6 @@ class PhpIniSensorTest {
     TextRange textRange = issue.primaryLocation().textRange();
     assertThat(textRange).isNotNull();
     assertThat(textRange.start().line()).isEqualTo(2);
-
   }
 
   @Test
