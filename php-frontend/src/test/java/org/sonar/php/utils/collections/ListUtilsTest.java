@@ -30,37 +30,37 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class ListUtilsTest {
 
   @Test
-  public void get_last_on_list() {
+  public void getLastOnList() {
     List<String> list = List.of("value1", "value2");
     assertThat(ListUtils.getLast(list)).isEqualTo("value2");
   }
 
   @Test
-  public void get_last_on_empty_list() {
+  public void getLastOnEmptyList() {
     List<String> list = List.of();
     assertThatThrownBy(() -> ListUtils.getLast(list)).isInstanceOf(IndexOutOfBoundsException.class);
   }
 
   @Test
-  public void get_last_default_on_list() {
+  public void getLastDefaultOnList() {
     List<String> list = List.of("value1", "value2");
     assertThat(ListUtils.getLast(list, "default")).isEqualTo("value2");
   }
 
   @Test
-  public void get_last_default_on_empty_list() {
+  public void getLastDefaultOnEmptyList() {
     List<String> list = List.of();
     assertThat(ListUtils.getLast(list, "default")).isEqualTo("default");
   }
 
   @Test
-  public void get_only_element_on_single_element_list() {
+  public void getOnlyElementOnSingleElementList() {
     List<String> list = List.of("value");
     assertThat(ListUtils.getOnlyElement(list)).isEqualTo("value");
   }
 
   @Test
-  public void get_only_element_on_multiple_element_list() {
+  public void getOnlyElementOnMultipleElementList() {
     List<String> list = List.of("value1", "value2");
     assertThatThrownBy(() -> ListUtils.getOnlyElement(list))
       .isInstanceOf(IllegalArgumentException.class)
@@ -68,7 +68,7 @@ public class ListUtilsTest {
   }
 
   @Test
-  public void get_only_element_on_empty_list() {
+  public void getOnlyElementOnEmptyList() {
     List<String> list = List.of();
     assertThatThrownBy(() -> ListUtils.getOnlyElement(list))
       .isInstanceOf(IllegalArgumentException.class)
@@ -76,7 +76,7 @@ public class ListUtilsTest {
   }
 
   @Test
-  public void test_concat_any_list() {
+  public void testConcatAnyList() {
     List<SomeType> list1 = Arrays.asList(new SomeType("value1"), new SomeType("value2"));
     List<SomeType> list2 = Arrays.asList(new SomeType("value3"), new SomeType("value4"));
 
@@ -85,7 +85,7 @@ public class ListUtilsTest {
   }
 
   @Test
-  public void test_concat_many_lists() {
+  public void testConcatManyLists() {
     List<SomeType> list1 = Arrays.asList(new SomeType("value1"), new SomeType("value2"));
     List<SomeType> list2 = Arrays.asList(new SomeType("value3"), new SomeType("value4"));
     List<SomeType> list3 = Arrays.asList(new SomeType("value5"), new SomeType("value6"));
@@ -107,7 +107,7 @@ public class ListUtilsTest {
   }
 
   @Test
-  public void test_merge_without_duplicate() {
+  public void testMergeWithoutDuplicate() {
     List<SomeType> list1 = Arrays.asList(new SomeType("value1"), new SomeType("value2"));
     List<SomeType> list2 = Arrays.asList(new SomeType("value3"), new SomeType("value4"));
 
@@ -117,7 +117,7 @@ public class ListUtilsTest {
   }
 
   @Test
-  public void test_merge_with_duplicate() {
+  public void testMergeWithDuplicate() {
     List<SomeType> list1 = Arrays.asList(new SomeType("value1"), new SomeType("value2"));
     List<SomeType> list2 = Arrays.asList(new SomeType("value2"), new SomeType("value3"));
 
@@ -127,7 +127,7 @@ public class ListUtilsTest {
   }
 
   @Test
-  public void test_reverse_any_list() {
+  public void testReverseAnyList() {
     List<SomeType> list = Arrays.asList(new SomeType("value1"), new SomeType("value2"));
 
     assertThat(ListUtils.reverse(list))
