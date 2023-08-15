@@ -1,106 +1,106 @@
 {
-'Symfony:Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/ProxyDumperTest.php':[
-66,
+"Symfony:Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/ProxyDumperTest.php": [
+66
 ],
-'Symfony:Bundle/FrameworkBundle/Tests/Command/TranslationDebugCommandTest.php':[
-54,
+"Symfony:Bundle/FrameworkBundle/Tests/Command/TranslationDebugCommandTest.php": [
+54
 ],
-'Symfony:Component/Cache/Adapter/AbstractTagAwareAdapter.php':[
-59,
+"Symfony:Component/Cache/Adapter/AbstractTagAwareAdapter.php": [
+59
 ],
-'Symfony:Component/Clock/Tests/MockClockTest.php':[
+"Symfony:Component/Clock/Tests/MockClockTest.php": [
 52,
-53,
+53
 ],
-'Symfony:Component/DependencyInjection/Dumper/PhpDumper.php':[
-235,
+"Symfony:Component/DependencyInjection/Dumper/PhpDumper.php": [
+235
 ],
-'Symfony:Component/DependencyInjection/Exception/ParameterCircularReferenceException.php':[
-25,
+"Symfony:Component/DependencyInjection/Exception/ParameterCircularReferenceException.php": [
+25
 ],
-'Symfony:Component/DependencyInjection/Tests/ContainerBuilderTest.php':[
+"Symfony:Component/DependencyInjection/Tests/ContainerBuilderTest.php": [
 301,
 1777,
-1779,
+1779
 ],
-'Symfony:Component/DependencyInjection/Tests/Dumper/PhpDumperTest.php':[
+"Symfony:Component/DependencyInjection/Tests/Dumper/PhpDumperTest.php": [
 1396,
-1398,
+1398
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_array_params.php':[
-52,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_array_params.php": [
+52
 ],
-'Symfony:Component/ErrorHandler/Tests/Exception/FlattenExceptionTest.php':[
-226,
+"Symfony:Component/ErrorHandler/Tests/Exception/FlattenExceptionTest.php": [
+226
 ],
-'Symfony:Component/ExpressionLanguage/Tests/ExpressionLanguageTest.php':[
-445,
+"Symfony:Component/ExpressionLanguage/Tests/ExpressionLanguageTest.php": [
+445
 ],
-'Symfony:Component/Form/Extension/Core/Type/WeekType.php':[
+"Symfony:Component/Form/Extension/Core/Type/WeekType.php": [
 66,
-70,
+70
 ],
-'Symfony:Component/Form/Tests/ChoiceList/Factory/CachingFactoryDecoratorTest.php':[
-208,
+"Symfony:Component/Form/Tests/ChoiceList/Factory/CachingFactoryDecoratorTest.php": [
+208
 ],
-'Symfony:Component/HttpFoundation/Tests/RequestTest.php':[
+"Symfony:Component/HttpFoundation/Tests/RequestTest.php": [
 398,
 398,
 406,
-406,
+406
 ],
-'Symfony:Component/HttpKernel/Tests/DependencyInjection/AddAnnotatedClassesToCachePassTest.php':[
-29,
+"Symfony:Component/HttpKernel/Tests/DependencyInjection/AddAnnotatedClassesToCachePassTest.php": [
+29
 ],
-'Symfony:Component/Messenger/Bridge/Amqp/Transport/Connection.php':[
-496,
+"Symfony:Component/Messenger/Bridge/Amqp/Transport/Connection.php": [
+496
 ],
-'Symfony:Component/Messenger/Tests/Middleware/DispatchAfterCurrentBusMiddlewareTest.php':[
+"Symfony:Component/Messenger/Tests/Middleware/DispatchAfterCurrentBusMiddlewareTest.php": [
 72,
 73,
 74,
 121,
 186,
 194,
-205,
+205
 ],
-'Symfony:Component/Mime/Tests/Encoder/Base64EncoderTest.php':[
+"Symfony:Component/Mime/Tests/Encoder/Base64EncoderTest.php": [
 72,
 77,
-77,
+77
 ],
-'Symfony:Component/RateLimiter/Policy/NoLimiter.php':[
+"Symfony:Component/RateLimiter/Policy/NoLimiter.php": [
 30,
-35,
+35
 ],
-'Symfony:Component/Routing/Matcher/Dumper/StaticPrefixCollection.php':[
-105,
+"Symfony:Component/Routing/Matcher/Dumper/StaticPrefixCollection.php": [
+105
 ],
-'Symfony:Component/Routing/Tests/Generator/UrlGeneratorTest.php':[
-640,
+"Symfony:Component/Routing/Tests/Generator/UrlGeneratorTest.php": [
+640
 ],
-'Symfony:Component/Routing/Tests/Matcher/Dumper/CompiledUrlMatcherDumperTest.php':[
-454,
+"Symfony:Component/Routing/Tests/Matcher/Dumper/CompiledUrlMatcherDumperTest.php": [
+454
 ],
-'Symfony:Component/Routing/Tests/RouteTest.php':[
-24,
+"Symfony:Component/Routing/Tests/RouteTest.php": [
+24
 ],
-'Symfony:Component/Serializer/Tests/Mapping/Factory/CompiledClassMetadataFactoryTest.php':[
-97,
+"Symfony:Component/Serializer/Tests/Mapping/Factory/CompiledClassMetadataFactoryTest.php": [
+97
 ],
-'Symfony:Component/Serializer/Tests/Normalizer/Features/CallbacksTestTrait.php':[
+"Symfony:Component/Serializer/Tests/Normalizer/Features/CallbacksTestTrait.php": [
 298,
 299,
 300,
-301,
+301
 ],
-'Symfony:Component/Validator/Tests/Constraints/AtLeastOneOfValidatorTest.php':[
-116,
+"Symfony:Component/Validator/Tests/Constraints/AtLeastOneOfValidatorTest.php": [
+116
 ],
-'Symfony:Component/VarDumper/Caster/GmpCaster.php':[
-28,
+"Symfony:Component/VarDumper/Caster/GmpCaster.php": [
+28
 ],
-'Symfony:Component/VarDumper/Caster/ReflectionCaster.php':[
-165,
-],
+"Symfony:Component/VarDumper/Caster/ReflectionCaster.php": [
+165
+]
 }

@@ -1,13 +1,13 @@
 {
-'Symfony:Bundle/FrameworkBundle/Tests/DependencyInjection/FrameworkExtensionTestCase.php':[
+"Symfony:Bundle/FrameworkBundle/Tests/DependencyInjection/FrameworkExtensionTestCase.php": [
 487,
-496,
+496
 ],
-'Symfony:Bundle/WebProfilerBundle/Tests/Resources/MinifyTest.php':[
+"Symfony:Bundle/WebProfilerBundle/Tests/Resources/MinifyTest.php": [
 27,
-28,
+28
 ],
-'Symfony:Component/DependencyInjection/Tests/ContainerBuilderTest.php':[
-268,
-],
+"Symfony:Component/DependencyInjection/Tests/ContainerBuilderTest.php": [
+268
+]
 }

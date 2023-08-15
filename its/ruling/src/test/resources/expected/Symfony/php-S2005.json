@@ -1,27 +1,27 @@
 {
-'Symfony:Bridge/PhpUnit/DeprecationErrorHandler/Deprecation.php':[
-409,
+"Symfony:Bridge/PhpUnit/DeprecationErrorHandler/Deprecation.php": [
+409
 ],
-'Symfony:Bridge/PhpUnit/bin/simple-phpunit.php':[
-256,
+"Symfony:Bridge/PhpUnit/bin/simple-phpunit.php": [
+256
 ],
-'Symfony:Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/ProxyDumperTest.php':[
-55,
+"Symfony:Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/ProxyDumperTest.php": [
+55
 ],
-'Symfony:Bridge/Twig/Node/DumpNode.php':[
+"Symfony:Bridge/Twig/Node/DumpNode.php": [
 44,
 45,
 47,
 49,
 55,
-65,
+65
 ],
-'Symfony:Bridge/Twig/Tests/Extension/DumpExtensionTest.php':[
+"Symfony:Bridge/Twig/Tests/Extension/DumpExtensionTest.php": [
 99,
 105,
-138,
+138
 ],
-'Symfony:Bundle/FrameworkBundle/Console/Descriptor/MarkdownDescriptor.php':[
+"Symfony:Bundle/FrameworkBundle/Console/Descriptor/MarkdownDescriptor.php": [
 49,
 60,
 201,
@@ -40,67 +40,67 @@
 254,
 261,
 268,
-429,
+429
 ],
-'Symfony:Bundle/FrameworkBundle/DependencyInjection/Configuration.php':[
-628,
+"Symfony:Bundle/FrameworkBundle/DependencyInjection/Configuration.php": [
+628
 ],
-'Symfony:Component/BrowserKit/Tests/ResponseTest.php':[
+"Symfony:Component/BrowserKit/Tests/ResponseTest.php": [
 69,
 70,
-71,
+71
 ],
-'Symfony:Component/Cache/Adapter/CouchbaseBucketAdapter.php':[
-69,
+"Symfony:Component/Cache/Adapter/CouchbaseBucketAdapter.php": [
+69
 ],
-'Symfony:Component/Cache/Adapter/CouchbaseCollectionAdapter.php':[
-62,
+"Symfony:Component/Cache/Adapter/CouchbaseCollectionAdapter.php": [
+62
 ],
-'Symfony:Component/Cache/Adapter/DoctrineDbalAdapter.php':[
+"Symfony:Component/Cache/Adapter/DoctrineDbalAdapter.php": [
 234,
-241,
+241
 ],
-'Symfony:Component/Cache/Adapter/PdoAdapter.php':[
+"Symfony:Component/Cache/Adapter/PdoAdapter.php": [
 261,
-268,
+268
 ],
-'Symfony:Component/Config/Builder/ConfigBuilderGenerator.php':[
+"Symfony:Component/Config/Builder/ConfigBuilderGenerator.php": [
 134,
 135,
 286,
 287,
-432,
+432
 ],
-'Symfony:Component/Config/Tests/Exception/LoaderLoadExceptionTest.php':[
+"Symfony:Component/Config/Tests/Exception/LoaderLoadExceptionTest.php": [
 53,
-97,
+97
 ],
-'Symfony:Component/Config/Tests/Fixtures/Configuration/ExampleConfiguration.php':[
-51,
+"Symfony:Component/Config/Tests/Fixtures/Configuration/ExampleConfiguration.php": [
+51
 ],
-'Symfony:Component/Console/Descriptor/MarkdownDescriptor.php':[
+"Symfony:Component/Console/Descriptor/MarkdownDescriptor.php": [
 51,
 68,
 108,
-121,
+121
 ],
-'Symfony:Component/Console/Descriptor/ReStructuredTextDescriptor.php':[
+"Symfony:Component/Console/Descriptor/ReStructuredTextDescriptor.php": [
 61,
 84,
-183,
+183
 ],
-'Symfony:Component/Console/Tests/ApplicationTest.php':[
+"Symfony:Component/Console/Tests/ApplicationTest.php": [
 452,
-459,
+459
 ],
-'Symfony:Component/Console/Tests/Helper/FormatterHelperTest.php':[
+"Symfony:Component/Console/Tests/Helper/FormatterHelperTest.php": [
 41,
 48,
 61,
 73,
-86,
+86
 ],
-'Symfony:Component/Console/Tests/Helper/ProgressBarTest.php':[
+"Symfony:Component/Console/Tests/Helper/ProgressBarTest.php": [
 403,
 455,
 536,
@@ -108,69 +108,69 @@
 949,
 963,
 978,
-1247,
+1247
 ],
-'Symfony:Component/Console/Tests/Helper/TableTest.php':[
+"Symfony:Component/Console/Tests/Helper/TableTest.php": [
 605,
 610,
-1293,
+1293
 ],
-'Symfony:Component/Console/Tests/Input/StringInputTest.php':[
-85,
+"Symfony:Component/Console/Tests/Input/StringInputTest.php": [
+85
 ],
-'Symfony:Component/Console/Tests/Output/ConsoleSectionOutputTest.php':[
+"Symfony:Component/Console/Tests/Output/ConsoleSectionOutputTest.php": [
 75,
 91,
 150,
-165,
+165
 ],
-'Symfony:Component/CssSelector/XPath/Extension/HtmlExtension.php':[
+"Symfony:Component/CssSelector/XPath/Extension/HtmlExtension.php": [
 63,
 77,
 103,
-146,
+146
 ],
-'Symfony:Component/DependencyInjection/Argument/LazyClosure.php':[
-84,
+"Symfony:Component/DependencyInjection/Argument/LazyClosure.php": [
+84
 ],
-'Symfony:Component/DependencyInjection/Dumper/PhpDumper.php':[
-1283,
+"Symfony:Component/DependencyInjection/Dumper/PhpDumper.php": [
+1283
 ],
-'Symfony:Component/DependencyInjection/Loader/XmlFileLoader.php':[
-730,
+"Symfony:Component/DependencyInjection/Loader/XmlFileLoader.php": [
+730
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/php/services10.php':[
-50,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/php/services10.php": [
+50
 ],
-'Symfony:Component/Dotenv/Tests/DotenvTest.php':[
+"Symfony:Component/Dotenv/Tests/DotenvTest.php": [
 45,
-52,
+52
 ],
-'Symfony:Component/ExpressionLanguage/Tests/ParserTest.php':[
+"Symfony:Component/ExpressionLanguage/Tests/ParserTest.php": [
 329,
 335,
 341,
 363,
-375,
+375
 ],
-'Symfony:Component/Form/Tests/CompoundFormTest.php':[
+"Symfony:Component/Form/Tests/CompoundFormTest.php": [
 822,
 842,
-866,
+866
 ],
-'Symfony:Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php':[
+"Symfony:Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php": [
 847,
 853,
-861,
+861
 ],
-'Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/PdoSessionHandlerTest.php':[
-118,
+"Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/PdoSessionHandlerTest.php": [
+118
 ],
-'Symfony:Component/HttpKernel/Tests/HttpCache/EsiTest.php':[
+"Symfony:Component/HttpKernel/Tests/HttpCache/EsiTest.php": [
 82,
-102,
+102
 ],
-'Symfony:Component/Intl/Resources/data/transliterator/emoji/emoji-ar.php':[
+"Symfony:Component/Intl/Resources/data/transliterator/emoji/emoji-ar.php": [
 219,
 220,
 221,
@@ -389,9 +389,9 @@
 3515,
 3521,
 3522,
-3533,
+3533
 ],
-'Symfony:Component/Intl/Resources/data/transliterator/emoji/emoji-ar_sa.php':[
+"Symfony:Component/Intl/Resources/data/transliterator/emoji/emoji-ar_sa.php": [
 219,
 220,
 221,
@@ -431,114 +431,114 @@
 275,
 276,
 277,
-278,
+278
 ],
-'Symfony:Component/Intl/Tests/LocaleTest.php':[
-79,
+"Symfony:Component/Intl/Tests/LocaleTest.php": [
+79
 ],
-'Symfony:Component/Mailer/Tests/Transport/Smtp/DummyStream.php':[
-58,
+"Symfony:Component/Mailer/Tests/Transport/Smtp/DummyStream.php": [
+58
 ],
-'Symfony:Component/Messenger/Bridge/Amqp/Tests/Transport/ConnectionTest.php':[
+"Symfony:Component/Messenger/Bridge/Amqp/Tests/Transport/ConnectionTest.php": [
 66,
 172,
 323,
 375,
-405,
+405
 ],
-'Symfony:Component/Messenger/Bridge/Doctrine/Transport/Connection.php':[
-377,
+"Symfony:Component/Messenger/Bridge/Doctrine/Transport/Connection.php": [
+377
 ],
-'Symfony:Component/Mime/Tests/Encoder/Base64EncoderTest.php':[
+"Symfony:Component/Mime/Tests/Encoder/Base64EncoderTest.php": [
 91,
 100,
 114,
 123,
 139,
-148,
+148
 ],
-'Symfony:Component/Mime/Tests/Encoder/QpEncoderTest.php':[
+"Symfony:Component/Mime/Tests/Encoder/QpEncoderTest.php": [
 84,
 85,
 88,
 89,
-122,
+122
 ],
-'Symfony:Component/Mime/Tests/Header/ParameterizedHeaderTest.php':[
+"Symfony:Component/Mime/Tests/Header/ParameterizedHeaderTest.php": [
 109,
-194,
+194
 ],
-'Symfony:Component/Mime/Tests/Header/UnstructuredHeaderTest.php':[
+"Symfony:Component/Mime/Tests/Header/UnstructuredHeaderTest.php": [
 55,
 63,
 173,
 175,
-202,
+202
 ],
-'Symfony:Component/Notifier/Bridge/GoogleChat/GoogleChatOptions.php':[
-42,
+"Symfony:Component/Notifier/Bridge/GoogleChat/GoogleChatOptions.php": [
+42
 ],
-'Symfony:Component/Process/Exception/ProcessFailedException.php':[
-31,
+"Symfony:Component/Process/Exception/ProcessFailedException.php": [
+31
 ],
-'Symfony:Component/PropertyAccess/Exception/UnexpectedTypeException.php':[
-30,
+"Symfony:Component/PropertyAccess/Exception/UnexpectedTypeException.php": [
+30
 ],
-'Symfony:Component/PropertyInfo/Extractor/ReflectionExtractor.php':[
-389,
+"Symfony:Component/PropertyInfo/Extractor/ReflectionExtractor.php": [
+389
 ],
-'Symfony:Component/Routing/Matcher/Dumper/CompiledUrlMatcherDumper.php':[
+"Symfony:Component/Routing/Matcher/Dumper/CompiledUrlMatcherDumper.php": [
 136,
 138,
-150,
+150
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher1.php':[
-30,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher1.php": [
+30
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher10.php':[
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher10.php": [
 13,
-892,
+892
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher11.php':[
-13,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher11.php": [
+13
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher12.php':[
-13,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher12.php": [
+13
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher13.php':[
-13,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher13.php": [
+13
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher2.php':[
-32,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher2.php": [
+32
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher3.php':[
-15,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher3.php": [
+15
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher5.php':[
-25,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher5.php": [
+25
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher6.php':[
-21,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher6.php": [
+21
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher7.php':[
-21,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher7.php": [
+21
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher8.php':[
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher8.php": [
 13,
 16,
-19,
+19
 ],
-'Symfony:Component/Routing/Tests/Generator/UrlGeneratorTest.php':[
-500,
+"Symfony:Component/Routing/Tests/Generator/UrlGeneratorTest.php": [
+500
 ],
-'Symfony:Component/Runtime/Internal/ComposerPlugin.php':[
+"Symfony:Component/Runtime/Internal/ComposerPlugin.php": [
 93,
-95,
+95
 ],
-'Symfony:Component/Security/Core/Tests/Role/LegacyRoleTest.php':[
-21,
+"Symfony:Component/Security/Core/Tests/Role/LegacyRoleTest.php": [
+21
 ],
-'Symfony:Component/Serializer/Tests/Encoder/XmlEncoderTest.php':[
+"Symfony:Component/Serializer/Tests/Encoder/XmlEncoderTest.php": [
 51,
 61,
 71,
@@ -561,12 +561,12 @@
 469,
 483,
 729,
-742,
+742
 ],
-'Symfony:Component/Templating/Tests/Storage/FileStorageTest.php':[
-25,
+"Symfony:Component/Templating/Tests/Storage/FileStorageTest.php": [
+25
 ],
-'Symfony:Component/Translation/Dumper/PoFileDumper.php':[
+"Symfony:Component/Translation/Dumper/PoFileDumper.php": [
 25,
 26,
 27,
@@ -577,64 +577,64 @@
 57,
 60,
 61,
-126,
+126
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable-fqn.html.php':[
-29,
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable-fqn.html.php": [
+29
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable-short.html.php':[
-29,
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable-short.html.php": [
+29
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable.html.php':[
-29,
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable.html.php": [
+29
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/translation.html.php':[
-29,
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/translation.html.php": [
+29
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor/translatable-fqn.html.php':[
-29,
+"Symfony:Component/Translation/Tests/fixtures/extractor/translatable-fqn.html.php": [
+29
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor/translatable-short.html.php':[
-29,
+"Symfony:Component/Translation/Tests/fixtures/extractor/translatable-short.html.php": [
+29
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor/translatable.html.php':[
-29,
+"Symfony:Component/Translation/Tests/fixtures/extractor/translatable.html.php": [
+29
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor/translation.html.php':[
-29,
+"Symfony:Component/Translation/Tests/fixtures/extractor/translation.html.php": [
+29
 ],
-'Symfony:Component/Validator/Tests/Constraints/LengthValidatorTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/LengthValidatorTest.php": [
 364,
-380,
+380
 ],
-'Symfony:Component/VarDumper/Tests/Caster/FFICasterTest.php':[
-177,
+"Symfony:Component/VarDumper/Tests/Caster/FFICasterTest.php": [
+177
 ],
-'Symfony:Component/VarExporter/Internal/Exporter.php':[
-225,
+"Symfony:Component/VarExporter/Internal/Exporter.php": [
+225
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/array-object-custom.php':[
-17,
+"Symfony:Component/VarExporter/Tests/Fixtures/array-object-custom.php": [
+17
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/final-error-legacy.php':[
-5,
+"Symfony:Component/VarExporter/Tests/Fixtures/final-error-legacy.php": [
+5
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/lf-ending-string.php':[
-3,
+"Symfony:Component/VarExporter/Tests/Fixtures/lf-ending-string.php": [
+3
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/multiline-string.php':[
+"Symfony:Component/VarExporter/Tests/Fixtures/multiline-string.php": [
 4,
-5,
+5
 ],
-'Symfony:Component/Workflow/Tests/Dumper/MermaidDumperTest.php':[
+"Symfony:Component/Workflow/Tests/Dumper/MermaidDumperTest.php": [
 79,
 112,
 132,
 164,
 185,
-209,
+209
 ],
-'Symfony:Component/Yaml/Tests/DumperTest.php':[
-585,
-],
+"Symfony:Component/Yaml/Tests/DumperTest.php": [
+585
+]
 }

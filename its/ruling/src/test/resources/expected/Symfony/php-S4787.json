@@ -1,11 +1,11 @@
 {
-'Symfony:Bundle/FrameworkBundle/Secrets/SodiumVault.php':[
-83,
+"Symfony:Bundle/FrameworkBundle/Secrets/SodiumVault.php": [
+83
 ],
-'Symfony:Component/Cache/Marshaller/SodiumMarshaller.php':[
-57,
+"Symfony:Component/Cache/Marshaller/SodiumMarshaller.php": [
+57
 ],
-'Symfony:Component/Mime/Crypto/SMimeEncrypter.php':[
-51,
-],
+"Symfony:Component/Mime/Crypto/SMimeEncrypter.php": [
+51
+]
 }
