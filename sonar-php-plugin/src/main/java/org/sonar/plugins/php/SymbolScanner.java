@@ -21,6 +21,8 @@ package org.sonar.plugins.php;
 
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.annotation.CheckForNull;
 import org.slf4j.Logger;
@@ -87,7 +89,14 @@ public class SymbolScanner extends Scanner {
     fileSymbolTable.classSymbolDatas().forEach(projectSymbolData::add);
     fileSymbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
 
-    cache.writeFileContentHash(file, FileHashingUtils.inputFileContentHash(file));
+    byte[] contentHash;
+    try {
+      contentHash = FileHashingUtils.inputFileContentHash(file);
+    } catch (IllegalStateException ise) {
+      LOG.debug("Failed to compute content hash for file {}", file.key());
+      return;
+    }
+    cache.writeFileContentHash(file, contentHash);
     cache.writeFileSymbolTable(file, fileSymbolTable);
   }
 

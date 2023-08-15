@@ -19,7 +19,9 @@
  */
 package org.sonar.plugins.php;
 
+import java.io.IOException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -101,7 +103,13 @@ abstract class Scanner {
     byte[] fileHash = cache.readFileContentHash(inputFile);
     // InputFile.Status is not reliable in some cases
     // We use the hash of the file's content to double-check the content is the same.
-    return MessageDigest.isEqual(fileHash, FileHashingUtils.inputFileContentHash(inputFile));
+    try {
+      byte[] bytes = FileHashingUtils.inputFileContentHash(inputFile);
+      return MessageDigest.isEqual(fileHash, bytes);
+    } catch (IllegalStateException ise) {
+      LOG.debug("Failed to compute content hash for file {}", inputFile.key());
+      return false;
+    }
   }
 
   private void processFile(InputFile file) {
