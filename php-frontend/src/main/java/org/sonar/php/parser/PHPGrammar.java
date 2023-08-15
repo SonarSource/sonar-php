@@ -1853,6 +1853,7 @@ public class PHPGrammar {
     return b.<AnonymousClassTree>nonterminal(Kind.ANONYMOUS_CLASS).is(
       f.anonymousClass(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
+        b.optional(b.token(READONLY)),
         b.token(CLASS),
         b.optional(b.token(PHPPunctuator.LPARENTHESIS)),
         ARGUMENTS(),

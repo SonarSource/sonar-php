@@ -1768,16 +1768,23 @@ public class TreeFactory {
     return separatedList(firstArgument, otherArguments, trailingComma.orNull());
   }
 
+  @SuppressWarnings("java:S107")
   public AnonymousClassTree anonymousClass(
     Optional<List<AttributeGroupTree>> attributes,
+    Optional<InternalSyntaxToken> readonly,
     InternalSyntaxToken classToken,
-    Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<CallArgumentTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
+    Optional<InternalSyntaxToken> lParenthesis,
+    SeparatedListImpl<CallArgumentTree> arguments,
+    Optional<InternalSyntaxToken> rParenthesis,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
-    InternalSyntaxToken lCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken rCurlyBrace) {
+    InternalSyntaxToken lCurlyBrace,
+    Optional<List<ClassMemberTree>> members,
+    InternalSyntaxToken rCurlyBrace) {
 
     return new AnonymousClassTreeImpl(
       attributes.or(Collections.emptyList()),
+      readonly.orNull(),
       classToken,
       lParenthesis.orNull(),
       arguments,
