@@ -73,11 +73,13 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
     "/* @SuppressWarnings(\"php:S1234\") */",
   })
   void filterOutIssueCommentOnSameLineButApplyToNextLine(String suppressWarning) throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "function foo(){} " + suppressWarning,
       "php:S1234", "function foo(){} "
     );
+    // @spotless:on
   }
 
   @ParameterizedTest
@@ -108,22 +110,26 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
     "/* @SuppressWarnings(\"php:S1234\") */",
   })
   void filterOutIssueCommentSeparatedByEmptyLine(String suppressWarning) throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          suppressWarning,
       "",          "",
       "php:S1234", "function foo(){} "
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutIssueAttributeSeparatedByEmptyLine() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "php:S1234", "#[SuppressWarnings(\"php:S1234\")]",
       "php:S1234", "",
       "php:S1234", "function foo(){} "
     );
+    // @spotless:on
   }
 
   @ParameterizedTest
@@ -139,6 +145,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
     "$foo = new class {                , };",
   })
   void filterOutOnFullScopeUsingComment(String scopeDeclaration, String scopeEnd) throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "// @SuppressWarnings(\"php:S1234\")",
@@ -147,6 +154,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "php:S1234", scopeEnd,
       "",          "$x = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @ParameterizedTest
@@ -158,6 +166,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
     "enum Foo {                        , }",
   })
   void filterOutOnFullScopeUsingAttribute(String scopeDeclaration, String scopeEnd) throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "php:S1234", "#[SuppressWarnings(\"php:S1234\")]",
@@ -166,10 +175,12 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "php:S1234", scopeEnd,
       "",          "$x = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutCommentOnMethod() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "class Foo {",
@@ -181,10 +192,12 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "",          "}",
       "",          "$x = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutAttributeOnMethod() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "class Foo {",
@@ -196,10 +209,12 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "",          "}",
       "",          "$x = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutAttributeOnClassVariableDeclaration() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "class Foo {",
@@ -209,10 +224,12 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "",          "}",
       "",          "$x = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutAttributeOnClassConstantDeclaration() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "class Foo {",
@@ -221,10 +238,12 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "",          "}",
       "",          "$x = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutAttributeOnParameter() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "function foo (",
@@ -235,10 +254,12 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "",          "  return $x; // out of the scope",
       "",          "}"
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutAttributeOnAnonymousClass() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "$x = new",
@@ -248,10 +269,12 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "php:S1234", "};",
       "",          "$x = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutAttributeOnFunctionExpression() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "$x =",
@@ -261,10 +284,12 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "php:S1234", "};",
       "",          "$y = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutAttributeOnArrowFunctionExpression() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "$x =",
@@ -273,10 +298,12 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "php:S1234", "  $x + $y;",
       "",          "$z = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @Test
   void filterOutAttributeOnEnumCase() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "",          "enum Color {",
@@ -287,6 +314,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
       "",          "}",
       "",          "$x = 3; // out of the scope"
     );
+    // @spotless:on
   }
 
   @Test
@@ -315,6 +343,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
 
   @Test
   void filterOutMultipleIssueOnDifferentScope() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",          "<?php",
       "php:S1234", "#[SuppressWarnings(\"php:S1234\")]",
@@ -325,21 +354,25 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
 
   @Test
   void filterOutMultipleIssueInSingleComment() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",                    "<?php",
       "",                    "/* @SuppressWarnings(\"php:S1234\")",
       "",                    "   @SuppressWarnings(\"php:S4567\") */",
       "php:S1234,php:S4567", "function foo(){}",
       "",                    "$x = 3;");
+    // @spotless:on
   }
 
   @Test
   void filterOutMultipleIssueInSingleSuppressWarningsInstruction() throws URISyntaxException {
+    // @spotless:off
     assertScopeOfSuppressWarningInstruction(
       "",                    "<?php",
       "",                    "// @SuppressWarnings(\"php:S1234\", \"php:S4567\")",
       "php:S1234,php:S4567", "function foo(){}",
       "",                    "$x = 3;");
+    // @spotless:on
   }
 
   @Test
@@ -376,7 +409,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
    * "php:S1,php:S2", "$x = 3;"
    * </>
    */
-  private void assertScopeOfSuppressWarningInstruction(String ...params) throws URISyntaxException {
+  private void assertScopeOfSuppressWarningInstruction(String... params) throws URISyntaxException {
     assertThat(params.length % 2).as("Expecting even number of arguments").isZero();
 
     String filename = "myFile.php";
@@ -388,7 +421,7 @@ class SuppressWarningFilterTest extends ParsingTestUtils {
 
     for (int i = 0; i < params.length; i += 2) {
       String[] filteredRules = params[i].isEmpty() ? new String[0] : params[i].split(",");
-      String lineCode = params[i+1];
+      String lineCode = params[i + 1];
 
       filteredRulesPerLine.add(filteredRules);
       fullScript.append(lineCode).append(System.lineSeparator());

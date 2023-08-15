@@ -29,12 +29,12 @@ public class ClassConstModifierTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.CLASS_CONST_MODIFIER)
-    .matches("public")
-    .matches("protected")
-    .matches("private")
-    .matches("final")
+      .matches("public")
+      .matches("protected")
+      .matches("private")
+      .matches("final")
 
-    .notMatches("readonly")
-    .notMatches("static");
+      .notMatches("readonly")
+      .notMatches("static");
   }
 }

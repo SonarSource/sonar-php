@@ -36,7 +36,6 @@ public class PostfixExprTest {
       .matches("['Test', 'method']()")
       .matches("'Test::method'()")
       .matches("(['Test', 'method'])()")
-      .matches("('Test::method')()")
-    ;
+      .matches("('Test::method')()");
   }
 }

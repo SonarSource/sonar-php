@@ -41,7 +41,7 @@ public class PhpPluginTest {
 
   @Test
   public void testNumberOfExtensionsInSonarQubeContext() {
-    SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(9,9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
+    SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(9, 9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
 

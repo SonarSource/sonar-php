@@ -61,9 +61,10 @@ public class ScannerTest {
       verify(progressReport, never()).stop();
     }
   }
+
   private static class TestScanner extends Scanner {
 
-   TestScanner(SensorContext context) {
+    TestScanner(SensorContext context) {
       super(context, new DurationStatistics(context.config()), mock(Cache.class));
     }
 

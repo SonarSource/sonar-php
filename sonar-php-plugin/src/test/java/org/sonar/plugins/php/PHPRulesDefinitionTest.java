@@ -65,7 +65,8 @@ public class PHPRulesDefinitionTest {
   }
 
   private static RulesDefinition.Repository buildRepository(int majorVersion, int minorVersion) {
-    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition(SonarRuntimeImpl.forSonarQube(Version.create(majorVersion, minorVersion), SonarQubeSide.SERVER, SonarEdition.DEVELOPER));
+    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition(
+      SonarRuntimeImpl.forSonarQube(Version.create(majorVersion, minorVersion), SonarQubeSide.SERVER, SonarEdition.DEVELOPER));
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
     return context.repository("php");

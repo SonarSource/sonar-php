@@ -42,4 +42,3 @@ public class PerlStyleCommentsUsageCheckTest {
     PHPCheckTest.check(CHECK, file, issues);
   }
 }
-

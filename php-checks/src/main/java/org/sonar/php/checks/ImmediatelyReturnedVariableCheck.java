@@ -151,7 +151,6 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
     return returnedName;
   }
 
-
   private void reportIssue(StatementTree nextStatement, String varName, Tree tree) {
     String message = String.format(MESSAGE, nextStatement.is(Kind.RETURN_STATEMENT) ? "return" : "throw", varName);
     context().newIssue(this, tree, message);

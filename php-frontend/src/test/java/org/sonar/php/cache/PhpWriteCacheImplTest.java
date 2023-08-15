@@ -19,7 +19,6 @@
  */
 package org.sonar.php.cache;
 
-
 import org.junit.Test;
 import org.sonar.api.batch.sensor.cache.WriteCache;
 
@@ -28,7 +27,7 @@ import static org.mockito.Mockito.verify;
 
 public class PhpWriteCacheImplTest {
 
-  private static final byte [] bytes = new byte[] {1, 2, 3};
+  private static final byte[] bytes = new byte[] {1, 2, 3};
 
   @Test
   public void shouldWriteFromWriteCache() {

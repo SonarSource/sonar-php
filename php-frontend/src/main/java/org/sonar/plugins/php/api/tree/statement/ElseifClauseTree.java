@@ -44,4 +44,3 @@ public interface ElseifClauseTree extends StatementTree {
   List<StatementTree> statements();
 
 }
-

@@ -49,7 +49,6 @@ public class TooManyReturnCheck extends PHPVisitorCheck {
     defaultValue = "" + DEFAULT)
   int max = DEFAULT;
 
-
   @Override
   public void visitReturnStatement(ReturnStatementTree tree) {
     super.visitReturnStatement(tree);

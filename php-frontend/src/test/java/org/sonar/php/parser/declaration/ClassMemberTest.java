@@ -32,7 +32,6 @@ public class ClassMemberTest {
       .matches("var $a;")
       .matches("const A;")
       .matches("private function f() {}")
-      .matches("public readonly string $prop;")
-    ;
+      .matches("public readonly string $prop;");
   }
 }

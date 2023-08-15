@@ -46,14 +46,14 @@ public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
 
   private static final Set<String> INVERSE_ASSERTIONS = SetUtils.immutableSetOf("assertNotSame", "assertNotEquals");
 
-  private static final Map<String, String> REPLACEMENT_ASSERTIONS = MapBuilder.<String, String>builder().
-    put("true", "assertTrue()").
-    put("false", "assertFalse()").
-    put("null", "assertNull()").
-    put("!true", "assertNotTrue()").
-    put("!false", "assertNotFalse()").
-    put("!null", "assertNotNull()").
-    build();
+  private static final Map<String, String> REPLACEMENT_ASSERTIONS = MapBuilder.<String, String>builder()
+    .put("true", "assertTrue()")
+    .put("false", "assertFalse()")
+    .put("null", "assertNull()")
+    .put("!true", "assertNotTrue()")
+    .put("!false", "assertNotFalse()")
+    .put("!null", "assertNotNull()")
+    .build();
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

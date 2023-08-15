@@ -40,9 +40,9 @@ public class AttributeTreeImpl extends PHPTree implements AttributeTree {
   private final SyntaxToken closeParenthesisToken;
 
   public AttributeTreeImpl(NamespaceNameTree name,
-                           @Nullable SyntaxToken openParenthesisToken,
-                           SeparatedList<CallArgumentTree> arguments,
-                           @Nullable SyntaxToken closeParenthesisToken) {
+    @Nullable SyntaxToken openParenthesisToken,
+    SeparatedList<CallArgumentTree> arguments,
+    @Nullable SyntaxToken closeParenthesisToken) {
     this.name = name;
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = arguments;
@@ -54,8 +54,7 @@ public class AttributeTreeImpl extends PHPTree implements AttributeTree {
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(name, openParenthesisToken),
       arguments.elementsAndSeparators(),
-      IteratorUtils.iteratorOf(closeParenthesisToken)
-    );
+      IteratorUtils.iteratorOf(closeParenthesisToken));
   }
 
   @Override

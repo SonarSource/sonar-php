@@ -42,7 +42,6 @@ public class CpdSerializer {
     return serializer.convert(serializationInput);
   }
 
-
   private SerializationResult convert(CpdSerializationInput serializationInput) {
     try (out; stream) {
       String pluginVersion = serializationInput.pluginVersion();

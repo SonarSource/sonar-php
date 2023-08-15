@@ -160,7 +160,7 @@ public class PhpAnalyzerRegexSourceTest {
     RegexParseResult regex = parseRegex("'/(?(1|2)ab|cd|ef)/'");
     RegexSyntaxElement openingQuote = regex.openingQuote();
     LocationInFile locationInFile = ((PhpAnalyzerRegexSource) openingQuote.getSource()).locationInFileFor(openingQuote.getRange());
-    assertLocation(3,0,1, locationInFile);
+    assertLocation(3, 0, 1, locationInFile);
   }
 
   private static void assertCharacterLocation(RegexTree tree, char expected, int line, int startLineOffset, int endLineOffset) {

@@ -46,8 +46,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CpdVisitorTest {
 
   public static final String EXAMPLE_CODE = "<?php $x = 1;\n$y = 'str' + $x;\n";
-  private static final byte[] EXAMPLE_STRING_TABLE_BYTES = new byte [] {8, 5, 49, 46, 50, 46, 51, 2, 36, 120, 1, 61, 7, 36, 78, 85, 77, 66, 69, 82, 1, 59, 2, 36, 121, 6, 36, 67, 72, 65, 82, 83, 1, 43, 3, 69, 78, 68};
-  private static final byte[] EXAMPLE_DATA_BYTES = new byte[]{0, 10, 1, 6, 1, 8, 1, 1, 9, 1, 10, 2, 1, 11, 1, 12, 3, 1, 12, 1, 13, 4, 2, 0, 2, 2, 5, 2, 3, 2, 4, 2, 2, 5, 2, 10, 6, 2, 11, 2, 12, 7, 2, 13, 2, 15, 1, 2, 15, 2, 16, 4, 3, 69, 78, 68};
+  private static final byte[] EXAMPLE_STRING_TABLE_BYTES = new byte[] {8, 5, 49, 46, 50, 46, 51, 2, 36, 120, 1, 61, 7, 36, 78, 85, 77, 66, 69, 82, 1, 59, 2, 36, 121, 6, 36, 67, 72,
+    65, 82, 83, 1, 43, 3, 69, 78, 68};
+  private static final byte[] EXAMPLE_DATA_BYTES = new byte[] {0, 10, 1, 6, 1, 8, 1, 1, 9, 1, 10, 2, 1, 11, 1, 12, 3, 1, 12, 1, 13, 4, 2, 0, 2, 2, 5, 2, 3, 2, 4, 2, 2, 5, 2, 10, 6,
+    2, 11, 2, 12, 7, 2, 13, 2, 15, 1, 2, 15, 2, 16, 4, 3, 69, 78, 68};
   private final ActionParser<Tree> p = PHPParserBuilder.createParser();
 
   @Rule
@@ -233,14 +235,14 @@ public class CpdVisitorTest {
   private List<CpdToken> scan(String source) throws IOException {
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), source);
     CpdVisitor cpdVisitor = new CpdVisitor();
-    CompilationUnitTree tree = (CompilationUnitTree)p.parse(testFile.contents());
+    CompilationUnitTree tree = (CompilationUnitTree) p.parse(testFile.contents());
     return cpdVisitor.computeCpdTokens(testFile, tree, SymbolTableImpl.create(tree), null);
   }
 
   private List<CpdToken> scan(String source, @Nullable CacheContext cacheContext) throws IOException {
     PhpFile testFile = FileTestUtils.getFile(tempFolder.newFile(), source);
     CpdVisitor cpdVisitor = new CpdVisitor();
-    CompilationUnitTree tree = (CompilationUnitTree)p.parse(testFile.contents());
+    CompilationUnitTree tree = (CompilationUnitTree) p.parse(testFile.contents());
     return cpdVisitor.computeCpdTokens(testFile, tree, SymbolTableImpl.create(tree), cacheContext);
   }
 

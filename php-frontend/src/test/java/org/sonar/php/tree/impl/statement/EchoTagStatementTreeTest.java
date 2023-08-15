@@ -48,7 +48,7 @@ public class EchoTagStatementTreeTest extends PHPTreeModelTest {
     StatementTree statement = statements.get(0);
     assertThat(statement.getKind()).isEqualTo(Kind.EXPRESSION_STATEMENT);
     assertThat(statement).isInstanceOf(ExpressionStatementTree.class);
-    assertThat(((ExpressionStatementTree)statement).expression().getKind()).isEqualTo(Kind.VARIABLE_IDENTIFIER);
+    assertThat(((ExpressionStatementTree) statement).expression().getKind()).isEqualTo(Kind.VARIABLE_IDENTIFIER);
   }
 
   @Test
@@ -88,33 +88,33 @@ public class EchoTagStatementTreeTest extends PHPTreeModelTest {
     assertThat(statements).hasSize(8);
 
     assertThat(statements.get(0).getKind()).isEqualTo(Kind.EXPRESSION_STATEMENT);
-    assertThat(((ExpressionStatementTree)statements.get(0)).expression().getKind()).isEqualTo(Kind.FUNCTION_CALL);
-    assertThat(((ExpressionStatementTree)statements.get(0)).eosToken().text()).isEqualTo(";");
+    assertThat(((ExpressionStatementTree) statements.get(0)).expression().getKind()).isEqualTo(Kind.FUNCTION_CALL);
+    assertThat(((ExpressionStatementTree) statements.get(0)).eosToken().text()).isEqualTo(";");
 
     assertThat(statements.get(1).getKind()).isEqualTo(Kind.INLINE_HTML);
-    assertThat(((InlineHTMLTree)statements.get(1)).inlineHTMLToken().text()).isEqualTo("?> 1 <?=");
+    assertThat(((InlineHTMLTree) statements.get(1)).inlineHTMLToken().text()).isEqualTo("?> 1 <?=");
 
     assertThat(statements.get(2).getKind()).isEqualTo(Kind.ECHO_TAG_STATEMENT);
-    assertThat(((EchoTagStatementTree)statements.get(2)).expressions()).hasSize(1);
-    assertThat(((EchoTagStatementTree)statements.get(2)).eosToken().text()).isEqualTo("?> 2 <?=");
+    assertThat(((EchoTagStatementTree) statements.get(2)).expressions()).hasSize(1);
+    assertThat(((EchoTagStatementTree) statements.get(2)).eosToken().text()).isEqualTo("?> 2 <?=");
 
     assertThat(statements.get(3).getKind()).isEqualTo(Kind.ECHO_TAG_STATEMENT);
-    assertThat(((EchoTagStatementTree)statements.get(3)).expressions()).hasSize(1);
-    assertThat(((EchoTagStatementTree)statements.get(3)).eosToken().text()).isEqualTo(";");
+    assertThat(((EchoTagStatementTree) statements.get(3)).expressions()).hasSize(1);
+    assertThat(((EchoTagStatementTree) statements.get(3)).eosToken().text()).isEqualTo(";");
 
     assertThat(statements.get(4).getKind()).isEqualTo(Kind.INLINE_HTML);
-    assertThat(((InlineHTMLTree)statements.get(4)).inlineHTMLToken().text()).isEqualTo("?> 3 <?=");
+    assertThat(((InlineHTMLTree) statements.get(4)).inlineHTMLToken().text()).isEqualTo("?> 3 <?=");
 
     assertThat(statements.get(5).getKind()).isEqualTo(Kind.ECHO_TAG_STATEMENT);
-    assertThat(((EchoTagStatementTree)statements.get(5)).expressions()).hasSize(1);
-    assertThat(((EchoTagStatementTree)statements.get(5)).eosToken().text()).isEqualTo(";");
+    assertThat(((EchoTagStatementTree) statements.get(5)).expressions()).hasSize(1);
+    assertThat(((EchoTagStatementTree) statements.get(5)).eosToken().text()).isEqualTo(";");
 
     assertThat(statements.get(6).getKind()).isEqualTo(Kind.EXPRESSION_STATEMENT);
-    assertThat(((ExpressionStatementTree)statements.get(6)).expression().getKind()).isEqualTo(Kind.FUNCTION_CALL);
-    assertThat(((ExpressionStatementTree)statements.get(6)).eosToken().text()).isEqualTo(";");
+    assertThat(((ExpressionStatementTree) statements.get(6)).expression().getKind()).isEqualTo(Kind.FUNCTION_CALL);
+    assertThat(((ExpressionStatementTree) statements.get(6)).eosToken().text()).isEqualTo(";");
 
     assertThat(statements.get(7).getKind()).isEqualTo(Kind.INLINE_HTML);
-    assertThat(((InlineHTMLTree)statements.get(7)).inlineHTMLToken().text()).isEqualTo("?> 4");
+    assertThat(((InlineHTMLTree) statements.get(7)).inlineHTMLToken().text()).isEqualTo("?> 4");
   }
 
   @Test
@@ -124,10 +124,10 @@ public class EchoTagStatementTreeTest extends PHPTreeModelTest {
     List<StatementTree> statements = script.statements();
     assertThat(statements).hasSize(1);
     assertThat(statements.get(0).getKind()).isEqualTo(Kind.IF_STATEMENT);
-    IfStatementTree ifStatement = (IfStatementTree)statements.get(0);
+    IfStatementTree ifStatement = (IfStatementTree) statements.get(0);
     assertThat(ifStatement.statements()).hasSize(1);
     assertThat(ifStatement.statements().get(0).getKind()).isEqualTo(Kind.BLOCK);
-    BlockTree block = (BlockTree)ifStatement.statements().get(0);
+    BlockTree block = (BlockTree) ifStatement.statements().get(0);
     List<StatementTree> blockStatements = block.statements();
     assertThat(blockStatements).hasSize(2);
 

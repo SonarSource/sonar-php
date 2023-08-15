@@ -48,7 +48,7 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.useTypeToken()).isNull();
     assertThat(tree.clauses()).hasSize(2);
   }
-  
+
   @Test
   public void const_token() throws Exception {
     UseStatementTree tree = parse("use const \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_STATEMENT);
@@ -76,7 +76,6 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.closeCurlyBraceToken()).isNotNull();
     assertThat(tree.clauses()).hasSize(2);
   }
-
 
   @Test
   public void with_trailing_comma() throws Exception {

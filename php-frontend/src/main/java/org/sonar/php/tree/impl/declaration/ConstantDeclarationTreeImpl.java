@@ -39,10 +39,9 @@ public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDecl
   private final InternalSyntaxToken eosToken;
 
   public ConstantDeclarationTreeImpl(
-      SyntaxToken constToken,
-      SeparatedListImpl<VariableDeclarationTree> declarations,
-      InternalSyntaxToken eosToken
-  ) {
+    SyntaxToken constToken,
+    SeparatedListImpl<VariableDeclarationTree> declarations,
+    InternalSyntaxToken eosToken) {
     this.constToken = constToken;
     this.declarations = declarations;
     this.eosToken = eosToken;

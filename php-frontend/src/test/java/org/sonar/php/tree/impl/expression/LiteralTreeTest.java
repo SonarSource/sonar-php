@@ -60,7 +60,6 @@ public class LiteralTreeTest extends PHPTreeModelTest {
     assertLiteral("__FILE__", Kind.MAGIC_CONSTANT);
   }
 
-
   private void assertLiteral(String toParse, Kind expectedKind) throws Exception {
     LiteralTreeImpl tree = parse(toParse, PHPLexicalGrammar.COMMON_SCALAR);
 

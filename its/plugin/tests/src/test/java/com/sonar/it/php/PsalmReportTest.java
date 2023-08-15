@@ -59,7 +59,6 @@ public class PsalmReportTest {
     assertThat(firstTextRange.getEndLine()).isEqualTo(2);
     assertThat(firstTextRange.getEndOffset()).isEqualTo(10);
 
-
     Issues.Issue second = issues.get(1);
     assertThat(second.getComponent()).isEqualTo("psalm_project:src/test.php");
     assertThat(second.getRule()).isEqualTo("external_psalm:InvalidScalarArgument");

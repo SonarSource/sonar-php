@@ -41,13 +41,13 @@ public class WordPressAutoUpdateCheck extends WordPressConfigVisitor {
   @Override
   void visitConfigDeclaration(FunctionCallTree config) {
     configKeyString(config).ifPresent(key -> {
-        if ("WP_AUTO_UPDATE_CORE".equals(key)) {
-          raiseOnMatchingValue(config, CheckUtils::isFalseValue);
-        } else {
-          // AUTOMATIC_UPDATER_DISABLED or DISALLOW_FILE_MODS
-          raiseOnMatchingValue(config, CheckUtils::isTrueValue);
-        }
-      });
+      if ("WP_AUTO_UPDATE_CORE".equals(key)) {
+        raiseOnMatchingValue(config, CheckUtils::isFalseValue);
+      } else {
+        // AUTOMATIC_UPDATER_DISABLED or DISALLOW_FILE_MODS
+        raiseOnMatchingValue(config, CheckUtils::isTrueValue);
+      }
+    });
   }
 
   private void raiseOnMatchingValue(FunctionCallTree config, Predicate<ExpressionTree> valuePredicate) {

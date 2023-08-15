@@ -25,13 +25,12 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.wordpress.WordPressDebugModeCheckPart;
 
 @Rule(key = "S4507")
-public class DebugModeCheck extends CheckBundle  {
+public class DebugModeCheck extends CheckBundle {
 
   @Override
   protected List<CheckBundlePart> checks() {
     return Arrays.asList(
       new CakePhpDebugModeCheckPart(),
-      new WordPressDebugModeCheckPart()
-    );
+      new WordPressDebugModeCheckPart());
   }
 }

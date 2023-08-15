@@ -227,8 +227,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
       new Assertion("matches"),
       new Assertion("stringStartsWith"),
       new Assertion("stringContains"),
-      new Assertion("stringEndsWith")
-    ).collect(Collectors.toMap(e -> e.name().toLowerCase(Locale.ENGLISH), e -> e));
+      new Assertion("stringEndsWith")).collect(Collectors.toMap(e -> e.name().toLowerCase(Locale.ENGLISH), e -> e));
   }
 
   @Override

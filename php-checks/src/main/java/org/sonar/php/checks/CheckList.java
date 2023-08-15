@@ -373,8 +373,7 @@ public class CheckList {
       SuperfluousCurlyBraceCheck.class,
       UnicodeAwareCharClassesCheck.class,
       UnquantifiedNonCapturingGroupCheck.class,
-      VerboseRegexCheck.class
-    );
+      VerboseRegexCheck.class);
   }
 
   public static List<Class<?>> getPhpChecks() {

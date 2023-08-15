@@ -93,12 +93,12 @@ public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
   @Nullable
   private static ExpressionTree getExpressionComparedWithFunction(ExpressionTree expression, Kind kind) {
     if (OR_KINDS.contains(kind) && expression.is(Kind.LOGICAL_COMPLEMENT) && ((UnaryExpressionTree) expression).expression().is(Kind.FUNCTION_CALL)) {
-      FunctionCallTree functionCall = (FunctionCallTree)((UnaryExpressionTree) expression).expression();
+      FunctionCallTree functionCall = (FunctionCallTree) ((UnaryExpressionTree) expression).expression();
       return retrieveArgumentFromIsNullCall(functionCall);
     }
 
     if (AND_KINDS.contains(kind) && expression.is(Kind.FUNCTION_CALL)) {
-      return retrieveArgumentFromIsNullCall((FunctionCallTree)expression);
+      return retrieveArgumentFromIsNullCall((FunctionCallTree) expression);
     }
 
     return null;

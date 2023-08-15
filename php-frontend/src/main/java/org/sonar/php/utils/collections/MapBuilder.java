@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public final class MapBuilder<K, V> {
 
-  public static <K, V> MapBuilder<K,V> builder() {
+  public static <K, V> MapBuilder<K, V> builder() {
     return new MapBuilder<>();
   }
 

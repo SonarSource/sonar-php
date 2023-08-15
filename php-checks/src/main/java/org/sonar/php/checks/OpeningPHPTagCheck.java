@@ -33,7 +33,6 @@ public class OpeningPHPTagCheck extends PHPVisitorCheck {
   private static final String SHORT_ECHO_TAG = "<?=";
   private static final String SHORT_TAG = "<?";
 
-
   @Override
   public void visitScript(ScriptTree tree) {
     String openingTagWithContentBefore = tree.fileOpeningTagToken().text();

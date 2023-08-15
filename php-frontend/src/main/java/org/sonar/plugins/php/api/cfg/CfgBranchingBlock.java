@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
-
 import org.sonar.plugins.php.api.tree.Tree;
 
 /**

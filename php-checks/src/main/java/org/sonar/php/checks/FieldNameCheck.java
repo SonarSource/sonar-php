@@ -46,7 +46,6 @@ public class FieldNameCheck extends PHPSubscriptionCheck {
     defaultValue = DEFAULT)
   String format = DEFAULT;
 
-
   @Override
   public void init() {
     pattern = Pattern.compile(format);

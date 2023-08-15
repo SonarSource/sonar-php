@@ -61,8 +61,7 @@ public class CaseClauseTreeImpl extends PHPTree implements CaseClauseTree {
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(caseToken, expression, caseSeparatorToken),
-      statements.iterator()
-    );
+      statements.iterator());
   }
 
   @Override

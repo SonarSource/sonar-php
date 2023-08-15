@@ -24,7 +24,7 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ContinueStatementTest{
+public class ContinueStatementTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.CONTINUE_STATEMENT)

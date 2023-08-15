@@ -78,7 +78,8 @@ public class MissingMethodVisibilityCheck extends PHPVisitorCheck {
     }
   }
 
-  // fixme (Lena) : could be replaced with method implemented in https://github.com/pynicolas/sonar-php/commit/c8ba74d43c0816871e928d9415da68791fbde5e8
+  // fixme (Lena) : could be replaced with method implemented in
+  // https://github.com/pynicolas/sonar-php/commit/c8ba74d43c0816871e928d9415da68791fbde5e8
   private static boolean hasVisibilityModifier(MethodDeclarationTree method) {
     for (SyntaxToken modifier : method.modifiers()) {
       if (VISIBILITIES.contains(modifier.text().toLowerCase(Locale.ENGLISH))) {

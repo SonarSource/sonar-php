@@ -53,8 +53,7 @@ public class DefaultClauseTreeImpl extends PHPTree implements DefaultClauseTree 
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(defaultToken, caseSeparatorToken),
-        statements.iterator()
-    );
+      statements.iterator());
   }
 
   @Override

@@ -58,8 +58,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     NameIdentifierTree name,
     ParameterListTree parameters,
     @Nullable ReturnTypeClauseTree returnTypeClause,
-    Tree body
-    ) {
+    Tree body) {
     this.attributeGroups = attributeGroups;
     this.modifiersToken = modifiersToken;
     this.functionToken = functionToken;

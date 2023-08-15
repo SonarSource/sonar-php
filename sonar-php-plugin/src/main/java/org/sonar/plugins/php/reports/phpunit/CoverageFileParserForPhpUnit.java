@@ -60,7 +60,7 @@ class CoverageFileParserForPhpUnit {
 
   private static void parse(List<PackageNode> packages, Consumer<FileNode> consumer) {
     for (PackageNode packageNode : packages) {
-      consumeFileNodes(packageNode.getFiles(),consumer);
+      consumeFileNodes(packageNode.getFiles(), consumer);
     }
   }
 

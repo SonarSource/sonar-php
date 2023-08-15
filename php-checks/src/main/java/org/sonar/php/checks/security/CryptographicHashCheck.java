@@ -43,8 +43,7 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
     "ripemd160",
     "haval160,3",
     "haval192,3",
-    "haval224,3"
-  );
+    "haval224,3");
   private static final Set<String> WEAK_MHASH_ARGUMENTS = Set.of(
     "MHASH_MD2",
     "MHASH_MD4",
@@ -56,8 +55,7 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
     "MHASH_HAVAL128",
     "MHASH_HAVAL160",
     "MHASH_HAVAL192",
-    "MHASH_HAVAL224"
-  );
+    "MHASH_HAVAL224");
 
   private static final ArgumentVerifierValueContainment hashArgumentVerifier = ArgumentVerifierValueContainment.builder()
     .position(0)

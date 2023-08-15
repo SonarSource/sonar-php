@@ -65,10 +65,9 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
   }
 
   public DeclareStatementTreeImpl(
-      DeclareStatementHead declareStatementHead, InternalSyntaxToken colonToken,
-      List<StatementTree> statements,
-      InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken
-  ) {
+    DeclareStatementHead declareStatementHead, InternalSyntaxToken colonToken,
+    List<StatementTree> statements,
+    InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken) {
     this.declareStatementHead = declareStatementHead;
     this.colonToken = colonToken;
     this.statements = statements;
@@ -131,8 +130,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
       declareStatementHead.directives().elementsAndSeparators(),
       IteratorUtils.iteratorOf(declareStatementHead.closeParenthesisToken(), colonToken),
       statements.iterator(),
-      IteratorUtils.iteratorOf(endDeclareToken, eosToken)
-    );
+      IteratorUtils.iteratorOf(endDeclareToken, eosToken));
   }
 
   @Override
@@ -148,11 +146,10 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
     private final SyntaxToken closeParenthesisToken;
 
     public DeclareStatementHead(
-        SyntaxToken declareToken,
-        SyntaxToken openParenthesisToken,
-        SeparatedListImpl<VariableDeclarationTree> directives,
-        SyntaxToken closeParenthesisToken
-    ) {
+      SyntaxToken declareToken,
+      SyntaxToken openParenthesisToken,
+      SeparatedListImpl<VariableDeclarationTree> directives,
+      SyntaxToken closeParenthesisToken) {
       this.declareToken = declareToken;
       this.openParenthesisToken = openParenthesisToken;
       this.directives = directives;

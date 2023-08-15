@@ -35,8 +35,7 @@ public class ArrayDestructuringAssignmentTest {
       .matches("[&$one, [$two, &$three]] = $a")
       .matches("['one' => &$one, 'two' => $two] = $a")
       .notMatches("$array = [1, 2]")
-      .notMatches("list($a, &$b) = $array")
-    ;
+      .notMatches("list($a, &$b) = $array");
   }
 
 }

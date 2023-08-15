@@ -57,7 +57,7 @@ public class ExpectedIssuesParser extends PHPVisitorCheck {
         issueLine += Integer.valueOf(spaceSplit[0].substring(2));
       }
 
-      TestIssue issue = TestIssue.create(message,  issueLine);
+      TestIssue issue = TestIssue.create(message, issueLine);
       expectedIssues.add(issue);
 
       if (text.contains("[[")) {
@@ -84,7 +84,7 @@ public class ExpectedIssuesParser extends PHPVisitorCheck {
     }
 
     issue.endLine(issue.line());
-    issue.startColumn(text.indexOf('^') );
+    issue.startColumn(text.indexOf('^'));
     issue.endColumn(text.lastIndexOf('^') + 1);
   }
 

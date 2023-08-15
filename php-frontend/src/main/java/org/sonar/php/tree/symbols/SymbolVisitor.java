@@ -94,8 +94,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     "$HTTP_RAW_POST_DATA",
     "$http_response_header",
     "$_COOKIE",
-    "$_REQUEST"
-  );
+    "$_REQUEST");
   private static final Set<String> SELF_OBJECTS = SetUtils.immutableSetOf("$this", "self", "static");
 
   private final Deque<Scope> classScopes = new ArrayDeque<>();
@@ -114,7 +113,6 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   private Scope currentScope;
   private Scope globalScope;
   private ClassMemberUsageState classMemberUsageState = null;
-
 
   public SymbolVisitor(SymbolTableImpl symbolTable) {
     super(symbolTable);
@@ -190,8 +188,8 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   }
 
   private void resolveDeclaredTypeNamespaceName(@Nullable DeclaredTypeTree type) {
-    if (type != null && type.isSimple() && ((TypeTree)type).typeName().is(Kind.NAMESPACE_NAME)) {
-      lookupOrCreateUndeclaredSymbol((NamespaceNameTree) ((TypeTree)type).typeName());
+    if (type != null && type.isSimple() && ((TypeTree) type).typeName().is(Kind.NAMESPACE_NAME)) {
+      lookupOrCreateUndeclaredSymbol((NamespaceNameTree) ((TypeTree) type).typeName());
     }
   }
 
@@ -334,7 +332,6 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     associateSymbol(identifier, symbol);
   }
 
-
   @Override
   public void visitToken(SyntaxToken token) {
     if (classMemberUsageState != null && classMemberUsageState.isStatic && token.text().equals(PHPKeyword.CLASS.getValue())) {
@@ -426,7 +423,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
         // consider 'global' has being a modifier for the variable
         symbol.addModifiers(Collections.singletonList(tree.globalToken()));
 
-      } else if (variable.is(Kind.COMPOUND_VARIABLE_NAME))  {
+      } else if (variable.is(Kind.COMPOUND_VARIABLE_NAME)) {
         visitCompoundVariable((CompoundVariableTree) variable);
       }
     }

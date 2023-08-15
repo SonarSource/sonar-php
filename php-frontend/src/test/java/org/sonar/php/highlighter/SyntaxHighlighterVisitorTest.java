@@ -83,7 +83,7 @@ public class SyntaxHighlighterVisitorTest {
   @Test
   public void multiline_comment_on_three_lines() throws Exception {
     highlight("<?php   /*Comment line 1\n  Comment line 2\n  Comment line 3*/ ");
-    
+
     // line 1
     check(1, 7, null);
     check(1, 8, TypeOfText.COMMENT);
@@ -141,8 +141,8 @@ public class SyntaxHighlighterVisitorTest {
   public void expandable_string() throws Exception {
     highlight("<?php \"Hello $name!\";");
 
-    checkOnRange(1, 6, 7, TypeOfText.STRING);    // "Hello_
-    checkOnRange(1, 18, 2, TypeOfText.STRING);   // !"
+    checkOnRange(1, 6, 7, TypeOfText.STRING); // "Hello_
+    checkOnRange(1, 18, 2, TypeOfText.STRING); // !"
   }
 
   @Test

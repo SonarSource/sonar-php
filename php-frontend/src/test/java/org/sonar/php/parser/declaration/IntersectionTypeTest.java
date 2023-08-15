@@ -32,7 +32,6 @@ public class IntersectionTypeTest {
       .matches("int&array")
       .matches("foo&bar&array")
       .notMatches("foo&bar|array")
-      .notMatches("int")
-    ;
+      .notMatches("int");
   }
 }

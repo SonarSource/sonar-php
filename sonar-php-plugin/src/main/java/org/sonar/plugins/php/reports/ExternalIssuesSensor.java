@@ -49,7 +49,6 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   private static final String UNRESOLVED_INPUT_FILE_MESSAGE_FORMAT = "Failed to resolve %s file path(s) in %s %s report. No issues imported related to file(s): %s";
   public final String defaultRuleId = reportKey() + ".finding";
 
-
   protected ExternalIssuesSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
     super(analysisWarningsWrapper);
   }

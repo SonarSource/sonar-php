@@ -183,7 +183,7 @@ public class CpdVisitor extends PHPVisitorCheck {
       return new CpdToken(token.line(),
         token.column(),
         token.endLine(),
-        token.endColumn(), 
+        token.endColumn(),
         text);
     }
 

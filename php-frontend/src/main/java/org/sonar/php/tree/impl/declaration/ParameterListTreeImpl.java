@@ -40,8 +40,7 @@ public class ParameterListTreeImpl extends PHPTree implements ParameterListTree 
   public ParameterListTreeImpl(
     InternalSyntaxToken openParenthesis,
     SeparatedListImpl<ParameterTree> parameters,
-    InternalSyntaxToken closeParenthesis
-  ) {
+    InternalSyntaxToken closeParenthesis) {
     this.openParenthesis = openParenthesis;
     this.parameters = parameters;
     this.closeParenthesis = closeParenthesis;

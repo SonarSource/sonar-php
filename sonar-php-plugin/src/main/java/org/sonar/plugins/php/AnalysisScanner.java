@@ -78,12 +78,12 @@ class AnalysisScanner extends Scanner {
   private int numScannedWithoutParsing = 0;
 
   public AnalysisScanner(SensorContext context,
-                         PHPChecks checks,
-                         FileLinesContextFactory fileLinesContextFactory,
-                         NoSonarFilter noSonarFilter,
-                         ProjectSymbolData projectSymbolData,
-                         DurationStatistics statistics,
-                         CacheContext cacheContext) {
+    PHPChecks checks,
+    FileLinesContextFactory fileLinesContextFactory,
+    NoSonarFilter noSonarFilter,
+    ProjectSymbolData projectSymbolData,
+    DurationStatistics statistics,
+    CacheContext cacheContext) {
     super(context, statistics, new Cache(cacheContext));
     this.checks = checks;
     this.fileLinesContextFactory = fileLinesContextFactory;
@@ -274,9 +274,7 @@ class AnalysisScanner extends Scanner {
         PreciseIssue preciseIssue = (PreciseIssue) issue;
 
         newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
-        preciseIssue.secondaryLocations().forEach(secondary ->
-          addSecondaryLocation(context, inputFile, newIssue, secondary)
-        );
+        preciseIssue.secondaryLocations().forEach(secondary -> addSecondaryLocation(context, inputFile, newIssue, secondary));
       }
 
       newIssue.save();
@@ -317,7 +315,6 @@ class AnalysisScanner extends Scanner {
   void onEnd() {
     phpAnalyzer.terminate();
   }
-
 
   private static void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesOfCodeNumber()).forMetric(CoreMetrics.NCLOC).save();

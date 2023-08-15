@@ -29,10 +29,10 @@ public class EmptyStatementTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.EMPTY_STATEMENT)
-        .matches(";")
-        .matches(" ;")
+      .matches(";")
+      .matches(" ;")
 
-        .notMatches("?>")
-        .notMatches("$a;");
+      .notMatches("?>")
+      .notMatches("$a;");
   }
 }

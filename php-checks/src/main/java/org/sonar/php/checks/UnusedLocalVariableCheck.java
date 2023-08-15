@@ -74,8 +74,7 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    CheckUtils.argumentsOfKind(tree, Tree.Kind.VARIABLE_IDENTIFIER).forEach(argument ->
-      exclusions.add((IdentifierTree) argument));
+    CheckUtils.argumentsOfKind(tree, Tree.Kind.VARIABLE_IDENTIFIER).forEach(argument -> exclusions.add((IdentifierTree) argument));
 
     super.visitFunctionCall(tree);
   }

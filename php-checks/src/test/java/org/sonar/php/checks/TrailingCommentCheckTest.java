@@ -36,8 +36,7 @@ public class TrailingCommentCheckTest {
   public void defaultValue() throws Exception {
     List<PhpIssue> issues = Arrays.asList(
       newIssue(4),
-      newIssue(5)
-    );
+      newIssue(5));
 
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
   }
@@ -49,8 +48,7 @@ public class TrailingCommentCheckTest {
       newIssue(4),
       newIssue(5),
       newIssue(11),
-      newIssue(12)
-    );
+      newIssue(12));
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
   }
 

@@ -644,7 +644,6 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
     }
   }
 
-
   @Override
   public final List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree) {
     return analyze(new PHPCheckContext(file, tree, null));

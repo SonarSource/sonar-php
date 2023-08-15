@@ -144,11 +144,11 @@ public class PhpPrAnalysisTest {
 
   private void assertPrAnalysisLogs(BuildResult result) {
     String expectedUsedSymbolsFromCache = String.format("Cached information of global symbols will be used for %d out of %d files. " +
-        "Global symbols were recomputed for the remaining files.",
+      "Global symbols were recomputed for the remaining files.",
       expectedSkipped, expectedTotalFiles);
 
     String expectedRegularAnalysisLog = String.format("The PHP analyzer was able to leverage cached data from previous analyses for " +
-        "%d out of %d files. These files were not parsed.",
+      "%d out of %d files. These files were not parsed.",
       expectedSkipped, expectedTotalFiles);
 
     assertThat(result.getLogs())
@@ -161,7 +161,7 @@ public class PhpPrAnalysisTest {
     FileUtils.copyDirectory(new File("../sources_pr_analysis", scenario), tempDirectory);
   }
 
-  private static String profile(String name,  List<String> ruleKeys) {
+  private static String profile(String name, List<String> ruleKeys) {
     StringBuilder sb = new StringBuilder()
       .append("<profile>")
       .append("<name>").append(name).append("</name>")

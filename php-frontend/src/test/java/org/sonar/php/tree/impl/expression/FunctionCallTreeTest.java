@@ -56,7 +56,6 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
   }
 
-
   @Test
   public void with_named_arguments() throws Exception {
     FunctionCallTree tree = parse("f(self::$p1, a: $p2)", PHPLexicalGrammar.MEMBER_EXPRESSION);

@@ -87,7 +87,6 @@ public class RedefineConstantCheck extends PHPVisitorCheck {
     });
   }
 
-
   private static Optional<String> constantName(Tree tree) {
     return CheckUtils.argument((FunctionCallTree) tree, "constant_name", 0)
       .map(CallArgumentTree::value)

@@ -50,7 +50,7 @@ public abstract class AbstractClassSymbol implements ClassSymbol {
 
   @Override
   public Trilean isSubTypeOf(QualifiedName... typeNames) {
-    for(QualifiedName typeName: typeNames) {
+    for (QualifiedName typeName : typeNames) {
       if (allSuperTypes().stream().anyMatch(s -> s.qualifiedName().equals(typeName))) {
         return Trilean.TRUE;
       }

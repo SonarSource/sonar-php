@@ -46,8 +46,7 @@ public class TraitAliasTreeImpl extends PHPTree implements TraitAliasTree {
     InternalSyntaxToken asToken,
     @Nullable SyntaxToken modifier,
     @Nullable NameIdentifierTree alias,
-    InternalSyntaxToken eos
-    ) {
+    InternalSyntaxToken eos) {
     this.methodReference = methodReference;
     this.asToken = asToken;
     this.modifier = modifier;

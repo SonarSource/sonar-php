@@ -92,7 +92,7 @@ public class FileWithSymbolsAndSideEffectsCheck extends PHPVisitorCheck {
     super.visitExpressionStatement(tree);
 
     if (tree.expression().is(Tree.Kind.FUNCTION_CALL)) {
-      FunctionCallTree functionCallTree = (FunctionCallTree)tree.expression();
+      FunctionCallTree functionCallTree = (FunctionCallTree) tree.expression();
 
       String callee = functionCallTree.callee().toString();
       if ("define".equalsIgnoreCase(callee)) {

@@ -32,7 +32,7 @@ public class DirectlyAccessingSuperGlobalCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Do not access \"%s\" directly.";
   public static final String KEY = "S2043";
 
-  private static final Set<String> SUPER_GLOBAL_REQUIRING_SANITIZATION =  SetUtils.immutableSetOf(
+  private static final Set<String> SUPER_GLOBAL_REQUIRING_SANITIZATION = SetUtils.immutableSetOf(
     "$_COOKIE", "$_ENV", "$_FILES", "$_GET", "$_POST", "$_REQUEST", "$_SERVER");
 
   @Override

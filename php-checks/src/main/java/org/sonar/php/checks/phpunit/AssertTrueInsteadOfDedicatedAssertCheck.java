@@ -78,7 +78,11 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
       return;
     }
 
-    getAssertion(fct).ifPresent(a -> { if (ASSERT_METHOD_NAMES.contains(a.name())) { checkBooleanExpressionInAssertMethod(fct, a.name()); }});
+    getAssertion(fct).ifPresent(a -> {
+      if (ASSERT_METHOD_NAMES.contains(a.name())) {
+        checkBooleanExpressionInAssertMethod(fct, a.name());
+      }
+    });
 
     super.visitFunctionCall(fct);
   }

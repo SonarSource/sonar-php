@@ -111,7 +111,7 @@ public class Assertions {
     public ParserAssert matchesPrefix(String prefixToBeMatched, String remainingInput) {
       isNotNull();
       try {
-        PHPTree tree = (PHPTree)actual.parse(prefixToBeMatched + remainingInput);
+        PHPTree tree = (PHPTree) actual.parse(prefixToBeMatched + remainingInput);
         SyntaxToken lastToken = tree.getLastToken();
 
         if (prefixToBeMatched.length() != lastToken.column() + lastToken.text().length()) {
@@ -119,7 +119,7 @@ public class Assertions {
             "Rule '" + getRuleName() + "' should match:\n" + prefixToBeMatched + "\nwhen followed by:\n" + remainingInput);
         }
       } catch (RecognitionException e) {
-        throw new RecognitionException(0, e.getMessage()  + "\n" +
+        throw new RecognitionException(0, e.getMessage() + "\n" +
           "Rule '" + getRuleName() + "' should match:\n" + prefixToBeMatched + "\nwhen followed by:\n" + remainingInput);
       }
       return this;

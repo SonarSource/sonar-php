@@ -36,7 +36,6 @@ public class FileWithSymbolsAndSideEffectsCheckTest {
   private final List<PhpIssue> issue = Collections.singletonList(
     new FileIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
 
-
   @Test
   public void ok() throws Exception {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");

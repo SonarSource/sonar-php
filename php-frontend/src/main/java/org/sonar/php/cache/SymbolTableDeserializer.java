@@ -69,7 +69,7 @@ public class SymbolTableDeserializer {
       List<FunctionSymbolData> functionSymbolData = new ArrayList<>();
       stringTable = readStringTable();
       String pluginVersionText = readString();
-      if(!pluginVersionText.equals(pluginVersion)) {
+      if (!pluginVersionText.equals(pluginVersion)) {
         return null;
       }
       int sizeOfClassSymbols = readInt();
@@ -106,7 +106,6 @@ public class SymbolTableDeserializer {
     return new FunctionSymbolData.FunctionSymbolProperties(hasReturn, hasFuncGetArgs);
   }
 
-
   private QualifiedName readQualifiedName() throws IOException {
     String name = readString();
     return SymbolQualifiedName.qualifiedName(name);
@@ -140,7 +139,6 @@ public class SymbolTableDeserializer {
     return new ClassSymbolData(location, qualifiedName, superClass, implementedInterfaces, ClassSymbol.Kind.valueOf(kindText), methods);
   }
 
-
   private LocationInFile readLocation() throws IOException {
     String filePath = readString();
     if ("[unknown file]".equals(filePath)) {
@@ -153,7 +151,6 @@ public class SymbolTableDeserializer {
       return new LocationInFileImpl(filePath, startLine, startLineOffset, endLine, endLineOffset);
     }
   }
-
 
   private MethodSymbolData readMethod() throws IOException {
     Visibility visibility = Visibility.valueOf(readString());
@@ -180,7 +177,6 @@ public class SymbolTableDeserializer {
     }
     return parameters;
   }
-
 
   private int readInt() throws IOException {
     return in.readInt();

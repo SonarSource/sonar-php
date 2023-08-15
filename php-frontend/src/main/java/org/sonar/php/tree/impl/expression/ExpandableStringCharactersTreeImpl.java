@@ -62,5 +62,3 @@ public class ExpandableStringCharactersTreeImpl extends PHPTree implements Expan
     visitor.visitExpandableStringCharacters(this);
   }
 }
-
-

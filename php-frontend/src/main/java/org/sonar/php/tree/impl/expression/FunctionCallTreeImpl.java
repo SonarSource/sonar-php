@@ -50,7 +50,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   private FunctionSymbol symbol = new UnknownFunctionSymbol(UNKNOWN_FUNCTION_NAME);
 
   public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl<CallArgumentTree> callArguments,
-                              InternalSyntaxToken closeParenthesisToken) {
+    InternalSyntaxToken closeParenthesisToken) {
     this.callee = callee;
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = argumentsValueList(callArguments);

@@ -53,8 +53,7 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
     @Nullable InternalSyntaxToken openCurlyBraceToken,
     SeparatedListImpl<UseClauseTree> clauses,
     @Nullable InternalSyntaxToken closeCurlyBraceToken,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     this.useToken = useToken;
     this.useTypeToken = useTypeToken;
     this.prefix = prefix;
@@ -71,8 +70,7 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
     InternalSyntaxToken useToken,
     @Nullable InternalSyntaxToken useTypeToken,
     SeparatedListImpl<UseClauseTree> clauses,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return new UseStatementTreeImpl(Kind.USE_STATEMENT, useToken, useTypeToken, null, null, null, clauses, null, eosToken);
   }
 
@@ -84,8 +82,7 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
     InternalSyntaxToken openCurlyBraceToken,
     SeparatedListImpl<UseClauseTree> clauses,
     InternalSyntaxToken closeCurlyBraceToken,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     return new UseStatementTreeImpl(Kind.GROUP_USE_STATEMENT, useToken, useTypeToken, prefix, nsSeparatorToken, openCurlyBraceToken, clauses, closeCurlyBraceToken, eosToken);
   }
 
@@ -143,8 +140,7 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(useToken, useTypeToken, prefix, nsSeparatorToken, openCurlyBraceToken),
       clauses.elementsAndSeparators(),
-      IteratorUtils.iteratorOf(closeCurlyBraceToken, eosToken)
-      );
+      IteratorUtils.iteratorOf(closeCurlyBraceToken, eosToken));
   }
 
   @Override
@@ -152,4 +148,3 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
     visitor.visitUseStatement(this);
   }
 }
-

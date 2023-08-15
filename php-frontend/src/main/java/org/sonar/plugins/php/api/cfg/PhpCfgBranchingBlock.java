@@ -53,7 +53,7 @@ class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
   }
 
   @Override
-  public Set<CfgBlock> successors(){
+  public Set<CfgBlock> successors() {
     return SetUtils.immutableSetOf(trueSuccessor, falseSuccessor);
   }
 

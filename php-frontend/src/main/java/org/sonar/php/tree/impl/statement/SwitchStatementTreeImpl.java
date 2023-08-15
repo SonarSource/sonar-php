@@ -47,11 +47,10 @@ public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementT
   private final InternalSyntaxToken eosToken;
 
   public SwitchStatementTreeImpl(
-      InternalSyntaxToken switchToken, ParenthesisedExpressionTree expression, InternalSyntaxToken openCurlyBraceToken,
-      @Nullable InternalSyntaxToken semicolonToken,
-      List<SwitchCaseClauseTree> cases,
-      InternalSyntaxToken closeCurlyBraceToken
-  ) {
+    InternalSyntaxToken switchToken, ParenthesisedExpressionTree expression, InternalSyntaxToken openCurlyBraceToken,
+    @Nullable InternalSyntaxToken semicolonToken,
+    List<SwitchCaseClauseTree> cases,
+    InternalSyntaxToken closeCurlyBraceToken) {
     this.kind = Kind.SWITCH_STATEMENT;
 
     this.switchToken = switchToken;
@@ -67,11 +66,10 @@ public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementT
   }
 
   public SwitchStatementTreeImpl(
-      InternalSyntaxToken switchToken, ParenthesisedExpressionTree expression, InternalSyntaxToken colonToken,
-      @Nullable InternalSyntaxToken semicolonToken,
-      List<SwitchCaseClauseTree> cases,
-      InternalSyntaxToken endswitchToken, InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken switchToken, ParenthesisedExpressionTree expression, InternalSyntaxToken colonToken,
+    @Nullable InternalSyntaxToken semicolonToken,
+    List<SwitchCaseClauseTree> cases,
+    InternalSyntaxToken endswitchToken, InternalSyntaxToken eosToken) {
     this.kind = Kind.ALTERNATIVE_SWITCH_STATEMENT;
 
     this.switchToken = switchToken;
@@ -96,8 +94,7 @@ public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementT
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(switchToken, expression, openCurlyBraceToken, colonToken, semicolonToken),
       cases.iterator(),
-      IteratorUtils.iteratorOf(closeCurlyBraceToken, endswitchToken, eosToken)
-    );
+      IteratorUtils.iteratorOf(closeCurlyBraceToken, endswitchToken, eosToken));
   }
 
   @Override

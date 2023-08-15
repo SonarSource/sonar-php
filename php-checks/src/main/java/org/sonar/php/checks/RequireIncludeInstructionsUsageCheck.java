@@ -66,6 +66,6 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
 
   private static boolean isAutoloadImport(FunctionCallTree tree) {
     String call = tree.toString();
-    return (call.startsWith("include") || call.startsWith("require")) && call.endsWith("autoload.php'") ;
+    return (call.startsWith("include") || call.startsWith("require")) && call.endsWith("autoload.php'");
   }
 }

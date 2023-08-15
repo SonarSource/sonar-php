@@ -203,7 +203,7 @@ public class LeftCurlyBraceStartsLineCheck extends PHPVisitorCheck {
 
   private void checkBlock(Tree body, SyntaxToken prevToken) {
     if (body.is(Kind.BLOCK)) {
-      BlockTree blockTree = (BlockTree)body;
+      BlockTree blockTree = (BlockTree) body;
       checkOpenCurlyBrace(blockTree.openCurlyBraceToken(), blockTree.closeCurlyBraceToken(), prevToken);
     }
   }

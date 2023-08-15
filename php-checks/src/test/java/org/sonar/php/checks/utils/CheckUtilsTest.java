@@ -91,7 +91,7 @@ public class CheckUtilsTest {
     FunctionCallTree call = (FunctionCallTree) root;
     assertThat(CheckUtils.getFunctionName(call)).isEqualTo("A::run");
     assertThat(CheckUtils.getLowerCaseFunctionName(call)).isEqualTo("a::run");
-    assertThat(CheckUtils.getLowerCaseFunctionName((FunctionCallTree)expressionFromStatement("$var(2);"))).isNull();
+    assertThat(CheckUtils.getLowerCaseFunctionName((FunctionCallTree) expressionFromStatement("$var(2);"))).isNull();
 
     root = ((ExpressionStatementTree) parseMethodStatement("$this->run(2);")).expression();
     assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
@@ -205,16 +205,16 @@ public class CheckUtilsTest {
   @Test
   public void is_null_or_empty_string() {
     assertThat(createLiterals(Tree.Kind.NULL_LITERAL, "NULL")
-        .allMatch(CheckUtils::isNullOrEmptyString)).isTrue();
+      .allMatch(CheckUtils::isNullOrEmptyString)).isTrue();
 
     assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "", "   ")
-        .allMatch(CheckUtils::isNullOrEmptyString)).isTrue();
+      .allMatch(CheckUtils::isNullOrEmptyString)).isTrue();
 
     assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "x", "  .  ")
-        .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
+      .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
 
     assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true", "false")
-        .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
+      .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
   }
 
   @Test
@@ -238,7 +238,6 @@ public class CheckUtilsTest {
     tree = parseClassMember("use MyTrait;");
     assertThat(CheckUtils.hasModifier(tree, "private")).isFalse();
   }
-
 
   @Test
   public void is_public() {
@@ -354,7 +353,7 @@ public class CheckUtilsTest {
   }
 
   private List<ClassMemberTree> parseClassMembers(String toParse) {
-    return ((ClassDeclarationTree) parse("class Wrapper{" + toParse+ "}")).members();
+    return ((ClassDeclarationTree) parse("class Wrapper{" + toParse + "}")).members();
   }
 
   private ClassMemberTree parseClassMember(String toParse) {
@@ -362,7 +361,7 @@ public class CheckUtilsTest {
   }
 
   private List<StatementTree> parseMethodStatements(String toParse) {
-    MethodDeclarationTree method = (MethodDeclarationTree) parseClassMembers("public function wrapperMethod() {"+ toParse +"}").get(0);
+    MethodDeclarationTree method = (MethodDeclarationTree) parseClassMembers("public function wrapperMethod() {" + toParse + "}").get(0);
     return ((BlockTree) method.body()).statements();
   }
 

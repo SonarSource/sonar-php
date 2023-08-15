@@ -79,8 +79,7 @@ public class ElseClauseTreeImpl extends PHPTree implements ElseClauseTree {
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(elseToken, colonToken),
-      statements.iterator()
-    );
+      statements.iterator());
   }
 
   @Override

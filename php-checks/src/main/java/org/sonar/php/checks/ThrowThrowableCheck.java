@@ -61,8 +61,7 @@ public class ThrowThrowableCheck extends PHPVisitorCheck {
   private void verifyClass(NamespaceNameTree namespaceNameTree, ThrowExpressionTree tree) {
     ClassSymbol classSymbol = Symbols.getClass(namespaceNameTree);
     if (classSymbol.isSubTypeOf(THROWABLE_FQN).isFalse()) {
-      context().newIssue(this, tree, MESSAGE).
-        secondary(classSymbol.location(), SECONDARY_MESSAGE);
+      context().newIssue(this, tree, MESSAGE).secondary(classSymbol.location(), SECONDARY_MESSAGE);
     }
   }
 }

@@ -67,8 +67,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
     @Nullable SyntaxToken implementsToken, @Nullable SeparatedListImpl<NamespaceNameTree> superInterfaces,
     SyntaxToken openCurlyBraceToken,
     List<ClassMemberTree> members,
-    SyntaxToken closeCurlyBraceToken
-  ) {
+    SyntaxToken closeCurlyBraceToken) {
     List<ExpressionTree> argumentValues = callArguments.stream()
       .map(CallArgumentTree::value)
       .collect(Collectors.toList());
@@ -191,8 +190,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
       superInterfaces.elementsAndSeparators(),
       IteratorUtils.iteratorOf(openCurlyBraceToken),
       members.iterator(),
-      IteratorUtils.iteratorOf(closeCurlyBraceToken)
-    );
+      IteratorUtils.iteratorOf(closeCurlyBraceToken));
   }
 
   @Override

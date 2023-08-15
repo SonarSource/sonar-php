@@ -39,7 +39,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
 @Rule(key = EmptyDatabasePasswordCheck.KEY)
-public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
+public class EmptyDatabasePasswordCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2115";
 

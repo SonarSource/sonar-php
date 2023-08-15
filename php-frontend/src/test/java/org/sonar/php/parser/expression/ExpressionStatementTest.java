@@ -37,8 +37,7 @@ public class ExpressionStatementTest {
       .matches("foo(MATCH);")
       .matches("foo\\match();")
       .matches("match($a);")
-      .matches("match($a) {$b=>2};")
-    ;
+      .matches("match($a) {$b=>2};");
   }
 
 }

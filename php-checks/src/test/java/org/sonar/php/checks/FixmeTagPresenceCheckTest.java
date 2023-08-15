@@ -42,8 +42,7 @@ public class FixmeTagPresenceCheckTest {
       newIssue(8),
       newIssue(9),
       newIssue(12),
-      newIssue(14)
-    );
+      newIssue(14));
 
     PHPCheckTest.check(CHECK, file, issues);
   }

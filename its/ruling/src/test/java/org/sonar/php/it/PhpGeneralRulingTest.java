@@ -70,7 +70,6 @@ public class PhpGeneralRulingTest {
     testProject("monica");
   }
 
-
   // TODO SONARPHP-1441 Solve ruling test results due to nondeterministic symbol creation
   @Test
   @Ignore("Due to nondeterministic results")

@@ -63,7 +63,7 @@ public class ArrowFunctionExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.referenceToken().text()).isEqualTo("&");
     assertThat(tree.parameters().parameters()).hasSize(1);
     assertThat(tree.parameters().parameters().get(0).variableIdentifier().text()).isEqualTo("$x");
-    assertThat(((BuiltInTypeTree) ((TypeTree)tree.returnTypeClause().type()).typeName()).token().text()).isEqualTo("string");
+    assertThat(((BuiltInTypeTree) ((TypeTree) tree.returnTypeClause().type()).typeName()).token().text()).isEqualTo("string");
     assertThat(tree.doubleArrowToken().text()).isEqualTo("=>");
     assertThat(expressionToString(tree.body())).isEqualTo("$x . '_'");
   }

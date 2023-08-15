@@ -61,7 +61,6 @@ public class TestIssue {
   private Location primaryLocation;
   private List<Location> secondaryLocations = new ArrayList<>();
 
-
   private TestIssue(@Nullable String message, int line) {
     primaryLocation = new Location(message, line);
   }

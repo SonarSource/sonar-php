@@ -281,7 +281,6 @@ public final class CheckUtils {
     return tree.condition().get(tree.condition().size() - 1);
   }
 
-
   public static String trimQuotes(String value) {
     if (value.length() > 1 && (value.startsWith("'") || value.startsWith("\""))) {
       return value.substring(1, value.length() - 1);
@@ -437,8 +436,7 @@ public final class CheckUtils {
     ExpressionTree receiver = skipParenthesis(assignedValue(tree.object()));
     if (receiver.is(Kind.NEW_EXPRESSION)) {
       ExpressionTree newExpression = ((NewExpressionTree) receiver).expression();
-      return Optional.ofNullable(newExpression.is(Kind.FUNCTION_CALL) ? functionName((FunctionCallTree) newExpression) :
-        nameOf(newExpression));
+      return Optional.ofNullable(newExpression.is(Kind.FUNCTION_CALL) ? functionName((FunctionCallTree) newExpression) : nameOf(newExpression));
     }
     return Optional.empty();
   }

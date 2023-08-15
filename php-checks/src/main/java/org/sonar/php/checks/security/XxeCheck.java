@@ -72,11 +72,10 @@ public class XxeCheck extends PHPVisitorCheck {
       }
     } else if (callee.is(Kind.CLASS_MEMBER_ACCESS) && "build".equals(functionName) &&
       isNamespaceMemberEqualTo("Cake\\Utility\\Xml", callee)) {
-      argument(call, OPTIONS, 1).ifPresent(options -> checkXmlBuildOption(options.value(), options));
-    }
+        argument(call, OPTIONS, 1).ifPresent(options -> checkXmlBuildOption(options.value(), options));
+      }
     super.visitFunctionCall(call);
   }
-
 
   private void checkSimpleXmlOption(ExpressionTree optionValue, Tree treeToReport) {
     if (optionValue.is(Kind.NAMESPACE_NAME) && "LIBXML_NOENT".equals(((NamespaceNameTree) optionValue).unqualifiedName())) {
@@ -140,7 +139,7 @@ public class XxeCheck extends PHPVisitorCheck {
       .map(c -> c.symbol().qualifiedName().toString());
   }
 
-  private static boolean isNamespaceMemberEqualTo(String targetNamespace, ExpressionTree callee){
+  private static boolean isNamespaceMemberEqualTo(String targetNamespace, ExpressionTree callee) {
     return namespaceMemberFullQualifiedName(callee)
       .filter(name -> targetNamespace.equalsIgnoreCase(name) || isNameInNamespaceEqualTo(targetNamespace, callee, name))
       .isPresent();

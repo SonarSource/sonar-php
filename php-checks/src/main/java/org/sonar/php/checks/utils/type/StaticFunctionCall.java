@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.utils.type;
 
-
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;

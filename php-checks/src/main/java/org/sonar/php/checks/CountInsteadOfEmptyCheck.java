@@ -78,7 +78,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     boolean result;
     if (isEqualityExpression(parentBinaryTree)) {
       result = isZero(parentBinaryTree.leftOperand()) || isZero(parentBinaryTree.rightOperand());
-    } else if(parentBinaryTree.is(Tree.Kind.GREATER_THAN) || parentBinaryTree.is(Tree.Kind.LESS_THAN_OR_EQUAL_TO)) {
+    } else if (parentBinaryTree.is(Tree.Kind.GREATER_THAN) || parentBinaryTree.is(Tree.Kind.LESS_THAN_OR_EQUAL_TO)) {
       result = isOne(parentBinaryTree.leftOperand()) || isZero(parentBinaryTree.rightOperand());
     } else {
       // Kind.GREATER_THAN_OR_EQUAL_TO or Kind.LESS_THAN
@@ -97,7 +97,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
       return false;
     }
 
-    if (CheckUtils.SUPERGLOBALS.contains(((VariableIdentifierTree)tree).variableExpression().text())) {
+    if (CheckUtils.SUPERGLOBALS.contains(((VariableIdentifierTree) tree).variableExpression().text())) {
       return true;
     }
 
@@ -123,11 +123,11 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     DeclaredTypeTree parameterTypeTree = ((ParameterTree) declaration.getParent()).declaredType();
     if (parameterTypeTree == null
       || !parameterTypeTree.is(Tree.Kind.TYPE)
-      || !((TypeTree)parameterTypeTree).typeName().is(Tree.Kind.BUILT_IN_TYPE)) {
+      || !((TypeTree) parameterTypeTree).typeName().is(Tree.Kind.BUILT_IN_TYPE)) {
       return false;
     }
 
-    BuiltInTypeTree builtInType = ((BuiltInTypeTree) ((TypeTree)parameterTypeTree).typeName());
+    BuiltInTypeTree builtInType = ((BuiltInTypeTree) ((TypeTree) parameterTypeTree).typeName());
 
     return builtInType.token().text().equalsIgnoreCase("array");
   }

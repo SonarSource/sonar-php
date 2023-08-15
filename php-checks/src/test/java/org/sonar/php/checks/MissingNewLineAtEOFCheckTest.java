@@ -33,7 +33,7 @@ public class MissingNewLineAtEOFCheckTest {
   private MissingNewLineAtEOFCheck check = new MissingNewLineAtEOFCheck();
   private static final String TEST_FILE_DIR = "MissingNewLineAtEOF/";
   private List<PhpIssue> issue = Collections.singletonList(
-    new FileIssue(check,"Add a new line at the end of this file."));
+    new FileIssue(check, "Add a new line at the end of this file."));
 
   @Test
   public void noNewLine() {

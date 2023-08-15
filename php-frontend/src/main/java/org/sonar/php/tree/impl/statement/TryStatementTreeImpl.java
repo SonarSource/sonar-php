@@ -64,8 +64,7 @@ public class TryStatementTreeImpl extends PHPTree implements TryStatementTree {
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(tryToken, block),
       catchBlocks.iterator(),
-      IteratorUtils.iteratorOf(finallyToken, finallyBlock)
-    );
+      IteratorUtils.iteratorOf(finallyToken, finallyBlock));
   }
 
   @Override

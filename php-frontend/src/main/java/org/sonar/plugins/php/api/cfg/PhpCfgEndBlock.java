@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 import org.sonar.plugins.php.api.tree.Tree;
 
-
 /**
  * The end node of a {@link ControlFlowGraph}.
  */

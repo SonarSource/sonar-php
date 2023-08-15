@@ -27,9 +27,9 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HighlightChecker {
-  
+
   private String componentKey;
-  
+
   public HighlightChecker(String componentKey) {
     this.componentKey = componentKey;
   }

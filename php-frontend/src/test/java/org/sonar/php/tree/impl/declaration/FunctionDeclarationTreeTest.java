@@ -58,7 +58,7 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.returnTypeClause().colonToken().text()).isEqualTo(":");
     assertThat(tree.returnTypeClause().type().typeName().toString()).hasToString("array");
     assertThat(tree.returnTypeClause().declaredType().isSimple()).isTrue();
-    assertThat(((TypeTree)tree.returnTypeClause().declaredType()).typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
+    assertThat(((TypeTree) tree.returnTypeClause().declaredType()).typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
   }
 
   @Test
@@ -68,7 +68,7 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.returnTypeClause().colonToken().text()).isEqualTo(":");
     assertThat(tree.returnTypeClause().type().typeName()).hasToString("array");
     assertThat(tree.returnTypeClause().declaredType().isSimple()).isFalse();
-    assertThat(((UnionTypeTree)tree.returnTypeClause().declaredType()).types()).hasSize(2);
+    assertThat(((UnionTypeTree) tree.returnTypeClause().declaredType()).types()).hasSize(2);
   }
 
   @Test

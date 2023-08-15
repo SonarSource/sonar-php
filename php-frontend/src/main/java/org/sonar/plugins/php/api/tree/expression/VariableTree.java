@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-
 /**
  * <a href="http://php.net/manual/en/language.variables.php">Common interface to represent variable name expression</a>
  * <pre>

@@ -32,7 +32,6 @@ public class MatchExpressionTest {
       .matches("match ($a) {$a=>1}")
       .matches("match ($var) {$a,$b =>0,$c=>1,}")
       .matches("match ($a) {default=>1}")
-      .notMatches("match ($a) {}")
-    ;
+      .notMatches("match ($a) {}");
   }
 }

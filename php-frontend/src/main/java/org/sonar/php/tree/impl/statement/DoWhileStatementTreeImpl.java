@@ -41,10 +41,9 @@ public class DoWhileStatementTreeImpl extends PHPTree implements DoWhileStatemen
   private final InternalSyntaxToken eosToken;
 
   public DoWhileStatementTreeImpl(
-      InternalSyntaxToken doToken, StatementTree statement,
-      InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition,
-      InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken doToken, StatementTree statement,
+    InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition,
+    InternalSyntaxToken eosToken) {
     this.doToken = doToken;
     this.statement = statement;
     this.whileToken = whileToken;

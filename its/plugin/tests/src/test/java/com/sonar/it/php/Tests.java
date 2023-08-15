@@ -132,8 +132,8 @@ public class Tests {
   @CheckForNull
   static Components.Component getComponent(String projectKey, String componentKey) {
     List<Components.Component> components = newWsClient().components().tree(new TreeRequest()
-        .setComponent(projectKey)
-        .setQ(componentKey))
+      .setComponent(projectKey)
+      .setQ(componentKey))
       .getComponentsList();
     return components.size() == 1 ? components.get(0) : null;
   }

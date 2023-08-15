@@ -49,11 +49,9 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
     InternalSyntaxToken catchToken,
     InternalSyntaxToken lParenthesis,
     SeparatedList<NamespaceNameTree> exceptionTypes,
-    @Nullable
-    VariableIdentifierTreeImpl variable,
+    @Nullable VariableIdentifierTreeImpl variable,
     InternalSyntaxToken rParenthsis,
-    BlockTree block
-  ) {
+    BlockTree block) {
     this.catchToken = catchToken;
     this.lParenthesis = lParenthesis;
     this.exceptionTypes = exceptionTypes;

@@ -29,9 +29,9 @@ public class PhpRegexUtils {
   private static Map<Character, Character> bracketDelimiters() {
     Map<Character, Character> delimiters = new HashMap<>();
     delimiters.put('[', ']');
-    delimiters.put('{','}');
+    delimiters.put('{', '}');
     delimiters.put('<', '>');
-    delimiters.put('(',')');
+    delimiters.put('(', ')');
     return delimiters;
   }
 

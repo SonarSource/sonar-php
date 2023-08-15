@@ -83,7 +83,6 @@ public class PunctuatorSpacingCheck extends PHPVisitorCheck implements Formattin
     previousToken = token;
   }
 
-
   private void checkSpaceBetweenCloseParenAndOpenCurly(SyntaxToken closeParenthesis, SyntaxToken openCurly) {
     if (check.isOneSpaceBetweenRParentAndLCurly) {
       int nbSpace = TokenUtils.getNbSpaceBetween(closeParenthesis, openCurly);

@@ -166,7 +166,6 @@ public interface VisitorCheck extends PHPCheck {
    * [ END ] Declaration
    */
 
-
   /**
    * [ START ] Statement
    */

@@ -57,6 +57,4 @@ public class SwitchStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
-
-
 }

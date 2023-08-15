@@ -122,4 +122,3 @@ public class InternalSyntaxTrivia extends PHPTree implements SyntaxTrivia {
     return this;
   }
 }
-

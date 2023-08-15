@@ -30,8 +30,7 @@ public class TypeTest {
   public void test() {
     assertThat(PHPLexicalGrammar.TYPE)
       .matches("int")
-      .matches("?int")
-    ;
+      .matches("?int");
   }
 
 }

@@ -36,7 +36,7 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = CheckUtils.lowerCaseFunctionName (tree);
+    String functionName = CheckUtils.lowerCaseFunctionName(tree);
     if (tree.callee().is(Kind.OBJECT_MEMBER_ACCESS)) {
       if ("chmod".equals(functionName)) {
         chmodSymfonyAndLaravelCheck(tree);

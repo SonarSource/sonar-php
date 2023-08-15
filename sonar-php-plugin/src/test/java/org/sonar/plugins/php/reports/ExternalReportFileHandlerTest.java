@@ -40,7 +40,7 @@ public class ExternalReportFileHandlerTest {
 
   @Before
   public void setup() {
-    context =  SensorContextTester.create(PROJECT_DIR);
+    context = SensorContextTester.create(PROJECT_DIR);
     addInputFiles("index.php", "subfolder/index.php");
     fileHandler = ExternalReportFileHandler.create(context);
   }
@@ -57,11 +57,11 @@ public class ExternalReportFileHandlerTest {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "index.php"))).isEqualTo("index.php");
   }
 
-
   @Test
   public void should_not_return_relative_when_files_are_unknown() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "unknown.php"))).isEqualTo(path("foo", "bar", "extern-file-handler", "unknown.php"));
-    assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php"))).isEqualTo(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php"));
+    assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php")))
+      .isEqualTo(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php"));
   }
 
   @Test
@@ -86,7 +86,8 @@ public class ExternalReportFileHandlerTest {
   @Test
   public void should_return_relative_path_for_second_file_when_unknown() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "index.php"))).isEqualTo("index.php");
-    assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php"))).isEqualTo(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php"));
+    assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php")))
+      .isEqualTo(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php"));
   }
 
   @Test
@@ -110,9 +111,8 @@ public class ExternalReportFileHandlerTest {
   @Test
   public void should_return_handle_shorter_path() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "index.php"))).isEqualTo("index.php");
-    assertThat(fileHandler.relativePath(path("bar",  "index.php"))).isEqualTo(path("bar","index.php"));
+    assertThat(fileHandler.relativePath(path("bar", "index.php"))).isEqualTo(path("bar", "index.php"));
   }
-
 
   private void addInputFiles(String... paths) {
     Arrays.stream(paths).forEach(path -> context.fileSystem().add(TestInputFileBuilder.create(MODULE_KEY, path).build()));
@@ -121,6 +121,5 @@ public class ExternalReportFileHandlerTest {
   private static String path(String first, String... more) {
     return Path.of(first, more).toString();
   }
-
 
 }

@@ -47,8 +47,8 @@ public class PhpTestUtils {
 
   public static final String SENSOR_TEST_PHPUNIT_REPORT_DIR = "phpunit-reports/";
   public static final String UT_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR + "coverage/ut-coverage.xml";
-  public static final String IT_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR +  "coverage/it-coverage.xml";
-  public static final String OVERALL_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR +  "coverage/overall-coverage.xml";
+  public static final String IT_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR + "coverage/it-coverage.xml";
+  public static final String OVERALL_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR + "coverage/overall-coverage.xml";
 
   public static final String GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR + "coverage/generated-ut-coverage.xml";
   public static final String GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR + "coverage/generated-it-coverage.xml";
@@ -56,7 +56,7 @@ public class PhpTestUtils {
 
   private PhpTestUtils() {
   }
-  
+
   public static File getModuleBaseDir() {
     return new File("src/test/resources");
   }

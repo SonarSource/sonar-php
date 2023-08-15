@@ -77,8 +77,7 @@ public class PhpPlugin implements Plugin {
         .category(PHP_CATEGORY)
         .subCategory(GENERAL_SUBCATEGORY)
         .multiValues(true)
-        .build()
-      );
+        .build());
 
     if (context.getRuntime().getProduct() != SonarProduct.SONARLINT) {
       addPhpUnitExtensions(context);

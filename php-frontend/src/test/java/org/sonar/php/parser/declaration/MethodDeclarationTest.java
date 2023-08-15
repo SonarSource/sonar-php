@@ -43,8 +43,7 @@ public class MethodDeclarationTest {
       .matches("#[A1(4)] public function f() {}")
       .matches("public function f($prop) {}")
       .matches("public function f($prop = null) {}")
-      .matches("public function f($prop = new Foo()) {}")
-    ;
+      .matches("public function f($prop = new Foo()) {}");
   }
 
   @Test
@@ -58,8 +57,7 @@ public class MethodDeclarationTest {
       .matches("public function __construct(readonly protected $prop) {}")
       .matches("public function __construct(readonly protected string $prop) {}")
       .matches("public function __construct(readonly $prop) {}")
-      .notMatches("public function __construct(var $prop) {}")
-    ;
+      .notMatches("public function __construct(var $prop) {}");
   }
 
   @Test

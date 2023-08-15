@@ -42,7 +42,6 @@ public class EnumDeclarationTest {
       .notMatches("enum A { case A}")
       .notMatches("enum A { public $property; }")
       .notMatches("enum A extends B { }")
-      .notMatches("enum A: { }")
-    ;
+      .notMatches("enum A: { }");
   }
 }

@@ -26,7 +26,6 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class FileIssueTest {
 
-
   private static final PHPCheck CHECK = new DummyCheck();
 
   @Test

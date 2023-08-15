@@ -135,8 +135,7 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(absoluteSeparator),
       namespaces.elementsAndSeparators(),
-      IteratorUtils.iteratorOf(name)
-    );
+      IteratorUtils.iteratorOf(name));
   }
 
   @Override

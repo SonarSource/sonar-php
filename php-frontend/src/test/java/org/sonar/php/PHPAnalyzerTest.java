@@ -186,7 +186,7 @@ class PHPAnalyzerTest {
   }
 
   private PHPAnalyzer createAnalyzer(PHPCheck... checks) throws IOException {
-    return createAnalyzer(Arrays.asList(checks),  Collections.emptyList());
+    return createAnalyzer(Arrays.asList(checks), Collections.emptyList());
   }
 
   private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks) throws IOException {

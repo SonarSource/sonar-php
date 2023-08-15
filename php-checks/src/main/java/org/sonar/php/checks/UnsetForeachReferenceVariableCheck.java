@@ -53,7 +53,7 @@ public class UnsetForeachReferenceVariableCheck extends PHPVisitorCheck {
       boolean usageIsOutsideForEach = usageIsOutsideForEach(usage, tree);
       if (usageIsOutsideForEach && !usageIsInUnset(usage)) {
         usedBeforeUnset = true;
-      } else if(usageIsOutsideForEach) {
+      } else if (usageIsOutsideForEach) {
         // unset() found
         wasUnset = true;
         break;

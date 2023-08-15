@@ -55,8 +55,7 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
     ParameterListTree parameters,
     @Nullable LexicalVariablesTree lexicalVars,
     @Nullable ReturnTypeClauseTree returnTypeClause,
-    BlockTree body
-  ) {
+    BlockTree body) {
     this.attributeGroups = attributeGroups;
     this.staticToken = staticToken;
     this.functionToken = functionToken;
@@ -120,8 +119,7 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.listIterator(),
-      IteratorUtils.iteratorOf(staticToken, functionToken, referenceToken, parameters, lexicalVars, returnTypeClause, body)
-    );
+      IteratorUtils.iteratorOf(staticToken, functionToken, referenceToken, parameters, lexicalVars, returnTypeClause, body));
   }
 
   @Override

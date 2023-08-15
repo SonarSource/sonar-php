@@ -29,18 +29,18 @@ public class RegularStringLiteralTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.REGULAR_STRING_LITERAL)
-    .matches("\"\"")
-    .matches("\"str\"")
-    .matches("'str'");
+      .matches("\"\"")
+      .matches("\"str\"")
+      .matches("'str'");
   }
 
   @Test
   public void test_real_life() {
     assertThat(PHPLexicalGrammar.REGULAR_STRING_LITERAL)
-    .matches("\"/regexp $/\"")
-    .matches("\"non regexp $\"") // PHP is permissive
-    .matches("\"str \\$foo\"")
-    .matches("\"{'str'}\"");
+      .matches("\"/regexp $/\"")
+      .matches("\"non regexp $\"") // PHP is permissive
+      .matches("\"str \\$foo\"")
+      .matches("\"{'str'}\"");
   }
 
 }

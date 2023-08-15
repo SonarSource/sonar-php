@@ -102,8 +102,7 @@ public class ListUtilsTest {
         new SomeType("value7"), new SomeType("value8"),
         new SomeType("value9"), new SomeType("value10"),
         new SomeType("value11"), new SomeType("value12"),
-        new SomeType("value13"), new SomeType("value14")
-      );
+        new SomeType("value13"), new SomeType("value14"));
   }
 
   @Test
@@ -143,8 +142,10 @@ public class ListUtilsTest {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
       ListUtilsTest.SomeType value1 = (ListUtilsTest.SomeType) o;
       return Objects.equals(value, value1.value);
     }

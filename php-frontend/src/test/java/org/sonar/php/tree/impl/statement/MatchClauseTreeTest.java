@@ -52,7 +52,7 @@ public class MatchClauseTreeTest extends PHPTreeModelTest {
   @Test
   public void default_clause() throws Exception {
     MatchDefaultClauseTree tree = parse("default => false", PHPLexicalGrammar.MATCH_CLAUSE);
-    
+
     assertThat(tree.is(Kind.MATCH_DEFAULT_CLAUSE)).isTrue();
     assertThat(tree.defaultToken().text()).isEqualTo("default");
     assertThat(tree.trailingComma()).isNull();

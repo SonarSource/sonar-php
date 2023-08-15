@@ -43,7 +43,6 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
     assertThat(field).isNotNull();
     assertThat(field.usages()).hasSize(2);
 
-
     Symbol arrayField = getSymbol("$fieldArray", Kind.FIELD);
     assertThat(arrayField).isNotNull();
     assertThat(arrayField.usages()).hasSize(1);

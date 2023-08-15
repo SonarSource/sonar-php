@@ -45,7 +45,6 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
   private StatementTree nextStatement = null;
   private FormattingStandardCheck check = null;
 
-
   @Override
   public void checkFormat(FormattingStandardCheck formattingCheck, ScriptTree scriptTree) {
     this.check = formattingCheck;

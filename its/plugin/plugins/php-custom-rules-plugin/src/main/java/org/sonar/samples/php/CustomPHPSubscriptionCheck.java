@@ -37,8 +37,7 @@ public class CustomPHPSubscriptionCheck extends PHPSubscriptionCheck {
   @Override
   public List<Kind> nodesToVisit() {
     return Collections.singletonList(
-      Kind.FOR_STATEMENT
-    );
+      Kind.FOR_STATEMENT);
   }
 
   @Override

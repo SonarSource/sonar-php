@@ -38,7 +38,6 @@ public class EnumCaseTest {
       .matches("case NEW = 1;")
       .matches("case CLASS = 'a';")
       .matches("case EVAL = 'c';")
-      .notMatches("case A")
-    ;
+      .notMatches("case A");
   }
 }

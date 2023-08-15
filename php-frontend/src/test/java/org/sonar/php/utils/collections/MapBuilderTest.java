@@ -70,8 +70,10 @@ public class MapBuilderTest {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
       Key key = (Key) o;
       return id == key.id;
     }
@@ -91,8 +93,10 @@ public class MapBuilderTest {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
       Value value1 = (Value) o;
       return Objects.equals(value, value1.value);
     }

@@ -88,7 +88,6 @@ public class CacheTest {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
 
-
     SymbolTableImpl data = exampleSymbolTable();
     SymbolTableSerializationInput serializationInput = new SymbolTableSerializationInput(data, PLUGIN_VERSION);
     SerializationResult serializationData = SymbolTableSerializer.toBinary(serializationInput);
@@ -182,8 +181,7 @@ public class CacheTest {
       new LocationInFileImpl("abc.php", 1, 1, 1, 10),
       QualifiedName.qualifiedName("funcName"),
       List.of(),
-      new FunctionSymbolData.FunctionSymbolProperties(false, false)
-    )));
+      new FunctionSymbolData.FunctionSymbolProperties(false, false))));
     return data;
   }
 

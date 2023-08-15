@@ -122,7 +122,7 @@ public class AssignmentExpressionVisitorTest {
       Symbol symbol = symbolTable.getSymbol(var);
       if (symbol != null) {
         return ((SymbolImpl) symbol).uniqueAssignedValue();
-       }
+      }
       return Optional.empty();
     }
   }

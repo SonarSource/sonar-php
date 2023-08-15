@@ -158,7 +158,7 @@ public class PhpIniParserTest {
     String fileName = "dir" + File.separator + "xxx.ini";
     File file = new File(fileName);
 
-    assertThatThrownBy(() ->  FileTestUtils.getFile(file))
+    assertThatThrownBy(() -> FileTestUtils.getFile(file))
       .isInstanceOf(IllegalStateException.class)
       .hasMessageContaining(fileName);
   }

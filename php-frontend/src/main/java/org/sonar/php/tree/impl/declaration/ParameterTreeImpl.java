@@ -58,8 +58,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     @Nullable InternalSyntaxToken ellipsisToken,
     VariableIdentifierTree variableIdentifier,
     @Nullable InternalSyntaxToken equalToken,
-    @Nullable ExpressionTree initValue
-   ) {
+    @Nullable ExpressionTree initValue) {
     this.attributeGroups = attributeGroups;
     this.visibility = visibility;
     this.readonlyToken = readonlyToken;
@@ -148,8 +147,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
-      IteratorUtils.iteratorOf(visibility, readonlyToken, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue)
-    );
+      IteratorUtils.iteratorOf(visibility, readonlyToken, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue));
   }
 
   @Override

@@ -25,6 +25,6 @@ import org.sonar.plugins.php.CheckVerifier;
 public class NestedSwitchCheckTest {
   @Test
   public void test() throws Exception {
-    CheckVerifier.verify(new NestedSwitchCheck(),"NestedSwitchCheck.php");
+    CheckVerifier.verify(new NestedSwitchCheck(), "NestedSwitchCheck.php");
   }
 }

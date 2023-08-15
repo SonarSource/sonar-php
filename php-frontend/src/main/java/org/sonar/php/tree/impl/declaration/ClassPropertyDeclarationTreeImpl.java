@@ -53,8 +53,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     List<SyntaxToken> modifierTokens,
     @Nullable DeclaredTypeTree typeAnnotation,
     SeparatedListImpl<VariableDeclarationTree> declarations,
-    InternalSyntaxToken eosToken
-  ) {
+    InternalSyntaxToken eosToken) {
     this.kind = kind;
     this.attributeGroups = attributeGroups;
     this.modifierTokens = modifierTokens;
@@ -64,10 +63,10 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   }
 
   public static ClassPropertyDeclarationTree variable(List<AttributeGroupTree> attributes,
-                                                      List<SyntaxToken> modifierTokens,
-                                                      @Nullable DeclaredTypeTree typeAnnotation,
-                                                      SeparatedListImpl<VariableDeclarationTree> declarations,
-                                                      InternalSyntaxToken eosToken) {
+    List<SyntaxToken> modifierTokens,
+    @Nullable DeclaredTypeTree typeAnnotation,
+    SeparatedListImpl<VariableDeclarationTree> declarations,
+    InternalSyntaxToken eosToken) {
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION,
       attributes,
       modifierTokens,
@@ -77,10 +76,10 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   }
 
   public static ClassPropertyDeclarationTree constant(List<AttributeGroupTree> attributes,
-                                                      List<SyntaxToken> modifiers,
-                                                      SyntaxToken constToken,
-                                                      SeparatedListImpl<VariableDeclarationTree> declarations,
-                                                      InternalSyntaxToken eosToken) {
+    List<SyntaxToken> modifiers,
+    SyntaxToken constToken,
+    SeparatedListImpl<VariableDeclarationTree> declarations,
+    InternalSyntaxToken eosToken) {
 
     List<SyntaxToken> modifierTokens = new ArrayList<>(modifiers);
     modifierTokens.add(constToken);

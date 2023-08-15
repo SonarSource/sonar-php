@@ -116,7 +116,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
 
   private static boolean isConstructor(IdentifierTree methodName, ClassTree classDec) {
     MethodDeclarationTree constructor = classDec.fetchConstructor();
-    return  constructor != null && constructor.name().equals(methodName);
+    return constructor != null && constructor.name().equals(methodName);
   }
 
   private static boolean isMagicMethod(String methodName) {

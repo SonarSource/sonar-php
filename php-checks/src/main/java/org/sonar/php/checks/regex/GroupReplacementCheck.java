@@ -64,8 +64,7 @@ public class GroupReplacementCheck extends AbstractRegexCheck {
           List<String> stringReferences = references.stream().map(String::valueOf).collect(Collectors.toList());
           newIssue(replacement, String.format(MESSAGE, references.size() == 1 ? "" : "s", String.join(", ", stringReferences)));
         }
-      }
-    );
+      });
   }
 
   private static List<Integer> collectReferences(String replacement) {

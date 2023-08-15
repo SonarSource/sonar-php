@@ -24,7 +24,6 @@ import org.sonar.php.ParsingTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class CommentLineVisitorTest extends ParsingTestUtils {
 
   @Test

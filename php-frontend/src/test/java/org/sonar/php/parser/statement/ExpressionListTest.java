@@ -34,8 +34,7 @@ public class ExpressionListTest {
       .matches("1 + 2;")
       .matches("1, 2;")
       .matches("1, 2, 3;")
-      .matches("1, 2;")
-    ;
+      .matches("1, 2;");
   }
 
   @Test
@@ -44,9 +43,7 @@ public class ExpressionListTest {
       .notMatches("?>")
       .notMatches("1, ?>")
       .notMatches("1; 2;")
-      .notMatches("echo 1;")
-    ;
+      .notMatches("echo 1;");
   }
-
 
 }

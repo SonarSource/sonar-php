@@ -34,7 +34,7 @@ public class FunctionNameCheckTest {
 
   @Test
   public void custom() throws Exception {
-    check.format =  "^[a-zA-Z][a-zA-Z0-9]*$";
+    check.format = "^[a-zA-Z][a-zA-Z0-9]*$";
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 

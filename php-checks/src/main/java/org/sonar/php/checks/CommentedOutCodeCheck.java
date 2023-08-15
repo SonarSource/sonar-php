@@ -42,7 +42,6 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
   private static final String MULTILINE_COMMENT_REPLACE = "((/\\*\\*?)|(\\n\\s*\\*(?!/))|(\\*/))";
   private static final String SINGLE_LINE_COMMENT_REPLACE = "^((//)|(#))";
 
-
   private static final String INNER_CLASS_CONTEXT = "class DummyClass{%s}";
   private static final String INNER_METHOD_CONTEXT = "class DummyClass{public function dummyMethod(){%s}}";
 

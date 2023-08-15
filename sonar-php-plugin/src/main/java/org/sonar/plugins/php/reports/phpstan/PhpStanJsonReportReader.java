@@ -51,8 +51,7 @@ public class PhpStanJsonReportReader extends JsonReportReader {
     // SONARPHP-1316 : in case there is no issue in the report, 'files' in a JSONArray and not a JSONObject
     Optional.ofNullable(rootObject.get("files"))
       .filter(JSONObject.class::isInstance).map(JSONObject.class::cast)
-      .ifPresent(files ->
-        files.forEach((file, records) -> onFile(cleanFilePath((String) file), (JSONObject) records)));
+      .ifPresent(files -> files.forEach((file, records) -> onFile(cleanFilePath((String) file), (JSONObject) records)));
   }
 
   private void onFile(String file, JSONObject records) {

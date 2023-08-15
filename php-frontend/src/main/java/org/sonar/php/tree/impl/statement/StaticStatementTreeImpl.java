@@ -54,8 +54,7 @@ public class StaticStatementTreeImpl extends PHPTree implements StaticStatementT
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(staticToken),
       variables.elementsAndSeparators(),
-      IteratorUtils.iteratorOf(eosToken)
-    );
+      IteratorUtils.iteratorOf(eosToken));
   }
 
   @Override

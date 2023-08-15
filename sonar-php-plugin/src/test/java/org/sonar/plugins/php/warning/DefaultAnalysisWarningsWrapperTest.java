@@ -27,7 +27,6 @@ import static org.mockito.Mockito.verify;
 
 public class DefaultAnalysisWarningsWrapperTest {
 
-
   @Test
   public void addWarning() {
     AnalysisWarnings analysisWarnings = spy(AnalysisWarnings.class);

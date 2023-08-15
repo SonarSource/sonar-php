@@ -121,7 +121,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
           break;
         case METHOD_DECLARATION:
           retrieveTypeFromDoc(classMember);
-          retrieveTypeFromParameter((MethodDeclarationTree)classMember);
+          retrieveTypeFromParameter((MethodDeclarationTree) classMember);
           break;
         default:
           break;

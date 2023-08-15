@@ -33,5 +33,4 @@ public class SymbolQualifiedNameTest {
     assertThat(qualifiedName1).isEqualTo(qualifiedName2);
   }
 
-
 }

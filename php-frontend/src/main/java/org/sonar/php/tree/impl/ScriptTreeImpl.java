@@ -50,8 +50,7 @@ public class ScriptTreeImpl extends PHPTree implements ScriptTree {
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(fileOpeningTagToken),
-      statements.iterator()
-    );
+      statements.iterator());
   }
 
   @Override

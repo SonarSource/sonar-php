@@ -34,9 +34,7 @@ public class HeredocStringLiteralTest {
       .matches("<<<A\nSimple {$var->foo()} Content\nA")
       .matches("<<<A\nSimple \" Content\nA")
 
-
-      .notMatches("<<<A\nSimple Content\nB")
-    ;
+      .notMatches("<<<A\nSimple Content\nB");
 
   }
 }

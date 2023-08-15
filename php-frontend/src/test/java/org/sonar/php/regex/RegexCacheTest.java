@@ -39,8 +39,7 @@ public class RegexCacheTest {
   public void same_result_if_same_tree_is_provided() {
     CompilationUnitTree cut = ParsingTestUtils.parseSource("<?php" +
       "$s0 = '/abc/';" +
-      "$s1 = '/abc/';"
-    );
+      "$s1 = '/abc/';");
 
     ExpressionStatementTree statement1 = (ExpressionStatementTree) cut.script().statements().get(0);
     ExpressionStatementTree statement2 = (ExpressionStatementTree) cut.script().statements().get(1);
@@ -63,8 +62,7 @@ public class RegexCacheTest {
   @Test
   public void test_cache_via_context() {
     CompilationUnitTree cut = ParsingTestUtils.parseSource("<?php" +
-      "$s0 = '/abc/';"
-    );
+      "$s0 = '/abc/';");
     ExpressionStatementTree statement1 = (ExpressionStatementTree) cut.script().statements().get(0);
     LiteralTree s0 = (LiteralTree) ((AssignmentExpressionTree) statement1.expression()).value();
 

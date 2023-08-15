@@ -31,10 +31,10 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 public class TooManyMethodsInClassCheckTest {
 
   private TooManyMethodsInClassCheck check = new TooManyMethodsInClassCheck();
-  private static final String FILE_NAME= "TooManyMethodsInClassCheck.php";
+  private static final String FILE_NAME = "TooManyMethodsInClassCheck.php";
 
   @Test
-  public void defaultValue() throws Exception  {
+  public void defaultValue() throws Exception {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
@@ -51,8 +51,7 @@ public class TooManyMethodsInClassCheckTest {
 
     List<PhpIssue> issues = Arrays.asList(
       new LineIssue(check, 3, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes."),
-      new LineIssue(check, 35, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.")
-    );
+      new LineIssue(check, 35, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes."));
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues);
   }
 

@@ -69,8 +69,7 @@ final class XmlProfileParser {
 
   private static String getChildContent(Element element, String tagName) {
     Optional<String> optionalChildContent = getOptionalChildContent(element, tagName);
-    return optionalChildContent.
-      orElseThrow(() -> new IllegalStateException("Failed to get content of " + tagName));
+    return optionalChildContent.orElseThrow(() -> new IllegalStateException("Failed to get content of " + tagName));
   }
 
   private static Optional<String> getOptionalChildContent(Element element, String tagName) {

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.lexical;
 
-
 /**
  * Represents a Trivia in the SyntaxTree.
  */

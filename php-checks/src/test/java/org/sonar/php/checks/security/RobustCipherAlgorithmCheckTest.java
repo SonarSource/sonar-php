@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.security;
 
-
 import org.junit.Test;
 import org.sonar.plugins.php.CheckVerifier;
 

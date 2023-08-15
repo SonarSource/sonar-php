@@ -891,7 +891,7 @@ public interface Tree {
      * {@link MatchExpressionTree}
      */
     MATCH_EXPRESSION(MatchExpressionTree.class),
-    
+
     /**
      * {@link CaseClauseTree}
      */

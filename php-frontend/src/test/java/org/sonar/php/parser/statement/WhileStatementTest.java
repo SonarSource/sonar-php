@@ -33,7 +33,6 @@ public class WhileStatementTest {
       .matches("while ($a) : endwhile;")
       .matches("while ($a) : {} {} endwhile;")
 
-      .notMatches("while ($a) : {}")
-    ;
+      .notMatches("while ($a) : {}");
   }
 }

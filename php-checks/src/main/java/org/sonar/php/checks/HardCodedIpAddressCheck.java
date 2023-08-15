@@ -39,6 +39,8 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
 
   private static final String PROTOCOL = "((\\w+:)?\\/\\/)?";
   private static final String IP_V4 = "(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[1-9])(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}(?!\\d)";
+
+  // @spotless:off
   private static final String IP_V6 = "\\[?(" +
     "([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|" +         // 1:2:3:4:5:6:7:8
     "([0-9a-fA-F]{1,4}:){1,7}:|"+                         // 1::                              1:2:3:4:5:6:7::
@@ -57,6 +59,8 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
     "((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}" +
     "(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])"+           // 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
     ")(?![\\d\\w:])";
+  // @spotless:on
+
   private static final Pattern IP_PATTERN = Pattern.compile(String.format("%s(?<ip>((%s)|(%s)))", PROTOCOL, IP_V4, IP_V6));
 
   private static final List<String> RESERVED_IP_PREFIXES = List.of(
@@ -64,8 +68,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
     "198.51.100.",
     "203.0.113.",
     "2001:0db8:",
-    "2001:db8:"
-  );
+    "2001:db8:");
 
   private static final String MESSAGE = "Make sure using this hardcoded IP address is safe here.";
   private static final String BROADCAST_IPV4 = "255.255.255.255";
@@ -86,7 +89,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
   }
 
   private static boolean isSensitive(String ip) {
-    return !isLoopback(ip) && !isBroadcast(ip) && !isReservedIP(ip) ;
+    return !isLoopback(ip) && !isBroadcast(ip) && !isReservedIP(ip);
   }
 
   private static boolean isLoopback(String ip) {

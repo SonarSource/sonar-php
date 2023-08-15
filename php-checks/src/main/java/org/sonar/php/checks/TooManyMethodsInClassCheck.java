@@ -52,7 +52,6 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     type = "BOOLEAN")
   public boolean countNonpublicMethods = DEFAULT_NON_PUBLIC;
 
-
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     super.visitClassDeclaration(tree);

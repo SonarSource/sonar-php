@@ -28,7 +28,7 @@ public class ClassVariableDeclarationTest {
 
   @Test
   public void test() {
-     assertThat(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION)
+    assertThat(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION)
       .matches("var $a;")
       .matches("var $a, $b;")
       .matches("public static $a;")

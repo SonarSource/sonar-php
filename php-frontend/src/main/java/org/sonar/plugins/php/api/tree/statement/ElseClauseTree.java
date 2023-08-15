@@ -42,4 +42,3 @@ public interface ElseClauseTree extends Tree {
   List<StatementTree> statements();
 
 }
-

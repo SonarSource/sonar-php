@@ -148,12 +148,11 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .collect(Collectors.toList());
 
     ClassSymbol.Kind kind = ClassSymbol.Kind.NORMAL;
-    if (tree.is(Tree.Kind.CLASS_DECLARATION) && ((ClassDeclarationTree)tree).isAbstract()) {
+    if (tree.is(Tree.Kind.CLASS_DECLARATION) && ((ClassDeclarationTree) tree).isAbstract()) {
       kind = ClassSymbol.Kind.ABSTRACT;
     } else if (tree.is(Tree.Kind.INTERFACE_DECLARATION)) {
       kind = ClassSymbol.Kind.INTERFACE;
     }
-
 
     ClassSymbolData classSymbolData = new ClassSymbolData(
       location,
@@ -161,8 +160,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       superClassName,
       interfaceNames,
       kind,
-      methodsByClassTree.getOrDefault(tree, Collections.emptyList())
-    );
+      methodsByClassTree.getOrDefault(tree, Collections.emptyList()));
     classSymbolDataByTree.put(tree, classSymbolData);
   }
 
@@ -216,7 +214,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     super.visitFunctionDeclaration(tree);
 
-    FunctionSymbolData data =  new FunctionSymbolData(location(name), qualifiedName, parameters, functionPropertiesStack.pop());
+    FunctionSymbolData data = new FunctionSymbolData(location(name), qualifiedName, parameters, functionPropertiesStack.pop());
     functionSymbolDataByTree.put(tree, data);
   }
 
@@ -242,7 +240,9 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     functionSymbolProperties().ifPresent(p -> {
-      if (isFuncGetArgsCall(tree)) { p.hasFuncGetArgs(true);}
+      if (isFuncGetArgsCall(tree)) {
+        p.hasFuncGetArgs(true);
+      }
     });
     super.visitFunctionCall(tree);
   }
@@ -283,7 +283,6 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     return fct.callee().is(Tree.Kind.NAMESPACE_NAME)
       && ((NamespaceNameTree) fct.callee()).fullyQualifiedName().matches("func_get_arg(s)?");
   }
-
 
   /**
    * Provide the path of the file from the URI in case the PhpFile is located on the local filesystem

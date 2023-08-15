@@ -48,10 +48,9 @@ public class ClassSymbolIndex {
   }
 
   public ClassSymbol get(QualifiedName qualifiedName) {
-    return symbolsByQualifiedName.computeIfAbsent(qualifiedName, qn ->
-      projectSymbolData.classSymbolData(qn)
-        .<ClassSymbol>map(ClassSymbolImpl::new)
-        .orElse(new UnknownClassSymbol(qualifiedName)));
+    return symbolsByQualifiedName.computeIfAbsent(qualifiedName, qn -> projectSymbolData.classSymbolData(qn)
+      .<ClassSymbol>map(ClassSymbolImpl::new)
+      .orElse(new UnknownClassSymbol(qualifiedName)));
   }
 
   public ClassSymbol get(ClassSymbolData classSymbolData) {

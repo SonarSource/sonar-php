@@ -133,4 +133,3 @@ public abstract class PHPTree implements Tree {
     return (token.line() > prevToken.line()) || (prevToken.column() + prevToken.text().length() < token.column());
   }
 }
-

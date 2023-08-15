@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.tree.lexical;
 import java.util.List;
 import org.sonar.plugins.php.api.tree.Tree;
 
-
 /**
  * Represents a token in the syntax tree.
  */

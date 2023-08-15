@@ -43,8 +43,7 @@ public class Parameter {
       parameterName,
       parameterType,
       parameter.initValue() != null,
-      parameter.ellipsisToken() != null
-    );
+      parameter.ellipsisToken() != null);
   }
 
   public String name() {

@@ -206,8 +206,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
     PHPKeyword.PRINT.getValue(),
     PHPKeyword.HALT_COMPILER.getValue(),
     PHPKeyword.DIE.getValue(),
-    PHPKeyword.EXIT.getValue()
-  );
+    PHPKeyword.EXIT.getValue());
 
   public boolean isInternalFunction(ExpressionTree callee) {
     String calleeString = callee.toString().toLowerCase(Locale.ROOT);
@@ -221,7 +220,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
     }
   }
 
-  public void reportIssue(String msg, Tree ... issueLocations) {
+  public void reportIssue(String msg, Tree... issueLocations) {
     PreciseIssue issue = context().newIssue(this, issueLocations[0], msg);
     for (int i = 1; i < issueLocations.length; i++) {
       issue.secondary(issueLocations[i], null);
