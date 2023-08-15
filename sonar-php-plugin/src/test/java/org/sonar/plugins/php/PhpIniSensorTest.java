@@ -47,6 +47,9 @@ import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.sonar.php.ini.BasePhpIniIssue.newIssue;
 
 class PhpIniSensorTest {
@@ -55,18 +58,22 @@ class PhpIniSensorTest {
   final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Test
-  void describe() throws Exception {
+  void describe() {
     DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
     sensor().describe(descriptor);
     assertThat(descriptor.name()).isEqualTo("Analyzer for \"php.ini\" files");
   }
 
   @Test
-  void single_file() throws Exception {
+  void singleFile() throws IOException {
+    CheckFactory checkFactory = mock(CheckFactory.class);
+    PhpIniSensor sensor = new PhpIniSensor(checkFactory);
+    when(checkFactory.<PhpIniCheck>create(any())).thenReturn(checks());
+
     File baseDir = new File("src/test/resources/phpini");
     SensorContextTester context = SensorContextTester.create(baseDir);
     DefaultInputFile file1 = setupSingleFile(baseDir, context);
-    sensor().execute(context, checks());
+    sensor.execute(context);
 
     Collection<Issue> issues = context.allIssues();
     assertThat(issues).hasSize(1);
@@ -80,7 +87,32 @@ class PhpIniSensorTest {
   }
 
   @Test
-  void parse_error() throws Exception {
+  void checkWhereLineNumberIsNegative() throws IOException {
+    CheckFactory checkFactory = mock(CheckFactory.class);
+    PhpIniSensor sensor = new PhpIniSensor(checkFactory);
+    Checks<PhpIniCheck> checks = checks();
+    PhpIniCheck rule1 = checks.of(RuleKey.parse("repo1:rule1"));
+    ((MyCheck) rule1).lineNumber = -1;
+
+    when(checkFactory.<PhpIniCheck>create(any())).thenReturn(checks);
+
+    File baseDir = new File("src/test/resources/phpini");
+    SensorContextTester context = SensorContextTester.create(baseDir);
+    DefaultInputFile file1 = setupSingleFile(baseDir, context);
+    sensor.execute(context);
+
+    Collection<Issue> issues = context.allIssues();
+    assertThat(issues).hasSize(1);
+    Issue issue = issues.iterator().next();
+    assertThat(issue.ruleKey().rule()).isEqualTo("rule1");
+    assertThat(issue.primaryLocation().inputComponent()).isEqualTo(file1);
+    assertThat(issue.primaryLocation().message()).isEqualTo("message1");
+    TextRange textRange = issue.primaryLocation().textRange();
+    assertThat(textRange).isNull();
+  }
+
+  @Test
+  void parseError() throws Exception {
     File baseDir = new File("src/test/resources/phpini-error");
     SensorContextTester context = SensorContextTester.create(baseDir);
     setupSingleFile(baseDir, context);
@@ -112,10 +144,11 @@ class PhpIniSensorTest {
 
   @Rule(key = "rule1")
   public static class MyCheck implements PhpIniCheck {
+    public int lineNumber = 2;
+
     @Override
     public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {
-      return Collections.singletonList(newIssue("message1").line(2));
+      return Collections.singletonList(newIssue("message1").line(lineNumber));
     }
   }
-
 }

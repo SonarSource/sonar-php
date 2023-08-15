@@ -65,7 +65,8 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
   private static final Set<String> SENSITIVE_FUNCTIONS_JSON = Set.of(
     "generatedSensitiveFunctions.json",
     "manuallyCreatedSensitiveFunctions.json");
-  private static final Map<String, SensitiveMethod> SENSITIVE_FUNCTIONS = JsonSensitiveFunctionsReader.parseSensitiveFunctions();
+  private static final Map<String, SensitiveMethod> SENSITIVE_FUNCTIONS = JsonSensitiveFunctionsReader.parseSensitiveFunctions(LOCATION_OF_FUNCTIONS_JSON,
+    SENSITIVE_FUNCTIONS_JSON);
 
   private static final Map<String, ArgumentMatcher> matcherMap = new HashMap<>();
 
@@ -150,15 +151,14 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     }
 
     public Set<ArgumentMatcher> getCorrespondingMatchers() {
-      Function<ExpressionTree, Boolean> isRegularStringLiteral =
-        tree -> tree.is(Kind.REGULAR_STRING_LITERAL) && !isEmptyStringLiteral((LiteralTree) tree);
+      Function<ExpressionTree, Boolean> isRegularStringLiteral = tree -> tree.is(Kind.REGULAR_STRING_LITERAL) && !isEmptyStringLiteral((LiteralTree) tree);
 
       return sensitiveIndices.stream().map(index -> matcherMap.computeIfAbsent(index + ";" + orderedArguments.get(index),
-          key -> ArgumentVerifierUnaryFunction.builder()
-            .position(index)
-            .name(orderedArguments.get(index))
-            .matchingFunction(isRegularStringLiteral)
-            .build()))
+        key -> ArgumentVerifierUnaryFunction.builder()
+          .position(index)
+          .name(orderedArguments.get(index))
+          .matchingFunction(isRegularStringLiteral)
+          .build()))
         .collect(Collectors.toSet());
     }
 
@@ -175,12 +175,12 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     private JsonSensitiveFunctionsReader() {
     }
 
-    private static Map<String, SensitiveMethod> parseSensitiveFunctions() {
+    static Map<String, SensitiveMethod> parseSensitiveFunctions(String location, Set<String> fileNames) {
       Map<String, SensitiveMethod> sensitiveFunctions = new HashMap<>();
 
-      for (String json_location : SENSITIVE_FUNCTIONS_JSON) {
+      for (String fileName : fileNames) {
         try {
-          JSONArray readArray = parseResource(LOCATION_OF_FUNCTIONS_JSON + json_location);
+          JSONArray readArray = parseResource(location + fileName);
           for (Object element : readArray) {
             JSONObject castElement = (JSONObject) element;
             String cls = (String) castElement.get("cls");
@@ -189,14 +189,13 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
             JSONArray args = (JSONArray) castElement.get("args");
             JSONArray indices = (JSONArray) castElement.get("indices");
 
-
             SensitiveMethod sensitiveMethod = new SensitiveMethod(name, cls, retrieveSensitiveIndices(indices),
               retrieveActualArguments(args));
             sensitiveFunctions.put(sensitiveMethod.uniqueName(), sensitiveMethod);
           }
         } catch (IOException | ParseException e) {
           LOG.error("JSON containing the sensitive functions for hard coded credentials couldn't be read correctly from " +
-            "resources at {}.", json_location);
+            "resources at {}.", fileName);
         }
       }
       return sensitiveFunctions;
