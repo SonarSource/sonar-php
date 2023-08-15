@@ -19,8 +19,8 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.base.Functions;
 import java.util.Iterator;
+import java.util.function.Function;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -71,7 +71,7 @@ public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDecl
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       IteratorUtils.iteratorOf(constToken),
-      declarations.elementsAndSeparators(Functions.identity()),
+      declarations.elementsAndSeparators(Function.identity()),
       IteratorUtils.iteratorOf(eosToken));
   }
 
