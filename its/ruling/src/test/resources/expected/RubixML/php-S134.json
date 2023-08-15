@@ -1,31 +1,31 @@
 {
-'RubixML:src/Clusterers/MeanShift.php':[
-358,
+"RubixML:src/Clusterers/MeanShift.php": [
+358
 ],
-'RubixML:src/Graph/Trees/BallTree.php':[
+"RubixML:src/Graph/Trees/BallTree.php": [
 195,
-263,
+263
 ],
-'RubixML:src/Graph/Trees/KDTree.php':[
+"RubixML:src/Graph/Trees/KDTree.php": [
 202,
-269,
+269
 ],
-'RubixML:src/Tokenizers/KSkipNGram.php':[
-122,
+"RubixML:src/Tokenizers/KSkipNGram.php": [
+122
 ],
-'RubixML:src/Transformers/HotDeckImputer.php':[
+"RubixML:src/Transformers/HotDeckImputer.php": [
 196,
-216,
+216
 ],
-'RubixML:src/Transformers/ImageVectorizer.php':[
-127,
+"RubixML:src/Transformers/ImageVectorizer.php": [
+127
 ],
-'RubixML:src/Transformers/KNNImputer.php':[
+"RubixML:src/Transformers/KNNImputer.php": [
 203,
 218,
-228,
+228
 ],
-'RubixML:src/Transformers/WordCountVectorizer.php':[
-167,
-],
+"RubixML:src/Transformers/WordCountVectorizer.php": [
+167
+]
 }

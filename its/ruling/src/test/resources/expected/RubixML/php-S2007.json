@@ -1,5 +1,5 @@
 {
-'RubixML:src/functions.php':[
+"RubixML:src/functions.php": [
 29,
 50,
 69,
@@ -11,6 +11,6 @@
 184,
 200,
 217,
-243,
-],
+243
+]
 }

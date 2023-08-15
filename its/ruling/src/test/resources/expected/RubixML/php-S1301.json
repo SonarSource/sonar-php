@@ -1,18 +1,18 @@
 {
-'RubixML:src/CommitteeMachine.php':[
-261,
+"RubixML:src/CommitteeMachine.php": [
+261
 ],
-'RubixML:src/DataType.php':[
-118,
+"RubixML:src/DataType.php": [
+118
 ],
-'RubixML:src/Datasets/Dataset.php':[
-377,
+"RubixML:src/Datasets/Dataset.php": [
+377
 ],
-'RubixML:src/Specifications/LabelsAreCompatibleWithLearner.php':[
-59,
+"RubixML:src/Specifications/LabelsAreCompatibleWithLearner.php": [
+59
 ],
-'RubixML:src/Transformers/MissingDataImputer.php':[
+"RubixML:src/Transformers/MissingDataImputer.php": [
 130,
-188,
-],
+188
+]
 }

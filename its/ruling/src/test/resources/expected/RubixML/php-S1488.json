@@ -1,17 +1,17 @@
 {
-'RubixML:src/AnomalyDetectors/RobustZScore.php':[
-289,
+"RubixML:src/AnomalyDetectors/RobustZScore.php": [
+289
 ],
-'RubixML:src/Backends/Tasks/TrainAndValidate.php':[
-43,
+"RubixML:src/Backends/Tasks/TrainAndValidate.php": [
+43
 ],
-'RubixML:src/CrossValidation/HoldOut.php':[
-75,
+"RubixML:src/CrossValidation/HoldOut.php": [
+75
 ],
-'RubixML:src/NeuralNet/FeedForward.php':[
-186,
+"RubixML:src/NeuralNet/FeedForward.php": [
+186
 ],
-'RubixML:src/NeuralNet/Layers/Noise.php':[
-104,
-],
+"RubixML:src/NeuralNet/Layers/Noise.php": [
+104
+]
 }

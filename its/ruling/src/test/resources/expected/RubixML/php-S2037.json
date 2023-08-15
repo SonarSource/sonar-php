@@ -1,8 +1,8 @@
 {
-'RubixML:src/CrossValidation/Metrics/RandIndex.php':[
-84,
+"RubixML:src/CrossValidation/Metrics/RandIndex.php": [
+84
 ],
-'RubixML:src/Datasets/Labeled.php':[
+"RubixML:src/Datasets/Labeled.php": [
 92,
 129,
 331,
@@ -22,9 +22,9 @@
 658,
 692,
 720,
-784,
+784
 ],
-'RubixML:src/Datasets/Unlabeled.php':[
+"RubixML:src/Datasets/Unlabeled.php": [
 65,
 100,
 180,
@@ -40,24 +40,24 @@
 374,
 406,
 431,
-493,
+493
 ],
-'RubixML:src/Graph/Nodes/Depth.php':[
-59,
+"RubixML:src/Graph/Nodes/Depth.php": [
+59
 ],
-'RubixML:src/Graph/Trees/DecisionTree.php':[
-476,
+"RubixML:src/Graph/Trees/DecisionTree.php": [
+476
 ],
-'RubixML:src/GridSearch.php':[
-264,
+"RubixML:src/GridSearch.php": [
+264
 ],
-'RubixML:src/Helpers/Params.php':[
+"RubixML:src/Helpers/Params.php": [
 142,
 164,
 167,
-171,
+171
 ],
-'RubixML:src/Helpers/Stats.php':[
+"RubixML:src/Helpers/Stats.php": [
 113,
 171,
 197,
@@ -72,9 +72,9 @@
 290,
 292,
 303,
-305,
+305
 ],
-'RubixML:src/NeuralNet/Parameter.php':[
-45,
-],
+"RubixML:src/NeuralNet/Parameter.php": [
+45
+]
 }
