@@ -1,14 +1,14 @@
 {
-'psysh:test/Input/CodeArgumentTest.php':[
-25,
+"psysh:test/Input/CodeArgumentTest.php": [
+25
 ],
-'psysh:test/Reflection/ReflectionClassConstantTest.php':[
-37,
+"psysh:test/Reflection/ReflectionClassConstantTest.php": [
+37
 ],
-'psysh:test/Reflection/ReflectionConstantTest.php':[
-74,
+"psysh:test/Reflection/ReflectionConstantTest.php": [
+74
 ],
-'psysh:test/Reflection/ReflectionLanguageConstructTest.php':[
-93,
-],
+"psysh:test/Reflection/ReflectionLanguageConstructTest.php": [
+93
+]
 }

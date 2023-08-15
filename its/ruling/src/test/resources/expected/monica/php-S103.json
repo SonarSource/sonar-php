@@ -1,45 +1,45 @@
 {
-'monica:app/Console/Commands/Passport.php':[
-58,
+"monica:app/Console/Commands/Passport.php": [
+58
 ],
-'monica:app/Console/Commands/SentryRelease.php':[
+"monica:app/Console/Commands/SentryRelease.php": [
 81,
-84,
+84
 ],
-'monica:app/Console/Commands/SetupTest.php':[
+"monica:app/Console/Commands/SetupTest.php": [
 300,
-303,
+303
 ],
-'monica:app/Console/Commands/Tests/UpdateLangs.php':[
-38,
+"monica:app/Console/Commands/Tests/UpdateLangs.php": [
+38
 ],
-'monica:app/Console/Commands/Update.php':[
+"monica:app/Console/Commands/Update.php": [
 66,
-69,
+69
 ],
-'monica:app/Console/Scheduling/CronEvent.php':[
-112,
+"monica:app/Console/Scheduling/CronEvent.php": [
+112
 ],
-'monica:app/Helpers/SearchHelper.php':[
-22,
+"monica:app/Helpers/SearchHelper.php": [
+22
 ],
-'monica:app/Http/Controllers/Auth/Validate2faController.php':[
-16,
+"monica:app/Http/Controllers/Auth/Validate2faController.php": [
+16
 ],
-'monica:app/Http/Controllers/Contacts/ContactFieldsController.php':[
-25,
+"monica:app/Http/Controllers/Contacts/ContactFieldsController.php": [
+25
 ],
-'monica:app/Http/Controllers/ContactsController.php':[
+"monica:app/Http/Controllers/ContactsController.php": [
 254,
 262,
 270,
-278,
+278
 ],
-'monica:app/Http/Controllers/DAV/Backend/CardDAV/CardDAVBackend.php':[
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/CardDAVBackend.php": [
 79,
-96,
+96
 ],
-'monica:app/Http/Resources/Contact/ContactBase.php':[
+"monica:app/Http/Resources/Contact/ContactBase.php": [
 42,
 43,
 46,
@@ -49,19 +49,19 @@
 54,
 55,
 101,
-102,
+102
 ],
-'monica:app/Jobs/Dav/UpdateVCard.php':[
-68,
+"monica:app/Jobs/Dav/UpdateVCard.php": [
+68
 ],
-'monica:app/Models/Contact/Contact.php':[
-1269,
+"monica:app/Models/Contact/Contact.php": [
+1269
 ],
-'monica:app/Notifications/EmailMessaging.php':[
+"monica:app/Notifications/EmailMessaging.php": [
 44,
-45,
+45
 ],
-'monica:app/Providers/AppServiceProvider.php':[
+"monica:app/Providers/AppServiceProvider.php": [
 108,
 139,
 144,
@@ -72,55 +72,55 @@
 149,
 163,
 184,
-188,
+188
 ],
-'monica:app/Services/Account/Settings/JsonExportAccount.php':[
-66,
+"monica:app/Services/Account/Settings/JsonExportAccount.php": [
+66
 ],
-'monica:app/Services/Account/Settings/SqlExportAccount.php':[
+"monica:app/Services/Account/Settings/SqlExportAccount.php": [
 1333,
-1341,
+1341
 ],
-'monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php':[
+"monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php": [
 41,
-78,
+78
 ],
-'monica:app/Services/DavClient/Utils/Dav/ServiceUrlQuery.php':[
-71,
+"monica:app/Services/DavClient/Utils/Dav/ServiceUrlQuery.php": [
+71
 ],
-'monica:app/Services/VCard/ExportVCard.php':[
+"monica:app/Services/VCard/ExportVCard.php": [
 271,
-283,
+283
 ],
-'monica:app/Services/VCard/ImportVCard.php':[
+"monica:app/Services/VCard/ImportVCard.php": [
 320,
 809,
 844,
-1078,
+1078
 ],
-'monica:app/Traits/Searchable.php':[
-21,
+"monica:app/Traits/Searchable.php": [
+21
 ],
-'monica:config/monica.php':[
-15,
+"monica:config/monica.php": [
+15
 ],
-'monica:config/sentry.php':[
-8,
+"monica:config/sentry.php": [
+8
 ],
-'monica:database/migrations/2016_06_08_005413_create_contacts_table.php':[
-133,
+"monica:database/migrations/2016_06_08_005413_create_contacts_table.php": [
+133
 ],
-'monica:database/migrations/2017_06_07_173437_add_multiple_genders_choices.php':[
+"monica:database/migrations/2017_06_07_173437_add_multiple_genders_choices.php": [
 20,
-51,
+51
 ],
-'monica:database/migrations/2017_11_10_202620_move_addresses_from_contact_to_addresses.php':[
-17,
+"monica:database/migrations/2017_11_10_202620_move_addresses_from_contact_to_addresses.php": [
+17
 ],
-'monica:database/migrations/2017_12_04_165421_move_ages_data.php':[
-16,
+"monica:database/migrations/2017_12_04_165421_move_ages_data.php": [
+16
 ],
-'monica:database/migrations/2018_05_07_070458_create_terms_table.php':[
+"monica:database/migrations/2018_05_07_070458_create_terms_table.php": [
 35,
 37,
 39,
@@ -140,17 +140,17 @@
 90,
 121,
 124,
-126,
+126
 ],
-'monica:database/migrations/2018_07_08_104306_update-timestamps-timezone.php':[
+"monica:database/migrations/2018_07_08_104306_update-timestamps-timezone.php": [
 34,
 35,
 36,
 68,
 112,
-113,
+113
 ],
-'monica:database/migrations/2018_08_31_020908_create_life_events_table.php':[
+"monica:database/migrations/2018_08_31_020908_create_life_events_table.php": [
 94,
 108,
 115,
@@ -162,12 +162,12 @@
 242,
 249,
 314,
-371,
+371
 ],
-'monica:database/migrations/2018_10_07_120133_fix_json_column.php':[
-31,
+"monica:database/migrations/2018_10_07_120133_fix_json_column.php": [
+31
 ],
-'monica:database/migrations/2018_12_09_023232_add_emotions_table.php':[
+"monica:database/migrations/2018_12_09_023232_add_emotions_table.php": [
 43,
 45,
 46,
@@ -316,33 +316,33 @@
 253,
 254,
 255,
-256,
+256
 ],
-'monica:resources/lang/ar/app.php':[
+"monica:resources/lang/ar/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/ar/auth.php':[
+"monica:resources/lang/ar/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/ar/journal.php':[
-12,
+"monica:resources/lang/ar/journal.php": [
+12
 ],
-'monica:resources/lang/ar/mail.php':[
+"monica:resources/lang/ar/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/ar/people.php':[
+"monica:resources/lang/ar/people.php": [
 177,
 178,
 210,
 216,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/ar/settings.php':[
+"monica:resources/lang/ar/settings.php": [
 37,
 39,
 41,
@@ -392,25 +392,25 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/cs/app.php':[
+"monica:resources/lang/cs/app.php": [
 53,
 77,
-124,
+124
 ],
-'monica:resources/lang/cs/auth.php':[
+"monica:resources/lang/cs/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/cs/journal.php':[
-12,
+"monica:resources/lang/cs/journal.php": [
+12
 ],
-'monica:resources/lang/cs/mail.php':[
+"monica:resources/lang/cs/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/cs/people.php':[
+"monica:resources/lang/cs/people.php": [
 177,
 178,
 210,
@@ -418,9 +418,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/cs/settings.php':[
+"monica:resources/lang/cs/settings.php": [
 37,
 39,
 41,
@@ -471,27 +471,27 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/cs/validation.php':[
-27,
+"monica:resources/lang/cs/validation.php": [
+27
 ],
-'monica:resources/lang/da/app.php':[
+"monica:resources/lang/da/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/da/auth.php':[
+"monica:resources/lang/da/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/da/journal.php':[
-12,
+"monica:resources/lang/da/journal.php": [
+12
 ],
-'monica:resources/lang/da/mail.php':[
+"monica:resources/lang/da/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/da/people.php':[
+"monica:resources/lang/da/people.php": [
 177,
 178,
 210,
@@ -499,9 +499,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/da/settings.php':[
+"monica:resources/lang/da/settings.php": [
 37,
 39,
 41,
@@ -555,30 +555,30 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/de/app.php':[
+"monica:resources/lang/de/app.php": [
 77,
 118,
-124,
+124
 ],
-'monica:resources/lang/de/auth.php':[
+"monica:resources/lang/de/auth.php": [
 76,
 77,
-82,
+82
 ],
-'monica:resources/lang/de/journal.php':[
-12,
+"monica:resources/lang/de/journal.php": [
+12
 ],
-'monica:resources/lang/de/mail.php':[
+"monica:resources/lang/de/mail.php": [
 30,
-39,
+39
 ],
-'monica:resources/lang/de/passwords.php':[
+"monica:resources/lang/de/passwords.php": [
 23,
-25,
+25
 ],
-'monica:resources/lang/de/people.php':[
+"monica:resources/lang/de/people.php": [
 86,
 97,
 177,
@@ -589,9 +589,9 @@
 272,
 286,
 287,
-516,
+516
 ],
-'monica:resources/lang/de/settings.php':[
+"monica:resources/lang/de/settings.php": [
 37,
 39,
 41,
@@ -653,35 +653,35 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/el/app.php':[
+"monica:resources/lang/el/app.php": [
 50,
 53,
 77,
 118,
-124,
+124
 ],
-'monica:resources/lang/el/auth.php':[
+"monica:resources/lang/el/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/el/dashboard.php':[
-11,
+"monica:resources/lang/el/dashboard.php": [
+11
 ],
-'monica:resources/lang/el/journal.php':[
-12,
+"monica:resources/lang/el/journal.php": [
+12
 ],
-'monica:resources/lang/el/mail.php':[
+"monica:resources/lang/el/mail.php": [
 24,
 29,
-44,
+44
 ],
-'monica:resources/lang/el/passwords.php':[
+"monica:resources/lang/el/passwords.php": [
 23,
-25,
+25
 ],
-'monica:resources/lang/el/people.php':[
+"monica:resources/lang/el/people.php": [
 78,
 86,
 177,
@@ -691,9 +691,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/el/settings.php':[
+"monica:resources/lang/el/settings.php": [
 37,
 39,
 41,
@@ -755,24 +755,24 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/en-GB/app.php':[
+"monica:resources/lang/en-GB/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/en-GB/auth.php':[
+"monica:resources/lang/en-GB/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/en-GB/journal.php':[
-12,
+"monica:resources/lang/en-GB/journal.php": [
+12
 ],
-'monica:resources/lang/en-GB/mail.php':[
+"monica:resources/lang/en-GB/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/en-GB/people.php':[
+"monica:resources/lang/en-GB/people.php": [
 177,
 178,
 210,
@@ -780,9 +780,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/en-GB/settings.php':[
+"monica:resources/lang/en-GB/settings.php": [
 37,
 39,
 41,
@@ -836,24 +836,24 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/en/app.php':[
+"monica:resources/lang/en/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/en/auth.php':[
+"monica:resources/lang/en/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/en/journal.php':[
-12,
+"monica:resources/lang/en/journal.php": [
+12
 ],
-'monica:resources/lang/en/mail.php':[
+"monica:resources/lang/en/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/en/people.php':[
+"monica:resources/lang/en/people.php": [
 177,
 178,
 210,
@@ -861,9 +861,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/en/settings.php':[
+"monica:resources/lang/en/settings.php": [
 37,
 39,
 41,
@@ -917,32 +917,32 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/es/app.php':[
+"monica:resources/lang/es/app.php": [
 53,
 77,
 118,
-124,
+124
 ],
-'monica:resources/lang/es/auth.php':[
+"monica:resources/lang/es/auth.php": [
 76,
 77,
-84,
+84
 ],
-'monica:resources/lang/es/journal.php':[
-12,
+"monica:resources/lang/es/journal.php": [
+12
 ],
-'monica:resources/lang/es/mail.php':[
+"monica:resources/lang/es/mail.php": [
 24,
 29,
-44,
+44
 ],
-'monica:resources/lang/es/passwords.php':[
+"monica:resources/lang/es/passwords.php": [
 23,
-25,
+25
 ],
-'monica:resources/lang/es/people.php':[
+"monica:resources/lang/es/people.php": [
 78,
 86,
 177,
@@ -952,9 +952,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/es/settings.php':[
+"monica:resources/lang/es/settings.php": [
 37,
 39,
 41,
@@ -1014,25 +1014,25 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/fa/app.php':[
+"monica:resources/lang/fa/app.php": [
 53,
 77,
-124,
+124
 ],
-'monica:resources/lang/fa/auth.php':[
+"monica:resources/lang/fa/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/fa/journal.php':[
-12,
+"monica:resources/lang/fa/journal.php": [
+12
 ],
-'monica:resources/lang/fa/mail.php':[
+"monica:resources/lang/fa/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/fa/people.php':[
+"monica:resources/lang/fa/people.php": [
 177,
 178,
 210,
@@ -1040,9 +1040,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/fa/settings.php':[
+"monica:resources/lang/fa/settings.php": [
 38,
 40,
 42,
@@ -1096,25 +1096,25 @@
 458,
 464,
 471,
-526,
+526
 ],
-'monica:resources/lang/fi/app.php':[
+"monica:resources/lang/fi/app.php": [
 77,
 118,
-124,
+124
 ],
-'monica:resources/lang/fi/auth.php':[
+"monica:resources/lang/fi/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/fi/journal.php':[
-12,
+"monica:resources/lang/fi/journal.php": [
+12
 ],
-'monica:resources/lang/fi/mail.php':[
+"monica:resources/lang/fi/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/fi/people.php':[
+"monica:resources/lang/fi/people.php": [
 177,
 178,
 210,
@@ -1122,9 +1122,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/fi/settings.php':[
+"monica:resources/lang/fi/settings.php": [
 37,
 39,
 41,
@@ -1178,34 +1178,34 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/fr/app.php':[
+"monica:resources/lang/fr/app.php": [
 53,
 77,
 118,
-124,
+124
 ],
-'monica:resources/lang/fr/auth.php':[
+"monica:resources/lang/fr/auth.php": [
 76,
 77,
-84,
+84
 ],
-'monica:resources/lang/fr/dashboard.php':[
-11,
+"monica:resources/lang/fr/dashboard.php": [
+11
 ],
-'monica:resources/lang/fr/journal.php':[
-12,
+"monica:resources/lang/fr/journal.php": [
+12
 ],
-'monica:resources/lang/fr/mail.php':[
+"monica:resources/lang/fr/mail.php": [
 24,
 29,
-38,
+38
 ],
-'monica:resources/lang/fr/passwords.php':[
-25,
+"monica:resources/lang/fr/passwords.php": [
+25
 ],
-'monica:resources/lang/fr/people.php':[
+"monica:resources/lang/fr/people.php": [
 61,
 78,
 86,
@@ -1217,9 +1217,9 @@
 272,
 286,
 371,
-516,
+516
 ],
-'monica:resources/lang/fr/settings.php':[
+"monica:resources/lang/fr/settings.php": [
 37,
 39,
 41,
@@ -1288,33 +1288,33 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/he/app.php':[
+"monica:resources/lang/he/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/he/auth.php':[
+"monica:resources/lang/he/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/he/journal.php':[
-12,
+"monica:resources/lang/he/journal.php": [
+12
 ],
-'monica:resources/lang/he/mail.php':[
+"monica:resources/lang/he/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/he/people.php':[
+"monica:resources/lang/he/people.php": [
 98,
 177,
 178,
 210,
 216,
 286,
-516,
+516
 ],
-'monica:resources/lang/he/settings.php':[
+"monica:resources/lang/he/settings.php": [
 37,
 39,
 88,
@@ -1354,24 +1354,24 @@
 445,
 455,
 463,
-525,
+525
 ],
-'monica:resources/lang/hr/app.php':[
+"monica:resources/lang/hr/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/hr/auth.php':[
+"monica:resources/lang/hr/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/hr/journal.php':[
-12,
+"monica:resources/lang/hr/journal.php": [
+12
 ],
-'monica:resources/lang/hr/mail.php':[
+"monica:resources/lang/hr/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/hr/people.php':[
+"monica:resources/lang/hr/people.php": [
 177,
 178,
 210,
@@ -1379,9 +1379,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/hr/settings.php':[
+"monica:resources/lang/hr/settings.php": [
 37,
 39,
 41,
@@ -1435,35 +1435,35 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/id/app.php':[
+"monica:resources/lang/id/app.php": [
 50,
 53,
 77,
 118,
 124,
-125,
+125
 ],
-'monica:resources/lang/id/auth.php':[
+"monica:resources/lang/id/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/id/dashboard.php':[
-11,
+"monica:resources/lang/id/dashboard.php": [
+11
 ],
-'monica:resources/lang/id/journal.php':[
-12,
+"monica:resources/lang/id/journal.php": [
+12
 ],
-'monica:resources/lang/id/mail.php':[
+"monica:resources/lang/id/mail.php": [
 29,
-44,
+44
 ],
-'monica:resources/lang/id/passwords.php':[
+"monica:resources/lang/id/passwords.php": [
 23,
-25,
+25
 ],
-'monica:resources/lang/id/people.php':[
+"monica:resources/lang/id/people.php": [
 78,
 86,
 97,
@@ -1475,9 +1475,9 @@
 272,
 286,
 287,
-516,
+516
 ],
-'monica:resources/lang/id/settings.php':[
+"monica:resources/lang/id/settings.php": [
 37,
 39,
 41,
@@ -1539,26 +1539,26 @@
 463,
 470,
 525,
-530,
+530
 ],
-'monica:resources/lang/it/app.php':[
+"monica:resources/lang/it/app.php": [
 77,
 118,
-124,
+124
 ],
-'monica:resources/lang/it/auth.php':[
+"monica:resources/lang/it/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/it/journal.php':[
-12,
+"monica:resources/lang/it/journal.php": [
+12
 ],
-'monica:resources/lang/it/mail.php':[
+"monica:resources/lang/it/mail.php": [
 24,
 29,
-44,
+44
 ],
-'monica:resources/lang/it/people.php':[
+"monica:resources/lang/it/people.php": [
 86,
 177,
 178,
@@ -1566,9 +1566,9 @@
 216,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/it/settings.php':[
+"monica:resources/lang/it/settings.php": [
 37,
 39,
 41,
@@ -1627,24 +1627,24 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/ja/app.php':[
+"monica:resources/lang/ja/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/ja/auth.php':[
+"monica:resources/lang/ja/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/ja/journal.php':[
-12,
+"monica:resources/lang/ja/journal.php": [
+12
 ],
-'monica:resources/lang/ja/mail.php':[
+"monica:resources/lang/ja/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/ja/people.php':[
+"monica:resources/lang/ja/people.php": [
 177,
 178,
 210,
@@ -1652,9 +1652,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/ja/settings.php':[
+"monica:resources/lang/ja/settings.php": [
 37,
 39,
 41,
@@ -1708,26 +1708,26 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/nl/app.php':[
+"monica:resources/lang/nl/app.php": [
 53,
 77,
-124,
+124
 ],
-'monica:resources/lang/nl/auth.php':[
+"monica:resources/lang/nl/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/nl/journal.php':[
-12,
+"monica:resources/lang/nl/journal.php": [
+12
 ],
-'monica:resources/lang/nl/mail.php':[
+"monica:resources/lang/nl/mail.php": [
 24,
 29,
-38,
+38
 ],
-'monica:resources/lang/nl/people.php':[
+"monica:resources/lang/nl/people.php": [
 61,
 78,
 86,
@@ -1739,9 +1739,9 @@
 272,
 286,
 287,
-516,
+516
 ],
-'monica:resources/lang/nl/settings.php':[
+"monica:resources/lang/nl/settings.php": [
 37,
 39,
 41,
@@ -1803,25 +1803,25 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/no/app.php':[
+"monica:resources/lang/no/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/no/auth.php':[
+"monica:resources/lang/no/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/no/journal.php':[
-12,
+"monica:resources/lang/no/journal.php": [
+12
 ],
-'monica:resources/lang/no/mail.php':[
+"monica:resources/lang/no/mail.php": [
 24,
 29,
-44,
+44
 ],
-'monica:resources/lang/no/people.php':[
+"monica:resources/lang/no/people.php": [
 97,
 177,
 178,
@@ -1830,9 +1830,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/no/settings.php':[
+"monica:resources/lang/no/settings.php": [
 37,
 39,
 41,
@@ -1885,25 +1885,25 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/pt-BR/app.php':[
+"monica:resources/lang/pt-BR/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/pt-BR/auth.php':[
+"monica:resources/lang/pt-BR/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/pt-BR/journal.php':[
-12,
+"monica:resources/lang/pt-BR/journal.php": [
+12
 ],
-'monica:resources/lang/pt-BR/mail.php':[
+"monica:resources/lang/pt-BR/mail.php": [
 24,
 29,
-44,
+44
 ],
-'monica:resources/lang/pt-BR/people.php':[
+"monica:resources/lang/pt-BR/people.php": [
 78,
 177,
 178,
@@ -1912,9 +1912,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/pt-BR/settings.php':[
+"monica:resources/lang/pt-BR/settings.php": [
 37,
 39,
 41,
@@ -1978,24 +1978,24 @@
 455,
 457,
 463,
-470,
+470
 ],
-'monica:resources/lang/pt/app.php':[
+"monica:resources/lang/pt/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/pt/auth.php':[
+"monica:resources/lang/pt/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/pt/journal.php':[
-12,
+"monica:resources/lang/pt/journal.php": [
+12
 ],
-'monica:resources/lang/pt/mail.php':[
+"monica:resources/lang/pt/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/pt/people.php':[
+"monica:resources/lang/pt/people.php": [
 177,
 178,
 210,
@@ -2003,9 +2003,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/pt/settings.php':[
+"monica:resources/lang/pt/settings.php": [
 37,
 39,
 41,
@@ -2059,28 +2059,28 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/ru/app.php':[
+"monica:resources/lang/ru/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/ru/auth.php':[
+"monica:resources/lang/ru/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/ru/dashboard.php':[
-11,
+"monica:resources/lang/ru/dashboard.php": [
+11
 ],
-'monica:resources/lang/ru/journal.php':[
-12,
+"monica:resources/lang/ru/journal.php": [
+12
 ],
-'monica:resources/lang/ru/mail.php':[
+"monica:resources/lang/ru/mail.php": [
 24,
 29,
-44,
+44
 ],
-'monica:resources/lang/ru/people.php':[
+"monica:resources/lang/ru/people.php": [
 177,
 178,
 210,
@@ -2088,9 +2088,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/ru/settings.php':[
+"monica:resources/lang/ru/settings.php": [
 37,
 39,
 41,
@@ -2143,26 +2143,26 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/sv/app.php':[
+"monica:resources/lang/sv/app.php": [
 53,
 77,
-124,
+124
 ],
-'monica:resources/lang/sv/auth.php':[
+"monica:resources/lang/sv/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/sv/journal.php':[
-12,
+"monica:resources/lang/sv/journal.php": [
+12
 ],
-'monica:resources/lang/sv/mail.php':[
+"monica:resources/lang/sv/mail.php": [
 24,
 29,
-44,
+44
 ],
-'monica:resources/lang/sv/people.php':[
+"monica:resources/lang/sv/people.php": [
 177,
 178,
 210,
@@ -2170,9 +2170,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/sv/settings.php':[
+"monica:resources/lang/sv/settings.php": [
 37,
 39,
 41,
@@ -2225,26 +2225,26 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/tr/app.php':[
+"monica:resources/lang/tr/app.php": [
 53,
 77,
 118,
-124,
+124
 ],
-'monica:resources/lang/tr/auth.php':[
+"monica:resources/lang/tr/auth.php": [
 76,
 77,
-84,
+84
 ],
-'monica:resources/lang/tr/journal.php':[
-12,
+"monica:resources/lang/tr/journal.php": [
+12
 ],
-'monica:resources/lang/tr/mail.php':[
-29,
+"monica:resources/lang/tr/mail.php": [
+29
 ],
-'monica:resources/lang/tr/people.php':[
+"monica:resources/lang/tr/people.php": [
 78,
 177,
 178,
@@ -2253,9 +2253,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/tr/settings.php':[
+"monica:resources/lang/tr/settings.php": [
 37,
 39,
 41,
@@ -2311,24 +2311,24 @@
 463,
 470,
 525,
-530,
+530
 ],
-'monica:resources/lang/uk/app.php':[
+"monica:resources/lang/uk/app.php": [
 77,
-124,
+124
 ],
-'monica:resources/lang/uk/auth.php':[
+"monica:resources/lang/uk/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/uk/journal.php':[
-12,
+"monica:resources/lang/uk/journal.php": [
+12
 ],
-'monica:resources/lang/uk/mail.php':[
+"monica:resources/lang/uk/mail.php": [
 24,
-29,
+29
 ],
-'monica:resources/lang/uk/people.php':[
+"monica:resources/lang/uk/people.php": [
 98,
 177,
 178,
@@ -2337,9 +2337,9 @@
 232,
 272,
 286,
-516,
+516
 ],
-'monica:resources/lang/uk/settings.php':[
+"monica:resources/lang/uk/settings.php": [
 37,
 39,
 41,
@@ -2393,23 +2393,23 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/vi/app.php':[
+"monica:resources/lang/vi/app.php": [
 124,
-125,
+125
 ],
-'monica:resources/lang/vi/auth.php':[
+"monica:resources/lang/vi/auth.php": [
 76,
-77,
+77
 ],
-'monica:resources/lang/vi/journal.php':[
-12,
+"monica:resources/lang/vi/journal.php": [
+12
 ],
-'monica:resources/lang/vi/mail.php':[
-29,
+"monica:resources/lang/vi/mail.php": [
+29
 ],
-'monica:resources/lang/vi/people.php':[
+"monica:resources/lang/vi/people.php": [
 177,
 178,
 210,
@@ -2418,9 +2418,9 @@
 272,
 286,
 287,
-516,
+516
 ],
-'monica:resources/lang/vi/settings.php':[
+"monica:resources/lang/vi/settings.php": [
 37,
 39,
 41,
@@ -2474,16 +2474,16 @@
 457,
 463,
 470,
-525,
+525
 ],
-'monica:resources/lang/zh-TW/app.php':[
-124,
+"monica:resources/lang/zh-TW/app.php": [
+124
 ],
-'monica:resources/lang/zh-TW/people.php':[
+"monica:resources/lang/zh-TW/people.php": [
 210,
-272,
+272
 ],
-'monica:resources/lang/zh-TW/settings.php':[
+"monica:resources/lang/zh-TW/settings.php": [
 37,
 39,
 41,
@@ -2512,12 +2512,12 @@
 445,
 455,
 463,
-470,
+470
 ],
-'monica:resources/lang/zh/app.php':[
-124,
+"monica:resources/lang/zh/app.php": [
+124
 ],
-'monica:resources/lang/zh/settings.php':[
+"monica:resources/lang/zh/settings.php": [
 37,
 39,
 41,
@@ -2536,33 +2536,33 @@
 389,
 411,
 412,
-470,
+470
 ],
-'monica:resources/views/auth/emailchange1.blade.php':[
-31,
+"monica:resources/views/auth/emailchange1.blade.php": [
+31
 ],
-'monica:resources/views/auth/emailchange2.blade.php':[
-36,
+"monica:resources/views/auth/emailchange2.blade.php": [
+36
 ],
-'monica:resources/views/auth/emails/password.blade.php':[
-1,
+"monica:resources/views/auth/emails/password.blade.php": [
+1
 ],
-'monica:resources/views/auth/login.blade.php':[
+"monica:resources/views/auth/login.blade.php": [
 42,
-62,
+62
 ],
-'monica:resources/views/auth/oauthlogin.blade.php':[
+"monica:resources/views/auth/oauthlogin.blade.php": [
 24,
-40,
+40
 ],
-'monica:resources/views/auth/passwords/email.blade.php':[
-24,
+"monica:resources/views/auth/passwords/email.blade.php": [
+24
 ],
-'monica:resources/views/auth/passwords/reset.blade.php':[
+"monica:resources/views/auth/passwords/reset.blade.php": [
 21,
-31,
+31
 ],
-'monica:resources/views/auth/register.blade.php':[
+"monica:resources/views/auth/register.blade.php": [
 13,
 14,
 15,
@@ -2571,102 +2571,102 @@
 74,
 81,
 86,
-93,
+93
 ],
-'monica:resources/views/compliance/index.blade.php':[
-8,
+"monica:resources/views/compliance/index.blade.php": [
+8
 ],
-'monica:resources/views/dashboard/_monthReminder.blade.php':[
+"monica:resources/views/dashboard/_monthReminder.blade.php": [
 10,
-19,
+19
 ],
-'monica:resources/views/dashboard/blank.blade.php':[
-11,
+"monica:resources/views/dashboard/blank.blade.php": [
+11
 ],
-'monica:resources/views/errors/layout.blade.php':[
-19,
+"monica:resources/views/errors/layout.blade.php": [
+19
 ],
-'monica:resources/views/journal/add.blade.php':[
+"monica:resources/views/journal/add.blade.php": [
 43,
-49,
+49
 ],
-'monica:resources/views/journal/edit.blade.php':[
-54,
+"monica:resources/views/journal/edit.blade.php": [
+54
 ],
-'monica:resources/views/partials/check.blade.php':[
-22,
+"monica:resources/views/partials/check.blade.php": [
+22
 ],
-'monica:resources/views/partials/components/date-select.blade.php':[
-45,
+"monica:resources/views/partials/components/date-select.blade.php": [
+45
 ],
-'monica:resources/views/partials/components/people-upgrade-sidebar.blade.php':[
-7,
+"monica:resources/views/partials/components/people-upgrade-sidebar.blade.php": [
+7
 ],
-'monica:resources/views/partials/footer.blade.php':[
-6,
+"monica:resources/views/partials/footer.blade.php": [
+6
 ],
-'monica:resources/views/partials/header.blade.php':[
+"monica:resources/views/partials/header.blade.php": [
 11,
 23,
 26,
-29,
+29
 ],
-'monica:resources/views/partials/subscription.blade.php':[
-4,
+"monica:resources/views/partials/subscription.blade.php": [
+4
 ],
-'monica:resources/views/people/_header.blade.php':[
+"monica:resources/views/people/_header.blade.php": [
 95,
 114,
-122,
+122
 ],
-'monica:resources/views/people/activities/year.blade.php':[
+"monica:resources/views/people/activities/year.blade.php": [
 11,
 23,
 72,
 84,
 86,
 97,
-106,
+106
 ],
-'monica:resources/views/people/auditlogs/index.blade.php':[
-11,
+"monica:resources/views/people/auditlogs/index.blade.php": [
+11
 ],
-'monica:resources/views/people/avatar/edit.blade.php':[
-34,
+"monica:resources/views/people/avatar/edit.blade.php": [
+34
 ],
-'monica:resources/views/people/blank.blade.php':[
-29,
+"monica:resources/views/people/blank.blade.php": [
+29
 ],
-'monica:resources/views/people/conversations/edit.blade.php':[
-81,
+"monica:resources/views/people/conversations/edit.blade.php": [
+81
 ],
-'monica:resources/views/people/conversations/index.blade.php':[
+"monica:resources/views/people/conversations/index.blade.php": [
 6,
-24,
+24
 ],
-'monica:resources/views/people/conversations/new.blade.php':[
+"monica:resources/views/people/conversations/new.blade.php": [
 71,
-74,
+74
 ],
-'monica:resources/views/people/create.blade.php':[
+"monica:resources/views/people/create.blade.php": [
 143,
-144,
+144
 ],
-'monica:resources/views/people/debt/form.blade.php':[
+"monica:resources/views/people/debt/form.blade.php": [
 12,
 17,
-25,
+25
 ],
-'monica:resources/views/people/debt/index.blade.php':[
-55,
+"monica:resources/views/people/debt/index.blade.php": [
+55
 ],
-'monica:resources/views/people/edit.blade.php':[
-155,
+"monica:resources/views/people/edit.blade.php": [
+155
 ],
-'monica:resources/views/people/food-preferences/edit.blade.php':[
-46,
+"monica:resources/views/people/food-preferences/edit.blade.php": [
+46
 ],
-'monica:resources/views/people/index.blade.php':[
+"monica:resources/views/people/index.blade.php": [
 79,
 83,
 87,
@@ -2676,68 +2676,68 @@
 138,
 139,
 152,
-154,
+154
 ],
-'monica:resources/views/people/introductions/edit.blade.php':[
+"monica:resources/views/people/introductions/edit.blade.php": [
 45,
 67,
 81,
-87,
+87
 ],
-'monica:resources/views/people/introductions/index.blade.php':[
-9,
+"monica:resources/views/people/introductions/index.blade.php": [
+9
 ],
-'monica:resources/views/people/profile.blade.php':[
+"monica:resources/views/people/profile.blade.php": [
 54,
 55,
 91,
 98,
-99,
+99
 ],
-'monica:resources/views/people/relationship/_relationship.blade.php':[
+"monica:resources/views/people/relationship/_relationship.blade.php": [
 16,
-32,
+32
 ],
-'monica:resources/views/people/relationship/edit.blade.php':[
+"monica:resources/views/people/relationship/edit.blade.php": [
 146,
-149,
+149
 ],
-'monica:resources/views/people/relationship/index.blade.php':[
+"monica:resources/views/people/relationship/index.blade.php": [
 10,
 24,
-40,
+40
 ],
-'monica:resources/views/people/relationship/new.blade.php':[
+"monica:resources/views/people/relationship/new.blade.php": [
 37,
 170,
 174,
-175,
+175
 ],
-'monica:resources/views/people/reminders/form.blade.php':[
+"monica:resources/views/people/reminders/form.blade.php": [
 62,
 63,
 64,
-76,
+76
 ],
-'monica:resources/views/people/reminders/index.blade.php':[
-42,
+"monica:resources/views/people/reminders/index.blade.php": [
+42
 ],
-'monica:resources/views/settings/export.blade.php':[
+"monica:resources/views/settings/export.blade.php": [
 56,
-62,
+62
 ],
-'monica:resources/views/settings/imports/index.blade.php':[
-66,
+"monica:resources/views/settings/imports/index.blade.php": [
+66
 ],
-'monica:resources/views/settings/imports/report.blade.php':[
-39,
+"monica:resources/views/settings/imports/report.blade.php": [
+39
 ],
-'monica:resources/views/settings/imports/upload.blade.php':[
+"monica:resources/views/settings/imports/upload.blade.php": [
 64,
 70,
-71,
+71
 ],
-'monica:resources/views/settings/index.blade.php':[
+"monica:resources/views/settings/index.blade.php": [
 53,
 64,
 94,
@@ -2745,21 +2745,21 @@
 108,
 130,
 150,
-158,
+158
 ],
-'monica:resources/views/settings/security/index.blade.php':[
+"monica:resources/views/settings/security/index.blade.php": [
 55,
 59,
-63,
+63
 ],
-'monica:resources/views/settings/storage/index.blade.php':[
-40,
+"monica:resources/views/settings/storage/index.blade.php": [
+40
 ],
-'monica:resources/views/settings/subscriptions/account.blade.php':[
+"monica:resources/views/settings/subscriptions/account.blade.php": [
 56,
-107,
+107
 ],
-'monica:resources/views/settings/subscriptions/blank.blade.php':[
+"monica:resources/views/settings/subscriptions/blank.blade.php": [
 46,
 49,
 53,
@@ -2768,17 +2768,17 @@
 74,
 78,
 83,
-104,
+104
 ],
-'monica:resources/views/settings/subscriptions/downgrade-checklist.blade.php':[
+"monica:resources/views/settings/subscriptions/downgrade-checklist.blade.php": [
 43,
 49,
 54,
 55,
 57,
-69,
+69
 ],
-'monica:resources/views/settings/subscriptions/downgrade-success.blade.php':[
+"monica:resources/views/settings/subscriptions/downgrade-success.blade.php": [
 31,
 35,
 36,
@@ -2801,9 +2801,9 @@
 53,
 54,
 55,
-56,
+56
 ],
-'monica:resources/views/settings/subscriptions/success.blade.php':[
+"monica:resources/views/settings/subscriptions/success.blade.php": [
 31,
 36,
 37,
@@ -2816,32 +2816,32 @@
 47,
 49,
 51,
-53,
+53
 ],
-'monica:resources/views/settings/subscriptions/update.blade.php':[
-52,
+"monica:resources/views/settings/subscriptions/update.blade.php": [
+52
 ],
-'monica:resources/views/settings/subscriptions/upgrade.blade.php':[
-44,
+"monica:resources/views/settings/subscriptions/upgrade.blade.php": [
+44
 ],
-'monica:resources/views/settings/tags.blade.php':[
-67,
+"monica:resources/views/settings/tags.blade.php": [
+67
 ],
-'monica:resources/views/settings/users/accept.blade.php':[
+"monica:resources/views/settings/users/accept.blade.php": [
 24,
 31,
 37,
 44,
 49,
-61,
+61
 ],
-'monica:resources/views/settings/users/add.blade.php':[
-68,
+"monica:resources/views/settings/users/add.blade.php": [
+68
 ],
-'monica:resources/views/settings/users/index.blade.php':[
-79,
+"monica:resources/views/settings/users/index.blade.php": [
+79
 ],
-'monica:routes/web.php':[
+"monica:routes/web.php": [
 230,
 231,
 234,
@@ -2849,67 +2849,67 @@
 248,
 276,
 286,
-288,
+288
 ],
-'monica:tests/Api/DAV/CalDAVBirthdaysTest.php':[
+"monica:tests/Api/DAV/CalDAVBirthdaysTest.php": [
 55,
 125,
 175,
 232,
-281,
+281
 ],
-'monica:tests/Api/DAV/CalDAVTasksTest.php':[
+"monica:tests/Api/DAV/CalDAVTasksTest.php": [
 56,
 126,
 179,
 238,
-290,
+290
 ],
-'monica:tests/Api/DAV/CardDAVTest.php':[
+"monica:tests/Api/DAV/CardDAVTest.php": [
 85,
 166,
 236,
 285,
 339,
 385,
-443,
+443
 ],
-'monica:tests/Api/DAV/DAVServerTest.php':[
+"monica:tests/Api/DAV/DAVServerTest.php": [
 99,
-145,
+145
 ],
-'monica:tests/Api/DAV/VCardContactTest.php':[
+"monica:tests/Api/DAV/VCardContactTest.php": [
 362,
 402,
-446,
+446
 ],
-'monica:tests/Api/DAV/VEventBirthdayTest.php':[
+"monica:tests/Api/DAV/VEventBirthdayTest.php": [
 65,
-114,
+114
 ],
-'monica:tests/Api/DAV/VTodoTaskTest.php':[
+"monica:tests/Api/DAV/VTodoTaskTest.php": [
 177,
-220,
+220
 ],
-'monica:tests/Helpers/DavTester.php':[
+"monica:tests/Helpers/DavTester.php": [
 79,
 106,
-121,
+121
 ],
-'monica:tests/Unit/Controllers/Auth/PasswordResetTest.php':[
-29,
+"monica:tests/Unit/Controllers/Auth/PasswordResetTest.php": [
+29
 ],
-'monica:tests/Unit/Jobs/Reminder/NotifyUserAboutReminderTest.php':[
+"monica:tests/Unit/Jobs/Reminder/NotifyUserAboutReminderTest.php": [
 61,
-107,
+107
 ],
-'monica:tests/Unit/Jobs/ScheduleStayInTouchTest.php':[
-53,
+"monica:tests/Unit/Jobs/ScheduleStayInTouchTest.php": [
+53
 ],
-'monica:tests/Unit/Models/DayTest.php':[
+"monica:tests/Unit/Models/DayTest.php": [
 20,
 29,
 53,
-62,
-],
+62
+]
 }

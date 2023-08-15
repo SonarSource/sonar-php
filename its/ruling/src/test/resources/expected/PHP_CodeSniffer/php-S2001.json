@@ -1,6 +1,6 @@
 {
-'PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DeprecatedFunctionsUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DeprecatedFunctionsUnitTest.inc": [
 3,
-4,
-],
+4
+]
 }

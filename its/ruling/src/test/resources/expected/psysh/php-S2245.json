@@ -1,7 +1,7 @@
 {
-'psysh:test/Command/ListCommand/GlobalVariableEnumeratorTest.php':[
+"psysh:test/Command/ListCommand/GlobalVariableEnumeratorTest.php": [
 40,
 43,
-46,
-],
+46
+]
 }

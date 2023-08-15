@@ -1,41 +1,41 @@
 {
-'PHPWord:bootstrap.php':[
-18,
+"PHPWord:bootstrap.php": [
+18
 ],
-'PHPWord:samples/Sample_01_SimpleText.php':[
+"PHPWord:samples/Sample_01_SimpleText.php": [
 10,
 12,
 15,
 18,
 24,
-48,
+48
 ],
-'PHPWord:samples/Sample_02_TabStops.php':[
+"PHPWord:samples/Sample_02_TabStops.php": [
 7,
 10,
 22,
 25,
-29,
+29
 ],
-'PHPWord:samples/Sample_03_Sections.php':[
+"PHPWord:samples/Sample_03_Sections.php": [
 9,
-12,
+12
 ],
-'PHPWord:samples/Sample_04_Textrun.php':[
+"PHPWord:samples/Sample_04_Textrun.php": [
 7,
 10,
 13,
 16,
 19,
 23,
-26,
+26
 ],
-'PHPWord:samples/Sample_05_Multicolumn.php':[
+"PHPWord:samples/Sample_05_Multicolumn.php": [
 7,
 8,
-14,
+14
 ],
-'PHPWord:samples/Sample_06_Footnote.php':[
+"PHPWord:samples/Sample_06_Footnote.php": [
 10,
 14,
 17,
@@ -44,17 +44,17 @@
 27,
 30,
 33,
-54,
+54
 ],
-'PHPWord:samples/Sample_07_TemplateCloneRow.php':[
+"PHPWord:samples/Sample_07_TemplateCloneRow.php": [
 7,
-40,
+40
 ],
-'PHPWord:samples/Sample_08_ParagraphPagination.php':[
+"PHPWord:samples/Sample_08_ParagraphPagination.php": [
 7,
-17,
+17
 ],
-'PHPWord:samples/Sample_09_Tables.php':[
+"PHPWord:samples/Sample_09_Tables.php": [
 10,
 11,
 12,
@@ -84,24 +84,24 @@
 115,
 119,
 141,
-143,
+143
 ],
-'PHPWord:samples/Sample_10_EastAsianFontStyle.php':[
+"PHPWord:samples/Sample_10_EastAsianFontStyle.php": [
 7,
 8,
-9,
+9
 ],
-'PHPWord:samples/Sample_11_ReadWord2007.php':[
+"PHPWord:samples/Sample_11_ReadWord2007.php": [
 6,
 7,
-10,
+10
 ],
-'PHPWord:samples/Sample_11_ReadWord97.php':[
+"PHPWord:samples/Sample_11_ReadWord97.php": [
 6,
 7,
-9,
+9
 ],
-'PHPWord:samples/Sample_12_HeaderFooter.php':[
+"PHPWord:samples/Sample_12_HeaderFooter.php": [
 7,
 10,
 13,
@@ -111,18 +111,18 @@
 24,
 29,
 52,
-54,
+54
 ],
-'PHPWord:samples/Sample_13_Images.php':[
+"PHPWord:samples/Sample_13_Images.php": [
 10,
 13,
 23,
 30,
 36,
 37,
-90,
+90
 ],
-'PHPWord:samples/Sample_14_ListItem.php':[
+"PHPWord:samples/Sample_14_ListItem.php": [
 7,
 10,
 13,
@@ -131,103 +131,103 @@
 31,
 65,
 71,
-79,
+79
 ],
-'PHPWord:samples/Sample_15_Link.php':[
+"PHPWord:samples/Sample_15_Link.php": [
 7,
 10,
-14,
+14
 ],
-'PHPWord:samples/Sample_16_Object.php':[
+"PHPWord:samples/Sample_16_Object.php": [
 7,
-10,
+10
 ],
-'PHPWord:samples/Sample_17_TitleTOC.php':[
+"PHPWord:samples/Sample_17_TitleTOC.php": [
 7,
 11,
 14,
 15,
 27,
-37,
+37
 ],
-'PHPWord:samples/Sample_18_Watermark.php':[
+"PHPWord:samples/Sample_18_Watermark.php": [
 7,
 10,
-11,
+11
 ],
-'PHPWord:samples/Sample_19_TextBreak.php':[
+"PHPWord:samples/Sample_19_TextBreak.php": [
 7,
 10,
 12,
 14,
 17,
-21,
+21
 ],
-'PHPWord:samples/Sample_20_BGColor.php':[
+"PHPWord:samples/Sample_20_BGColor.php": [
 7,
-10,
+10
 ],
-'PHPWord:samples/Sample_21_TableRowRules.php':[
+"PHPWord:samples/Sample_21_TableRowRules.php": [
 7,
 10,
 19,
 21,
 27,
-36,
+36
 ],
-'PHPWord:samples/Sample_22_CheckBox.php':[
+"PHPWord:samples/Sample_22_CheckBox.php": [
 7,
 10,
 15,
-17,
+17
 ],
-'PHPWord:samples/Sample_23_TemplateBlock.php':[
-7,
+"PHPWord:samples/Sample_23_TemplateBlock.php": [
+7
 ],
-'PHPWord:samples/Sample_24_ReadODText.php':[
+"PHPWord:samples/Sample_24_ReadODText.php": [
 6,
 7,
-10,
+10
 ],
-'PHPWord:samples/Sample_25_TextBox.php':[
+"PHPWord:samples/Sample_25_TextBox.php": [
 7,
 10,
 13,
 24,
 34,
-36,
+36
 ],
-'PHPWord:samples/Sample_26_Html.php':[
+"PHPWord:samples/Sample_26_Html.php": [
 7,
 10,
-11,
+11
 ],
-'PHPWord:samples/Sample_27_Field.php':[
+"PHPWord:samples/Sample_27_Field.php": [
 9,
 13,
 31,
 36,
-55,
+55
 ],
-'PHPWord:samples/Sample_28_ReadRTF.php':[
+"PHPWord:samples/Sample_28_ReadRTF.php": [
 6,
 7,
-10,
+10
 ],
-'PHPWord:samples/Sample_29_Line.php':[
+"PHPWord:samples/Sample_29_Line.php": [
 7,
-10,
+10
 ],
-'PHPWord:samples/Sample_30_ReadHTML.php':[
+"PHPWord:samples/Sample_30_ReadHTML.php": [
 6,
 7,
-10,
+10
 ],
-'PHPWord:samples/Sample_31_Shape.php':[
+"PHPWord:samples/Sample_31_Shape.php": [
 7,
-10,
+10
 ],
-'PHPWord:samples/Sample_32_Chart.php':[
+"PHPWord:samples/Sample_32_Chart.php": [
 9,
 16,
 20,
@@ -243,24 +243,24 @@
 30,
 35,
 57,
-58,
+58
 ],
-'PHPWord:samples/Sample_33_FormField.php':[
+"PHPWord:samples/Sample_33_FormField.php": [
 7,
 11,
-13,
+13
 ],
-'PHPWord:samples/Sample_34_SDT.php':[
+"PHPWord:samples/Sample_34_SDT.php": [
 7,
 10,
-12,
+12
 ],
-'PHPWord:samples/Sample_35_InternalLink.php':[
+"PHPWord:samples/Sample_35_InternalLink.php": [
 7,
 9,
-11,
+11
 ],
-'PHPWord:samples/Sample_36_RTL.php':[
+"PHPWord:samples/Sample_36_RTL.php": [
 7,
 10,
 12,
@@ -270,9 +270,9 @@
 23,
 24,
 25,
-29,
+29
 ],
-'PHPWord:samples/Sample_37_Comments.php':[
+"PHPWord:samples/Sample_37_Comments.php": [
 7,
 10,
 14,
@@ -286,27 +286,27 @@
 41,
 45,
 51,
-53,
+53
 ],
-'PHPWord:samples/Sample_38_Protection.php':[
+"PHPWord:samples/Sample_38_Protection.php": [
 9,
 11,
-15,
+15
 ],
-'PHPWord:samples/Sample_39_TrackChanges.php':[
+"PHPWord:samples/Sample_39_TrackChanges.php": [
 9,
 12,
 13,
-15,
+15
 ],
-'PHPWord:samples/Sample_40_TemplateSetComplexValue.php':[
+"PHPWord:samples/Sample_40_TemplateSetComplexValue.php": [
 12,
 14,
 19,
 23,
-34,
+34
 ],
-'PHPWord:samples/Sample_41_TemplateSetChart.php':[
+"PHPWord:samples/Sample_41_TemplateSetChart.php": [
 10,
 12,
 13,
@@ -316,9 +316,9 @@
 18,
 19,
 21,
-23,
+23
 ],
-'PHPWord:samples/Sample_Header.php':[
+"PHPWord:samples/Sample_Header.php": [
 15,
 22,
 38,
@@ -329,20 +329,20 @@
 47,
 55,
 70,
-99,
+99
 ],
-'PHPWord:samples/index.php':[
+"PHPWord:samples/index.php": [
 6,
 32,
-41,
+41
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 86,
 5114,
 5191,
 5269,
 5320,
 5349,
-5377,
-],
+5377
+]
 }

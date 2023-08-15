@@ -1,5 +1,5 @@
 {
-'psysh:src/CodeCleaner.php':[
+"psysh:src/CodeCleaner.php": [
 51,
 67,
 88,
@@ -15,147 +15,147 @@
 352,
 369,
 384,
-389,
+389
 ],
-'psysh:src/CodeCleaner/AbstractClassPass.php':[
+"psysh:src/CodeCleaner/AbstractClassPass.php": [
 23,
 35,
-60,
+60
 ],
-'psysh:src/CodeCleaner/AssignThisVariablePass.php':[
+"psysh:src/CodeCleaner/AssignThisVariablePass.php": [
 25,
-36,
+36
 ],
-'psysh:src/CodeCleaner/CallTimePassByReferencePass.php':[
+"psysh:src/CodeCleaner/CallTimePassByReferencePass.php": [
 29,
-42,
+42
 ],
-'psysh:src/CodeCleaner/CalledClassPass.php':[
+"psysh:src/CodeCleaner/CalledClassPass.php": [
 28,
 37,
 49,
 80,
-87,
+87
 ],
-'psysh:src/CodeCleaner/CodeCleanerPass.php':[
-20,
+"psysh:src/CodeCleaner/CodeCleanerPass.php": [
+20
 ],
-'psysh:src/CodeCleaner/EmptyArrayDimFetchPass.php':[
+"psysh:src/CodeCleaner/EmptyArrayDimFetchPass.php": [
 25,
 34,
-46,
+46
 ],
-'psysh:src/CodeCleaner/ExitPass.php':[
+"psysh:src/CodeCleaner/ExitPass.php": [
 21,
-30,
+30
 ],
-'psysh:src/CodeCleaner/FinalClassPass.php':[
+"psysh:src/CodeCleaner/FinalClassPass.php": [
 22,
 31,
 43,
-63,
+63
 ],
-'psysh:src/CodeCleaner/FunctionContextPass.php':[
+"psysh:src/CodeCleaner/FunctionContextPass.php": [
 20,
 30,
 38,
-63,
+63
 ],
-'psysh:src/CodeCleaner/FunctionReturnInWriteContextPass.php':[
+"psysh:src/CodeCleaner/FunctionReturnInWriteContextPass.php": [
 31,
 47,
-74,
+74
 ],
-'psysh:src/CodeCleaner/ImplicitReturnPass.php':[
+"psysh:src/CodeCleaner/ImplicitReturnPass.php": [
 29,
 36,
 46,
-120,
+120
 ],
-'psysh:src/CodeCleaner/InstanceOfPass.php':[
+"psysh:src/CodeCleaner/InstanceOfPass.php": [
 30,
 36,
-50,
+50
 ],
-'psysh:src/CodeCleaner/IssetPass.php':[
+"psysh:src/CodeCleaner/IssetPass.php": [
 27,
-38,
+38
 ],
-'psysh:src/CodeCleaner/LabelContextPass.php':[
+"psysh:src/CodeCleaner/LabelContextPass.php": [
 33,
 48,
 58,
 83,
-93,
+93
 ],
-'psysh:src/CodeCleaner/LeavePsyshAlonePass.php':[
+"psysh:src/CodeCleaner/LeavePsyshAlonePass.php": [
 22,
-33,
+33
 ],
-'psysh:src/CodeCleaner/ListPass.php':[
+"psysh:src/CodeCleaner/ListPass.php": [
 31,
 35,
 49,
-101,
+101
 ],
-'psysh:src/CodeCleaner/LoopContextPass.php':[
+"psysh:src/CodeCleaner/LoopContextPass.php": [
 30,
 39,
 54,
-98,
+98
 ],
-'psysh:src/CodeCleaner/MagicConstantsPass.php':[
+"psysh:src/CodeCleaner/MagicConstantsPass.php": [
 25,
-35,
+35
 ],
-'psysh:src/CodeCleaner/NamespaceAwarePass.php':[
+"psysh:src/CodeCleaner/NamespaceAwarePass.php": [
 23,
 36,
 50,
-62,
+62
 ],
-'psysh:src/CodeCleaner/NamespacePass.php':[
+"psysh:src/CodeCleaner/NamespacePass.php": [
 31,
 39,
 54,
-87,
+87
 ],
-'psysh:src/CodeCleaner/NoReturnValue.php':[
+"psysh:src/CodeCleaner/NoReturnValue.php": [
 25,
-30,
+30
 ],
-'psysh:src/CodeCleaner/PassableByReferencePass.php':[
+"psysh:src/CodeCleaner/PassableByReferencePass.php": [
 30,
 41,
 74,
-107,
+107
 ],
-'psysh:src/CodeCleaner/RequirePass.php':[
+"psysh:src/CodeCleaner/RequirePass.php": [
 27,
 36,
 79,
 121,
-126,
+126
 ],
-'psysh:src/CodeCleaner/ReturnTypePass.php':[
+"psysh:src/CodeCleaner/ReturnTypePass.php": [
 28,
 39,
 49,
 96,
 107,
-112,
+112
 ],
-'psysh:src/CodeCleaner/StrictTypesPass.php':[
+"psysh:src/CodeCleaner/StrictTypesPass.php": [
 32,
-50,
+50
 ],
-'psysh:src/CodeCleaner/UseStatementPass.php':[
+"psysh:src/CodeCleaner/UseStatementPass.php": [
 34,
 51,
 72,
-130,
+130
 ],
-'psysh:src/CodeCleaner/ValidClassNamePass.php':[
+"psysh:src/CodeCleaner/ValidClassNamePass.php": [
 34,
 53,
 79,
@@ -174,32 +174,32 @@
 313,
 323,
 335,
-349,
+349
 ],
-'psysh:src/CodeCleaner/ValidConstructorPass.php':[
+"psysh:src/CodeCleaner/ValidConstructorPass.php": [
 35,
 42,
 57,
-92,
+92
 ],
-'psysh:src/CodeCleaner/ValidFunctionNamePass.php':[
+"psysh:src/CodeCleaner/ValidFunctionNamePass.php": [
 29,
 42,
 70,
-77,
+77
 ],
-'psysh:src/Command/BufferCommand.php':[
+"psysh:src/Command/BufferCommand.php": [
 26,
 31,
 54,
-80,
+80
 ],
-'psysh:src/Command/ClearCommand.php':[
+"psysh:src/Command/ClearCommand.php": [
 23,
 28,
-48,
+48
 ],
-'psysh:src/Command/Command.php':[
+"psysh:src/Command/Command.php": [
 26,
 35,
 47,
@@ -213,24 +213,24 @@
 198,
 223,
 239,
-268,
+268
 ],
-'psysh:src/Command/DocCommand.php':[
+"psysh:src/Command/DocCommand.php": [
 29,
 36,
 67,
 132,
 178,
-246,
+246
 ],
-'psysh:src/Command/DumpCommand.php':[
+"psysh:src/Command/DumpCommand.php": [
 27,
 36,
 44,
 73,
-93,
+93
 ],
-'psysh:src/Command/EditCommand.php':[
+"psysh:src/Command/EditCommand.php": [
 22,
 42,
 49,
@@ -238,20 +238,20 @@
 119,
 140,
 158,
-185,
+185
 ],
-'psysh:src/Command/ExitCommand.php':[
+"psysh:src/Command/ExitCommand.php": [
 24,
 29,
-51,
+51
 ],
-'psysh:src/Command/HelpCommand.php':[
+"psysh:src/Command/HelpCommand.php": [
 26,
 33,
 50,
-60,
+60
 ],
-'psysh:src/Command/HistoryCommand.php':[
+"psysh:src/Command/HistoryCommand.php": [
 28,
 36,
 48,
@@ -261,9 +261,9 @@
 188,
 225,
 242,
-247,
+247
 ],
-'psysh:src/Command/ListCommand.php':[
+"psysh:src/Command/ListCommand.php": [
 38,
 48,
 56,
@@ -272,72 +272,72 @@
 180,
 200,
 230,
-242,
+242
 ],
-'psysh:src/Command/ListCommand/ClassConstantEnumerator.php':[
+"psysh:src/Command/ListCommand/ClassConstantEnumerator.php": [
 21,
 26,
 65,
 92,
-115,
+115
 ],
-'psysh:src/Command/ListCommand/ClassEnumerator.php':[
+"psysh:src/Command/ListCommand/ClassEnumerator.php": [
 21,
 26,
 70,
-114,
+114
 ],
-'psysh:src/Command/ListCommand/ConstantEnumerator.php':[
+"psysh:src/Command/ListCommand/ConstantEnumerator.php": [
 21,
 53,
 126,
-156,
+156
 ],
-'psysh:src/Command/ListCommand/Enumerator.php':[
+"psysh:src/Command/ListCommand/Enumerator.php": [
 24,
 43,
 58,
 88,
 93,
-98,
+98
 ],
-'psysh:src/Command/ListCommand/FunctionEnumerator.php':[
+"psysh:src/Command/ListCommand/FunctionEnumerator.php": [
 21,
 26,
 71,
-90,
+90
 ],
-'psysh:src/Command/ListCommand/GlobalVariableEnumerator.php':[
+"psysh:src/Command/ListCommand/GlobalVariableEnumerator.php": [
 20,
 25,
 53,
-75,
+75
 ],
-'psysh:src/Command/ListCommand/MethodEnumerator.php':[
+"psysh:src/Command/ListCommand/MethodEnumerator.php": [
 20,
 25,
 65,
 94,
 117,
-133,
+133
 ],
-'psysh:src/Command/ListCommand/PropertyEnumerator.php':[
+"psysh:src/Command/ListCommand/PropertyEnumerator.php": [
 20,
 25,
 66,
 93,
 117,
 131,
-148,
+148
 ],
-'psysh:src/Command/ListCommand/VariableEnumerator.php':[
+"psysh:src/Command/ListCommand/VariableEnumerator.php": [
 22,
 40,
 49,
 80,
-121,
+121
 ],
-'psysh:src/Command/ParseCommand.php':[
+"psysh:src/Command/ParseCommand.php": [
 31,
 47,
 60,
@@ -345,14 +345,14 @@
 92,
 123,
 148,
-167,
+167
 ],
-'psysh:src/Command/PsyVersionCommand.php':[
+"psysh:src/Command/PsyVersionCommand.php": [
 21,
 26,
-38,
+38
 ],
-'psysh:src/Command/ReflectingCommand.php':[
+"psysh:src/Command/ReflectingCommand.php": [
 32,
 53,
 71,
@@ -366,9 +366,9 @@
 263,
 277,
 287,
-299,
+299
 ],
-'psysh:src/Command/ShowCommand.php':[
+"psysh:src/Command/ShowCommand.php": [
 28,
 36,
 44,
@@ -379,26 +379,26 @@
 201,
 214,
 245,
-296,
+296
 ],
-'psysh:src/Command/SudoCommand.php':[
+"psysh:src/Command/SudoCommand.php": [
 27,
 37,
 55,
 63,
 102,
-135,
+135
 ],
-'psysh:src/Command/ThrowUpCommand.php':[
+"psysh:src/Command/ThrowUpCommand.php": [
 33,
 41,
 56,
 64,
 94,
 117,
-155,
+155
 ],
-'psysh:src/Command/TimeitCommand.php':[
+"psysh:src/Command/TimeitCommand.php": [
 27,
 42,
 58,
@@ -407,9 +407,9 @@
 142,
 156,
 171,
-183,
+183
 ],
-'psysh:src/Command/TimeitCommand/TimeitVisitor.php':[
+"psysh:src/Command/TimeitCommand/TimeitVisitor.php": [
 33,
 42,
 52,
@@ -417,16 +417,16 @@
 85,
 112,
 124,
-143,
+143
 ],
-'psysh:src/Command/TraceCommand.php':[
+"psysh:src/Command/TraceCommand.php": [
 25,
 32,
 42,
 75,
-96,
+96
 ],
-'psysh:src/Command/WhereamiCommand.php':[
+"psysh:src/Command/WhereamiCommand.php": [
 25,
 32,
 42,
@@ -434,15 +434,15 @@
 82,
 96,
 116,
-149,
+149
 ],
-'psysh:src/Command/WtfCommand.php':[
+"psysh:src/Command/WtfCommand.php": [
 27,
 41,
 49,
-88,
+88
 ],
-'psysh:src/ConfigPaths.php':[
+"psysh:src/ConfigPaths.php": [
 18,
 35,
 49,
@@ -469,9 +469,9 @@
 385,
 410,
 431,
-436,
+436
 ],
-'psysh:src/Configuration.php':[
+"psysh:src/Configuration.php": [
 35,
 142,
 183,
@@ -573,9 +573,9 @@
 1811,
 1833,
 1847,
-1861,
+1861
 ],
-'psysh:src/Context.php':[
+"psysh:src/Context.php": [
 21,
 48,
 97,
@@ -594,84 +594,84 @@
 270,
 286,
 299,
-309,
+309
 ],
-'psysh:src/ContextAware.php':[
-21,
+"psysh:src/ContextAware.php": [
+21
 ],
-'psysh:src/EnvInterface.php':[
-18,
+"psysh:src/EnvInterface.php": [
+18
 ],
-'psysh:src/Exception/BreakException.php':[
+"psysh:src/Exception/BreakException.php": [
 18,
 25,
 34,
-46,
+46
 ],
-'psysh:src/Exception/DeprecatedException.php':[
-18,
+"psysh:src/Exception/DeprecatedException.php": [
+18
 ],
-'psysh:src/Exception/ErrorException.php':[
+"psysh:src/Exception/ErrorException.php": [
 18,
 32,
 78,
 97,
-109,
+109
 ],
-'psysh:src/Exception/Exception.php':[
-18,
+"psysh:src/Exception/Exception.php": [
+18
 ],
-'psysh:src/Exception/FatalErrorException.php':[
+"psysh:src/Exception/FatalErrorException.php": [
 18,
 32,
-47,
+47
 ],
-'psysh:src/Exception/ParseErrorException.php':[
+"psysh:src/Exception/ParseErrorException.php": [
 18,
 26,
-37,
+37
 ],
-'psysh:src/Exception/RuntimeException.php':[
+"psysh:src/Exception/RuntimeException.php": [
 18,
 29,
-38,
+38
 ],
-'psysh:src/Exception/ThrowUpException.php':[
+"psysh:src/Exception/ThrowUpException.php": [
 18,
 23,
 32,
-44,
+44
 ],
-'psysh:src/Exception/TypeErrorException.php':[
+"psysh:src/Exception/TypeErrorException.php": [
 18,
 31,
 41,
-53,
+53
 ],
-'psysh:src/Exception/UnexpectedTargetException.php':[
+"psysh:src/Exception/UnexpectedTargetException.php": [
 15,
 25,
-34,
+34
 ],
-'psysh:src/ExecutionClosure.php':[
+"psysh:src/ExecutionClosure.php": [
 18,
 27,
 70,
-86,
+86
 ],
-'psysh:src/ExecutionLoop/AbstractListener.php':[
+"psysh:src/ExecutionLoop/AbstractListener.php": [
 20,
 25,
 32,
 39,
 46,
 53,
-60,
+60
 ],
-'psysh:src/ExecutionLoop/Listener.php':[
-20,
+"psysh:src/ExecutionLoop/Listener.php": [
+20
 ],
-'psysh:src/ExecutionLoop/ProcessForker.php':[
+"psysh:src/ExecutionLoop/ProcessForker.php": [
 25,
 46,
 54,
@@ -684,21 +684,21 @@
 188,
 203,
 221,
-253,
+253
 ],
-'psysh:src/ExecutionLoop/RunkitReloader.php':[
+"psysh:src/ExecutionLoop/RunkitReloader.php": [
 22,
 30,
 41,
 53,
 63,
-130,
+130
 ],
-'psysh:src/ExecutionLoopClosure.php':[
+"psysh:src/ExecutionLoopClosure.php": [
 24,
-29,
+29
 ],
-'psysh:src/Formatter/CodeFormatter.php':[
+"psysh:src/Formatter/CodeFormatter.php": [
 21,
 85,
 108,
@@ -708,24 +708,24 @@
 211,
 249,
 278,
-315,
+315
 ],
-'psysh:src/Formatter/DocblockFormatter.php':[
+"psysh:src/Formatter/DocblockFormatter.php": [
 21,
 35,
 73,
 111,
 136,
 151,
-161,
+161
 ],
-'psysh:src/Formatter/Formatter.php':[
-20,
+"psysh:src/Formatter/Formatter.php": [
+20
 ],
-'psysh:src/Formatter/ReflectorFormatter.php':[
-18,
+"psysh:src/Formatter/ReflectorFormatter.php": [
+18
 ],
-'psysh:src/Formatter/SignatureFormatter.php':[
+"psysh:src/Formatter/SignatureFormatter.php": [
 24,
 35,
 71,
@@ -739,17 +739,17 @@
 232,
 248,
 264,
-327,
+327
 ],
-'psysh:src/Formatter/TraceFormatter.php':[
+"psysh:src/Formatter/TraceFormatter.php": [
 21,
-33,
+33
 ],
-'psysh:src/Input/CodeArgument.php':[
+"psysh:src/Input/CodeArgument.php": [
 31,
-43,
+43
 ],
-'psysh:src/Input/FilterOptions.php':[
+"psysh:src/Input/FilterOptions.php": [
 23,
 35,
 49,
@@ -757,9 +757,9 @@
 89,
 101,
 117,
-129,
+129
 ],
-'psysh:src/Input/ShellInput.php':[
+"psysh:src/Input/ShellInput.php": [
 21,
 37,
 49,
@@ -770,29 +770,29 @@
 227,
 251,
 273,
-290,
+290
 ],
-'psysh:src/Input/SilentInput.php':[
+"psysh:src/Input/SilentInput.php": [
 22,
 31,
-39,
+39
 ],
-'psysh:src/Output/OutputPager.php':[
-21,
+"psysh:src/Output/OutputPager.php": [
+21
 ],
-'psysh:src/Output/PassthruPager.php':[
+"psysh:src/Output/PassthruPager.php": [
 21,
 28,
-36,
+36
 ],
-'psysh:src/Output/ProcOutputPager.php':[
+"psysh:src/Output/ProcOutputPager.php": [
 25,
 38,
 52,
 69,
-91,
+91
 ],
-'psysh:src/Output/ShellOutput.php':[
+"psysh:src/Output/ShellOutput.php": [
 22,
 42,
 73,
@@ -803,9 +803,9 @@
 170,
 179,
 189,
-199,
+199
 ],
-'psysh:src/Output/Theme.php':[
+"psysh:src/Output/Theme.php": [
 21,
 92,
 153,
@@ -822,15 +822,15 @@
 250,
 260,
 270,
-277,
+277
 ],
-'psysh:src/ParserFactory.php':[
+"psysh:src/ParserFactory.php": [
 21,
 33,
 43,
-53,
+53
 ],
-'psysh:src/Readline/GNUReadline.php':[
+"psysh:src/Readline/GNUReadline.php": [
 22,
 39,
 49,
@@ -841,20 +841,20 @@
 98,
 109,
 117,
-125,
+125
 ],
-'psysh:src/Readline/Hoa/Autocompleter.php':[
-45,
+"psysh:src/Readline/Hoa/Autocompleter.php": [
+45
 ],
-'psysh:src/Readline/Hoa/AutocompleterAggregate.php':[
+"psysh:src/Readline/Hoa/AutocompleterAggregate.php": [
 45,
 55,
 66,
 96,
 107,
-115,
+115
 ],
-'psysh:src/Readline/Hoa/AutocompleterPath.php':[
+"psysh:src/Readline/Hoa/AutocompleterPath.php": [
 45,
 86,
 143,
@@ -862,17 +862,17 @@
 162,
 170,
 181,
-189,
+189
 ],
-'psysh:src/Readline/Hoa/AutocompleterWord.php':[
+"psysh:src/Readline/Hoa/AutocompleterWord.php": [
 45,
 55,
 68,
 93,
 105,
-116,
+116
 ],
-'psysh:src/Readline/Hoa/Console.php':[
+"psysh:src/Readline/Hoa/Console.php": [
 45,
 120,
 145,
@@ -886,9 +886,9 @@
 304,
 316,
 327,
-339,
+339
 ],
-'psysh:src/Readline/Hoa/ConsoleCursor.php':[
+"psysh:src/Readline/Hoa/ConsoleCursor.php": [
 45,
 60,
 158,
@@ -901,12 +901,12 @@
 361,
 600,
 642,
-685,
+685
 ],
-'psysh:src/Readline/Hoa/ConsoleException.php':[
-45,
+"psysh:src/Readline/Hoa/ConsoleException.php": [
+45
 ],
-'psysh:src/Readline/Hoa/ConsoleInput.php':[
+"psysh:src/Readline/Hoa/ConsoleInput.php": [
 47,
 57,
 76,
@@ -920,9 +920,9 @@
 141,
 149,
 157,
-165,
+165
 ],
-'psysh:src/Readline/Hoa/ConsoleOutput.php':[
+"psysh:src/Readline/Hoa/ConsoleOutput.php": [
 46,
 61,
 71,
@@ -937,9 +937,9 @@
 178,
 186,
 194,
-205,
+205
 ],
-'psysh:src/Readline/Hoa/ConsoleProcessus.php':[
+"psysh:src/Readline/Hoa/ConsoleProcessus.php": [
 43,
 289,
 309,
@@ -987,9 +987,9 @@
 841,
 849,
 857,
-885,
+885
 ],
-'psysh:src/Readline/Hoa/ConsoleTput.php':[
+"psysh:src/Readline/Hoa/ConsoleTput.php": [
 48,
 576,
 590,
@@ -999,9 +999,9 @@
 735,
 747,
 758,
-810,
+810
 ],
-'psysh:src/Readline/Hoa/ConsoleWindow.php':[
+"psysh:src/Readline/Hoa/ConsoleWindow.php": [
 47,
 59,
 72,
@@ -1018,9 +1018,9 @@
 382,
 426,
 470,
-485,
+485
 ],
-'psysh:src/Readline/Hoa/Event.php':[
+"psysh:src/Readline/Hoa/Event.php": [
 45,
 71,
 80,
@@ -1030,24 +1030,24 @@
 153,
 163,
 171,
-188,
+188
 ],
-'psysh:src/Readline/Hoa/EventBucket.php':[
+"psysh:src/Readline/Hoa/EventBucket.php": [
 43,
 58,
 68,
 76,
 87,
 95,
-106,
+106
 ],
-'psysh:src/Readline/Hoa/EventException.php':[
-43,
+"psysh:src/Readline/Hoa/EventException.php": [
+43
 ],
-'psysh:src/Readline/Hoa/EventListenable.php':[
-43,
+"psysh:src/Readline/Hoa/EventListenable.php": [
+43
 ],
-'psysh:src/Readline/Hoa/EventListener.php':[
+"psysh:src/Readline/Hoa/EventListener.php": [
 44,
 59,
 70,
@@ -1055,22 +1055,22 @@
 95,
 105,
 115,
-123,
+123
 ],
-'psysh:src/Readline/Hoa/EventListens.php':[
+"psysh:src/Readline/Hoa/EventListens.php": [
 43,
 53,
 69,
-80,
+80
 ],
-'psysh:src/Readline/Hoa/EventSource.php':[
+"psysh:src/Readline/Hoa/EventSource.php": [
+43
+],
+"psysh:src/Readline/Hoa/Exception.php": [
 43,
+72
 ],
-'psysh:src/Readline/Hoa/Exception.php':[
-43,
-72,
-],
-'psysh:src/Readline/Hoa/ExceptionIdle.php':[
+"psysh:src/Readline/Hoa/ExceptionIdle.php": [
 45,
 98,
 112,
@@ -1081,9 +1081,9 @@
 189,
 231,
 248,
-258,
+258
 ],
-'psysh:src/Readline/Hoa/File.php':[
+"psysh:src/Readline/Hoa/File.php": [
 45,
 148,
 180,
@@ -1096,22 +1096,22 @@
 241,
 249,
 257,
-271,
+271
 ],
-'psysh:src/Readline/Hoa/FileDirectory.php':[
+"psysh:src/Readline/Hoa/FileDirectory.php": [
 45,
 82,
 106,
 114,
-164,
+164
 ],
-'psysh:src/Readline/Hoa/FileDoesNotExistException.php':[
-47,
+"psysh:src/Readline/Hoa/FileDoesNotExistException.php": [
+47
 ],
-'psysh:src/Readline/Hoa/FileException.php':[
-47,
+"psysh:src/Readline/Hoa/FileException.php": [
+47
 ],
-'psysh:src/Readline/Hoa/FileFinder.php':[
+"psysh:src/Readline/Hoa/FileFinder.php": [
 45,
 90,
 103,
@@ -1142,9 +1142,9 @@
 631,
 639,
 647,
-655,
+655
 ],
-'psysh:src/Readline/Hoa/FileGeneric.php':[
+"psysh:src/Readline/Hoa/FileGeneric.php": [
 45,
 55,
 63,
@@ -1183,9 +1183,9 @@
 440,
 451,
 463,
-474,
+474
 ],
-'psysh:src/Readline/Hoa/FileLink.php':[
+"psysh:src/Readline/Hoa/FileLink.php": [
 45,
 68,
 76,
@@ -1193,9 +1193,9 @@
 92,
 100,
 134,
-142,
+142
 ],
-'psysh:src/Readline/Hoa/FileLinkRead.php':[
+"psysh:src/Readline/Hoa/FileLinkRead.php": [
 47,
 80,
 107,
@@ -1208,9 +1208,9 @@
 194,
 204,
 216,
-228,
+228
 ],
-'psysh:src/Readline/Hoa/FileLinkReadWrite.php':[
+"psysh:src/Readline/Hoa/FileLinkReadWrite.php": [
 45,
 64,
 93,
@@ -1233,9 +1233,9 @@
 244,
 254,
 268,
-276,
+276
 ],
-'psysh:src/Readline/Hoa/FileRead.php':[
+"psysh:src/Readline/Hoa/FileRead.php": [
 45,
 64,
 89,
@@ -1248,9 +1248,9 @@
 150,
 158,
 166,
-174,
+174
 ],
-'psysh:src/Readline/Hoa/FileReadWrite.php':[
+"psysh:src/Readline/Hoa/FileReadWrite.php": [
 45,
 64,
 93,
@@ -1273,45 +1273,45 @@
 244,
 254,
 268,
-276,
+276
 ],
-'psysh:src/Readline/Hoa/IStream.php':[
-45,
+"psysh:src/Readline/Hoa/IStream.php": [
+45
 ],
-'psysh:src/Readline/Hoa/IteratorFileSystem.php':[
+"psysh:src/Readline/Hoa/IteratorFileSystem.php": [
 45,
 57,
-75,
+75
 ],
-'psysh:src/Readline/Hoa/IteratorRecursiveDirectory.php':[
+"psysh:src/Readline/Hoa/IteratorRecursiveDirectory.php": [
 45,
 62,
 81,
 103,
 115,
-123,
+123
 ],
-'psysh:src/Readline/Hoa/IteratorSplFileInfo.php':[
+"psysh:src/Readline/Hoa/IteratorSplFileInfo.php": [
 45,
 60,
 76,
 84,
 96,
 107,
-115,
+115
 ],
-'psysh:src/Readline/Hoa/Protocol.php':[
+"psysh:src/Readline/Hoa/Protocol.php": [
 43,
 65,
 76,
 88,
 149,
-220,
+220
 ],
-'psysh:src/Readline/Hoa/ProtocolException.php':[
-43,
+"psysh:src/Readline/Hoa/ProtocolException.php": [
+43
 ],
-'psysh:src/Readline/Hoa/ProtocolNode.php':[
+"psysh:src/Readline/Hoa/ProtocolNode.php": [
 43,
 66,
 87,
@@ -1327,13 +1327,13 @@
 286,
 294,
 302,
-310,
+310
 ],
-'psysh:src/Readline/Hoa/ProtocolNodeLibrary.php':[
+"psysh:src/Readline/Hoa/ProtocolNodeLibrary.php": [
 43,
-48,
+48
 ],
-'psysh:src/Readline/Hoa/ProtocolWrapper.php':[
+"psysh:src/Readline/Hoa/ProtocolWrapper.php": [
 43,
 64,
 76,
@@ -1359,9 +1359,9 @@
 408,
 432,
 457,
-465,
+465
 ],
-'psysh:src/Readline/Hoa/Readline.php':[
+"psysh:src/Readline/Hoa/Readline.php": [
 45,
 115,
 141,
@@ -1403,9 +1403,9 @@
 735,
 849,
 868,
-885,
+885
 ],
-'psysh:src/Readline/Hoa/Stream.php':[
+"psysh:src/Readline/Hoa/Stream.php": [
 45,
 114,
 211,
@@ -1430,12 +1430,12 @@
 513,
 521,
 540,
-556,
+556
 ],
-'psysh:src/Readline/Hoa/StreamBufferable.php':[
-47,
+"psysh:src/Readline/Hoa/StreamBufferable.php": [
+47
 ],
-'psysh:src/Readline/Hoa/StreamContext.php':[
+"psysh:src/Readline/Hoa/StreamContext.php": [
 45,
 65,
 76,
@@ -1445,63 +1445,63 @@
 114,
 122,
 130,
-138,
+138
 ],
-'psysh:src/Readline/Hoa/StreamException.php':[
-45,
+"psysh:src/Readline/Hoa/StreamException.php": [
+45
 ],
-'psysh:src/Readline/Hoa/StreamIn.php':[
-45,
+"psysh:src/Readline/Hoa/StreamIn.php": [
+45
 ],
-'psysh:src/Readline/Hoa/StreamLockable.php':[
-47,
+"psysh:src/Readline/Hoa/StreamLockable.php": [
+47
 ],
-'psysh:src/Readline/Hoa/StreamOut.php':[
-45,
+"psysh:src/Readline/Hoa/StreamOut.php": [
+45
 ],
-'psysh:src/Readline/Hoa/StreamPathable.php':[
-45,
+"psysh:src/Readline/Hoa/StreamPathable.php": [
+45
 ],
-'psysh:src/Readline/Hoa/StreamPointable.php':[
-45,
+"psysh:src/Readline/Hoa/StreamPointable.php": [
+45
 ],
-'psysh:src/Readline/Hoa/StreamStatable.php':[
-45,
+"psysh:src/Readline/Hoa/StreamStatable.php": [
+45
 ],
-'psysh:src/Readline/Hoa/StreamTouchable.php':[
-45,
+"psysh:src/Readline/Hoa/StreamTouchable.php": [
+45
 ],
-'psysh:src/Readline/Hoa/Ustring.php':[
+"psysh:src/Readline/Hoa/Ustring.php": [
 47,
 52,
 69,
 109,
-117,
+117
 ],
-'psysh:src/Readline/Hoa/Xcallable.php':[
+"psysh:src/Readline/Hoa/Xcallable.php": [
 45,
 86,
 140,
 150,
 210,
 241,
-249,
+249
 ],
-'psysh:src/Readline/HoaConsole.php':[
-20,
+"psysh:src/Readline/HoaConsole.php": [
+20
 ],
-'psysh:src/Readline/Libedit.php':[
+"psysh:src/Readline/Libedit.php": [
 27,
 34,
 42,
 50,
 74,
-103,
+103
 ],
-'psysh:src/Readline/Readline.php':[
-18,
+"psysh:src/Readline/Readline.php": [
+18
 ],
-'psysh:src/Readline/Transient.php':[
+"psysh:src/Readline/Transient.php": [
 20,
 32,
 40,
@@ -1513,9 +1513,9 @@
 114,
 124,
 132,
-144,
+144
 ],
-'psysh:src/Readline/Userland.php':[
+"psysh:src/Readline/Userland.php": [
 27,
 39,
 49,
@@ -1527,9 +1527,9 @@
 130,
 142,
 152,
-162,
+162
 ],
-'psysh:src/Reflection/ReflectionClassConstant.php':[
+"psysh:src/Reflection/ReflectionClassConstant.php": [
 20,
 32,
 58,
@@ -1545,13 +1545,13 @@
 176,
 187,
 197,
-213,
+213
 ],
-'psysh:src/Reflection/ReflectionConstant.php':[
+"psysh:src/Reflection/ReflectionConstant.php": [
 20,
-25,
+25
 ],
-'psysh:src/Reflection/ReflectionConstant_.php':[
+"psysh:src/Reflection/ReflectionConstant_.php": [
 24,
 46,
 67,
@@ -1564,9 +1564,9 @@
 139,
 150,
 161,
-171,
+171
 ],
-'psysh:src/Reflection/ReflectionLanguageConstruct.php':[
+"psysh:src/Reflection/ReflectionLanguageConstruct.php": [
 18,
 78,
 92,
@@ -1575,9 +1575,9 @@
 118,
 138,
 146,
-156,
+156
 ],
-'psysh:src/Reflection/ReflectionLanguageConstructParameter.php':[
+"psysh:src/Reflection/ReflectionLanguageConstructParameter.php": [
 20,
 26,
 39,
@@ -1586,16 +1586,16 @@
 76,
 86,
 96,
-108,
+108
 ],
-'psysh:src/Reflection/ReflectionNamespace.php':[
+"psysh:src/Reflection/ReflectionNamespace.php": [
 18,
 27,
 37,
 47,
-57,
+57
 ],
-'psysh:src/Shell.php':[
+"psysh:src/Shell.php": [
 51,
 91,
 117,
@@ -1672,9 +1672,9 @@
 1563,
 1584,
 1599,
-1618,
+1618
 ],
-'psysh:src/Sudo.php':[
+"psysh:src/Sudo.php": [
 19,
 29,
 45,
@@ -1684,37 +1684,37 @@
 113,
 130,
 151,
-173,
+173
 ],
-'psysh:src/Sudo/SudoVisitor.php':[
+"psysh:src/Sudo/SudoVisitor.php": [
 37,
 53,
-129,
+129
 ],
-'psysh:src/SuperglobalsEnv.php':[
+"psysh:src/SuperglobalsEnv.php": [
 18,
-25,
+25
 ],
-'psysh:src/TabCompletion/AutoCompleter.php':[
+"psysh:src/TabCompletion/AutoCompleter.php": [
 22,
 32,
 40,
 54,
 97,
-105,
+105
 ],
-'psysh:src/TabCompletion/Matcher/AbstractContextAwareMatcher.php':[
+"psysh:src/TabCompletion/Matcher/AbstractContextAwareMatcher.php": [
 26,
 40,
 52,
-62,
+62
 ],
-'psysh:src/TabCompletion/Matcher/AbstractDefaultParametersMatcher.php':[
+"psysh:src/TabCompletion/Matcher/AbstractDefaultParametersMatcher.php": [
 15,
 22,
-50,
+50
 ],
-'psysh:src/TabCompletion/Matcher/AbstractMatcher.php':[
+"psysh:src/TabCompletion/Matcher/AbstractMatcher.php": [
 20,
 54,
 64,
@@ -1724,90 +1724,90 @@
 141,
 155,
 164,
-175,
+175
 ],
-'psysh:src/TabCompletion/Matcher/ClassAttributesMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ClassAttributesMatcher.php": [
 23,
 28,
-75,
+75
 ],
-'psysh:src/TabCompletion/Matcher/ClassMethodDefaultParametersMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ClassMethodDefaultParametersMatcher.php": [
 15,
 17,
-43,
+43
 ],
-'psysh:src/TabCompletion/Matcher/ClassMethodsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ClassMethodsMatcher.php": [
 23,
 28,
-72,
+72
 ],
-'psysh:src/TabCompletion/Matcher/ClassNamesMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ClassNamesMatcher.php": [
 22,
 27,
-55,
+55
 ],
-'psysh:src/TabCompletion/Matcher/CommandsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/CommandsMatcher.php": [
 25,
 35,
 45,
 60,
 70,
 84,
-96,
+96
 ],
-'psysh:src/TabCompletion/Matcher/ConstantsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ConstantsMatcher.php": [
 22,
 27,
-39,
+39
 ],
-'psysh:src/TabCompletion/Matcher/FunctionDefaultParametersMatcher.php':[
+"psysh:src/TabCompletion/Matcher/FunctionDefaultParametersMatcher.php": [
 15,
 17,
-34,
+34
 ],
-'psysh:src/TabCompletion/Matcher/FunctionsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/FunctionsMatcher.php": [
 22,
 27,
-42,
+42
 ],
-'psysh:src/TabCompletion/Matcher/KeywordsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/KeywordsMatcher.php": [
 22,
 38,
 48,
 56,
-68,
+68
 ],
-'psysh:src/TabCompletion/Matcher/MongoClientMatcher.php':[
+"psysh:src/TabCompletion/Matcher/MongoClientMatcher.php": [
 22,
 27,
-59,
+59
 ],
-'psysh:src/TabCompletion/Matcher/MongoDatabaseMatcher.php':[
+"psysh:src/TabCompletion/Matcher/MongoDatabaseMatcher.php": [
 22,
 27,
-55,
+55
 ],
-'psysh:src/TabCompletion/Matcher/ObjectAttributesMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ObjectAttributesMatcher.php": [
 25,
 30,
-66,
+66
 ],
-'psysh:src/TabCompletion/Matcher/ObjectMethodDefaultParametersMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ObjectMethodDefaultParametersMatcher.php": [
 15,
 17,
-50,
+50
 ],
-'psysh:src/TabCompletion/Matcher/ObjectMethodsMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ObjectMethodsMatcher.php": [
 25,
 30,
-68,
+68
 ],
-'psysh:src/TabCompletion/Matcher/VariablesMatcher.php':[
+"psysh:src/TabCompletion/Matcher/VariablesMatcher.php": [
 22,
 27,
-39,
+39
 ],
-'psysh:src/Util/Docblock.php':[
+"psysh:src/Util/Docblock.php": [
 25,
 75,
 89,
@@ -1816,80 +1816,80 @@
 206,
 218,
 230,
-242,
+242
 ],
-'psysh:src/Util/Json.php':[
+"psysh:src/Util/Json.php": [
 18,
-26,
+26
 ],
-'psysh:src/Util/Mirror.php':[
+"psysh:src/Util/Mirror.php": [
 23,
 47,
 83,
 108,
-119,
+119
 ],
-'psysh:src/Util/Str.php':[
+"psysh:src/Util/Str.php": [
 20,
 61,
-73,
+73
 ],
-'psysh:src/VarDumper/Cloner.php':[
+"psysh:src/VarDumper/Cloner.php": [
 23,
 30,
-40,
+40
 ],
-'psysh:src/VarDumper/Dumper.php':[
+"psysh:src/VarDumper/Dumper.php": [
 22,
 39,
 50,
 61,
 68,
-102,
+102
 ],
-'psysh:src/VarDumper/Presenter.php':[
+"psysh:src/VarDumper/Presenter.php": [
 22,
 52,
 85,
 95,
-109,
+109
 ],
-'psysh:src/VarDumper/PresenterAware.php':[
-19,
+"psysh:src/VarDumper/PresenterAware.php": [
+19
 ],
-'psysh:src/VersionUpdater/Checker.php':[
-15,
+"psysh:src/VersionUpdater/Checker.php": [
+15
 ],
-'psysh:src/VersionUpdater/Downloader.php':[
-17,
+"psysh:src/VersionUpdater/Downloader.php": [
+17
 ],
-'psysh:src/VersionUpdater/Downloader/CurlDownloader.php':[
+"psysh:src/VersionUpdater/Downloader/CurlDownloader.php": [
 19,
 25,
 31,
 73,
-79,
+79
 ],
-'psysh:src/VersionUpdater/Downloader/Factory.php':[
+"psysh:src/VersionUpdater/Downloader/Factory.php": [
 18,
-23,
+23
 ],
-'psysh:src/VersionUpdater/Downloader/FileDownloader.php':[
+"psysh:src/VersionUpdater/Downloader/FileDownloader.php": [
 17,
 23,
 29,
 45,
-51,
+51
 ],
-'psysh:src/VersionUpdater/GitHubChecker.php':[
+"psysh:src/VersionUpdater/GitHubChecker.php": [
 17,
 23,
 32,
 44,
 52,
-68,
+68
 ],
-'psysh:src/VersionUpdater/Installer.php':[
+"psysh:src/VersionUpdater/Installer.php": [
 17,
 29,
 38,
@@ -1899,74 +1899,74 @@
 79,
 104,
 122,
-138,
+138
 ],
-'psysh:src/VersionUpdater/IntervalChecker.php':[
+"psysh:src/VersionUpdater/IntervalChecker.php": [
 15,
 20,
 26,
 50,
-64,
+64
 ],
-'psysh:src/VersionUpdater/NoopChecker.php':[
+"psysh:src/VersionUpdater/NoopChecker.php": [
 20,
 22,
-27,
+27
 ],
-'psysh:src/VersionUpdater/SelfUpdate.php':[
+"psysh:src/VersionUpdater/SelfUpdate.php": [
 25,
 40,
 53,
 63,
 80,
-101,
+101
 ],
-'psysh:src/functions.php':[
+"psysh:src/functions.php": [
 30,
 94,
 132,
-342,
+342
 ],
-'psysh:test/ClassWithSecretConstructor.php':[
+"psysh:test/ClassWithSecretConstructor.php": [
 15,
-19,
+19
 ],
-'psysh:test/ClassWithSecretParentConstructor.php':[
-15,
+"psysh:test/ClassWithSecretParentConstructor.php": [
+15
 ],
-'psysh:test/ClassWithSecretiveParent.php':[
-15,
+"psysh:test/ClassWithSecretiveParent.php": [
+15
 ],
-'psysh:test/ClassWithSecrets.php':[
+"psysh:test/ClassWithSecrets.php": [
 15,
 21,
-30,
+30
 ],
-'psysh:test/CodeCleaner/AbstractClassPassTest.php':[
+"psysh:test/CodeCleaner/AbstractClassPassTest.php": [
 17,
 22,
 30,
 38,
 50,
-56,
+56
 ],
-'psysh:test/CodeCleaner/AssignThisVariablePassTest.php':[
+"psysh:test/CodeCleaner/AssignThisVariablePassTest.php": [
 17,
 22,
 30,
 38,
 49,
-55,
+55
 ],
-'psysh:test/CodeCleaner/CallTimePassByReferencePassTest.php':[
+"psysh:test/CodeCleaner/CallTimePassByReferencePassTest.php": [
 17,
 22,
 30,
 38,
 51,
-57,
+57
 ],
-'psysh:test/CodeCleaner/CalledClassPassTest.php':[
+"psysh:test/CodeCleaner/CalledClassPassTest.php": [
 17,
 22,
 30,
@@ -1974,80 +1974,80 @@
 55,
 61,
 81,
-87,
+87
 ],
-'psysh:test/CodeCleaner/CodeCleanerTestCase.php':[
+"psysh:test/CodeCleaner/CodeCleanerTestCase.php": [
 19,
 26,
 31,
-40,
+40
 ],
-'psysh:test/CodeCleaner/EmptyArrayDimFetchPassTest.php':[
+"psysh:test/CodeCleaner/EmptyArrayDimFetchPassTest.php": [
 17,
 22,
 30,
 38,
 52,
-58,
+58
 ],
-'psysh:test/CodeCleaner/ExitPassTest.php':[
+"psysh:test/CodeCleaner/ExitPassTest.php": [
 17,
 27,
 35,
-45,
+45
 ],
-'psysh:test/CodeCleaner/FinalClassPassTest.php':[
+"psysh:test/CodeCleaner/FinalClassPassTest.php": [
 17,
 22,
 30,
 38,
 51,
-57,
+57
 ],
-'psysh:test/CodeCleaner/Fixtures/ClassWithCallStatic.php':[
+"psysh:test/CodeCleaner/Fixtures/ClassWithCallStatic.php": [
 15,
-17,
+17
 ],
-'psysh:test/CodeCleaner/Fixtures/ClassWithStatic.php':[
+"psysh:test/CodeCleaner/Fixtures/ClassWithStatic.php": [
 15,
-17,
+17
 ],
-'psysh:test/CodeCleaner/Fixtures/TraitWithStatic.php':[
+"psysh:test/CodeCleaner/Fixtures/TraitWithStatic.php": [
 15,
-17,
+17
 ],
-'psysh:test/CodeCleaner/FunctionContextPassTest.php':[
+"psysh:test/CodeCleaner/FunctionContextPassTest.php": [
 17,
 22,
 30,
 36,
 47,
-55,
+55
 ],
-'psysh:test/CodeCleaner/FunctionReturnInWriteContextPassTest.php':[
+"psysh:test/CodeCleaner/FunctionReturnInWriteContextPassTest.php": [
 17,
 22,
 30,
 40,
 52,
 65,
-71,
+71
 ],
-'psysh:test/CodeCleaner/ImplicitReturnPassTest.php':[
+"psysh:test/CodeCleaner/ImplicitReturnPassTest.php": [
 17,
 22,
 30,
-35,
+35
 ],
-'psysh:test/CodeCleaner/InstanceOfPassTest.php':[
+"psysh:test/CodeCleaner/InstanceOfPassTest.php": [
 17,
 22,
 30,
 38,
 65,
-71,
+71
 ],
-'psysh:test/CodeCleaner/IssetPassTest.php':[
+"psysh:test/CodeCleaner/IssetPassTest.php": [
 20,
 25,
 33,
@@ -2055,9 +2055,9 @@
 56,
 62,
 102,
-108,
+108
 ],
-'psysh:test/CodeCleaner/LabelContextPassTest.php':[
+"psysh:test/CodeCleaner/LabelContextPassTest.php": [
 17,
 22,
 30,
@@ -2065,49 +2065,49 @@
 55,
 63,
 75,
-81,
+81
 ],
-'psysh:test/CodeCleaner/LeavePsyshAlonePassTest.php':[
+"psysh:test/CodeCleaner/LeavePsyshAlonePassTest.php": [
 17,
 22,
 27,
 37,
 43,
 58,
-66,
+66
 ],
-'psysh:test/CodeCleaner/ListPassTest.php':[
+"psysh:test/CodeCleaner/ListPassTest.php": [
 18,
 23,
 31,
 42,
 79,
-86,
+86
 ],
-'psysh:test/CodeCleaner/LoopContextPassTest.php':[
+"psysh:test/CodeCleaner/LoopContextPassTest.php": [
 17,
 22,
 30,
 38,
 85,
-91,
+91
 ],
-'psysh:test/CodeCleaner/MagicConstantsPassTest.php':[
+"psysh:test/CodeCleaner/MagicConstantsPassTest.php": [
 17,
 22,
 30,
-35,
+35
 ],
-'psysh:test/CodeCleaner/NamespacePassTest.php':[
+"psysh:test/CodeCleaner/NamespacePassTest.php": [
 18,
 25,
-31,
+31
 ],
-'psysh:test/CodeCleaner/NoReturnValueTest.php':[
+"psysh:test/CodeCleaner/NoReturnValueTest.php": [
 19,
-21,
+21
 ],
-'psysh:test/CodeCleaner/PassableByReferencePassTest.php':[
+"psysh:test/CodeCleaner/PassableByReferencePassTest.php": [
 17,
 22,
 30,
@@ -2117,9 +2117,9 @@
 72,
 78,
 98,
-106,
+106
 ],
-'psysh:test/CodeCleaner/RequirePassTest.php':[
+"psysh:test/CodeCleaner/RequirePassTest.php": [
 17,
 22,
 30,
@@ -2127,9 +2127,9 @@
 60,
 73,
 87,
-96,
+96
 ],
-'psysh:test/CodeCleaner/ReturnTypePassTest.php':[
+"psysh:test/CodeCleaner/ReturnTypePassTest.php": [
 17,
 22,
 34,
@@ -2141,32 +2141,32 @@
 100,
 110,
 122,
-132,
+132
 ],
-'psysh:test/CodeCleaner/StrictTypesPassTest.php':[
+"psysh:test/CodeCleaner/StrictTypesPassTest.php": [
 17,
 22,
 27,
 38,
-46,
+46
 ],
-'psysh:test/CodeCleaner/UseStatementPassTest.php':[
+"psysh:test/CodeCleaner/UseStatementPassTest.php": [
 17,
 22,
 30,
 35,
 84,
-89,
+89
 ],
-'psysh:test/CodeCleaner/ValidClassNamePassTest.php':[
+"psysh:test/CodeCleaner/ValidClassNamePassTest.php": [
 17,
 22,
 30,
 38,
 109,
-115,
+115
 ],
-'psysh:test/CodeCleaner/ValidConstructorPassTest.php':[
+"psysh:test/CodeCleaner/ValidConstructorPassTest.php": [
 17,
 22,
 30,
@@ -2174,17 +2174,17 @@
 49,
 61,
 74,
-80,
+80
 ],
-'psysh:test/CodeCleaner/ValidFunctionNamePassTest.php':[
+"psysh:test/CodeCleaner/ValidFunctionNamePassTest.php": [
 17,
 22,
 30,
 38,
 65,
-71,
+71
 ],
-'psysh:test/CodeCleanerTest.php':[
+"psysh:test/CodeCleanerTest.php": [
 17,
 22,
 28,
@@ -2193,27 +2193,27 @@
 81,
 89,
 103,
-113,
+113
 ],
-'psysh:test/Command/ClearCommandTest.php':[
+"psysh:test/Command/ClearCommandTest.php": [
 18,
-20,
+20
 ],
-'psysh:test/Command/ExitCommandTest.php':[
+"psysh:test/Command/ExitCommandTest.php": [
 18,
-20,
+20
 ],
-'psysh:test/Command/HelpCommandTest.php':[
+"psysh:test/Command/HelpCommandTest.php": [
 19,
-21,
+21
 ],
-'psysh:test/Command/ListCommand/ClassConstantEnumeratorTest.php':[
+"psysh:test/Command/ListCommand/ClassConstantEnumeratorTest.php": [
 18,
 23,
 31,
-163,
+163
 ],
-'psysh:test/Command/ListCommand/ClassEnumeratorTest.php':[
+"psysh:test/Command/ListCommand/ClassEnumeratorTest.php": [
 18,
 20,
 32,
@@ -2224,9 +2224,9 @@
 209,
 228,
 247,
-260,
+260
 ],
-'psysh:test/Command/ListCommand/ConstantEnumeratorTest.php':[
+"psysh:test/Command/ListCommand/ConstantEnumeratorTest.php": [
 21,
 25,
 32,
@@ -2235,63 +2235,63 @@
 88,
 105,
 116,
-134,
+134
 ],
-'psysh:test/Command/ListCommand/EnumeratorTestCase.php':[
+"psysh:test/Command/ListCommand/EnumeratorTestCase.php": [
 20,
 22,
 27,
-43,
+43
 ],
-'psysh:test/Command/ListCommand/Fixtures/ClassAlfa.php':[
+"psysh:test/Command/ListCommand/Fixtures/ClassAlfa.php": [
 15,
 21,
 25,
-29,
+29
 ],
-'psysh:test/Command/ListCommand/Fixtures/ClassBravo.php':[
+"psysh:test/Command/ListCommand/Fixtures/ClassBravo.php": [
 15,
 23,
 27,
-31,
+31
 ],
-'psysh:test/Command/ListCommand/Fixtures/ClassCharlie.php':[
+"psysh:test/Command/ListCommand/Fixtures/ClassCharlie.php": [
 15,
-21,
+21
 ],
-'psysh:test/Command/ListCommand/Fixtures/InterfaceDelta.php':[
+"psysh:test/Command/ListCommand/Fixtures/InterfaceDelta.php": [
+15
+],
+"psysh:test/Command/ListCommand/Fixtures/InterfaceEcho.php": [
+15
+],
+"psysh:test/Command/ListCommand/Fixtures/TraitFoxtrot.php": [
 15,
+19
 ],
-'psysh:test/Command/ListCommand/Fixtures/InterfaceEcho.php':[
+"psysh:test/Command/ListCommand/Fixtures/TraitGolf.php": [
+15
+],
+"psysh:test/Command/ListCommand/Fixtures/functions.php": [
 15,
+19
 ],
-'psysh:test/Command/ListCommand/Fixtures/TraitFoxtrot.php':[
-15,
-19,
-],
-'psysh:test/Command/ListCommand/Fixtures/TraitGolf.php':[
-15,
-],
-'psysh:test/Command/ListCommand/Fixtures/functions.php':[
-15,
-19,
-],
-'psysh:test/Command/ListCommand/FunctionEnumeratorTest.php':[
+"psysh:test/Command/ListCommand/FunctionEnumeratorTest.php": [
 21,
 23,
 30,
 42,
 65,
 88,
-112,
+112
 ],
-'psysh:test/Command/ListCommand/GlobalVariableEnumeratorTest.php':[
+"psysh:test/Command/ListCommand/GlobalVariableEnumeratorTest.php": [
 18,
 20,
 27,
-39,
+39
 ],
-'psysh:test/Command/ListCommand/MethodEnumeratorTest.php':[
+"psysh:test/Command/ListCommand/MethodEnumeratorTest.php": [
 17,
 19,
 26,
@@ -2300,9 +2300,9 @@
 84,
 114,
 134,
-153,
+153
 ],
-'psysh:test/Command/ListCommand/PropertyEnumeratorTest.php':[
+"psysh:test/Command/ListCommand/PropertyEnumeratorTest.php": [
 17,
 19,
 26,
@@ -2311,42 +2311,42 @@
 84,
 114,
 134,
-143,
+143
 ],
-'psysh:test/Command/ListCommand/VariableEnumeratorTest.php':[
+"psysh:test/Command/ListCommand/VariableEnumeratorTest.php": [
 19,
 21,
 35,
 54,
-89,
+89
 ],
-'psysh:test/Command/PsyVersionCommandTest.php':[
+"psysh:test/Command/PsyVersionCommandTest.php": [
 19,
-21,
+21
 ],
-'psysh:test/Command/ThrowUpCommandTest.php':[
+"psysh:test/Command/ThrowUpCommandTest.php": [
 19,
 24,
 42,
 67,
-80,
+80
 ],
-'psysh:test/Command/TimeitCommand/TimeitVisitorTest.php':[
+"psysh:test/Command/TimeitCommand/TimeitVisitorTest.php": [
 19,
 24,
 33,
-38,
+38
 ],
-'psysh:test/ConfigPathsTest.php':[
+"psysh:test/ConfigPathsTest.php": [
 17,
 19,
 53,
 62,
 141,
 147,
-169,
+169
 ],
-'psysh:test/ConfigurationTest.php':[
+"psysh:test/ConfigurationTest.php": [
 26,
 28,
 35,
@@ -2389,9 +2389,9 @@
 551,
 564,
 572,
-581,
+581
 ],
-'psysh:test/ContextTest.php':[
+"psysh:test/ContextTest.php": [
 18,
 20,
 25,
@@ -2410,15 +2410,15 @@
 245,
 274,
 300,
-311,
+311
 ],
-'psysh:test/Exception/BreakExceptionTest.php':[
+"psysh:test/Exception/BreakExceptionTest.php": [
 18,
 20,
 28,
-36,
+36
 ],
-'psysh:test/Exception/ErrorExceptionTest.php':[
+"psysh:test/Exception/ErrorExceptionTest.php": [
 18,
 20,
 29,
@@ -2428,44 +2428,44 @@
 79,
 91,
 101,
-113,
+113
 ],
-'psysh:test/Exception/FatalErrorExceptionTest.php':[
+"psysh:test/Exception/FatalErrorExceptionTest.php": [
 18,
 20,
 29,
 39,
-48,
+48
 ],
-'psysh:test/Exception/ParseErrorExceptionTest.php':[
+"psysh:test/Exception/ParseErrorExceptionTest.php": [
 18,
 20,
 29,
-37,
+37
 ],
-'psysh:test/Exception/RuntimeExceptionTest.php':[
+"psysh:test/Exception/RuntimeExceptionTest.php": [
 18,
-20,
+20
 ],
-'psysh:test/Exception/ThrowUpExceptionTest.php':[
+"psysh:test/Exception/ThrowUpExceptionTest.php": [
 19,
 21,
 35,
 44,
-56,
+56
 ],
-'psysh:test/Exception/TypeErrorExceptionTest.php':[
+"psysh:test/Exception/TypeErrorExceptionTest.php": [
 18,
 20,
 32,
-40,
+40
 ],
-'psysh:test/FakeShell.php':[
+"psysh:test/FakeShell.php": [
 18,
 22,
-27,
+27
 ],
-'psysh:test/Formatter/CodeFormatterTest.php':[
+"psysh:test/Formatter/CodeFormatterTest.php": [
 19,
 24,
 33,
@@ -2478,38 +2478,38 @@
 236,
 242,
 265,
-273,
+273
 ],
-'psysh:test/Formatter/DocblockFormatterTest.php':[
+"psysh:test/Formatter/DocblockFormatterTest.php": [
 18,
 32,
-41,
+41
 ],
-'psysh:test/Formatter/Fixtures/BoringTrait.php':[
+"psysh:test/Formatter/Fixtures/BoringTrait.php": [
 15,
-17,
+17
 ],
-'psysh:test/Formatter/Fixtures/SomeClass.php':[
+"psysh:test/Formatter/Fixtures/SomeClass.php": [
 15,
 20,
-25,
+25
 ],
-'psysh:test/Formatter/SignatureFormatterTest.php':[
+"psysh:test/Formatter/SignatureFormatterTest.php": [
 21,
 26,
 30,
 37,
 42,
-100,
+100
 ],
-'psysh:test/Input/CodeArgumentTest.php':[
+"psysh:test/Input/CodeArgumentTest.php": [
 18,
 23,
 31,
 43,
-48,
+48
 ],
-'psysh:test/Input/FilterOptionsTest.php':[
+"psysh:test/Input/FilterOptionsTest.php": [
 19,
 21,
 30,
@@ -2518,9 +2518,9 @@
 64,
 79,
 88,
-102,
+102
 ],
-'psysh:test/Input/ShellInputTest.php':[
+"psysh:test/Input/ShellInputTest.php": [
 21,
 23,
 39,
@@ -2528,15 +2528,15 @@
 69,
 82,
 97,
-106,
+106
 ],
-'psysh:test/ParserFactoryTest.php':[
+"psysh:test/ParserFactoryTest.php": [
 18,
 20,
 29,
-42,
+42
 ],
-'psysh:test/ParserTestCase.php':[
+"psysh:test/ParserTestCase.php": [
 19,
 28,
 35,
@@ -2545,21 +2545,21 @@
 68,
 76,
 86,
-95,
+95
 ],
-'psysh:test/Readline/GNUReadlineTest.php':[
+"psysh:test/Readline/GNUReadlineTest.php": [
 17,
 24,
 34,
 40,
 57,
-75,
+75
 ],
-'psysh:test/Readline/HoaConsoleTest.php':[
+"psysh:test/Readline/HoaConsoleTest.php": [
 17,
-19,
+19
 ],
-'psysh:test/Readline/LibeditTest.php':[
+"psysh:test/Readline/LibeditTest.php": [
 17,
 24,
 41,
@@ -2568,16 +2568,16 @@
 71,
 89,
 105,
-124,
+124
 ],
-'psysh:test/Readline/TransientTest.php':[
+"psysh:test/Readline/TransientTest.php": [
 17,
 19,
 36,
 54,
-70,
+70
 ],
-'psysh:test/Reflection/ReflectionClassConstantTest.php':[
+"psysh:test/Reflection/ReflectionClassConstantTest.php": [
 17,
 21,
 35,
@@ -2585,13 +2585,13 @@
 49,
 55,
 68,
-78,
+78
 ],
-'psysh:test/Reflection/ReflectionConstantBCTest.php':[
+"psysh:test/Reflection/ReflectionConstantBCTest.php": [
 18,
-22,
+22
 ],
-'psysh:test/Reflection/ReflectionConstantTest.php':[
+"psysh:test/Reflection/ReflectionConstantTest.php": [
 19,
 21,
 34,
@@ -2602,13 +2602,13 @@
 86,
 92,
 101,
-111,
+111
 ],
-'psysh:test/Reflection/ReflectionLanguageConstructParameterTest.php':[
+"psysh:test/Reflection/ReflectionLanguageConstructParameterTest.php": [
 18,
-20,
+20
 ],
-'psysh:test/Reflection/ReflectionLanguageConstructTest.php':[
+"psysh:test/Reflection/ReflectionLanguageConstructTest.php": [
 17,
 22,
 32,
@@ -2618,14 +2618,14 @@
 67,
 75,
 91,
-99,
+99
 ],
-'psysh:test/Reflection/ReflectionNamespaceTest.php':[
+"psysh:test/Reflection/ReflectionNamespaceTest.php": [
 17,
 19,
-27,
+27
 ],
-'psysh:test/ShellTest.php':[
+"psysh:test/ShellTest.php": [
 24,
 31,
 38,
@@ -2667,9 +2667,9 @@
 597,
 614,
 621,
-631,
+631
 ],
-'psysh:test/Sudo/SudoVisitorTest.php':[
+"psysh:test/Sudo/SudoVisitorTest.php": [
 19,
 24,
 33,
@@ -2687,9 +2687,9 @@
 135,
 140,
 150,
-155,
+155
 ],
-'psysh:test/SudoTest.php':[
+"psysh:test/SudoTest.php": [
 17,
 22,
 29,
@@ -2704,18 +2704,18 @@
 118,
 129,
 135,
-141,
+141
 ],
-'psysh:test/TabCompletion/AutoCompleterTest.php':[
+"psysh:test/TabCompletion/AutoCompleterTest.php": [
 22,
 31,
-95,
+95
 ],
-'psysh:test/TabCompletion/StaticSample.php':[
+"psysh:test/TabCompletion/StaticSample.php": [
 18,
-24,
+24
 ],
-'psysh:test/TestCase.php':[
+"psysh:test/TestCase.php": [
 23,
 25,
 32,
@@ -2728,43 +2728,43 @@
 71,
 76,
 82,
-89,
+89
 ],
-'psysh:test/TestableEnv.php':[
+"psysh:test/TestableEnv.php": [
 17,
 21,
-26,
+26
 ],
-'psysh:test/Util/DocblockTest.php':[
+"psysh:test/Util/DocblockTest.php": [
 17,
 22,
-43,
+43
 ],
-'psysh:test/Util/MirrorTest.php':[
+"psysh:test/Util/MirrorTest.php": [
 20,
 26,
 31,
 72,
 83,
-91,
+91
 ],
-'psysh:test/Util/StrTest.php':[
+"psysh:test/Util/StrTest.php": [
 17,
 22,
-27,
+27
 ],
-'psysh:test/VersionUpdater/GitHubCheckerTest.php':[
+"psysh:test/VersionUpdater/GitHubCheckerTest.php": [
 18,
 25,
 45,
 57,
-73,
+73
 ],
-'psysh:test/VersionUpdater/NoopCheckerTest.php':[
+"psysh:test/VersionUpdater/NoopCheckerTest.php": [
 18,
-20,
+20
 ],
-'psysh:test/VersionUpdater/SelfUpdateTest.php':[
+"psysh:test/VersionUpdater/SelfUpdateTest.php": [
 26,
 28,
 36,
@@ -2781,6 +2781,6 @@
 206,
 217,
 234,
-251,
-],
+251
+]
 }

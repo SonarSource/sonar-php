@@ -1,59 +1,59 @@
 {
-'PHP_CodeSniffer:scripts/build-phar.php':[
+"PHP_CodeSniffer:scripts/build-phar.php": [
 156,
 157,
 158,
 159,
 160,
 161,
-162,
+162
 ],
-'PHP_CodeSniffer:src/Config.php':[
+"PHP_CodeSniffer:src/Config.php": [
 1598,
-1600,
+1600
 ],
-'PHP_CodeSniffer:src/Reports/Cbf.php':[
+"PHP_CodeSniffer:src/Reports/Cbf.php": [
 183,
-185,
+185
 ],
-'PHP_CodeSniffer:src/Reports/Code.php':[
+"PHP_CodeSniffer:src/Reports/Code.php": [
 177,
 207,
 248,
 294,
-313,
+313
 ],
-'PHP_CodeSniffer:src/Reports/Full.php':[
+"PHP_CodeSniffer:src/Reports/Full.php": [
 95,
 139,
-181,
+181
 ],
-'PHP_CodeSniffer:src/Reports/Info.php':[
-100,
+"PHP_CodeSniffer:src/Reports/Info.php": [
+100
 ],
-'PHP_CodeSniffer:src/Reports/Source.php':[
-249,
+"PHP_CodeSniffer:src/Reports/Source.php": [
+249
 ],
-'PHP_CodeSniffer:src/Reports/Summary.php':[
+"PHP_CodeSniffer:src/Reports/Summary.php": [
 122,
-124,
+124
 ],
-'PHP_CodeSniffer:src/Reports/VersionControl.php':[
+"PHP_CodeSniffer:src/Reports/VersionControl.php": [
 237,
-325,
+325
 ],
-'PHP_CodeSniffer:src/Runner.php':[
+"PHP_CodeSniffer:src/Runner.php": [
 523,
-538,
+538
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php':[
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php": [
 102,
-102,
+102
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Arrays/ArrayIndentUnitTest.inc':[
-74,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Arrays/ArrayIndentUnitTest.inc": [
+74
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Strings/UnnecessaryStringConcatUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Strings/UnnecessaryStringConcatUnitTest.inc": [
 2,
 6,
 9,
@@ -61,30 +61,30 @@
 12,
 15,
 16,
-18,
+18
 ],
-'PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc':[
-61,
+"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
+61
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/ConcatenationSpacingUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/ConcatenationSpacingUnitTest.inc": [
 8,
 34,
 38,
 42,
-46,
+46
 ],
-'PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php':[
+"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
 78,
 79,
 96,
 97,
 122,
-123,
+123
 ],
-'PHP_CodeSniffer:tests/bootstrap.php':[
+"PHP_CodeSniffer:tests/bootstrap.php": [
 32,
 36,
 40,
-44,
-],
+44
+]
 }

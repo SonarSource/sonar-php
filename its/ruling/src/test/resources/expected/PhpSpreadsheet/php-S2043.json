@@ -1,5 +1,5 @@
 {
-'PhpSpreadsheet:samples/Basic/45_Quadratic_equation_solver.php':[
+"PhpSpreadsheet:samples/Basic/45_Quadratic_equation_solver.php": [
 24,
 24,
 32,
@@ -14,9 +14,9 @@
 59,
 59,
 60,
-60,
+60
 ],
-'PhpSpreadsheet:samples/Wizards/NumberFormat/Accounting.php':[
+"PhpSpreadsheet:samples/Wizards/NumberFormat/Accounting.php": [
 32,
 32,
 43,
@@ -50,9 +50,9 @@
 96,
 97,
 98,
-99,
+99
 ],
-'PhpSpreadsheet:samples/Wizards/NumberFormat/Currency.php':[
+"PhpSpreadsheet:samples/Wizards/NumberFormat/Currency.php": [
 32,
 32,
 43,
@@ -86,9 +86,9 @@
 96,
 97,
 98,
-99,
+99
 ],
-'PhpSpreadsheet:samples/Wizards/NumberFormat/Number.php':[
+"PhpSpreadsheet:samples/Wizards/NumberFormat/Number.php": [
 22,
 22,
 31,
@@ -104,9 +104,9 @@
 56,
 58,
 62,
-63,
+63
 ],
-'PhpSpreadsheet:samples/Wizards/NumberFormat/Percentage.php':[
+"PhpSpreadsheet:samples/Wizards/NumberFormat/Percentage.php": [
 22,
 22,
 31,
@@ -118,9 +118,9 @@
 46,
 50,
 52,
-55,
+55
 ],
-'PhpSpreadsheet:samples/Wizards/NumberFormat/Scientific.php':[
+"PhpSpreadsheet:samples/Wizards/NumberFormat/Scientific.php": [
 22,
 22,
 31,
@@ -132,13 +132,13 @@
 46,
 50,
 52,
-55,
+55
 ],
-'PhpSpreadsheet:samples/download.php':[
+"PhpSpreadsheet:samples/download.php": [
 8,
-9,
+9
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Helper/Sample.php':[
-41,
-],
+"PhpSpreadsheet:src/PhpSpreadsheet/Helper/Sample.php": [
+41
+]
 }

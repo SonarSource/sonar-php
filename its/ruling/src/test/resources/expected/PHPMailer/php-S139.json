@@ -1,5 +1,5 @@
 {
-'PHPMailer:src/PHPMailer.php':[
+"PHPMailer:src/PHPMailer.php": [
 1100,
 1308,
 1389,
@@ -16,56 +16,56 @@
 4867,
 4868,
 4921,
-4934,
+4934
 ],
-'PHPMailer:src/POP3.php':[
+"PHPMailer:src/POP3.php": [
 263,
 264,
 265,
 266,
 268,
-395,
+395
 ],
-'PHPMailer:src/SMTP.php':[
+"PHPMailer:src/SMTP.php": [
 646,
 679,
 698,
 925,
-928,
+928
 ],
-'PHPMailer:test/Language/TranslationCompletenessTest.php':[
+"PHPMailer:test/Language/TranslationCompletenessTest.php": [
 61,
 62,
-82,
+82
 ],
-'PHPMailer:test/PHPMailer/AddStringEmbeddedImageTest.php':[
+"PHPMailer:test/PHPMailer/AddStringEmbeddedImageTest.php": [
 56,
-58,
+58
 ],
-'PHPMailer:test/PHPMailer/DKIMTest.php':[
-236,
+"PHPMailer:test/PHPMailer/DKIMTest.php": [
+236
 ],
-'PHPMailer:test/PHPMailer/LocalizationTest.php':[
+"PHPMailer:test/PHPMailer/LocalizationTest.php": [
 264,
 268,
 272,
 284,
-336,
+336
 ],
-'PHPMailer:test/PHPMailer/PHPMailerTest.php':[
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
 95,
 1093,
 1096,
 1105,
-1202,
+1202
 ],
-'PHPMailer:test/PreSendTestCase.php':[
-36,
+"PHPMailer:test/PreSendTestCase.php": [
+36
 ],
-'PHPMailer:test/SendTestCase.php':[
-57,
+"PHPMailer:test/SendTestCase.php": [
+57
 ],
-'PHPMailer:test/TestCase.php':[
-51,
-],
+"PHPMailer:test/TestCase.php": [
+51
+]
 }

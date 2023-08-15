@@ -1,82 +1,82 @@
 {
-'psysh:src/CodeCleaner/AbstractClassPass.php':[
-39,
+"psysh:src/CodeCleaner/AbstractClassPass.php": [
+39
 ],
-'psysh:src/CodeCleaner/CalledClassPass.php':[
-52,
+"psysh:src/CodeCleaner/CalledClassPass.php": [
+52
 ],
-'psysh:src/CodeCleaner/EmptyArrayDimFetchPass.php':[
-53,
+"psysh:src/CodeCleaner/EmptyArrayDimFetchPass.php": [
+53
 ],
-'psysh:src/CodeCleaner/FunctionReturnInWriteContextPass.php':[
-68,
+"psysh:src/CodeCleaner/FunctionReturnInWriteContextPass.php": [
+68
 ],
-'psysh:src/CodeCleaner/ImplicitReturnPass.php':[
-90,
+"psysh:src/CodeCleaner/ImplicitReturnPass.php": [
+90
 ],
-'psysh:src/CodeCleaner/LabelContextPass.php':[
-72,
+"psysh:src/CodeCleaner/LabelContextPass.php": [
+72
 ],
-'psysh:src/CodeCleaner/LoopContextPass.php':[
-84,
+"psysh:src/CodeCleaner/LoopContextPass.php": [
+84
 ],
-'psysh:src/CodeCleaner/NamespaceAwarePass.php':[
+"psysh:src/CodeCleaner/NamespaceAwarePass.php": [
+67
+],
+"psysh:src/CodeCleaner/PassableByReferencePass.php": [
+112
+],
+"psysh:src/CodeCleaner/ReturnTypePass.php": [
+74
+],
+"psysh:src/CodeCleaner/ValidClassNamePass.php": [
 67,
+154
 ],
-'psysh:src/CodeCleaner/PassableByReferencePass.php':[
-112,
+"psysh:src/CodeCleaner/ValidConstructorPass.php": [
+60
 ],
-'psysh:src/CodeCleaner/ReturnTypePass.php':[
-74,
+"psysh:src/CodeCleaner/ValidFunctionNamePass.php": [
+47
 ],
-'psysh:src/CodeCleaner/ValidClassNamePass.php':[
-67,
-154,
+"psysh:src/Command/ListCommand/ConstantEnumerator.php": [
+74
 ],
-'psysh:src/CodeCleaner/ValidConstructorPass.php':[
-60,
-],
-'psysh:src/CodeCleaner/ValidFunctionNamePass.php':[
-47,
-],
-'psysh:src/Command/ListCommand/ConstantEnumerator.php':[
-74,
-],
-'psysh:src/Command/ShowCommand.php':[
+"psysh:src/Command/ShowCommand.php": [
 262,
-279,
+279
 ],
-'psysh:src/Configuration.php':[
+"psysh:src/Configuration.php": [
 148,
 189,
 201,
-1230,
+1230
 ],
-'psysh:src/ExecutionLoop/ProcessForker.php':[
-228,
+"psysh:src/ExecutionLoop/ProcessForker.php": [
+228
 ],
-'psysh:src/Formatter/SignatureFormatter.php':[
-274,
+"psysh:src/Formatter/SignatureFormatter.php": [
+274
 ],
-'psysh:src/Readline/Hoa/FileDirectory.php':[
-147,
+"psysh:src/Readline/Hoa/FileDirectory.php": [
+147
 ],
-'psysh:src/Readline/Hoa/Readline.php':[
-214,
+"psysh:src/Readline/Hoa/Readline.php": [
+214
 ],
-'psysh:src/Readline/Hoa/Stream.php':[
-221,
+"psysh:src/Readline/Hoa/Stream.php": [
+221
 ],
-'psysh:src/Readline/Hoa/Ustring.php':[
-132,
+"psysh:src/Readline/Hoa/Ustring.php": [
+132
 ],
-'psysh:src/Util/Docblock.php':[
-159,
+"psysh:src/Util/Docblock.php": [
+159
 ],
-'psysh:src/VersionUpdater/SelfUpdate.php':[
-166,
+"psysh:src/VersionUpdater/SelfUpdate.php": [
+166
 ],
-'psysh:src/functions.php':[
-109,
-],
+"psysh:src/functions.php": [
+109
+]
 }

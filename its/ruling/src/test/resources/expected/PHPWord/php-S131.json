@@ -1,14 +1,14 @@
 {
-'PHPWord:src/PhpWord/Element/Image.php':[
-503,
+"PHPWord:src/PhpWord/Element/Image.php": [
+503
 ],
-'PHPWord:src/PhpWord/Media.php':[
-65,
+"PHPWord:src/PhpWord/Media.php": [
+65
 ],
-'PHPWord:src/PhpWord/Metadata/DocInfo.php':[
-514,
+"PHPWord:src/PhpWord/Metadata/DocInfo.php": [
+514
 ],
-'PHPWord:src/PhpWord/Reader/MsDoc.php':[
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
 321,
 1537,
 1624,
@@ -17,23 +17,23 @@
 1697,
 1799,
 1879,
-2205,
+2205
 ],
-'PHPWord:src/PhpWord/Reader/ODText/Content.php':[
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
 47,
-56,
+56
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/Numbering.php':[
-50,
+"PHPWord:src/PhpWord/Reader/Word2007/Numbering.php": [
+50
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/Styles.php':[
-72,
+"PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
+72
 ],
-'PHPWord:src/PhpWord/Shared/Converter.php':[
+"PHPWord:src/PhpWord/Shared/Converter.php": [
 306,
-389,
+389
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
+"PHPWord:src/PhpWord/Shared/Html.php": [
 114,
 326,
 570,
@@ -41,16 +41,16 @@
 686,
 883,
 905,
-1109,
+1109
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
-414,
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+414
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Element/Field.php':[
+"PHPWord:src/PhpWord/Writer/ODText/Element/Field.php": [
 43,
-64,
+64
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Element/Shape.php':[
-140,
-],
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Shape.php": [
+140
+]
 }

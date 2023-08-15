@@ -1,98 +1,98 @@
 {
-'RubixML:tests/AnomalyDetectors/IsolationForestTest.php':[
+"RubixML:tests/AnomalyDetectors/IsolationForestTest.php": [
+111
+],
+"RubixML:tests/AnomalyDetectors/LocalOutlierFactorTest.php": [
+112
+],
+"RubixML:tests/AnomalyDetectors/LodaTest.php": [
+113,
+123
+],
+"RubixML:tests/AnomalyDetectors/RobustZScoreTest.php": [
 111,
+121
 ],
-'RubixML:tests/AnomalyDetectors/LocalOutlierFactorTest.php':[
+"RubixML:tests/Classifiers/AdaBoostTest.php": [
+115
+],
+"RubixML:tests/Classifiers/ClassificationTreeTest.php": [
+117
+],
+"RubixML:tests/Classifiers/ExtraTreeClassifierTest.php": [
+114
+],
+"RubixML:tests/Classifiers/KDNeighborsTest.php": [
+113
+],
+"RubixML:tests/Classifiers/KNearestNeighborsTest.php": [
+115
+],
+"RubixML:tests/Classifiers/LogisticRegressionTest.php": [
+121
+],
+"RubixML:tests/Classifiers/MultilayerPerceptronTest.php": [
+137
+],
+"RubixML:tests/Classifiers/NaiveBayesTest.php": [
+115
+],
+"RubixML:tests/Classifiers/RadiusNeighborsTest.php": [
+113
+],
+"RubixML:tests/Classifiers/RandomForestTest.php": [
+117
+],
+"RubixML:tests/Classifiers/SoftmaxClassifierTest.php": [
+120
+],
+"RubixML:tests/Clusterers/DBSCANTest.php": [
+93
+],
+"RubixML:tests/Clusterers/FuzzyCMeansTest.php": [
+116
+],
+"RubixML:tests/Clusterers/GaussianMixtureTest.php": [
+115
+],
+"RubixML:tests/Clusterers/KMeansTest.php": [
+118
+],
+"RubixML:tests/Clusterers/MeanShiftTest.php": [
+116
+],
+"RubixML:tests/NeuralNet/ActivationFunctions/ELUTest.php": [
+47
+],
+"RubixML:tests/Regressors/AdalineTest.php": [
+114
+],
+"RubixML:tests/Regressors/ExtraTreeRegressorTest.php": [
+107
+],
+"RubixML:tests/Regressors/GradientBoostTest.php": [
 112,
+122
 ],
-'RubixML:tests/AnomalyDetectors/LodaTest.php':[
-113,
-123,
+"RubixML:tests/Regressors/KDNeighborsRegressorTest.php": [
+106
 ],
-'RubixML:tests/AnomalyDetectors/RobustZScoreTest.php':[
-111,
-121,
+"RubixML:tests/Regressors/KNNRegressorTest.php": [
+108
 ],
-'RubixML:tests/Classifiers/AdaBoostTest.php':[
-115,
+"RubixML:tests/Regressors/MLPRegressorTest.php": [
+129
 ],
-'RubixML:tests/Classifiers/ClassificationTreeTest.php':[
-117,
+"RubixML:tests/Regressors/RadiusNeighborsRegressorTest.php": [
+106
 ],
-'RubixML:tests/Classifiers/ExtraTreeClassifierTest.php':[
-114,
+"RubixML:tests/Regressors/RegressionTreeTest.php": [
+110
 ],
-'RubixML:tests/Classifiers/KDNeighborsTest.php':[
-113,
+"RubixML:tests/Regressors/RidgeTest.php": [
+107
 ],
-'RubixML:tests/Classifiers/KNearestNeighborsTest.php':[
-115,
-],
-'RubixML:tests/Classifiers/LogisticRegressionTest.php':[
-121,
-],
-'RubixML:tests/Classifiers/MultilayerPerceptronTest.php':[
-137,
-],
-'RubixML:tests/Classifiers/NaiveBayesTest.php':[
-115,
-],
-'RubixML:tests/Classifiers/RadiusNeighborsTest.php':[
-113,
-],
-'RubixML:tests/Classifiers/RandomForestTest.php':[
-117,
-],
-'RubixML:tests/Classifiers/SoftmaxClassifierTest.php':[
-120,
-],
-'RubixML:tests/Clusterers/DBSCANTest.php':[
-93,
-],
-'RubixML:tests/Clusterers/FuzzyCMeansTest.php':[
-116,
-],
-'RubixML:tests/Clusterers/GaussianMixtureTest.php':[
-115,
-],
-'RubixML:tests/Clusterers/KMeansTest.php':[
-118,
-],
-'RubixML:tests/Clusterers/MeanShiftTest.php':[
-116,
-],
-'RubixML:tests/NeuralNet/ActivationFunctions/ELUTest.php':[
-47,
-],
-'RubixML:tests/Regressors/AdalineTest.php':[
-114,
-],
-'RubixML:tests/Regressors/ExtraTreeRegressorTest.php':[
-107,
-],
-'RubixML:tests/Regressors/GradientBoostTest.php':[
-112,
-122,
-],
-'RubixML:tests/Regressors/KDNeighborsRegressorTest.php':[
-106,
-],
-'RubixML:tests/Regressors/KNNRegressorTest.php':[
-108,
-],
-'RubixML:tests/Regressors/MLPRegressorTest.php':[
-129,
-],
-'RubixML:tests/Regressors/RadiusNeighborsRegressorTest.php':[
-106,
-],
-'RubixML:tests/Regressors/RegressionTreeTest.php':[
-110,
-],
-'RubixML:tests/Regressors/RidgeTest.php':[
-107,
-],
-'RubixML:tests/Transformers/TSNETest.php':[
-79,
-],
+"RubixML:tests/Transformers/TSNETest.php": [
+79
+]
 }

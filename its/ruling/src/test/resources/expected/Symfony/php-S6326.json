@@ -1,33 +1,33 @@
 {
-'Symfony:Bridge/PhpUnit/bin/simple-phpunit.php':[
-277,
+"Symfony:Bridge/PhpUnit/bin/simple-phpunit.php": [
+277
 ],
-'Symfony:Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/ProxyDumperTest.php':[
-148,
+"Symfony:Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/ProxyDumperTest.php": [
+148
 ],
-'Symfony:Component/Cache/Tests/Traits/RedisProxiesTest.php':[
-94,
+"Symfony:Component/Cache/Tests/Traits/RedisProxiesTest.php": [
+94
 ],
-'Symfony:Component/Config/Resource/ReflectionClassResource.php':[
-181,
+"Symfony:Component/Config/Resource/ReflectionClassResource.php": [
+181
 ],
-'Symfony:Component/DependencyInjection/Dumper/PhpDumper.php':[
-250,
+"Symfony:Component/DependencyInjection/Dumper/PhpDumper.php": [
+250
 ],
-'Symfony:Component/Intl/Data/Bundle/Writer/PhpBundleWriter.php':[
-45,
+"Symfony:Component/Intl/Data/Bundle/Writer/PhpBundleWriter.php": [
+45
 ],
-'Symfony:Component/Mime/Resources/bin/update_mime_types.php':[
+"Symfony:Component/Mime/Resources/bin/update_mime_types.php": [
 56,
-148,
+148
 ],
-'Symfony:Component/PasswordHasher/Tests/Command/UserPasswordHashCommandTest.php':[
+"Symfony:Component/PasswordHasher/Tests/Command/UserPasswordHashCommandTest.php": [
 83,
 103,
-138,
+138
 ],
-'Symfony:Component/Routing/Matcher/Dumper/CompiledUrlMatcherDumper.php':[
+"Symfony:Component/Routing/Matcher/Dumper/CompiledUrlMatcherDumper.php": [
 159,
-159,
-],
+159
+]
 }

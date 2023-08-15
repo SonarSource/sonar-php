@@ -1,15 +1,15 @@
 {
-'flysystem:src/AdapterTestUtilities/ToxiproxyManagement.php':[
-36,
+"flysystem:src/AdapterTestUtilities/ToxiproxyManagement.php": [
+36
 ],
-'flysystem:src/FilesystemOperationFailed.php':[
-10,
+"flysystem:src/FilesystemOperationFailed.php": [
+10
 ],
-'flysystem:src/FilesystemTest.php':[
+"flysystem:src/FilesystemTest.php": [
 392,
-455,
+455
 ],
-'flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapterTest.php':[
-31,
-],
+"flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapterTest.php": [
+31
+]
 }

@@ -1,10 +1,10 @@
 {
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Html/Issue2029Test.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Html/Issue2029Test.php": [
 60,
 66,
 75,
 81,
 90,
-96,
-],
+96
+]
 }

@@ -1,230 +1,230 @@
 {
-'RubixML:src/AnomalyDetectors/GaussianMLE.php':[
-165,
+"RubixML:src/AnomalyDetectors/GaussianMLE.php": [
+165
 ],
-'RubixML:src/AnomalyDetectors/IsolationForest.php':[
-196,
+"RubixML:src/AnomalyDetectors/IsolationForest.php": [
+196
 ],
-'RubixML:src/AnomalyDetectors/LocalOutlierFactor.php':[
-172,
+"RubixML:src/AnomalyDetectors/LocalOutlierFactor.php": [
+172
 ],
-'RubixML:src/AnomalyDetectors/Loda.php':[
-204,
+"RubixML:src/AnomalyDetectors/Loda.php": [
+204
 ],
-'RubixML:src/AnomalyDetectors/OneClassSVM.php':[
-168,
+"RubixML:src/AnomalyDetectors/OneClassSVM.php": [
+168
 ],
-'RubixML:src/AnomalyDetectors/RobustZScore.php':[
-171,
+"RubixML:src/AnomalyDetectors/RobustZScore.php": [
+171
 ],
-'RubixML:src/BootstrapAggregator.php':[
-167,
+"RubixML:src/BootstrapAggregator.php": [
+167
 ],
-'RubixML:src/Classifiers/AdaBoost.php':[
-250,
+"RubixML:src/Classifiers/AdaBoost.php": [
+250
 ],
-'RubixML:src/Classifiers/ClassificationTree.php':[
-130,
+"RubixML:src/Classifiers/ClassificationTree.php": [
+130
 ],
-'RubixML:src/Classifiers/ExtraTreeClassifier.php':[
-128,
+"RubixML:src/Classifiers/ExtraTreeClassifier.php": [
+128
 ],
-'RubixML:src/Classifiers/GaussianNB.php':[
-193,
+"RubixML:src/Classifiers/GaussianNB.php": [
+193
 ],
-'RubixML:src/Classifiers/KDNeighbors.php':[
-144,
+"RubixML:src/Classifiers/KDNeighbors.php": [
+144
 ],
-'RubixML:src/Classifiers/KNearestNeighbors.php':[
-157,
+"RubixML:src/Classifiers/KNearestNeighbors.php": [
+157
 ],
-'RubixML:src/Classifiers/LogisticRegression.php':[
-232,
+"RubixML:src/Classifiers/LogisticRegression.php": [
+232
 ],
-'RubixML:src/Classifiers/LogitBoost.php':[
-298,
+"RubixML:src/Classifiers/LogitBoost.php": [
+298
 ],
-'RubixML:src/Classifiers/MultilayerPerceptron.php':[
-298,
+"RubixML:src/Classifiers/MultilayerPerceptron.php": [
+298
 ],
-'RubixML:src/Classifiers/NaiveBayes.php':[
-183,
+"RubixML:src/Classifiers/NaiveBayes.php": [
+183
 ],
-'RubixML:src/Classifiers/OneVsRest.php':[
-135,
+"RubixML:src/Classifiers/OneVsRest.php": [
+135
 ],
-'RubixML:src/Classifiers/RadiusNeighbors.php':[
-163,
+"RubixML:src/Classifiers/RadiusNeighbors.php": [
+163
 ],
-'RubixML:src/Classifiers/RandomForest.php':[
-201,
+"RubixML:src/Classifiers/RandomForest.php": [
+201
 ],
-'RubixML:src/Classifiers/SVC.php':[
-179,
+"RubixML:src/Classifiers/SVC.php": [
+179
 ],
-'RubixML:src/Classifiers/SoftmaxClassifier.php':[
-228,
+"RubixML:src/Classifiers/SoftmaxClassifier.php": [
+228
 ],
-'RubixML:src/Clusterers/FuzzyCMeans.php':[
-210,
+"RubixML:src/Clusterers/FuzzyCMeans.php": [
+210
 ],
-'RubixML:src/Clusterers/GaussianMixture.php':[
-221,
+"RubixML:src/Clusterers/GaussianMixture.php": [
+221
 ],
-'RubixML:src/Clusterers/KMeans.php':[
-231,
+"RubixML:src/Clusterers/KMeans.php": [
+231
 ],
-'RubixML:src/Clusterers/MeanShift.php':[
-263,
+"RubixML:src/Clusterers/MeanShift.php": [
+263
 ],
-'RubixML:src/CommitteeMachine.php':[
-203,
+"RubixML:src/CommitteeMachine.php": [
+203
 ],
-'RubixML:src/Datasets/Dataset.php':[
+"RubixML:src/Datasets/Dataset.php": [
 296,
 489,
-668,
+668
 ],
-'RubixML:src/Graph/Trees/BallTree.php':[
-108,
+"RubixML:src/Graph/Trees/BallTree.php": [
+108
 ],
-'RubixML:src/Graph/Trees/DecisionTree.php':[
-156,
+"RubixML:src/Graph/Trees/DecisionTree.php": [
+156
 ],
-'RubixML:src/Graph/Trees/ITree.php':[
-89,
+"RubixML:src/Graph/Trees/ITree.php": [
+89
 ],
-'RubixML:src/Graph/Trees/KDTree.php':[
-112,
+"RubixML:src/Graph/Trees/KDTree.php": [
+112
 ],
-'RubixML:src/Graph/Trees/Tree.php':[
-28,
+"RubixML:src/Graph/Trees/Tree.php": [
+28
 ],
-'RubixML:src/GridSearch.php':[
-230,
+"RubixML:src/GridSearch.php": [
+230
 ],
-'RubixML:src/PersistentModel.php':[
-132,
+"RubixML:src/PersistentModel.php": [
+132
 ],
-'RubixML:src/Pipeline.php':[
-120,
+"RubixML:src/Pipeline.php": [
+120
 ],
-'RubixML:src/Regressors/Adaline.php':[
-226,
+"RubixML:src/Regressors/Adaline.php": [
+226
 ],
-'RubixML:src/Regressors/ExtraTreeRegressor.php':[
-109,
+"RubixML:src/Regressors/ExtraTreeRegressor.php": [
+109
 ],
-'RubixML:src/Regressors/GradientBoost.php':[
-297,
+"RubixML:src/Regressors/GradientBoost.php": [
+297
 ],
-'RubixML:src/Regressors/KDNeighborsRegressor.php':[
-133,
+"RubixML:src/Regressors/KDNeighborsRegressor.php": [
+133
 ],
-'RubixML:src/Regressors/KNNRegressor.php':[
-148,
+"RubixML:src/Regressors/KNNRegressor.php": [
+148
 ],
-'RubixML:src/Regressors/MLPRegressor.php':[
-290,
+"RubixML:src/Regressors/MLPRegressor.php": [
+290
 ],
-'RubixML:src/Regressors/RadiusNeighborsRegressor.php':[
-141,
+"RubixML:src/Regressors/RadiusNeighborsRegressor.php": [
+141
 ],
-'RubixML:src/Regressors/RegressionTree.php':[
-112,
+"RubixML:src/Regressors/RegressionTree.php": [
+112
 ],
-'RubixML:src/Regressors/Ridge.php':[
-122,
+"RubixML:src/Regressors/Ridge.php": [
+122
 ],
-'RubixML:src/Regressors/SVR.php':[
-183,
+"RubixML:src/Regressors/SVR.php": [
+183
 ],
-'RubixML:src/Report.php':[
-81,
+"RubixML:src/Report.php": [
+81
 ],
-'RubixML:src/Specifications/Specification.php':[
+"RubixML:src/Specifications/Specification.php": [
 30,
-46,
+46
 ],
-'RubixML:src/Strategies/Constant.php':[
-54,
+"RubixML:src/Strategies/Constant.php": [
+54
 ],
-'RubixML:src/Strategies/KMostFrequent.php':[
-69,
+"RubixML:src/Strategies/KMostFrequent.php": [
+69
 ],
-'RubixML:src/Strategies/Mean.php':[
-45,
+"RubixML:src/Strategies/Mean.php": [
+45
 ],
-'RubixML:src/Strategies/Percentile.php':[
-66,
+"RubixML:src/Strategies/Percentile.php": [
+66
 ],
-'RubixML:src/Strategies/Prior.php':[
-53,
+"RubixML:src/Strategies/Prior.php": [
+53
 ],
-'RubixML:src/Strategies/Strategy.php':[
-31,
+"RubixML:src/Strategies/Strategy.php": [
+31
 ],
-'RubixML:src/Strategies/WildGuess.php':[
-58,
+"RubixML:src/Strategies/WildGuess.php": [
+58
 ],
-'RubixML:src/Trainable.php':[
-21,
+"RubixML:src/Trainable.php": [
+21
 ],
-'RubixML:src/Transformers/BM25Transformer.php':[
-126,
+"RubixML:src/Transformers/BM25Transformer.php": [
+126
 ],
-'RubixML:src/Transformers/GaussianRandomProjector.php':[
-105,
+"RubixML:src/Transformers/GaussianRandomProjector.php": [
+105
 ],
-'RubixML:src/Transformers/HotDeckImputer.php':[
-132,
+"RubixML:src/Transformers/HotDeckImputer.php": [
+132
 ],
-'RubixML:src/Transformers/ImageVectorizer.php':[
-70,
+"RubixML:src/Transformers/ImageVectorizer.php": [
+70
 ],
-'RubixML:src/Transformers/IntervalDiscretizer.php':[
-87,
+"RubixML:src/Transformers/IntervalDiscretizer.php": [
+87
 ],
-'RubixML:src/Transformers/KNNImputer.php':[
-139,
+"RubixML:src/Transformers/KNNImputer.php": [
+139
 ],
-'RubixML:src/Transformers/LinearDiscriminantAnalysis.php':[
-99,
+"RubixML:src/Transformers/LinearDiscriminantAnalysis.php": [
+99
 ],
-'RubixML:src/Transformers/MaxAbsoluteScaler.php':[
-52,
+"RubixML:src/Transformers/MaxAbsoluteScaler.php": [
+52
 ],
-'RubixML:src/Transformers/MinMaxNormalizer.php':[
-100,
+"RubixML:src/Transformers/MinMaxNormalizer.php": [
+100
 ],
-'RubixML:src/Transformers/MissingDataImputer.php':[
-110,
+"RubixML:src/Transformers/MissingDataImputer.php": [
+110
 ],
-'RubixML:src/Transformers/OneHotEncoder.php':[
-61,
+"RubixML:src/Transformers/OneHotEncoder.php": [
+61
 ],
-'RubixML:src/Transformers/PrincipalComponentAnalysis.php':[
-110,
+"RubixML:src/Transformers/PrincipalComponentAnalysis.php": [
+110
 ],
-'RubixML:src/Transformers/RobustStandardizer.php':[
-80,
+"RubixML:src/Transformers/RobustStandardizer.php": [
+80
 ],
-'RubixML:src/Transformers/Stateful.php':[
-28,
+"RubixML:src/Transformers/Stateful.php": [
+28
 ],
-'RubixML:src/Transformers/TfIdfTransformer.php':[
-112,
+"RubixML:src/Transformers/TfIdfTransformer.php": [
+112
 ],
-'RubixML:src/Transformers/TruncatedSVD.php':[
-99,
+"RubixML:src/Transformers/TruncatedSVD.php": [
+99
 ],
-'RubixML:src/Transformers/WordCountVectorizer.php':[
-124,
+"RubixML:src/Transformers/WordCountVectorizer.php": [
+124
 ],
-'RubixML:src/Transformers/ZScaleStandardizer.php':[
-92,
+"RubixML:src/Transformers/ZScaleStandardizer.php": [
+92
 ],
-'RubixML:src/Tuple.php':[
-94,
-],
+"RubixML:src/Tuple.php": [
+94
+]
 }

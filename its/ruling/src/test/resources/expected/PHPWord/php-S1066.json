@@ -1,52 +1,52 @@
 {
-'PHPWord:src/PhpWord/Element/AbstractContainer.php':[
-269,
+"PHPWord:src/PhpWord/Element/AbstractContainer.php": [
+269
 ],
-'PHPWord:src/PhpWord/Element/Image.php':[
-344,
+"PHPWord:src/PhpWord/Element/Image.php": [
+344
 ],
-'PHPWord:src/PhpWord/Reader/MsDoc.php':[
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
 2340,
-2375,
+2375
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
-956,
+"PHPWord:src/PhpWord/Shared/Html.php": [
+956
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 1751,
 1930,
 3635,
 3894,
 4420,
 4756,
-4757,
+4757
 ],
-'PHPWord:src/PhpWord/Shared/Text.php':[
-245,
+"PHPWord:src/PhpWord/Shared/Text.php": [
+245
 ],
-'PHPWord:src/PhpWord/Shared/ZipArchive.php':[
-171,
+"PHPWord:src/PhpWord/Shared/ZipArchive.php": [
+171
 ],
-'PHPWord:src/PhpWord/Writer/AbstractWriter.php':[
+"PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
 285,
-386,
+386
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Element/Title.php':[
-42,
+"PHPWord:src/PhpWord/Writer/ODText/Element/Title.php": [
+42
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php':[
+"PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
 65,
-70,
+70
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Element/Field.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Field.php": [
 76,
-147,
+147
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/AbstractPart.php':[
-82,
+"PHPWord:src/PhpWord/Writer/Word2007/Part/AbstractPart.php": [
+82
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Style/MarginBorder.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Style/MarginBorder.php": [
 91,
-99,
-],
+99
+]
 }

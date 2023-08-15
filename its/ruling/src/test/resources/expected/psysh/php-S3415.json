@@ -1,17 +1,17 @@
 {
-'psysh:test/Readline/GNUReadlineTest.php':[
-36,
+"psysh:test/Readline/GNUReadlineTest.php": [
+36
 ],
-'psysh:test/Readline/LibeditTest.php':[
-50,
+"psysh:test/Readline/LibeditTest.php": [
+50
 ],
-'psysh:test/Reflection/ReflectionClassConstantTest.php':[
-45,
+"psysh:test/Reflection/ReflectionClassConstantTest.php": [
+45
 ],
-'psysh:test/Reflection/ReflectionConstantTest.php':[
-82,
+"psysh:test/Reflection/ReflectionConstantTest.php": [
+82
 ],
-'psysh:test/ShellTest.php':[
-385,
-],
+"psysh:test/ShellTest.php": [
+385
+]
 }

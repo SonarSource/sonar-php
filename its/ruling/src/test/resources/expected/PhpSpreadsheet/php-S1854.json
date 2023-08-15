@@ -1,13 +1,13 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Chart/Renderer/JpGraphRendererBase.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Renderer/JpGraphRendererBase.php": [
 786,
-800,
+800
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS/Root.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS/Root.php": [
 112,
-112,
+112
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Pdf/Tcpdf.php':[
-46,
-],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Pdf/Tcpdf.php": [
+46
+]
 }

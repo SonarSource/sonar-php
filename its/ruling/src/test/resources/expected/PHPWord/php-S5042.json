@@ -1,17 +1,17 @@
 {
-'PHPWord:src/PhpWord/Element/Image.php':[
-346,
+"PHPWord:src/PhpWord/Element/Image.php": [
+346
 ],
-'PHPWord:src/PhpWord/Writer/AbstractWriter.php':[
-387,
+"PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
+387
 ],
-'PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
 97,
 98,
 99,
-100,
+100
 ],
-'PHPWord:tests/PhpWordTests/TestHelperDOCX.php':[
-64,
-],
+"PHPWord:tests/PhpWordTests/TestHelperDOCX.php": [
+64
+]
 }

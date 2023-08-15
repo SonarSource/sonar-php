@@ -1,13 +1,13 @@
 {
-'PHPWord:src/PhpWord/Element/Footer.php':[
+"PHPWord:src/PhpWord/Element/Footer.php": [
 96,
 106,
-116,
+116
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
-328,
+"PHPWord:src/PhpWord/Shared/Html.php": [
+328
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 641,
 962,
 1029,
@@ -77,9 +77,9 @@
 4973,
 4979,
 5353,
-5381,
+5381
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/Table.php':[
-55,
-],
+"PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
+55
+]
 }

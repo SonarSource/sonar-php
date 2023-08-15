@@ -1,20 +1,20 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php':[
-174,
+"PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php": [
+174
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
 2283,
-2283,
+2283
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php": [
 121,
-121,
+121
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php": [
 122,
-122,
+122
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php':[
-100,
-],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php": [
+100
+]
 }

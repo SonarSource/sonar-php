@@ -1,48 +1,48 @@
 {
-'psysh:src/Command/ReflectingCommand.php':[
-168,
+"psysh:src/Command/ReflectingCommand.php": [
+168
 ],
-'psysh:src/Formatter/DocblockFormatter.php':[
+"psysh:src/Formatter/DocblockFormatter.php": [
 162,
-162,
+162
 ],
-'psysh:src/Input/ShellInput.php':[
-90,
+"psysh:src/Input/ShellInput.php": [
+90
 ],
-'psysh:src/Readline/Hoa/ConsoleWindow.php':[
+"psysh:src/Readline/Hoa/ConsoleWindow.php": [
 103,
-107,
+107
 ],
-'psysh:src/Readline/Hoa/FileFinder.php':[
-229,
+"psysh:src/Readline/Hoa/FileFinder.php": [
+229
 ],
-'psysh:src/Readline/Hoa/FileLinkRead.php':[
-89,
+"psysh:src/Readline/Hoa/FileLinkRead.php": [
+89
 ],
-'psysh:src/Readline/Hoa/FileLinkReadWrite.php':[
-76,
+"psysh:src/Readline/Hoa/FileLinkReadWrite.php": [
+76
 ],
-'psysh:src/Readline/Hoa/FileRead.php':[
-73,
+"psysh:src/Readline/Hoa/FileRead.php": [
+73
 ],
-'psysh:src/Readline/Hoa/FileReadWrite.php':[
-76,
+"psysh:src/Readline/Hoa/FileReadWrite.php": [
+76
 ],
-'psysh:src/Shell.php':[
+"psysh:src/Shell.php": [
 1236,
 1324,
-1440,
+1440
 ],
-'psysh:src/Util/Docblock.php':[
+"psysh:src/Util/Docblock.php": [
 182,
 231,
-243,
+243
 ],
-'psysh:src/VersionUpdater/GitHubChecker.php':[
-26,
+"psysh:src/VersionUpdater/GitHubChecker.php": [
+26
 ],
-'psysh:test/ShellTest.php':[
+"psysh:test/ShellTest.php": [
 341,
-361,
-],
+361
+]
 }

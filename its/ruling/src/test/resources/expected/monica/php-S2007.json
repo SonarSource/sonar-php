@@ -1,34 +1,34 @@
 {
-'monica:app/Helpers/helpers.php':[
-13,
+"monica:app/Helpers/helpers.php": [
+13
 ],
-'monica:bootstrap/app.php':[
-14,
+"monica:bootstrap/app.php": [
+14
 ],
-'monica:config/cache.php':[
+"monica:config/cache.php": [
 7,
 112,
 114,
 131,
-132,
+132
 ],
-'monica:config/database.php':[
+"monica:config/database.php": [
 5,
-212,
+212
 ],
-'monica:config/passport.php':[
+"monica:config/passport.php": [
 5,
-86,
+86
 ],
-'monica:public/index.php':[
+"monica:public/index.php": [
 38,
 52,
 54,
-55,
+55
 ],
-'monica:scripts/tests/server-cc.php':[
+"monica:scripts/tests/server-cc.php": [
 10,
 12,
-28,
-],
+28
+]
 }

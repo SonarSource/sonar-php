@@ -1,17 +1,17 @@
 {
-'RubixML:src/Datasets/Dataset.php':[
-44,
+"RubixML:src/Datasets/Dataset.php": [
+44
 ],
-'RubixML:src/Datasets/Labeled.php':[
-44,
+"RubixML:src/Datasets/Labeled.php": [
+44
 ],
-'RubixML:src/Datasets/Unlabeled.php':[
-31,
+"RubixML:src/Datasets/Unlabeled.php": [
+31
 ],
-'RubixML:tests/Datasets/LabeledTest.php':[
-22,
+"RubixML:tests/Datasets/LabeledTest.php": [
+22
 ],
-'RubixML:tests/Datasets/UnlabeledTest.php':[
-21,
-],
+"RubixML:tests/Datasets/UnlabeledTest.php": [
+21
+]
 }

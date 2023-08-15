@@ -1,20 +1,20 @@
 {
-'PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.13.inc':[
-2,
+"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.13.inc": [
+2
 ],
-'PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.14.inc':[
-2,
+"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.14.inc": [
+2
 ],
-'PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.15.inc':[
-2,
+"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.15.inc": [
+2
 ],
-'PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.16.inc':[
-2,
+"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.16.inc": [
+2
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ValidLogicalOperatorsUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ValidLogicalOperatorsUnitTest.inc": [
 5,
 11,
 17,
-17,
-],
+17
+]
 }

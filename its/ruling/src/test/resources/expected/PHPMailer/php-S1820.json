@@ -1,8 +1,8 @@
 {
-'PHPMailer:src/PHPMailer.php':[
-32,
+"PHPMailer:src/PHPMailer.php": [
+32
 ],
-'PHPMailer:src/SMTP.php':[
-31,
-],
+"PHPMailer:src/SMTP.php": [
+31
+]
 }

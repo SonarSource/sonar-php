@@ -1,32 +1,32 @@
 {
-'PHPWord:src/PhpWord/Element/AbstractContainer.php':[
-197,
+"PHPWord:src/PhpWord/Element/AbstractContainer.php": [
+197
 ],
-'PHPWord:src/PhpWord/Element/AbstractElement.php':[
-497,
+"PHPWord:src/PhpWord/Element/AbstractElement.php": [
+497
 ],
-'PHPWord:src/PhpWord/Escaper/Rtf.php':[
-70,
+"PHPWord:src/PhpWord/Escaper/Rtf.php": [
+70
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php':[
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
 127,
 219,
 326,
 351,
 366,
-679,
+679
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/Settings.php':[
-71,
+"PHPWord:src/PhpWord/Reader/Word2007/Settings.php": [
+71
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
+"PHPWord:src/PhpWord/Shared/Html.php": [
 810,
-1005,
+1005
 ],
-'PHPWord:src/PhpWord/Shared/OLERead.php':[
-283,
+"PHPWord:src/PhpWord/Shared/OLERead.php": [
+283
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 325,
 502,
 772,
@@ -44,91 +44,91 @@
 4706,
 5247,
 5294,
-5330,
+5330
 ],
-'PHPWord:src/PhpWord/Style.php':[
-204,
+"PHPWord:src/PhpWord/Style.php": [
+204
 ],
-'PHPWord:src/PhpWord/Style/AbstractStyle.php':[
-308,
+"PHPWord:src/PhpWord/Style/AbstractStyle.php": [
+308
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
-486,
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+486
 ],
-'PHPWord:src/PhpWord/Writer/AbstractWriter.php':[
-413,
+"PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
+413
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/Table.php':[
-136,
+"PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
+136
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/Text.php':[
+"PHPWord:src/PhpWord/Writer/HTML/Element/Text.php": [
 171,
 206,
 232,
-256,
+256
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/Title.php':[
-47,
+"PHPWord:src/PhpWord/Writer/HTML/Element/Title.php": [
+47
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Part/Head.php':[
-127,
+"PHPWord:src/PhpWord/Writer/HTML/Part/Head.php": [
+127
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Element/Text.php':[
+"PHPWord:src/PhpWord/Writer/ODText/Element/Text.php": [
 65,
-78,
+78
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Element/Title.php':[
-58,
+"PHPWord:src/PhpWord/Writer/ODText/Element/Title.php": [
+58
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Part/Content.php':[
+"PHPWord:src/PhpWord/Writer/ODText/Part/Content.php": [
 98,
 282,
 335,
-391,
+391
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php':[
-102,
+"PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
+102
 ],
-'PHPWord:src/PhpWord/Writer/RTF/Element/Table.php':[
-139,
+"PHPWord:src/PhpWord/Writer/RTF/Element/Table.php": [
+139
 ],
-'PHPWord:src/PhpWord/Writer/RTF/Part/Document.php':[
+"PHPWord:src/PhpWord/Writer/RTF/Part/Document.php": [
 163,
-183,
+183
 ],
-'PHPWord:src/PhpWord/Writer/Word2007.php':[
-321,
+"PHPWord:src/PhpWord/Writer/Word2007.php": [
+321
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Element/AbstractElement.php':[
-150,
+"PHPWord:src/PhpWord/Writer/Word2007/Element/AbstractElement.php": [
+150
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Element/Text.php':[
-80,
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Text.php": [
+80
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Element/Title.php':[
-70,
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Title.php": [
+70
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php':[
-359,
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php": [
+359
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php':[
-80,
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php": [
+80
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Styles.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Styles.php": [
 131,
 195,
-209,
+209
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Style/Frame.php':[
-134,
+"PHPWord:src/PhpWord/Writer/Word2007/Style/Frame.php": [
+134
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Style/Table.php':[
-47,
+"PHPWord:src/PhpWord/Writer/Word2007/Style/Table.php": [
+47
 ],
-'PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php':[
-130,
+"PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
+130
 ],
-'PHPWord:tests/PhpWordTests/TestHelperDOCX.php':[
-101,
-],
+"PHPWord:tests/PhpWordTests/TestHelperDOCX.php": [
+101
+]
 }

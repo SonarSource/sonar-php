@@ -1,33 +1,33 @@
 {
-'psysh:src/Command/DocCommand.php':[
-73,
+"psysh:src/Command/DocCommand.php": [
+73
 ],
-'psysh:src/Command/ListCommand/MethodEnumerator.php':[
-69,
+"psysh:src/Command/ListCommand/MethodEnumerator.php": [
+69
 ],
-'psysh:src/Readline/Hoa/ConsoleCursor.php':[
-204,
+"psysh:src/Readline/Hoa/ConsoleCursor.php": [
+204
 ],
-'psysh:src/Readline/Hoa/ConsoleWindow.php':[
+"psysh:src/Readline/Hoa/ConsoleWindow.php": [
 144,
-214,
+214
 ],
-'psysh:src/TabCompletion/Matcher/ClassMethodDefaultParametersMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ClassMethodDefaultParametersMatcher.php": [
 18,
-20,
+20
 ],
-'psysh:src/TabCompletion/Matcher/ObjectMethodDefaultParametersMatcher.php':[
+"psysh:src/TabCompletion/Matcher/ObjectMethodDefaultParametersMatcher.php": [
 18,
-20,
+20
 ],
-'psysh:test/ConfigurationTest.php':[
+"psysh:test/ConfigurationTest.php": [
 127,
-135,
+135
 ],
-'psysh:test/Readline/GNUReadlineTest.php':[
-35,
+"psysh:test/Readline/GNUReadlineTest.php": [
+35
 ],
-'psysh:test/Readline/LibeditTest.php':[
-49,
-],
+"psysh:test/Readline/LibeditTest.php": [
+49
+]
 }

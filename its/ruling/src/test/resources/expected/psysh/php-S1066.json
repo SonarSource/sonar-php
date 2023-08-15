@@ -1,37 +1,37 @@
 {
-'psysh:src/CodeCleaner/EmptyArrayDimFetchPass.php':[
-61,
+"psysh:src/CodeCleaner/EmptyArrayDimFetchPass.php": [
+61
 ],
-'psysh:src/CodeCleaner/RequirePass.php':[
-86,
+"psysh:src/CodeCleaner/RequirePass.php": [
+86
 ],
-'psysh:src/CodeCleaner/UseStatementPass.php':[
+"psysh:src/CodeCleaner/UseStatementPass.php": [
 55,
-113,
+113
 ],
-'psysh:src/CodeCleaner/ValidFunctionNamePass.php':[
-53,
+"psysh:src/CodeCleaner/ValidFunctionNamePass.php": [
+53
 ],
-'psysh:src/Command/ReflectingCommand.php':[
-363,
+"psysh:src/Command/ReflectingCommand.php": [
+363
 ],
-'psysh:src/Configuration.php':[
+"psysh:src/Configuration.php": [
 213,
-627,
+627
 ],
-'psysh:src/ExecutionLoop/ProcessForker.php':[
-160,
+"psysh:src/ExecutionLoop/ProcessForker.php": [
+160
 ],
-'psysh:src/Formatter/CodeFormatter.php':[
-87,
+"psysh:src/Formatter/CodeFormatter.php": [
+87
 ],
-'psysh:src/Readline/Libedit.php':[
-82,
+"psysh:src/Readline/Libedit.php": [
+82
 ],
-'psysh:src/Readline/Transient.php':[
-61,
+"psysh:src/Readline/Transient.php": [
+61
 ],
-'psysh:src/Shell.php':[
-1072,
-],
+"psysh:src/Shell.php": [
+1072
+]
 }

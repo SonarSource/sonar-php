@@ -1,25 +1,25 @@
 {
-'monica:app/Models/Contact/Contact.php':[
+"monica:app/Models/Contact/Contact.php": [
 978,
 979,
 980,
 981,
 982,
 984,
-985,
+985
 ],
-'monica:config/laravolt/avatar.php':[
-56,
+"monica:config/laravolt/avatar.php": [
+56
 ],
-'monica:database/factories/ContactFactory.php':[
-17,
+"monica:database/factories/ContactFactory.php": [
+17
 ],
-'monica:tests/Api/DAV/VCardContactTest.php':[
+"monica:tests/Api/DAV/VCardContactTest.php": [
 71,
 113,
-141,
+141
 ],
-'monica:tests/Unit/Services/Contact/Avatar/GenerateDefaultAvatarTest.php':[
-50,
-],
+"monica:tests/Unit/Services/Contact/Avatar/GenerateDefaultAvatarTest.php": [
+50
+]
 }

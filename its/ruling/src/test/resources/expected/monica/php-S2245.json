@@ -1,5 +1,5 @@
 {
-'monica:app/Console/Commands/SetupTest.php':[
+"monica:app/Console/Commands/SetupTest.php": [
 175,
 181,
 182,
@@ -78,20 +78,20 @@
 633,
 639,
 649,
-650,
+650
 ],
-'monica:app/Models/Contact/Contact.php':[
-988,
+"monica:app/Models/Contact/Contact.php": [
+988
 ],
-'monica:tests/Api/Settings/ApiComplianceControllerTest.php':[
+"monica:tests/Api/Settings/ApiComplianceControllerTest.php": [
 28,
 30,
 59,
-61,
+61
 ],
-'monica:tests/Unit/Models/IdHasherTest.php':[
+"monica:tests/Unit/Models/IdHasherTest.php": [
 19,
 33,
-47,
-],
+47
+]
 }

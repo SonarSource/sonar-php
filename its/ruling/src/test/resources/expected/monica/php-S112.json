@@ -1,14 +1,14 @@
 {
-'monica:app/Console/Commands/Tests/UpdateLangs.php':[
-38,
+"monica:app/Console/Commands/Tests/UpdateLangs.php": [
+38
 ],
-'monica:app/Services/User/AcceptPolicy.php':[
-48,
+"monica:app/Services/User/AcceptPolicy.php": [
+48
 ],
-'monica:database/migrations/2017_06_07_173437_add_multiple_genders_choices.php':[
-29,
+"monica:database/migrations/2017_06_07_173437_add_multiple_genders_choices.php": [
+29
 ],
-'monica:tests/Unit/Jobs/ServiceQueueTester.php':[
-38,
-],
+"monica:tests/Unit/Jobs/ServiceQueueTester.php": [
+38
+]
 }

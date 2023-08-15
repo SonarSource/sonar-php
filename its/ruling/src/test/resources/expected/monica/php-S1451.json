@@ -1,341 +1,341 @@
 {
-'monica:config/laravolt/avatar.php':[
-0,
+"monica:config/laravolt/avatar.php": [
+0
 ],
-'monica:resources/views/auth/emailchange1.blade.php':[
-0,
+"monica:resources/views/auth/emailchange1.blade.php": [
+0
 ],
-'monica:resources/views/auth/emailchange2.blade.php':[
-0,
+"monica:resources/views/auth/emailchange2.blade.php": [
+0
 ],
-'monica:resources/views/auth/emails/password.blade.php':[
-0,
+"monica:resources/views/auth/emails/password.blade.php": [
+0
 ],
-'monica:resources/views/auth/login.blade.php':[
-0,
+"monica:resources/views/auth/login.blade.php": [
+0
 ],
-'monica:resources/views/auth/oauthlogin.blade.php':[
-0,
+"monica:resources/views/auth/oauthlogin.blade.php": [
+0
 ],
-'monica:resources/views/auth/passwords/email.blade.php':[
-0,
+"monica:resources/views/auth/passwords/email.blade.php": [
+0
 ],
-'monica:resources/views/auth/passwords/reset.blade.php':[
-0,
+"monica:resources/views/auth/passwords/reset.blade.php": [
+0
 ],
-'monica:resources/views/auth/recovery/login.blade.php':[
-0,
+"monica:resources/views/auth/recovery/login.blade.php": [
+0
 ],
-'monica:resources/views/auth/register.blade.php':[
-0,
+"monica:resources/views/auth/register.blade.php": [
+0
 ],
-'monica:resources/views/auth/validate2fa.blade.php':[
-0,
+"monica:resources/views/auth/validate2fa.blade.php": [
+0
 ],
-'monica:resources/views/auth/validatewebauthn.blade.php':[
-0,
+"monica:resources/views/auth/validatewebauthn.blade.php": [
+0
 ],
-'monica:resources/views/auth/verify.blade.php':[
-0,
+"monica:resources/views/auth/verify.blade.php": [
+0
 ],
-'monica:resources/views/changelog/index.blade.php':[
-0,
+"monica:resources/views/changelog/index.blade.php": [
+0
 ],
-'monica:resources/views/compliance/index.blade.php':[
-0,
+"monica:resources/views/compliance/index.blade.php": [
+0
 ],
-'monica:resources/views/components/sidebar.blade.php':[
-0,
+"monica:resources/views/components/sidebar.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/_monthReminder.blade.php':[
-0,
+"monica:resources/views/dashboard/_monthReminder.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/blank.blade.php':[
-0,
+"monica:resources/views/dashboard/blank.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/events/_activity.blade.php':[
-0,
+"monica:resources/views/dashboard/events/_activity.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/events/_call.blade.php':[
-0,
+"monica:resources/views/dashboard/events/_call.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/events/_contact.blade.php':[
-0,
+"monica:resources/views/dashboard/events/_contact.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/events/_debt.blade.php':[
-0,
+"monica:resources/views/dashboard/events/_debt.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/events/_gift.blade.php':[
-0,
+"monica:resources/views/dashboard/events/_gift.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/events/_note.blade.php':[
-0,
+"monica:resources/views/dashboard/events/_note.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/events/_reminder.blade.php':[
-0,
+"monica:resources/views/dashboard/events/_reminder.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/events/_task.blade.php':[
-0,
+"monica:resources/views/dashboard/events/_task.blade.php": [
+0
 ],
-'monica:resources/views/dashboard/index.blade.php':[
-0,
+"monica:resources/views/dashboard/index.blade.php": [
+0
 ],
-'monica:resources/views/errors/402.blade.php':[
-0,
+"monica:resources/views/errors/402.blade.php": [
+0
 ],
-'monica:resources/views/errors/403.blade.php':[
-0,
+"monica:resources/views/errors/403.blade.php": [
+0
 ],
-'monica:resources/views/errors/500.blade.php':[
-0,
+"monica:resources/views/errors/500.blade.php": [
+0
 ],
-'monica:resources/views/errors/503.blade.php':[
-0,
+"monica:resources/views/errors/503.blade.php": [
+0
 ],
-'monica:resources/views/errors/layout.blade.php':[
-0,
+"monica:resources/views/errors/layout.blade.php": [
+0
 ],
-'monica:resources/views/journal/add.blade.php':[
-0,
+"monica:resources/views/journal/add.blade.php": [
+0
 ],
-'monica:resources/views/journal/edit.blade.php':[
-0,
+"monica:resources/views/journal/edit.blade.php": [
+0
 ],
-'monica:resources/views/journal/index.blade.php':[
-0,
+"monica:resources/views/journal/index.blade.php": [
+0
 ],
-'monica:resources/views/layouts/skeleton.blade.php':[
-0,
+"monica:resources/views/layouts/skeleton.blade.php": [
+0
 ],
-'monica:resources/views/marketing/auth.blade.php':[
-0,
+"monica:resources/views/marketing/auth.blade.php": [
+0
 ],
-'monica:resources/views/marketing/skeleton.blade.php':[
-0,
+"monica:resources/views/marketing/skeleton.blade.php": [
+0
 ],
-'monica:resources/views/partials/auth/validate2fa.blade.php':[
-0,
+"monica:resources/views/partials/auth/validate2fa.blade.php": [
+0
 ],
-'monica:resources/views/partials/check.blade.php':[
-0,
+"monica:resources/views/partials/check.blade.php": [
+0
 ],
-'monica:resources/views/partials/components/currency-select.blade.php':[
-0,
+"monica:resources/views/partials/components/currency-select.blade.php": [
+0
 ],
-'monica:resources/views/partials/components/date-select.blade.php':[
-0,
+"monica:resources/views/partials/components/date-select.blade.php": [
+0
 ],
-'monica:resources/views/partials/components/people-upgrade-sidebar.blade.php':[
-0,
+"monica:resources/views/partials/components/people-upgrade-sidebar.blade.php": [
+0
 ],
-'monica:resources/views/partials/errors.blade.php':[
-0,
+"monica:resources/views/partials/errors.blade.php": [
+0
 ],
-'monica:resources/views/partials/footer.blade.php':[
-0,
+"monica:resources/views/partials/footer.blade.php": [
+0
 ],
-'monica:resources/views/partials/header.blade.php':[
-0,
+"monica:resources/views/partials/header.blade.php": [
+0
 ],
-'monica:resources/views/partials/notification.blade.php':[
-0,
+"monica:resources/views/partials/notification.blade.php": [
+0
 ],
-'monica:resources/views/partials/subscription.blade.php':[
-0,
+"monica:resources/views/partials/subscription.blade.php": [
+0
 ],
-'monica:resources/views/people/_header.blade.php':[
-0,
+"monica:resources/views/people/_header.blade.php": [
+0
 ],
-'monica:resources/views/people/activities/index.blade.php':[
-0,
+"monica:resources/views/people/activities/index.blade.php": [
+0
 ],
-'monica:resources/views/people/activities/year.blade.php':[
-0,
+"monica:resources/views/people/activities/year.blade.php": [
+0
 ],
-'monica:resources/views/people/auditlogs/index.blade.php':[
-0,
+"monica:resources/views/people/auditlogs/index.blade.php": [
+0
 ],
-'monica:resources/views/people/avatar/edit.blade.php':[
-0,
+"monica:resources/views/people/avatar/edit.blade.php": [
+0
 ],
-'monica:resources/views/people/blank.blade.php':[
-0,
+"monica:resources/views/people/blank.blade.php": [
+0
 ],
-'monica:resources/views/people/calls/index.blade.php':[
-0,
+"monica:resources/views/people/calls/index.blade.php": [
+0
 ],
-'monica:resources/views/people/conversations/edit.blade.php':[
-0,
+"monica:resources/views/people/conversations/edit.blade.php": [
+0
 ],
-'monica:resources/views/people/conversations/index.blade.php':[
-0,
+"monica:resources/views/people/conversations/index.blade.php": [
+0
 ],
-'monica:resources/views/people/conversations/new.blade.php':[
-0,
+"monica:resources/views/people/conversations/new.blade.php": [
+0
 ],
-'monica:resources/views/people/create.blade.php':[
-0,
+"monica:resources/views/people/create.blade.php": [
+0
 ],
-'monica:resources/views/people/debt/add.blade.php':[
-0,
+"monica:resources/views/people/debt/add.blade.php": [
+0
 ],
-'monica:resources/views/people/debt/edit.blade.php':[
-0,
+"monica:resources/views/people/debt/edit.blade.php": [
+0
 ],
-'monica:resources/views/people/debt/form.blade.php':[
-0,
+"monica:resources/views/people/debt/form.blade.php": [
+0
 ],
-'monica:resources/views/people/debt/index.blade.php':[
-0,
+"monica:resources/views/people/debt/index.blade.php": [
+0
 ],
-'monica:resources/views/people/documents/index.blade.php':[
-0,
+"monica:resources/views/people/documents/index.blade.php": [
+0
 ],
-'monica:resources/views/people/edit.blade.php':[
-0,
+"monica:resources/views/people/edit.blade.php": [
+0
 ],
-'monica:resources/views/people/food-preferences/edit.blade.php':[
-0,
+"monica:resources/views/people/food-preferences/edit.blade.php": [
+0
 ],
-'monica:resources/views/people/food-preferences/index.blade.php':[
-0,
+"monica:resources/views/people/food-preferences/index.blade.php": [
+0
 ],
-'monica:resources/views/people/gifts/index.blade.php':[
-0,
+"monica:resources/views/people/gifts/index.blade.php": [
+0
 ],
-'monica:resources/views/people/index.blade.php':[
-0,
+"monica:resources/views/people/index.blade.php": [
+0
 ],
-'monica:resources/views/people/introductions/edit.blade.php':[
-0,
+"monica:resources/views/people/introductions/edit.blade.php": [
+0
 ],
-'monica:resources/views/people/introductions/index.blade.php':[
-0,
+"monica:resources/views/people/introductions/index.blade.php": [
+0
 ],
-'monica:resources/views/people/life-events/index.blade.php':[
-0,
+"monica:resources/views/people/life-events/index.blade.php": [
+0
 ],
-'monica:resources/views/people/photos/index.blade.php':[
-0,
+"monica:resources/views/people/photos/index.blade.php": [
+0
 ],
-'monica:resources/views/people/profile.blade.php':[
-0,
+"monica:resources/views/people/profile.blade.php": [
+0
 ],
-'monica:resources/views/people/relationship/_relationship.blade.php':[
-0,
+"monica:resources/views/people/relationship/_relationship.blade.php": [
+0
 ],
-'monica:resources/views/people/relationship/edit.blade.php':[
-0,
+"monica:resources/views/people/relationship/edit.blade.php": [
+0
 ],
-'monica:resources/views/people/relationship/index.blade.php':[
-0,
+"monica:resources/views/people/relationship/index.blade.php": [
+0
 ],
-'monica:resources/views/people/relationship/new.blade.php':[
-0,
+"monica:resources/views/people/relationship/new.blade.php": [
+0
 ],
-'monica:resources/views/people/reminders/add.blade.php':[
-0,
+"monica:resources/views/people/reminders/add.blade.php": [
+0
 ],
-'monica:resources/views/people/reminders/edit.blade.php':[
-0,
+"monica:resources/views/people/reminders/edit.blade.php": [
+0
 ],
-'monica:resources/views/people/reminders/form.blade.php':[
-0,
+"monica:resources/views/people/reminders/form.blade.php": [
+0
 ],
-'monica:resources/views/people/reminders/index.blade.php':[
-0,
+"monica:resources/views/people/reminders/index.blade.php": [
+0
 ],
-'monica:resources/views/people/sidebar.blade.php':[
-0,
+"monica:resources/views/people/sidebar.blade.php": [
+0
 ],
-'monica:resources/views/people/tasks/index.blade.php':[
-0,
+"monica:resources/views/people/tasks/index.blade.php": [
+0
 ],
-'monica:resources/views/people/work/edit.blade.php':[
-0,
+"monica:resources/views/people/work/edit.blade.php": [
+0
 ],
-'monica:resources/views/people/work/index.blade.php':[
-0,
+"monica:resources/views/people/work/index.blade.php": [
+0
 ],
-'monica:resources/views/settings/_sidebar.blade.php':[
-0,
+"monica:resources/views/settings/_sidebar.blade.php": [
+0
 ],
-'monica:resources/views/settings/api/index.blade.php':[
-0,
+"monica:resources/views/settings/api/index.blade.php": [
+0
 ],
-'monica:resources/views/settings/auditlog/index.blade.php':[
-0,
+"monica:resources/views/settings/auditlog/index.blade.php": [
+0
 ],
-'monica:resources/views/settings/dav/index.blade.php':[
-0,
+"monica:resources/views/settings/dav/index.blade.php": [
+0
 ],
-'monica:resources/views/settings/export.blade.php':[
-0,
+"monica:resources/views/settings/export.blade.php": [
+0
 ],
-'monica:resources/views/settings/imports/blank.blade.php':[
-0,
+"monica:resources/views/settings/imports/blank.blade.php": [
+0
 ],
-'monica:resources/views/settings/imports/index.blade.php':[
-0,
+"monica:resources/views/settings/imports/index.blade.php": [
+0
 ],
-'monica:resources/views/settings/imports/report.blade.php':[
-0,
+"monica:resources/views/settings/imports/report.blade.php": [
+0
 ],
-'monica:resources/views/settings/imports/upload.blade.php':[
-0,
+"monica:resources/views/settings/imports/upload.blade.php": [
+0
 ],
-'monica:resources/views/settings/index.blade.php':[
-0,
+"monica:resources/views/settings/index.blade.php": [
+0
 ],
-'monica:resources/views/settings/personalization/index.blade.php':[
-0,
+"monica:resources/views/settings/personalization/index.blade.php": [
+0
 ],
-'monica:resources/views/settings/security/index.blade.php':[
-0,
+"monica:resources/views/settings/security/index.blade.php": [
+0
 ],
-'monica:resources/views/settings/storage/index.blade.php':[
-0,
+"monica:resources/views/settings/storage/index.blade.php": [
+0
 ],
-'monica:resources/views/settings/subscriptions/account.blade.php':[
-0,
+"monica:resources/views/settings/subscriptions/account.blade.php": [
+0
 ],
-'monica:resources/views/settings/subscriptions/archive.blade.php':[
-0,
+"monica:resources/views/settings/subscriptions/archive.blade.php": [
+0
 ],
-'monica:resources/views/settings/subscriptions/blank.blade.php':[
-0,
+"monica:resources/views/settings/subscriptions/blank.blade.php": [
+0
 ],
-'monica:resources/views/settings/subscriptions/confirm.blade.php':[
-0,
+"monica:resources/views/settings/subscriptions/confirm.blade.php": [
+0
 ],
-'monica:resources/views/settings/subscriptions/downgrade-checklist.blade.php':[
-0,
+"monica:resources/views/settings/subscriptions/downgrade-checklist.blade.php": [
+0
 ],
-'monica:resources/views/settings/subscriptions/downgrade-success.blade.php':[
-0,
+"monica:resources/views/settings/subscriptions/downgrade-success.blade.php": [
+0
 ],
-'monica:resources/views/settings/subscriptions/success.blade.php':[
-0,
+"monica:resources/views/settings/subscriptions/success.blade.php": [
+0
 ],
-'monica:resources/views/settings/subscriptions/update.blade.php':[
-0,
+"monica:resources/views/settings/subscriptions/update.blade.php": [
+0
 ],
-'monica:resources/views/settings/subscriptions/upgrade.blade.php':[
-0,
+"monica:resources/views/settings/subscriptions/upgrade.blade.php": [
+0
 ],
-'monica:resources/views/settings/tags.blade.php':[
-0,
+"monica:resources/views/settings/tags.blade.php": [
+0
 ],
-'monica:resources/views/settings/users/accept.blade.php':[
-0,
+"monica:resources/views/settings/users/accept.blade.php": [
+0
 ],
-'monica:resources/views/settings/users/add.blade.php':[
-0,
+"monica:resources/views/settings/users/add.blade.php": [
+0
 ],
-'monica:resources/views/settings/users/blank.blade.php':[
-0,
+"monica:resources/views/settings/users/blank.blade.php": [
+0
 ],
-'monica:resources/views/settings/users/index.blade.php':[
-0,
-],
+"monica:resources/views/settings/users/index.blade.php": [
+0
+]
 }

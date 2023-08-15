@@ -1,48 +1,48 @@
 {
-'psysh:src/CodeCleaner.php':[
-203,
+"psysh:src/CodeCleaner.php": [
+203
 ],
-'psysh:src/Command/TimeitCommand.php':[
-99,
+"psysh:src/Command/TimeitCommand.php": [
+99
 ],
-'psysh:src/ConfigPaths.php':[
-267,
+"psysh:src/ConfigPaths.php": [
+267
 ],
-'psysh:src/Configuration.php':[
+"psysh:src/Configuration.php": [
 389,
 624,
-1227,
+1227
 ],
-'psysh:src/ExecutionClosure.php':[
-87,
+"psysh:src/ExecutionClosure.php": [
+87
 ],
-'psysh:src/Input/FilterOptions.php':[
+"psysh:src/Input/FilterOptions.php": [
 52,
-62,
+62
 ],
-'psysh:src/Input/ShellInput.php':[
-50,
+"psysh:src/Input/ShellInput.php": [
+50
 ],
-'psysh:src/Output/ProcOutputPager.php':[
-53,
+"psysh:src/Output/ProcOutputPager.php": [
+53
 ],
-'psysh:src/Reflection/ReflectionClassConstant.php':[
-84,
+"psysh:src/Reflection/ReflectionClassConstant.php": [
+84
 ],
-'psysh:src/Shell.php':[
+"psysh:src/Shell.php": [
 564,
 624,
 986,
 1040,
-1174,
+1174
 ],
-'psysh:src/VersionUpdater/Downloader/CurlDownloader.php':[
-32,
+"psysh:src/VersionUpdater/Downloader/CurlDownloader.php": [
+32
 ],
-'psysh:src/VersionUpdater/Downloader/FileDownloader.php':[
-30,
+"psysh:src/VersionUpdater/Downloader/FileDownloader.php": [
+30
 ],
-'psysh:src/VersionUpdater/SelfUpdate.php':[
-131,
-],
+"psysh:src/VersionUpdater/SelfUpdate.php": [
+131
+]
 }

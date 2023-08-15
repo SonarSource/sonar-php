@@ -158,6 +158,7 @@ ruling_task:
       - PHP_PROJECT: "Psysh"
       - PHP_PROJECT: "PhpWord"
       - PHP_PROJECT: "RubixML"
+      - PHP_PROJECT: "PhpSpreadsheet"
   submodules_script:
     - git submodule update --init
   ruling_script:

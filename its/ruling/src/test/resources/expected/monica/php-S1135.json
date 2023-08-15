@@ -1,12 +1,12 @@
 {
-'monica:app/Http/Controllers/Api/ApiController.php':[
-68,
+"monica:app/Http/Controllers/Api/ApiController.php": [
+68
 ],
-'monica:app/Http/Controllers/ContactsController.php':[
-382,
+"monica:app/Http/Controllers/ContactsController.php": [
+382
 ],
-'monica:tests/Browser/Settings/MultiFAControllerTest.php':[
+"monica:tests/Browser/Settings/MultiFAControllerTest.php": [
 188,
-189,
-],
+189
+]
 }

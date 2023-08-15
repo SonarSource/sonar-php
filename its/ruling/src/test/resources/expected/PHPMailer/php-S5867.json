@@ -1,20 +1,20 @@
 {
-'PHPMailer:src/PHPMailer.php':[
+"PHPMailer:src/PHPMailer.php": [
 1867,
 2320,
 2362,
 2363,
 3476,
 4130,
-4318,
+4318
 ],
-'PHPMailer:test/Language/TranslationCompletenessTest.php':[
+"PHPMailer:test/Language/TranslationCompletenessTest.php": [
 60,
 70,
-71,
+71
 ],
-'PHPMailer:test/PHPMailer/GenerateIdTest.php':[
+"PHPMailer:test/PHPMailer/GenerateIdTest.php": [
 51,
-52,
-],
+52
+]
 }

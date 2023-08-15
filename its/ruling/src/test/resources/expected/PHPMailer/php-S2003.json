@@ -1,14 +1,14 @@
 {
-'PHPMailer:get_oauth_token.php':[
-78,
+"PHPMailer:get_oauth_token.php": [
+78
 ],
-'PHPMailer:test/Language/TranslationCompletenessTest.php':[
-82,
+"PHPMailer:test/Language/TranslationCompletenessTest.php": [
+82
 ],
-'PHPMailer:test/PHPMailer/PHPMailerTest.php':[
-1238,
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
+1238
 ],
-'PHPMailer:test/SendTestCase.php':[
-57,
-],
+"PHPMailer:test/SendTestCase.php": [
+57
+]
 }

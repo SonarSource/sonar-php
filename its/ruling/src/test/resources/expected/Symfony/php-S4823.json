@@ -1,8 +1,8 @@
 {
-'Symfony:Bridge/PhpUnit/Tests/CoverageListenerTest.php':[
-37,
+"Symfony:Bridge/PhpUnit/Tests/CoverageListenerTest.php": [
+37
 ],
-'Symfony:Bridge/PhpUnit/bin/simple-phpunit.php':[
+"Symfony:Bridge/PhpUnit/bin/simple-phpunit.php": [
 21,
 22,
 22,
@@ -26,62 +26,62 @@
 432,
 438,
 439,
-439,
+439
 ],
-'Symfony:Component/Console/Command/CompleteCommand.php':[
+"Symfony:Component/Console/Command/CompleteCommand.php": [
 114,
-220,
+220
 ],
-'Symfony:Component/Console/Command/DumpCompletionCommand.php':[
-94,
+"Symfony:Component/Console/Command/DumpCompletionCommand.php": [
+94
 ],
-'Symfony:Component/Console/Input/ArgvInput.php':[
-48,
+"Symfony:Component/Console/Input/ArgvInput.php": [
+48
 ],
-'Symfony:Component/Console/SingleCommandApplication.php':[
-59,
+"Symfony:Component/Console/SingleCommandApplication.php": [
+59
 ],
-'Symfony:Component/Console/Tests/ApplicationTest.php':[
-986,
+"Symfony:Component/Console/Tests/ApplicationTest.php": [
+986
 ],
-'Symfony:Component/Console/Tests/Input/ArgvInputTest.php':[
-24,
+"Symfony:Component/Console/Tests/Input/ArgvInputTest.php": [
+24
 ],
-'Symfony:Component/Intl/Resources/bin/update-data.php':[
+"Symfony:Component/Intl/Resources/bin/update-data.php": [
 34,
 34,
 36,
 67,
-90,
+90
 ],
-'Symfony:Component/Mailer/Tests/Transport/Fixtures/fake-sendmail.php':[
-5,
+"Symfony:Component/Mailer/Tests/Transport/Fixtures/fake-sendmail.php": [
+5
 ],
-'Symfony:Component/Process/Tests/ErrorProcessInitiator.php':[
-19,
+"Symfony:Component/Process/Tests/ErrorProcessInitiator.php": [
+19
 ],
-'Symfony:Component/Process/Tests/NonStopableProcess.php':[
+"Symfony:Component/Process/Tests/NonStopableProcess.php": [
 35,
-35,
+35
 ],
-'Symfony:Component/Runtime/GenericRuntime.php':[
-155,
+"Symfony:Component/Runtime/GenericRuntime.php": [
+155
 ],
-'Symfony:Component/Runtime/SymfonyRuntime.php':[
+"Symfony:Component/Runtime/SymfonyRuntime.php": [
 98,
-146,
+146
 ],
-'Symfony:Component/Translation/Resources/bin/translation-status.php':[
+"Symfony:Component/Translation/Resources/bin/translation-status.php": [
 56,
 56,
 59,
-63,
+63
 ],
-'Symfony:Component/VarDumper/Dumper/CliDumper.php':[
+"Symfony:Component/VarDumper/Dumper/CliDumper.php": [
 530,
-531,
+531
 ],
-'Symfony:Component/VarDumper/Dumper/ContextProvider/CliContextProvider.php':[
-28,
-],
+"Symfony:Component/VarDumper/Dumper/ContextProvider/CliContextProvider.php": [
+28
+]
 }

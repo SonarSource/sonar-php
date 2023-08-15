@@ -1,8 +1,8 @@
 {
-'RubixML:benchmarks/Classifiers/RandomForestBench.php':[
-87,
+"RubixML:benchmarks/Classifiers/RandomForestBench.php": [
+87
 ],
-'RubixML:benchmarks/Regressors/GradientBoostBench.php':[
-77,
-],
+"RubixML:benchmarks/Regressors/GradientBoostBench.php": [
+77
+]
 }

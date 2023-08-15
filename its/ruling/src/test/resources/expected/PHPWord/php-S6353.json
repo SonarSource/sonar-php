@@ -1,12 +1,12 @@
 {
-'PHPWord:src/PhpWord/Reader/RTF/Document.php':[
-248,
+"PHPWord:src/PhpWord/Reader/RTF/Document.php": [
+248
 ],
-'PHPWord:src/PhpWord/Shared/Converter.php':[
+"PHPWord:src/PhpWord/Shared/Converter.php": [
 385,
-385,
+385
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
+"PHPWord:src/PhpWord/Shared/Html.php": [
 732,
 732,
 736,
@@ -14,11 +14,11 @@
 807,
 810,
 828,
-828,
+828
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
 411,
 411,
-440,
-],
+440
+]
 }

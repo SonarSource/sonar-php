@@ -1,14 +1,14 @@
 {
-'Symfony:Bridge/Doctrine/Tests/Fixtures/AssociationEntity.php':[
-26,
+"Symfony:Bridge/Doctrine/Tests/Fixtures/AssociationEntity.php": [
+26
 ],
-'Symfony:Bridge/Doctrine/Tests/Fixtures/AssociationEntity2.php':[
-26,
+"Symfony:Bridge/Doctrine/Tests/Fixtures/AssociationEntity2.php": [
+26
 ],
-'Symfony:Bridge/Doctrine/Tests/Fixtures/BaseUser.php':[
-29,
+"Symfony:Bridge/Doctrine/Tests/Fixtures/BaseUser.php": [
+29
 ],
-'Symfony:Bridge/Doctrine/Tests/PropertyInfo/Fixtures/DoctrineDummy.php':[
+"Symfony:Bridge/Doctrine/Tests/PropertyInfo/Fixtures/DoctrineDummy.php": [
 72,
 77,
 82,
@@ -21,452 +21,452 @@
 117,
 122,
 134,
-144,
+144
 ],
-'Symfony:Bridge/Doctrine/Tests/PropertyInfo/Fixtures/DoctrineRelation.php':[
+"Symfony:Bridge/Doctrine/Tests/PropertyInfo/Fixtures/DoctrineRelation.php": [
 52,
 57,
 68,
-74,
+74
 ],
-'Symfony:Bridge/Doctrine/Tests/Validator/Constraints/UniqueEntityTest.php':[
+"Symfony:Bridge/Doctrine/Tests/Validator/Constraints/UniqueEntityTest.php": [
 68,
 74,
 80,
-81,
+81
 ],
-'Symfony:Bundle/SecurityBundle/LoginLink/FirewallAwareLoginLinkHandler.php':[
-32,
+"Symfony:Bundle/SecurityBundle/LoginLink/FirewallAwareLoginLinkHandler.php": [
+32
 ],
-'Symfony:Bundle/SecurityBundle/RememberMe/FirewallAwareRememberMeHandler.php':[
-31,
+"Symfony:Bundle/SecurityBundle/RememberMe/FirewallAwareRememberMeHandler.php": [
+31
 ],
-'Symfony:Component/Cache/Adapter/AbstractAdapter.php':[
-37,
+"Symfony:Component/Cache/Adapter/AbstractAdapter.php": [
+37
 ],
-'Symfony:Component/Cache/Traits/Redis5Proxy.php':[
-32,
+"Symfony:Component/Cache/Traits/Redis5Proxy.php": [
+32
 ],
-'Symfony:Component/Cache/Traits/Redis6Proxy.php':[
-32,
+"Symfony:Component/Cache/Traits/Redis6Proxy.php": [
+32
 ],
-'Symfony:Component/Cache/Traits/RedisCluster5Proxy.php':[
-32,
+"Symfony:Component/Cache/Traits/RedisCluster5Proxy.php": [
+32
 ],
-'Symfony:Component/Cache/Traits/RedisCluster6Proxy.php':[
-32,
+"Symfony:Component/Cache/Traits/RedisCluster6Proxy.php": [
+32
 ],
-'Symfony:Component/Cache/Traits/RelayProxy.php':[
-33,
+"Symfony:Component/Cache/Traits/RelayProxy.php": [
+33
 ],
-'Symfony:Component/DependencyInjection/Loader/Configurator/InlineServiceConfigurator.php':[
+"Symfony:Component/DependencyInjection/Loader/Configurator/InlineServiceConfigurator.php": [
 36,
 37,
-38,
+38
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/php/lazy_autowire_attribute.php':[
-96,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/php/lazy_autowire_attribute.php": [
+96
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/php/lazy_autowire_attribute_with_intersection.php':[
-90,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/php/lazy_autowire_attribute_with_intersection.php": [
+90
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_dedup_lazy.php':[
+"Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_dedup_lazy.php": [
 118,
-130,
+130
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_non_shared_lazy_ghost.php':[
-86,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_non_shared_lazy_ghost.php": [
+86
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_wither_lazy.php':[
-82,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_wither_lazy.php": [
+82
 ],
-'Symfony:Component/ErrorHandler/Tests/Fixtures/FinalConstant/FinalConstants.php':[
-21,
+"Symfony:Component/ErrorHandler/Tests/Fixtures/FinalConstant/FinalConstants.php": [
+21
 ],
-'Symfony:Component/ErrorHandler/Tests/Fixtures/FinalConstant/OverrideFinalConstant.php':[
-17,
+"Symfony:Component/ErrorHandler/Tests/Fixtures/FinalConstant/OverrideFinalConstant.php": [
+17
 ],
-'Symfony:Component/ErrorHandler/Tests/Fixtures/FinalConstant/OverrideFinalConstant81.php':[
-17,
+"Symfony:Component/ErrorHandler/Tests/Fixtures/FinalConstant/OverrideFinalConstant81.php": [
+17
 ],
-'Symfony:Component/ErrorHandler/Tests/Fixtures/FinalProperty/FinalProperty.php':[
-20,
+"Symfony:Component/ErrorHandler/Tests/Fixtures/FinalProperty/FinalProperty.php": [
+20
 ],
-'Symfony:Component/ErrorHandler/Tests/Fixtures/OverrideFinalProperty.php':[
-11,
+"Symfony:Component/ErrorHandler/Tests/Fixtures/OverrideFinalProperty.php": [
+11
 ],
-'Symfony:Component/Form/Extension/Validator/Type/FormTypeValidatorExtension.php':[
-32,
+"Symfony:Component/Form/Extension/Validator/Type/FormTypeValidatorExtension.php": [
+32
 ],
-'Symfony:Component/Form/Tests/Extension/Validator/ValidatorTypeGuesserTest.php':[
-211,
+"Symfony:Component/Form/Tests/Extension/Validator/ValidatorTypeGuesserTest.php": [
+211
 ],
-'Symfony:Component/Form/Tests/Fixtures/Author.php':[
-22,
+"Symfony:Component/Form/Tests/Fixtures/Author.php": [
+22
 ],
-'Symfony:Component/HttpClient/AmpHttpClient.php':[
-51,
+"Symfony:Component/HttpClient/AmpHttpClient.php": [
+51
 ],
-'Symfony:Component/HttpClient/CurlHttpClient.php':[
-46,
+"Symfony:Component/HttpClient/CurlHttpClient.php": [
+46
 ],
-'Symfony:Component/HttpClient/NativeHttpClient.php':[
-40,
+"Symfony:Component/HttpClient/NativeHttpClient.php": [
+40
 ],
-'Symfony:Component/HttpKernel/Tests/KernelTest.php':[
-754,
+"Symfony:Component/HttpKernel/Tests/KernelTest.php": [
+754
 ],
-'Symfony:Component/Intl/Transliterator/EmojiTransliterator.php':[
+"Symfony:Component/Intl/Transliterator/EmojiTransliterator.php": [
 140,
 141,
 155,
-156,
+156
 ],
-'Symfony:Component/Mime/Tests/Header/ParameterizedHeaderTest.php':[
+"Symfony:Component/Mime/Tests/Header/ParameterizedHeaderTest.php": [
+19
+],
+"Symfony:Component/Mime/Tests/Header/UnstructuredHeaderTest.php": [
+19
+],
+"Symfony:Component/PropertyAccess/Tests/Fixtures/TestClass.php": [
+18
+],
+"Symfony:Component/PropertyAccess/Tests/Fixtures/TestPublicPropertyGetterOnObject.php": [
+17
+],
+"Symfony:Component/PropertyInfo/Tests/Fixtures/AdderRemoverDummy.php": [
 19,
+20
 ],
-'Symfony:Component/Mime/Tests/Header/UnstructuredHeaderTest.php':[
-19,
-],
-'Symfony:Component/PropertyAccess/Tests/Fixtures/TestClass.php':[
-18,
-],
-'Symfony:Component/PropertyAccess/Tests/Fixtures/TestPublicPropertyGetterOnObject.php':[
-17,
-],
-'Symfony:Component/PropertyInfo/Tests/Fixtures/AdderRemoverDummy.php':[
-19,
-20,
-],
-'Symfony:Component/PropertyInfo/Tests/Fixtures/Dummy.php':[
+"Symfony:Component/PropertyInfo/Tests/Fixtures/Dummy.php": [
 24,
 104,
-109,
+109
 ],
-'Symfony:Component/PropertyInfo/Tests/Fixtures/DummyNamespace.php':[
-22,
+"Symfony:Component/PropertyInfo/Tests/Fixtures/DummyNamespace.php": [
+22
 ],
-'Symfony:Component/PropertyInfo/Tests/Fixtures/DummyUnionType.php':[
+"Symfony:Component/PropertyInfo/Tests/Fixtures/DummyUnionType.php": [
 19,
-20,
+20
 ],
-'Symfony:Component/PropertyInfo/Tests/Fixtures/IgnorePropertyDummy.php':[
-31,
+"Symfony:Component/PropertyInfo/Tests/Fixtures/IgnorePropertyDummy.php": [
+31
 ],
-'Symfony:Component/PropertyInfo/Tests/Fixtures/Php74Dummy.php':[
+"Symfony:Component/PropertyInfo/Tests/Fixtures/Php74Dummy.php": [
 20,
 22,
-23,
+23
 ],
-'Symfony:Component/Security/Core/Role/SwitchUserRole.php':[
+"Symfony:Component/Security/Core/Role/SwitchUserRole.php": [
 21,
-22,
+22
 ],
-'Symfony:Component/Security/Core/Tests/Validator/Constraints/UserPasswordTest.php':[
+"Symfony:Component/Security/Core/Tests/Validator/Constraints/UserPasswordTest.php": [
 67,
 70,
-73,
+73
 ],
-'Symfony:Component/Serializer/Tests/Fixtures/DummyPrivatePropertyWithoutGetter.php':[
-16,
+"Symfony:Component/Serializer/Tests/Fixtures/DummyPrivatePropertyWithoutGetter.php": [
+16
 ],
-'Symfony:Component/Serializer/Tests/Normalizer/PropertyNormalizerTest.php':[
+"Symfony:Component/Serializer/Tests/Normalizer/PropertyNormalizerTest.php": [
 569,
-574,
+574
 ],
-'Symfony:Component/Validator/Tests/Constraints/AtLeastOneOfValidatorTest.php':[
-303,
+"Symfony:Component/Validator/Tests/Constraints/AtLeastOneOfValidatorTest.php": [
+303
 ],
-'Symfony:Component/Validator/Tests/Constraints/BicValidatorTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/BicValidatorTest.php": [
 334,
 336,
-338,
+338
 ],
-'Symfony:Component/Validator/Tests/Constraints/CardSchemeTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/CardSchemeTest.php": [
 45,
 48,
-51,
+51
 ],
-'Symfony:Component/Validator/Tests/Constraints/ChoiceTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/ChoiceTest.php": [
 61,
 64,
 67,
-70,
+70
 ],
-'Symfony:Component/Validator/Tests/Constraints/CidrTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/CidrTest.php": [
 150,
 153,
-156,
+156
 ],
-'Symfony:Component/Validator/Tests/Constraints/CountTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/CountTest.php": [
 52,
 55,
-58,
+58
 ],
-'Symfony:Component/Validator/Tests/Constraints/CountryTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/CountryTest.php": [
 44,
 47,
-50,
+50
 ],
-'Symfony:Component/Validator/Tests/Constraints/CssColorTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/CssColorTest.php": [
 48,
 51,
-54,
+54
 ],
-'Symfony:Component/Validator/Tests/Constraints/CurrencyTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/CurrencyTest.php": [
 40,
 43,
-46,
+46
 ],
-'Symfony:Component/Validator/Tests/Constraints/DateTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/DateTest.php": [
 40,
 43,
-46,
+46
 ],
-'Symfony:Component/Validator/Tests/Constraints/DateTimeTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/DateTimeTest.php": [
 45,
 48,
-51,
+51
 ],
-'Symfony:Component/Validator/Tests/Constraints/DivisibleByTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/DivisibleByTest.php": [
 47,
 50,
-53,
+53
 ],
-'Symfony:Component/Validator/Tests/Constraints/EmailTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/EmailTest.php": [
 87,
 90,
-93,
+93
 ],
-'Symfony:Component/Validator/Tests/Constraints/EqualToTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/EqualToTest.php": [
 47,
 50,
-53,
+53
 ],
-'Symfony:Component/Validator/Tests/Constraints/ExpressionLanguageSyntaxTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/ExpressionLanguageSyntaxTest.php": [
 75,
 78,
-81,
+81
 ],
-'Symfony:Component/Validator/Tests/Constraints/ExpressionSyntaxTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/ExpressionSyntaxTest.php": [
 72,
 75,
-78,
+78
 ],
-'Symfony:Component/Validator/Tests/Constraints/ExpressionTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/ExpressionTest.php": [
 49,
 52,
-55,
+55
 ],
-'Symfony:Component/Validator/Tests/Constraints/FileTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/FileTest.php": [
 167,
 170,
-173,
+173
 ],
-'Symfony:Component/Validator/Tests/Constraints/Fixtures/WhenTestWithAttributes.php':[
+"Symfony:Component/Validator/Tests/Constraints/Fixtures/WhenTestWithAttributes.php": [
 28,
-34,
+34
 ],
-'Symfony:Component/Validator/Tests/Constraints/GreaterThanOrEqualTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/GreaterThanOrEqualTest.php": [
 47,
 50,
-53,
+53
 ],
-'Symfony:Component/Validator/Tests/Constraints/GreaterThanTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/GreaterThanTest.php": [
 47,
 50,
-53,
+53
 ],
-'Symfony:Component/Validator/Tests/Constraints/HostnameTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/HostnameTest.php": [
 44,
 47,
-50,
+50
 ],
-'Symfony:Component/Validator/Tests/Constraints/IbanValidatorTest.php':[
-481,
+"Symfony:Component/Validator/Tests/Constraints/IbanValidatorTest.php": [
+481
 ],
-'Symfony:Component/Validator/Tests/Constraints/IdenticalToTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/IdenticalToTest.php": [
 47,
 50,
-53,
+53
 ],
-'Symfony:Component/Validator/Tests/Constraints/ImageTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/ImageTest.php": [
 50,
 53,
-56,
+56
 ],
-'Symfony:Component/Validator/Tests/Constraints/IpTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/IpTest.php": [
 70,
 73,
-76,
+76
 ],
-'Symfony:Component/Validator/Tests/Constraints/IsbnTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/IsbnTest.php": [
 44,
 47,
-50,
+50
 ],
-'Symfony:Component/Validator/Tests/Constraints/IsinTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/IsinTest.php": [
 40,
 43,
-46,
+46
 ],
-'Symfony:Component/Validator/Tests/Constraints/IssnTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/IssnTest.php": [
 46,
 49,
-52,
+52
 ],
-'Symfony:Component/Validator/Tests/Constraints/JsonTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/JsonTest.php": [
 40,
 43,
-46,
+46
 ],
-'Symfony:Component/Validator/Tests/Constraints/LanguageTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/LanguageTest.php": [
 44,
 47,
-50,
+50
 ],
-'Symfony:Component/Validator/Tests/Constraints/LengthTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/LengthTest.php": [
 110,
 113,
-116,
+116
 ],
-'Symfony:Component/Validator/Tests/Constraints/LessThanOrEqualTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/LessThanOrEqualTest.php": [
 47,
 50,
-53,
+53
 ],
-'Symfony:Component/Validator/Tests/Constraints/LessThanTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/LessThanTest.php": [
 47,
 50,
-53,
+53
 ],
-'Symfony:Component/Validator/Tests/Constraints/LocaleTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/LocaleTest.php": [
 44,
 47,
-50,
+50
 ],
-'Symfony:Component/Validator/Tests/Constraints/LuhnTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/LuhnTest.php": [
 40,
 43,
-46,
+46
 ],
-'Symfony:Component/Validator/Tests/Constraints/NegativeOrZeroTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/NegativeOrZeroTest.php": [
 41,
-44,
+44
 ],
-'Symfony:Component/Validator/Tests/Constraints/NegativeTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/NegativeTest.php": [
 41,
-44,
+44
 ],
-'Symfony:Component/Validator/Tests/Constraints/NotBlankTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/NotBlankTest.php": [
 66,
-69,
+69
 ],
-'Symfony:Component/Validator/Tests/Constraints/NotCompromisedPasswordTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/NotCompromisedPasswordTest.php": [
 56,
 59,
-62,
+62
 ],
-'Symfony:Component/Validator/Tests/Constraints/NotEqualToTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/NotEqualToTest.php": [
 47,
 50,
-53,
+53
 ],
-'Symfony:Component/Validator/Tests/Constraints/NotIdenticalToTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/NotIdenticalToTest.php": [
 47,
 50,
-53,
+53
 ],
-'Symfony:Component/Validator/Tests/Constraints/PositiveOrZeroTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/PositiveOrZeroTest.php": [
 41,
-44,
+44
 ],
-'Symfony:Component/Validator/Tests/Constraints/PositiveTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/PositiveTest.php": [
 41,
-44,
+44
 ],
-'Symfony:Component/Validator/Tests/Constraints/RegexTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/RegexTest.php": [
 140,
 143,
-146,
+146
 ],
-'Symfony:Component/Validator/Tests/Constraints/TimeTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/TimeTest.php": [
 40,
 43,
-46,
+46
 ],
-'Symfony:Component/Validator/Tests/Constraints/TimezoneTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/TimezoneTest.php": [
 92,
 95,
-98,
+98
 ],
-'Symfony:Component/Validator/Tests/Constraints/TypeTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/TypeTest.php": [
 44,
 47,
-50,
+50
 ],
-'Symfony:Component/Validator/Tests/Constraints/UlidTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/UlidTest.php": [
 40,
 43,
-46,
+46
 ],
-'Symfony:Component/Validator/Tests/Constraints/UniqueTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/UniqueTest.php": [
 58,
 61,
 64,
-67,
+67
 ],
-'Symfony:Component/Validator/Tests/Constraints/UrlTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/UrlTest.php": [
 72,
 75,
-78,
+78
 ],
-'Symfony:Component/Validator/Tests/Constraints/UuidTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/UuidTest.php": [
 72,
 75,
-78,
+78
 ],
-'Symfony:Component/Validator/Tests/Constraints/ValidTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/ValidTest.php": [
 57,
 60,
-63,
+63
 ],
-'Symfony:Component/Validator/Tests/Constraints/WhenTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/WhenTest.php": [
 179,
-184,
+184
 ],
-'Symfony:Component/Validator/Tests/Fixtures/Annotation/EntityParent.php':[
+"Symfony:Component/Validator/Tests/Fixtures/Annotation/EntityParent.php": [
 20,
-21,
+21
 ],
-'Symfony:Component/Validator/Tests/Fixtures/Attribute/EntityParent.php':[
+"Symfony:Component/Validator/Tests/Fixtures/Attribute/EntityParent.php": [
 20,
-21,
+21
 ],
-'Symfony:Component/Validator/Tests/Fixtures/NestedAttribute/EntityParent.php':[
+"Symfony:Component/Validator/Tests/Fixtures/NestedAttribute/EntityParent.php": [
 20,
-21,
+21
 ],
-'Symfony:Component/Validator/Tests/Mapping/Factory/LazyLoadingMetadataFactoryTest.php':[
-33,
+"Symfony:Component/Validator/Tests/Mapping/Factory/LazyLoadingMetadataFactoryTest.php": [
+33
 ],
-'Symfony:Component/VarDumper/Tests/Caster/SplCasterTest.php':[
-240,
+"Symfony:Component/VarDumper/Tests/Caster/SplCasterTest.php": [
+240
 ],
-'Symfony:Component/VarDumper/Tests/Fixtures/DateTimeChild.php':[
-7,
+"Symfony:Component/VarDumper/Tests/Fixtures/DateTimeChild.php": [
+7
 ],
-'Symfony:Component/VarDumper/Tests/Fixtures/LotsOfAttributes.php':[
-21,
+"Symfony:Component/VarDumper/Tests/Fixtures/LotsOfAttributes.php": [
+21
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/LazyGhost/ChildMagicClass.php':[
-21,
+"Symfony:Component/VarExporter/Tests/Fixtures/LazyGhost/ChildMagicClass.php": [
+21
 ],
-'Symfony:Component/VarExporter/Tests/InstantiatorTest.php':[
+"Symfony:Component/VarExporter/Tests/InstantiatorTest.php": [
 95,
-102,
+102
 ],
-'Symfony:Component/VarExporter/Tests/VarExporterTest.php':[
-318,
-],
+"Symfony:Component/VarExporter/Tests/VarExporterTest.php": [
+318
+]
 }

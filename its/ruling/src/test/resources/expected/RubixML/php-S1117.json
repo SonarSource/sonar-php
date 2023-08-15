@@ -1,136 +1,136 @@
 {
-'RubixML:benchmarks/Persisters/Serializers/GzipNativeBench.php':[
-57,
+"RubixML:benchmarks/Persisters/Serializers/GzipNativeBench.php": [
+57
 ],
-'RubixML:benchmarks/Persisters/Serializers/NativeBench.php':[
-57,
+"RubixML:benchmarks/Persisters/Serializers/NativeBench.php": [
+57
 ],
-'RubixML:benchmarks/Persisters/Serializers/RBXBench.php':[
-57,
+"RubixML:benchmarks/Persisters/Serializers/RBXBench.php": [
+57
 ],
-'RubixML:src/AnomalyDetectors/GaussianMLE.php':[
+"RubixML:src/AnomalyDetectors/GaussianMLE.php": [
 211,
 245,
 265,
-277,
+277
 ],
-'RubixML:src/AnomalyDetectors/IsolationForest.php':[
-238,
+"RubixML:src/AnomalyDetectors/IsolationForest.php": [
+238
 ],
-'RubixML:src/AnomalyDetectors/LocalOutlierFactor.php':[
+"RubixML:src/AnomalyDetectors/LocalOutlierFactor.php": [
 223,
-311,
+311
 ],
-'RubixML:src/AnomalyDetectors/Loda.php':[
+"RubixML:src/AnomalyDetectors/Loda.php": [
 313,
 319,
-369,
+369
 ],
-'RubixML:src/Classifiers/AdaBoost.php':[
-302,
+"RubixML:src/Classifiers/AdaBoost.php": [
+302
 ],
-'RubixML:src/Classifiers/GaussianNB.php':[
+"RubixML:src/Classifiers/GaussianNB.php": [
 264,
 264,
 306,
-408,
+408
 ],
-'RubixML:src/Classifiers/KNearestNeighbors.php':[
-311,
+"RubixML:src/Classifiers/KNearestNeighbors.php": [
+311
 ],
-'RubixML:src/Classifiers/LogisticRegression.php':[
-289,
+"RubixML:src/Classifiers/LogisticRegression.php": [
+289
 ],
-'RubixML:src/Classifiers/LogitBoost.php':[
+"RubixML:src/Classifiers/LogitBoost.php": [
 360,
 410,
 476,
-599,
+599
 ],
-'RubixML:src/Classifiers/MultilayerPerceptron.php':[
+"RubixML:src/Classifiers/MultilayerPerceptron.php": [
 366,
-368,
+368
 ],
-'RubixML:src/Classifiers/NaiveBayes.php':[
+"RubixML:src/Classifiers/NaiveBayes.php": [
 236,
 247,
-259,
+259
 ],
-'RubixML:src/Classifiers/OneVsRest.php':[
-173,
+"RubixML:src/Classifiers/OneVsRest.php": [
+173
 ],
-'RubixML:src/Classifiers/RadiusNeighbors.php':[
-193,
+"RubixML:src/Classifiers/RadiusNeighbors.php": [
+193
 ],
-'RubixML:src/Classifiers/SoftmaxClassifier.php':[
-285,
+"RubixML:src/Classifiers/SoftmaxClassifier.php": [
+285
 ],
-'RubixML:src/Clusterers/GaussianMixture.php':[
+"RubixML:src/Clusterers/GaussianMixture.php": [
 346,
 346,
 498,
 499,
 556,
-556,
+556
 ],
-'RubixML:src/Clusterers/KMeans.php':[
-302,
+"RubixML:src/Clusterers/KMeans.php": [
+302
 ],
-'RubixML:src/Clusterers/MeanShift.php':[
-332,
+"RubixML:src/Clusterers/MeanShift.php": [
+332
 ],
-'RubixML:src/CrossValidation/Reports/AggregateReport.php':[
-93,
+"RubixML:src/CrossValidation/Reports/AggregateReport.php": [
+93
 ],
-'RubixML:src/Datasets/Generators/Circle.php':[
-101,
+"RubixML:src/Datasets/Generators/Circle.php": [
+101
 ],
-'RubixML:src/Datasets/Generators/HalfMoon.php':[
-116,
+"RubixML:src/Datasets/Generators/HalfMoon.php": [
+116
 ],
-'RubixML:src/Datasets/Generators/Hyperplane.php':[
-96,
+"RubixML:src/Datasets/Generators/Hyperplane.php": [
+96
 ],
-'RubixML:src/Datasets/Generators/SwissRoll.php':[
-128,
+"RubixML:src/Datasets/Generators/SwissRoll.php": [
+128
 ],
-'RubixML:src/Datasets/Labeled.php':[
+"RubixML:src/Datasets/Labeled.php": [
 228,
 440,
 524,
 685,
 711,
-757,
+757
 ],
-'RubixML:src/Extractors/CSV.php':[
+"RubixML:src/Extractors/CSV.php": [
 141,
-190,
+190
 ],
-'RubixML:src/Graph/Nodes/Split.php':[
-137,
+"RubixML:src/Graph/Nodes/Split.php": [
+137
 ],
-'RubixML:src/Graph/Trees/CART.php':[
-91,
+"RubixML:src/Graph/Trees/CART.php": [
+91
 ],
-'RubixML:src/Graph/Trees/ExtraTree.php':[
-75,
+"RubixML:src/Graph/Trees/ExtraTree.php": [
+75
 ],
-'RubixML:src/GridSearch.php':[
-286,
+"RubixML:src/GridSearch.php": [
+286
 ],
-'RubixML:src/NeuralNet/CostFunctions/HuberLoss.php':[
-78,
+"RubixML:src/NeuralNet/CostFunctions/HuberLoss.php": [
+78
 ],
-'RubixML:src/NeuralNet/FeedForward.php':[
+"RubixML:src/NeuralNet/FeedForward.php": [
 164,
-182,
+182
 ],
-'RubixML:src/NeuralNet/Layers/Activation.php':[
+"RubixML:src/NeuralNet/Layers/Activation.php": [
 104,
 142,
-143,
+143
 ],
-'RubixML:src/NeuralNet/Layers/BatchNorm.php':[
+"RubixML:src/NeuralNet/Layers/BatchNorm.php": [
 157,
 158,
 183,
@@ -140,163 +140,163 @@
 222,
 255,
 260,
-261,
+261
 ],
-'RubixML:src/NeuralNet/Layers/Binary.php':[
+"RubixML:src/NeuralNet/Layers/Binary.php": [
 127,
 169,
-170,
+170
 ],
-'RubixML:src/NeuralNet/Layers/Continuous.php':[
-117,
+"RubixML:src/NeuralNet/Layers/Continuous.php": [
+117
 ],
-'RubixML:src/NeuralNet/Layers/Dense.php':[
+"RubixML:src/NeuralNet/Layers/Dense.php": [
 161,
 166,
-249,
+249
 ],
-'RubixML:src/NeuralNet/Layers/Dropout.php':[
+"RubixML:src/NeuralNet/Layers/Dropout.php": [
 117,
-157,
+157
 ],
-'RubixML:src/NeuralNet/Layers/Multiclass.php':[
+"RubixML:src/NeuralNet/Layers/Multiclass.php": [
 126,
 175,
-176,
+176
 ],
-'RubixML:src/NeuralNet/Layers/PReLU.php':[
+"RubixML:src/NeuralNet/Layers/PReLU.php": [
 96,
 161,
 229,
-263,
+263
 ],
-'RubixML:src/NeuralNet/Layers/Swish.php':[
+"RubixML:src/NeuralNet/Layers/Swish.php": [
 112,
 130,
 180,
-181,
+181
 ],
-'RubixML:src/NeuralNet/Optimizers/StepDecay.php':[
-91,
+"RubixML:src/NeuralNet/Optimizers/StepDecay.php": [
+91
 ],
-'RubixML:src/Regressors/GradientBoost.php':[
+"RubixML:src/Regressors/GradientBoost.php": [
 368,
 454,
-529,
+529
 ],
-'RubixML:src/Regressors/KNNRegressor.php':[
-244,
+"RubixML:src/Regressors/KNNRegressor.php": [
+244
 ],
-'RubixML:src/Regressors/MLPRegressor.php':[
-354,
+"RubixML:src/Regressors/MLPRegressor.php": [
+354
 ],
-'RubixML:src/Regressors/Ridge.php':[
-177,
+"RubixML:src/Regressors/Ridge.php": [
+177
 ],
-'RubixML:src/Strategies/KMostFrequent.php':[
-89,
+"RubixML:src/Strategies/KMostFrequent.php": [
+89
 ],
-'RubixML:src/Strategies/WildGuess.php':[
+"RubixML:src/Strategies/WildGuess.php": [
 78,
 79,
-81,
+81
 ],
-'RubixML:src/Transformers/BM25Transformer.php':[
-195,
+"RubixML:src/Transformers/BM25Transformer.php": [
+195
 ],
-'RubixML:src/Transformers/ImageResizer.php':[
+"RubixML:src/Transformers/ImageResizer.php": [
 95,
-96,
+96
 ],
-'RubixML:src/Transformers/ImageRotator.php':[
-142,
+"RubixML:src/Transformers/ImageRotator.php": [
+142
 ],
-'RubixML:src/Transformers/LinearDiscriminantAnalysis.php':[
+"RubixML:src/Transformers/LinearDiscriminantAnalysis.php": [
 155,
-167,
+167
 ],
-'RubixML:src/Transformers/MinMaxNormalizer.php':[
+"RubixML:src/Transformers/MinMaxNormalizer.php": [
 141,
 144,
 174,
 177,
 202,
-227,
+227
 ],
-'RubixML:src/Transformers/OneHotEncoder.php':[
-91,
+"RubixML:src/Transformers/OneHotEncoder.php": [
+91
 ],
-'RubixML:src/Transformers/PrincipalComponentAnalysis.php':[
+"RubixML:src/Transformers/PrincipalComponentAnalysis.php": [
 140,
-152,
+152
 ],
-'RubixML:src/Transformers/TSNE.php':[
-482,
+"RubixML:src/Transformers/TSNE.php": [
+482
 ],
-'RubixML:src/Transformers/TfIdfTransformer.php':[
-171,
+"RubixML:src/Transformers/TfIdfTransformer.php": [
+171
 ],
-'RubixML:src/Transformers/TruncatedSVD.php':[
+"RubixML:src/Transformers/TruncatedSVD.php": [
 127,
-137,
+137
 ],
-'RubixML:src/Transformers/ZScaleStandardizer.php':[
-165,
+"RubixML:src/Transformers/ZScaleStandardizer.php": [
+165
 ],
-'RubixML:tests/Datasets/LabeledTest.php':[
+"RubixML:tests/Datasets/LabeledTest.php": [
 85,
 101,
 564,
 581,
 604,
-806,
+806
 ],
-'RubixML:tests/Datasets/UnlabeledTest.php':[
+"RubixML:tests/Datasets/UnlabeledTest.php": [
 77,
 91,
 270,
 485,
 501,
-579,
+579
 ],
-'RubixML:tests/Graph/Nodes/BallTest.php':[
-65,
+"RubixML:tests/Graph/Nodes/BallTest.php": [
+65
 ],
-'RubixML:tests/Graph/Nodes/BoxTest.php':[
-70,
+"RubixML:tests/Graph/Nodes/BoxTest.php": [
+70
 ],
-'RubixML:tests/Graph/Nodes/CliqueTest.php':[
-61,
+"RubixML:tests/Graph/Nodes/CliqueTest.php": [
+61
 ],
-'RubixML:tests/Graph/Nodes/DepthTest.php':[
-67,
+"RubixML:tests/Graph/Nodes/DepthTest.php": [
+67
 ],
-'RubixML:tests/Graph/Nodes/IsolatorTest.php':[
-60,
+"RubixML:tests/Graph/Nodes/IsolatorTest.php": [
+60
 ],
-'RubixML:tests/Graph/Nodes/NeighborhoodTest.php':[
-64,
+"RubixML:tests/Graph/Nodes/NeighborhoodTest.php": [
+64
 ],
-'RubixML:tests/Graph/Trees/BallTreeTest.php':[
-98,
+"RubixML:tests/Graph/Trees/BallTreeTest.php": [
+98
 ],
-'RubixML:tests/Graph/Trees/ITreeTest.php':[
-84,
+"RubixML:tests/Graph/Trees/ITreeTest.php": [
+84
 ],
-'RubixML:tests/Graph/Trees/KDTreeTest.php':[
-98,
+"RubixML:tests/Graph/Trees/KDTreeTest.php": [
+98
 ],
-'RubixML:tests/NeuralNet/SnapshotTest.php':[
+"RubixML:tests/NeuralNet/SnapshotTest.php": [
 37,
-47,
+47
 ],
-'RubixML:tests/Serializers/GzipNativeTest.php':[
-56,
+"RubixML:tests/Serializers/GzipNativeTest.php": [
+56
 ],
-'RubixML:tests/Serializers/NativeTest.php':[
-60,
+"RubixML:tests/Serializers/NativeTest.php": [
+60
 ],
-'RubixML:tests/Serializers/RBXTest.php':[
-60,
-],
+"RubixML:tests/Serializers/RBXTest.php": [
+60
+]
 }

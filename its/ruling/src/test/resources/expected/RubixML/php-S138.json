@@ -1,11 +1,11 @@
 {
-'RubixML:src/Classifiers/LogitBoost.php':[
-350,
+"RubixML:src/Classifiers/LogitBoost.php": [
+350
 ],
-'RubixML:tests/CrossValidation/Reports/MulticlassBreakdownTest.php':[
-72,
+"RubixML:tests/CrossValidation/Reports/MulticlassBreakdownTest.php": [
+72
 ],
-'RubixML:tests/Datasets/LabeledTest.php':[
-688,
-],
+"RubixML:tests/Datasets/LabeledTest.php": [
+688
+]
 }

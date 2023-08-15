@@ -1,26 +1,26 @@
 {
-'Symfony:Bridge/PhpUnit/SymfonyTestsListener.php':[
-16,
+"Symfony:Bridge/PhpUnit/SymfonyTestsListener.php": [
+16
 ],
-'Symfony:Bridge/PhpUnit/TextUI/Command.php':[
-20,
+"Symfony:Bridge/PhpUnit/TextUI/Command.php": [
+20
 ],
-'Symfony:Bundle/FrameworkBundle/Tests/Fixtures/ClassAliasExampleClass.php':[
-10,
+"Symfony:Bundle/FrameworkBundle/Tests/Fixtures/ClassAliasExampleClass.php": [
+10
 ],
-'Symfony:Component/Cache/Traits/RedisClusterProxy.php':[
-16,
+"Symfony:Component/Cache/Traits/RedisClusterProxy.php": [
+16
 ],
-'Symfony:Component/Cache/Traits/RedisProxy.php':[
-16,
+"Symfony:Component/Cache/Traits/RedisProxy.php": [
+16
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_uninitialized_ref.php':[
-80,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/php/services_uninitialized_ref.php": [
+80
 ],
-'Symfony:Component/Routing/Tests/Fixtures/AnnotatedClasses/FooTrait.php':[
-10,
+"Symfony:Component/Routing/Tests/Fixtures/AnnotatedClasses/FooTrait.php": [
+10
 ],
-'Symfony:Contracts/Service/Test/ServiceLocatorTest.php':[
-16,
-],
+"Symfony:Contracts/Service/Test/ServiceLocatorTest.php": [
+16
+]
 }

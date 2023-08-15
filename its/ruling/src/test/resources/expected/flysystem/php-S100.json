@@ -1,5 +1,5 @@
 {
-'flysystem:mocked-functions.php':[
+"flysystem:mocked-functions.php": [
 53,
 62,
 71,
@@ -11,14 +11,14 @@
 125,
 134,
 143,
-154,
+154
 ],
-'flysystem:src/AdapterTestUtilities/test-functions.php':[
+"flysystem:src/AdapterTestUtilities/test-functions.php": [
 5,
 10,
 19,
 25,
 30,
-39,
-],
+39
+]
 }

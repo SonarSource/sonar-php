@@ -1,26 +1,26 @@
 {
-'psysh:src/CodeCleaner/PassableByReferencePass.php':[
-40,
+"psysh:src/CodeCleaner/PassableByReferencePass.php": [
+40
 ],
-'psysh:src/CodeCleaner/RequirePass.php':[
-35,
+"psysh:src/CodeCleaner/RequirePass.php": [
+35
 ],
-'psysh:src/CodeCleaner/UseStatementPass.php':[
-71,
+"psysh:src/CodeCleaner/UseStatementPass.php": [
+71
 ],
-'psysh:src/Command/TimeitCommand/TimeitVisitor.php':[
-51,
+"psysh:src/Command/TimeitCommand/TimeitVisitor.php": [
+51
 ],
-'psysh:src/Configuration.php':[
-280,
+"psysh:src/Configuration.php": [
+280
 ],
-'psysh:src/Readline/Hoa/Readline.php':[
-355,
+"psysh:src/Readline/Hoa/Readline.php": [
+355
 ],
-'psysh:src/Readline/Libedit.php':[
-102,
+"psysh:src/Readline/Libedit.php": [
+102
 ],
-'psysh:src/functions.php':[
-131,
-],
+"psysh:src/functions.php": [
+131
+]
 }

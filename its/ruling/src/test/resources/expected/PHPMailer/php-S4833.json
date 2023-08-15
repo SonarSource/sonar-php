@@ -1,14 +1,14 @@
 {
-'PHPMailer:test/Language/TranslationCompletenessTest.php':[
-82,
+"PHPMailer:test/Language/TranslationCompletenessTest.php": [
+82
 ],
-'PHPMailer:test/PHPMailer/PHPMailerTest.php':[
-1238,
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
+1238
 ],
-'PHPMailer:test/PHPMailer/ValidateAddressCustomValidatorTest.php':[
-89,
+"PHPMailer:test/PHPMailer/ValidateAddressCustomValidatorTest.php": [
+89
 ],
-'PHPMailer:test/SendTestCase.php':[
-57,
-],
+"PHPMailer:test/SendTestCase.php": [
+57
+]
 }

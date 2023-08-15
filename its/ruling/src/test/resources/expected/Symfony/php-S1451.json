@@ -1,86 +1,86 @@
 {
-'Symfony:Bridge/PhpUnit/Tests/DeprecationErrorHandler/fake_vendor/acme/outdated-lib/outdated_file.php':[
-0,
+"Symfony:Bridge/PhpUnit/Tests/DeprecationErrorHandler/fake_vendor/acme/outdated-lib/outdated_file.php": [
+0
 ],
-'Symfony:Bundle/FrameworkBundle/Tests/Fixtures/Resources/views/translation.html.php':[
-0,
+"Symfony:Bundle/FrameworkBundle/Tests/Fixtures/Resources/views/translation.html.php": [
+0
 ],
-'Symfony:Bundle/FrameworkBundle/Tests/Fixtures/TemplatePathsCache/templates-empty.php':[
-0,
+"Symfony:Bundle/FrameworkBundle/Tests/Fixtures/TemplatePathsCache/templates-empty.php": [
+0
 ],
-'Symfony:Bundle/FrameworkBundle/Tests/Fixtures/TemplatePathsCache/templates.php':[
-0,
+"Symfony:Bundle/FrameworkBundle/Tests/Fixtures/TemplatePathsCache/templates.php": [
+0
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/php/return_foo_string.php':[
-0,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/php/return_foo_string.php": [
+0
 ],
-'Symfony:Component/ErrorHandler/Resources/bin/extract-tentative-return-types.php':[
-0,
+"Symfony:Component/ErrorHandler/Resources/bin/extract-tentative-return-types.php": [
+0
 ],
-'Symfony:Component/ErrorHandler/Resources/views/error.html.php':[
-0,
+"Symfony:Component/ErrorHandler/Resources/views/error.html.php": [
+0
 ],
-'Symfony:Component/ErrorHandler/Resources/views/exception.html.php':[
-0,
+"Symfony:Component/ErrorHandler/Resources/views/exception.html.php": [
+0
 ],
-'Symfony:Component/ErrorHandler/Resources/views/exception_full.html.php':[
-0,
+"Symfony:Component/ErrorHandler/Resources/views/exception_full.html.php": [
+0
 ],
-'Symfony:Component/ErrorHandler/Resources/views/logs.html.php':[
-0,
+"Symfony:Component/ErrorHandler/Resources/views/logs.html.php": [
+0
 ],
-'Symfony:Component/ErrorHandler/Resources/views/trace.html.php':[
-0,
+"Symfony:Component/ErrorHandler/Resources/views/trace.html.php": [
+0
 ],
-'Symfony:Component/ErrorHandler/Resources/views/traces.html.php':[
-0,
+"Symfony:Component/ErrorHandler/Resources/views/traces.html.php": [
+0
 ],
-'Symfony:Component/ErrorHandler/Resources/views/traces_text.html.php':[
-0,
+"Symfony:Component/ErrorHandler/Resources/views/traces_text.html.php": [
+0
 ],
-'Symfony:Component/Intl/Resources/emoji/build.php':[
-0,
+"Symfony:Component/Intl/Resources/emoji/build.php": [
+0
 ],
-'Symfony:Component/Mailer/Tests/Transport/Fixtures/fake-sendmail.php':[
-0,
+"Symfony:Component/Mailer/Tests/Transport/Fixtures/fake-sendmail.php": [
+0
 ],
-'Symfony:Component/Routing/Tests/Fixtures/OtherAnnotatedClasses/NoStartTagClass.php':[
-0,
+"Symfony:Component/Routing/Tests/Fixtures/OtherAnnotatedClasses/NoStartTagClass.php": [
+0
 ],
-'Symfony:Component/Templating/Tests/Fixtures/templates/foo.php':[
-0,
+"Symfony:Component/Templating/Tests/Fixtures/templates/foo.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-7.3/translation.html.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor-7.3/translation.html.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable-fqn.html.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable-fqn.html.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable-short.html.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable-short.html.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable.html.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/translatable.html.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/translation.html.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/translation.html.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/validator-constraints.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/validator-constraints.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor/translatable-fqn.html.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor/translatable-fqn.html.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor/translatable-short.html.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor/translatable-short.html.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor/translatable.html.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor/translatable.html.php": [
+0
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor/translation.html.php':[
-0,
+"Symfony:Component/Translation/Tests/fixtures/extractor/translation.html.php": [
+0
 ],
-'Symfony:Component/Validator/Resources/bin/sync-iban-formats.php':[
-0,
-],
+"Symfony:Component/Validator/Resources/bin/sync-iban-formats.php": [
+0
+]
 }

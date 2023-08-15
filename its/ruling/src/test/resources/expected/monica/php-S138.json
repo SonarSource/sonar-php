@@ -1,36 +1,36 @@
 {
-'monica:app/Models/Contact/Contact.php':[
-754,
+"monica:app/Models/Contact/Contact.php": [
+754
 ],
-'monica:database/migrations/2016_06_08_005413_create_contacts_table.php':[
-14,
+"monica:database/migrations/2016_06_08_005413_create_contacts_table.php": [
+14
 ],
-'monica:database/migrations/2018_03_18_085815_populate_default_relationship_type_tables.php':[
-13,
+"monica:database/migrations/2018_03_18_085815_populate_default_relationship_type_tables.php": [
+13
 ],
-'monica:database/migrations/2018_05_07_070458_create_terms_table.php':[
-15,
+"monica:database/migrations/2018_05_07_070458_create_terms_table.php": [
+15
 ],
-'monica:database/migrations/2018_07_03_204220_create_default_activity_type_groups_table.php':[
-15,
+"monica:database/migrations/2018_07_03_204220_create_default_activity_type_groups_table.php": [
+15
 ],
-'monica:database/migrations/2018_08_31_020908_create_life_events_table.php':[
-17,
+"monica:database/migrations/2018_08_31_020908_create_life_events_table.php": [
+17
 ],
-'monica:database/migrations/2018_12_09_023232_add_emotions_table.php':[
-15,
+"monica:database/migrations/2018_12_09_023232_add_emotions_table.php": [
+15
 ],
-'monica:routes/web.php':[
-41,
+"monica:routes/web.php": [
+41
 ],
-'monica:tests/Unit/Helpers/DateHelperTest.php':[
-599,
+"monica:tests/Unit/Helpers/DateHelperTest.php": [
+599
 ],
-'monica:tests/Unit/Models/ContactTest.php':[
-175,
+"monica:tests/Unit/Models/ContactTest.php": [
+175
 ],
-'monica:tests/Unit/Services/Account/Settings/ExportAccountTest.php':[
+"monica:tests/Unit/Services/Account/Settings/ExportAccountTest.php": [
 121,
-241,
-],
+241
+]
 }

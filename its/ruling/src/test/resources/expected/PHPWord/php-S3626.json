@@ -1,14 +1,14 @@
 {
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
-229,
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
+229
 ],
-'PHPWord:src/PhpWord/Writer/AbstractWriter.php':[
-410,
+"PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
+410
 ],
-'PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php':[
-127,
+"PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
+127
 ],
-'PHPWord:tests/PhpWordTests/TestHelperDOCX.php':[
-98,
-],
+"PHPWord:tests/PhpWordTests/TestHelperDOCX.php": [
+98
+]
 }

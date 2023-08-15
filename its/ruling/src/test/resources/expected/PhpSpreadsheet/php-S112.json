@@ -1,24 +1,24 @@
 {
-'PhpSpreadsheet:infra/LocaleGenerator.php':[
-230,
+"PhpSpreadsheet:infra/LocaleGenerator.php": [
+230
 ],
-'PhpSpreadsheet:samples/Bootstrap.php':[
-22,
+"PhpSpreadsheet:samples/Bootstrap.php": [
+22
 ],
-'PhpSpreadsheet:samples/Reader/20_Reader_worksheet_hyperlink_image.php':[
-17,
+"PhpSpreadsheet:samples/Reader/20_Reader_worksheet_hyperlink_image.php": [
+17
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Indirect.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Indirect.php": [
 29,
-44,
+44
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Helper/Sample.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Helper/Sample.php": [
 85,
 97,
 163,
-194,
+194
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/UnparsedDataTest.php':[
-42,
-],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/UnparsedDataTest.php": [
+42
+]
 }
