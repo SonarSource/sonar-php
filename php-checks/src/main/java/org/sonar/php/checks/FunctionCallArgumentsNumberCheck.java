@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Iterables;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -32,6 +31,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static java.util.Objects.requireNonNull;
+import static org.sonar.php.utils.collections.ListUtils.getLast;
 
 @Rule(key = "S930")
 public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
@@ -75,7 +75,7 @@ public class FunctionCallArgumentsNumberCheck extends PHPVisitorCheck {
   }
 
   private static boolean hasEllipsisOperator(List<Parameter> parameters) {
-    return !parameters.isEmpty() && Iterables.getLast(parameters).hasEllipsisOperator();
+    return !parameters.isEmpty() && getLast(parameters).hasEllipsisOperator();
   }
 
   private static boolean hasSpreadArgument(FunctionCallTree call) {

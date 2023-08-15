@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.Iterables;
 import java.util.Optional;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
@@ -28,6 +27,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTr
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.php.utils.collections.ListUtils.getLast;
 
 public class ListExpressionTreeTest extends PHPTreeModelTest {
 
@@ -40,7 +40,7 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void simple_variable() throws Exception {
+  public void simple_variable() {
     ListExpressionTree tree = parse("list ($a, $b)", Kind.LIST_EXPRESSION);
 
     assertListExpression(tree, 2, 1);
@@ -49,19 +49,19 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void omitted_element() throws Exception {
+  public void omitted_element() {
     ListExpressionTree tree = parse("list (, $a, , ,$b)", Kind.LIST_EXPRESSION);
 
     assertListExpression(tree, 2, 4);
     assertThat(tree.toString()).isEqualTo("list (, $a, , ,$b)");
     assertThat(tree.elements().get(0)).isNotPresent();
-    Optional<ArrayAssignmentPatternElementTree> last = Iterables.getLast(tree.elements());
+    Optional<ArrayAssignmentPatternElementTree> last = getLast(tree.elements());
     assertThat(last).isPresent();
     assertThat(expressionToString(last.get())).isEqualTo("$b");
   }
 
   @Test
-  public void nested_list_expression() throws Exception {
+  public void nested_list_expression() {
     ListExpressionTree tree = parse("list (list ($a), $b)", Kind.LIST_EXPRESSION);
 
     assertListExpression(tree, 2, 1);

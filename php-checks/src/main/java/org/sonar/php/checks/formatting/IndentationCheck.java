@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +39,8 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import static org.sonar.php.utils.collections.ListUtils.getLast;
 
 public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck {
 
@@ -138,7 +139,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
 
       List<Tree> interfaceList = new ArrayList<>(classTree.superInterfaces());
       SyntaxToken classToken = classTree.classToken();
-      SyntaxToken lastInterfaceToken = ((PHPTree) Iterables.getLast(classTree.superInterfaces())).getFirstToken();
+      SyntaxToken lastInterfaceToken = ((PHPTree) getLast(classTree.superInterfaces())).getFirstToken();
       int expectedColumn = classToken.column() + PSR2_INDENTATION;
 
       if (!TokenUtils.isOnSameLine(classToken, lastInterfaceToken)) {
@@ -169,7 +170,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
 
       // Checking parenthesis
       if (closeParenthesis != null) {
-        checkClosingParenthesisLocation(Iterables.getLast(arguments), closeParenthesis, isFunctionCall);
+        checkClosingParenthesisLocation(getLast(arguments), closeParenthesis, isFunctionCall);
       }
     }
   }

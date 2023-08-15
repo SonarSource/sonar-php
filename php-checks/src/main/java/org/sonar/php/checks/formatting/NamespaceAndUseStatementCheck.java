@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.google.common.collect.Iterables;
 import java.util.ArrayList;
 import java.util.List;
 import org.sonar.php.checks.FormattingStandardCheck;
@@ -33,6 +32,8 @@ import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import static org.sonar.php.utils.collections.ListUtils.getLast;
 
 public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements FormattingCheck {
 
@@ -89,7 +90,7 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
 
   private void checkBlankLineAfterUses(UseStatementTree useStatement) {
     if (check.hasUseBlankLine && !isFollowedWithBlankLine(useStatement)) {
-      reportIssue(BLANK_LINE_USE_MESSAGE, Iterables.getLast(useStatements).useToken());
+      reportIssue(BLANK_LINE_USE_MESSAGE, getLast(useStatements).useToken());
     }
   }
 

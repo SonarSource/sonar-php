@@ -24,10 +24,29 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 
 public class ListUtils {
 
   private ListUtils() {
+  }
+
+  public static <T> T getLast(List<T> list) {
+    return list.get(list.size() - 1);
+  }
+
+  @CheckForNull
+  public static <T> T getLast(List<T> list, @Nullable T defaultValue) {
+    return list.isEmpty() ? defaultValue : list.get(list.size() - 1);
+  }
+
+  public static <T> T getOnlyElement(List<T> list) {
+    if (list.size() == 1) {
+      return list.get(0);
+    } else {
+      throw new IllegalArgumentException(String.format("Expected list of size 1, but was list of size %d.", list.size()));
+    }
   }
 
   @SafeVarargs

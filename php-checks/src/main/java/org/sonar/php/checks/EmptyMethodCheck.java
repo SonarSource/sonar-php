@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Iterables;
 import java.util.Collections;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
@@ -34,6 +33,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import static org.sonar.php.utils.collections.ListUtils.getLast;
 
 @Rule(key = "S1186")
 public class EmptyMethodCheck extends PHPVisitorCheck {
@@ -65,7 +66,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   private static boolean hasCommentAbove(SyntaxToken token) {
     int beforeDeclarationLine = token.line() - 1;
-    SyntaxTrivia trivia = Iterables.getLast(token.trivias(), null);
+    SyntaxTrivia trivia = getLast(token.trivias(), null);
     return trivia != null && beforeDeclarationLine == trivia.endLine() && isValuableComment(trivia);
   }
 
@@ -80,7 +81,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
     }
 
     // Check whether there is a valuable comment in method body
-    SyntaxTrivia trivia = Iterables.getLast(tree.closeCurlyBraceToken().trivias(), null);
+    SyntaxTrivia trivia = getLast(tree.closeCurlyBraceToken().trivias(), null);
     return trivia != null && isValuableComment(trivia);
   }
 
