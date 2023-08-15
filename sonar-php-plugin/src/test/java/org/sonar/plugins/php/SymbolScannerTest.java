@@ -106,11 +106,8 @@ public class SymbolScannerTest {
 
   @Test
   public void hashExceptionWhenTryingToSaveHash() {
-    try (MockedStatic<FileHashingUtils> FileHashingUtilsStaticMock = Mockito.mockStatic(FileHashingUtils.class)) {
-      FileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IOException("BOOM!"));
-      buildBaseProjectSymbolDataAndCache();
-      assertThat(logTester.logs(Level.DEBUG)).contains("Failed to compute content hash for file moduleKey:incremental/baseFile.php");
-    }
+    buildBaseProjectSymbolDataAndCache();
+    assertThat(logTester.logs(Level.DEBUG)).contains("Failed to compute content hash for file moduleKey:incremental/baseFile.php");
   }
 
   @Test

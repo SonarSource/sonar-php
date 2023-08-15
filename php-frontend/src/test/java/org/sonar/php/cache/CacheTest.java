@@ -19,6 +19,7 @@
  */
 package org.sonar.php.cache;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -152,7 +153,7 @@ public class CacheTest {
   public void writeFileContentHashWhenCacheIsEnabled() {
     CacheContext context = new CacheContextImpl(true, writeCache, null, PLUGIN_VERSION);
     Cache cache = new Cache(context);
-    byte[] hash = "hash".getBytes();
+    byte[] hash = DEFAULT_INPUT_FILE.md5Hash().getBytes(StandardCharsets.UTF_8);
     cache.writeFileContentHash(DEFAULT_INPUT_FILE, hash);
 
     verify(writeCache).writeBytes(CACHE_KEY_HASH, hash);
@@ -162,8 +163,7 @@ public class CacheTest {
   public void writeFileContentHashWhenCacheIsDisabled() {
     CacheContext context = new CacheContextImpl(false, writeCache, null, PLUGIN_VERSION);
     Cache cache = new Cache(context);
-    byte[] hash = "hash".getBytes();
-    cache.writeFileContentHash(DEFAULT_INPUT_FILE, hash);
+    cache.writeFileContentHash(DEFAULT_INPUT_FILE, new byte[] {});
 
     verifyNoInteractions(writeCache);
   }

@@ -19,18 +19,16 @@
  */
 package org.sonar.plugins.php;
 
-import java.io.IOException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.DurationStatistics;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.php.cache.Cache;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
@@ -103,13 +101,7 @@ abstract class Scanner {
     byte[] fileHash = cache.readFileContentHash(inputFile);
     // InputFile.Status is not reliable in some cases
     // We use the hash of the file's content to double-check the content is the same.
-    try {
-      byte[] bytes = FileHashingUtils.inputFileContentHash(inputFile);
-      return MessageDigest.isEqual(fileHash, bytes);
-    } catch (IOException | NoSuchAlgorithmException e) {
-      LOG.debug("Failed to compute content hash for file {}", inputFile.key());
-      return false;
-    }
+    return MessageDigest.isEqual(fileHash, FileHashingUtils.inputFileContentHash(inputFile));
   }
 
   private void processFile(InputFile file) {

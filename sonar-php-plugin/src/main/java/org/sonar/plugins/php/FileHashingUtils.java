@@ -19,10 +19,7 @@
  */
 package org.sonar.plugins.php;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import org.sonar.api.batch.fs.InputFile;
 
 public class FileHashingUtils {
@@ -30,11 +27,7 @@ public class FileHashingUtils {
   private FileHashingUtils() {
   }
 
-  private static final String HASH_ALGORITHM = "MD5";
-
-  public static byte[] inputFileContentHash(InputFile inputFile) throws IOException, NoSuchAlgorithmException {
-    byte[] contentBytes = inputFile.contents().getBytes(StandardCharsets.UTF_8);
-    MessageDigest messageDigest = MessageDigest.getInstance(HASH_ALGORITHM);
-    return messageDigest.digest(contentBytes);
+  public static byte[] inputFileContentHash(InputFile inputFile) {
+    return inputFile.md5Hash().getBytes(StandardCharsets.UTF_8);
   }
 }
