@@ -101,10 +101,9 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
     return attributeGroups;
   }
 
-  @Nullable
   @Override
-  public SyntaxToken readonlyToken() {
-    return readonly;
+  public boolean isReadOnly() {
+    return readonly != null;
   }
 
   @Override

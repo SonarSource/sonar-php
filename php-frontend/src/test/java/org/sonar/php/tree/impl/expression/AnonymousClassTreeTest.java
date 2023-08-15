@@ -42,7 +42,7 @@ class AnonymousClassTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void test() throws Exception {
+  void shouldParseAnonymousClassDeclaration() {
     AnonymousClassTree tree = parse("class (1, foo()) extends A implements B, C {var $a;}", Kind.ANONYMOUS_CLASS);
 
     assertThat(tree.is(Kind.ANONYMOUS_CLASS)).isTrue();
@@ -55,25 +55,26 @@ class AnonymousClassTreeTest extends PHPTreeModelTest {
     assertThat(tree.implementsToken()).isNotNull();
     assertThat(tree.superInterfaces()).hasSize(2);
     assertThat(tree.members()).hasSize(1);
+    assertThat(tree.isReadOnly()).isFalse();
   }
 
   @Test
-  void test_with_named_arguments() {
+  void shouldParseAnonymousClassDeclarationWithNamedArguments() {
     AnonymousClassTree tree = parse("class (name: 'a') {}", Kind.ANONYMOUS_CLASS);
     assertThat(tree.callArguments()).hasSize(1);
   }
 
   @Test
-  void with_attributes() {
+  void shouldParseAnonymousClassDeclarationWithAttributes() {
     AnonymousClassTree tree = parse("#[A1,] class {}", Kind.ANONYMOUS_CLASS);
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
   }
 
   @Test
-  void with_readonly() {
+  void shouldParseAnonymousClassDeclarationWithReadonly() {
     AnonymousClassTree tree = parse("readonly class {}", Kind.ANONYMOUS_CLASS);
-    assertThat(tree.readonlyToken()).isNotNull();
+    assertThat(tree.isReadOnly()).isTrue();
     assertThat(((PHPTree) tree).childrenIterator()).hasSize(9);
   }
 }
