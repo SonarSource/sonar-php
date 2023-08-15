@@ -1,44 +1,44 @@
 {
-'monica:app/ExportResources/ExportResource.php':[
-130,
+"monica:app/ExportResources/ExportResource.php": [
+130
 ],
-'monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBirthdays.php':[
-151,
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBirthdays.php": [
+151
 ],
-'monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVTasks.php':[
-58,
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVTasks.php": [
+58
 ],
-'monica:app/Http/Resources/Contact/ContactBase.php':[
-15,
+"monica:app/Http/Resources/Contact/ContactBase.php": [
+15
 ],
-'monica:app/Providers/AppServiceProvider.php':[
-108,
+"monica:app/Providers/AppServiceProvider.php": [
+108
 ],
-'monica:app/Providers/DAVServiceProvider.php':[
-53,
+"monica:app/Providers/DAVServiceProvider.php": [
+53
 ],
-'monica:app/Providers/RouteServiceProvider.php':[
-108,
+"monica:app/Providers/RouteServiceProvider.php": [
+108
 ],
-'monica:app/Services/Account/Activity/ActivityStatisticService.php':[
+"monica:app/Services/Account/Activity/ActivityStatisticService.php": [
 101,
-106,
+106
 ],
-'monica:app/Services/Account/Photo/UploadPhoto.php':[
+"monica:app/Services/Account/Photo/UploadPhoto.php": [
 23,
 23,
-23,
+23
 ],
-'monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php':[
+"monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php": [
 60,
 100,
 128,
-239,
+239
 ],
-'monica:app/Services/DispatchableService.php':[
-47,
+"monica:app/Services/DispatchableService.php": [
+47
 ],
-'monica:database/factories/AccountFactory.php':[
+"monica:database/factories/AccountFactory.php": [
 6,
 47,
 56,
@@ -46,9 +46,9 @@
 71,
 83,
 93,
-104,
+104
 ],
-'monica:database/factories/ContactFactory.php':[
+"monica:database/factories/ContactFactory.php": [
 5,
 37,
 43,
@@ -64,53 +64,53 @@
 232,
 238,
 254,
-265,
+265
 ],
-'monica:database/factories/JournalFactory.php':[
+"monica:database/factories/JournalFactory.php": [
 3,
 9,
-15,
+15
 ],
-'monica:database/factories/RelationshipFactory.php':[
+"monica:database/factories/RelationshipFactory.php": [
 3,
 24,
-35,
+35
 ],
-'monica:database/factories/UserFactory.php':[
+"monica:database/factories/UserFactory.php": [
 17,
 25,
-29,
+29
 ],
-'monica:tests/Commands/Tests/SendTestEmailTest.php':[
-42,
+"monica:tests/Commands/Tests/SendTestEmailTest.php": [
+42
 ],
-'monica:tests/Helpers/DavTester.php':[
+"monica:tests/Helpers/DavTester.php": [
 45,
-55,
+55
 ],
-'monica:tests/Unit/Jobs/Dav/PushVCardTest.php':[
-53,
+"monica:tests/Unit/Jobs/Dav/PushVCardTest.php": [
+53
 ],
-'monica:tests/Unit/Jobs/Reminder/NotifyUserAboutReminderTest.php':[
+"monica:tests/Unit/Jobs/Reminder/NotifyUserAboutReminderTest.php": [
 57,
-103,
+103
 ],
-'monica:tests/Unit/Services/DavClient/SynchronizeAddressBookTest.php':[
+"monica:tests/Unit/Services/DavClient/SynchronizeAddressBookTest.php": [
 22,
-45,
+45
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushTest.php": [
 51,
-122,
+122
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterMissedTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterMissedTest.php": [
 56,
-56,
+56
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterTest.php": [
 52,
 52,
 140,
-140,
-],
+140
+]
 }

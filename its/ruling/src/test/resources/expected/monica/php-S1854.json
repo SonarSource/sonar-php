@@ -1,50 +1,50 @@
 {
-'monica:tests/Api/ApiTagControllerTest.php':[
+"monica:tests/Api/ApiTagControllerTest.php": [
 299,
-300,
+300
 ],
-'monica:tests/Api/Contact/ApiPhotoControllerTest.php':[
-274,
+"monica:tests/Api/Contact/ApiPhotoControllerTest.php": [
+274
 ],
-'monica:tests/Feature/AccountSubscriptionTest.php':[
+"monica:tests/Feature/AccountSubscriptionTest.php": [
 276,
-293,
+293
 ],
-'monica:tests/Feature/AvatarTest.php':[
-109,
+"monica:tests/Feature/AvatarTest.php": [
+109
 ],
-'monica:tests/Unit/Helpers/ComplianceHelperTest.php':[
-32,
+"monica:tests/Unit/Helpers/ComplianceHelperTest.php": [
+32
 ],
-'monica:tests/Unit/Jobs/Dav/DeleteMultipleVCardTest.php':[
-33,
+"monica:tests/Unit/Jobs/Dav/DeleteMultipleVCardTest.php": [
+33
 ],
-'monica:tests/Unit/Jobs/Dav/DeleteVCardTest.php':[
-41,
+"monica:tests/Unit/Jobs/Dav/DeleteVCardTest.php": [
+41
 ],
-'monica:tests/Unit/Jobs/Dav/GetMultipleVCardTest.php':[
+"monica:tests/Unit/Jobs/Dav/GetMultipleVCardTest.php": [
 79,
-155,
+155
 ],
-'monica:tests/Unit/Jobs/Dav/GetVCardTest.php':[
-51,
+"monica:tests/Unit/Jobs/Dav/GetVCardTest.php": [
+51
 ],
-'monica:tests/Unit/Jobs/Dav/PushVCardTest.php':[
-64,
+"monica:tests/Unit/Jobs/Dav/PushVCardTest.php": [
+64
 ],
-'monica:tests/Unit/Jobs/Dav/UpdateVCardTest.php':[
-45,
+"monica:tests/Unit/Jobs/Dav/UpdateVCardTest.php": [
+45
 ],
-'monica:tests/Unit/Jobs/GetWeatherInformationTest.php':[
-45,
+"monica:tests/Unit/Jobs/GetWeatherInformationTest.php": [
+45
 ],
-'monica:tests/Unit/Models/AccountTest.php':[
-619,
+"monica:tests/Unit/Models/AccountTest.php": [
+619
 ],
-'monica:tests/Unit/Services/Contact/Avatar/GetAvatarsFromInternetTest.php':[
-87,
+"monica:tests/Unit/Services/Contact/Avatar/GetAvatarsFromInternetTest.php": [
+87
 ],
-'monica:tests/Unit/Services/User/AcceptPolicyTest.php':[
-22,
-],
+"monica:tests/Unit/Services/User/AcceptPolicyTest.php": [
+22
+]
 }

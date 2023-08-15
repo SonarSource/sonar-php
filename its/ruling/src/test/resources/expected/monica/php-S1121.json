@@ -1,73 +1,73 @@
 {
-'monica:app/ExportResources/Contact/Document.php':[
-27,
+"monica:app/ExportResources/Contact/Document.php": [
+27
 ],
-'monica:app/ExportResources/ExportResource.php':[
-131,
+"monica:app/ExportResources/ExportResource.php": [
+131
 ],
-'monica:app/Http/Controllers/StorageController.php':[
-113,
+"monica:app/Http/Controllers/StorageController.php": [
+113
 ],
-'monica:app/Http/Middleware/CheckVersion.php':[
-20,
+"monica:app/Http/Middleware/CheckVersion.php": [
+20
 ],
-'monica:app/Jobs/Dav/GetMultipleVCard.php':[
-82,
+"monica:app/Jobs/Dav/GetMultipleVCard.php": [
+82
 ],
-'monica:app/Jobs/Dav/GetVCard.php':[
-65,
+"monica:app/Jobs/Dav/GetVCard.php": [
+65
 ],
-'monica:app/Jobs/GetGPSCoordinate.php':[
-68,
+"monica:app/Jobs/GetGPSCoordinate.php": [
+68
 ],
-'monica:app/Models/Account/Weather.php':[
+"monica:app/Models/Account/Weather.php": [
 73,
 74,
-116,
+116
 ],
-'monica:app/Services/DavClient/Utils/AddressBookGetter.php':[
-200,
+"monica:app/Services/DavClient/Utils/AddressBookGetter.php": [
+200
 ],
-'monica:app/Services/DavClient/Utils/Dav/DavClient.php':[
+"monica:app/Services/DavClient/Utils/Dav/DavClient.php": [
 347,
 350,
 370,
 395,
-419,
+419
 ],
-'monica:app/Services/Instance/Geolocalization/GetGPSCoordinate.php':[
+"monica:app/Services/Instance/Geolocalization/GetGPSCoordinate.php": [
 68,
 89,
-103,
+103
 ],
-'monica:app/Services/VCard/ImportVCard.php':[
-629,
+"monica:app/Services/VCard/ImportVCard.php": [
+629
 ],
-'monica:app/Traits/AmountFormatter.php':[
+"monica:app/Traits/AmountFormatter.php": [
 39,
 53,
-67,
+67
 ],
-'monica:tests/Unit/Jobs/Dav/DeleteMultipleVCardTest.php':[
-31,
+"monica:tests/Unit/Jobs/Dav/DeleteMultipleVCardTest.php": [
+31
 ],
-'monica:tests/Unit/Jobs/Dav/DeleteVCardTest.php':[
-39,
+"monica:tests/Unit/Jobs/Dav/DeleteVCardTest.php": [
+39
 ],
-'monica:tests/Unit/Jobs/Dav/GetMultipleVCardTest.php':[
+"monica:tests/Unit/Jobs/Dav/GetMultipleVCardTest.php": [
 77,
-153,
+153
 ],
-'monica:tests/Unit/Jobs/Dav/GetVCardTest.php':[
-49,
+"monica:tests/Unit/Jobs/Dav/GetVCardTest.php": [
+49
 ],
-'monica:tests/Unit/Jobs/Dav/PushVCardTest.php':[
-62,
+"monica:tests/Unit/Jobs/Dav/PushVCardTest.php": [
+62
 ],
-'monica:tests/Unit/Jobs/Dav/UpdateVCardTest.php':[
-43,
+"monica:tests/Unit/Jobs/Dav/UpdateVCardTest.php": [
+43
 ],
-'monica:tests/Unit/Jobs/GetWeatherInformationTest.php':[
-43,
-],
+"monica:tests/Unit/Jobs/GetWeatherInformationTest.php": [
+43
+]
 }

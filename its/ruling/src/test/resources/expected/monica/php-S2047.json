@@ -1,162 +1,162 @@
 {
-'monica:app/Helpers/AccountHelper.php':[
-63,
+"monica:app/Helpers/AccountHelper.php": [
+63
 ],
-'monica:app/Helpers/DBHelper.php':[
-42,
+"monica:app/Helpers/DBHelper.php": [
+42
 ],
-'monica:app/Helpers/GenderHelper.php':[
-40,
+"monica:app/Helpers/GenderHelper.php": [
+40
 ],
-'monica:app/Http/Controllers/DAV/Backend/CardDAV/CardDAVBackend.php':[
-409,
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/CardDAVBackend.php": [
+409
 ],
-'monica:app/Http/Controllers/DAV/DAVRedirect.php':[
-27,
+"monica:app/Http/Controllers/DAV/DAVRedirect.php": [
+27
 ],
-'monica:app/Http/Controllers/Settings/MultiFAController.php':[
-131,
+"monica:app/Http/Controllers/Settings/MultiFAController.php": [
+131
 ],
-'monica:app/Http/Controllers/StorageController.php':[
-111,
+"monica:app/Http/Controllers/StorageController.php": [
+111
 ],
-'monica:app/Http/Middleware/AuthenticateWithTokenOnBasicAuth.php':[
-128,
+"monica:app/Http/Middleware/AuthenticateWithTokenOnBasicAuth.php": [
+128
 ],
-'monica:app/Http/Requests/AuthorizedRequest.php':[
-10,
+"monica:app/Http/Requests/AuthorizedRequest.php": [
+10
 ],
-'monica:app/Interfaces/IsJournalableInterface.php':[
-36,
+"monica:app/Interfaces/IsJournalableInterface.php": [
+36
 ],
-'monica:app/Models/Account/ImportJob.php':[
+"monica:app/Models/Account/ImportJob.php": [
 170,
-188,
+188
 ],
-'monica:app/Models/Contact/Contact.php':[
+"monica:app/Models/Contact/Contact.php": [
 999,
-1483,
+1483
 ],
-'monica:app/Models/User/User.php':[
+"monica:app/Models/User/User.php": [
 226,
-292,
+292
 ],
-'monica:app/Notifications/StayInTouchEmail.php':[
-69,
+"monica:app/Notifications/StayInTouchEmail.php": [
+69
 ],
-'monica:app/Services/Account/Activity/Activity/AttachContactToActivity.php':[
-31,
+"monica:app/Services/Account/Activity/Activity/AttachContactToActivity.php": [
+31
 ],
-'monica:app/Services/Account/Activity/Activity/CreateActivity.php':[
-38,
+"monica:app/Services/Account/Activity/Activity/CreateActivity.php": [
+38
 ],
-'monica:app/Services/Account/Activity/Activity/DestroyActivity.php':[
+"monica:app/Services/Account/Activity/Activity/DestroyActivity.php": [
 29,
-45,
+45
 ],
-'monica:app/Services/Account/Activity/Activity/UpdateActivity.php':[
-39,
+"monica:app/Services/Account/Activity/Activity/UpdateActivity.php": [
+39
 ],
-'monica:app/Services/Account/Activity/ActivityType/DestroyActivityType.php':[
-29,
+"monica:app/Services/Account/Activity/ActivityType/DestroyActivityType.php": [
+29
 ],
-'monica:app/Services/Account/Activity/ActivityTypeCategory/DestroyActivityTypeCategory.php':[
-29,
+"monica:app/Services/Account/Activity/ActivityTypeCategory/DestroyActivityTypeCategory.php": [
+29
 ],
-'monica:app/Services/Account/Company/DestroyCompany.php':[
-29,
+"monica:app/Services/Account/Company/DestroyCompany.php": [
+29
 ],
-'monica:app/Services/Account/Gender/DestroyGender.php':[
-29,
+"monica:app/Services/Account/Gender/DestroyGender.php": [
+29
 ],
-'monica:app/Services/Account/LifeEvent/LifeEventType/DestroyLifeEventType.php':[
-29,
+"monica:app/Services/Account/LifeEvent/LifeEventType/DestroyLifeEventType.php": [
+29
 ],
-'monica:app/Services/Account/Photo/DestroyPhoto.php':[
-30,
+"monica:app/Services/Account/Photo/DestroyPhoto.php": [
+30
 ],
-'monica:app/Services/Account/Place/DestroyPlace.php':[
-29,
+"monica:app/Services/Account/Place/DestroyPlace.php": [
+29
 ],
-'monica:app/Services/Account/Settings/ArchiveAllContacts.php':[
-32,
+"monica:app/Services/Account/Settings/ArchiveAllContacts.php": [
+32
 ],
-'monica:app/Services/Account/Settings/DestroyAllDocuments.php':[
-28,
+"monica:app/Services/Account/Settings/DestroyAllDocuments.php": [
+28
 ],
-'monica:app/Services/Account/Settings/DestroyAllPhotos.php':[
-28,
+"monica:app/Services/Account/Settings/DestroyAllPhotos.php": [
+28
 ],
-'monica:app/Services/Auth/Population/PopulateContactFieldTypesTable.php':[
-37,
+"monica:app/Services/Auth/Population/PopulateContactFieldTypesTable.php": [
+37
 ],
-'monica:app/Services/Auth/Population/PopulateLifeEventsTable.php':[
-46,
+"monica:app/Services/Auth/Population/PopulateLifeEventsTable.php": [
+46
 ],
-'monica:app/Services/Auth/Population/PopulateModulesTable.php':[
-43,
+"monica:app/Services/Auth/Population/PopulateModulesTable.php": [
+43
 ],
-'monica:app/Services/BaseService.php':[
-27,
+"monica:app/Services/BaseService.php": [
+27
 ],
-'monica:app/Services/Contact/Address/DestroyAddress.php':[
-30,
+"monica:app/Services/Contact/Address/DestroyAddress.php": [
+30
 ],
-'monica:app/Services/Contact/Avatar/GetGravatarURL.php':[
-52,
+"monica:app/Services/Contact/Avatar/GetGravatarURL.php": [
+52
 ],
-'monica:app/Services/Contact/Call/DestroyCall.php':[
-30,
+"monica:app/Services/Contact/Call/DestroyCall.php": [
+30
 ],
-'monica:app/Services/Contact/ContactField/DestroyContactField.php':[
-29,
+"monica:app/Services/Contact/ContactField/DestroyContactField.php": [
+29
 ],
-'monica:app/Services/Contact/Conversation/DestroyConversation.php':[
-34,
+"monica:app/Services/Contact/Conversation/DestroyConversation.php": [
+34
 ],
-'monica:app/Services/Contact/Conversation/DestroyMessage.php':[
-36,
+"monica:app/Services/Contact/Conversation/DestroyMessage.php": [
+36
 ],
-'monica:app/Services/Contact/Document/DestroyDocument.php':[
-30,
+"monica:app/Services/Contact/Document/DestroyDocument.php": [
+30
 ],
-'monica:app/Services/Contact/Gift/DestroyGift.php':[
-29,
+"monica:app/Services/Contact/Gift/DestroyGift.php": [
+29
 ],
-'monica:app/Services/Contact/LifeEvent/DestroyLifeEvent.php':[
-30,
+"monica:app/Services/Contact/LifeEvent/DestroyLifeEvent.php": [
+30
 ],
-'monica:app/Services/Contact/Occupation/DestroyOccupation.php':[
-29,
+"monica:app/Services/Contact/Occupation/DestroyOccupation.php": [
+29
 ],
-'monica:app/Services/Contact/Relationship/DestroyRelationship.php':[
-32,
+"monica:app/Services/Contact/Relationship/DestroyRelationship.php": [
+32
 ],
-'monica:app/Services/Contact/Reminder/DestroyReminder.php':[
-30,
+"monica:app/Services/Contact/Reminder/DestroyReminder.php": [
+30
 ],
-'monica:app/Services/Contact/Tag/DestroyTag.php':[
-29,
+"monica:app/Services/Contact/Tag/DestroyTag.php": [
+29
 ],
-'monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php':[
-142,
+"monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php": [
+142
 ],
-'monica:app/Services/DavClient/Utils/Dav/DavClient.php':[
-439,
+"monica:app/Services/DavClient/Utils/Dav/DavClient.php": [
+439
 ],
-'monica:app/Services/Task/DestroyTask.php':[
-29,
+"monica:app/Services/Task/DestroyTask.php": [
+29
 ],
-'monica:app/Services/User/CreateUser.php':[
-143,
+"monica:app/Services/User/CreateUser.php": [
+143
 ],
-'monica:app/Services/VCalendar/ImportTask.php':[
-90,
+"monica:app/Services/VCalendar/ImportTask.php": [
+90
 ],
-'monica:app/Services/VCard/ImportVCard.php':[
-377,
+"monica:app/Services/VCard/ImportVCard.php": [
+377
 ],
-'monica:app/Traits/Journalable.php':[
-36,
-],
+"monica:app/Traits/Journalable.php": [
+36
+]
 }

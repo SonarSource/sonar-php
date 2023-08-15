@@ -1,12 +1,12 @@
 {
-'monica:app/Services/Instance/IdHasher.php':[
-38,
+"monica:app/Services/Instance/IdHasher.php": [
+38
 ],
-'monica:tests/Browser/Auth/AuthControllerTest.php':[
-191,
+"monica:tests/Browser/Auth/AuthControllerTest.php": [
+191
 ],
-'monica:tests/DuskTestCase.php':[
+"monica:tests/DuskTestCase.php": [
 113,
-121,
-],
+121
+]
 }

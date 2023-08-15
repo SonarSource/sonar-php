@@ -1,10 +1,10 @@
 {
-'monica:scripts/tests/server-cc.php':[
-13,
+"monica:scripts/tests/server-cc.php": [
+13
 ],
-'monica:tests/DuskTestCase.php':[
+"monica:tests/DuskTestCase.php": [
 58,
 72,
-73,
-],
+73
+]
 }

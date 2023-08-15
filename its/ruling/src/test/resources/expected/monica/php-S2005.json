@@ -1,45 +1,45 @@
 {
-'monica:database/migrations/2018_10_07_120133_fix_json_column.php':[
-25,
+"monica:database/migrations/2018_10_07_120133_fix_json_column.php": [
+25
 ],
-'monica:tests/Api/DAV/CalDAVBirthdaysTest.php':[
+"monica:tests/Api/DAV/CalDAVBirthdaysTest.php": [
 55,
 126,
-176,
+176
 ],
-'monica:tests/Api/DAV/CalDAVTasksTest.php':[
+"monica:tests/Api/DAV/CalDAVTasksTest.php": [
 56,
 127,
-180,
+180
 ],
-'monica:tests/Api/DAV/CardDAVTest.php':[
+"monica:tests/Api/DAV/CardDAVTest.php": [
 85,
 167,
 203,
 237,
-286,
+286
 ],
-'monica:tests/Api/DAV/DAVServerTest.php':[
+"monica:tests/Api/DAV/DAVServerTest.php": [
 99,
-145,
+145
 ],
-'monica:tests/Api/DAV/VCardContactTest.php':[
+"monica:tests/Api/DAV/VCardContactTest.php": [
 362,
 402,
 446,
-458,
+458
 ],
-'monica:tests/Api/DAV/VEventBirthdayTest.php':[
+"monica:tests/Api/DAV/VEventBirthdayTest.php": [
 65,
 114,
-126,
+126
 ],
-'monica:tests/Api/DAV/VTodoTaskTest.php':[
+"monica:tests/Api/DAV/VTodoTaskTest.php": [
 177,
 220,
-232,
+232
 ],
-'monica:tests/Helpers/DavTester.php':[
+"monica:tests/Helpers/DavTester.php": [
 142,
 159,
 174,
@@ -53,18 +53,18 @@
 306,
 321,
 338,
-348,
+348
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookSynchronizerTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookSynchronizerTest.php": [
 166,
 214,
 223,
 275,
 284,
 320,
-328,
+328
 ],
-'monica:tests/Unit/Services/DavClient/Utils/Dav/DavClientTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/Dav/DavClientTest.php": [
 130,
 139,
 162,
@@ -82,6 +82,6 @@
 403,
 412,
 435,
-450,
-],
+450
+]
 }

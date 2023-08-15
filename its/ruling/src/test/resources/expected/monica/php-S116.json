@@ -1,12 +1,12 @@
 {
-'monica:app/Console/Commands/SentryRelease.php':[
-40,
+"monica:app/Console/Commands/SentryRelease.php": [
+40
 ],
-'monica:app/Http/Controllers/Settings/MultiFAController.php':[
-27,
+"monica:app/Http/Controllers/Settings/MultiFAController.php": [
+27
 ],
-'monica:app/Models/Contact/Contact.php':[
+"monica:app/Models/Contact/Contact.php": [
 65,
-79,
-],
+79
+]
 }
