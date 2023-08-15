@@ -1,6 +1,6 @@
 {
-'flysystem:src/InMemory/InMemoryFilesystemAdapter.php':[
+"flysystem:src/InMemory/InMemoryFilesystemAdapter.php": [
 197,
-203,
-],
+203
+]
 }

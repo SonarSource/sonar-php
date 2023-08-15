@@ -1,14 +1,14 @@
 {
-'flysystem:src/Local/LocalFilesystemAdapterTest.php':[
+"flysystem:src/Local/LocalFilesystemAdapterTest.php": [
 64,
 73,
-83,
+83
 ],
-'flysystem:src/MountManagerTest.php':[
+"flysystem:src/MountManagerTest.php": [
 467,
-478,
+478
 ],
-'flysystem:src/PathPrefixing/PathPrefixedAdapterTest.php':[
-77,
-],
+"flysystem:src/PathPrefixing/PathPrefixedAdapterTest.php": [
+77
+]
 }

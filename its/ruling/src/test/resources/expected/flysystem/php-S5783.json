@@ -1,13 +1,13 @@
 {
-'flysystem:src/Local/LocalFilesystemAdapterTest.php':[
-227,
+"flysystem:src/Local/LocalFilesystemAdapterTest.php": [
+227
 ],
-'flysystem:src/PhpseclibV2/SftpAdapterTest.php':[
+"flysystem:src/PhpseclibV2/SftpAdapterTest.php": [
 118,
-200,
+200
 ],
-'flysystem:src/PhpseclibV3/SftpAdapterTest.php':[
+"flysystem:src/PhpseclibV3/SftpAdapterTest.php": [
 119,
-201,
-],
+201
+]
 }

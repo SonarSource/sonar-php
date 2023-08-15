@@ -1,11 +1,11 @@
 {
-'flysystem:src/AsyncAwsS3/PortableVisibilityConverter.php':[
-12,
+"flysystem:src/AsyncAwsS3/PortableVisibilityConverter.php": [
+12
 ],
-'flysystem:src/AwsS3V3/PortableVisibilityConverter.php':[
-11,
+"flysystem:src/AwsS3V3/PortableVisibilityConverter.php": [
+11
 ],
-'flysystem:src/Ftp/FtpConnectionProvider.php':[
-43,
-],
+"flysystem:src/Ftp/FtpConnectionProvider.php": [
+43
+]
 }
