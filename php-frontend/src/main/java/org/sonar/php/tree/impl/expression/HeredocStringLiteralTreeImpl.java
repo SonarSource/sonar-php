@@ -19,13 +19,13 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.base.Preconditions;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.sonar.api.utils.Preconditions;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;

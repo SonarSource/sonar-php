@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
-import com.google.common.base.Preconditions;
 import com.sonar.sslr.api.RecognitionException;
 import java.util.ArrayDeque;
 import java.util.Collections;
@@ -32,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.sonar.api.utils.Preconditions;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.LiteralUtils;
 import org.sonar.php.utils.collections.ListUtils;

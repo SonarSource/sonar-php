@@ -19,7 +19,6 @@
  */
 package org.sonar.php.parser;
 
-import com.google.common.base.Throwables;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
@@ -29,6 +28,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.Throwables;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 

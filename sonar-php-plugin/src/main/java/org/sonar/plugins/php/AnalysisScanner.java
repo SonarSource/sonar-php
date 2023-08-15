@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.base.Throwables;
 import com.sonar.sslr.api.RecognitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +47,7 @@ import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.CpdVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
+import org.sonar.php.utils.Throwables;
 import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;

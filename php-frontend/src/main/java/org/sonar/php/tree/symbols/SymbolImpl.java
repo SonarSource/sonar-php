@@ -19,10 +19,10 @@
  */
 package org.sonar.php.tree.symbols;
 
-import com.google.common.base.Preconditions;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import org.sonar.api.utils.Preconditions;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
