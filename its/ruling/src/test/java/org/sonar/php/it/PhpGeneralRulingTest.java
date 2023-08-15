@@ -104,6 +104,11 @@ public class PhpGeneralRulingTest {
     testProject("Symfony");
   }
 
+  @Test
+  public void testPhpSpreadsheet() throws Exception {
+    testProject("PhpSpreadsheet");
+  }
+
   private void testProject(String project) throws Exception {
     ORCHESTRATOR.getServer().provisionProject(project, project);
     ORCHESTRATOR.getServer().associateProjectToQualityProfile(project, "php", "rules");

@@ -1,42 +1,42 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial.php':[
-59,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial.php": [
+59
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Securities/AccruedInterest.php':[
-47,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Securities/AccruedInterest.php": [
+47
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Chart/Axis.php':[
-149,
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Axis.php": [
+149
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Chart/Chart.php':[
-167,
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Chart.php": [
+167
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeries.php':[
-130,
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeries.php": [
+130
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeriesValues.php':[
-106,
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeriesValues.php": [
+106
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Chart/Properties.php':[
-828,
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Properties.php": [
+828
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Chart/TrendLine.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/TrendLine.php": [
 52,
-185,
+185
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/MD5.php':[
-190,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/MD5.php": [
+190
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php':[
-137,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
+137
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php':[
-373,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
+373
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php':[
-1384,
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
+1384
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php':[
-2328,
-],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+2328
+]
 }

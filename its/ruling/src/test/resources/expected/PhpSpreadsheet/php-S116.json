@@ -1,19 +1,19 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DgContainer/SpgrContainer/SpContainer.php':[
-49,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DgContainer/SpgrContainer/SpContainer.php": [
+49
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer.php": [
 40,
-47,
+47
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer/BstoreContainer.php':[
-12,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer/BstoreContainer.php": [
+12
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
 57,
-64,
+64
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
 37,
 44,
 51,
@@ -23,21 +23,21 @@
 79,
 86,
 100,
-107,
+107
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php':[
-19,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
+19
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
 69,
 72,
-75,
+75
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php':[
-79,
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
+79
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/BIFFwriter.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/BIFFwriter.php": [
 54,
-61,
-],
+61
+]
 }

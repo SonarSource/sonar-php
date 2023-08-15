@@ -1,5 +1,5 @@
 {
-'PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_1.php':[
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_1.php": [
 65,
 65,
 67,
@@ -10,9 +10,9 @@
 73,
 73,
 76,
-76,
+76
 ],
-'PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_2.php':[
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_2.php": [
 65,
 65,
 67,
@@ -23,9 +23,9 @@
 73,
 73,
 76,
-76,
+76
 ],
-'PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_display.php':[
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_display.php": [
 65,
 65,
 67,
@@ -36,22 +36,22 @@
 73,
 73,
 76,
-76,
+76
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Random.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Random.php": [
 20,
 49,
 91,
-92,
+92
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/MemoryDrawing.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/MemoryDrawing.php": [
 68,
-68,
+68
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/DataTypeTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/DataTypeTest.php": [
 46,
 49,
 53,
-57,
-],
+57
+]
 }

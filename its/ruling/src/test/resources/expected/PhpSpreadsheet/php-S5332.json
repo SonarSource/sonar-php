@@ -1,9 +1,9 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php": [
 23,
-35,
+35
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Namespaces.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Namespaces.php": [
 33,
 71,
 73,
@@ -18,39 +18,39 @@
 111,
 113,
 115,
-117,
+117
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php": [
 75,
 76,
 77,
 82,
-86,
+86
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Meta.php':[
-38,
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Meta.php": [
+38
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php':[
-34,
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php": [
+34
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Styles.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Styles.php": [
 45,
 46,
 47,
 49,
-53,
+53
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/HyperlinkTest.php':[
-23,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/HyperlinkTest.php": [
+23
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/NamespacePurlTest.php':[
-24,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/NamespacePurlTest.php": [
+24
 ],
-'PhpSpreadsheet:tests/data/Calculation/Web/WEBSERVICE.php':[
+"PhpSpreadsheet:tests/data/Calculation/Web/WEBSERVICE.php": [
 6,
 11,
 16,
 22,
-27,
-],
+27
+]
 }
