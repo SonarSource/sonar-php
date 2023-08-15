@@ -57,14 +57,22 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   private final List<ClassMemberTree> members;
   private final SyntaxToken closeCurlyBraceToken;
   private final SeparatedList<CallArgumentTree> callArguments;
+  @Nullable
+  private final SyntaxToken readonly;
   private ClassSymbol symbol;
 
+  @SuppressWarnings("java:S107")
   public AnonymousClassTreeImpl(
     List<AttributeGroupTree> attributeGroups,
+    @Nullable SyntaxToken readonly,
     SyntaxToken classToken,
-    @Nullable SyntaxToken openParenthesisToken, SeparatedList<CallArgumentTree> callArguments, @Nullable SyntaxToken closeParenthesisToken,
-    @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
-    @Nullable SyntaxToken implementsToken, @Nullable SeparatedListImpl<NamespaceNameTree> superInterfaces,
+    @Nullable SyntaxToken openParenthesisToken,
+    SeparatedList<CallArgumentTree> callArguments,
+    @Nullable SyntaxToken closeParenthesisToken,
+    @Nullable SyntaxToken extendsToken,
+    @Nullable NamespaceNameTree superClass,
+    @Nullable SyntaxToken implementsToken,
+    @Nullable SeparatedListImpl<NamespaceNameTree> superInterfaces,
     SyntaxToken openCurlyBraceToken,
     List<ClassMemberTree> members,
     SyntaxToken closeCurlyBraceToken) {
@@ -73,6 +81,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
       .collect(Collectors.toList());
 
     this.attributeGroups = attributeGroups;
+    this.readonly = readonly;
     this.classToken = classToken;
     this.openParenthesisToken = openParenthesisToken;
     this.callArguments = callArguments;
@@ -90,6 +99,12 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   @Override
   public List<AttributeGroupTree> attributeGroups() {
     return attributeGroups;
+  }
+
+  @Nullable
+  @Override
+  public SyntaxToken readonlyToken() {
+    return readonly;
   }
 
   @Override
@@ -184,7 +199,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
-      IteratorUtils.iteratorOf(classToken, openParenthesisToken),
+      IteratorUtils.iteratorOf(readonly, classToken, openParenthesisToken),
       callArguments.elementsAndSeparators(),
       IteratorUtils.iteratorOf(closeParenthesisToken, extendsToken, superClass, implementsToken),
       superInterfaces.elementsAndSeparators(),

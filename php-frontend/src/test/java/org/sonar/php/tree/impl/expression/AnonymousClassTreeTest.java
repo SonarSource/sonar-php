@@ -19,17 +19,30 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.Assertions;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AnonymousClassTreeTest extends PHPTreeModelTest {
+class AnonymousClassTreeTest extends PHPTreeModelTest {
+  @Test
+  void shouldParseAnonymousClassDeclarations() {
+    Assertions.assertThat(Kind.ANONYMOUS_CLASS)
+      .matches("class (1, foo()) extends A implements B, C {var $a;}")
+      .matches("class (name: 'a') {}")
+      .matches("readonly class {}")
+      .matches("#[A1,] readonly class {}")
+
+      .notMatches("readonly #[A1,] class {}")
+      .notMatches("class readonly {}");
+  }
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     AnonymousClassTree tree = parse("class (1, foo()) extends A implements B, C {var $a;}", Kind.ANONYMOUS_CLASS);
 
     assertThat(tree.is(Kind.ANONYMOUS_CLASS)).isTrue();
@@ -45,15 +58,22 @@ public class AnonymousClassTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_with_named_arguments() throws Exception {
+  void test_with_named_arguments() {
     AnonymousClassTree tree = parse("class (name: 'a') {}", Kind.ANONYMOUS_CLASS);
     assertThat(tree.callArguments()).hasSize(1);
   }
 
   @Test
-  public void with_attributes() throws Exception {
+  void with_attributes() {
     AnonymousClassTree tree = parse("#[A1,] class {}", Kind.ANONYMOUS_CLASS);
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
+  }
+
+  @Test
+  void with_readonly() {
+    AnonymousClassTree tree = parse("readonly class {}", Kind.ANONYMOUS_CLASS);
+    assertThat(tree.readonlyToken()).isNotNull();
+    assertThat(((PHPTree) tree).childrenIterator()).hasSize(9);
   }
 }
