@@ -1,5 +1,5 @@
 {
-'PHPMailer:get_oauth_token.php':[
+"PHPMailer:get_oauth_token.php": [
 50,
 87,
 96,
@@ -7,9 +7,9 @@
 155,
 159,
 166,
-170,
+170
 ],
-'PHPMailer:src/DSNConfigurator.php':[
+"PHPMailer:src/DSNConfigurator.php": [
 45,
 82,
 88,
@@ -25,12 +25,12 @@
 200,
 232,
 237,
-239,
+239
 ],
-'PHPMailer:src/OAuth.php':[
-127,
+"PHPMailer:src/OAuth.php": [
+127
 ],
-'PHPMailer:src/PHPMailer.php':[
+"PHPMailer:src/PHPMailer.php": [
 828,
 861,
 863,
@@ -454,9 +454,9 @@
 4959,
 4972,
 5025,
-5104,
+5104
 ],
-'PHPMailer:src/POP3.php':[
+"PHPMailer:src/POP3.php": [
 179,
 203,
 205,
@@ -483,9 +483,9 @@
 395,
 415,
 433,
-435,
+435
 ],
-'PHPMailer:src/SMTP.php':[
+"PHPMailer:src/SMTP.php": [
 266,
 270,
 276,
@@ -580,55 +580,55 @@
 1437,
 1439,
 1441,
-1443,
+1443
 ],
-'PHPMailer:test/Language/TranslationCompletenessTest.php':[
+"PHPMailer:test/Language/TranslationCompletenessTest.php": [
 53,
 54,
 60,
 64,
 75,
 86,
-89,
+89
 ],
-'PHPMailer:test/PHPMailer/AddEmbeddedImageTest.php':[
-148,
+"PHPMailer:test/PHPMailer/AddEmbeddedImageTest.php": [
+148
 ],
-'PHPMailer:test/PHPMailer/AddStringAttachmentTest.php':[
-123,
+"PHPMailer:test/PHPMailer/AddStringAttachmentTest.php": [
+123
 ],
-'PHPMailer:test/PHPMailer/AddStringEmbeddedImageTest.php':[
+"PHPMailer:test/PHPMailer/AddStringEmbeddedImageTest.php": [
 112,
-136,
+136
 ],
-'PHPMailer:test/PHPMailer/CustomHeaderTest.php':[
+"PHPMailer:test/PHPMailer/CustomHeaderTest.php": [
 39,
 44,
 45,
-47,
+47
 ],
-'PHPMailer:test/PHPMailer/DKIMTest.php':[
+"PHPMailer:test/PHPMailer/DKIMTest.php": [
 41,
 250,
-265,
+265
 ],
-'PHPMailer:test/PHPMailer/EncodeQTest.php':[
+"PHPMailer:test/PHPMailer/EncodeQTest.php": [
 38,
 42,
-44,
+44
 ],
-'PHPMailer:test/PHPMailer/EncodeStringTest.php':[
+"PHPMailer:test/PHPMailer/EncodeStringTest.php": [
 38,
-40,
+40
 ],
-'PHPMailer:test/PHPMailer/FileIsAccessibleTest.php':[
-84,
+"PHPMailer:test/PHPMailer/FileIsAccessibleTest.php": [
+84
 ],
-'PHPMailer:test/PHPMailer/Html2TextTest.php':[
+"PHPMailer:test/PHPMailer/Html2TextTest.php": [
 37,
-186,
+186
 ],
-'PHPMailer:test/PHPMailer/LocalizationTest.php':[
+"PHPMailer:test/PHPMailer/LocalizationTest.php": [
 45,
 47,
 49,
@@ -636,13 +636,13 @@
 202,
 204,
 384,
-421,
+421
 ],
-'PHPMailer:test/PHPMailer/MailTransportTest.php':[
+"PHPMailer:test/PHPMailer/MailTransportTest.php": [
 48,
-70,
+70
 ],
-'PHPMailer:test/PHPMailer/PHPMailerTest.php':[
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
 50,
 56,
 417,
@@ -656,9 +656,9 @@
 1113,
 1123,
 1167,
-1234,
+1234
 ],
-'PHPMailer:test/PHPMailer/ParseAddressesTest.php':[
+"PHPMailer:test/PHPMailer/ParseAddressesTest.php": [
 45,
 47,
 52,
@@ -676,50 +676,50 @@
 142,
 144,
 149,
-151,
+151
 ],
-'PHPMailer:test/PHPMailer/PunyencodeAddressTest.php':[
-97,
+"PHPMailer:test/PHPMailer/PunyencodeAddressTest.php": [
+97
 ],
-'PHPMailer:test/PHPMailer/ReplyToGetSetClearTest.php':[
+"PHPMailer:test/PHPMailer/ReplyToGetSetClearTest.php": [
 42,
 44,
 49,
 196,
 197,
 199,
-411,
+411
 ],
-'PHPMailer:test/PHPMailer/SetFromTest.php':[
-196,
+"PHPMailer:test/PHPMailer/SetFromTest.php": [
+196
 ],
-'PHPMailer:test/PHPMailer/SetWordWrapTest.php':[
+"PHPMailer:test/PHPMailer/SetWordWrapTest.php": [
 56,
-111,
+111
 ],
-'PHPMailer:test/PHPMailer/ValidateAddressCustomValidatorTest.php':[
+"PHPMailer:test/PHPMailer/ValidateAddressCustomValidatorTest.php": [
 31,
-51,
+51
 ],
-'PHPMailer:test/PHPMailer/ValidateAddressTest.php':[
-481,
+"PHPMailer:test/PHPMailer/ValidateAddressTest.php": [
+481
 ],
-'PHPMailer:test/PHPMailer/XMailerTest.php':[
+"PHPMailer:test/PHPMailer/XMailerTest.php": [
 38,
-40,
+40
 ],
-'PHPMailer:test/POP3/PopBeforeSmtpTest.php':[
+"PHPMailer:test/POP3/PopBeforeSmtpTest.php": [
 40,
 54,
-68,
+68
 ],
-'PHPMailer:test/SendTestCase.php':[
+"PHPMailer:test/SendTestCase.php": [
 50,
 63,
 64,
-68,
+68
 ],
-'PHPMailer:test/TestCase.php':[
+"PHPMailer:test/TestCase.php": [
 129,
 144,
 146,
@@ -748,10 +748,10 @@
 318,
 329,
 335,
-373,
+373
 ],
-'PHPMailer:test/fakefunctions.php':[
+"PHPMailer:test/fakefunctions.php": [
 3,
-10,
-],
+10
+]
 }

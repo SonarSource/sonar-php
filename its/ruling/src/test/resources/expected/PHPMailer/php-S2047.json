@@ -1,5 +1,5 @@
 {
-'PHPMailer:src/PHPMailer.php':[
+"PHPMailer:src/PHPMailer.php": [
 858,
 1012,
 1027,
@@ -29,16 +29,16 @@
 3941,
 3957,
 4217,
-4614,
+4614
 ],
-'PHPMailer:src/POP3.php':[
+"PHPMailer:src/POP3.php": [
 172,
 199,
 244,
 307,
-413,
+413
 ],
-'PHPMailer:src/SMTP.php':[
+"PHPMailer:src/SMTP.php": [
 323,
 457,
 498,
@@ -55,9 +55,9 @@
 1081,
 1092,
 1106,
-1319,
+1319
 ],
-'PHPMailer:test/TestCase.php':[
-371,
-],
+"PHPMailer:test/TestCase.php": [
+371
+]
 }

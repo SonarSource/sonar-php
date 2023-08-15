@@ -1,11 +1,11 @@
 {
-'PHPMailer:get_oauth_token.php':[
-96,
+"PHPMailer:get_oauth_token.php": [
+96
 ],
-'PHPMailer:src/DSNConfigurator.php':[
-152,
+"PHPMailer:src/DSNConfigurator.php": [
+152
 ],
-'PHPMailer:src/PHPMailer.php':[
+"PHPMailer:src/PHPMailer.php": [
 1114,
 1193,
 2157,
@@ -17,18 +17,18 @@
 2787,
 3031,
 4105,
-4902,
+4902
 ],
-'PHPMailer:src/SMTP.php':[
-554,
+"PHPMailer:src/SMTP.php": [
+554
 ],
-'PHPMailer:test/PHPMailer/ParseAddressesTest.php':[
+"PHPMailer:test/PHPMailer/ParseAddressesTest.php": [
 54,
 85,
 117,
-151,
+151
 ],
-'PHPMailer:test/TestCase.php':[
-155,
-],
+"PHPMailer:test/TestCase.php": [
+155
+]
 }

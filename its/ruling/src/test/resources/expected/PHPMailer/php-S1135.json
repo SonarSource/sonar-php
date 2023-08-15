@@ -1,12 +1,12 @@
 {
-'PHPMailer:test/PHPMailer/ParseAddressesTest.php':[
-22,
+"PHPMailer:test/PHPMailer/ParseAddressesTest.php": [
+22
 ],
-'PHPMailer:test/PHPMailer/Utf8CharBoundaryTest.php':[
-23,
+"PHPMailer:test/PHPMailer/Utf8CharBoundaryTest.php": [
+23
 ],
-'PHPMailer:test/PHPMailer/ValidateAddressTest.php':[
+"PHPMailer:test/PHPMailer/ValidateAddressTest.php": [
 24,
-220,
-],
+220
+]
 }

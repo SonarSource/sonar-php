@@ -1,10 +1,10 @@
 {
-'PHPMailer:src/PHPMailer.php':[
+"PHPMailer:src/PHPMailer.php": [
 1738,
 1936,
-2618,
+2618
 ],
-'PHPMailer:test/TestCase.php':[
-199,
-],
+"PHPMailer:test/TestCase.php": [
+199
+]
 }

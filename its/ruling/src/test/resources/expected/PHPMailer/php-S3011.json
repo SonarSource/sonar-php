@@ -1,23 +1,23 @@
 {
-'PHPMailer:test/OAuth/OAuthTest.php':[
+"PHPMailer:test/OAuth/OAuthTest.php": [
 39,
-40,
+40
 ],
-'PHPMailer:test/PHPMailer/FileIsAccessibleTest.php':[
+"PHPMailer:test/PHPMailer/FileIsAccessibleTest.php": [
 42,
 44,
 94,
-96,
+96
 ],
-'PHPMailer:test/PHPMailer/IsPermittedPathTest.php':[
+"PHPMailer:test/PHPMailer/IsPermittedPathTest.php": [
 38,
-40,
+40
 ],
-'PHPMailer:test/PHPMailer/LocalizationTest.php':[
+"PHPMailer:test/PHPMailer/LocalizationTest.php": [
 426,
-428,
+428
 ],
-'PHPMailer:test/PHPMailer/PHPMailerTest.php':[
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
 256,
 257,
 260,
@@ -25,12 +25,12 @@
 266,
 269,
 272,
-275,
+275
 ],
-'PHPMailer:test/TestCase.php':[
+"PHPMailer:test/TestCase.php": [
 192,
 215,
 218,
-221,
-],
+221
+]
 }

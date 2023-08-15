@@ -1,12 +1,12 @@
 {
-'PHPMailer:test/PHPMailer/DSNConfiguratorTest.php':[
+"PHPMailer:test/PHPMailer/DSNConfiguratorTest.php": [
 112,
-157,
+157
 ],
-'PHPMailer:test/PHPMailer/IsPermittedPathTest.php':[
-99,
+"PHPMailer:test/PHPMailer/IsPermittedPathTest.php": [
+99
 ],
-'PHPMailer:test/PHPMailer/PHPMailerTest.php':[
-478,
-],
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
+478
+]
 }

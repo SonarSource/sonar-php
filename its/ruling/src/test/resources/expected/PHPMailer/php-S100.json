@@ -1,19 +1,19 @@
 {
-'PHPMailer:src/PHPMailer.php':[
+"PHPMailer:src/PHPMailer.php": [
 4407,
 4564,
 4730,
 4755,
 4797,
 4841,
-4864,
+4864
 ],
-'PHPMailer:src/SMTP.php':[
+"PHPMailer:src/SMTP.php": [
 1122,
-1220,
+1220
 ],
-'PHPMailer:test/fakefunctions.php':[
+"PHPMailer:test/fakefunctions.php": [
 4,
-11,
-],
+11
+]
 }
