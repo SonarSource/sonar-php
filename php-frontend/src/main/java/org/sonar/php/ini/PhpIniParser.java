@@ -19,12 +19,12 @@
  */
 package org.sonar.php.ini;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 import com.sonar.sslr.api.RecognitionException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.sonar.php.ini.tree.Directive;
 import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -97,12 +97,12 @@ public class PhpIniParser {
   private static class PhpIniFileImpl implements PhpIniFile {
 
     private final List<Directive> directives;
-    private final ListMultimap<String, Directive> directivesByName = ArrayListMultimap.create();
+    private final Map<String, List<Directive>> directivesByName = new HashMap<>();
 
     public PhpIniFileImpl(List<Directive> directives) {
       this.directives = Collections.unmodifiableList(directives);
       for (Directive directive : directives) {
-        directivesByName.put(directive.name().text(), directive);
+        directivesByName.computeIfAbsent(directive.name().text(), key -> new ArrayList<>()).add(directive);
       }
     }
 
@@ -113,7 +113,7 @@ public class PhpIniParser {
 
     @Override
     public List<Directive> directivesForName(String directiveName) {
-      return directivesByName.get(directiveName);
+      return directivesByName.getOrDefault(directiveName, Collections.emptyList());
     }
 
   }

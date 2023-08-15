@@ -19,9 +19,8 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -50,7 +49,7 @@ public class ReadWriteUsages {
   private final Set<SyntaxToken> writes = new HashSet<>();
   private final Set<SyntaxToken> readAssignment = new HashSet<>();
   private final Set<SyntaxToken> declarations = new HashSet<>();
-  private final ListMultimap<Symbol,Symbol> inheritedVariablesByParent = ArrayListMultimap.create();
+  private final Map<Symbol,List<Symbol>> inheritedVariablesByParent = new HashMap<>();
   private final Map<Symbol,Symbol> parentSymbolByInheritedReference = new HashMap<>();
 
   public ReadWriteUsages(Tree tree, SymbolTable symbolTable) {
@@ -60,7 +59,7 @@ public class ReadWriteUsages {
 
   public boolean isRead(Symbol symbol) {
     return hasReadUsage(symbol)
-      || inheritedVariablesByParent.get(symbol).stream().anyMatch(this::isRead)
+      || inheritedVariablesByParent.getOrDefault(symbol, Collections.emptyList()).stream().anyMatch(this::isRead)
       || hasParentWhichIsRead(symbol);
   }
 
@@ -151,7 +150,7 @@ public class ReadWriteUsages {
         Symbol symbol = scope.getSymbol(variableIdentifier.text());
 
         if (parentScopeSymbol != null && symbol != null) {
-          inheritedVariablesByParent.put(parentScopeSymbol, symbol);
+          inheritedVariablesByParent.computeIfAbsent(parentScopeSymbol, key -> new ArrayList<>()).add(symbol);
         }
 
       } else if (variableTree.is(Tree.Kind.REFERENCE_VARIABLE) && variableTree.variableExpression().is(Tree.Kind.VARIABLE_IDENTIFIER)) {
@@ -160,7 +159,7 @@ public class ReadWriteUsages {
         Symbol symbol = scope.getSymbol(variableIdentifier.text());
 
         if (parentScopeSymbol != null && symbol != null) {
-          inheritedVariablesByParent.put(parentScopeSymbol, symbol);
+          inheritedVariablesByParent.computeIfAbsent(parentScopeSymbol, key -> new ArrayList<>()).add(symbol);
           parentSymbolByInheritedReference.put(symbol, parentScopeSymbol);
         }
       }
