@@ -19,13 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
@@ -67,7 +68,7 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
     Tree.Kind.ALTERNATIVE_SWITCH_STATEMENT
     );
 
-  private ListMultimap<Tree, Tree> jumpsByLoop = ArrayListMultimap.create();
+  private Map<Tree, List<Tree>> jumpsByLoop = new HashMap<>();
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
@@ -77,7 +78,7 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
   }
 
   private void reportIssues() {
-    jumpsByLoop.asMap().forEach((loop, jumps) -> {
+    jumpsByLoop.forEach((loop, jumps) -> {
       PreciseIssue preciseIssue = context().newIssue(this, ((PHPTree) loop).getFirstToken(), MESSAGE);
       jumps.forEach(jump -> preciseIssue.secondary(jump, "loop exit"));
     });
@@ -109,7 +110,7 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
       return;
     }
     if (!isWhileTrue(loop) && !canExecuteMoreThanOnce(loop)) {
-      jumpsByLoop.put(loop, tree);
+      jumpsByLoop.computeIfAbsent(loop, key -> new ArrayList<>()).add(tree);
     }
   }
 
