@@ -1,5 +1,5 @@
 {
-'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyPHPStatementUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyPHPStatementUnitTest.inc": [
 9,
 12,
 15,
@@ -16,28 +16,28 @@
 63,
 71,
 72,
-80,
+80
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
 42,
 43,
 226,
 228,
 230,
 250,
-252,
+252
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/DisallowMultipleStatementsUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/DisallowMultipleStatementsUnitTest.inc": [
 2,
 16,
-18,
+18
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ScopeClosingBraceSniff.php':[
-68,
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ScopeClosingBraceSniff.php": [
+68
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SemicolonSpacingUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SemicolonSpacingUnitTest.inc": [
 12,
 34,
-41,
-],
+41
+]
 }

@@ -1,12 +1,12 @@
 {
-'PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/EvalObjectFactoryUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/EvalObjectFactoryUnitTest.inc": [
 4,
 12,
 13,
-21,
+21
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/EvalUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/EvalUnitTest.inc": [
 2,
-4,
-],
+4
+]
 }

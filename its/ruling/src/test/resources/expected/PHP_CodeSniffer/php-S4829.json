@@ -1,9 +1,9 @@
 {
-'PHP_CodeSniffer:src/Config.php':[
-376,
+"PHP_CodeSniffer:src/Config.php": [
+376
 ],
-'PHP_CodeSniffer:src/Runner.php':[
+"PHP_CodeSniffer:src/Runner.php": [
 366,
-678,
-],
+678
+]
 }

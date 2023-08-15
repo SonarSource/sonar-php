@@ -1,10 +1,10 @@
 {
-'PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DiscourageGotoUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DiscourageGotoUnitTest.inc": [
 3,
-11,
+11
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc": [
 4,
-14,
-],
+14
+]
 }

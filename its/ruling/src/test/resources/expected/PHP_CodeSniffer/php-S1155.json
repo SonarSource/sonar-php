@@ -1,9 +1,9 @@
 {
-'PHP_CodeSniffer:src/Runner.php':[
-722,
+"PHP_CodeSniffer:src/Runner.php": [
+722
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php':[
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
 207,
-249,
-],
+249
+]
 }

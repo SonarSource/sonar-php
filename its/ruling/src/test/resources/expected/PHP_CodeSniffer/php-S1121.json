@@ -1,11 +1,11 @@
 {
-'PHP_CodeSniffer:src/Config.php':[
-312,
+"PHP_CodeSniffer:src/Config.php": [
+312
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc':[
-109,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
+109
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
 55,
 56,
 58,
@@ -25,13 +25,13 @@
 78,
 78,
 80,
-80,
+80
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc": [
 8,
-8,
+8
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
 7,
 9,
 12,
@@ -39,18 +39,18 @@
 52,
 52,
 79,
-85,
+85
 ],
-'PHP_CodeSniffer:src/Tokenizers/PHP.php':[
-760,
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+760
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
 198,
 200,
 207,
-209,
+209
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc':[
-62,
-],
+"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc": [
+62
+]
 }

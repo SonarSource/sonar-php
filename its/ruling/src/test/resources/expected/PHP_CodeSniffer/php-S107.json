@@ -1,8 +1,8 @@
 {
-'PHP_CodeSniffer:src/Files/File.php':[
-836,
+"PHP_CodeSniffer:src/Files/File.php": [
+836
 ],
-'PHP_CodeSniffer:src/Reports/Report.php':[
-51,
-],
+"PHP_CodeSniffer:src/Reports/Report.php": [
+51
+]
 }

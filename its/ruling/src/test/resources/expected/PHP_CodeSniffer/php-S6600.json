@@ -1,145 +1,145 @@
 {
-'PHP_CodeSniffer:src/Config.php':[
-361,
+"PHP_CodeSniffer:src/Config.php": [
+361
 ],
-'PHP_CodeSniffer:src/Files/File.php':[
+"PHP_CodeSniffer:src/Files/File.php": [
 460,
-2580,
+2580
 ],
-'PHP_CodeSniffer:src/Runner.php':[
-683,
+"PHP_CodeSniffer:src/Runner.php": [
+683
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/ControlStructures/InlineControlStructureSniff.php':[
-153,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/ControlStructures/InlineControlStructureSniff.php": [
+153
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/CSSLintSniff.php':[
-91,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/CSSLintSniff.php": [
+91
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ClosureLinterSniff.php':[
-112,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ClosureLinterSniff.php": [
+112
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ESLintSniff.php':[
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ESLintSniff.php": [
 87,
 93,
-108,
+108
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/JSHintSniff.php':[
-90,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/JSHintSniff.php": [
+90
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/EndFileNewlineSniff.php':[
-79,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/EndFileNewlineSniff.php": [
+79
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/EndFileNoNewlineSniff.php':[
-86,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/EndFileNoNewlineSniff.php": [
+86
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/ExecutableFileSniff.php':[
-57,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/ExecutableFileSniff.php": [
+57
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LineEndingsSniff.php':[
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LineEndingsSniff.php": [
 71,
-143,
+143
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LineLengthSniff.php':[
-83,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LineLengthSniff.php": [
+83
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LowercasedFilenameSniff.php':[
-65,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LowercasedFilenameSniff.php": [
+65
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/MultipleStatementAlignmentSniff.php':[
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/MultipleStatementAlignmentSniff.php": [
 84,
-257,
+257
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/SyntaxSniff.php':[
-70,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/SyntaxSniff.php": [
+70
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/GitMergeConflictSniff.php':[
-223,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/GitMergeConflictSniff.php": [
+223
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/SubversionPropertiesSniff.php':[
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/SubversionPropertiesSniff.php": [
 61,
-104,
+104
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ArbitraryParenthesesSpacingSniff.php':[
-120,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ArbitraryParenthesesSpacingSniff.php": [
+120
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowSpaceIndentSniff.php':[
-215,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowSpaceIndentSniff.php": [
+215
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php':[
-187,
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php": [
+187
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc':[
-20,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc": [
+20
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Files/ExecutableFileUnitTest.php':[
-28,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/ExecutableFileUnitTest.php": [
+28
 ],
-'PHP_CodeSniffer:src/Standards/MySource/Sniffs/Objects/CreateWidgetTypeCallbackSniff.php':[
-138,
+"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Objects/CreateWidgetTypeCallbackSniff.php": [
+138
 ],
-'PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/ReturnFunctionValueUnitTest.inc':[
-8,
+"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/ReturnFunctionValueUnitTest.inc": [
+8
 ],
-'PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php':[
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
 125,
 130,
 136,
 180,
-207,
+207
 ],
-'PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc": [
 4,
 5,
 98,
-99,
+99
 ],
-'PHP_CodeSniffer:src/Standards/PSR1/Sniffs/Files/SideEffectsSniff.php':[
-59,
+"PHP_CodeSniffer:src/Standards/PSR1/Sniffs/Files/SideEffectsSniff.php": [
+59
 ],
-'PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/FileHeaderSniff.php':[
+"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/FileHeaderSniff.php": [
 165,
 221,
 260,
-268,
+268
 ],
-'PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Files/EndFileNewlineSniff.php':[
+"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Files/EndFileNewlineSniff.php": [
 46,
 67,
-102,
+102
 ],
-'PHP_CodeSniffer:src/Standards/PSR2/Tests/Files/ClosingTagUnitTest.2.inc':[
-2,
+"PHP_CodeSniffer:src/Standards/PSR2/Tests/Files/ClosingTagUnitTest.2.inc": [
+2
 ],
-'PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc':[
-96,
+"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
+96
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php':[
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
 58,
 62,
 70,
 118,
-222,
+222
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/InlineCommentSniff.php':[
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/InlineCommentSniff.php": [
 256,
 293,
 300,
 320,
-343,
+343
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JSLintSniff.php':[
-81,
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JSLintSniff.php": [
+81
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JavaScriptLintSniff.php':[
-84,
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JavaScriptLintSniff.php": [
+84
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Files/FileExtensionSniff.php':[
-63,
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Files/FileExtensionSniff.php": [
+63
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Functions/MultiLineFunctionDeclarationSniff.php':[
-73,
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Functions/MultiLineFunctionDeclarationSniff.php": [
+73
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php':[
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php": [
 154,
 168,
 186,
@@ -147,51 +147,51 @@
 212,
 222,
 270,
-283,
+283
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.inc':[
-124,
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.inc": [
+124
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/EchoedStringsUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/EchoedStringsUnitTest.inc": [
 5,
 6,
 7,
 8,
 9,
-13,
+13
 ],
-'PHP_CodeSniffer:src/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php':[
-93,
+"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php": [
+93
 ],
-'PHP_CodeSniffer:src/Standards/Zend/Sniffs/Files/ClosingTagSniff.php':[
-74,
+"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Files/ClosingTagSniff.php": [
+74
 ],
-'PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.2.inc':[
-2,
+"PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.2.inc": [
+2
 ],
-'PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.3.inc':[
-1,
+"PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.3.inc": [
+1
 ],
-'PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.4.inc':[
-1,
+"PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.4.inc": [
+1
 ],
-'PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.5.inc':[
-1,
+"PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.5.inc": [
+1
 ],
-'PHP_CodeSniffer:src/Tokenizers/JS.php':[
-1210,
+"PHP_CodeSniffer:src/Tokenizers/JS.php": [
+1210
 ],
-'PHP_CodeSniffer:src/Tokenizers/PHP.php':[
-1958,
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+1958
 ],
-'PHP_CodeSniffer:src/Tokenizers/Tokenizer.php':[
+"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
 1017,
 1118,
 1212,
 1387,
-1479,
+1479
 ],
-'PHP_CodeSniffer:src/Util/Cache.php':[
-346,
-],
+"PHP_CodeSniffer:src/Util/Cache.php": [
+346
+]
 }

@@ -1,12 +1,12 @@
 {
-'PHP_CodeSniffer:src/Config.php':[
-337,
+"PHP_CodeSniffer:src/Config.php": [
+337
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.inc": [
 44,
 45,
 45,
 46,
-47,
-],
+47
+]
 }
