@@ -1,15 +1,15 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
 35,
 230,
-231,
+231
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/ChainedBlockStream.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/ChainedBlockStream.php": [
 61,
 68,
-107,
+107
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/SampleTest.php':[
-33,
-],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/SampleTest.php": [
+33
+]
 }

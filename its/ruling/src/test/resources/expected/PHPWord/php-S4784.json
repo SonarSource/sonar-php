@@ -1,30 +1,30 @@
 {
-'PHPWord:src/PhpWord/Element/PreserveText.php':[
-63,
+"PHPWord:src/PhpWord/Element/PreserveText.php": [
+63
 ],
-'PHPWord:src/PhpWord/Reader/RTF/Document.php':[
-248,
+"PHPWord:src/PhpWord/Reader/RTF/Document.php": [
+248
 ],
-'PHPWord:src/PhpWord/Shared/Converter.php':[
-385,
+"PHPWord:src/PhpWord/Shared/Converter.php": [
+385
 ],
-'PHPWord:src/PhpWord/Shared/Css.php':[
-41,
+"PHPWord:src/PhpWord/Shared/Css.php": [
+41
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
+"PHPWord:src/PhpWord/Shared/Html.php": [
 732,
 804,
 828,
 935,
-959,
+959
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
-411,
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+411
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Element/Text.php':[
-108,
+"PHPWord:src/PhpWord/Writer/ODText/Element/Text.php": [
+108
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php':[
-81,
-],
+"PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
+81
+]
 }

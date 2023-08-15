@@ -1,20 +1,20 @@
 {
-'monica:app/Console/Commands/Tests/UpdateLangs.php':[
-46,
+"monica:app/Console/Commands/Tests/UpdateLangs.php": [
+46
 ],
-'monica:app/ExportResources/Journal/JournalEntry.php':[
-22,
+"monica:app/ExportResources/Journal/JournalEntry.php": [
+22
 ],
-'monica:app/Http/Controllers/Contacts/AvatarController.php':[
-40,
+"monica:app/Http/Controllers/Contacts/AvatarController.php": [
+40
 ],
-'monica:app/Jobs/Dav/PushVCard.php':[
-57,
+"monica:app/Jobs/Dav/PushVCard.php": [
+57
 ],
-'monica:app/Services/Contact/Avatar/UpdateAvatar.php':[
-60,
+"monica:app/Services/Contact/Avatar/UpdateAvatar.php": [
+60
 ],
-'monica:database/migrations/2018_05_06_061227_external_countries.php':[
-37,
-],
+"monica:database/migrations/2018_05_06_061227_external_countries.php": [
+37
+]
 }

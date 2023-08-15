@@ -1,34 +1,34 @@
 {
-'PHPWord:src/PhpWord/Element/Image.php':[
-501,
+"PHPWord:src/PhpWord/Element/Image.php": [
+501
 ],
-'PHPWord:src/PhpWord/Reader/MsDoc.php':[
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
 1528,
 1600,
-2317,
+2317
 ],
-'PHPWord:src/PhpWord/Reader/ODText/Content.php':[
-35,
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
+35
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php':[
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
 105,
-235,
+235
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/Numbering.php':[
-34,
+"PHPWord:src/PhpWord/Reader/Word2007/Numbering.php": [
+34
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/Styles.php':[
-34,
+"PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
+34
 ],
-'PHPWord:src/PhpWord/Shared/Converter.php':[
-304,
+"PHPWord:src/PhpWord/Shared/Converter.php": [
+304
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
+"PHPWord:src/PhpWord/Shared/Html.php": [
 107,
 681,
-878,
+878
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 270,
 445,
 684,
@@ -48,36 +48,36 @@
 4309,
 4458,
 4784,
-5191,
+5191
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
 493,
 602,
-769,
+769
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/Table.php':[
-32,
+"PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
+32
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Style/Paragraph.php':[
-34,
+"PHPWord:src/PhpWord/Writer/HTML/Style/Paragraph.php": [
+34
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Element/Text.php':[
-33,
+"PHPWord:src/PhpWord/Writer/ODText/Element/Text.php": [
+33
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php':[
-32,
+"PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
+32
 ],
-'PHPWord:src/PhpWord/Writer/RTF/Part/Document.php':[
-145,
+"PHPWord:src/PhpWord/Writer/RTF/Part/Document.php": [
+145
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Element/Field.php':[
-162,
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Field.php": [
+162
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php": [
 122,
-338,
+338
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Style/Font.php':[
-60,
-],
+"PHPWord:src/PhpWord/Writer/Word2007/Style/Font.php": [
+60
+]
 }

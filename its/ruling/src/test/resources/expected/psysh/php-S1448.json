@@ -1,41 +1,41 @@
 {
-'psysh:src/ConfigPaths.php':[
-17,
+"psysh:src/ConfigPaths.php": [
+17
 ],
-'psysh:src/Configuration.php':[
-34,
+"psysh:src/Configuration.php": [
+34
 ],
-'psysh:src/Readline/Hoa/ConsoleProcessus.php':[
-42,
+"psysh:src/Readline/Hoa/ConsoleProcessus.php": [
+42
 ],
-'psysh:src/Readline/Hoa/FileFinder.php':[
-44,
+"psysh:src/Readline/Hoa/FileFinder.php": [
+44
 ],
-'psysh:src/Readline/Hoa/FileGeneric.php':[
-44,
+"psysh:src/Readline/Hoa/FileGeneric.php": [
+44
 ],
-'psysh:src/Readline/Hoa/FileLinkReadWrite.php':[
-44,
+"psysh:src/Readline/Hoa/FileLinkReadWrite.php": [
+44
 ],
-'psysh:src/Readline/Hoa/FileReadWrite.php':[
-44,
+"psysh:src/Readline/Hoa/FileReadWrite.php": [
+44
 ],
-'psysh:src/Readline/Hoa/ProtocolWrapper.php':[
-42,
+"psysh:src/Readline/Hoa/ProtocolWrapper.php": [
+42
 ],
-'psysh:src/Readline/Hoa/Readline.php':[
-44,
+"psysh:src/Readline/Hoa/Readline.php": [
+44
 ],
-'psysh:src/Readline/Hoa/Stream.php':[
-44,
+"psysh:src/Readline/Hoa/Stream.php": [
+44
 ],
-'psysh:src/Shell.php':[
-50,
+"psysh:src/Shell.php": [
+50
 ],
-'psysh:test/ConfigurationTest.php':[
-25,
+"psysh:test/ConfigurationTest.php": [
+25
 ],
-'psysh:test/ShellTest.php':[
-23,
-],
+"psysh:test/ShellTest.php": [
+23
+]
 }

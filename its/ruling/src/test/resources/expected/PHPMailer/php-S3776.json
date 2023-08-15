@@ -1,5 +1,5 @@
 {
-'PHPMailer:src/PHPMailer.php':[
+"PHPMailer:src/PHPMailer.php": [
 1216,
 1535,
 1715,
@@ -12,15 +12,15 @@
 3277,
 3468,
 4269,
-4864,
+4864
 ],
-'PHPMailer:src/SMTP.php':[
+"PHPMailer:src/SMTP.php": [
 498,
 716,
 854,
-1220,
+1220
 ],
-'PHPMailer:test/Language/TranslationCompletenessTest.php':[
-48,
-],
+"PHPMailer:test/Language/TranslationCompletenessTest.php": [
+48
+]
 }

@@ -1,42 +1,42 @@
 {
-'PHP_CodeSniffer:scripts/build-phar.php':[
-1,
+"PHP_CodeSniffer:scripts/build-phar.php": [
+1
 ],
-'PHP_CodeSniffer:scripts/validate-pear-package.php':[
-1,
+"PHP_CodeSniffer:scripts/validate-pear-package.php": [
+1
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Files/InlineHTMLUnitTest.5.inc':[
-1,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/InlineHTMLUnitTest.5.inc": [
+1
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/CharacterBeforePHPOpeningTagUnitTest.2.inc':[
-1,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/CharacterBeforePHPOpeningTagUnitTest.2.inc": [
+1
 ],
-'PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/InlineCommentUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/InlineCommentUnitTest.inc": [
 15,
 24,
 25,
 27,
 28,
-29,
+29
 ],
-'PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
 223,
-225,
+225
 ],
-'PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.7.inc':[
-1,
+"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.7.inc": [
+1
 ],
-'PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.9.inc':[
-1,
+"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.9.inc": [
+1
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.inc": [
 17,
 27,
-28,
+28
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc": [
 19,
 20,
-21,
-],
+21
+]
 }

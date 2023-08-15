@@ -1,37 +1,37 @@
 {
-'Symfony:Component/DependencyInjection/Tests/Dumper/PhpDumperTest.php':[
-861,
+"Symfony:Component/DependencyInjection/Tests/Dumper/PhpDumperTest.php": [
+861
 ],
-'Symfony:Component/Dotenv/Dotenv.php':[
-241,
+"Symfony:Component/Dotenv/Dotenv.php": [
+241
 ],
-'Symfony:Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php':[
+"Symfony:Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php": [
 791,
-818,
+818
 ],
-'Symfony:Component/HttpKernel/Tests/Controller/ArgumentResolver/TraceableValueResolverTest.php':[
-52,
+"Symfony:Component/HttpKernel/Tests/Controller/ArgumentResolver/TraceableValueResolverTest.php": [
+52
 ],
-'Symfony:Component/Mime/Header/AbstractHeader.php':[
-142,
+"Symfony:Component/Mime/Header/AbstractHeader.php": [
+142
 ],
-'Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher3.php':[
-28,
+"Symfony:Component/Routing/Tests/Fixtures/dumper/compiled_url_matcher3.php": [
+28
 ],
-'Symfony:Component/Security/Core/Tests/Authorization/AccessDecisionManagerTest.php':[
-47,
+"Symfony:Component/Security/Core/Tests/Authorization/AccessDecisionManagerTest.php": [
+47
 ],
-'Symfony:Component/Serializer/Normalizer/DateIntervalNormalizer.php':[
-92,
+"Symfony:Component/Serializer/Normalizer/DateIntervalNormalizer.php": [
+92
 ],
-'Symfony:Component/Translation/Command/TranslationPullCommand.php':[
-135,
+"Symfony:Component/Translation/Command/TranslationPullCommand.php": [
+135
 ],
-'Symfony:Component/Uid/Factory/NameBasedUuidFactory.php':[
-31,
+"Symfony:Component/Uid/Factory/NameBasedUuidFactory.php": [
+31
 ],
-'Symfony:Component/VarExporter/Internal/Hydrator.php':[
+"Symfony:Component/VarExporter/Internal/Hydrator.php": [
 103,
-202,
-],
+202
+]
 }

@@ -1,23 +1,23 @@
 {
-'psysh:test/ClassWithSecrets.php':[
+"psysh:test/ClassWithSecrets.php": [
 16,
 17,
-18,
+18
 ],
-'psysh:test/Command/ListCommand/Fixtures/ClassAlfa.php':[
-18,
+"psysh:test/Command/ListCommand/Fixtures/ClassAlfa.php": [
+18
 ],
-'psysh:test/Command/ListCommand/Fixtures/ClassBravo.php':[
-20,
+"psysh:test/Command/ListCommand/Fixtures/ClassBravo.php": [
+20
 ],
-'psysh:test/Formatter/Fixtures/SomeClass.php':[
-17,
+"psysh:test/Formatter/Fixtures/SomeClass.php": [
+17
 ],
-'psysh:test/Formatter/SignatureFormatterTest.php':[
-23,
+"psysh:test/Formatter/SignatureFormatterTest.php": [
+23
 ],
-'psysh:test/Util/MirrorTest.php':[
+"psysh:test/Util/MirrorTest.php": [
 22,
-23,
-],
+23
+]
 }

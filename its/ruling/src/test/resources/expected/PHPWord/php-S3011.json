@@ -1,8 +1,8 @@
 {
-'PHPWord:src/PhpWord/Shared/AbstractEnum.php':[
-35,
+"PHPWord:src/PhpWord/Shared/AbstractEnum.php": [
+35
 ],
-'PHPWord:tests/PhpWordTests/Style/AbstractStyleTest.php':[
-107,
-],
+"PHPWord:tests/PhpWordTests/Style/AbstractStyleTest.php": [
+107
+]
 }

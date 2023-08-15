@@ -1,17 +1,17 @@
 {
-'PHP_CodeSniffer:src/Config.php':[
-337,
+"PHP_CodeSniffer:src/Config.php": [
+337
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DisallowRequestSuperglobalUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DisallowRequestSuperglobalUnitTest.inc": [
 2,
 6,
 8,
 10,
 12,
 13,
-14,
+14
 ],
-'PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/GetRequestDataUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/GetRequestDataUnitTest.inc": [
 2,
 5,
 8,
@@ -19,6 +19,6 @@
 21,
 26,
 27,
-28,
-],
+28
+]
 }

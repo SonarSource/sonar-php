@@ -1,40 +1,40 @@
 {
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Files/ExecutableFileUnitTest.php':[
-28,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/ExecutableFileUnitTest.php": [
+28
 ],
-'PHP_CodeSniffer:src/Standards/PEAR/Tests/Formatting/MultiLineAssignmentUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/Formatting/MultiLineAssignmentUnitTest.inc": [
 2,
 5,
 8,
 11,
-13,
+13
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/GlobalKeywordUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/GlobalKeywordUnitTest.inc": [
 4,
 8,
 9,
-11,
+11
 ],
-'PHP_CodeSniffer:tests/AllTests.php':[
+"PHP_CodeSniffer:tests/AllTests.php": [
 12,
 49,
-50,
+50
 ],
-'PHP_CodeSniffer:tests/Core/Filters/Filter/AcceptTest.php':[
+"PHP_CodeSniffer:tests/Core/Filters/Filter/AcceptTest.php": [
 43,
-60,
+60
 ],
-'PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteLinuxTest.php':[
+"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteLinuxTest.php": [
+48
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteWindowsTest.php": [
+52
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionTest.php": [
 48,
+65
 ],
-'PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteWindowsTest.php':[
-52,
-],
-'PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionTest.php':[
-48,
-65,
-],
-'PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php':[
+"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
 58,
 59,
 130,
@@ -53,21 +53,21 @@
 325,
 326,
 330,
-332,
+332
 ],
-'PHP_CodeSniffer:tests/Standards/AllSniffs.php':[
+"PHP_CodeSniffer:tests/Standards/AllSniffs.php": [
 43,
 44,
 45,
 99,
-100,
+100
 ],
-'PHP_CodeSniffer:tests/bootstrap.php':[
+"PHP_CodeSniffer:tests/bootstrap.php": [
 48,
 51,
 67,
 68,
 69,
-81,
-],
+81
+]
 }

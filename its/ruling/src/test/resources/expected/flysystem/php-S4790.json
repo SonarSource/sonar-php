@@ -1,8 +1,8 @@
 {
-'flysystem:src/PhpseclibV2/SftpConnectionProvider.php':[
-167,
+"flysystem:src/PhpseclibV2/SftpConnectionProvider.php": [
+167
 ],
-'flysystem:src/PhpseclibV2/SftpConnectionProviderTest.php':[
-245,
-],
+"flysystem:src/PhpseclibV2/SftpConnectionProviderTest.php": [
+245
+]
 }

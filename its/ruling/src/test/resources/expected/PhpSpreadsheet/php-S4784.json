@@ -1,92 +1,92 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
 3713,
-4251,
+4251
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Database/DatabaseAbstract.php':[
-135,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Database/DatabaseAbstract.php": [
+135
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/FormulaParser.php':[
-222,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/FormulaParser.php": [
+222
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php':[
-201,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php": [
+201
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Subtotal.php':[
-49,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Subtotal.php": [
+49
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Cell/AdvancedValueBinder.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/AdvancedValueBinder.php": [
 48,
-50,
+50
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Cell/DefaultValueBinder.php':[
-63,
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/DefaultValueBinder.php": [
+63
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php':[
-176,
+"PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php": [
+176
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php':[
-231,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php": [
+231
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
 4534,
 4535,
 4539,
 4540,
 4544,
 4545,
-7410,
+7410
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
 1657,
 1659,
 1667,
-1741,
+1741
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php": [
 93,
-97,
+97
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/Date.php':[
-484,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Date.php": [
+484
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/DateFormatter.php':[
-126,
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/DateFormatter.php": [
+126
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Formatter.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Formatter.php": [
 167,
-181,
+181
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/FractionFormatter.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/FractionFormatter.php": [
 29,
-66,
+66
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php": [
 121,
 214,
-284,
+284
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/PercentageFormatter.php':[
-41,
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/PercentageFormatter.php": [
+41
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Style/Style.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/Style.php": [
 367,
-372,
+372
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php": [
 122,
-129,
+129
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Validations.php':[
-48,
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Validations.php": [
+48
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php':[
-1861,
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
+1861
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php':[
-100,
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php": [
+100
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
 519,
 535,
 640,
@@ -96,20 +96,20 @@
 1223,
 1357,
 1358,
-1528,
+1528
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Drawing.php':[
-496,
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Drawing.php": [
+496
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Engineering/ImCscTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Engineering/ImCscTest.php": [
 138,
-143,
+143
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/VisibilityTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/VisibilityTest.php": [
 98,
 100,
 102,
 104,
-106,
-],
+106
+]
 }

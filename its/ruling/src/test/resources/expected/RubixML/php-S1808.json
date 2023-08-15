@@ -1,8 +1,8 @@
 {
-'RubixML:tests/Specifications/DatasetHasDimensionalityTest.php':[
+"RubixML:tests/Specifications/DatasetHasDimensionalityTest.php": [
 35,
 37,
 42,
-44,
-],
+44
+]
 }

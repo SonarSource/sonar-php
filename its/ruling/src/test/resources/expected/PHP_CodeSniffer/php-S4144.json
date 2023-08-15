@@ -1,9 +1,9 @@
 {
-'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc": [
 129,
-137,
+137
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc": [
 161,
 166,
 170,
@@ -12,27 +12,27 @@
 190,
 195,
 201,
-207,
+207
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/ConstructorNameUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/ConstructorNameUnitTest.inc": [
 25,
-61,
+61
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/VersionControl/SubversionPropertiesUnitTest.php':[
-54,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/VersionControl/SubversionPropertiesUnitTest.php": [
+54
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SuperfluousWhitespaceUnitTest.1.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SuperfluousWhitespaceUnitTest.1.inc": [
 30,
-41,
+41
 ],
-'PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php':[
-1158,
+"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
+1158
 ],
-'PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php':[
+"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
 92,
-230,
+230
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.php':[
-133,
-],
+"PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.php": [
+133
+]
 }

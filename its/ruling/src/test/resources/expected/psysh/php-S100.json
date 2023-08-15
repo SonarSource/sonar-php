@@ -1,5 +1,5 @@
 {
-'psysh:src/Readline/Hoa/ProtocolWrapper.php':[
+"psysh:src/Readline/Hoa/ProtocolWrapper.php": [
 75,
 86,
 98,
@@ -17,9 +17,9 @@
 305,
 332,
 344,
-431,
+431
 ],
-'psysh:src/Readline/Hoa/Readline.php':[
+"psysh:src/Readline/Hoa/Readline.php": [
 203,
 446,
 489,
@@ -33,14 +33,14 @@
 655,
 692,
 724,
-734,
+734
 ],
-'psysh:src/Readline/Hoa/Stream.php':[
+"psysh:src/Readline/Hoa/Stream.php": [
 150,
 198,
 205,
 338,
 463,
-500,
-],
+500
+]
 }

@@ -20,7 +20,6 @@
 package org.sonar.php.tree.impl;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.UnmodifiableIterator;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -184,7 +183,7 @@ public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
     return elementsAndSeparators(Function.identity());
   }
 
-  private final class ElementAndSeparatorIterator extends UnmodifiableIterator<Tree> {
+  private final class ElementAndSeparatorIterator implements Iterator<Tree> {
 
     private final Function<T, ? extends Tree> elementTransformer;
     private final Iterator<T> elementIterator = list.iterator();
@@ -205,6 +204,11 @@ public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
       Tree next = nextIsElement ? elementTransformer.apply(elementIterator.next()) : separatorIterator.next();
       nextIsElement = !nextIsElement;
       return next;
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException();
     }
   }
 

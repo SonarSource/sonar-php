@@ -1,5 +1,5 @@
 {
-'PHPMailer:src/PHPMailer.php':[
+"PHPMailer:src/PHPMailer.php": [
 70,
 77,
 84,
@@ -62,13 +62,13 @@
 717,
 724,
 732,
-792,
+792
 ],
-'PHPMailer:src/POP3.php':[
+"PHPMailer:src/POP3.php": [
 75,
-117,
+117
 ],
-'PHPMailer:src/SMTP.php':[
+"PHPMailer:src/SMTP.php": [
 127,
 150,
 160,
@@ -79,18 +79,18 @@
 214,
 234,
 246,
-253,
+253
 ],
-'PHPMailer:test/Language/TranslationCompletenessTest.php':[
-34,
+"PHPMailer:test/Language/TranslationCompletenessTest.php": [
+34
 ],
-'PHPMailer:test/PHPMailer/PHPMailerTest.php':[
-26,
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
+26
 ],
-'PHPMailer:test/TestCase.php':[
+"PHPMailer:test/TestCase.php": [
 60,
 67,
 74,
-119,
-],
+119
+]
 }

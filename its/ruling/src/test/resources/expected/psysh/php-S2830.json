@@ -1,79 +1,79 @@
 {
-'psysh:src/CodeCleaner.php':[
+"psysh:src/CodeCleaner.php": [
 71,
 76,
-77,
+77
 ],
-'psysh:src/Command/HistoryCommand.php':[
-37,
+"psysh:src/Command/HistoryCommand.php": [
+37
 ],
-'psysh:src/Command/ListCommand/Enumerator.php':[
-44,
+"psysh:src/Command/ListCommand/Enumerator.php": [
+44
 ],
-'psysh:src/Command/ParseCommand.php':[
-48,
+"psysh:src/Command/ParseCommand.php": [
+48
 ],
-'psysh:src/Command/ReflectingCommand.php':[
+"psysh:src/Command/ReflectingCommand.php": [
 54,
 57,
 58,
-60,
+60
 ],
-'psysh:src/Command/SudoCommand.php':[
+"psysh:src/Command/SudoCommand.php": [
 38,
 41,
 42,
-44,
+44
 ],
-'psysh:src/Command/ThrowUpCommand.php':[
+"psysh:src/Command/ThrowUpCommand.php": [
 42,
-45,
+45
 ],
-'psysh:src/Command/TimeitCommand.php':[
+"psysh:src/Command/TimeitCommand.php": [
 43,
 46,
 47,
-49,
+49
 ],
-'psysh:src/Command/TraceCommand.php':[
-33,
+"psysh:src/Command/TraceCommand.php": [
+33
 ],
-'psysh:src/ConfigPaths.php':[
-37,
+"psysh:src/ConfigPaths.php": [
+37
 ],
-'psysh:src/Configuration.php':[
-143,
+"psysh:src/Configuration.php": [
+143
 ],
-'psysh:src/ExecutionLoop/RunkitReloader.php':[
-42,
+"psysh:src/ExecutionLoop/RunkitReloader.php": [
+42
 ],
-'psysh:src/Output/ShellOutput.php':[
+"psysh:src/Output/ShellOutput.php": [
 45,
 49,
-51,
+51
 ],
-'psysh:src/Readline/Hoa/ConsoleInput.php':[
+"psysh:src/Readline/Hoa/ConsoleInput.php": [
 61,
-63,
+63
 ],
-'psysh:src/Readline/Hoa/Stream.php':[
-119,
+"psysh:src/Readline/Hoa/Stream.php": [
+119
 ],
-'psysh:src/Readline/Userland.php':[
+"psysh:src/Readline/Userland.php": [
 60,
 67,
 70,
-73,
+73
 ],
-'psysh:src/Reflection/ReflectionClassConstant.php':[
-34,
+"psysh:src/Reflection/ReflectionClassConstant.php": [
+34
 ],
-'psysh:src/Shell.php':[
+"psysh:src/Shell.php": [
 92,
-94,
+94
 ],
-'psysh:src/VarDumper/Presenter.php':[
+"psysh:src/VarDumper/Presenter.php": [
 57,
-63,
-],
+63
+]
 }

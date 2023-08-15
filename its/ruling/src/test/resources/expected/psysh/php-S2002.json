@@ -1,104 +1,104 @@
 {
-'psysh:src/CodeCleaner.php':[
-192,
+"psysh:src/CodeCleaner.php": [
+192
 ],
-'psysh:src/Command/DumpCommand.php':[
-94,
+"psysh:src/Command/DumpCommand.php": [
+94
 ],
-'psysh:src/Command/EditCommand.php':[
+"psysh:src/Command/EditCommand.php": [
 166,
-169,
+169
 ],
-'psysh:src/Command/ReflectingCommand.php':[
-264,
+"psysh:src/Command/ReflectingCommand.php": [
+264
 ],
-'psysh:src/Command/ShowCommand.php':[
+"psysh:src/Command/ShowCommand.php": [
 118,
-231,
+231
 ],
-'psysh:src/ConfigPaths.php':[
+"psysh:src/ConfigPaths.php": [
 167,
 306,
 306,
 366,
-388,
+388
 ],
-'psysh:src/Configuration.php':[
+"psysh:src/Configuration.php": [
 448,
 470,
 485,
-627,
+627
 ],
-'psysh:src/ExecutionLoop/ProcessForker.php':[
+"psysh:src/ExecutionLoop/ProcessForker.php": [
 130,
 151,
 158,
 161,
 276,
-283,
+283
 ],
-'psysh:src/Formatter/CodeFormatter.php':[
-87,
+"psysh:src/Formatter/CodeFormatter.php": [
+87
 ],
-'psysh:src/Output/ProcOutputPager.php':[
-54,
+"psysh:src/Output/ProcOutputPager.php": [
+54
 ],
-'psysh:src/Readline/Hoa/ConsoleInput.php':[
-60,
+"psysh:src/Readline/Hoa/ConsoleInput.php": [
+60
 ],
-'psysh:src/Readline/Hoa/ConsoleProcessus.php':[
+"psysh:src/Readline/Hoa/ConsoleProcessus.php": [
 290,
 311,
-314,
+314
 ],
-'psysh:src/Readline/Hoa/ExceptionIdle.php':[
-87,
+"psysh:src/Readline/Hoa/ExceptionIdle.php": [
+87
 ],
-'psysh:src/Readline/Hoa/File.php':[
+"psysh:src/Readline/Hoa/File.php": [
 155,
 162,
-181,
+181
 ],
-'psysh:src/Readline/Hoa/FileDirectory.php':[
+"psysh:src/Readline/Hoa/FileDirectory.php": [
 176,
 179,
 207,
-214,
+214
 ],
-'psysh:src/Readline/Hoa/FileGeneric.php':[
+"psysh:src/Readline/Hoa/FileGeneric.php": [
 259,
 262,
 288,
 291,
 300,
-303,
+303
 ],
-'psysh:src/Readline/Hoa/ProtocolWrapper.php':[
+"psysh:src/Readline/Hoa/ProtocolWrapper.php": [
 88,
 311,
 313,
 447,
-450,
+450
 ],
-'psysh:src/Readline/Hoa/Readline.php':[
+"psysh:src/Readline/Hoa/Readline.php": [
 176,
-895,
+895
 ],
-'psysh:src/Reflection/ReflectionConstant.php':[
-26,
+"psysh:src/Reflection/ReflectionConstant.php": [
+26
 ],
-'psysh:src/Reflection/ReflectionConstant_.php':[
-54,
+"psysh:src/Reflection/ReflectionConstant_.php": [
+54
 ],
-'psysh:src/Shell.php':[
+"psysh:src/Shell.php": [
 262,
 566,
-1553,
+1553
 ],
-'psysh:src/VersionUpdater/GitHubChecker.php':[
-81,
+"psysh:src/VersionUpdater/GitHubChecker.php": [
+81
 ],
-'psysh:src/VersionUpdater/IntervalChecker.php':[
-28,
-],
+"psysh:src/VersionUpdater/IntervalChecker.php": [
+28
+]
 }

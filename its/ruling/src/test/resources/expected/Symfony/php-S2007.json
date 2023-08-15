@@ -1,17 +1,17 @@
 {
-'Symfony:Bridge/PhpUnit/ConstraintTrait.php':[
-16,
+"Symfony:Bridge/PhpUnit/ConstraintTrait.php": [
+16
 ],
-'Symfony:Bridge/PhpUnit/Tests/DeprecationErrorHandler/fake_vendor/acme/lib/deprecation_riddled.php':[
-35,
+"Symfony:Bridge/PhpUnit/Tests/DeprecationErrorHandler/fake_vendor/acme/lib/deprecation_riddled.php": [
+35
 ],
-'Symfony:Bridge/PhpUnit/Tests/DeprecationErrorHandler/fake_vendor/acme/outdated-lib/outdated_file.php':[
-6,
+"Symfony:Bridge/PhpUnit/Tests/DeprecationErrorHandler/fake_vendor/acme/outdated-lib/outdated_file.php": [
+6
 ],
-'Symfony:Bridge/PhpUnit/Tests/DeprecationErrorHandler/generate_phar.php':[
-3,
+"Symfony:Bridge/PhpUnit/Tests/DeprecationErrorHandler/generate_phar.php": [
+3
 ],
-'Symfony:Bridge/PhpUnit/bin/simple-phpunit.php':[
+"Symfony:Bridge/PhpUnit/bin/simple-phpunit.php": [
 22,
 23,
 24,
@@ -54,33 +54,33 @@
 393,
 403,
 405,
-415,
+415
 ],
-'Symfony:Bridge/PhpUnit/bootstrap.php':[
-16,
+"Symfony:Bridge/PhpUnit/bootstrap.php": [
+16
 ],
-'Symfony:Bridge/Twig/Extension/FormExtension.php':[
+"Symfony:Bridge/Twig/Extension/FormExtension.php": [
 182,
 194,
-202,
+202
 ],
-'Symfony:Bundle/FrameworkBundle/Resources/bin/check-unused-known-tags.php':[
+"Symfony:Bundle/FrameworkBundle/Resources/bin/check-unused-known-tags.php": [
 20,
-21,
+21
 ],
-'Symfony:Bundle/SecurityBundle/Tests/DependencyInjection/Fixtures/php/firewall_provider.php':[
-6,
+"Symfony:Bundle/SecurityBundle/Tests/DependencyInjection/Fixtures/php/firewall_provider.php": [
+6
 ],
-'Symfony:Component/Clock/Resources/now.php':[
-20,
+"Symfony:Component/Clock/Resources/now.php": [
+20
 ],
-'Symfony:Component/Console/Tests/Command/CommandTest.php':[
-504,
+"Symfony:Component/Console/Tests/Command/CommandTest.php": [
+504
 ],
-'Symfony:Component/Console/Tests/Fixtures/application_signalable.php':[
-9,
+"Symfony:Component/Console/Tests/Fixtures/application_signalable.php": [
+9
 ],
-'Symfony:Component/DependencyInjection/Loader/Configurator/ContainerConfigurator.php':[
+"Symfony:Component/DependencyInjection/Loader/Configurator/ContainerConfigurator.php": [
 98,
 106,
 114,
@@ -92,168 +92,168 @@
 172,
 180,
 188,
-196,
+196
 ],
-'Symfony:Component/DependencyInjection/Tests/Exception/InvalidParameterTypeExceptionTest.php':[
-50,
+"Symfony:Component/DependencyInjection/Tests/Exception/InvalidParameterTypeExceptionTest.php": [
+50
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/FactoryDummy.php':[
-41,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/FactoryDummy.php": [
+41
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container10.php':[
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container10.php": [
+8
+],
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container11.php": [
+6
+],
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container12.php": [
+5
+],
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container13.php": [
+6
+],
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container15.php": [
+5
+],
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container16.php": [
+5
+],
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container17.php": [
+5
+],
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container19.php": [
 8,
+19
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container11.php':[
-6,
-],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container12.php':[
-5,
-],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container13.php':[
-6,
-],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container15.php':[
-5,
-],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container16.php':[
-5,
-],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container17.php':[
-5,
-],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container19.php':[
-8,
-19,
-],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container21.php':[
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container21.php": [
 6,
 8,
-11,
+11
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container24.php':[
-5,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container24.php": [
+5
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container33.php':[
-7,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container33.php": [
+7
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container34.php':[
-6,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container34.php": [
+6
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container8.php':[
-6,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container8.php": [
+6
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container9.php':[
-15,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container9.php": [
+15
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_abstract.php':[
-5,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_abstract.php": [
+5
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_almost_circular.php':[
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_almost_circular.php": [
 10,
-11,
+11
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_deprecated_parameters.php':[
-5,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_deprecated_parameters.php": [
+5
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_env_in_id.php':[
-8,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_env_in_id.php": [
+8
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_inline_requires.php':[
-12,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_inline_requires.php": [
+12
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_non_scalar_tags.php':[
-9,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_non_scalar_tags.php": [
+9
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_service_locator_argument.php':[
-7,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_service_locator_argument.php": [
+7
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_uninitialized_ref.php':[
-8,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/containers/container_uninitialized_ref.php": [
+8
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/includes/classes.php':[
-6,
+"Symfony:Component/DependencyInjection/Tests/Fixtures/includes/classes.php": [
+6
 ],
-'Symfony:Component/DependencyInjection/Tests/Fixtures/includes/createphar.php':[
+"Symfony:Component/DependencyInjection/Tests/Fixtures/includes/createphar.php": [
 3,
-8,
+8
 ],
-'Symfony:Component/ErrorHandler/Resources/bin/extract-tentative-return-types.php':[
+"Symfony:Component/ErrorHandler/Resources/bin/extract-tentative-return-types.php": [
 47,
 48,
 60,
 60,
-61,
+61
 ],
-'Symfony:Component/ErrorHandler/Resources/views/exception.html.php':[
+"Symfony:Component/ErrorHandler/Resources/views/exception.html.php": [
 31,
 32,
 33,
-34,
+34
 ],
-'Symfony:Component/ErrorHandler/Resources/views/exception_full.html.php':[
-1,
+"Symfony:Component/ErrorHandler/Resources/views/exception_full.html.php": [
+1
 ],
-'Symfony:Component/ErrorHandler/Resources/views/logs.html.php':[
+"Symfony:Component/ErrorHandler/Resources/views/logs.html.php": [
 2,
 15,
 19,
-20,
+20
 ],
-'Symfony:Component/ErrorHandler/Resources/views/trace.html.php':[
+"Symfony:Component/ErrorHandler/Resources/views/trace.html.php": [
 13,
 14,
 15,
-16,
+16
 ],
-'Symfony:Component/ErrorHandler/Resources/views/traces.html.php':[
+"Symfony:Component/ErrorHandler/Resources/views/traces.html.php": [
 8,
 11,
 12,
 40,
 42,
-43,
+43
 ],
-'Symfony:Component/ErrorHandler/Resources/views/traces_text.html.php':[
-9,
+"Symfony:Component/ErrorHandler/Resources/views/traces_text.html.php": [
+9
 ],
-'Symfony:Component/ErrorHandler/Tests/ErrorEnhancer/UndefinedFunctionErrorEnhancerTest.php':[
-60,
+"Symfony:Component/ErrorHandler/Tests/ErrorEnhancer/UndefinedFunctionErrorEnhancerTest.php": [
+60
 ],
-'Symfony:Component/ErrorHandler/Tests/HeaderMock.php':[
+"Symfony:Component/ErrorHandler/Tests/HeaderMock.php": [
 14,
 19,
-26,
+26
 ],
-'Symfony:Component/ExpressionLanguage/Resources/bin/generate_operator_regex.php':[
+"Symfony:Component/ExpressionLanguage/Resources/bin/generate_operator_regex.php": [
 16,
-20,
+20
 ],
-'Symfony:Component/ExpressionLanguage/Tests/ExpressionFunctionTest.php':[
-39,
+"Symfony:Component/ExpressionLanguage/Tests/ExpressionFunctionTest.php": [
+39
 ],
-'Symfony:Component/ExpressionLanguage/Tests/Fixtures/TestProvider.php':[
-33,
+"Symfony:Component/ExpressionLanguage/Tests/Fixtures/TestProvider.php": [
+33
 ],
-'Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/common.inc':[
+"Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/common.inc": [
 5,
-40,
+40
 ],
-'Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_raw_urlencode.php':[
+"Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_raw_urlencode.php": [
+5,
+7
+],
+"Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_samesite_lax.php": [
+5
+],
+"Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_samesite_strict.php": [
+5
+],
+"Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_urlencode.php": [
 5,
 7,
+10
 ],
-'Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_samesite_lax.php':[
-5,
-],
-'Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_samesite_strict.php':[
-5,
-],
-'Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_urlencode.php':[
-5,
-7,
-10,
-],
-'Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/deleted_cookie.php':[
+"Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/deleted_cookie.php": [
 15,
 17,
 19,
@@ -263,49 +263,49 @@
 30,
 34,
 36,
-54,
+54
 ],
-'Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/invalid_cookie_name.php':[
-5,
+"Symfony:Component/HttpFoundation/Tests/Fixtures/response-functional/invalid_cookie_name.php": [
+5
 ],
-'Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/common.inc':[
-5,
+"Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/common.inc": [
+5
 ],
-'Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/invalid_regenerate.php':[
+"Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/invalid_regenerate.php": [
 8,
-11,
+11
 ],
-'Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/storage.php':[
+"Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/storage.php": [
 8,
-10,
+10
 ],
-'Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/with_samesite.php':[
-7,
+"Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/with_samesite.php": [
+7
 ],
-'Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/with_samesite_and_migration.php':[
-7,
+"Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/with_samesite_and_migration.php": [
+7
 ],
-'Symfony:Component/HttpKernel/Tests/Controller/ArgumentResolverTest.php':[
-394,
+"Symfony:Component/HttpKernel/Tests/Controller/ArgumentResolverTest.php": [
+394
 ],
-'Symfony:Component/HttpKernel/Tests/Controller/ControllerResolverTest.php':[
-194,
+"Symfony:Component/HttpKernel/Tests/Controller/ControllerResolverTest.php": [
+194
 ],
-'Symfony:Component/HttpKernel/Tests/HttpKernelTest.php':[
-524,
+"Symfony:Component/HttpKernel/Tests/HttpKernelTest.php": [
+524
 ],
-'Symfony:Component/Intl/Resources/bin/autoload.php':[
-12,
+"Symfony:Component/Intl/Resources/bin/autoload.php": [
+12
 ],
-'Symfony:Component/Intl/Resources/bin/common.php':[
+"Symfony:Component/Intl/Resources/bin/common.php": [
 20,
 30,
 40,
 47,
 54,
-69,
+69
 ],
-'Symfony:Component/Intl/Resources/bin/update-data.php':[
+"Symfony:Component/Intl/Resources/bin/update-data.php": [
 33,
 34,
 67,
@@ -324,63 +324,63 @@
 182,
 212,
 223,
-229,
+229
 ],
-'Symfony:Component/Intl/Resources/emoji/build.php':[
-20,
+"Symfony:Component/Intl/Resources/emoji/build.php": [
+20
 ],
-'Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/clicks.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/clicks.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/delivered_messages.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/delivered_messages.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/opens.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/opens.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/permanent_failure.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/permanent_failure.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/spam_complaints.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/spam_complaints.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/temporary_failure.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/temporary_failure.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/unsubscribes.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Mailgun/Tests/Webhook/Fixtures/unsubscribes.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/bounce.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/bounce.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/delivery.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/delivery.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/link_click.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/link_click.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/open.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/open.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/spam_complaint.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/spam_complaint.php": [
+5
 ],
-'Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/subscription_change.php':[
-5,
+"Symfony:Component/Mailer/Bridge/Postmark/Tests/Webhook/Fixtures/subscription_change.php": [
+5
 ],
-'Symfony:Component/Mailer/Tests/Transport/Fixtures/fake-sendmail.php':[
-3,
+"Symfony:Component/Mailer/Tests/Transport/Fixtures/fake-sendmail.php": [
+3
 ],
-'Symfony:Component/Messenger/Bridge/Amqp/Tests/Fixtures/long_receiver.php':[
+"Symfony:Component/Messenger/Bridge/Amqp/Tests/Fixtures/long_receiver.php": [
 3,
 5,
 29,
 33,
 34,
 35,
-39,
+39
 ],
-'Symfony:Component/Mime/Resources/bin/update_mime_types.php':[
+"Symfony:Component/Mime/Resources/bin/update_mime_types.php": [
 17,
 18,
 26,
@@ -393,24 +393,24 @@
 54,
 113,
 145,
-146,
+146
 ],
-'Symfony:Component/Notifier/Bridge/Twilio/Tests/Webhook/Fixtures/delivered.php':[
-6,
+"Symfony:Component/Notifier/Bridge/Twilio/Tests/Webhook/Fixtures/delivered.php": [
+6
 ],
-'Symfony:Component/Process/Tests/ErrorProcessInitiator.php':[
-22,
+"Symfony:Component/Process/Tests/ErrorProcessInitiator.php": [
+22
 ],
-'Symfony:Component/Process/Tests/KillableProcessWithOutput.php':[
+"Symfony:Component/Process/Tests/KillableProcessWithOutput.php": [
 12,
-19,
+19
 ],
-'Symfony:Component/Process/Tests/NonStopableProcess.php':[
+"Symfony:Component/Process/Tests/NonStopableProcess.php": [
 19,
 35,
-36,
+36
 ],
-'Symfony:Component/Process/Tests/PipeStdinInStdoutStdErrStreamSelect.php':[
+"Symfony:Component/Process/Tests/PipeStdinInStdoutStdErrStreamSelect.php": [
 17,
 18,
 24,
@@ -420,36 +420,36 @@
 28,
 29,
 38,
-60,
+60
 ],
-'Symfony:Component/Process/Tests/SignalListener.php':[
-16,
+"Symfony:Component/Process/Tests/SignalListener.php": [
+16
 ],
-'Symfony:Component/Routing/Tests/Fixtures/validpattern.php':[
-6,
+"Symfony:Component/Routing/Tests/Fixtures/validpattern.php": [
+6
 ],
-'Symfony:Component/Routing/Tests/Fixtures/validresource.php':[
-5,
+"Symfony:Component/Routing/Tests/Fixtures/validresource.php": [
+5
 ],
-'Symfony:Component/Routing/Tests/Fixtures/with_define_path_variable.php':[
-3,
+"Symfony:Component/Routing/Tests/Fixtures/with_define_path_variable.php": [
+3
 ],
-'Symfony:Component/Runtime/Tests/phpt/autoload.php':[
+"Symfony:Component/Runtime/Tests/phpt/autoload.php": [
 24,
-25,
+25
 ],
-'Symfony:Component/Runtime/Tests/phpt/kernel-loop.php':[
-19,
+"Symfony:Component/Runtime/Tests/phpt/kernel-loop.php": [
+19
 ],
-'Symfony:Component/String/Resources/bin/update-data.php':[
-45,
+"Symfony:Component/String/Resources/bin/update-data.php": [
+45
 ],
-'Symfony:Component/String/Resources/functions.php':[
+"Symfony:Component/String/Resources/functions.php": [
 15,
 22,
-32,
+32
 ],
-'Symfony:Component/Translation/Resources/bin/translation-status.php':[
+"Symfony:Component/Translation/Resources/bin/translation-status.php": [
 16,
 40,
 55,
@@ -469,150 +469,150 @@
 205,
 261,
 266,
-271,
+271
 ],
-'Symfony:Component/Translation/Resources/functions.php':[
-18,
+"Symfony:Component/Translation/Resources/functions.php": [
+18
 ],
-'Symfony:Component/Translation/Tests/fixtures/extractor-ast/translation.html.php':[
+"Symfony:Component/Translation/Tests/fixtures/extractor-ast/translation.html.php": [
 52,
 52,
-52,
+52
 ],
-'Symfony:Component/Validator/Resources/bin/sync-iban-formats.php':[
+"Symfony:Component/Validator/Resources/bin/sync-iban-formats.php": [
 32,
-47,
+47
 ],
-'Symfony:Component/Validator/Tests/Constraints/ChoiceValidatorTest.php':[
+"Symfony:Component/Validator/Tests/Constraints/ChoiceValidatorTest.php": [
+20
+],
+"Symfony:Component/VarDumper/Dumper/HtmlDumper.php": [
+991
+],
+"Symfony:Component/VarDumper/Resources/functions/dump.php": [
 20,
+46
 ],
-'Symfony:Component/VarDumper/Dumper/HtmlDumper.php':[
-991,
+"Symfony:Component/VarDumper/Tests/Caster/ReflectionCasterTest.php": [
+653
 ],
-'Symfony:Component/VarDumper/Resources/functions/dump.php':[
-20,
-46,
+"Symfony:Component/VarDumper/Tests/Fixtures/GeneratorDemo.php": [
+18
 ],
-'Symfony:Component/VarDumper/Tests/Caster/ReflectionCasterTest.php':[
-653,
-],
-'Symfony:Component/VarDumper/Tests/Fixtures/GeneratorDemo.php':[
-18,
-],
-'Symfony:Component/VarDumper/Tests/Fixtures/dumb-var.php':[
+"Symfony:Component/VarDumper/Tests/Fixtures/dumb-var.php": [
 22,
 25,
 27,
-39,
+39
 ],
-'Symfony:Component/VarDumper/Tests/Fixtures/dump_server.php':[
+"Symfony:Component/VarDumper/Tests/Fixtures/dump_server.php": [
 9,
 11,
 17,
 20,
-28,
+28
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/__unserialize-but-no-__serialize.php':[
+"Symfony:Component/VarExporter/Tests/Fixtures/__unserialize-but-no-__serialize.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/abstract-parent.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/array-iterator-legacy.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/array-iterator.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/array-object-custom-legacy.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/array-object-custom.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/array-object-legacy.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/array-object.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/clone.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/datetime-legacy.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/datetime.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/error.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/final-array-iterator-legacy.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/final-array-iterator.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/final-error-legacy.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/final-error.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/final-stdclass.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/foo-serializable.php": [
+4
+],
+"Symfony:Component/VarExporter/Tests/Fixtures/hard-references-recursive.php": [
 4,
+6
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/abstract-parent.php':[
+"Symfony:Component/VarExporter/Tests/Fixtures/hard-references.php": [
 4,
+8
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/array-iterator-legacy.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/incomplete-class.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/array-iterator.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/php74-serializable.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/array-object-custom-legacy.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/private-constructor.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/array-object-custom.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/private.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/array-object-legacy.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/readonly.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/array-object.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/serializable.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/clone.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/spl-object-storage-legacy.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/datetime-legacy.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/spl-object-storage.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/datetime.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/var-on-sleep.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/error.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/wakeup-refl.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/final-array-iterator-legacy.php':[
-4,
+"Symfony:Component/VarExporter/Tests/Fixtures/wakeup.php": [
+4
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/final-array-iterator.php':[
-4,
+"Symfony:Contracts/Deprecation/function.php": [
+23
 ],
-'Symfony:Component/VarExporter/Tests/Fixtures/final-error-legacy.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/final-error.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/final-stdclass.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/foo-serializable.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/hard-references-recursive.php':[
-4,
-6,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/hard-references.php':[
-4,
-8,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/incomplete-class.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/php74-serializable.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/private-constructor.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/private.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/readonly.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/serializable.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/spl-object-storage-legacy.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/spl-object-storage.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/var-on-sleep.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/wakeup-refl.php':[
-4,
-],
-'Symfony:Component/VarExporter/Tests/Fixtures/wakeup.php':[
-4,
-],
-'Symfony:Contracts/Deprecation/function.php':[
-23,
-],
-'Symfony:Contracts/HttpClient/Test/Fixtures/web/index.php':[
+"Symfony:Contracts/HttpClient/Test/Fixtures/web/index.php": [
 8,
 32,
-120,
-],
+120
+]
 }

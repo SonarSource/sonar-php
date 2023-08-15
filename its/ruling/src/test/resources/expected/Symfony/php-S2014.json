@@ -1,9 +1,9 @@
 {
-'Symfony:Component/DependencyInjection/Tests/Compiler/RegisterServiceSubscribersPassTest.php':[
+"Symfony:Component/DependencyInjection/Tests/Compiler/RegisterServiceSubscribersPassTest.php": [
 269,
 400,
 409,
 455,
-468,
-],
+468
+]
 }

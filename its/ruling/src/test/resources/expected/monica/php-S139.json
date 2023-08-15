@@ -1,5 +1,5 @@
 {
-'monica:app/Console/Commands/ImportCSV.php':[
+"monica:app/Console/Commands/ImportCSV.php": [
 127,
 131,
 135,
@@ -7,27 +7,27 @@
 145,
 150,
 155,
-159,
+159
 ],
-'monica:app/Helpers/TimezoneHelper.php':[
-102,
+"monica:app/Helpers/TimezoneHelper.php": [
+102
 ],
-'monica:app/Providers/DAVServiceProvider.php':[
-69,
+"monica:app/Providers/DAVServiceProvider.php": [
+69
 ],
-'monica:app/Services/Instance/IdHasher.php':[
-39,
+"monica:app/Services/Instance/IdHasher.php": [
+39
 ],
-'monica:config/google2fa.php':[
-15,
+"monica:config/google2fa.php": [
+15
 ],
-'monica:database/migrations/2020_03_25_065551_add_addressbook_subscription.php':[
-31,
+"monica:database/migrations/2020_03_25_065551_add_addressbook_subscription.php": [
+31
 ],
-'monica:tests/Browser/Auth/AuthControllerTest.php':[
-193,
+"monica:tests/Browser/Auth/AuthControllerTest.php": [
+193
 ],
-'monica:tests/Unit/Helpers/MoneyHelperTest.php':[
-50,
-],
+"monica:tests/Unit/Helpers/MoneyHelperTest.php": [
+50
+]
 }

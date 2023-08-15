@@ -1,8 +1,8 @@
 {
-'PHPWord:src/PhpWord/Media.php':[
-67,
+"PHPWord:src/PhpWord/Media.php": [
+67
 ],
-'PHPWord:src/PhpWord/Reader/MsDoc.php':[
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
 1534,
 1629,
 1651,
@@ -14,23 +14,23 @@
 1935,
 1957,
 2208,
-2246,
+2246
 ],
-'PHPWord:src/PhpWord/Reader/ODText/Content.php':[
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
 53,
-98,
+98
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/Styles.php':[
-73,
+"PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
+73
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
+"PHPWord:src/PhpWord/Shared/Html.php": [
 727,
 803,
 825,
 900,
-906,
+906
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 1429,
 1468,
 1485,
@@ -41,6 +41,6 @@
 1700,
 1842,
 1859,
-1875,
-],
+1875
+]
 }

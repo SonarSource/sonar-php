@@ -1,10 +1,10 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
 3347,
 3390,
-3704,
+3704
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Database.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Database.php": [
 41,
 79,
 113,
@@ -16,9 +16,9 @@
 322,
 356,
 391,
-426,
+426
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTime.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTime.php": [
 69,
 95,
 154,
@@ -41,9 +41,9 @@
 806,
 829,
 858,
-886,
+886
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering.php": [
 45,
 70,
 96,
@@ -96,37 +96,37 @@
 1269,
 1290,
 1316,
-1421,
+1421
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselI.php':[
-38,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselI.php": [
+38
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselJ.php':[
-37,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselJ.php": [
+37
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselK.php':[
-36,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselK.php": [
+36
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselY.php':[
-34,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselY.php": [
+34
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BitWise.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BitWise.php": [
 45,
 80,
 116,
 152,
-190,
+190
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Compare.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Compare.php": [
 32,
-67,
+67
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Complex.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Complex.php": [
 35,
 77,
-107,
+107
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ComplexFunctions.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ComplexFunctions.php": [
 29,
 60,
 94,
@@ -145,25 +145,25 @@
 493,
 527,
 561,
-593,
+593
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ComplexOperations.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ComplexOperations.php": [
 32,
 62,
 87,
-117,
+117
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ConvertUOM.php':[
-536,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ConvertUOM.php": [
+536
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Erf.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Erf.php": [
 38,
-71,
+71
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ErfC.php':[
-33,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ErfC.php": [
+33
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial.php": [
 59,
 107,
 146,
@@ -210,27 +210,27 @@
 1293,
 1324,
 1354,
-1385,
+1385
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Amortization.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Amortization.php": [
 42,
-131,
+131
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Coupons.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Coupons.php": [
 45,
 108,
 179,
 245,
 300,
-361,
+361
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Depreciation.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Depreciation.php": [
 39,
 105,
 153,
-186,
+186
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php": [
 128,
 238,
 253,
@@ -238,32 +238,32 @@
 287,
 302,
 315,
-527,
+527
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Information/ExcelError.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Information/ExcelError.php": [
 95,
 107,
 123,
 135,
 147,
 157,
-167,
+167
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical.php": [
 162,
 255,
 275,
-299,
+299
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical/Conditional.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical/Conditional.php": [
 135,
 162,
-190,
+190
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical/Operations.php':[
-119,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical/Operations.php": [
+119
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef.php": [
 73,
 95,
 121,
@@ -278,24 +278,24 @@
 340,
 362,
 381,
-398,
+398
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/ExcelMatch.php':[
-35,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/ExcelMatch.php": [
+35
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Indirect.php':[
-66,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Indirect.php": [
+66
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Offset.php':[
-44,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Offset.php": [
+44
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/RowColumnInformation.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/RowColumnInformation.php": [
 45,
 96,
 138,
-190,
+190
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig.php": [
 26,
 56,
 79,
@@ -344,9 +344,9 @@
 992,
 1010,
 1028,
-1062,
+1062
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical.php": [
 43,
 64,
 85,
@@ -427,9 +427,9 @@
 1669,
 1690,
 1712,
-1735,
+1735
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Conditional.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Conditional.php": [
 33,
 56,
 88,
@@ -437,33 +437,33 @@
 142,
 166,
 192,
-212,
+212
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Confidence.php':[
-30,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Confidence.php": [
+30
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Counts.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Counts.php": [
 22,
 53,
-81,
+81
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Percentiles.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Percentiles.php": [
 27,
 77,
 128,
-159,
+159
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Permutations.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Permutations.php": [
 33,
-78,
+78
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/StandardDeviations.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/StandardDeviations.php": [
 20,
 42,
 64,
-86,
+86
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Trends.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Trends.php": [
 70,
 98,
 127,
@@ -474,15 +474,15 @@
 341,
 365,
 389,
-415,
+415
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Variances.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Variances.php": [
 22,
 64,
 110,
-153,
+153
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData.php": [
 23,
 39,
 55,
@@ -506,49 +506,49 @@
 372,
 390,
 409,
-427,
+427
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Concatenate.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Concatenate.php": [
 21,
-59,
+59
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Format.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Format.php": [
 39,
 81,
 122,
 167,
-273,
+273
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Web.php':[
-26,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Web.php": [
+26
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php':[
-7683,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
+7683
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/RC4.php':[
-46,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/RC4.php": [
+46
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/Date.php':[
-268,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Date.php": [
+268
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/Drawing.php':[
-30,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Drawing.php": [
+30
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php':[
-545,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
+545
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/ChainedBlockStream.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/ChainedBlockStream.php": [
 49,
 104,
 117,
 133,
 144,
 157,
-179,
+179
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
 381,
 413,
-651,
-],
+651
+]
 }

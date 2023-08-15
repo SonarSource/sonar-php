@@ -1,7 +1,7 @@
 {
-'Symfony:Component/EventDispatcher/Tests/EventDispatcherTest.php':[
+"Symfony:Component/EventDispatcher/Tests/EventDispatcherTest.php": [
 22,
 23,
-24,
-],
+24
+]
 }

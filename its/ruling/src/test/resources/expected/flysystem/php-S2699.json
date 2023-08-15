@@ -1,17 +1,17 @@
 {
-'flysystem:src/AsyncAwsS3/AsyncAwsS3AdapterTest.php':[
-200,
+"flysystem:src/AsyncAwsS3/AsyncAwsS3AdapterTest.php": [
+200
 ],
-'flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php':[
-216,
+"flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
+216
 ],
-'flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapterTest.php':[
-122,
+"flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapterTest.php": [
+122
 ],
-'flysystem:src/InMemory/InMemoryFilesystemAdapterTest.php':[
-269,
+"flysystem:src/InMemory/InMemoryFilesystemAdapterTest.php": [
+269
 ],
-'flysystem:src/Local/LocalFilesystemAdapterTest.php':[
-588,
-],
+"flysystem:src/Local/LocalFilesystemAdapterTest.php": [
+588
+]
 }

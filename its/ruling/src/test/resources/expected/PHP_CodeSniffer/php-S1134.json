@@ -1,9 +1,9 @@
 {
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/FixmeSniff.php':[
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/FixmeSniff.php": [
 3,
-61,
+61
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/FixmeUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/FixmeUnitTest.inc": [
 3,
 4,
 7,
@@ -12,9 +12,9 @@
 16,
 18,
 21,
-23,
+23
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/FixmeUnitTest.php':[
-3,
-],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/FixmeUnitTest.php": [
+3
+]
 }

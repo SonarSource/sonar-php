@@ -1,6 +1,6 @@
 {
-'Symfony:Bundle/FrameworkBundle/Tests/CacheWarmer/RouterCacheWarmerTest.php':[
+"Symfony:Bundle/FrameworkBundle/Tests/CacheWarmer/RouterCacheWarmerTest.php": [
 48,
-52,
-],
+52
+]
 }

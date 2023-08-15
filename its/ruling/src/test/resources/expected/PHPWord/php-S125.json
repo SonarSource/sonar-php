@@ -1,16 +1,16 @@
 {
-'PHPWord:samples/Sample_07_TemplateCloneRow.php':[
+"PHPWord:samples/Sample_07_TemplateCloneRow.php": [
 66,
 71,
-76,
+76
 ],
-'PHPWord:samples/Sample_40_TemplateSetComplexValue.php':[
-37,
+"PHPWord:samples/Sample_40_TemplateSetComplexValue.php": [
+37
 ],
-'PHPWord:src/PhpWord/Reader/AbstractReader.php':[
-52,
+"PHPWord:src/PhpWord/Reader/AbstractReader.php": [
+52
 ],
-'PHPWord:src/PhpWord/Reader/MsDoc.php':[
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
 195,
 217,
 1286,
@@ -32,22 +32,22 @@
 2350,
 2358,
 2371,
-2379,
+2379
 ],
-'PHPWord:src/PhpWord/Reader/ODText/Content.php':[
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
 46,
-93,
+93
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php':[
-281,
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+281
 ],
-'PHPWord:src/PhpWord/Reader/Word2007/Styles.php':[
-71,
+"PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
+71
 ],
-'PHPWord:src/PhpWord/Shared/Drawing.php':[
-108,
+"PHPWord:src/PhpWord/Shared/Drawing.php": [
+108
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 698,
 853,
 1793,
@@ -58,39 +58,39 @@
 3790,
 3823,
 4255,
-4351,
+4351
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
-735,
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+735
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Element/Table.php':[
-47,
+"PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
+47
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php':[
-98,
+"PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php": [
+98
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Style/Table.php':[
+"PHPWord:src/PhpWord/Writer/ODText/Style/Table.php": [
+43
+],
+"PHPWord:tests/PhpWordTests/Element/TOCTest.php": [
+59
+],
+"PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
 43,
+58
 ],
-'PHPWord:tests/PhpWordTests/Element/TOCTest.php':[
-59,
+"PHPWord:tests/PhpWordTests/Writer/ODText/ElementTest.php": [
+312
 ],
-'PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php':[
-43,
-58,
+"PHPWord:tests/PhpWordTests/Writer/RTF/StyleTest.php": [
+137
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/ElementTest.php':[
-312,
-],
-'PHPWord:tests/PhpWordTests/Writer/RTF/StyleTest.php':[
-137,
-],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
 62,
-462,
+462
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/SettingsTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/SettingsTest.php": [
 92,
-104,
-],
+104
+]
 }

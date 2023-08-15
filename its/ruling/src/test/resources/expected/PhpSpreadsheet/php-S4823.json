@@ -1,18 +1,18 @@
 {
-'PhpSpreadsheet:samples/Chart/32_Chart_read_write.php':[
-13,
+"PhpSpreadsheet:samples/Chart/32_Chart_read_write.php": [
+13
 ],
-'PhpSpreadsheet:samples/Chart/32_Chart_read_write_HTML.php':[
-18,
+"PhpSpreadsheet:samples/Chart/32_Chart_read_write_HTML.php": [
+18
 ],
-'PhpSpreadsheet:samples/Chart/32_Chart_read_write_PDF.php':[
-20,
+"PhpSpreadsheet:samples/Chart/32_Chart_read_write_PDF.php": [
+20
 ],
-'PhpSpreadsheet:samples/Chart/35_Chart_render.php':[
-19,
+"PhpSpreadsheet:samples/Chart/35_Chart_render.php": [
+19
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/SampleTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/SampleTest.php": [
 33,
-34,
-],
+34
+]
 }

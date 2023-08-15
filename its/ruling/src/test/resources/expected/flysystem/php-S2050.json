@@ -1,6 +1,6 @@
 {
-'flysystem:src/AdapterTestUtilities/ExceptionThrowingFilesystemAdapter.php':[
+"flysystem:src/AdapterTestUtilities/ExceptionThrowingFilesystemAdapter.php": [
 31,
-37,
-],
+37
+]
 }

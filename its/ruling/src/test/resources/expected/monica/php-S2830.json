@@ -1,8 +1,8 @@
 {
-'monica:app/Http/Controllers/Api/ApiController.php':[
-38,
+"monica:app/Http/Controllers/Api/ApiController.php": [
+38
 ],
-'monica:app/Services/User/CreateUser.php':[
-66,
-],
+"monica:app/Services/User/CreateUser.php": [
+66
+]
 }

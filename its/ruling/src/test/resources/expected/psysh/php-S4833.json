@@ -1,11 +1,11 @@
 {
-'psysh:src/Configuration.php':[
-510,
+"psysh:src/Configuration.php": [
+510
 ],
-'psysh:src/Shell.php':[
-473,
+"psysh:src/Shell.php": [
+473
 ],
-'psysh:test/Command/ListCommand/FunctionEnumeratorTest.php':[
-18,
-],
+"psysh:test/Command/ListCommand/FunctionEnumeratorTest.php": [
+18
+]
 }

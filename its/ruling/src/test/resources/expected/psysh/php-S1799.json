@@ -1,5 +1,5 @@
 {
-'psysh:src/functions.php':[
+"psysh:src/functions.php": [
 347,
 352,
 357,
@@ -8,6 +8,6 @@
 435,
 441,
 448,
-452,
-],
+452
+]
 }

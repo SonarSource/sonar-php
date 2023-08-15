@@ -1,71 +1,71 @@
 {
-'monica:app/ExportResources/ExportResource.php':[
-130,
+"monica:app/ExportResources/ExportResource.php": [
+130
 ],
-'monica:app/Helpers/DBHelper.php':[
+"monica:app/Helpers/DBHelper.php": [
 54,
-60,
+60
 ],
-'monica:app/Http/Controllers/Auth/PasswordChangeController.php':[
-34,
+"monica:app/Http/Controllers/Auth/PasswordChangeController.php": [
+34
 ],
-'monica:app/Http/Controllers/DashboardController.php':[
-25,
+"monica:app/Http/Controllers/DashboardController.php": [
+25
 ],
-'monica:app/Http/Controllers/Settings/ExportController.php':[
-116,
+"monica:app/Http/Controllers/Settings/ExportController.php": [
+116
 ],
-'monica:app/Listeners/LogoutUserDevices.php':[
-45,
+"monica:app/Listeners/LogoutUserDevices.php": [
+45
 ],
-'monica:app/Models/Contact/Document.php':[
-85,
+"monica:app/Models/Contact/Document.php": [
+85
 ],
-'monica:app/Models/Contact/Reminder.php':[
-136,
+"monica:app/Models/Contact/Reminder.php": [
+136
 ],
-'monica:app/Providers/AppServiceProvider.php':[
+"monica:app/Providers/AppServiceProvider.php": [
 48,
 52,
+56
+],
+"monica:app/Services/DavClient/Utils/AddressBookContactsPush.php": [
 56,
+107
 ],
-'monica:app/Services/DavClient/Utils/AddressBookContactsPush.php':[
-56,
-107,
+"monica:app/Services/DavClient/Utils/AddressBookContactsPushMissed.php": [
+64
 ],
-'monica:app/Services/DavClient/Utils/AddressBookContactsPushMissed.php':[
-64,
+"monica:app/Services/VCard/ExportVCard.php": [
+233
 ],
-'monica:app/Services/VCard/ExportVCard.php':[
-233,
-],
-'monica:database/migrations/2017_01_22_142645_add_fields_to_contacts.php':[
+"monica:database/migrations/2017_01_22_142645_add_fields_to_contacts.php": [
 25,
 35,
-49,
+49
 ],
-'monica:database/migrations/2017_01_28_193913_remove_deleted_at_from_notes.php':[
-18,
+"monica:database/migrations/2017_01_28_193913_remove_deleted_at_from_notes.php": [
+18
 ],
-'monica:database/migrations/2017_02_04_225618_change_reminders_table.php':[
-18,
+"monica:database/migrations/2017_02_04_225618_change_reminders_table.php": [
+18
 ],
-'monica:database/migrations/2017_02_05_035925_add_gifts_metrics_to_contacts.php':[
-32,
+"monica:database/migrations/2017_02_05_035925_add_gifts_metrics_to_contacts.php": [
+32
 ],
-'monica:database/migrations/2017_02_07_041607_change_tasks_table.php':[
-18,
+"monica:database/migrations/2017_02_07_041607_change_tasks_table.php": [
+18
 ],
-'monica:database/migrations/2017_02_08_002251_change_number_tasks_contact.php':[
-37,
+"monica:database/migrations/2017_02_08_002251_change_number_tasks_contact.php": [
+37
 ],
-'monica:database/migrations/2017_02_11_154900_add_avatars_to_contacts.php':[
-31,
+"monica:database/migrations/2017_02_11_154900_add_avatars_to_contacts.php": [
+31
 ],
-'monica:database/migrations/2017_07_26_220021_change_contacts_table.php':[
-22,
+"monica:database/migrations/2017_07_26_220021_change_contacts_table.php": [
+22
 ],
-'monica:tests/Api/DAV/CalDAVBirthdaysTest.php':[
+"monica:tests/Api/DAV/CalDAVBirthdaysTest.php": [
 41,
 55,
 65,
@@ -80,9 +80,9 @@
 243,
 256,
 281,
-292,
+292
 ],
-'monica:tests/Api/DAV/CalDAVTasksTest.php':[
+"monica:tests/Api/DAV/CalDAVTasksTest.php": [
 42,
 56,
 66,
@@ -97,9 +97,9 @@
 249,
 265,
 290,
-301,
+301
 ],
-'monica:tests/Api/DAV/CardDAVTest.php':[
+"monica:tests/Api/DAV/CardDAVTest.php": [
 71,
 85,
 95,
@@ -123,17 +123,17 @@
 396,
 419,
 443,
-453,
+453
 ],
-'monica:tests/Api/DAV/DAVServerTest.php':[
+"monica:tests/Api/DAV/DAVServerTest.php": [
 82,
 99,
 114,
 124,
 145,
-155,
+155
 ],
-'monica:tests/Api/DAV/VCardContactTest.php':[
+"monica:tests/Api/DAV/VCardContactTest.php": [
 46,
 73,
 115,
@@ -156,9 +156,9 @@
 446,
 456,
 458,
-468,
+468
 ],
-'monica:tests/Api/DAV/VEventBirthdayTest.php':[
+"monica:tests/Api/DAV/VEventBirthdayTest.php": [
 46,
 65,
 76,
@@ -166,9 +166,9 @@
 114,
 124,
 126,
-136,
+136
 ],
-'monica:tests/Api/DAV/VTodoTaskTest.php':[
+"monica:tests/Api/DAV/VTodoTaskTest.php": [
 47,
 83,
 118,
@@ -179,17 +179,17 @@
 220,
 230,
 232,
-242,
+242
 ],
-'monica:tests/Browser/Auth/AuthControllerTest.php':[
+"monica:tests/Browser/Auth/AuthControllerTest.php": [
 41,
 78,
-134,
+134
 ],
-'monica:tests/DuskTestCase.php':[
-60,
+"monica:tests/DuskTestCase.php": [
+60
 ],
-'monica:tests/Feature/ContactTest.php':[
+"monica:tests/Feature/ContactTest.php": [
 367,
 371,
 391,
@@ -197,9 +197,9 @@
 537,
 542,
 560,
-565,
+565
 ],
-'monica:tests/Helpers/DavTester.php':[
+"monica:tests/Helpers/DavTester.php": [
 141,
 158,
 173,
@@ -216,44 +216,44 @@
 320,
 332,
 337,
-355,
+355
 ],
-'monica:tests/Unit/Jobs/ScheduleStayInTouchTest.php':[
-43,
+"monica:tests/Unit/Jobs/ScheduleStayInTouchTest.php": [
+43
 ],
-'monica:tests/Unit/Models/ContactTest.php':[
-1013,
+"monica:tests/Unit/Models/ContactTest.php": [
+1013
 ],
-'monica:tests/Unit/Models/PetCategoryTest.php':[
+"monica:tests/Unit/Models/PetCategoryTest.php": [
 19,
-31,
+31
 ],
-'monica:tests/Unit/Models/UserTest.php':[
-438,
+"monica:tests/Unit/Models/UserTest.php": [
+438
 ],
-'monica:tests/Unit/Services/Account/Settings/ExportAccountTest.php':[
+"monica:tests/Unit/Services/Account/Settings/ExportAccountTest.php": [
 49,
-82,
+82
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushMissedTest.php':[
-75,
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushMissedTest.php": [
+75
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushTest.php": [
 74,
 78,
 138,
-142,
+142
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterMissedTest.php':[
-67,
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterMissedTest.php": [
+67
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterTest.php": [
 63,
 90,
 160,
-198,
+198
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookSynchronizerTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookSynchronizerTest.php": [
 165,
 175,
 213,
@@ -261,9 +261,9 @@
 274,
 289,
 319,
-333,
+333
 ],
-'monica:tests/Unit/Services/DavClient/Utils/Dav/DavClientTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/Dav/DavClientTest.php": [
 129,
 144,
 161,
@@ -285,10 +285,10 @@
 434,
 434,
 450,
-458,
+458
 ],
-'monica:tests/Unit/Services/VCard/ImportVCardTest.php':[
+"monica:tests/Unit/Services/VCard/ImportVCardTest.php": [
 72,
-83,
-],
+83
+]
 }

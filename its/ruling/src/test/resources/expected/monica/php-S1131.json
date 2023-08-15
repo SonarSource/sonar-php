@@ -1,9 +1,9 @@
 {
-'monica:resources/lang/de/mail.php':[
-24,
+"monica:resources/lang/de/mail.php": [
+24
 ],
-'monica:resources/views/people/introductions/edit.blade.php':[
+"monica:resources/views/people/introductions/edit.blade.php": [
 67,
-81,
-],
+81
+]
 }

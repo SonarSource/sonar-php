@@ -1,5 +1,5 @@
 {
-'Symfony:Bridge/Twig/Tests/Command/DebugCommandTest.php':[
+"Symfony:Bridge/Twig/Tests/Command/DebugCommandTest.php": [
 141,
 191,
 193,
@@ -7,63 +7,63 @@
 243,
 244,
 245,
-248,
+248
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/Messenger/ReceivingConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/Messenger/ReceivingConfig.php": [
+11
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/Messenger/RoutingConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/Messenger/RoutingConfig.php": [
+11
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/MessengerConfig.php':[
-13,
+"Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/MessengerConfig.php": [
+13
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/Translator/Books/PageConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/Translator/Books/PageConfig.php": [
+11
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/Translator/BooksConfig.php':[
-12,
+"Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/Translator/BooksConfig.php": [
+12
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/TranslatorConfig.php':[
-13,
+"Symfony:Component/Config/Tests/Builder/Fixtures/AddToList/Symfony/Config/AddToList/TranslatorConfig.php": [
+13
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/ArrayExtraKeys/Symfony/Config/ArrayExtraKeys/BarConfig.php':[
-10,
+"Symfony:Component/Config/Tests/Builder/Fixtures/ArrayExtraKeys/Symfony/Config/ArrayExtraKeys/BarConfig.php": [
+10
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/ArrayExtraKeys/Symfony/Config/ArrayExtraKeys/BazConfig.php':[
-10,
+"Symfony:Component/Config/Tests/Builder/Fixtures/ArrayExtraKeys/Symfony/Config/ArrayExtraKeys/BazConfig.php": [
+10
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/ArrayExtraKeys/Symfony/Config/ArrayExtraKeys/FooConfig.php':[
-10,
+"Symfony:Component/Config/Tests/Builder/Fixtures/ArrayExtraKeys/Symfony/Config/ArrayExtraKeys/FooConfig.php": [
+10
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/NodeInitialValues/Symfony/Config/NodeInitialValues/Messenger/TransportsConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/NodeInitialValues/Symfony/Config/NodeInitialValues/Messenger/TransportsConfig.php": [
+11
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/NodeInitialValues/Symfony/Config/NodeInitialValues/MessengerConfig.php':[
-12,
+"Symfony:Component/Config/Tests/Builder/Fixtures/NodeInitialValues/Symfony/Config/NodeInitialValues/MessengerConfig.php": [
+12
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/NodeInitialValues/Symfony/Config/NodeInitialValues/SomeCleverNameConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/NodeInitialValues/Symfony/Config/NodeInitialValues/SomeCleverNameConfig.php": [
+11
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/KeyedListObjectConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/KeyedListObjectConfig.php": [
+11
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/ListObjectConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/ListObjectConfig.php": [
+11
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/Nested/NestedListObjectConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/Nested/NestedListObjectConfig.php": [
+11
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/Nested/NestedObjectConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/Nested/NestedObjectConfig.php": [
+11
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/NestedConfig.php':[
-13,
+"Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/NestedConfig.php": [
+13
 ],
-'Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/ObjectConfig.php':[
-11,
+"Symfony:Component/Config/Tests/Builder/Fixtures/ScalarNormalizedTypes/Symfony/Config/ScalarNormalizedTypes/ObjectConfig.php": [
+11
 ],
-'Symfony:Component/Console/Tests/Helper/TableTest.php':[
+"Symfony:Component/Console/Tests/Helper/TableTest.php": [
 122,
 123,
 124,
@@ -106,12 +106,12 @@
 1871,
 1872,
 1873,
-1874,
+1874
 ],
-'Symfony:Component/HttpClient/Tests/Chunk/ServerSentEventTest.php':[
-74,
+"Symfony:Component/HttpClient/Tests/Chunk/ServerSentEventTest.php": [
+74
 ],
-'Symfony:Component/Messenger/Tests/Command/DebugCommandTest.php':[
+"Symfony:Component/Messenger/Tests/Command/DebugCommandTest.php": [
 74,
 75,
 76,
@@ -135,9 +135,9 @@
 124,
 126,
 149,
-154,
+154
 ],
-'Symfony:Component/Messenger/Tests/Command/FailedMessagesShowCommandTest.php':[
+"Symfony:Component/Messenger/Tests/Command/FailedMessagesShowCommandTest.php": [
 74,
 75,
 76,
@@ -151,12 +151,12 @@
 119,
 120,
 121,
-122,
+122
 ],
-'Symfony:Component/Security/Http/Authenticator/Passport/Passport.php':[
-69,
+"Symfony:Component/Security/Http/Authenticator/Passport/Passport.php": [
+69
 ],
-'Symfony:Component/Uid/Tests/Command/InspectUlidCommandTest.php':[
+"Symfony:Component/Uid/Tests/Command/InspectUlidCommandTest.php": [
 34,
 35,
 36,
@@ -166,9 +166,9 @@
 40,
 41,
 42,
-43,
+43
 ],
-'Symfony:Component/Uid/Tests/Command/InspectUuidCommandTest.php':[
+"Symfony:Component/Uid/Tests/Command/InspectUuidCommandTest.php": [
 34,
 35,
 36,
@@ -282,12 +282,12 @@
 261,
 262,
 263,
-264,
+264
 ],
-'Symfony:Component/VarDumper/Tests/Caster/ReflectionCasterTest.php':[
-495,
+"Symfony:Component/VarDumper/Tests/Caster/ReflectionCasterTest.php": [
+495
 ],
-'Symfony:Component/VarDumper/Tests/Cloner/VarClonerTest.php':[
+"Symfony:Component/VarDumper/Tests/Cloner/VarClonerTest.php": [
 85,
 104,
 119,
@@ -299,9 +299,9 @@
 532,
 590,
 611,
-628,
+628
 ],
-'Symfony:Component/VarDumper/Tests/Command/Descriptor/CliDescriptorTest.php':[
+"Symfony:Component/VarDumper/Tests/Command/Descriptor/CliDescriptorTest.php": [
 69,
 70,
 71,
@@ -321,11 +321,11 @@
 164,
 165,
 166,
-167,
+167
 ],
-'Symfony:Component/VarDumper/Tests/Dumper/CliDumperTest.php':[
+"Symfony:Component/VarDumper/Tests/Dumper/CliDumperTest.php": [
 155,
 157,
-345,
-],
+345
+]
 }

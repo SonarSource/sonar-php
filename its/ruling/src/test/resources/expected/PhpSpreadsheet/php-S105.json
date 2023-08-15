@@ -1,14 +1,14 @@
 {
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Html/HtmlTagsTest.php':[
-0,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Html/HtmlTagsTest.php": [
+0
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/Table/TableTest.php':[
-0,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/Table/TableTest.php": [
+0
 ],
-'PhpSpreadsheet:tests/data/Calculation/TextData/CLEAN.php':[
-0,
+"PhpSpreadsheet:tests/data/Calculation/TextData/CLEAN.php": [
+0
 ],
-'PhpSpreadsheet:tests/data/Calculation/TextData/TRIM.php':[
-0,
-],
+"PhpSpreadsheet:tests/data/Calculation/TextData/TRIM.php": [
+0
+]
 }

@@ -1,9 +1,9 @@
 {
-'PHP_CodeSniffer:autoload.php':[
+"PHP_CodeSniffer:autoload.php": [
 134,
-177,
+177
 ],
-'PHP_CodeSniffer:src/Config.php':[
+"PHP_CodeSniffer:src/Config.php": [
 508,
 513,
 518,
@@ -24,69 +24,69 @@
 827,
 1481,
 1506,
-1587,
+1587
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/DisallowYodaConditionsUnitTest.inc':[
-73,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/DisallowYodaConditionsUnitTest.inc": [
+73
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc':[
-108,
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
+108
 ],
-'PHP_CodeSniffer:src/Standards/MySource/Tests/Channels/DisallowSelfActionsUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/MySource/Tests/Channels/DisallowSelfActionsUnitTest.inc": [
 12,
 16,
 27,
 28,
 30,
 31,
-46,
+46
 ],
-'PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/ClassInstantiationUnitTest.inc':[
-32,
+"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/ClassInstantiationUnitTest.inc": [
+32
 ],
-'PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
 217,
 222,
 233,
-238,
+238
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc':[
-23,
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
+23
 ],
-'PHP_CodeSniffer:src/Tokenizers/PHP.php':[
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
 548,
 918,
 994,
 2160,
-3196,
+3196
 ],
-'PHP_CodeSniffer:src/Util/Common.php':[
+"PHP_CodeSniffer:src/Util/Common.php": [
 104,
 452,
 488,
 489,
-498,
+498
 ],
-'PHP_CodeSniffer:src/Util/Standards.php':[
+"PHP_CodeSniffer:src/Util/Standards.php": [
 85,
 174,
 235,
 285,
-320,
+320
 ],
-'PHP_CodeSniffer:tests/Core/AbstractMethodUnitTest.php':[
+"PHP_CodeSniffer:tests/Core/AbstractMethodUnitTest.php": [
 62,
 63,
 75,
 94,
 95,
 103,
-118,
+118
 ],
-'PHP_CodeSniffer:tests/Core/AllTests.php':[
-28,
+"PHP_CodeSniffer:tests/Core/AllTests.php": [
+28
 ],
-'PHP_CodeSniffer:tests/Core/File/FindEndOfStatementTest.php':[
+"PHP_CodeSniffer:tests/Core/File/FindEndOfStatementTest.php": [
 26,
 41,
 56,
@@ -122,15 +122,15 @@
 383,
 388,
 403,
-408,
+408
 ],
-'PHP_CodeSniffer:tests/Core/File/FindExtendedClassNameTest.php':[
-32,
+"PHP_CodeSniffer:tests/Core/File/FindExtendedClassNameTest.php": [
+32
 ],
-'PHP_CodeSniffer:tests/Core/File/FindImplementedInterfaceNamesTest.php':[
-31,
+"PHP_CodeSniffer:tests/Core/File/FindImplementedInterfaceNamesTest.php": [
+31
 ],
-'PHP_CodeSniffer:tests/Core/File/FindStartOfStatementTest.php':[
+"PHP_CodeSniffer:tests/Core/File/FindStartOfStatementTest.php": [
 26,
 41,
 56,
@@ -173,30 +173,30 @@
 459,
 464,
 480,
-496,
+496
 ],
-'PHP_CodeSniffer:tests/Core/File/GetMemberPropertiesTest.php':[
+"PHP_CodeSniffer:tests/Core/File/GetMemberPropertiesTest.php": [
 31,
 821,
-859,
+859
 ],
-'PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.php':[
-1138,
+"PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.php": [
+1138
 ],
-'PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php':[
-903,
+"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
+903
 ],
-'PHP_CodeSniffer:tests/Core/File/IsReferenceTest.php':[
-31,
+"PHP_CodeSniffer:tests/Core/File/IsReferenceTest.php": [
+31
 ],
-'PHP_CodeSniffer:tests/Core/Filters/Filter/AcceptTest.php':[
+"PHP_CodeSniffer:tests/Core/Filters/Filter/AcceptTest.php": [
 66,
 67,
 67,
 85,
-85,
+85
 ],
-'PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionTest.php':[
+"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionTest.php": [
 88,
 92,
 116,
@@ -206,15 +206,15 @@
 225,
 226,
 227,
-229,
+229
 ],
-'PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.inc':[
+"PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.inc": [
 28,
 29,
 31,
-32,
+32
 ],
-'PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.php':[
+"PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.php": [
 38,
 52,
 52,
@@ -239,35 +239,35 @@
 249,
 262,
 262,
-285,
+285
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/AnonClassParenthesisOwnerTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/AnonClassParenthesisOwnerTest.php": [
 30,
 53,
-98,
+98
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.php": [
 32,
 84,
-135,
+135
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/AttributesTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/AttributesTest.php": [
 34,
 254,
 278,
 308,
 413,
 559,
-580,
+580
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/BackfillEnumTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillEnumTest.php": [
 33,
-141,
+141
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/BackfillExplicitOctalNotationTest.php':[
-33,
+"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillExplicitOctalNotationTest.php": [
+33
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/BackfillFnTokenTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillFnTokenTest.php": [
 109,
 140,
 383,
@@ -276,69 +276,69 @@
 566,
 650,
 732,
-784,
+784
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/BackfillMatchTokenTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillMatchTokenTest.php": [
 35,
 216,
 231,
 454,
-509,
+509
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/BackfillNumericSeparatorTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillNumericSeparatorTest.php": [
 30,
-175,
+175
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/BackfillReadonlyTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillReadonlyTest.php": [
 31,
-176,
+176
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/BitwiseOrTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/BitwiseOrTest.php": [
 30,
-81,
+81
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/ContextSensitiveKeywordsTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/ContextSensitiveKeywordsTest.php": [
 31,
-149,
+149
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/DefaultKeywordTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/DefaultKeywordTest.php": [
 36,
 116,
 227,
-290,
+290
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.php": [
 32,
 117,
-204,
+204
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/DoubleQuotedStringTest.php':[
-32,
+"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleQuotedStringTest.php": [
+32
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.php": [
 31,
 80,
-128,
+128
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/FinallyTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/FinallyTest.php": [
 30,
-69,
+69
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.php": [
 31,
 77,
-123,
+123
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/HeredocNowdocCloserTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/HeredocNowdocCloserTest.php": [
 51,
 52,
-70,
+70
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/HeredocStringTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/HeredocStringTest.php": [
 32,
-53,
+53
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/NamedFunctionCallArgumentsTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/NamedFunctionCallArgumentsTest.php": [
 33,
 50,
 274,
@@ -363,36 +363,36 @@
 654,
 670,
 706,
-721,
+721
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/NullsafeObjectOperatorTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/NullsafeObjectOperatorTest.php": [
 39,
 60,
 100,
-107,
+107
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/ScopeSettingWithNamespaceOperatorTest.php':[
-33,
+"PHP_CodeSniffer:tests/Core/Tokenizer/ScopeSettingWithNamespaceOperatorTest.php": [
+33
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/ShortArrayTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/ShortArrayTest.php": [
 30,
-95,
+95
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceTest.php':[
-38,
+"PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceTest.php": [
+38
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceWinTest.php':[
-35,
+"PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceWinTest.php": [
+35
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/TypeIntersectionTest.php':[
+"PHP_CodeSniffer:tests/Core/Tokenizer/TypeIntersectionTest.php": [
 31,
-84,
+84
 ],
-'PHP_CodeSniffer:tests/Core/Tokenizer/UndoNamespacedNameSingleTokenTest.php':[
-41,
+"PHP_CodeSniffer:tests/Core/Tokenizer/UndoNamespacedNameSingleTokenTest.php": [
+41
 ],
-'PHP_CodeSniffer:tests/Standards/AllSniffs.php':[
+"PHP_CodeSniffer:tests/Standards/AllSniffs.php": [
 28,
-59,
-],
+59
+]
 }

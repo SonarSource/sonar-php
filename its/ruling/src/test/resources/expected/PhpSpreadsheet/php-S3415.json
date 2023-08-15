@@ -1,74 +1,74 @@
 {
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/DateTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/DateTest.php": [
 143,
-151,
+151
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/DateValueTest.php':[
-172,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/DateValueTest.php": [
+172
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/EDateTest.php':[
-136,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/EDateTest.php": [
+136
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/EoMonthTest.php':[
-135,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/EoMonthTest.php": [
+135
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/TimeTest.php':[
-121,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/TimeTest.php": [
+121
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/TimeValueTest.php':[
-108,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/DateTime/TimeValueTest.php": [
+108
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/CoordinateTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/CoordinateTest.php": [
 40,
 55,
 121,
 136,
 183,
-215,
+215
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/DataSeriesValuesTest.php':[
-34,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/DataSeriesValuesTest.php": [
+34
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/PR3163Test.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/PR3163Test.php": [
 146,
-151,
+151
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Html/HtmlTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Html/HtmlTest.php": [
 421,
-424,
+424
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/XlsxTest.php':[
-232,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/XlsxTest.php": [
+232
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/CodePageTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/CodePageTest.php": [
 58,
-72,
+72
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/NumberFormatTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/NumberFormatTest.php": [
 100,
-103,
+103
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnCellIterator2Test.php':[
-67,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnCellIterator2Test.php": [
+67
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/DrawingTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/DrawingTest.php": [
 57,
 58,
 84,
-85,
+85
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/RowCellIterator2Test.php':[
-67,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/RowCellIterator2Test.php": [
+67
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/VisibilityTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/VisibilityTest.php": [
 31,
 34,
 37,
 64,
 67,
-70,
+70
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/DrawingsTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/DrawingsTest.php": [
 94,
 95,
 123,
@@ -145,9 +145,9 @@
 467,
 468,
 517,
-518,
+518
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/UnparsedDataTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/UnparsedDataTest.php": [
 72,
 73,
 76,
@@ -155,6 +155,6 @@
 96,
 97,
 98,
-99,
-],
+99
+]
 }

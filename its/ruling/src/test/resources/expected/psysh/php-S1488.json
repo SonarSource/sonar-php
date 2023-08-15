@@ -1,26 +1,26 @@
 {
-'psysh:src/ParserFactory.php':[
-62,
+"psysh:src/ParserFactory.php": [
+62
 ],
-'psysh:src/Readline/Hoa/FileDirectory.php':[
-97,
+"psysh:src/Readline/Hoa/FileDirectory.php": [
+97
 ],
-'psysh:src/Readline/Hoa/FileLinkRead.php':[
-96,
+"psysh:src/Readline/Hoa/FileLinkRead.php": [
+96
 ],
-'psysh:src/Readline/Hoa/FileLinkReadWrite.php':[
-84,
+"psysh:src/Readline/Hoa/FileLinkReadWrite.php": [
+84
 ],
-'psysh:src/Readline/Hoa/FileRead.php':[
-80,
+"psysh:src/Readline/Hoa/FileRead.php": [
+80
 ],
-'psysh:src/Readline/Hoa/FileReadWrite.php':[
-84,
+"psysh:src/Readline/Hoa/FileReadWrite.php": [
+84
 ],
-'psysh:test/CodeCleaner/EmptyArrayDimFetchPassTest.php':[
-59,
+"psysh:test/CodeCleaner/EmptyArrayDimFetchPassTest.php": [
+59
 ],
-'psysh:test/ShellTest.php':[
-625,
-],
+"psysh:test/ShellTest.php": [
+625
+]
 }

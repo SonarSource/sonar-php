@@ -1,8 +1,8 @@
 {
-'psysh:src/Command/ListCommand.php':[
-231,
+"psysh:src/Command/ListCommand.php": [
+231
 ],
-'psysh:src/Formatter/DocblockFormatter.php':[
-141,
-],
+"psysh:src/Formatter/DocblockFormatter.php": [
+141
+]
 }

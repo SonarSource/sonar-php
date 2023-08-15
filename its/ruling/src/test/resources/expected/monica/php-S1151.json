@@ -1,20 +1,20 @@
 {
-'monica:app/ExportResources/Journal/JournalEntry.php':[
-33,
+"monica:app/ExportResources/Journal/JournalEntry.php": [
+33
 ],
-'monica:app/Http/Controllers/Contacts/AvatarController.php':[
-41,
+"monica:app/Http/Controllers/Contacts/AvatarController.php": [
+41
 ],
-'monica:app/Models/Contact/Contact.php':[
+"monica:app/Models/Contact/Contact.php": [
 786,
 801,
 817,
 833,
 848,
 864,
-880,
+880
 ],
-'monica:app/Services/VCard/ExportVCard.php':[
-267,
-],
+"monica:app/Services/VCard/ExportVCard.php": [
+267
+]
 }

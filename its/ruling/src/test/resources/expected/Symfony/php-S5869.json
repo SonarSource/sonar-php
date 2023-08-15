@@ -1,14 +1,14 @@
 {
-'Symfony:Component/DomCrawler/Crawler.php':[
-156,
+"Symfony:Component/DomCrawler/Crawler.php": [
+156
 ],
-'Symfony:Component/Form/Extension/Core/Type/MoneyType.php':[
+"Symfony:Component/Form/Extension/Core/Type/MoneyType.php": [
 129,
 129,
 129,
-129,
+129
 ],
-'Symfony:Component/Serializer/Normalizer/DataUriNormalizer.php':[
-99,
-],
+"Symfony:Component/Serializer/Normalizer/DataUriNormalizer.php": [
+99
+]
 }

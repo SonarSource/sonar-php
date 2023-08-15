@@ -1,36 +1,36 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php':[
-3229,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+3229
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselI.php':[
-63,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselI.php": [
+63
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselJ.php':[
-62,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselJ.php": [
+62
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselK.php':[
-61,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselK.php": [
+61
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselY.php':[
-59,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselY.php": [
+59
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Cell/DataValidator.php':[
-35,
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/DataValidator.php": [
+35
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric/Styles.php':[
-252,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric/Styles.php": [
+252
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Html.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Html.php": [
 411,
-901,
+901
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php':[
-359,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
+359
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php':[
-165,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php": [
+165
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
 1174,
 1234,
 2083,
@@ -38,37 +38,37 @@
 2612,
 4126,
 4948,
-7385,
+7385
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Style/CellFont.php':[
-11,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Style/CellFont.php": [
+11
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
 453,
 1770,
 1780,
-2150,
+2150
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
 496,
-551,
+551
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/Style/Border.php':[
-59,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/Style/Border.php": [
+59
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/Style/NumberFormat.php':[
-19,
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/Style/NumberFormat.php": [
+19
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter.php':[
-484,
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter.php": [
+484
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php':[
-402,
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
+402
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php':[
-218,
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php": [
+218
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/StringTable.php':[
-241,
-],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/StringTable.php": [
+241
+]
 }

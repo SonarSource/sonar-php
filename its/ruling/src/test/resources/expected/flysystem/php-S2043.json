@@ -1,13 +1,13 @@
 {
-'flysystem:src/AdapterTestUtilities/test-functions.php':[
+"flysystem:src/AdapterTestUtilities/test-functions.php": [
 7,
 12,
 14,
 21,
 22,
-27,
+27
 ],
-'flysystem:src/WebDAV/resources/server.php':[
-20,
-],
+"flysystem:src/WebDAV/resources/server.php": [
+20
+]
 }

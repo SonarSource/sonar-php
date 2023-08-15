@@ -1,41 +1,41 @@
 {
-'PHPWord:samples/Sample_05_Multicolumn.php':[
-8,
+"PHPWord:samples/Sample_05_Multicolumn.php": [
+8
 ],
-'PHPWord:samples/Sample_06_Footnote.php':[
-48,
+"PHPWord:samples/Sample_06_Footnote.php": [
+48
 ],
-'PHPWord:samples/Sample_08_ParagraphPagination.php':[
+"PHPWord:samples/Sample_08_ParagraphPagination.php": [
 20,
 28,
 38,
 47,
-58,
+58
 ],
-'PHPWord:samples/Sample_21_TableRowRules.php':[
+"PHPWord:samples/Sample_21_TableRowRules.php": [
 15,
-41,
+41
 ],
-'PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php':[
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 3301,
 3316,
 3515,
 3568,
 3584,
 3601,
-4422,
+4422
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
-553,
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+553
 ],
-'PHPWord:src/PhpWord/Writer/HTML/Part/Head.php':[
-65,
+"PHPWord:src/PhpWord/Writer/HTML/Part/Head.php": [
+65
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Part/Content.php':[
+"PHPWord:src/PhpWord/Writer/ODText/Part/Content.php": [
 337,
-393,
+393
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/FontTable.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Part/FontTable.php": [
 38,
 47,
 56,
@@ -44,9 +44,9 @@
 83,
 92,
 101,
-110,
+110
 ],
-'PHPWord:tests/PhpWordTests/Shared/HtmlTest.php':[
-57,
-],
+"PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
+57
+]
 }

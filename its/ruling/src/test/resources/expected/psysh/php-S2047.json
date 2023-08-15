@@ -1,29 +1,29 @@
 {
-'psysh:src/ConfigPaths.php':[
-384,
+"psysh:src/ConfigPaths.php": [
+384
 ],
-'psysh:src/Configuration.php':[
+"psysh:src/Configuration.php": [
 250,
 774,
 863,
 901,
 924,
-1091,
+1091
 ],
-'psysh:src/Readline/Hoa/FileLinkRead.php':[
+"psysh:src/Readline/Hoa/FileLinkRead.php": [
 106,
-156,
+156
 ],
-'psysh:src/Readline/Hoa/StreamLockable.php':[
-84,
+"psysh:src/Readline/Hoa/StreamLockable.php": [
+84
 ],
-'psysh:src/Readline/Readline.php':[
+"psysh:src/Readline/Readline.php": [
 43,
 50,
 64,
-85,
+85
 ],
-'psysh:src/Shell.php':[
-558,
-],
+"psysh:src/Shell.php": [
+558
+]
 }

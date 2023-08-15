@@ -1,8 +1,8 @@
 {
-'flysystem:src/Ftp/FtpAdapter.php':[
-389,
+"flysystem:src/Ftp/FtpAdapter.php": [
+389
 ],
-'flysystem:src/WhitespacePathNormalizer.php':[
-19,
-],
+"flysystem:src/WhitespacePathNormalizer.php": [
+19
+]
 }

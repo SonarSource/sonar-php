@@ -1,63 +1,63 @@
 {
-'PHP_CodeSniffer:src/Files/File.php':[
+"PHP_CodeSniffer:src/Files/File.php": [
 2221,
 2302,
-2633,
+2633
 ],
-'PHP_CodeSniffer:src/Generators/Text.php':[
+"PHP_CodeSniffer:src/Generators/Text.php": [
 143,
-178,
+178
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UselessOverridingMethodSniff.php':[
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UselessOverridingMethodSniff.php": [
+80
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyStatementUnitTest.inc": [
+72
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnconditionalIfStatementUnitTest.inc": [
+5
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
 80,
+91
 ],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyStatementUnitTest.inc':[
-72,
-],
-'PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnconditionalIfStatementUnitTest.inc':[
-5,
-],
-'PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc':[
-80,
-91,
-],
-'PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
 43,
-98,
+98
 ],
-'PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc':[
-231,
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
+231
 ],
-'PHP_CodeSniffer:src/Standards/PSR12/Tests/ControlStructures/BooleanOperatorPlacementUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/PSR12/Tests/ControlStructures/BooleanOperatorPlacementUnitTest.inc": [
 14,
 20,
 79,
 85,
 102,
-108,
+108
 ],
-'PHP_CodeSniffer:src/Standards/PSR2/Tests/ControlStructures/ElseIfDeclarationUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/PSR2/Tests/ControlStructures/ElseIfDeclarationUnitTest.inc": [
+4,
+8
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Formatting/OperatorBracketSniff.php": [
+233
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/ElseIfDeclarationUnitTest.inc": [
 4,
 8,
+12
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Formatting/OperatorBracketSniff.php':[
-233,
-],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/ElseIfDeclarationUnitTest.inc':[
-4,
-8,
-12,
-],
-'PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc':[
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
 3,
 7,
 11,
 15,
 19,
 23,
-83,
+83
 ],
-'PHP_CodeSniffer:src/Tokenizers/JS.php':[
-973,
-],
+"PHP_CodeSniffer:src/Tokenizers/JS.php": [
+973
+]
 }

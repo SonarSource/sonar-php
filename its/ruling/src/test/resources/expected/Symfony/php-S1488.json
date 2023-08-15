@@ -1,122 +1,122 @@
 {
-'Symfony:Bridge/Doctrine/Tests/DependencyInjection/CompilerPass/RegisterMappingsPassTest.php':[
-46,
+"Symfony:Bridge/Doctrine/Tests/DependencyInjection/CompilerPass/RegisterMappingsPassTest.php": [
+46
 ],
-'Symfony:Bridge/Doctrine/Tests/PropertyInfo/DoctrineExtractorTest.php':[
-137,
+"Symfony:Bridge/Doctrine/Tests/PropertyInfo/DoctrineExtractorTest.php": [
+137
 ],
-'Symfony:Bridge/Doctrine/Tests/Validator/Constraints/UniqueEntityValidatorTest.php':[
-98,
+"Symfony:Bridge/Doctrine/Tests/Validator/Constraints/UniqueEntityValidatorTest.php": [
+98
 ],
-'Symfony:Bridge/Monolog/Formatter/ConsoleFormatter.php':[
-122,
+"Symfony:Bridge/Monolog/Formatter/ConsoleFormatter.php": [
+122
 ],
-'Symfony:Bundle/DebugBundle/Tests/DependencyInjection/DebugExtensionTest.php':[
-112,
+"Symfony:Bundle/DebugBundle/Tests/DependencyInjection/DebugExtensionTest.php": [
+112
 ],
-'Symfony:Bundle/TwigBundle/Tests/DependencyInjection/TwigExtensionTest.php':[
-295,
+"Symfony:Bundle/TwigBundle/Tests/DependencyInjection/TwigExtensionTest.php": [
+295
 ],
-'Symfony:Component/Cache/Tests/Adapter/AdapterTestCase.php':[
-101,
+"Symfony:Component/Cache/Tests/Adapter/AdapterTestCase.php": [
+101
 ],
-'Symfony:Component/Cache/Tests/Adapter/PredisTagAwareAdapterTest.php':[
-33,
+"Symfony:Component/Cache/Tests/Adapter/PredisTagAwareAdapterTest.php": [
+33
 ],
-'Symfony:Component/Cache/Tests/Adapter/PredisTagAwareClusterAdapterTest.php':[
-33,
+"Symfony:Component/Cache/Tests/Adapter/PredisTagAwareClusterAdapterTest.php": [
+33
 ],
-'Symfony:Component/Cache/Tests/Adapter/RedisClusterAdapterTest.php':[
-46,
+"Symfony:Component/Cache/Tests/Adapter/RedisClusterAdapterTest.php": [
+46
 ],
-'Symfony:Component/Cache/Tests/Adapter/RedisTagAwareAdapterTest.php':[
-38,
+"Symfony:Component/Cache/Tests/Adapter/RedisTagAwareAdapterTest.php": [
+38
 ],
-'Symfony:Component/Cache/Tests/Adapter/RedisTagAwareArrayAdapterTest.php':[
-37,
+"Symfony:Component/Cache/Tests/Adapter/RedisTagAwareArrayAdapterTest.php": [
+37
 ],
-'Symfony:Component/Cache/Tests/Adapter/RedisTagAwareClusterAdapterTest.php':[
-38,
+"Symfony:Component/Cache/Tests/Adapter/RedisTagAwareClusterAdapterTest.php": [
+38
 ],
-'Symfony:Component/Config/Builder/ClassBuilder.php':[
-85,
+"Symfony:Component/Config/Builder/ClassBuilder.php": [
+85
 ],
-'Symfony:Component/DependencyInjection/Dumper/PhpDumper.php':[
-1976,
+"Symfony:Component/DependencyInjection/Dumper/PhpDumper.php": [
+1976
 ],
-'Symfony:Component/Finder/Tests/GitignoreTest.php':[
-60,
+"Symfony:Component/Finder/Tests/GitignoreTest.php": [
+60
 ],
-'Symfony:Component/Form/FormErrorIterator.php':[
-206,
+"Symfony:Component/Form/FormErrorIterator.php": [
+206
 ],
-'Symfony:Component/Form/Tests/Extension/Core/DataTransformer/DateIntervalToStringTransformerTest.php':[
+"Symfony:Component/Form/Tests/Extension/Core/DataTransformer/DateIntervalToStringTransformerTest.php": [
 25,
-39,
+39
 ],
-'Symfony:Component/HttpClient/Tests/CachingHttpClientTest.php':[
-106,
+"Symfony:Component/HttpClient/Tests/CachingHttpClientTest.php": [
+106
 ],
-'Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/MongoDbSessionHandlerTest.php':[
-209,
+"Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/MongoDbSessionHandlerTest.php": [
+209
 ],
-'Symfony:Component/HttpKernel/DataCollector/DataCollector.php':[
-63,
+"Symfony:Component/HttpKernel/DataCollector/DataCollector.php": [
+63
 ],
-'Symfony:Component/HttpKernel/Tests/HttpCache/TestMultipleHttpKernel.php':[
-67,
+"Symfony:Component/HttpKernel/Tests/HttpCache/TestMultipleHttpKernel.php": [
+67
 ],
-'Symfony:Component/Intl/Data/Generator/LanguageDataGenerator.php':[
-133,
+"Symfony:Component/Intl/Data/Generator/LanguageDataGenerator.php": [
+133
 ],
-'Symfony:Component/Intl/Data/Generator/TimezoneDataGenerator.php':[
-131,
+"Symfony:Component/Intl/Data/Generator/TimezoneDataGenerator.php": [
+131
 ],
-'Symfony:Component/Lock/Tests/Store/RedisArrayStoreTest.php':[
-39,
+"Symfony:Component/Lock/Tests/Store/RedisArrayStoreTest.php": [
+39
 ],
-'Symfony:Component/Mailer/Transport/Smtp/Auth/CramMd5Authenticator.php':[
-56,
+"Symfony:Component/Mailer/Transport/Smtp/Auth/CramMd5Authenticator.php": [
+56
 ],
-'Symfony:Component/Messenger/Bridge/AmazonSqs/Tests/Transport/AmazonSqsReceiverTest.php':[
-70,
+"Symfony:Component/Messenger/Bridge/AmazonSqs/Tests/Transport/AmazonSqsReceiverTest.php": [
+70
 ],
-'Symfony:Component/Messenger/Bridge/Beanstalkd/Tests/Transport/BeanstalkdReceiverTest.php':[
-94,
+"Symfony:Component/Messenger/Bridge/Beanstalkd/Tests/Transport/BeanstalkdReceiverTest.php": [
+94
 ],
-'Symfony:Component/Messenger/Bridge/Doctrine/Tests/Transport/DoctrineReceiverTest.php':[
-144,
+"Symfony:Component/Messenger/Bridge/Doctrine/Tests/Transport/DoctrineReceiverTest.php": [
+144
 ],
-'Symfony:Component/Messenger/Transport/Serialization/Normalizer/FlattenExceptionNormalizer.php':[
-31,
+"Symfony:Component/Messenger/Transport/Serialization/Normalizer/FlattenExceptionNormalizer.php": [
+31
 ],
-'Symfony:Component/Notifier/Bridge/FakeSms/Tests/FakeSmsLoggerTransportTest.php':[
-28,
+"Symfony:Component/Notifier/Bridge/FakeSms/Tests/FakeSmsLoggerTransportTest.php": [
+28
 ],
-'Symfony:Component/Serializer/Tests/Normalizer/DateIntervalNormalizerTest.php':[
-36,
+"Symfony:Component/Serializer/Tests/Normalizer/DateIntervalNormalizerTest.php": [
+36
 ],
-'Symfony:Component/Translation/Dumper/MoFileDumper.php':[
-57,
+"Symfony:Component/Translation/Dumper/MoFileDumper.php": [
+57
 ],
-'Symfony:Component/Translation/Tests/DataCollector/TranslationDataCollectorTest.php':[
-135,
+"Symfony:Component/Translation/Tests/DataCollector/TranslationDataCollectorTest.php": [
+135
 ],
-'Symfony:Component/Validator/Tests/Constraints/NotIdenticalToValidatorTest.php':[
-80,
+"Symfony:Component/Validator/Tests/Constraints/NotIdenticalToValidatorTest.php": [
+80
 ],
-'Symfony:Component/VarDumper/Tests/Caster/DateCasterTest.php':[
-391,
+"Symfony:Component/VarDumper/Tests/Caster/DateCasterTest.php": [
+391
 ],
-'Symfony:Component/VarExporter/Internal/LazyObjectRegistry.php':[
-97,
+"Symfony:Component/VarExporter/Internal/LazyObjectRegistry.php": [
+97
 ],
-'Symfony:Component/VarExporter/LazyGhostTrait.php':[
+"Symfony:Component/VarExporter/LazyGhostTrait.php": [
 186,
-203,
+203
 ],
-'Symfony:Component/VarExporter/LazyProxyTrait.php':[
+"Symfony:Component/VarExporter/LazyProxyTrait.php": [
 109,
-126,
-],
+126
+]
 }

@@ -1,37 +1,37 @@
 {
-'monica:app/Console/Commands/CalculateStatistics.php':[
+"monica:app/Console/Commands/CalculateStatistics.php": [
 43,
-44,
+44
 ],
-'monica:app/Console/Commands/Clean.php':[
-35,
+"monica:app/Console/Commands/Clean.php": [
+35
 ],
-'monica:app/Console/Commands/CreateAccount.php':[
+"monica:app/Console/Commands/CreateAccount.php": [
 45,
 50,
 58,
-62,
+62
 ],
-'monica:app/Console/Commands/DavClientsUpdate.php':[
+"monica:app/Console/Commands/DavClientsUpdate.php": [
 36,
-38,
+38
 ],
-'monica:app/Console/Commands/Deactivate2FA.php':[
+"monica:app/Console/Commands/Deactivate2FA.php": [
 37,
 44,
 50,
-62,
+62
 ],
-'monica:app/Console/Commands/Helpers/Command.php':[
-39,
+"monica:app/Console/Commands/Helpers/Command.php": [
+39
 ],
-'monica:app/Console/Commands/Helpers/CommandCaller.php':[
+"monica:app/Console/Commands/Helpers/CommandCaller.php": [
 26,
 45,
 46,
-48,
+48
 ],
-'monica:app/Console/Commands/ImportCSV.php':[
+"monica:app/Console/Commands/ImportCSV.php": [
 57,
 59,
 63,
@@ -56,22 +56,22 @@
 188,
 198,
 227,
-242,
+242
 ],
-'monica:app/Console/Commands/ImportVCards.php':[
+"monica:app/Console/Commands/ImportVCards.php": [
 42,
 49,
 59,
 63,
 76,
-104,
+104
 ],
-'monica:app/Console/Commands/LangGenerate.php':[
+"monica:app/Console/Commands/LangGenerate.php": [
 33,
 34,
-39,
+39
 ],
-'monica:app/Console/Commands/MigrateDatabaseCollation.php':[
+"monica:app/Console/Commands/MigrateDatabaseCollation.php": [
 36,
 37,
 40,
@@ -80,15 +80,15 @@
 59,
 62,
 86,
-111,
+111
 ],
-'monica:app/Console/Commands/NewAddressBookSubscription.php':[
+"monica:app/Console/Commands/NewAddressBookSubscription.php": [
 43,
 51,
 55,
-57,
+57
 ],
-'monica:app/Console/Commands/OneTime/MoveAvatars.php':[
+"monica:app/Console/Commands/OneTime/MoveAvatars.php": [
 40,
 45,
 52,
@@ -101,9 +101,9 @@
 97,
 112,
 116,
-125,
+125
 ],
-'monica:app/Console/Commands/OneTime/MoveAvatarsToPhotosDirectory.php':[
+"monica:app/Console/Commands/OneTime/MoveAvatarsToPhotosDirectory.php": [
 45,
 49,
 56,
@@ -112,15 +112,15 @@
 69,
 70,
 72,
-76,
+76
 ],
-'monica:app/Console/Commands/Passport.php':[
+"monica:app/Console/Commands/Passport.php": [
 35,
 45,
 51,
-65,
+65
 ],
-'monica:app/Console/Commands/PingVersionServer.php':[
+"monica:app/Console/Commands/PingVersionServer.php": [
 41,
 45,
 47,
@@ -130,23 +130,23 @@
 86,
 90,
 105,
-107,
+107
 ],
-'monica:app/Console/Commands/SendReminders.php':[
+"monica:app/Console/Commands/SendReminders.php": [
 38,
 50,
-51,
+51
 ],
-'monica:app/Console/Commands/SendStayInTouch.php':[
+"monica:app/Console/Commands/SendStayInTouch.php": [
 36,
-43,
+43
 ],
-'monica:app/Console/Commands/SendTestEmail.php':[
+"monica:app/Console/Commands/SendTestEmail.php": [
 38,
 43,
-54,
+54
 ],
-'monica:app/Console/Commands/SentryRelease.php':[
+"monica:app/Console/Commands/SentryRelease.php": [
 63,
 67,
 86,
@@ -155,26 +155,26 @@
 105,
 109,
 113,
-123,
+123
 ],
-'monica:app/Console/Commands/SetUserAdmin.php':[
+"monica:app/Console/Commands/SetUserAdmin.php": [
 37,
 44,
 52,
 54,
 59,
 68,
-70,
+70
 ],
-'monica:app/Console/Commands/SetupProduction.php':[
+"monica:app/Console/Commands/SetupProduction.php": [
 37,
 45,
 51,
 65,
 71,
-73,
+73
 ],
-'monica:app/Console/Commands/SetupTest.php':[
+"monica:app/Console/Commands/SetupTest.php": [
 96,
 104,
 152,
@@ -218,16 +218,16 @@
 623,
 633,
 649,
-650,
+650
 ],
-'monica:app/Console/Commands/Tests/UpdateLangs.php':[
+"monica:app/Console/Commands/Tests/UpdateLangs.php": [
 37,
 43,
 46,
 54,
-57,
+57
 ],
-'monica:app/Console/Commands/Update.php':[
+"monica:app/Console/Commands/Update.php": [
 40,
 41,
 47,
@@ -240,70 +240,70 @@
 73,
 85,
 88,
-100,
+100
 ],
-'monica:app/Console/Kernel.php':[
+"monica:app/Console/Kernel.php": [
 29,
 53,
 66,
-68,
+68
 ],
-'monica:app/Console/Scheduling/CronEvent.php':[
+"monica:app/Console/Scheduling/CronEvent.php": [
 108,
 111,
 114,
-119,
+119
 ],
-'monica:app/Exceptions/Handler.php':[
+"monica:app/Exceptions/Handler.php": [
 31,
 32,
 33,
 51,
-58,
+58
 ],
-'monica:app/ExportResources/Account/Account.php':[
-43,
+"monica:app/ExportResources/Account/Account.php": [
+43
 ],
-'monica:app/ExportResources/Account/Activity.php':[
-25,
+"monica:app/ExportResources/Account/Activity.php": [
+25
 ],
-'monica:app/ExportResources/Account/ActivityType.php':[
-25,
+"monica:app/ExportResources/Account/ActivityType.php": [
+25
 ],
-'monica:app/ExportResources/Account/AddressbookSubscription.php':[
-34,
+"monica:app/ExportResources/Account/AddressbookSubscription.php": [
+34
 ],
-'monica:app/ExportResources/Account/LifeEventType.php':[
-26,
+"monica:app/ExportResources/Account/LifeEventType.php": [
+26
 ],
-'monica:app/ExportResources/Contact/Call.php':[
-26,
+"monica:app/ExportResources/Contact/Call.php": [
+26
 ],
-'monica:app/ExportResources/Contact/Contact.php':[
+"monica:app/ExportResources/Contact/Contact.php": [
 50,
 60,
 61,
 65,
 74,
 80,
-83,
+83
 ],
-'monica:app/ExportResources/Contact/ContactField.php':[
-23,
+"monica:app/ExportResources/Contact/ContactField.php": [
+23
 ],
-'monica:app/ExportResources/Contact/Conversation.php':[
-23,
+"monica:app/ExportResources/Contact/Conversation.php": [
+23
 ],
-'monica:app/ExportResources/Contact/Gift.php':[
-28,
+"monica:app/ExportResources/Contact/Gift.php": [
+28
 ],
-'monica:app/ExportResources/Contact/LifeEvent.php':[
-26,
+"monica:app/ExportResources/Contact/LifeEvent.php": [
+26
 ],
-'monica:app/ExportResources/Contact/Pet.php':[
-23,
+"monica:app/ExportResources/Contact/Pet.php": [
+23
 ],
-'monica:app/ExportResources/ExportResource.php':[
+"monica:app/ExportResources/ExportResource.php": [
 44,
 48,
 49,
@@ -318,23 +318,23 @@
 121,
 123,
 129,
-130,
+130
 ],
-'monica:app/ExportResources/Instance/AuditLog.php':[
+"monica:app/ExportResources/Instance/AuditLog.php": [
 26,
-29,
+29
 ],
-'monica:app/ExportResources/Journal/JournalEntry.php':[
+"monica:app/ExportResources/Journal/JournalEntry.php": [
 21,
-22,
+22
 ],
-'monica:app/ExportResources/User/User.php':[
+"monica:app/ExportResources/User/User.php": [
 43,
 44,
 51,
-55,
+55
 ],
-'monica:app/Helpers/AccountHelper.php':[
+"monica:app/Helpers/AccountHelper.php": [
 19,
 23,
 27,
@@ -354,16 +354,16 @@
 201,
 202,
 208,
-213,
+213
 ],
-'monica:app/Helpers/AuditLogHelper.php':[
+"monica:app/Helpers/AuditLogHelper.php": [
 21,
 26,
 27,
 33,
-38,
+38
 ],
-'monica:app/Helpers/CollectionHelper.php':[
+"monica:app/Helpers/CollectionHelper.php": [
 28,
 34,
 41,
@@ -372,21 +372,21 @@
 64,
 84,
 88,
-102,
+102
 ],
-'monica:app/Helpers/ComplianceHelper.php':[
-25,
+"monica:app/Helpers/ComplianceHelper.php": [
+25
 ],
-'monica:app/Helpers/ComposerScripts.php':[
+"monica:app/Helpers/ComposerScripts.php": [
 19,
 20,
 24,
 39,
 40,
 44,
-54,
+54
 ],
-'monica:app/Helpers/CountriesHelper.php':[
+"monica:app/Helpers/CountriesHelper.php": [
 20,
 39,
 55,
@@ -398,13 +398,13 @@
 114,
 117,
 132,
-174,
+174
 ],
-'monica:app/Helpers/DBHelper.php':[
+"monica:app/Helpers/DBHelper.php": [
 29,
-31,
+31
 ],
-'monica:app/Helpers/DateHelper.php':[
+"monica:app/Helpers/DateHelper.php": [
 24,
 27,
 29,
@@ -428,26 +428,26 @@
 298,
 319,
 338,
-356,
+356
 ],
-'monica:app/Helpers/FormHelper.php':[
-20,
+"monica:app/Helpers/FormHelper.php": [
+20
 ],
-'monica:app/Helpers/GenderHelper.php':[
-19,
+"monica:app/Helpers/GenderHelper.php": [
+19
 ],
-'monica:app/Helpers/InstanceHelper.php':[
+"monica:app/Helpers/InstanceHelper.php": [
 35,
 59,
 62,
 67,
-102,
+102
 ],
-'monica:app/Helpers/JournalHelper.php':[
+"monica:app/Helpers/JournalHelper.php": [
 19,
-23,
+23
 ],
-'monica:app/Helpers/LocaleHelper.php':[
+"monica:app/Helpers/LocaleHelper.php": [
 27,
 29,
 43,
@@ -463,34 +463,34 @@
 174,
 194,
 198,
-204,
+204
 ],
-'monica:app/Helpers/MoneyHelper.php':[
+"monica:app/Helpers/MoneyHelper.php": [
 31,
 37,
 63,
 87,
 110,
 129,
-133,
+133
 ],
-'monica:app/Helpers/RequestHelper.php':[
+"monica:app/Helpers/RequestHelper.php": [
 23,
 25,
 56,
 60,
 69,
 70,
-78,
+78
 ],
-'monica:app/Helpers/SearchHelper.php':[
+"monica:app/Helpers/SearchHelper.php": [
 27,
-38,
+38
 ],
-'monica:app/Helpers/StorageHelper.php':[
-52,
+"monica:app/Helpers/StorageHelper.php": [
+52
 ],
-'monica:app/Helpers/TimezoneHelper.php':[
+"monica:app/Helpers/TimezoneHelper.php": [
 19,
 20,
 35,
@@ -501,39 +501,39 @@
 67,
 72,
 74,
-120,
+120
 ],
-'monica:app/Helpers/VCardHelper.php':[
-20,
+"monica:app/Helpers/VCardHelper.php": [
+20
 ],
-'monica:app/Helpers/WeatherHelper.php':[
+"monica:app/Helpers/WeatherHelper.php": [
 21,
 31,
 48,
-52,
+52
 ],
-'monica:app/Helpers/helpers.php':[
-5,
+"monica:app/Helpers/helpers.php": [
+5
 ],
-'monica:app/Http/Controllers/Account/Activity/ActivityTypeCategoriesController.php':[
+"monica:app/Http/Controllers/Account/Activity/ActivityTypeCategoriesController.php": [
 25,
 29,
 100,
-102,
+102
 ],
-'monica:app/Http/Controllers/Account/Activity/ActivityTypesController.php':[
+"monica:app/Http/Controllers/Account/Activity/ActivityTypesController.php": [
 71,
-73,
+73
 ],
-'monica:app/Http/Controllers/Account/LifeEvent/LifeEventCategoriesController.php':[
+"monica:app/Http/Controllers/Account/LifeEvent/LifeEventCategoriesController.php": [
 20,
-24,
+24
 ],
-'monica:app/Http/Controllers/Account/LifeEvent/LifeEventTypesController.php':[
+"monica:app/Http/Controllers/Account/LifeEvent/LifeEventTypesController.php": [
 69,
-71,
+71
 ],
-'monica:app/Http/Controllers/Api/Account/Activity/ApiActivityTypeCategoryController.php':[
+"monica:app/Http/Controllers/Api/Account/Activity/ApiActivityTypeCategoryController.php": [
 25,
 29,
 45,
@@ -549,9 +549,9 @@
 120,
 125,
 127,
-129,
+129
 ],
-'monica:app/Http/Controllers/Api/Account/Activity/ApiActivityTypeController.php':[
+"monica:app/Http/Controllers/Api/Account/Activity/ApiActivityTypeController.php": [
 25,
 29,
 44,
@@ -567,9 +567,9 @@
 120,
 125,
 127,
-129,
+129
 ],
-'monica:app/Http/Controllers/Api/Account/ApiCompanyController.php':[
+"monica:app/Http/Controllers/Api/Account/ApiCompanyController.php": [
 25,
 29,
 44,
@@ -585,9 +585,9 @@
 120,
 125,
 127,
-129,
+129
 ],
-'monica:app/Http/Controllers/Api/Account/ApiGenderController.php':[
+"monica:app/Http/Controllers/Api/Account/ApiGenderController.php": [
 25,
 29,
 44,
@@ -603,9 +603,9 @@
 119,
 124,
 126,
-128,
+128
 ],
-'monica:app/Http/Controllers/Api/Account/ApiPlaceController.php':[
+"monica:app/Http/Controllers/Api/Account/ApiPlaceController.php": [
 25,
 29,
 44,
@@ -621,9 +621,9 @@
 119,
 124,
 126,
-128,
+128
 ],
-'monica:app/Http/Controllers/Api/Account/ApiUserController.php':[
+"monica:app/Http/Controllers/Api/Account/ApiUserController.php": [
 41,
 43,
 52,
@@ -634,9 +634,9 @@
 119,
 125,
 129,
-134,
+134
 ],
-'monica:app/Http/Controllers/Api/ApiActivitiesController.php':[
+"monica:app/Http/Controllers/Api/ApiActivitiesController.php": [
 26,
 30,
 47,
@@ -655,9 +655,9 @@
 142,
 145,
 149,
-153,
+153
 ],
-'monica:app/Http/Controllers/Api/ApiContactController.php':[
+"monica:app/Http/Controllers/Api/ApiContactController.php": [
 45,
 48,
 56,
@@ -684,9 +684,9 @@
 242,
 250,
 252,
-254,
+254
 ],
-'monica:app/Http/Controllers/Api/ApiContactFieldController.php':[
+"monica:app/Http/Controllers/Api/ApiContactFieldController.php": [
 27,
 30,
 45,
@@ -702,9 +702,9 @@
 109,
 111,
 127,
-131,
+131
 ],
-'monica:app/Http/Controllers/Api/ApiContactTagController.php':[
+"monica:app/Http/Controllers/Api/ApiContactTagController.php": [
 25,
 30,
 34,
@@ -716,9 +716,9 @@
 92,
 112,
 115,
-123,
+123
 ],
-'monica:app/Http/Controllers/Api/ApiController.php':[
+"monica:app/Http/Controllers/Api/ApiController.php": [
 37,
 40,
 44,
@@ -728,9 +728,9 @@
 69,
 71,
 76,
-188,
+188
 ],
-'monica:app/Http/Controllers/Api/ApiDebtController.php':[
+"monica:app/Http/Controllers/Api/ApiDebtController.php": [
 23,
 27,
 42,
@@ -749,9 +749,9 @@
 157,
 161,
 177,
-181,
+181
 ],
-'monica:app/Http/Controllers/Api/ApiGiftController.php':[
+"monica:app/Http/Controllers/Api/ApiGiftController.php": [
 26,
 32,
 45,
@@ -771,9 +771,9 @@
 157,
 160,
 164,
-170,
+170
 ],
-'monica:app/Http/Controllers/Api/ApiJournalController.php':[
+"monica:app/Http/Controllers/Api/ApiJournalController.php": [
 21,
 25,
 40,
@@ -788,14 +788,14 @@
 100,
 121,
 136,
-140,
+140
 ],
-'monica:app/Http/Controllers/Api/ApiMeController.php':[
+"monica:app/Http/Controllers/Api/ApiMeController.php": [
 38,
 40,
-42,
+42
 ],
-'monica:app/Http/Controllers/Api/ApiNoteController.php':[
+"monica:app/Http/Controllers/Api/ApiNoteController.php": [
 22,
 26,
 41,
@@ -817,9 +817,9 @@
 158,
 162,
 178,
-182,
+182
 ],
-'monica:app/Http/Controllers/Api/ApiPetController.php':[
+"monica:app/Http/Controllers/Api/ApiPetController.php": [
 22,
 26,
 41,
@@ -838,9 +838,9 @@
 147,
 151,
 169,
-173,
+173
 ],
-'monica:app/Http/Controllers/Api/ApiRelationshipController.php':[
+"monica:app/Http/Controllers/Api/ApiRelationshipController.php": [
 25,
 29,
 44,
@@ -853,21 +853,21 @@
 94,
 111,
 116,
-118,
+118
 ],
-'monica:app/Http/Controllers/Api/ApiRelationshipTypeController.php':[
+"monica:app/Http/Controllers/Api/ApiRelationshipTypeController.php": [
 20,
 23,
 38,
-41,
+41
 ],
-'monica:app/Http/Controllers/Api/ApiRelationshipTypeGroupController.php':[
+"monica:app/Http/Controllers/Api/ApiRelationshipTypeGroupController.php": [
 25,
 28,
 43,
-47,
+47
 ],
-'monica:app/Http/Controllers/Api/ApiReminderController.php':[
+"monica:app/Http/Controllers/Api/ApiReminderController.php": [
 27,
 31,
 46,
@@ -887,9 +887,9 @@
 144,
 148,
 171,
-176,
+176
 ],
-'monica:app/Http/Controllers/Api/ApiTagController.php':[
+"monica:app/Http/Controllers/Api/ApiTagController.php": [
 30,
 34,
 49,
@@ -905,9 +905,9 @@
 127,
 143,
 147,
-151,
+151
 ],
-'monica:app/Http/Controllers/Api/ApiTaskController.php':[
+"monica:app/Http/Controllers/Api/ApiTaskController.php": [
 25,
 29,
 44,
@@ -922,9 +922,9 @@
 119,
 121,
 135,
-139,
+139
 ],
-'monica:app/Http/Controllers/Api/Auth/OAuthController.php':[
+"monica:app/Http/Controllers/Api/Auth/OAuthController.php": [
 43,
 70,
 77,
@@ -933,9 +933,9 @@
 159,
 167,
 171,
-179,
+179
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiAddressController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiAddressController.php": [
 26,
 30,
 45,
@@ -953,21 +953,21 @@
 127,
 129,
 143,
-147,
+147
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiAuditLogController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiAuditLogController.php": [
 25,
 29,
 33,
-36,
+36
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiAvatarController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiAvatarController.php": [
 24,
 33,
 35,
-37,
+37
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiCallController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiCallController.php": [
 27,
 31,
 48,
@@ -985,9 +985,9 @@
 130,
 132,
 146,
-150,
+150
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiConversationController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiConversationController.php": [
 26,
 30,
 44,
@@ -1007,9 +1007,9 @@
 147,
 152,
 154,
-156,
+156
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiDocumentController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiDocumentController.php": [
 37,
 41,
 57,
@@ -1025,9 +1025,9 @@
 131,
 136,
 138,
-140,
+140
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiLifeEventController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiLifeEventController.php": [
 39,
 42,
 57,
@@ -1037,9 +1037,9 @@
 92,
 94,
 110,
-115,
+115
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiMessageController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiMessageController.php": [
 27,
 29,
 33,
@@ -1057,9 +1057,9 @@
 110,
 116,
 118,
-120,
+120
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiOccupationController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiOccupationController.php": [
 25,
 29,
 44,
@@ -1075,9 +1075,9 @@
 119,
 124,
 126,
-128,
+128
 ],
-'monica:app/Http/Controllers/Api/Contact/ApiPhotoController.php':[
+"monica:app/Http/Controllers/Api/Contact/ApiPhotoController.php": [
 26,
 30,
 46,
@@ -1093,20 +1093,20 @@
 119,
 124,
 126,
-128,
+128
 ],
-'monica:app/Http/Controllers/Api/Misc/ApiCountryController.php':[
-23,
+"monica:app/Http/Controllers/Api/Misc/ApiCountryController.php": [
+23
 ],
-'monica:app/Http/Controllers/Api/Settings/ApiAuditLogController.php':[
+"monica:app/Http/Controllers/Api/Settings/ApiAuditLogController.php": [
 22,
-25,
+25
 ],
-'monica:app/Http/Controllers/Api/Settings/ApiComplianceController.php':[
+"monica:app/Http/Controllers/Api/Settings/ApiComplianceController.php": [
 33,
-36,
+36
 ],
-'monica:app/Http/Controllers/Api/Settings/ApiContactFieldTypeController.php':[
+"monica:app/Http/Controllers/Api/Settings/ApiContactFieldTypeController.php": [
 36,
 40,
 56,
@@ -1120,73 +1120,73 @@
 129,
 144,
 148,
-155,
+155
 ],
-'monica:app/Http/Controllers/Api/Settings/ApiCurrencyController.php':[
+"monica:app/Http/Controllers/Api/Settings/ApiCurrencyController.php": [
 33,
-35,
+35
 ],
-'monica:app/Http/Controllers/Api/Statistics/ApiStatisticsController.php':[
+"monica:app/Http/Controllers/Api/Statistics/ApiStatisticsController.php": [
 20,
-41,
+41
 ],
-'monica:app/Http/Controllers/Auth/EmailChangeController.php':[
-35,
+"monica:app/Http/Controllers/Auth/EmailChangeController.php": [
+35
 ],
-'monica:app/Http/Controllers/Auth/InvitationController.php':[
+"monica:app/Http/Controllers/Auth/InvitationController.php": [
 46,
 92,
-145,
+145
 ],
-'monica:app/Http/Controllers/Auth/LoginController.php':[
-44,
+"monica:app/Http/Controllers/Auth/LoginController.php": [
+44
 ],
-'monica:app/Http/Controllers/Auth/PasswordChangeController.php':[
+"monica:app/Http/Controllers/Auth/PasswordChangeController.php": [
 63,
 67,
 84,
-106,
+106
 ],
-'monica:app/Http/Controllers/Auth/RecoveryLoginController.php':[
+"monica:app/Http/Controllers/Auth/RecoveryLoginController.php": [
 50,
-52,
+52
 ],
-'monica:app/Http/Controllers/Auth/RegisterController.php':[
+"monica:app/Http/Controllers/Auth/RegisterController.php": [
 58,
 93,
 97,
 109,
 115,
 131,
-134,
+134
 ],
-'monica:app/Http/Controllers/Auth/Validate2faController.php':[
+"monica:app/Http/Controllers/Auth/Validate2faController.php": [
 20,
-23,
+23
 ],
-'monica:app/Http/Controllers/Contacts/ActivitiesController.php':[
+"monica:app/Http/Controllers/Contacts/ActivitiesController.php": [
 59,
 62,
 81,
-85,
+85
 ],
-'monica:app/Http/Controllers/Contacts/AddressesController.php':[
+"monica:app/Http/Controllers/Contacts/AddressesController.php": [
 28,
 42,
-114,
+114
 ],
-'monica:app/Http/Controllers/Contacts/AvatarController.php':[
+"monica:app/Http/Controllers/Contacts/AvatarController.php": [
 40,
-47,
+47
 ],
-'monica:app/Http/Controllers/Contacts/CallsController.php':[
+"monica:app/Http/Controllers/Contacts/CallsController.php": [
 44,
-105,
+105
 ],
-'monica:app/Http/Controllers/Contacts/ContactFieldsController.php':[
-20,
+"monica:app/Http/Controllers/Contacts/ContactFieldsController.php": [
+20
 ],
-'monica:app/Http/Controllers/Contacts/ConversationsController.php':[
+"monica:app/Http/Controllers/Contacts/ConversationsController.php": [
 48,
 76,
 86,
@@ -1209,38 +1209,38 @@
 255,
 257,
 280,
-282,
+282
 ],
-'monica:app/Http/Controllers/Contacts/DocumentsController.php':[
+"monica:app/Http/Controllers/Contacts/DocumentsController.php": [
 75,
 76,
-79,
+79
 ],
-'monica:app/Http/Controllers/Contacts/IntroductionsController.php':[
-33,
+"monica:app/Http/Controllers/Contacts/IntroductionsController.php": [
+33
 ],
-'monica:app/Http/Controllers/Contacts/LifeEventsController.php':[
+"monica:app/Http/Controllers/Contacts/LifeEventsController.php": [
 62,
 100,
 102,
 125,
-127,
+127
 ],
-'monica:app/Http/Controllers/Contacts/NotesController.php':[
+"monica:app/Http/Controllers/Contacts/NotesController.php": [
 22,
 55,
-58,
+58
 ],
-'monica:app/Http/Controllers/Contacts/PetsController.php':[
+"monica:app/Http/Controllers/Contacts/PetsController.php": [
 22,
-44,
+44
 ],
-'monica:app/Http/Controllers/Contacts/PhotosController.php':[
+"monica:app/Http/Controllers/Contacts/PhotosController.php": [
 67,
 69,
-74,
+74
 ],
-'monica:app/Http/Controllers/Contacts/RelationshipsController.php':[
+"monica:app/Http/Controllers/Contacts/RelationshipsController.php": [
 62,
 64,
 69,
@@ -1251,21 +1251,21 @@
 194,
 228,
 232,
-254,
+254
 ],
-'monica:app/Http/Controllers/Contacts/RemindersController.php':[
+"monica:app/Http/Controllers/Contacts/RemindersController.php": [
 40,
-86,
+86
 ],
-'monica:app/Http/Controllers/Contacts/TagsController.php':[
+"monica:app/Http/Controllers/Contacts/TagsController.php": [
 55,
 64,
-65,
+65
 ],
-'monica:app/Http/Controllers/Contacts/TasksController.php':[
-18,
+"monica:app/Http/Controllers/Contacts/TasksController.php": [
+18
 ],
-'monica:app/Http/Controllers/ContactsController.php':[
+"monica:app/Http/Controllers/ContactsController.php": [
 69,
 78,
 82,
@@ -1314,12 +1314,12 @@
 722,
 726,
 731,
-734,
+734
 ],
-'monica:app/Http/Controllers/DAV/Auth/AuthBackend.php':[
-43,
+"monica:app/Http/Controllers/DAV/Auth/AuthBackend.php": [
+43
 ],
-'monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBackend.php':[
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBackend.php": [
 34,
 66,
 130,
@@ -1328,18 +1328,18 @@
 178,
 206,
 209,
-279,
+279
 ],
-'monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBirthdays.php':[
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBirthdays.php": [
 57,
 58,
 68,
 98,
 102,
 137,
-140,
+140
 ],
-'monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVTasks.php':[
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVTasks.php": [
 97,
 98,
 108,
@@ -1350,17 +1350,17 @@
 180,
 204,
 205,
-211,
+211
 ],
-'monica:app/Http/Controllers/DAV/Backend/CardDAV/AddressBook.php':[
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/AddressBook.php": [
 72,
 74,
-94,
+94
 ],
-'monica:app/Http/Controllers/DAV/Backend/CardDAV/AddressBookHome.php':[
-41,
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/AddressBookHome.php": [
+41
 ],
-'monica:app/Http/Controllers/DAV/Backend/CardDAV/CardDAVBackend.php':[
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/CardDAVBackend.php": [
 65,
 77,
 98,
@@ -1371,9 +1371,9 @@
 308,
 329,
 413,
-443,
+443
 ],
-'monica:app/Http/Controllers/DAV/Backend/SyncDAVBackend.php':[
+"monica:app/Http/Controllers/DAV/Backend/SyncDAVBackend.php": [
 45,
 95,
 159,
@@ -1387,9 +1387,9 @@
 207,
 211,
 247,
-249,
+249
 ],
-'monica:app/Http/Controllers/DAV/DAVACL/PrincipalBackend.php':[
+"monica:app/Http/Controllers/DAV/DAVACL/PrincipalBackend.php": [
 63,
 78,
 79,
@@ -1399,9 +1399,9 @@
 147,
 149,
 154,
-171,
+171
 ],
-'monica:app/Http/Controllers/DashboardController.php':[
+"monica:app/Http/Controllers/DashboardController.php": [
 34,
 47,
 62,
@@ -1409,9 +1409,9 @@
 110,
 115,
 138,
-169,
+169
 ],
-'monica:app/Http/Controllers/JournalController.php':[
+"monica:app/Http/Controllers/JournalController.php": [
 42,
 43,
 127,
@@ -1419,16 +1419,16 @@
 167,
 205,
 213,
-221,
+221
 ],
-'monica:app/Http/Controllers/Settings/ExportController.php':[
+"monica:app/Http/Controllers/Settings/ExportController.php": [
 76,
 78,
 79,
 83,
-110,
+110
 ],
-'monica:app/Http/Controllers/Settings/GendersController.php':[
+"monica:app/Http/Controllers/Settings/GendersController.php": [
 28,
 50,
 80,
@@ -1436,36 +1436,36 @@
 101,
 118,
 121,
-130,
+130
 ],
-'monica:app/Http/Controllers/Settings/ModulesController.php':[
-21,
+"monica:app/Http/Controllers/Settings/ModulesController.php": [
+21
 ],
-'monica:app/Http/Controllers/Settings/MultiFAController.php':[
+"monica:app/Http/Controllers/Settings/MultiFAController.php": [
 62,
 75,
 112,
-140,
+140
 ],
-'monica:app/Http/Controllers/Settings/PersonalizationController.php':[
+"monica:app/Http/Controllers/Settings/PersonalizationController.php": [
 96,
-104,
+104
 ],
-'monica:app/Http/Controllers/Settings/RecoveryCodesController.php':[
+"monica:app/Http/Controllers/Settings/RecoveryCodesController.php": [
 25,
 47,
 63,
 85,
 88,
-95,
+95
 ],
-'monica:app/Http/Controllers/Settings/ReminderRulesController.php':[
-21,
+"monica:app/Http/Controllers/Settings/ReminderRulesController.php": [
+21
 ],
-'monica:app/Http/Controllers/Settings/StorageController.php':[
-27,
+"monica:app/Http/Controllers/Settings/StorageController.php": [
+27
 ],
-'monica:app/Http/Controllers/Settings/SubscriptionsController.php':[
+"monica:app/Http/Controllers/Settings/SubscriptionsController.php": [
 33,
 40,
 48,
@@ -1500,9 +1500,9 @@
 319,
 322,
 327,
-358,
+358
 ],
-'monica:app/Http/Controllers/SettingsController.php':[
+"monica:app/Http/Controllers/SettingsController.php": [
 59,
 75,
 103,
@@ -1518,9 +1518,9 @@
 280,
 331,
 411,
-417,
+417
 ],
-'monica:app/Http/Controllers/StorageController.php':[
+"monica:app/Http/Controllers/StorageController.php": [
 33,
 43,
 48,
@@ -1529,75 +1529,75 @@
 113,
 118,
 123,
-129,
+129
 ],
-'monica:app/Http/Controllers/TasksController.php':[
+"monica:app/Http/Controllers/TasksController.php": [
 71,
 75,
-78,
+78
 ],
-'monica:app/Http/Location/Drivers/CloudflareDriver.php':[
+"monica:app/Http/Location/Drivers/CloudflareDriver.php": [
 30,
 32,
-41,
+41
 ],
-'monica:app/Http/Middleware/Authenticate.php':[
-17,
+"monica:app/Http/Middleware/Authenticate.php": [
+17
 ],
-'monica:app/Http/Middleware/AuthenticateWithTokenOnBasicAuth.php':[
+"monica:app/Http/Middleware/AuthenticateWithTokenOnBasicAuth.php": [
 62,
 66,
 78,
 85,
 104,
 114,
-130,
+130
 ],
-'monica:app/Http/Middleware/CheckAccountLimitations.php':[
-20,
+"monica:app/Http/Middleware/CheckAccountLimitations.php": [
+20
 ],
-'monica:app/Http/Middleware/CheckCompliance.php':[
+"monica:app/Http/Middleware/CheckCompliance.php": [
 21,
 25,
-29,
+29
 ],
-'monica:app/Http/Middleware/CheckLocale.php':[
-22,
+"monica:app/Http/Middleware/CheckLocale.php": [
+22
 ],
-'monica:app/Http/Middleware/CheckVersion.php':[
+"monica:app/Http/Middleware/CheckVersion.php": [
 20,
-27,
+27
 ],
-'monica:app/Http/Middleware/EnsureEmailIsVerified.php':[
-19,
+"monica:app/Http/Middleware/EnsureEmailIsVerified.php": [
+19
 ],
-'monica:app/Http/Middleware/RedirectIfAuthenticated.php':[
-20,
+"monica:app/Http/Middleware/RedirectIfAuthenticated.php": [
+20
 ],
-'monica:app/Http/Middleware/SentryContext.php':[
+"monica:app/Http/Middleware/SentryContext.php": [
 20,
 22,
 23,
 32,
-33,
+33
 ],
-'monica:app/Http/Resources/Contact/ContactBase.php':[
+"monica:app/Http/Resources/Contact/ContactBase.php": [
 115,
 117,
-120,
+120
 ],
-'monica:app/Http/Resources/Country/Country.php':[
+"monica:app/Http/Resources/Country/Country.php": [
 18,
-21,
+21
 ],
-'monica:app/Jobs/Avatars/CreateAvatarsForExistingContacts.php':[
+"monica:app/Jobs/Avatars/CreateAvatarsForExistingContacts.php": [
 53,
-54,
+54
 ],
-'monica:app/Jobs/Avatars/GenerateDefaultAvatar.php':[
-50,
+"monica:app/Jobs/Avatars/GenerateDefaultAvatar.php": [
+50
 ],
-'monica:app/Jobs/Avatars/MoveContactAvatarToPhotosDirectory.php':[
+"monica:app/Jobs/Avatars/MoveContactAvatarToPhotosDirectory.php": [
 69,
 100,
 104,
@@ -1608,34 +1608,34 @@
 162,
 165,
 181,
-185,
+185
 ],
-'monica:app/Jobs/Avatars/UpdateAllGravatars.php':[
-27,
+"monica:app/Jobs/Avatars/UpdateAllGravatars.php": [
+27
 ],
-'monica:app/Jobs/Dav/DeleteMultipleVCard.php':[
+"monica:app/Jobs/Dav/DeleteMultipleVCard.php": [
 47,
-54,
+54
 ],
-'monica:app/Jobs/Dav/DeleteVCard.php':[
-47,
+"monica:app/Jobs/Dav/DeleteVCard.php": [
+47
 ],
-'monica:app/Jobs/Dav/GetMultipleVCard.php':[
+"monica:app/Jobs/Dav/GetMultipleVCard.php": [
 49,
 60,
 63,
 79,
-82,
+82
 ],
-'monica:app/Jobs/Dav/GetVCard.php':[
+"monica:app/Jobs/Dav/GetVCard.php": [
 49,
-65,
+65
 ],
-'monica:app/Jobs/Dav/PushVCard.php':[
+"monica:app/Jobs/Dav/PushVCard.php": [
 49,
-57,
+57
 ],
-'monica:app/Jobs/Dav/UpdateVCard.php':[
+"monica:app/Jobs/Dav/UpdateVCard.php": [
 60,
 64,
 67,
@@ -1643,72 +1643,72 @@
 92,
 97,
 109,
-115,
+115
 ],
-'monica:app/Jobs/ExportAccount.php':[
+"monica:app/Jobs/ExportAccount.php": [
 59,
 76,
 78,
-81,
+81
 ],
-'monica:app/Jobs/ExportAllAsSQL.php':[
+"monica:app/Jobs/ExportAllAsSQL.php": [
 31,
 37,
 43,
 50,
 51,
-53,
+53
 ],
-'monica:app/Jobs/GetGPSCoordinate.php':[
+"monica:app/Jobs/GetGPSCoordinate.php": [
 68,
 72,
-77,
+77
 ],
-'monica:app/Jobs/GetWeatherInformation.php':[
+"monica:app/Jobs/GetWeatherInformation.php": [
 54,
 58,
-60,
+60
 ],
-'monica:app/Jobs/Reminder/NotifyUserAboutReminder.php':[
+"monica:app/Jobs/Reminder/NotifyUserAboutReminder.php": [
 46,
 63,
 66,
 82,
 85,
-97,
+97
 ],
-'monica:app/Jobs/ResizeAvatars.php':[
+"monica:app/Jobs/ResizeAvatars.php": [
 38,
 43,
 47,
-51,
+51
 ],
-'monica:app/Jobs/SendNewUserAlert.php':[
-38,
+"monica:app/Jobs/SendNewUserAlert.php": [
+38
 ],
-'monica:app/Jobs/StayInTouch/ScheduleStayInTouch.php':[
+"monica:app/Jobs/StayInTouch/ScheduleStayInTouch.php": [
 41,
 43,
 48,
-56,
+56
 ],
-'monica:app/Jobs/SynchronizeAddressBooks.php':[
+"monica:app/Jobs/SynchronizeAddressBooks.php": [
 47,
-53,
+53
 ],
-'monica:app/Listeners/LoginListener.php':[
+"monica:app/Listeners/LoginListener.php": [
 49,
 95,
-107,
+107
 ],
-'monica:app/Listeners/LogoutUserDevices.php':[
+"monica:app/Listeners/LogoutUserDevices.php": [
 22,
 44,
 59,
 74,
-89,
+89
 ],
-'monica:app/Models/Account/Account.php':[
+"monica:app/Models/Account/Account.php": [
 550,
 560,
 601,
@@ -1720,19 +1720,19 @@
 662,
 673,
 743,
-745,
+745
 ],
-'monica:app/Models/Account/Activity.php':[
-131,
+"monica:app/Models/Account/Activity.php": [
+131
 ],
-'monica:app/Models/Account/ActivityType.php':[
+"monica:app/Models/Account/ActivityType.php": [
 63,
-77,
+77
 ],
-'monica:app/Models/Account/ActivityTypeCategory.php':[
-57,
+"monica:app/Models/Account/ActivityTypeCategory.php": [
+57
 ],
-'monica:app/Models/Account/ImportJob.php':[
+"monica:app/Models/Account/ImportJob.php": [
 109,
 117,
 129,
@@ -1750,34 +1750,34 @@
 242,
 256,
 263,
-269,
+269
 ],
-'monica:app/Models/Account/Photo.php':[
+"monica:app/Models/Account/Photo.php": [
 70,
 84,
 89,
 101,
-104,
+104
 ],
-'monica:app/Models/Account/Place.php':[
+"monica:app/Models/Account/Place.php": [
 62,
 66,
 70,
 74,
 78,
 82,
-97,
+97
 ],
-'monica:app/Models/Account/Weather.php':[
+"monica:app/Models/Account/Weather.php": [
 73,
 74,
 76,
 92,
 116,
 132,
-235,
+235
 ],
-'monica:app/Models/Contact/Contact.php':[
+"monica:app/Models/Contact/Contact.php": [
 197,
 198,
 497,
@@ -1860,65 +1860,65 @@
 1491,
 1512,
 1514,
-1552,
+1552
 ],
-'monica:app/Models/Contact/ContactField.php':[
+"monica:app/Models/Contact/ContactField.php": [
 78,
-91,
+91
 ],
-'monica:app/Models/Contact/Document.php':[
+"monica:app/Models/Contact/Document.php": [
 67,
 81,
 89,
 101,
-104,
+104
 ],
-'monica:app/Models/Contact/Gift.php':[
+"monica:app/Models/Contact/Gift.php": [
 146,
-148,
+148
 ],
-'monica:app/Models/Contact/Reminder.php':[
+"monica:app/Models/Contact/Reminder.php": [
 113,
 117,
 121,
 181,
-185,
+185
 ],
-'monica:app/Models/Contact/Tag.php':[
+"monica:app/Models/Contact/Tag.php": [
 51,
-55,
+55
 ],
-'monica:app/Models/Instance/SpecialDate.php':[
+"monica:app/Models/Instance/SpecialDate.php": [
 106,
 121,
 125,
 157,
-160,
+160
 ],
-'monica:app/Models/Journal/JournalEntry.php':[
+"monica:app/Models/Journal/JournalEntry.php": [
 76,
 78,
-95,
+95
 ],
-'monica:app/Models/ModelBinding.php':[
-19,
+"monica:app/Models/ModelBinding.php": [
+19
 ],
-'monica:app/Models/ModelBindingWithContact.php':[
-23,
+"monica:app/Models/ModelBindingWithContact.php": [
+23
 ],
-'monica:app/Models/Relationship/Relationship.php':[
-88,
+"monica:app/Models/Relationship/Relationship.php": [
+88
 ],
-'monica:app/Models/Relationship/RelationshipType.php':[
+"monica:app/Models/Relationship/RelationshipType.php": [
 77,
 83,
 87,
 89,
 97,
 100,
-110,
+110
 ],
-'monica:app/Models/User/User.php':[
+"monica:app/Models/User/User.php": [
 164,
 166,
 181,
@@ -1930,15 +1930,15 @@
 255,
 271,
 296,
-297,
+297
 ],
-'monica:app/Notifications/UserNotified.php':[
-76,
+"monica:app/Notifications/UserNotified.php": [
+76
 ],
-'monica:app/Notifications/UserReminded.php':[
-64,
+"monica:app/Notifications/UserReminded.php": [
+64
 ],
-'monica:app/Providers/AppServiceProvider.php':[
+"monica:app/Providers/AppServiceProvider.php": [
 32,
 33,
 40,
@@ -1955,9 +1955,9 @@
 101,
 108,
 111,
-126,
+126
 ],
-'monica:app/Providers/DAVServiceProvider.php':[
+"monica:app/Providers/DAVServiceProvider.php": [
 36,
 39,
 42,
@@ -1965,18 +1965,18 @@
 48,
 53,
 107,
-109,
+109
 ],
-'monica:app/Providers/MacroServiceProvider.php':[
+"monica:app/Providers/MacroServiceProvider.php": [
 18,
 19,
 27,
 28,
 36,
 37,
-41,
+41
 ],
-'monica:app/Providers/RouteServiceProvider.php':[
+"monica:app/Providers/RouteServiceProvider.php": [
 42,
 46,
 52,
@@ -1986,32 +1986,32 @@
 67,
 105,
 108,
-119,
+119
 ],
-'monica:app/Services/Account/Activity/Activity/AttachContactToActivity.php':[
+"monica:app/Services/Account/Activity/Activity/AttachContactToActivity.php": [
 38,
 74,
 81,
-83,
+83
 ],
-'monica:app/Services/Account/Activity/Activity/CreateActivity.php':[
+"monica:app/Services/Account/Activity/Activity/CreateActivity.php": [
 42,
 43,
 49,
 54,
 55,
 104,
-121,
+121
 ],
-'monica:app/Services/Account/Activity/Activity/UpdateActivity.php':[
+"monica:app/Services/Account/Activity/Activity/UpdateActivity.php": [
 46,
 51,
 56,
 57,
 110,
-125,
+125
 ],
-'monica:app/Services/Account/Activity/ActivityStatisticService.php':[
+"monica:app/Services/Account/Activity/ActivityStatisticService.php": [
 56,
 59,
 60,
@@ -2021,9 +2021,9 @@
 101,
 106,
 111,
-116,
+116
 ],
-'monica:app/Services/Account/Photo/UploadPhoto.php':[
+"monica:app/Services/Account/Photo/UploadPhoto.php": [
 23,
 60,
 62,
@@ -2038,30 +2038,30 @@
 135,
 191,
 198,
-213,
+213
 ],
-'monica:app/Services/Account/Place/CreatePlace.php':[
+"monica:app/Services/Account/Place/CreatePlace.php": [
 51,
-66,
+66
 ],
-'monica:app/Services/Account/Place/UpdatePlace.php':[
+"monica:app/Services/Account/Place/UpdatePlace.php": [
 55,
-70,
+70
 ],
-'monica:app/Services/Account/Settings/ArchiveAllContacts.php':[
+"monica:app/Services/Account/Settings/ArchiveAllContacts.php": [
 36,
-40,
+40
 ],
-'monica:app/Services/Account/Settings/DestroyAccount.php':[
-82,
+"monica:app/Services/Account/Settings/DestroyAccount.php": [
+82
 ],
-'monica:app/Services/Account/Settings/DestroyAllDocuments.php':[
-35,
+"monica:app/Services/Account/Settings/DestroyAllDocuments.php": [
+35
 ],
-'monica:app/Services/Account/Settings/DestroyAllPhotos.php':[
-35,
+"monica:app/Services/Account/Settings/DestroyAllPhotos.php": [
+35
 ],
-'monica:app/Services/Account/Settings/ResetAccount.php':[
+"monica:app/Services/Account/Settings/ResetAccount.php": [
 65,
 79,
 93,
@@ -2069,9 +2069,9 @@
 139,
 141,
 158,
-172,
+172
 ],
-'monica:app/Services/Account/Settings/SqlExportAccount.php':[
+"monica:app/Services/Account/Settings/SqlExportAccount.php": [
 141,
 146,
 154,
@@ -2080,52 +2080,52 @@
 163,
 1329,
 1335,
-1340,
+1340
 ],
-'monica:app/Services/Auth/Population/PopulateContactFieldTypesTable.php':[
+"monica:app/Services/Auth/Population/PopulateContactFieldTypesTable.php": [
 54,
 69,
-72,
+72
 ],
-'monica:app/Services/Auth/Population/PopulateLifeEventsTable.php':[
+"monica:app/Services/Auth/Population/PopulateLifeEventsTable.php": [
 50,
 55,
 90,
 97,
 112,
-115,
+115
 ],
-'monica:app/Services/Auth/Population/PopulateModulesTable.php':[
+"monica:app/Services/Auth/Population/PopulateModulesTable.php": [
 47,
 65,
 79,
-82,
+82
 ],
-'monica:app/Services/BaseService.php':[
-72,
+"monica:app/Services/BaseService.php": [
+72
 ],
-'monica:app/Services/Contact/Address/CreateAddress.php':[
-60,
+"monica:app/Services/Contact/Address/CreateAddress.php": [
+60
 ],
-'monica:app/Services/Contact/Address/UpdateAddress.php':[
-63,
+"monica:app/Services/Contact/Address/UpdateAddress.php": [
+63
 ],
-'monica:app/Services/Contact/Avatar/GenerateDefaultAvatar.php':[
+"monica:app/Services/Contact/Avatar/GenerateDefaultAvatar.php": [
 64,
 81,
 93,
 94,
 108,
 109,
-113,
+113
 ],
-'monica:app/Services/Contact/Avatar/GetAdorableAvatarURL.php':[
-47,
+"monica:app/Services/Contact/Avatar/GetAdorableAvatarURL.php": [
+47
 ],
-'monica:app/Services/Contact/Avatar/GetAvatarsFromInternet.php':[
-55,
+"monica:app/Services/Contact/Avatar/GetAvatarsFromInternet.php": [
+55
 ],
-'monica:app/Services/Contact/Avatar/GetGravatar.php':[
+"monica:app/Services/Contact/Avatar/GetGravatar.php": [
 58,
 59,
 66,
@@ -2134,48 +2134,48 @@
 92,
 97,
 99,
-103,
+103
 ],
-'monica:app/Services/Contact/Avatar/GetGravatarURL.php':[
+"monica:app/Services/Contact/Avatar/GetGravatarURL.php": [
 34,
 54,
 56,
-71,
+71
 ],
-'monica:app/Services/Contact/Avatar/UpdateAvatar.php':[
+"monica:app/Services/Contact/Avatar/UpdateAvatar.php": [
 54,
-60,
+60
 ],
-'monica:app/Services/Contact/Call/CreateCall.php':[
+"monica:app/Services/Contact/Call/CreateCall.php": [
 50,
 51,
 68,
 86,
-88,
+88
 ],
-'monica:app/Services/Contact/Call/UpdateCall.php':[
+"monica:app/Services/Contact/Call/UpdateCall.php": [
 51,
 52,
 75,
 94,
-96,
+96
 ],
-'monica:app/Services/Contact/Contact/CreateContact.php':[
+"monica:app/Services/Contact/Contact/CreateContact.php": [
 72,
 76,
 127,
 142,
-204,
+204
 ],
-'monica:app/Services/Contact/Contact/DestroyContact.php':[
+"monica:app/Services/Contact/Contact/DestroyContact.php": [
 49,
 51,
-81,
+81
 ],
-'monica:app/Services/Contact/Contact/SetMeContact.php':[
-40,
+"monica:app/Services/Contact/Contact/SetMeContact.php": [
+40
 ],
-'monica:app/Services/Contact/Contact/UpdateBirthdayInformation.php':[
+"monica:app/Services/Contact/Contact/UpdateBirthdayInformation.php": [
 37,
 44,
 52,
@@ -2184,20 +2184,20 @@
 127,
 131,
 133,
-180,
+180
 ],
-'monica:app/Services/Contact/Contact/UpdateContact.php':[
+"monica:app/Services/Contact/Contact/UpdateContact.php": [
 78,
 115,
 123,
 130,
 136,
-137,
+137
 ],
-'monica:app/Services/Contact/Contact/UpdateContactFoodPreferences.php':[
-40,
+"monica:app/Services/Contact/Contact/UpdateContactFoodPreferences.php": [
+40
 ],
-'monica:app/Services/Contact/Contact/UpdateContactIntroduction.php':[
+"monica:app/Services/Contact/Contact/UpdateContactIntroduction.php": [
 41,
 48,
 56,
@@ -2208,117 +2208,117 @@
 139,
 145,
 147,
-194,
+194
 ],
-'monica:app/Services/Contact/Contact/UpdateDeceasedInformation.php':[
+"monica:app/Services/Contact/Contact/UpdateDeceasedInformation.php": [
 66,
 85,
 99,
 111,
-145,
+145
 ],
-'monica:app/Services/Contact/Contact/UpdateWorkInformation.php':[
-45,
+"monica:app/Services/Contact/Contact/UpdateWorkInformation.php": [
+45
 ],
-'monica:app/Services/Contact/ContactField/CreateContactField.php':[
-54,
+"monica:app/Services/Contact/ContactField/CreateContactField.php": [
+54
 ],
-'monica:app/Services/Contact/ContactField/UpdateContactField.php':[
-58,
+"monica:app/Services/Contact/ContactField/UpdateContactField.php": [
+58
 ],
-'monica:app/Services/Contact/Document/UploadDocument.php':[
-38,
+"monica:app/Services/Contact/Document/UploadDocument.php": [
+38
 ],
-'monica:app/Services/Contact/Gift/CreateGift.php':[
+"monica:app/Services/Contact/Gift/CreateGift.php": [
 55,
 71,
-75,
+75
 ],
-'monica:app/Services/Contact/Gift/UpdateGift.php':[
+"monica:app/Services/Contact/Gift/UpdateGift.php": [
 59,
 74,
-80,
+80
 ],
-'monica:app/Services/Contact/Label/UpdateAddressLabels.php':[
+"monica:app/Services/Contact/Label/UpdateAddressLabels.php": [
 54,
 56,
 61,
-82,
+82
 ],
-'monica:app/Services/Contact/Label/UpdateContactFieldLabels.php':[
+"monica:app/Services/Contact/Label/UpdateContactFieldLabels.php": [
 54,
 57,
 62,
-83,
+83
 ],
-'monica:app/Services/Contact/LifeEvent/CreateLifeEvent.php':[
-78,
+"monica:app/Services/Contact/LifeEvent/CreateLifeEvent.php": [
+78
 ],
-'monica:app/Services/Contact/LifeEvent/DestroyLifeEvent.php':[
-51,
+"monica:app/Services/Contact/LifeEvent/DestroyLifeEvent.php": [
+51
 ],
-'monica:app/Services/Contact/Relationship/CreateRelationship.php':[
-52,
+"monica:app/Services/Contact/Relationship/CreateRelationship.php": [
+52
 ],
-'monica:app/Services/Contact/Relationship/DestroyRelationship.php':[
+"monica:app/Services/Contact/Relationship/DestroyRelationship.php": [
 58,
 74,
 76,
-82,
+82
 ],
-'monica:app/Services/Contact/Relationship/UpdateRelationship.php':[
+"monica:app/Services/Contact/Relationship/UpdateRelationship.php": [
 44,
-46,
+46
 ],
-'monica:app/Services/Contact/Reminder/CreateReminder.php':[
-60,
+"monica:app/Services/Contact/Reminder/CreateReminder.php": [
+60
 ],
-'monica:app/Services/Contact/Reminder/UpdateReminder.php':[
-64,
+"monica:app/Services/Contact/Reminder/UpdateReminder.php": [
+64
 ],
-'monica:app/Services/Contact/Tag/AssociateTag.php':[
-64,
+"monica:app/Services/Contact/Tag/AssociateTag.php": [
+64
 ],
-'monica:app/Services/Contact/Tag/CreateTag.php':[
-41,
+"monica:app/Services/Contact/Tag/CreateTag.php": [
+41
 ],
-'monica:app/Services/DavClient/CreateAddressBookSubscription.php':[
+"monica:app/Services/DavClient/CreateAddressBookSubscription.php": [
 43,
-52,
+52
 ],
-'monica:app/Services/DavClient/SynchronizeAddressBook.php':[
+"monica:app/Services/DavClient/SynchronizeAddressBook.php": [
 43,
 50,
-52,
+52
 ],
-'monica:app/Services/DavClient/UpdateSubscriptionLocalSyncToken.php':[
-50,
+"monica:app/Services/DavClient/UpdateSubscriptionLocalSyncToken.php": [
+50
 ],
-'monica:app/Services/DavClient/Utils/AddressBookContactsPush.php':[
+"monica:app/Services/DavClient/Utils/AddressBookContactsPush.php": [
 37,
 52,
 77,
 93,
 99,
-103,
+103
 ],
-'monica:app/Services/DavClient/Utils/AddressBookContactsPushMissed.php':[
+"monica:app/Services/DavClient/Utils/AddressBookContactsPushMissed.php": [
 50,
 53,
 58,
-61,
+61
 ],
-'monica:app/Services/DavClient/Utils/AddressBookContactsUpdater.php':[
+"monica:app/Services/DavClient/Utils/AddressBookContactsUpdater.php": [
 45,
 51,
 71,
 72,
-74,
+74
 ],
-'monica:app/Services/DavClient/Utils/AddressBookContactsUpdaterMissed.php':[
-28,
+"monica:app/Services/DavClient/Utils/AddressBookContactsUpdaterMissed.php": [
+28
 ],
-'monica:app/Services/DavClient/Utils/AddressBookGetter.php':[
+"monica:app/Services/DavClient/Utils/AddressBookGetter.php": [
 31,
 33,
 50,
@@ -2338,9 +2338,9 @@
 196,
 201,
 251,
-255,
+255
 ],
-'monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php':[
+"monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php": [
 50,
 60,
 90,
@@ -2358,9 +2358,9 @@
 230,
 233,
 236,
-239,
+239
 ],
-'monica:app/Services/DavClient/Utils/Dav/DavClient.php':[
+"monica:app/Services/DavClient/Utils/Dav/DavClient.php": [
 82,
 99,
 104,
@@ -2398,64 +2398,64 @@
 512,
 559,
 560,
-568,
+568
 ],
-'monica:app/Services/DavClient/Utils/Dav/ServiceUrlQuery.php':[
+"monica:app/Services/DavClient/Utils/Dav/ServiceUrlQuery.php": [
 21,
 23,
 29,
 36,
 37,
 39,
-75,
+75
 ],
-'monica:app/Services/DavClient/Utils/Model/ContactUpdateDto.php':[
+"monica:app/Services/DavClient/Utils/Model/ContactUpdateDto.php": [
 36,
-37,
+37
 ],
-'monica:app/Services/DavClient/Utils/Model/SyncDto.php':[
+"monica:app/Services/DavClient/Utils/Model/SyncDto.php": [
 18,
-70,
+70
 ],
-'monica:app/Services/Instance/Geolocalization/GetGPSCoordinate.php':[
+"monica:app/Services/Instance/Geolocalization/GetGPSCoordinate.php": [
 55,
 68,
 89,
 93,
 102,
 103,
-105,
+105
 ],
-'monica:app/Services/Instance/IdHasher.php':[
+"monica:app/Services/Instance/IdHasher.php": [
 35,
-38,
+38
 ],
-'monica:app/Services/Instance/TokenClean.php':[
+"monica:app/Services/Instance/TokenClean.php": [
 42,
 43,
 68,
-70,
+70
 ],
-'monica:app/Services/Instance/Weather/GetWeatherInformation.php':[
+"monica:app/Services/Instance/Weather/GetWeatherInformation.php": [
 49,
 63,
 80,
 89,
-114,
+114
 ],
-'monica:app/Services/Task/CreateTask.php':[
-36,
+"monica:app/Services/Task/CreateTask.php": [
+36
 ],
-'monica:app/Services/Task/UpdateTask.php':[
+"monica:app/Services/Task/UpdateTask.php": [
 37,
-42,
+42
 ],
-'monica:app/Services/User/AcceptPolicy.php':[
+"monica:app/Services/User/AcceptPolicy.php": [
 38,
 41,
-47,
+47
 ],
-'monica:app/Services/User/CreateUser.php':[
+"monica:app/Services/User/CreateUser.php": [
 91,
 93,
 98,
@@ -2467,30 +2467,30 @@
 118,
 119,
 129,
-146,
+146
 ],
-'monica:app/Services/User/EmailChange.php':[
+"monica:app/Services/User/EmailChange.php": [
 44,
-50,
+50
 ],
-'monica:app/Services/User/UpdateViewPreference.php':[
+"monica:app/Services/User/UpdateViewPreference.php": [
 35,
-39,
+39
 ],
-'monica:app/Services/VCalendar/ExportTask.php':[
+"monica:app/Services/VCalendar/ExportTask.php": [
 50,
 88,
 92,
 95,
 98,
-101,
+101
 ],
-'monica:app/Services/VCalendar/ExportVCalendar.php':[
+"monica:app/Services/VCalendar/ExportVCalendar.php": [
 50,
 94,
-98,
+98
 ],
-'monica:app/Services/VCalendar/ImportTask.php':[
+"monica:app/Services/VCalendar/ImportTask.php": [
 43,
 46,
 64,
@@ -2504,9 +2504,9 @@
 158,
 171,
 183,
-185,
+185
 ],
-'monica:app/Services/VCard/ExportVCard.php':[
+"monica:app/Services/VCard/ExportVCard.php": [
 67,
 73,
 74,
@@ -2534,9 +2534,9 @@
 306,
 308,
 334,
-335,
+335
 ],
-'monica:app/Services/VCard/ImportVCard.php':[
+"monica:app/Services/VCard/ImportVCard.php": [
 115,
 116,
 143,
@@ -2640,21 +2640,21 @@
 1209,
 1211,
 1213,
-1223,
+1223
 ],
-'monica:app/Traits/AmountFormatter.php':[
+"monica:app/Traits/AmountFormatter.php": [
 39,
 53,
-67,
+67
 ],
-'monica:app/Traits/HasUuid.php':[
+"monica:app/Traits/HasUuid.php": [
 16,
-17,
+17
 ],
-'monica:app/Traits/Journalable.php':[
-38,
+"monica:app/Traits/Journalable.php": [
+38
 ],
-'monica:app/Traits/Searchable.php':[
+"monica:app/Traits/Searchable.php": [
 23,
 27,
 37,
@@ -2662,9 +2662,9 @@
 61,
 64,
 65,
-67,
+67
 ],
-'monica:app/Traits/StripeCall.php':[
+"monica:app/Traits/StripeCall.php": [
 20,
 22,
 28,
@@ -2673,9 +2673,9 @@
 41,
 45,
 48,
-50,
+50
 ],
-'monica:app/Traits/Subscription.php':[
+"monica:app/Traits/Subscription.php": [
 22,
 26,
 47,
@@ -2684,37 +2684,37 @@
 60,
 76,
 126,
-127,
+127
 ],
-'monica:app/ViewHelpers/ContactHelper.php':[
-29,
+"monica:app/ViewHelpers/ContactHelper.php": [
+29
 ],
-'monica:config/cache.php':[
+"monica:config/cache.php": [
 111,
 113,
 119,
-130,
+130
 ],
-'monica:config/database.php':[
+"monica:config/database.php": [
 211,
-226,
+226
 ],
-'monica:config/passport.php':[
+"monica:config/passport.php": [
 85,
 88,
-91,
+91
 ],
-'monica:database/factories/Account/AddressBookFactory.php':[
-28,
+"monica:database/factories/Account/AddressBookFactory.php": [
+28
 ],
-'monica:database/factories/Account/AddressBookSubscriptionFactory.php':[
+"monica:database/factories/Account/AddressBookSubscriptionFactory.php": [
 29,
-34,
+34
 ],
-'monica:database/factories/Account/ExportJobFactory.php':[
-28,
+"monica:database/factories/Account/ExportJobFactory.php": [
+28
 ],
-'monica:database/factories/AccountFactory.php':[
+"monica:database/factories/AccountFactory.php": [
 6,
 12,
 15,
@@ -2730,9 +2730,9 @@
 83,
 93,
 104,
-107,
+107
 ],
-'monica:database/factories/ContactFactory.php':[
+"monica:database/factories/ContactFactory.php": [
 5,
 11,
 30,
@@ -2781,9 +2781,9 @@
 295,
 305,
 308,
-313,
+313
 ],
-'monica:database/factories/InstanceFactory.php':[
+"monica:database/factories/InstanceFactory.php": [
 3,
 10,
 13,
@@ -2793,67 +2793,67 @@
 43,
 50,
 56,
-59,
+59
 ],
-'monica:database/factories/JournalFactory.php':[
+"monica:database/factories/JournalFactory.php": [
 3,
 9,
-15,
+15
 ],
-'monica:database/factories/RelationshipFactory.php':[
+"monica:database/factories/RelationshipFactory.php": [
 3,
 6,
 11,
 16,
 24,
 27,
-35,
+35
 ],
-'monica:database/factories/SettingsFactory.php':[
+"monica:database/factories/SettingsFactory.php": [
 3,
 12,
-20,
+20
 ],
-'monica:database/factories/UserFactory.php':[
+"monica:database/factories/UserFactory.php": [
 5,
 17,
 25,
 29,
 35,
-38,
+38
 ],
-'monica:database/factories/WebauthnFactory.php':[
-14,
+"monica:database/factories/WebauthnFactory.php": [
+14
 ],
-'monica:database/migrations/2014_10_12_000000_create_users_table.php':[
+"monica:database/migrations/2014_10_12_000000_create_users_table.php": [
+16
+],
+"monica:database/migrations/2014_10_12_100000_create_password_resets_table.php": [
+16
+],
+"monica:database/migrations/2016_06_01_000001_create_oauth_auth_codes_table.php": [
+16
+],
+"monica:database/migrations/2016_06_01_000002_create_oauth_access_tokens_table.php": [
+16
+],
+"monica:database/migrations/2016_06_01_000003_create_oauth_refresh_tokens_table.php": [
+16
+],
+"monica:database/migrations/2016_06_01_000004_create_oauth_clients_table.php": [
+16
+],
+"monica:database/migrations/2016_06_01_000005_create_oauth_personal_access_clients_table.php": [
+16
+],
+"monica:database/migrations/2016_06_07_234741_create_account_table.php": [
+16
+],
+"monica:database/migrations/2016_06_08_003006_add_account_info_table.php": [
 16,
+33
 ],
-'monica:database/migrations/2014_10_12_100000_create_password_resets_table.php':[
-16,
-],
-'monica:database/migrations/2016_06_01_000001_create_oauth_auth_codes_table.php':[
-16,
-],
-'monica:database/migrations/2016_06_01_000002_create_oauth_access_tokens_table.php':[
-16,
-],
-'monica:database/migrations/2016_06_01_000003_create_oauth_refresh_tokens_table.php':[
-16,
-],
-'monica:database/migrations/2016_06_01_000004_create_oauth_clients_table.php':[
-16,
-],
-'monica:database/migrations/2016_06_01_000005_create_oauth_personal_access_clients_table.php':[
-16,
-],
-'monica:database/migrations/2016_06_07_234741_create_account_table.php':[
-16,
-],
-'monica:database/migrations/2016_06_08_003006_add_account_info_table.php':[
-16,
-33,
-],
-'monica:database/migrations/2016_06_08_005413_create_contacts_table.php':[
+"monica:database/migrations/2016_06_08_005413_create_contacts_table.php": [
 16,
 55,
 64,
@@ -2861,115 +2861,115 @@
 82,
 94,
 100,
-111,
+111
 ],
-'monica:database/migrations/2016_06_25_224219_create_reminder_type_table.php':[
+"monica:database/migrations/2016_06_25_224219_create_reminder_type_table.php": [
 16,
 23,
-37,
+37
 ],
-'monica:database/migrations/2016_06_28_191025_create_tasks_table.php':[
+"monica:database/migrations/2016_06_28_191025_create_tasks_table.php": [
+16
+],
+"monica:database/migrations/2016_06_30_185050_create_notes_table.php": [
+16
+],
+"monica:database/migrations/2016_07_25_133835_add_width_field.php": [
 16,
+28
 ],
-'monica:database/migrations/2016_06_30_185050_create_notes_table.php':[
-16,
-],
-'monica:database/migrations/2016_07_25_133835_add_width_field.php':[
-16,
-28,
-],
-'monica:database/migrations/2016_08_28_122938_create_kids_table.php':[
+"monica:database/migrations/2016_08_28_122938_create_kids_table.php": [
 18,
 31,
 36,
-50,
+50
 ],
-'monica:database/migrations/2016_08_28_215159_create_relations_table.php':[
+"monica:database/migrations/2016_08_28_215159_create_relations_table.php": [
 15,
-19,
+19
 ],
-'monica:database/migrations/2016_09_03_202027_add_reminder_id_to_contacts.php':[
+"monica:database/migrations/2016_09_03_202027_add_reminder_id_to_contacts.php": [
 16,
 20,
 24,
 36,
 40,
-44,
+44
 ],
-'monica:database/migrations/2016_09_05_134937_add_last_talked_to_field.php':[
+"monica:database/migrations/2016_09_05_134937_add_last_talked_to_field.php": [
 16,
-20,
+20
 ],
-'monica:database/migrations/2016_09_05_135927_add_people_id_to_contacts.php':[
-16,
+"monica:database/migrations/2016_09_05_135927_add_people_id_to_contacts.php": [
+16
 ],
-'monica:database/migrations/2016_09_05_145111_add_name_info_to_peoples.php':[
-16,
+"monica:database/migrations/2016_09_05_145111_add_name_info_to_peoples.php": [
+16
 ],
-'monica:database/migrations/2016_09_06_213550_create_activity_type_table.php':[
+"monica:database/migrations/2016_09_06_213550_create_activity_type_table.php": [
 15,
-22,
+22
 ],
-'monica:database/migrations/2016_09_10_164406_create_jobs_table.php':[
+"monica:database/migrations/2016_09_10_164406_create_jobs_table.php": [
+16
+],
+"monica:database/migrations/2016_09_10_170122_create_notifications_table.php": [
+16
+],
+"monica:database/migrations/2016_09_12_014120_create_failed_jobs_table.php": [
+16
+],
+"monica:database/migrations/2016_09_30_014720_add_kid_to_reminder.php": [
+16
+],
+"monica:database/migrations/2016_10_15_024156_add_deleted_at_to_users.php": [
+16
+],
+"monica:database/migrations/2016_10_19_155139_create_cache_table.php": [
+16
+],
+"monica:database/migrations/2016_10_19_155800_create_sessions_table.php": [
+16
+],
+"monica:database/migrations/2016_10_21_022941_add_statistics_table.php": [
+16
+],
+"monica:database/migrations/2016_10_24_013543_add_journal_setting_to_users.php": [
+16
+],
+"monica:database/migrations/2016_10_28_002518_add_metric_to_settings.php": [
+16
+],
+"monica:database/migrations/2016_11_01_014353_create_activities_table.php": [
+16
+],
+"monica:database/migrations/2016_11_01_015957_add_icon_column.php": [
+15
+],
+"monica:database/migrations/2016_11_03_150307_add_activity_location_to_activities.php": [
+16
+],
+"monica:database/migrations/2016_11_09_013049_add_events_table.php": [
+16
+],
+"monica:database/migrations/2016_12_08_011555_remove_type_from_notes.php": [
+15
+],
+"monica:database/migrations/2016_12_13_133945_add_gifts_table.php": [
+16
+],
+"monica:database/migrations/2016_12_28_150831_change_title_column.php": [
+15
+],
+"monica:database/migrations/2017_01_14_200815_add_facebook_columns_to_users_table.php": [
 16,
+29
 ],
-'monica:database/migrations/2016_09_10_170122_create_notifications_table.php':[
+"monica:database/migrations/2017_01_15_045025_add_colors_to_users.php": [
 16,
+28
 ],
-'monica:database/migrations/2016_09_12_014120_create_failed_jobs_table.php':[
-16,
-],
-'monica:database/migrations/2016_09_30_014720_add_kid_to_reminder.php':[
-16,
-],
-'monica:database/migrations/2016_10_15_024156_add_deleted_at_to_users.php':[
-16,
-],
-'monica:database/migrations/2016_10_19_155139_create_cache_table.php':[
-16,
-],
-'monica:database/migrations/2016_10_19_155800_create_sessions_table.php':[
-16,
-],
-'monica:database/migrations/2016_10_21_022941_add_statistics_table.php':[
-16,
-],
-'monica:database/migrations/2016_10_24_013543_add_journal_setting_to_users.php':[
-16,
-],
-'monica:database/migrations/2016_10_28_002518_add_metric_to_settings.php':[
-16,
-],
-'monica:database/migrations/2016_11_01_014353_create_activities_table.php':[
-16,
-],
-'monica:database/migrations/2016_11_01_015957_add_icon_column.php':[
-15,
-],
-'monica:database/migrations/2016_11_03_150307_add_activity_location_to_activities.php':[
-16,
-],
-'monica:database/migrations/2016_11_09_013049_add_events_table.php':[
-16,
-],
-'monica:database/migrations/2016_12_08_011555_remove_type_from_notes.php':[
-15,
-],
-'monica:database/migrations/2016_12_13_133945_add_gifts_table.php':[
-16,
-],
-'monica:database/migrations/2016_12_28_150831_change_title_column.php':[
-15,
-],
-'monica:database/migrations/2017_01_14_200815_add_facebook_columns_to_users_table.php':[
-16,
-29,
-],
-'monica:database/migrations/2017_01_15_045025_add_colors_to_users.php':[
-16,
-28,
-],
-'monica:database/migrations/2017_01_22_142645_add_fields_to_contacts.php':[
+"monica:database/migrations/2017_01_22_142645_add_fields_to_contacts.php": [
 16,
 23,
 29,
@@ -2977,129 +2977,129 @@
 47,
 53,
 59,
-66,
+66
 ],
-'monica:database/migrations/2017_01_23_043831_change_people_to_contact_for_kids.php':[
+"monica:database/migrations/2017_01_23_043831_change_people_to_contact_for_kids.php": [
 16,
 20,
 34,
-38,
+38
 ],
-'monica:database/migrations/2017_01_26_013524_change_people_to_significantother.php':[
+"monica:database/migrations/2017_01_26_013524_change_people_to_significantother.php": [
 16,
 22,
 34,
-38,
+38
 ],
-'monica:database/migrations/2017_01_26_022852_change_notes_to_contact.php':[
+"monica:database/migrations/2017_01_26_022852_change_notes_to_contact.php": [
 16,
-22,
+22
 ],
-'monica:database/migrations/2017_01_26_034553_add_notes_count_to_contact.php':[
+"monica:database/migrations/2017_01_26_034553_add_notes_count_to_contact.php": [
 16,
-28,
+28
 ],
-'monica:database/migrations/2017_01_27_024356_change_people_in_events.php':[
+"monica:database/migrations/2017_01_27_024356_change_people_in_events.php": [
 16,
 22,
 34,
-40,
+40
 ],
-'monica:database/migrations/2017_01_28_180156_remove_deleted_at_from_significant_others.php':[
+"monica:database/migrations/2017_01_28_180156_remove_deleted_at_from_significant_others.php": [
 16,
-30,
+30
 ],
-'monica:database/migrations/2017_01_28_184901_remove_deleted_at_from_kids.php':[
+"monica:database/migrations/2017_01_28_184901_remove_deleted_at_from_kids.php": [
 16,
-30,
+30
 ],
-'monica:database/migrations/2017_01_28_193913_remove_deleted_at_from_notes.php':[
+"monica:database/migrations/2017_01_28_193913_remove_deleted_at_from_notes.php": [
 16,
-30,
+30
 ],
-'monica:database/migrations/2017_01_28_222114_remove_viewed_at_from_contacts.php':[
+"monica:database/migrations/2017_01_28_222114_remove_viewed_at_from_contacts.php": [
 16,
-30,
+30
 ],
-'monica:database/migrations/2017_01_29_175146_remove_delete_at_from_activities.php':[
+"monica:database/migrations/2017_01_29_175146_remove_delete_at_from_activities.php": [
 16,
-30,
+30
 ],
-'monica:database/migrations/2017_01_29_175629_add_number_activities_to_contacts.php':[
+"monica:database/migrations/2017_01_29_175629_add_number_activities_to_contacts.php": [
 16,
-28,
+28
 ],
-'monica:database/migrations/2017_01_31_025849_add_activity_statistics_table.php':[
-16,
+"monica:database/migrations/2017_01_31_025849_add_activity_statistics_table.php": [
+16
 ],
-'monica:database/migrations/2017_02_02_232450_add_confirmation.php':[
+"monica:database/migrations/2017_02_02_232450_add_confirmation.php": [
 16,
 29,
-33,
+33
 ],
-'monica:database/migrations/2017_02_04_225618_change_reminders_table.php':[
+"monica:database/migrations/2017_02_04_225618_change_reminders_table.php": [
 16,
 22,
 34,
-40,
+40
 ],
-'monica:database/migrations/2017_02_05_035925_add_gifts_metrics_to_contacts.php':[
+"monica:database/migrations/2017_02_05_035925_add_gifts_metrics_to_contacts.php": [
 16,
-30,
+30
 ],
-'monica:database/migrations/2017_02_05_041740_change_gifts_table.php':[
+"monica:database/migrations/2017_02_05_041740_change_gifts_table.php": [
 16,
-29,
+29
 ],
-'monica:database/migrations/2017_02_05_042122_change_people_to_contact_for_gifts.php':[
-16,
-22,
-34,
-40,
-],
-'monica:database/migrations/2017_02_07_041607_change_tasks_table.php':[
+"monica:database/migrations/2017_02_05_042122_change_people_to_contact_for_gifts.php": [
 16,
 22,
 34,
-40,
+40
 ],
-'monica:database/migrations/2017_02_07_051355_add_number_tasks_to_contact.php':[
+"monica:database/migrations/2017_02_07_041607_change_tasks_table.php": [
 16,
-28,
+22,
+34,
+40
 ],
-'monica:database/migrations/2017_02_08_002251_change_number_tasks_contact.php':[
+"monica:database/migrations/2017_02_07_051355_add_number_tasks_to_contact.php": [
+16,
+28
+],
+"monica:database/migrations/2017_02_08_002251_change_number_tasks_contact.php": [
 16,
 22,
 35,
-41,
+41
 ],
-'monica:database/migrations/2017_02_08_025358_add_sort_preferences_to_users.php':[
+"monica:database/migrations/2017_02_08_025358_add_sort_preferences_to_users.php": [
 16,
-28,
+28
 ],
-'monica:database/migrations/2017_02_10_195613_remove_notifications_table.php':[
-26,
+"monica:database/migrations/2017_02_10_195613_remove_notifications_table.php": [
+26
 ],
-'monica:database/migrations/2017_02_10_214714_remove_people_table.php':[
-26,
+"monica:database/migrations/2017_02_10_214714_remove_people_table.php": [
+26
 ],
-'monica:database/migrations/2017_02_10_215405_remove_entities_table.php':[
-26,
+"monica:database/migrations/2017_02_10_215405_remove_entities_table.php": [
+26
 ],
-'monica:database/migrations/2017_02_10_224355_calculate_statistics.php':[
-22,
+"monica:database/migrations/2017_02_10_224355_calculate_statistics.php": [
+22
 ],
-'monica:database/migrations/2017_02_11_154900_add_avatars_to_contacts.php':[
+"monica:database/migrations/2017_02_11_154900_add_avatars_to_contacts.php": [
 16,
-29,
+29
 ],
-'monica:database/migrations/2017_02_12_134220_create_entries_table.php':[
-16,
+"monica:database/migrations/2017_02_12_134220_create_entries_table.php": [
+16
 ],
-'monica:database/migrations/2017_05_03_155254_move_significant_other_data.php':[
-16,
+"monica:database/migrations/2017_05_03_155254_move_significant_other_data.php": [
+16
 ],
-'monica:database/migrations/2017_05_04_164723_remove_contact_encryption.php':[
+"monica:database/migrations/2017_05_04_164723_remove_contact_encryption.php": [
 17,
 19,
 23,
@@ -3108,160 +3108,160 @@
 35,
 39,
 43,
-47,
+47
 ],
-'monica:database/migrations/2017_05_04_185921_add_title_to_activities.php':[
-16,
+"monica:database/migrations/2017_05_04_185921_add_title_to_activities.php": [
+16
 ],
-'monica:database/migrations/2017_05_04_193252_alter_activity_nullable.php':[
-16,
+"monica:database/migrations/2017_05_04_193252_alter_activity_nullable.php": [
+16
 ],
-'monica:database/migrations/2017_05_08_164514_remove_encryption_tasks.php':[
+"monica:database/migrations/2017_05_08_164514_remove_encryption_tasks.php": [
 16,
 18,
-22,
+22
 ],
-'monica:database/migrations/2017_05_30_002239_remove_predefined_reminders.php':[
+"monica:database/migrations/2017_05_30_002239_remove_predefined_reminders.php": [
 18,
 20,
 24,
-31,
+31
 ],
-'monica:database/migrations/2017_05_30_023116_create_money_table.php':[
-15,
+"monica:database/migrations/2017_05_30_023116_create_money_table.php": [
+15
 ],
-'monica:database/migrations/2017_06_07_173437_add_multiple_genders_choices.php':[
+"monica:database/migrations/2017_06_07_173437_add_multiple_genders_choices.php": [
 17,
 45,
-49,
+49
 ],
-'monica:database/migrations/2017_06_10_152945_add_social_networks_to_contacts.php':[
-16,
+"monica:database/migrations/2017_06_10_152945_add_social_networks_to_contacts.php": [
+16
 ],
-'monica:database/migrations/2017_06_10_155349_create_currencies_data.php':[
+"monica:database/migrations/2017_06_10_155349_create_currencies_data.php": [
 17,
-31,
+31
 ],
-'monica:database/migrations/2017_06_11_025227_remove_encryption_journal.php':[
+"monica:database/migrations/2017_06_11_025227_remove_encryption_journal.php": [
 16,
 18,
-22,
+22
 ],
-'monica:database/migrations/2017_06_11_110735_change_unique_constraint_for_contacts.php':[
+"monica:database/migrations/2017_06_11_110735_change_unique_constraint_for_contacts.php": [
 16,
-30,
+30
 ],
-'monica:database/migrations/2017_06_13_035059_remove_gifts_encryption.php':[
+"monica:database/migrations/2017_06_13_035059_remove_gifts_encryption.php": [
 16,
 20,
 24,
-28,
+28
 ],
-'monica:database/migrations/2017_06_13_195740_add_company_to_contacts.php':[
+"monica:database/migrations/2017_06_13_195740_add_company_to_contacts.php": [
+16
+],
+"monica:database/migrations/2017_06_14_131803_remove_bern_timezone.php": [
 16,
+17
 ],
-'monica:database/migrations/2017_06_14_131803_remove_bern_timezone.php':[
-16,
-17,
-],
-'monica:database/migrations/2017_06_16_215256_add_about_who_to_reminders.php':[
+"monica:database/migrations/2017_06_16_215256_add_about_who_to_reminders.php": [
 17,
 24,
 25,
-34,
+34
 ],
-'monica:database/migrations/2017_06_17_010900_fix_contacts_table.php':[
+"monica:database/migrations/2017_06_17_010900_fix_contacts_table.php": [
 15,
-16,
+16
 ],
-'monica:database/migrations/2017_06_17_153814_refactor_user_table.php':[
+"monica:database/migrations/2017_06_17_153814_refactor_user_table.php": [
 16,
-31,
+31
 ],
-'monica:database/migrations/2017_06_19_105842_add_stripe_fields_to_users.php':[
+"monica:database/migrations/2017_06_19_105842_add_stripe_fields_to_users.php": [
 15,
-22,
+22
 ],
-'monica:database/migrations/2017_06_20_121345_add_invitations_statistics.php':[
+"monica:database/migrations/2017_06_20_121345_add_invitations_statistics.php": [
 15,
-19,
+19
 ],
-'monica:database/migrations/2017_06_22_210813_add_name_order_to_users.php':[
+"monica:database/migrations/2017_06_22_210813_add_name_order_to_users.php": [
+16
+],
+"monica:database/migrations/2017_06_27_134704_create_import_table.php": [
 16,
+32
 ],
-'monica:database/migrations/2017_06_27_134704_create_import_table.php':[
+"monica:database/migrations/2017_06_29_211725_add_import_job_to_statistics.php": [
+15
+],
+"monica:database/migrations/2017_06_29_230523_add_gravatar_url_to_users.php": [
+16
+],
+"monica:database/migrations/2017_07_02_155736_create_tags_table.php": [
 16,
-32,
+25
 ],
-'monica:database/migrations/2017_06_29_211725_add_import_job_to_statistics.php':[
-15,
+"monica:database/migrations/2017_07_04_132743_add_tags_to_statistics.php": [
+15
 ],
-'monica:database/migrations/2017_06_29_230523_add_gravatar_url_to_users.php':[
-16,
+"monica:database/migrations/2017_07_12_014244_create_calls_table.php": [
+16
 ],
-'monica:database/migrations/2017_07_02_155736_create_tags_table.php':[
-16,
-25,
+"monica:database/migrations/2017_07_17_005012_drop_reminders_count_from_contacts.php": [
+16
 ],
-'monica:database/migrations/2017_07_04_132743_add_tags_to_statistics.php':[
-15,
+"monica:database/migrations/2017_07_22_153209_create_instance_table.php": [
+18
 ],
-'monica:database/migrations/2017_07_12_014244_create_calls_table.php':[
-16,
-],
-'monica:database/migrations/2017_07_17_005012_drop_reminders_count_from_contacts.php':[
-16,
-],
-'monica:database/migrations/2017_07_22_153209_create_instance_table.php':[
-18,
-],
-'monica:database/migrations/2017_07_26_220021_change_contacts_table.php':[
+"monica:database/migrations/2017_07_26_220021_change_contacts_table.php": [
 18,
 26,
 32,
 49,
-62,
+62
 ],
-'monica:database/migrations/2017_08_02_152838_change_string_to_boolean_for_reminders.php':[
+"monica:database/migrations/2017_08_02_152838_change_string_to_boolean_for_reminders.php": [
 18,
 24,
 25,
 29,
 36,
-40,
+40
 ],
-'monica:database/migrations/2017_08_06_085629_change_events_data.php':[
+"monica:database/migrations/2017_08_06_085629_change_events_data.php": [
 19,
-27,
+27
 ],
-'monica:database/migrations/2017_08_06_153253_move_kids_to_contacts.php':[
+"monica:database/migrations/2017_08_06_153253_move_kids_to_contacts.php": [
 19,
 23,
 31,
 41,
 62,
-77,
+77
 ],
-'monica:database/migrations/2017_08_16_041431_add_contact_avatar_location.php':[
+"monica:database/migrations/2017_08_16_041431_add_contact_avatar_location.php": [
 16,
-28,
+28
 ],
-'monica:database/migrations/2017_08_21_224835_remove_paid_limitations_for_current_users.php':[
-17,
+"monica:database/migrations/2017_08_21_224835_remove_paid_limitations_for_current_users.php": [
+17
 ],
-'monica:database/migrations/2017_09_10_125918_remove_unusued_counters.php':[
-16,
+"monica:database/migrations/2017_09_10_125918_remove_unusued_counters.php": [
+16
 ],
-'monica:database/migrations/2017_09_13_095923_add_tracking_table.php':[
-16,
+"monica:database/migrations/2017_09_13_095923_add_tracking_table.php": [
+16
 ],
-'monica:database/migrations/2017_09_13_191714_add_partial_notion.php':[
+"monica:database/migrations/2017_09_13_191714_add_partial_notion.php": [
 17,
 22,
 23,
-30,
+30
 ],
-'monica:database/migrations/2017_10_14_083556_change_gift_column_structure.php':[
+"monica:database/migrations/2017_10_14_083556_change_gift_column_structure.php": [
 18,
 19,
 22,
@@ -3273,74 +3273,74 @@
 51,
 55,
 62,
-67,
+67
 ],
-'monica:database/migrations/2017_10_17_170803_change_gift_structure.php':[
+"monica:database/migrations/2017_10_17_170803_change_gift_structure.php": [
+16
+],
+"monica:database/migrations/2017_10_19_134816_create_activity_contact_table.php": [
+16
+],
+"monica:database/migrations/2017_10_19_135215_move_activities_to_pivot_table.php": [
+18
+],
+"monica:database/migrations/2017_10_25_102923_remove_contact_id_activities_table.php": [
+15
+],
+"monica:database/migrations/2017_11_01_122541_add_met_through_to_contacts.php": [
 16,
+20
 ],
-'monica:database/migrations/2017_10_19_134816_create_activity_contact_table.php':[
-16,
+"monica:database/migrations/2017_11_02_202601_add_is_dead_to_contacts.php": [
+16
 ],
-'monica:database/migrations/2017_10_19_135215_move_activities_to_pivot_table.php':[
-18,
-],
-'monica:database/migrations/2017_10_25_102923_remove_contact_id_activities_table.php':[
-15,
-],
-'monica:database/migrations/2017_11_01_122541_add_met_through_to_contacts.php':[
-16,
-20,
-],
-'monica:database/migrations/2017_11_02_202601_add_is_dead_to_contacts.php':[
-16,
-],
-'monica:database/migrations/2017_11_10_174654_create_contact_fields_table.php':[
+"monica:database/migrations/2017_11_10_174654_create_contact_fields_table.php": [
 17,
 30,
 43,
-59,
+59
 ],
-'monica:database/migrations/2017_11_10_181043_migrate_contacts_information.php':[
+"monica:database/migrations/2017_11_10_181043_migrate_contacts_information.php": [
 19,
 44,
 45,
 55,
 65,
-75,
+75
 ],
-'monica:database/migrations/2017_11_10_202620_move_addresses_from_contact_to_addresses.php':[
+"monica:database/migrations/2017_11_10_202620_move_addresses_from_contact_to_addresses.php": [
 16,
-17,
+17
 ],
-'monica:database/migrations/2017_11_10_204035_delete_contact_fields_from_contacts.php':[
+"monica:database/migrations/2017_11_10_204035_delete_contact_fields_from_contacts.php": [
+16
+],
+"monica:database/migrations/2017_11_20_115635_change-amount-to-double-on-debts.php": [
 16,
+28
 ],
-'monica:database/migrations/2017_11_20_115635_change-amount-to-double-on-debts.php':[
-16,
-28,
+"monica:database/migrations/2017_11_27_083043_add_more_statistics.php": [
+16
 ],
-'monica:database/migrations/2017_11_27_083043_add_more_statistics.php':[
-16,
-],
-'monica:database/migrations/2017_11_27_134403_add_new_avatar_to_contacts.php':[
+"monica:database/migrations/2017_11_27_134403_add_new_avatar_to_contacts.php": [
 17,
 27,
 32,
-40,
+40
 ],
-'monica:database/migrations/2017_11_27_202857_change_tasks_table_structure.php':[
+"monica:database/migrations/2017_11_27_202857_change_tasks_table_structure.php": [
 17,
-25,
+25
 ],
-'monica:database/migrations/2017_12_01_113748_update_notes.php':[
-16,
+"monica:database/migrations/2017_12_01_113748_update_notes.php": [
+16
 ],
-'monica:database/migrations/2017_12_04_164831_create_ages_table.php':[
+"monica:database/migrations/2017_12_04_164831_create_ages_table.php": [
 16,
 27,
-33,
+33
 ],
-'monica:database/migrations/2017_12_04_165421_move_ages_data.php':[
+"monica:database/migrations/2017_12_04_165421_move_ages_data.php": [
 18,
 23,
 36,
@@ -3350,55 +3350,55 @@
 82,
 88,
 107,
-117,
+117
 ],
-'monica:database/migrations/2017_12_10_205328_add_account_id_to_activities.php':[
+"monica:database/migrations/2017_12_10_205328_add_account_id_to_activities.php": [
 18,
-24,
+24
 ],
-'monica:database/migrations/2017_12_10_214545_add_last_consulted_at_to_contacts.php':[
+"monica:database/migrations/2017_12_10_214545_add_last_consulted_at_to_contacts.php": [
 17,
 23,
 24,
-28,
+28
 ],
-'monica:database/migrations/2017_12_13_115857_create_day_table.php':[
+"monica:database/migrations/2017_12_13_115857_create_day_table.php": [
 16,
-25,
+25
 ],
-'monica:database/migrations/2017_12_21_163616_update_journal_entries_with_existing_activities.php':[
+"monica:database/migrations/2017_12_21_163616_update_journal_entries_with_existing_activities.php": [
 17,
-29,
+29
 ],
-'monica:database/migrations/2017_12_21_170327_add_google2fa_secret_to_users.php':[
+"monica:database/migrations/2017_12_21_170327_add_google2fa_secret_to_users.php": [
 15,
-27,
+27
 ],
-'monica:database/migrations/2017_12_24_115641_create_pets_table.php':[
+"monica:database/migrations/2017_12_24_115641_create_pets_table.php": [
 17,
-26,
+26
 ],
-'monica:database/migrations/2017_12_31_114224_add_dashboard_tab_to_users.php':[
-16,
+"monica:database/migrations/2017_12_31_114224_add_dashboard_tab_to_users.php": [
+16
 ],
-'monica:database/migrations/2018_01_15_105858_create_additional_reminders_table.php':[
+"monica:database/migrations/2018_01_15_105858_create_additional_reminders_table.php": [
 18,
 28,
 41,
 49,
 54,
-64,
+64
 ],
-'monica:database/migrations/2018_01_16_203358_add_gift_received.php':[
-16,
+"monica:database/migrations/2018_01_16_203358_add_gift_received.php": [
+16
 ],
-'monica:database/migrations/2018_01_16_212320_rename_gift_columns.php':[
-16,
+"monica:database/migrations/2018_01_16_212320_rename_gift_columns.php": [
+16
 ],
-'monica:database/migrations/2018_01_17_230820_add_gift_tab_view_to_users.php':[
-16,
+"monica:database/migrations/2018_01_17_230820_add_gift_tab_view_to_users.php": [
+16
 ],
-'monica:database/migrations/2018_01_27_014146_add_custom_gender.php':[
+"monica:database/migrations/2018_01_27_014146_add_custom_gender.php": [
 18,
 25,
 30,
@@ -3407,68 +3407,68 @@
 44,
 48,
 52,
-58,
+58
 ],
-'monica:database/migrations/2018_02_28_223747_update_notification_table.php':[
-16,
+"monica:database/migrations/2018_02_28_223747_update_notification_table.php": [
+16
 ],
-'monica:database/migrations/2018_03_03_204440_create_relationship_type_table.php':[
+"monica:database/migrations/2018_03_03_204440_create_relationship_type_table.php": [
 16,
 24,
 35,
 45,
-53,
+53
 ],
-'monica:database/migrations/2018_03_18_090209_populate_relationship_type_tables_with_default_values.php':[
+"monica:database/migrations/2018_03_18_090209_populate_relationship_type_tables_with_default_values.php": [
 16,
-17,
+17
 ],
-'monica:database/migrations/2018_03_18_090345_migrate_current_relationship_table_to_new_relationship_structure.php':[
+"monica:database/migrations/2018_03_18_090345_migrate_current_relationship_table_to_new_relationship_structure.php": [
 18,
 19,
 25,
 26,
-28,
+28
 ],
-'monica:database/migrations/2018_03_24_083258_migrate_offsprings.php':[
+"monica:database/migrations/2018_03_24_083258_migrate_offsprings.php": [
 17,
 18,
-23,
+23
 ],
-'monica:database/migrations/2018_04_04_220850_create_default_modules_table.php':[
-17,
+"monica:database/migrations/2018_04_04_220850_create_default_modules_table.php": [
+17
 ],
-'monica:database/migrations/2018_04_04_222608_create_account_modules_table.php':[
-16,
+"monica:database/migrations/2018_04_04_222608_create_account_modules_table.php": [
+16
 ],
-'monica:database/migrations/2018_04_10_205655_fix_production_error.php':[
+"monica:database/migrations/2018_04_10_205655_fix_production_error.php": [
 20,
 21,
 23,
-29,
+29
 ],
-'monica:database/migrations/2018_04_10_222515_migrate-modules.php':[
+"monica:database/migrations/2018_04_10_222515_migrate-modules.php": [
 17,
-18,
+18
 ],
-'monica:database/migrations/2018_04_13_131008_fix-contacts-data.php':[
+"monica:database/migrations/2018_04_13_131008_fix-contacts-data.php": [
 23,
 25,
 30,
 35,
-39,
+39
 ],
-'monica:database/migrations/2018_04_13_205231_create_changes_table.php':[
+"monica:database/migrations/2018_04_13_205231_create_changes_table.php": [
 16,
-22,
+22
 ],
-'monica:database/migrations/2018_04_14_081052_fix_wrong_gender.php':[
-18,
+"monica:database/migrations/2018_04_14_081052_fix_wrong_gender.php": [
+18
 ],
-'monica:database/migrations/2018_04_19_190239_stay_in_touch.php':[
-16,
+"monica:database/migrations/2018_04_19_190239_stay_in_touch.php": [
+16
 ],
-'monica:database/migrations/2018_05_06_061227_external_countries.php':[
+"monica:database/migrations/2018_05_06_061227_external_countries.php": [
 18,
 22,
 23,
@@ -3478,47 +3478,47 @@
 58,
 64,
 65,
-71,
+71
 ],
-'monica:database/migrations/2018_05_07_070458_create_terms_table.php':[
+"monica:database/migrations/2018_05_07_070458_create_terms_table.php": [
 17,
-26,
+26
 ],
-'monica:database/migrations/2018_05_13_110706_add_ex_wife_husband_relationship.php':[
+"monica:database/migrations/2018_05_13_110706_add_ex_wife_husband_relationship.php": [
 29,
-30,
+30
 ],
-'monica:database/migrations/2018_05_16_143631_add_nickname_to_contacts.php':[
+"monica:database/migrations/2018_05_16_143631_add_nickname_to_contacts.php": [
 16,
-22,
+22
 ],
-'monica:database/migrations/2018_05_16_214222_add_timestamps_to_currencies.php':[
-16,
+"monica:database/migrations/2018_05_16_214222_add_timestamps_to_currencies.php": [
+16
 ],
-'monica:database/migrations/2018_05_20_121028_accept_terms.php':[
-16,
-17,
-18,
-],
-'monica:database/migrations/2018_05_24_160546_fix-inconsistant-reminder-time.php':[
-15,
+"monica:database/migrations/2018_05_20_121028_accept_terms.php": [
 16,
 17,
+18
 ],
-'monica:database/migrations/2018_06_10_191450_add_love_metadata_relationshisp.php':[
-16,
-],
-'monica:database/migrations/2018_06_11_184017_change_default_user_table.php':[
+"monica:database/migrations/2018_05_24_160546_fix-inconsistant-reminder-time.php": [
 15,
+16,
+17
 ],
-'monica:database/migrations/2018_06_13_000100_create_u2f_key_table.php':[
+"monica:database/migrations/2018_06_10_191450_add_love_metadata_relationshisp.php": [
+16
+],
+"monica:database/migrations/2018_06_11_184017_change_default_user_table.php": [
+15
+],
+"monica:database/migrations/2018_06_13_000100_create_u2f_key_table.php": [
 23,
-33,
+33
 ],
-'monica:database/migrations/2018_06_14_212502_change_default_name_order_user_table.php':[
-15,
+"monica:database/migrations/2018_06_14_212502_change_default_name_order_user_table.php": [
+15
 ],
-'monica:database/migrations/2018_07_03_204220_create_default_activity_type_groups_table.php':[
+"monica:database/migrations/2018_07_03_204220_create_default_activity_type_groups_table.php": [
 18,
 24,
 168,
@@ -3532,84 +3532,84 @@
 228,
 240,
 241,
-254,
+254
 ],
-'monica:database/migrations/2018_07_08_104306_update-timestamps-timezone.php':[
+"monica:database/migrations/2018_07_08_104306_update-timestamps-timezone.php": [
 18,
 32,
 33,
 66,
 67,
 110,
-111,
+111
 ],
-'monica:database/migrations/2018_07_26_104306_create-conversations.php':[
+"monica:database/migrations/2018_07_26_104306_create-conversations.php": [
 16,
-28,
+28
 ],
-'monica:database/migrations/2018_08_06_145046_add_starred_to_contacts.php':[
-16,
+"monica:database/migrations/2018_08_06_145046_add_starred_to_contacts.php": [
+16
 ],
-'monica:database/migrations/2018_08_18_180426_add_legacy_free_plan.php':[
-17,
+"monica:database/migrations/2018_08_18_180426_add_legacy_free_plan.php": [
+17
 ],
-'monica:database/migrations/2018_08_29_124804_add_conversations_to_statistics.php':[
-15,
+"monica:database/migrations/2018_08_29_124804_add_conversations_to_statistics.php": [
+15
 ],
-'monica:database/migrations/2018_08_29_222051_add_conversations_to_modules.php':[
+"monica:database/migrations/2018_08_29_222051_add_conversations_to_modules.php": [
 24,
-25,
+25
 ],
-'monica:database/migrations/2018_08_31_020908_create_life_events_table.php':[
+"monica:database/migrations/2018_08_31_020908_create_life_events_table.php": [
 19,
 26,
 43,
 53,
 66,
 400,
-401,
+401
 ],
-'monica:database/migrations/2018_09_02_150531_contact_archiving.php':[
+"monica:database/migrations/2018_09_02_150531_contact_archiving.php": [
 16,
-28,
+28
 ],
-'monica:database/migrations/2018_09_05_025008_add_default_profile_view.php':[
-16,
+"monica:database/migrations/2018_09_05_025008_add_default_profile_view.php": [
+16
 ],
-'monica:database/migrations/2018_09_05_213507_mark_modules_migrated.php':[
+"monica:database/migrations/2018_09_05_213507_mark_modules_migrated.php": [
 19,
 20,
 23,
 25,
 26,
-32,
+32
 ],
-'monica:database/migrations/2018_09_13_135926_add_description_field_to_contacts.php':[
-16,
+"monica:database/migrations/2018_09_13_135926_add_description_field_to_contacts.php": [
+16
 ],
-'monica:database/migrations/2018_09_23_024528_add_documents_table.php':[
-16,
+"monica:database/migrations/2018_09_23_024528_add_documents_table.php": [
+16
 ],
-'monica:database/migrations/2018_09_29_114125_add_reminder_to_life_events.php':[
-16,
+"monica:database/migrations/2018_09_29_114125_add_reminder_to_life_events.php": [
+16
 ],
-'monica:database/migrations/2018_10_01_211757_add_number_of_views.php':[
-16,
+"monica:database/migrations/2018_10_01_211757_add_number_of_views.php": [
+16
 ],
-'monica:database/migrations/2018_10_07_120133_fix_json_column.php':[
+"monica:database/migrations/2018_10_07_120133_fix_json_column.php": [
 18,
-30,
+30
 ],
-'monica:database/migrations/2018_10_16_000703_add_documents_to_module_table.php':[
+"monica:database/migrations/2018_10_16_000703_add_documents_to_module_table.php": [
 19,
-20,
+20
 ],
-'monica:database/migrations/2018_10_27_230346_fix_non_english_tab_slugs.php':[
+"monica:database/migrations/2018_10_27_230346_fix_non_english_tab_slugs.php": [
 15,
 16,
-17,
+17
 ],
-'monica:database/migrations/2018_10_28_165814_email_verified.php':[
+"monica:database/migrations/2018_10_28_165814_email_verified.php": [
 17,
 21,
 22,
@@ -3618,124 +3618,124 @@
 32,
 36,
 49,
-54,
+54
 ],
-'monica:database/migrations/2018_11_15_172333_make_contact_id_nullable_in_tasks.php':[
+"monica:database/migrations/2018_11_15_172333_make_contact_id_nullable_in_tasks.php": [
+16
+],
+"monica:database/migrations/2018_11_18_021908_create_images_table.php": [
+16
+],
+"monica:database/migrations/2018_11_21_212932_add_contacts_uuid.php": [
 16,
+28
 ],
-'monica:database/migrations/2018_11_18_021908_create_images_table.php':[
-16,
+"monica:database/migrations/2018_11_25_020818_add_contact_photo_table.php": [
+16
 ],
-'monica:database/migrations/2018_11_21_212932_add_contacts_uuid.php':[
-16,
-28,
+"monica:database/migrations/2018_11_30_154729_recovery_codes.php": [
+16
 ],
-'monica:database/migrations/2018_11_25_020818_add_contact_photo_table.php':[
-16,
+"monica:database/migrations/2018_12_08_233140_add_who_called_to_calls.php": [
+16
 ],
-'monica:database/migrations/2018_11_30_154729_recovery_codes.php':[
-16,
-],
-'monica:database/migrations/2018_12_08_233140_add_who_called_to_calls.php':[
-16,
-],
-'monica:database/migrations/2018_12_09_023232_add_emotions_table.php':[
+"monica:database/migrations/2018_12_09_023232_add_emotions_table.php": [
 17,
 23,
-31,
+31
 ],
-'monica:database/migrations/2018_12_09_145956_create_emotion_call_table.php':[
+"monica:database/migrations/2018_12_09_145956_create_emotion_call_table.php": [
+16
+],
+"monica:database/migrations/2018_12_16_195440_add_gps_coordinates_to_addressess.php": [
+16
+],
+"monica:database/migrations/2018_12_19_002819_create_places_table.php": [
 16,
+30
 ],
-'monica:database/migrations/2018_12_16_195440_add_gps_coordinates_to_addressess.php':[
-16,
-],
-'monica:database/migrations/2018_12_19_002819_create_places_table.php':[
-16,
-30,
-],
-'monica:database/migrations/2018_12_19_003444_move_addresses_data.php':[
+"monica:database/migrations/2018_12_19_003444_move_addresses_data.php": [
 18,
 19,
-36,
+36
 ],
-'monica:database/migrations/2018_12_21_235418_add_weather_table.php':[
-16,
+"monica:database/migrations/2018_12_21_235418_add_weather_table.php": [
+16
 ],
-'monica:database/migrations/2018_12_22_021123_add_weather_preferences_to_users.php':[
-16,
+"monica:database/migrations/2018_12_22_021123_add_weather_preferences_to_users.php": [
+16
 ],
-'monica:database/migrations/2018_12_22_200413_add_reminder_initial_date_to_reminders.php':[
+"monica:database/migrations/2018_12_22_200413_add_reminder_initial_date_to_reminders.php": [
 18,
 26,
 27,
 28,
 34,
 41,
-55,
+55
 ],
-'monica:database/migrations/2018_12_24_164256_add_companies_table.php':[
-16,
+"monica:database/migrations/2018_12_24_164256_add_companies_table.php": [
+16
 ],
-'monica:database/migrations/2018_12_24_220019_add_occupations_table.php':[
-16,
+"monica:database/migrations/2018_12_24_220019_add_occupations_table.php": [
+16
 ],
-'monica:database/migrations/2018_12_25_001736_add_linkedin_to_default_contact_field_type.php':[
+"monica:database/migrations/2018_12_25_001736_add_linkedin_to_default_contact_field_type.php": [
 22,
-23,
+23
 ],
-'monica:database/migrations/2018_12_25_012011_move_linkedin_data_to_contact_field_type.php':[
+"monica:database/migrations/2018_12_25_012011_move_linkedin_data_to_contact_field_type.php": [
 20,
 21,
-34,
+34
 ],
-'monica:database/migrations/2018_12_29_091017_default_temperature_scale.php':[
+"monica:database/migrations/2018_12_29_091017_default_temperature_scale.php": [
 18,
 24,
 25,
 26,
 31,
-32,
+32
 ],
-'monica:database/migrations/2018_12_29_135516_sync_token.php':[
-16,
+"monica:database/migrations/2018_12_29_135516_sync_token.php": [
+16
 ],
-'monica:database/migrations/2019_01_05_152329_add_reminder_ids_to_contacts.php':[
-16,
+"monica:database/migrations/2019_01_05_152329_add_reminder_ids_to_contacts.php": [
+16
 ],
-'monica:database/migrations/2019_01_05_152405_migrate_previous_remiders.php':[
+"monica:database/migrations/2019_01_05_152405_migrate_previous_remiders.php": [
 23,
 24,
 25,
 28,
 32,
-37,
+37
 ],
-'monica:database/migrations/2019_01_05_152456_drop_special_date_id_from_reminders.php':[
+"monica:database/migrations/2019_01_05_152456_drop_special_date_id_from_reminders.php": [
 16,
-22,
+22
 ],
-'monica:database/migrations/2019_01_05_152526_schedule_new_reminders.php':[
+"monica:database/migrations/2019_01_05_152526_schedule_new_reminders.php": [
 15,
 16,
 17,
-22,
+22
 ],
-'monica:database/migrations/2019_01_05_202557_add_foreign_keys_to_reminder.php':[
-22,
-23,
-24,
-26,
-33,
-],
-'monica:database/migrations/2019_01_05_202748_add_foreign_key_to_reminder_rule.php':[
+"monica:database/migrations/2019_01_05_202557_add_foreign_keys_to_reminder.php": [
 22,
 23,
 24,
 26,
-34,
+33
 ],
-'monica:database/migrations/2019_01_05_202938_add_foreign_key_to_contacts.php':[
+"monica:database/migrations/2019_01_05_202748_add_foreign_key_to_reminder_rule.php": [
+22,
+23,
+24,
+26,
+34
+],
+"monica:database/migrations/2019_01_05_202938_add_foreign_key_to_contacts.php": [
 24,
 25,
 26,
@@ -3748,27 +3748,27 @@
 53,
 54,
 56,
-64,
+64
 ],
-'monica:database/migrations/2019_01_05_203201_add_foreign_key_for_reminder_in_life-events_table.php':[
+"monica:database/migrations/2019_01_05_203201_add_foreign_key_for_reminder_in_life-events_table.php": [
 21,
 22,
 23,
 25,
-34,
+34
 ],
-'monica:database/migrations/2019_01_06_135133_update_u2f_key_table.php':[
+"monica:database/migrations/2019_01_06_135133_update_u2f_key_table.php": [
 16,
-19,
+19
 ],
-'monica:database/migrations/2019_01_06_150143_add_inactive_flag_to_reminders.php':[
+"monica:database/migrations/2019_01_06_150143_add_inactive_flag_to_reminders.php": [
+16
+],
+"monica:database/migrations/2019_01_06_190036_u2f_key_name.php": [
 16,
+28
 ],
-'monica:database/migrations/2019_01_06_190036_u2f_key_name.php':[
-16,
-28,
-],
-'monica:database/migrations/2019_01_11_142944_add_foreign_keys_to_activities.php':[
+"monica:database/migrations/2019_01_11_142944_add_foreign_keys_to_activities.php": [
 22,
 23,
 24,
@@ -3777,17 +3777,17 @@
 41,
 42,
 44,
-53,
+53
 ],
-'monica:database/migrations/2019_01_11_183717_change_activities_date_type.php':[
+"monica:database/migrations/2019_01_11_183717_change_activities_date_type.php": [
 16,
-20,
+20
 ],
-'monica:database/migrations/2019_01_17_093812_add_admin_user.php':[
+"monica:database/migrations/2019_01_17_093812_add_admin_user.php": [
 16,
-28,
+28
 ],
-'monica:database/migrations/2019_01_18_142032_add_dav_uuid.php':[
+"monica:database/migrations/2019_01_18_142032_add_dav_uuid.php": [
 16,
 19,
 23,
@@ -3795,12 +3795,12 @@
 40,
 43,
 47,
-51,
+51
 ],
-'monica:database/migrations/2019_01_22_034555_create_emotion_activity_table.php':[
-16,
+"monica:database/migrations/2019_01_22_034555_create_emotion_activity_table.php": [
+16
 ],
-'monica:database/migrations/2019_02_09_200203_add_gender_type.php':[
+"monica:database/migrations/2019_02_09_200203_add_gender_type.php": [
 18,
 27,
 28,
@@ -3809,59 +3809,59 @@
 38,
 40,
 42,
-61,
+61
 ],
-'monica:database/migrations/2019_02_17_112452_add_default_gender.php':[
+"monica:database/migrations/2019_02_17_112452_add_default_gender.php": [
 18,
 27,
 28,
 31,
-46,
+46
 ],
-'monica:database/migrations/2019_02_20_205744_allow_gender_null.php':[
-16,
+"monica:database/migrations/2019_02_20_205744_allow_gender_null.php": [
+16
 ],
-'monica:database/migrations/2019_02_24_223855_remove_relation_type_name.php':[
-16,
+"monica:database/migrations/2019_02_24_223855_remove_relation_type_name.php": [
+16
 ],
-'monica:database/migrations/2019_03_29_163611_add_webauthn.php':[
-16,
+"monica:database/migrations/2019_03_29_163611_add_webauthn.php": [
+16
 ],
-'monica:database/migrations/2019_05_05_194746_add_cron_schedule.php':[
-16,
+"monica:database/migrations/2019_05_05_194746_add_cron_schedule.php": [
+16
 ],
-'monica:database/migrations/2019_05_15_205533_rename_preferences.php':[
-16,
+"monica:database/migrations/2019_05_15_205533_rename_preferences.php": [
+16
 ],
-'monica:database/migrations/2019_05_26_000000_add_relationship_table_indexes.php':[
+"monica:database/migrations/2019_05_26_000000_add_relationship_table_indexes.php": [
 17,
-20,
+20
 ],
-'monica:database/migrations/2019_05_27_000000_populate_relationship_type_tables_with_stepparent_values.php':[
+"monica:database/migrations/2019_05_27_000000_populate_relationship_type_tables_with_stepparent_values.php": [
 37,
 38,
 48,
-49,
+49
 ],
-'monica:database/migrations/2019_08_12_213308_change_avatars_structure.php':[
+"monica:database/migrations/2019_08_12_213308_change_avatars_structure.php": [
 16,
-33,
+33
 ],
-'monica:database/migrations/2019_08_13_160332_add_me_contact_on_user.php':[
+"monica:database/migrations/2019_08_13_160332_add_me_contact_on_user.php": [
 16,
-29,
+29
 ],
-'monica:database/migrations/2019_08_14_091427_update_stripe_columns.php':[
+"monica:database/migrations/2019_08_14_091427_update_stripe_columns.php": [
 18,
 23,
 36,
-40,
+40
 ],
-'monica:database/migrations/2019_09_04_075311_fix_tattoo_or_piercing_translation.php':[
+"monica:database/migrations/2019_09_04_075311_fix_tattoo_or_piercing_translation.php": [
 18,
-19,
+19
 ],
-'monica:database/migrations/2019_12_17_024553_add_foreign_keys.php':[
+"monica:database/migrations/2019_12_17_024553_add_foreign_keys.php": [
 93,
 99,
 105,
@@ -3973,9 +3973,9 @@
 633,
 634,
 636,
-642,
+642
 ],
-'monica:database/migrations/2019_12_21_100315_change_gift_status.php':[
+"monica:database/migrations/2019_12_21_100315_change_gift_status.php": [
 19,
 20,
 21,
@@ -3990,48 +3990,48 @@
 46,
 54,
 55,
-62,
+62
 ],
-'monica:database/migrations/2019_12_21_194559_add_photo_gift.php':[
-16,
+"monica:database/migrations/2019_12_21_194559_add_photo_gift.php": [
+16
 ],
-'monica:database/migrations/2020_02_03_015403_create_audit_log_table.php':[
-16,
+"monica:database/migrations/2020_02_03_015403_create_audit_log_table.php": [
+16
 ],
-'monica:database/migrations/2020_02_18_211620_add_contact_field_label.php':[
+"monica:database/migrations/2020_02_18_211620_add_contact_field_label.php": [
 16,
 27,
-37,
+37
 ],
-'monica:database/migrations/2020_03_22_132429_rename_birthday_reminder_title_deceased.php':[
+"monica:database/migrations/2020_03_22_132429_rename_birthday_reminder_title_deceased.php": [
 18,
-22,
+22
 ],
-'monica:database/migrations/2020_03_25_055551_add_address_book.php':[
+"monica:database/migrations/2020_03_25_055551_add_address_book.php": [
+16
+],
+"monica:database/migrations/2020_03_25_065551_add_addressbook_subscription.php": [
+16
+],
+"monica:database/migrations/2020_03_25_082324_add_contact_address_book_id.php": [
 16,
+29
 ],
-'monica:database/migrations/2020_03_25_065551_add_addressbook_subscription.php':[
+"monica:database/migrations/2020_03_25_201407_add_contact_vcard_data.php": [
 16,
+28
 ],
-'monica:database/migrations/2020_03_25_082324_add_contact_address_book_id.php':[
-16,
-29,
-],
-'monica:database/migrations/2020_03_25_201407_add_contact_vcard_data.php':[
-16,
-28,
-],
-'monica:database/migrations/2020_04_24_185810_remove_duplicate_currency.php':[
+"monica:database/migrations/2020_04_24_185810_remove_duplicate_currency.php": [
 23,
 26,
-27,
+27
 ],
-'monica:database/migrations/2020_04_24_205810_currencies_table_seed.php':[
+"monica:database/migrations/2020_04_24_205810_currencies_table_seed.php": [
 22,
 27,
-29,
+29
 ],
-'monica:database/migrations/2020_04_24_212138_update_amount_format.php':[
+"monica:database/migrations/2020_04_24_212138_update_amount_format.php": [
 28,
 36,
 37,
@@ -4044,24 +4044,24 @@
 70,
 73,
 85,
-101,
+101
 ],
-'monica:database/migrations/2020_05_08_072433_google2fa_column_size.php':[
-15,
+"monica:database/migrations/2020_05_08_072433_google2fa_column_size.php": [
+15
 ],
-'monica:database/migrations/2020_05_31_091556_custom_life_event_types.php':[
-17,
+"monica:database/migrations/2020_05_31_091556_custom_life_event_types.php": [
+17
 ],
-'monica:database/migrations/2020_08_05_184814_upgrade_passport.php':[
+"monica:database/migrations/2020_08_05_184814_upgrade_passport.php": [
 16,
 20,
-21,
+21
 ],
-'monica:database/migrations/2020_11_01_000001_create_subscription_items_table.php':[
+"monica:database/migrations/2020_11_01_000001_create_subscription_items_table.php": [
 16,
-20,
+20
 ],
-'monica:database/migrations/2020_12_19_205923_add_uuids.php':[
+"monica:database/migrations/2020_12_19_205923_add_uuids.php": [
 49,
 50,
 51,
@@ -4069,24 +4069,24 @@
 67,
 68,
 69,
-72,
+72
 ],
-'monica:database/migrations/2021_09_27_023405_create_job_batches_table.php':[
+"monica:database/migrations/2021_09_27_023405_create_job_batches_table.php": [
+16
+],
+"monica:database/migrations/2021_10_11_060512_add_distant_etag.php": [
 16,
+28
 ],
-'monica:database/migrations/2021_10_11_060512_add_distant_etag.php':[
-16,
-28,
+"monica:database/migrations/2022_01_01_202745_add_export_jobs.php": [
+16
 ],
-'monica:database/migrations/2022_01_01_202745_add_export_jobs.php':[
-16,
-],
-'monica:database/migrations/2022_01_02_222042_contact_soft_delete.php':[
+"monica:database/migrations/2022_01_02_222042_contact_soft_delete.php": [
 16,
 17,
-30,
+30
 ],
-'monica:database/migrations/2022_04_25_165338_cashier_stripe_rename_plan.php':[
+"monica:database/migrations/2022_04_25_165338_cashier_stripe_rename_plan.php": [
 16,
 19,
 23,
@@ -4094,34 +4094,34 @@
 41,
 45,
 50,
-53,
+53
 ],
-'monica:database/seeds/DatabaseSeeder.php':[
-15,
+"monica:database/seeds/DatabaseSeeder.php": [
+15
 ],
-'monica:database/seeds/UsersColorSeeder.php':[
-18,
+"monica:database/seeds/UsersColorSeeder.php": [
+18
 ],
-'monica:routes/api.php':[
+"monica:routes/api.php": [
 11,
-13,
+13
 ],
-'monica:routes/console.php':[
+"monica:routes/console.php": [
 18,
 19,
 24,
-26,
+26
 ],
-'monica:routes/oauth.php':[
+"monica:routes/oauth.php": [
 5,
 9,
-14,
+14
 ],
-'monica:routes/special.php':[
+"monica:routes/special.php": [
 7,
-11,
+11
 ],
-'monica:routes/web.php':[
+"monica:routes/web.php": [
 31,
 37,
 41,
@@ -4140,35 +4140,35 @@
 273,
 287,
 294,
-306,
+306
 ],
-'monica:scripts/tests/server-cc.php':[
-19,
+"monica:scripts/tests/server-cc.php": [
+19
 ],
-'monica:tests/Api/ApiTagControllerTest.php':[
+"monica:tests/Api/ApiTagControllerTest.php": [
 344,
-380,
+380
 ],
-'monica:tests/Api/Contact/ApiContactControllerTest.php':[
-539,
+"monica:tests/Api/Contact/ApiContactControllerTest.php": [
+539
 ],
-'monica:tests/Api/Contact/ApiConversationControllerTest.php':[
+"monica:tests/Api/Contact/ApiConversationControllerTest.php": [
 58,
-88,
+88
 ],
-'monica:tests/Api/Contact/ApiDocumentControllerTest.php':[
+"monica:tests/Api/Contact/ApiDocumentControllerTest.php": [
 56,
-86,
+86
 ],
-'monica:tests/Api/Contact/ApiLifeEventControllerTest.php':[
+"monica:tests/Api/Contact/ApiLifeEventControllerTest.php": [
 62,
-92,
+92
 ],
-'monica:tests/Api/Contact/ApiPhotoControllerTest.php':[
+"monica:tests/Api/Contact/ApiPhotoControllerTest.php": [
 56,
-86,
+86
 ],
-'monica:tests/Api/DAV/CardEtag.php':[
+"monica:tests/Api/DAV/CardEtag.php": [
 15,
 17,
 19,
@@ -4184,9 +4184,9 @@
 91,
 134,
 161,
-170,
+170
 ],
-'monica:tests/Browser/Auth/AuthControllerTest.php':[
+"monica:tests/Browser/Auth/AuthControllerTest.php": [
 23,
 39,
 62,
@@ -4208,21 +4208,21 @@
 199,
 201,
 219,
-226,
+226
 ],
-'monica:tests/Browser/ExampleTest.php':[
-16,
+"monica:tests/Browser/ExampleTest.php": [
+16
 ],
-'monica:tests/Browser/Feature/UploadVCardTest.php':[
+"monica:tests/Browser/Feature/UploadVCardTest.php": [
 18,
 36,
 53,
-72,
+72
 ],
-'monica:tests/Browser/Settings/DAVControllerTest.php':[
-16,
+"monica:tests/Browser/Settings/DAVControllerTest.php": [
+16
 ],
-'monica:tests/Browser/Settings/MultiFAControllerTest.php':[
+"monica:tests/Browser/Settings/MultiFAControllerTest.php": [
 29,
 43,
 59,
@@ -4232,37 +4232,37 @@
 207,
 243,
 277,
-314,
+314
 ],
-'monica:tests/Commands/Other/CreateAddressBookSubscriptionTest.php':[
+"monica:tests/Commands/Other/CreateAddressBookSubscriptionTest.php": [
 20,
-23,
+23
 ],
-'monica:tests/Commands/Scheduling/CalculateStatisticsTest.php':[
+"monica:tests/Commands/Scheduling/CalculateStatisticsTest.php": [
 18,
-20,
+20
 ],
-'monica:tests/Commands/Scheduling/DavClientsUpdateTest.php':[
-24,
+"monica:tests/Commands/Scheduling/DavClientsUpdateTest.php": [
+24
 ],
-'monica:tests/Commands/Scheduling/PingVersionServerTest.php':[
+"monica:tests/Commands/Scheduling/PingVersionServerTest.php": [
 21,
-52,
+52
 ],
-'monica:tests/Commands/Tests/PassportCommandTest.php':[
+"monica:tests/Commands/Tests/PassportCommandTest.php": [
 18,
-22,
+22
 ],
-'monica:tests/Commands/Tests/SendTestEmailTest.php':[
-42,
+"monica:tests/Commands/Tests/SendTestEmailTest.php": [
+42
 ],
-'monica:tests/DuskTestCase.php':[
+"monica:tests/DuskTestCase.php": [
 36,
 50,
 113,
-121,
+121
 ],
-'monica:tests/Feature/AccountSubscriptionTest.php':[
+"monica:tests/Feature/AccountSubscriptionTest.php": [
 41,
 43,
 59,
@@ -4273,16 +4273,16 @@
 117,
 120,
 251,
-253,
+253
 ],
-'monica:tests/Feature/ContactTest.php':[
-270,
+"monica:tests/Feature/ContactTest.php": [
+270
 ],
-'monica:tests/Helpers/CommandCallerFake.php':[
+"monica:tests/Helpers/CommandCallerFake.php": [
 31,
-42,
+42
 ],
-'monica:tests/Helpers/DavTester.php':[
+"monica:tests/Helpers/DavTester.php": [
 45,
 54,
 55,
@@ -4290,43 +4290,43 @@
 62,
 63,
 258,
-277,
+277
 ],
-'monica:tests/Traits/SignIn.php':[
-19,
+"monica:tests/Traits/SignIn.php": [
+19
 ],
-'monica:tests/Unit/Helpers/AccountHelperTest.php':[
+"monica:tests/Unit/Helpers/AccountHelperTest.php": [
 174,
-200,
+200
 ],
-'monica:tests/Unit/Helpers/CollectionHelperTest.php':[
+"monica:tests/Unit/Helpers/CollectionHelperTest.php": [
 59,
-158,
+158
 ],
-'monica:tests/Unit/Helpers/DateHelperTest.php':[
+"monica:tests/Unit/Helpers/DateHelperTest.php": [
 752,
-754,
+754
 ],
-'monica:tests/Unit/Helpers/RequestHelperTest.php':[
+"monica:tests/Unit/Helpers/RequestHelperTest.php": [
 50,
-53,
+53
 ],
-'monica:tests/Unit/Helpers/WeatherHelperTest.php':[
-40,
+"monica:tests/Unit/Helpers/WeatherHelperTest.php": [
+40
 ],
-'monica:tests/Unit/Jobs/CreateAvatarsForExistingContactsTest.php':[
+"monica:tests/Unit/Jobs/CreateAvatarsForExistingContactsTest.php": [
 28,
-31,
+31
 ],
-'monica:tests/Unit/Jobs/Dav/DeleteMultipleVCardTest.php':[
+"monica:tests/Unit/Jobs/Dav/DeleteMultipleVCardTest.php": [
 35,
-45,
+45
 ],
-'monica:tests/Unit/Jobs/Dav/DeleteVCardTest.php':[
+"monica:tests/Unit/Jobs/Dav/DeleteVCardTest.php": [
 31,
-43,
+43
 ],
-'monica:tests/Unit/Jobs/Dav/GetMultipleVCardTest.php':[
+"monica:tests/Unit/Jobs/Dav/GetMultipleVCardTest.php": [
 45,
 50,
 81,
@@ -4334,152 +4334,152 @@
 121,
 126,
 157,
-167,
+167
 ],
-'monica:tests/Unit/Jobs/Dav/GetVCardTest.php':[
+"monica:tests/Unit/Jobs/Dav/GetVCardTest.php": [
 53,
-63,
+63
 ],
-'monica:tests/Unit/Jobs/Dav/PushVCardTest.php':[
+"monica:tests/Unit/Jobs/Dav/PushVCardTest.php": [
 49,
 53,
-66,
+66
 ],
-'monica:tests/Unit/Jobs/Dav/UpdateVCardTest.php':[
-47,
+"monica:tests/Unit/Jobs/Dav/UpdateVCardTest.php": [
+47
 ],
-'monica:tests/Unit/Jobs/GetWeatherInformationTest.php':[
+"monica:tests/Unit/Jobs/GetWeatherInformationTest.php": [
 29,
 32,
-47,
+47
 ],
-'monica:tests/Unit/Jobs/Reminder/NotifyUserAboutReminderTest.php':[
+"monica:tests/Unit/Jobs/Reminder/NotifyUserAboutReminderTest.php": [
 57,
-103,
+103
 ],
-'monica:tests/Unit/Jobs/ScheduleStayInTouchTest.php':[
-44,
+"monica:tests/Unit/Jobs/ScheduleStayInTouchTest.php": [
+44
 ],
-'monica:tests/Unit/Jobs/ServiceQueueTest.php':[
+"monica:tests/Unit/Jobs/ServiceQueueTest.php": [
 36,
-38,
+38
 ],
-'monica:tests/Unit/Jobs/ServiceQueueTester.php':[
+"monica:tests/Unit/Jobs/ServiceQueueTester.php": [
 37,
-51,
+51
 ],
-'monica:tests/Unit/Jobs/SynchronizeAddressBooksTest.php':[
-23,
+"monica:tests/Unit/Jobs/SynchronizeAddressBooksTest.php": [
+23
 ],
-'monica:tests/Unit/Jobs/UpdateAllGravatarsTest.php':[
+"monica:tests/Unit/Jobs/UpdateAllGravatarsTest.php": [
 27,
-28,
+28
 ],
-'monica:tests/Unit/Models/ContactTest.php':[
+"monica:tests/Unit/Models/ContactTest.php": [
 536,
-1014,
+1014
 ],
-'monica:tests/Unit/Services/Account/Activity/ActivityStatisticServiceTest.php':[
+"monica:tests/Unit/Services/Account/Activity/ActivityStatisticServiceTest.php": [
 25,
 50,
 78,
 137,
 145,
 201,
-209,
+209
 ],
-'monica:tests/Unit/Services/Account/Activity/CreateActivityTest.php':[
+"monica:tests/Unit/Services/Account/Activity/CreateActivityTest.php": [
 37,
-52,
+52
 ],
-'monica:tests/Unit/Services/Account/Activity/UpdateActivityTest.php':[
+"monica:tests/Unit/Services/Account/Activity/UpdateActivityTest.php": [
 58,
 64,
 93,
 109,
-115,
+115
 ],
-'monica:tests/Unit/Services/Account/Company/CreateCompanyTest.php':[
-53,
+"monica:tests/Unit/Services/Account/Company/CreateCompanyTest.php": [
+53
 ],
-'monica:tests/Unit/Services/Account/Settings/DestroyAllDocumentsTest.php':[
+"monica:tests/Unit/Services/Account/Settings/DestroyAllDocumentsTest.php": [
 26,
-40,
+40
 ],
-'monica:tests/Unit/Services/Account/Settings/DestroyAllPhotosTest.php':[
+"monica:tests/Unit/Services/Account/Settings/DestroyAllPhotosTest.php": [
 26,
-40,
+40
 ],
-'monica:tests/Unit/Services/Account/Settings/ExportAccountTest.php':[
+"monica:tests/Unit/Services/Account/Settings/ExportAccountTest.php": [
 33,
-66,
+66
 ],
-'monica:tests/Unit/Services/Account/Settings/ResetAccountTest.php':[
-37,
+"monica:tests/Unit/Services/Account/Settings/ResetAccountTest.php": [
+37
 ],
-'monica:tests/Unit/Services/Contact/Contact/CreateContactTest.php':[
-137,
+"monica:tests/Unit/Services/Contact/Contact/CreateContactTest.php": [
+137
 ],
-'monica:tests/Unit/Services/Contact/Contact/UpdateWorkInformationTest.php':[
-71,
+"monica:tests/Unit/Services/Contact/Contact/UpdateWorkInformationTest.php": [
+71
 ],
-'monica:tests/Unit/Services/Contact/Description/ClearPersonalDescriptionTest.php':[
-49,
+"monica:tests/Unit/Services/Contact/Description/ClearPersonalDescriptionTest.php": [
+49
 ],
-'monica:tests/Unit/Services/Contact/Description/SetPersonalDescriptionTest.php':[
-50,
+"monica:tests/Unit/Services/Contact/Description/SetPersonalDescriptionTest.php": [
+50
 ],
-'monica:tests/Unit/Services/Contact/Reminder/CreateReminderTest.php':[
+"monica:tests/Unit/Services/Contact/Reminder/CreateReminderTest.php": [
 221,
-223,
+223
 ],
-'monica:tests/Unit/Services/Contact/Reminder/UpdateReminderTest.php':[
+"monica:tests/Unit/Services/Contact/Reminder/UpdateReminderTest.php": [
 103,
-105,
+105
 ],
-'monica:tests/Unit/Services/DavClient/AddAddressBookTest.php':[
+"monica:tests/Unit/Services/DavClient/AddAddressBookTest.php": [
 24,
-78,
+78
 ],
-'monica:tests/Unit/Services/DavClient/SynchronizeAddressBookTest.php':[
+"monica:tests/Unit/Services/DavClient/SynchronizeAddressBookTest.php": [
 19,
 22,
 42,
-45,
+45
 ],
-'monica:tests/Unit/Services/DavClient/UpdateSubscriptionLocalSyncTokenTest.php':[
+"monica:tests/Unit/Services/DavClient/UpdateSubscriptionLocalSyncTokenTest.php": [
 30,
 33,
 58,
-61,
+61
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushMissedTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushMissedTest.php": [
 46,
 50,
-58,
+58
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushTest.php": [
 48,
 51,
 63,
 110,
 113,
 118,
-122,
+122
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterMissedTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterMissedTest.php": [
 46,
 49,
-56,
+56
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterTest.php": [
 50,
 52,
 138,
 140,
-144,
+144
 ],
-'monica:tests/Unit/Services/DavClient/Utils/AddressBookSynchronizerTest.php':[
+"monica:tests/Unit/Services/DavClient/Utils/AddressBookSynchronizerTest.php": [
 34,
 58,
 100,
@@ -4490,6 +4490,6 @@
 236,
 246,
 300,
-344,
-],
+344
+]
 }

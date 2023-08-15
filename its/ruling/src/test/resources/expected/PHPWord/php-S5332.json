@@ -1,51 +1,51 @@
 {
-'PHPWord:samples/Sample_13_Images.php':[
-23,
+"PHPWord:samples/Sample_13_Images.php": [
+23
 ],
-'PHPWord:samples/Sample_15_Link.php':[
+"PHPWord:samples/Sample_15_Link.php": [
 23,
-24,
+24
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Part/AbstractPart.php':[
+"PHPWord:src/PhpWord/Writer/ODText/Part/AbstractPart.php": [
 58,
 59,
 60,
 62,
-66,
+66
 ],
-'PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php':[
-47,
+"PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php": [
+47
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Comments.php':[
-55,
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Comments.php": [
+55
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Document.php':[
-55,
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Document.php": [
+55
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Footer.php':[
-61,
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Footer.php": [
+61
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Footnotes.php':[
-85,
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Footnotes.php": [
+85
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Numbering.php':[
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Numbering.php": [
+53
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php": [
+322
+],
+"PHPWord:tests/PhpWordTests/AbstractWebServerEmbeddedTest.php": [
 53,
+62
 ],
-'PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php':[
-322,
+"PHPWord:tests/PhpWordTests/Element/SectionTest.php": [
+79
 ],
-'PHPWord:tests/PhpWordTests/AbstractWebServerEmbeddedTest.php':[
-53,
-62,
-],
-'PHPWord:tests/PhpWordTests/Element/SectionTest.php':[
-79,
-],
-'PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
 121,
-134,
+134
 ],
-'PHPWord:tests/PhpWordTests/XmlDocument.php':[
-151,
-],
+"PHPWord:tests/PhpWordTests/XmlDocument.php": [
+151
+]
 }

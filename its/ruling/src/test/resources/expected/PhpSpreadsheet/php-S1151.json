@@ -1,14 +1,14 @@
 {
-'PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
 4794,
 4882,
-4926,
+4926
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
 370,
-502,
+502
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
 1142,
 1235,
 1259,
@@ -30,9 +30,9 @@
 6514,
 6969,
 6988,
-7386,
+7386
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
 454,
 551,
 869,
@@ -41,9 +41,9 @@
 1647,
 1666,
 1715,
-1781,
+1781
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
 90,
 109,
 125,
@@ -57,35 +57,35 @@
 556,
 585,
 617,
-652,
+652
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/Trend.php':[
-99,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/Trend.php": [
+99
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php':[
-412,
+"PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
+412
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Formatter.php':[
-105,
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Formatter.php": [
+105
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Style/Style.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/Style.php": [
 514,
-529,
+529
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter.php": [
 831,
 915,
 938,
-997,
+997
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php':[
-216,
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php": [
+216
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
 440,
-462,
+462
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php':[
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php": [
 66,
 78,
 133,
@@ -95,9 +95,9 @@
 246,
 276,
 330,
-370,
+370
 ],
-'PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php':[
-438,
-],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+438
+]
 }

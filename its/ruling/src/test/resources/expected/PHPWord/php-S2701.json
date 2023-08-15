@@ -1,11 +1,11 @@
 {
-'PHPWord:tests/PhpWordTests/Element/TrackChangeTest.php':[
-63,
+"PHPWord:tests/PhpWordTests/Element/TrackChangeTest.php": [
+63
 ],
-'PHPWord:tests/PhpWordTests/Style/ChartTest.php':[
+"PHPWord:tests/PhpWordTests/Style/ChartTest.php": [
 66,
 70,
 169,
-185,
-],
+185
+]
 }

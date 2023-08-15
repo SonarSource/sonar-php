@@ -1,15 +1,15 @@
 {
-'PHP_CodeSniffer:src/Config.php':[
+"PHP_CodeSniffer:src/Config.php": [
 662,
-664,
+664
 ],
-'PHP_CodeSniffer:src/Runner.php':[
+"PHP_CodeSniffer:src/Runner.php": [
 298,
-301,
+301
 ],
-'PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php':[
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php": [
 178,
 185,
-189,
-],
+189
+]
 }

@@ -1,20 +1,20 @@
 {
-'PhpSpreadsheet:samples/Basic/01_Simple_download_ods.php':[
-61,
+"PhpSpreadsheet:samples/Basic/01_Simple_download_ods.php": [
+61
 ],
-'PhpSpreadsheet:samples/Basic/01_Simple_download_pdf.php':[
-56,
+"PhpSpreadsheet:samples/Basic/01_Simple_download_pdf.php": [
+56
 ],
-'PhpSpreadsheet:samples/Basic/01_Simple_download_xls.php':[
-61,
+"PhpSpreadsheet:samples/Basic/01_Simple_download_xls.php": [
+61
 ],
-'PhpSpreadsheet:samples/Basic/01_Simple_download_xlsx.php':[
-60,
+"PhpSpreadsheet:samples/Basic/01_Simple_download_xlsx.php": [
+60
 ],
-'PhpSpreadsheet:samples/Basic/25_In_memory_image.php':[
-26,
+"PhpSpreadsheet:samples/Basic/25_In_memory_image.php": [
+26
 ],
-'PhpSpreadsheet:samples/download.php':[
-15,
-],
+"PhpSpreadsheet:samples/download.php": [
+15
+]
 }

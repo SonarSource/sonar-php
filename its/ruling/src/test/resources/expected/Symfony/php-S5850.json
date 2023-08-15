@@ -1,19 +1,19 @@
 {
-'Symfony:Component/DependencyInjection/Compiler/AutowireRequiredMethodsPass.php':[
+"Symfony:Component/DependencyInjection/Compiler/AutowireRequiredMethodsPass.php": [
 59,
 59,
 69,
 69,
-95,
+95
 ],
-'Symfony:Component/DependencyInjection/Compiler/AutowireRequiredPropertiesPass.php':[
+"Symfony:Component/DependencyInjection/Compiler/AutowireRequiredPropertiesPass.php": [
 45,
-45,
+45
 ],
-'Symfony:Component/HttpClient/DataCollector/HttpClientDataCollector.php':[
-233,
+"Symfony:Component/HttpClient/DataCollector/HttpClientDataCollector.php": [
+233
 ],
-'Symfony:Component/HttpClient/HttpClientTrait.php':[
-816,
-],
+"Symfony:Component/HttpClient/HttpClientTrait.php": [
+816
+]
 }

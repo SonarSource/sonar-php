@@ -1,18 +1,18 @@
 {
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/FormulaParserTest.php':[
-15,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/FormulaParserTest.php": [
+15
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/CellRangeTest.php':[
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/CellRangeTest.php": [
 94,
-111,
+111
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/DefinedNameFormulaTest.php':[
-178,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/DefinedNameFormulaTest.php": [
+178
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/DefinedNameTest.php':[
-137,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/DefinedNameTest.php": [
+137
 ],
-'PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/Table/TableTest.php':[
-208,
-],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/Table/TableTest.php": [
+208
+]
 }

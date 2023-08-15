@@ -1,12 +1,12 @@
 {
-'PHPWord:src/PhpWord/IOFactory.php':[
-87,
+"PHPWord:src/PhpWord/IOFactory.php": [
+87
 ],
-'PHPWord:src/PhpWord/Media.php':[
+"PHPWord:src/PhpWord/Media.php": [
 58,
-59,
+59
 ],
-'PHPWord:src/PhpWord/Reader/MsDoc.php':[
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
 167,
 278,
 280,
@@ -420,17 +420,17 @@
 2226,
 2305,
 2306,
-2307,
+2307
 ],
-'PHPWord:src/PhpWord/Settings.php':[
+"PHPWord:src/PhpWord/Settings.php": [
 192,
 196,
-402,
+402
 ],
-'PHPWord:src/PhpWord/Shared/AbstractEnum.php':[
-72,
+"PHPWord:src/PhpWord/Shared/AbstractEnum.php": [
+72
 ],
-'PHPWord:src/PhpWord/Shared/Converter.php':[
+"PHPWord:src/PhpWord/Shared/Converter.php": [
 354,
 393,
 395,
@@ -444,9 +444,9 @@
 441,
 441,
 453,
-453,
+453
 ],
-'PHPWord:src/PhpWord/Shared/Html.php':[
+"PHPWord:src/PhpWord/Shared/Html.php": [
 116,
 150,
 158,
@@ -488,18 +488,18 @@
 952,
 952,
 1116,
-1134,
+1134
 ],
-'PHPWord:src/PhpWord/Shared/Text.php':[
+"PHPWord:src/PhpWord/Shared/Text.php": [
 147,
-167,
+167
 ],
-'PHPWord:src/PhpWord/Style.php':[
+"PHPWord:src/PhpWord/Style.php": [
 158,
 211,
-215,
+215
 ],
-'PHPWord:src/PhpWord/TemplateProcessor.php':[
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
 245,
 245,
 246,
@@ -527,39 +527,39 @@
 1439,
 1444,
 1449,
-1450,
+1450
 ],
-'PHPWord:tests/PhpWordTests/AbstractWebServerEmbeddedTest.php':[
+"PHPWord:tests/PhpWordTests/AbstractWebServerEmbeddedTest.php": [
 50,
 59,
-68,
+68
 ],
-'PHPWord:tests/PhpWordTests/Collection/CollectionTest.php':[
+"PHPWord:tests/PhpWordTests/Collection/CollectionTest.php": [
 38,
 39,
 40,
 41,
-45,
+45
 ],
-'PHPWord:tests/PhpWordTests/ComplexType/FootnotePropertiesTest.php':[
+"PHPWord:tests/PhpWordTests/ComplexType/FootnotePropertiesTest.php": [
 44,
 45,
 46,
-47,
+47
 ],
-'PHPWord:tests/PhpWordTests/ComplexType/ProofStateTest.php':[
+"PHPWord:tests/PhpWordTests/ComplexType/ProofStateTest.php": [
 39,
-40,
+40
 ],
-'PHPWord:tests/PhpWordTests/Element/AbstractElementTest.php':[
+"PHPWord:tests/PhpWordTests/Element/AbstractElementTest.php": [
 33,
-43,
+43
 ],
-'PHPWord:tests/PhpWordTests/Element/BookmarkTest.php':[
+"PHPWord:tests/PhpWordTests/Element/BookmarkTest.php": [
 37,
-38,
+38
 ],
-'PHPWord:tests/PhpWordTests/Element/CellTest.php':[
+"PHPWord:tests/PhpWordTests/Element/CellTest.php": [
 38,
 39,
 49,
@@ -598,9 +598,9 @@
 249,
 260,
 261,
-271,
+271
 ],
-'PHPWord:tests/PhpWordTests/Element/CheckBoxTest.php':[
+"PHPWord:tests/PhpWordTests/Element/CheckBoxTest.php": [
 38,
 39,
 40,
@@ -611,9 +611,9 @@
 64,
 74,
 83,
-86,
+86
 ],
-'PHPWord:tests/PhpWordTests/Element/CommentTest.php':[
+"PHPWord:tests/PhpWordTests/Element/CommentTest.php": [
 46,
 47,
 48,
@@ -624,9 +624,9 @@
 63,
 64,
 74,
-86,
+86
 ],
-'PHPWord:tests/PhpWordTests/Element/FieldTest.php':[
+"PHPWord:tests/PhpWordTests/Element/FieldTest.php": [
 38,
 48,
 49,
@@ -650,9 +650,9 @@
 112,
 113,
 114,
-115,
+115
 ],
-'PHPWord:tests/PhpWordTests/Element/FooterTest.php':[
+"PHPWord:tests/PhpWordTests/Element/FooterTest.php": [
 38,
 39,
 50,
@@ -677,9 +677,9 @@
 150,
 160,
 173,
-174,
+174
 ],
-'PHPWord:tests/PhpWordTests/Element/FootnoteTest.php':[
+"PHPWord:tests/PhpWordTests/Element/FootnoteTest.php": [
 36,
 37,
 38,
@@ -691,9 +691,9 @@
 95,
 96,
 108,
-117,
+117
 ],
-'PHPWord:tests/PhpWordTests/Element/HeaderTest.php':[
+"PHPWord:tests/PhpWordTests/Element/HeaderTest.php": [
 39,
 40,
 41,
@@ -727,9 +727,9 @@
 218,
 229,
 248,
-251,
+251
 ],
-'PHPWord:tests/PhpWordTests/Element/ImageTest.php':[
+"PHPWord:tests/PhpWordTests/Element/ImageTest.php": [
 39,
 40,
 41,
@@ -775,15 +775,15 @@
 228,
 229,
 231,
-232,
+232
 ],
-'PHPWord:tests/PhpWordTests/Element/LineTest.php':[
+"PHPWord:tests/PhpWordTests/Element/LineTest.php": [
 38,
 39,
 49,
-75,
+75
 ],
-'PHPWord:tests/PhpWordTests/Element/LinkTest.php':[
+"PHPWord:tests/PhpWordTests/Element/LinkTest.php": [
 39,
 40,
 41,
@@ -796,9 +796,9 @@
 62,
 72,
 73,
-85,
+85
 ],
-'PHPWord:tests/PhpWordTests/Element/ListItemRunTest.php':[
+"PHPWord:tests/PhpWordTests/Element/ListItemRunTest.php": [
 36,
 37,
 38,
@@ -828,15 +828,15 @@
 148,
 159,
 172,
-173,
+173
 ],
-'PHPWord:tests/PhpWordTests/Element/ListItemTest.php':[
+"PHPWord:tests/PhpWordTests/Element/ListItemTest.php": [
 38,
 48,
 49,
-60,
+60
 ],
-'PHPWord:tests/PhpWordTests/Element/ObjectTest.php':[
+"PHPWord:tests/PhpWordTests/Element/ObjectTest.php": [
 39,
 40,
 41,
@@ -847,12 +847,12 @@
 77,
 78,
 91,
-104,
+104
 ],
-'PHPWord:tests/PhpWordTests/Element/PageBreakTest.php':[
-38,
+"PHPWord:tests/PhpWordTests/Element/PageBreakTest.php": [
+38
 ],
-'PHPWord:tests/PhpWordTests/Element/PreserveTextTest.php':[
+"PHPWord:tests/PhpWordTests/Element/PreserveTextTest.php": [
 37,
 38,
 39,
@@ -861,9 +861,9 @@
 50,
 51,
 60,
-61,
+61
 ],
-'PHPWord:tests/PhpWordTests/Element/RowTest.php':[
+"PHPWord:tests/PhpWordTests/Element/RowTest.php": [
 38,
 39,
 40,
@@ -872,18 +872,18 @@
 53,
 54,
 65,
-66,
+66
 ],
-'PHPWord:tests/PhpWordTests/Element/SDTTest.php':[
+"PHPWord:tests/PhpWordTests/Element/SDTTest.php": [
 46,
 47,
 48,
 49,
 50,
 51,
-73,
+73
 ],
-'PHPWord:tests/PhpWordTests/Element/SectionTest.php':[
+"PHPWord:tests/PhpWordTests/Element/SectionTest.php": [
 39,
 46,
 47,
@@ -899,9 +899,9 @@
 205,
 217,
 220,
-221,
+221
 ],
-'PHPWord:tests/PhpWordTests/Element/TOCTest.php':[
+"PHPWord:tests/PhpWordTests/Element/TOCTest.php": [
 44,
 45,
 49,
@@ -911,9 +911,9 @@
 93,
 94,
 100,
-101,
+101
 ],
-'PHPWord:tests/PhpWordTests/Element/TableTest.php':[
+"PHPWord:tests/PhpWordTests/Element/TableTest.php": [
 38,
 39,
 40,
@@ -926,15 +926,15 @@
 84,
 95,
 106,
-109,
+109
 ],
-'PHPWord:tests/PhpWordTests/Element/TextBoxTest.php':[
+"PHPWord:tests/PhpWordTests/Element/TextBoxTest.php": [
 38,
 39,
 49,
-71,
+71
 ],
-'PHPWord:tests/PhpWordTests/Element/TextBreakTest.php':[
+"PHPWord:tests/PhpWordTests/Element/TextBreakTest.php": [
 39,
 40,
 51,
@@ -942,9 +942,9 @@
 63,
 64,
 75,
-76,
+76
 ],
-'PHPWord:tests/PhpWordTests/Element/TextRunTest.php':[
+"PHPWord:tests/PhpWordTests/Element/TextRunTest.php": [
 39,
 40,
 41,
@@ -977,9 +977,9 @@
 170,
 171,
 180,
-183,
+183
 ],
-'PHPWord:tests/PhpWordTests/Element/TextTest.php':[
+"PHPWord:tests/PhpWordTests/Element/TextTest.php": [
 38,
 39,
 40,
@@ -989,15 +989,15 @@
 63,
 73,
 82,
-85,
+85
 ],
-'PHPWord:tests/PhpWordTests/Element/TitleTest.php':[
+"PHPWord:tests/PhpWordTests/Element/TitleTest.php": [
 41,
 42,
 52,
-64,
+64
 ],
-'PHPWord:tests/PhpWordTests/Element/TrackChangeTest.php':[
+"PHPWord:tests/PhpWordTests/Element/TrackChangeTest.php": [
 43,
 44,
 45,
@@ -1005,21 +1005,21 @@
 61,
 62,
 63,
-64,
+64
 ],
-'PHPWord:tests/PhpWordTests/Escaper/RtfEscaper2Test.php':[
+"PHPWord:tests/PhpWordTests/Escaper/RtfEscaper2Test.php": [
 51,
 61,
 71,
-81,
+81
 ],
-'PHPWord:tests/PhpWordTests/IOFactoryTest.php':[
+"PHPWord:tests/PhpWordTests/IOFactoryTest.php": [
 54,
 73,
 93,
-114,
+114
 ],
-'PHPWord:tests/PhpWordTests/MediaTest.php':[
+"PHPWord:tests/PhpWordTests/MediaTest.php": [
 36,
 44,
 52,
@@ -1033,9 +1033,9 @@
 104,
 113,
 118,
-121,
+121
 ],
-'PHPWord:tests/PhpWordTests/Metadata/DocInfoTest.php':[
+"PHPWord:tests/PhpWordTests/Metadata/DocInfoTest.php": [
 36,
 39,
 49,
@@ -1091,9 +1091,9 @@
 223,
 224,
 225,
-226,
+226
 ],
-'PHPWord:tests/PhpWordTests/Metadata/SettingsTest.php':[
+"PHPWord:tests/PhpWordTests/Metadata/SettingsTest.php": [
 40,
 50,
 60,
@@ -1115,9 +1115,9 @@
 207,
 213,
 220,
-226,
+226
 ],
-'PHPWord:tests/PhpWordTests/PhpWordTest.php':[
+"PHPWord:tests/PhpWordTests/PhpWordTest.php": [
 39,
 40,
 41,
@@ -1136,23 +1136,23 @@
 181,
 195,
 196,
-205,
+205
 ],
-'PHPWord:tests/PhpWordTests/Reader/HTMLTest.php':[
-39,
+"PHPWord:tests/PhpWordTests/Reader/HTMLTest.php": [
+39
 ],
-'PHPWord:tests/PhpWordTests/Reader/MsDocTest.php':[
+"PHPWord:tests/PhpWordTests/Reader/MsDocTest.php": [
 40,
 50,
-60,
+60
 ],
-'PHPWord:tests/PhpWordTests/Reader/ODTextTest.php':[
-38,
+"PHPWord:tests/PhpWordTests/Reader/ODTextTest.php": [
+38
 ],
-'PHPWord:tests/PhpWordTests/Reader/RTFTest.php':[
-39,
+"PHPWord:tests/PhpWordTests/Reader/RTFTest.php": [
+39
 ],
-'PHPWord:tests/PhpWordTests/Reader/Word2007/ElementTest.php':[
+"PHPWord:tests/PhpWordTests/Reader/Word2007/ElementTest.php": [
 62,
 63,
 65,
@@ -1192,9 +1192,9 @@
 273,
 276,
 277,
-313,
+313
 ],
-'PHPWord:tests/PhpWordTests/Reader/Word2007/PartTest.php':[
+"PHPWord:tests/PhpWordTests/Reader/Word2007/PartTest.php": [
 119,
 126,
 127,
@@ -1220,9 +1220,9 @@
 227,
 228,
 232,
-233,
+233
 ],
-'PHPWord:tests/PhpWordTests/Reader/Word2007/StyleTest.php':[
+"PHPWord:tests/PhpWordTests/Reader/Word2007/StyleTest.php": [
 46,
 47,
 48,
@@ -1260,9 +1260,9 @@
 187,
 190,
 215,
-227,
+227
 ],
-'PHPWord:tests/PhpWordTests/Reader/Word2007Test.php':[
+"PHPWord:tests/PhpWordTests/Reader/Word2007Test.php": [
 40,
 50,
 61,
@@ -1271,9 +1271,9 @@
 64,
 67,
 78,
-81,
+81
 ],
-'PHPWord:tests/PhpWordTests/SettingsTest.php':[
+"PHPWord:tests/PhpWordTests/SettingsTest.php": [
 83,
 84,
 85,
@@ -1335,9 +1335,9 @@
 237,
 240,
 249,
-253,
+253
 ],
-'PHPWord:tests/PhpWordTests/Shared/ConverterTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/ConverterTest.php": [
 41,
 44,
 47,
@@ -1377,14 +1377,14 @@
 135,
 136,
 137,
-138,
+138
 ],
-'PHPWord:tests/PhpWordTests/Shared/CssTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/CssTest.php": [
 33,
 45,
-50,
+50
 ],
-'PHPWord:tests/PhpWordTests/Shared/DrawingTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/DrawingTest.php": [
 33,
 34,
 35,
@@ -1422,9 +1422,9 @@
 109,
 110,
 111,
-112,
+112
 ],
-'PHPWord:tests/PhpWordTests/Shared/HtmlTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
 48,
 66,
 93,
@@ -1617,15 +1617,15 @@
 1078,
 1081,
 1082,
-1100,
+1100
 ],
-'PHPWord:tests/PhpWordTests/Shared/Microsoft/PasswordEncoderTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/Microsoft/PasswordEncoderTest.php": [
 39,
 55,
 71,
-87,
+87
 ],
-'PHPWord:tests/PhpWordTests/Shared/TextTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/TextTest.php": [
 31,
 32,
 33,
@@ -1650,9 +1650,9 @@
 77,
 78,
 79,
-87,
+87
 ],
-'PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
 39,
 40,
 41,
@@ -1669,15 +1669,15 @@
 108,
 110,
 123,
-124,
+124
 ],
-'PHPWord:tests/PhpWordTests/Shared/XMLWriterTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/XMLWriterTest.php": [
 36,
 43,
 53,
-69,
+69
 ],
-'PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php':[
+"PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
 88,
 89,
 91,
@@ -1687,9 +1687,9 @@
 97,
 98,
 99,
-100,
+100
 ],
-'PHPWord:tests/PhpWordTests/Style/AbstractStyleTest.php':[
+"PHPWord:tests/PhpWordTests/Style/AbstractStyleTest.php": [
 40,
 48,
 56,
@@ -1712,15 +1712,15 @@
 83,
 83,
 94,
-94,
+94
 ],
-'PHPWord:tests/PhpWordTests/Style/CellTest.php':[
+"PHPWord:tests/PhpWordTests/Style/CellTest.php": [
 58,
 62,
 77,
-90,
+90
 ],
-'PHPWord:tests/PhpWordTests/Style/ChartTest.php':[
+"PHPWord:tests/PhpWordTests/Style/ChartTest.php": [
 38,
 42,
 52,
@@ -1739,9 +1739,9 @@
 169,
 173,
 185,
-189,
+189
 ],
-'PHPWord:tests/PhpWordTests/Style/FontTest.php':[
+"PHPWord:tests/PhpWordTests/Style/FontTest.php": [
 48,
 49,
 50,
@@ -1755,25 +1755,25 @@
 161,
 171,
 191,
-192,
+192
 ],
-'PHPWord:tests/PhpWordTests/Style/ImageTest.php':[
+"PHPWord:tests/PhpWordTests/Style/ImageTest.php": [
 56,
-87,
+87
 ],
-'PHPWord:tests/PhpWordTests/Style/IndentationTest.php':[
+"PHPWord:tests/PhpWordTests/Style/IndentationTest.php": [
 46,
-50,
+50
 ],
-'PHPWord:tests/PhpWordTests/Style/LanguageTest.php':[
+"PHPWord:tests/PhpWordTests/Style/LanguageTest.php": [
 48,
-52,
+52
 ],
-'PHPWord:tests/PhpWordTests/Style/LineNumberingTest.php':[
+"PHPWord:tests/PhpWordTests/Style/LineNumberingTest.php": [
 46,
-50,
+50
 ],
-'PHPWord:tests/PhpWordTests/Style/LineTest.php':[
+"PHPWord:tests/PhpWordTests/Style/LineTest.php": [
 50,
 72,
 84,
@@ -1782,32 +1782,32 @@
 117,
 128,
 139,
-150,
+150
 ],
-'PHPWord:tests/PhpWordTests/Style/ListItemTest.php':[
+"PHPWord:tests/PhpWordTests/Style/ListItemTest.php": [
 39,
 51,
 63,
-75,
+75
 ],
-'PHPWord:tests/PhpWordTests/Style/NumberingLevelTest.php':[
-56,
+"PHPWord:tests/PhpWordTests/Style/NumberingLevelTest.php": [
+56
 ],
-'PHPWord:tests/PhpWordTests/Style/NumberingTest.php':[
+"PHPWord:tests/PhpWordTests/Style/NumberingTest.php": [
 44,
 48,
-59,
+59
 ],
-'PHPWord:tests/PhpWordTests/Style/PaperTest.php':[
+"PHPWord:tests/PhpWordTests/Style/PaperTest.php": [
 45,
 55,
 56,
 57,
 68,
 69,
-70,
+70
 ],
-'PHPWord:tests/PhpWordTests/Style/ParagraphTest.php':[
+"PHPWord:tests/PhpWordTests/Style/ParagraphTest.php": [
 58,
 60,
 97,
@@ -1817,14 +1817,14 @@
 156,
 166,
 167,
-177,
+177
 ],
-'PHPWord:tests/PhpWordTests/Style/RowTest.php':[
+"PHPWord:tests/PhpWordTests/Style/RowTest.php": [
 49,
 55,
-75,
+75
 ],
-'PHPWord:tests/PhpWordTests/Style/SectionTest.php':[
+"PHPWord:tests/PhpWordTests/Style/SectionTest.php": [
 39,
 40,
 41,
@@ -1898,30 +1898,30 @@
 330,
 333,
 344,
-347,
+347
 ],
-'PHPWord:tests/PhpWordTests/Style/ShadingTest.php':[
+"PHPWord:tests/PhpWordTests/Style/ShadingTest.php": [
 45,
-49,
+49
 ],
-'PHPWord:tests/PhpWordTests/Style/SpacingTest.php':[
+"PHPWord:tests/PhpWordTests/Style/SpacingTest.php": [
 46,
-50,
+50
 ],
-'PHPWord:tests/PhpWordTests/Style/TOCTest.php':[
+"PHPWord:tests/PhpWordTests/Style/TOCTest.php": [
 45,
-49,
+49
 ],
-'PHPWord:tests/PhpWordTests/Style/TabTest.php':[
+"PHPWord:tests/PhpWordTests/Style/TabTest.php": [
 45,
-49,
+49
 ],
-'PHPWord:tests/PhpWordTests/Style/TablePositionTest.php':[
+"PHPWord:tests/PhpWordTests/Style/TablePositionTest.php": [
 37,
 38,
-64,
+64
 ],
-'PHPWord:tests/PhpWordTests/Style/TableTest.php':[
+"PHPWord:tests/PhpWordTests/Style/TableTest.php": [
 46,
 49,
 50,
@@ -1945,9 +1945,9 @@
 209,
 212,
 213,
-222,
+222
 ],
-'PHPWord:tests/PhpWordTests/Style/TextBoxTest.php':[
+"PHPWord:tests/PhpWordTests/Style/TextBoxTest.php": [
 62,
 96,
 118,
@@ -1968,16 +1968,16 @@
 284,
 295,
 306,
-317,
+317
 ],
-'PHPWord:tests/PhpWordTests/StyleTest.php':[
+"PHPWord:tests/PhpWordTests/StyleTest.php": [
 84,
 86,
 88,
 91,
-105,
+105
 ],
-'PHPWord:tests/PhpWordTests/TestHelperDOCX.php':[
+"PHPWord:tests/PhpWordTests/TestHelperDOCX.php": [
 49,
 50,
 59,
@@ -1987,9 +1987,9 @@
 82,
 85,
 102,
-116,
+116
 ],
-'PHPWord:tests/PhpWordTests/Writer/HTML/ElementTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/HTML/ElementTest.php": [
 47,
 61,
 79,
@@ -2008,18 +2008,18 @@
 190,
 191,
 214,
-215,
+215
 ],
-'PHPWord:tests/PhpWordTests/Writer/HTML/StyleTest.php':[
-35,
+"PHPWord:tests/PhpWordTests/Writer/HTML/StyleTest.php": [
+35
 ],
-'PHPWord:tests/PhpWordTests/Writer/HTMLTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/HTMLTest.php": [
 40,
 61,
 138,
-143,
+143
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/Element/ImageTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/ODText/Element/ImageTest.php": [
 50,
 52,
 54,
@@ -2027,9 +2027,9 @@
 59,
 60,
 62,
-63,
+63
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/ElementTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/ODText/ElementTest.php": [
 52,
 86,
 87,
@@ -2094,16 +2094,16 @@
 320,
 324,
 326,
-328,
+328
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/Part/AbstractPartTest.php':[
-38,
+"PHPWord:tests/PhpWordTests/Writer/ODText/Part/AbstractPartTest.php": [
+38
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/Part/ContentTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/ODText/Part/ContentTest.php": [
 95,
-109,
+109
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/Style/FontTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/ODText/Style/FontTest.php": [
 50,
 52,
 55,
@@ -2164,9 +2164,9 @@
 245,
 247,
 248,
-250,
+250
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/Style/ParagraphTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/ODText/Style/ParagraphTest.php": [
 52,
 54,
 55,
@@ -2307,9 +2307,9 @@
 459,
 460,
 462,
-463,
+463
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/Style/SectionTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/ODText/Style/SectionTest.php": [
 84,
 85,
 86,
@@ -2391,12 +2391,12 @@
 243,
 245,
 246,
-247,
+247
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODText/StyleTest.php':[
-39,
+"PHPWord:tests/PhpWordTests/Writer/ODText/StyleTest.php": [
+39
 ],
-'PHPWord:tests/PhpWordTests/Writer/ODTextTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/ODTextTest.php": [
 38,
 40,
 42,
@@ -2405,25 +2405,25 @@
 113,
 122,
 132,
-133,
+133
 ],
-'PHPWord:tests/PhpWordTests/Writer/PDF/DomPDFTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/PDF/DomPDFTest.php": [
 49,
 67,
 70,
 73,
-76,
+76
 ],
-'PHPWord:tests/PhpWordTests/Writer/PDF/MPDFTest.php':[
-49,
+"PHPWord:tests/PhpWordTests/Writer/PDF/MPDFTest.php": [
+49
 ],
-'PHPWord:tests/PhpWordTests/Writer/PDF/TCPDFTest.php':[
-48,
+"PHPWord:tests/PhpWordTests/Writer/PDF/TCPDFTest.php": [
+48
 ],
-'PHPWord:tests/PhpWordTests/Writer/PDFTest.php':[
-45,
+"PHPWord:tests/PhpWordTests/Writer/PDFTest.php": [
+45
 ],
-'PHPWord:tests/PhpWordTests/Writer/RTF/ElementTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/RTF/ElementTest.php": [
 44,
 54,
 63,
@@ -2432,9 +2432,9 @@
 123,
 134,
 145,
-157,
+157
 ],
-'PHPWord:tests/PhpWordTests/Writer/RTF/HeaderFooterTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/RTF/HeaderFooterTest.php": [
 35,
 36,
 37,
@@ -2449,21 +2449,21 @@
 73,
 74,
 75,
-76,
+76
 ],
-'PHPWord:tests/PhpWordTests/Writer/RTF/StyleTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/RTF/StyleTest.php": [
 44,
 63,
 123,
 132,
-154,
+154
 ],
-'PHPWord:tests/PhpWordTests/Writer/RTFTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/RTFTest.php": [
 38,
 95,
-114,
+114
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Element/ChartTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Element/ChartTest.php": [
 87,
 95,
 105,
@@ -2475,9 +2475,9 @@
 205,
 207,
 209,
-239,
+239
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Element/FormFieldTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Element/FormFieldTest.php": [
 52,
 53,
 56,
@@ -2487,9 +2487,9 @@
 65,
 66,
 67,
-68,
+68
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/ElementTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/ElementTest.php": [
 58,
 74,
 89,
@@ -2562,18 +2562,18 @@
 519,
 520,
 521,
-522,
+522
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/AbstractPartTest.php':[
-36,
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/AbstractPartTest.php": [
+36
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/CommentsTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/CommentsTest.php": [
 54,
 57,
 58,
-59,
+59
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
 60,
 87,
 108,
@@ -2626,22 +2626,22 @@
 624,
 655,
 670,
-671,
+671
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/FooterTest.php':[
-53,
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/FooterTest.php": [
+53
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/FootnotesTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/FootnotesTest.php": [
 50,
-51,
+51
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/HeaderTest.php':[
-53,
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/HeaderTest.php": [
+53
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/NumberingTest.php':[
-76,
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/NumberingTest.php": [
+76
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/SettingsTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/SettingsTest.php": [
 56,
 78,
 79,
@@ -2693,18 +2693,18 @@
 450,
 453,
 466,
-469,
+469
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Part/StylesTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/StylesTest.php": [
 69,
 74,
 79,
 106,
 111,
 116,
-145,
+145
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Style/FontTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Style/FontTest.php": [
 52,
 72,
 73,
@@ -2725,9 +2725,9 @@
 126,
 141,
 155,
-156,
+156
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Style/ImageTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Style/ImageTest.php": [
 59,
 61,
 62,
@@ -2745,9 +2745,9 @@
 101,
 102,
 103,
-104,
+104
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Style/ParagraphTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Style/ParagraphTest.php": [
 52,
 63,
 64,
@@ -2755,15 +2755,15 @@
 76,
 77,
 78,
-92,
+92
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Style/SectionTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Style/SectionTest.php": [
 53,
 54,
 55,
-56,
+56
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/Style/TableTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Style/TableTest.php": [
 59,
 60,
 79,
@@ -2784,13 +2784,13 @@
 142,
 143,
 159,
-160,
+160
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007/StyleTest.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007/StyleTest.php": [
 43,
-63,
+63
 ],
-'PHPWord:tests/PhpWordTests/Writer/Word2007Test.php':[
+"PHPWord:tests/PhpWordTests/Writer/Word2007Test.php": [
 63,
 67,
 80,
@@ -2798,6 +2798,6 @@
 123,
 151,
 164,
-181,
-],
+181
+]
 }
