@@ -19,10 +19,12 @@
  */
 package org.sonar.plugins.php.reports.phpunit;
 
-import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -185,12 +187,12 @@ public class PhpUnitSensorTest {
     if (tempReport.createNewFile()) {
       File originalReport = new File(context.fileSystem().baseDir(), relativeReportPath);
 
-      String content = Files.readLines(originalReport, StandardCharsets.UTF_8)
+      String content = Files.readAllLines(Path.of(originalReport.getPath()), StandardCharsets.UTF_8)
         .stream()
         .collect(Collectors.joining("\n"))
         .replace(inputFile.relativePath(), inputFile.absolutePath());
 
-      Files.asCharSink(tempReport, StandardCharsets.UTF_8).write(content);
+      Files.writeString(Path.of(tempReport.getPath()), content, StandardOpenOption.TRUNCATE_EXISTING);
     }
     tempReports.add(tempReport);
   }

@@ -19,10 +19,11 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.Test;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -123,11 +124,11 @@ public class PhpExclusionsFileFilterTest {
 
     testFile = setupSingleFile(baseDir, context, "empty.php");
     assertThat(filter.accept(testFile)).isTrue();
-
   }
 
   private static DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context, String fileName) throws IOException {
-    return setupSingleFile(baseDir, context, fileName, Files.asCharSource(new File(baseDir, fileName), StandardCharsets.UTF_8).read());
+    String content = Files.readString(Path.of(new File(baseDir, fileName).getPath()));
+    return setupSingleFile(baseDir, context, fileName, content);
   }
 
   private static DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context, String fileName, String content) {

@@ -19,19 +19,19 @@
  */
 package org.sonar.php.filters;
 
-import com.google.common.collect.Range;
-import com.google.common.collect.RangeSet;
-import com.google.common.collect.TreeRangeSet;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.annotation.CheckForNull;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -68,7 +68,7 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
 
     Optional.ofNullable(phpTreeParent)
       .ifPresent(phpTree -> {
-        Range<Integer> range = computeLineRange(phpTree, parent.startToken(), parent.endToken());
+        Set<Integer> range = computeLines(phpTree, parent.startToken(), parent.endToken());
         suppressedWarnings.addSuppressedWarning(getFileUri(), rulesSuppressed, range);
       });
 
@@ -96,10 +96,9 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
 
   private void processSuppressedWarningsInComment(SyntaxToken token, String comment) {
     Matcher matcher = SUPPRESS_WARNING_COMMENT_PATTERN.matcher(comment);
-
     if (matcher.find()) {
       PHPTree parent = findFarthestPhpTreeParent(token);
-      Range<Integer> range = computeLineRange(parent, token, token);
+      Set<Integer> range = computeLines(parent, token, token);
       do {
         String arguments = matcher.group("arguments");
         Arrays.stream(arguments.split(","))
@@ -109,7 +108,7 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
     }
   }
 
-  private static Range<Integer> computeLineRange(PHPTree phpTree, SyntaxToken startToken, SyntaxToken endToken) {
+  private static Set<Integer> computeLines(PHPTree phpTree, SyntaxToken startToken, SyntaxToken endToken) {
     int startLine = Optional.ofNullable(phpTree)
       .map(PHPTree::getFirstToken)
       .map(SyntaxToken::line)
@@ -118,7 +117,7 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
       .map(PHPTree::getLastToken)
       .map(SyntaxToken::endLine)
       .orElse(endToken.endLine());
-    return Range.closed(startLine, endLine);
+    return IntStream.rangeClosed(startLine, endLine).boxed().collect(Collectors.toSet());
   }
 
   /**
@@ -162,23 +161,23 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
   }
 
   static class SuppressedWarnings {
-    private final Map<String, Map<String, RangeSet<Integer>>> suppressedRangePerRulesPerFile = new HashMap<>();
+    private final Map<String, Map<String, Set<Integer>>> suppressedRangePerRulesPerFile = new HashMap<>();
 
-    public void addSuppressedWarning(String fileUri, String ruleName, Range<Integer> range) {
+    public void addSuppressedWarning(String fileUri, String ruleName, Set<Integer> range) {
       suppressedRangePerRulesPerFile
         .computeIfAbsent(fileUri, key -> new HashMap<>())
-        .computeIfAbsent(ruleName, key -> TreeRangeSet.create())
-        .add(range);
+        .computeIfAbsent(ruleName, key -> new HashSet<>())
+        .addAll(range);
     }
 
-    public void addSuppressedWarning(String fileUri, Collection<String> ruleNames, Range<Integer> range) {
+    public void addSuppressedWarning(String fileUri, Collection<String> ruleNames, Set<Integer> range) {
       ruleNames.forEach(ruleName -> addSuppressedWarning(fileUri, ruleName, range));
     }
 
     public boolean hasSuppressedWarnings(String fileUri, String ruleName, int line) {
       return suppressedRangePerRulesPerFile
         .getOrDefault(fileUri, Collections.emptyMap())
-        .getOrDefault(ruleName, TreeRangeSet.create())
+        .getOrDefault(ruleName, new HashSet<>())
         .contains(line);
     }
 
