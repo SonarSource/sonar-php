@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.google.common.base.Preconditions;
+import org.sonar.api.utils.Preconditions;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 

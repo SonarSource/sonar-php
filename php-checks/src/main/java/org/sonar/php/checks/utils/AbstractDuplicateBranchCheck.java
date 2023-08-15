@@ -19,9 +19,9 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.api.utils.Preconditions;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;

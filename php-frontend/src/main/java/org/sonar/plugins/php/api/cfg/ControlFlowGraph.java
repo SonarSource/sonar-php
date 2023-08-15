@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
-import com.google.common.base.Throwables;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
@@ -28,6 +27,7 @@ import javax.annotation.CheckForNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.Throwables;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
