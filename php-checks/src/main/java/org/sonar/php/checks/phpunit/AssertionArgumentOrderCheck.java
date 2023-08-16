@@ -30,6 +30,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 
+import static org.sonar.php.checks.utils.CheckUtils.assignedValue;
 import static org.sonar.php.checks.utils.CheckUtils.hasNamedArgument;
 import static org.sonar.plugins.php.api.tree.Tree.Kind;
 
@@ -61,12 +62,12 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
   }
 
   private boolean isLiteral(ExpressionTree expression) {
-    return CheckUtils.assignedValue(expression).is(LITERAL) ||
-      CheckUtils.assignedValue(expression).is(Kind.CLASS_MEMBER_ACCESS) &&
-        isStaticAccessWithName((MemberAccessTree) expression, "class");
+    return assignedValue(expression).is(LITERAL) ||
+      (assignedValue(expression).is(Kind.CLASS_MEMBER_ACCESS) &&
+        isStaticAccessWithName((MemberAccessTree) expression, "class"));
   }
 
-  private boolean isStaticAccessWithName(MemberAccessTree tree, String memberName) {
+  private static boolean isStaticAccessWithName(MemberAccessTree tree, String memberName) {
     return tree.isStatic() &&
       tree.member().is(Kind.NAME_IDENTIFIER) &&
       memberName.equals(((NameIdentifierTree) tree.member()).text());

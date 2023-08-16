@@ -26,7 +26,10 @@ class MyTest extends TestCase
     doSomethind($result->format('d-M-Y'), '31-Jan-2012'); // OK - No assertion
 
     $e = null;
-    $this->assertInstanceOf(LogicException::class, $e);
+    $this->assertInstanceOf(LogicException::class, $e); // OK - expected is a class name
+    // Noncompliant@+1
+    $this->assertInstanceOf(LogicException::CONSTANT, $e); // actual is a null literal, can't say anything about expected
+    $this->assertInstanceOf($e, LogicException::class);
     $this->assertInstanceOf(\LogicException::class, $e);
     $this->assertNotInstanceOf(LogicException::class, $e);
   }
