@@ -21,6 +21,7 @@ package org.sonar.plugins.php;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
@@ -285,7 +286,7 @@ public class PHPSensorTest {
     context.fileSystem().add(inputFile);
 
     try (MockedStatic<FileHashingUtils> FileHashingUtilsStaticMock = Mockito.mockStatic(FileHashingUtils.class)) {
-      FileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IOException("BOOM!"));
+      FileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IllegalStateException("BOOM!"));
       phpSensor.execute(context);
       assertThat(logTester.logs(Level.DEBUG)).contains("Failed to compute content hash for file moduleKey:PHPSquidSensor.php");
     }

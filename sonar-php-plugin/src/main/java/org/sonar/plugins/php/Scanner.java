@@ -25,12 +25,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.DurationStatistics;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.php.cache.Cache;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
@@ -106,7 +106,7 @@ abstract class Scanner {
     try {
       byte[] bytes = FileHashingUtils.inputFileContentHash(inputFile);
       return MessageDigest.isEqual(fileHash, bytes);
-    } catch (IOException | NoSuchAlgorithmException e) {
+    } catch (IllegalStateException ise) {
       LOG.debug("Failed to compute content hash for file {}", inputFile.key());
       return false;
     }

@@ -25,11 +25,11 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.annotation.CheckForNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.php.cache.Cache;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -92,7 +92,7 @@ public class SymbolScanner extends Scanner {
     byte[] contentHash;
     try {
       contentHash = FileHashingUtils.inputFileContentHash(file);
-    } catch (IOException | NoSuchAlgorithmException e) {
+    } catch (IllegalStateException ise) {
       LOG.debug("Failed to compute content hash for file {}", file.key());
       return;
     }
@@ -117,7 +117,7 @@ public class SymbolScanner extends Scanner {
 
   @Override
   void logException(Exception e, InputFile file) {
-    LOG.debug("Unable to analyze file: " + file, e);
+    LOG.debug("Unable to analyze file: {}", file, e);
   }
 
   public ProjectSymbolData getProjectSymbolData() {
