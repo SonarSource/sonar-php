@@ -24,6 +24,11 @@ class MyTest extends TestCase
 
     self::assertEquals($foo); // OK - No valid assertion of moodle test cases
     doSomethind($result->format('d-M-Y'), '31-Jan-2012'); // OK - No assertion
+
+    $e = null;
+    $this->assertInstanceOf(LogicException::class, $e);
+    $this->assertInstanceOf(\LogicException::class, $e);
+    $this->assertNotInstanceOf(LogicException::class, $e);
   }
 
   private function no_test() {

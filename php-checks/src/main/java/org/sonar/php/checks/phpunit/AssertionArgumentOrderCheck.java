@@ -27,6 +27,8 @@ import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 
 import static org.sonar.php.checks.utils.CheckUtils.hasNamedArgument;
 import static org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -36,7 +38,8 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
 
   private static final String MESSAGE = "Swap these 2 arguments so they are in the correct order: expected value, actual value.";
   private static final String SECONDARY_MESSAGE = "Other argument to swap.";
-  private static final Kind[] LITERAL = {Kind.BOOLEAN_LITERAL, Kind.NULL_LITERAL, Kind.NUMERIC_LITERAL, Kind.EXPANDABLE_STRING_LITERAL, Kind.REGULAR_STRING_LITERAL};
+  private static final Kind[] LITERAL = {Kind.BOOLEAN_LITERAL, Kind.NULL_LITERAL, Kind.NUMERIC_LITERAL, Kind.EXPANDABLE_STRING_LITERAL,
+    Kind.REGULAR_STRING_LITERAL};
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -49,11 +52,23 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
     if (arguments.size() >= 2 && assertion.isPresent() && assertion.get().hasExpectedValue() && !hasNamedArgument(tree)) {
       ExpressionTree expected = arguments.get(0).value();
       ExpressionTree actual = arguments.get(1).value();
-      if (CheckUtils.assignedValue(actual).is(LITERAL) && !CheckUtils.assignedValue(expected).is(LITERAL)) {
+      if (isLiteral(actual) && !isLiteral(expected)) {
         newIssue(actual, MESSAGE).secondary(expected, SECONDARY_MESSAGE);
       }
     }
 
     super.visitFunctionCall(tree);
+  }
+
+  private boolean isLiteral(ExpressionTree expression) {
+    return CheckUtils.assignedValue(expression).is(LITERAL) ||
+      CheckUtils.assignedValue(expression).is(Kind.CLASS_MEMBER_ACCESS) &&
+        isStaticAccessWithName((MemberAccessTree) expression, "class");
+  }
+
+  private boolean isStaticAccessWithName(MemberAccessTree tree, String memberName) {
+    return tree.isStatic() &&
+      tree.member().is(Kind.NAME_IDENTIFIER) &&
+      memberName.equals(((NameIdentifierTree) tree.member()).text());
   }
 }
