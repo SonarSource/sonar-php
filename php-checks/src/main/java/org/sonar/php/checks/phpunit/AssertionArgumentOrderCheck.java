@@ -21,7 +21,6 @@ package org.sonar.php.checks.phpunit;
 
 import java.util.Optional;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -53,7 +52,7 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
     if (arguments.size() >= 2 && assertion.isPresent() && assertion.get().hasExpectedValue() && !hasNamedArgument(tree)) {
       ExpressionTree expected = arguments.get(0).value();
       ExpressionTree actual = arguments.get(1).value();
-      if (isLiteral(actual) && !isLiteral(expected)) {
+      if (isLiteralOrClassName(actual) && !isLiteralOrClassName(expected)) {
         newIssue(actual, MESSAGE).secondary(expected, SECONDARY_MESSAGE);
       }
     }
@@ -61,9 +60,9 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
     super.visitFunctionCall(tree);
   }
 
-  private boolean isLiteral(ExpressionTree expression) {
+  private static boolean isLiteralOrClassName(ExpressionTree expression) {
     return assignedValue(expression).is(LITERAL) ||
-      (assignedValue(expression).is(Kind.CLASS_MEMBER_ACCESS) &&
+      (expression instanceof MemberAccessTree &&
         isStaticAccessWithName((MemberAccessTree) expression, "class"));
   }
 
