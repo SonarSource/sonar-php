@@ -30,6 +30,8 @@ import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.checks.utils.type.NewObjectCall;
 import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
+import org.sonar.php.symbols.FunctionSymbol;
+import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -166,27 +168,25 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
   @Override
   protected void checkFunctionCall(FunctionCallTree tree) {
-    String functionName = ((NamespaceNameTree) tree.callee()).qualifiedName();
+    FunctionSymbol functionSymbol = ((FunctionCallTreeImpl) tree).symbol();
+    if (functionSymbol == null) {
+      return;
+    }
+    String functionName = functionSymbol.qualifiedName().simpleName();
 
     if (SET_LOCALE_FUNCTION.equalsIgnoreCase(functionName)) {
       checkLocalCategoryArgument(tree.callArguments());
-
     } else if (PARSE_STR_FUNCTION.equalsIgnoreCase(functionName)) {
       checkParseStrArguments(tree);
-
     } else if (ASSERT_FUNCTION.equalsIgnoreCase(functionName)) {
       checkAssertArguments(tree);
-
     } else if (DEFINE_FUNCTION.equalsIgnoreCase(functionName)) {
       checkDefineArguments(tree);
-
     } else if (SEARCHING_STRING_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT))) {
       checkSearchingStringArguments(tree);
-
-    } else {
+    } else if (NEW_BY_DEPRECATED_FUNCTIONS.containsKey(functionName)) {
       context().newIssue(this, tree.callee(), buildMessage(functionName.toLowerCase(Locale.ROOT)));
     }
-
   }
 
   /**

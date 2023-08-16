@@ -153,3 +153,7 @@ $result = strchr($stringA, 0); // Noncompliant {{Convert this integer needle int
 
 strstr($mystring, before_needle: false, needle: 42); // Noncompliant
 strstr($mystring, before_needle: 42, needle: "ok");
+
+use Rubix\ML\Graph\Nodes\Split;
+
+new Split();   // Ok
