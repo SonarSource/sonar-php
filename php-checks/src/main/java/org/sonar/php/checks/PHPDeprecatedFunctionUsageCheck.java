@@ -30,6 +30,8 @@ import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.checks.utils.type.NewObjectCall;
 import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
+import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -166,27 +168,31 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
   @Override
   protected void checkFunctionCall(FunctionCallTree tree) {
-    String functionName = ((NamespaceNameTree) tree.callee()).qualifiedName();
+    ExpressionTree callee = tree.callee();
+    // The object creations can be ignored. Only functions are deprecated.
+    if (callee instanceof ClassNamespaceNameTreeImpl) {
+      return;
+    }
+    String functionName = ((NamespaceNameTree) callee).qualifiedName();
 
     if (SET_LOCALE_FUNCTION.equalsIgnoreCase(functionName)) {
       checkLocalCategoryArgument(tree.callArguments());
-
     } else if (PARSE_STR_FUNCTION.equalsIgnoreCase(functionName)) {
       checkParseStrArguments(tree);
-
     } else if (ASSERT_FUNCTION.equalsIgnoreCase(functionName)) {
       checkAssertArguments(tree);
-
     } else if (DEFINE_FUNCTION.equalsIgnoreCase(functionName)) {
       checkDefineArguments(tree);
-
     } else if (SEARCHING_STRING_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT))) {
       checkSearchingStringArguments(tree);
-
-    } else {
+    } else if (!functionRedefinedInCurrentNamespace(tree, functionName)) {
       context().newIssue(this, tree.callee(), buildMessage(functionName.toLowerCase(Locale.ROOT)));
     }
+  }
 
+  private static boolean functionRedefinedInCurrentNamespace(FunctionCallTree tree, String functionName) {
+    return !functionName.toLowerCase(Locale.ROOT).equals(
+      ((FunctionCallTreeImpl) tree).symbol().qualifiedName().toString().toLowerCase(Locale.ROOT));
   }
 
   /**

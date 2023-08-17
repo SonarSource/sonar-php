@@ -49,7 +49,7 @@ namespace A {
     }
   }
 
-  call_user_method();             /* Noncompliant */ // FIXME (SONARPHP-552) False-Positive
+  call_user_method();
   \call_user_method();            // Noncompliant
 }
 
@@ -153,3 +153,8 @@ $result = strchr($stringA, 0); // Noncompliant {{Convert this integer needle int
 
 strstr($mystring, before_needle: false, needle: 42); // Noncompliant
 strstr($mystring, before_needle: 42, needle: "ok");
+
+use Rubix\ML\Graph\Nodes\Split;
+
+new Split();   // OK
+?>

@@ -25,9 +25,12 @@ import org.sonar.plugins.php.CheckVerifier;
 public class PHPDeprecatedFunctionUsageCheckTest {
 
   @Test
-  public void test() throws Exception {
-    // FIXME (SONARPHP-552): FP line 27, should be OK
+  public void test() {
     CheckVerifier.verify(new PHPDeprecatedFunctionUsageCheck(), "PHPDeprecatedFunctionUsageCheck.php");
   }
 
+  @Test
+  public void testCustomNamespace() {
+    CheckVerifier.verify(new PHPDeprecatedFunctionUsageCheck(), "PHPDeprecatedFunctionUsageCheck_namespace.php");
+  }
 }
