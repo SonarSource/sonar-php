@@ -20,14 +20,19 @@
 package org.sonar.php.checks.phpunit;
 
 import java.util.Optional;
+import javax.annotation.CheckForNull;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
-import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 
 import static org.sonar.php.checks.utils.CheckUtils.assignedValue;
 import static org.sonar.php.checks.utils.CheckUtils.hasNamedArgument;
@@ -52,7 +57,7 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
     if (arguments.size() >= 2 && assertion.isPresent() && assertion.get().hasExpectedValue() && !hasNamedArgument(tree)) {
       ExpressionTree expected = arguments.get(0).value();
       ExpressionTree actual = arguments.get(1).value();
-      if (isLiteralOrClassName(actual) && !isLiteralOrClassName(expected)) {
+      if (isLiteralOrClassNameOrParameter(actual) && !isLiteralOrClassNameOrParameter(expected)) {
         newIssue(actual, MESSAGE).secondary(expected, SECONDARY_MESSAGE);
       }
     }
@@ -60,15 +65,39 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
     super.visitFunctionCall(tree);
   }
 
-  private static boolean isLiteralOrClassName(ExpressionTree expression) {
+  private static boolean isLiteralOrClassNameOrParameter(ExpressionTree expression) {
     return assignedValue(expression).is(LITERAL) ||
-      (expression instanceof MemberAccessTree &&
-        isStaticAccessWithName((MemberAccessTree) expression, "class"));
+      isStaticAccessWithName(expression, "class") ||
+      isDefinedAsParameter(expression);
   }
 
-  private static boolean isStaticAccessWithName(MemberAccessTree tree, String memberName) {
-    return tree.isStatic() &&
-      tree.member().is(Kind.NAME_IDENTIFIER) &&
-      memberName.equals(((NameIdentifierTree) tree.member()).text());
+  private static boolean isStaticAccessWithName(ExpressionTree expression, String memberName) {
+    if (expression instanceof MemberAccessTree) {
+      MemberAccessTree tree = (MemberAccessTree) expression;
+      return tree.isStatic() && memberName.equals(name(tree.member()));
+    }
+    return false;
+  }
+
+  private static boolean isDefinedAsParameter(ExpressionTree expression) {
+    MethodDeclarationTree method = (MethodDeclarationTree) TreeUtils.findAncestorWithKind(expression, Kind.METHOD_DECLARATION);
+    if (method != null) {
+      String name = name(expression);
+      for (ParameterTree parameter : method.parameters().parameters()) {
+        String text = parameter.variableIdentifier().text();
+        if (text.equals(name)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  @CheckForNull
+  private static String name(Tree expression) {
+    if (expression instanceof IdentifierTree) {
+      return ((IdentifierTree) expression).text();
+    }
+    return null;
   }
 }

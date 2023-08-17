@@ -19,8 +19,10 @@
 108
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/CoordinateTest.php": [
+24,
 40,
 55,
+74,
 121,
 136,
 183,
@@ -48,17 +50,11 @@
 100,
 103
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnCellIterator2Test.php": [
-67
-],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/DrawingTest.php": [
 57,
 58,
 84,
 85
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/RowCellIterator2Test.php": [
-67
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/VisibilityTest.php": [
 31,

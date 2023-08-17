@@ -32,9 +32,22 @@ class MyTest extends TestCase
     $this->assertInstanceOf($e, LogicException::class);
     $this->assertInstanceOf(\LogicException::class, $e);
     $this->assertNotInstanceOf(LogicException::class, $e);
+
+    self::assertSame(0, $runner.getExitCode()); // OK
+    $this->assertSame($expected, $runner.getExitCode()); // OK
+    $this->assertSame($runner.getExitCode(), $expected); // Noncompliant
+    $this->assertNotSame($expected, $runner.getExitCode()); // OK
+    $this->assertNotSame($runner.getExitCode(), $expected); // Noncompliant
   }
 
   private function no_test() {
     doSomethind();
+  }
+
+  public function testExport(bool $foobar, bool $staticValueExpected = false)
+  {
+    $isStaticValue = true;
+    $this->assertSame($staticValueExpected, $isStaticValue); // OK
+    $this->assertSame(true, $isStaticValue); // OK
   }
 }

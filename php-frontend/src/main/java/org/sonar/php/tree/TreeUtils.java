@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 
+import static java.util.Arrays.asList;
+
 public class TreeUtils {
 
   private TreeUtils() {
@@ -52,6 +54,11 @@ public class TreeUtils {
       parent = parent.getParent();
     }
     return parent;
+  }
+
+  @CheckForNull
+  public static Tree findAncestorWithKind(Tree tree, Tree.Kind... kinds) {
+    return findAncestorWithKind(tree, asList(kinds));
   }
 
   public static Stream<Tree> descendants(@Nullable Tree root) {
