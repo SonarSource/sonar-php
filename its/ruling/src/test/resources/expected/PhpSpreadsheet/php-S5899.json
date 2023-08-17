@@ -17,16 +17,5 @@
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Csv/CsvCallbackTest.php": [
 19
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Security/XmlScannerTest.php": [
-45,
-84,
-141
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xml/XmlTest.php": [
-25
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/HtmlCommentsTest.php": [
-16
 ]
 }

@@ -361,6 +361,10 @@ public final class CheckUtils {
     return !tree.is(Kind.USE_TRAIT_DECLARATION) && !(hasModifier(tree, "private") || hasModifier(tree, "protected"));
   }
 
+  public static boolean isStatic(ClassMemberTree tree) {
+    return hasModifier(tree, "static");
+  }
+
   /**
    * Retrieves an argument based on position and name.
    *

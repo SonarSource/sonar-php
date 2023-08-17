@@ -30,6 +30,8 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.symbols.MethodSymbol;
+import org.sonar.php.symbols.Symbols;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -82,7 +84,8 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     if (!CheckUtils.isPublic(tree) && isMarkedAsTestMethod(tree)) {
       newIssue(tree.name(), MESSAGE_VISIBLE);
     } else if (CheckUtils.isPublic(tree) && !isMarkedAsTestMethod(tree)
-      && !isCalledMethod(tree) && methodContainsAssertions(tree)) {
+      && !isCalledMethod(tree) && methodContainsAssertions(tree)
+      && (!CheckUtils.isStatic(tree) || !isMethodWithReturn(tree))) {
         newIssue(tree.name(), MESSAGE_MARKED);
       }
   }
@@ -91,6 +94,11 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     String methodName = tree.name().text().toLowerCase(Locale.ROOT);
 
     return testMethods.stream().anyMatch(t -> callPathExists(t, methodName));
+  }
+
+  private static boolean isMethodWithReturn(MethodDeclarationTree tree) {
+    MethodSymbol methodSymbol = Symbols.get(tree);
+    return methodSymbol.hasReturn();
   }
 
   // Perform a DFS to check if a path between two internal methods exists
