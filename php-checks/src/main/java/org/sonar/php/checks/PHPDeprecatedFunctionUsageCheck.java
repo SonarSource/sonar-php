@@ -31,6 +31,7 @@ import org.sonar.php.checks.utils.type.NewObjectCall;
 import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -168,7 +169,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   @Override
   protected void checkFunctionCall(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
-    // There are no object creations in the list of deprecated functions
+    // The object creations can be ignored. Only functions are deprecated.
     if (callee instanceof ClassNamespaceNameTreeImpl) {
       return;
     }
@@ -184,9 +185,15 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       checkDefineArguments(tree);
     } else if (SEARCHING_STRING_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT))) {
       checkSearchingStringArguments(tree);
-    } else {
+    } else if (!ifFunctionRedefinedInCurrentNamespace(tree, functionName)) {
       context().newIssue(this, tree.callee(), buildMessage(functionName.toLowerCase(Locale.ROOT)));
     }
+  }
+
+  private static boolean ifFunctionRedefinedInCurrentNamespace(FunctionCallTree tree, String functionName) {
+    return tree.is(Kind.FUNCTION_CALL) &&
+      !functionName.toLowerCase(Locale.ROOT).equals(
+        ((FunctionCallTreeImpl) tree).symbol().qualifiedName().toString().toLowerCase(Locale.ROOT));
   }
 
   /**
