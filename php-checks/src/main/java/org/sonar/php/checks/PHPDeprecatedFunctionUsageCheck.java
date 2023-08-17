@@ -192,7 +192,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
   private static boolean functionRedefinedInCurrentNamespace(FunctionCallTree tree, String functionName) {
     return !functionName.toLowerCase(Locale.ROOT).equals(
-        ((FunctionCallTreeImpl) tree).symbol().qualifiedName().toString().toLowerCase(Locale.ROOT));
+      ((FunctionCallTreeImpl) tree).symbol().qualifiedName().toString().toLowerCase(Locale.ROOT));
   }
 
   /**
