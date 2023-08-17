@@ -44,9 +44,10 @@ class MyTest extends TestCase
     doSomethind();
   }
 
-  public function testExport(bool $staticValueExpected = false)
+  public function testExport(bool $foobar, bool $staticValueExpected = false)
   {
     $isStaticValue = true;
     $this->assertSame($staticValueExpected, $isStaticValue); // OK
+    $this->assertSame(true, $isStaticValue); // OK
   }
 }

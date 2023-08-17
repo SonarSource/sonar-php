@@ -57,6 +57,8 @@ public class TreeUtilsTest {
     assertThat(findAncestorWithKind(statementTree, singletonList(Tree.Kind.WHILE_STATEMENT))).isNull();
 
     assertThat(findAncestorWithKind(func, singletonList(Tree.Kind.FUNCTION_DECLARATION))).isEqualTo(func);
+    assertThat(findAncestorWithKind(func, Tree.Kind.FUNCTION_DECLARATION)).isEqualTo(func);
+    assertThat(findAncestorWithKind(func, Tree.Kind.SCRIPT, Tree.Kind.FUNCTION_DECLARATION)).isEqualTo(func);
   }
 
 }

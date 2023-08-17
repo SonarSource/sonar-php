@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import java.util.Iterator;
 import java.util.Optional;
 import javax.annotation.CheckForNull;
 import org.sonar.check.Rule;
@@ -83,11 +82,9 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
   private static boolean isDefinedAsParameter(ExpressionTree expression) {
     MethodDeclarationTree method = (MethodDeclarationTree) TreeUtils.findAncestorWithKind(expression, Kind.METHOD_DECLARATION);
     if (method != null) {
-      Iterator<ParameterTree> iterator = method.parameters().parameters().iterator();
       String name = name(expression);
-      while (iterator.hasNext()) {
-        ParameterTree next = iterator.next();
-        String text = next.variableIdentifier().text();
+      for (ParameterTree parameter : method.parameters().parameters()) {
+        String text = parameter.variableIdentifier().text();
         if (text.equals(name)) {
           return true;
         }

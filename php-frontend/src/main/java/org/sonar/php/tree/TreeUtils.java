@@ -56,6 +56,7 @@ public class TreeUtils {
     return parent;
   }
 
+  @CheckForNull
   public static Tree findAncestorWithKind(Tree tree, Tree.Kind... kinds) {
     return findAncestorWithKind(tree, asList(kinds));
   }
