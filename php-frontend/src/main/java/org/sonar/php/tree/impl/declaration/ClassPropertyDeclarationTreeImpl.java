@@ -45,6 +45,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   private final List<SyntaxToken> modifierTokens;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
   private final InternalSyntaxToken eosToken;
+  @Nullable
   private final DeclaredTypeTree typeAnnotation;
 
   private ClassPropertyDeclarationTreeImpl(
@@ -69,7 +70,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     InternalSyntaxToken eosToken) {
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION,
       attributes,
-      modifierTokens,
+      Collections.unmodifiableList(modifierTokens),
       typeAnnotation,
       declarations,
       eosToken);
@@ -78,12 +79,18 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   public static ClassPropertyDeclarationTree constant(List<AttributeGroupTree> attributes,
     List<SyntaxToken> modifiers,
     SyntaxToken constToken,
+    @Nullable DeclaredTypeTree typeAnnotation,
     SeparatedListImpl<VariableDeclarationTree> declarations,
     InternalSyntaxToken eosToken) {
 
     List<SyntaxToken> modifierTokens = new ArrayList<>(modifiers);
     modifierTokens.add(constToken);
-    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, attributes, Collections.unmodifiableList(modifierTokens), null, declarations, eosToken);
+    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION,
+      attributes,
+      Collections.unmodifiableList(modifierTokens),
+      typeAnnotation,
+      declarations,
+      eosToken);
   }
 
   @Override

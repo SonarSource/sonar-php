@@ -372,13 +372,22 @@ public class PHPGrammar {
 
   public ClassPropertyDeclarationTree CLASS_CONSTANT_DECLARATION() {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION).is(
-      f.classConstantDeclaration(
-        b.zeroOrMore(ATTRIBUTE_GROUP()),
-        b.zeroOrMore(CLASS_CONST_MODIFIER()),
-        b.token(PHPKeyword.CONST),
-        MEMBER_CONST_DECLARATION(),
-        b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_CONST_DECLARATION())),
-        EOS()));
+      b.firstOf(
+        f.classConstantDeclaration(
+          b.zeroOrMore(ATTRIBUTE_GROUP()),
+          b.zeroOrMore(CLASS_CONST_MODIFIER()),
+          b.token(PHPKeyword.CONST),
+          MEMBER_CONST_DECLARATION(),
+          b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_CONST_DECLARATION())),
+          EOS()),
+        f.classConstantDeclarationWithTypeHint(
+          b.zeroOrMore(ATTRIBUTE_GROUP()),
+          b.zeroOrMore(CLASS_CONST_MODIFIER()),
+          b.token(PHPKeyword.CONST),
+          DECLARED_TYPE(),
+          MEMBER_CONST_DECLARATION(),
+          b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_CONST_DECLARATION())),
+          EOS())));
   }
 
   public SyntaxToken CLASS_CONST_MODIFIER() {

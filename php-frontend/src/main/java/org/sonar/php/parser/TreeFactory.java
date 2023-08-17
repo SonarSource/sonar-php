@@ -433,6 +433,23 @@ public class TreeFactory {
     return ClassPropertyDeclarationTreeImpl.constant(attributes.or(Collections.emptyList()),
       modifiers.or(Collections.emptyList()),
       constToken,
+      null,
+      separatedList(firstDeclaration, additionalDeclarations),
+      eosToken);
+  }
+
+  public ClassPropertyDeclarationTree classConstantDeclarationWithTypeHint(
+    Optional<List<AttributeGroupTree>> attributes,
+    Optional<List<SyntaxToken>> modifiers,
+    InternalSyntaxToken constToken,
+    DeclaredTypeTree typeAnnotation,
+    VariableDeclarationTree firstDeclaration,
+    Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
+    InternalSyntaxToken eosToken) {
+    return ClassPropertyDeclarationTreeImpl.constant(attributes.or(Collections.emptyList()),
+      modifiers.or(Collections.emptyList()),
+      constToken,
+      typeAnnotation,
       separatedList(firstDeclaration, additionalDeclarations),
       eosToken);
   }
