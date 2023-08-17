@@ -380,7 +380,7 @@ public class PHPGrammar {
           MEMBER_CONST_DECLARATION(),
           b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_CONST_DECLARATION())),
           EOS()),
-        f.classConstantDeclaration(
+        f.classConstantDeclarationWithTypeHint(
           b.zeroOrMore(ATTRIBUTE_GROUP()),
           b.zeroOrMore(CLASS_CONST_MODIFIER()),
           b.token(PHPKeyword.CONST),

@@ -56,6 +56,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
       .matches("#[A1(3)] public int $a;")
       .matches("static $a;")
       .matches("readonly $a;")
+      .matches("var $a;")
 
       .matches("final $a;")
       .matches("public private $a;")

@@ -438,7 +438,7 @@ public class TreeFactory {
       eosToken);
   }
 
-  public ClassPropertyDeclarationTree classConstantDeclaration(
+  public ClassPropertyDeclarationTree classConstantDeclarationWithTypeHint(
     Optional<List<AttributeGroupTree>> attributes,
     Optional<List<SyntaxToken>> modifiers,
     InternalSyntaxToken constToken,
