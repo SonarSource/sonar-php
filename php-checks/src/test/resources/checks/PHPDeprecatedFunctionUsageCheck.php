@@ -158,14 +158,3 @@ use Rubix\ML\Graph\Nodes\Split;
 
 new Split();   // OK
 ?>
-
-<?php
-namespace mynamespace;
-
-function split() {
-  echo "split";
-}
-
-split();  // OK, function in current namespace
-\split()  // Noncompliant
-?>

@@ -185,14 +185,13 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       checkDefineArguments(tree);
     } else if (SEARCHING_STRING_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT))) {
       checkSearchingStringArguments(tree);
-    } else if (!ifFunctionRedefinedInCurrentNamespace(tree, functionName)) {
+    } else if (!functionRedefinedInCurrentNamespace(tree, functionName)) {
       context().newIssue(this, tree.callee(), buildMessage(functionName.toLowerCase(Locale.ROOT)));
     }
   }
 
-  private static boolean ifFunctionRedefinedInCurrentNamespace(FunctionCallTree tree, String functionName) {
-    return tree.is(Kind.FUNCTION_CALL) &&
-      !functionName.toLowerCase(Locale.ROOT).equals(
+  private static boolean functionRedefinedInCurrentNamespace(FunctionCallTree tree, String functionName) {
+    return !functionName.toLowerCase(Locale.ROOT).equals(
         ((FunctionCallTreeImpl) tree).symbol().qualifiedName().toString().toLowerCase(Locale.ROOT));
   }
 
