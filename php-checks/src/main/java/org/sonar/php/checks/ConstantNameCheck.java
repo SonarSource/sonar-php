@@ -86,7 +86,11 @@ public class ConstantNameCheck extends PHPVisitorCheck {
   }
 
   private void checkConstantName(Tree tree, String constName) {
-    if (!pattern.matcher(constName).matches()) {
+    String constNameWithoutNamespace = constName;
+    if (constName.contains("\\")) {
+      constNameWithoutNamespace = constName.substring(constName.lastIndexOf("\\") + 1);
+    }
+    if (!pattern.matcher(constNameWithoutNamespace).matches()) {
       context().newIssue(this, tree, String.format(MESSAGE, constName, format));
     }
   }

@@ -21,3 +21,10 @@ class Bar {
 
 define();                             // OK
 define($not_a_string_literal, false); // OK
+
+define('\VALID_CONSTANT_NAME', 'test'); // OK
+define('namespace\level\VALID_CONSTANT_NAME', 'test'); // OK
+define('namespace\level\Foo', 'test'); // Noncompliant
+//     ^^^^^^^^^^^^^^^^^^^^^
+define('\Foo', 'test'); // Noncompliant
+//     ^^^^^^

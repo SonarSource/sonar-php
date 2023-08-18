@@ -43,6 +43,8 @@ public class ConstantNameCheckTest {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Arrays.asList(
       new LineIssue(check, 9, "Rename this constant \"FOO\" to match the regular expression " + check.format + "."),
       new LineIssue(check, 14, null),
-      new LineIssue(check, 18, null)));
+      new LineIssue(check, 18, null),
+      new LineIssue(check, 25, null),
+      new LineIssue(check, 26, null)));
   }
 }
