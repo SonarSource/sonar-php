@@ -189,3 +189,30 @@ class UsageInFirstClassCallable
         return $query->getDuration(...); // shouldn't trigger on callable convert with receivers other that `$this`
     }
 }
+
+class MethodCalledByMagicMethodCall
+{
+  public function __call($method, $arguments)
+  {
+    if (method_exists($this, $method)) {
+      return call_user_func_array([$this, $method], $arguments);
+    }
+    trigger_error('Call to undefined method '.__CLASS__.'::'.$method.'()', E_USER_ERROR);
+  }
+
+  private function bar()
+  {
+  }
+}
+
+class MethodCalledByMagicMethodCall2
+{
+  public function __call($method, $arguments)
+  {
+    return call_user_func($method, $arguments);
+  }
+
+  private function bar()
+  {
+  }
+}

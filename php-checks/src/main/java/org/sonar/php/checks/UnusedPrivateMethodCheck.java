@@ -22,19 +22,24 @@ package org.sonar.php.checks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -49,6 +54,8 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Remove this unused private \"%s\" method.";
   private static final Pattern USES_PHPDOC_PATTERN = Pattern.compile("@uses\\s+(\\w+::)?(\\w+)");
+
+  private static final List<String> CALL_USER_FUNCTIONS = List.of("call_user_func_array", "call_user_func");
 
   private final List<String> stringLiterals = new ArrayList<>();
   private final List<String> dynamicUsedMethods = new ArrayList<>();
@@ -102,10 +109,36 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
         && !methodsUsedInFirstClassCallables.contains(methodSymbol.name())
         && !isConstructor(methodSymbol.declaration(), tree)
         && !isMagicMethod(methodSymbol.name())
-        && !isUsedInStringLiteral(methodSymbol)) {
+        && !isUsedInStringLiteral(methodSymbol)
+        && !isMagicMethodCallDefined(tree)) {
         context().newIssue(this, methodSymbol.declaration(), String.format(MESSAGE, methodSymbol.name()));
       }
     }
+  }
+
+  private static boolean isMagicMethodCallDefined(ClassTree tree) {
+    if (tree instanceof ClassDeclarationTree) {
+      Optional<ClassMemberTree> magicMethodCall = findMagicMethodCall((ClassDeclarationTree) tree);
+      if (magicMethodCall.isPresent()) {
+        return containsCallUserFunction(magicMethodCall.get());
+      }
+    }
+    return false;
+  }
+
+  private static Optional<ClassMemberTree> findMagicMethodCall(ClassDeclarationTree tree) {
+    return tree.members().stream()
+      .filter(MethodDeclarationTree.class::isInstance)
+      .filter(method -> "__call".equals(((MethodDeclarationTree) method).name().text()))
+      .findFirst();
+  }
+
+  private static boolean containsCallUserFunction(ClassMemberTree magicMethodCall) {
+    return TreeUtils.descendants(magicMethodCall, FunctionCallTree.class)
+      .anyMatch(expression -> {
+        String functionName = ((FunctionCallTreeImpl) expression).symbol().qualifiedName().simpleName().toLowerCase(Locale.ROOT);
+        return CALL_USER_FUNCTIONS.contains(functionName);
+      });
   }
 
   @Override
