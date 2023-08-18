@@ -29,9 +29,22 @@ class MyTest extends TestCase
 
     assertTrue(null == null); // Noncompliant
 
-    assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false); // Noncompliant {{Use assertSame instead.}}
-    assertTrue(strpos($this->Mail->Body, 'src="composer.json"') !== false); // Noncompliant {{Use assertNotSame instead.}}
-    assertTrue(doSomeThing() === true); // Noncompliant
+    assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false); // Noncompliant {{Simplify this expression by removing the equality comparison to false and use assertFalse instead.}}
+    assertTrue(strpos($this->Mail->Body, 'src="composer.json"') !== false); // Noncompliant {{Simplify this expression by removing the non-equality comparison to false.}}
+
+    assertTrue ($a == true);  // Noncompliant {{Simplify this expression by removing the equality comparison to true.}}
+    assertTrue ($a == false); // Noncompliant {{Simplify this expression by removing the equality comparison to false and use assertFalse instead.}}
+    assertFalse($a == true);  // Noncompliant {{Simplify this expression by removing the equality comparison to true.}}
+    assertFalse($a == false); // Noncompliant {{Simplify this expression by removing the equality comparison to false and use assertTrue instead.}}
+    assertTrue ($a != true);  // Noncompliant {{Simplify this expression by removing the non-equality comparison to true and use assertFalse instead.}}
+    assertTrue ($a != false); // Noncompliant {{Simplify this expression by removing the non-equality comparison to false.}}
+    assertFalse($a != true);  // Noncompliant {{Simplify this expression by removing the non-equality comparison to true.}}
+    assertFalse($a != false); // Noncompliant {{Simplify this expression by removing the non-equality comparison to false and use assertTrue instead.}}
+    assertTrue($a === true);  // Noncompliant
+    assertTrue($a === false); // Noncompliant
+    assertTrue(true == $a);  // Noncompliant
+    assertTrue(false == $a); // Noncompliant
+
     assertEquals($a, $b);
     doSomeThing();
   }
