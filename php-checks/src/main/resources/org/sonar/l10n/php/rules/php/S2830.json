@@ -1,6 +1,12 @@
 {
   "title": "Class constructors should not create other objects",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "FOCUSED"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

@@ -1,20 +1,57 @@
+<p>This vulnerability allows attackers to impersonate a trusted host.</p>
 <h2>Why is this an issue?</h2>
-<p>To establish a SSL/TLS connection not vulnerable to man-in-the-middle attacks, it’s essential to make sure the server presents the right
-certificate.</p>
-<p>The certificate’s hostname-specific data should match the server hostname.</p>
-<p>It’s not recommended to re-invent the wheel by implementing custom hostname verification.</p>
-<p>TLS/SSL libraries provide built-in hostname verification functions that should be used.</p>
-<h3>Noncompliant code example</h3>
-<pre>
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE); // Noncompliant
+<p>Transport Layer Security (TLS) provides secure communication between systems over the internet by encrypting the data sent between them. In this
+process, the role of hostname validation, combined with certificate validation, is to ensure that a system is indeed the one it claims to be, adding
+an extra layer of trust and security.</p>
+<p>When hostname validation is disabled, the client skips this critical check. This creates an opportunity for attackers to pose as a trusted entity
+and intercept, manipulate, or steal the data being transmitted.</p>
+<p>To do so, an attacker would obtain a valid certificate authenticating <code>example.com</code>, serve it using a different hostname, and the
+application code would still accept it.</p>
+<h3>What is the potential impact?</h3>
+<p>Establishing trust in a secure way is a non-trivial task. When you disable hostname validation, you are removing a key mechanism designed to build
+this trust in internet communication, opening your system up to a number of potential threats.</p>
+<h4>Identity spoofing</h4>
+<p>If a system does not validate hostnames, it cannot confirm the identity of the other party involved in the communication. An attacker can exploit
+this by creating a fake server and masquerading it as a legitimate one. For example, they might set up a server that looks like your bank’s server,
+tricking your system into thinking it is communicating with the bank. This scenario, called identity spoofing, allows the attacker to collect any data
+your system sends to them, potentially leading to significant data breaches.</p>
+<h2>How to fix it in cURL</h2>
+<h3>Code examples</h3>
+<p>The following code contains examples of disabled hostname validation.</p>
+<p>The hostname validation gets disabled by setting <code>CURLOPT_SSL_VERIFYHOST</code> to <code>0 or false</code>. To enable validation set the value
+to <code>2 or true</code> or do not set <code>CURLOPT_SSL_VERIFYHOST</code> at all to use the secure default value.</p>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, 'https://example.com/');
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);  // Noncompliant
+curl_exec($curl);
+curl_close($curl);
 </pre>
-<h3>Compliant solution</h3>
-<pre>
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // Compliant; default value is 2 to "check the existence of a common name and also verify that it matches the hostname provided" according to PHP's documentation
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // Compliant: starting from 7.66.0: treats 1 and 2 the same (https://curl.haxx.se/libcurl/c/CURLOPT_SSL_VERIFYHOST.html)
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, 'https://example.com/');
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+curl_exec($curl);
+curl_close($curl);
 </pre>
+<h3>How does this work?</h3>
+<p>To fix the vulnerability of disabled hostname validation, it is strongly recommended to first re-enable the default validation and fix the root
+cause: the validity of the certificate.</p>
+<h4>Use valid certificates</h4>
+<p>If a hostname validation failure prevents connecting to the target server, keep in mind that <strong>one system’s code should not work around
+another system’s problems</strong>, as this creates unnecessary dependencies and can lead to reliability issues.</p>
+<p>Therefore, the first solution is to change the remote host’s certificate to match its identity. If the remote host is not under your control,
+consider replicating its service to a server whose certificate you can change yourself.</p>
+<p>In case the contacted host is located on a development machine, and if there is no other choice, try following this solution:</p>
+<ul>
+  <li> Create a self-signed certificate for that machine. </li>
+  <li> Add this self-signed certificate to the system’s trust store. </li>
+  <li> If the hostname is not <code>localhost</code>, add the hostname in the <code>/etc/hosts</code> file. </li>
+</ul>
 <h2>Resources</h2>
+<h3>Standards</h3>
 <ul>
   <li> <a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/">OWASP Top 10 2021 Category A2</a> - Cryptographic Failures </li>
   <li> <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP Top 10 2021 Category A5</a> - Security Misconfiguration </li>

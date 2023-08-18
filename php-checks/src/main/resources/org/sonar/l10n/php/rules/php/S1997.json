@@ -1,6 +1,12 @@
 {
   "title": "Files should not contain inline HTML",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "FOCUSED"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

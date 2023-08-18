@@ -1,13 +1,17 @@
 <h2>Why is this an issue?</h2>
-<p>Shared naming conventions allow teams to collaborate efficiently. This rule checks that all function names match a provided regular expression.</p>
-<h3>Noncompliant code example</h3>
-<p>With default provided regular expression: <code>^[a-z][a-zA-Z0-9]*$</code>:</p>
+<p>Shared naming conventions allow teams to collaborate efficiently.</p>
+<p>This rule raises an issue when a function name does not match a provided regular expression.</p>
+<p>For example, with the default provided regular expression <code>^[a-z][a-zA-Z0-9]*$</code>, the function:</p>
 <pre>
-function DoSomething(){...}
+function DoSomething(){ // Noncompliant
+    // ...
+}
 </pre>
-<h3>Compliant solution</h3>
+<p>should be renamed to</p>
 <pre>
-function doSomething(){...}
+function doSomething(){
+    // ...
+}
 </pre>
 <h3>Exceptions</h3>
 <p>Methods with an <code>@inheritdoc</code> annotation, as well as magic methods (<code>__construct()</code>, <code>__destruct()</code>,
@@ -15,12 +19,12 @@ function doSomething(){...}
 <code>__sleep()</code>, <code>__wakeup()</code>, <code>__toString()</code>, <code>__invoke()</code>, <code>__set_state()</code>,
 <code>__clone()</code>, <code>__debugInfo()</code>) are ignored.</p>
 <pre>
-function __construct(){...}
-function __destruct(){...}
+function __construct(){...} // Compliant by exception
+function __destruct(){...}  // Compliant by exception
 
 /**
  * {@inheritdoc}
  */
-function myFunc(){...}
+function myFunc(){...}      // Compliant by exception
 </pre>
 

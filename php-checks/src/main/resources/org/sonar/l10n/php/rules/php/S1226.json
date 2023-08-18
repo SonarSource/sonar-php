@@ -1,6 +1,12 @@
 {
   "title": "Function and method parameters\u0027 initial values should not be ignored",
   "type": "BUG",
+  "code": {
+    "impacts": {
+      "RELIABILITY": "LOW"
+    },
+    "attribute": "CLEAR"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

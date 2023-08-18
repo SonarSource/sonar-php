@@ -1,3 +1,4 @@
+<p>This rule is deprecated, and will eventually be removed.</p>
 <h2>Why is this an issue?</h2>
 <p><code>sleep</code> is sometimes used in a mistaken attempt to prevent Denial of Service (DoS) attacks by throttling response rate. But because it
 ties up a thread, each request takes longer to serve that it otherwise would, making the application <em>more</em> vulnerable to DoS attacks, rather
@@ -13,6 +14,4 @@ if (is_bad_ip($requester)) {
   <li> <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
   Misconfiguration </li>
 </ul>
-<h2>Deprecated</h2>
-<p>This rule is deprecated, and will eventually be removed.</p>
 

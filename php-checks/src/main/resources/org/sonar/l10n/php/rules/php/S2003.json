@@ -1,6 +1,12 @@
 {
   "title": "\"require_once\" and \"include_once\" should be used instead of \"require\" and \"include\"",
   "type": "BUG",
+  "code": {
+    "impacts": {
+      "RELIABILITY": "LOW"
+    },
+    "attribute": "CONVENTIONAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

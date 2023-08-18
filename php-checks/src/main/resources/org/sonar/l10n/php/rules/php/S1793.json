@@ -1,6 +1,12 @@
 {
   "title": "\"elseif\" keyword should be used in place of \"else if\" keywords",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    },
+    "attribute": "CONVENTIONAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

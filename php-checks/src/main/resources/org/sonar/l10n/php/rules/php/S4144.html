@@ -1,33 +1,33 @@
 <h2>Why is this an issue?</h2>
-<p>When two methods have the same implementation, either it was a mistake - something else was intended - or the duplication was intentional, but may
-be confusing to maintainers. In the latter case, one implementation should invoke the other.</p>
-<h3>Noncompliant code example</h3>
-<pre>
+<p>Two methods having the same implementation are suspicious. It might be that something else was intended. Or the duplication is intentional, which
+becomes a maintenance burden.</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 class A {
-    private const CODE = "bounteous";
+    private const CODE = "secret";
 
     public function getCode() {
         doTheThing();
         return A::CODE;
     }
 
-    public function getName() {  // Noncompliant
+    public function getName() {  // Noncompliant: duplicates getCode
         doTheThing();
         return A::CODE;
     }
 }
 </pre>
-<h3>Compliant solution</h3>
-<pre>
+<p>If the identical logic is intentional, the code should be refactored to avoid duplication. For example, by having both methods call the same method
+or by having one implementation invoke the other.</p>
+<pre data-diff-id="1" data-diff-type="compliant">
 class A {
-    private const CODE = "bounteous";
+    private const CODE = "secret";
 
     public function getCode() {
         doTheThing();
         return A::CODE;
     }
 
-    public function getName() {
+    public function getName() { // Intent is clear
         return $this-&gt;getCode();
     }
 }

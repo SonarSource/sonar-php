@@ -1,14 +1,18 @@
 <h2>Why is this an issue?</h2>
-<p>A <code>for</code> loop with a counter that moves in the wrong direction is not an infinite loop. Because of wraparound, the loop will eventually
-reach its stop condition, but in doing so, it will run many, many more times than anticipated, potentially causing unexpected behavior.</p>
-<h3>Noncompliant code example</h3>
-<pre>
+<p>A <code>for</code> loop with a counter that moves in the wrong direction, away from the stop condition, is not an infinite loop. Because of <a
+href="https://en.wikipedia.org/wiki/Integer_overflow#:~:text=The%20most%20common%20result%20of%20an%20overflow%20is%20that%20the%20least%20significant%20representable%20digits%20of%20the%20result%20are%20stored%3B%20the%20result%20is%20said%20to%20wrap%20around%20the%20maximum">wraparound</a>,
+the loop will eventually reach its stop condition, but in doing so, it will probably run more times than anticipated, potentially causing unexpected
+behavior.</p>
+<h2>How to fix it</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 for ($i = 0; $i &lt; $length; $i--) { // Noncompliant
   //...
 }
 </pre>
-<h3>Compliant solution</h3>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 for ($i = 0; $i &lt; $length; $i++) {
   //...
 }

@@ -1,8 +1,6 @@
 <h2>Why is this an issue?</h2>
 <p>A <code>catch</code> clause that only rethrows the caught exception has the same effect as omitting the <code>catch</code> altogether and letting
-it bubble up automatically, but with more code and the additional detriment of leaving maintainers scratching their heads.</p>
-<p>Such clauses should either be eliminated or populated with the appropriate logic.</p>
-<h3>Noncompliant code example</h3>
+it bubble up automatically.</p>
 <pre>
 $s = "";
 try {
@@ -11,28 +9,18 @@ try {
   throw $e;  // Noncompliant
 }
 </pre>
-<h3>Compliant solution</h3>
-<pre>
-$s = "";
-try {
-  $s = readMyFile($fileName);
-} catch (Exception $e) {
-  error_log($e-&gt;getMessage());
-  throw $e;  // Compliant
-}
-</pre>
-<p>or</p>
-<pre>
-$s = "";
-try {
-  $s = readMyFile($fileName);
-} catch (Exception $e) {
-  error_log($e-&gt;getMessage());
-  throw new MyException("an exception occurred", 2, $e);  // Compliant
-}
-</pre>
-<p>or</p>
+<p>Such clauses should either be removed or populated with the appropriate logic.</p>
 <pre>
 $s = readMyFile($fileName);
+</pre>
+<p>or</p>
+<pre>
+$s = "";
+try {
+  $s = readMyFile($fileName);
+} catch (Exception $e) {
+  error_log($e-&gt;getMessage());
+  throw new MyException("an exception occurred", 2, $e);
+}
 </pre>
 

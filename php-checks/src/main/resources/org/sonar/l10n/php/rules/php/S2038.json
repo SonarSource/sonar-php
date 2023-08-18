@@ -1,6 +1,12 @@
 {
   "title": "Colors should be defined in upper case",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    },
+    "attribute": "FORMATTED"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

@@ -1,6 +1,12 @@
 {
   "title": "\"exit(...)\" and \"die(...)\" statements should not be used",
   "type": "BUG",
+  "code": {
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    },
+    "attribute": "CONVENTIONAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

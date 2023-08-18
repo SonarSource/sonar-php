@@ -1,6 +1,12 @@
 {
   "title": "\"__construct\" functions should not make PHP 4-style calls to parent constructors",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "CONVENTIONAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

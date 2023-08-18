@@ -1,17 +1,42 @@
 <h2>Why is this an issue?</h2>
-<p>A long parameter list can indicate that a new structure should be created to wrap the numerous parameters or that the function is doing too many
-things.</p>
-<h3>Noncompliant code example</h3>
-<p>With a maximum number of 4 parameters:</p>
+<p>Functions with a long parameter list are difficult to use, as maintainers must figure out the role of each parameter and keep track of their
+position.</p>
 <pre>
-function doSomething($param1, $param2, $param3, $param4, $param5) {
-...
+function setCoordinates($x1, $y1, $z1, $x2, $y2, $z2) { // Noncompliant
+    // ...
 }
 </pre>
-<h3>Compliant solution</h3>
+<p>The solution can be to:</p>
+<ul>
+  <li> Split the function into smaller ones </li>
+</ul>
 <pre>
-function doSomething($param1, $param2, $param3, $param4) {
-...
+// Each function does a part of what the original setCoordinates function was doing, so confusion risks are lower
+function setOrigin(int $x, int $y, int $z) {
+   // ...
+}
+
+function setSize(int $width, int $height, float $depth) {
+   // ...
 }
 </pre>
+<ul>
+  <li> Find a better data structure for the parameters that group data in a way that makes sense for the specific application domain </li>
+</ul>
+<pre>
+class Point
+{
+    // In geometry, Point is a logical structure to group data
+    public function __construct(
+        public int $x,
+        public int $y,
+        public int $z
+    ) {}
+}
+
+function setCoordinates(Point $p1, Point $p2) {
+    // ...
+}
+</pre>
+<p>This rule raises an issue when a function has more parameters than the provided threshold.</p>
 

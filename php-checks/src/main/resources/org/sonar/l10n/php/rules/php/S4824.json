@@ -1,6 +1,12 @@
 {
   "title": "References used in \"foreach\" loops should be \"unset\"",
   "type": "BUG",
+  "code": {
+    "impacts": {
+      "RELIABILITY": "HIGH"
+    },
+    "attribute": "CLEAR"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

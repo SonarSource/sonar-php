@@ -1,6 +1,12 @@
 {
   "title": "\"cgi.force_redirect\" should be enabled",
   "type": "VULNERABILITY",
+  "code": {
+    "impacts": {
+      "SECURITY": "MEDIUM"
+    },
+    "attribute": "COMPLETE"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

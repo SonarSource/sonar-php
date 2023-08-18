@@ -1,6 +1,12 @@
 {
   "title": "Closing tag \"?\u003e\" should be omitted on files containing only PHP",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    },
+    "attribute": "CONVENTIONAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

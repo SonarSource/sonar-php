@@ -1,19 +1,18 @@
 <h2>Why is this an issue?</h2>
-<p>For better readability, do not put more than one statement on a single line.</p>
-<h3>Noncompliant code example</h3>
+<p>Putting multiple statements on a single line lowers the code readability and makes debugging the code more complex.</p>
 <pre>
-if(someCondition) doSomething();
+if (someCondition) doSomething(); // Noncompliant
 </pre>
-<h3>Compliant solution</h3>
+<p>Write one statement per line to improve readability.</p>
 <pre>
-if(someCondition) {
+if (someCondition) {
   doSomething();
 }
 </pre>
 <h3>Exceptions</h3>
-<p>Anonymous functions containing a single statement are ignored.</p>
+<p>The rule ignores anonymous functions containing a single statement.</p>
 <pre>
-$max_comparator = function ($v) { return $v &gt; 2; };           // Compliant
+$max_comparator = function ($v) { return $v &gt; 2; };           // Compliant by exception
 $max_comparator = function ($v) { echo $v; return $v &gt; 2; };  // Noncompliant
 </pre>
 
