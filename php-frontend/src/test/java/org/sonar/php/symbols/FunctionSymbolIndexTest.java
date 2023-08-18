@@ -21,7 +21,6 @@ package org.sonar.php.symbols;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,7 +86,7 @@ public class FunctionSymbolIndexTest {
     for (FunctionSymbolData f : data) {
       projectSymbolData.add(f);
     }
-    return FunctionSymbolIndex.create(new HashSet<>(Arrays.asList(data)), projectSymbolData);
+    return FunctionSymbolIndex.create(new ArrayList<>(Arrays.asList(data)), projectSymbolData);
   }
 
   private LocationInFileImpl someLocation() {
