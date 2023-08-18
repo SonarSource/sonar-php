@@ -66,10 +66,6 @@
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
 159
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/StyleMerger.php": [
-78,
-112
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/CellValue.php": [
 191
 ],

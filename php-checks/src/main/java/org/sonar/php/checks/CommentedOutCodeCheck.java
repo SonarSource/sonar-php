@@ -33,10 +33,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = CommentedOutCodeCheck.KEY)
+@Rule(key = "S125")
 public class CommentedOutCodeCheck extends PHPVisitorCheck {
-
-  public static final String KEY = "S125";
   private static final String MESSAGE = "Remove this commented out code.";
 
   private static final String MULTILINE_COMMENT_REPLACE = "((/\\*\\*?)|(\\n\\s*\\*(?!/))|(\\*/))";
@@ -124,8 +122,10 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
 
     // try to parse in an inner class context to cover statements which are only allowed in a class declaration
     try {
-      PARSER.parse(String.format(INNER_CLASS_CONTEXT, possibleCode));
-      return true;
+      ClassDeclarationTree parsedCode = (ClassDeclarationTree) PARSER.parse(String.format(INNER_CLASS_CONTEXT, possibleCode));
+      // if this is empty, possibleCode starts with a comment opener, which leads to parsing possibleCode as a single comment
+      // But we should only raise an issue, if the parsedCode contains valid code.
+      return !parsedCode.members().isEmpty();
     } catch (Exception e) {
       // continue on parser error
     }

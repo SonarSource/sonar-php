@@ -95,3 +95,36 @@ $helper->log('Set header/footer');
 // user-defined; not supported by PhpSpreadsheet
 
 // use Foo\Bar\{ Bla, Bli };
+
+/**
+* # misleading opener -> is not commented out code
+* @xyz
+* @foobar
+* @return void
+*/
+
+/**
+* // misleading opener -> is not commented out code
+* @xyz
+* @foobar
+* @return void
+*/
+
+/**
+ * ## This should not raise an issue as it is used as comment extraction
+ * for OpenAPI
+ *
+ * @OA\Get(
+ *     path="/api/some/endpoint",
+ *     operationId="getSomeEndpoint",
+ *     tags={"Example"},
+ *     summary="Does something",
+ *     description="One-line markdown is not fun"
+ *     @OA\Response(
+ *         response=201,
+ *         description="Successfully succeeded"
+ *     )
+ * )
+ *
+ * @return void
+ */
