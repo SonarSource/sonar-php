@@ -30,7 +30,7 @@ class A {
   public function k() {             // OK - public
   }
 
-  public function __i() {           // OK - magic method
+  private function __i() {           // OK - magic method
   }
 
   function m() {                    // OK - default (=> not private)
@@ -163,4 +163,26 @@ class DynamicClass
   private function five(): void // Noncompliant
   {
   }
+}
+
+class UsageInFirstClassCallable
+{
+    public function getClockCallable(): callable {
+        $callable = strtoupper(...);  // callables without `$this` shouldn't trigger the logic
+        return $this->getTime(...);
+    }
+
+    private function getTime(): int {
+        return time();
+    }
+
+    private function getDuration(): int {
+        return time();
+    }
+
+    public function addQuery(Query $query): callable
+    {
+        $this->{'getDuration'}(...); // shouldn't trigger on callable convert with something other than name identifier
+        return $query->getDuration(...); // shouldn't trigger on callable convert with receivers other that `$this`
+    }
 }

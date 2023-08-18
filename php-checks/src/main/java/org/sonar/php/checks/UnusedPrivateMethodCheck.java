@@ -34,9 +34,15 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
+import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import static org.sonar.plugins.php.api.tree.Tree.Kind.VARIABLE_IDENTIFIER;
 
 @Rule(key = "S1144")
 public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
@@ -46,10 +52,13 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
 
   private final List<String> stringLiterals = new ArrayList<>();
   private final List<String> dynamicUsedMethods = new ArrayList<>();
+  private final List<String> methodsUsedInFirstClassCallables = new ArrayList<>();
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     stringLiterals.clear();
+    dynamicUsedMethods.clear();
+    methodsUsedInFirstClassCallables.clear();
     super.visitClassDeclaration(tree);
 
     if (tree.is(Tree.Kind.CLASS_DECLARATION, Tree.Kind.ENUM_DECLARATION)) {
@@ -68,16 +77,29 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
     super.visitMethodDeclaration(tree);
   }
 
+  @Override
+  public void visitCallableConvert(CallableConvertTree tree) {
+    if (tree.expression().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
+      MemberAccessTree memberAccessTree = (MemberAccessTree) tree.expression();
+      if (isThis(memberAccessTree.object()) && memberAccessTree.member().is(Tree.Kind.NAME_IDENTIFIER)) {
+        methodsUsedInFirstClassCallables.add(((NameIdentifierTree) memberAccessTree.member()).text().toLowerCase(Locale.ROOT));
+      }
+    }
+
+    super.visitCallableConvert(tree);
+  }
+
   private void checkClass(ClassTree tree) {
     Scope classScope = context().symbolTable().getScopeFor(tree);
     for (Symbol methodSymbol : classScope.getSymbols(Kind.FUNCTION)) {
 
       // For enums private and protected are equivalent as inheritance is not allowed.
-      boolean ruleConditions = (methodSymbol.hasModifier("private") || isProtectedEnumMethod(tree, methodSymbol)) &&
+      boolean isUnusedMethodWithNarrowVisibility = (methodSymbol.hasModifier("private") || isProtectedEnumMethod(tree, methodSymbol)) &&
         methodSymbol.usages().isEmpty();
 
-      if (ruleConditions
+      if (isUnusedMethodWithNarrowVisibility
         && !dynamicUsedMethods.contains(methodSymbol.name())
+        && !methodsUsedInFirstClassCallables.contains(methodSymbol.name())
         && !isConstructor(methodSymbol.declaration(), tree)
         && !isMagicMethod(methodSymbol.name())
         && !isUsedInStringLiteral(methodSymbol)) {
@@ -89,6 +111,8 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
   @Override
   public void visitAnonymousClass(AnonymousClassTree tree) {
     stringLiterals.clear();
+    dynamicUsedMethods.clear();
+    methodsUsedInFirstClassCallables.clear();
     super.visitAnonymousClass(tree);
 
     checkClass(tree);
@@ -121,5 +145,9 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
 
   private static boolean isMagicMethod(String methodName) {
     return methodName.startsWith("__");
+  }
+
+  private static boolean isThis(Tree object) {
+    return object.is(VARIABLE_IDENTIFIER) && "$this".equals(((VariableIdentifierTree) object).text());
   }
 }
