@@ -23,10 +23,9 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = OpeningPHPTagCheck.KEY)
+@Rule(key = "S1757")
 public class OpeningPHPTagCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1757";
   private static final String MESSAGE = "Change this opening tag to either \"<?php\" or \"<?=\".";
 
   private static final String LONG_TAG = "<?php";
@@ -38,7 +37,7 @@ public class OpeningPHPTagCheck extends PHPVisitorCheck {
     String openingTagWithContentBefore = tree.fileOpeningTagToken().text();
 
     if (!isAuthorisedTag(openingTagWithContentBefore)) {
-      context().newLineIssue(this, getLineToReport(openingTagWithContentBefore), MESSAGE);
+      context().newLineIssue(this, getLineToReport(tree), MESSAGE);
     }
   }
 
@@ -48,8 +47,8 @@ public class OpeningPHPTagCheck extends PHPVisitorCheck {
    * The node contains everything before the first opening include HTML if present
    * this allows to ensure reporting the issue on the correct line.
    */
-  private static int getLineToReport(String openingTag) {
-    return openingTag.split("(?:\r)?\n|\r").length;
+  private static int getLineToReport(ScriptTree tree) {
+    return tree.fileOpeningTagToken().endLine();
   }
 
   private static boolean isAuthorisedTag(String openingTagWithContentBefore) {
