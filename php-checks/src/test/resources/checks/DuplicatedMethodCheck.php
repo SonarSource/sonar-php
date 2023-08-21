@@ -97,3 +97,28 @@ class C {
     public function isEmptyMethod() {
     }
 }
+
+function myFunction() : A
+{
+    return null;
+}
+
+function myFunction() : array
+{
+    return null;
+}
+
+function myFunction($a, $lot, $of, $params) : array
+{
+    return null;
+}
+
+function myFunction(int $a, bool $lot, $of, $params) : array // Noncompliant
+{
+    return null;
+}
+
+function myFunction(int $a, bool $lot, $of) : array
+{
+    return null;
+}

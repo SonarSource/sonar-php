@@ -24,15 +24,18 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -49,7 +52,7 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
   private static final Function<FunctionTree, NameIdentifierTree> METHOD_TO_NAME = f -> ((MethodDeclarationTree) f).name();
   private static final Function<FunctionTree, NameIdentifierTree> FUNCTION_TO_NAME = f -> ((FunctionDeclarationTree) f).name();
   private final Deque<List<MethodDeclarationTree>> methods = new LinkedList<>();
-  private List<FunctionDeclarationTree> functions = new ArrayList<>();
+  private final List<FunctionDeclarationTree> functions = new ArrayList<>();
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
@@ -111,14 +114,27 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
         .skip(i + 1L)
         // avoid reporting multiple times
         .filter(m -> !reported.contains(m))
+        // avoid methods with different parameters and/or return type
+        .filter(m -> haveSameParametersAndReturnType(func, m))
         // only consider method syntactically equivalent
         .filter(m -> areSyntacticallyEquivalent(methodBody.iterator(), ((BlockTree) m.body()).statements().iterator()))
         .forEach(m -> {
-          context().newIssue(this,
-            toName.apply(m),
-            String.format(ISSUE_MSG, methodIdentifier.text(), methodIdentifier.line())).secondary(methodIdentifier, "original implementation");
+          context()
+            .newIssue(this,
+              toName.apply(m),
+              String.format(ISSUE_MSG, methodIdentifier.text(), methodIdentifier.line()))
+            .secondary(methodIdentifier, "original implementation");
           reported.add(m);
         });
     }
+  }
+
+  private static boolean haveSameParametersAndReturnType(FunctionTree f1, FunctionTree f2) {
+    return f1.parameters().parameters().size() == f2.parameters().parameters().size() &&
+      areSyntacticallyEquivalent(declaredTypeTreeOrNull(f1), declaredTypeTreeOrNull(f2));
+  }
+
+  private static DeclaredTypeTree declaredTypeTreeOrNull(FunctionTree functionTree) {
+    return Optional.ofNullable(functionTree.returnTypeClause()).map(ReturnTypeClauseTree::declaredType).orElse(null);
   }
 }
