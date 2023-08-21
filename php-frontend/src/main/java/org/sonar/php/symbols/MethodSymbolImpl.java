@@ -23,6 +23,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.CheckForNull;
 import org.sonar.php.tree.symbols.QualifiedNames;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -32,6 +33,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
   private final MethodSymbolData data;
   private final ClassSymbol owner;
   private Trilean isOverriding;
+  private MethodSymbol baseMethod;
 
   public MethodSymbolImpl(MethodSymbolData data, ClassSymbol owner) {
     super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties()));
@@ -62,6 +64,15 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
     return isOverriding;
   }
 
+  @CheckForNull
+  public MethodSymbol getBaseMethod() {
+    if (isOverriding().isTrue()) {
+      return baseMethod;
+    } else {
+      return null;
+    }
+  }
+
   private Trilean computeIsOverriding() {
     if (visibility().equals(Visibility.PRIVATE) || name().equals("__construct")) {
       return Trilean.FALSE;
@@ -87,6 +98,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
 
       MethodSymbol methodSymbol = visitedClass.getDeclaredMethod(name());
       if (!methodSymbol.isUnknownSymbol() && !methodSymbol.visibility().equals(Visibility.PRIVATE)) {
+        baseMethod = methodSymbol;
         return Trilean.TRUE;
       }
 
