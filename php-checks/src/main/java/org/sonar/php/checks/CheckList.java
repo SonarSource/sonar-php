@@ -20,9 +20,7 @@
 package org.sonar.php.checks;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.sonar.php.checks.phpini.AllowUrlCheck;
 import org.sonar.php.checks.phpini.CgiForceRedirectCheck;
 import org.sonar.php.checks.phpini.EnableDlCheck;
@@ -99,7 +97,6 @@ import org.sonar.php.checks.wordpress.WordPressLateConfigCheck;
 import org.sonar.php.checks.wordpress.WordPressSaltsCheck;
 import org.sonar.php.checks.wordpress.WordPressUnfilteredHtmlCheck;
 import org.sonar.php.utils.collections.ListUtils;
-import org.sonar.php.utils.collections.SetUtils;
 
 public class CheckList {
 
@@ -334,8 +331,8 @@ public class CheckList {
       ZipEntryCheck.class);
   }
 
-  public static Set<Class<?>> getPhpIniChecks() {
-    return SetUtils.immutableSetOf(
+  public static List<Class<?>> getPhpIniChecks() {
+    return List.of(
       AllowUrlCheck.class,
       CookiesSecureCheck.class,
       CgiForceRedirectCheck.class,
@@ -347,8 +344,8 @@ public class CheckList {
       SessionUseTransSidCheck.class);
   }
 
-  public static Set<Class<?>> getRegexChecks() {
-    return Set.of(
+  public static List<Class<?>> getRegexChecks() {
+    return List.of(
       AnchorPrecedenceCheck.class,
       DuplicatesInCharacterClassCheck.class,
       EmptyAlternativeCheck.class,
@@ -380,7 +377,7 @@ public class CheckList {
     return ListUtils.merge(getGeneralChecks(), getRegexChecks());
   }
 
-  public static Set<Class<?>> getAllChecks() {
-    return SetUtils.concat(new HashSet<>(getPhpChecks()), getPhpIniChecks(), getRegexChecks());
+  public static List<Class<?>> getAllChecks() {
+    return ListUtils.merge(getPhpChecks(), getPhpIniChecks());
   }
 }

@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -79,11 +80,11 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
   @Nullable
   private final String filePath;
   private Scope globalScope;
-  private final Map<ClassTree, ClassSymbolData> classSymbolDataByTree = new HashMap<>();
+  private final Map<ClassTree, ClassSymbolData> classSymbolDataByTree = new LinkedHashMap<>();
   private ClassSymbolIndex classSymbolIndex;
   private final Map<ClassTree, List<MethodSymbolData>> methodsByClassTree = new HashMap<>();
   private final Map<MethodSymbolData, MethodDeclarationTreeImpl> methodTreeByData = new HashMap<>();
-  private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new HashMap<>();
+  private final Map<FunctionDeclarationTree, FunctionSymbolData> functionSymbolDataByTree = new LinkedHashMap<>();
   private FunctionSymbolIndex functionSymbolIndex;
 
   private final Deque<ClassTree> classTreeStack = new ArrayDeque<>();

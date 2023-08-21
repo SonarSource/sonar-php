@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php;
 
-import java.util.ArrayList;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.php.checks.CheckList;
@@ -42,7 +41,7 @@ public class PHPRulesDefinition implements RulesDefinition {
 
     RuleMetadataLoader ruleMetadataLoader = new RuleMetadataLoader(RESOURCE_BASE_PATH, PHPProfileDefinition.SONAR_WAY_PATH, runtime);
 
-    ruleMetadataLoader.addRulesByAnnotatedClass(repository, new ArrayList<>(CheckList.getAllChecks()));
+    ruleMetadataLoader.addRulesByAnnotatedClass(repository, CheckList.getAllChecks());
 
     repository.done();
   }

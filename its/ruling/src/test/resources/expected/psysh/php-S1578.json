@@ -5,16 +5,31 @@
 "psysh:src/Reflection/ReflectionConstant_.php": [
 0
 ],
-"psysh:src/functions.php": [
-0
-],
-"psysh:test/Command/ListCommand/Fixtures/functions.php": [
-0
-],
-"psysh:test/fixtures/config.php": [
-0
-],
-"psysh:test/fixtures/empty.php": [
-0
-]
+  "psysh:src/functions.php": [
+    0
+  ],
+  "psysh:test/Command/ListCommand/Fixtures/functions.php": [
+    0
+  ],
+  "psysh:test/fixtures/config.php": [
+    0
+  ],
+  "psysh:test/fixtures/default/.config/psysh/config.php": [
+    0
+  ],
+  "psysh:test/fixtures/empty.php": [
+    0
+  ],
+  "psysh:test/fixtures/legacy/.psysh/rc.php": [
+    0
+  ],
+  "psysh:test/fixtures/mixed/.psysh/config.php": [
+    0
+  ],
+  "psysh:test/fixtures/mixed/.psysh/rc.php": [
+    0
+  ],
+  "psysh:test/fixtures/project/.psysh.php": [
+    0
+  ]
 }
