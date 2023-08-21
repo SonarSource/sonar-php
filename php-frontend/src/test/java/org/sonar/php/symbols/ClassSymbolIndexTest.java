@@ -20,7 +20,6 @@
 package org.sonar.php.symbols;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -237,7 +236,7 @@ public class ClassSymbolIndexTest {
   }
 
   private ClassSymbolIndex createSymbols(ProjectSymbolData projectData, ClassSymbolData... data) {
-    ClassSymbolIndex result = ClassSymbolIndex.create(new HashSet<>(Arrays.asList(data)), projectData);
+    ClassSymbolIndex result = ClassSymbolIndex.create(Arrays.asList(data), projectData);
     for (ClassSymbolData d : data) {
       assertThat(result.get(d).qualifiedName()).isEqualTo(d.qualifiedName());
       assertThat(result.get(d).isUnknownSymbol()).isFalse();

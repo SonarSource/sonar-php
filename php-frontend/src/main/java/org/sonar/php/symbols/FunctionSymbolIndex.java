@@ -22,7 +22,6 @@ package org.sonar.php.symbols;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
@@ -35,13 +34,13 @@ public class FunctionSymbolIndex {
     this.projectSymbolData = projectSymbolData;
   }
 
-  public static FunctionSymbolIndex create(Set<FunctionSymbolData> fileDeclarations, ProjectSymbolData projectSymbolData) {
+  public static FunctionSymbolIndex create(List<FunctionSymbolData> fileDeclarations, ProjectSymbolData projectSymbolData) {
     FunctionSymbolIndex index = new FunctionSymbolIndex(projectSymbolData);
     index.init(fileDeclarations);
     return index;
   }
 
-  private void init(Set<FunctionSymbolData> fileDeclarations) {
+  private void init(List<FunctionSymbolData> fileDeclarations) {
     for (FunctionSymbolData data : fileDeclarations) {
       FunctionSymbolIndex.FunctionSymbolImpl symbol = new FunctionSymbolIndex.FunctionSymbolImpl(data);
       symbolsByQualifiedName.put(symbol.qualifiedName(), symbol);

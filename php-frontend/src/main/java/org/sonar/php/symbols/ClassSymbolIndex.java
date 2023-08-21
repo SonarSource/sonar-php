@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -41,7 +40,7 @@ public class ClassSymbolIndex {
     this.projectSymbolData = projectSymbolData;
   }
 
-  public static ClassSymbolIndex create(Set<ClassSymbolData> fileDeclarations, ProjectSymbolData projectSymbolData) {
+  public static ClassSymbolIndex create(List<ClassSymbolData> fileDeclarations, ProjectSymbolData projectSymbolData) {
     ClassSymbolIndex index = new ClassSymbolIndex(projectSymbolData);
     index.init(fileDeclarations);
     return index;
@@ -57,7 +56,7 @@ public class ClassSymbolIndex {
     return symbolsByData.get(classSymbolData);
   }
 
-  private void init(Set<ClassSymbolData> fileDeclarations) {
+  private void init(List<ClassSymbolData> fileDeclarations) {
     for (ClassSymbolData data : fileDeclarations) {
       ClassSymbolImpl symbol = new ClassSymbolImpl(data);
       symbolsByQualifiedName.put(symbol.qualifiedName(), symbol);

@@ -22,8 +22,8 @@ package org.sonar.php.checks;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,7 +62,7 @@ public class CheckListTest {
    */
   @Test
   public void test() {
-    Set<Class<?>> checks = CheckList.getAllChecks();
+    List<Class<?>> checks = CheckList.getAllChecks();
 
     for (Class<?> cls : checks) {
       if (cls != ParsingErrorCheck.class) {
@@ -74,4 +74,10 @@ public class CheckListTest {
     }
   }
 
+  @Test
+  public void checksShouldNotContainDuplicates() {
+    List<Class<?>> allChecks = CheckList.getAllChecks();
+    HashSet<Class<?>> allChecksWithoutDuplicates = new HashSet<>(allChecks);
+    assertThat(allChecks).hasSameSizeAs(allChecksWithoutDuplicates);
+  }
 }

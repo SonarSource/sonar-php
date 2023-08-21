@@ -39,6 +39,9 @@ public class PhpGeneralRulingTest {
   @ClassRule
   public static Orchestrator ORCHESTRATOR = RulingHelper.getOrchestrator();
 
+  // TODO: SONARPHP-1454 - exclude all files that contain an element (file / directory) in the path that start with a dot
+  private static final String EXCLUDED_FILES = "**/.*, **/.*/**";
+
   @BeforeClass
   public static void prepare_quality_profile() {
     ProfileGenerator.RulesConfiguration parameters = new ProfileGenerator.RulesConfiguration()
@@ -70,9 +73,7 @@ public class PhpGeneralRulingTest {
     testProject("monica");
   }
 
-  // TODO SONARPHP-1441 Solve ruling test results due to nondeterministic symbol creation
   @Test
-  @Ignore("Due to nondeterministic results")
   public void testPhpCodeSniffer() throws Exception {
     testProject("PHP_CodeSniffer");
   }
@@ -117,7 +118,8 @@ public class PhpGeneralRulingTest {
       .setProperty("sonar.import_unknown_files", "true")
       .setProperty("sonar.php.duration.statistics", "true")
       .setProperty("sonar.cpd.exclusions", "**/*")
-      .setProperty("sonar.scm.disabled", "true");
+      .setProperty("sonar.scm.disabled", "true")
+      .setProperty("sonar.exclusions", EXCLUDED_FILES);
 
     ORCHESTRATOR.executeBuild(build);
 
