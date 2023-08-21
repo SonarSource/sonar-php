@@ -86,7 +86,7 @@ public class FunctionSymbolIndexTest {
     for (FunctionSymbolData f : data) {
       projectSymbolData.add(f);
     }
-    return FunctionSymbolIndex.create(new ArrayList<>(Arrays.asList(data)), projectSymbolData);
+    return FunctionSymbolIndex.create(Arrays.asList(data), projectSymbolData);
   }
 
   private LocationInFileImpl someLocation() {

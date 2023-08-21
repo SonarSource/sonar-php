@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import org.junit.Test;
 
@@ -73,4 +74,10 @@ public class CheckListTest {
     }
   }
 
+  @Test
+  public void checksShouldNotContainDuplicates() {
+    List<Class<?>> allChecks = CheckList.getAllChecks();
+    HashSet<Class<?>> allChecksWithoutDuplicates = new HashSet<>(allChecks);
+    assertThat(allChecks).hasSameSizeAs(allChecksWithoutDuplicates);
+  }
 }
