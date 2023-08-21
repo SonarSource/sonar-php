@@ -26,8 +26,11 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -119,8 +122,13 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
   private static boolean isMagicMethodCallDefined(ClassTree tree) {
     if (tree instanceof ClassDeclarationTree) {
       Optional<ClassMemberTree> magicMethodCall = findMagicMethodCall((ClassDeclarationTree) tree);
-      if (magicMethodCall.isPresent()) {
-        return containsCallUserFunction(magicMethodCall.get());
+      if (magicMethodCall.isPresent() && containsCallUserFunction(magicMethodCall.get())) {
+        return true;
+      } else {
+        Optional<ClassSymbol> superClass = ((ClassDeclarationTreeImpl) tree).symbol().superClass();
+        if (superClass.isPresent()) {
+          return containsSuperClassCallMethod(superClass.get());
+        }
       }
     }
     return false;
@@ -139,6 +147,20 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
         String functionName = ((FunctionCallTreeImpl) expression).symbol().qualifiedName().simpleName().toLowerCase(Locale.ROOT);
         return CALL_USER_FUNCTIONS.contains(functionName);
       });
+  }
+
+  private static boolean containsSuperClassCallMethod(ClassSymbol tree) {
+    Optional<MethodSymbol> callMethod = tree.declaredMethods().stream()
+      .filter(m -> "__call".equals(m.name()))
+      .findFirst();
+    if (callMethod.isPresent()) {
+      return true;
+    }
+    Optional<ClassSymbol> superClass = tree.superClass();
+    if (superClass.isPresent()) {
+      return containsSuperClassCallMethod(superClass.get());
+    }
+    return false;
   }
 
   @Override

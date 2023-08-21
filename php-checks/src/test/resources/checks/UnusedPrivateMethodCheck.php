@@ -200,6 +200,7 @@ class MethodCalledByMagicMethodCall
     trigger_error('Call to undefined method '.__CLASS__.'::'.$method.'()', E_USER_ERROR);
   }
 
+  // OK because it might be called via __call()
   private function bar()
   {
   }
@@ -212,6 +213,23 @@ class MethodCalledByMagicMethodCall2
     return call_user_func($method, $arguments);
   }
 
+  // OK because it might be called via __call()
+  private function bar()
+  {
+  }
+}
+
+class MethodCalledByMagicMethodCall3Base
+{
+  public function __call($method, $arguments)
+  {
+    return call_user_func($method, $arguments);
+  }
+}
+
+class MethodCalledByMagicMethodCall3Impl extends MethodCalledByMagicMethodCall3Base
+{
+  // OK because it might be called via __call() in superclass
   private function bar()
   {
   }
