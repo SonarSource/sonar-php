@@ -21,6 +21,7 @@ package org.sonar.php.checks.utils;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -45,12 +46,15 @@ import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.HasAttributes;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
@@ -355,6 +359,19 @@ public final class CheckUtils {
     }
 
     return false;
+  }
+
+  public static List<String> getAttributeNames(Tree declaration) {
+    List<String> result = new ArrayList<>();
+    if (declaration instanceof HasAttributes) {
+      List<AttributeGroupTree> attributeGroupTrees = ((HasAttributes) declaration).attributeGroups();
+      for (AttributeGroupTree attributes : attributeGroupTrees) {
+        for (AttributeTree attributeTree : attributes.attributes()) {
+          result.add(attributeTree.name().fullyQualifiedName());
+        }
+      }
+    }
+    return result;
   }
 
   public static boolean isPublic(ClassMemberTree tree) {

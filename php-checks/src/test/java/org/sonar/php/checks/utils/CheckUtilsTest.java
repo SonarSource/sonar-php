@@ -65,12 +65,12 @@ public class CheckUtilsTest {
   private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
 
   @Test
-  public void utility_class() throws Exception {
+  public void shouldCheckUtilityGoodPractice() throws Exception {
     UtilityClass.assertGoodPractice(CheckUtils.class);
   }
 
   @Test
-  public void skipParenthesis() throws Exception {
+  public void skipParenthesis() {
     ExpressionTree expr;
 
     expr = expressionFromStatement("42;");
@@ -85,7 +85,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void function_name() throws Exception {
+  public void shouldCheckFunctionName() {
     ExpressionTree root = expressionFromStatement("A::run(2);");
     assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
     FunctionCallTree call = (FunctionCallTree) root;
@@ -105,7 +105,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void no_function_name() throws Exception {
+  public void shouldCheckNoFunctionName() {
     ExpressionTree root = expressionFromStatement("$name(2);");
     assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
     FunctionCallTree call = (FunctionCallTree) root;
@@ -113,7 +113,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void for_condition() throws Exception {
+  public void shouldCheckForCondition() {
     Tree tree = PHPParserBuilder.createParser().parse("<?= for(;;) {} ?>");
     ForStatementTree forStatement = (ForStatementTree) ((CompilationUnitTree) tree).script().statements().get(0);
     assertThat(CheckUtils.getForCondition(forStatement)).isNull();
@@ -128,30 +128,30 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void trim_quotes() throws Exception {
-    assertThat(trimQuotes("")).isEqualTo("");
+  public void shouldTrimQuotes() {
+    assertThat(trimQuotes("")).isEmpty();
     assertThat(trimQuotes("'")).isEqualTo("'");
-    assertThat(trimQuotes("''")).isEqualTo("");
-    assertThat(trimQuotes("\"\"")).isEqualTo("");
+    assertThat(trimQuotes("''")).isEmpty();
+    assertThat(trimQuotes("\"\"")).isEmpty();
     assertThat(trimQuotes("\"abc\"")).isEqualTo("abc");
     assertThat(trimQuotes("'abc'")).isEqualTo("abc");
     assertThat(trimQuotes("abc")).isEqualTo("abc");
   }
 
   @Test
-  public void trim_quotes_literal() {
+  public void shoukdTrimQuotesLiteral() {
     assertThat(trimQuotes((LiteralTree) expressionFromStatement("\"abc\";"))).isEqualTo("abc");
     assertThat(trimQuotes((LiteralTree) expressionFromStatement("'abc';"))).isEqualTo("abc");
-    assertThat(trimQuotes((LiteralTree) expressionFromStatement("'';"))).isEqualTo("");
+    assertThat(trimQuotes((LiteralTree) expressionFromStatement("'';"))).isEmpty();
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void trim_quotes_literal_on_non_string() {
+  public void shoukdTrimQuotesLiteralOnNonString() {
     trimQuotes((LiteralTree) expressionFromStatement("42;"));
   }
 
   @Test
-  public void is_false_value() throws Exception {
+  public void shouldCheckIsFalseValue() {
     assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "false", "False", "FALSE")
       .allMatch(CheckUtils::isFalseValue)).isTrue();
 
@@ -170,7 +170,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void is_true_value() throws Exception {
+  public void shouldCheckIsTrueValue() {
     assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true", "True", "TRUE")
       .allMatch(CheckUtils::isTrueValue)).isTrue();
 
@@ -189,7 +189,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void is_string_literal_with_value() throws Exception {
+  public void shouldCheckIsStringLiteralWithValue() throws Exception {
     assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"foo\"", "\"Foo\"", "\"FOO\"")
       .allMatch(literalTree -> isStringLiteralWithValue(literalTree, "foo"))).isTrue();
 
@@ -203,7 +203,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void is_null_or_empty_string() {
+  public void shouldCheckIsNullOrEmptyString() {
     assertThat(createLiterals(Tree.Kind.NULL_LITERAL, "NULL")
       .allMatch(CheckUtils::isNullOrEmptyString)).isTrue();
 
@@ -218,7 +218,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void has_annotation_of_function() {
+  public void shouldCheckHasAnnotation() {
     FunctionDeclarationTree tree = (FunctionDeclarationTree) parse("/**\n * @annotation\n */\nfunction foo(){}");
     assertThat(CheckUtils.hasAnnotation(tree, "@annotation")).isTrue();
     assertThat(CheckUtils.hasAnnotation(tree, "annotation")).isTrue();
@@ -230,7 +230,30 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void has_modifier() {
+  public void shouldCheckAttributes() {
+    FunctionDeclarationTree tree = (FunctionDeclarationTree) parse("#[Test]\n" +
+      "#[TestWithJson('[0, 1, 1]')]\n" +
+      "#[CustomAttribute]\n" +
+      "#[TestDox('It does something')]\n" +
+      "#[Framework\\Attribute]\n" +
+      "#[Aaaa\\Bbbb, Cccc\\Dddd('It does something')]\n" +
+      "function foo(){}");
+
+    List<String> attributeNames = CheckUtils.getAttributeNames(tree);
+    assertThat(attributeNames).contains("Test", "TestWithJson", "TestDox", "CustomAttribute", "Framework\\Attribute", "Aaaa\\Bbbb", "Cccc\\Dddd")
+      .doesNotContain("#Test", "foo", "Bbbb");
+  }
+
+  @Test
+  public void shouldCheckAttributesForNonHasAttributes() {
+    ArrayInitializerTree tree = (ArrayInitializerTree) expressionFromStatement("array('key' => 'value');");
+
+    List<String> attributeNames = CheckUtils.getAttributeNames(tree);
+    assertThat(attributeNames).isEmpty();
+  }
+
+  @Test
+  public void shouldCheckHasModifier() {
     ClassMemberTree tree = parseClassMember("abstract protected function foo(){}");
     assertThat(CheckUtils.hasModifier(tree, "abstract")).isTrue();
     assertThat(CheckUtils.hasModifier(tree, "protected")).isTrue();
@@ -240,7 +263,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void is_public() {
+  public void shouldCheckIsPublic() {
     ClassMemberTree tree = parseClassMember("public function foo(){}");
     assertThat(CheckUtils.isPublic(tree)).isTrue();
 
@@ -261,7 +284,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void pure_function_name() {
+  public void shouldCheckPureFunctionName() {
     FunctionCallTree functionCall = (FunctionCallTree) expressionFromStatement("fooBar();");
     assertThat(functionName(functionCall)).isEqualTo("fooBar");
     assertThat(functionName(functionCall)).isNotEqualTo("foobar");
@@ -277,7 +300,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void pure_lower_case_function_name() {
+  public void shouldCheckPureLowerCaseFunctionName() {
     FunctionCallTree functionCall = (FunctionCallTree) expressionFromStatement("fooBar();");
     assertThat(lowerCaseFunctionName(functionCall)).isEqualTo("foobar");
     assertThat(lowerCaseFunctionName(functionCall)).isNotEqualTo("fooBar");
@@ -293,7 +316,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void test_named_argument_retrieval() {
+  public void shouldCheckNamedArgumentRetrieval() {
     Tree tree = expressionFromStatement("f(self::$p1, a: $p2);");
     FunctionCallTree callTree = (FunctionCallTree) tree;
 
@@ -330,7 +353,7 @@ public class CheckUtilsTest {
   }
 
   @Test
-  public void noClass_methodInheritedFromClassOrInterface() {
+  public void noClassMethodInheritedFromClassOrInterface() {
     MethodDeclarationTree method = (MethodDeclarationTree) ((ClassDeclarationTree) parse("trait Wrapper{public function foo() {}}")).members().get(0);
     assertThat(isMethodInheritedFromClassOrInterface(QualifiedName.qualifiedName("A\\B"), method)).isFalse();
   }

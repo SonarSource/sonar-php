@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.utils;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -36,6 +37,8 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   private boolean isPhpUnitTestCase = false;
   private boolean isPhpUnitTestMethod = false;
 
+  // Methods should not have too many lines
+  @SuppressWarnings("java:S138")
   private static Map<String, Assertion> assertions() {
     return Stream.of(
       new Assertion("assertArrayHasKey"),
@@ -263,8 +266,17 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   }
 
   protected boolean isTestCaseMethod(MethodDeclarationTree tree) {
+    return isTestCaseMethod(tree, List.of());
+  }
+
+  protected boolean isTestCaseMethod(MethodDeclarationTree tree, List<String> usesNamespaces) {
+    List<String> attributeNames = CheckUtils.getAttributeNames(tree);
     return isPhpUnitTestCase && CheckUtils.isPublic(tree)
-      && (tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test"));
+      && (tree.name().text().startsWith("test")
+        || CheckUtils.hasAnnotation(tree, "test")
+        || attributeNames.contains("PHPUnit\\Framework\\Attributes\\Test")
+        || (usesNamespaces.contains("PHPUnit\\Framework\\Attributes\\Test")
+          && attributeNames.contains("Test")));
   }
 
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {

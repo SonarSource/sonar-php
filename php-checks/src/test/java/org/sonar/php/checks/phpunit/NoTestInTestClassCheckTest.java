@@ -28,4 +28,9 @@ public class NoTestInTestClassCheckTest {
   public void test() {
     CheckVerifier.verify(new NoTestInTestClassCheck(), "phpunit/NoTestInTestClassCheck.php");
   }
+
+  @Test
+  public void test2() {
+    CheckVerifier.verify(new NoTestInTestClassCheck(), "phpunit/NoTestInTestClassCheck2.php");
+  }
 }

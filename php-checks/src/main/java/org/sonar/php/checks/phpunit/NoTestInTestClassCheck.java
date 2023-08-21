@@ -19,24 +19,36 @@
  */
 package org.sonar.php.checks.phpunit;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 
 @Rule(key = "S2187")
 public class NoTestInTestClassCheck extends PhpUnitCheck {
 
   private static final String MESSAGE = "Add some tests to this class.";
 
+  private List<String> usesNamespaces = new ArrayList<>();
+
+  @Override
+  public void visitScript(ScriptTree tree) {
+    super.visitScript(tree);
+    usesNamespaces = new ArrayList<>();
+  }
+
   @Override
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {
     if (!tree.isAbstract()) {
       boolean hasTestMethod = false;
       for (ClassMemberTree member : tree.members()) {
-        if (member.is(Tree.Kind.METHOD_DECLARATION) && isTestCaseMethod((MethodDeclarationTree) member)) {
+        if (member.is(Tree.Kind.METHOD_DECLARATION) && isTestCaseMethod((MethodDeclarationTree) member, usesNamespaces)) {
           hasTestMethod = true;
           break;
         }
@@ -48,5 +60,11 @@ public class NoTestInTestClassCheck extends PhpUnitCheck {
     }
 
     super.visitPhpUnitTestCase(tree);
+  }
+
+  @Override
+  public void visitUseClause(UseClauseTree tree) {
+    super.visitUseClause(tree);
+    usesNamespaces.add(tree.namespaceName().fullyQualifiedName());
   }
 }
