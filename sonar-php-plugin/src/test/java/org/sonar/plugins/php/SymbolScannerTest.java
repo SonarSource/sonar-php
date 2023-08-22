@@ -26,15 +26,15 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.slf4j.event.Level;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
@@ -48,8 +48,8 @@ import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class SymbolScannerTest {
 
-  @Rule
-  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
 
   public static final QualifiedName CLASS_NAME = qualifiedName("app\\test\\controller");
   private static ReadWriteInMemoryCache previousCache;

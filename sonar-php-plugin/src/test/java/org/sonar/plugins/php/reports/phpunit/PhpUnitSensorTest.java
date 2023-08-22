@@ -32,8 +32,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
@@ -44,7 +44,7 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -56,8 +56,8 @@ import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 
 public class PhpUnitSensorTest {
 
-  @Rule
-  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
   private final List<String> analysisWarnings = new ArrayList<>();
   private final AnalysisWarningsWrapper analysisWarningsWrapper = analysisWarnings::add;
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());

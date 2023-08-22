@@ -38,7 +38,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
@@ -62,7 +62,7 @@ public abstract class ReportSensorTest {
     return elements.get(0);
   }
 
-  protected static void assertNoErrorWarnDebugLogs(LogTester logTester) {
+  protected static void assertNoErrorWarnDebugLogs(LogTesterJUnit5 logTester) {
     org.assertj.core.api.Assertions.assertThat(logTester.logs(Level.ERROR)).isEmpty();
     org.assertj.core.api.Assertions.assertThat(logTester.logs(Level.WARN)).isEmpty();
     org.assertj.core.api.Assertions.assertThat(logTester.logs(Level.DEBUG)).isEmpty();
@@ -146,6 +146,6 @@ public abstract class ReportSensorTest {
 
   protected abstract ExternalIssuesSensor sensor();
 
-  protected abstract LogTester logTester();
+  protected abstract LogTesterJUnit5 logTester();
 
 }

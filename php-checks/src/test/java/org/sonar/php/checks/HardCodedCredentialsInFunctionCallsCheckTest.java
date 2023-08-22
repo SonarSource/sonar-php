@@ -21,10 +21,10 @@ package org.sonar.php.checks;
 
 import java.io.FileNotFoundException;
 import java.util.Set;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.CheckVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,8 +33,8 @@ import static org.sonar.php.checks.HardCodedCredentialsInFunctionCallsCheck.Json
 
 public class HardCodedCredentialsInFunctionCallsCheckTest {
 
-  @Rule
-  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
 
   @Test
   public void test() throws Exception {

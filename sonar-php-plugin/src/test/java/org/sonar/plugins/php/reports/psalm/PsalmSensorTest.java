@@ -24,8 +24,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.Severity;
@@ -34,7 +34,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
@@ -50,8 +50,8 @@ public class PsalmSensorTest extends ReportSensorTest {
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "psalm");
   private final PsalmSensor psalmSensor = new PsalmSensor(analysisWarnings);
 
-  @Rule
-  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
 
   @Test
   public void test_descriptor() {
@@ -267,7 +267,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Override
-  protected LogTester logTester() {
+  protected LogTesterJUnit5 logTester() {
     return logTester;
   }
 }
