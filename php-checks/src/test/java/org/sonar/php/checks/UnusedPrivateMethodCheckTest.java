@@ -25,7 +25,7 @@ import org.sonar.plugins.php.CheckVerifier;
 public class UnusedPrivateMethodCheckTest {
 
   @Test
-  public void test() throws Exception {
+  public void test() {
     CheckVerifier.verify(new UnusedPrivateMethodCheck(), "UnusedPrivateMethodCheck.php");
   }
 

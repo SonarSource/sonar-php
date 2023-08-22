@@ -189,3 +189,105 @@ class UsageInFirstClassCallable
         return $query->getDuration(...); // shouldn't trigger on callable convert with receivers other that `$this`
     }
 }
+
+class MagicMethodCall
+{
+  public function __call($method, $arguments)
+  {
+    if (method_exists($this, $method)) {
+      return call_user_func_array([$this, $method], $arguments);
+    }
+    trigger_error('Call to undefined method '.__CLASS__.'::'.$method.'()', E_USER_ERROR);
+  }
+
+  // OK because it might be called via __call()
+  private function bar()
+  {
+  }
+}
+
+class MagicMethodCall2
+{
+  public function __call($method, $arguments)
+  {
+    return call_user_func($method, $arguments);
+  }
+
+  // OK because it might be called via __call()
+  private function bar()
+  {
+  }
+}
+
+class MagicMethodCall3Base
+{
+  public function __call($method, $arguments)
+  {
+    return call_user_func($method, $arguments);
+  }
+}
+
+class MagicMethodCall3Impl extends MagicMethodCall3Base
+{
+  // OK because it might be called via __call() in superclass
+  private function bar()
+  {
+  }
+}
+
+class MagicMethodCall4Base
+{
+  public function __call($method, $arguments)
+  {
+    return call_user_func($method, $arguments);
+  }
+}
+
+class MagicMethodCall4Abstract extends MagicMethodCall4Base {}
+
+class MagicMethodCall4Impl extends MagicMethodCall4Abstract
+{
+  // OK because it might be called via __call() in superclass
+  private function bar()
+  {
+  }
+}
+
+class MagicMethodCall5
+{
+  public function __call($method, $arguments)
+  {
+    // The call of call_user_func_array or call_user_func is missing
+  }
+
+  private function bar() // Noncompliant
+  {
+  }
+}
+
+class MagicMethodCall6Base {}
+
+class MagicMethodCall6Abstract extends MagicMethodCall6Base {}
+
+class MagicMethodCall6Impl extends MagicMethodCall6Abstract
+{
+  private function bar() // Noncompliant
+  {
+  }
+}
+
+class MagicMethodCall7
+{
+  public function __call($method, $arguments)
+  {
+    // The call of call_user_func_array or call_user_func is missing
+  }
+}
+
+class MagicMethodCall7Impl extends MagicMethodCall7
+{
+  // TODO SONARPHP-1455 FN because in superclass in __call the call of call_user_func_array or call_user_func is missing
+  private function bar()
+  {
+  }
+}
