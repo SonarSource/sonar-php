@@ -19,15 +19,18 @@
  */
 package org.sonar.php.checks.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public abstract class PhpUnitCheck extends PHPVisitorCheck {
@@ -233,6 +236,8 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
       new Assertion("stringEndsWith")).collect(Collectors.toMap(e -> e.name().toLowerCase(Locale.ENGLISH), e -> e));
   }
 
+  protected List<String> usesNamespaces = new ArrayList<>();
+
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     isPhpUnitTestCase = CheckUtils.isSubClassOfTestCase(tree);
@@ -247,7 +252,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    isPhpUnitTestMethod = isTestCaseMethod(tree);
+    isPhpUnitTestMethod = isTestCaseMethod(tree, usesNamespaces);
     if (isPhpUnitTestMethod) {
       visitPhpUnitTestMethod(tree);
     }
@@ -265,10 +270,6 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
   }
 
-  protected boolean isTestCaseMethod(MethodDeclarationTree tree) {
-    return isTestCaseMethod(tree, List.of());
-  }
-
   protected boolean isTestCaseMethod(MethodDeclarationTree tree, List<String> usesNamespaces) {
     List<String> attributeNames = CheckUtils.getAttributeNames(tree);
     return isPhpUnitTestCase && CheckUtils.isPublic(tree)
@@ -277,6 +278,18 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
         || attributeNames.contains("PHPUnit\\Framework\\Attributes\\Test")
         || (usesNamespaces.contains("PHPUnit\\Framework\\Attributes\\Test")
           && attributeNames.contains("Test")));
+  }
+
+  @Override
+  public void visitScript(ScriptTree tree) {
+    super.visitScript(tree);
+    usesNamespaces = new ArrayList<>();
+  }
+
+  @Override
+  public void visitUseClause(UseClauseTree tree) {
+    super.visitUseClause(tree);
+    usesNamespaces.add(tree.namespaceName().fullyQualifiedName());
   }
 
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {

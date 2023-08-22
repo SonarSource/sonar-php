@@ -57,7 +57,7 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (!isTestCaseMethod(tree)) {
+    if (!isTestCaseMethod(tree, usesNamespaces)) {
       return;
     }
 
