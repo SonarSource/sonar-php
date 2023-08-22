@@ -30,7 +30,7 @@ class A {
   public function k() {             // OK - public
   }
 
-  private function __i() {           // OK - magic method
+  private function __clone() {           // OK - magic method
   }
 
   function m() {                    // OK - default (=> not private)
@@ -102,6 +102,9 @@ class UsageInStringLiteral {
 
 class ClassContainingAnonymousClass {
 
+  /**
+   * @uses five - mention a noncompliant method from another class to ensure it is not remembered from here
+   */
   public function containsAnonymousClass($obj) {
     $anonymousClass = new class(){};
     $obj->foo();
