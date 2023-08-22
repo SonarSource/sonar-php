@@ -24,13 +24,13 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = UselessObjectCreationCheck.KEY)
+@Rule(key = "S1848")
 public class UselessObjectCreationCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1848";
   private static final String MESSAGE = "Either remove this useless object instantiation of class \"%s\" or use it";
 
   @Override
@@ -38,6 +38,9 @@ public class UselessObjectCreationCheck extends PHPVisitorCheck {
     super.visitExpressionStatement(tree);
 
     if (tree.expression().is(Tree.Kind.NEW_EXPRESSION)) {
+      if (isSingleStatementInTryCatch(tree)) {
+        return;
+      }
       NewExpressionTree newExpression = (NewExpressionTree) tree.expression();
       String message = String.format(MESSAGE, getClassName(newExpression.expression()));
       context().newIssue(this, newExpression, message);
@@ -53,4 +56,11 @@ public class UselessObjectCreationCheck extends PHPVisitorCheck {
     }
   }
 
+  private static boolean isSingleStatementInTryCatch(ExpressionStatementTree tree) {
+    if (tree.getParent().is(Tree.Kind.BLOCK)) {
+      BlockTree blocks = (BlockTree) tree.getParent();
+      return tree.getParent().getParent().is(Tree.Kind.TRY_STATEMENT) && blocks.statements().size() == 1;
+    }
+    return false;
+  }
 }
