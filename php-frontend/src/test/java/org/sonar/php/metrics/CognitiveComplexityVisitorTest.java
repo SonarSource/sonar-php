@@ -23,7 +23,7 @@ import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.metrics.CognitiveComplexityVisitor.CognitiveComplexity;
 import org.sonar.php.metrics.CognitiveComplexityVisitor.ComplexityComponent;
@@ -35,10 +35,10 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
+class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
 
   @Test
-  public void if_else() throws Exception {
+  void ifElse() {
     assertThat(complexity("if ($a) {}")).isEqualTo(1);
     assertThat(complexity("if ($a): endif;")).isEqualTo(1);
 
@@ -52,7 +52,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void if_else_nesting() throws Exception {
+  void ifElseNesting() {
     assertThat(complexity("if ($a) { if ($a) {} }")).isEqualTo(3);
     assertThat(complexity("if ($a): if ($a) {} endif;")).isEqualTo(3);
 
@@ -68,7 +68,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void switch_statement() throws Exception {
+  void switchStatement() {
     assertThat(complexity("switch ($a) { case 1: break; case 2: break; default: }")).isEqualTo(1);
     assertThat(complexity("switch ($a) { case 1: if ($a) {} }")).isEqualTo(3);
     assertThat(complexity("if ($a) { switch ($a) {  } } ")).isEqualTo(3);
@@ -77,7 +77,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void while_loop() throws Exception {
+  void whileLoop() {
     assertThat(complexity("while ($a) {}")).isEqualTo(1);
     assertThat(complexity("while ($a):  endwhile;")).isEqualTo(1);
 
@@ -90,7 +90,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void do_while_loop() throws Exception {
+  void doWhileLoop() {
     assertThat(complexity("do {} while ($a);")).isEqualTo(1);
     assertThat(complexity("do { if ($a) {} } while ($a);")).isEqualTo(3);
     assertThat(complexity("if ($a) { do {} while ($a); }")).isEqualTo(3);
@@ -99,7 +99,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void foreach_loop() throws Exception {
+  void foreachLoop() {
     assertThat(complexity("foreach ($a as $b) {}")).isEqualTo(1);
     assertThat(complexity("foreach ($a as $b => $c) {}")).isEqualTo(1);
     assertThat(complexity("foreach ($a as $b): endforeach;")).isEqualTo(1);
@@ -113,7 +113,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void for_loop() throws Exception {
+  void forLoop() {
     assertThat(complexity("for (;;) {}")).isEqualTo(1);
     assertThat(complexity("for (;;): endfor;")).isEqualTo(1);
 
@@ -126,8 +126,8 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void try_catch() throws Exception {
-    assertThat(complexity("try {} finally {}")).isEqualTo(0);
+  void tryCatch() {
+    assertThat(complexity("try {} finally {}")).isZero();
     assertThat(complexity("try {} catch (Exc $e) {} ")).isEqualTo(1);
     assertThat(complexity("try {} catch (Exc $e) {} catch (Exc $e) {}")).isEqualTo(2);
 
@@ -141,7 +141,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void conditional_expression() throws Exception {
+  void conditionalExpression() {
     assertThat(complexity("$a = $b ? 1 : 2; ")).isEqualTo(1);
     assertThat(complexity("$a = $b ? 1 : ($b ? 1 : 2); ")).isEqualTo(3);
     assertThat(complexity("$a = $b ? ($b ? 1 : 2) : 2; ")).isEqualTo(3);
@@ -150,11 +150,11 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void jumps() throws Exception {
-    assertThat(complexity(" return 42;")).isEqualTo(0);
-    assertThat(complexity(" return;")).isEqualTo(0);
-    assertThat(complexity(" break; ")).isEqualTo(0);
-    assertThat(complexity(" continue; ")).isEqualTo(0);
+  void jumps() {
+    assertThat(complexity(" return 42;")).isZero();
+    assertThat(complexity(" return;")).isZero();
+    assertThat(complexity(" break; ")).isZero();
+    assertThat(complexity(" continue; ")).isZero();
 
     assertThat(complexity(" continue 42; ")).isEqualTo(1);
     assertThat(complexity(" break 42; ")).isEqualTo(1);
@@ -170,7 +170,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void logical_operators() throws Exception {
+  void logicalOperators() {
     assertThat(complexity(" 1 && 2;")).isEqualTo(1);
     assertThat(complexity(" 1 && 2 && 3 && 4 && 5;")).isEqualTo(1);
 
@@ -193,7 +193,7 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void nested_functions() throws Exception {
+  void nestedFunctions() {
     assertThat(components(" function nestedFunction() { if ($a) {} } ")).containsExactly(cc("if", 2));
     assertThat(components(" foo(function() { if ($a) {} });")).containsExactly(cc("if", 2));
     assertThat(components(" foo(function() { return $a && $b; });")).containsExactly(cc("&&", 1));
@@ -201,18 +201,18 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void recursion() throws Exception {
+  void recursion() {
     // recursion is not supported yet, should be 1
-    assertThat(complexity(" f(); ")).isEqualTo(0);
+    assertThat(complexity(" f(); ")).isZero();
   }
 
   @Test
-  public void no_complexity() throws Exception {
-    assertThat(complexity(" foo(); ")).isEqualTo(0);
+  void noComplexity() {
+    assertThat(complexity(" foo(); ")).isZero();
   }
 
   @Test
-  public void file_complexity_is_sum_of_functions() throws Exception {
+  void fileComplexityIsSumOfFunctions() {
     File file = new File("src/test/resources/metrics/file_cognitive_complexity.php");
     ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
     CompilationUnitTree cut = (CompilationUnitTree) p.parse(file);

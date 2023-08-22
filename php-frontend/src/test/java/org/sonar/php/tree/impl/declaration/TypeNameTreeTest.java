@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -28,10 +28,10 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TypeNameTreeTest extends PHPTreeModelTest {
+class TypeNameTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void built_in_type() throws Exception {
+  void builtInType() {
     BuiltInTypeTree tree = parse("int", PHPLexicalGrammar.TYPE_NAME);
 
     assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
@@ -39,7 +39,7 @@ public class TypeNameTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void built_in_mixed_type() throws Exception {
+  void builtInMixedType() {
     BuiltInTypeTree tree = parse("mixed", PHPLexicalGrammar.TYPE_NAME);
 
     assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
@@ -47,7 +47,7 @@ public class TypeNameTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void built_in_type_capital_letter() throws Exception {
+  void builtInTypeCapitalLetter() {
     BuiltInTypeTree tree = parse("Int", PHPLexicalGrammar.TYPE_NAME);
 
     assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
@@ -55,7 +55,7 @@ public class TypeNameTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void built_in_type_keyword() throws Exception {
+  void builtInTypeKeyword() {
     BuiltInTypeTree tree = parse("callable", PHPLexicalGrammar.TYPE_NAME);
 
     assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
@@ -63,7 +63,7 @@ public class TypeNameTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void namespace_name_type() throws Exception {
+  void namespaceNameType() {
     NamespaceNameTree tree = parse("MyClass", PHPLexicalGrammar.TYPE_NAME);
 
     assertThat(tree.is(Kind.NAMESPACE_NAME)).isTrue();

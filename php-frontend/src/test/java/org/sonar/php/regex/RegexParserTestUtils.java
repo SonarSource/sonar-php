@@ -20,7 +20,7 @@
 package org.sonar.php.regex;
 
 import javax.annotation.Nullable;
-import junit.framework.AssertionFailedError;
+import org.opentest4j.AssertionFailedError;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -33,8 +33,7 @@ import org.sonarsource.analyzer.commons.regex.ast.CharacterClassElementTree;
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegexParserTestUtils {
 
@@ -66,15 +65,19 @@ public class RegexParserTestUtils {
   }
 
   public static void assertKind(RegexTree.Kind expected, RegexTree actual) {
-    assertEquals("Regex should have kind " + expected, expected, actual.kind());
-    assertTrue("`is` should return true when the kinds match.", actual.is(expected));
-    assertTrue("`is` should return true when one of the kinds match.", actual.is(RegexTree.Kind.CHARACTER, RegexTree.Kind.DISJUNCTION, expected));
+    assertThat(actual.kind()).withFailMessage(String.format("Regex should have kind %s", expected)).isEqualTo(expected);
+
+    assertThat(actual.is(expected)).withFailMessage("`is` should return true when the kinds match.").isTrue();
+    assertThat(actual.is(RegexTree.Kind.CHARACTER, RegexTree.Kind.DISJUNCTION, expected))
+      .withFailMessage("`is` should return true when one of the kinds match.").isTrue();
   }
 
   public static void assertKind(CharacterClassElementTree.Kind expected, CharacterClassElementTree actual) {
-    assertEquals("Regex should have kind " + expected, expected, actual.characterClassElementKind());
-    assertTrue("`is` should return true when the kinds match.", actual.is(expected));
-    assertTrue("`is` should return true when one of the kinds match.", actual.is(CharacterClassElementTree.Kind.PLAIN_CHARACTER, expected));
+    assertThat(actual.characterClassElementKind()).withFailMessage(String.format("Regex should have kind %s", expected)).isEqualTo(expected);
+
+    assertThat(actual.is(expected)).withFailMessage("`is` should return true when the kinds match.").isTrue();
+    assertThat(actual.is(CharacterClassElementTree.Kind.PLAIN_CHARACTER, expected))
+      .withFailMessage("`is` should return true when one of the kinds match.").isTrue();
   }
 
   public static <T> T assertType(Class<T> klass, @Nullable Object o) {

@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BreakStatementTreeTest extends PHPTreeModelTest {
+class BreakStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void empty() throws Exception {
+  void empty() {
     BreakStatementTree tree = parse("break ;", PHPLexicalGrammar.BREAK_STATEMENT);
 
     assertThat(tree.is(Kind.BREAK_STATEMENT)).isTrue();
@@ -40,7 +40,7 @@ public class BreakStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void not_empty() throws Exception {
+  void notEmpty() {
     BreakStatementTree tree = parse("break $a;", PHPLexicalGrammar.BREAK_STATEMENT);
 
     assertThat(tree.breakToken().text()).isEqualTo("break");

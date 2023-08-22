@@ -21,25 +21,31 @@ package org.sonar.plugins.php.api.cfg;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree;
 
-public class PhpCfgEndBlockTest extends PHPTreeModelTest {
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void cannot_add_element() {
-    PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
-    Tree tree = parse("array()", PHPLexicalGrammar.ARRAY_INIALIZER);
-    endBlock.addElement(tree);
+class PhpCfgEndBlockTest extends PHPTreeModelTest {
+
+  @Test
+  void cannotAddElement() {
+    assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> {
+      PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
+      Tree tree = parse("array()", PHPLexicalGrammar.ARRAY_INIALIZER);
+      endBlock.addElement(tree);
+    });
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void cannot_replace_successors() {
-    PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
-    Map<PhpCfgBlock, PhpCfgBlock> map = new HashMap<>();
-    map.put(endBlock, endBlock);
-    endBlock.replaceSuccessors(map);
+  @Test
+  void cannotReplaceSuccessors() {
+    assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> {
+      PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
+      Map<PhpCfgBlock, PhpCfgBlock> map = new HashMap<>();
+      map.put(endBlock, endBlock);
+      endBlock.replaceSuccessors(map);
+    });
   }
 }

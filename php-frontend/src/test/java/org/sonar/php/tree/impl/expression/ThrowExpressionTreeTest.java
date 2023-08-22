@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.ThrowExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ThrowExpressionTreeTest extends PHPTreeModelTest {
+class ThrowExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     ThrowExpressionTree tree = parse("throw $a", PHPLexicalGrammar.EXPRESSION);
     assertThat(tree.is(Tree.Kind.THROW_EXPRESSION)).isTrue();
     assertThat(tree.throwToken().text()).isEqualTo("throw");

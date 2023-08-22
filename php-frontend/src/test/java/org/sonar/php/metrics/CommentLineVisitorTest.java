@@ -19,15 +19,15 @@
  */
 package org.sonar.php.metrics;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ParsingTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CommentLineVisitorTest extends ParsingTestUtils {
+class CommentLineVisitorTest extends ParsingTestUtils {
 
   @Test
-  public void comment_lines() throws Exception {
+  void commentLines() {
     CommentLineVisitor comment = new CommentLineVisitor(parse("metrics/comments.php"));
 
     assertThat(comment.commentLineNumber()).isEqualTo(3);

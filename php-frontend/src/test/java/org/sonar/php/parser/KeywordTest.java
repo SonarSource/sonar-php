@@ -20,15 +20,15 @@
 package org.sonar.php.parser;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.api.PHPKeyword;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class KeywordTest {
+class KeywordTest {
 
   @Test
-  public void test() {
+  void test() {
     // Exact list of keywords from PHP reference manual
     assertThat(PHPLexicalGrammar.KEYWORDS)
       .matches("__halt_compiler")
@@ -104,7 +104,7 @@ public class KeywordTest {
   }
 
   @Test
-  public void getKeywordValues() {
+  void getKeywordValues() {
     Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(70);
   }
 

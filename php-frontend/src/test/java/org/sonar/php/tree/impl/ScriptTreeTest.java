@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -27,29 +27,29 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ScriptTreeTest extends PHPTreeModelTest {
+class ScriptTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void script_without_statement() throws Exception {
+  void scriptWithoutStatement() {
     ScriptTree tree = parse("<?php", PHPLexicalGrammar.SCRIPT);
 
     assertThat(tree.is(Kind.SCRIPT)).isTrue();
     assertThat(tree.fileOpeningTagToken().text()).isEqualTo("<?php");
-    assertThat(tree.statements()).hasSize(0);
+    assertThat(tree.statements()).isEmpty();
   }
 
   @Test
-  public void script_asp_style_not_supported() throws Exception {
+  void scriptAspStyleNotSupported() {
     // Support removed in SONARPHP-1087
     ScriptTree tree = parse("<% $a; %> <br/>", PHPLexicalGrammar.SCRIPT);
 
     assertThat(tree.is(Kind.SCRIPT)).isTrue();
     assertThat(tree.fileOpeningTagToken().text()).isEqualTo("<% $a; %> <br/>");
-    assertThat(tree.statements()).hasSize(0);
+    assertThat(tree.statements()).isEmpty();
   }
 
   @Test
-  public void script_with_statement() throws Exception {
+  void scriptWithStatement() {
     ScriptTree tree = parse("<?php $a;", PHPLexicalGrammar.SCRIPT);
 
     assertThat(tree.is(Kind.SCRIPT)).isTrue();

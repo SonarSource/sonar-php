@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ExpandableStringLiteralTest {
+class ExpandableStringLiteralTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Kind.EXPANDABLE_STRING_LITERAL)
       .matches("\"$var\"")
       .matches("\"str $var\"")
@@ -38,7 +38,7 @@ public class ExpandableStringLiteralTest {
   }
 
   @Test
-  public void executionOperator() {
+  void executionOperator() {
     assertThat(Kind.EXECUTION_OPERATOR)
       .matches("`$var`")
       .matches("`without expression`")
@@ -50,7 +50,7 @@ public class ExpandableStringLiteralTest {
   }
 
   @Test
-  public void test_real_life() {
+  void testRealLife() {
     assertThat(Kind.EXPANDABLE_STRING_LITERAL)
       .matches("\"{$var[\"foo\"]}\"");
   }

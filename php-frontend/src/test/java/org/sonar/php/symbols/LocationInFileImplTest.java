@@ -19,13 +19,13 @@
  */
 package org.sonar.php.symbols;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LocationInFileImplTest {
+class LocationInFileImplTest {
   @Test
-  public void getters() {
+  void getters() {
     LocationInFileImpl loc = new LocationInFileImpl("f1", 1, 2, 3, 4);
     assertThat(loc.filePath()).isEqualTo("f1");
     assertThat(loc.startLine()).isEqualTo(1);
@@ -35,7 +35,7 @@ public class LocationInFileImplTest {
   }
 
   @Test
-  public void test_equals() {
+  void testEquals() {
     LocationInFileImpl loc = new LocationInFileImpl("f1", 1, 2, 3, 4);
     assertThat(loc)
       .isEqualTo(loc)
@@ -50,7 +50,7 @@ public class LocationInFileImplTest {
   }
 
   @Test
-  public void test_hashCode() {
+  void testHashCode() {
     assertThat(new LocationInFileImpl("f1", 1, 2, 3, 4).hashCode())
       .isEqualTo(new LocationInFileImpl("f1", 1, 2, 3, 4).hashCode())
       .isNotEqualTo(new LocationInFileImpl("f2", 1, 2, 3, 4).hashCode())
@@ -61,7 +61,7 @@ public class LocationInFileImplTest {
   }
 
   @Test
-  public void test_toString() {
+  void testToString() {
     assertThat(new LocationInFileImpl("f1", 1, 2, 3, 4)).hasToString("LocationInFileImpl{f1, 1, 2, 3, 4}");
   }
 }

@@ -20,7 +20,7 @@
 package org.sonar.php.tree.visitors;
 
 import java.io.File;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.regex.PhpRegexCheck;
@@ -42,7 +42,7 @@ import org.sonarsource.analyzer.commons.regex.ast.RepetitionTree;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class PHPCheckContextTest {
+class PHPCheckContextTest {
 
   private static final File WORKDIR = new File("src/test/resources/visitors");
   private static final File PHP_FILE = new File("src/test/resources/visitors/test.php");
@@ -52,7 +52,7 @@ public class PHPCheckContextTest {
   private static final CacheContext CACHE_CONTEXT = mock(CacheContext.class);
 
   @Test
-  public void test_regex_newIssue() {
+  void testRegexNewIssue() {
     PHPCheckContext context = new PHPCheckContext(PHP_INPUT_FILE, TREE, PHP_FILE);
     PhpRegexCheck regexCheck = new TestPhpRegexCheck();
     String regex = "'/x{42}|y{23}/'";
@@ -73,7 +73,7 @@ public class PHPCheckContextTest {
   }
 
   @Test
-  public void should_return_cache_context_when_constructed_with_PhpInputFileContext() {
+  void shouldReturnCacheContextWhenConstructedWith_PhpInputFileContext() {
     PhpInputFileContext inputFileContext = new PhpInputFileContext(PHP_INPUT_FILE, WORKDIR, CACHE_CONTEXT);
     CheckContext checkContext = new PHPCheckContext(inputFileContext, TREE, SymbolTableImpl.create(TREE));
     assertThat(checkContext.cacheContext()).isEqualTo(CACHE_CONTEXT);

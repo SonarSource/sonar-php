@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -27,9 +27,9 @@ import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AttributeTreeTest extends PHPTreeModelTest {
+class AttributeTreeTest extends PHPTreeModelTest {
   @Test
-  public void simple_attribute() throws Exception {
+  void simpleAttribute() {
     AttributeTree tree = parse("A", PHPLexicalGrammar.ATTRIBUTE);
 
     assertThat(tree.is(Tree.Kind.ATTRIBUTE)).isTrue();
@@ -37,7 +37,7 @@ public class AttributeTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_arguments_and_fqn() throws Exception {
+  void withArgumentsAndFqn() {
     AttributeTree tree = parse("\\A\\B\\C($x, y: $y)", PHPLexicalGrammar.ATTRIBUTE);
 
     assertThat(tree.is(Tree.Kind.ATTRIBUTE)).isTrue();

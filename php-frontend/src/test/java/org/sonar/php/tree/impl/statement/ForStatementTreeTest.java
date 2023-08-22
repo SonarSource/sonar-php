@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,17 +27,17 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ForStatementTreeTest extends PHPTreeModelTest {
+class ForStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void standard_syntax() throws Exception {
+  void standardSyntax() {
     ForStatementTree tree = parse("for ($a; ; $c, $b) {}", PHPLexicalGrammar.FOR_STATEMENT);
 
     assertThat(tree.is(Kind.FOR_STATEMENT)).isTrue();
     assertThat(tree.forToken().text()).isEqualTo("for");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.init()).hasSize(1);
-    assertThat(tree.condition()).hasSize(0);
+    assertThat(tree.condition()).isEmpty();
     assertThat(tree.update()).hasSize(2);
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(tree.colonToken()).isNull();
@@ -49,19 +49,19 @@ public class ForStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void alternative_syntax() throws Exception {
+  void alternativeSyntax() {
     ForStatementTree tree = parse("for (; ;) : endfor ;", PHPLexicalGrammar.FOR_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_FOR_STATEMENT)).isTrue();
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
-    assertThat(tree.init()).hasSize(0);
-    assertThat(tree.condition()).hasSize(0);
-    assertThat(tree.update()).hasSize(0);
+    assertThat(tree.init()).isEmpty();
+    assertThat(tree.condition()).isEmpty();
+    assertThat(tree.update()).isEmpty();
     assertThat(tree.colonToken()).isNotNull();
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(tree.endforToken()).isNotNull();
     assertThat(tree.eosToken()).isNotNull();
-    assertThat(tree.statements()).hasSize(0);
+    assertThat(tree.statements()).isEmpty();
     assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 }

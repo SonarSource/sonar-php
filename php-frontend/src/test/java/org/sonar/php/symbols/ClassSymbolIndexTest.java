@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static java.util.Collections.emptyList;
@@ -31,10 +31,10 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
-public class ClassSymbolIndexTest {
+class ClassSymbolIndexTest {
 
   @Test
-  public void class_without_superclass() {
+  void classWithoutSuperclass() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b");
     ClassSymbolIndex symbols = createSymbols(a, b);
@@ -43,7 +43,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void superclass_in_current_file() {
+  void superclassInCurrentFile() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolIndex symbols = createSymbols(a, b);
@@ -52,7 +52,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void superclass_outside_current_file() {
+  void superclassOutsideCurrentFile() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolIndex symbols = createSymbols(projectData(a), b);
@@ -60,7 +60,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void two_classes_with_same_superclass_outside_current_file() {
+  void twoClassesWithSameSuperclassOutsideCurrentFile() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolData c = data("ns1\\c", "ns1\\a");
@@ -69,7 +69,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void superclass_of_superclass_outside_current_file() {
+  void superclassOfSuperclassOutsideCurrentFile() {
     ClassSymbolData a = data("ns1\\a");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolData c = data("ns1\\c", "ns1\\b");
@@ -80,7 +80,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void cycle_between_classes_in_current_file() {
+  void cycleBetweenClassesInCurrentFile() {
     ClassSymbolData a = data("ns1\\a", "ns1\\c");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolData c = data("ns1\\c", "ns1\\b");
@@ -91,7 +91,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void cycle_between_classes_outside_current_file() {
+  void cycleBetweenClassesOutsideCurrentFile() {
     ClassSymbolData a = data("ns1\\a", "ns1\\b");
     ClassSymbolData b = data("ns1\\b", "ns1\\a");
     ClassSymbolData c = data("ns1\\c", "ns1\\a");
@@ -101,7 +101,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void unknown_super_class() {
+  void unknownSuperClass() {
     ClassSymbolData a = data("ns1\\a", "ns1\\c");
     ClassSymbolData b = data("ns1\\b", "ns1\\c");
     ClassSymbolIndex symbols = createSymbols(a, b);
@@ -115,7 +115,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void get_by_qualified_name() {
+  void getByQualifiedName() {
     ClassSymbolData a = data("ns1\\a", "ns1\\c");
     ClassSymbolData b = data("ns1\\b", "ns1\\c");
     ClassSymbolData c = data("ns1\\c");
@@ -130,7 +130,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void isOrSubclassOf() {
+  void isOrSubclassOf() {
     ClassSymbolIndex symbols = createSymbols(
       data("a", "b"),
       data("b"),
@@ -150,7 +150,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void isOrSubclassOf_with_cycle() {
+  void isOrSubclassOfWithCycle() {
     ClassSymbolIndex symbols = createSymbols(
       data("a", "b"),
       data("b", "a"));
@@ -161,7 +161,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void isSubTypeOf() {
+  void isSubTypeOf() {
     ClassSymbolIndex symbols = createSymbols(
       data("a", "b"),
       data("b"),
@@ -181,7 +181,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void isSubTypeOf_with_cycle() {
+  void isSubTypeOfWithCycle() {
     ClassSymbolIndex symbols = createSymbols(
       data("a", "b"),
       data("b", "a"));
@@ -192,7 +192,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void get_method() {
+  void getMethod() {
     List<MethodSymbolData> methods = Arrays.asList(
       method("methodA"),
       method("methodB"));
@@ -218,7 +218,7 @@ public class ClassSymbolIndexTest {
   }
 
   @Test
-  public void unknown_class_and_method() {
+  void unknownClassAndMethod() {
     ClassSymbolIndex symbols = createSymbols(data("a"));
 
     ClassSymbol classSymbol = symbols.get(fqn("x"));

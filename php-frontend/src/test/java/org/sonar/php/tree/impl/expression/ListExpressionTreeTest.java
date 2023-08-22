@@ -20,7 +20,7 @@
 package org.sonar.php.tree.impl.expression;
 
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
@@ -29,31 +29,31 @@ import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.utils.collections.ListUtils.getLast;
 
-public class ListExpressionTreeTest extends PHPTreeModelTest {
+class ListExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void empty() throws Exception {
+  void empty() {
     ListExpressionTree tree = parse("list ()", Kind.LIST_EXPRESSION);
 
     assertListExpression(tree, 0, 0);
-    assertThat(tree.toString()).isEqualTo("list ()");
+    assertThat(tree).hasToString("list ()");
   }
 
   @Test
-  public void simple_variable() {
+  void simpleVariable() {
     ListExpressionTree tree = parse("list ($a, $b)", Kind.LIST_EXPRESSION);
 
     assertListExpression(tree, 2, 1);
     assertFirstElement(tree, Kind.VARIABLE_IDENTIFIER, "$a");
-    assertThat(tree.toString()).isEqualTo("list ($a, $b)");
+    assertThat(tree).hasToString("list ($a, $b)");
   }
 
   @Test
-  public void omitted_element() {
+  void omittedElement() {
     ListExpressionTree tree = parse("list (, $a, , ,$b)", Kind.LIST_EXPRESSION);
 
     assertListExpression(tree, 2, 4);
-    assertThat(tree.toString()).isEqualTo("list (, $a, , ,$b)");
+    assertThat(tree).hasToString("list (, $a, , ,$b)");
     assertThat(tree.elements().get(0)).isNotPresent();
     Optional<ArrayAssignmentPatternElementTree> last = getLast(tree.elements());
     assertThat(last).isPresent();
@@ -61,7 +61,7 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void nested_list_expression() {
+  void nestedListExpression() {
     ListExpressionTree tree = parse("list (list ($a), $b)", Kind.LIST_EXPRESSION);
 
     assertListExpression(tree, 2, 1);

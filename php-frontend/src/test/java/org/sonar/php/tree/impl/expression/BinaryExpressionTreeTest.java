@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -28,42 +28,42 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BinaryExpressionTreeTest extends PHPTreeModelTest {
+class BinaryExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void conditional_or() throws Exception {
+  void conditionalOr() {
     testBinary(Kind.CONDITIONAL_OR, "||");
     testBinary(Kind.ALTERNATIVE_CONDITIONAL_OR, "or");
   }
 
   @Test
-  public void conditional_xor() throws Exception {
+  void conditionalXor() {
     testBinary(Kind.ALTERNATIVE_CONDITIONAL_XOR, "xor");
   }
 
   @Test
-  public void conditional_and() throws Exception {
+  void conditionalAnd() {
     testBinary(Kind.CONDITIONAL_AND, "&&");
     testBinary(Kind.ALTERNATIVE_CONDITIONAL_AND, "and");
   }
 
   @Test
-  public void bitwise_or() throws Exception {
+  void bitwiseOr() {
     testBinary(Kind.BITWISE_OR, "|");
   }
 
   @Test
-  public void bitwise_xor() throws Exception {
+  void bitwiseXor() {
     testBinary(Kind.BITWISE_XOR, "^");
   }
 
   @Test
-  public void bitwise_and() throws Exception {
+  void bitwiseAnd() {
     testBinary(Kind.BITWISE_AND, "&");
   }
 
   @Test
-  public void equality() throws Exception {
+  void equality() {
     testBinary(Kind.STRICT_NOT_EQUAL_TO, "!==", PHPLexicalGrammar.EQUALITY_EXPR);
     testBinary(Kind.NOT_EQUAL_TO, "!=", PHPLexicalGrammar.EQUALITY_EXPR);
     testBinary(Kind.STRICT_EQUAL_TO, "===", PHPLexicalGrammar.EQUALITY_EXPR);
@@ -73,7 +73,7 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void relational() throws Exception {
+  void relational() {
     testBinary(Kind.LESS_THAN_OR_EQUAL_TO, "<=", PHPLexicalGrammar.RELATIONAL_EXPR);
     testBinary(Kind.GREATER_THAN_OR_EQUAL_TO, ">=", PHPLexicalGrammar.RELATIONAL_EXPR);
     testBinary(Kind.LESS_THAN, "<", PHPLexicalGrammar.RELATIONAL_EXPR);
@@ -81,36 +81,36 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void shift() throws Exception {
+  void shift() {
     testBinary(Kind.LEFT_SHIFT, "<<", PHPLexicalGrammar.SHIFT_EXPR);
     testBinary(Kind.RIGHT_SHIFT, ">>", PHPLexicalGrammar.SHIFT_EXPR);
   }
 
   @Test
-  public void additive() throws Exception {
+  void additive() {
     testBinary(Kind.PLUS, "+", PHPLexicalGrammar.ADDITIVE_EXPR);
     testBinary(Kind.MINUS, "-", PHPLexicalGrammar.ADDITIVE_EXPR);
   }
 
   @Test
-  public void multiplicative() throws Exception {
+  void multiplicative() {
     testBinary(Kind.MULTIPLY, "*", PHPLexicalGrammar.MULTIPLICATIVE_EXPR);
     testBinary(Kind.DIVIDE, "/", PHPLexicalGrammar.MULTIPLICATIVE_EXPR);
     testBinary(Kind.REMAINDER, "%", PHPLexicalGrammar.MULTIPLICATIVE_EXPR);
   }
 
   @Test
-  public void power() throws Exception {
+  void power() {
     testBinary(Kind.POWER, "**", PHPLexicalGrammar.POWER_EXPR);
   }
 
   @Test
-  public void concatenation() throws Exception {
+  void concatenation() {
     testBinary(Kind.CONCATENATION, ".", PHPLexicalGrammar.ADDITIVE_EXPR);
   }
 
   @Test
-  public void instanceof_expr() throws Exception {
+  void instanceofExpr() {
     testBinary(Kind.INSTANCE_OF, "instanceof", PHPLexicalGrammar.POSTFIX_EXPR);
   }
 
@@ -137,7 +137,7 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_associativity_or() throws Exception {
+  void testAssociativityOr() {
     Kind conditionalOr = Kind.CONDITIONAL_OR;
     BinaryExpressionTree tree = parse("$a || $b || $c", conditionalOr);
 
@@ -149,7 +149,7 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_associativity_null_coalescing() throws Exception {
+  void testAssociativityNullCoalescing() {
     Kind coalescingExpr = Kind.NULL_COALESCING_EXPRESSION;
     BinaryExpressionTree tree = parse("$a ?? $b ?? $c", coalescingExpr);
 

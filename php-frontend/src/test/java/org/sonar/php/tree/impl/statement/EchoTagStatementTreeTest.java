@@ -20,7 +20,7 @@
 package org.sonar.php.tree.impl.statement;
 
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -37,10 +37,10 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class EchoTagStatementTreeTest extends PHPTreeModelTest {
+class EchoTagStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void start_without_echo_tag() {
+  void startWithoutEchoTag() {
     CompilationUnitTree tree = parse("<?php $a ?>", PHPLexicalGrammar.COMPILATION_UNIT);
     ScriptTree script = tree.script();
     List<StatementTree> statements = script.statements();
@@ -52,7 +52,7 @@ public class EchoTagStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void start_with_echo_tag() {
+  void startWithEchoTag() {
     CompilationUnitTree tree = parse("<?= $a ?>", PHPLexicalGrammar.COMPILATION_UNIT);
     ScriptTree script = tree.script();
     List<StatementTree> statements = script.statements();
@@ -66,7 +66,7 @@ public class EchoTagStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void start_with_echo_tag_with_several_arguments() {
+  void startWithEchoTagWithSeveralArguments() {
     CompilationUnitTree tree = parse("<?= $a, $b ?>", PHPLexicalGrammar.COMPILATION_UNIT);
     ScriptTree script = tree.script();
     List<StatementTree> statements = script.statements();
@@ -81,7 +81,7 @@ public class EchoTagStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void several_echo_tags() {
+  void severalEchoTags() {
     CompilationUnitTree tree = parse("<?php foo(); ?> 1 <?= $a ?> 2 <?= $b; ?> 3 <?= $c; bar(); ?> 4", PHPLexicalGrammar.COMPILATION_UNIT);
     ScriptTree script = tree.script();
     List<StatementTree> statements = script.statements();
@@ -118,7 +118,7 @@ public class EchoTagStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void echo_tags_in_a_block() {
+  void echoTagsInABlock() {
     CompilationUnitTree tree = parse("<?php if (true) { ?> 1 <?= $a ?> 2 <?php }", PHPLexicalGrammar.COMPILATION_UNIT);
     ScriptTree script = tree.script();
     List<StatementTree> statements = script.statements();
@@ -140,11 +140,11 @@ public class EchoTagStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void empty_echo_tag() {
+  void emptyEchoTag() {
     CompilationUnitTree tree = parse("<?=", PHPLexicalGrammar.COMPILATION_UNIT);
     ScriptTree script = tree.script();
     List<StatementTree> statements = script.statements();
-    assertThat(statements).hasSize(0);
+    assertThat(statements).isEmpty();
   }
 
 }

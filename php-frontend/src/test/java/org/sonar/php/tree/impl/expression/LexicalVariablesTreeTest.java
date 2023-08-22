@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LexicalVariablesTreeTest extends PHPTreeModelTest {
+class LexicalVariablesTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void single() throws Exception {
+  void single() {
     LexicalVariablesTree tree = parse("use ($a)", Kind.LEXICAL_VARIABLES);
 
     assertThat(tree.is(Kind.LEXICAL_VARIABLES)).isTrue();
@@ -41,7 +41,7 @@ public class LexicalVariablesTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void multiple() throws Exception {
+  void multiple() {
     LexicalVariablesTree tree = parse("use ($a, $b)", Kind.LEXICAL_VARIABLES);
 
     assertThat(tree.is(Kind.LEXICAL_VARIABLES)).isTrue();

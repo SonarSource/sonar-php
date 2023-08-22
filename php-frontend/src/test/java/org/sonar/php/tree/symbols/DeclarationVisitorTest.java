@@ -25,17 +25,17 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.tree.symbols.DeclarationVisitor.pathOf;
 
-public class DeclarationVisitorTest {
+class DeclarationVisitorTest {
 
   @Test
-  public void pathOfShouldNotRelayOnPhysicalFile() throws IOException, URISyntaxException {
+  void pathOfShouldNotRelayOnPhysicalFile() throws IOException, URISyntaxException {
     PhpFile phpFile = Mockito.mock(PhpFile.class);
     URI uri = Files.createTempFile("foo", ".php").toUri();
     Mockito.when(phpFile.uri()).thenReturn(uri);

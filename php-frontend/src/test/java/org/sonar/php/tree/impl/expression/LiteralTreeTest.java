@@ -19,48 +19,48 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LiteralTreeTest extends PHPTreeModelTest {
+class LiteralTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void null_literal() throws Exception {
+  void nullLiteral() {
     assertLiteral("NULL", Kind.NULL_LITERAL);
   }
 
   @Test
-  public void nowdoc_literal() throws Exception {
+  void nowdocLiteral() {
     assertLiteral("<<<'EOD'\n content \nEOD", Kind.NOWDOC_LITERAL);
     assertLiteral("<<< 'EOD'\n content \nEOD", Kind.NOWDOC_LITERAL);
     assertLiteral("<<<'EOD'\nEOD", Kind.NOWDOC_LITERAL);
   }
 
   @Test
-  public void numeric_literal() throws Exception {
+  void numericLiteral() {
     assertLiteral("0", Kind.NUMERIC_LITERAL);
   }
 
   @Test
-  public void regular_string_literal() throws Exception {
+  void regularStringLiteral() {
     assertLiteral("\"content\"", Kind.REGULAR_STRING_LITERAL);
   }
 
   @Test
-  public void boolean_literal() throws Exception {
+  void booleanLiteral() {
     assertLiteral("true", Kind.BOOLEAN_LITERAL);
   }
 
   @Test
-  public void magic_constant_literal() throws Exception {
+  void magicConstantLiteral() {
     assertLiteral("__FILE__", Kind.MAGIC_CONSTANT);
   }
 
-  private void assertLiteral(String toParse, Kind expectedKind) throws Exception {
+  private void assertLiteral(String toParse, Kind expectedKind) {
     LiteralTreeImpl tree = parse(toParse, PHPLexicalGrammar.COMMON_SCALAR);
 
     assertThat(tree.is(expectedKind)).isTrue();

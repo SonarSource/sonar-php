@@ -19,15 +19,15 @@
  */
 package org.sonar.php.ini;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.sonar.php.ini.BasePhpIniIssue.newIssue;
 
-public class BasePhpIniIssueTest {
+class BasePhpIniIssueTest {
 
   @Test
-  public void new_issue() throws Exception {
+  void createNewIssue() {
     PhpIniIssue issue = newIssue("message1").line(42);
     assertThat(issue.message()).isEqualTo("message1");
     assertThat(issue.line()).isEqualTo(42);

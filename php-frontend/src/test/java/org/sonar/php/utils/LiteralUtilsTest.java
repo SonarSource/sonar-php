@@ -19,21 +19,21 @@
  */
 package org.sonar.php.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LiteralUtilsTest {
+class LiteralUtilsTest {
 
   @Test
-  public void decimal_values_test() {
+  void decimalValuesTest() {
     assertThat(LiteralUtils.longLiteralValue("100")).isEqualTo(100);
     assertThat(LiteralUtils.longLiteralValue("100_000")).isEqualTo(100000);
     assertThat(LiteralUtils.longLiteralValue("9223372036854775807")).isEqualTo(9223372036854775807L);
   }
 
   @Test
-  public void binary_values_test() {
+  void binaryValuesTest() {
     assertThat(LiteralUtils.longLiteralValue("0b101")).isEqualTo(5);
     assertThat(LiteralUtils.longLiteralValue("0b10_1")).isEqualTo(5);
 
@@ -42,7 +42,7 @@ public class LiteralUtilsTest {
   }
 
   @Test
-  public void hexadecimal_values_test() {
+  void hexadecimalValuesTest() {
     assertThat(LiteralUtils.longLiteralValue("0x1F")).isEqualTo(31);
     assertThat(LiteralUtils.longLiteralValue("0x1_F")).isEqualTo(31);
 

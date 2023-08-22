@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AssignmentExpressionTreeTest extends PHPTreeModelTest {
+class AssignmentExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     AssignmentExpressionTree tree = parse("$a %= $b", PHPLexicalGrammar.ASSIGNMENT_EXPRESSION);
     assertThat(tree.is(Kind.REMAINDER_ASSIGNMENT)).isTrue();
     assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
@@ -41,7 +41,7 @@ public class AssignmentExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_assignment_by_reference() throws Exception {
+  void testAssignmentByReference() {
     AssignmentExpressionTree tree = parse("$a =& $b", PHPLexicalGrammar.ASSIGNMENT_BY_REFERENCE);
     assertThat(tree.is(Kind.ASSIGNMENT_BY_REFERENCE)).isTrue();
     assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
@@ -52,7 +52,7 @@ public class AssignmentExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_null_coalescing_assignment() {
+  void testNullCoalescingAssignment() {
     AssignmentExpressionTree tree = parse("$a ??= $b", PHPLexicalGrammar.ASSIGNMENT_EXPRESSION);
     assertThat(tree.is(Kind.NULL_COALESCING_ASSIGNMENT)).isTrue();
     assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();

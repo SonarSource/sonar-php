@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ParameterListTreeTest extends PHPTreeModelTest {
+class ParameterListTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void empty() throws Exception {
+  void empty() {
     ParameterListTree tree = parameterList("()");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.parameters()).isEmpty();
@@ -38,14 +38,14 @@ public class ParameterListTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void not_empty() throws Exception {
+  void notEmpty() {
     assertThat(parameterList("($p1)").parameters()).hasSize(1);
     assertThat(parameterList("($p1, $p2)").parameters()).hasSize(2);
     assertThat(parameterList("($p1, $p2,)").parameters()).hasSize(2);
   }
 
   @Test
-  public void with_attributes() throws Exception {
+  void withAttributes() {
     assertThat(parameterList("(#[A1(5)] $p1, #[A1(6)] $p2)").parameters()).hasSize(2);
   }
 

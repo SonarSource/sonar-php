@@ -19,27 +19,27 @@
  */
 package org.sonar.php.metrics;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ParsingTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CounterVisitorTest extends ParsingTestUtils {
+class CounterVisitorTest extends ParsingTestUtils {
 
   @Test
-  public void test_class() throws Exception {
+  void testClass() {
     CounterVisitor counterVisitor = new CounterVisitor(parse("metrics/classes.php"));
     assertThat(counterVisitor.getClassNumber()).isEqualTo(4);
   }
 
   @Test
-  public void test_statements() throws Exception {
+  void testStatements() {
     CounterVisitor counterVisitor = new CounterVisitor(parse("metrics/statements.php"));
     assertThat(counterVisitor.getStatementNumber()).isEqualTo(29);
   }
 
   @Test
-  public void test_functions() throws Exception {
+  void testFunctions() {
     CounterVisitor counterVisitor = new CounterVisitor(parse("metrics/functions.php"));
     assertThat(counterVisitor.getFunctionNumber()).isEqualTo(4);
   }

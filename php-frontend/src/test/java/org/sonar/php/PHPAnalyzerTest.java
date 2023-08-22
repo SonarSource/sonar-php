@@ -21,27 +21,25 @@ package org.sonar.php;
 
 import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.io.TempDir;
+import org.slf4j.event.Level;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
-import org.slf4j.event.Level;
+import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.symbols.ProjectSymbolData;
-import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -65,29 +63,26 @@ class PHPAnalyzerTest {
   private final SensorContextTester sensorContext = SensorContextTester.create(Paths.get("."));
 
   @RegisterExtension
-  private final LogTesterJUnit5 logTester = new LogTesterJUnit5();
-  private final TemporaryFolder tmpFolder = new TemporaryFolder();
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
-  @BeforeEach
-  void before() throws IOException {
-    tmpFolder.create();
-  }
+  @TempDir
+  public File tempFolder;
 
   @Test
-  void parsingFailureShouldRaiseAnException() throws IOException {
+  void parsingFailureShouldRaiseAnException() {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = createAnalyzer(check);
-    InputFile file = FileTestUtils.getInputFile(tmpFolder.newFile(), "<?php if(condition): ?>");
+    InputFile file = FileTestUtils.getInputFile(new File(tempFolder, "file"), "<?php if(condition): ?>");
     Assertions.assertThrows(RecognitionException.class, () -> {
       analyzer.nextFile(file);
     });
   }
 
   @Test
-  void testAnalyze() throws Exception {
+  void testAnalyze() {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = createAnalyzer(check);
-    InputFile file = FileTestUtils.getInputFile(tmpFolder.newFile(), "<?php $a = 1;");
+    InputFile file = FileTestUtils.getInputFile(new File(tempFolder, "file"), "<?php $a = 1;");
     analyzer.nextFile(file);
     List<PhpIssue> issues = analyzer.analyze();
     assertThat(issues).hasSize(1);
@@ -106,12 +101,12 @@ class PHPAnalyzerTest {
   }
 
   @Test
-  void testAnalyseWithStackOverflow() throws Exception {
+  void testAnalyseWithStackOverflow() {
     PHPCheck check = spy(PHPCheck.class);
     when(check.analyze(any(CheckContext.class))).thenThrow(StackOverflowError.class);
 
     PHPAnalyzer analyzer = createAnalyzer(check);
-    InputFile file = FileTestUtils.getInputFile(tmpFolder.newFile(), "<?php $a = 1;");
+    InputFile file = FileTestUtils.getInputFile(new File(tempFolder, "file"), "<?php $a = 1;");
     analyzer.nextFile(file);
 
     assertThatExceptionOfType(StackOverflowError.class).isThrownBy(analyzer::analyze);
@@ -120,11 +115,11 @@ class PHPAnalyzerTest {
   }
 
   @Test
-  void testAnalyzeTestFile() throws Exception {
+  void testAnalyzeTestFile() {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();
     PHPAnalyzer analyzer = createAnalyzer(Arrays.asList(check, testCheck), Collections.singletonList(testCheck));
-    InputFile file = FileTestUtils.getInputFile(tmpFolder.newFile(), "<?php $a = 1;");
+    InputFile file = FileTestUtils.getInputFile(new File(tempFolder, "file"), "<?php $a = 1;");
     analyzer.nextFile(file);
     List<PhpIssue> issues = analyzer.analyze();
     assertThat(issues).hasSize(2);
@@ -137,7 +132,7 @@ class PHPAnalyzerTest {
   }
 
   @Test
-  void terminateCallForwardedToChecks() throws Exception {
+  void terminateCallForwardedToChecks() {
     PHPCheck check1 = spy(new DummyCheck());
     PHPCheck check2 = spy(new DummyCheck());
     PHPAnalyzer analyzer = createAnalyzer(check1, check2);
@@ -148,7 +143,7 @@ class PHPAnalyzerTest {
   }
 
   @Test
-  void logErrorAndContinueWhenExceptionInTerminate() throws Exception {
+  void logErrorAndContinueWhenExceptionInTerminate() {
     PHPCheck check1 = spy(new DummyCheck());
     doThrow(new RuntimeException("myError")).when(check1).terminate();
     PHPCheck check2 = spy(new DummyCheck());
@@ -161,7 +156,7 @@ class PHPAnalyzerTest {
   }
 
   @Test
-  void testSuppressWarningFilterForMainAndTestFile() throws IOException {
+  void testSuppressWarningFilterForMainAndTestFile() {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
@@ -185,16 +180,16 @@ class PHPAnalyzerTest {
     assertThat(suppressWarningFilter.accept(fileUri, "S11", 2)).isTrue();
   }
 
-  private PHPAnalyzer createAnalyzer(PHPCheck... checks) throws IOException {
+  private PHPAnalyzer createAnalyzer(PHPCheck... checks) {
     return createAnalyzer(Arrays.asList(checks), Collections.emptyList());
   }
 
-  private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks) throws IOException {
+  private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks) {
     return createAnalyzer(checks, testFileChecks, new SuppressWarningFilter());
   }
 
-  private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks, SuppressWarningFilter suppressWarningFilter) throws IOException {
-    return new PHPAnalyzer(checks, testFileChecks, tmpFolder.newFolder(), new ProjectSymbolData(),
+  private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks, SuppressWarningFilter suppressWarningFilter) {
+    return new PHPAnalyzer(checks, testFileChecks, tempFolder, new ProjectSymbolData(),
       new DurationStatistics(sensorContext.config()), null, suppressWarningFilter);
   }
 }

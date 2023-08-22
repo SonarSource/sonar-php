@@ -19,16 +19,16 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class UseStatementTest {
+class UseStatementTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.USE_STATEMENT)
       .matches("use My\\Full\\Name as alias;")
       .matches("use const My\\Full\\Name as alias;")
@@ -39,7 +39,7 @@ public class UseStatementTest {
   }
 
   @Test
-  public void group_use() {
+  void groupUse() {
     assertThat(Kind.GROUP_USE_STATEMENT)
       .matches("use My\\Project\\{Class1, Class2};")
       .matches("use const My\\Full\\{Name1 as A, Name2 as B};")

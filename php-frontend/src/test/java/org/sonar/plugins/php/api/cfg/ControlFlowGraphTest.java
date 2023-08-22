@@ -76,7 +76,7 @@ import static org.mockito.Mockito.when;
  * <p>
  * Also check {@link ExpectedCfgStructure}
  */
-public class ControlFlowGraphTest extends PHPTreeModelTest {
+class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
@@ -202,7 +202,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  void infiniteFor() throws Exception {
+  void infiniteFor() {
     ControlFlowGraph cfg = cfgForBlock("" +
       "for(;;) {" +
       " " +
@@ -1139,7 +1139,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
-  void switchWithCaseUsingSameBlockAsDefault() throws Exception {
+  void switchWithCaseUsingSameBlockAsDefault() {
     verifyBlockCfg("" +
       "before(succ = [case1]);" +
       "switch ($expr) {" +

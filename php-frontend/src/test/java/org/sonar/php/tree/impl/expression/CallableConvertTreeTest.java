@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CallableConvertTreeTest extends PHPTreeModelTest {
+class CallableConvertTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void simple_callable_convert() {
+  void simpleCallableConvert() {
     CallableConvertTreeImpl tree = parse("f(...)", PHPLexicalGrammar.EXPRESSION);
     assertThat(tree.is(Tree.Kind.CALLABLE_CONVERT)).isTrue();
     assertThat(tree.childrenIterator()).hasSize(4);

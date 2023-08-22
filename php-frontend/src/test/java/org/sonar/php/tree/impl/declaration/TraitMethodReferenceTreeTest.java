@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TraitMethodReferenceTreeTest extends PHPTreeModelTest {
+class TraitMethodReferenceTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void single_identifier() throws Exception {
+  void singleIdentifier() {
     TraitMethodReferenceTree tree = parse("method1", PHPLexicalGrammar.TRAIT_METHOD_REFERENCE);
     assertThat(tree.is(Kind.TRAIT_METHOD_REFERENCE)).isTrue();
     assertThat(tree.trait()).isNull();
@@ -38,7 +38,7 @@ public class TraitMethodReferenceTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void qualified() throws Exception {
+  void qualified() {
     TraitMethodReferenceTree tree = parse("namespace\\NS1\\NS2::method1", PHPLexicalGrammar.TRAIT_METHOD_REFERENCE);
     assertThat(tree.is(Kind.TRAIT_METHOD_REFERENCE)).isTrue();
     assertThat(tree.trait().is(Kind.NAMESPACE_NAME)).isTrue();

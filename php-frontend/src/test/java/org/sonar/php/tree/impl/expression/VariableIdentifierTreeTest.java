@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VariableIdentifierTreeTest extends PHPTreeModelTest {
+class VariableIdentifierTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     VariableIdentifierTree tree = parse("$a", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.VARIABLE_IDENTIFIER)).isTrue();

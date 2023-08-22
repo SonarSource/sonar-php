@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ListAssignmentExpressionTest {
+class ListAssignmentExpressionTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.LIST_EXPRESSION_ASSIGNMENT)
       .matches("list ($a) = array(1)")
       .matches("list($a, &$b) = $array")

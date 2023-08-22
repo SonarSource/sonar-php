@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class MemberConstDeclarationTest {
+class MemberConstDeclarationTest {
 
   @Test
-  public void member_const_declaration() {
+  void memberConstDeclaration() {
     assertThat(PHPLexicalGrammar.MEMBER_CONST_DECLARATION)
       .matches("a")
       .matches("a = $a");

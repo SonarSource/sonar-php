@@ -61,7 +61,7 @@ class PhpReadCacheImplTest {
   }
 
   @Test
-  void shouldReturnNullWhenDoesntContainsKey() throws IOException {
+  void shouldReturnNullWhenDoesntContainsKey() {
     ReadCache readCache = mock(ReadCache.class);
     when(readCache.contains("key")).thenReturn(false);
 

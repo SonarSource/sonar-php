@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class InternalFunctionTest {
+class InternalFunctionTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.INTERNAL_FUNCTION)
       .matches("isset ($a, $b)")
       .matches("isset ($a, $b,)")

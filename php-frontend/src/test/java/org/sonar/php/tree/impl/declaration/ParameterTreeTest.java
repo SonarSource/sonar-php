@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ParameterTreeTest extends PHPTreeModelTest {
+class ParameterTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void only_identifier() throws Exception {
+  void onlyIdentifier() {
     ParameterTree tree = parse("$param1", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.is(Kind.PARAMETER)).isTrue();
     assertThat(tree.type()).isNull();
@@ -45,7 +45,7 @@ public class ParameterTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void full() throws Exception {
+  void full() {
     ParameterTree tree = parse("Class1&...$param1=$value1", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.type().typeName().is(Kind.NAMESPACE_NAME)).isTrue();
     assertThat(tree.referenceToken().text()).isEqualTo("&");
@@ -56,13 +56,13 @@ public class ParameterTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_attributes() throws Exception {
+  void withAttributes() {
     ParameterTree tree = parse("#[A1(5)] #[A2(5)] int $a", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.attributeGroups()).hasSize(2);
   }
 
   @Test
-  public void init_property() throws Exception {
+  void initProperty() {
     ParameterTree tree = parse("private int $a", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.isPropertyPromotion()).isTrue();
     assertThat(tree.visibility().text()).isEqualTo("private");
@@ -72,7 +72,7 @@ public class ParameterTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void init_readonly_property() throws Exception {
+  void initReadonlyProperty() {
     ParameterTree tree = parse("private readonly int $a", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.isPropertyPromotion()).isTrue();
     assertThat(tree.visibility().text()).isEqualTo("private");

@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -28,10 +28,10 @@ import org.sonar.plugins.php.api.tree.expression.MatchDefaultClauseTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MatchClauseTreeTest extends PHPTreeModelTest {
+class MatchClauseTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void single_condition_clause() throws Exception {
+  void singleConditionClause() {
     MatchConditionClauseTree tree = parse("$a=>$b", PHPLexicalGrammar.MATCH_CLAUSE);
 
     assertThat(tree.is(Kind.MATCH_CONDITION_CLAUSE)).isTrue();
@@ -41,7 +41,7 @@ public class MatchClauseTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void multi_condition_clause() throws Exception {
+  void multiConditionClause() {
     MatchConditionClauseTree tree = parse("$a,$b,$c,=>4", PHPLexicalGrammar.MATCH_CLAUSE);
 
     assertThat(tree.is(Kind.MATCH_CONDITION_CLAUSE)).isTrue();
@@ -50,7 +50,7 @@ public class MatchClauseTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void default_clause() throws Exception {
+  void defaultClause() {
     MatchDefaultClauseTree tree = parse("default => false", PHPLexicalGrammar.MATCH_CLAUSE);
 
     assertThat(tree.is(Kind.MATCH_DEFAULT_CLAUSE)).isTrue();
@@ -61,7 +61,7 @@ public class MatchClauseTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void default_clause_with_trailing_comma() throws Exception {
+  void defaultClauseWithTrailingComma() {
     MatchDefaultClauseTree tree = parse("default, => 1", PHPLexicalGrammar.MATCH_CLAUSE);
 
     assertThat(tree.is(Kind.MATCH_DEFAULT_CLAUSE)).isTrue();

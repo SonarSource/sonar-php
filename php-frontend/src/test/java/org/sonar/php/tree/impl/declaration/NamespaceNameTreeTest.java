@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,17 +27,17 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NamespaceNameTreeTest extends PHPTreeModelTest {
+class NamespaceNameTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void simple_absolute_namespace() {
+  void simpleAbsoluteNamespace() {
     NamespaceNameTree tree = parse("\\a", PHPLexicalGrammar.NAMESPACE_NAME);
     assertThat(tree.namespaces()).isEmpty();
     assertThat(tree.name().text()).isEqualTo("a");
   }
 
   @Test
-  public void absolute_namespace() {
+  void absoluteNamespace() {
     NamespaceNameTree tree = parse("\\ns1\\ns2\\name", PHPLexicalGrammar.NAMESPACE_NAME);
 
     assertThat(tree.is(Kind.NAMESPACE_NAME)).isTrue();
@@ -48,7 +48,7 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void relative_namespace() {
+  void relativeNamespace() {
     NamespaceNameTree tree = parse("ns1\\ns2\\name", PHPLexicalGrammar.NAMESPACE_NAME);
 
     assertThat(tree.is(Kind.NAMESPACE_NAME)).isTrue();
@@ -59,14 +59,14 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void relative_namespace_with_keyword() {
+  void relativeNamespaceWithKeyword() {
     NamespaceNameTree tree = parse("foo\\while\\if", PHPLexicalGrammar.NAMESPACE_NAME);
     assertThat(tree.namespaces()).hasSize(2);
     assertThat(tree.name().text()).isEqualTo("if");
   }
 
   @Test
-  public void absolute_namespace_with_keyword() {
+  void absoluteNamespaceWithKeyword() {
     NamespaceNameTree tree = parse("\\for\\while\\if", PHPLexicalGrammar.NAMESPACE_NAME);
     assertThat(tree.namespaces()).hasSize(2);
     assertThat(tree.name().text()).isEqualTo("if");

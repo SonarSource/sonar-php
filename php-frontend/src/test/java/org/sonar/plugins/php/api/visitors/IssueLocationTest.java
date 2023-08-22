@@ -20,20 +20,20 @@
 package org.sonar.plugins.php.api.visitors;
 
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-public class IssueLocationTest {
+class IssueLocationTest {
 
   private static final Tree TOKEN1 = createToken(5, 10, "token1");
   private static final Tree TOKEN2 = createToken(12, 0, "token2");
 
   @Test
-  public void test() throws Exception {
+  void test() {
     IssueLocation issueLocation = new IssueLocation(TOKEN1, "Test message");
 
     assertThat(issueLocation.message()).isEqualTo("Test message");
@@ -45,7 +45,7 @@ public class IssueLocationTest {
   }
 
   @Test
-  public void without_message() throws Exception {
+  void withoutMessage() {
     IssueLocation issueLocation = new IssueLocation(TOKEN1, null);
 
     assertThat(issueLocation.message()).isNull();
@@ -53,7 +53,7 @@ public class IssueLocationTest {
   }
 
   @Test
-  public void test_two_trees_constructor() throws Exception {
+  void testTwoTreesConstructor() {
     IssueLocation issueLocation = new IssueLocation(TOKEN1, TOKEN2, "Test message");
 
     assertThat(issueLocation.message()).isEqualTo("Test message");
@@ -64,7 +64,7 @@ public class IssueLocationTest {
   }
 
   @Test
-  public void location_in_file() {
+  void locationInFile() {
     LocationInFileImpl locationInFile = new LocationInFileImpl("dir1/file1.php", 1, 2, 3, 4);
     IssueLocation issueLocation = new IssueLocation(locationInFile, "Test message");
     assertThat(issueLocation.message()).isEqualTo("Test message");

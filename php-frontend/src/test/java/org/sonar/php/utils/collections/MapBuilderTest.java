@@ -21,22 +21,22 @@ package org.sonar.php.utils.collections;
 
 import java.util.Map;
 import java.util.Objects;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class MapBuilderTest {
+class MapBuilderTest {
 
   @Test
-  public void test_returns_unmodifiable_map() {
+  void testReturnsUnmodifiableMap() {
     MapBuilder<String, String> builder = MapBuilder.builder();
     Map<String, String> map = builder.build();
-    assertThrows(UnsupportedOperationException.class, () -> map.put("key", "value"));
+    assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> map.put("key", "value"));
   }
 
   @Test
-  public void test_construct_strings_map() {
+  void testConstructStringsMap() {
     Map<String, String> map = MapBuilder.<String, String>builder()
       .put("key1", "value1")
       .put("key2", "value2")
@@ -49,7 +49,7 @@ public class MapBuilderTest {
   }
 
   @Test
-  public void test_construct_any_map() {
+  void testConstructAnyMap() {
     Map<Key, Value> map = MapBuilder.<Key, Value>builder()
       .put(new Key(1), new Value("value1"))
       .put(new Key(2), new Value("value2"))

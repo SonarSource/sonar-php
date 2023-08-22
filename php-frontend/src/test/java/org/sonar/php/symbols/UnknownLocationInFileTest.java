@@ -19,15 +19,15 @@
  */
 package org.sonar.php.symbols;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UnknownLocationInFileTest {
+class UnknownLocationInFileTest {
 
   @Test
-  public void unknown() {
+  void unknown() {
     LocationInFile loc = UnknownLocationInFile.UNKNOWN_LOCATION;
     assertThat(loc.filePath()).isEqualTo("[unknown file]");
     assertThat(loc.startLine()).isEqualTo(1);

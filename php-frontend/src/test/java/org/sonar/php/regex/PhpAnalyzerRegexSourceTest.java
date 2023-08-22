@@ -20,7 +20,7 @@
 package org.sonar.php.regex;
 
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 import org.sonarsource.analyzer.commons.regex.RegexParser;
@@ -35,17 +35,16 @@ import org.sonarsource.analyzer.commons.regex.ast.SequenceTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
 import static org.sonar.php.regex.RegexParserTestUtils.assertKind;
 import static org.sonar.php.regex.RegexParserTestUtils.assertSuccessfulParse;
 import static org.sonar.php.regex.RegexParserTestUtils.makeSource;
 import static org.sonar.php.regex.RegexParserTestUtils.parseRegex;
 
-public class PhpAnalyzerRegexSourceTest {
+class PhpAnalyzerRegexSourceTest {
 
   @Test
   // TODO: Extend test with exact syntax error location check
-  public void invalid_regex() {
+  void invalidRegex() {
     RegexSource source = makeSource("'/+/'");
     RegexParseResult result = new RegexParser(source, new FlagSet()).parse();
 
@@ -53,21 +52,21 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   @Test
-  public void test_to_few_delimiters() {
+  void testToFewDelimiters() {
     assertThatThrownBy(() -> makeSource("'/'"))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Regular expression does not contain delimiters");
   }
 
   @Test
-  public void test_non_string_literal() {
+  void testNonStringLiteral() {
     assertThatThrownBy(() -> makeSource("1"))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessage("Only string literals allowed");
   }
 
   @Test
-  public void test_string_literal() {
+  void testStringLiteral() {
     RegexTree regex = assertSuccessfulParse("'/a\\nb/'"); // <?php foo('/a\nb/');
     assertKind(RegexTree.Kind.SEQUENCE, regex);
     List<RegexTree> items = ((SequenceTree) regex).getItems();
@@ -83,7 +82,7 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   @Test
-  public void multiline_string_literal() {
+  void multilineStringLiteral() {
     RegexTree regex = assertSuccessfulParse("'/a\nbc\r\nde/'");
     assertKind(RegexTree.Kind.SEQUENCE, regex);
     List<RegexTree> items = ((SequenceTree) regex).getItems();
@@ -95,7 +94,7 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   @Test
-  public void single_quote_vs_double_quote() {
+  void singleQuoteVsDoubleQuote() {
     RegexParseResult singleQuoted = new RegexParser(makeSource("'/\\u{0041}/'"), new FlagSet()).parse();
     assertThat(singleQuoted.getSyntaxErrors()).extracting(SyntaxError::getMessage).containsExactly("Expected hexadecimal digit, but found '{'");
 
@@ -106,7 +105,7 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   @Test
-  public void test_string_literal_with_bracket_delimiters() {
+  void testStringLiteralWithBracketDelimiters() {
     RegexTree regex = assertSuccessfulParse("'[a]'");
     assertKind(RegexTree.Kind.CHARACTER, regex);
     assertCharacter('a', regex);
@@ -114,7 +113,7 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   @Test
-  public void php_literal_escape_sequence() {
+  void phpLiteralEscapeSequence() {
     RegexTree regex = assertSuccessfulParse("'/a\\\\\\\\b/'");
     assertKind(RegexTree.Kind.SEQUENCE, regex);
     List<RegexTree> items = ((SequenceTree) regex).getItems();
@@ -125,7 +124,7 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   @Test
-  public void test_leading_whitespace_before_delimiter() {
+  void testLeadingWhitespaceBeforeDelimiter() {
     assertCharacterLocation(assertSuccessfulParse("'    /a/'"), 'a', 3, 6, 7);
     assertCharacterLocation(assertSuccessfulParse("'\n /a/'"), 'a', 4, 2, 3);
     assertCharacterLocation(assertSuccessfulParse("'\r\n\n\r/a/'"), 'a', 3 + 3, 1, 2);
@@ -133,7 +132,7 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   @Test
-  public void test_recursive_pattern() {
+  void testRecursivePattern() {
     RegexTree regex = assertSuccessfulParse("'/(?R)/'");
     assertKind(RegexTree.Kind.NON_CAPTURING_GROUP, regex);
     assertThat(((NonCapturingGroupTree) regex).getElement()).isNull();
@@ -144,19 +143,19 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   @Test
-  public void test_conditionalSubpatterns_with_to_many_alternatives() {
+  void testConditionalSubpatternsWithToManyAlternatives() {
     RegexParseResult regex = parseRegex("'/(?(1)ab|cd|ef)/'");
     assertThat(regex.getSyntaxErrors()).isNotEmpty();
   }
 
   @Test
-  public void test_conditionalSubpatterns_with_invalid_condition() {
+  void testConditionalSubpatternsWithInvalidCondition() {
     RegexParseResult regex = parseRegex("'/(?(1|2)ab|cd|ef)/'");
     assertThat(regex.getSyntaxErrors()).isNotEmpty();
   }
 
   @Test
-  public void test_location_on_regex_opener() {
+  void testLocationOnRegexOpener() {
     RegexParseResult regex = parseRegex("'/(?(1|2)ab|cd|ef)/'");
     RegexSyntaxElement openingQuote = regex.openingQuote();
     LocationInFile locationInFile = ((PhpAnalyzerRegexSource) openingQuote.getSource()).locationInFileFor(openingQuote.getRange());
@@ -171,7 +170,7 @@ public class PhpAnalyzerRegexSourceTest {
 
   private static void assertCharacter(char expected, RegexTree tree) {
     assertKind(RegexTree.Kind.CHARACTER, tree);
-    assertEquals(expected, ((CharacterTree) tree).codePointOrUnit());
+    assertThat(((CharacterTree) tree).codePointOrUnit()).isEqualTo(expected);
   }
 
   private static void assertLocation(int line, int startLineOffset, int endLineOffset, RegexTree tree) {
@@ -180,10 +179,11 @@ public class PhpAnalyzerRegexSourceTest {
   }
 
   private static void assertLocation(int line, int startLineOffset, int endLineOffset, LocationInFile location) {
-    assertEquals(String.format("Expected line to be '%d' but got '%d'", line, location.startLine()), line, location.startLine());
-    assertEquals(String.format("Expected line to be '%d' but got '%d'", line, location.endLine()), line, location.endLine());
-    assertEquals(String.format("Expected start character to be '%d' but got '%d'", startLineOffset, location.startLineOffset()), startLineOffset, location.startLineOffset());
-    assertEquals(String.format("Expected end character to be '%d' but got '%d'", endLineOffset, location.endLineOffset()), endLineOffset, location.endLineOffset());
+    assertThat(location.startLine()).withFailMessage(String.format("Expected line to be '%d' but got '%d'", line, location.startLine())).isEqualTo(line);
+    assertThat(location.endLine()).withFailMessage(String.format("Expected line to be '%d' but got '%d'", line, location.endLine())).isEqualTo(line);
+    assertThat(location.startLineOffset()).withFailMessage(String.format("Expected start character to be '%d' but got '%d'", startLineOffset, location.startLineOffset()))
+      .isEqualTo(startLineOffset);
+    assertThat(location.endLineOffset()).withFailMessage(String.format("Expected end character to be '%d' but got '%d'", endLineOffset, location.endLineOffset()))
+      .isEqualTo(endLineOffset);
   }
-
 }

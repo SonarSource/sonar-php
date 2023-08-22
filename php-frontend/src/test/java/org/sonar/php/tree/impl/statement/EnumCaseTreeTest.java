@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EnumCaseTreeTest extends PHPTreeModelTest {
+class EnumCaseTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void simple_case() {
+  void simpleCase() {
     EnumCaseTreeImpl tree = parse("case A;", PHPLexicalGrammar.ENUM_CASE);
     assertThat(tree.is(Tree.Kind.ENUM_CASE)).isTrue();
     assertThat(tree.childrenIterator()).hasSize(5);
@@ -41,7 +41,7 @@ public class EnumCaseTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void enum_case_can_have_attributes() {
+  void enumCaseCanHaveAttributes() {
     EnumCaseTreeImpl tree = parse("#[A1(1)] case A;", PHPLexicalGrammar.ENUM_CASE);
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
@@ -49,7 +49,7 @@ public class EnumCaseTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void enum_case_with_value() {
+  void enumCaseWithValue() {
     EnumCaseTreeImpl tree = parse("case A = 'A';", PHPLexicalGrammar.ENUM_CASE);
     assertThat(tree.equalToken()).hasToString("=");
     assertThat(tree.value().is(Tree.Kind.REGULAR_STRING_LITERAL)).isTrue();

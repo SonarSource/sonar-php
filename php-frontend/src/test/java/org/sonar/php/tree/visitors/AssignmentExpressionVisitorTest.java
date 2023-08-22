@@ -20,7 +20,7 @@
 package org.sonar.php.tree.visitors;
 
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.tree.symbols.SymbolImpl;
@@ -34,10 +34,10 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AssignmentExpressionVisitorTest {
+class AssignmentExpressionVisitorTest {
 
   @Test
-  public void getAssignmentValue() {
+  void getAssignmentValue() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php function foo() { $a = 1; }");
 
     assertThat(uniqueAssignedValue).isPresent();
@@ -47,7 +47,7 @@ public class AssignmentExpressionVisitorTest {
   }
 
   @Test
-  public void getAssignmentValue_global() {
+  void getAssignmentValueGlobal() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;");
 
     assertThat(uniqueAssignedValue).isPresent();
@@ -57,14 +57,14 @@ public class AssignmentExpressionVisitorTest {
   }
 
   @Test
-  public void getAssignmentValue_multiple() {
+  void getAssignmentValueMultiple() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;\n$a = 2;");
 
     assertThat(uniqueAssignedValue).isNotPresent();
   }
 
   @Test
-  public void getAssignmentValue_list() {
+  void getAssignmentValueList() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b) = [1, 2];");
 
     assertThat(uniqueAssignedValue).isPresent();
@@ -74,14 +74,14 @@ public class AssignmentExpressionVisitorTest {
   }
 
   @Test
-  public void getAssignmentValue_list_unknown_values() {
+  void getAssignmentValueListUnknownValues() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1; list($a, $b) = getValues();");
 
     assertThat(uniqueAssignedValue).isNotPresent();
   }
 
   @Test
-  public void getAssignmentValue_list_skipped_element() {
+  void getAssignmentValueListSkippedElement() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$b").from("<?php list($a, , $b) = [1, 2, 3];");
 
     assertThat(uniqueAssignedValue).isPresent();
@@ -91,14 +91,14 @@ public class AssignmentExpressionVisitorTest {
   }
 
   @Test
-  public void getAssignmentValue_list_var_keys_not_supported_yet() {
+  void getAssignmentValueListVarKeysNotSupportedYet() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list(getAKey() => $a) = ['a'];");
 
     assertThat(uniqueAssignedValue).isNotPresent();
   }
 
   @Test
-  public void getAssignmentValue_list_value_keys_not_supported_yet() {
+  void getAssignmentValueListValueKeysNotSupportedYet() {
     Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b) = [getAKey() => 'a', getBKey() => 'b'];");
 
     assertThat(uniqueAssignedValue).isNotPresent();

@@ -21,7 +21,7 @@ package org.sonar.php.cache;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.symbols.FunctionSymbolData;
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-public class CacheTest {
+class CacheTest {
 
   private static final InputFile DEFAULT_INPUT_FILE = inputFile("default");
   private static final String CACHE_KEY_DATA = "php.projectSymbolData.data:" + DEFAULT_INPUT_FILE.key();
@@ -50,7 +50,7 @@ public class CacheTest {
   private final PhpReadCache readCache = mock(PhpReadCache.class);
 
   @Test
-  public void shouldWriteToCacheOnlyIfItsEnabled() {
+  void shouldWriteToCacheOnlyIfItsEnabled() {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
@@ -63,7 +63,7 @@ public class CacheTest {
   }
 
   @Test
-  public void shouldNotWriteToCacheIfItsDisabled() {
+  void shouldNotWriteToCacheIfItsDisabled() {
     CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = emptySymbolTable();
@@ -74,7 +74,7 @@ public class CacheTest {
   }
 
   @Test
-  public void shouldReadFromCache() {
+  void shouldReadFromCache() {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
@@ -85,7 +85,7 @@ public class CacheTest {
   }
 
   @Test
-  public void shouldReturnNullWhenDataCacheEntryDoesNotExist() {
+  void shouldReturnNullWhenDataCacheEntryDoesNotExist() {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
 
@@ -102,7 +102,7 @@ public class CacheTest {
   }
 
   @Test
-  public void shouldReturnNullWhenStringTableCacheEntryDoesNotExist() {
+  void shouldReturnNullWhenStringTableCacheEntryDoesNotExist() {
     CacheContext context = new CacheContextImpl(true, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
 
@@ -119,7 +119,7 @@ public class CacheTest {
   }
 
   @Test
-  public void shouldReturnNullWhenCacheDisabled() {
+  void shouldReturnNullWhenCacheDisabled() {
     CacheContext context = new CacheContextImpl(false, writeCache, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     SymbolTableImpl data = exampleSymbolTable();
@@ -131,7 +131,7 @@ public class CacheTest {
   }
 
   @Test
-  public void readFileContentHashWhenCacheIsEnabled() {
+  void readFileContentHashWhenCacheIsEnabled() {
     CacheContext context = new CacheContextImpl(true, null, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     byte[] hash = "hash".getBytes();
@@ -142,7 +142,7 @@ public class CacheTest {
   }
 
   @Test
-  public void readFileContentHashWhenCacheIsDisabled() {
+  void readFileContentHashWhenCacheIsDisabled() {
     CacheContext context = new CacheContextImpl(false, null, readCache, PLUGIN_VERSION);
     Cache cache = new Cache(context);
 
@@ -150,7 +150,7 @@ public class CacheTest {
   }
 
   @Test
-  public void writeFileContentHashWhenCacheIsEnabled() {
+  void writeFileContentHashWhenCacheIsEnabled() {
     CacheContext context = new CacheContextImpl(true, writeCache, null, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     byte[] hash = DEFAULT_INPUT_FILE.md5Hash().getBytes(StandardCharsets.UTF_8);
@@ -160,7 +160,7 @@ public class CacheTest {
   }
 
   @Test
-  public void writeFileContentHashWhenCacheIsDisabled() {
+  void writeFileContentHashWhenCacheIsDisabled() {
     CacheContext context = new CacheContextImpl(false, writeCache, null, PLUGIN_VERSION);
     Cache cache = new Cache(context);
     cache.writeFileContentHash(DEFAULT_INPUT_FILE, new byte[] {});
@@ -177,12 +177,11 @@ public class CacheTest {
   }
 
   private static SymbolTableImpl exampleSymbolTable() {
-    SymbolTableImpl data = SymbolTableImpl.create(List.of(), List.of(new FunctionSymbolData(
+    return SymbolTableImpl.create(List.of(), List.of(new FunctionSymbolData(
       new LocationInFileImpl("abc.php", 1, 1, 1, 10),
       QualifiedName.qualifiedName("funcName"),
       List.of(),
       new FunctionSymbolData.FunctionSymbolProperties(false, false))));
-    return data;
   }
 
   private SymbolTableImpl emptySymbolTable() {

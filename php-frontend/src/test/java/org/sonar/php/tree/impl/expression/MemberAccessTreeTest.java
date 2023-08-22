@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MemberAccessTreeTest extends PHPTreeModelTest {
+class MemberAccessTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void object_member_access() throws Exception {
+  void objectMemberAccess() {
     MemberAccessTree tree = parse("$obj->member", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     assertThat(tree.is(Kind.OBJECT_MEMBER_ACCESS)).isTrue();
@@ -42,7 +42,7 @@ public class MemberAccessTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void null_safe_member_access() throws Exception {
+  void nullSafeMemberAccess() {
     MemberAccessTree tree = parse("$obj?->member", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     assertThat(tree.is(Kind.OBJECT_MEMBER_ACCESS)).isTrue();
@@ -54,7 +54,7 @@ public class MemberAccessTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void class_member_access() throws Exception {
+  void classMemberAccess() {
     MemberAccessTree tree = parse("ClassName::MEMBER", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     assertThat(tree.is(Kind.CLASS_MEMBER_ACCESS)).isTrue();
@@ -66,7 +66,7 @@ public class MemberAccessTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void object_member_class_name_access() throws Exception {
+  void objectMemberClassNameAccess() {
     MemberAccessTree tree = parse("$obj::class", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     assertThat(tree.is(Kind.CLASS_MEMBER_ACCESS)).isTrue();

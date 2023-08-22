@@ -20,7 +20,7 @@
 package org.sonar.php.tree;
 
 import java.util.EnumSet;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -33,10 +33,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
 import static org.sonar.php.tree.TreeUtils.isDescendant;
 
-public class TreeUtilsTest {
+class TreeUtilsTest {
 
   @Test
-  public void test_isDescendant() {
+  void testIsDescendant() {
     Tree tree = PHPParserBuilder.createParser().parse("<?= for(;;) {} ?>");
     StatementTree statementTree = ((CompilationUnitTree) tree).script().statements().get(0);
     assertThat(isDescendant(statementTree, tree)).isTrue();
@@ -48,7 +48,7 @@ public class TreeUtilsTest {
   }
 
   @Test
-  public void test_findAncestorWithKind() {
+  void testFindAncestorWithKind() {
     Tree tree = PHPParserBuilder.createParser().parse("<?= function foo() {for(;;) {} } ?>");
     FunctionDeclarationTree func = (FunctionDeclarationTree) ((CompilationUnitTreeImpl) tree).script().statements().get(0);
     StatementTree statementTree = func.body().statements().get(0);

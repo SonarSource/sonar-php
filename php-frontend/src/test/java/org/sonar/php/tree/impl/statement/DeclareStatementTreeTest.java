@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DeclareStatementTreeTest extends PHPTreeModelTest {
+class DeclareStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void short_syntax() throws Exception {
+  void shortSyntax() {
     DeclareStatementTree tree = parse("declare (a);", PHPLexicalGrammar.DECLARE_STATEMENT);
 
     assertThat(tree.is(Kind.DECLARE_STATEMENT)).isTrue();
@@ -41,11 +41,11 @@ public class DeclareStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endDeclareToken()).isNull();
     assertThat(tree.eosToken()).isNotNull();
-    assertThat(tree.statements()).hasSize(0);
+    assertThat(tree.statements()).isEmpty();
   }
 
   @Test
-  public void one_statement_syntax() throws Exception {
+  void oneStatementSyntax() {
     DeclareStatementTree tree = parse("declare (a = $a, b = $b) {}", PHPLexicalGrammar.DECLARE_STATEMENT);
 
     assertThat(tree.is(Kind.DECLARE_STATEMENT)).isTrue();
@@ -60,7 +60,7 @@ public class DeclareStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void alternative_syntax() throws Exception {
+  void alternativeSyntax() {
     DeclareStatementTree tree = parse("declare (a) : {} {} enddeclare ;", PHPLexicalGrammar.DECLARE_STATEMENT);
 
     assertThat(tree.is(Kind.DECLARE_STATEMENT)).isTrue();

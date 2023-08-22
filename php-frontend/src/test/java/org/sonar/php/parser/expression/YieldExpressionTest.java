@@ -19,23 +19,23 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class YieldExpressionTest {
+class YieldExpressionTest {
 
   @Test
-  public void yield_scalar() {
+  void yieldScalar() {
     assertThat(PHPLexicalGrammar.YIELD_SCALAR)
       .matches("yield")
       .notMatches("yield $a");
   }
 
   @Test
-  public void yield_expression() {
+  void yieldExpression() {
     assertThat(Kind.YIELD_EXPRESSION)
       .notMatches("yield")
       .matches("yield $a")

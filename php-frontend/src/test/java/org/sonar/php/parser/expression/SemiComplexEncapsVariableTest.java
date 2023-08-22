@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class SemiComplexEncapsVariableTest {
+class SemiComplexEncapsVariableTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)
       .matches("${ expression }")
       .matches("${ variable }")
@@ -35,13 +35,13 @@ public class SemiComplexEncapsVariableTest {
   }
 
   @Test
-  public void test_recovery_expression() {
+  void testRecoveryExpression() {
     assertThat(PHPLexicalGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)
       .matches("${ var }");
   }
 
   @Test
-  public void test_real_life() throws Exception {
+  void testRealLife() {
     assertThat(PHPLexicalGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)
       .matches("${foo}")
       .matches("${ ${expression} }")

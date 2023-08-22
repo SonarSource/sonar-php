@@ -21,7 +21,7 @@ package org.sonar.php.metrics;
 
 import java.util.Optional;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -29,18 +29,18 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LineVisitorTest extends ParsingTestUtils {
+class LineVisitorTest extends ParsingTestUtils {
 
   private static final String LOC_FILE = "metrics/lines_of_code.php";
 
   @Test
-  public void test_lines_of_code_number() throws Exception {
+  void testLinesOfCodeNumber() {
     LineVisitor lineVisitor = new LineVisitor(parse(LOC_FILE));
     assertThat(lineVisitor.getLinesOfCodeNumber()).isEqualTo(7);
   }
 
   @Test
-  public void test_lines_of_code_number_on_tree() throws Exception {
+  void testLinesOfCodeNumberOnTree() {
     CompilationUnitTree cut = parse(LOC_FILE);
     Optional<ClassDeclarationTree> firstClassTree = cut.script().statements().stream()
       .filter(statement -> statement.is(Tree.Kind.CLASS_DECLARATION))
@@ -51,11 +51,10 @@ public class LineVisitorTest extends ParsingTestUtils {
   }
 
   @Test
-  public void test_lines_of_code() throws Exception {
+  void testLinesOfCode() {
     LineVisitor lineVisitor = new LineVisitor(parse(LOC_FILE));
     Set<Integer> linesOfCode = lineVisitor.getLinesOfCode();
-    assertThat(linesOfCode).hasSize(7);
-    assertThat(linesOfCode).contains(13, 17, 19, 20, 21, 22, 23);
+    assertThat(linesOfCode).hasSize(7).contains(13, 17, 19, 20, 21, 22, 23);
   }
 
 }

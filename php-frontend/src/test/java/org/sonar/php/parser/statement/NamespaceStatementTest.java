@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class NamespaceStatementTest {
+class NamespaceStatementTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.NAMESPACE_STATEMENT)
       .matches("namespace NS;")
       .matches("namespace NS {}")

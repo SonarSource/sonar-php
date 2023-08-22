@@ -22,7 +22,7 @@ package org.sonar.php.symbols;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 
@@ -30,10 +30,10 @@ import static org.sonar.php.symbols.FunctionSymbolAssert.assertThat;
 import static org.sonar.php.symbols.SymbolTestUtils.parse;
 import static org.sonar.php.tree.TreeUtils.descendants;
 
-public class MethodCallResolutionTest {
+class MethodCallResolutionTest {
 
   @Test
-  public void resolve_this() {
+  void resolveThis() {
     assertThat(callSymbol("<?php class A { function f(){} function g(){ $this->f(); } }")).isKnown("A::f");
     assertThat(callSymbol("<?php class A { function f(){} function g(){ $this->x(); } }")).isUnknown();
     assertThat(callSymbol("<?php class A { function f(){} function g(){ $this->$f(); } }")).isUnknown();
@@ -41,7 +41,7 @@ public class MethodCallResolutionTest {
   }
 
   @Test
-  public void resolve_this_with_inheritance() {
+  void resolveThisWithInheritance() {
     assertThat(callSymbol("<?php ",
       "class A { function f(){} }",
       "class B extends A { function g(){ $this->f(); } }")).isKnown("A::f");
@@ -51,14 +51,14 @@ public class MethodCallResolutionTest {
   }
 
   @Test
-  public void resolve_with_superclass_cycle() {
+  void resolveWithSuperclassCycle() {
     assertThat(callSymbol("<?php ",
       "class A extends B { }",
       "class B extends A { function g(){ $this->f(); } }")).isUnknown();
   }
 
   @Test
-  public void resolve_self_and_static() {
+  void resolveSelfAndStatic() {
     assertThat(callSymbol("<?php class A { function f(){} function g(){ self::f(); } }")).isKnown("A::f");
     assertThat(callSymbol("<?php class A { function f(){} function g(){ self::x(); } }")).isUnknown();
     assertThat(callSymbol("<?php class A { function f(){} function g(){ $self::f(); } }")).isUnknown();

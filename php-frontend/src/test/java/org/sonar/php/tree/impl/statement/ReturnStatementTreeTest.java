@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReturnStatementTreeTest extends PHPTreeModelTest {
+class ReturnStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void empty() throws Exception {
+  void empty() {
     ReturnStatementTree tree = parse("return ;", PHPLexicalGrammar.RETURN_STATEMENT);
 
     assertThat(tree.is(Kind.RETURN_STATEMENT)).isTrue();
@@ -40,7 +40,7 @@ public class ReturnStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void not_empty() throws Exception {
+  void notEmpty() {
     ReturnStatementTree tree = parse("return $a;", PHPLexicalGrammar.RETURN_STATEMENT);
 
     assertThat(tree.returnToken().text()).isEqualTo("return");

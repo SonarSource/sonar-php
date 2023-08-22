@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SwitchStatementTreeTest extends PHPTreeModelTest {
+class SwitchStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void standard_syntax() throws Exception {
+  void standardSyntax() {
     SwitchStatementTree tree = parse("switch ($a) { case $a : break; default : break; }", PHPLexicalGrammar.SWITCH_STATEMENT);
 
     assertThat(tree.is(Kind.SWITCH_STATEMENT)).isTrue();
@@ -44,7 +44,7 @@ public class SwitchStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void alternative_syntax() throws Exception {
+  void alternativeSyntax() {
     SwitchStatementTree tree = parse("switch ($a) : default : break; endswitch;", PHPLexicalGrammar.SWITCH_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_SWITCH_STATEMENT)).isTrue();

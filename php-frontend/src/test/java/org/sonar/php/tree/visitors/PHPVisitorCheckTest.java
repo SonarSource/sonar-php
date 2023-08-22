@@ -22,8 +22,9 @@ package org.sonar.php.tree.visitors;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.cache.CacheContext;
@@ -54,14 +55,14 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class PHPVisitorCheckTest {
+class PHPVisitorCheckTest {
 
   private static final String WORKDIR = "src/test/resources/visitors/";
 
   private PhpInputFileContext fileContext;
   private CacheContext cacheContext;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     PhpFile file = FileTestUtils.getFile(new File(WORKDIR + "test.php"));
     cacheContext = mock(CacheContext.class);
@@ -69,7 +70,7 @@ public class PHPVisitorCheckTest {
   }
 
   @Test
-  public void should_visit_tree_elements() {
+  void shouldVisitTreeElements() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
@@ -81,7 +82,7 @@ public class PHPVisitorCheckTest {
     assertThat(testVisitor.namespaceNameCounter).isEqualTo(7);
     assertThat(testVisitor.varIdentifierCounter).isEqualTo(8);
     // PHPCheck#init() is called by PHPAnalyzer
-    assertThat(testVisitor.initCounter).isEqualTo(0);
+    assertThat(testVisitor.initCounter).isZero();
     assertThat(testVisitor.literalCounter).isEqualTo(6);
     assertThat(testVisitor.tokenCounter).isEqualTo(96);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
@@ -94,7 +95,7 @@ public class PHPVisitorCheckTest {
   }
 
   @Test
-  public void should_have_correct_context() {
+  void shouldHaveCorrectContext() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
@@ -110,7 +111,7 @@ public class PHPVisitorCheckTest {
   }
 
   @Test
-  public void test_getFullyQualifiedName() {
+  void testGetFullyQualifiedName() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse("<?php namespace n { function foo() {}; foo(); }");
     PHPVisitorCheck visitor = new PHPVisitorCheck() {
@@ -118,7 +119,7 @@ public class PHPVisitorCheckTest {
       public void visitFunctionCall(FunctionCallTree tree) {
         QualifiedName qualifiedName = getFullyQualifiedName(((NamespaceNameTree) tree.callee()));
         assertThat(qualifiedName.simpleName()).isEqualTo("foo");
-        assertThat(qualifiedName.toString()).isEqualTo("n\\foo");
+        assertThat(qualifiedName).hasToString("n\\foo");
       }
     };
     PHPCheckContext phpCheckContext = new PHPCheckContext(mock(PhpFile.class), tree, null);
@@ -126,7 +127,7 @@ public class PHPVisitorCheckTest {
   }
 
   @Test
-  public void test_newIssue() {
+  void testNewIssue() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse("<?php phpinfo();");
     PHPVisitorCheck testVisitor = new PHPVisitorCheck() {
@@ -139,13 +140,14 @@ public class PHPVisitorCheckTest {
 
     List<PhpIssue> issues = testVisitor.context().getIssues();
 
-    assertThat(issues.size()).isEqualTo(1);
+    assertThat(issues).hasSize(1);
     assertThat(issues.get(0)).isInstanceOf(PreciseIssue.class);
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo("testIssue");
   }
 
-  @Test(timeout = 5000)
-  public void visiting_depth_is_limited() {
+  @Test
+  @Timeout(5000)
+  void visitingDepthIsLimited() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/long-concat.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
@@ -168,14 +170,14 @@ public class PHPVisitorCheckTest {
   }
 
   @Test
-  public void default_scanWithoutParsing() {
+  void defaultScanWithoutParsing() {
     PHPCheck check = new PHPVisitorCheck() {
     };
     assertThat(check.scanWithoutParsing(fileContext)).isTrue();
   }
 
   @Test
-  public void override_scanWithoutParsing() {
+  void overrideScanWithoutParsing() {
     PHPCheck check = new PHPVisitorCheck() {
       @Override
       public boolean scanWithoutParsing(PhpInputFileContext phpInputFileContext) {

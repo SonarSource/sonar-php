@@ -25,7 +25,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -45,12 +45,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.tree.TreeUtils.firstDescendant;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
-public class ProjectSymbolTableTest {
+class ProjectSymbolTableTest {
 
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser();
 
   @Test
-  public void superclass_in_different_file() {
+  void superclassInDifferentFile() {
     PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
     PhpFile file2 = file("file2.php", "<?php namespace ns1; class C extends B {}");
     PhpFile file3 = file("file3.php", "<?php namespace ns1; class B extends A {}");
@@ -68,7 +68,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void implemented_interfaces() {
+  void implementedInterfaces() {
     PhpFile file2 = file("file2.php", "<?php namespace ns1; class B extends A implements C {}");
     PhpFile file3 = file("file3.php", "<?php namespace ns1; interface C extends D {}");
     Tree ast = getAst(file2, buildProjectSymbolData(file2, file3));
@@ -90,7 +90,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void catch_clause() {
+  void catchClause() {
     PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
     PhpFile file2 = file("file2.php", "<?php namespace ns1; try {} catch (A $a) {}");
     Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
@@ -101,7 +101,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void new_expression() {
+  void newExpression() {
     PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
     PhpFile file2 = file("file2.php", "<?php namespace ns1;\n new A();\n new A;");
     Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
@@ -119,7 +119,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void non_class_namespace_name() {
+  void nonClassNamespaceName() {
     PhpFile file1 = file("file1.php", "<?php namespace ns1; class A {}");
     Tree ast = parser.parse(file1.contents());
     NamespaceNameTree namespaceNameTree = firstDescendant(ast, NamespaceNameTree.class).get();
@@ -127,7 +127,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void function_symbol_added_to_call() {
+  void functionSymbolAddedToCall() {
     PhpFile file1 = file("file1.php", "<?php function a(int $x, string... $y, $z = 'default') {}");
     PhpFile file2 = file("file2.php", "<?php a();");
     Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
@@ -146,7 +146,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void function_has_return() {
+  void functionHasReturn() {
     PhpFile file1 = file("file1.php", "<?php function a() { return $y; }");
     PhpFile file2 = file("file2.php", "<?php a();");
     Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
@@ -158,7 +158,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void function_has_return_function_expression_and_inner() {
+  void functionHasReturnFunctionExpressionAndInner() {
     PhpFile file1 = file("file1.php", "<?php function a() { function foo() {return $y;} $x = function() {return $y;}; }");
     PhpFile file2 = file("file2.php", "<?php a();");
     Tree ast = getAst(file2, buildProjectSymbolData(file1, file2));
@@ -170,7 +170,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void function_has_func_get_args() {
+  void functionHasFuncGetArgs() {
     PhpFile file1 = file("file1.php", "<?php function a() { $args = func_get_args(); }");
     PhpFile file2 = file("file2.php", "<?php a();");
     ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2);
@@ -184,7 +184,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void function_has_func_get_args_function_expression_and_inner() {
+  void functionHasFuncGetArgsFunctionExpressionAndInner() {
     PhpFile file1 = file("file1.php", "<?php function a() { function foo() { $args = func_get_args();} $x = function() {$args = func_get_args();}; }");
     PhpFile file2 = file("file2.php", "<?php a();");
     ProjectSymbolData projectSymbolData = buildProjectSymbolData(file1, file2);
@@ -198,7 +198,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void unknown_function_symbol() {
+  void unknownFunctionSymbol() {
     PhpFile file1 = file("file1.php", "<?php a();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
 
@@ -212,7 +212,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void duplicate_function_declaration() {
+  void duplicateFunctionDeclaration() {
     PhpFile file1 = file("file1.php", "<?php f();");
     PhpFile file2 = file("file2.php", "<?php function f($p1) {}");
     PhpFile file3 = file("file3.php", "<?php function f($p2) {}");
@@ -223,7 +223,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void get_class_methods() {
+  void getClassMethods() {
     PhpFile file1 = file("file1.php", "<?php namespace SomeNamespace; class A {public function foo(){}}");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
 
@@ -241,7 +241,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void get_class_methods_anonymous() {
+  void getClassMethodsAnonymous() {
     PhpFile file1 = file("file1.php", "<?php class A {public function x() {$o = new class() {public function anon() {}};}}");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
 
@@ -252,7 +252,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void anonymous_class() {
+  void anonymousClass() {
     PhpFile file1 = file("file1.php", "<?php $x = new class extends A implements B { public function foo() {} };");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     ClassSymbol anonymous = Symbols.get(firstDescendant(ast, AnonymousClassTreeImpl.class).get());
@@ -264,7 +264,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void get_function_symbol_from_call() {
+  void getFunctionSymbolFromCall() {
     PhpFile file1 = file("file1.php", "<?php function foo() {} foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
@@ -273,14 +273,14 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void do_not_get_function_symbol_from_unresolvable_call() {
+  void doNotGetFunctionSymbolFromUnresolvableCall() {
     PhpFile file1 = file("file1.php", "<?php function foo() {} $foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     assertThat(Symbols.get(firstDescendant(ast, FunctionCallTree.class).get()).isUnknownSymbol()).isTrue();
   }
 
   @Test
-  public void get_method_symbol_from_call() {
+  void getMethodSymbolFromCall() {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
@@ -289,7 +289,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void get_method_symbol_from_extended_call() {
+  void getMethodSymbolFromExtendedCall() {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} class BAR extends FOO{} BAR::foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
@@ -298,7 +298,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void get_method_symbol_from_unknown_extended_call() {
+  void getMethodSymbolFromUnknownExtendedCall() {
     PhpFile file1 = file("file1.php", "<?php class BAR extends FOO{} BAR::foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
@@ -307,21 +307,21 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void do_not_get_method_symbol_from_unresolvable_call() {
+  void doNotGetMethodSymbolFromUnresolvableCall() {
     PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::$foo();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     assertThat(Symbols.get(firstDescendant(ast, FunctionCallTree.class).get()).isUnknownSymbol()).isTrue();
   }
 
   @Test
-  public void do_not_get_function_symbol_from_new_expression_call() {
+  void doNotGetFunctionSymbolFromNewExpressionCall() {
     PhpFile file1 = file("file1.php", "<?php class FOO{} new FOO();");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     assertThat(Symbols.get(firstDescendant(ast, FunctionCallTree.class).get()).isUnknownSymbol()).isTrue();
   }
 
   @Test
-  public void get_method_with_yield_return() {
+  void getMethodWithYieldReturn() {
     PhpFile file1 = file("file1.php", "<?php class A {public function foo(){yield 1;}}");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
 
@@ -331,7 +331,7 @@ public class ProjectSymbolTableTest {
   }
 
   @Test
-  public void get_abstract_method() {
+  void getAbstractMethod() {
     PhpFile file1 = file("file1.php", "<?php abstract class A {abstract public function foo(){}}");
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
 

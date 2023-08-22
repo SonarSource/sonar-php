@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ForEachStatementTreeTest extends PHPTreeModelTest {
+class ForEachStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void standard_syntax() throws Exception {
+  void standardSyntax() {
     ForEachStatementTree tree = parse("foreach ($a as $b) {}", PHPLexicalGrammar.FOREACH_STATEMENT);
 
     assertThat(tree.is(Kind.FOREACH_STATEMENT)).isTrue();
@@ -49,7 +49,7 @@ public class ForEachStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void alternative_syntax() throws Exception {
+  void alternativeSyntax() {
     ForEachStatementTree tree = parse("foreach ($a as $b) : {} {} endforeach ;", PHPLexicalGrammar.FOREACH_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_FOREACH_STATEMENT)).isTrue();
@@ -68,7 +68,7 @@ public class ForEachStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void syntax_with_key() throws Exception {
+  void syntaxWithKey() {
     ForEachStatementTree tree = parse("foreach ($a as $key => $b) {}", PHPLexicalGrammar.FOREACH_STATEMENT);
     assertThat(tree.key()).isNotNull();
     assertThat(tree.doubleArrowToken()).isNotNull();

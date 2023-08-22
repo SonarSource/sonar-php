@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TraitPrecedenceTreeTest extends PHPTreeModelTest {
+class TraitPrecedenceTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     TraitPrecedenceTree tree = parse("NS1\\Class1::method1 insteadof Class2, Class3;", PHPLexicalGrammar.TRAIT_PRECEDENCE);
     assertThat(tree.is(Kind.TRAIT_PRECEDENCE)).isTrue();
     assertThat(tree.methodReference().method().text()).isEqualTo("method1");

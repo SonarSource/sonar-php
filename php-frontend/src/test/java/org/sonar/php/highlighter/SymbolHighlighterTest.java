@@ -22,18 +22,15 @@ package org.sonar.php.highlighter;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.fs.internal.DefaultTextRange;
@@ -45,7 +42,7 @@ import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 
-public class SymbolHighlighterTest {
+class SymbolHighlighterTest {
 
   private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser();
 
@@ -53,26 +50,23 @@ public class SymbolHighlighterTest {
 
   private SensorContextTester context;
 
-  @Rule
-  public TemporaryFolder tempFolder = new TemporaryFolder();
-  private DefaultFileSystem fileSystem;
+  @TempDir
+  public File tempFolder;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
-    fileSystem = new DefaultFileSystem(tempFolder.getRoot());
-    fileSystem.setEncoding(StandardCharsets.UTF_8);
-    file = tempFolder.newFile();
+    file = new File(tempFolder, "file");
   }
 
   @Test
-  public void test_empty_input() throws Exception {
+  void testEmptyInput() {
     highlight("<?php ");
 
     checkNoSymbolExists(1, 1);
   }
 
   @Test
-  public void test_no_usages() throws Exception {
+  void testNoUsages() {
     highlight("<?php   $a = 1; ");
 
     checkNoSymbolExists(1, 7); // (blank)
@@ -84,7 +78,7 @@ public class SymbolHighlighterTest {
   }
 
   @Test
-  public void test_usages() throws Exception {
+  void testUsages() {
     highlight("<?php   $a = 1; echo $a; $a = 4; ");
 
     checkSymbolReferences(1, 8, Arrays.asList(
@@ -93,14 +87,14 @@ public class SymbolHighlighterTest {
   }
 
   @Test
-  public void test_compound_variable() throws Exception {
+  void testCompoundVariable() {
     highlight("<?php   $a = 1; echo \"${a}\"; echo \"$a\";");
 
     checkSymbolReferences(1, 8, Arrays.asList(textRange(1, 24, 1, 25), textRange(1, 35, 1, 37)));
   }
 
   @Test
-  public void test_use_clause() throws Exception {
+  void testUseClause() {
     highlight("<?php $b = 42; $f = function() use($b) { echo $b; };");
 
     // there are 3 symbols: global $b, local $b, $f
@@ -113,7 +107,7 @@ public class SymbolHighlighterTest {
   }
 
   @Test
-  public void test_arrow_function() throws Exception {
+  void testArrowFunction() {
     highlight("<?php $a = 1; $b = 2; $f = fn($b) => $a + $b; foo($a); foo($b);");
     // global $a
     checkSymbolReferences(1, 6, Arrays.asList(
@@ -133,9 +127,11 @@ public class SymbolHighlighterTest {
       .setType(Type.MAIN)
       .initMetadata(s)
       .build();
-    fileSystem.add(inputFile);
 
-    context = SensorContextTester.create(tempFolder.getRoot());
+    // TODO: Look if I work
+    // fileSystem.add(inputFile);
+
+    context = SensorContextTester.create(tempFolder);
 
     NewSymbolTable newSymbolTable = context.newSymbolTable().onFile(inputFile);
     Tree tree = PARSER.parse(s);

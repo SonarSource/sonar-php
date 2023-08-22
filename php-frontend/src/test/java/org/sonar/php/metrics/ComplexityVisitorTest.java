@@ -21,7 +21,7 @@ package org.sonar.php.metrics;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -30,16 +30,16 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ComplexityVisitorTest {
+class ComplexityVisitorTest {
 
   private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
 
   @Test
-  public void declarations() throws Exception {
+  void declarations() {
     assertOneComplexityToken("function f() {}", "function");
     assertOneComplexityToken("$f = function() {};", "function");
     assertOneComplexityToken("$f = fn() => 0;", "fn");
-    assertThat(complexity("class A {}")).isEqualTo(0);
+    assertThat(complexity("class A {}")).isZero();
     assertOneComplexityToken("class A { public function f() {} }", "function");
 
     assertThat(complexity("function f() { f(); return; }")).isEqualTo(1);
@@ -50,8 +50,8 @@ public class ComplexityVisitorTest {
   }
 
   @Test
-  public void statements() throws Exception {
-    assertThat(complexity("$a = 0;")).isEqualTo(0);
+  void statements() {
+    assertThat(complexity("$a = 0;")).isZero();
     assertOneComplexityToken("if ($a) {}", "if");
     assertOneComplexityToken("if ($a) {} else {}", "if");
     assertThat(complexity("if ($a) {} else if($b) {} else {}")).isEqualTo(2);
@@ -60,22 +60,22 @@ public class ComplexityVisitorTest {
     assertOneComplexityToken("foreach ($a as $b) {}", "foreach");
     assertOneComplexityToken("while ($a) {}", "while");
     assertOneComplexityToken("do {} while($a);", "do");
-    assertThat(complexity("switch ($a) {}")).isEqualTo(0);
+    assertThat(complexity("switch ($a) {}")).isZero();
     assertOneComplexityToken("switch ($a) {case 1:}", "case");
-    assertThat(complexity("switch ($a) {default:}")).isEqualTo(0);
+    assertThat(complexity("switch ($a) {default:}")).isZero();
 
-    assertThat(complexity("try {}")).isEqualTo(0);
-    assertThat(complexity("try {} catch(E $s) {}")).isEqualTo(0);
-    assertThat(complexity("return 1;")).isEqualTo(0);
-    assertThat(complexity("throw e;")).isEqualTo(0);
-    assertThat(complexity("goto x;")).isEqualTo(0);
+    assertThat(complexity("try {}")).isZero();
+    assertThat(complexity("try {} catch(E $s) {}")).isZero();
+    assertThat(complexity("return 1;")).isZero();
+    assertThat(complexity("throw e;")).isZero();
+    assertThat(complexity("goto x;")).isZero();
   }
 
   @Test
-  public void expressions() throws Exception {
-    assertThat(complexity("$a;")).isEqualTo(0);
-    assertThat(complexity("$a + $b;")).isEqualTo(0);
-    assertThat(complexity("$f();")).isEqualTo(0);
+  void expressions() {
+    assertThat(complexity("$a;")).isZero();
+    assertThat(complexity("$a + $b;")).isZero();
+    assertThat(complexity("$f();")).isZero();
 
     assertOneComplexityToken("$a || $b;", "||");
     assertOneComplexityToken("$a && $b;", "&&");
@@ -85,7 +85,7 @@ public class ComplexityVisitorTest {
   }
 
   @Test
-  public void without_nested_functions() throws Exception {
+  void withoutNestedFunctions() {
     assertThat(complexityWithoutNestedFunctions("$a && $b && $c;")).isEqualTo(2);
     assertThat(complexityWithoutNestedFunctions("$a && f(function () { return $a && $b; });")).isEqualTo(1);
     assertThat(complexityWithoutNestedFunctions("$a && f(fn() => $a && $b);")).isEqualTo(1);

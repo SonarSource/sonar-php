@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class IfStatementTest {
+class IfStatementTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.IF_STATEMENT)
       .matches("if ($a) {}")
       .matches("if ($a) {} elseif ($a) {}")
@@ -44,7 +44,7 @@ public class IfStatementTest {
   }
 
   @Test
-  public void realLife() throws Exception {
+  void realLife() {
     assertThat(PHPLexicalGrammar.IF_STATEMENT)
       .matches("if (\"#$a\") {\n $x = ''; }");
   }

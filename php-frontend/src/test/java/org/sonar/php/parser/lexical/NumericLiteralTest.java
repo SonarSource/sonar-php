@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.lexical;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class NumericLiteralTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+class NumericLiteralTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Kind.NUMERIC_LITERAL)
       .matches("7E-10")
       .matches("1.2e3")

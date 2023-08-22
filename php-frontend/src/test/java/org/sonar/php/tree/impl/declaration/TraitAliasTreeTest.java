@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TraitAliasTreeTest extends PHPTreeModelTest {
+class TraitAliasTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void with_alias() throws Exception {
+  void withAlias() {
     TraitAliasTree tree = alias("method1 as method2;");
     assertThat(tree.methodReference().method().text()).isEqualTo("method1");
     assertThat(tree.modifierToken()).isNull();
@@ -38,7 +38,7 @@ public class TraitAliasTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_modifier() throws Exception {
+  void withModifier() {
     TraitAliasTree tree = alias("method1 as public;");
     assertThat(tree.methodReference().method().text()).isEqualTo("method1");
     assertThat(tree.modifierToken().text()).isEqualTo("public");
@@ -46,7 +46,7 @@ public class TraitAliasTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_alias_and_modifier() throws Exception {
+  void withAliasAndModifier() {
     TraitAliasTree tree = alias("method1 as public method2;");
     assertThat(tree.methodReference().method().text()).isEqualTo("method1");
     assertThat(tree.modifierToken().text()).isEqualTo("public");

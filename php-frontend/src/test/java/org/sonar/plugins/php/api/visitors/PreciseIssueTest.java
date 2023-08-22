@@ -20,7 +20,7 @@
 package org.sonar.plugins.php.api.visitors;
 
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -29,13 +29,13 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PreciseIssueTest {
+class PreciseIssueTest {
 
   private static final PHPCheck CHECK = new DummyCheck();
   private static final IssueLocation PRIMARY_LOCATION = new IssueLocation(createToken(42, 5, "Hello"), "Test message");
 
   @Test
-  public void test() throws Exception {
+  void test() {
     PreciseIssue preciseIssue = new PreciseIssue(CHECK, PRIMARY_LOCATION);
 
     assertThat(preciseIssue.check()).isEqualTo(CHECK);
@@ -47,13 +47,13 @@ public class PreciseIssueTest {
   }
 
   @Test
-  public void with_cost() throws Exception {
+  void withCost() {
     PreciseIssue preciseIssue = new PreciseIssue(CHECK, PRIMARY_LOCATION).cost(5);
     assertThat(preciseIssue.cost()).isEqualTo(5);
   }
 
   @Test
-  public void with_secondary() throws Exception {
+  void withSecondary() {
     PreciseIssue preciseIssue = new PreciseIssue(CHECK, PRIMARY_LOCATION);
     preciseIssue.secondary(createToken(142, 0, "someValue"), "Secondary message");
     preciseIssue.secondary(createToken(242, 0, "someValue"), null);
@@ -72,7 +72,7 @@ public class PreciseIssueTest {
   }
 
   @Test
-  public void with_secondary_in_different_file() {
+  void withSecondaryInDifferentFile() {
     PreciseIssue preciseIssue = new PreciseIssue(CHECK, PRIMARY_LOCATION);
     LocationInFileImpl locationInFile = new LocationInFileImpl("dir1/file1.php", 1, 2, 3, 4);
     preciseIssue.secondary(locationInFile, "Secondary message");
@@ -87,7 +87,7 @@ public class PreciseIssueTest {
   }
 
   @Test
-  public void secondary_on_unknown_location() {
+  void secondaryOnUnknownLocation() {
     PreciseIssue preciseIssue = new PreciseIssue(CHECK, PRIMARY_LOCATION);
     preciseIssue.secondary(UnknownLocationInFile.UNKNOWN_LOCATION, "Secondary message");
     assertThat(preciseIssue.secondaryLocations()).isEmpty();

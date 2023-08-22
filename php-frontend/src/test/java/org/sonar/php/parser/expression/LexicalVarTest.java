@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class LexicalVarTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+class LexicalVarTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.LEXICAL_VARIABLE)
       .matches("$a")
       .matches("&$a");

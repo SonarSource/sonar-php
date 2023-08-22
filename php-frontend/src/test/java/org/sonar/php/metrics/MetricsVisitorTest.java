@@ -20,7 +20,7 @@
 package org.sonar.php.metrics;
 
 import java.io.File;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.FileTestUtils;
@@ -33,10 +33,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class MetricsVisitorTest extends ParsingTestUtils {
+class MetricsVisitorTest extends ParsingTestUtils {
 
   @Test
-  public void test() {
+  void test() {
     String filename = "metrics/lines_of_code.php";
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/" + filename));
 
@@ -45,7 +45,7 @@ public class MetricsVisitorTest extends ParsingTestUtils {
     FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, ast, SymbolTableImpl.create(ast), fileLinesContext);
 
     assertThat(fileMeasures.getFileComplexity()).isEqualTo(1);
-    assertThat(fileMeasures.getFileCognitiveComplexity()).isEqualTo(0);
+    assertThat(fileMeasures.getFileCognitiveComplexity()).isZero();
 
     assertThat(fileMeasures.getFunctionNumber()).isEqualTo(1);
     assertThat(fileMeasures.getStatementNumber()).isEqualTo(2);

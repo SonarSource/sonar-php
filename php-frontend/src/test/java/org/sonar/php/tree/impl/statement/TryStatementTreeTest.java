@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TryStatementTreeTest extends PHPTreeModelTest {
+class TryStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test_2_catch_blocks() throws Exception {
+  void test_2_catch_blocks() {
     TryStatementTree tree = parse("try {} catch(Exception1 $e1) {} catch(Exception2 $e2) {}", PHPLexicalGrammar.TRY_STATEMENT);
 
     assertThat(tree.is(Kind.TRY_STATEMENT)).isTrue();
@@ -42,13 +42,13 @@ public class TryStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_finally_block() throws Exception {
+  void testFinallyBlock() {
     TryStatementTree tree = parse("try {} finally {}", PHPLexicalGrammar.TRY_STATEMENT);
 
     assertThat(tree.is(Kind.TRY_STATEMENT)).isTrue();
     assertThat(tree.tryToken().text()).isEqualTo("try");
     assertThat(expressionToString(tree.block())).isEqualTo("{}");
-    assertThat(tree.catchBlocks()).hasSize(0);
+    assertThat(tree.catchBlocks()).isEmpty();
     assertThat(tree.finallyToken().text()).isEqualTo("finally");
     assertThat(expressionToString(tree.finallyBlock())).isEqualTo("{}");
   }

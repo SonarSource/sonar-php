@@ -38,7 +38,7 @@
  */
 package org.sonar.php.tree.symbols;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
@@ -50,7 +50,7 @@ import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UsagesTest extends ParsingTestUtils {
+class UsagesTest extends ParsingTestUtils {
 
   private final SymbolTableImpl SYMBOL_TABLE = SymbolTableImpl.create(parse("symbols/usages.php"));
 
@@ -62,51 +62,51 @@ public class UsagesTest extends ParsingTestUtils {
   private final Symbol globalSymbolSomeInterface = getGlobalScopeSymbol("SomeInterface");
 
   @Test
-  public void test() throws Exception {
+  void test() {
     for (Scope scope : SYMBOL_TABLE.getScopes()) {
 
       Tree tree = scope.tree();
       if (tree.is(Tree.Kind.FUNCTION_EXPRESSION)) {
-        test_use_clause(scope);
+        testUseClause(scope);
       } else if (tree.is(Tree.Kind.ARROW_FUNCTION_EXPRESSION)) {
-        test_arrow_function(scope);
+        testArrowFunction(scope);
       } else if (scope.isGlobal()) {
-        test_global_scope(scope);
+        testGlobalScope(scope);
 
       } else if (tree.is(Tree.Kind.FUNCTION_DECLARATION)) {
         String functionName = ((FunctionDeclarationTree) tree).name().text();
         if ("g".equals(functionName)) {
-          test_global_statement(scope);
+          testGlobalStatement(scope);
 
         } else if ("h".equals(functionName)) {
-          test_parameter(scope);
+          testParameter(scope);
 
         } else if ("j".equals(functionName)) {
-          test_local_variable(scope);
+          testLocalVariable(scope);
         }
 
       } else if (tree.is(Tree.Kind.CLASS_DECLARATION)) {
         String className = ((ClassDeclarationTree) tree).name().text();
         if ("A".equals(className)) {
-          test_class(scope);
+          testClass(scope);
         }
       } else if (tree.is(Tree.Kind.METHOD_DECLARATION)) {
         String methodName = ((MethodDeclarationTree) tree).name().text();
         if ("method".equals(methodName)) {
-          test_method(scope);
+          testMethod(scope);
         } else if ("__construct".equals(methodName)) {
-          test_anonymous_class_method(scope);
+          testAnonymousClassMethod(scope);
         }
       } else if (tree.is(Tree.Kind.ANONYMOUS_CLASS)) {
         if (((AnonymousClassTree) tree).arguments().size() == 2) {
-          test_anonymous_class(scope);
+          testAnonymousClass(scope);
         }
       }
     }
 
   }
 
-  private void test_anonymous_class(Scope scope) {
+  private void testAnonymousClass(Scope scope) {
     assertThat(globalSymbolFooBar.usages()).hasSize(1);
     assertThat(globalSymbolSomeTrait.usages()).hasSize(1);
     assertThat(globalSymbolSomeClass.usages()).hasSize(1);
@@ -115,33 +115,33 @@ public class UsagesTest extends ParsingTestUtils {
     assertThat(scope.getSymbol("$num").usages()).hasSize(2);
   }
 
-  private void test_anonymous_class_method(Scope scope) {
+  private void testAnonymousClassMethod(Scope scope) {
     assertThat(scope.getSymbol("$string").usages()).hasSize(1);
     assertThat(scope.getSymbol("$num").usages()).hasSize(1);
   }
 
-  private void test_class(Scope scope) {
+  private void testClass(Scope scope) {
     assertThat(scope.getSymbol("$field").usages()).hasSize(1);
     assertThat(scope.getSymbol("method").usages()).hasSize(1);
   }
 
-  private void test_method(Scope scope) {
+  private void testMethod(Scope scope) {
     assertThat(scope.getSymbol("$A").usages()).hasSize(1);
   }
 
-  private void test_local_variable(Scope scope) {
+  private void testLocalVariable(Scope scope) {
     Symbol localSymbol = scope.getSymbol("$a");
     assertThat(localSymbol).isNotEqualTo(globalSymbolA);
     assertThat(localSymbol.usages()).hasSize(1);
   }
 
-  private void test_parameter(Scope scope) {
+  private void testParameter(Scope scope) {
     Symbol parameterSymbol = scope.getSymbol("$a");
     assertThat(parameterSymbol).isNotEqualTo(globalSymbolA);
     assertThat(parameterSymbol.usages()).hasSize(1);
   }
 
-  private void test_global_scope(Scope scope) {
+  private void testGlobalScope(Scope scope) {
     assertThat(globalSymbolA.usages()).hasSize(5);
     assertThat(globalSymbolB.usages()).hasSize(1);
 
@@ -163,11 +163,11 @@ public class UsagesTest extends ParsingTestUtils {
 
   }
 
-  private void test_global_statement(Scope scope) {
+  private void testGlobalStatement(Scope scope) {
     assertThat(scope.getSymbol("$a")).isEqualTo(globalSymbolA);
   }
 
-  private void test_use_clause(Scope scope) {
+  private void testUseClause(Scope scope) {
     Symbol useClauseSymbolA = scope.getSymbol("$a");
     Symbol useClauseSymbolB = scope.getSymbol("$b");
     assertThat(useClauseSymbolA).isNotEqualTo(globalSymbolA);
@@ -175,7 +175,7 @@ public class UsagesTest extends ParsingTestUtils {
     assertThat(useClauseSymbolA.usages()).hasSize(1);
   }
 
-  private void test_arrow_function(Scope scope) {
+  private void testArrowFunction(Scope scope) {
     Symbol symbolA = scope.getSymbol("$a");
     Symbol symbolB = scope.getSymbol("$b");
     assertThat(symbolA).isEqualTo(globalSymbolA);

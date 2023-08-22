@@ -21,27 +21,27 @@ package org.sonar.plugins.php.api.tests;
 
 import java.io.File;
 import java.nio.file.Paths;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class PhpTestFileTest {
+class PhpTestFileTest {
 
   @Test
-  public void load_file() throws Exception {
+  void loadFile() {
     File physicalFile = new File("src/test/resources/tests/testfile.php");
     PhpTestFile file = new PhpTestFile(physicalFile);
     assertThat(file.contents()).isEqualTo("<?php echo \"Hello\";\n");
     assertThat(file.filename()).isEqualTo("testfile.php");
     String expectedPath = Paths.get("src", "test", "resources", "tests", "testfile.php").toString();
-    assertThat(file.toString()).isEqualTo(expectedPath);
+    assertThat(file).hasToString(expectedPath);
     assertThat(file.uri()).isEqualTo(physicalFile.toURI());
     assertThat(file.key()).isEqualTo("testFileModule:testfile.php");
   }
 
   @Test
-  public void load_invalid_show_filename() {
+  void loadInvalidShowFilename() {
     File file = new File("invalid.php");
     assertThatThrownBy(() -> new PhpTestFile(file))
       .isInstanceOf(IllegalArgumentException.class)

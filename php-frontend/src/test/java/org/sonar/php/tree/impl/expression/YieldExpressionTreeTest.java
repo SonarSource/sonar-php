@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class YieldExpressionTreeTest extends PHPTreeModelTest {
+class YieldExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void yield_value() throws Exception {
+  void yieldValue() {
     YieldExpressionTree tree = parse("yield $a", Kind.YIELD_EXPRESSION);
 
     assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();
@@ -43,7 +43,7 @@ public class YieldExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void yield_key_value() throws Exception {
+  void yieldKeyValue() {
     YieldExpressionTree tree = parse("yield $a=>$b", Kind.YIELD_EXPRESSION);
 
     assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();
@@ -56,7 +56,7 @@ public class YieldExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void yield_null() throws Exception {
+  void yieldNull() {
     YieldExpressionTree tree = parse("yield", PHPLexicalGrammar.YIELD_SCALAR);
 
     assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();
@@ -68,7 +68,7 @@ public class YieldExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void yield_from() throws Exception {
+  void yieldFrom() {
     YieldExpressionTree tree = parse("yield from foo()", Kind.YIELD_EXPRESSION);
 
     assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();

@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ParenthesizedExpressionTreeTest extends PHPTreeModelTest {
+class ParenthesizedExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void parenthesized_expression() throws Exception {
+  void parenthesizedExpression() {
     ParenthesisedExpressionTree tree = parse("($a)", Kind.PARENTHESISED_EXPRESSION);
 
     assertThat(tree.is(Kind.PARENTHESISED_EXPRESSION)).isTrue();
@@ -39,7 +39,7 @@ public class ParenthesizedExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void parenthesized_yield_expression() throws Exception {
+  void parenthesizedYieldExpression() {
     ParenthesisedExpressionTree tree = parse("(yield $a)", Kind.PARENTHESISED_EXPRESSION);
 
     assertThat(tree.is(Kind.PARENTHESISED_EXPRESSION)).isTrue();

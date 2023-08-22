@@ -19,14 +19,14 @@
  */
 package org.sonar.php.parser;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ScriptTest {
+class ScriptTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.SCRIPT)
       .matches("<?php")
       .matches("<?php const A = 1; function foo(){}")
@@ -36,7 +36,7 @@ public class ScriptTest {
   }
 
   @Test
-  public void should_parse_expression_list_statement() throws Exception {
+  void shouldParseExpressionListStatement() {
     assertThat(PHPLexicalGrammar.SCRIPT)
       .matches("<?= $x, $x + 1 ?> <tag> <?= $x*2; echo 42 ?>")
 
