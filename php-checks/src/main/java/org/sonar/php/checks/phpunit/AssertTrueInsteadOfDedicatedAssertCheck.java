@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.phpunit;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -40,9 +41,9 @@ import static org.sonar.plugins.php.api.tree.Tree.Kind.NULL_LITERAL;
 @Rule(key = "S5785")
 public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
 
-  private static final String MESSAGE_USE_INSTEAD = "Use %s instead.";
+  private static final String MESSAGE_USE_INSTEAD = "Use %s() instead.";
   private static final String SECONDARY_MESSAGE_USE_INSTEAD = "%s is performed here, which is better expressed with %s.";
-  private static final String MESSAGE_SIMPLIFY = "Simplify this expression by removing the %s comparison to %s%s.";
+  private static final String MESSAGE_SIMPLIFY = "Simplify this expression by %sremoving the comparison to '%s'.";
   private static final String ASSERT_TRUE = "assertTrue";
   private static final String ASSERT_FALSE = "assertFalse";
   private static final Set<String> ASSERT_BOOLEAN_METHOD_NAMES = Set.of(ASSERT_TRUE, ASSERT_FALSE);
@@ -55,11 +56,6 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
     .put(ReplacementAssertion.EQUALS, ReplacementAssertion.NOT_EQUALS)
     .put(ReplacementAssertion.NOT_EQUALS, ReplacementAssertion.EQUALS)
     .build();
-  private static final Map<Tree.Kind, String> COMPARISON_TO_MESSAGE = Map.of(
-    Tree.Kind.EQUAL_TO, "equality",
-    Tree.Kind.STRICT_EQUAL_TO, "equality",
-    Tree.Kind.NOT_EQUAL_TO, "non-equality",
-    Tree.Kind.STRICT_NOT_EQUAL_TO, "non-equality");
 
   private enum ReplacementAssertion {
     NULL("Null", "A null-check"),
@@ -98,34 +94,37 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
   }
 
   private void checkBooleanExpressionInAssertMethod(FunctionCallTree problematicAssertionCall, String assertionName) {
-    CheckUtils.argumentValue(problematicAssertionCall, "", 0).ifPresent(argumentExpression -> booleanComparisonWithBooleanLiteral(argumentExpression)
-      .ifPresentOrElse(booleanLiteralToRemove -> {
+    CheckUtils.argumentValue(problematicAssertionCall, "", 0).ifPresent(argumentExpression -> {
+      Optional<String> argumentValue = retrieveBooleanLiteralFromBinaryExpression(argumentExpression);
+
+      if (argumentValue.isPresent()) {
         // Boolean comparison, raise an issue to simplify it
         BinaryExpressionTree bet = (BinaryExpressionTree) argumentExpression;
-        String comparisonToRemove = COMPARISON_TO_MESSAGE.get(bet.getKind());
-        String additionalAction = computeAdditionalAction(assertionName, booleanLiteralToRemove, bet);
-        String message = String.format(MESSAGE_SIMPLIFY, comparisonToRemove, booleanLiteralToRemove, additionalAction);
+        String booleanLiteralToRemove = argumentValue.get();
+        boolean shouldChangeAssertion = shouldChangeAssertionFunction(assertionName, booleanLiteralToRemove, bet);
+        String additionalAction = "";
+        if (shouldChangeAssertion) {
+          additionalAction = String.format("using %s() and ", ASSERT_TRUE.equals(assertionName) ? ASSERT_FALSE : ASSERT_TRUE);
+        }
+        String message = String.format(MESSAGE_SIMPLIFY, additionalAction, booleanLiteralToRemove.toLowerCase(Locale.ROOT));
         newIssue(problematicAssertionCall, message);
-      }, () -> {
+      } else {
         // Non-boolean comparison, raise an issue to replace it
         Optional<ReplacementAssertion> replacementAssertionOpt = getReplacementAssertion(argumentExpression);
         if (assertionName.equals(ASSERT_FALSE)) {
           replacementAssertionOpt = replacementAssertionOpt.map(COMPLEMENTS::get);
         }
         replacementAssertionOpt.ifPresent(replacementAssertion -> reportIssue(problematicAssertionCall, replacementAssertion, argumentExpression));
-      }));
+      }
+    });
   }
 
-  private static String computeAdditionalAction(String assertionName, String booleanLiteralValue, BinaryExpressionTree bet) {
+  private static boolean shouldChangeAssertionFunction(String assertionName, String booleanLiteralValue, BinaryExpressionTree bet) {
     boolean isAssertTrue = ASSERT_TRUE.equals(assertionName);
-    boolean isTrueValue = "true".equals(booleanLiteralValue);
+    boolean isTrueValue = "true".equalsIgnoreCase(booleanLiteralValue);
     boolean isEqualComparison = bet.is(Tree.Kind.EQUAL_TO, Tree.Kind.STRICT_EQUAL_TO);
 
-    if ((isAssertTrue && isTrueValue == isEqualComparison) || (!isAssertTrue && isTrueValue)) {
-      return "";
-    } else {
-      return String.format(" and use %s instead", isAssertTrue ? ASSERT_FALSE : ASSERT_TRUE);
-    }
+    return !((isAssertTrue && isTrueValue == isEqualComparison) || (!isAssertTrue && isTrueValue));
   }
 
   private void reportIssue(FunctionCallTree problematicAssertionCall, ReplacementAssertion replacementAssertion, ExpressionTree argumentExpression) {
@@ -184,7 +183,7 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
     return bet.leftOperand().is(NULL_LITERAL) || bet.rightOperand().is(NULL_LITERAL);
   }
 
-  private static Optional<String> booleanComparisonWithBooleanLiteral(ExpressionTree expr) {
+  private static Optional<String> retrieveBooleanLiteralFromBinaryExpression(ExpressionTree expr) {
     if (expr.is(Tree.Kind.EQUAL_TO, Tree.Kind.STRICT_EQUAL_TO, Tree.Kind.NOT_EQUAL_TO, Tree.Kind.STRICT_NOT_EQUAL_TO)) {
       BinaryExpressionTree bet = (BinaryExpressionTree) expr;
       if (bet.leftOperand().is(BOOLEAN_LITERAL)) {
