@@ -30,8 +30,8 @@ import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
+import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
@@ -125,7 +125,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
       if (magicMethodCall.isPresent() && containsCallUserFunction(magicMethodCall.get())) {
         return true;
       } else {
-        Optional<ClassSymbol> superClass = ((ClassDeclarationTreeImpl) tree).symbol().superClass();
+        Optional<ClassSymbol> superClass = ((HasClassSymbol) tree).symbol().superClass();
         if (superClass.isPresent()) {
           return containsSuperClassCallMethod(superClass.get());
         }

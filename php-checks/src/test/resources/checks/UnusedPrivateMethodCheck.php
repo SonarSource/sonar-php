@@ -275,3 +275,19 @@ class MagicMethodCall6Impl extends MagicMethodCall6Abstract
   {
   }
 }
+
+class MagicMethodCall7
+{
+  public function __call($method, $arguments)
+  {
+    // The call of call_user_func_array or call_user_func is missing
+  }
+}
+
+class MagicMethodCall7Impl extends MagicMethodCall7
+{
+  // TODO SONARPHP-1455 FN because in superclass in __call the call of call_user_func_array or call_user_func is missing
+  private function bar()
+  {
+  }
+}
