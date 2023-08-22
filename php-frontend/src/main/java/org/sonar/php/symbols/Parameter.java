@@ -65,10 +65,12 @@ public class Parameter {
 
   @Override
   public boolean equals(Object other) {
-    if (this == other)
+    if (this == other) {
       return true;
-    if (other == null || getClass() != other.getClass())
+    }
+    if (other == null || getClass() != other.getClass()) {
       return false;
+    }
     Parameter parameter = (Parameter) other;
     return hasDefault == parameter.hasDefault && hasEllipsisOperator == parameter.hasEllipsisOperator && Objects.equals(name, parameter.name)
       && Objects.equals(type, parameter.type);

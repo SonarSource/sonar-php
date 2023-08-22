@@ -21,12 +21,14 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Parameter;
-import org.sonar.php.symbols.Symbols;
+import org.sonar.php.symbols.Symbol;
 import org.sonar.php.tree.symbols.HasClassSymbol;
 import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -47,10 +49,9 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = OverridingMethodSimplyCallParentCheck.KEY)
+@Rule(key = "S1185")
 public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1185";
   private static final String MESSAGE = "Remove this method \"%s\" to simply inherit it.";
 
   @Override
@@ -65,6 +66,8 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
     visitClass(tree);
   }
 
+  // existence of superclass is still checked
+  @SuppressWarnings("java:S3655")
   private void visitClass(ClassTree tree) {
     if (tree.superClass() != null) {
       ClassSymbol superClassSymbol = ((HasClassSymbol) tree).symbol().superClass().get();
@@ -102,55 +105,49 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
 
       if (functionCallTree.callee().is(Kind.CLASS_MEMBER_ACCESS)) {
         MemberAccessTree memberAccessTree = (MemberAccessTree) functionCallTree.callee();
-
         String methodName = method.name().text();
-        boolean sameMethodName = memberAccessTree.member().toString().equals(methodName);
 
-        MethodSymbol correspondingMethodFromSuper = superClass.declaredMethods().stream()
-          .filter(ms -> ms.name().equalsIgnoreCase(methodName) && hasSameParameterList(method, ms))
-          .findFirst()
-          .orElse(null);
-        // doesn't check `__construct`
-        // MethodSymbol ms2 = ((MethodSymbolImpl) Symbols.get(method)).getBaseMethod();
-        boolean shouldCheckMethodFromSuper = !superClass.isUnknownSymbol() && correspondingMethodFromSuper != null;
+        boolean isCallingSuperclassMethodWithSameNameAndArguments = isSuperClassReference(memberAccessTree.object(), superClass.qualifiedName().toString()) &&
+          memberAccessTree.member().toString().equals(methodName) &&
+          isFunctionCalledWithSameArgumentsAsDeclared(functionCallTree, method);
+        if (isCallingSuperclassMethodWithSameNameAndArguments) {
+          boolean duplicatesDeclarationFromSuper = Stream.iterate(superClass, Objects::nonNull, c -> c.superClass().orElse(null))
+            .flatMap(c -> c.declaredMethods().stream()
+              .filter(ms -> ms.name().equalsIgnoreCase(methodName) &&
+                hasSameVisibilityAs(method, ms) &&
+                hasSameParameterList(method, ms)))
+            .findFirst()
+            .isPresent();
+          boolean isInheritanceChainUnresolvable = Stream.iterate(superClass, Objects::nonNull, c -> c.superClass().orElse(null))
+            .anyMatch(Symbol::isUnknownSymbol);
 
-        if (isSuperClassReference(memberAccessTree.object(), superClass.qualifiedName().toString()) &&
-          sameMethodName &&
-          isFunctionCalledWithSameArgumentsAsDeclared(functionCallTree, method) &&
-          (superClass.isUnknownSymbol() || correspondingMethodFromSuper != null &&
-            hasSameVisibilityAs(method, correspondingMethodFromSuper) &&
-            hasSameParameterList(method, correspondingMethodFromSuper))) {
-          String message = String.format(MESSAGE, methodName);
-          context().newIssue(this, method.name(), message);
+          if (isInheritanceChainUnresolvable || duplicatesDeclarationFromSuper) {
+            String message = String.format(MESSAGE, methodName);
+            context().newIssue(this, method.name(), message);
+          }
         }
       }
     }
   }
 
-  private boolean hasSameParameterList(MethodDeclarationTree method, MethodSymbol other) {
-    if (Symbols.get(method).isUnknownSymbol() || other.isUnknownSymbol()) {
-      return false;
-    }
+  private static boolean hasSameParameterList(MethodDeclarationTree method, MethodSymbol other) {
+    MethodSymbol methodSymbol = ((HasMethodSymbol) method).symbol();
 
-    List<Parameter> parameters = ((HasMethodSymbol) method).symbol().parameters();
-    List<Parameter> parametersFromSuper = other.parameters();
-    if (parameters.size() != parametersFromSuper.size()) {
+    List<Parameter> parameters = methodSymbol.parameters();
+    List<Parameter> otherParameters = other.parameters();
+    if (parameters.size() != otherParameters.size()) {
       return false;
     }
     for (int i = 0; i < parameters.size(); ++i) {
-      if (!parameters.get(i).equals(parametersFromSuper.get(i))) {
+      if (!parameters.get(i).equals(otherParameters.get(i))) {
         return false;
       }
     }
     return true;
   }
 
-  private boolean hasSameVisibilityAs(MethodDeclarationTree method, MethodSymbol other) {
-    if (Symbols.get(method).isUnknownSymbol() || other.isUnknownSymbol()) {
-      return false;
-    }
-
-    return Symbols.get(method).visibility().equals(other.visibility());
+  private static boolean hasSameVisibilityAs(MethodDeclarationTree method, MethodSymbol other) {
+    return ((HasMethodSymbol) method).symbol().visibility().equals(other.visibility());
   }
 
   private static boolean isFunctionCalledWithSameArgumentsAsDeclared(FunctionCallTree functionCallTree, MethodDeclarationTree method) {

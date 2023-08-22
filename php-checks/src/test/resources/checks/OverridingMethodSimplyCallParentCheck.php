@@ -80,6 +80,10 @@ abstract class B extends A {
   public function o($arg1, $arg2 = 0) { // OK
     A::o($arg1, $arg2);
   }
+
+  public function p() {
+    print("Doesn't reference superclass at all");
+  }
 }
 
 class D extends C {
@@ -136,6 +140,14 @@ class DefaultF extends F
     }
 }
 
+class MiddleF extends F {}
+class LowerF extends MiddleF {
+    public function __construct(FooInterface $arg1) // Noncompliant
+    {
+        parent::__construct($arg1);
+    }
+}
+
 //////////////////////////////////
 // shouldn't trigger if visibility differs
 
@@ -157,5 +169,13 @@ class DefaultG extends G
     public static function factoryMethod(): self {
         // do something
         return new self();
+    }
+}
+
+class AnotherG extends G
+{
+    public function __construct($arg)
+    {
+        parent::__construct($arg);
     }
 }
