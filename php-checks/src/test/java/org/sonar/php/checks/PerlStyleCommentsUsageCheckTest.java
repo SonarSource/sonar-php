@@ -19,26 +19,16 @@
  */
 package org.sonar.php.checks;
 
-import java.util.Collections;
-import java.util.List;
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonar.plugins.php.api.visitors.PhpFile;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class PerlStyleCommentsUsageCheckTest {
 
   private static final PHPCheck CHECK = new PerlStyleCommentsUsageCheck();
 
   @Test
-  public void test() throws Exception {
-    PhpFile file = TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php");
-    String message = "Use \"//\" instead of \"#\" to start this comment";
-    List<PhpIssue> issues = Collections.singletonList(new LineIssue(CHECK, 3, message));
-
-    PHPCheckTest.check(CHECK, file, issues);
+  public void test() {
+    CheckVerifier.verify(CHECK, "PerlStyleCommentsUsageCheck.php");
   }
 }

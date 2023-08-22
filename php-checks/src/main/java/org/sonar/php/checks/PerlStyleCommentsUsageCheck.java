@@ -23,19 +23,23 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = PerlStyleCommentsUsageCheck.KEY)
+@Rule(key = "S2046")
 public class PerlStyleCommentsUsageCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S2046";
   private static final String MESSAGE = "Use \"//\" instead of \"#\" to start this comment";
 
   @Override
   public void visitTrivia(SyntaxTrivia trivia) {
     super.visitTrivia(trivia);
 
-    if (trivia.text().charAt(0) == '#') {
+    String text = trivia.text();
+    if (text.charAt(0) == '#' && !isShebangLine(text)) {
       context().newIssue(this, trivia, MESSAGE);
     }
+  }
+
+  private static boolean isShebangLine(String triviaText) {
+    return triviaText.startsWith("#!");
   }
 
 }
