@@ -19,38 +19,42 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class OpeningPHPTagCheckTest {
+class OpeningPHPTagCheckTest {
 
   private final OpeningPHPTagCheck check = new OpeningPHPTagCheck();
   private static final String TEST_DIR = "OpeningPHPTagCheck/";
 
   @Test
-  public void okLongTag() {
+  void okLongTag() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_long_tag.php");
   }
 
   @Test
-  public void okShortEchoTag() {
+  void okShortEchoTag() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_short_echo_tag.php");
   }
 
   @Test
   // SONARPHP-436
-  public void okJustHtml() {
+  void okJustHtml() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_just_html.php");
   }
 
   @Test
-  public void ko() throws Exception {
+  void ko() {
     CheckVerifier.verify(check, TEST_DIR + "ko.php");
   }
 
-  @Test
-  public void koWithStartingComment() throws Exception {
-    CheckVerifier.verify(check, TEST_DIR + "ko_starting_comment.php");
+  @ParameterizedTest
+  @ValueSource(strings = {"1", "2", "3", "4"})
+  void koWithStartingComment(String pathSuffix) {
+    String path = TEST_DIR + "ko_starting_comment_" + pathSuffix + ".php";
+    CheckVerifier.verify(check, path);
   }
 
 }
