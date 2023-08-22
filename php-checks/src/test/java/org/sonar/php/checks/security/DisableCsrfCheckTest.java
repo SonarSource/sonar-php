@@ -19,32 +19,32 @@
  */
 package org.sonar.php.checks.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class DisableCsrfCheckTest {
+class DisableCsrfCheckTest {
   @Test
-  public void testSymfonyController() {
+  void testSymfonyController() {
     CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/SymfonyController.php");
   }
 
   @Test
-  public void testSymfonyForm() {
+  void testSymfonyForm() {
     CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/SymfonyForm.php");
   }
 
   @Test
-  public void testSymfonyConfig() {
+  void testSymfonyConfig() {
     CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/config/packages/SymfonyConfig.php");
   }
 
   @Test
-  public void testSymfonyExtension() {
+  void testSymfonyExtension() {
     CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/SymfonyExtension.php");
   }
 
   @Test
-  public void testLaravelMiddleware() {
+  void testLaravelMiddleware() {
     CheckVerifier.verify(new DisableCsrfCheck(), "security/csrf/LaravelMiddleware.php");
   }
 }

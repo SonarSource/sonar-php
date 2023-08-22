@@ -19,26 +19,26 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class StringLiteralDuplicatedCheckTest {
+class StringLiteralDuplicatedCheckTest {
 
   private StringLiteralDuplicatedCheck check = new StringLiteralDuplicatedCheck();
 
   @Test
-  public void default_value() {
+  void defaultValue() {
     CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/default.php");
   }
 
   @Test
-  public void custom_property_threshold() {
+  void customPropertyThreshold() {
     check.threshold = 4;
     CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom_threshold.php");
   }
 
   @Test
-  public void custom_property_minimal_literal_length() {
+  void customPropertyMinimalLiteralLength() {
     check.minimalLiteralLength = 4;
     CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom_length.php");
   }

@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class RegexUsageCheckTest {
+class RegexUsageCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new RegexUsageCheck(), "security/RegexUsageCheck.php");
   }
 

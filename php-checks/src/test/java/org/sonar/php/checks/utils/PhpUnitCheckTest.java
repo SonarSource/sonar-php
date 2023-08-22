@@ -19,15 +19,15 @@
  */
 package org.sonar.php.checks.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-public class PhpUnitCheckTest {
+class PhpUnitCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new PhpUnitCheckImpl(), "utils/PhpUnitCheck.php");
   }
 

@@ -20,24 +20,24 @@
 package org.sonar.php.checks;
 
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 
-public class NestedControlFlowDepthCheckTest {
+class NestedControlFlowDepthCheckTest {
 
   private static final String FILE_NAME = "NestedControlFlowDepthCheck.php";
   private NestedControlFlowDepthCheck check = new NestedControlFlowDepthCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.max = 5;
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(new LineIssue(check, 32, null)));
   }

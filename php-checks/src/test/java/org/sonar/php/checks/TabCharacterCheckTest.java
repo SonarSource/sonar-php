@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
@@ -29,10 +29,10 @@ import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class TabCharacterCheckTest {
+class TabCharacterCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     PHPCheck check = new TabCharacterCheck();
 
     List<PhpIssue> issue = Collections.singletonList(new FileIssue(check, "Replace all tab characters in this file by sequences of white-spaces."));
@@ -40,7 +40,7 @@ public class TabCharacterCheckTest {
   }
 
   @Test
-  public void test_ok() throws Exception {
+  void testOk() throws Exception {
     PHPCheck check = new TabCharacterCheck();
     CheckVerifier.verifyNoIssueIgnoringExpected(check, "TabCharacterCheck/TabCharacterCheck_ok.php");
   }

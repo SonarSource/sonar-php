@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class AssertionArgumentOrderCheckTest {
+class AssertionArgumentOrderCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new AssertionArgumentOrderCheck(), "phpunit/AssertionArgumentOrderCheck.php");
   }
 }

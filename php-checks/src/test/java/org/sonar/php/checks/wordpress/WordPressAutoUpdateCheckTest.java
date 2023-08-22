@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.wordpress;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class WordPressAutoUpdateCheckTest {
+class WordPressAutoUpdateCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new WordPressAutoUpdateCheck(), "wordpress/WordPressAutoUpdateCheck/wp-config.php");
   }
 

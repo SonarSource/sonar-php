@@ -19,16 +19,16 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
-public class PerlStyleCommentsUsageCheckTest {
+class PerlStyleCommentsUsageCheckTest {
 
   private static final PHPCheck CHECK = new PerlStyleCommentsUsageCheck();
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(CHECK, "PerlStyleCommentsUsageCheck.php");
   }
 }

@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
@@ -29,12 +29,12 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class FixmeTagPresenceCheckTest {
+class FixmeTagPresenceCheckTest {
 
   private static final PHPCheck CHECK = new FixmeTagPresenceCheck();
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     PhpFile file = TestUtils.getCheckFile("FixmeTagPresenceCheck.php");
 
     List<PhpIssue> issues = Arrays.asList(

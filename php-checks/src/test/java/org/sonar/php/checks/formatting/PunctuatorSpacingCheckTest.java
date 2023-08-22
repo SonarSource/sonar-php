@@ -19,22 +19,22 @@
  */
 package org.sonar.php.checks.formatting;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class PunctuatorSpacingCheckTest extends FormattingStandardCheckTest {
+class PunctuatorSpacingCheckTest extends FormattingStandardCheckTest {
 
   private static final String TEST_FILE = TEST_DIR + "PunctuatorSpacingCheck.php";
 
   @Test
-  public void defaultValue() throws IllegalAccessException {
+  void defaultValue() throws IllegalAccessException {
     activeOnly("isOneSpaceBetweenRParentAndLCurly", "isNoSpaceParenthesis");
     CheckVerifier.verify(check, TEST_FILE);
   }
 
   @Test
-  public void custom() throws IllegalAccessException {
+  void custom() throws IllegalAccessException {
     deactivateAll();
     CheckVerifier.verifyNoIssueIgnoringExpected(check, TEST_FILE);
   }

@@ -20,25 +20,25 @@
 package org.sonar.php.checks;
 
 import java.util.Arrays;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 
-public class ConstantNameCheckTest {
+class ConstantNameCheckTest {
 
   private static final String FILE_NAME = "ConstantNameCheck.php";
 
   private ConstantNameCheck check = new ConstantNameCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.format = "^[A-Z][a-z]*$";
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Arrays.asList(
       new LineIssue(check, 9, "Rename this constant \"FOO\" to match the regular expression " + check.format + "."),

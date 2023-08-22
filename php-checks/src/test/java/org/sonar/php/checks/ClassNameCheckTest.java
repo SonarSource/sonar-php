@@ -21,24 +21,24 @@ package org.sonar.php.checks;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class ClassNameCheckTest {
+class ClassNameCheckTest {
 
   private ClassNameCheck check = new ClassNameCheck();
   private String fileName = "ClassNameCheck.php";
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.format = "^[a-z][a-zA-Z0-9]*$";
     List<PhpIssue> expectedIssues = new LinkedList<>();
     expectedIssues.add(new LineIssue(check, 7, "Rename class \"MyClass\" to match the regular expression " + check.format + "."));

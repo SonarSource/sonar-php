@@ -19,26 +19,26 @@
  */
 package org.sonar.php.checks.formatting;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTest {
+class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTest {
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
     CheckVerifier.verify(check, TEST_DIR + "NamespaceAndUseStatementCheck.php");
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     deactivateAll();
     CheckVerifier.verifyNoIssueIgnoringExpected(check, TEST_DIR + "NamespaceAndUseStatementCheck.php");
   }
 
   @Test
-  public void emptyScript() throws Exception {
+  void emptyScript() throws Exception {
     activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "empty-script.php");
   }

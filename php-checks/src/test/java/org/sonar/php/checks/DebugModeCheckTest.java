@@ -19,18 +19,18 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class DebugModeCheckTest {
+class DebugModeCheckTest {
 
   @Test
-  public void test_wordpress() {
+  void testWordpress() {
     CheckVerifier.verify(new DebugModeCheck(), "wordpress/WordPressDebugModeCheck/wp-config.php");
   }
 
   @Test
-  public void test_cakephp() {
+  void testCakephp() {
     CheckVerifier.verify(new DebugModeCheck(), "CakePhpDebugModeCheck.php");
   }
 }

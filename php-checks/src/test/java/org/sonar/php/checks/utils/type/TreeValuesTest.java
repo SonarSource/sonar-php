@@ -23,7 +23,7 @@ import com.sonar.sslr.api.typed.ActionParser;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -38,12 +38,12 @@ import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TreeValuesTest {
+class TreeValuesTest {
 
   static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser();
 
   @Test
-  public void lookup() {
+  void lookup() {
     CompilationUnitTree unit = (CompilationUnitTree) PARSER.parse("<?php f(); $a = 1; $b =& $a; $a = 2; $a += 3; $a = ((4));");
     ExpressionTree f = expression(unit, 0);
     ExpressionTree a = ((AssignmentExpressionTree) expression(unit, 1)).variable();
@@ -62,7 +62,7 @@ public class TreeValuesTest {
   }
 
   @Test
-  public void lookup_foreach() {
+  void lookupForeach() {
     CompilationUnitTree unit = (CompilationUnitTree) PARSER.parse("<?php $a = 1; foreach($arr as $a) { };");
     ExpressionTree a = ((AssignmentExpressionTree) expression(unit, 0)).variable();
     ForEachStatementTree forEachStatement = (ForEachStatementTree) unit.script().statements().get(1);

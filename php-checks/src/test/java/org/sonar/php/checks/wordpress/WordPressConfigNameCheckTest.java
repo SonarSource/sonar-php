@@ -19,18 +19,18 @@
  */
 package org.sonar.php.checks.wordpress;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class WordPressConfigNameCheckTest {
+class WordPressConfigNameCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new WordPressConfigNameCheck(), "wordpress/WordPresConfigNameCheck/wp-config.php");
   }
 
   @Test
-  public void custom_option() {
+  void customOption() {
     WordPressConfigNameCheck check = new WordPressConfigNameCheck();
     check.customOptions = "MY_CUSTOM_OPTION, MY_SECOND_CUSTOM_OPTION";
     CheckVerifier.verify(check, "wordpress/WordPresConfigNameCheck/custom/wp-config.php");

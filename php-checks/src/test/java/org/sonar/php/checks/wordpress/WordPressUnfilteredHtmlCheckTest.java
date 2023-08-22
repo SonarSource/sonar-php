@@ -20,20 +20,20 @@
 package org.sonar.php.checks.wordpress;
 
 import java.io.IOException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
-public class WordPressUnfilteredHtmlCheckTest extends WordPressConfigCheckTest {
+class WordPressUnfilteredHtmlCheckTest extends WordPressConfigCheckTest {
 
   PHPCheck check = new WordPressUnfilteredHtmlCheck();
 
   @Test
-  public void test_misconfiguration() throws IOException {
+  void testMisconfiguration() throws IOException {
     wordPressVerifier.verify(check, "wordpress/WordPressUnfilteredHtmlCheck/wp-config.php");
   }
 
   @Test
-  public void test_missing_config() throws IOException {
+  void testMissingConfig() throws IOException {
     wordPressVerifier.verifyAbsence(check, "Make sure allowing unfiltered HTML is intended.");
   }
 }

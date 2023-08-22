@@ -19,18 +19,18 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class PHPDeprecatedFunctionUsageCheckTest {
+class PHPDeprecatedFunctionUsageCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new PHPDeprecatedFunctionUsageCheck(), "PHPDeprecatedFunctionUsageCheck.php");
   }
 
   @Test
-  public void testCustomNamespace() {
+  void testCustomNamespace() {
     CheckVerifier.verify(new PHPDeprecatedFunctionUsageCheck(), "PHPDeprecatedFunctionUsageCheck_namespace.php");
   }
 }

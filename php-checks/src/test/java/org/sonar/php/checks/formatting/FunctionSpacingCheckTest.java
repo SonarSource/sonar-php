@@ -19,23 +19,23 @@
  */
 package org.sonar.php.checks.formatting;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
+class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
 
   private static final String TEST_FILE = TEST_DIR + "FunctionSpacingCheck.php";
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     activeOnly("isOneSpaceAfterComma", "isNoSpaceAfterMethodName", "isClosureSpacing");
     CheckVerifier.verify(check, TEST_FILE);
 
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     deactivateAll();
     CheckVerifier.verifyNoIssueIgnoringExpected(check, TEST_FILE);
   }

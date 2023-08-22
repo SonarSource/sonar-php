@@ -21,19 +21,19 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class FileHeaderCheckTest {
+class FileHeaderCheckTest {
 
   private static final String FILE_2 = "FileHeaderCheck/file2.php";
   private FileHeaderCheck check = new FileHeaderCheck();
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     List<PhpIssue> issue = Collections.singletonList(new FileIssue(check, "Add or update the header of this file."));
     List<PhpIssue> noIssue = Collections.emptyList();
 

@@ -19,38 +19,38 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class ClearTextProtocolsCheckTest {
+class ClearTextProtocolsCheckTest {
 
   @Test
-  public void string_literals() {
+  void stringLiterals() {
     CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/stringLiterals.php");
   }
 
   @Test
-  public void ftp() {
+  void ftp() {
     CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/ftp.php");
   }
 
   @Test
-  public void laravel_mail() {
+  void laravelMail() {
     CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/laravel/config/mail.php");
   }
 
   @Test
-  public void swift_mailer() {
+  void swiftMailer() {
     CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/swiftMailer.php");
   }
 
   @Test
-  public void php_mailer() {
+  void phpMailer() {
     CheckVerifier.verify(new ClearTextProtocolsCheck(), "security/clearTextProtocolsCheck/phpMailer.php");
   }
 
   @Test
-  public void wordpress() {
+  void wordpress() {
     CheckVerifier.verify(new ClearTextProtocolsCheck(), "wordpress/WordPressForceSslCheck/wp-config.php");
   }
 }

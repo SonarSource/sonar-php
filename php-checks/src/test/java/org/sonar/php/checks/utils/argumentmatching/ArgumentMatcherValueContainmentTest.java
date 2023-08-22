@@ -20,14 +20,14 @@
 package org.sonar.php.checks.utils.argumentmatching;
 
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArgumentMatcherValueContainmentTest {
+class ArgumentMatcherValueContainmentTest {
 
   @Test
-  public void argumentIndicatorWithString() {
+  void argumentIndicatorWithString() {
     ArgumentMatcherValueContainment argumentMatcher = ArgumentMatcherValueContainment.builder()
       .values("VALUE")
       .position(1)
@@ -40,7 +40,7 @@ public class ArgumentMatcherValueContainmentTest {
   }
 
   @Test
-  public void argumentIndicatorWithSet() {
+  void argumentIndicatorWithSet() {
     ArgumentMatcherValueContainment argumentMatcher = ArgumentMatcherValueContainment.builder()
       .values(Set.of(
         "VALUE"))

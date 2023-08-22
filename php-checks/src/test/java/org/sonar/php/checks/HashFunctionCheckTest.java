@@ -19,18 +19,18 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class HashFunctionCheckTest {
+class HashFunctionCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new HashFunctionCheck(), "HashFunctionCheck.php");
   }
 
   @Test
-  public void test_no_issue() {
+  void testNoIssue() {
     CheckVerifier.verifyNoIssue(new HashFunctionCheck(), "HashFunctionCheckNoIssue.php");
   }
 

@@ -20,15 +20,15 @@
 package org.sonar.php.checks.utils.argumentmatching;
 
 import java.util.function.Function;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArgumentVerifierUnaryFunctionTest {
+class ArgumentVerifierUnaryFunctionTest {
 
   @Test
-  public void argumentVerifierConstructionTest() {
+  void argumentVerifierConstructionTest() {
     Function<ExpressionTree, Boolean> testFunction = s -> true;
 
     ArgumentVerifierUnaryFunction verifier = ArgumentVerifierUnaryFunction.builder()

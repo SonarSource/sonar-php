@@ -19,22 +19,22 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class TooManyLinesInFunctionCheckTest {
+class TooManyLinesInFunctionCheckTest {
 
   private static final String FILE_NAME = "TooManyLinesInFunctionCheck.php";
 
   private TooManyLinesInFunctionCheck check = new TooManyLinesInFunctionCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.max = 3;
     CheckVerifier.verify(check, FILE_NAME);
   }

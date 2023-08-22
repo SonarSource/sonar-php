@@ -22,7 +22,7 @@ package org.sonar.php.checks.utils;
 import com.sonar.sslr.api.typed.ActionParser;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -30,17 +30,17 @@ import org.sonarsource.analyzer.commons.checks.coverage.UtilityClass;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SyntacticEquivalenceTest {
+class SyntacticEquivalenceTest {
 
   private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
 
   @Test
-  public void utility_class() throws Exception {
+  void utilityClass() throws Exception {
     UtilityClass.assertGoodPractice(SyntacticEquivalence.class);
   }
 
   @Test
-  public void areSyntacticallyEquivalent() throws Exception {
+  void areSyntacticallyEquivalent() throws Exception {
     assertThat(areSyntacticallyEquivalent(null, null)).isTrue();
     assertThat(areSyntacticallyEquivalent(null, "1;")).isFalse();
     assertThat(areSyntacticallyEquivalent("$x;", null)).isFalse();

@@ -21,23 +21,23 @@ package org.sonar.php.checks.phpini;
 
 import java.io.File;
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ini.PhpIniCheck;
 
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.check;
 
-public class CgiForceRedirectCheckTest {
+class CgiForceRedirectCheckTest {
 
   private PhpIniCheck check = new CgiForceRedirectCheck();
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  public void line_issue() throws Exception {
+  void lineIssue() throws Exception {
     check(check, new File(dir, "cgi_force_redirect.ini"));
   }
 
   @Test
-  public void empty_file() throws Exception {
+  void emptyFile() throws Exception {
     check(check, new File(dir, "empty.ini"), Collections.emptyList());
   }
 

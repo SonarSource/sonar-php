@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class POSIXFilePermissionsCheckTest {
+class POSIXFilePermissionsCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new POSIXFilePermissionsCheck(), "security/POSIXFilePermissionsCheck.php");
   }
 }

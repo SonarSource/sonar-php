@@ -20,24 +20,24 @@
 package org.sonar.php.checks;
 
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 
-public class TooManyLinesInFileCheckTest {
+class TooManyLinesInFileCheckTest {
 
   private TooManyLinesInFileCheck check = new TooManyLinesInFileCheck();
   private String fileName = "TooManyLinesInFileCheck.php";
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verifyNoIssue(check, fileName);
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.max = 2;
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), Collections.singletonList(new LineIssue(
       check,

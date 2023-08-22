@@ -22,18 +22,18 @@ package org.sonar.php.checks;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class LineLengthCheckTest {
+class LineLengthCheckTest {
 
   private LineLengthCheck check = new LineLengthCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     List<PhpIssue> issues = Collections.singletonList(
       new LineIssue(check, 4, "Split this 122 characters long line (which is greater than 120 authorized)."));
 
@@ -41,7 +41,7 @@ public class LineLengthCheckTest {
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.maximumLineLength = 30;
     List<PhpIssue> issues = Arrays.asList(
       new LineIssue(check, 4, "Split this 122 characters long line (which is greater than 30 authorized)."),

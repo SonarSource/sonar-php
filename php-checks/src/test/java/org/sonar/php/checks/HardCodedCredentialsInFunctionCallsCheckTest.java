@@ -21,40 +21,40 @@ package org.sonar.php.checks;
 
 import java.io.FileNotFoundException;
 import java.util.Set;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.CheckVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.sonar.php.checks.HardCodedCredentialsInFunctionCallsCheck.JsonSensitiveFunctionsReader;
 
-public class HardCodedCredentialsInFunctionCallsCheckTest {
+class HardCodedCredentialsInFunctionCallsCheckTest {
 
-  @Rule
-  public LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @RegisterExtension
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new HardCodedCredentialsInFunctionCallsCheck(), "HardCodedCredentialsInFunctionCallsCheck.php");
   }
 
   @Test
-  public void parseResourceThrowsException() {
+  void parseResourceThrowsException() {
     assertThatThrownBy(() -> JsonSensitiveFunctionsReader.parseResource("no_valid_file_location" +
       ".json")).isInstanceOf(FileNotFoundException.class);
   }
 
   @Test
-  public void toIntegerReturnsNull() {
+  void toIntegerReturnsNull() {
     Integer integer = JsonSensitiveFunctionsReader.toInteger("string");
     assertThat(integer).isNull();
   }
 
   @Test
-  public void shouldLogErrorOnInvalidFile() {
+  void shouldLogErrorOnInvalidFile() {
     JsonSensitiveFunctionsReader.parseSensitiveFunctions("invalidLocation", Set.of("invalid_fileName"));
 
     assertThat(logTester.setLevel(Level.ERROR).logs()).hasSize(1);

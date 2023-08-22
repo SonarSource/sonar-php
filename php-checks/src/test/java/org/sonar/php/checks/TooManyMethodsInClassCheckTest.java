@@ -21,31 +21,31 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class TooManyMethodsInClassCheckTest {
+class TooManyMethodsInClassCheckTest {
 
   private TooManyMethodsInClassCheck check = new TooManyMethodsInClassCheck();
   private static final String FILE_NAME = "TooManyMethodsInClassCheck.php";
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
-  public void custom_maximum_method_threshold() throws Exception {
+  void customMaximumMethodThreshold() throws Exception {
     check.maximumMethodThreshold = 2;
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  public void custom_count_non_public_method() throws Exception {
+  void customCountNonPublicMethod() throws Exception {
     check.maximumMethodThreshold = 2;
     check.countNonpublicMethods = false;
 

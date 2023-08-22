@@ -19,21 +19,21 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class ClassComplexityCheckTest {
+class ClassComplexityCheckTest {
 
   private static final String FILE_NAME = "ClassComplexityCheck.php";
   private ClassComplexityCheck check = new ClassComplexityCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.max = 5;
     CheckVerifier.verify(check, FILE_NAME);
   }

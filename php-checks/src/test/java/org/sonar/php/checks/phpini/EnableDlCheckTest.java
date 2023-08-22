@@ -21,22 +21,22 @@ package org.sonar.php.checks.phpini;
 
 import java.io.File;
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.issue;
 
-public class EnableDlCheckTest {
+class EnableDlCheckTest {
 
   private EnableDlCheck check = new EnableDlCheck();
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  public void line_issues() throws Exception {
+  void lineIssues() throws Exception {
     PhpIniCheckTestUtils.check(check, new File(dir, "enable_dl.ini"));
   }
 
   @Test
-  public void file_issue() throws Exception {
+  void fileIssue() throws Exception {
     PhpIniCheckTestUtils.check(check, new File(dir, "empty.ini"), Collections.singletonList(
       issue("Explicitly set \"enable_dl\" to 0.")));
   }

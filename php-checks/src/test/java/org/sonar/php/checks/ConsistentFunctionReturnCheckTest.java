@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class ConsistentFunctionReturnCheckTest {
+class ConsistentFunctionReturnCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new ConsistentFunctionReturnCheck(), "ConsistentFunctionReturnCheck.php");
   }
 

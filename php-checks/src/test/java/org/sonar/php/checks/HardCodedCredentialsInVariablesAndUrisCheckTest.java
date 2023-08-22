@@ -19,18 +19,18 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class HardCodedCredentialsInVariablesAndUrisCheckTest {
+class HardCodedCredentialsInVariablesAndUrisCheckTest {
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verify(new HardCodedCredentialsInVariablesAndUrisCheck(), "HardCodedCredentialsInVariablesAndUrisCheck.php");
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     HardCodedCredentialsInVariablesAndUrisCheck check = new HardCodedCredentialsInVariablesAndUrisCheck();
     check.credentialWords = "marmalade,bazooka";
     CheckVerifier.verify(check, "HardCodedCredentialsInVariablesAndUrisCheckCustom.php");

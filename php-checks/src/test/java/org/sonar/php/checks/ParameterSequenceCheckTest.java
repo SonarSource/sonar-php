@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class ParameterSequenceCheckTest {
+class ParameterSequenceCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/ParameterSequenceCheck.php");
     CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/A.php", "ParameterSequenceCheck/B.php");
   }

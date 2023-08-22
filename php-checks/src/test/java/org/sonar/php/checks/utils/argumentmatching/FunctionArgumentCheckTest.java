@@ -21,7 +21,7 @@ package org.sonar.php.checks.utils.argumentmatching;
 
 import java.util.Set;
 import java.util.function.Function;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -33,12 +33,12 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class FunctionArgumentCheckTest extends PhpTreeModelTest {
+class FunctionArgumentCheckTest extends PhpTreeModelTest {
 
   private static final Function<ExpressionTree, Boolean> trueFunction = s -> true;
 
   @Test
-  public void checkArgumentRaisesIssueWhenPositionMatches() {
+  void checkArgumentRaisesIssueWhenPositionMatches() {
     FunctionCallTree tree = parse("methodName(\"firstValue\", \"secondValue\", \"thirdValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     ArgumentVerifierUnaryFunction matcher = ArgumentVerifierUnaryFunction.builder()
@@ -54,7 +54,7 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesIssueWhenNameMatches() {
+  void checkArgumentRaisesIssueWhenNameMatches() {
     FunctionCallTree tree = parse("methodName(firstVar:\"firstValue\", secondVar:\"secondValue\", thirdVar:\"thirdValue\")",
       PHPLexicalGrammar.MEMBER_EXPRESSION);
 
@@ -71,7 +71,7 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesIssueBecauseOrderOfSequentialMatchers() {
+  void checkArgumentRaisesIssueBecauseOrderOfSequentialMatchers() {
     FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     ArgumentVerifierUnaryFunction shouldNotMatch = ArgumentVerifierUnaryFunction.builder()
@@ -93,7 +93,7 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesIssuesOnBothMatchers() {
+  void checkArgumentRaisesIssuesOnBothMatchers() {
     FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\", thirdVar:\"thirdValue\")",
       PHPLexicalGrammar.MEMBER_EXPRESSION);
 
@@ -116,7 +116,7 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesNoIssueWhenMatchedPositionIsNamed() {
+  void checkArgumentRaisesNoIssueWhenMatchedPositionIsNamed() {
     FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\", thirdVar:\"thirdValue\")",
       PHPLexicalGrammar.MEMBER_EXPRESSION);
 
@@ -133,7 +133,7 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesNoIssueBecauseOfSequentialOrderedMatchers() {
+  void checkArgumentRaisesNoIssueBecauseOfSequentialOrderedMatchers() {
     FunctionCallTree tree = parse("methodName(\"firstValue\", secondVar:\"secondValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     ArgumentVerifierUnaryFunction shouldNotMatch = ArgumentVerifierUnaryFunction.builder()
@@ -155,7 +155,7 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesIssueWhenMethodNameInMatcherIsNull() {
+  void checkArgumentRaisesIssueWhenMethodNameInMatcherIsNull() {
     FunctionCallTree tree = parse("methodName(\"firstValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     ArgumentVerifierValueContainment matcher = ArgumentVerifierValueContainment.builder()
@@ -170,7 +170,7 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesNoIssueWhenMethodNameInMatcherIsNull() {
+  void checkArgumentRaisesNoIssueWhenMethodNameInMatcherIsNull() {
     FunctionCallTree tree = parse("methodName(\"firstValue\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     ArgumentMatcherValueContainment matcher = ArgumentMatcherValueContainment.builder()
@@ -185,7 +185,7 @@ public class FunctionArgumentCheckTest extends PhpTreeModelTest {
   }
 
   @Test
-  public void checkArgumentRaisesIssueWhenPositionInMatcherIsOutOfBounds() {
+  void checkArgumentRaisesIssueWhenPositionInMatcherIsOutOfBounds() {
     FunctionCallTree tree = parse("methodName(\"first\")", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     ArgumentMatcherValueContainment matcher = ArgumentMatcherValueContainment.builder()

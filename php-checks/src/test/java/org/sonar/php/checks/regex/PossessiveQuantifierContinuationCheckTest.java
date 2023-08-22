@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.regex;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class PossessiveQuantifierContinuationCheckTest {
+class PossessiveQuantifierContinuationCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new PossessiveQuantifierContinuationCheck(), "regex/PossessiveQuantifierContinuationCheck.php");
   }
 

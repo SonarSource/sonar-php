@@ -19,14 +19,14 @@
  */
 package org.sonar.php.checks.utils.type;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TypePredicateListTest {
+class TypePredicateListTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(new TypePredicateList().test(null)).isFalse();
     assertThat(new TypePredicateList(x -> true).test(null)).isTrue();
     assertThat(new TypePredicateList(x -> true, x -> false).test(null)).isTrue();

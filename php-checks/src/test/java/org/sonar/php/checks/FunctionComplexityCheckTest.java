@@ -20,25 +20,25 @@
 package org.sonar.php.checks;
 
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 
-public class FunctionComplexityCheckTest {
+class FunctionComplexityCheckTest {
 
   private static final String FILE_NAME = "FunctionComplexityCheck.php";
   private FunctionComplexityCheck check = new FunctionComplexityCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(
       new LineIssue(check, 3, "The Cyclomatic Complexity of this function \"ko\" is 28 which is greater than 20 authorized.")));
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.threshold = 2;
     CheckVerifier.verify(check, FILE_NAME);
   }

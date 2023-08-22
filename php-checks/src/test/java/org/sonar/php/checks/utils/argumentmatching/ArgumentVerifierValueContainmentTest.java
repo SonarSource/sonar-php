@@ -20,14 +20,14 @@
 package org.sonar.php.checks.utils.argumentmatching;
 
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArgumentVerifierValueContainmentTest {
+class ArgumentVerifierValueContainmentTest {
 
   @Test
-  public void argumentVerifierWithValue() {
+  void argumentVerifierWithValue() {
     ArgumentVerifierValueContainment argumentVerifier = ArgumentVerifierValueContainment.builder()
       .raiseIssueOnMatch(false)
       .position(1)
@@ -39,7 +39,7 @@ public class ArgumentVerifierValueContainmentTest {
   }
 
   @Test
-  public void argumentVerifierWithName() {
+  void argumentVerifierWithName() {
     ArgumentVerifierValueContainment argumentVerifier = ArgumentVerifierValueContainment.builder()
       .position(1)
       .name("name")
@@ -53,7 +53,7 @@ public class ArgumentVerifierValueContainmentTest {
   }
 
   @Test
-  public void argumentVerifierWithSet() {
+  void argumentVerifierWithSet() {
     ArgumentVerifierValueContainment argumentVerifier = ArgumentVerifierValueContainment.builder()
       .position(1)
       .values(Set.of("VALUE"))
@@ -67,7 +67,7 @@ public class ArgumentVerifierValueContainmentTest {
   }
 
   @Test
-  public void argumentVerifierWithDefault() {
+  void argumentVerifierWithDefault() {
     ArgumentVerifierValueContainment argumentVerifier = ArgumentVerifierValueContainment.builder()
       .position(1)
       .values("VALUE")
