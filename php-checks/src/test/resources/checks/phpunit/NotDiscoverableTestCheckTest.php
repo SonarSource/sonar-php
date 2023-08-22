@@ -107,3 +107,42 @@ class ChainsTestLoop extends TestCase {
     $this->a();
   }
 }
+
+class DataHelper extends TestCase {
+  public function testFoo() {
+    $this->staticMethodCompliant1();
+  }
+
+  // Noncompliant@+1 {{Mark this method as a test so that it can be executed by the test runner.}}
+  public static function staticMethodNonCompliant1() { // doesn't return any data, we don't consider it as an helper/provider, we raise an issue
+    self::assertTrue("abc");
+  }
+
+  // Noncompliant@+1 {{Mark this method as a test so that it can be executed by the test runner.}}
+  public static function staticMethodNonCompliant2() : int { // we don't refer to the return type hint to know if the method return data or not
+    self::assertTrue("abc");
+  }
+
+  // Noncompliant@+1 {{Adjust the visibility of this test method so that it can be executed by the test runner.}}
+  private static function testStaticMethodNonCompliant3() {
+    self::assertTrue("abc");
+  }
+
+  // Noncompliant@+1 {{Adjust the visibility of this test method so that it can be executed by the test runner.}}
+  private static function testStaticMethodNonCompliant4() { // even if it return data, because it is private and named test it should raise an issue
+    self::assertTrue("abc");
+    return ["data"];
+  }
+
+  public static function staticMethodCompliant1() { // Compliant : it is called by another test method
+    self::assertTrue("abc");
+  }
+
+  public static function staticMethodCompliant2() { // Compliant : public static method that return something are considered helper/provider and should not raise an issue
+    self::assertTrue("abc");
+    return ["data"];
+  }
+
+  public static function staticMethodCompliant3() { // Compliant : doesn't perform any assert, not considered as a test method
+  }
+}
