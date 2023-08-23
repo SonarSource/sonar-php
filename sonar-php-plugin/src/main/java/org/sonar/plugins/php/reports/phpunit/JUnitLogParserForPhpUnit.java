@@ -61,17 +61,24 @@ public class JUnitLogParserForPhpUnit {
   }
 
   private static TestSuites processRoot(File file, SMInputFactory inputFactory) throws XMLStreamException {
-    SMHierarchicCursor rootCursor = inputFactory.rootElementCursor(file);
-    rootCursor.advance();
-    if (!"testsuites".equals(rootCursor.getLocalName())) {
-      throw new XMLStreamException("Report should start with <testsuites>");
+    SMHierarchicCursor rootCursor = null;
+    try {
+      rootCursor = inputFactory.rootElementCursor(file);
+      rootCursor.advance();
+      if (!"testsuites".equals(rootCursor.getLocalName())) {
+        throw new XMLStreamException("Report should start with <testsuites>");
+      }
+      SMInputCursor childCursor = rootCursor.childElementCursor("testsuite");
+      List<TestSuite> testSuites = new ArrayList<>();
+      while (childCursor.getNext() != null) {
+        testSuites.add(processTestSuite(childCursor));
+      }
+      return new TestSuites(testSuites);
+    } finally {
+      if (rootCursor != null) {
+        rootCursor.getStreamReader().closeCompletely();
+      }
     }
-    SMInputCursor childCursor = rootCursor.childElementCursor("testsuite");
-    List<TestSuite> testSuites = new ArrayList<>();
-    while (childCursor.getNext() != null) {
-      testSuites.add(processTestSuite(childCursor));
-    }
-    return new TestSuites(testSuites);
   }
 
   private static TestSuite processTestSuite(SMInputCursor cursor) throws XMLStreamException {
