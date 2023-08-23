@@ -19,20 +19,20 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class TooManyReturnCheckTest {
+class TooManyReturnCheckTest {
 
   private TooManyReturnCheck check = new TooManyReturnCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verify(check, "TooManyReturnCheck/default.php");
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.max = 2;
     CheckVerifier.verify(check, "TooManyReturnCheck/custom.php");
   }

@@ -21,35 +21,35 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class FileNameCheckTest {
+class FileNameCheckTest {
 
   private FileNameCheck check = new FileNameCheck();
   private static final String TEST_DIR = "FileNameCheck/";
 
   @Test
-  public void ok_defaultValue() {
+  void okDefaultValue() {
     checkNoIssue("ok.php");
   }
 
   @Test
-  public void ko_defaultValue() {
+  void koDefaultValue() {
     checkIssue("_ko.php", "Rename this file to match this regular expression: \"" + FileNameCheck.DEFAULT + "\"");
   }
 
   @Test
-  public void ok_custom() {
+  void okCustom() {
     check.format = "_[a-z][A-Za-z0-9]+.php";
     checkNoIssue("_ko.php");
   }
 
   @Test
-  public void ko_custom() {
+  void koCustom() {
     check.format = "_[a-z][A-Za-z0-9]+.php";
     checkIssue("ok.php", "Rename this file to match this regular expression: \"" + check.format + "\"");
   }

@@ -21,19 +21,19 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class CommentedOutCodeCheckTest {
+class CommentedOutCodeCheckTest {
 
   private static final PHPCheck CHECK = new CommentedOutCodeCheck();
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     List<PhpIssue> issues = Arrays.asList(
       newIssue(13),
       newIssue(18),

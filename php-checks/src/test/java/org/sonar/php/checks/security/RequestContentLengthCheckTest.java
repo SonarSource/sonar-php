@@ -19,27 +19,27 @@
  */
 package org.sonar.php.checks.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class RequestContentLengthCheckTest {
+class RequestContentLengthCheckTest {
   @Test
-  public void symfony_file() {
+  void symfonyFile() {
     CheckVerifier.verify(new RequestContentLengthCheck(), "security/requestContentLengthCheck/symfonyFile.php");
   }
 
   @Test
-  public void laravel_request() {
+  void laravelRequest() {
     CheckVerifier.verify(new RequestContentLengthCheck(), "security/requestContentLengthCheck/laravelRequest.php");
   }
 
   @Test
-  public void laravel_form_request() {
+  void laravelFormRequest() {
     CheckVerifier.verify(new RequestContentLengthCheck(), "security/requestContentLengthCheck/laravelFormRequest.php");
   }
 
   @Test
-  public void laravel_validator() {
+  void laravelValidator() {
     CheckVerifier.verify(new RequestContentLengthCheck(), "security/requestContentLengthCheck/laravelValidator.php");
   }
 }

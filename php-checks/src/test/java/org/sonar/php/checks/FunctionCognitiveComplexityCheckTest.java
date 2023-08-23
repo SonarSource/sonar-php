@@ -19,21 +19,21 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class FunctionCognitiveComplexityCheckTest {
+class FunctionCognitiveComplexityCheckTest {
 
   private FunctionCognitiveComplexityCheck check = new FunctionCognitiveComplexityCheck();
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     check.setThreshold(0);
     CheckVerifier.verify(check, "FunctionCognitiveComplexityCheck/zeroThreshold.php");
   }
 
   @Test
-  public void default_threshold() throws Exception {
+  void defaultThreshold() throws Exception {
     CheckVerifier.verify(check, "FunctionCognitiveComplexityCheck/default.php");
   }
 

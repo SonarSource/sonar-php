@@ -21,31 +21,31 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class TooManyFieldsInClassCheckTest {
+class TooManyFieldsInClassCheckTest {
 
   private TooManyFieldsInClassCheck check = new TooManyFieldsInClassCheck();
   private static final String FILE_NAME = "TooManyFieldsInClassCheck.php";
 
   @Test
-  public void test_default() throws Exception {
+  void testDefault() throws Exception {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
-  public void custom_maximum_field_threshold() throws Exception {
+  void customMaximumFieldThreshold() throws Exception {
     check.maximumFieldThreshold = 4;
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  public void custom_both_parameters() throws Exception {
+  void customBothParameters() throws Exception {
     check.maximumFieldThreshold = 2;
     check.countNonpublicFields = false;
 

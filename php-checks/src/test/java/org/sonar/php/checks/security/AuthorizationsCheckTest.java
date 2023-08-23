@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class AuthorizationsCheckTest {
+class AuthorizationsCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new AuthorizationsCheck(), "security/AuthorizationsCheck/VoterInterfaceCheck.php");
     CheckVerifier.verify(new AuthorizationsCheck(), "security/AuthorizationsCheck/VoterCheck.php");
     CheckVerifier.verify(new AuthorizationsCheck(), "security/AuthorizationsCheck/FacadeGateCheck.php");

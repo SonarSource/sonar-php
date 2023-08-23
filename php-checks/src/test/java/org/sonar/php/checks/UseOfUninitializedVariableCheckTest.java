@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class UseOfUninitializedVariableCheckTest {
+class UseOfUninitializedVariableCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new UseOfUninitializedVariableCheck(), "UseOfUninitializedVariableCheck.php");
   }
 

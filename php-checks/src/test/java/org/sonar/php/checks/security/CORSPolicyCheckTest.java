@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class CORSPolicyCheckTest {
+class CORSPolicyCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new CORSPolicyCheck(), "security/CORSCheck/CORSPolicyCheck.php");
     CheckVerifier.verify(new CORSPolicyCheck(), "security/CORSCheck/cors.php");
     CheckVerifier.verifyNoIssue(new CORSPolicyCheck(), "security/CORSCheck/foo.php");

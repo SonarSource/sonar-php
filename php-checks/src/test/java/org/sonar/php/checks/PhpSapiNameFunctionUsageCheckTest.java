@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class PhpSapiNameFunctionUsageCheckTest {
+class PhpSapiNameFunctionUsageCheckTest {
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verify(new PhpSapiNameFunctionUsageCheck(), "PhpSapiNameFunctionUsageCheck.php");
   }
 

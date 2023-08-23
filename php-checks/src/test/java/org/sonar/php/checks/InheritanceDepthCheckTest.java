@@ -19,25 +19,25 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class InheritanceDepthCheckTest {
+class InheritanceDepthCheckTest {
 
   @Test
-  public void defaults() {
+  void defaults() {
     CheckVerifier.verify(new InheritanceDepthCheck(), "InheritanceDepthCheck/defaults.php");
   }
 
   @Test
-  public void reduce_max_inheritance_depth() {
+  void reduceMaxInheritanceDepth() {
     InheritanceDepthCheck check = new InheritanceDepthCheck();
     check.max = 3;
     CheckVerifier.verify(check, "InheritanceDepthCheck/reduce_max_inheritance_depth.php");
   }
 
   @Test
-  public void filtered_classes() {
+  void filteredClasses() {
     InheritanceDepthCheck check = new InheritanceDepthCheck();
     check.filteredClasses = "filteredClass1, filteredClass2";
     CheckVerifier.verifyNoIssue(check, "InheritanceDepthCheck/filtered_classes.php");

@@ -20,26 +20,26 @@
 package org.sonar.php.checks.wordpress;
 
 import java.io.IOException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
-public class WordPressLateConfigCheckTest extends WordPressConfigCheckTest {
+class WordPressLateConfigCheckTest extends WordPressConfigCheckTest {
 
   PHPCheck check = new WordPressLateConfigCheck();
 
   @Test
-  public void test_config_file_with_parenthesis() throws IOException {
+  void testConfigFileWithParenthesis() throws IOException {
     wordPressVerifier.verify(check, "wordpress/WordPressLateConfigCheck/with-parenthesis.php");
   }
 
   @Test
-  public void test_config_file_without_parenthesis() throws IOException {
+  void testConfigFileWithoutParenthesis() throws IOException {
     wordPressVerifier.verify(check, "wordpress/WordPressLateConfigCheck/without-parenthesis.php");
   }
 
   @Test
-  public void test_other_file() {
+  void testOtherFile() {
     CheckVerifier.verifyNoIssue(check, "wordpress/WordPressLateConfigCheck/no-wp-config.php");
   }
 

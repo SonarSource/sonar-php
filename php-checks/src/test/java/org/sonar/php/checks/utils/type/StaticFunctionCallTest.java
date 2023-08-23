@@ -19,23 +19,24 @@
  */
 package org.sonar.php.checks.utils.type;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.sonar.php.checks.utils.type.StaticFunctionCall.staticFunctionCall;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
-public class StaticFunctionCallTest {
+class StaticFunctionCallTest {
 
   private static final String A_B_C_DEF = "A\\B\\C::def";
 
-  @Test(expected = IllegalStateException.class)
-  public void illegal_static_function_call() {
-    staticFunctionCall("A\\B\\C\\def");
+  @Test
+  void illegalStaticFunctionCall() {
+    assertThatExceptionOfType(IllegalStateException.class).isThrownBy(() -> staticFunctionCall("A\\B\\C\\def"));
   }
 
   @Test
-  public void matches() {
+  void matches() {
     assertThat(staticFunctionCall(A_B_C_DEF).matches(qualifiedName("A\\B\\C"), "def")).isTrue();
     assertThat(staticFunctionCall(A_B_C_DEF).matches(qualifiedName("a\\b\\c"), "DEF")).isTrue();
     assertThat(staticFunctionCall(A_B_C_DEF).matches(qualifiedName("A\\B\\C"), "ghi")).isFalse();

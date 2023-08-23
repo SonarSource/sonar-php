@@ -19,16 +19,16 @@
  */
 package org.sonar.php.checks.phpini;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.checks.phpini.PhpIniBoolean.OFF;
 import static org.sonar.php.checks.phpini.PhpIniBoolean.ON;
 
-public class PhpIniBooleanTest {
+class PhpIniBooleanTest {
 
   @Test
-  public void variants() throws Exception {
+  void variants() throws Exception {
     assertThat(ON.matchesValue("1")).isTrue();
     assertThat(ON.matchesValue("on")).isTrue();
     assertThat(ON.matchesValue("yes")).isTrue();
@@ -43,14 +43,14 @@ public class PhpIniBooleanTest {
   }
 
   @Test
-  public void case_insensitive() throws Exception {
+  void caseInsensitive() throws Exception {
     assertThat(ON.matchesValue("On")).isTrue();
     assertThat(ON.matchesValue("ON")).isTrue();
     assertThat(ON.matchesValue("yeS")).isTrue();
   }
 
   @Test
-  public void quoted_value() throws Exception {
+  void quotedValue() throws Exception {
     assertThat(ON.matchesValue("'on'")).isTrue();
     assertThat(ON.matchesValue("'1'")).isTrue();
     assertThat(ON.matchesValue("\"1\"")).isTrue();

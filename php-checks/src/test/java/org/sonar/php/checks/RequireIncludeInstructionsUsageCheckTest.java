@@ -19,18 +19,18 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class RequireIncludeInstructionsUsageCheckTest {
+class RequireIncludeInstructionsUsageCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new RequireIncludeInstructionsUsageCheck(), "RequireIncludeInstructionsUsageCheck.php");
   }
 
   @Test
-  public void ignore_special_files() throws Exception {
+  void ignoreSpecialFiles() throws Exception {
     CheckVerifier.verifyNoIssue(new RequireIncludeInstructionsUsageCheck(), "autoload.php");
   }
 

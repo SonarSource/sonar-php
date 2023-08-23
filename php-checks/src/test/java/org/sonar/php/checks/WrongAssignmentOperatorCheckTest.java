@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class WrongAssignmentOperatorCheckTest {
+class WrongAssignmentOperatorCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new WrongAssignmentOperatorCheck(), "WrongAssignmentOperatorCheck.php");
   }
 

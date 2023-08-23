@@ -19,12 +19,12 @@
  */
 package org.sonar.php.checks.phpunit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class ExceptionTestingCheckTest {
+class ExceptionTestingCheckTest {
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new ExceptionTestingCheck(), "phpunit/ExceptionTestingCheck.php");
   }
 }

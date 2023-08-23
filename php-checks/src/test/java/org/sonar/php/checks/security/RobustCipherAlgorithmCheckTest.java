@@ -19,12 +19,12 @@
  */
 package org.sonar.php.checks.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class RobustCipherAlgorithmCheckTest {
+class RobustCipherAlgorithmCheckTest {
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new RobustCipherAlgorithmCheck(), "security/RobustCipherAlgorithmCheck.php");
   }
 }

@@ -19,26 +19,26 @@
  */
 package org.sonar.php.checks.formatting;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
+class CurlyBraceCheckTest extends FormattingStandardCheckTest {
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     activeOnly("isOpenCurlyBraceForClassAndFunction", "isOpenCurlyBraceForControlStructures", "isClosingCurlyNextToKeyword");
     CheckVerifier.verify(check, TEST_DIR + "CurlyBraceCheck.php");
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     deactivateAll();
     CheckVerifier.verifyNoIssueIgnoringExpected(check, TEST_DIR + "CurlyBraceCheck.php");
   }
 
   @Test
-  public void closing_curly() throws Exception {
+  void closingCurly() throws Exception {
     activeOnly("isClosingCurlyNextToKeyword");
     CheckVerifier.verify(check, TEST_DIR + "ClosingCurlyBraceCheck.php");
   }

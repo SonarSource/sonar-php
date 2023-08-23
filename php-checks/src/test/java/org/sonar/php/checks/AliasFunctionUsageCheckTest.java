@@ -19,16 +19,16 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
 /**
  * @author Piotr Dawidiuk
  */
-public class AliasFunctionUsageCheckTest {
+class AliasFunctionUsageCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new AliasFunctionUsageCheck(), "AliasFunctionUsageCheck.php");
   }
 

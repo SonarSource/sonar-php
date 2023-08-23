@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -29,13 +29,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-public class CheckBundleTest {
+class CheckBundleTest {
 
   private static final CheckContext CONTEXT = mock(CheckContext.class);
   private static final CheckBundlePart BUNDLE_PART = spy(CheckBundlePart.class);
 
   @Test
-  public void test_bundle_part_analysis() {
+  void testBundlePartAnalysis() {
     CheckBundle bundle = new TestCheckBundle();
     bundle.init();
     bundle.analyze(CONTEXT);

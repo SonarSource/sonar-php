@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.wordpress;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class WordPressDbRepairCheckTest {
+class WordPressDbRepairCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new WordPressDbRepairCheck(), "wordpress/WordPressDbRepairCheck/wp-config.php");
   }
 

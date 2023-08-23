@@ -19,14 +19,14 @@
  */
 package org.sonar.php.checks.wordpress;
 
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
+import java.io.File;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.plugins.php.WordPressConfigVerifier;
 
 public abstract class WordPressConfigCheckTest {
 
-  @Rule
-  public TemporaryFolder folder = new TemporaryFolder();
+  @TempDir
+  public File folder;
 
   public WordPressConfigVerifier wordPressVerifier;
 

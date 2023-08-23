@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.regex;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class EmptyGroupCheckTest {
+class EmptyGroupCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new EmptyGroupCheck(), "regex/EmptyGroupCheck.php");
   }
 }

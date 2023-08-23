@@ -19,19 +19,19 @@
  */
 package org.sonar.php.checks.wordpress;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
-public class WordPressConfigVisitorTest {
+class WordPressConfigVisitorTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new TestWordPressConfigVisitor(), "wordpress/WordPressConfigVisitor/wp-config.php");
   }
 
   @Test
-  public void test_non_config_file() {
+  void testNonConfigFile() {
     CheckVerifier.verifyNoIssue(new TestWordPressConfigVisitor(), "wordpress/WordPressConfigVisitor/file.php");
   }
 

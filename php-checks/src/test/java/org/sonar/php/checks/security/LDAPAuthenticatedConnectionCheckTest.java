@@ -19,12 +19,12 @@
  */
 package org.sonar.php.checks.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class LDAPAuthenticatedConnectionCheckTest {
+class LDAPAuthenticatedConnectionCheckTest {
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new LDAPAuthenticatedConnectionCheck(), "security/LDAPAuthenticatedConnectionCheck.php");
   }
 }

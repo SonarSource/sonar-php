@@ -20,24 +20,24 @@
 package org.sonar.php.checks;
 
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 
-public class ClosingTagInFullPHPFileCheckTest {
+class ClosingTagInFullPHPFileCheckTest {
 
   private ClosingTagInFullPHPFileCheck check = new ClosingTagInFullPHPFileCheck();
   private static final String TEST_DIR = "ClosingTagInFullPHPFileCheck/";
 
   @Test
-  public void ok() throws Exception {
+  void ok() throws Exception {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test
-  public void ko() throws Exception {
+  void ko() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LineIssue(check, 11, "Remove this closing tag \"?>\".")));
   }
 }

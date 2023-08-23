@@ -21,19 +21,19 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class TrailingCommentCheckTest {
+class TrailingCommentCheckTest {
 
   private TrailingCommentCheck check = new TrailingCommentCheck();
   private String fileName = "TrailingCommentCheck.php";
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     List<PhpIssue> issues = Arrays.asList(
       newIssue(4),
       newIssue(5));
@@ -42,7 +42,7 @@ public class TrailingCommentCheckTest {
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.legalCommentPattern = "";
     List<PhpIssue> issues = Arrays.asList(
       newIssue(4),

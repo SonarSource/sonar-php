@@ -21,28 +21,28 @@ package org.sonar.php.checks;
 
 import java.io.File;
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.check;
 
-public class SessionCookiePersistenceCheckTest {
+class SessionCookiePersistenceCheckTest {
 
   private SessionCookiePersistenceCheck check = new SessionCookiePersistenceCheck();
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  public void phpini() throws Exception {
+  void phpini() throws Exception {
     check(check, new File(dir, "session_cookie_persistence.ini"));
   }
 
   @Test
-  public void empty_phpini() throws Exception {
+  void emptyPhpini() throws Exception {
     check(check, new File(dir, "empty.ini"), Collections.emptyList());
   }
 
   @Test
-  public void programmatic() throws Exception {
+  void programmatic() throws Exception {
     CheckVerifier.verify(check, "SessionCookiePersistence.php");
   }
 

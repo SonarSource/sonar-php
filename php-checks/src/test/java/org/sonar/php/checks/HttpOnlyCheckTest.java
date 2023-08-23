@@ -21,24 +21,24 @@ package org.sonar.php.checks;
 
 import java.io.File;
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.check;
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.issue;
 
-public class HttpOnlyCheckTest {
+class HttpOnlyCheckTest {
 
   private HttpOnlyCheck check = new HttpOnlyCheck();
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  public void test_php_file() {
+  void testPhpFile() {
     CheckVerifier.verify(new HttpOnlyCheck(), "HttpOnlyCheck.php");
   }
 
   @Test
-  public void test_php_ini() {
+  void testPhpIni() {
     check(check, new File(dir, "http_only.ini"));
     check(check, new File(dir, "empty.ini"), Collections.singletonList(issue("Set the \"session.cookie_httponly\" property to \"true\" if needed.")));
   }

@@ -19,18 +19,18 @@
  */
 package org.sonar.php.checks.regex;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class RegexComplexityCheckTest {
+class RegexComplexityCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new RegexComplexityCheck(), "regex/RegexComplexityCheck.php");
   }
 
   @Test
-  public void test_max_parameter() throws Exception {
+  void testMaxParameter() throws Exception {
     RegexComplexityCheck check = new RegexComplexityCheck();
     check.max = 21;
     CheckVerifier.verify(check, "regex/RegexComplexityCheck-21.php");

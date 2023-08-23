@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks.utils.type;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.checks.utils.type.TreeValuesTest.expression;
 
-public class ObjectMemberFunctionCallTest {
+class ObjectMemberFunctionCallTest {
 
   @Test
-  public void test() {
+  void test() {
     CompilationUnitTree unit = (CompilationUnitTree) TreeValuesTest.PARSER.parse("<?php " +
     /* expr0 */ "$x->m();" +
     /* expr1 */ "m();" +

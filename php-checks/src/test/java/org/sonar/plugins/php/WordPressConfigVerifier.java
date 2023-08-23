@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Collections;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.tests.PHPCheckVerifier;
 import org.sonar.plugins.php.api.visitors.FileIssue;
@@ -34,9 +34,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class WordPressConfigVerifier {
 
-  private final TemporaryFolder folder;
+  @TempDir
+  private final File folder;
 
-  public WordPressConfigVerifier(TemporaryFolder folder) {
+  public WordPressConfigVerifier(File folder) {
     this.folder = folder;
   }
 
@@ -53,7 +54,7 @@ public class WordPressConfigVerifier {
     Files.write(emptyFile.toPath(), "<?php\n".getBytes(Charset.defaultCharset()));
     PHPCheckTest.check(check, TestUtils.getFile(emptyFile), Collections.singletonList(new FileIssue(check, message)));
 
-    File noConfigFile = folder.newFile("non-wp-config.php");
+    File noConfigFile = new File(folder, "non-wp-config.php");
     Files.write(noConfigFile.toPath(), "<?php\n".getBytes(Charset.defaultCharset()));
     PHPCheckVerifier.verifyNoIssue(noConfigFile, check);
   }
@@ -67,6 +68,6 @@ public class WordPressConfigVerifier {
   }
 
   private File configFile() throws IOException {
-    return folder.newFile("wp-config.php");
+    return new File(folder, "wp-config.php");
   }
 }

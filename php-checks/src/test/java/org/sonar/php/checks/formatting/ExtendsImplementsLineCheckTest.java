@@ -19,20 +19,20 @@
  */
 package org.sonar.php.checks.formatting;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class ExtendsImplementsLineCheckTest extends FormattingStandardCheckTest {
+class ExtendsImplementsLineCheckTest extends FormattingStandardCheckTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     activeOnly("isExtendsAndImplementsLine");
     CheckVerifier.verify(check, TEST_DIR + "ExtendsImplementsLineCheck.php");
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     deactivateAll();
     CheckVerifier.verifyNoIssueIgnoringExpected(check, TEST_DIR + "ExtendsImplementsLineCheck.php");
   }

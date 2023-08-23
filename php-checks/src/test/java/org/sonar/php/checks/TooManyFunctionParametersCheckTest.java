@@ -21,32 +21,32 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class TooManyFunctionParametersCheckTest {
+class TooManyFunctionParametersCheckTest {
 
   private static final String FILE_NAME = "TooManyFunctionParametersCheck.php";
 
   private TooManyFunctionParametersCheck check = new TooManyFunctionParametersCheck();
 
   @Test
-  public void default_parameter_values() throws Exception {
+  void defaultParameterValues() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 24, 36));
   }
 
   @Test
-  public void custom_value_for_max() throws Exception {
+  void customValueForMax() throws Exception {
     check.max = 2;
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  public void custom_value_for_constructor_max() throws Exception {
+  void customValueForConstructorMax() throws Exception {
     check.constructorMax = 2;
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 19, 24, 29, 36));
   }

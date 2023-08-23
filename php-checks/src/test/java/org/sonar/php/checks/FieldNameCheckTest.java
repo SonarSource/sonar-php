@@ -20,25 +20,25 @@
 package org.sonar.php.checks;
 
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 
-public class FieldNameCheckTest {
+class FieldNameCheckTest {
 
   private static final String FILE_NAME = "FieldNameCheck.php";
 
   private FieldNameCheck check = new FieldNameCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
     String message = "Rename this field \"$myVariable\" to match the regular expression " + check.format + ".";
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),

@@ -20,36 +20,36 @@
 package org.sonar.php.checks;
 
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 
-public class MoreThanOneClassInFileCheckTest {
+class MoreThanOneClassInFileCheckTest {
 
   private static final String TEST_DIR = "MoreThanOneClassInFileCheck/";
   private final MoreThanOneClassInFileCheck check = new MoreThanOneClassInFileCheck();
 
   @Test
-  public void ok() throws Exception {
+  void ok() throws Exception {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test
-  public void ko1() throws Exception {
+  void ko1() throws Exception {
     String message = "There are 2 independent classes in this file; move all but one of them to other files.";
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko1.php"), Collections.singletonList(new FileIssue(check, message).cost(1.0)));
   }
 
   @Test
-  public void ko2() throws Exception {
+  void ko2() throws Exception {
     String message = "There are 2 independent interfaces in this file; move all but one of them to other files.";
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko2.php"), Collections.singletonList(new FileIssue(check, message).cost(1.0)));
   }
 
   @Test
-  public void ko3() throws Exception {
+  void ko3() throws Exception {
     String message = "There are 1 independent classes and 2 independent interfaces in this file; move all but one of them to other files.";
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko3.php"), Collections.singletonList(new FileIssue(check, message).cost(2.0)));
   }

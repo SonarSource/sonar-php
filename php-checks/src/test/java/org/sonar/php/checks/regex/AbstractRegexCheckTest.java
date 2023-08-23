@@ -21,7 +21,7 @@ package org.sonar.php.checks.regex;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.CheckVerifier;
@@ -34,7 +34,7 @@ import org.sonarsource.analyzer.commons.regex.RegexParseResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AbstractRegexCheckTest {
+class AbstractRegexCheckTest {
 
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
   private final AbstractRegexCheck check = new AbstractRegexCheck() {
@@ -45,7 +45,7 @@ public class AbstractRegexCheckTest {
   };
 
   @Test
-  public void test_getLiteral() {
+  void testGetLiteral() {
     assertThat(AbstractRegexCheck.getLiteral(expr("'//'"))).isPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("'/a/'"))).isPresent();
     assertThat(AbstractRegexCheck.getLiteral(expr("' /a/'"))).isPresent();
@@ -57,7 +57,7 @@ public class AbstractRegexCheckTest {
   }
 
   @Test
-  public void testHasValidDelimiter() {
+  void testHasValidDelimiter() {
     assertThat(check.hasValidDelimiters(pattern("'/Foo/'"))).isTrue();
     assertThat(check.hasValidDelimiters(pattern("'/Foo\\/a/'"))).isTrue();
     assertThat(check.hasValidDelimiters(pattern("'/Foo/mi'"))).isTrue();
@@ -73,7 +73,7 @@ public class AbstractRegexCheckTest {
   }
 
   @Test
-  public void test_getFlagSet() {
+  void testGetFlagSet() {
     assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/\"")).isEmpty()).isTrue();
     assertThat(AbstractRegexCheck.getFlagSet((LiteralTree) expr("\"/a/i\""))).satisfies(f -> {
       assertThat(f.isEmpty()).isFalse();
@@ -93,7 +93,7 @@ public class AbstractRegexCheckTest {
   }
 
   @Test
-  public void test_newIssue_on_regexFunctionCall_with_cost() {
+  void testNewIssueOnRegexFunctionCallWithCost() {
     AbstractRegexCheck check = new AbstractRegexCheck() {
       @Override
       public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {

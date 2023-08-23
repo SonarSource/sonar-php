@@ -19,21 +19,21 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class LocalVariableAndParameterNameCheckTest {
+class LocalVariableAndParameterNameCheckTest {
 
   private static final String FILE_NAME = "LocalVariableAndParameterNameCheck.php";
   private LocalVariableAndParameterNameCheck check = new LocalVariableAndParameterNameCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.format = "^[A-Z_a-z0-9]*$";
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }

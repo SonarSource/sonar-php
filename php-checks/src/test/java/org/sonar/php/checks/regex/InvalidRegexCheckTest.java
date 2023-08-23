@@ -20,13 +20,13 @@
 package org.sonar.php.checks.regex;
 
 import junit.framework.TestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class InvalidRegexCheckTest extends TestCase {
+class InvalidRegexCheckTest extends TestCase {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     CheckVerifier.verify(new InvalidRegexCheck(), "regex/InvalidRegexCheck.php");
   }
 }

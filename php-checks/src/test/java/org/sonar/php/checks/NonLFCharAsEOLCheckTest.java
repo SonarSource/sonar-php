@@ -19,40 +19,40 @@
  */
 package org.sonar.php.checks;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class NonLFCharAsEOLCheckTest {
+class NonLFCharAsEOLCheckTest {
 
-  @Rule
-  public TemporaryFolder temporaryFolder = new TemporaryFolder();
+  @TempDir
+  public File temporaryFolder;
 
   private NonLFCharAsEOLCheck check = new NonLFCharAsEOLCheck();
   private PhpFile okFile;
   private PhpFile koFile;
 
-  @Before
-  public void setUp() throws Exception {
-    okFile = TestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \n");
-    koFile = TestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \r\n");
+  @BeforeEach
+  public void setUp() {
+    okFile = TestUtils.getFile(new File(temporaryFolder, "test1.php"), "<?php $foo = 1; \n");
+    koFile = TestUtils.getFile(new File(temporaryFolder, "test2.php"), "<?php $foo = 1; \r\n");
   }
 
   @Test
-  public void ok() {
+  void ok() {
     PHPCheckTest.check(check, okFile, Collections.emptyList());
   }
 
   @Test
-  public void ko() {
+  void ko() {
     List<PhpIssue> issues = Collections.singletonList(
       new FileIssue(check, "Replace all non line feed end of line characters in this file \"" + koFile.filename() + "\" by LF."));
     PHPCheckTest.check(check, koFile, issues);

@@ -19,46 +19,46 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class GenericExceptionCheckTest {
+class GenericExceptionCheckTest {
 
   private GenericExceptionCheck check = new GenericExceptionCheck();
   private static final String TEST_DIR = "GenericExceptionCheck/";
 
   @Test
-  public void ok_non_namespace() throws Exception {
+  void okNonNamespace() throws Exception {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok1.php");
   }
 
   @Test
-  public void ok_namespace() throws Exception {
+  void okNamespace() throws Exception {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok2.php");
   }
 
   @Test
-  public void ko_non_namespace() throws Exception {
+  void koNonNamespace() throws Exception {
     CheckVerifier.verify(check, TEST_DIR + "ko1.php");
   }
 
   @Test
-  public void ko_namespace() throws Exception {
+  void koNamespace() throws Exception {
     CheckVerifier.verify(check, TEST_DIR + "ko2.php");
   }
 
   @Test
-  public void ko_namespace_use() throws Exception {
+  void koNamespaceUse() throws Exception {
     CheckVerifier.verify(check, TEST_DIR + "ko3.php");
   }
 
   @Test
-  public void ko_multiple_namespaces() throws Exception {
+  void koMultipleNamespaces() throws Exception {
     CheckVerifier.verify(check, TEST_DIR + "ko4.php");
   }
 
   @Test
-  public void throw_expressions() throws Exception {
+  void throwExpressions() throws Exception {
     CheckVerifier.verify(check, TEST_DIR + "throw_expressions.php");
   }
 }

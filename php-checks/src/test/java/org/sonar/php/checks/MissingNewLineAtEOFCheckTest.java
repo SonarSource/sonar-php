@@ -21,14 +21,14 @@ package org.sonar.php.checks;
 
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class MissingNewLineAtEOFCheckTest {
+class MissingNewLineAtEOFCheckTest {
 
   private MissingNewLineAtEOFCheck check = new MissingNewLineAtEOFCheck();
   private static final String TEST_FILE_DIR = "MissingNewLineAtEOF/";
@@ -36,17 +36,17 @@ public class MissingNewLineAtEOFCheckTest {
     new FileIssue(check, "Add a new line at the end of this file."));
 
   @Test
-  public void noNewLine() {
+  void noNewLine() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "MissingNewLineAtEOF.php"), issue);
   }
 
   @Test
-  public void emptyFile() {
+  void emptyFile() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "EmptyFile.php"), issue);
   }
 
   @Test
-  public void newLine() {
+  void newLine() {
     CheckVerifier.verifyNoIssue(check, TEST_FILE_DIR + "NewLineAtEOF.php");
   }
 

@@ -20,24 +20,24 @@
 package org.sonar.php.checks;
 
 import java.util.Arrays;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class NestedFunctionDepthCheckTest {
+class NestedFunctionDepthCheckTest {
 
   private static final String FILE_NAME = "NestedFunctionDepthCheck.php";
   private NestedFunctionDepthCheck check = new NestedFunctionDepthCheck();
 
   @Test
-  public void defaultValue() throws Exception {
+  void defaultValue() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
-  public void custom() throws Exception {
+  void custom() throws Exception {
     check.max = 2;
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Arrays.asList(
       issue(5),

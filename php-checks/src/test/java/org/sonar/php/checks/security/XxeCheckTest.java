@@ -19,13 +19,13 @@
  */
 package org.sonar.php.checks.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-public class XxeCheckTest {
+class XxeCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     CheckVerifier.verify(new XxeCheck(), "security/XxeCheck.php");
     CheckVerifier.verify(new XxeCheck(), "security/XxeCheck_CakeUtils.php");
   }

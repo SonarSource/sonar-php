@@ -21,24 +21,24 @@ package org.sonar.php.checks.phpini;
 
 import java.io.File;
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ini.PhpIniCheck;
 
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.check;
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.issue;
 
-public class AllowUrlCheckTest {
+class AllowUrlCheckTest {
 
   private PhpIniCheck check = new AllowUrlCheck();
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  public void line_issues() throws Exception {
+  void lineIssues() throws Exception {
     check(check, new File(dir, "allow_url.ini"));
   }
 
   @Test
-  public void file_issue() throws Exception {
+  void fileIssue() throws Exception {
     check(check, new File(dir, "empty.ini"), Collections.singletonList(
       issue("Disable \"allow_url_fopen\" explicitly; it is enabled by default.")));
   }

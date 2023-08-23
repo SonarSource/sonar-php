@@ -20,20 +20,20 @@
 package org.sonar.php.checks.security;
 
 import java.io.File;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.check;
 
-public class CookieDomainCheckTest {
+class CookieDomainCheckTest {
 
   @Test
-  public void test_php_file() {
+  void testPhpFile() {
     CheckVerifier.verify(new CookieDomainCheck(), "security/CookieDomainCheck.php");
   }
 
   @Test
-  public void test_php_ini() {
+  void testPhpIni() {
     check(new CookieDomainCheck(), new File("src/test/resources/checks/phpini/cookie_domain.ini"));
   }
 }

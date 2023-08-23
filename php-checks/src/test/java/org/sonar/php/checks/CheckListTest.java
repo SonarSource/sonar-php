@@ -24,17 +24,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CheckListTest {
+class CheckListTest {
 
   /**
    * Enforces that each check declared in list.
    */
   @Test
-  public void count() {
+  void count() {
     int count = 0;
     List<File> files = new ArrayList<>();
     String[] checkFolders = {
@@ -61,7 +61,7 @@ public class CheckListTest {
    * Enforces that each check has test
    */
   @Test
-  public void test() {
+  void test() {
     List<Class<?>> checks = CheckList.getAllChecks();
 
     for (Class<?> cls : checks) {
@@ -75,7 +75,7 @@ public class CheckListTest {
   }
 
   @Test
-  public void checksShouldNotContainDuplicates() {
+  void checksShouldNotContainDuplicates() {
     List<Class<?>> allChecks = CheckList.getAllChecks();
     HashSet<Class<?>> allChecksWithoutDuplicates = new HashSet<>(allChecks);
     assertThat(allChecks).hasSameSizeAs(allChecksWithoutDuplicates);

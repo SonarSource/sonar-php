@@ -20,34 +20,34 @@
 package org.sonar.php.checks;
 
 import java.util.Collections;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 
-public class InlineHTMLInFileCheckTest {
+class InlineHTMLInFileCheckTest {
 
   private InlineHTMLInFileCheck check = new InlineHTMLInFileCheck();
   private static final String TEST_DIR = "InlineHTMLInFileCheck/";
 
   @Test
-  public void ok() throws Exception {
+  void ok() throws Exception {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test
-  public void ok_asp() throws Exception {
+  void okAsp() throws Exception {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_asp.php");
   }
 
   @Test
-  public void ok_excluded_file() throws Exception {
+  void okExcludedFile() throws Exception {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.phtml");
   }
 
   @Test
-  public void ko() throws Exception {
+  void ko() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new FileIssue(check, "Remove the inline HTML in this file.")));
   }
 }
