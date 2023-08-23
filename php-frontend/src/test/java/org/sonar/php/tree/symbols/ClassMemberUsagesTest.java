@@ -19,7 +19,11 @@
  */
 package org.sonar.php.tree.symbols;
 
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
@@ -48,28 +52,24 @@ class ClassMemberUsagesTest extends ParsingTestUtils {
     assertThat(arrayField.usages()).hasSize(1);
   }
 
-  @Test
-  void testMethod() {
-    Symbol method = getSymbol("method", Kind.FUNCTION);
-    Symbol field = getSymbol("$method", Kind.FIELD);
+  @ParameterizedTest
+  @MethodSource
+  void testMethod(String symbolName, String fieldName, int expectedMethodUsages) {
+    Symbol method = getSymbol(symbolName, Kind.FUNCTION);
+    Symbol field = getSymbol(fieldName, Kind.FIELD);
 
     assertThat(method).isNotNull();
     assertThat(field).isNotNull();
 
     assertThat(field.usages()).hasSize(1);
-    assertThat(method.usages()).hasSize(7);
+    assertThat(method.usages()).hasSize(expectedMethodUsages);
   }
 
-  @Test
-  void testStaticMethod() {
-    Symbol method = getSymbol("staticMethod", Kind.FUNCTION);
-    Symbol field = getSymbol("$staticMethod", Kind.FIELD);
-
-    assertThat(method).isNotNull();
-    assertThat(field).isNotNull();
-
-    assertThat(field.usages()).hasSize(1);
-    assertThat(method.usages()).hasSize(5);
+  private static Stream<Arguments> testMethod() {
+    return Stream.of(
+      Arguments.of("method", "$method", 7),
+      Arguments.of("staticMethod", "$staticMethod", 5),
+      Arguments.of("lateDeclMethod", "$lateDeclField", 1));
   }
 
   @Test
@@ -82,18 +82,6 @@ class ClassMemberUsagesTest extends ParsingTestUtils {
 
     assertThat(constField.usages()).hasSize(1);
     assertThat(field.usages()).hasSize(1);
-  }
-
-  @Test
-  void testUsedBeforeDeclaration() {
-    Symbol method = getSymbol("lateDeclMethod", Kind.FUNCTION);
-    Symbol field = getSymbol("$lateDeclField", Kind.FIELD);
-
-    assertThat(method).isNotNull();
-    assertThat(field).isNotNull();
-
-    assertThat(field.usages()).hasSize(1);
-    assertThat(method.usages()).hasSize(1);
   }
 
   @Test

@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
@@ -73,9 +72,7 @@ class PHPAnalyzerTest {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = createAnalyzer(check);
     InputFile file = FileTestUtils.getInputFile(new File(tempFolder, "file"), "<?php if(condition): ?>");
-    Assertions.assertThrows(RecognitionException.class, () -> {
-      analyzer.nextFile(file);
-    });
+    assertThatExceptionOfType(RecognitionException.class).isThrownBy(() -> analyzer.nextFile(file));
   }
 
   @Test

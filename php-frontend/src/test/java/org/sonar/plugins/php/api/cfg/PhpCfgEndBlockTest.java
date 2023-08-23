@@ -32,19 +32,21 @@ class PhpCfgEndBlockTest extends PHPTreeModelTest {
 
   @Test
   void cannotAddElement() {
+    PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
+    Tree tree = parse("array()", PHPLexicalGrammar.ARRAY_INIALIZER);
+
     assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> {
-      PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
-      Tree tree = parse("array()", PHPLexicalGrammar.ARRAY_INIALIZER);
       endBlock.addElement(tree);
     });
   }
 
   @Test
   void cannotReplaceSuccessors() {
+    PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
+    Map<PhpCfgBlock, PhpCfgBlock> map = new HashMap<>();
+    map.put(endBlock, endBlock);
+
     assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> {
-      PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
-      Map<PhpCfgBlock, PhpCfgBlock> map = new HashMap<>();
-      map.put(endBlock, endBlock);
       endBlock.replaceSuccessors(map);
     });
   }

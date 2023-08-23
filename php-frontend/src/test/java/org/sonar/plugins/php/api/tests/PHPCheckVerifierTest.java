@@ -55,14 +55,17 @@ class PHPCheckVerifierTest {
 
   @Test
   void fileIssueWrongMessage() {
+    File file = new File("src/test/resources/tests/file-issue.php");
+    PHPVisitorCheck check = new PHPVisitorCheck() {
+      @Override
+      public void visitCompilationUnit(CompilationUnitTree tree) {
+        context().newFileIssue(this, "Wrong message").cost(2.5d);
+      }
+    };
+
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> {
-      PHPCheckVerifier.verify(new File("src/test/resources/tests/file-issue.php"),
-        new PHPVisitorCheck() {
-          @Override
-          public void visitCompilationUnit(CompilationUnitTree tree) {
-            context().newFileIssue(this, "Wrong message").cost(2.5d);
-          }
-        });
+      PHPCheckVerifier.verify(file,
+        check);
     });
   }
 
@@ -79,46 +82,54 @@ class PHPCheckVerifierTest {
 
   @Test
   void lineIssueWrongMessage() {
+    File file = new File("src/test/resources/tests/line-issue.php");
+    PHPVisitorCheck check = new PHPVisitorCheck() {
+      @Override
+      public void visitCompilationUnit(CompilationUnitTree tree) {
+        context().newLineIssue(this, 2, "Wrong message");
+      }
+    };
+
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> {
-      PHPCheckVerifier.verify(new File("src/test/resources/tests/line-issue.php"),
-        new PHPVisitorCheck() {
-          @Override
-          public void visitCompilationUnit(CompilationUnitTree tree) {
-            context().newLineIssue(this, 2, "Wrong message");
-          }
-        });
+      PHPCheckVerifier.verify(file,
+        check);
     });
   }
 
   @Test
   void preciseIssue() {
+    PHPVisitorCheck check = new PHPVisitorCheck() {
+      @Override
+      public void visitFunctionCall(FunctionCallTree tree) {
+        SyntaxToken echoToken = ((NamespaceNameTree) tree.callee()).name().token();
+        SyntaxToken literalToken = ((LiteralTree) tree.callArguments().get(0).value()).token();
+        context().newIssue(this, echoToken, "Precise issue")
+          .secondary(literalToken, "Secondary");
+        super.visitFunctionCall(tree);
+      }
+    };
+
     PHPCheckVerifier.verify(new File("src/test/resources/tests/precise-issue.php"),
-      new PHPVisitorCheck() {
-        @Override
-        public void visitFunctionCall(FunctionCallTree tree) {
-          SyntaxToken echoToken = ((NamespaceNameTree) tree.callee()).name().token();
-          SyntaxToken literalToken = ((LiteralTree) tree.callArguments().get(0).value()).token();
-          context().newIssue(this, echoToken, "Precise issue")
-            .secondary(literalToken, "Secondary");
-          super.visitFunctionCall(tree);
-        }
-      });
+      check);
   }
 
   @Test
   void preciseIssueWrongSecondaryMessage() {
+    File file1 = new File("src/test/resources/tests/precise-issue.php");
+    PHPVisitorCheck check = new PHPVisitorCheck() {
+      @Override
+      public void visitFunctionCall(FunctionCallTree tree) {
+        SyntaxToken echoToken = ((NamespaceNameTree) tree.callee()).name().token();
+        SyntaxToken literalToken = ((LiteralTree) tree.callArguments().get(0).value()).token();
+        context().newIssue(this, echoToken, "Precise issue")
+          .secondary(literalToken, "Wrong message");
+        super.visitFunctionCall(tree);
+      }
+    };
+
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> {
-      PHPCheckVerifier.verify(new File("src/test/resources/tests/precise-issue.php"),
-        new PHPVisitorCheck() {
-          @Override
-          public void visitFunctionCall(FunctionCallTree tree) {
-            SyntaxToken echoToken = ((NamespaceNameTree) tree.callee()).name().token();
-            SyntaxToken literalToken = ((LiteralTree) tree.callArguments().get(0).value()).token();
-            context().newIssue(this, echoToken, "Precise issue")
-              .secondary(literalToken, "Wrong message");
-            super.visitFunctionCall(tree);
-          }
-        });
+      PHPCheckVerifier.verify(file1,
+        check);
     });
   }
 
@@ -137,18 +148,22 @@ class PHPCheckVerifierTest {
 
   @Test
   void multipleFilesAndMissingIssue() {
+    File file1 = new File("src/test/resources/tests/multifile/file1.php");
+    File file2 = new File("src/test/resources/tests/multifile/file2.php");
+    PHPVisitorCheck check = new PHPVisitorCheck() {
+      @Override
+      public void visitClassDeclaration(ClassDeclarationTree tree) {
+        if (context().getPhpFile().filename().equals("file1.php")) {
+          context().newIssue(this, tree.classToken(), "class!");
+        }
+      }
+    };
+
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> {
       PHPCheckVerifier.verify(
-        new PHPVisitorCheck() {
-          @Override
-          public void visitClassDeclaration(ClassDeclarationTree tree) {
-            if (context().getPhpFile().filename().equals("file1.php")) {
-              context().newIssue(this, tree.classToken(), "class!");
-            }
-          }
-        },
-        new File("src/test/resources/tests/multifile/file1.php"),
-        new File("src/test/resources/tests/multifile/file2.php"));
+        check,
+        file1,
+        file2);
     });
   }
 

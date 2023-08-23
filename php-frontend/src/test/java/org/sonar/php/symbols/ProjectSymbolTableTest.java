@@ -25,7 +25,12 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -272,52 +277,33 @@ class ProjectSymbolTableTest {
     assertThat(symbol.isUnknownSymbol()).isFalse();
   }
 
-  @Test
-  void doNotGetFunctionSymbolFromUnresolvableCall() {
-    PhpFile file1 = file("file1.php", "<?php function foo() {} $foo();");
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "<?php function foo() {} $foo();",
+    "<?php class FOO{public static function foo() {}} FOO::$foo();",
+    "<?php class FOO{} new FOO();"
+  })
+  void doNotGetFunctionSymbolFromUnresolvableCall(String code) {
+    PhpFile file1 = file("file1.php", code);
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     assertThat(Symbols.get(firstDescendant(ast, FunctionCallTree.class).get()).isUnknownSymbol()).isTrue();
   }
 
-  @Test
-  void getMethodSymbolFromCall() {
-    PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::foo();");
+  @ParameterizedTest
+  @MethodSource
+  void getMethodSymbolFromCall(String code, boolean isUnknownSymbol) {
+    PhpFile file1 = file("file1.php", code);
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
     FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
     assertThat(symbol).isInstanceOf(MethodSymbol.class);
-    assertThat(symbol.isUnknownSymbol()).isFalse();
+    assertThat(symbol.isUnknownSymbol()).isEqualTo(isUnknownSymbol);
   }
 
-  @Test
-  void getMethodSymbolFromExtendedCall() {
-    PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} class BAR extends FOO{} BAR::foo();");
-    Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(symbol).isInstanceOf(MethodSymbol.class);
-    assertThat(symbol.isUnknownSymbol()).isFalse();
-  }
-
-  @Test
-  void getMethodSymbolFromUnknownExtendedCall() {
-    PhpFile file1 = file("file1.php", "<?php class BAR extends FOO{} BAR::foo();");
-    Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    FunctionSymbol symbol = Symbols.get(firstDescendant(ast, FunctionCallTree.class).get());
-    assertThat(symbol).isInstanceOf(MethodSymbol.class);
-    assertThat(symbol.isUnknownSymbol()).isTrue();
-  }
-
-  @Test
-  void doNotGetMethodSymbolFromUnresolvableCall() {
-    PhpFile file1 = file("file1.php", "<?php class FOO{public static function foo() {}} FOO::$foo();");
-    Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    assertThat(Symbols.get(firstDescendant(ast, FunctionCallTree.class).get()).isUnknownSymbol()).isTrue();
-  }
-
-  @Test
-  void doNotGetFunctionSymbolFromNewExpressionCall() {
-    PhpFile file1 = file("file1.php", "<?php class FOO{} new FOO();");
-    Tree ast = getAst(file1, buildProjectSymbolData(file1));
-    assertThat(Symbols.get(firstDescendant(ast, FunctionCallTree.class).get()).isUnknownSymbol()).isTrue();
+  private static Stream<Arguments> getMethodSymbolFromCall() {
+    return Stream.of(
+      Arguments.of("<?php class FOO{public static function foo() {}} FOO::foo();", false),
+      Arguments.of("<?php class FOO{public static function foo() {}} class BAR extends FOO{} BAR::foo();", false),
+      Arguments.of("<?php class BAR extends FOO{} BAR::foo();", true));
   }
 
   @Test

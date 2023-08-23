@@ -35,6 +35,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// Suppressing issues about too many assertions
+@SuppressWarnings("java:S5961")
 class ExpressionPrecedenceTest extends PHPTreeModelTest {
 
   @Test

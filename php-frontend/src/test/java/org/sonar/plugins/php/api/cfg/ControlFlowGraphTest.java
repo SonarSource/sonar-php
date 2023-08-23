@@ -76,7 +76,10 @@ import static org.mockito.Mockito.when;
  * <p>
  * Also check {@link ExpectedCfgStructure}
  */
-class ControlFlowGraphTest extends PHPTreeModelTest {
+
+@SuppressWarnings("java:S5786")
+// needed for javaDoc reference
+public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5();

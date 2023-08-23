@@ -20,6 +20,8 @@
 package org.sonar.php.tree.impl.declaration;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -30,36 +32,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TypeNameTreeTest extends PHPTreeModelTest {
 
-  @Test
-  void builtInType() {
-    BuiltInTypeTree tree = parse("int", PHPLexicalGrammar.TYPE_NAME);
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "int", "mixed", "Int", "callable"
+  })
+  void builtInType(String typeName) {
+    BuiltInTypeTree tree = parse(typeName, PHPLexicalGrammar.TYPE_NAME);
 
     assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
-    assertThat(tree.token().text()).isEqualTo("int");
-  }
-
-  @Test
-  void builtInMixedType() {
-    BuiltInTypeTree tree = parse("mixed", PHPLexicalGrammar.TYPE_NAME);
-
-    assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
-    assertThat(tree.token().text()).isEqualTo("mixed");
-  }
-
-  @Test
-  void builtInTypeCapitalLetter() {
-    BuiltInTypeTree tree = parse("Int", PHPLexicalGrammar.TYPE_NAME);
-
-    assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
-    assertThat(tree.token().text()).isEqualTo("Int");
-  }
-
-  @Test
-  void builtInTypeKeyword() {
-    BuiltInTypeTree tree = parse("callable", PHPLexicalGrammar.TYPE_NAME);
-
-    assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
-    assertThat(tree.token().text()).isEqualTo("callable");
+    assertThat(tree.token().text()).isEqualTo(typeName);
   }
 
   @Test

@@ -20,8 +20,12 @@
 package org.sonar.php.tree.symbols;
 
 import java.util.List;
+import java.util.stream.Stream;
 import org.assertj.core.api.ListAssert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.tree.TreeUtils;
@@ -347,37 +351,23 @@ class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbol).isNotNull();
   }
 
-  @Test
-  void undeclaredClassUsage() {
-    SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
-    Symbol symbol = symbolTable.getSymbol("pdo");
+  @ParameterizedTest
+  @MethodSource
+  void undeclaredClassUsage(String code, String symbolName, int usageColumn) {
+    SymbolTableImpl symbolTable = symbolTableFor(code);
+    Symbol symbol = symbolTable.getSymbol(symbolName);
     assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
     assertThat(symbol.usages()).hasSize(1);
     SyntaxToken usage = symbol.usages().get(0);
     assertThat(usage.line()).isEqualTo(1);
-    assertThat(usage.column()).isEqualTo(17);
+    assertThat(usage.column()).isEqualTo(usageColumn);
   }
 
-  @Test
-  void undeclaredClassUsageWithFullyQualifiedName() {
-    SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new \\PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
-    Symbol symbol = symbolTable.getSymbol("pdo");
-    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
-    assertThat(symbol.usages()).hasSize(1);
-    SyntaxToken usage = symbol.usages().get(0);
-    assertThat(usage.line()).isEqualTo(1);
-    assertThat(usage.column()).isEqualTo(18);
-  }
-
-  @Test
-  void undeclaredClassUsageInNamespace() {
-    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace A { $a = new A('odbc:sample', 'db2inst1', 'ibmdb2'); }");
-    Symbol symbol = symbolTable.getSymbol("A\\A");
-    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
-    assertThat(symbol.usages()).hasSize(1);
-    SyntaxToken usage = symbol.usages().get(0);
-    assertThat(usage.line()).isEqualTo(1);
-    assertThat(usage.column()).isEqualTo(30);
+  private static Stream<Arguments> undeclaredClassUsage() {
+    return Stream.of(
+      Arguments.of("<?php $dbh = new PDO('odbc:sample', 'db2inst1', 'ibmdb2');", "pdo", 17),
+      Arguments.of("<?php $dbh = new \\PDO('odbc:sample', 'db2inst1', 'ibmdb2');", "pdo", 18),
+      Arguments.of("<?php  namespace A { $a = new A('odbc:sample', 'db2inst1', 'ibmdb2'); }", "A\\A", 30));
   }
 
   @Test
