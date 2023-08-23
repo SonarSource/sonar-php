@@ -71,6 +71,16 @@ public interface CheckContext {
   PreciseIssue newIssue(PHPCheck check, Tree startTree, Tree endTree, String message);
 
   /**
+   * Report an issue with precise issue location based on lines and columns without relaying on tree elements
+   *
+   * @param check the instance of the rule for which issue should be created
+   * @param issueLocation issue location within a file including the location message
+   * @return issue with precise location
+   * @since 3.32
+   */
+  PreciseIssue newIssue(PHPCheck check, IssueLocation issueLocation);
+
+  /**
    *
    * <p> To add cost use {@link LineIssue#cost(double)}.
    * <pre>
