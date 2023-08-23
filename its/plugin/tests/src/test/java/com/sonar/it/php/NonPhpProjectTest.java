@@ -23,15 +23,15 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NonPhpProjectTest {
+class NonPhpProjectTest {
 
-  @ClassRule
+  @RegisterExtension
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "non-php-project";
   private static final String PROJECT_NAME = "Non Php Project";
@@ -40,8 +40,8 @@ public class NonPhpProjectTest {
 
   private static BuildResult buildResult;
 
-  @BeforeClass
-  public static void startServer() {
+  @BeforeAll
+  static void startServer() {
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
       .setProjectKey(PROJECT_KEY)
@@ -53,7 +53,7 @@ public class NonPhpProjectTest {
   }
 
   @Test
-  public void test_execution_of_sensors() {
+  void test_execution_of_sensors() {
     assertThat(buildResult.getLogs()).doesNotContain(Tests.PHP_SENSOR_NAME);
     assertThat(buildResult.getLogs()).doesNotContain(Tests.PHP_INI_SENSOR_NAME);
     assertThat(buildResult.getLogs()).contains("1 file indexed");

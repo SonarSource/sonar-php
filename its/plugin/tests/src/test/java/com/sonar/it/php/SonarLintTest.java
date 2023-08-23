@@ -28,10 +28,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.rules.TemporaryFolder;
 import org.sonarsource.sonarlint.core.StandaloneSonarLintEngineImpl;
 import org.sonarsource.sonarlint.core.analysis.api.ClientInputFile;
@@ -43,17 +43,17 @@ import org.sonarsource.sonarlint.core.commons.Language;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SonarLintTest {
+class SonarLintTest {
 
-  @ClassRule
-  public static TemporaryFolder temp = new TemporaryFolder();
+  @TempDir
+  public static File tempDirectory;
 
   private static StandaloneSonarLintEngine sonarlintEngine;
 
   private static Path baseDir;
 
-  @BeforeClass
-  public static void prepare() throws Exception {
+  @BeforeAll
+  static void prepare() {
     StandaloneGlobalConfiguration sonarLintConfig = StandaloneGlobalConfiguration.builder()
       .addPlugin(Tests.PHP_PLUGIN_LOCATION.getFile().toPath())
       .addEnabledLanguage(Language.PHP)
@@ -66,13 +66,13 @@ public class SonarLintTest {
     baseDir = temp.newFolder().toPath();
   }
 
-  @AfterClass
-  public static void stop() {
+  @AfterAll
+  static void stop() {
     sonarlintEngine.stop();
   }
 
   @Test
-  public void should_raise_issues() throws IOException {
+  void shouldRaiseIssues() throws IOException {
     Path filePath = Tests.projectDirectoryFor("sonarlint").toPath().resolve("Math.php");
     filePath = Files.copy(filePath, baseDir.resolve("Math.php"));
     ClientInputFile inputFile = prepareInputFile(filePath, false);

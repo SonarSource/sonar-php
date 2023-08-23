@@ -22,23 +22,23 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.util.List;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonarqube.ws.Issues.Issue;
 
-public class CustomRulesTest {
+class CustomRulesTest {
 
-  @ClassRule
+  @RegisterExtension
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "custom-rules";
   private static final String PROJECT_NAME = "Custom Rules";
   private static List<Issue> issues;
 
-  @BeforeClass
-  public static void prepare() {
+  @BeforeAll
+  static void prepare() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "php-custom-rules-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("custom_rules"))
@@ -51,12 +51,12 @@ public class CustomRulesTest {
   }
 
   @Test
-  public void base_tree_visitor_check() {
+  void base_tree_visitor_check() {
     assertSingleIssue("php-custom-rules:visitor", 5, "Function expression.", "5min");
   }
 
   @Test
-  public void subscription_base_visitor_check() {
+  void subscription_base_visitor_check() {
     assertSingleIssue("php-custom-rules:subscription", 8, "For statement.", "10min");
   }
 

@@ -22,22 +22,22 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.util.List;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Common;
 import org.sonarqube.ws.Issues;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PsalmReportTest {
+class PsalmReportTest {
 
   private static final String PROJECT = "psalm_project";
 
-  @ClassRule
+  @RegisterExtension
   public static final Orchestrator ORCHESTRATOR = Tests.ORCHESTRATOR;
 
   @Test
-  public void import_report() {
+  void importReport() {
     Tests.provisionProject(PROJECT, PROJECT, "php", "no_rules");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor(PROJECT));

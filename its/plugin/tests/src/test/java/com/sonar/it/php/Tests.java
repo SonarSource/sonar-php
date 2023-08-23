@@ -33,7 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
-import org.junit.ClassRule;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.sonarqube.ws.Components;
@@ -73,7 +73,7 @@ public class Tests {
 
   public static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
 
-  @ClassRule
+  @RegisterExtension
   public static final Orchestrator ORCHESTRATOR;
 
   public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");

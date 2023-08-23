@@ -24,26 +24,26 @@ import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Measures;
 
 import static com.sonar.it.php.Tests.getMeasure;
 import static com.sonar.it.php.Tests.getMeasureAsDouble;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PHPIntegrationTest {
+class PHPIntegrationTest {
 
-  @ClassRule
+  @RegisterExtension
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "php-integration";
   private static final String PROJECT_NAME = "PHP Integration";
 
   public static final String FILE_TOKEN_PARSER = PROJECT_KEY + ":Bridge/Twig/TokenParser/TransTokenParser.php";
 
-  @BeforeClass
-  public static void startServer() {
+  @BeforeAll
+  static void startServer() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectKey(PROJECT_KEY)
@@ -59,7 +59,7 @@ public class PHPIntegrationTest {
   }
 
   @Test
-  public void projectMetric() {
+  void projectMetric() {
     // Size
     assertThat(getProjectMeasureAsDouble("ncloc")).isEqualTo(83800d);
     assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(119844d);
@@ -81,7 +81,7 @@ public class PHPIntegrationTest {
   }
 
   @Test
-  public void fileMetrics() {
+  void fileMetrics() {
     // Size
     assertThat(getFileMeasureAsDouble("ncloc")).isEqualTo(56d);
     assertThat(getFileMeasureAsDouble("lines")).isEqualTo(90d);
@@ -123,7 +123,7 @@ public class PHPIntegrationTest {
    * SONAR-3139
    */
   @Test
-  public void testDuplicationResults() {
+  void testDuplicationResults() {
     assertThat(getProjectMeasureAsDouble("duplicated_lines")).isEqualTo(8469d);
     assertThat(getProjectMeasureAsDouble("duplicated_blocks")).isEqualTo(295d);
     assertThat(getProjectMeasureAsDouble("duplicated_files")).isEqualTo(82d);
@@ -134,7 +134,7 @@ public class PHPIntegrationTest {
    * SONARPHP-278
    */
   @Test
-  public void should_be_compatible_with_DevCockpit() {
+  void should_be_compatible_with_DevCockpit() {
     assertThat(getFileMeasure("ncloc_data").getValue()).isNotEmpty();
   }
 
