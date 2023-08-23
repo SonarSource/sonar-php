@@ -74,6 +74,18 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(externalIssues).hasSize(3);
 
     ExternalIssue first = externalIssues.get(0);
+    verifyPsalmReportIssue1(first);
+
+    ExternalIssue second = externalIssues.get(1);
+    verifyPsalmReportIssue2(first, second);
+
+    ExternalIssue third = externalIssues.get(2);
+    verifyPsalmReportIssue3(third);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  private static void verifyPsalmReportIssue1(ExternalIssue first) {
     assertThat(first.type()).isEqualTo(RuleType.BUG);
     assertThat(first.severity()).isEqualTo(Severity.CRITICAL);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -86,8 +98,9 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(firstTextRange.start().lineOffset()).isEqualTo(4);
     assertThat(firstTextRange.end().line()).isEqualTo(5);
     assertThat(firstTextRange.end().lineOffset()).isEqualTo(16);
+  }
 
-    ExternalIssue second = externalIssues.get(1);
+  private static void verifyPsalmReportIssue2(ExternalIssue first, ExternalIssue second) {
     assertThat(second.type()).isEqualTo(RuleType.BUG);
     assertThat(second.severity()).isEqualTo(Severity.CRITICAL);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -100,8 +113,9 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(secondTextRange.start().lineOffset()).isEqualTo(1);
     assertThat(secondTextRange.end().line()).isEqualTo(2);
     assertThat(secondTextRange.end().lineOffset()).isEqualTo(10);
+  }
 
-    ExternalIssue third = externalIssues.get(2);
+  private static void verifyPsalmReportIssue3(ExternalIssue third) {
     assertThat(third.type()).isEqualTo(RuleType.BUG);
     assertThat(third.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
@@ -113,8 +127,6 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(thirdTextRange.start().lineOffset()).isEqualTo(4);
     assertThat(thirdTextRange.end().line()).isEqualTo(5);
     assertThat(thirdTextRange.end().lineOffset()).isEqualTo(16);
-
-    assertNoErrorWarnDebugLogs(logTester);
   }
 
   @Test
@@ -139,6 +151,24 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(externalIssues).hasSize(5);
 
     ExternalIssue first = externalIssues.get(0);
+    verifyIssue1(first);
+
+    ExternalIssue second = externalIssues.get(1);
+    verifyIssue2(second);
+
+    ExternalIssue third = externalIssues.get(2);
+    verifyIssue3(third);
+
+    ExternalIssue fourth = externalIssues.get(3);
+    verifyIssue4(fourth);
+
+    ExternalIssue fifth = externalIssues.get(4);
+    verifyIssue5(fifth);
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  private static void verifyIssue1(ExternalIssue first) {
     assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(first.severity()).isEqualTo(Severity.MAJOR);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -151,8 +181,9 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(firstTextRange.start().lineOffset()).isEqualTo(4);
     assertThat(firstTextRange.end().line()).isEqualTo(5);
     assertThat(firstTextRange.end().lineOffset()).isEqualTo(16);
+  }
 
-    ExternalIssue second = externalIssues.get(1);
+  private static void verifyIssue2(ExternalIssue second) {
     assertThat(second.type()).isEqualTo(RuleType.SECURITY_HOTSPOT);
     assertThat(second.severity()).isEqualTo(Severity.INFO);
     assertThat(second.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -161,8 +192,9 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(secondPrimaryLoc.message()).isEqualTo("Issue without textRange");
     TextRange secondTextRange = secondPrimaryLoc.textRange();
     assertThat(secondTextRange).isNull();
+  }
 
-    ExternalIssue third = externalIssues.get(2);
+  private static void verifyIssue3(ExternalIssue third) {
     assertThat(third.type()).isEqualTo(RuleType.VULNERABILITY);
     assertThat(third.severity()).isEqualTo(Severity.BLOCKER);
     assertThat(third.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -175,8 +207,9 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(thirdTextRange.start().lineOffset()).isEqualTo(4);
     assertThat(thirdTextRange.end().line()).isEqualTo(2);
     assertThat(thirdTextRange.end().lineOffset()).isEqualTo(5);
+  }
 
-    ExternalIssue fourth = externalIssues.get(3);
+  private static void verifyIssue4(ExternalIssue fourth) {
     assertThat(fourth.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(fourth.severity()).isEqualTo(Severity.MINOR);
     assertThat(fourth.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -189,8 +222,9 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(fourthTextRange.start().lineOffset()).isZero();
     assertThat(fourthTextRange.end().line()).isEqualTo(2);
     assertThat(fourthTextRange.end().lineOffset()).isEqualTo(22);
+  }
 
-    ExternalIssue fifth = externalIssues.get(4);
+  private static void verifyIssue5(ExternalIssue fifth) {
     assertThat(fifth.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(fifth.severity()).isEqualTo(Severity.MAJOR);
     assertThat(fifth.ruleId()).isEqualTo("psalm.finding");
@@ -203,8 +237,6 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(fifthTextRange.start().lineOffset()).isEqualTo(1);
     assertThat(fifthTextRange.end().line()).isEqualTo(2);
     assertThat(fifthTextRange.end().lineOffset()).isEqualTo(10);
-
-    assertNoErrorWarnDebugLogs(logTester);
   }
 
   @Test
