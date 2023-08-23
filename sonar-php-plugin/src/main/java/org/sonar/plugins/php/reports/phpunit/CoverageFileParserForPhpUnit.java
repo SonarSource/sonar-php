@@ -66,13 +66,20 @@ class CoverageFileParserForPhpUnit {
 
   private static CoverageNode getCoverage(File report) throws ParseException, IOException {
     SMInputFactory inputFactory = JUnitLogParserForPhpUnit.inputFactory();
+    SMHierarchicCursor rootCursor = null;
     try {
-      SMHierarchicCursor rootCursor = inputFactory.rootElementCursor(report);
-      rootCursor.advance();
-      if (!"coverage".equals(rootCursor.getLocalName())) {
-        throw new XMLStreamException("Report should start with <coverage>");
+      try {
+        rootCursor = inputFactory.rootElementCursor(report);
+        rootCursor.advance();
+        if (!"coverage".equals(rootCursor.getLocalName())) {
+          throw new XMLStreamException("Report should start with <coverage>");
+        }
+        return parseCoverageNode(rootCursor);
+      } finally {
+        if (rootCursor != null) {
+          rootCursor.getStreamReader().closeCompletely();
+        }
       }
-      return parseCoverageNode(rootCursor);
     } catch (WstxIOException e) {
       throw new IOException(e.getMessage(), e.getCause());
     } catch (XMLStreamException e) {
