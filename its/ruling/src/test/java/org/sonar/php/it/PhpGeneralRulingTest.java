@@ -26,24 +26,24 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PhpGeneralRulingTest {
 
-  @ClassRule
+  @RegisterExtension
   public static Orchestrator ORCHESTRATOR = RulingHelper.getOrchestrator();
 
   // TODO: SONARPHP-1454 - exclude all files that contain an element (file / directory) in the path that start with a dot
   private static final String EXCLUDED_FILES = "**/.*, **/.*/**";
 
-  @BeforeClass
-  public static void prepare_quality_profile() {
+  @BeforeAll
+  static void prepareQualityProfile() {
     ProfileGenerator.RulesConfiguration parameters = new ProfileGenerator.RulesConfiguration()
       .add("S103", "maximumLineLength", "140")
       .add("S138", "max", "100")
@@ -64,48 +64,48 @@ public class PhpGeneralRulingTest {
   }
 
   @Test
-  public void testFlysystem() throws Exception {
+  void testFlysystem() throws Exception {
     testProject("flysystem");
   }
 
   @Test
-  public void testMonica() throws Exception {
+  void testMonica() throws Exception {
     testProject("monica");
   }
 
   @Test
-  public void testPhpCodeSniffer() throws Exception {
+  void testPhpCodeSniffer() throws Exception {
     testProject("PHP_CodeSniffer");
   }
 
   @Test
-  public void testPhpMailer() throws Exception {
+  void testPhpMailer() throws Exception {
     testProject("PHPMailer");
   }
 
   @Test
-  public void testPsysh() throws Exception {
+  void testPsysh() throws Exception {
     testProject("psysh");
   }
 
   @Test
-  public void testPhpWord() throws Exception {
+  void testPhpWord() throws Exception {
     testProject("PHPWord");
   }
 
   @Test
-  public void testRubixML() throws Exception {
+  void testRubixML() throws Exception {
     testProject("RubixML");
   }
 
   @Test
-  @Ignore("Due to around 8600 files this project should not be part of the regular integration test run")
-  public void testSymfony() throws Exception {
+  @Disabled("Due to around 8600 files this project should not be part of the regular integration test run")
+  void testSymfony() throws Exception {
     testProject("Symfony");
   }
 
   @Test
-  public void testPhpSpreadsheet() throws Exception {
+  void testPhpSpreadsheet() throws Exception {
     testProject("PhpSpreadsheet");
   }
 
@@ -126,5 +126,4 @@ public class PhpGeneralRulingTest {
     String litsDifferences = new String(Files.readAllBytes(litsDifferencesFile.toPath()));
     assertThat(litsDifferences).isEmpty();
   }
-
 }

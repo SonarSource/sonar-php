@@ -28,48 +28,34 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Parameterized.class)
 public class PhpPrAnalysisTest {
 
-  @ClassRule
+  @RegisterExtension
   public static final Orchestrator ORCHESTRATOR = RulingHelper.getOrchestrator(Edition.DEVELOPER);
 
   private static final String PROJECT_KEY = "prAnalysis";
 
   private static final String INCREMENTAL_ANALYSIS_PROFILE = "incrementalPrAnalysis";
 
-  @Rule
-  public TemporaryFolder temporaryFolder = new TemporaryFolder();
+  @TempDir
+  public File tempDirectory;
 
-  private final String scenario;
-  private final int expectedTotalFiles;
-  private final int expectedSkipped;
-  private final List<String> deletedFiles;
-
-  public PhpPrAnalysisTest(String scenario, int expectedTotalFiles, int expectedSkipped, List<String> deletedFiles) {
-    this.scenario = scenario;
-    this.expectedTotalFiles = expectedTotalFiles;
-    this.expectedSkipped = expectedSkipped;
-    this.deletedFiles = deletedFiles;
-  }
-
-  @BeforeClass
-  public static void prepare_quality_profile() throws IOException {
+  @BeforeAll
+  static void prepareQualityProfile() throws IOException {
     ORCHESTRATOR.getServer().provisionProject(PROJECT_KEY, PROJECT_KEY);
 
     // Create and load quality profile
@@ -78,37 +64,36 @@ public class PhpPrAnalysisTest {
     ORCHESTRATOR.getServer().associateProjectToQualityProfile(PROJECT_KEY, "php", INCREMENTAL_ANALYSIS_PROFILE);
   }
 
-  @Parameterized.Parameters(name = "{index}: {0}")
-  public static Collection<Object[]> data() {
-    return List.of(new Object[][] {
-      // {<scenario>, <total files>, <skipped>, <deleted>}
-      {"added", 3, 2, Collections.emptyList()},
-      {"changed", 2, 1, Collections.emptyList()},
-      {"deleted", 1, 1, List.of("AbstractController.php")}
-    });
+  static Stream<Arguments> parameters() {
+    return Stream.of(
+      // <scenario>, <total files>, <skipped>, <deleted>
+      Arguments.of("added", 3, 2, Collections.emptyList()),
+      Arguments.of("changed", 2, 1, Collections.emptyList()),
+      Arguments.of("deleted", 1, 1, List.of("AbstractController.php"))
+    );
   }
 
-  @Test
-  public void pr_analysis_logs() throws IOException {
-    File tempDirectory = temporaryFolder.newFolder();
+  @ParameterizedTest
+  @MethodSource("parameters")
+  void prAnalysisLogs(String scenario, int expectedTotalFiles, int expectedSkipped, List<String> deletedFiles) throws IOException {
     File litsDifferencesFile = FileLocation.of("target/differences").getFile();
 
     // Analyze base commit
     analyzeAndAssertBaseCommit(tempDirectory, litsDifferencesFile);
 
     // Analyze the changed branch
-    setUpChanges(tempDirectory, scenario);
+    setUpChanges(tempDirectory, scenario, deletedFiles);
     SonarScanner build = RulingHelper.prepareScanner(tempDirectory, PROJECT_KEY, "expected_pr_analysis/" + scenario, litsDifferencesFile)
       .setProperty("sonar.pullrequest.key", "1")
       .setProperty("sonar.pullrequest.branch", "incremental");
 
     BuildResult result = ORCHESTRATOR.executeBuild(build);
-    assertPrAnalysisLogs(result);
+    assertPrAnalysisLogs(result, expectedTotalFiles, expectedSkipped);
   }
 
-  @Test
-  public void pr_analysis_issues() throws IOException {
-    File tempDirectory = temporaryFolder.newFolder();
+  @ParameterizedTest
+  @MethodSource("parameters")
+  void prAnalysisIssues(String scenario, int expectedTotalFiles, int expectedSkipped, List<String> deletedFiles) throws IOException {
     File litsDifferencesFile = FileLocation.of("target/differences").getFile();
 
     // Analyze base commit
@@ -120,7 +105,7 @@ public class PhpPrAnalysisTest {
     // Still, while testing, we want to run branch analysis, to take full advantage of LITS by comparing the total issues that are raised
     // (if we set up a PR Analysis, LITS will fail comparing all the expected issues).
     // Thus, in the test we perform branch analysis, and we manually enable incremental analysis for testing purposes.
-    setUpChanges(tempDirectory, scenario);
+    setUpChanges(tempDirectory, scenario, deletedFiles);
     SonarScanner build = RulingHelper.prepareScanner(tempDirectory, PROJECT_KEY, "expected_pr_analysis/" + scenario, litsDifferencesFile)
       .setProperty("sonar.php.skipUnchanged", "true");
 
@@ -129,7 +114,7 @@ public class PhpPrAnalysisTest {
     // Check expected issues
     String litsDifferences = new String(Files.readAllBytes(litsDifferencesFile.toPath()), UTF_8);
     assertThat(litsDifferences).isEmpty();
-    assertPrAnalysisLogs(result);
+    assertPrAnalysisLogs(result, expectedTotalFiles, expectedSkipped);
   }
 
   private void analyzeAndAssertBaseCommit(File tempFile, File litsDifferencesFile) throws IOException {
@@ -142,7 +127,7 @@ public class PhpPrAnalysisTest {
     assertThat(litsDifferences).isEmpty();
   }
 
-  private void assertPrAnalysisLogs(BuildResult result) {
+  private void assertPrAnalysisLogs(BuildResult result, int expectedTotalFiles, int expectedSkipped) {
     String expectedUsedSymbolsFromCache = String.format("Cached information of global symbols will be used for %d out of %d files. " +
       "Global symbols were recomputed for the remaining files.",
       expectedSkipped, expectedTotalFiles);
@@ -156,7 +141,7 @@ public class PhpPrAnalysisTest {
       .contains(expectedRegularAnalysisLog);
   }
 
-  private void setUpChanges(File tempDirectory, String scenario) throws IOException {
+  private void setUpChanges(File tempDirectory, String scenario, List<String> deletedFiles) throws IOException {
     Arrays.stream(tempDirectory.listFiles(f -> deletedFiles.contains(f.getName()))).forEach(File::delete);
     FileUtils.copyDirectory(new File("../sources_pr_analysis", scenario), tempDirectory);
   }
