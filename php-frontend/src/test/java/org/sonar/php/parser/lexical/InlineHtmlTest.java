@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.lexical;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class InlineHtmlTest {
+class InlineHtmlTest {
 
   @Test
-  public void statement() {
+  void statement() {
     assertThat(PHPLexicalGrammar.INLINE_HTML_STATEMENT)
       .matches("?>")
       .matches("?> <html>")
@@ -35,7 +35,7 @@ public class InlineHtmlTest {
   }
 
   @Test
-  public void token() {
+  void token() {
     assertThat(PHPLexicalGrammar.INLINE_HTML)
       .matches("?>")
       .matches("?> <html>")

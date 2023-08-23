@@ -19,7 +19,9 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -28,42 +30,21 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TypeNameTreeTest extends PHPTreeModelTest {
+class TypeNameTreeTest extends PHPTreeModelTest {
 
-  @Test
-  public void built_in_type() throws Exception {
-    BuiltInTypeTree tree = parse("int", PHPLexicalGrammar.TYPE_NAME);
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "int", "mixed", "Int", "callable"
+  })
+  void builtInType(String typeName) {
+    BuiltInTypeTree tree = parse(typeName, PHPLexicalGrammar.TYPE_NAME);
 
     assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
-    assertThat(tree.token().text()).isEqualTo("int");
+    assertThat(tree.token().text()).isEqualTo(typeName);
   }
 
   @Test
-  public void built_in_mixed_type() throws Exception {
-    BuiltInTypeTree tree = parse("mixed", PHPLexicalGrammar.TYPE_NAME);
-
-    assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
-    assertThat(tree.token().text()).isEqualTo("mixed");
-  }
-
-  @Test
-  public void built_in_type_capital_letter() throws Exception {
-    BuiltInTypeTree tree = parse("Int", PHPLexicalGrammar.TYPE_NAME);
-
-    assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
-    assertThat(tree.token().text()).isEqualTo("Int");
-  }
-
-  @Test
-  public void built_in_type_keyword() throws Exception {
-    BuiltInTypeTree tree = parse("callable", PHPLexicalGrammar.TYPE_NAME);
-
-    assertThat(tree.is(Kind.BUILT_IN_TYPE)).isTrue();
-    assertThat(tree.token().text()).isEqualTo("callable");
-  }
-
-  @Test
-  public void namespace_name_type() throws Exception {
+  void namespaceNameType() {
     NamespaceNameTree tree = parse("MyClass", PHPLexicalGrammar.TYPE_NAME);
 
     assertThat(tree.is(Kind.NAMESPACE_NAME)).isTrue();

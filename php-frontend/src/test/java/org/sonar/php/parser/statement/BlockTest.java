@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class BlockTest {
+class BlockTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.BLOCK)
       .matches("{ $a ; }")
       .matches("{ $a ; $b; }")

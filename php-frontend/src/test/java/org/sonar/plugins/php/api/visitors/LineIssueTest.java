@@ -19,17 +19,17 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.utils.DummyCheck;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-public class LineIssueTest {
+class LineIssueTest {
 
   private static final PHPCheck CHECK = new DummyCheck();
 
   @Test
-  public void test() throws Exception {
+  void test() {
     LineIssue lineIssue = new LineIssue(CHECK, 42, "Test message");
 
     assertThat(lineIssue.check()).isEqualTo(CHECK);
@@ -39,7 +39,7 @@ public class LineIssueTest {
   }
 
   @Test
-  public void with_cost() throws Exception {
+  void withCost() {
     LineIssue lineIssue = new LineIssue(CHECK, 42, "Test message").cost(5);
 
     assertThat(lineIssue.check()).isEqualTo(CHECK);

@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class IntersectionTypeTest {
+class IntersectionTypeTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.INTERSECTION_TYPE)
       .matches("int&array")
       .matches("foo&bar&array")

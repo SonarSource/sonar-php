@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.tree.impl.PHPTree;
@@ -35,10 +35,12 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExpressionPrecedenceTest extends PHPTreeModelTest {
+// Suppressing issues about too many assertions
+@SuppressWarnings("java:S5961")
+class ExpressionPrecedenceTest extends PHPTreeModelTest {
 
   @Test
-  public void operator_precedence_and_associativity() throws Exception {
+  void operatorPrecedenceAndAssociativity() {
     assertPrecedence("2 ** 3 ** 4", "2 ** (3 ** 4)");
     assertPrecedence("2 ** 3 * 4", "(2 ** 3) * 4");
     assertPrecedence("2 * 3 ** 4", "2 * (3 ** 4)");
@@ -125,7 +127,7 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void assignment() throws Exception {
+  void assignment() {
     assertPrecedence("$a = 3 ?? 4", "$a = (3 ?? 4)");
     assertPrecedence("$a = $b = 4", "$a = ($b = 4)");
     assertPrecedence("$a = $b += 4", "$a = ($b += 4)");
@@ -161,7 +163,7 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
     assertPrecedence("42 + match ($a) {default=>0}", "42 + (match ( $a ) { (default => 0) })");
   }
 
-  private void assertPrecedence(String code, String expected) throws Exception {
+  private void assertPrecedence(String code, String expected) {
     ExpressionTree expression = parse(code, PHPLexicalGrammar.EXPRESSION);
     String actual = dumpWithParentheses(expression).stream().collect(Collectors.joining(" "));
     assertThat(actual).isEqualTo(expected);

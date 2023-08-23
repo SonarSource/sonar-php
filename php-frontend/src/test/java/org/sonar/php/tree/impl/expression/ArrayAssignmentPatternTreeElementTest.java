@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTr
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArrayAssignmentPatternTreeElementTest extends PHPTreeModelTest {
+class ArrayAssignmentPatternTreeElementTest extends PHPTreeModelTest {
 
   @Test
-  public void simple() throws Exception {
+  void simple() {
     ArrayAssignmentPatternElementTree tree = parse("$a", PHPLexicalGrammar.ARRAY_ASSIGNMENT_PATTERN_ELEMENT);
     assertThat(tree.is(Kind.ARRAY_ASSIGNMENT_PATTERN_ELEMENT)).isTrue();
     assertThat(tree.key()).isNull();
@@ -39,7 +39,7 @@ public class ArrayAssignmentPatternTreeElementTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_key() throws Exception {
+  void withKey() {
     ArrayAssignmentPatternElementTree tree = parse("\"name\" => $a", PHPLexicalGrammar.ARRAY_ASSIGNMENT_PATTERN_ELEMENT);
     assertThat(expressionToString(tree.key())).isEqualTo("\"name\"");
     assertThat(tree.doubleArrowToken().text()).isEqualTo("=>");

@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TypeTreeTest extends PHPTreeModelTest {
+class TypeTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void non_optional() throws Exception {
+  void nonOptional() {
     TypeTree tree = parse("int", PHPLexicalGrammar.TYPE);
 
     assertThat(tree.is(Kind.TYPE)).isTrue();
@@ -39,7 +39,7 @@ public class TypeTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void optional() throws Exception {
+  void optional() {
     TypeTree tree = parse("?MyClass", PHPLexicalGrammar.TYPE);
 
     assertThat(tree.is(Kind.TYPE)).isTrue();

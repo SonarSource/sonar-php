@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class ShiftExpressionTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+class ShiftExpressionTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.SHIFT_EXPR)
       .matches("$a")
       .matches("$a >> $a")

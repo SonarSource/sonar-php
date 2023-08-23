@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReferenceVariableTreeTest extends PHPTreeModelTest {
+class ReferenceVariableTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void single() throws Exception {
+  void single() {
     ReferenceVariableTree tree = parse("& $a", Kind.REFERENCE_VARIABLE);
 
     assertThat(tree.is(Kind.REFERENCE_VARIABLE)).isTrue();

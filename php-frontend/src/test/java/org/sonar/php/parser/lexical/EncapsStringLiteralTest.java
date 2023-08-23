@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.lexical;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class EncapsStringLiteralTest {
+class EncapsStringLiteralTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Kind.EXPANDABLE_STRING_LITERAL)
       .matches("\"$var\"")
       .matches("\"$var\n\"");

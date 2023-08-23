@@ -19,16 +19,17 @@
  */
 package org.sonar.php.tree.impl;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class SeparatedListImplTest {
   @Test
   void checkCollectionIsUnmodifiable() {
     SeparatedList<Tree> separatedList = SeparatedListImpl.empty();
 
-    Assertions.assertThrows(UnsupportedOperationException.class, separatedList.elementsAndSeparators()::remove);
+    assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(separatedList.elementsAndSeparators()::remove);
   }
 }

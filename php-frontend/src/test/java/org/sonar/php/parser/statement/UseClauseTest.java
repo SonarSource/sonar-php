@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class UseClauseTest {
+class UseClauseTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.USE_CLAUSE)
       .matches("ArrayObject")
       .matches("My\\Full\\functionName")
@@ -36,7 +36,7 @@ public class UseClauseTest {
   }
 
   @Test
-  public void test_group_use_clause() {
+  void testGroupUseClause() {
     assertThat(PHPLexicalGrammar.GROUP_USE_CLAUSE)
       .matches("ArrayObject")
       .matches("My\\Full\\functionName")

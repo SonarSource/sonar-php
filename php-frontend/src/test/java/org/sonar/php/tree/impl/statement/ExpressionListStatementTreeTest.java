@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExpressionListStatementTreeTest extends PHPTreeModelTest {
+class ExpressionListStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     ExpressionListStatementTree tree = parse("$a, foo();", PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT);
 
     assertThat(tree.is(Kind.EXPRESSION_LIST_STATEMENT)).isTrue();

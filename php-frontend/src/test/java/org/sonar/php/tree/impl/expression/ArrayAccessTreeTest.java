@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArrayAccessTreeTest extends PHPTreeModelTest {
+class ArrayAccessTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void bracket_offset() throws Exception {
+  void bracketOffset() {
     ArrayAccessTree tree = parse("$a[$offset]", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();
@@ -43,7 +43,7 @@ public class ArrayAccessTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void curly_brace_offset() throws Exception {
+  void curlyBraceOffset() {
     ArrayAccessTree tree = parse("$a{$offset}", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();
@@ -56,7 +56,7 @@ public class ArrayAccessTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void field_array_access() throws Exception {
+  void fieldArrayAccess() {
     ArrayAccessTree tree = parse("$o->f[$offset]", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();
@@ -69,7 +69,7 @@ public class ArrayAccessTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void field_array_access_static() throws Exception {
+  void fieldArrayAccessStatic() {
     ArrayAccessTree tree = parse("SomeClass::$f[$offset]", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.ARRAY_ACCESS)).isTrue();

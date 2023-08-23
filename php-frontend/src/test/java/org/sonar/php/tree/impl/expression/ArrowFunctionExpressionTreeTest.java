@@ -20,7 +20,7 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.sonar.sslr.api.typed.ActionParser;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -37,10 +37,10 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArrowFunctionExpressionTreeTest extends PHPTreeModelTest {
+class ArrowFunctionExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void basic() throws Exception {
+  void basic() {
     ArrowFunctionExpressionTree tree = parse("fn () => NULL", Tree.Kind.ARROW_FUNCTION_EXPRESSION);
 
     assertThat(tree.is(Tree.Kind.ARROW_FUNCTION_EXPRESSION)).isTrue();
@@ -54,7 +54,7 @@ public class ArrowFunctionExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_static_reference_parameter_return_type() throws Exception {
+  void withStaticReferenceParameterReturnType() {
     ArrowFunctionExpressionTree tree = parse("static fn&($x): string => $x . '_'", Tree.Kind.ARROW_FUNCTION_EXPRESSION);
 
     assertThat(tree.is(Tree.Kind.ARROW_FUNCTION_EXPRESSION)).isTrue();
@@ -69,7 +69,7 @@ public class ArrowFunctionExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void arrow_function_and_yield_precedence() throws Exception {
+  void arrowFunctionAndYieldPrecedence() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     CompilationUnitTree root = (CompilationUnitTree) parser.parse("<?php\n" +
       "function f() {\n" +
@@ -90,7 +90,7 @@ public class ArrowFunctionExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void arrow_function_and_array_index_value_precedence() throws Exception {
+  void arrowFunctionAndArrayIndexValuePrecedence() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     CompilationUnitTree root = (CompilationUnitTree) parser.parse("<?php\n" +
       "$x = array(\n" +

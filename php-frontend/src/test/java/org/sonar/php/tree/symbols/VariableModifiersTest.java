@@ -20,18 +20,18 @@
 package org.sonar.php.tree.symbols;
 
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class VariableModifiersTest extends ParsingTestUtils {
+class VariableModifiersTest extends ParsingTestUtils {
 
   private SymbolTableImpl SYMBOL_TABLE = SymbolTableImpl.create(parse("symbols/variable_modifiers.php"));
 
   @Test
-  public void modifiers() {
+  void modifiers() {
     List<Symbol> symbols = SYMBOL_TABLE.getSymbols("$a");
     // FIXME SONARPHP-741: should be 3
     // line 8 should be an usage of global variable, and not generate a new symbol

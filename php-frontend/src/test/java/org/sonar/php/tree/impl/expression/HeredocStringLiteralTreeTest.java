@@ -21,7 +21,11 @@ package org.sonar.php.tree.impl.expression;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import java.util.Collections;
-import org.junit.Test;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -33,50 +37,38 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
+class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
 
-  @Test
-  public void test() throws Exception {
-    String code = "<<<ABC\nHello $name!{$foo->bar}!\nABC";
+  @ParameterizedTest
+  @MethodSource
+  void test(String code, String openingToken, String closingToken) throws Exception {
     HeredocStringLiteralTree tree = parseHeredoc(code);
-    assertThat(tree.openingToken().text()).isEqualTo("<<<ABC\n");
-    assertThat(tree.closingToken().text()).isEqualTo("\nABC");
+    assertThat(tree.openingToken().text()).isEqualTo(openingToken);
+    assertThat(tree.closingToken().text()).isEqualTo(closingToken);
     assertThat(tree.expressions()).hasSize(2);
     assertThat(tree.strings()).hasSize(3);
   }
 
-  @Test
-  public void label_with_quotes() throws Exception {
-    String code = "<<<\"ABC\"\nHello $name!{$foo->bar}!\nABC";
-    HeredocStringLiteralTree tree = parseHeredoc(code);
-    assertThat(tree.openingToken().text()).isEqualTo("<<<\"ABC\"\n");
-    assertThat(tree.closingToken().text()).isEqualTo("\nABC");
-    assertThat(tree.expressions()).hasSize(2);
-    assertThat(tree.strings()).hasSize(3);
+  private static Stream<Arguments> test() {
+    return Stream.of(
+      Arguments.of("<<<ABC\nHello $name!{$foo->bar}!\nABC", "<<<ABC\n", "\nABC"),
+      Arguments.of("<<<\"ABC\"\nHello $name!{$foo->bar}!\nABC", "<<<\"ABC\"\n", "\nABC"),
+      Arguments.of("<<<\"ABC\"\n  Hello $name!{$foo->bar}!\n  ABC", "<<<\"ABC\"\n", "\n  ABC"));
   }
 
   @Test
-  public void flexible_heredoc_syntax() throws Exception {
-    String code = "<<<\"ABC\"\n  Hello $name!{$foo->bar}!\n  ABC";
-    HeredocStringLiteralTree tree = parseHeredoc(code);
-    assertThat(tree.openingToken().text()).isEqualTo("<<<\"ABC\"\n");
-    assertThat(tree.closingToken().text()).isEqualTo("\n  ABC");
-    assertThat(tree.expressions()).hasSize(2);
-    assertThat(tree.strings()).hasSize(3);
-  }
-
-  @Test
-  public void with_double_quotes_inside() throws Exception {
+  void withDoubleQuotesInside() {
     String code = "<<<ABC\nHello \"John\"!\nABC";
     HeredocStringLiteralTree tree = parseHeredoc(code);
-    assertThat(tree.expressions()).hasSize(0);
+    assertThat(tree.expressions()).isEmpty();
     assertThat(tree.strings()).hasSize(1);
     assertThat(tree.strings().get(0).value()).isEqualTo("Hello \"John\"!");
   }
 
   @Test
-  public void test_pseudo_comment() throws Exception {
+  void testPseudoComment() {
     String code = "<<<EOF\n" +
       "/**/{$a}\n" +
       "EOF";
@@ -85,7 +77,7 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void no_content_token_location() throws Exception {
+  void noContentTokenLocation() {
     String code = "<<<EOD\n"
       + "EOD";
     HeredocStringLiteralTree tree = parseHeredoc(code);
@@ -94,21 +86,21 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     assertThat(openingToken.text()).isEqualTo("<<<EOD\n");
     assertThat(openingToken.line()).isEqualTo(1);
     assertThat(openingToken.endLine()).isEqualTo(2);
-    assertThat(openingToken.column()).isEqualTo(0);
-    assertThat(openingToken.endColumn()).isEqualTo(0);
+    assertThat(openingToken.column()).isZero();
+    assertThat(openingToken.endColumn()).isZero();
 
-    assertThat(tree.expressions()).hasSize(0);
+    assertThat(tree.expressions()).isEmpty();
 
     SyntaxToken closingToken = tree.closingToken();
     assertThat(closingToken.text()).isEqualTo("EOD");
     assertThat(closingToken.line()).isEqualTo(2);
     assertThat(closingToken.endLine()).isEqualTo(2);
-    assertThat(closingToken.column()).isEqualTo(0);
+    assertThat(closingToken.column()).isZero();
     assertThat(closingToken.endColumn()).isEqualTo(3);
   }
 
   @Test
-  public void empty_content_token_location() throws Exception {
+  void emptyContentTokenLocation() {
     String code = "/**/<<<EOD\n"
       + "\n"
       + "EOD";
@@ -119,20 +111,20 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     assertThat(openingToken.line()).isEqualTo(1);
     assertThat(openingToken.endLine()).isEqualTo(2);
     assertThat(openingToken.column()).isEqualTo(4);
-    assertThat(openingToken.endColumn()).isEqualTo(0);
+    assertThat(openingToken.endColumn()).isZero();
 
-    assertThat(tree.expressions()).hasSize(0);
+    assertThat(tree.expressions()).isEmpty();
 
     SyntaxToken closingToken = tree.closingToken();
     assertThat(closingToken.text()).isEqualTo("\nEOD");
     assertThat(closingToken.line()).isEqualTo(2);
     assertThat(closingToken.endLine()).isEqualTo(3);
-    assertThat(closingToken.column()).isEqualTo(0);
+    assertThat(closingToken.column()).isZero();
     assertThat(closingToken.endColumn()).isEqualTo(3);
   }
 
   @Test
-  public void with_content_token_location() throws Exception {
+  void withContentTokenLocation() {
     String code = "/**/<<<EOD\n"
       + "  ABC\n"
       + "  DEF\n"
@@ -144,9 +136,9 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     assertThat(openingToken.line()).isEqualTo(1);
     assertThat(openingToken.endLine()).isEqualTo(2);
     assertThat(openingToken.column()).isEqualTo(4);
-    assertThat(openingToken.endColumn()).isEqualTo(0);
+    assertThat(openingToken.endColumn()).isZero();
 
-    assertThat(tree.expressions()).hasSize(0);
+    assertThat(tree.expressions()).isEmpty();
 
     SyntaxToken closingToken = tree.closingToken();
     assertThat(closingToken.text()).isEqualTo("\nEOD");
@@ -157,20 +149,20 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void parse_backslash() throws Exception {
+  void parseBackslash() {
     String code = "<<<ABC\n\\\nABC";
     HeredocStringLiteralTree tree = parseHeredoc(code);
     assertThat(tree.strings().get(0).value()).isEqualTo("\\");
   }
 
-  private HeredocStringLiteralTree parseHeredoc(String code) throws Exception {
+  private HeredocStringLiteralTree parseHeredoc(String code) {
     HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
     assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
     return tree;
   }
 
   @Test
-  public void heredoc_body() throws Exception {
+  void heredocBody() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, 0);
     HeredocBody heredoc = (HeredocBody) parser.parse("Start $name End");
     assertThat(heredoc.expressions()).hasSize(3);
@@ -180,16 +172,22 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     assertThat(heredoc.expressions().get(2).is(Tree.Kind.HEREDOC_STRING_CHARACTERS)).isTrue();
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void unsupported_kind() throws Exception {
+  @Test
+  void unsupportedKind() {
     HeredocBody tree = new HeredocBody(Collections.emptyList());
-    tree.getKind();
+    assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> {
+      tree.getKind();
+    });
   }
 
-  @Test(expected = UnsupportedOperationException.class)
-  public void unsupported_accept() throws Exception {
+  @Test
+  void unsupportedAccept() {
     HeredocBody tree = new HeredocBody(Collections.emptyList());
-    tree.accept(new PHPVisitorCheck() {
+    PHPVisitorCheck check = new PHPVisitorCheck() {
+    };
+
+    assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> {
+      tree.accept(check);
     });
   }
 

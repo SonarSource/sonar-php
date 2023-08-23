@@ -20,7 +20,11 @@
 package org.sonar.php.tree.visitors;
 
 import java.util.Optional;
-import org.junit.Test;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.tree.symbols.SymbolImpl;
@@ -34,72 +38,35 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AssignmentExpressionVisitorTest {
+class AssignmentExpressionVisitorTest {
 
-  @Test
-  public void getAssignmentValue() {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php function foo() { $a = 1; }");
-
-    assertThat(uniqueAssignedValue).isPresent();
-    ExpressionTree value = uniqueAssignedValue.get();
-    assertThat(value).isInstanceOf(LiteralTree.class);
-    assertThat(((LiteralTree) value).value()).isEqualTo("1");
-  }
-
-  @Test
-  public void getAssignmentValue_global() {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;");
+  @ParameterizedTest
+  @MethodSource
+  void getAssignmentValue(String variableName, String codeSnippet, String expectedValue) {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of(variableName).from(codeSnippet);
 
     assertThat(uniqueAssignedValue).isPresent();
     ExpressionTree value = uniqueAssignedValue.get();
     assertThat(value).isInstanceOf(LiteralTree.class);
-    assertThat(((LiteralTree) value).value()).isEqualTo("1");
+    assertThat(((LiteralTree) value).value()).isEqualTo(expectedValue);
   }
 
-  @Test
-  public void getAssignmentValue_multiple() {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;\n$a = 2;");
-
-    assertThat(uniqueAssignedValue).isNotPresent();
+  private static Stream<Arguments> getAssignmentValue() {
+    return Stream.of(
+      Arguments.of("$a", "<?php function foo() { $a = 1; }", "1"),
+      Arguments.of("$a", "<?php $a = 1;", "1"),
+      Arguments.of("$a", "<?php list($a, $b) = [1, 2];", "1"),
+      Arguments.of("$b", "<?php list($a, , $b) = [1, 2, 3];", "3"));
   }
 
-  @Test
-  public void getAssignmentValue_list() {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b) = [1, 2];");
-
-    assertThat(uniqueAssignedValue).isPresent();
-    ExpressionTree value = uniqueAssignedValue.get();
-    assertThat(value).isInstanceOf(LiteralTree.class);
-    assertThat(((LiteralTree) value).value()).isEqualTo("1");
-  }
-
-  @Test
-  public void getAssignmentValue_list_unknown_values() {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1; list($a, $b) = getValues();");
-
-    assertThat(uniqueAssignedValue).isNotPresent();
-  }
-
-  @Test
-  public void getAssignmentValue_list_skipped_element() {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$b").from("<?php list($a, , $b) = [1, 2, 3];");
-
-    assertThat(uniqueAssignedValue).isPresent();
-    ExpressionTree value = uniqueAssignedValue.get();
-    assertThat(value).isInstanceOf(LiteralTree.class);
-    assertThat(((LiteralTree) value).value()).isEqualTo("3");
-  }
-
-  @Test
-  public void getAssignmentValue_list_var_keys_not_supported_yet() {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list(getAKey() => $a) = ['a'];");
-
-    assertThat(uniqueAssignedValue).isNotPresent();
-  }
-
-  @Test
-  public void getAssignmentValue_list_value_keys_not_supported_yet() {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php list($a, $b) = [getAKey() => 'a', getBKey() => 'b'];");
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "<?php $a = 1;\n$a = 2;",
+    "<?php $a = 1; list($a, $b) = getValues();",
+    "<?php list(getAKey() => $a) = ['a'];",
+    "<?php list($a, $b) = [getAKey() => 'a', getBKey() => 'b'];"})
+  void getAssignmentValueMultiple(String codeSnippet) {
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from(codeSnippet);
 
     assertThat(uniqueAssignedValue).isNotPresent();
   }

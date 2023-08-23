@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConditionalExpressionTreeTest extends PHPTreeModelTest {
+class ConditionalExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void full() throws Exception {
+  void full() {
     ConditionalExpressionTree tree = parse("$condition ? $trueExpr : $falseExpr", Kind.CONDITIONAL_EXPRESSION);
 
     assertThat(tree.is(Kind.CONDITIONAL_EXPRESSION)).isTrue();
@@ -41,7 +41,7 @@ public class ConditionalExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void without_true_expression() throws Exception {
+  void withoutTrueExpression() {
     ConditionalExpressionTree tree = parse("$condition ? : $falseExpr", Kind.CONDITIONAL_EXPRESSION);
 
     assertThat(tree.is(Kind.CONDITIONAL_EXPRESSION)).isTrue();

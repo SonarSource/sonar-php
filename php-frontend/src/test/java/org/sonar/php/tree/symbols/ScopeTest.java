@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.symbols;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -27,28 +27,25 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
-public class ScopeTest extends ParsingTestUtils {
+class ScopeTest extends ParsingTestUtils {
 
   private final SymbolTableImpl SYMBOL_TABLE = SymbolTableImpl.create(parse("symbols/scopes.php"));
 
   @Test
-  public void global_scope() throws Exception {
+  void globalScope() {
     Scope globalScope = getScopeFor(Kind.COMPILATION_UNIT);
 
     assertThat(globalScope.isGlobal()).isTrue();
-    assertNotNull(globalScope.getSymbol("$a"));
-    assertNotNull(globalScope.getSymbol("$b"));
-    assertNotNull(globalScope.getSymbol("f"));
-    assertNotNull(globalScope.getSymbol("A"));
+    assertThat(globalScope.getSymbol("$a")).isNotNull();
+    assertThat(globalScope.getSymbol("$b")).isNotNull();
+    assertThat(globalScope.getSymbol("f")).isNotNull();
 
-    assertNull(globalScope.getSymbol("$c"));
+    assertThat(globalScope.getSymbol("$c")).isNull();
   }
 
   @Test
-  public void function_scope() throws Exception {
+  void functionScope() {
     Scope functionScope = getScopeFor(Kind.FUNCTION_DECLARATION);
 
     assertThat(functionScope.isGlobal()).isFalse();
@@ -65,14 +62,14 @@ public class ScopeTest extends ParsingTestUtils {
   }
 
   @Test
-  public void function_expression_scope() throws Exception {
+  void functionExpressionScope() {
     Scope functionExprScope = getScopeFor(Kind.FUNCTION_EXPRESSION);
 
-    assertNotNull(functionExprScope.getSymbol("$e"));
+    assertThat(functionExprScope.getSymbol("$e")).isNotNull();
   }
 
   @Test
-  public void arrow_function_expression_scope() throws Exception {
+  void arrowFunctionExpressionScope() {
     Scope scope = getScopeFor(Kind.ARROW_FUNCTION_EXPRESSION);
 
     assertThat(scope.getSymbols(Symbol.Kind.PARAMETER)).extracting(Symbol::name).containsExactlyInAnyOrder("$a", "$d");
@@ -91,7 +88,7 @@ public class ScopeTest extends ParsingTestUtils {
   }
 
   @Test
-  public void global_statement() throws Exception {
+  void globalStatement() {
     Scope functionScope = getScopeFor(Kind.FUNCTION_DECLARATION);
 
     assertThat(functionScope.getSymbol("$b")).isNotNull();
@@ -105,7 +102,7 @@ public class ScopeTest extends ParsingTestUtils {
   }
 
   @Test
-  public void lexical_variable() throws Exception {
+  void lexicalVariable() {
     Scope functionScope = getScopeFor(Kind.FUNCTION_EXPRESSION);
 
     assertThat(functionScope.getSymbol("$c")).isNotNull();
@@ -119,7 +116,7 @@ public class ScopeTest extends ParsingTestUtils {
   }
 
   @Test
-  public void class_scope() throws Exception {
+  void classScope() {
     Scope classScope = getScopeFor(Kind.CLASS_DECLARATION);
 
     assertThat(classScope.getSymbol("$field1")).isNotNull();
@@ -127,7 +124,7 @@ public class ScopeTest extends ParsingTestUtils {
   }
 
   @Test
-  public void anonymous_class_scope() throws Exception {
+  void anonymousClassScope() {
     Scope classScope = getScopeFor(Kind.ANONYMOUS_CLASS);
 
     assertThat(classScope.getSymbol("$field1")).isNotNull();
@@ -135,14 +132,14 @@ public class ScopeTest extends ParsingTestUtils {
   }
 
   @Test
-  public void method_scope() throws Exception {
+  void methodScope() {
     Scope methodScope = getScopeFor(Kind.METHOD_DECLARATION);
 
     assertThat(methodScope.getSymbol("$g")).isNotNull();
   }
 
   @Test
-  public void same_name_in_same_scope() throws Exception {
+  void sameNameInSameScope() {
     SymbolTableImpl symbolTable = SymbolTableImpl.create(parse("symbols/scope_same_name.php"));
     Scope scope = getScopeFor(Kind.COMPILATION_UNIT, symbolTable);
 

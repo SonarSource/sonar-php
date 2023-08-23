@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EnumDeclarationTreeTest extends PHPTreeModelTest {
+class EnumDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void simple_enum_with_no_cases() {
+  void simpleEnumWithNoCases() {
     EnumDeclarationTreeImpl tree = parse("enum A {}", PHPLexicalGrammar.ENUM_DECLARATION);
     assertThat(tree.is(Tree.Kind.ENUM_DECLARATION)).isTrue();
     assertThat(tree.childrenIterator()).hasSize(7);
@@ -45,7 +45,7 @@ public class EnumDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void simple_enum_with_cases() {
+  void simpleEnumWithCases() {
     EnumDeclarationTree tree = parse("enum A {case A;\ncase B;}", PHPLexicalGrammar.ENUM_DECLARATION);
     assertThat(tree.is(Tree.Kind.ENUM_DECLARATION)).isTrue();
     assertThat(tree.name()).hasToString("A");
@@ -56,7 +56,7 @@ public class EnumDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void enum_can_contain_other_class_like_members() {
+  void enumCanContainOtherClassLikeMembers() {
     EnumDeclarationTree tree = parse("enum A {case A;\nconst FOO = 1;\npublic function foo(){} }", PHPLexicalGrammar.ENUM_DECLARATION);
     assertThat(tree.cases()).hasSize(1);
     assertThat(tree.cases().get(0).name()).hasToString("A");
@@ -67,7 +67,7 @@ public class EnumDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void enum_can_implement_interfaces() {
+  void enumCanImplementInterfaces() {
     EnumDeclarationTree tree = parse("enum A implements B,C {}", PHPLexicalGrammar.ENUM_DECLARATION);
     assertThat(tree.implementsToken()).hasToString("implements");
     assertThat(tree.superInterfaces()).hasSize(2);
@@ -76,7 +76,7 @@ public class EnumDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void enum_can_have_attributes() {
+  void enumCanHaveAttributes() {
     EnumDeclarationTree tree = parse("#[A1(1)] enum A {}", PHPLexicalGrammar.ENUM_DECLARATION);
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(1);
@@ -84,7 +84,7 @@ public class EnumDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void enum_with_backing_type() {
+  void enumWithBackingType() {
     EnumDeclarationTree tree = parse("enum A: string {}", PHPLexicalGrammar.ENUM_DECLARATION);
     assertThat(tree.typeColonToken()).hasToString(":");
     assertThat(tree.backingType()).hasToString("string");

@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ExitExprTest {
+class ExitExprTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.EXIT_EXPRESSION)
       .matches("exit (0)")
       .matches("die ('Error')")

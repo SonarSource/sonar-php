@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -27,9 +27,9 @@ import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UnionTypeTreeTest extends PHPTreeModelTest {
+class UnionTypeTreeTest extends PHPTreeModelTest {
   @Test
-  public void simple_content() throws Exception {
+  void simpleContent() {
     UnionTypeTree tree = parse("int|string", PHPLexicalGrammar.UNION_TYPE);
 
     assertThat(tree.is(Tree.Kind.UNION_TYPE)).isTrue();

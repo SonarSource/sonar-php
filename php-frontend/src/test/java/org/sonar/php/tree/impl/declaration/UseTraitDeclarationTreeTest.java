@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UseTraitDeclarationTreeTest extends PHPTreeModelTest {
+class UseTraitDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void without_adaptations() throws Exception {
+  void withoutAdaptations() {
     UseTraitDeclarationTree tree = parse("use A,B,C;", Kind.USE_TRAIT_DECLARATION);
     assertThat(tree.is(Kind.USE_TRAIT_DECLARATION)).isTrue();
     assertThat(tree.traits()).hasSize(3);
@@ -40,7 +40,7 @@ public class UseTraitDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_adaptations() throws Exception {
+  void withAdaptations() {
     UseTraitDeclarationTree tree = parse("use A,B,C { m1 as m2; }", Kind.USE_TRAIT_DECLARATION);
     assertThat(tree.is(Kind.USE_TRAIT_DECLARATION)).isTrue();
     assertThat(tree.traits()).hasSize(3);

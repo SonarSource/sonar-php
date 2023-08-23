@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class AnonymousClassTest {
+class AnonymousClassTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Kind.ANONYMOUS_CLASS)
       .matches("class(1, foo()) extends A implements B, C {var $a;}")
       .matches("class implements B {}")

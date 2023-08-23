@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ForStatementTest {
+class ForStatementTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.FOR_STATEMENT)
       .matches("for ($i = 1; $i <= 10; $i++) {}")
       .matches("for ($a1 = 1, $a2 = 2;  $b1 <= 10, $b2 > 5;  $c1++, $c2--) {}")

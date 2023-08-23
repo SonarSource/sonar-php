@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SpreadArgumentTreeTest extends PHPTreeModelTest {
+class SpreadArgumentTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void single() throws Exception {
+  void single() {
     SpreadArgumentTree tree = parse("... $a", Kind.SPREAD_ARGUMENT);
 
     assertThat(tree.is(Kind.SPREAD_ARGUMENT)).isTrue();

@@ -19,17 +19,17 @@
  */
 package org.sonar.php.symbols;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
-public class ProjectSymbolDataTest {
+class ProjectSymbolDataTest {
 
   @Test
-  public void add() {
+  void add() {
     QualifiedName qualifiedName = qualifiedName("ns1\\Class1");
     ProjectSymbolData projectSymbolData = new ProjectSymbolData();
 
@@ -41,7 +41,7 @@ public class ProjectSymbolDataTest {
   }
 
   @Test
-  public void builtins() {
+  void builtins() {
     ProjectSymbolData projectSymbolData = new ProjectSymbolData();
     assertThat(projectSymbolData.classSymbolData(qualifiedName("Exception")).get().implementedInterfaces()).containsExactly(qualifiedName("Throwable"));
 

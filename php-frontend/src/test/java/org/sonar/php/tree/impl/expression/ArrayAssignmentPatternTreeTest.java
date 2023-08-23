@@ -20,7 +20,7 @@
 package org.sonar.php.tree.impl.expression;
 
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
@@ -28,10 +28,10 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArrayAssignmentPatternTreeTest extends PHPTreeModelTest {
+class ArrayAssignmentPatternTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void simple() throws Exception {
+  void simple() {
     ArrayAssignmentPatternTree tree = parse("[$a, , $b]", Kind.ARRAY_ASSIGNMENT_PATTERN);
 
     assertThat(tree.is(Kind.ARRAY_ASSIGNMENT_PATTERN)).isTrue();

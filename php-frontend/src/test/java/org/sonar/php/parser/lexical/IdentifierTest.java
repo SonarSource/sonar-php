@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.lexical;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class IdentifierTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+class IdentifierTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Kind.NAME_IDENTIFIER)
       .matches("identifier")
       .matches("_identifier")

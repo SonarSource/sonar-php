@@ -24,7 +24,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -37,10 +37,10 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class PHPSubscriptionCheckTest {
+class PHPSubscriptionCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
@@ -54,7 +54,7 @@ public class PHPSubscriptionCheckTest {
   }
 
   @Test
-  public void test_newIssue() {
+  void testNewIssue() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse("<?php phpinfo();");
     PHPSubscriptionCheck testVisitor = new PHPSubscriptionCheck() {
@@ -72,7 +72,7 @@ public class PHPSubscriptionCheckTest {
 
     List<PhpIssue> issues = testVisitor.context().getIssues();
 
-    assertThat(issues.size()).isEqualTo(1);
+    assertThat(issues).hasSize(1);
     assertThat(issues.get(0)).isInstanceOf(PreciseIssue.class);
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo("testIssue");
   }

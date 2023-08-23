@@ -19,18 +19,18 @@
  */
 package org.sonar.php.cache;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.sensor.cache.WriteCache;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class PhpWriteCacheImplTest {
+class PhpWriteCacheImplTest {
 
   private static final byte[] bytes = new byte[] {1, 2, 3};
 
   @Test
-  public void shouldWriteFromWriteCache() {
+  void shouldWriteFromWriteCache() {
     WriteCache writeCache = mock(WriteCache.class);
     PhpWriteCacheImpl cache = new PhpWriteCacheImpl(writeCache);
 
@@ -40,7 +40,7 @@ public class PhpWriteCacheImplTest {
   }
 
   @Test
-  public void shouldCallCopyFromPrevious() {
+  void shouldCallCopyFromPrevious() {
     WriteCache writeCache = mock(WriteCache.class);
     PhpWriteCacheImpl cache = new PhpWriteCacheImpl(writeCache);
 

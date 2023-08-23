@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -28,10 +28,10 @@ import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
+class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void one_element() throws Exception {
+  void oneElement() {
     ArrayInitializerBracketTree tree = parse("[0]", PHPLexicalGrammar.ARRAY_INIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_BRACKET)).isTrue();
@@ -43,7 +43,7 @@ public class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void multiple_elements() throws Exception {
+  void multipleElements() {
     ArrayInitializerBracketTree tree = parse("[0, 1, 2]", PHPLexicalGrammar.ARRAY_INIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_BRACKET)).isTrue();
@@ -58,7 +58,7 @@ public class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_trailing_comma() throws Exception {
+  void withTrailingComma() {
     ArrayInitializerBracketTree tree = parse("[0, 1, 2,]", PHPLexicalGrammar.ARRAY_INIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_BRACKET)).isTrue();
@@ -73,7 +73,7 @@ public class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void spread_operator() throws Exception {
+  void spreadOperator() {
     ArrayInitializerBracketTree tree = parse("[1, 2, ...$arr1, 5]", PHPLexicalGrammar.ARRAY_INIALIZER);
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_BRACKET)).isTrue();
     assertThat(tree.arrayPairs()).hasSize(4);

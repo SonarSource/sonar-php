@@ -20,7 +20,7 @@
 package org.sonar.php.compat;
 
 import java.net.URI;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
@@ -28,11 +28,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PhpFileImplTest {
+class PhpFileImplTest {
   private final InputFile inputFile = mock(InputFile.class);
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     URI uri = new URI("uri");
 
     when(inputFile.contents()).thenReturn("Input file content");
@@ -46,7 +46,7 @@ public class PhpFileImplTest {
     assertThat(phpFile).isExactlyInstanceOf(PhpFileImpl.class);
     assertThat(phpFile.contents()).isEqualTo("Input file content");
     assertThat(phpFile.filename()).isEqualTo("file.php");
-    assertThat(phpFile.toString()).isEqualTo("to string");
+    assertThat(phpFile).hasToString("to string");
     assertThat(phpFile.uri()).isEqualTo(uri);
     assertThat(phpFile.key()).isEqualTo("moduleKey:file.php");
   }

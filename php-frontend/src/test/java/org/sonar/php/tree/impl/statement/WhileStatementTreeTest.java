@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WhileStatementTreeTest extends PHPTreeModelTest {
+class WhileStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void standard_syntax() throws Exception {
+  void standardSyntax() {
     WhileStatementTree tree = parse("while ($a) {}", PHPLexicalGrammar.WHILE_STATEMENT);
 
     assertThat(tree.is(Kind.WHILE_STATEMENT)).isTrue();
@@ -45,12 +45,12 @@ public class WhileStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void alternative_syntax() throws Exception {
+  void alternativeSyntax() {
     WhileStatementTree tree = parse("while ($a) : endwhile ;", PHPLexicalGrammar.WHILE_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_WHILE_STATEMENT)).isTrue();
     assertThat(tree.whileToken().text()).isEqualTo("while");
-    assertThat(tree.statements()).hasSize(0);
+    assertThat(tree.statements()).isEmpty();
     assertThat(tree.colonToken().text()).isEqualTo(":");
     assertThat(tree.endWhileToken().text()).isEqualTo("endwhile");
     assertThat(tree.eosToken().text()).isEqualTo(";");

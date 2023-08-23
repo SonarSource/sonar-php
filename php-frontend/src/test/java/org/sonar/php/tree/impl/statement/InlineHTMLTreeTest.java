@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class InlineHTMLTreeTest extends PHPTreeModelTest {
+class InlineHTMLTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     InlineHTMLTree tree = parse("?>", PHPLexicalGrammar.INLINE_HTML_STATEMENT);
 
     assertThat(tree.is(Kind.INLINE_HTML)).isTrue();

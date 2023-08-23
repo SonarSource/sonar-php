@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BlockTreeTest extends PHPTreeModelTest {
+class BlockTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void empty() throws Exception {
+  void empty() {
     BlockTree tree = parse("{}", PHPLexicalGrammar.BLOCK);
 
     assertThat(tree.is(Kind.BLOCK)).isTrue();
@@ -38,7 +38,7 @@ public class BlockTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void not_empty() throws Exception {
+  void notEmpty() {
     BlockTree tree = parse("{ $a; }", PHPLexicalGrammar.BLOCK);
     assertThat(tree.statements()).hasSize(1);
 

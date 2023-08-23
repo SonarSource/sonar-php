@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.lexical;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class RegularStringLiteralTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+class RegularStringLiteralTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.REGULAR_STRING_LITERAL)
       .matches("\"\"")
       .matches("\"str\"")
@@ -35,7 +35,7 @@ public class RegularStringLiteralTest {
   }
 
   @Test
-  public void test_real_life() {
+  void testRealLife() {
     assertThat(PHPLexicalGrammar.REGULAR_STRING_LITERAL)
       .matches("\"/regexp $/\"")
       .matches("\"non regexp $\"") // PHP is permissive

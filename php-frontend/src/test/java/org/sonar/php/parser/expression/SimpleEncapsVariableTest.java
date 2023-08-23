@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class SimpleEncapsVariableTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+class SimpleEncapsVariableTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.SIMPLE_ENCAPS_VARIABLE)
       .matches("$variable")
       .matches("$variable[offset]")
@@ -36,7 +36,7 @@ public class SimpleEncapsVariableTest {
   }
 
   @Test
-  public void test_real_life() {
+  void testRealLife() {
     assertThat(PHPLexicalGrammar.SIMPLE_ENCAPS_VARIABLE)
       .matches("$foo[0]")
       .matches("$foo[identifier]")
@@ -45,7 +45,7 @@ public class SimpleEncapsVariableTest {
   }
 
   @Test
-  public void nok() throws Exception {
+  void nok() {
     assertThat(PHPLexicalGrammar.SIMPLE_ENCAPS_VARIABLE)
       .notMatches("$var[test()]")
       .notMatches("$var[{$test}]")

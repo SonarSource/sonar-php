@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArrayPairTreeTest extends PHPTreeModelTest {
+class ArrayPairTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void value() throws Exception {
+  void value() throws Exception {
     ArrayPairTree tree = parse("$val", Kind.ARRAY_PAIR);
 
     assertThat(tree.is(Kind.ARRAY_PAIR)).isTrue();
@@ -40,7 +40,7 @@ public class ArrayPairTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void key_value() throws Exception {
+  void keyValue() {
     ArrayPairTree tree = parse("$key => $val", Kind.ARRAY_PAIR);
 
     assertThat(tree.is(Kind.ARRAY_PAIR)).isTrue();
@@ -51,7 +51,7 @@ public class ArrayPairTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void spread_operator() throws Exception {
+  void spreadOperator() {
     ArrayPairTree tree = parse("...$val", Kind.ARRAY_PAIR);
     assertThat(tree.ellipsisToken().text()).isEqualTo("...");
     assertThat(expressionToString(tree.value())).isEqualTo("$val");

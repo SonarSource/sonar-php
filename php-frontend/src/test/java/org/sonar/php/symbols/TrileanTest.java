@@ -19,21 +19,21 @@
  */
 package org.sonar.php.symbols;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TrileanTest {
+class TrileanTest {
 
   @Test
-  public void isTrue() {
+  void isTrue() {
     assertThat(Trilean.TRUE.isTrue()).isTrue();
     assertThat(Trilean.FALSE.isTrue()).isFalse();
     assertThat(Trilean.UNKNOWN.isTrue()).isFalse();
   }
 
   @Test
-  public void isFalse() {
+  void isFalse() {
     assertThat(Trilean.TRUE.isFalse()).isFalse();
     assertThat(Trilean.FALSE.isFalse()).isTrue();
     assertThat(Trilean.UNKNOWN.isFalse()).isFalse();

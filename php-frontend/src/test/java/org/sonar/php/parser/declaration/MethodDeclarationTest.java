@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class MethodDeclarationTest {
+class MethodDeclarationTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     assertThat(PHPLexicalGrammar.METHOD_DECLARATION)
       .matches("function f ();")
       .matches("function f () {}")
@@ -47,7 +47,7 @@ public class MethodDeclarationTest {
   }
 
   @Test
-  public void construct() {
+  void construct() {
     assertThat(PHPLexicalGrammar.METHOD_DECLARATION)
       .matches("public function __construct(private $prop) {}")
       .matches("public function __construct(public $prop) {}")
@@ -61,7 +61,7 @@ public class MethodDeclarationTest {
   }
 
   @Test
-  public void optional_semicolon() {
+  void optionalSemicolon() {
     assertThat(PHPLexicalGrammar.METHOD_DECLARATION)
       .matches("function fun() ?>")
       .notMatches("function fun() ?> <?php {}");

@@ -19,22 +19,22 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ComplexEncapsVariableTest {
+class ComplexEncapsVariableTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.COMPLEX_ENCAPS_VARIABLE)
       .matches("{ $var }")
       .matches("{ ${expression} }");
   }
 
   @Test
-  public void test_real_life() {
+  void testRealLife() {
     assertThat(PHPLexicalGrammar.COMPLEX_ENCAPS_VARIABLE)
       .matches("{ $var }")
       .matches("{ ${$var} }")
@@ -45,7 +45,7 @@ public class ComplexEncapsVariableTest {
   }
 
   @Test
-  public void nok() {
+  void nok() {
     assertThat(PHPLexicalGrammar.COMPLEX_ENCAPS_VARIABLE)
       .notMatches("{$'str'}")
       .notMatches("{$0}");

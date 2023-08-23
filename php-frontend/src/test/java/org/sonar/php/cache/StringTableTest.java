@@ -22,36 +22,38 @@ package org.sonar.php.cache;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class StringTableTest {
+class StringTableTest {
 
   @Test
-  public void test() {
+  void test() {
     StringTable stringTable = new StringTable();
-    assertEquals(0, stringTable.getIndex("a0"));
-    assertEquals(1, stringTable.getIndex("a1"));
-    assertEquals(2, stringTable.getIndex("a2"));
+    assertThat(stringTable.getIndex("a0")).isZero();
+    assertThat(stringTable.getIndex("a1")).isEqualTo(1);
+    assertThat(stringTable.getIndex("a2")).isEqualTo(2);
 
-    assertThrows(IndexOutOfBoundsException.class, () -> stringTable.getString(3));
-    assertEquals("a0", stringTable.getString(0));
-    assertEquals("a2", stringTable.getString(2));
-    assertEquals("a1", stringTable.getString(1));
+    assertThatExceptionOfType(IndexOutOfBoundsException.class).isThrownBy(() -> stringTable.getString(3));
+
+    assertThat(stringTable.getString(0)).isEqualTo("a0");
+    assertThat(stringTable.getString(2)).isEqualTo("a2");
+    assertThat(stringTable.getString(1)).isEqualTo("a1");
   }
 
   @Test
-  public void test_create_from_list() {
+  void testCreateFromList() {
     List<String> list = new ArrayList<>(Arrays.asList("a0", "a1", "a2"));
     StringTable stringTable = new StringTable(list);
     stringTable.getIndex("a3");
 
-    assertThrows(IndexOutOfBoundsException.class, () -> stringTable.getString(4));
-    assertEquals("a0", stringTable.getString(0));
-    assertEquals("a2", stringTable.getString(2));
-    assertEquals("a1", stringTable.getString(1));
-    assertEquals("a3", stringTable.getString(3));
+    assertThatExceptionOfType(IndexOutOfBoundsException.class).isThrownBy(() -> stringTable.getString(4));
+
+    assertThat(stringTable.getString(0)).isEqualTo("a0");
+    assertThat(stringTable.getString(2)).isEqualTo("a2");
+    assertThat(stringTable.getString(1)).isEqualTo("a1");
+    assertThat(stringTable.getString(3)).isEqualTo("a3");
   }
 }

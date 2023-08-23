@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ArrayPairTest {
+class ArrayPairTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Tree.Kind.ARRAY_PAIR)
       .matches("$a")
       .matches("getArr()")

@@ -21,15 +21,15 @@ package org.sonar.php.symbols;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
-public class FunctionSymbolIndexTest {
+class FunctionSymbolIndexTest {
 
   @Test
-  public void global_function() {
+  void globalFunction() {
     FunctionSymbolData a = data("a");
     FunctionSymbolIndex index = index(a);
 
@@ -39,7 +39,7 @@ public class FunctionSymbolIndexTest {
   }
 
   @Test
-  public void namespace_function() {
+  void namespaceFunction() {
     FunctionSymbolData a = data("\\namespace\\a");
     FunctionSymbolIndex index = index(a);
 
@@ -51,7 +51,7 @@ public class FunctionSymbolIndexTest {
   }
 
   @Test
-  public void global_and_namespace_function() {
+  void globalAndNamespaceFunction() {
     FunctionSymbolData globalA = data("a");
     FunctionSymbolData namespaceA = data("\\namespace\\a");
     FunctionSymbolIndex index = index(globalA, namespaceA);
@@ -66,7 +66,7 @@ public class FunctionSymbolIndexTest {
   }
 
   @Test
-  public void unknown_function() {
+  void unknownFunction() {
     FunctionSymbolData a = data("a");
     FunctionSymbolIndex index = index(a);
 

@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree;
 
-public class LexicalVarsTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+class LexicalVarsTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Tree.Kind.LEXICAL_VARIABLES)
       .matches("use ($a)")
       .matches("use ($a, $b)")

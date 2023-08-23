@@ -19,14 +19,14 @@
  */
 package org.sonar.php.parser;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class CompilationUnitTest {
+class CompilationUnitTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.COMPILATION_UNIT)
       .matches("")
 

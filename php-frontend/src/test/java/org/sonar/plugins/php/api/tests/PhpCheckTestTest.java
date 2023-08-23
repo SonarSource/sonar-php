@@ -19,12 +19,11 @@
  */
 package org.sonar.plugins.php.api.tests;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.LineIssue;
@@ -34,35 +33,32 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class PhpCheckTestTest {
+class PhpCheckTestTest {
 
   private int tmpFileId = 0;
 
-  @Rule
-  public TemporaryFolder tmpFolder = new TemporaryFolder();
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
+  @TempDir
+  public File tempFolder;
 
   private static final PHPCheck CHECK = new DummyCheck();
 
   @Test
-  public void test_no_issue() throws Exception {
+  void testNoIssue() {
     PHPCheckTest.check(CHECK, createFile("<?php $a += 1; // No issue"));
   }
 
   @Test
-  public void test_with_message() throws Exception {
+  void testWithMessage() {
     PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK {{message}}"));
   }
 
   @Test
-  public void test_without_message() throws Exception {
+  void testWithoutMessage() {
     PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK"));
   }
 
   @Test
-  public void test_error_unexpected_issue() throws Exception {
+  void testErrorUnexpectedIssue() {
     PhpFile file = createFile("<?php $a = 1;");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -70,7 +66,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_error_no_issue() throws Exception {
+  void testErrorNoIssue() {
     PhpFile file = createFile("<?php $a += 1; // NOK");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -78,7 +74,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_error_wrong_message() throws Exception {
+  void testErrorWrongMessage() {
     PhpFile file = createFile("<?php $a = 1; // NOK {{another message}}");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -88,7 +84,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_wrong_number() throws Exception {
+  void testWrongNumber() {
     PhpFile file = createFile("<?php $a += 1; // NOK");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -96,7 +92,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_check_passing_issues_overrides_comment() throws Exception {
+  void testCheckPassingIssuesOverridesComment() {
     // The rule will raise an issue but by giving a empty list we say we expect no issue despite of the comment
     PhpFile file = createFile("<?php $a = 1; // NOK {{message}}");
     List<PhpIssue> issues = createIssuesForLines( /* None */);
@@ -106,12 +102,12 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_multiple_issue_on_same_line() throws Exception {
+  void testMultipleIssueOnSameLine() {
     PHPCheckTest.check(CHECK, createFile("<?php $a = 1; $a = 1; $a = 1;"), createIssuesForLines(1, 1, 1));
   }
 
   @Test
-  public void test_multiple_issue_on_same_line_wrong_message() throws Exception {
+  void testMultipleIssueOnSameLineWrongMessage() {
     PhpFile file = createFile("<?php $a = 1; $a = 1; $a = 1;");
     List<PhpIssue> issues = createIssuesForLines("another message", 1, 1, 1);
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file, issues))
@@ -122,7 +118,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_error_wrong_number1() throws Exception {
+  void testErrorWrongNumber1() {
     PhpFile file = createFile("<?php $a = 1; $a = 1; // NOK");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -130,7 +126,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_error_wrong_number2() throws Exception {
+  void testErrorWrongNumber2() {
     PhpFile file = createFile("<?php $a = 1; // NOK");
     List<PhpIssue> issues = createIssuesForLines(1, 1);
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file, issues))
@@ -139,17 +135,17 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_expected_cost() throws Exception {
+  void testExpectedCost() {
     PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=2]]"));
   }
 
   @Test
-  public void test_no_expected_cost() throws Exception {
+  void testNoExpectedCost() {
     PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK"));
   }
 
   @Test
-  public void test_wrong_cost() throws Exception {
+  void testWrongCost() {
     PHPCheck check = new DummyCheck(2);
     PhpFile file = createFile("<?php $a = 1; // NOK [[effortToFix=3]]");
     assertThatThrownBy(() -> PHPCheckTest.check(check, file))
@@ -160,7 +156,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void missing_cost() throws Exception {
+  void missingCost() {
     PhpFile file = createFile("<?php $a = 1; // NOK [[effortToFix=3]]");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -170,13 +166,13 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_precise_location() throws Exception {
+  void testPreciseLocation() {
     PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK\n" +
       "//    ^^^^^^      "));
   }
 
   @Test
-  public void test_wrong_start_precise_location() throws Exception {
+  void testWrongStartPreciseLocation() {
     PhpFile file = createFile("<?php $a = 1; // NOK\n//   ^^^^^^^      ");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -184,7 +180,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_wrong_end_precise_location() throws Exception {
+  void testWrongEndPreciseLocation() {
     PhpFile file = createFile("<?php $a = 1; // NOK\n//    ^^^^^       ");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -192,7 +188,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_issue_without_precise_location() throws Exception {
+  void testIssueWithoutPreciseLocation() {
     PhpFile file = createFile("<?php class A {} // NOK\n//    ^^^^^      ");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -200,13 +196,13 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_secondary_location() throws Exception {
+  void testSecondaryLocation() {
     PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK [[secondary=+0,-0]] {{message}}"));
     PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK [[secondary=1,1]] {{message}}"));
   }
 
   @Test
-  public void test_missing_secondary_location() throws Exception {
+  void testMissingSecondaryLocation() {
     PhpFile file = createFile("<?php $a = 1; // NOK [[secondary=+1]] {{message}}");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -214,7 +210,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_unexpected_secondary_location() throws Exception {
+  void testUnexpectedSecondaryLocation() {
     PhpFile file = createFile("<?php $a = 1; // NOK [[secondary=+0]] {{message}}");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
@@ -222,7 +218,7 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_wrong_cost_with_secondary() throws Exception {
+  void testWrongCostWithSecondary() {
     PHPCheck check = new DummyCheck(2);
     PhpFile file = createFile("<?php $a = 1; // NOK [[effortToFix=3;secondary=1,1]]");
     assertThatThrownBy(() -> PHPCheckTest.check(check, file))
@@ -233,12 +229,12 @@ public class PhpCheckTestTest {
   }
 
   @Test
-  public void test_shifted_line() throws Exception {
+  void testShiftedLine() {
     PHPCheckTest.check(CHECK, createFile("<?php \n// NOK@+1\n$a = 1;"));
   }
 
   @Test
-  public void test_secondary_with_cost() throws Exception {
+  void testSecondaryWithCost() {
     PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=2;secondary=1,1]]"));
     PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[secondary=1,1;effortToFix=2]]"));
   }
@@ -255,8 +251,8 @@ public class PhpCheckTestTest {
     return issues;
   }
 
-  private PhpFile createFile(String content) throws Exception {
-    return FileTestUtils.getFile(tmpFolder.newFile("test_check" + tmpFileId++ + ".php"), content);
+  private PhpFile createFile(String content) {
+    return FileTestUtils.getFile(new File(tempFolder, "test_check" + tmpFileId++ + ".php"), content);
   }
 
 }

@@ -22,9 +22,7 @@ package org.sonar.php.ini;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
 import java.util.List;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.ini.tree.Directive;
 import org.sonar.php.ini.tree.PhpIniFile;
@@ -32,38 +30,36 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class PhpIniParserTest {
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
+class PhpIniParserTest {
 
   @Test
-  public void no_directive() throws Exception {
+  void noDirective() {
     assertThat(parse("").directives()).isEmpty();
     assertThat(parse("   \n  ").directives()).isEmpty();
   }
 
   @Test
-  public void section() throws Exception {
+  void section() {
     assertThat(parse("[section1]").directives()).isEmpty();
     assertThat(parse("  [section1] ").directives()).isEmpty();
     checkSingleDirective("[section1]\n name1=value1\n [section2]", "name1", "value1");
   }
 
   @Test
-  public void simple_directive() throws Exception {
+  void simpleDirective() {
     checkSingleDirective("name1=value1", "name1", "value1");
   }
 
   @Test
-  public void empty_value() throws Exception {
+  void emptyValue() {
     checkSingleDirective("name1=", "name1", "");
   }
 
   @Test
-  public void two_directives() throws Exception {
+  void twoDirectives() {
     List<Directive> directives = parse("name1=value1\nname2=value2").directives();
     assertThat(directives).hasSize(2);
     checkDirective(directives.get(0), "name1", "value1");
@@ -71,38 +67,38 @@ public class PhpIniParserTest {
   }
 
   @Test
-  public void full_line_comment() throws Exception {
+  void fullLineComment() {
     checkSingleDirective(";comment1\nname1=value1\n;comment2", "name1", "value1");
   }
 
   @Test
-  public void end_of_line_comment() throws Exception {
+  void endOfLineComment() {
     checkSingleDirective("name1=value1;comment1", "name1", "value1");
   }
 
   @Test
-  public void whitespaces() throws Exception {
+  void whitespaces() {
     checkSingleDirective(" \t  name1 \t = \t   value1  ", "name1", "value1");
   }
 
   @Test
-  public void string_value() throws Exception {
+  void stringValue() {
     checkSingleDirective("name1=\"value1\"", "name1", "\"value1\"");
   }
 
   @Test
-  public void string_value_containing_special_char() throws Exception {
+  void stringValueContainingSpecialChar() {
     checkSingleDirective("name1=\"value1;value2\"", "name1", "\"value1;value2\"");
     checkSingleDirective("name1=\"value1=value2\"", "name1", "\"value1=value2\"");
   }
 
   @Test
-  public void string_value_containing_escaped_quotes() throws Exception {
+  void stringValueContainingEscapedQuotes() {
     checkSingleDirective("name1=\"aa\\\"bb;\\\"cc\"", "name1", "\"aa\\\"bb;\\\"cc\"");
   }
 
   @Test
-  public void numeric_value() throws Exception {
+  void numericValue() {
     checkSingleDirective("name1=42", "name1", "42");
     checkSingleDirective("name1=42.", "name1", "42.");
     checkSingleDirective("name1=4.2", "name1", "4.2");
@@ -110,35 +106,32 @@ public class PhpIniParserTest {
   }
 
   @Test
-  public void expressions() throws Exception {
+  void expressions() {
     checkSingleDirective("name1=E_ALL & ~E_DEPRECATED & ~E_STRICT", "name1", "E_ALL & ~E_DEPRECATED & ~E_STRICT");
   }
 
   @Test
-  public void no_equal_sign() {
+  void noEqualSign() {
     assertThat(parse("xxx").directives()).isEmpty();
   }
 
   @Test
-  public void empty_name() throws Exception {
-    thrown.expect(RecognitionException.class);
-    parse("=value1");
+  void emptyName() {
+    assertThatExceptionOfType(RecognitionException.class).isThrownBy(() -> parse("=value1"));
   }
 
   @Test
-  public void blank_name() throws Exception {
-    thrown.expect(RecognitionException.class);
-    parse(" =value1");
+  void blankName() {
+    assertThatExceptionOfType(RecognitionException.class).isThrownBy(() -> parse(" =value1"));
   }
 
   @Test
-  public void more_than_one_equal_sign() throws Exception {
-    thrown.expect(RecognitionException.class);
-    parse("name1=value1=1");
+  void moreThanOneEqualSign() {
+    assertThatExceptionOfType(RecognitionException.class).isThrownBy(() -> parse("name1=value1=1"));
   }
 
   @Test
-  public void tokens() throws Exception {
+  void tokens() {
     Directive directive = parse("\n  name1=value1").directives().get(0);
     checkToken(directive.name(), "name1", 2, 3, 2, 8);
     checkToken(directive.equalSign(), "=", 2, 8, 2, 9);
@@ -146,7 +139,7 @@ public class PhpIniParserTest {
   }
 
   @Test
-  public void parse_file() throws Exception {
+  void parseFile() {
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/phpini/php.ini"));
     PhpIniFile phpIni = new PhpIniParser().parse(file);
     assertThat(phpIni.directives()).hasSize(1);
@@ -154,7 +147,7 @@ public class PhpIniParserTest {
   }
 
   @Test
-  public void unknown_file() {
+  void unknownFile() {
     String fileName = "dir" + File.separator + "xxx.ini";
     File file = new File(fileName);
 
@@ -164,7 +157,7 @@ public class PhpIniParserTest {
   }
 
   @Test
-  public void directive_by_name() {
+  void directiveByName() {
     PhpIniFile phpIniFile = parse("\n  name1=value1 \n name2=value2 \n name1=value3");
     assertThat(phpIniFile.directivesForName("name1"))
       .extracting(Directive::value)

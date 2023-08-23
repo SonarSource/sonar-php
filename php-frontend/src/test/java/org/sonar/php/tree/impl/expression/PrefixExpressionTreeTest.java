@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,44 +27,44 @@ import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PrefixExpressionTreeTest extends PHPTreeModelTest {
+class PrefixExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void unary_plus() throws Exception {
+  void unaryPlus() {
     testPrefixExpr(Kind.UNARY_PLUS, "+");
   }
 
   @Test
-  public void unary_minus() throws Exception {
+  void unaryMinus() {
     testPrefixExpr(Kind.UNARY_MINUS, "-");
   }
 
   @Test
-  public void prefix_inc() throws Exception {
+  void prefixInc() {
     testPrefixExpr(Kind.PREFIX_INCREMENT, "++");
   }
 
   @Test
-  public void prefix_dec() throws Exception {
+  void prefixDec() {
     testPrefixExpr(Kind.PREFIX_DECREMENT, "--");
   }
 
   @Test
-  public void bitwise_complement() throws Exception {
+  void bitwiseComplement() {
     testPrefixExpr(Kind.BITWISE_COMPLEMENT, "~");
   }
 
   @Test
-  public void logical_complement() throws Exception {
+  void logicalComplement() {
     testPrefixExpr(Kind.LOGICAL_COMPLEMENT, "!");
   }
 
   @Test
-  public void error_control() throws Exception {
+  void errorControl() {
     testPrefixExpr(Kind.ERROR_CONTROL, "@");
   }
 
-  private void testPrefixExpr(Kind kind, String operator) throws Exception {
+  private void testPrefixExpr(Kind kind, String operator) {
     UnaryExpressionTree tree = parse(operator + "$a", PHPLexicalGrammar.UNARY_EXPR);
 
     assertThat(tree.is(kind)).isTrue();

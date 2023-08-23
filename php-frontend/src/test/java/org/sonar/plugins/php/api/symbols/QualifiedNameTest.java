@@ -19,14 +19,14 @@
  */
 package org.sonar.plugins.php.api.symbols;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class QualifiedNameTest {
+class QualifiedNameTest {
 
   @Test
-  public void qualifiedName() {
+  void qualifiedName() {
     QualifiedName qualifiedName1 = QualifiedName.qualifiedName("A\\B\\C");
     QualifiedName qualifiedName2 = QualifiedName.qualifiedName("a\\b\\c");
     assertThat(qualifiedName1).isEqualTo(qualifiedName2);

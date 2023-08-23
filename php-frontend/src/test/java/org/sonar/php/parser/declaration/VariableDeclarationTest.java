@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class VariableDeclarationTest {
+class VariableDeclarationTest {
 
   @Test
-  public void variable_declaration() {
+  void variableDeclaration() {
     assertThat(PHPLexicalGrammar.VARIABLE_DECLARATION)
       .matches("$a")
       .matches("$a = 1")

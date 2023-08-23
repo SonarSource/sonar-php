@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.lexical;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class NowdocTest {
+class NowdocTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Tree.Kind.NOWDOC_LITERAL)
       .matches("<<<'EOF'\n" +
         "<html> content </html>\n" +

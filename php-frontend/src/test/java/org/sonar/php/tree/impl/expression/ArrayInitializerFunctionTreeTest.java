@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArrayInitializerFunctionTreeTest extends PHPTreeModelTest {
+class ArrayInitializerFunctionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void empty() throws Exception {
+  void empty() {
     ArrayInitializerFunctionTree tree = parse("array()", PHPLexicalGrammar.ARRAY_INIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_FUNCTION)).isTrue();
@@ -42,7 +42,7 @@ public class ArrayInitializerFunctionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void non_empty() throws Exception {
+  void nonEmpty() {
     ArrayInitializerFunctionTree tree = parse("array($a, $b, $c)", PHPLexicalGrammar.ARRAY_INIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_FUNCTION)).isTrue();
@@ -58,7 +58,7 @@ public class ArrayInitializerFunctionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_trailing_comma() throws Exception {
+  void withTrailingComma() {
     ArrayInitializerFunctionTree tree = parse("array($a,)", PHPLexicalGrammar.ARRAY_INIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_FUNCTION)).isTrue();

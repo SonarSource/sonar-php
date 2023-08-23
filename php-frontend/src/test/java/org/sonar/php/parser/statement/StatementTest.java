@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class StatementTest {
+class StatementTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.STATEMENT)
       .matches("{}")
       .matches("label:")
@@ -65,13 +65,13 @@ public class StatementTest {
   }
 
   @Test
-  public void optional_semicolon() {
+  void optionalSemicolon() {
     assertThat(PHPLexicalGrammar.STATEMENT)
       .matches("continue ?>");
   }
 
   @Test
-  public void top_statement() {
+  void topStatement() {
     assertThat(PHPLexicalGrammar.TOP_STATEMENT)
       .matches("__halt_compiler();");
   }

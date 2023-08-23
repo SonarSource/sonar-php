@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ElseifClauseTreeTest extends PHPTreeModelTest {
+class ElseifClauseTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void standard_syntax() throws Exception {
+  void standardSyntax() {
     ElseifClauseTree tree = parse("elseif ($condition) {}", PHPLexicalGrammar.ELSEIF_CLAUSE);
 
     assertThat(tree.is(Kind.ELSEIF_CLAUSE)).isTrue();
@@ -40,7 +40,7 @@ public class ElseifClauseTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void alternative_syntax() throws Exception {
+  void alternativeSyntax() {
     ElseifClauseTree tree = parse("elseif ($condition) : $stmt1; $stmt2; ", PHPLexicalGrammar.ALTERNATIVE_ELSEIF_CLAUSE);
 
     assertThat(tree.is(Kind.ALTERNATIVE_ELSEIF_CLAUSE)).isTrue();

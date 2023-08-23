@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class MatchExpressionTest {
+class MatchExpressionTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.MATCH_EXPRESSION)
       .matches("match ($a) {$a=>1}")
       .matches("match ($var) {$a,$b =>0,$c=>1,}")

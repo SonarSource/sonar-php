@@ -22,35 +22,35 @@ package org.sonar.php.utils.collections;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class SetUtilsTest {
+class SetUtilsTest {
 
   @Test
-  public void test_returns_unmodifiable_set() {
+  void testReturnsUnmodifiableSet() {
     Set<String> set = SetUtils.immutableSetOf();
-    assertThrows(UnsupportedOperationException.class, () -> set.add("value"));
+    assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> set.add("value"));
   }
 
   @Test
-  public void test_construct_strings_set() {
+  void testConstructStringsSet() {
     Set<String> set = SetUtils.immutableSetOf("value1", "value2");
 
     assertThat(set).containsExactlyInAnyOrder("value1", "value2");
   }
 
   @Test
-  public void test_construct_any_set() {
+  void testConstructAnySet() {
     Set<SomeType> set = SetUtils.immutableSetOf(new SomeType("value1"), new SomeType("value2"));
 
     assertThat(set).containsExactlyInAnyOrder(new SomeType("value1"), new SomeType("value2"));
   }
 
   @Test
-  public void test_concat_any_set() {
+  void testConcatAnySet() {
     Set<SomeType> set1 = SetUtils.immutableSetOf(new SomeType("value1"), new SomeType("value2"));
     Set<SomeType> set2 = SetUtils.immutableSetOf(new SomeType("value3"), new SomeType("value4"));
 
@@ -60,7 +60,7 @@ public class SetUtilsTest {
   }
 
   @Test
-  public void test_concat_many_sets() {
+  void testConcatManySets() {
     Set<SomeType> set1 = SetUtils.immutableSetOf(new SomeType("value1"), new SomeType("value2"));
     Set<SomeType> set2 = SetUtils.immutableSetOf(new SomeType("value3"), new SomeType("value4"));
     Set<SomeType> set3 = SetUtils.immutableSetOf(new SomeType("value5"), new SomeType("value6"));
@@ -81,7 +81,7 @@ public class SetUtilsTest {
   }
 
   @Test
-  public void test_no_difference() {
+  void testNoDifference() {
     Set<String> set1 = SetUtils.immutableSetOf("A", "B", "C");
     Set<String> set2 = SetUtils.immutableSetOf("A", "B", "C");
 
@@ -90,7 +90,7 @@ public class SetUtilsTest {
   }
 
   @Test
-  public void test_no_difference_on_left() {
+  void testNoDifferenceOnLeft() {
     Set<String> set1 = SetUtils.immutableSetOf("A", "B", "C");
     Set<String> set2 = SetUtils.immutableSetOf("A", "B", "C", "D", "E");
 
@@ -99,7 +99,7 @@ public class SetUtilsTest {
   }
 
   @Test
-  public void test_difference() {
+  void testDifference() {
     Set<String> set1 = SetUtils.immutableSetOf("A", "B", "C");
     Set<String> set2 = SetUtils.immutableSetOf("A", "B", "C", "D", "E");
 

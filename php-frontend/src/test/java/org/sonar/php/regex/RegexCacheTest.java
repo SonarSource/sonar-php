@@ -19,7 +19,7 @@
  */
 package org.sonar.php.regex;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -33,10 +33,10 @@ import org.sonarsource.analyzer.commons.regex.ast.FlagSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class RegexCacheTest {
+class RegexCacheTest {
 
   @Test
-  public void same_result_if_same_tree_is_provided() {
+  void sameResultIfSameTreeIsProvided() {
     CompilationUnitTree cut = ParsingTestUtils.parseSource("<?php" +
       "$s0 = '/abc/';" +
       "$s1 = '/abc/';");
@@ -60,7 +60,7 @@ public class RegexCacheTest {
   }
 
   @Test
-  public void test_cache_via_context() {
+  void testCacheViaContext() {
     CompilationUnitTree cut = ParsingTestUtils.parseSource("<?php" +
       "$s0 = '/abc/';");
     ExpressionStatementTree statement1 = (ExpressionStatementTree) cut.script().statements().get(0);

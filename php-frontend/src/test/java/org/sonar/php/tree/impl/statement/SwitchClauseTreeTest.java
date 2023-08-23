@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -28,10 +28,10 @@ import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SwitchClauseTreeTest extends PHPTreeModelTest {
+class SwitchClauseTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void case_clause() throws Exception {
+  void caseClause() {
     CaseClauseTree tree = parse("case $a: $b;", PHPLexicalGrammar.SWITCH_CASE_CLAUSE);
 
     assertThat(tree.is(Kind.CASE_CLAUSE)).isTrue();
@@ -42,7 +42,7 @@ public class SwitchClauseTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void default_clause() throws Exception {
+  void defaultClause() {
     DefaultClauseTree tree = parse("default: $b; break;", PHPLexicalGrammar.SWITCH_CASE_CLAUSE);
 
     assertThat(tree.is(Kind.DEFAULT_CLAUSE)).isTrue();

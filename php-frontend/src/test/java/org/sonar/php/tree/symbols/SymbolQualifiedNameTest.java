@@ -19,18 +19,17 @@
  */
 package org.sonar.php.tree.symbols;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SymbolQualifiedNameTest {
+class SymbolQualifiedNameTest {
 
   @Test
-  public void test() {
+  void test() {
     SymbolQualifiedName qualifiedName1 = SymbolQualifiedName.create("A", "B", "C");
     SymbolQualifiedName qualifiedName2 = SymbolQualifiedName.create("a", "b", "c");
-    assertThat(qualifiedName1.toString()).isEqualTo("a\\b\\c");
-    assertThat(qualifiedName1).isEqualTo(qualifiedName2);
+    assertThat(qualifiedName1).hasToString("a\\b\\c").isEqualTo(qualifiedName2);
   }
 
 }

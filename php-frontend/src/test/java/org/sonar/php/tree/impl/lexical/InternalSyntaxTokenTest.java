@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.lexical;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class InternalSyntaxTokenTest extends PHPTreeModelTest {
+class InternalSyntaxTokenTest extends PHPTreeModelTest {
 
   @Test
-  public void inline_html() throws Exception {
+  void inlineHtml() {
     InternalSyntaxToken tree = parse("?>", PHPLexicalGrammar.INLINE_HTML);
 
     assertThat(tree.is(Kind.INLINE_HTML_TOKEN)).isTrue();
@@ -37,7 +37,7 @@ public class InternalSyntaxTokenTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void token() throws Exception {
+  void token() {
     InternalSyntaxToken tree = parse("foo", PHPLexicalGrammar.IDENTIFIER);
 
     assertThat(tree.is(Kind.TOKEN)).isTrue();

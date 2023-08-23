@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NamespaceStatementTreeTest extends PHPTreeModelTest {
+class NamespaceStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void standard_syntax() throws Exception {
+  void standardSyntax() {
     NamespaceStatementTree tree = parse("namespace NS;", PHPLexicalGrammar.NAMESPACE_STATEMENT);
 
     assertThat(tree.is(Kind.NAMESPACE_STATEMENT)).isTrue();
@@ -44,7 +44,7 @@ public class NamespaceStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void block_syntax() throws Exception {
+  void blockSyntax() {
     NamespaceStatementTree tree = parse("namespace { $a; }", PHPLexicalGrammar.NAMESPACE_STATEMENT);
 
     assertThat(tree.is(Kind.NAMESPACE_STATEMENT)).isTrue();

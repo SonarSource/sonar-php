@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ComputedVariableTreeTest extends PHPTreeModelTest {
+class ComputedVariableTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() {
     ComputedVariableTree tree = parse("{$a}", Kind.COMPUTED_VARIABLE_NAME);
 
     assertThat(tree.is(Kind.COMPUTED_VARIABLE_NAME)).isTrue();

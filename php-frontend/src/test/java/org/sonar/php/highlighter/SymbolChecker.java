@@ -65,7 +65,7 @@ public class SymbolChecker {
     Collection<TextRange> foundReferences = context.referencesForSymbolAt(componentKey, line, column);
     assertThat(foundReferences).isNotNull();
     String message = String.format("number of found references to the symbol located at line %d and column %d", line, column);
-    assertThat(foundReferences.size()).as(message).isEqualTo(referenceRanges.size());
+    assertThat(foundReferences).as(message).hasSameSizeAs(referenceRanges);
     for (TextRange referenceRange : referenceRanges) {
       assertThat(foundReferences).extracting("start", "end").contains(tuple(referenceRange.start(), referenceRange.end()));
     }

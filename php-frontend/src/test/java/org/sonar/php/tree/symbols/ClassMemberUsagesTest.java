@@ -19,26 +19,30 @@
  */
 package org.sonar.php.tree.symbols;
 
-import org.junit.Test;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClassMemberUsagesTest extends ParsingTestUtils {
+class ClassMemberUsagesTest extends ParsingTestUtils {
 
   private final SymbolTableImpl SYMBOL_TABLE = SymbolTableImpl.create(parse("symbols/class_members_usages.php"));
 
   @Test
-  public void test_static_field() throws Exception {
+  void testStaticField() {
     Symbol staticField = getSymbol("$staticField", Kind.FIELD);
     assertThat(staticField).isNotNull();
     assertThat(staticField.usages()).hasSize(4);
   }
 
   @Test
-  public void test_field() throws Exception {
+  void testField() {
     Symbol field = getSymbol("$field", Kind.FIELD);
     assertThat(field).isNotNull();
     assertThat(field.usages()).hasSize(2);
@@ -48,32 +52,28 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
     assertThat(arrayField.usages()).hasSize(1);
   }
 
-  @Test
-  public void test_method() throws Exception {
-    Symbol method = getSymbol("method", Kind.FUNCTION);
-    Symbol field = getSymbol("$method", Kind.FIELD);
+  @ParameterizedTest
+  @MethodSource
+  void testMethod(String symbolName, String fieldName, int expectedMethodUsages) {
+    Symbol method = getSymbol(symbolName, Kind.FUNCTION);
+    Symbol field = getSymbol(fieldName, Kind.FIELD);
 
     assertThat(method).isNotNull();
     assertThat(field).isNotNull();
 
     assertThat(field.usages()).hasSize(1);
-    assertThat(method.usages()).hasSize(7);
+    assertThat(method.usages()).hasSize(expectedMethodUsages);
+  }
+
+  private static Stream<Arguments> testMethod() {
+    return Stream.of(
+      Arguments.of("method", "$method", 7),
+      Arguments.of("staticMethod", "$staticMethod", 5),
+      Arguments.of("lateDeclMethod", "$lateDeclField", 1));
   }
 
   @Test
-  public void test_static_method() throws Exception {
-    Symbol method = getSymbol("staticMethod", Kind.FUNCTION);
-    Symbol field = getSymbol("$staticMethod", Kind.FIELD);
-
-    assertThat(method).isNotNull();
-    assertThat(field).isNotNull();
-
-    assertThat(field.usages()).hasSize(1);
-    assertThat(method.usages()).hasSize(5);
-  }
-
-  @Test
-  public void test_const_field() throws Exception {
+  void testConstField() {
     Symbol constField = getSymbol("constField", Kind.FIELD);
     Symbol field = getSymbol("$constField", Kind.FIELD);
 
@@ -85,19 +85,7 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
   }
 
   @Test
-  public void test_used_before_declaration() throws Exception {
-    Symbol method = getSymbol("lateDeclMethod", Kind.FUNCTION);
-    Symbol field = getSymbol("$lateDeclField", Kind.FIELD);
-
-    assertThat(method).isNotNull();
-    assertThat(field).isNotNull();
-
-    assertThat(field.usages()).hasSize(1);
-    assertThat(method.usages()).hasSize(1);
-  }
-
-  @Test
-  public void test_property_name_in_variable() throws Exception {
+  void testPropertyNameInVariable() {
     Symbol variable = getSymbol("$a", Kind.VARIABLE);
     Symbol parameter = getSymbol("$p", Kind.PARAMETER);
 
@@ -110,7 +98,7 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
   }
 
   @Test
-  public void test_local_var_as_members() throws Exception {
+  void testLocalVarAsMembers() {
     Symbol variable = getSymbol("$fieldN", Kind.VARIABLE);
     Symbol parameter = getSymbol("$funcN", Kind.PARAMETER);
 
@@ -126,13 +114,13 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
     assertThat(parameter.usages()).hasSize(1);
 
     // actually these method and field are used but we do not support this use case
-    assertThat(field.usages()).hasSize(0);
-    assertThat(method.usages()).hasSize(0);
+    assertThat(field.usages()).isEmpty();
+    assertThat(method.usages()).isEmpty();
 
   }
 
   @Test
-  public void test_inheritance_constant_lookup() throws Exception {
+  void testInheritanceConstantLookup() {
     Symbol variable = getSymbol("A_CONST", Kind.FIELD);
     assertThat(variable).isNotNull();
     assertThat(variable.usages()).hasSize(1);

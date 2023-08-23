@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConstantDeclarationTreeTest extends PHPTreeModelTest {
+class ConstantDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     ConstantDeclarationTree tree = parse("const A = 1, B = 2;", PHPLexicalGrammar.CONSTANT_DECLARATION);
     assertThat(tree.is(Kind.CONSTANT_DECLARATION)).isTrue();
     assertThat(tree.constToken().text()).isEqualTo("const");

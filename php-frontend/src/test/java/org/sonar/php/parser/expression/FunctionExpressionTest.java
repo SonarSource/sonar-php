@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class FunctionExpressionTest {
+class FunctionExpressionTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Tree.Kind.FUNCTION_EXPRESSION)
       .matches("function () {}")
       .matches("function &() {}")

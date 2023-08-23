@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -30,10 +30,10 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
+class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void simple_variable() throws Exception {
+  void simpleVariable() {
     ExpandableStringLiteralTree tree = parse("\"simple var: $a\"", Kind.EXPANDABLE_STRING_LITERAL);
 
     assertExpandableStringLiteral(tree, 1, 1);
@@ -43,7 +43,7 @@ public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void semi_complex_variable() throws Exception {
+  void semiComplexVariable() {
     ExpandableStringLiteralTree tree = parse("\"semi-complex var: ${$a}\"", Kind.EXPANDABLE_STRING_LITERAL);
 
     assertExpandableStringLiteral(tree, 1, 1);
@@ -53,7 +53,7 @@ public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void complex_variable() throws Exception {
+  void complexVariable() {
     ExpandableStringLiteralTree tree = parse("\"complex var: {$a}\"", Kind.EXPANDABLE_STRING_LITERAL);
 
     assertExpandableStringLiteral(tree, 1, 1);
@@ -63,7 +63,7 @@ public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void multiple_variables_and_strings() throws Exception {
+  void multipleVariablesAndStrings() {
     ExpandableStringLiteralTree tree = parse("\"1st var: $a - 2nd composed vars: $b$c\"", Kind.EXPANDABLE_STRING_LITERAL);
 
     assertExpandableStringLiteral(tree, 2, 3);
@@ -73,13 +73,13 @@ public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_pseudo_comment() throws Exception {
+  void testPseudoComment() {
     ExpandableStringLiteralTree tree = parse("\"/**/{$a}\"", Kind.EXPANDABLE_STRING_LITERAL);
     assertFirstExpression(tree, "{$a}", Kind.COMPUTED_VARIABLE_NAME);
   }
 
   @Test
-  public void executionOperator() throws Exception {
+  void executionOperator() {
     ExecutionOperatorTree tree = parse("`ls $a`", PHPLexicalGrammar.EXPRESSION);
 
     ExpandableStringLiteralTree literal = tree.literal();

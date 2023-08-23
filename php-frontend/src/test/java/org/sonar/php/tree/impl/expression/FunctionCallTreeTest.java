@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FunctionCallTreeTest extends PHPTreeModelTest {
+class FunctionCallTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void without_argument() throws Exception {
+  void withoutArgument() {
     FunctionCallTree tree = parse("f()", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     assertThat(tree.is(Kind.FUNCTION_CALL)).isTrue();
@@ -41,7 +41,7 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_argument() throws Exception {
+  void withArgument() {
     FunctionCallTree tree = parse("f($p1, $p2)", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     assertThat(tree.is(Kind.FUNCTION_CALL)).isTrue();
@@ -57,7 +57,7 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_named_arguments() throws Exception {
+  void withNamedArguments() {
     FunctionCallTree tree = parse("f(self::$p1, a: $p2)", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     assertThat(tree.callArguments()).hasSize(2);
@@ -67,7 +67,7 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_named_keyword_argument() throws Exception {
+  void withNamedKeywordArgument() {
     FunctionCallTree tree = parse("f(if: $a)", PHPLexicalGrammar.MEMBER_EXPRESSION);
 
     assertThat(tree.callArguments()).hasSize(1);

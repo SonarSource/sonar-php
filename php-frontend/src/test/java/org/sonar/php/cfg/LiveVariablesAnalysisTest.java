@@ -20,7 +20,7 @@
 package org.sonar.php.cfg;
 
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
@@ -56,10 +56,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * Also check {@link ExpectedCfgStructure} and {@link ControlFlowGraphTest}
  */
-public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
+class LiveVariablesAnalysisTest extends PHPTreeModelTest {
 
   @Test
-  public void test_simple_kill() {
+  void testSimpleKill() {
     verifyLiveVariableAnalysis("" +
       "block( succ = [END], liveIn = [], liveOut = [], gen = [], kill = [foo, bar, qix]);" +
       "$foo = 1;" +
@@ -68,7 +68,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_null_coalescing() {
+  void testNullCoalescing() {
     verifyLiveVariableAnalysis("" +
       "block( succ = [END], liveIn = [foo], liveOut = [], gen = [foo], kill = [foo, bar, qix]);" +
       "$foo ??= 1;" +
@@ -77,14 +77,14 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_simple_gen() {
+  void testSimpleGen() {
     verifyLiveVariableAnalysis("" +
       "block( succ = [END], liveIn = [foo, bar], liveOut = [], gen = [foo, bar]);" +
       "foo($foo, $bar);");
   }
 
   @Test
-  public void test_complex_reads_and_writes() {
+  void testComplexReadsAndWrites() {
     verifyLiveVariableAnalysis("" +
       "block( succ = [END], liveIn = [a,b], liveOut = [], gen = [a,b], kill = []);" +
       "$a[$b] = 1;");
@@ -148,7 +148,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_write_before_read() {
+  void testWriteBeforeRead() {
     verifyLiveVariableAnalysis("" +
       "condition( succ = [body, END], liveIn = [], liveOut = [], gen = [], kill = [a]);" +
       "$a = 1;" +
@@ -161,7 +161,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_gen_kill() {
+  void testGenKill() {
     verifyLiveVariableAnalysis("" +
       "condition( succ = [body, END], liveIn = [x], liveOut = [], gen = [x], kill = [a]);" +
       "$a = $x + 1;" +
@@ -182,7 +182,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_do_while() {
+  void testDoWhile() {
     verifyLiveVariableAnalysis("" +
       "beforeDo( succ = [body], liveIn = [x], liveOut = [a], gen = [x], kill = [a]);" +
       "$a = $x + 1;" +
@@ -195,7 +195,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_with_ignored_param() {
+  void testWithIgnoredParam() {
     verifyLiveVariableAnalysis("$a", "" +
       "condition( succ = [insideIf], liveIn = [foo, bar], liveOut = [x,a], gen = [foo, bar], kill = [x,y,z,w,a]);" +
       "$a = 42;" +
@@ -211,7 +211,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void compound_assignments() {
+  void compoundAssignments() {
     verifyLiveVariableAnalysis("" +
       "condition( succ = [insideIf], liveIn = [y], liveOut = [x,y], gen = [y], kill = [x,y]);" +
       "$x = 0;" +
@@ -224,7 +224,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void prefix_postfix_increment_decrement_expressions() {
+  void prefixPostfixIncrementDecrementExpressions() {
     verifyLiveVariableAnalysis("" +
       "condition( succ = [insideIf], liveIn = [a, a1, a2], liveOut = [a], gen = [a, a1, a2], kill = [a]);" +
       "--$a;" +
@@ -239,7 +239,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void unary_minus_plus_expression() {
+  void unaryMinusPlusExpression() {
     verifyLiveVariableAnalysis("" +
       "condition( succ = [insideIf], liveIn = [a], liveOut = [a], gen = [a], kill = []);" +
       "foo($a);" +
@@ -252,7 +252,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_with_array_assignment() {
+  void testWithArrayAssignment() {
     verifyLiveVariableAnalysis("" +
       "condition( succ = [insideIf], liveIn = [], liveOut = [x], gen = [], kill = [x,y]);" +
       "list($x, $y) = array();" +
@@ -263,7 +263,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void read_symbols() {
+  void readSymbols() {
     String body = "" +
       "$foo = 1;" +
       "$bar = bar();" +

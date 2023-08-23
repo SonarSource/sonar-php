@@ -21,15 +21,15 @@ package org.sonar.php.parser;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 
-public class PHPParserTest {
+class PHPParserTest {
 
   @Test
-  public void expression() throws Exception {
+  void expression() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.EXPRESSION);
     BinaryExpressionTree tree = (BinaryExpressionTree) parser.parse("$a + $b + $c");
     Assertions.assertThat(tree.getParent()).isNull();
@@ -42,7 +42,7 @@ public class PHPParserTest {
   }
 
   @Test
-  public void for_each() throws Exception {
+  void forEach() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.FOREACH_STATEMENT);
     ForEachStatementTree tree = (ForEachStatementTree) parser.parse("foreach ($arr as &$value) { }");
     Assertions.assertThat(tree.expression().getParent()).isSameAs(tree);

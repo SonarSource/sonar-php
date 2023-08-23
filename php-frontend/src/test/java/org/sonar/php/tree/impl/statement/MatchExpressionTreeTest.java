@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.expression.MatchExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MatchExpressionTreeTest extends PHPTreeModelTest {
+class MatchExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     MatchExpressionTree tree = parse("match ($a) { 0,1 => 'Foo', default=>'bar'}", PHPLexicalGrammar.MATCH_EXPRESSION);
 
     assertThat(tree.is(Kind.MATCH_EXPRESSION)).isTrue();
@@ -44,7 +44,7 @@ public class MatchExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void test_with_trailing_comma() throws Exception {
+  void testWithTrailingComma() {
     MatchExpressionTree tree = parse("match ($var->field) { 0 => 'Foo',}", PHPLexicalGrammar.MATCH_EXPRESSION);
 
     assertThat(tree.is(Kind.MATCH_EXPRESSION)).isTrue();

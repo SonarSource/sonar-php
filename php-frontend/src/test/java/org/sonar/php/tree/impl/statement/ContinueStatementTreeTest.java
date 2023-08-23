@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ContinueStatementTreeTest extends PHPTreeModelTest {
+class ContinueStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void empty() throws Exception {
+  void empty() {
     ContinueStatementTree tree = parse("continue ;", PHPLexicalGrammar.CONTINUE_STATEMENT);
 
     assertThat(tree.is(Kind.CONTINUE_STATEMENT)).isTrue();
@@ -40,7 +40,7 @@ public class ContinueStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void not_empty() throws Exception {
+  void notEmpty() {
     ContinueStatementTree tree = parse("continue $a;", PHPLexicalGrammar.CONTINUE_STATEMENT);
 
     assertThat(tree.continueToken().text()).isEqualTo("continue");

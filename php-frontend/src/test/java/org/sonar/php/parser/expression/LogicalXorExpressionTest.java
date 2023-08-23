@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class LogicalXorExpressionTest {
+class LogicalXorExpressionTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(Kind.ALTERNATIVE_CONDITIONAL_XOR)
       .matches("$a")
       .matches("$a XOR $a")

@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CompilationUnitTreeTest extends PHPTreeModelTest {
+class CompilationUnitTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() {
     CompilationUnitTree tree = parse("<?php $a;", PHPLexicalGrammar.COMPILATION_UNIT);
 
     assertThat(tree.is(Kind.COMPILATION_UNIT)).isTrue();
@@ -40,7 +40,7 @@ public class CompilationUnitTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void without_statement() throws Exception {
+  void withoutStatement() {
     CompilationUnitTree tree = parse("<?php", PHPLexicalGrammar.COMPILATION_UNIT);
 
     assertThat(tree.is(Kind.COMPILATION_UNIT)).isTrue();
@@ -49,7 +49,7 @@ public class CompilationUnitTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void empty() throws Exception {
+  void empty() {
     CompilationUnitTree tree = parse("", PHPLexicalGrammar.COMPILATION_UNIT);
 
     assertThat(tree.is(Kind.COMPILATION_UNIT)).isTrue();
@@ -58,7 +58,7 @@ public class CompilationUnitTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void without_php() throws Exception {
+  void withoutPhp() {
     CompilationUnitTree tree = parse("hello world\n", PHPLexicalGrammar.COMPILATION_UNIT);
 
     assertThat(tree.is(Kind.COMPILATION_UNIT)).isTrue();

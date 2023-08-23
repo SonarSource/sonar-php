@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ExpressionListTest {
+class ExpressionListTest {
 
   @Test
-  public void should_match() {
+  void shouldMatch() {
     assertThat(PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT)
       .matches("1 ?>")
       .matches("foo() ?>")
@@ -38,7 +38,7 @@ public class ExpressionListTest {
   }
 
   @Test
-  public void should_not_match() {
+  void shouldNotMatch() {
     assertThat(PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT)
       .notMatches("?>")
       .notMatches("1, ?>")

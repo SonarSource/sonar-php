@@ -19,17 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FunctionExpressionTreeTest extends PHPTreeModelTest {
+class FunctionExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void basic() throws Exception {
+  void basic() {
     FunctionExpressionTree tree = parse("function () {}", Kind.FUNCTION_EXPRESSION);
 
     assertThat(tree.is(Kind.FUNCTION_EXPRESSION)).isTrue();
@@ -43,7 +43,7 @@ public class FunctionExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_reference() throws Exception {
+  void withReference() {
     FunctionExpressionTree tree = parse("function &() {}", Kind.FUNCTION_EXPRESSION);
 
     assertThat(tree.is(Kind.FUNCTION_EXPRESSION)).isTrue();
@@ -57,7 +57,7 @@ public class FunctionExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void static_function() throws Exception {
+  void staticFunction() {
     FunctionExpressionTree tree = parse("static function () {}", Kind.FUNCTION_EXPRESSION);
 
     assertThat(tree.is(Kind.FUNCTION_EXPRESSION)).isTrue();
@@ -71,7 +71,7 @@ public class FunctionExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_lexical_vars() throws Exception {
+  void withLexicalVars() {
     FunctionExpressionTree tree = parse("function () use ($a) {}", Kind.FUNCTION_EXPRESSION);
 
     assertThat(tree.is(Kind.FUNCTION_EXPRESSION)).isTrue();
@@ -85,7 +85,7 @@ public class FunctionExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_return_type() throws Exception {
+  void withReturnType() {
     FunctionExpressionTree tree = parse("function () : bool {}", Kind.FUNCTION_EXPRESSION);
 
     assertThat(tree.is(Kind.FUNCTION_EXPRESSION)).isTrue();

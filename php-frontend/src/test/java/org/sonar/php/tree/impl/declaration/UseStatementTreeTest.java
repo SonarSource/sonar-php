@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UseStatementTreeTest extends PHPTreeModelTest {
+class UseStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void single_declaration() throws Exception {
+  void singleDeclaration() {
     UseStatementTree tree = parse("use \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_STATEMENT);
     assertThat(tree.is(Kind.USE_STATEMENT)).isTrue();
     assertThat(tree.useTypeToken()).isNull();
@@ -42,7 +42,7 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void multiple_declarations() throws Exception {
+  void multipleDeclarations() {
     UseStatementTree tree = parse("use \\ns1\\ns2\\name, \\ns1\\ns2\\name2;", PHPLexicalGrammar.USE_STATEMENT);
     assertThat(tree.is(Kind.USE_STATEMENT)).isTrue();
     assertThat(tree.useTypeToken()).isNull();
@@ -50,7 +50,7 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void const_token() throws Exception {
+  void constToken() {
     UseStatementTree tree = parse("use const \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_STATEMENT);
 
     assertThat(tree.is(Kind.USE_STATEMENT)).isTrue();
@@ -58,7 +58,7 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void function_token() throws Exception {
+  void functionToken() {
     UseStatementTree tree = parse("use function \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_STATEMENT);
 
     assertThat(tree.is(Kind.USE_STATEMENT)).isTrue();
@@ -66,7 +66,7 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void group_use_statement() throws Exception {
+  void groupUseStatement() {
     UseStatementTree tree = parse("use ns1\\ns2\\{name1 as a1, function name2};", Kind.GROUP_USE_STATEMENT);
     assertThat(tree.is(Kind.GROUP_USE_STATEMENT)).isTrue();
     assertThat(tree.prefix()).isNotNull();
@@ -78,7 +78,7 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void with_trailing_comma() throws Exception {
+  void withTrailingComma() {
     UseStatementTree tree = parse("use ns1\\{A, B, C,};", Kind.GROUP_USE_STATEMENT);
     assertThat(tree.is(Kind.GROUP_USE_STATEMENT)).isTrue();
     assertThat(tree.prefix()).isNotNull();

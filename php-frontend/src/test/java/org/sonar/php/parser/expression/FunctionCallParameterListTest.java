@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class FunctionCallParameterListTest {
+class FunctionCallParameterListTest {
 
   @Test
-  public void test() {
+  void test() {
     assertThat(PHPLexicalGrammar.FUNCTION_CALL_PARAMETER_LIST)
       .matches("()")
       .matches("($p)")

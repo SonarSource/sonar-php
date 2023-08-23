@@ -19,16 +19,16 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExpandableStringCharactersTreeTest extends PHPTreeModelTest {
+class ExpandableStringCharactersTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     ExpandableStringCharactersTreeImpl tree = parse("characters with spaces", Kind.EXPANDABLE_STRING_CHARACTERS);
 
     assertThat(tree.is(Kind.EXPANDABLE_STRING_CHARACTERS)).isTrue();

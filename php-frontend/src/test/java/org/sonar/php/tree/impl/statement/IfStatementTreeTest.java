@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -28,10 +28,10 @@ import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IfStatementTreeTest extends PHPTreeModelTest {
+class IfStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void standard_syntax() throws Exception {
+  void standardSyntax() {
     IfStatementTree tree = parse("if ($a) {}", PHPLexicalGrammar.IF_STATEMENT);
 
     assertThat(tree.ifToken().text()).isEqualTo("if");
@@ -39,13 +39,13 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.statements()).hasSize(1);
 
     assertThat(tree.elseClause()).isNull();
-    assertThat(tree.elseifClauses()).hasSize(0);
+    assertThat(tree.elseifClauses()).isEmpty();
     assertThat(tree.endifToken()).isNull();
     assertThat(tree.eosToken()).isNull();
   }
 
   @Test
-  public void standard_syntax_with_else() throws Exception {
+  void standardSyntaxWithElse() {
     IfStatementTree tree = parse("if ($a) {} else {}", PHPLexicalGrammar.IF_STATEMENT);
 
     assertThat(tree.is(Kind.IF_STATEMENT)).isTrue();
@@ -57,7 +57,7 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
     assertThat(elseClause).isNotNull();
     assertThat(elseClause.is(Kind.ELSE_CLAUSE)).isTrue();
     assertThat(elseClause.statements()).hasSize(1);
-    assertThat(tree.elseifClauses()).hasSize(0);
+    assertThat(tree.elseifClauses()).isEmpty();
     assertThat(tree.colonToken()).isNull();
 
     assertThat(tree.endifToken()).isNull();
@@ -65,12 +65,12 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void alternative_syntax_with_else() throws Exception {
+  void alternativeSyntaxWithElse() {
     IfStatementTree tree = parse("if ($a) : elseif ($a) : else : {} {} endif;", PHPLexicalGrammar.IF_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_IF_STATEMENT)).isTrue();
     assertThat(tree.colonToken()).isNotNull();
-    assertThat(tree.statements()).hasSize(0);
+    assertThat(tree.statements()).isEmpty();
 
     assertThat(tree.elseClause()).isNotNull();
 
@@ -82,7 +82,7 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void elseif_syntax() throws Exception {
+  void elseifSyntax() {
     IfStatementTree tree = parse("if ($a) {} elseif ($b) {} elseif ($c) {} else {}", PHPLexicalGrammar.IF_STATEMENT);
 
     assertThat(tree.statements()).hasSize(1);

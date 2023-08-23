@@ -19,15 +19,15 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class AlternativeLogicalOperatorsTest {
+class AlternativeLogicalOperatorsTest {
 
   @Test
-  public void test_and() {
+  void testAnd() {
     assertThat(Tree.Kind.ALTERNATIVE_CONDITIONAL_AND)
       .matches("$a = $b and $b")
       .matches("$a = $b and $b")
@@ -35,7 +35,7 @@ public class AlternativeLogicalOperatorsTest {
   }
 
   @Test
-  public void test_or() {
+  void testOr() {
     assertThat(Tree.Kind.ALTERNATIVE_CONDITIONAL_OR)
       .matches("$a = $b or $b")
       .matches("$a = $b or $b xor $b")
@@ -43,7 +43,7 @@ public class AlternativeLogicalOperatorsTest {
   }
 
   @Test
-  public void test_xor() {
+  void testXor() {
     assertThat(Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR)
       .matches("$a = $b xor $b")
       .matches("$a = $b xor $b and $b")

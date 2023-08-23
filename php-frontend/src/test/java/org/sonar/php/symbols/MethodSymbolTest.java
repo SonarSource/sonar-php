@@ -21,7 +21,7 @@ package org.sonar.php.symbols;
 
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
@@ -32,10 +32,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.symbols.SymbolTestUtils.parse;
 import static org.sonar.php.tree.TreeUtils.firstDescendant;
 
-public class MethodSymbolTest {
+class MethodSymbolTest {
 
   @Test
-  public void simple_method() {
+  void simpleMethod() {
     Tree ast = parse("<?php class A { function foo($p1) {} }");
     ClassSymbol a = Symbols.get(firstDescendant(ast, ClassDeclarationTreeImpl.class).get());
     MethodSymbol foo = firstDescendant(ast, MethodDeclarationTreeImpl.class).get().symbol();
@@ -44,7 +44,7 @@ public class MethodSymbolTest {
   }
 
   @Test
-  public void method_in_anonymous_class() {
+  void methodInAnonymousClass() {
     Tree ast = parse("<?php $x = new class { function foo($p1) {} };");
     ClassSymbol anonymous = Symbols.get(firstDescendant(ast, AnonymousClassTreeImpl.class).get());
     MethodSymbol foo = firstDescendant(ast, MethodDeclarationTreeImpl.class).get().symbol();
@@ -53,7 +53,7 @@ public class MethodSymbolTest {
   }
 
   @Test
-  public void isOverriding_by_super_classes() {
+  void isOverridingBySuperClasses() {
     Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
       "class A { function foo() {} }",
       "class B extends X { function foo() {} }",
@@ -72,7 +72,7 @@ public class MethodSymbolTest {
   }
 
   @Test
-  public void isOverriding_by_interfaces() {
+  void isOverridingByInterfaces() {
     Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
       "interface I1 extends I2, I3, I4 {public function method1($a);}",
       "interface I2 {public function method2($a);}",
@@ -96,7 +96,7 @@ public class MethodSymbolTest {
   }
 
   @Test
-  public void catch_dead_loop_in_isDeclaredInInterface() {
+  void catchDeadLoopInIsDeclaredInInterface() {
     Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
       "interface I1 extends I2 {}",
       "interface I2 extends I1 {}",
@@ -109,7 +109,7 @@ public class MethodSymbolTest {
   }
 
   @Test
-  public void private_method_does_not_override() {
+  void privateMethodDoesNotOverride() {
     Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
       "class C1 {public function method1(){}}",
       "class C2 extends C1 {private function method1(){}}");
@@ -118,7 +118,7 @@ public class MethodSymbolTest {
   }
 
   @Test
-  public void private_method_can_not_be_overridden() {
+  void privateMethodCanNotBeOverridden() {
     Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
       "class C1 {private function method1(){}}",
       "class C2 extends C1 {public function method1(){}}");

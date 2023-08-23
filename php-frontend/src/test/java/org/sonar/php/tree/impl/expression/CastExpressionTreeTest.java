@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -29,10 +29,10 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CastExpressionTreeTest extends PHPTreeModelTest {
+class CastExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void cast_expression() {
+  void castExpression() {
     CastExpressionTree tree = parse("(int)$a", PHPLexicalGrammar.CAST_TYPE);
     assertThat(tree.is(Kind.CAST_EXPRESSION)).isTrue();
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
@@ -49,7 +49,7 @@ public class CastExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void prefixed_cast_expression() {
+  void prefixedCastExpression() {
     PrefixedCastExpressionTree tree = parse("b'abc'", PHPLexicalGrammar.CAST_TYPE);
     assertThat(tree.is(Kind.PREFIXED_CAST_EXPRESSION)).isTrue();
     assertThat(expressionToString(tree)).isEqualTo("b'abc'");
@@ -64,7 +64,7 @@ public class CastExpressionTreeTest extends PHPTreeModelTest {
         super.visitPrefixedCastExpression(tree);
       }
     });
-    assertThat(visitReport.toString()).isEqualTo("visitPrefixedCastExpression");
+    assertThat(visitReport.toString()).hasToString("visitPrefixedCastExpression");
   }
 
 }

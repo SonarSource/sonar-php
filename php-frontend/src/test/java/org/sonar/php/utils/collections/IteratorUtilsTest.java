@@ -21,25 +21,26 @@ package org.sonar.php.utils.collections;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class IteratorUtilsTest {
+class IteratorUtilsTest {
 
   @Test
-  public void test_return_singleton_iterator() {
+  void testReturnSingletonIterator() {
     Iterator<String> singletonIterator = IteratorUtils.iteratorOf("element");
 
     assertThat(singletonIterator.hasNext()).isTrue();
     assertThat(singletonIterator.next()).isEqualTo("element");
     assertThat(singletonIterator.hasNext()).isFalse();
-    assertThrows(NoSuchElementException.class, singletonIterator::next);
+
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(singletonIterator::next);
   }
 
   @Test
-  public void test_return_iterator_of_multiple_elements() {
+  void testReturnIteratorOfMultipleElements() {
     Iterator<String> singletonIterator = IteratorUtils.iteratorOf("element1", "element2");
 
     assertThat(singletonIterator.hasNext()).isTrue();
@@ -47,11 +48,11 @@ public class IteratorUtilsTest {
     assertThat(singletonIterator.hasNext()).isTrue();
     assertThat(singletonIterator.next()).isEqualTo("element2");
     assertThat(singletonIterator.hasNext()).isFalse();
-    assertThrows(NoSuchElementException.class, singletonIterator::next);
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(singletonIterator::next);
   }
 
   @Test
-  public void test_return_concatenated_iterators() {
+  void testReturnConcatenatedIterators() {
     Iterator<String> firstIterator = IteratorUtils.iteratorOf("firstElement");
     Iterator<String> secondIterator = IteratorUtils.iteratorOf("secondElement", "thirdElement");
     Iterator<String> iterator = IteratorUtils.concat(firstIterator, secondIterator);
@@ -61,14 +62,14 @@ public class IteratorUtilsTest {
     assertThat(iterator.next()).isEqualTo("secondElement");
     assertThat(iterator.next()).isEqualTo("thirdElement");
     assertThat(iterator.hasNext()).isFalse();
-    assertThrows(NoSuchElementException.class, iterator::next);
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(iterator::next);
   }
 
   @Test
-  public void test_iterator_concat_with_null() {
+  void testIteratorConcatWithNull() {
     Iterator<String> iterator = IteratorUtils.concat((Iterator<String>) null);
 
     assertThat(iterator.hasNext()).isFalse();
-    assertThrows(NoSuchElementException.class, iterator::next);
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(iterator::next);
   }
 }
