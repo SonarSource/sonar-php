@@ -21,6 +21,7 @@ package org.sonar.php.symbols;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
@@ -31,6 +32,8 @@ public interface ClassSymbol extends Symbol {
   QualifiedName qualifiedName();
 
   Optional<ClassSymbol> superClass();
+
+  Set<ClassSymbol> allSuperTypes();
 
   List<ClassSymbol> implementedInterfaces();
 
@@ -49,4 +52,6 @@ public interface ClassSymbol extends Symbol {
     ABSTRACT,
     INTERFACE
   }
+
+  Trilean hasTestMethod();
 }

@@ -37,7 +37,6 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -217,18 +216,6 @@ class CheckUtilsTest {
 
     assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true", "false")
       .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
-  }
-
-  @Test
-  void hasAnnotationOfFunction() {
-    FunctionDeclarationTree tree = (FunctionDeclarationTree) parse("/**\n * @annotation\n */\nfunction foo(){}");
-    assertThat(CheckUtils.hasAnnotation(tree, "@annotation")).isTrue();
-    assertThat(CheckUtils.hasAnnotation(tree, "annotation")).isTrue();
-    assertThat(CheckUtils.hasAnnotation(tree, "other_annotation")).isFalse();
-
-    tree = (FunctionDeclarationTree) parse("/**\n * annotation\n */\nfunction foo(){}");
-    assertThat(CheckUtils.hasAnnotation(tree, "@annotation")).isFalse();
-    assertThat(CheckUtils.hasAnnotation(tree, "annotation")).isFalse();
   }
 
   @Test

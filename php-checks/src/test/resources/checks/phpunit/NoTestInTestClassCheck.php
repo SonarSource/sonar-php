@@ -9,6 +9,10 @@ class MyOtherTest extends TestCase { // OK
   public function testFoo() {}
 }
 
+class InheritingTest extends MyOtherTest {} // OK
+
+class DoubleInheritingTest extends InheritingTest {} // OK
+
 class MyNextTest extends TestCase { // Noncompliant {{Add some tests to this class.}}
   public function foo() {}
 }

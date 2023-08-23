@@ -50,6 +50,7 @@ import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.utils.collections.SetUtils;
@@ -57,6 +58,7 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -180,20 +182,24 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
       .map(Parameter::fromTree)
       .collect(Collectors.toList());
 
-    String visibility = tree.modifiers().stream()
+    String visibilityName = tree.modifiers().stream()
       .map(m -> m.text().toUpperCase(Locale.ROOT))
       .filter(VALID_VISIBILITIES::contains)
       .findFirst()
       .orElse("PUBLIC");
 
+    Visibility visibility = Visibility.valueOf(visibilityName);
+
     boolean isAbstract = tree.modifiers().stream()
       .map(m -> m.text().toUpperCase(Locale.ROOT))
       .anyMatch(m -> m.equals("ABSTRACT"));
 
+    boolean isTestMethod = isTestMethod(tree, visibility);
+
     super.visitMethodDeclaration(tree);
 
     MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), name.text(), parameters,
-      functionPropertiesStack.pop(), Visibility.valueOf(visibility), isAbstract);
+      functionPropertiesStack.pop(), visibility, isAbstract, isTestMethod);
 
     methodTreeByData.put(methodSymbolData, (MethodDeclarationTreeImpl) tree);
     methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
@@ -302,5 +308,18 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     } catch (InvalidPathException e) {
       return null;
     }
+  }
+
+  private boolean isTestMethod(MethodDeclarationTree tree, Visibility visibility) {
+    boolean hasTestName = tree.name().text().startsWith("test");
+
+    boolean hasTestAttribute = tree.attributeGroups().stream()
+      .flatMap(group -> group.attributes().stream()).map(AttributeTree::name)
+      .anyMatch(nameTree -> "phpunit\\framework\\attributes\\test".equals(getFullyQualifiedName(nameTree, Symbol.Kind.CLASS).toString()));
+
+    boolean hasTestAnnotation = TreeUtils.hasAnnotation(tree, "@test");
+
+    return Visibility.PUBLIC.equals(visibility) &&
+      (hasTestName || hasTestAnnotation || hasTestAttribute);
   }
 }

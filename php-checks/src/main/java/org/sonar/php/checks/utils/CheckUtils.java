@@ -72,7 +72,6 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 import static java.util.Collections.singletonList;
 import static org.sonar.php.symbols.Symbols.get;
 import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
-import static org.sonar.php.utils.collections.ListUtils.getLast;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public final class CheckUtils {
@@ -340,20 +339,6 @@ public final class CheckUtils {
       String value = CheckUtils.trimQuotes(((LiteralTree) tree).value());
       return value.trim().isEmpty();
     }
-    return false;
-  }
-
-  public static boolean hasAnnotation(Tree declaration, String annotation) {
-    if (!annotation.startsWith("@")) {
-      annotation = "@" + annotation;
-    }
-
-    List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
-
-    if (!trivias.isEmpty()) {
-      return StringUtils.containsIgnoreCase(getLast(trivias).text(), annotation);
-    }
-
     return false;
   }
 

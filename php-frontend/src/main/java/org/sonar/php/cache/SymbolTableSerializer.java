@@ -100,6 +100,7 @@ public class SymbolTableSerializer {
     writeText(method.visibility().toString());
     writeText(method.name());
     writeBoolean(method.isAbstract());
+    writeBoolean(method.isTestMethod());
     write(method.location());
     writeParameters(method.parameters());
     writeBoolean(method.properties().hasReturn());

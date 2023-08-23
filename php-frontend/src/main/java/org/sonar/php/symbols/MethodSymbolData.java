@@ -27,13 +27,14 @@ public class MethodSymbolData extends FunctionSymbolData {
   private Visibility visibility;
   private String name;
   private boolean isAbstract;
+  private boolean isTestMethod;
 
   public MethodSymbolData(LocationInFile location,
     String name,
     List<Parameter> parameters,
     FunctionSymbolProperties properties,
     Visibility visibility) {
-    this(location, name, parameters, properties, visibility, false);
+    this(location, name, parameters, properties, visibility, false, false);
   }
 
   public MethodSymbolData(LocationInFile location,
@@ -41,11 +42,13 @@ public class MethodSymbolData extends FunctionSymbolData {
     List<Parameter> parameters,
     FunctionSymbolProperties properties,
     Visibility visibility,
-    boolean isAbstract) {
+    boolean isAbstract,
+    boolean isTestMethod) {
     super(location, QualifiedName.qualifiedName(name), parameters, properties);
     this.name = name;
     this.visibility = visibility;
     this.isAbstract = isAbstract;
+    this.isTestMethod = isTestMethod;
   }
 
   public Visibility visibility() {
@@ -58,5 +61,9 @@ public class MethodSymbolData extends FunctionSymbolData {
 
   public boolean isAbstract() {
     return isAbstract;
+  }
+
+  public boolean isTestMethod() {
+    return isTestMethod;
   }
 }

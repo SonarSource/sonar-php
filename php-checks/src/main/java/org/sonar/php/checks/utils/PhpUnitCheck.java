@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -263,8 +264,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   }
 
   protected boolean isTestCaseMethod(MethodDeclarationTree tree) {
-    return isPhpUnitTestCase && CheckUtils.isPublic(tree)
-      && (tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test"));
+    return isPhpUnitTestCase && ((MethodDeclarationTreeImpl) tree).symbol().isTestMethod().isTrue();
   }
 
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {

@@ -19,8 +19,10 @@
  */
 package org.sonar.php.tree;
 
+import com.sonar.sslr.api.typed.ActionParser;
 import java.util.EnumSet;
 import org.junit.jupiter.api.Test;
+import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -31,6 +33,7 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
+import static org.sonar.php.tree.TreeUtils.hasAnnotation;
 import static org.sonar.php.tree.TreeUtils.isDescendant;
 
 class TreeUtilsTest {
@@ -61,4 +64,16 @@ class TreeUtilsTest {
     assertThat(findAncestorWithKind(func, Tree.Kind.SCRIPT, Tree.Kind.FUNCTION_DECLARATION)).isEqualTo(func);
   }
 
+  @Test
+  void testHasAnnotationOfFunction() {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
+    FunctionDeclarationTree tree = (FunctionDeclarationTree) parser.parse("/**\n * @annotation\n */\nfunction foo(){}");
+    assertThat(hasAnnotation(tree, "@annotation")).isTrue();
+    assertThat(hasAnnotation(tree, "annotation")).isTrue();
+    assertThat(hasAnnotation(tree, "other_annotation")).isFalse();
+
+    tree = (FunctionDeclarationTree) parser.parse("/**\n * annotation\n */\nfunction foo(){}");
+    assertThat(hasAnnotation(tree, "@annotation")).isFalse();
+    assertThat(hasAnnotation(tree, "annotation")).isFalse();
+  }
 }
