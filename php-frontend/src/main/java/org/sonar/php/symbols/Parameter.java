@@ -72,8 +72,10 @@ public class Parameter {
       return false;
     }
     Parameter parameter = (Parameter) other;
-    return hasDefault == parameter.hasDefault && hasEllipsisOperator == parameter.hasEllipsisOperator && Objects.equals(name, parameter.name)
-      && Objects.equals(type, parameter.type);
+    return hasDefault == parameter.hasDefault &&
+      hasEllipsisOperator == parameter.hasEllipsisOperator &&
+      Objects.equals(name, parameter.name) &&
+      Objects.equals(type, parameter.type);
   }
 
   @Override

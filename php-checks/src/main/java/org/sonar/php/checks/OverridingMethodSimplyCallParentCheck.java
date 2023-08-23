@@ -112,12 +112,10 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
           isFunctionCalledWithSameArgumentsAsDeclared(functionCallTree, method);
         if (isCallingSuperclassMethodWithSameNameAndArguments) {
           boolean duplicatesDeclarationFromSuper = Stream.iterate(superClass, Objects::nonNull, c -> c.superClass().orElse(null))
-            .flatMap(c -> c.declaredMethods().stream()
-              .filter(ms -> ms.name().equalsIgnoreCase(methodName) &&
-                hasSameVisibilityAs(method, ms) &&
-                hasSameParameterList(method, ms)))
-            .findFirst()
-            .isPresent();
+            .flatMap(c -> c.declaredMethods().stream())
+            .anyMatch(ms -> ms.name().equalsIgnoreCase(methodName) &&
+              hasSameVisibilityAs(method, ms) &&
+              hasSameParameterList(method, ms));
           boolean isInheritanceChainUnresolvable = Stream.iterate(superClass, Objects::nonNull, c -> c.superClass().orElse(null))
             .anyMatch(Symbol::isUnknownSymbol);
 
