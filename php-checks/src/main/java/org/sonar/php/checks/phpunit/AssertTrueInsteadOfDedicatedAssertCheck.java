@@ -56,6 +56,9 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
     .put(ReplacementAssertion.EQUALS, ReplacementAssertion.NOT_EQUALS)
     .put(ReplacementAssertion.NOT_EQUALS, ReplacementAssertion.EQUALS)
     .build();
+  private static final Map<String, String> ASSERTIONS_COMPLEMENT = Map.of(
+    ASSERT_FALSE, ASSERT_TRUE,
+    ASSERT_TRUE, ASSERT_FALSE);
 
   private enum ReplacementAssertion {
     NULL("Null", "A null-check"),
@@ -101,11 +104,9 @@ public class AssertTrueInsteadOfDedicatedAssertCheck extends PhpUnitCheck {
         // Boolean comparison, raise an issue to simplify it
         BinaryExpressionTree bet = (BinaryExpressionTree) argumentExpression;
         String booleanLiteralToRemove = argumentValue.get();
-        boolean shouldChangeAssertion = shouldChangeAssertionFunction(assertionName, booleanLiteralToRemove, bet);
-        String additionalAction = "";
-        if (shouldChangeAssertion) {
-          additionalAction = String.format("using %s() and ", ASSERT_TRUE.equals(assertionName) ? ASSERT_FALSE : ASSERT_TRUE);
-        }
+        String additionalAction = shouldChangeAssertionFunction(assertionName, booleanLiteralToRemove, bet)
+          ? String.format("using %s() and ", ASSERTIONS_COMPLEMENT.get(assertionName))
+          : "";
         String message = String.format(MESSAGE_SIMPLIFY, additionalAction, booleanLiteralToRemove.toLowerCase(Locale.ROOT));
         newIssue(problematicAssertionCall, message);
       } else {
