@@ -19,6 +19,7 @@
  */
 package com.sonar.it.php;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -31,8 +32,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonarsource.sonarlint.core.StandaloneSonarLintEngineImpl;
 import org.sonarsource.sonarlint.core.analysis.api.ClientInputFile;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.Issue;
@@ -57,13 +57,13 @@ class SonarLintTest {
     StandaloneGlobalConfiguration sonarLintConfig = StandaloneGlobalConfiguration.builder()
       .addPlugin(Tests.PHP_PLUGIN_LOCATION.getFile().toPath())
       .addEnabledLanguage(Language.PHP)
-      .setSonarLintUserHome(temp.newFolder().toPath())
+      .setSonarLintUserHome(tempDirectory.toPath())
       .setLogOutput((formattedMessage, level) -> {
         /* Don't pollute logs */
       })
       .build();
     sonarlintEngine = new StandaloneSonarLintEngineImpl(sonarLintConfig);
-    baseDir = temp.newFolder().toPath();
+    baseDir = tempDirectory.toPath();
   }
 
   @AfterAll

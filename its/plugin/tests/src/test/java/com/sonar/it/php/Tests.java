@@ -24,6 +24,8 @@ import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.container.Server;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
 import java.util.Arrays;
@@ -34,8 +36,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 import org.sonarqube.ws.Components;
 import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.Measures;
@@ -51,19 +51,7 @@ import org.sonarqube.ws.client.measures.ComponentRequest;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-  CustomRulesTest.class,
-  NonPhpProjectTest.class,
-  NoSonarTest.class,
-  PHPIntegrationTest.class,
-  PHPTest.class,
-  PHPUnitTest.class,
-  SonarLintTest.class,
-  PhpStanReportTest.class,
-  PsalmReportTest.class
-})
-public class Tests {
+class Tests {
 
   public static final String PROJECT_ROOT_DIR = "../projects/";
 
@@ -83,7 +71,7 @@ public class Tests {
   private static final Pattern TASK_ID_PATTERN = Pattern.compile("/api/ce/task\\?id=(\\S+)");
 
   static {
-    OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
+    OrchestratorBuilder<OrchestratorExtensionBuilder, OrchestratorExtension> builder = OrchestratorExtension.builderEnv()
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
       // PHP Plugin
@@ -95,7 +83,7 @@ public class Tests {
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"));
-    ORCHESTRATOR = orchestratorBuilder.build();
+    ORCHESTRATOR = builder.build();
   }
 
   public static void provisionProject(String projectKey, String projectName, String languageKey, String profileName) {
