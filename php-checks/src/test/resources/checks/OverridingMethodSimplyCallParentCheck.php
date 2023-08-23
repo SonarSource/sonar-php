@@ -15,8 +15,8 @@ abstract class B extends A {
     parent::g($p1);
   }
 
-  public function g($p1, $p2, $p3) {   // Noncompliant
-    parent::g($p1, $p2, $p3);
+  public function g1($p1, $p2, $p3) {   // Noncompliant
+    parent::g1($p1, $p2, $p3);
   }
 
   public function g2($p1, $p2, $p3) {   // OK
@@ -44,14 +44,18 @@ abstract class B extends A {
     doSomethingElse();
   }
 
+  public function g4() {
+    return null;
+  }
+
   public function j() {      // OK
     new class extends B {
       public function f() {      // Noncompliant
         parent::f();
       }
 
-      public function g() {      // Noncompliant
-        B::g();
+      public function g4() {      // Noncompliant
+        B::g4();
       }
 
     };
@@ -75,6 +79,10 @@ abstract class B extends A {
 
   public function o($arg1, $arg2 = 0) { // OK
     A::o($arg1, $arg2);
+  }
+
+  public function p() {
+    print("Doesn't reference superclass at all");
   }
 }
 
@@ -108,4 +116,66 @@ class E {
     return E::f();           // OK
   }
 
+}
+
+///////////////////////////////////
+// shouldn't trigger if arguments differ
+
+interface FooInterface {}
+class FooConcrete implements FooInterface {}
+
+class F
+{
+    public function __construct(FooInterface $arg1)
+    {
+        // init..
+    }
+}
+
+class DefaultF extends F
+{
+    public function __construct(FooConcrete $arg1)
+    {
+        parent::__construct($arg1);
+    }
+}
+
+class MiddleF extends F {}
+class LowerF extends MiddleF {
+    public function __construct(FooInterface $arg1) // Noncompliant
+    {
+        parent::__construct($arg1);
+    }
+}
+
+//////////////////////////////////
+// shouldn't trigger if visibility differs
+
+class G
+{
+    public function __construct()
+    {
+        // init..
+    }
+}
+
+class DefaultG extends G
+{
+    private function __construct()
+    {
+        parent::__construct();
+    }
+
+    public static function factoryMethod(): self {
+        // do something
+        return new self();
+    }
+}
+
+class AnotherG extends G
+{
+    public function __construct($arg)
+    {
+        parent::__construct($arg);
+    }
 }

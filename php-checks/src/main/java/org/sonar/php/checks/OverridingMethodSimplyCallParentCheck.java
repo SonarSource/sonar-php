@@ -21,8 +21,16 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.symbols.MethodSymbol;
+import org.sonar.php.symbols.Parameter;
+import org.sonar.php.symbols.Symbol;
+import org.sonar.php.tree.symbols.HasClassSymbol;
+import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -41,10 +49,9 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = OverridingMethodSimplyCallParentCheck.KEY)
+@Rule(key = "S1185")
 public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1185";
   private static final String MESSAGE = "Remove this method \"%s\" to simply inherit it.";
 
   @Override
@@ -59,18 +66,20 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
     visitClass(tree);
   }
 
+  // existence of superclass is still checked
+  @SuppressWarnings("java:S3655")
   private void visitClass(ClassTree tree) {
     if (tree.superClass() != null) {
-      String superClass = tree.superClass().fullName();
+      ClassSymbol superClassSymbol = ((HasClassSymbol) tree).symbol().superClass().get();
       for (ClassMemberTree member : tree.members()) {
         if (member.is(Kind.METHOD_DECLARATION)) {
-          checkMethod((MethodDeclarationTree) member, superClass);
+          checkMethod((MethodDeclarationTree) member, superClassSymbol);
         }
       }
     }
   }
 
-  private void checkMethod(MethodDeclarationTree method, String superClass) {
+  private void checkMethod(MethodDeclarationTree method, ClassSymbol superClass) {
     if (method.body().is(Kind.BLOCK)) {
       BlockTree blockTree = (BlockTree) method.body();
 
@@ -90,25 +99,56 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
     }
   }
 
-  private void checkExpression(@Nullable ExpressionTree expressionTree, MethodDeclarationTree method, String superClass) {
+  private void checkExpression(@Nullable ExpressionTree expressionTree, MethodDeclarationTree method, ClassSymbol superClass) {
     if (expressionTree != null && expressionTree.is(Kind.FUNCTION_CALL)) {
       FunctionCallTree functionCallTree = (FunctionCallTree) expressionTree;
 
       if (functionCallTree.callee().is(Kind.CLASS_MEMBER_ACCESS)) {
         MemberAccessTree memberAccessTree = (MemberAccessTree) functionCallTree.callee();
-
         String methodName = method.name().text();
-        boolean sameMethodName = memberAccessTree.member().toString().equals(methodName);
 
-        if (isSuperClass(memberAccessTree.object(), superClass) && sameMethodName && sameArguments(functionCallTree, method)) {
-          String message = String.format(MESSAGE, methodName);
-          context().newIssue(this, method.name(), message);
+        boolean isCallingSuperclassMethodWithSameNameAndArguments = isSuperClassReference(memberAccessTree.object(), superClass.qualifiedName().toString()) &&
+          memberAccessTree.member().toString().equals(methodName) &&
+          isFunctionCalledWithSameArgumentsAsDeclared(functionCallTree, method);
+        if (isCallingSuperclassMethodWithSameNameAndArguments) {
+          boolean duplicatesDeclarationFromSuper = Stream.iterate(superClass, Objects::nonNull, c -> c.superClass().orElse(null))
+            .flatMap(c -> c.declaredMethods().stream())
+            .anyMatch(ms -> ms.name().equalsIgnoreCase(methodName) &&
+              hasSameVisibilityAs(method, ms) &&
+              hasSameParameterList(method, ms));
+          boolean isInheritanceChainUnresolvable = Stream.iterate(superClass, Objects::nonNull, c -> c.superClass().orElse(null))
+            .anyMatch(Symbol::isUnknownSymbol);
+
+          if (isInheritanceChainUnresolvable || duplicatesDeclarationFromSuper) {
+            String message = String.format(MESSAGE, methodName);
+            context().newIssue(this, method.name(), message);
+          }
         }
       }
     }
   }
 
-  private static boolean sameArguments(FunctionCallTree functionCallTree, MethodDeclarationTree method) {
+  private static boolean hasSameParameterList(MethodDeclarationTree method, MethodSymbol other) {
+    MethodSymbol methodSymbol = ((HasMethodSymbol) method).symbol();
+
+    List<Parameter> parameters = methodSymbol.parameters();
+    List<Parameter> otherParameters = other.parameters();
+    if (parameters.size() != otherParameters.size()) {
+      return false;
+    }
+    for (int i = 0; i < parameters.size(); ++i) {
+      if (!parameters.get(i).equals(otherParameters.get(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private static boolean hasSameVisibilityAs(MethodDeclarationTree method, MethodSymbol other) {
+    return ((HasMethodSymbol) method).symbol().visibility().equals(other.visibility());
+  }
+
+  private static boolean isFunctionCalledWithSameArgumentsAsDeclared(FunctionCallTree functionCallTree, MethodDeclarationTree method) {
     List<String> argumentNames = new ArrayList<>();
     for (CallArgumentTree argument : functionCallTree.callArguments()) {
       if (!argument.value().is(Kind.VARIABLE_IDENTIFIER) || argument.name() != null) {
@@ -128,7 +168,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
     return argumentNames.equals(parameterNames);
   }
 
-  private static boolean isSuperClass(ExpressionTree tree, String superClass) {
+  private static boolean isSuperClassReference(ExpressionTree tree, String superClass) {
     String str = tree.toString();
     return superClass.equalsIgnoreCase(str) || "parent".equalsIgnoreCase(str);
   }

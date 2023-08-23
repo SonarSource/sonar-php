@@ -126,6 +126,33 @@ class MethodSymbolTest {
     assertThat(classes.get("C2").getDeclaredMethod("method1").isOverriding()).isEqualTo(Trilean.FALSE);
   }
 
+  @Test
+  void shouldDeserializeParameters() {
+    Map<String, ClassSymbol> classes = parseMultipleClasses("<?php",
+      "class C1 {private function method1($arg){}}",
+      "class C2 {public function method1($arg2){}}",
+      "class C3 {public function method1(...$arg3){}}",
+      "class C4 {public function method1(int $arg){}}",
+      "class C5 {public function method1(int $arg = 7){}}");
+
+    Parameter arg1 = classes.get("C1").getDeclaredMethod("method1").parameters().get(0);
+    Parameter arg2 = classes.get("C2").getDeclaredMethod("method1").parameters().get(0);
+    Parameter arg3 = classes.get("C3").getDeclaredMethod("method1").parameters().get(0);
+    Parameter arg4 = classes.get("C4").getDeclaredMethod("method1").parameters().get(0);
+    Parameter arg5 = classes.get("C5").getDeclaredMethod("method1").parameters().get(0);
+    Parameter arg6 = null;
+
+    assertThat(arg1)
+      .isNotNull()
+      .isEqualTo(arg1)
+      .isNotEqualTo(arg2)
+      .isNotEqualTo(arg3)
+      .isNotEqualTo(arg4)
+      .isNotEqualTo(arg5)
+      .isNotEqualTo(arg6)
+      .isNotEqualTo((Object) classes.get("C1"));
+  }
+
   private Map<String, ClassSymbol> parseMultipleClasses(String... lines) {
     Tree ast = parse(lines);
     return TreeUtils.descendants(ast, ClassDeclarationTreeImpl.class)

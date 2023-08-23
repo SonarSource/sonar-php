@@ -19,6 +19,7 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.Objects;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 
@@ -60,5 +61,25 @@ public class Parameter {
 
   public boolean hasEllipsisOperator() {
     return hasEllipsisOperator;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    Parameter parameter = (Parameter) other;
+    return hasDefault == parameter.hasDefault &&
+      hasEllipsisOperator == parameter.hasEllipsisOperator &&
+      Objects.equals(name, parameter.name) &&
+      Objects.equals(type, parameter.type);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, type, hasDefault, hasEllipsisOperator);
   }
 }
