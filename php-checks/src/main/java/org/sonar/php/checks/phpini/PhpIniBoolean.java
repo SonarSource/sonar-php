@@ -22,7 +22,6 @@ package org.sonar.php.checks.phpini;
 import java.util.Locale;
 import java.util.Set;
 import org.sonar.php.ini.tree.Directive;
-import org.sonar.php.utils.collections.SetUtils;
 
 public enum PhpIniBoolean {
 
@@ -32,7 +31,7 @@ public enum PhpIniBoolean {
   private final Set<String> variants;
 
   PhpIniBoolean(String... variants) {
-    this.variants = SetUtils.immutableSetOf(variants);
+    this.variants = Set.of(variants);
   }
 
   public boolean matchesValue(Directive directive) {

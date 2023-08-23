@@ -19,25 +19,12 @@
  */
 package org.sonar.php.utils.collections;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * This class is used for Java < 9 to simplify the creation of sets.
- * After moving to Java > 9, should be replaced by Immutable Set Static Factory Methods
- * @see <a href="https://docs.oracle.com/javase/9/docs/api/java/util/Set.html#immutable">Immutable Set Static Factory Methods</a>
- */
 public class SetUtils {
 
   private SetUtils() {
-  }
-
-  @SafeVarargs
-  public static <T> Set<T> immutableSetOf(T... elements) {
-    Set<T> set = new HashSet<>(Arrays.asList(elements));
-    return Collections.unmodifiableSet(set);
   }
 
   @SafeVarargs

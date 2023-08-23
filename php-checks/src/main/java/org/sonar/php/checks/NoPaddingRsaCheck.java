@@ -24,7 +24,6 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -42,7 +41,7 @@ public class NoPaddingRsaCheck extends FunctionUsageCheck {
 
   @Override
   protected Set<String> lookedUpFunctionNames() {
-    return SetUtils.immutableSetOf("openssl_public_encrypt");
+    return Set.of("openssl_public_encrypt");
   }
 
   @Override

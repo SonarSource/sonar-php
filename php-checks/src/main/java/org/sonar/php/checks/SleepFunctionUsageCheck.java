@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = SleepFunctionUsageCheck.KEY)
@@ -33,7 +32,7 @@ public class SleepFunctionUsageCheck extends FunctionUsageCheck {
 
   @Override
   protected Set<String> lookedUpFunctionNames() {
-    return SetUtils.immutableSetOf("sleep");
+    return Set.of("sleep");
   }
 
   @Override

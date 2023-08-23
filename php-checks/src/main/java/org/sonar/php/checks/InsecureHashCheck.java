@@ -23,7 +23,6 @@ import java.util.Locale;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
@@ -36,7 +35,7 @@ public class InsecureHashCheck extends FunctionUsageCheck {
 
   @Override
   protected Set<String> lookedUpFunctionNames() {
-    return SetUtils.immutableSetOf("md5", "sha1");
+    return Set.of("md5", "sha1");
   }
 
   @Override

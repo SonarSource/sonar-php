@@ -32,7 +32,6 @@ import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.regex.PhpRegexCheck;
 import org.sonar.php.regex.PhpRegexUtils;
 import org.sonar.php.regex.RegexCheckContext;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -57,7 +56,7 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
   public static final int PCRE_UTF8 = Pattern.UNICODE_CHARACTER_CLASS;
 
   protected static final Pattern DELIMITER_PATTERN = Pattern.compile("^[^a-zA-Z\\d\\r\\n\\t\\f\\v]");
-  protected static final Set<String> REGEX_FUNCTIONS = SetUtils.immutableSetOf(
+  protected static final Set<String> REGEX_FUNCTIONS = Set.of(
     "preg_replace", "preg_match", "preg_filter", "preg_replace_callback", "preg_split", "preg_match_all");
 
   private RegexCheckContext regexContext;

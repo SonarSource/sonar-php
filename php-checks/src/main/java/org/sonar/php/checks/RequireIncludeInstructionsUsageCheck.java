@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import java.util.Locale;
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -33,8 +32,8 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
   public static final String KEY = "S4833";
   private static final String MESSAGE = "Replace \"%s\" with namespace import mechanism through the \"use\" keyword.";
 
-  private static final Set<String> EXCLUDED_FILES = SetUtils.immutableSetOf("autoload.php", "ScriptHandler.php");
-  private static final Set<String> WRONG_FUNCTIONS = SetUtils.immutableSetOf(
+  private static final Set<String> EXCLUDED_FILES = Set.of("autoload.php", "ScriptHandler.php");
+  private static final Set<String> WRONG_FUNCTIONS = Set.of(
     "require",
     "include",
     "require_once",

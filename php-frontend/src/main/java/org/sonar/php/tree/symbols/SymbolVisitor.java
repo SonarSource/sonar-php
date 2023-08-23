@@ -33,7 +33,6 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.utils.SourceBuilder;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.symbols.MemberSymbol;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -81,7 +80,7 @@ import static java.util.Objects.requireNonNull;
 
 public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
-  private static final Set<String> BUILT_IN_VARIABLES = SetUtils.immutableSetOf(
+  private static final Set<String> BUILT_IN_VARIABLES = Set.of(
     "$this",
     "$GLOBALS",
     "$_SERVER",
@@ -95,7 +94,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     "$http_response_header",
     "$_COOKIE",
     "$_REQUEST");
-  private static final Set<String> SELF_OBJECTS = SetUtils.immutableSetOf("$this", "self", "static");
+  private static final Set<String> SELF_OBJECTS = Set.of("$this", "self", "static");
 
   private final Deque<Scope> classScopes = new ArrayDeque<>();
   private final Map<Symbol, Scope> scopeBySymbol = new HashMap<>();

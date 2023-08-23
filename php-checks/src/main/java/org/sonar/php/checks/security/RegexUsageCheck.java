@@ -26,7 +26,6 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -44,7 +43,7 @@ public class RegexUsageCheck extends FunctionUsageCheck {
   // this function accepts pattern as second argument, all others as first
   private static final String MB_EREG_SEARCH_INIT = "mb_ereg_search_init";
 
-  private static final Set<String> FUNCTION_NAMES = SetUtils.immutableSetOf(
+  private static final Set<String> FUNCTION_NAMES = Set.of(
     "ereg",
     "ereg_replace",
     "eregi",
@@ -79,7 +78,7 @@ public class RegexUsageCheck extends FunctionUsageCheck {
   protected void checkFunctionCall(FunctionCallTree tree) {
     int index = getPatternArgumentIndex(tree);
     Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "pattern", index);
-    if (!argument.isPresent()) {
+    if (argument.isEmpty()) {
       return;
     }
 

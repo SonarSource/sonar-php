@@ -22,7 +22,6 @@ package org.sonar.php.checks.security;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S4828")
@@ -30,7 +29,7 @@ public class SignallingProcessCheck extends FunctionUsageCheck {
 
   private static final String MESSAGE = "Make sure that sending signals is safe here.";
 
-  private static final Set<String> FUNCTION_NAMES = SetUtils.immutableSetOf("posix_kill");
+  private static final Set<String> FUNCTION_NAMES = Set.of("posix_kill");
 
   @Override
   protected Set<String> lookedUpFunctionNames() {

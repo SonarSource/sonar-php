@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.expression.PrefixExpressionTreeImpl;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -53,7 +52,7 @@ public class LoggerConfigurationCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure that this logger's configuration is safe.";
   private static final String ERROR_REPORTING = "error_reporting";
-  private static final Set<String> GLOBAL_CONFIGURATION_FUNCTIONS = SetUtils.immutableSetOf("ini_set", "ini_alter");
+  private static final Set<String> GLOBAL_CONFIGURATION_FUNCTIONS = Set.of("ini_set", "ini_alter");
   private static final Map<String, List<String>> WHITELISTED_VALUE_BY_DIRECTIVE = buildWhitelistedValues();
   private static final QualifiedName PSR_LOG_ABSTRACT_LOGGER_CLASS = qualifiedName("Psr\\Log\\AbstractLogger");
   private static final QualifiedName PSR_LOG_LOGGER_INTERFACE = qualifiedName("Psr\\Log\\LoggerInterface");

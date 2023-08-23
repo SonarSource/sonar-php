@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.EnumMap;
@@ -36,7 +35,6 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
 import org.sonar.plugins.php.api.cfg.CfgBranchingBlock;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
@@ -73,7 +71,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     Kind.CATCH_BLOCK,
     Kind.ASSIGNMENT_BY_REFERENCE);
 
-  private static final Set<String> FUNCTION_CHANGING_CURRENT_SCOPE = new HashSet<>(Arrays.asList(
+  private static final Set<String> FUNCTION_CHANGING_CURRENT_SCOPE = Set.of(
     "eval",
     "extract",
     "parse_str",
@@ -82,10 +80,10 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     "include",
     "include_once",
     "require",
-    "require_once"));
+    "require_once");
 
   // Note: "$argc" and "$argv" are not available in the function scope without using "global"
-  private static final Set<String> PREDEFINED_VARIABLES = new HashSet<>(Arrays.asList(
+  private static final Set<String> PREDEFINED_VARIABLES = Set.of(
     "$_COOKIE",
     "$_ENV",
     "$_FILES",
@@ -99,7 +97,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     "$HTTP_RESPONSE_HEADER",
     "$PHP_ERRORMSG",
     // "$this" is defined only in method, but rule S2014 raises issues when it's used elsewhere
-    "$THIS"));
+    "$THIS");
 
   private static final Set<String> FUNCTION_ALLOWING_ARGUMENT_CHECK;
 
@@ -430,7 +428,8 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
     @Override
     public void visitFunctionCall(FunctionCallTree functionCall) {
-      if (FUNCTION_CHANGING_CURRENT_SCOPE.contains(CheckUtils.getLowerCaseFunctionName(functionCall))) {
+      String lowerCaseFunctionName = CheckUtils.getLowerCaseFunctionName(functionCall);
+      if (lowerCaseFunctionName != null && FUNCTION_CHANGING_CURRENT_SCOPE.contains(lowerCaseFunctionName)) {
         scopeWasChanged = true;
       }
       super.visitFunctionCall(functionCall);
@@ -458,7 +457,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     @Override
     public void visitVariableIdentifier(VariableIdentifierTree tree) {
       if (uninitializedVariableDeclaration(tree)
-        && TreeUtils.findAncestorWithKind(tree, SetUtils.immutableSetOf(Kind.STATIC_STATEMENT)) != null) {
+        && TreeUtils.findAncestorWithKind(tree, Set.of(Kind.STATIC_STATEMENT)) != null) {
         uninitializedStaticVariables.add(tree.variableExpression().text());
       }
       super.visitVariableIdentifier(tree);

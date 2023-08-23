@@ -22,7 +22,6 @@ package org.sonar.php.checks.phpunit;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
@@ -31,7 +30,7 @@ import static org.sonar.php.checks.utils.CheckUtils.lowerCaseFunctionName;
 public class AbortedTestCaseCheck extends PhpUnitCheck {
 
   private static final String MESSAGE = "Either remove this call or add an explanation about why the test is aborted.";
-  private static final Set<String> ABORT_FUNCTIONS = SetUtils.immutableSetOf("marktestskipped", "marktestincomplete");
+  private static final Set<String> ABORT_FUNCTIONS = Set.of("marktestskipped", "marktestincomplete");
 
   @Override
   public void visitFunctionCall(FunctionCallTree fct) {
@@ -47,6 +46,7 @@ public class AbortedTestCaseCheck extends PhpUnitCheck {
   }
 
   private static boolean isAbortFunctionWithoutMessage(FunctionCallTree fct) {
-    return ABORT_FUNCTIONS.contains(lowerCaseFunctionName(fct)) && fct.callArguments().isEmpty();
+    String name = lowerCaseFunctionName(fct);
+    return name != null && ABORT_FUNCTIONS.contains(name) && fct.callArguments().isEmpty();
   }
 }

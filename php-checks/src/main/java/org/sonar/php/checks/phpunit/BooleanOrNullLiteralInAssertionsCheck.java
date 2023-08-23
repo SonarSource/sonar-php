@@ -28,7 +28,6 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.utils.collections.MapBuilder;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -38,13 +37,13 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 public class BooleanOrNullLiteralInAssertionsCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Use %s instead.";
 
-  private static final Set<String> HANDLED_ASSERTIONS = SetUtils.immutableSetOf(
+  private static final Set<String> HANDLED_ASSERTIONS = Set.of(
     "assertEquals",
     "assertSame",
     "assertNotEquals",
     "assertNotSame");
 
-  private static final Set<String> INVERSE_ASSERTIONS = SetUtils.immutableSetOf("assertNotSame", "assertNotEquals");
+  private static final Set<String> INVERSE_ASSERTIONS = Set.of("assertNotSame", "assertNotEquals");
 
   private static final Map<String, String> REPLACEMENT_ASSERTIONS = MapBuilder.<String, String>builder()
     .put("true", "assertTrue()")
