@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.internal.SonarRuntimeImpl;
@@ -32,10 +32,10 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PHPRulesDefinitionTest {
+class PHPRulesDefinitionTest {
 
   @Test
-  public void testActivationSonarLint() {
+  void testActivationSonarLint() {
     RulesDefinition.Repository repository = buildRepository(8, 9);
     assertThat(repository).isNotNull();
     assertThat(repository.name()).isEqualTo("Sonar");
@@ -48,7 +48,7 @@ public class PHPRulesDefinitionTest {
   }
 
   @Test
-  public void owaspSecurityStandard() {
+  void owaspSecurityStandard() {
     RulesDefinition.Repository repository_9_3 = buildRepository();
     RulesDefinition.Rule S5328_9_3 = repository_9_3.rule("S5328");
     assertThat(S5328_9_3).isNotNull();

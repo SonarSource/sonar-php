@@ -21,16 +21,16 @@ package org.sonar.plugins.php.reports.phpunit;
 
 import java.io.File;
 import java.nio.charset.Charset;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class CoverageResultImporterTest {
+class CoverageResultImporterTest {
 
   private static final String BASE_DIR = "/reports/phpunit/";
   private static final String MONKEY_FILE_NAME = "src/Monkey.php";
@@ -54,10 +54,10 @@ public class CoverageResultImporterTest {
   private CoverageResultImporter importer;
   private SensorContextTester context;
 
-  @Rule
-  public final LogTester logTester = new LogTester();
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
-  @Before
+  @BeforeEach
   public void setUp() {
     context = SensorContextTester.create(new File(SRC_TEST_RESOURCES + BASE_DIR).getAbsoluteFile());
     DefaultInputFile monkeyFile = TestInputFileBuilder.create("moduleKey", MONKEY_FILE_NAME)
@@ -72,7 +72,7 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_add_warning_and_log_when_report_not_found() {
+  void shouldAddWarningAndLogWhenReportNotFound() {
     executeSensorImporting(new File("notfound.txt"));
     assertThat(logTester.logs(Level.ERROR)).hasSize(1);
     assertThat((logTester.logs(Level.ERROR).get(0)))
@@ -84,7 +84,7 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_parse_even_with_package_node() {
+  void shouldParseEvenWithPackageNode() {
     String componentKey = componentKey(MONKEY_FILE_NAME);
 
     executeSensorImporting(getReportFile("phpunit.coverage-with-package.xml"));
@@ -93,7 +93,7 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_generate_coverage_measures_also_with_missing_files() {
+  void shouldGenerateCoverageMeasuresAlsoWithMissingFiles() {
     executeSensorImporting(getReportFile("phpunit.coverage.xml"));
     String componentKey = componentKey(MONKEY_FILE_NAME);
     assertReport(componentKey);
@@ -111,7 +111,7 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_not_raise_warning_for_excluded_files() {
+  void shouldNotRaiseWarningForExcludedFiles() {
     context.settings().setProperty("sonar.exclusion", "**/IndexControllerTest.php,**/Banana.php");
     executeSensorImporting(getReportFile("phpunit.coverage.xml"));
     assertThat(logTester.logs(Level.WARN)).hasSize(2);
@@ -119,7 +119,7 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_generate_coverage_measures_with_fqn_paths() {
+  void shouldGenerateCoverageMeasuresWithFqnPaths() {
     String warning = "Failed to resolve 2 file path(s) in PHPUnit coverage phpunit.coverage-fqn.xml report. " +
       "Nothing is imported related to file(s): /foo/bar/src/Banana.php;/foo/bar/src/IndexControllerTest.php";
 
@@ -131,7 +131,7 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_generate_coverage_measures_with_windows_fqn_paths() {
+  void shouldGenerateCoverageMeasuresWithWindowsFqnPaths() {
     String warning = "Failed to resolve 2 file path(s) in PHPUnit coverage phpunit.coverage-fqn_win.xml report. " +
       "Nothing is imported related to file(s): C:\\foo\\bar\\src\\Banana.php;C:\\foo\\bar\\src\\IndexControllerTest.php";
 
@@ -143,7 +143,7 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_add_warning_and_log_when_report_is_empty() {
+  void shouldAddWarningAndLogWhenReportIsEmpty() {
     executeSensorImporting(getReportFile("phpunit.coverage-no-record.xml"));
     assertThat(logTester.logs(Level.WARN)).hasSize(1);
     assertThat(logTester.logs(Level.WARN).get(0))
@@ -170,7 +170,7 @@ public class CoverageResultImporterTest {
    * SONARPLUGINS-1591
    */
   @Test
-  public void should_not_fail_if_no_statement_count() {
+  void shouldNotFailIfNoStatementCount() {
     String componentKey = componentKey(MONKEY_FILE_NAME);
 
     executeSensorImporting(getReportFile("phpunit.coverage-with-no-statements-covered.xml"));
@@ -182,7 +182,7 @@ public class CoverageResultImporterTest {
    * SONARPLUGINS-1675
    */
   @Test
-  public void should_not_fail_if_no_line_for_file_node() {
+  void shouldNotFailIfNoLineForFileNode() {
     try {
       executeSensorImporting(getReportFile("phpunit.coverage-with-filenode-without-line.xml"));
     } catch (Exception e) {
@@ -191,7 +191,7 @@ public class CoverageResultImporterTest {
   }
 
   @Test
-  public void should_not_set_metrics_to_ncloc_for_missing_files_sq_62() {
+  void shouldNotSetMetricsToNclocForMissingFilesSq_62() {
     String componentKey = componentKey("Monkey.php");
 
     executeSensorImporting(getReportFile("phpunit.coverage-no-record.xml"));

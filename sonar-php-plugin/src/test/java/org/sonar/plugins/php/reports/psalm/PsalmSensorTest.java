@@ -24,8 +24,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.Severity;
@@ -34,7 +34,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
@@ -44,17 +44,17 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class PsalmSensorTest extends ReportSensorTest {
+class PsalmSensorTest extends ReportSensorTest {
 
   private static final String PSALM_PROPERTY = "sonar.php.psalm.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "psalm");
   private final PsalmSensor psalmSensor = new PsalmSensor(analysisWarnings);
 
-  @Rule
-  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
 
   @Test
-  public void test_descriptor() {
+  void testDescriptor() {
     DefaultSensorDescriptor sensorDescriptor = new DefaultSensorDescriptor();
     psalmSensor.describe(sensorDescriptor);
     assertThat(sensorDescriptor.name()).isEqualTo("Import of Psalm issues");
@@ -69,7 +69,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue() throws IOException {
+  void raiseIssue() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report.json");
     assertThat(externalIssues).hasSize(3);
 
@@ -118,7 +118,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue_file_has_unix_absolute_paths() throws IOException {
+  void raiseIssueFileHasUnixAbsolutePaths() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-abs.json");
     assertThat(externalIssues).hasSize(3);
 
@@ -126,7 +126,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue_file_has_windows_absolute_paths() throws IOException {
+  void raiseIssueFileHasWindowsAbsolutePaths() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-abs_win.json");
     assertThat(externalIssues).hasSize(3);
 
@@ -134,7 +134,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue_with_missing_fields() throws IOException {
+  void raiseIssueWithMissingFields() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-with-missing-fields.json");
     assertThat(externalIssues).hasSize(5);
 
@@ -208,7 +208,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue_with_errors() throws IOException {
+  void raiseIssueWithErrors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-with-errors.json");
     assertThat(externalIssues).hasSize(2);
 
@@ -248,7 +248,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void excluded_files_will_not_be_logged() throws IOException {
+  void excludedFilesWillNotBeLogged() throws IOException {
     executeSensorImporting("psalm-report-with-errors.json", Map.of("sonar.exclusion", "*/**/unknown.php"));
 
     assertThat(logTester.logs(Level.ERROR)).isEmpty();
@@ -267,7 +267,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Override
-  protected LogTester logTester() {
+  protected LogTesterJUnit5 logTester() {
     return logTester;
   }
 }

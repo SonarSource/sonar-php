@@ -20,16 +20,16 @@
 package org.sonar.plugins.php.reports.phpunit.xml;
 
 import java.io.File;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.reports.phpunit.JUnitLogParserForPhpUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TestCaseTest {
+class TestCaseTest {
 
   @Test
-  public void shouldResolveStatusFromXmlData() throws Exception {
+  void shouldResolveStatusFromXmlData() throws Exception {
     JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "test-cases-status.xml"));
     final TestSuite suite = suites.suites.get(0);

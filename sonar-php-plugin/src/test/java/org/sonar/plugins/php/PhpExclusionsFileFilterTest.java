@@ -24,7 +24,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -33,10 +34,10 @@ import org.sonar.api.config.internal.MapSettings;
 import static org.assertj.core.api.Assertions.fail;
 import static org.fest.assertions.Assertions.assertThat;
 
-public class PhpExclusionsFileFilterTest {
+class PhpExclusionsFileFilterTest {
 
   @Test
-  public void should_exclude_vendor_dir() {
+  void shouldExcludeVendorDir() {
     MapSettings settings = new MapSettings();
     settings.setProperty(PhpPlugin.PHP_EXCLUSIONS_KEY, PhpPlugin.PHP_EXCLUSIONS_DEFAULT_VALUE);
     PhpExclusionsFileFilter filter = new PhpExclusionsFileFilter(settings.asConfig());
@@ -47,7 +48,7 @@ public class PhpExclusionsFileFilterTest {
   }
 
   @Test
-  public void should_exclude_only_php() {
+  void shouldExcludeOnlyPhp() {
     MapSettings settings = new MapSettings();
     settings.setProperty(PhpPlugin.PHP_EXCLUSIONS_KEY, PhpPlugin.PHP_EXCLUSIONS_DEFAULT_VALUE);
     PhpExclusionsFileFilter filter = new PhpExclusionsFileFilter(settings.asConfig());
@@ -56,7 +57,7 @@ public class PhpExclusionsFileFilterTest {
   }
 
   @Test
-  public void should_include_vendor_when_property_is_empty() {
+  void shouldIncludeVendorWhenPropertyIsEmpty() {
     MapSettings settings = new MapSettings();
     settings.setProperty(PhpPlugin.PHP_EXCLUSIONS_KEY, "");
 
@@ -67,7 +68,7 @@ public class PhpExclusionsFileFilterTest {
   }
 
   @Test
-  public void should_exclude_using_custom_path_regex() {
+  void shouldExcludeUsingCustomPathRegex() {
     MapSettings settings = new MapSettings();
     settings.setProperty(
       PhpPlugin.PHP_EXCLUSIONS_KEY, PhpPlugin.PHP_EXCLUSIONS_DEFAULT_VALUE + "," + "**/libs/**");
@@ -80,7 +81,7 @@ public class PhpExclusionsFileFilterTest {
   }
 
   @Test
-  public void should_ignore_empty_path_regex() {
+  void shouldIgnoreEmptyPathRegex() {
     MapSettings settings = new MapSettings();
     settings.setProperty(PhpPlugin.PHP_EXCLUSIONS_KEY, "," + PhpPlugin.PHP_EXCLUSIONS_DEFAULT_VALUE + ",");
 
@@ -90,8 +91,8 @@ public class PhpExclusionsFileFilterTest {
     assertThat(filter.accept(inputFile("vendor/some_lib.php"))).isFalse();
   }
 
-  @Test(timeout = 2000)
-  public void should_ignore_php_files_with_average_line_length_over_threshold() throws IOException {
+  @Timeout(2)
+  void shouldIgnorePhpFilesWithAverageLineLengthOverThreshold() throws IOException {
     PhpExclusionsFileFilter filter = new PhpExclusionsFileFilter(new MapSettings().asConfig());
     File baseDir = new File("src/test/resources/exclusions");
     SensorContextTester context = SensorContextTester.create(baseDir);

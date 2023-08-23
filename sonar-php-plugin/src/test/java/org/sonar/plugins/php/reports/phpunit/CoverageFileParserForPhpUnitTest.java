@@ -22,15 +22,15 @@ package org.sonar.plugins.php.reports.phpunit;
 import java.io.File;
 import java.io.IOException;
 import java.util.function.Consumer;
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.reports.phpunit.xml.FileNode;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
 
-public class CoverageFileParserForPhpUnitTest {
+class CoverageFileParserForPhpUnitTest {
 
   private static final String NO_PROJECT_FILE = "phpunit.coverage-no-project.xml";
   private static final String INVALID_COVERAGE_FILE = "phpunit.coverage-invalid.xml";
@@ -39,23 +39,25 @@ public class CoverageFileParserForPhpUnitTest {
 
   private CoverageFileParserForPhpUnit parser;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     parser = new CoverageFileParserForPhpUnit();
   }
 
   @Test
-  public void should_parse_when_there_is_no_project() throws IOException {
+  void shouldParseWhenThereIsNoProject() throws IOException {
     CountConsumer counter = new CountConsumer();
     parser.parse(reportFile(NO_PROJECT_FILE), counter);
     assertThat(counter.count).isZero();
   }
 
   @Test
-  public void should_fail_when_xml_root_node_is_not_coverage() {
+  void shouldFailWhenXmlRootNodeIsNotCoverage() {
     CountConsumer counter = new CountConsumer();
     File reportFile = reportFile(INVALID_COVERAGE_FILE);
-    assertThrows(ParseException.class, () -> parser.parse(reportFile, counter));
+    Assertions.assertThatExceptionOfType(ParseException.class)
+      .isThrownBy(() -> parser.parse(reportFile, counter))
+      .withMessage("javax.xml.stream.XMLStreamException: Report should start with <coverage>");
   }
 
   private static File reportFile(String file) {

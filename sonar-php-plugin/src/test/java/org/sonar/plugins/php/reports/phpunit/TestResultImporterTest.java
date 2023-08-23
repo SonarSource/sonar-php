@@ -20,9 +20,9 @@
 package org.sonar.plugins.php.reports.phpunit;
 
 import java.io.File;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
@@ -30,7 +30,7 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -41,7 +41,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class TestResultImporterTest {
+class TestResultImporterTest {
 
   private static final File BASE_DIR = new File("src/test/resources/org/sonar/plugins/php/phpunit/sensor/src/");
   private final AnalysisWarningsWrapper analysisWarnings = spy(AnalysisWarningsWrapper.class);
@@ -49,10 +49,10 @@ public class TestResultImporterTest {
   private SensorContextTester context;
   private DefaultFileSystem fs;
 
-  @Rule
-  public final LogTester logTester = new LogTester();
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
-  @Before
+  @BeforeEach
   public void setUp() {
     context = SensorContextTester.create(new File("src/test/resources"));
     importer = new TestResultImporter(analysisWarnings);
@@ -60,7 +60,7 @@ public class TestResultImporterTest {
   }
 
   @Test
-  public void should_add_warning_and_log_when_report_not_found() {
+  void shouldAddWarningAndLogWhenReportNotFound() {
     executeSensorImporting(new File("notfound.txt"));
     assertThat(logTester.logs(Level.ERROR)).hasSize(1);
     assertThat((logTester.logs(Level.ERROR).get(0)))
@@ -72,7 +72,7 @@ public class TestResultImporterTest {
   }
 
   @Test
-  public void should_add_warning_and_log_when_report_does_not_contain_any_record() {
+  void shouldAddWarningAndLogWhenReportDoesNotContainAnyRecord() {
     executeSensorImporting(new File(PhpTestUtils.getModuleBaseDir(), PhpTestUtils.PHPUNIT_EMPTY_REPORT_PATH));
     assertThat(logTester.logs(Level.WARN)).hasSize(1);
     assertThat((logTester.logs(Level.WARN).get(0)))
@@ -83,8 +83,8 @@ public class TestResultImporterTest {
       .addWarning(startsWith("PHPUnit test report does not contain any record in file"));
   }
 
-  @Test()
-  public void shouldGenerateTestsMeasures() {
+  @Test
+  void shouldGenerateTestsMeasures() {
     DefaultInputFile appTestFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
     DefaultInputFile appSkippedTestFile = TestInputFileBuilder.create("moduleKey", "src/AppSkipTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
 
@@ -120,7 +120,7 @@ public class TestResultImporterTest {
   }
 
   @Test
-  public void should_not_raise_warnings_for_excluded_files() {
+  void shouldNotRaiseWarningsForExcludedFiles() {
     DefaultInputFile appTestFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
     DefaultInputFile appSkippedTestFile = TestInputFileBuilder.create("moduleKey", "src/AppSkipTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
 

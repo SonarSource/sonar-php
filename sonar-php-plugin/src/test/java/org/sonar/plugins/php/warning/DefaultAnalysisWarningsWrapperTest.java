@@ -19,16 +19,16 @@
  */
 package org.sonar.plugins.php.warning;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.notifications.AnalysisWarnings;
 
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-public class DefaultAnalysisWarningsWrapperTest {
+class DefaultAnalysisWarningsWrapperTest {
 
   @Test
-  public void addWarning() {
+  void addWarning() {
     AnalysisWarnings analysisWarnings = spy(AnalysisWarnings.class);
     AnalysisWarningsWrapper analysisWarningsWrapper = new DefaultAnalysisWarningsWrapper(analysisWarnings);
     analysisWarningsWrapper.addWarning("Test");

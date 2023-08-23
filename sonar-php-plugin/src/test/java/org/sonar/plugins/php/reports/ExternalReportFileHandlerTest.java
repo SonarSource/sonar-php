@@ -22,14 +22,14 @@ package org.sonar.plugins.php.reports;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExternalReportFileHandlerTest {
+class ExternalReportFileHandlerTest {
 
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "extern-file-handler");
   private static final String MODULE_KEY = "ExternalReportFileHandler";
@@ -38,7 +38,7 @@ public class ExternalReportFileHandlerTest {
 
   private SensorContextTester context;
 
-  @Before
+  @BeforeEach
   public void setup() {
     context = SensorContextTester.create(PROJECT_DIR);
     addInputFiles("index.php", "subfolder/index.php");
@@ -46,70 +46,70 @@ public class ExternalReportFileHandlerTest {
   }
 
   @Test
-  public void should_return_relative_path_when_all_files_are_known() {
+  void shouldReturnRelativePathWhenAllFilesAreKnown() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "index.php"))).isEqualTo("index.php");
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "subfolder", "index.php"))).isEqualTo(path("subfolder", "index.php"));
   }
 
   @Test
-  public void should_return_relative_path_when_first_file_is_in_subfolder() {
+  void shouldReturnRelativePathWhenFirstFileIsInSubfolder() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "subfolder", "index.php"))).isEqualTo(path("subfolder", "index.php"));
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "index.php"))).isEqualTo("index.php");
   }
 
   @Test
-  public void should_not_return_relative_when_files_are_unknown() {
+  void shouldNotReturnRelativeWhenFilesAreUnknown() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "unknown.php"))).isEqualTo(path("foo", "bar", "extern-file-handler", "unknown.php"));
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php")))
       .isEqualTo(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php"));
   }
 
   @Test
-  public void should_return_relative_when_first_file_is_unknown() {
+  void shouldReturnRelativeWhenFirstFileIsUnknown() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "unknown.php"))).isEqualTo(path("foo", "bar", "extern-file-handler", "unknown.php"));
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "subfolder", "index.php"))).isEqualTo(path("subfolder", "index.php"));
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "index.php"))).isEqualTo("index.php");
   }
 
   @Test
-  public void should_return_relative_path_when_already_relative() {
+  void shouldReturnRelativePathWhenAlreadyRelative() {
     assertThat(fileHandler.relativePath("index.php")).isEqualTo("index.php");
     assertThat(fileHandler.relativePath(path("subfolder", "index.php"))).isEqualTo(path("subfolder", "index.php"));
   }
 
   @Test
-  public void test() {
+  void test() {
     assertThat(fileHandler.relativePath(path("unknown", "index.php"))).isEqualTo(path("index.php"));
     assertThat(fileHandler.relativePath("index.php")).isEqualTo("index.php");
   }
 
   @Test
-  public void should_return_relative_path_for_second_file_when_unknown() {
+  void shouldReturnRelativePathForSecondFileWhenUnknown() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "index.php"))).isEqualTo("index.php");
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php")))
       .isEqualTo(path("foo", "bar", "extern-file-handler", "subfolder", "unknown.php"));
   }
 
   @Test
-  public void should_return_relative_path_for_unix_path() {
+  void shouldReturnRelativePathForUnixPath() {
     assertThat(fileHandler.relativePath("/foo/bar/FileHandler/index.php")).isEqualTo("index.php");
     assertThat(fileHandler.relativePath("/foo/bar/FileHandler/subfolder/index.php")).isEqualTo(path("subfolder", "index.php"));
   }
 
   @Test
-  public void should_return_relative_path_for_fqn_windows_path() {
+  void shouldReturnRelativePathForFqnWindowsPath() {
     assertThat(fileHandler.relativePath("C:\\foo\\bar\\FileHandler\\index.php")).isEqualTo("index.php");
     assertThat(fileHandler.relativePath("C:\\foo\\bar\\FileHandler\\subfolder\\index.php")).isEqualTo(path("subfolder", "index.php"));
   }
 
   @Test
-  public void should_return_relative_path_for_relative_windows_path() {
+  void shouldReturnRelativePathForRelativeWindowsPath() {
     assertThat(fileHandler.relativePath("index.php")).isEqualTo("index.php");
     assertThat(fileHandler.relativePath("subfolder\\index.php")).isEqualTo("subfolder\\index.php");
   }
 
   @Test
-  public void should_return_handle_shorter_path() {
+  void shouldReturnHandleShorterPath() {
     assertThat(fileHandler.relativePath(path("foo", "bar", "extern-file-handler", "index.php"))).isEqualTo("index.php");
     assertThat(fileHandler.relativePath(path("bar", "index.php"))).isEqualTo(path("bar", "index.php"));
   }

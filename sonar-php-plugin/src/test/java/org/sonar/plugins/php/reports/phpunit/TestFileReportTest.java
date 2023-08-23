@@ -23,8 +23,8 @@ import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Consumer;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -37,7 +37,7 @@ import org.sonar.plugins.php.reports.phpunit.xml.TestCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TestFileReportTest {
+class TestFileReportTest {
 
   private String componentKey;
   private String testFileName;
@@ -48,7 +48,7 @@ public class TestFileReportTest {
 
   private final Consumer<String> addUnresolvedInputFiles = file -> unresolvedInputFiles.add(file);
 
-  @Before
+  @BeforeEach
   public void setUp() {
     testFileName = "testfile.php";
     DefaultInputFile testFile = TestInputFileBuilder.create("moduleKey", testFileName).setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
@@ -60,7 +60,7 @@ public class TestFileReportTest {
   }
 
   @Test
-  public void shouldReportStatusCounts() {
+  void shouldReportStatusCounts() {
     final TestFileReport report = new TestFileReport(testFileName, 3d);
     report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
     report.addTestCase(new TestCase(TestCase.Status.ERROR));
@@ -75,7 +75,7 @@ public class TestFileReportTest {
   }
 
   @Test
-  public void shouldReportZeroTestsIfEmpty() {
+  void shouldReportZeroTestsIfEmpty() {
     final TestFileReport report = new TestFileReport(testFileName, 0d);
     report.saveTestMeasures(context, fileHandler, addUnresolvedInputFiles);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TESTS, 0);
@@ -83,7 +83,7 @@ public class TestFileReportTest {
   }
 
   @Test
-  public void shouldNotCountSkippedTests() {
+  void shouldNotCountSkippedTests() {
     final TestFileReport report = new TestFileReport(testFileName, 1d);
     report.addTestCase(new TestCase(null, null, null, null, null));
     report.addTestCase(new TestCase(TestCase.Status.SKIPPED));

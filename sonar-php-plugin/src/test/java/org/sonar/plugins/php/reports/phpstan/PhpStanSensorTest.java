@@ -27,8 +27,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.io.FilenameUtils;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.Severity;
@@ -37,7 +39,6 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
-import org.sonar.api.testfixtures.log.LogTester;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
@@ -49,17 +50,17 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class PhpStanSensorTest extends ReportSensorTest {
+class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "phpstan");
   protected final PhpStanSensor phpStanSensor = new PhpStanSensor(analysisWarnings);
 
-  @Rule
-  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
 
   @Test
-  public void test_descriptor() {
+  void testDescriptor() {
     DefaultSensorDescriptor sensorDescriptor = new DefaultSensorDescriptor();
     phpStanSensor.describe(sensorDescriptor);
     assertThat(sensorDescriptor.name()).isEqualTo("Import of PHPStan issues");
@@ -74,7 +75,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue_with_unix_path() throws IOException {
+  void raiseIssueWithUnixPath() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report.json");
     assertThat(externalIssues).hasSize(3);
 
@@ -114,32 +115,17 @@ public class PhpStanSensorTest extends ReportSensorTest {
     assertNoErrorWarnDebugLogs(logTester);
   }
 
-  @Test
-  public void raise_issue_with_windows_path() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report_win.json");
+  @ParameterizedTest
+  @ValueSource(strings = {"phpstan-report_win.json", "phpstan-report-abs.json", "phpstan-report-abs_win.json"})
+  void raiseIssueWithPath(String path) throws IOException {
+    List<ExternalIssue> externalIssues = executeSensorImporting(path);
     assertThat(externalIssues).hasSize(3);
 
     assertNoErrorWarnDebugLogs(logTester);
   }
 
   @Test
-  public void issues_when_phpstan_file_with_absolute_unix_paths() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-abs.json");
-    assertThat(externalIssues).hasSize(3);
-
-    assertNoErrorWarnDebugLogs(logTester);
-  }
-
-  @Test
-  public void issues_when_phpstan_file_with_absolute_windows_paths() throws IOException {
-    List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-abs_win.json");
-    assertThat(externalIssues).hasSize(3);
-
-    assertNoErrorWarnDebugLogs(logTester);
-  }
-
-  @Test
-  public void issues_when_phpstan_file_has_errors() throws IOException {
+  void issuesWhenPhpstanFileHasErrors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-error.json");
     assertThat(externalIssues).hasSize(1);
 
@@ -163,7 +149,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void excluded_files_will_not_be_logged() throws IOException {
+  void excludedFilesWillNotBeLogged() throws IOException {
     executeSensorImporting("phpstan-report-with-error.json", Map.of("sonar.exclusion", "*/**/notExisting*.php"));
 
     assertThat(logTester.logs(Level.ERROR)).isEmpty();
@@ -172,7 +158,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void issues_when_phpstan_with_line_and_message_errors() throws IOException {
+  void issuesWhenPhpstanWithLineAndMessageErrors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-line-and-message-error.json");
     assertThat(externalIssues).isEmpty();
 
@@ -185,7 +171,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void no_object_as_root() throws IOException {
+  void noObjectAsRoot() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("no-object-as-root.php");
     assertThat(externalIssues).isEmpty();
     assertThat(onlyOneLogElement(logTester().logs(Level.ERROR)))
@@ -194,14 +180,14 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void report_without_issue() throws IOException {
+  void reportWithoutIssue() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-no-issue.json");
     assertThat(externalIssues).isEmpty();
     assertThat(logTester().logs(Level.ERROR)).isEmpty();
   }
 
   @Test
-  public void file_path_is_cleaned_when_it_contains_additional_context() throws Exception {
+  void filePathIsCleanedWhenItContainsAdditionalContext() throws Exception {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-with-context-in-path.json");
     assertThat(externalIssues).hasSize(1);
     assertThat(externalIssues.get(0).primaryLocation().inputComponent().key()).isEqualTo("reports-project:phpstan/file3.php");
@@ -218,7 +204,7 @@ public class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Override
-  protected LogTester logTester() {
+  protected LogTesterJUnit5 logTester() {
     return logTester;
   }
 
