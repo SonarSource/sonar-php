@@ -30,10 +30,10 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonarqube.ws.Issues.Issue;
 
-class CustomRulesTest extends Tests {
+class CustomRulesTest {
 
-//  @RegisterExtension
-//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
+  @RegisterExtension
+  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "custom-rules";
   private static final String PROJECT_NAME = "Custom Rules";
   private static List<Issue> issues;
@@ -47,7 +47,7 @@ class CustomRulesTest extends Tests {
       .setProjectName(PROJECT_NAME)
       .setProjectVersion("1.0")
       .setSourceDirs("src");
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
     issues = Tests.issuesForComponent(PROJECT_KEY);
   }
 

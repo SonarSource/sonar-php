@@ -31,7 +31,7 @@ import static com.sonar.it.php.Tests.getComponent;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PHPTest extends Tests {
+class PHPTest {
 
   private static final String MULTI_MODULE_PROJECT_KEY = "multimodule-php";
   private static final String EMPTY_FILE_PROJECT_KEY = "empty_file_project_key";
@@ -40,8 +40,8 @@ class PHPTest extends Tests {
   private static final String PROJECT_WITH_VENDOR_KEY = "project-with-vendor";
   private static final String SRC_DIR_NAME = "src";
 
-//  @RegisterExtension
-//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
+  @RegisterExtension
+  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
 
   /**
    * SONARPLUGINS-1657
@@ -52,7 +52,7 @@ class PHPTest extends Tests {
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("project-with-several-extensions"))
       .setProperty("sonar.php.file.suffixes", "php,php3,php4,myphp,html");
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     assertThat(getMeasureAsInt(SEVERAL_EXTENSIONS_PROJECT_KEY, "files")).isEqualTo(3);
     assertThat(getMeasureAsInt(getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math2.myphp"), "lines")).isGreaterThan(1);
@@ -64,7 +64,7 @@ class PHPTest extends Tests {
     Tests.provisionProject(PROJECT_WITH_VENDOR_KEY, "Project with vendor dir", "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("project-with-vendor"));
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     assertThat(getMeasureAsInt(PROJECT_WITH_VENDOR_KEY, "files")).isEqualTo(1);
   }
@@ -77,7 +77,7 @@ class PHPTest extends Tests {
     Tests.provisionProject(MULTI_MODULE_PROJECT_KEY, "Multimodule PHP Project", "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("multimodule"));
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     String componentKey1 = MULTI_MODULE_PROJECT_KEY + ":module1/src";
     String componentKey2 = MULTI_MODULE_PROJECT_KEY + ":module2/src";
@@ -100,7 +100,7 @@ class PHPTest extends Tests {
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
       .setProjectDir(Tests.projectDirectoryFor("empty_file"));
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     assertThat(getMeasureAsInt(EMPTY_FILE_PROJECT_KEY, "files")).isEqualTo(3);
   }
@@ -115,7 +115,7 @@ class PHPTest extends Tests {
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
       .setProjectDir(Tests.projectDirectoryFor("big_concat"));
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     List<Issues.Issue> issues = Tests.issuesForComponent("big_concat_key");
     // The file actually contains two calls to sleep(), but only one is visited due to the depth limit of the visitor.
@@ -133,7 +133,7 @@ class PHPTest extends Tests {
       .setSourceEncoding("UTF-8")
       .setTestDirs("tests")
       .setProjectDir(Tests.projectDirectoryFor("project-with-main-and-test"));
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     List<Issues.Issue> issues = Tests.issuesForComponent(PROJECT_WITH_MAIN_AND_TEST_KEY);
     assertThat(issues).hasSize(1);

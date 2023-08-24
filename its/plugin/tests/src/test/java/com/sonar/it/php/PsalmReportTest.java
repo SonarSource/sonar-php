@@ -30,12 +30,12 @@ import org.sonarqube.ws.Issues;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PsalmReportTest extends Tests {
+class PsalmReportTest {
 
   private static final String PROJECT = "psalm_project";
 
-//  @RegisterExtension
-//  public static final OrchestratorExtension ORCHESTRATOR = Tests.ORCHESTRATOR;
+  @RegisterExtension
+  public static final OrchestratorExtension ORCHESTRATOR = Tests.ORCHESTRATOR;
 
   @Test
   void importReport() {

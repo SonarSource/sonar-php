@@ -30,10 +30,10 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NonPhpProjectTest extends Tests {
+class NonPhpProjectTest {
 
-//  @RegisterExtension
-//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
+  @RegisterExtension
+  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "non-php-project";
   private static final String PROJECT_NAME = "Non Php Project";
 
@@ -50,7 +50,7 @@ class NonPhpProjectTest extends Tests {
       .setProjectVersion("1.0")
       .setSourceDirs(".");
 
-    buildResult = ORCHESTRATOR.executeBuild(build);
+    buildResult = orchestrator.executeBuild(build);
   }
 
   @Test

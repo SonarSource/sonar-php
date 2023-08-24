@@ -29,10 +29,10 @@ import org.sonarqube.ws.Issues;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SuppressWarningsTest extends Tests{
+public class SuppressWarningsTest {
 
-//  @RegisterExtension
-//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
+  @RegisterExtension
+  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
 
   private static final String PROJECT_KEY = "suppress_warnings";
 
@@ -41,7 +41,7 @@ public class SuppressWarningsTest extends Tests{
     Tests.provisionProject(PROJECT_KEY, "SuppressWarningsTest", "php", "nosonar-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor(PROJECT_KEY));
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
     List<Issues.Issue> issues = Tests.issuesForComponent(PROJECT_KEY);
     assertThat(issues).isEmpty();
   }

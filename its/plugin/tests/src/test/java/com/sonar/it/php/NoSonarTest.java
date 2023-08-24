@@ -31,10 +31,10 @@ import org.sonarqube.ws.Issues.Issue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NoSonarTest extends Tests {
+class NoSonarTest {
 
-//  @RegisterExtension
-//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
+  @RegisterExtension
+  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "nosonar-project";
   private static final String PROJECT_NAME = "NOSONAR Project";
 
@@ -51,7 +51,7 @@ class NoSonarTest extends Tests {
       .setSourceDirs(".")
       .setProjectDir(PROJECT_DIR);
 
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 
   @Test

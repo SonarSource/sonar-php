@@ -33,7 +33,7 @@ import static com.sonar.it.php.Tests.getAnalysisWarnings;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PHPUnitTest extends Tests {
+class PHPUnitTest {
 
   private static final String PROJECT_KEY = "php-unit";
   private static final String PROJECT_NAME = "PHP Unit";

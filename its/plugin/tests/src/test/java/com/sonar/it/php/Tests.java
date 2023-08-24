@@ -35,9 +35,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.platform.suite.api.SelectClasses;
-import org.junit.platform.suite.api.Suite;
 import org.sonarqube.ws.Components;
 import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.Measures;
@@ -65,7 +64,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //  PhpStanReportTest.class,
 //  PsalmReportTest.class
 //})
-abstract class Tests {
+class Tests {
 
   public static final String PROJECT_ROOT_DIR = "../projects/";
 
@@ -214,4 +213,42 @@ abstract class Tests {
 
     assertThat(unexpectedLogs).isEmpty();
   }
+
+  // Nested classes
+  @Nested
+  class NestedCustomRulesTest extends CustomRulesTest {
+  }
+
+  @Nested
+  class NestedNonPhpProjectTest extends NonPhpProjectTest {
+  }
+
+  @Nested
+  class NestedNoSonarTest extends NoSonarTest {
+  }
+
+  @Nested
+  class NestedPHPIntegrationTest extends PHPIntegrationTest {
+  }
+
+  @Nested
+  class NestedPHPTest extends PHPTest {
+  }
+
+  @Nested
+  class NestedPHPUnitTest extends PHPUnitTest {
+  }
+
+  @Nested
+  class NestedSonarLintTest extends SonarLintTest {
+  }
+
+  @Nested
+  class NestedPhpStanReportTest extends PhpStanReportTest {
+  }
+
+  @Nested
+  class NestedPsalmReportTest extends PsalmReportTest {
+  }
+
 }
