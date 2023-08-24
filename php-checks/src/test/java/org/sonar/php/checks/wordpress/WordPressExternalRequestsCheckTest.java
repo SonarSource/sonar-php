@@ -19,12 +19,20 @@
  */
 package org.sonar.php.checks.wordpress;
 
+import java.io.File;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class WordPressExternalRequestsCheckTest extends WordPressConfigCheckTest {
 
+  @TempDir
+  public static File tmpDir;
   private final WordPressExternalRequestsCheck check = new WordPressExternalRequestsCheck();
+
+  public WordPressExternalRequestsCheckTest() {
+    super(tmpDir);
+  }
 
   @Test
   void test() throws IOException {

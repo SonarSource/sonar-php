@@ -20,17 +20,13 @@
 package org.sonar.php.checks.wordpress;
 
 import java.io.File;
-import org.junit.jupiter.api.io.TempDir;
 import org.sonar.plugins.php.WordPressConfigVerifier;
 
 public abstract class WordPressConfigCheckTest {
 
-  @TempDir
-  public File folder;
-
   public WordPressConfigVerifier wordPressVerifier;
 
-  public WordPressConfigCheckTest() {
+  public WordPressConfigCheckTest(File folder) {
     wordPressVerifier = new WordPressConfigVerifier(folder);
   }
 }
