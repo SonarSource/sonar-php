@@ -19,12 +19,13 @@
  */
 package org.sonar.php.checks.regex;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-class SingleCharacterAlternationCheckTest extends TestCase {
+class SingleCharacterAlternationCheckTest {
 
-  public void test() throws Exception {
+  @Test
+  void test() {
     CheckVerifier.verify(new SingleCharacterAlternationCheck(), "regex/SingleCharacterAlternationCheck.php");
   }
 }

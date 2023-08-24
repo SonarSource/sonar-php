@@ -19,13 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-class CatchThrowableCheckTest extends TestCase {
+class CatchThrowableCheckTest {
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new CatchThrowableCheck(), "CatchThrowableCheck/CatchThrowableCheck.php");
     CheckVerifier.verify(new CatchThrowableCheck(), "CatchThrowableCheck/A.php", "CatchThrowableCheck/B.php");
   }
