@@ -23,7 +23,6 @@ import java.util.Set;
 import org.sonar.php.checks.CheckBundle;
 import org.sonar.php.checks.CheckBundlePart;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 public class WordPressForceSslCheckPart extends WordPressConfigVisitor implements CheckBundlePart {
@@ -33,7 +32,7 @@ public class WordPressForceSslCheckPart extends WordPressConfigVisitor implement
 
   @Override
   protected Set<String> configsToVisit() {
-    return SetUtils.immutableSetOf("FORCE_SSL_ADMIN", "FORCE_SSL_LOGIN");
+    return Set.of("FORCE_SSL_ADMIN", "FORCE_SSL_LOGIN");
   }
 
   @Override

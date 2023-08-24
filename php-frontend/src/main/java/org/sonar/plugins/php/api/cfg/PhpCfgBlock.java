@@ -29,10 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.api.utils.Preconditions;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
-
-import static java.util.Objects.requireNonNull;
 
 class PhpCfgBlock implements CfgBlock {
 
@@ -48,9 +45,7 @@ class PhpCfgBlock implements CfgBlock {
   }
 
   PhpCfgBlock(PhpCfgBlock successor, PhpCfgBlock syntacticSuccessor) {
-
-    this(SetUtils.immutableSetOf(successor), requireNonNull(syntacticSuccessor,
-      "Syntactic successor cannot be null"));
+    this(Set.of(successor), syntacticSuccessor);
   }
 
   PhpCfgBlock(Set<PhpCfgBlock> successors) {
@@ -58,7 +53,7 @@ class PhpCfgBlock implements CfgBlock {
   }
 
   PhpCfgBlock(PhpCfgBlock successor) {
-    this(SetUtils.immutableSetOf(successor));
+    this(Set.of(successor));
   }
 
   PhpCfgBlock() {

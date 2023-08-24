@@ -19,9 +19,11 @@
  */
 package org.sonar.plugins.php.api.cfg;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 
 class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
@@ -54,7 +56,8 @@ class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
 
   @Override
   public Set<CfgBlock> successors() {
-    return SetUtils.immutableSetOf(trueSuccessor, falseSuccessor);
+    // `trueSuccessor` and `falseSuccessor` can be equal, but to comply with the API we need to have them in a Set
+    return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(trueSuccessor, falseSuccessor)));
   }
 
   @Override

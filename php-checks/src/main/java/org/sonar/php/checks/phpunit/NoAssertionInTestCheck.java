@@ -30,7 +30,6 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.tree.TreeUtils;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -146,8 +145,9 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
 
       Symbol symbol = symbolTable.getSymbol(((MemberAccessTree) callee).member());
       if (symbol != null && symbol.is(Symbol.Kind.FUNCTION)) {
-        return Optional.ofNullable((MethodDeclarationTree) TreeUtils.findAncestorWithKind(symbol.declaration(),
-          SetUtils.immutableSetOf(Tree.Kind.METHOD_DECLARATION)));
+        return Optional.ofNullable((MethodDeclarationTree) TreeUtils.findAncestorWithKind(
+          symbol.declaration(),
+          Tree.Kind.METHOD_DECLARATION));
       }
 
       return Optional.empty();

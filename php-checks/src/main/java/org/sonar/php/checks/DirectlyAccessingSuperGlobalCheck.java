@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -32,7 +31,7 @@ public class DirectlyAccessingSuperGlobalCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Do not access \"%s\" directly.";
   public static final String KEY = "S2043";
 
-  private static final Set<String> SUPER_GLOBAL_REQUIRING_SANITIZATION = SetUtils.immutableSetOf(
+  private static final Set<String> SUPER_GLOBAL_REQUIRING_SANITIZATION = Set.of(
     "$_COOKIE", "$_ENV", "$_FILES", "$_GET", "$_POST", "$_REQUEST", "$_SERVER");
 
   @Override

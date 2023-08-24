@@ -27,7 +27,6 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.php.tree.symbols.SymbolImpl;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -51,12 +50,12 @@ public class CommandLineArgumentCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure that command line arguments are used safely here.";
 
-  private static final Set<QualifiedName> SUSPICIOUS_CLASS_INSTANTIATIONS = SetUtils.immutableSetOf(
+  private static final Set<QualifiedName> SUSPICIOUS_CLASS_INSTANTIATIONS = Set.of(
     qualifiedName("Zend\\Console\\Getopt"),
     qualifiedName("GetOpt\\Option"));
 
-  private static final Set<String> SUSPICIOUS_ARRAY_ACCESSES = SetUtils.immutableSetOf("$GLOBALS", "$_SERVER");
-  private static final Set<String> SUSPICIOUS_GLOBAL_IDENTIFIERS = SetUtils.immutableSetOf("$argv", "$HTTP_SERVER_VARS");
+  private static final Set<String> SUSPICIOUS_ARRAY_ACCESSES = Set.of("$GLOBALS", "$_SERVER");
+  private static final Set<String> SUSPICIOUS_GLOBAL_IDENTIFIERS = Set.of("$argv", "$HTTP_SERVER_VARS");
 
   private Map<Scope, List<String>> variableSetAsGlobalInScopes = new HashMap<>();
 

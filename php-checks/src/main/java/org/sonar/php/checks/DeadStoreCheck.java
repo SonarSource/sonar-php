@@ -31,7 +31,6 @@ import org.sonar.php.cfg.LiveVariablesAnalysis.LiveVariables;
 import org.sonar.php.cfg.LiveVariablesAnalysis.VariableUsage;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.php.utils.collections.ListUtils;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
 import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -47,7 +46,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S1854")
 public class DeadStoreCheck extends PHPSubscriptionCheck {
 
-  private static final Set<String> BASIC_LITERAL_VALUES = SetUtils.immutableSetOf(
+  private static final Set<String> BASIC_LITERAL_VALUES = Set.of(
     "true",
     "false",
     "1",

@@ -24,7 +24,6 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -40,7 +39,7 @@ public class MissingMethodVisibilityCheck extends PHPVisitorCheck {
   public static final String KEY = "S1784";
   private static final String MESSAGE = "Explicitly mention the visibility of this %s \"%s\".";
 
-  private static final Set<String> VISIBILITIES = SetUtils.immutableSetOf(
+  private static final Set<String> VISIBILITIES = Set.of(
     PHPKeyword.PRIVATE.getValue(),
     PHPKeyword.PROTECTED.getValue(),
     PHPKeyword.PUBLIC.getValue());

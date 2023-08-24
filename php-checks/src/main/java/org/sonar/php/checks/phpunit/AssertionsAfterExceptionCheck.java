@@ -27,7 +27,6 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.tree.TreeUtils;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -39,12 +38,12 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Don't perform an assertion here; An exception is expected to be raised before its execution.";
   private static final String MESSAGE_SINGLE = "Refactor this test; if this assertion's argument raises an exception, the assertion will never get executed.";
 
-  private static final Set<String> EXPECT_METHODS = SetUtils.immutableSetOf(
+  private static final Set<String> EXPECT_METHODS = Set.of(
     "expectexception",
     "expectexceptionmessage",
     "expectexceptionmessagematches",
     "exceptexceptioncode");
-  private static final Set<String> EXPECT_ANNOTATIONS = SetUtils.immutableSetOf(
+  private static final Set<String> EXPECT_ANNOTATIONS = Set.of(
     "expectedexception",
     "expectexceptionmessage",
     "expectedexceptionmessage",
@@ -92,7 +91,7 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
     }
 
     String functionName = CheckUtils.lowerCaseFunctionName(tree);
-    if (EXPECT_METHODS.contains(functionName) && isMainStatementInBody(tree)) {
+    if (functionName != null && EXPECT_METHODS.contains(functionName) && isMainStatementInBody(tree)) {
       expectExceptionCall = tree;
     } else if (isAssertion(tree)) {
       assertionsStack.add(tree);

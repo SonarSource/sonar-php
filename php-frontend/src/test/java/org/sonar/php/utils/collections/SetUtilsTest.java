@@ -25,34 +25,13 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class SetUtilsTest {
 
   @Test
-  void testReturnsUnmodifiableSet() {
-    Set<String> set = SetUtils.immutableSetOf();
-    assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> set.add("value"));
-  }
-
-  @Test
-  void testConstructStringsSet() {
-    Set<String> set = SetUtils.immutableSetOf("value1", "value2");
-
-    assertThat(set).containsExactlyInAnyOrder("value1", "value2");
-  }
-
-  @Test
-  void testConstructAnySet() {
-    Set<SomeType> set = SetUtils.immutableSetOf(new SomeType("value1"), new SomeType("value2"));
-
-    assertThat(set).containsExactlyInAnyOrder(new SomeType("value1"), new SomeType("value2"));
-  }
-
-  @Test
   void testConcatAnySet() {
-    Set<SomeType> set1 = SetUtils.immutableSetOf(new SomeType("value1"), new SomeType("value2"));
-    Set<SomeType> set2 = SetUtils.immutableSetOf(new SomeType("value3"), new SomeType("value4"));
+    Set<SomeType> set1 = Set.of(new SomeType("value1"), new SomeType("value2"));
+    Set<SomeType> set2 = Set.of(new SomeType("value3"), new SomeType("value4"));
 
     assertThat(SetUtils.concat(set1, set2))
       .containsExactlyInAnyOrder(new SomeType("value1"), new SomeType("value2"),
@@ -61,13 +40,13 @@ class SetUtilsTest {
 
   @Test
   void testConcatManySets() {
-    Set<SomeType> set1 = SetUtils.immutableSetOf(new SomeType("value1"), new SomeType("value2"));
-    Set<SomeType> set2 = SetUtils.immutableSetOf(new SomeType("value3"), new SomeType("value4"));
-    Set<SomeType> set3 = SetUtils.immutableSetOf(new SomeType("value5"), new SomeType("value6"));
-    Set<SomeType> set4 = SetUtils.immutableSetOf(new SomeType("value7"), new SomeType("value8"));
-    Set<SomeType> set5 = SetUtils.immutableSetOf(new SomeType("value9"), new SomeType("value10"));
-    Set<SomeType> set6 = SetUtils.immutableSetOf(new SomeType("value11"), new SomeType("value12"));
-    Set<SomeType> set7 = SetUtils.immutableSetOf(new SomeType("value13"), new SomeType("value14"));
+    Set<SomeType> set1 = Set.of(new SomeType("value1"), new SomeType("value2"));
+    Set<SomeType> set2 = Set.of(new SomeType("value3"), new SomeType("value4"));
+    Set<SomeType> set3 = Set.of(new SomeType("value5"), new SomeType("value6"));
+    Set<SomeType> set4 = Set.of(new SomeType("value7"), new SomeType("value8"));
+    Set<SomeType> set5 = Set.of(new SomeType("value9"), new SomeType("value10"));
+    Set<SomeType> set6 = Set.of(new SomeType("value11"), new SomeType("value12"));
+    Set<SomeType> set7 = Set.of(new SomeType("value13"), new SomeType("value14"));
 
     assertThat(SetUtils.concat(set1, set2, set3, set4, set5, set6, set7))
       .containsExactlyInAnyOrder(
@@ -82,8 +61,8 @@ class SetUtilsTest {
 
   @Test
   void testNoDifference() {
-    Set<String> set1 = SetUtils.immutableSetOf("A", "B", "C");
-    Set<String> set2 = SetUtils.immutableSetOf("A", "B", "C");
+    Set<String> set1 = Set.of("A", "B", "C");
+    Set<String> set2 = Set.of("A", "B", "C");
 
     assertThat(SetUtils.difference(set1, set2))
       .isEqualTo(Collections.emptySet());
@@ -91,8 +70,8 @@ class SetUtilsTest {
 
   @Test
   void testNoDifferenceOnLeft() {
-    Set<String> set1 = SetUtils.immutableSetOf("A", "B", "C");
-    Set<String> set2 = SetUtils.immutableSetOf("A", "B", "C", "D", "E");
+    Set<String> set1 = Set.of("A", "B", "C");
+    Set<String> set2 = Set.of("A", "B", "C", "D", "E");
 
     assertThat(SetUtils.difference(set1, set2))
       .isEqualTo(Collections.emptySet());
@@ -100,8 +79,8 @@ class SetUtilsTest {
 
   @Test
   void testDifference() {
-    Set<String> set1 = SetUtils.immutableSetOf("A", "B", "C");
-    Set<String> set2 = SetUtils.immutableSetOf("A", "B", "C", "D", "E");
+    Set<String> set1 = Set.of("A", "B", "C");
+    Set<String> set2 = Set.of("A", "B", "C", "D", "E");
 
     assertThat(SetUtils.difference(set2, set1))
       .containsExactlyInAnyOrder("D", "E");

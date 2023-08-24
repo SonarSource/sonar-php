@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.symbols.Symbols;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
@@ -37,10 +36,10 @@ public class FunctionNameCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Rename function \"%s\" to match the regular expression %s.";
 
-  private static final Set<String> MAGIC_METHODS = SetUtils.immutableSetOf(
-    "__construct", "__destruct", "__call", "__callStatic", "__callStatic", "__get",
+  private static final Set<String> MAGIC_METHODS = Set.of(
+    "__construct", "__destruct", "__call", "__callStatic", "__get",
     "__set", "__isset", "__unset", "__sleep", "__wakeup", "__toString", "__invoke",
-    "__set_state", "__clone", "__clone", "__debugInfo");
+    "__set_state", "__clone", "__debugInfo");
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   private Pattern pattern = null;
 

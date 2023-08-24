@@ -32,7 +32,6 @@ import org.sonar.php.checks.formatting.FunctionSpacingCheck;
 import org.sonar.php.checks.formatting.IndentationCheck;
 import org.sonar.php.checks.formatting.NamespaceAndUseStatementCheck;
 import org.sonar.php.checks.formatting.PunctuatorSpacingCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -193,7 +192,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
     type = "BOOLEAN")
   public boolean isExtendsAndImplementsLine = true;
 
-  private static final Set<String> INTERNAL_FUNCTIONS = SetUtils.immutableSetOf(
+  private static final Set<String> INTERNAL_FUNCTIONS = Set.of(
     PHPKeyword.ECHO.getValue(),
     PHPKeyword.ISSET.getValue(),
     PHPKeyword.EMPTY.getValue(),

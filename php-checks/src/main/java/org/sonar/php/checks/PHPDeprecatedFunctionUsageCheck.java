@@ -103,20 +103,20 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static final String PARSE_STR_FUNCTION = "parse_str";
   private static final String ASSERT_FUNCTION = "assert";
   private static final String DEFINE_FUNCTION = "define";
-  private static final Set<String> LOCALE_CATEGORY_CONSTANTS = SetUtils.immutableSetOf(
+  private static final Set<String> LOCALE_CATEGORY_CONSTANTS = Set.of(
     "LC_ALL", "LC_COLLATE", "LC_CTYPE", "LC_MONETARY", "LC_NUMERIC", "LC_TIME", "LC_MESSAGES");
 
-  private static final Set<String> DEPRECATED_CASE_SENSITIVE_CONSTANTS = SetUtils.immutableSetOf(
+  private static final Set<String> DEPRECATED_CASE_SENSITIVE_CONSTANTS = Set.of(
     "FILTER_FLAG_SCHEME_REQUIRED", "FILTER_FLAG_HOST_REQUIRED");
 
-  private static final Set<String> SEARCHING_STRING_FUNCTIONS = SetUtils.immutableSetOf(
+  private static final Set<String> SEARCHING_STRING_FUNCTIONS = Set.of(
     "stristr", "strrchr", "strstr", "strripos", "stripos", "strrpos", "strpos", "strchr");
 
   private static final Predicate<TreeValues> SPLFILEOBJECT_FGETSS = new ObjectMemberFunctionCall(FGETSS_FUNCTION, new NewObjectCall("SplFileObject"));
 
   @Override
   protected Set<String> lookedUpFunctionNames() {
-    Set<String> functionNames = SetUtils.immutableSetOf(SET_LOCALE_FUNCTION, PARSE_STR_FUNCTION, ASSERT_FUNCTION, DEFINE_FUNCTION);
+    Set<String> functionNames = Set.of(SET_LOCALE_FUNCTION, PARSE_STR_FUNCTION, ASSERT_FUNCTION, DEFINE_FUNCTION);
     return SetUtils.concat(functionNames, NEW_BY_DEPRECATED_FUNCTIONS.keySet(), SEARCHING_STRING_FUNCTIONS);
   }
 

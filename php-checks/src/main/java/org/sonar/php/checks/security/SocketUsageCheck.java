@@ -22,7 +22,6 @@ package org.sonar.php.checks.security;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
 @Rule(key = "S4818")
@@ -30,7 +29,7 @@ public class SocketUsageCheck extends FunctionUsageCheck {
 
   private static final String MESSAGE = "Make sure that sockets are used safely here.";
 
-  private static final Set<String> FUNCTION_NAMES = SetUtils.immutableSetOf(
+  private static final Set<String> FUNCTION_NAMES = Set.of(
     "socket_create",
     "socket_create_listen",
     "socket_addrinfo_bind",

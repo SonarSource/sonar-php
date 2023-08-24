@@ -27,7 +27,6 @@ import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.symbols.Symbols;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -41,7 +40,7 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Don't use this assertion inside a try-catch catching an assertion exception.";
   private static final String SECONDARY_MESSAGE = "Exception type that catches assertion exceptions.";
 
-  private static final Set<String> RELEVANT_EXCEPTIONS = SetUtils.immutableSetOf(
+  private static final Set<String> RELEVANT_EXCEPTIONS = Set.of(
     "exception",
     "phpunit\\framework\\expectationfailedexception",
     "phpunit\\framework\\assertionfailederror");

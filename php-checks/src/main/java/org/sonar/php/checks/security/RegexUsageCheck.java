@@ -19,14 +19,11 @@
  */
 package org.sonar.php.checks.security;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -38,13 +35,13 @@ public class RegexUsageCheck extends FunctionUsageCheck {
 
   private static final String MESSAGE = "Make sure that using a regular expression is safe here.";
 
-  private static final Set<Character> SPECIAL_CHARS = new HashSet<>(Arrays.asList('+', '*', '{'));
+  private static final Set<Character> SPECIAL_CHARS = Set.of('+', '*', '{');
   private static final int MIN_PATTERN_LENGTH = 3 + 2 + 2; // 2 for string quotes and 2 for regex pattern delimeters
 
   // this function accepts pattern as second argument, all others as first
   private static final String MB_EREG_SEARCH_INIT = "mb_ereg_search_init";
 
-  private static final Set<String> FUNCTION_NAMES = SetUtils.immutableSetOf(
+  private static final Set<String> FUNCTION_NAMES = Set.of(
     "ereg",
     "ereg_replace",
     "eregi",
@@ -79,7 +76,7 @@ public class RegexUsageCheck extends FunctionUsageCheck {
   protected void checkFunctionCall(FunctionCallTree tree) {
     int index = getPatternArgumentIndex(tree);
     Optional<CallArgumentTree> argument = CheckUtils.argument(tree, "pattern", index);
-    if (!argument.isPresent()) {
+    if (argument.isEmpty()) {
       return;
     }
 

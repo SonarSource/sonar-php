@@ -33,7 +33,6 @@ import org.sonar.php.checks.utils.PhpUnitCheck;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.php.tree.TreeUtils;
-import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -46,12 +45,12 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class NotDiscoverableTestCheck extends PhpUnitCheck {
   private static final String MESSAGE_VISIBLE = "Adjust the visibility of this test method so that it can be executed by the test runner.";
   private static final String MESSAGE_MARKED = "Mark this method as a test so that it can be executed by the test runner.";
-  private static final Set<String> OVERRIDABLE_METHODS = SetUtils.immutableSetOf(
+  private static final Set<String> OVERRIDABLE_METHODS = Set.of(
     "setup",
     "teardown",
     "setupbeforeclass",
     "teardownafterclass");
-  private static final Set<String> SELF_OBJECTS = SetUtils.immutableSetOf("$this", "self", "static");
+  private static final Set<String> SELF_OBJECTS = Set.of("$this", "self", "static");
 
   private Map<String, Set<String>> internalCalledMethods = new HashMap<>();
   private Set<String> testMethods = new HashSet<>();
