@@ -32,6 +32,7 @@ class C {
     $LOCAL2[0][1] = 1;    // Noncompliant
     $LOCAL3 += 1;         // Noncompliant
     $LOCAL4 =& $LOCAL;    // Noncompliant
+    $local_var = 1;       // OK
   }
 }
 
@@ -41,5 +42,5 @@ function f2() {
   $_GET = array();        // OK
 }
 
-$f = fn($param) => $param * 2;
+$f = fn($param, $second_param) => $param * 2;
 $f = fn($PARAM) => $PARAM * 2; // Noncompliant
