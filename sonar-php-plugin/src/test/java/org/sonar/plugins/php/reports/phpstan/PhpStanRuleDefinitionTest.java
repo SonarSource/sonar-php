@@ -19,15 +19,15 @@
  */
 package org.sonar.plugins.php.reports.phpstan;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PhpStanRuleDefinitionTest {
+class PhpStanRuleDefinitionTest {
 
   @Test
-  public void phpstan_external_repository() {
+  void phpstanExternalRepository() {
     RulesDefinition.Context context = new RulesDefinition.Context();
     PhpStanRuleDefinition rulesDefinition = new PhpStanRuleDefinition();
     rulesDefinition.define(context);
@@ -38,7 +38,7 @@ public class PhpStanRuleDefinitionTest {
     assertThat(repository.name()).isEqualTo("PHPStan");
     assertThat(repository.language()).isEqualTo("php");
     assertThat(repository.isExternal()).isTrue();
-    assertThat(repository.rules().size()).isEqualTo(1);
+    assertThat(repository.rules()).hasSize(1);
 
     RulesDefinition.Rule rule = repository.rule("phpstan.finding");
     assertThat(rule).isNotNull();

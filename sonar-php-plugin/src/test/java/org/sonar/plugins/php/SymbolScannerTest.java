@@ -25,16 +25,16 @@ import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.slf4j.event.Level;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.php.cache.CacheContextImpl;
 import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
@@ -46,10 +46,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.sonar.plugins.php.PhpTestUtils.inputFile;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
-public class SymbolScannerTest {
+class SymbolScannerTest {
 
-  @Rule
-  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
 
   public static final QualifiedName CLASS_NAME = qualifiedName("app\\test\\controller");
   private static ReadWriteInMemoryCache previousCache;
@@ -57,7 +57,7 @@ public class SymbolScannerTest {
   private SensorContextTester context;
   private DurationStatistics statistics;
 
-  @Before
+  @BeforeEach
   public void init() throws IOException {
     context = SensorContextTester.create(PhpTestUtils.getModuleBaseDir());
     Path workDir = Files.createTempDirectory("workDir");
@@ -72,7 +72,7 @@ public class SymbolScannerTest {
   }
 
   @Test
-  public void shouldCreateProjectSymbolDataWhenCacheIsDisabled() throws IOException {
+  void shouldCreateProjectSymbolDataWhenCacheIsDisabled() throws IOException {
     SymbolScanner symbolScanner = createScannerCacheDisabled();
     InputFile baseFile = inputFile("incremental/baseFile.php", InputFile.Type.MAIN, InputFile.Status.ADDED);
 
@@ -84,7 +84,7 @@ public class SymbolScannerTest {
   }
 
   @Test
-  public void shouldCreateProjectSymbolDataFromCache() throws IOException, NoSuchAlgorithmException {
+  void shouldCreateProjectSymbolDataFromCache() throws IOException, NoSuchAlgorithmException {
     buildBaseProjectSymbolDataAndCache();
 
     previousCache = nextCache.copy();
@@ -105,7 +105,7 @@ public class SymbolScannerTest {
   }
 
   @Test
-  public void hashExceptionWhenTryingToSaveHash() {
+  void hashExceptionWhenTryingToSaveHash() {
     try (MockedStatic<FileHashingUtils> FileHashingUtilsStaticMock = Mockito.mockStatic(FileHashingUtils.class)) {
       FileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IllegalStateException("BOOM!"));
       buildBaseProjectSymbolDataAndCache();
@@ -114,7 +114,7 @@ public class SymbolScannerTest {
   }
 
   @Test
-  public void shouldCreateProjectSymbolDataWithSymbolWhenFileIsDeleted() {
+  void shouldCreateProjectSymbolDataWithSymbolWhenFileIsDeleted() {
     buildBaseProjectSymbolDataAndCache();
 
     previousCache = nextCache.copy();

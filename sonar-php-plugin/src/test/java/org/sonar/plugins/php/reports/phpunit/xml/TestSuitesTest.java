@@ -24,15 +24,15 @@ package org.sonar.plugins.php.reports.phpunit.xml;
 
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.reports.phpunit.TestFileReport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TestSuitesTest {
+class TestSuitesTest {
 
   @Test
-  public void shouldCollectReportsFromAllTestSuites() {
+  void shouldCollectReportsFromAllTestSuites() {
     final String testFile1 = "one.php";
     final String testFile2 = "two.php";
     final TestSuites testSuites = new TestSuites(Arrays.asList(new TestSuite(testFile1), new TestSuite(testFile2)));

@@ -20,15 +20,15 @@
 package org.sonar.plugins.php.reports.phpunit.xml;
 
 import java.util.Collection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.reports.phpunit.TestFileReport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TestSuiteTest {
+class TestSuiteTest {
 
   @Test
-  public void shouldCreateReportOnlyIfFileBased() {
+  void shouldCreateReportOnlyIfFileBased() {
     final TestSuite fileSuite = new TestSuite("file");
     assertThat(fileSuite.generateReports()).hasSize(1);
     assertThat(fileSuite.generateReports().iterator().next()).isEqualTo(new TestFileReport("file", 0d));
@@ -37,7 +37,7 @@ public class TestSuiteTest {
   }
 
   @Test
-  public void shouldDrillDownUntilItFindsAFileBasedSuite() {
+  void shouldDrillDownUntilItFindsAFileBasedSuite() {
     final TestSuite rootSuite = new TestSuite(null);
     final TestSuite intermediateSuite = new TestSuite(null);
     rootSuite.addNested(intermediateSuite);
@@ -47,7 +47,7 @@ public class TestSuiteTest {
   }
 
   @Test
-  public void shouldCreateOneReportForEveryNestedFileBasedSuite() {
+  void shouldCreateOneReportForEveryNestedFileBasedSuite() {
     final TestSuite rootSuite = new TestSuite(null);
     final TestSuite fileSuite1 = new TestSuite("file1");
     rootSuite.addNested(fileSuite1);
@@ -68,7 +68,7 @@ public class TestSuiteTest {
    *
    */
   @Test
-  public void shouldCreateAReportForSuiteNestedWithinAnotherFileBasedSuite() {
+  void shouldCreateAReportForSuiteNestedWithinAnotherFileBasedSuite() {
     final TestSuite fileSuite = new TestSuite("file");
     final TestSuite nestedFileSuite = new TestSuite("nestedFile");
     fileSuite.addNested(nestedFileSuite);

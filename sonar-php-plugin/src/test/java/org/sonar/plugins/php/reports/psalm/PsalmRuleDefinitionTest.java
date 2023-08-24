@@ -19,15 +19,15 @@
  */
 package org.sonar.plugins.php.reports.psalm;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PsalmRuleDefinitionTest {
+class PsalmRuleDefinitionTest {
 
   @Test
-  public void psalm_external_repository() {
+  void psalmExternalRepository() {
     RulesDefinition.Context context = new RulesDefinition.Context();
     PsalmRulesDefinition rulesDefinition = new PsalmRulesDefinition();
     rulesDefinition.define(context);
@@ -38,7 +38,7 @@ public class PsalmRuleDefinitionTest {
     assertThat(repository.name()).isEqualTo("Psalm");
     assertThat(repository.language()).isEqualTo("php");
     assertThat(repository.isExternal()).isTrue();
-    assertThat(repository.rules().size()).isEqualTo(266);
+    assertThat(repository.rules()).hasSize(266);
 
     RulesDefinition.Rule rule = repository.rule("AbstractMethodCall");
     assertThat(rule).isNotNull();

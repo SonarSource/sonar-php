@@ -21,8 +21,7 @@ package org.sonar.plugins.php;
 
 import java.io.File;
 import java.util.Collections;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -30,36 +29,32 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.php.cache.Cache;
 import org.sonarsource.analyzer.commons.ProgressReport;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-public class ScannerTest {
+class ScannerTest {
 
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
   private ProgressReport progressReport = mock(ProgressReport.class);
 
-  @org.junit.Rule
-  public final ExpectedException thrown = ExpectedException.none();
-
   @Test
-  public void progress_report_should_be_stopped() {
+  void progressReportShouldBeStopped() {
     TestScanner scanner = new TestScanner(context);
     scanner.execute(progressReport, Collections.singletonList(PhpTestUtils.inputFile("empty.php")));
     verify(progressReport).stop();
   }
 
   @Test
-  public void cancelled_analysis() {
+  void cancelledAnalysis() {
     Scanner scanner = new TestScanner(context);
     context.setCancelled(true);
-    thrown.expectMessage("Analysis cancelled");
-    try {
-      scanner.execute(progressReport, Collections.singletonList(PhpTestUtils.inputFile("empty.php")));
-    } finally {
-      verify(progressReport).cancel();
-      verify(progressReport, never()).stop();
-    }
+    Throwable throwable = catchThrowable(() -> scanner.execute(progressReport, Collections.singletonList(PhpTestUtils.inputFile("empty.php"))));
+    assertThat(throwable).hasMessage("Analysis cancelled");
+    verify(progressReport).cancel();
+    verify(progressReport, never()).stop();
   }
 
   private static class TestScanner extends Scanner {

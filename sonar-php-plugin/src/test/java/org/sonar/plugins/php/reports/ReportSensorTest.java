@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.event.Level;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
@@ -38,7 +38,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
@@ -62,7 +62,7 @@ public abstract class ReportSensorTest {
     return elements.get(0);
   }
 
-  protected static void assertNoErrorWarnDebugLogs(LogTester logTester) {
+  protected static void assertNoErrorWarnDebugLogs(LogTesterJUnit5 logTester) {
     org.assertj.core.api.Assertions.assertThat(logTester.logs(Level.ERROR)).isEmpty();
     org.assertj.core.api.Assertions.assertThat(logTester.logs(Level.WARN)).isEmpty();
     org.assertj.core.api.Assertions.assertThat(logTester.logs(Level.DEBUG)).isEmpty();
@@ -105,14 +105,14 @@ public abstract class ReportSensorTest {
   }
 
   @Test
-  public void no_issues_without_report_paths_property() throws IOException {
+  void noIssuesWithoutReportPathsProperty() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting(null);
     assertThat(externalIssues).isEmpty();
     assertNoErrorWarnDebugLogs(logTester());
   }
 
   @Test
-  public void no_issues_with_invalid_report_path() throws IOException {
+  void noIssuesWithInvalidReportPath() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("invalid-path.txt");
     assertThat(externalIssues).isEmpty();
     assertThat(onlyOneLogElement(logTester().logs(Level.ERROR)))
@@ -124,7 +124,7 @@ public abstract class ReportSensorTest {
   }
 
   @Test
-  public void no_issues_with_invalid_file() throws IOException {
+  void noIssuesWithInvalidFile() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("not-" + sensor().reportKey() + "-report.json");
     assertThat(externalIssues).isEmpty();
     assertThat(onlyOneLogElement(logTester().logs(Level.ERROR)))
@@ -136,7 +136,7 @@ public abstract class ReportSensorTest {
   }
 
   @Test
-  public void no_issues_with_empty_file() throws IOException {
+  void noIssuesWithEmptyFile() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting(sensor().reportKey() + "-report-empty.json");
     assertThat(externalIssues).isEmpty();
     assertNoErrorWarnDebugLogs(logTester());
@@ -146,6 +146,6 @@ public abstract class ReportSensorTest {
 
   protected abstract ExternalIssuesSensor sensor();
 
-  protected abstract LogTester logTester();
+  protected abstract LogTesterJUnit5 logTester();
 
 }

@@ -24,8 +24,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.Severity;
@@ -34,7 +34,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
 import org.sonar.api.rules.RuleType;
-import org.sonar.api.testfixtures.log.LogTester;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
@@ -44,17 +44,17 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class PsalmSensorTest extends ReportSensorTest {
+class PsalmSensorTest extends ReportSensorTest {
 
   private static final String PSALM_PROPERTY = "sonar.php.psalm.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "psalm");
   private final PsalmSensor psalmSensor = new PsalmSensor(analysisWarnings);
 
-  @Rule
-  public final LogTester logTester = new LogTester().setLevel(Level.DEBUG);
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
 
   @Test
-  public void test_descriptor() {
+  void testDescriptor() {
     DefaultSensorDescriptor sensorDescriptor = new DefaultSensorDescriptor();
     psalmSensor.describe(sensorDescriptor);
     assertThat(sensorDescriptor.name()).isEqualTo("Import of Psalm issues");
@@ -69,11 +69,18 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue() throws IOException {
+  void raiseIssue() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report.json");
     assertThat(externalIssues).hasSize(3);
 
-    ExternalIssue first = externalIssues.get(0);
+    verifyPsalmReportIssue1(externalIssues.get(0));
+    verifyPsalmReportIssue2(externalIssues.get(0), externalIssues.get(1));
+    verifyPsalmReportIssue3(externalIssues.get(2));
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  private static void verifyPsalmReportIssue1(ExternalIssue first) {
     assertThat(first.type()).isEqualTo(RuleType.BUG);
     assertThat(first.severity()).isEqualTo(Severity.CRITICAL);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -86,8 +93,9 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(firstTextRange.start().lineOffset()).isEqualTo(4);
     assertThat(firstTextRange.end().line()).isEqualTo(5);
     assertThat(firstTextRange.end().lineOffset()).isEqualTo(16);
+  }
 
-    ExternalIssue second = externalIssues.get(1);
+  private static void verifyPsalmReportIssue2(ExternalIssue first, ExternalIssue second) {
     assertThat(second.type()).isEqualTo(RuleType.BUG);
     assertThat(second.severity()).isEqualTo(Severity.CRITICAL);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -100,8 +108,9 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(secondTextRange.start().lineOffset()).isEqualTo(1);
     assertThat(secondTextRange.end().line()).isEqualTo(2);
     assertThat(secondTextRange.end().lineOffset()).isEqualTo(10);
+  }
 
-    ExternalIssue third = externalIssues.get(2);
+  private static void verifyPsalmReportIssue3(ExternalIssue third) {
     assertThat(third.type()).isEqualTo(RuleType.BUG);
     assertThat(third.severity()).isEqualTo(Severity.MAJOR);
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
@@ -113,12 +122,10 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(thirdTextRange.start().lineOffset()).isEqualTo(4);
     assertThat(thirdTextRange.end().line()).isEqualTo(5);
     assertThat(thirdTextRange.end().lineOffset()).isEqualTo(16);
-
-    assertNoErrorWarnDebugLogs(logTester);
   }
 
   @Test
-  public void raise_issue_file_has_unix_absolute_paths() throws IOException {
+  void raiseIssueFileHasUnixAbsolutePaths() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-abs.json");
     assertThat(externalIssues).hasSize(3);
 
@@ -126,7 +133,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue_file_has_windows_absolute_paths() throws IOException {
+  void raiseIssueFileHasWindowsAbsolutePaths() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-abs_win.json");
     assertThat(externalIssues).hasSize(3);
 
@@ -134,11 +141,20 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void raise_issue_with_missing_fields() throws IOException {
+  void raiseIssueWithMissingFields() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-with-missing-fields.json");
     assertThat(externalIssues).hasSize(5);
 
-    ExternalIssue first = externalIssues.get(0);
+    verifyIssue1(externalIssues.get(0));
+    verifyIssue2(externalIssues.get(1));
+    verifyIssue3(externalIssues.get(2));
+    verifyIssue4(externalIssues.get(3));
+    verifyIssue5(externalIssues.get(4));
+
+    assertNoErrorWarnDebugLogs(logTester);
+  }
+
+  private static void verifyIssue1(ExternalIssue first) {
     assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(first.severity()).isEqualTo(Severity.MAJOR);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -151,8 +167,9 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(firstTextRange.start().lineOffset()).isEqualTo(4);
     assertThat(firstTextRange.end().line()).isEqualTo(5);
     assertThat(firstTextRange.end().lineOffset()).isEqualTo(16);
+  }
 
-    ExternalIssue second = externalIssues.get(1);
+  private static void verifyIssue2(ExternalIssue second) {
     assertThat(second.type()).isEqualTo(RuleType.SECURITY_HOTSPOT);
     assertThat(second.severity()).isEqualTo(Severity.INFO);
     assertThat(second.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -161,8 +178,9 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(secondPrimaryLoc.message()).isEqualTo("Issue without textRange");
     TextRange secondTextRange = secondPrimaryLoc.textRange();
     assertThat(secondTextRange).isNull();
+  }
 
-    ExternalIssue third = externalIssues.get(2);
+  private static void verifyIssue3(ExternalIssue third) {
     assertThat(third.type()).isEqualTo(RuleType.VULNERABILITY);
     assertThat(third.severity()).isEqualTo(Severity.BLOCKER);
     assertThat(third.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -175,8 +193,9 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(thirdTextRange.start().lineOffset()).isEqualTo(4);
     assertThat(thirdTextRange.end().line()).isEqualTo(2);
     assertThat(thirdTextRange.end().lineOffset()).isEqualTo(5);
+  }
 
-    ExternalIssue fourth = externalIssues.get(3);
+  private static void verifyIssue4(ExternalIssue fourth) {
     assertThat(fourth.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(fourth.severity()).isEqualTo(Severity.MINOR);
     assertThat(fourth.ruleId()).isEqualTo("InvalidScalarArgument");
@@ -189,8 +208,9 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(fourthTextRange.start().lineOffset()).isZero();
     assertThat(fourthTextRange.end().line()).isEqualTo(2);
     assertThat(fourthTextRange.end().lineOffset()).isEqualTo(22);
+  }
 
-    ExternalIssue fifth = externalIssues.get(4);
+  private static void verifyIssue5(ExternalIssue fifth) {
     assertThat(fifth.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(fifth.severity()).isEqualTo(Severity.MAJOR);
     assertThat(fifth.ruleId()).isEqualTo("psalm.finding");
@@ -203,12 +223,10 @@ public class PsalmSensorTest extends ReportSensorTest {
     assertThat(fifthTextRange.start().lineOffset()).isEqualTo(1);
     assertThat(fifthTextRange.end().line()).isEqualTo(2);
     assertThat(fifthTextRange.end().lineOffset()).isEqualTo(10);
-
-    assertNoErrorWarnDebugLogs(logTester);
   }
 
   @Test
-  public void raise_issue_with_errors() throws IOException {
+  void raiseIssueWithErrors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-with-errors.json");
     assertThat(externalIssues).hasSize(2);
 
@@ -248,7 +266,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Test
-  public void excluded_files_will_not_be_logged() throws IOException {
+  void excludedFilesWillNotBeLogged() throws IOException {
     executeSensorImporting("psalm-report-with-errors.json", Map.of("sonar.exclusion", "*/**/unknown.php"));
 
     assertThat(logTester.logs(Level.ERROR)).isEmpty();
@@ -267,7 +285,7 @@ public class PsalmSensorTest extends ReportSensorTest {
   }
 
   @Override
-  protected LogTester logTester() {
+  protected LogTesterJUnit5 logTester() {
     return logTester;
   }
 }

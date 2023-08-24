@@ -19,8 +19,8 @@
  */
 package org.sonar.plugins.php;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
@@ -30,17 +30,17 @@ import org.sonar.api.utils.Version;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PhpPluginTest {
+class PhpPluginTest {
 
   private PhpPlugin plugin;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     this.plugin = new PhpPlugin();
   }
 
   @Test
-  public void testNumberOfExtensionsInSonarQubeContext() {
+  void testNumberOfExtensionsInSonarQubeContext() {
     SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(9, 9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY);
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
@@ -49,7 +49,7 @@ public class PhpPluginTest {
   }
 
   @Test
-  public void testNumberOfExtensionsInSonarLintContext() {
+  void testNumberOfExtensionsInSonarLintContext() {
     SonarRuntime runtime = SonarRuntimeImpl.forSonarLint(Version.create(6, 7));
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
