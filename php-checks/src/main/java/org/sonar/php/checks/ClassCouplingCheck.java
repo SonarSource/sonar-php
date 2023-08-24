@@ -21,14 +21,16 @@ package org.sonar.php.checks;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -45,16 +47,17 @@ import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
-@Rule(key = ClassCouplingCheck.KEY)
+@Rule(key = "S1200")
 public class ClassCouplingCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1200";
   private static final String MESSAGE = "Split this class into smaller and more specialized ones " +
     "to reduce its dependencies on other classes from %s to the maximum authorized %s or less.";
+  private static final String SECONDARY_MESSAGE = "Dependency on %s.";
 
   public static final int DEFAULT = 20;
-  private final Deque<Set<String>> types = new ArrayDeque<>();
+  private final Deque<Map<String, Tree>> types = new ArrayDeque<>();
   private static final Set<String> DOC_TAGS = Set.of(
     "@var", "@global", "@staticvar", "@throws", "@param", "@return");
 
@@ -89,16 +92,33 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
   }
 
   private void leaveClass(ClassTree tree) {
-    int nbType = types.removeLast().size();
+    Map<String, Tree> coupledTrees = types.removeLast();
+    int numberOfTypes = coupledTrees.size();
 
-    if (nbType > max) {
-      String message = String.format(MESSAGE, nbType, max);
-      context().newIssue(this, tree.classToken(), message);
+    if (numberOfTypes > max) {
+      String message = String.format(MESSAGE, numberOfTypes, max);
+      PreciseIssue preciseIssue = context().newIssue(this, tree.classToken(), message);
+
+      raiseSecondaryLocations(preciseIssue, coupledTrees);
+    }
+  }
+
+  private static void raiseSecondaryLocations(PreciseIssue preciseIssue, Map<String, Tree> coupledTrees) {
+    Map<Tree, String> treeToNames = new HashMap<>();
+
+    // calculate which tree's aggregate multiple dependencies
+    for (Map.Entry<String, Tree> nameAndTree : coupledTrees.entrySet()) {
+      treeToNames.compute(nameAndTree.getValue(),
+        (k, oldValue) -> oldValue == null ? nameAndTree.getKey() : oldValue.concat(", " + nameAndTree.getKey()));
+    }
+
+    for (Map.Entry<Tree, String> treeAndNames : treeToNames.entrySet()) {
+      preciseIssue.secondary(treeAndNames.getKey(), String.format(SECONDARY_MESSAGE, treeAndNames.getValue()));
     }
   }
 
   private void enterClass(ClassTree tree) {
-    types.addLast(new HashSet<>());
+    types.addLast(new HashMap<>());
     retrieveCoupledTypes(tree);
   }
 
@@ -132,7 +152,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
     for (ParameterTree parameter : methodDeclaration.parameters().parameters()) {
       DeclaredTypeTree type = parameter.declaredType();
       if (type != null && type.isSimple() && ((TypeTree) type).typeName().is(Kind.NAMESPACE_NAME)) {
-        addType(getTypeName((NamespaceNameTree) ((TypeTree) type).typeName()));
+        addType(getTypeName((NamespaceNameTree) ((TypeTree) type).typeName()), type);
       }
     }
   }
@@ -142,12 +162,12 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
 
     for (SyntaxTrivia comment : varDecToken.trivias()) {
       for (String line : comment.text().split("[" + LexicalConstant.LINE_TERMINATOR + "]++")) {
-        retrieveTypeFromCommentLine(line);
+        retrieveTypeFromCommentLine(line, comment);
       }
     }
   }
 
-  private void retrieveTypeFromCommentLine(String line) {
+  private void retrieveTypeFromCommentLine(String line, Tree trivia) {
     String[] commentLine = line.trim().split("[" + LexicalConstant.WHITESPACE + "]++");
 
     if (commentLine.length > 2 && DOC_TAGS.contains(commentLine[1])) {
@@ -155,7 +175,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
         type = StringUtils.removeEnd(type, "[]");
 
         if (!EXCLUDED_TYPES.contains(type.toLowerCase(Locale.ROOT))) {
-          addType(type);
+          addType(type, trivia);
         }
       }
     }
@@ -168,11 +188,11 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
       ExpressionTree callee = ((FunctionCallTree) expression).callee();
 
       if (callee.is(Kind.NAMESPACE_NAME)) {
-        addType(getTypeName((NamespaceNameTree) callee));
+        addType(getTypeName((NamespaceNameTree) callee), callee);
       }
 
     } else if (expression.is(Kind.NAMESPACE_NAME)) {
-      addType(getTypeName((NamespaceNameTree) expression));
+      addType(getTypeName((NamespaceNameTree) expression), expression);
     }
   }
 
@@ -187,9 +207,9 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
     return name;
   }
 
-  private void addType(String type) {
+  private void addType(String type, Tree tree) {
     if (!types.isEmpty()) {
-      types.getLast().add(type);
+      types.getLast().compute(type, (k, v) -> v == null || v instanceof SyntaxTrivia ? tree : v);
     }
   }
 
