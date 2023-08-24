@@ -51,12 +51,12 @@ class CustomRulesTest {
   }
 
   @Test
-  void base_tree_visitor_check() {
+  void baseTreeVisitorCheck() {
     assertSingleIssue("php-custom-rules:visitor", 5, "Function expression.", "5min");
   }
 
   @Test
-  void subscription_base_visitor_check() {
+  void subscriptionBaseVisitorCheck() {
     assertSingleIssue("php-custom-rules:subscription", 8, "For statement.", "10min");
   }
 

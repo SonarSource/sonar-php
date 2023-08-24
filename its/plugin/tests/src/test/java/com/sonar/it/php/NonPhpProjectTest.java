@@ -53,7 +53,7 @@ class NonPhpProjectTest {
   }
 
   @Test
-  void test_execution_of_sensors() {
+  void testExecutionOfSensors() {
     assertThat(buildResult.getLogs()).doesNotContain(Tests.PHP_SENSOR_NAME);
     assertThat(buildResult.getLogs()).doesNotContain(Tests.PHP_INI_SENSOR_NAME);
     assertThat(buildResult.getLogs()).contains("1 file indexed");

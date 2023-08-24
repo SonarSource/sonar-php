@@ -134,7 +134,7 @@ class PHPIntegrationTest {
    * SONARPHP-278
    */
   @Test
-  void should_be_compatible_with_DevCockpit() {
+  void shouldBeCompatibleWithDevCockpit() {
     assertThat(getFileMeasure("ncloc_data").getValue()).isNotEmpty();
   }
 
