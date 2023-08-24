@@ -206,18 +206,15 @@ class ClassSymbolIndexTest {
     assertThat(a.getDeclaredMethod("methodA").isUnknownSymbol()).isFalse();
     assertThat(a.getDeclaredMethod("random").isUnknownSymbol()).isTrue();
     assertThat(a.is(ClassSymbol.Kind.NORMAL)).isTrue();
-    assertThat(a.hasTestMethod().isTrue()).isFalse();
 
     ClassSymbol b = symbols.get(fqn("b"));
     assertThat(b.declaredMethods()).isEmpty();
     assertThat(b.getDeclaredMethod("methodA")).isInstanceOf(UnknownMethodSymbol.class);
     assertThat(a.is(ClassSymbol.Kind.INTERFACE)).isFalse();
-    assertThat(b.hasTestMethod().isTrue()).isFalse();
 
     ClassSymbol unknown = symbols.get(fqn("unknown"));
     assertThat(unknown.declaredMethods()).isEmpty();
     assertThat(unknown.getDeclaredMethod("foo")).isInstanceOf(UnknownMethodSymbol.class);
-    assertThat(unknown.hasTestMethod().isTrue()).isFalse();
   }
 
   @Test
@@ -227,7 +224,6 @@ class ClassSymbolIndexTest {
     ClassSymbol classSymbol = symbols.get(fqn("x"));
     assertThat(classSymbol).isInstanceOf(UnknownClassSymbol.class);
     assertThat(classSymbol.is(ClassSymbol.Kind.NORMAL)).isFalse();
-    assertThat(classSymbol.hasTestMethod().isTrue()).isFalse();
 
     MethodSymbol methodSymbol = classSymbol.getDeclaredMethod("y");
     assertThat(methodSymbol).isInstanceOf(UnknownMethodSymbol.class);

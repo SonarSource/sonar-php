@@ -73,8 +73,4 @@ public class ClassSymbolData {
   public ClassSymbol.Kind kind() {
     return kind;
   }
-
-  public boolean hasTestMethod() {
-    return methods().stream().anyMatch(MethodSymbolData::isTestMethod);
-  }
 }

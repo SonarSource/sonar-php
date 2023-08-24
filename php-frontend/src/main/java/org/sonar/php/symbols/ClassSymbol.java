@@ -52,6 +52,4 @@ public interface ClassSymbol extends Symbol {
     ABSTRACT,
     INTERFACE
   }
-
-  Trilean hasTestMethod();
 }

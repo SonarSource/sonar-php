@@ -42,6 +42,6 @@ public class NoTestInTestClassCheck extends PhpUnitCheck {
   private boolean hasSuperClassWithTestMethod(ClassDeclarationTree tree) {
     ClassSymbol symbol = ((ClassDeclarationTreeImpl) tree).symbol();
     // as allSuperTypes() contains the ClassSymbol of the tree itself, this is sufficient to check
-    return symbol.allSuperTypes().stream().anyMatch(superTypeSymbol -> superTypeSymbol.hasTestMethod().isTrue());
+    return symbol.allSuperTypes().stream().anyMatch(this::hasTestMethod);
   }
 }

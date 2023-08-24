@@ -28,4 +28,9 @@ class NoTestInTestClassCheckTest {
   void test() {
     CheckVerifier.verify(new NoTestInTestClassCheck(), "phpunit/NoTestInTestClassCheck.php");
   }
+
+  @Test
+  void testWithoutImportingTestAttribute() {
+    CheckVerifier.verify(new NoTestInTestClassCheck(), "phpunit/NoTestInTestClassCheckWithoutImportingTestAttribute.php");
+  }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class MyTest extends TestCase {
   /** @test */
@@ -61,4 +62,10 @@ class MyTest extends TestCase {
   public function testK() { // Compliant
     doTest();
   }
+
+  #[Test]
+  public function testF() {} // Noncompliant
+
+  /** @test */
+  public function testG() {} // Noncompliant
 }

@@ -106,11 +106,6 @@ public class ClassSymbolIndex {
     }
 
     @Override
-    public Trilean hasTestMethod() {
-      return data.hasTestMethod() ? Trilean.TRUE : Trilean.FALSE;
-    }
-
-    @Override
     public List<MethodSymbol> declaredMethods() {
       return new ArrayList<>(methods.values());
     }

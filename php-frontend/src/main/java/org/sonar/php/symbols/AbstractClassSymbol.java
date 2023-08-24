@@ -61,6 +61,9 @@ public abstract class AbstractClassSymbol implements ClassSymbol {
     return Trilean.FALSE;
   }
 
+  /**
+   * Returns back the class symbol of all its super types and itself
+   */
   @Override
   public Set<ClassSymbol> allSuperTypes() {
     if (allSuperTypes == null) {
@@ -77,10 +80,5 @@ public abstract class AbstractClassSymbol implements ClassSymbol {
       }
     }
     return allSuperTypes;
-  }
-
-  @Override
-  public Trilean hasTestMethod() {
-    return Trilean.UNKNOWN;
   }
 }
