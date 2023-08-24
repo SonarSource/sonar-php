@@ -19,15 +19,15 @@
  */
 package org.sonar.samples.php;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MyPhpRulesTest {
+class MyPhpRulesTest {
 
   @Test
-  public void rules() {
+  void rules() {
     MyPhpRules rulesDefinition = new MyPhpRules();
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
