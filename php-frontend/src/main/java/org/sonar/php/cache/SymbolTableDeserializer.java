@@ -156,12 +156,13 @@ public class SymbolTableDeserializer {
     Visibility visibility = Visibility.valueOf(readString());
     String name = readString();
     boolean isAbstract = readBoolean();
+    boolean isTestMethod = readBoolean();
     LocationInFile location = readLocation();
     List<Parameter> parameters = readParameters();
     boolean hasReturn = readBoolean();
     boolean hasFuncGetArgs = readBoolean();
     FunctionSymbolData.FunctionSymbolProperties properties = new FunctionSymbolData.FunctionSymbolProperties(hasReturn, hasFuncGetArgs);
-    return new MethodSymbolData(location, name, parameters, properties, visibility, isAbstract);
+    return new MethodSymbolData(location, name, parameters, properties, visibility, isAbstract, isTestMethod);
   }
 
   private List<Parameter> readParameters() throws IOException {

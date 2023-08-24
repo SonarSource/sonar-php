@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ATest extends TestCase {
   public function testA() {
@@ -62,6 +63,20 @@ class ATest extends TestCase {
 
     $this->assertTrue($a); // Compliant
     throw $e;
+  }
+
+  #[Test]
+  public function attributedMethod() {
+      $this->expectException(\RuntimeException::class);
+      doSomething();
+      $this->assertTrue($a); // Noncompliant
+  }
+
+  /** @test */
+  public function annotatedMethod() {
+      $this->expectException(\RuntimeException::class);
+      doSomething();
+      $this->assertTrue($a); // Noncompliant
   }
 }
 

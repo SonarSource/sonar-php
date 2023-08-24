@@ -21,10 +21,9 @@ package org.sonar.php.checks.phpunit;
 
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
-import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 
 @Rule(key = "S2187")
 public class NoTestInTestClassCheck extends PhpUnitCheck {
@@ -33,20 +32,16 @@ public class NoTestInTestClassCheck extends PhpUnitCheck {
 
   @Override
   protected void visitPhpUnitTestCase(ClassDeclarationTree tree) {
-    if (!tree.isAbstract()) {
-      boolean hasTestMethod = false;
-      for (ClassMemberTree member : tree.members()) {
-        if (member.is(Tree.Kind.METHOD_DECLARATION) && isTestCaseMethod((MethodDeclarationTree) member)) {
-          hasTestMethod = true;
-          break;
-        }
-      }
-
-      if (!hasTestMethod) {
-        newIssue(tree.name(), MESSAGE);
-      }
+    if (!tree.isAbstract() && !hasSuperClassWithTestMethod(tree)) {
+      newIssue(tree.name(), MESSAGE);
     }
 
     super.visitPhpUnitTestCase(tree);
+  }
+
+  private boolean hasSuperClassWithTestMethod(ClassDeclarationTree tree) {
+    ClassSymbol symbol = ((ClassDeclarationTreeImpl) tree).symbol();
+    // as allSuperTypes() contains the ClassSymbol of the tree itself, this is sufficient to check
+    return symbol.allSuperTypes().stream().anyMatch(this::hasTestMethod);
   }
 }

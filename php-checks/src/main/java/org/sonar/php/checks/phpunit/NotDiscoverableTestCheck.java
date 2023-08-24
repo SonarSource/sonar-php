@@ -130,7 +130,7 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
   }
 
   private static boolean isMarkedAsTestMethod(MethodDeclarationTree tree) {
-    return tree.name().text().startsWith("test") || CheckUtils.hasAnnotation(tree, "test");
+    return tree.name().text().startsWith("test") || TreeUtils.hasAnnotation(tree, "test");
   }
 
   private static class InternalCallsFindVisitor extends PhpUnitCheck {

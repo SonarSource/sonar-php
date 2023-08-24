@@ -28,5 +28,7 @@ public interface MethodSymbol extends FunctionSymbol {
 
   Trilean isAbstract();
 
+  Trilean isTestMethod();
+
   ClassSymbol owner();
 }

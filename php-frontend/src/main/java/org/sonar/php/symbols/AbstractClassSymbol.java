@@ -61,7 +61,11 @@ public abstract class AbstractClassSymbol implements ClassSymbol {
     return Trilean.FALSE;
   }
 
-  private Set<ClassSymbol> allSuperTypes() {
+  /**
+   * Returns back the class symbol of all its super types and itself
+   */
+  @Override
+  public Set<ClassSymbol> allSuperTypes() {
     if (allSuperTypes == null) {
       allSuperTypes = new HashSet<>();
       Deque<ClassSymbol> workList = new ArrayDeque<>();
@@ -77,5 +81,4 @@ public abstract class AbstractClassSymbol implements ClassSymbol {
     }
     return allSuperTypes;
   }
-
 }

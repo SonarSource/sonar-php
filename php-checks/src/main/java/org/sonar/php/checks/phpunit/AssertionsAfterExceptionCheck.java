@@ -26,6 +26,7 @@ import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.utils.collections.SetUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -76,7 +77,7 @@ public class AssertionsAfterExceptionCheck extends PhpUnitCheck {
 
   private static boolean hasExpectAnnotation(MethodDeclarationTree tree) {
     for (String method : EXPECT_ANNOTATIONS) {
-      if (CheckUtils.hasAnnotation(tree, method)) {
+      if (TreeUtils.hasAnnotation(tree, method)) {
         return true;
       }
     }

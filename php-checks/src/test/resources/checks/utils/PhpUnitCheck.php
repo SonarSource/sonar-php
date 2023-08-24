@@ -28,3 +28,8 @@ class MyLastTest extends TestCase {
 class MyRelyLastTest extends TestCase {
   public function method() {} // OK
 }
+
+class MyAttribute1 extends TestCase {
+  #[PHPUnit\Framework\Attributes\Test] // Noncompliant {{Identified as test method.}}
+  public function foo() {}
+}

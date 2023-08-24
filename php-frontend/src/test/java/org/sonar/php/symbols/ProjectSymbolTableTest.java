@@ -243,6 +243,7 @@ class ProjectSymbolTableTest {
     assertThat(methodSymbol.hasReturn()).isFalse();
     assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
     assertThat(methodSymbol.location()).isEqualTo(new LocationInFileImpl(filePath("file1.php"), 1, 56, 1, 59));
+    assertThat(methodSymbol.isTestMethod().isTrue()).isFalse();
   }
 
   @Test
@@ -324,6 +325,23 @@ class ProjectSymbolTableTest {
     Optional<MethodDeclarationTree> methodDeclaration = firstDescendant(ast, MethodDeclarationTree.class);
     MethodSymbol methodSymbol = Symbols.get(methodDeclaration.get());
     assertThat(methodSymbol.isAbstract().isTrue()).isTrue();
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "<?php class A {public function testFoo(){}}",
+    "<?php class A {#[PHPUnit\\Framework\\Attributes\\Test] public function foo(){}}",
+    "<?php use PHPUnit\\Framework\\Attributes\\Test; class A {#[Test] public function foo(){}}",
+    "<?php use PHPUnit\\Framework; class A {#[Framework\\Attributes\\Test] public function foo(){}}",
+    "<?php class A {/** * @test */ public function foo(){}}",
+  })
+  void shouldIdentifyTestMethodInClass(String code) {
+    PhpFile file1 = file("file1.php", code);
+    Tree ast = getAst(file1, buildProjectSymbolData(file1));
+
+    Optional<MethodDeclarationTree> methodDeclaration = firstDescendant(ast, MethodDeclarationTree.class);
+    MethodSymbol methodSymbol = Symbols.get(methodDeclaration.get());
+    assertThat(methodSymbol.isTestMethod().isTrue()).isTrue();
   }
 
   private ProjectSymbolData buildProjectSymbolData(PhpFile... files) {

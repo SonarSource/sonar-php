@@ -65,9 +65,9 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       return;
     }
 
-    if (CheckUtils.hasAnnotation(tree, "expectedException")
-      || CheckUtils.hasAnnotation(tree, "doesNotPerformAssertions")
-      || CheckUtils.hasAnnotation(tree, "expectedDeprecation")) {
+    if (TreeUtils.hasAnnotation(tree, "expectedException")
+      || TreeUtils.hasAnnotation(tree, "doesNotPerformAssertions")
+      || TreeUtils.hasAnnotation(tree, "expectedDeprecation")) {
       return;
     }
 

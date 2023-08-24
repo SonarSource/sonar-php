@@ -20,6 +20,7 @@
 package org.sonar.php.tree;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -28,10 +29,13 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 
 import static java.util.Arrays.asList;
+import static org.sonar.php.utils.collections.ListUtils.getLast;
 
 public class TreeUtils {
 
@@ -82,5 +86,19 @@ public class TreeUtils {
 
   public static <T extends Tree> Optional<T> firstDescendant(Tree root, Class<T> clazz) {
     return (Optional<T>) firstDescendant(root, clazz::isInstance);
+  }
+
+  public static boolean hasAnnotation(Tree declaration, String annotation) {
+    if (!annotation.startsWith("@")) {
+      annotation = "@" + annotation;
+    }
+
+    List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
+
+    if (!trivias.isEmpty()) {
+      return StringUtils.containsIgnoreCase(getLast(trivias).text(), annotation);
+    }
+
+    return false;
   }
 }

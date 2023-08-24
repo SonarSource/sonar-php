@@ -22,6 +22,8 @@ package org.sonar.php.symbols;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
@@ -50,6 +52,7 @@ class MethodSymbolTest {
     MethodSymbol foo = firstDescendant(ast, MethodDeclarationTreeImpl.class).get().symbol();
     assertThat(anonymous.declaredMethods().get(0)).isSameAs(foo);
     assertThat(foo.owner()).isSameAs(anonymous);
+    assertThat(foo.isTestMethod().isTrue()).isFalse();
   }
 
   @Test
@@ -151,6 +154,23 @@ class MethodSymbolTest {
       .isNotEqualTo(arg5)
       .isNotEqualTo(arg6)
       .isNotEqualTo((Object) classes.get("C1"));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "<?php class A {public function testFoo(){}}",
+    "<?php class A {#[PHPUnit\\Framework\\Attributes\\Test] public function foo(){}}",
+    "<?php use PHPUnit\\Framework\\Attributes\\Test; class A {#[Test] public function foo(){}}",
+    "<?php use PHPUnit\\Framework; class A {#[Framework\\Attributes\\Test] public function foo(){}}",
+    "<?php class A {/** * @test */ public function foo(){}}",
+  })
+  void shouldIdentifyTestMethodInClass(String code) {
+    Tree ast = parse(code);
+    ClassSymbol classSymbol = Symbols.get(firstDescendant(ast, ClassDeclarationTreeImpl.class).get());
+    MethodSymbol methodSymbol = firstDescendant(ast, MethodDeclarationTreeImpl.class).get().symbol();
+
+    assertThat(classSymbol.declaredMethods().get(0)).isSameAs(methodSymbol);
+    assertThat(methodSymbol.isTestMethod().isTrue()).isTrue();
   }
 
   private Map<String, ClassSymbol> parseMultipleClasses(String... lines) {

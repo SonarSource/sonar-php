@@ -25,7 +25,14 @@ import org.sonar.plugins.php.CheckVerifier;
 class NoTestInTestClassCheckTest {
 
   @Test
-  void test() {
-    CheckVerifier.verify(new NoTestInTestClassCheck(), "phpunit/NoTestInTestClassCheck.php");
+  void testWithImportingTestAttribute() {
+    CheckVerifier.verify(new NoTestInTestClassCheck(),
+      "phpunit/NoTestInTestClassCheckImportingTestAttribute.php");
+  }
+
+  @Test
+  void testWithoutImportingTestAttribute() {
+    CheckVerifier.verify(new NoTestInTestClassCheck(),
+      "phpunit/NoTestInTestClassCheckWithoutImportingTestAttribute.php");
   }
 }

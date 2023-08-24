@@ -55,6 +55,7 @@ class SymbolTableSerializerTest {
       List.of(new Parameter("$transport", "Zend_Mail_Transport_Abstract", false, false)),
       new FunctionSymbolData.FunctionSymbolProperties(false, false),
       Visibility.PUBLIC,
+      false,
       false));
     methods.add(new MethodSymbolData(
       new LocationInFileImpl("Mail.php", 195, 27, 195, 46),
@@ -62,6 +63,7 @@ class SymbolTableSerializerTest {
       List.of(),
       new FunctionSymbolData.FunctionSymbolProperties(true, false),
       Visibility.PUBLIC,
+      false,
       false));
 
     methods.add(new MethodSymbolData(
@@ -70,6 +72,7 @@ class SymbolTableSerializerTest {
       List.of(new Parameter("$charset", null, true, false)),
       new FunctionSymbolData.FunctionSymbolProperties(false, false),
       Visibility.PUBLIC,
+      false,
       false));
 
     ClassSymbolData classSymbolData = new ClassSymbolData(

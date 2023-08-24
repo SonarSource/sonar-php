@@ -50,6 +50,11 @@ public class UnknownMethodSymbol extends UnknownFunctionSymbol implements Method
   }
 
   @Override
+  public Trilean isTestMethod() {
+    return Trilean.UNKNOWN;
+  }
+
+  @Override
   public ClassSymbol owner() {
     return new UnknownClassSymbol(QualifiedName.qualifiedName("unknown"));
   }
