@@ -19,8 +19,6 @@
  */
 package org.sonar.php.checks.security;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import org.sonar.check.Rule;
@@ -37,7 +35,7 @@ public class RegexUsageCheck extends FunctionUsageCheck {
 
   private static final String MESSAGE = "Make sure that using a regular expression is safe here.";
 
-  private static final Set<Character> SPECIAL_CHARS = new HashSet<>(Arrays.asList('+', '*', '{'));
+  private static final Set<Character> SPECIAL_CHARS = Set.of('+', '*', '{');
   private static final int MIN_PATTERN_LENGTH = 3 + 2 + 2; // 2 for string quotes and 2 for regex pattern delimeters
 
   // this function accepts pattern as second argument, all others as first

@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
@@ -148,7 +147,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       if (symbol != null && symbol.is(Symbol.Kind.FUNCTION)) {
         return Optional.ofNullable((MethodDeclarationTree) TreeUtils.findAncestorWithKind(
           symbol.declaration(),
-          Set.of(Tree.Kind.METHOD_DECLARATION)));
+          Tree.Kind.METHOD_DECLARATION));
       }
 
       return Optional.empty();

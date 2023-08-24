@@ -69,8 +69,7 @@ public class PhpPrAnalysisTest {
       // <scenario>, <total files>, <skipped>, <deleted>
       Arguments.of("added", 3, 2, Collections.emptyList()),
       Arguments.of("changed", 2, 1, Collections.emptyList()),
-      Arguments.of("deleted", 1, 1, List.of("AbstractController.php"))
-    );
+      Arguments.of("deleted", 1, 1, List.of("AbstractController.php")));
   }
 
   @ParameterizedTest

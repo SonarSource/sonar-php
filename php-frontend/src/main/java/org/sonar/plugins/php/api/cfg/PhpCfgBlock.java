@@ -45,7 +45,6 @@ class PhpCfgBlock implements CfgBlock {
   }
 
   PhpCfgBlock(PhpCfgBlock successor, PhpCfgBlock syntacticSuccessor) {
-
     this(Set.of(successor), syntacticSuccessor);
   }
 

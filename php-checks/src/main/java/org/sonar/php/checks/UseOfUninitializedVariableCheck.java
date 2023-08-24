@@ -457,7 +457,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     @Override
     public void visitVariableIdentifier(VariableIdentifierTree tree) {
       if (uninitializedVariableDeclaration(tree)
-        && TreeUtils.findAncestorWithKind(tree, Set.of(Kind.STATIC_STATEMENT)) != null) {
+        && TreeUtils.findAncestorWithKind(tree, Kind.STATIC_STATEMENT) != null) {
         uninitializedStaticVariables.add(tree.variableExpression().text());
       }
       super.visitVariableIdentifier(tree);
