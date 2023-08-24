@@ -106,6 +106,8 @@
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>
 
+    <!-- TODO SONARPHP-1463 Investigate if doclint suppress warnings can be removed -->
+    <doclint>none</doclint>
   </properties>
 
   <dependencyManagement>
