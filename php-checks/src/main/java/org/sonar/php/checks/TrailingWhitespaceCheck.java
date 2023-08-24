@@ -20,38 +20,48 @@
 package org.sonar.php.checks;
 
 import java.util.Iterator;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.LexicalConstant;
+import org.sonar.php.symbols.LocationInFileImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.IssueLocation;
+import org.sonar.plugins.php.api.visitors.LocationInFile;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = TrailingWhitespaceCheck.KEY)
+@Rule(key = "S1131")
 public class TrailingWhitespaceCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1131";
   private static final String MESSAGE = "Remove the useless trailing whitespaces at the end of this line.";
 
-  private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[^" + LexicalConstant.WHITESPACE + "]+[" + LexicalConstant.WHITESPACE + "]+$");
+  private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[^" + LexicalConstant.WHITESPACE + "]+([" + LexicalConstant.WHITESPACE + "]+)$");
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     Stream<String> lines = CheckUtils.lines(context().getPhpFile());
 
     Iterator<String> it = lines.iterator();
-    int i = 0;
+    int lineNumber = 1;
     while (it.hasNext()) {
-      if (test(it.next())) {
-        context().newLineIssue(this, i + 1, MESSAGE);
-      }
-      i++;
+      checkLine(it.next(), lineNumber);
+      lineNumber++;
     }
   }
 
-  private static boolean test(String line) {
-    return line.length() > 0 && WHITESPACE_PATTERN.matcher(line).find();
+  private void checkLine(String line, int lineNumber) {
+    if (!line.isEmpty()) {
+      Matcher m = WHITESPACE_PATTERN.matcher(line);
+      if (m.find()) {
+        context().newIssue(this, issueLocation(m, lineNumber));
+      }
+    }
   }
 
+  private static IssueLocation issueLocation(Matcher m, int lineNumber) {
+    LocationInFile location = new LocationInFileImpl(null, lineNumber, m.start(1), lineNumber, m.end(1));
+    return new IssueLocation(location, MESSAGE);
+  }
 }

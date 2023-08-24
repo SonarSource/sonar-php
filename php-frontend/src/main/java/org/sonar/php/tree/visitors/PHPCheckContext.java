@@ -88,7 +88,8 @@ public class PHPCheckContext implements CheckContext, RegexCheckContext {
     return newIssue(check, new PhpRegexCheck.PhpRegexIssueLocation(regexTree, message));
   }
 
-  private PreciseIssue newIssue(PHPCheck check, IssueLocation issueLocation) {
+  @Override
+  public PreciseIssue newIssue(PHPCheck check, IssueLocation issueLocation) {
     PreciseIssue issue = new PreciseIssue(check, issueLocation);
     issues.add(issue);
 
