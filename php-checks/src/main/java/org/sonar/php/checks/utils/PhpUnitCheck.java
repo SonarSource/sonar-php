@@ -266,14 +266,14 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
   }
 
   protected boolean isTestCaseMethod(MethodDeclarationTree tree) {
-    return isPhpUnitTestCase && hasTestMethod(((MethodDeclarationTreeImpl) tree).symbol());
+    return isPhpUnitTestCase && isTestMethod(((MethodDeclarationTreeImpl) tree).symbol());
   }
 
   protected boolean hasTestMethod(ClassSymbol symbol) {
-    return symbol.declaredMethods().stream().anyMatch(this::hasTestMethod);
+    return symbol.declaredMethods().stream().anyMatch(this::isTestMethod);
   }
 
-  protected boolean hasTestMethod(MethodSymbol symbol) {
+  protected boolean isTestMethod(MethodSymbol symbol) {
     return symbol.isTestMethod().isTrue();
   }
 

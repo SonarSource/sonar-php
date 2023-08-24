@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
@@ -310,16 +311,19 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
     }
   }
 
-  private boolean isTestMethod(MethodDeclarationTree tree, Visibility visibility) {
-    boolean hasTestName = tree.name().text().startsWith("test");
+  private boolean isTestMethod(MethodDeclarationTree methodTree, Visibility visibility) {
+    if (!Visibility.PUBLIC.equals(visibility)) {
+      return false;
+    }
 
-    boolean hasTestAttribute = tree.attributeGroups().stream()
+    Predicate<MethodDeclarationTree> hasTestNamePrefix = tree -> tree.name().text().startsWith("test");
+
+    Predicate<MethodDeclarationTree> hasTestAnnotation = tree -> TreeUtils.hasAnnotation(tree, "@test");
+
+    Predicate<MethodDeclarationTree> hasTestAttribute = tree -> tree.attributeGroups().stream()
       .flatMap(group -> group.attributes().stream()).map(AttributeTree::name)
       .anyMatch(nameTree -> "phpunit\\framework\\attributes\\test".equals(getFullyQualifiedName(nameTree, Symbol.Kind.CLASS).toString()));
 
-    boolean hasTestAnnotation = TreeUtils.hasAnnotation(tree, "@test");
-
-    return Visibility.PUBLIC.equals(visibility) &&
-      (hasTestName || hasTestAnnotation || hasTestAttribute);
+    return hasTestNamePrefix.or(hasTestAnnotation).or(hasTestAttribute).test(methodTree);
   }
 }

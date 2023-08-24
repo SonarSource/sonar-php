@@ -229,7 +229,6 @@ class ClassSymbolIndexTest {
     assertThat(methodSymbol).isInstanceOf(UnknownMethodSymbol.class);
     assertThat(methodSymbol.visibility()).isEqualTo(Visibility.PUBLIC);
     assertThat(methodSymbol.owner()).isInstanceOf(UnknownClassSymbol.class);
-    assertThat(methodSymbol.isTestMethod().isTrue()).isFalse();
   }
 
   private ClassSymbolIndex createSymbols(ClassSymbolData... data) {

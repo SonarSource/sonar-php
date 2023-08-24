@@ -335,7 +335,7 @@ class ProjectSymbolTableTest {
     "<?php use PHPUnit\\Framework; class A {#[Framework\\Attributes\\Test] public function foo(){}}",
     "<?php class A {/** * @test */ public function foo(){}}",
   })
-  void getTestMethod(String code) {
+  void shouldIdentifyTestMethodInClass(String code) {
     PhpFile file1 = file("file1.php", code);
     Tree ast = getAst(file1, buildProjectSymbolData(file1));
 
