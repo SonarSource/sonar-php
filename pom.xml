@@ -54,6 +54,7 @@
     <module>sonar-php-plugin</module>
     <module>php-frontend</module>
     <module>php-checks</module>
+    <module>php-custom-rules</module>
   </modules>
 
   <scm>
@@ -105,8 +106,6 @@
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>
 
-    <!-- FIXME fix javadoc errors and remove this -->
-    <doclint>none</doclint>
   </properties>
 
   <dependencyManagement>

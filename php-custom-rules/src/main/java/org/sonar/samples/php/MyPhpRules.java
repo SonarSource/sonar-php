@@ -1,7 +1,7 @@
 /*
- * SonarQube PHP Custom Rules Example
- * Copyright (C) 2016-2016 SonarSource SA
- * mailto:contact AT sonarsource DOT com
+ * SonarQube PHP Plugin
+ * Copyright (C) 2016-2023 SonarSource SA
+ * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,14 +19,13 @@
  */
 package org.sonar.samples.php;
 
-
-import com.google.common.collect.ImmutableList;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
@@ -52,13 +51,14 @@ public class MyPhpRules implements RulesDefinition, PHPCustomRuleRepository {
    * to be part of the rule repository
    */
   @Override
-  public ImmutableList<Class> checkClasses() {
-    return ImmutableList.of(ForbiddenFunctionUseCheck.class, OtherForbiddenFunctionUseCheck.class);
+  public List<Class<?>> checkClasses() {
+    return List.of(ForbiddenFunctionUseCheck.class, OtherForbiddenFunctionUseCheck.class);
   }
 
   @Override
   public void define(Context context) {
-    NewRepository repository = context.createRepository(repositoryKey(), "php").setName("MyCompany Custom Repository");
+    NewRepository repository = context.createRepository(repositoryKey(), "php")
+      .setName("MyCompany Custom Repository");
 
     // Load rule meta data from annotations
     RulesDefinitionAnnotationLoader annotationLoader = new RulesDefinitionAnnotationLoader();

@@ -1,7 +1,7 @@
 /*
- * SonarQube PHP Custom Rules Example
- * Copyright (C) 2016-2016 SonarSource SA
- * mailto:contact AT sonarsource DOT com
+ * SonarQube PHP Plugin
+ * Copyright (C) 2016-2023 SonarSource SA
+ * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,6 @@
  */
 package org.sonar.samples.php.checks;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import java.util.List;
 import java.util.Set;
 import org.sonar.check.Priority;
@@ -47,17 +45,17 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
   priority = Priority.MAJOR,
   name = "Forbidden function should not be used.",
   tags = {"convention"},
-// Description can either be given in this annotation or through HTML name <ruleKey>.html located in package src/resources/org/sonar/l10n/php/rules/<repositoryKey>
-  description = "<p>The following functions should not be used:</p> <ul><li>foo</li> <li>bar</li></ul>"
-  )
+  // Description can either be given in this annotation or through HTML name <ruleKey>.html located in package
+  // src/resources/org/sonar/l10n/php/rules/<repositoryKey>
+  description = "<p>The following functions should not be used:</p> <ul><li>foo</li> <li>bar</li></ul>")
 public class OtherForbiddenFunctionUseCheck extends PHPSubscriptionCheck {
 
-  private static final Set<String> FORBIDDEN_FUNCTIONS = ImmutableSet.of("foo", "bar");
+  private static final Set<String> FORBIDDEN_FUNCTIONS = Set.of("foo", "bar");
   public static final String KEY = "S2";
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.FUNCTION_CALL);
+    return List.of(Kind.FUNCTION_CALL);
   }
 
   /**

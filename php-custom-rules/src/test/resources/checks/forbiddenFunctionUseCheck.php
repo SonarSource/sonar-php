@@ -1,20 +1,23 @@
 <?php
 
-foo();                  // NOK {{Remove the usage of this forbidden function.}}
-foo(1);                 // NOK
+foo();                  //Noncompliant {{Remove the usage of this forbidden function.}}
+foo(1);                 //Noncompliant
 
-bar();                  // NOK
-bar(1);                 // NOK
+bar();                  //Noncompliant
+bar(1);                 //Noncompliant
 
-class Obj {
-    function foo() {
+class Obj
+{
+    public function foo()
+    {
         return "foo";
     }
 
-    function bar() {
+    public function bar()
+    {
         return "bar";
     }
-};
+}
 
 $myObj = new Obj();
 

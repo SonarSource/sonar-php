@@ -1,7 +1,7 @@
 /*
- * SonarQube PHP Custom Rules Example
- * Copyright (C) 2016-2016 SonarSource SA
- * mailto:contact AT sonarsource DOT com
+ * SonarQube PHP Plugin
+ * Copyright (C) 2016-2023 SonarSource SA
+ * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,11 +19,9 @@
  */
 package org.sonar.samples.php.checks;
 
-import org.junit.Test;
-import org.sonar.plugins.php.api.tests.PhpTestFile;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-
 import java.io.File;
+import org.junit.Test;
+import org.sonar.plugins.php.api.tests.PHPCheckVerifier;
 
 /**
  * Test class to test the check implementation.
@@ -31,8 +29,8 @@ import java.io.File;
 public class OtherForbiddenFunctionUseCheckTest {
 
   @Test
-  public void test() throws Exception {
-    PHPCheckTest.check(new OtherForbiddenFunctionUseCheck(), new PhpTestFile(new File("src/test/resources/checks/forbiddenFunctionUseCheck.php")));
+  public void test() {
+    PHPCheckVerifier.verify(new OtherForbiddenFunctionUseCheck(), new File("src/test/resources/checks/forbiddenFunctionUseCheck.php"));
   }
 
 }
