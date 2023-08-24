@@ -93,13 +93,6 @@
       </plugin>
 
       <!-- Disable publishing this custom plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
 
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
@@ -108,4 +101,32 @@
 		</plugins>
 	</build>
 
+  <profiles>
+    <profile>
+      <id>deploy-sonarsource</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jfrog.buildinfo</groupId>
+            <artifactId>artifactory-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>build-info</id>
+                <goals>
+                  <goal>publish</goal>
+                </goals>
+                <configuration>
+                  <publisher>
+                    <publishBuildInfo>false</publishBuildInfo>
+                    <publishArtifacts>false</publishArtifacts>
+                  </publisher>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
 </project>

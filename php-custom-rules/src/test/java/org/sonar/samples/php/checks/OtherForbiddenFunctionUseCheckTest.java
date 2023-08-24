@@ -20,16 +20,16 @@
 package org.sonar.samples.php.checks;
 
 import java.io.File;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.api.tests.PHPCheckVerifier;
 
 /**
  * Test class to test the check implementation.
  */
-public class OtherForbiddenFunctionUseCheckTest {
+class OtherForbiddenFunctionUseCheckTest {
 
   @Test
-  public void test() {
+  void test() {
     PHPCheckVerifier.verify(new OtherForbiddenFunctionUseCheck(), new File("src/test/resources/checks/forbiddenFunctionUseCheck.php"));
   }
 
