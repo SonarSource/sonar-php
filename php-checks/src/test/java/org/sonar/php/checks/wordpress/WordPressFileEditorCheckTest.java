@@ -19,13 +19,22 @@
  */
 package org.sonar.php.checks.wordpress;
 
+import java.io.File;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 class WordPressFileEditorCheckTest extends WordPressConfigCheckTest {
 
+  @TempDir
+  public static File tmpDir;
+
   PHPCheck check = new WordPressFileEditorCheck();
+
+  public WordPressFileEditorCheckTest() {
+    super(tmpDir);
+  }
 
   @Test
   void editFalse() throws IOException {
