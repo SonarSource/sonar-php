@@ -21,6 +21,7 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -28,10 +29,10 @@ import org.sonarqube.ws.Issues;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SuppressWarningsTest {
+public class SuppressWarningsTest extends Tests{
 
-  @RegisterExtension
-  public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+//  @RegisterExtension
+//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
 
   private static final String PROJECT_KEY = "suppress_warnings";
 
@@ -40,7 +41,7 @@ public class SuppressWarningsTest {
     Tests.provisionProject(PROJECT_KEY, "SuppressWarningsTest", "php", "nosonar-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor(PROJECT_KEY));
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
     List<Issues.Issue> issues = Tests.issuesForComponent(PROJECT_KEY);
     assertThat(issues).isEmpty();
   }

@@ -21,6 +21,7 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -29,12 +30,12 @@ import org.sonarqube.ws.Issues;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PsalmReportTest {
+class PsalmReportTest extends Tests {
 
   private static final String PROJECT = "psalm_project";
 
-  @RegisterExtension
-  public static final Orchestrator ORCHESTRATOR = Tests.ORCHESTRATOR;
+//  @RegisterExtension
+//  public static final OrchestratorExtension ORCHESTRATOR = Tests.ORCHESTRATOR;
 
   @Test
   void importReport() {

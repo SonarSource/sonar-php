@@ -21,6 +21,7 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,10 +30,10 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonarqube.ws.Issues.Issue;
 
-class CustomRulesTest {
+class CustomRulesTest extends Tests {
 
-  @RegisterExtension
-  public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+//  @RegisterExtension
+//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "custom-rules";
   private static final String PROJECT_NAME = "Custom Rules";
   private static List<Issue> issues;
@@ -46,7 +47,7 @@ class CustomRulesTest {
       .setProjectName(PROJECT_NAME)
       .setProjectVersion("1.0")
       .setSourceDirs("src");
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
     issues = Tests.issuesForComponent(PROJECT_KEY);
   }
 

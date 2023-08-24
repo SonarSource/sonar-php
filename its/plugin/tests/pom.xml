@@ -36,6 +36,10 @@
       <version>4.0.0.404</version>
     </dependency>
     <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-suite</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-ws</artifactId>
       <version>${version.sonar}</version>
@@ -79,10 +83,11 @@
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
-            <redirectTestOutputToFile>true</redirectTestOutputToFile>
-            <reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
+<!--            <redirectTestOutputToFile>true</redirectTestOutputToFile>-->
+<!--            <reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>-->
             <includes>
-              <include>com/sonar/it/php/Tests.java</include>
+<!--              <include>com/sonar/it/php/Tests.java</include>-->
+              <include>com/sonar/it/php/*.java</include>
             </includes>
           </configuration>
         </plugin>

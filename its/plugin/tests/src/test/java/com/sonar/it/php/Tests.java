@@ -36,6 +36,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.platform.suite.api.SelectClasses;
+import org.junit.platform.suite.api.Suite;
 import org.sonarqube.ws.Components;
 import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.Measures;
@@ -51,7 +53,19 @@ import org.sonarqube.ws.client.measures.ComponentRequest;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Tests {
+//@Suite
+//@SelectClasses({
+//  CustomRulesTest.class,
+//  NonPhpProjectTest.class,
+//  NoSonarTest.class,
+//  PHPIntegrationTest.class,
+//  PHPTest.class,
+//  PHPUnitTest.class,
+//  SonarLintTest.class,
+//  PhpStanReportTest.class,
+//  PsalmReportTest.class
+//})
+abstract class Tests {
 
   public static final String PROJECT_ROOT_DIR = "../projects/";
 
@@ -62,7 +76,7 @@ class Tests {
   public static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
 
   @RegisterExtension
-  public static final Orchestrator ORCHESTRATOR;
+  public static final OrchestratorExtension ORCHESTRATOR;
 
   public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
 

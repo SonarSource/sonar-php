@@ -21,6 +21,7 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,10 +34,10 @@ import static com.sonar.it.php.Tests.getMeasure;
 import static com.sonar.it.php.Tests.getMeasureAsDouble;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PHPIntegrationTest {
+class PHPIntegrationTest extends Tests {
 
-  @RegisterExtension
-  public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+//  @RegisterExtension
+//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "php-integration";
   private static final String PROJECT_NAME = "PHP Integration";
 
@@ -55,7 +56,7 @@ class PHPIntegrationTest {
       .setProperty("sonar.exclusions", "**/Component/**/*.php, **/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php")
       .setProperty("sonar.internal.analysis.failFast", "false");
 
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
   }
 
   @Test

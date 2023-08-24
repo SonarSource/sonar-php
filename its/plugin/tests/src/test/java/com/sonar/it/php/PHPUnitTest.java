@@ -22,6 +22,7 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.io.File;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,10 +33,8 @@ import static com.sonar.it.php.Tests.getAnalysisWarnings;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PHPUnitTest {
+class PHPUnitTest extends Tests {
 
-  @RegisterExtension
-  public static Orchestrator orchestrator = ORCHESTRATOR;
   private static final String PROJECT_KEY = "php-unit";
   private static final String PROJECT_NAME = "PHP Unit";
 
@@ -71,7 +70,7 @@ class PHPUnitTest {
   }
 
   public BuildResult executeBuild() {
-    return orchestrator.executeBuild(BUILD);
+    return ORCHESTRATOR.executeBuild(BUILD);
   }
 
   @Test

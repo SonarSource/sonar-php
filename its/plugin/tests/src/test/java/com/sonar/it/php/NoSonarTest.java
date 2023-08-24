@@ -21,6 +21,7 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.io.File;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,10 +31,10 @@ import org.sonarqube.ws.Issues.Issue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NoSonarTest {
+class NoSonarTest extends Tests {
 
-  @RegisterExtension
-  public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+//  @RegisterExtension
+//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "nosonar-project";
   private static final String PROJECT_NAME = "NOSONAR Project";
 
@@ -50,7 +51,7 @@ class NoSonarTest {
       .setSourceDirs(".")
       .setProjectDir(PROJECT_DIR);
 
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
   }
 
   @Test

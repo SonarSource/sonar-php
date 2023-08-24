@@ -22,6 +22,7 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.io.File;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,10 +30,10 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NonPhpProjectTest {
+class NonPhpProjectTest extends Tests {
 
-  @RegisterExtension
-  public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+//  @RegisterExtension
+//  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "non-php-project";
   private static final String PROJECT_NAME = "Non Php Project";
 
@@ -49,7 +50,7 @@ class NonPhpProjectTest {
       .setProjectVersion("1.0")
       .setSourceDirs(".");
 
-    buildResult = orchestrator.executeBuild(build);
+    buildResult = ORCHESTRATOR.executeBuild(build);
   }
 
   @Test
