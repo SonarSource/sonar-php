@@ -93,10 +93,10 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
 
   private void leaveClass(ClassTree tree) {
     Map<String, Tree> coupledTrees = types.removeLast();
-    int nbType = coupledTrees.size();
+    int numberOfTypes = coupledTrees.size();
 
-    if (nbType > max) {
-      String message = String.format(MESSAGE, nbType, max);
+    if (numberOfTypes > max) {
+      String message = String.format(MESSAGE, numberOfTypes, max);
       PreciseIssue preciseIssue = context().newIssue(this, tree.classToken(), message);
 
       raiseSecondaryLocations(preciseIssue, coupledTrees);
