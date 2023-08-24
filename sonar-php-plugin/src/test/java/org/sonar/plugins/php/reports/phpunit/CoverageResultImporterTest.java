@@ -191,7 +191,7 @@ class CoverageResultImporterTest {
   }
 
   @Test
-  void shouldNotSetMetricsToNclocForMissingFilesSq_62() {
+  void shouldNotSetMetricsToNclocForMissingFilesSq62() {
     String componentKey = componentKey("Monkey.php");
 
     executeSensorImporting(getReportFile("phpunit.coverage-no-record.xml"));

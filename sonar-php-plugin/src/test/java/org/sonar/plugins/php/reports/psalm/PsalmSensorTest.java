@@ -73,14 +73,9 @@ class PsalmSensorTest extends ReportSensorTest {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report.json");
     assertThat(externalIssues).hasSize(3);
 
-    ExternalIssue first = externalIssues.get(0);
-    verifyPsalmReportIssue1(first);
-
-    ExternalIssue second = externalIssues.get(1);
-    verifyPsalmReportIssue2(first, second);
-
-    ExternalIssue third = externalIssues.get(2);
-    verifyPsalmReportIssue3(third);
+    verifyPsalmReportIssue1(externalIssues.get(0));
+    verifyPsalmReportIssue2(externalIssues.get(0), externalIssues.get(1));
+    verifyPsalmReportIssue3(externalIssues.get(2));
 
     assertNoErrorWarnDebugLogs(logTester);
   }
@@ -150,20 +145,11 @@ class PsalmSensorTest extends ReportSensorTest {
     List<ExternalIssue> externalIssues = executeSensorImporting("psalm-report-with-missing-fields.json");
     assertThat(externalIssues).hasSize(5);
 
-    ExternalIssue first = externalIssues.get(0);
-    verifyIssue1(first);
-
-    ExternalIssue second = externalIssues.get(1);
-    verifyIssue2(second);
-
-    ExternalIssue third = externalIssues.get(2);
-    verifyIssue3(third);
-
-    ExternalIssue fourth = externalIssues.get(3);
-    verifyIssue4(fourth);
-
-    ExternalIssue fifth = externalIssues.get(4);
-    verifyIssue5(fifth);
+    verifyIssue1(externalIssues.get(0));
+    verifyIssue2(externalIssues.get(1));
+    verifyIssue3(externalIssues.get(2));
+    verifyIssue4(externalIssues.get(3));
+    verifyIssue5(externalIssues.get(4));
 
     assertNoErrorWarnDebugLogs(logTester);
   }

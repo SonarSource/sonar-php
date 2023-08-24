@@ -52,7 +52,7 @@ class CoverageFileParserForPhpUnitTest {
   }
 
   @Test
-  void shouldFailWhenXmlRootNodeIsNotCoverage() {
+  void shouldFailWhenXmlRootNodeIsNotCovered() {
     CountConsumer counter = new CountConsumer();
     File reportFile = reportFile(INVALID_COVERAGE_FILE);
     Assertions.assertThatExceptionOfType(ParseException.class)
