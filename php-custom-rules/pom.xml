@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.sonarsource.samples</groupId>
+	<artifactId>php-custom-rules</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>sonar-plugin</packaging>
+
+	<name>SonarQube PHP Custom Rules Example</name>
+	<description>PHP Custom Rules Example for SonarQube</description>
+	<inceptionYear>2016</inceptionYear>
+
+	<properties>
+		<sonar.version>6.7</sonar.version>
+		<sonarphp.version>2.13.0.3107</sonarphp.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.sonarsource.sonarqube</groupId>
+			<artifactId>sonar-plugin-api</artifactId>
+			<version>${sonar.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.sonarsource.php</groupId>
+			<artifactId>sonar-php-plugin</artifactId>
+			<type>sonar-plugin</type>
+			<version>${sonarphp.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+				<artifactId>sonar-packaging-maven-plugin</artifactId>
+				<version>1.21.0.505</version>
+				<extensions>true</extensions>
+				<configuration>
+					<pluginKey>php-custom</pluginKey>
+					<pluginName>PHP Custom Rules</pluginName>
+					<pluginClass>org.sonar.samples.php.PHPCustomRulesPlugin</pluginClass>
+					<sonarLintSupported>true</sonarLintSupported>
+					<skipDependenciesPackaging>true</skipDependenciesPackaging>
+					<sonarQubeMinVersion>6.7</sonarQubeMinVersion>
+					<basePlugin>php</basePlugin>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
