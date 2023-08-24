@@ -41,14 +41,12 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
-@Rule(key = LocalVariableAndParameterNameCheck.KEY)
+@Rule(key = "S117")
 public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
-
-  public static final String KEY = "S117";
 
   private static final String MESSAGE = "Rename this %s \"%s\" to match the regular expression %s.";
 
-  public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
+  public static final String DEFAULT = "^[a-z_][a-zA-Z0-9_]*$";
   private Deque<Set<String>> checkedVariables = new ArrayDeque<>();
   private Pattern pattern = null;
 

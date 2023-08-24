@@ -52,54 +52,9 @@
 169,
 205
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial.php": [
-579,
-603,
-823,
-823
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/CashFlow/Variable/NonPeriodic.php": [
-202,
-203
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/CashFlow/Variable/Periodic.php": [
-72,
-73
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/FormulaParser.php": [
 146,
 147
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef.php": [
-340,
-340,
-340,
-340,
-362,
-362,
-362,
-362,
-381,
-381,
-381
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/LookupBase.php": [
-13,
-21,
-21
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/Beta.php": [
-178,
-230,
-231,
-232
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/Normal.php": [
-156,
-157
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData.php": [
-163
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Cell/AddressHelper.php": [
 69,
@@ -107,11 +62,7 @@
 173
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Axis.php": [
-102,
 236
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Properties.php": [
-637
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php": [
 547,
@@ -127,13 +78,7 @@
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
 1145,
 1156,
-1157,
-1919,
-1919,
-2666,
-2695,
-7835,
-7838
+1157
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php": [
 210
@@ -174,218 +119,64 @@
 72,
 72
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php": [
-151,
-153,
-184,
-186,
-273,
-278,
-302,
-316,
-333,
-340,
-382
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/Style.php": [
-29
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer.php": [
 171
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer/BstoreContainer.php": [
 17
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
-520
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
-137,
-137,
-137,
-206
+137
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS/Root.php": [
-53,
-53,
 164,
 243,
 276,
 347
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLERead.php": [
-340,
-343
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
 375,
 375,
 375,
-375,
-455
+375
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/PolynomialBestFit.php": [
-145,
-146,
-147,
-147,
-147,
 161,
 162,
 173
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Xls.php": [
-212,
-218,
-219
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
 344,
 344,
 400
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Formatter.php": [
-72,
-73
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php": [
-188
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Dimension.php": [
 128
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
-793,
-846,
-1650
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php": [
-150
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
 184,
 205,
 212,
 423,
-479,
-597,
-598,
-599,
-722,
-784,
-797,
-837,
-838,
-839,
-872
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/BIFFwriter.php": [
-94,
-211
+479
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php": [
 104,
 140
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Font.php": [
-52,
-53
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
-615,
-680,
-709,
-732,
-809,
-840,
-869,
-933,
-935,
-974,
-975,
-976,
-982,
-1002,
-1423,
-1511,
-1534
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Workbook.php": [
-191,
-191,
-191,
-218,
-426,
-474,
-480,
-623,
-690,
-691,
-692,
-693,
-931,
-1049,
-1092,
-1097,
-1116
+931
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-213,
-213,
-213,
-406,
-410,
-639,
-639,
-639,
-669,
-1011,
-1052,
-1106,
-1111,
-1120,
-1124,
-1130,
-1132,
-1277,
-1278,
-1336,
-1952,
-2186,
-2186,
-2188,
-2261,
-2261,
-2264,
-2265,
 2334,
 2339,
 2340,
 2352,
 2354,
-2356,
-2437,
-2463,
-2473,
-2485
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Xf.php": [
-174,
-175,
-176,
-177,
-181,
-184,
-216,
-234,
-236,
-250
+2356
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php": [
 1281
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/CyclicTest.php": [
-17
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/LayoutTest.php": [
 13,
@@ -396,9 +187,6 @@
 156,
 182
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Utility/File.php": [
-10
-],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnCellIteratorTest.php": [
 37,
 58
@@ -407,8 +195,5 @@
 37,
 57,
 77
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xls/WorkbookTest.php": [
-37
 ]
 }

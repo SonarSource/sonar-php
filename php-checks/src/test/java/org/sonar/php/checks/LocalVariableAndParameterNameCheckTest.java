@@ -25,15 +25,15 @@ import org.sonar.plugins.php.CheckVerifier;
 class LocalVariableAndParameterNameCheckTest {
 
   private static final String FILE_NAME = "LocalVariableAndParameterNameCheck.php";
-  private LocalVariableAndParameterNameCheck check = new LocalVariableAndParameterNameCheck();
+  private final LocalVariableAndParameterNameCheck check = new LocalVariableAndParameterNameCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.format = "^[A-Z_a-z0-9]*$";
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
