@@ -10,10 +10,10 @@ function f1($param) {     // OK
 }
 
 
-function f1($PARAM) {     // Noncompliant {{Rename this parameter "$PARAM" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
+function f1($PARAM) {     // Noncompliant {{Rename this parameter "$PARAM" to match the regular expression ^[a-z_][a-zA-Z0-9_]*$.}}
 //          ^^^^^^
 
-  $LOCAL = function () {  // Noncompliant {{Rename this local variable "$LOCAL" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
+  $LOCAL = function () {  // Noncompliant {{Rename this local variable "$LOCAL" to match the regular expression ^[a-z_][a-zA-Z0-9_]*$.}}
 //^^^^^^
     $INNER_LOCAL = 1;     // Noncompliant
     $LOCAL = 1;           // Noncompliant
