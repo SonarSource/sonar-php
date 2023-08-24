@@ -19,14 +19,13 @@
  */
 package org.sonar.php.checks.regex;
 
-import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
-class RedundantRegexAlternativesCheckTest extends TestCase {
+class RedundantRegexAlternativesCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new RedundantRegexAlternativesCheck(), "regex/RedundantRegexAlternativesCheck.php");
   }
 }
