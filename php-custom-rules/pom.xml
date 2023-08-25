@@ -9,7 +9,6 @@
     <version>${revision}</version>
   </parent>
 
-	<groupId>org.sonarsource.samples</groupId>
 	<artifactId>php-custom-rules</artifactId>
 	<packaging>sonar-plugin</packaging>
 
