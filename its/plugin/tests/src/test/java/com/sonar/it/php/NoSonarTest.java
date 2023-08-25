@@ -21,26 +21,27 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.io.File;
 import java.util.List;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Issues.Issue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NoSonarTest {
+class NoSonarTest {
 
-  @ClassRule
-  public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+  @RegisterExtension
+  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "nosonar-project";
   private static final String PROJECT_NAME = "NOSONAR Project";
 
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("nosonar");
 
-  @BeforeClass
-  public static void startServer() {
+  @BeforeAll
+  static void startServer() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "nosonar-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectKey(PROJECT_KEY)
@@ -54,7 +55,7 @@ public class NoSonarTest {
   }
 
   @Test
-  public void test() {
+  void test() {
     List<Issue> issues = Tests.issuesForComponent(PROJECT_KEY);
 
     assertThat(Tests.issuesForRule(issues, "php:S1116")).hasSize(1);
