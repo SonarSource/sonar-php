@@ -11,6 +11,8 @@ assertTrue($a !== $b);
 assertTrue($a != $b);
 assertFalse($a === $b);
 assertFalse($a == $b);
+assertTrue($a == true);
+assertTrue($a == false);
 </pre>
 <h3>Compliant solution</h3>
 <pre>
@@ -22,5 +24,7 @@ assertNotEquals($a, $b);
 assertNotSame($a, $b);
 assertNotEquals($a, $b);
 assertNotSame($a, $b);
+assertTrue($a);
+assertFalse($a);
 </pre>
 
