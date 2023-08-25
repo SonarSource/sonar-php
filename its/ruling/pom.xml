@@ -29,21 +29,6 @@
     <dependency>
       <groupId>org.sonarsource.orchestrator</groupId>
       <artifactId>sonar-orchestrator-junit5</artifactId>
-      <version>4.0.0.404</version>
-      <!-- It includes junit-jupiter-api:jar:5.9.2 where TempDirFactory is not defined yet -->
-      <exclusions>
-        <exclusion>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <!-- TODO SONARPHP-1423 Update Sonar-Orchestrator to 4.0.0.404 this dependency can be removed after SONARPHP-1423 -->
-      <!-- For now, it forces to use correct transitive dependency version -->
-      <groupId>org.sonarsource.orchestrator</groupId>
-      <artifactId>sonar-orchestrator</artifactId>
-      <version>4.0.0.404</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
