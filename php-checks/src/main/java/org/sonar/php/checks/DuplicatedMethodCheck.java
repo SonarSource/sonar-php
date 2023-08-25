@@ -37,12 +37,15 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import static org.sonar.php.checks.utils.CheckUtils.isEmptyArrayConstructor;
 import static org.sonar.php.checks.utils.SyntacticEquivalence.areSyntacticallyEquivalent;
 
 @Rule(key = "S4144")
@@ -81,13 +84,25 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
   }
 
   private static boolean isDuplicateCandidate(MethodDeclarationTree tree) {
-    return tree.body().is(Tree.Kind.BLOCK) && (((BlockTree) tree.body()).statements().size() >= 2 || isAccessor(tree));
+    return tree.body().is(Tree.Kind.BLOCK) && (((BlockTree) tree.body()).statements().size() >= 2 || isNonTrivialAccessor(tree));
   }
 
-  private static boolean isAccessor(MethodDeclarationTree tree) {
+  private static boolean isNonTrivialAccessor(MethodDeclarationTree tree) {
     String methodName = tree.name().text();
-    return ((BlockTree) tree.body()).statements().size() == 1
-      && (methodName.startsWith("set") || methodName.startsWith("get") || methodName.startsWith("is"));
+    List<StatementTree> statements = ((BlockTree) tree.body()).statements();
+    boolean isAccessor = statements.size() == 1 && (methodName.startsWith("set") || methodName.startsWith("get") || methodName.startsWith("is"));
+    return isAccessor && !isTrivialStatement(statements.get(0));
+  }
+
+  private static boolean isTrivialStatement(StatementTree statement) {
+    if (statement.is(Tree.Kind.RETURN_STATEMENT)) {
+      ExpressionTree expression = ((ReturnStatementTree) statement).expression();
+      return expression != null &&
+        (isEmptyArrayConstructor(expression) || expression.is(Tree.Kind.NEW_EXPRESSION, Tree.Kind.NULL_LITERAL));
+    } else if (statement.is(Tree.Kind.THROW_STATEMENT)) {
+      return true;
+    }
+    return false;
   }
 
   @Override
