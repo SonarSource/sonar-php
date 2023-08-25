@@ -20,6 +20,7 @@
 
   <dependencies>
     <dependency>
+      <!-- TODO SONARPHP-1423 Update Sonar-Orchestrator to 4.0.0.404 -->
       <groupId>org.sonarsource.orchestrator</groupId>
       <artifactId>sonar-orchestrator-junit5</artifactId>
       <version>4.0.0.404</version>
@@ -87,7 +88,6 @@
             <reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
             <includes>
               <include>com/sonar/it/php/Tests.java</include>
-<!--              <include>com/sonar/it/php/*.java</include>-->
             </includes>
           </configuration>
         </plugin>

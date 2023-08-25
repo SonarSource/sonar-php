@@ -197,7 +197,6 @@ class Tests {
   }
 
   // TODO SONARPHP-1466 Replace nested classes in it-php-plugin-tests:Tests with a more elegant solution
-  // Nested classes
   @Nested
   class NestedCustomRulesTest extends CustomRulesTest {
   }
