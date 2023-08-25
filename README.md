@@ -1,6 +1,6 @@
 # Code Quality and Security for PHP 
 
-<p style="text-align: center;">
+<p align="center">
   <img alt="Cirrus CI - Task and Script Build Status" src="https://img.shields.io/cirrus/github/SonarSource/sonar-php">
   <img alt="Quality Gate Status" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status">
   <img alt="Coverage" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=coverage">
