@@ -19,7 +19,6 @@
  */
 package com.sonar.it.php;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
@@ -27,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Issues;
 
+import static com.sonar.it.php.Tests.createScanner;
 import static com.sonar.it.php.Tests.getComponent;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,7 +49,7 @@ class PHPTest {
   @Test
   void shouldImportSourcesWithUserDefinedFileSuffixes() {
     Tests.provisionProject(SEVERAL_EXTENSIONS_PROJECT_KEY, "Project with several extensions", "php", "it-profile");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
       .setProjectDir(Tests.projectDirectoryFor("project-with-several-extensions"))
       .setProperty("sonar.php.file.suffixes", "php,php3,php4,myphp,html");
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
@@ -62,7 +62,7 @@ class PHPTest {
   @Test
   void shouldExcludeVendorDir() {
     Tests.provisionProject(PROJECT_WITH_VENDOR_KEY, "Project with vendor dir", "php", "it-profile");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
       .setProjectDir(Tests.projectDirectoryFor("project-with-vendor"));
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
@@ -75,7 +75,7 @@ class PHPTest {
   @Test
   void shouldSupportMultimoduleProjects() {
     Tests.provisionProject(MULTI_MODULE_PROJECT_KEY, "Multimodule PHP Project", "php", "it-profile");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
       .setProjectDir(Tests.projectDirectoryFor("multimodule"));
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
@@ -93,10 +93,9 @@ class PHPTest {
   @Test
   void shouldNotFailOnEmptyFile() {
     Tests.provisionProject(EMPTY_FILE_PROJECT_KEY, "Empty file test project", "php", "it-profile");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
       .setProjectKey(EMPTY_FILE_PROJECT_KEY)
       .setProjectName("Empty file test project")
-      .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
       .setProjectDir(Tests.projectDirectoryFor("empty_file"));
@@ -108,10 +107,9 @@ class PHPTest {
   @Test
   void shouldNotFailOnDeeplyNestedTrees() {
     Tests.provisionProject("big_concat_key", "Big Concat", "php", "sleep-profile");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
       .setProjectKey("big_concat_key")
       .setProjectName("Big Concat")
-      .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
       .setProjectDir(Tests.projectDirectoryFor("big_concat"));
@@ -126,12 +124,12 @@ class PHPTest {
   @Test
   void shouldHandleProjectWithOnlyTestFiles() {
     Tests.provisionProject(PROJECT_WITH_MAIN_AND_TEST_KEY, "project main and test files", "php", "it-profile");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
       .setProjectKey(PROJECT_WITH_MAIN_AND_TEST_KEY)
       .setProjectName("Test project")
-      .setProjectVersion("1.0")
       .setSourceEncoding("UTF-8")
       .setTestDirs("tests")
+      .setSourceDirs("")
       .setProjectDir(Tests.projectDirectoryFor("project-with-main-and-test"));
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 

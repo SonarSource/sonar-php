@@ -19,7 +19,6 @@
  */
 package com.sonar.it.php;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
@@ -28,6 +27,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Common;
 import org.sonarqube.ws.Issues;
 
+import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PhpStanReportTest {
@@ -40,7 +40,7 @@ class PhpStanReportTest {
   @Test
   void importReport() {
     Tests.provisionProject(PROJECT, PROJECT, "php", "no_rules");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
       .setProjectDir(Tests.projectDirectoryFor("phpstan_project"));
     Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
 

@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Issues.Issue;
 
+import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class NoSonarTest {
@@ -42,13 +43,12 @@ class NoSonarTest {
   @BeforeAll
   static void startServer() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "nosonar-profile");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
+      .setProjectDir(PROJECT_DIR)
       .setProjectKey(PROJECT_KEY)
       .setProjectName(PROJECT_NAME)
-      .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
-      .setSourceDirs(".")
-      .setProjectDir(PROJECT_DIR);
+      .setSourceDirs(".");
 
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }

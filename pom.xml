@@ -78,7 +78,6 @@
     <!-- JAR versions -->
     <version.assertj>3.5.2</version.assertj>
     <version.commons-lang>3.10</version.commons-lang>
-    <version.junit>4.13.1</version.junit>
     <version.junit-jupiter>5.10.0</version.junit-jupiter>
     <version.maven-project>2.0.6</version.maven-project>
     <version.junit-platform-suite>1.10.0</version.junit-platform-suite>

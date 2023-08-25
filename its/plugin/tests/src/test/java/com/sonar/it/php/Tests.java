@@ -62,6 +62,8 @@ class Tests {
 
   public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
 
+  public static final String SCANNER_VERSION = "5.0.1.3006";
+
   @RegisterExtension
   public static final OrchestratorExtension ORCHESTRATOR = OrchestratorExtension.builderEnv()
     .useDefaultAdminCredentialsForBuilds(true)
@@ -76,6 +78,13 @@ class Tests {
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"))
     .build();
+
+  public static SonarScanner createScanner() {
+    return SonarScanner.create()
+      .setScannerVersion(SCANNER_VERSION)
+      .setProjectVersion("1.0")
+      .setSourceDirs("src");
+  }
 
   private static final TaskRequest TASK_REQUEST = new TaskRequest().setAdditionalFields(Collections.singletonList("warnings"));
 
