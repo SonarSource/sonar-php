@@ -458,4 +458,9 @@ public final class CheckUtils {
     return symbol.isSubTypeOf(qualifiedName("PHPUnit\\Framework\\TestCase")).isTrue()
       || symbol.isSubTypeOf(qualifiedName("PHPUnit_Framework_TestCase")).isTrue();
   }
+
+  public static boolean isEmptyArrayConstructor(ExpressionTree arg) {
+    return (arg.is(Tree.Kind.ARRAY_INITIALIZER_FUNCTION, Tree.Kind.ARRAY_INITIALIZER_BRACKET) &&
+      ((ArrayInitializerTree) arg).arrayPairs().isEmpty());
+  }
 }

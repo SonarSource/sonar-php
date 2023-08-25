@@ -122,3 +122,33 @@ function myFunction(int $a, bool $lot, $of) : array
 {
     return null;
 }
+
+class D {
+    public function getAprop() {
+       return null;
+    }
+    public function getA2prop() {
+       return null;
+    }
+
+    public function getXprop() {
+       return [];
+    }
+    public function getX2prop() {
+       return [];
+    }
+
+    public function getYprop() {
+       throw new \LogicException("Not implemented");
+    }
+    public function getY2prop() {
+       throw new \LogicException("Not implemented");
+    }
+
+    public function getZprop() {
+       return new C();
+    }
+    public function getZ2prop() {
+       return new C();
+    }
+}
