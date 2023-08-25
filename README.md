@@ -1,4 +1,12 @@
-# Code Quality and Security for PHP [![Build Status](https://travis-ci.org/SonarSource/sonar-php.svg?branch=master)](https://travis-ci.org/SonarSource/sonar-php)
+# Code Quality and Security for PHP 
+
+<p style="text-align: center;">
+  ![Cirrus CI - Task and Script Build Status](https://img.shields.io/cirrus/github/SonarSource/sonar-php)
+  [![Quality Gate Status](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status&token=sqb_4837e5681149ae08a621e6002e892de5f7e813f4)](https://next.sonarqube.com/sonarqube/dashboard?id=org.sonarsource.php%3Aphp)
+  [![Coverage](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=coverage&token=sqb_4837e5681149ae08a621e6002e892de5f7e813f4)](https://next.sonarqube.com/sonarqube/dashboard?id=org.sonarsource.php%3Aphp)
+  ![Maven Central](https://img.shields.io/maven-central/v/org.sonarsource.php/sonar-php-plugin)
+  ![GitHub](https://img.shields.io/github/license/SonarSource/sonar-php)
+</p>
 
 This SonarSource project is a [static code analyser](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](https://www.sonarqube.org/) platform. It will allow you to produce stable and easily supported code by helping you find and correct bugs, vulnerabilities and smells in your code.
 
