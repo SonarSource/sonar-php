@@ -19,7 +19,6 @@
  */
 package com.sonar.it.php;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.io.File;

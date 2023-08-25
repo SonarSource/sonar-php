@@ -88,7 +88,7 @@
     <version.mockito>4.11.0</version.mockito>
     <version.sonar>10.1.0.73491</version.sonar>
     <version.staxmate>2.0.1</version.staxmate>
-    <version.sonar-orchestrator>3.41.0.295</version.sonar-orchestrator>
+    <version.sonar-orchestrator>4.0.0.404</version.sonar-orchestrator>
     <version.sslr>1.24.0.633</version.sslr>
     <version.spotless>2.34.0</version.spotless>
     <version.sonarlint>8.16.0.67686</version.sonarlint>
@@ -178,9 +178,16 @@
       </dependency>
       <dependency>
         <groupId>org.sonarsource.orchestrator</groupId>
-        <artifactId>sonar-orchestrator</artifactId>
+        <artifactId>sonar-orchestrator-junit5</artifactId>
         <version>${version.sonar-orchestrator}</version>
         <scope>test</scope>
+        <exclusions>
+          <!-- It includes junit-jupiter-api:jar:5.9.2 where TempDirFactory is not defined yet -->
+          <exclusion>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.sonarsource.sonarlint.core</groupId>
@@ -215,20 +222,8 @@
         <version>${version.analyzer-commons}</version>
       </dependency>
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${version.junit}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter</artifactId>
-        <version>${version.junit-jupiter}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.vintage</groupId>
-        <artifactId>junit-vintage-engine</artifactId>
         <version>${version.junit-jupiter}</version>
         <scope>test</scope>
       </dependency>
@@ -343,7 +338,7 @@
           <configuration>
             <encoding>UTF-8</encoding>
             <java>
-              <toggleOffOn />
+              <toggleOffOn/>
               <eclipse>
                 <version>4.21.0</version>
                 <file>https://raw.githubusercontent.com/SonarSource/sonar-developer-toolset/master/eclipse/sonar-formatter.xml</file>
