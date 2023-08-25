@@ -20,12 +20,10 @@
 package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
-import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.container.Server;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
-import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
 import java.util.Arrays;
@@ -37,8 +35,6 @@ import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.platform.suite.api.SelectClasses;
-import org.junit.platform.suite.api.Suite;
 import org.sonarqube.ws.Components;
 import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.Measures;
@@ -54,18 +50,6 @@ import org.sonarqube.ws.client.measures.ComponentRequest;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Suite
-@SelectClasses({
-  CustomRulesTest.class,
-  NonPhpProjectTest.class,
-  NoSonarTest.class,
-  PHPIntegrationTest.class,
-  PHPTest.class,
-  PHPUnitTest.class,
-  SonarLintTest.class,
-  PhpStanReportTest.class,
-  PsalmReportTest.class
-})
 class Tests {
 
   public static final String PROJECT_ROOT_DIR = "../projects/";
@@ -76,45 +60,26 @@ class Tests {
 
   public static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
 
-//  @RegisterExtension
-//  public static final OrchestratorExtension ORCHESTRATOR = OrchestratorExtension.builderEnv()
-//    .useDefaultAdminCredentialsForBuilds(true)
-//    .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
-//    // PHP Plugin
-//    .addPlugin(PHP_PLUGIN_LOCATION)
-//    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
-//    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
-//    // Custom rules plugin
-//    .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
-//    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
-//    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
-//    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"))
-//    .build();
+  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
 
   @RegisterExtension
-  public static final OrchestratorExtension ORCHESTRATOR;
-
-  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
+  public static final OrchestratorExtension ORCHESTRATOR = OrchestratorExtension.builderEnv()
+    .useDefaultAdminCredentialsForBuilds(true)
+    .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
+    // PHP Plugin
+    .addPlugin(PHP_PLUGIN_LOCATION)
+    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
+    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
+    // Custom rules plugin
+    .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
+    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
+    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
+    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"))
+    .build();
 
   private static final TaskRequest TASK_REQUEST = new TaskRequest().setAdditionalFields(Collections.singletonList("warnings"));
 
   private static final Pattern TASK_ID_PATTERN = Pattern.compile("/api/ce/task\\?id=(\\S+)");
-
-  static {
-    OrchestratorBuilder<OrchestratorExtensionBuilder, OrchestratorExtension> builder = OrchestratorExtension.builderEnv()
-      .useDefaultAdminCredentialsForBuilds(true)
-      .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
-      // PHP Plugin
-      .addPlugin(PHP_PLUGIN_LOCATION)
-      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
-      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
-      // Custom rules plugin
-      .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
-      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
-      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
-      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"));
-    ORCHESTRATOR = builder.build();
-  }
 
   public static void provisionProject(String projectKey, String projectName, String languageKey, String profileName) {
     Server server = ORCHESTRATOR.getServer();
@@ -231,41 +196,42 @@ class Tests {
     assertThat(unexpectedLogs).isEmpty();
   }
 
+  // TODO SONARPHP-1466 Replace nested classes in it-php-plugin-tests:Tests with a more elegant solution
   // Nested classes
-//  @Nested
-//  class NestedCustomRulesTest extends CustomRulesTest {
-//  }
-//
-//  @Nested
-//  class NestedNonPhpProjectTest extends NonPhpProjectTest {
-//  }
-//
-//  @Nested
-//  class NestedNoSonarTest extends NoSonarTest {
-//  }
-//
-//  @Nested
-//  class NestedPHPIntegrationTest extends PHPIntegrationTest {
-//  }
-//
-//  @Nested
-//  class NestedPHPTest extends PHPTest {
-//  }
-//
-//  @Nested
-//  class NestedPHPUnitTest extends PHPUnitTest {
-//  }
-//
-//  @Nested
-//  class NestedSonarLintTest extends SonarLintTest {
-//  }
-//
-//  @Nested
-//  class NestedPhpStanReportTest extends PhpStanReportTest {
-//  }
-//
-//  @Nested
-//  class NestedPsalmReportTest extends PsalmReportTest {
-//  }
+  @Nested
+  class NestedCustomRulesTest extends CustomRulesTest {
+  }
+
+  @Nested
+  class NestedNonPhpProjectTest extends NonPhpProjectTest {
+  }
+
+  @Nested
+  class NestedNoSonarTest extends NoSonarTest {
+  }
+
+  @Nested
+  class NestedPHPIntegrationTest extends PHPIntegrationTest {
+  }
+
+  @Nested
+  class NestedPHPTest extends PHPTest {
+  }
+
+  @Nested
+  class NestedPHPUnitTest extends PHPUnitTest {
+  }
+
+  @Nested
+  class NestedSonarLintTest extends SonarLintTest {
+  }
+
+  @Nested
+  class NestedPhpStanReportTest extends PhpStanReportTest {
+  }
+
+  @Nested
+  class NestedPsalmReportTest extends PsalmReportTest {
+  }
 
 }
