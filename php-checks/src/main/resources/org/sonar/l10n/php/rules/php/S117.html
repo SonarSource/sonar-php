@@ -2,9 +2,14 @@
 <p>Shared naming conventions allow teams to collaborate effectively. This rule raises an issue when a local variable or function parameter name does
 not match the provided regular expression.</p>
 <h3>Noncompliant code example</h3>
-<p>With the default regular expression <code>^[a-z][a-zA-Z0-9]*$</code>:</p>
+<p>With the default regular expression <code>^[a-z_][a-zA-Z0-9_]*$</code>:</p>
 <pre>
-public function doSomething($my_param){
+public function doSomething($myParam){
+  $LOCAL;
+  ...
+}
+
+public function do_something_else($my_param){
   $LOCAL;
   ...
 }
@@ -12,6 +17,11 @@ public function doSomething($my_param){
 <h3>Compliant solution</h3>
 <pre>
 public function doSomething($myParam){
+  $local;
+  ...
+}
+
+public function do_something_else($my_param){
   $local;
   ...
 }

@@ -34,4 +34,10 @@ class A {
 </pre>
 <h3>Exceptions</h3>
 <p>Methods that are not accessors (getters and setters), with fewer than 2 statements are ignored.</p>
+<p>Additionally, accessors consisting of a single statement are ignored, if this statement does one of the following:</p>
+<ul>
+  <li> Return <code>null</code> or an empty list <code>[]</code> </li>
+  <li> Throw an exception </li>
+  <li> Return a newly created object </li>
+</ul>
 
