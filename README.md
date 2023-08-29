@@ -13,7 +13,7 @@ This SonarSource project is a [static code analyser](https://en.wikipedia.org/wi
 
 # Features
 * 200+ rules
-* Supports up to PHP 8
+* Supports up to PHP 8.3
 * Metrics (complexity, number of lines etc.)
 * Import of [unit test and coverage results](https://docs.sonarqube.org/latest/analysis/coverage/)
 * Support of [custom rules](https://docs.sonarqube.org/latest/analysis/languages/php/)
@@ -45,12 +45,14 @@ If you have a question on how to use plugin (and the [docs](https://docs.sonarqu
 To request a new feature, please create a new thread in [SonarSource Community Forum](https://community.sonarsource.com/). Even if you plan to implement it yourself and submit it back to the community, please start a new thread first to be sure that we can follow up on it.
 
 ### Pull Request (PR)
-To submit a contribution, create a pull request for this repository. Please make sure that you follow our [code style](https://github.com/SonarSource/sonar-developer-toolset) and all [tests](#testing) are passing (Travis build is created for each PR).
+To submit a contribution, create a pull request for this repository. Please make sure that you follow our [code style](https://github.com/SonarSource/sonar-developer-toolset) and all [tests](#testing) are passing.
 
 ### Custom Rules
 If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](https://docs.sonarqube.org/latest/analysis/languages/php/) available only for you.
 
 #### Custom Rules API Changes
+- **3.32** (October 2023)
+    * Additional `newIssue` endpoint added to the `CheckContext` API interface
 - **3.15** (January 2021)
     * `PHPCustomRulesDefinition` was removed, it was deprecated since version 2.13 (March 2018)
     * Removed dependency on sslr-squid-bridge which is not maintained anymore
@@ -80,7 +82,7 @@ mvn clean install
 To run integration tests, you will need to create a properties file like the one shown below, and set its location in an environment variable named `ORCHESTRATOR_CONFIG_URL`.
 ```properties
 # version of SonarQube server
-sonar.runtimeVersion=8.9
+sonar.runtimeVersion=9.9
 ```
 Before running any of integration tests make sure the submodules are checked out:
 ```shell
