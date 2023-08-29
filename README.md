@@ -51,8 +51,8 @@ To submit a contribution, create a pull request for this repository. Please make
 If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](https://docs.sonarqube.org/latest/analysis/languages/php/) available only for you.
 
 #### Custom Rules API Changes
-- **3.32**, support of PHP 8.3:
-    * Custom rule examples have been moved in this project, in folder [php-custom-rules](php-custom-rules)
+- **3.32** (October 2023)
+    * Additional `newIssue` endpoint added to the `CheckContext` API interface
 - **3.15** (January 2021)
     * `PHPCustomRulesDefinition` was removed, it was deprecated since version 2.13 (March 2018)
     * Removed dependency on sslr-squid-bridge which is not maintained anymore
@@ -82,7 +82,7 @@ mvn clean install
 To run integration tests, you will need to create a properties file like the one shown below, and set its location in an environment variable named `ORCHESTRATOR_CONFIG_URL`.
 ```properties
 # version of SonarQube server
-sonar.runtimeVersion=10.1
+sonar.runtimeVersion=9.9
 ```
 Before running any of integration tests make sure the submodules are checked out:
 ```shell
