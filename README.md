@@ -8,13 +8,13 @@
   <img alt="GitHub" src="https://img.shields.io/github/license/SonarSource/sonar-php">
 </p>
 
-This SonarSource project is a [static code analyser](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](https://www.sonarqube.org/) platform. It will allow you to produce stable and easily supported code by helping you find and correct bugs, vulnerabilities and smells in your code.
+This SonarSource project is a [static code analyzer](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](https://www.sonarqube.org/) platform. It will allow you to produce stable and easily supported [Clean Code](https://www.sonarsource.com/solutions/clean-code/) by helping you find and correct bugs, vulnerabilities, and code smells.
 
 
 # Features
 * 200+ rules
 * Supports up to PHP 8.3
-* Metrics (complexity, number of lines etc.)
+* Metrics (complexity, number of lines, etc.)
 * Import of [unit test and coverage results](https://docs.sonarqube.org/latest/analysis/coverage/)
 * Support of [custom rules](https://docs.sonarqube.org/latest/analysis/languages/php/)
 
@@ -31,10 +31,10 @@ This SonarSource project is a [static code analyser](https://en.wikipedia.org/wi
 
 * [Control Flow Graph documentation](doc/CFG.md)
 
-Have question or feedback?
---------------------------
+Have questions or feedback?
+---------------------------
 
-To provide feedback (request a feature, report a bug etc.) use the [SonarSource Community Forum](https://community.sonarsource.com/). Please do not forget to specify the language (PHP!), plugin version and SonarQube version.
+To provide feedback (request a feature, report a bug, etc.) use the [SonarSource Community Forum](https://community.sonarsource.com/). Please do not forget to specify the language (PHP!), plugin version, and SonarQube version.
 
 If you have a question on how to use plugin (and the [docs](https://docs.sonarqube.org/latest/analysis/languages/php/) don't help you), we also encourage you to use the community forum.
 
@@ -45,7 +45,7 @@ If you have a question on how to use plugin (and the [docs](https://docs.sonarqu
 To request a new feature, please create a new thread in [SonarSource Community Forum](https://community.sonarsource.com/). Even if you plan to implement it yourself and submit it back to the community, please start a new thread first to be sure that we can follow up on it.
 
 ### Pull Request (PR)
-To submit a contribution, create a pull request for this repository. Please make sure that you follow our [code style](https://github.com/SonarSource/sonar-developer-toolset) and all [tests](#testing) are passing.
+To submit a contribution, create a pull request for this repository. Please make sure that you follow our [code style](https://github.com/SonarSource/sonar-developer-toolset) and that all [tests](#testing) are passing.
 
 ### Custom Rules
 If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](https://docs.sonarqube.org/latest/analysis/languages/php/) available only for you.
@@ -84,25 +84,25 @@ To run integration tests, you will need to create a properties file like the one
 # version of SonarQube server
 sonar.runtimeVersion=9.9
 ```
-Before running any of integration tests make sure the submodules are checked out:
+Before running any of the integration tests make sure the submodules are checked out:
 ```shell
   git submodule init
   git submodule update
 ```
 #### Plugin Test
-The "Plugin Test" is an additional integration test which verifies plugin features such as metric calculation, coverage etc. To launch it, execute this command from directory `its/plugin`:
+The "Plugin Test" is an additional integration test that verifies plugin features such as metric calculation, coverage, etc. To launch it, execute this command from the directory `its/plugin`:
 ```shell
 mvn clean install
 ```
 
 #### Ruling Test
-The "Ruling Test" is a special integration test which launches the analysis of a large code base, saves the issues created by the plugin in report files, and then compares those results to the set of expected issues (stored as JSON files). To launch ruling test:
+The "Ruling Test" is a special integration test that launches the analysis of a large code base, saves the issues created by the plugin in report files, and then compares those results to the set of expected issues (stored as JSON files). To launch the ruling test:
 ```shell
 cd its/ruling
 mvn clean install
 ```
 
-This test gives you the opportunity to examine the issues created by each rule and make sure they're what you expect. You can inspect new/lost issues checking web-pages mentioned in the logs at the end of analysis:
+This test gives you the opportunity to examine the issues created by each rule and make sure they're what you expect. You can inspect new/lost issues by checking the web pages mentioned in the logs at the end of the analysis:
 ```
 INFO  - HTML Issues Report generated: /path/to/project/sonar-php/its/sources/src/.sonar/issues-report/issues-report.html
 INFO  - Light HTML Issues Report generated: /path/to/project/sonar-php/its/sources/src/.sonar/issues-report/issues-report-light.html
