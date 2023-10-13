@@ -122,7 +122,7 @@ build_win_task:
   build_script:
     - git config --global core.autocrlf input
     - source cirrus-env CI
-    - mvn.cmd clean install
+    - mvn clean install
 
 plugin_qa_task:
   <<: *ONLY_SONARSOURCE_QA
