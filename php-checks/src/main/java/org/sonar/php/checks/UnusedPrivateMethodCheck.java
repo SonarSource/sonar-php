@@ -27,12 +27,11 @@ import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.ClassSymbol;
-import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.tree.symbols.HasClassSymbol;
-import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -48,8 +47,10 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import static org.sonar.plugins.php.api.tree.Tree.Kind.USE_TRAIT_DECLARATION;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.VARIABLE_IDENTIFIER;
 
 @Rule(key = "S1144")
@@ -90,7 +91,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
   @Override
   public void visitCallableConvert(CallableConvertTree tree) {
     if (tree.expression().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
-      MemberAccessTree memberAccessTree = (MemberAccessTree) tree.expression();
+      var memberAccessTree = (MemberAccessTree) tree.expression();
       if (isThis(memberAccessTree.object()) && memberAccessTree.member().is(Tree.Kind.NAME_IDENTIFIER)) {
         methodsUsedInFirstClassCallables.add(((NameIdentifierTree) memberAccessTree.member()).text().toLowerCase(Locale.ROOT));
       }
@@ -100,7 +101,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
   }
 
   private void checkClass(ClassTree tree) {
-    Scope classScope = context().symbolTable().getScopeFor(tree);
+    var classScope = context().symbolTable().getScopeFor(tree);
     for (Symbol methodSymbol : classScope.getSymbols(Kind.FUNCTION)) {
 
       // For enums private and protected are equivalent as inheritance is not allowed.
@@ -124,12 +125,12 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
       Optional<ClassMemberTree> magicMethodCall = findMagicMethodCall((ClassDeclarationTree) tree);
       if (magicMethodCall.isPresent() && containsCallUserFunction(magicMethodCall.get())) {
         return true;
-      } else {
-        Optional<ClassSymbol> superClass = ((HasClassSymbol) tree).symbol().superClass();
-        if (superClass.isPresent()) {
-          return containsSuperClassCallMethod(superClass.get());
-        }
       }
+      Optional<ClassSymbol> superClass = ((HasClassSymbol) tree).symbol().superClass();
+      if (superClass.isPresent() && containsSuperClassCallMethod(superClass.get())) {
+        return true;
+      }
+      return containsTraitWithMagicMethodCall(tree);
     }
     return false;
   }
@@ -150,10 +151,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
   }
 
   private static boolean containsSuperClassCallMethod(ClassSymbol tree) {
-    Optional<MethodSymbol> callMethod = tree.declaredMethods().stream()
-      .filter(m -> "__call".equals(m.name()))
-      .findFirst();
-    if (callMethod.isPresent()) {
+    if (containsMagicMethodCall(tree)) {
       return true;
     }
     Optional<ClassSymbol> superClass = tree.superClass();
@@ -161,6 +159,21 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
       return containsSuperClassCallMethod(superClass.get());
     }
     return false;
+  }
+
+  private static boolean containsTraitWithMagicMethodCall(ClassTree tree) {
+    return tree.members().stream()
+      .filter(member -> member.is(USE_TRAIT_DECLARATION))
+      .map(member -> ((UseTraitDeclarationTree) member).traits())
+      .flatMap(List::stream)
+      .filter(ClassNamespaceNameTreeImpl.class::isInstance)
+      .map(trait -> ((ClassNamespaceNameTreeImpl) trait).symbol())
+      .anyMatch(UnusedPrivateMethodCheck::containsMagicMethodCall);
+  }
+
+  private static boolean containsMagicMethodCall(ClassSymbol tree) {
+    return tree.declaredMethods().stream()
+      .anyMatch(m -> m.name().startsWith("__call"));
   }
 
   @Override
