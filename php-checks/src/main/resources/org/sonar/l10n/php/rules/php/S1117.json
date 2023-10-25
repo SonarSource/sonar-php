@@ -1,5 +1,4 @@
 {
-  "title": "Local variables should not have the same name as class fields",
   "type": "CODE_SMELL",
   "code": {
     "impacts": {
@@ -20,5 +19,6 @@
   "ruleSpecification": "RSPEC-1117",
   "sqKey": "S1117",
   "scope": "All",
-  "quickfix": "unknown"
+  "quickfix": "unknown",
+  "title": "Local variables should not have the same name as class fields"
 }

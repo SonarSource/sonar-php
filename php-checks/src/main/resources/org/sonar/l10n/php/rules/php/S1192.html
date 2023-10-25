@@ -1,31 +1,35 @@
 <h2>Why is this an issue?</h2>
-<p>Duplicated string literals make the process of refactoring error-prone, since you must be sure to update all occurrences.</p>
-<p>On the other hand, constants can be referenced from many places, but only need to be updated in a single place.</p>
-<h3>Noncompliant code example</h3>
-<p>With the default threshold of 3:</p>
-<pre>
-function run() {
-  prepare('this is a duplicate'); // Noncompliant - 'this is a duplicate' is duplicated 3 times
-  execute('this is a duplicate');
-  release('this is a duplicate');
-}
-</pre>
-<h3>Compliant solution</h3>
-<pre>
-MESSAGE = 'this is a duplicate';
-
-function run() {
-  prepare(MESSAGE);
-  execute(MESSAGE);
-  release(MESSAGE);
-}
-</pre>
+<p>Duplicated string literals make the process of refactoring complex and error-prone, as any change would need to be propagated on all
+occurrences.</p>
 <h3>Exceptions</h3>
 <p>No issue will be raised on:</p>
 <ul>
   <li> strings with less than 5 characters </li>
   <li> strings with only letters, numbers, underscores, hyphens and periods </li>
 </ul>
+<h2>How to fix it</h2>
+<p>Instead, use constants to replace the duplicated string literals. Constants can be referenced from many places, but only need to be updated in a
+single place.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<p>With the default threshold of 3:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+function run() {
+  prepare('this is a duplicate'); // Noncompliant - 'this is a duplicate' is duplicated 3 times
+  execute('this is a duplicate');
+  release('this is a duplicate');
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+MESSAGE = 'this is a duplicate';
+
+function run() {
+  prepare(MESSAGE); // Compliant - the duplicated string literal is replaced by a constant and can be safely re-used
+  execute(MESSAGE);
+  release(MESSAGE);
+}
+</pre>
 <pre>
 $severity = $request-&gt;getParam('severity-score');
 </pre>

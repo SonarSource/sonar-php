@@ -1,12 +1,6 @@
 {
   "title": "Variables should be initialized before use",
   "type": "BUG",
-  "code": {
-    "impacts": {
-      "RELIABILITY": "MEDIUM"
-    },
-    "attribute": "CLEAR"
-  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
@@ -25,5 +19,11 @@
       457
     ]
   },
-  "quickfix": "infeasible"
+  "quickfix": "infeasible",
+  "code": {
+    "impacts": {
+      "RELIABILITY": "MEDIUM"
+    },
+    "attribute": "CLEAR"
+  }
 }
