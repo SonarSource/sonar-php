@@ -25,8 +25,13 @@ import org.sonar.plugins.php.CheckVerifier;
 class UnusedPrivateMethodCheckTest {
 
   @Test
-  void test() {
+  void shouldRaiseIssuesCorrectly() {
     CheckVerifier.verify(new UnusedPrivateMethodCheck(), "UnusedPrivateMethodCheck.php");
+  }
+
+  @Test
+  void shouldRaiseIssuesWhenEncounteringTraits() {
+    CheckVerifier.verify(new UnusedPrivateMethodCheck(), "UnusedPrivateMethodCheckWithTraits.php");
   }
 
 }
