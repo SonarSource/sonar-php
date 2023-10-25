@@ -1,3 +1,4 @@
+<p>Once control flow has been moved out of the current code block, any subsequent statements become effectively unreachable.</p>
 <h2>Why is this an issue?</h2>
 <p>Some statements (<code>return</code>, <code>break</code>, <code>continue</code>, <code>goto</code>, <code>switch</code>) and <code>throw</code>
 expressions move control flow out of the current code block. So any unlabeled statements that come after such a jump are unreachable, and either this

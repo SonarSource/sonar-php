@@ -22,14 +22,13 @@
   "scope": "Main",
   "securityStandards": {
     "CWE": [
-      829
+      16
     ],
     "OWASP": [
-      "A1"
+      "A6"
     ],
     "OWASP Top 10 2021": [
-      "A3",
-      "A8"
+      "A5"
     ],
     "PCI DSS 3.2": [
       "2.2",

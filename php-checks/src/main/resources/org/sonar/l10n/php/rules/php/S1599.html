@@ -6,7 +6,7 @@ programming scenarios where variable names need to be dynamically determined and
 confusion. It can also increase the risk of security vulnerabilities, such as allowing user input to directly manipulate variable names, potentially
 leading to injection attacks or unintended behavior.</p>
 <h4>Noncompliant code example</h4>
-<pre data-diff-id="1" data-diff-type="noncompliant">
+<pre>
 $var = 'foo';
 $$var = 'bar';      //Noncompliant
 $$$var = 'hello';  //Noncompliant

@@ -1,19 +1,10 @@
 <h2>Why is this an issue?</h2>
-<p>If a <code>private</code> field is declared but not used in the program, it can be considered dead code and should therefore be removed. This will
-improve maintainability because developers will not wonder what the variable is used for.</p>
-<h3>Noncompliant code example</h3>
+<p>If a <code>private</code> field is declared but not used locally, its limited visibility makes it dead code.</p>
+<p>This is either a sign that some logic is missing or that the code should be cleaned.</p>
+<p>Cleaning out dead code decreases the size of the maintained codebase, making it easier to understand and preventing bugs from being introduced.</p>
 <pre>
 class MyClass {
-  private $foo = 4;                       //foo is unused
-
-  public function compute($a) {
-    return $a * 4;
-  }
-}
-</pre>
-<h3>Compliant solution</h3>
-<pre>
-class MyClass {
+  private $foo = 4;            // Noncompliant: foo is unused and should be removed
 
   public function compute($a) {
     return $a * 4;

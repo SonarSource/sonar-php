@@ -13,7 +13,6 @@
     "constantCost": "5min"
   },
   "tags": [
-    "cwe",
     "php-ini"
   ],
   "defaultSeverity": "Blocker",
@@ -21,15 +20,10 @@
   "sqKey": "S3337",
   "scope": "Main",
   "securityStandards": {
-    "CWE": [
-      23,
-      36
-    ],
     "OWASP": [
       "A6"
     ],
     "OWASP Top 10 2021": [
-      "A1",
       "A5"
     ],
     "PCI DSS 3.2": [

@@ -1,27 +1,37 @@
+<p>File access functions in PHP are typically used to open local files. They are also capable of reading files from remote servers using protocols
+such as HTTP, HTTPS and FTP.</p>
+<p>This behavior is controlled by the <code>allow_url_fopen</code> and <code>allow_url_include</code> settings.</p>
 <h2>Why is this an issue?</h2>
-<p><code>allow_url_fopen</code> and <code>allow_url_include</code> allow code to be read into a script from URL’s. The ability to suck in executable
-code from outside your site, coupled with imperfect input cleansing could lay your site bare to attackers. Even if your input filtering is perfect
-today, are you prepared to bet your site that it will always be perfect in the future?</p>
-<p>This rule raises an issue when either property is explicitly enabled in <em>php.ini</em> and when <code>allow_url_fopen</code>, which defaults to
-enabled, is not explicitly disabled.</p>
-<h3>Noncompliant code example</h3>
-<pre>
-; php.ini  Noncompliant; allow_url_fopen not explicitly disabled
+<p>Most applications do not require or expect the file access functions to download remotely accessible files. However, attackers can abuse these
+remote file access features while exploiting other vulnerabilities, such as path traversal issues.</p>
+<h3>What is the potential impact?</h3>
+<p>While activating these settings does not pose a direct threat to the application’s security, they can make the exploitation of other
+vulnerabilities easier and more severe.</p>
+<p>If an attacker can control a file location while <code>allow_url_fopen</code> is set to <code>1</code>, they can use this ability to perform a
+Server-Side Request Forgery exploit. This allows the attacker to affect more than just the local application and they may be able to laterally attack
+other assets on the local network.</p>
+<p>If <code>allow_url_include</code> is set to <code>1</code>, the attacker will also have the ability to download and execute arbitrary PHP code.</p>
+<h2>How to fix it</h2>
+<p><code>allow_url_fopen</code> and <code>allow_url_include</code> should be deactivated in the main PHP configuration file. Note that
+<code>allow_url_include</code> is disabled by default while <code>allow_url_fopen</code> is not and must be explicitly disabled.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+; php.ini  Noncompliant; allow_url_fopen is enabled by default
 allow_url_include=1  ; Noncompliant
 </pre>
-<h3>Compliant solution</h3>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 ; php.ini
 allow_url_fopen=0
 allow_url_include=0
 </pre>
 <h2>Resources</h2>
+<h3>Standards</h3>
 <ul>
-  <li> <a href="https://owasp.org/Top10/A03_2021-Injection/">OWASP Top 10 2021 Category A3</a> - Injection </li>
-  <li> <a href="https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/">OWASP Top 10 2021 Category A8</a> - Software and Data
-  Integrity Failures </li>
-  <li> <a href="https://owasp.org/www-project-top-ten/2017/A1_2017-Injection">OWASP Top 10 2017 Category A1</a> - Injection </li>
-  <li> <a href="https://cwe.mitre.org/data/definitions/829">MITRE, CWE-829</a> - Inclusion of Functionality from Untrusted Control Sphere </li>
-  <li> <a href="https://www.sans.org/top25-software-errors/#cat2">SANS Top 25</a> - Risky Resource Management </li>
+  <li> OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a> </li>
+  <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">Top 10 2017 Category A6 - Security
+  Misconfiguration</a> </li>
+  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/829">CWE-16 - Inclusion of Functionality from Untrusted Control Sphere</a> </li>
 </ul>
 
