@@ -1,12 +1,21 @@
 <?php
 
-class MagicMethodCall
+class MagicMethodCallBase
 {
   use MyTraitWithMagicMethodCallWithCallUserFuncArrayFunction;
 
   private function bar()
   {
   // Compliant as bar() can be called in the trait
+  }
+}
+
+class MagicMethodCallChild extends MagicMethodCallBase
+{
+
+  // TODO SONARPHP-1482 FP because we can't access traits of a superclass in symbols
+  private function foo() // Noncompliant
+  {
   }
 }
 
@@ -21,7 +30,7 @@ trait MyTraitWithMagicMethodCallWithCallUserFuncArrayFunction
   }
 }
 
-class MagicMethodCallFalseNegative
+class MagicMethodCallFalseNegativeBase
 {
   use MyTraitWithMagicMethodCallWithoutBody;
 
@@ -39,11 +48,18 @@ trait MyTraitWithMagicMethodCallWithoutBody
   }
 }
 
-class MagicMethodCall2
+class MagicMethodCallBase2
 {
   use MyTraitWithoutMagicMethodCall;
 
   private function bar() // Noncompliant
+  {
+  }
+}
+
+class MagicMethodCallChild2 extends MagicMethodCallBase2
+{
+  private function foo() // Noncompliant
   {
   }
 }
@@ -55,11 +71,18 @@ trait MyTraitWithoutMagicMethodCall
   }
 }
 
-class MagicMethodCall2
+class MagicMethodCall3
 {
   use NonExistingTrait;
 
   private function bar() // Noncompliant
+  {
+  }
+}
+
+class MagicMethodCall4 extends MagicMethodCall3
+{
+  private function foo() // Noncompliant
   {
   }
 }
