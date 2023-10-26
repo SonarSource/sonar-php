@@ -1,0 +1,26 @@
+name: bump-versions
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The new version
+        required: true
+        type: string
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # write for peter-evans/create-pull-request, read for actions/checkout
+      pull-requests: write # write for peter-evans/create-pull-request
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mvn versions:set-property -DgenerateBackupPoms=false -Dproperty=revision -DnewVersion=${{ github.event.inputs.version }}
+      - uses: peter-evans/create-pull-request@v5
+        with:
+          author: github-actions[bot] <noreply@github.com>
+          commit-message: Prepare next development iteration
+          title: Prepare next development iteration
+          branch: bot/bump-project-version
+          branch-suffix: timestamp
