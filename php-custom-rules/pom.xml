@@ -53,7 +53,7 @@
             <pluginName>PHP Custom Rules</pluginName>
             <pluginClass>org.sonar.samples.php.PHPCustomRulesPlugin</pluginClass>
             <sonarLintSupported>true</sonarLintSupported>
-            <pluginApiMinVersion>10.1</pluginApiMinVersion>
+            <pluginApiMinVersion>9.13</pluginApiMinVersion>
             <requiredForLanguages>php</requiredForLanguages>
             <skipDependenciesPackaging>true</skipDependenciesPackaging>
             <jreMinVersion>${jre.min.version}</jreMinVersion>
