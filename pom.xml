@@ -75,9 +75,6 @@
     <license.title>SonarQube PHP Plugin</license.title>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-    <!-- plugin versions -->
-    <version.sonar-packaging-maven-plugin>1.20.0.405</version.sonar-packaging-maven-plugin>
-
     <!-- JAR versions -->
     <version.assertj>3.5.2</version.assertj>
     <version.commons-lang>3.10</version.commons-lang>
@@ -308,10 +305,10 @@
         <plugin>
           <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
           <artifactId>sonar-packaging-maven-plugin</artifactId>
-          <version>${version.sonar-packaging-maven-plugin}</version>
           <configuration>
             <sonarLintSupported>true</sonarLintSupported>
-            <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
+            <pluginApiMinVersion>10.1</pluginApiMinVersion>
+            <requiredForLanguages>php</requiredForLanguages>
             <skipDependenciesPackaging>true</skipDependenciesPackaging>
             <jreMinVersion>${jre.min.version}</jreMinVersion>
             <archive>
