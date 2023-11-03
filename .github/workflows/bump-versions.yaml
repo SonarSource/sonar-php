@@ -19,7 +19,7 @@ jobs:
           mvn versions:set-property -DgenerateBackupPoms=false -Dproperty=revision -DnewVersion=${{ github.event.inputs.version }}
       - uses: peter-evans/create-pull-request@v5
         with:
-          author: github-actions[bot] <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}>
           commit-message: Prepare next development iteration
           title: Prepare next development iteration
           branch: bot/bump-project-version
