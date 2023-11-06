@@ -48,13 +48,13 @@
       <plugin>
           <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
           <artifactId>sonar-packaging-maven-plugin</artifactId>
-          <version>${version.sonar-packaging-maven-plugin}</version>
           <configuration>
             <pluginKey>php-custom</pluginKey>
             <pluginName>PHP Custom Rules</pluginName>
             <pluginClass>org.sonar.samples.php.PHPCustomRulesPlugin</pluginClass>
             <sonarLintSupported>true</sonarLintSupported>
-            <sonarQubeMinVersion>7.9</sonarQubeMinVersion>
+            <pluginApiMinVersion>9.13</pluginApiMinVersion>
+            <requiredForLanguages>php</requiredForLanguages>
             <skipDependenciesPackaging>true</skipDependenciesPackaging>
             <jreMinVersion>${jre.min.version}</jreMinVersion>
             <archive>
