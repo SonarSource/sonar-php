@@ -39,8 +39,7 @@ mend_scan_secrets: &MEND_SCAN_SECRETS
   WS_APIKEY: VAULT[development/kv/data/mend data.apikey]
 
 promote_secrets: &PROMOTE_SECRETS
-  GCF_ACCESS_TOKEN: VAULT[development/kv/data/promote data.token]
-  PROMOTE_URL: VAULT[development/kv/data/promote data.url]
+  ARTIFACTORY_PROMOTE_ACCESS_TOKEN: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promoter access_token]
   GITHUB_TOKEN: VAULT[development/github/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promotion token]
   # burgr notification
   BURGR_URL: VAULT[development/kv/data/burgr data.url]
