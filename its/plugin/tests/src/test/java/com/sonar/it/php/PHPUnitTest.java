@@ -27,6 +27,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
+import static com.sonar.it.php.Tests.createScanner;
 import static com.sonar.it.php.Tests.getAnalysisWarnings;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,11 +49,10 @@ class PHPUnitTest {
 
   private static final String TEST_FILE = "tests/MathTest.php";
 
-  private final SonarScanner BUILD = SonarScanner.create()
+  private final SonarScanner BUILD = createScanner()
     .setProjectDir(PROJECT_DIR)
     .setProjectKey(PROJECT_KEY)
     .setProjectName(PROJECT_NAME)
-    .setProjectVersion("1.0")
     .setSourceDirs(SOURCE_DIR)
     .setTestDirs(TESTS_DIR);
 

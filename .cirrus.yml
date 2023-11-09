@@ -57,7 +57,7 @@ default_container_definition: &DEFAULT_CONTAINER_DEFINITION
 
 container_definition: &CONTAINER_DEFINITION
   eks_container:
-    image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j11-latest
+    image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-latest
     <<: *DEFAULT_CONTAINER_DEFINITION
     cpu: 2
     memory: 2G
@@ -72,7 +72,7 @@ qa_container_definition: &QA_CONTAINER_DEFINITION
 win_vm_definition: &WINDOWS_VM_DEFINITION
   ec2_instance:
     experimental: true # see https://github.com/cirruslabs/cirrus-ci-docs/issues/1051
-    image: base-windows-jdk11-v*
+    image: base-windows-jdk17-v*
     platform: windows
     region: eu-central-1
     type: t3.xlarge

@@ -19,7 +19,6 @@
  */
 package com.sonar.it.php;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
@@ -28,6 +27,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
+import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class NonPhpProjectTest {
@@ -43,11 +43,10 @@ class NonPhpProjectTest {
 
   @BeforeAll
   static void startServer() {
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
       .setProjectDir(PROJECT_DIR)
       .setProjectKey(PROJECT_KEY)
       .setProjectName(PROJECT_NAME)
-      .setProjectVersion("1.0")
       .setSourceDirs(".");
 
     buildResult = orchestrator.executeBuild(build);

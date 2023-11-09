@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
+import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonarqube.ws.Issues.Issue;
 
@@ -40,12 +41,10 @@ class CustomRulesTest {
   @BeforeAll
   static void prepare() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "php-custom-rules-profile");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
       .setProjectDir(Tests.projectDirectoryFor("custom_rules"))
       .setProjectKey(PROJECT_KEY)
-      .setProjectName(PROJECT_NAME)
-      .setProjectVersion("1.0")
-      .setSourceDirs("src");
+      .setProjectName(PROJECT_NAME);
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
     issues = Tests.issuesForComponent(PROJECT_KEY);
   }

@@ -19,7 +19,6 @@
  */
 package com.sonar.it.php;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.locator.FileLocation;
@@ -30,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Measures;
 
+import static com.sonar.it.php.Tests.createScanner;
 import static com.sonar.it.php.Tests.getMeasure;
 import static com.sonar.it.php.Tests.getMeasureAsDouble;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,13 +46,12 @@ class PHPIntegrationTest {
   @BeforeAll
   static void startServer() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
-    SonarScanner build = SonarScanner.create()
+    SonarScanner build = createScanner()
+      .setProjectDir(FileLocation.of("../../sources/src/Symfony/").getFile())
       .setProjectKey(PROJECT_KEY)
       .setProjectName(PROJECT_NAME)
-      .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
-      .setProjectDir(FileLocation.of("../../sources/src/Symfony/").getFile())
       .setProperty("sonar.exclusions", "**/Component/**/*.php, **/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php")
       .setProperty("sonar.internal.analysis.failFast", "false");
 
