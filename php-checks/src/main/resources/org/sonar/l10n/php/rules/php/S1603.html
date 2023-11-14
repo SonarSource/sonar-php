@@ -1,7 +1,7 @@
 <h2>Why is this an issue?</h2>
 <p>Using a function in PHP with the same name as the nesting class was historically used to declare a class constructor. However, as of PHP 8.0.0,
 this declaration is discouraged and will provoke an <code>E_DEPRECATED</code> error, albeit it functions as a constructor.</p>
-<p>Instead, users should explicitly define the constructor by declaring a <code>__construct(…​)</code> function. However, if both styles are present
+<p>Instead, users should explicitly define the constructor by declaring a <code>__construct(...)</code> function. However, if both styles are present
 in the same class, PHP will treat the <code>__construct</code> function as the class constructor, which can cause unintended behavior.</p>
 <p>Adhering to this convention improves readability and maintainability by ensuring that the constructor declaration is named uniformly throughout the
 codebase.</p>
