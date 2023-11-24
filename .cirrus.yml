@@ -102,11 +102,6 @@ build_task:
     #allow deployment of pull request artifacts to repox
     DEPLOY_PULL_REQUEST: true
     CIRRUS_CLONE_DEPTH: 50
-  sonar_cache:
-    folder: ${HOME}/.sonar/cache
-    fingerprint_script:
-      - echo ${CIRRUS_OS}
-      - curl --silent ${SONAR_HOST_URL}/deploy/plugins/index.txt | sort
   build_script:
     - git submodule update --init
     - source cirrus-env BUILD
