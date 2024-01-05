@@ -47,7 +47,9 @@ class NonPhpProjectTest {
       .setProjectDir(PROJECT_DIR)
       .setProjectKey(PROJECT_KEY)
       .setProjectName(PROJECT_NAME)
-      .setSourceDirs(".");
+      .setSourceDirs(".")
+      // workaround following a change on SonarQube
+      .setProperty("sonar.plugins.downloadOnlyRequired", "false");
 
     buildResult = orchestrator.executeBuild(build);
   }
