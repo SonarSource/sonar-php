@@ -194,6 +194,7 @@ class Tests {
       .filter(line -> !line.startsWith("WARN: SonarQube scanners will require Java 11+ starting on next version"))
       .filter(line -> !line.startsWith("WARN: The sonar.modules is a deprecated property and should not be used anymore"))
       .filter(line -> !line.startsWith("WARN: PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results."))
+      .filter(line -> !line.startsWith("WARN: sonar.plugins.downloadOnlyRequired is false"))
       .filter(line -> !line.startsWith("WARNING: An illegal reflective access operation has occurred"))
       .filter(line -> !line.startsWith("WARNING: Illegal reflective access"))
       .filter(line -> !line.startsWith("WARNING: Please consider reporting this to the maintainers"))
