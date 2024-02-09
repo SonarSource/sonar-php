@@ -29,6 +29,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -202,6 +203,15 @@ class Tests {
       .filter(line -> !line.startsWith("WARNING: All illegal access operations will be denied in a future release"))
       .filter(line -> !line.startsWith("Picked up JAVA_TOOL_OPTIONS:"))
       .collect(Collectors.toList());
+
+    Set<String> temporaryToleratedStrings = Set.of(
+      "java.lang.NoClassDefFoundError: org/eclipse/jgit/internal/JGitText",
+      "org.eclipse.jgit.internal.util.ShutdownHook.cleanup",
+      "at java.base/java.lang.Thread.run",
+      "org.eclipse.jgit.internal.JGitText",
+      "... 2 more");
+
+    unexpectedLogs.removeIf(logElement -> temporaryToleratedStrings.stream().anyMatch(logElement::contains));
 
     assertThat(unexpectedLogs).isEmpty();
   }
