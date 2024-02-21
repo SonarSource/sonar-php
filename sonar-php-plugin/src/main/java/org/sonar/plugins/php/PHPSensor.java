@@ -106,7 +106,6 @@ public class PHPSensor implements Sensor {
 
     List<InputFile> inputFiles = new ArrayList<>();
     fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
-    LOG.info("Number of analyzed files: " + inputFiles.size());
     return inputFiles;
   }
 
