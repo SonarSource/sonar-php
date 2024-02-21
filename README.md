@@ -118,6 +118,6 @@ sonar-php/its/ruling/src/test/resources/expected/
 
 ### License
 
-Copyright 2010-2021 SonarSource.
+Copyright 2010-2024 SonarSource.
 
 Licensed under the [GNU Lesser General Public License, Version 3.0](https://www.gnu.org/licenses/lgpl.txt)

@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2023 SonarSource SA
+ * Copyright (C) 2010-2024 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -106,6 +106,7 @@ public class PHPSensor implements Sensor {
 
     List<InputFile> inputFiles = new ArrayList<>();
     fileSystem.inputFiles(phpFilePredicate).forEach(inputFiles::add);
+    LOG.info("Number of analyzed files: " + inputFiles.size());
     return inputFiles;
   }
 
