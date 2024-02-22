@@ -94,12 +94,12 @@
     <version.slf4j>1.7.30</version.slf4j>
 
     <!-- Advertise minimal required JRE version -->
-    <jre.min.version>11</jre.min.version>
+    <jre.min.version>17</jre.min.version>
 
     <!-- JDK Build versions -->
-    <jdk.min.version>11</jdk.min.version>
-    <jdk.source.version>11</jdk.source.version>
-    <jdk.target.version>11</jdk.target.version>
+    <jdk.min.version>17</jdk.min.version>
+    <jdk.source.version>17</jdk.source.version>
+    <jdk.target.version>17</jdk.target.version>
 
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>
