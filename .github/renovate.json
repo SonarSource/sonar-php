@@ -1,0 +1,14 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>SonarSource/renovate-config:languages-team"
+  ],
+  "enabledManagers": ["maven", "github-actions", "regex"],
+  "maven": {
+    "enabled": true
+  },
+  "ignorePaths": [
+    "its/**",
+    "**/test/**"
+  ]
+}
