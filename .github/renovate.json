@@ -10,5 +10,8 @@
   "ignorePaths": [
     "its/**",
     "**/test/**"
-  ]
+  ],
+  "patch": {
+    "enabled": false
+  }
 }
