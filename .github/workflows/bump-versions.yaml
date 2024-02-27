@@ -14,10 +14,10 @@ jobs:
       contents: write # write for peter-evans/create-pull-request, read for actions/checkout
       pull-requests: write # write for peter-evans/create-pull-request
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - run: |
           mvn versions:set-property -DgenerateBackupPoms=false -Dproperty=revision -DnewVersion=${{ github.event.inputs.version }}
-      - uses: peter-evans/create-pull-request@v5
+      - uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5
         with:
           author: ${{ github.actor }} <${{ github.actor }}>
           commit-message: Prepare next development iteration
