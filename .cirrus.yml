@@ -15,16 +15,6 @@ env:
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
 
-maven_cache: &MAVEN_CACHE
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
-    fingerprint_script: cat **/pom.xml
-
-win_maven_cache: &WIN_MAVEN_CACHE
-  maven_cache:
-    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
-    folder: ~/.m2/repository
-
 build_secrets: &BUILD_SECRETS
   SIGN_KEY: VAULT[development/kv/data/sign data.key]
   PGP_PASSPHRASE: VAULT[development/kv/data/sign data.passphrase]
@@ -45,6 +35,35 @@ promote_secrets: &PROMOTE_SECRETS
   BURGR_URL: VAULT[development/kv/data/burgr data.url]
   BURGR_USERNAME: VAULT[development/kv/data/burgr data.cirrus_username]
   BURGR_PASSWORD: VAULT[development/kv/data/burgr data.cirrus_password]
+
+
+# ----------------------------------------------
+# ------------------CACHING---------------------
+# ----------------------------------------------
+
+setup_orchestrator_cache: &SETUP_ORCHESTRATOR_CACHE
+  set_orchestrator_home_script: |
+    export TODAY=$(date '+%Y-%m-%d')
+    echo "TODAY=${TODAY}" >> $CIRRUS_ENV
+    echo "ORCHESTRATOR_HOME=${CIRRUS_WORKING_DIR}/orchestrator/${TODAY}" >> $CIRRUS_ENV
+  mkdir_orchestrator_home_script: |
+    echo "Create dir ${ORCHESTRATOR_HOME} if needed"
+    mkdir -p ${ORCHESTRATOR_HOME}
+  orchestrator_cache:
+    folder: ${ORCHESTRATOR_HOME}
+    fingerprint_script: echo ${TODAY}
+    reupload_on_changes: "true"
+
+maven_cache: &MAVEN_CACHE
+  maven_cache:
+    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
+    fingerprint_script: cat **/pom.xml
+
+win_maven_cache: &WIN_MAVEN_CACHE
+  maven_cache:
+    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
+    folder: ~/.m2/repository
+
 
 # ----------------------------------------------
 # -------------CONTAINER DEFINITIONS------------
@@ -122,6 +141,7 @@ plugin_qa_task:
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
+  <<: *SETUP_ORCHESTRATOR_CACHE
   <<: *MAVEN_CACHE
   env:
     CIRRUS_CLONE_DEPTH: 1
@@ -141,6 +161,7 @@ ruling_task:
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
+  <<: *SETUP_ORCHESTRATOR_CACHE
   <<: *MAVEN_CACHE
   env:
     CIRRUS_CLONE_DEPTH: 1
