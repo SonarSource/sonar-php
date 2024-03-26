@@ -479,7 +479,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
       if (callee.is(Kind.NAMESPACE_NAME)) {
         usageForNamespaceName(((NamespaceNameTree) callee), Symbol.Kind.CLASS);
         FunctionCallTree functionCall = (FunctionCallTree) tree.expression();
-        scan(functionCall.callArguments().stream().map(CallArgumentTree::value).collect(Collectors.toList()));
+        scan(functionCall.callArguments().stream().map(CallArgumentTree::value).toList());
         return;
       }
     }
@@ -498,7 +498,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
       visitCompactFunctionCall(tree.callArguments());
     }
 
-    scan(tree.callArguments().stream().map(CallArgumentTree::value).collect(Collectors.toList()));
+    scan(tree.callArguments().stream().map(CallArgumentTree::value).toList());
   }
 
   /**

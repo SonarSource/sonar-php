@@ -82,7 +82,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   private static SeparatedListImpl<ExpressionTree> argumentsValueList(SeparatedListImpl<CallArgumentTree> arguments) {
     List<ExpressionTree> argumentValues = arguments.stream()
       .map(CallArgumentTree::value)
-      .collect(Collectors.toList());
+      .toList();
 
     return new SeparatedListImpl<>(argumentValues, arguments.getSeparators());
   }

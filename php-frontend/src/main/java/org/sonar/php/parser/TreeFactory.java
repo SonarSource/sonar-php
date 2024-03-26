@@ -1694,9 +1694,7 @@ public class TreeFactory {
   public ExpressionTree postfixExpression(ExpressionTree expression, Optional<Object> optional) {
     if (optional.isPresent()) {
 
-      if (optional.get() instanceof SyntaxToken) {
-        SyntaxToken operator = (SyntaxToken) optional.get();
-
+      if (optional.get() instanceof SyntaxToken operator) {
         return new PostfixExpressionTreeImpl(
           operator.text().equals(PHPPunctuator.INC.getValue()) ? Kind.POSTFIX_INCREMENT : Kind.POSTFIX_DECREMENT,
           expression,
@@ -1853,7 +1851,7 @@ public class TreeFactory {
     if (rest.isPresent()) {
       otherElements = rest.get().stream()
         .map(t -> newTuple((SyntaxToken) t.first(), optional(t.second())))
-        .collect(Collectors.toList());
+        .toList();
     }
     return new ArrayAssignmentPatternElements(firstElement.orNull(), otherElements);
   }

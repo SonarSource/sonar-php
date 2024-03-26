@@ -156,9 +156,8 @@ public class LoggerConfigurationCheck extends PHPVisitorCheck {
   private static String getRawValue(ExpressionTree tree) {
     if (tree.is(Tree.Kind.NULL_LITERAL, Tree.Kind.BOOLEAN_LITERAL, Tree.Kind.NUMERIC_LITERAL)) {
       return ((LiteralTree) tree).value();
-    } else if (tree instanceof PrefixExpressionTreeImpl) {
-      PrefixExpressionTreeImpl prefixExpressionTree = (PrefixExpressionTreeImpl) tree;
-      return prefixExpressionTree.operator().text() + getRawValue(prefixExpressionTree.expression());
+    } else if (tree instanceof PrefixExpressionTreeImpl prefixExpression) {
+      return prefixExpression.operator().text() + getRawValue(prefixExpression.expression());
     } else if (tree.is(Tree.Kind.NAMESPACE_NAME)) {
       // Predefined constants (ex: E_ALL) are of type NamespaceNameTree
       return ((NamespaceNameTree) tree).qualifiedName();

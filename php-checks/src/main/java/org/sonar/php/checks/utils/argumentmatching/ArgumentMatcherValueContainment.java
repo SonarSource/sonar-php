@@ -51,8 +51,8 @@ public class ArgumentMatcherValueContainment extends ArgumentMatcher {
 
   public Optional<String> nameOf(Tree tree) {
     String name;
-    if (tree instanceof LiteralTree) {
-      name = ((LiteralTree) tree).value();
+    if (tree instanceof LiteralTree literal) {
+      name = literal.value();
     } else {
       name = CheckUtils.nameOf(tree);
     }

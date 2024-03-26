@@ -72,8 +72,7 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
   }
 
   private static boolean isStaticAccessWithName(ExpressionTree expression, String memberName) {
-    if (expression instanceof MemberAccessTree) {
-      MemberAccessTree tree = (MemberAccessTree) expression;
+    if (expression instanceof MemberAccessTree tree) {
       return tree.isStatic() && memberName.equals(name(tree.member()));
     }
     return false;
@@ -95,8 +94,8 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
 
   @CheckForNull
   private static String name(Tree expression) {
-    if (expression instanceof IdentifierTree) {
-      return ((IdentifierTree) expression).text();
+    if (expression instanceof IdentifierTree identifier) {
+      return identifier.text();
     }
     return null;
   }

@@ -147,7 +147,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     List<QualifiedName> interfaceNames = tree.superInterfaces().stream()
       .map(name -> getFullyQualifiedName(name, Symbol.Kind.CLASS))
-      .collect(Collectors.toList());
+      .toList();
 
     ClassSymbol.Kind kind = ClassSymbol.Kind.NORMAL;
     if (tree.is(Tree.Kind.CLASS_DECLARATION) && ((ClassDeclarationTree) tree).isAbstract()) {
@@ -180,7 +180,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     List<Parameter> parameters = tree.parameters().parameters().stream()
       .map(Parameter::fromTree)
-      .collect(Collectors.toList());
+      .toList();
 
     String visibilityName = tree.modifiers().stream()
       .map(m -> m.text().toUpperCase(Locale.ROOT))
@@ -216,7 +216,7 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     List<Parameter> parameters = tree.parameters().parameters().stream()
       .map(Parameter::fromTree)
-      .collect(Collectors.toList());
+      .toList();
 
     super.visitFunctionDeclaration(tree);
 

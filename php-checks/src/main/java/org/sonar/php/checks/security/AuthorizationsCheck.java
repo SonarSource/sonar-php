@@ -73,10 +73,10 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
     if (!hasModifier(methodDeclarationTree, "abstract")) {
       String functionName = trimQuotes(getFunctionName(methodDeclarationTree));
       if ("vote".equalsIgnoreCase(functionName) && isMethodInheritedFromClassOrInterface(SYMFONY_VOTER_INTERFACE_NAMESPACE, methodDeclarationTree)) {
-        checkReturnStatements(methodDeclarationTree, a -> (VOTER_INTERFACE_COMPLIANT_RETURN_VALUES.contains(a)));
+        checkReturnStatements(methodDeclarationTree, VOTER_INTERFACE_COMPLIANT_RETURN_VALUES::contains);
       }
       if ("voteOnAttribute".equalsIgnoreCase(functionName) && isMethodInheritedFromClassOrInterface(SYMFONY_VOTER_NAMESPACE, methodDeclarationTree)) {
-        checkReturnStatements(methodDeclarationTree, a -> ("false".equals(a)));
+        checkReturnStatements(methodDeclarationTree, "false"::equals);
       }
     }
     super.visitMethodDeclaration(methodDeclarationTree);
@@ -113,7 +113,7 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
   }
 
   private void checkReturnStatements(FunctionTree methodDeclarationTree, Predicate<String> predicate) {
-    List<ReturnStatementTree> returnStatements = descendants(methodDeclarationTree, ReturnStatementTree.class).collect(Collectors.toList());
+    List<ReturnStatementTree> returnStatements = descendants(methodDeclarationTree, ReturnStatementTree.class).toList();
     for (ReturnStatementTree returnStatementTree : returnStatements) {
       if (CompliantResultStatement.create(returnStatementTree.expression(), predicate).isCompliant()) {
         return;
@@ -126,36 +126,20 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
     }
   }
 
-  private static class CompliantResultStatement {
-    private ExpressionTree returnExpressionTree;
-    private Predicate<String> predicate;
-
-    private CompliantResultStatement(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
-      this.returnExpressionTree = returnExpressionTree;
-      this.predicate = predicate;
-    }
+  private record CompliantResultStatement(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
 
     static CompliantResultStatement create(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
       return new CompliantResultStatement(returnExpressionTree, predicate);
     }
-
     boolean isCompliant() {
-      switch (returnExpressionTree.getKind()) {
-        case NUMERIC_LITERAL:
-        case REGULAR_STRING_LITERAL:
-          return false;
-        case FUNCTION_CALL:
-          return isFunctionCallCompliant();
-        case VARIABLE_IDENTIFIER:
-          return isVariableValueCompliant();
-        case CLASS_MEMBER_ACCESS:
-          return isMemberValueCompliant();
-        case NULL_LITERAL:
-        case BOOLEAN_LITERAL:
-          return isBooleanOrNullLiteralValueCompliant();
-        default:
-          return true;
-      }
+      return switch (returnExpressionTree.getKind()) {
+        case NUMERIC_LITERAL, REGULAR_STRING_LITERAL -> false;
+        case FUNCTION_CALL -> isFunctionCallCompliant();
+        case VARIABLE_IDENTIFIER -> isVariableValueCompliant();
+        case CLASS_MEMBER_ACCESS -> isMemberValueCompliant();
+        case NULL_LITERAL, BOOLEAN_LITERAL -> isBooleanOrNullLiteralValueCompliant();
+        default -> true;
+      };
     }
 
     boolean isFunctionCallCompliant() {
@@ -164,10 +148,7 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
 
     boolean isVariableValueCompliant() {
       Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue((VariableIdentifierTree) returnExpressionTree);
-      if (uniqueAssignedValue.isPresent()) {
-        return create(uniqueAssignedValue.get(), predicate).isCompliant();
-      }
-      return true;
+      return uniqueAssignedValue.map(expressionTree -> create(expressionTree, predicate).isCompliant()).orElse(true);
     }
 
     boolean isBooleanOrNullLiteralValueCompliant() {

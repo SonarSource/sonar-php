@@ -55,7 +55,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   private void checkFunctionCall(FunctionCallTree tree, FunctionSymbol symbol) {
     List<String> parameters = symbol.parameters().stream()
       .map(Parameter::name)
-      .collect(Collectors.toList());
+      .toList();
 
     if (isWrongParameterSequence(tree, parameters)) {
       newIssue(tree, String.format(MESSAGE, symbol.qualifiedName()))
@@ -66,7 +66,7 @@ public class ParameterSequenceCheck extends PHPVisitorCheck {
   private static boolean isWrongParameterSequence(FunctionCallTree call, List<String> parameters) {
     List<String> arguments = CheckUtils.argumentsOfKind(call, Kind.VARIABLE_IDENTIFIER).stream()
       .map(e -> ((VariableIdentifierTree) e).text())
-      .collect(Collectors.toList());
+      .toList();
 
     return arguments.size() == parameters.size() && !arguments.equals(parameters) && new HashSet<>(parameters).equals(new HashSet<>(arguments));
   }

@@ -24,31 +24,15 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.cache.CacheContext;
 
-public final class PhpInputFileContext {
+public record PhpInputFileContext(PhpFile phpFile, @Nullable File workingDirectory, @Nullable CacheContext cacheContext) {
 
-  private final PhpFile phpFile;
-
-  @Nullable
-  private final File workingDirectory;
-
-  @Nullable
-  private final CacheContext cacheContext;
-
-  public PhpInputFileContext(PhpFile phpFile, @Nullable File workingDirectory, @Nullable CacheContext cacheContext) {
-    this.phpFile = phpFile;
-    this.workingDirectory = workingDirectory;
-    this.cacheContext = cacheContext;
-  }
-
-  public PhpFile phpFile() {
-    return phpFile;
-  }
-
+  @Override
   @CheckForNull
   public File workingDirectory() {
     return workingDirectory;
   }
 
+  @Override
   @CheckForNull
   public CacheContext cacheContext() {
     return cacheContext;

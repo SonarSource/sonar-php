@@ -150,19 +150,13 @@ public abstract class AbstractRegexCheck extends FunctionUsageCheck implements P
 
   @CheckForNull
   private static Integer parseModifier(char ch) {
-    switch (ch) {
-      case 'i':
-        return PCRE_CASELESS;
-      case 'm':
-        return PCRE_MULTILINE;
-      case 's':
-        return PCRE_DOTALL;
-      case 'u':
-        return PCRE_UTF8;
-      case 'x':
-        return PCRE_EXTENDED;
-      default:
-        return null;
-    }
+    return switch (ch) {
+      case 'i' -> PCRE_CASELESS;
+      case 'm' -> PCRE_MULTILINE;
+      case 's' -> PCRE_DOTALL;
+      case 'u' -> PCRE_UTF8;
+      case 'x' -> PCRE_EXTENDED;
+      default -> null;
+    };
   }
 }

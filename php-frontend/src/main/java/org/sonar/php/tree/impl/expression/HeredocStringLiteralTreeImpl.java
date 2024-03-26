@@ -102,12 +102,12 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
     return elements.stream()
       .filter(ExpandableStringCharactersTree.class::isInstance)
       .map(ExpandableStringCharactersTree.class::cast)
-      .collect(Collectors.toList());
+      .toList();
   }
 
   @Override
   public List<ExpressionTree> expressions() {
-    return elements.stream().filter(input -> !input.is(Kind.HEREDOC_STRING_CHARACTERS)).collect(Collectors.toList());
+    return elements.stream().filter(input -> !input.is(Kind.HEREDOC_STRING_CHARACTERS)).toList();
   }
 
   @Override

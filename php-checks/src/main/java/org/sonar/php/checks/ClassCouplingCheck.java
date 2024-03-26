@@ -134,8 +134,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
   private void retrieveCoupledTypes(ClassTree classTree) {
     for (ClassMemberTree classMember : classTree.members()) {
       switch (classMember.getKind()) {
-        case CLASS_PROPERTY_DECLARATION:
-        case CLASS_CONSTANT_PROPERTY_DECLARATION:
+        case CLASS_PROPERTY_DECLARATION, CLASS_CONSTANT_PROPERTY_DECLARATION:
           retrieveTypeFromDoc(classMember);
           break;
         case METHOD_DECLARATION:

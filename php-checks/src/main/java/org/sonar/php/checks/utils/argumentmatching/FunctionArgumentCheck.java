@@ -79,7 +79,7 @@ public abstract class FunctionArgumentCheck extends PHPVisitorCheck {
       ExpressionTree argumentValue = CheckUtils.assignedValue(argument);
 
       boolean matchesValues = argumentMatcher.matches(argumentValue);
-      if (argumentMatcher instanceof IssueRaiser && ((IssueRaiser) argumentMatcher).shouldRaiseIssue(matchesValues, argumentValue)) {
+      if (argumentMatcher instanceof IssueRaiser issueRaiser && issueRaiser.shouldRaiseIssue(matchesValues, argumentValue)) {
         createIssue(argument);
       }
       return matchesValues;

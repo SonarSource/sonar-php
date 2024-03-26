@@ -169,10 +169,7 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     while (!isSuspicious && !operands.isEmpty()) {
       ExpressionTree operand = operands.pop();
       switch (operand.getKind()) {
-        case BOOLEAN_LITERAL:
-        case NULL_LITERAL:
-        case REGULAR_STRING_LITERAL:
-        case NUMERIC_LITERAL:
+        case BOOLEAN_LITERAL, NULL_LITERAL, REGULAR_STRING_LITERAL, NUMERIC_LITERAL:
           break;
         case CONCATENATION:
           operands.add(((BinaryExpressionTree) operand).leftOperand());

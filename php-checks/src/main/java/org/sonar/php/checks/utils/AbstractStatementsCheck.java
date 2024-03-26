@@ -63,51 +63,20 @@ public class AbstractStatementsCheck extends PHPSubscriptionCheck {
   }
 
   public static List<StatementTree> getStatements(Tree tree) {
-    List<StatementTree> statements = Collections.emptyList();
-    switch (tree.getKind()) {
-      case SCRIPT:
-        statements = ((ScriptTree) tree).statements();
-        break;
-      case BLOCK:
-        statements = ((BlockTree) tree).statements();
-        break;
-      case CASE_CLAUSE:
-      case DEFAULT_CLAUSE:
-        statements = ((SwitchCaseClauseTree) tree).statements();
-        break;
-      case DECLARE_STATEMENT:
-        statements = ((DeclareStatementTree) tree).statements();
-        break;
-      case IF_STATEMENT:
-      case ALTERNATIVE_IF_STATEMENT:
-        statements = ((IfStatementTree) tree).statements();
-        break;
-      case ELSE_CLAUSE:
-      case ALTERNATIVE_ELSE_CLAUSE:
-        statements = ((ElseClauseTree) tree).statements();
-        break;
-      case ELSEIF_CLAUSE:
-      case ALTERNATIVE_ELSEIF_CLAUSE:
-        statements = ((ElseifClauseTree) tree).statements();
-        break;
-      case FOREACH_STATEMENT:
-      case ALTERNATIVE_FOREACH_STATEMENT:
-        statements = ((ForEachStatementTree) tree).statements();
-        break;
-      case FOR_STATEMENT:
-      case ALTERNATIVE_FOR_STATEMENT:
-        statements = ((ForStatementTree) tree).statements();
-        break;
-      case NAMESPACE_STATEMENT:
-        statements = ((NamespaceStatementTree) tree).statements();
-        break;
-      case WHILE_STATEMENT:
-        statements = ((WhileStatementTree) tree).statements();
-        break;
-      default:
-        break;
-    }
-    return statements;
+    return switch (tree.getKind()) {
+      case SCRIPT -> ((ScriptTree) tree).statements();
+      case BLOCK -> ((BlockTree) tree).statements();
+      case CASE_CLAUSE, DEFAULT_CLAUSE -> ((SwitchCaseClauseTree) tree).statements();
+      case DECLARE_STATEMENT -> ((DeclareStatementTree) tree).statements();
+      case IF_STATEMENT, ALTERNATIVE_IF_STATEMENT -> ((IfStatementTree) tree).statements();
+      case ELSE_CLAUSE, ALTERNATIVE_ELSE_CLAUSE -> ((ElseClauseTree) tree).statements();
+      case ELSEIF_CLAUSE, ALTERNATIVE_ELSEIF_CLAUSE -> ((ElseifClauseTree) tree).statements();
+      case FOREACH_STATEMENT, ALTERNATIVE_FOREACH_STATEMENT -> ((ForEachStatementTree) tree).statements();
+      case FOR_STATEMENT, ALTERNATIVE_FOR_STATEMENT -> ((ForStatementTree) tree).statements();
+      case NAMESPACE_STATEMENT -> ((NamespaceStatementTree) tree).statements();
+      case WHILE_STATEMENT -> ((WhileStatementTree) tree).statements();
+      default -> Collections.emptyList();
+    };
   }
 
 }

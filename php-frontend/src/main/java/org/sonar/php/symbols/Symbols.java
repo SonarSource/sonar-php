@@ -50,8 +50,8 @@ public class Symbols {
   }
 
   public static ClassSymbol getClass(NamespaceNameTree namespaceNameTree) {
-    if (namespaceNameTree instanceof ClassNamespaceNameTreeImpl) {
-      return ((ClassNamespaceNameTreeImpl) namespaceNameTree).symbol();
+    if (namespaceNameTree instanceof ClassNamespaceNameTreeImpl namespaceName) {
+      return namespaceName.symbol();
     }
     return new UnknownClassSymbol(qualifiedName(namespaceNameTree.qualifiedName()));
   }
