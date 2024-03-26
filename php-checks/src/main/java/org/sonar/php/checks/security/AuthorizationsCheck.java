@@ -129,35 +129,34 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
   private record CompliantResultStatement(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
 
     static CompliantResultStatement create(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
-        return new CompliantResultStatement(returnExpressionTree, predicate);
-      }
-
-      boolean isCompliant() {
-        return switch (returnExpressionTree.getKind()) {
-          case NUMERIC_LITERAL, REGULAR_STRING_LITERAL -> false;
-          case FUNCTION_CALL -> isFunctionCallCompliant();
-          case VARIABLE_IDENTIFIER -> isVariableValueCompliant();
-          case CLASS_MEMBER_ACCESS -> isMemberValueCompliant();
-          case NULL_LITERAL, BOOLEAN_LITERAL -> isBooleanOrNullLiteralValueCompliant();
-          default -> true;
-        };
-      }
-
-      boolean isFunctionCallCompliant() {
-        return !"response::allow".equalsIgnoreCase(nameOf(((FunctionCallTree) returnExpressionTree).callee()));
-      }
-
-      boolean isVariableValueCompliant() {
-        Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue((VariableIdentifierTree) returnExpressionTree);
-        return uniqueAssignedValue.map(expressionTree -> create(expressionTree, predicate).isCompliant()).orElse(true);
-      }
-
-      boolean isBooleanOrNullLiteralValueCompliant() {
-        return predicate.test(((LiteralTree) returnExpressionTree).value().toLowerCase(Locale.ROOT));
-      }
-
-      boolean isMemberValueCompliant() {
-        return predicate.test(nameOf(((MemberAccessTree) returnExpressionTree).member()));
-      }
+      return new CompliantResultStatement(returnExpressionTree, predicate);
     }
+    boolean isCompliant() {
+      return switch (returnExpressionTree.getKind()) {
+        case NUMERIC_LITERAL, REGULAR_STRING_LITERAL -> false;
+        case FUNCTION_CALL -> isFunctionCallCompliant();
+        case VARIABLE_IDENTIFIER -> isVariableValueCompliant();
+        case CLASS_MEMBER_ACCESS -> isMemberValueCompliant();
+        case NULL_LITERAL, BOOLEAN_LITERAL -> isBooleanOrNullLiteralValueCompliant();
+        default -> true;
+      };
+    }
+
+    boolean isFunctionCallCompliant() {
+      return !"response::allow".equalsIgnoreCase(nameOf(((FunctionCallTree) returnExpressionTree).callee()));
+    }
+
+    boolean isVariableValueCompliant() {
+      Optional<ExpressionTree> uniqueAssignedValue = CheckUtils.uniqueAssignedValue((VariableIdentifierTree) returnExpressionTree);
+      return uniqueAssignedValue.map(expressionTree -> create(expressionTree, predicate).isCompliant()).orElse(true);
+    }
+
+    boolean isBooleanOrNullLiteralValueCompliant() {
+      return predicate.test(((LiteralTree) returnExpressionTree).value().toLowerCase(Locale.ROOT));
+    }
+
+    boolean isMemberValueCompliant() {
+      return predicate.test(nameOf(((MemberAccessTree) returnExpressionTree).member()));
+    }
+  }
 }
