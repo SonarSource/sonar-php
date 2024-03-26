@@ -145,7 +145,7 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
 
     if (callee.is(Tree.Kind.CLASS_MEMBER_ACCESS) && (((MemberAccessTree) callee).object().is(Tree.Kind.NAMESPACE_NAME))) {
       className = getFullyQualifiedName((NamespaceNameTree) ((MemberAccessTree) callee).object()).toString();
-    } else if (callee.is(Tree.Kind.OBJECT_MEMBER_ACCESS) && (((MemberAccessTree) callee).object()instanceof VariableIdentifierTreeImpl receiver)) {
+    } else if (callee.is(Tree.Kind.OBJECT_MEMBER_ACCESS) && (((MemberAccessTree) callee).object() instanceof VariableIdentifierTreeImpl receiver)) {
       Symbol receiverSymbol = receiver.symbol();
       if (receiverSymbol == null) {
         return null;
