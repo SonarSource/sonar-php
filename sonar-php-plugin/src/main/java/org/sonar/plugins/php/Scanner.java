@@ -62,7 +62,7 @@ abstract class Scanner {
   void execute(ProgressReport progressReport, List<InputFile> files) {
     String name = this.name();
     LOG.info("Starting {}", name);
-    List<String> filenames = files.stream().map(InputFile::toString).collect(Collectors.toList());
+    List<String> filenames = files.stream().map(InputFile::toString).toList();
     progressReport.start(filenames);
 
     boolean success = false;

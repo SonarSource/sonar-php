@@ -71,31 +71,25 @@ public class AbstractStatementsCheck extends PHPSubscriptionCheck {
       case BLOCK:
         statements = ((BlockTree) tree).statements();
         break;
-      case CASE_CLAUSE:
-      case DEFAULT_CLAUSE:
+      case CASE_CLAUSE, DEFAULT_CLAUSE:
         statements = ((SwitchCaseClauseTree) tree).statements();
         break;
       case DECLARE_STATEMENT:
         statements = ((DeclareStatementTree) tree).statements();
         break;
-      case IF_STATEMENT:
-      case ALTERNATIVE_IF_STATEMENT:
+      case IF_STATEMENT, ALTERNATIVE_IF_STATEMENT:
         statements = ((IfStatementTree) tree).statements();
         break;
-      case ELSE_CLAUSE:
-      case ALTERNATIVE_ELSE_CLAUSE:
+      case ELSE_CLAUSE, ALTERNATIVE_ELSE_CLAUSE:
         statements = ((ElseClauseTree) tree).statements();
         break;
-      case ELSEIF_CLAUSE:
-      case ALTERNATIVE_ELSEIF_CLAUSE:
+      case ELSEIF_CLAUSE, ALTERNATIVE_ELSEIF_CLAUSE:
         statements = ((ElseifClauseTree) tree).statements();
         break;
-      case FOREACH_STATEMENT:
-      case ALTERNATIVE_FOREACH_STATEMENT:
+      case FOREACH_STATEMENT, ALTERNATIVE_FOREACH_STATEMENT:
         statements = ((ForEachStatementTree) tree).statements();
         break;
-      case FOR_STATEMENT:
-      case ALTERNATIVE_FOR_STATEMENT:
+      case FOR_STATEMENT, ALTERNATIVE_FOR_STATEMENT:
         statements = ((ForStatementTree) tree).statements();
         break;
       case NAMESPACE_STATEMENT:

@@ -60,7 +60,7 @@ public class ListUtils {
 
   @SafeVarargs
   public static <T> List<T> merge(Collection<? extends T>... collections) {
-    return concat(collections).stream().distinct().collect(Collectors.toList());
+    return concat(collections).stream().distinct().toList();
   }
 
   public static <T> List<T> reverse(List<T> list) {

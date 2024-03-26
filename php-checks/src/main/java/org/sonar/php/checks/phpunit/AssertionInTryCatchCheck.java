@@ -74,7 +74,7 @@ public class AssertionInTryCatchCheck extends PhpUnitCheck {
       }
 
       result.addAll(
-        catchBlockTree.exceptionTypes().stream().filter(AssertionInTryCatchCheck::isRelevantExceptionType).collect(Collectors.toList()));
+        catchBlockTree.exceptionTypes().stream().filter(AssertionInTryCatchCheck::isRelevantExceptionType).toList());
     }
 
     return result;

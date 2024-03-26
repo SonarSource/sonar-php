@@ -93,7 +93,7 @@ public class PHPCheckTest {
   private static List<TestIssue> toTestIssues(List<PhpIssue> phpIssues) {
     return phpIssues.stream()
       .map(phpIssue -> TestIssue.create(message(phpIssue), line(phpIssue)))
-      .collect(Collectors.toList());
+      .toList();
   }
 
   private static void compare(List<PhpIssue> actualIssues, List<TestIssue> expectedIssues) {
@@ -133,8 +133,8 @@ public class PHPCheckTest {
   }
 
   private static int line(PhpIssue issue) {
-    if (issue instanceof LineIssue) {
-      return ((LineIssue) issue).line();
+    if (issue instanceof LineIssue lineIssue) {
+      return lineIssue.line();
 
     } else if (issue instanceof FileIssue) {
       return 0;
@@ -144,11 +144,11 @@ public class PHPCheckTest {
   }
 
   private static String message(PhpIssue issue) {
-    if (issue instanceof LineIssue) {
-      return ((LineIssue) issue).message();
+    if (issue instanceof LineIssue lineIssue) {
+      return lineIssue.message();
 
-    } else if (issue instanceof FileIssue) {
-      return ((FileIssue) issue).message();
+    } else if (issue instanceof FileIssue fileIssue) {
+      return fileIssue.message();
     }
 
     return ((PreciseIssue) issue).primaryLocation().message();
@@ -215,11 +215,10 @@ public class PHPCheckTest {
       }
 
       if (expectedIssue.startColumn() != null) {
-        if (!(actualIssue instanceof PreciseIssue)) {
+        if (!(actualIssue instanceof PreciseIssue actualPreciseIssue)) {
           return String.format(NO_PRECISE_LOCATION, expectedIssue.line());
         }
 
-        PreciseIssue actualPreciseIssue = (PreciseIssue) actualIssue;
         int actualStart = actualPreciseIssue.primaryLocation().startLineOffset();
         if (expectedIssue.startColumn() != actualStart) {
           return String.format(WRONG_PRIMARY_LOCATION, expectedIssue.line(), "start", actualStart);

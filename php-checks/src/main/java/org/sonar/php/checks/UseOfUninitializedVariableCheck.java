@@ -267,8 +267,8 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     }
     BlockSummary summary = new BlockSummary(visitor.initializedVariables, visitor.scopeWasChanged);
 
-    if (block instanceof CfgBranchingBlock) {
-      Tree branchingTree = ((CfgBranchingBlock) block).branchingTree();
+    if (block instanceof CfgBranchingBlock branchingBlock) {
+      Tree branchingTree = branchingBlock.branchingTree();
       if (branchingTree.is(Kind.FOREACH_STATEMENT, Kind.ALTERNATIVE_FOREACH_STATEMENT)) {
         summary.initializedVariables.addAll(getForEachVariables((ForEachStatementTree) branchingTree));
       }

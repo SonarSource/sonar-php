@@ -412,7 +412,7 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
    */
   private static boolean isVoidSymbol(FunctionSymbol functionSymbol) {
     return !functionSymbol.isUnknownSymbol() && !functionSymbol.hasReturn() &&
-      (!(functionSymbol instanceof MethodSymbol) || ((MethodSymbol) functionSymbol).isAbstract().isFalse());
+      (!(functionSymbol instanceof MethodSymbol methodSymbol) || methodSymbol.isAbstract().isFalse());
   }
 
   /**

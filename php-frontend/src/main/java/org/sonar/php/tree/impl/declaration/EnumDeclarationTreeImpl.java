@@ -50,7 +50,7 @@ public class EnumDeclarationTreeImpl extends ClassDeclarationTreeImpl implements
       implementsToken, superInterfaces, openCurlyBraceToken, members, closeCurlyBraceToken);
     this.typeColonToken = typeColonToken;
     this.backingType = backingType;
-    this.cases = members.stream().filter(m -> m.is(Kind.ENUM_CASE)).map(EnumCaseTree.class::cast).collect(Collectors.toList());
+    this.cases = members.stream().filter(m -> m.is(Kind.ENUM_CASE)).map(EnumCaseTree.class::cast).toList();
   }
 
   @Nullable

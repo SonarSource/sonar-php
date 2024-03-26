@@ -78,7 +78,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
     SyntaxToken closeCurlyBraceToken) {
     List<ExpressionTree> argumentValues = callArguments.stream()
       .map(CallArgumentTree::value)
-      .collect(Collectors.toList());
+      .toList();
 
     this.attributeGroups = attributeGroups;
     this.readonly = readonly;

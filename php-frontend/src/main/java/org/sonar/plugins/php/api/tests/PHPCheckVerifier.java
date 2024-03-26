@@ -122,10 +122,10 @@ public class PHPCheckVerifier {
   }
 
   private static MultiFileVerifier.Issue addIssue(MultiFileVerifier verifier, PhpIssue issue, PhpFile file) {
-    if (issue instanceof LineIssue) {
-      return addLineIssue(verifier, (LineIssue) issue, file);
-    } else if (issue instanceof FileIssue) {
-      return addFileIssue(verifier, (FileIssue) issue, file);
+    if (issue instanceof LineIssue lineIssue) {
+      return addLineIssue(verifier, lineIssue, file);
+    } else if (issue instanceof FileIssue fileIssue) {
+      return addFileIssue(verifier, fileIssue, file);
     } else {
       return addPreciseIssue(verifier, (PreciseIssue) issue, file);
     }

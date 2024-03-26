@@ -79,7 +79,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     if (check.isFunctionCallsArgumentsIndentation && !check.isInternalFunction(tree.callee())) {
       SyntaxToken calleeLastToken = ((PHPTree) tree.callee()).getLastToken();
       checkArgumentsIndentation(
-        tree.callArguments().stream().map(CallArgumentTree::value).collect(Collectors.toList()),
+        tree.callArguments().stream().map(CallArgumentTree::value).toList(),
         calleeLastToken,
         startColumnForLine(calleeLastToken.line()),
         tree.closeParenthesisToken(), true);

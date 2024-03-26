@@ -56,7 +56,7 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
     List<ExpressionTree> values = new ArrayList<>();
     if (rhs.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
       List<ArrayPairTree> valueArrayParis = ((ArrayInitializerTree) rhs).arrayPairs();
-      values = valueArrayParis.stream().anyMatch(p -> p.key() != null) ? Collections.emptyList() : valueArrayParis.stream().map(ArrayPairTree::value).collect(Collectors.toList());
+      values = valueArrayParis.stream().anyMatch(p -> p.key() != null) ? Collections.emptyList() : valueArrayParis.stream().map(ArrayPairTree::value).toList();
     }
 
     int index = 0;

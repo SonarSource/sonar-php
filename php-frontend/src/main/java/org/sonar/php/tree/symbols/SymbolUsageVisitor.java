@@ -65,8 +65,8 @@ class SymbolUsageVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitNamespaceName(NamespaceNameTree tree) {
-    if (tree instanceof ClassNamespaceNameTreeImpl) {
-      resolveClassSymbol((ClassNamespaceNameTreeImpl) tree);
+    if (tree instanceof ClassNamespaceNameTreeImpl classNamespaceName) {
+      resolveClassSymbol(classNamespaceName);
     }
     super.visitNamespaceName(tree);
   }

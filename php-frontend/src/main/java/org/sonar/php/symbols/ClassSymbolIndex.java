@@ -97,7 +97,7 @@ public class ClassSymbolIndex {
 
     @Override
     public List<ClassSymbol> implementedInterfaces() {
-      return data.implementedInterfaces().stream().map(i -> get(i)).collect(Collectors.toList());
+      return data.implementedInterfaces().stream().map(ClassSymbolIndex.this::get).toList();
     }
 
     @Override

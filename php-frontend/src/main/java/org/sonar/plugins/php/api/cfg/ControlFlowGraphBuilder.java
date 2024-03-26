@@ -130,65 +130,29 @@ class ControlFlowGraphBuilder {
   }
 
   private PhpCfgBlock build(Tree tree, PhpCfgBlock currentBlock) {
-    switch (tree.getKind()) {
-      case TRY_STATEMENT:
-        return buildTryStatement((TryStatementTree) tree, currentBlock);
-      case THROW_STATEMENT:
-        return buildThrowStatement((ThrowStatementTree) tree, currentBlock);
-      case RETURN_STATEMENT:
-        return buildReturnStatement((ReturnStatementTree) tree, currentBlock);
-      case BREAK_STATEMENT:
-        return buildBreakStatement((BreakStatementTree) tree, currentBlock);
-      case CONTINUE_STATEMENT:
-        return buildContinueStatement((ContinueStatementTree) tree, currentBlock);
-      case GOTO_STATEMENT:
-        return buildGotoStatement((GotoStatementTree) tree, currentBlock);
-      case DO_WHILE_STATEMENT:
-        return buildDoWhileStatement((DoWhileStatementTree) tree, currentBlock);
-      case WHILE_STATEMENT:
-      case ALTERNATIVE_WHILE_STATEMENT:
-        return buildWhileStatement((WhileStatementTree) tree, currentBlock);
-      case IF_STATEMENT:
-      case ALTERNATIVE_IF_STATEMENT:
-        return buildIfStatement((IfStatementTree) tree, currentBlock);
-      case FOR_STATEMENT:
-      case ALTERNATIVE_FOR_STATEMENT:
-        return buildForStatement((ForStatementTree) tree, currentBlock);
-      case FOREACH_STATEMENT:
-      case ALTERNATIVE_FOREACH_STATEMENT:
-        return buildForEachStatement((ForEachStatementTree) tree, currentBlock);
-      case BLOCK:
-        return buildBlock((BlockTree) tree, currentBlock);
-      case SWITCH_STATEMENT:
-      case ALTERNATIVE_SWITCH_STATEMENT:
-        return buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
-      case LABEL:
-        return createLabelBlock((LabelTree) tree, currentBlock);
-      case DECLARE_STATEMENT:
-        return buildDeclareStatement((DeclareStatementTree) tree, currentBlock);
-      case GLOBAL_STATEMENT:
-      case STATIC_STATEMENT:
-      case UNSET_VARIABLE_STATEMENT:
-      case EXPRESSION_LIST_STATEMENT:
-      case FUNCTION_DECLARATION:
-      case USE_STATEMENT:
-      case GROUP_USE_STATEMENT:
-      case CONSTANT_DECLARATION:
-      case NAMESPACE_STATEMENT:
-      case INLINE_HTML:
-      case EXPRESSION_STATEMENT:
-      case ECHO_TAG_STATEMENT:
+    return switch (tree.getKind()) {
+      case TRY_STATEMENT -> buildTryStatement((TryStatementTree) tree, currentBlock);
+      case THROW_STATEMENT -> buildThrowStatement((ThrowStatementTree) tree, currentBlock);
+      case RETURN_STATEMENT -> buildReturnStatement((ReturnStatementTree) tree, currentBlock);
+      case BREAK_STATEMENT -> buildBreakStatement((BreakStatementTree) tree, currentBlock);
+      case CONTINUE_STATEMENT -> buildContinueStatement((ContinueStatementTree) tree, currentBlock);
+      case GOTO_STATEMENT -> buildGotoStatement((GotoStatementTree) tree, currentBlock);
+      case DO_WHILE_STATEMENT -> buildDoWhileStatement((DoWhileStatementTree) tree, currentBlock);
+      case WHILE_STATEMENT, ALTERNATIVE_WHILE_STATEMENT -> buildWhileStatement((WhileStatementTree) tree, currentBlock);
+      case IF_STATEMENT, ALTERNATIVE_IF_STATEMENT -> buildIfStatement((IfStatementTree) tree, currentBlock);
+      case FOR_STATEMENT, ALTERNATIVE_FOR_STATEMENT -> buildForStatement((ForStatementTree) tree, currentBlock);
+      case FOREACH_STATEMENT, ALTERNATIVE_FOREACH_STATEMENT -> buildForEachStatement((ForEachStatementTree) tree, currentBlock);
+      case BLOCK -> buildBlock((BlockTree) tree, currentBlock);
+      case SWITCH_STATEMENT, ALTERNATIVE_SWITCH_STATEMENT -> buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
+      case LABEL -> createLabelBlock((LabelTree) tree, currentBlock);
+      case DECLARE_STATEMENT -> buildDeclareStatement((DeclareStatementTree) tree, currentBlock);
+      case GLOBAL_STATEMENT, STATIC_STATEMENT, UNSET_VARIABLE_STATEMENT, EXPRESSION_LIST_STATEMENT, FUNCTION_DECLARATION, USE_STATEMENT, GROUP_USE_STATEMENT, CONSTANT_DECLARATION, NAMESPACE_STATEMENT, INLINE_HTML, EXPRESSION_STATEMENT, ECHO_TAG_STATEMENT -> {
         currentBlock.addElement(tree);
-        return currentBlock;
-      case TRAIT_DECLARATION:
-      case INTERFACE_DECLARATION:
-      case CLASS_DECLARATION:
-      case EMPTY_STATEMENT:
-      case ENUM_DECLARATION:
-        return currentBlock;
-      default:
-        throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
-    }
+        yield currentBlock;
+      }
+      case TRAIT_DECLARATION, INTERFACE_DECLARATION, CLASS_DECLARATION, EMPTY_STATEMENT, ENUM_DECLARATION -> currentBlock;
+      default -> throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
+    };
   }
 
   private PhpCfgBlock buildDeclareStatement(DeclareStatementTree declare, PhpCfgBlock successor) {
@@ -235,7 +199,7 @@ class ControlFlowGraphBuilder {
 
     List<PhpCfgBlock> catchBlocks = tree.catchBlocks().stream()
       .map(catchBlockTree -> buildSubFlow(catchBlockTree.block().statements(), finallyBlock))
-      .collect(Collectors.toList());
+      .toList();
 
     if (catchBlocks.isEmpty()) {
       throwTargets.push(finallyBlock);

@@ -160,7 +160,7 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
     }
     List<CfgBlock> loopBlocks = cfg.blocks().stream()
       .filter(CfgBranchingBlock.class::isInstance)
-      .filter(b -> ((CfgBranchingBlock) b).branchingTree().equals(loop)).collect(Collectors.toList());
+      .filter(b -> ((CfgBranchingBlock) b).branchingTree().equals(loop)).toList();
 
     return ((CfgBranchingBlock) getOnlyElement(loopBlocks));
   }

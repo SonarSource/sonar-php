@@ -118,7 +118,7 @@ class AnalysisScanner extends Scanner {
     if (inSonarLint(context)) {
       applicableChecks = applicableChecks.stream()
         .filter(e -> !(e instanceof UncatchableExceptionCheck))
-        .collect(Collectors.toList());
+        .toList();
     }
     return applicableChecks;
   }
@@ -129,7 +129,7 @@ class AnalysisScanner extends Scanner {
   private List<PHPCheck> getTestFileChecks() {
     return this.checks.all().stream()
       .filter(PhpUnitCheck.class::isInstance)
-      .collect(Collectors.toList());
+      .toList();
   }
 
   private boolean scanFileWithoutParsing(InputFile inputFile, CpdVisitor cpdVisitor) {
@@ -224,17 +224,15 @@ class AnalysisScanner extends Scanner {
   private List<PhpIssue> filterIssuesByWarningSuppressor(InputFile inputFile, List<PhpIssue> issues) {
     return issues.stream()
       .filter(issue -> isIncluded(inputFile, issue))
-      .collect(Collectors.toList());
+      .toList();
   }
 
   private boolean isIncluded(InputFile inputFile, PhpIssue issue) {
     RuleKey ruleKey = checks.ruleKeyFor(issue.check());
     if (ruleKey != null) {
-      if (issue instanceof LineIssue) {
-        LineIssue lineIssue = (LineIssue) issue;
+      if (issue instanceof LineIssue lineIssue) {
         return suppressWarningFilter.accept(inputFile.uri().toString(), ruleKey.toString(), lineIssue.line());
-      } else if (issue instanceof PreciseIssue) {
-        PreciseIssue preciseIssue = (PreciseIssue) issue;
+      } else if (issue instanceof PreciseIssue preciseIssue) {
         return suppressWarningFilter.accept(inputFile.uri().toString(), ruleKey.toString(), preciseIssue.primaryLocation().startLine());
       }
     }
@@ -248,10 +246,7 @@ class AnalysisScanner extends Scanner {
         .forRule(ruleKey)
         .gap(issue.cost());
 
-      if (issue instanceof LineIssue) {
-
-        LineIssue lineIssue = (LineIssue) issue;
-
+      if (issue instanceof LineIssue lineIssue) {
         NewIssueLocation location = newIssue.newLocation()
           .message(lineIssue.message())
           .on(inputFile)
@@ -259,18 +254,13 @@ class AnalysisScanner extends Scanner {
 
         newIssue.at(location);
 
-      } else if (issue instanceof FileIssue) {
-
-        FileIssue fileIssue = (FileIssue) issue;
-
+      } else if (issue instanceof FileIssue fileIssue) {
         NewIssueLocation location = newIssue.newLocation()
           .message(fileIssue.message())
           .on(inputFile);
 
         newIssue.at(location);
-
       } else {
-
         PreciseIssue preciseIssue = (PreciseIssue) issue;
 
         newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
@@ -361,7 +351,7 @@ class AnalysisScanner extends Scanner {
     List<RuleKey> keys = checks.all().stream()
       .filter(ParsingErrorCheck.class::isInstance)
       .map(checks::ruleKeyFor)
-      .collect(Collectors.toList());
+      .toList();
 
     return keys.isEmpty() ? null : keys.get(0);
   }

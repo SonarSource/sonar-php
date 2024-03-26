@@ -123,34 +123,27 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
 
   private static RuleType toType(@Nullable String type) {
     if (type != null) {
-      switch (type) {
-        case "BUG":
-          return RuleType.BUG;
-        case "SECURITY_HOTSPOT":
-          return RuleType.SECURITY_HOTSPOT;
-        case "VULNERABILITY":
-          return RuleType.VULNERABILITY;
-        case "CODE_SMELL":
-          return RuleType.CODE_SMELL;
-      }
+      return switch (type) {
+        case "BUG" -> RuleType.BUG;
+        case "SECURITY_HOTSPOT" -> RuleType.SECURITY_HOTSPOT;
+        case "VULNERABILITY" -> RuleType.VULNERABILITY;
+        case "CODE_SMELL" -> RuleType.CODE_SMELL;
+        default -> DEFAULT_RULE_TYPE;
+      };
     }
     return DEFAULT_RULE_TYPE;
   }
 
   private static Severity toSeverity(@Nullable String severity) {
     if (severity != null) {
-      switch (severity) {
-        case "INFO":
-          return Severity.INFO;
-        case "MINOR":
-          return Severity.MINOR;
-        case "MAJOR":
-          return Severity.MAJOR;
-        case "CRITICAL":
-          return Severity.CRITICAL;
-        case "BLOCKER":
-          return Severity.BLOCKER;
-      }
+      return switch (severity) {
+        case "INFO" -> Severity.INFO;
+        case "MINOR" -> Severity.MINOR;
+        case "MAJOR" -> Severity.MAJOR;
+        case "CRITICAL" -> Severity.CRITICAL;
+        case "BLOCKER" -> Severity.BLOCKER;
+        default -> DEFAULT_SEVERITY;
+      };
     }
     return DEFAULT_SEVERITY;
   }

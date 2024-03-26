@@ -43,7 +43,7 @@ public class ForLoopIncrementSignCheck extends PHPVisitorCheck {
   public void visitForStatement(ForStatementTree tree) {
     List<ExpressionTree> updates = tree.update().stream()
       .filter(expression -> updateKind(expression) != UpdateKind.UNKNOWN)
-      .collect(Collectors.toList());
+      .toList();
 
     ExpressionTree forCondition = CheckUtils.getForCondition(tree);
     if (forCondition != null && !updates.isEmpty()) {

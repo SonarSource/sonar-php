@@ -72,7 +72,7 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
     return context().symbolTable().getSymbols(Kind.FIELD).stream()
       .filter(f -> TreeUtils.findAncestorWithKind(f.declaration(), Collections.singletonList(Tree.Kind.ANONYMOUS_CLASS)) == null)
       .filter(f -> TreeUtils.findAncestorWithKind(f.declaration(), classDeclarationKind) == tree)
-      .collect(Collectors.toList());
+      .toList();
   }
 
   private static boolean isSelfConstantAccess(ExpressionTree tree) {

@@ -121,8 +121,8 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
   }
 
   private static boolean isMagicMethodCallDefined(ClassTree tree) {
-    if (tree instanceof ClassDeclarationTree) {
-      Optional<ClassMemberTree> magicMethodCall = findMagicMethodCall((ClassDeclarationTree) tree);
+    if (tree instanceof ClassDeclarationTree classDeclaration) {
+      Optional<ClassMemberTree> magicMethodCall = findMagicMethodCall(classDeclaration);
       if (magicMethodCall.isPresent() && containsCallUserFunction(magicMethodCall.get())) {
         return true;
       }

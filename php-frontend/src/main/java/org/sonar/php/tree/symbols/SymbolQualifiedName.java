@@ -44,7 +44,7 @@ public class SymbolQualifiedName implements QualifiedName {
   }
 
   private SymbolQualifiedName(List<String> nameElements) {
-    this.nameElements = nameElements.stream().map(name -> name.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
+    this.nameElements = nameElements.stream().map(name -> name.toLowerCase(Locale.ROOT)).toList();
   }
 
   /**
@@ -66,7 +66,7 @@ public class SymbolQualifiedName implements QualifiedName {
   }
 
   public static SymbolQualifiedName create(NamespaceNameTree nameTree) {
-    List<String> namespaces = nameTree.namespaces().stream().map(NameIdentifierTree::text).collect(Collectors.toList());
+    List<String> namespaces = nameTree.namespaces().stream().map(NameIdentifierTree::text).toList();
     return new SymbolQualifiedName(namespaces, nameTree.name().text());
   }
 

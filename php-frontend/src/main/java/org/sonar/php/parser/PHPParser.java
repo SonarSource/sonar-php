@@ -56,7 +56,7 @@ public class PHPParser extends ActionParser<Tree> {
       return setParents(super.parse(source));
     } catch (RuntimeException e) {
       Throwable rootCause = Throwables.getRootCause(e);
-      throw (rootCause instanceof RecognitionException) ? (RecognitionException) rootCause : e;
+      throw (rootCause instanceof RecognitionException recognitionException) ? recognitionException : e;
     }
   }
 

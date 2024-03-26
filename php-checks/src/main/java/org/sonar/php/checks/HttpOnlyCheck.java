@@ -101,8 +101,8 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
       String method = nameOf(memberAccessTree.member());
       return "create".equals(method) && receiver.is(Kind.NAMESPACE_NAME) && SYMFONY_COOKIE.equals(getFullyQualifiedName((NamespaceNameTree) receiver));
     }
-    if (callee instanceof ClassNamespaceNameTreeImpl) {
-      return ((ClassNamespaceNameTreeImpl) callee).symbol().qualifiedName().equals(SYMFONY_COOKIE);
+    if (callee instanceof ClassNamespaceNameTreeImpl classNamespaceName) {
+      return classNamespaceName.symbol().qualifiedName().equals(SYMFONY_COOKIE);
     }
     return false;
   }

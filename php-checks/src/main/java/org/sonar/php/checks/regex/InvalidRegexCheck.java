@@ -46,7 +46,7 @@ public class InvalidRegexCheck extends AbstractRegexCheck {
     RegexSyntaxElement tree = syntaxErrors.get(0).getOffendingSyntaxElement();
     List<RegexIssueLocation> secondaries = syntaxErrors.stream()
       .map(error -> new RegexIssueLocation(error.getOffendingSyntaxElement(), error.getMessage()))
-      .collect(Collectors.toList());
+      .toList();
 
     String msg = String.format(MESSAGE_FORMAT, secondaries.size() > 1 ? "s" : "");
     newIssue(tree, msg, null, secondaries);

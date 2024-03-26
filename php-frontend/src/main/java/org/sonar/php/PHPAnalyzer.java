@@ -121,7 +121,7 @@ public class PHPAnalyzer {
     return testFileChecks.stream()
       .map(check -> check.analyze(new PHPCheckContext(currentFileContext, currentFileTree, currentFileSymbolTable)))
       .flatMap(List::stream)
-      .collect(Collectors.toList());
+      .toList();
   }
 
   public void terminate() {

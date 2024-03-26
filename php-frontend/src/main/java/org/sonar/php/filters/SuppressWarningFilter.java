@@ -82,7 +82,7 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
       .filter(expr -> expr.is(Tree.Kind.REGULAR_STRING_LITERAL))
       .map(LiteralTree.class::cast)
       .map(literal -> stripDoubleQuotes(literal.value()))
-      .collect(Collectors.toList());
+      .toList();
   }
 
   @Override
