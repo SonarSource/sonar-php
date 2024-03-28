@@ -36,3 +36,9 @@
 <h1><?= htmlspecialchars("<br>", ENT_QUOTES) ?></h1>
 <h1><?= array(1, 2); ?></h1>
 <h1><?php htmlspecialchars("<br>", ENT_QUOTES); // Noncompliant ?></h1>
+<h1><?php
+$value = "3.14159";
+// Compliant: strtok has a side effect
+strtok($value, '.');
+$round_length = strlen(strtok('.'));
+?></h1>

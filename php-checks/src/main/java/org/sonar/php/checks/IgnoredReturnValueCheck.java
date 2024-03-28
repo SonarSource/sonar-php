@@ -110,7 +110,6 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
     "strrpos",
     "strspn",
     "strstr",
-    "strtok",
     "strtolower",
     "strtoupper",
     "strtr",
