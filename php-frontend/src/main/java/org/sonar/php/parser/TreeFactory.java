@@ -545,21 +545,9 @@ public class TreeFactory {
       initValue = eqAndInitValue.get().second();
     }
 
-    SyntaxToken visibility = null;
-    SyntaxToken readonly = null;
-
-    for (SyntaxToken token : visibilityAndReadonly.or(Collections.emptyList())) {
-      if ("readonly".equals(token.text())) {
-        readonly = token;
-      } else {
-        visibility = token;
-      }
-    }
-
     VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(identifier);
     return new ParameterTreeImpl(attributeGroups.or(Collections.emptyList()),
-      visibility,
-      readonly,
+      visibilityAndReadonly.or(Collections.emptyList()),
       type.orNull(),
       ampersand.orNull(),
       ellipsis.orNull(),
