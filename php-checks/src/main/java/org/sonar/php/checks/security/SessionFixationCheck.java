@@ -20,8 +20,9 @@
 package org.sonar.php.checks.security;
 
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -32,19 +33,18 @@ public class SessionFixationCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (isSessionIdFunction(tree) && hasArguments(tree)) {
+    if (isFunctionCall(tree, "session_id") && hasArguments(tree) && !isFunctionCall(firstCallArgument(tree), "session_create_id")) {
       context().newIssue(this, tree, MESSAGE);
     }
-
     super.visitFunctionCall(tree);
   }
 
-  private boolean isSessionIdFunction(FunctionCallTree tree) {
-    if (tree.callee().is(Kind.NAMESPACE_NAME)) {
-      String qualifiedName = ((NamespaceNameTree) tree.callee()).qualifiedName();
-      return qualifiedName.equalsIgnoreCase("session_id");
-    }
-    return false;
+  private static boolean isFunctionCall(ExpressionTree expression, String expectedName) {
+    return expression.is(Kind.FUNCTION_CALL) && expectedName.equals(CheckUtils.getLowerCaseFunctionName((FunctionCallTree) expression));
+  }
+
+  private static ExpressionTree firstCallArgument(FunctionCallTree call) {
+    return call.callArguments().get(0).value();
   }
 
   private boolean hasArguments(FunctionCallTree tree) {
