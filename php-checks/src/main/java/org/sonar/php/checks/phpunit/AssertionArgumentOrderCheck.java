@@ -29,10 +29,12 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 
 import static org.sonar.php.checks.utils.CheckUtils.assignedValue;
 import static org.sonar.php.checks.utils.CheckUtils.hasNamedArgument;
@@ -68,20 +70,20 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
   private static boolean isLiteralOrClassNameOrParameter(ExpressionTree expression) {
     return assignedValue(expression).is(LITERAL) ||
       isStaticAccessWithName(expression, "class") ||
-      isDefinedAsParameter(expression);
+      isDefinedFromParameter(expression);
   }
 
   private static boolean isStaticAccessWithName(ExpressionTree expression, String memberName) {
     if (expression instanceof MemberAccessTree tree) {
-      return tree.isStatic() && memberName.equals(name(tree.member()));
+      return tree.isStatic() && memberName.equals(sourceVariableName(tree.member()));
     }
     return false;
   }
 
-  private static boolean isDefinedAsParameter(ExpressionTree expression) {
+  private static boolean isDefinedFromParameter(ExpressionTree expression) {
     MethodDeclarationTree method = (MethodDeclarationTree) TreeUtils.findAncestorWithKind(expression, Kind.METHOD_DECLARATION);
     if (method != null) {
-      String name = name(expression);
+      String name = sourceVariableName(expression);
       for (ParameterTree parameter : method.parameters().parameters()) {
         String text = parameter.variableIdentifier().text();
         if (text.equals(name)) {
@@ -93,10 +95,13 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
   }
 
   @CheckForNull
-  private static String name(Tree expression) {
+  private static String sourceVariableName(Tree expression) {
     if (expression instanceof IdentifierTree identifier) {
       return identifier.text();
-    }
+    } else if (expression instanceof ArrayAccessTree arrayAccessTree &&
+      arrayAccessTree.object() instanceof VariableIdentifierTree variableIdentifierTree) {
+        return variableIdentifierTree.token().text();
+      }
     return null;
   }
 }

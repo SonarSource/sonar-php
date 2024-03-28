@@ -50,4 +50,12 @@ class MyTest extends TestCase
     $this->assertSame($staticValueExpected, $isStaticValue); // OK
     $this->assertSame(true, $isStaticValue); // OK
   }
+
+  public function testResolve($params, $expected, $expectedException = null)
+  {
+    $request = new Request();
+
+    list($route, $params) = $request->resolve();
+    $this->assertEquals($expected['params'], $params);  // OK - `expected` value is a field of a function parameter
+  }
 }
