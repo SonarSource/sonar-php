@@ -50,5 +50,18 @@ html
 
 <h1 a="<?php echo $a?>" b="<?php echo $b;?>">  // OK
 
-
+<?php
+function getRegisterCallbacks()
+    {
+        return [
+            function (ExpressionLanguage $el) {
+                $el->register('fn', function () {}, function () {});  // Noncompliant {{2 function expressions were found on this line. Reformat the code to have only one function expression per line.}}
+            },
+          function (ExpressionLanguage $el) {
+            $el->register('fn',
+              function () {},
+              function () {});  // Compliant
+          }
+        ];
+}?>
 
