@@ -30,5 +30,7 @@ class InvalidRegexCheck
   {
     preg_match('/$[a-z]^/', $input);
     preg_replace('/[^A-Za-z0-9\-\][\^!@#$%&*)(+=}{]/', '', $input);
+
+    preg_match("/((?:[\\0\\r\\n]|\u{202A}|\u{202B}|\u{202D}|\u{202E}|\u{2066}|\u{2067}|\u{2068}|\u{202C}|\u{2069})++)(.)/", $input);
   }
 }
