@@ -25,17 +25,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
-@Rule(key = OneStatementPerLineCheck.KEY)
+@Rule(key = "S122")
 public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
-
-  public static final String KEY = "S122";
-  private static final String MESSAGE = "%s statements were found on this line. Reformat the code to have only one statement per line.";
+  private static final String MESSAGE = "%s %s were found on this line. Reformat the code to have only one %s per line.";
 
   private final Map<Integer, StatementCount> statementsPerLine = new HashMap<>();
   private final Set<Integer> linesWithHtml = new HashSet<>();
@@ -139,11 +138,22 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
 
       StatementCount stmtCount = statementsAtLine.getValue();
 
-      if (stmtCount.nbStatement > 1 || stmtCount.nbFunctionExpression > 1 || stmtCount.nbNestedStatement > 1) {
-        String message = String.format(MESSAGE, stmtCount.nbStatement + stmtCount.nbNestedStatement);
+      String message = createMessage(stmtCount);
+      if (message != null) {
         context().newLineIssue(this, line, message);
       }
     }
+  }
+
+  @Nullable
+  private static String createMessage(StatementCount stmtCount) {
+    String message = null;
+    if (stmtCount.nbStatement > 1 || stmtCount.nbNestedStatement > 1) {
+      message = MESSAGE.formatted(stmtCount.nbStatement + stmtCount.nbNestedStatement, "statements", "statement");
+    } else if (stmtCount.nbFunctionExpression > 1) {
+      message = MESSAGE.formatted(stmtCount.nbFunctionExpression, "function expressions", "function expression");
+    }
+    return message;
   }
 
   private static int line(Tree tree) {
