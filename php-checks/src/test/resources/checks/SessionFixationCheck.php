@@ -15,6 +15,8 @@ session_ID('test_' . $test); // Noncompliant
 $id = session_id();
 $myObj->session_id($_GET['id']);
 session_regenerate_id();
+session_id(session_create_id());
+session_id(Session_Create_Id());
 
 // safe but we report hotspot issue
 $sessionId = bin2hex(random_bytes(16));
