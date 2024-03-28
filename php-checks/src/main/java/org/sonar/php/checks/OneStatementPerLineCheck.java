@@ -25,7 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -138,22 +137,16 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
 
       StatementCount stmtCount = statementsAtLine.getValue();
 
-      String message = createMessage(stmtCount);
-      if (message != null) {
-        context().newLineIssue(this, line, message);
+      if (stmtCount.nbStatement > 1 || stmtCount.nbNestedStatement > 1) {
+        reportIssue(line, stmtCount.nbStatement + stmtCount.nbNestedStatement, "statement");
+      } else if (stmtCount.nbFunctionExpression > 1) {
+        reportIssue(line, stmtCount.nbFunctionExpression, "function expression");
       }
     }
   }
 
-  @Nullable
-  private static String createMessage(StatementCount stmtCount) {
-    String message = null;
-    if (stmtCount.nbStatement > 1 || stmtCount.nbNestedStatement > 1) {
-      message = MESSAGE.formatted(stmtCount.nbStatement + stmtCount.nbNestedStatement, "statements", "statement");
-    } else if (stmtCount.nbFunctionExpression > 1) {
-      message = MESSAGE.formatted(stmtCount.nbFunctionExpression, "function expressions", "function expression");
-    }
-    return message;
+  private void reportIssue(int line, int actualCount, String name) {
+    context().newLineIssue(this, line, MESSAGE.formatted(actualCount, name + "s", name));
   }
 
   private static int line(Tree tree) {
