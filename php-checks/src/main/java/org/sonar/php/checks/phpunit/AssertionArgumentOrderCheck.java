@@ -29,10 +29,12 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 
 import static org.sonar.php.checks.utils.CheckUtils.assignedValue;
 import static org.sonar.php.checks.utils.CheckUtils.hasNamedArgument;
@@ -96,6 +98,9 @@ public class AssertionArgumentOrderCheck extends PhpUnitCheck {
   private static String name(Tree expression) {
     if (expression instanceof IdentifierTree identifier) {
       return identifier.text();
+    } else if (expression instanceof ArrayAccessTree arrayAccessTree &&
+      arrayAccessTree.object() instanceof VariableIdentifierTree variableIdentifierTree) {
+      return variableIdentifierTree.token().text();
     }
     return null;
   }
