@@ -31,11 +31,9 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
-@Rule(key = OneStatementPerLineCheck.KEY)
+@Rule(key = "S122")
 public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
-
-  public static final String KEY = "S122";
-  private static final String MESSAGE = "%s statements were found on this line. Reformat the code to have only one statement per line.";
+  private static final String MESSAGE = "%s %s were found on this line. Reformat the code to have only one %s per line.";
 
   private final Map<Integer, StatementCount> statementsPerLine = new HashMap<>();
   private final Set<Integer> linesWithHtml = new HashSet<>();
@@ -139,11 +137,16 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
 
       StatementCount stmtCount = statementsAtLine.getValue();
 
-      if (stmtCount.nbStatement > 1 || stmtCount.nbFunctionExpression > 1 || stmtCount.nbNestedStatement > 1) {
-        String message = String.format(MESSAGE, stmtCount.nbStatement + stmtCount.nbNestedStatement);
-        context().newLineIssue(this, line, message);
+      if (stmtCount.nbStatement > 1 || stmtCount.nbNestedStatement > 1) {
+        reportIssue(line, stmtCount.nbStatement + stmtCount.nbNestedStatement, "statement");
+      } else if (stmtCount.nbFunctionExpression > 1) {
+        reportIssue(line, stmtCount.nbFunctionExpression, "function expression");
       }
     }
+  }
+
+  private void reportIssue(int line, int actualCount, String name) {
+    context().newLineIssue(this, line, MESSAGE.formatted(actualCount, name + "s", name));
   }
 
   private static int line(Tree tree) {
