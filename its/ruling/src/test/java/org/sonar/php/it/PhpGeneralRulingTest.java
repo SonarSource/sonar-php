@@ -39,9 +39,6 @@ public class PhpGeneralRulingTest {
   @RegisterExtension
   public static Orchestrator ORCHESTRATOR = RulingHelper.getOrchestrator();
 
-  // TODO: SONARPHP-1454 - exclude all files that contain an element (file / directory) in the path that start with a dot
-  private static final String EXCLUDED_FILES = "**/.*, **/.*/**";
-
   @BeforeAll
   static void prepareQualityProfile() {
     ProfileGenerator.RulesConfiguration parameters = new ProfileGenerator.RulesConfiguration()
@@ -118,8 +115,13 @@ public class PhpGeneralRulingTest {
       .setProperty("sonar.import_unknown_files", "true")
       .setProperty("sonar.php.duration.statistics", "true")
       .setProperty("sonar.cpd.exclusions", "**/*")
-      .setProperty("sonar.scm.disabled", "true")
-      .setProperty("sonar.exclusions", EXCLUDED_FILES);
+      .setProperty("sonar.scm.disabled", "true");
+
+    if (System.getProperty("os.name").toLowerCase().contains("win")) {
+      // On unix systems, files or directories starting with a dot are hidden, so we don't get them from the scanner
+      // In order to have the same behavior on all systems, we exclude them on windows
+      build.setProperty("sonar.exclusions", "**/.*, **/.*/**");
+    }
 
     ORCHESTRATOR.executeBuild(build);
 
