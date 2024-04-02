@@ -219,7 +219,7 @@ class PHPSensorTest {
   }
 
   @Test
-  void testCpd() {
+  void cpdTokenShouldBeValidForSimpleFile() {
     String fileName = "cpd.php";
     String componentKey = "moduleKey:" + fileName;
 
@@ -236,6 +236,23 @@ class PHPSensorTest {
       "}",
       "echo$CHARS",
       ";");
+  }
+
+  @Test
+  void cpdTokenShouldBeValidForReadonlyPropertyPromotion() {
+    String fileName = "readonlyPropertyPromotion.php";
+    String componentKey = "moduleKey:" + fileName;
+
+    PHPSensor phpSensor = createSensor();
+    analyseSingleFile(phpSensor, fileName);
+
+    List<TokensLine> tokensLines = context.cpdTokens(componentKey);
+    assertThat(tokensLines.stream().map(TokensLine::getValue)).containsExactly(
+      "namespaceMyCoolNamespace;",
+      "classDomain",
+      "{",
+      "publicfunction__construct(readonlyprivatestring$prop){}",
+      "}");
   }
 
   @Test

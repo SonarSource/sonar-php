@@ -40,19 +40,19 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private static final Kind KIND = Kind.PARAMETER;
 
   private final List<AttributeGroupTree> attributeGroups;
-  private final SyntaxToken visibility;
-  private final SyntaxToken readonlyToken;
+  private final List<SyntaxToken> visibilityAndReadonly;
   private final DeclaredTypeTree type;
   private final InternalSyntaxToken referenceToken;
   private final InternalSyntaxToken ellipsisToken;
   private final VariableIdentifierTree variableIdentifier;
   private final InternalSyntaxToken equalToken;
   private final ExpressionTree initValue;
+  private SyntaxToken readonlyToken;
+  private SyntaxToken visibility;
 
   public ParameterTreeImpl(
     List<AttributeGroupTree> attributeGroups,
-    @Nullable SyntaxToken visibility,
-    @Nullable SyntaxToken readonlyToken,
+    List<SyntaxToken> visibilityAndReadonly,
     @Nullable DeclaredTypeTree type,
     @Nullable InternalSyntaxToken referenceToken,
     @Nullable InternalSyntaxToken ellipsisToken,
@@ -60,8 +60,16 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     @Nullable InternalSyntaxToken equalToken,
     @Nullable ExpressionTree initValue) {
     this.attributeGroups = attributeGroups;
-    this.visibility = visibility;
-    this.readonlyToken = readonlyToken;
+    this.visibilityAndReadonly = visibilityAndReadonly;
+
+    for (SyntaxToken token : visibilityAndReadonly) {
+      if ("readonly".equals(token.text())) {
+        this.readonlyToken = token;
+      } else {
+        this.visibility = token;
+      }
+    }
+
     this.type = type;
     this.referenceToken = referenceToken;
     this.ellipsisToken = ellipsisToken;
@@ -147,7 +155,8 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
-      IteratorUtils.iteratorOf(visibility, readonlyToken, type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue));
+      visibilityAndReadonly.iterator(),
+      IteratorUtils.iteratorOf(type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue));
   }
 
   @Override
