@@ -30,5 +30,9 @@ class InvalidRegexCheck
   {
     preg_match('/$[a-z]^/', $input);
     preg_replace('/[^A-Za-z0-9\-\][\^!@#$%&*)(+=}{]/', '', $input);
+
+    preg_match("/\0/", $input);
+    preg_match("/[\\0\\r\\n]/", $input);
+    preg_match("/\012/", $input);
   }
 }
