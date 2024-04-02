@@ -48,6 +48,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   {@link #leftOperand()} {@link Tree.Kind#CONDITIONAL_OR ||} {@link #rightOperand()}
  *   {@link #leftOperand()} {@link Tree.Kind#ALTERNATIVE_CONDITIONAL_OR or} {@link #rightOperand()}
  *   {@link #leftOperand()} {@link Tree.Kind#INSTANCE_OF instanceof} {@link #rightOperand()}
+ *   {@link #leftOperand()} {@link Tree.Kind#CONCATENATION .} {@link #rightOperand()}
  * </pre>
  */
 public interface BinaryExpressionTree extends ExpressionTree {

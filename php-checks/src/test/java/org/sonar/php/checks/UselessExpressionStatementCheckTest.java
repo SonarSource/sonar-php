@@ -30,6 +30,11 @@ class UselessExpressionStatementCheckTest {
   }
 
   @Test
+  void testWithPartialUselessStatements() throws Exception {
+    CheckVerifier.verify(new UselessExpressionStatementCheck(), "UselessExpressionStatementCheckPartial.php");
+  }
+
+  @Test
   void testNoIssueInFileWith_html() throws Exception {
     CheckVerifier.verifyNoIssue(new UselessExpressionStatementCheck(), "UselessExpressionStatementCheckHTML.php");
   }
