@@ -34,7 +34,6 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>php-frontend</artifactId>
-      <!-- TODO SONARPHP-1457 Get rid of sonar-analyzer-test-commons dependency in php-frontend, it can be removed when it is solved-->
       <exclusions>
         <exclusion>
           <groupId>junit</groupId>
