@@ -4,7 +4,9 @@
 variable or expression that evaluates to a boolean value is unnecessary and can make the code harder to read and understand. The more complex a
 boolean expression is, the harder it will be for developers to understand its meaning and expected behavior, and it will favour the introduction of
 new bugs.</p>
-<h2>How to tix it</h2>
+<h3>Exceptions</h3>
+<p>The use of literal booleans in comparisons which use identity operators (<code>===</code> and <code>!==</code>) are ignored.</p>
+<h2>How to fix it</h2>
 <p>Remove redundant boolean literals from expressions to improve readability and make the code more maintainable.</p>
 <h3>Code examples</h3>
 <h4>Noncompliant code example</h4>
@@ -21,6 +23,4 @@ if (!$booleanVariable) { /* ... */ }
 if ($booleanVariable) { /* ... */ }
 doSomething(true);
 </pre>
-<h3>Exceptions</h3>
-<p>The use of literal booleans in comparisons which use identity operators (<code>===</code> and <code>!==</code>) are ignored.</p>
 
