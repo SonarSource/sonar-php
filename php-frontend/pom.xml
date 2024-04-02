@@ -41,7 +41,6 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
     </dependency>
-    <!-- TODO SONARPHP-1457 Get rid of sonar-analyzer-test-commons dependency in php-frontend  -->
     <dependency>
       <groupId>org.sonarsource.analyzer-commons</groupId>
       <artifactId>sonar-analyzer-test-commons</artifactId>
