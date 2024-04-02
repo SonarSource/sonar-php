@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
