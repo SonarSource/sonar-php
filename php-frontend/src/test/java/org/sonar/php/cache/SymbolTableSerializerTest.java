@@ -34,6 +34,7 @@ import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.SymbolQualifiedName;
+import org.sonar.php.tree.symbols.SymbolReturnType;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 
@@ -55,6 +56,7 @@ class SymbolTableSerializerTest {
       List.of(new Parameter("$transport", "Zend_Mail_Transport_Abstract", false, false)),
       new FunctionSymbolData.FunctionSymbolProperties(false, false),
       Visibility.PUBLIC,
+      SymbolReturnType.notDefined(),
       false,
       false));
     methods.add(new MethodSymbolData(
@@ -63,6 +65,7 @@ class SymbolTableSerializerTest {
       List.of(),
       new FunctionSymbolData.FunctionSymbolProperties(true, false),
       Visibility.PUBLIC,
+      SymbolReturnType.notDefined(),
       false,
       false));
 
@@ -72,6 +75,7 @@ class SymbolTableSerializerTest {
       List.of(new Parameter("$charset", null, true, false)),
       new FunctionSymbolData.FunctionSymbolProperties(false, false),
       Visibility.PUBLIC,
+      SymbolReturnType.notDefined(),
       false,
       false));
 
@@ -87,7 +91,8 @@ class SymbolTableSerializerTest {
       new LocationInFileImpl("file1.php", 2, 9, 2, 12),
       SymbolQualifiedName.qualifiedName("foo"),
       List.of(new Parameter("$i", "int", false, false)),
-      new FunctionSymbolData.FunctionSymbolProperties(false, false));
+      new FunctionSymbolData.FunctionSymbolProperties(false, false),
+      SymbolReturnType.notDefined());
     functionSymbolDatas.add(functionSymbolData);
     SymbolTableImpl symbolTable = SymbolTableImpl.create(classSymbolDatas, functionSymbolDatas);
 
@@ -122,7 +127,8 @@ class SymbolTableSerializerTest {
       "name",
       List.of(new Parameter("$i", "int", false, false)),
       new FunctionSymbolData.FunctionSymbolProperties(false, false),
-      Visibility.PUBLIC);
+      Visibility.PUBLIC,
+      SymbolReturnType.notDefined());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
     Throwable throwable = catchThrowable(() -> SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION)));
@@ -207,7 +213,8 @@ class SymbolTableSerializerTest {
       new LocationInFileImpl("file1.php", 2, 9, 2, 12),
       SymbolQualifiedName.qualifiedName("name"),
       List.of(),
-      new FunctionSymbolData.FunctionSymbolProperties(false, false));
+      new FunctionSymbolData.FunctionSymbolProperties(false, false),
+      SymbolReturnType.notDefined());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
@@ -226,7 +233,8 @@ class SymbolTableSerializerTest {
       new LocationInFileImpl("file1.php", 2, 9, 2, 12),
       SymbolQualifiedName.qualifiedName("name"),
       List.of(),
-      new FunctionSymbolData.FunctionSymbolProperties(false, false));
+      new FunctionSymbolData.FunctionSymbolProperties(false, false),
+      SymbolReturnType.notDefined());
     SymbolTableImpl symbolTable = SymbolTableImpl.create(List.of(), List.of(functionSymbolData));
 
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));

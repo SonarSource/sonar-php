@@ -19,21 +19,25 @@
  */
 package org.sonar.php.symbols;
 
-import java.util.List;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.ReturnType;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
+
+import java.util.List;
 
 public class FunctionSymbolData {
   private final LocationInFile location;
   private final QualifiedName qualifiedName;
   private final List<Parameter> parameters;
   private final FunctionSymbolProperties properties;
+  private final ReturnType returnType;
 
-  public FunctionSymbolData(LocationInFile location, QualifiedName qualifiedName, List<Parameter> parameters, FunctionSymbolProperties properties) {
+  public FunctionSymbolData(LocationInFile location, QualifiedName qualifiedName, List<Parameter> parameters, FunctionSymbolProperties properties, ReturnType returnType) {
     this.location = location;
     this.qualifiedName = qualifiedName;
     this.parameters = parameters;
     this.properties = properties;
+    this.returnType = returnType;
   }
 
   public LocationInFile location() {
@@ -58,6 +62,10 @@ public class FunctionSymbolData {
 
   public FunctionSymbolProperties properties() {
     return properties;
+  }
+
+  public ReturnType returnType() {
+    return returnType;
   }
 
   public static class FunctionSymbolProperties {

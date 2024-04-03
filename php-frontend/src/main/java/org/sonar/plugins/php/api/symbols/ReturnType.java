@@ -17,24 +17,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.symbols;
+package org.sonar.plugins.php.api.symbols;
 
-import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.symbols.ReturnType;
-import org.sonar.plugins.php.api.visitors.LocationInFile;
+/**
+ * Represent details about the declared return type of function and method.
+ */
+public interface ReturnType {
+  boolean isDefined();
 
-import java.util.List;
-
-public interface FunctionSymbol extends Symbol {
-  LocationInFile location();
-
-  QualifiedName qualifiedName();
-
-  boolean hasReturn();
-
-  boolean hasFuncGetArgs();
-
-  List<Parameter> parameters();
-
-  ReturnType returnType();
+  boolean isVoid();
 }

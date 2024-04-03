@@ -26,6 +26,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.LocationInFileImpl;
+import org.sonar.php.tree.symbols.SymbolReturnType;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.cache.CacheContext;
 import org.sonar.plugins.php.api.cache.PhpReadCache;
@@ -181,7 +182,8 @@ class CacheTest {
       new LocationInFileImpl("abc.php", 1, 1, 1, 10),
       QualifiedName.qualifiedName("funcName"),
       List.of(),
-      new FunctionSymbolData.FunctionSymbolProperties(false, false))));
+      new FunctionSymbolData.FunctionSymbolProperties(false, false),
+      new SymbolReturnType(false, false))));
   }
 
   private SymbolTableImpl emptySymbolTable() {

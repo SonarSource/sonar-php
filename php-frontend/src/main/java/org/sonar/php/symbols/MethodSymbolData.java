@@ -21,20 +21,22 @@ package org.sonar.php.symbols;
 
 import java.util.List;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.ReturnType;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class MethodSymbolData extends FunctionSymbolData {
-  private Visibility visibility;
-  private String name;
-  private boolean isAbstract;
-  private boolean isTestMethod;
+  private final Visibility visibility;
+  private final String name;
+  private final boolean isAbstract;
+  private final boolean isTestMethod;
 
   public MethodSymbolData(LocationInFile location,
     String name,
     List<Parameter> parameters,
     FunctionSymbolProperties properties,
-    Visibility visibility) {
-    this(location, name, parameters, properties, visibility, false, false);
+    Visibility visibility,
+    ReturnType returnType) {
+    this(location, name, parameters, properties, visibility, returnType, false, false);
   }
 
   public MethodSymbolData(LocationInFile location,
@@ -42,9 +44,10 @@ public class MethodSymbolData extends FunctionSymbolData {
     List<Parameter> parameters,
     FunctionSymbolProperties properties,
     Visibility visibility,
+    ReturnType returnType,
     boolean isAbstract,
     boolean isTestMethod) {
-    super(location, QualifiedName.qualifiedName(name), parameters, properties);
+    super(location, QualifiedName.qualifiedName(name), parameters, properties, returnType);
     this.name = name;
     this.visibility = visibility;
     this.isAbstract = isAbstract;

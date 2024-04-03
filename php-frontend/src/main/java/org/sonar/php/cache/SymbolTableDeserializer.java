@@ -34,8 +34,10 @@ import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.UnknownLocationInFile;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.SymbolQualifiedName;
+import org.sonar.php.tree.symbols.SymbolReturnType;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.ReturnType;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class SymbolTableDeserializer {
@@ -93,11 +95,12 @@ public class SymbolTableDeserializer {
   }
 
   private FunctionSymbolData readFunctionSymbolDataList() throws IOException {
-    LocationInFile location = readLocation();
-    QualifiedName qualifiedName = readQualifiedName();
-    List<Parameter> parameters = readParameters();
-    FunctionSymbolData.FunctionSymbolProperties properties = readProperties();
-    return new FunctionSymbolData(location, qualifiedName, parameters, properties);
+    var location = readLocation();
+    var qualifiedName = readQualifiedName();
+    var parameters = readParameters();
+    var properties = readProperties();
+    var returnType = readReturnType();
+    return new FunctionSymbolData(location, qualifiedName, parameters, properties, returnType);
   }
 
   private FunctionSymbolData.FunctionSymbolProperties readProperties() throws IOException {
@@ -117,6 +120,12 @@ public class SymbolTableDeserializer {
       return null;
     }
     return SymbolQualifiedName.qualifiedName(name);
+  }
+
+  private ReturnType readReturnType() throws IOException {
+    var isDefined = readBoolean();
+    var isVoid = readBoolean();
+    return new SymbolReturnType(isDefined, isVoid);
   }
 
   private ClassSymbolData readClassSymbolData() throws IOException {
@@ -153,16 +162,17 @@ public class SymbolTableDeserializer {
   }
 
   private MethodSymbolData readMethod() throws IOException {
-    Visibility visibility = Visibility.valueOf(readString());
-    String name = readString();
-    boolean isAbstract = readBoolean();
-    boolean isTestMethod = readBoolean();
-    LocationInFile location = readLocation();
-    List<Parameter> parameters = readParameters();
-    boolean hasReturn = readBoolean();
-    boolean hasFuncGetArgs = readBoolean();
-    FunctionSymbolData.FunctionSymbolProperties properties = new FunctionSymbolData.FunctionSymbolProperties(hasReturn, hasFuncGetArgs);
-    return new MethodSymbolData(location, name, parameters, properties, visibility, isAbstract, isTestMethod);
+    var visibility = Visibility.valueOf(readString());
+    var name = readString();
+    var isAbstract = readBoolean();
+    var isTestMethod = readBoolean();
+    var location = readLocation();
+    var parameters = readParameters();
+    var hasReturn = readBoolean();
+    var hasFuncGetArgs = readBoolean();
+    var returnType = readReturnType();
+    var properties = new FunctionSymbolData.FunctionSymbolProperties(hasReturn, hasFuncGetArgs);
+    return new MethodSymbolData(location, name, parameters, properties, visibility, returnType, isAbstract, isTestMethod);
   }
 
   private List<Parameter> readParameters() throws IOException {

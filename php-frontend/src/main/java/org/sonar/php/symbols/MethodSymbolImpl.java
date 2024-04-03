@@ -34,7 +34,7 @@ public class MethodSymbolImpl extends FunctionSymbolIndex.FunctionSymbolImpl imp
   private Trilean isOverriding;
 
   public MethodSymbolImpl(MethodSymbolData data, ClassSymbol owner) {
-    super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties()));
+    super(new FunctionSymbolData(data.location(), data.qualifiedName(), data.parameters(), data.properties(), data.returnType()));
     this.data = data;
     this.owner = owner;
   }
