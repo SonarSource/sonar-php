@@ -35,20 +35,20 @@ class TooManyFunctionParametersCheckTest {
   private TooManyFunctionParametersCheck check = new TooManyFunctionParametersCheck();
 
   @Test
-  void defaultParameterValues() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 24, 36));
+  void shouldVerifyDefaultParameterValues() {
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 24, 36, 62, 79));
   }
 
   @Test
-  void customValueForMax() throws Exception {
+  void shouldVerifyCustomValueForMax() {
     check.max = 2;
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  void customValueForConstructorMax() throws Exception {
+  void shouldVerifyCustomValueForConstructorMax() {
     check.constructorMax = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 19, 24, 29, 36));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 19, 24, 29, 36, 62, 79));
   }
 
   private List<PhpIssue> issues(int... lines) {
