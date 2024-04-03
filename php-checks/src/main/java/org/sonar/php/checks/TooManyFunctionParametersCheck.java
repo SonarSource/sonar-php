@@ -30,8 +30,11 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import static java.util.function.Predicate.not;
 
 @Rule(key = TooManyFunctionParametersCheck.KEY)
 public class TooManyFunctionParametersCheck extends PHPVisitorCheck {
@@ -46,23 +49,29 @@ public class TooManyFunctionParametersCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "max",
     defaultValue = "" + DEFAULT_MAX)
-  int max = DEFAULT_MAX;
+  public int max = DEFAULT_MAX;
 
   @RuleProperty(
     key = "constructorMax",
     defaultValue = "" + DEFAULT_CONSTRUCTOR_MAX)
-  int constructorMax = DEFAULT_CONSTRUCTOR_MAX;
+  public int constructorMax = DEFAULT_CONSTRUCTOR_MAX;
 
-  private ClassTree classTree = null;
+  private ClassTree classTree;
 
   @Override
   public void visitParameterList(ParameterListTree parameterList) {
-    int numberOfParameters = parameterList.parameters().size();
+    int numberOfParameters = getNumberOfParametersExcludingPromotedProperties(parameterList);
     int maxValue = isConstructorParameterList(parameterList) ? constructorMax : max;
     if (numberOfParameters > maxValue && isOverriding(parameterList.getParent()).isFalse()) {
       context().newIssue(this, parameterList, String.format(MESSAGE, numberOfParameters, maxValue));
     }
     super.visitParameterList(parameterList);
+  }
+
+  private static int getNumberOfParametersExcludingPromotedProperties(ParameterListTree parameterList) {
+    return (int) parameterList.parameters().stream()
+      .filter(not(ParameterTree::isPropertyPromotion))
+      .count();
   }
 
   private static Trilean isOverriding(@Nullable Tree tree) {

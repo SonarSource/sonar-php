@@ -1,14 +1,5 @@
 {
-"flysystem:src/AwsS3V3/AwsS3V3Adapter.php": [
-98
-],
-"flysystem:src/Ftp/FtpConnectionOptions.php": [
-11
-],
 "flysystem:src/PhpseclibV2/SftpConnectionProvider.php": [
 77
-],
-"flysystem:src/PhpseclibV3/SftpConnectionProvider.php": [
-32
 ]
 }
