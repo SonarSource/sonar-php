@@ -49,13 +49,13 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "maximumFieldThreshold",
     defaultValue = "" + DEFAULT_MAX)
-  int maximumFieldThreshold = DEFAULT_MAX;
+  public int maximumFieldThreshold = DEFAULT_MAX;
 
   @RuleProperty(
     key = "countNonpublicFields",
     defaultValue = "" + DEFAULT_COUNT_NON_PUBLIC,
     type = "BOOLEAN")
-  boolean countNonpublicFields = DEFAULT_COUNT_NON_PUBLIC;
+  public boolean countNonpublicFields = DEFAULT_COUNT_NON_PUBLIC;
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
