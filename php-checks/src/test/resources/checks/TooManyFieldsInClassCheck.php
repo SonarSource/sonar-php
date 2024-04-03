@@ -102,6 +102,18 @@ class ConstructorPropertyPromotionAndRegularConstructorArguments {     // Noncom
   ) {}
 };
 
+class ConstructorPropertyPromotionAndReadOnlyConstructorArguments {     // Noncompliant {{Refactor this class so it has no more than 4 fields, rather than the 5 it currently has.}}
+  public $f1;
+  public $f2;
+  public function __construct(
+    protected readonly string $f3,
+    private readonly $f4,
+    readonly private string $f5,
+    $notPropertyPromotion1,
+    $notPropertyPromotion2
+  ) {}
+};
+
 class ConstructorPropertyPromotionAndRegularConstructorArgumentsCompliant {     // Compliant
   public $f1;
   public $f2;
