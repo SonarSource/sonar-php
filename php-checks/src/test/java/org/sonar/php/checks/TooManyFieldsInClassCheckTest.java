@@ -34,24 +34,27 @@ class TooManyFieldsInClassCheckTest {
   private static final String FILE_NAME = "TooManyFieldsInClassCheck.php";
 
   @Test
-  void testDefault() throws Exception {
+  void testDefault() {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
-  void customMaximumFieldThreshold() throws Exception {
+  void testCustomMaximumFieldThreshold() {
     check.maximumFieldThreshold = 4;
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  void customBothParameters() throws Exception {
+  void testCustomCountNonpublicFields() {
     check.maximumFieldThreshold = 2;
     check.countNonpublicFields = false;
 
     List<PhpIssue> issues = Arrays.asList(
       new LineIssue(check, 3, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has."),
-      new LineIssue(check, 18, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has."));
+      new LineIssue(check, 18, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has."),
+      new LineIssue(check, 33, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."),
+      new LineIssue(check, 43, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."),
+      new LineIssue(check, 83, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."));
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues);
   }
 }

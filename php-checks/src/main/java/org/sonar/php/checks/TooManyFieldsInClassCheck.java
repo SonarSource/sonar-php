@@ -20,7 +20,9 @@
 package org.sonar.php.checks;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
@@ -29,6 +31,8 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -45,13 +49,13 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
   @RuleProperty(
     key = "maximumFieldThreshold",
     defaultValue = "" + DEFAULT_MAX)
-  int maximumFieldThreshold = DEFAULT_MAX;
+  public int maximumFieldThreshold = DEFAULT_MAX;
 
   @RuleProperty(
     key = "countNonpublicFields",
     defaultValue = "" + DEFAULT_COUNT_NON_PUBLIC,
     type = "BOOLEAN")
-  boolean countNonpublicFields = DEFAULT_COUNT_NON_PUBLIC;
+  public boolean countNonpublicFields = DEFAULT_COUNT_NON_PUBLIC;
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -63,10 +67,12 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
   }
 
   private void visitClass(ClassTree tree) {
-    int nbFields = getNumberOfFields(tree);
+    var numberOfFields = getNumberOfFields(tree);
+    var numberOfConstructorProperties = getNumberOfConstructorProperties(tree);
+    var allFields = numberOfFields + numberOfConstructorProperties;
 
-    if (nbFields > maximumFieldThreshold) {
-      String message = String.format(MESSAGE, maximumFieldThreshold, countNonpublicFields ? "" : " public", nbFields);
+    if (allFields > maximumFieldThreshold) {
+      var message = String.format(MESSAGE, maximumFieldThreshold, countNonpublicFields ? "" : " public", allFields);
       context().newIssue(this, tree.classToken(), message);
     }
   }
@@ -100,7 +106,7 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
   }
 
   private static int getNumberOfNonPublicFields(List<ClassPropertyDeclarationTree> fields) {
-    int nbNonPublicFields = 0;
+    var nbNonPublicFields = 0;
 
     for (ClassPropertyDeclarationTree field : fields) {
 
@@ -122,4 +128,24 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
     return false;
   }
 
+  private int getNumberOfConstructorProperties(ClassTree tree) {
+    var constructors = getConstructors(tree);
+    return (int) constructors.map(constructor -> constructor.parameters().parameters())
+      .flatMap(Collection::stream)
+      .filter(ParameterTree::isPropertyPromotion)
+      .filter((ParameterTree parameter) -> {
+        if (!countNonpublicFields) {
+          return "public".equalsIgnoreCase(parameter.visibility().text());
+        }
+        return true;
+      })
+      .count();
+  }
+
+  private static Stream<MethodDeclarationTree> getConstructors(ClassTree tree) {
+    return tree.members().stream()
+      .filter(member -> member.is(Kind.METHOD_DECLARATION))
+      .map(MethodDeclarationTree.class::cast)
+      .filter(member -> "__construct".equals((member.name()).text()));
+  }
 }
