@@ -36,7 +36,7 @@ class TooManyFunctionParametersCheckTest {
 
   @Test
   void shouldVerifyDefaultParameterValues() {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 24, 36, 62, 79));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 24, 36, 61, 78, 92, 106, 120));
   }
 
   @Test
@@ -48,7 +48,7 @@ class TooManyFunctionParametersCheckTest {
   @Test
   void shouldVerifyCustomValueForConstructorMax() {
     check.constructorMax = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 19, 24, 29, 36, 62, 79));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 14, 19, 24, 29, 36, 61, 78, 92, 106, 120));
   }
 
   private List<PhpIssue> issues(int... lines) {

@@ -57,7 +57,6 @@ class OnlyPromotedProperties {
   }
 }
 
-
 class ReadOnlyPromotedProperty {
   function __construct(  // Noncompliant {{This function has 10 parameters, which is greater than the 7 authorized.}}
     public readonly $p1,
@@ -86,5 +85,47 @@ class OnePromotedPropertyAndEightParameters {
     $p7,
     $p8,
     public $p9) {
+  }
+}
+
+class OneProtectedPromotedPropertyAndEightParameters {
+  function __construct(  // Noncompliant {{This function has 8 parameters, which is greater than the 7 authorized.}}
+    $p1,
+    $p2,
+    $p3,
+    $p4,
+    $p5,
+    $p6,
+    $p7,
+    $p8,
+    protected $p9) {
+  }
+}
+
+class OnePrivatePromotedPropertyAndEightParameters {
+  function __construct(  // Noncompliant {{This function has 8 parameters, which is greater than the 7 authorized.}}
+    $p1,
+    $p2,
+    $p3,
+    $p4,
+    $p5,
+    $p6,
+    $p7,
+    $p8,
+    private $p9) {
+  }
+}
+
+class OnePrivateReadOnlyPromotedPropertyAndEightParameters {
+  function __construct(  // Noncompliant {{This function has 8 parameters, which is greater than the 7 authorized.}}
+    $p1,
+    $p2,
+    $p3,
+    $p4,
+    $p5,
+    $p6,
+    $p7,
+    $p8,
+    private readonly $p9) {
   }
 }
