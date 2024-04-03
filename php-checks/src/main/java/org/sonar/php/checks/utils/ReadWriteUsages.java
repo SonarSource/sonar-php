@@ -21,6 +21,7 @@ package org.sonar.php.checks.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -61,6 +63,15 @@ public class ReadWriteUsages {
     return hasReadUsage(symbol)
       || inheritedVariablesByParent.getOrDefault(symbol, Collections.emptyList()).stream().anyMatch(this::isRead)
       || hasParentWhichIsRead(symbol);
+  }
+
+  public List<SyntaxToken> getWritesSorted(Symbol symbol) {
+    var allReferences = new ArrayList<>(symbol.usages());
+    allReferences.add(symbol.declaration().token());
+    return allReferences.stream()
+      .filter(writes::contains)
+      .sorted(Comparator.comparing(SyntaxToken::line).reversed())
+      .toList();
   }
 
   private boolean hasReadUsage(Symbol symbol) {
@@ -111,14 +122,20 @@ public class ReadWriteUsages {
     }
 
     private void visitAssignedVariable(Tree tree) {
-      if (!tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      if (tree.is(Tree.Kind.ARRAY_ACCESS)) {
+        visitReadAssignedVariable(((ArrayAccessTree) tree).object());
+        return;
+      } else if (!tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
         return;
       }
       writes.add(((VariableIdentifierTree) tree).token());
     }
 
     private void visitReadAssignedVariable(Tree tree) {
-      if (!tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      if (tree.is(Tree.Kind.ARRAY_ACCESS)) {
+        visitReadAssignedVariable(((ArrayAccessTree) tree).object());
+        return;
+      } else if (!tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
         return;
       }
       SyntaxToken token = ((VariableIdentifierTree) tree).token();

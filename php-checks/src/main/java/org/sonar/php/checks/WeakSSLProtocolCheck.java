@@ -22,19 +22,26 @@ package org.sonar.php.checks;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.ReadWriteUsages;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
@@ -46,6 +53,7 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
   private static final String STREAM_CONTEXT_CREATE = "stream_context_create";
   private static final String STREAM_SOCKET_ENABLE_CRYPTO = "stream_socket_enable_crypto";
   private static final String CURL_SETOPT = "curl_setopt";
+  private static final String CRYPTO_METHOD_KEY = "crypto_method";
 
   private static final Map<String, List<String>> STREAM_WEAK_PROTOCOLS = MapBuilder.<String, List<String>>builder()
     .put(STREAM_CONTEXT_CREATE, Arrays.asList(
@@ -81,9 +89,14 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Change this code to use a stronger protocol.";
 
+  public WeakSSLProtocolCheck() {
+    super();
+  }
+
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
+
     if (STREAM_CONTEXT_CREATE.equals(functionName)) {
       CheckUtils.argument(tree, "options", 0).ifPresent(
         options -> checkStreamSSLConfig(options.value()));
@@ -106,6 +119,16 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
   }
 
   private void checkStreamSSLConfig(ExpressionTree expressionTree) {
+    var enclosingBlock = TreeUtils.findAncestorWithKind(expressionTree, Tree.Kind.BLOCK);
+    if (enclosingBlock != null) {
+      var usages = new ReadWriteUsages(enclosingBlock, context().symbolTable());
+      var hasSensitiveReassignment = checkOptionsReassignment(usages, expressionTree);
+      if (hasSensitiveReassignment) {
+        // sensitive reassignment detected, no need to check the initial assignment
+        return;
+      }
+    }
+
     ExpressionTree config = getAssignedValue(expressionTree);
     if (!isArrayInitializer(config)) {
       return;
@@ -113,32 +136,73 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
     getProperty((ArrayInitializerTree) config, "SSL")
       .flatMap(sslConfig -> {
         if (isArrayInitializer(sslConfig)) {
-          return getProperty((ArrayInitializerTree) sslConfig, "crypto_method");
+          return getProperty((ArrayInitializerTree) sslConfig, CRYPTO_METHOD_KEY);
         }
         return Optional.empty();
       })
       .ifPresent(value -> checkStreamWeakProtocol(value, STREAM_CONTEXT_CREATE));
   }
 
+  private boolean checkOptionsReassignment(ReadWriteUsages usages, ExpressionTree expressionTree) {
+    var symbol = context().symbolTable().getSymbol(expressionTree);
+    if (symbol == null) {
+      return false;
+    }
+
+    var optionsSslAccesses = usages.getWritesSorted(symbol).stream()
+      .map(SyntaxToken::getParent)
+      .filter(tree -> isArrayObjectWithOffset(tree, "ssl"))
+      .map(Tree::getParent)
+      .toList();
+
+    // In a sensitive case, `$options['ssl'] is either assigned with an array initializer or a value is directly written by an array key
+    // check if `$options['ssl']` is assigned with a sensitive array initializer
+    boolean hasOptionsSslSensitiveAssignment = optionsSslAccesses.stream()
+      .map(WeakSSLProtocolCheck::getAssignedValueFromParent)
+      .filter(param -> param != null && isArrayInitializer(param))
+      .findFirst()
+      .flatMap(c -> getProperty((ArrayInitializerTree) c, CRYPTO_METHOD_KEY))
+      .map(tree -> checkStreamWeakProtocol(tree, STREAM_CONTEXT_CREATE))
+      .orElse(false);
+
+    if (hasOptionsSslSensitiveAssignment) {
+      return true;
+    }
+
+    // check if `$options['ssl']['crypto_method']` is set directly
+    return optionsSslAccesses.stream()
+      .filter(tree -> isArrayObjectWithOffset(tree, CRYPTO_METHOD_KEY))
+      .map(Tree::getParent)
+      .map(WeakSSLProtocolCheck::getAssignedValueFromParent)
+      .filter(Objects::nonNull)
+      .findFirst()
+      .map(tree -> checkStreamWeakProtocol(tree, STREAM_CONTEXT_CREATE))
+      .orElse(false);
+  }
+
   private static boolean isArrayInitializer(ExpressionTree param) {
     return param.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION);
   }
 
-  private void checkStreamWeakProtocol(ExpressionTree expressionTree, String functionName) {
+  private boolean checkStreamWeakProtocol(ExpressionTree expressionTree, String functionName) {
     Stream<ExpressionTree> protocols = expressionTree.is(Tree.Kind.BITWISE_OR)
       ? getOperands((BinaryExpressionTree) expressionTree)
       : Stream.of(expressionTree);
     List<String> weakProtocols = STREAM_WEAK_PROTOCOLS.get(functionName);
     if (weakProtocols != null) {
-      protocols.forEach(protocol -> {
+      return protocols.map((ExpressionTree protocol) -> {
         if (protocol.is(Tree.Kind.NAMESPACE_NAME)) {
           NamespaceNameTree cryptoMethod = (NamespaceNameTree) protocol;
           if (weakProtocols.contains(cryptoMethod.name().text())) {
             context().newIssue(this, cryptoMethod, MESSAGE);
+            return true;
           }
         }
-      });
+        return false;
+      })
+        .reduce(false, Boolean::logicalOr);
     }
+    return false;
   }
 
   private void checkCURLWeakProtocol(ExpressionTree expressionTree) {
@@ -162,17 +226,34 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
     return Stream.of(binaryExpressionTree.leftOperand(), binaryExpressionTree.rightOperand());
   }
 
-  private Optional<ExpressionTree> getProperty(ArrayInitializerTree params, String property) {
+  private static Optional<ExpressionTree> getProperty(ArrayInitializerTree params, String property) {
     return params.arrayPairs().stream()
       .filter(pair -> isStringLiteralWithValue(pair.key(), property))
       .map(pair -> getAssignedValue(pair.value()))
       .findFirst();
   }
 
-  private ExpressionTree getAssignedValue(ExpressionTree value) {
+  private static ExpressionTree getAssignedValue(ExpressionTree value) {
     if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
       return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) value).orElse(value);
     }
     return value;
+  }
+
+  @Nullable
+  private static ExpressionTree getAssignedValueFromParent(@Nullable Tree tree) {
+    return Optional.ofNullable(tree)
+      .map(Tree::getParent)
+      .filter(parent -> parent != null && parent.is(Tree.Kind.ASSIGNMENT))
+      .map(parent -> ((AssignmentExpressionTree) parent).value())
+      .orElse(null);
+  }
+
+  private static boolean isArrayObjectWithOffset(@Nullable Tree tree, String offset) {
+    if (tree == null) {
+      return false;
+    }
+    return tree.getParent() instanceof ArrayAccessTree arrayAccessTree &&
+      isStringLiteralWithValue(arrayAccessTree.offset(), offset);
   }
 }
