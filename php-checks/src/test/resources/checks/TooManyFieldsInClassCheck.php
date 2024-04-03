@@ -40,6 +40,16 @@ class ConstructorPropertyPromotionPublic {     // Noncompliant {{Refactor this c
   ) {}
 };
 
+class ConstructorPropertyPromotionPublic {     // Noncompliant {{Refactor this class so it has no more than 4 fields, rather than the 5 it currently has.}}
+  public function __construct(
+    PUBLIC string $f1,
+    PUBLIC string $f2,
+    PUBLIC string $f3,
+    PUBLIC string $f4,
+    PUBLIC string $f5,
+  ) {}
+};
+
 class ConstructorPropertyPromotionProtected {     // Noncompliant {{Refactor this class so it has no more than 4 fields, rather than the 5 it currently has.}}
   public function __construct(
     protected string $f1,

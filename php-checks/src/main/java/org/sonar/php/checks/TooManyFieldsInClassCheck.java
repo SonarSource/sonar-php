@@ -135,7 +135,7 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
       .filter(ParameterTree::isPropertyPromotion)
       .filter((ParameterTree parameter) -> {
         if (!countNonpublicFields) {
-          return "public".equals(parameter.visibility().text());
+          return "public".equalsIgnoreCase(parameter.visibility().text());
         }
         return true;
       })
