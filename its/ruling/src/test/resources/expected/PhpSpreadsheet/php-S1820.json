@@ -1,48 +1,15 @@
 {
-"PhpSpreadsheet:infra/LocaleGenerator.php": [
-13
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
 24
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/FormulaToken.php": [
-27
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Cell/DataValidation.php": [
-5
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Chart.php": [
 8
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeries.php": [
-7
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Layout.php": [
 7
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Properties.php": [
-11
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php": [
-8
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Csv.php": [
-14
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
 68
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php": [
-15
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Namespaces.php": [
-5
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Font.php": [
-10
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLERead.php": [
-7
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
 5
@@ -50,38 +17,8 @@
 "PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
 15
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/Alignment.php": [
-7
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/Color.php": [
-5
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/Conditional.php": [
-8
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/Fill.php": [
-5
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/Font.php": [
-7
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat.php": [
-5
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter/Column/Rule.php": [
-8
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/BaseDrawing.php": [
 9
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/PageSetup.php": [
-80
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Protection.php": [
-7
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table/TableStyle.php": [
-7
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
 34

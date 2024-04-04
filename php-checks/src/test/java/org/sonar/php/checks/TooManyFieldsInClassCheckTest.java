@@ -54,7 +54,10 @@ class TooManyFieldsInClassCheckTest {
       new LineIssue(check, 18, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has."),
       new LineIssue(check, 33, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."),
       new LineIssue(check, 43, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."),
-      new LineIssue(check, 83, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."));
+      new LineIssue(check, 83, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."),
+      new LineIssue(check, 168, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."),
+      new LineIssue(check, 183, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."),
+      new LineIssue(check, 198, "Refactor this class so it has no more than 2 public fields, rather than the 5 it currently has."));
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues);
   }
 }
