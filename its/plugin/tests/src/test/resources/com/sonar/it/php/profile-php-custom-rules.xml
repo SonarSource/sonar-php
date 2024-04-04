@@ -6,22 +6,18 @@
     <rule>
       <repositoryKey>php-custom-rules</repositoryKey>
       <key>visitor</key>
-      <priority>MAJOR</priority>
     </rule>
     <rule>
       <repositoryKey>php-custom-rules</repositoryKey>
       <key>subscription</key>
-      <priority>MAJOR</priority>
     </rule>
     <rule>
       <repositoryKey>deprecated-php-custom-rules</repositoryKey>
       <key>visitor</key>
-      <priority>MAJOR</priority>
     </rule>
     <rule>
       <repositoryKey>deprecated-php-custom-rules</repositoryKey>
       <key>subscription</key>
-      <priority>MAJOR</priority>
     </rule>
   </rules>
 </profile>

@@ -6,12 +6,10 @@
     <rule>
       <repositoryKey>php</repositoryKey>
       <key>S1116</key> <!-- empty statement -->
-      <priority>INFO</priority>
     </rule>
     <rule>
       <repositoryKey>php</repositoryKey>
       <key>NoSonar</key> <!-- raise issue on NOSONAR -->
-      <priority>INFO</priority>
     </rule>
   </rules>
 </profile>

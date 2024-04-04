@@ -6,7 +6,6 @@
     <rule>
       <repositoryKey>php</repositoryKey>
       <key>S3334</key>
-      <priority>BLOCKER</priority>
     </rule>
   </rules>
 </profile>
