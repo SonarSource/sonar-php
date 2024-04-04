@@ -50,6 +50,13 @@ class PsalmReportTest {
     assertThat(first.getComponent()).isEqualTo("psalm_project:src/test.php");
     assertThat(first.getRule()).isEqualTo("external_psalm:psalm.finding");
     assertThat(first.getMessage()).isEqualTo("Second issue on test.php");
+    assertThat(first.getImpactsList()).hasSize(1);
+
+    // Not working atm, Impact is not properly send to SQ (somewhere)
+    // Common.Impact firstImpact = first.getImpactsList().get(0);
+    // assertThat(firstImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.RELIABILITY);
+    // assertThat(firstImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.HIGH);
+
     assertThat(first.getType()).isEqualTo(Common.RuleType.BUG);
     assertThat(first.getSeverity()).isEqualTo(Common.Severity.CRITICAL);
     assertThat(first.getEffort()).isEqualTo("5min");
@@ -64,6 +71,12 @@ class PsalmReportTest {
     assertThat(second.getComponent()).isEqualTo("psalm_project:src/test.php");
     assertThat(second.getRule()).isEqualTo("external_psalm:InvalidScalarArgument");
     assertThat(second.getMessage()).isEqualTo("First issue on test.php");
+    assertThat(second.getImpactsList()).hasSize(1);
+
+    // Not working atm, Impact is not properly send to SQ (somewhere)
+    // Common.Impact secondImpact = second.getImpactsList().get(0);
+    // assertThat(secondImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.RELIABILITY);
+    // assertThat(secondImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.HIGH);
     assertThat(second.getType()).isEqualTo(Common.RuleType.BUG);
     assertThat(second.getSeverity()).isEqualTo(Common.Severity.CRITICAL);
     assertThat(second.getEffort()).isEqualTo("5min");

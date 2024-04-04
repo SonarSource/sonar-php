@@ -33,17 +33,19 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.rule.Severity;
+import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
+import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.never;
@@ -80,8 +82,9 @@ class PhpStanSensorTest extends ReportSensorTest {
     assertThat(externalIssues).hasSize(3);
 
     ExternalIssue first = externalIssues.get(0);
+    assertThat(first.impacts()).containsOnly(entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));
     assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL);
-    assertThat(first.severity()).isEqualTo(Severity.MAJOR);
+    assertThat(first.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.MAJOR);
     IssueLocation firstPrimaryLoc = first.primaryLocation();
     assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file1.php");
     assertThat(firstPrimaryLoc.message())
@@ -91,8 +94,9 @@ class PhpStanSensorTest extends ReportSensorTest {
     assertThat(firstTextRange.start().line()).isEqualTo(5);
 
     ExternalIssue second = externalIssues.get(1);
+    assertThat(second.impacts()).containsOnly(entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));
     assertThat(second.type()).isEqualTo(RuleType.CODE_SMELL);
-    assertThat(second.severity()).isEqualTo(Severity.MAJOR);
+    assertThat(second.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.MAJOR);
     IssueLocation secondPrimaryLoc = second.primaryLocation();
     assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file2.php");
     assertThat(secondPrimaryLoc.message())
@@ -102,8 +106,9 @@ class PhpStanSensorTest extends ReportSensorTest {
     assertThat(secondTextRange.start().line()).isEqualTo(5);
 
     ExternalIssue third = externalIssues.get(2);
+    assertThat(third.impacts()).containsOnly(entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));
     assertThat(third.type()).isEqualTo(RuleType.CODE_SMELL);
-    assertThat(third.severity()).isEqualTo(Severity.MAJOR);
+    assertThat(third.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.MAJOR);
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
     assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file2.php");
     assertThat(thirdPrimaryLoc.message())
@@ -130,8 +135,9 @@ class PhpStanSensorTest extends ReportSensorTest {
     assertThat(externalIssues).hasSize(1);
 
     ExternalIssue first = externalIssues.get(0);
+    assertThat(first.impacts()).containsOnly(entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));
     assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL);
-    assertThat(first.severity()).isEqualTo(Severity.MAJOR);
+    assertThat(first.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.MAJOR);
     IssueLocation firstPrimaryLoc = first.primaryLocation();
     assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:phpstan/file1.php");
     assertThat(firstPrimaryLoc.message())

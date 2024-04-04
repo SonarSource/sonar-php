@@ -25,13 +25,14 @@ import java.util.List;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewExternalIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.issue.impact.Severity;
+import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
@@ -43,7 +44,7 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   protected static final Long DEFAULT_CONSTANT_DEBT_MINUTES = 5L;
 
   private static final RuleType DEFAULT_RULE_TYPE = RuleType.CODE_SMELL;
-  private static final Severity DEFAULT_SEVERITY = Severity.MAJOR;
+  private static final org.sonar.api.batch.rule.Severity DEFAULT_RULE_SEVERITY = org.sonar.api.batch.rule.Severity.MAJOR;
   private static final String READ_ERROR_MSG_FORMAT = "An error occurred when reading report file '%s', no issue will be imported from this report.\n%s";
 
   private static final String UNRESOLVED_INPUT_FILE_MESSAGE_FORMAT = "Failed to resolve %s file path(s) in %s %s report. No issues imported related to file(s): %s";
@@ -104,10 +105,14 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
     }
 
     NewExternalIssue newExternalIssue = context.newExternalIssue();
+    var ruleType = toType(issue.type);
+    var ruleSeverity = toRuleSeverity(issue.severity);
     newExternalIssue
-      .type(toType(issue.type))
-      .severity(toSeverity(issue.severity))
-      .remediationEffortMinutes(DEFAULT_CONSTANT_DEBT_MINUTES);
+      .addImpact(toSoftwareQuality(ruleType), toImpactSeverity(ruleSeverity))
+      .remediationEffortMinutes(DEFAULT_CONSTANT_DEBT_MINUTES)
+      // For now we're still keeping the deprecated type and severity to enable a smoother transition for users
+      .severity(ruleSeverity)
+      .type(ruleType);
 
     NewIssueLocation primaryLocation = newExternalIssue.newLocation()
       .message(issue.message)
@@ -134,18 +139,34 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
     return DEFAULT_RULE_TYPE;
   }
 
-  private static Severity toSeverity(@Nullable String severity) {
+  private static org.sonar.api.batch.rule.Severity toRuleSeverity(@Nullable String severity) {
     if (severity != null) {
       return switch (severity) {
-        case "INFO" -> Severity.INFO;
-        case "MINOR" -> Severity.MINOR;
-        case "MAJOR" -> Severity.MAJOR;
-        case "CRITICAL" -> Severity.CRITICAL;
-        case "BLOCKER" -> Severity.BLOCKER;
-        default -> DEFAULT_SEVERITY;
+        case "INFO" -> org.sonar.api.batch.rule.Severity.INFO;
+        case "MINOR" -> org.sonar.api.batch.rule.Severity.MINOR;
+        case "MAJOR" -> org.sonar.api.batch.rule.Severity.MAJOR;
+        case "CRITICAL" -> org.sonar.api.batch.rule.Severity.CRITICAL;
+        case "BLOCKER" -> org.sonar.api.batch.rule.Severity.BLOCKER;
+        default -> DEFAULT_RULE_SEVERITY;
       };
     }
-    return DEFAULT_SEVERITY;
+    return DEFAULT_RULE_SEVERITY;
+  }
+
+  private static SoftwareQuality toSoftwareQuality(RuleType ruleType) {
+    return switch (ruleType) {
+      case BUG -> SoftwareQuality.RELIABILITY;
+      case SECURITY_HOTSPOT, VULNERABILITY -> SoftwareQuality.SECURITY;
+      case CODE_SMELL -> SoftwareQuality.MAINTAINABILITY;
+    };
+  }
+
+  private static Severity toImpactSeverity(org.sonar.api.batch.rule.Severity ruleSeverity) {
+    return switch (ruleSeverity) {
+      case INFO, MINOR -> Severity.LOW;
+      case MAJOR -> Severity.MEDIUM;
+      case CRITICAL, BLOCKER -> Severity.HIGH;
+    };
   }
 
   private String toRuleId(@Nullable String ruleId) {
