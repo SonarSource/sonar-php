@@ -28,17 +28,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
+import org.sonar.api.issue.impact.Severity;
+import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -81,8 +83,9 @@ class PsalmSensorTest extends ReportSensorTest {
   }
 
   private static void verifyPsalmReportIssue1(ExternalIssue first) {
+    assertThat(first.impacts()).containsOnly(entry(SoftwareQuality.RELIABILITY, Severity.HIGH));
     assertThat(first.type()).isEqualTo(RuleType.BUG);
-    assertThat(first.severity()).isEqualTo(Severity.CRITICAL);
+    assertThat(first.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.CRITICAL);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation firstPrimaryLoc = first.primaryLocation();
     assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
@@ -96,8 +99,9 @@ class PsalmSensorTest extends ReportSensorTest {
   }
 
   private static void verifyPsalmReportIssue2(ExternalIssue first, ExternalIssue second) {
+    assertThat(second.impacts()).containsOnly(entry(SoftwareQuality.RELIABILITY, Severity.HIGH));
     assertThat(second.type()).isEqualTo(RuleType.BUG);
-    assertThat(second.severity()).isEqualTo(Severity.CRITICAL);
+    assertThat(second.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.CRITICAL);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation secondPrimaryLoc = second.primaryLocation();
     assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
@@ -111,8 +115,9 @@ class PsalmSensorTest extends ReportSensorTest {
   }
 
   private static void verifyPsalmReportIssue3(ExternalIssue third) {
+    assertThat(third.impacts()).containsOnly(entry(SoftwareQuality.RELIABILITY, Severity.MEDIUM));
     assertThat(third.type()).isEqualTo(RuleType.BUG);
-    assertThat(third.severity()).isEqualTo(Severity.MAJOR);
+    assertThat(third.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.MAJOR);
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
     assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file2.php");
     assertThat(thirdPrimaryLoc.message()).isEqualTo("Argument 1 of foo expects int, \"not an int\" provided");
@@ -155,8 +160,9 @@ class PsalmSensorTest extends ReportSensorTest {
   }
 
   private static void verifyIssue1(ExternalIssue first) {
+    assertThat(first.impacts()).containsOnly(entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));
     assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL);
-    assertThat(first.severity()).isEqualTo(Severity.MAJOR);
+    assertThat(first.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.MAJOR);
     assertThat(first.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation firstPrimaryLoc = first.primaryLocation();
     assertThat(firstPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
@@ -170,8 +176,9 @@ class PsalmSensorTest extends ReportSensorTest {
   }
 
   private static void verifyIssue2(ExternalIssue second) {
+    assertThat(second.impacts()).containsOnly(entry(SoftwareQuality.SECURITY, Severity.LOW));
     assertThat(second.type()).isEqualTo(RuleType.SECURITY_HOTSPOT);
-    assertThat(second.severity()).isEqualTo(Severity.INFO);
+    assertThat(second.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.INFO);
     assertThat(second.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation secondPrimaryLoc = second.primaryLocation();
     assertThat(secondPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
@@ -181,8 +188,9 @@ class PsalmSensorTest extends ReportSensorTest {
   }
 
   private static void verifyIssue3(ExternalIssue third) {
+    assertThat(third.impacts()).containsOnly(entry(SoftwareQuality.SECURITY, Severity.HIGH));
     assertThat(third.type()).isEqualTo(RuleType.VULNERABILITY);
-    assertThat(third.severity()).isEqualTo(Severity.BLOCKER);
+    assertThat(third.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.BLOCKER);
     assertThat(third.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation thirdPrimaryLoc = third.primaryLocation();
     assertThat(thirdPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
@@ -196,8 +204,9 @@ class PsalmSensorTest extends ReportSensorTest {
   }
 
   private static void verifyIssue4(ExternalIssue fourth) {
+    assertThat(fourth.impacts()).containsOnly(entry(SoftwareQuality.MAINTAINABILITY, Severity.LOW));
     assertThat(fourth.type()).isEqualTo(RuleType.CODE_SMELL);
-    assertThat(fourth.severity()).isEqualTo(Severity.MINOR);
+    assertThat(fourth.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.MINOR);
     assertThat(fourth.ruleId()).isEqualTo("InvalidScalarArgument");
     IssueLocation fourthPrimaryLoc = fourth.primaryLocation();
     assertThat(fourthPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
@@ -211,8 +220,9 @@ class PsalmSensorTest extends ReportSensorTest {
   }
 
   private static void verifyIssue5(ExternalIssue fifth) {
+    assertThat(fifth.impacts()).containsOnly(entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));
     assertThat(fifth.type()).isEqualTo(RuleType.CODE_SMELL);
-    assertThat(fifth.severity()).isEqualTo(Severity.MAJOR);
+    assertThat(fifth.severity()).isEqualTo(org.sonar.api.batch.rule.Severity.MAJOR);
     assertThat(fifth.ruleId()).isEqualTo("psalm.finding");
     IssueLocation fifthPrimaryLoc = fifth.primaryLocation();
     assertThat(fifthPrimaryLoc.inputComponent().key()).isEqualTo("reports-project:psalm/file1.php");
