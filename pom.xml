@@ -69,7 +69,7 @@
   </issueManagement>
 
   <properties>
-    <revision>3.35-SNAPSHOT</revision>
+    <revision>3.36-SNAPSHOT</revision>
     <version.enforcer.plugin>3.0.0-M3</version.enforcer.plugin>
     <gitRepositoryName>sonar-php</gitRepositoryName>
     <license.title>SonarQube PHP Plugin</license.title>
