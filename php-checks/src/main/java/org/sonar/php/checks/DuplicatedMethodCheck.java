@@ -69,7 +69,7 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    // Ignore empty functions
+    // Ignore functions with fewer than 2 statements
     if (tree.body().statements().size() >= MINIMUM_NUMBER_OF_STATEMENTS) {
       functions.add(tree);
     }
