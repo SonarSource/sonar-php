@@ -26,7 +26,7 @@ import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 
 import javax.annotation.Nullable;
 
-public record SymbolReturnType(boolean isDefined, boolean isVoid) implements ReturnType {
+public record SymbolReturnType(boolean isPresent, boolean isVoid) implements ReturnType {
   public static SymbolReturnType from(@Nullable ReturnTypeClauseTree returnTypeClause) {
     if (returnTypeClause == null) {
       return new SymbolReturnType(false, false);
