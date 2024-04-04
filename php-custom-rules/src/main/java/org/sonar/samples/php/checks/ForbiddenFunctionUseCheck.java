@@ -20,7 +20,6 @@
 package org.sonar.samples.php.checks;
 
 import java.util.Set;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -39,7 +38,6 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
  */
 @Rule(
   key = ForbiddenFunctionUseCheck.KEY,
-  priority = Priority.MAJOR,
   name = "Forbidden function should not be used.",
   tags = {"convention"}
 // Description can either be given in this annotation or through HTML name <ruleKey>.html located in package

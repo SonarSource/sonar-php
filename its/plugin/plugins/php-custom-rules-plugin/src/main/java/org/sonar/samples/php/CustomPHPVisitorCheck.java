@@ -19,14 +19,12 @@
  */
 package org.sonar.samples.php;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(
   key = "visitor",
-  priority = Priority.MINOR,
   name = "PHP visitor check",
   description = "desc")
 public class CustomPHPVisitorCheck extends PHPVisitorCheck {

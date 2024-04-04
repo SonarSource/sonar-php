@@ -21,7 +21,6 @@ package org.sonar.samples.php;
 
 import java.util.Collections;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -29,7 +28,6 @@ import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
 @Rule(
   key = "subscription",
-  priority = Priority.MINOR,
   name = "PHP subscription visitor check",
   description = "desc")
 public class CustomPHPSubscriptionCheck extends PHPSubscriptionCheck {
