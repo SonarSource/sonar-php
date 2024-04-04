@@ -23,7 +23,7 @@ package org.sonar.plugins.php.api.symbols;
  * Represent details about the declared return type of function and method.
  */
 public interface ReturnType {
-  boolean isDefined();
+  boolean isPresent();
 
   boolean isVoid();
 }

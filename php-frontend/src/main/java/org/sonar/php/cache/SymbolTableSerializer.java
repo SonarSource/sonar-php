@@ -149,7 +149,7 @@ public class SymbolTableSerializer {
   }
 
   private void write(ReturnType returnType) throws IOException {
-    writeBoolean(returnType.isDefined());
+    writeBoolean(returnType.isPresent());
     writeBoolean(returnType.isVoid());
   }
 

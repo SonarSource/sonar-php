@@ -422,7 +422,7 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
   }
 
   private static boolean isReturnTypeNotDeclaredOrVoid(FunctionSymbol functionSymbol) {
-    return !functionSymbol.returnType().isDefined() || functionSymbol.returnType().isVoid();
+    return !functionSymbol.returnType().isPresent() || functionSymbol.returnType().isVoid();
   }
 
   /**

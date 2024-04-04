@@ -76,7 +76,7 @@ class FunctionSymbolIndexTest {
     assertThat(result.location()).isInstanceOf(UnknownLocationInFile.class);
     assertThat(result.hasReturn()).isFalse();
     assertThat(result.hasFuncGetArgs()).isFalse();
-    assertThat(result.returnType().isDefined()).isFalse();
+    assertThat(result.returnType().isPresent()).isFalse();
     assertThat(result.returnType().isVoid()).isFalse();
   }
 

@@ -33,35 +33,35 @@ class SymbolReturnTypeTest extends ParsingTestUtils {
   @Test
   void testNotDefined() {
     SymbolReturnType returnType = SymbolReturnType.notDefined();
-    assertThat(returnType.isDefined()).isFalse();
+    assertThat(returnType.isPresent()).isFalse();
     assertThat(returnType.isVoid()).isFalse();
   }
 
   @Test
   void testFromNotDefined() {
     SymbolReturnType returnType = SymbolReturnType.from(parseReturnTypeClause("function a(){}"));
-    assertThat(returnType.isDefined()).isFalse();
+    assertThat(returnType.isPresent()).isFalse();
     assertThat(returnType.isVoid()).isFalse();
   }
 
   @Test
   void testFromIntType() {
     SymbolReturnType returnType = SymbolReturnType.from(parseReturnTypeClause("function a():int{}"));
-    assertThat(returnType.isDefined()).isTrue();
+    assertThat(returnType.isPresent()).isTrue();
     assertThat(returnType.isVoid()).isFalse();
   }
 
   @Test
   void testFromVoidType() {
     SymbolReturnType returnType = SymbolReturnType.from(parseReturnTypeClause("function a():void{}"));
-    assertThat(returnType.isDefined()).isTrue();
+    assertThat(returnType.isPresent()).isTrue();
     assertThat(returnType.isVoid()).isTrue();
   }
 
   @Test
   void testFromComplexType() {
     SymbolReturnType returnType = SymbolReturnType.from(parseReturnTypeClause("function a():int|float{}"));
-    assertThat(returnType.isDefined()).isTrue();
+    assertThat(returnType.isPresent()).isTrue();
     assertThat(returnType.isVoid()).isFalse();
   }
 
