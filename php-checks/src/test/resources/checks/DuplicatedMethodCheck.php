@@ -17,6 +17,9 @@ function fun4($a, $c) { // Noncompliant {{Update this method so that its impleme
 function fun5($a, $c) {
   echo $a;
 }
+function fun6($a, $c) { // OK, not raising if there is less than 2 statements
+  echo $a;
+}
 
 class A {
     public $var = 'a default value';
@@ -35,9 +38,17 @@ class B {
         echo $this->var;
     }
 
-    public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 32.}}
+    public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 35.}}
     //              ^^^^^^^^^^^
         echo $this->var;
+        echo $this->var;
+    }
+
+    public function displayVarSmall() {
+        echo $this->var;
+    }
+
+    public function displayVarSmall2() { // OK, not raising if there is less than 2 statements
         echo $this->var;
     }
 
@@ -48,13 +59,19 @@ class B {
                        echo $this->var;
                        echo $this->var;
                    }
-                   public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 47.}}
+                   public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 58.}}
                        echo $this->var;
                        echo $this->var;
                    }
-                   public function displayVar3() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 47.}}
+                   public function displayVar3() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 58.}}
                       echo $this->var;
                       echo $this->var;
+                   }
+                   public function displayVarSmall() {
+                       echo $this->var;
+                   }
+                   public function displayVarSmall2() { // OK, not raising if there is less than 2 statements
+                       echo $this->var;
                    }
                 };
     }
@@ -100,25 +117,40 @@ class C {
 
 function myFunction() : A
 {
+    something();
     return null;
 }
 
 function myFunction() : array
 {
+    something();
     return null;
 }
 
 function myFunction($a, $lot, $of, $params) : array
 {
+    something();
     return null;
 }
 
 function myFunction(int $a, bool $lot, $of, $params) : array // Noncompliant
 {
+    something();
     return null;
 }
 
 function myFunction(int $a, bool $lot, $of) : array
+{
+    something();
+    return null;
+}
+
+function myFunctionSmall($a, $lot, $of, $params, $again) : array
+{
+    return null;
+}
+
+function myFunctionSmall($a, $lot, $of, $params, $again) : array // OK, not raising if there is less than 2 statements
 {
     return null;
 }

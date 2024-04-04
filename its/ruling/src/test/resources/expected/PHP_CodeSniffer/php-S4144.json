@@ -1,17 +1,4 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc": [
-129,
-137
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc": [
-161,
-166,
-170,
-185,
-195,
-201,
-207
-],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/ConstructorNameUnitTest.inc": [
 25,
 61
