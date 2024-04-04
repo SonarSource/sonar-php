@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           mvn versions:set-property -DgenerateBackupPoms=false -Dproperty=revision -DnewVersion=${{ github.event.inputs.version }}
-      - uses: peter-evans/create-pull-request@v5
+      - uses: peter-evans/create-pull-request@v6
         with:
           author: ${{ github.actor }} <${{ github.actor }}>
           commit-message: Prepare next development iteration
