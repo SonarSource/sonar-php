@@ -98,7 +98,7 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
     List<ClassPropertyDeclarationTree> fields = new ArrayList<>();
 
     for (ClassMemberTree classMember : classDeclaration.members()) {
-      if (classMember.is(Kind.CLASS_PROPERTY_DECLARATION, Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)) {
+      if (classMember.is(Kind.CLASS_PROPERTY_DECLARATION)) {
         fields.add((ClassPropertyDeclarationTree) classMember);
       }
     }
