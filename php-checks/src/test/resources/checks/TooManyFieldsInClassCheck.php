@@ -125,12 +125,20 @@ class ConstructorPropertyPromotionAndRegularConstructorArgumentsCompliant {     
   ) {}
 };
 
-class Constants {   // Compliant
+class PublicConstants {   // Compliant
   public const A1 = 'a1';
   public const A2 = 'a2';
   public const A3 = 'a3';
   public const A4 = 'a4';
   public const A5 = 'a5';
+}
+
+class Constants {   // Compliant
+  const A1 = 'a1';
+  const A2 = 'a2';
+  const A3 = 'a3';
+  const A4 = 'a4';
+  const A5 = 'a5';
 }
 
 class ConstantsAndPublicField {   // Compliant
