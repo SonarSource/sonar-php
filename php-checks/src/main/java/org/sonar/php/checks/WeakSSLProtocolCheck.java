@@ -89,10 +89,6 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Change this code to use a stronger protocol.";
 
-  public WeakSSLProtocolCheck() {
-    super();
-  }
-
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
@@ -156,16 +152,8 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
       .toList();
 
     // In a sensitive case, `$options['ssl'] is either assigned with an array initializer or a value is directly written by an array key
-    // check if `$options['ssl']` is assigned with a sensitive array initializer
-    boolean hasOptionsSslSensitiveAssignment = optionsSslAccesses.stream()
-      .map(WeakSSLProtocolCheck::getAssignedValueFromParent)
-      .filter(param -> param != null && isArrayInitializer(param))
-      .findFirst()
-      .flatMap(c -> getProperty((ArrayInitializerTree) c, CRYPTO_METHOD_KEY))
-      .map(tree -> checkStreamWeakProtocol(tree, STREAM_CONTEXT_CREATE))
-      .orElse(false);
-
-    if (hasOptionsSslSensitiveAssignment) {
+    if (hasOptionsSslSensitiveAssignment(optionsSslAccesses)) {
+      // `$options['ssl']` is assigned with a sensitive array initializer
       return true;
     }
 
@@ -182,6 +170,16 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
 
   private static boolean isArrayInitializer(ExpressionTree param) {
     return param.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION);
+  }
+
+  private boolean hasOptionsSslSensitiveAssignment(List<Tree> optionsSslAccesses) {
+    return optionsSslAccesses.stream()
+      .map(WeakSSLProtocolCheck::getAssignedValueFromParent)
+      .filter(param -> param != null && isArrayInitializer(param))
+      .findFirst()
+      .flatMap(c -> getProperty((ArrayInitializerTree) c, CRYPTO_METHOD_KEY))
+      .map(tree -> checkStreamWeakProtocol(tree, STREAM_CONTEXT_CREATE))
+      .orElse(false);
   }
 
   private boolean checkStreamWeakProtocol(ExpressionTree expressionTree, String functionName) {
