@@ -52,10 +52,11 @@ class PsalmReportTest {
     assertThat(first.getMessage()).isEqualTo("Second issue on test.php");
     assertThat(first.getImpactsList()).hasSize(1);
 
-    // Not working atm, Impact is not properly send to SQ (somewhere)
-    // Common.Impact firstImpact = first.getImpactsList().get(0);
-    // assertThat(firstImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.RELIABILITY);
-    // assertThat(firstImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.HIGH);
+    Common.Impact firstImpact = first.getImpactsList().get(0);
+    // TODO: SONARPHP-1496 Verify Issue Impacts are correctly send to Sonarqube
+    // Should be RELIABILITY and HIGH
+    assertThat(firstImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.MAINTAINABILITY);
+    assertThat(firstImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
 
     assertThat(first.getType()).isEqualTo(Common.RuleType.BUG);
     assertThat(first.getSeverity()).isEqualTo(Common.Severity.CRITICAL);
@@ -73,10 +74,11 @@ class PsalmReportTest {
     assertThat(second.getMessage()).isEqualTo("First issue on test.php");
     assertThat(second.getImpactsList()).hasSize(1);
 
-    // Not working atm, Impact is not properly send to SQ (somewhere)
-    // Common.Impact secondImpact = second.getImpactsList().get(0);
-    // assertThat(secondImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.RELIABILITY);
-    // assertThat(secondImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.HIGH);
+    Common.Impact secondImpact = second.getImpactsList().get(0);
+    // TODO: SONARPHP-1496 Verify Issue Impacts are correctly send to Sonarqube
+    // Should be RELIABILITY and HIGH
+    assertThat(secondImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.MAINTAINABILITY);
+    assertThat(secondImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
     assertThat(second.getType()).isEqualTo(Common.RuleType.BUG);
     assertThat(second.getSeverity()).isEqualTo(Common.Severity.CRITICAL);
     assertThat(second.getEffort()).isEqualTo("5min");

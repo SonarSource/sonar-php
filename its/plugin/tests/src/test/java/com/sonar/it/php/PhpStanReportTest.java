@@ -52,10 +52,9 @@ class PhpStanReportTest {
     assertThat(first.getMessage()).isEqualTo("Message for issue without line.");
     assertThat(first.getImpactsList()).hasSize(1);
 
-    // Not working atm, Impact is not properly send to SQ (somewhere)
-    // Common.Impact firstImpact = first.getImpactsList().get(0);
-    // assertThat(firstImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.MAINTAINABILITY);
-    // assertThat(firstImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
+    Common.Impact firstImpact = first.getImpactsList().get(0);
+    assertThat(firstImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.MAINTAINABILITY);
+    assertThat(firstImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
     assertThat(first.getType()).isEqualTo(Common.RuleType.CODE_SMELL);
     assertThat(first.getSeverity()).isEqualTo(Common.Severity.MAJOR);
     assertThat(first.getEffort()).isEqualTo("5min");
@@ -67,10 +66,9 @@ class PhpStanReportTest {
     assertThat(second.getMessage()).isEqualTo("Parameter #1 $i of function foo expects int, string given.");
     assertThat(second.getImpactsList()).hasSize(1);
 
-    // Not working atm, Impact is not properly send to SQ (somewhere)
-    // Common.Impact secondImpact = second.getImpactsList().get(0);
-    // assertThat(secondImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.MAINTAINABILITY);
-    // assertThat(secondImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
+    Common.Impact secondImpact = second.getImpactsList().get(0);
+    assertThat(secondImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.MAINTAINABILITY);
+    assertThat(secondImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
     assertThat(second.getType()).isEqualTo(Common.RuleType.CODE_SMELL);
     assertThat(second.getSeverity()).isEqualTo(Common.Severity.MAJOR);
     assertThat(second.getEffort()).isEqualTo("5min");
