@@ -145,6 +145,33 @@ stream_socket_enable_crypto($fp, true, STREAM_CRYPTO_METHOD_TLSv1_2_SERVER | STR
 stream_socket_enable_crypto($fp, crypto_type:STREAM_CRYPTO_METHOD_TLSv1_1_SERVER, enable:true); // Noncompliant
 stream_socket_enable_crypto($fp, crypto_type:STREAM_CRYPTO_METHOD_TLSv1_2_SERVER, enable:true);
 
+function arrayAssignment()
+{
+  $options = [];
+  $options['ssl']['crypto_method'] = \STREAM_CRYPTO_METHOD_TLS_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT; // Noncompliant
+  $options['ssl']['crypto_method'] ??= \STREAM_CRYPTO_METHOD_TLS_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT; // Compliant -- the assignment is conditional
+  stream_context_create($options);
+}
+function arrayAssignment2()
+{
+  $options = [];
+  $options['ssl'] = [
+    'crypto_method' => \STREAM_CRYPTO_METHOD_TLS_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT // Noncompliant
+  ];
+  $options['ssl']['crypto_method'] ??= \STREAM_CRYPTO_METHOD_TLS_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT; // Compliant -- the assignment is conditional
+  stream_context_create($options);
+}
+function arrayAssignment3()
+{
+  $options = [];
+  $options['ssl']['crypto_method'] = \STREAM_CRYPTO_METHOD_TLS_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT; // Compliant -- reassigned later
+  $options['ssl'] = [
+    'crypto_method' => \STREAM_CRYPTO_METHOD_TLS_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT // Noncompliant
+  ];
+  $options['ssl']['crypto_method'] ??= \STREAM_CRYPTO_METHOD_TLS_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT | \STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT; // Compliant -- the assignment is conditional
+  stream_context_create($options);
+}
+
 // Curl
 
 $ch = curl_init();
