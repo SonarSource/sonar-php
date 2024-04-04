@@ -54,6 +54,8 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
   private static final String ISSUE_MSG = "Update this method so that its implementation is not identical to \"%s\" on line %d.";
   private static final Function<FunctionTree, NameIdentifierTree> METHOD_TO_NAME = f -> ((MethodDeclarationTree) f).name();
   private static final Function<FunctionTree, NameIdentifierTree> FUNCTION_TO_NAME = f -> ((FunctionDeclarationTree) f).name();
+  private static final int MINIMUM_NUMBER_OF_STATEMENTS = 2;
+
   private final Deque<List<MethodDeclarationTree>> methods = new LinkedList<>();
   private final List<FunctionDeclarationTree> functions = new ArrayList<>();
 
@@ -67,8 +69,8 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    // Ignore empty functions
-    if (!tree.body().statements().isEmpty()) {
+    // Ignore functions with fewer than 2 statements
+    if (tree.body().statements().size() >= MINIMUM_NUMBER_OF_STATEMENTS) {
       functions.add(tree);
     }
     super.visitFunctionDeclaration(tree);
@@ -84,7 +86,7 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
   }
 
   private static boolean isDuplicateCandidate(MethodDeclarationTree tree) {
-    return tree.body().is(Tree.Kind.BLOCK) && (((BlockTree) tree.body()).statements().size() >= 2 || isNonTrivialAccessor(tree));
+    return tree.body().is(Tree.Kind.BLOCK) && (((BlockTree) tree.body()).statements().size() >= MINIMUM_NUMBER_OF_STATEMENTS || isNonTrivialAccessor(tree));
   }
 
   private static boolean isNonTrivialAccessor(MethodDeclarationTree tree) {
