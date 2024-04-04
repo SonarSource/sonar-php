@@ -51,6 +51,12 @@ class MethodDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
+  void testReturnTypeVoid() {
+    MethodDeclarationTree tree = parse("public function f() : void {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.returnTypeClause()).isNotNull();
+  }
+
+  @Test
   void returnTypeUnion() {
     MethodDeclarationTree tree = parse("public function f() : bool|array {}", PHPLexicalGrammar.METHOD_DECLARATION);
     assertThat(tree.returnTypeClause()).isNotNull();

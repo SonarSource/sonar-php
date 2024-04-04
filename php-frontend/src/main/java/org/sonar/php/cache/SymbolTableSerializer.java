@@ -31,6 +31,7 @@ import org.sonar.php.symbols.Parameter;
 import org.sonar.php.tree.symbols.SymbolQualifiedName;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.ReturnType;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class SymbolTableSerializer {
@@ -105,6 +106,7 @@ public class SymbolTableSerializer {
     writeParameters(method.parameters());
     writeBoolean(method.properties().hasReturn());
     writeBoolean(method.properties().hasFuncGetArgs());
+    write(method.returnType());
   }
 
   private void writeParameters(List<Parameter> parameters) throws IOException {
@@ -138,11 +140,17 @@ public class SymbolTableSerializer {
     write(data.qualifiedName());
     writeParameters(data.parameters());
     write(data.properties());
+    write(data.returnType());
   }
 
   private void write(FunctionSymbolData.FunctionSymbolProperties properties) throws IOException {
     writeBoolean(properties.hasReturn());
     writeBoolean(properties.hasFuncGetArgs());
+  }
+
+  private void write(ReturnType returnType) throws IOException {
+    writeBoolean(returnType.isPresent());
+    writeBoolean(returnType.isVoid());
   }
 
   private void writeText(@Nullable String text) throws IOException {

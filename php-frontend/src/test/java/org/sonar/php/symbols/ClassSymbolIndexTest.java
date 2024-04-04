@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
+import org.sonar.php.tree.symbols.SymbolReturnType;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 
 import static java.util.Collections.emptyList;
@@ -274,7 +275,7 @@ class ClassSymbolIndexTest {
   }
 
   private MethodSymbolData method(String name) {
-    return new MethodSymbolData(someLocation(), name, emptyList(), new FunctionSymbolData.FunctionSymbolProperties(), Visibility.PUBLIC);
+    return new MethodSymbolData(someLocation(), name, emptyList(), new FunctionSymbolData.FunctionSymbolProperties(), Visibility.PUBLIC, SymbolReturnType.notDefined());
   }
 
   private LocationInFileImpl someLocation() {

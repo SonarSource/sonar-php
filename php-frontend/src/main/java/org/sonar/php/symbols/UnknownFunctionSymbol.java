@@ -21,7 +21,9 @@ package org.sonar.php.symbols;
 
 import java.util.Collections;
 import java.util.List;
+import org.sonar.php.tree.symbols.SymbolReturnType;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.ReturnType;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class UnknownFunctionSymbol implements FunctionSymbol {
@@ -54,6 +56,11 @@ public class UnknownFunctionSymbol implements FunctionSymbol {
   @Override
   public List<Parameter> parameters() {
     return Collections.emptyList();
+  }
+
+  @Override
+  public ReturnType returnType() {
+    return SymbolReturnType.notDefined();
   }
 
   @Override

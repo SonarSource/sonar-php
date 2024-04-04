@@ -120,6 +120,7 @@ $foo = Foo::a(); // Noncompliant
 abstract class B {
   public function function1() {
     $a = $this->function2(); // OK
+    $a = $this->function3(); // Noncompliant {{Remove this use of the output from "B::function3"; "B::function3" doesn't return anything.}}
   }
 
   abstract protected function function2() {}
@@ -174,4 +175,24 @@ class ArrowFunctions {
 
 function voidFunction($param) {
   echo $param;
+}
+
+abstract class AbstractTest {
+  protected static function function1(): String {
+    throw new BadMethodCallException('This method must be implemented by subclasses.');
+  }
+
+  protected static function function2(): void {
+    throw new BadMethodCallException('This method must be implemented by subclasses.');
+  }
+
+  protected static function function3() {
+    throw new BadMethodCallException('This method must be implemented by subclasses.');
+  }
+
+  protected static function caller() {
+    $a = static::function1(); // OK
+    $a = static::function2(); // Noncompliant
+    $a = static::function3(); // Noncompliant
+  }
 }

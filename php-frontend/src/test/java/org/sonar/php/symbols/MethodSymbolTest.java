@@ -43,6 +43,8 @@ class MethodSymbolTest {
     MethodSymbol foo = firstDescendant(ast, MethodDeclarationTreeImpl.class).get().symbol();
     assertThat(a.declaredMethods().get(0)).isSameAs(foo);
     assertThat(foo.owner()).isSameAs(a);
+    assertThat(foo.returnType().isPresent()).isFalse();
+    assertThat(foo.returnType().isVoid()).isFalse();
   }
 
   @Test

@@ -409,10 +409,20 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
   /**
    * If there is a symbol for the function, verify that the function has a return value.
    * If the symbol belongs to a method, also verify that the method is not abstract.
+   * If there is a return type declared that is not void, don't consider it as a void symbol.
    */
   private static boolean isVoidSymbol(FunctionSymbol functionSymbol) {
-    return !functionSymbol.isUnknownSymbol() && !functionSymbol.hasReturn() &&
-      (!(functionSymbol instanceof MethodSymbol methodSymbol) || methodSymbol.isAbstract().isFalse());
+    return !functionSymbol.isUnknownSymbol() && !functionSymbol.hasReturn()
+      && isNotAbstractMethod(functionSymbol)
+      && isReturnTypeNotDeclaredOrVoid(functionSymbol);
+  }
+
+  private static boolean isNotAbstractMethod(FunctionSymbol functionSymbol) {
+    return !(functionSymbol instanceof MethodSymbol methodSymbol) || methodSymbol.isAbstract().isFalse();
+  }
+
+  private static boolean isReturnTypeNotDeclaredOrVoid(FunctionSymbol functionSymbol) {
+    return !functionSymbol.returnType().isPresent() || functionSymbol.returnType().isVoid();
   }
 
   /**

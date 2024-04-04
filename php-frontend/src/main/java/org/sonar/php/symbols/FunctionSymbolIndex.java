@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.ReturnType;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
 public class FunctionSymbolIndex {
@@ -94,6 +95,11 @@ public class FunctionSymbolIndex {
     @Override
     public List<Parameter> parameters() {
       return data.parameters();
+    }
+
+    @Override
+    public ReturnType returnType() {
+      return data.returnType();
     }
 
     @Override

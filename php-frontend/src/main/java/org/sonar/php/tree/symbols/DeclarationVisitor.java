@@ -35,7 +35,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.ClassSymbol;
@@ -55,6 +54,7 @@ import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.ReturnType;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -196,10 +196,12 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     boolean isTestMethod = isTestMethod(tree, visibility);
 
+    ReturnType returnType = SymbolReturnType.from(tree.returnTypeClause());
+
     super.visitMethodDeclaration(tree);
 
     MethodSymbolData methodSymbolData = new MethodSymbolData(location(name), name.text(), parameters,
-      functionPropertiesStack.pop(), visibility, isAbstract, isTestMethod);
+      functionPropertiesStack.pop(), visibility, returnType, isAbstract, isTestMethod);
 
     methodTreeByData.put(methodSymbolData, (MethodDeclarationTreeImpl) tree);
     methodsByClassTree.computeIfAbsent(currentClassTree, c -> new ArrayList<>()).add(methodSymbolData);
@@ -211,16 +213,18 @@ public class DeclarationVisitor extends NamespaceNameResolvingVisitor {
 
     symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace());
 
-    IdentifierTree name = tree.name();
-    SymbolQualifiedName qualifiedName = currentNamespace().resolve(name.text());
+    var name = tree.name();
+    var qualifiedName = currentNamespace().resolve(name.text());
 
-    List<Parameter> parameters = tree.parameters().parameters().stream()
+    var parameters = tree.parameters().parameters().stream()
       .map(Parameter::fromTree)
       .toList();
 
+    var returnType = SymbolReturnType.from(tree.returnTypeClause());
+
     super.visitFunctionDeclaration(tree);
 
-    FunctionSymbolData data = new FunctionSymbolData(location(name), qualifiedName, parameters, functionPropertiesStack.pop());
+    var data = new FunctionSymbolData(location(name), qualifiedName, parameters, functionPropertiesStack.pop(), returnType);
     functionSymbolDataByTree.put(tree, data);
   }
 
