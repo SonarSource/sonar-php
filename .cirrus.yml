@@ -107,7 +107,13 @@ depends_on_build: &DEPENDS_ON_BUILD
     - build
 
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
-  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*" || $CIRRUS_BRANCH =~ "release.*")
+  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && 
+    ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*" || $CIRRUS_BRANCH =~ "release.*")
+
+only_main_branches_filter: &ONLY_MAIN_BRANCHES
+  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" &&
+    ($CIRRUS_BRANCH == $CIRRUS_DEFAULT_BRANCH || $CIRRUS_BRANCH =~ "branch-.*")
+
 
 # ----------------------------------------------
 # -------------------TASKS----------------------
@@ -201,7 +207,7 @@ pr_analysis_task:
   cleanup_before_cache_script: cleanup_maven_repository
 
 ws_scan_task:
-  <<: *ONLY_SONARSOURCE_QA
+  <<: *ONLY_MAIN_BRANCHES
   <<: *DEPENDS_ON_BUILD
   <<: *CONTAINER_DEFINITION
   <<: *MAVEN_CACHE
