@@ -338,7 +338,7 @@
               <toggleOffOn/>
               <eclipse>
                 <version>4.22.0</version>
-                <file>https://raw.githubusercontent.com/SonarSource/sonar-developer-toolset/master/eclipse/sonar-formatter.xml</file>
+                <file>https://raw.githubusercontent.com/SonarSource/sonar-developer-toolset/975900353cb119cb20a7ad3ecb53183480dd4c2e/eclipse/sonar-formatter.xml</file>
               </eclipse>
             </java>
           </configuration>
