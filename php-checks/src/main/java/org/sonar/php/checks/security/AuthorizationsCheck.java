@@ -131,6 +131,7 @@ public class AuthorizationsCheck extends PHPVisitorCheck {
     static CompliantResultStatement create(ExpressionTree returnExpressionTree, Predicate<String> predicate) {
       return new CompliantResultStatement(returnExpressionTree, predicate);
     }
+
     boolean isCompliant() {
       return switch (returnExpressionTree.getKind()) {
         case NUMERIC_LITERAL, REGULAR_STRING_LITERAL -> false;
