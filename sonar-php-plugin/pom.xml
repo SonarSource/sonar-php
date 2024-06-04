@@ -54,7 +54,7 @@
       <artifactId>php-frontend</artifactId>
       <classifier>tests</classifier>
       <version>${revision}</version>
-   </dependency>
+    </dependency>
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-testing-harness</artifactId>
