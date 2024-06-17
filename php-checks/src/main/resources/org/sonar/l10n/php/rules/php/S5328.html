@@ -32,5 +32,9 @@ session_id(bin2hex(random_bytes(16))); // Compliant
   <li> CWE - <a href="https://cwe.mitre.org/data/definitions/340">CWE-340 - Generation of Predictable Numbers or Identifiers</a> </li>
   <li> <a href="https://www.php.net/random-bytes">PHP: random_bytes()</a> </li>
   <li> <a href="https://www.php.net/session-regenerate-id">PHP: session_regenerate_id()</a> </li>
+  <li> STIG Viewer - <a href="https://stigviewer.com/stig/application_security_and_development/2023-06-08/finding/V-222579">Application Security and
+  Development: V-222579</a> - Applications must use system-generated session identifiers that protect against session fixation. </li>
+  <li> STIG Viewer - <a href="https://stigviewer.com/stig/application_security_and_development/2023-06-08/finding/V-222582">Application Security and
+  Development: V-222582</a> - The application must not re-use or recycle session IDs. </li>
 </ul>
 
