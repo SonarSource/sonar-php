@@ -77,7 +77,7 @@
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
     <!-- JAR versions -->
-    <version.assertj>3.26.0</version.assertj>
+    <version.assertj>3.5.2</version.assertj>
     <version.commons-lang>3.14.0</version.commons-lang>
     <version.junit-jupiter>5.10.2</version.junit-jupiter>
     <version.maven-project>2.2.1</version.maven-project>
