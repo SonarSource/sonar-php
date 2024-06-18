@@ -1,0 +1,45 @@
+name: Releasability Check
+
+#TODO not merge in this form
+on:
+  push:
+    branches:
+      - jonas/releasability-check
+
+jobs:
+  releasability-job:
+    name: Releasability check
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write      # required by SonarSource/vault-action-wrapper
+      contents: read       # required by checkout
+    steps:
+      - name: Retrieve Vault Secrets
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_PASSWORD;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader role | ARTIFACTORY_ROLE;
+            development/kv/data/repox url | ARTIFACTORY_URL;
+
+      - name: Get the latest available version number
+        id: latest-version
+        env:
+          ARTIFACTORY_PRIVATE_USERNAME: vault-${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ROLE }}
+          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_PASSWORD }}
+          ARTIFACTORY_URL: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_URL }}
+          REPO: sonarsource-public-builds
+        run: |
+          echo LATEST_VERSION=$(curl -s -u ${ARTIFACTORY_PRIVATE_USERNAME}:${ARTIFACTORY_PRIVATE_PASSWORD} \
+          "${ARTIFACTORY_URL}/api/search/latestVersion?g=org.sonarsource.php&a=sonar-php-plugin&repos=${REPO}") >> "$GITHUB_OUTPUT"
+
+      - uses: SonarSource/gh-action_releasability@v1.0.3
+        id: releasability
+        with:
+          branch: ${{ github.ref_name }}
+          commit-sha: ${{ github.sha }}
+          organization: ${{ github.repository_owner }}
+          repository: ${{ github.event.repository.name }}
+          version: ${{ steps.latest-version.outputs.LATEST_VERSION }}
+
