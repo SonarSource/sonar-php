@@ -1,7 +1,15 @@
+# The commit-sha that will be provided to SonarSource/gh-action_releasability will be the latest commit sha of the branch that triggered the workflow.
+# When triggering the workflow, you can modify this with the "Run workflow from branch" property.
+
 name: Releasability Check
 
 on:
   workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      version:
+        description: Optional; Used to specify the version to check, otherwise pulls the latest master version from artifactory.
+        required: false
 
 jobs:
   releasability-job:
@@ -28,10 +36,16 @@ jobs:
           ARTIFACTORY_URL: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_URL }}
           REPO: sonarsource-public-builds
         run: |
-          echo LATEST_VERSION=$(curl -s -u ${ARTIFACTORY_PRIVATE_USERNAME}:${ARTIFACTORY_PRIVATE_PASSWORD} \
-          "${ARTIFACTORY_URL}/api/search/latestVersion?g=org.sonarsource.php&a=sonar-php-plugin&repos=${REPO}") >> "$GITHUB_OUTPUT"
+          if [[ -z "${{ github.event.inputs.version }}" ]]; then
+            echo "version not provided, pulling latest version from sonarsource-public-builds."
+            echo LATEST_VERSION=$(curl -s -u ${ARTIFACTORY_PRIVATE_USERNAME}:${ARTIFACTORY_PRIVATE_PASSWORD} \
+            "${ARTIFACTORY_URL}/api/search/latestVersion?g=org.sonarsource.php&a=sonar-php-plugin&repos=${REPO}") >> "$GITHUB_OUTPUT"
+          else
+            echo "version is provided, using its value: ${{ github.event.inputs.version }}."
+            echo "LATEST_VERSION=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          fi
 
-      - uses: SonarSource/gh-action_releasability@v1.0.3
+      - uses: SonarSource/gh-action_releasability@v1.0.4
         id: releasability
         with:
           branch: ${{ github.ref_name }}
