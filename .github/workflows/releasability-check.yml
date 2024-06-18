@@ -37,7 +37,7 @@ jobs:
           REPO: sonarsource-public-builds
         run: |
           if [[ -z "${{ github.event.inputs.version }}" ]]; then
-            echo "version not provided, pulling latest version from sonarsource-public-builds."
+            echo "version not provided, pulling latest version from $REPO."
             echo LATEST_VERSION=$(curl -s -u ${ARTIFACTORY_PRIVATE_USERNAME}:${ARTIFACTORY_PRIVATE_PASSWORD} \
             "${ARTIFACTORY_URL}/api/search/latestVersion?g=org.sonarsource.php&a=sonar-php-plugin&repos=${REPO}") >> "$GITHUB_OUTPUT"
           else
