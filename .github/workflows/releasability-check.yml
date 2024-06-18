@@ -1,10 +1,7 @@
 name: Releasability Check
 
-#TODO not merge in this form
 on:
-  push:
-    branches:
-      - jonas/releasability-check
+  workflow_dispatch:
 
 jobs:
   releasability-job:
