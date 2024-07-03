@@ -31,11 +31,6 @@ mend_scan_secrets: &MEND_SCAN_SECRETS
 promote_secrets: &PROMOTE_SECRETS
   ARTIFACTORY_PROMOTE_ACCESS_TOKEN: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promoter access_token]
   GITHUB_TOKEN: VAULT[development/github/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promotion token]
-  # burgr notification
-  BURGR_URL: VAULT[development/kv/data/burgr data.url]
-  BURGR_USERNAME: VAULT[development/kv/data/burgr data.cirrus_username]
-  BURGR_PASSWORD: VAULT[development/kv/data/burgr data.cirrus_password]
-
 
 # ----------------------------------------------
 # ------------------CACHING---------------------
@@ -234,7 +229,5 @@ promote_task:
   <<: *MAVEN_CACHE
   env:
     <<: *PROMOTE_SECRETS
-    #artifacts that will have downloadable links in burgr
-    ARTIFACTS: org.sonarsource.php:sonar-php-plugin:jar
   script: cirrus_promote_maven
   cleanup_before_cache_script: cleanup_maven_repository
