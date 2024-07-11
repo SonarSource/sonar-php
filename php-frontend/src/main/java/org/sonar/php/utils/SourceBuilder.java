@@ -21,6 +21,7 @@ package org.sonar.php.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -28,6 +29,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
 public class SourceBuilder extends PHPSubscriptionCheck {
+
+  private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\r\n|\n|\r");
 
   private final StringBuilder stringBuilder = new StringBuilder();
   private int line = 1;
@@ -57,7 +60,7 @@ public class SourceBuilder extends PHPSubscriptionCheck {
     insertMissingSpaceBefore(token.line(), token.column());
     String text = token.text();
     stringBuilder.append(text);
-    String[] lines = text.split("\r\n|\n|\r", -1);
+    String[] lines = LINEBREAK_PATTERN.split(text, -1);
     if (lines.length > 1) {
       line += lines.length - 1;
       column = lines[lines.length - 1].length();
