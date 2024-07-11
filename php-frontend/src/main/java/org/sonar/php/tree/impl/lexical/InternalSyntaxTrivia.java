@@ -22,6 +22,7 @@ package org.sonar.php.tree.impl.lexical;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -29,6 +30,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 public class InternalSyntaxTrivia extends PHPTree implements SyntaxTrivia {
+
+  private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\r\n|\n|\r");
 
   private final String comment;
   private final int column;
@@ -44,7 +47,7 @@ public class InternalSyntaxTrivia extends PHPTree implements SyntaxTrivia {
   }
 
   private void calculateEndOffsets() {
-    String[] lines = comment.split("\r\n|\n|\r", -1);
+    String[] lines = LINEBREAK_PATTERN.split(comment, -1);
     endColumn = column + comment.length();
     endLine = startLine + lines.length - 1;
 

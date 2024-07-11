@@ -22,6 +22,7 @@ package org.sonar.php.tree.impl.lexical;
 import com.sonar.sslr.api.TokenType;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -30,6 +31,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
+
+  private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\r\n|\n|\r");
 
   private final Kind kind;
 
@@ -54,7 +57,7 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
   }
 
   private void calculateEndOffsets() {
-    String[] lines = value.split("\r\n|\n|\r", -1);
+    String[] lines = LINEBREAK_PATTERN.split(value, -1);
     endColumn = column + value.length();
     endLine = line + lines.length - 1;
 
