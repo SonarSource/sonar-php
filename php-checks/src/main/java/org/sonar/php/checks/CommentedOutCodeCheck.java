@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -37,8 +38,9 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class CommentedOutCodeCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Remove this commented out code.";
 
-  private static final String MULTILINE_COMMENT_REPLACE = "((/\\*\\*?)|(\\n\\s*\\*(?!/))|(\\*/))";
-  private static final String SINGLE_LINE_COMMENT_REPLACE = "^((//)|(#))";
+  private static final Pattern MULTILINE_COMMENT_REPLACE = Pattern.compile("((/\\*\\*?)|(\\n\\s*\\*(?!/))|(\\*/))");
+  private static final Pattern SINGLE_LINE_COMMENT_REPLACE = Pattern.compile("^((//)|(#))");
+  private static final Pattern MULTIPLE_LINEBREAKS = Pattern.compile("\\R+");
 
   private static final String INNER_CLASS_CONTEXT = "class DummyClass{%s}";
   private static final String INNER_METHOD_CONTEXT = "class DummyClass{public function dummyMethod(){%s}}";
@@ -62,7 +64,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
   @Override
   public void visitTrivia(SyntaxTrivia trivia) {
     String comment = trivia.text();
-    if (comment.startsWith("/*") && isParsableCode(comment.replaceAll(MULTILINE_COMMENT_REPLACE, " "))) {
+    if (comment.startsWith("/*") && isParsableCode(MULTILINE_COMMENT_REPLACE.matcher(comment).replaceAll(" "))) {
       context().newIssue(this, trivia, MESSAGE);
     }
     if (comment.startsWith("//") || comment.startsWith("#")) {
@@ -94,7 +96,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
     singleLineTrivias
       .iterator()
       .forEachRemaining(t -> mergedSingleLineComment
-        .append(t.text().trim().replaceAll(SINGLE_LINE_COMMENT_REPLACE, "")));
+        .append(SINGLE_LINE_COMMENT_REPLACE.matcher(t.text().trim()).replaceAll("")));
 
     if (isParsableCode(mergedSingleLineComment.toString())) {
       SyntaxTrivia firstTrivia = singleLineTrivias.peekFirst();
@@ -106,7 +108,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
 
   private static boolean isParsableCode(String possibleCode) {
     // empty comment should not be commented out code
-    if (possibleCode.replaceAll("\\R+", "").trim().length() == 0) {
+    if (MULTIPLE_LINEBREAKS.matcher(possibleCode).replaceAll("").trim().isEmpty()) {
       return false;
     }
 
