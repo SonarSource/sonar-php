@@ -20,15 +20,18 @@
 package org.sonar.php.utils.collections;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 public class IteratorUtils {
 
   private IteratorUtils() {
 
+  }
+
+  public static <T> Iterator<T> iteratorOf(T element) {
+    return Collections.singletonList(element).iterator();
   }
 
   @SafeVarargs
@@ -42,12 +45,13 @@ public class IteratorUtils {
   }
 
   private static class IteratorIterator<T> implements Iterator<T> {
-    private final List<Iterator<? extends T>> iterables;
+    private final Iterator<? extends T>[] iterables;
     private Iterator<? extends T> current;
+    private int currentIndex;
 
     @SafeVarargs
     public IteratorIterator(Iterator<? extends T>... iterables) {
-      this.iterables = new LinkedList<>(Arrays.asList(iterables));
+      this.iterables = iterables;
     }
 
     @Override
@@ -66,8 +70,8 @@ public class IteratorUtils {
     }
 
     private void checkNext() {
-      while ((current == null || !current.hasNext()) && !iterables.isEmpty()) {
-        current = iterables.remove(0);
+      while ((current == null || !current.hasNext()) && currentIndex < iterables.length) {
+        current = iterables[currentIndex++];
       }
     }
   }
