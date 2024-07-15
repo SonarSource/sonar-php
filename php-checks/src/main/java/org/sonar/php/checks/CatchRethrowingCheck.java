@@ -8,11 +8,6 @@
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -41,7 +36,7 @@ public class CatchRethrowingCheck extends PHPVisitorCheck {
     if (catchBlocks.stream().allMatch(catchBlock -> hasSingleStatement(catchBlock) && isRetrowingException(catchBlock))) {
       catchBlocks.stream()
         .flatMap(catchBlock -> catchBlock.block().statements().stream())
-        .forEach(statement -> context().newIssue(this, statement, "Add logic to this catch clause or eliminate it and rethrow the exception automatically."));
+        .forEach(statement -> context().newIssue(this, statement, "Add logic to this catch clause or eliminate it and rethrow up."));
     }
     super.visitTryStatement(tree);
   }
@@ -52,7 +47,7 @@ public class CatchRethrowingCheck extends PHPVisitorCheck {
 
   private static boolean isRetrowingException(CatchBlockTree catchBlock) {
     StatementTree statement = catchBlock.block().statements().get(0);
-    if (!statement.is(Tree.Kind.THROW_STATEMENT) || catchBlock.variable() == null) {
+    if (!statement.is(Tree.Kind.THROW_STATEMENTZZZ) || catchBlock.variable() == null) {
       return false;
     }
     ExpressionTree thrownExpression = CheckUtils.skipParenthesis(((ThrowStatementTree) statement).expression());

@@ -38,14 +38,6 @@ public class AvoidDESCheck extends PHPVisitorCheck {
   private static final String OPENSSL_DES = "des-ede3";
 
   @Override
-  public void visitNameIdentifier(NameIdentifierTree tree) {
-    if (MCRYPT_CIPHERS.contains(tree.text())) {
-      context().newIssue(this, tree, MESSAGE);
-    }
-    super.visitNameIdentifier(tree);
-  }
-
-  @Override
   public void visitLiteral(LiteralTree tree) {
     String literal = trimQuotes(tree.value().toLowerCase(Locale.ROOT));
     if (literal.startsWith(OPENSSL_DES)) {

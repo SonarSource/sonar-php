@@ -50,22 +50,6 @@ public class CallParentConstructorCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitAnonymousClass(AnonymousClassTree tree) {
-    visitClass(tree);
-  }
-
-  private void visitClass(ClassTree tree) {
-    if (tree.superClass() != null) {
-      MethodDeclarationTree constructor = tree.fetchConstructor();
-      if (constructor != null && isPHP5Constructor(constructor)) {
-        superClass = tree.superClass().fullName();
-        scan(constructor);
-        superClass = null;
-      }
-    }
-  }
-
-  @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (superClass != null && tree.callee().is(Kind.CLASS_MEMBER_ACCESS)) {
       MemberAccessTree memberAccess = (MemberAccessTree) tree.callee();

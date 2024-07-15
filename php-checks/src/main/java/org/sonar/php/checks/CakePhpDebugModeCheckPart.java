@@ -41,6 +41,22 @@ public class CakePhpDebugModeCheckPart extends PHPVisitorCheck implements CheckB
   private CheckBundle bundle;
 
   @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    visitClass(tree);
+  }
+
+  private void visitClass(ClassTree tree) {
+    if (tree.superClass() != null) {
+      MethodDeclarationTree constructor = tree.fetchConstructor();
+      if (constructor != null && isPHP5Constructor(constructor)) {
+        superClass = tree.superClass().fullName();
+        scan(constructor);
+        superClass = null;
+      }
+    }
+  }
+
+  @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
 
