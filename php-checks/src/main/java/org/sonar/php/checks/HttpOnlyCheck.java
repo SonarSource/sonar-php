@@ -87,6 +87,18 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
     super.visitFunctionCall(tree);
   }
 
+  public void visitNode(Tree tree) {
+    List<Tree> complexityTrees = ComplexityVisitor.complexityNodesWithoutNestedFunctions(tree);
+    int complexity = complexityTrees.size();
+    if (complexity > threshold) {
+      String functionName = CheckUtils.getFunctionName((FunctionTree) tree);
+      String message = String.format(MESSAGE, functionName, complexity, threshold);
+      int cost = complexity - threshold;
+      PreciseIssue issue = context().newIssue(this, ((FunctionTree) tree).functionToken(), message).cost(cost);
+      complexityTrees.forEach(complexityTree -> meow.complexity?);
+    }
+  }
+
   private static boolean isSetCookie(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
     return functionName != null && SET_COOKIE_FUNCTIONS.contains(functionName);

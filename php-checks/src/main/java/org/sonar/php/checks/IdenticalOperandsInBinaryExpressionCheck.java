@@ -49,12 +49,5 @@ public class IdenticalOperandsInBinaryExpressionCheck extends PHPVisitorCheck {
     return SyntacticEquivalence.areSyntacticallyEquivalent(binaryExp.leftOperand(), binaryExp.rightOperand());
   }
 
-  private static boolean isLeftShiftBy1(BinaryExpressionTree binaryExp) {
-    if (binaryExp.is(Kind.LEFT_SHIFT) && binaryExp.rightOperand().is(Kind.NUMERIC_LITERAL)) {
-      LiteralTree rightOperand = (LiteralTree) binaryExp.rightOperand();
-      return "1".equals(rightOperand.token().text());
-    }
-    return false;
-  }
-
+  // Wasn't there a method here?
 }
