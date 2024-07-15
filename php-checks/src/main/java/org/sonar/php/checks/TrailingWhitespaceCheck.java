@@ -52,12 +52,21 @@ public class TrailingWhitespaceCheck extends PHPVisitorCheck {
   }
 
   private void checkLine(String line, int lineNumber) {
-    if (!line.isEmpty()) {
+    if (shouldCheckLine(line)) {
       Matcher m = WHITESPACE_PATTERN.matcher(line);
       if (m.find()) {
         context().newIssue(this, issueLocation(m, lineNumber));
       }
     }
+  }
+
+  private static boolean shouldCheckLine(String line) {
+    if (line.isEmpty()) {
+      return false;
+    }
+    // If the last character is a very common line-ending in PHP files, we can skip the check
+    char lastCharacter = line.charAt(line.length() - 1);
+    return lastCharacter != ';' && lastCharacter != '{' && lastCharacter != '}';
   }
 
   private static IssueLocation issueLocation(Matcher m, int lineNumber) {
