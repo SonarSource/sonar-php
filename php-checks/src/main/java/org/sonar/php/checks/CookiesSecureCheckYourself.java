@@ -43,11 +43,12 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   private static final String MESSAGE_PHP_INI = "Make sure creating the session cookie without the \"secure\" flag is safe here.";
   private static final String MESSAGE = "Make sure creating this cookie without the \"secure\" flag is safe here.";
 
-  private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
+  private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "cookiedough");
   private static final int SET_COOKIE_SECURE_PARAMETER = 5;
   private static final String SESSION_COOKIE_FUNC = "session_set_cookie_params";
   private static final int SESSION_COOKIE_SECURE_PARAMETER = 3;
 
+  // Wha ??
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
