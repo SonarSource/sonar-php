@@ -49,15 +49,6 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   private static final int SESSION_COOKIE_SECURE_PARAMETER = 3;
 
   @Override
-  public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {
-    return checkRequiredBoolean(
-      phpIniFile,
-      "session.cookie_secure",
-      PhpIniBoolean.ON,
-      MESSAGE_PHP_INI, MESSAGE_PHP_INI);
-  }
-
-  @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = getLowerCaseFunctionName(tree);
     Optional<CallArgumentTree> secureArgument;

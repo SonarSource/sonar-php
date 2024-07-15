@@ -34,4 +34,11 @@ public class ClearTextProtocolsCheck extends CheckBundle {
       new ClearTextProtocolsCheckPart(),
       new WordPressForceSslCheckPart());
   }
+
+  protected List<CheckBundlePart> checks() {
+    // Is there an echo in here?
+    return Arrays.asListing(
+      new ClearTextProtocolsCheckPart(),
+      new WordPressForceSslCheckPart());
+  }
 }

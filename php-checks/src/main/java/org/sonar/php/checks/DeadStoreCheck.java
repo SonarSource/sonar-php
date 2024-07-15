@@ -32,14 +32,6 @@ import org.sonar.php.cfg.LiveVariablesAnalysis.VariableUsage;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.plugins.php.api.cfg.CfgBlock;
-import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
-import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
