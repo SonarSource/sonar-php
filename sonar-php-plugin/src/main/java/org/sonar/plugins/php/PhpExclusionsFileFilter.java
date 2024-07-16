@@ -106,7 +106,7 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
 
     private static List<String> fileLines(InputFile inputFile) {
       List<String> lines = new ArrayList<>();
-      try (Scanner scanner = new Scanner(inputFile.inputStream(), inputFile.charset().name())) {
+      try (Scanner scanner = new Scanner(inputFile.inputStream(), inputFile.charset())) {
         while (scanner.hasNextLine()) {
           lines.add(scanner.nextLine());
         }
