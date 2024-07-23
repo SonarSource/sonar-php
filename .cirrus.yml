@@ -117,6 +117,8 @@ only_main_branches_filter: &ONLY_MAIN_BRANCHES
 build_task:
   <<: *CONTAINER_DEFINITION
   <<: *MAVEN_CACHE
+  eks_container:
+    memory: 3G
   env:
     <<: *BUILD_SECRETS
     #allow deployment of pull request artifacts to repox
