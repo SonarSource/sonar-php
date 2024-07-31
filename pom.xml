@@ -89,7 +89,7 @@
     <version.sonar-orchestrator>4.9.0.1920</version.sonar-orchestrator>
     <version.sslr>1.24.0.633</version.sslr>
     <version.spotless>2.43.0</version.spotless>
-    <version.sonarlint>9.8.0.76914</version.sonarlint>
+    <version.sonarlint>10.4.0.78811</version.sonarlint>
     <version.analyzer-commons>2.11.0.2861</version.analyzer-commons>
     <version.plugin-api>10.7.0.2191</version.plugin-api>
     <version.slf4j>1.7.36</version.slf4j>
