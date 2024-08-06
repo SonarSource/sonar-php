@@ -29,10 +29,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -63,7 +61,8 @@ class Tests {
 
   public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
 
-  public static final String SCANNER_VERSION = "5.0.1.3006";
+  public static final String SCANNER_VERSION = "6.1.0.4477";
+  private static final Pattern DEBUG_AND_INFO_LOG_LINE_PATTERN = Pattern.compile("\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s(INFO|DEBUG)\\s.*");
 
   @RegisterExtension
   public static final OrchestratorExtension ORCHESTRATOR = OrchestratorExtension.builderEnv()
@@ -169,7 +168,7 @@ class Tests {
   static List<Issues.Issue> issuesForRule(List<Issues.Issue> issues, String ruleKey) {
     return issues.stream()
       .filter(i -> i.getRule().equals(ruleKey))
-      .collect(Collectors.toList());
+      .toList();
   }
 
   public static void executeBuildWithExpectedWarnings(Orchestrator orchestrator, SonarScanner build) {
@@ -186,42 +185,11 @@ class Tests {
     assertThat(lines.size()).isBetween(25, 150);
 
     List<String> unexpectedLogs = lines.stream()
-      .filter(line -> !line.startsWith("INFO: "))
-      .filter(line -> !line.startsWith("WARN: sonar.php.coverage.reportPath is deprecated as of SonarQube 6.2"))
-      .filter(line -> !line.startsWith("WARN: sonar.php.coverage.itReportPath is deprecated as of SonarQube 6.2"))
-      .filter(line -> !line.startsWith("WARN: sonar.php.coverage.overallReportPath is deprecated as of SonarQube 6.2"))
-      .filter(line -> !line.startsWith("WARN: Line with number 0 doesn't belong to file Math.php"))
-      .filter(line -> !line.startsWith("WARN: Line with number 100 doesn't belong to file Math.php"))
-      .filter(line -> !line.startsWith("WARN: SonarQube scanners will require Java 11+ starting on next version"))
-      .filter(line -> !line.startsWith("WARN: The sonar.modules is a deprecated property and should not be used anymore"))
-      .filter(line -> !line.startsWith("WARN: PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results."))
-      .filter(line -> !line.startsWith("WARN: sonar.plugins.downloadOnlyRequired is false"))
-      .filter(line -> !line.startsWith("WARNING: An illegal reflective access operation has occurred"))
-      .filter(line -> !line.startsWith("WARNING: Illegal reflective access"))
-      .filter(line -> !line.startsWith("WARNING: Please consider reporting this to the maintainers"))
-      .filter(line -> !line.startsWith("WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations"))
-      .filter(line -> !line.startsWith("WARNING: All illegal access operations will be denied in a future release"))
-      .filter(line -> !line.startsWith("Picked up JAVA_TOOL_OPTIONS:"))
-      .collect(Collectors.toList());
-
-    Set<String> temporaryToleratedStrings = Set.of(
-      "java.lang.NoClassDefFoundError: org/eclipse/jgit/internal/JGitText",
-      "org.eclipse.jgit.internal.util.ShutdownHook.cleanup",
-      "at java.base/java.lang.Thread.run",
-      "org.eclipse.jgit.internal.JGitText",
-      "java.lang.NoClassDefFoundError: ch/qos/logback/classic/spi/ThrowableProxy",
-      "at ch.qos.logback.classic.spi.LoggingEvent.<init>",
-      "at ch.qos.logback.classic.Logger.buildLoggingEventAndAppend",
-      "at ch.qos.logback.classic.Logger.filterAndLog_0_Or3Plus",
-      "at ch.qos.logback.classic.Logger.error",
-      "Caused by: java.lang.ClassNotFoundException: ch.qos.logback.classic.spi.ThrowableProxy",
-      "at java.base/java.net.URLClassLoader.findClass",
-      "at org.sonarsource.scanner.api.internal.IsolatedClassloader.loadClass",
-      "at java.base/java.lang.ClassLoader.loadClass",
-      "... 6 more",
-      "... 2 more");
-
-    unexpectedLogs.removeIf(logElement -> temporaryToleratedStrings.stream().anyMatch(logElement::contains));
+      .filter(line -> !DEBUG_AND_INFO_LOG_LINE_PATTERN.matcher(line).matches())
+      .map(line -> line.replaceAll("^\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s", ""))
+      .filter(line -> !line.startsWith("WARN  The sonar.modules is a deprecated property and should not be used anymore"))
+      .filter(line -> !line.startsWith("WARN  PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results."))
+      .toList();
 
     assertThat(unexpectedLogs).isEmpty();
   }
