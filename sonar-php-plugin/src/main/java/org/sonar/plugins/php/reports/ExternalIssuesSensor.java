@@ -24,11 +24,12 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
+import org.sonar.api.SonarEdition;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.issue.NewExternalIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.issue.impact.Severity;
@@ -72,7 +73,7 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   }
 
   public String getFileReadErrorMessage(Exception e, File reportPath) {
-    String additionalMsg = e.getClass().getSimpleName() + ": " + e.getMessage();
+    String additionalMsg = e.getClass().getSimpleName() + ": " + e.getMessage() + " at " + e.getStackTrace()[0].toString();
     if (e instanceof ParseException || e instanceof ClassCastException) {
       additionalMsg = "The content of the file probably does not have the expected format.";
     } else if (e instanceof FileNotFoundException) {
@@ -104,13 +105,19 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
       return;
     }
 
-    NewExternalIssue newExternalIssue = context.newExternalIssue();
+    var newExternalIssue = context.newExternalIssue();
     var ruleType = toType(issue.type);
     var ruleSeverity = toRuleSeverity(issue.severity);
+
+    var isSonarCloud = context.runtime().getProduct() == SonarProduct.SONARQUBE && context.runtime().getEdition() == SonarEdition.SONARCLOUD;
+    if (!isSonarCloud) {
+      // SonarCloud does not yet (as of sonar-php 3.37-SNAPSHOT) support the `impact` field for external issues
+      newExternalIssue.addImpact(toSoftwareQuality(ruleType), toImpactSeverity(ruleSeverity));
+    }
+
     newExternalIssue
-      .addImpact(toSoftwareQuality(ruleType), toImpactSeverity(ruleSeverity))
       .remediationEffortMinutes(DEFAULT_CONSTANT_DEBT_MINUTES)
-      // For now we're still keeping the deprecated type and severity to enable a smoother transition for users
+      // For now, we're still keeping the deprecated type and severity to enable a smoother transition for users
       .severity(ruleSeverity)
       .type(ruleType);
 

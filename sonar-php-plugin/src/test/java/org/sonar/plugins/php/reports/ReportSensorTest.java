@@ -43,6 +43,7 @@ import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.spy;
@@ -74,20 +75,25 @@ public abstract class ReportSensorTest {
 
   protected List<ExternalIssue> executeSensorImporting(@Nullable String fileName, Map<String, String> additionalProperties) throws IOException {
     Path projectDir = projectDir();
+    var context = createContext(fileName, projectDir, additionalProperties);
+    sensor().execute(context);
+    return new ArrayList<>(context.allExternalIssues());
+  }
+
+  protected SensorContextTester createContext(@Nullable String fileName, Path projectDir, Map<String, String> additionalProperties) throws IOException {
     Path baseDir = projectDir.getParent();
     SensorContextTester context = SensorContextTester.create(baseDir);
     try (Stream<Path> fileStream = Files.list(projectDir)) {
       fileStream.forEach(file -> addFileToContext(context, baseDir, file));
-      context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(8, 9), SonarQubeSide.SERVER, SonarEdition.DEVELOPER));
-      if (fileName != null) {
-        MapSettings settings = context.settings();
-        String path = projectDir.resolve(fileName).toAbsolutePath().toString();
-        settings.setProperty("sonar.php." + sensor().reportKey() + ".reportPaths", path);
-        additionalProperties.forEach(settings::setProperty);
-      }
-      sensor().execute(context);
-      return new ArrayList<>(context.allExternalIssues());
     }
+    context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(8, 9), SonarQubeSide.SERVER, SonarEdition.DEVELOPER));
+    if (fileName != null) {
+      MapSettings settings = context.settings();
+      String path = projectDir.resolve(fileName).toAbsolutePath().toString();
+      settings.setProperty("sonar.php." + sensor().reportKey() + ".reportPaths", path);
+      additionalProperties.forEach(settings::setProperty);
+    }
+    return context;
   }
 
   private static void addFileToContext(SensorContextTester context, Path projectDir, Path file) {
@@ -140,6 +146,32 @@ public abstract class ReportSensorTest {
     List<ExternalIssue> externalIssues = executeSensorImporting(sensor().reportKey() + "-report-empty.json");
     assertThat(externalIssues).isEmpty();
     assertNoErrorWarnDebugLogs(logTester());
+  }
+
+  @Test
+  void shouldNotAddImpactsForSonarCloud() throws IOException {
+    var projectDir = projectDir();
+    var context = createContext(sensor().reportKey() + "-report.json", projectDir, Map.of());
+    context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(8, 0), SonarQubeSide.SCANNER, SonarEdition.SONARCLOUD));
+
+    sensor().execute(context);
+
+    var externalIssues = new ArrayList<>(context.allExternalIssues());
+    // Actually, sonar-plugin-api-impl from SonarCloud would return a null here, but we use the dependency from SonarQube,
+    // so we only verify that value was not saved.
+    assertThat(externalIssues).extracting(ExternalIssue::impacts).isNotEmpty().allMatch(Map::isEmpty);
+  }
+
+  @Test
+  void shouldAddImpactsForSonarLint() throws IOException {
+    var projectDir = projectDir();
+    var context = createContext(sensor().reportKey() + "-report.json", projectDir, Map.of());
+    context.setRuntime(SonarRuntimeImpl.forSonarLint(Version.create(10, 1)));
+
+    sensor().execute(context);
+
+    var externalIssues = new ArrayList<>(context.allExternalIssues());
+    assertThat(externalIssues).extracting(ExternalIssue::impacts).isNotEmpty().allMatch(not(Map::isEmpty));
   }
 
   protected abstract Path projectDir();
