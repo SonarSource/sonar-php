@@ -26,8 +26,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.utils.Preconditions;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
@@ -79,6 +80,7 @@ import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import static java.util.Objects.requireNonNull;
 
 public class SymbolVisitor extends NamespaceNameResolvingVisitor {
+  private static final Logger LOG = LoggerFactory.getLogger(SymbolVisitor.class);
 
   private static final Set<String> BUILT_IN_VARIABLES = Set.of(
     "$this",
@@ -95,6 +97,8 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     "$_COOKIE",
     "$_REQUEST");
   private static final Set<String> SELF_OBJECTS = Set.of("$this", "self", "static");
+  private static final int MEMBER_ACCESS_MAXIMUM_DEPTH = 100;
+  private static final int MEMBER_ACCESS_LOG_TRUNCATION_LENGTH = 20;
 
   private final Deque<Scope> classScopes = new ArrayDeque<>();
   private final Map<Symbol, Scope> scopeBySymbol = new HashMap<>();
@@ -112,6 +116,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   private Scope currentScope;
   private Scope globalScope;
   private ClassMemberUsageState classMemberUsageState = null;
+  private int memberStatementDepth;
 
   public SymbolVisitor(SymbolTableImpl symbolTable) {
     super(symbolTable);
@@ -123,6 +128,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   public void visitCompilationUnit(CompilationUnitTree tree) {
     globalScope = symbolTable.addScope(new Scope(tree));
     currentScope = globalScope;
+    memberStatementDepth = 0;
     super.visitCompilationUnit(tree);
   }
 
@@ -545,6 +551,14 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
+    memberStatementDepth++;
+    if (memberStatementDepth >= MEMBER_ACCESS_MAXIMUM_DEPTH) {
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("visitMemberAccess at \"{}...\" has reached the maximum depth of {}, switching to the next statement",
+          tree.toString().substring(0, MEMBER_ACCESS_LOG_TRUNCATION_LENGTH), MEMBER_ACCESS_MAXIMUM_DEPTH);
+      }
+      return;
+    }
     boolean functionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
     if (tree.object().is(Kind.NAMESPACE_NAME)) {
       usageForNamespaceName(((NamespaceNameTree) tree.object()), Symbol.Kind.CLASS);
@@ -559,6 +573,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     classMemberUsageState.isConst = classMemberUsageState.isField && tree.isStatic();
 
     tree.member().accept(this);
+    memberStatementDepth = 0;
   }
 
   private static boolean isSelfMember(MemberAccessTree tree) {

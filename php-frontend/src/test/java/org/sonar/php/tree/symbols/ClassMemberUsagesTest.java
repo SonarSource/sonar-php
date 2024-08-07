@@ -21,9 +21,12 @@ package org.sonar.php.tree.symbols;
 
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.event.Level;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
@@ -31,6 +34,9 @@ import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ClassMemberUsagesTest extends ParsingTestUtils {
+
+  @RegisterExtension
+  public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   private final SymbolTableImpl SYMBOL_TABLE = SymbolTableImpl.create(parse("symbols/class_members_usages.php"));
 
@@ -124,6 +130,28 @@ class ClassMemberUsagesTest extends ParsingTestUtils {
     Symbol variable = getSymbol("A_CONST", Kind.FIELD);
     assertThat(variable).isNotNull();
     assertThat(variable.usages()).hasSize(1);
+  }
+
+  @Test
+  void shouldAbortBuildingSymbolTableForLongChain() {
+    var code = """
+      <?php
+      class A {
+        function foo() {
+          return $this;
+        }
+      }
+      (new A())->foo()
+      """ + "\n->foo()".repeat(100) +
+      ";";
+
+    logTester.setLevel(Level.DEBUG);
+    SymbolTableImpl.create(parseSource(code));
+    assertThat(logTester.logs(Level.DEBUG)).contains("visitMemberAccess at \"(new A())->foo() ->f...\" has reached the maximum depth of 100, switching to the next statement");
+
+    logTester.setLevel(Level.INFO);
+    SymbolTableImpl.create(parseSource(code));
+    assertThat(logTester.logs(Level.INFO)).doesNotContain("visitMemberAccess at \"(new A())->foo() ->f...\" has reached the maximum depth of 100, switching to the next statement");
   }
 
   private Symbol getSymbol(String name, Kind kind) {
