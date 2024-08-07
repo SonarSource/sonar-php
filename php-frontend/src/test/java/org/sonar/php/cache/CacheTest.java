@@ -82,7 +82,7 @@ class CacheTest {
     warmupReadCache(data);
 
     SymbolTableImpl actual = cache.read(DEFAULT_INPUT_FILE);
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(data);
+    assertThat(actual).usingRecursiveComparison().isEqualTo(data);
   }
 
   @Test

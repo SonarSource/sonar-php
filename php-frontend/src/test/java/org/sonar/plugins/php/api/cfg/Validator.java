@@ -90,7 +90,7 @@ public class Validator {
       List<String> expectedPred = expectedCfg.expectedPred(actualBlock);
       assertThat(expectedCfg.blockIds(actualBlock.predecessors()))
         .withFailMessage(buildDebugMessage("predecessors", blockTestId))
-        .containsOnlyElementsOf(expectedPred);
+        .hasSameElementsAs(expectedPred);
     }
   }
 
@@ -109,7 +109,7 @@ public class Validator {
   private void assertEmptyBlock(CfgBlock emptyBlock) {
     List<ExpectedCfgStructure.BlockExpectation> matchedExpectations = expectedCfg.emptyBlockExpectations.stream()
       .filter(blockExpectation -> blockExpectation.matchesBlock(emptyBlock))
-      .collect(Collectors.toList());
+      .toList();
     assertThat(matchedExpectations)
       .withFailMessage(format("Failed to assert empty block succ=%s, pred=%s. Matched expectations: %s",
         expectedCfg.blockIds(emptyBlock.successors()),
@@ -155,7 +155,7 @@ public class Validator {
     Set<String> actualVariableNames = actualVariables.stream().map(Symbol::name).collect(Collectors.toSet());
     assertThat(actualVariableNames)
       .withFailMessage(buildDebugMessage(variableType + " elements differ. Actual: " + StringUtils.join(actualVariableNames, " ; "), blockTestId))
-      .containsOnlyElementsOf(expectedVariables);
+      .hasSameElementsAs(expectedVariables);
   }
 
   private void assertSuccessors(CfgBlock actualBlock) {
@@ -181,7 +181,7 @@ public class Validator {
       List<String> actual = expectedCfg.blockIds(actualBlock.successors());
       assertThat(actual)
         .withFailMessage(buildDebugMessage(format("successors actual: %s expected %s", actual, expectedSucc), blockTestId))
-        .containsOnlyElementsOf(expectedSucc);
+        .hasSameElementsAs(expectedSucc);
     }
 
   }

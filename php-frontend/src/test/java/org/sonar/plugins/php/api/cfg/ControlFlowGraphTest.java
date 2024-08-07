@@ -1567,7 +1567,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
     assertThat(cfg).isNull();
     assertThat(logTester.logs(Level.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 2 (activate debug logs for more details)");
-    assertThat(logTester.logs(Level.DEBUG)).hasOnlyOneElementSatisfying(s -> assertThat(s).contains("com.sonar.sslr.api.RecognitionException: Failed to build CFG"));
+    assertThat(logTester.logs(Level.DEBUG)).singleElement().satisfies(s -> assertThat(s).contains("com.sonar.sslr.api.RecognitionException: Failed to build CFG"));
     logTester.clear();
     logTester.setLevel(Level.INFO);
 
