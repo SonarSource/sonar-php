@@ -32,7 +32,7 @@ class EnumCaseTreeTest extends PHPTreeModelTest {
   void simpleCase() {
     EnumCaseTreeImpl tree = parse("case A;", PHPLexicalGrammar.ENUM_CASE);
     assertThat(tree.is(Tree.Kind.ENUM_CASE)).isTrue();
-    assertThat(tree.childrenIterator()).hasSize(5);
+    assertThat(tree.childrenIterator()).toIterable().hasSize(5);
     assertThat(tree.caseToken()).hasToString("case");
     assertThat(tree.name()).hasToString("A");
     assertThat(tree.equalToken()).isNull();

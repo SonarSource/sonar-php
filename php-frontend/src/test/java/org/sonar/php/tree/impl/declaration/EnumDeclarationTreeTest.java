@@ -33,7 +33,7 @@ class EnumDeclarationTreeTest extends PHPTreeModelTest {
   void simpleEnumWithNoCases() {
     EnumDeclarationTreeImpl tree = parse("enum A {}", PHPLexicalGrammar.ENUM_DECLARATION);
     assertThat(tree.is(Tree.Kind.ENUM_DECLARATION)).isTrue();
-    assertThat(tree.childrenIterator()).hasSize(7);
+    assertThat(tree.childrenIterator()).toIterable().hasSize(7);
     assertThat(tree.classToken()).hasToString("enum");
     assertThat(tree.name()).hasToString("A");
     assertThat(tree.typeColonToken()).isNull();

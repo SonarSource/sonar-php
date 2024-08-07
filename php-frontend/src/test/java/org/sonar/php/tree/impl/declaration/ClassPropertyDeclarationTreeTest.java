@@ -160,7 +160,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.typeAnnotation().questionMarkToken()).isNull();
     assertThat(builtinType(tree)).isEqualTo("int");
 
-    assertThat(((PHPTree) tree).childrenIterator()).containsExactly(
+    assertThat(((PHPTree) tree).childrenIterator()).toIterable().containsExactly(
       tree.modifierTokens().get(0),
       tree.typeAnnotation(),
       tree.declarations().get(0),
