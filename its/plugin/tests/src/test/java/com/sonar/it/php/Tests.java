@@ -191,7 +191,9 @@ class Tests {
       .filter(line -> !line.startsWith("WARN  PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results."))
       .toList();
 
-    assertThat(unexpectedLogs).isEmpty();
+    assertThat(unexpectedLogs)
+      .describedAs("There should be no unexpected lines in the analysis logs")
+      .isEmpty();
   }
 
   // TODO SONARPHP-1466 Replace nested classes in it-php-plugin-tests:Tests with a more elegant solution
