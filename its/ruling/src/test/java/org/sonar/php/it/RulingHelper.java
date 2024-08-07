@@ -19,7 +19,6 @@
  */
 package org.sonar.php.it;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.container.Edition;
@@ -28,12 +27,19 @@ import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.MavenLocation;
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RulingHelper {
 
   private static final String SQ_VERSION_PROPERTY = "sonar.runtimeVersion";
   private static final String DEFAULT_SQ_VERSION = "LATEST_RELEASE";
+  private static final Pattern DEBUG_AND_INFO_LOG_LINE_PATTERN = Pattern.compile("\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s(INFO|DEBUG)\\s.*");
+  private static final Pattern CODE_LINE_LOG_LINE_PATTERN = Pattern.compile("\\s*\\d+: .*");
+  private static final Pattern CODE_POINTER_LOG_LINE_PATTERN = Pattern.compile("\\s*\\^+");
 
   static OrchestratorExtension getOrchestrator(Edition sonarEdition) {
     OrchestratorBuilder<OrchestratorExtensionBuilder, OrchestratorExtension> builder = OrchestratorExtension.builderEnv()
@@ -50,16 +56,15 @@ public class RulingHelper {
     return builder.build();
   }
 
-  static Orchestrator getOrchestrator() {
+  static OrchestratorExtension getOrchestrator() {
     return getOrchestrator(Edition.COMMUNITY);
   }
 
-  static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile) throws IOException {
+  static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile) {
     return SonarScanner.create(path)
       .setProjectKey(projectKey)
       .setProjectName(projectKey)
       .setProjectVersion("1")
-      .setLanguage("php")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
       .setProperty("sonar.lits.dump.old", FileLocation.of("src/test/resources/" + expectedIssueLocation).getFile().getAbsolutePath())
@@ -67,5 +72,26 @@ public class RulingHelper {
       .setProperty("sonar.lits.differences", litsDifferencesFile.getAbsolutePath())
       .setProperty("sonar.internal.analysis.failFast", "true")
       .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx2000m");
+  }
+
+  public static void assertAnalyzerLogs(String logs) {
+    assertThat(logs).contains("Sensor PHP sensor");
+
+    List<String> lines = Arrays.asList(logs.split("[\r\n]+"));
+
+    List<String> unexpectedLogs = lines.stream()
+      .filter(line -> !DEBUG_AND_INFO_LOG_LINE_PATTERN.matcher(line).matches())
+      .filter(line -> !CODE_LINE_LOG_LINE_PATTERN.matcher(line).matches())
+      .filter(line -> !CODE_POINTER_LOG_LINE_PATTERN.matcher(line).matches())
+      .map(line -> line.replaceAll("^\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s", ""))
+      .filter(line -> !line.startsWith("WARN  PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results."))
+      .filter(line -> !line.startsWith("WARN  Invalid character encountered in file"))
+      .filter(line -> !line.startsWith("ERROR Unable to parse file"))
+      .filter(line -> !line.startsWith("ERROR Parse error at line"))
+      .toList();
+
+    assertThat(unexpectedLogs)
+      .describedAs("There should be no unexpected lines in the analysis logs")
+      .isEmpty();
   }
 }

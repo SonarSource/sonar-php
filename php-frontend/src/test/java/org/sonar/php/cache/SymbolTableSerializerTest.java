@@ -99,7 +99,7 @@ class SymbolTableSerializerTest {
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
     SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
+    assertThat(actual).usingRecursiveComparison().isEqualTo(symbolTable);
   }
 
   @Test
@@ -153,7 +153,7 @@ class SymbolTableSerializerTest {
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
     SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
+    assertThat(actual).usingRecursiveComparison().isEqualTo(symbolTable);
   }
 
   @Test
@@ -170,7 +170,7 @@ class SymbolTableSerializerTest {
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
     SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
+    assertThat(actual).usingRecursiveComparison().isEqualTo(symbolTable);
   }
 
   @Test
@@ -187,7 +187,7 @@ class SymbolTableSerializerTest {
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
     SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
+    assertThat(actual).usingRecursiveComparison().isEqualTo(symbolTable);
   }
 
   @Test
@@ -204,7 +204,7 @@ class SymbolTableSerializerTest {
     SerializationResult binary = SymbolTableSerializer.toBinary(new SymbolTableSerializationInput(symbolTable, PLUGIN_VERSION));
     SymbolTableImpl actual = SymbolTableDeserializer.fromBinary(new SymbolTableDeserializationInput(binary.data(), binary.stringTable(), PLUGIN_VERSION));
 
-    assertThat(actual).isEqualToComparingFieldByFieldRecursively(symbolTable);
+    assertThat(actual).usingRecursiveComparison().isEqualTo(symbolTable);
   }
 
   @Test

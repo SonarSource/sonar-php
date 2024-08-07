@@ -25,7 +25,6 @@ import java.io.StringReader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.ParsingTestUtils;
@@ -40,14 +39,14 @@ class ExecutableLineVisitorTest extends ParsingTestUtils {
     String filename = "metrics/executable_lines.php";
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/" + filename));
     Set<Integer> executableLines = new ExecutableLineVisitor(parse(filename)).getExecutableLines();
-    assertThat(executableLines).containsOnlyElementsOf(expectedExecutableLines(file));
+    assertThat(executableLines).hasSameElementsAs(expectedExecutableLines(file));
   }
 
   // returns lines marked with "// +1" comment
   private static Set<Integer> expectedExecutableLines(PhpFile phpFile) {
     Set<Integer> expectedExecutableLines = new HashSet<>();
 
-    List<String> lines = new BufferedReader(new StringReader(phpFile.contents())).lines().collect(Collectors.toList());
+    List<String> lines = new BufferedReader(new StringReader(phpFile.contents())).lines().toList();
     for (int i = 0; i < lines.size(); i++) {
       if (lines.get(i).contains("// +1")) {
         expectedExecutableLines.add(i + 1);

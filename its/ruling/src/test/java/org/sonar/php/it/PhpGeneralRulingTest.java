@@ -19,8 +19,8 @@
  */
 package org.sonar.php.it;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
 import java.nio.file.Files;
@@ -33,11 +33,12 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.php.it.RulingHelper.assertAnalyzerLogs;
 
 public class PhpGeneralRulingTest {
 
   @RegisterExtension
-  public static Orchestrator ORCHESTRATOR = RulingHelper.getOrchestrator();
+  public static OrchestratorExtension ORCHESTRATOR = RulingHelper.getOrchestrator();
 
   @BeforeAll
   static void prepareQualityProfile() {
@@ -123,9 +124,11 @@ public class PhpGeneralRulingTest {
       build.setProperty("sonar.exclusions", "**/.*, **/.*/**");
     }
 
-    ORCHESTRATOR.executeBuild(build);
+    var buildResult = ORCHESTRATOR.executeBuild(build);
 
     String litsDifferences = new String(Files.readAllBytes(litsDifferencesFile.toPath()));
     assertThat(litsDifferences).isEmpty();
+
+    assertAnalyzerLogs(buildResult.getLogs());
   }
 }
