@@ -14,6 +14,8 @@ $x = 5 - 5; // Noncompliant
 $x = $x + $x;
 $x = $x * $x;
 $x = $x . $x;
+$x = 3 ** 3;
+$x = $a ** $a;
 $x = $x;
 $x = $a == $a + $b;
 $x = $a << $a; // Noncompliant
