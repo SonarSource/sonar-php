@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/arbitrary/absolute/path/sonar-php/its/plugin/projects/phpunit/tests" tests="2" assertions="4" errors="0" warnings="0" failures="1" skipped="0" time="0.001589">
+    <testsuite name="MathDivTest" file="/home/nils/Code/sonar-php/its/plugin/projects/phpunit/tests/MathDivTest.php" tests="2" assertions="4" errors="0" warnings="0" failures="1" skipped="0" time="0.001589">
+      <testcase name="testSub" class="MathDivTest" classname="MathDivTest" file="/home/nils/Code/sonar-php/its/plugin/projects/phpunit/tests/MathDivTest.php" line="19" assertions="2" time="0.001377">
+        <failure type="PHPUnit\Framework\ExpectationFailedException">MathDivTest::testDiv
+          Failed asserting that 2.5 matches expected 1.66.</failure>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>

@@ -92,9 +92,10 @@ public class PhpPlugin implements Plugin {
     context.addExtensions(PhpUnitSensor.class,
       PropertyDefinition.builder(PhpUnitSensor.PHPUNIT_TESTS_REPORT_PATH_KEY)
         .name("Unit Test Report")
-        .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
+        .description("Comma-separated list of paths to PHPUnit unit test execution report files. Paths may be either absolute or relative to the project base directory.")
         .onQualifiers(Qualifiers.PROJECT)
         .category(PHP_CATEGORY)
+        .multiValues(true)
         .subCategory(PHPUNIT_SUBCATEGORY)
         .build(),
       PropertyDefinition.builder(PhpUnitSensor.PHPUNIT_COVERAGE_REPORT_PATHS_KEY)

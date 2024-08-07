@@ -21,12 +21,10 @@ package org.sonar.plugins.php.reports.phpunit;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.plugins.php.reports.phpunit.xml.TestSuites;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.xml.ParseException;
 
@@ -44,7 +42,7 @@ public class TestResultImporter extends PhpUnitReportImporter {
   @Override
   public void importReport(File report, SensorContext context) throws ParseException, IOException {
     LOG.info("Importing {}", report);
-    TestSuites testSuites = parser.parse(report);
+    var testSuites = parser.parse(report);
     List<TestFileReport> testFileReports = testSuites.arrangeSuitesIntoTestFileReports();
     if (testFileReports.isEmpty()) {
       createWarning(TEST_REPORT_DOES_NOT_CONTAIN_ANY_RECORD, report);
@@ -57,28 +55,6 @@ public class TestResultImporter extends PhpUnitReportImporter {
     for (TestFileReport fileReport : testFileReports) {
       fileReport.saveTestMeasures(context, fileHandler, this::addUnresolvedInputFile);
     }
-  }
-
-  /**
-   * For PHPUnit tests report only a single file is expected compared to PHPUnit coverage reports
-   */
-  @Override
-  public List<File> getReportFiles(SensorContext context) {
-    return context.config().get(reportPathKey())
-      .map(report -> getIOFile(context.fileSystem().baseDir(), report))
-      .map(Collections::singletonList)
-      .orElse(Collections.emptyList());
-  }
-
-  /**
-   * Inspired by {@link org.sonarsource.analyzer.commons.ExternalReportProvider}
-   */
-  private static File getIOFile(File baseDir, String path) {
-    File file = new File(path);
-    if (!file.isAbsolute()) {
-      file = new File(baseDir, path);
-    }
-    return file;
   }
 
   @Override

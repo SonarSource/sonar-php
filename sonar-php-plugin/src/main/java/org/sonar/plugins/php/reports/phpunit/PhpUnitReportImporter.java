@@ -56,7 +56,7 @@ public abstract class PhpUnitReportImporter extends AbstractReportImporter {
   }
 
   protected void createWarning(String message, File file) {
-    String warning = String.format(message, file.getAbsolutePath());
+    var warning = String.format(message, file.getAbsolutePath());
     logger().warn(warning);
     analysisWarningsWrapper.addWarning(warning);
   }
