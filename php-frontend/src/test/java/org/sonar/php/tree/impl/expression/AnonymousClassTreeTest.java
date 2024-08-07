@@ -75,6 +75,6 @@ class AnonymousClassTreeTest extends PHPTreeModelTest {
   void shouldParseAnonymousClassDeclarationWithReadonly() {
     AnonymousClassTree tree = parse("readonly class {}", Kind.ANONYMOUS_CLASS);
     assertThat(tree.isReadOnly()).isTrue();
-    assertThat(((PHPTree) tree).childrenIterator()).hasSize(9);
+    assertThat(((PHPTree) tree).childrenIterator()).toIterable().hasSize(9);
   }
 }

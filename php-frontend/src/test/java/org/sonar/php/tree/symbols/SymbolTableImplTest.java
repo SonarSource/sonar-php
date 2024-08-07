@@ -21,7 +21,6 @@ package org.sonar.php.tree.symbols;
 
 import java.util.List;
 import java.util.stream.Stream;
-import org.assertj.core.api.ListAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -552,13 +551,13 @@ class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbol("A1").qualifiedName()).hasToString("a1");
   }
 
-  private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
-    return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
+  private static void assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
+    assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
   }
 
-  private static ListAssert<String> assertFunctionSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
-    return assertThat(symbolTable.getSymbols(Kind.FUNCTION)).extracting(s -> s.qualifiedName().toString())
+  private static void assertFunctionSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
+    assertThat(symbolTable.getSymbols(Kind.FUNCTION)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
   }
 

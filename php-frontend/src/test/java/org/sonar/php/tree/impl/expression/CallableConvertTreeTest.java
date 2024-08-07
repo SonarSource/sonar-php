@@ -32,7 +32,7 @@ class CallableConvertTreeTest extends PHPTreeModelTest {
   void simpleCallableConvert() {
     CallableConvertTreeImpl tree = parse("f(...)", PHPLexicalGrammar.EXPRESSION);
     assertThat(tree.is(Tree.Kind.CALLABLE_CONVERT)).isTrue();
-    assertThat(tree.childrenIterator()).hasSize(4);
+    assertThat(tree.childrenIterator()).toIterable().hasSize(4);
     assertThat(tree.expression().is(Tree.Kind.NAMESPACE_NAME)).isTrue();
     assertThat(tree.expression()).hasToString("f");
     assertThat(tree.openParenthesisToken()).hasToString("(");
