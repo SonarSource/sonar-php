@@ -65,7 +65,7 @@ public class TrailingWhitespaceCheck extends PHPVisitorCheck {
       return false;
     }
     // If the last character is a very common line-ending in PHP files, we can skip the check
-    char lastCharacter = line.charAt(line.length() - 1);
+    var lastCharacter = line.charAt(line.length() - 1);
     return lastCharacter != ';' && lastCharacter != '{' && lastCharacter != '}';
   }
 
