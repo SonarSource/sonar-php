@@ -109,6 +109,41 @@ class PHPUnitTest {
   }
 
   @Test
+  void shouldImportMultipleTestReports() {
+    setTestReportPath(REPORTS_DIR + "/phpunit.tests.xml," + REPORTS_DIR + "/phpunit.tests.div.xml");
+    BuildResult result = executeBuild();
+
+    assertThat(getProjectMetrics("tests")).isEqualTo(3);
+    assertThat(getProjectMetrics("test_failures")).isEqualTo(2);
+    assertThat(getProjectMetrics("test_errors")).isZero();
+
+    assertThat(getFileMetrics(TEST_FILE, "tests")).isEqualTo(2);
+    assertThat(getFileMetrics(TEST_FILE, "test_failures")).isEqualTo(1);
+    assertThat(getFileMetrics(TEST_FILE, "test_errors")).isZero();
+
+    assertThat(result.getLogs()).doesNotContain("Failed to resolve 1 file path(s) in PHPUnit tests");
+    assertThat(getAnalysisWarnings(result)).isEmpty();
+  }
+
+  @Test
+  void shouldImportMultipleTestReportsWhenOneIsInvalid() {
+    setTestReportPath(REPORTS_DIR + "/phpunit.tests.xml," + REPORTS_DIR + "/phpunit.tests.unknown.xml");
+    BuildResult result = executeBuild();
+
+    assertThat(getProjectMetrics("tests")).isEqualTo(2);
+    assertThat(getProjectMetrics("test_failures")).isEqualTo(1);
+    assertThat(getProjectMetrics("test_errors")).isZero();
+
+    assertThat(getFileMetrics(TEST_FILE, "tests")).isEqualTo(2);
+    assertThat(getFileMetrics(TEST_FILE, "test_failures")).isEqualTo(1);
+    assertThat(getFileMetrics(TEST_FILE, "test_errors")).isZero();
+
+    assertThat(result.getLogs()).contains("Failed to resolve 1 file path(s) in PHPUnit tests");
+    assertThat(getAnalysisWarnings(result)).hasSize(1);
+    assertThat(getAnalysisWarnings(result).get(0)).contains("Failed to resolve 1 file path(s) in PHPUnit tests");
+  }
+
+  @Test
   void coverageReportWithAbsoluteUnixFilePaths() {
     setCoverageReportPaths(REPORTS_DIR + "/phpunit.coverage.xml");
     BuildResult result = executeBuild();
