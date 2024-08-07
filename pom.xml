@@ -83,7 +83,7 @@
     <version.junit-jupiter>5.10.3</version.junit-jupiter>
     <version.maven-project>2.2.1</version.maven-project>
     <version.junit-platform-suite>1.10.3</version.junit-platform-suite>
-    <version.mockito>4.11.0</version.mockito>
+    <version.mockito>5.12.0</version.mockito>
     <version.sonar>10.6.0.92116</version.sonar>
     <version.staxmate>2.0.1</version.staxmate>
     <version.sonar-orchestrator>4.9.0.1920</version.sonar-orchestrator>
