@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Retrieve Vault Secrets
         id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
+        uses: SonarSource/vault-action-wrapper@3.0.1
         with:
           secrets: |
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_PASSWORD;
@@ -45,7 +45,7 @@ jobs:
             echo "LATEST_VERSION=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: SonarSource/gh-action_releasability@v1.0.4
+      - uses: SonarSource/gh-action_releasability@1.2.3
         id: releasability
         with:
           branch: ${{ github.ref_name }}
