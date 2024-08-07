@@ -34,7 +34,7 @@ public class IdenticalOperandsInBinaryExpressionCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Identical sub-expressions on both sides of operator \"%s\"";
 
-  private static final Set<String> EXCLUDED_OPERATORS = Set.of("*", "+", ".");
+  private static final Set<String> EXCLUDED_OPERATORS = Set.of("*", "+", ".", "**");
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree binaryExp) {
