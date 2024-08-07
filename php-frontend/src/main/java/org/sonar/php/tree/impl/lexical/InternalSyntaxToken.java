@@ -22,7 +22,6 @@ package org.sonar.php.tree.impl.lexical;
 import com.sonar.sslr.api.TokenType;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -30,9 +29,9 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
+import static org.sonar.php.utils.Patterns.LINEBREAK_PATTERN;
 
-  private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\r\n|\n|\r");
+public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
 
   private final Kind kind;
 
