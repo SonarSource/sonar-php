@@ -21,16 +21,15 @@ package org.sonar.php.utils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
-public class SourceBuilder extends PHPSubscriptionCheck {
+import static org.sonar.php.utils.Patterns.LINEBREAK_PATTERN;
 
-  private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\r\n|\n|\r");
+public class SourceBuilder extends PHPSubscriptionCheck {
 
   private final StringBuilder stringBuilder = new StringBuilder();
   private int line = 1;

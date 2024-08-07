@@ -22,16 +22,15 @@ package org.sonar.php.tree.impl.lexical;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class InternalSyntaxTrivia extends PHPTree implements SyntaxTrivia {
+import static org.sonar.php.utils.Patterns.LINEBREAK_PATTERN;
 
-  private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\r\n|\n|\r");
+public class InternalSyntaxTrivia extends PHPTree implements SyntaxTrivia {
 
   private final String comment;
   private final int column;
