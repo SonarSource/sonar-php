@@ -36,7 +36,7 @@ public class SourceBuilder extends PHPSubscriptionCheck {
   private int column = 0;
 
   public static String build(Tree tree) {
-    SourceBuilder writer = new SourceBuilder();
+    var writer = new SourceBuilder();
     writer.scanTree(tree);
     return writer.stringBuilder.toString();
   }
