@@ -71,7 +71,8 @@ public class IteratorUtils {
 
     private void checkNext() {
       while ((current == null || !current.hasNext()) && currentIndex < iterables.length) {
-        current = iterables[currentIndex++];
+        current = iterables[currentIndex];
+        currentIndex++;
       }
     }
   }
