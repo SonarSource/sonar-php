@@ -17,38 +17,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.symbols;
+package org.sonar.php.tree.visitors;
 
-import java.util.List;
-import java.util.Set;
-import javax.annotation.Nullable;
-import org.sonar.php.tree.symbols.Scope;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-public interface SymbolTable {
+/**
+ * Visitor that detects the framework used in the analyzed file.
+ */
+public class FrameworkDetectionVisitor extends PHPVisitorCheck {
+  private SymbolTable.Framework framework = SymbolTable.Framework.EMPTY;
 
-  /**
-   *
-   * @param kind kind of symbols to look for
-   * @return list of symbols with the given kind
-   */
-  List<Symbol> getSymbols(Symbol.Kind kind);
+  @Override
+  public void visitUseClause(UseClauseTree tree) {
+    if (tree.namespaceName().qualifiedName().startsWith("Drupal")) {
+      this.framework = SymbolTable.Framework.DRUPAL;
+    }
+  }
 
-  Set<Scope> getScopes();
-
-  @Nullable
-  Scope getScopeFor(Tree tree);
-
-  Symbol getSymbol(Tree tree);
-
-  Framework getFramework();
-
-  /**
-   * Some specific PHP frameworks can be detected by the plugin. The rules can then use this information
-   * to adapt their behavior.
-   */
-  enum Framework {
-    DRUPAL,
-    EMPTY,
+  public SymbolTable.Framework getFramework() {
+    return framework;
   }
 }

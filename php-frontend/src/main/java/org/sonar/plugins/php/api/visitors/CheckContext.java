@@ -123,4 +123,12 @@ public interface CheckContext {
 
   @Beta
   CacheContext cacheContext();
+
+  /**
+   * Determine if the current file uses a specific framework.
+   * @return the framework used by the current file, or {@link SymbolTable.Framework#EMPTY} if the file does not use any framework.
+   */
+  default SymbolTable.Framework getFramework() {
+    return symbolTable().getFramework();
+  }
 }
