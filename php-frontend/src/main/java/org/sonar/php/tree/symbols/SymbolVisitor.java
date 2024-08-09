@@ -25,7 +25,9 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -494,9 +496,10 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
+    LOG.debug("Entering another function call, actual stack depth: {}", new Throwable().getStackTrace().length);
     if (tree.callee().is(Kind.NAMESPACE_NAME)) {
       usageForNamespaceName((NamespaceNameTree) tree.callee(), Symbol.Kind.FUNCTION);
-    } else {
+    } else if (memberStatementDepth == 0) {
       tree.callee().accept(this);
     }
     String callee = SourceBuilder.build(tree.callee()).trim();
@@ -551,29 +554,53 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
-    memberStatementDepth++;
-    if (memberStatementDepth >= MEMBER_ACCESS_MAXIMUM_DEPTH) {
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("visitMemberAccess at \"{}...\" has reached the maximum depth of {}, switching to the next statement",
-          tree.toString().substring(0, MEMBER_ACCESS_LOG_TRUNCATION_LENGTH), MEMBER_ACCESS_MAXIMUM_DEPTH);
+    LOG.debug("Entering another object, actual stack depth: {}", new Throwable().getStackTrace().length);
+    if (memberStatementDepth == 0) {
+      var objectsList = Stream.iterate((Tree) tree,
+        Objects::nonNull,
+        t -> {
+          if (t instanceof MemberAccessTree memberAccessTree)
+            return memberAccessTree.object();
+          else if (t instanceof FunctionCallTree functionCallTree)
+            return functionCallTree.callee();
+          else return null;
+        })
+        .filter(Objects::nonNull)
+        .toList();
+
+      // if (objectsList.size() > MEMBER_ACCESS_MAXIMUM_DEPTH) {
+      // special handling of long call chains which happens in some DSL-like scenarios, including but not limited to
+      // SQL queries or some kind of configurations as code
+      for (Tree next : objectsList) {
+        memberStatementDepth++;
+        LOG.debug("Entering another object, depth: {}, actual stack depth: {}", memberStatementDepth, new Throwable().getStackTrace().length);
+        // usage for a namespace name is recorded in a corresponding `visit*` method
+        if (!next.is(Kind.NAMESPACE_NAME)) {
+          next.accept(this);
+        }
+        memberStatementDepth--;
       }
-      return;
-    }
-    boolean functionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
-    if (tree.object().is(Kind.NAMESPACE_NAME)) {
-      usageForNamespaceName(((NamespaceNameTree) tree.object()), Symbol.Kind.CLASS);
+      // } else {
+      // if (tree.object().is(Kind.NAMESPACE_NAME)) {
+      // usageForNamespaceName(((NamespaceNameTree) tree.object()), Symbol.Kind.CLASS);
+      // } else if (memberStatementDepth == 0) {
+      // tree.object().accept(this);
+      // }
+      // }
     } else {
-      tree.object().accept(this);
+      if (tree.object().is(Kind.NAMESPACE_NAME)) {
+        usageForNamespaceName(((NamespaceNameTree) tree.object()), Symbol.Kind.CLASS);
+      }
+
+      boolean functionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
+      classMemberUsageState = new ClassMemberUsageState();
+      classMemberUsageState.isStatic = tree.isStatic();
+      classMemberUsageState.isSelfMember = isSelfMember(tree);
+      classMemberUsageState.isField = !functionCall;
+      classMemberUsageState.isConst = classMemberUsageState.isField && tree.isStatic();
+
+      tree.member().accept(this);
     }
-
-    classMemberUsageState = new ClassMemberUsageState();
-    classMemberUsageState.isStatic = tree.isStatic();
-    classMemberUsageState.isSelfMember = isSelfMember(tree);
-    classMemberUsageState.isField = !functionCall;
-    classMemberUsageState.isConst = classMemberUsageState.isField && tree.isStatic();
-
-    tree.member().accept(this);
-    memberStatementDepth = 0;
   }
 
   private static boolean isSelfMember(MemberAccessTree tree) {
