@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -40,9 +41,10 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1781";
-  private static final String MESSAGE = "Write this \"%s\" %s in lower case.";
+  private static final String MESSAGE = "Write this \"%s\" %s in %s case.";
 
   private static final Pattern PATTERN = Pattern.compile("[a-z_]+");
+  private static final Pattern PATTERN_DRUPAL = Pattern.compile("[A-Z_]+");
   private static final Set<String> KEYWORDS = Set.of(PHPKeyword.getKeywordValues());
 
   @Override
@@ -50,7 +52,11 @@ public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
     super.visitLiteral(tree);
 
     if (tree.is(Kind.NULL_LITERAL, Kind.BOOLEAN_LITERAL)) {
-      check(tree, tree.value(), "constant");
+      if (context().getFramework() == SymbolTable.Framework.DRUPAL) {
+        checkWithDrupalConvention(tree, tree.value(), "constant");
+      } else {
+        check(tree, tree.value(), "constant");
+      }
     }
   }
 
@@ -101,7 +107,14 @@ public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
 
   private void check(Tree tree, String value, String kind) {
     if (!PATTERN.matcher(value).matches()) {
-      String message = String.format(MESSAGE, value, kind);
+      String message = MESSAGE.formatted(value, kind, "lower");
+      context().newIssue(this, tree, message);
+    }
+  }
+
+  private void checkWithDrupalConvention(Tree tree, String value, String kind) {
+    if (!PATTERN_DRUPAL.matcher(value).matches()) {
+      String message = MESSAGE.formatted(value, kind, "upper");
       context().newIssue(this, tree, message);
     }
   }

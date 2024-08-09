@@ -25,8 +25,12 @@ import org.sonar.plugins.php.CheckVerifier;
 class KeywordsAndConstantsNotLowerCaseCheckTest {
 
   @Test
-  void test() throws Exception {
+  void testLowercase() {
     CheckVerifier.verify(new KeywordsAndConstantsNotLowerCaseCheck(), "KeywordsAndConstantsNotLowerCaseCheck.php");
+  }
 
+  @Test
+  void testDrupalConvention() {
+    CheckVerifier.verify(new KeywordsAndConstantsNotLowerCaseCheck(), "KeywordsAndConstantsNotLowerCaseWithDrupalCheck.php");
   }
 }
