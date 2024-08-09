@@ -26,7 +26,7 @@ class FunctionNameCheckTest {
 
   private static final String FILE_NAME = "FunctionNameCheck.php";
   private static final String FILE_NAME_DRUPAL = "FunctionNameCheckDrupal.php";
-  private static final String FILE_NAME_DRUPAL_NO_OVERRIDE = "FunctionNameCheckDrupalNoOverride.php";
+  private static final String FILE_NAME_DRUPAL_CUSTOM_REGEX = "FunctionNameCheckDrupalWithCustomRegex.php";
   private FunctionNameCheck check = new FunctionNameCheck();
 
   @Test
@@ -54,6 +54,6 @@ class FunctionNameCheckTest {
   @Test
   void customShouldPreventDrupalOverride() {
     check.format = "^[a-zA-Z][a-zA-Z0-9]*$";
-    CheckVerifier.verify(check, FILE_NAME_DRUPAL_NO_OVERRIDE);
+    CheckVerifier.verify(check, FILE_NAME_DRUPAL_CUSTOM_REGEX);
   }
 }
