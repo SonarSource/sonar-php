@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.symbols.Symbols;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
@@ -41,12 +42,14 @@ public class FunctionNameCheck extends PHPVisitorCheck {
     "__set", "__isset", "__unset", "__sleep", "__wakeup", "__toString", "__invoke",
     "__set_state", "__clone", "__debugInfo");
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
+  public static final String DEFAULT_DRUPAL = "^[a-z][a-z0-9_]*$";
+  private static final Pattern patternDrupal = Pattern.compile(DEFAULT_DRUPAL);
   private Pattern pattern = null;
 
   @RuleProperty(
     key = "format",
     defaultValue = DEFAULT)
-  String format = DEFAULT;
+  public String format = DEFAULT;
 
   @Override
   public void init() {
@@ -69,9 +72,26 @@ public class FunctionNameCheck extends PHPVisitorCheck {
 
   private void check(NameIdentifierTree name) {
     String functionName = name.text();
-    if (!pattern.matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
-      context().newIssue(this, name, String.format(MESSAGE, functionName, format));
+    if (!computePattern().matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
+      context().newIssue(this, name, String.format(MESSAGE, functionName, computeFormat()));
     }
   }
 
+  private Pattern computePattern() {
+    if (isDrupal()) {
+      return patternDrupal;
+    }
+    return pattern;
+  }
+
+  private String computeFormat() {
+    if (isDrupal()) {
+      return DEFAULT_DRUPAL;
+    }
+    return format;
+  }
+
+  private boolean isDrupal() {
+    return context().getFramework() == SymbolTable.Framework.DRUPAL && format.equals(DEFAULT);
+  }
 }
