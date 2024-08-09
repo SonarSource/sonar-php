@@ -25,17 +25,35 @@ import org.sonar.plugins.php.CheckVerifier;
 class FunctionNameCheckTest {
 
   private static final String FILE_NAME = "FunctionNameCheck.php";
+  private static final String FILE_NAME_DRUPAL = "FunctionNameCheckDrupal.php";
+  private static final String FILE_NAME_DRUPAL_NO_OVERRIDE = "FunctionNameCheckDrupalNoOverride.php";
   private FunctionNameCheck check = new FunctionNameCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void testDefaultValue() {
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  void custom() throws Exception {
+  void testCustom() {
     check.format = "^[a-zA-Z][a-zA-Z0-9]*$";
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
+  @Test
+  void testDefaultValueDrupal() {
+    CheckVerifier.verify(check, FILE_NAME_DRUPAL);
+  }
+
+  @Test
+  void testCustomDrupal() {
+    check.format = "^[a-zA-Z][a-zA-Z0-9_]*$";
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME_DRUPAL);
+  }
+
+  @Test
+  void customShouldPreventDrupalOverride() {
+    check.format = "^[a-zA-Z][a-zA-Z0-9]*$";
+    CheckVerifier.verify(check, FILE_NAME_DRUPAL_NO_OVERRIDE);
+  }
 }
