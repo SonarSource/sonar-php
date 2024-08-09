@@ -33,6 +33,7 @@ import org.sonar.php.symbols.ClassSymbolData;
 import org.sonar.php.symbols.FunctionSymbolData;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
+import org.sonar.php.tree.visitors.FrameworkDetectionVisitor;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
@@ -44,12 +45,13 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class SymbolTableImpl implements SymbolTable {
 
-  private List<Symbol> symbols = new ArrayList<>();
-  private Map<Tree, Scope> scopes = new HashMap<>();
-  private Map<Tree, Symbol> symbolsByTree = new HashMap<>();
-  private Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
+  private final List<Symbol> symbols = new ArrayList<>();
+  private final Map<Tree, Scope> scopes = new HashMap<>();
+  private final Map<Tree, Symbol> symbolsByTree = new HashMap<>();
+  private final Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
   private Collection<ClassSymbolData> classSymbolData;
   private Collection<FunctionSymbolData> functionSymbolData;
+  private Framework framework;
 
   private SymbolTableImpl() {
   }
@@ -59,8 +61,8 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   public static SymbolTableImpl create(CompilationUnitTree compilationUnit, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
-    SymbolTableImpl symbolModel = new SymbolTableImpl();
-    DeclarationVisitor declarationVisitor = new DeclarationVisitor(symbolModel, projectSymbolData, file);
+    var symbolModel = new SymbolTableImpl();
+    var declarationVisitor = new DeclarationVisitor(symbolModel, projectSymbolData, file);
     declarationVisitor.visitCompilationUnit(compilationUnit);
     symbolModel.classSymbolData = declarationVisitor.classSymbolData();
     symbolModel.functionSymbolData = declarationVisitor.functionSymbolData();
@@ -70,11 +72,14 @@ public class SymbolTableImpl implements SymbolTable {
       declarationVisitor.classSymbolIndex(),
       declarationVisitor.functionSymbolIndex()).visitCompilationUnit(compilationUnit);
     compilationUnit.accept(new AssignmentExpressionVisitor());
+    var frameworkDetectionVisitor = new FrameworkDetectionVisitor();
+    compilationUnit.accept(frameworkDetectionVisitor);
+    symbolModel.framework = frameworkDetectionVisitor.getFramework();
     return symbolModel;
   }
 
   public static SymbolTableImpl create(Collection<ClassSymbolData> classSymbolData, Collection<FunctionSymbolData> functionSymbolData) {
-    SymbolTableImpl symbolTable = new SymbolTableImpl();
+    var symbolTable = new SymbolTableImpl();
     symbolTable.classSymbolData = classSymbolData;
     symbolTable.functionSymbolData = functionSymbolData;
     return symbolTable;
@@ -93,6 +98,11 @@ public class SymbolTableImpl implements SymbolTable {
   @Override
   public Scope getScopeFor(Tree tree) {
     return scopes.get(tree);
+  }
+
+  @Override
+  public Framework getFramework() {
+    return this.framework;
   }
 
   SymbolImpl declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, SymbolQualifiedName namespace) {
@@ -115,21 +125,21 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   TypeSymbolImpl declareTypeSymbol(IdentifierTree name, Scope scope, SymbolQualifiedName qualifiedName) {
-    TypeSymbolImpl symbol = new TypeSymbolImpl(name, scope, qualifiedName);
+    var symbol = new TypeSymbolImpl(name, scope, qualifiedName);
     symbolByQualifiedName.put(qualifiedName, symbol);
     addSymbol(name, scope, symbol);
     return symbol;
   }
 
   MemberSymbolImpl declareMemberSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, TypeSymbol owner) {
-    MemberSymbolImpl memberSymbol = new MemberSymbolImpl(name, kind, scope, owner);
+    var memberSymbol = new MemberSymbolImpl(name, kind, scope, owner);
     symbolByQualifiedName.put(memberSymbol.qualifiedName(), memberSymbol);
     addSymbol(name, scope, memberSymbol);
     return memberSymbol;
   }
 
   SymbolImpl createUndeclaredSymbol(QualifiedName fullyQualifiedName, Symbol.Kind kind) {
-    UndeclaredSymbol undeclaredSymbol = new UndeclaredSymbol(fullyQualifiedName, kind);
+    var undeclaredSymbol = new UndeclaredSymbol(fullyQualifiedName, kind);
     symbolByQualifiedName.put(fullyQualifiedName, undeclaredSymbol);
     return undeclaredSymbol;
   }
@@ -149,7 +159,7 @@ public class SymbolTableImpl implements SymbolTable {
   public List<Symbol> getSymbols(Symbol.Kind kind) {
     List<Symbol> result = new ArrayList<>();
     for (Symbol symbol : getSymbols()) {
-      if (kind.equals(symbol.kind())) {
+      if (kind == symbol.kind()) {
         result.add(symbol);
       }
     }
