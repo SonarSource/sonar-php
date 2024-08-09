@@ -25,13 +25,13 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.slf4j.event.Level;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 class ClassMemberUsagesTest extends ParsingTestUtils {
 
@@ -133,7 +133,7 @@ class ClassMemberUsagesTest extends ParsingTestUtils {
   }
 
   @Test
-  void shouldAbortBuildingSymbolTableForLongChain() {
+  void shouldNotOverflowBuildingSymbolTableForLongChain() {
     var code = """
       <?php
       class A {
@@ -142,16 +142,11 @@ class ClassMemberUsagesTest extends ParsingTestUtils {
         }
       }
       (new A())->foo()
-      """ + "\n->foo()".repeat(100) +
+      """ + "\n->foo()".repeat(1500) +
       ";";
 
-    logTester.setLevel(Level.DEBUG);
-    SymbolTableImpl.create(parseSource(code));
-    assertThat(logTester.logs(Level.DEBUG)).contains("visitMemberAccess at \"(new A())->foo() ->f...\" has reached the maximum depth of 100, switching to the next statement");
-
-    logTester.setLevel(Level.INFO);
-    SymbolTableImpl.create(parseSource(code));
-    assertThat(logTester.logs(Level.INFO)).doesNotContain("visitMemberAccess at \"(new A())->foo() ->f...\" has reached the maximum depth of 100, switching to the next statement");
+    assertThatCode(() -> SymbolTableImpl.create(parseSource(code)))
+      .doesNotThrowAnyException();
   }
 
   private Symbol getSymbol(String name, Kind kind) {
