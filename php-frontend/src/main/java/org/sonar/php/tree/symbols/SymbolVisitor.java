@@ -27,8 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.utils.Preconditions;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
@@ -80,8 +78,6 @@ import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import static java.util.Objects.requireNonNull;
 
 public class SymbolVisitor extends NamespaceNameResolvingVisitor {
-  private static final Logger LOG = LoggerFactory.getLogger(SymbolVisitor.class);
-
   private static final Set<String> BUILT_IN_VARIABLES = Set.of(
     "$this",
     "$GLOBALS",
@@ -97,8 +93,6 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     "$_COOKIE",
     "$_REQUEST");
   private static final Set<String> SELF_OBJECTS = Set.of("$this", "self", "static");
-  private static final int MEMBER_ACCESS_MAXIMUM_DEPTH = 100;
-  private static final int MEMBER_ACCESS_LOG_TRUNCATION_LENGTH = 20;
 
   private final Deque<Scope> classScopes = new ArrayDeque<>();
   private final Map<Symbol, Scope> scopeBySymbol = new HashMap<>();
@@ -116,7 +110,6 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   private Scope currentScope;
   private Scope globalScope;
   private ClassMemberUsageState classMemberUsageState = null;
-  private int memberStatementDepth;
 
   public SymbolVisitor(SymbolTableImpl symbolTable) {
     super(symbolTable);
@@ -128,7 +121,6 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   public void visitCompilationUnit(CompilationUnitTree tree) {
     globalScope = symbolTable.addScope(new Scope(tree));
     currentScope = globalScope;
-    memberStatementDepth = 0;
     super.visitCompilationUnit(tree);
   }
 
@@ -494,9 +486,13 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
+    visitFunctionCall(tree, true);
+  }
+
+  public void visitFunctionCall(FunctionCallTree tree, boolean recursive) {
     if (tree.callee().is(Kind.NAMESPACE_NAME)) {
       usageForNamespaceName((NamespaceNameTree) tree.callee(), Symbol.Kind.FUNCTION);
-    } else {
+    } else if (recursive) {
       tree.callee().accept(this);
     }
     String callee = SourceBuilder.build(tree.callee()).trim();
@@ -551,29 +547,47 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
 
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
-    memberStatementDepth++;
-    if (memberStatementDepth >= MEMBER_ACCESS_MAXIMUM_DEPTH) {
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("visitMemberAccess at \"{}...\" has reached the maximum depth of {}, switching to the next statement",
-          tree.toString().substring(0, MEMBER_ACCESS_LOG_TRUNCATION_LENGTH), MEMBER_ACCESS_MAXIMUM_DEPTH);
+    boolean isCallChain = tree.object().is(Kind.FUNCTION_CALL);
+
+    if (isCallChain) {
+      // special handling of long call chains which happens in some DSL-like scenarios, including but not limited to SQL queries.
+      // Because we unwind the chain from the end, we don't know its exact length, and this branch will execute even for short chains.
+      ExpressionTree current = tree;
+      while (current != null) {
+        if (current instanceof MemberAccessTree memberAccessTree) {
+          visitMemberAccess(memberAccessTree, false);
+          current = memberAccessTree.object();
+        } else if (current instanceof FunctionCallTree functionCallTree) {
+          visitFunctionCall(functionCallTree, false);
+          current = functionCallTree.callee();
+        } else {
+          if (!current.is(Kind.NAMESPACE_NAME)) {
+            // namespace name is handled in a corresponding `visit*` method; here we continue processing after leaving the chain
+            current.accept(this);
+          }
+          current = null;
+        }
       }
-      return;
+    } else {
+      visitMemberAccess(tree, true);
     }
-    boolean functionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
+  }
+
+  public void visitMemberAccess(MemberAccessTree tree, boolean recursive) {
     if (tree.object().is(Kind.NAMESPACE_NAME)) {
       usageForNamespaceName(((NamespaceNameTree) tree.object()), Symbol.Kind.CLASS);
-    } else {
+    } else if (recursive) {
       tree.object().accept(this);
     }
 
+    boolean isFunctionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
     classMemberUsageState = new ClassMemberUsageState();
     classMemberUsageState.isStatic = tree.isStatic();
     classMemberUsageState.isSelfMember = isSelfMember(tree);
-    classMemberUsageState.isField = !functionCall;
+    classMemberUsageState.isField = !isFunctionCall;
     classMemberUsageState.isConst = classMemberUsageState.isField && tree.isStatic();
 
     tree.member().accept(this);
-    memberStatementDepth = 0;
   }
 
   private static boolean isSelfMember(MemberAccessTree tree) {
