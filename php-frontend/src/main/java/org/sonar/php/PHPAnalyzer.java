@@ -25,7 +25,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +61,7 @@ public class PHPAnalyzer {
   private final DurationStatistics statistics;
   private final CacheContext cacheContext;
   private final SuppressWarningFilter suppressWarningFilter;
+  private final boolean frameworkDetectionEnabled;
 
   private PhpInputFileContext currentFileContext;
 
@@ -75,7 +75,8 @@ public class PHPAnalyzer {
     ProjectSymbolData projectSymbolData,
     DurationStatistics statistics,
     @Nullable CacheContext cacheContext,
-    SuppressWarningFilter suppressWarningFilter) {
+    SuppressWarningFilter suppressWarningFilter,
+    boolean frameworkDetectionEnabled) {
     this.checks = checks;
     this.testFileChecks = testFileChecks;
     this.workingDir = workingDir;
@@ -83,6 +84,7 @@ public class PHPAnalyzer {
     this.statistics = statistics;
     this.cacheContext = cacheContext;
     this.suppressWarningFilter = suppressWarningFilter;
+    this.frameworkDetectionEnabled = frameworkDetectionEnabled;
     for (PHPCheck check : checks) {
       check.init();
     }
@@ -92,7 +94,8 @@ public class PHPAnalyzer {
     currentFile = PhpFileImpl.create(inputFile);
     currentFileContext = new PhpInputFileContext(currentFile, workingDir, cacheContext);
     currentFileTree = (CompilationUnitTree) statistics.time("CheckParsing", () -> parser.parse(currentFile.contents()));
-    currentFileSymbolTable = statistics.time("CheckSymbolTable", () -> SymbolTableImpl.create(currentFileTree, projectSymbolData, PhpFileImpl.create(inputFile)));
+    currentFileSymbolTable = statistics.time("CheckSymbolTable",
+      () -> SymbolTableImpl.create(currentFileTree, projectSymbolData, PhpFileImpl.create(inputFile), frameworkDetectionEnabled));
   }
 
   public List<PhpIssue> analyze() {

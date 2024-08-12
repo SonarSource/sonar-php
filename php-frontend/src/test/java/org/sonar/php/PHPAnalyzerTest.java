@@ -157,7 +157,7 @@ class PHPAnalyzerTest {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();
     SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
-    PHPAnalyzer analyzer = createAnalyzer(List.of(check), List.of(testCheck), suppressWarningFilter);
+    PHPAnalyzer analyzer = createAnalyzer(List.of(check), List.of(testCheck), suppressWarningFilter, true);
     InputFile file = new TestInputFileBuilder("projectKey", "file.php")
       .setContents("<?php\n//@SuppressWarnings(\"S11\")\n$a = 1;")
       .build();
@@ -177,16 +177,44 @@ class PHPAnalyzerTest {
     assertThat(suppressWarningFilter.accept(fileUri, "S11", 2)).isTrue();
   }
 
+  @Test
+  void frameworkVisitorShouldBeTriggered() {
+    PHPCheck check = new DummyCheck();
+    PHPCheck testCheck = new DummyCheck();
+    SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
+    PHPAnalyzer analyzer = createAnalyzer(List.of(check), List.of(testCheck), suppressWarningFilter, true);
+    InputFile file = new TestInputFileBuilder("projectKey", "file.php")
+      .setContents("<?php\nuse Drupal\\something;\n$a = 1;")
+      .build();
+
+    analyzer.nextFile(file);
+    assertThat(analyzer.currentFileSymbolTable().getFramework()).isEqualTo(SymbolTable.Framework.DRUPAL);
+  }
+
+  @Test
+  void frameworkVisitorShouldNotBeTriggered() {
+    PHPCheck check = new DummyCheck();
+    PHPCheck testCheck = new DummyCheck();
+    SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
+    PHPAnalyzer analyzer = createAnalyzer(List.of(check), List.of(testCheck), suppressWarningFilter, false);
+    InputFile file = new TestInputFileBuilder("projectKey", "file.php")
+      .setContents("<?php\nuse Drupal\\something;\n$a = 1;")
+      .build();
+
+    analyzer.nextFile(file);
+    assertThat(analyzer.currentFileSymbolTable().getFramework()).isNull();
+  }
+
   private PHPAnalyzer createAnalyzer(PHPCheck... checks) {
     return createAnalyzer(Arrays.asList(checks), Collections.emptyList());
   }
 
   private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks) {
-    return createAnalyzer(checks, testFileChecks, new SuppressWarningFilter());
+    return createAnalyzer(checks, testFileChecks, new SuppressWarningFilter(), true);
   }
 
-  private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks, SuppressWarningFilter suppressWarningFilter) {
+  private PHPAnalyzer createAnalyzer(List<PHPCheck> checks, List<PHPCheck> testFileChecks, SuppressWarningFilter suppressWarningFilter, boolean frameworkDetectionEnabled) {
     return new PHPAnalyzer(checks, testFileChecks, tempFolder, new ProjectSymbolData(),
-      new DurationStatistics(sensorContext.config()), null, suppressWarningFilter);
+      new DurationStatistics(sensorContext.config()), null, suppressWarningFilter, frameworkDetectionEnabled);
   }
 }

@@ -20,6 +20,9 @@
 package org.sonar.plugins.php;
 
 import com.sonar.sslr.api.RecognitionException;
+import java.io.File;
+import java.io.InterruptedIOException;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.DurationStatistics;
@@ -57,10 +60,6 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import java.io.File;
-import java.io.InterruptedIOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 class AnalysisScanner extends Scanner {
 
@@ -96,7 +95,8 @@ class AnalysisScanner extends Scanner {
     hasTestFileChecks = !testFileChecks.isEmpty();
 
     File workingDir = context.fileSystem().workDir();
-    phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext, suppressWarningFilter);
+    var frameworkDetectionEnabled = "true".equalsIgnoreCase(context.config().get(PhpPlugin.PHP_FRAMEWORK_DETECTION).orElse(""));
+    phpAnalyzer = new PHPAnalyzer(mainFileChecks, testFileChecks, workingDir, projectSymbolData, statistics, cacheContext, suppressWarningFilter, frameworkDetectionEnabled);
   }
 
   @Override
