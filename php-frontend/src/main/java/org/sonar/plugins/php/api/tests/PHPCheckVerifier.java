@@ -52,24 +52,26 @@ public class PHPCheckVerifier {
   private static final ActionParser<Tree> parser = PHPParserBuilder.createParser();
 
   private final boolean readExpectedIssuesFromComments;
+  private final boolean frameworkDetectionEnabled;
 
   /**
    * Internal use only. Subject to changes.
    */
-  protected PHPCheckVerifier(boolean readExpectedIssuesFromComments) {
+  protected PHPCheckVerifier(boolean readExpectedIssuesFromComments, boolean frameworkDetectionEnabled) {
     this.readExpectedIssuesFromComments = readExpectedIssuesFromComments;
+    this.frameworkDetectionEnabled = frameworkDetectionEnabled;
   }
 
   public static void verify(File sourceFile, PHPCheck check) {
-    new PHPCheckVerifier(true).createVerifier(Collections.singletonList(sourceFile), check).assertOneOrMoreIssues();
+    new PHPCheckVerifier(true, true).createVerifier(Collections.singletonList(sourceFile), check).assertOneOrMoreIssues();
   }
 
   public static void verifyNoIssue(File sourceFile, PHPCheck check) {
-    new PHPCheckVerifier(true).createVerifier(Collections.singletonList(sourceFile), check).assertNoIssues();
+    new PHPCheckVerifier(true, true).createVerifier(Collections.singletonList(sourceFile), check).assertNoIssues();
   }
 
   public static void verify(PHPCheck check, File... files) {
-    new PHPCheckVerifier(true).createVerifier(Arrays.asList(files), check).assertOneOrMoreIssues();
+    new PHPCheckVerifier(true, true).createVerifier(Arrays.asList(files), check).assertOneOrMoreIssues();
   }
 
   /**
@@ -84,7 +86,7 @@ public class PHPCheckVerifier {
       PhpTestFile phpFile = new PhpTestFile(file);
       CompilationUnitTree ast = (CompilationUnitTree) parser.parse(phpFile.contents());
       astByFile.put(file, ast);
-      SymbolTableImpl symbolTable = SymbolTableImpl.create(ast, new ProjectSymbolData(), phpFile);
+      var symbolTable = SymbolTableImpl.create(ast, new ProjectSymbolData(), phpFile, frameworkDetectionEnabled);
       symbolTable.classSymbolDatas().forEach(projectSymbolData::add);
       symbolTable.functionSymbolDatas().forEach(projectSymbolData::add);
     }
@@ -96,7 +98,7 @@ public class PHPCheckVerifier {
   }
 
   private void addFile(PHPCheck check, MultiFileVerifier verifier, CompilationUnitTree tree, PhpFile phpFile, ProjectSymbolData projectSymbolData) {
-    SymbolTableImpl symbolTable = SymbolTableImpl.create(tree, projectSymbolData, phpFile);
+    var symbolTable = SymbolTableImpl.create(tree, projectSymbolData, phpFile, frameworkDetectionEnabled);
     check.init();
     for (PhpIssue issue : check.analyze(phpFile, tree, symbolTable)) {
       if (!issue.check().equals(check)) {

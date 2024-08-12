@@ -36,6 +36,8 @@ public class PhpPlugin implements Plugin {
   public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
   public static final String PHP_EXCLUSIONS_KEY = "sonar.php.exclusions";
   public static final String PHP_EXCLUSIONS_DEFAULT_VALUE = "**/vendor/**";
+  public static final String PHP_FRAMEWORK_DETECTION = "sonar.php.frameworkDetection";
+  public static final String PHP_FRAMEWORK_DETECTION_DEFAULT_VALUE = "true";
 
   public static final String PHP_CATEGORY = "PHP";
   public static final String GENERAL_SUBCATEGORY = "General";
@@ -77,6 +79,15 @@ public class PhpPlugin implements Plugin {
         .category(PHP_CATEGORY)
         .subCategory(GENERAL_SUBCATEGORY)
         .multiValues(true)
+        .build(),
+
+      PropertyDefinition.builder(PHP_FRAMEWORK_DETECTION)
+        .defaultValue(PHP_FRAMEWORK_DETECTION_DEFAULT_VALUE)
+        .name("PHP Framework detection")
+        .description("Enable the detection of PHP framework in analyzed file, which adapt some rules behavior.")
+        .onQualifiers(Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .subCategory(GENERAL_SUBCATEGORY)
         .build());
 
     if (context.getRuntime().getProduct() != SonarProduct.SONARLINT) {

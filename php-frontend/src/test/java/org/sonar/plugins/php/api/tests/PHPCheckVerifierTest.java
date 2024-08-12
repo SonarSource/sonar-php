@@ -171,7 +171,7 @@ class PHPCheckVerifierTest {
   void ignoreExpectedIssues() {
     class CustomVerifier extends PHPCheckVerifier {
       private CustomVerifier() {
-        super(false);
+        super(false, true);
       }
 
       private void verifyNoIssueIgnoringExpected(File sourceFile, PHPCheck check) {

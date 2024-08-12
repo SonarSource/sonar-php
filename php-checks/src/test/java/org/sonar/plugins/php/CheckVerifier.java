@@ -27,8 +27,8 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 public final class CheckVerifier extends PHPCheckVerifier {
 
-  private CheckVerifier(boolean readExpectedIssuesFromComments) {
-    super(readExpectedIssuesFromComments);
+  private CheckVerifier(boolean readExpectedIssuesFromComments, boolean frameworkDetectionEnabled) {
+    super(readExpectedIssuesFromComments, frameworkDetectionEnabled);
   }
 
   public static void verify(PHPCheck check, String... relativePaths) {
@@ -40,7 +40,7 @@ public final class CheckVerifier extends PHPCheckVerifier {
   }
 
   public static void verifyNoIssueIgnoringExpected(PHPCheck check, String relativePath) {
-    new CheckVerifier(false).createVerifier(Collections.singletonList(checkFile(relativePath)), check).assertNoIssues();
+    new CheckVerifier(false, true).createVerifier(Collections.singletonList(checkFile(relativePath)), check).assertNoIssues();
   }
 
   private static File checkFile(String relativePath) {

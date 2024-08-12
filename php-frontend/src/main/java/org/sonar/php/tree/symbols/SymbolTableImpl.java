@@ -51,7 +51,7 @@ public class SymbolTableImpl implements SymbolTable {
   private final Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
   private Collection<ClassSymbolData> classSymbolData;
   private Collection<FunctionSymbolData> functionSymbolData;
-  private Framework framework;
+  private Framework framework = Framework.EMPTY;
 
   private SymbolTableImpl() {
   }
@@ -61,6 +61,10 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   public static SymbolTableImpl create(CompilationUnitTree compilationUnit, ProjectSymbolData projectSymbolData, @Nullable PhpFile file) {
+    return create(compilationUnit, projectSymbolData, file, true);
+  }
+
+  public static SymbolTableImpl create(CompilationUnitTree compilationUnit, ProjectSymbolData projectSymbolData, @Nullable PhpFile file, boolean frameworkDetectionEnabled) {
     var symbolModel = new SymbolTableImpl();
     var declarationVisitor = new DeclarationVisitor(symbolModel, projectSymbolData, file);
     declarationVisitor.visitCompilationUnit(compilationUnit);
@@ -72,9 +76,11 @@ public class SymbolTableImpl implements SymbolTable {
       declarationVisitor.classSymbolIndex(),
       declarationVisitor.functionSymbolIndex()).visitCompilationUnit(compilationUnit);
     compilationUnit.accept(new AssignmentExpressionVisitor());
-    var frameworkDetectionVisitor = new FrameworkDetectionVisitor();
-    compilationUnit.accept(frameworkDetectionVisitor);
-    symbolModel.framework = frameworkDetectionVisitor.getFramework();
+    if (frameworkDetectionEnabled) {
+      var frameworkDetectionVisitor = new FrameworkDetectionVisitor();
+      compilationUnit.accept(frameworkDetectionVisitor);
+      symbolModel.framework = frameworkDetectionVisitor.getFramework();
+    }
     return symbolModel;
   }
 
