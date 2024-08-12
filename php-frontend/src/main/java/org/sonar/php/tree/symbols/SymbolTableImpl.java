@@ -51,7 +51,7 @@ public class SymbolTableImpl implements SymbolTable {
   private final Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
   private Collection<ClassSymbolData> classSymbolData;
   private Collection<FunctionSymbolData> functionSymbolData;
-  private Framework framework;
+  private Framework framework = Framework.EMPTY;
 
   private SymbolTableImpl() {
   }
@@ -106,7 +106,6 @@ public class SymbolTableImpl implements SymbolTable {
     return scopes.get(tree);
   }
 
-  @CheckForNull
   @Override
   public Framework getFramework() {
     return this.framework;

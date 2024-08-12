@@ -27,14 +27,11 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Issues;
 
 import static com.sonar.it.php.Tests.createScanner;
-import static com.sonar.it.php.Tests.getComponent;
-import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FrameworkDetectionPHPTest {
 
   private static final String DRUPAL_PROJECT_KEY = "drupal-project";
-  private static final String SRC_DIR_NAME = "src";
 
   @RegisterExtension
   public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
@@ -61,9 +58,5 @@ class FrameworkDetectionPHPTest {
 
     List<Issues.Issue> issues = Tests.issuesForComponent(DRUPAL_PROJECT_KEY);
     assertThat(issues).hasSize(1);
-  }
-
-  private static String getResourceKey(String projectKey, String fileName) {
-    return projectKey + ":" + SRC_DIR_NAME + "/" + fileName;
   }
 }

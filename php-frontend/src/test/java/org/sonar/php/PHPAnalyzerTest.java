@@ -202,7 +202,7 @@ class PHPAnalyzerTest {
       .build();
 
     analyzer.nextFile(file);
-    assertThat(analyzer.currentFileSymbolTable().getFramework()).isNull();
+    assertThat(analyzer.currentFileSymbolTable().getFramework()).isEqualTo(SymbolTable.Framework.EMPTY);
   }
 
   private PHPAnalyzer createAnalyzer(PHPCheck... checks) {

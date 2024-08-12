@@ -42,7 +42,6 @@ public interface SymbolTable {
 
   Symbol getSymbol(Tree tree);
 
-  @CheckForNull
   Framework getFramework();
 
   /**
