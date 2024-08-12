@@ -25,9 +25,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.sonar.api.utils.Preconditions;
 import org.sonar.php.api.PHPKeyword;
@@ -554,25 +552,22 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     if (isCallChain) {
       // special handling of long call chains which happens in some DSL-like scenarios, including but not limited to SQL queries.
       // Because we unwind the chain from the end, we don't know its exact length, and this branch will execute even for short chains.
-      Stream.iterate(tree, Objects::nonNull, (Tree next) -> {
-        if (next instanceof MemberAccessTree memberAccessTree) {
-          return memberAccessTree.object();
-        } else if (next instanceof FunctionCallTree functionCallTree) {
-          return functionCallTree.callee();
+      ExpressionTree current = tree;
+      while (current != null) {
+        if (current instanceof MemberAccessTree memberAccessTree) {
+          visitMemberAccess(memberAccessTree, false);
+          current = memberAccessTree.object();
+        } else if (current instanceof FunctionCallTree functionCallTree) {
+          visitFunctionCall(functionCallTree, false);
+          current = functionCallTree.callee();
         } else {
-          return null;
-        }
-      })
-        .forEach((Tree next) -> {
-          if (next instanceof MemberAccessTree memberAccessTree) {
-            visitMemberAccess(memberAccessTree, false);
-          } else if (next instanceof FunctionCallTree functionCallTree) {
-            visitFunctionCall(functionCallTree, false);
-          } else if (!next.is(Kind.NAMESPACE_NAME)) {
-            // namespace name is handled in a corresponding `visit*` method
-            next.accept(this);
+          if (!current.is(Kind.NAMESPACE_NAME)) {
+            // namespace name is handled in a corresponding `visit*` method; here we continue processing after leaving the chain
+            current.accept(this);
           }
-        });
+          current = null;
+        }
+      }
     } else {
       visitMemberAccess(tree, true);
     }
@@ -585,11 +580,11 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
       tree.object().accept(this);
     }
 
-    boolean functionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
+    boolean isFunctionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
     classMemberUsageState = new ClassMemberUsageState();
     classMemberUsageState.isStatic = tree.isStatic();
     classMemberUsageState.isSelfMember = isSelfMember(tree);
-    classMemberUsageState.isField = !functionCall;
+    classMemberUsageState.isField = !isFunctionCall;
     classMemberUsageState.isConst = classMemberUsageState.isField && tree.isStatic();
 
     tree.member().accept(this);
