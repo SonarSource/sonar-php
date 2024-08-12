@@ -21,7 +21,6 @@ package org.sonar.plugins.php.api.symbols;
 
 import java.util.List;
 import java.util.Set;
-import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.tree.Tree;
