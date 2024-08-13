@@ -3,17 +3,32 @@
 functionality. This allows for more flexibility and ease of use when writing code.</p>
 <p>However, it is generally recommended to follow a consistent casing convention for readability and maintainability purposes. Relevant constants are
 <code>true</code>, <code>false</code> and <code>null</code>.</p>
+<p>Note that if the Drupal framework is detected, this rule will enforce Drupal standards instead. Relevant constants are <code>TRUE</code>,
+<code>FALSE</code> and <code>NULL</code>.</p>
 <h3>Noncompliant code example</h3>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 &lt;?php ECHO 'Hello World'; ?&gt;
+</pre>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+&lt;?php
+// In a Drupal context
+const CACHE_ENABLED = true;
+?&gt;
 </pre>
 <h3>Compliant solution</h3>
 <pre data-diff-id="1" data-diff-type="compliant">
 &lt;?php echo 'Hello World'; ?&gt;
 </pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+&lt;?php
+// In a Drupal context
+const CACHE_ENABLED = TRUE;
+?&gt;
+</pre>
 <h2>Resources</h2>
 <h3>Documentation</h3>
 <ul>
   <li> <a href="https://www.php.net/manual/en/reserved.constants.php">PHP Manual - Predefined Constants</a> </li>
+  <li> <a href="https://www.drupal.org/docs/develop/standards/php/php-coding-standards#s-constants">Drupal - Naming Conventions - Constants</a> </li>
 </ul>
 

@@ -2,14 +2,26 @@
 <p>Shared naming conventions allow teams to collaborate efficiently.</p>
 <p>This rule raises an issue when a function name does not match a provided regular expression.</p>
 <p>For example, with the default provided regular expression <code>^[a-z][a-zA-Z0-9]*$</code>, the function:</p>
-<pre>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 function DoSomething(){ // Noncompliant
     // ...
 }
 </pre>
 <p>should be renamed to</p>
-<pre>
+<pre data-diff-id="1" data-diff-type="compliant">
 function doSomething(){
+    // ...
+}
+</pre>
+<p>In case the Drupal framework is detected and the default regex is not replaced, it will follow the PHP coding standards for Drupal.</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+function doSomething(){ // Noncompliant
+    // ...
+}
+</pre>
+<p>should be renamed to</p>
+<pre data-diff-id="2" data-diff-type="compliant">
+function do_something(){
     // ...
 }
 </pre>
@@ -27,4 +39,9 @@ function __destruct(){...}  // Compliant by exception
  */
 function myFunc(){...}      // Compliant by exception
 </pre>
+<h2>References</h2>
+<ul>
+  <li> <a href="https://www.drupal.org/docs/develop/standards/php/php-coding-standards#s-functions-and-variables">Drupal - Naming Conventions -
+  Functions and variables</a> </li>
+</ul>
 
