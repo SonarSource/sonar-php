@@ -42,7 +42,7 @@ $hash = hash_pbkdf2('sha256', $password, $salt, 100000); // Noncompliant
 </pre>
 <h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
-$salt = random_bytes(16);
+$salt = random_bytes(32);
 $hash = hash_pbkdf2('sha256', $password, $salt, 100000);
 </pre>
 <h3>How does this work?</h3>
