@@ -14,7 +14,8 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   private static final Tree.Kind[] LITERAL_KINDS = {
     Tree.Kind.BOOLEAN_LITERAL,
     Tree.Kind.NUMERIC_LITERAL,
-    Tree.Kind.REGULAR_STRING_LITERAL
+    Tree.Kind.REGULAR_STRING_LITERAL,
+    Tree.Kind.NULL_LITERAL,
   };
 
   @Override
