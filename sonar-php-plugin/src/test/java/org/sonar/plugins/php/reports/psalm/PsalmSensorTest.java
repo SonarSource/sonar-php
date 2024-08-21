@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
@@ -38,6 +39,7 @@ import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
+import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -54,6 +56,12 @@ class PsalmSensorTest extends ReportSensorTest {
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
+
+  @BeforeEach
+  void init() {
+    PsalmRulesDefinition.setRuleLoader(null);
+    new PsalmRulesDefinition(SONAR_RUNTIME);
+  }
 
   @Test
   void testDescriptor() {
@@ -282,6 +290,16 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(logTester.logs(Level.ERROR)).isEmpty();
     assertThat(logTester.logs(Level.WARN)).isEmpty();
     verify(analysisWarnings, never()).addWarning(anyString());
+  }
+
+  @Test
+  void callingExternalRuleLoaderShouldNotFailWhenRuleLoaderNotInitializedFirst() {
+    PsalmRulesDefinition.setRuleLoader(null);
+    ExternalRuleLoader externalRuleLoader = psalmSensor.externalRuleLoader();
+
+    assertThat(externalRuleLoader).isNotNull();
+
+    assertThat(logTester.logs(Level.DEBUG)).containsExactly("Psalm importing not initialized at startup, initializing it now.");
   }
 
   @Override

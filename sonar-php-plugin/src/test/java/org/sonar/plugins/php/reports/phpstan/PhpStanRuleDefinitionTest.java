@@ -19,32 +19,60 @@
  */
 package org.sonar.plugins.php.reports.phpstan;
 
-import org.junit.jupiter.api.Test;
+import java.util.Map;
+import javax.annotation.Nullable;
+import org.junit.jupiter.api.BeforeEach;
+import org.sonar.api.SonarRuntime;
+import org.sonar.api.issue.impact.Severity;
+import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.plugins.php.reports.ExternalRulesDefinitionTest;
+import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PhpStanRuleDefinitionTest {
+class PhpStanRuleDefinitionTest extends ExternalRulesDefinitionTest {
 
-  @Test
-  void phpstanExternalRepository() {
-    RulesDefinition.Context context = new RulesDefinition.Context();
-    PhpStanRuleDefinition rulesDefinition = new PhpStanRuleDefinition();
-    rulesDefinition.define(context);
+  @BeforeEach
+  void init() {
+    PhpStanRuleDefinition.setRuleLoader(null);
+  }
 
-    assertThat(context.repositories()).hasSize(1);
-    RulesDefinition.Repository repository = context.repository("external_phpstan");
-    assertThat(repository).isNotNull();
-    assertThat(repository.name()).isEqualTo("PHPStan");
-    assertThat(repository.language()).isEqualTo("php");
-    assertThat(repository.isExternal()).isTrue();
-    assertThat(repository.rules()).hasSize(1);
-
+  @Override
+  protected void customRuleAssertion(RulesDefinition.Repository repository) {
     RulesDefinition.Rule rule = repository.rule("phpstan.finding");
     assertThat(rule).isNotNull();
     assertThat(rule.name()).isEqualTo("PHPStan Rule");
     assertThat(rule.htmlDescription()).isEqualTo("This is external rule <code>phpstan:phpstan.finding</code>. No details are available.");
     assertThat(rule.tags()).isEmpty();
+
+    // TODO: SONARPHP-1524 should add branching based on isCCTSupported for these assertions
+    assertThat(rule.cleanCodeAttribute()).isNull();
+    assertThat(rule.defaultImpacts()).containsOnly(Map.entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));
   }
 
+  @Override
+  protected ExternalRuleLoader ruleLoader() {
+    return PhpStanRuleDefinition.ruleLoader();
+  }
+
+  @Override
+  protected RulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime) {
+    return new PhpStanRuleDefinition(sonarRuntime);
+  }
+
+  @Override
+  protected int numberOfRules() {
+    return 1;
+  }
+
+  @Override
+  protected String reportName() {
+    return PhpStanSensor.PHPSTAN_REPORT_NAME;
+  }
+
+  @Override
+  protected String reportKey() {
+    return PhpStanSensor.PHPSTAN_REPORT_KEY;
+  }
 }

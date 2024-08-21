@@ -19,21 +19,28 @@
  */
 package org.sonar.plugins.php.reports.psalm;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.plugins.php.api.Php;
+import javax.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.SonarRuntime;
+import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_KEY;
 import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_NAME;
 
-public class PsalmRulesDefinition implements RulesDefinition {
+public class PsalmRulesDefinition extends ExternalRulesDefinition {
+  private static final Logger LOG = LoggerFactory.getLogger(PsalmRulesDefinition.class);
 
-  private static final String RULES_JSON = "org/sonar/plugins/php/reports/psalm/rules.json";
+  public PsalmRulesDefinition(@Nullable SonarRuntime sonarRuntime) {
+    super(sonarRuntime, PSALM_REPORT_KEY, PSALM_REPORT_NAME);
+  }
 
-  static final ExternalRuleLoader RULE_LOADER = new ExternalRuleLoader(PSALM_REPORT_KEY, PSALM_REPORT_NAME, RULES_JSON, Php.KEY);
-
-  @Override
-  public void define(Context context) {
-    RULE_LOADER.createExternalRuleRepository(context);
+  static ExternalRuleLoader ruleLoader() {
+    if (ruleLoader == null) {
+      LOG.debug("Psalm importing not initialized at startup, initializing it now.");
+      ruleLoader = initializeRuleLoader(null, PSALM_REPORT_KEY, PSALM_REPORT_NAME);
+    }
+    return ruleLoader;
   }
 }

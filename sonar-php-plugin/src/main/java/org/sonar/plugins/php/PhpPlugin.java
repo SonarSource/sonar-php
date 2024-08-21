@@ -128,8 +128,8 @@ public class PhpPlugin implements Plugin {
         .subCategory(PHP_CATEGORY)
         .onQualifiers(Qualifiers.PROJECT)
         .multiValues(true)
-        .build(),
-      PhpStanRuleDefinition.class);
+        .build());
+    context.addExtension(new PhpStanRuleDefinition(context.getRuntime()));
   }
 
   private static void addPsalmExtensions(Context context) {
@@ -141,8 +141,8 @@ public class PhpPlugin implements Plugin {
         .subCategory(PHP_CATEGORY)
         .onQualifiers(Qualifiers.PROJECT)
         .multiValues(true)
-        .build(),
-      PsalmRulesDefinition.class);
+        .build());
+    context.addExtension(new PsalmRulesDefinition(context.getRuntime()));
   }
 
 }

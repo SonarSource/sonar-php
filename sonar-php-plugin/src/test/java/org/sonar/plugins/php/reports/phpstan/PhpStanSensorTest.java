@@ -27,22 +27,24 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.io.FilenameUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
+import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
 import org.sonar.plugins.php.reports.ReportSensorTest;
+import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -60,6 +62,12 @@ class PhpStanSensorTest extends ReportSensorTest {
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
+
+  @BeforeEach
+  void init() {
+    PhpStanRuleDefinition.setRuleLoader(null);
+    new PhpStanRuleDefinition(SONAR_RUNTIME);
+  }
 
   @Test
   void testDescriptor() {
@@ -197,6 +205,16 @@ class PhpStanSensorTest extends ReportSensorTest {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-with-context-in-path.json");
     assertThat(externalIssues).hasSize(1);
     assertThat(externalIssues.get(0).primaryLocation().inputComponent().key()).isEqualTo("reports-project:phpstan/file3.php");
+  }
+
+  @Test
+  void callingExternalRuleLoaderShouldNotFailWhenRuleLoaderNotInitializedFirst() {
+    PhpStanRuleDefinition.setRuleLoader(null);
+    ExternalRuleLoader externalRuleLoader = phpStanSensor.externalRuleLoader();
+
+    assertThat(externalRuleLoader).isNotNull();
+
+    assertThat(logTester.logs(Level.DEBUG)).containsExactly("PHPStan importing not initialized at startup, initializing it now.");
   }
 
   @Override

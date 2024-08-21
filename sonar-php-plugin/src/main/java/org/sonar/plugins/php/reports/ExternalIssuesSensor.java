@@ -204,5 +204,4 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   protected abstract String reportKey();
 
   protected abstract ExternalRuleLoader externalRuleLoader();
-
 }
