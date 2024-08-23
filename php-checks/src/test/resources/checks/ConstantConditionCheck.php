@@ -14,5 +14,6 @@ function boolean_expressions() {
   if (input() || 42); // Noncompliant
   //             ^^
   $foo = input() || 42; // Noncompliant
+  $foo = input() && 42; // Noncompliant
 }
 
