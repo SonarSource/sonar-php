@@ -24,12 +24,20 @@ import org.sonar.api.SonarProduct;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.reports.phpstan.PhpStanRuleDefinition;
+import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonar.plugins.php.reports.phpstan.PhpStanSensor;
 import org.sonar.plugins.php.reports.phpunit.PhpUnitSensor;
-import org.sonar.plugins.php.reports.psalm.PsalmRulesDefinition;
 import org.sonar.plugins.php.reports.psalm.PsalmSensor;
 import org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper;
+
+import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_KEY;
+import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_NAME;
+import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_PATH_KEY;
+import static org.sonar.plugins.php.reports.phpunit.PhpUnitSensor.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
+import static org.sonar.plugins.php.reports.phpunit.PhpUnitSensor.PHPUNIT_TESTS_REPORT_PATH_KEY;
+import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_KEY;
+import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_NAME;
+import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_PATH_KEY;
 
 public class PhpPlugin implements Plugin {
 
@@ -101,7 +109,7 @@ public class PhpPlugin implements Plugin {
 
   private static void addPhpUnitExtensions(Context context) {
     context.addExtensions(PhpUnitSensor.class,
-      PropertyDefinition.builder(PhpUnitSensor.PHPUNIT_TESTS_REPORT_PATH_KEY)
+      PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
         .name("Unit Test Report")
         .description("Comma-separated list of paths to PHPUnit unit test execution report files. Paths may be either absolute or relative to the project base directory.")
         .onQualifiers(Qualifiers.PROJECT)
@@ -109,7 +117,7 @@ public class PhpPlugin implements Plugin {
         .multiValues(true)
         .subCategory(PHPUNIT_SUBCATEGORY)
         .build(),
-      PropertyDefinition.builder(PhpUnitSensor.PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
+      PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
         .name("Coverage Reports")
         .description("List of PHPUnit code coverage report files. Each path can be either absolute or relative.")
         .onQualifiers(Qualifiers.PROJECT)
@@ -120,8 +128,10 @@ public class PhpPlugin implements Plugin {
   }
 
   private static void addPhpStanExtensions(Context context) {
-    context.addExtensions(PhpStanSensor.class,
-      PropertyDefinition.builder(PhpStanSensor.PHPSTAN_REPORT_PATH_KEY)
+    context.addExtensions(
+      new ExternalRulesDefinition(context.getRuntime(), PHPSTAN_REPORT_KEY, PHPSTAN_REPORT_NAME),
+      PhpStanSensor.class,
+      PropertyDefinition.builder(PHPSTAN_REPORT_PATH_KEY)
         .name("PHPStan Report Files")
         .description("Paths (absolute or relative) to report files with PHPStan issues.")
         .category(EXTERNAL_ANALYZERS_SUBCATEGORY)
@@ -129,12 +139,13 @@ public class PhpPlugin implements Plugin {
         .onQualifiers(Qualifiers.PROJECT)
         .multiValues(true)
         .build());
-    context.addExtension(new PhpStanRuleDefinition(context.getRuntime()));
   }
 
   private static void addPsalmExtensions(Context context) {
-    context.addExtensions(PsalmSensor.class,
-      PropertyDefinition.builder(PsalmSensor.PSALM_REPORT_PATH_KEY)
+    context.addExtensions(
+      new ExternalRulesDefinition(context.getRuntime(), PSALM_REPORT_KEY, PSALM_REPORT_NAME),
+      PsalmSensor.class,
+      PropertyDefinition.builder(PSALM_REPORT_PATH_KEY)
         .name("Psalm Report Files")
         .description("Paths (absolute or relative) to report files with Psalm issues.")
         .category(EXTERNAL_ANALYZERS_SUBCATEGORY)
@@ -142,7 +153,6 @@ public class PhpPlugin implements Plugin {
         .onQualifiers(Qualifiers.PROJECT)
         .multiValues(true)
         .build());
-    context.addExtension(new PsalmRulesDefinition(context.getRuntime()));
   }
 
 }

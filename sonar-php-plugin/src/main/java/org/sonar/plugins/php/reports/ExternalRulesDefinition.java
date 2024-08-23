@@ -21,21 +21,18 @@ package org.sonar.plugins.php.reports;
 
 import javax.annotation.Nullable;
 import org.sonar.api.SonarRuntime;
+import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.php.api.Php;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
+@ScannerSide
 public class ExternalRulesDefinition implements RulesDefinition {
-
-  protected static ExternalRuleLoader ruleLoader;
-  protected static final String RULES_JSON_PATH = "org/sonar/plugins/php/reports/%s/rules.json";
+  private static final String RULES_JSON_PATH = "org/sonar/plugins/php/reports/%s/rules.json";
+  private final ExternalRuleLoader ruleLoader;
 
   public ExternalRulesDefinition(@Nullable SonarRuntime sonarRuntime, String reportKey, String reportName) {
-    ruleLoader = initializeRuleLoader(sonarRuntime, reportKey, reportName);
-  }
-
-  public static ExternalRuleLoader initializeRuleLoader(@Nullable SonarRuntime sonarRuntime, String reportKey, String reportName) {
-    return new ExternalRuleLoader(reportKey, reportName, RULES_JSON_PATH.formatted(reportKey), Php.KEY, sonarRuntime);
+    this.ruleLoader = new ExternalRuleLoader(reportKey, reportName, RULES_JSON_PATH.formatted(reportKey), Php.KEY, sonarRuntime);
   }
 
   @Override
@@ -43,7 +40,7 @@ public class ExternalRulesDefinition implements RulesDefinition {
     ruleLoader.createExternalRuleRepository(context);
   }
 
-  public static void setRuleLoader(@Nullable ExternalRuleLoader ruleLoader) {
-    ExternalRulesDefinition.ruleLoader = ruleLoader;
+  public ExternalRuleLoader getRuleLoader() {
+    return ruleLoader;
   }
 }

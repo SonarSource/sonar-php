@@ -21,22 +21,16 @@ package org.sonar.plugins.php.reports.psalm;
 
 import java.util.Map;
 import javax.annotation.Nullable;
-import org.junit.jupiter.api.BeforeEach;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonar.plugins.php.reports.ExternalRulesDefinitionTest;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PsalmRuleDefinitionTest extends ExternalRulesDefinitionTest {
-
-  @BeforeEach
-  void init() {
-    PsalmRulesDefinition.setRuleLoader(null);
-  }
 
   @Override
   protected void customRuleAssertion(RulesDefinition.Repository repository) {
@@ -51,13 +45,8 @@ class PsalmRuleDefinitionTest extends ExternalRulesDefinitionTest {
   }
 
   @Override
-  protected ExternalRuleLoader ruleLoader() {
-    return PsalmRulesDefinition.ruleLoader();
-  }
-
-  @Override
-  protected RulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime) {
-    return new PsalmRulesDefinition(sonarRuntime);
+  protected ExternalRulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime) {
+    return new ExternalRulesDefinition(sonarRuntime, PsalmSensor.PSALM_REPORT_KEY, PsalmSensor.PSALM_REPORT_NAME);
   }
 
   @Override

@@ -24,10 +24,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import org.apache.commons.io.FilenameUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,8 +39,8 @@ import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
+import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonar.plugins.php.reports.ReportSensorTest;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -53,21 +49,18 @@ import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_KEY;
+import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_NAME;
 
 class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "phpstan");
-  protected final PhpStanSensor phpStanSensor = new PhpStanSensor(analysisWarnings);
+  private final ExternalRulesDefinition externalRulesDefinition = new ExternalRulesDefinition(SONAR_RUNTIME, PHPSTAN_REPORT_KEY, PHPSTAN_REPORT_NAME);
+  protected final PhpStanSensor phpStanSensor = new PhpStanSensor(externalRulesDefinition, analysisWarnings);
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
-
-  @BeforeEach
-  void init() {
-    PhpStanRuleDefinition.setRuleLoader(null);
-    new PhpStanRuleDefinition(SONAR_RUNTIME);
-  }
 
   @Test
   void testDescriptor() {
@@ -207,16 +200,6 @@ class PhpStanSensorTest extends ReportSensorTest {
     assertThat(externalIssues.get(0).primaryLocation().inputComponent().key()).isEqualTo("reports-project:phpstan/file3.php");
   }
 
-  @Test
-  void callingExternalRuleLoaderShouldNotFailWhenRuleLoaderNotInitializedFirst() {
-    PhpStanRuleDefinition.setRuleLoader(null);
-    ExternalRuleLoader externalRuleLoader = phpStanSensor.externalRuleLoader();
-
-    assertThat(externalRuleLoader).isNotNull();
-
-    assertThat(logTester.logs(Level.DEBUG)).containsExactly("PHPStan importing not initialized at startup, initializing it now.");
-  }
-
   @Override
   protected Path projectDir() {
     return PROJECT_DIR;
@@ -230,14 +213,5 @@ class PhpStanSensorTest extends ReportSensorTest {
   @Override
   protected LogTesterJUnit5 logTester() {
     return logTester;
-  }
-
-  private static String loggedFilePaths(boolean overflow, String... filePath) {
-    List<String> pathList = Stream.of(filePath).limit(5).map(FilenameUtils::separatorsToSystem).collect(Collectors.toList());
-    String log = String.join(";", pathList);
-    if (overflow) {
-      log += ";...";
-    }
-    return log;
   }
 }

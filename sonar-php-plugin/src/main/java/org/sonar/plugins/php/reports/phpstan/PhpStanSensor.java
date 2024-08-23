@@ -27,8 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
+import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
 public class PhpStanSensor extends ExternalIssuesSensor {
@@ -39,8 +39,8 @@ public class PhpStanSensor extends ExternalIssuesSensor {
   public static final String PHPSTAN_REPORT_NAME = "PHPStan";
   public static final String PHPSTAN_REPORT_PATH_KEY = "sonar.php.phpstan.reportPaths";
 
-  public PhpStanSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
-    super(analysisWarningsWrapper);
+  public PhpStanSensor(ExternalRulesDefinition externalRulesDefinition, AnalysisWarningsWrapper analysisWarningsWrapper) {
+    super(externalRulesDefinition, analysisWarningsWrapper);
   }
 
   @Override
@@ -68,10 +68,5 @@ public class PhpStanSensor extends ExternalIssuesSensor {
   @Override
   public Logger logger() {
     return LOG;
-  }
-
-  @Override
-  protected ExternalRuleLoader externalRuleLoader() {
-    return PhpStanRuleDefinition.ruleLoader();
   }
 }

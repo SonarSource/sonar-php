@@ -21,8 +21,8 @@ package org.sonar.plugins.php.reports;
 
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
@@ -30,7 +30,6 @@ import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.utils.Version;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,30 +38,27 @@ public abstract class ExternalRulesDefinitionTest {
   private static final SonarRuntime SONAR_RUNTIME_10_6 = SonarRuntimeImpl.forSonarQube(Version.create(10, 6), SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
   private static final SonarRuntime SONAR_RUNTIME_9_9 = SonarRuntimeImpl.forSonarQube(Version.create(9, 9), SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
 
-  static Stream<SonarRuntime> externalRepositoryShouldBeInitializedWithSonarRuntime() {
-    return Stream.of(SONAR_RUNTIME_10_6, SONAR_RUNTIME_9_9, null);
+  static Stream<Arguments> externalRepositoryShouldBeInitializedWithSonarRuntime() {
+    return Stream.of(
+      Arguments.of(SONAR_RUNTIME_10_6, true),
+      Arguments.of(SONAR_RUNTIME_9_9, false),
+      Arguments.of(null, false));
   }
 
   @MethodSource
   @ParameterizedTest
-  void externalRepositoryShouldBeInitializedWithSonarRuntime(@Nullable SonarRuntime sonarRuntime) {
+  void externalRepositoryShouldBeInitializedWithSonarRuntime(@Nullable SonarRuntime sonarRuntime, boolean shouldSupportCCT) {
     RulesDefinition.Context context = new RulesDefinition.Context();
-    RulesDefinition rulesDefinition = rulesDefinition(sonarRuntime);
+    ExternalRulesDefinition rulesDefinition = rulesDefinition(sonarRuntime);
     rulesDefinition.define(context);
 
-    assertExternalRuleLoader(context, sonarRuntime);
+    assertExternalRuleLoader(context, rulesDefinition, shouldSupportCCT);
   }
 
-  @Test
-  void externalRepositoryShouldBeInitializedWithoutSonarRuntime() {
-    RulesDefinition.Context context = new RulesDefinition.Context();
-    ExternalRuleLoader externalRuleLoader = ruleLoader();
-    externalRuleLoader.createExternalRuleRepository(context);
-
-    assertExternalRuleLoader(context, null);
-  }
-
-  protected void assertExternalRuleLoader(RulesDefinition.Context context, @Nullable SonarRuntime sonarRuntime) {
+  protected void assertExternalRuleLoader(
+    RulesDefinition.Context context,
+    ExternalRulesDefinition rulesDefinition,
+    boolean shouldSupportCCT) {
     assertThat(context.repositories()).hasSize(1);
     RulesDefinition.Repository repository = context.repository("external_" + reportKey());
     assertThat(repository).isNotNull();
@@ -71,19 +67,14 @@ public abstract class ExternalRulesDefinitionTest {
     assertThat(repository.isExternal()).isTrue();
     assertThat(repository.rules()).hasSize(numberOfRules());
 
-    boolean isCCTSupported = sonarRuntime != null
-      && sonarRuntime.getApiVersion().isGreaterThanOrEqual(ExternalRuleLoader.API_VERSION_SUPPORTING_CLEAN_CODE_IMPACTS_AND_ATTRIBUTES);
-
-    assertThat(ruleLoader().isCleanCodeImpactsAndAttributesSupported()).isEqualTo(isCCTSupported);
+    assertThat(rulesDefinition.getRuleLoader().isCleanCodeImpactsAndAttributesSupported()).isEqualTo(shouldSupportCCT);
 
     customRuleAssertion(repository);
   }
 
   protected abstract void customRuleAssertion(RulesDefinition.Repository repository);
 
-  protected abstract ExternalRuleLoader ruleLoader();
-
-  protected abstract RulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime);
+  protected abstract ExternalRulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime);
 
   protected abstract int numberOfRules();
 

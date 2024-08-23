@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
@@ -38,8 +37,8 @@ import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
+import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonar.plugins.php.reports.ReportSensorTest;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -47,21 +46,18 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_KEY;
+import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_NAME;
 
 class PsalmSensorTest extends ReportSensorTest {
 
   private static final String PSALM_PROPERTY = "sonar.php.psalm.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "psalm");
-  private final PsalmSensor psalmSensor = new PsalmSensor(analysisWarnings);
+  private final ExternalRulesDefinition externalRulesDefinition = new ExternalRulesDefinition(SONAR_RUNTIME, PSALM_REPORT_KEY, PSALM_REPORT_NAME);
+  private final PsalmSensor psalmSensor = new PsalmSensor(externalRulesDefinition, analysisWarnings);
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
-
-  @BeforeEach
-  void init() {
-    PsalmRulesDefinition.setRuleLoader(null);
-    new PsalmRulesDefinition(SONAR_RUNTIME);
-  }
 
   @Test
   void testDescriptor() {
@@ -290,16 +286,6 @@ class PsalmSensorTest extends ReportSensorTest {
     assertThat(logTester.logs(Level.ERROR)).isEmpty();
     assertThat(logTester.logs(Level.WARN)).isEmpty();
     verify(analysisWarnings, never()).addWarning(anyString());
-  }
-
-  @Test
-  void callingExternalRuleLoaderShouldNotFailWhenRuleLoaderNotInitializedFirst() {
-    PsalmRulesDefinition.setRuleLoader(null);
-    ExternalRuleLoader externalRuleLoader = psalmSensor.externalRuleLoader();
-
-    assertThat(externalRuleLoader).isNotNull();
-
-    assertThat(logTester.logs(Level.DEBUG)).containsExactly("Psalm importing not initialized at startup, initializing it now.");
   }
 
   @Override

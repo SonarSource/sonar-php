@@ -21,22 +21,16 @@ package org.sonar.plugins.php.reports.phpstan;
 
 import java.util.Map;
 import javax.annotation.Nullable;
-import org.junit.jupiter.api.BeforeEach;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonar.plugins.php.reports.ExternalRulesDefinitionTest;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PhpStanRuleDefinitionTest extends ExternalRulesDefinitionTest {
-
-  @BeforeEach
-  void init() {
-    PhpStanRuleDefinition.setRuleLoader(null);
-  }
 
   @Override
   protected void customRuleAssertion(RulesDefinition.Repository repository) {
@@ -52,13 +46,8 @@ class PhpStanRuleDefinitionTest extends ExternalRulesDefinitionTest {
   }
 
   @Override
-  protected ExternalRuleLoader ruleLoader() {
-    return PhpStanRuleDefinition.ruleLoader();
-  }
-
-  @Override
-  protected RulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime) {
-    return new PhpStanRuleDefinition(sonarRuntime);
+  protected ExternalRulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime) {
+    return new ExternalRulesDefinition(sonarRuntime, PhpStanSensor.PHPSTAN_REPORT_KEY, PhpStanSensor.PHPSTAN_REPORT_NAME);
   }
 
   @Override
