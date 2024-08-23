@@ -7,5 +7,6 @@ function literals() {
   if ("foo"); // Noncompliant
   if (null); // Noncompliant
   if (array()); // Noncompliant
+  if (new stdClass()); // Noncompliant
 }
 
