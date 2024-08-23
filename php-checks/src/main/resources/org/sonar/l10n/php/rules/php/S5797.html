@@ -1,0 +1,30 @@
+<p>This rule raises an issue when a constant expression is used as a condition in an <code>if</code>, <code>elif</code>, a conditional expression or
+other boolean expressions.</p>
+<h2>Why is this an issue?</h2>
+<p>When a constant is used as a condition, either it has no effect on the execution flow and it can be removed, or some code will never be executed
+and it is a bug.</p>
+<h2>How to fix it</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+function foo() {
+    $a = true;
+    if ($a) { // Noncompliant: the condition is always true
+        return 1;
+    } else {
+        return 2;
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+function foo() {
+    $a = bar();
+    if ($a) {
+        return 1;
+    } else {
+        return 2;
+    }
+}
+</pre>
+
