@@ -23,6 +23,7 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -61,6 +62,14 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
       checkConstant(tree.rightOperand());
     }
     super.visitBinaryExpression(tree);
+  }
+
+  @Override
+  public void visitPrefixExpression(UnaryExpressionTree tree) {
+    if (tree.is(Tree.Kind.LOGICAL_COMPLEMENT)) {
+      checkConstant(tree.expression());
+    }
+    super.visitPrefixExpression(tree);
   }
 
   private void checkConstant(ExpressionTree conditionExpression) {

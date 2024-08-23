@@ -18,5 +18,6 @@ function boolean_expressions() {
   $foo = input() or 42; // Noncompliant
   $foo = input() and 42; // Noncompliant
   $foo = input() xor 42; // Noncompliant
+  $foo = !42; // Noncompliant
 }
 
