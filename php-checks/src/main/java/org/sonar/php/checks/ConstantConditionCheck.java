@@ -50,14 +50,18 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     super.visitIfStatement(tree);
   }
 
+  @Override
+  public void visitBinaryExpression(BinaryExpressionTree tree) {
+    if (tree.is(CONDITION_OPERATOR_KINDS)) {
+      checkConstant(tree.leftOperand());
+      checkConstant(tree.rightOperand());
+    }
+    super.visitBinaryExpression(tree);
+  }
+
   private void checkConstant(ExpressionTree conditionExpression) {
     if (conditionExpression.is(BOOLEAN_CONSTANT_KINDS)) {
       newIssue(conditionExpression, MESSAGE);
-    }
-    if (conditionExpression.is(CONDITION_OPERATOR_KINDS)) {
-      BinaryExpressionTree conditionBinaryExpression = (BinaryExpressionTree) conditionExpression;
-      checkConstant(conditionBinaryExpression.leftOperand());
-      checkConstant(conditionBinaryExpression.rightOperand());
     }
   }
 }
