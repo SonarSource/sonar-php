@@ -145,6 +145,7 @@ public class CheckList {
       ConditionalIndentationCheck.class,
       ConditionalOnNewLineCheck.class,
       ConsistentFunctionReturnCheck.class,
+      ConstantConditionCheck.class,
       ConstantNameCheck.class,
       ConstructWithParenthesesCheck.class,
       ConstructorDeclarationCheck.class,
