@@ -10,3 +10,8 @@ function literals() {
   if (new stdClass()); // Noncompliant
 }
 
+function boolean_expressions() {
+  if (input() || 42); // Noncompliant
+  //             ^^
+}
+
