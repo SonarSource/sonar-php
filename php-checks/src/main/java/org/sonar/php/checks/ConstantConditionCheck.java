@@ -34,6 +34,9 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   private static final Tree.Kind[] CONDITION_OPERATOR_KINDS = {
     Tree.Kind.CONDITIONAL_OR,
     Tree.Kind.CONDITIONAL_AND,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_OR,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_AND,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR,
   };
   private static final Tree.Kind[] BOOLEAN_CONSTANT_KINDS = {
     Tree.Kind.BOOLEAN_LITERAL,
