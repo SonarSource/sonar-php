@@ -6,5 +6,6 @@ function literals() {
   if (42); // Noncompliant
   if ("foo"); // Noncompliant
   if (null); // Noncompliant
+  if (array()); // Noncompliant
 }
 
