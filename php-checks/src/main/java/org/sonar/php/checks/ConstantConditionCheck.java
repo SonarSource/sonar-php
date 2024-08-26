@@ -48,6 +48,7 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     Tree.Kind.REGULAR_STRING_LITERAL,
     Tree.Kind.NULL_LITERAL,
     Tree.Kind.ARRAY_INITIALIZER_FUNCTION,
+    Tree.Kind.ARRAY_INITIALIZER_BRACKET,
     Tree.Kind.NEW_EXPRESSION,
     Tree.Kind.FUNCTION_EXPRESSION,
   };

@@ -9,6 +9,7 @@ function literals() {
   if ($bar); // FN, not implemented to avoid FP cases, string interpolation is not interpreted in the tree
   if (null); // Noncompliant
   if (array()); // Noncompliant
+  if ([]); // Noncompliant
   if (new stdClass()); // Noncompliant
   if ($foo = 3); // OK, value is assigned
 }
