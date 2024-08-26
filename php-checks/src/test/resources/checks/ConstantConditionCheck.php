@@ -27,4 +27,11 @@ function alternative_if_statements() {
   } else if (42) { // Noncompliant
     bar();
   }
+
+
+  if (input()) {
+    foo();
+  } elseif (42) { // Noncompliant
+    bar();
+  }
 }
