@@ -5,13 +5,22 @@ function literals() {
   // ^^^^
   if (42); // Noncompliant
   if ("foo"); // Noncompliant
+  if ('foo'); // Noncompliant
   $bar = "foo";
-  if ($bar); // FN, not implemented to avoid FP cases, string interpolation is not interpreted in the tree
+  if ("$bar"); // FN, not implemented to avoid FP cases, string interpolation is not interpreted in the tree
   if (null); // Noncompliant
   if (array()); // Noncompliant
   if ([]); // Noncompliant
   if (new stdClass()); // Noncompliant
   if ($foo = 3); // OK, value is assigned
+}
+
+function heredoc_strings() {
+  // Noncompliant@+1
+  if (<<<EOD
+  This is a heredoc string.
+  EOD
+  );
 }
 
 function boolean_expressions() {
