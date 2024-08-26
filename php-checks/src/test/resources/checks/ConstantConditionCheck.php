@@ -5,6 +5,8 @@ function literals() {
   // ^^^^
   if (42); // Noncompliant
   if ("foo"); // Noncompliant
+  $bar = "foo";
+  if ($bar); // FN, not implemented to avoid FP cases, string interpolation is not interpreted in the tree
   if (null); // Noncompliant
   if (array()); // Noncompliant
   if (new stdClass()); // Noncompliant
