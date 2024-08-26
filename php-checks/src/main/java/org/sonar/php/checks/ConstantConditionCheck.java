@@ -27,6 +27,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = ConstantConditionCheck.KEY)
@@ -34,7 +35,7 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S5797";
   private static final String MESSAGE = "Replace this expression; used as a condition it will always be constant.";
-  private static final Tree.Kind[] CONDITION_OPERATOR_KINDS = {
+  private static final Tree.Kind[] CONDITIONAL_KINDS = {
     Tree.Kind.CONDITIONAL_OR,
     Tree.Kind.CONDITIONAL_AND,
     Tree.Kind.ALTERNATIVE_CONDITIONAL_OR,
@@ -49,6 +50,23 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     Tree.Kind.ARRAY_INITIALIZER_FUNCTION,
     Tree.Kind.NEW_EXPRESSION,
   };
+
+  @Override
+  public void visitBinaryExpression(BinaryExpressionTree tree) {
+    if (tree.is(CONDITIONAL_KINDS)) {
+      checkConstant(tree.leftOperand());
+      checkConstant(tree.rightOperand());
+    }
+    super.visitBinaryExpression(tree);
+  }
+
+  @Override
+  public void visitPrefixExpression(UnaryExpressionTree tree) {
+    if (tree.is(Tree.Kind.LOGICAL_COMPLEMENT)) {
+      checkConstant(tree.expression());
+    }
+    super.visitPrefixExpression(tree);
+  }
 
   @Override
   public void visitIfStatement(IfStatementTree tree) {
@@ -72,20 +90,10 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitBinaryExpression(BinaryExpressionTree tree) {
-    if (tree.is(CONDITION_OPERATOR_KINDS)) {
-      checkConstant(tree.leftOperand());
-      checkConstant(tree.rightOperand());
-    }
-    super.visitBinaryExpression(tree);
-  }
-
-  @Override
-  public void visitPrefixExpression(UnaryExpressionTree tree) {
-    if (tree.is(Tree.Kind.LOGICAL_COMPLEMENT)) {
-      checkConstant(tree.expression());
-    }
-    super.visitPrefixExpression(tree);
+  public void visitSwitchStatement(SwitchStatementTree tree) {
+    ExpressionTree conditionExpression = tree.expression().expression();
+    checkConstant(conditionExpression);
+    super.visitSwitchStatement(tree);
   }
 
   private void checkConstant(ExpressionTree conditionExpression) {

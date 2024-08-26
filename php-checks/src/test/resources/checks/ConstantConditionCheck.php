@@ -36,3 +36,14 @@ function alternative_if_statements() {
 
   42 ? foo() : bar(); // Noncompliant
 }
+
+function switch_statement() {
+  switch (42) { // Noncompliant
+    case 1:
+      foo();
+      break;
+    case 2:
+      bar();
+      break;
+  }
+}
