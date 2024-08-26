@@ -1,6 +1,12 @@
 [
   {
     "key": "phpstan.finding",
-    "name": "PHPStan Rule"
+    "name": "PHPStan Rule",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    }
   }
 ]
