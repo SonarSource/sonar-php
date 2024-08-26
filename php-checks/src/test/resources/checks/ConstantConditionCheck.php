@@ -21,6 +21,12 @@ function heredoc_strings() {
   This is a heredoc string.
   EOD
   );
+
+  // Noncompliant@+1
+  if (<<<'EOD'
+  This is a nowdoc string.
+  EOD
+  );
 }
 
 function boolean_expressions() {
