@@ -10,15 +10,16 @@ function literals() {
   if (null); // Noncompliant
   if (array()); // Noncompliant
   if (new stdClass()); // Noncompliant
+  if ($foo = 3); // OK
 }
 
 function boolean_expressions() {
-  if (input() || 42); // Noncompliant
+  if (input() && 42); // Noncompliant
   //             ^^
-  $foo = input() || 42; // Noncompliant
   $foo = input() && 42; // Noncompliant
-  $foo = input() or 42; // Noncompliant
+  $foo = input() || 42; // Noncompliant
   $foo = input() and 42; // Noncompliant
+  $foo = input() or 42; // Noncompliant
   $foo = input() xor 42; // Noncompliant
   $foo = !42; // Noncompliant
 }
@@ -37,6 +38,8 @@ function alternative_if_statements() {
   }
 
   42 ? foo() : bar(); // Noncompliant
+
+  42 ?: foo(); // Noncompliant
 }
 
 function switch_statement() {
@@ -58,4 +61,20 @@ function while_statements() {
   do {
     foo();
   } while (true); // OK
+}
+
+function variables() {
+  $foo = 3 && bar(); // Noncompliant
+  $foo = 3 and bar(); // OK, foo = 3 in this case, "and" precedence is lower than "="
+  $foo = bar() and 3; // Noncompliant
+  $foo = (3 and bar()); // Noncompliant
+
+  $foo = 3 || bar(); // Noncompliant
+  $foo = 3 or bar(); // OK, foo = 3 in this case, "or" precedence is lower than "="
+  $foo = (3 or bar()); // Noncompliant
+  $foo = bar() or 3; // Noncompliant
+
+  $foo = 3 xor bar(); // OK, foo = 3 in this case, "xor" precedence is lower than "="
+  $foo = (3 xor bar()); // Noncompliant
+  $foo = bar() xor 3; // Noncompliant
 }

@@ -36,10 +36,10 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   public static final String KEY = "S5797";
   private static final String MESSAGE = "Replace this expression; used as a condition it will always be constant.";
   private static final Tree.Kind[] CONDITIONAL_KINDS = {
-    Tree.Kind.CONDITIONAL_OR,
     Tree.Kind.CONDITIONAL_AND,
-    Tree.Kind.ALTERNATIVE_CONDITIONAL_OR,
+    Tree.Kind.CONDITIONAL_OR,
     Tree.Kind.ALTERNATIVE_CONDITIONAL_AND,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_OR,
     Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR,
   };
   private static final Tree.Kind[] BOOLEAN_CONSTANT_KINDS = {
