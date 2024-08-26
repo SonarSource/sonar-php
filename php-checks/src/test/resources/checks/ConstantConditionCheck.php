@@ -10,7 +10,7 @@ function literals() {
   if (null); // Noncompliant
   if (array()); // Noncompliant
   if (new stdClass()); // Noncompliant
-  if ($foo = 3); // OK
+  if ($foo = 3); // OK, value is assigned
 }
 
 function boolean_expressions() {
@@ -77,4 +77,8 @@ function variables() {
   $foo = 3 xor bar(); // OK, foo = 3 in this case, "xor" precedence is lower than "="
   $foo = (3 xor bar()); // Noncompliant
   $foo = bar() xor 3; // Noncompliant
+}
+
+function anonymous_functions() {
+  if (function() { return 42;}); // Noncompliant
 }
