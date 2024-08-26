@@ -21,3 +21,10 @@ function boolean_expressions() {
   $foo = !42; // Noncompliant
 }
 
+function alternative_if_statements() {
+  if (input()) {
+    foo();
+  } else if (42) { // Noncompliant
+    bar();
+  }
+}
