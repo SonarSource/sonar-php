@@ -7,11 +7,12 @@ function literals() {
   if ("foo"); // Noncompliant
   if ('foo'); // Noncompliant
   $bar = "foo";
-  if ("$bar"); // FN, not implemented to avoid FP cases, string interpolation is not interpreted in the tree
+  if ("$bar"); // FN, not implemented to avoid FP cases, strings are not expanded in the tree
   if (null); // Noncompliant
   if (array()); // Noncompliant
   if ([]); // Noncompliant
   if (new stdClass()); // Noncompliant
+  if (__DIR__); // Noncompliant
   if ($foo = 3); // OK, value is assigned
 }
 
