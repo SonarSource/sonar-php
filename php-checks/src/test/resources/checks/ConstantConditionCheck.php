@@ -49,3 +49,13 @@ function switch_statement() {
       break;
   }
 }
+
+function while_statements() {
+  while (true) { // OK
+    foo();
+  }
+
+  do {
+    foo();
+  } while (true); // OK
+}
