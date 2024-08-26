@@ -28,10 +28,11 @@ function alternative_if_statements() {
     bar();
   }
 
-
   if (input()) {
     foo();
   } elseif (42) { // Noncompliant
     bar();
   }
+
+  42 ? foo() : bar(); // Noncompliant
 }
