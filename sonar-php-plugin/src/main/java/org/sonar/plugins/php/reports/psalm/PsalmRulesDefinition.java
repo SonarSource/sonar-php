@@ -17,30 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.reports;
+package org.sonar.plugins.php.reports.psalm;
 
-import javax.annotation.Nullable;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.scanner.ScannerSide;
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.plugins.php.api.Php;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
+import org.sonar.plugins.php.reports.AbstractExternalRulesDefinition;
 
 @ScannerSide
-public class ExternalRulesDefinition implements RulesDefinition {
-  private static final String RULES_JSON_PATH = "org/sonar/plugins/php/reports/%s/rules.json";
-  private final ExternalRuleLoader ruleLoader;
+public class PsalmRulesDefinition extends AbstractExternalRulesDefinition {
 
-  public ExternalRulesDefinition(@Nullable SonarRuntime sonarRuntime, String reportKey, String reportName) {
-    this.ruleLoader = new ExternalRuleLoader(reportKey, reportName, RULES_JSON_PATH.formatted(reportKey), Php.KEY, sonarRuntime);
-  }
-
-  @Override
-  public void define(Context context) {
-    ruleLoader.createExternalRuleRepository(context);
-  }
-
-  public ExternalRuleLoader getRuleLoader() {
-    return ruleLoader;
+  public PsalmRulesDefinition(SonarRuntime sonarRuntime) {
+    super(sonarRuntime, PsalmSensor.PSALM_REPORT_KEY, PsalmSensor.PSALM_REPORT_NAME);
   }
 }

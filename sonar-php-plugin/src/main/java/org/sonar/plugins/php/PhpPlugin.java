@@ -24,19 +24,16 @@ import org.sonar.api.SonarProduct;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.reports.ExternalRulesDefinition;
+import org.sonar.plugins.php.reports.phpstan.PhpStanRulesDefinition;
 import org.sonar.plugins.php.reports.phpstan.PhpStanSensor;
 import org.sonar.plugins.php.reports.phpunit.PhpUnitSensor;
+import org.sonar.plugins.php.reports.psalm.PsalmRulesDefinition;
 import org.sonar.plugins.php.reports.psalm.PsalmSensor;
 import org.sonar.plugins.php.warning.DefaultAnalysisWarningsWrapper;
 
-import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_KEY;
-import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_NAME;
 import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_PATH_KEY;
 import static org.sonar.plugins.php.reports.phpunit.PhpUnitSensor.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
 import static org.sonar.plugins.php.reports.phpunit.PhpUnitSensor.PHPUNIT_TESTS_REPORT_PATH_KEY;
-import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_KEY;
-import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_NAME;
 import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_PATH_KEY;
 
 public class PhpPlugin implements Plugin {
@@ -129,7 +126,7 @@ public class PhpPlugin implements Plugin {
 
   private static void addPhpStanExtensions(Context context) {
     context.addExtensions(
-      new ExternalRulesDefinition(context.getRuntime(), PHPSTAN_REPORT_KEY, PHPSTAN_REPORT_NAME),
+      new PhpStanRulesDefinition(context.getRuntime()),
       PhpStanSensor.class,
       PropertyDefinition.builder(PHPSTAN_REPORT_PATH_KEY)
         .name("PHPStan Report Files")
@@ -143,7 +140,7 @@ public class PhpPlugin implements Plugin {
 
   private static void addPsalmExtensions(Context context) {
     context.addExtensions(
-      new ExternalRulesDefinition(context.getRuntime(), PSALM_REPORT_KEY, PSALM_REPORT_NAME),
+      new PsalmRulesDefinition(context.getRuntime()),
       PsalmSensor.class,
       PropertyDefinition.builder(PSALM_REPORT_PATH_KEY)
         .name("Psalm Report Files")

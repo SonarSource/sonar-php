@@ -37,7 +37,6 @@ import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
-import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,15 +45,13 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_KEY;
-import static org.sonar.plugins.php.reports.psalm.PsalmSensor.PSALM_REPORT_NAME;
 
 class PsalmSensorTest extends ReportSensorTest {
 
   private static final String PSALM_PROPERTY = "sonar.php.psalm.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "psalm");
-  private final ExternalRulesDefinition externalRulesDefinition = new ExternalRulesDefinition(SONAR_RUNTIME, PSALM_REPORT_KEY, PSALM_REPORT_NAME);
-  private final PsalmSensor psalmSensor = new PsalmSensor(externalRulesDefinition, analysisWarnings);
+  private final PsalmRulesDefinition psalmRulesDefinition = new PsalmRulesDefinition(SONAR_RUNTIME);
+  private final PsalmSensor psalmSensor = new PsalmSensor(psalmRulesDefinition, analysisWarnings);
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);

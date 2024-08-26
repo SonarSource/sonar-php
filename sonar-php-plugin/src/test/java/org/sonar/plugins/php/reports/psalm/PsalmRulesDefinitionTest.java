@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.reports.phpstan;
+package org.sonar.plugins.php.reports.psalm;
 
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -25,43 +25,42 @@ import org.sonar.api.SonarRuntime;
 import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.plugins.php.reports.ExternalRulesDefinition;
+import org.sonar.plugins.php.reports.AbstractExternalRulesDefinition;
 import org.sonar.plugins.php.reports.ExternalRulesDefinitionTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PhpStanRuleDefinitionTest extends ExternalRulesDefinitionTest {
+class PsalmRulesDefinitionTest extends ExternalRulesDefinitionTest {
 
   @Override
-  protected void customRuleAssertion(RulesDefinition.Repository repository) {
-    RulesDefinition.Rule rule = repository.rule("phpstan.finding");
+  protected void customRuleAssertion(RulesDefinition.Repository repository, boolean shouldSupportCCT) {
+    RulesDefinition.Rule rule = repository.rule("AbstractMethodCall");
     assertThat(rule).isNotNull();
-    assertThat(rule.name()).isEqualTo("PHPStan Rule");
-    assertThat(rule.htmlDescription()).isEqualTo("This is external rule <code>phpstan:phpstan.finding</code>. No details are available.");
+    assertThat(rule.name()).isEqualTo("AbstractMethodCall");
     assertThat(rule.tags()).isEmpty();
 
-    // TODO: SONARPHP-1524 should add branching based on isCCTSupported for these assertions
+    // TODO: SONARPHP-1525 should add branching based on isCCTSupported for these assertions
     assertThat(rule.cleanCodeAttribute()).isNull();
     assertThat(rule.defaultImpacts()).containsOnly(Map.entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));
   }
 
   @Override
-  protected ExternalRulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime) {
-    return new ExternalRulesDefinition(sonarRuntime, PhpStanSensor.PHPSTAN_REPORT_KEY, PhpStanSensor.PHPSTAN_REPORT_NAME);
+  protected AbstractExternalRulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime) {
+    return new PsalmRulesDefinition(sonarRuntime);
   }
 
   @Override
   protected int numberOfRules() {
-    return 1;
+    return 266;
   }
 
   @Override
   protected String reportName() {
-    return PhpStanSensor.PHPSTAN_REPORT_NAME;
+    return PsalmSensor.PSALM_REPORT_NAME;
   }
 
   @Override
   protected String reportKey() {
-    return PhpStanSensor.PHPSTAN_REPORT_KEY;
+    return PsalmSensor.PSALM_REPORT_KEY;
   }
 }

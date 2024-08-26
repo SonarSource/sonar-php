@@ -28,9 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
-import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
 @ScannerSide
@@ -42,8 +40,8 @@ public class PsalmSensor extends ExternalIssuesSensor {
   public static final String PSALM_REPORT_NAME = "Psalm";
   public static final String PSALM_REPORT_PATH_KEY = "sonar.php.psalm.reportPaths";
 
-  public PsalmSensor(ExternalRulesDefinition externalRulesDefinition, AnalysisWarningsWrapper analysisWarningsWrapper) {
-    super(externalRulesDefinition, analysisWarningsWrapper);
+  public PsalmSensor(PsalmRulesDefinition psalmRulesDefinition, AnalysisWarningsWrapper analysisWarningsWrapper) {
+    super(psalmRulesDefinition, analysisWarningsWrapper);
   }
 
   @Override

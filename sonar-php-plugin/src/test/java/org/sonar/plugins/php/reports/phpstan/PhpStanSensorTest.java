@@ -39,7 +39,6 @@ import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
-import org.sonar.plugins.php.reports.ExternalRulesDefinition;
 import org.sonar.plugins.php.reports.ReportSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,15 +48,13 @@ import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_KEY;
-import static org.sonar.plugins.php.reports.phpstan.PhpStanSensor.PHPSTAN_REPORT_NAME;
 
 class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "phpstan");
-  private final ExternalRulesDefinition externalRulesDefinition = new ExternalRulesDefinition(SONAR_RUNTIME, PHPSTAN_REPORT_KEY, PHPSTAN_REPORT_NAME);
-  protected final PhpStanSensor phpStanSensor = new PhpStanSensor(externalRulesDefinition, analysisWarnings);
+  private final PhpStanRulesDefinition phpStanRulesDefinition = new PhpStanRulesDefinition(SONAR_RUNTIME);
+  protected final PhpStanSensor phpStanSensor = new PhpStanSensor(phpStanRulesDefinition, analysisWarnings);
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);

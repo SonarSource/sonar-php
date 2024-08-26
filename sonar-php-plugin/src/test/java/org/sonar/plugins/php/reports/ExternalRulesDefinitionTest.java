@@ -49,7 +49,7 @@ public abstract class ExternalRulesDefinitionTest {
   @ParameterizedTest
   void externalRepositoryShouldBeInitializedWithSonarRuntime(@Nullable SonarRuntime sonarRuntime, boolean shouldSupportCCT) {
     RulesDefinition.Context context = new RulesDefinition.Context();
-    ExternalRulesDefinition rulesDefinition = rulesDefinition(sonarRuntime);
+    AbstractExternalRulesDefinition rulesDefinition = rulesDefinition(sonarRuntime);
     rulesDefinition.define(context);
 
     assertExternalRuleLoader(context, rulesDefinition, shouldSupportCCT);
@@ -57,7 +57,7 @@ public abstract class ExternalRulesDefinitionTest {
 
   protected void assertExternalRuleLoader(
     RulesDefinition.Context context,
-    ExternalRulesDefinition rulesDefinition,
+    AbstractExternalRulesDefinition rulesDefinition,
     boolean shouldSupportCCT) {
     assertThat(context.repositories()).hasSize(1);
     RulesDefinition.Repository repository = context.repository("external_" + reportKey());
@@ -69,12 +69,12 @@ public abstract class ExternalRulesDefinitionTest {
 
     assertThat(rulesDefinition.getRuleLoader().isCleanCodeImpactsAndAttributesSupported()).isEqualTo(shouldSupportCCT);
 
-    customRuleAssertion(repository);
+    customRuleAssertion(repository, shouldSupportCCT);
   }
 
-  protected abstract void customRuleAssertion(RulesDefinition.Repository repository);
+  protected abstract void customRuleAssertion(RulesDefinition.Repository repository, boolean shouldSupportCCT);
 
-  protected abstract ExternalRulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime);
+  protected abstract AbstractExternalRulesDefinition rulesDefinition(@Nullable SonarRuntime sonarRuntime);
 
   protected abstract int numberOfRules();
 

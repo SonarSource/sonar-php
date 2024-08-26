@@ -52,7 +52,7 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   public final String defaultRuleId = reportKey() + ".finding";
   protected final ExternalRuleLoader externalRuleLoader;
 
-  protected ExternalIssuesSensor(ExternalRulesDefinition externalRulesDefinition, AnalysisWarningsWrapper analysisWarningsWrapper) {
+  protected ExternalIssuesSensor(AbstractExternalRulesDefinition externalRulesDefinition, AnalysisWarningsWrapper analysisWarningsWrapper) {
     super(analysisWarningsWrapper);
     this.externalRuleLoader = externalRulesDefinition.getRuleLoader();
   }
