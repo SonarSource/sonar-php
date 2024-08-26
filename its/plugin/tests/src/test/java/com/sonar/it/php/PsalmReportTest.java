@@ -58,6 +58,7 @@ class PsalmReportTest {
     assertThat(firstImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.MAINTAINABILITY);
     assertThat(firstImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
 
+    assertThat(first.getCleanCodeAttribute()).isEqualTo(Common.CleanCodeAttribute.CONVENTIONAL);
     assertThat(first.getType()).isEqualTo(Common.RuleType.BUG);
     assertThat(first.getSeverity()).isEqualTo(Common.Severity.CRITICAL);
     assertThat(first.getEffort()).isEqualTo("5min");
@@ -77,8 +78,9 @@ class PsalmReportTest {
     Common.Impact secondImpact = second.getImpactsList().get(0);
     // TODO: SONARPHP-1496 Verify Issue Impacts are correctly send to Sonarqube
     // Should be RELIABILITY and HIGH
-    assertThat(secondImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.MAINTAINABILITY);
-    assertThat(secondImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
+    assertThat(secondImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.RELIABILITY);
+    assertThat(secondImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.HIGH);
+    assertThat(second.getCleanCodeAttribute()).isEqualTo(Common.CleanCodeAttribute.LOGICAL);
     assertThat(second.getType()).isEqualTo(Common.RuleType.BUG);
     assertThat(second.getSeverity()).isEqualTo(Common.Severity.CRITICAL);
     assertThat(second.getEffort()).isEqualTo("5min");

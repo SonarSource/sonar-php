@@ -2,1331 +2,2927 @@
   {
     "key": "psalm.finding",
     "name": "Psalm Rule",
-    "description": "This reporting may be triggered by a custom Psalm rule or by a default Psalm rule that has not yet been added to the SonarPHP analyzer."
+    "description": "This reporting may be triggered by a custom Psalm rule or by a default Psalm rule that has not yet been added to the SonarPHP analyzer.",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "MEDIUM"
+      }
+    }
   },
   {
     "key": "AbstractInstantiation",
     "name": "AbstractInstantiation",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/AbstractInstantiation"
   },
   {
     "key": "AbstractMethodCall",
     "name": "AbstractMethodCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/AbstractMethodCall"
   },
   {
     "key": "ArgumentTypeCoercion",
     "name": "ArgumentTypeCoercion",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ArgumentTypeCoercion"
   },
   {
     "key": "AssignmentToVoid",
     "name": "AssignmentToVoid",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/AssignmentToVoid"
   },
   {
     "key": "CircularReference",
     "name": "CircularReference",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/CircularReference"
   },
   {
     "key": "ComplexFunction",
     "name": "ComplexFunction",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ComplexFunction"
   },
   {
     "key": "ComplexMethod",
     "name": "ComplexMethod",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ComplexMethod"
   },
   {
     "key": "ConflictingReferenceConstraint",
     "name": "ConflictingReferenceConstraint",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ConflictingReferenceConstraint"
   },
   {
     "key": "ConstructorSignatureMismatch",
     "name": "ConstructorSignatureMismatch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ConstructorSignatureMismatch"
   },
   {
     "key": "ContinueOutsideLoop",
     "name": "ContinueOutsideLoop",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ContinueOutsideLoop"
   },
   {
     "key": "DeprecatedClass",
     "name": "DeprecatedClass",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedClass"
   },
   {
     "key": "DeprecatedConstant",
     "name": "DeprecatedConstant",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedConstant"
   },
   {
     "key": "DeprecatedFunction",
     "name": "DeprecatedFunction",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedFunction"
   },
   {
     "key": "DeprecatedInterface",
     "name": "DeprecatedInterface",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedInterface"
   },
   {
     "key": "DeprecatedMethod",
     "name": "DeprecatedMethod",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedMethod"
   },
   {
     "key": "DeprecatedProperty",
     "name": "DeprecatedProperty",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedProperty"
   },
   {
     "key": "DeprecatedTrait",
     "name": "DeprecatedTrait",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DeprecatedTrait"
   },
   {
     "key": "DocblockTypeContradiction",
     "name": "DocblockTypeContradiction",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DocblockTypeContradiction"
   },
   {
     "key": "DuplicateArrayKey",
     "name": "DuplicateArrayKey",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateArrayKey"
   },
   {
     "key": "DuplicateClass",
     "name": "DuplicateClass",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateClass"
   },
   {
     "key": "DuplicateFunction",
     "name": "DuplicateFunction",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateFunction"
   },
   {
     "key": "DuplicateMethod",
     "name": "DuplicateMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateMethod"
   },
   {
     "key": "DuplicateParam",
     "name": "DuplicateParam",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateParam"
   },
   {
     "key": "EmptyArrayAccess",
     "name": "EmptyArrayAccess",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/EmptyArrayAccess"
   },
   {
     "key": "ExtensionRequirementViolation",
     "name": "ExtensionRequirementViolation",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ExtensionRequirementViolation"
   },
   {
     "key": "FalsableReturnStatement",
     "name": "FalsableReturnStatement",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/FalsableReturnStatement"
   },
   {
     "key": "FalseOperand",
     "name": "FalseOperand",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/FalseOperand"
   },
   {
     "key": "ForbiddenCode",
     "name": "ForbiddenCode",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ForbiddenCode"
   },
   {
     "key": "ForbiddenEcho",
     "name": "ForbiddenEcho",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ForbiddenEcho"
   },
   {
     "key": "ImplementationRequirementViolation",
     "name": "ImplementationRequirementViolation",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImplementationRequirementViolation"
   },
   {
     "key": "ImplementedParamTypeMismatch",
     "name": "ImplementedParamTypeMismatch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImplementedParamTypeMismatch"
   },
   {
     "key": "ImplementedReturnTypeMismatch",
     "name": "ImplementedReturnTypeMismatch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImplementedReturnTypeMismatch"
   },
   {
     "key": "ImplicitToStringCast",
     "name": "ImplicitToStringCast",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImplicitToStringCast"
   },
   {
     "key": "ImpureByReferenceAssignment",
     "name": "ImpureByReferenceAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImpureByReferenceAssignment"
   },
   {
     "key": "ImpureFunctionCall",
     "name": "ImpureFunctionCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImpureFunctionCall"
   },
   {
     "key": "ImpureMethodCall",
     "name": "ImpureMethodCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImpureMethodCall"
   },
   {
     "key": "ImpurePropertyAssignment",
     "name": "ImpurePropertyAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImpurePropertyAssignment"
   },
   {
     "key": "ImpurePropertyFetch",
     "name": "ImpurePropertyFetch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImpurePropertyFetch"
   },
   {
     "key": "ImpureStaticProperty",
     "name": "ImpureStaticProperty",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImpureStaticProperty"
   },
   {
     "key": "ImpureStaticVariable",
     "name": "ImpureStaticVariable",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImpureStaticVariable"
   },
   {
     "key": "ImpureVariable",
     "name": "ImpureVariable",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ImpureVariable"
   },
   {
     "key": "InaccessibleClassConstant",
     "name": "InaccessibleClassConstant",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InaccessibleClassConstant"
   },
   {
     "key": "InaccessibleMethod",
     "name": "InaccessibleMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InaccessibleMethod"
   },
   {
     "key": "InaccessibleProperty",
     "name": "InaccessibleProperty",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InaccessibleProperty"
   },
   {
     "key": "InterfaceInstantiation",
     "name": "InterfaceInstantiation",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InterfaceInstantiation"
   },
   {
     "key": "InternalClass",
     "name": "InternalClass",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InternalClass"
   },
   {
     "key": "InternalMethod",
     "name": "InternalMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InternalMethod"
   },
   {
     "key": "InternalProperty",
     "name": "InternalProperty",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InternalProperty"
   },
   {
     "key": "InvalidArgument",
     "name": "InvalidArgument",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidArgument"
   },
   {
     "key": "InvalidArrayAccess",
     "name": "InvalidArrayAccess",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidArrayAccess"
   },
   {
     "key": "InvalidArrayAssignment",
     "name": "InvalidArrayAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidArrayAssignment"
   },
   {
     "key": "InvalidArrayOffset",
     "name": "InvalidArrayOffset",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidArrayOffset"
   },
   {
     "key": "InvalidAttribute",
     "name": "InvalidAttribute",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidAttribute"
   },
   {
     "key": "InvalidCast",
     "name": "InvalidCast",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidCast"
   },
   {
     "key": "InvalidCatch",
     "name": "InvalidCatch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidCatch"
   },
   {
     "key": "InvalidClass",
     "name": "InvalidClass",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidClass"
   },
   {
     "key": "InvalidClone",
     "name": "InvalidClone",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidClone"
   },
   {
     "key": "InvalidDocblock",
     "name": "InvalidDocblock",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidDocblock"
   },
   {
     "key": "InvalidDocblockParamName",
     "name": "InvalidDocblockParamName",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidDocblockParamName"
   },
   {
     "key": "InvalidExtendClass",
     "name": "InvalidExtendClass",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidExtendClass"
   },
   {
     "key": "InvalidFalsableReturnType",
     "name": "InvalidFalsableReturnType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidFalsableReturnType"
   },
   {
     "key": "InvalidFunctionCall",
     "name": "InvalidFunctionCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidFunctionCall"
   },
   {
     "key": "InvalidGlobal",
     "name": "InvalidGlobal",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidGlobal"
   },
   {
     "key": "InvalidIterator",
     "name": "InvalidIterator",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidIterator"
   },
   {
     "key": "InvalidLiteralArgument",
     "name": "InvalidLiteralArgument",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidLiteralArgument"
   },
   {
     "key": "InvalidMethodCall",
     "name": "InvalidMethodCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidMethodCall"
   },
   {
     "key": "InvalidNamedArgument",
     "name": "InvalidNamedArgument",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidNamedArgument"
   },
   {
     "key": "InvalidNullableReturnType",
     "name": "InvalidNullableReturnType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidNullableReturnType"
   },
   {
     "key": "InvalidOperand",
     "name": "InvalidOperand",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidOperand"
   },
   {
     "key": "InvalidParamDefault",
     "name": "InvalidParamDefault",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidParamDefault"
   },
   {
     "key": "InvalidParent",
     "name": "InvalidParent",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidParent"
   },
   {
     "key": "InvalidPassByReference",
     "name": "InvalidPassByReference",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidPassByReference"
   },
   {
     "key": "InvalidPropertyAssignment",
     "name": "InvalidPropertyAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidPropertyAssignment"
   },
   {
     "key": "InvalidPropertyAssignmentValue",
     "name": "InvalidPropertyAssignmentValue",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidPropertyAssignmentValue"
   },
   {
     "key": "InvalidPropertyFetch",
     "name": "InvalidPropertyFetch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidPropertyFetch"
   },
   {
     "key": "InvalidReturnStatement",
     "name": "InvalidReturnStatement",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidReturnStatement"
   },
   {
     "key": "InvalidReturnType",
     "name": "InvalidReturnType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidReturnType"
   },
   {
     "key": "InvalidScalarArgument",
     "name": "InvalidScalarArgument",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidScalarArgument"
   },
   {
     "key": "InvalidScope",
     "name": "InvalidScope",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidScope"
   },
   {
     "key": "InvalidStaticInvocation",
     "name": "InvalidStaticInvocation",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidStaticInvocation"
   },
   {
     "key": "InvalidStringClass",
     "name": "InvalidStringClass",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidStringClass"
   },
   {
     "key": "InvalidTemplateParam",
     "name": "InvalidTemplateParam",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidTemplateParam"
   },
   {
     "key": "InvalidThrow",
     "name": "InvalidThrow",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidThrow"
   },
   {
     "key": "InvalidToString",
     "name": "InvalidToString",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidToString"
   },
   {
     "key": "InvalidTraversableImplementation",
     "name": "InvalidTraversableImplementation",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidTraversableImplementation"
   },
   {
     "key": "InvalidTypeImport",
     "name": "InvalidTypeImport",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidTypeImport"
   },
   {
     "key": "LessSpecificImplementedReturnType",
     "name": "LessSpecificImplementedReturnType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/LessSpecificImplementedReturnType"
   },
   {
     "key": "LessSpecificReturnStatement",
     "name": "LessSpecificReturnStatement",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/LessSpecificReturnStatement"
   },
   {
     "key": "LessSpecificReturnType",
     "name": "LessSpecificReturnType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/LessSpecificReturnType"
   },
   {
     "key": "LoopInvalidation",
     "name": "LoopInvalidation",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/LoopInvalidation"
   },
   {
     "key": "MethodSignatureMismatch",
     "name": "MethodSignatureMismatch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MethodSignatureMismatch"
   },
   {
     "key": "MethodSignatureMustOmitReturnType",
     "name": "MethodSignatureMustOmitReturnType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MethodSignatureMustOmitReturnType"
   },
   {
     "key": "MismatchingDocblockParamType",
     "name": "MismatchingDocblockParamType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MismatchingDocblockParamType"
   },
   {
     "key": "MismatchingDocblockPropertyType",
     "name": "MismatchingDocblockPropertyType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MismatchingDocblockPropertyType"
   },
   {
     "key": "MismatchingDocblockReturnType",
     "name": "MismatchingDocblockReturnType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MismatchingDocblockReturnType"
   },
   {
     "key": "MissingClosureParamType",
     "name": "MissingClosureParamType",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingClosureParamType"
   },
   {
     "key": "MissingClosureReturnType",
     "name": "MissingClosureReturnType",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingClosureReturnType"
   },
   {
     "key": "MissingConstructor",
     "name": "MissingConstructor",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingConstructor"
   },
   {
     "key": "MissingDependency",
     "name": "MissingDependency",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingDependency"
   },
   {
     "key": "MissingDocblockType",
     "name": "MissingDocblockType",
+    "code": {
+      "attribute": "FORMATTED",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingDocblockType"
   },
   {
     "key": "MissingFile",
     "name": "MissingFile",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingFile"
   },
   {
     "key": "MissingImmutableAnnotation",
     "name": "MissingImmutableAnnotation",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingImmutableAnnotation"
   },
   {
     "key": "MissingParamType",
     "name": "MissingParamType",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingParamType"
   },
   {
     "key": "MissingPropertyType",
     "name": "MissingPropertyType",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingPropertyType"
   },
   {
     "key": "MissingReturnType",
     "name": "MissingReturnType",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingReturnType"
   },
   {
     "key": "MissingTemplateParam",
     "name": "MissingTemplateParam",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingTemplateParam"
   },
   {
     "key": "MissingThrowsDocblock",
     "name": "MissingThrowsDocblock",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MissingThrowsDocblock"
   },
   {
     "key": "MixedArgument",
     "name": "MixedArgument",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedArgument"
   },
   {
     "key": "MixedArgumentTypeCoercion",
     "name": "MixedArgumentTypeCoercion",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedArgumentTypeCoercion"
   },
   {
     "key": "MixedArrayAccess",
     "name": "MixedArrayAccess",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedArrayAccess"
   },
   {
     "key": "MixedArrayAssignment",
     "name": "MixedArrayAssignment",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedArrayAssignment"
   },
   {
     "key": "MixedArrayOffset",
     "name": "MixedArrayOffset",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedArrayOffset"
   },
   {
     "key": "MixedArrayTypeCoercion",
     "name": "MixedArrayTypeCoercion",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedArrayTypeCoercion"
   },
   {
     "key": "MixedAssignment",
     "name": "MixedAssignment",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedAssignment"
   },
   {
     "key": "MixedClone",
     "name": "MixedClone",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedClone"
   },
   {
     "key": "MixedFunctionCall",
     "name": "MixedFunctionCall",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedFunctionCall"
   },
   {
     "key": "MixedInferredReturnType",
     "name": "MixedInferredReturnType",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedInferredReturnType"
   },
   {
     "key": "MixedMethodCall",
     "name": "MixedMethodCall",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedMethodCall"
   },
   {
     "key": "MixedOperand",
     "name": "MixedOperand",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedOperand"
   },
   {
     "key": "MixedPropertyAssignment",
     "name": "MixedPropertyAssignment",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedPropertyAssignment"
   },
   {
     "key": "MixedPropertyFetch",
     "name": "MixedPropertyFetch",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedPropertyFetch"
   },
   {
     "key": "MixedPropertyTypeCoercion",
     "name": "MixedPropertyTypeCoercion",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedPropertyTypeCoercion"
   },
   {
     "key": "MixedReturnStatement",
     "name": "MixedReturnStatement",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedReturnStatement"
   },
   {
     "key": "MixedReturnTypeCoercion",
     "name": "MixedReturnTypeCoercion",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedReturnTypeCoercion"
   },
   {
     "key": "MixedStringOffsetAssignment",
     "name": "MixedStringOffsetAssignment",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MixedStringOffsetAssignment"
   },
   {
     "key": "MoreSpecificImplementedParamType",
     "name": "MoreSpecificImplementedParamType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MoreSpecificImplementedParamType"
   },
   {
     "key": "MoreSpecificReturnType",
     "name": "MoreSpecificReturnType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MoreSpecificReturnType"
   },
   {
     "key": "MutableDependency",
     "name": "MutableDependency",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/MutableDependency"
   },
   {
     "key": "NamedArgumentNotAllowed",
     "name": "NamedArgumentNotAllowed",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NamedArgumentNotAllowed"
   },
   {
     "key": "NoInterfaceProperties",
     "name": "NoInterfaceProperties",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NoInterfaceProperties"
   },
   {
     "key": "NonInvariantDocblockPropertyType",
     "name": "NonInvariantDocblockPropertyType",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NonInvariantDocblockPropertyType"
   },
   {
     "key": "NonInvariantPropertyType",
     "name": "NonInvariantPropertyType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NonInvariantPropertyType"
   },
   {
     "key": "NonStaticSelfCall",
     "name": "NonStaticSelfCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NonStaticSelfCall"
   },
   {
     "key": "NoValue",
     "name": "NoValue",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NoValue"
   },
   {
     "key": "NullableReturnStatement",
     "name": "NullableReturnStatement",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullableReturnStatement"
   },
   {
     "key": "NullArgument",
     "name": "NullArgument",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullArgument"
   },
   {
     "key": "NullArrayAccess",
     "name": "NullArrayAccess",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullArrayAccess"
   },
   {
     "key": "NullArrayOffset",
     "name": "NullArrayOffset",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullArrayOffset"
   },
   {
     "key": "NullFunctionCall",
     "name": "NullFunctionCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullFunctionCall"
   },
   {
     "key": "NullIterator",
     "name": "NullIterator",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullIterator"
   },
   {
     "key": "NullOperand",
     "name": "NullOperand",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullOperand"
   },
   {
     "key": "NullPropertyAssignment",
     "name": "NullPropertyAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullPropertyAssignment"
   },
   {
     "key": "NullPropertyFetch",
     "name": "NullPropertyFetch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullPropertyFetch"
   },
   {
     "key": "NullReference",
     "name": "NullReference",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullReference"
   },
   {
     "key": "OverriddenMethodAccess",
     "name": "OverriddenMethodAccess",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/OverriddenMethodAccess"
   },
   {
     "key": "OverriddenPropertyAccess",
     "name": "OverriddenPropertyAccess",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/OverriddenPropertyAccess"
   },
   {
     "key": "ParadoxicalCondition",
     "name": "ParadoxicalCondition",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ParadoxicalCondition"
   },
   {
     "key": "ParamNameMismatch",
     "name": "ParamNameMismatch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ParamNameMismatch"
   },
   {
     "key": "ParentNotFound",
     "name": "ParentNotFound",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ParentNotFound"
   },
   {
     "key": "ParseError",
     "name": "ParseError",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ParseError"
   },
   {
     "key": "PluginIssue",
     "name": "PluginIssue",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PluginIssue"
   },
   {
     "key": "PossibleRawObjectIteration",
     "name": "PossibleRawObjectIteration",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossibleRawObjectIteration"
   },
   {
     "key": "PossiblyFalseArgument",
     "name": "PossiblyFalseArgument",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalseArgument"
   },
   {
     "key": "PossiblyFalseIterator",
     "name": "PossiblyFalseIterator",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalseIterator"
   },
   {
     "key": "PossiblyFalseOperand",
     "name": "PossiblyFalseOperand",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalseOperand"
   },
   {
     "key": "PossiblyFalsePropertyAssignmentValue",
     "name": "PossiblyFalsePropertyAssignmentValue",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalsePropertyAssignmentValue"
   },
   {
     "key": "PossiblyFalseReference",
     "name": "PossiblyFalseReference",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyFalseReference"
   },
   {
     "key": "PossiblyInvalidArgument",
     "name": "PossiblyInvalidArgument",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidArgument"
   },
   {
     "key": "PossiblyInvalidArrayAccess",
     "name": "PossiblyInvalidArrayAccess",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidArrayAccess"
   },
   {
     "key": "PossiblyInvalidArrayAssignment",
     "name": "PossiblyInvalidArrayAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidArrayAssignment"
   },
   {
     "key": "PossiblyInvalidArrayOffset",
     "name": "PossiblyInvalidArrayOffset",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidArrayOffset"
   },
   {
     "key": "PossiblyInvalidCast",
     "name": "PossiblyInvalidCast",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidCast"
   },
   {
     "key": "PossiblyInvalidClone",
     "name": "PossiblyInvalidClone",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidClone"
   },
   {
     "key": "PossiblyInvalidFunctionCall",
     "name": "PossiblyInvalidFunctionCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidFunctionCall"
   },
   {
     "key": "PossiblyInvalidIterator",
     "name": "PossiblyInvalidIterator",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidIterator"
   },
   {
     "key": "PossiblyInvalidMethodCall",
     "name": "PossiblyInvalidMethodCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidMethodCall"
   },
   {
     "key": "PossiblyInvalidOperand",
     "name": "PossiblyInvalidOperand",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidOperand"
   },
   {
     "key": "PossiblyInvalidPropertyAssignment",
     "name": "PossiblyInvalidPropertyAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidPropertyAssignment"
   },
   {
     "key": "PossiblyInvalidPropertyAssignmentValue",
     "name": "PossiblyInvalidPropertyAssignmentValue",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidPropertyAssignmentValue"
   },
   {
     "key": "PossiblyInvalidPropertyFetch",
     "name": "PossiblyInvalidPropertyFetch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyInvalidPropertyFetch"
   },
   {
     "key": "PossiblyNullArgument",
     "name": "PossiblyNullArgument",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullArgument"
   },
   {
     "key": "PossiblyNullArrayAccess",
     "name": "PossiblyNullArrayAccess",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullArrayAccess"
   },
   {
     "key": "PossiblyNullArrayAssignment",
     "name": "PossiblyNullArrayAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullArrayAssignment"
   },
   {
     "key": "PossiblyNullArrayOffset",
     "name": "PossiblyNullArrayOffset",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullArrayOffset"
   },
   {
     "key": "PossiblyNullFunctionCall",
     "name": "PossiblyNullFunctionCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullFunctionCall"
   },
   {
     "key": "PossiblyNullIterator",
     "name": "PossiblyNullIterator",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullIterator"
   },
   {
     "key": "PossiblyNullOperand",
     "name": "PossiblyNullOperand",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullOperand"
   },
   {
     "key": "PossiblyNullPropertyAssignment",
     "name": "PossiblyNullPropertyAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullPropertyAssignment"
   },
   {
     "key": "PossiblyNullPropertyAssignmentValue",
     "name": "PossiblyNullPropertyAssignmentValue",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullPropertyAssignmentValue"
   },
   {
     "key": "PossiblyNullPropertyFetch",
     "name": "PossiblyNullPropertyFetch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullPropertyFetch"
   },
   {
     "key": "PossiblyNullReference",
     "name": "PossiblyNullReference",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyNullReference"
   },
   {
     "key": "PossiblyUndefinedArrayOffset",
     "name": "PossiblyUndefinedArrayOffset",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedArrayOffset"
   },
   {
     "key": "PossiblyUndefinedGlobalVariable",
     "name": "PossiblyUndefinedGlobalVariable",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedGlobalVariable"
   },
   {
     "key": "PossiblyUndefinedIntArrayOffset",
     "name": "PossiblyUndefinedIntArrayOffset",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedIntArrayOffset"
   },
   {
     "key": "PossiblyUndefinedMethod",
     "name": "PossiblyUndefinedMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedMethod"
   },
   {
     "key": "PossiblyUndefinedStringArrayOffset",
     "name": "PossiblyUndefinedStringArrayOffset",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedStringArrayOffset"
   },
   {
     "key": "PossiblyUndefinedVariable",
     "name": "PossiblyUndefinedVariable",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUndefinedVariable"
   },
   {
     "key": "PossiblyUnusedMethod",
     "name": "PossiblyUnusedMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUnusedMethod"
   },
   {
     "key": "PossiblyUnusedParam",
     "name": "PossiblyUnusedParam",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUnusedParam"
   },
   {
     "key": "PossiblyUnusedProperty",
     "name": "PossiblyUnusedProperty",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PossiblyUnusedProperty"
   },
   {
     "key": "PropertyNotSetInConstructor",
     "name": "PropertyNotSetInConstructor",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PropertyNotSetInConstructor"
   },
   {
     "key": "PropertyTypeCoercion",
     "name": "PropertyTypeCoercion",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/PropertyTypeCoercion"
   },
   {
     "key": "RawObjectIteration",
     "name": "RawObjectIteration",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/RawObjectIteration"
   },
   {
     "key": "RedundantCast",
     "name": "RedundantCast",
+    "code": {
+      "attribute": "DISTINCT",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/RedundantCast"
   },
   {
     "key": "RedundantCastGivenDocblockType",
     "name": "RedundantCastGivenDocblockType",
+    "code": {
+      "attribute": "DISTINCT",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/RedundantCastGivenDocblockType"
   },
   {
     "key": "RedundantCondition",
     "name": "RedundantCondition",
+    "code": {
+      "attribute": "DISTINCT",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/RedundantCondition"
   },
   {
     "key": "RedundantConditionGivenDocblockType",
     "name": "RedundantConditionGivenDocblockType",
+    "code": {
+      "attribute": "DISTINCT",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/RedundantConditionGivenDocblockType"
   },
   {
     "key": "RedundantIdentityWithTrue",
     "name": "RedundantIdentityWithTrue",
+    "code": {
+      "attribute": "DISTINCT",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/RedundantIdentityWithTrue"
   },
   {
     "key": "RedundantPropertyInitializationCheck",
     "name": "RedundantPropertyInitializationCheck",
+    "code": {
+      "attribute": "DISTINCT",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/RedundantPropertyInitializationCheck"
   },
   {
     "key": "ReferenceConstraintViolation",
     "name": "ReferenceConstraintViolation",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ReferenceConstraintViolation"
   },
   {
     "key": "ReservedWord",
     "name": "ReservedWord",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/ReservedWord"
   },
   {
     "key": "StringIncrement",
     "name": "StringIncrement",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/StringIncrement"
   },
   {
     "key": "TaintedCallable",
     "name": "TaintedCallable",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedCallable"
   },
   {
     "key": "TaintedCookie",
     "name": "TaintedCookie",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedCookie"
   },
   {
     "key": "TaintedCustom",
     "name": "TaintedCustom",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedCustom"
   },
   {
     "key": "TaintedEval",
     "name": "TaintedEval",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedEval"
   },
   {
     "key": "TaintedFile",
     "name": "TaintedFile",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedFile"
   },
   {
     "key": "TaintedHeader",
     "name": "TaintedHeader",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedHeader"
   },
   {
     "key": "TaintedHtml",
     "name": "TaintedHtml",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedHtml"
   },
   {
     "key": "TaintedInclude",
     "name": "TaintedInclude",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedInclude"
   },
   {
     "key": "TaintedInput",
     "name": "TaintedInput",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedInput"
   },
   {
     "key": "TaintedLdap",
     "name": "TaintedLdap",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedLdap"
   },
   {
     "key": "TaintedShell",
     "name": "TaintedShell",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedShell"
   },
   {
     "key": "TaintedSql",
     "name": "TaintedSql",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedSql"
   },
   {
     "key": "TaintedSSRF",
     "name": "TaintedSSRF",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedSSRF"
   },
   {
     "key": "TaintedSystemSecret",
     "name": "TaintedSystemSecret",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedSystemSecret"
   },
   {
     "key": "TaintedUnserialize",
     "name": "TaintedUnserialize",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedUnserialize"
   },
   {
     "key": "TaintedUserSecret",
     "name": "TaintedUserSecret",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "HIGH"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TaintedUserSecret"
   },
   {
     "key": "TooFewArguments",
     "name": "TooFewArguments",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TooFewArguments"
   },
   {
     "key": "TooManyArguments",
     "name": "TooManyArguments",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TooManyArguments"
   },
   {
     "key": "TooManyTemplateParams",
     "name": "TooManyTemplateParams",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TooManyTemplateParams"
   },
   {
     "key": "Trace",
     "name": "Trace",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/Trace"
   },
   {
     "key": "TraitMethodSignatureMismatch",
     "name": "TraitMethodSignatureMismatch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TraitMethodSignatureMismatch"
   },
   {
     "key": "TypeDoesNotContainNull",
     "name": "TypeDoesNotContainNull",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TypeDoesNotContainNull"
   },
   {
     "key": "TypeDoesNotContainType",
     "name": "TypeDoesNotContainType",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/TypeDoesNotContainType"
   },
   {
     "key": "UncaughtThrowInGlobalScope",
     "name": "UncaughtThrowInGlobalScope",
+    "code": {
+      "attribute": "CONVENTIONAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UncaughtThrowInGlobalScope"
   },
   {
     "key": "UndefinedAttributeClass",
     "name": "UndefinedAttributeClass",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedAttributeClass"
   },
   {
     "key": "UndefinedClass",
     "name": "UndefinedClass",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedClass"
   },
   {
     "key": "UndefinedConstant",
     "name": "UndefinedConstant",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedConstant"
   },
   {
     "key": "UndefinedDocblockClass",
     "name": "UndefinedDocblockClass",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedDocblockClass"
   },
   {
     "key": "UndefinedFunction",
     "name": "UndefinedFunction",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedFunction"
   },
   {
     "key": "UndefinedGlobalVariable",
     "name": "UndefinedGlobalVariable",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedGlobalVariable"
   },
   {
     "key": "UndefinedInterface",
     "name": "UndefinedInterface",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedInterface"
   },
   {
     "key": "UndefinedInterfaceMethod",
     "name": "UndefinedInterfaceMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedInterfaceMethod"
   },
   {
     "key": "UndefinedMagicMethod",
     "name": "UndefinedMagicMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedMagicMethod"
   },
   {
     "key": "UndefinedMagicPropertyAssignment",
     "name": "UndefinedMagicPropertyAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedMagicPropertyAssignment"
   },
   {
     "key": "UndefinedMagicPropertyFetch",
     "name": "UndefinedMagicPropertyFetch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedMagicPropertyFetch"
   },
   {
     "key": "UndefinedMethod",
     "name": "UndefinedMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedMethod"
   },
   {
     "key": "UndefinedPropertyAssignment",
     "name": "UndefinedPropertyAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedPropertyAssignment"
   },
   {
     "key": "UndefinedPropertyFetch",
     "name": "UndefinedPropertyFetch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedPropertyFetch"
   },
   {
     "key": "UndefinedThisPropertyAssignment",
     "name": "UndefinedThisPropertyAssignment",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedThisPropertyAssignment"
   },
   {
     "key": "UndefinedThisPropertyFetch",
     "name": "UndefinedThisPropertyFetch",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedThisPropertyFetch"
   },
   {
     "key": "UndefinedTrace",
     "name": "UndefinedTrace",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedTrace"
   },
   {
     "key": "UndefinedTrait",
     "name": "UndefinedTrait",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedTrait"
   },
   {
     "key": "UndefinedVariable",
     "name": "UndefinedVariable",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedVariable"
   },
   {
     "key": "UnevaluatedCode",
     "name": "UnevaluatedCode",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "SECURITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnevaluatedCode"
   },
   {
     "key": "UnhandledMatchCondition",
     "name": "UnhandledMatchCondition",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnhandledMatchCondition"
   },
   {
     "key": "UnimplementedAbstractMethod",
     "name": "UnimplementedAbstractMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnimplementedAbstractMethod"
   },
   {
     "key": "UnimplementedInterfaceMethod",
     "name": "UnimplementedInterfaceMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnimplementedInterfaceMethod"
   },
   {
     "key": "UninitializedProperty",
     "name": "UninitializedProperty",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UninitializedProperty"
   },
   {
     "key": "UnnecessaryVarAnnotation",
     "name": "UnnecessaryVarAnnotation",
+    "code": {
+      "attribute": "DISTINCT",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnnecessaryVarAnnotation"
   },
   {
     "key": "UnrecognizedExpression",
     "name": "UnrecognizedExpression",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnrecognizedExpression"
   },
   {
     "key": "UnrecognizedStatement",
     "name": "UnrecognizedStatement",
+    "code": {
+      "attribute": "CLEAR",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnrecognizedStatement"
   },
   {
     "key": "UnresolvableInclude",
     "name": "UnresolvableInclude",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "RELIABILITY": "MEDIUM"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnresolvableInclude"
   },
   {
     "key": "UnsafeInstantiation",
     "name": "UnsafeInstantiation",
+    "code": {
+      "attribute": "TRUSTWORTHY",
+      "impacts": {
+        "SECURITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnsafeInstantiation"
   },
   {
     "key": "UnusedClass",
     "name": "UnusedClass",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedClass"
   },
   {
     "key": "UnusedClosureParam",
     "name": "UnusedClosureParam",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedClosureParam"
   },
   {
     "key": "UnusedConstructor",
     "name": "UnusedConstructor",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedConstructor"
   },
   {
     "key": "UnusedFunctionCall",
     "name": "UnusedFunctionCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedFunctionCall"
   },
   {
     "key": "UnusedMethod",
     "name": "UnusedMethod",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedMethod"
   },
   {
     "key": "UnusedMethodCall",
     "name": "UnusedMethodCall",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedMethodCall"
   },
   {
     "key": "UnusedParam",
     "name": "UnusedParam",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedParam"
   },
   {
     "key": "UnusedProperty",
     "name": "UnusedProperty",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedProperty"
   },
   {
     "key": "UnusedPsalmSuppress",
     "name": "UnusedPsalmSuppress",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedPsalmSuppress"
   },
   {
     "key": "UnusedVariable",
     "name": "UnusedVariable",
+    "code": {
+      "attribute": "LOGICAL",
+      "impacts": {
+        "MAINTAINABILITY": "LOW"
+      }
+    },
     "url": "https://psalm.dev/docs/running_psalm/issues/UnusedVariable"
   }
 ]
