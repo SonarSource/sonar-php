@@ -23,14 +23,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.php.reports.ExternalIssuesSensor;
-import org.sonarsource.analyzer.commons.ExternalRuleLoader;
+import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
+@ScannerSide
 public class PsalmSensor extends ExternalIssuesSensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PsalmSensor.class);
@@ -39,8 +40,8 @@ public class PsalmSensor extends ExternalIssuesSensor {
   public static final String PSALM_REPORT_NAME = "Psalm";
   public static final String PSALM_REPORT_PATH_KEY = "sonar.php.psalm.reportPaths";
 
-  public PsalmSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
-    super(analysisWarningsWrapper);
+  public PsalmSensor(PsalmRulesDefinition psalmRulesDefinition, AnalysisWarningsWrapper analysisWarningsWrapper) {
+    super(psalmRulesDefinition, analysisWarningsWrapper);
   }
 
   @Override
@@ -68,10 +69,5 @@ public class PsalmSensor extends ExternalIssuesSensor {
   @Override
   public Logger logger() {
     return LOG;
-  }
-
-  @Override
-  protected ExternalRuleLoader externalRuleLoader() {
-    return PsalmRulesDefinition.RULE_LOADER;
   }
 }

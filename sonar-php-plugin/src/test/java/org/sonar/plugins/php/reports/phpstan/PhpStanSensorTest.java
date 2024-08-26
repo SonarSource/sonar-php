@@ -24,20 +24,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.batch.sensor.issue.IssueLocation;
+import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
@@ -56,7 +53,8 @@ class PhpStanSensorTest extends ReportSensorTest {
 
   private static final String PHPSTAN_PROPERTY = "sonar.php.phpstan.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "phpstan");
-  protected final PhpStanSensor phpStanSensor = new PhpStanSensor(analysisWarnings);
+  private final PhpStanRulesDefinition phpStanRulesDefinition = new PhpStanRulesDefinition(SONAR_RUNTIME);
+  protected final PhpStanSensor phpStanSensor = new PhpStanSensor(phpStanRulesDefinition, analysisWarnings);
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
@@ -212,14 +210,5 @@ class PhpStanSensorTest extends ReportSensorTest {
   @Override
   protected LogTesterJUnit5 logTester() {
     return logTester;
-  }
-
-  private static String loggedFilePaths(boolean overflow, String... filePath) {
-    List<String> pathList = Stream.of(filePath).limit(5).map(FilenameUtils::separatorsToSystem).collect(Collectors.toList());
-    String log = String.join(";", pathList);
-    if (overflow) {
-      log += ";...";
-    }
-    return log;
   }
 }

@@ -17,16 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.reports.psalm;
+package org.sonar.plugins.php.reports.phpstan;
 
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.php.reports.AbstractExternalRulesDefinition;
 
 @ScannerSide
-public class PsalmRulesDefinition extends AbstractExternalRulesDefinition {
+public class PhpStanRulesDefinition extends AbstractExternalRulesDefinition {
 
-  public PsalmRulesDefinition(SonarRuntime sonarRuntime) {
-    super(sonarRuntime, PsalmSensor.PSALM_REPORT_KEY, PsalmSensor.PSALM_REPORT_NAME);
+  public PhpStanRulesDefinition(SonarRuntime sonarRuntime) {
+    super(sonarRuntime, PhpStanSensor.PHPSTAN_REPORT_KEY, PhpStanSensor.PHPSTAN_REPORT_NAME);
   }
 }

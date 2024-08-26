@@ -50,9 +50,11 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
 
   private static final String UNRESOLVED_INPUT_FILE_MESSAGE_FORMAT = "Failed to resolve %s file path(s) in %s %s report. No issues imported related to file(s): %s";
   public final String defaultRuleId = reportKey() + ".finding";
+  protected final ExternalRuleLoader externalRuleLoader;
 
-  protected ExternalIssuesSensor(AnalysisWarningsWrapper analysisWarningsWrapper) {
+  protected ExternalIssuesSensor(AbstractExternalRulesDefinition externalRulesDefinition, AnalysisWarningsWrapper analysisWarningsWrapper) {
     super(analysisWarningsWrapper);
+    this.externalRuleLoader = externalRulesDefinition.getRuleLoader();
   }
 
   @Override
@@ -177,7 +179,10 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   }
 
   private String toRuleId(@Nullable String ruleId) {
-    return ruleId != null && externalRuleLoader().ruleKeys().contains(ruleId) ? ruleId : defaultRuleId;
+    if (ruleId != null && externalRuleLoader.ruleKeys().contains(ruleId)) {
+      return ruleId;
+    }
+    return defaultRuleId;
   }
 
   private static void refinePrimaryLocation(NewIssueLocation primaryLocation, JsonReportReader.Issue issue, InputFile inputFile) {
@@ -202,7 +207,4 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
   }
 
   protected abstract String reportKey();
-
-  protected abstract ExternalRuleLoader externalRuleLoader();
-
 }

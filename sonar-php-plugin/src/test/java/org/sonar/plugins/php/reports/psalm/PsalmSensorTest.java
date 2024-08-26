@@ -50,7 +50,8 @@ class PsalmSensorTest extends ReportSensorTest {
 
   private static final String PSALM_PROPERTY = "sonar.php.psalm.reportPaths";
   private static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "reports", "psalm");
-  private final PsalmSensor psalmSensor = new PsalmSensor(analysisWarnings);
+  private final PsalmRulesDefinition psalmRulesDefinition = new PsalmRulesDefinition(SONAR_RUNTIME);
+  private final PsalmSensor psalmSensor = new PsalmSensor(psalmRulesDefinition, analysisWarnings);
 
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5().setLevel(Level.DEBUG);
