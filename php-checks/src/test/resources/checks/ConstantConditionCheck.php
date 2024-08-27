@@ -81,6 +81,26 @@ function while_statements() {
 }
 
 function variables() {
+  if ($param); // OK
+
+  $x = 3;
+//     ^> {{Last assignment.}}
+  if ($x); // Noncompliant
+//    ^^
+
+  $y = 3;
+  $y = input();
+  if ($y); // OK
+
+  $z = 3;
+  $z = input();
+  $z = 42;
+//     ^^> {{Last assignment.}}
+  if ($z); // Noncompliant
+//    ^^
+}
+
+function variable_assignments() {
   $foo = 3 && bar(); // Noncompliant
   $foo = 3 and bar(); // OK, foo = 3 in this case, "and" precedence is lower than "="
   $foo = bar() and 3; // Noncompliant

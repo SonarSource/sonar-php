@@ -19,7 +19,11 @@
  */
 package org.sonar.php.checks;
 
+import java.util.List;
+import java.util.Optional;
 import org.sonar.check.Rule;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
@@ -35,6 +39,7 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S5797";
   private static final String MESSAGE = "Replace this expression; used as a condition it will always be constant.";
+  private static final String SECONDARY_MESSAGE = "Last assignment.";
   private static final Tree.Kind[] CONDITIONAL_KINDS = {
     Tree.Kind.CONDITIONAL_AND,
     Tree.Kind.CONDITIONAL_OR,
@@ -55,6 +60,13 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     Tree.Kind.NEW_EXPRESSION,
     Tree.Kind.FUNCTION_EXPRESSION,
   };
+
+  public static <T> Optional<T> getLastValue(List<T> list) {
+    if (list.isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(list.get(list.size() - 1));
+  }
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
@@ -104,6 +116,15 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   private void checkConstant(ExpressionTree conditionExpression) {
     if (conditionExpression.is(BOOLEAN_CONSTANT_KINDS)) {
       newIssue(conditionExpression, MESSAGE);
+      return;
+    }
+    if (conditionExpression.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      VariableIdentifierTreeImpl variableIdentifier = (VariableIdentifierTreeImpl) conditionExpression;
+      SymbolImpl variableSymbol = variableIdentifier.symbol();
+      Optional<ExpressionTree> variableLastValue = getLastValue(variableSymbol.assignedValues());
+      if (variableLastValue.isPresent() && variableLastValue.get().is(BOOLEAN_CONSTANT_KINDS)) {
+        newIssue(conditionExpression, MESSAGE).secondary(variableLastValue.get(), SECONDARY_MESSAGE);
+      }
     }
   }
 }
