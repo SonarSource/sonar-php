@@ -13,7 +13,7 @@ function literals() {
   if ([]); // Noncompliant
   if (new stdClass()); // Noncompliant
   if (__DIR__); // Noncompliant
-  if ($foo = 3); // OK, value is assigned
+  if ($foo = 3); // OK, side-effect (value assignment) to the condition
 }
 
 function heredoc_strings() {
@@ -71,13 +71,23 @@ function switch_statement() {
 }
 
 function while_statements() {
-  while (true) { // OK
+  while (true) { // OK, loop should be stopped with break statements
     foo();
   }
 
   do {
     foo();
   } while (true); // OK
+}
+
+function for_statements() {
+  for ($i = 1; true; $i++) { // OK, loop should be stopped with break statements, intended by PHP's documentation
+    foo();
+  }
+
+  for (; ; ) { // OK
+    foo();
+  }
 }
 
 function variables() {
