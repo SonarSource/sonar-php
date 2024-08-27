@@ -16,7 +16,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/AbstractInstantiation"
@@ -27,7 +27,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/AbstractMethodCall"
@@ -236,7 +236,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateFunction"
@@ -247,7 +247,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/DuplicateMethod"
@@ -269,7 +269,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/EmptyArrayAccess"
@@ -302,7 +302,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "HIGH"
+        "RELIABILITY": "MEDIUM"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/FalseOperand"
@@ -687,7 +687,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidFunctionCall"
@@ -786,7 +786,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/InvalidParent"
@@ -1534,7 +1534,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "LOW"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullFunctionCall"
@@ -1589,7 +1589,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/NullReference"
@@ -1611,7 +1611,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "LOW"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/OverriddenPropertyAccess"
@@ -2414,7 +2414,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/TooFewArguments"
@@ -2513,7 +2513,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedClass"
@@ -2524,7 +2524,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedConstant"
@@ -2546,7 +2546,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedFunction"
@@ -2568,7 +2568,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedInterface"
@@ -2623,7 +2623,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedMethod"
@@ -2689,7 +2689,7 @@
     "code": {
       "attribute": "LOGICAL",
       "impacts": {
-        "RELIABILITY": "MEDIUM"
+        "RELIABILITY": "HIGH"
       }
     },
     "url": "https://psalm.dev/docs/running_psalm/issues/UndefinedTrait"

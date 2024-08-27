@@ -27,11 +27,11 @@ import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.CleanCodeAttribute;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.php.reports.AbstractExternalRulesDefinition;
-import org.sonar.plugins.php.reports.ExternalRulesDefinitionTest;
+import org.sonar.plugins.php.reports.AbstractExternalRulesDefinitionTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PhpStanRulesDefinitionTest extends ExternalRulesDefinitionTest {
+class PhpStanRulesDefinitionTest extends AbstractExternalRulesDefinitionTest {
 
   @Override
   protected void customRuleAssertion(RulesDefinition.Repository repository, boolean shouldSupportCCT) {

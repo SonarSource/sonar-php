@@ -27,11 +27,11 @@ import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.CleanCodeAttribute;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.php.reports.AbstractExternalRulesDefinition;
-import org.sonar.plugins.php.reports.ExternalRulesDefinitionTest;
+import org.sonar.plugins.php.reports.AbstractExternalRulesDefinitionTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PsalmRulesDefinitionTest extends ExternalRulesDefinitionTest {
+class PsalmRulesDefinitionTest extends AbstractExternalRulesDefinitionTest {
 
   @Override
   protected void customRuleAssertion(RulesDefinition.Repository repository, boolean shouldSupportCCT) {
@@ -42,7 +42,7 @@ class PsalmRulesDefinitionTest extends ExternalRulesDefinitionTest {
 
     if (shouldSupportCCT) {
       assertThat(rule.cleanCodeAttribute()).isEqualTo(CleanCodeAttribute.LOGICAL);
-      assertThat(rule.defaultImpacts()).containsOnly(Map.entry(SoftwareQuality.RELIABILITY, Severity.MEDIUM));
+      assertThat(rule.defaultImpacts()).containsOnly(Map.entry(SoftwareQuality.RELIABILITY, Severity.HIGH));
     } else {
       assertThat(rule.cleanCodeAttribute()).isNull();
       assertThat(rule.defaultImpacts()).containsOnly(Map.entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));

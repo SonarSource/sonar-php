@@ -53,8 +53,6 @@ class PsalmReportTest {
     assertThat(first.getImpactsList()).hasSize(1);
 
     Common.Impact firstImpact = first.getImpactsList().get(0);
-    // TODO: SONARPHP-1496 Verify Issue Impacts are correctly send to Sonarqube
-    // Should be RELIABILITY and HIGH
     assertThat(firstImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.MAINTAINABILITY);
     assertThat(firstImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
 
@@ -76,8 +74,6 @@ class PsalmReportTest {
     assertThat(second.getImpactsList()).hasSize(1);
 
     Common.Impact secondImpact = second.getImpactsList().get(0);
-    // TODO: SONARPHP-1496 Verify Issue Impacts are correctly send to Sonarqube
-    // Should be RELIABILITY and HIGH
     assertThat(secondImpact.getSoftwareQuality()).isEqualTo(Common.SoftwareQuality.RELIABILITY);
     assertThat(secondImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.HIGH);
     assertThat(second.getCleanCodeAttribute()).isEqualTo(Common.CleanCodeAttribute.LOGICAL);

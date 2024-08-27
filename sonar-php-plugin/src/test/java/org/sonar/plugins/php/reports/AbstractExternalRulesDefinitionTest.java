@@ -33,7 +33,7 @@ import org.sonar.api.utils.Version;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class ExternalRulesDefinitionTest {
+public abstract class AbstractExternalRulesDefinitionTest {
 
   private static final SonarRuntime SONAR_RUNTIME_10_6 = SonarRuntimeImpl.forSonarQube(Version.create(10, 6), SonarQubeSide.SERVER, SonarEdition.COMMUNITY);
   private static final SonarRuntime SONAR_RUNTIME_9_9 = SonarRuntimeImpl.forSonarQube(Version.create(9, 9), SonarQubeSide.SERVER, SonarEdition.COMMUNITY);

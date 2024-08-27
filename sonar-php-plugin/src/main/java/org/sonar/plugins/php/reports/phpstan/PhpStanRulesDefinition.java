@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.reports.phpstan;
 
+import javax.annotation.Nullable;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.php.reports.AbstractExternalRulesDefinition;
@@ -26,7 +27,7 @@ import org.sonar.plugins.php.reports.AbstractExternalRulesDefinition;
 @ScannerSide
 public class PhpStanRulesDefinition extends AbstractExternalRulesDefinition {
 
-  public PhpStanRulesDefinition(SonarRuntime sonarRuntime) {
+  public PhpStanRulesDefinition(@Nullable SonarRuntime sonarRuntime) {
     super(sonarRuntime, PhpStanSensor.PHPSTAN_REPORT_KEY, PhpStanSensor.PHPSTAN_REPORT_NAME);
   }
 }

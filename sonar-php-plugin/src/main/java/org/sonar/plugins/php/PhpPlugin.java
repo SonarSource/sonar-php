@@ -126,7 +126,7 @@ public class PhpPlugin implements Plugin {
 
   private static void addPhpStanExtensions(Context context) {
     context.addExtensions(
-      new PhpStanRulesDefinition(context.getRuntime()),
+      PhpStanRulesDefinition.class,
       PhpStanSensor.class,
       PropertyDefinition.builder(PHPSTAN_REPORT_PATH_KEY)
         .name("PHPStan Report Files")
@@ -140,7 +140,7 @@ public class PhpPlugin implements Plugin {
 
   private static void addPsalmExtensions(Context context) {
     context.addExtensions(
-      new PsalmRulesDefinition(context.getRuntime()),
+      PsalmRulesDefinition.class,
       PsalmSensor.class,
       PropertyDefinition.builder(PSALM_REPORT_PATH_KEY)
         .name("Psalm Report Files")
