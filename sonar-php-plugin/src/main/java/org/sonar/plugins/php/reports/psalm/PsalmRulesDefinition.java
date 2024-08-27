@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.reports.psalm;
 
+import javax.annotation.Nullable;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.php.reports.AbstractExternalRulesDefinition;
@@ -26,7 +27,7 @@ import org.sonar.plugins.php.reports.AbstractExternalRulesDefinition;
 @ScannerSide
 public class PsalmRulesDefinition extends AbstractExternalRulesDefinition {
 
-  public PsalmRulesDefinition(SonarRuntime sonarRuntime) {
+  public PsalmRulesDefinition(@Nullable SonarRuntime sonarRuntime) {
     super(sonarRuntime, PsalmSensor.PSALM_REPORT_KEY, PsalmSensor.PSALM_REPORT_NAME);
   }
 }
