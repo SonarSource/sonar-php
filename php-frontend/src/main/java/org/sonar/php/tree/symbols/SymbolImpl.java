@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.symbols;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -79,10 +78,6 @@ public class SymbolImpl implements Symbol {
       }
     }
     return false;
-  }
-
-  public List<ExpressionTree> assignedValues() {
-    return Collections.unmodifiableList(assignedValues);
   }
 
   void addModifiers(List<SyntaxToken> modifiers) {
