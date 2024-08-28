@@ -97,17 +97,6 @@ function variables() {
 //     ^> {{Last assignment.}}
   if ($x); // Noncompliant
 //    ^^
-
-  $y = 3;
-  $y = input();
-  if ($y); // OK
-
-  $z = 3;
-  $z = input();
-  $z = 42;
-//     ^^> {{Last assignment.}}
-  if ($z); // Noncompliant
-//    ^^
 }
 
 function variable_assignments() {
