@@ -27,7 +27,6 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
-import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = ConstantConditionCheck.KEY)
@@ -92,13 +91,6 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     ExpressionTree conditionExpression = tree.condition();
     checkConstant(conditionExpression);
     super.visitConditionalExpression(tree);
-  }
-
-  @Override
-  public void visitSwitchStatement(SwitchStatementTree tree) {
-    ExpressionTree conditionExpression = tree.expression().expression();
-    checkConstant(conditionExpression);
-    super.visitSwitchStatement(tree);
   }
 
   private void checkConstant(ExpressionTree conditionExpression) {

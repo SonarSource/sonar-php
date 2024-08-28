@@ -60,11 +60,11 @@ function alternative_if_statements() {
 }
 
 function switch_statement() {
-  switch (42) { // Noncompliant
-    case 1:
+  switch (true) { // OK, often used to conditions in switch statement cases
+    case $a < 3:
       foo();
       break;
-    case 2:
+    case $a > 42:
       bar();
       break;
   }
