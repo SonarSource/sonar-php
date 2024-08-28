@@ -94,9 +94,7 @@ function variables() {
   if ($param); // OK
 
   $x = 3;
-//     ^> {{Last assignment.}}
-  if ($x); // Noncompliant
-//    ^^
+  if ($x); // FN, require reaching definitions analysis
 }
 
 function variable_assignments() {

@@ -20,13 +20,11 @@
 package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
@@ -37,7 +35,6 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S5797";
   private static final String MESSAGE = "Replace this expression; used as a condition it will always be constant.";
-  private static final String SECONDARY_MESSAGE = "Last assignment.";
   private static final Tree.Kind[] CONDITIONAL_KINDS = {
     Tree.Kind.CONDITIONAL_AND,
     Tree.Kind.CONDITIONAL_OR,
@@ -107,15 +104,6 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   private void checkConstant(ExpressionTree conditionExpression) {
     if (conditionExpression.is(BOOLEAN_CONSTANT_KINDS)) {
       newIssue(conditionExpression, MESSAGE);
-      return;
-    }
-    if (conditionExpression.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      var variableIdentifierTree = (VariableIdentifierTree) conditionExpression;
-      CheckUtils.uniqueAssignedValue(variableIdentifierTree).ifPresent((ExpressionTree value) -> {
-        if (value.is(BOOLEAN_CONSTANT_KINDS)) {
-          newIssue(conditionExpression, MESSAGE).secondary(value, SECONDARY_MESSAGE);
-        }
-      });
     }
   }
 }
