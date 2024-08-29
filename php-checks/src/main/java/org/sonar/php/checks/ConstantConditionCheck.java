@@ -59,7 +59,7 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   private static boolean isFirstStatementClassDeclaration(IfStatementTree tree) {
     return tree.statements().stream()
       .findFirst()
-      // Class declaration can't be written outside a block
+      // Class declaration can't be written outside a block in an if statement
       .filter(s -> s.is(Tree.Kind.BLOCK))
       .map(BlockTree.class::cast)
       .flatMap(block -> block.statements().stream().findFirst())

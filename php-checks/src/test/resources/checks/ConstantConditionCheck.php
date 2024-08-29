@@ -54,13 +54,14 @@ function alternative_if_statements() {
   } elseif (42) { // Noncompliant
     bar();
   }
+}
 
+function conditional_expressions() {
   42 ? foo() : bar(); // Noncompliant
-
   42 ?: foo(); // Noncompliant
 }
 
-function switch_statement() {
+function switch_statements() {
   switch (true) { // OK, often used to conditions in switch statement cases
     case $a < 3:
       foo();
@@ -118,7 +119,7 @@ function anonymous_functions() {
   if (function() { return 42;}); // Noncompliant
 }
 
-function class_migration() {
+function class_migrations() {
   class_alias(NewName::class, OldName::class);
   if (false) { // OK, used to deprecate the old class name
   	class OldName {
