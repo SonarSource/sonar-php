@@ -116,3 +116,11 @@ function variable_assignments() {
 function anonymous_functions() {
   if (function() { return 42;}); // Noncompliant
 }
+
+function class_migration() {
+  class_alias(NewName::class, OldName::class);
+  if (false) { // OK, used to deprecate the old class name
+  	class OldName {
+  	}
+  }
+}

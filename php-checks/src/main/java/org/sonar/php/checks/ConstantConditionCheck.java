@@ -25,6 +25,7 @@ import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -55,6 +56,33 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     Tree.Kind.FUNCTION_EXPRESSION,
   };
 
+  private static boolean isFirstStatementClassDeclaration(IfStatementTree tree) {
+    return tree.statements().stream()
+      .findFirst()
+      // Class declaration can't be written outside a block
+      .filter(s -> s.is(Tree.Kind.BLOCK))
+      .map(BlockTree.class::cast)
+      .flatMap(block -> block.statements().stream().findFirst())
+      .map(firstStatement -> firstStatement.is(Tree.Kind.CLASS_DECLARATION))
+      .orElse(false);
+  }
+
+  @Override
+  public void visitIfStatement(IfStatementTree tree) {
+    if (!isFirstStatementClassDeclaration(tree)) {
+      ExpressionTree conditionExpression = tree.condition().expression();
+      checkConstant(conditionExpression);
+    }
+    super.visitIfStatement(tree);
+  }
+
+  @Override
+  public void visitElseifClause(ElseifClauseTree tree) {
+    ExpressionTree conditionExpression = tree.condition().expression();
+    checkConstant(conditionExpression);
+    super.visitElseifClause(tree);
+  }
+
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
     if (tree.is(CONDITIONAL_KINDS)) {
@@ -70,20 +98,6 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
       checkConstant(tree.expression());
     }
     super.visitPrefixExpression(tree);
-  }
-
-  @Override
-  public void visitIfStatement(IfStatementTree tree) {
-    ExpressionTree conditionExpression = tree.condition().expression();
-    checkConstant(conditionExpression);
-    super.visitIfStatement(tree);
-  }
-
-  @Override
-  public void visitElseifClause(ElseifClauseTree tree) {
-    ExpressionTree conditionExpression = tree.condition().expression();
-    checkConstant(conditionExpression);
-    super.visitElseifClause(tree);
   }
 
   @Override
