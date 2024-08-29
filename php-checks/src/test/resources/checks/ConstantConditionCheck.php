@@ -62,7 +62,7 @@ function conditional_expressions() {
 }
 
 function switch_statements() {
-  switch (true) { // OK, often used to conditions in switch statement cases
+  switch (true) { // OK, often used to have more complex conditions in switch statement cases
     case $a < 3:
       foo();
       break;
