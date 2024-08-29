@@ -1,7 +1,4 @@
 {
-"Symfony:Bridge/Doctrine/Form/Type/EntityType.php": [
-92
-],
 "Symfony:Bridge/Monolog/Formatter/ConsoleFormatter.php": [
 103
 ],
@@ -37,9 +34,6 @@
 "Symfony:Component/Cache/CacheItem.php": [
 165,
 175
-],
-"Symfony:Component/Console/Tests/Descriptor/JsonDescriptorTest.php": [
-33
 ],
 "Symfony:Component/DependencyInjection/ServiceLocator.php": [
 85,
@@ -80,9 +74,6 @@
 310,
 328
 ],
-"Symfony:Component/EventDispatcher/Debug/TraceableEventDispatcher.php": [
-321
-],
 "Symfony:Component/Form/Tests/Fixtures/Author.php": [
 40,
 65,
@@ -101,9 +92,6 @@
 "Symfony:Component/HttpClient/Response/NativeResponse.php": [
 213,
 340
-],
-"Symfony:Component/HttpFoundation/StreamedJsonResponse.php": [
-68
 ],
 "Symfony:Component/HttpKernel/Tests/Controller/ControllerResolverTest.php": [
 213

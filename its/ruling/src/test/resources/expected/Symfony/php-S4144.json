@@ -50,20 +50,10 @@
 "Symfony:Component/Console/Tests/Input/ArgvInputTest.php": [
 252
 ],
-"Symfony:Component/CssSelector/XPath/Extension/AbstractExtension.php": [
-31,
-36,
-41,
-46
-],
-"Symfony:Component/DependencyInjection/LazyProxy/PhpDumper/NullDumper.php": [
-35
-],
 "Symfony:Component/DependencyInjection/Loader/Configurator/AbstractServiceConfigurator.php": [
 109
 ],
 "Symfony:Component/DependencyInjection/Tests/Fixtures/CheckTypeDeclarationsPass/BarMethodCall.php": [
-18,
 23
 ],
 "Symfony:Component/DependencyInjection/Tests/Fixtures/FooTaggedForInvalidDefaultMethodClass.php": [
@@ -77,39 +67,20 @@
 34
 ],
 "Symfony:Component/Form/Button.php": [
-181,
-189,
-229,
 272,
-280,
-288
+280
 ],
 "Symfony:Component/Form/ButtonBuilder.php": [
-277,
 446,
 454,
-478,
-486,
 494,
 510,
-518,
-550,
-558,
 566,
-584,
-594,
-604,
 612,
-620,
-654
+620
 ],
 "Symfony:Component/Form/Extension/Core/DataAccessor/PropertyPathAccessor.php": [
 72
-],
-"Symfony:Component/Form/Test/FormIntegrationTestCase.php": [
-43,
-48,
-53
 ],
 "Symfony:Component/Form/Tests/CompoundFormTest.php": [
 260
@@ -126,27 +97,17 @@
 "Symfony:Component/Form/Tests/Resources/TranslationFilesTest.php": [
 37
 ],
-"Symfony:Component/HtmlSanitizer/Tests/HtmlSanitizerConfigTest.php": [
-278
-],
 "Symfony:Component/HttpClient/Chunk/DataChunk.php": [
 37,
-42,
-62
+42
 ],
 "Symfony:Component/HttpClient/Chunk/ErrorChunk.php": [
-59,
-65,
-71
+59
 ],
 "Symfony:Component/HttpClient/Internal/AmpListener.php": [
 66,
 73,
-133,
 172
-],
-"Symfony:Component/HttpFoundation/Tests/Session/Storage/Handler/Fixtures/common.inc": [
-107
 ],
 "Symfony:Component/HttpKernel/Tests/ControllerMetadata/ArgumentMetadataFactoryTest.php": [
 110
@@ -169,17 +130,8 @@
 "Symfony:Component/Mime/Tests/MessageTest.php": [
 97
 ],
-"Symfony:Component/Notifier/Message/EmailMessage.php": [
-99
-],
 "Symfony:Component/Notifier/Message/SmsMessage.php": [
 69
-],
-"Symfony:Component/Notifier/Tests/Message/DummyMessageWithoutTransport.php": [
-37
-],
-"Symfony:Component/Notifier/Tests/Transport/DummyMessage.php": [
-37
 ],
 "Symfony:Component/PasswordHasher/Tests/Fixtures/TestLegacyPasswordAuthenticatedUser.php": [
 49
@@ -198,26 +150,16 @@
 ],
 "Symfony:Component/PropertyInfo/Tests/Fixtures/NullExtractor.php": [
 35,
-43,
-51,
 59
-],
-"Symfony:Component/Security/Core/Authentication/Token/NullToken.php": [
-56,
-74
 ],
 "Symfony:Component/Security/Core/Tests/Authentication/AuthenticationTrustResolverTest.php": [
 61
 ],
 "Symfony:Component/Security/Core/Tests/Authentication/Token/Fixtures/CustomUser.php": [
-25,
-40
+25
 ],
 "Symfony:Component/Security/Core/Tests/Resources/TranslationFilesTest.php": [
 35
-],
-"Symfony:Component/Security/Http/Tests/EventListener/PasswordMigratingListenerTest.php": [
-163
 ],
 "Symfony:Component/Security/Http/Tests/Firewall/ContextListenerTest.php": [
 262
@@ -225,25 +167,18 @@
 "Symfony:Component/Security/Http/Tests/LoginLink/LoginLinkHandlerTest.php": [
 302
 ],
-"Symfony:Component/Serializer/Tests/Normalizer/AbstractObjectNormalizerTest.php": [
-410
-],
 "Symfony:Component/Serializer/Tests/Normalizer/GetSetMethodNormalizerTest.php": [
 278,
-361,
 370
 ],
 "Symfony:Component/Serializer/Tests/Normalizer/ObjectNormalizerTest.php": [
 534,
 543,
-577,
-584,
-613
+584
 ],
 "Symfony:Component/Serializer/Tests/Normalizer/PropertyNormalizerTest.php": [
 290,
-348,
-496
+348
 ],
 "Symfony:Component/String/ByteString.php": [
 223
@@ -251,27 +186,12 @@
 "Symfony:Component/Templating/TemplateReference.php": [
 66
 ],
-"Symfony:Component/Validator/Constraints/All.php": [
-40
-],
-"Symfony:Component/Validator/Constraints/AtLeastOneOf.php": [
-58
-],
-"Symfony:Component/Validator/Constraints/Existence.php": [
-26
-],
-"Symfony:Component/Validator/Constraints/Sequentially.php": [
-43
-],
 "Symfony:Component/Validator/Tests/Constraints/ChoiceValidatorTest.php": [
 98
 ],
 "Symfony:Component/Validator/Tests/Constraints/CidrValidatorTest.php": [
 73,
 96
-],
-"Symfony:Component/Validator/Tests/Constraints/CompositeTest.php": [
-30
 ],
 "Symfony:Component/Validator/Tests/Constraints/CountValidatorTestCase.php": [
 259
