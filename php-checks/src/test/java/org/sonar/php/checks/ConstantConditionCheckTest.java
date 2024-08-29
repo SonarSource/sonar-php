@@ -25,7 +25,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class ConstantConditionCheckTest {
 
   @Test
-  void test() {
+  void testCheck() {
     CheckVerifier.verify(new ConstantConditionCheck(), "ConstantConditionCheck.php");
   }
 }
