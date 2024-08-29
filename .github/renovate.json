@@ -37,5 +37,6 @@
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch"
     }
-  ]
+  ],
+  "reviewers": ["team:analysis-cloud-squad"]
 }
