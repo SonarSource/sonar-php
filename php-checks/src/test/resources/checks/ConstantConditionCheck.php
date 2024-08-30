@@ -3,6 +3,7 @@
 function literals() {
   if(true); // Noncompliant {{Replace this expression; used as a condition it will always be constant.}}
   // ^^^^
+  if ((true)); // Noncompliant
   if (42); // Noncompliant
   if ("foo"); // Noncompliant
   if ('foo'); // Noncompliant
@@ -33,13 +34,30 @@ function heredoc_strings() {
 function boolean_expressions() {
   if (input() && 42); // Noncompliant
   //             ^^
+
   $foo = input() && 42; // Noncompliant
   $foo = input() || 42; // Noncompliant
   $foo = input() and 42; // Noncompliant
   $foo = input() or 42; // Noncompliant
   $foo = input() xor 42; // Noncompliant
+  $foo = input() | 42; // OK
+
   $foo = !42; // Noncompliant
   $foo = ~42; // OK
+
+  $foo = 3 && bar(); // Noncompliant
+  $foo = 3 and bar(); // OK, foo = 3 in this case, "and" precedence is lower than "="
+  $foo = (3 and bar()); // Noncompliant
+  $foo = bar() and 3; // Noncompliant
+
+  $foo = 3 || bar(); // Noncompliant
+  $foo = 3 or bar(); // OK, foo = 3 in this case, "or" precedence is lower than "="
+  $foo = (3 or bar()); // Noncompliant
+  $foo = bar() or 3; // Noncompliant
+
+  $foo = 3 xor bar(); // OK, foo = 3 in this case, "xor" precedence is lower than "="
+  $foo = (3 xor bar()); // Noncompliant
+  $foo = bar() xor 3; // Noncompliant
 }
 
 function alternative_if_statements() {
@@ -97,22 +115,6 @@ function variables() {
 
   $x = 3;
   if ($x); // FN, require reaching definitions analysis
-}
-
-function variable_assignments() {
-  $foo = 3 && bar(); // Noncompliant
-  $foo = 3 and bar(); // OK, foo = 3 in this case, "and" precedence is lower than "="
-  $foo = bar() and 3; // Noncompliant
-  $foo = (3 and bar()); // Noncompliant
-
-  $foo = 3 || bar(); // Noncompliant
-  $foo = 3 or bar(); // OK, foo = 3 in this case, "or" precedence is lower than "="
-  $foo = (3 or bar()); // Noncompliant
-  $foo = bar() or 3; // Noncompliant
-
-  $foo = 3 xor bar(); // OK, foo = 3 in this case, "xor" precedence is lower than "="
-  $foo = (3 xor bar()); // Noncompliant
-  $foo = bar() xor 3; // Noncompliant
 }
 
 function anonymous_functions() {

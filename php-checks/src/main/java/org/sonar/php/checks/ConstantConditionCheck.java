@@ -24,6 +24,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
@@ -67,6 +68,14 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
       .orElse(false);
   }
 
+  private static boolean isConstant(ExpressionTree conditionExpression) {
+    if (conditionExpression.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
+      ParenthesisedExpressionTree parenthesisedExpression = (ParenthesisedExpressionTree) conditionExpression;
+      return isConstant(parenthesisedExpression.expression());
+    }
+    return conditionExpression.is(BOOLEAN_CONSTANT_KINDS);
+  }
+
   @Override
   public void visitIfStatement(IfStatementTree tree) {
     if (!isFirstStatementClassDeclaration(tree)) {
@@ -108,7 +117,7 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   }
 
   private void checkConstant(ExpressionTree conditionExpression) {
-    if (conditionExpression.is(BOOLEAN_CONSTANT_KINDS)) {
+    if (isConstant(conditionExpression)) {
       newIssue(conditionExpression, MESSAGE);
     }
   }
