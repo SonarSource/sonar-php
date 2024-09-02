@@ -22,6 +22,7 @@ function binary_expressions() {
 //    ^^^^^
   if ($foo + 2); // OK
   if (($foo + 4) + (2 + 2)); // OK
+  if ((4 + 4) + (2 + $foo)); // OK
   if (('4') + '2'); // Noncompliant
   if (4 - 2); // Noncompliant
   if (4 * 2); // Noncompliant
