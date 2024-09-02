@@ -17,6 +17,41 @@ function literals() {
   if ($foo = 3); // OK, side-effect (value assignment) to the condition
 }
 
+function binary_expressions() {
+  if ('foo' . 'bar'); // Noncompliant
+  if (4 + 2); // Noncompliant
+//    ^^^^^
+  if (4 - 2); // Noncompliant
+  if (4 * 2); // Noncompliant
+  if (4 / 2); // Noncompliant
+  if (4 % 2); // Noncompliant
+  if (4 ** 2); // Noncompliant
+  if (4 << 2); // Noncompliant
+  if (4 >> 2); // Noncompliant
+  if (4 < 2); // Noncompliant
+  if (4 > 2); // Noncompliant
+  if (4 <= 2); // Noncompliant
+  if (4 >= 2); // Noncompliant
+  if (4 == 2); // Noncompliant
+  if (4 === 2); // Noncompliant
+  if (4 != 2); // Noncompliant
+  if (4 !== 2); // Noncompliant
+  if (4 <> 2); // Noncompliant
+  if (4 <=> 2); // Noncompliant
+  if (4 & 2); // Noncompliant
+  if (4 ^ 2); // Noncompliant
+  if (4 | 2); // Noncompliant
+  if (true && 2); // Noncompliant
+//    ^^^^^^^^^
+  if (false || 2); // Noncompliant
+  if (true and 2); // Noncompliant
+  if (false or 2); // Noncompliant
+  if (true xor 2); // Noncompliant
+  if (null ?? 2); // Noncompliant
+  if ('foo' . 'bar' === 42 || true); // Noncompliant
+//    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
 function heredoc_strings() {
   // Noncompliant@+1
   if (<<<EOD

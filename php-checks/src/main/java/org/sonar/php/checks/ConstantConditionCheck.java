@@ -73,6 +73,9 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
       ParenthesisedExpressionTree parenthesisedExpression = (ParenthesisedExpressionTree) conditionExpression;
       return isConstant(parenthesisedExpression.expression());
     }
+    if (conditionExpression instanceof BinaryExpressionTree binaryExpression) {
+      return isConstant(binaryExpression.leftOperand()) && isConstant(binaryExpression.rightOperand());
+    }
     return conditionExpression.is(BOOLEAN_CONSTANT_KINDS);
   }
 
@@ -94,7 +97,8 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
-    if (tree.is(CONDITIONAL_KINDS)) {
+    // Avoid redundant issues if the whole expression is constant
+    if (tree.is(CONDITIONAL_KINDS) && !isConstant(tree)) {
       checkConstant(tree.leftOperand());
       checkConstant(tree.rightOperand());
     }
