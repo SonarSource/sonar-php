@@ -50,6 +50,15 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     Tree.Kind.NEW_EXPRESSION,
     Tree.Kind.FUNCTION_EXPRESSION,
   };
+  private static final Tree.Kind[] LITERAL_KINDS = {
+    Tree.Kind.BOOLEAN_LITERAL,
+    Tree.Kind.NUMERIC_LITERAL,
+    Tree.Kind.REGULAR_STRING_LITERAL,
+    Tree.Kind.NULL_LITERAL,
+    Tree.Kind.HEREDOC_LITERAL,
+    Tree.Kind.NOWDOC_LITERAL,
+    Tree.Kind.MAGIC_CONSTANT,
+  };
   private static final Tree.Kind[] CONDITIONAL_KINDS = {
     Tree.Kind.CONDITIONAL_AND,
     Tree.Kind.CONDITIONAL_OR,
@@ -58,19 +67,30 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR,
   };
 
-  private static boolean isConstant(ExpressionTree conditionExpression) {
+  private static boolean isBooleanConstant(ExpressionTree conditionExpression) {
     if (conditionExpression.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
       ParenthesisedExpressionTree parenthesisedExpression = (ParenthesisedExpressionTree) conditionExpression;
-      return isConstant(parenthesisedExpression.expression());
+      return isBooleanConstant(parenthesisedExpression.expression());
     }
     if (conditionExpression instanceof BinaryExpressionTree binaryExpression) {
-      return isConstant(binaryExpression.leftOperand()) && isConstant(binaryExpression.rightOperand());
+      return isValueConstant(binaryExpression.leftOperand()) && isValueConstant(binaryExpression.rightOperand());
     }
     return conditionExpression.is(BOOLEAN_CONSTANT_KINDS);
   }
 
-  private static boolean containsClassOrInterfaceDeclaration(IfStatementTree ifStatementTree) {
-    return ifStatementTree.statements().stream()
+  private static boolean isValueConstant(ExpressionTree conditionExpression) {
+    if (conditionExpression.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
+      ParenthesisedExpressionTree parenthesisedExpression = (ParenthesisedExpressionTree) conditionExpression;
+      return isValueConstant(parenthesisedExpression.expression());
+    }
+    if (conditionExpression instanceof BinaryExpressionTree binaryExpression) {
+      return isValueConstant(binaryExpression.leftOperand()) && isValueConstant(binaryExpression.rightOperand());
+    }
+    return conditionExpression.is(LITERAL_KINDS);
+  }
+
+  private static boolean containsClassOrInterfaceDeclaration(IfStatementTree ifStatement) {
+    return ifStatement.statements().stream()
       // Class declaration can't be written outside a block in an if statement
       .filter(s -> s.is(Tree.Kind.BLOCK))
       .map(BlockTree.class::cast)
@@ -78,15 +98,15 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
       .anyMatch(ConstantConditionCheck::isClassOrInterfaceDeclaration);
   }
 
-  private static boolean isClassOrInterfaceDeclaration(StatementTree statementTree) {
-    return statementTree.is(Tree.Kind.CLASS_DECLARATION, Tree.Kind.INTERFACE_DECLARATION);
+  private static boolean isClassOrInterfaceDeclaration(StatementTree statement) {
+    return statement.is(Tree.Kind.CLASS_DECLARATION, Tree.Kind.INTERFACE_DECLARATION);
   }
 
   @Override
   public void visitIfStatement(IfStatementTree tree) {
     if (!containsClassOrInterfaceDeclaration(tree)) {
       ExpressionTree conditionExpression = tree.condition().expression();
-      checkConstant(conditionExpression);
+      checkBooleanConstant(conditionExpression);
     }
     super.visitIfStatement(tree);
   }
@@ -94,16 +114,16 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   @Override
   public void visitElseifClause(ElseifClauseTree tree) {
     ExpressionTree conditionExpression = tree.condition().expression();
-    checkConstant(conditionExpression);
+    checkBooleanConstant(conditionExpression);
     super.visitElseifClause(tree);
   }
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
     // Avoid redundant issues if the whole expression is constant
-    if (tree.is(CONDITIONAL_KINDS) && !isConstant(tree)) {
-      checkConstant(tree.leftOperand());
-      checkConstant(tree.rightOperand());
+    if (tree.is(CONDITIONAL_KINDS) && !isBooleanConstant(tree)) {
+      checkBooleanConstant(tree.leftOperand());
+      checkBooleanConstant(tree.rightOperand());
     }
     super.visitBinaryExpression(tree);
   }
@@ -111,7 +131,7 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   @Override
   public void visitPrefixExpression(UnaryExpressionTree tree) {
     if (tree.is(Tree.Kind.LOGICAL_COMPLEMENT)) {
-      checkConstant(tree.expression());
+      checkBooleanConstant(tree.expression());
     }
     super.visitPrefixExpression(tree);
   }
@@ -119,12 +139,12 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
   @Override
   public void visitConditionalExpression(ConditionalExpressionTree tree) {
     ExpressionTree conditionExpression = tree.condition();
-    checkConstant(conditionExpression);
+    checkBooleanConstant(conditionExpression);
     super.visitConditionalExpression(tree);
   }
 
-  private void checkConstant(ExpressionTree conditionExpression) {
-    if (isConstant(conditionExpression)) {
+  private void checkBooleanConstant(ExpressionTree conditionExpression) {
+    if (isBooleanConstant(conditionExpression)) {
       newIssue(conditionExpression, MESSAGE);
     }
   }

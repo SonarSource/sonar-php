@@ -18,9 +18,11 @@ function literals() {
 }
 
 function binary_expressions() {
-  if ('foo' . 'bar'); // Noncompliant
   if (4 + 2); // Noncompliant
 //    ^^^^^
+  if ($foo + 2); // OK
+  if (($foo + 4) + (2 + 2)); // OK
+  if (('4') + '2'); // Noncompliant
   if (4 - 2); // Noncompliant
   if (4 * 2); // Noncompliant
   if (4 / 2); // Noncompliant
@@ -32,6 +34,8 @@ function binary_expressions() {
   if (4 > 2); // Noncompliant
   if (4 <= 2); // Noncompliant
   if (4 >= 2); // Noncompliant
+  if ('foo' . 'bar'); // Noncompliant
+  if ([$foo] == [$bar]); // OK
   if (4 == 2); // Noncompliant
   if (4 === 2); // Noncompliant
   if (4 != 2); // Noncompliant
