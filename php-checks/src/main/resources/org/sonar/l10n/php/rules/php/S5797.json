@@ -1,0 +1,23 @@
+{
+  "title": "Constants should not be used as conditions",
+  "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "HIGH"
+    },
+    "attribute": "LOGICAL"
+  },
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "suspicious"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-5797",
+  "sqKey": "S5797",
+  "scope": "All",
+  "quickfix": "unknown"
+}

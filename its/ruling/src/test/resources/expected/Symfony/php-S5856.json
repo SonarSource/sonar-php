@@ -36,9 +36,6 @@
 "Symfony:Component/String/AbstractUnicodeString.php": [
 162
 ],
-"Symfony:Component/VarExporter/Internal/Exporter.php": [
-222
-],
 "Symfony:Component/VarExporter/ProxyHelper.php": [
 323
 ]

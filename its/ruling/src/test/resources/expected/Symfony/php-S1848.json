@@ -32,9 +32,6 @@
 "Symfony:Component/Cache/Tests/Adapter/MemcachedAdapterTest.php": [
 111
 ],
-"Symfony:Component/Cache/Tests/Adapter/RelayAdapterTest.php": [
-31
-],
 "Symfony:Component/Config/Tests/Definition/EnumNodeTest.php": [
 33,
 91,
@@ -142,10 +139,6 @@
 "Symfony:Component/Finder/Tests/Iterator/SortableIteratorTest.php": [
 21
 ],
-"Symfony:Component/Form/Extension/Core/DataTransformer/BaseDateTimeTransformer.php": [
-49,
-55
-],
 "Symfony:Component/Form/Tests/ButtonBuilderTest.php": [
 66
 ],
@@ -229,9 +222,6 @@
 "Symfony:Component/Lock/Tests/Store/RedisStoreTest.php": [
 49
 ],
-"Symfony:Component/Lock/Tests/Store/RelayStoreTest.php": [
-31
-],
 "Symfony:Component/Mailer/Tests/EnvelopeTest.php": [
 36,
 54,
@@ -242,9 +232,6 @@
 ],
 "Symfony:Component/Mailer/Tests/Transport/RoundRobinTransportTest.php": [
 29
-],
-"Symfony:Component/Messenger/Bridge/Redis/Tests/Transport/RedisExtIntegrationTest.php": [
-404
 ],
 "Symfony:Component/Mime/Tests/AddressTest.php": [
 36
@@ -354,12 +341,6 @@
 ],
 "Symfony:Component/Security/Http/Tests/Firewall/SwitchUserListenerTest.php": [
 61
-],
-"Symfony:Component/Semaphore/Tests/Store/RelayStoreTest.php": [
-30
-],
-"Symfony:Component/Serializer/Context/Normalizer/UnwrappingDenormalizerContextBuilder.php": [
-46
 ],
 "Symfony:Component/Serializer/Normalizer/AbstractNormalizer.php": [
 436
@@ -507,17 +488,11 @@
 45,
 47
 ],
-"Symfony:Component/Uid/Command/GenerateUuidCommand.php": [
-128
-],
 "Symfony:Component/Uid/Tests/UlidTest.php": [
 47
 ],
 "Symfony:Component/Uid/Tests/UuidTest.php": [
 64
-],
-"Symfony:Component/Validator/Constraints/RangeValidator.php": [
-190
 ],
 "Symfony:Component/Validator/Tests/ConstraintTest.php": [
 46,

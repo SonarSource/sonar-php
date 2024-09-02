@@ -3,8 +3,12 @@
 188,
 192
 ],
-"Symfony:Bridge/Twig/Tests/Extension/DumpExtensionTest.php": [
-53
+"Symfony:Bridge/Twig/Tests/Extension/CodeExtensionTest.php": [
+36,
+44
+],
+"Symfony:Bridge/Twig/Tests/Translation/TwigExtractorTest.php": [
+47
 ],
 "Symfony:Component/Cache/Tests/DataCollector/CacheDataCollectorTest.php": [
 29,
@@ -30,8 +34,23 @@
 103,
 104
 ],
+"Symfony:Component/Config/Tests/Definition/PrototypedArrayNodeTest.php": [
+354
+],
 "Symfony:Component/Console/Tests/Helper/QuestionHelperTest.php": [
 803
+],
+"Symfony:Component/Console/Tests/Question/ChoiceQuestionTest.php": [
+38
+],
+"Symfony:Component/CssSelector/Tests/XPath/TranslatorTest.php": [
+117
+],
+"Symfony:Component/DependencyInjection/Tests/Loader/XmlFileLoaderTest.php": [
+1211
+],
+"Symfony:Component/ErrorHandler/Tests/Exception/FlattenExceptionTest.php": [
+130
 ],
 "Symfony:Component/EventDispatcher/Tests/Debug/TraceableEventDispatcherTest.php": [
 177
@@ -39,7 +58,6 @@
 "Symfony:Component/ExpressionLanguage/Tests/ExpressionLanguageTest.php": [
 111,
 127,
-160,
 397,
 406
 ],
@@ -85,7 +103,6 @@
 179
 ],
 "Symfony:Component/HttpFoundation/Tests/Session/SessionTest.php": [
-94,
 233
 ],
 "Symfony:Component/HttpKernel/Tests/DataCollector/LoggerDataCollectorTest.php": [
@@ -108,27 +125,21 @@
 224,
 225
 ],
-"Symfony:Component/Lock/Tests/Store/DoctrineDbalPostgreSqlStoreTest.php": [
-116,
-153
+"Symfony:Component/Routing/Tests/Annotation/RouteTest.php": [
+48,
+57
 ],
-"Symfony:Component/Lock/Tests/Store/PostgreSqlStoreTest.php": [
-108,
-147
+"Symfony:Component/Serializer/Tests/NameConverter/CamelCaseToSnakeCaseNameConverterTest.php": [
+35,
+44
 ],
-"Symfony:Component/OptionsResolver/Tests/OptionsResolverTest.php": [
-531
+"Symfony:Component/Templating/Tests/TemplateNameParserTest.php": [
+40
 ],
 "Symfony:Component/Translation/Tests/Dumper/FileDumperTest.php": [
 48,
 51,
 55
-],
-"Symfony:Component/VarDumper/Tests/Dumper/CliDumperTest.php": [
-456
-],
-"Symfony:Component/VarExporter/Tests/VarExporterTest.php": [
-88
 ],
 "Symfony:Component/Workflow/Tests/WorkflowTest.php": [
 295

@@ -1,7 +1,4 @@
 {
-"Symfony:Component/HttpFoundation/Session/Storage/NativeSessionStorage.php": [
-168
-],
 "Symfony:Component/HttpFoundation/Session/Storage/Proxy/AbstractProxy.php": [
 84
 ],

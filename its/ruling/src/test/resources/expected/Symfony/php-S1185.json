@@ -1,25 +1,12 @@
 {
-"Symfony:Component/Cache/Adapter/TraceableTagAwareAdapter.php": [
-21
-],
-"Symfony:Component/DependencyInjection/Tests/Extension/ExtensionTest.php": [
-90
-],
 "Symfony:Component/Finder/Tests/Iterator/MultiplePcreFilterIteratorTest.php": [
 64
 ],
 "Symfony:Component/Form/Extension/Validator/ViolationMapper/ViolationPathIterator.php": [
 21
 ],
-"Symfony:Component/HttpKernel/Tests/KernelTest.php": [
-622,
-658
-],
 "Symfony:Component/Security/Http/Tests/Authenticator/AbstractAuthenticatorTest.php": [
 40
-],
-"Symfony:Component/Templating/Tests/Loader/FilesystemLoaderTest.php": [
-83
 ],
 "Symfony:Component/Workflow/Event/GuardEvent.php": [
 35

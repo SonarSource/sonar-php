@@ -32,8 +32,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 public class SymbolImpl implements Symbol {
 
   private final String name;
-  private QualifiedName qualifiedName;
   private final IdentifierTree declaration;
+  private QualifiedName qualifiedName;
   private Kind kind;
   private Scope scope;
   private List<SyntaxToken> usages = new LinkedList<>();
