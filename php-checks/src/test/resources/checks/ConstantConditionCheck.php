@@ -157,9 +157,28 @@ function anonymous_functions() {
 }
 
 function class_migrations() {
-  class_alias(NewName::class, OldName::class);
+  class_alias(NewClass::class, OldClass::class);
   if (false) { // OK, used to deprecate the old class name
-  	class OldName {
+  	class OldClass {
+  	}
+  }
+
+class_alias(NewAbstractClass::class, OldAbstractClass::class);
+  if (false) { // OK, used to deprecate the old abstract class name
+    abstract class OldAbstractClass {
+    }
+  }
+
+  class_alias(NewInterface::class, OldInterface::class);
+  if (false) { // OK, used to deprecate the old interface name
+    interface OldInterface {
+    }
+  }
+
+  class_alias(NewClass::class, OldClass::class);
+  if (false) { // OK
+    $x = 3;
+  	class OldClass {
   	}
   }
 }

@@ -29,6 +29,7 @@ import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = ConstantConditionCheck.KEY)
@@ -57,17 +58,6 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR,
   };
 
-  private static boolean isFirstStatementClassDeclaration(IfStatementTree tree) {
-    return tree.statements().stream()
-      .findFirst()
-      // Class declaration can't be written outside a block in an if statement
-      .filter(s -> s.is(Tree.Kind.BLOCK))
-      .map(BlockTree.class::cast)
-      .flatMap(block -> block.statements().stream().findFirst())
-      .map(firstStatement -> firstStatement.is(Tree.Kind.CLASS_DECLARATION))
-      .orElse(false);
-  }
-
   private static boolean isConstant(ExpressionTree conditionExpression) {
     if (conditionExpression.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
       ParenthesisedExpressionTree parenthesisedExpression = (ParenthesisedExpressionTree) conditionExpression;
@@ -79,9 +69,22 @@ public class ConstantConditionCheck extends PHPVisitorCheck {
     return conditionExpression.is(BOOLEAN_CONSTANT_KINDS);
   }
 
+  private static boolean containsClassOrInterfaceDeclaration(IfStatementTree ifStatementTree) {
+    return ifStatementTree.statements().stream()
+      // Class declaration can't be written outside a block in an if statement
+      .filter(s -> s.is(Tree.Kind.BLOCK))
+      .map(BlockTree.class::cast)
+      .flatMap(block -> block.statements().stream())
+      .anyMatch(ConstantConditionCheck::isClassOrInterfaceDeclaration);
+  }
+
+  private static boolean isClassOrInterfaceDeclaration(StatementTree statementTree) {
+    return statementTree.is(Tree.Kind.CLASS_DECLARATION, Tree.Kind.INTERFACE_DECLARATION);
+  }
+
   @Override
   public void visitIfStatement(IfStatementTree tree) {
-    if (!isFirstStatementClassDeclaration(tree)) {
+    if (!containsClassOrInterfaceDeclaration(tree)) {
       ExpressionTree conditionExpression = tree.condition().expression();
       checkConstant(conditionExpression);
     }
