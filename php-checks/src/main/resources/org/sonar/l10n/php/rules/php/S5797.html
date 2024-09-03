@@ -8,8 +8,7 @@ and it is a bug.</p>
 <h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 function foo() {
-    $a = true;
-    if ($a) { // Noncompliant: the condition is always true
+    if (true) { // Noncompliant: the condition is always true
         return 1;
     } else {
         return 2;
