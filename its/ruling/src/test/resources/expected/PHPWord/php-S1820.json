@@ -1,5 +1,8 @@
 {
-"PHPWord:src/PhpWord/Style/Font.php": [
-23
+"PHP_CodeSniffer:src/Files/File.php": [
+19
+],
+"PHP_CodeSniffer:src/Util/Tokens.php": [
+191
 ]
 }

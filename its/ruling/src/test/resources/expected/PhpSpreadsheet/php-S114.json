@@ -1,0 +1,32 @@
+{
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneInterfacePerFileUnitTest.inc": [
+2,
+6,
+10
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneObjectStructurePerFileUnitTest.inc": [
+18
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/InterfaceNameSuffixUnitTest.inc": [
+24
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidClassNameUnitTest.inc": [
+22,
+24,
+26,
+28,
+30,
+32,
+34,
+38,
+42,
+46
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
+63
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/ClassFileNameUnitTest.inc": [
+15,
+16
+]
+}

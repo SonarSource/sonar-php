@@ -27,7 +27,6 @@ import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarsource.analyzer.commons.ProfileGenerator;
@@ -94,12 +93,6 @@ public class PhpGeneralRulingTest {
   @Test
   void testRubixML() throws Exception {
     testProject("RubixML");
-  }
-
-  @Test
-  @Disabled("Due to around 8600 files this project should not be part of the regular integration test run")
-  void testSymfony() throws Exception {
-    testProject("Symfony");
   }
 
   @Test

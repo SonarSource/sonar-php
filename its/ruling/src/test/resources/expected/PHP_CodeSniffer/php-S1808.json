@@ -71,7 +71,10 @@
 21,
 26,
 27,
-28
+28,
+31,
+32,
+33
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc": [
 3,
@@ -331,7 +334,11 @@
 145,
 154,
 155,
-162
+162,
+168,
+169,
+170,
+170
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc": [
 4,
@@ -592,7 +599,10 @@
 20
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-173
+187
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.4.inc": [
+6
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/ControlSignatureUnitTest.inc": [
 10,
@@ -1091,6 +1101,9 @@
 70,
 103
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.10.inc": [
+11
+],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.6.inc": [
 11
 ],
@@ -1283,10 +1296,23 @@
 62,
 67
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DiscouragedFunctionsUnitTest.inc": [
+7
+],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/InnerFunctionsUnitTest.inc": [
 5,
 35,
-46
+46,
+55,
+60,
+62,
+63,
+68,
+69,
+74,
+81,
+82,
+83
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/MethodScopeUnitTest.inc": [
 2,
@@ -1480,6 +1506,21 @@
 2,
 4,
 5
+],
+"PHP_CodeSniffer:tests/Core/File/GetClassPropertiesTest.inc": [
+4,
+10,
+13,
+16,
+19,
+22,
+25,
+28,
+31,
+36,
+41,
+51,
+58
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/AnonClassParenthesisOwnerTest.inc": [
 5,

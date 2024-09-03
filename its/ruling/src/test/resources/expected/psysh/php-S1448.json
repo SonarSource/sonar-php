@@ -1,41 +1,30 @@
 {
-"psysh:src/ConfigPaths.php": [
+"PHP_CodeSniffer:src/Config.php": [
+75
+],
+"PHP_CodeSniffer:src/Files/File.php": [
+19
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
+3,
+63
+],
+"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
 17
 ],
-"psysh:src/Configuration.php": [
-34
+"PHP_CodeSniffer:tests/Core/File/FindEndOfStatementTest.php": [
+14
 ],
-"psysh:src/Readline/Hoa/ConsoleProcessus.php": [
-42
+"PHP_CodeSniffer:tests/Core/File/FindStartOfStatementTest.php": [
+14
 ],
-"psysh:src/Readline/Hoa/FileFinder.php": [
-44
+"PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.php": [
+14
 ],
-"psysh:src/Readline/Hoa/FileGeneric.php": [
-44
+"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
+14
 ],
-"psysh:src/Readline/Hoa/FileLinkReadWrite.php": [
-44
-],
-"psysh:src/Readline/Hoa/FileReadWrite.php": [
-44
-],
-"psysh:src/Readline/Hoa/ProtocolWrapper.php": [
-42
-],
-"psysh:src/Readline/Hoa/Readline.php": [
-44
-],
-"psysh:src/Readline/Hoa/Stream.php": [
-44
-],
-"psysh:src/Shell.php": [
-50
-],
-"psysh:test/ConfigurationTest.php": [
-25
-],
-"psysh:test/ShellTest.php": [
-23
+"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillFnTokenTest.php": [
+14
 ]
 }

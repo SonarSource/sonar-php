@@ -21,12 +21,12 @@
 105
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-377,
-540
+378,
+541
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-228,
-273
+242,
+287
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/NamingConventions/ValidClassNameSniff.php": [
 54
@@ -45,8 +45,8 @@
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
 79,
-221,
-311
+224,
+314
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/VariableCommentSniff.php": [
 120
@@ -82,8 +82,8 @@
 996
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-897,
-1231
+928,
+1262
 ],
 "PHP_CodeSniffer:src/Util/Common.php": [
 415,

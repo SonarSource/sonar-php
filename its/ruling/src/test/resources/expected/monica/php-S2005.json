@@ -1,87 +1,93 @@
 {
-"monica:database/migrations/2018_10_07_120133_fix_json_column.php": [
-25
-],
-"monica:tests/Api/DAV/CalDAVBirthdaysTest.php": [
-55,
-126,
-176
-],
-"monica:tests/Api/DAV/CalDAVTasksTest.php": [
-56,
-127,
-180
-],
-"monica:tests/Api/DAV/CardDAVTest.php": [
-85,
-167,
-203,
-237,
-286
-],
-"monica:tests/Api/DAV/DAVServerTest.php": [
-99,
-145
-],
-"monica:tests/Api/DAV/VCardContactTest.php": [
-362,
-402,
-446,
-458
-],
-"monica:tests/Api/DAV/VEventBirthdayTest.php": [
-65,
-114,
-126
-],
-"monica:tests/Api/DAV/VTodoTaskTest.php": [
-177,
-220,
-232
-],
-"monica:tests/Helpers/DavTester.php": [
-142,
+"PHP_CodeSniffer:scripts/build-phar.php": [
+156,
+157,
+158,
 159,
-174,
-191,
-206,
-223,
-238,
-253,
-272,
-291,
-306,
-321,
-338,
-348
+160,
+161,
+162
 ],
-"monica:tests/Unit/Services/DavClient/Utils/AddressBookSynchronizerTest.php": [
-166,
-214,
-223,
-275,
-284,
-320,
-328
+"PHP_CodeSniffer:src/Config.php": [
+1612,
+1614
 ],
-"monica:tests/Unit/Services/DavClient/Utils/Dav/DavClientTest.php": [
-130,
+"PHP_CodeSniffer:src/Reports/Cbf.php": [
+183,
+185
+],
+"PHP_CodeSniffer:src/Reports/Code.php": [
+177,
+207,
+248,
+294,
+313
+],
+"PHP_CodeSniffer:src/Reports/Full.php": [
+95,
 139,
-162,
-171,
-192,
-208,
-229,
-240,
-274,
-285,
-319,
-329,
-362,
-372,
-403,
-412,
-435,
-450
+181
+],
+"PHP_CodeSniffer:src/Reports/Info.php": [
+100
+],
+"PHP_CodeSniffer:src/Reports/Source.php": [
+249
+],
+"PHP_CodeSniffer:src/Reports/Summary.php": [
+122,
+124
+],
+"PHP_CodeSniffer:src/Reports/VersionControl.php": [
+237,
+325
+],
+"PHP_CodeSniffer:src/Runner.php": [
+523,
+538
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php": [
+102,
+102
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Arrays/ArrayIndentUnitTest.inc": [
+74
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Strings/UnnecessaryStringConcatUnitTest.inc": [
+2,
+6,
+9,
+11,
+12,
+15,
+16,
+18
+],
+"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
+61
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/ConcatenationSpacingUnitTest.inc": [
+8,
+34,
+38,
+42,
+46
+],
+"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
+201
+],
+"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
+78,
+79,
+96,
+97,
+122,
+123
+],
+"PHP_CodeSniffer:tests/bootstrap.php": [
+32,
+36,
+40,
+44
 ]
 }

@@ -1,139 +1,25 @@
 {
-"psysh:src/Configuration.php": [
-50
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.inc": [
+11
 ],
-"psysh:src/Readline/Hoa/AutocompleterAggregate.php": [
-49
-],
-"psysh:src/Readline/Hoa/AutocompleterPath.php": [
-54,
-59
-],
-"psysh:src/Readline/Hoa/AutocompleterWord.php": [
-49
-],
-"psysh:src/Readline/Hoa/Console.php": [
-89,
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
+5,
+7,
+10,
+12,
+15,
+17,
+19,
+20,
+21,
+47,
+62,
+92,
+93,
 94,
-99,
-104,
-109,
-114
+100
 ],
-"psysh:src/Readline/Hoa/ConsoleInput.php": [
-51
-],
-"psysh:src/Readline/Hoa/ConsoleOutput.php": [
-50,
-55
-],
-"psysh:src/Readline/Hoa/ConsoleProcessus.php": [
-202,
-207,
-212,
-217,
-222,
-227,
-236,
-241
-],
-"psysh:src/Readline/Hoa/ConsoleTput.php": [
-52,
-103,
-149,
-570
-],
-"psysh:src/Readline/Hoa/ConsoleWindow.php": [
-51
-],
-"psysh:src/Readline/Hoa/Event.php": [
-60,
-65
-],
-"psysh:src/Readline/Hoa/EventBucket.php": [
-47,
-52
-],
-"psysh:src/Readline/Hoa/EventListener.php": [
-48,
-53
-],
-"psysh:src/Readline/Hoa/EventListens.php": [
-47
-],
-"psysh:src/Readline/Hoa/ExceptionIdle.php": [
-49,
-54,
-59,
-64,
-69
-],
-"psysh:src/Readline/Hoa/FileFinder.php": [
-49,
-54,
-59,
-64,
-69,
-74,
-79,
-84
-],
-"psysh:src/Readline/Hoa/FileGeneric.php": [
-49
-],
-"psysh:src/Readline/Hoa/IteratorFileSystem.php": [
-49
-],
-"psysh:src/Readline/Hoa/IteratorRecursiveDirectory.php": [
-49,
-54
-],
-"psysh:src/Readline/Hoa/IteratorSplFileInfo.php": [
-49,
-54
-],
-"psysh:src/Readline/Hoa/Protocol.php": [
-54,
-59
-],
-"psysh:src/Readline/Hoa/ProtocolNode.php": [
-47,
-52,
-57
-],
-"psysh:src/Readline/Hoa/ProtocolWrapper.php": [
-47,
-52
-],
-"psysh:src/Readline/Hoa/Readline.php": [
-64,
-69,
-74,
-79,
-84,
-89,
-94,
-99,
-104,
-109
-],
-"psysh:src/Readline/Hoa/Stream.php": [
-76,
-81,
-86,
-91,
-96,
-101,
-106,
-546
-],
-"psysh:src/Readline/Hoa/StreamContext.php": [
-49,
-54,
-59
-],
-"psysh:src/Readline/Hoa/Xcallable.php": [
-49,
-54
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
+33
 ]
 }

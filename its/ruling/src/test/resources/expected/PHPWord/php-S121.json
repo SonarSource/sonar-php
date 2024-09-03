@@ -1,0 +1,69 @@
+{
+"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
+3,
+7,
+11,
+13,
+15,
+17,
+23,
+45,
+46,
+49,
+62,
+66,
+78,
+120,
+128,
+134,
+142,
+143,
+144,
+150,
+158,
+159,
+162,
+163,
+164,
+167,
+168,
+170,
+178,
+185,
+188,
+188,
+191,
+195,
+198,
+206,
+222,
+232,
+235,
+236,
+238,
+242,
+260,
+269
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DiscourageGotoUnitTest.inc": [
+11
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
+104,
+107,
+113
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
+64,
+65
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/LongConditionClosingCommentUnitTest.inc": [
+700
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
+47
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc": [
+14
+]
+}

@@ -1,13 +1,30 @@
 {
-"flysystem:src/AdapterTestUtilities/test-functions.php": [
-7,
+"PHP_CodeSniffer:src/Config.php": [
+351
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DisallowRequestSuperglobalUnitTest.inc": [
+2,
+6,
+8,
+10,
 12,
+13,
+14
+],
+"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/GetRequestDataUnitTest.inc": [
+2,
+5,
+8,
 14,
 21,
-22,
-27
+26,
+27,
+28
 ],
-"flysystem:src/WebDAV/resources/server.php": [
-20
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+52,
+71,
+142,
+160
 ]
 }

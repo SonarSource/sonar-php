@@ -1,9 +1,18 @@
 {
-"psysh:src/Readline/Hoa/Protocol.php": [
-90
+"PHP_CodeSniffer:src/Config.php": [
+351
 ],
-"psysh:src/functions.php": [
-400,
-400
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.inc": [
+44,
+45,
+45,
+46,
+47
+],
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+52,
+71,
+142,
+160
 ]
 }

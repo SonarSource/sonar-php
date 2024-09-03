@@ -1,5 +1,9 @@
 {
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php": [
-318
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
+287
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
+314,
+615
 ]
 }

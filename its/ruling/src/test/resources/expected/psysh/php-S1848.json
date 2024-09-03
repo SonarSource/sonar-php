@@ -1,14 +1,9 @@
 {
-"psysh:test/Input/CodeArgumentTest.php": [
-25
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/UpperCaseConstantUnitTest.inc": [
+54
 ],
-"psysh:test/Reflection/ReflectionClassConstantTest.php": [
-37
-],
-"psysh:test/Reflection/ReflectionConstantTest.php": [
-74
-],
-"psysh:test/Reflection/ReflectionLanguageConstructTest.php": [
-93
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/InnerFunctionsUnitTest.inc": [
+31,
+42
 ]
 }

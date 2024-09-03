@@ -1,55 +1,30 @@
 {
-"psysh:src/Command/EditCommand.php": [
-160,
-160,
+"PHP_CodeSniffer:src/Config.php": [
+351
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DisallowRequestSuperglobalUnitTest.inc": [
+2,
+6,
+8,
+10,
+12,
+13,
+14
+],
+"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/GetRequestDataUnitTest.inc": [
+2,
+5,
+8,
+14,
+21,
+26,
+27,
+28
+],
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+52,
+71,
+142,
 160
-],
-"psysh:src/Configuration.php": [
-148,
-148,
-149
-],
-"psysh:src/Readline/Hoa/Console.php": [
-340
-],
-"psysh:src/Readline/Hoa/ConsoleProcessus.php": [
-858,
-860,
-861,
-863,
-864,
-866
-],
-"psysh:src/Readline/Hoa/ConsoleTput.php": [
-749,
-749,
-750,
-761,
-762,
-765,
-766,
-769,
-770
-],
-"psysh:src/Readline/Hoa/ConsoleWindow.php": [
-118,
-119
-],
-"psysh:src/Readline/Hoa/Protocol.php": [
-90
-],
-"psysh:src/SuperglobalsEnv.php": [
-26,
-26,
-27
-],
-"psysh:src/functions.php": [
-157,
-157,
-157,
-344,
-344,
-400,
-400
 ]
 }

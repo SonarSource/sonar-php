@@ -1,82 +1,24 @@
 {
-"flysystem:src/AsyncAwsS3/AsyncAwsS3Adapter.php": [
-113,
-114,
-115
+"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
+77
 ],
-"flysystem:src/AsyncAwsS3/S3ClientStub.php": [
-57
+"PHP_CodeSniffer:src/Files/File.php": [
+239
 ],
-"flysystem:src/AwsS3V3/AwsS3V3Adapter.php": [
-110,
-111,
-112
-],
-"flysystem:src/AzureBlobStorage/AzureBlobStorageAdapter.php": [
-71,
-72
-],
-"flysystem:src/Filesystem.php": [
-31,
-32
-],
-"flysystem:src/Ftp/FtpAdapter.php": [
-65,
-66,
-67,
-68
-],
-"flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapter.php": [
-66,
-67,
-68
-],
-"flysystem:src/InMemory/InMemoryFilesystemAdapter.php": [
-38
-],
-"flysystem:src/Local/LocalFilesystemAdapter.php": [
-80,
-81,
+"PHP_CodeSniffer:src/Files/FileList.php": [
+83,
 84,
-84
+85
 ],
-"flysystem:src/Local/LocalFilesystemAdapterTest.php": [
-140
+"PHP_CodeSniffer:src/Reporter.php": [
+145
 ],
-"flysystem:src/PathPrefixing/PathPrefixedAdapter.php": [
-42
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DeprecatedFunctionsSniff.php": [
+37
 ],
-"flysystem:src/PhpseclibV2/SftpAdapter.php": [
-65,
-66,
-67
-],
-"flysystem:src/PhpseclibV2/SftpConnectionProvider.php": [
-100
-],
-"flysystem:src/PhpseclibV3/SftpAdapter.php": [
-45,
-46,
-47
-],
-"flysystem:src/PhpseclibV3/SftpConnectionProvider.php": [
-47
-],
-"flysystem:src/UrlGeneration/PrefixPublicUrlGenerator.php": [
-16
-],
-"flysystem:src/UrlGeneration/ShardedPrefixPublicUrlGenerator.php": [
-30
-],
-"flysystem:src/WebDAV/WebDAVAdapter.php": [
-62
-],
-"flysystem:src/ZipArchive/StubZipArchiveProvider.php": [
-21
-],
-"flysystem:src/ZipArchive/ZipArchiveAdapter.php": [
-47,
-48,
-49
+"PHP_CodeSniffer:tests/FileList.php": [
+55,
+59,
+69
 ]
 }

@@ -1,47 +1,20 @@
 {
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php": [
-166,
-363,
-380,
-410,
-470,
-482,
-499,
-569
+"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/ConstructorNameUnitTest.inc": [
+25,
+61
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Engine/StructuredReferenceTest.php": [
-86
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SuperfluousWhitespaceUnitTest.1.inc": [
+30,
+41
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/LookupRef/SortTest.php": [
-86
+"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
+1158
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/AddressHelperTest.php": [
+"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
+92,
+230
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.php": [
 133
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/AdvancedValueBinderTest.php": [
-184
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php": [
-160,
-194,
-238,
-346,
-377,
-407,
-449,
-483
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/NumberFormatTest.php": [
-82
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/WorksheetNamedRangesTest.php": [
-137
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/HtmlNumberFormatTest.php": [
-197
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ConditionalTest.php": [
-391,
-471
 ]
 }

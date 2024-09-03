@@ -1,20 +1,51 @@
 {
-"PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php": [
-174
+"PHP_CodeSniffer:src/Reports/Gitblame.php": [
+38,
+38,
+38,
+38
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-2283,
-2283
+"PHP_CodeSniffer:src/Reports/Hgblame.php": [
+39,
+39,
+39,
+39,
+39
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php": [
-121,
-121
+"PHP_CodeSniffer:src/Reports/Junit.php": [
+115
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php": [
-122,
-122
+"PHP_CodeSniffer:src/Sniffs/AbstractVariableSniff.php": [
+86,
+172
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php": [
-100
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ClosureLinterSniff.php": [
+85,
+85
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/SyntaxSniff.php": [
+63
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
+500,
+500
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ShorthandSizeSniff.php": [
+94
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
+180,
+180,
+185,
+185
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JSLintSniff.php": [
+69
+],
+"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php": [
+83
+],
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+1607
 ]
 }

@@ -1,50 +1,17 @@
 {
-"monica:tests/Api/ApiTagControllerTest.php": [
-299,
-300
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/NamingConventions/ValidClassNameSniff.php": [
+63
 ],
-"monica:tests/Api/Contact/ApiPhotoControllerTest.php": [
-274
+"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Traits/UseDeclarationSniff.php": [
+132
 ],
-"monica:tests/Feature/AccountSubscriptionTest.php": [
-276,
-293
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
+4
 ],
-"monica:tests/Feature/AvatarTest.php": [
-109
+"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
+513
 ],
-"monica:tests/Unit/Helpers/ComplianceHelperTest.php": [
-32
-],
-"monica:tests/Unit/Jobs/Dav/DeleteMultipleVCardTest.php": [
-33
-],
-"monica:tests/Unit/Jobs/Dav/DeleteVCardTest.php": [
-41
-],
-"monica:tests/Unit/Jobs/Dav/GetMultipleVCardTest.php": [
-79,
-155
-],
-"monica:tests/Unit/Jobs/Dav/GetVCardTest.php": [
-51
-],
-"monica:tests/Unit/Jobs/Dav/PushVCardTest.php": [
-64
-],
-"monica:tests/Unit/Jobs/Dav/UpdateVCardTest.php": [
-45
-],
-"monica:tests/Unit/Jobs/GetWeatherInformationTest.php": [
-45
-],
-"monica:tests/Unit/Models/AccountTest.php": [
-619
-],
-"monica:tests/Unit/Services/Contact/Avatar/GetAvatarsFromInternetTest.php": [
-87
-],
-"monica:tests/Unit/Services/User/AcceptPolicyTest.php": [
-22
+"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
+598
 ]
 }

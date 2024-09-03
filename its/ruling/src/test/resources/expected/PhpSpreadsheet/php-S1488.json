@@ -1,53 +1,54 @@
 {
-"PhpSpreadsheet:samples/Chart/33_Chart_create_line_dateaxis.php": [
-369
+"PHP_CodeSniffer:src/Files/File.php": [
+2415,
+2420
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/DateValue.php": [
-98
+"PHP_CodeSniffer:src/Fixer.php": [
+320
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/Time.php": [
-82
+"PHP_CodeSniffer:src/Reports/Gitblame.php": [
+54
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engine/Operands/StructuredReference.php": [
-87
+"PHP_CodeSniffer:src/Reports/Svnblame.php": [
+66
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Depreciation.php": [
-206
+"PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php": [
+710
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/MatrixFunctions.php": [
-172
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
+64
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Conditional.php": [
-312
+"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/CamelCapsFunctionNameUnitTest.php": [
+28
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Cell/AddressHelper.php": [
-69,
-173
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/ForbiddenFunctionsUnitTest.php": [
+28
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric/Styles.php": [
-227
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
+186
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods/FormulaTranslator.php": [
-93
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/LowercaseClassKeywordsUnitTest.php": [
+28
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-5257,
-5432,
-7886
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/BlockCommentUnitTest.php": [
+43
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-1271
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.php": [
+32
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
-1527
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/NamingConventions/ValidVariableNameUnitTest.php": [
+28
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
-791
+"PHP_CodeSniffer:src/Tokenizers/Comment.php": [
+266
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Functional/StreamTest.php": [
-13
+"PHP_CodeSniffer:src/Tokenizers/JS.php": [
+1034
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/SpreadsheetTest.php": [
-41
+"PHP_CodeSniffer:src/Util/Common.php": [
+204,
+220,
+235,
+533
 ]
 }

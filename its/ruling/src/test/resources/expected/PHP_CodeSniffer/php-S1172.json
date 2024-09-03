@@ -1,6 +1,6 @@
 {
 "PHP_CodeSniffer:src/Config.php": [
-1239
+1253
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/Functions/FunctionCallArgumentSpacingSniff.php": [
 102
@@ -226,10 +226,10 @@
 90
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-222
+223
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-216
+230
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php": [
 182,
@@ -277,7 +277,7 @@
 104
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
-742
+771
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/PostStatementCommentUnitTest.inc": [
 30,

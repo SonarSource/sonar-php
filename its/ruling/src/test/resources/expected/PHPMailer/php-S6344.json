@@ -1,0 +1,11 @@
+{
+"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/UpperCaseConstantNameUnitTest.inc": [
+9,
+10,
+13,
+14
+],
+"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.11.inc": [
+11
+]
+}

@@ -350,6 +350,9 @@
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.3.inc": [
 0
 ],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.4.inc": [
+0
+],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/InlineCommentUnitTest.inc": [
 0
 ],
@@ -483,6 +486,9 @@
 0
 ],
 "PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.17.inc": [
+0
+],
+"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.18.inc": [
 0
 ],
 "PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.2.inc": [
@@ -650,6 +656,9 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.1.inc": [
 0
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.10.inc": [
+0
+],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.2.inc": [
 0
 ],
@@ -755,6 +764,9 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/InnerFunctionsUnitTest.inc": [
 0
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/NonExecutableCodeUnitTest.3.inc": [
+0
+],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/MethodScopeUnitTest.inc": [
 0
 ],
@@ -849,6 +861,9 @@
 0
 ],
 "PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/Sub/C.inc": [
+0
+],
+"PHP_CodeSniffer:tests/Core/File/GetClassPropertiesTest.inc": [
 0
 ],
 "PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.inc": [

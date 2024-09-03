@@ -1,115 +1,91 @@
 {
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-3713,
-4251
+"PHP_CodeSniffer:src/Config.php": [
+235
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Database/DatabaseAbstract.php": [
+"PHP_CodeSniffer:src/Reports/Gitblame.php": [
+37
+],
+"PHP_CodeSniffer:src/Reports/Hgblame.php": [
+38
+],
+"PHP_CodeSniffer:src/Reports/Svnblame.php": [
+35
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/FixmeSniff.php": [
+58
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/TodoSniff.php": [
+57
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ClosureLinterSniff.php": [
+85
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DisallowAlternativePHPTagsSniff.php": [
 135
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/FormulaParser.php": [
-222
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php": [
-201
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Subtotal.php": [
-49
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Cell/AdvancedValueBinder.php": [
-48,
-50
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Cell/DefaultValueBinder.php": [
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/SyntaxSniff.php": [
 63
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php": [
-176
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowSpaceIndentSniff.php": [
+116
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php": [
-231
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php": [
+105
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-4534,
-4535,
-4539,
-4540,
-4544,
-4545,
-7410
+"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/IncludeOwnSystemSniff.php": [
+44
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-1657,
-1659,
-1667,
-1741
+"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/IncludeSystemSniff.php": [
+91,
+233
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php": [
-93,
-97
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
+500,
+541
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Date.php": [
-484
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
+242,
+287
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/DateFormatter.php": [
-126
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/DuplicateClassDefinitionSniff.php": [
+91
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Formatter.php": [
-167,
-181
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ShorthandSizeSniff.php": [
+93
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/FractionFormatter.php": [
-29,
-66
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/BlockCommentSniff.php": [
+206
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php": [
-121,
-214,
-284
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
+180,
+185
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/PercentageFormatter.php": [
-41
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
+79,
+224,
+314,
+615
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/Style.php": [
-367,
-372
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/VariableCommentSniff.php": [
+120
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php": [
-122,
-129
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JSLintSniff.php": [
+69
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Validations.php": [
-48
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php": [
+172
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-1861
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php": [
+153,
+159
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php": [
-100
+"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php": [
+83
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
-519,
-535,
-640,
-931,
-1097,
-1117,
-1223,
-1357,
-1358,
-1528
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Drawing.php": [
-496
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Engineering/ImCscTest.php": [
-138,
-143
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/VisibilityTest.php": [
-98,
-100,
-102,
-104,
-106
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+786,
+928,
+1603,
+1607
 ]
 }

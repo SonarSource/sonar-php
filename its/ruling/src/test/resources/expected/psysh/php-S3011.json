@@ -1,23 +1,7 @@
 {
-"psysh:src/Reflection/ReflectionClassConstant.php": [
-40
-],
-"psysh:src/Sudo.php": [
-65,
-116,
-135,
-153,
-156
-],
-"psysh:src/TabCompletion/Matcher/ClassAttributesMatcher.php": [
-50,
-52
-],
-"psysh:test/Input/ShellInputTest.php": [
-101,
-102
-],
-"psysh:test/ShellTest.php": [
-591
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+297,
+298,
+299
 ]
 }

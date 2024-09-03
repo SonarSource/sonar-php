@@ -1,12 +1,7 @@
 {
-"monica:tests/TestCase.php": [
-25,
-42,
-44,
-58,
-60
-],
-"monica:tests/Unit/Helpers/CountryHelperTest.php": [
-17
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+297,
+298,
+299
 ]
 }

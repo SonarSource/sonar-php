@@ -1,15 +1,15 @@
 {
 "PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
-241
+242
 ],
 "PHP_CodeSniffer:src/Config.php": [
-889,
-981,
-1044
+903,
+995,
+1058
 ],
 "PHP_CodeSniffer:src/Files/File.php": [
-528,
-1251
+534,
+1257
 ],
 "PHP_CodeSniffer:src/Files/FileList.php": [
 83
@@ -23,8 +23,11 @@
 "PHP_CodeSniffer:src/Reports/Code.php": [
 113
 ],
+"PHP_CodeSniffer:src/Ruleset.php": [
+1345
+],
 "PHP_CodeSniffer:src/Runner.php": [
-916
+949
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/MultipleStatementAlignmentSniff.php": [
 303
@@ -49,15 +52,15 @@
 205
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-471,
-508,
-573
+472,
+509,
+574
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-273,
-372,
-443,
-467
+287,
+386,
+457,
+481
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php": [
 574
@@ -95,11 +98,11 @@
 73
 ],
 "PHP_CodeSniffer:src/Tokenizers/CSS.php": [
-459
+463
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-2561,
-3113
+2615,
+3167
 ],
 "PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
 1568
@@ -107,6 +110,14 @@
 "PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
 841,
 856
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionTest.php": [
+455
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
+139,
+180,
+383
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/AttributesTest.php": [
 411
@@ -136,7 +147,7 @@
 797
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/ContextSensitiveKeywordsTest.php": [
-151
+33
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.php": [
 130

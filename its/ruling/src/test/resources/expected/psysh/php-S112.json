@@ -1,41 +1,12 @@
 {
-"psysh:src/ExecutionLoop/ProcessForker.php": [
-112,
-117,
-133,
-142,
-227
+"PHP_CodeSniffer:autoload.php": [
+285,
+304
 ],
-"psysh:src/Input/ShellInput.php": [
-188,
-191,
-231,
-275,
-292,
-298,
-315
+"PHP_CodeSniffer:scripts/build-phar.php": [
+57
 ],
-"psysh:src/Output/ProcOutputPager.php": [
-58,
-77,
-97
-],
-"psysh:src/Reflection/ReflectionClassConstant.php": [
-188
-],
-"psysh:src/Reflection/ReflectionConstant_.php": [
-162
-],
-"psysh:src/Reflection/ReflectionLanguageConstruct.php": [
-93
-],
-"psysh:src/Reflection/ReflectionNamespace.php": [
-48
-],
-"psysh:src/VersionUpdater/IntervalChecker.php": [
-60
-],
-"psysh:test/ParserTestCase.php": [
-56
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
+21
 ]
 }

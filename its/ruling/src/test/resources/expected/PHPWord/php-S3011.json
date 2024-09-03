@@ -1,8 +1,7 @@
 {
-"PHPWord:src/PhpWord/Shared/AbstractEnum.php": [
-35
-],
-"PHPWord:tests/PhpWordTests/Style/AbstractStyleTest.php": [
-107
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+297,
+298,
+299
 ]
 }

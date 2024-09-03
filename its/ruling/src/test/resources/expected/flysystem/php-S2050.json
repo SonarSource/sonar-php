@@ -1,6 +1,22 @@
 {
-"flysystem:src/AdapterTestUtilities/ExceptionThrowingFilesystemAdapter.php": [
-31,
-37
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/JumbledIncrementerSniff.php": [
+92
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/ForLoopWithTestFunctionCallUnitTest.inc": [
+8
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JavaScriptLintSniff.php": [
+68
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowSizeFunctionsInLoopsUnitTest.inc": [
+18,
+21,
+23,
+27,
+29,
+49
+],
+"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php": [
+70
 ]
 }

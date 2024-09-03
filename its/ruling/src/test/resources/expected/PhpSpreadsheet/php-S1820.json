@@ -1,32 +1,8 @@
 {
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-24
+"PHP_CodeSniffer:src/Files/File.php": [
+19
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Chart.php": [
-8
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Layout.php": [
-7
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-68
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
-5
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
-15
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/BaseDrawing.php": [
-9
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-34
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-56
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx.php": [
-37
+"PHP_CodeSniffer:src/Util/Tokens.php": [
+191
 ]
 }

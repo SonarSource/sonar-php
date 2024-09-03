@@ -1,35 +1,59 @@
 {
-"monica:app/Console/Commands/SetupTest.php": [
-35
+"PHP_CodeSniffer:src/Config.php": [
+75
 ],
-"monica:app/Models/Contact/Contact.php": [
-47
+"PHP_CodeSniffer:src/Files/File.php": [
+19
 ],
-"monica:app/Services/Account/Settings/SqlExportAccount.php": [
-12
+"PHP_CodeSniffer:src/Ruleset.php": [
+18
 ],
-"monica:app/Services/VCard/ImportVCard.php": [
-45
+"PHP_CodeSniffer:src/Runner.php": [
+24
 ],
-"monica:database/migrations/2019_12_17_024553_add_foreign_keys.php": [
-33
-],
-"monica:tests/Api/Contact/ApiContactControllerTest.php": [
-13
-],
-"monica:tests/Feature/ContactTest.php": [
+"PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php": [
 17
 ],
-"monica:tests/Unit/Helpers/DateHelperTest.php": [
-12
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
+17
 ],
-"monica:tests/Unit/Models/ContactTest.php": [
-33
+"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Traits/UseDeclarationSniff.php": [
+16
 ],
-"monica:tests/Unit/Services/VCard/ExportVCardTest.php": [
-20
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php": [
+16
 ],
-"monica:tests/Unit/Services/VCard/ImportVCardTest.php": [
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
+17
+],
+"PHP_CodeSniffer:src/Tokenizers/JS.php": [
+16
+],
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+14
+],
+"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
+15
+],
+"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
+17
+],
+"PHP_CodeSniffer:tests/Core/File/GetMemberPropertiesTest.php": [
+14
+],
+"PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.php": [
+14
+],
+"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
+14
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/NamedFunctionCallArgumentsTest.php": [
+15
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceTest.php": [
+21
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/UndoNamespacedNameSingleTokenTest.php": [
 24
 ]
 }

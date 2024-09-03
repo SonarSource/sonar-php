@@ -1,81 +1,49 @@
 {
-"flysystem:src/Ftp/FtpAdapter.php": [
-78,
-192,
-217,
-246,
-262,
-276,
-316,
-334,
-549,
-562,
-594,
-599,
-606,
-629,
-640,
-645
+"PHP_CodeSniffer:autoload.php": [
+77
 ],
-"flysystem:src/Ftp/FtpConnectionProvider.php": [
-43,
-43,
-57,
-71,
-91,
-101
+"PHP_CodeSniffer:src/Files/File.php": [
+1085
 ],
-"flysystem:src/Ftp/NoopCommandConnectivityChecker.php": [
-16
+"PHP_CodeSniffer:src/Fixer.php": [
+158,
+370,
+412,
+418,
+454,
+489,
+526,
+552,
+647
 ],
-"flysystem:src/Ftp/RawListFtpConnectivityChecker.php": [
-17
+"PHP_CodeSniffer:src/Ruleset.php": [
+153
 ],
-"flysystem:src/Ftp/RawListFtpConnectivityCheckerTest.php": [
-33
+"PHP_CodeSniffer:src/Runner.php": [
+298
 ],
-"flysystem:src/Local/LocalFilesystemAdapter.php": [
-123,
-142,
-166,
-189,
-191,
-193,
-250,
-265,
-274,
-287,
-304,
-346,
-366,
-407,
-421,
-433,
-458
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/NoSilencedErrorsUnitTest.inc": [
+5,
+10
 ],
-"flysystem:src/PhpseclibV2/SftpAdapter.php": [
-354
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
+44
 ],
-"flysystem:src/PhpseclibV2/SftpAdapterTest.php": [
-203
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+522,
+3458,
+3487
 ],
-"flysystem:src/PhpseclibV3/SftpAdapter.php": [
-334
+"PHP_CodeSniffer:src/Util/Common.php": [
+63,
+67,
+67,
+68
 ],
-"flysystem:src/PhpseclibV3/SftpAdapterTest.php": [
-204
+"PHP_CodeSniffer:src/Util/Standards.php": [
+124
 ],
-"flysystem:src/WebDAV/WebDAVAdapter.php": [
-363,
-400
-],
-"flysystem:src/ZipArchive/FilesystemZipArchiveProvider.php": [
-34
-],
-"flysystem:src/ZipArchive/ZipArchiveAdapter.php": [
-358
-],
-"flysystem:src/ZipArchive/ZipArchiveAdapterTest.php": [
-96
+"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
+303
 ]
 }

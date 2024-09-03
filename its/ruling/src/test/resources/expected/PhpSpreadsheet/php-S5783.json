@@ -1,18 +1,5 @@
 {
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/CyclicTest.php": [
-28,
-38
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/AverageIfTest.php": [
-30,
-38
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/AverageIfsTest.php": [
-37,
-45
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/CountBlankTest.php": [
-32,
-40
+"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
+170
 ]
 }

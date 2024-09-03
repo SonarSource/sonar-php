@@ -1,5 +1,59 @@
 {
-"flysystem:src/AdapterTestUtilities/FilesystemAdapterTestCase.php": [
-34
+"PHP_CodeSniffer:src/Config.php": [
+75
+],
+"PHP_CodeSniffer:src/Files/File.php": [
+19
+],
+"PHP_CodeSniffer:src/Ruleset.php": [
+18
+],
+"PHP_CodeSniffer:src/Runner.php": [
+24
+],
+"PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php": [
+17
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
+17
+],
+"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Traits/UseDeclarationSniff.php": [
+16
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php": [
+16
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
+17
+],
+"PHP_CodeSniffer:src/Tokenizers/JS.php": [
+16
+],
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+14
+],
+"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
+15
+],
+"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
+17
+],
+"PHP_CodeSniffer:tests/Core/File/GetMemberPropertiesTest.php": [
+14
+],
+"PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.php": [
+14
+],
+"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
+14
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/NamedFunctionCallArgumentsTest.php": [
+15
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceTest.php": [
+21
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/UndoNamespacedNameSingleTokenTest.php": [
+24
 ]
 }

@@ -1,8 +1,25 @@
 {
-"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
-196,
-199,
-200,
-205
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.inc": [
+11
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
+5,
+7,
+10,
+12,
+15,
+17,
+19,
+20,
+21,
+47,
+62,
+92,
+93,
+94,
+100
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
+33
 ]
 }

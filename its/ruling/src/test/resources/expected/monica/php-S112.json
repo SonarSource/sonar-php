@@ -1,14 +1,12 @@
 {
-"monica:app/Console/Commands/Tests/UpdateLangs.php": [
-38
+"PHP_CodeSniffer:autoload.php": [
+285,
+304
 ],
-"monica:app/Services/User/AcceptPolicy.php": [
-48
+"PHP_CodeSniffer:scripts/build-phar.php": [
+57
 ],
-"monica:database/migrations/2017_06_07_173437_add_multiple_genders_choices.php": [
-29
-],
-"monica:tests/Unit/Jobs/ServiceQueueTester.php": [
-38
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
+21
 ]
 }

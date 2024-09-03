@@ -1,6 +1,6 @@
 {
 "PHP_CodeSniffer:src/Config.php": [
-312
+326
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
 109
@@ -42,7 +42,7 @@
 85
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-760
+791
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
 198,

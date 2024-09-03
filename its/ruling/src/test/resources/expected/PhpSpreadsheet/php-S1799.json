@@ -1,20 +1,24 @@
 {
-"PhpSpreadsheet:samples/Basic/01_Simple_download_ods.php": [
-61
+"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
+99
 ],
-"PhpSpreadsheet:samples/Basic/01_Simple_download_pdf.php": [
-56
+"PHP_CodeSniffer:scripts/build-phar.php": [
+27
 ],
-"PhpSpreadsheet:samples/Basic/01_Simple_download_xls.php": [
-61
+"PHP_CodeSniffer:src/Runner.php": [
+540
 ],
-"PhpSpreadsheet:samples/Basic/01_Simple_download_xlsx.php": [
-60
+"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.inc": [
+86
 ],
-"PhpSpreadsheet:samples/Basic/25_In_memory_image.php": [
-26
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
+96,
+98
 ],
-"PhpSpreadsheet:samples/download.php": [
+"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.11.inc": [
+9
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowBooleanStatementUnitTest.inc": [
 15
 ]
 }

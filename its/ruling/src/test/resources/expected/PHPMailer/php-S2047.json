@@ -1,63 +1,139 @@
 {
-"PHPMailer:src/PHPMailer.php": [
-858,
-1012,
-1027,
-1042,
-1057,
-1076,
-1155,
-1305,
-1375,
-1442,
-1509,
-1535,
-1669,
-1715,
-1877,
-1902,
-2015,
-2100,
-2262,
-3208,
-3705,
-3768,
-3838,
-3887,
-3909,
-3925,
-3941,
-3957,
-4217,
-4614
+"PHP_CodeSniffer:autoload.php": [
+64
 ],
-"PHPMailer:src/POP3.php": [
-172,
-199,
-244,
-307,
-413
+"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
+109,
+170,
+207,
+276
 ],
-"PHPMailer:src/SMTP.php": [
-323,
-457,
-498,
-664,
-716,
-809,
-835,
-902,
-922,
-946,
-981,
-995,
-1069,
-1081,
-1092,
-1106,
-1319
+"PHP_CodeSniffer:src/Config.php": [
+284,
+1566
 ],
-"PHPMailer:test/TestCase.php": [
-371
+"PHP_CodeSniffer:src/Files/File.php": [
+662,
+696,
+729,
+753,
+779,
+810,
+842,
+1104
+],
+"PHP_CodeSniffer:src/Files/FileList.php": [
+231
+],
+"PHP_CodeSniffer:src/Filters/ExactMatch.php": [
+43
+],
+"PHP_CodeSniffer:src/Filters/Filter.php": [
+94,
+164,
+201
+],
+"PHP_CodeSniffer:src/Fixer.php": [
+140,
+386,
+474,
+606,
+667,
+689,
+704,
+720,
+736
+],
+"PHP_CodeSniffer:src/Reporter.php": [
+177
+],
+"PHP_CodeSniffer:src/Reports/Cbf.php": [
+39
+],
+"PHP_CodeSniffer:src/Reports/Checkstyle.php": [
+33
+],
+"PHP_CodeSniffer:src/Reports/Code.php": [
+33
+],
+"PHP_CodeSniffer:src/Reports/Csv.php": [
+32
+],
+"PHP_CodeSniffer:src/Reports/Diff.php": [
+32
+],
+"PHP_CodeSniffer:src/Reports/Emacs.php": [
+32
+],
+"PHP_CodeSniffer:src/Reports/Full.php": [
+33
+],
+"PHP_CodeSniffer:src/Reports/Info.php": [
+33
+],
+"PHP_CodeSniffer:src/Reports/Json.php": [
+33
+],
+"PHP_CodeSniffer:src/Reports/Junit.php": [
+34
+],
+"PHP_CodeSniffer:src/Reports/Notifysend.php": [
+98
+],
+"PHP_CodeSniffer:src/Reports/Report.php": [
+32
+],
+"PHP_CodeSniffer:src/Reports/Source.php": [
+33
+],
+"PHP_CodeSniffer:src/Reports/Summary.php": [
+33
+],
+"PHP_CodeSniffer:src/Reports/VersionControl.php": [
+41
+],
+"PHP_CodeSniffer:src/Reports/Xml.php": [
+33
+],
+"PHP_CodeSniffer:src/Ruleset.php": [
+1120
+],
+"PHP_CodeSniffer:src/Runner.php": [
+748
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
+1513
+],
+"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Namespaces/UseDeclarationSniff.php": [
+277
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
+771
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ObjectOperatorSpacingSniff.php": [
+100,
+139
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.1.inc": [
+139,
+148,
+158,
+173,
+182,
+190,
+207,
+224,
+232,
+239,
+256,
+327,
+336,
+385,
+399,
+411,
+418
+],
+"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
+103
 ]
 }

@@ -1,6 +1,6 @@
 {
 "PHP_CodeSniffer:src/Config.php": [
-1616
+1630
 ],
 "PHP_CodeSniffer:src/Filters/Filter.php": [
 179
@@ -39,6 +39,9 @@
 41,
 44,
 45
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Debug/JSHintUnitTest.php": [
+26
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
 114,
@@ -137,6 +140,14 @@
 "PHP_CodeSniffer:tests/Core/File/GetMemberPropertiesTest.php": [
 821,
 859
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
+165,
+192,
+210,
+228,
+394,
+402
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/BackfillFnTokenTest.php": [
 508

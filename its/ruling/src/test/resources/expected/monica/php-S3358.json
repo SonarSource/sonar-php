@@ -1,17 +1,5 @@
 {
-"monica:app/Services/DavClient/Utils/AddressBookContactsPush.php": [
-113
-],
-"monica:app/Services/VCard/ImportVCard.php": [
-523
-],
-"monica:config/monica.php": [
-15
-],
-"monica:config/sentry.php": [
-8
-],
-"monica:database/migrations/2019_12_21_100315_change_gift_status.php": [
-57
+"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
+63
 ]
 }

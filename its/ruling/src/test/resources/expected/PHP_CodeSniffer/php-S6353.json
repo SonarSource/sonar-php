@@ -27,17 +27,17 @@
 63
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-499,
-499
+500,
+500
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ShorthandSizeSniff.php": [
 94
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
-179,
-179,
-184,
-184
+180,
+180,
+185,
+185
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JSLintSniff.php": [
 69
@@ -46,6 +46,6 @@
 83
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-1576
+1607
 ]
 }

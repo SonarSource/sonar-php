@@ -1,96 +1,21 @@
 {
-"PHPWord:samples/Sample_07_TemplateCloneRow.php": [
-66,
-71,
-76
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
+223,
+225
 ],
-"PHPWord:samples/Sample_40_TemplateSetComplexValue.php": [
-37
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc": [
+6,
+8,
+15,
+19,
+97,
+147,
+158
 ],
-"PHPWord:src/PhpWord/Reader/AbstractReader.php": [
-52
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.1.inc": [
+540
 ],
-"PHPWord:src/PhpWord/Reader/MsDoc.php": [
-195,
-217,
-1286,
-1582,
-1608,
-1672,
-1912,
-1926,
-1929,
-1948,
-2017,
-2032,
-2187,
-2189,
-2234,
-2236,
-2238,
-2280,
-2350,
-2358,
-2371,
-2379
-],
-"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
-46,
-93
-],
-"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
-281
-],
-"PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
-71
-],
-"PHPWord:src/PhpWord/Shared/Drawing.php": [
-108
-],
-"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
-698,
-853,
-1793,
-1797,
-2744,
-2781,
-2806,
-3790,
-3823,
-4255,
-4351
-],
-"PHPWord:src/PhpWord/TemplateProcessor.php": [
-735
-],
-"PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
-47
-],
-"PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php": [
-98
-],
-"PHPWord:src/PhpWord/Writer/ODText/Style/Table.php": [
-43
-],
-"PHPWord:tests/PhpWordTests/Element/TOCTest.php": [
-59
-],
-"PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
-43,
-58
-],
-"PHPWord:tests/PhpWordTests/Writer/ODText/ElementTest.php": [
-312
-],
-"PHPWord:tests/PhpWordTests/Writer/RTF/StyleTest.php": [
-137
-],
-"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
-62,
-462
-],
-"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/SettingsTest.php": [
-92,
-104
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/MemberVarSpacingUnitTest.inc": [
+315
 ]
 }

@@ -1,13 +1,13 @@
 {
 "PHP_CodeSniffer:src/Config.php": [
-361
+375
 ],
 "PHP_CodeSniffer:src/Files/File.php": [
-460,
-2580
+466,
+2601
 ],
 "PHP_CodeSniffer:src/Runner.php": [
-683
+716
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/ControlStructures/InlineControlStructureSniff.php": [
 153
@@ -84,8 +84,8 @@
 125,
 130,
 136,
-180,
-207
+181,
+208
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc": [
 4,
@@ -98,9 +98,9 @@
 ],
 "PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/FileHeaderSniff.php": [
 165,
-221,
-260,
-268
+222,
+261,
+269
 ],
 "PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Files/EndFileNewlineSniff.php": [
 46,
@@ -117,15 +117,15 @@
 58,
 62,
 70,
-118,
-222
+119,
+223
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/InlineCommentSniff.php": [
-256,
-293,
-300,
-320,
-343
+257,
+294,
+301,
+321,
+344
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JSLintSniff.php": [
 81
@@ -182,7 +182,7 @@
 1210
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-1958
+1989
 ],
 "PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
 1017,

@@ -1,11 +1,9 @@
 {
-"PHPWord:src/PhpWord/Escaper/Rtf.php": [
-65
+"PHP_CodeSniffer:src/Runner.php": [
+755
 ],
-"PHPWord:src/PhpWord/Shared/Text.php": [
-192
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php": [
-269
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
+207,
+249
 ]
 }

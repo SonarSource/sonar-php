@@ -1,12 +1,9 @@
 {
-"monica:app/Services/Instance/IdHasher.php": [
-38
+"PHP_CodeSniffer:src/Runner.php": [
+755
 ],
-"monica:tests/Browser/Auth/AuthControllerTest.php": [
-191
-],
-"monica:tests/DuskTestCase.php": [
-113,
-121
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
+207,
+249
 ]
 }

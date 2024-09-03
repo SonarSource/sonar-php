@@ -137,6 +137,9 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
 0
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DiscouragedFunctionsUnitTest.inc": [
+0
+],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/EmbeddedPhpUnitTest.inc": [
 0
 ],
@@ -162,6 +165,9 @@
 0
 ],
 "PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/Sub/C.inc": [
+0
+],
+"PHP_CodeSniffer:tests/Core/File/GetClassPropertiesTest.inc": [
 0
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.inc": [

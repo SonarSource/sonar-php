@@ -1,20 +1,12 @@
 {
-"flysystem:src/AsyncAwsS3/AsyncAwsS3Adapter.php": [
-417,
-442
+"PHP_CodeSniffer:autoload.php": [
+285,
+304
 ],
-"flysystem:src/ProxyArrayAccessToProperties.php": [
-51,
-60
+"PHP_CodeSniffer:scripts/build-phar.php": [
+57
 ],
-"flysystem:src/WebDAV/WebDAVAdapter.php": [
-133,
-148,
-168,
-186,
-203,
-351,
-388,
-437
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
+21
 ]
 }

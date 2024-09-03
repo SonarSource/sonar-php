@@ -1,21 +1,21 @@
 {
 "PHP_CodeSniffer:src/Files/File.php": [
-1382,
-1389,
-1399,
-2230,
-2234,
-2238,
-2371,
-2375,
-2448,
-2452,
-2456,
-2551,
-2559,
-2563,
-2567,
-2571
+1390,
+1397,
+1407,
+2251,
+2255,
+2259,
+2392,
+2396,
+2469,
+2473,
+2477,
+2572,
+2580,
+2584,
+2588,
+2592
 ],
 "PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php": [
 787,
@@ -82,13 +82,14 @@
 85
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/ClassCommentSniff.php": [
-62
+65
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
 149
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-83
+83,
+141
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/ControlStructures/MultiLineConditionSniff.php": [
 97,
@@ -98,9 +99,10 @@
 80
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionDeclarationSniff.php": [
-502,
-504,
-513
+506,
+515,
+517,
+526
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/WhiteSpace/ObjectOperatorIndentSniff.php": [
 86
@@ -110,12 +112,12 @@
 154,
 158,
 164,
-178,
-186,
-198,
-215,
-239,
-277
+180,
+188,
+200,
+217,
+241,
+279
 ],
 "PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Classes/ClassInstantiationSniff.php": [
 71,
@@ -136,20 +138,21 @@
 388,
 391,
 394,
-396
+396,
+433
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/LowercaseStyleDefinitionSniff.php": [
 57
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/ClassCommentSniff.php": [
-68
+71
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
 83
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
 124,
-155
+158
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/VariableCommentSniff.php": [
 53
@@ -182,10 +185,10 @@
 195
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/NonExecutableCodeSniff.php": [
-62,
-217,
-224,
-257
+100,
+254,
+261,
+294
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/MemberVarSpacingSniff.php": [
 70,
@@ -200,8 +203,8 @@
 113,
 113,
 119,
-253,
-437
+257,
+441
 ],
 "PHP_CodeSniffer:src/Tokenizers/JS.php": [
 423,
@@ -213,31 +216,31 @@
 870
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-778,
-849,
-962,
-1410,
-1432,
-1455,
-1485,
-1489,
-1513,
-1536,
-1586,
-1615,
-1956,
-1956,
-2020,
-2070,
-2530,
-2536,
-2551,
-2576,
-2581,
-2587,
-2764,
-2769,
-2774
+809,
+880,
+993,
+1441,
+1463,
+1486,
+1516,
+1520,
+1544,
+1567,
+1617,
+1646,
+1987,
+1987,
+2051,
+2101,
+2584,
+2590,
+2605,
+2630,
+2635,
+2641,
+2818,
+2823,
+2828
 ],
 "PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
 911,

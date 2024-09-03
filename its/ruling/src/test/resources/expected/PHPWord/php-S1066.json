@@ -1,52 +1,134 @@
 {
-"PHPWord:src/PhpWord/Element/AbstractContainer.php": [
-269
+"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
+181,
+187
 ],
-"PHPWord:src/PhpWord/Element/Image.php": [
-344
-],
-"PHPWord:src/PhpWord/Reader/MsDoc.php": [
-2340,
-2375
-],
-"PHPWord:src/PhpWord/Shared/Html.php": [
-956
-],
-"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
-1751,
-1930,
-3635,
-3894,
-4420,
-4756,
-4757
-],
-"PHPWord:src/PhpWord/Shared/Text.php": [
-245
-],
-"PHPWord:src/PhpWord/Shared/ZipArchive.php": [
-171
-],
-"PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
-285,
-386
-],
-"PHPWord:src/PhpWord/Writer/ODText/Element/Title.php": [
+"PHP_CodeSniffer:src/Files/DummyFile.php": [
 42
 ],
-"PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
-65,
+"PHP_CodeSniffer:src/Files/File.php": [
+379,
+405,
+1389,
+1396
+],
+"PHP_CodeSniffer:src/Filters/Filter.php": [
+102
+],
+"PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php": [
+137,
+285,
+644
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/EmptyPHPStatementSniff.php": [
+107
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LineLengthSniff.php": [
+160
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/RequireStrictTypesSniff.php": [
+50
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php": [
+94
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php": [
+107
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
+168,
+222,
+236
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/NestingLevelUnitTest.inc": [
+18,
+35,
+54,
+81,
+87
+],
+"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Objects/AssignThisSniff.php": [
+55
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
+108
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/ControlStructures/MultiLineConditionSniff.php": [
+183
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php": [
+142,
+601
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
+85,
+86,
+87,
+172
+],
+"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/DeclareStatementSniff.php": [
+67,
+114,
+132,
+213
+],
+"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Classes/ClassDeclarationSniff.php": [
+447
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/ClassDeclarationSniff.php": [
 70
 ],
-"PHPWord:src/PhpWord/Writer/Word2007/Element/Field.php": [
-76,
-147
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
+180
 ],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/AbstractPart.php": [
-82
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
+51,
+152,
+210,
+293,
+452,
+458
 ],
-"PHPWord:src/PhpWord/Writer/Word2007/Style/MarginBorder.php": [
-91,
-99
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/ForLoopDeclarationSniff.php": [
+255
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Formatting/OperatorBracketSniff.php": [
+211,
+219
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Operators/ComparisonOperatorUsageSniff.php": [
+123
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php": [
+124
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/NonExecutableCodeSniff.php": [
+220
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php": [
+275
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/FunctionSpacingSniff.php": [
+301
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php": [
+335,
+353,
+363
+],
+"PHP_CodeSniffer:src/Tokenizers/JS.php": [
+422,
+676
+],
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+577
+],
+"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
+1453,
+1671
+],
+"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
+84,
+390
 ]
 }

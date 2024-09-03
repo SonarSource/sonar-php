@@ -1,58 +1,56 @@
 {
-"PhpSpreadsheet:samples/Basic/13_Calculation.php": [
-161
+"PHP_CodeSniffer:src/Config.php": [
+326
 ],
-"PhpSpreadsheet:samples/Basic/13_CalculationCyclicFormulae.php": [
-26
+"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
+109
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_bar_custom_colors.php": [
-135
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
+55,
+56,
+58,
+58,
+61,
+61,
+64,
+64,
+66,
+66,
+69,
+70,
+72,
+72,
+75,
+75,
+78,
+78,
+80,
+80
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_bar_labels_lines.php": [
-160
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc": [
+8,
+8
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_pie_custom_colors.php": [
-135
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
+7,
+9,
+12,
+44,
+52,
+52,
+79,
+85
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-4123,
-4487,
-4761,
-4764,
-4950
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+791
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php": [
-206
+"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
+198,
+200,
+207,
+209
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Cell/AdvancedValueBinder.php": [
-83
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-1305,
-1306,
-2194,
-3753
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-1620
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher.php": [
-40,
+"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc": [
 62
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DgContainer.php": [
-63
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
-387
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
-840
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-3278
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-288
 ]
 }

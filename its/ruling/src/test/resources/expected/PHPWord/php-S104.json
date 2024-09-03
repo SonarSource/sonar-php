@@ -1,11 +1,23 @@
 {
-"PHPWord:src/PhpWord/Reader/MsDoc.php": [
+"PHP_CodeSniffer:src/Config.php": [
 0
 ],
-"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
+"PHP_CodeSniffer:src/Files/File.php": [
 0
 ],
-"PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
+0
+],
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+0
+],
+"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
+0
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceTest.php": [
+0
+],
+"PHP_CodeSniffer:tests/Core/Tokenizer/UndoNamespacedNameSingleTokenTest.php": [
 0
 ]
 }

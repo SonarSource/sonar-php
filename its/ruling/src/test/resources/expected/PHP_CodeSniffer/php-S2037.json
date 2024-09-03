@@ -4,27 +4,27 @@
 177
 ],
 "PHP_CodeSniffer:src/Config.php": [
-508,
-513,
-518,
-523,
-528,
-534,
-539,
-544,
-552,
-557,
-562,
-567,
-573,
-578,
-767,
-793,
-808,
-827,
-1481,
-1506,
-1587
+522,
+527,
+532,
+537,
+542,
+548,
+553,
+558,
+566,
+571,
+576,
+581,
+587,
+592,
+781,
+807,
+822,
+841,
+1495,
+1520,
+1601
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/DisallowYodaConditionsUnitTest.inc": [
 73
@@ -55,10 +55,10 @@
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
 548,
-918,
-994,
-2160,
-3196
+949,
+1025,
+2213,
+3250
 ],
 "PHP_CodeSniffer:src/Util/Common.php": [
 104,
@@ -85,6 +85,16 @@
 ],
 "PHP_CodeSniffer:tests/Core/AllTests.php": [
 28
+],
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+30,
+33,
+37,
+38,
+67,
+68,
+69,
+70
 ],
 "PHP_CodeSniffer:tests/Core/File/FindEndOfStatementTest.php": [
 26,
@@ -175,13 +185,17 @@
 480,
 496
 ],
+"PHP_CodeSniffer:tests/Core/File/GetClassPropertiesTest.php": [
+34,
+79
+],
 "PHP_CodeSniffer:tests/Core/File/GetMemberPropertiesTest.php": [
 31,
 821,
 859
 ],
 "PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.php": [
-1138
+1175
 ],
 "PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
 903
@@ -203,10 +217,13 @@
 117,
 134,
 135,
-225,
-226,
-227,
-229
+361,
+362,
+363,
+365,
+451,
+452,
+454
 ],
 "PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.inc": [
 28,
@@ -299,7 +316,7 @@
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/ContextSensitiveKeywordsTest.php": [
 31,
-149
+170
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/DefaultKeywordTest.php": [
 36,

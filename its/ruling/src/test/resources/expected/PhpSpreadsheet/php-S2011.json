@@ -1,15 +1,76 @@
 {
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
-35,
-230,
-231
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/ExecutableFileUnitTest.php": [
+28
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/ChainedBlockStream.php": [
-61,
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/Formatting/MultiLineAssignmentUnitTest.inc": [
+2,
+5,
+8,
+11,
+13
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/GlobalKeywordUnitTest.inc": [
+4,
+8,
+9,
+11
+],
+"PHP_CodeSniffer:tests/AllTests.php": [
+12,
+49,
+50
+],
+"PHP_CodeSniffer:tests/Core/Filters/Filter/AcceptTest.php": [
+43,
+60
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteLinuxTest.php": [
+48
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteWindowsTest.php": [
+52
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionTest.php": [
+48,
+65
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
+32
+],
+"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
+58,
+59,
+130,
+132,
+133,
+137,
+144,
+145,
+148,
+150,
+153,
+268,
+269,
+273,
+275,
+325,
+326,
+330,
+332
+],
+"PHP_CodeSniffer:tests/Standards/AllSniffs.php": [
+43,
+44,
+45,
+99,
+100
+],
+"PHP_CodeSniffer:tests/bootstrap.php": [
+48,
+51,
+67,
 68,
-107
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/SampleTest.php": [
-33
+69,
+81
 ]
 }

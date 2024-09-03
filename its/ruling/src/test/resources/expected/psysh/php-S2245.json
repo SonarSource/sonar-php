@@ -1,7 +1,5 @@
 {
-"psysh:test/Command/ListCommand/GlobalVariableEnumeratorTest.php": [
-40,
-43,
-46
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.inc": [
+42
 ]
 }
