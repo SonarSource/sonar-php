@@ -1,6 +1,6 @@
 {
 "PHP_CodeSniffer:src/Config.php": [
-228
+235
 ],
 "PHP_CodeSniffer:src/Reports/Gitblame.php": [
 37
@@ -40,12 +40,12 @@
 233
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-499,
-540
+500,
+541
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-228,
-273
+242,
+287
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/DuplicateClassDefinitionSniff.php": [
 91
@@ -57,14 +57,14 @@
 206
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
-179,
-184
+180,
+185
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
 79,
-221,
-311,
-586
+224,
+314,
+615
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/VariableCommentSniff.php": [
 120
@@ -83,9 +83,9 @@
 83
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-755,
-897,
-1572,
-1576
+786,
+928,
+1603,
+1607
 ]
 }

@@ -1,8 +1,8 @@
 {
 "PHPMailer:src/SMTP.php": [
-648,
-656,
-656
+662,
+670,
+670
 ],
 "PHPMailer:test/PHPMailer/PHPMailerTest.php": [
 485,

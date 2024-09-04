@@ -1,98 +1,91 @@
 {
 "flysystem:src/AdapterTestUtilities/FilesystemAdapterTestCase.php": [
-66,
-124,
-282,
+67,
+125,
 286,
 290,
-329,
-341,
-353,
-356,
+294,
+333,
+345,
 357,
-801,
-821
+360,
+361,
+903,
+923
 ],
 "flysystem:src/AsyncAwsS3/AsyncAwsS3AdapterTest.php": [
-98,
-135,
-274,
-276,
-308,
-309,
-379,
-380,
-381
+63,
+113,
+144,
+284,
+286,
+318,
+319,
+389,
+390,
+391
 ],
 "flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
-81,
-96,
-136,
-184,
-352
-],
-"flysystem:src/AzureBlobStorage/AzureBlobStorageAdapterTest.php": [
-28,
-65,
-73,
-81
+79,
+103,
+144,
+192,
+398
 ],
 "flysystem:src/DirectoryListingTest.php": [
 110,
-128
+129
 ],
 "flysystem:src/FilesystemTest.php": [
-438,
 457,
-458,
-459,
-460,
-461,
+476,
+477,
+478,
+479,
 480,
-579
+499,
+620
+],
+"flysystem:src/Ftp/FtpAdapterTest.php": [
+68,
+70
 ],
 "flysystem:src/Ftp/FtpAdapterTestCase.php": [
-95,
-96,
-97
-],
-"flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapterTest.php": [
-58,
-67,
-73
+102,
+103,
+104
 ],
 "flysystem:src/Local/LocalFilesystemAdapterTest.php": [
-96,
-173,
-733,
-757
+97,
+176
+],
+"flysystem:src/MountManagerTest.php": [
+76,
+150
 ],
 "flysystem:src/PathPrefixing/PathPrefixedAdapterTest.php": [
-95
-],
-"flysystem:src/PhpseclibV2/SftpAdapterTest.php": [
-37
-],
-"flysystem:src/PhpseclibV2/SftpConnectionProviderTest.php": [
-22
+96,
+114,
+126,
+127
 ],
 "flysystem:src/PhpseclibV3/SftpAdapterTest.php": [
-28
+29,
+226,
+228,
+232
 ],
 "flysystem:src/PhpseclibV3/SftpConnectionProviderTest.php": [
-34,
-309
+33,
+303
 ],
 "flysystem:src/ReadOnly/ReadOnlyFilesystemAdapterTest.php": [
 171
 ],
-"flysystem:src/WebDAV/WebDAVAdapterTestCase.php": [
-53
-],
 "flysystem:src/WhitespacePathNormalizerTest.php": [
-77
+80
 ],
-"flysystem:src/ZipArchive/ZipArchiveAdapterTest.php": [
-278
+"flysystem:src/ZipArchive/ZipArchiveAdapterTestCase.php": [
+279
 ]
 }

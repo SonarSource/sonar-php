@@ -1,14 +1,14 @@
 {
 "psysh:test/CodeCleaner/CallTimePassByReferencePassTest.php": [
-43
+46
 ],
 "psysh:test/Sudo/SudoVisitorTest.php": [
-92,
-108,
-124,
-125,
-126,
-127,
-142
+96,
+112,
+128,
+129,
+130,
+131,
+146
 ]
 }

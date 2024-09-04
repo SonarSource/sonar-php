@@ -2,6 +2,9 @@
 "PHPWord:src/PhpWord/Element/PreserveText.php": [
 63
 ],
+"PHPWord:src/PhpWord/IOFactory.php": [
+119
+],
 "PHPWord:src/PhpWord/Reader/RTF/Document.php": [
 248
 ],
@@ -12,19 +15,25 @@
 41
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-732,
-804,
-828,
-935,
-959
+739,
+819,
+843,
+972,
+996
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-411
+448
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Element/Text.php": [
 108
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
-81
+94
+],
+"PHPWord:tests/PhpWordTests/Writer/HTML/FontTest.php": [
+87,
+137,
+184,
+224
 ]
 }

@@ -3,22 +3,22 @@
 40
 ],
 "psysh:src/CodeCleaner/RequirePass.php": [
-35
+36
 ],
 "psysh:src/CodeCleaner/UseStatementPass.php": [
-71
+72
 ],
 "psysh:src/Command/TimeitCommand/TimeitVisitor.php": [
 51
 ],
 "psysh:src/Configuration.php": [
-280
+284
 ],
 "psysh:src/Readline/Hoa/Readline.php": [
 355
 ],
 "psysh:src/Readline/Libedit.php": [
-102
+103
 ],
 "psysh:src/functions.php": [
 131

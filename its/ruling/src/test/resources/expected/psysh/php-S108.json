@@ -1,6 +1,6 @@
 {
 "psysh:src/Input/ShellInput.php": [
-90
+92
 ],
 "psysh:src/Readline/Hoa/Readline.php": [
 624,
@@ -8,6 +8,6 @@
 711
 ],
 "psysh:src/functions.php": [
-186
+190
 ]
 }

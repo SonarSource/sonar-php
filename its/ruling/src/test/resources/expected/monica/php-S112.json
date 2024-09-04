@@ -7,8 +7,5 @@
 ],
 "monica:database/migrations/2017_06_07_173437_add_multiple_genders_choices.php": [
 29
-],
-"monica:tests/Unit/Jobs/ServiceQueueTester.php": [
-38
 ]
 }

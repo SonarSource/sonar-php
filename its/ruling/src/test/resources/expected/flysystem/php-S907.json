@@ -3,15 +3,16 @@
 205
 ],
 "flysystem:src/Ftp/FtpAdapter.php": [
-99
+98
 ],
 "flysystem:src/PhpseclibV2/SftpConnectionProvider.php": [
 119
 ],
 "flysystem:src/PhpseclibV3/SftpConnectionProvider.php": [
-65
+62,
+77
 ],
 "flysystem:src/PhpseclibV3/SftpConnectionProviderTest.php": [
-393
+387
 ]
 }

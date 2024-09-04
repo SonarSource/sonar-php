@@ -1,27 +1,27 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-24
+26
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-68
+69
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-46
+48
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
 23
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/ReferenceHelper.php": [
-13
+14
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
-15
+19
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-34
+35
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
-30
+33
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
 56
@@ -30,6 +30,6 @@
 20
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
-19
+23
 ]
 }

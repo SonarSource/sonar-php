@@ -7,8 +7,5 @@
 ],
 "monica:app/Console/Commands/SetupProduction.php": [
 17
-],
-"monica:tests/Unit/Models/AddressBookSubscriptionTest.php": [
-71
 ]
 }

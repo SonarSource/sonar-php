@@ -4,41 +4,49 @@
 248
 ],
 "PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
-70
+72
 ],
 "PHPWord:src/PhpWord/Shared/Css.php": [
 41
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-732,
-804,
-828,
-828,
-935,
-959
+739,
+819,
+843,
+843,
+972,
+996
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-411,
-464,
-470,
-474,
-476,
-749,
-1416
+448,
+501,
+507,
+511,
+513,
+786,
+1461
+],
+"PHPWord:src/PhpWord/Writer/HTML/Style/Table.php": [
+57,
+65
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Element/Text.php": [
 108
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
-81
+94
 ],
 "PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
-723
+746
 ],
 "PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
-518,
-518,
-572,
-572
+550,
+550,
+604,
+604,
+735,
+735,
+812,
+812
 ]
 }

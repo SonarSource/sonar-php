@@ -1,15 +1,15 @@
 {
 "PHPWord:src/PhpWord/Element/Image.php": [
-392,
-409,
-411,
-453
+398,
+438,
+440,
+482
 ],
 "PHPWord:src/PhpWord/Settings.php": [
-391
+431
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-956
+993
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 1097,
@@ -159,16 +159,20 @@
 5328,
 5330
 ],
+"PHPWord:src/PhpWord/Shared/XMLReader.php": [
+120
+],
 "PHPWord:src/PhpWord/Shared/XMLWriter.php": [
 69,
 93
 ],
 "PHPWord:src/PhpWord/Shared/ZipArchive.php": [
-117,
-303
+118,
+171,
+307
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-524
+561
 ],
 "PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
 249
@@ -179,8 +183,12 @@
 105
 ],
 "PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
-161,
-182
+57,
+193,
+214
+],
+"PHPWord:tests/PhpWordTests/TestHelperDOCX.php": [
+107
 ],
 "PHPWord:tests/PhpWordTests/Writer/RTFTest.php": [
 97

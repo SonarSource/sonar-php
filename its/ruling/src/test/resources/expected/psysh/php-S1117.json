@@ -1,17 +1,17 @@
 {
 "psysh:src/CodeCleaner.php": [
-203
+179
 ],
 "psysh:src/Command/TimeitCommand.php": [
 99
 ],
 "psysh:src/ConfigPaths.php": [
-267
+210
 ],
 "psysh:src/Configuration.php": [
-389,
-624,
-1227
+398,
+633,
+1256
 ],
 "psysh:src/ExecutionClosure.php": [
 87
@@ -21,20 +21,17 @@
 62
 ],
 "psysh:src/Input/ShellInput.php": [
-50
+52
 ],
 "psysh:src/Output/ProcOutputPager.php": [
 53
 ],
-"psysh:src/Reflection/ReflectionClassConstant.php": [
-84
-],
 "psysh:src/Shell.php": [
-564,
-624,
-986,
-1040,
-1174
+552,
+612,
+1015,
+1069,
+1203
 ],
 "psysh:src/VersionUpdater/Downloader/CurlDownloader.php": [
 32

@@ -4,11 +4,11 @@
 169
 ],
 "PHP_CodeSniffer:src/Config.php": [
-1665
+1679
 ],
 "PHP_CodeSniffer:src/Runner.php": [
 360,
-739
+772
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc": [
 5,

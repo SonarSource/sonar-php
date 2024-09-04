@@ -9,7 +9,7 @@
 50
 ],
 "PHPWord:src/PhpWord/Element/Image.php": [
-142
+152
 ],
 "PHPWord:src/PhpWord/Element/Line.php": [
 41
@@ -58,37 +58,31 @@
 71
 ],
 "PHPWord:src/PhpWord/PhpWord.php": [
-85,
-92
+86,
+93
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-120
+121
 ],
 "PHPWord:src/PhpWord/Writer/HTML.php": [
-57
-],
-"PHPWord:src/PhpWord/Writer/HTML/Element/AbstractElement.php": [
-72
-],
-"PHPWord:src/PhpWord/Writer/HTML/Part/AbstractPart.php": [
-41
+81
 ],
 "PHPWord:src/PhpWord/Writer/ODText.php": [
-52
+59
 ],
 "PHPWord:src/PhpWord/Writer/PDF.php": [
-56
+57
 ],
 "PHPWord:src/PhpWord/Writer/RTF.php": [
-50
+48
 ],
 "PHPWord:src/PhpWord/Writer/RTF/Element/AbstractElement.php": [
-57
+90
 ],
 "PHPWord:src/PhpWord/Writer/RTF/Part/AbstractPart.php": [
 41
 ],
 "PHPWord:src/PhpWord/Writer/Word2007.php": [
-81
+82
 ]
 }

@@ -1,37 +1,37 @@
 {
 "PHPWord:src/PhpWord/Element/AbstractContainer.php": [
-225
+228
 ],
 "PHPWord:src/PhpWord/PhpWord.php": [
 302
 ],
 "PHPWord:src/PhpWord/Reader/AbstractReader.php": [
-98
+117
 ],
 "PHPWord:src/PhpWord/Reader/ReaderInterface.php": [
 34
 ],
 "PHPWord:src/PhpWord/Settings.php": [
-190,
-236
+204,
+266
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-489
+494
 ],
 "PHPWord:src/PhpWord/Shared/XMLReader.php": [
-128,
+133,
 227
 ],
 "PHPWord:src/PhpWord/Shared/XMLWriter.php": [
 179
 ],
 "PHPWord:src/PhpWord/Shared/ZipArchive.php": [
-131,
-168,
-189,
-232,
-284,
-318
+132,
+167,
+193,
+236,
+288,
+322
 ],
 "PHPWord:src/PhpWord/Style/AbstractStyle.php": [
 227
@@ -42,15 +42,15 @@
 535
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-1429
+1474
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Element/Title.php": [
-74
+75
 ],
 "PHPWord:src/PhpWord/Writer/Word2007/Element/AbstractElement.php": [
-219
+216
 ],
 "PHPWord:src/PhpWord/Writer/Word2007/Part/AbstractPart.php": [
-100
+98
 ]
 }

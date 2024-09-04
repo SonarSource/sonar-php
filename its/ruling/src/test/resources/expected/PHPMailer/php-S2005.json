@@ -1,13 +1,13 @@
 {
 "PHPMailer:language/phpmailer.lang-pl.php": [
-18
+20
 ],
 "PHPMailer:src/PHPMailer.php": [
-1408,
-1426,
-2283,
-2663,
-4978
+1413,
+1431,
+2332,
+2712,
+5100
 ],
 "PHPMailer:src/POP3.php": [
 463
@@ -61,12 +61,12 @@
 83
 ],
 "PHPMailer:test/PHPMailer/ValidateAddressTest.php": [
-286,
-299,
-346,
-371,
-374,
-423
+284,
+297,
+344,
+369,
+372,
+421
 ],
 "PHPMailer:test/PHPMailer/WrapTextTest.php": [
 69,

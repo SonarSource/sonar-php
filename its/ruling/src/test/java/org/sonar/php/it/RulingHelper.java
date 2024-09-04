@@ -60,8 +60,8 @@ public class RulingHelper {
     return getOrchestrator(Edition.COMMUNITY);
   }
 
-  static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile) {
-    return SonarScanner.create(path)
+  static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile, String... keyValueProperties) {
+    return SonarScanner.create(path, keyValueProperties)
       .setProjectKey(projectKey)
       .setProjectName(projectKey)
       .setProjectVersion("1")

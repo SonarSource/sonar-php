@@ -8,41 +8,41 @@
 37
 ],
 "PHPWord:src/PhpWord/Reader/AbstractReader.php": [
-52
+59
 ],
 "PHPWord:src/PhpWord/Reader/MsDoc.php": [
-195,
-217,
-1286,
-1582,
-1608,
-1672,
-1912,
-1926,
-1929,
-1948,
-2017,
-2032,
-2187,
-2189,
-2234,
-2236,
-2238,
-2280,
-2350,
-2358,
-2371,
-2379
+201,
+223,
+1294,
+1590,
+1616,
+1680,
+1920,
+1934,
+1938,
+1957,
+2026,
+2041,
+2196,
+2198,
+2243,
+2245,
+2247,
+2289,
+2359,
+2367,
+2380,
+2388
 ],
 "PHPWord:src/PhpWord/Reader/ODText/Content.php": [
-46,
-93
+60,
+164
 ],
 "PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
-281
+539
 ],
 "PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
-71
+73
 ],
 "PHPWord:src/PhpWord/Shared/Drawing.php": [
 108
@@ -61,10 +61,14 @@
 4351
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-735
+772
 ],
 "PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
-47
+49
+],
+"PHPWord:src/PhpWord/Writer/ODText/Element/Formula.php": [
+49,
+59
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php": [
 98
@@ -75,6 +79,9 @@
 "PHPWord:tests/PhpWordTests/Element/TOCTest.php": [
 59
 ],
+"PHPWord:tests/PhpWordTests/Reader/Word2007/ElementTest.php": [
+539
+],
 "PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
 43,
 58
@@ -83,7 +90,7 @@
 312
 ],
 "PHPWord:tests/PhpWordTests/Writer/RTF/StyleTest.php": [
-137
+163
 ],
 "PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
 62,

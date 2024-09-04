@@ -1,6 +1,6 @@
 {
 "psysh:src/Command/DocCommand.php": [
-73
+72
 ],
 "psysh:src/Command/ListCommand/MethodEnumerator.php": [
 69
@@ -21,8 +21,8 @@
 20
 ],
 "psysh:test/ConfigurationTest.php": [
-127,
-135
+130,
+138
 ],
 "psysh:test/Readline/GNUReadlineTest.php": [
 35

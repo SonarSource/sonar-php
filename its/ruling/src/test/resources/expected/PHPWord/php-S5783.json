@@ -1,5 +1,9 @@
 {
 "PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
-102
+103,
+144
+],
+"PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
+76
 ]
 }

@@ -4,20 +4,5 @@
 ],
 "monica:database/migrations/2017_11_10_202620_move_addresses_from_contact_to_addresses.php": [
 17
-],
-"monica:tests/Unit/Services/Account/Company/CreateCompanyTest.php": [
-54
-],
-"monica:tests/Unit/Services/Contact/Contact/CreateContactTest.php": [
-138
-],
-"monica:tests/Unit/Services/Contact/Contact/UpdateWorkInformationTest.php": [
-72
-],
-"monica:tests/Unit/Services/Contact/Description/ClearPersonalDescriptionTest.php": [
-50
-],
-"monica:tests/Unit/Services/Contact/Description/SetPersonalDescriptionTest.php": [
-51
 ]
 }

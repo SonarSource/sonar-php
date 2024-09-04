@@ -5,69 +5,63 @@
 "psysh:src/CodeCleaner/ImplicitReturnPass.php": [
 45
 ],
-"psysh:src/CodeCleaner/ListPass.php": [
-48
-],
 "psysh:src/CodeCleaner/LoopContextPass.php": [
-53
+55
 ],
 "psysh:src/CodeCleaner/PassableByReferencePass.php": [
 40
 ],
 "psysh:src/CodeCleaner/RequirePass.php": [
-78
+84
 ],
 "psysh:src/CodeCleaner/ReturnTypePass.php": [
-48
+44
 ],
 "psysh:src/CodeCleaner/StrictTypesPass.php": [
-49
-],
-"psysh:src/CodeCleaner/UseStatementPass.php": [
-71
+58
 ],
 "psysh:src/CodeCleaner/ValidConstructorPass.php": [
 56
 ],
 "psysh:src/Command/DocCommand.php": [
-66,
-177
+65,
+175
 ],
 "psysh:src/Command/HelpCommand.php": [
-59
+58
 ],
 "psysh:src/Command/HistoryCommand.php": [
 96
 ],
 "psysh:src/Command/ListCommand.php": [
-241
+236
 ],
 "psysh:src/Command/ListCommand/ConstantEnumerator.php": [
 52
 ],
 "psysh:src/Command/ReflectingCommand.php": [
-298
+259
 ],
 "psysh:src/Command/ShowCommand.php": [
-244
+236
 ],
 "psysh:src/ExecutionLoop/ProcessForker.php": [
 107
 ],
 "psysh:src/ExecutionLoopClosure.php": [
-28
+27
 ],
 "psysh:src/Formatter/CodeFormatter.php": [
-210
+209
 ],
 "psysh:src/Formatter/SignatureFormatter.php": [
-263
+261
 ],
 "psysh:src/Formatter/TraceFormatter.php": [
 32
 ],
 "psysh:src/Input/ShellInput.php": [
-289
+291
 ],
 "psysh:src/Readline/Hoa/ConsoleCursor.php": [
 360
@@ -97,8 +91,8 @@
 85
 ],
 "psysh:src/Shell.php": [
-501,
-1069
+489,
+1098
 ],
 "psysh:src/Sudo/SudoVisitor.php": [
 52
@@ -107,10 +101,10 @@
 138
 ],
 "psysh:src/Util/Mirror.php": [
-46
+45
 ],
 "psysh:src/functions.php": [
 131,
-341
+345
 ]
 }

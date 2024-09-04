@@ -1,15 +1,15 @@
 {
 "psysh:src/CodeCleaner/LoopContextPass.php": [
-65
+67
 ],
 "psysh:src/Command/DocCommand.php": [
-183,
-218,
-231
+181,
+216,
+229
 ],
 "psysh:src/Command/ReflectingCommand.php": [
-327,
-342
+288,
+302
 ],
 "psysh:src/Readline/Hoa/ConsoleCursor.php": [
 476,

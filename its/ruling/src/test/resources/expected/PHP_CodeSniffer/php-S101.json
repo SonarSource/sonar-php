@@ -1,7 +1,8 @@
 {
 "PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.inc": [
 9,
-21
+21,
+31
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneClassPerFileUnitTest.inc": [
 2,

@@ -1,37 +1,32 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Html.php": [
-901
+965
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
-452
+511
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-1174,
-5331,
-5582,
-5622,
-5705,
-6521
+1059,
+5207,
+5456,
+5560
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-562,
-856,
-1634,
-1710
+536,
+848,
+1687,
+1763
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
-112,
-132,
-207,
-225,
-396,
-496,
-571
+122,
+142,
+217,
+235,
+406,
+509,
+601
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php": [
-218
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-446
+202
 ]
 }

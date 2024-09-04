@@ -1,136 +1,173 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-4121,
-4647
+4039,
+4551
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/FormulaParser.php": [
-126
+120
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/Cell.php": [
+386
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Html.php": [
-787
+849
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
-254
+246
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-635,
-2168,
-2414,
-2923,
-5270,
-5445
+571,
+2056,
+2304,
+2802,
+5146,
+5319
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-425
+392
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
-68,
-543,
-954
+77,
+572,
+991
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php": [
-254
+269
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/DataValidations.php": [
+39
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/ReferenceHelper.php": [
-376,
-569
+368,
+573
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
-73
+61
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Wizard/CurrencyBase.php": [
+125
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/Style.php": [
-204
+184
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter.php": [
-817
+785
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php": [
+193
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
-575
+554
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php": [
-60
+48
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-264,
-2794
+223,
+2735
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx.php": [
-301
+252
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php": [
-256,
-513,
-733,
-1026
+312,
+565,
+792,
+1115
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/ContentTypes.php": [
 21
 ],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Drawing.php": [
+180
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Rels.php": [
+182
+],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Theme.php": [
 17
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
+256
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Engine/FormattedNumberTest.php": [
 79
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/LookupRef/UniqueTest.php": [
-51
+53
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/MathTrig/RoundTest.php": [
-45
+44
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/ParseFormulaTest.php": [
-27
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/AxisPropertiesTest.php": [
-30
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/AxisShadowTest.php": [
 29
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/Charts32ScatterTest.php": [
-105
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/XlfnFunctionsTest.php": [
+15
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/DataSeriesColorTest.php": [
-33
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/AxisPropertiesTest.php": [
+32
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/GridlinesLineStyleTest.php": [
-31,
-227
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/GridlinesShadowGlowTest.php": [
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/AxisShadowTest.php": [
 31
 ],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/Charts32ScatterTest.php": [
+107
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/DataSeriesColorTest.php": [
+35
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/GridlinesLineStyleTest.php": [
+33,
+229
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/GridlinesShadowGlowTest.php": [
+33
+],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/Issue3397Test.php": [
-20
+22
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/MultiplierTest.php": [
-19
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Gnumeric/GnumericLoadTest.php": [
-17
+20
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Html/Issue2029Test.php": [
-10
+12
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Utility/File.php": [
-8
+10
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xls/ConditionalBorderTest.php": [
+14
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xls/ConditionalFormattingBasicTest.php": [
-34
+36
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/Issue1482Test.php": [
-28
+27
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xml/XmlActiveSheetTest.php": [
+12
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xml/XmlFontBoldItalicTest.php": [
+12
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ExportArrayTest.php": [
-167
+169
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/WorksheetTest.php": [
-287
+299
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/GridlinesTest.php": [
-98
+100
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ArrayFunctionsTest.php": [
+18,
+134
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/DrawingsTest.php": [
-191
+193
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/Issue4025Test.php": [
+24
 ]
 }

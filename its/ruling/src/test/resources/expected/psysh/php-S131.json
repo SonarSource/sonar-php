@@ -1,16 +1,16 @@
 {
 "psysh:src/CodeCleaner/LoopContextPass.php": [
-55,
-99
+57,
+107
 ],
 "psysh:src/Command/DocCommand.php": [
-181
+179
 ],
 "psysh:src/Command/ReflectingCommand.php": [
-302
+263
 ],
 "psysh:src/Configuration.php": [
-1539
+1582
 ],
 "psysh:src/Output/Theme.php": [
 119
@@ -30,7 +30,7 @@
 292
 ],
 "psysh:src/Shell.php": [
-1299
+1328
 ],
 "psysh:src/TabCompletion/Matcher/ClassAttributesMatcher.php": [
 79
@@ -39,7 +39,7 @@
 76
 ],
 "psysh:src/TabCompletion/Matcher/ClassNamesMatcher.php": [
-63
+64
 ],
 "psysh:src/TabCompletion/Matcher/CommandsMatcher.php": [
 100
@@ -72,6 +72,6 @@
 51
 ],
 "psysh:src/functions.php": [
-274
+278
 ]
 }

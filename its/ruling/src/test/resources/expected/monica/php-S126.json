@@ -36,8 +36,5 @@
 ],
 "monica:database/migrations/2019_12_21_100315_change_gift_status.php": [
 29
-],
-"monica:tests/Api/DAV/CardEtag.php": [
-19
 ]
 }

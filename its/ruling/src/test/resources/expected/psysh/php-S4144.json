@@ -1,19 +1,16 @@
 {
-"psysh:src/Reflection/ReflectionClassConstant.php": [
-136,
-146
-],
 "psysh:test/CodeCleaner/CalledClassPassTest.php": [
-80
+83
 ],
 "psysh:test/CodeCleaner/IssetPassTest.php": [
-101
+103,
+128
 ],
 "psysh:test/CodeCleaner/LabelContextPassTest.php": [
-74
+77
 ],
 "psysh:test/CodeCleaner/PassableByReferencePassTest.php": [
-71,
-97
+86,
+112
 ]
 }

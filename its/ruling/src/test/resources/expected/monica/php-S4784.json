@@ -4,8 +4,5 @@
 ],
 "monica:app/Services/DavClient/CreateAddressBookSubscription.php": [
 53
-],
-"monica:tests/Browser/Settings/MultiFAControllerTest.php": [
-114
 ]
 }

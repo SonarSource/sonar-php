@@ -5,7 +5,7 @@
 116
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-328
+333
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 641,
@@ -78,8 +78,5 @@
 4979,
 5353,
 5381
-],
-"PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
-55
 ]
 }

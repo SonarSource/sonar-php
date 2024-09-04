@@ -1,9 +1,9 @@
 {
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Financial/AllSetupTeardown.php": [
-120
+101
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Logical/XorTest.php": [
-28
+25
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/ChiInvLeftTailTest.php": [
 24
@@ -12,10 +12,10 @@
 24
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Custom/ComplexAssert.php": [
-27,
-107
+21,
+93
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Csv/CsvCallbackTest.php": [
-19
+18
 ]
 }

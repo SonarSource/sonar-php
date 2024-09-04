@@ -3,26 +3,29 @@
 46
 ],
 "psysh:src/CodeCleaner/ListPass.php": [
-48
+42
 ],
 "psysh:src/CodeCleaner/LoopContextPass.php": [
-53
+55
+],
+"psysh:src/CodeCleaner/PassableByReferencePass.php": [
+40
 ],
 "psysh:src/CodeCleaner/RequirePass.php": [
-78
+84
 ],
 "psysh:src/CodeCleaner/ReturnTypePass.php": [
-48
+44
 ],
 "psysh:src/CodeCleaner/StrictTypesPass.php": [
-49
+58
 ],
 "psysh:src/CodeCleaner/UseStatementPass.php": [
-71
+72
 ],
 "psysh:src/Command/DocCommand.php": [
-66,
-177
+65,
+175
 ],
 "psysh:src/Command/HistoryCommand.php": [
 96
@@ -31,11 +34,11 @@
 52
 ],
 "psysh:src/Command/ReflectingCommand.php": [
-120,
-298
+118,
+259
 ],
 "psysh:src/Configuration.php": [
-280
+284
 ],
 "psysh:src/Context.php": [
 47
@@ -46,11 +49,14 @@
 "psysh:src/ExecutionLoop/ProcessForker.php": [
 107
 ],
+"psysh:src/Formatter/SignatureFormatter.php": [
+261
+],
 "psysh:src/Formatter/TraceFormatter.php": [
 32
 ],
 "psysh:src/Input/ShellInput.php": [
-289
+291
 ],
 "psysh:src/Output/Theme.php": [
 91
@@ -96,21 +102,21 @@
 149
 ],
 "psysh:src/Shell.php": [
-1069,
-1263,
-1293
+1098,
+1292,
+1322
 ],
 "psysh:src/Sudo/SudoVisitor.php": [
 52
 ],
 "psysh:src/Util/Mirror.php": [
-46
+45
 ],
 "psysh:src/Util/Str.php": [
-72
+73
 ],
 "psysh:src/functions.php": [
 131,
-343
+347
 ]
 }

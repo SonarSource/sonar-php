@@ -1,14 +1,14 @@
 {
 "PHPMailer:src/PHPMailer.php": [
-2281,
-4866,
-4867,
-4868,
-4869,
-4970
+2330,
+4988,
+4989,
+4990,
+4991,
+5092
 ],
 "PHPMailer:src/SMTP.php": [
-502
+516
 ],
 "PHPMailer:test/Language/TranslationCompletenessTest.php": [
 62
@@ -41,6 +41,6 @@
 218
 ],
 "PHPMailer:test/TestCase.php": [
-247
+252
 ]
 }

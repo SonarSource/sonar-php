@@ -14,7 +14,7 @@
 "PHPMailer:language/phpmailer.lang-fi.php": [
 12,
 19,
-24
+23
 ],
 "PHPMailer:language/phpmailer.lang-fo.php": [
 12,
@@ -43,6 +43,6 @@
 46
 ],
 "PHPMailer:test/PHPMailer/PHPMailerTest.php": [
-1206
+1235
 ]
 }

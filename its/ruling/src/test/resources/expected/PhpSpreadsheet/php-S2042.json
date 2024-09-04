@@ -1,12 +1,15 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-24
+26
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ConvertUOM.php": [
 9
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Roman.php": [
 9
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/Cell.php": [
+22
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Properties.php": [
 11
@@ -15,40 +18,43 @@
 27
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Helper/Html.php": [
-13
+14
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Html.php": [
-23
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
 28
 ],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
+30
+],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-68
+69
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-46
+48
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
 23
 ],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php": [
+31
+],
 "PhpSpreadsheet:src/PhpSpreadsheet/ReferenceHelper.php": [
-13
+14
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
-15
+19
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/Font.php": [
 7
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter.php": [
-16
+19
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-34
+35
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
-30
+33
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
 30
@@ -66,9 +72,12 @@
 20
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
-19
+23
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/ReferenceHelperTest.php": [
+18
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/WorksheetTest.php": [
-16
+18
 ]
 }

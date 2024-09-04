@@ -1,15 +1,18 @@
 {
 "PHPWord:src/PhpWord/Reader/MsDoc.php": [
-2205
+2214
+],
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
+122
 ],
 "PHPWord:src/PhpWord/Reader/Word2007/Numbering.php": [
 50
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-326,
-570,
-686,
-905,
-1109
+331,
+575,
+692,
+942,
+1150
 ]
 }

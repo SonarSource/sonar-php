@@ -1,7 +1,4 @@
 {
-"PhpSpreadsheet:phpstan-conditional.php": [
-3
-],
 "PhpSpreadsheet:samples/Autofilter/10_Autofilter.php": [
 9,
 29,
@@ -159,106 +156,97 @@
 10,
 32
 ],
-"PhpSpreadsheet:samples/Basic/11_Documentsecurity.php": [
+"PhpSpreadsheet:samples/Basic1/11_Documentsecurity.php": [
 9
 ],
-"PhpSpreadsheet:samples/Basic/12_CellProtection.php": [
+"PhpSpreadsheet:samples/Basic1/12_CellProtection.php": [
 10
 ],
-"PhpSpreadsheet:samples/Basic/13_Calculation.php": [
+"PhpSpreadsheet:samples/Basic1/13_Calculation.php": [
 12,
 17,
 158,
 159,
-161
+160
 ],
-"PhpSpreadsheet:samples/Basic/13_CalculationCyclicFormulae.php": [
+"PhpSpreadsheet:samples/Basic1/13_CalculationCyclicFormulae.php": [
 10,
 23,
 24,
-26
+25
 ],
-"PhpSpreadsheet:samples/Basic/14_Xls.php": [
+"PhpSpreadsheet:samples/Basic1/14_Xls.php": [
 6,
 8,
 9,
 11
 ],
-"PhpSpreadsheet:samples/Basic/15_Datavalidation.php": [
+"PhpSpreadsheet:samples/Basic1/15_Datavalidation.php": [
 10,
 40
 ],
-"PhpSpreadsheet:samples/Basic/16_Csv.php": [
+"PhpSpreadsheet:samples/Basic1/16_Csv.php": [
 7,
-11,
+10,
+15,
 16,
-17,
-24,
-30,
-38,
-40
+22,
+28,
+36,
+37
 ],
-"PhpSpreadsheet:samples/Basic/17_Html.php": [
+"PhpSpreadsheet:samples/Basic1/17_Html.php": [
+4
+],
+"PhpSpreadsheet:samples/Basic1/17a_Html.php": [
+6
+],
+"PhpSpreadsheet:samples/Basic1/17b_Html.php": [
 6,
-8,
-9,
-11
+8
 ],
-"PhpSpreadsheet:samples/Basic/17a_Html.php": [
-6,
-8,
-9,
-11
-],
-"PhpSpreadsheet:samples/Basic/17b_Html.php": [
-6,
-8,
-9,
-11,
-16
-],
-"PhpSpreadsheet:samples/Basic/18_Extendedcalculation.php": [
+"PhpSpreadsheet:samples/Basic1/18_Extendedcalculation.php": [
 10,
 15
 ],
-"PhpSpreadsheet:samples/Basic/19_Namedrange.php": [
+"PhpSpreadsheet:samples/Basic1/19_Namedrange.php": [
 10
 ],
-"PhpSpreadsheet:samples/Basic/20_Read_Excel2003XML.php": [
+"PhpSpreadsheet:samples/Basic2/20_Read_Excel2003XML.php": [
 7,
 8,
 9
 ],
-"PhpSpreadsheet:samples/Basic/20_Read_Gnumeric.php": [
+"PhpSpreadsheet:samples/Basic2/20_Read_Gnumeric.php": [
 7,
 8,
 9
 ],
-"PhpSpreadsheet:samples/Basic/20_Read_Ods.php": [
+"PhpSpreadsheet:samples/Basic2/20_Read_Ods.php": [
 7,
 8,
 9
 ],
-"PhpSpreadsheet:samples/Basic/20_Read_Sylk.php": [
+"PhpSpreadsheet:samples/Basic2/20_Read_Sylk.php": [
 7,
 8,
 9
 ],
-"PhpSpreadsheet:samples/Basic/20_Read_Xls.php": [
+"PhpSpreadsheet:samples/Basic2/20_Read_Xls.php": [
 7,
 10,
 11,
 12
 ],
-"PhpSpreadsheet:samples/Basic/22_Heavily_formatted.php": [
+"PhpSpreadsheet:samples/Basic2/22_Heavily_formatted.php": [
 11
 ],
-"PhpSpreadsheet:samples/Basic/23_Sharedstyles.php": [
+"PhpSpreadsheet:samples/Basic2/23_Sharedstyles.php": [
 12,
 28,
 29
 ],
-"PhpSpreadsheet:samples/Basic/24_Readfilter.php": [
+"PhpSpreadsheet:samples/Basic2/24_Readfilter.php": [
 12,
 13,
 14,
@@ -266,21 +254,22 @@
 33,
 36
 ],
-"PhpSpreadsheet:samples/Basic/25_In_memory_image.php": [
-10,
-24,
-29,
-34
+"PhpSpreadsheet:samples/Basic2/25_In_memory_image.php": [
+11,
+12,
+30,
+35,
+43,
+54
 ],
-"PhpSpreadsheet:samples/Basic/26_Utf8.php": [
-9,
-10,
-22,
-28,
-29,
-30
+"PhpSpreadsheet:samples/Basic2/26_Utf8.php": [
+11,
+12,
+19,
+31,
+36
 ],
-"PhpSpreadsheet:samples/Basic/27_Images_Html_Pdf.php": [
+"PhpSpreadsheet:samples/Basic2/27_Images_Html_Pdf.php": [
 14,
 15,
 17,
@@ -289,17 +278,17 @@
 24,
 32
 ],
-"PhpSpreadsheet:samples/Basic/27_Images_Xls.php": [
+"PhpSpreadsheet:samples/Basic2/27_Images_Xls.php": [
 9,
 10
 ],
-"PhpSpreadsheet:samples/Basic/27_Images_Xlsx.php": [
+"PhpSpreadsheet:samples/Basic2/27_Images_Xlsx.php": [
 10,
 14,
 15,
 16
 ],
-"PhpSpreadsheet:samples/Basic/28_Iterator.php": [
+"PhpSpreadsheet:samples/Basic2/28_Iterator.php": [
 8,
 9,
 10,
@@ -308,24 +297,24 @@
 17,
 27
 ],
-"PhpSpreadsheet:samples/Basic/29_Advanced_value_binder.php": [
+"PhpSpreadsheet:samples/Basic2/29_Advanced_value_binder.php": [
 19
 ],
-"PhpSpreadsheet:samples/Basic/30_Template.php": [
+"PhpSpreadsheet:samples/Basic3/30_Template.php": [
 9,
 10,
 13,
 29,
 31
 ],
-"PhpSpreadsheet:samples/Basic/30_Templatebiff5.php": [
+"PhpSpreadsheet:samples/Basic3/30_Templatebiff5.php": [
 9,
 10,
 13,
 29,
 31
 ],
-"PhpSpreadsheet:samples/Basic/31_Document_properties_write.php": [
+"PhpSpreadsheet:samples/Basic3/31_Document_properties_write.php": [
 8,
 9,
 11,
@@ -339,7 +328,7 @@
 57,
 59
 ],
-"PhpSpreadsheet:samples/Basic/31_Document_properties_write_xls.php": [
+"PhpSpreadsheet:samples/Basic3/31_Document_properties_write_xls.php": [
 8,
 9,
 11,
@@ -353,25 +342,25 @@
 57,
 59
 ],
-"PhpSpreadsheet:samples/Basic/37_Page_layout_view.php": [
+"PhpSpreadsheet:samples/Basic3/37_Page_layout_view.php": [
 10
 ],
-"PhpSpreadsheet:samples/Basic/38_Clone_worksheet.php": [
+"PhpSpreadsheet:samples/Basic3/38_Clone_worksheet.php": [
 9,
 44
 ],
-"PhpSpreadsheet:samples/Basic/39_Dropdown.php": [
+"PhpSpreadsheet:samples/Basic3/39_Dropdown.php": [
 11,
-23,
-29,
+24,
 30,
-33,
-35,
-38,
+31,
+34,
+36,
 39,
-89
+40,
+90
 ],
-"PhpSpreadsheet:samples/Basic/40_Duplicate_style.php": [
+"PhpSpreadsheet:samples/Basic4/40_Duplicate_style.php": [
 10,
 11,
 14,
@@ -384,10 +373,10 @@
 27,
 32
 ],
-"PhpSpreadsheet:samples/Basic/41_Password.php": [
+"PhpSpreadsheet:samples/Basic4/41_Password.php": [
 4
 ],
-"PhpSpreadsheet:samples/Basic/42_RichText.php": [
+"PhpSpreadsheet:samples/Basic4/42_RichText.php": [
 10,
 25,
 38,
@@ -397,7 +386,7 @@
 54,
 55
 ],
-"PhpSpreadsheet:samples/Basic/43_Merge_workbooks.php": [
+"PhpSpreadsheet:samples/Basic4/43_Merge_workbooks.php": [
 8,
 9,
 10,
@@ -405,7 +394,7 @@
 16,
 20
 ],
-"PhpSpreadsheet:samples/Basic/44_Worksheet_info.php": [
+"PhpSpreadsheet:samples/Basic4/44_Worksheet_info.php": [
 10,
 11,
 12,
@@ -414,29 +403,30 @@
 17,
 18
 ],
-"PhpSpreadsheet:samples/Basic/45_Quadratic_equation_solver.php": [
+"PhpSpreadsheet:samples/Basic4/45_Quadratic_equation_solver.php": [
 9,
 56,
 57,
 59,
 60,
-64
+63,
+68
 ],
-"PhpSpreadsheet:samples/Basic/46_ReadHtml.php": [
+"PhpSpreadsheet:samples/Basic4/46_ReadHtml.php": [
 10,
 11,
 13,
 14
 ],
-"PhpSpreadsheet:samples/Basic/47_xlsfill.php": [
+"PhpSpreadsheet:samples/Basic4/47_xlsfill.php": [
 8,
 9
 ],
-"PhpSpreadsheet:samples/Basic/47_xlsxfill.php": [
+"PhpSpreadsheet:samples/Basic4/47_xlsxfill.php": [
 8,
 9
 ],
-"PhpSpreadsheet:samples/Basic/48_Image_move_size_with_cells.php": [
+"PhpSpreadsheet:samples/Basic4/48_Image_move_size_with_cells.php": [
 11,
 12,
 20,
@@ -444,7 +434,7 @@
 51,
 62
 ],
-"PhpSpreadsheet:samples/Basic/49_alignment.php": [
+"PhpSpreadsheet:samples/Basic4/49_alignment.php": [
 9,
 11,
 12,
@@ -454,440 +444,23 @@
 37,
 38
 ],
-"PhpSpreadsheet:samples/Basic/50_xlsverticalbreak.php": [
+"PhpSpreadsheet:samples/Basic4/50_xlsverticalbreak.php": [
 8,
 9
 ],
-"PhpSpreadsheet:samples/Bootstrap.php": [
-9
-],
-"PhpSpreadsheet:samples/Calculations/Database/DAVERAGE.php": [
-7,
-8,
+"PhpSpreadsheet:samples/Basic4/51_ProtectedSort.php": [
 9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/Database/DCOUNT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/Database/DCOUNTA.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/Database/DGET.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/Database/DMAX.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-54
-],
-"PhpSpreadsheet:samples/Calculations/Database/DMIN.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-54
-],
-"PhpSpreadsheet:samples/Calculations/Database/DPRODUCT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/Database/DSTDEV.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/Database/DSTDEVP.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/Database/DSUM.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/Database/DVAR.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/Database/DVARP.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-42,
-48
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/DATE.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-24,
-28
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/DATEDIF.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-29,
-33
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/DATEVALUE.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-23,
-25
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/DAY.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-33,
-37
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/DAYS.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-31,
-35
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/DAYS360.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-30,
-34
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/EDATE.php": [
-7,
-8,
-9,
-14,
-15,
+12,
 17,
-18,
-20
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/EOMONTH.php": [
-7,
-8,
-9,
-14,
-15,
-17,
-18,
-20
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/HOUR.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-31,
-35
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/ISOWEEKNUM.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-33,
-37
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/MINUTE.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-31,
-35
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/MONTH.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-33,
-37
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/NETWORKDAYS.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-30,
-39,
-55,
-58
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/NOW.php": [
-7,
-8,
-9,
-14,
-15
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/SECOND.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-31,
-35
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/TIME.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-22,
+25,
 26
 ],
-"PhpSpreadsheet:samples/Calculations/DateTime/TIMEVALUE.php": [
-7,
-8,
-9,
-14,
+"PhpSpreadsheet:samples/Basic4/52_Currency.php": [
+12,
 15,
-18,
-20,
-22
+167
 ],
-"PhpSpreadsheet:samples/Calculations/DateTime/TODAY.php": [
-7,
-8,
-9,
-14,
-15
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/WEEKDAY.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-33,
-37
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/WEEKNUM.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-33,
-37
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/WORKDAY.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-30,
-39,
-40,
-56
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/YEAR.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-33,
-37
-],
-"PhpSpreadsheet:samples/Calculations/DateTime/YEARFRAC.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-31,
-35
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/BESSELI.php": [
-8,
-9,
-10,
-15,
-16,
-18,
-19
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/BESSELJ.php": [
-8,
-9,
-10,
-15,
-16,
-18,
-19
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/BESSELK.php": [
-8,
-9,
-10,
-15,
-16,
-18,
-19
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/BESSELY.php": [
-8,
-9,
-10,
-15,
-16,
-18,
-19
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/BIN2DEC.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-30,
-34
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/BIN2HEX.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-30,
-34
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/BIN2OCT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-30,
-34
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/BITAND.php": [
+"PhpSpreadsheet:samples/Bitwise/BITAND.php": [
 7,
 8,
 9,
@@ -897,7 +470,7 @@
 26,
 30
 ],
-"PhpSpreadsheet:samples/Calculations/Engineering/BITLSHIFT.php": [
+"PhpSpreadsheet:samples/Bitwise/BITLSHIFT.php": [
 7,
 8,
 9,
@@ -907,7 +480,7 @@
 25,
 29
 ],
-"PhpSpreadsheet:samples/Calculations/Engineering/BITOR.php": [
+"PhpSpreadsheet:samples/Bitwise/BITOR.php": [
 7,
 8,
 9,
@@ -917,7 +490,7 @@
 26,
 30
 ],
-"PhpSpreadsheet:samples/Calculations/Engineering/BITRSHIFT.php": [
+"PhpSpreadsheet:samples/Bitwise/BITRSHIFT.php": [
 7,
 8,
 9,
@@ -927,7 +500,7 @@
 23,
 27
 ],
-"PhpSpreadsheet:samples/Calculations/Engineering/BITXOR.php": [
+"PhpSpreadsheet:samples/Bitwise/BITXOR.php": [
 7,
 8,
 9,
@@ -937,637 +510,8 @@
 26,
 30
 ],
-"PhpSpreadsheet:samples/Calculations/Engineering/COMPLEX.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-28,
-30
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/CONVERT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-29,
-33
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/DEC2BIN.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-31,
-35
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/DEC2HEX.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/DEC2OCT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/DELTA.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-23,
-27,
-31
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/ERF.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-25,
-30,
-31,
-32,
-37
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/ERFC.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-24,
-28
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/GESTEP.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-26,
-30,
-34
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/HEX2BIN.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-30,
-34
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/HEX2DEC.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/HEX2OCT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-30,
-34
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMABS.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMAGINARY.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMARGUMENT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMCONJUGATE.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMCOS.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMCOSH.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMCOT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMCSC.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMCSCH.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMDIV.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-25,
-29
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMEXP.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMLN.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMLOG10.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMLOG2.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMPOWER.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMPRODUCT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-25,
-29
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMREAL.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMSEC.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMSECH.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMSIN.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMSINH.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMSQRT.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMSUB.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-25,
-29
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMSUM.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-25,
-29
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/IMTAN.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-32,
-36
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/OCT2BIN.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-31,
-35
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/OCT2DEC.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-33,
-37
-],
-"PhpSpreadsheet:samples/Calculations/Engineering/OCT2HEX.php": [
-7,
-8,
-9,
-14,
-15,
-18,
-33,
-37
-],
-"PhpSpreadsheet:samples/Calculations/Financial/ACCRINT.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/Financial/ACCRINTM.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/Financial/AMORDEGRC.php": [
-12,
-13,
-16
-],
-"PhpSpreadsheet:samples/Calculations/Financial/AMORLINC.php": [
-12,
-13,
-16
-],
-"PhpSpreadsheet:samples/Calculations/Financial/COUPDAYBS.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/Financial/COUPDAYS.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/Financial/COUPDAYSNC.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/Financial/COUPNCD.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/Financial/COUPNUM.php": [
-12,
-13,
-16
-],
-"PhpSpreadsheet:samples/Calculations/Financial/COUPPCD.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/Financial/CUMIPMT.php": [
-10,
-11,
-14,
-26,
-27,
-28,
-29,
-30
-],
-"PhpSpreadsheet:samples/Calculations/Financial/CUMPRINC.php": [
-10,
-11,
-14,
-26,
-27,
-28,
-29,
-30
-],
-"PhpSpreadsheet:samples/Calculations/Financial/DB.php": [
-11,
-12,
-15,
-26,
-27,
-28
-],
-"PhpSpreadsheet:samples/Calculations/Financial/DDB.php": [
-11,
-12,
-15,
-26,
-27,
-28
-],
-"PhpSpreadsheet:samples/Calculations/Financial/DISC.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/Financial/DOLLARDE.php": [
-10,
-11,
-14,
-25
-],
-"PhpSpreadsheet:samples/Calculations/Financial/DOLLARFR.php": [
-10,
-11,
-14,
-25
-],
-"PhpSpreadsheet:samples/Calculations/Financial/EFFECT.php": [
-11,
-12,
-15,
-25
-],
-"PhpSpreadsheet:samples/Calculations/Financial/FV.php": [
-10,
-11,
-14
-],
-"PhpSpreadsheet:samples/Calculations/Financial/FVSCHEDULE.php": [
-10,
-11,
-14
-],
-"PhpSpreadsheet:samples/Calculations/Financial/INTRATE.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/Financial/IPMT.php": [
-11,
-12,
-15,
-27,
-28,
-29
-],
-"PhpSpreadsheet:samples/Calculations/Financial/IRR.php": [
-10,
-11,
-14
-],
-"PhpSpreadsheet:samples/Calculations/Financial/ISPMT.php": [
-10,
-11,
-14,
-26,
-27,
-28
-],
-"PhpSpreadsheet:samples/Calculations/Financial/MIRR.php": [
-10,
-11,
-14
-],
-"PhpSpreadsheet:samples/Calculations/Financial/NOMINAL.php": [
-11,
-12,
-15,
-25
-],
-"PhpSpreadsheet:samples/Calculations/Financial/NPER.php": [
-12,
-13,
-16
-],
-"PhpSpreadsheet:samples/Calculations/Financial/NPV.php": [
-11,
-12,
-15
-],
-"PhpSpreadsheet:samples/Calculations/LookupRef/ADDRESS.php": [
-10,
-11,
-19,
-20
-],
-"PhpSpreadsheet:samples/Calculations/LookupRef/COLUMN.php": [
-10,
-11,
-17,
-18
-],
-"PhpSpreadsheet:samples/Calculations/LookupRef/COLUMNS.php": [
-10,
-11,
-18,
-19
-],
-"PhpSpreadsheet:samples/Calculations/LookupRef/INDEX.php": [
-10,
-11,
-13,
-18,
-36,
-37
-],
-"PhpSpreadsheet:samples/Calculations/LookupRef/INDIRECT.php": [
-11,
-12,
-14,
-30,
-31
-],
-"PhpSpreadsheet:samples/Calculations/LookupRef/OFFSET.php": [
-10,
-11,
-13,
-30,
-31
-],
-"PhpSpreadsheet:samples/Calculations/LookupRef/ROW.php": [
-10,
-11,
-17,
-18
-],
-"PhpSpreadsheet:samples/Calculations/LookupRef/ROWS.php": [
-10,
-11,
-17,
-18
-],
-"PhpSpreadsheet:samples/Calculations/LookupRef/VLOOKUP.php": [
-12,
-13,
-15,
-28,
-43,
-44,
-45
+"PhpSpreadsheet:samples/Bootstrap.php": [
+9
 ],
 "PhpSpreadsheet:samples/Chart/32_Chart_read_write.php": [
 7,
@@ -1602,9 +546,7 @@
 57,
 59,
 62,
-81,
-82,
-84
+81
 ],
 "PhpSpreadsheet:samples/Chart/32_Chart_read_write_PDF.php": [
 14,
@@ -1620,11 +562,66 @@
 59,
 61,
 64,
-83,
-84,
-86
+83
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_area.php": [
+"PhpSpreadsheet:samples/Chart/34_Chart_update.php": [
+9,
+10,
+11,
+16,
+18,
+22
+],
+"PhpSpreadsheet:samples/Chart/35_Chart_render.php": [
+12,
+13,
+18,
+26,
+37,
+54,
+56,
+59,
+61,
+64,
+71,
+73,
+79
+],
+"PhpSpreadsheet:samples/Chart/35_Chart_render33.php": [
+12,
+13,
+16,
+17,
+25,
+33,
+50,
+52,
+55,
+57,
+60,
+67,
+69,
+75
+],
+"PhpSpreadsheet:samples/Chart/37_Chart_dynamic_title.php": [
+8,
+9,
+12,
+15,
+22,
+24,
+25,
+30,
+34,
+40,
+42,
+47,
+48,
+50,
+54,
+55
+],
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_area.php": [
 13,
 14,
 32,
@@ -1637,7 +634,7 @@
 76,
 79
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_area_2.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_area_2.php": [
 14,
 17,
 35,
@@ -1650,10 +647,10 @@
 79,
 82
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_bar.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_bar.php": [
 5
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_bar_custom_colors.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_bar_custom_colors.php": [
 14,
 15,
 27,
@@ -1676,7 +673,7 @@
 157,
 160
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_bar_labels_lines.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_bar_labels_lines.php": [
 17,
 18,
 30,
@@ -1704,7 +701,7 @@
 183,
 186
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_bar_stacked.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_bar_stacked.php": [
 13,
 14,
 32,
@@ -1717,19 +714,19 @@
 79,
 82
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_bubble.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_bubble.php": [
+12,
 13,
-14,
-38,
-50,
-62,
-74,
-80,
-91,
-94,
-97
+37,
+49,
+61,
+73,
+79,
+90,
+93,
+96
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_column.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_column.php": [
 13,
 14,
 32,
@@ -1742,7 +739,7 @@
 79,
 82
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_column_2.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_column_2.php": [
 13,
 14,
 40,
@@ -1756,7 +753,7 @@
 88,
 91
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_composite.alternate.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_composite.alternate.php": [
 13,
 14,
 40,
@@ -1775,7 +772,7 @@
 135,
 138
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_composite.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_composite.php": [
 13,
 14,
 40,
@@ -1793,7 +790,7 @@
 132,
 135
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_line.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_line.php": [
 14,
 15,
 33,
@@ -1806,7 +803,7 @@
 79,
 82
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_line_dateaxis.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_line_dateaxis.php": [
 12,
 13,
 41,
@@ -1828,7 +825,7 @@
 306,
 341
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_multiple_charts.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_multiple_charts.php": [
 13,
 14,
 32,
@@ -1850,7 +847,7 @@
 153,
 156
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_pie.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_pie.php": [
 14,
 15,
 33,
@@ -1871,7 +868,7 @@
 149,
 152
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_pie_custom_colors.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_pie_custom_colors.php": [
 14,
 15,
 27,
@@ -1894,7 +891,7 @@
 157,
 160
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_radar.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_radar.php": [
 14,
 15,
 41,
@@ -1907,7 +904,7 @@
 89,
 92
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_scatter.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_scatter.php": [
 13,
 14,
 32,
@@ -1920,7 +917,7 @@
 73,
 76
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_scatter2.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_scatter2.php": [
 17,
 18,
 40,
@@ -1937,7 +934,7 @@
 164,
 167
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_scatter3.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_scatter3.php": [
 16,
 17,
 39,
@@ -1951,7 +948,7 @@
 159,
 163
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_scatter4.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_scatter4.php": [
 14,
 15,
 33,
@@ -1978,7 +975,7 @@
 102,
 105
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_scatter5_trendlines.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_scatter5_trendlines.php": [
 17,
 18,
 44,
@@ -1994,7 +991,7 @@
 169,
 195
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_scatter6_value_xaxis.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_scatter6_value_xaxis.php": [
 16,
 17,
 20,
@@ -2010,7 +1007,7 @@
 92,
 108
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_stock.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_stock.php": [
 16,
 17,
 40,
@@ -2025,45 +1022,280 @@
 93,
 96
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_stock2.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_stock2.php": [
+16,
 17,
-18,
-41,
-54,
-64,
-72,
-82,
-84,
-87,
+40,
+53,
+63,
+71,
+81,
+83,
+86,
+91,
 92,
 93,
-94,
-102,
-122,
-123,
-125
+101
 ],
-"PhpSpreadsheet:samples/Chart/34_Chart_update.php": [
+"PhpSpreadsheet:samples/ComplexNumbers1/COMPLEX.php": [
+7,
+8,
 9,
-10,
-11,
-16,
+14,
+15,
 18,
-22
+28,
+30
 ],
-"PhpSpreadsheet:samples/Chart/35_Chart_render.php": [
-12,
-13,
+"PhpSpreadsheet:samples/ComplexNumbers1/IMABS.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers1/IMAGINARY.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers1/IMARGUMENT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers1/IMCONJUGATE.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers1/IMREAL.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMCOS.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMCOSH.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMCOT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMCSC.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMCSCH.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMDIV.php": [
+7,
+8,
+9,
+14,
+15,
 18,
 25,
-35,
-52,
-54,
-58,
-61,
-67,
-69,
-75
+29
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMEXP.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMLN.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMLOG10.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers2/IMLOG2.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMPOWER.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMPRODUCT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+25,
+29
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMSEC.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMSECH.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMSIN.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMSINH.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMSQRT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMSUB.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+25,
+29
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMSUM.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+25,
+29
+],
+"PhpSpreadsheet:samples/ComplexNumbers3/IMTAN.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
 ],
 "PhpSpreadsheet:samples/ConditionalFormatting/01_Basic_Comparisons.php": [
 14,
@@ -2071,13 +1303,13 @@
 43,
 49,
 73,
-80,
-87,
-99,
-100,
-101,
-103,
-162
+78,
+83,
+93,
+94,
+95,
+97,
+156
 ],
 "PhpSpreadsheet:samples/ConditionalFormatting/02_Text_Comparisons.php": [
 13,
@@ -2121,7 +1353,8 @@
 120,
 122,
 123,
-125
+126,
+127
 ],
 "PhpSpreadsheet:samples/ConditionalFormatting/06_Duplicate_Comparisons.php": [
 13,
@@ -2145,13 +1378,385 @@
 93,
 95
 ],
+"PhpSpreadsheet:samples/ConditionalFormatting/cond08_colorscale.php": [
+13,
+14,
+43,
+44,
+46,
+56
+],
+"PhpSpreadsheet:samples/Database/DAVERAGE.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/Database/DCOUNT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/Database/DCOUNTA.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/Database/DGET.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/Database/DMAX.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+54
+],
+"PhpSpreadsheet:samples/Database/DMIN.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+54
+],
+"PhpSpreadsheet:samples/Database/DPRODUCT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/Database/DSTDEV.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/Database/DSTDEVP.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/Database/DSUM.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/Database/DVAR.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/Database/DVARP.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+42,
+48
+],
+"PhpSpreadsheet:samples/DateTime/DATE.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+24,
+28
+],
+"PhpSpreadsheet:samples/DateTime/DATEDIF.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+29,
+33
+],
+"PhpSpreadsheet:samples/DateTime/DATEVALUE.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+23,
+25
+],
+"PhpSpreadsheet:samples/DateTime/DAY.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+33,
+37
+],
+"PhpSpreadsheet:samples/DateTime/DAYS.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+31,
+35
+],
+"PhpSpreadsheet:samples/DateTime/DAYS360.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+30,
+34
+],
+"PhpSpreadsheet:samples/DateTime/EDATE.php": [
+7,
+8,
+9,
+14,
+15,
+17,
+18,
+20,
+37
+],
+"PhpSpreadsheet:samples/DateTime/EOMONTH.php": [
+7,
+8,
+9,
+14,
+15,
+17,
+18,
+20
+],
+"PhpSpreadsheet:samples/DateTime/HOUR.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+31,
+35
+],
+"PhpSpreadsheet:samples/DateTime/ISOWEEKNUM.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+33,
+37
+],
+"PhpSpreadsheet:samples/DateTime/MINUTE.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+31,
+35
+],
+"PhpSpreadsheet:samples/DateTime/MONTH.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+33,
+37
+],
+"PhpSpreadsheet:samples/DateTime2/NETWORKDAYS.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+30,
+39,
+55,
+58
+],
+"PhpSpreadsheet:samples/DateTime2/NOW.php": [
+7,
+8,
+9,
+14,
+15
+],
+"PhpSpreadsheet:samples/DateTime2/SECOND.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+31,
+35
+],
+"PhpSpreadsheet:samples/DateTime2/TIME.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+22,
+26
+],
+"PhpSpreadsheet:samples/DateTime2/TIMEVALUE.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+20,
+22
+],
+"PhpSpreadsheet:samples/DateTime2/TODAY.php": [
+7,
+8,
+9,
+14,
+15
+],
+"PhpSpreadsheet:samples/DateTime2/WEEKDAY.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+33,
+37
+],
+"PhpSpreadsheet:samples/DateTime2/WEEKNUM.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+33,
+37
+],
+"PhpSpreadsheet:samples/DateTime2/WORKDAY.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+30,
+39,
+40,
+56
+],
+"PhpSpreadsheet:samples/DateTime2/YEAR.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+33,
+37
+],
+"PhpSpreadsheet:samples/DateTime2/YEARFRAC.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+31,
+35
+],
 "PhpSpreadsheet:samples/DefinedNames/AbsoluteNamedRange.php": [
 8,
 9,
 22,
 31,
 32,
-40
+40,
+48,
+50,
+52
 ],
 "PhpSpreadsheet:samples/DefinedNames/CrossWorksheetNamedFormula.php": [
 10,
@@ -2170,7 +1775,10 @@
 30,
 39,
 40,
-48
+48,
+59,
+61,
+63
 ],
 "PhpSpreadsheet:samples/DefinedNames/RelativeNamedRange.php": [
 8,
@@ -2178,7 +1786,10 @@
 25,
 34,
 35,
-43
+43,
+51,
+53,
+55
 ],
 "PhpSpreadsheet:samples/DefinedNames/RelativeNamedRange2.php": [
 8,
@@ -2186,7 +1797,10 @@
 25,
 34,
 35,
-43
+43,
+54,
+56,
+58
 ],
 "PhpSpreadsheet:samples/DefinedNames/RelativeNamedRangeAsFunction.php": [
 9,
@@ -2194,7 +1808,10 @@
 26,
 35,
 36,
-44
+44,
+57,
+59,
+61
 ],
 "PhpSpreadsheet:samples/DefinedNames/ScopedNamedRange.php": [
 8,
@@ -2203,7 +1820,10 @@
 44,
 45,
 53,
-66
+63,
+68,
+73,
+75
 ],
 "PhpSpreadsheet:samples/DefinedNames/ScopedNamedRange2.php": [
 8,
@@ -2211,18 +1831,486 @@
 11,
 53,
 54,
-62
+62,
+80,
+82,
+84
 ],
 "PhpSpreadsheet:samples/DefinedNames/SimpleNamedFormula.php": [
 9,
-10
+10,
+36,
+38,
+40,
+42
 ],
 "PhpSpreadsheet:samples/DefinedNames/SimpleNamedRange.php": [
 8,
-9
+9,
+30,
+32,
+34,
+36
+],
+"PhpSpreadsheet:samples/Engineering/BESSELI.php": [
+8,
+9,
+10,
+15,
+16,
+18,
+19,
+21
+],
+"PhpSpreadsheet:samples/Engineering/BESSELJ.php": [
+8,
+9,
+10,
+15,
+16,
+18,
+19,
+21
+],
+"PhpSpreadsheet:samples/Engineering/BESSELK.php": [
+8,
+9,
+10,
+15,
+16,
+18,
+19,
+21
+],
+"PhpSpreadsheet:samples/Engineering/BESSELY.php": [
+8,
+9,
+10,
+15,
+16,
+18,
+19,
+21
+],
+"PhpSpreadsheet:samples/Engineering/CONVERT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+29,
+33,
+34
+],
+"PhpSpreadsheet:samples/Engineering/Convert-Online.php": [
+9,
+16,
+17,
+18,
+20,
+78,
+79,
+80,
+83
+],
+"PhpSpreadsheet:samples/Engineering/DELTA.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+23,
+27,
+31
+],
+"PhpSpreadsheet:samples/Engineering/ERF.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+25,
+30,
+31,
+32,
+37
+],
+"PhpSpreadsheet:samples/Engineering/ERFC.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+24,
+28
+],
+"PhpSpreadsheet:samples/Engineering/GESTEP.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+26,
+30,
+34,
+42,
+44,
+46
+],
+"PhpSpreadsheet:samples/Financial1/ACCRINT.php": [
+11,
+12,
+15
+],
+"PhpSpreadsheet:samples/Financial1/ACCRINTM.php": [
+11,
+12,
+15
+],
+"PhpSpreadsheet:samples/Financial1/AMORDEGRC.php": [
+12,
+13,
+16
+],
+"PhpSpreadsheet:samples/Financial1/AMORLINC.php": [
+12,
+13,
+16
+],
+"PhpSpreadsheet:samples/Financial1/COUPDAYBS.php": [
+11,
+12,
+15
+],
+"PhpSpreadsheet:samples/Financial1/COUPDAYS.php": [
+11,
+12,
+15
+],
+"PhpSpreadsheet:samples/Financial1/COUPDAYSNC.php": [
+11,
+12,
+15
+],
+"PhpSpreadsheet:samples/Financial1/COUPNCD.php": [
+11,
+12,
+15
+],
+"PhpSpreadsheet:samples/Financial1/COUPNUM.php": [
+12,
+13,
+16
+],
+"PhpSpreadsheet:samples/Financial1/COUPPCD.php": [
+11,
+12,
+15
+],
+"PhpSpreadsheet:samples/Financial1/CUMIPMT.php": [
+10,
+11,
+14,
+26,
+27,
+28,
+29,
+30
+],
+"PhpSpreadsheet:samples/Financial1/CUMPRINC.php": [
+10,
+11,
+14,
+26,
+27,
+28,
+29,
+30
+],
+"PhpSpreadsheet:samples/Financial2/DB.php": [
+11,
+12,
+15,
+26,
+27,
+28
+],
+"PhpSpreadsheet:samples/Financial2/DDB.php": [
+11,
+12,
+15,
+26,
+27,
+28
+],
+"PhpSpreadsheet:samples/Financial2/DISC.php": [
+11,
+12,
+15
+],
+"PhpSpreadsheet:samples/Financial2/DOLLARDE.php": [
+10,
+11,
+14,
+25
+],
+"PhpSpreadsheet:samples/Financial2/DOLLARFR.php": [
+10,
+11,
+14,
+25
+],
+"PhpSpreadsheet:samples/Financial2/EFFECT.php": [
+11,
+12,
+15,
+25
+],
+"PhpSpreadsheet:samples/Financial2/FV.php": [
+10,
+11,
+14
+],
+"PhpSpreadsheet:samples/Financial2/FVSCHEDULE.php": [
+10,
+11,
+14
+],
+"PhpSpreadsheet:samples/Financial3/INTRATE.php": [
+11,
+12,
+15
+],
+"PhpSpreadsheet:samples/Financial3/IPMT.php": [
+11,
+12,
+15,
+27,
+28,
+29
+],
+"PhpSpreadsheet:samples/Financial3/IRR.php": [
+10,
+11,
+14
+],
+"PhpSpreadsheet:samples/Financial3/ISPMT.php": [
+10,
+11,
+14,
+26,
+27,
+28
+],
+"PhpSpreadsheet:samples/Financial3/MIRR.php": [
+10,
+11,
+14
+],
+"PhpSpreadsheet:samples/Financial3/NOMINAL.php": [
+11,
+12,
+15,
+25
+],
+"PhpSpreadsheet:samples/Financial3/NPER.php": [
+12,
+13,
+16
+],
+"PhpSpreadsheet:samples/Financial3/NPV.php": [
+11,
+12,
+15
 ],
 "PhpSpreadsheet:samples/Header.php": [
-11
+13
+],
+"PhpSpreadsheet:samples/HexEtcConversions/BIN2DEC.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+30,
+34
+],
+"PhpSpreadsheet:samples/HexEtcConversions/BIN2HEX.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+30,
+34
+],
+"PhpSpreadsheet:samples/HexEtcConversions/BIN2OCT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+30,
+34
+],
+"PhpSpreadsheet:samples/HexEtcConversions/DEC2BIN.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+31,
+35
+],
+"PhpSpreadsheet:samples/HexEtcConversions/DEC2HEX.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/HexEtcConversions/DEC2OCT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/HexEtcConversions/HEX2BIN.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+30,
+34
+],
+"PhpSpreadsheet:samples/HexEtcConversions/HEX2DEC.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+32,
+36
+],
+"PhpSpreadsheet:samples/HexEtcConversions/HEX2OCT.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+30,
+34
+],
+"PhpSpreadsheet:samples/HexEtcConversions/OCT2BIN.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+31,
+35
+],
+"PhpSpreadsheet:samples/HexEtcConversions/OCT2DEC.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+33,
+37
+],
+"PhpSpreadsheet:samples/HexEtcConversions/OCT2HEX.php": [
+7,
+8,
+9,
+14,
+15,
+18,
+33,
+37
+],
+"PhpSpreadsheet:samples/LookupRef/ADDRESS.php": [
+10,
+11,
+19,
+20
+],
+"PhpSpreadsheet:samples/LookupRef/COLUMN.php": [
+10,
+11,
+17,
+18
+],
+"PhpSpreadsheet:samples/LookupRef/COLUMNS.php": [
+10,
+11,
+18,
+19
+],
+"PhpSpreadsheet:samples/LookupRef/INDEX.php": [
+10,
+11,
+13,
+18,
+36,
+37
+],
+"PhpSpreadsheet:samples/LookupRef/INDIRECT.php": [
+11,
+12,
+14,
+30,
+31
+],
+"PhpSpreadsheet:samples/LookupRef/OFFSET.php": [
+10,
+11,
+13,
+30,
+31
+],
+"PhpSpreadsheet:samples/LookupRef/ROW.php": [
+10,
+11,
+17,
+18
+],
+"PhpSpreadsheet:samples/LookupRef/ROWS.php": [
+10,
+11,
+17,
+18
+],
+"PhpSpreadsheet:samples/LookupRef/VLOOKUP.php": [
+12,
+13,
+15,
+28,
+43,
+44,
+45
 ],
 "PhpSpreadsheet:samples/Pdf/21_Pdf_Domdf.php": [
 7,
@@ -2237,32 +2325,33 @@
 15
 ],
 "PhpSpreadsheet:samples/Pdf/21a_Pdf.php": [
-7,
-18,
-24,
-25
+8,
+19
 ],
 "PhpSpreadsheet:samples/Pdf/21b_Pdf.php": [
-8,
-27,
-36,
-37
+9,
+28,
+38
 ],
 "PhpSpreadsheet:samples/Pdf/21c_Pdf.php": [
-9,
-10,
 11,
-13,
-22,
-23
+46,
+47,
+48,
+50
 ],
 "PhpSpreadsheet:samples/Pdf/21d_FitToHeightPdf.php": [
 10,
 11,
 12,
 13,
-14,
-17
+14
+],
+"PhpSpreadsheet:samples/Pdf/21e_UnusualFont_mpdf.php": [
+9,
+12,
+24,
+25
 ],
 "PhpSpreadsheet:samples/Reader/01_Simple_file_reader_using_IOFactory.php": [
 7,
@@ -2312,12 +2401,13 @@
 18
 ],
 "PhpSpreadsheet:samples/Reader/08_Simple_file_reader_loading_several_named_worksheets.php": [
-7,
 8,
-9,
-12,
+13,
+14,
 15,
-18
+18,
+21,
+24
 ],
 "PhpSpreadsheet:samples/Reader/09_Simple_file_reader_using_a_read_filter.php": [
 10,
@@ -2333,35 +2423,35 @@
 10,
 11,
 12,
-41,
-45,
-50,
-52,
-53
+35,
+39,
+44,
+46,
+47
 ],
 "PhpSpreadsheet:samples/Reader/11_Reading_a_workbook_in_chunks_using_a_configurable_read_filter_(version_1).php": [
 10,
 11,
+42,
 45,
 48,
 51,
-54,
-58,
-62,
-63
+55,
+59,
+60
 ],
 "PhpSpreadsheet:samples/Reader/12_Reading_a_workbook_in_chunks_using_a_configurable_read_filter_(version_2).php": [
 10,
 11,
+42,
 45,
-48,
-50,
-56,
-61,
-65,
-66
+47,
+53,
+58,
+62,
+63
 ],
-"PhpSpreadsheet:samples/Reader/13_Simple_file_reader_for_multiple_CSV_files.php": [
+"PhpSpreadsheet:samples/Reader2/13_Simple_file_reader_for_multiple_CSV_files.php": [
 7,
 9,
 10,
@@ -2370,19 +2460,19 @@
 27,
 28
 ],
-"PhpSpreadsheet:samples/Reader/14_Reading_a_large_CSV_file_in_chunks_to_split_across_multiple_worksheets.php": [
+"PhpSpreadsheet:samples/Reader2/14_Reading_a_large_CSV_file_in_chunks_to_split_across_multiple_worksheets.php": [
 11,
+42,
 45,
-48,
-50,
+47,
+55,
 58,
 61,
-64,
-79,
-84,
-85
+76,
+81,
+82
 ],
-"PhpSpreadsheet:samples/Reader/15_Simple_file_reader_for_tab_separated_value_file_using_the_Advanced_Value_Binder.php": [
+"PhpSpreadsheet:samples/Reader2/15_Simple_file_reader_for_tab_separated_value_file_using_the_Advanced_Value_Binder.php": [
 11,
 13,
 16,
@@ -2390,41 +2480,41 @@
 25,
 26
 ],
-"PhpSpreadsheet:samples/Reader/16_Handling_loader_exceptions_using_TryCatch.php": [
+"PhpSpreadsheet:samples/Reader2/16_Handling_loader_exceptions_using_TryCatch.php": [
 8,
 12
 ],
-"PhpSpreadsheet:samples/Reader/17_Simple_file_reader_loading_several_named_worksheets.php": [
+"PhpSpreadsheet:samples/Reader2/17_Simple_file_reader_loading_several_named_worksheets.php": [
 7,
 10,
 14
 ],
-"PhpSpreadsheet:samples/Reader/18_Reading_list_of_worksheets_without_loading_entire_file.php": [
+"PhpSpreadsheet:samples/Reader2/18_Reading_list_of_worksheets_without_loading_entire_file.php": [
 7,
 11,
 12
 ],
-"PhpSpreadsheet:samples/Reader/19_Reading_worksheet_information_without_loading_entire_file.php": [
+"PhpSpreadsheet:samples/Reader2/19_Reading_worksheet_information_without_loading_entire_file.php": [
 7,
 8,
 12,
 13
 ],
-"PhpSpreadsheet:samples/Reader/20_Reader_worksheet_hyperlink_image.php": [
+"PhpSpreadsheet:samples/Reader2/20_Reader_worksheet_hyperlink_image.php": [
 7,
 11,
 13,
 15,
 19,
-22,
-24,
-36,
-42,
-44,
+25,
+27,
+39,
+45,
 47,
-49
+50,
+52
 ],
-"PhpSpreadsheet:samples/Reader/21_Reader_CSV_Long_Integers_with_String_Value_Binder.php": [
+"PhpSpreadsheet:samples/Reader2/21_Reader_CSV_Long_Integers_with_String_Value_Binder.php": [
 11,
 12,
 14,
@@ -2433,17 +2523,23 @@
 26,
 27
 ],
-"PhpSpreadsheet:samples/Reader/22_Reader_formscomments.php": [
+"PhpSpreadsheet:samples/Reader2/22_Reader_formscomments.php": [
 9,
 10,
 13,
 16
 ],
-"PhpSpreadsheet:samples/Reader/22_Reader_issue1767.php": [
+"PhpSpreadsheet:samples/Reader2/22_Reader_issue1767.php": [
 9,
 10,
 13,
 16
+],
+"PhpSpreadsheet:samples/Reader2/23_iterateRowsYield.php": [
+9,
+11,
+15,
+17
 ],
 "PhpSpreadsheet:samples/Reading_workbook_data/Custom_properties.php": [
 7,
@@ -2594,18 +2690,21 @@
 263,
 320
 ],
+"PhpSpreadsheet:tests/bootstrap.php": [
+7
+],
 "PhpSpreadsheet:tests/data/Calculation/Calculation.php": [
-3
+5
 ],
 "PhpSpreadsheet:tests/data/Calculation/LookupRef/HLOOKUP.php": [
-3,
-12
+5,
+14
 ],
 "PhpSpreadsheet:tests/data/Calculation/LookupRef/VLOOKUP.php": [
-3
+5
 ],
 "PhpSpreadsheet:tests/data/Calculation/TextData/VALUETOTEXT.php": [
-5,
-9
+7,
+11
 ]
 }

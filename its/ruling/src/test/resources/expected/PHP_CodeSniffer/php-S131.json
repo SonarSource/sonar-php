@@ -1,9 +1,9 @@
 {
 "PHP_CodeSniffer:src/Files/File.php": [
-1394,
-1651,
-1861,
-1982
+1402,
+1664,
+1874,
+1998
 ],
 "PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php": [
 866

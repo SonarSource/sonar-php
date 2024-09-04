@@ -1,11 +1,11 @@
 {
 "psysh:src/CodeCleaner/StrictTypesPass.php": [
-60
+68
 ],
 "psysh:src/Readline/Hoa/ConsoleCursor.php": [
 560
 ],
 "psysh:src/functions.php": [
-273
+277
 ]
 }

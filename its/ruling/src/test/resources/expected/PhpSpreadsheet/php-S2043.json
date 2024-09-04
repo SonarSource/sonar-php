@@ -1,5 +1,5 @@
 {
-"PhpSpreadsheet:samples/Basic/45_Quadratic_equation_solver.php": [
+"PhpSpreadsheet:samples/Basic4/45_Quadratic_equation_solver.php": [
 24,
 24,
 32,
@@ -15,6 +15,27 @@
 59,
 60,
 60
+],
+"PhpSpreadsheet:samples/Engineering/Convert-Online.php": [
+17,
+37,
+37,
+45,
+45,
+53,
+53,
+63,
+63,
+77,
+77,
+77,
+78,
+79,
+80,
+81,
+81,
+85,
+85
 ],
 "PhpSpreadsheet:samples/Wizards/NumberFormat/Accounting.php": [
 32,
@@ -139,6 +160,6 @@
 9
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Helper/Sample.php": [
-41
+38
 ]
 }

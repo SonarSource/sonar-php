@@ -80,37 +80,5 @@
 17,
 25,
 29
-],
-"monica:tests/Commands/Tests/SendTestEmailTest.php": [
-42
-],
-"monica:tests/Helpers/DavTester.php": [
-45,
-55
-],
-"monica:tests/Unit/Jobs/Dav/PushVCardTest.php": [
-53
-],
-"monica:tests/Unit/Jobs/Reminder/NotifyUserAboutReminderTest.php": [
-57,
-103
-],
-"monica:tests/Unit/Services/DavClient/SynchronizeAddressBookTest.php": [
-22,
-45
-],
-"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsPushTest.php": [
-51,
-122
-],
-"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterMissedTest.php": [
-56,
-56
-],
-"monica:tests/Unit/Services/DavClient/Utils/AddressBookContactsUpdaterTest.php": [
-52,
-52,
-140,
-140
 ]
 }

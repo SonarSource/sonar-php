@@ -1,6 +1,6 @@
 {
 "psysh:src/Configuration.php": [
-154
+158
 ],
 "psysh:src/Readline/Hoa/ConsoleProcessus.php": [
 265
@@ -19,9 +19,6 @@
 217,
 240
 ],
-"psysh:src/Readline/Hoa/File.php": [
-134
-],
 "psysh:src/Readline/Hoa/FileDirectory.php": [
 200
 ],
@@ -36,14 +33,14 @@
 116
 ],
 "psysh:test/Command/ListCommand/ClassEnumeratorTest.php": [
-49,
-55,
-84,
-133,
-139,
-158
+52,
+58,
+87,
+136,
+142,
+161
 ],
 "psysh:test/Formatter/SignatureFormatterTest.php": [
-58
+65
 ]
 }

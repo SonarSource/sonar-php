@@ -1,24 +1,24 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-4421,
-4605
+4332,
+4517
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/DateValue.php": [
-72
+78
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Maximum.php": [
-75
+71
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Minimum.php": [
-75
+71
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Variances.php": [
 79,
 168
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/FractionFormatter.php": [
+40,
 42,
-44,
-50
+48
 ]
 }

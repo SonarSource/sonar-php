@@ -16,13 +16,13 @@
 176
 ],
 "PHPMailer:src/PHPMailer.php": [
-4101,
-4101,
-4102
+4223,
+4223,
+4224
 ],
 "PHPMailer:test/PHPMailer/PHPMailerTest.php": [
-1219,
-1224
+1248,
+1253
 ],
 "PHPMailer:test/SendTestCase.php": [
 64,

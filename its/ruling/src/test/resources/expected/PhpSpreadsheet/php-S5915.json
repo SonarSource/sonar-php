@@ -1,50 +1,53 @@
 {
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/CalculationErrorTest.php": [
-28
+30
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/ModeTest.php": [
 40
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Web/WebServiceTest.php": [
-94
+95
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/SampleCoverageTest.php": [
-37
+39
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/NamedRange2Test.php": [
-102
+103
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Ods/OdsInfoTest.php": [
-48,
-93
+50,
+95
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Ods/OdsTest.php": [
-117,
-135
+120,
+138
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Security/XmlScannerTest.php": [
-80
+50
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xml/XmlInfoTest.php": [
-29,
-64,
-73
+30,
+40,
+74,
+84,
+94,
+104
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xml/XmlTest.php": [
-61,
-70,
-79
+62,
+72,
+82
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/AlignmentTest.php": [
-50,
-61
+51,
+62
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/AutoFilter/AutoFilterCustomNumericTest.php": [
-175,
-208
+189,
+222
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/AutoFilter/RuleDateGroupTest.php": [
-91,
-111
+93,
+113
 ]
 }

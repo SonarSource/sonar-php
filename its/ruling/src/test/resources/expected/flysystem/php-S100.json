@@ -1,24 +1,8 @@
 {
-"flysystem:mocked-functions.php": [
-53,
-62,
-71,
-80,
-89,
-98,
-107,
-116,
-125,
-134,
-143,
-154
+"flysystem:bin/check-versions.php": [
+26
 ],
-"flysystem:src/AdapterTestUtilities/test-functions.php": [
-5,
-10,
-19,
-25,
-30,
-39
+"flysystem:bin/tools.php": [
+5
 ]
 }

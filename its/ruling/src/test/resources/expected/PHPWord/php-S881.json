@@ -1,12 +1,12 @@
 {
 "PHPWord:src/PhpWord/Element/Section.php": [
-209
+207
 ],
 "PHPWord:src/PhpWord/Media.php": [
-61
+60
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-563
+568
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 2442,
@@ -15,12 +15,12 @@
 3423
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-670
+707
 ],
 "PHPWord:src/PhpWord/Writer/Word2007.php": [
-205,
-237,
-266
+204,
+235,
+263
 ],
 "PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php": [
 278

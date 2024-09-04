@@ -1,7 +1,4 @@
 {
-"psysh:src/CodeCleaner/ValidClassNamePass.php": [
-83
-],
 "psysh:src/Readline/Hoa/AutocompleterAggregate.php": [
 58
 ],
@@ -55,7 +52,7 @@
 89
 ],
 "psysh:src/Readline/Hoa/File.php": [
-141
+137
 ],
 "psysh:src/Readline/Hoa/FileDirectory.php": [
 75
@@ -115,13 +112,7 @@
 "psysh:src/Readline/Hoa/Xcallable.php": [
 133
 ],
-"psysh:src/Reflection/ReflectionClassConstant.php": [
-177
-],
-"psysh:src/Reflection/ReflectionConstant_.php": [
-151
-],
-"psysh:src/Reflection/ReflectionLanguageConstructParameter.php": [
-40
+"psysh:src/Reflection/ReflectionConstant.php": [
+147
 ]
 }

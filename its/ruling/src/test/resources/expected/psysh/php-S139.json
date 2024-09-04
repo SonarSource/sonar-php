@@ -1,18 +1,16 @@
 {
 "psysh:src/CodeCleaner.php": [
-131,
-135,
-165,
-169
+110,
+114
 ],
 "psysh:src/CodeCleaner/PassableByReferencePass.php": [
-108
+113
 ],
 "psysh:src/Configuration.php": [
-299,
-302,
-310,
-1112
+303,
+306,
+319,
+1141
 ],
 "psysh:src/Output/Theme.php": [
 22
@@ -45,14 +43,13 @@
 99
 ],
 "psysh:src/Shell.php": [
-1325,
-1496,
-1502
+1536,
+1542
 ],
 "psysh:src/TabCompletion/Matcher/FunctionDefaultParametersMatcher.php": [
 18
 ],
 "psysh:test/Formatter/SignatureFormatterTest.php": [
-80
+87
 ]
 }

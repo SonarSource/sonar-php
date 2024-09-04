@@ -1,15 +1,15 @@
 {
 "PHPMailer:src/PHPMailer.php": [
-1535,
-2100,
-2809,
-4407,
-4864
+1540,
+2142,
+2858,
+4529,
+4986
 ],
 "PHPMailer:test/PHPMailer/ParseAddressesTest.php": [
 190
 ],
 "PHPMailer:test/PHPMailer/ValidateAddressTest.php": [
-281
+279
 ]
 }

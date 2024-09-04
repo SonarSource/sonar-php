@@ -2,6 +2,9 @@
 "PHPWord:src/PhpWord/Reader/MsDoc.php": [
 31
 ],
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+40
+],
 "PHPWord:src/PhpWord/Shared/Html.php": [
 38
 ],
@@ -9,12 +12,12 @@
 190
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-32
+33
 ],
 "PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
 36
 ],
 "PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
-37
+39
 ]
 }

@@ -1,20 +1,36 @@
 {
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Internal/ExcelArrayPseudoFunctions.php": [
+19,
+19
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/Cell.php": [
+480,
+480
+],
 "PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php": [
-174
+151
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-2283,
-2283
+2348,
+2348
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php": [
-121,
-121
+115,
+115
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php": [
-122,
-122
+116,
+116
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php": [
+236,
+236
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php": [
 100
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
+1538,
+1538
 ]
 }

@@ -23,11 +23,5 @@
 ],
 "monica:database/migrations/2020_03_25_065551_add_addressbook_subscription.php": [
 31
-],
-"monica:tests/Browser/Auth/AuthControllerTest.php": [
-193
-],
-"monica:tests/Unit/Helpers/MoneyHelperTest.php": [
-50
 ]
 }

@@ -1,5 +1,9 @@
 {
 "PHPMailer:src/PHPMailer.php": [
-2166
+2208,
+4121
+],
+"PHPMailer:test/TestCase.php": [
+224
 ]
 }

@@ -1,6 +1,6 @@
 {
 "PhpSpreadsheet:infra/LocaleGenerator.php": [
-242
+279
 ],
 "PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_1.php": [
 85
@@ -12,32 +12,32 @@
 85
 ],
 "PhpSpreadsheet:samples/Pdf/21c_Pdf.php": [
-14,
-17,
-18
+51,
+54,
+55
 ],
-"PhpSpreadsheet:samples/Reader/14_Reading_a_large_CSV_file_in_chunks_to_split_across_multiple_worksheets.php": [
-75
+"PhpSpreadsheet:samples/Reader2/14_Reading_a_large_CSV_file_in_chunks_to_split_across_multiple_worksheets.php": [
+72
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-4163
+4081
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engine/ArrayArgumentHelper.php": [
-69
+54
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engine/Operands/StructuredReference.php": [
-162
+180
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Securities/Price.php": [
-82
+81
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/ExcelMatch.php": [
-82
+73
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Matrix.php": [
-114,
-123,
-135
+119,
+126,
+137
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/VLookup.php": [
 48
@@ -49,14 +49,14 @@
 162
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/Beta.php": [
-135
+130
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/GammaBase.php": [
-40,
-126
+39,
+125
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/NewtonRaphson.php": [
-30
+29
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Percentiles.php": [
 107,
@@ -66,7 +66,7 @@
 71
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Replace.php": [
-116
+114
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Search.php": [
 47,
@@ -75,72 +75,70 @@
 91
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Token/Stack.php": [
-50,
-62,
-103
+43,
+55,
+93
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Cell/Coordinate.php": [
-418
+499
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeriesValues.php": [
-507
+464
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Renderer/JpGraphRendererBase.php": [
-84,
-92,
-100,
-322,
-397,
-498,
-665
+94,
+102,
+110,
+342,
+417,
+532,
+699
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Collection/Cells.php": [
-229,
-323,
-395
+223,
+315,
+385
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Csv/Delimiter.php": [
-56
+51
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php": [
-429
+409
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-472
+442
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/TableReader.php": [
 82
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
-217,
-226,
-227,
-228
+191,
+200,
+201,
+202
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-624,
-3058,
-3065
+571,
+2981
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
-461,
-474,
-820,
-1163,
-1412,
-1700,
-1705,
-1752
+488,
+853,
+1204,
+1457,
+1706,
+1711,
+1758
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-710,
-738
+659,
+687
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx.php": [
-506
+465
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Comments.php": [
-38
+47
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/ContentTypes.php": [
 95,
@@ -150,37 +148,40 @@
 48
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Rels.php": [
-267,
-366,
-368
+291,
+390,
+392
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
-733,
-1133
+891,
+1322
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Engine/RangeTest.php": [
-87
+108
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Csv/CsvContiguousTest.php": [
-49
+48
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnCellIteratorTest.php": [
-45,
+46,
 66
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnIteratorTest.php": [
-40,
-58
+42,
+60
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/IteratorTest.php": [
-23
+25
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/RowCellIteratorTest.php": [
-45,
+46,
 65
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/RowIteratorTest.php": [
-43,
-61
+45,
+63
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ArrayFunctions2Test.php": [
+223
 ]
 }

@@ -1,10 +1,17 @@
 {
 "PHPWord:src/PhpWord/Reader/MsDoc.php": [
-364,
-1600
+370,
+1608
+],
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
+56
+],
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+191
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-681
+686,
+893
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 1392,
@@ -17,10 +24,13 @@
 164
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
-32
+45
 ],
 "PHPWord:tests/PhpWordTests/Reader/Word2007/PartTest.php": [
 30
+],
+"PHPWord:tests/PhpWordTests/Writer/HTML/Element/TableTest.php": [
+31
 ],
 "PHPWord:tests/PhpWordTests/Writer/ODText/Style/SectionTest.php": [
 39

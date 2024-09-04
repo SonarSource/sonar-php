@@ -1,4 +1,11 @@
 {
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
+47
+],
+"PHPWord:src/PhpWord/Reader/Word2007/Comments.php": [
+27,
+32
+],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 497,
 629,
@@ -7,5 +14,23 @@
 2114,
 3183,
 4461
+],
+"PHPWord:tests/PhpWordTests/SettingsTest.php": [
+156
+],
+"PHPWord:tests/PhpWordTests/Writer/HTML/Helper.php": [
+67
+],
+"PHPWord:tests/PhpWordTests/Writer/ODText/Part/ManifestTest.php": [
+45
+],
+"PHPWord:tests/PhpWordTests/Writer/ODText/Style/Paragraph2Test.php": [
+150
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Element/TableTest.php": [
+44,
+86,
+123,
+141
 ]
 }

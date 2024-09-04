@@ -1,10 +1,10 @@
 {
 "psysh:src/Configuration.php": [
-1867,
-1869,
-1869,
-1869,
-1869
+1910,
+1912,
+1912,
+1912,
+1912
 ],
 "psysh:src/Readline/Hoa/Console.php": [
 169,
@@ -18,7 +18,7 @@
 213
 ],
 "psysh:src/Util/Str.php": [
-96,
-105
+97,
+106
 ]
 }

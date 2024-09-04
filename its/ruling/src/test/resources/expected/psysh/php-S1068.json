@@ -14,10 +14,10 @@
 17
 ],
 "psysh:test/Formatter/SignatureFormatterTest.php": [
-23
+25
 ],
 "psysh:test/Util/MirrorTest.php": [
-22,
-23
+21,
+22
 ]
 }

@@ -1,9 +1,9 @@
 {
 "psysh:src/Configuration.php": [
-510
+519
 ],
 "psysh:src/Shell.php": [
-473
+461
 ],
 "psysh:test/Command/ListCommand/FunctionEnumeratorTest.php": [
 18

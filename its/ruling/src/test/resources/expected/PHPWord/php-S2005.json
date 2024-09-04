@@ -26,14 +26,14 @@
 4422
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-553
+590
 ],
 "PHPWord:src/PhpWord/Writer/HTML/Part/Head.php": [
-65
+68
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Part/Content.php": [
-337,
-393
+339,
+395
 ],
 "PHPWord:src/PhpWord/Writer/Word2007/Part/FontTable.php": [
 38,
@@ -47,6 +47,12 @@
 110
 ],
 "PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
-57
+65
+],
+"PHPWord:tests/PhpWordTests/Writer/HTML/Element/TableTest.php": [
+101,
+117,
+131,
+145
 ]
 }

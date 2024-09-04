@@ -1,13 +1,10 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Deviations.php": [
-77,
-124
+73,
+120
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Variances.php": [
 76,
 165
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-8061
 ]
 }

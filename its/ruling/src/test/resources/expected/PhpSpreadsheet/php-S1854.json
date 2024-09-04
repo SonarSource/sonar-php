@@ -1,11 +1,11 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Renderer/JpGraphRendererBase.php": [
-786,
-800
+820,
+834
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS/Root.php": [
-112,
-112
+106,
+106
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Pdf/Tcpdf.php": [
 46

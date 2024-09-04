@@ -11,8 +11,11 @@
 "PhpSpreadsheet:samples/Chart/35_Chart_render.php": [
 19
 ],
+"PhpSpreadsheet:samples/Chart/35_Chart_render33.php": [
+18
+],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/SampleTest.php": [
-33,
-34
+35,
+36
 ]
 }

@@ -1,16 +1,5 @@
 {
-"flysystem:src/PhpseclibV2/SftpStub.php": [
-64
-],
 "flysystem:src/PhpseclibV3/SftpStub.php": [
 62
-],
-"flysystem:src/ProxyArrayAccessToProperties.php": [
-24
-],
-"flysystem:src/ZipArchive/StubZipArchive.php": [
-28,
-51,
-70
 ]
 }

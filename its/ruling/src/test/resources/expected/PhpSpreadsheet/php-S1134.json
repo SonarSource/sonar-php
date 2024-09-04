@@ -1,17 +1,20 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-1238,
-1270,
-4396
+1129,
+1161,
+4274
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/DataValidations.php": [
+155
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
-942,
-944
+908,
+910
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Workbook.php": [
-912
+860
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-1275
+1213
 ]
 }

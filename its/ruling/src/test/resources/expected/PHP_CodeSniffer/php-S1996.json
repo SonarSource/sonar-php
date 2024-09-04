@@ -125,6 +125,9 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
 0
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/InnerFunctionsUnitTest.inc": [
+0
+],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/MethodScopeUnitTest.inc": [
 0
 ],
@@ -132,6 +135,9 @@
 0
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/MemberVarSpacingUnitTest.inc": [
+0
+],
+"PHP_CodeSniffer:tests/Core/File/GetClassPropertiesTest.inc": [
 0
 ]
 }

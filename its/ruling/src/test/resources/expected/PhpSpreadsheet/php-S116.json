@@ -1,43 +1,43 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DgContainer/SpgrContainer/SpContainer.php": [
-49
+37
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer.php": [
-40,
-47
+30,
+35
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer/BstoreContainer.php": [
 12
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
 57,
-64
+62
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
 37,
-44,
-51,
-58,
-65,
+42,
+47,
+52,
+57,
+62,
+67,
 72,
-79,
-86,
-100,
-107
+82,
+87
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
-19
+17
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
-69,
-72,
-75
+56,
+58,
+60
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
-79
+65
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/BIFFwriter.php": [
-54,
-61
+50,
+55
 ]
 }

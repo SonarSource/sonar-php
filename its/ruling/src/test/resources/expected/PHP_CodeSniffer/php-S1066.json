@@ -8,9 +8,9 @@
 ],
 "PHP_CodeSniffer:src/Files/File.php": [
 379,
-402,
-1381,
-1388
+405,
+1389,
+1396
 ],
 "PHP_CodeSniffer:src/Filters/Filter.php": [
 102
@@ -73,21 +73,21 @@
 213
 ],
 "PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Classes/ClassDeclarationSniff.php": [
-446
+447
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/ClassDeclarationSniff.php": [
-69
+70
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
-179
+180
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
 51,
-149,
-207,
-290,
-445,
-451
+152,
+210,
+293,
+452,
+458
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/ForLoopDeclarationSniff.php": [
 255
@@ -100,10 +100,10 @@
 123
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php": [
-119
+124
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/NonExecutableCodeSniff.php": [
-183
+220
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php": [
 275

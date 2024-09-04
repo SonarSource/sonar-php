@@ -3,10 +3,10 @@
 259
 ],
 "PHPWord:src/PhpWord/Element/Image.php": [
-206
+216
 ],
 "PHPWord:src/PhpWord/Media.php": [
-51
+50
 ],
 "PHPWord:src/PhpWord/Writer/Word2007/Element/OLEObject.php": [
 42
@@ -15,9 +15,9 @@
 193
 ],
 "PHPWord:tests/PhpWordTests/Element/ImageTest.php": [
-41,
-87,
-203,
-224
+39,
+77,
+208,
+230
 ]
 }

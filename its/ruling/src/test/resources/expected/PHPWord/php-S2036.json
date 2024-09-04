@@ -10,5 +10,8 @@
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 0
+],
+"PHPWord:tests/bootstrap.php": [
+0
 ]
 }

@@ -1010,6 +1010,9 @@
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.1.inc": [
 0
 ],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.4.inc": [
+0
+],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.php": [
 0
 ],
@@ -1859,6 +1862,9 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/EmptyCatchCommentUnitTest.php": [
 0
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.10.inc": [
+0
+],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.2.inc": [
 0
 ],
@@ -2078,6 +2084,9 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/LowercasePHPFunctionsUnitTest.php": [
 0
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/NonExecutableCodeUnitTest.3.inc": [
+0
+],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/NonExecutableCodeUnitTest.php": [
 0
 ],
@@ -2276,6 +2285,9 @@
 "PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/Sub/C.inc": [
 0
 ],
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+0
+],
 "PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
 0
 ],
@@ -2289,6 +2301,9 @@
 0
 ],
 "PHP_CodeSniffer:tests/Core/File/FindStartOfStatementTest.php": [
+0
+],
+"PHP_CodeSniffer:tests/Core/File/GetClassPropertiesTest.php": [
 0
 ],
 "PHP_CodeSniffer:tests/Core/File/GetMemberPropertiesTest.php": [
@@ -2309,6 +2324,18 @@
 "PHP_CodeSniffer:tests/Core/IsCamelCapsTest.php": [
 0
 ],
+"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyAllowedAsDeclaredSniff.php": [
+0
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyAllowedViaMagicMethodSniff.php": [
+0
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyAllowedViaStdClassSniff.php": [
+0
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyNotAllowedViaAttributeSniff.php": [
+0
+],
 "PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteLinuxTest.php": [
 0
 ],
@@ -2316,6 +2343,9 @@
 0
 ],
 "PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionTest.php": [
+0
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
 0
 ],
 "PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.php": [

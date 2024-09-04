@@ -1,12 +1,12 @@
 {
 "PHPMailer:src/PHPMailer.php": [
-1867,
-2320,
-2362,
-2363,
-3476,
-4130,
-4318
+1875,
+2369,
+2411,
+2412,
+3525,
+4252,
+4440
 ],
 "PHPMailer:test/Language/TranslationCompletenessTest.php": [
 60,

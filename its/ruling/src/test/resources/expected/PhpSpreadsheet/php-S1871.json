@@ -1,41 +1,45 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Indirect.php": [
-81
+79
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/LookupBase.php": [
-60
+57
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/Binomial.php": [
-206
+203
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Extract.php": [
-247
+251
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Cell/DefaultValueBinder.php": [
-67,
-69
+96,
+98
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/CellReferenceHelper.php": [
-110
+98
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
-287
+297,
+719
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/ConditionalStyles.php": [
-168
+175
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Font.php": [
-468
+470
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
-252,
-255
+238,
+241
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Wizard/CurrencyBase.php": [
+154
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
-735,
-885
+714,
+854
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Custom/ComplexAssert.php": [
-32
+26
 ]
 }

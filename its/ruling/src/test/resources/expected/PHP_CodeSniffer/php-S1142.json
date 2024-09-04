@@ -1,17 +1,17 @@
 {
 "PHP_CodeSniffer:src/Config.php": [
-1504
+1518
 ],
 "PHP_CodeSniffer:src/Files/File.php": [
 317,
-836,
-2011,
-2325,
-2478,
-2652,
-2693,
-2731,
-2783
+842,
+2032,
+2346,
+2499,
+2673,
+2714,
+2752,
+2804
 ],
 "PHP_CodeSniffer:src/Filters/ExactMatch.php": [
 43
@@ -26,8 +26,8 @@
 32
 ],
 "PHP_CodeSniffer:src/Ruleset.php": [
-684,
-1108
+685,
+1120
 ],
 "PHP_CodeSniffer:src/Runner.php": [
 54,
@@ -166,9 +166,6 @@
 73,
 181
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.php": [
-28
-],
 "PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Classes/ClassInstantiationSniff.php": [
 41
 ],
@@ -182,9 +179,6 @@
 40
 ],
 "PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.php": [
-28
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Classes/PropertyDeclarationSniff.php": [
 28
 ],
 "PHP_CodeSniffer:src/Standards/PSR2/Sniffs/ControlStructures/SwitchDeclarationSniff.php": [
@@ -269,7 +263,7 @@
 60
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/NonExecutableCodeSniff.php": [
-48
+64
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Scope/StaticThisUsageSniff.php": [
 40
@@ -299,6 +293,9 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.php": [
 28
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/NonExecutableCodeUnitTest.php": [
+43
+],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.php": [
 28
 ],
@@ -312,7 +309,7 @@
 915
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-3174
+3228
 ],
 "PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
 933

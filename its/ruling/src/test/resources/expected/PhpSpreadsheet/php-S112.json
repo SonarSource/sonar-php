@@ -1,24 +1,49 @@
 {
 "PhpSpreadsheet:infra/LocaleGenerator.php": [
-230
+90,
+94,
+106,
+127,
+143,
+160,
+165,
+173,
+201,
+219
+],
+"PhpSpreadsheet:samples/Basic1/19_Namedrange.php": [
+40
+],
+"PhpSpreadsheet:samples/Basic2/25_In_memory_image.php": [
+32,
+37
 ],
 "PhpSpreadsheet:samples/Bootstrap.php": [
 22
 ],
-"PhpSpreadsheet:samples/Reader/20_Reader_worksheet_hyperlink_image.php": [
-17
+"PhpSpreadsheet:samples/DefinedNames/ScopedNamedRange.php": [
+65
+],
+"PhpSpreadsheet:samples/Reader2/20_Reader_worksheet_hyperlink_image.php": [
+17,
+21
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Indirect.php": [
 29,
-44
+42
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Helper/Sample.php": [
-85,
-97,
-163,
-194
+76,
+152,
+176
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/FormulaArguments.php": [
+89
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/UnparsedDataTest.php": [
-42
+44
+],
+"PhpSpreadsheet:tests/bootstrap.php": [
+28
 ]
 }

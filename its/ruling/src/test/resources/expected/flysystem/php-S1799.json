@@ -1,8 +1,5 @@
 {
-"flysystem:test_files/wait_for_ftp.php": [
-37
-],
-"flysystem:test_files/wait_for_sftp.php": [
-35
+"flysystem:bin/tools.php": [
+13
 ]
 }

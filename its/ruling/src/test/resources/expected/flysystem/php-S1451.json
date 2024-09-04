@@ -1,14 +1,8 @@
 {
-"flysystem:src/CalculateChecksumFromStream.php": [
+"flysystem:src/Ftp/StubConnectionProvider.php": [
 0
 ],
-"flysystem:src/ChecksumAlgoIsNotSupported.php": [
-0
-],
-"flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapterWithoutAclTest.php": [
-0
-],
-"flysystem:src/UrlGeneration/TemporaryUrlGenerator.php": [
+"flysystem:src/ResolveIdenticalPathConflict.php": [
 0
 ],
 "flysystem:src/WebDAV/UrlPrefixingClientStub.php": [

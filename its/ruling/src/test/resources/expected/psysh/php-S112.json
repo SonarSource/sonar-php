@@ -7,24 +7,21 @@
 227
 ],
 "psysh:src/Input/ShellInput.php": [
-188,
-191,
-231,
-275,
-292,
-298,
-315
+190,
+193,
+233,
+277,
+294,
+300,
+317
 ],
 "psysh:src/Output/ProcOutputPager.php": [
 58,
 77,
 97
 ],
-"psysh:src/Reflection/ReflectionClassConstant.php": [
-188
-],
-"psysh:src/Reflection/ReflectionConstant_.php": [
-162
+"psysh:src/Reflection/ReflectionConstant.php": [
+158
 ],
 "psysh:src/Reflection/ReflectionLanguageConstruct.php": [
 93
@@ -37,5 +34,8 @@
 ],
 "psysh:test/ParserTestCase.php": [
 56
+],
+"psysh:test/fixtures/config.php": [
+13
 ]
 }

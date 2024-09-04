@@ -1,5 +1,8 @@
 {
 "flysystem:src/AsyncAwsS3/AsyncAwsS3AdapterTest.php": [
-276
+286
+],
+"flysystem:src/PhpseclibV3/SimpleConnectivityChecker.php": [
+30
 ]
 }

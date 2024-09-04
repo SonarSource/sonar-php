@@ -47,27 +47,5 @@
 39,
 53,
 67
-],
-"monica:tests/Unit/Jobs/Dav/DeleteMultipleVCardTest.php": [
-31
-],
-"monica:tests/Unit/Jobs/Dav/DeleteVCardTest.php": [
-39
-],
-"monica:tests/Unit/Jobs/Dav/GetMultipleVCardTest.php": [
-77,
-153
-],
-"monica:tests/Unit/Jobs/Dav/GetVCardTest.php": [
-49
-],
-"monica:tests/Unit/Jobs/Dav/PushVCardTest.php": [
-62
-],
-"monica:tests/Unit/Jobs/Dav/UpdateVCardTest.php": [
-43
-],
-"monica:tests/Unit/Jobs/GetWeatherInformationTest.php": [
-43
 ]
 }

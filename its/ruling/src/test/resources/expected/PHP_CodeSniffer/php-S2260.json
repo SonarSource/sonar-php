@@ -135,7 +135,7 @@
 5
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Functions/FunctionDeclarationUnitTest.inc": [
-421
+468
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Functions/ValidDefaultValueUnitTest.inc": [
 101
@@ -282,7 +282,7 @@
 111
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/NonExecutableCodeUnitTest.2.inc": [
-62
+74
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/MemberVarScopeUnitTest.inc": [
 7
@@ -333,7 +333,7 @@
 36
 ],
 "PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.inc": [
-136
+141
 ],
 "PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.inc": [
 45
@@ -366,7 +366,7 @@
 43
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/ContextSensitiveKeywordsTest.inc": [
-190
+83
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/DoubleQuotedStringTest.inc": [
 53

@@ -3,14 +3,13 @@
 117
 ],
 "psysh:src/Command/ReflectingCommand.php": [
-143
+141
 ],
 "psysh:src/Command/TimeitCommand.php": [
 158
 ],
 "psysh:src/ConfigPaths.php": [
-145,
-421
+356
 ],
 "psysh:src/ExecutionLoop/ProcessForker.php": [
 47,
@@ -19,12 +18,12 @@
 47
 ],
 "psysh:src/Formatter/CodeFormatter.php": [
-88
+87
 ],
 "psysh:src/Formatter/SignatureFormatter.php": [
-110,
-144,
-218
+108,
+142,
+216
 ],
 "psysh:src/Readline/GNUReadline.php": [
 50
@@ -51,15 +50,16 @@
 124,
 131
 ],
-"psysh:src/Reflection/ReflectionConstant_.php": [
-49,
-53
+"psysh:src/Reflection/ReflectionConstant.php": [
+45,
+49
 ],
 "psysh:src/Reflection/ReflectionLanguageConstruct.php": [
 79
 ],
 "psysh:src/Shell.php": [
-1523
+1553,
+1565
 ],
 "psysh:src/TabCompletion/Matcher/AbstractMatcher.php": [
 67,
@@ -84,12 +84,12 @@
 78
 ],
 "psysh:src/TabCompletion/Matcher/ClassNamesMatcher.php": [
-64,
 65,
-68,
+66,
 69,
 70,
-71
+71,
+72
 ],
 "psysh:src/TabCompletion/Matcher/CommandsMatcher.php": [
 101
@@ -150,10 +150,5 @@
 178,
 180,
 191
-],
-"psysh:src/VarDumper/Dumper.php": [
-74,
-77,
-79
 ]
 }

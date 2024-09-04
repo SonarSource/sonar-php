@@ -1,33 +1,38 @@
 {
 "psysh:src/CodeCleaner.php": [
-192
-],
-"psysh:src/Command/DumpCommand.php": [
-94
+167
 ],
 "psysh:src/Command/EditCommand.php": [
 166,
 169
 ],
-"psysh:src/Command/ReflectingCommand.php": [
-264
-],
 "psysh:src/Command/ShowCommand.php": [
-118,
-231
+110,
+223
 ],
 "psysh:src/ConfigPaths.php": [
-167,
-306,
-306,
-366,
-388
+142,
+241,
+241,
+301,
+323
 ],
 "psysh:src/Configuration.php": [
-448,
-470,
-485,
-627
+457,
+479,
+494,
+636,
+1105,
+1128,
+1266,
+1305,
+1347
+],
+"psysh:src/Exception/ErrorException.php": [
+110
+],
+"psysh:src/Exception/ThrowUpException.php": [
+45
 ],
 "psysh:src/ExecutionLoop/ProcessForker.php": [
 130,
@@ -38,7 +43,7 @@
 283
 ],
 "psysh:src/Formatter/CodeFormatter.php": [
-87
+86
 ],
 "psysh:src/Output/ProcOutputPager.php": [
 54
@@ -55,9 +60,9 @@
 87
 ],
 "psysh:src/Readline/Hoa/File.php": [
-155,
-162,
-181
+151,
+158,
+177
 ],
 "psysh:src/Readline/Hoa/FileDirectory.php": [
 176,
@@ -85,15 +90,13 @@
 895
 ],
 "psysh:src/Reflection/ReflectionConstant.php": [
-26
-],
-"psysh:src/Reflection/ReflectionConstant_.php": [
-54
+50
 ],
 "psysh:src/Shell.php": [
-262,
-566,
-1553
+145,
+292,
+554,
+1563
 ],
 "psysh:src/VersionUpdater/GitHubChecker.php": [
 81

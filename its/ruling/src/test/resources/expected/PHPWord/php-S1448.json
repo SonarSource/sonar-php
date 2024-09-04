@@ -1,6 +1,6 @@
 {
 "PHPWord:src/PhpWord/Element/AbstractElement.php": [
-30
+32
 ],
 "PHPWord:src/PhpWord/Element/Image.php": [
 30
@@ -12,7 +12,7 @@
 31
 ],
 "PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
-36
+40
 ],
 "PHPWord:src/PhpWord/Settings.php": [
 23
@@ -33,7 +33,7 @@
 25
 ],
 "PHPWord:src/PhpWord/Style/Font.php": [
-23
+26
 ],
 "PHPWord:src/PhpWord/Style/Frame.php": [
 31
@@ -42,19 +42,19 @@
 29
 ],
 "PHPWord:src/PhpWord/Style/Paragraph.php": [
-52
+53
 ],
 "PHPWord:src/PhpWord/Style/Section.php": [
 26
 ],
 "PHPWord:src/PhpWord/Style/Table.php": [
-25
+27
 ],
 "PHPWord:src/PhpWord/Style/TablePosition.php": [
 25
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-32
+33
 ],
 "PHPWord:tests/PhpWordTests/Metadata/SettingsTest.php": [
 31
@@ -63,10 +63,13 @@
 36
 ],
 "PHPWord:tests/PhpWordTests/Style/TextBoxTest.php": [
-29
+30
 ],
 "PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
-37
+39
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/ElementTest.php": [
+31
 ],
 "PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
 33

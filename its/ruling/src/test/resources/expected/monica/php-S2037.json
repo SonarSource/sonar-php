@@ -34,11 +34,5 @@
 ],
 "monica:app/Services/VCard/ImportVCard.php": [
 123
-],
-"monica:tests/Unit/Jobs/ServiceQueueTester.php": [
-26,
-27,
-35,
-49
 ]
 }

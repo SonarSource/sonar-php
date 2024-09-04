@@ -9,10 +9,10 @@
 193
 ],
 "PHPWord:tests/PhpWordTests/Element/AbstractElementTest.php": [
-31
+33
 ],
 "PHPWord:tests/PhpWordTests/Element/CommentTest.php": [
-84
+118
 ],
 "PHPWord:tests/PhpWordTests/Element/FooterTest.php": [
 35,
@@ -28,7 +28,7 @@
 193
 ],
 "PHPWord:tests/PhpWordTests/Element/ImageTest.php": [
-153
+158
 ],
 "PHPWord:tests/PhpWordTests/Element/LinkTest.php": [
 83
@@ -68,6 +68,9 @@
 "PHPWord:tests/PhpWordTests/Shared/TextTest.php": [
 35
 ],
+"PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
+99
+],
 "PHPWord:tests/PhpWordTests/Style/SectionTest.php": [
 49,
 64,
@@ -87,5 +90,8 @@
 271,
 295,
 311
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Element/TOCTest.php": [
+39
 ]
 }

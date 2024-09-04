@@ -1,131 +1,122 @@
 {
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Database.php": [
-76
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Depreciation.php": [
-66,
-128
+63,
+123
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Internal/ExcelArrayPseudoFunctions.php": [
+75
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Matrix.php": [
-73
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical.php": [
-845
+71
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/Binomial.php": [
-141
+139
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/LogNormal.php": [
 113
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Cell/DataType.php": [
-59
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Cell/DataValidator.php": [
-34
+60
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Html.php": [
-320,
-649,
-780
+286,
+639,
+846
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
-361
+370
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-1149,
-1318,
-4222,
-4748,
-4957,
-7185,
-7242,
-7407,
-7416
+1034,
+1211,
+4099,
+4630,
+4836,
+6757,
+6813,
+6966,
+6975
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-1308
+1350
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
+1497
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/ReferenceHelper.php": [
-921,
-940
+929,
+948
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
-1726
+1732
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Cell/Style.php": [
-74
+63
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php": [
-182,
-188,
-223,
-226,
-250,
-253
+167,
+173,
+207,
+210,
+234,
+237
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
-557,
-638,
-643,
-659
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Style/ColorMap.php": [
-78
+538,
+614,
+619,
+634
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Workbook.php": [
-448
+413
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-3097,
-3098,
-3099,
-3100,
-3102,
-3103,
-3104
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php": [
+978
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/ChiTestTest.php": [
-8
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/CountIfsTest.php": [
-5
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/ForecastTest.php": [
-9
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/GrowthTest.php": [
-8
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/LinEstTest.php": [
-8
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/LogEstTest.php": [
-8
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/TrendTest.php": [
-8
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/MergedCellTest.php": [
-112
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/Issue2077Test.php": [
-46
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Html/HtmlTagsTest.php": [
-210
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Ods/OdsInfoTest.php": [
 10
 ],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/CountIfsTest.php": [
+7
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/ForecastTest.php": [
+11
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/GrowthTest.php": [
+10
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/LinEstTest.php": [
+10
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/LogEstTest.php": [
+10
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/TrendTest.php": [
+10
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/MergedCellTest.php": [
+110
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/Issue2077Test.php": [
+48
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Html/HtmlTagsTest.php": [
+212
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Ods/OdsInfoTest.php": [
+12
+],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Ods/OdsTest.php": [
-14
+16
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ArrayFunctions2Test.php": [
+18
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/TableTest.php": [
-61,
-81
+63,
+83
 ],
 "PhpSpreadsheet:tests/data/Calculation/Statistical/COUNTIFS.php": [
-22
+24
 ]
 }

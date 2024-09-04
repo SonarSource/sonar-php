@@ -1,10 +1,10 @@
 {
 "PHP_CodeSniffer:src/Files/File.php": [
 351,
-905,
-1245,
-2429,
-2531
+911,
+1251,
+2450,
+2552
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/ControlStructures/InlineControlStructureSniff.php": [
 213,
@@ -72,7 +72,7 @@
 345
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php": [
-91
+96
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Strings/ConcatenationSpacingSniff.php": [
 98
@@ -87,25 +87,25 @@
 86
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-705,
-748,
-1112,
-1319,
-1352,
-1358,
-1396,
-1442,
-1467,
-1523,
-1546,
-1569,
-1595,
-1762,
-1774,
-1884,
-2032,
-2215,
-2543
+735,
+778,
+1143,
+1350,
+1383,
+1389,
+1427,
+1473,
+1498,
+1554,
+1577,
+1600,
+1626,
+1793,
+1805,
+1915,
+2063,
+2268,
+2597
 ],
 "PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
 250,

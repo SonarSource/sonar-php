@@ -45,13 +45,17 @@
 92
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/MemoryDrawing.php": [
-68,
-68
+57,
+57
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Rels.php": [
+237,
+237
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/DataTypeTest.php": [
+43,
 46,
-49,
-53,
-57
+50,
+54
 ]
 }

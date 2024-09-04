@@ -1,11 +1,8 @@
 {
+"psysh:test/CodeCleaner/IssetPassTest.php": [
+137
+],
 "psysh:test/CodeCleaner/RequirePassTest.php": [
-75
-],
-"psysh:test/CodeCleaner/ReturnTypePassTest.php": [
-24
-],
-"psysh:test/Command/ListCommand/ClassConstantEnumeratorTest.php": [
-166
+78
 ]
 }

@@ -3,12 +3,12 @@
 229
 ],
 "PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
-410
+401
 ],
 "PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
 127
 ],
 "PHPWord:tests/PhpWordTests/TestHelperDOCX.php": [
-98
+99
 ]
 }

@@ -1,22 +1,5 @@
 {
 "monica:config/location.php": [
 130
-],
-"monica:tests/Api/Account/ApiUserControllerTest.php": [
-140
-],
-"monica:tests/Unit/Helpers/RequestHelperTest.php": [
-17,
-20,
-28,
-31,
-43,
-52,
-59
-],
-"monica:tests/Unit/Services/User/AcceptPolicyTest.php": [
-27,
-36,
-67
 ]
 }

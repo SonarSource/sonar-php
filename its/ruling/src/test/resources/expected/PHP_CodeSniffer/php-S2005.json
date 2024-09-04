@@ -9,8 +9,8 @@
 162
 ],
 "PHP_CodeSniffer:src/Config.php": [
-1598,
-1600
+1612,
+1614
 ],
 "PHP_CodeSniffer:src/Reports/Cbf.php": [
 183,
@@ -72,6 +72,9 @@
 38,
 42,
 46
+],
+"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
+201
 ],
 "PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
 78,

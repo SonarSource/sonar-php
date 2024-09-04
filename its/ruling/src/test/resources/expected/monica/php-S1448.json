@@ -22,32 +22,5 @@
 ],
 "monica:database/migrations/2019_12_17_024553_add_foreign_keys.php": [
 33
-],
-"monica:tests/Api/Contact/ApiContactControllerTest.php": [
-13
-],
-"monica:tests/Feature/ContactTest.php": [
-17
-],
-"monica:tests/Helpers/DavTester.php": [
-12
-],
-"monica:tests/Unit/Helpers/DateHelperTest.php": [
-12
-],
-"monica:tests/Unit/Models/AccountTest.php": [
-32
-],
-"monica:tests/Unit/Models/ContactTest.php": [
-33
-],
-"monica:tests/Unit/Models/UserTest.php": [
-18
-],
-"monica:tests/Unit/Services/VCard/ExportVCardTest.php": [
-20
-],
-"monica:tests/Unit/Services/VCard/ImportVCardTest.php": [
-24
 ]
 }

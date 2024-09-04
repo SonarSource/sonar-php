@@ -1,34 +1,24 @@
 {
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Exception.php": [
-20
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-7990,
-7990,
-8011,
-8011,
-8015,
-8015,
-8042,
-8042
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Securities/AccruedInterest.php": [
+55
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-2083,
-2110
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Settings.php": [
-136
+2121,
+2148
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/Blanks.php": [
-89
+85
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/DateValue.php": [
-101
+99
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/Duplicates.php": [
-68
+64
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/Errors.php": [
-85
+81
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/HtmlTest.php": [
+41
 ]
 }

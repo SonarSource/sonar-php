@@ -1,33 +1,40 @@
 {
 "flysystem:src/AsyncAwsS3/AsyncAwsS3Adapter.php": [
-347
-],
-"flysystem:src/AsyncAwsS3/PortableVisibilityConverter.php": [
-42
+362
 ],
 "flysystem:src/AwsS3V3/AwsS3V3Adapter.php": [
-155
+158
 ],
 "flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
-101
+108
 ],
 "flysystem:src/AwsS3V3/S3ClientStub.php": [
 48
 ],
 "flysystem:src/Ftp/FtpAdapter.php": [
-115,
-127,
-168,
-378
+122,
+134,
+175,
+385
+],
+"flysystem:src/Ftp/StubConnectionProvider.php": [
+16
 ],
 "flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapter.php": [
-147
+146
 ],
-"flysystem:src/InMemory/StaticInMemoryAdapterRegistry.php": [
-12
+"flysystem:src/GridFS/GridFSAdapter.php": [
+91,
+91,
+115,
+115,
+382,
+382,
+385,
+385
 ],
 "flysystem:src/Local/LocalFilesystemAdapter.php": [
-421
+441
 ],
 "flysystem:src/MountManagerTest.php": [
 52,
@@ -37,7 +44,7 @@
 125
 ],
 "flysystem:src/PhpseclibV3/SftpConnectionProvider.php": [
-71
+83
 ],
 "flysystem:src/WebDAV/WebDAVAdapter.php": [
 324

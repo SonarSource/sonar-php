@@ -2,8 +2,5 @@
 "monica:app/Helpers/SearchHelper.php": [
 27,
 27
-],
-"monica:tests/Browser/Auth/AuthControllerTest.php": [
-175
 ]
 }

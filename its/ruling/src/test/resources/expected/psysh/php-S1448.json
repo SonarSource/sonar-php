@@ -1,7 +1,4 @@
 {
-"psysh:src/ConfigPaths.php": [
-17
-],
 "psysh:src/Configuration.php": [
 34
 ],
@@ -30,7 +27,7 @@
 44
 ],
 "psysh:src/Shell.php": [
-50
+51
 ],
 "psysh:test/ConfigurationTest.php": [
 25

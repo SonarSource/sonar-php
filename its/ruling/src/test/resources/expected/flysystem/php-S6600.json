@@ -1,9 +1,6 @@
 {
 "flysystem:src/AwsS3V3/AwsS3V3Adapter.php": [
-400,
-401
-],
-"flysystem:test_files/wait_for_sftp.php": [
-28
+403,
+404
 ]
 }

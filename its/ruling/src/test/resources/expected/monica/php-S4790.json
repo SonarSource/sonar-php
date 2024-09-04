@@ -10,21 +10,5 @@
 ],
 "monica:app/Services/VCard/GetEtag.php": [
 36
-],
-"monica:tests/Api/DAV/CardEtag.php": [
-23
-],
-"monica:tests/Feature/StorageControllerTest.php": [
-50,
-67,
-84,
-127,
-146,
-165,
-246,
-252,
-271,
-284,
-290
 ]
 }

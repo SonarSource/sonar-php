@@ -12,26 +12,26 @@
 68
 ],
 "psysh:src/CodeCleaner/ImplicitReturnPass.php": [
-90
+89
 ],
 "psysh:src/CodeCleaner/LabelContextPass.php": [
 72
 ],
 "psysh:src/CodeCleaner/LoopContextPass.php": [
-84
+92
 ],
 "psysh:src/CodeCleaner/NamespaceAwarePass.php": [
-67
+69
 ],
 "psysh:src/CodeCleaner/PassableByReferencePass.php": [
-112
+117
 ],
 "psysh:src/CodeCleaner/ReturnTypePass.php": [
-74
+66
 ],
 "psysh:src/CodeCleaner/ValidClassNamePass.php": [
 67,
-154
+152
 ],
 "psysh:src/CodeCleaner/ValidConstructorPass.php": [
 60
@@ -43,14 +43,14 @@
 74
 ],
 "psysh:src/Command/ShowCommand.php": [
-262,
-279
+254,
+271
 ],
 "psysh:src/Configuration.php": [
-148,
-189,
-201,
-1230
+152,
+193,
+205,
+1259
 ],
 "psysh:src/ExecutionLoop/ProcessForker.php": [
 228

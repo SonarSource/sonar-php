@@ -10,8 +10,5 @@
 ],
 "monica:app/Providers/RouteServiceProvider.php": [
 52
-],
-"monica:tests/Browser/Auth/AuthControllerTest.php": [
-166
 ]
 }

@@ -4,9 +4,5 @@
 ],
 "monica:app/Http/Controllers/ContactsController.php": [
 382
-],
-"monica:tests/Browser/Settings/MultiFAControllerTest.php": [
-188,
-189
 ]
 }

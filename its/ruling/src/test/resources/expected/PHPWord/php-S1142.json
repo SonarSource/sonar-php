@@ -5,17 +5,20 @@
 "PHPWord:src/PhpWord/Metadata/DocInfo.php": [
 510
 ],
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+191
+],
 "PHPWord:src/PhpWord/Shared/Converter.php": [
 304,
 379
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-1021,
-1042,
-1071
+1062,
+1083,
+1112
 ],
 "PHPWord:src/PhpWord/Shared/OLERead.php": [
-174
+185
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 270,
@@ -44,6 +47,12 @@
 92
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-1320
+1365
+],
+"PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
+110
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Field.php": [
+307
 ]
 }

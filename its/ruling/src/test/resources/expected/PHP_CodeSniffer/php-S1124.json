@@ -6,7 +6,8 @@
 11,
 12,
 15,
-18
+18,
+32
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/DocCommentAlignmentUnitTest.inc": [
 85

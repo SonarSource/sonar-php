@@ -1,9 +1,9 @@
 {
 "psysh:src/CodeCleaner/PassableByReferencePass.php": [
-112
+117
 ],
 "psysh:src/Command/Command.php": [
-214
+215
 ],
 "psysh:src/Readline/Hoa/Readline.php": [
 280,
@@ -15,6 +15,6 @@
 119
 ],
 "psysh:src/VarDumper/Dumper.php": [
-84
+83
 ]
 }

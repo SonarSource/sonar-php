@@ -33,7 +33,7 @@
 ],
 "PHPWord:samples/Sample_09_Tables.php": [
 6,
-158
+155
 ],
 "PHPWord:samples/Sample_10_EastAsianFontStyle.php": [
 3,
@@ -109,7 +109,7 @@
 ],
 "PHPWord:samples/Sample_27_Field.php": [
 5,
-70
+73
 ],
 "PHPWord:samples/Sample_28_ReadRTF.php": [
 3,
@@ -145,11 +145,11 @@
 ],
 "PHPWord:samples/Sample_36_RTL.php": [
 3,
-44
+50
 ],
 "PHPWord:samples/Sample_37_Comments.php": [
 3,
-62
+77
 ],
 "PHPWord:samples/Sample_38_Protection.php": [
 5,
@@ -167,6 +167,17 @@
 6,
 45
 ],
+"PHPWord:samples/Sample_42_TemplateSetCheckbox.php": [
+3,
+20
+],
+"PHPWord:samples/Sample_43_RTLDefault.php": [
+3,
+31
+],
+"PHPWord:samples/Sample_44_ExtractVariablesFromReaderWord2007.php": [
+3
+],
 "PHPWord:samples/Sample_Header.php": [
 2
 ],
@@ -175,10 +186,10 @@
 36
 ],
 "PHPWord:src/PhpWord/Shared/ZipArchive.php": [
-89
+90
 ],
 "PHPWord:src/PhpWord/Writer/PDF/AbstractRenderer.php": [
-88
+89
 ],
 "PHPWord:tests/bootstrap.php": [
 17

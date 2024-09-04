@@ -1,5 +1,8 @@
 {
 "flysystem:src/AdapterTestUtilities/FilesystemAdapterTestCase.php": [
-34
+35
+],
+"flysystem:src/FilesystemTest.php": [
+25
 ]
 }

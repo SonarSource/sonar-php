@@ -1,21 +1,28 @@
 {
 "PHPWord:src/PhpWord/Reader/MsDoc.php": [
-1537,
-1633,
-1653,
-1677,
-1697,
-1716,
-1799,
-1879,
-1961,
-2244
+1545,
+1641,
+1661,
+1685,
+1705,
+1724,
+1807,
+1887,
+1970,
+2253
 ],
 "PHPWord:src/PhpWord/Reader/ODText/Content.php": [
-56
+93,
+122,
+126
+],
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+350,
+373,
+387
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-686,
-905
+692,
+942
 ]
 }

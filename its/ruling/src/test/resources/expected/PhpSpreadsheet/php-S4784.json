@@ -1,115 +1,136 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-3713,
-4251
+3643,
+4163
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Database/DatabaseAbstract.php": [
-135
+123
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/FormulaParser.php": [
-222
+216
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php": [
-201
+190
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Internal/ExcelArrayPseudoFunctions.php": [
+19
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Subtotal.php": [
-49
+41
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Cell/AdvancedValueBinder.php": [
-48,
-50
+45,
+47
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/Cell.php": [
+480
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Cell/DefaultValueBinder.php": [
-63
+92
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php": [
-176
+153
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php": [
-231
+180
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-4534,
-4535,
-4539,
-4540,
-4544,
-4545,
-7410
+4413,
+4414,
+4418,
+4419,
+4423,
+4424,
+6969
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-1657,
-1659,
-1667,
-1741
+1710,
+1712,
+1720,
+1793
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/DataValidations.php": [
+28
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php": [
-93,
-97
+98,
+102,
+621
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/DataValidations.php": [
+64,
+75
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Date.php": [
-484
+180,
+467
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/DateFormatter.php": [
-126
+125
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Formatter.php": [
-167,
-181
+153,
+167
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/FractionFormatter.php": [
-29,
-66
+27,
+64
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/NumberFormatter.php": [
-121,
-214,
-284
+115,
+203,
+271
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/PercentageFormatter.php": [
 41
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/Style.php": [
-367,
-372
+347,
+352
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php": [
-122,
-129
+116,
+123
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Validations.php": [
 48
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-1861
+1716
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php": [
+236
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php": [
 100
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
-519,
-535,
-640,
-931,
-1097,
-1117,
-1223,
-1357,
-1358,
-1528
+500,
+516,
+616,
+897,
+1060,
+1080,
+1185,
+1317,
+1318,
+1488
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Drawing.php": [
-496
+504
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
+1538
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Engineering/ImCscTest.php": [
-138,
-143
+132,
+137
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/VisibilityTest.php": [
-98,
 100,
 102,
 104,
-106
+106,
+108
 ]
 }

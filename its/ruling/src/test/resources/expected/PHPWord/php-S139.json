@@ -4,10 +4,16 @@
 11,
 12
 ],
+"PHPWord:samples/Sample_36_RTL.php": [
+10
+],
+"PHPWord:samples/Sample_43_RTLDefault.php": [
+13
+],
 "PHPWord:src/PhpWord/Element/AbstractContainer.php": [
-114,
-141,
-147
+117,
+144,
+150
 ],
 "PHPWord:src/PhpWord/Element/Footer.php": [
 32
@@ -40,13 +46,13 @@
 343
 ],
 "PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
-43,
-44,
-45,
-46,
 47,
-269,
-364
+48,
+49,
+50,
+51,
+527,
+623
 ],
 "PHPWord:src/PhpWord/Settings.php": [
 32,
@@ -55,35 +61,35 @@
 58
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-110,
-449,
-474,
-762,
-832,
-909,
-916,
-1075,
-1077,
-1079,
-1081,
-1084,
-1142,
-1144,
-1148
+112,
+454,
+479,
+769,
+847,
+946,
+953,
+1116,
+1118,
+1120,
+1122,
+1125,
+1187,
+1189,
+1193
 ],
 "PHPWord:src/PhpWord/Shared/Microsoft/PasswordEncoder.php": [
-49,
-52
+52,
+55
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 2675,
 4351
 ],
 "PHPWord:src/PhpWord/Shared/ZipArchive.php": [
-41,
 42,
-250,
-263
+43,
+254,
+267
 ],
 "PHPWord:src/PhpWord/SimpleType/Border.php": [
 30,
@@ -117,6 +123,9 @@
 "PHPWord:src/PhpWord/Style.php": [
 211
 ],
+"PHPWord:src/PhpWord/Style/Border.php": [
+25
+],
 "PHPWord:src/PhpWord/Style/Chart.php": [
 84,
 85,
@@ -135,7 +144,7 @@
 76
 ],
 "PHPWord:src/PhpWord/Style/Paragraph.php": [
-202
+203
 ],
 "PHPWord:src/PhpWord/Style/Section.php": [
 41,
@@ -143,8 +152,7 @@
 43,
 44,
 45,
-46,
-48
+47
 ],
 "PHPWord:src/PhpWord/Style/Shading.php": [
 35,
@@ -171,28 +179,25 @@
 74
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
-398,
-457,
-460,
-466,
-472,
-484,
-486
-],
-"PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
-55
+435,
+494,
+497,
+503,
+509,
+521,
+523
 ],
 "PHPWord:src/PhpWord/Writer/HTML/Style/Paragraph.php": [
-66
+75
 ],
 "PHPWord:src/PhpWord/Writer/PDF/AbstractRenderer.php": [
 73
 ],
 "PHPWord:src/PhpWord/Writer/RTF/Element/AbstractElement.php": [
-130
+163
 ],
 "PHPWord:src/PhpWord/Writer/RTF/Element/Table.php": [
-81
+103
 ],
 "PHPWord:src/PhpWord/Writer/RTF/Part/Document.php": [
 100,
@@ -204,15 +209,15 @@
 108
 ],
 "PHPWord:src/PhpWord/Writer/RTF/Part/Header.php": [
-176
+177
 ],
 "PHPWord:src/PhpWord/Writer/RTF/Style/Border.php": [
 95,
 98
 ],
 "PHPWord:src/PhpWord/Writer/Word2007.php": [
-123,
-206
+122,
+205
 ],
 "PHPWord:src/PhpWord/Writer/Word2007/Element/Line.php": [
 76
@@ -256,7 +261,7 @@
 118
 ],
 "PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
-967
+1092
 ],
 "PHPWord:tests/PhpWordTests/Style/CellTest.php": [
 58
@@ -303,7 +308,11 @@
 243
 ],
 "PHPWord:tests/PhpWordTests/Writer/Word2007/Style/FontTest.php": [
-65,
-90
+67,
+92
+],
+"PHPWord:tests/bootstrap.php": [
+44,
+50
 ]
 }

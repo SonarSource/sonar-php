@@ -1,9 +1,6 @@
 {
 "psysh:test/Input/CodeArgumentTest.php": [
-25
-],
-"psysh:test/Reflection/ReflectionClassConstantTest.php": [
-37
+28
 ],
 "psysh:test/Reflection/ReflectionConstantTest.php": [
 74

@@ -1,12 +1,9 @@
 {
-"psysh:src/CodeCleaner/InstanceOfPass.php": [
-60
-],
 "psysh:src/CodeCleaner/PassableByReferencePass.php": [
-82
+87
 ],
 "psysh:src/CodeCleaner/ValidClassNamePass.php": [
-89
+87
 ],
 "psysh:src/Readline/Hoa/Console.php": [
 259

@@ -1,5 +1,8 @@
 {
 "PhpSpreadsheet:samples/Header.php": [
-7
+9
+],
+"PhpSpreadsheet:tests/bootstrap.php": [
+35
 ]
 }

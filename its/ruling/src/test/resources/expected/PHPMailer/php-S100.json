@@ -1,16 +1,16 @@
 {
 "PHPMailer:src/PHPMailer.php": [
-4407,
-4564,
-4730,
-4755,
-4797,
-4841,
-4864
+4529,
+4686,
+4852,
+4877,
+4919,
+4963,
+4986
 ],
 "PHPMailer:src/SMTP.php": [
-1122,
-1220
+1155,
+1253
 ],
 "PHPMailer:test/fakefunctions.php": [
 4,

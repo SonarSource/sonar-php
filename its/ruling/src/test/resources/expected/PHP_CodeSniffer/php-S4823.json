@@ -1,6 +1,6 @@
 {
 "PHP_CodeSniffer:src/Config.php": [
-337
+351
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.inc": [
 44,
@@ -8,5 +8,11 @@
 45,
 46,
 47
+],
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+52,
+71,
+142,
+160
 ]
 }

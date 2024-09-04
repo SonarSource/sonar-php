@@ -8,47 +8,52 @@
 "PhpSpreadsheet:samples/Chart/32_Chart_read_write_PDF.php": [
 72
 ],
+"PhpSpreadsheet:samples/Chart/37_Chart_dynamic_title.php": [
+63
+],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-5629
+5581
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical/Conditional.php": [
 93
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Sort.php": [
-182
+168
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Arabic.php": [
-39,
-46
+34,
+41
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Gcd.php": [
-60
+55
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/Coordinate.php": [
+275
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Renderer/JpGraphRendererBase.php": [
-775
+809
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Title.php": [
+134
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
-436
+495
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-1679,
-1948,
-1948
+1732,
+1999,
+1999
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter/Column/Rule.php": [
-284
+273
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-3182
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php": [
-174,
-989
+3156
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
-1448
+1715
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/MathTrig/SequenceTest.php": [
-17
+19
 ]
 }

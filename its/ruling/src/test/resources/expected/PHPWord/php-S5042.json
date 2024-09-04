@@ -1,9 +1,9 @@
 {
 "PHPWord:src/PhpWord/Element/Image.php": [
-346
+357
 ],
 "PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
-387
+378
 ],
 "PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
 97,

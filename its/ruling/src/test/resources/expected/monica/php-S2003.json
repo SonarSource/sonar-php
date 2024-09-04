@@ -4,11 +4,5 @@
 ],
 "monica:public/index.php": [
 24
-],
-"monica:scripts/tests/server-cc.php": [
-26
-],
-"monica:tests/Traits/CreatesApplication.php": [
-18
 ]
 }

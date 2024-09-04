@@ -1,17 +1,14 @@
 {
 "flysystem:src/AsyncAwsS3/AsyncAwsS3AdapterTest.php": [
-200
+209
 ],
 "flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
-216
-],
-"flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapterTest.php": [
-122
+224
 ],
 "flysystem:src/InMemory/InMemoryFilesystemAdapterTest.php": [
-269
+257
 ],
 "flysystem:src/Local/LocalFilesystemAdapterTest.php": [
-588
+671
 ]
 }

@@ -1,12 +1,15 @@
 {
 "psysh:src/CodeCleaner.php": [
-317
+293
+],
+"psysh:src/CodeCleaner/ReturnTypePass.php": [
+99
 ],
 "psysh:src/CodeCleaner/UseStatementPass.php": [
-71
+72
 ],
 "psysh:src/Command/ListCommand/ClassConstantEnumerator.php": [
-25
+24
 ],
 "psysh:src/Command/ListCommand/ConstantEnumerator.php": [
 125
@@ -29,26 +32,26 @@
 82
 ],
 "psysh:src/Command/ReflectingCommand.php": [
-84,
-120
+82,
+118
 ],
 "psysh:src/ConfigPaths.php": [
-409
+344
 ],
 "psysh:src/Configuration.php": [
-280,
-819,
-1810
+284,
+828,
+1853
 ],
 "psysh:src/Context.php": [
 47
 ],
 "psysh:src/Formatter/CodeFormatter.php": [
-180
+179
 ],
 "psysh:src/Formatter/SignatureFormatter.php": [
-34,
-177
+33,
+175
 ],
 "psysh:src/Readline/GNUReadline.php": [
 124
@@ -90,7 +93,7 @@
 209
 ],
 "psysh:src/Shell.php": [
-1293
+1322
 ],
 "psysh:src/Sudo/SudoVisitor.php": [
 52
@@ -112,10 +115,10 @@
 29
 ],
 "psysh:src/Util/Mirror.php": [
-46
+45
 ],
 "psysh:src/Util/Str.php": [
-72
+73
 ],
 "psysh:src/VersionUpdater/SelfUpdate.php": [
 100

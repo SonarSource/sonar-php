@@ -1,8 +1,8 @@
 {
 "PHP_CodeSniffer:src/Files/File.php": [
-416,
-871,
-1262
+422,
+877,
+1268
 ],
 "PHP_CodeSniffer:src/Fixer.php": [
 122,
@@ -11,13 +11,13 @@
 758
 ],
 "PHP_CodeSniffer:src/Ruleset.php": [
-239,
-325,
-522,
-623,
-976,
-1242,
-1253
+240,
+326,
+523,
+624,
+982,
+1254,
+1265
 ],
 "PHP_CodeSniffer:src/Runner.php": [
 80
@@ -42,7 +42,7 @@
 68
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/ForbiddenFunctionsSniff.php": [
-210
+215
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/LowerCaseConstantSniff.php": [
 48

@@ -1,6 +1,6 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-24
+26
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Chart.php": [
 8
@@ -9,24 +9,24 @@
 7
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-68
+69
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
 5
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
-15
+19
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/BaseDrawing.php": [
-9
+11
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-34
+35
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
 56
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx.php": [
-37
+36
 ]
 }

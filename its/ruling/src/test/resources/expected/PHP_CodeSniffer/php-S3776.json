@@ -5,27 +5,28 @@
 ],
 "PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
 207,
-275
+276
 ],
 "PHP_CodeSniffer:src/Config.php": [
-326,
-416,
-465,
-701,
-1552
+224,
+340,
+430,
+479,
+715,
+1566
 ],
 "PHP_CodeSniffer:src/Files/File.php": [
 317,
-836,
-1325,
-1610,
-1783,
-2011,
-2195,
-2276,
-2325,
-2478,
-2602
+842,
+1333,
+1623,
+1796,
+2032,
+2216,
+2297,
+2346,
+2499,
+2623
 ],
 "PHP_CodeSniffer:src/Filters/Filter.php": [
 201
@@ -69,20 +70,20 @@
 150
 ],
 "PHP_CodeSniffer:src/Ruleset.php": [
-127,
-237,
-316,
-684,
-866,
-1207,
-1293
+128,
+238,
+317,
+685,
+867,
+1219,
+1309
 ],
 "PHP_CodeSniffer:src/Runner.php": [
 54,
 353,
 621,
-715,
-795
+748,
+828
 ],
 "PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php": [
 255,
@@ -228,12 +229,12 @@
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
 93,
-222,
-488
+223,
+489
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
 60,
-251
+265
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/ControlStructures/MultiLineConditionSniff.php": [
 61
@@ -287,7 +288,7 @@
 "PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/FileHeaderSniff.php": [
 41,
 131,
-288
+289
 ],
 "PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Functions/ReturnTypeDeclarationSniff.php": [
 44
@@ -353,7 +354,7 @@
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/ClassDeclarationSniff.php": [
 54,
-98
+99
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/SelfMemberReferenceSniff.php": [
 44
@@ -372,8 +373,8 @@
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
 45,
-202,
-278
+205,
+281
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentThrowTagSniff.php": [
 41
@@ -446,7 +447,7 @@
 60
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/NonExecutableCodeSniff.php": [
-48
+64
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Strings/ConcatenationSpacingSniff.php": [
 55
@@ -504,10 +505,10 @@
 ],
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
 512,
-2355,
-3174,
-3398,
-3457
+2409,
+3228,
+3452,
+3511
 ],
 "PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
 170,

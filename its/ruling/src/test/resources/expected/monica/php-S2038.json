@@ -13,13 +13,5 @@
 ],
 "monica:database/factories/ContactFactory.php": [
 17
-],
-"monica:tests/Api/DAV/VCardContactTest.php": [
-71,
-113,
-141
-],
-"monica:tests/Unit/Services/Contact/Avatar/GenerateDefaultAvatarTest.php": [
-50
 ]
 }

@@ -1,6 +1,6 @@
 {
 "PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
-327
+586
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 962,
@@ -13,7 +13,7 @@
 4329
 ],
 "PHPWord:tests/PhpWordTests/Writer/HTMLTest.php": [
-132
+167
 ],
 "PHPWord:tests/PhpWordTests/Writer/ODText/ElementTest.php": [
 284
@@ -27,6 +27,6 @@
 236
 ],
 "PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
-614
+649
 ]
 }

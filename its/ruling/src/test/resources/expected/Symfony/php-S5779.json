@@ -1,9 +1,0 @@
-{
-"Symfony:Bundle/FrameworkBundle/Tests/DependencyInjection/FrameworkExtensionTestCase.php": [
-1320,
-1347
-],
-"Symfony:Component/Routing/Tests/RouteTest.php": [
-289
-]
-}

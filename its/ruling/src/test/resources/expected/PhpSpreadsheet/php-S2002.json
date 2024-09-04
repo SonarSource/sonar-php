@@ -1,94 +1,109 @@
 {
-"PhpSpreadsheet:samples/Basic/25_In_memory_image.php": [
-24
-],
-"PhpSpreadsheet:samples/Reader/20_Reader_worksheet_hyperlink_image.php": [
+"PhpSpreadsheet:samples/Reader2/20_Reader_worksheet_hyperlink_image.php": [
 15
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-4188,
-4593
+4106,
+4505
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Matrix.php": [
-101
+109
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Helper/Html.php": [
-634
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Csv.php": [
-318
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php": [
-188
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
-263
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-137
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
-46
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/CodePage.php": [
-91
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Drawing.php": [
-170
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/File.php": [
-44
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
-119
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
-217,
-228
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
-252,
-255,
-255,
-255,
-261
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/XMLWriter.php": [
-39,
-63
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/MemoryDrawing.php": [
-78,
-159,
-219,
-231
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
-669
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
-442,
-464
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-2437
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Functional/DrawingImageHyperlinkTest.php": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Helper/Handler.php": [
 13
 ],
+"PhpSpreadsheet:src/PhpSpreadsheet/Helper/Html.php": [
+620
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Helper/Sample.php": [
+217
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Csv.php": [
+306
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php": [
+176,
+181
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
+255
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
+122,
+2402
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
+38,
+48,
+58,
+70
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php": [
+124,
+130
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/CodePage.php": [
+90
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/File.php": [
+42
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
+111
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
+191,
+202
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
+238,
+241,
+241,
+241,
+247
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/XMLWriter.php": [
+36,
+59
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/MemoryDrawing.php": [
+66,
+145,
+204,
+216
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
+643
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
+423,
+445
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+2376
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Functional/DrawingImageHyperlinkTest.php": [
+15
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/Issue3770Test.php": [
+29
+],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xml/XmlTest.php": [
-22,
-60,
-69,
-78
+61,
+71,
+81
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/ExactFontTest.php": [
-65
+66
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/DrawingTest.php": [
-16
+18
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/MemoryDrawingTest.php": [
-15
+17
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ArrayFunctionsTest.php": [
+118,
+235
 ]
 }

@@ -1,12 +1,12 @@
 {
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Document/SecurityTest.php": [
-16,
-22
+18,
+24
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/PasswordReloadTest.php": [
-16
+18
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/SpreadsheetCoverageTest.php": [
-48
+47
 ]
 }

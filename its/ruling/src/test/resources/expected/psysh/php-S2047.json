@@ -1,14 +1,14 @@
 {
 "psysh:src/ConfigPaths.php": [
-384
+319
 ],
 "psysh:src/Configuration.php": [
-250,
-774,
-863,
-901,
-924,
-1091
+254,
+783,
+872,
+910,
+933,
+1118
 ],
 "psysh:src/Readline/Hoa/FileLinkRead.php": [
 106,
@@ -24,6 +24,7 @@
 85
 ],
 "psysh:src/Shell.php": [
-558
+546,
+953
 ]
 }

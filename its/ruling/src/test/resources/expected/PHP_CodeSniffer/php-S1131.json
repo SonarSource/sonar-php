@@ -43,6 +43,9 @@
 213,
 216
 ],
+"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.18.inc": [
+8
+],
 "PHP_CodeSniffer:src/Standards/PSR2/Tests/Files/EndFileNewlineUnitTest.6.inc": [
 2
 ],

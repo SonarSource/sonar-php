@@ -1,5 +1,8 @@
 {
 "PHPWord:samples/Sample_Header.php": [
 7
+],
+"PHPWord:tests/bootstrap.php": [
+59
 ]
 }

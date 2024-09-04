@@ -1,13 +1,13 @@
 {
 "psysh:src/Command/ReflectingCommand.php": [
-168
+166
 ],
 "psysh:src/Formatter/DocblockFormatter.php": [
 162,
 162
 ],
 "psysh:src/Input/ShellInput.php": [
-90
+92
 ],
 "psysh:src/Readline/Hoa/ConsoleWindow.php": [
 103,
@@ -29,20 +29,20 @@
 76
 ],
 "psysh:src/Shell.php": [
-1236,
-1324,
-1440
+1265,
+1353,
+1480
 ],
 "psysh:src/Util/Docblock.php": [
 182,
-231,
-243
+229,
+241
 ],
 "psysh:src/VersionUpdater/GitHubChecker.php": [
 26
 ],
 "psysh:test/ShellTest.php": [
-341,
-361
+358,
+378
 ]
 }

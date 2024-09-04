@@ -3,24 +3,25 @@
 96
 ],
 "PHPMailer:src/DSNConfigurator.php": [
-152
+150
 ],
 "PHPMailer:src/PHPMailer.php": [
-1114,
-1193,
-2157,
-2483,
-2504,
-2571,
-2628,
-2685,
-2787,
-3031,
-4105,
-4902
+1120,
+1199,
+2022,
+2199,
+2532,
+2553,
+2620,
+2677,
+2734,
+2836,
+3080,
+4227,
+5024
 ],
 "PHPMailer:src/SMTP.php": [
-554
+568
 ],
 "PHPMailer:test/PHPMailer/ParseAddressesTest.php": [
 54,

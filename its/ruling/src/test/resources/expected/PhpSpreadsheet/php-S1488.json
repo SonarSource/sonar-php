@@ -1,53 +1,53 @@
 {
-"PhpSpreadsheet:samples/Chart/33_Chart_create_line_dateaxis.php": [
-369
+"PhpSpreadsheet:infra/LocaleGenerator.php": [
+268
+],
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_line_dateaxis.php": [
+381
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/DateValue.php": [
-98
+104
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/Time.php": [
 82
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engine/Operands/StructuredReference.php": [
-87
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Depreciation.php": [
-206
+201
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/MatrixFunctions.php": [
 172
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Conditional.php": [
-312
+289
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Cell/AddressHelper.php": [
 69,
 173
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric/Styles.php": [
-227
+219
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods/FormulaTranslator.php": [
 93
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-5257,
-5432,
-7886
+5134,
+5308,
+7378
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-1271
+1173
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
-1527
+1579
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
-791
+757
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Functional/StreamTest.php": [
-13
+15
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/SpreadsheetTest.php": [
-41
+42
 ]
 }

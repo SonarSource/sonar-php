@@ -3,19 +3,19 @@
 151
 ],
 "psysh:src/CodeCleaner.php": [
-229
+205
 ],
 "psysh:src/Command/HistoryCommand.php": [
 168
 ],
 "psysh:src/Command/ReflectingCommand.php": [
-168
+166
 ],
 "psysh:src/Command/ShowCommand.php": [
-297
+289
 ],
 "psysh:src/Command/WhereamiCommand.php": [
-99
+96
 ],
 "psysh:src/Readline/Hoa/ConsoleCursor.php": [
 477
@@ -31,7 +31,7 @@
 84
 ],
 "psysh:src/Shell.php": [
-1236
+1265
 ],
 "psysh:src/VersionUpdater/GitHubChecker.php": [
 26

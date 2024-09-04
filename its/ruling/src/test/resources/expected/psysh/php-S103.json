@@ -1,34 +1,40 @@
 {
+"psysh:src/CodeCleaner.php": [
+68
+],
 "psysh:src/CodeCleaner/IssetPass.php": [
 44
 ],
+"psysh:src/CodeCleaner/ListPass.php": [
+56
+],
 "psysh:src/Command/Command.php": [
-168
+169
 ],
 "psysh:src/Command/EditCommand.php": [
 53,
 79
 ],
 "psysh:src/Command/ListCommand.php": [
-74
+73
 ],
 "psysh:src/Command/ShowCommand.php": [
-49
+41
 ],
 "psysh:src/Configuration.php": [
-325,
-329,
-333,
-361,
-364,
-369,
-628
+334,
+338,
+342,
+370,
+373,
+378,
+637
 ],
 "psysh:src/ExecutionLoop/ProcessForker.php": [
 96
 ],
 "psysh:src/Formatter/CodeFormatter.php": [
-316
+315
 ],
 "psysh:src/Formatter/DocblockFormatter.php": [
 120
@@ -37,7 +43,7 @@
 32
 ],
 "psysh:src/Input/ShellInput.php": [
-93
+95
 ],
 "psysh:src/Output/ShellOutput.php": [
 41
@@ -46,8 +52,7 @@
 57
 ],
 "psysh:src/Readline/Hoa/File.php": [
-134,
-151
+147
 ],
 "psysh:src/Readline/Hoa/FileLinkRead.php": [
 86
@@ -65,46 +70,49 @@
 50
 ],
 "psysh:src/Shell.php": [
-1607
+1641
 ],
 "psysh:src/Util/Docblock.php": [
 78
 ],
 "psysh:src/Util/Mirror.php": [
-69
+68
+],
+"psysh:src/VarDumper/Dumper.php": [
+82
 ],
 "psysh:src/functions.php": [
-331,
-346,
-351,
-356,
-361,
-366
+335,
+350,
+355,
+360,
+365,
+370
 ],
 "psysh:test/Command/ListCommand/ConstantEnumeratorTest.php": [
-81,
-108
+84,
+111
 ],
 "psysh:test/Command/ListCommand/MethodEnumeratorTest.php": [
-147
+150
 ],
 "psysh:test/ConfigurationTest.php": [
-459,
-460,
-461,
-462
+468,
+469,
+470,
+471
 ],
 "psysh:test/Formatter/CodeFormatterTest.php": [
+238,
+239,
+242,
+243,
 244,
-245,
-248,
-249,
+247,
 250,
-253,
-256,
-257
+251
 ],
 "psysh:test/Formatter/SignatureFormatterTest.php": [
-90
+101
 ]
 }

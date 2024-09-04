@@ -1,34 +1,42 @@
 {
 "PHPWord:src/PhpWord/Media.php": [
-67
+66
 ],
 "PHPWord:src/PhpWord/Reader/MsDoc.php": [
-1534,
-1629,
-1651,
-1675,
-1695,
-1715,
-1798,
-1872,
-1935,
-1957,
-2208,
-2246
+1542,
+1637,
+1659,
+1683,
+1703,
+1723,
+1806,
+1880,
+1944,
+1966,
+2217,
+2255
 ],
 "PHPWord:src/PhpWord/Reader/ODText/Content.php": [
-53,
-98
+67,
+123,
+169
+],
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+347,
+371,
+385
 ],
 "PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
-73
+75
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-727,
-803,
-825,
-900,
-906
+734,
+818,
+840,
+903,
+920,
+937,
+943
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 1429,
@@ -42,5 +50,8 @@
 1842,
 1859,
 1875
+],
+"PHPWord:src/PhpWord/Writer/ODText/Element/Field.php": [
+83
 ]
 }

@@ -2,9 +2,6 @@
 "psysh:scoper.inc.php": [
 0
 ],
-"psysh:src/Reflection/ReflectionConstant_.php": [
-0
-],
 "psysh:src/functions.php": [
 0
 ],
@@ -15,6 +12,9 @@
 0
 ],
 "psysh:test/fixtures/empty.php": [
+0
+],
+"psysh:vendor-bin/phpstan/bootstrap.php": [
 0
 ]
 }

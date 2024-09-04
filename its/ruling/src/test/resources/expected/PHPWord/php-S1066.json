@@ -1,16 +1,16 @@
 {
 "PHPWord:src/PhpWord/Element/AbstractContainer.php": [
-269
+272
 ],
 "PHPWord:src/PhpWord/Element/Image.php": [
-344
+355
 ],
 "PHPWord:src/PhpWord/Reader/MsDoc.php": [
-2340,
-2375
+2349,
+2384
 ],
 "PHPWord:src/PhpWord/Shared/Html.php": [
-956
+993
 ],
 "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
 1751,
@@ -22,28 +22,29 @@
 4757
 ],
 "PHPWord:src/PhpWord/Shared/Text.php": [
-245
-],
-"PHPWord:src/PhpWord/Shared/ZipArchive.php": [
-171
+246
 ],
 "PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
 285,
-386
+377
+],
+"PHPWord:src/PhpWord/Writer/HTML/Style/Table.php": [
+45
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Element/Title.php": [
 42
 ],
 "PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
-65,
-70
+78,
+83
 ],
 "PHPWord:src/PhpWord/Writer/Word2007/Element/Field.php": [
-76,
-147
+79,
+150,
+265
 ],
 "PHPWord:src/PhpWord/Writer/Word2007/Part/AbstractPart.php": [
-82
+80
 ],
 "PHPWord:src/PhpWord/Writer/Word2007/Style/MarginBorder.php": [
 91,

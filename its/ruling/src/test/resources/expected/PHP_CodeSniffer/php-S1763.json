@@ -39,6 +39,14 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Formatting/OperatorBracketSniff.php": [
 257
 ],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/NonExecutableCodeUnitTest.3.inc": [
+4,
+11,
+26,
+43,
+53,
+61
+],
 "PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.inc": [
 26
 ],

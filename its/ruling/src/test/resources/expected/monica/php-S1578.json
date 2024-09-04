@@ -2411,7 +2411,7 @@
 "monica:routes/web.php": [
 0
 ],
-"monica:scripts/tests/server-cc.php": [
+"monica:server.php": [
 0
 ]
 }

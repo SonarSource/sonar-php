@@ -1,17 +1,18 @@
 {
 "psysh:src/Command/ShowCommand.php": [
-118
+110
 ],
 "psysh:src/Configuration.php": [
-393,
-1382
+152,
+402,
+1425
 ],
 "psysh:src/Input/FilterOptions.php": [
 52
 ],
 "psysh:src/Input/ShellInput.php": [
-254,
-255
+256,
+257
 ],
 "psysh:src/Readline/Hoa/AutocompleterAggregate.php": [
 80
@@ -35,7 +36,7 @@
 215
 ],
 "psysh:src/Readline/Hoa/File.php": [
-155
+151
 ],
 "psysh:src/Readline/Hoa/FileGeneric.php": [
 452
@@ -71,14 +72,14 @@
 234
 ],
 "psysh:src/Readline/Libedit.php": [
-110
+111
 ],
 "psysh:src/Readline/Transient.php": [
 61
 ],
 "psysh:src/Shell.php": [
-601,
-619
+589,
+607
 ],
 "psysh:src/functions.php": [
 145

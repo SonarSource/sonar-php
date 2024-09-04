@@ -7,16 +7,16 @@
 ],
 "psysh:src/functions.php": [
 131,
-341,
-343
+345,
+347
 ],
 "psysh:test/CodeCleaner/ValidClassNamePassTest.php": [
-114
+117
 ],
 "psysh:test/Command/ListCommand/ClassConstantEnumeratorTest.php": [
-30
+33
 ],
 "psysh:test/Input/ShellInputTest.php": [
-105
+108
 ]
 }

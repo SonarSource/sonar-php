@@ -1,58 +1,50 @@
 {
-"PhpSpreadsheet:samples/Basic/13_Calculation.php": [
-161
-],
-"PhpSpreadsheet:samples/Basic/13_CalculationCyclicFormulae.php": [
-26
-],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_bar_custom_colors.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_bar_custom_colors.php": [
 135
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_bar_labels_lines.php": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_bar_labels_lines.php": [
 160
 ],
-"PhpSpreadsheet:samples/Chart/33_Chart_create_pie_custom_colors.php": [
+"PhpSpreadsheet:samples/Chart33b/33_Chart_create_pie_custom_colors.php": [
 135
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
-4123,
-4487,
-4761,
-4764,
-4950
+4041,
+4399,
+4875
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php": [
-206
+195
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Cell/AdvancedValueBinder.php": [
 83
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-1305,
-1306,
-2194,
-3753
+1198,
+1199,
+2084,
+3632
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
-1620
+1673
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher.php": [
-40,
-62
+30,
+46
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DgContainer.php": [
-63
+58
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
-387
+371
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
-840
+741
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-3278
+3186
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
-288
+247
 ]
 }

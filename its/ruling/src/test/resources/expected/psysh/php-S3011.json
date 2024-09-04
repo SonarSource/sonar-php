@@ -1,23 +1,20 @@
 {
-"psysh:src/Reflection/ReflectionClassConstant.php": [
-40
-],
 "psysh:src/Sudo.php": [
 65,
-116,
-135,
-153,
-156
+122,
+146,
+164,
+167
 ],
 "psysh:src/TabCompletion/Matcher/ClassAttributesMatcher.php": [
 50,
 52
 ],
 "psysh:test/Input/ShellInputTest.php": [
-101,
-102
+104,
+105
 ],
 "psysh:test/ShellTest.php": [
-591
+632
 ]
 }

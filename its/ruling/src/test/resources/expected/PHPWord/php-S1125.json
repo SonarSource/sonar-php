@@ -8,6 +8,9 @@
 167
 ],
 "PHPWord:src/PhpWord/Writer/HTML/Style/AbstractStyle.php": [
-125
+128
+],
+"PHPWord:src/PhpWord/Writer/RTF/Style/AbstractStyle.php": [
+105
 ]
 }

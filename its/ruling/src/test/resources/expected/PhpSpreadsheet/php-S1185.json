@@ -1,23 +1,23 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php": [
-60
+45
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-423
+376
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/CellValue.php": [
-50
+48
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/DateValue.php": [
-52
+51
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/Expression.php": [
-19
+16
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/TextValue.php": [
-54
+49
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ArrayFormulaPrefixTest.php": [
-12
+14
 ]
 }

@@ -1,18 +1,18 @@
 {
 "flysystem:src/AdapterTestUtilities/FilesystemAdapterTestCase.php": [
-34
+35
 ],
 "flysystem:src/AsyncAwsS3/AsyncAwsS3Adapter.php": [
-45
+46
 ],
 "flysystem:src/AsyncAwsS3/AsyncAwsS3AdapterTest.php": [
-33
+34
 ],
 "flysystem:src/AwsS3V3/AwsS3V3Adapter.php": [
 42
 ],
 "flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
-35
+33
 ],
 "flysystem:src/AwsS3V3/S3ClientStub.php": [
 22
@@ -21,16 +21,22 @@
 46
 ],
 "flysystem:src/Filesystem.php": [
-17
+18
 ],
 "flysystem:src/FilesystemTest.php": [
-23
+25
 ],
 "flysystem:src/Ftp/FtpAdapter.php": [
-35
+37
+],
+"flysystem:src/Ftp/FtpAdapterTestCase.php": [
+27
 ],
 "flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapter.php": [
-47
+46
+],
+"flysystem:src/GridFS/GridFSAdapter.php": [
+33
 ],
 "flysystem:src/InMemory/InMemoryFilesystemAdapterTest.php": [
 22
@@ -42,7 +48,7 @@
 43
 ],
 "flysystem:src/MountManager.php": [
-13
+14
 ],
 "flysystem:src/MountManagerTest.php": [
 17
@@ -56,16 +62,13 @@
 "flysystem:src/PhpseclibV3/SftpAdapter.php": [
 32
 ],
-"flysystem:src/ReadOnly/ReadOnlyFilesystemAdapter.php": [
-23
-],
 "flysystem:src/WebDAV/WebDAVAdapter.php": [
 40
 ],
 "flysystem:src/ZipArchive/ZipArchiveAdapter.php": [
 34
 ],
-"flysystem:src/ZipArchive/ZipArchiveAdapterTest.php": [
+"flysystem:src/ZipArchive/ZipArchiveAdapterTestCase.php": [
 25
 ]
 }

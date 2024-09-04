@@ -13,17 +13,5 @@
 4284,
 4286,
 4288
-],
-"PHPWord:tests/PhpWordTests/PhpWordTest.php": [
-125
-],
-"PHPWord:tests/PhpWordTests/Writer/ODTextTest.php": [
-106
-],
-"PHPWord:tests/PhpWordTests/Writer/RTFTest.php": [
-107
-],
-"PHPWord:tests/PhpWordTests/Writer/Word2007Test.php": [
-172
 ]
 }

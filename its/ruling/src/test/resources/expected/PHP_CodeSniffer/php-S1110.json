@@ -1,9 +1,9 @@
 {
 "PHP_CodeSniffer:src/Config.php": [
-1027
+1041
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/ClassCommentSniff.php": [
-109
+112
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
 27,

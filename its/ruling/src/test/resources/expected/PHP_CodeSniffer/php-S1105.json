@@ -18,35 +18,35 @@
 110,
 171,
 208,
-276
+277
 ],
 "PHP_CodeSniffer:scripts/build-phar.php": [
 50
 ],
 "PHP_CodeSniffer:src/Config.php": [
 76,
-198,
-218,
-271,
+205,
+225,
 285,
-297,
+299,
 311,
-327,
-417,
-466,
-597,
-702,
-1240,
-1266,
-1299,
-1322,
-1346,
-1422,
-1480,
-1505,
-1553,
-1634,
-1681
+325,
+341,
+431,
+480,
+611,
+716,
+1254,
+1280,
+1313,
+1336,
+1360,
+1436,
+1494,
+1519,
+1567,
+1648,
+1695
 ],
 "PHP_CodeSniffer:src/Exceptions/DeepExitException.php": [
 16
@@ -69,34 +69,34 @@
 295,
 306,
 318,
-557,
-618,
-630,
-837,
-1099,
-1123,
-1135,
-1147,
-1159,
-1171,
-1183,
-1195,
-1207,
-1219,
-1238,
-1326,
-1611,
-1784,
-1961,
-2012,
-2139,
-2326,
-2479,
-2603,
-2653,
-2694,
-2732,
-2784
+563,
+624,
+636,
+843,
+1105,
+1129,
+1141,
+1153,
+1165,
+1177,
+1189,
+1201,
+1213,
+1225,
+1244,
+1334,
+1624,
+1797,
+1975,
+2033,
+2160,
+2347,
+2500,
+2624,
+2674,
+2715,
+2753,
+2805
 ],
 "PHP_CodeSniffer:src/Files/FileList.php": [
 22,
@@ -285,19 +285,19 @@
 34
 ],
 "PHP_CodeSniffer:src/Ruleset.php": [
-18,
-128,
-238,
-317,
-622,
-685,
-867,
-1109,
-1148,
-1208,
-1294,
-1348,
-1374
+19,
+129,
+239,
+318,
+623,
+686,
+868,
+1121,
+1160,
+1220,
+1310,
+1418,
+1444
 ],
 "PHP_CodeSniffer:src/Runner.php": [
 25,
@@ -308,10 +308,10 @@
 354,
 602,
 622,
-716,
-796,
-906,
-925
+749,
+829,
+939,
+958
 ],
 "PHP_CodeSniffer:src/Sniffs/AbstractArraySniff.php": [
 16,
@@ -410,9 +410,9 @@
 62
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnnecessaryFinalModifierSniff.php": [
-30,
-39,
-55
+29,
+38,
+54
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
 24,
@@ -674,7 +674,7 @@
 19,
 62,
 119,
-208
+213
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/LowerCaseConstantSniff.php": [
 17,
@@ -1022,7 +1022,7 @@
 "PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.php": [
 15,
 27,
-72
+73
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceBsdAllmanUnitTest.php": [
 15,
@@ -1499,31 +1499,31 @@
 46
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/ClassCommentSniff.php": [
-16,
-25,
-46,
-100
+15,
+24,
+45,
+103
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
 17,
 78,
 94,
-223,
-320,
-362,
-415,
-459,
-489,
-530,
-559
+224,
+321,
+363,
+416,
+460,
+490,
+531,
+560
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
 17,
 45,
 61,
-168,
-217,
-252
+182,
+231,
+266
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/InlineCommentSniff.php": [
 16,
@@ -1610,7 +1610,7 @@
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/ClassCommentUnitTest.php": [
 15,
 27,
-62
+64
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.2.inc": [
 8
@@ -1621,12 +1621,12 @@
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.php": [
 15,
 29,
-74
+73
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FunctionCommentUnitTest.php": [
 15,
 27,
-90
+92
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/InlineCommentUnitTest.inc": [
 12
@@ -1843,7 +1843,7 @@
 26,
 42,
 132,
-289
+290
 ],
 "PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/ImportStatementSniff.php": [
 17,
@@ -1968,6 +1968,10 @@
 "PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.17.inc": [
 12
 ],
+"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.18.inc": [
+11,
+13
+],
 "PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.2.inc": [
 31
 ],
@@ -2044,13 +2048,13 @@
 17,
 37,
 63,
-479
+480
 ],
 "PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Classes/PropertyDeclarationSniff.php": [
 17,
 29,
-160,
-177
+200,
+217
 ],
 "PHP_CodeSniffer:src/Standards/PSR2/Sniffs/ControlStructures/ControlStructureSpacingSniff.php": [
 17,
@@ -2108,12 +2112,12 @@
 "PHP_CodeSniffer:src/Standards/PSR2/Tests/Classes/ClassDeclarationUnitTest.php": [
 15,
 27,
-80
+82
 ],
 "PHP_CodeSniffer:src/Standards/PSR2/Tests/Classes/PropertyDeclarationUnitTest.php": [
 15,
 27,
-66
+68
 ],
 "PHP_CodeSniffer:src/Standards/PSR2/Tests/ControlStructures/ControlStructureSpacingUnitTest.php": [
 15,
@@ -2299,7 +2303,7 @@
 17,
 30,
 55,
-99
+100
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/ClassFileNameSniff.php": [
 16,
@@ -2314,7 +2318,7 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/LowercaseClassKeywordsSniff.php": [
 17,
 26,
-50
+51
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/SelfMemberReferenceSniff.php": [
 22,
@@ -2335,9 +2339,9 @@
 52
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/ClassCommentSniff.php": [
-25,
-34,
-50
+24,
+33,
+49
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/ClosingDeclarationCommentSniff.php": [
 16,
@@ -2362,11 +2366,11 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
 18,
 46,
-203,
-279,
-625,
-684,
-743
+206,
+282,
+654,
+713,
+772
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentThrowTagSniff.php": [
 17,
@@ -2580,9 +2584,9 @@
 44
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/InnerFunctionsSniff.php": [
-16,
-25,
-41
+17,
+26,
+42
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php": [
 17,
@@ -2592,8 +2596,8 @@
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/NonExecutableCodeSniff.php": [
 17,
-26,
-49
+42,
+65
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Scope/MemberVarScopeSniff.php": [
 16,
@@ -2716,7 +2720,7 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Arrays/ArrayDeclarationUnitTest.php": [
 15,
 29,
-230
+238
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/ClassDefinitionClosingBraceSpaceUnitTest.php": [
 15,
@@ -2811,7 +2815,7 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/ClassDeclarationUnitTest.php": [
 15,
 27,
-78
+80
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/ClassFileNameUnitTest.php": [
 15,
@@ -2829,7 +2833,7 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/LowercaseClassKeywordsUnitTest.php": [
 15,
 27,
-53
+54
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/SelfMemberReferenceUnitTest.php": [
 15,
@@ -2850,7 +2854,7 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/ClassCommentUnitTest.php": [
 15,
 27,
-47
+49
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/ClosingDeclarationCommentUnitTest.inc": [
 4,
@@ -2898,7 +2902,7 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.php": [
 15,
 29,
-70
+71
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FunctionCommentThrowTagUnitTest.php": [
 15,
@@ -2908,7 +2912,7 @@
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FunctionCommentUnitTest.php": [
 15,
 27,
-171
+191
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.inc": [
 13,
@@ -2916,7 +2920,8 @@
 71,
 86,
 133,
-159
+159,
+181
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.php": [
 15,
@@ -3162,12 +3167,13 @@
 21,
 25,
 33,
-44
+44,
+53
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/InnerFunctionsUnitTest.php": [
 15,
 27,
-45
+47
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/LowercasePHPFunctionsUnitTest.php": [
 15,
@@ -3393,7 +3399,7 @@
 17,
 33,
 53,
-528
+532
 ],
 "PHP_CodeSniffer:src/Tokenizers/Comment.php": [
 15,
@@ -3411,12 +3417,12 @@
 "PHP_CodeSniffer:src/Tokenizers/PHP.php": [
 15,
 513,
-2356,
-3175,
-3256,
-3364,
-3399,
-3458
+2410,
+3229,
+3310,
+3418,
+3453,
+3512
 ],
 "PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
 16,
@@ -3491,6 +3497,22 @@
 25,
 37,
 67
+],
+"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
+17,
+28,
+51,
+66,
+82,
+98,
+121,
+141,
+159,
+178,
+206,
+228,
+243,
+295
 ],
 "PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
 18,
@@ -3581,6 +3603,13 @@
 477,
 493
 ],
+"PHP_CodeSniffer:tests/Core/File/GetClassPropertiesTest.php": [
+15,
+32,
+47,
+77,
+93
+],
 "PHP_CodeSniffer:tests/Core/File/GetMemberPropertiesTest.php": [
 15,
 29,
@@ -3621,16 +3650,17 @@
 737,
 785,
 819,
-855,
-879,
-913,
-937,
-1000,
-1032,
-1064,
-1087,
-1110,
-1136
+856,
+892,
+916,
+950,
+974,
+1037,
+1069,
+1101,
+1124,
+1147,
+1173
 ],
 "PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
 15,
@@ -3696,6 +3726,28 @@
 111,
 128
 ],
+"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyAllowedAsDeclaredSniff.php": [
+14,
+20,
+25
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyAllowedViaMagicMethodSniff.php": [
+14,
+18,
+23,
+32,
+37
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyAllowedViaStdClassSniff.php": [
+15,
+18,
+23
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyNotAllowedViaAttributeSniff.php": [
+16,
+19,
+24
+],
 "PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteLinuxTest.php": [
 17,
 47,
@@ -3716,8 +3768,25 @@
 115,
 133,
 148,
+360,
+379,
+450,
+468
+],
+"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
+22,
+31,
+52,
+94,
+115,
+151,
+178,
+206,
 224,
-243
+240,
+291,
+333,
+377
 ],
 "PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.php": [
 15,
@@ -3856,8 +3925,8 @@
 16,
 30,
 49,
-148,
-167
+169,
+191
 ],
 "PHP_CodeSniffer:tests/Core/Tokenizer/DefaultKeywordTest.php": [
 16,

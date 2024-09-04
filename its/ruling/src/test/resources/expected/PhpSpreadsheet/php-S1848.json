@@ -1,18 +1,18 @@
 {
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/FormulaParserTest.php": [
-15
+17
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/CellRangeTest.php": [
-94,
-111
+96,
+113
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/DefinedNameFormulaTest.php": [
-178
+180
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/DefinedNameTest.php": [
-137
+138
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/Table/TableTest.php": [
-208
+211
 ]
 }

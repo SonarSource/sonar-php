@@ -1,23 +1,23 @@
 {
 "PHPMailer:src/PHPMailer.php": [
-874,
-877,
-1472,
-1761,
-1787,
-3043,
-3051,
-3062,
-3065,
-3071,
-4085
+880,
+883,
+1477,
+1769,
+1795,
+3092,
+3100,
+3111,
+3114,
+3120,
+4207
 ],
 "PHPMailer:src/POP3.php": [
 358
 ],
 "PHPMailer:src/SMTP.php": [
-444,
-1272
+458,
+1305
 ],
 "PHPMailer:test/POP3/PopBeforeSmtpTest.php": [
 96,

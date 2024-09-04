@@ -72,5 +72,15 @@
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.inc": [
 24
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/NonExecutableCodeUnitTest.3.inc": [
+2,
+9,
+16,
+24,
+32,
+41,
+51,
+59
 ]
 }

@@ -1,14 +1,15 @@
 {
 "PHP_CodeSniffer:src/Config.php": [
-235,
-756,
-783,
-814,
-834
+231,
+249,
+770,
+797,
+828,
+848
 ],
 "PHP_CodeSniffer:src/Files/File.php": [
-1435,
-1505
+1443,
+1513
 ],
 "PHP_CodeSniffer:src/Reports/VersionControl.php": [
 188,
@@ -88,8 +89,8 @@
 ],
 "PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/FileHeaderSniff.php": [
 162,
-216,
-234
+217,
+235
 ],
 "PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/UseDeclarationUnitTest.php": [
 31,
@@ -97,7 +98,7 @@
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Arrays/ArrayDeclarationUnitTest.php": [
 31,
-128
+132
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/IndentationUnitTest.php": [
 31
@@ -136,7 +137,8 @@
 31
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/NonExecutableCodeUnitTest.php": [
-46
+46,
+87
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/ControlStructureSpacingUnitTest.php": [
 31,
@@ -161,11 +163,11 @@
 67
 ],
 "PHP_CodeSniffer:src/Tokenizers/CSS.php": [
-292,
-317,
-331,
-366,
-386
+296,
+321,
+335,
+370,
+390
 ],
 "PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
 794,

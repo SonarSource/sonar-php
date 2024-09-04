@@ -1,76 +1,35 @@
 {
 "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/RowColumnInformation.php": [
-146
+148
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php": [
-208
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
-1133,
-1416,
-1424,
-1563,
-1571,
-1729,
-1736,
-1775,
-2437,
-2603,
-2788,
-2903,
-3196,
-4056,
-4277,
-4341,
-4344,
-4423,
-4426,
-4437,
-4438,
-4515,
-4518,
-4521,
-4525,
-4631,
-4652,
-4782,
-4816,
-4937,
-5113,
-5195,
-7603,
-7627,
-7659,
-7662
+205
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
-920
+957
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/Style/NumberFormat.php": [
 16
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter.php": [
-229
+224
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php": [
-435
+429
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
-657
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Meta.php": [
-88
+604
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/AutoFilter.php": [
 27
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
-1438
+1705
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnCellIterator2Test.php": [
-64
+66
 ],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/RowCellIterator2Test.php": [
-64
+66
 ]
 }

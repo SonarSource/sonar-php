@@ -1,5 +1,13 @@
 {
 "PHPWord:src/PhpWord/Shared/OLERead.php": [
-268
+279
+],
+"PHPWord:tests/PhpWordTests/Writer/HTMLTest.php": [
+59
+],
+"PHPWord:tests/PhpWordTests/Writer/ODText/Part/ManifestTest.php": [
+79,
+89,
+94
 ]
 }

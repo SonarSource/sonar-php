@@ -6,21 +6,21 @@
 109,
 170,
 207,
-275
+276
 ],
 "PHP_CodeSniffer:src/Config.php": [
-270,
-1552
+284,
+1566
 ],
 "PHP_CodeSniffer:src/Files/File.php": [
-656,
-690,
-723,
-747,
-773,
-804,
-836,
-1098
+662,
+696,
+729,
+753,
+779,
+810,
+842,
+1104
 ],
 "PHP_CodeSniffer:src/Files/FileList.php": [
 231
@@ -96,10 +96,10 @@
 33
 ],
 "PHP_CodeSniffer:src/Ruleset.php": [
-1108
+1120
 ],
 "PHP_CodeSniffer:src/Runner.php": [
-715
+748
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
 1513
@@ -108,7 +108,7 @@
 277
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
-742
+771
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ObjectOperatorSpacingSniff.php": [
 100,

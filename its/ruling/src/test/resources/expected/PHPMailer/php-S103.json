@@ -1,18 +1,37 @@
 {
+"PHPMailer:language/phpmailer.lang-as.php": [
+10
+],
+"PHPMailer:language/phpmailer.lang-bn.php": [
+10
+],
+"PHPMailer:language/phpmailer.lang-da.php": [
+12
+],
 "PHPMailer:language/phpmailer.lang-el.php": [
 9
 ],
+"PHPMailer:language/phpmailer.lang-es.php": [
+12
+],
 "PHPMailer:language/phpmailer.lang-fr.php": [
-13
+12
 ],
 "PHPMailer:language/phpmailer.lang-hi.php": [
 11
+],
+"PHPMailer:language/phpmailer.lang-ja.php": [
+13
+],
+"PHPMailer:language/phpmailer.lang-nb.php": [
+9
 ],
 "PHPMailer:language/phpmailer.lang-nl.php": [
 10
 ],
 "PHPMailer:language/phpmailer.lang-pl.php": [
-18
+9,
+20
 ],
 "PHPMailer:language/phpmailer.lang-pt_br.php": [
 14
@@ -20,7 +39,19 @@
 "PHPMailer:language/phpmailer.lang-ro.php": [
 9
 ],
+"PHPMailer:language/phpmailer.lang-ru.php": [
+12
+],
+"PHPMailer:language/phpmailer.lang-si.php": [
+10
+],
 "PHPMailer:language/phpmailer.lang-sl.php": [
+12
+],
+"PHPMailer:language/phpmailer.lang-tr.php": [
+14
+],
+"PHPMailer:language/phpmailer.lang-zh_cn.php": [
 12
 ]
 }

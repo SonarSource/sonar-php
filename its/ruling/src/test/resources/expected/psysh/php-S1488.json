@@ -1,7 +1,4 @@
 {
-"psysh:src/ParserFactory.php": [
-62
-],
 "psysh:src/Readline/Hoa/FileDirectory.php": [
 97
 ],
@@ -18,9 +15,9 @@
 84
 ],
 "psysh:test/CodeCleaner/EmptyArrayDimFetchPassTest.php": [
-59
+62
 ],
 "psysh:test/ShellTest.php": [
-625
+666
 ]
 }
