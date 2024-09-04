@@ -1,20 +1,8 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-75
+"psysh:src/Configuration.php": [
+34
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-19
-],
-"PHP_CodeSniffer:src/Ruleset.php": [
-18
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
-17
-],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-14
-],
-"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
-15
+"psysh:src/Shell.php": [
+51
 ]
 }

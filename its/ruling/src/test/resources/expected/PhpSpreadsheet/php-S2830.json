@@ -1,24 +1,165 @@
 {
-"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
-77
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+2890,
+2891,
+2892
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-239
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Complex.php": [
+52
 ],
-"PHP_CodeSniffer:src/Files/FileList.php": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/Cell.php": [
+118
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Axis.php": [
+24
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/AxisText.php": [
+16
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Chart.php": [
+139,
+140,
+147,
+148
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeries.php": [
+132,
+137
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeriesValues.php": [
+91,
+92
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Legend.php": [
+59,
+60
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Properties.php": [
+122,
+123,
+124
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Comment.php": [
+81,
+82,
+84
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/BaseReader.php": [
+61
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/RichText/RichText.php": [
+31
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/RichText/Run.php": [
+24
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
+407,
+408,
+412,
+416,
+419,
+425,
+429,
+430
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/Border.php": [
+51
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/Borders.php": [
 83,
 84,
-85
+85,
+86,
+87,
+93,
+94,
+95,
+96,
+97
 ],
-"PHP_CodeSniffer:src/Reporter.php": [
-145
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/Conditional.php": [
+115
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DeprecatedFunctionsSniff.php": [
-37
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/CellStyleAssessor.php": [
+17,
+18
 ],
-"PHP_CodeSniffer:tests/FileList.php": [
-55,
-59,
-69
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/Fill.php": [
+75,
+76
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/Font.php": [
+115,
+117
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Wizard/Locale.php": [
+27
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/Style.php": [
+87,
+88,
+89,
+90,
+91,
+92
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Drawing/Shadow.php": [
+70
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php": [
+75,
+76
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
+337,
+339,
+341,
+343,
+345,
+347,
+349,
+351,
+353,
+355,
+357
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods.php": [
+45,
+46,
+47,
+48,
+49,
+50,
+51
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php": [
+35
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
+93
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx.php": [
+151,
+152,
+153,
+154,
+155,
+156,
+157,
+158,
+159,
+160,
+161,
+162,
+163,
+164,
+167,
+168,
+169,
+170,
+171,
+172,
+173
 ]
 }

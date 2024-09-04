@@ -1,0 +1,52 @@
+{
+"PHPWord:samples/Sample_13_Images.php": [
+23
+],
+"PHPWord:samples/Sample_15_Link.php": [
+23,
+24
+],
+"PHPWord:src/PhpWord/Writer/ODText/Part/AbstractPart.php": [
+64,
+65,
+66,
+68,
+72
+],
+"PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php": [
+47
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Comments.php": [
+55
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Document.php": [
+55
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Footer.php": [
+61
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Footnotes.php": [
+85
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Numbering.php": [
+53
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php": [
+317
+],
+"PHPWord:tests/PhpWordTests/AbstractWebServerEmbeddedTest.php": [
+53,
+62,
+71
+],
+"PHPWord:tests/PhpWordTests/Element/SectionTest.php": [
+79
+],
+"PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
+163,
+176
+],
+"PHPWord:tests/PhpWordTests/XmlDocument.php": [
+156
+]
+}

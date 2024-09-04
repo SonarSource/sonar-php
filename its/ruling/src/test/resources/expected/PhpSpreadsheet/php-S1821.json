@@ -1,16 +1,32 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/NestingLevelUnitTest.inc": [
-55,
-82
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Html.php": [
+965
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
-50,
-55
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
+511
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-258,
-268,
-278,
-283
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
+1059,
+5207,
+5456,
+5560
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
+536,
+848,
+1687,
+1763
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
+122,
+142,
+217,
+235,
+406,
+509,
+601
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php": [
+202
 ]
 }

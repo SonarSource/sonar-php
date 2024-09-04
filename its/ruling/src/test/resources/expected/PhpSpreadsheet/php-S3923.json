@@ -1,42 +1,8 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyStatementUnitTest.inc": [
-7,
-15
+"PhpSpreadsheet:samples/Chart/35_Chart_render33.php": [
+23
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-103
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/ControlStructures/MultiLineConditionSniff.php": [
-84
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/ControlSignatureUnitTest.inc": [
-155
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
-185
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
-50,
-55,
-71
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-258,
-268,
-278,
-298
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/ControlStructures/ElseIfDeclarationUnitTest.inc": [
-11
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/LongConditionClosingCommentUnitTest.inc": [
-19,
-42,
-65,
-90,
-254,
-277,
-380,
-466
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
+2502
 ]
 }

@@ -1,30 +1,80 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-75
+"PHPWord:src/PhpWord/Element/AbstractElement.php": [
+32
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-19
+"PHPWord:src/PhpWord/Element/Image.php": [
+30
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-3,
-63
+"PHPWord:src/PhpWord/Metadata/DocInfo.php": [
+25
 ],
-"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
-17
+"PHPWord:src/PhpWord/Metadata/Settings.php": [
+31
 ],
-"PHP_CodeSniffer:tests/Core/File/FindEndOfStatementTest.php": [
-14
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+40
 ],
-"PHP_CodeSniffer:tests/Core/File/FindStartOfStatementTest.php": [
-14
+"PHPWord:src/PhpWord/Settings.php": [
+23
 ],
-"PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.php": [
-14
+"PHPWord:src/PhpWord/Shared/Converter.php": [
+23
 ],
-"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
-14
+"PHPWord:src/PhpWord/Shared/Html.php": [
+38
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillFnTokenTest.php": [
-14
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
+190
+],
+"PHPWord:src/PhpWord/Style/Border.php": [
+23
+],
+"PHPWord:src/PhpWord/Style/Chart.php": [
+25
+],
+"PHPWord:src/PhpWord/Style/Font.php": [
+26
+],
+"PHPWord:src/PhpWord/Style/Frame.php": [
+31
+],
+"PHPWord:src/PhpWord/Style/NumberingLevel.php": [
+29
+],
+"PHPWord:src/PhpWord/Style/Paragraph.php": [
+53
+],
+"PHPWord:src/PhpWord/Style/Section.php": [
+26
+],
+"PHPWord:src/PhpWord/Style/Table.php": [
+27
+],
+"PHPWord:src/PhpWord/Style/TablePosition.php": [
+25
+],
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+33
+],
+"PHPWord:tests/PhpWordTests/Metadata/SettingsTest.php": [
+31
+],
+"PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
+36
+],
+"PHPWord:tests/PhpWordTests/Style/TextBoxTest.php": [
+30
+],
+"PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
+39
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/ElementTest.php": [
+31
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
+33
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/SettingsTest.php": [
+33
 ]
 }

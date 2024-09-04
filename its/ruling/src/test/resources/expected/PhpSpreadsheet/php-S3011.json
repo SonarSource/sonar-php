@@ -1,7 +1,12 @@
 {
-"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
-297,
-298,
-299
+"PhpSpreadsheet:infra/DocumentGenerator.php": [
+38
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xls/WorkbookTest.php": [
+47,
+48,
+54,
+76,
+78
 ]
 }

@@ -1,9 +1,23 @@
 {
-"PHP_CodeSniffer:src/Util/Cache.php": [
-144,
-149,
-150,
-164,
-235
+"PHPWord:src/PhpWord/Element/AbstractElement.php": [
+259
+],
+"PHPWord:src/PhpWord/Element/Image.php": [
+216
+],
+"PHPWord:src/PhpWord/Media.php": [
+50
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Element/OLEObject.php": [
+42
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Numbering.php": [
+193
+],
+"PHPWord:tests/PhpWordTests/Element/ImageTest.php": [
+39,
+77,
+208,
+230
 ]
 }

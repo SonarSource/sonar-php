@@ -1,7 +1,20 @@
 {
-"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
-297,
-298,
-299
+"psysh:src/Sudo.php": [
+65,
+122,
+146,
+164,
+167
+],
+"psysh:src/TabCompletion/Matcher/ClassAttributesMatcher.php": [
+50,
+52
+],
+"psysh:test/Input/ShellInputTest.php": [
+104,
+105
+],
+"psysh:test/ShellTest.php": [
+632
 ]
 }

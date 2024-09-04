@@ -1,16 +1,18 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-1041
+"PHPWord:src/PhpWord/Reader/Word2007/Footnotes.php": [
+59
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/ClassCommentSniff.php": [
-112
+"PHPWord:src/PhpWord/Shared/OLERead.php": [
+286
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
-27,
-47,
-52
+"PHPWord:src/PhpWord/Writer/HTML/Element/Text.php": [
+164,
+199
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php": [
-265
+"PHPWord:src/PhpWord/Writer/ODText/Part/Content.php": [
+96
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Text.php": [
+78
 ]
 }

@@ -1,5 +1,32 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-63
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Helpers.php": [
+94
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Format.php": [
+140
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/DefinedName.php": [
+61
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/ReferenceHelper.php": [
+582
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php": [
+125
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/RowCellIterator.php": [
+124
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php": [
+971
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/StringValueBinder2Test.php": [
+119
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/Issue3833Test.php": [
+143
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/StringHelperTest.php": [
+66
 ]
 }

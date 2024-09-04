@@ -1,9 +1,12 @@
 {
-"PHP_CodeSniffer:src/Util/Cache.php": [
-144,
-149,
-150,
-164,
-235
+"PHPMailer:src/SMTP.php": [
+662,
+670,
+670
+],
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
+485,
+862,
+875
 ]
 }

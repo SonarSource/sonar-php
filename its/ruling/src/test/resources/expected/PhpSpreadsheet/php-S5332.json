@@ -1,0 +1,58 @@
+{
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php": [
+23,
+35
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Namespaces.php": [
+33,
+71,
+73,
+75,
+77,
+79,
+81,
+91,
+107,
+109,
+111,
+113,
+115,
+117,
+119,
+121,
+123
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php": [
+74,
+75,
+76,
+81,
+85
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Meta.php": [
+38
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php": [
+34
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Styles.php": [
+45,
+46,
+47,
+49,
+53
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/HyperlinkTest.php": [
+25
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/NamespacePurlTest.php": [
+23
+],
+"PhpSpreadsheet:tests/data/Calculation/Web/WEBSERVICE.php": [
+8,
+13,
+18,
+24,
+29
+]
+}

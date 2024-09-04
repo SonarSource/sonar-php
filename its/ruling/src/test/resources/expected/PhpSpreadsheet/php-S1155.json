@@ -1,9 +1,59 @@
 {
-"PHP_CodeSniffer:src/Runner.php": [
-755
+"PhpSpreadsheet:samples/Chart/32_Chart_read_write.php": [
+66
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
-207,
-249
+"PhpSpreadsheet:samples/Chart/32_Chart_read_write_HTML.php": [
+70
+],
+"PhpSpreadsheet:samples/Chart/32_Chart_read_write_PDF.php": [
+72
+],
+"PhpSpreadsheet:samples/Chart/37_Chart_dynamic_title.php": [
+63
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+5581
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical/Conditional.php": [
+93
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Sort.php": [
+168
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Arabic.php": [
+34,
+41
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Gcd.php": [
+55
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/Coordinate.php": [
+275
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Renderer/JpGraphRendererBase.php": [
+809
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Title.php": [
+134
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
+495
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
+1732,
+1999,
+1999
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter/Column/Rule.php": [
+273
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+3156
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
+1715
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/MathTrig/SequenceTest.php": [
+19
 ]
 }

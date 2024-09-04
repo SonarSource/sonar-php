@@ -1,0 +1,32 @@
+{
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Database/SetupTeardownDatabases.php": [
+13
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Financial/AllSetupTeardown.php": [
+14
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Logical/AllSetupTeardown.php": [
+14
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/LookupRef/AllSetupTeardown.php": [
+14
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/MathTrig/AllSetupTeardown.php": [
+14
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/AllSetupTeardown.php": [
+15
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/TextData/AllSetupTeardown.php": [
+15
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Custom/ComplexAssert.php": [
+10
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/AutoFilter/SetupTeardown.php": [
+11
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/Table/SetupTeardown.php": [
+11
+]
+}

@@ -1,5 +1,34 @@
 {
-"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
-170
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/CyclicTest.php": [
+30,
+40
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/AverageIfTest.php": [
+30,
+38
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/AverageIfsTest.php": [
+37,
+45
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Statistical/CountBlankTest.php": [
+32,
+40
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/MissingArgumentsTest.php": [
+23
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/DataType2Test.php": [
+36
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/DefaultValueBinderTest.php": [
+57,
+66,
+114,
+127
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/StringValueBinderTest.php": [
+83,
+92
 ]
 }

@@ -1,12 +1,42 @@
 {
-"PHP_CodeSniffer:autoload.php": [
-285,
-304
+"PHPWord:bootstrap.php": [
+22
 ],
-"PHP_CodeSniffer:scripts/build-phar.php": [
-57
+"PHPWord:src/PhpWord/Element/Section.php": [
+215
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
-21
+"PHPWord:src/PhpWord/Reader/HTML.php": [
+46
+],
+"PHPWord:src/PhpWord/Reader/RTF.php": [
+47
+],
+"PHPWord:src/PhpWord/Reader/Word2007.php": [
+107
+],
+"PHPWord:src/PhpWord/Shared/Html.php": [
+1014
+],
+"PHPWord:src/PhpWord/Shared/XMLReader.php": [
+60,
+70
+],
+"PHPWord:src/PhpWord/Shared/XMLWriter.php": [
+94
+],
+"PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
+286,
+310
+],
+"PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
+111,
+121,
+151,
+160,
+848,
+886
+],
+"PHPWord:tests/bootstrap.php": [
+47
 ]
 }

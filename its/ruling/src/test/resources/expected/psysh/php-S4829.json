@@ -1,9 +1,22 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-390
+"psysh:src/Command/EditCommand.php": [
+163
 ],
-"PHP_CodeSniffer:src/Runner.php": [
-366,
-711
+"psysh:src/Configuration.php": [
+1878
+],
+"psysh:src/Readline/Hoa/Console.php": [
+131,
+159
+],
+"psysh:src/Readline/Hoa/ConsoleInput.php": [
+60,
+61
+],
+"psysh:src/Readline/Hoa/File.php": [
+115
+],
+"psysh:src/Readline/Transient.php": [
+146
 ]
 }

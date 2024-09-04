@@ -1,5 +1,39 @@
 {
-"PHP_CodeSniffer:src/Reports/Gitblame.php": [
-54
+"PhpSpreadsheet:samples/Pdf/21c_Pdf.php": [
+19,
+43
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php": [
+160
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/Coordinate.php": [
+519,
+520
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods/FormulaTranslator.php": [
+88
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/AutoFilter.php": [
+28
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/TableReader.php": [
+32
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/DateFormatter.php": [
+167
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+1062
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Document/EpochTest.php": [
+37,
+40
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Csv/CsvEnclosureTest.php": [
+173,
+232
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/CallbackTest.php": [
+25
 ]
 }

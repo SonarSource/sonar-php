@@ -1,5 +1,61 @@
 {
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.inc": [
-42
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_1.php": [
+65,
+65,
+67,
+69,
+69,
+72,
+72,
+73,
+73,
+76,
+76
+],
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_2.php": [
+65,
+65,
+67,
+69,
+69,
+72,
+72,
+73,
+73,
+76,
+76
+],
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_display.php": [
+65,
+65,
+67,
+69,
+69,
+72,
+72,
+73,
+73,
+76,
+76
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Random.php": [
+20,
+49,
+91,
+92
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/MemoryDrawing.php": [
+57,
+57
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Rels.php": [
+237,
+237
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/DataTypeTest.php": [
+43,
+46,
+50,
+54
 ]
 }

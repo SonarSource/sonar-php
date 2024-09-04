@@ -1,53 +1,32 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/ForLoopShouldBeWhileLoopSniff.php": [
+"PHPWord:src/PhpWord/Element/Section.php": [
+207
+],
+"PHPWord:src/PhpWord/Media.php": [
+60
+],
+"PHPWord:src/PhpWord/Shared/Html.php": [
+568
+],
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
+2442,
+3324,
+3399,
+3423
+],
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+707
+],
+"PHPWord:src/PhpWord/Writer/Word2007.php": [
+204,
+235,
+263
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php": [
+278
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Rels.php": [
 64,
-65
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/ForLoopWithTestFunctionCallSniff.php": [
-68,
 69
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/JumbledIncrementerSniff.php": [
-79,
-80,
-115,
-116
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnconditionalIfStatementSniff.php": [
-71,
-72
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnnecessaryFinalModifierSniff.php": [
-68,
-69
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
-101,
-102
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UselessOverridingMethodSniff.php": [
-72,
-73
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-250
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DiscourageGotoUnitTest.inc": [
-10
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-141
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Classes/ClassDeclarationSniff.php": [
-427
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Namespaces/UseDeclarationSniff.php": [
-209
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
-35
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc": [
-13
 ]
 }

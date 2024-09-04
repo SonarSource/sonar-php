@@ -1,0 +1,22 @@
+{
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/TodoSniff.php": [
+3
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyStatementUnitTest.inc": [
+69
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/TodoUnitTest.inc": [
+3,
+4,
+7,
+10,
+13,
+16,
+18,
+21,
+23
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/TodoUnitTest.php": [
+3
+]
+}

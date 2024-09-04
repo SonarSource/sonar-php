@@ -1,30 +1,42 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-351
+"PHPMailer:get_oauth_token.php": [
+50,
+50,
+87,
+88,
+89,
+90,
+91,
+108,
+108,
+108,
+159,
+166,
+166,
+176
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DisallowRequestSuperglobalUnitTest.inc": [
-2,
-6,
-8,
-10,
-12,
-13,
-14
+"PHPMailer:src/PHPMailer.php": [
+4223,
+4223,
+4224
 ],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/GetRequestDataUnitTest.inc": [
-2,
-5,
-8,
-14,
-21,
-26,
-27,
-28
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
+1248,
+1253
 ],
-"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
-52,
+"PHPMailer:test/SendTestCase.php": [
+64,
 71,
-142,
-160
+78,
+85,
+91
+],
+"PHPMailer:test/testbootstrap-dist.php": [
+3,
+4,
+5,
+6,
+7,
+8
 ]
 }

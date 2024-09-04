@@ -1,5 +1,9 @@
 {
-"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
-170
+"PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
+103,
+144
+],
+"PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
+76
 ]
 }

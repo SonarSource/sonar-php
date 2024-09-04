@@ -1,8 +1,200 @@
 {
-"PHP_CodeSniffer:tests/Core/File/FindExtendedClassNameTest.php": [
-31
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_line_dateaxis.php": [
+359,
+379
 ],
-"PHP_CodeSniffer:tests/Core/File/FindImplementedInterfaceNamesTest.php": [
-30
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/DateParts.php": [
+49,
+88,
+127
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/DateValue.php": [
+84,
+114,
+138
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/Days.php": [
+48,
+49
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/Days360.php": [
+65,
+70
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/Difference.php": [
+47,
+52,
+57,
+97,
+102,
+102,
+116,
+121,
+121,
+149
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/Helpers.php": [
+82,
+181,
+259
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/Month.php": [
+53,
+97
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/TimeValue.php": [
+59
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/Week.php": [
+71,
+125,
+167,
+169,
+205
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/FormulaParser.php": [
+140,
+141
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/AddressHelper.php": [
+69,
+119,
+173
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Axis.php": [
+240
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php": [
+546,
+547
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric/Styles.php": [
+193,
+198
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php": [
+206
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
+1030,
+1041,
+1042
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php": [
+196
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/MD5.php": [
+64,
+65,
+66,
+67,
+69,
+70,
+71,
+72,
+152,
+152,
+152,
+157,
+157,
+157,
+162,
+162,
+162,
+167,
+167,
+167,
+173,
+173,
+173,
+173,
+173
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
+562,
+1138,
+1981
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
+81,
+81
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer.php": [
+136
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer/BstoreContainer.php": [
+17
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
+113
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS/Root.php": [
+152,
+230,
+261,
+328
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
+301,
+301,
+301,
+301
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/PolynomialBestFit.php": [
+145,
+146,
+157
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php": [
+329
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Dimension.php": [
+118
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
+163,
+184,
+191,
+402,
+460
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php": [
+91,
+127
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Workbook.php": [
+879
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+2273,
+2278,
+2279,
+2291,
+2293,
+2295
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php": [
+1370
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/LayoutTest.php": [
+15,
+25
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Chart/LegendTest.php": [
+117,
+158,
+184
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnCellIteratorTest.php": [
+39,
+59
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/RowCellIteratorTest.php": [
+39,
+58,
+77
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ArrayFunctions2Test.php": [
+75
 ]
 }

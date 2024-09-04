@@ -1,86 +1,45 @@
 {
-"PHP_CodeSniffer:src/Files/File.php": [
-422,
-877,
-1268
+"psysh:src/CodeCleaner.php": [
+179
 ],
-"PHP_CodeSniffer:src/Fixer.php": [
-122,
-509,
-624,
-758
+"psysh:src/Command/TimeitCommand.php": [
+99
 ],
-"PHP_CodeSniffer:src/Ruleset.php": [
-240,
-326,
-523,
-624,
-982,
-1254,
-1265
+"psysh:src/ConfigPaths.php": [
+210
 ],
-"PHP_CodeSniffer:src/Runner.php": [
-80
+"psysh:src/Configuration.php": [
+398,
+633,
+1256
 ],
-"PHP_CodeSniffer:src/Sniffs/AbstractScopeSniff.php": [
-132
+"psysh:src/ExecutionClosure.php": [
+87
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ESLintSniff.php": [
-66
+"psysh:src/Input/FilterOptions.php": [
+52,
+62
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LineEndingsSniff.php": [
-102
+"psysh:src/Input/ShellInput.php": [
+52
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/MultipleStatementAlignmentSniff.php": [
-124,
-380
+"psysh:src/Output/ProcOutputPager.php": [
+53
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Metrics/CyclomaticComplexitySniff.php": [
-89
+"psysh:src/Shell.php": [
+552,
+612,
+1015,
+1069,
+1203
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Metrics/NestingLevelSniff.php": [
-68
+"psysh:src/VersionUpdater/Downloader/CurlDownloader.php": [
+32
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/ForbiddenFunctionsSniff.php": [
-215
+"psysh:src/VersionUpdater/Downloader/FileDownloader.php": [
+30
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/LowerCaseConstantSniff.php": [
-48
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/NoSilencedErrorsSniff.php": [
-67
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php": [
-113
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/SubversionPropertiesSniff.php": [
-58,
-122
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
-129,
-231
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
-147
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php": [
-217,
-218
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/WhiteSpace/ObjectOperatorIndentSniff.php": [
-133
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ForbiddenStylesSniff.php": [
-142
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/IndentationSniff.php": [
-137
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/MemberVarSpacingSniff.php": [
-161
-],
-"PHP_CodeSniffer:src/Tokenizers/JS.php": [
-801
+"psysh:src/VersionUpdater/SelfUpdate.php": [
+131
 ]
 }

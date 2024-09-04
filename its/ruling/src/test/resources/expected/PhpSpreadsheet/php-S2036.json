@@ -1,179 +1,53 @@
 {
-"PHP_CodeSniffer:autoload.php": [
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_dynamic_dates.php": [
 0
 ],
-"PHP_CodeSniffer:scripts/build-phar.php": [
+"PhpSpreadsheet:samples/Basic1/17b_Html.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyPHPStatementUnitTest.inc": [
+"PhpSpreadsheet:samples/Basic2/24_Readfilter.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc": [
+"PhpSpreadsheet:samples/Basic3/39_Dropdown.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
+"PhpSpreadsheet:samples/Chart33a/33_Chart_create_line_dateaxis.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/LineEndingsUnitTest.1.inc": [
+"PhpSpreadsheet:samples/DefinedNames/CrossWorksheetNamedFormula.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
+"PhpSpreadsheet:samples/Pdf/21a_Pdf.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc": [
+"PhpSpreadsheet:samples/Pdf/21b_Pdf.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/AbstractClassNamePrefixUnitTest.inc": [
+"PhpSpreadsheet:samples/Pdf/21c_Pdf.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/CamelCapsFunctionNameUnitTest.inc": [
+"PhpSpreadsheet:samples/Reader/08_Simple_file_reader_loading_several_named_worksheets.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/ConstructorNameUnitTest.inc": [
+"PhpSpreadsheet:samples/Reader/09_Simple_file_reader_using_a_read_filter.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/UpperCaseConstantNameUnitTest.inc": [
+"PhpSpreadsheet:samples/Reader/10_Simple_file_reader_using_a_configurable_read_filter.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.inc": [
+"PhpSpreadsheet:samples/Reader/11_Reading_a_workbook_in_chunks_using_a_configurable_read_filter_(version_1).php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/UpperCaseConstantUnitTest.inc": [
+"PhpSpreadsheet:samples/Reader/12_Reading_a_workbook_in_chunks_using_a_configurable_read_filter_(version_2).php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/DisallowSpaceIndentUnitTest.1.inc": [
+"PhpSpreadsheet:samples/Reader2/14_Reading_a_large_CSV_file_in_chunks_to_split_across_multiple_worksheets.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/DisallowSpaceIndentUnitTest.2.inc": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/DisallowTabIndentUnitTest.1.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/ScopeIndentUnitTest.3.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/GetRequestDataUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Formatting/MultiLineAssignmentUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.4.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/ClosingBraceUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/OpeningBraceSpaceUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.12.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.5.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/ImportStatementUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/LowercaseClassKeywordsUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/ClosingDeclarationCommentUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/LongConditionClosingCommentUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/PostStatementCommentUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDeclarationArgumentSpacingUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/GlobalFunctionUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/LowercaseFunctionKeywordsUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DiscouragedFunctionsUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/EmbeddedPhpUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/GlobalKeywordUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/InnerFunctionsUnitTest.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.1.inc": [
-0
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SuperfluousWhitespaceUnitTest.1.inc": [
-0
-],
-"PHP_CodeSniffer:tests/AllTests.php": [
-0
-],
-"PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/B.inc": [
-0
-],
-"PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/C.inc": [
-0
-],
-"PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/Sub/C.inc": [
-0
-],
-"PHP_CodeSniffer:tests/Core/File/GetClassPropertiesTest.inc": [
-0
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.inc": [
-0
-],
-"PHP_CodeSniffer:tests/bootstrap.php": [
+"PhpSpreadsheet:tests/bootstrap.php": [
 0
 ]
 }

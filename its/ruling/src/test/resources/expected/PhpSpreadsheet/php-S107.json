@@ -1,8 +1,43 @@
 {
-"PHP_CodeSniffer:src/Files/File.php": [
-842
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Securities/AccruedInterest.php": [
+47
 ],
-"PHP_CodeSniffer:src/Reports/Report.php": [
-51
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Axis.php": [
+159
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Chart.php": [
+129
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeries.php": [
+115
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeriesValues.php": [
+80
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Properties.php": [
+736
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/TrendLine.php": [
+43,
+176
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/MD5.php": [
+173
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
+113
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
+299
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/Wizard/CurrencyBase.php": [
+60
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
+1418
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+171,
+2267
 ]
 }

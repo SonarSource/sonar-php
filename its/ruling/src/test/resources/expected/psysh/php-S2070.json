@@ -1,9 +1,10 @@
 {
-"PHP_CodeSniffer:src/Util/Cache.php": [
-144,
-149,
-150,
-164,
-235
+"psysh:src/Readline/Hoa/IteratorSplFileInfo.php": [
+64
+],
+"psysh:src/Readline/Hoa/Stream.php": [
+155,
+254,
+323
 ]
 }

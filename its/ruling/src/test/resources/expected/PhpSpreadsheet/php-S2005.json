@@ -1,93 +1,118 @@
 {
-"PHP_CodeSniffer:scripts/build-phar.php": [
-156,
-157,
-158,
-159,
-160,
-161,
-162
+"PhpSpreadsheet:samples/HexEtcConversions/BIN2DEC.php": [
+41
 ],
-"PHP_CodeSniffer:src/Config.php": [
-1612,
-1614
+"PhpSpreadsheet:samples/HexEtcConversions/BIN2HEX.php": [
+41
 ],
-"PHP_CodeSniffer:src/Reports/Cbf.php": [
-183,
-185
+"PhpSpreadsheet:samples/HexEtcConversions/BIN2OCT.php": [
+41
 ],
-"PHP_CodeSniffer:src/Reports/Code.php": [
-177,
-207,
-248,
-294,
-313
+"PhpSpreadsheet:samples/HexEtcConversions/DEC2BIN.php": [
+42
 ],
-"PHP_CodeSniffer:src/Reports/Full.php": [
-95,
-139,
-181
+"PhpSpreadsheet:samples/HexEtcConversions/DEC2HEX.php": [
+43
 ],
-"PHP_CodeSniffer:src/Reports/Info.php": [
-100
+"PhpSpreadsheet:samples/HexEtcConversions/DEC2OCT.php": [
+43
 ],
-"PHP_CodeSniffer:src/Reports/Source.php": [
-249
+"PhpSpreadsheet:samples/HexEtcConversions/HEX2BIN.php": [
+41
 ],
-"PHP_CodeSniffer:src/Reports/Summary.php": [
-122,
-124
+"PhpSpreadsheet:samples/HexEtcConversions/HEX2DEC.php": [
+43
 ],
-"PHP_CodeSniffer:src/Reports/VersionControl.php": [
-237,
-325
+"PhpSpreadsheet:samples/HexEtcConversions/HEX2OCT.php": [
+41
 ],
-"PHP_CodeSniffer:src/Runner.php": [
-523,
-538
+"PhpSpreadsheet:samples/HexEtcConversions/OCT2BIN.php": [
+42
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php": [
-102,
+"PhpSpreadsheet:samples/HexEtcConversions/OCT2DEC.php": [
+44
+],
+"PhpSpreadsheet:samples/HexEtcConversions/OCT2HEX.php": [
+44
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+5146,
+5437
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Title.php": [
+12
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
+569,
+691
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php": [
 102
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Arrays/ArrayIndentUnitTest.inc": [
-74
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
+157
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Strings/UnnecessaryStringConcatUnitTest.inc": [
-2,
-6,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS/Root.php": [
+180
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/FunctionPrefix.php": [
 9,
-11,
-12,
-15,
-16,
+176
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Logical/IfsTest.php": [
+31
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/Logical/SwitchTest.php": [
+31
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Ods/OdsTest.php": [
+232
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/AutoFilterTest.php": [
 18
 ],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
-61
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/ConditionalNoFormatSetTest.php": [
+21,
+72
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/ConcatenationSpacingUnitTest.inc": [
-8,
-34,
-38,
-42,
-46
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/Issue3495Test.php": [
+26
 ],
-"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
-201
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xml/XmlLoadTest.php": [
+49,
+104,
+121,
+137,
+149
 ],
-"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
-78,
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xml/XmlStylesTest.php": [
+21,
+60,
+108,
+128
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/XmlWriterTest.php": [
+46,
+70
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Csv/CsvEnclosureTest.php": [
+155,
+214
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/HtmlCommentsTest.php": [
+54,
+57,
+62,
+65,
+74
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ConditionalFillTest.php": [
+65,
+72,
 79,
-96,
-97,
-122,
-123
+85
 ],
-"PHP_CodeSniffer:tests/bootstrap.php": [
-32,
-36,
-40,
-44
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/Issue3988Test.php": [
+93
 ]
 }

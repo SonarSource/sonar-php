@@ -1,239 +1,217 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.inc": [
-6,
-17,
-18,
-28
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+3634
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/CamelCapsFunctionNameUnitTest.inc": [
-6,
-7,
-11,
-12,
-13,
-17,
-19,
-21,
-25,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselI.php": [
+38
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselJ.php": [
+37
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselK.php": [
+35
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BesselY.php": [
+34
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/BitWise.php": [
+39,
+71,
+104,
+137,
+172
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Compare.php": [
+32,
+67
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Complex.php": [
+34,
+76,
+106
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ComplexFunctions.php": [
+28,
+58,
+91,
+120,
+149,
+178,
+207,
+236,
+265,
+294,
+323,
+352,
+381,
+410,
+444,
+477,
+510,
+543,
+574
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ComplexOperations.php": [
 31,
-50,
-52,
-53,
-70,
-72,
-73,
-99,
-100,
-101,
-103,
-123,
-126,
-144,
-146,
-147,
-158,
-159,
-165,
-166
+60,
+83,
+111
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/ConstructorNameUnitTest.inc": [
-5,
-20,
-47,
-56,
-70,
-72
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ConvertUOM.php": [
+530
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.inc": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/Erf.php": [
+37,
+69
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engineering/ErfC.php": [
 32
 ],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Channels/DisallowSelfActionsUnitTest.inc": [
-5
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc": [
-53
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-6,
-7,
-11,
-12,
-13,
-14,
-15,
-16,
-17,
-18,
-19,
-20,
-24,
-25,
-26,
-27,
-28,
-29,
-30,
-31,
-32,
-33,
-37,
-38,
-39,
-40,
-41,
-42,
-43,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Amortization.php": [
 44,
-45,
-46,
-50,
-51,
-52,
-53,
-54,
-55,
-56,
-57,
-58,
-59,
-67,
-68,
-69,
-70,
-71,
-72,
-73,
-74,
-75,
-76,
-80,
-81,
-82,
-83,
-84,
-85,
-86,
-87,
-88,
-89,
-93,
-94,
-95,
-96,
-97,
-98,
-99,
-100,
-101,
-102,
-103,
+131
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Coupons.php": [
+43,
 104,
-123,
-125,
-126,
-142,
-144,
-145,
-147,
+173,
+238,
+290,
+349
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Depreciation.php": [
+36,
+100,
 148,
-149,
+181
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Functions.php": [
+126
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Information/ExcelError.php": [
+79,
+91,
+107,
+119,
+131,
+141,
+151,
+161
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical/Conditional.php": [
+135,
+162,
+190
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Logical/Operations.php": [
+113
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/ExcelMatch.php": [
+35
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Indirect.php": [
+64
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Offset.php": [
+44
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/RowColumnInformation.php": [
+45,
+98,
+140,
+191
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Conditional.php": [
+31,
+52,
+82,
+106,
+130,
+152,
 174,
-175,
-176,
-178,
-179,
-201,
-203,
-204,
-207,
-212,
-213,
-220,
-221,
-232
+192
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
-15
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Confidence.php": [
+29
 ],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Methods/CamelCapsMethodNameUnitTest.inc": [
-6,
-7,
-11,
-12,
-13,
-17,
-21,
-25,
-26,
-32,
-46,
-47,
-48,
-51,
-68,
-71,
-77
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/LongConditionClosingCommentUnitTest.inc": [
-3,
-770
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDeclarationArgumentSpacingUnitTest.inc": [
-73
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/GlobalFunctionUnitTest.inc": [
-14
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/LowercaseFunctionKeywordsUnitTest.inc": [
-3,
-7,
-8,
-9,
-10,
-11,
-12,
-16,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Counts.php": [
 20,
-21,
+49,
+75
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Percentiles.php": [
+27,
+77,
+128,
+159
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Permutations.php": [
+33,
+79
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/StandardDeviations.php": [
+20,
+40,
+60,
+80
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Trends.php": [
+68,
+94,
+122,
+153,
+181,
+208,
+269,
+334,
+358,
+380,
+406
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Variances.php": [
 22,
-23,
-24,
-25
+64,
+110,
+153
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-4,
-5,
-6,
-7,
-8,
-9,
-13,
-14,
-16
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Concatenate.php": [
+22,
+116
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/MethodScopeUnitTest.inc": [
-16,
-39
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Format.php": [
+39,
+81,
+121,
+182,
+281
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.2.inc": [
-2
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
+7203
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.3.inc": [
-7
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/RC4.php": [
+42
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.4.inc": [
-4
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Date.php": [
+265
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.5.inc": [
-5
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Drawing.php": [
+28
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.6.inc": [
-10
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
+529
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.7.inc": [
-7
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/ChainedBlockStream.php": [
+46,
+101,
+114,
+130,
+139,
+150,
+169
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SuperfluousWhitespaceUnitTest.1.inc": [
-60
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
+351,
+383,
+619
 ]
 }

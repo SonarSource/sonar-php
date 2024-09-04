@@ -1,16 +1,24 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-1041
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+4332,
+4517
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/ClassCommentSniff.php": [
-112
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/DateValue.php": [
+78
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
-27,
-47,
-52
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Maximum.php": [
+71
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php": [
-265
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Minimum.php": [
+71
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Variances.php": [
+79,
+168
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat/FractionFormatter.php": [
+40,
+42,
+48
 ]
 }

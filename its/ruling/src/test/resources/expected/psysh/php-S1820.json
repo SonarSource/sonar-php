@@ -1,8 +1,8 @@
 {
-"PHP_CodeSniffer:src/Files/File.php": [
-19
+"psysh:src/Configuration.php": [
+34
 ],
-"PHP_CodeSniffer:src/Util/Tokens.php": [
-191
+"psysh:src/Shell.php": [
+51
 ]
 }

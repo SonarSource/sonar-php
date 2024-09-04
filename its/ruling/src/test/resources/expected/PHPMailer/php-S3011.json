@@ -1,7 +1,36 @@
 {
-"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
-297,
-298,
-299
+"PHPMailer:test/OAuth/OAuthTest.php": [
+39,
+40
+],
+"PHPMailer:test/PHPMailer/FileIsAccessibleTest.php": [
+42,
+44,
+94,
+96
+],
+"PHPMailer:test/PHPMailer/IsPermittedPathTest.php": [
+38,
+40
+],
+"PHPMailer:test/PHPMailer/LocalizationTest.php": [
+426,
+428
+],
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
+256,
+257,
+260,
+263,
+266,
+269,
+272,
+275
+],
+"PHPMailer:test/TestCase.php": [
+192,
+217,
+221,
+225
 ]
 }

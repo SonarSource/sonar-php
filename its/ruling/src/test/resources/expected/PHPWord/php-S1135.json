@@ -1,22 +1,110 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/TodoSniff.php": [
-3
+"PHPWord:src/PhpWord/Element/AbstractContainer.php": [
+106
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyStatementUnitTest.inc": [
-69
+"PHPWord:src/PhpWord/Element/AbstractElement.php": [
+541
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/TodoUnitTest.inc": [
-3,
-4,
-7,
-10,
-13,
-16,
-18,
-21,
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
+364,
+1293,
+1450,
+1957,
+2026,
+2040
+],
+"PHPWord:src/PhpWord/Reader/ODText/Meta.php": [
+33
+],
+"PHPWord:src/PhpWord/Reader/RTF/Document.php": [
+134
+],
+"PHPWord:src/PhpWord/Reader/Word2007.php": [
+32,
+33
+],
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+189,
+457,
+609,
+624,
+741
+],
+"PHPWord:src/PhpWord/Reader/Word2007/Document.php": [
+124
+],
+"PHPWord:src/PhpWord/Shared/Html.php": [
+68,
+350,
+414,
+506,
+651,
+652
+],
+"PHPWord:src/PhpWord/Style/Frame.php": [
+29
+],
+"PHPWord:src/PhpWord/Style/Image.php": [
+67
+],
+"PHPWord:src/PhpWord/Style/Paragraph.php": [
+397,
+411
+],
+"PHPWord:src/PhpWord/Style/Shape.php": [
+25
+],
+"PHPWord:src/PhpWord/Writer/ODText/Element/Text.php": [
+43
+],
+"PHPWord:src/PhpWord/Writer/ODText/Part/Content.php": [
+46,
+263
+],
+"PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php": [
+74,
+92
+],
+"PHPWord:src/PhpWord/Writer/ODText/Style/Font.php": [
+74,
+102,
+104
+],
+"PHPWord:src/PhpWord/Writer/RTF/Element/AbstractElement.php": [
+163
+],
+"PHPWord:src/PhpWord/Writer/RTF/Element/Table.php": [
+251
+],
+"PHPWord:src/PhpWord/Writer/RTF/Style/Border.php": [
+95
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Field.php": [
+124
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/FontTable.php": [
 23
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/TodoUnitTest.php": [
-3
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Numbering.php": [
+137,
+167
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Styles.php": [
+32
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Theme.php": [
+23
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Style/Line.php": [
+30
+],
+"PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
+214
+],
+"PHPWord:tests/PhpWordTests/Writer/ODTextTest.php": [
+102
+],
+"PHPWord:tests/PhpWordTests/Writer/RTFTest.php": [
+103
 ]
 }

@@ -1,24 +1,80 @@
 {
-"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
-77
+"psysh:src/CodeCleaner.php": [
+73,
+74,
+75
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-239
+"psysh:src/Command/CodeArgumentParser.php": [
+27
 ],
-"PHP_CodeSniffer:src/Files/FileList.php": [
-83,
-84,
-85
-],
-"PHP_CodeSniffer:src/Reporter.php": [
-145
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DeprecatedFunctionsSniff.php": [
+"psysh:src/Command/HistoryCommand.php": [
 37
 ],
-"PHP_CodeSniffer:tests/FileList.php": [
+"psysh:src/Command/ListCommand/Enumerator.php": [
+44
+],
+"psysh:src/Command/ParseCommand.php": [
+46
+],
+"psysh:src/Command/ReflectingCommand.php": [
+52,
 55,
-59,
-69
+56,
+58
+],
+"psysh:src/Command/SudoCommand.php": [
+37,
+40,
+41,
+43
+],
+"psysh:src/Command/ThrowUpCommand.php": [
+40,
+41
+],
+"psysh:src/Command/TimeitCommand.php": [
+43,
+46,
+47,
+49
+],
+"psysh:src/Command/TraceCommand.php": [
+33
+],
+"psysh:src/ConfigPaths.php": [
+38,
+38
+],
+"psysh:src/Configuration.php": [
+145
+],
+"psysh:src/ExecutionLoop/RunkitReloader.php": [
+42
+],
+"psysh:src/Output/ShellOutput.php": [
+45,
+49,
+51
+],
+"psysh:src/Readline/Hoa/ConsoleInput.php": [
+61,
+63
+],
+"psysh:src/Readline/Hoa/Stream.php": [
+119
+],
+"psysh:src/Readline/Userland.php": [
+60,
+67,
+70,
+73
+],
+"psysh:src/Shell.php": [
+84,
+86
+],
+"psysh:src/VarDumper/Presenter.php": [
+57,
+63
 ]
 }

@@ -1,15 +1,9 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-676,
-678
+"PHPMailer:src/PHPMailer.php": [
+1947,
+1970
 ],
-"PHP_CodeSniffer:src/Runner.php": [
-298,
-301
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php": [
-178,
-185,
-189
+"PHPMailer:test/PHPMailer/MailTransportTest.php": [
+71
 ]
 }

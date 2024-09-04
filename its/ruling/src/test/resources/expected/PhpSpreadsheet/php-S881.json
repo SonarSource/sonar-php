@@ -1,53 +1,187 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/ForLoopShouldBeWhileLoopSniff.php": [
-64,
-65
+"PhpSpreadsheet:infra/LocaleGenerator.php": [
+279
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/ForLoopWithTestFunctionCallSniff.php": [
-68,
-69
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_1.php": [
+85
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/JumbledIncrementerSniff.php": [
-79,
-80,
-115,
-116
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_2.php": [
+85
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnconditionalIfStatementSniff.php": [
-71,
+"PhpSpreadsheet:samples/Autofilter/10_Autofilter_selection_display.php": [
+85
+],
+"PhpSpreadsheet:samples/Pdf/21c_Pdf.php": [
+51,
+54,
+55
+],
+"PhpSpreadsheet:samples/Reader2/14_Reading_a_large_CSV_file_in_chunks_to_split_across_multiple_worksheets.php": [
 72
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnnecessaryFinalModifierSniff.php": [
-68,
-69
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+4081
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
-101,
-102
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engine/ArrayArgumentHelper.php": [
+54
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UselessOverridingMethodSniff.php": [
-72,
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Engine/Operands/StructuredReference.php": [
+180
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Financial/Securities/Price.php": [
+81
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/ExcelMatch.php": [
 73
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-250
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Matrix.php": [
+119,
+126,
+137
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DiscourageGotoUnitTest.inc": [
-10
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/VLookup.php": [
+48
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-141
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/MathTrig/Factorial.php": [
+52
 ],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Classes/ClassDeclarationSniff.php": [
-427
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Averages.php": [
+162
 ],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Namespaces/UseDeclarationSniff.php": [
-209
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/Beta.php": [
+130
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
-35
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/GammaBase.php": [
+39,
+125
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc": [
-13
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/NewtonRaphson.php": [
+29
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Percentiles.php": [
+107,
+184
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Extract.php": [
+71
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Replace.php": [
+114
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Search.php": [
+47,
+49,
+89,
+91
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Token/Stack.php": [
+43,
+55,
+93
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/Coordinate.php": [
+499
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeriesValues.php": [
+464
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Chart/Renderer/JpGraphRendererBase.php": [
+94,
+102,
+110,
+342,
+417,
+532,
+699
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Collection/Cells.php": [
+223,
+315,
+385
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Csv/Delimiter.php": [
+51
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php": [
+409
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
+442
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/TableReader.php": [
+82
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
+191,
+200,
+201,
+202
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
+571,
+2981
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
+488,
+853,
+1204,
+1457,
+1706,
+1711,
+1758
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+659,
+687
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx.php": [
+465
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Comments.php": [
+47
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/ContentTypes.php": [
+95,
+116
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Drawing.php": [
+48
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Rels.php": [
+291,
+390,
+392
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
+891,
+1322
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Engine/RangeTest.php": [
+108
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Csv/CsvContiguousTest.php": [
+48
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnCellIteratorTest.php": [
+46,
+66
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/ColumnIteratorTest.php": [
+42,
+60
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/IteratorTest.php": [
+25
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/RowCellIteratorTest.php": [
+46,
+65
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/RowIteratorTest.php": [
+45,
+63
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ArrayFunctions2Test.php": [
+223
 ]
 }

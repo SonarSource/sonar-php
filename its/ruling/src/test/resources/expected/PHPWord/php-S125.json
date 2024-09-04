@@ -1,21 +1,103 @@
 {
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
+"PHPWord:samples/Sample_07_TemplateCloneRow.php": [
+66,
+71,
+76
+],
+"PHPWord:samples/Sample_40_TemplateSetComplexValue.php": [
+37
+],
+"PHPWord:src/PhpWord/Reader/AbstractReader.php": [
+59
+],
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
+201,
 223,
-225
+1294,
+1590,
+1616,
+1680,
+1920,
+1934,
+1938,
+1957,
+2026,
+2041,
+2196,
+2198,
+2243,
+2245,
+2247,
+2289,
+2359,
+2367,
+2380,
+2388
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc": [
-6,
-8,
-15,
-19,
-97,
-147,
-158
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
+60,
+164
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.1.inc": [
-540
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+539
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/MemberVarSpacingUnitTest.inc": [
-315
+"PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
+73
+],
+"PHPWord:src/PhpWord/Shared/Drawing.php": [
+108
+],
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
+698,
+853,
+1793,
+1797,
+2744,
+2781,
+2806,
+3790,
+3823,
+4255,
+4351
+],
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+772
+],
+"PHPWord:src/PhpWord/Writer/HTML/Element/Table.php": [
+49
+],
+"PHPWord:src/PhpWord/Writer/ODText/Element/Formula.php": [
+49,
+59
+],
+"PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php": [
+98
+],
+"PHPWord:src/PhpWord/Writer/ODText/Style/Table.php": [
+43
+],
+"PHPWord:tests/PhpWordTests/Element/TOCTest.php": [
+59
+],
+"PHPWord:tests/PhpWordTests/Reader/Word2007/ElementTest.php": [
+539
+],
+"PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
+43,
+58
+],
+"PHPWord:tests/PhpWordTests/Writer/ODText/ElementTest.php": [
+312
+],
+"PHPWord:tests/PhpWordTests/Writer/RTF/StyleTest.php": [
+163
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
+62,
+462
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/SettingsTest.php": [
+92,
+104
 ]
 }

@@ -1,5 +1,19 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-63
+"psysh:src/ConfigPaths.php": [
+38
+],
+"psysh:src/Formatter/SignatureFormatter.php": [
+301
+],
+"psysh:src/Readline/Hoa/ConsoleTput.php": [
+751
+],
+"psysh:src/Readline/Hoa/FileGeneric.php": [
+174,
+179,
+184
+],
+"psysh:src/Readline/Hoa/Protocol.php": [
+94
 ]
 }

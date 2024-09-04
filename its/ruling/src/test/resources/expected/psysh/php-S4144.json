@@ -1,20 +1,16 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/ConstructorNameUnitTest.inc": [
-25,
-61
+"psysh:test/CodeCleaner/CalledClassPassTest.php": [
+83
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SuperfluousWhitespaceUnitTest.1.inc": [
-30,
-41
+"psysh:test/CodeCleaner/IssetPassTest.php": [
+103,
+128
 ],
-"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
-1158
+"psysh:test/CodeCleaner/LabelContextPassTest.php": [
+77
 ],
-"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
-92,
-230
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.php": [
-133
+"psysh:test/CodeCleaner/PassableByReferencePassTest.php": [
+86,
+112
 ]
 }

@@ -1,41 +1,23 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.inc": [
-24
+"psysh:test/ClassWithSecrets.php": [
+16,
+17,
+18
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.inc": [
-61,
-64,
-67,
-73
+"psysh:test/Command/ListCommand/Fixtures/ClassAlfa.php": [
+18
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
-19,
-20,
+"psysh:test/Command/ListCommand/Fixtures/ClassBravo.php": [
+20
+],
+"psysh:test/Formatter/Fixtures/SomeClass.php": [
+17
+],
+"psysh:test/Formatter/SignatureFormatterTest.php": [
+25
+],
+"psysh:test/Util/MirrorTest.php": [
 21,
 22
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Properties/ConstantVisibilityUnitTest.inc": [
-16
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-33,
-74,
-74
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/MemberVarSpacingUnitTest.inc": [
-32,
-122,
-124,
-131,
-136,
-146,
-148,
-152,
-262,
-263,
-264,
-265,
-305,
-346
 ]
 }

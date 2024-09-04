@@ -1,16 +1,28 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/NestingLevelUnitTest.inc": [
-55,
-82
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
+1545,
+1641,
+1661,
+1685,
+1705,
+1724,
+1807,
+1887,
+1970,
+2253
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
-50,
-55
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
+93,
+122,
+126
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-258,
-268,
-278,
-283
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+350,
+373,
+387
+],
+"PHPWord:src/PhpWord/Shared/Html.php": [
+692,
+942
 ]
 }

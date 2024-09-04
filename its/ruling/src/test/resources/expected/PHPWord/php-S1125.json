@@ -1,35 +1,16 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/ForLoopShouldBeWhileLoopUnitTest.inc": [
-10
+"PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php": [
+3473,
+5381
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/DisallowYodaConditionsUnitTest.inc": [
-6,
-8,
-11,
-13,
-130,
-133,
-134
+"PHPWord:src/PhpWord/Shared/XMLWriter.php": [
+147,
+167
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/SpaceAfterNotUnitTest.inc": [
-5,
-40,
-57
+"PHPWord:src/PhpWord/Writer/HTML/Style/AbstractStyle.php": [
+128
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc": [
-94
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/PostStatementCommentUnitTest.inc": [
-22
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
-6,
-7,
-18,
-19,
-29,
-29,
-123,
-127
+"PHPWord:src/PhpWord/Writer/RTF/Style/AbstractStyle.php": [
+105
 ]
 }

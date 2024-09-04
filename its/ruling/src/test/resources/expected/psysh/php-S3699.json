@@ -1,36 +1,28 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc": [
-65
+"psysh:src/CodeCleaner/PassableByReferencePass.php": [
+52
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-208
+"psysh:src/Readline/Hoa/ConsoleOutput.php": [
+111,
+119,
+127,
+137,
+147,
+157,
+166,
+171,
+179
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
-3,
-4,
-5,
-6,
-7,
-8,
-9,
-10,
-11,
-12,
-13,
-15,
-153,
-154,
-155
+"psysh:src/Readline/Hoa/EventBucket.php": [
+69
 ],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Channels/DisallowSelfActionsUnitTest.inc": [
-46
+"psysh:src/Readline/Hoa/ExceptionIdle.php": [
+264
 ],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/ReturnFunctionValueUnitTest.inc": [
-3
+"psysh:src/Readline/Hoa/Readline.php": [
+358
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-4,
-14,
-15
+"psysh:src/Reflection/ReflectionConstant.php": [
+168
 ]
 }

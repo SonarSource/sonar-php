@@ -1,0 +1,17 @@
+{
+"PHPWord:src/PhpWord/Element/Image.php": [
+357
+],
+"PHPWord:src/PhpWord/Writer/AbstractWriter.php": [
+378
+],
+"PHPWord:tests/PhpWordTests/Shared/ZipArchiveTest.php": [
+97,
+98,
+99,
+100
+],
+"PHPWord:tests/PhpWordTests/TestHelperDOCX.php": [
+64
+]
+}

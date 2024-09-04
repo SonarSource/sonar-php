@@ -1,18 +1,21 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-351
+"PhpSpreadsheet:samples/Chart/32_Chart_read_write.php": [
+13
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.inc": [
-44,
-45,
-45,
-46,
-47
+"PhpSpreadsheet:samples/Chart/32_Chart_read_write_HTML.php": [
+18
 ],
-"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
-52,
-71,
-142,
-160
+"PhpSpreadsheet:samples/Chart/32_Chart_read_write_PDF.php": [
+20
+],
+"PhpSpreadsheet:samples/Chart/35_Chart_render.php": [
+19
+],
+"PhpSpreadsheet:samples/Chart/35_Chart_render33.php": [
+18
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/SampleTest.php": [
+35,
+36
 ]
 }

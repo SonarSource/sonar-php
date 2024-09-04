@@ -1,21 +1,11 @@
 {
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-223,
-225
+"psysh:src/Reflection/ReflectionConstant.php": [
+148
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc": [
-6,
-8,
-15,
-19,
-97,
-147,
-158
+"psysh:src/TabCompletion/Matcher/ClassNamesMatcher.php": [
+40
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.1.inc": [
-540
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/MemberVarSpacingUnitTest.inc": [
-315
+"psysh:src/functions.php": [
+474
 ]
 }

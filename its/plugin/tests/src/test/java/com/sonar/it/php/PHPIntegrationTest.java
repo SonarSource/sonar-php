@@ -41,13 +41,13 @@ class PHPIntegrationTest {
   private static final String PROJECT_KEY = "php-integration";
   private static final String PROJECT_NAME = "PHP Integration";
 
-  public static final String FILE_TOKEN_PARSER = PROJECT_KEY + ":Bridge/Twig/TokenParser/TransTokenParser.php";
+  public static final String FILE_TOKEN_PARSER = PROJECT_KEY + ":src/Generators/Generator.php";
 
   @BeforeAll
   static void startServer() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = createScanner()
-      .setProjectDir(FileLocation.of("../../sources/src/Symfony/").getFile())
+      .setProjectDir(FileLocation.of("../../sources/src/PHP_CodeSniffer/").getFile())
       .setProjectKey(PROJECT_KEY)
       .setProjectName(PROJECT_NAME)
       .setSourceEncoding("UTF-8")

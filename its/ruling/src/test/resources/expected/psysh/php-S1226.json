@@ -1,11 +1,11 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/EndFileNewlineSniff.php": [
-58
+"psysh:src/Command/ParseCommand.php": [
+71
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/EndFileNoNewlineSniff.php": [
-58
+"psysh:src/Shell.php": [
+319
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-4
+"psysh:test/FakeShell.php": [
+24
 ]
 }

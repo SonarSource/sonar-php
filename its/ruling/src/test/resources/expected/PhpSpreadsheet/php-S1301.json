@@ -1,87 +1,55 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyStatementUnitTest.inc": [
-3,
-7
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+3210
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-82,
-93,
-109,
-146,
-204
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric/Styles.php": [
+244
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/NestingLevelUnitTest.inc": [
-14,
-31,
-50,
-55,
-77,
-82
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Html.php": [
+392,
+965
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/CharacterBeforePHPOpeningTagUnitTest.php": [
-30
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php": [
+114
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/RequireStrictTypesUnitTest.php": [
-30
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
+1059,
+1125,
+2140,
+2502,
+4003,
+4827,
+6944
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Classes/ClassDeclarationUnitTest.php": [
-49
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Style/CellFont.php": [
+11
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.php": [
-74
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
+420,
+1824,
+1834,
+2189
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
-65
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
+509,
+581
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
-48,
-50,
-55,
-88,
-130
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/Style/Border.php": [
+71
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-34,
-163,
-256,
-258,
-266,
-268,
-276,
-278,
-283
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/Style/NumberFormat.php": [
+19
 ],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/ControlStructures/BooleanOperatorPlacementUnitTest.inc": [
-34
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter.php": [
+461
 ],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/OpenTagUnitTest.php": [
-30
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
+381
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/IndentationUnitTest.php": [
-30
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Escher.php": [
+202
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/LongConditionClosingCommentUnitTest.inc": [
-631
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Files/FileExtensionUnitTest.php": [
-30
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-79
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SemicolonSpacingUnitTest.inc": [
-32
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DefaultKeywordTest.inc": [
-70,
-82
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc": [
-36,
-47,
-67
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc": [
-48
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/StringTable.php": [
+241
 ]
 }

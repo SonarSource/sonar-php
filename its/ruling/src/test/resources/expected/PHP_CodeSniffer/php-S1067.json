@@ -1,0 +1,119 @@
+{
+"PHP_CodeSniffer:src/Files/File.php": [
+351,
+911,
+1251,
+2450,
+2552
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/ControlStructures/InlineControlStructureSniff.php": [
+213,
+234
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/GitMergeConflictSniff.php": [
+96,
+110,
+157,
+171
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/IncrementDecrementSpacingSniff.php": [
+65,
+118
+],
+"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
+193,
+268,
+573,
+589,
+620,
+695,
+973,
+1341
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/ForLoopShouldBeWhileLoopUnitTest.inc": [
+10
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/DisallowYodaConditionsUnitTest.inc": [
+136
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
+63
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
+5,
+13,
+39
+],
+"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
+198
+],
+"PHP_CodeSniffer:src/Standards/PSR1/Sniffs/Files/SideEffectsSniff.php": [
+101,
+110
+],
+"PHP_CodeSniffer:src/Standards/PSR12/Tests/ControlStructures/BooleanOperatorPlacementUnitTest.inc": [
+3,
+35,
+44,
+52,
+68,
+91
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php": [
+373
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/SwitchDeclarationSniff.php": [
+151
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/DisallowMultipleAssignmentsSniff.php": [
+147
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/EmbeddedPhpSniff.php": [
+345
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php": [
+96
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Strings/ConcatenationSpacingSniff.php": [
+98
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php": [
+329
+],
+"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/SemicolonSpacingSniff.php": [
+78
+],
+"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
+86
+],
+"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+735,
+778,
+1143,
+1350,
+1383,
+1389,
+1427,
+1473,
+1498,
+1554,
+1577,
+1600,
+1626,
+1793,
+1805,
+1915,
+2063,
+2268,
+2597
+],
+"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
+250,
+982,
+1202,
+1352
+],
+"PHP_CodeSniffer:src/Util/Cache.php": [
+116
+]
+}

@@ -1,25 +1,43 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.inc": [
-11
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DgContainer/SpgrContainer/SpContainer.php": [
+37
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
-5,
-7,
-10,
-12,
-15,
-17,
-19,
-20,
-21,
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer.php": [
+30,
+35
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DggContainer/BstoreContainer.php": [
+12
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
+57,
+62
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
+37,
+42,
 47,
+52,
+57,
 62,
-92,
-93,
-94,
-100
+67,
+72,
+82,
+87
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-33
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
+17
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php": [
+56,
+58,
+60
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
+65
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/BIFFwriter.php": [
+50,
+55
 ]
 }

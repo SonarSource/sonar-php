@@ -1,113 +1,197 @@
 {
-"PHP_CodeSniffer:scripts/build-phar.php": [
-31
-],
-"PHP_CodeSniffer:scripts/validate-pear-package.php": [
-15,
-16
-],
-"PHP_CodeSniffer:src/Config.php": [
-1679
-],
-"PHP_CodeSniffer:src/Ruleset.php": [
-375
-],
-"PHP_CodeSniffer:src/Runner.php": [
-360,
-772
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.1.inc": [
-44
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc": [
-4,
+"PHPWord:samples/Sample_01_SimpleText.php": [
 5,
-11,
-12,
-16,
-17,
-22,
-23,
-26,
-27,
-33,
-34,
-35,
-36,
-41,
-42,
-47,
-48,
-55,
-56,
-60,
-61,
-64,
-65,
-71,
-72,
-73,
-74,
-79,
-80,
-85,
-86,
-93,
-98,
-99
+90
 ],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.2.inc": [
-2
+"PHPWord:samples/Sample_02_TabStops.php": [
+3,
+39
 ],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.11.inc": [
-21
+"PHPWord:samples/Sample_03_Sections.php": [
+5,
+51
 ],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.9.inc": [
-7
+"PHPWord:samples/Sample_04_Textrun.php": [
+3,
+49
 ],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Files/ClosingTagUnitTest.2.inc": [
-2
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.inc": [
-124
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.1.inc": [
-13
-],
-"PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.2.inc": [
-2
-],
-"PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.3.inc": [
-1
-],
-"PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.4.inc": [
-1
-],
-"PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.5.inc": [
-1
-],
-"PHP_CodeSniffer:tests/AllTests.php": [
-13,
-14,
-16,
-17,
-18,
-33,
-35
-],
-"PHP_CodeSniffer:tests/Core/AllTests.php": [
+"PHPWord:samples/Sample_05_Multicolumn.php": [
+3,
 48
 ],
-"PHP_CodeSniffer:tests/Core/Autoloader/DetermineLoadedClassTest.php": [
-26
+"PHPWord:samples/Sample_06_Footnote.php": [
+6,
+61
 ],
-"PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/B.inc": [
+"PHPWord:samples/Sample_07_TemplateCloneRow.php": [
+3,
+86
+],
+"PHPWord:samples/Sample_08_ParagraphPagination.php": [
+3,
+69
+],
+"PHPWord:samples/Sample_09_Tables.php": [
+6,
+155
+],
+"PHPWord:samples/Sample_10_EastAsianFontStyle.php": [
+3,
+16
+],
+"PHPWord:samples/Sample_11_ReadWord2007.php": [
+3,
+15
+],
+"PHPWord:samples/Sample_11_ReadWord97.php": [
+3,
+14
+],
+"PHPWord:samples/Sample_12_HeaderFooter.php": [
+3,
+64
+],
+"PHPWord:samples/Sample_13_Images.php": [
+6,
+101
+],
+"PHPWord:samples/Sample_14_ListItem.php": [
+3,
+101
+],
+"PHPWord:samples/Sample_15_Link.php": [
+3,
+29
+],
+"PHPWord:samples/Sample_16_Object.php": [
+3,
+18
+],
+"PHPWord:samples/Sample_17_TitleTOC.php": [
+3,
+74
+],
+"PHPWord:samples/Sample_18_Watermark.php": [
+3,
+18
+],
+"PHPWord:samples/Sample_19_TextBreak.php": [
+3,
+38
+],
+"PHPWord:samples/Sample_20_BGColor.php": [
+3,
+22
+],
+"PHPWord:samples/Sample_21_TableRowRules.php": [
+3,
+46
+],
+"PHPWord:samples/Sample_22_CheckBox.php": [
+3,
+23
+],
+"PHPWord:samples/Sample_23_TemplateBlock.php": [
+3,
+20
+],
+"PHPWord:samples/Sample_24_ReadODText.php": [
+3,
+15
+],
+"PHPWord:samples/Sample_25_TextBox.php": [
+3,
+48
+],
+"PHPWord:samples/Sample_26_Html.php": [
+3,
+101
+],
+"PHPWord:samples/Sample_27_Field.php": [
+5,
+73
+],
+"PHPWord:samples/Sample_28_ReadRTF.php": [
+3,
+15
+],
+"PHPWord:samples/Sample_29_Line.php": [
+3,
+64
+],
+"PHPWord:samples/Sample_30_ReadHTML.php": [
+3,
+15
+],
+"PHPWord:samples/Sample_31_Shape.php": [
+3,
+97
+],
+"PHPWord:samples/Sample_32_Chart.php": [
+3,
+79
+],
+"PHPWord:samples/Sample_33_FormField.php": [
+3,
+28
+],
+"PHPWord:samples/Sample_34_SDT.php": [
+3,
+33
+],
+"PHPWord:samples/Sample_35_InternalLink.php": [
+3,
+22
+],
+"PHPWord:samples/Sample_36_RTL.php": [
+3,
+50
+],
+"PHPWord:samples/Sample_37_Comments.php": [
+3,
+77
+],
+"PHPWord:samples/Sample_38_Protection.php": [
+5,
+21
+],
+"PHPWord:samples/Sample_39_TrackChanges.php": [
+5,
+29
+],
+"PHPWord:samples/Sample_40_TemplateSetComplexValue.php": [
+8,
+45
+],
+"PHPWord:samples/Sample_41_TemplateSetChart.php": [
+6,
+45
+],
+"PHPWord:samples/Sample_42_TemplateSetCheckbox.php": [
+3,
+20
+],
+"PHPWord:samples/Sample_43_RTLDefault.php": [
+3,
+31
+],
+"PHPWord:samples/Sample_44_ExtractVariablesFromReaderWord2007.php": [
 3
 ],
-"PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/C.inc": [
-3
+"PHPWord:samples/Sample_Header.php": [
+2
 ],
-"PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/Sub/C.inc": [
-3
+"PHPWord:samples/index.php": [
+2,
+36
+],
+"PHPWord:src/PhpWord/Shared/ZipArchive.php": [
+90
+],
+"PHPWord:src/PhpWord/Writer/PDF/AbstractRenderer.php": [
+89
+],
+"PHPWord:tests/bootstrap.php": [
+17
 ]
 }

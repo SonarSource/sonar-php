@@ -1,9 +1,5 @@
 {
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/ClassInstantiationUnitTest.inc": [
-10,
-11
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-26
+"PHPWord:src/PhpWord/Shared/Html.php": [
+263
 ]
 }

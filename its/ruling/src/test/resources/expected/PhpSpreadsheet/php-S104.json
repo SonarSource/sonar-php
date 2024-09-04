@@ -1,23 +1,35 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
 0
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
 0
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
 0
 ],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
 0
 ],
-"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php": [
 0
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceTest.php": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
 0
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/UndoNamespacedNameSingleTokenTest.php": [
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
+0
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+0
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php": [
+0
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
+0
+],
+"PhpSpreadsheet:tests/data/Style/NumberFormat.php": [
 0
 ]
 }

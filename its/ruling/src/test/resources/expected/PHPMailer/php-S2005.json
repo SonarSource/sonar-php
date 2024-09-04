@@ -1,93 +1,78 @@
 {
-"PHP_CodeSniffer:scripts/build-phar.php": [
-156,
-157,
-158,
-159,
-160,
-161,
-162
+"PHPMailer:language/phpmailer.lang-pl.php": [
+20
 ],
-"PHP_CodeSniffer:src/Config.php": [
-1612,
-1614
+"PHPMailer:src/PHPMailer.php": [
+1413,
+1431,
+2332,
+2712,
+5100
 ],
-"PHP_CodeSniffer:src/Reports/Cbf.php": [
-183,
-185
+"PHPMailer:src/POP3.php": [
+463
 ],
-"PHP_CodeSniffer:src/Reports/Code.php": [
-177,
-207,
-248,
-294,
-313
+"PHPMailer:test/PHPMailer/AddEmbeddedImageTest.php": [
+47
 ],
-"PHP_CodeSniffer:src/Reports/Full.php": [
-95,
-139,
-181
+"PHPMailer:test/PHPMailer/AddStringAttachmentTest.php": [
+35
 ],
-"PHP_CodeSniffer:src/Reports/Info.php": [
-100
-],
-"PHP_CodeSniffer:src/Reports/Source.php": [
-249
-],
-"PHP_CodeSniffer:src/Reports/Summary.php": [
-122,
-124
-],
-"PHP_CodeSniffer:src/Reports/VersionControl.php": [
-237,
-325
-],
-"PHP_CodeSniffer:src/Runner.php": [
-523,
-538
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php": [
+"PHPMailer:test/PHPMailer/DKIMTest.php": [
 102,
-102
+106,
+188
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Arrays/ArrayIndentUnitTest.inc": [
-74
+"PHPMailer:test/PHPMailer/Html2TextTest.php": [
+64,
+133,
+140,
+184,
+192,
+198,
+204,
+210,
+216
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Strings/UnnecessaryStringConcatUnitTest.inc": [
-2,
-6,
-9,
-11,
-12,
-15,
-16,
-18
+"PHPMailer:test/PHPMailer/ICalTest.php": [
+37
 ],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
-61
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/ConcatenationSpacingUnitTest.inc": [
-8,
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
 34,
-38,
-42,
-46
+621,
+657,
+1131
 ],
-"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
-201
+"PHPMailer:test/PHPMailer/ParseAddressesTest.php": [
+211,
+248,
+260
 ],
-"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
-78,
-79,
-96,
-97,
-122,
+"PHPMailer:test/PHPMailer/ReplyToGetSetClearTest.php": [
+192,
+252,
+278
+],
+"PHPMailer:test/PHPMailer/SetErrorTest.php": [
 123
 ],
-"PHP_CodeSniffer:tests/bootstrap.php": [
-32,
-36,
-40,
-44
+"PHPMailer:test/PHPMailer/SetWordWrapTest.php": [
+76,
+83
+],
+"PHPMailer:test/PHPMailer/ValidateAddressTest.php": [
+284,
+297,
+344,
+369,
+372,
+421
+],
+"PHPMailer:test/PHPMailer/WrapTextTest.php": [
+69,
+80
+],
+"PHPMailer:test/SendTestCase.php": [
+52
 ]
 }

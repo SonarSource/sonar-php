@@ -1,119 +1,86 @@
 {
-"PHP_CodeSniffer:src/Files/File.php": [
-351,
-911,
-1251,
-2450,
-2552
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+4103,
+4331,
+4488,
+4502,
+4588,
+4620,
+5117,
+5280
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/ControlStructures/InlineControlStructureSniff.php": [
-213,
-234
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/DateTimeExcel/Days360.php": [
+93
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/GitMergeConflictSniff.php": [
-96,
-110,
-157,
-171
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/FormulaParser.php": [
+489,
+503,
+531,
+552
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/IncrementDecrementSpacingSniff.php": [
-65,
-118
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Address.php": [
+53
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
-193,
-268,
-573,
-589,
-620,
-695,
-973,
-1341
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/HLookup.php": [
+79
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/ForLoopShouldBeWhileLoopUnitTest.inc": [
-10
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Lookup.php": [
+35
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/DisallowYodaConditionsUnitTest.inc": [
-136
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/VLookup.php": [
+97
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-63
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Statistical/Distributions/Beta.php": [
+41,
+63,
+94
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
-5,
-13,
-39
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/TextData/Extract.php": [
+131,
+195
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-198
+"PhpSpreadsheet:src/PhpSpreadsheet/Cell/StringValueBinder.php": [
+100
 ],
-"PHP_CodeSniffer:src/Standards/PSR1/Sniffs/Files/SideEffectsSniff.php": [
-101,
-110
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/ConditionalStyles.php": [
+138
 ],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/ControlStructures/BooleanOperatorPlacementUnitTest.inc": [
-3,
-35,
-44,
-52,
-68,
-91
+"PhpSpreadsheet:src/PhpSpreadsheet/ReferenceHelper.php": [
+552
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php": [
-373
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
+370
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/SwitchDeclarationSniff.php": [
-151
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
+241
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/DisallowMultipleAssignmentsSniff.php": [
-147
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Protection.php": [
+133
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/EmbeddedPhpSniff.php": [
-345
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
+1048,
+1072,
+1486
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php": [
-96
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+2841,
+2857
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Strings/ConcatenationSpacingSniff.php": [
-98
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Xf.php": [
+150
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php": [
-329
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php": [
+1512
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/SemicolonSpacingSniff.php": [
-78
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/StringTable.php": [
+43
 ],
-"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
-86
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
+895,
+1329
 ],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-735,
-778,
-1143,
-1350,
-1383,
-1389,
-1427,
-1473,
-1498,
-1554,
-1577,
-1600,
-1626,
-1793,
-1805,
-1915,
-2063,
-2268,
-2597
-],
-"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
-250,
-982,
-1202,
-1352
-],
-"PHP_CodeSniffer:src/Util/Cache.php": [
-116
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/CalculationTest.php": [
+293,
+331
 ]
 }

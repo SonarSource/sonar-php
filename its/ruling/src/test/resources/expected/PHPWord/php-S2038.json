@@ -1,0 +1,19 @@
+{
+"PHPWord:samples/Sample_31_Shape.php": [
+34,
+50,
+65
+],
+"PHPWord:src/PhpWord/Writer/ODText/Part/Styles.php": [
+203
+],
+"PHPWord:tests/PhpWordTests/Writer/HTML/ElementTest.php": [
+108,
+109
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/ElementTest.php": [
+182,
+197,
+213
+]
+}

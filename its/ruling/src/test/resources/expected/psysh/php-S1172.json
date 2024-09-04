@@ -1,409 +1,54 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-1253
+"psysh:src/CodeCleaner.php": [
+359
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Functions/FunctionCallArgumentSpacingSniff.php": [
-102
+"psysh:src/Configuration.php": [
+518
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc": [
-3,
-7,
-24,
-24,
-28,
-28,
-78,
-94,
-117,
-121,
-121,
-129,
-133,
-137
+"psysh:src/Exception/ThrowUpException.php": [
+43
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UselessOverridingMethodUnitTest.inc": [
-22
+"psysh:src/Readline/Hoa/ProtocolWrapper.php": [
+75,
+305,
+394
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-109
+"psysh:src/Readline/Transient.php": [
+47
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
-25,
-25,
-29,
-29,
-33,
-33,
-38,
-38,
+"psysh:src/Readline/Userland.php": [
 56,
 56,
-63,
-63,
-145,
-145
+56
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc": [
-46,
-46,
-47,
-47,
-51,
-51,
-52,
-52,
-57,
-57,
-58,
-58,
-62,
-62,
-63,
-63,
-70,
-70,
-71,
-71,
-75,
-75,
-76,
-76,
-81,
-81,
-82,
-82,
-86,
-86,
-87,
-87,
-97,
-98,
-99,
-100,
-101,
-102,
-108,
-109,
-110,
-111,
-112,
-113,
-123,
-123,
-127,
-127,
-131,
-136,
-141,
-152,
-152,
-179,
-179,
-179,
-179,
-185,
-185,
-185,
-185,
-190,
-190,
-190,
-190,
-195,
-195,
-195,
-195,
-201,
-201,
-201,
-201,
-207,
-207,
-207,
-207
+"psysh:src/TabCompletion/AutoCompleter.php": [
+53
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/CamelCapsFunctionNameUnitTest.inc": [
-39,
-39,
-40,
-40,
-41,
-42,
-42,
-43,
-44,
-70,
-95,
-95,
-100,
-103,
-133,
-133,
-134,
-134,
-135,
-136,
-136,
-137,
-138
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.inc": [
-20,
-20,
-20,
-20,
-20,
-21,
-21,
-21,
-21,
-21,
-22,
-22,
-22,
-22,
-22,
-23,
-23,
-23,
-23,
-23,
-25,
-25,
-26,
-26,
-27,
-27,
-28,
-28,
-29,
-29,
-32,
-32,
-32,
-36,
-37,
-38,
-39,
-40,
-43,
-43,
-49,
-51,
-53,
-55,
-82,
-89,
-91
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/UpperCaseConstantUnitTest.inc": [
-4,
-4,
-7,
-7,
-10,
-10,
-20,
-20,
-23,
-23,
-26,
-26,
-36,
-36,
-39,
-39,
-42,
-42,
-90,
-90,
-98,
-98
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/IncludeOwnSystemSniff.php": [
-88,
-89,
-90
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-223
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-230
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php": [
-182,
-182
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Formatting/MultiLineAssignmentUnitTest.inc": [
-18,
-19
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-112,
-112,
-113,
-113,
-114,
-115,
-115,
-116,
-117,
-142,
-170,
-170,
-175,
-178,
-190,
-190,
-191,
-191,
-192,
-193,
-193,
-194,
-195,
-207,
-207
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
-52,
+"psysh:src/VarDumper/Presenter.php": [
 64
 ],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/ClosingBraceUnitTest.inc": [
-35
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
-104
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
-771
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/PostStatementCommentUnitTest.inc": [
-30,
-32
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDeclarationArgumentSpacingUnitTest.inc": [
-4,
-5,
-6,
-6,
-6,
-7,
-7,
-7,
-8,
-8,
-8,
-9,
-9,
-9,
-10,
-11,
-12,
-12,
-12,
-13,
-13,
-13,
-14,
-14,
-14,
-15,
-15,
-15,
+"psysh:test/CodeCleaner/Fixtures/ClassWithCallStatic.php": [
 16,
-16,
-17,
-18,
-21,
-22,
-23,
-24,
-29,
-30,
+16
+],
+"psysh:test/Formatter/DocblockFormatterTest.php": [
+34
+],
+"psysh:test/Formatter/Fixtures/BoringTrait.php": [
+16
+],
+"psysh:test/Formatter/Fixtures/SomeClass.php": [
+19
+],
+"psysh:test/Formatter/SignatureFormatterTest.php": [
+27,
+27,
+27,
+31,
+31,
 31,
 35,
 35,
-43,
-44,
-45,
-46,
-51,
-52,
-53,
-54,
-55,
-56,
-61,
-62,
-63,
-64,
-70,
-70,
-70,
-71,
-71,
-73,
-73,
-73,
-73,
-75,
-76,
-77,
-80,
-81,
-82,
-83,
-92,
-93,
-94,
-95,
-99,
-99,
-99,
-100,
-100,
-101,
-101,
-102,
-102,
-105,
-105
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDuplicateArgumentUnitTest.inc": [
-2,
-3,
-3,
-3,
-5
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/GlobalFunctionUnitTest.inc": [
-14
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
-133,
-133,
-133
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc": [
-10,
-10,
-10
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-56
-],
-"PHP_CodeSniffer:src/Standards/Zend/Tests/Debug/CodeAnalyzerUnitTest.inc": [
-2
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.inc": [
-19,
-24,
-27
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
-3,
-10
+35
 ]
 }

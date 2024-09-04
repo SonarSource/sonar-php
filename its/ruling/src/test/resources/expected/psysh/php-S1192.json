@@ -1,10 +1,5 @@
 {
-"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
-440
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/NamedFunctionCallArgumentsTest.php": [
-41,
-60,
-65
+"psysh:test/SudoTest.php": [
+28
 ]
 }

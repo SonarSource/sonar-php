@@ -1,56 +1,87 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-326
+"psysh:src/Command/ShowCommand.php": [
+110
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-109
+"psysh:src/Configuration.php": [
+152,
+402,
+1425
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
-55,
-56,
-58,
-58,
-61,
-61,
-64,
-64,
-66,
-66,
-69,
-70,
-72,
-72,
-75,
-75,
-78,
-78,
-80,
+"psysh:src/Input/FilterOptions.php": [
+52
+],
+"psysh:src/Input/ShellInput.php": [
+256,
+257
+],
+"psysh:src/Readline/Hoa/AutocompleterAggregate.php": [
 80
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc": [
-8,
-8
+"psysh:src/Readline/Hoa/Console.php": [
+126,
+132,
+138,
+222
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-7,
-9,
-12,
-44,
-52,
-52,
-79,
-85
+"psysh:src/Readline/Hoa/ConsoleOutput.php": [
+165
 ],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-791
+"psysh:src/Readline/Hoa/ConsoleProcessus.php": [
+640
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
-198,
-200,
+"psysh:src/Readline/Hoa/ConsoleTput.php": [
+696
+],
+"psysh:src/Readline/Hoa/ExceptionIdle.php": [
+215
+],
+"psysh:src/Readline/Hoa/File.php": [
+151
+],
+"psysh:src/Readline/Hoa/FileGeneric.php": [
+452
+],
+"psysh:src/Readline/Hoa/FileLinkReadWrite.php": [
+255
+],
+"psysh:src/Readline/Hoa/FileReadWrite.php": [
+255
+],
+"psysh:src/Readline/Hoa/IteratorSplFileInfo.php": [
+63,
+116
+],
+"psysh:src/Readline/Hoa/ProtocolNode.php": [
 207,
-209
+227
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc": [
-62
+"psysh:src/Readline/Hoa/ProtocolNodeLibrary.php": [
+59
+],
+"psysh:src/Readline/Hoa/Readline.php": [
+571,
+903
+],
+"psysh:src/Readline/Hoa/Stream.php": [
+437
+],
+"psysh:src/Readline/Hoa/Xcallable.php": [
+167,
+218,
+223,
+234
+],
+"psysh:src/Readline/Libedit.php": [
+111
+],
+"psysh:src/Readline/Transient.php": [
+61
+],
+"psysh:src/Shell.php": [
+589,
+607
+],
+"psysh:src/functions.php": [
+145
 ]
 }

@@ -1,93 +1,46 @@
 {
-"PHP_CodeSniffer:scripts/build-phar.php": [
-156,
-157,
-158,
-159,
-160,
-161,
-162
+"psysh:src/Configuration.php": [
+158
 ],
-"PHP_CodeSniffer:src/Config.php": [
-1612,
-1614
+"psysh:src/Readline/Hoa/ConsoleProcessus.php": [
+265
 ],
-"PHP_CodeSniffer:src/Reports/Cbf.php": [
-183,
-185
-],
-"PHP_CodeSniffer:src/Reports/Code.php": [
-177,
-207,
-248,
-294,
-313
-],
-"PHP_CodeSniffer:src/Reports/Full.php": [
-95,
-139,
-181
-],
-"PHP_CodeSniffer:src/Reports/Info.php": [
-100
-],
-"PHP_CodeSniffer:src/Reports/Source.php": [
-249
-],
-"PHP_CodeSniffer:src/Reports/Summary.php": [
-122,
-124
-],
-"PHP_CodeSniffer:src/Reports/VersionControl.php": [
-237,
-325
-],
-"PHP_CodeSniffer:src/Runner.php": [
-523,
-538
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php": [
+"psysh:src/Readline/Hoa/Event.php": [
+98,
 102,
-102
+107
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Arrays/ArrayIndentUnitTest.inc": [
-74
+"psysh:src/Readline/Hoa/EventListens.php": [
+57
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Strings/UnnecessaryStringConcatUnitTest.inc": [
-2,
-6,
-9,
-11,
-12,
-15,
-16,
-18
+"psysh:src/Readline/Hoa/ExceptionIdle.php": [
+205,
+210,
+217,
+240
 ],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
-61
+"psysh:src/Readline/Hoa/FileDirectory.php": [
+200
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/ConcatenationSpacingUnitTest.inc": [
-8,
-34,
-38,
-42,
-46
+"psysh:src/Readline/Hoa/FileLink.php": [
+127
 ],
-"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
-201
+"psysh:src/Readline/Hoa/Stream.php": [
+159,
+343
 ],
-"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
-78,
-79,
-96,
-97,
-122,
-123
+"psysh:src/Readline/Hoa/Xcallable.php": [
+116
 ],
-"PHP_CodeSniffer:tests/bootstrap.php": [
-32,
-36,
-40,
-44
+"psysh:test/Command/ListCommand/ClassEnumeratorTest.php": [
+52,
+58,
+87,
+136,
+142,
+161
+],
+"psysh:test/Formatter/SignatureFormatterTest.php": [
+65
 ]
 }

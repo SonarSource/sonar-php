@@ -1,20 +1,20 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/FixmeSniff.php": [
-3,
-61
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php": [
+1129,
+1161,
+4274
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/FixmeUnitTest.inc": [
-3,
-4,
-7,
-10,
-13,
-16,
-18,
-21,
-23
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml/DataValidations.php": [
+155
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/FixmeUnitTest.php": [
-3
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
+908,
+910
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Workbook.php": [
+860
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+1213
 ]
 }

@@ -1,10 +1,48 @@
 {
-"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
-440
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+281
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/NamedFunctionCallArgumentsTest.php": [
-41,
+"PHPWord:src/PhpWord/Writer/Word2007/Element/FormField.php": [
+68
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php": [
+85,
+107,
+114
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Styles.php": [
+101
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Part/Theme.php": [
+224,
+227,
+228
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Style/Font.php": [
+45
+],
+"PHPWord:src/PhpWord/Writer/Word2007/Style/Paragraph.php": [
+59
+],
+"PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
+143,
+404
+],
+"PHPWord:tests/PhpWordTests/Writer/ODText/Style/FontTest.php": [
+62
+],
+"PHPWord:tests/PhpWordTests/Writer/ODText/Style/ParagraphTest.php": [
+52,
+53,
 60,
-65
+87,
+245
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
+108
+],
+"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/SettingsTest.php": [
+53,
+141
 ]
 }

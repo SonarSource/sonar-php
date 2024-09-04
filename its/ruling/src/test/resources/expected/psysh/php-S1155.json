@@ -1,9 +1,6 @@
 {
-"PHP_CodeSniffer:src/Runner.php": [
-755
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
-207,
-249
+"psysh:src/Command/ListCommand.php": [
+180,
+200
 ]
 }

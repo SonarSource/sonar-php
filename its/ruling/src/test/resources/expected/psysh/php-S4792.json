@@ -1,16 +1,6 @@
 {
-"PHP_CodeSniffer:scripts/build-phar.php": [
-23
-],
-"PHP_CodeSniffer:src/Generators/HTML.php": [
-174
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php": [
-185,
-189
-],
-"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
-221,
-624
+"psysh:test/ShellTest.php": [
+268,
+272
 ]
 }

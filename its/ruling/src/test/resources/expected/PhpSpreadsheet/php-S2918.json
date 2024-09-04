@@ -1,15 +1,8 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-676,
-678
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Csv.php": [
+306
 ],
-"PHP_CodeSniffer:src/Runner.php": [
-298,
-301
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php": [
-178,
-185,
-189
+"PhpSpreadsheet:tests/bootstrap.php": [
+35
 ]
 }

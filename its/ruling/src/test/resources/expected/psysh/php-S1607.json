@@ -1,5 +1,8 @@
 {
-"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
-120
+"psysh:test/CodeCleaner/IssetPassTest.php": [
+137
+],
+"psysh:test/CodeCleaner/RequirePassTest.php": [
+78
 ]
 }

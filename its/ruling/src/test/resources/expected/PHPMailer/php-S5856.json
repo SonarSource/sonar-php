@@ -1,6 +1,7 @@
 {
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/SuperfluousWhitespaceSniff.php": [
-111,
-149
+"PHPMailer:src/PHPMailer.php": [
+3522,
+3531,
+3539
 ]
 }

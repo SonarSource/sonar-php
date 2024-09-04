@@ -1,159 +1,118 @@
 {
-"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
-242
+"psysh:src/CodeCleaner.php": [
+68
 ],
-"PHP_CodeSniffer:src/Config.php": [
-903,
-995,
-1058
+"psysh:src/CodeCleaner/IssetPass.php": [
+44
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-534,
-1257
+"psysh:src/CodeCleaner/ListPass.php": [
+56
 ],
-"PHP_CodeSniffer:src/Files/FileList.php": [
-83
+"psysh:src/Command/Command.php": [
+169
 ],
-"PHP_CodeSniffer:src/Filters/Filter.php": [
-140
+"psysh:src/Command/EditCommand.php": [
+53,
+79
 ],
-"PHP_CodeSniffer:src/Fixer.php": [
-553
-],
-"PHP_CodeSniffer:src/Reports/Code.php": [
-113
-],
-"PHP_CodeSniffer:src/Ruleset.php": [
-1345
-],
-"PHP_CodeSniffer:src/Runner.php": [
-949
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/MultipleStatementAlignmentSniff.php": [
-303
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
-358,
-373,
-467,
-1221,
-1288
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/LineLengthUnitTest.3.inc": [
-6,
-7
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/IncludeSystemSniff.php": [
-187,
-268,
-272
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Objects/CreateWidgetTypeCallbackSniff.php": [
-205
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-472,
-509,
-574
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-287,
-386,
-457,
-481
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php": [
-574
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionDeclarationSniff.php": [
-343
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Sniffs/Files/SideEffectsSniff.php": [
-47
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/ControlStructures/ControlStructureSpacingSniff.php": [
-122,
-172
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentThrowTagSniff.php": [
-154
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JavaScriptLintSniff.php": [
-60
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Functions/FunctionDeclarationArgumentSpacingSniff.php": [
-217,
-315
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Operators/IncrementDecrementUsageSniff.php": [
-132
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/DisallowSizeFunctionsInLoopsSniff.php": [
-107
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/EmbeddedPhpUnitTest.inc": [
-94
-],
-"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php": [
+"psysh:src/Command/ListCommand.php": [
 73
 ],
-"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
-463
+"psysh:src/Command/ShowCommand.php": [
+41
 ],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-2615,
-3167
+"psysh:src/Configuration.php": [
+334,
+338,
+342,
+370,
+373,
+378,
+637
 ],
-"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
-1568
+"psysh:src/ExecutionLoop/ProcessForker.php": [
+96
 ],
-"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
-841,
-856
+"psysh:src/Formatter/CodeFormatter.php": [
+315
 ],
-"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionTest.php": [
-455
+"psysh:src/Formatter/DocblockFormatter.php": [
+120
 ],
-"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
-139,
-180,
-383
+"psysh:src/Formatter/TraceFormatter.php": [
+32
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/AttributesTest.php": [
-411
+"psysh:src/Input/ShellInput.php": [
+95
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillExplicitOctalNotationTest.php": [
-39
+"psysh:src/Output/ShellOutput.php": [
+41
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillFnTokenTest.php": [
-125,
-152,
-153,
-156,
-157,
-160,
-161,
-401,
-404,
-405,
-408,
-409,
-473,
-477,
-490,
-493,
-494,
-793,
-797
+"psysh:src/Readline/Hoa/EventListens.php": [
+57
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/ContextSensitiveKeywordsTest.php": [
-33
+"psysh:src/Readline/Hoa/File.php": [
+147
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.php": [
-130
+"psysh:src/Readline/Hoa/FileLinkRead.php": [
+86
 ],
-"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
-155,
-196
+"psysh:src/Readline/Hoa/FileLinkReadWrite.php": [
+73
+],
+"psysh:src/Readline/Hoa/FileRead.php": [
+70
+],
+"psysh:src/Readline/Hoa/FileReadWrite.php": [
+73
+],
+"psysh:src/Readline/Hoa/ProtocolNodeLibrary.php": [
+50
+],
+"psysh:src/Shell.php": [
+1641
+],
+"psysh:src/Util/Docblock.php": [
+78
+],
+"psysh:src/Util/Mirror.php": [
+68
+],
+"psysh:src/VarDumper/Dumper.php": [
+82
+],
+"psysh:src/functions.php": [
+335,
+350,
+355,
+360,
+365,
+370
+],
+"psysh:test/Command/ListCommand/ConstantEnumeratorTest.php": [
+84,
+111
+],
+"psysh:test/Command/ListCommand/MethodEnumeratorTest.php": [
+150
+],
+"psysh:test/ConfigurationTest.php": [
+468,
+469,
+470,
+471
+],
+"psysh:test/Formatter/CodeFormatterTest.php": [
+238,
+239,
+242,
+243,
+244,
+247,
+250,
+251
+],
+"psysh:test/Formatter/SignatureFormatterTest.php": [
+101
 ]
 }

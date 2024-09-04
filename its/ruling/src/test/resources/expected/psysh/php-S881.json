@@ -1,53 +1,20 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/ForLoopShouldBeWhileLoopSniff.php": [
-64,
-65
+"psysh:src/CodeCleaner/PassableByReferencePass.php": [
+117
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/ForLoopWithTestFunctionCallSniff.php": [
-68,
-69
+"psysh:src/Command/Command.php": [
+215
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/JumbledIncrementerSniff.php": [
-79,
-80,
-115,
-116
+"psysh:src/Readline/Hoa/Readline.php": [
+280,
+319,
+331,
+821
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnconditionalIfStatementSniff.php": [
-71,
-72
+"psysh:src/Readline/Userland.php": [
+119
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnnecessaryFinalModifierSniff.php": [
-68,
-69
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
-101,
-102
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UselessOverridingMethodSniff.php": [
-72,
-73
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-250
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DiscourageGotoUnitTest.inc": [
-10
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-141
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Classes/ClassDeclarationSniff.php": [
-427
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Namespaces/UseDeclarationSniff.php": [
-209
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
-35
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc": [
-13
+"psysh:src/VarDumper/Dumper.php": [
+83
 ]
 }

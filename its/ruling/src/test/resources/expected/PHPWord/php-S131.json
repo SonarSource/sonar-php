@@ -1,86 +1,64 @@
 {
-"PHP_CodeSniffer:src/Files/File.php": [
-1402,
-1664,
-1874,
-1998
+"PHPWord:src/PhpWord/Element/Image.php": [
+532
 ],
-"PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php": [
-866
+"PHPWord:src/PhpWord/Media.php": [
+64
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/GitMergeConflictSniff.php": [
-81,
-154
+"PHPWord:src/PhpWord/Metadata/DocInfo.php": [
+514
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyStatementUnitTest.inc": [
-3
+"PHPWord:src/PhpWord/Reader/MsDoc.php": [
+327,
+1545,
+1632,
+1661,
+1685,
+1705,
+1807,
+1887,
+2214
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-82,
+"PHPWord:src/PhpWord/Reader/ODText/Content.php": [
+61,
 93,
-109,
-146,
-204
+122,
+126
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/NestingLevelUnitTest.inc": [
-14,
-31,
-50,
-55,
-77,
-82
+"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
+342,
+350,
+373,
+387
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/RequireStrictTypesUnitTest.php": [
-30
+"PHPWord:src/PhpWord/Reader/Word2007/Numbering.php": [
+50
 ],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/UnusedSystemSniff.php": [
-102
+"PHPWord:src/PhpWord/Reader/Word2007/Styles.php": [
+74
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
+"PHPWord:src/PhpWord/Shared/Converter.php": [
+306,
+389
+],
+"PHPWord:src/PhpWord/Shared/Html.php": [
+119,
+331,
+575,
+690,
+692,
+898,
+942,
+1150
+],
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+451
+],
+"PHPWord:src/PhpWord/Writer/ODText/Element/Field.php": [
+43,
 65
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
-48,
-88,
-130
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-34,
-81,
-163,
-256,
-266,
-276,
-291
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/ControlStructures/BooleanOperatorPlacementUnitTest.inc": [
-34
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/LongConditionClosingCommentUnitTest.inc": [
-495,
-631,
-703
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-79
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SemicolonSpacingUnitTest.inc": [
-32
-],
-"PHP_CodeSniffer:src/Util/Common.php": [
-456
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DefaultKeywordTest.inc": [
-176
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc": [
-36,
-47,
-56,
-67
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc": [
-26,
-48
+"PHPWord:src/PhpWord/Writer/Word2007/Element/Shape.php": [
+140
 ]
 }

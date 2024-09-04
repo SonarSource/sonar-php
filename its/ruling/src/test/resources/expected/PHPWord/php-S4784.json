@@ -1,91 +1,39 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-235
-],
-"PHP_CodeSniffer:src/Reports/Gitblame.php": [
-37
-],
-"PHP_CodeSniffer:src/Reports/Hgblame.php": [
-38
-],
-"PHP_CodeSniffer:src/Reports/Svnblame.php": [
-35
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/FixmeSniff.php": [
-58
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/TodoSniff.php": [
-57
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ClosureLinterSniff.php": [
-85
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DisallowAlternativePHPTagsSniff.php": [
-135
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/SyntaxSniff.php": [
+"PHPWord:src/PhpWord/Element/PreserveText.php": [
 63
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowSpaceIndentSniff.php": [
-116
+"PHPWord:src/PhpWord/IOFactory.php": [
+119
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php": [
-105
+"PHPWord:src/PhpWord/Reader/RTF/Document.php": [
+248
 ],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/IncludeOwnSystemSniff.php": [
-44
+"PHPWord:src/PhpWord/Shared/Converter.php": [
+385
 ],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/IncludeSystemSniff.php": [
-91,
-233
+"PHPWord:src/PhpWord/Shared/Css.php": [
+41
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-500,
-541
+"PHPWord:src/PhpWord/Shared/Html.php": [
+739,
+819,
+843,
+972,
+996
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-242,
-287
+"PHPWord:src/PhpWord/TemplateProcessor.php": [
+448
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/DuplicateClassDefinitionSniff.php": [
-91
+"PHPWord:src/PhpWord/Writer/ODText/Element/Text.php": [
+108
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ShorthandSizeSniff.php": [
-93
+"PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php": [
+94
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/BlockCommentSniff.php": [
-206
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
-180,
-185
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
-79,
-224,
-314,
-615
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/VariableCommentSniff.php": [
-120
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JSLintSniff.php": [
-69
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php": [
-172
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php": [
-153,
-159
-],
-"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php": [
-83
-],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-786,
-928,
-1603,
-1607
+"PHPWord:tests/PhpWordTests/Writer/HTML/FontTest.php": [
+87,
+137,
+184,
+224
 ]
 }

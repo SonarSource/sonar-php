@@ -1,11 +1,11 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-208
+"PHPMailer:src/PHPMailer.php": [
+1479,
+1484,
+1492,
+1495
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
-8,
-9,
-15,
-155
+"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
+295
 ]
 }

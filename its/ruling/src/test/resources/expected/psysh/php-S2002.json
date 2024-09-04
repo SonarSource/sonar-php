@@ -1,49 +1,107 @@
 {
-"PHP_CodeSniffer:autoload.php": [
-77
+"psysh:src/CodeCleaner.php": [
+167
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-1085
+"psysh:src/Command/EditCommand.php": [
+166,
+169
 ],
-"PHP_CodeSniffer:src/Fixer.php": [
+"psysh:src/Command/ShowCommand.php": [
+110,
+223
+],
+"psysh:src/ConfigPaths.php": [
+142,
+241,
+241,
+301,
+323
+],
+"psysh:src/Configuration.php": [
+457,
+479,
+494,
+636,
+1105,
+1128,
+1266,
+1305,
+1347
+],
+"psysh:src/Exception/ErrorException.php": [
+110
+],
+"psysh:src/Exception/ThrowUpException.php": [
+45
+],
+"psysh:src/ExecutionLoop/ProcessForker.php": [
+130,
+151,
 158,
-370,
-412,
-418,
-454,
-489,
-526,
-552,
-647
+161,
+276,
+283
 ],
-"PHP_CodeSniffer:src/Ruleset.php": [
-153
+"psysh:src/Formatter/CodeFormatter.php": [
+86
 ],
-"PHP_CodeSniffer:src/Runner.php": [
-298
+"psysh:src/Output/ProcOutputPager.php": [
+54
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/NoSilencedErrorsUnitTest.inc": [
-5,
-10
+"psysh:src/Readline/Hoa/ConsoleInput.php": [
+60
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-44
+"psysh:src/Readline/Hoa/ConsoleProcessus.php": [
+290,
+311,
+314
 ],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-522,
-3458,
-3487
+"psysh:src/Readline/Hoa/ExceptionIdle.php": [
+87
 ],
-"PHP_CodeSniffer:src/Util/Common.php": [
-63,
-67,
-67,
-68
+"psysh:src/Readline/Hoa/File.php": [
+151,
+158,
+177
 ],
-"PHP_CodeSniffer:src/Util/Standards.php": [
-124
+"psysh:src/Readline/Hoa/FileDirectory.php": [
+176,
+179,
+207,
+214
 ],
-"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
+"psysh:src/Readline/Hoa/FileGeneric.php": [
+259,
+262,
+288,
+291,
+300,
 303
+],
+"psysh:src/Readline/Hoa/ProtocolWrapper.php": [
+88,
+311,
+313,
+447,
+450
+],
+"psysh:src/Readline/Hoa/Readline.php": [
+176,
+895
+],
+"psysh:src/Reflection/ReflectionConstant.php": [
+50
+],
+"psysh:src/Shell.php": [
+145,
+292,
+554,
+1563
+],
+"psysh:src/VersionUpdater/GitHubChecker.php": [
+81
+],
+"psysh:src/VersionUpdater/IntervalChecker.php": [
+28
 ]
 }

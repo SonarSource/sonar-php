@@ -1,49 +1,109 @@
 {
-"PHP_CodeSniffer:autoload.php": [
-77
+"PhpSpreadsheet:samples/Reader2/20_Reader_worksheet_hyperlink_image.php": [
+15
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-1085
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php": [
+4106,
+4505
 ],
-"PHP_CodeSniffer:src/Fixer.php": [
-158,
-370,
-412,
-418,
-454,
-489,
-526,
-552,
-647
+"PhpSpreadsheet:src/PhpSpreadsheet/Calculation/LookupRef/Matrix.php": [
+109
 ],
-"PHP_CodeSniffer:src/Ruleset.php": [
-153
+"PhpSpreadsheet:src/PhpSpreadsheet/Helper/Handler.php": [
+13
 ],
-"PHP_CodeSniffer:src/Runner.php": [
-298
+"PhpSpreadsheet:src/PhpSpreadsheet/Helper/Html.php": [
+620
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/NoSilencedErrorsUnitTest.inc": [
-5,
-10
+"PhpSpreadsheet:src/PhpSpreadsheet/Helper/Sample.php": [
+217
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-44
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Csv.php": [
+306
 ],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-522,
-3458,
-3487
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php": [
+176,
+181
 ],
-"PHP_CodeSniffer:src/Util/Common.php": [
-63,
-67,
-67,
-68
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Ods.php": [
+255
 ],
-"PHP_CodeSniffer:src/Util/Standards.php": [
-124
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
+122,
+2402
 ],
-"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
-303
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Chart.php": [
+38,
+48,
+58,
+70
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xml.php": [
+124,
+130
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/CodePage.php": [
+90
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/File.php": [
+42
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE.php": [
+111
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/OLE/PPS.php": [
+191,
+202
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
+238,
+241,
+241,
+241,
+247
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Shared/XMLWriter.php": [
+36,
+59
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/MemoryDrawing.php": [
+66,
+145,
+204,
+216
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
+643
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls.php": [
+423,
+445
+],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
+2376
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Functional/DrawingImageHyperlinkTest.php": [
+15
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xlsx/Issue3770Test.php": [
+29
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xml/XmlTest.php": [
+61,
+71,
+81
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/ExactFontTest.php": [
+66
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/DrawingTest.php": [
+18
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/MemoryDrawingTest.php": [
+17
+],
+"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ArrayFunctionsTest.php": [
+118,
+235
 ]
 }
