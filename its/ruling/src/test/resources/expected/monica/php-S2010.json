@@ -1,19 +1,13 @@
 {
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.13.inc": [
-2
+"monica:database/migrations/2017_06_17_010900_fix_contacts_table.php": [
+16
 ],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.14.inc": [
-2
+"monica:database/migrations/2017_09_13_191714_add_partial_notion.php": [
+23
 ],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.15.inc": [
-2
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.16.inc": [
-2
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ValidLogicalOperatorsUnitTest.inc": [
-5,
-11,
+"monica:database/migrations/2017_11_10_202620_move_addresses_from_contact_to_addresses.php": [
+17,
+17,
 17,
 17
 ]

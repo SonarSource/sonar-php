@@ -1,56 +1,55 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-326
+"flysystem:src/AsyncAwsS3/AsyncAwsS3Adapter.php": [
+362
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-109
+"flysystem:src/AwsS3V3/AwsS3V3Adapter.php": [
+158
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
-55,
-56,
-58,
-58,
-61,
-61,
-64,
-64,
-66,
-66,
-69,
-70,
-72,
-72,
-75,
-75,
-78,
-78,
-80,
-80
+"flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
+108
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc": [
-8,
-8
+"flysystem:src/AwsS3V3/S3ClientStub.php": [
+48
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-7,
-9,
-12,
-44,
+"flysystem:src/Ftp/FtpAdapter.php": [
+122,
+134,
+175,
+385
+],
+"flysystem:src/Ftp/StubConnectionProvider.php": [
+16
+],
+"flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapter.php": [
+146
+],
+"flysystem:src/GridFS/GridFSAdapter.php": [
+91,
+91,
+115,
+115,
+382,
+382,
+385,
+385
+],
+"flysystem:src/Local/LocalFilesystemAdapter.php": [
+441
+],
+"flysystem:src/MountManagerTest.php": [
 52,
-52,
-79,
-85
+53
 ],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-791
+"flysystem:src/PhpseclibV2/SftpConnectionProvider.php": [
+125
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
-198,
-200,
-207,
-209
+"flysystem:src/PhpseclibV3/SftpConnectionProvider.php": [
+83
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc": [
-62
+"flysystem:src/WebDAV/WebDAVAdapter.php": [
+324
+],
+"flysystem:src/ZipArchive/ZipArchiveAdapter.php": [
+152
 ]
 }

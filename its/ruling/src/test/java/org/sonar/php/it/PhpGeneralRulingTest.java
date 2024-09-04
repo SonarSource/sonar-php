@@ -67,7 +67,9 @@ public class PhpGeneralRulingTest {
 
   @Test
   void testMonica() throws Exception {
-    testProject("monica");
+    // To avoid error: File tests/Unit/Traits/SearchableTest.php can't be indexed twice...
+    // the tests directory needs to be excluded
+    testProject("monica", "sonar.exclusions", "**/tests/**");
   }
 
   @Test
@@ -100,12 +102,17 @@ public class PhpGeneralRulingTest {
     testProject("PhpSpreadsheet");
   }
 
-  private void testProject(String project) throws Exception {
+  private void testProject(String project, String... keyValueProperties) throws Exception {
     ORCHESTRATOR.getServer().provisionProject(project, project);
     ORCHESTRATOR.getServer().associateProjectToQualityProfile(project, "php", "rules");
     File litsDifferencesFile = FileLocation.of("target/differences").getFile();
     File projectLocation = FileLocation.of("../sources/src/" + project).getFile();
-    SonarScanner build = RulingHelper.prepareScanner(projectLocation, project, "expected/" + project, litsDifferencesFile)
+    SonarScanner build = RulingHelper.prepareScanner(
+        projectLocation,
+        project,
+        "expected/" + project,
+        litsDifferencesFile,
+        keyValueProperties)
       .setProperty("sonar.import_unknown_files", "true")
       .setProperty("sonar.php.duration.statistics", "true")
       .setProperty("sonar.cpd.exclusions", "**/*")

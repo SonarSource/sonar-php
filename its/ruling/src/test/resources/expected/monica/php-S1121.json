@@ -1,56 +1,51 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-326
+"monica:app/ExportResources/Contact/Document.php": [
+27
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-109
+"monica:app/ExportResources/ExportResource.php": [
+131
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
-55,
-56,
-58,
-58,
-61,
-61,
-64,
-64,
-66,
-66,
-69,
-70,
-72,
-72,
-75,
-75,
-78,
-78,
-80,
-80
+"monica:app/Http/Controllers/StorageController.php": [
+113
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc": [
-8,
-8
+"monica:app/Http/Middleware/CheckVersion.php": [
+20
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-7,
-9,
-12,
-44,
-52,
-52,
-79,
-85
+"monica:app/Jobs/Dav/GetMultipleVCard.php": [
+82
 ],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-791
+"monica:app/Jobs/Dav/GetVCard.php": [
+65
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
-198,
-200,
-207,
-209
+"monica:app/Jobs/GetGPSCoordinate.php": [
+68
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc": [
-62
+"monica:app/Models/Account/Weather.php": [
+73,
+74,
+116
+],
+"monica:app/Services/DavClient/Utils/AddressBookGetter.php": [
+200
+],
+"monica:app/Services/DavClient/Utils/Dav/DavClient.php": [
+347,
+350,
+370,
+395,
+419
+],
+"monica:app/Services/Instance/Geolocalization/GetGPSCoordinate.php": [
+68,
+89,
+103
+],
+"monica:app/Services/VCard/ImportVCard.php": [
+629
+],
+"monica:app/Traits/AmountFormatter.php": [
+39,
+53,
+67
 ]
 }

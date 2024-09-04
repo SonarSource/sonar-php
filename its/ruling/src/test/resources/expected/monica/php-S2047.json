@@ -1,139 +1,162 @@
 {
-"PHP_CodeSniffer:autoload.php": [
-64
+"monica:app/Helpers/AccountHelper.php": [
+63
 ],
-"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
-109,
+"monica:app/Helpers/DBHelper.php": [
+42
+],
+"monica:app/Helpers/GenderHelper.php": [
+40
+],
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/CardDAVBackend.php": [
+409
+],
+"monica:app/Http/Controllers/DAV/DAVRedirect.php": [
+27
+],
+"monica:app/Http/Controllers/Settings/MultiFAController.php": [
+131
+],
+"monica:app/Http/Controllers/StorageController.php": [
+111
+],
+"monica:app/Http/Middleware/AuthenticateWithTokenOnBasicAuth.php": [
+128
+],
+"monica:app/Http/Requests/AuthorizedRequest.php": [
+10
+],
+"monica:app/Interfaces/IsJournalableInterface.php": [
+36
+],
+"monica:app/Models/Account/ImportJob.php": [
 170,
-207,
-276
+188
 ],
-"PHP_CodeSniffer:src/Config.php": [
-284,
-1566
+"monica:app/Models/Contact/Contact.php": [
+999,
+1483
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-662,
-696,
-729,
-753,
-779,
-810,
-842,
-1104
+"monica:app/Models/User/User.php": [
+226,
+292
 ],
-"PHP_CodeSniffer:src/Files/FileList.php": [
-231
+"monica:app/Notifications/StayInTouchEmail.php": [
+69
 ],
-"PHP_CodeSniffer:src/Filters/ExactMatch.php": [
-43
+"monica:app/Services/Account/Activity/Activity/AttachContactToActivity.php": [
+31
 ],
-"PHP_CodeSniffer:src/Filters/Filter.php": [
-94,
-164,
-201
+"monica:app/Services/Account/Activity/Activity/CreateActivity.php": [
+38
 ],
-"PHP_CodeSniffer:src/Fixer.php": [
-140,
-386,
-474,
-606,
-667,
-689,
-704,
-720,
-736
+"monica:app/Services/Account/Activity/Activity/DestroyActivity.php": [
+29,
+45
 ],
-"PHP_CodeSniffer:src/Reporter.php": [
-177
-],
-"PHP_CodeSniffer:src/Reports/Cbf.php": [
+"monica:app/Services/Account/Activity/Activity/UpdateActivity.php": [
 39
 ],
-"PHP_CodeSniffer:src/Reports/Checkstyle.php": [
-33
+"monica:app/Services/Account/Activity/ActivityType/DestroyActivityType.php": [
+29
 ],
-"PHP_CodeSniffer:src/Reports/Code.php": [
-33
+"monica:app/Services/Account/Activity/ActivityTypeCategory/DestroyActivityTypeCategory.php": [
+29
 ],
-"PHP_CodeSniffer:src/Reports/Csv.php": [
+"monica:app/Services/Account/Company/DestroyCompany.php": [
+29
+],
+"monica:app/Services/Account/Gender/DestroyGender.php": [
+29
+],
+"monica:app/Services/Account/LifeEvent/LifeEventType/DestroyLifeEventType.php": [
+29
+],
+"monica:app/Services/Account/Photo/DestroyPhoto.php": [
+30
+],
+"monica:app/Services/Account/Place/DestroyPlace.php": [
+29
+],
+"monica:app/Services/Account/Settings/ArchiveAllContacts.php": [
 32
 ],
-"PHP_CodeSniffer:src/Reports/Diff.php": [
-32
+"monica:app/Services/Account/Settings/DestroyAllDocuments.php": [
+28
 ],
-"PHP_CodeSniffer:src/Reports/Emacs.php": [
-32
+"monica:app/Services/Account/Settings/DestroyAllPhotos.php": [
+28
 ],
-"PHP_CodeSniffer:src/Reports/Full.php": [
-33
+"monica:app/Services/Auth/Population/PopulateContactFieldTypesTable.php": [
+37
 ],
-"PHP_CodeSniffer:src/Reports/Info.php": [
-33
+"monica:app/Services/Auth/Population/PopulateLifeEventsTable.php": [
+46
 ],
-"PHP_CodeSniffer:src/Reports/Json.php": [
-33
+"monica:app/Services/Auth/Population/PopulateModulesTable.php": [
+43
 ],
-"PHP_CodeSniffer:src/Reports/Junit.php": [
+"monica:app/Services/BaseService.php": [
+27
+],
+"monica:app/Services/Contact/Address/DestroyAddress.php": [
+30
+],
+"monica:app/Services/Contact/Avatar/GetGravatarURL.php": [
+52
+],
+"monica:app/Services/Contact/Call/DestroyCall.php": [
+30
+],
+"monica:app/Services/Contact/ContactField/DestroyContactField.php": [
+29
+],
+"monica:app/Services/Contact/Conversation/DestroyConversation.php": [
 34
 ],
-"PHP_CodeSniffer:src/Reports/Notifysend.php": [
-98
+"monica:app/Services/Contact/Conversation/DestroyMessage.php": [
+36
 ],
-"PHP_CodeSniffer:src/Reports/Report.php": [
+"monica:app/Services/Contact/Document/DestroyDocument.php": [
+30
+],
+"monica:app/Services/Contact/Gift/DestroyGift.php": [
+29
+],
+"monica:app/Services/Contact/LifeEvent/DestroyLifeEvent.php": [
+30
+],
+"monica:app/Services/Contact/Occupation/DestroyOccupation.php": [
+29
+],
+"monica:app/Services/Contact/Relationship/DestroyRelationship.php": [
 32
 ],
-"PHP_CodeSniffer:src/Reports/Source.php": [
-33
+"monica:app/Services/Contact/Reminder/DestroyReminder.php": [
+30
 ],
-"PHP_CodeSniffer:src/Reports/Summary.php": [
-33
+"monica:app/Services/Contact/Tag/DestroyTag.php": [
+29
 ],
-"PHP_CodeSniffer:src/Reports/VersionControl.php": [
-41
+"monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php": [
+142
 ],
-"PHP_CodeSniffer:src/Reports/Xml.php": [
-33
+"monica:app/Services/DavClient/Utils/Dav/DavClient.php": [
+439
 ],
-"PHP_CodeSniffer:src/Ruleset.php": [
-1120
+"monica:app/Services/Task/DestroyTask.php": [
+29
 ],
-"PHP_CodeSniffer:src/Runner.php": [
-748
+"monica:app/Services/User/CreateUser.php": [
+143
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
-1513
+"monica:app/Services/VCalendar/ImportTask.php": [
+90
 ],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Namespaces/UseDeclarationSniff.php": [
-277
+"monica:app/Services/VCard/ImportVCard.php": [
+377
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
-771
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ObjectOperatorSpacingSniff.php": [
-100,
-139
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.1.inc": [
-139,
-148,
-158,
-173,
-182,
-190,
-207,
-224,
-232,
-239,
-256,
-327,
-336,
-385,
-399,
-411,
-418
-],
-"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
-103
+"monica:app/Traits/Journalable.php": [
+36
 ]
 }

@@ -1,10 +1,18 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DiscourageGotoUnitTest.inc": [
-3,
-11
+"flysystem:src/AzureBlobStorage/AzureBlobStorageAdapter.php": [
+205
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc": [
-4,
-14
+"flysystem:src/Ftp/FtpAdapter.php": [
+98
+],
+"flysystem:src/PhpseclibV2/SftpConnectionProvider.php": [
+119
+],
+"flysystem:src/PhpseclibV3/SftpConnectionProvider.php": [
+62,
+77
+],
+"flysystem:src/PhpseclibV3/SftpConnectionProviderTest.php": [
+387
 ]
 }

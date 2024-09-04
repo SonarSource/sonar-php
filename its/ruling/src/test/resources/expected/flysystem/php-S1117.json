@@ -1,86 +1,114 @@
 {
-"PHP_CodeSniffer:src/Files/File.php": [
-422,
-877,
-1268
+"flysystem:src/AdapterTestUtilities/FilesystemAdapterTestCase.php": [
+98,
+135,
+152,
+177,
+210,
+266,
+283,
+332,
+343,
+355,
+371,
+406,
+444,
+553,
+586,
+621,
+643,
+670,
+686,
+725,
+739,
+755,
+793,
+816,
+833,
+853,
+869,
+892,
+911,
+931,
+947,
+963
 ],
-"PHP_CodeSniffer:src/Fixer.php": [
-122,
-509,
-624,
-758
+"flysystem:src/AsyncAwsS3/AsyncAwsS3Adapter.php": [
+234,
+329,
+381
 ],
-"PHP_CodeSniffer:src/Ruleset.php": [
-240,
-326,
-523,
-624,
-982,
-1254,
-1265
+"flysystem:src/AsyncAwsS3/AsyncAwsS3AdapterTest.php": [
+280,
+314
 ],
-"PHP_CodeSniffer:src/Runner.php": [
-80
+"flysystem:src/AwsS3V3/AwsS3V3Adapter.php": [
+171,
+282,
+429
 ],
-"PHP_CodeSniffer:src/Sniffs/AbstractScopeSniff.php": [
-132
+"flysystem:src/FilesystemTest.php": [
+398,
+419,
+438,
+450,
+465,
+488,
+539,
+557,
+569,
+581,
+594,
+606,
+628,
+642,
+659,
+675,
+691,
+711,
+737
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ESLintSniff.php": [
-66
+"flysystem:src/Ftp/FtpAdapter.php": [
+214,
+235,
+322,
+340,
+527,
+551,
+590,
+637
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LineEndingsSniff.php": [
-102
+"flysystem:src/Local/LocalFilesystemAdapter.php": [
+132,
+228,
+259,
+278,
+355,
+393
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/MultipleStatementAlignmentSniff.php": [
-124,
-380
+"flysystem:src/MountManagerTest.php": [
+65,
+84,
+95,
+107,
+139,
+616
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Metrics/CyclomaticComplexitySniff.php": [
-89
+"flysystem:src/PhpseclibV2/SftpConnectionProvider.php": [
+109,
+200
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Metrics/NestingLevelSniff.php": [
-68
+"flysystem:src/PhpseclibV2/StubSftpConnectionProvider.php": [
+54
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/ForbiddenFunctionsSniff.php": [
-215
+"flysystem:src/PhpseclibV3/SftpConnectionProvider.php": [
+57
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/LowerCaseConstantSniff.php": [
-48
+"flysystem:src/PhpseclibV3/StubSftpConnectionProvider.php": [
+34
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/NoSilencedErrorsSniff.php": [
-67
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php": [
-113
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/SubversionPropertiesSniff.php": [
-58,
-122
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
-129,
-231
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
-147
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php": [
-217,
-218
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/WhiteSpace/ObjectOperatorIndentSniff.php": [
-133
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ForbiddenStylesSniff.php": [
-142
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/IndentationSniff.php": [
-137
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/MemberVarSpacingSniff.php": [
-161
-],
-"PHP_CodeSniffer:src/Tokenizers/JS.php": [
-801
+"flysystem:src/ZipArchive/ZipArchiveAdapter.php": [
+79,
+393
 ]
 }

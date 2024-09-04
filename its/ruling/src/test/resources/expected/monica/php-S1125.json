@@ -1,35 +1,8 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/ForLoopShouldBeWhileLoopUnitTest.inc": [
-10
+"monica:app/Http/Controllers/Api/Statistics/ApiStatisticsController.php": [
+20
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/DisallowYodaConditionsUnitTest.inc": [
-6,
-8,
-11,
-13,
-130,
-133,
-134
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/SpaceAfterNotUnitTest.inc": [
-5,
-40,
-57
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc": [
-94
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/PostStatementCommentUnitTest.inc": [
-22
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
-6,
-7,
-18,
-19,
-29,
-29,
-123,
-127
+"monica:app/Services/Task/UpdateTask.php": [
+52
 ]
 }

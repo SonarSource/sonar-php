@@ -1,87 +1,20 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyStatementUnitTest.inc": [
-3,
-7
+"monica:app/Console/Commands/Tests/UpdateLangs.php": [
+46
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-82,
-93,
-109,
-146,
-204
+"monica:app/ExportResources/Journal/JournalEntry.php": [
+22
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/NestingLevelUnitTest.inc": [
-14,
-31,
-50,
-55,
-77,
-82
+"monica:app/Http/Controllers/Contacts/AvatarController.php": [
+40
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/CharacterBeforePHPOpeningTagUnitTest.php": [
-30
+"monica:app/Jobs/Dav/PushVCard.php": [
+57
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/RequireStrictTypesUnitTest.php": [
-30
+"monica:app/Services/Contact/Avatar/UpdateAvatar.php": [
+60
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Classes/ClassDeclarationUnitTest.php": [
-49
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.php": [
-74
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
-65
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
-48,
-50,
-55,
-88,
-130
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-34,
-163,
-256,
-258,
-266,
-268,
-276,
-278,
-283
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/ControlStructures/BooleanOperatorPlacementUnitTest.inc": [
-34
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/OpenTagUnitTest.php": [
-30
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/IndentationUnitTest.php": [
-30
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/LongConditionClosingCommentUnitTest.inc": [
-631
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Files/FileExtensionUnitTest.php": [
-30
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-79
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SemicolonSpacingUnitTest.inc": [
-32
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DefaultKeywordTest.inc": [
-70,
-82
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc": [
-36,
-47,
-67
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.inc": [
-48
+"monica:database/migrations/2018_05_06_061227_external_countries.php": [
+37
 ]
 }

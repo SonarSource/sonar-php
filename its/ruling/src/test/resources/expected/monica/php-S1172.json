@@ -1,409 +1,84 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-1253
+"monica:app/ExportResources/ExportResource.php": [
+130
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Functions/FunctionCallArgumentSpacingSniff.php": [
-102
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBirthdays.php": [
+151
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc": [
-3,
-7,
-24,
-24,
-28,
-28,
-78,
-94,
-117,
-121,
-121,
-129,
-133,
-137
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVTasks.php": [
+58
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UselessOverridingMethodUnitTest.inc": [
-22
+"monica:app/Http/Resources/Contact/ContactBase.php": [
+15
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-109
+"monica:app/Providers/AppServiceProvider.php": [
+108
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
-25,
-25,
-29,
-29,
-33,
-33,
-38,
-38,
-56,
-56,
-63,
-63,
-145,
-145
+"monica:app/Providers/DAVServiceProvider.php": [
+53
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc": [
-46,
-46,
-47,
-47,
-51,
-51,
-52,
-52,
-57,
-57,
-58,
-58,
-62,
-62,
-63,
-63,
-70,
-70,
-71,
-71,
-75,
-75,
-76,
-76,
-81,
-81,
-82,
-82,
-86,
-86,
-87,
-87,
-97,
-98,
-99,
-100,
+"monica:app/Providers/RouteServiceProvider.php": [
+108
+],
+"monica:app/Services/Account/Activity/ActivityStatisticService.php": [
 101,
-102,
-108,
-109,
-110,
-111,
-112,
-113,
-123,
-123,
-127,
-127,
-131,
-136,
-141,
-152,
-152,
-179,
-179,
-179,
-179,
-185,
-185,
-185,
-185,
-190,
-190,
-190,
-190,
-195,
-195,
-195,
-195,
-201,
-201,
-201,
-201,
-207,
-207,
-207,
-207
+106
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/CamelCapsFunctionNameUnitTest.inc": [
-39,
-39,
-40,
-40,
-41,
-42,
-42,
-43,
-44,
-70,
-95,
-95,
+"monica:app/Services/Account/Photo/UploadPhoto.php": [
+23,
+23,
+23
+],
+"monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php": [
+60,
 100,
-103,
-133,
-133,
-134,
-134,
-135,
-136,
-136,
-137,
-138
+128,
+239
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.inc": [
-20,
-20,
-20,
-20,
-20,
-21,
-21,
-21,
-21,
-21,
-22,
-22,
-22,
-22,
-22,
-23,
-23,
-23,
-23,
-23,
-25,
-25,
-26,
-26,
-27,
-27,
-28,
-28,
-29,
-29,
-32,
-32,
-32,
-36,
-37,
-38,
-39,
-40,
-43,
-43,
-49,
-51,
-53,
-55,
-82,
-89,
-91
+"monica:app/Services/DispatchableService.php": [
+47
 ],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/UpperCaseConstantUnitTest.inc": [
-4,
-4,
-7,
-7,
-10,
-10,
-20,
-20,
-23,
-23,
-26,
-26,
-36,
-36,
-39,
-39,
-42,
-42,
-90,
-90,
-98,
-98
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/IncludeOwnSystemSniff.php": [
-88,
-89,
-90
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-223
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-230
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php": [
-182,
-182
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Formatting/MultiLineAssignmentUnitTest.inc": [
-18,
-19
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-112,
-112,
-113,
-113,
-114,
-115,
-115,
-116,
-117,
-142,
-170,
-170,
-175,
-178,
-190,
-190,
-191,
-191,
-192,
-193,
-193,
-194,
-195,
-207,
-207
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
-52,
-64
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/ClosingBraceUnitTest.inc": [
-35
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
+"monica:database/factories/AccountFactory.php": [
+6,
+47,
+56,
+67,
+71,
+83,
+93,
 104
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
-771
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/PostStatementCommentUnitTest.inc": [
-30,
-32
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDeclarationArgumentSpacingUnitTest.inc": [
-4,
+"monica:database/factories/ContactFactory.php": [
 5,
-6,
-6,
-6,
-7,
-7,
-7,
-8,
-8,
-8,
-9,
-9,
-9,
-10,
-11,
-12,
-12,
-12,
-13,
-13,
-13,
-14,
-14,
-14,
-15,
-15,
-15,
-16,
-16,
-17,
-18,
-21,
-22,
-23,
-24,
-29,
-30,
-31,
-35,
-35,
+37,
 43,
-44,
-45,
-46,
-51,
 52,
-53,
-54,
-55,
-56,
-61,
-62,
-63,
-64,
-70,
-70,
-70,
-71,
-71,
-73,
-73,
-73,
-73,
-75,
+69,
 76,
-77,
-80,
-81,
-82,
-83,
 92,
-93,
-94,
-95,
-99,
-99,
-99,
-100,
-100,
-101,
-101,
-102,
-102,
-105,
-105
+173,
+189,
+197,
+216,
+228,
+232,
+238,
+254,
+265
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDuplicateArgumentUnitTest.inc": [
-2,
+"monica:database/factories/JournalFactory.php": [
 3,
+9,
+15
+],
+"monica:database/factories/RelationshipFactory.php": [
 3,
-3,
-5
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/GlobalFunctionUnitTest.inc": [
-14
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.inc": [
-133,
-133,
-133
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.inc": [
-10,
-10,
-10
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-56
-],
-"PHP_CodeSniffer:src/Standards/Zend/Tests/Debug/CodeAnalyzerUnitTest.inc": [
-2
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.inc": [
-19,
 24,
-27
+35
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.inc": [
-3,
-10
+"monica:database/factories/UserFactory.php": [
+17,
+25,
+29
 ]
 }

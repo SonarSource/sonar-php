@@ -1,51 +1,7 @@
 {
-"PHP_CodeSniffer:src/Reports/Gitblame.php": [
-38,
-38,
-38,
-38
-],
-"PHP_CodeSniffer:src/Reports/Hgblame.php": [
-39,
-39,
-39,
-39,
-39
-],
-"PHP_CodeSniffer:src/Reports/Junit.php": [
-115
-],
-"PHP_CodeSniffer:src/Sniffs/AbstractVariableSniff.php": [
-86,
-172
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ClosureLinterSniff.php": [
-85,
-85
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/SyntaxSniff.php": [
-63
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-500,
-500
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ShorthandSizeSniff.php": [
-94
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
-180,
-180,
-185,
-185
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JSLintSniff.php": [
-69
-],
-"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php": [
-83
-],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-1607
+"flysystem:src/Ftp/FtpAdapter.php": [
+397,
+397,
+397
 ]
 }

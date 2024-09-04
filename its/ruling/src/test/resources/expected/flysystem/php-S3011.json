@@ -1,7 +1,6 @@
 {
-"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
-297,
-298,
-299
+"flysystem:src/Ftp/FtpAdapterTest.php": [
+48,
+49
 ]
 }

@@ -1,10 +1,17 @@
 {
-"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
-440
+"flysystem:src/AdapterTestUtilities/FilesystemAdapterTestCase.php": [
+268
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/NamedFunctionCallArgumentsTest.php": [
-41,
-60,
-65
+"flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
+117
+],
+"flysystem:src/FilesystemTest.php": [
+333
+],
+"flysystem:src/Local/LocalFilesystemAdapterTest.php": [
+107
+],
+"flysystem:src/MountManagerTest.php": [
+174
 ]
 }

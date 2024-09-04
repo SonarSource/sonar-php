@@ -1,5 +1,9 @@
 {
-"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
-170
+"flysystem:src/Local/LocalFilesystemAdapterTest.php": [
+230
+],
+"flysystem:src/PhpseclibV3/SftpAdapterTest.php": [
+120,
+202
 ]
 }

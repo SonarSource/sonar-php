@@ -1,4087 +1,4845 @@
 {
-"PHP_CodeSniffer:autoload.php": [
-21,
-65,
-151,
-195,
-256,
-268,
-283,
-302,
-318,
-330
-],
-"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
-20,
-73,
-89,
-110,
-171,
-208,
-277
-],
-"PHP_CodeSniffer:scripts/build-phar.php": [
-50
-],
-"PHP_CodeSniffer:src/Config.php": [
-76,
-205,
-225,
-285,
-299,
-311,
-325,
-341,
-431,
-480,
-611,
-716,
-1254,
-1280,
-1313,
-1336,
-1360,
-1436,
-1494,
-1519,
-1567,
-1648,
-1695
-],
-"PHP_CodeSniffer:src/Exceptions/DeepExitException.php": [
-16
-],
-"PHP_CodeSniffer:src/Exceptions/RuntimeException.php": [
-13
-],
-"PHP_CodeSniffer:src/Exceptions/TokenizerException.php": [
-13
-],
-"PHP_CodeSniffer:src/Files/DummyFile.php": [
-21,
-34,
-73
-],
-"PHP_CodeSniffer:src/Files/File.php": [
-20,
-235,
-272,
-295,
-306,
-318,
-563,
-624,
-636,
-843,
-1105,
-1129,
-1141,
-1153,
-1165,
-1177,
-1189,
-1201,
-1213,
-1225,
-1244,
-1334,
-1624,
-1797,
-1975,
-2033,
-2160,
-2347,
-2500,
-2624,
-2674,
-2715,
-2753,
-2805
-],
-"PHP_CodeSniffer:src/Files/FileList.php": [
-22,
-69,
-113,
-143,
-175,
-188,
-206,
-219,
-232,
-249
-],
-"PHP_CodeSniffer:src/Files/LocalFile.php": [
-18,
-31,
-74,
-86,
-169
-],
-"PHP_CodeSniffer:src/Filters/ExactMatch.php": [
-17,
-44,
-83
-],
-"PHP_CodeSniffer:src/Filters/Filter.php": [
-18,
-76,
-95,
-137,
-165,
-202
-],
-"PHP_CodeSniffer:src/Filters/GitModified.php": [
-15,
-24,
-36
-],
-"PHP_CodeSniffer:src/Filters/GitStaged.php": [
-17,
-26,
-38
-],
-"PHP_CodeSniffer:src/Fixer.php": [
-19,
-117,
-141,
-231,
-307,
-319,
-337,
-355,
-387,
-435,
-475,
-607,
-668,
-690,
-705,
-721,
-737,
-757
-],
-"PHP_CodeSniffer:src/Generators/Generator.php": [
-19,
-44,
-74,
-91
-],
-"PHP_CodeSniffer:src/Generators/HTML.php": [
-19,
-29,
-57,
-143,
-166,
-192,
-216,
-237
-],
-"PHP_CodeSniffer:src/Generators/Markdown.php": [
-15,
-25,
-51,
-65,
-85,
-108,
-128
-],
-"PHP_CodeSniffer:src/Generators/Text.php": [
-15,
-28,
-52,
-73,
-127
-],
-"PHP_CodeSniffer:src/Reporter.php": [
-19,
-99,
-178,
-201,
-271,
-335
-],
-"PHP_CodeSniffer:src/Reports/Cbf.php": [
-21,
-40
-],
-"PHP_CodeSniffer:src/Reports/Checkstyle.php": [
-16,
-34
-],
-"PHP_CodeSniffer:src/Reports/Code.php": [
-16,
-34
-],
-"PHP_CodeSniffer:src/Reports/Csv.php": [
-15,
-33
-],
-"PHP_CodeSniffer:src/Reports/Diff.php": [
-15,
-33
-],
-"PHP_CodeSniffer:src/Reports/Emacs.php": [
-15,
-33
-],
-"PHP_CodeSniffer:src/Reports/Full.php": [
-16,
-34
-],
-"PHP_CodeSniffer:src/Reports/Gitblame.php": [
-16,
-34,
-69
-],
-"PHP_CodeSniffer:src/Reports/Hgblame.php": [
-16,
-34,
-70
-],
-"PHP_CodeSniffer:src/Reports/Info.php": [
-16,
-34
-],
-"PHP_CodeSniffer:src/Reports/Json.php": [
-16,
-34
-],
-"PHP_CodeSniffer:src/Reports/Junit.php": [
-17,
-35
-],
-"PHP_CodeSniffer:src/Reports/Notifysend.php": [
-24,
-59,
-99,
-160,
-194,
-212,
-228
-],
-"PHP_CodeSniffer:src/Reports/Report.php": [
-15
-],
-"PHP_CodeSniffer:src/Reports/Source.php": [
-16,
-34,
-283
-],
-"PHP_CodeSniffer:src/Reports/Summary.php": [
-16,
-34
-],
-"PHP_CodeSniffer:src/Reports/Svnblame.php": [
-15,
-33,
-55
-],
-"PHP_CodeSniffer:src/Reports/VersionControl.php": [
-17,
-42
-],
-"PHP_CodeSniffer:src/Reports/Xml.php": [
-16,
-34
-],
-"PHP_CodeSniffer:src/Ruleset.php": [
-19,
-129,
-239,
-318,
-623,
-686,
-868,
-1121,
-1160,
-1220,
-1310,
-1418,
-1444
-],
-"PHP_CodeSniffer:src/Runner.php": [
-25,
-55,
-157,
-243,
-291,
-354,
-602,
-622,
-749,
-829,
-939,
-958
-],
-"PHP_CodeSniffer:src/Sniffs/AbstractArraySniff.php": [
-16,
-25,
-44,
-114
-],
-"PHP_CodeSniffer:src/Sniffs/AbstractPatternSniff.php": [
-18,
-64,
-85,
-133,
-159,
-188,
-256,
-702,
-736,
-754,
-769,
-860,
-913
-],
-"PHP_CodeSniffer:src/Sniffs/AbstractScopeSniff.php": [
-33,
-111,
-131
-],
-"PHP_CodeSniffer:src/Sniffs/AbstractVariableSniff.php": [
-22,
-51,
-79,
-163
-],
-"PHP_CodeSniffer:src/Sniffs/Sniff.php": [
-20
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Arrays/ArrayIndentSniff.php": [
-16,
-40,
-59
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Arrays/DisallowLongArraySyntaxSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Arrays/DisallowShortArraySyntaxSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Classes/DuplicateClassNameSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Classes/OpeningBraceSameLineSniff.php": [
-16,
-25,
-46
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/AssignmentInConditionSniff.php": [
-21,
-46,
-79
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/EmptyPHPStatementSniff.php": [
-20,
-29,
-48
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/EmptyStatementSniff.php": [
-31,
-40,
-69
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/ForLoopShouldBeWhileLoopSniff.php": [
-30,
-39,
-55
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/ForLoopWithTestFunctionCallSniff.php": [
-34,
-43,
-59
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/JumbledIncrementerSniff.php": [
-36,
-45,
-61,
-109
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnconditionalIfStatementSniff.php": [
-34,
-43,
-62
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnnecessaryFinalModifierSniff.php": [
-29,
-38,
-54
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UnusedFunctionParameterSniff.php": [
-24,
-40,
-60
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/CodeAnalysis/UselessOverridingMethodSniff.php": [
-29,
-38,
-54
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/DocCommentSniff.php": [
-16,
-35,
-51
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/FixmeSniff.php": [
-18,
-37,
-53
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Commenting/TodoSniff.php": [
-17,
-36,
-52
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/ControlStructures/DisallowYodaConditionsSniff.php": [
-18,
-27,
-43,
-141
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/ControlStructures/InlineControlStructureSniff.php": [
-17,
-43,
-68
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/CSSLintSniff.php": [
-18,
-34,
-50
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ClosureLinterSniff.php": [
-18,
-50,
-67
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/ESLintSniff.php": [
-18,
-41,
-58
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Debug/JSHintSniff.php": [
-19,
-35,
-52
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/ByteOrderMarkSniff.php": [
-17,
-39,
-55
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/EndFileNewlineSniff.php": [
-16,
-36,
-55
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/EndFileNoNewlineSniff.php": [
-16,
-36,
-55
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/ExecutableFileSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/InlineHTMLSniff.php": [
-16,
-38,
-54
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LineEndingsSniff.php": [
-16,
-43,
-62
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LineLengthSniff.php": [
-21,
-56,
-72,
-98
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/LowercasedFilenameSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/OneClassPerFileSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/OneInterfacePerFileSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/OneObjectStructurePerFileSniff.php": [
-16,
-25,
-46
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Files/OneTraitPerFileSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/DisallowMultipleStatementsSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/MultipleStatementAlignmentSniff.php": [
-20,
-64,
-82,
-101
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/NoSpaceAfterCastSniff.php": [
-20,
-29,
-45
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/SpaceAfterCastSniff.php": [
-17,
-40,
-56
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/SpaceAfterNotSniff.php": [
-17,
-50,
-66
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Formatting/SpaceBeforeCastSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Functions/CallTimePassByReferenceSniff.php": [
-17,
-26,
-45
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Functions/FunctionCallArgumentSpacingSniff.php": [
-17,
-26,
-52,
-103
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Functions/OpeningFunctionBraceBsdAllmanSniff.php": [
-17,
-40,
-59
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Functions/OpeningFunctionBraceKernighanRitchieSniff.php": [
-17,
-40,
-59
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Metrics/CyclomaticComplexitySniff.php": [
-21,
-44,
-60
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Metrics/NestingLevelSniff.php": [
-17,
-40,
-56
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/NamingConventions/AbstractClassNamePrefixSniff.php": [
-15,
-24,
-40
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/NamingConventions/CamelCapsFunctionNameSniff.php": [
-18,
-86,
-103,
-189
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/NamingConventions/ConstructorNameSniff.php": [
-20,
-41,
-58,
-129,
-143
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/NamingConventions/InterfaceNameSuffixSniff.php": [
-15,
-24,
-40
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/NamingConventions/TraitNameSuffixSniff.php": [
-15,
-24,
-40
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/NamingConventions/UpperCaseConstantNameSniff.php": [
-17,
-26,
-45
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/BacktickOperatorSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/CharacterBeforePHPOpeningTagSniff.php": [
-16,
-38,
-54
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/ClosingPHPTagSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DeprecatedFunctionsSniff.php": [
-14,
-33,
-59
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DisallowAlternativePHPTagsSniff.php": [
-19,
-42,
-73,
-174,
-206,
-230
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DisallowRequestSuperglobalSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DisallowShortOpenTagSniff.php": [
-17,
-26,
-52,
-148
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DiscourageGotoSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/ForbiddenFunctionsSniff.php": [
-19,
-62,
-119,
-213
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/LowerCaseConstantSniff.php": [
-17,
-47,
-70,
-148
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/LowerCaseKeywordSniff.php": [
-18,
-27,
-56
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/LowerCaseTypeSniff.php": [
-18,
-51,
-72,
-201,
-249
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/NoSilencedErrorsSniff.php": [
-23,
-39,
-55
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/RequireStrictTypesSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/SAPIUsageSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/SyntaxSniff.php": [
-19,
-35,
-54
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/UpperCaseConstantSniff.php": [
-15,
-28
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/Strings/UnnecessaryStringConcatSniff.php": [
-17,
-53,
-72
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/GitMergeConflictSniff.php": [
-16,
-36,
-55
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/VersionControl/SubversionPropertiesSniff.php": [
-17,
-40,
-56,
-121
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ArbitraryParenthesesSpacingSniff.php": [
-20,
-51,
-84
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowSpaceIndentSniff.php": [
-16,
-43,
-62
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php": [
-16,
-43,
-62
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/IncrementDecrementSpacingSniff.php": [
-17,
-36,
-55
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/LanguageConstructSpacingSniff.php": [
-18,
-27,
-57
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
-18,
-108,
-128,
-1514
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/WhiteSpace/SpreadOperatorSpacingAfterSniff.php": [
-17,
-40,
-56
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Arrays/ArrayIndentUnitTest.php": [
-15,
-27,
-62
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Arrays/DisallowLongArraySyntaxUnitTest.php": [
-15,
-29,
-60
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Arrays/DisallowShortArraySyntaxUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Classes/DuplicateClassNameUnitTest.php": [
-15,
-27,
-44
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Classes/OpeningBraceSameLineUnitTest.php": [
-15,
-27,
-56
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/AssignmentInConditionUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyPHPStatementUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/EmptyStatementUnitTest.php": [
-15,
-27,
-57
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/ForLoopShouldBeWhileLoopUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/ForLoopWithTestFunctionCallUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/JumbledIncrementerUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnconditionalIfStatementUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.inc": [
-34,
-69,
-74
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnusedFunctionParameterUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UselessOverridingMethodUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/DocCommentUnitTest.php": [
-15,
-27,
-42,
-105
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/FixmeUnitTest.php": [
-16,
-30,
-56
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Commenting/TodoUnitTest.php": [
-15,
-29,
-46
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/DisallowYodaConditionsUnitTest.php": [
-15,
-27,
-79
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.1.inc": [
-61,
-259,
-268
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/ControlStructures/InlineControlStructureUnitTest.php": [
-15,
-29,
-106
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Debug/CSSLintUnitTest.php": [
-16,
-25,
-45,
-60
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Debug/ClosureLinterUnitTest.php": [
-16,
-25,
-45,
-60
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Debug/ESLintUnitTest.php": [
-16,
-42,
-57,
-72,
-92,
-107
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Debug/JSHintUnitTest.php": [
-16,
-25,
-46,
-61
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/ByteOrderMarkUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/EndFileNewlineUnitTest.php": [
-15,
-29,
-57
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/EndFileNoNewlineUnitTest.php": [
-15,
-29,
-61
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/ExecutableFileUnitTest.php": [
-15,
-24,
-44,
-67
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/InlineHTMLUnitTest.php": [
-15,
-29,
-59
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/LineEndingsUnitTest.1.inc": [
-12
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/LineEndingsUnitTest.php": [
-15,
-27,
-42,
-57
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/LineLengthUnitTest.php": [
-15,
-27,
-44,
-77
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/LowercasedFilenameUnitTest.php": [
-15,
-29,
-50
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneClassPerFileUnitTest.php": [
-15,
-27,
-45
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneInterfacePerFileUnitTest.php": [
-15,
-27,
-45
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneObjectStructurePerFileUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneTraitPerFileUnitTest.php": [
-15,
-27,
-45
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/DisallowMultipleStatementsUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/MultipleStatementAlignmentUnitTest.php": [
-15,
-27,
-44
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/NoSpaceAfterCastUnitTest.php": [
-15,
-27,
-66
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/SpaceAfterCastUnitTest.php": [
-15,
-27,
-81
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/SpaceAfterNotUnitTest.php": [
-15,
-29,
-85
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Formatting/SpaceBeforeCastUnitTest.php": [
-15,
-27,
-72
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/CallTimePassByReferenceUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.inc": [
-26,
-30,
-34,
-39,
-57,
-111,
-113,
-158,
-160
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/FunctionCallArgumentSpacingUnitTest.php": [
-15,
-27,
-73
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceBsdAllmanUnitTest.php": [
-15,
-27,
-78
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.inc": [
-9,
-22,
-29,
-53,
-68,
-77,
-92,
-104,
-132,
-137,
-142,
-157,
-162,
-171,
-181,
-186,
-191,
-197,
-203,
-208
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Functions/OpeningFunctionBraceKernighanRitchieUnitTest.php": [
-15,
-27,
-69
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/CyclomaticComplexityUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/NestingLevelUnitTest.inc": [
-4,
+"monica:app/Console/Commands/CalculateStatistics.php": [
 11,
-15,
-28,
-32,
-47,
-51,
-74,
-78
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Metrics/NestingLevelUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/AbstractClassNamePrefixUnitTest.inc": [
-4,
-9,
-14,
-19,
-24,
-31,
-37,
-43,
-57
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/AbstractClassNamePrefixUnitTest.php": [
-14,
-26,
-47
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/CamelCapsFunctionNameUnitTest.inc": [
-88,
-94,
-106
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/CamelCapsFunctionNameUnitTest.php": [
-15,
-27,
-86
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/ConstructorNameUnitTest.inc": [
-3,
-18,
-33,
-41,
-46,
-48,
-54,
-69,
-95
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/ConstructorNameUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/InterfaceNameSuffixUnitTest.inc": [
-4,
-9,
-14,
-20,
-25
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/InterfaceNameSuffixUnitTest.php": [
-14,
-26,
-41
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/TraitNameSuffixUnitTest.php": [
-14,
-26,
-44
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/UpperCaseConstantNameUnitTest.inc": [
-17
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/UpperCaseConstantNameUnitTest.php": [
-15,
-27,
-50
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/BacktickOperatorUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/CharacterBeforePHPOpeningTagUnitTest.php": [
-15,
-29,
-51
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/ClosingPHPTagUnitTest.php": [
-15,
-29,
-53
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DeprecatedFunctionsUnitTest.php": [
-15,
-27,
-52
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DisallowAlternativePHPTagsUnitTest.php": [
-15,
-26,
-56,
-90
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DisallowRequestSuperglobalUnitTest.php": [
-14,
-26,
-45
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DisallowShortOpenTagUnitTest.php": [
-15,
-26,
-52,
-86
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/DiscourageGotoUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/ForbiddenFunctionsUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseConstantUnitTest.php": [
-15,
-29,
-85
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseKeywordUnitTest.php": [
-15,
-27,
-60
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.inc": [
-58
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.php": [
-15,
-27,
-84
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/NoSilencedErrorsUnitTest.inc": [
-6
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/NoSilencedErrorsUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/RequireStrictTypesUnitTest.php": [
-15,
-29,
-50
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/SAPIUsageUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/SyntaxUnitTest.php": [
-16,
-30,
-53
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/UpperCaseConstantUnitTest.inc": [
-5,
-8,
-11,
-21,
-24,
-27,
-37,
-40,
-43,
-63,
-65,
-74,
-91
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/UpperCaseConstantUnitTest.php": [
-15,
-27,
-64
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/Strings/UnnecessaryStringConcatUnitTest.php": [
-15,
-29,
-67
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/VersionControl/GitMergeConflictUnitTest.php": [
-15,
-29,
-164
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/VersionControl/SubversionPropertiesUnitTest.php": [
-15,
-24,
-40,
-55
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/ArbitraryParenthesesSpacingUnitTest.php": [
-15,
-27,
-76
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/DisallowSpaceIndentUnitTest.1.inc": [
-4
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/DisallowSpaceIndentUnitTest.2.inc": [
-4
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/DisallowSpaceIndentUnitTest.php": [
-15,
-27,
-48,
-123
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/DisallowTabIndentUnitTest.1.inc": [
-4,
-18
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/DisallowTabIndentUnitTest.php": [
-15,
-27,
-44,
-140
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/IncrementDecrementSpacingUnitTest.php": [
-15,
-29,
-60
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/LanguageConstructSpacingUnitTest.php": [
-15,
-27,
-68
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/ScopeIndentUnitTest.3.inc": [
-5
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/ScopeIndentUnitTest.php": [
-15,
-27,
-49,
-208
-],
-"PHP_CodeSniffer:src/Standards/Generic/Tests/WhiteSpace/SpreadOperatorSpacingAfterUnitTest.php": [
-15,
-27,
-52
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/CSS/BrowserSpecificStylesSniff.php": [
-16,
-49,
-65
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/DisallowSelfActionsSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/IncludeOwnSystemSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/IncludeSystemSniff.php": [
-17,
-48,
-64,
-205,
-292
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Channels/UnusedSystemSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Commenting/FunctionCommentSniff.php": [
-19,
 32
 ],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Debug/DebugCodeSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Debug/FirebugConsoleSniff.php": [
-16,
-32,
-53
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Objects/AssignThisSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Objects/CreateWidgetTypeCallbackSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Objects/DisallowNewWidgetSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/PHP/AjaxNullComparisonSniff.php": [
-19,
-28,
-44
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/PHP/EvalObjectFactorySniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/PHP/GetRequestDataSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/PHP/ReturnFunctionValueSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/MySource/Sniffs/Strings/JoinStringsSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/CSS/BrowserSpecificStylesUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Channels/DisallowSelfActionsUnitTest.inc": [
-3,
-6,
-11,
-22,
-26,
-39,
-44
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Channels/DisallowSelfActionsUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Channels/IncludeSystemUnitTest.php": [
-15,
-27,
-54
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Channels/UnusedSystemUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Commenting/FunctionCommentUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Debug/DebugCodeUnitTest.php": [
-15,
-27,
-45
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Debug/FirebugConsoleUnitTest.php": [
-15,
-29,
-55
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Objects/AssignThisUnitTest.php": [
-15,
-29,
-52
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Objects/CreateWidgetTypeCallbackUnitTest.php": [
-15,
-29,
-53
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Objects/DisallowNewWidgetUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/AjaxNullComparisonUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/EvalObjectFactoryUnitTest.inc": [
-3,
-10,
-19
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/EvalObjectFactoryUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/GetRequestDataUnitTest.inc": [
+"monica:app/Console/Commands/Clean.php": [
 12,
-19
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/GetRequestDataUnitTest.php": [
-15,
-27,
+34,
 50
 ],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/PHP/ReturnFunctionValueUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/MySource/Tests/Strings/JoinStringsUnitTest.php": [
-15,
-29,
-56
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Classes/ClassDeclarationSniff.php": [
-16,
-25,
-46
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/ClassCommentSniff.php": [
-15,
-24,
-45,
-103
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FileCommentSniff.php": [
-17,
-78,
-94,
-224,
-321,
-363,
-416,
-460,
-490,
-531,
-560
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/FunctionCommentSniff.php": [
-17,
-45,
-61,
-182,
-231,
-266
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Commenting/InlineCommentSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/ControlStructures/ControlSignatureSniff.php": [
-15,
-31
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/ControlStructures/MultiLineConditionSniff.php": [
-17,
-43,
-62
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Files/IncludingFileSniff.php": [
-19,
-28,
-49
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Formatting/MultiLineAssignmentSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionCallSignatureSniff.php": [
-17,
-64,
-87,
-183,
-208,
-338
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/FunctionDeclarationSniff.php": [
-19,
-45,
-64,
-220,
-259,
-284,
-373
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/Functions/ValidDefaultValueSniff.php": [
-16,
-25,
-45
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/NamingConventions/ValidClassNameSniff.php": [
-16,
-25,
-46
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/NamingConventions/ValidFunctionNameSniff.php": [
-18,
-57,
-74,
-182
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/NamingConventions/ValidVariableNameSniff.php": [
-16,
-29,
-78,
-95
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/WhiteSpace/ObjectOperatorIndentSniff.php": [
-16,
-49,
-65
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/WhiteSpace/ScopeClosingBraceSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Sniffs/WhiteSpace/ScopeIndentSniff.php": [
-15
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Classes/ClassDeclarationUnitTest.php": [
-15,
-27,
-48,
-85
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/ClassCommentUnitTest.php": [
-15,
-27,
-64
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.2.inc": [
-8
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.3.inc": [
-7
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FileCommentUnitTest.php": [
-15,
-29,
-73
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/FunctionCommentUnitTest.php": [
-15,
-27,
-92
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/InlineCommentUnitTest.inc": [
-12
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Commenting/InlineCommentUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/ControlSignatureUnitTest.inc": [
+"monica:app/Console/Commands/CreateAccount.php": [
 10,
-15,
-148
+43
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/ControlSignatureUnitTest.php": [
-15,
-27,
-66
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.inc": [
-126,
-148,
-154,
-197,
-203
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/ControlStructures/MultiLineConditionUnitTest.php": [
-15,
-29,
-85
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.inc": [
-54
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Files/IncludingFileUnitTest.php": [
-15,
-27,
-61
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Formatting/MultiLineAssignmentUnitTest.php": [
-15,
-27,
-46
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Functions/FunctionCallSignatureUnitTest.php": [
-15,
-29,
-151
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Functions/FunctionDeclarationUnitTest.php": [
-15,
-29,
-132
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/Functions/ValidDefaultValueUnitTest.php": [
-15,
-27,
-54
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidClassNameUnitTest.php": [
-15,
-27,
-67
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-163,
-169
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.php": [
-15,
-27,
-143
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
-3,
-26,
-28,
-30,
-38,
-45,
-66,
-76,
-83,
-90
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.php": [
-15,
-27,
-50
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ObjectOperatorIndentUnitTest.php": [
-15,
-27,
-68
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.inc": [
-4,
-6,
-10,
-16,
-23,
-28,
-157,
-163
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeClosingBraceUnitTest.php": [
-15,
-27,
-61
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.inc": [
-4,
-6,
+"monica:app/Console/Commands/DavClientsUpdate.php": [
 11,
-16,
-33,
-55,
-57,
-62,
-75,
-134,
-151,
-153,
-185,
-221,
-310
-],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/WhiteSpace/ScopeIndentUnitTest.php": [
-15,
-27,
-60
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Sniffs/Classes/ClassDeclarationSniff.php": [
-16,
-25,
-46
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Sniffs/Files/SideEffectsSniff.php": [
-17,
-26,
-42,
-80
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Sniffs/Methods/CamelCapsMethodNameSniff.php": [
-17,
-31,
-86
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Classes/ClassDeclarationUnitTest.php": [
-15,
-29,
+32,
 51
 ],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.2.inc": [
-20
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.7.inc": [
-6
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.php": [
-15,
-27,
-46,
-63
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Methods/CamelCapsMethodNameUnitTest.inc": [
-41,
-54
-],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Methods/CamelCapsMethodNameUnitTest.php": [
-15,
-27,
-53
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Classes/AnonClassDeclarationSniff.php": [
-19,
-42,
-58,
-144,
-231
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Classes/ClassInstantiationSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Classes/ClosingBraceSniff.php": [
-16,
-25,
-47
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Classes/OpeningBraceSpaceSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/ControlStructures/BooleanOperatorPlacementSniff.php": [
-16,
-34,
-56
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/ControlStructures/ControlStructureSpacingSniff.php": [
-18,
-34,
-60
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/DeclareStatementSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/FileHeaderSniff.php": [
-17,
-26,
-42,
-132,
-290
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/ImportStatementSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Files/OpenTagSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Functions/NullableTypeDeclarationSniff.php": [
-16,
-39,
-55
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Functions/ReturnTypeDeclarationSniff.php": [
-16,
-25,
-45
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Keywords/ShortFormTypeKeywordsSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Namespaces/CompoundNamespaceDepthSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Operators/OperatorSpacingSniff.php": [
-17,
-26,
-53
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Properties/ConstantVisibilitySniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Sniffs/Traits/UseDeclarationSniff.php": [
-17,
-26,
-42,
-284,
-652
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/AnonClassDeclarationUnitTest.inc": [
+"monica:app/Console/Commands/Deactivate2FA.php": [
 9,
-18
+32
 ],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/AnonClassDeclarationUnitTest.php": [
-15,
-27,
-65
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/ClassInstantiationUnitTest.php": [
-15,
-27,
-61
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/ClosingBraceUnitTest.inc": [
-3,
-7,
+"monica:app/Console/Commands/ExportAll.php": [
 9,
-12,
-17,
-22,
-27,
-30,
-50
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/ClosingBraceUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/OpeningBraceSpaceUnitTest.inc": [
-6,
-10,
-13,
-18,
-24,
-29,
-34,
-51,
-55
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Classes/OpeningBraceSpaceUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/ControlStructures/BooleanOperatorPlacementUnitTest.php": [
-15,
-27,
-53
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/ControlStructures/ControlStructureSpacingUnitTest.php": [
-15,
-27,
-62
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/DeclareStatementUnitTest.inc": [
-22,
-43,
-46,
-49
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/DeclareStatementUnitTest.php": [
-15,
-27,
-66
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.1.inc": [
-27
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.12.inc": [
-15
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.17.inc": [
-12
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.18.inc": [
-11,
-13
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.2.inc": [
-31
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.3.inc": [
-25
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.4.inc": [
-13
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.5.inc": [
-16
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.6.inc": [
-11
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/FileHeaderUnitTest.php": [
-15,
-29,
-76
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/ImportStatementUnitTest.inc": [
-13,
-22
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/ImportStatementUnitTest.php": [
-15,
-27,
-46
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Files/OpenTagUnitTest.php": [
-15,
-29,
-49
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Functions/NullableTypeDeclarationUnitTest.php": [
-15,
-27,
-58
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Functions/ReturnTypeDeclarationUnitTest.php": [
-15,
-27,
-55
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Keywords/ShortFormTypeKeywordsUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Namespaces/CompoundNamespaceDepthUnitTest.php": [
-15,
-27,
-46
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Operators/OperatorSpacingUnitTest.php": [
-15,
-27,
-63
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Properties/ConstantVisibilityUnitTest.inc": [
-11
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Properties/ConstantVisibilityUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/PSR12/Tests/Traits/UseDeclarationUnitTest.php": [
-15,
-27,
-65
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Classes/ClassDeclarationSniff.php": [
-17,
-37,
-63,
-480
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Classes/PropertyDeclarationSniff.php": [
-17,
-29,
-200,
-217
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/ControlStructures/ControlStructureSpacingSniff.php": [
-17,
-40,
-66
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/ControlStructures/ElseIfDeclarationSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/ControlStructures/SwitchDeclarationSniff.php": [
-17,
-33,
-49,
-218,
-247
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Files/ClosingTagSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Files/EndFileNewlineSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Methods/FunctionCallSignatureSniff.php": [
-17,
-41
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Methods/FunctionClosingBraceSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Methods/MethodDeclarationSniff.php": [
-17,
-24,
-40,
-157
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Namespaces/NamespaceDeclarationSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Sniffs/Namespaces/UseDeclarationSniff.php": [
-17,
-26,
-42,
-278
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Classes/ClassDeclarationUnitTest.php": [
-15,
-27,
-82
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Classes/PropertyDeclarationUnitTest.php": [
-15,
-27,
-68
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/ControlStructures/ControlStructureSpacingUnitTest.php": [
-15,
-27,
-56
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/ControlStructures/ElseIfDeclarationUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/ControlStructures/SwitchDeclarationUnitTest.php": [
-15,
-27,
-75
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Files/ClosingTagUnitTest.php": [
-15,
-29,
-58
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Files/EndFileNewlineUnitTest.php": [
-15,
-29,
-60
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.inc": [
-182,
-184,
-192
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionCallSignatureUnitTest.php": [
-15,
-27,
-88
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/FunctionClosingBraceUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Methods/MethodDeclarationUnitTest.php": [
-15,
-27,
-58
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/NamespaceDeclarationUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/UseDeclarationUnitTest.10.inc": [
-6
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/UseDeclarationUnitTest.12.inc": [
-7
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/UseDeclarationUnitTest.13.inc": [
-8
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/UseDeclarationUnitTest.14.inc": [
-6
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/UseDeclarationUnitTest.3.inc": [
-8,
-10
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/UseDeclarationUnitTest.8.inc": [
-6
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/UseDeclarationUnitTest.9.inc": [
-6
-],
-"PHP_CodeSniffer:src/Standards/PSR2/Tests/Namespaces/UseDeclarationUnitTest.php": [
-15,
-29,
-91
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Arrays/ArrayBracketSpacingSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php": [
-17,
-26,
-45,
-145,
-319
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ClassDefinitionClosingBraceSpaceSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ClassDefinitionNameSpacingSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ClassDefinitionOpeningBraceSpaceSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ColonSpacingSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ColourDefinitionSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/DisallowMultipleStyleDefinitionsSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/DuplicateClassDefinitionSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/DuplicateStyleDefinitionSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/EmptyClassDefinitionSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/EmptyStyleDefinitionSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ForbiddenStylesSniff.php": [
-16,
-72,
-96,
-140
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/IndentationSniff.php": [
-17,
-40,
-56
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/LowercaseStyleDefinitionSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/MissingColonSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/NamedColoursSniff.php": [
-16,
-59,
-75
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/OpacitySniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/SemicolonSpacingSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/CSS/ShorthandSizeSniff.php": [
-16,
-47,
-63
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/ClassDeclarationSniff.php": [
-17,
-30,
-55,
-100
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/ClassFileNameSniff.php": [
-16,
-25,
-46
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/DuplicatePropertySniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/LowercaseClassKeywordsSniff.php": [
-17,
-26,
-51
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/SelfMemberReferenceSniff.php": [
-22,
-29,
-45,
-177,
-191,
-223
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Classes/ValidClassNameSniff.php": [
-17,
-26,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/BlockCommentSniff.php": [
-17,
-33,
-52
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/ClassCommentSniff.php": [
-24,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/ClosingDeclarationCommentSniff.php": [
-16,
-25,
-46
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/DocCommentAlignmentSniff.php": [
-17,
-36,
-52
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/EmptyCatchCommentSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FileCommentSniff.php": [
-16,
-35,
-51
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentSniff.php": [
-18,
-46,
-206,
-282,
-654,
-713,
-772
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/FunctionCommentThrowTagSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/InlineCommentSniff.php": [
-17,
-36,
-55
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/LongConditionClosingCommentSniff.php": [
-16,
-68,
-84
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/PostStatementCommentSniff.php": [
-16,
-53,
-69
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Commenting/VariableCommentSniff.php": [
-17,
-30,
-171,
-188
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/ControlSignatureSniff.php": [
-17,
-43,
-72
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/ElseIfDeclarationSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/ForEachLoopDeclarationSniff.php": [
-16,
-39,
-55
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/ForLoopDeclarationSniff.php": [
-17,
-57,
-73
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/InlineIfDeclarationSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/LowercaseDeclarationSniff.php": [
-16,
-25,
-53
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/ControlStructures/SwitchDeclarationSniff.php": [
-17,
-43,
-59
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JSLintSniff.php": [
-18,
-34,
-51
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Debug/JavaScriptLintSniff.php": [
-19,
-35,
-52
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Files/FileExtensionSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Formatting/OperatorBracketSniff.php": [
-17,
-36,
-52,
-275
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Functions/FunctionDeclarationArgumentSpacingSniff.php": [
-17,
-47,
-67,
-105
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Functions/FunctionDeclarationSniff.php": [
-15,
-24
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Functions/FunctionDuplicateArgumentSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Functions/GlobalFunctionSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Functions/LowercaseFunctionKeywordsSniff.php": [
-17,
-26,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Functions/MultiLineFunctionDeclarationSniff.php": [
-16,
-43,
-110,
-156,
-192
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/NamingConventions/ValidFunctionNameSniff.php": [
-17,
 30
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/NamingConventions/ValidVariableNameSniff.php": [
-18,
-31,
-116,
-169
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Objects/DisallowObjectStringIndexSniff.php": [
-16,
-32,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Objects/ObjectInstantiationSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Objects/ObjectMemberCommaSniff.php": [
-17,
-33,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Operators/ComparisonOperatorUsageSniff.php": [
-17,
-68,
-90
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Operators/IncrementDecrementUsageSniff.php": [
-17,
-26,
-48,
-70,
-120
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Operators/ValidLogicalOperatorsSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/CommentedOutCodeSniff.php": [
-18,
-44,
-61
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/DisallowBooleanStatementSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/DisallowComparisonAssignmentSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/DisallowInlineIfSniff.php": [
-16,
-35,
-51
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/DisallowMultipleAssignmentsSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/DisallowSizeFunctionsInLoopsSniff.php": [
-16,
-49,
-68
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/DiscouragedFunctionsSniff.php": [
-15
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/EmbeddedPhpSniff.php": [
-17,
-26,
-42,
-67,
-300
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/EvalSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/GlobalKeywordSniff.php": [
-16,
-25,
-41
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/HeredocSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/InnerFunctionsSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/LowercasePHPFunctionsSniff.php": [
-17,
-31,
-45,
-61
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/PHP/NonExecutableCodeSniff.php": [
-17,
-42,
-65
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Scope/MemberVarScopeSniff.php": [
-16,
-28,
-52,
-69
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Scope/MethodScopeSniff.php": [
-17,
-24,
-40,
-78
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Scope/StaticThisUsageSniff.php": [
-17,
-24,
-41,
-86,
-123
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Strings/ConcatenationSpacingSniff.php": [
-17,
-40,
-56
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Strings/DoubleQuoteUsageSniff.php": [
-16,
-25,
-44
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/Strings/EchoedStringsSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/CastSpacingSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ControlStructureSpacingSniff.php": [
-17,
-36,
-65
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/FunctionClosingBraceSpaceSniff.php": [
-16,
-35,
-54
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/FunctionOpeningBraceSpaceSniff.php": [
-16,
-35,
-54
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/FunctionSpacingSniff.php": [
-17,
-54,
-70
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/LanguageConstructSpacingSniff.php": [
-17,
-26,
-51
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/LogicalOperatorSpacingSniff.php": [
-17,
-36,
-52
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/MemberVarSpacingSniff.php": [
-17,
-45,
-229,
-246
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ObjectOperatorSpacingSniff.php": [
-16,
-32,
-52,
-101,
-140
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php": [
-17,
-59,
-132,
-327
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/PropertyLabelSpacingSniff.php": [
-16,
-32,
-51
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ScopeClosingBraceSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/ScopeKeywordSpacingSniff.php": [
-17,
-26,
-45
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/SemicolonSpacingSniff.php": [
-17,
-36,
-52
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Sniffs/WhiteSpace/SuperfluousWhitespaceSniff.php": [
-20,
-49,
-73
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Arrays/ArrayBracketSpacingUnitTest.php": [
-15,
-27,
-51
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Arrays/ArrayDeclarationUnitTest.php": [
-15,
-29,
-238
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/ClassDefinitionClosingBraceSpaceUnitTest.php": [
-15,
-27,
-54
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/ClassDefinitionNameSpacingUnitTest.php": [
-15,
-27,
-45
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/ClassDefinitionOpeningBraceSpaceUnitTest.php": [
-15,
-27,
-58
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/ColonSpacingUnitTest.php": [
-15,
-27,
-54
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/ColourDefinitionUnitTest.php": [
-15,
-27,
-46
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/DisallowMultipleStyleDefinitionsUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/DuplicateClassDefinitionUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/DuplicateStyleDefinitionUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/EmptyClassDefinitionUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/EmptyStyleDefinitionUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/ForbiddenStylesUnitTest.php": [
-15,
-27,
-51
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/IndentationUnitTest.php": [
-15,
-29,
-69
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/LowercaseStyleDefinitionUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/MissingColonUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/NamedColoursUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/OpacityUnitTest.php": [
-15,
-27,
-54
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/SemicolonSpacingUnitTest.php": [
-15,
-27,
-52
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/CSS/ShorthandSizeUnitTest.php": [
-15,
-27,
-53
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/ClassDeclarationUnitTest.php": [
-15,
-27,
-80
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/ClassFileNameUnitTest.php": [
-15,
-27,
-71
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/DuplicatePropertyUnitTest.php": [
-15,
-27,
-46
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/LowercaseClassKeywordsUnitTest.inc": [
-9
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/LowercaseClassKeywordsUnitTest.php": [
-15,
-27,
-54
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/SelfMemberReferenceUnitTest.php": [
-15,
-27,
-58
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/ValidClassNameUnitTest.php": [
-15,
-27,
-69
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/BlockCommentUnitTest.php": [
-15,
-27,
-42,
-98
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/ClassCommentUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/ClosingDeclarationCommentUnitTest.inc": [
-4,
+"monica:app/Console/Commands/GetVersion.php": [
 8,
+29
+],
+"monica:app/Console/Commands/Helpers/Command.php": [
 12,
-16,
-20,
-22,
-26,
-30,
-36,
-40,
-44,
-50,
-58,
-62,
-66,
-70,
-78
+19,
+38,
+52,
+66
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/ClosingDeclarationCommentUnitTest.php": [
-15,
-27,
-52
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/DocCommentAlignmentUnitTest.inc": [
-7,
-21,
-35,
-48,
-73,
-81,
-93
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/DocCommentAlignmentUnitTest.php": [
-15,
-29,
-70
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/EmptyCatchCommentUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FileCommentUnitTest.php": [
-15,
-29,
-71
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FunctionCommentThrowTagUnitTest.php": [
-15,
-27,
-54
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/FunctionCommentUnitTest.php": [
-15,
-27,
-191
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.inc": [
-13,
-43,
-71,
-86,
-133,
-159,
-181
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/InlineCommentUnitTest.php": [
-15,
-29,
-85
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/LongConditionClosingCommentUnitTest.inc": [
-4,
-771
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/LongConditionClosingCommentUnitTest.php": [
-15,
-29,
-97
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/PostStatementCommentUnitTest.inc": [
-4,
+"monica:app/Console/Commands/Helpers/CommandCaller.php": [
 11,
-17
+22,
+43
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/PostStatementCommentUnitTest.php": [
-15,
-29,
-63
+"monica:app/Console/Commands/Helpers/CommandCallerContract.php": [
+8
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Commenting/VariableCommentUnitTest.php": [
-15,
-27,
-77
+"monica:app/Console/Commands/ImportCSV.php": [
+19,
+54,
+121,
+226,
+241
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/ControlSignatureUnitTest.php": [
-15,
-29,
-96
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/ElseIfDeclarationUnitTest.php": [
-15,
-27,
-45
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/ForEachLoopDeclarationUnitTest.php": [
-15,
-27,
-50
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/ForLoopDeclarationUnitTest.php": [
-15,
-29,
-117
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.php": [
-15,
-26,
-41,
-69
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/LowercaseDeclarationUnitTest.php": [
-15,
-27,
-55
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/SwitchDeclarationUnitTest.php": [
-15,
-29,
-142
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Debug/JSLintUnitTest.php": [
-16,
-25,
-45,
-60
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Debug/JavaScriptLintUnitTest.php": [
-16,
-25,
-45,
-60
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Files/FileExtensionUnitTest.php": [
-15,
-29,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Formatting/OperatorBracketUnitTest.php": [
-15,
-29,
-111
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDeclarationArgumentSpacingUnitTest.inc": [
-38
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDeclarationArgumentSpacingUnitTest.php": [
-15,
-27,
-80
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDeclarationUnitTest.php": [
-15,
-27,
-45
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/FunctionDuplicateArgumentUnitTest.php": [
-15,
-27,
-46
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/GlobalFunctionUnitTest.inc": [
-5,
-10
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/GlobalFunctionUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/LowercaseFunctionKeywordsUnitTest.php": [
-15,
-27,
-52
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Functions/MultiLineFunctionDeclarationUnitTest.php": [
-15,
-29,
-107
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-23
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/NamingConventions/ValidFunctionNameUnitTest.php": [
-15,
-27,
-53
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/NamingConventions/ValidVariableNameUnitTest.php": [
-15,
-27,
-82
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Objects/DisallowObjectStringIndexUnitTest.php": [
-15,
-29,
-53
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Objects/ObjectInstantiationUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Objects/ObjectMemberCommaUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ComparisonOperatorUsageUnitTest.php": [
-15,
-29,
-95
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/IncrementDecrementUsageUnitTest.php": [
-15,
-27,
-54
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Operators/ValidLogicalOperatorsUnitTest.php": [
-15,
-27,
-46
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.inc": [
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/CommentedOutCodeUnitTest.php": [
-15,
-27,
-44
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowBooleanStatementUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowComparisonAssignmentUnitTest.php": [
-15,
-27,
-53
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowInlineIfUnitTest.php": [
-15,
-29,
-57
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-3,
-32,
-72
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.php": [
-15,
-27,
-52
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowSizeFunctionsInLoopsUnitTest.php": [
-15,
-29,
-67
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DiscouragedFunctionsUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/EmbeddedPhpUnitTest.inc": [
-55,
-92
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/EmbeddedPhpUnitTest.php": [
-15,
-27,
-72
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/EvalUnitTest.php": [
-15,
-27,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/GlobalKeywordUnitTest.inc": [
-7
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/GlobalKeywordUnitTest.php": [
-15,
-27,
-45
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/HeredocUnitTest.php": [
-15,
-27,
-45
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/InnerFunctionsUnitTest.inc": [
-3,
-12,
+"monica:app/Console/Commands/ImportVCards.php": [
 14,
-21,
-25,
-33,
-44,
-53
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/InnerFunctionsUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/LowercasePHPFunctionsUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/NonExecutableCodeUnitTest.php": [
-15,
-27,
-44
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/MemberVarScopeUnitTest.php": [
-15,
-27,
-51
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/MethodScopeUnitTest.inc": [
-5,
-45
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/MethodScopeUnitTest.php": [
-15,
-27,
-47
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/StaticThisUsageUnitTest.php": [
-15,
-27,
-56
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/ConcatenationSpacingUnitTest.php": [
-15,
-27,
-60
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/DoubleQuoteUsageUnitTest.php": [
-15,
-27,
-56
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/Strings/EchoedStringsUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/CastSpacingUnitTest.php": [
-15,
-27,
-48
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/ControlStructureSpacingUnitTest.php": [
-15,
-29,
-97
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionClosingBraceSpaceUnitTest.php": [
-15,
-29,
-70
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionOpeningBraceSpaceUnitTest.php": [
-15,
-29,
-62
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.1.inc": [
-25,
-43,
-60,
-71,
-94,
-110,
-118,
-124,
-166,
-195,
-217,
-245,
-275,
-280,
-319,
-374,
-390,
-404,
-491
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.2.inc": [
-3
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.3.inc": [
-8
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.4.inc": [
-5
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.5.inc": [
-6
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.6.inc": [
-11
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.7.inc": [
-8
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/FunctionSpacingUnitTest.php": [
-15,
-29,
-128
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/LanguageConstructSpacingUnitTest.php": [
-15,
-27,
-54
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/LogicalOperatorSpacingUnitTest.php": [
-15,
-29,
-50
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/MemberVarSpacingUnitTest.inc": [
-3,
-15,
-27,
-43,
-49,
-56,
-79,
-91,
-120,
-129,
-141,
-159,
-173,
-184,
-197,
-206,
-251,
-270,
-280,
-296,
-300,
-337,
-370
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/MemberVarSpacingUnitTest.php": [
-15,
-27,
-79
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/ObjectOperatorSpacingUnitTest.php": [
-15,
-27,
-62
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/OperatorSpacingUnitTest.php": [
-15,
-29,
-164
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/PropertyLabelSpacingUnitTest.php": [
-15,
-27,
-49
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/ScopeClosingBraceUnitTest.php": [
-15,
-27,
-53
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/ScopeKeywordSpacingUnitTest.php": [
-15,
-27,
-64
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SemicolonSpacingUnitTest.php": [
-15,
-29,
-77
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SuperfluousWhitespaceUnitTest.1.inc": [
-12,
-31,
-42
-],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/SuperfluousWhitespaceUnitTest.php": [
-15,
-29,
-107
-],
-"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php": [
-20,
-29,
-46
-],
-"PHP_CodeSniffer:src/Standards/Zend/Sniffs/Files/ClosingTagSniff.php": [
-17,
-26,
-42
-],
-"PHP_CodeSniffer:src/Standards/Zend/Sniffs/NamingConventions/ValidVariableNameSniff.php": [
-18,
-31,
-116,
-171
-],
-"PHP_CodeSniffer:src/Standards/Zend/Tests/Debug/CodeAnalyzerUnitTest.php": [
-16,
-25,
-45,
-60
-],
-"PHP_CodeSniffer:src/Standards/Zend/Tests/Files/ClosingTagUnitTest.php": [
-15,
-29,
-59
-],
-"PHP_CodeSniffer:src/Standards/Zend/Tests/NamingConventions/ValidVariableNameUnitTest.php": [
-15,
-27,
-73
-],
-"PHP_CodeSniffer:src/Tokenizers/CSS.php": [
-17,
-33,
-53,
-532
-],
-"PHP_CodeSniffer:src/Tokenizers/Comment.php": [
-15,
-31,
-177,
-252
-],
-"PHP_CodeSniffer:src/Tokenizers/JS.php": [
-17,
-262,
-280,
-916,
-1053
-],
-"PHP_CodeSniffer:src/Tokenizers/PHP.php": [
-15,
-513,
-2410,
-3229,
-3310,
-3418,
-3453,
-3512
-],
-"PHP_CodeSniffer:src/Tokenizers/Tokenizer.php": [
-16,
+38,
+75,
 86,
-117,
-138,
-171,
-586,
-666,
-851,
-889,
-934,
-1501
+101
 ],
-"PHP_CodeSniffer:src/Util/Cache.php": [
-17,
-43,
-290,
-305,
-329,
-345
+"monica:app/Console/Commands/Inspire.php": [
+9,
+30
 ],
-"PHP_CodeSniffer:src/Util/Common.php": [
+"monica:app/Console/Commands/LangGenerate.php": [
+9,
+30
+],
+"monica:app/Console/Commands/MigrateDatabaseCollation.php": [
+11,
+35,
+79,
+104
+],
+"monica:app/Console/Commands/NewAddressBookSubscription.php": [
+11,
+36
+],
+"monica:app/Console/Commands/OneTime/MoveAvatars.php": [
 13,
-41,
-62,
-89,
-142,
-170,
-189,
-250,
-277,
-406,
-447,
-518,
-547
-],
-"PHP_CodeSniffer:src/Util/Standards.php": [
-15,
-26,
-234,
-280,
-319
-],
-"PHP_CodeSniffer:src/Util/Timing.php": [
-13,
-36,
-52
-],
-"PHP_CodeSniffer:src/Util/Tokens.php": [
-192,
-759,
-786
-],
-"PHP_CodeSniffer:tests/AllTests.php": [
 39,
-48
-],
-"PHP_CodeSniffer:tests/Core/AbstractMethodUnitTest.php": [
-18,
-47,
-74,
-93
-],
-"PHP_CodeSniffer:tests/Core/AllTests.php": [
-18,
-27,
-39
-],
-"PHP_CodeSniffer:tests/Core/Autoloader/DetermineLoadedClassTest.php": [
-16,
-25,
-37,
-67
-],
-"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
-17,
-28,
 51,
 66,
-82,
-98,
-121,
-141,
-159,
-178,
-206,
-228,
-243,
-295
+81,
+107,
+122,
+134
 ],
-"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
-18,
-35,
-64,
-168,
-203,
-261,
-295,
-346,
-380,
-433,
-458,
-496,
-531,
-587,
-626,
-685,
-721,
-780,
-820,
-892,
-927,
-1067,
-1107,
-1159,
-1194
+"monica:app/Console/Commands/OneTime/MoveAvatarsToPhotosDirectory.php": [
+19,
+44,
+68,
+82
 ],
-"PHP_CodeSniffer:tests/Core/File/FindEndOfStatementTest.php": [
-15,
-24,
-39,
-54,
-69,
-97,
-125,
-153,
-168,
-183,
-201,
-216,
-231,
-246,
-266,
-286,
-304,
-319,
-339,
-361,
-381,
-401
+"monica:app/Console/Commands/Passport.php": [
+11,
+34,
+42,
+62
 ],
-"PHP_CodeSniffer:tests/Core/File/FindExtendedClassNameTest.php": [
-15,
-30,
-46
-],
-"PHP_CodeSniffer:tests/Core/File/FindImplementedInterfaceNamesTest.php": [
-15,
-29,
-45
-],
-"PHP_CodeSniffer:tests/Core/File/FindStartOfStatementTest.php": [
-15,
-24,
-39,
-54,
-69,
-84,
+"monica:app/Console/Commands/PingVersionServer.php": [
+16,
+40,
 99,
-127,
-167,
-201,
-216,
-231,
-246,
+104
+],
+"monica:app/Console/Commands/SendReminders.php": [
+10,
+31,
+49
+],
+"monica:app/Console/Commands/SendStayInTouch.php": [
+10,
+31,
+42
+],
+"monica:app/Console/Commands/SendTestEmail.php": [
+9,
+31
+],
+"monica:app/Console/Commands/SentryRelease.php": [
+13,
+62,
+95,
+122,
+132
+],
+"monica:app/Console/Commands/SetPremiumAccount.php": [
+9,
+30
+],
+"monica:app/Console/Commands/SetUserAdmin.php": [
+9,
+32
+],
+"monica:app/Console/Commands/SetupProduction.php": [
+11,
+36
+],
+"monica:app/Console/Commands/SetupTest.php": [
+36,
+95,
+126,
+135,
+148,
+226,
+241,
+250,
+269,
+289,
+330,
+375,
+389,
+424,
+439,
+454,
+471,
+489,
+498,
+544,
+566,
+583,
+605,
+611,
+621,
+648,
+669,
+674
+],
+"monica:app/Console/Commands/Tests/SetupFrontEndTestUser.php": [
+10,
+31
+],
+"monica:app/Console/Commands/Tests/UpdateLangs.php": [
+15,
+36
+],
+"monica:app/Console/Commands/Update.php": [
+12,
+39,
+97
+],
+"monica:app/Console/Commands/UpdateGravatars.php": [
+9,
+30
+],
+"monica:app/Console/Kernel.php": [
+10,
+25,
+44,
+65
+],
+"monica:app/Console/Scheduling/CronEvent.php": [
+9,
+32,
+43,
+56,
+66,
+79,
+92,
+105
+],
+"monica:app/Events/Event.php": [
+6
+],
+"monica:app/Events/MoveAvatarEvent.php": [
+9,
+26
+],
+"monica:app/Events/RecoveryLogin.php": [
+8,
+27
+],
+"monica:app/Events/TokenDeleteEvent.php": [
+9,
+28
+],
+"monica:app/Exceptions/FileNotFoundException.php": [
+8,
+21,
+27
+],
+"monica:app/Exceptions/Handler.php": [
+12,
+30,
+48
+],
+"monica:app/Exceptions/MissingEnvVariableException.php": [
+11
+],
+"monica:app/Exceptions/NoAccountException.php": [
+11
+],
+"monica:app/Exceptions/NoCoordinatesException.php": [
+8
+],
+"monica:app/Exceptions/RateLimitedSecondException.php": [
+8,
+10
+],
+"monica:app/Exceptions/StripeException.php": [
+11
+],
+"monica:app/Exceptions/WrongIdException.php": [
+11
+],
+"monica:app/Exceptions/WrongValueException.php": [
+11
+],
+"monica:app/ExportResources/Account/Account.php": [
+18,
+30
+],
+"monica:app/ExportResources/Account/Activity.php": [
+8,
+22
+],
+"monica:app/ExportResources/Account/ActivityType.php": [
+8,
+22
+],
+"monica:app/ExportResources/Account/ActivityTypeCategory.php": [
+8
+],
+"monica:app/ExportResources/Account/Addressbook.php": [
+8,
+21
+],
+"monica:app/ExportResources/Account/AddressbookSubscription.php": [
+10,
+29
+],
+"monica:app/ExportResources/Account/LifeEventCategory.php": [
+8,
+20
+],
+"monica:app/ExportResources/Account/LifeEventType.php": [
+8,
+22
+],
+"monica:app/ExportResources/Account/Photo.php": [
+8,
+22
+],
+"monica:app/ExportResources/Account/ReminderRule.php": [
+8
+],
+"monica:app/ExportResources/Contact/Address.php": [
+8,
+20
+],
+"monica:app/ExportResources/Contact/Call.php": [
+8,
+22
+],
+"monica:app/ExportResources/Contact/Contact.php": [
+12,
+42
+],
+"monica:app/ExportResources/Contact/ContactField.php": [
+8,
+20
+],
+"monica:app/ExportResources/Contact/ContactFieldType.php": [
+8
+],
+"monica:app/ExportResources/Contact/Conversation.php": [
+8,
+20
+],
+"monica:app/ExportResources/Contact/Debt.php": [
+8,
+22
+],
+"monica:app/ExportResources/Contact/Document.php": [
+8,
+24
+],
+"monica:app/ExportResources/Contact/Gender.php": [
+8
+],
+"monica:app/ExportResources/Contact/Gift.php": [
+8,
+25
+],
+"monica:app/ExportResources/Contact/LifeEvent.php": [
+8,
+23
+],
+"monica:app/ExportResources/Contact/Message.php": [
+8
+],
+"monica:app/ExportResources/Contact/Note.php": [
+8
+],
+"monica:app/ExportResources/Contact/Pet.php": [
+8,
+20
+],
+"monica:app/ExportResources/Contact/Reminder.php": [
+8
+],
+"monica:app/ExportResources/Contact/Task.php": [
+8
+],
+"monica:app/ExportResources/CountResourceCollection.php": [
+9,
+17
+],
+"monica:app/ExportResources/ExportResource.php": [
+10,
+32,
+43,
+62,
+81,
+95,
+108
+],
+"monica:app/ExportResources/Instance/AuditLog.php": [
+8,
+23
+],
+"monica:app/ExportResources/Instance/Emotion/Emotion.php": [
+8,
+19
+],
+"monica:app/ExportResources/Instance/SpecialDate.php": [
+8
+],
+"monica:app/ExportResources/Journal/JournalEntry.php": [
+8,
+19
+],
+"monica:app/ExportResources/MapUuidResourceCollection.php": [
+9,
+17
+],
+"monica:app/ExportResources/Relationship/Relationship.php": [
+8,
+16
+],
+"monica:app/ExportResources/User/Module.php": [
+8
+],
+"monica:app/ExportResources/User/SyncToken.php": [
+8
+],
+"monica:app/ExportResources/User/User.php": [
+10,
+37
+],
+"monica:app/Helpers/AccountHelper.php": [
+10,
+18,
+42,
+53,
+64,
+95,
+121,
+152,
+189
+],
+"monica:app/Helpers/AuditLogHelper.php": [
+10,
+18
+],
+"monica:app/Helpers/CollectionHelper.php": [
+9,
+20,
+55,
+83,
+101
+],
+"monica:app/Helpers/ComplianceHelper.php": [
+10,
+19,
+40
+],
+"monica:app/Helpers/ComposerScripts.php": [
+6,
+18,
+38,
+53
+],
+"monica:app/Helpers/CountriesHelper.php": [
+11,
+18,
+37,
+53,
+72,
+86,
+105,
+131,
+171
+],
+"monica:app/Helpers/DBHelper.php": [
+10,
+18,
+28,
+43,
+53,
+64
+],
+"monica:app/Helpers/DateHelper.php": [
+12,
+23,
+58,
+85,
+106,
+126,
+137,
+148,
+159,
+171,
+182,
+194,
+206,
+219,
+237,
 261,
 277,
 293,
-308,
-323,
-343,
-363,
-378,
-400,
-421,
-451,
-477,
-493
+314,
+336,
+351
 ],
-"PHP_CodeSniffer:tests/Core/File/GetClassPropertiesTest.php": [
+"monica:app/Helpers/FormHelper.php": [
+8,
+17
+],
+"monica:app/Helpers/GenderHelper.php": [
+11,
+18,
+41
+],
+"monica:app/Helpers/InstanceHelper.php": [
+14,
+21,
+32,
+58,
+98,
+115
+],
+"monica:app/Helpers/JournalHelper.php": [
+10,
+18
+],
+"monica:app/Helpers/LocaleHelper.php": [
+17,
+26,
+42,
+59,
+77,
+96,
+114,
+130,
+166,
+193
+],
+"monica:app/Helpers/MailHelper.php": [
+9,
+20
+],
+"monica:app/Helpers/MoneyHelper.php": [
+16,
+30,
+60,
+84,
+107,
+128
+],
+"monica:app/Helpers/RequestHelper.php": [
+13,
+20,
+40,
+53,
+97
+],
+"monica:app/Helpers/SearchHelper.php": [
+12,
+23
+],
+"monica:app/Helpers/StorageHelper.php": [
+11,
+19,
+33,
+51
+],
+"monica:app/Helpers/StringHelper.php": [
+6,
+14
+],
+"monica:app/Helpers/TimezoneHelper.php": [
+8,
 15,
+54,
+119
+],
+"monica:app/Helpers/VCardHelper.php": [
+9,
+17
+],
+"monica:app/Helpers/WeatherHelper.php": [
+12,
+20,
+44
+],
+"monica:app/Helpers/helpers.php": [
+14
+],
+"monica:app/Http/Controllers/Account/Activity/ActivityTypeCategoriesController.php": [
+14,
+21,
+55,
+73,
+94
+],
+"monica:app/Http/Controllers/Account/Activity/ActivityTypesController.php": [
+14,
+24,
+43,
+65
+],
+"monica:app/Http/Controllers/Account/LifeEvent/LifeEventCategoriesController.php": [
+9,
+16
+],
+"monica:app/Http/Controllers/Account/LifeEvent/LifeEventTypesController.php": [
+14,
+24,
+42,
+63
+],
+"monica:app/Http/Controllers/Api/Account/Activity/ApiActivityTypeCategoryController.php": [
+17,
+24,
+44,
+63,
+91,
+119
+],
+"monica:app/Http/Controllers/Api/Account/Activity/ApiActivityTypeController.php": [
+17,
+24,
+43,
+62,
+90,
+119
+],
+"monica:app/Http/Controllers/Api/Account/ApiCompanyController.php": [
+17,
+24,
+43,
+62,
+91,
+119
+],
+"monica:app/Http/Controllers/Api/Account/ApiGenderController.php": [
+17,
+24,
+43,
+62,
+90,
+118
+],
+"monica:app/Http/Controllers/Api/Account/ApiPlaceController.php": [
+17,
+24,
+43,
+62,
+90,
+118
+],
+"monica:app/Http/Controllers/Api/Account/ApiUserController.php": [
+20,
+28,
+40,
+76,
+110
+],
+"monica:app/Http/Controllers/Api/ApiActivitiesController.php": [
+18,
+25,
+46,
+64,
+92,
+120,
+141
+],
+"monica:app/Http/Controllers/Api/ApiContactController.php": [
+23,
+30,
+44,
+88,
+109,
+137,
+166,
+184,
+213,
+241
+],
+"monica:app/Http/Controllers/Api/ApiContactFieldController.php": [
+17,
+26,
+44,
+72,
+101,
+126
+],
+"monica:app/Http/Controllers/Api/ApiContactTagController.php": [
+15,
+23,
+52,
+81,
+111
+],
+"monica:app/Http/Controllers/Api/ApiController.php": [
+12,
+36,
+90,
+117,
+126,
+136,
+145,
+157,
+165,
+174,
+203
+],
+"monica:app/Http/Controllers/Api/ApiDebtController.php": [
+15,
+22,
+41,
+60,
+86,
+116,
+156,
+176
+],
+"monica:app/Http/Controllers/Api/ApiGiftController.php": [
+18,
+25,
+44,
+62,
+85,
+112,
+135,
+156
+],
+"monica:app/Http/Controllers/Api/ApiJournalController.php": [
+13,
+20,
+39,
+58,
+84,
+114,
+135
+],
+"monica:app/Http/Controllers/Api/ApiMeController.php": [
+12,
+19,
+31,
+56
+],
+"monica:app/Http/Controllers/Api/ApiNoteController.php": [
+14,
+21,
+40,
+59,
+90,
+127,
+157,
+177
+],
+"monica:app/Http/Controllers/Api/ApiPetController.php": [
+14,
+21,
+40,
+59,
+85,
+115,
+146,
+168
+],
+"monica:app/Http/Controllers/Api/ApiRelationshipController.php": [
+16,
+24,
+43,
+61,
+85,
+110
+],
+"monica:app/Http/Controllers/Api/ApiRelationshipTypeController.php": [
+11,
+19,
+37
+],
+"monica:app/Http/Controllers/Api/ApiRelationshipTypeGroupController.php": [
+11,
+24,
+42
+],
+"monica:app/Http/Controllers/Api/ApiReminderController.php": [
+19,
+26,
+45,
+64,
+92,
+120,
+143,
+170
+],
+"monica:app/Http/Controllers/Api/ApiTagController.php": [
+20,
+29,
+48,
+67,
+93,
+119,
+142
+],
+"monica:app/Http/Controllers/Api/ApiTaskController.php": [
+17,
+24,
+43,
+62,
+87,
+113,
+134
+],
+"monica:app/Http/Controllers/Api/Auth/OAuthController.php": [
+23,
+40,
+55,
+68,
+102,
+115,
+142,
+158,
+193
+],
+"monica:app/Http/Controllers/Api/Contact/ApiAddressController.php": [
+18,
+25,
+44,
+63,
+91,
+119,
+142
+],
+"monica:app/Http/Controllers/Api/Contact/ApiAuditLogController.php": [
+15,
+24
+],
+"monica:app/Http/Controllers/Api/Contact/ApiAvatarController.php": [
+14,
+23
+],
+"monica:app/Http/Controllers/Api/Contact/ApiCallController.php": [
+19,
+26,
+47,
+66,
+94,
+122,
+145
+],
+"monica:app/Http/Controllers/Api/Contact/ApiConversationController.php": [
+18,
+25,
+43,
+71,
+89,
+117,
+146
+],
+"monica:app/Http/Controllers/Api/Contact/ApiDocumentController.php": [
+17,
+24,
+36,
+56,
+84,
+102,
+130
+],
+"monica:app/Http/Controllers/Api/Contact/ApiLifeEventController.php": [
+16,
+23,
+38,
+56,
+82,
+109
+],
+"monica:app/Http/Controllers/Api/Contact/ApiMessageController.php": [
+18,
+26,
+63,
+102
+],
+"monica:app/Http/Controllers/Api/Contact/ApiOccupationController.php": [
+17,
+24,
+43,
+62,
+90,
+118
+],
+"monica:app/Http/Controllers/Api/Contact/ApiPhotoController.php": [
+17,
+25,
+45,
+72,
+90,
+118
+],
+"monica:app/Http/Controllers/Api/Misc/ApiCountryController.php": [
+13,
+20
+],
+"monica:app/Http/Controllers/Api/Settings/ApiAuditLogController.php": [
+13,
+21
+],
+"monica:app/Http/Controllers/Api/Settings/ApiComplianceController.php": [
+12,
+19,
+32
+],
+"monica:app/Http/Controllers/Api/Settings/ApiContactFieldTypeController.php": [
+14,
+21,
+35,
+54,
+80,
+119,
+143
+],
+"monica:app/Http/Controllers/Api/Settings/ApiCurrencyController.php": [
+12,
+19,
+32
+],
+"monica:app/Http/Controllers/Api/Statistics/ApiStatisticsController.php": [
+12,
+19
+],
+"monica:app/Http/Controllers/Auth/EmailChangeController.php": [
+14,
+31,
+50,
+64,
+79,
+102,
+114
+],
+"monica:app/Http/Controllers/Auth/ForgotPasswordController.php": [
+9
+],
+"monica:app/Http/Controllers/Auth/InvitationController.php": [
+18,
+34,
+45,
+65,
+84,
+117,
+144
+],
+"monica:app/Http/Controllers/Auth/LoginController.php": [
+10,
+37,
+42
+],
+"monica:app/Http/Controllers/Auth/PasswordChangeController.php": [
+17,
+32,
+44,
+61,
+83,
+98,
+122,
+141,
+153
+],
+"monica:app/Http/Controllers/Auth/RecoveryLoginController.php": [
+13,
+30,
+41,
+66
+],
+"monica:app/Http/Controllers/Auth/RegisterController.php": [
+19,
+46,
+56,
+74,
+91,
+130
+],
+"monica:app/Http/Controllers/Auth/ResetPasswordController.php": [
+10,
+35
+],
+"monica:app/Http/Controllers/Auth/Validate2faController.php": [
+11,
+19,
+31
+],
+"monica:app/Http/Controllers/Auth/VerificationController.php": [
+9,
+36
+],
+"monica:app/Http/Controllers/ChangelogController.php": [
+9,
+17
+],
+"monica:app/Http/Controllers/ComplianceController.php": [
+12,
+20,
+29
+],
+"monica:app/Http/Controllers/Contacts/ActivitiesController.php": [
+21,
+32,
+57,
+77,
+110,
+124,
+158,
+178,
+199
+],
+"monica:app/Http/Controllers/Contacts/AddressesController.php": [
+18,
+25,
+39,
+53,
+78,
+108,
+124
+],
+"monica:app/Http/Controllers/Contacts/AvatarController.php": [
+13,
+18,
+32,
+81
+],
+"monica:app/Http/Controllers/Contacts/CallsController.php": [
+18,
+28,
+41,
+60,
+79,
+99
+],
+"monica:app/Http/Controllers/Contacts/ContactAuditLogController.php": [
+10,
+15
+],
+"monica:app/Http/Controllers/Contacts/ContactFieldsController.php": [
+12,
+17,
+42,
+50,
+70,
+87
+],
+"monica:app/Http/Controllers/Contacts/ConversationsController.php": [
+21,
+31,
+44,
+73,
+117,
+146,
+200,
+241,
+274
+],
+"monica:app/Http/Controllers/Contacts/DebtController.php": [
+12,
+20,
 32,
 47,
-77,
-93
+74,
+86,
+104,
+131
 ],
-"PHP_CodeSniffer:tests/Core/File/GetMemberPropertiesTest.php": [
-15,
+"monica:app/Http/Controllers/Contacts/DocumentsController.php": [
+16,
+25,
+36,
+50,
+69
+],
+"monica:app/Http/Controllers/Contacts/GiftController.php": [
+18,
 29,
-46,
-819,
-834,
-857
+45,
+56,
+76,
+98,
+116
 ],
-"PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.php": [
+"monica:app/Http/Controllers/Contacts/IntroductionsController.php": [
+13,
+23,
+51
+],
+"monica:app/Http/Controllers/Contacts/LifeEventsController.php": [
+19,
+29,
+43,
+58,
+86,
+119
+],
+"monica:app/Http/Controllers/Contacts/NotesController.php": [
+13,
+18,
+43,
+53,
+75,
+96
+],
+"monica:app/Http/Controllers/Contacts/PetsController.php": [
+12,
+17,
+40,
+62,
+88,
+111
+],
+"monica:app/Http/Controllers/Contacts/PhotosController.php": [
+16,
+26,
+40,
+61
+],
+"monica:app/Http/Controllers/Contacts/RelationshipsController.php": [
+25,
+33,
+60,
+98,
+139,
+175,
+227,
+252
+],
+"monica:app/Http/Controllers/Contacts/RemindersController.php": [
 15,
-24,
-47,
-70,
-93,
-117,
-151,
-184,
-207,
-240,
-264,
-297,
-320,
-343,
-366,
-398,
-430,
-454,
-477,
-500,
-523,
-546,
+23,
+38,
+68,
+84,
+116
+],
+"monica:app/Http/Controllers/Contacts/TagsController.php": [
+13,
+21,
+34,
+48
+],
+"monica:app/Http/Controllers/Contacts/TasksController.php": [
+10,
+15
+],
+"monica:app/Http/Controllers/ContactsController.php": [
+33,
+41,
+52,
+64,
+147,
+158,
+170,
+197,
+234,
+338,
+378,
+471,
+495,
+510,
+533,
+551,
 570,
 594,
 618,
-641,
-664,
-687,
-737,
-785,
-819,
-856,
-892,
-916,
-950,
-974,
-1037,
-1069,
-1101,
-1124,
-1147,
-1173
+654,
+673,
+696
 ],
-"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
-15,
-24,
-47,
-70,
-93,
-116,
-139,
-162,
-185,
-208,
-231,
-254,
-277,
-300,
-323,
-346,
-369,
-392,
-415,
-438,
-461,
-484,
-507,
-530,
-553,
-576,
-599,
-622,
-645,
-668,
-691,
-714,
-737,
-760,
-783,
-806,
-829,
-852,
-875,
-901
+"monica:app/Http/Controllers/Controller.php": [
+11
 ],
-"PHP_CodeSniffer:tests/Core/File/IsReferenceTest.php": [
-15,
-29,
-45
-],
-"PHP_CodeSniffer:tests/Core/Filters/Filter/AcceptTest.php": [
-19,
+"monica:app/Http/Controllers/DAV/Auth/AuthBackend.php": [
+12,
+30,
 42,
-59,
-83,
-106
+72
 ],
-"PHP_CodeSniffer:tests/Core/IsCamelCapsTest.php": [
-16,
-25,
-38,
-61,
-76,
-97,
-111,
-128
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/AbstractCalDAVBackend.php": [
+13,
+22
 ],
-"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyAllowedAsDeclaredSniff.php": [
-14,
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBackend.php": [
+11,
 20,
-25
-],
-"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyAllowedViaMagicMethodSniff.php": [
-14,
-18,
-23,
-32,
-37
-],
-"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyAllowedViaStdClassSniff.php": [
-15,
-18,
-23
-],
-"PHP_CodeSniffer:tests/Core/Ruleset/Fixtures/Sniffs/Category/SetPropertyNotAllowedViaAttributeSniff.php": [
-16,
-19,
-24
-],
-"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteLinuxTest.php": [
-17,
-47,
-86,
-99
-],
-"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionAbsoluteWindowsTest.php": [
-17,
-47,
-85,
-100
-],
-"PHP_CodeSniffer:tests/Core/Ruleset/RuleInclusionTest.php": [
-17,
-47,
-64,
-103,
-115,
-133,
-148,
-360,
-379,
-450,
-468
-],
-"PHP_CodeSniffer:tests/Core/Ruleset/SetSniffPropertyTest.php": [
-22,
-31,
-52,
-94,
-115,
-151,
-178,
-206,
-224,
-240,
-291,
-333,
-377
-],
-"PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTest.php": [
-15,
-37,
-50,
-71,
-107,
-140,
-170,
-200,
-236,
-260
-],
-"PHP_CodeSniffer:tests/Core/Sniffs/AbstractArraySniffTestable.php": [
-15,
-39,
-59
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/AnonClassParenthesisOwnerTest.inc": [
-10
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/AnonClassParenthesisOwnerTest.php": [
-15,
-29,
-52,
-76,
-97,
-135
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/ArrayKeywordTest.php": [
-15,
-31,
-55,
-83,
-107,
-134,
-158
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/AttributesTest.php": [
-15,
 33,
-70,
-253,
+65,
+128,
+169,
+204,
+236,
+259,
 277,
-307,
-349,
-412,
-455,
-558,
-579
+298,
+308,
+323,
+344,
+354
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillEnumTest.php": [
-15,
-32,
-79,
-140,
-158
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillExplicitOctalNotationTest.php": [
-15,
-32,
-53
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillFnTokenTest.php": [
-15,
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBirthdays.php": [
+14,
+21,
 26,
 44,
-60,
-76,
-92,
-108,
-139,
-174,
-190,
-206,
-222,
-238,
-254,
-270,
-286,
-302,
-318,
-334,
-350,
-366,
-382,
-423,
-439,
-455,
-507,
-525,
-541,
-565,
-585,
-628,
-649,
-675,
-731,
-783
+55,
+86,
+97,
+117,
+130,
+152,
+160,
+165
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillMatchTokenTest.php": [
-17,
-34,
-57,
-215,
-247,
-333,
-350,
-387,
-403,
-453,
-508
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillNumericSeparatorTest.php": [
-15,
-29,
-48,
-174,
-195
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillReadonlyTest.php": [
-15,
-30,
-48,
-175,
-193
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BitwiseOrTest.php": [
-15,
-29,
-47,
-80,
-98
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/ContextSensitiveKeywordsTest.php": [
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVTasks.php": [
 16,
-30,
-49,
-169,
-191
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DefaultKeywordTest.php": [
-16,
-35,
+23,
+28,
+46,
 59,
-115,
-175,
-226,
-250,
-289
+71,
+84,
+95,
+126,
+154,
+201
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleArrowTest.php": [
-17,
-31,
-51,
-116,
-136,
-203,
-223
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/ICalDAVBackend.php": [
+6
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/DoubleQuotedStringTest.php": [
-16,
-31,
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/AddressBook.php": [
+8,
+22,
+60,
+70,
+92
+],
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/AddressBookHome.php": [
+8,
+22,
+38
+],
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/AddressBookRoot.php": [
+10,
+26,
 48
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.inc": [
-4,
-15,
-21,
-35,
-46
+"monica:app/Http/Controllers/DAV/Backend/CardDAV/CardDAVBackend.php": [
+27,
+36,
+58,
+73,
+87,
+115,
+176,
+187,
+224,
+242,
+265,
+279,
+305,
+326,
+362,
+392,
+410,
+442,
+472,
+483
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/EnumCaseTest.php": [
-15,
-30,
-53,
-79,
-102,
-127,
-146
+"monica:app/Http/Controllers/DAV/Backend/IDAVBackend.php": [
+6
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/FinallyTest.php": [
-15,
-29,
-47,
-68,
-86
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/GotoLabelTest.php": [
-15,
-30,
-49,
-76,
-95,
-122,
-140
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/HeredocNowdocCloserTest.php": [
+"monica:app/Http/Controllers/DAV/Backend/SyncDAVBackend.php": [
+10,
 23,
-35,
-69,
+42,
+60,
+77,
+93,
+156,
+206,
+223,
+234,
+246
+],
+"monica:app/Http/Controllers/DAV/DAVACL/PrincipalBackend.php": [
+12,
+28,
+33,
+60,
+77,
+104,
+137,
+169,
+187,
+201
+],
+"monica:app/Http/Controllers/DAV/DAVRedirect.php": [
+14,
+16,
+28
+],
+"monica:app/Http/Controllers/DashboardController.php": [
+15,
+22,
+106,
+134,
+165,
+180
+],
+"monica:app/Http/Controllers/EmotionController.php": [
+12,
+19,
+29,
+42
+],
+"monica:app/Http/Controllers/JournalController.php": [
+15,
+22,
+32,
+81,
+89,
+115,
+126,
+140,
+151,
+187,
+199,
+233
+],
+"monica:app/Http/Controllers/MeController.php": [
+12,
+22,
+43
+],
+"monica:app/Http/Controllers/Settings/AuditLogController.php": [
+10,
+15
+],
+"monica:app/Http/Controllers/Settings/ExportController.php": [
+13,
+20,
+39,
+53,
+68,
+103
+],
+"monica:app/Http/Controllers/Settings/GendersController.php": [
+17,
+24,
+39,
+64,
+91,
+116,
+144,
+154,
+169
+],
+"monica:app/Http/Controllers/Settings/ModulesController.php": [
+11,
+18,
+27,
+37
+],
+"monica:app/Http/Controllers/Settings/MultiFAController.php": [
+14,
+34,
+58,
+95,
+105,
+132,
+155
+],
+"monica:app/Http/Controllers/Settings/PersonalizationController.php": [
+13,
+22,
+33,
+44,
+71,
 95
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/HeredocStringTest.php": [
-16,
+"monica:app/Http/Controllers/Settings/RecoveryCodesController.php": [
+12,
+22,
+44,
+62,
+78
+],
+"monica:app/Http/Controllers/Settings/ReminderRulesController.php": [
+11,
+18,
+27,
+37
+],
+"monica:app/Http/Controllers/Settings/StorageController.php": [
+12,
+17
+],
+"monica:app/Http/Controllers/Settings/SubscriptionsController.php": [
+23,
+32,
+76,
+110,
+156,
+183,
+204,
+219,
+233,
+243,
+257,
+284,
+314,
+343,
+357
+],
+"monica:app/Http/Controllers/SettingsController.php": [
 31,
+38,
+48,
+87,
+130,
+154,
+172,
+190,
+199,
+219,
+232,
+251,
+266,
+312,
+326,
+345,
+357,
+368,
+374,
+387,
+406
+],
+"monica:app/Http/Controllers/StorageController.php": [
+16,
+18,
+30,
+61,
+112
+],
+"monica:app/Http/Controllers/TasksController.php": [
+15,
+24,
+35,
 52,
 70
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/NamedFunctionCallArgumentsTest.php": [
-16,
-32,
-80,
-273,
-300,
-332,
-384,
-481,
-561,
-591,
-653,
-705,
-750
+"monica:app/Http/Kernel.php": [
+8
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/NullsafeObjectOperatorTest.php": [
-16,
-38,
-59,
-77,
-99,
-123
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/ScopeSettingWithNamespaceOperatorTest.php": [
-15,
-32,
-65
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/ShortArrayTest.php": [
-15,
-29,
-53,
-94,
-118
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceTest.php": [
+"monica:app/Http/Location/Drivers/CloudflareDriver.php": [
+12,
+17,
 22,
+29,
+38
+],
+"monica:app/Http/Middleware/Authenticate.php": [
+8,
+16
+],
+"monica:app/Http/Middleware/AuthenticateWithTokenOnBasicAuth.php": [
+19,
+36,
+48,
+61,
+77,
+101,
+129,
+146
+],
+"monica:app/Http/Middleware/CheckAccountLimitations.php": [
+10,
+19
+],
+"monica:app/Http/Middleware/CheckCompliance.php": [
+11,
+20
+],
+"monica:app/Http/Middleware/CheckLocale.php": [
+10,
+19
+],
+"monica:app/Http/Middleware/CheckVersion.php": [
+10,
+19
+],
+"monica:app/Http/Middleware/EncryptCookies.php": [
+8
+],
+"monica:app/Http/Middleware/EnsureEmailIsVerified.php": [
+9,
+18
+],
+"monica:app/Http/Middleware/PreventRequestsDuringMaintenance.php": [
+8
+],
+"monica:app/Http/Middleware/RedirectIfAuthenticated.php": [
+9,
+19
+],
+"monica:app/Http/Middleware/SentryContext.php": [
+10,
+19
+],
+"monica:app/Http/Middleware/TrimStrings.php": [
+8
+],
+"monica:app/Http/Middleware/TrustProxies.php": [
+8,
+15
+],
+"monica:app/Http/Middleware/VerifyCsrfToken.php": [
+8
+],
+"monica:app/Http/Requests/AuthorizedRequest.php": [
+6,
+11
+],
+"monica:app/Http/Requests/EmailChangeRequest.php": [
+6,
+13
+],
+"monica:app/Http/Requests/ImportsRequest.php": [
+6,
+13
+],
+"monica:app/Http/Requests/InvitationRequest.php": [
+6,
+13
+],
+"monica:app/Http/Requests/Journal/DaysRequest.php": [
+8,
+15
+],
+"monica:app/Http/Requests/PasswordChangeRequest.php": [
+8,
+15
+],
+"monica:app/Http/Requests/People/ContactFieldsRequest.php": [
+8,
+15
+],
+"monica:app/Http/Requests/People/ConversationRequest.php": [
+8,
+15
+],
+"monica:app/Http/Requests/People/DebtRequest.php": [
+8,
+15
+],
+"monica:app/Http/Requests/People/GiftsRequest.php": [
+8,
+15
+],
+"monica:app/Http/Requests/People/NoteToggleRequest.php": [
+8,
+15
+],
+"monica:app/Http/Requests/People/NotesRequest.php": [
+8,
+15
+],
+"monica:app/Http/Requests/People/PetsRequest.php": [
+8,
+15
+],
+"monica:app/Http/Requests/Request.php": [
+8
+],
+"monica:app/Http/Requests/Settings/GendersRequest.php": [
+10,
+17
+],
+"monica:app/Http/Requests/SettingsRequest.php": [
+9,
+16
+],
+"monica:app/Http/Resources/Account/User/User.php": [
+14,
+22
+],
+"monica:app/Http/Resources/Activity/Activity.php": [
+14,
+22
+],
+"monica:app/Http/Resources/Activity/ActivityType.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Activity/ActivityTypeCategory.php": [
+12,
+20
+],
+"monica:app/Http/Resources/Address/Address.php": [
+14,
+22
+],
+"monica:app/Http/Resources/AuditLog/AuditLog.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Call/Call.php": [
+14,
+22
+],
+"monica:app/Http/Resources/Company/Company.php": [
+12,
+20
+],
+"monica:app/Http/Resources/Contact/Contact.php": [
+11,
+21
+],
+"monica:app/Http/Resources/Contact/ContactBase.php": [
+14,
+16,
+113
+],
+"monica:app/Http/Resources/Contact/ContactSearch.php": [
+11,
+21
+],
+"monica:app/Http/Resources/Contact/ContactShort.php": [
+12,
+22
+],
+"monica:app/Http/Resources/Contact/ContactWithContactFields.php": [
+11,
+21
+],
+"monica:app/Http/Resources/ContactField/ContactField.php": [
+14,
+22
+],
+"monica:app/Http/Resources/ContactField/ContactFieldLabel.php": [
+12,
+20
+],
+"monica:app/Http/Resources/Conversation/Conversation.php": [
+15,
+23
+],
+"monica:app/Http/Resources/Conversation/Message.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Country/Country.php": [
+9,
+17
+],
+"monica:app/Http/Resources/Debt/Debt.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Document/Document.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Emotion/Emotion.php": [
+11,
+19
+],
+"monica:app/Http/Resources/Gender/Gender.php": [
+12,
+20
+],
+"monica:app/Http/Resources/Gift/Gift.php": [
+14,
+22
+],
+"monica:app/Http/Resources/Journal/Entry.php": [
+12,
+20
+],
+"monica:app/Http/Resources/LifeEvent/LifeEvent.php": [
+14,
+22
+],
+"monica:app/Http/Resources/LifeEvent/LifeEventCategory.php": [
+12,
+20
+],
+"monica:app/Http/Resources/LifeEvent/LifeEventType.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Note/Note.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Occupation/Occupation.php": [
+14,
+22
+],
+"monica:app/Http/Resources/Pet/Pet.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Pet/PetCategory.php": [
+11,
+19
+],
+"monica:app/Http/Resources/Photo/Photo.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Place/Place.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Relationship/Relationship.php": [
+14,
+22
+],
+"monica:app/Http/Resources/Relationship/RelationshipShort.php": [
+12,
+20
+],
+"monica:app/Http/Resources/RelationshipType/RelationshipType.php": [
+12,
+20
+],
+"monica:app/Http/Resources/RelationshipTypeGroup/RelationshipTypeGroup.php": [
+12,
+20
+],
+"monica:app/Http/Resources/Reminder/Reminder.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Reminder/ReminderOutbox.php": [
+13,
+21
+],
+"monica:app/Http/Resources/Settings/Compliance/Compliance.php": [
+12,
+20
+],
+"monica:app/Http/Resources/Settings/ContactFieldType/ContactFieldType.php": [
+12,
+20
+],
+"monica:app/Http/Resources/Settings/Currency/Currency.php": [
+11,
+19
+],
+"monica:app/Http/Resources/Settings/WebauthnKey/WebauthnKey.php": [
+12,
+20
+],
+"monica:app/Http/Resources/Tag/Tag.php": [
+12,
+20
+],
+"monica:app/Http/Resources/Task/Task.php": [
+13,
+21
+],
+"monica:app/Http/ViewComposers/CountrySelectViewComposer.php": [
+9,
+17
+],
+"monica:app/Http/ViewComposers/CurrencySelectViewComposer.php": [
+9,
+17
+],
+"monica:app/Http/ViewComposers/DateSelectViewComposer.php": [
+9,
+17
+],
+"monica:app/Http/ViewComposers/InstanceViewComposer.php": [
+9,
+17
+],
+"monica:app/Interfaces/Hashing.php": [
+6
+],
+"monica:app/Interfaces/IsJournalableInterface.php": [
+9
+],
+"monica:app/Interfaces/LabelInterface.php": [
+8
+],
+"monica:app/Interfaces/MailNotification.php": [
+9
+],
+"monica:app/Jobs/AddContactFromVCard.php": [
+14,
+34,
+45
+],
+"monica:app/Jobs/AuditLog/LogAccountAudit.php": [
+13,
+29,
+39
+],
+"monica:app/Jobs/Avatars/CreateAvatarsForExistingContacts.php": [
+17,
+33,
+47
+],
+"monica:app/Jobs/Avatars/GenerateDefaultAvatar.php": [
+15,
+39,
+49
+],
+"monica:app/Jobs/Avatars/GetAvatarsFromInternet.php": [
+14,
+38,
+48
+],
+"monica:app/Jobs/Avatars/MoveContactAvatarToPhotosDirectory.php": [
+19,
+52,
+63,
+90,
+120,
+139,
+154,
+171,
+176,
+193
+],
+"monica:app/Jobs/Avatars/UpdateAllGravatars.php": [
+12,
+21
+],
+"monica:app/Jobs/Avatars/UpdateGravatar.php": [
+14,
+38,
+48
+],
+"monica:app/Jobs/Dav/DeleteMultipleVCard.php": [
+14,
+35,
+46,
+67
+],
+"monica:app/Jobs/Dav/DeleteVCard.php": [
+14,
+35,
+46
+],
+"monica:app/Jobs/Dav/GetMultipleVCard.php": [
+16,
+37,
+48,
+76,
+96
+],
+"monica:app/Jobs/Dav/GetVCard.php": [
+16,
+37,
+48,
+62
+],
+"monica:app/Jobs/Dav/PushVCard.php": [
+16,
+37,
+48
+],
+"monica:app/Jobs/Dav/UpdateVCard.php": [
+20,
+47,
+59,
+85
+],
+"monica:app/Jobs/ExportAccount.php": [
+19,
+41,
+52,
+93
+],
+"monica:app/Jobs/ExportAllAsSQL.php": [
+11,
+20
+],
+"monica:app/Jobs/GetGPSCoordinate.php": [
+17,
+45,
+55,
+67
+],
+"monica:app/Jobs/GetWeatherInformation.php": [
+15,
+43,
+53
+],
+"monica:app/Jobs/Job.php": [
+8
+],
+"monica:app/Jobs/Reminder/NotifyUserAboutReminder.php": [
+18,
+32,
+42,
+62,
+78,
+96
+],
+"monica:app/Jobs/ResizeAvatars.php": [
+16,
+27,
 37,
 60
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/StableCommentWhitespaceWinTest.php": [
-19,
-34,
-57
+"monica:app/Jobs/SendNewUserAlert.php": [
+15,
+26,
+36
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/TypeIntersectionTest.php": [
-16,
-30,
-48,
-83,
-101
-],
-"PHP_CodeSniffer:tests/Core/Tokenizer/UndoNamespacedNameSingleTokenTest.php": [
+"monica:app/Jobs/SendVerifyEmail.php": [
+14,
 25,
+35
+],
+"monica:app/Jobs/ServiceQueue.php": [
+14,
+45,
+56,
+67
+],
+"monica:app/Jobs/StayInTouch/ScheduleStayInTouch.php": [
+16,
+27,
+37
+],
+"monica:app/Jobs/SynchronizeAddressBooks.php": [
+15,
+35,
+46
+],
+"monica:app/Jobs/UpdateLastConsultedDate.php": [
+13,
+24,
+34
+],
+"monica:app/Listeners/LoginListener.php": [
+15,
+22,
+48,
+62,
+72,
+83,
+94,
+106
+],
+"monica:app/Listeners/LogoutUserDevices.php": [
+13,
+21,
+39,
+57,
+73,
+88
+],
+"monica:app/Models/Account/Account.php": [
+56,
+93,
+103,
+114,
+128,
+138,
+148,
+158,
+168,
+178,
+188,
+198,
+208,
+218,
+228,
+238,
+248,
+258,
+268,
+278,
+288,
+298,
+308,
+318,
+328,
+338,
+348,
+358,
+368,
+378,
+388,
+398,
+408,
+418,
+428,
+438,
+448,
+458,
+468,
+478,
+488,
+498,
+508,
+518,
+528,
+538,
+547,
+576,
+588,
+599,
+618,
+655,
+688,
+718,
+729,
+742
+],
+"monica:app/Models/Account/Activity.php": [
+21,
+62,
+72,
+82,
+90,
+100,
+112,
+122,
+130,
+145
+],
+"monica:app/Models/Account/ActivityStatistic.php": [
+9,
+28,
+36
+],
+"monica:app/Models/Account/ActivityType.php": [
+11,
+34,
+44,
+54,
+62,
+76
+],
+"monica:app/Models/Account/ActivityTypeCategory.php": [
+11,
+35,
+45,
+56
+],
+"monica:app/Models/Account/AddressBook.php": [
+14,
+52,
+62,
+72
+],
+"monica:app/Models/Account/AddressBookSubscription.php": [
+16,
+85,
+95,
+105,
+116,
+127,
+138,
+149,
+160,
+170
+],
+"monica:app/Models/Account/ApiUsage.php": [
+8,
+15
+],
+"monica:app/Models/Account/Company.php": [
+11,
 40,
+50
+],
+"monica:app/Models/Account/ExportJob.php": [
+13,
+75,
+85,
+95,
+107
+],
+"monica:app/Models/Account/ImportJob.php": [
+36,
+76,
+86,
+96,
+106,
+128,
+145,
+157,
+171,
+189,
+211,
+224,
+255,
+287,
+301
+],
+"monica:app/Models/Account/ImportJobReport.php": [
+20,
+36,
+46,
+56
+],
+"monica:app/Models/Account/Invitation.php": [
+16,
+32,
+42
+],
+"monica:app/Models/Account/Photo.php": [
+16,
+39,
+49,
+59,
+69,
+83,
+100
+],
+"monica:app/Models/Account/Place.php": [
+19,
+39,
+49,
+59,
+96,
+110,
+123
+],
+"monica:app/Models/Account/Weather.php": [
+13,
+49,
+59,
+69,
+90,
+105,
+115,
+131,
+230
+],
+"monica:app/Models/Contact/Address.php": [
+18,
+43,
+53,
+63,
+73
+],
+"monica:app/Models/Contact/Call.php": [
+16,
+56,
+66,
+76
+],
+"monica:app/Models/Contact/Contact.php": [
+48,
+176,
+186,
+196,
+214,
+224,
+234,
+244,
+254,
+264,
+274,
+284,
+294,
+304,
+314,
+324,
+334,
+344,
+354,
+364,
+374,
+384,
+394,
+404,
+414,
+424,
+434,
+444,
+454,
+464,
+474,
+484,
+496,
+523,
+541,
+552,
+563,
+574,
+585,
+596,
+614,
+633,
+652,
+697,
+709,
+721,
+731,
+742,
+755,
+908,
+929,
+939,
+957,
+976,
+1000,
+1020,
+1043,
+1065,
+1073,
+1081,
+1089,
+1099,
+1125,
+1144,
+1177,
+1195,
+1219,
+1227,
+1239,
+1249,
+1268,
+1278,
+1305,
+1338,
+1372,
+1398,
+1420,
+1438,
+1460,
+1484,
+1507,
+1532,
+1537,
+1551,
+1566,
+1577
+],
+"monica:app/Models/Contact/ContactField.php": [
+13,
+36,
+46,
+56,
+66,
+77,
+90
+],
+"monica:app/Models/Contact/ContactFieldLabel.php": [
+14,
+41
+],
+"monica:app/Models/Contact/ContactFieldType.php": [
+12,
+53,
 63
 ],
-"PHP_CodeSniffer:tests/FileList.php": [
+"monica:app/Models/Contact/Conversation.php": [
+12,
+35,
+45,
+55,
+65
+],
+"monica:app/Models/Contact/Debt.php": [
+23,
+47,
+57,
+67,
+78,
+89,
+100
+],
+"monica:app/Models/Contact/Document.php": [
+14,
+46,
+56,
+66,
+80,
+100
+],
+"monica:app/Models/Contact/Gender.php": [
+12,
+76,
+86,
+96
+],
+"monica:app/Models/Contact/Gift.php": [
+28,
+61,
+71,
+81,
+91,
+102,
+113,
+124,
+135,
+145
+],
+"monica:app/Models/Contact/LifeEvent.php": [
+11,
+63,
+73,
+83,
+93
+],
+"monica:app/Models/Contact/LifeEventCategory.php": [
+12,
+44,
+54
+],
+"monica:app/Models/Contact/LifeEventType.php": [
+12,
+45,
+55,
+65
+],
+"monica:app/Models/Contact/Message.php": [
+11,
+43,
+53,
+63
+],
+"monica:app/Models/Contact/Note.php": [
+21,
+70,
+80,
+91,
+101,
+111,
+121
+],
+"monica:app/Models/Contact/Occupation.php": [
+11,
+64,
+74,
+84
+],
+"monica:app/Models/Contact/Pet.php": [
+11,
+27,
+37,
+47,
+58
+],
+"monica:app/Models/Contact/PetCategory.php": [
+8,
+25
+],
+"monica:app/Models/Contact/Reminder.php": [
+23,
+60,
+70,
+80,
+91,
+101,
+112,
+134,
+149,
+177
+],
+"monica:app/Models/Contact/ReminderOutbox.php": [
+23,
+48,
+58,
+68
+],
+"monica:app/Models/Contact/ReminderRule.php": [
+10,
+35
+],
+"monica:app/Models/Contact/Tag.php": [
+10,
+33,
+41,
+49
+],
+"monica:app/Models/Contact/Task.php": [
+24,
+66,
+76,
+87,
+98
+],
+"monica:app/Models/Instance/AuditLog.php": [
 13,
+56,
+66,
+76,
+87
+],
+"monica:app/Models/Instance/Cron.php": [
+8
+],
+"monica:app/Models/Instance/Emotion/Emotion.php": [
+18,
+34,
+44,
+54,
+66
+],
+"monica:app/Models/Instance/Emotion/PrimaryEmotion.php": [
+15,
+31,
+41
+],
+"monica:app/Models/Instance/Emotion/SecondaryEmotion.php": [
+16,
+32,
+42
+],
+"monica:app/Models/Instance/Instance.php": [
+9,
+17
+],
+"monica:app/Models/Instance/SpecialDate.php": [
+29,
+86,
+96,
+105,
+120,
+138,
+154,
+177
+],
+"monica:app/Models/Instance/Statistic.php": [
+8
+],
+"monica:app/Models/Journal/Day.php": [
+13,
+31,
+41
+],
+"monica:app/Models/Journal/Entry.php": [
+17,
+46,
+57,
+68
+],
+"monica:app/Models/Journal/JournalEntry.php": [
+24,
+51,
+61,
+72,
+94,
+109,
+124
+],
+"monica:app/Models/ModelBinding.php": [
+9,
+18
+],
+"monica:app/Models/ModelBindingHasher.php": [
+9
+],
+"monica:app/Models/ModelBindingHasherWithContact.php": [
+9
+],
+"monica:app/Models/ModelBindingWithContact.php": [
+10,
+19
+],
+"monica:app/Models/Relationship/Relationship.php": [
+15,
+46,
+56,
+66,
+76,
+86
+],
+"monica:app/Models/Relationship/RelationshipType.php": [
+13,
+38,
+48,
+58,
+74
+],
+"monica:app/Models/Relationship/RelationshipTypeGroup.php": [
+10,
+35
+],
+"monica:app/Models/Settings/Currency.php": [
+8
+],
+"monica:app/Models/Settings/Term.php": [
+9,
+21
+],
+"monica:app/Models/User/Changelog.php": [
+10,
+31,
+41,
+51
+],
+"monica:app/Models/User/Module.php": [
+14,
+38,
+49
+],
+"monica:app/Models/User/RecoveryCode.php": [
+9,
+30
+],
+"monica:app/Models/User/SyncToken.php": [
+8
+],
+"monica:app/Models/User/User.php": [
+25,
+102,
+112,
+122,
+132,
+142,
+153,
+163,
+178,
+205,
+216,
+227,
+240,
+268,
+282,
+293
+],
+"monica:app/Notifications/EmailMessaging.php": [
+11,
+19,
+37
+],
+"monica:app/Notifications/ExportAccountDone.php": [
+17,
+32,
+43,
+54
+],
+"monica:app/Notifications/InvitationMail.php": [
+16,
+25,
+36,
+55
+],
+"monica:app/Notifications/NewUserAlert.php": [
+14,
+25,
+35,
+45
+],
+"monica:app/Notifications/StayInTouchEmail.php": [
+17,
+31,
+41,
 52,
+70
+],
+"monica:app/Notifications/UserNotified.php": [
+19,
+39,
+50,
+61
+],
+"monica:app/Notifications/UserReminded.php": [
+18,
+32,
+42,
+53
+],
+"monica:app/Providers/AppServiceProvider.php": [
+24,
+31,
+123
+],
+"monica:app/Providers/AuthServiceProvider.php": [
+10,
+26
+],
+"monica:app/Providers/BroadcastServiceProvider.php": [
+9,
+16
+],
+"monica:app/Providers/DAVServiceProvider.php": [
+28,
+35,
+65,
+84
+],
+"monica:app/Providers/EventServiceProvider.php": [
+8
+],
+"monica:app/Providers/MacroServiceProvider.php": [
+10,
+17
+],
+"monica:app/Providers/RouteServiceProvider.php": [
+23,
+39,
+79,
+104
+],
+"monica:app/Services/Account/Activity/Activity/AttachContactToActivity.php": [
+10,
+17,
+32,
+53,
+72
+],
+"monica:app/Services/Account/Activity/Activity/CreateActivity.php": [
+13,
+20,
+39,
+70,
+95,
+119
+],
+"monica:app/Services/Account/Activity/Activity/DestroyActivity.php": [
+9,
+16,
+30,
+46
+],
+"monica:app/Services/Account/Activity/Activity/UpdateActivity.php": [
+13,
+20,
+40,
+72,
+102,
+123
+],
+"monica:app/Services/Account/Activity/ActivityStatisticService.php": [
+11,
+21,
+37,
+49,
+97
+],
+"monica:app/Services/Account/Activity/ActivityType/CreateActivityType.php": [
+10,
+17,
+33
+],
+"monica:app/Services/Account/Activity/ActivityType/DestroyActivityType.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Account/Activity/ActivityType/UpdateActivityType.php": [
+10,
+17,
+34
+],
+"monica:app/Services/Account/Activity/ActivityTypeCategory/CreateActivityTypeCategory.php": [
+9,
+16,
+31
+],
+"monica:app/Services/Account/Activity/ActivityTypeCategory/DestroyActivityTypeCategory.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Account/Activity/ActivityTypeCategory/UpdateActivityTypeCategory.php": [
+9,
+16,
+32
+],
+"monica:app/Services/Account/Company/CreateCompany.php": [
+13,
+20,
+37,
+59
+],
+"monica:app/Services/Account/Company/DestroyCompany.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Account/Company/UpdateCompany.php": [
+9,
+16,
+33
+],
+"monica:app/Services/Account/Gender/CreateGender.php": [
+10,
+17,
+35
+],
+"monica:app/Services/Account/Gender/DestroyGender.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Account/Gender/UpdateGender.php": [
+10,
+17,
+36
+],
+"monica:app/Services/Account/LifeEvent/LifeEventType/CreateLifeEventType.php": [
+10,
+17,
+32
+],
+"monica:app/Services/Account/LifeEvent/LifeEventType/DestroyLifeEventType.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Account/LifeEvent/LifeEventType/UpdateLifeEventType.php": [
+10,
+17,
+33
+],
+"monica:app/Services/Account/Photo/DestroyPhoto.php": [
+10,
+17,
+31
+],
+"monica:app/Services/Account/Photo/UploadPhoto.php": [
+20,
+22,
+34,
+51,
+81,
+102,
+152,
+166,
+177,
+190,
+212
+],
+"monica:app/Services/Account/Place/CreatePlace.php": [
+10,
+17,
+37,
+65
+],
+"monica:app/Services/Account/Place/DestroyPlace.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Account/Place/UpdatePlace.php": [
+10,
+17,
+38,
+69
+],
+"monica:app/Services/Account/Settings/ArchiveAllContacts.php": [
+11,
+18,
+33
+],
+"monica:app/Services/Account/Settings/DestroyAccount.php": [
+10,
+17,
+32,
+53,
+66,
+81
+],
+"monica:app/Services/Account/Settings/DestroyAllDocuments.php": [
+9,
+16,
+29
+],
+"monica:app/Services/Account/Settings/DestroyAllPhotos.php": [
+9,
+16,
+29
+],
+"monica:app/Services/Account/Settings/JsonExportAccount.php": [
+14,
+24,
+38,
+57,
+75,
+87
+],
+"monica:app/Services/Account/Settings/ResetAccount.php": [
+12,
+21,
+34,
+63,
+77,
+91,
+105,
+118,
+132,
+156,
+170
+],
+"monica:app/Services/Account/Settings/SqlExportAccount.php": [
+13,
+23,
+37,
+56,
+135,
+182,
+193,
+211,
+234,
+252,
+274,
+295,
+318,
+340,
+363,
+385,
+409,
+431,
+451,
+511,
+532,
+554,
+579,
+605,
+626,
+647,
+668,
+695,
+717,
+739,
+761,
+785,
+813,
+837,
+863,
+886,
+909,
+937,
+959,
+982,
+1008,
+1030,
+1051,
+1074,
+1096,
+1120,
+1141,
+1168,
+1192,
+1214,
+1239,
+1260,
+1301,
+1323,
+1354
+],
+"monica:app/Services/Auth/Population/PopulateContactFieldTypesTable.php": [
+17,
+24,
+38,
+51,
+68,
+89
+],
+"monica:app/Services/Auth/Population/PopulateLifeEventsTable.php": [
+19,
+26,
+47,
+72,
+85,
+111,
+131,
+147,
+163
+],
+"monica:app/Services/Auth/Population/PopulateModulesTable.php": [
+16,
+23,
+44,
+62,
+78,
+98
+],
+"monica:app/Services/BaseService.php": [
+10,
+17,
+28,
+43,
+57,
+71
+],
+"monica:app/Services/Contact/Address/CreateAddress.php": [
+13,
+20,
+43,
+78
+],
+"monica:app/Services/Contact/Address/DestroyAddress.php": [
+10,
+17,
+31
+],
+"monica:app/Services/Contact/Address/UpdateAddress.php": [
+13,
+20,
+44,
 82
 ],
-"PHP_CodeSniffer:tests/Standards/AbstractSniffUnitTest.php": [
-24,
-56,
-75,
-104,
-117,
-221,
-433
+"monica:app/Services/Contact/Avatar/GenerateDefaultAvatar.php": [
+14,
+21,
+35,
+63,
+79,
+107
 ],
-"PHP_CodeSniffer:tests/Standards/AllSniffs.php": [
+"monica:app/Services/Contact/Avatar/GetAdorableAvatarURL.php": [
+8,
+15,
+30,
+46
+],
+"monica:app/Services/Contact/Avatar/GetAvatarsFromInternet.php": [
+10,
+17,
+36,
+54,
+70,
+94
+],
+"monica:app/Services/Contact/Avatar/GetGravatar.php": [
+13,
+20,
+27,
+52,
+83
+],
+"monica:app/Services/Contact/Avatar/GetGravatarURL.php": [
+10,
+17,
+31,
+53,
+70
+],
+"monica:app/Services/Contact/Avatar/UpdateAvatar.php": [
+14,
+21,
+45
+],
+"monica:app/Services/Contact/Call/CreateCall.php": [
+12,
+19,
+37,
+67,
+85
+],
+"monica:app/Services/Contact/Call/DestroyCall.php": [
+10,
+17,
+31,
+58
+],
+"monica:app/Services/Contact/Call/UpdateCall.php": [
+10,
+17,
+35,
+70,
+91
+],
+"monica:app/Services/Contact/Contact/CreateContact.php": [
+22,
+29,
+66,
+104,
+141,
+155,
+175,
+198,
+224,
+245
+],
+"monica:app/Services/Contact/Contact/DeleteMeContact.php": [
+10,
+17,
+31
+],
+"monica:app/Services/Contact/Contact/DestroyContact.php": [
+13,
+22,
+37,
+64,
+80
+],
+"monica:app/Services/Contact/Contact/SetMeContact.php": [
+11,
+18,
+33
+],
+"monica:app/Services/Contact/Contact/UpdateBirthdayInformation.php": [
+16,
+28,
+67,
+93,
+111,
+126,
+147,
+159,
+179
+],
+"monica:app/Services/Contact/Contact/UpdateContact.php": [
+16,
+26,
+62,
+91,
+129,
+149,
+165
+],
+"monica:app/Services/Contact/Contact/UpdateContactFoodPreferences.php": [
+10,
+17,
+32
+],
+"monica:app/Services/Contact/Contact/UpdateContactIntroduction.php": [
+17,
+29,
+73,
+106,
+112,
+119,
+138,
+161,
+173,
+193
+],
+"monica:app/Services/Contact/Contact/UpdateDeceasedInformation.php": [
+13,
+20,
+40,
+65,
+83,
+98,
+124,
+144
+],
+"monica:app/Services/Contact/Contact/UpdateWorkInformation.php": [
+13,
+20,
+37,
+70
+],
+"monica:app/Services/Contact/ContactField/CreateContactField.php": [
+12,
+19,
+36
+],
+"monica:app/Services/Contact/ContactField/DestroyContactField.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Contact/ContactField/UpdateContactField.php": [
+12,
+19,
+37
+],
+"monica:app/Services/Contact/Conversation/AddMessageToConversation.php": [
+16,
+23,
+41
+],
+"monica:app/Services/Contact/Conversation/CreateConversation.php": [
+16,
+23,
+39
+],
+"monica:app/Services/Contact/Conversation/DestroyConversation.php": [
+14,
+21,
+35
+],
+"monica:app/Services/Contact/Conversation/DestroyMessage.php": [
+15,
+22,
+37
+],
+"monica:app/Services/Contact/Conversation/UpdateConversation.php": [
+15,
+22,
+38
+],
+"monica:app/Services/Contact/Conversation/UpdateMessage.php": [
+16,
+23,
+42
+],
+"monica:app/Services/Contact/Description/ClearPersonalDescription.php": [
+12,
+19,
+34,
+59
+],
+"monica:app/Services/Contact/Description/SetPersonalDescription.php": [
+12,
+19,
+38,
+63
+],
+"monica:app/Services/Contact/Document/DestroyDocument.php": [
+10,
+17,
+31
+],
+"monica:app/Services/Contact/Document/UploadDocument.php": [
+12,
+19,
+34,
+58
+],
+"monica:app/Services/Contact/Gift/AssociatePhotoToGift.php": [
+10,
+17,
+31
+],
+"monica:app/Services/Contact/Gift/CreateGift.php": [
+12,
+19,
+47
+],
+"monica:app/Services/Contact/Gift/DestroyGift.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Contact/Gift/UpdateGift.php": [
+12,
+19,
+48
+],
+"monica:app/Services/Contact/Label/UpdateAddressLabels.php": [
+10,
+17,
+32,
+52,
+80
+],
+"monica:app/Services/Contact/Label/UpdateContactFieldLabels.php": [
+10,
+17,
+32,
+52,
+81
+],
+"monica:app/Services/Contact/LifeEvent/CreateLifeEvent.php": [
+13,
+20,
+41,
+77
+],
+"monica:app/Services/Contact/LifeEvent/DestroyLifeEvent.php": [
+10,
+17,
+31,
+50
+],
+"monica:app/Services/Contact/LifeEvent/UpdateLifeEvent.php": [
+10,
+17,
+35
+],
+"monica:app/Services/Contact/Occupation/CreateOccupation.php": [
+11,
+18,
+43
+],
+"monica:app/Services/Contact/Occupation/DestroyOccupation.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Contact/Occupation/UpdateOccupation.php": [
+10,
+17,
+43
+],
+"monica:app/Services/Contact/Relationship/CreateRelationship.php": [
+11,
+18,
+34,
+69
+],
+"monica:app/Services/Contact/Relationship/DestroyRelationship.php": [
+12,
+19,
+33,
+56,
+71
+],
+"monica:app/Services/Contact/Relationship/UpdateRelationship.php": [
+10,
+17,
+32,
+62
+],
+"monica:app/Services/Contact/Reminder/CreateReminder.php": [
+11,
+18,
+41
+],
+"monica:app/Services/Contact/Reminder/DestroyReminder.php": [
+9,
+16,
+31
+],
+"monica:app/Services/Contact/Reminder/UpdateReminder.php": [
+11,
+18,
+42
+],
+"monica:app/Services/Contact/Tag/AssociateTag.php": [
+10,
+17,
+32,
+57,
+77,
+90
+],
+"monica:app/Services/Contact/Tag/CreateTag.php": [
+11,
+18,
+32
+],
+"monica:app/Services/Contact/Tag/DestroyTag.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Contact/Tag/DetachTag.php": [
+10,
+17,
+32
+],
+"monica:app/Services/Contact/Tag/UpdateTag.php": [
+11,
+18,
+33
+],
+"monica:app/Services/DavClient/CreateAddressBookSubscription.php": [
+15,
+22,
+39,
+78,
+86
+],
+"monica:app/Services/DavClient/SynchronizeAddressBook.php": [
+17,
+24,
+37,
+61,
+71
+],
+"monica:app/Services/DavClient/UpdateSubscriptionLocalSyncToken.php": [
+10,
+17,
+29,
+44
+],
+"monica:app/Services/DavClient/Utils/AddressBookContactsPush.php": [
+15,
+27,
+49,
+74,
+90
+],
+"monica:app/Services/DavClient/Utils/AddressBookContactsPushMissed.php": [
+15,
+28,
+47
+],
+"monica:app/Services/DavClient/Utils/AddressBookContactsUpdater.php": [
+17,
+28,
+43,
+69
+],
+"monica:app/Services/DavClient/Utils/AddressBookContactsUpdaterMissed.php": [
+11,
+23
+],
+"monica:app/Services/DavClient/Utils/AddressBookGetter.php": [
+15,
+28,
+45,
+80,
+132,
+150,
+172,
+190,
+215,
+227,
+247
+],
+"monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php": [
 18,
 27,
-42,
-117
+39,
+74,
+116,
+143,
+161,
+180,
+198,
+222
 ],
-"PHP_CodeSniffer:tests/TestSuite.php": [
+"monica:app/Services/DavClient/Utils/Dav/DavClient.php": [
 16,
+39,
+53,
+67,
+79,
+95,
+121,
+140,
+175,
+214,
+246,
+281,
+327,
+367,
+390,
+417,
+440,
+484,
+508,
+553,
+585,
+599
+],
+"monica:app/Services/DavClient/Utils/Dav/DavClientException.php": [
+8
+],
+"monica:app/Services/DavClient/Utils/Dav/DavServerNotCompliantException.php": [
+6
+],
+"monica:app/Services/DavClient/Utils/Dav/ServiceUrlQuery.php": [
+10,
+20,
+59,
+72
+],
+"monica:app/Services/DavClient/Utils/Model/ContactDeleteDto.php": [
+6
+],
+"monica:app/Services/DavClient/Utils/Model/ContactDto.php": [
+6,
+24
+],
+"monica:app/Services/DavClient/Utils/Model/ContactPushDto.php": [
+6,
+32
+],
+"monica:app/Services/DavClient/Utils/Model/ContactUpdateDto.php": [
+9,
+23,
+35
+],
+"monica:app/Services/DavClient/Utils/Model/SyncDto.php": [
+17,
+36,
+47,
+57,
+69
+],
+"monica:app/Services/DavClient/Utils/Traits/HasCapability.php": [
+8,
+16
+],
+"monica:app/Services/DavClient/Utils/Traits/WithSyncDto.php": [
+9,
+21
+],
+"monica:app/Services/DispatchableService.php": [
+13,
+21,
+35,
+48
+],
+"monica:app/Services/Instance/AuditLog/LogAccountAction.php": [
+9,
+16,
+36
+],
+"monica:app/Services/Instance/Geolocalization/GetGPSCoordinate.php": [
+15,
+22,
+37,
+54,
+67,
+88
+],
+"monica:app/Services/Instance/IdHasher.php": [
+10,
+24,
+29,
+34
+],
+"monica:app/Services/Instance/TokenClean.php": [
+11,
+18,
+35,
+58
+],
+"monica:app/Services/Instance/Weather/GetWeatherInformation.php": [
+16,
+23,
+41,
+62,
+77,
+106
+],
+"monica:app/Services/QueuableService.php": [
+11
+],
+"monica:app/Services/Task/CreateTask.php": [
+10,
+17,
+33
+],
+"monica:app/Services/Task/DestroyTask.php": [
+9,
+16,
+30
+],
+"monica:app/Services/Task/UpdateTask.php": [
+9,
+16,
+34
+],
+"monica:app/Services/User/AcceptPolicy.php": [
+11,
+18,
+35
+],
+"monica:app/Services/User/CreateUser.php": [
+13,
+20,
+39,
+64,
+85,
+144
+],
+"monica:app/Services/User/EmailChange.php": [
+10,
+17,
+32
+],
+"monica:app/Services/User/UpdateViewPreference.php": [
+10,
+17,
+32
+],
+"monica:app/Services/VCalendar/ExportTask.php": [
+13,
+20,
+34,
+48,
+71,
+82
+],
+"monica:app/Services/VCalendar/ExportVCalendar.php": [
+13,
+20,
+34,
+48,
+72,
+84
+],
+"monica:app/Services/VCalendar/ImportTask.php": [
+16,
+25,
+40,
+61,
+91,
+103,
+119,
+140,
+154,
+169,
+181
+],
+"monica:app/Services/VCard/ExportVCard.php": [
+18,
+25,
+39,
+56,
+65,
+111,
+134,
+163,
+184,
+204,
+224,
+252,
+302,
+321,
+331
+],
+"monica:app/Services/VCard/GetEtag.php": [
+9,
+16,
+30
+],
+"monica:app/Services/VCard/ImportVCard.php": [
+46,
+108,
+137,
+166,
+181,
+221,
+246,
+279,
+311,
+349,
+363,
+378,
+390,
+399,
+408,
+418,
+430,
+466,
+498,
+518,
+538,
+569,
+594,
+648,
+674,
+708,
+730,
+742,
+775,
+791,
+807,
+860,
+893,
+930,
+984,
+1040,
+1058,
+1119,
+1172,
+1200
+],
+"monica:app/Traits/AmountFormatter.php": [
+11,
+18,
+28,
+38,
+52,
+66
+],
+"monica:app/Traits/DAVFormat.php": [
+6,
+14
+],
+"monica:app/Traits/HasUuid.php": [
+8,
+15
+],
+"monica:app/Traits/Hasher.php": [
+10,
+17,
+22,
+29,
+34
+],
+"monica:app/Traits/Journalable.php": [
+10,
+17,
+27,
+37
+],
+"monica:app/Traits/JsonRespondController.php": [
+10,
+27,
+38,
+50,
+61,
+75,
+86,
+100,
+115,
+129,
+143,
+157,
+170,
+187
+],
+"monica:app/Traits/Searchable.php": [
+9,
+22,
+56
+],
+"monica:app/Traits/StripeCall.php": [
+9,
+19
+],
+"monica:app/Traits/Subscription.php": [
+9,
+20,
+44,
+75,
+89,
+99,
+111,
+123,
+143
+],
+"monica:app/Traits/WithUser.php": [
+8,
+21
+],
+"monica:app/ViewHelpers/ContactHelper.php": [
+18,
+26
+],
+"monica:database/factories/Account/AddressBookFactory.php": [
+11,
+25
+],
+"monica:database/factories/Account/AddressBookSubscriptionFactory.php": [
+12,
+26
+],
+"monica:database/factories/Account/ExportJobFactory.php": [
+11,
+25
+],
+"monica:database/migrations/2014_10_12_000000_create_users_table.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2014_10_12_100000_create_password_resets_table.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2016_06_01_000001_create_oauth_auth_codes_table.php": [
+8,
+15,
+32
+],
+"monica:database/migrations/2016_06_01_000002_create_oauth_access_tokens_table.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2016_06_01_000003_create_oauth_refresh_tokens_table.php": [
+8,
+15,
+30
+],
+"monica:database/migrations/2016_06_01_000004_create_oauth_clients_table.php": [
+8,
+15,
+36
+],
+"monica:database/migrations/2016_06_01_000005_create_oauth_personal_access_clients_table.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2016_06_07_234741_create_account_table.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2016_06_08_003006_add_account_info_table.php": [
+8,
+15,
+32
+],
+"monica:database/migrations/2016_06_08_005413_create_contacts_table.php": [
+8,
+15,
+132
+],
+"monica:database/migrations/2016_06_25_224219_create_reminder_type_table.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2016_06_28_191025_create_tasks_table.php": [
+8,
+15,
+35
+],
+"monica:database/migrations/2016_06_30_185050_create_notes_table.php": [
+8,
+15,
+39
+],
+"monica:database/migrations/2016_07_25_133835_add_width_field.php": [
+8,
+15,
 27
 ],
-"PHP_CodeSniffer:tests/TestSuite7.php": [
-16,
+"monica:database/migrations/2016_08_28_122938_create_kids_table.php": [
+7,
+14,
+47
+],
+"monica:database/migrations/2016_08_28_215159_create_relations_table.php": [
+7,
+14,
+40
+],
+"monica:database/migrations/2016_09_03_202027_add_reminder_id_to_contacts.php": [
+8,
+15,
+35
+],
+"monica:database/migrations/2016_09_05_134937_add_last_talked_to_field.php": [
+8,
+15,
+31
+],
+"monica:database/migrations/2016_09_05_135927_add_people_id_to_contacts.php": [
+8,
+15,
 27
 ],
-"PHP_CodeSniffer:tests/bootstrap.php": [
-61
+"monica:database/migrations/2016_09_05_145111_add_name_info_to_peoples.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2016_09_06_213550_create_activity_type_table.php": [
+7,
+14,
+35
+],
+"monica:database/migrations/2016_09_10_164406_create_jobs_table.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2016_09_10_170122_create_notifications_table.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2016_09_12_014120_create_failed_jobs_table.php": [
+8,
+15,
+32
+],
+"monica:database/migrations/2016_09_30_014720_add_kid_to_reminder.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2016_10_15_024156_add_deleted_at_to_users.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2016_10_19_155139_create_cache_table.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2016_10_19_155800_create_sessions_table.php": [
+8,
+15,
+32
+],
+"monica:database/migrations/2016_10_21_022941_add_statistics_table.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2016_10_24_013543_add_journal_setting_to_users.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2016_10_24_014257_create_journal_tables.php": [
+7,
+14
+],
+"monica:database/migrations/2016_10_28_002518_add_metric_to_settings.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2016_11_01_014353_create_activities_table.php": [
+8,
+15,
+35
+],
+"monica:database/migrations/2016_11_01_015957_add_icon_column.php": [
+7,
+14,
+26
+],
+"monica:database/migrations/2016_11_03_150307_add_activity_location_to_activities.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2016_11_09_013049_add_events_table.php": [
+8,
+15,
+33
+],
+"monica:database/migrations/2016_12_08_011555_remove_type_from_notes.php": [
+7,
+14,
+28
+],
+"monica:database/migrations/2016_12_13_133945_add_gifts_table.php": [
+8,
+15,
+39
+],
+"monica:database/migrations/2016_12_28_150831_change_title_column.php": [
+7,
+14,
+26
+],
+"monica:database/migrations/2017_01_14_200815_add_facebook_columns_to_users_table.php": [
+8,
+15,
+28
+],
+"monica:database/migrations/2017_01_15_045025_add_colors_to_users.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2017_01_22_142645_add_fields_to_contacts.php": [
+8,
+15,
+46
+],
+"monica:database/migrations/2017_01_23_043831_change_people_to_contact_for_kids.php": [
+8,
+15,
+33
+],
+"monica:database/migrations/2017_01_26_013524_change_people_to_significantother.php": [
+8,
+15,
+33
+],
+"monica:database/migrations/2017_01_26_022852_change_notes_to_contact.php": [
+8,
+15
+],
+"monica:database/migrations/2017_01_26_034553_add_notes_count_to_contact.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2017_01_27_024356_change_people_in_events.php": [
+8,
+15,
+33
+],
+"monica:database/migrations/2017_01_28_180156_remove_deleted_at_from_significant_others.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2017_01_28_184901_remove_deleted_at_from_kids.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2017_01_28_193913_remove_deleted_at_from_notes.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2017_01_28_222114_remove_viewed_at_from_contacts.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2017_01_29_175146_remove_delete_at_from_activities.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2017_01_29_175629_add_number_activities_to_contacts.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2017_01_31_025849_add_activity_statistics_table.php": [
+8,
+15,
+32
+],
+"monica:database/migrations/2017_02_02_232450_add_confirmation.php": [
+8,
+15,
+28
+],
+"monica:database/migrations/2017_02_04_225618_change_reminders_table.php": [
+8,
+15,
+33
+],
+"monica:database/migrations/2017_02_05_035925_add_gifts_metrics_to_contacts.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2017_02_05_041740_change_gifts_table.php": [
+8,
+15,
+28
+],
+"monica:database/migrations/2017_02_05_042122_change_people_to_contact_for_gifts.php": [
+8,
+15,
+33
+],
+"monica:database/migrations/2017_02_07_041607_change_tasks_table.php": [
+8,
+15,
+33
+],
+"monica:database/migrations/2017_02_07_051355_add_number_tasks_to_contact.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2017_02_08_002251_change_number_tasks_contact.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2017_02_08_025358_add_sort_preferences_to_users.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2017_02_10_195613_remove_notifications_table.php": [
+8,
+15,
+25
+],
+"monica:database/migrations/2017_02_10_214714_remove_people_table.php": [
+8,
+15,
+25
+],
+"monica:database/migrations/2017_02_10_215405_remove_entities_table.php": [
+8,
+15,
+25
+],
+"monica:database/migrations/2017_02_10_224355_calculate_statistics.php": [
+12,
+20
+],
+"monica:database/migrations/2017_02_11_154900_add_avatars_to_contacts.php": [
+8,
+15,
+28
+],
+"monica:database/migrations/2017_02_12_134220_create_entries_table.php": [
+8,
+15,
+31
+],
+"monica:database/migrations/2017_05_03_155254_move_significant_other_data.php": [
+8,
+15
+],
+"monica:database/migrations/2017_05_04_164723_remove_contact_encryption.php": [
+7,
+15
+],
+"monica:database/migrations/2017_05_04_185921_add_title_to_activities.php": [
+8,
+15
+],
+"monica:database/migrations/2017_05_04_193252_alter_activity_nullable.php": [
+8,
+15
+],
+"monica:database/migrations/2017_05_08_164514_remove_encryption_tasks.php": [
+7,
+14
+],
+"monica:database/migrations/2017_05_30_002239_remove_predefined_reminders.php": [
+9,
+16
+],
+"monica:database/migrations/2017_05_30_023116_create_money_table.php": [
+7,
+14
+],
+"monica:database/migrations/2017_06_07_173437_add_multiple_genders_choices.php": [
+8,
+15,
+42
+],
+"monica:database/migrations/2017_06_10_152945_add_social_networks_to_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2017_06_10_155349_create_currencies_data.php": [
+9,
+16
+],
+"monica:database/migrations/2017_06_11_025227_remove_encryption_journal.php": [
+7,
+14
+],
+"monica:database/migrations/2017_06_11_110735_change_unique_constraint_for_contacts.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2017_06_13_035059_remove_gifts_encryption.php": [
+7,
+14
+],
+"monica:database/migrations/2017_06_13_195740_add_company_to_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2017_06_14_131803_remove_bern_timezone.php": [
+7,
+14
+],
+"monica:database/migrations/2017_06_14_132911_add_zar_currency_to_currencies_table.php": [
+7,
+14
+],
+"monica:database/migrations/2017_06_16_215256_add_about_who_to_reminders.php": [
+9,
+16
+],
+"monica:database/migrations/2017_06_17_010900_fix_contacts_table.php": [
+7,
+14
+],
+"monica:database/migrations/2017_06_17_153814_refactor_user_table.php": [
+8,
+15
+],
+"monica:database/migrations/2017_06_19_105842_add_stripe_fields_to_users.php": [
+7,
+14
+],
+"monica:database/migrations/2017_06_20_121345_add_invitations_statistics.php": [
+7,
+14
+],
+"monica:database/migrations/2017_06_22_210813_add_name_order_to_users.php": [
+8,
+15
+],
+"monica:database/migrations/2017_06_27_134704_create_import_table.php": [
+8,
+15
+],
+"monica:database/migrations/2017_06_29_211725_add_import_job_to_statistics.php": [
+7,
+14
+],
+"monica:database/migrations/2017_06_29_230523_add_gravatar_url_to_users.php": [
+8,
+15
+],
+"monica:database/migrations/2017_07_02_155736_create_tags_table.php": [
+8,
+15
+],
+"monica:database/migrations/2017_07_04_132743_add_tags_to_statistics.php": [
+7,
+14
+],
+"monica:database/migrations/2017_07_09_164312_update_bad_translation_key.php": [
+7,
+14
+],
+"monica:database/migrations/2017_07_12_014244_create_calls_table.php": [
+8,
+15
+],
+"monica:database/migrations/2017_07_17_005012_drop_reminders_count_from_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2017_07_18_215312_add_danish_kroner_to_currencies_table.php": [
+7,
+14
+],
+"monica:database/migrations/2017_07_18_215758_add_indian_rupee_to_currencies_table.php": [
+7,
+14
+],
+"monica:database/migrations/2017_07_19_094503_add_brazilian_real_to_currencies.php": [
+7,
+14
+],
+"monica:database/migrations/2017_07_22_153209_create_instance_table.php": [
+10,
+17
+],
+"monica:database/migrations/2017_07_26_220021_change_contacts_table.php": [
+10,
+17
+],
+"monica:database/migrations/2017_08_02_152838_change_string_to_boolean_for_reminders.php": [
+9,
+16
+],
+"monica:database/migrations/2017_08_06_085629_change_events_data.php": [
+7,
+14
+],
+"monica:database/migrations/2017_08_06_153253_move_kids_to_contacts.php": [
+10,
+17
+],
+"monica:database/migrations/2017_08_16_041431_add_contact_avatar_location.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2017_08_21_224835_remove_paid_limitations_for_current_users.php": [
+9,
+16
+],
+"monica:database/migrations/2017_09_10_125918_remove_unusued_counters.php": [
+8,
+15
+],
+"monica:database/migrations/2017_09_13_095923_add_tracking_table.php": [
+8,
+15
+],
+"monica:database/migrations/2017_09_13_191714_add_partial_notion.php": [
+9,
+16
+],
+"monica:database/migrations/2017_10_14_083556_change_gift_column_structure.php": [
+10,
+17
+],
+"monica:database/migrations/2017_10_17_170803_change_gift_structure.php": [
+8,
+15
+],
+"monica:database/migrations/2017_10_19_134816_create_activity_contact_table.php": [
+8,
+15,
+31
+],
+"monica:database/migrations/2017_10_19_135215_move_activities_to_pivot_table.php": [
+7,
+14,
+31
+],
+"monica:database/migrations/2017_10_25_102923_remove_contact_id_activities_table.php": [
+7,
+14
+],
+"monica:database/migrations/2017_11_01_122541_add_met_through_to_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2017_11_02_202601_add_is_dead_to_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2017_11_10_174654_create_contact_fields_table.php": [
+9,
+16
+],
+"monica:database/migrations/2017_11_10_181043_migrate_contacts_information.php": [
+9,
+16
+],
+"monica:database/migrations/2017_11_10_202620_move_addresses_from_contact_to_addresses.php": [
+7,
+14
+],
+"monica:database/migrations/2017_11_10_204035_delete_contact_fields_from_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2017_11_20_115635_change-amount-to-double-on-debts.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2017_11_27_083043_add_more_statistics.php": [
+8,
+15
+],
+"monica:database/migrations/2017_11_27_134403_add_new_avatar_to_contacts.php": [
+9,
+16
+],
+"monica:database/migrations/2017_11_27_202857_change_tasks_table_structure.php": [
+9,
+16
+],
+"monica:database/migrations/2017_12_01_113748_update_notes.php": [
+8,
+15
+],
+"monica:database/migrations/2017_12_04_164831_create_ages_table.php": [
+8,
+15
+],
+"monica:database/migrations/2017_12_04_165421_move_ages_data.php": [
+8,
+15
+],
+"monica:database/migrations/2017_12_10_181535_remove_important_dates_table.php": [
+7,
+14
+],
+"monica:database/migrations/2017_12_10_205328_add_account_id_to_activities.php": [
+10,
+17
+],
+"monica:database/migrations/2017_12_10_214545_add_last_consulted_at_to_contacts.php": [
+9,
+16
+],
+"monica:database/migrations/2017_12_13_115857_create_day_table.php": [
+8,
+15
+],
+"monica:database/migrations/2017_12_21_163616_update_journal_entries_with_existing_activities.php": [
+7,
+14
+],
+"monica:database/migrations/2017_12_21_170327_add_google2fa_secret_to_users.php": [
+7,
+14,
+26
+],
+"monica:database/migrations/2017_12_24_115641_create_pets_table.php": [
+9,
+16
+],
+"monica:database/migrations/2017_12_31_114224_add_dashboard_tab_to_users.php": [
+8,
+15
+],
+"monica:database/migrations/2018_01_15_105858_create_additional_reminders_table.php": [
+10,
+17
+],
+"monica:database/migrations/2018_01_16_203358_add_gift_received.php": [
+8,
+15
+],
+"monica:database/migrations/2018_01_16_212320_rename_gift_columns.php": [
+8,
+15
+],
+"monica:database/migrations/2018_01_17_230820_add_gift_tab_view_to_users.php": [
+8,
+15
+],
+"monica:database/migrations/2018_01_27_014146_add_custom_gender.php": [
+10,
+17
+],
+"monica:database/migrations/2018_02_25_202752_change_locale_in_db.php": [
+7,
+14
+],
+"monica:database/migrations/2018_02_28_223747_update_notification_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_03_03_204440_create_relationship_type_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_03_18_085815_populate_default_relationship_type_tables.php": [
+7,
+14
+],
+"monica:database/migrations/2018_03_18_090209_populate_relationship_type_tables_with_default_values.php": [
+8,
+15
+],
+"monica:database/migrations/2018_03_18_090345_migrate_current_relationship_table_to_new_relationship_structure.php": [
+10,
+17
+],
+"monica:database/migrations/2018_03_24_083258_migrate_offsprings.php": [
+9,
+16
+],
+"monica:database/migrations/2018_04_04_220850_create_default_modules_table.php": [
+9,
+16
+],
+"monica:database/migrations/2018_04_04_222608_create_account_modules_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_04_10_205655_fix_production_error.php": [
+9,
+16
+],
+"monica:database/migrations/2018_04_10_222515_migrate-modules.php": [
+9,
+16
+],
+"monica:database/migrations/2018_04_13_131008_fix-contacts-data.php": [
+8,
+15
+],
+"monica:database/migrations/2018_04_13_205231_create_changes_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_04_14_081052_fix_wrong_gender.php": [
+9,
+16
+],
+"monica:database/migrations/2018_04_19_190239_stay_in_touch.php": [
+8,
+15
+],
+"monica:database/migrations/2018_05_06_061227_external_countries.php": [
+10,
+17,
+36,
+53
+],
+"monica:database/migrations/2018_05_07_070458_create_terms_table.php": [
+9,
+16,
+144
+],
+"monica:database/migrations/2018_05_13_110706_add_ex_wife_husband_relationship.php": [
+8,
+15
+],
+"monica:database/migrations/2018_05_16_143631_add_nickname_to_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2018_05_16_214222_add_timestamps_to_currencies.php": [
+8,
+15
+],
+"monica:database/migrations/2018_05_20_121028_accept_terms.php": [
+8,
+15
+],
+"monica:database/migrations/2018_05_20_225034_change_name_order_user-_preferencies.php": [
+7,
+14
+],
+"monica:database/migrations/2018_05_24_160546_fix-inconsistant-reminder-time.php": [
+7,
+14
+],
+"monica:database/migrations/2018_06_10_191450_add_love_metadata_relationshisp.php": [
+8,
+15
+],
+"monica:database/migrations/2018_06_10_221746_migrate_entries_objects.php": [
+7,
+14
+],
+"monica:database/migrations/2018_06_11_184017_change_default_user_table.php": [
+7,
+14
+],
+"monica:database/migrations/2018_06_13_000100_create_u2f_key_table.php": [
+15,
+22,
+44
+],
+"monica:database/migrations/2018_06_14_212502_change_default_name_order_user_table.php": [
+7,
+14
+],
+"monica:database/migrations/2018_07_03_204220_create_default_activity_type_groups_table.php": [
+9,
+16,
+265
+],
+"monica:database/migrations/2018_07_08_104306_update-timestamps-timezone.php": [
+8,
+15,
+109
+],
+"monica:database/migrations/2018_07_26_104306_create-conversations.php": [
+8,
+15,
+49
+],
+"monica:database/migrations/2018_08_06_145046_add_starred_to_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2018_08_09_18000_fix-empty-reminder-time.php": [
+7,
+14
+],
+"monica:database/migrations/2018_08_18_180426_add_legacy_free_plan.php": [
+9,
+16
+],
+"monica:database/migrations/2018_08_29_124804_add_conversations_to_statistics.php": [
+7,
+14
+],
+"monica:database/migrations/2018_08_29_222051_add_conversations_to_modules.php": [
+9,
+16
+],
+"monica:database/migrations/2018_08_31_020908_create_life_events_table.php": [
+11,
+18
+],
+"monica:database/migrations/2018_09_02_150531_contact_archiving.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2018_09_05_025008_add_default_profile_view.php": [
+8,
+15
+],
+"monica:database/migrations/2018_09_05_213507_mark_modules_migrated.php": [
+11,
+18
+],
+"monica:database/migrations/2018_09_13_135926_add_description_field_to_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2018_09_18_142844_remove_events.php": [
+7,
+14
+],
+"monica:database/migrations/2018_09_23_024528_add_documents_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_09_29_114125_add_reminder_to_life_events.php": [
+8,
+15
+],
+"monica:database/migrations/2018_10_01_211757_add_number_of_views.php": [
+8,
+15
+],
+"monica:database/migrations/2018_10_04_181116_life_event_vehicle.php": [
+7,
+14
+],
+"monica:database/migrations/2018_10_07_120133_fix_json_column.php": [
+8,
+15
+],
+"monica:database/migrations/2018_10_16_000703_add_documents_to_module_table.php": [
+9,
+16
+],
+"monica:database/migrations/2018_10_19_081816_life_event_tattoo.php": [
+7,
+14
+],
+"monica:database/migrations/2018_10_27_230346_fix_non_english_tab_slugs.php": [
+7,
+14
+],
+"monica:database/migrations/2018_10_28_165814_email_verified.php": [
+9,
+16,
+48
+],
+"monica:database/migrations/2018_11_11_145035_remove_changelogs_table.php": [
+7,
+14
+],
+"monica:database/migrations/2018_11_15_172333_make_contact_id_nullable_in_tasks.php": [
+8,
+15
+],
+"monica:database/migrations/2018_11_18_021908_create_images_table.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2018_11_21_212932_add_contacts_uuid.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2018_11_25_020818_add_contact_photo_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_11_30_154729_recovery_codes.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2018_12_08_233140_add_who_called_to_calls.php": [
+8,
+15
+],
+"monica:database/migrations/2018_12_09_023232_add_emotions_table.php": [
+9,
+16
+],
+"monica:database/migrations/2018_12_09_145956_create_emotion_call_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_12_16_195440_add_gps_coordinates_to_addressess.php": [
+8,
+15
+],
+"monica:database/migrations/2018_12_19_002819_create_places_table.php": [
+8,
+15,
+42
+],
+"monica:database/migrations/2018_12_19_003444_move_addresses_data.php": [
+10,
+17
+],
+"monica:database/migrations/2018_12_21_235418_add_weather_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_12_22_021123_add_weather_preferences_to_users.php": [
+8,
+15
+],
+"monica:database/migrations/2018_12_22_200413_add_reminder_initial_date_to_reminders.php": [
+10,
+17
+],
+"monica:database/migrations/2018_12_24_164256_add_companies_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_12_24_220019_add_occupations_table.php": [
+8,
+15
+],
+"monica:database/migrations/2018_12_25_001736_add_linkedin_to_default_contact_field_type.php": [
+9,
+16
+],
+"monica:database/migrations/2018_12_25_012011_move_linkedin_data_to_contact_field_type.php": [
+10,
+17
+],
+"monica:database/migrations/2018_12_29_091017_default_temperature_scale.php": [
+10,
+17
+],
+"monica:database/migrations/2018_12_29_135516_sync_token.php": [
+8,
+15
+],
+"monica:database/migrations/2019_01_05_152329_add_reminder_ids_to_contacts.php": [
+8,
+15
+],
+"monica:database/migrations/2019_01_05_152405_migrate_previous_remiders.php": [
+10,
+17
+],
+"monica:database/migrations/2019_01_05_152456_drop_special_date_id_from_reminders.php": [
+8,
+15
+],
+"monica:database/migrations/2019_01_05_152526_schedule_new_reminders.php": [
+7,
+14
+],
+"monica:database/migrations/2019_01_05_202557_add_foreign_keys_to_reminder.php": [
+11,
+18
+],
+"monica:database/migrations/2019_01_05_202748_add_foreign_key_to_reminder_rule.php": [
+11,
+18
+],
+"monica:database/migrations/2019_01_05_202938_add_foreign_key_to_contacts.php": [
+11,
+18
+],
+"monica:database/migrations/2019_01_05_203201_add_foreign_key_for_reminder_in_life-events_table.php": [
+11,
+18
+],
+"monica:database/migrations/2019_01_06_135133_update_u2f_key_table.php": [
+8,
+15
+],
+"monica:database/migrations/2019_01_06_150143_add_inactive_flag_to_reminders.php": [
+8,
+15
+],
+"monica:database/migrations/2019_01_06_190036_u2f_key_name.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2019_01_11_142944_add_foreign_keys_to_activities.php": [
+12,
+19
+],
+"monica:database/migrations/2019_01_11_183717_change_activities_date_type.php": [
+8,
+15
+],
+"monica:database/migrations/2019_01_17_093812_add_admin_user.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2019_01_18_142032_add_dav_uuid.php": [
+8,
+15,
+39
+],
+"monica:database/migrations/2019_01_22_034555_create_emotion_activity_table.php": [
+8,
+15
+],
+"monica:database/migrations/2019_01_24_221539_change_activity_model_location.php": [
+7,
+14
+],
+"monica:database/migrations/2019_01_31_223600_add_swiss_chf_to_currencies_table.php": [
+6,
+13
+],
+"monica:database/migrations/2019_02_08_234959_remove_users_without_account.php": [
+7,
+14
+],
+"monica:database/migrations/2019_02_09_200203_add_gender_type.php": [
+10,
+17,
+60
+],
+"monica:database/migrations/2019_02_17_112452_add_default_gender.php": [
+10,
+17,
+45
+],
+"monica:database/migrations/2019_02_20_205744_allow_gender_null.php": [
+8,
+15
+],
+"monica:database/migrations/2019_02_24_223855_remove_relation_type_name.php": [
+8,
+15
+],
+"monica:database/migrations/2019_03_27_103012_set_default_profile_links.php": [
+7,
+14
+],
+"monica:database/migrations/2019_03_29_163611_add_webauthn.php": [
+8,
+15,
+42
+],
+"monica:database/migrations/2019_05_05_194746_add_cron_schedule.php": [
+8,
+15,
+30
+],
+"monica:database/migrations/2019_05_15_205533_rename_preferences.php": [
+8,
+15
+],
+"monica:database/migrations/2019_05_26_000000_add_relationship_table_indexes.php": [
+8,
+15
+],
+"monica:database/migrations/2019_05_27_000000_populate_relationship_type_tables_with_stepparent_values.php": [
+9,
+16
+],
+"monica:database/migrations/2019_08_12_213308_change_avatars_structure.php": [
+8,
+15,
+32
+],
+"monica:database/migrations/2019_08_12_222938_create_avatars_for_existing_contacts.php": [
+11,
+18
+],
+"monica:database/migrations/2019_08_13_160332_add_me_contact_on_user.php": [
+8,
+15,
+28
+],
+"monica:database/migrations/2019_08_14_091427_update_stripe_columns.php": [
+8,
+15,
+35
+],
+"monica:database/migrations/2019_09_04_075311_fix_tattoo_or_piercing_translation.php": [
+8,
+15
+],
+"monica:database/migrations/2019_12_17_024553_add_foreign_keys.php": [
+34,
+56,
+90,
+111,
+120,
+129,
+138,
+158,
+178,
+208,
+225,
+245,
+262,
+279,
+299,
+322,
+342,
+362,
+379,
+396,
+416,
+423,
+446,
+463,
+483,
+509,
+529,
+546,
+569,
+599,
+632
+],
+"monica:database/migrations/2019_12_21_100315_change_gift_status.php": [
+11,
+18
+],
+"monica:database/migrations/2019_12_21_194559_add_photo_gift.php": [
+8,
+15,
+34
+],
+"monica:database/migrations/2019_12_27_23533_rename_picnicked.php": [
+7,
+14
+],
+"monica:database/migrations/2020_02_03_015403_create_audit_log_table.php": [
+8,
+15,
+39
+],
+"monica:database/migrations/2020_02_18_211620_add_contact_field_label.php": [
+8,
+15,
+54
+],
+"monica:database/migrations/2020_03_22_132429_rename_birthday_reminder_title_deceased.php": [
+8,
+15
+],
+"monica:database/migrations/2020_03_25_055551_add_address_book.php": [
+8,
+15,
+37
+],
+"monica:database/migrations/2020_03_25_065551_add_addressbook_subscription.php": [
+8,
+15,
+47
+],
+"monica:database/migrations/2020_03_25_082324_add_contact_address_book_id.php": [
+8,
+15,
+28
+],
+"monica:database/migrations/2020_03_25_201407_add_contact_vcard_data.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2020_04_24_185810_remove_duplicate_currency.php": [
+9,
+16
+],
+"monica:database/migrations/2020_04_24_205810_currencies_table_seed.php": [
+9,
+18
+],
+"monica:database/migrations/2020_04_24_212138_update_amount_format.php": [
+14,
+21,
+27,
+59,
+98
+],
+"monica:database/migrations/2020_05_08_072433_google2fa_column_size.php": [
+7,
+14
+],
+"monica:database/migrations/2020_05_31_091556_custom_life_event_types.php": [
+9,
+16
+],
+"monica:database/migrations/2020_08_05_184814_upgrade_passport.php": [
+8,
+15
+],
+"monica:database/migrations/2020_11_01_000001_create_subscription_items_table.php": [
+8,
+15,
+38
+],
+"monica:database/migrations/2020_12_19_205923_add_uuids.php": [
+8,
+48,
+65
+],
+"monica:database/migrations/2021_04_23_190837_remove_reminder_sent.php": [
+7,
+14
+],
+"monica:database/migrations/2021_09_27_023405_create_job_batches_table.php": [
+8,
+15,
+36
+],
+"monica:database/migrations/2021_10_11_060512_add_distant_etag.php": [
+8,
+15,
+27
+],
+"monica:database/migrations/2021_10_14_212144_v_card_company.php": [
+7,
+14
+],
+"monica:database/migrations/2022_01_01_202745_add_export_jobs.php": [
+8,
+15,
+39
+],
+"monica:database/migrations/2022_01_02_222042_contact_soft_delete.php": [
+8,
+15,
+29
+],
+"monica:database/migrations/2022_04_25_165338_cashier_stripe_rename_plan.php": [
+8,
+15,
+40
+],
+"monica:database/seeds/DatabaseSeeder.php": [
+7,
+14
+],
+"monica:database/seeds/FakeUserTableSeeder.php": [
+7,
+14
+],
+"monica:database/seeds/UsersColorSeeder.php": [
+7,
+15
 ]
 }

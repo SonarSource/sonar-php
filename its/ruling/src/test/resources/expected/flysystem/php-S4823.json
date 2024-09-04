@@ -1,18 +1,10 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-351
+"flysystem:bin/check-versions.php": [
+47,
+53
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/ControlStructures/InlineIfDeclarationUnitTest.inc": [
-44,
-45,
-45,
-46,
-47
-],
-"PHP_CodeSniffer:tests/Core/Config/ReportWidthTest.php": [
-52,
-71,
-142,
-160
+"flysystem:bin/set-flysystem-version.php": [
+10,
+14
 ]
 }

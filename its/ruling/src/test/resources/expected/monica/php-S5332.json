@@ -1,0 +1,13 @@
+{
+"monica:app/Models/Account/Place.php": [
+124
+],
+"monica:app/Services/VCard/ExportVCard.php": [
+280,
+283
+],
+"monica:app/Services/VCard/ImportVCard.php": [
+1143,
+1147
+]
+}

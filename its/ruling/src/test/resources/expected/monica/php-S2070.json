@@ -1,9 +1,14 @@
 {
-"PHP_CodeSniffer:src/Util/Cache.php": [
-144,
-149,
-150,
-164,
-235
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVBirthdays.php": [
+65
+],
+"monica:app/Http/Controllers/DAV/Backend/CalDAV/CalDAVTasks.php": [
+105
+],
+"monica:app/Providers/AppServiceProvider.php": [
+112
+],
+"monica:app/Services/VCard/GetEtag.php": [
+36
 ]
 }

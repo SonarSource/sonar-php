@@ -1,25 +1,12 @@
 {
-"PHP_CodeSniffer:src/Standards/Generic/Tests/CodeAnalysis/UnnecessaryFinalModifierUnitTest.inc": [
-11
+"monica:app/Console/Commands/SentryRelease.php": [
+40
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
-5,
-7,
-10,
-12,
-15,
-17,
-19,
-20,
-21,
-47,
-62,
-92,
-93,
-94,
-100
+"monica:app/Http/Controllers/Settings/MultiFAController.php": [
+27
 ],
-"PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
-33
+"monica:app/Models/Contact/Contact.php": [
+65,
+79
 ]
 }

@@ -1,30 +1,74 @@
 {
-"PHP_CodeSniffer:src/Config.php": [
-75
+"flysystem:src/AdapterTestUtilities/FilesystemAdapterTestCase.php": [
+35
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-19
+"flysystem:src/AsyncAwsS3/AsyncAwsS3Adapter.php": [
+46
 ],
-"PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
-3,
-63
+"flysystem:src/AsyncAwsS3/AsyncAwsS3AdapterTest.php": [
+34
 ],
-"PHP_CodeSniffer:tests/Core/ErrorSuppressionTest.php": [
+"flysystem:src/AwsS3V3/AwsS3V3Adapter.php": [
+42
+],
+"flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
+33
+],
+"flysystem:src/AwsS3V3/S3ClientStub.php": [
+22
+],
+"flysystem:src/AzureBlobStorage/AzureBlobStorageAdapter.php": [
+46
+],
+"flysystem:src/Filesystem.php": [
+18
+],
+"flysystem:src/FilesystemTest.php": [
+25
+],
+"flysystem:src/Ftp/FtpAdapter.php": [
+37
+],
+"flysystem:src/Ftp/FtpAdapterTestCase.php": [
+27
+],
+"flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapter.php": [
+46
+],
+"flysystem:src/GridFS/GridFSAdapter.php": [
+33
+],
+"flysystem:src/InMemory/InMemoryFilesystemAdapterTest.php": [
+22
+],
+"flysystem:src/Local/LocalFilesystemAdapter.php": [
+50
+],
+"flysystem:src/Local/LocalFilesystemAdapterTest.php": [
+43
+],
+"flysystem:src/MountManager.php": [
+14
+],
+"flysystem:src/MountManagerTest.php": [
 17
 ],
-"PHP_CodeSniffer:tests/Core/File/FindEndOfStatementTest.php": [
-14
+"flysystem:src/PathPrefixing/PathPrefixedAdapter.php": [
+30
 ],
-"PHP_CodeSniffer:tests/Core/File/FindStartOfStatementTest.php": [
-14
+"flysystem:src/PhpseclibV2/SftpAdapter.php": [
+35
 ],
-"PHP_CodeSniffer:tests/Core/File/GetMethodParametersTest.php": [
-14
+"flysystem:src/PhpseclibV3/SftpAdapter.php": [
+32
 ],
-"PHP_CodeSniffer:tests/Core/File/GetMethodPropertiesTest.php": [
-14
+"flysystem:src/WebDAV/WebDAVAdapter.php": [
+40
 ],
-"PHP_CodeSniffer:tests/Core/Tokenizer/BackfillFnTokenTest.php": [
-14
+"flysystem:src/ZipArchive/ZipArchiveAdapter.php": [
+34
+],
+"flysystem:src/ZipArchive/ZipArchiveAdapterTestCase.php": [
+25
 ]
 }

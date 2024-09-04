@@ -1,24 +1,8 @@
 {
-"PHP_CodeSniffer:scripts/ValidatePEAR/ValidatePEARPackageXML.php": [
-77
+"monica:app/Http/Controllers/Api/ApiController.php": [
+38
 ],
-"PHP_CodeSniffer:src/Files/File.php": [
-239
-],
-"PHP_CodeSniffer:src/Files/FileList.php": [
-83,
-84,
-85
-],
-"PHP_CodeSniffer:src/Reporter.php": [
-145
-],
-"PHP_CodeSniffer:src/Standards/Generic/Sniffs/PHP/DeprecatedFunctionsSniff.php": [
-37
-],
-"PHP_CodeSniffer:tests/FileList.php": [
-55,
-59,
-69
+"monica:app/Services/User/CreateUser.php": [
+66
 ]
 }

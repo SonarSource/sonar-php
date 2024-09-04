@@ -1,0 +1,11 @@
+{
+"monica:app/Models/Account/AddressBookSubscription.php": [
+150
+],
+"monica:app/Models/User/User.php": [
+206
+],
+"monica:database/factories/ContactFactory.php": [
+169
+]
+}
