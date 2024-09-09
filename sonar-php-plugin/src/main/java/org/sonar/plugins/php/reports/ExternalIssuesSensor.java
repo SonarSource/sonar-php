@@ -37,7 +37,6 @@ import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rules.RuleType;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
-import org.sonarsource.analyzer.commons.ExternalReportProvider;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.ParseException;
 
@@ -67,7 +66,7 @@ public abstract class ExternalIssuesSensor extends AbstractReportImporter implem
 
   @Override
   public List<File> getReportFiles(SensorContext context) {
-    return ExternalReportProvider.getReportFiles(context, reportPathKey());
+    return ExternalReportWildcardProvider.getReportFiles(context, reportPathKey());
   }
 
   public String getUnresolvedInputFileMessageFormat() {

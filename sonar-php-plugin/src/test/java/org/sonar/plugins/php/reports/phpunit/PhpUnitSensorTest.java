@@ -174,6 +174,17 @@ class PhpUnitSensorTest {
       .startsWith("Can not read file").endsWith("src/App.php");
   }
 
+  @Test
+  void shouldLoadReportsByWildcard() {
+    context.settings().setProperty("sonar.php.coverage.reportPaths", "reports/phpunit/phpunit.coverage*.xml");
+
+    createSensor().execute(context);
+
+    assertThat(logTester.logs(Level.INFO))
+      .filteredOn(line -> line.matches("Importing .*\\.xml"))
+      .hasSize(9);
+  }
+
   private PhpUnitSensor createSensor() {
     return new PhpUnitSensor(analysisWarningsWrapper);
   }

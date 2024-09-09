@@ -334,6 +334,12 @@
               <eclipse>
                 <version>4.22.0</version>
                 <file>https://raw.githubusercontent.com/SonarSource/sonar-developer-toolset/master/eclipse/sonar-formatter.xml</file>
+                <p2Mirrors>
+                  <p2Mirror>
+                    <prefix>https://download.eclipse.org/eclipse</prefix>
+                    <url>https://ftp.fau.de/eclipse/eclipse</url>
+                  </p2Mirror>
+                </p2Mirrors>
               </eclipse>
             </java>
           </configuration>

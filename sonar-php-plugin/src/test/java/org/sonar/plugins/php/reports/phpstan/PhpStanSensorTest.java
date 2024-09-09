@@ -197,6 +197,22 @@ class PhpStanSensorTest extends ReportSensorTest {
     assertThat(externalIssues.get(0).primaryLocation().inputComponent().key()).isEqualTo("reports-project:phpstan/file3.php");
   }
 
+  @Test
+  void shouldLoadReportsByWildcard() throws IOException {
+    var context = createContext(null, PROJECT_DIR, Map.of());
+    context.settings().setProperty(PHPSTAN_PROPERTY, "phpstan/*.json");
+    sensor().execute(context);
+
+    var externalIssues = context.allExternalIssues();
+
+    if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
+      // the file phpstan-report-abs_win.json is imported successfully and contains 3 additional issues
+      assertThat(externalIssues).hasSize(14);
+    } else {
+      assertThat(externalIssues).hasSize(11);
+    }
+  }
+
   @Override
   protected Path projectDir() {
     return PROJECT_DIR;
