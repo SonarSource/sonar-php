@@ -70,11 +70,10 @@ public final class ExternalReportWildcardProvider {
   }
 
   private static List<File> getIOFiles(File baseDir, String reportPath) {
-    FileProvider fileProvider;
     if (!isWildcard(reportPath)) {
       return List.of(getSpecificFile(baseDir, reportPath));
     } else {
-      fileProvider = new FileProvider(baseDir, reportPath);
+      var fileProvider = new FileProvider(baseDir, reportPath);
       return fileProvider.getMatchingFiles();
     }
   }
