@@ -285,6 +285,22 @@ class PsalmSensorTest extends ReportSensorTest {
     verify(analysisWarnings, never()).addWarning(anyString());
   }
 
+  @Test
+  void shouldLoadReportsByWildcard() throws IOException {
+    var context = createContext(null, PROJECT_DIR, Map.of());
+    context.settings().setProperty(PSALM_PROPERTY, "psalm/*.json");
+    sensor().execute(context);
+
+    var externalIssues = context.allExternalIssues();
+
+    if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
+      // the file psalm-report-abs_win.json is imported successfully and contains 3 additional issues
+      assertThat(externalIssues).hasSize(16);
+    } else {
+      assertThat(externalIssues).hasSize(13);
+    }
+  }
+
   @Override
   protected Path projectDir() {
     return PROJECT_DIR;

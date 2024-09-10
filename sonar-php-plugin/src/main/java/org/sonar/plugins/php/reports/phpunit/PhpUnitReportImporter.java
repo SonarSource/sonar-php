@@ -23,8 +23,8 @@ import java.io.File;
 import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.php.reports.AbstractReportImporter;
+import org.sonar.plugins.php.reports.ExternalReportWildcardProvider;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
-import org.sonarsource.analyzer.commons.ExternalReportProvider;
 
 public abstract class PhpUnitReportImporter extends AbstractReportImporter {
 
@@ -52,7 +52,7 @@ public abstract class PhpUnitReportImporter extends AbstractReportImporter {
   }
 
   public List<File> getReportFiles(SensorContext context) {
-    return ExternalReportProvider.getReportFiles(context, reportPathKey());
+    return ExternalReportWildcardProvider.getReportFiles(context, reportPathKey());
   }
 
   protected void createWarning(String message, File file) {
