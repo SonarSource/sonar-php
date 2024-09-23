@@ -93,6 +93,7 @@
     <version.analyzer-commons>2.12.0.2964</version.analyzer-commons>
     <version.plugin-api>10.10.0.2391</version.plugin-api>
     <version.slf4j>1.7.36</version.slf4j>
+    <version.rule-api>2.7.0.2612</version.rule-api>
 
     <!-- Advertise minimal required JRE version -->
     <jre.min.version>17</jre.min.version>
@@ -293,6 +294,43 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <!-- Should always be called explicitly -->
+            <phase>none</phase>
+            <id>update</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.sonarsource.rule-api</groupId>
+            <artifactId>rule-api</artifactId>
+            <version>${version.rule-api}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <executable>java</executable>
+          <!-- Where sonarpedia.json is located -->
+          <workingDirectory>${project.basedir}</workingDirectory>
+          <arguments>
+            <argument>-classpath</argument>
+            <!-- workaround to include only a single jar -->
+            <argument>
+              ${settings.localRepository}/com/sonarsource/rule-api/rule-api/${version.rule-api}/rule-api-${version.rule-api}.jar
+            </argument>
+            <argument>com.sonarsource.ruleapi.Main</argument>
+            <argument>update</argument>
+          </arguments>
+          <includeProjectDependencies>false</includeProjectDependencies>
+        </configuration>
       </plugin>
     </plugins>
     <pluginManagement>
