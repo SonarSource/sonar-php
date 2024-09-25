@@ -19,5 +19,5 @@
   "ruleSpecification": "RSPEC-1479",
   "sqKey": "S1479",
   "scope": "All",
-  "quickfix": "unknown"
+  "quickfix": "infeasible"
 }
