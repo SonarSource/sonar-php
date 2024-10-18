@@ -143,6 +143,12 @@
                     <include>**</include>
                   </includes>
                 </filter>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>**/*.php</exclude>
+                  </excludes>
+                </filter>
               </filters>
             </configuration>
           </execution>
