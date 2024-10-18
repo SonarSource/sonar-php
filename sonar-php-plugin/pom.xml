@@ -53,6 +53,7 @@
       <groupId>org.sonarsource.php</groupId>
       <artifactId>php-frontend</artifactId>
       <classifier>tests</classifier>
+      <scope>test</scope>
       <version>${revision}</version>
     </dependency>
     <dependency>
