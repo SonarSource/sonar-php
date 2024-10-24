@@ -21,7 +21,6 @@ package org.sonar.php.tree.impl.expression;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.symbols.FunctionSymbol;
 import org.sonar.php.symbols.UnknownFunctionSymbol;

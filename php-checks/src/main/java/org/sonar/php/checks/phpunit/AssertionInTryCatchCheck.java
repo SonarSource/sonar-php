@@ -22,7 +22,6 @@ package org.sonar.php.checks.phpunit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.PhpUnitCheck;

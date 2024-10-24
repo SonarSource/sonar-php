@@ -19,6 +19,9 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.tuple.Pair;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -31,10 +34,6 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 
 @Rule(key = UselessExpressionStatementCheck.KEY)
 public class UselessExpressionStatementCheck extends PHPVisitorCheck {

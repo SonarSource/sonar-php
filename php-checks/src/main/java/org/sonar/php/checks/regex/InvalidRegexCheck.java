@@ -20,7 +20,6 @@
 package org.sonar.php.checks.regex;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation;

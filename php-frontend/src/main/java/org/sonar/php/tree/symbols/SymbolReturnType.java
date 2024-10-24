@@ -19,12 +19,11 @@
  */
 package org.sonar.php.tree.symbols;
 
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.plugins.php.api.symbols.ReturnType;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
-
-import javax.annotation.Nullable;
 
 public record SymbolReturnType(boolean isPresent, boolean isVoid) implements ReturnType {
   public static SymbolReturnType from(@Nullable ReturnTypeClauseTree returnTypeClause) {

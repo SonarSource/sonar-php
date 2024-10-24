@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;

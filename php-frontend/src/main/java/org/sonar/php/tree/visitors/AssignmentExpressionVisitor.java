@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.symbols.SymbolImpl;
