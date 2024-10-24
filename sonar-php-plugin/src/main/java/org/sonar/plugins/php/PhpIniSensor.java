@@ -20,6 +20,7 @@
 package org.sonar.plugins.php;
 
 import com.sonar.sslr.api.RecognitionException;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
@@ -39,7 +40,6 @@ import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.PhpIniParser;
 import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.plugins.php.api.Php;
-import java.util.List;
 
 public class PhpIniSensor implements Sensor {
 

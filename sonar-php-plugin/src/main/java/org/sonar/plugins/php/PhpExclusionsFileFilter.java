@@ -25,12 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFileFilter;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.utils.WildcardPattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.plugins.php.api.Php;
 

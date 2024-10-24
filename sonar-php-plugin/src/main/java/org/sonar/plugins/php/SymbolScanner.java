@@ -21,8 +21,6 @@ package org.sonar.plugins.php;
 
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.annotation.CheckForNull;
 import org.slf4j.Logger;

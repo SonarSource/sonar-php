@@ -28,8 +28,8 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.plugins.php.reports.ExternalReportFileHandler;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.reports.ExternalReportFileHandler;
 import org.sonar.plugins.php.reports.phpunit.xml.TestCase;
 
 /**

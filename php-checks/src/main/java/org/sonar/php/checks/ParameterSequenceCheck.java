@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.FunctionSymbol;

@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tests.TestIssue.Location;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;

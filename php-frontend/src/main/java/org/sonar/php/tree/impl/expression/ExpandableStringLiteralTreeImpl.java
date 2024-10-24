@@ -21,7 +21,6 @@ package org.sonar.php.tree.impl.expression;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.utils.collections.IteratorUtils;

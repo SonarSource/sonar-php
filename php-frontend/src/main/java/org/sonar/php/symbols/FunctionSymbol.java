@@ -19,11 +19,10 @@
  */
 package org.sonar.php.symbols;
 
+import java.util.List;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.ReturnType;
 import org.sonar.plugins.php.api.visitors.LocationInFile;
-
-import java.util.List;
 
 public interface FunctionSymbol extends Symbol {
   LocationInFile location();

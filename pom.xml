@@ -331,6 +331,12 @@
             <encoding>UTF-8</encoding>
             <java>
               <toggleOffOn/>
+              <importOrder>
+                <file>
+                  https://raw.githubusercontent.com/SonarSource/sonar-developer-toolset/refs/heads/master/eclipse/sonar.importorder
+                </file>
+              </importOrder>
+              <removeUnusedImports/>
               <eclipse>
                 <version>4.22.0</version>
                 <file>https://raw.githubusercontent.com/SonarSource/sonar-developer-toolset/master/eclipse/sonar-formatter.xml</file>
