@@ -1,0 +1,55 @@
+[versions]
+sonar-commons = "2.14.0.3087"
+sonar-plugin-api = "10.12.0.2522"
+sonarqube = "10.7.0.96327"
+sonar-scanner-gradle = "5.1.0.4882"
+sonar-orchestrator = "5.0.0.2065"
+sonarlint = "9.8.0.76914"
+slf4j = "1.7.36"
+sslr = "1.24.0.633"
+junit = "5.11.2"
+assertj = "3.26.3"
+mockito = "5.14.2"
+jfrog-gradle = "5.2.5"
+spotless-gradle = "6.25.0"
+blowdryer-gradle = "1.7.1"
+commons-io = "2.17.0"
+commons-lang = "3.17.0"
+jsr305 = "3.0.2"
+maven-project = "2.2.1"
+junit-platform = "1.11.2"
+staxmate = "2.0.1"
+
+[libraries]
+sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
+sonar-analyzer-test-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-test-commons", version.ref = "sonar-commons" }
+sonar-xml-parsing = { module = "org.sonarsource.analyzer-commons:sonar-xml-parsing", version.ref = "sonar-commons" }
+sonar-regex-parsing = { module = "org.sonarsource.analyzer-commons:sonar-regex-parsing", version.ref = "sonar-commons" }
+sonar-plugin-api = { module = "org.sonarsource.api.plugin:sonar-plugin-api", version.ref = "sonar-plugin-api" }
+sonar-plugin-api-impl = { module = "org.sonarsource.sonarqube:sonar-plugin-api-impl", version.ref = "sonarqube" }
+sonar-plugin-api-test-fixtures = { module = "org.sonarsource.api.plugin:sonar-plugin-api-test-fixtures", version.ref = "sonar-plugin-api" }
+sonar-testing-harness = { module = "org.sonarsource.sonarqube:sonar-testing-harness", version.ref = "sonarqube" }
+sonar-ws = { module = "org.sonarsource.sonarqube:sonar-ws", version.ref = "sonarqube" }
+sonar-scanner-gradle = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version.ref = "sonar-scanner-gradle" }
+sonar-orchestrator-junit5 = { module = "org.sonarsource.orchestrator:sonar-orchestrator-junit5", version.ref = "sonar-orchestrator" }
+sonarlint-core = { module = "org.sonarsource.sonarlint.core:sonarlint-core", version.ref = "sonarlint" }
+sonarlint-plugin-api = { module = "org.sonarsource.sonarlint:sonarlint-plugin-api", version.ref = "sonarlint" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+sslr-core = { module = "org.sonarsource.sslr:sslr-core", version.ref = "sslr" }
+sslr-toolkit = { module = "org.sonarsource.sslr:sslr-toolkit", version.ref = "sslr" }
+sslr-testing-harness = { module = "org.sonarsource.sslr:sslr-testing-harness", version.ref = "sslr" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+jfrog-buildinfo-gradle = { module = "org.jfrog.buildinfo:build-info-extractor-gradle", version.ref = "jfrog-gradle" }
+diffplug-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless-gradle" }
+diffplug-blowdryer = { module = "com.diffplug:blowdryer", version.ref = "blowdryer-gradle" }
+commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
+commons-lang = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang" }
+jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
+maven-project = { module = "org.apache.maven:maven-project", version.ref = "maven-project" }
+junit-platform = { module = "org.junit.platform:junit-platform-suite", version.ref = "junit-platform" }
+staxmate = { module = "org.codehaus.staxmate:staxmate", version.ref = "staxmate" }
+
+[plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless-gradle" }
