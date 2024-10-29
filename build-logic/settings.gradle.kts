@@ -1,5 +1,3 @@
-rootProject.name = "sonar-php"
-
 dependencyResolutionManagement {
   repositories {
     maven {
