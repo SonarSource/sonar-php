@@ -1,5 +1,6 @@
 [versions]
-sonar-commons = "2.14.0.3087"
+#TODO replace by released vrsion before merge
+sonar-commons = "2.15.0.3121"
 sonar-plugin-api = "10.13.0.2560"
 sonarqube = "10.7.0.96327"
 sonar-scanner-gradle = "5.1.0.4882"

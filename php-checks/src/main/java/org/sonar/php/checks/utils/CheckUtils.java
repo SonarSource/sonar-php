@@ -32,11 +32,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.php.tree.TreeUtils;
-import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.php.utils.collections.MapBuilder;
@@ -64,7 +62,6 @@ import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -205,21 +202,6 @@ public final class CheckUtils {
       }
     }
     return null;
-  }
-
-  /**
-   * Return whether the method is overriding a parent method or not.
-   *
-   * @param declaration METHOD_DECLARATION
-   * @return true if method has tag "@inheritdoc" in it's doc comment.
-   */
-  public static boolean isOverriding(MethodDeclarationTree declaration) {
-    for (SyntaxTrivia comment : ((PHPTree) declaration).getFirstToken().trivias()) {
-      if (StringUtils.containsIgnoreCase(comment.text(), "@inheritdoc")) {
-        return true;
-      }
-    }
-    return false;
   }
 
   public static boolean isExitExpression(FunctionCallTree functionCallTree) {
@@ -379,8 +361,10 @@ public final class CheckUtils {
   }
 
   public static Optional<LiteralTree> resolvedArgumentLiteral(FunctionCallTree call, String name, int position) {
-    return argumentValue(call, name, position).map(CheckUtils::assignedValue)
-      .filter(LiteralTree.class::isInstance).map(LiteralTree.class::cast);
+    return argumentValue(call, name, position)
+      .map(CheckUtils::assignedValue)
+      .filter(LiteralTree.class::isInstance)
+      .map(LiteralTree.class::cast);
   }
 
   public static Optional<ExpressionTree> argumentValue(FunctionCallTree call, String name, int position) {
