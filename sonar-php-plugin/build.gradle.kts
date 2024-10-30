@@ -19,18 +19,10 @@ dependencies {
   }
   implementation(project(":php-checks"))
   implementation(libs.sonar.plugin.api)
-  implementation(libs.sonar.testing.harness) {
-    exclude(group = "junit", module = "junit")
-  }
-  implementation(libs.sonar.plugin.api.impl) {
-    exclude(group = "junit", module = "junit")
-  }
-  implementation(libs.sslr.testing.harness) {
-    exclude(group = "junit", module = "junit")
-  }
   implementation(libs.sonar.analyzer.commons)
   implementation(libs.sonar.xml.parsing)
   implementation(libs.staxmate)
+  implementation(libs.commons.lang)
   compileOnly(libs.slf4j.api)
 
   testImplementation(testFixtures(project(":php-frontend")))
@@ -38,6 +30,9 @@ dependencies {
   testImplementation(libs.assertj.core)
   testImplementation(libs.mockito.core)
   testImplementation(libs.sonar.plugin.api.test.fixtures)
+  testImplementation(libs.sonar.testing.harness)
+  testImplementation(libs.sonar.plugin.api.impl)
+  testImplementation(libs.sslr.testing.harness)
 }
 
 description = "SonarSource PHP Analyzer :: Sonar Plugin"
@@ -132,7 +127,7 @@ tasks.shadowJar {
   }
 
   doLast {
-    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 6_000_000L, 6_500_000L)
+    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 5_500_000L)
   }
 }
 

@@ -13,16 +13,16 @@ dependencies {
   api(libs.sonar.regex.parsing)
 
   implementation(libs.sonar.plugin.api)
-  implementation(libs.sslr.testing.harness)
-  implementation(libs.sonar.testing.harness)
   implementation(libs.commons.lang)
-  implementation(libs.sonar.plugin.api.impl)
   compileOnly(libs.slf4j.api)
 
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.mockito.core)
   testImplementation(libs.assertj.core)
   testImplementation(libs.sonar.plugin.api.test.fixtures)
+  testImplementation(libs.sonar.plugin.api.impl)
+  testImplementation(libs.sslr.testing.harness)
+  testImplementation(libs.sonar.testing.harness)
 
   testFixturesImplementation(libs.sonar.plugin.api.impl)
 }
