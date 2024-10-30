@@ -33,7 +33,7 @@ sonar-ws = { module = "org.sonarsource.sonarqube:sonar-ws", version.ref = "sonar
 sonar-scanner-gradle = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version.ref = "sonar-scanner-gradle" }
 sonar-orchestrator-junit5 = { module = "org.sonarsource.orchestrator:sonar-orchestrator-junit5", version.ref = "sonar-orchestrator" }
 sonarlint-core = { module = "org.sonarsource.sonarlint.core:sonarlint-core", version.ref = "sonarlint" }
-sonarlint-plugin-api = { module = "org.sonarsource.sonarlint:sonarlint-plugin-api", version.ref = "sonarlint" }
+sonarlint-plugin-api = { module = "org.sonarsource.sonarlint.core:sonarlint-plugin-api", version.ref = "sonarlint" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 sslr-core = { module = "org.sonarsource.sslr:sslr-core", version.ref = "sslr" }
 sslr-toolkit = { module = "org.sonarsource.sslr:sslr-toolkit", version.ref = "sslr" }

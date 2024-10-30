@@ -1,6 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
-import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.sonarsource.php.enforceJarSize
 
 plugins {

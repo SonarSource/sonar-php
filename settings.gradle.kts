@@ -34,6 +34,8 @@ includeBuild("build-logic")
 include(":sonar-php-plugin")
 include(":php-frontend")
 include(":php-checks")
+include(":its:plugin:tests")
+include(":its:ruling")
 
 dependencyResolutionManagement {
   repositories {
