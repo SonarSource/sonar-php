@@ -46,7 +46,7 @@ public class RulingHelper {
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
       .setEdition(sonarEdition)
-      .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
+      .addPlugin(FileLocation.byWildcardFilename(new File("../../sonar-php-plugin/build/libs"), "sonar-php-plugin-*-all.jar"))
       .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.11.0.2659"));
 
     if (sonarEdition != Edition.COMMUNITY) {
