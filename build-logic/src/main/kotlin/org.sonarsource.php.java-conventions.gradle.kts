@@ -1,3 +1,7 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
+import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
+
 plugins {
   `java-library`
 }
@@ -17,5 +21,15 @@ tasks.withType<Javadoc> {
   options.encoding = "UTF-8"
   options {
     (this as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
+  }
+}
+
+tasks.withType<Test> {
+  useJUnitPlatform()
+  testLogging {
+    // log the full stack trace (default is the 1st line of the stack trace)
+    exceptionFormat = TestExceptionFormat.FULL
+    // verbose log for failed and skipped tests (by default the name of the tests are not logged)
+    events(SKIPPED, FAILED)
   }
 }
