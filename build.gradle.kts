@@ -22,3 +22,8 @@ spotless {
     target("*.gradle.kts", "/build-logic/src/**/*.gradle.kts")
   }
 }
+
+// TODO Remove after SONARIAC-1521, since the ITs won't be in the test task anymore
+tasks.named<Test>("test") {
+  exclude("**/its/**")
+}
