@@ -1,3 +1,22 @@
+/*
+ * SonarQube PHP Plugin
+ * Copyright (C) 2010-2024 SonarSource SA
+ * mailto:info AT sonarsource DOT com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 package org.sonar.php.checks;
 
 import java.util.Iterator;
@@ -11,10 +30,8 @@ import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -39,11 +56,10 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
 
   private List<Pattern> variablePatterns = null;
 
-
   @Override
   public void visitConstDeclaration(ConstantDeclarationTree tree) {
-    //TODO remove
-    for (Iterator<Tree> it = tree.declarations().elementsAndSeparators(); it.hasNext(); ) {
+    // TODO remove
+    for (Iterator<Tree> it = tree.declarations().elementsAndSeparators(); it.hasNext();) {
       Tree elementsOrSeparator = it.next();
       if (elementsOrSeparator.is(Tree.Kind.VARIABLE_DECLARATION)) {
         var variableDeclaration = (VariableDeclarationTree) elementsOrSeparator;
@@ -54,7 +70,7 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
 
   @Override
   public void visitVariableDeclaration(VariableDeclarationTree tree) {
-//    Pattern.compile("=\\s*+([^\\\\ &;#,|]+)");
+    // Pattern.compile("=\\s*+([^\\\\ &;#,|]+)");
     System.out.println("BBBB variable declaration: " + tree.identifier() + "   kind " + tree.getKind());
     if (tree.initValue() instanceof LiteralTree literalTree) {
       detectSecret(tree.identifier().text(), CheckUtils.trimQuotes(literalTree.value()), literalTree);
@@ -73,16 +89,16 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
         .filter(constantName -> constantName.is(Tree.Kind.REGULAR_STRING_LITERAL))
         .map(LiteralTree.class::cast)
         .ifPresent(constantName -> {
-          //TODO remove
+          // TODO remove
           System.out.println("DDDD constantName " + constantName.value());
           CheckUtils.argumentValue(functionCall, "value", 1)
             .filter(value -> value.is(Tree.Kind.REGULAR_STRING_LITERAL))
             .map(LiteralTree.class::cast)
-              .ifPresent(value -> {
-                //TODO remove
-                System.out.println("DDDD value: " + value.value());
-                detectSecret(CheckUtils.trimQuotes(constantName.value()), CheckUtils.trimQuotes(value.value()), value);
-              });
+            .ifPresent(value -> {
+              // TODO remove
+              System.out.println("DDDD value: " + value.value());
+              detectSecret(CheckUtils.trimQuotes(constantName.value()), CheckUtils.trimQuotes(value.value()), value);
+            });
 
         });
     }
@@ -90,8 +106,8 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
   }
 
   private void detectSecret(String identifierName, String secret, Tree tree) {
-    //TODO remove
-//    System.out.println("AAAA detectSecret " + identifierName);
+    // TODO remove
+    // System.out.println("AAAA detectSecret " + identifierName);
     getSecretLikeName(identifierName).ifPresent(secretName -> {
       if (secret.equals("abcdefghijklmnopqrs")) {
         newIssue(tree, "'%s' detected in this expression, review this potentially hard-coded secret.".formatted(secretName));
