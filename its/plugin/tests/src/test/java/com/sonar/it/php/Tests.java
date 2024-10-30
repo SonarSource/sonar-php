@@ -59,7 +59,7 @@ class Tests {
 
   public static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
 
-  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
+  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardFilename(new File("../../../sonar-php-plugin/build/libs"), "sonar-php-plugin-*-all.jar");
 
   public static final String SCANNER_VERSION = "6.1.0.4477";
   private static final Pattern DEBUG_AND_INFO_LOG_LINE_PATTERN = Pattern.compile("\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s(INFO|DEBUG)\\s.*");
