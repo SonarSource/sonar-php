@@ -49,17 +49,6 @@ setup_orchestrator_cache: &SETUP_ORCHESTRATOR_CACHE
     fingerprint_script: echo ${TODAY}
     reupload_on_changes: "true"
 
-maven_cache: &MAVEN_CACHE
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
-    fingerprint_script: cat **/pom.xml
-
-win_maven_cache: &WIN_MAVEN_CACHE
-  maven_cache:
-    #windows cache is buggy if using ${CIRRUS_WORKING_DIR}
-    folder: ~/.m2/repository
-
-
 # ----------------------------------------------
 # -------------CONTAINER DEFINITIONS------------
 # ----------------------------------------------
@@ -116,7 +105,6 @@ only_main_branches_filter: &ONLY_MAIN_BRANCHES
 
 build_task:
   <<: *CONTAINER_DEFINITION
-  <<: *MAVEN_CACHE
   eks_container:
     memory: 3G
   env:
@@ -127,14 +115,12 @@ build_task:
   build_script:
     - git submodule update --init
     - source cirrus-env BUILD
-    - regular_mvn_build_deploy_analyze
-  cleanup_before_cache_script: cleanup_maven_repository
+    - regular_gradle_build_deploy_analyze
 
 build_win_task:
   <<: *WINDOWS_VM_DEFINITION
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
-  <<: *WIN_MAVEN_CACHE
   build_script:
     - git config --global core.autocrlf input
     - source cirrus-env CI
@@ -145,7 +131,6 @@ plugin_qa_task:
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
   <<: *SETUP_ORCHESTRATOR_CACHE
-  <<: *MAVEN_CACHE
   env:
     CIRRUS_CLONE_DEPTH: 1
     matrix:
@@ -155,17 +140,15 @@ plugin_qa_task:
     - git submodule update --init
   qa_script:
     - source cirrus-env QA
-    - source set_maven_build_version $BUILD_NUMBER
+    - source set_gradle_build_version $BUILD_NUMBER
     - cd its/plugin
     - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} -Dmaven.test.redirectTestOutputToFile=false -B -e -V
-  cleanup_before_cache_script: cleanup_maven_repository
 
 ruling_task:
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
   <<: *SETUP_ORCHESTRATOR_CACHE
-  <<: *MAVEN_CACHE
   env:
     CIRRUS_CLONE_DEPTH: 1
     matrix:
@@ -181,16 +164,14 @@ ruling_task:
     - git submodule update --init
   ruling_script:
     - source cirrus-env QA
-    - source set_maven_build_version $BUILD_NUMBER
+    - source set_gradle_build_version $BUILD_NUMBER
     - cd its/ruling
     - mvn test -Dtest=PhpGeneralRulingTest#test${PHP_PROJECT} -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
-  cleanup_before_cache_script: cleanup_maven_repository
 
 pr_analysis_task:
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
-  <<: *MAVEN_CACHE
   env:
     <<: *PR_ANALYSIS_SECRETS
     CIRRUS_CLONE_DEPTH: 1
@@ -198,21 +179,19 @@ pr_analysis_task:
     - git submodule update --init
   ruling_script:
     - source cirrus-env QA
-    - source set_maven_build_version $BUILD_NUMBER
+    - source set_gradle_build_version $BUILD_NUMBER
     - cd its/ruling
     - mvn test -Dtest=PhpPrAnalysisTest -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
-  cleanup_before_cache_script: cleanup_maven_repository
 
 ws_scan_task:
   <<: *ONLY_MAIN_BRANCHES
   <<: *DEPENDS_ON_BUILD
   <<: *CONTAINER_DEFINITION
-  <<: *MAVEN_CACHE
   env:
     <<: *MEND_SCAN_SECRETS
   whitesource_script:
     - source cirrus-env QA
-    - source set_maven_build_version $BUILD_NUMBER
+    - source set_gradle_build_version $BUILD_NUMBER
     - mvn clean install -DskipTests
     - source ws_scan.sh
   allow_failures: "true"
@@ -228,8 +207,6 @@ promote_task:
     - plugin_qa
   <<: *ONLY_SONARSOURCE_QA
   <<: *CONTAINER_DEFINITION
-  <<: *MAVEN_CACHE
   env:
     <<: *PROMOTE_SECRETS
   script: cirrus_promote_maven
-  cleanup_before_cache_script: cleanup_maven_repository
