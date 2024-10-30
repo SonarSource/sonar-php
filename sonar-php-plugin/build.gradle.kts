@@ -120,11 +120,6 @@ tasks.shadowJar {
   exclude("LICENSE*")
   exclude("NOTICE*")
   exclude("**/*.php")
-  dependencies {
-    exclude(dependency("junit:junit"))
-    exclude(dependency("org.mockito:mockito-core"))
-    exclude(dependency("org.assertj:assertj-core"))
-  }
 
   doLast {
     enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 5_500_000L)
