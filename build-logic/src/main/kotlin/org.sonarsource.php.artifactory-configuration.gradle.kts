@@ -92,5 +92,5 @@ artifactory {
   clientConfig.isIncludeEnvVars = true
   clientConfig.envVarsExcludePatterns =
     "*password*,*PASSWORD*,*secret*,*MAVEN_CMD_LINE_ARGS*,sun.java.command," +
-      "*token*,*TOKEN*,*LOGIN*,*login*,*key*,*KEY*,*PASSPHRASE*,*signing*"
+    "*token*,*TOKEN*,*LOGIN*,*login*,*key*,*KEY*,*PASSPHRASE*,*signing*"
 }
