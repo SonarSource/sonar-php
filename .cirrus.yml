@@ -115,7 +115,8 @@ build_task:
   build_script:
     - git submodule update --init
     - source cirrus-env BUILD
-    - regular_gradle_build_deploy_analyze
+    # TODO Remove ITs exclusion after SONARIAC-1521, since the ITs won't be in the test task anymore
+    - regular_gradle_build_deploy_analyze -x :its:plugin:tests:test -x :its:ruling:test
 
 build_win_task:
   <<: *WINDOWS_VM_DEFINITION
