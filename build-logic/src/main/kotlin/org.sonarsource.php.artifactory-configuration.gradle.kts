@@ -1,4 +1,3 @@
-import org.sonarsource.php.ArtifactoryConfiguration
 import org.sonarsource.php.signingCondition
 
 plugins {
@@ -6,8 +5,6 @@ plugins {
   signing
   `maven-publish`
 }
-
-val artifactoryConfiguration = extensions.create<ArtifactoryConfiguration>("artifactoryConfiguration")
 
 publishing {
   publications.create<MavenPublication>("mavenJava") {
@@ -57,55 +54,43 @@ tasks.withType<Sign> {
   }
 }
 
-// `afterEvaluate` is required to inject configurable properties; see https://github.com/jfrog/artifactory-gradle-plugin/issues/71#issuecomment-1734977528
-project.afterEvaluate {
-  artifactory {
-    if (artifactoryConfiguration.artifactsToPublish.isPresent) {
-      clientConfig.info.addEnvironmentProperty(
-        "ARTIFACTS_TO_PUBLISH",
-        artifactoryConfiguration.artifactsToPublish.get(),
-      )
-      clientConfig.info.addEnvironmentProperty(
-        "ARTIFACTS_TO_DOWNLOAD",
-        artifactoryConfiguration.artifactsToDownload.getOrElse(""),
-      )
-    }
+artifactory {
+  val artifactsToPublish = "org.sonarsource.php:sonar-php-plugin:jar"
 
-    setContextUrl(System.getenv("ARTIFACTORY_URL"))
-    // Note: `publish` should only be called once: https://github.com/jfrog/artifactory-gradle-plugin/issues/111
-    publish {
-      if (artifactoryConfiguration.repoKeyEnv.isPresent) {
-        repository {
-          repoKey = System.getenv(artifactoryConfiguration.repoKeyEnv.get())
-          username = System.getenv(artifactoryConfiguration.usernameEnv.get())
-          password = System.getenv(artifactoryConfiguration.passwordEnv.get())
-        }
-      }
-      defaults {
-        publications("mavenJava")
-        setProperties(
-          mapOf(
-            "build.name" to "sonar-php",
-            "version" to project.version.toString(),
-            "build.number" to project.ext["buildNumber"].toString(),
-            "pr.branch.target" to System.getenv("PULL_REQUEST_BRANCH_TARGET"),
-            "pr.number" to System.getenv("PULL_REQUEST_NUMBER"),
-            "vcs.branch" to System.getenv("GIT_BRANCH"),
-            "vcs.revision" to System.getenv("GIT_COMMIT"),
-          ),
-        )
-        setPublishArtifacts(true)
-        setPublishPom(true)
-        setPublishIvy(false)
-      }
-    }
+  clientConfig.info.addEnvironmentProperty("ARTIFACTS_TO_PUBLISH", artifactsToPublish)
+  clientConfig.info.addEnvironmentProperty("ARTIFACTS_TO_DOWNLOAD", "")
 
-    clientConfig.info.addEnvironmentProperty("PROJECT_VERSION", project.version.toString())
-    clientConfig.info.buildName = "sonar-php"
-    clientConfig.info.buildNumber = project.ext["buildNumber"].toString()
-    clientConfig.isIncludeEnvVars = true
-    clientConfig.envVarsExcludePatterns =
-      "*password*,*PASSWORD*,*secret*,*MAVEN_CMD_LINE_ARGS*,sun.java.command," +
-      "*token*,*TOKEN*,*LOGIN*,*login*,*key*,*KEY*,*PASSPHRASE*,*signing*"
+  setContextUrl(System.getenv("ARTIFACTORY_URL"))
+  publish {
+    repository {
+      setRepoKey(System.getenv("ARTIFACTORY_DEPLOY_REPO"))
+      setUsername(System.getenv("ARTIFACTORY_DEPLOY_USERNAME"))
+      setPassword(System.getenv("ARTIFACTORY_DEPLOY_PASSWORD"))
+    }
+    defaults {
+      publications("mavenJava")
+      setProperties(
+        mapOf(
+          "build.name" to "sonar-php",
+          "version" to project.version.toString(),
+          "build.number" to project.ext["buildNumber"].toString(),
+          "pr.branch.target" to System.getenv("PULL_REQUEST_BRANCH_TARGET"),
+          "pr.number" to System.getenv("PULL_REQUEST_NUMBER"),
+          "vcs.branch" to System.getenv("GIT_BRANCH"),
+          "vcs.revision" to System.getenv("GIT_COMMIT"),
+        ),
+      )
+      setPublishArtifacts(true)
+      setPublishPom(true)
+      setPublishIvy(false)
+    }
   }
+
+  clientConfig.info.addEnvironmentProperty("PROJECT_VERSION", project.version.toString())
+  clientConfig.info.buildName = "sonar-php"
+  clientConfig.info.buildNumber = project.ext["buildNumber"].toString()
+  clientConfig.isIncludeEnvVars = true
+  clientConfig.envVarsExcludePatterns =
+    "*password*,*PASSWORD*,*secret*,*MAVEN_CMD_LINE_ARGS*,sun.java.command," +
+      "*token*,*TOKEN*,*LOGIN*,*login*,*key*,*KEY*,*PASSPHRASE*,*signing*"
 }

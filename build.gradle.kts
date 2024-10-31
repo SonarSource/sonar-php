@@ -11,3 +11,5 @@ spotless {
     target("*.gradle.kts", "/build-logic/src/**/*.gradle.kts")
   }
 }
+
+tasks.artifactoryPublish { skip = true }

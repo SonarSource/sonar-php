@@ -119,13 +119,3 @@ publishing {
     artifact(tasks.javadocJar)
   }
 }
-
-artifactoryConfiguration {
-  artifactsToPublish = "org.sonarsource.php:sonar-php-plugin:jar"
-  artifactsToDownload = ""
-  repoKeyEnv = "ARTIFACTORY_DEPLOY_REPO"
-  usernameEnv = "ARTIFACTORY_DEPLOY_USERNAME"
-  passwordEnv = "ARTIFACTORY_DEPLOY_PASSWORD"
-}
-
-tasks.artifactoryPublish { skip = true }
