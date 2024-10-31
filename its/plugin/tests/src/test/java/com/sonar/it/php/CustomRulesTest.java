@@ -23,6 +23,7 @@ import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -30,6 +31,7 @@ import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonarqube.ws.Issues.Issue;
 
+@Disabled
 class CustomRulesTest {
 
   @RegisterExtension

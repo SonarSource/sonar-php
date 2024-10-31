@@ -7,14 +7,6 @@ plugins {
   `maven-publish`
 }
 
-// this value is present on CI
-val buildNumber: String? = System.getProperty("buildNumber")
-if (project.version.toString().endsWith("-SNAPSHOT") && buildNumber != null) {
-  val versionSuffix = if (project.version.toString().count { it == '.' } == 1) ".0.$buildNumber" else ".$buildNumber"
-  project.version = project.version.toString().replace("-SNAPSHOT", versionSuffix)
-  logger.lifecycle("Project version set to $version")
-}
-
 val artifactoryConfiguration = extensions.create<ArtifactoryConfiguration>("artifactoryConfiguration")
 
 publishing {
@@ -93,7 +85,7 @@ project.afterEvaluate {
           mapOf(
             "build.name" to "sonar-php",
             "version" to project.version.toString(),
-            "build.number" to buildNumber,
+            "build.number" to project.ext["buildNumber"].toString(),
             "pr.branch.target" to System.getenv("PULL_REQUEST_BRANCH_TARGET"),
             "pr.number" to System.getenv("PULL_REQUEST_NUMBER"),
             "vcs.branch" to System.getenv("GIT_BRANCH"),
@@ -108,7 +100,7 @@ project.afterEvaluate {
 
     clientConfig.info.addEnvironmentProperty("PROJECT_VERSION", project.version.toString())
     clientConfig.info.buildName = "sonar-php"
-    clientConfig.info.buildNumber = buildNumber
+    clientConfig.info.buildNumber = project.ext["buildNumber"].toString()
     clientConfig.isIncludeEnvVars = true
     clientConfig.envVarsExcludePatterns =
       "*password*,*PASSWORD*,*secret*,*MAVEN_CMD_LINE_ARGS*,sun.java.command," +

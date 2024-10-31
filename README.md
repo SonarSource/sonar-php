@@ -100,11 +100,7 @@ The "Ruling Test" is a special integration test that launches the analysis of a 
 ./gradlew build -p its/ruling
 ```
 
-This test gives you the opportunity to examine the issues created by each rule and make sure they're what you expect. You can inspect new/lost issues by checking the web pages mentioned in the logs at the end of the analysis:
-```
-INFO  - HTML Issues Report generated: /path/to/project/sonar-php/its/sources/src/.sonar/issues-report/issues-report.html
-INFO  - Light HTML Issues Report generated: /path/to/project/sonar-php/its/sources/src/.sonar/issues-report/issues-report-light.html
-```
+This test gives you the opportunity to examine the issues created by each rule and make sure they're what you expect. You can inspect new/lost issues by checking the SonarQube local URL mentioned in the logs at the end of the analysis.
 If everything looks good to you, you can copy the file with the actual issues located at
 ```
 sonar-php/its/ruling/target/actual/

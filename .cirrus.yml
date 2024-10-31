@@ -124,7 +124,7 @@ build_win_task:
   build_script:
     - git config --global core.autocrlf input
     - source cirrus-env CI
-    - mvn clean install
+    - ./gradlew clean build
 
 plugin_qa_task:
   <<: *ONLY_SONARSOURCE_QA
@@ -142,7 +142,7 @@ plugin_qa_task:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
     - cd its/plugin
-    - mvn verify -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} -Dmaven.test.redirectTestOutputToFile=false -B -e -V
+    - ../../gradlew ${GRADLE_COMMON_FLAGS} test
 
 ruling_task:
   <<: *ONLY_SONARSOURCE_QA
@@ -166,7 +166,7 @@ ruling_task:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
     - cd its/ruling
-    - mvn test -Dtest=PhpGeneralRulingTest#test${PHP_PROJECT} -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
+    - ../../gradlew ${GRADLE_COMMON_FLAGS} test
 
 pr_analysis_task:
   <<: *ONLY_SONARSOURCE_QA
@@ -181,7 +181,7 @@ pr_analysis_task:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
     - cd its/ruling
-    - mvn test -Dtest=PhpPrAnalysisTest -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false -B -e -V
+    - ../../gradlew ${GRADLE_COMMON_FLAGS} -Dtest=PhpPrAnalysisTest test
 
 ws_scan_task:
   <<: *ONLY_MAIN_BRANCHES
@@ -192,7 +192,7 @@ ws_scan_task:
   whitesource_script:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
-    - mvn clean install -DskipTests
+    - ./gradlew clean build -x test
     - source ws_scan.sh
   allow_failures: "true"
   always:

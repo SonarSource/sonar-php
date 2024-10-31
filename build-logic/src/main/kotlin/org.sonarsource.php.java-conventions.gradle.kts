@@ -4,6 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 
 plugins {
   `java-library`
+  jacoco
 }
 
 java {

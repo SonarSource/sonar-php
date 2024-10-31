@@ -53,3 +53,4 @@ staxmate = { module = "org.codehaus.staxmate:staxmate", version.ref = "staxmate"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless-gradle" }
+shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }

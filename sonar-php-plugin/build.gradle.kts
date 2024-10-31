@@ -4,16 +4,13 @@ plugins {
   id("org.sonarsource.php.java-conventions")
   id("org.sonarsource.php.artifactory-configuration")
   id("org.sonarsource.php.code-style-convention")
-  jacoco
-  id("com.github.johnrengelman.shadow") version "8.1.1"
+  alias(libs.plugins.shadow)
   id("java-library")
   id("java-test-fixtures")
 }
 
 dependencies {
-  implementation(project(":php-frontend")) {
-    exclude(group = "junit", module = "junit")
-  }
+  implementation(project(":php-frontend"))
   implementation(project(":php-checks"))
   implementation(libs.sonar.plugin.api)
   implementation(libs.sonar.analyzer.commons)
@@ -134,8 +131,4 @@ artifactoryConfiguration {
   repoKeyEnv = "ARTIFACTORY_DEPLOY_REPO"
   usernameEnv = "ARTIFACTORY_DEPLOY_USERNAME"
   passwordEnv = "ARTIFACTORY_DEPLOY_PASSWORD"
-}
-
-codeStyleConvention {
-  licenseHeaderFile.set(rootProject.file("LICENSE_HEADER"))
 }
