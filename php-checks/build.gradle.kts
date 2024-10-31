@@ -2,7 +2,6 @@ plugins {
   id("org.sonarsource.php.java-conventions")
   id("org.sonarsource.php.code-style-convention")
   id("java-library")
-  id("java-test-fixtures")
 }
 
 description = "SonarSource PHP Analyzer :: Checks"

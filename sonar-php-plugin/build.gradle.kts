@@ -5,8 +5,6 @@ plugins {
   id("org.sonarsource.php.artifactory-configuration")
   id("org.sonarsource.php.code-style-convention")
   alias(libs.plugins.shadow)
-  id("java-library")
-  id("java-test-fixtures")
 }
 
 dependencies {
