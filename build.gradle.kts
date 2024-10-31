@@ -5,16 +5,6 @@ plugins {
   id("com.diffplug.blowdryer")
 }
 
-tasks.artifactoryPublish { skip = true }
-
-artifactoryConfiguration {
-  artifactsToPublish = "org.sonarsource.text:sonar-text-plugin:jar"
-  artifactsToDownload = ""
-  repoKeyEnv = "ARTIFACTORY_DEPLOY_REPO"
-  usernameEnv = "ARTIFACTORY_DEPLOY_USERNAME"
-  passwordEnv = "ARTIFACTORY_DEPLOY_PASSWORD"
-}
-
 spotless {
   encoding(Charsets.UTF_8)
   kotlinGradle {
@@ -22,3 +12,5 @@ spotless {
     target("*.gradle.kts", "/build-logic/src/**/*.gradle.kts")
   }
 }
+
+tasks.artifactoryPublish { skip = true }

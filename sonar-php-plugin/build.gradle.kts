@@ -123,11 +123,8 @@ publishing {
 }
 
 artifactoryConfiguration {
-  license {
-    name.set("GNU LPGL 3")
-    url.set("http://www.gnu.org/licenses/lgpl.txt")
-    distribution.set("repo")
-  }
+  artifactsToPublish = "org.sonarsource.php:sonar-php-plugin:jar"
+  artifactsToDownload = ""
   repoKeyEnv = "ARTIFACTORY_DEPLOY_REPO"
   usernameEnv = "ARTIFACTORY_DEPLOY_USERNAME"
   passwordEnv = "ARTIFACTORY_DEPLOY_PASSWORD"

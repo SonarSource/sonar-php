@@ -21,7 +21,9 @@ publishing {
       }
       licenses {
         license {
-          artifactoryConfiguration.license?.invoke(this)
+          name.set("GNU LGPL 3")
+          url.set("http://www.gnu.org/licenses/lgpl.txt")
+          distribution.set("repo")
         }
       }
       scm {
