@@ -52,7 +52,6 @@ plugins.withType<JacocoPlugin> {
   tasks["test"].finalizedBy("jacocoTestReport")
 }
 
-// used to be done by sonar-packaging maven plugin
 tasks.jar {
   manifest {
     attributes(
@@ -71,7 +70,7 @@ tasks.jar {
         "Plugin-OrganizationUrl" to "https://www.sonarsource.com",
         "Plugin-SourcesUrl" to "https://github.com/SonarSource/sonar-php",
         "Plugin-Version" to project.version,
-        "Sonar-Version" to "9.8",
+        "Sonar-Version" to "9.9",
         "SonarLint-Supported" to "true",
         "Version" to project.version.toString(),
         "Jre-Min-Version" to java.sourceCompatibility.majorVersion,

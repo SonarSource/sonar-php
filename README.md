@@ -86,8 +86,7 @@ sonar.runtimeVersion=9.9
 ```
 Before running any of the integration tests make sure the submodules are checked out:
 ```shell
-  git submodule init
-  git submodule update
+  git submodule update --init
 ```
 #### Plugin Test
 The "Plugin Test" is an additional integration test that verifies plugin features such as metric calculation, coverage, etc. To launch it:

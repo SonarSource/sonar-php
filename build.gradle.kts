@@ -24,6 +24,6 @@ spotless {
 }
 
 // TODO Remove after SONARIAC-1521, since the ITs won't be in the test task anymore
-tasks.named<Test>("test") {
-  exclude("**/its/**")
-}
+// tasks.named<Test>("test") {
+//  exclude("**/its/**")
+// }

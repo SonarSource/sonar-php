@@ -1,16 +1,15 @@
 dependencyResolutionManagement {
   repositories {
+    mavenCentral()
+    gradlePluginPortal()
     maven {
       url = uri("https://repox.jfrog.io/repox/sonarsource")
-
       val artifactoryUsername =
-        providers.environmentVariable("ARTIFACTORY_PRIVATE_USERNAME").orElse(
-          providers.gradleProperty("artifactoryUsername")
-        )
+        providers.environmentVariable("ARTIFACTORY_PRIVATE_USERNAME")
+          .orElse(providers.gradleProperty("artifactoryUsername"))
       val artifactoryPassword =
-        providers.environmentVariable("ARTIFACTORY_PRIVATE_PASSWORD").orElse(
-          providers.gradleProperty("artifactoryPassword")
-        )
+        providers.environmentVariable("ARTIFACTORY_PRIVATE_PASSWORD")
+          .orElse(providers.gradleProperty("artifactoryPassword"))
 
       if (artifactoryUsername.isPresent && artifactoryPassword.isPresent) {
         authentication {
@@ -21,8 +20,6 @@ dependencyResolutionManagement {
         }
       }
     }
-    mavenCentral()
-    gradlePluginPortal()
   }
   versionCatalogs {
     create("libs") {
@@ -37,13 +34,11 @@ pluginManagement {
       url = uri("https://repox.jfrog.io/repox/sonarsource")
 
       val artifactoryUsername =
-        providers.environmentVariable("ARTIFACTORY_PRIVATE_USERNAME").orElse(
-          providers.gradleProperty("artifactoryUsername")
-        )
+        providers.environmentVariable("ARTIFACTORY_PRIVATE_USERNAME")
+          .orElse(providers.gradleProperty("artifactoryUsername"))
       val artifactoryPassword =
-        providers.environmentVariable("ARTIFACTORY_PRIVATE_PASSWORD").orElse(
-          providers.gradleProperty("artifactoryPassword")
-        )
+        providers.environmentVariable("ARTIFACTORY_PRIVATE_PASSWORD")
+          .orElse(providers.gradleProperty("artifactoryPassword"))
 
       if (artifactoryUsername.isPresent && artifactoryPassword.isPresent) {
         authentication {
