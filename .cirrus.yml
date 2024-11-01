@@ -168,7 +168,7 @@ ruling_task:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
     - cd its/ruling
-    - ../../gradlew -Dtest=PhpGeneralRulingTest#test${PHP_PROJECT} -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false test
+    - ../../gradlew -Dtest=PhpGeneralRulingTest#test${PHP_PROJECT} -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false test --info --console plain --no-daemon
 
 pr_analysis_task:
   <<: *ONLY_SONARSOURCE_QA

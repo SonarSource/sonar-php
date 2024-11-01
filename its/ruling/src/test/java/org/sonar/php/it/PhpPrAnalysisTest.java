@@ -43,7 +43,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 public class PhpPrAnalysisTest {
 
   @RegisterExtension
