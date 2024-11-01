@@ -125,7 +125,7 @@ build_win_task:
   build_script:
     - git config --global core.autocrlf input
     - source cirrus-env CI
-    - ./gradlew clean build
+    - ./gradlew clean build -x :its:plugin:tests:test -x :its:ruling:test
 
 plugin_qa_task:
   <<: *ONLY_SONARSOURCE_QA
@@ -167,7 +167,7 @@ ruling_task:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
     - cd its/ruling
-    - ../../gradlew test
+    - ../../gradlew test -Dtest=PhpGeneralRulingTest#test${PHP_PROJECT}
 
 pr_analysis_task:
   <<: *ONLY_SONARSOURCE_QA
