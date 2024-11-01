@@ -150,6 +150,7 @@ ruling_task:
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
+  <<: *SETUP_ORCHESTRATOR_CACHE
   env:
     CIRRUS_CLONE_DEPTH: 1
     matrix:
@@ -167,7 +168,7 @@ ruling_task:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
     - cd its/ruling
-    - ../../gradlew -Dtest=PhpGeneralRulingTest#test${PHP_PROJECT} test
+    - ../../gradlew -Dtest=PhpGeneralRulingTest#test${PHP_PROJECT} -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE -Dmaven.test.redirectTestOutputToFile=false test
 
 pr_analysis_task:
   <<: *ONLY_SONARSOURCE_QA
