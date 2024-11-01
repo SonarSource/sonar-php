@@ -125,6 +125,7 @@ build_win_task:
   build_script:
     - git config --global core.autocrlf input
     - source cirrus-env CI
+    # TODO Remove ITs exclusion after SONARIAC-1521, since the ITs won't be in the test task anymore
     - ./gradlew clean build -x :its:plugin:tests:test -x :its:ruling:test
 
 plugin_qa_task:
@@ -149,7 +150,6 @@ ruling_task:
   <<: *ONLY_SONARSOURCE_QA
   <<: *DEPENDS_ON_BUILD
   <<: *QA_CONTAINER_DEFINITION
-  <<: *SETUP_ORCHESTRATOR_CACHE
   env:
     CIRRUS_CLONE_DEPTH: 1
     matrix:
