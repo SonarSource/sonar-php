@@ -31,6 +31,7 @@ import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonarqube.ws.Issues.Issue;
 
+// TODO Enable back with SONARPHP-1520
 @Disabled
 class CustomRulesTest {
 
