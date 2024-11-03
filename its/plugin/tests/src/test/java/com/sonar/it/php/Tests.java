@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.CheckForNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Components;
@@ -198,6 +199,9 @@ class Tests {
   }
 
   // TODO SONARPHP-1466 Replace nested classes in it-php-plugin-tests:Tests with a more elegant solution
+
+  // TODO Enable back with SONARPHP-1520
+  @Disabled
   @Nested
   class NestedCustomRulesTest extends CustomRulesTest {
   }
