@@ -183,7 +183,7 @@ pr_analysis_task:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
     - cd its/ruling
-    - ../../gradlew -Dtest=PhpPrAnalysisTest test
+    - ../../gradlew test --tests PhpPrAnalysisTest --info --console plain --no-daemon
 
 ws_scan_task:
   <<: *ONLY_MAIN_BRANCHES
