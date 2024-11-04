@@ -1,6 +1,7 @@
 plugins {
   alias(libs.plugins.spotless)
   id("org.sonarsource.php.artifactory-configuration")
+  id("org.sonarsource.php.rule-api")
   id("org.sonarsource.php.sonarqube")
 }
 
