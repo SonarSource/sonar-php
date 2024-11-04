@@ -94,7 +94,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
       List<IdentifierTree> unused = new ArrayList<>();
 
       for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {
-        if (symbol.usages().isEmpty() && !constructorPromotedProperties.contains(symbol.declaration())) {
+        if (symbol.usages().isEmpty() && !constructorPromotedProperties.contains(symbol.declaration()) && !symbol.name().startsWith("_")) {
           unused.add(symbol.declaration());
         }
       }
