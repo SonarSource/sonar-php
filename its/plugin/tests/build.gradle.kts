@@ -17,3 +17,7 @@ dependencies {
   testImplementation(libs.assertj.core)
   testCompileOnly(libs.jsr305)
 }
+
+tasks.test {
+  include("**/Tests.class")
+}

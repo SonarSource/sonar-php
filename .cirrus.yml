@@ -144,7 +144,7 @@ plugin_qa_task:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
     - cd its/plugin
-    - ../../gradlew -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} test --tests Tests --info --console plain --no-daemon
+    - ../../gradlew -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} test --info --console plain --no-daemon
 
 ruling_task:
   <<: *ONLY_SONARSOURCE_QA
