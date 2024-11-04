@@ -1,4 +1,5 @@
 import org.sonarsource.php.enforceJarSize
+import org.sonarsource.php.registerCleanupTask
 
 plugins {
   id("org.sonarsource.php.java-conventions")
@@ -15,7 +16,6 @@ dependencies {
   implementation(libs.sonar.xml.parsing)
   implementation(libs.staxmate)
   implementation(libs.commons.lang)
-  compileOnly(libs.slf4j.api)
 
   testImplementation(testFixtures(project(":php-frontend")))
   testImplementation(libs.junit.jupiter)
@@ -28,24 +28,6 @@ dependencies {
 }
 
 description = "SonarSource PHP Analyzer :: Sonar Plugin"
-
-jacoco {
-  toolVersion = "0.8.12"
-}
-
-tasks.jacocoTestReport {
-  dependsOn(tasks.test)
-  reports {
-    xml.required.set(true)
-    csv.required.set(false)
-    html.required.set(false)
-  }
-}
-
-// when subproject has Jacoco plugin applied we want to generate XML report for coverage
-plugins.withType<JacocoPlugin> {
-  tasks["test"].finalizedBy("jacocoTestReport")
-}
 
 tasks.jar {
   manifest {
@@ -74,19 +56,7 @@ tasks.jar {
   }
 }
 
-val cleanupTask =
-  tasks.register<Delete>("cleanupOldVersion") {
-    group = "build"
-    description = "Clean up jars of old plugin version"
-
-    delete(
-      fileTree(project.layout.buildDirectory.dir("libs")).matching {
-        include("${project.name}-*.jar")
-        exclude("${project.name}-${project.version}-*.jar")
-        exclude("${project.name}-${project.version}.jar")
-      },
-    )
-  }
+val cleanupTask = registerCleanupTask()
 
 tasks.shadowJar {
   dependsOn(cleanupTask)

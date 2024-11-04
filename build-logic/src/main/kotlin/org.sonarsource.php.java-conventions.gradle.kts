@@ -34,3 +34,20 @@ tasks.withType<Test> {
     events(SKIPPED, FAILED)
   }
 }
+
+jacoco {
+  toolVersion = "0.8.12"
+}
+
+tasks.jacocoTestReport {
+  dependsOn(tasks.test)
+  reports {
+    xml.required.set(true)
+    csv.required.set(false)
+    html.required.set(providers.environmentVariable("CI").map { it.toBoolean().not() }.orElse(true))
+  }
+}
+
+plugins.withType<JacocoPlugin> {
+  tasks["test"].finalizedBy("jacocoTestReport")
+}

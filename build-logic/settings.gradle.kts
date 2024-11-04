@@ -30,6 +30,8 @@ dependencyResolutionManagement {
 
 pluginManagement {
   repositories {
+    mavenCentral()
+    gradlePluginPortal()
     maven {
       url = uri("https://repox.jfrog.io/repox/sonarsource")
 
@@ -49,7 +51,5 @@ pluginManagement {
         }
       }
     }
-    mavenCentral()
-    gradlePluginPortal()
   }
 }

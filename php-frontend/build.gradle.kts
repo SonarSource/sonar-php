@@ -14,7 +14,6 @@ dependencies {
 
   implementation(libs.sonar.plugin.api)
   implementation(libs.commons.lang)
-  compileOnly(libs.slf4j.api)
 
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.mockito.core)

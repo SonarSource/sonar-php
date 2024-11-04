@@ -11,7 +11,6 @@ dependencies {
   implementation(libs.sonar.plugin.api)
   implementation(libs.sonar.analyzer.commons)
   implementation(libs.commons.lang)
-  compileOnly(libs.slf4j.api)
 
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.assertj.core)
