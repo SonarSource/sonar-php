@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2014-2024 SonarSource SA
+ * Copyright (C) 2010-2024 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -108,11 +108,11 @@ public class PhpGeneralRulingTest {
     File litsDifferencesFile = FileLocation.of("target/differences").getFile();
     File projectLocation = FileLocation.of("../sources/src/" + project).getFile();
     SonarScanner build = RulingHelper.prepareScanner(
-        projectLocation,
-        project,
-        "expected/" + project,
-        litsDifferencesFile,
-        keyValueProperties)
+      projectLocation,
+      project,
+      "expected/" + project,
+      litsDifferencesFile,
+      keyValueProperties)
       .setProperty("sonar.import_unknown_files", "true")
       .setProperty("sonar.php.duration.statistics", "true")
       .setProperty("sonar.cpd.exclusions", "**/*")

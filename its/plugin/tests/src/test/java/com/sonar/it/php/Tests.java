@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2011-2024 SonarSource SA
+ * Copyright (C) 2010-2024 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.CheckForNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Components;
@@ -59,7 +60,7 @@ class Tests {
 
   public static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
 
-  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
+  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardFilename(new File("../../../sonar-php-plugin/build/libs"), "sonar-php-plugin-*-all.jar");
 
   public static final String SCANNER_VERSION = "6.1.0.4477";
   private static final Pattern DEBUG_AND_INFO_LOG_LINE_PATTERN = Pattern.compile("\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s(INFO|DEBUG)\\s.*");
@@ -73,7 +74,8 @@ class Tests {
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
     // Custom rules plugin
-    .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
+    // TODO Fix in SONARPHP-1520 Migrate Custom Rules module to Gradle
+    // .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"))
@@ -197,6 +199,9 @@ class Tests {
   }
 
   // TODO SONARPHP-1466 Replace nested classes in it-php-plugin-tests:Tests with a more elegant solution
+
+  // TODO Enable back with SONARPHP-1520
+  @Disabled
   @Nested
   class NestedCustomRulesTest extends CustomRulesTest {
   }

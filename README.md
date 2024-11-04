@@ -75,7 +75,7 @@ To run tests locally follow these instructions.
 ### Build the Project and Run Unit Tests
 To build the plugin and run its unit tests, execute this command from the project's root directory (you will need [Maven](https://maven.apache.org/)):
 ```shell
-mvn clean install
+./gradlew build
 ```
 
 ### Integration Tests
@@ -86,27 +86,21 @@ sonar.runtimeVersion=9.9
 ```
 Before running any of the integration tests make sure the submodules are checked out:
 ```shell
-  git submodule init
-  git submodule update
+  git submodule update --init
 ```
 #### Plugin Test
-The "Plugin Test" is an additional integration test that verifies plugin features such as metric calculation, coverage, etc. To launch it, execute this command from the directory `its/plugin`:
+The "Plugin Test" is an additional integration test that verifies plugin features such as metric calculation, coverage, etc. To launch it:
 ```shell
-mvn clean install
+./gradlew its:plugin:tests:test
 ```
 
 #### Ruling Test
 The "Ruling Test" is a special integration test that launches the analysis of a large code base, saves the issues created by the plugin in report files, and then compares those results to the set of expected issues (stored as JSON files). To launch the ruling test:
 ```shell
-cd its/ruling
-mvn clean install
+./gradlew its:ruling:test
 ```
 
-This test gives you the opportunity to examine the issues created by each rule and make sure they're what you expect. You can inspect new/lost issues by checking the web pages mentioned in the logs at the end of the analysis:
-```
-INFO  - HTML Issues Report generated: /path/to/project/sonar-php/its/sources/src/.sonar/issues-report/issues-report.html
-INFO  - Light HTML Issues Report generated: /path/to/project/sonar-php/its/sources/src/.sonar/issues-report/issues-report-light.html
-```
+This test gives you the opportunity to examine the issues created by each rule and make sure they're what you expect. You can inspect new/lost issues by checking the SonarQube local URL mentioned in the logs at the end of the analysis.
 If everything looks good to you, you can copy the file with the actual issues located at
 ```
 sonar-php/its/ruling/target/actual/
