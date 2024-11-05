@@ -379,8 +379,10 @@ public final class CheckUtils {
   }
 
   public static Optional<LiteralTree> resolvedArgumentLiteral(FunctionCallTree call, String name, int position) {
-    return argumentValue(call, name, position).map(CheckUtils::assignedValue)
-      .filter(LiteralTree.class::isInstance).map(LiteralTree.class::cast);
+    return argumentValue(call, name, position)
+      .map(CheckUtils::assignedValue)
+      .filter(LiteralTree.class::isInstance)
+      .map(LiteralTree.class::cast);
   }
 
   public static Optional<ExpressionTree> argumentValue(FunctionCallTree call, String name, int position) {
@@ -411,6 +413,13 @@ public final class CheckUtils {
       return CheckUtils.uniqueAssignedValue((VariableIdentifierTree) tree).orElse(tree);
     }
     return tree;
+  }
+
+  public static Optional<LiteralTree> assignedValueAsLiteralTree(ExpressionTree tree) {
+    if (assignedValue(tree) instanceof LiteralTree literalTree) {
+      return Optional.of(literalTree);
+    }
+    return Optional.empty();
   }
 
   public static Optional<ExpressionTree> uniqueAssignedValue(VariableIdentifierTree tree) {
