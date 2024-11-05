@@ -105,8 +105,9 @@ public class PhpGeneralRulingTest {
   private void testProject(String project, String... keyValueProperties) throws Exception {
     ORCHESTRATOR.getServer().provisionProject(project, project);
     ORCHESTRATOR.getServer().associateProjectToQualityProfile(project, "php", "rules");
-    File litsDifferencesFile = FileLocation.of("target/differences").getFile();
+    File litsDifferencesFile = FileLocation.of("build/differences").getFile();
     File projectLocation = FileLocation.of("../sources/src/" + project).getFile();
+
     SonarScanner build = RulingHelper.prepareScanner(
       projectLocation,
       project,

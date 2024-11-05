@@ -118,8 +118,7 @@ build_task:
   build_script:
     - git submodule update --init
     - source cirrus-env BUILD
-    # TODO Remove ITs exclusion after SONARIAC-1521, since the ITs won't be in the test task anymore
-    - regular_gradle_build_deploy_analyze -x :its:plugin:tests:test -x :its:ruling:test
+    - regular_gradle_build_deploy_analyze
 
 build_win_task:
   <<: *WINDOWS_VM_DEFINITION
@@ -128,8 +127,7 @@ build_win_task:
   build_script:
     - git config --global core.autocrlf input
     - source cirrus-env CI
-    # TODO Remove ITs exclusion after SONARIAC-1521, since the ITs won't be in the test task anymore
-    - ./gradlew clean build -x :its:plugin:tests:test -x :its:ruling:test
+    - ./gradlew clean build
 
 plugin_qa_task:
   <<: *ONLY_SONARSOURCE_QA
@@ -146,8 +144,7 @@ plugin_qa_task:
   qa_script:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
-    - cd its/plugin
-    - ../../gradlew -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} test --info --console plain --no-daemon
+    - ./gradlew -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=${SQ_VERSION} its:plugin:tests:integrationTest --info --console plain --no-daemon
 
 ruling_task:
   <<: *ONLY_SONARSOURCE_QA
@@ -170,8 +167,7 @@ ruling_task:
   ruling_script:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
-    - cd its/ruling
-    - ../../gradlew -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE test --tests PhpGeneralRulingTest.test${PHP_PROJECT} --info --console plain --no-daemon
+    - ./gradlew -Drevision=${PROJECT_VERSION} -Dsonar.runtimeVersion=LATEST_RELEASE its:ruling:integrationTest --tests PhpGeneralRulingTest.test${PHP_PROJECT} --info --console plain --no-daemon
 
 pr_analysis_task:
   <<: *ONLY_SONARSOURCE_QA
@@ -185,8 +181,7 @@ pr_analysis_task:
   ruling_script:
     - source cirrus-env QA
     - source set_gradle_build_version $BUILD_NUMBER
-    - cd its/ruling
-    - ../../gradlew test --tests PhpPrAnalysisTest --info --console plain --no-daemon
+    - ./gradlew its:ruling:integrationTest --tests PhpPrAnalysisTest --info --console plain --no-daemon
 
 ws_scan_task:
   <<: *ONLY_MAIN_BRANCHES
