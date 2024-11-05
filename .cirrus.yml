@@ -109,6 +109,9 @@ build_task:
     memory: 3G
   env:
     <<: *BUILD_SECRETS
+    ORG_GRADLE_PROJECT_signingKey: VAULT[development/kv/data/sign data.key]
+    ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
+    ORG_GRADLE_PROJECT_signingKeyId: VAULT[development/kv/data/sign data.key_id]
     #allow deployment of pull request artifacts to repox
     DEPLOY_PULL_REQUEST: true
     CIRRUS_CLONE_DEPTH: 50
