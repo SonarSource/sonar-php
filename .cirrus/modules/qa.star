@@ -53,7 +53,7 @@ def qa_os_win_task():
 
 
 #
-# Plugin
+# Commons
 #
 
 def qa_task(env):
@@ -78,9 +78,13 @@ def run_its_script():
         "git submodule update --init --depth 1",
         "source cirrus-env QA",
         "source .cirrus/use-gradle-wrapper.sh",
-        "./gradlew \"${GRADLE_TASK}\" \"-Dsonar.runtimeVersion=${SQ_VERSION}\" --info --build-cache --console plain --no-daemon"
+        "./gradlew \"${GRADLE_TASK}\" ${GRADLE_FLAGS} \"-Dsonar.runtimeVersion=${SQ_VERSION}\" --info --build-cache --console plain --no-daemon"
     ]
 
+
+#
+# Plugin
+#
 
 def qa_plugin_env():
     return {
@@ -117,3 +121,23 @@ def qa_ruling_task():
     return {
         "qa_ruling_task": qa_task(qa_ruling_env())
     }
+
+
+#
+# PR Analysis
+#
+
+def qa_pr_analysis_env():
+  return {
+    "GRADLE_TASK": QA_RULING_GRADLE_TASK,
+    "GRADLE_FLAGS": "--tests PhpPrAnalysisTest",
+    "SQ_VERSION": QA_QUBE_LATEST_RELEASE,
+    "KEEP_ORCHESTRATOR_RUNNING": "true",
+    "GITHUB_TOKEN": "VAULT[development/github/token/licenses-ro token]",
+  }
+
+
+def qa_pr_analysis_task():
+  return {
+    "qa_pr_analysis_task": qa_task(qa_pr_analysis_env())
+  }
