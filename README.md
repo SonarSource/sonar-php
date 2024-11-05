@@ -110,6 +110,30 @@ into the directory with the expected issues
 sonar-php/its/ruling/src/test/resources/expected/
 ```
 
+### Rule Descriptions
+
+#### Update Rule Descriptions
+
+To update all rule descriptions:
+
+```shell
+./gradlew ruleApiUpdate
+```
+
+#### Generate New Rule Description
+
+To fetch static files for a rule SXXXX from [RSPEC](https://github.com/SonarSource/rspec):
+
+```shell
+./gradlew ruleApiGenerateRule -Prule=SXXXX
+```
+
+Same for a specific RSPEC branch (`master` by default):
+
+```shell
+./gradlew ruleApiGenerateRule -Prule=SXXXX -Pbranch=my-branch
+```
+
 ### License
 
 Copyright 2010-2024 SonarSource.
