@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.DnfTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
@@ -34,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 class FunctionDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
-  void simpleDeclaration() {
+  void shouldSupportSimpleDeclaration() {
     FunctionDeclarationTree tree = parse("function f($p) {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.is(Kind.FUNCTION_DECLARATION)).isTrue();
     assertThat(tree.attributeGroups()).isEmpty();
@@ -47,13 +48,13 @@ class FunctionDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void reference() {
+  void shouldSupportReference() {
     FunctionDeclarationTree tree = parse("function &f($p) {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.referenceToken()).isNotNull();
   }
 
   @Test
-  void withReturnTypeClause() {
+  void shouldSupportReturnTypeClause() {
     FunctionDeclarationTree tree = parse("function f() : array {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.returnTypeClause()).isNotNull();
     assertThat(tree.returnTypeClause().colonToken().text()).isEqualTo(":");
@@ -63,7 +64,7 @@ class FunctionDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void withUnionReturnTypeClause() {
+  void shouldSupportUnionReturnTypeClause() {
     FunctionDeclarationTree tree = parse("function f() : array|int {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.returnTypeClause()).isNotNull();
     assertThat(tree.returnTypeClause().colonToken().text()).isEqualTo(":");
@@ -73,14 +74,25 @@ class FunctionDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void withAttributes() {
+  void shouldSupportAttributes() {
     FunctionDeclarationTree tree = parse("#[A1(8), A2] function f() {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(2);
   }
 
   @Test
-  void parameterWithVisibilityModifier() {
+  void shouldSupportParameterWithVisibilityModifier() {
     assertThatExceptionOfType(RecognitionException.class).isThrownBy(() -> parse("function f(public $p) {}", PHPLexicalGrammar.FUNCTION_DECLARATION));
+  }
+
+  @Test
+  void shouldSupportDnfTypeInParameter() {
+    FunctionDeclarationTree tree = parse("function f(int|null|(A&B) $p) {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
+    assertThat(tree.parameters().parameters()).hasSize(1);
+    var type = tree.parameters().parameters().get(0).declaredType();
+    assertThat(type.getKind()).isEqualTo(Kind.DNF_TYPE);
+    var dnfType = (DnfTypeTree) type;
+    assertThat(dnfType.isSimple()).isFalse();
+    assertThat(dnfType.types()).hasSize(3);
   }
 }

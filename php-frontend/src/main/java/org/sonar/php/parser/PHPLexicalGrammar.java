@@ -74,6 +74,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   UNION_TYPE,
   INTERSECTION_TYPE,
   DECLARED_TYPE,
+  DNF_TYPE,
+  DNF_INTESECTION_TYPE,
 
   /**
    * Lexical

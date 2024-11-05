@@ -36,6 +36,8 @@ import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfIntersectionTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -581,6 +583,16 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitIntersectionType(IntersectionTypeTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitDnfType(DnfTypeTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitDnfIntersectionType(DnfIntersectionTypeTree tree) {
     scan(tree);
   }
 

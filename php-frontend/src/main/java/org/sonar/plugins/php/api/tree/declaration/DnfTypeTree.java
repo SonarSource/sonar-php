@@ -17,22 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import org.junit.jupiter.api.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+/**
+ * <a href="https://wiki.php.net/rfc/dnf_types">DNF Types</a>
+ *
+ * @since 3.39
+ */
+public interface DnfTypeTree extends DeclaredTypeTree {
 
-class ClassMemberTest {
-
-  @Test
-  void test() {
-    assertThat(PHPLexicalGrammar.CLASS_MEMBER)
-      .matches("var $a;")
-      .matches("const A;")
-      .matches("private function f() {}")
-      .matches("public readonly string $prop;")
-      .matches("public int|null|(A&B) $a;");
-  }
+  /**
+   * The list of elements and separators, e.g., <code>int</code>, <code>|</code> and <code>(A&amp;B)</code> in <code>int|(A&amp;B)</code>.
+   * @return the list of elements and separators
+   */
+  SeparatedList<DeclaredTypeTree> types();
 }

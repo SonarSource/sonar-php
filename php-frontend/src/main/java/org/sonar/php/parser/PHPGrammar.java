@@ -40,6 +40,8 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfIntersectionTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
@@ -607,9 +609,31 @@ public class PHPGrammar {
         b.oneOrMore(f.newTuple(b.token(PHPPunctuator.AMPERSAND), TYPE()))));
   }
 
+  /**
+   * We don't want to match UNION_TYPE as DNF_TYPE, so we need this more complex grammar to ensure we have a mix of union and intersection:
+   * DNF_TYPE -> (TYPE "|")* DNF_INTERSECTION_TYPE ("|" (TYPE | DNF_INTERSECTION_TYPE))*
+   */
+  public DnfTypeTree DNF_TYPE() {
+    return b.<DnfTypeTree>nonterminal(PHPLexicalGrammar.DNF_TYPE).is(
+      b.firstOf(
+        f.dnfType(
+          b.zeroOrMore(f.newTuple(TYPE(), b.token(PHPPunctuator.OR))),
+          DNF_INTERSECTION_TYPE(),
+          b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), b.firstOf(TYPE(), DNF_INTERSECTION_TYPE()))))));
+  }
+
+  public DnfIntersectionTypeTree DNF_INTERSECTION_TYPE() {
+    return b.<DnfIntersectionTypeTree>nonterminal(PHPLexicalGrammar.DNF_INTESECTION_TYPE).is(
+      f.dnfIntersectionType(
+        b.token(PHPPunctuator.LPARENTHESIS),
+        TYPE(),
+        b.oneOrMore(f.newTuple(b.token(PHPPunctuator.AMPERSAND), TYPE())),
+        b.token(PHPPunctuator.RPARENTHESIS)));
+  }
+
   public DeclaredTypeTree DECLARED_TYPE() {
     return b.<DeclaredTypeTree>nonterminal(PHPLexicalGrammar.DECLARED_TYPE).is(
-      b.firstOf(UNION_TYPE(), INTERSECTION_TYPE(), TYPE()));
+      b.firstOf(DNF_TYPE(), UNION_TYPE(), INTERSECTION_TYPE(), TYPE()));
   }
 
   /**
