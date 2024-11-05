@@ -73,7 +73,7 @@ If you have an idea for a rule but you are not sure that everyone needs it you c
 To run tests locally follow these instructions.
 
 ### Build the Project and Run Unit Tests
-To build the plugin and run its unit tests, execute this command from the project's root directory (you will need [Maven](https://maven.apache.org/)):
+To build the plugin and run its unit tests, execute this command from the project's root directory:
 ```shell
 ./gradlew build
 ```
