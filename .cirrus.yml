@@ -14,6 +14,10 @@ env:
   PATH: ${CIRRUS_WORKING_DIR}/.cirrus:${PATH}
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
+  # Gradle signing configuration
+  ORG_GRADLE_PROJECT_signingKey: VAULT[development/kv/data/sign data.key]
+  ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
+  ORG_GRADLE_PROJECT_signingKeyId: VAULT[development/kv/data/sign data.key_id]
 
 build_secrets: &BUILD_SECRETS
   SIGN_KEY: VAULT[development/kv/data/sign data.key]
@@ -117,6 +121,7 @@ build_task:
     - source cirrus-env BUILD
     # TODO Remove ITs exclusion after SONARIAC-1521, since the ITs won't be in the test task anymore
     - regular_gradle_build_deploy_analyze -x :its:plugin:tests:test -x :its:ruling:test
+    - gradle --no-daemon --info --stacktrace --console plain build sonar artifactoryPublish -DbuildNumber="$BUILD_NUMBER" -Dsonar.host.url="$SONAR_HOST_URL" -Dsonar.token="$SONAR_TOKEN" -Dsonar.projectVersion="$INITIAL_VERSION" -Dsonar.analysis.buildNumber="$BUILD_NUMBER" -Dsonar.analysis.pipeline="$PIPELINE_ID" -Dsonar.analysis.sha1="$GIT_SHA1" -Dsonar.analysis.repository="$GITHUB_REPO" "$@"
 
 build_win_task:
   <<: *WINDOWS_VM_DEFINITION
