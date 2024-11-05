@@ -105,18 +105,24 @@ public class PhpGeneralRulingTest {
   private void testProject(String project, String... keyValueProperties) throws Exception {
     ORCHESTRATOR.getServer().provisionProject(project, project);
     ORCHESTRATOR.getServer().associateProjectToQualityProfile(project, "php", "rules");
-    File litsDifferencesFile = FileLocation.of("target/differences").getFile();
+    File litsDifferencesFile = FileLocation.of("build/differences").getFile();
     File projectLocation = FileLocation.of("../sources/src/" + project).getFile();
-    SonarScanner build = RulingHelper.prepareScanner(
-      projectLocation,
-      project,
-      "expected/" + project,
-      litsDifferencesFile,
-      keyValueProperties)
+
+    SonarScanner build = SonarScanner.create(projectLocation, keyValueProperties)
+      .setProjectKey(project)
+      .setProjectName(project)
+      .setProjectVersion("1")
+      .setSourceEncoding("UTF-8")
+      .setSourceDirs(".")
+      .setProperty("sonar.lits.dump.old", FileLocation.of("src/integrationTest/resources/expected/" + project).getFile().getAbsolutePath())
+      .setProperty("sonar.lits.dump.new", FileLocation.of("target/actual").getFile().getAbsolutePath())
+      .setProperty("sonar.lits.differences", litsDifferencesFile.getAbsolutePath())
+      .setProperty("sonar.internal.analysis.failFast", "true")
       .setProperty("sonar.import_unknown_files", "true")
       .setProperty("sonar.php.duration.statistics", "true")
       .setProperty("sonar.cpd.exclusions", "**/*")
-      .setProperty("sonar.scm.disabled", "true");
+      .setProperty("sonar.scm.disabled", "true")
+      .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx2000m");
 
     if (System.getProperty("os.name").toLowerCase().contains("win")) {
       // On unix systems, files or directories starting with a dot are hidden, so we don't get them from the scanner

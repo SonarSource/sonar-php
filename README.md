@@ -91,13 +91,13 @@ Before running any of the integration tests make sure the submodules are checked
 #### Plugin Test
 The "Plugin Test" is an additional integration test that verifies plugin features such as metric calculation, coverage, etc. To launch it:
 ```shell
-./gradlew its:plugin:tests:test
+./gradlew its:plugin:tests:integrationTest
 ```
 
 #### Ruling Test
 The "Ruling Test" is a special integration test that launches the analysis of a large code base, saves the issues created by the plugin in report files, and then compares those results to the set of expected issues (stored as JSON files). To launch the ruling test:
 ```shell
-./gradlew its:ruling:test
+./gradlew its:ruling:integrationTest
 ```
 
 This test gives you the opportunity to examine the issues created by each rule and make sure they're what you expect. You can inspect new/lost issues by checking the SonarQube local URL mentioned in the logs at the end of the analysis.
