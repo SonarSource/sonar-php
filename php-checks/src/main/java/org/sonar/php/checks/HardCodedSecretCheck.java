@@ -51,14 +51,13 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
   private static final String DEFAULT_SECRET_WORDS = "api[_.-]?key,auth,credential,secret,token";
   private static final String DEFAULT_RANDOMNESS_SENSIBILITY = "5.0";
   private static final double LANGUAGE_SCORE_INCREMENT = 0.3;
-  private static final int TWO_ARGUMENTS = 2;
   private static final int MAX_RANDOMNESS_SENSIBILITY = 10;
   private static final int MINIMUM_CREDENTIAL_LENGTH = 17;
 
   private static final String FIRST_ACCEPTED_CHARACTER = "[\\w.+/~$:&-]";
   private static final String FOLLOWING_ACCEPTED_CHARACTER = "[=\\w.+/~$:&-]";
   private static final Pattern SECRET_PATTERN = Pattern.compile(FIRST_ACCEPTED_CHARACTER + "(" + FOLLOWING_ACCEPTED_CHARACTER + "|\\\\\\\\" + FOLLOWING_ACCEPTED_CHARACTER + ")++");
-  private static final Pattern IPV_6_PATTERN = Pattern.compile("%s|%s".formatted(IP_V4, IP_V6));
+  private static final Pattern IP_PATTERN = Pattern.compile("%s|%s".formatted(IP_V4, IP_V6));
 
   @RuleProperty(
     key = "secretWords",
@@ -96,7 +95,7 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
       visitDefineFunctionCall(tree);
     } else if ("strcasecmp".equals(functionName) || "strcmp".equals(functionName)) {
       visitStringCompareFunctionCall(tree);
-    } else if (tree.callArguments().size() == TWO_ARGUMENTS) {
+    } else if (tree.callArguments().size() == 2) {
       visitTwoArgumentsFunctionCall(tree);
     }
     super.visitFunctionCall(tree);
@@ -115,13 +114,13 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
   private void visitStringCompareFunctionCall(FunctionCallTree tree) {
     var string1 = CheckUtils.resolvedArgumentLiteral(tree, "string1", 0);
     var string2 = CheckUtils.resolvedArgumentLiteral(tree, "string2", 1);
-    if (string1.isPresent()) {
+    if (string1.isPresent() && tree.callArguments().size() == 2) {
       var callArg = tree.callArguments().get(1).value();
       if (callArg instanceof VariableIdentifierTree variableIdentifier) {
         detectSecret(variableIdentifier.text(), string1.get().value(), string1.get());
       }
     }
-    if (string2.isPresent()) {
+    if (string2.isPresent() && tree.callArguments().size() == 2) {
       var callArg = tree.callArguments().get(0).value();
       if (callArg instanceof VariableIdentifierTree variableIdentifier) {
         detectSecret(variableIdentifier.text(), string2.get().value(), string2.get());
@@ -168,13 +167,13 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
-    var leftOperant = tree.leftOperand();
-    var rightOperant = tree.rightOperand();
-    if (rightOperant instanceof LiteralTree secretValueTree && leftOperant instanceof VariableIdentifierTree variableTree) {
-      detectSecret(variableTree.text(), secretValueTree.value(), rightOperant);
+    var leftOperand = tree.leftOperand();
+    var rightOperand = tree.rightOperand();
+    if (rightOperand instanceof LiteralTree secretValueTree && leftOperand instanceof VariableIdentifierTree variableTree) {
+      detectSecret(variableTree.text(), secretValueTree.value(), rightOperand);
     }
-    if (leftOperant instanceof LiteralTree secretValueTree && rightOperant instanceof VariableIdentifierTree variableTree) {
-      detectSecret(variableTree.text(), secretValueTree.value(), leftOperant);
+    if (leftOperand instanceof LiteralTree secretValueTree && rightOperand instanceof VariableIdentifierTree variableTree) {
+      detectSecret(variableTree.text(), secretValueTree.value(), leftOperand);
     }
     super.visitBinaryExpression(tree);
   }
@@ -226,7 +225,7 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
   }
 
   private static boolean isNotIpV6(String literal) {
-    return !IPV_6_PATTERN.matcher(literal).matches();
+    return !IP_PATTERN.matcher(literal).matches();
   }
 
   private EntropyDetector entropyDetector() {

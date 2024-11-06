@@ -30,11 +30,12 @@ define("credential", "abcdefghijklmnopqrs");              // Noncompliant
 
 define("namespace\level\Token", "abcdefghijklmnopqrs");   // Noncompliant
 
+define("abcdefghijklmnopqrs");    // Compliant
 
 // Variables declarations (as AssignmentExpression)
-$var_ok = "abcdefghijklmnopqrs"; // Compliant
+$var_ok = "abcdefghijklmnopqrs";  // Compliant
 
-$oauth = "abcdefghijklmnopqrs";  // Noncompliant
+$oauth = "abcdefghijklmnopqrs";   // Noncompliant
 
 // Variables in function
 function do_something(): void
@@ -178,6 +179,18 @@ function compareStrings($auth)
   {
     echo $auth;
   }
+  if (strcmp())
+  {
+    echo $auth;
+  }
+  if (strcmp("abcdefghijklmnopqrs"))
+  {
+    echo $auth;
+  }
+  if (strcmp("abcdefghijklmnopqrs", $auth, "abc"))
+  {
+    echo $auth;
+  }
 
   // case insensitive
   if (strcasecmp($auth, "abcdefghijklmnopqrs"))    // Noncompliant
@@ -205,6 +218,18 @@ function compareStrings($auth)
     echo $auth;
   }
   if (strcasecmp("X", $auth))
+  {
+    echo $auth;
+  }
+  if (strcasecmp())
+  {
+    echo $auth;
+  }
+  if (strcasecmp("abcdefghijklmnopqrs"))
+  {
+    echo $auth;
+  }
+  if (strcasecmp("abcdefghijklmnopqrs", $auth, "abc"))
   {
     echo $auth;
   }
