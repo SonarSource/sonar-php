@@ -136,7 +136,7 @@ def qa_ruling_script():
     "git submodule update --init --depth 1",
     "source cirrus-env QA",
     "source .cirrus/use-gradle-wrapper.sh",
-    "./gradlew \"${GRADLE_TASK}\" \"--tests PhpGeneralRulingTest.test${PHP_PROJECT} -Dsonar.runtimeVersion=${SQ_VERSION}\" --info --build-cache --console plain --no-daemon"
+    "./gradlew \"${GRADLE_TASK}\" \"-Dsonar.runtimeVersion=${SQ_VERSION}\" --tests \"PhpGeneralRulingTest.test${PHP_PROJECT}\" --info --build-cache --console plain --no-daemon"
   ]
 
 
@@ -164,7 +164,7 @@ def qa_pr_analysis_script():
     "git submodule update --init --depth 1",
     "source cirrus-env QA",
     "source .cirrus/use-gradle-wrapper.sh",
-    "./gradlew \"${GRADLE_TASK}\" \"--tests PhpPrAnalysisTest -Dsonar.runtimeVersion=${SQ_VERSION}\" --info --build-cache --console plain --no-daemon"
+    "./gradlew \"${GRADLE_TASK}\" \"-Dsonar.runtimeVersion=${SQ_VERSION}\" --tests \"PhpPrAnalysisTest\" --info --build-cache --console plain --no-daemon"
   ]
 
 
