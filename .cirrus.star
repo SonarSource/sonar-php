@@ -12,7 +12,6 @@ load(
   "build_task",
   "build_test_analyze_task",
   "sca_scan_task"
-)
 load(
   ".cirrus/modules/qa.star",
   "qa_os_win_task",
