@@ -28,6 +28,8 @@ import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfIntersectionTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
@@ -306,6 +308,16 @@ public interface Tree {
      * {@link IntersectionTypeTree}
      */
     INTERSECTION_TYPE(IntersectionTypeTree.class),
+
+    /**
+     * {@link DnfTypeTree}
+     */
+    DNF_TYPE(DnfTypeTree.class),
+
+    /**
+     * {@link DnfIntersectionTypeTree}
+     */
+    DNF_INTERSECTION_TYPE(DnfIntersectionTypeTree.class),
 
     /**
      * {@link NamespaceNameTree}
@@ -1000,7 +1012,7 @@ public interface Tree {
     STATIC_STATEMENT(StaticStatementTree.class),
 
     /**
-     * {@link SyntaxToken}
+     * {@link SyntaxTrivia}
      */
     TRIVIA(SyntaxTrivia.class),
 

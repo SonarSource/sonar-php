@@ -24,15 +24,24 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-class ClassMemberTest {
+class DnfTypeTest {
 
   @Test
-  void test() {
-    assertThat(PHPLexicalGrammar.CLASS_MEMBER)
-      .matches("var $a;")
-      .matches("const A;")
-      .matches("private function f() {}")
-      .matches("public readonly string $prop;")
-      .matches("public int|null|(A&B) $a;");
+  void shouldParse() {
+    assertThat(PHPLexicalGrammar.DNF_TYPE)
+      .matches("(A&B)")
+      .matches("(A&B)|int")
+      .matches("int|(A&B)")
+      .matches("int|null|(A&B)")
+      .matches("int|(A&B)|null")
+      .matches("(A&B)|(C&D)")
+      .matches("(A&B)|C")
+
+      .notMatches("int|null")
+      .notMatches("int")
+      .notMatches("A&B")
+      .notMatches("A&B|null")
+      .notMatches("A&null")
+      .notMatches("null");
   }
 }

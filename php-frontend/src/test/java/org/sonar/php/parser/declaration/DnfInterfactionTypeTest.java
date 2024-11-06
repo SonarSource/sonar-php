@@ -24,15 +24,19 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-class ClassMemberTest {
+class DnfInterfactionTypeTest {
 
   @Test
-  void test() {
-    assertThat(PHPLexicalGrammar.CLASS_MEMBER)
-      .matches("var $a;")
-      .matches("const A;")
-      .matches("private function f() {}")
-      .matches("public readonly string $prop;")
-      .matches("public int|null|(A&B) $a;");
+  void shouldParse() {
+    assertThat(PHPLexicalGrammar.DNF_INTERSECTION_TYPE)
+      .matches("(A&B)")
+      .matches("(A&B&C&D)")
+
+      .notMatches("(A)")
+      .notMatches("A&B")
+      .notMatches("(A&B")
+      .notMatches("((A&B)")
+      .notMatches("null")
+      .notMatches("(A&B)|C");
   }
 }

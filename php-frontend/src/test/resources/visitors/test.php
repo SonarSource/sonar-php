@@ -6,7 +6,7 @@ namespace NS;
 class A extends B {
   public $field; /* comment 1 */ // comment 2
 
-  public function foo(#[A2, A3,] int|array $a) {
+  public function foo(#[A2, A3,] int|array $a, int|(A&B) $b) {
     $var = 1;
     foo(1, 2);
     `cat $var`;

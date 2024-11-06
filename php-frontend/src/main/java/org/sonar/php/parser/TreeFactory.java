@@ -45,6 +45,8 @@ import org.sonar.php.tree.impl.declaration.ClassNamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.CombinedTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.ConstantDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.DnfIntersectionTypeTreeImpl;
+import org.sonar.php.tree.impl.declaration.DnfTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.EnumDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
@@ -151,6 +153,8 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfIntersectionTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.EnumDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
@@ -1872,13 +1876,13 @@ public class TreeFactory {
     return new ExecutionOperatorTreeImpl(literal);
   }
 
-  private static SeparatedList<TypeTree> combinedTypes(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
-    List<TypeTree> types = new ArrayList<>();
+  private static <T extends DeclaredTypeTree> SeparatedList<T> combinedTypes(T firstType, List<Tuple<SyntaxToken, T>> rest) {
+    List<T> types = new ArrayList<>();
     List<SyntaxToken> separators = new ArrayList<>();
 
-    types.add(type1);
+    types.add(firstType);
 
-    for (Tuple<SyntaxToken, TypeTree> tuple : rest) {
+    for (Tuple<SyntaxToken, T> tuple : rest) {
       separators.add(tuple.first);
       types.add(tuple.second);
     }
@@ -1886,12 +1890,37 @@ public class TreeFactory {
     return new SeparatedListImpl<>(types, separators);
   }
 
-  public UnionTypeTree unionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
-    return new CombinedTypeTreeImpl.UnionTypeTreeImpl(combinedTypes(type1, rest));
+  public UnionTypeTree unionType(TypeTree firstType, List<Tuple<SyntaxToken, TypeTree>> rest) {
+    return new CombinedTypeTreeImpl.UnionTypeTreeImpl(combinedTypes(firstType, rest));
   }
 
-  public IntersectionTypeTree intersectionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
-    return new CombinedTypeTreeImpl.IntersectionTypeTreeImpl(combinedTypes(type1, rest));
+  public IntersectionTypeTree intersectionType(TypeTree firstType, List<Tuple<SyntaxToken, TypeTree>> rest) {
+    return new CombinedTypeTreeImpl.IntersectionTypeTreeImpl(combinedTypes(firstType, rest));
+  }
+
+  public DnfTypeTree dnfType(
+    Optional<List<Tuple<TypeTree, SyntaxToken>>> simpleTypes,
+    DnfIntersectionTypeTree intersectionTypeTree,
+    Optional<List<Tuple<SyntaxToken, DeclaredTypeTree>>> rest) {
+    List<DeclaredTypeTree> types = new ArrayList<>();
+    List<SyntaxToken> separators = new ArrayList<>();
+
+    for (Tuple<TypeTree, SyntaxToken> tuple : simpleTypes.or(Collections.emptyList())) {
+      types.add(tuple.first);
+      separators.add(tuple.second);
+    }
+    types.add(intersectionTypeTree);
+    for (Tuple<SyntaxToken, DeclaredTypeTree> tuple : rest.or(Collections.emptyList())) {
+      separators.add(tuple.first);
+      types.add(tuple.second);
+    }
+
+    var separatedList = new SeparatedListImpl<>(types, separators);
+    return new DnfTypeTreeImpl(separatedList);
+  }
+
+  public DnfIntersectionTypeTree dnfIntersectionType(SyntaxToken openParenthesis, TypeTree firstType, List<Tuple<SyntaxToken, TypeTree>> rest, SyntaxToken closedParenthesis) {
+    return new DnfIntersectionTypeTreeImpl(openParenthesis, combinedTypes(firstType, rest), closedParenthesis);
   }
 
   public CallArgumentTree functionCallArgument(Optional<Tuple<NameIdentifierTree, InternalSyntaxToken>> optional, ExpressionTree firstOf) {

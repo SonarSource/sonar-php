@@ -28,6 +28,8 @@ import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfIntersectionTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.DnfTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.IntersectionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -157,6 +159,10 @@ public interface VisitorCheck extends PHPCheck {
   void visitUnionType(UnionTypeTree tree);
 
   void visitIntersectionType(IntersectionTypeTree tree);
+
+  void visitDnfType(DnfTypeTree tree);
+
+  void visitDnfIntersectionType(DnfIntersectionTypeTree tree);
 
   void visitBuiltInType(BuiltInTypeTree tree);
 

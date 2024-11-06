@@ -40,6 +40,8 @@ class FunctionDeclarationTest {
       .matches("function f($prop = new Foo()) {}")
       .matches("function f(A&B $prop): A&B {}")
       .matches("function f(A|B $prop): A|B {}")
+      .matches("function f(null|(A&B) $prop): void {}")
+      .matches("function f(A $prop): null|(A&B) {}")
       // readonly is a keyword, but it can be used as a function name
       .matches("function readonly() {}")
       .matches("function READONLY() {}")
