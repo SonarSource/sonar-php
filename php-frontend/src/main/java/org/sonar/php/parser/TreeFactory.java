@@ -1876,11 +1876,11 @@ public class TreeFactory {
     return new ExecutionOperatorTreeImpl(literal);
   }
 
-  private static <T extends DeclaredTypeTree> SeparatedList<T> combinedTypes(T type1, List<Tuple<SyntaxToken, T>> rest) {
+  private static <T extends DeclaredTypeTree> SeparatedList<T> combinedTypes(T firstType, List<Tuple<SyntaxToken, T>> rest) {
     List<T> types = new ArrayList<>();
     List<SyntaxToken> separators = new ArrayList<>();
 
-    types.add(type1);
+    types.add(firstType);
 
     for (Tuple<SyntaxToken, T> tuple : rest) {
       separators.add(tuple.first);
@@ -1890,15 +1890,17 @@ public class TreeFactory {
     return new SeparatedListImpl<>(types, separators);
   }
 
-  public UnionTypeTree unionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
-    return new CombinedTypeTreeImpl.UnionTypeTreeImpl(combinedTypes(type1, rest));
+  public UnionTypeTree unionType(TypeTree firstType, List<Tuple<SyntaxToken, TypeTree>> rest) {
+    return new CombinedTypeTreeImpl.UnionTypeTreeImpl(combinedTypes(firstType, rest));
   }
 
-  public IntersectionTypeTree intersectionType(TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest) {
-    return new CombinedTypeTreeImpl.IntersectionTypeTreeImpl(combinedTypes(type1, rest));
+  public IntersectionTypeTree intersectionType(TypeTree firstType, List<Tuple<SyntaxToken, TypeTree>> rest) {
+    return new CombinedTypeTreeImpl.IntersectionTypeTreeImpl(combinedTypes(firstType, rest));
   }
 
-  public DnfTypeTree dnfType(Optional<List<Tuple<TypeTree, SyntaxToken>>> simpleTypes, DnfIntersectionTypeTree intersectionTypeTree,
+  public DnfTypeTree dnfType(
+    Optional<List<Tuple<TypeTree, SyntaxToken>>> simpleTypes,
+    DnfIntersectionTypeTree intersectionTypeTree,
     Optional<List<Tuple<SyntaxToken, DeclaredTypeTree>>> rest) {
     List<DeclaredTypeTree> types = new ArrayList<>();
     List<SyntaxToken> separators = new ArrayList<>();
@@ -1917,8 +1919,8 @@ public class TreeFactory {
     return new DnfTypeTreeImpl(separatedList);
   }
 
-  public DnfIntersectionTypeTree dnfIntersectionType(SyntaxToken openParenthesis, TypeTree type1, List<Tuple<SyntaxToken, TypeTree>> rest, SyntaxToken closedParenthesis) {
-    return new DnfIntersectionTypeTreeImpl(openParenthesis, combinedTypes(type1, rest), closedParenthesis);
+  public DnfIntersectionTypeTree dnfIntersectionType(SyntaxToken openParenthesis, TypeTree firstType, List<Tuple<SyntaxToken, TypeTree>> rest, SyntaxToken closedParenthesis) {
+    return new DnfIntersectionTypeTreeImpl(openParenthesis, combinedTypes(firstType, rest), closedParenthesis);
   }
 
   public CallArgumentTree functionCallArgument(Optional<Tuple<NameIdentifierTree, InternalSyntaxToken>> optional, ExpressionTree firstOf) {

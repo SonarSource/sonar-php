@@ -28,7 +28,7 @@ class DnfInterfactionTypeTest {
 
   @Test
   void shouldParse() {
-    assertThat(PHPLexicalGrammar.DNF_INTESECTION_TYPE)
+    assertThat(PHPLexicalGrammar.DNF_INTERSECTION_TYPE)
       .matches("(A&B)")
       .matches("(A&B&C&D)")
 

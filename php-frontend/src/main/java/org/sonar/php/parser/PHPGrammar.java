@@ -623,7 +623,7 @@ public class PHPGrammar {
   }
 
   public DnfIntersectionTypeTree DNF_INTERSECTION_TYPE() {
-    return b.<DnfIntersectionTypeTree>nonterminal(PHPLexicalGrammar.DNF_INTESECTION_TYPE).is(
+    return b.<DnfIntersectionTypeTree>nonterminal(PHPLexicalGrammar.DNF_INTERSECTION_TYPE).is(
       f.dnfIntersectionType(
         b.token(PHPPunctuator.LPARENTHESIS),
         TYPE(),
