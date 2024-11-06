@@ -10,6 +10,7 @@ load(".cirrus/modules/env.star", "env")
 load(
   ".cirrus/modules/build.star",
   "build_task",
+  "build_test_analyze_task",
   "sca_scan_task"
 )
 load(
@@ -27,6 +28,7 @@ def main(ctx):
   merge_dict(conf, load_features(ctx))
   merge_dict(conf, env())
   merge_dict(conf, build_task())
+  merge_dict(conf, build_test_analyze_task())
   merge_dict(conf, qa_os_win_task())
   merge_dict(conf, sca_scan_task())
   merge_dict(conf, qa_plugin_task())

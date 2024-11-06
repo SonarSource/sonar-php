@@ -4,7 +4,6 @@ load(
     "next_env",
     "whitesource_api_env"
 )
-
 load(
     "github.com/SonarSource/cirrus-modules/cloud-native/conditions.star@analysis/master",
     "is_main_branch",
@@ -51,40 +50,69 @@ def build_script():
 
 
 def build_env():
-    env = pgp_signing_env()
-    env |= next_env()
-    env |= {
-        "DEPLOY_PULL_REQUEST": "true",
-        "BUILD_ARGUMENTS": "-DtrafficInspection=false --parallel --profile -x test -x sonar"
-    }
-    return env
+  env = pgp_signing_env()
+  env |= next_env()
+  env |= {
+    "DEPLOY_PULL_REQUEST": "true",
+    "BUILD_ARGUMENTS": "-DtrafficInspection=false --parallel --profile -x test -x sonar"
+  }
+  return env
 
 
 def build_task():
-    return {
-        "build_task": {
-            "env": build_env(),
-            "eks_container": custom_image_container_builder(cpu=2, memory="6G"),
-            "project_version_cache": project_version_cache(),
-            "gradle_cache": gradle_cache(),
-            "gradle_wrapper_cache": gradle_wrapper_cache(),
-            "build_script": build_script(),
-            "cleanup_gradle_script": cleanup_gradle_script(),
-            "on_success": profile_report_artifacts(),
-            "store_project_version_script": store_project_version_script()
-        }
+  return {
+    "build_task": {
+      "env": build_env(),
+      "eks_container": custom_image_container_builder(cpu=2, memory="6G"),
+      "project_version_cache": project_version_cache(),
+      "gradle_cache": gradle_cache(),
+      "gradle_wrapper_cache": gradle_wrapper_cache(),
+      "build_script": build_script(),
+      "cleanup_gradle_script": cleanup_gradle_script(),
+      "on_success": profile_report_artifacts(),
+      "store_project_version_script": store_project_version_script()
     }
+  }
 
+
+#
+# Build test analyze
+#
 
 def build_test_env():
-    env = pgp_signing_env()
-    env |= next_env()
-    env |= {
-        "DEPLOY_PULL_REQUEST": "false",
-        "BUILD_ARGUMENTS": "-x artifactoryPublish"
-    }
-    return env
+  env = pgp_signing_env()
+  env |= next_env()
+  env |= {
+    "DEPLOY_PULL_REQUEST": "false",
+    "BUILD_ARGUMENTS": "-x artifactoryPublish"
+  }
+  return env
 
+
+def build_test_analyze_task():
+  return {
+    "build_test_analyze_task": {
+      "only_if": is_branch_qa_eligible(),
+      "depends_on": "build",
+      "env": build_test_env(),
+      "eks_container": custom_image_container_builder(cpu=2, memory="6G"),
+      "gradle_cache": gradle_cache(),
+      "gradle_wrapper_cache": gradle_wrapper_cache(),
+      "build_script": build_script(),
+      "on_failure": {
+        "junit_artifacts": {
+          "path": "**/test-results/**/*.xml",
+          "format": "junit"
+        }
+      },
+      "cleanup_gradle_script": cleanup_gradle_script(),
+    }
+  }
+
+
+#
+# WhiteSource scan
+#
 
 def whitesource_script():
     return [
