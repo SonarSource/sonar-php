@@ -74,6 +74,25 @@ class MemberExpressionTest {
 
       .notMatches("(int) $a")
 
+      // new expression without parenthesis introduced in PHP 8.4
+      .matches("new Foo()->bar")
+      .matches("new Foo()->bar()")
+      .matches("new Foo()::BAR")
+      .matches("new Foo()::bar()")
+      .matches("new Foo()::$bar")
+      .matches("new Foo()[0]")
+      .matches("new Foo(){0}")
+      .matches("new Foo()()")
+
+      .matches("new class {}->bar")
+      .matches("new class {}->bar()")
+      .matches("new class {}::BAR")
+      .matches("new class {}::bar()")
+      .matches("new class {}::$bar")
+      .matches("new class {}[0]")
+      .matches("new class {}{0}")
+      .matches("new class {}()")
+
       // OLD TESTS
 
       .matches("$a[]")

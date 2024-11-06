@@ -1617,7 +1617,8 @@ public class PHPGrammar {
         f.newStaticIdentifier(b.token(STATIC)),
         NAMESPACE_NAME_WITHOUT_SINGLE_KEYWORD(),
         VARIABLE_WITHOUT_OBJECTS(),
-        PARENTHESIZED_EXPRESSION()));
+        PARENTHESIZED_EXPRESSION(),
+        NEW_EXPRESSION()));
   }
 
   public AssignmentExpressionTree ASSIGNMENT_BY_REFERENCE() {
@@ -1861,7 +1862,7 @@ public class PHPGrammar {
 
   public NewExpressionTree NEW_EXPRESSION() {
     return b.<NewExpressionTree>nonterminal(Kind.NEW_EXPRESSION).is(
-      f.newExpression(b.token(NEW), b.firstOf(NEW_OBJECT_EXPRESSION(), ANONYMOUS_CLASS())));
+      f.newExpression(b.token(NEW), b.firstOf(PARENTHESIZED_EXPRESSION(), NEW_OBJECT_EXPRESSION(), ANONYMOUS_CLASS())));
   }
 
   public ExpressionTree NEW_OBJECT_EXPRESSION() {
