@@ -246,6 +246,8 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   void shouldSupportPropertyHook() {
     ClassPropertyDeclarationTree tree = parse("public string $a { get { return $this-> a + 1; } final set($value) => $value - 1; }", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
 
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    assertThat(((ClassPropertyDeclarationTreeImpl) tree).childrenIterator()).toIterable().hasSize(4);
     assertThat(tree.attributeGroups()).isEmpty();
     assertThat(tree.modifierTokens()).hasSize(1);
     assertThat(tree.declarations()).hasSize(1);

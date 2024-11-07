@@ -39,6 +39,7 @@ public class PropertyHookTreeImpl extends PHPTree implements PropertyHookTree {
 
   private final List<AttributeGroupTree> attributeGroups;
   private final List<SyntaxToken> modifiersToken;
+  @Nullable
   private final InternalSyntaxToken referenceToken;
   private final NameIdentifierTree name;
   @Nullable
@@ -111,7 +112,8 @@ public class PropertyHookTreeImpl extends PHPTree implements PropertyHookTree {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
       modifiersToken.iterator(),
-      IteratorUtils.iteratorOf(referenceToken, name),
+      IteratorUtils.nullableIterator(referenceToken),
+      IteratorUtils.iteratorOf(name),
       IteratorUtils.nullableIterator(parameters),
       IteratorUtils.nullableIterator(doubleArrowToken),
       IteratorUtils.iteratorOf(body));

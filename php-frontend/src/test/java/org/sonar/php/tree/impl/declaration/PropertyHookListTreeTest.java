@@ -37,6 +37,7 @@ class PropertyHookListTreeTest extends PHPTreeModelTest {
     assertThat(tree.openCurlyBrace()).isNotNull();
     assertThat(tree.closeCurlyBrace()).isNotNull();
     assertThat(tree.hooks()).hasSize(1);
+    assertThat(((PropertyHookListTreeImpl) tree).childrenIterator()).toIterable().hasSize(3);
 
     PropertyHookTree firstPropertyHook = tree.hooks().get(0);
     assertThat(firstPropertyHook.attributeGroups()).hasSize(1);
@@ -56,6 +57,7 @@ class PropertyHookListTreeTest extends PHPTreeModelTest {
     assertThat(tree.openCurlyBrace()).isNotNull();
     assertThat(tree.closeCurlyBrace()).isNotNull();
     assertThat(tree.hooks()).hasSize(1);
+    assertThat(((PropertyHookListTreeImpl) tree).childrenIterator()).toIterable().hasSize(3);
 
     PropertyHookTree firstPropertyHook = tree.hooks().get(0);
     assertThat(firstPropertyHook.attributeGroups()).isEmpty();
@@ -76,5 +78,6 @@ class PropertyHookListTreeTest extends PHPTreeModelTest {
     assertThat(tree.openCurlyBrace()).isNotNull();
     assertThat(tree.closeCurlyBrace()).isNotNull();
     assertThat(tree.hooks()).hasSize(2);
+    assertThat(((PropertyHookListTreeImpl) tree).childrenIterator()).toIterable().hasSize(4);
   }
 }

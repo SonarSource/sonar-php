@@ -42,6 +42,7 @@ class PropertyHookTest {
       .matches("get { return 42; }")
       .matches("get { return $this->a+1; }")
       .matches("set { $this->a = $value -1; }")
+      .matches("set(A|string $value) { $this->a = $value -1; }")
       .matches("final set($value) => $value - 1;")
       .matches("set (A $a) { $this->arr[] = $a; $this->a = $a; }")
       .matches("get { return implode(', ', array_map(fn (Author $author) => $author->name,$this->authors,)); }")
