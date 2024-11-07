@@ -32,6 +32,7 @@ class ParameterListTest {
       .matches("()")
       .matches("($a)")
       .matches("($a, $b)")
-      .matches("($a, $b,)");
+      .matches("($a, $b,)")
+      .matches("(int $a { get; set => 123; }, $b)");
   }
 }

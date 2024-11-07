@@ -66,6 +66,12 @@ public interface ParameterTree extends Tree, HasAttributes {
   @Nullable
   ExpressionTree initValue();
 
+  /**
+   * @return the {@link PropertyHookListTree} if it exists.
+   */
+  @Nullable
+  PropertyHookListTree propertyHookList();
+
   @Nullable
   SyntaxToken readonlyToken();
 

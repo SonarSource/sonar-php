@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ParameterTreeTest extends PHPTreeModelTest {
 
   @Test
-  void onlyIdentifier() {
+  void shouldSupportOnlyIdentifier() {
     ParameterTree tree = parse("$param1", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.is(Kind.PARAMETER)).isTrue();
     assertThat(tree.type()).isNull();
@@ -45,7 +45,7 @@ class ParameterTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void full() {
+  void shouldSupportFullExample() {
     ParameterTree tree = parse("Class1&...$param1=$value1", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.type().typeName().is(Kind.NAMESPACE_NAME)).isTrue();
     assertThat(tree.referenceToken().text()).isEqualTo("&");
@@ -56,13 +56,13 @@ class ParameterTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void withAttributes() {
+  void shouldSupportWithAttributes() {
     ParameterTree tree = parse("#[A1(5)] #[A2(5)] int $a", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.attributeGroups()).hasSize(2);
   }
 
   @Test
-  void initProperty() {
+  void shouldSupportInitProperty() {
     ParameterTree tree = parse("private int $a", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.isPropertyPromotion()).isTrue();
     assertThat(tree.visibility().text()).isEqualTo("private");
@@ -72,12 +72,23 @@ class ParameterTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void initReadonlyProperty() {
+  void shouldSupportInitReadonlyProperty() {
     ParameterTree tree = parse("private readonly int $a", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.isPropertyPromotion()).isTrue();
     assertThat(tree.visibility().text()).isEqualTo("private");
     assertThat(tree.declaredType()).isNotNull();
     assertThat(tree.readonlyToken()).isNotNull();
     assertThat(tree.isReadonly()).isTrue();
+  }
+
+  @Test
+  void shouldSupportPropertyHookList() {
+    ParameterTree tree = parse("int $a { get; set => 123; }", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.is(Kind.PARAMETER)).isTrue();
+    assertThat(((ParameterTreeImpl) tree).childrenIterator()).toIterable().hasSize(7);
+    assertThat(tree.propertyHookList()).isNotNull();
+    assertThat(tree.propertyHookList().openCurlyBrace()).isNotNull();
+    assertThat(tree.propertyHookList().hooks()).hasSize(2);
+    assertThat(tree.propertyHookList().closeCurlyBrace()).isNotNull();
   }
 }

@@ -560,7 +560,8 @@ public class TreeFactory {
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
     InternalSyntaxToken identifier,
-    Optional<Tuple<InternalSyntaxToken, ExpressionTree>> eqAndInitValue) {
+    Optional<Tuple<InternalSyntaxToken, ExpressionTree>> eqAndInitValue,
+    Optional<PropertyHookListTree> propertyHookList) {
     InternalSyntaxToken eqToken = null;
     ExpressionTree initValue = null;
     if (eqAndInitValue.isPresent()) {
@@ -576,7 +577,8 @@ public class TreeFactory {
       ellipsis.orNull(),
       varIdentifier,
       eqToken,
-      initValue);
+      initValue,
+      propertyHookList.orNull());
   }
 
   public SeparatedListImpl<NamespaceNameTree> interfaceList(NamespaceNameTree first, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> others) {

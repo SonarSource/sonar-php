@@ -38,6 +38,9 @@ class ParameterTest {
       .matches("&$a")
       .matches("...$a")
       .matches("$a = \"foo\"")
-      .matches("int|array|Foo $a");
+      .matches("int|array|Foo $a")
+      .matches("int $a { get; set => 123; }")
+      .matches("int $a { final set($value) => $value - 1; }")
+      .matches("int $a { get { return $this->a+1; } }");
   }
 }
