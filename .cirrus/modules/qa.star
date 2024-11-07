@@ -34,7 +34,6 @@ def on_failure():
 
 def qa_win_script():
   return [
-    "git config --global core.autocrlf input",
     "source cirrus-env CI",
     "./gradlew ${GRADLE_COMMON_FLAGS} test"
   ]
@@ -50,7 +49,6 @@ def qa_os_win_task():
       "gradle_cache": gradle_cache(),
       "gradle_wrapper_cache": gradle_wrapper_cache(),
       "build_script": qa_win_script(),
-      "on_success": profile_report_artifacts(),
       "on_failure": on_failure(),
     }
   }

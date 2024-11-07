@@ -7,7 +7,7 @@ load("github.com/SonarSource/cirrus-modules/cloud-native/conditions.star@analysi
 def promote_script():
   return [
     "source cirrus-env PROMOTE",
-    "cirrus_jfrog_promote multi",
+    "cirrus_jfrog_promote",
     "source ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt",
     "github-notify-promotion",
   ]
@@ -21,7 +21,8 @@ def promote_task():
         "build",
         "qa_os_win",
         "qa_ruling",
-        "qa_plugin"
+        "qa_plugin",
+        "qa_pr_analysis"
       ],
       "env": promotion_env(),
       "eks_container": base_image_container_builder(cpu=1, memory="2G"),

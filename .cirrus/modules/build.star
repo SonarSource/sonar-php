@@ -11,7 +11,7 @@ load(
 )
 load(
   "github.com/SonarSource/cirrus-modules/cloud-native/platform.star@analysis/master",
-  "custom_image_container_builder"
+  "base_image_container_builder"
 )
 load(
   "github.com/SonarSource/cirrus-modules/cloud-native/cache.star@analysis/master",
@@ -41,7 +41,7 @@ def profile_report_artifacts():
 
 def build_script():
   return [
-    "source cirrus-env BUILD-PRIVATE",
+    "source cirrus-env BUILD",
     "source .cirrus/use-gradle-wrapper.sh",
     "regular_gradle_build_deploy_analyze ${BUILD_ARGUMENTS}",
     "source set_gradle_build_version ${BUILD_NUMBER}",
@@ -54,7 +54,7 @@ def build_env():
   env |= next_env()
   env |= {
     "DEPLOY_PULL_REQUEST": "true",
-    "BUILD_ARGUMENTS": "-DtrafficInspection=false --parallel --profile -x test -x sonar"
+    "BUILD_ARGUMENTS": "-x test -x sonar"
   }
   return env
 
@@ -63,13 +63,12 @@ def build_task():
   return {
     "build_task": {
       "env": build_env(),
-      "eks_container": custom_image_container_builder(cpu=2, memory="6G"),
+      "eks_container": base_image_container_builder(cpu=2, memory="4G"),
       "project_version_cache": project_version_cache(),
       "gradle_cache": gradle_cache(),
       "gradle_wrapper_cache": gradle_wrapper_cache(),
       "build_script": build_script(),
       "cleanup_gradle_script": cleanup_gradle_script(),
-      "on_success": profile_report_artifacts(),
       "store_project_version_script": store_project_version_script()
     }
   }
@@ -95,7 +94,7 @@ def build_test_analyze_task():
       "only_if": is_branch_qa_eligible(),
       "depends_on": "build",
       "env": build_test_env(),
-      "eks_container": custom_image_container_builder(cpu=2, memory="6G"),
+      "eks_container": base_image_container_builder(cpu=2, memory="4G"),
       "gradle_cache": gradle_cache(),
       "gradle_wrapper_cache": gradle_wrapper_cache(),
       "build_script": build_script(),
@@ -119,7 +118,7 @@ def whitesource_script():
     "source cirrus-env QA",
     "source .cirrus/use-gradle-wrapper.sh",
     "source ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt",
-    "GRADLE_OPTS=\"-Xmx64m -Dorg.gradle.jvmargs='-Xmx3G' -Dorg.gradle.daemon=false\" ./gradlew ${GRADLE_COMMON_FLAGS} :sonar-php-plugin:processResources -Pkotlin.compiler.execution.strategy=in-process",
+    "GRADLE_OPTS=\"-Xmx64m -Dorg.gradle.jvmargs='-Xmx3G' -Dorg.gradle.daemon=false\" ./gradlew ${GRADLE_COMMON_FLAGS} :php-frontend:processResources -Pkotlin.compiler.execution.strategy=in-process",
     "source ws_scan.sh"
   ]
 
@@ -130,10 +129,9 @@ def sca_scan_task():
       "only_if": is_main_branch(),
       "depends_on": "build",
       "env": whitesource_api_env(),
-      "eks_container": custom_image_container_builder(cpu=1, memory="4G"),
+      "eks_container": base_image_container_builder(cpu=1, memory="4G"),
       "gradle_cache": gradle_cache(),
       "gradle_wrapper_cache": gradle_wrapper_cache(),
-      "project_version_cache": project_version_cache(),
       "whitesource_script": whitesource_script(),
       "cleanup_gradle_script": cleanup_gradle_script(),
       "allow_failures": "true",
@@ -142,6 +140,5 @@ def sca_scan_task():
           "path": "whitesource/**/*"
         }
       },
-      "on_success": profile_report_artifacts(),
     }
   }
