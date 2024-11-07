@@ -340,6 +340,12 @@ function detectSecretsInStrings($secret)
   $params4 = "token=abcdefghijklmnopqrs&user=admin"; // Noncompliant
   $params5 = "token=123456&abcdefghijklmnopqrs"; // Compliant, FN, even if "&" is accepted in a password, it also indicates a cut in a string literal
   $params6 = "token=123456:abcdefghijklmnopqrs"; // Noncompliant
+  $params7 = "token= abcdefghijklmnopqrs"; // Noncompliant
+  $params8 = "token=abcdefghijklmnopqrs;abcdefghijklmnopqrsaaa"; // Noncompliant
+  $params9 = "token=abc;abcdefghijklmnopqrsaaa"; // Compliant, ";" indicates a cut in string literal
+  $paramsA = "token=abc#abcdefghijklmnopqrsaaa"; // Compliant, "#" indicates a cut in string literal
+  $paramsB = "token=abc,abcdefghijklmnopqrsaaa"; // Compliant, "," indicates a cut in string literal
+  $paramsC = "token=abc|abcdefghijklmnopqrsaaa"; // Compliant, "|" indicates a cut in string literal
 
   // URLs are reported by S2068 only.
   $url = "http://user:123456@server.com/path";
