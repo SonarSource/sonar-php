@@ -9,7 +9,7 @@ plugins {
 }
 
 dependencies {
-  implementation(project(":php-frontend"))
+  api(project(":php-frontend"))
   implementation(project(":php-checks"))
   implementation(libs.sonar.plugin.api)
   implementation(libs.sonar.analyzer.commons)
@@ -45,6 +45,7 @@ tasks.jar {
         "Plugin-Name" to "PHP Code Quality and Security",
         "Plugin-Organization" to "SonarSource",
         "Plugin-OrganizationUrl" to "https://www.sonarsource.com",
+        "Plugin-RequiredForLanguages" to "php",
         "Plugin-SourcesUrl" to "https://github.com/SonarSource/sonar-php",
         "Plugin-Version" to project.version,
         "Sonar-Version" to "9.9",
