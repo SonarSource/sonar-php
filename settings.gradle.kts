@@ -36,6 +36,7 @@ include(":php-frontend")
 include(":php-checks")
 include(":php-custom-rules")
 include(":its:plugin:tests")
+include(":its:plugin:plugins:php-custom-rules-plugin")
 include(":its:ruling")
 
 gradle.allprojects {
