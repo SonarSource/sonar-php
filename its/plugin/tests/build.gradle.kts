@@ -23,6 +23,10 @@ dependencies {
   setIncludePatterns("Tests")
 }
 
+tasks.named("integrationTest") {
+  dependsOn(":its:plugin:plugins:php-custom-rules-plugin:build")
+}
+
 sonar {
   isSkipProject = true
 }

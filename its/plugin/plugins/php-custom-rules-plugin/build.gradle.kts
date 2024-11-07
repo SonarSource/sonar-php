@@ -9,7 +9,6 @@ plugins {
 dependencies {
   compileOnly(libs.sonar.plugin.api)
   compileOnly(project(":sonar-php-plugin"))
-  compileOnly(project(":php-frontend"))
 }
 
 description = "PHP Custom Rules Example for SonarQube"
@@ -30,6 +29,7 @@ tasks.jar {
         "Plugin-Name" to "PHP Custom Plugin Example",
         "Plugin-Organization" to "SonarSource",
         "Plugin-OrganizationUrl" to "https://www.sonarsource.com",
+        "Plugin-RequiredForLanguages" to "php",
         "Plugin-SourcesUrl" to "https://github.com/SonarSource/sonar-php",
         "Plugin-Version" to project.version,
         "Sonar-Version" to "9.9",
