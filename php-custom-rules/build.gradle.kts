@@ -11,6 +11,7 @@ dependencies {
 
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.sonar.plugin.api.impl)
+  testImplementation(project(":sonar-php-plugin"))
 }
 
 description = "PHP Custom Rules Example for SonarQube"
