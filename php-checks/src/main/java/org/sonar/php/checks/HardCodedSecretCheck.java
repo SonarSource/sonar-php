@@ -72,6 +72,7 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
   public double randomnessSensibility = Double.parseDouble(DEFAULT_RANDOMNESS_SENSIBILITY);
 
   private List<Pattern> variablePatterns;
+  private List<Pattern> literalPatterns;
   private EntropyDetector entropyDetector;
   private double maxLanguageScore;
 
@@ -178,14 +179,30 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
     super.visitBinaryExpression(tree);
   }
 
+  @Override
+  public void visitLiteral(LiteralTree tree) {
+    System.out.println("AAAA visitLiteral " + tree.value());
+    var literal = trimQuotes(tree.value());
+    literalPatterns().map(pattern -> pattern.matcher(literal))
+      .filter(Matcher::find)
+      .filter(matcher -> !isExcludedLiteral(matcher.group(2)))
+      .findAny()
+      .ifPresent(matcher -> reportIssue(tree, matcher.group(1)));
+    super.visitLiteral(tree);
+  }
+
   private void detectSecret(String identifierName, String secretValue, Tree tree) {
     var identifier = trimQuotes(identifierName);
     var secret = trimQuotes(secretValue);
     getSecretLikeName(identifier).ifPresent((String secretName) -> {
       if (isSecret(secret)) {
-        newIssue(tree, "'%s' detected in this expression, review this potentially hard-coded secret.".formatted(secretName));
+        reportIssue(tree, secretName);
       }
     });
+  }
+
+  private void reportIssue(Tree tree, String secretName) {
+    newIssue(tree, "'%s' detected in this expression, review this potentially hard-coded secret.".formatted(secretName));
   }
 
   private Optional<String> getSecretLikeName(String identifierName) {
@@ -204,6 +221,13 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
       variablePatterns = toPatterns("");
     }
     return variablePatterns.stream();
+  }
+
+  private Stream<Pattern> literalPatterns() {
+    if (literalPatterns == null) {
+      literalPatterns = toPatterns("=\\s*+([^\\\\ &;#,|]+)");
+    }
+    return literalPatterns.stream();
   }
 
   private List<Pattern> toPatterns(String suffix) {
@@ -226,6 +250,18 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
 
   private static boolean isNotIpV6(String literal) {
     return !IP_PATTERN.matcher(literal).matches();
+  }
+
+  private boolean isExcludedLiteral(String followingString) {
+    return !isPotentialCredential(followingString)
+      || followingString.startsWith("?")
+      || followingString.startsWith(":")
+      || followingString.contains("%s");
+  }
+
+  private boolean isPotentialCredential(String literal) {
+    String trimmed = literal.trim();
+    return trimmed.length() >= MINIMUM_CREDENTIAL_LENGTH && (!"anonymous".equals(trimmed));
   }
 
   private EntropyDetector entropyDetector() {
