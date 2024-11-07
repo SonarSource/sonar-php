@@ -21,7 +21,6 @@ package org.sonar.php.tree.impl.declaration;
 
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.utils.collections.IteratorUtils;
@@ -68,13 +67,11 @@ public class PropertyHookListTreeImpl extends PHPTree implements PropertyHookLis
     return KIND;
   }
 
-  @Nullable
   @Override
   public InternalSyntaxToken openCurlyBrace() {
     return openCurlyBrace;
   }
 
-  @Nullable
   @Override
   public InternalSyntaxToken closeCurlyBrace() {
     return closeCurlyBrace;

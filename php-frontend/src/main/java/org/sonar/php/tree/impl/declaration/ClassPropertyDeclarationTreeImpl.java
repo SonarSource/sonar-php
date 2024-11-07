@@ -46,7 +46,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   private final List<SyntaxToken> modifierTokens;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
   @Nullable
-  private final PropertyHookListTree propertyHooks;
+  private final PropertyHookListTree propertyHookList;
   @Nullable
   private final InternalSyntaxToken eosToken;
   @Nullable
@@ -58,14 +58,14 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     List<SyntaxToken> modifierTokens,
     @Nullable DeclaredTypeTree typeAnnotation,
     SeparatedListImpl<VariableDeclarationTree> declarations,
-    @Nullable PropertyHookListTree propertyHooks,
+    @Nullable PropertyHookListTree propertyHookList,
     @Nullable InternalSyntaxToken eosToken) {
     this.kind = kind;
     this.attributeGroups = attributeGroups;
     this.modifierTokens = modifierTokens;
     this.typeAnnotation = typeAnnotation;
     this.declarations = declarations;
-    this.propertyHooks = propertyHooks;
+    this.propertyHookList = propertyHookList;
     this.eosToken = eosToken;
   }
 
@@ -143,8 +143,8 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
 
   @Nullable
   @Override
-  public PropertyHookListTree propertyHooks() {
-    return propertyHooks;
+  public PropertyHookListTree propertyHookList() {
+    return propertyHookList;
   }
 
   @Nullable
@@ -185,7 +185,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
       modifierTokens.iterator(),
       IteratorUtils.nullableIterator(typeAnnotation),
       declarations.elementsAndSeparators(),
-      IteratorUtils.nullableIterator(propertyHooks),
+      IteratorUtils.nullableIterator(propertyHookList),
       IteratorUtils.nullableIterator(eosToken));
   }
 

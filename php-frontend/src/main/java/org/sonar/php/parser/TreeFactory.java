@@ -709,7 +709,7 @@ public class TreeFactory {
 
   public PropertyHookTree propertyHook(
     Optional<List<AttributeGroupTree>> attributes,
-    Optional<List<SyntaxToken>> modifiers,
+    Optional<SyntaxToken> modifier,
     Optional<InternalSyntaxToken> referenceToken,
     NameIdentifierTree name,
     Optional<ParameterListTree> parameters,
@@ -718,7 +718,7 @@ public class TreeFactory {
     throwOnUnrecognizedPropertyHookName(name);
     return new PropertyHookTreeImpl(
       attributes.or(Collections.emptyList()),
-      optionalList(modifiers),
+      modifier.orNull(),
       referenceToken.orNull(),
       name,
       parameters.orNull(),

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -34,10 +33,10 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 public interface PropertyHookTree extends Tree, HasAttributes {
 
   /**
-   * Modifiers of the property hook.
-   * @return the modifiers
+   * Modifier of the property hook, may only be <code>final</code>.
+   * @return the modifier
    */
-  List<SyntaxToken> modifiers();
+  SyntaxToken modifierToken();
 
   /**
    * The double arrow token if arrow function like syntax is used.

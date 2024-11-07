@@ -32,7 +32,6 @@ class PropertyHookTest {
       .matches("get;")
       .matches("set;")
       .matches("#[A1(4)] get;")
-      .matches("public get;")
       .matches("final get;")
       .matches("&get;")
       .matches("&get => $this->a;")
@@ -47,6 +46,10 @@ class PropertyHookTest {
       .matches("set (A $a) { $this->arr[] = $a; $this->a = $a; }")
       .matches("get { return implode(', ', array_map(fn (Author $author) => $author->name,$this->authors,)); }")
 
+      .notMatches("private get;")
+      .notMatches("public get;")
+      .notMatches("protected get;")
+      .notMatches("set => 42; 42;")
       .notMatches("name;")
       .notMatches("name => 123;")
       .notMatches("name;");

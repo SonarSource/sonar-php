@@ -659,14 +659,15 @@ public class PHPGrammar {
     return b.<PropertyHookTree>nonterminal(PHPLexicalGrammar.PROPERTY_HOOK).is(
       f.propertyHook(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
-        b.zeroOrMore(MEMBER_MODIFIER()),
+        b.optional(b.token(PHPKeyword.FINAL)),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         NAME_IDENTIFIER_OR_KEYWORD(),
         b.optional(PARAMETER_LIST()),
         b.optional(b.token(DOUBLEARROW)),
         b.firstOf(
           EOS(),
-          INNER_STATEMENT())));
+          BLOCK(),
+          EXPRESSION_STATEMENT())));
   }
 
   /**

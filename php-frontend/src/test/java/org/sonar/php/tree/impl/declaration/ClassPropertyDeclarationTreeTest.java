@@ -251,10 +251,10 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.attributeGroups()).isEmpty();
     assertThat(tree.modifierTokens()).hasSize(1);
     assertThat(tree.declarations()).hasSize(1);
-    assertThat(tree.propertyHooks()).isNotNull();
-    assertThat(tree.propertyHooks().openCurlyBrace()).isNotNull();
-    assertThat(tree.propertyHooks().hooks()).hasSize(2);
-    assertThat(tree.propertyHooks().closeCurlyBrace()).isNotNull();
+    assertThat(tree.propertyHookList()).isNotNull();
+    assertThat(tree.propertyHookList().openCurlyBrace()).isNotNull();
+    assertThat(tree.propertyHookList().hooks()).hasSize(2);
+    assertThat(tree.propertyHookList().closeCurlyBrace()).isNotNull();
     assertThat(tree.eosToken()).isNull();
   }
 

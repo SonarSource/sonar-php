@@ -62,7 +62,7 @@ public interface ClassPropertyDeclarationTree extends ClassMemberTree, HasAttrib
    * In this case there exists only one {@link VariableDeclarationTree} in the <code>declarations</code>.
    */
   @Nullable
-  PropertyHookListTree propertyHooks();
+  PropertyHookListTree propertyHookList();
 
   @Nullable
   SyntaxToken eosToken();

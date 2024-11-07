@@ -31,12 +31,12 @@ class PropertyHookTreeTest extends PHPTreeModelTest {
 
   @Test
   void shouldParsePropertyHookMethodDeclaration() {
-    PropertyHookTree tree = parse("#[A1(8), A2] public &get { return $this-> a+1; }", PHPLexicalGrammar.PROPERTY_HOOK);
+    PropertyHookTree tree = parse("#[A1(8), A2] final &get { return $this-> a+1; }", PHPLexicalGrammar.PROPERTY_HOOK);
     assertThat(tree.is(Tree.Kind.PROPERTY_HOOK_METHOD_DECLARATION)).isTrue();
     assertThat(((PropertyHookTreeImpl) tree).childrenIterator()).toIterable().hasSize(5);
     assertThat(tree.attributeGroups()).hasSize(1);
     assertThat(tree.attributeGroups().get(0).attributes()).hasSize(2);
-    assertThat(tree.modifiers()).hasSize(1);
+    assertThat(tree.modifierToken()).isNotNull();
     assertThat(tree.referenceToken()).isNotNull();
     assertThat(tree.name().text()).isEqualTo("get");
     assertThat(tree.parameters()).isNull();
@@ -50,7 +50,7 @@ class PropertyHookTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Tree.Kind.PROPERTY_HOOK_METHOD_DECLARATION)).isTrue();
     assertThat(((PropertyHookTreeImpl) tree).childrenIterator()).toIterable().hasSize(5);
     assertThat(tree.attributeGroups()).isEmpty();
-    assertThat(tree.modifiers()).hasSize(1);
+    assertThat(tree.modifierToken()).isNotNull();
     assertThat(tree.referenceToken()).isNull();
     assertThat(tree.name().text()).isEqualTo("set");
     assertThat(tree.parameters().parameters()).hasSize(1);
@@ -66,7 +66,7 @@ class PropertyHookTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Tree.Kind.PROPERTY_HOOK_METHOD_DECLARATION)).isTrue();
     assertThat(((PropertyHookTreeImpl) tree).childrenIterator()).toIterable().hasSize(2);
     assertThat(tree.attributeGroups()).isEmpty();
-    assertThat(tree.modifiers()).isEmpty();
+    assertThat(tree.modifierToken()).isNull();
     assertThat(tree.referenceToken()).isNull();
     assertThat(tree.name().text()).isEqualTo("get");
     assertThat(tree.parameters()).isNull();
