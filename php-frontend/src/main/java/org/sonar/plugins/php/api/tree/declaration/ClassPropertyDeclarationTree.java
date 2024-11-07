@@ -58,7 +58,8 @@ public interface ClassPropertyDeclarationTree extends ClassMemberTree, HasAttrib
   SeparatedList<VariableDeclarationTree> declarations();
 
   /**
-   * {@link PropertyHookListTree}
+   * @return the {@link PropertyHookListTree} if it exists.
+   * In this case there exists only one {@link VariableDeclarationTree} in the <code>declarations</code>.
    */
   @Nullable
   PropertyHookListTree propertyHooks();

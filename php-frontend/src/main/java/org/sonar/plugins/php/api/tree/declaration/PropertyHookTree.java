@@ -33,21 +33,42 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  */
 public interface PropertyHookTree extends Tree, HasAttributes {
 
+  /**
+   * Modifiers of the property hook.
+   * @return the modifiers
+   */
   List<SyntaxToken> modifiers();
 
+  /**
+   * The double arrow token if arrow function like syntax is used.
+   * @return the double arrow token
+   */
   @Nullable
   SyntaxToken doubleArrowToken();
 
+  /**
+   * The reference token if the property hook is by reference.
+   * @return the reference token
+   */
   @Nullable
   SyntaxToken referenceToken();
 
+  /**
+   * The name of the property hook, can either be <code>get</code> or <code>set</code>.
+   * @return the name of the property hook
+   */
   NameIdentifierTree name();
 
+  /**
+   * The parameters of the property hook.
+   * @return the parameters
+   */
   @Nullable
   ParameterListTree parameters();
 
   /**
    * Either {@link PHPPunctuator#SEMICOLON ;} or {@link Kind#BLOCK block}
+   * @return the body of the property hook
    */
   Tree body();
 

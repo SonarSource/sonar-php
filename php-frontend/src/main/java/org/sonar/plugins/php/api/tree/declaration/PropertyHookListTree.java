@@ -32,16 +32,19 @@ public interface PropertyHookListTree extends Tree {
 
   /**
    * The open curly brace beginning the declaration of property hooks.
+   * @return the open curly brace
    */
   InternalSyntaxToken openCurlyBrace();
 
   /**
    * The list of {@link PropertyHookTree property hooks}
+   * @return the list of property hooks
    */
   List<PropertyHookTree> hooks();
 
   /**
    * The closed curly brace ending the declaration of property hooks.
+   * @return the closed curly brace
    */
   InternalSyntaxToken closeCurlyBrace();
 }
