@@ -55,7 +55,7 @@ dependencyResolutionManagement {
   repositories {
     mavenCentral()
     maven {
-      url = uri("https://repox.jfrog.io/repox/sonarsource-private-releases")
+      url = uri("https://repox.jfrog.io/repox/sonarsource")
       val artifactoryUsername =
         providers.environmentVariable("ARTIFACTORY_PRIVATE_USERNAME")
           .orElse(providers.gradleProperty("artifactoryUsername"))

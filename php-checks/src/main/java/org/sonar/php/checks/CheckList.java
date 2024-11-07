@@ -200,6 +200,7 @@ public class CheckList {
       HardCodedCredentialsInFunctionCallsCheck.class,
       HardCodedCredentialsInVariablesAndUrisCheck.class,
       HardCodedIpAddressCheck.class,
+      HardCodedSecretCheck.class,
       HardCodedUriCheck.class,
       HttpOnlyCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class,

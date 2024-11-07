@@ -38,10 +38,10 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
   private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6 + "|" + LOOPBACK_IPV4_MAPPED_TO_IPV6);
 
   private static final String PROTOCOL = "((\\w+:)?\\/\\/)?";
-  private static final String IP_V4 = "(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[1-9])(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}(?!\\d)";
+  public static final String IP_V4 = "(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[1-9])(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}(?!\\d)";
 
   // @spotless:off
-  private static final String IP_V6 = "\\[?(" +
+  public static final String IP_V6 = "\\[?(" +
     "([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|" +         // 1:2:3:4:5:6:7:8
     "([0-9a-fA-F]{1,4}:){1,7}:|"+                         // 1::                              1:2:3:4:5:6:7::
     "([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|" +        // 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
