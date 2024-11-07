@@ -65,6 +65,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
   PROPERTY_HOOK_LIST,
   PROPERTY_HOOK,
+  PROPERTY_HOOK_FUNCTION_NAME,
 
   TRAIT_METHOD_REFERENCE_FULLY_QUALIFIED,
   TRAIT_METHOD_REFERENCE,
@@ -255,6 +256,9 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   CLONE,
   PRINT,
 
+  GET,
+  SET,
+
   SELF,
   PARENT,
 
@@ -352,6 +356,9 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(REQUIRE).is(word(b, "REQUIRE")).skip();
     b.rule(CLONE).is(word(b, "CLONE")).skip();
     b.rule(PRINT).is(word(b, "PRINT")).skip();
+
+    b.rule(GET).is(word(b, "GET")).skip();
+    b.rule(SET).is(word(b, "SET")).skip();
 
     b.rule(SELF).is(word(b, "SELF")).skip();
     b.rule(PARENT).is(word(b, "PARENT")).skip();

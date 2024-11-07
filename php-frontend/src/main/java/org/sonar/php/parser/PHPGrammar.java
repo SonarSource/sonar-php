@@ -661,13 +661,20 @@ public class PHPGrammar {
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.optional(b.token(PHPKeyword.FINAL)),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
-        NAME_IDENTIFIER_OR_KEYWORD(),
+        PROPERTY_HOOK_FUNCTION_NAME(),
         b.optional(PARAMETER_LIST()),
         b.optional(b.token(DOUBLEARROW)),
         b.firstOf(
           EOS(),
           BLOCK(),
           EXPRESSION_STATEMENT())));
+  }
+
+  public InternalSyntaxToken PROPERTY_HOOK_FUNCTION_NAME() {
+    return b.<InternalSyntaxToken>nonterminal(PHPLexicalGrammar.PROPERTY_HOOK_FUNCTION_NAME).is(
+      b.firstOf(
+        b.token(PHPLexicalGrammar.GET),
+        b.token(PHPLexicalGrammar.SET)));
   }
 
   /**

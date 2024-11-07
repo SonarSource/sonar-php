@@ -711,25 +711,18 @@ public class TreeFactory {
     Optional<List<AttributeGroupTree>> attributes,
     Optional<SyntaxToken> modifier,
     Optional<InternalSyntaxToken> referenceToken,
-    NameIdentifierTree name,
+    InternalSyntaxToken name,
     Optional<ParameterListTree> parameters,
     Optional<InternalSyntaxToken> doubleArrowToken,
     Tree body) {
-    throwOnUnrecognizedPropertyHookName(name);
     return new PropertyHookTreeImpl(
       attributes.or(Collections.emptyList()),
       modifier.orNull(),
       referenceToken.orNull(),
-      name,
+      new NameIdentifierTreeImpl(name),
       parameters.orNull(),
       doubleArrowToken.orNull(),
       body);
-  }
-
-  private static void throwOnUnrecognizedPropertyHookName(NameIdentifierTree name) {
-    if (!"get".equals(name.text()) && !"set".equals(name.text())) {
-      throw new RecognitionException(((PHPTree) name).getLine(), "Declared property hook must be named \"get\" or \"set\"");
-    }
   }
 
   /**
