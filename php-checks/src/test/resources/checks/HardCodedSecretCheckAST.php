@@ -326,6 +326,9 @@ function detectSecretsInStrings($secret)
   $query5 = "secret=%s"; // Compliant
   $query6 = "secret=\"%s\""; // Compliant
   $query7 = "\"secret=\""; // Compliant
+  $query8 = "secret=:abcdefghijklmnopqrs"; // Compliant
+  $query9 = "secret=%s_abcdefghijklmnopqrs"; // Compliant
+
 
   $params1 = "user=admin&secret=Secret0123456789012345678"; // Noncompliant
   $params2 = "secret=no\nuser=admin0123456789"; // Compliant
@@ -406,6 +409,6 @@ function detectSecretsInStrings($secret)
   $tokenism = "(Queen's Partner's Stored Knowledge is a Minimal Sham)"; // Compliant
   $tokenWithExcludedCharacters2 = "abcdefghij|klmnopqrs"; // Compliant
 
-  // "anonymous" is explicitly ignored
+  // "anonymous" needs to be ignored
   $fieldNameWithSecretInIt = "anonymous";
 }

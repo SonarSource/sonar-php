@@ -181,11 +181,10 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
 
   @Override
   public void visitLiteral(LiteralTree tree) {
-    System.out.println("AAAA visitLiteral " + tree.value());
     var literal = trimQuotes(tree.value());
     literalPatterns().map(pattern -> pattern.matcher(literal))
       .filter(Matcher::find)
-      .filter(matcher -> !isExcludedLiteral(matcher.group(2)))
+      .filter(matcher -> !isExcludedLiteral(matcher.group("suffix")))
       .findAny()
       .ifPresent(matcher -> reportIssue(tree, matcher.group(1)));
     super.visitLiteral(tree);
@@ -225,7 +224,7 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
 
   private Stream<Pattern> literalPatterns() {
     if (literalPatterns == null) {
-      literalPatterns = toPatterns("=\\s*+([^\\\\ &;#,|]+)");
+      literalPatterns = toPatterns("=\\s*+(?<suffix>[^\\\\ &;#,|]+)");
     }
     return literalPatterns.stream();
   }
@@ -252,16 +251,16 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
     return !IP_PATTERN.matcher(literal).matches();
   }
 
-  private boolean isExcludedLiteral(String followingString) {
+  private static boolean isExcludedLiteral(String followingString) {
     return !isPotentialCredential(followingString)
       || followingString.startsWith("?")
       || followingString.startsWith(":")
       || followingString.contains("%s");
   }
 
-  private boolean isPotentialCredential(String literal) {
+  private static boolean isPotentialCredential(String literal) {
     String trimmed = literal.trim();
-    return trimmed.length() >= MINIMUM_CREDENTIAL_LENGTH && (!"anonymous".equals(trimmed));
+    return trimmed.length() >= MINIMUM_CREDENTIAL_LENGTH;
   }
 
   private EntropyDetector entropyDetector() {
