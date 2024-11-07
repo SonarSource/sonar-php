@@ -32,6 +32,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
+import org.sonar.plugins.php.api.tree.declaration.PropertyHookListTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
@@ -44,6 +45,9 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   private final List<AttributeGroupTree> attributeGroups;
   private final List<SyntaxToken> modifierTokens;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
+  @Nullable
+  private final PropertyHookListTree propertyHooks;
+  @Nullable
   private final InternalSyntaxToken eosToken;
   @Nullable
   private final DeclaredTypeTree typeAnnotation;
@@ -54,12 +58,14 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     List<SyntaxToken> modifierTokens,
     @Nullable DeclaredTypeTree typeAnnotation,
     SeparatedListImpl<VariableDeclarationTree> declarations,
-    InternalSyntaxToken eosToken) {
+    @Nullable PropertyHookListTree propertyHooks,
+    @Nullable InternalSyntaxToken eosToken) {
     this.kind = kind;
     this.attributeGroups = attributeGroups;
     this.modifierTokens = modifierTokens;
     this.typeAnnotation = typeAnnotation;
     this.declarations = declarations;
+    this.propertyHooks = propertyHooks;
     this.eosToken = eosToken;
   }
 
@@ -67,12 +73,14 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     List<SyntaxToken> modifierTokens,
     @Nullable DeclaredTypeTree typeAnnotation,
     SeparatedListImpl<VariableDeclarationTree> declarations,
-    InternalSyntaxToken eosToken) {
+    @Nullable PropertyHookListTree propertyHook,
+    @Nullable InternalSyntaxToken eosToken) {
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION,
       attributes,
       Collections.unmodifiableList(modifierTokens),
       typeAnnotation,
       declarations,
+      propertyHook,
       eosToken);
   }
 
@@ -90,6 +98,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
       Collections.unmodifiableList(modifierTokens),
       typeAnnotation,
       declarations,
+      null,
       eosToken);
   }
 
@@ -132,6 +141,13 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     return declarations;
   }
 
+  @Nullable
+  @Override
+  public PropertyHookListTree propertyHooks() {
+    return propertyHooks;
+  }
+
+  @Nullable
   @Override
   public SyntaxToken eosToken() {
     return eosToken;
@@ -167,13 +183,10 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     return IteratorUtils.concat(
       attributeGroups.iterator(),
       modifierTokens.iterator(),
-      nullableIterator(typeAnnotation),
+      IteratorUtils.nullableIterator(typeAnnotation),
       declarations.elementsAndSeparators(),
-      IteratorUtils.iteratorOf(eosToken));
-  }
-
-  private static Iterator<? extends Tree> nullableIterator(@Nullable Tree tree) {
-    return tree == null ? Collections.emptyIterator() : IteratorUtils.iteratorOf(tree);
+      IteratorUtils.nullableIterator(propertyHooks),
+      IteratorUtils.nullableIterator(eosToken));
   }
 
   @Override

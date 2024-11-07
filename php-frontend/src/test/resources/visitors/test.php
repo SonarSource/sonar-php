@@ -18,6 +18,11 @@ class A extends B {
   public function bar(callable&iterable $b) {
     return $b;
   }
+
+  public string $x {
+    get;
+    final set($y) => $y - 1;
+  }
 }
 
 enum A {

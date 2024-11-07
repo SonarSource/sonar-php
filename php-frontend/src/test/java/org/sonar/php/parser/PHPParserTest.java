@@ -47,4 +47,5 @@ class PHPParserTest {
     ForEachStatementTree tree = (ForEachStatementTree) parser.parse("foreach ($arr as &$value) { }");
     Assertions.assertThat(tree.expression().getParent()).isSameAs(tree);
   }
+
 }

@@ -53,6 +53,8 @@ import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
+import org.sonar.php.tree.impl.declaration.PropertyHookListTreeImpl;
+import org.sonar.php.tree.impl.declaration.PropertyHookTreeImpl;
 import org.sonar.php.tree.impl.declaration.ReturnTypeClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
@@ -162,6 +164,8 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.PropertyHookListTree;
+import org.sonar.plugins.php.api.tree.declaration.PropertyHookTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
@@ -477,7 +481,22 @@ public class TreeFactory {
       modifierTokens,
       typeAnnotation.orNull(),
       separatedList(firstVariable, additionalVariables),
+      null,
       eosToken);
+  }
+
+  public ClassPropertyDeclarationTree classVariableDeclaration(
+    Optional<List<AttributeGroupTree>> attributes,
+    List<SyntaxToken> modifierTokens,
+    Optional<DeclaredTypeTree> typeAnnotation,
+    VariableDeclarationTree variable,
+    PropertyHookListTree propertyHookListTree) {
+    return ClassPropertyDeclarationTreeImpl.variable(attributes.or(Collections.emptyList()),
+      modifierTokens,
+      typeAnnotation.orNull(),
+      separatedList(variable, Optional.absent()),
+      propertyHookListTree,
+      null);
   }
 
   public MethodDeclarationTree methodDeclaration(
@@ -679,6 +698,38 @@ public class TreeFactory {
     SyntaxToken equalToken = equalAndValue.isPresent() ? equalAndValue.get().first() : null;
     ExpressionTree value = equalAndValue.isPresent() ? equalAndValue.get().second() : null;
     return new EnumCaseTreeImpl(attributes.or(Collections.emptyList()), caseToken, name, equalToken, value, eosToken);
+  }
+
+  public PropertyHookListTree propertyHookList(
+    InternalSyntaxToken openCurlyBrace,
+    List<PropertyHookTree> hooks,
+    InternalSyntaxToken closeCurlyBrace) {
+    return new PropertyHookListTreeImpl(openCurlyBrace, hooks, closeCurlyBrace);
+  }
+
+  public PropertyHookTree propertyHook(
+    Optional<List<AttributeGroupTree>> attributes,
+    Optional<List<SyntaxToken>> modifiers,
+    Optional<InternalSyntaxToken> referenceToken,
+    NameIdentifierTree name,
+    Optional<ParameterListTree> parameters,
+    Optional<InternalSyntaxToken> doubleArrowToken,
+    Tree body) {
+    throwOnUnrecognizedPropertyHookName(name);
+    return new PropertyHookTreeImpl(
+      attributes.or(Collections.emptyList()),
+      optionalList(modifiers),
+      referenceToken.orNull(),
+      name,
+      parameters.orNull(),
+      doubleArrowToken.orNull(),
+      body);
+  }
+
+  private static void throwOnUnrecognizedPropertyHookName(NameIdentifierTree name) {
+    if (!"get".equals(name.text()) && !"set".equals(name.text())) {
+      throw new RecognitionException(((PHPTree) name).getLine(), "Declared property hook must be named \"get\" or \"set\"");
+    }
   }
 
   /**

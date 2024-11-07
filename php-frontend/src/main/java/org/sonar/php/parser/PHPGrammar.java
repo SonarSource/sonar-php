@@ -49,6 +49,8 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.PropertyHookListTree;
+import org.sonar.plugins.php.api.tree.declaration.PropertyHookTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
@@ -342,7 +344,7 @@ public class PHPGrammar {
   }
 
   /**
-   *  In contrast to class declarations, enums cannot contain properties. They do allow enum cases as an addition.
+   * In contrast to class declarations, enums cannot contain properties. They do allow enum cases as an addition.
    */
   public ClassMemberTree ENUM_MEMBER() {
     return b.<ClassMemberTree>nonterminal(PHPLexicalGrammar.ENUM_MEMBER).is(
@@ -410,15 +412,24 @@ public class PHPGrammar {
 
   public ClassPropertyDeclarationTree CLASS_VARIABLE_DECLARATION() {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION).is(
-      f.classVariableDeclaration(
-        b.zeroOrMore(ATTRIBUTE_GROUP()),
-        b.firstOf(
-          f.singleToken(b.token(PHPKeyword.VAR)),
-          b.oneOrMore(MEMBER_MODIFIER())),
-        b.optional(DECLARED_TYPE()),
-        VARIABLE_DECLARATION(),
-        b.zeroOrMore(f.newTuple(b.token(COMMA), VARIABLE_DECLARATION())),
-        EOS()));
+      b.firstOf(
+        f.classVariableDeclaration(
+          b.zeroOrMore(ATTRIBUTE_GROUP()),
+          b.firstOf(
+            f.singleToken(b.token(PHPKeyword.VAR)),
+            b.oneOrMore(MEMBER_MODIFIER())),
+          b.optional(DECLARED_TYPE()),
+          VARIABLE_DECLARATION(),
+          PROPERTY_HOOK_LIST()),
+        f.classVariableDeclaration(
+          b.zeroOrMore(ATTRIBUTE_GROUP()),
+          b.firstOf(
+            f.singleToken(b.token(PHPKeyword.VAR)),
+            b.oneOrMore(MEMBER_MODIFIER())),
+          b.optional(DECLARED_TYPE()),
+          VARIABLE_DECLARATION(),
+          b.zeroOrMore(f.newTuple(b.token(COMMA), VARIABLE_DECLARATION())),
+          EOS())));
   }
 
   public SyntaxToken VISIBILITY_MODIFIER() {
@@ -634,6 +645,28 @@ public class PHPGrammar {
   public DeclaredTypeTree DECLARED_TYPE() {
     return b.<DeclaredTypeTree>nonterminal(PHPLexicalGrammar.DECLARED_TYPE).is(
       b.firstOf(DNF_TYPE(), UNION_TYPE(), INTERSECTION_TYPE(), TYPE()));
+  }
+
+  public PropertyHookListTree PROPERTY_HOOK_LIST() {
+    return b.<PropertyHookListTree>nonterminal(PHPLexicalGrammar.PROPERTY_HOOK_LIST).is(
+      f.propertyHookList(
+        b.token(LCURLYBRACE),
+        b.oneOrMore(PROPERTY_HOOK()),
+        b.token(RCURLYBRACE)));
+  }
+
+  public PropertyHookTree PROPERTY_HOOK() {
+    return b.<PropertyHookTree>nonterminal(PHPLexicalGrammar.PROPERTY_HOOK).is(
+      f.propertyHook(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
+        b.zeroOrMore(MEMBER_MODIFIER()),
+        b.optional(b.token(PHPPunctuator.AMPERSAND)),
+        NAME_IDENTIFIER_OR_KEYWORD(),
+        b.optional(PARAMETER_LIST()),
+        b.optional(b.token(DOUBLEARROW)),
+        b.firstOf(
+          EOS(),
+          INNER_STATEMENT())));
   }
 
   /**

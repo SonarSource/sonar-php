@@ -21,51 +21,34 @@ package org.sonar.plugins.php.api.tree.declaration;
 
 import java.util.List;
 import javax.annotation.Nullable;
-import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.php.api.PHPPunctuator;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
- * <p>Class <a href="http://php.net/manual/en/language.oop5.properties.php">Properties</a>
- * <pre>
- *  var {@link #declarations()} ;
+ * <a href="https://wiki.php.net/rfc/property-hooks">Property Hooks</a>
  *
- *  public {@link #declarations()} ;
- *  protected {@link #declarations()} ;
- *  private {@link #declarations()} ;
- *
- *  public static {@link #declarations()} ;
- * </pre>
- *
- * <p>Class <a href="http://php.net/manual/en/language.oop5.constants.php">Constants</a>
- * <pre>
- *  const {@link #declarations()} ;
- * </pre>
+ * @since 3.39
  */
-public interface ClassPropertyDeclarationTree extends ClassMemberTree, HasAttributes {
+public interface PropertyHookTree extends Tree, HasAttributes {
 
-  List<SyntaxToken> modifierTokens();
+  List<SyntaxToken> modifiers();
+
+  @Nullable
+  SyntaxToken doubleArrowToken();
+
+  @Nullable
+  SyntaxToken referenceToken();
+
+  NameIdentifierTree name();
+
+  @Nullable
+  ParameterListTree parameters();
 
   /**
-   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
+   * Either {@link PHPPunctuator#SEMICOLON ;} or {@link Kind#BLOCK block}
    */
-  @Deprecated
-  @Nullable
-  TypeTree typeAnnotation();
-
-  @Nullable
-  DeclaredTypeTree declaredType();
-
-  SeparatedList<VariableDeclarationTree> declarations();
-
-  /**
-   * {@link PropertyHookListTree}
-   */
-  @Nullable
-  PropertyHookListTree propertyHooks();
-
-  @Nullable
-  SyntaxToken eosToken();
-
-  boolean hasModifiers(String... modifiers);
+  Tree body();
 
 }
