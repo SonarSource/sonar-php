@@ -57,6 +57,14 @@ public interface ClassPropertyDeclarationTree extends ClassMemberTree, HasAttrib
 
   SeparatedList<VariableDeclarationTree> declarations();
 
+  /**
+   * @return the {@link PropertyHookListTree} if it exists.
+   * In this case there exists only one {@link VariableDeclarationTree} in the <code>declarations</code>.
+   */
+  @Nullable
+  PropertyHookListTree propertyHookList();
+
+  @Nullable
   SyntaxToken eosToken();
 
   boolean hasModifiers(String... modifiers);

@@ -37,6 +37,8 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.PropertyHookListTree;
+import org.sonar.plugins.php.api.tree.declaration.PropertyHookTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
@@ -182,6 +184,11 @@ public interface Tree {
     METHOD_DECLARATION(MethodDeclarationTree.class),
 
     /**
+     * {@link PropertyHookTree}
+     */
+    PROPERTY_HOOK_METHOD_DECLARATION(PropertyHookTree.class),
+
+    /**
      * {@link FunctionDeclarationTree}
      */
     FUNCTION_DECLARATION(FunctionDeclarationTree.class),
@@ -210,6 +217,11 @@ public interface Tree {
      * {@link VariableDeclarationTree}
      */
     VARIABLE_DECLARATION(VariableDeclarationTree.class),
+
+    /**
+     * {@link PropertyHookListTree}
+     */
+    PROPERTY_HOOK_LIST(PropertyHookListTree.class),
 
     /**
      * {@link UseClauseTree}

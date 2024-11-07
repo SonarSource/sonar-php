@@ -72,4 +72,20 @@ class IteratorUtilsTest {
     assertThat(iterator.hasNext()).isFalse();
     assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(iterator::next);
   }
+
+  @Test
+  void testNullableIteratorWithExistingElement() {
+    Iterator<String> iterator = IteratorUtils.nullableIterator("element");
+
+    assertThat(iterator.hasNext()).isTrue();
+    assertThat(iterator.next()).isEqualTo("element");
+  }
+
+  @Test
+  void testNullableIteratorWithNull() {
+    Iterator<String> iterator = IteratorUtils.nullableIterator(null);
+
+    assertThat(iterator.hasNext()).isFalse();
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(iterator::next);
+  }
 }

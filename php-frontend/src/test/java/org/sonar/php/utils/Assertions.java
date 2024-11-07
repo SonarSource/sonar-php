@@ -97,6 +97,13 @@ public class Assertions {
       } catch (RecognitionException e) {
         // expected
         return this;
+      } catch (RuntimeException e) {
+        Throwable rootCause = Throwables.getRootCause(e);
+        if (rootCause instanceof RecognitionException) {
+          return this;
+        } else {
+          throw e;
+        }
       }
       throw new AssertionError("Rule '" + getRuleName() + "' should not match:\n" + input);
     }

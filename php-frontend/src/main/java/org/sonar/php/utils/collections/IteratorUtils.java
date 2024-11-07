@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import javax.annotation.Nullable;
 
 public class IteratorUtils {
 
@@ -37,6 +38,13 @@ public class IteratorUtils {
   @SafeVarargs
   public static <T> Iterator<T> iteratorOf(T... element) {
     return Arrays.asList(element).iterator();
+  }
+
+  public static <T> Iterator<T> nullableIterator(@Nullable T element) {
+    if (element == null) {
+      return Collections.emptyIterator();
+    }
+    return iteratorOf(element);
   }
 
   @SafeVarargs
