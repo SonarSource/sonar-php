@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MyPhpRulesTest {
 
   @Test
-  void rules() {
+  void shouldDefineRules() {
     MyPhpRules rulesDefinition = new MyPhpRules();
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);

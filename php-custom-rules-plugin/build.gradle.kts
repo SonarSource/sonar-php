@@ -11,7 +11,7 @@ dependencies {
 
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.sonar.plugin.api.impl)
-  testImplementation(project(":php-frontend"))
+  testImplementation(testFixtures(project(":php-frontend")))
 }
 
 description = "PHP Custom Rules Example for SonarQube"
@@ -42,6 +42,10 @@ tasks.jar {
       ),
     )
   }
+}
+
+tasks.withType<Test> {
+  useJUnitPlatform()
 }
 
 val cleanupTask = registerCleanupTask()

@@ -29,7 +29,7 @@ import org.sonar.php.utils.PHPCheckVerifier;
 class ForbiddenFunctionUseCheckTest {
 
   @Test
-  void test() {
+  void shouldRaiseIssues() {
     PHPCheckVerifier.verify(new ForbiddenFunctionUseCheck(), new File("src/test/resources/checks/forbiddenFunctionUseCheck.php"));
   }
 

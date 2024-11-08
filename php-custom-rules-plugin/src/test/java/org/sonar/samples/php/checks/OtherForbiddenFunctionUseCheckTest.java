@@ -29,8 +29,8 @@ import org.sonar.php.utils.PHPCheckVerifier;
 class OtherForbiddenFunctionUseCheckTest {
 
   @Test
-  void test() {
-    PHPCheckVerifier.verify(new OtherForbiddenFunctionUseCheck(), new File("src/test/resources/checks/forbiddenFunctionUseCheck.php"));
+  void shouldRaiseIssues() {
+    PHPCheckVerifier.verify(new OtherForbiddenFunctionUseCheck(), new File("src/test/resources/checks/otherForbiddenFunctionUseCheck.php"));
   }
 
 }
