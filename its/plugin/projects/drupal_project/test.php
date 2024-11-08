@@ -1,4 +1,4 @@
 <?php
 use Drupal\something;
 
-$variable = true
+$variable = true;

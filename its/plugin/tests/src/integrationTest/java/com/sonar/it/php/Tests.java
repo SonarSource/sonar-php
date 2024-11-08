@@ -72,6 +72,7 @@ class Tests {
     // PHP Plugin
     .addPlugin(PHP_PLUGIN_LOCATION)
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
+    .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "drupal_profile.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
     // Custom rules plugin
     // TODO Fix in SONARPHP-1520 Migrate Custom Rules module to Gradle
@@ -204,6 +205,10 @@ class Tests {
   @Disabled
   @Nested
   class NestedCustomRulesTest extends CustomRulesTest {
+  }
+
+  @Nested
+  class NestedFrameworkDetectionPHPTest extends FrameworkDetectionPHPTest {
   }
 
   @Nested
