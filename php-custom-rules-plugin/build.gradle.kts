@@ -2,6 +2,7 @@ import org.sonarsource.php.registerCleanupTask
 
 plugins {
   id("java-library")
+  id("jacoco")
   alias(libs.plugins.shadow)
 }
 
