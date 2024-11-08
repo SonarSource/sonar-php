@@ -31,32 +31,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FrameworkDetectionPHPTest {
 
-  private static final String DRUPAL_PROJECT_KEY = "drupal-project";
-
   @RegisterExtension
-  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
 
   @Test
   void shouldNotDetectIssueWhenFrameworkDetectionDisabled() {
-    Tests.provisionProject(DRUPAL_PROJECT_KEY, "Project with several extensions", "php", "it-profile");
-    SonarScanner build = createScanner()
-      .setProjectDir(Tests.projectDirectoryFor("drupal_project"))
-      .setProperty("sonar.php.frameworkDetection", "false");
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
-
-    List<Issues.Issue> issues = Tests.issuesForComponent(DRUPAL_PROJECT_KEY);
+    var issues = scanDrupalProject("Drupal project 1", "drupal-project-1", false);
     assertThat(issues).isEmpty();
   }
 
   @Test
-  void shouldDetectIssueWhenFrameworkDetectionDisabled() {
-    Tests.provisionProject(DRUPAL_PROJECT_KEY, "Project with several extensions", "php", "it-profile");
+  void shouldDetectIssueWhenFrameworkDetectionEnabled() {
+    var issues = scanDrupalProject("Drupal project 2", "drupal-project-2", true);
+    assertThat(issues).hasSize(1);
+  }
+
+  List<Issues.Issue> scanDrupalProject(String name, String key, boolean frameworkDetectionEnabled) {
+    Tests.provisionProject(key, name, "php", "drupal-profile");
     SonarScanner build = createScanner()
       .setProjectDir(Tests.projectDirectoryFor("drupal_project"))
-      .setProperty("sonar.php.frameworkDetection", "false");
+      .setProjectKey(key)
+      .setProjectName(name)
+      .setSourceEncoding("UTF-8")
+      .setSourceDirs(".")
+      .setProperty("sonar.php.frameworkDetection", "" + frameworkDetectionEnabled);
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
-
-    List<Issues.Issue> issues = Tests.issuesForComponent(DRUPAL_PROJECT_KEY);
-    assertThat(issues).hasSize(1);
+    return Tests.issuesForComponent(key);
   }
 }

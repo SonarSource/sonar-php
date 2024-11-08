@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile>
+  <name>drupal-profile</name>
+  <language>php</language>
+  <rules>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1781</key>
+    </rule>
+  </rules>
+</profile>
