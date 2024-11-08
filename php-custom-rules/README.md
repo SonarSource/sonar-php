@@ -4,7 +4,7 @@
 
 ### 3.39
 
-* The classes `PHPCheckTest` and `PHPCheckVerifier` are moved to php-frontend testFixtures and the package `org.sonar.php.utils`
+* The classes `ExpectedIssuesParser`, `PHPCheckTest`, `PHPCheckVerifier` and `PhpTestFile` are moved to php-frontend testFixtures and the package `org.sonar.php.utils`
 
 ### 3.2 
 

@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.tests;
 import java.io.File;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
+import org.sonar.php.utils.PhpTestFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

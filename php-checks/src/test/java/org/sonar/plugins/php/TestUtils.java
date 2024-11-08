@@ -22,7 +22,7 @@ package org.sonar.plugins.php;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import org.sonar.plugins.php.api.tests.PhpTestFile;
+import org.sonar.php.utils.PhpTestFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static java.nio.charset.StandardCharsets.UTF_8;

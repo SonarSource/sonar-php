@@ -31,7 +31,6 @@ import java.util.Map;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.symbols.ProjectSymbolData;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
-import org.sonar.plugins.php.api.tests.PhpTestFile;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
