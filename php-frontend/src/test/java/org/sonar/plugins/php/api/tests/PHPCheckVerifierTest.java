@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.tests;
 import java.io.File;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
+import org.sonar.php.utils.PHPCheckVerifier;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;

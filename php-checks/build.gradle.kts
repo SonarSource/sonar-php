@@ -12,6 +12,7 @@ dependencies {
   implementation(libs.sonar.analyzer.commons)
   implementation(libs.commons.lang)
 
+  testImplementation(testFixtures(project(":php-frontend")))
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.assertj.core)
   testImplementation(libs.mockito.core)
