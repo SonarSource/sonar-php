@@ -511,7 +511,8 @@ public class PHPGrammar {
         b.optional(
           f.newTuple(
             b.token(PHPPunctuator.EQU),
-            STATIC_SCALAR()))));
+            STATIC_SCALAR())),
+        b.optional(PROPERTY_HOOK_LIST())));
   }
 
   public SeparatedListImpl<NamespaceNameTree> INTERFACE_LIST() {

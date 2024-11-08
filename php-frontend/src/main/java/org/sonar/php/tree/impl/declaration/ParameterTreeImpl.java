@@ -29,6 +29,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.PropertyHookListTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -47,6 +48,8 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private final VariableIdentifierTree variableIdentifier;
   private final InternalSyntaxToken equalToken;
   private final ExpressionTree initValue;
+  @Nullable
+  private final PropertyHookListTree propertyHookList;
   private SyntaxToken readonlyToken;
   private SyntaxToken visibility;
 
@@ -58,7 +61,8 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     @Nullable InternalSyntaxToken ellipsisToken,
     VariableIdentifierTree variableIdentifier,
     @Nullable InternalSyntaxToken equalToken,
-    @Nullable ExpressionTree initValue) {
+    @Nullable ExpressionTree initValue,
+    @Nullable PropertyHookListTree propertyHookList) {
     this.attributeGroups = attributeGroups;
     this.visibilityAndReadonly = visibilityAndReadonly;
 
@@ -76,6 +80,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     this.variableIdentifier = variableIdentifier;
     this.equalToken = equalToken;
     this.initValue = initValue;
+    this.propertyHookList = propertyHookList;
   }
 
   @Override
@@ -142,6 +147,12 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   @Nullable
   @Override
+  public PropertyHookListTree propertyHookList() {
+    return propertyHookList;
+  }
+
+  @Nullable
+  @Override
   public SyntaxToken readonlyToken() {
     return readonlyToken;
   }
@@ -156,7 +167,8 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
       visibilityAndReadonly.iterator(),
-      IteratorUtils.iteratorOf(type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue));
+      IteratorUtils.iteratorOf(type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue),
+      IteratorUtils.nullableIterator(propertyHookList));
   }
 
   @Override

@@ -95,4 +95,15 @@ class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(dnfType.isSimple()).isFalse();
     assertThat(dnfType.types()).hasSize(3);
   }
+
+  @Test
+  void shouldSupportPropertyHooks() {
+    FunctionDeclarationTree tree = parse("function f(int $a { get; set => 123; }, $b) {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
+    assertThat(tree.is(Kind.FUNCTION_DECLARATION)).isTrue();
+    assertThat(((FunctionDeclarationTreeImpl) tree).childrenIterator()).toIterable().hasSize(6);
+    assertThat(tree.parameters().parameters()).hasSize(2);
+    var propertyHooks = tree.parameters().parameters().get(0).propertyHookList();
+    assertThat(propertyHooks.getKind()).isEqualTo(Kind.PROPERTY_HOOK_LIST);
+    assertThat(propertyHooks.hooks()).hasSize(2);
+  }
 }

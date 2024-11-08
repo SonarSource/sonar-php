@@ -55,4 +55,13 @@ class ParameterListTreeTest extends PHPTreeModelTest {
     return tree;
   }
 
+  @Test
+  void shouldSupportPropertyHooks() {
+    ParameterListTree tree = parameterList("(int $a { get; set => 123; }, $b)");
+    assertThat(tree.is(Kind.PARAMETER_LIST)).isTrue();
+    assertThat(((ParameterListTreeImpl) tree).childrenIterator()).toIterable().hasSize(5);
+    assertThat(tree.parameters()).hasSize(2);
+    assertThat((tree.parameters().get(0).propertyHookList())).isNotNull();
+    assertThat((tree.parameters().get(0).propertyHookList().hooks())).hasSize(2);
+  }
 }

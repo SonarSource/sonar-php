@@ -80,6 +80,16 @@ class MethodDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
+  void shouldSupportPropertyHook() {
+    MethodDeclarationTree tree = parse("public function __construct($p { get; }) {}", PHPLexicalGrammar.METHOD_DECLARATION);
+
+    assertThat(tree.is(Kind.METHOD_DECLARATION)).isTrue();
+    assertThat(((MethodDeclarationTreeImpl) tree).childrenIterator()).toIterable().hasSize(7);
+    assertThat(tree.parameters().parameters()).hasSize(1);
+    assertThat(tree.parameters().parameters().get(0).propertyHookList()).isNotNull();
+  }
+
+  @Test
   void nonConstructorParameterWithVisibilityModifier() {
     assertThatExceptionOfType(RecognitionException.class).isThrownBy(() -> parse("public function nonConstructor(public $p) {}", PHPLexicalGrammar.METHOD_DECLARATION));
   }
