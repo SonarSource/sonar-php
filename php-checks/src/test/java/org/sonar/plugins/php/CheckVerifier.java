@@ -22,7 +22,7 @@ package org.sonar.plugins.php;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
-import org.sonar.plugins.php.api.tests.PHPCheckVerifier;
+import org.sonar.php.utils.PHPCheckVerifier;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 public final class CheckVerifier extends PHPCheckVerifier {

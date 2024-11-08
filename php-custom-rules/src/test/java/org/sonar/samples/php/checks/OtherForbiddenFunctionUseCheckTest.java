@@ -21,7 +21,7 @@ package org.sonar.samples.php.checks;
 
 import java.io.File;
 import org.junit.jupiter.api.Test;
-import org.sonar.plugins.php.api.tests.PHPCheckVerifier;
+import org.sonar.php.utils.PHPCheckVerifier;
 
 /**
  * Test class to test the check implementation.

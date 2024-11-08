@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.tests;
+package org.sonar.php.utils;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.plugins.php.api.tests.TestIssue;
 import org.sonar.plugins.php.api.tests.TestIssue.Location;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;

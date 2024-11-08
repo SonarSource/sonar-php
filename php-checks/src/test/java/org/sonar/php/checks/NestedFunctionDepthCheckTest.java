@@ -21,8 +21,8 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
+import org.sonar.php.utils.PHPCheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 

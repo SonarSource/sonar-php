@@ -20,8 +20,8 @@
 package org.sonar.php.checks;
 
 import org.junit.jupiter.api.Test;
+import org.sonar.php.utils.PHPCheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 class RedundantParenthesesCheckTest {
   @Test
