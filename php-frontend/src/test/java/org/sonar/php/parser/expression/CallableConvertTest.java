@@ -39,6 +39,11 @@ class CallableConvertTest {
       .matches("'strlen'(...)")
       .matches("[$o, 'm'](...)")
       .matches("[C::class, 'm'](...)")
-      .notMatches("new C(...)");
+      .matches("new C(...)")
+      .matches("new C")
+
+      .notMatches("new C(...")
+      .notMatches("(new C(...)")
+      .notMatches("(new C");
   }
 }
