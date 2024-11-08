@@ -74,7 +74,7 @@ class Tests {
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "drupal_profile.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
     // Custom rules plugin
-    .addPlugin(FileLocation.byWildcardFilename(new File("../plugins/php-custom-rules-plugin/build/libs"), "php-custom-rules-plugin-*-all.jar"))
+    .addPlugin(FileLocation.byWildcardFilename(new File("../../../php-custom-rules-plugin/build/libs"), "php-custom-rules-plugin-*-all.jar"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"))

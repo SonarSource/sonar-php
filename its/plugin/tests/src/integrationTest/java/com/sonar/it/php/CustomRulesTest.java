@@ -33,7 +33,7 @@ import static org.sonarqube.ws.Issues.Issue;
 class CustomRulesTest {
 
   @RegisterExtension
-  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "custom-rules";
   private static final String PROJECT_NAME = "Custom Rules";
   private static List<Issue> issues;
@@ -51,17 +51,17 @@ class CustomRulesTest {
 
   @Test
   void baseTreeVisitorCheck() {
-    assertSingleIssue("php-custom-rules:visitor", 5, "Function expression.", "5min");
+    assertSingleIssue("custom:S1", 4, "Remove the usage of this forbidden function.", "5min");
   }
 
   @Test
   void subscriptionBaseVisitorCheck() {
-    assertSingleIssue("php-custom-rules:subscription", 8, "For statement.", "10min");
+    assertSingleIssue("custom:S2", 6, "Remove the usage of this other forbidden function.", "10min");
   }
 
-  private void assertSingleIssue(String ruleKey, int expectedLine, String expectedMessage, String expectedDebt) {
+  private static void assertSingleIssue(String ruleKey, int expectedLine, String expectedMessage, String expectedDebt) {
     assertThat(Tests.issuesForRule(issues, ruleKey)).hasSize(1);
-    Issue issue = Tests.issuesForRule(issues, ruleKey).get(0);
+    var issue = Tests.issuesForRule(issues, ruleKey).get(0);
     assertThat(issue.getLine()).isEqualTo(expectedLine);
     assertThat(issue.getMessage()).isEqualTo(expectedMessage);
     assertThat(issue.getDebt()).isEqualTo(expectedDebt);

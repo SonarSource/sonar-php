@@ -4,20 +4,12 @@
   <language>php</language>
   <rules>
     <rule>
-      <repositoryKey>php-custom-rules</repositoryKey>
-      <key>visitor</key>
+      <repositoryKey>custom</repositoryKey>
+      <key>S1</key>
     </rule>
     <rule>
-      <repositoryKey>php-custom-rules</repositoryKey>
-      <key>subscription</key>
-    </rule>
-    <rule>
-      <repositoryKey>deprecated-php-custom-rules</repositoryKey>
-      <key>visitor</key>
-    </rule>
-    <rule>
-      <repositoryKey>deprecated-php-custom-rules</repositoryKey>
-      <key>subscription</key>
+      <repositoryKey>custom</repositoryKey>
+      <key>S2</key>
     </rule>
   </rules>
 </profile>

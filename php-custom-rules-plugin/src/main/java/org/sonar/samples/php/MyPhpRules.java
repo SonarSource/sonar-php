@@ -70,7 +70,7 @@ public class MyPhpRules implements RulesDefinition, PHPCustomRuleRepository {
     // Optionally define remediation costs
     Map<String, String> remediationCosts = new HashMap<>();
     remediationCosts.put(ForbiddenFunctionUseCheck.KEY, "5min");
-    remediationCosts.put(OtherForbiddenFunctionUseCheck.KEY, "5min");
+    remediationCosts.put(OtherForbiddenFunctionUseCheck.KEY, "10min");
     repository.rules().forEach(rule -> rule.setDebtRemediationFunction(
       rule.debtRemediationFunctions().constantPerIssue(remediationCosts.get(rule.key()))));
 

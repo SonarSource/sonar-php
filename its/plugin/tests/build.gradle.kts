@@ -23,8 +23,9 @@ dependencies {
   setIncludePatterns("Tests")
 }
 
+// Mandatory for the orchestrator in the "Tests" class, since it requires the custom rules plugin JAR
 tasks.named("integrationTest") {
-  dependsOn(":its:plugin:plugins:php-custom-rules-plugin:build")
+  dependsOn(":php-custom-rules-plugin:shadowJar")
 }
 
 sonar {

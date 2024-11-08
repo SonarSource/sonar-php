@@ -7,11 +7,11 @@ plugins {
 
 dependencies {
   compileOnly(libs.sonar.plugin.api)
-  compileOnly(project(":sonar-php-plugin"))
+  compileOnly(project(":php-frontend"))
 
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.sonar.plugin.api.impl)
-  testImplementation(project(":sonar-php-plugin"))
+  testImplementation(project(":php-frontend"))
 }
 
 description = "PHP Custom Rules Example for SonarQube"
@@ -27,7 +27,7 @@ tasks.jar {
         "Plugin-Display-Version" to version,
         "Plugin-Homepage" to "https://sonarsource.atlassian.net/browse/SONARPHP",
         "Plugin-IssueTrackerUrl" to "https://sonarsource.atlassian.net/browse/SONARPHP",
-        "Plugin-Key" to "php",
+        "Plugin-Key" to "custom",
         "Plugin-License" to "GNU LGPL 3",
         "Plugin-Name" to "PHP Custom Rules",
         "Plugin-Organization" to "SonarSource",
