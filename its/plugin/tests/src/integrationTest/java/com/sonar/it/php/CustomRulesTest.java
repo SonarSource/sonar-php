@@ -23,7 +23,6 @@ import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -31,12 +30,10 @@ import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonarqube.ws.Issues.Issue;
 
-// TODO Enable back with SONARPHP-1520
-@Disabled
 class CustomRulesTest {
 
   @RegisterExtension
-  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "custom-rules";
   private static final String PROJECT_NAME = "Custom Rules";
   private static List<Issue> issues;
@@ -54,17 +51,17 @@ class CustomRulesTest {
 
   @Test
   void baseTreeVisitorCheck() {
-    assertSingleIssue("php-custom-rules:visitor", 5, "Function expression.", "5min");
+    assertSingleIssue("custom:S1", 4, "Remove the usage of this forbidden function.", "5min");
   }
 
   @Test
   void subscriptionBaseVisitorCheck() {
-    assertSingleIssue("php-custom-rules:subscription", 8, "For statement.", "10min");
+    assertSingleIssue("custom:S2", 6, "Remove the usage of this other forbidden function.", "10min");
   }
 
-  private void assertSingleIssue(String ruleKey, int expectedLine, String expectedMessage, String expectedDebt) {
+  private static void assertSingleIssue(String ruleKey, int expectedLine, String expectedMessage, String expectedDebt) {
     assertThat(Tests.issuesForRule(issues, ruleKey)).hasSize(1);
-    Issue issue = Tests.issuesForRule(issues, ruleKey).get(0);
+    var issue = Tests.issuesForRule(issues, ruleKey).get(0);
     assertThat(issue.getLine()).isEqualTo(expectedLine);
     assertThat(issue.getMessage()).isEqualTo(expectedMessage);
     assertThat(issue.getDebt()).isEqualTo(expectedDebt);

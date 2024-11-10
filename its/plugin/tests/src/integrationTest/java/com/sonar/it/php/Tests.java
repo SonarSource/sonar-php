@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.CheckForNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Components;
@@ -75,8 +74,7 @@ class Tests {
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "drupal_profile.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
     // Custom rules plugin
-    // TODO Fix in SONARPHP-1520 Migrate Custom Rules module to Gradle
-    // .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
+    .addPlugin(FileLocation.byWildcardFilename(new File("../../../php-custom-rules-plugin/build/libs"), "php-custom-rules-plugin-*-all.jar"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"))
@@ -201,8 +199,6 @@ class Tests {
 
   // TODO SONARPHP-1466 Replace nested classes in it-php-plugin-tests:Tests with a more elegant solution
 
-  // TODO Enable back with SONARPHP-1520
-  @Disabled
   @Nested
   class NestedCustomRulesTest extends CustomRulesTest {
   }
