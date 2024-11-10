@@ -20,19 +20,13 @@
 package com.sonar.it.php;
 
 import com.sonar.orchestrator.build.SonarScanner;
-import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Issues;
 
-import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FrameworkDetectionPHPTest {
-
-  @RegisterExtension
-  public static final OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
+class FrameworkDetectionPHPTest extends OrchestratorTest {
 
   @Test
   void shouldNotDetectIssueWhenFrameworkDetectionDisabled() {
@@ -47,15 +41,15 @@ class FrameworkDetectionPHPTest {
   }
 
   List<Issues.Issue> scanDrupalProject(String name, String key, boolean frameworkDetectionEnabled) {
-    Tests.provisionProject(key, name, "php", "drupal-profile");
+    provisionProject(key, name, "php", "drupal-profile");
     SonarScanner build = createScanner()
-      .setProjectDir(Tests.projectDirectoryFor("drupal_project"))
+      .setProjectDir(projectDirectoryFor("drupal_project"))
       .setProjectKey(key)
       .setProjectName(name)
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
       .setProperty("sonar.php.frameworkDetection", "" + frameworkDetectionEnabled);
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
-    return Tests.issuesForComponent(key);
+    executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+    return issuesForComponent(key);
   }
 }

@@ -41,6 +41,8 @@ import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneGlobalConf
 import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneSonarLintEngine;
 import org.sonarsource.sonarlint.core.commons.Language;
 
+import static com.sonar.it.php.OrchestratorTest.PHP_PLUGIN_LOCATION;
+import static com.sonar.it.php.OrchestratorTest.projectDirectoryFor;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SonarLintTest {
@@ -55,7 +57,7 @@ class SonarLintTest {
   @BeforeAll
   static void prepare() {
     StandaloneGlobalConfiguration sonarLintConfig = StandaloneGlobalConfiguration.builder()
-      .addPlugin(Tests.PHP_PLUGIN_LOCATION.getFile().toPath())
+      .addPlugin(PHP_PLUGIN_LOCATION.getFile().toPath())
       .addEnabledLanguage(Language.PHP)
       .setSonarLintUserHome(tempDirectory.toPath())
       .setLogOutput((formattedMessage, level) -> {
@@ -73,7 +75,7 @@ class SonarLintTest {
 
   @Test
   void shouldRaiseIssues() throws IOException {
-    Path filePath = Tests.projectDirectoryFor("sonarlint").toPath().resolve("Math.php");
+    Path filePath = projectDirectoryFor("sonarlint").toPath().resolve("Math.php");
     filePath = Files.copy(filePath, baseDir.resolve("Math.php"));
     ClientInputFile inputFile = prepareInputFile(filePath, false);
 

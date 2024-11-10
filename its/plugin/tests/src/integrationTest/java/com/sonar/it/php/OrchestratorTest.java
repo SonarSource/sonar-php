@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.CheckForNull;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Components;
 import org.sonarqube.ws.Issues;
@@ -49,23 +48,23 @@ import org.sonarqube.ws.client.measures.ComponentRequest;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Tests {
+class OrchestratorTest {
 
-  public static final String PROJECT_ROOT_DIR = "../projects/";
+  private static final String PROJECT_ROOT_DIR = "../projects/";
 
   private static final String RESOURCE_DIRECTORY = "/com/sonar/it/php/";
 
-  public static final String PHP_SENSOR_NAME = "PHP sensor";
+  protected static final String PHP_SENSOR_NAME = "PHP sensor";
 
-  public static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
+  protected static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
 
   public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardFilename(new File("../../../sonar-php-plugin/build/libs"), "sonar-php-plugin-*-all.jar");
 
-  public static final String SCANNER_VERSION = "6.1.0.4477";
+  private static final String SCANNER_VERSION = "6.1.0.4477";
   private static final Pattern DEBUG_AND_INFO_LOG_LINE_PATTERN = Pattern.compile("\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s(INFO|DEBUG)\\s.*");
 
   @RegisterExtension
-  public static final OrchestratorExtension ORCHESTRATOR = OrchestratorExtension.builderEnv()
+  protected static final OrchestratorExtension ORCHESTRATOR = OrchestratorExtension.builderEnv()
     .useDefaultAdminCredentialsForBuilds(true)
     .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
     // PHP Plugin
@@ -80,7 +79,7 @@ class Tests {
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"))
     .build();
 
-  public static SonarScanner createScanner() {
+  protected static SonarScanner createScanner() {
     return SonarScanner.create()
       .setScannerVersion(SCANNER_VERSION)
       .setProjectVersion("1.0")
@@ -91,18 +90,18 @@ class Tests {
 
   private static final Pattern TASK_ID_PATTERN = Pattern.compile("/api/ce/task\\?id=(\\S+)");
 
-  public static void provisionProject(String projectKey, String projectName, String languageKey, String profileName) {
+  protected static void provisionProject(String projectKey, String projectName, String languageKey, String profileName) {
     Server server = ORCHESTRATOR.getServer();
     server.provisionProject(projectKey, projectName);
     server.associateProjectToQualityProfile(projectKey, languageKey, profileName);
   }
 
-  static File projectDirectoryFor(String projectDirName) {
-    return new File(Tests.PROJECT_ROOT_DIR + projectDirName + "/");
+  public static File projectDirectoryFor(String projectDirName) {
+    return new File(OrchestratorTest.PROJECT_ROOT_DIR + projectDirName + "/");
   }
 
   @CheckForNull
-  static Measures.Measure getMeasure(String componentKey, String metricKey) {
+  protected static Measures.Measure getMeasure(String componentKey, String metricKey) {
     Measures.ComponentWsResponse response = newWsClient().measures().component(new ComponentRequest()
       .setComponent(componentKey)
       .setMetricKeys(singletonList(metricKey)));
@@ -111,19 +110,19 @@ class Tests {
   }
 
   @CheckForNull
-  static Integer getMeasureAsInt(String componentKey, String metricKey) {
+  protected static Integer getMeasureAsInt(String componentKey, String metricKey) {
     Measures.Measure measure = getMeasure(componentKey, metricKey);
     return (measure == null) ? null : Integer.parseInt(measure.getValue());
   }
 
   @CheckForNull
-  static Double getMeasureAsDouble(String componentKey, String metricKey) {
+  protected static Double getMeasureAsDouble(String componentKey, String metricKey) {
     Measures.Measure measure = getMeasure(componentKey, metricKey);
     return (measure == null) ? null : Double.parseDouble(measure.getValue());
   }
 
   @CheckForNull
-  static Components.Component getComponent(String projectKey, String componentKey) {
+  protected static Components.Component getComponent(String projectKey, String componentKey) {
     List<Components.Component> components = newWsClient().components().tree(new TreeRequest()
       .setComponent(projectKey)
       .setQ(componentKey))
@@ -134,7 +133,7 @@ class Tests {
   /**
    * Extract analysis warnings from component task to evaluate if expected warnings are send to the server
    */
-  static List<String> getAnalysisWarnings(BuildResult result) {
+  protected static List<String> getAnalysisWarnings(BuildResult result) {
     String taskId = getTaskId(result);
     if (taskId == null) {
       throw new RuntimeException("Task id can not be processed from BuildResult");
@@ -144,7 +143,7 @@ class Tests {
   }
 
   @CheckForNull
-  static String getTaskId(BuildResult result) {
+  private static String getTaskId(BuildResult result) {
     Matcher m = TASK_ID_PATTERN.matcher(result.getLogs());
     if (m.find()) {
       return m.group(1);
@@ -152,27 +151,27 @@ class Tests {
     return null;
   }
 
-  static WsClient newWsClient() {
+  private static WsClient newWsClient() {
     return WsClientFactories.getDefault().newClient(HttpConnector.newBuilder()
       .url(ORCHESTRATOR.getServer().getUrl())
       .credentials("admin", "admin")
       .build());
   }
 
-  static List<Issues.Issue> issuesForComponent(String componentKey) {
+  protected static List<Issues.Issue> issuesForComponent(String componentKey) {
     return newWsClient()
       .issues()
       .search(new SearchRequest().setComponentKeys(Collections.singletonList(componentKey)))
       .getIssuesList();
   }
 
-  static List<Issues.Issue> issuesForRule(List<Issues.Issue> issues, String ruleKey) {
+  protected static List<Issues.Issue> issuesForRule(List<Issues.Issue> issues, String ruleKey) {
     return issues.stream()
       .filter(i -> i.getRule().equals(ruleKey))
       .toList();
   }
 
-  public static void executeBuildWithExpectedWarnings(Orchestrator orchestrator, SonarScanner build) {
+  protected static void executeBuildWithExpectedWarnings(Orchestrator orchestrator, SonarScanner build) {
     BuildResult result = orchestrator.executeBuild(build);
     assertAnalyzerLogs(result.getLogs());
   }
@@ -196,47 +195,4 @@ class Tests {
       .describedAs("There should be no unexpected lines in the analysis logs")
       .isEmpty();
   }
-
-  // TODO SONARPHP-1466 Replace nested classes in it-php-plugin-tests:Tests with a more elegant solution
-
-  @Nested
-  class NestedCustomRulesTest extends CustomRulesTest {
-  }
-
-  @Nested
-  class NestedFrameworkDetectionPHPTest extends FrameworkDetectionPHPTest {
-  }
-
-  @Nested
-  class NestedNonPhpProjectTest extends NonPhpProjectTest {
-  }
-
-  @Nested
-  class NestedNoSonarTest extends NoSonarTest {
-  }
-
-  @Nested
-  class NestedPHPIntegrationTest extends PHPIntegrationTest {
-  }
-
-  @Nested
-  class NestedPHPTest extends PHPTest {
-  }
-
-  @Nested
-  class NestedPHPUnitTest extends PHPUnitTest {
-  }
-
-  @Nested
-  class NestedSonarLintTest extends SonarLintTest {
-  }
-
-  @Nested
-  class NestedPhpStanReportTest extends PhpStanReportTest {
-  }
-
-  @Nested
-  class NestedPsalmReportTest extends PsalmReportTest {
-  }
-
 }

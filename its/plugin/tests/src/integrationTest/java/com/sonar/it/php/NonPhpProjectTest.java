@@ -21,23 +21,18 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
-import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.io.File;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NonPhpProjectTest {
+class NonPhpProjectTest extends OrchestratorTest {
 
-  @RegisterExtension
-  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "non-php-project";
   private static final String PROJECT_NAME = "Non Php Project";
 
-  private static final File PROJECT_DIR = Tests.projectDirectoryFor("js-project");
+  private static final File PROJECT_DIR = projectDirectoryFor("js-project");
 
   private static BuildResult buildResult;
 
@@ -51,13 +46,13 @@ class NonPhpProjectTest {
       // workaround following a change on SonarQube
       .setProperty("sonar.plugins.downloadOnlyRequired", "false");
 
-    buildResult = orchestrator.executeBuild(build);
+    buildResult = ORCHESTRATOR.executeBuild(build);
   }
 
   @Test
   void testExecutionOfSensors() {
-    assertThat(buildResult.getLogs()).doesNotContain(Tests.PHP_SENSOR_NAME);
-    assertThat(buildResult.getLogs()).doesNotContain(Tests.PHP_INI_SENSOR_NAME);
+    assertThat(buildResult.getLogs()).doesNotContain(PHP_SENSOR_NAME);
+    assertThat(buildResult.getLogs()).doesNotContain(PHP_INI_SENSOR_NAME);
     assertThat(buildResult.getLogs()).contains("1 file indexed");
   }
 

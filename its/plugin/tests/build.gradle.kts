@@ -19,10 +19,6 @@ dependencies {
   "integrationTestCompileOnly"(libs.jsr305)
 }
 
-(tasks["integrationTest"] as Test).filter {
-  setIncludePatterns("Tests")
-}
-
 // Mandatory for the orchestrator in the "Tests" class, since it requires the custom rules plugin JAR
 tasks.named("integrationTest") {
   dependsOn(":php-custom-rules-plugin:shadowJar")

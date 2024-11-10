@@ -115,16 +115,6 @@ def qa_ruling_env():
     "GRADLE_TASK": QA_RULING_GRADLE_TASK,
     "SQ_VERSION": QA_QUBE_LATEST_RELEASE,
     "KEEP_ORCHESTRATOR_RUNNING": "true",
-    "matrix": [
-      {"PHP_PROJECT": "Flysystem"},
-      {"PHP_PROJECT": "Monica"},
-      {"PHP_PROJECT": "PhpCodeSniffer"},
-      {"PHP_PROJECT": "PhpMailer"},
-      {"PHP_PROJECT": "Psysh"},
-      {"PHP_PROJECT": "PhpWord"},
-      {"PHP_PROJECT": "RubixML"},
-      {"PHP_PROJECT": "PhpSpreadsheet"},
-    ],
     "GITHUB_TOKEN": "VAULT[development/github/token/licenses-ro token]",
   }
 
@@ -134,7 +124,7 @@ def qa_ruling_script():
     "git submodule update --init --depth 1",
     "source cirrus-env QA",
     "source .cirrus/use-gradle-wrapper.sh",
-    "./gradlew \"${GRADLE_TASK}\" \"-Dsonar.runtimeVersion=${SQ_VERSION}\" --tests \"PhpGeneralRulingTest.test${PHP_PROJECT}\" --info --build-cache --console plain --no-daemon"
+    "./gradlew \"${GRADLE_TASK}\" \"-Dsonar.runtimeVersion=${SQ_VERSION}\" --info --build-cache --console plain --no-daemon"
   ]
 
 

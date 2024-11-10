@@ -21,25 +21,18 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
-import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.io.File;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 
-import static com.sonar.it.php.Tests.createScanner;
-import static com.sonar.it.php.Tests.getAnalysisWarnings;
-import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PHPUnitTest {
+class PHPUnitTest extends OrchestratorTest {
 
-  @RegisterExtension
-  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
   private static final String PROJECT_KEY = "php-unit";
   private static final String PROJECT_NAME = "PHP Unit";
 
-  private static final File PROJECT_DIR = Tests.projectDirectoryFor("phpunit");
+  private static final File PROJECT_DIR = projectDirectoryFor("phpunit");
 
   private static final String SOURCE_DIR = "src";
   private static final String TESTS_DIR = "tests";
@@ -58,7 +51,7 @@ class PHPUnitTest {
 
   @BeforeAll
   static void startServer() {
-    Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
+    provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
   }
 
   public void setTestReportPath(String reportPath) {
@@ -70,7 +63,7 @@ class PHPUnitTest {
   }
 
   public BuildResult executeBuild() {
-    return orchestrator.executeBuild(BUILD);
+    return ORCHESTRATOR.executeBuild(BUILD);
   }
 
   @Test

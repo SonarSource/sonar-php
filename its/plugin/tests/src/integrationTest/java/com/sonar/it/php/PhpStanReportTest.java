@@ -20,31 +20,25 @@
 package com.sonar.it.php;
 
 import com.sonar.orchestrator.build.SonarScanner;
-import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Common;
 import org.sonarqube.ws.Issues;
 
-import static com.sonar.it.php.Tests.createScanner;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PhpStanReportTest {
+class PhpStanReportTest extends OrchestratorTest {
 
   private static final String PROJECT = "phpstan_project";
 
-  @RegisterExtension
-  public static final OrchestratorExtension ORCHESTRATOR = Tests.ORCHESTRATOR;
-
   @Test
   void importReport() {
-    Tests.provisionProject(PROJECT, PROJECT, "php", "no_rules");
+    provisionProject(PROJECT, PROJECT, "php", "no_rules");
     SonarScanner build = createScanner()
-      .setProjectDir(Tests.projectDirectoryFor("phpstan_project"));
-    Tests.executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
+      .setProjectDir(projectDirectoryFor("phpstan_project"));
+    executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
 
-    List<Issues.Issue> issues = Tests.issuesForComponent("phpstan_project");
+    List<Issues.Issue> issues = issuesForComponent("phpstan_project");
     assertThat(issues).hasSize(2);
     Issues.Issue first = issues.get(0);
     assertThat(first.getComponent()).isEqualTo("phpstan_project:src/test.php");

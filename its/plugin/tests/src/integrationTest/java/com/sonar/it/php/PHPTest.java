@@ -20,18 +20,13 @@
 package com.sonar.it.php;
 
 import com.sonar.orchestrator.build.SonarScanner;
-import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Issues;
 
-import static com.sonar.it.php.Tests.createScanner;
-import static com.sonar.it.php.Tests.getComponent;
-import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PHPTest {
+class PHPTest extends OrchestratorTest {
 
   private static final String MULTI_MODULE_PROJECT_KEY = "multimodule-php";
   private static final String EMPTY_FILE_PROJECT_KEY = "empty_file_project_key";
@@ -40,19 +35,16 @@ class PHPTest {
   private static final String PROJECT_WITH_VENDOR_KEY = "project-with-vendor";
   private static final String SRC_DIR_NAME = "src";
 
-  @RegisterExtension
-  public static OrchestratorExtension orchestrator = Tests.ORCHESTRATOR;
-
   /**
    * SONARPLUGINS-1657
    */
   @Test
   void shouldImportSourcesWithUserDefinedFileSuffixes() {
-    Tests.provisionProject(SEVERAL_EXTENSIONS_PROJECT_KEY, "Project with several extensions", "php", "it-profile");
+    provisionProject(SEVERAL_EXTENSIONS_PROJECT_KEY, "Project with several extensions", "php", "it-profile");
     SonarScanner build = createScanner()
-      .setProjectDir(Tests.projectDirectoryFor("project-with-several-extensions"))
+      .setProjectDir(projectDirectoryFor("project-with-several-extensions"))
       .setProperty("sonar.php.file.suffixes", "php,php3,php4,myphp,html");
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+    executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
 
     assertThat(getMeasureAsInt(SEVERAL_EXTENSIONS_PROJECT_KEY, "files")).isEqualTo(3);
     assertThat(getMeasureAsInt(getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math2.myphp"), "lines")).isGreaterThan(1);
@@ -61,10 +53,10 @@ class PHPTest {
 
   @Test
   void shouldExcludeVendorDir() {
-    Tests.provisionProject(PROJECT_WITH_VENDOR_KEY, "Project with vendor dir", "php", "it-profile");
+    provisionProject(PROJECT_WITH_VENDOR_KEY, "Project with vendor dir", "php", "it-profile");
     SonarScanner build = createScanner()
-      .setProjectDir(Tests.projectDirectoryFor("project-with-vendor"));
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+      .setProjectDir(projectDirectoryFor("project-with-vendor"));
+    executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
 
     assertThat(getMeasureAsInt(PROJECT_WITH_VENDOR_KEY, "files")).isEqualTo(1);
   }
@@ -74,10 +66,10 @@ class PHPTest {
    */
   @Test
   void shouldSupportMultimoduleProjects() {
-    Tests.provisionProject(MULTI_MODULE_PROJECT_KEY, "Multimodule PHP Project", "php", "it-profile");
+    provisionProject(MULTI_MODULE_PROJECT_KEY, "Multimodule PHP Project", "php", "it-profile");
     SonarScanner build = createScanner()
-      .setProjectDir(Tests.projectDirectoryFor("multimodule"));
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+      .setProjectDir(projectDirectoryFor("multimodule"));
+    executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
 
     String componentKey1 = MULTI_MODULE_PROJECT_KEY + ":module1/src";
     String componentKey2 = MULTI_MODULE_PROJECT_KEY + ":module2/src";
@@ -92,30 +84,30 @@ class PHPTest {
    */
   @Test
   void shouldNotFailOnEmptyFile() {
-    Tests.provisionProject(EMPTY_FILE_PROJECT_KEY, "Empty file test project", "php", "it-profile");
+    provisionProject(EMPTY_FILE_PROJECT_KEY, "Empty file test project", "php", "it-profile");
     SonarScanner build = createScanner()
       .setProjectKey(EMPTY_FILE_PROJECT_KEY)
       .setProjectName("Empty file test project")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
-      .setProjectDir(Tests.projectDirectoryFor("empty_file"));
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+      .setProjectDir(projectDirectoryFor("empty_file"));
+    executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
 
     assertThat(getMeasureAsInt(EMPTY_FILE_PROJECT_KEY, "files")).isEqualTo(3);
   }
 
   @Test
   void shouldNotFailOnDeeplyNestedTrees() {
-    Tests.provisionProject("big_concat_key", "Big Concat", "php", "sleep-profile");
+    provisionProject("big_concat_key", "Big Concat", "php", "sleep-profile");
     SonarScanner build = createScanner()
       .setProjectKey("big_concat_key")
       .setProjectName("Big Concat")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
-      .setProjectDir(Tests.projectDirectoryFor("big_concat"));
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+      .setProjectDir(projectDirectoryFor("big_concat"));
+    executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
 
-    List<Issues.Issue> issues = Tests.issuesForComponent("big_concat_key");
+    List<Issues.Issue> issues = issuesForComponent("big_concat_key");
     // The file actually contains two calls to sleep(), but only one is visited due to the depth limit of the visitor.
     assertThat(issues).hasSize(1);
     assertThat(issues.get(0).getLine()).isEqualTo(105);
@@ -123,17 +115,17 @@ class PHPTest {
 
   @Test
   void shouldHandleProjectWithOnlyTestFiles() {
-    Tests.provisionProject(PROJECT_WITH_MAIN_AND_TEST_KEY, "project main and test files", "php", "it-profile");
+    provisionProject(PROJECT_WITH_MAIN_AND_TEST_KEY, "project main and test files", "php", "it-profile");
     SonarScanner build = createScanner()
       .setProjectKey(PROJECT_WITH_MAIN_AND_TEST_KEY)
       .setProjectName("Test project")
       .setSourceEncoding("UTF-8")
       .setTestDirs("tests")
       .setSourceDirs("")
-      .setProjectDir(Tests.projectDirectoryFor("project-with-main-and-test"));
-    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+      .setProjectDir(projectDirectoryFor("project-with-main-and-test"));
+    executeBuildWithExpectedWarnings(ORCHESTRATOR, build);
 
-    List<Issues.Issue> issues = Tests.issuesForComponent(PROJECT_WITH_MAIN_AND_TEST_KEY);
+    List<Issues.Issue> issues = issuesForComponent(PROJECT_WITH_MAIN_AND_TEST_KEY);
     assertThat(issues).hasSize(1);
   }
 
