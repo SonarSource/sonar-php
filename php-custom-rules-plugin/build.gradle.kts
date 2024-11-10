@@ -53,6 +53,13 @@ plugins.withType<JacocoPlugin> {
   tasks["test"].finalizedBy("jacocoTestReport")
 }
 
+tasks.jacocoTestReport {
+  dependsOn(tasks.test)
+  reports {
+    xml.required.set(true)
+  }
+}
+
 val cleanupTask = registerCleanupTask()
 
 tasks.shadowJar {
