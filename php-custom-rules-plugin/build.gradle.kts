@@ -49,6 +49,10 @@ tasks.withType<Test> {
   useJUnitPlatform()
 }
 
+plugins.withType<JacocoPlugin> {
+  tasks["test"].finalizedBy("jacocoTestReport")
+}
+
 val cleanupTask = registerCleanupTask()
 
 tasks.shadowJar {
