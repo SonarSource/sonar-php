@@ -117,6 +117,7 @@ def whitesource_script():
   return [
     "source cirrus-env QA",
     "source .cirrus/use-gradle-wrapper.sh",
+    "source ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt",
     "GRADLE_OPTS=\"-Xmx64m -Dorg.gradle.jvmargs='-Xmx3G' -Dorg.gradle.daemon=false\" ./gradlew ${GRADLE_COMMON_FLAGS} :php-frontend:processResources -Pkotlin.compiler.execution.strategy=in-process",
     "source ws_scan.sh"
   ]
@@ -131,6 +132,7 @@ def sca_scan_task():
       "eks_container": base_image_container_builder(cpu=1, memory="4G"),
       "gradle_cache": gradle_cache(),
       "gradle_wrapper_cache": gradle_wrapper_cache(),
+      "project_version_cache": project_version_cache(),
       "whitesource_script": whitesource_script(),
       "cleanup_gradle_script": cleanup_gradle_script(),
       "allow_failures": "true",
