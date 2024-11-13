@@ -21,8 +21,6 @@ dependencies {
   "integrationTestCompileOnly"(libs.jsr305)
 }
 
-val integrationTest by sourceSets.integrationTest
-
 (tasks["integrationTest"] as Test).filter {
   setIncludePatterns("Tests")
 }
