@@ -557,7 +557,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
     Symbol symbol = symbolTable.getSymbol("isset");
     assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
-    assertThat(symbol.is(Symbol.Kind.FUNCTION));
+    assertThat(symbol.is(Symbol.Kind.FUNCTION)).isTrue();
     assertThat(symbol.usages()).hasSize(1);
   }
 

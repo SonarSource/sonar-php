@@ -200,6 +200,10 @@ class Tests {
   // TODO SONARPHP-1466 Replace nested classes in it-php-plugin-tests:Tests with a more elegant solution
 
   @Nested
+  class NestedCpdTokenTest extends CpdTokenTest {
+  }
+
+  @Nested
   class NestedCustomRulesTest extends CustomRulesTest {
   }
 
@@ -220,6 +224,10 @@ class Tests {
   }
 
   @Nested
+  class NestedPhpStanReportTest extends PhpStanReportTest {
+  }
+
+  @Nested
   class NestedPHPTest extends PHPTest {
   }
 
@@ -228,15 +236,15 @@ class Tests {
   }
 
   @Nested
+  class NestedPsalmReportTest extends PsalmReportTest {
+  }
+
+  @Nested
   class NestedSonarLintTest extends SonarLintTest {
   }
 
   @Nested
-  class NestedPhpStanReportTest extends PhpStanReportTest {
-  }
-
-  @Nested
-  class NestedPsalmReportTest extends PsalmReportTest {
+  class NestedSuppressWarningsTest extends SuppressWarningsTest {
   }
 
 }
