@@ -35,7 +35,7 @@ include(":sonar-php-plugin")
 include(":php-frontend")
 include(":php-checks")
 include(":php-custom-rules-plugin")
-include(":its:plugin:tests")
+include(":its:plugin")
 include(":its:ruling")
 
 gradle.allprojects {

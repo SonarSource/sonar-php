@@ -14,7 +14,7 @@ load(
   "mkdir_orchestrator_home_script",
 )
 
-QA_PLUGIN_GRADLE_TASK = "its:plugin:tests:integrationTest"
+QA_PLUGIN_GRADLE_TASK = "its:plugin:integrationTest"
 QA_RULING_GRADLE_TASK = "its:ruling:integrationTest"
 QA_QUBE_LATEST_RELEASE = "LATEST_RELEASE"
 
