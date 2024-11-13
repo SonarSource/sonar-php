@@ -551,6 +551,16 @@ class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbolTable.getSymbol("A1").qualifiedName()).hasToString("a1");
   }
 
+  @Test
+  void shouldCreateSymbolForFunctionInPropertyHook() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php class A { public int $prop { get { return isset($this->prop2); } } }");
+
+    Symbol symbol = symbolTable.getSymbol("isset");
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
+    assertThat(symbol.is(Symbol.Kind.FUNCTION));
+    assertThat(symbol.usages()).hasSize(1);
+  }
+
   private static void assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
