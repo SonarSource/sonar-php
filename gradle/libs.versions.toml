@@ -4,8 +4,8 @@ sonar-plugin-api = "10.13.0.2560"
 sonarqube = "10.7.0.96327"
 sonar-scanner-gradle = "5.1.0.4882"
 sonar-orchestrator = "5.0.0.2065"
-sonarlint = "9.8.0.76914"
-slf4j = "1.7.36"
+sonarlint = "10.9.0.79478"
+slf4j = "2.0.16"
 sslr = "1.24.0.633"
 junit = "5.11.3"
 assertj = "3.26.3"
@@ -19,6 +19,7 @@ jsr305 = "3.0.2"
 maven-project = "2.2.1"
 junit-platform = "1.11.3"
 staxmate = "2.0.1"
+awaitility = "4.2.2"
 
 [libraries]
 sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
@@ -32,8 +33,9 @@ sonar-testing-harness = { module = "org.sonarsource.sonarqube:sonar-testing-harn
 sonar-ws = { module = "org.sonarsource.sonarqube:sonar-ws", version.ref = "sonarqube" }
 sonar-scanner-gradle = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version.ref = "sonar-scanner-gradle" }
 sonar-orchestrator-junit5 = { module = "org.sonarsource.orchestrator:sonar-orchestrator-junit5", version.ref = "sonar-orchestrator" }
-sonarlint-core = { module = "org.sonarsource.sonarlint.core:sonarlint-core", version.ref = "sonarlint" }
-sonarlint-plugin-api = { module = "org.sonarsource.sonarlint.core:sonarlint-plugin-api", version.ref = "sonarlint" }
+sonar-lint-core = { module = "org.sonarsource.sonarlint.core:sonarlint-core", version.ref = "sonarlint" }
+sonar-lint-rpc-java-client = { module = "org.sonarsource.sonarlint.core:sonarlint-rpc-java-client", version.ref = "sonarlint" }
+sonar-lint-rpc-impl = { module = "org.sonarsource.sonarlint.core:sonarlint-rpc-impl", version.ref = "sonarlint" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 sslr-core = { module = "org.sonarsource.sslr:sslr-core", version.ref = "sslr" }
 sslr-toolkit = { module = "org.sonarsource.sslr:sslr-toolkit", version.ref = "sslr" }
@@ -50,6 +52,7 @@ jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
 maven-project = { module = "org.apache.maven:maven-project", version.ref = "maven-project" }
 junit-platform = { module = "org.junit.platform:junit-platform-suite", version.ref = "junit-platform" }
 staxmate = { module = "org.codehaus.staxmate:staxmate", version.ref = "staxmate" }
+awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility"}
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless-gradle" }

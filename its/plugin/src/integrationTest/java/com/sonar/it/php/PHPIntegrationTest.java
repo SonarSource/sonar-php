@@ -48,7 +48,7 @@ class PHPIntegrationTest {
   static void startServer() {
     Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = createScanner()
-      .setProjectDir(FileLocation.of("../../sources/src/psysh/").getFile())
+      .setProjectDir(FileLocation.of("../sources/src/psysh/").getFile())
       .setProjectKey(PROJECT_KEY)
       .setProjectName(PROJECT_NAME)
       .setSourceEncoding("UTF-8")

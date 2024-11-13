@@ -91,7 +91,7 @@ Before running any of the integration tests make sure the submodules are checked
 #### Plugin Test
 The "Plugin Test" is an additional integration test that verifies plugin features such as metric calculation, coverage, etc. To launch it:
 ```shell
-./gradlew its:plugin:tests:integrationTest
+./gradlew its:plugin:integrationTest
 ```
 
 #### Ruling Test

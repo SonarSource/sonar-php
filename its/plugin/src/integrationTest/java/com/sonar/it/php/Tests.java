@@ -51,7 +51,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class Tests {
 
-  public static final String PROJECT_ROOT_DIR = "../projects/";
+  public static final String PROJECT_ROOT_DIR = "projects/";
 
   private static final String RESOURCE_DIRECTORY = "/com/sonar/it/php/";
 
@@ -59,7 +59,7 @@ class Tests {
 
   public static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
 
-  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardFilename(new File("../../../sonar-php-plugin/build/libs"), "sonar-php-plugin-*-all.jar");
+  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardFilename(new File("../../sonar-php-plugin/build/libs"), "sonar-php-plugin-*-all.jar");
 
   public static final String SCANNER_VERSION = "6.1.0.4477";
   private static final Pattern DEBUG_AND_INFO_LOG_LINE_PATTERN = Pattern.compile("\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s(INFO|DEBUG)\\s.*");
@@ -74,7 +74,7 @@ class Tests {
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "drupal_profile.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "no_rules.xml"))
     // Custom rules plugin
-    .addPlugin(FileLocation.byWildcardFilename(new File("../../../php-custom-rules-plugin/build/libs"), "php-custom-rules-plugin-*-all.jar"))
+    .addPlugin(FileLocation.byWildcardFilename(new File("../../php-custom-rules-plugin/build/libs"), "php-custom-rules-plugin-*-all.jar"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "nosonar.xml"))
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "sleep.xml"))

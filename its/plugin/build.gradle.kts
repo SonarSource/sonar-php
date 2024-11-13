@@ -7,15 +7,17 @@ plugins {
 description = "PHP :: Integration Tests :: Plugin"
 
 dependencies {
-  "integrationTestImplementation"(project(":sonar-php-plugin", configuration = "shadow"))
+  "integrationTestCompileOnly"(project(":sonar-php-plugin", configuration = "shadow"))
   "integrationTestImplementation"(libs.sonar.orchestrator.junit5)
-  "integrationTestImplementation"(libs.junit.platform)
-  "integrationTestImplementation"(libs.sonar.ws)
-  "integrationTestImplementation"(libs.sonarlint.core)
-  "integrationTestImplementation"(libs.sonarlint.plugin.api)
   "integrationTestImplementation"(libs.sonar.plugin.api)
+  "integrationTestImplementation"(libs.sonar.ws)
+  "integrationTestImplementation"(libs.sonar.lint.core)
+  "integrationTestImplementation"(libs.sonar.lint.rpc.java.client)
+  "integrationTestImplementation"(libs.sonar.lint.rpc.impl)
+  "integrationTestImplementation"(libs.junit.platform)
   "integrationTestImplementation"(libs.junit.jupiter)
   "integrationTestImplementation"(libs.assertj.core)
+  "integrationTestImplementation"(libs.awaitility)
   "integrationTestCompileOnly"(libs.jsr305)
 }
 
