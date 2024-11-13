@@ -169,6 +169,11 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
     scan(tree.attributeGroups());
     resolveDeclaredTypeNamespaceName(tree.declaredType());
+
+    var propertyHookListTree = tree.propertyHookList();
+    if (propertyHookListTree != null) {
+      scan(propertyHookListTree);
+    }
   }
 
   @Override
