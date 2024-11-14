@@ -405,6 +405,11 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     if (initValue != null) {
       initValue.accept(this);
     }
+
+    var propertyHookListTree = tree.propertyHookList();
+    if (propertyHookListTree != null) {
+      scan(propertyHookListTree);
+    }
     // do not scan the children to not pass through variableIdentifier
   }
 
