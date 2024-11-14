@@ -552,8 +552,26 @@ class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  void shouldCreateSymbolForFunctionInPropertyHook() {
+  void shouldCreateSymbolForFunctionInVariableDeclarationPropertyHook() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php class A { public int $prop { get { return isset($this->prop2); } } }");
+
+    Symbol symbol = symbolTable.getSymbol("isset");
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
+    assertThat(symbol.is(Symbol.Kind.FUNCTION)).isTrue();
+    assertThat(symbol.usages()).hasSize(1);
+  }
+
+  @Test
+  void shouldCreateSymbolForFunctionInParameterPropertyHook() {
+    SymbolTableImpl symbolTable = symbolTableFor("""
+      <?php
+      class A {
+        public function __construct(
+          public $prop = 42 {
+            get => isset($this->prop);
+          }
+        ) { }
+      }""");
 
     Symbol symbol = symbolTable.getSymbol("isset");
     assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
