@@ -17,6 +17,8 @@ load(
 QA_PLUGIN_GRADLE_TASK = "its:plugin:integrationTest"
 QA_RULING_GRADLE_TASK = "its:ruling:integrationTest"
 QA_QUBE_LATEST_RELEASE = "LATEST_RELEASE"
+# Sonarqube versioning is changing, temporary pin for ITS
+QA_QUBE_DEV = "DEV[10.8]"
 
 
 def on_failure():
@@ -85,7 +87,7 @@ def qa_plugin_env():
     "KEEP_ORCHESTRATOR_RUNNING": "true",
     "matrix": [
       {"SQ_VERSION": QA_QUBE_LATEST_RELEASE},
-      {"SQ_VERSION": "DEV"},
+      {"SQ_VERSION": QA_QUBE_DEV},
     ],
     "GITHUB_TOKEN": "VAULT[development/github/token/licenses-ro token]",
   }
