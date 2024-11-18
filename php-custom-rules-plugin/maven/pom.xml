@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is an alternative way to build the plugin, using Maven instead of Gradle -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.sonar.samples.php</groupId>
+  <artifactId>php-custom-rules-plugin</artifactId>
+  <packaging>jar</packaging>
+  <version>3.39-SNAPSHOT</version>
+
+  <name>SonarSource PHP Custom Rules Example</name>
+  <description>PHP Custom Rules Example for SonarQube</description>
+
+  <properties>
+    <!-- JAR versions -->
+    <version.sonar-plugin-api>10.13.0.2560</version.sonar-plugin-api>
+    <version.sonarqube-plugin-api>10.7.0.96327</version.sonarqube-plugin-api>
+    <version.junit-jupiter>5.10.3</version.junit-jupiter>
+
+    <!-- Advertise minimal required JRE version -->
+    <jre.min.version>17</jre.min.version>
+
+    <!-- JDK Build versions -->
+    <jdk.min.version>17</jdk.min.version>
+    <jdk.source.version>17</jdk.source.version>
+    <jdk.target.version>17</jdk.target.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.sonarsource.api.plugin</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <version>${version.sonar-plugin-api}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.php</groupId>
+      <artifactId>php-frontend</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${version.junit-jupiter}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-plugin-api-impl</artifactId>
+      <version>${version.sonarqube-plugin-api}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.php</groupId>
+      <artifactId>php-frontend</artifactId>
+      <version>${project.version}</version>
+      <classifier>test-fixtures</classifier>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <!-- More details about the configuration here: https://docs.sonarsource.com/sonarqube/latest/extension-guide/developing-a-plugin/plugin-basics/ -->
+        <configuration>
+          <pluginKey>custom</pluginKey>
+          <pluginName>PHP Custom Rules</pluginName>
+          <pluginClass>org.sonar.samples.php.PHPCustomRulesPlugin</pluginClass>
+          <sonarLintSupported>true</sonarLintSupported>
+          <pluginApiMinVersion>9.9</pluginApiMinVersion>
+          <requiredForLanguages>php</requiredForLanguages>
+          <skipDependenciesPackaging>true</skipDependenciesPackaging>
+          <jreMinVersion>${jre.min.version}</jreMinVersion>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedArtifactAttached>false</shadedArtifactAttached>
+              <minimizeJar>true</minimizeJar>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

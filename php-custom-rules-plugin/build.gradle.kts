@@ -19,6 +19,7 @@ description = "PHP Custom Rules Example for SonarQube"
 
 tasks.jar {
   manifest {
+    // More details about the attributes here: https://docs.sonarsource.com/sonarqube/latest/extension-guide/developing-a-plugin/plugin-basics/
     attributes(
       mapOf(
         "Plugin-ChildFirstClassLoader" to "false",
