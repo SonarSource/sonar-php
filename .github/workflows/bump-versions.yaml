@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          mvn versions:set-property -DgenerateBackupPoms=false -Dproperty=revision -DnewVersion=${{ github.event.inputs.version }}
+          sed -i 's/version=.*/version=${{ github.event.inputs.version }}/' gradle.properties
       - uses: peter-evans/create-pull-request@v7
         with:
           author: ${{ github.actor }} <${{ github.actor }}>
