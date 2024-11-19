@@ -3,6 +3,7 @@ plugins {
   id("org.sonarsource.php.code-style-convention")
   id("java-library")
   id("java-test-fixtures")
+  id("maven-publish")
 }
 
 description = "SonarSource PHP Analyzer :: Frontend"
@@ -24,4 +25,15 @@ dependencies {
   testImplementation(libs.sonar.testing.harness)
 
   testFixturesImplementation(libs.sonar.plugin.api.impl)
+}
+
+publishing {
+  repositories {
+    mavenLocal()
+  }
+  publications {
+    create<MavenPublication>("mavenJava") {
+      from(components["java"])
+    }
+  }
 }
