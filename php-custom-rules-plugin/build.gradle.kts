@@ -37,7 +37,7 @@ tasks.jar {
         "Plugin-RequiredForLanguages" to "php",
         "Plugin-SourcesUrl" to "https://github.com/SonarSource/sonar-php",
         "Plugin-Version" to project.version,
-        "Sonar-Version" to "9.9",
+        "Sonar-Version" to "9.13",
         "SonarLint-Supported" to "true",
         "Version" to project.version.toString(),
         "Jre-Min-Version" to java.sourceCompatibility.majorVersion,
