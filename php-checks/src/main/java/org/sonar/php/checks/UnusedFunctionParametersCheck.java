@@ -46,8 +46,8 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1172";
   private static final String MESSAGE = "Remove the unused function parameter \"%s\".";
-  Deque<Boolean> hasFuncGetArgsStack = new ArrayDeque<>();
-  List<IdentifierTree> constructorPromotedProperties = new ArrayList<>();
+  private final Deque<Boolean> hasFuncGetArgsStack = new ArrayDeque<>();
+  private List<IdentifierTree> constructorPromotedProperties = new ArrayList<>();
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
@@ -94,7 +94,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
       List<IdentifierTree> unused = new ArrayList<>();
 
       for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {
-        if (symbol.usages().isEmpty() && !constructorPromotedProperties.contains(symbol.declaration())) {
+        if (!isExcluded(symbol) && symbol.usages().isEmpty() && !constructorPromotedProperties.contains(symbol.declaration())) {
           unused.add(symbol.declaration());
         }
       }
@@ -124,4 +124,10 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
       || (methodSymbol.visibility() != Visibility.PRIVATE && methodSymbol.owner().is(ClassSymbol.Kind.ABSTRACT));
   }
 
+  private static boolean isExcluded(Symbol symbol) {
+    return symbol.name().chars()
+      // skip the leading '$'
+      .skip(1)
+      .allMatch(c -> '_' == c);
+  }
 }

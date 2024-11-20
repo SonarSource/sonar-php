@@ -227,3 +227,13 @@ class Php8Class
   public function __construct(private $a, $b) {} // Noncompliant
 //                                        ^^
 }
+
+// Compliant: exclude underscore as a convention for unused variable
+$x = function($p1, $_, $__) {
+  return $p1;
+};
+
+// Underscore as a prefix has no special meaning
+$x = function($p1, $_p2, $__p3) { // Noncompliant 2
+  return $p1;
+};
