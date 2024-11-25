@@ -48,7 +48,7 @@ def qa_os_win_task():
       "depends_on": "build",
       "ec2_instance": ec2_instance_builder(),
       "env": artifactory_reader_env(),
-      "gradle_cache": gradle_cache(),
+      "gradle_cache": gradle_cache(fingerprint_script="git rev-parse HEAD"),
       "gradle_wrapper_cache": gradle_wrapper_cache(),
       "build_script": qa_win_script(),
       "on_failure": on_failure(),
