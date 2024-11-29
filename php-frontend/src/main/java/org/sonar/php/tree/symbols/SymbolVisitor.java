@@ -22,7 +22,9 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.sonar.api.utils.Preconditions;
 import org.sonar.php.api.PHPKeyword;
@@ -261,8 +263,26 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
   private void createMemberSymbols(ClassTree tree, @Nullable TypeSymbolImpl classSymbol) {
     for (ClassMemberTree member : tree.members()) {
       if (member.is(Kind.METHOD_DECLARATION)) {
-        SymbolImpl symbol = createMemberSymbol(classSymbol, ((MethodDeclarationTree) member).name(), Symbol.Kind.FUNCTION);
-        symbol.addModifiers(((MethodDeclarationTree) member).modifiers());
+        var method = (MethodDeclarationTree) member;
+        var name = method.name();
+
+        SymbolImpl symbol = createMemberSymbol(classSymbol, name, Symbol.Kind.FUNCTION);
+        symbol.addModifiers(method.modifiers());
+
+        if ("__construct".equals(name.text())) {
+          method.parameters().parameters().stream()
+            .filter(ParameterTree::isPropertyPromotion)
+            .forEach(param -> {
+              SymbolImpl fieldSymbol = createMemberSymbol(classSymbol, param.variableIdentifier(), Symbol.Kind.FIELD);
+              var modifiers = Stream.of(param.visibility(), param.readonlyToken()).filter(Objects::nonNull).toList();
+              fieldSymbol.addModifiers(modifiers);
+              ExpressionTree initValue = param.initValue();
+              if (initValue != null) {
+                initValue.accept(this);
+              }
+            });
+        }
+
       } else if (member.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, Kind.CLASS_PROPERTY_DECLARATION)) {
         ClassPropertyDeclarationTree classPropertyDeclaration = (ClassPropertyDeclarationTree) member;
         for (VariableDeclarationTree field : classPropertyDeclaration.declarations()) {

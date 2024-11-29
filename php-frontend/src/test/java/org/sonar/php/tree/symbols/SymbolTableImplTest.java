@@ -100,12 +100,12 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void symbolsFiltering() {
-    assertThat(SYMBOL_MODEL.getSymbols()).hasSize(20);
+    assertThat(SYMBOL_MODEL.getSymbols()).hasSize(23);
 
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FUNCTION)).hasSize(2);
+    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FUNCTION)).hasSize(3);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.CLASS)).hasSize(1);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FIELD)).hasSize(3);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.PARAMETER)).hasSize(1);
+    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FIELD)).hasSize(4);
+    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.PARAMETER)).hasSize(2);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.VARIABLE)).hasSize(13);
 
     assertThat(SYMBOL_MODEL.getSymbols("$a")).hasSize(3);
@@ -135,6 +135,21 @@ class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(constantField.name()).isEqualTo(constantName);
     assertThat(constantField.hasModifier("const")).isTrue();
     assertThat(constantField.is(Symbol.Kind.FIELD)).isTrue();
+  }
+
+  @Test
+  void promotedPropertyGeneratesTwoSymbols() {
+    var symbols = SYMBOL_MODEL.getSymbols("$promoted");
+
+    assertThat(symbols).hasSize(2);
+
+    var fieldSymbol = symbols.get(0);
+    assertThat(fieldSymbol.qualifiedName()).hasToString("a::$promoted");
+    assertThat(fieldSymbol.kind()).isEqualTo(Kind.FIELD);
+
+    var paramSymbol = symbols.get(1);
+    assertThat(paramSymbol.qualifiedName()).isNull();
+    assertThat(paramSymbol.kind()).isEqualTo(Kind.PARAMETER);
   }
 
   @Test

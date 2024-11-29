@@ -22,6 +22,8 @@ class A {                                     // A
 
   public function f($p = 12) {                     // f, $p
   }
+
+  public function __construct(public $promoted = 1) {}
 }
 
 $x = function () use($a) {
