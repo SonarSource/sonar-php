@@ -17,6 +17,7 @@
 package org.sonar.php.tree.symbols;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,6 +29,7 @@ import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.plugins.php.api.symbols.MemberSymbol;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.symbols.TypeSymbol;
@@ -100,12 +102,12 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void symbolsFiltering() {
-    assertThat(SYMBOL_MODEL.getSymbols()).hasSize(20);
+    assertThat(SYMBOL_MODEL.getSymbols()).hasSize(26);
 
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FUNCTION)).hasSize(2);
+    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FUNCTION)).hasSize(3);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.CLASS)).hasSize(1);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FIELD)).hasSize(3);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.PARAMETER)).hasSize(1);
+    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FIELD)).hasSize(5);
+    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.PARAMETER)).hasSize(4);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.VARIABLE)).hasSize(13);
 
     assertThat(SYMBOL_MODEL.getSymbols("$a")).hasSize(3);
@@ -135,6 +137,30 @@ class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(constantField.name()).isEqualTo(constantName);
     assertThat(constantField.hasModifier("const")).isTrue();
     assertThat(constantField.is(Symbol.Kind.FIELD)).isTrue();
+  }
+
+  @Test
+  void promotedPropertiesShouldGenerateSymbols() {
+    assertThat(SYMBOL_MODEL.getSymbols())
+      .map(Symbol::qualifiedName)
+      .filteredOn(Objects::nonNull)
+      .map(QualifiedName::toString)
+      .contains("a::$promoted1", "a::$promoted2");
+  }
+
+  @Test
+  void promotedPropertyShouldGenerateFieldAndParamSymbol() {
+    var symbols = SYMBOL_MODEL.getSymbols("$promoted1");
+
+    assertThat(symbols).hasSize(2);
+
+    var fieldSymbol = symbols.get(0);
+    assertThat(fieldSymbol.qualifiedName()).hasToString("a::$promoted1");
+    assertThat(fieldSymbol.kind()).isEqualTo(Kind.FIELD);
+
+    var paramSymbol = symbols.get(1);
+    assertThat(paramSymbol.qualifiedName()).isNull();
+    assertThat(paramSymbol.kind()).isEqualTo(Kind.PARAMETER);
   }
 
   @Test
