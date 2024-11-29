@@ -270,17 +270,7 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
         symbol.addModifiers(method.modifiers());
 
         if ("__construct".equals(name.text())) {
-          method.parameters().parameters().stream()
-            .filter(ParameterTree::isPropertyPromotion)
-            .forEach(param -> {
-              SymbolImpl fieldSymbol = createMemberSymbol(classSymbol, param.variableIdentifier(), Symbol.Kind.FIELD);
-              var modifiers = Stream.of(param.visibility(), param.readonlyToken()).filter(Objects::nonNull).toList();
-              fieldSymbol.addModifiers(modifiers);
-              ExpressionTree initValue = param.initValue();
-              if (initValue != null) {
-                initValue.accept(this);
-              }
-            });
+          createMemberSymbolsForPromotedProperties(method, classSymbol);
         }
 
       } else if (member.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, Kind.CLASS_PROPERTY_DECLARATION)) {
@@ -295,6 +285,20 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
         }
       }
     }
+  }
+
+  private void createMemberSymbolsForPromotedProperties(MethodDeclarationTree method, @Nullable TypeSymbolImpl classSymbol) {
+    method.parameters().parameters().stream()
+      .filter(ParameterTree::isPropertyPromotion)
+      .forEach(param -> {
+        SymbolImpl fieldSymbol = createMemberSymbol(classSymbol, param.variableIdentifier(), Symbol.Kind.FIELD);
+        var modifiers = Stream.of(param.visibility(), param.readonlyToken()).filter(Objects::nonNull).toList();
+        fieldSymbol.addModifiers(modifiers);
+        ExpressionTree initValue = param.initValue();
+        if (initValue != null) {
+          initValue.accept(this);
+        }
+      });
   }
 
   private SymbolImpl createMemberSymbol(@Nullable TypeSymbolImpl classSymbol, IdentifierTree identifier, Symbol.Kind kind) {
