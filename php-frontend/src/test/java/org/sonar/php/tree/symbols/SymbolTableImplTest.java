@@ -140,7 +140,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  void promotedPropertiesShouldGeneratesSymbols() {
+  void promotedPropertiesShouldGenerateSymbols() {
     assertThat(SYMBOL_MODEL.getSymbols())
       .map(Symbol::qualifiedName)
       .filteredOn(Objects::nonNull)
@@ -149,7 +149,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  void promotedPropertyShouldGeneratesTwoSymbols() {
+  void promotedPropertyShouldGenerateFieldAndParamSymbol() {
     var symbols = SYMBOL_MODEL.getSymbols("$promoted1");
 
     assertThat(symbols).hasSize(2);
