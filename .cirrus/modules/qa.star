@@ -17,8 +17,7 @@ load(
 QA_PLUGIN_GRADLE_TASK = "its:plugin:integrationTest"
 QA_RULING_GRADLE_TASK = "its:ruling:integrationTest"
 QA_QUBE_LATEST_RELEASE = "LATEST_RELEASE"
-# Sonarqube versioning is changing, temporary pin for ITS
-QA_QUBE_DEV = "DEV[10.8]"
+QA_QUBE_DEV = "DEV"
 
 
 def on_failure():
