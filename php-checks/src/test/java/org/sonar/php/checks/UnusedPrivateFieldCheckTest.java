@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class UnusedPrivateFieldCheckTest {
 
   @Test
-  void shouldRaiseExpectedIssues() {
+  void test() throws Exception {
     CheckVerifier.verify(new UnusedPrivateFieldCheck(), "UnusedPrivateFieldCheck.php");
   }
 }
