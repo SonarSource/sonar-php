@@ -36,7 +36,8 @@ public class BooleanEqualityComparisonCheck extends PHPVisitorCheck {
     Kind.ALTERNATIVE_CONDITIONAL_AND,
     Kind.EQUAL_TO,
     Kind.NOT_EQUAL_TO,
-    Kind.ALTERNATIVE_NOT_EQUAL_TO
+    Kind.ALTERNATIVE_NOT_EQUAL_TO,
+    Kind.ALTERNATIVE_CONDITIONAL_XOR
   };
 
   @Override

@@ -18,6 +18,8 @@ a || true         // Noncompliant
   || b
   || true;        // Noncompliant
 (a || true) ? b : c; // Noncompliant
+true xor a;       // Noncompliant
+$a xor false;     // Noncompliant
 
 a === false;      // OK - exception
 a === true;       // OK - exception
