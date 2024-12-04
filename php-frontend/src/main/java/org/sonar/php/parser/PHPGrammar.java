@@ -440,6 +440,7 @@ public class PHPGrammar {
   public SyntaxToken MEMBER_MODIFIER() {
     return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.MEMBER_MODIFIER).is(
       b.firstOf(
+        b.token(PHPLexicalGrammar.ASYMMETRIC_VISIBILITY_MODIFIER),
         VISIBILITY_MODIFIER(),
         b.token(PHPKeyword.READONLY),
         b.token(PHPKeyword.STATIC),

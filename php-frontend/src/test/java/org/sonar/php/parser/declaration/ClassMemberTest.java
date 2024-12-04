@@ -30,6 +30,7 @@ class ClassMemberTest {
       .matches("const A;")
       .matches("private function f() {}")
       .matches("public readonly string $prop;")
-      .matches("public int|null|(A&B) $a;");
+      .matches("public int|null|(A&B) $a;")
+      .matches("public(set) string $a;");
   }
 }

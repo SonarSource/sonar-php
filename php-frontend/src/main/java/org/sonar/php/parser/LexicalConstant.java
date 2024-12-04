@@ -142,6 +142,11 @@ public class LexicalConstant {
    */
   public static final String NUMERIC_LITERAL = EXPONENT_DNUM + "|" + DNUM + "|" + INTEGER_LITERAL;
 
+  /**
+   * Other
+   */
+  public static final String ASYMMETRIC_VISIBILITY_MODIFIER = "(?i)(?:public|protected|private)\\(set\\)";
+
   private LexicalConstant() {
   }
 

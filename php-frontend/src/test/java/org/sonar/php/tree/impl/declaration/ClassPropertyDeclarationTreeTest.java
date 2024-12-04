@@ -55,15 +55,30 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
       .matches("readonly $a;")
       .matches("var $a;")
 
+      // all possible asymmetric visibility
+      .matches("public(set) string $a;")
+      .matches("protected(set) string $a;")
+      .matches("private(set) string $a;")
+
+      // any order is possible for modifiers, including asymmetric visibility
+      .matches("readonly public protected(set) final string $prop;")
+      .matches("public readonly protected(set) final string $prop;")
+      .matches("readonly protected(set) public final string $prop;")
+      .matches("final readonly public protected(set) string $prop;")
+      .matches("readonly public final protected(set) string $prop;")
+
+      // not valid php, but we still parse these
       .matches("final $a;")
       .matches("public private $a;")
+      .matches("private public(set) string $a;")
 
       .matches("public string $a { get; }")
       .matches("public string $a { get { return $this-> a + 1; } }")
       .matches("public string $a { final set($value) => $value - 1; }")
 
       .notMatches("public final A;")
-      .notMatches("$a;");
+      .notMatches("$a;")
+      .notMatches("public( set ) string $a;");
   }
 
   @Test
@@ -253,6 +268,14 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.propertyHookList().hooks()).hasSize(2);
     assertThat(tree.propertyHookList().closeCurlyBrace()).isNotNull();
     assertThat(tree.eosToken()).isNull();
+  }
+
+  @Test
+  void shouldSupportAsymmetricVisibilityModifier() {
+    ClassPropertyDeclarationTree tree = parse("protected(set) string $staticProp;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
+    assertThat(tree.modifierTokens()).extracting(SyntaxToken::text).containsExactly("protected(set)");
+    assertThat(builtinType(tree)).isEqualTo("string");
   }
 
   /**
