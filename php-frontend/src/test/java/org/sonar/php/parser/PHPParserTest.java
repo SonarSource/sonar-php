@@ -23,10 +23,12 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 class PHPParserTest {
 
   @Test
-  void expression() {
+  void shouldParseExpression() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.EXPRESSION);
     BinaryExpressionTree tree = (BinaryExpressionTree) parser.parse("$a + $b + $c");
     Assertions.assertThat(tree.getParent()).isNull();
@@ -39,10 +41,24 @@ class PHPParserTest {
   }
 
   @Test
-  void forEach() {
+  void shouldParseForEach() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.FOREACH_STATEMENT);
     ForEachStatementTree tree = (ForEachStatementTree) parser.parse("foreach ($arr as &$value) { }");
     Assertions.assertThat(tree.expression().getParent()).isSameAs(tree);
   }
 
+  @Test
+  void shouldParseAsymmetricVisibilityInConstructor() {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
+    assertDoesNotThrow(() -> parser.parse("""
+      <?php
+      class Book
+      {
+        public function __construct(
+          public private(set) string $title,
+              public protected(set) string $author,
+              protected private(set) int $pubYear,
+          ) {}
+      }"""));
+  }
 }
