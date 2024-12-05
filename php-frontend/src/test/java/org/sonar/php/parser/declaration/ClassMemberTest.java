@@ -37,6 +37,5 @@ class ClassMemberTest {
       .notMatches("public( set) string $a;") // spaces are not accepted
       .notMatches("public(set ) string $a;")
       .notMatches("public( set ) string $a;");
-    ;
   }
 }
