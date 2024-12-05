@@ -34,8 +34,9 @@ class ClassMemberTest {
       .matches("public(set) string $a;")
       .matches("protected(set) string $a;")
       .matches("private(set) string $a;")
-      .notMatches("public( set) string $a;")   // spaces are not accepted
+      .notMatches("public( set) string $a;") // spaces are not accepted
       .notMatches("public(set ) string $a;")
-      .notMatches("public( set ) string $a;");;
+      .notMatches("public( set ) string $a;");
+    ;
   }
 }
