@@ -1,5 +1,6 @@
 <?php
 
+
   setcookie($name, $value, $expire, $path, $domain, true, false); // Noncompliant {{Make sure creating this cookie without the "httpOnly" flag is safe here.}}
 //^^^^^^^^^                                               ^^^^^ <
   setrawcookie($name, $value, $expire, $path, $domain, true, false); // Noncompliant {{Make sure creating this cookie without the "httpOnly" flag is safe here.}}
@@ -12,6 +13,16 @@ setcookie($name, $value, $expire, $path, $domain, false); // Noncompliant
 setcookie($name, $value, $expire, $path, $domain, true, $httpOnly);
 setcookie($name, $value, $expire, $path);  // Noncompliant
 setcookie($name, $value); // Noncompliant
+
+
+setcookie("tokenIdentity"); // Compliant; cookie value is empty by default
+setcookie("tokenIdentity", path:"/", value:'foo', expires_or_options:time() - 42000); // Compliant; cookie value is hardcoded
+setcookie(session_name(), '', time() - 3600, '/'); // Compliant; cookie value is hardcoded
+setcookie(session_name(), "", time() - 3600, '/'); // Compliant; cookie value is hardcoded
+\setcookie(\session_name(), null, -1, \OC::$WEBROOT ? : '/'); // Compliant; cookie value is  null
+setcookie("tokenIdentity", 'foo', time() - 42000, "/"); // Compliant; cookie value is hardcoded
+setcookie("tokenIdentity", "foo", time() - 42000, "/"); // Compliant; cookie value is hardcoded
+
 
 setrawcookie($name, $value, $expire, $path, $domain, true, foo(false));
 setrawcookie($name, $value, $expire, $path, $domain, true, true);

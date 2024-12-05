@@ -70,7 +70,7 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
         createIssueIfHttpOnlyIsFalse(argument.get().value(), tree);
       } else if (tree.callArguments().size() != 3) {
         // if only 3 argument are defined there is an ambiguity so we don't raise issue
-        context().newIssue(this, tree.callee(), MESSAGE);
+        createIssueIfCookieValueIsNotHardcoded(tree);
       }
     }
     if (isSymfonyCookieCreation(tree)) {
@@ -108,5 +108,17 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
     if (isFalseValue(argument)) {
       context().newIssue(this, tree.callee(), MESSAGE).secondary(argument, null);
     }
+  }
+
+  private void createIssueIfCookieValueIsNotHardcoded(FunctionCallTree tree) {
+    Optional<CallArgumentTree> cookieValue = CheckUtils.argument(tree, "value", 1);
+    if (cookieValue.isEmpty() || isHardcodedOrNullCookieValue(cookieValue.get())) {
+      return;
+    }
+    context().newIssue(this, tree.callee(), MESSAGE);
+  }
+
+  private static boolean isHardcodedOrNullCookieValue(CallArgumentTree cookieValue) {
+    return cookieValue.value().is(Kind.NULL_LITERAL) || cookieValue.value().is(Kind.REGULAR_STRING_LITERAL);
   }
 }
