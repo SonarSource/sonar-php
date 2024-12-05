@@ -130,6 +130,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
     assertThat(field.name()).isEqualTo(fieldName);
     assertThat(field.hasModifier("public")).isTrue();
+    assertThat(field.hasModifier("private(set)")).isTrue();
     assertThat(field.is(Symbol.Kind.FIELD)).isTrue();
 
     assertThat(constantField.name()).isEqualTo(constantName);

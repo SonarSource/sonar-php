@@ -17,7 +17,7 @@ function f() {                                // f
 }
 
 class A {                                     // A
-  public $fieldOne, $field2 = 1;                // $field1, $field2
+  public private(set) string $fieldOne, $field2 = 1;                // $field1, $field2
   const CONSTANT_FIELD;                       // $constantField
 
   public function f($p = 12) {                     // f, $p
