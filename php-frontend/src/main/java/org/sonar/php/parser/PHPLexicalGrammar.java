@@ -57,6 +57,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   MEMBER_MODIFIER,
   CLASS_CONST_MODIFIER,
   VISIBILITY_MODIFIER,
+  ASYMMETRIC_VISIBILITY_MODIFIER,
   MEMBER_CONST_DECLARATION,
   FUNCTION_CALL_ARGUMENT,
 
@@ -312,6 +313,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(BACKTICK).is("`");
     // FIXME: this recovery is introduce in order to parse ${var}, as expression cannot match keywords.
     b.rule(SEMI_COMPLEX_RECOVERY_EXPRESSION).is(b.regexp("[^}]++"));
+    b.rule(ASYMMETRIC_VISIBILITY_MODIFIER).is(SPACING, b.regexp(LexicalConstant.ASYMMETRIC_VISIBILITY_MODIFIER));
 
     // Identifier
     b.rule(WHITESPACES).is(b.regexp("[" + LexicalConstant.WHITESPACE + "]*+"));

@@ -30,6 +30,12 @@ class ClassMemberTest {
       .matches("const A;")
       .matches("private function f() {}")
       .matches("public readonly string $prop;")
-      .matches("public int|null|(A&B) $a;");
+      .matches("public int|null|(A&B) $a;")
+      .matches("public(set) string $a;")
+      .matches("protected(set) string $a;")
+      .matches("private(set) string $a;")
+      .notMatches("public( set) string $a;") // spaces are not accepted
+      .notMatches("public(set ) string $a;")
+      .notMatches("public( set ) string $a;");
   }
 }

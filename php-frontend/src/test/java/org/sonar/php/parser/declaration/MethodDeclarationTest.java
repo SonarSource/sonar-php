@@ -53,6 +53,8 @@ class MethodDeclarationTest {
       .matches("public function __construct(protected readonly $prop) {}")
       .matches("public function __construct(protected readonly string $prop) {}")
       .matches("public function __construct(readonly protected $prop) {}")
+      .matches("public function __construct(readonly public protected(set) $prop) {}")
+      .matches("public function __construct(protected(set) $prop) {}")
       .matches("public function __construct(readonly protected string $prop) {}")
       .matches("public function __construct(readonly $prop) {}")
       .matches("public function __construct(public $p { get; }) {}")
