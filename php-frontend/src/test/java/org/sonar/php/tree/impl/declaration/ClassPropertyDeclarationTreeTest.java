@@ -75,6 +75,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
       .matches("public string $a { get; }")
       .matches("public string $a { get { return $this-> a + 1; } }")
       .matches("public string $a { final set($value) => $value - 1; }")
+      .matches("public protected(set) string $a { get; }")
 
       .notMatches("public final A;")
       .notMatches("$a;")
