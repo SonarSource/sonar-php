@@ -32,6 +32,15 @@ class C1 {       // OK
   public function f2();
 }
 
+class TestClass {       // OK
+
+  public function test_f1();
+
+  public function f2();
+
+  public function f3();
+}
+
 $x = new class {       // Noncompliant
 //       ^^^^^
 

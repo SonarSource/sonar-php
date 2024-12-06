@@ -4,8 +4,5 @@
 ],
 "PHPMailer:src/SMTP.php": [
 31
-],
-"PHPMailer:test/PHPMailer/PHPMailerTest.php": [
-24
 ]
 }

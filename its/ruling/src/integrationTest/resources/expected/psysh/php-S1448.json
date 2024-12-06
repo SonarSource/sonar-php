@@ -28,11 +28,5 @@
 ],
 "psysh:src/Shell.php": [
 51
-],
-"psysh:test/ConfigurationTest.php": [
-25
-],
-"psysh:test/ShellTest.php": [
-23
 ]
 }

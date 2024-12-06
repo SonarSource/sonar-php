@@ -20,6 +20,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -74,4 +75,10 @@ public interface MethodDeclarationTree extends ClassMemberTree, FunctionTree {
   @Override
   Tree body();
 
+  /**
+   * Provide access to the symbol associated to the method.
+   * @return the symbol of the method, null if the symbol has not been resolved
+   */
+  @Nullable
+  MethodSymbol symbol();
 }
