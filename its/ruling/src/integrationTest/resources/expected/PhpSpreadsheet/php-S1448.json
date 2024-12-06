@@ -151,41 +151,5 @@
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php": [
 23
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/CalculationTest.php": [
-15
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/CoordinateTest.php": [
-12
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/IOFactoryTest.php": [
-14
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/ReferenceHelperTest.php": [
-18
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/DateTest.php": [
-14
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/SpreadsheetTest.php": [
-12
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php": [
-15
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/AutoFilter/AutoFilterTest.php": [
-12
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/Table/TableTest.php": [
-16
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/Worksheet2Test.php": [
-12
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/WorksheetTest.php": [
-18
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ConditionalTest.php": [
-15
 ]
 }

@@ -55,26 +55,5 @@
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
 33
-],
-"PHPWord:tests/PhpWordTests/Metadata/SettingsTest.php": [
-31
-],
-"PHPWord:tests/PhpWordTests/Shared/HtmlTest.php": [
-36
-],
-"PHPWord:tests/PhpWordTests/Style/TextBoxTest.php": [
-30
-],
-"PHPWord:tests/PhpWordTests/TemplateProcessorTest.php": [
-39
-],
-"PHPWord:tests/PhpWordTests/Writer/Word2007/ElementTest.php": [
-31
-],
-"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/DocumentTest.php": [
-33
-],
-"PHPWord:tests/PhpWordTests/Writer/Word2007/Part/SettingsTest.php": [
-33
 ]
 }

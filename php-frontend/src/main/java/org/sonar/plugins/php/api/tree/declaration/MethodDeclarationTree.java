@@ -76,7 +76,8 @@ public interface MethodDeclarationTree extends ClassMemberTree, FunctionTree {
   Tree body();
 
   /**
-   * Returns the symbol associated to the method.
+   * Provide access to the symbol associated to the method.
+   * @return the symbol of the method, null if the symbol has not been resolved
    */
   @Nullable
   MethodSymbol symbol();
