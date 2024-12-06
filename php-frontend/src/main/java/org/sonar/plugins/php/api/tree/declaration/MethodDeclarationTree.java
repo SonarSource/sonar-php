@@ -75,7 +75,9 @@ public interface MethodDeclarationTree extends ClassMemberTree, FunctionTree {
   @Override
   Tree body();
 
+  /**
+   * Returns the symbol associated to the method.
+   */
   @Nullable
   MethodSymbol symbol();
-
 }

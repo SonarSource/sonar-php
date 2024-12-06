@@ -31,18 +31,18 @@ class TooManyMethodsInClassCheckTest {
   private static final String FILE_NAME = "TooManyMethodsInClassCheck.php";
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
-  void customMaximumMethodThreshold() throws Exception {
+  void customMaximumMethodThreshold() {
     check.maximumMethodThreshold = 2;
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  void customCountNonPublicMethod() throws Exception {
+  void customCountNonPublicMethod() {
     check.maximumMethodThreshold = 2;
     check.countNonpublicMethods = false;
 
