@@ -90,11 +90,15 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
   }
 
   /**
-   * Return true if method is private or protected.
+   * Return true if method is private, protected or is a test method.
    */
   private boolean isExcluded(MethodDeclarationTree tree) {
-    if (!countNonpublicMethods) {
+    var methodSymbol = tree.symbol();
+    if (methodSymbol != null && methodSymbol.isTestMethod().isTrue()) {
+      return true;
+    }
 
+    if (!countNonpublicMethods) {
       for (SyntaxToken modifierToken : tree.modifiers()) {
         String modifier = modifierToken.text();
         if (PHPKeyword.PROTECTED.getValue().equals(modifier) || PHPKeyword.PRIVATE.getValue().equals(modifier)) {
