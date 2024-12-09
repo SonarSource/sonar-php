@@ -1,7 +1,7 @@
 [versions]
 sonar-commons = "2.16.0.3141"
 sonar-plugin-api = "10.14.0.2599"
-sonarqube = "10.7.0.96327"
+sonarqube = "24.12.0.100206"
 sonar-scanner-gradle = "6.0.1.5171"
 sonar-orchestrator = "5.1.0.2254"
 sonarlint = "10.10.0.79572"
