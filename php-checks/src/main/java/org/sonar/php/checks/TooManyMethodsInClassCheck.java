@@ -93,8 +93,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
    * Return true if method is private, protected or is a test method.
    */
   private boolean isExcluded(MethodDeclarationTree tree) {
-    var methodSymbol = tree.symbol();
-    if (methodSymbol != null && methodSymbol.isTestMethod().isTrue()) {
+    if (tree.symbol().isTestMethod().isTrue()) {
       return true;
     }
 
