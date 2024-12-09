@@ -23,7 +23,6 @@ import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.symbols.HasMethodSetSymbol;
-import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
