@@ -20,7 +20,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.tree.symbols.HasMethodSymbol;
+import org.sonar.plugins.php.api.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;

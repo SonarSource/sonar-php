@@ -14,12 +14,19 @@
  * You should have received a copy of the Sonar Source-Available License
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
-package org.sonar.php.tree.symbols;
+package org.sonar.plugins.php.api.symbols;
 
 import org.sonar.php.symbols.MethodSymbol;
 
+/**
+ * Represents an object that has a method symbol.
+ */
 public interface HasMethodSymbol {
 
+  /**
+   * Provide access to the method symbol associated to the object.
+   * @return the method symbol
+   */
   MethodSymbol symbol();
 
 }
