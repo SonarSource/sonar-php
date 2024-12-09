@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.symbols.HasMethodSetSymbol;
 import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -33,7 +34,7 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarationTree, HasMethodSymbol {
+public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarationTree, HasMethodSetSymbol {
 
   private static final Kind KIND = Kind.METHOD_DECLARATION;
 
