@@ -130,6 +130,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     this.symbol = symbol;
   }
 
+  @Override
   public MethodSymbol symbol() {
     return symbol;
   }

@@ -1,18 +1,9 @@
 {
-"flysystem:src/AdapterTestUtilities/FilesystemAdapterTestCase.php": [
-35
-],
 "flysystem:src/AsyncAwsS3/AsyncAwsS3Adapter.php": [
 46
 ],
-"flysystem:src/AsyncAwsS3/AsyncAwsS3AdapterTest.php": [
-34
-],
 "flysystem:src/AwsS3V3/AwsS3V3Adapter.php": [
 42
-],
-"flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
-33
 ],
 "flysystem:src/AwsS3V3/S3ClientStub.php": [
 22
@@ -23,14 +14,8 @@
 "flysystem:src/Filesystem.php": [
 18
 ],
-"flysystem:src/FilesystemTest.php": [
-25
-],
 "flysystem:src/Ftp/FtpAdapter.php": [
 37
-],
-"flysystem:src/Ftp/FtpAdapterTestCase.php": [
-27
 ],
 "flysystem:src/GoogleCloudStorage/GoogleCloudStorageAdapter.php": [
 46
@@ -38,20 +23,11 @@
 "flysystem:src/GridFS/GridFSAdapter.php": [
 33
 ],
-"flysystem:src/InMemory/InMemoryFilesystemAdapterTest.php": [
-22
-],
 "flysystem:src/Local/LocalFilesystemAdapter.php": [
 50
 ],
-"flysystem:src/Local/LocalFilesystemAdapterTest.php": [
-43
-],
 "flysystem:src/MountManager.php": [
 14
-],
-"flysystem:src/MountManagerTest.php": [
-17
 ],
 "flysystem:src/PathPrefixing/PathPrefixedAdapter.php": [
 30
@@ -67,8 +43,5 @@
 ],
 "flysystem:src/ZipArchive/ZipArchiveAdapter.php": [
 34
-],
-"flysystem:src/ZipArchive/ZipArchiveAdapterTestCase.php": [
-25
 ]
 }

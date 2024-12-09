@@ -31,24 +31,24 @@ class TooManyMethodsInClassCheckTest {
   private static final String FILE_NAME = "TooManyMethodsInClassCheck.php";
 
   @Test
-  void defaultValue() throws Exception {
+  void shouldReportNoIssueOnDefaultValue() {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
-  void customMaximumMethodThreshold() throws Exception {
+  void shouldReportIssuesWithCustomThreshold() {
     check.maximumMethodThreshold = 2;
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  void customCountNonPublicMethod() throws Exception {
+  void shouldReportIssuesWithCustomThresholdAndWithoutNonPublicMethods() {
     check.maximumMethodThreshold = 2;
     check.countNonpublicMethods = false;
 
     List<PhpIssue> issues = Arrays.asList(
       new LineIssue(check, 3, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes."),
-      new LineIssue(check, 35, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes."));
+      new LineIssue(check, 44, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes."));
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues);
   }
 

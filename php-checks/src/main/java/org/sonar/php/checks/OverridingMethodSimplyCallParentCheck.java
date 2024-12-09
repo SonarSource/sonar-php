@@ -126,8 +126,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
   }
 
   private static boolean hasSameParameterList(MethodDeclarationTree method, MethodSymbol other) {
-    MethodSymbol methodSymbol = ((HasMethodSymbol) method).symbol();
-
+    var methodSymbol = ((HasMethodSymbol) method).symbol();
     List<Parameter> parameters = methodSymbol.parameters();
     List<Parameter> otherParameters = other.parameters();
     if (parameters.size() != otherParameters.size()) {
@@ -142,7 +141,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
   }
 
   private static boolean hasSameVisibilityAs(MethodDeclarationTree method, MethodSymbol other) {
-    return ((HasMethodSymbol) method).symbol().visibility().equals(other.visibility());
+    return ((HasMethodSymbol) method).symbol().visibility() == other.visibility();
   }
 
   private static boolean isFunctionCalledWithSameArgumentsAsDeclared(FunctionCallTree functionCallTree, MethodDeclarationTree method) {
