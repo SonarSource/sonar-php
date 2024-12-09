@@ -9,13 +9,20 @@ class C {
   private static $field4;     // OK
   private static $field5;     // OK
 
+  public function __construct(
+    public $promotedPublic,
+    private $promotedPrivateUsed,
+    private $promotedPrivateUnused // Noncompliant
+  ) {}
+
   public function f($field1) {
-    return $field1 + $this->field2;
+    return $field1 + $this->field2 + $this->promotedPrivateUsed;
   }
 
   public function g() {
     return $this->myArray[0] + self::$field4 + static::$field5;
   }
+
 }
 
 class D {
