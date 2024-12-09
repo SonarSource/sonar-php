@@ -19,6 +19,7 @@ package org.sonar.php.checks;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -93,7 +94,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
    * Return true if method is private, protected or is a test method.
    */
   private boolean isExcluded(MethodDeclarationTree tree) {
-    if (tree.symbol().isTestMethod().isTrue()) {
+    if (((HasMethodSymbol) tree).symbol().isTestMethod().isTrue()) {
       return true;
     }
 

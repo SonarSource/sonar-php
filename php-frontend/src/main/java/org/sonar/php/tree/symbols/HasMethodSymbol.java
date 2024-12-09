@@ -18,7 +18,9 @@ package org.sonar.php.tree.symbols;
 
 import org.sonar.php.symbols.MethodSymbol;
 
-public interface HasMethodSetSymbol {
+public interface HasMethodSymbol {
+
+  MethodSymbol symbol();
 
   void setSymbol(MethodSymbol symbol);
 

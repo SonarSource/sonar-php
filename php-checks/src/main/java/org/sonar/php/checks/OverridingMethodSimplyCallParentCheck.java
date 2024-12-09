@@ -27,6 +27,7 @@ import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Parameter;
 import org.sonar.php.symbols.Symbol;
 import org.sonar.php.tree.symbols.HasClassSymbol;
+import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -125,7 +126,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
   }
 
   private static boolean hasSameParameterList(MethodDeclarationTree method, MethodSymbol other) {
-    var methodSymbol = method.symbol();
+    var methodSymbol = ((HasMethodSymbol) method).symbol();
     List<Parameter> parameters = methodSymbol.parameters();
     List<Parameter> otherParameters = other.parameters();
     if (parameters.size() != otherParameters.size()) {
@@ -140,7 +141,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
   }
 
   private static boolean hasSameVisibilityAs(MethodDeclarationTree method, MethodSymbol other) {
-    return method.symbol().visibility() == other.visibility();
+    return ((HasMethodSymbol) method).symbol().visibility() == other.visibility();
   }
 
   private static boolean isFunctionCalledWithSameArgumentsAsDeclared(FunctionCallTree functionCallTree, MethodDeclarationTree method) {
