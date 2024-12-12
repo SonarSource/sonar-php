@@ -6,7 +6,8 @@
 61,
 64,
 67,
-73
+73,
+78
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidVariableNameUnitTest.inc": [
 19,

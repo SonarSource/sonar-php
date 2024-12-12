@@ -32,10 +32,9 @@ import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = UnusedPrivateFieldCheck.KEY)
+@Rule(key = "S1068")
 public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S1068";
   private static final String MESSAGE = "Remove this unused \"%s\" private field.";
 
   private static final Set<String> constantUsedBeforeInit = new HashSet<>();
