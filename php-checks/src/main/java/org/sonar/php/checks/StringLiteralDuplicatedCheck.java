@@ -36,7 +36,9 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Define a constant instead of duplicating this literal \"%s\" %s times.";
   private static final String SECONDARY_MESSAGE = "Duplication.";
 
-  private static final Pattern ALLOWED_DUPLICATED_LITERALS = Pattern.compile("^[a-zA-Z_][.\\-\\w]+$");
+  private static final String ONLY_ALPHANUMERIC_UNDERSCORES_HYPHENS_AND_PERIODS = "^[a-zA-Z_][.\\-\\w]+$";
+  private static final String HTML_SIMPLE_TAG = "^</?[a-zA-Z][a-zA-Z0-9\\-_:.]*>$";
+  private static final Pattern ALLOWED_DUPLICATED_LITERALS = Pattern.compile(ONLY_ALPHANUMERIC_UNDERSCORES_HYPHENS_AND_PERIODS + "|" + HTML_SIMPLE_TAG);
 
   private final Map<String, LiteralTree> firstOccurrenceTrees = new HashMap<>();
   private final Map<String, List<LiteralTree>> sameLiteralOccurrences = new HashMap<>();
