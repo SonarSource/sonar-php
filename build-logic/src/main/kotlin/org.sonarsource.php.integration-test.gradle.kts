@@ -51,4 +51,6 @@ tasks.register<Test>("integrationTest") {
     exceptionFormat = TestExceptionFormat.FULL // log the full stack trace (default is the 1st line of the stack trace)
     events("skipped", "failed") // verbose log for failed and skipped tests (by default the name of the tests are not logged)
   }
+
+  outputs.upToDateWhen { false }
 }
