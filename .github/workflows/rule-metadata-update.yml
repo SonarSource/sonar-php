@@ -1,0 +1,34 @@
+name: rule-metadata-update
+on:
+  workflow_dispatch:
+  
+jobs:
+  rule-metadata-update:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write     # required by SonarSource/vault-action-wrapper
+      contents: write # write for peter-evans/create-pull-request, read for actions/checkout
+      pull-requests: write # write for peter-evans/create-pull-request
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get vault secrets
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader role | ARTIFACTORY_ROLE;
+      - uses: gradle/actions/setup-gradle@v4
+      - run: |
+          ./gradlew :ruleApiUpdate -PartifactoryUsername=${ARTIFACTORY_ROLE} -PartifactoryPassword=${ARTIFACTORY_ACCESS_TOKEN}
+        env:
+          ARTIFACTORY_ROLE: vault-${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ROLE }}
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          author: ${{ github.actor }} <${{ github.actor }}>
+          commit-message: Update rule metadata
+          title: Update rule metadata
+          base: master
+          branch: bot/rule-metadata-update
+          branch-suffix: timestamp
