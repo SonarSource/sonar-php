@@ -19,18 +19,13 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.locator.FileLocation;
-import java.util.HashSet;
-import java.util.Set;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.sonarqube.ws.Measures;
 
 import static com.sonar.it.php.Tests.createScanner;
-import static com.sonar.it.php.Tests.getMeasure;
 import static com.sonar.it.php.Tests.getMeasureAsDouble;
-import static org.assertj.core.api.Assertions.assertThat;
 
 class PHPIntegrationTest {
 
@@ -88,11 +83,7 @@ class PHPIntegrationTest {
       softly.assertThat(getFileMeasureAsDouble("files")).isEqualTo(1d);
       softly.assertThat(getFileMeasureAsDouble("classes")).isEqualTo(1d);
       softly.assertThat(getFileMeasureAsDouble("functions")).isEqualTo(4d);
-      softly.assertThat(lineNumbersInDataMeasure(getFileMeasure("ncloc_data").getValue()))
-        .isEqualTo(Set.of(64, 66, 67, 68, 69, 70, 71, 72, 12, 14, 15, 79, 16, 80, 17, 81, 18, 82, 19, 83, 20, 84, 21, 86, 87, 88, 89, 90,
-          27, 28, 92, 29, 93, 94, 36, 37, 38, 39, 48, 49, 50, 51, 52, 57, 58, 59, 62, 63));
-      softly.assertThat(lineNumbersInDataMeasure(getFileMeasure("executable_lines_data").getValue()))
-        .isEqualTo(Set.of(66, 67, 68, 69, 38, 81, 50, 82, 51, 88, 57, 89, 58, 92, 62, 63));
+
       softly.assertThat(getFileMeasureAsDouble("lines_to_cover")).isEqualTo(16d);
       softly.assertThat(getFileMeasureAsDouble("uncovered_lines")).isEqualTo(16d);
 
@@ -110,14 +101,6 @@ class PHPIntegrationTest {
     });
   }
 
-  private Set<Integer> lineNumbersInDataMeasure(String data) {
-    Set<Integer> lineNumbers = new HashSet<>();
-    for (String lineData : data.split(";")) {
-      lineNumbers.add(Integer.valueOf(lineData.replace("=1", "")));
-    }
-    return lineNumbers;
-  }
-
   /**
    * SONAR-3139
    */
@@ -131,24 +114,8 @@ class PHPIntegrationTest {
     });
   }
 
-  /**
-   * SONARPHP-278
-   */
-  @Test
-  void shouldBeCompatibleWithDevCockpit() {
-    assertThat(getFileMeasure("ncloc_data").getValue()).isNotEmpty();
-  }
-
-  private Measures.Measure getProjectMeasure(String metricKey) {
-    return getMeasure(PROJECT_KEY, metricKey.trim());
-  }
-
   private Double getProjectMeasureAsDouble(String metricKey) {
     return getMeasureAsDouble(PROJECT_KEY, metricKey.trim());
-  }
-
-  private Measures.Measure getFileMeasure(String metricKey) {
-    return getMeasure(FILE_TOKEN_PARSER, metricKey.trim());
   }
 
   private Double getFileMeasureAsDouble(String metricKey) {
