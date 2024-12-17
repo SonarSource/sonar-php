@@ -43,12 +43,6 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   private static final String ONLY_ALPHANUMERIC_UNDERSCORES_HYPHENS_AND_PERIODS = "^[a-zA-Z_][.\\-\\w]+$";
 
-  private final Map<String, LiteralTree> firstOccurrenceTrees = new HashMap<>();
-  private final Map<String, List<LiteralTree>> sameLiteralOccurrences = new HashMap<>();
-
-  public static final int THRESHOLD_DEFAULT = 3;
-  public static final int MINIMAL_LITERAL_LENGTH_DEFAULT = 5;
-
   // Single elements
   private static final String IDENTIFIER = "[a-zA-Z][a-zA-Z0-9\\-_:.]*+";
   private static final String OPT_SPACING = "\\s*+";
@@ -60,7 +54,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   // Partial elements matching
   private static final String DOUBLE_QUOTED_STRING_PARTIAL_START = "\"(?:\\\\.|[^\"])*+";
   private static final String SINGLE_QUOTED_STRING_PARTIAL_START = "'(?:\\\\.|[^'])*+";
-  private static final String NO_QUOTED_STRING_PARTIAL_START = "[a-zA-Z0-9\\\\-_:./]++";
+  private static final String NO_QUOTED_STRING_PARTIAL_START = "[a-zA-Z0-9\\-_:./]++";
   private static final String TAG_ATTRIBUTE_PARTIAL_START = OPT_SPACING
     + optional("=", OPT_SPACING, optional(firstOf(DOUBLE_QUOTED_STRING_PARTIAL_START, SINGLE_QUOTED_STRING_PARTIAL_START, NO_QUOTED_STRING_PARTIAL_START)));
 
@@ -80,6 +74,12 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
     HTML_TAG_PARTIAL_END + OPT_TEXT_OUTSIDE_OF_TAGS + HTML_TAG_PARTIAL_START,
     ONLY_ALPHANUMERIC_UNDERSCORES_HYPHENS_AND_PERIODS);
   private static final Pattern ALLOWED_DUPLICATED_LITERALS = Pattern.compile(FULL_ALLOWED_LITERALS_REGEX);
+
+  public static final int THRESHOLD_DEFAULT = 3;
+  public static final int MINIMAL_LITERAL_LENGTH_DEFAULT = 5;
+
+  private final Map<String, LiteralTree> firstOccurrenceTrees = new HashMap<>();
+  private final Map<String, List<LiteralTree>> sameLiteralOccurrences = new HashMap<>();
 
   @RuleProperty(
     key = "threshold",

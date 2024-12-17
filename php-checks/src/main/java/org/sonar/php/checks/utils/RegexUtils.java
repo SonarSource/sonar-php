@@ -16,7 +16,7 @@
  */
 package org.sonar.php.checks.utils;
 
-public class RegexUtils {
+public final class RegexUtils {
   private RegexUtils() {
   }
 
