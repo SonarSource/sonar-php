@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -103,9 +102,10 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   private void finish() {
     for (Map.Entry<String, List<LiteralTree>> literalOccurrences : sameLiteralOccurrences.entrySet()) {
+      String value = literalOccurrences.getKey();
       List<LiteralTree> occurrences = literalOccurrences.getValue();
 
-      if (occurrences.size() >= threshold) {
+      if (occurrences.size() >= threshold && !ALLOWED_DUPLICATED_LITERALS.matcher(value).matches()) {
         String literal = literalOccurrences.getKey();
         String message = String.format(MESSAGE, literal, occurrences.size());
         LiteralTree firstOccurrenceTree = firstOccurrenceTrees.get(literal);
@@ -121,9 +121,9 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   public void visitLiteral(LiteralTree tree) {
     if (tree.is(Kind.REGULAR_STRING_LITERAL)) {
       String literal = tree.value().replace("\\'", "'").replace("\\\"", "\"");
-      String value = StringUtils.substring(literal, 1, literal.length() - 1);
+      String value = removeQuotesAndQuotesEscaping(literal);
 
-      if (value.length() >= minimalLiteralLength && !ALLOWED_DUPLICATED_LITERALS.matcher(value).matches()) {
+      if (value.length() >= minimalLiteralLength) {
         if (!sameLiteralOccurrences.containsKey(value)) {
           List<LiteralTree> occurrences = new ArrayList<>();
           occurrences.add(tree);
@@ -134,6 +134,11 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
         }
       }
     }
+  }
+
+  private static String removeQuotesAndQuotesEscaping(String s) {
+    char quote = s.charAt(0);
+    return s.substring(1, s.length() - 1).replace("\\" + quote, String.valueOf(quote));
   }
 
 }
