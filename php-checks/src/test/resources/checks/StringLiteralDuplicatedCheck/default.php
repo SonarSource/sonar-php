@@ -130,6 +130,11 @@ $test = 'end-of-tag="val"> some content <div start-of-tag="val" ';
 $test = 'end-of-tag="val"> some content <div start-of-tag="val" ';
 $test = 'end-of-tag="val"> some content <div start-of-tag="val" ';
 
+// end and start tag with content and HTML tags between
+$test = 'end-of-tag="val"> some <i>extra</i> content <div start-of-tag="val" ';
+$test = 'end-of-tag="val"> some <i>extra</i> content <div start-of-tag="val" ';
+$test = 'end-of-tag="val"> some <i>extra</i> content <div start-of-tag="val" ';
+
 // Examples that still raise an issue
 $test = "<!-- /wp:query -->"; // Noncompliant
 $test = "<!-- /wp:query -->";
