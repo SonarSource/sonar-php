@@ -137,7 +137,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   }
 
   private static String removeQuotesAndQuotesEscaping(String s) {
-    char quote = s.charAt(0);
+    var quote = s.charAt(0);
     return s.substring(1, s.length() - 1).replace("\\" + quote, String.valueOf(quote));
   }
 
