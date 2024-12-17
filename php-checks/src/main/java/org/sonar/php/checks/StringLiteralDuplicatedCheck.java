@@ -61,14 +61,17 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   private static final String DOUBLE_QUOTED_STRING_PARTIAL_START = "\"(?:\\\\.|[^\"])*+";
   private static final String SINGLE_QUOTED_STRING_PARTIAL_START = "'(?:\\\\.|[^'])*+";
   private static final String NO_QUOTED_STRING_PARTIAL_START = "[a-zA-Z0-9\\\\-_:./]++";
-  private static final String TAG_ATTRIBUTE_PARTIAL_START = OPT_SPACING + optional("=", OPT_SPACING, optional(firstOf(DOUBLE_QUOTED_STRING_PARTIAL_START, SINGLE_QUOTED_STRING_PARTIAL_START, NO_QUOTED_STRING_PARTIAL_START)));
+  private static final String TAG_ATTRIBUTE_PARTIAL_START = OPT_SPACING
+    + optional("=", OPT_SPACING, optional(firstOf(DOUBLE_QUOTED_STRING_PARTIAL_START, SINGLE_QUOTED_STRING_PARTIAL_START, NO_QUOTED_STRING_PARTIAL_START)));
 
   // Complex regexes
   private static final String TAG_ATTRIBUTE = IDENTIFIER + OPT_SPACING + optional("=", OPT_SPACING, firstOf(DOUBLE_QUOTED_STRING, SINGLE_QUOTED_STRING, NO_QUOTED_STRING));
-  private static final String HTML_TAG_FULL = "</?"+ OPT_SPACING + IDENTIFIER + OPT_SPACING + zeroOrMore(TAG_ATTRIBUTE, OPT_SPACING) + "/?+>";
-  private static final String HTML_TAG_PARTIAL_START = OPT_SPACING + "</?+" + OPT_SPACING + optional(IDENTIFIER, OPT_SPACING, zeroOrMore(TAG_ATTRIBUTE, OPT_SPACING), optional(TAG_ATTRIBUTE_PARTIAL_START));
+  private static final String HTML_TAG_FULL = "</?" + OPT_SPACING + IDENTIFIER + OPT_SPACING + zeroOrMore(TAG_ATTRIBUTE, OPT_SPACING) + "/?+>";
+  private static final String HTML_TAG_PARTIAL_START = OPT_SPACING + "</?+" + OPT_SPACING
+    + optional(IDENTIFIER, OPT_SPACING, zeroOrMore(TAG_ATTRIBUTE, OPT_SPACING), optional(TAG_ATTRIBUTE_PARTIAL_START));
   private static final String HTML_TAG_PARTIAL_END = "[\"']?+" + OPT_SPACING + zeroOrMore(TAG_ATTRIBUTE, OPT_SPACING) + "/?+>";
-  private static final String HTML_CONTENT = optional(HTML_TAG_PARTIAL_END) + oneOrMore(OPT_TEXT_OUTSIDE_OF_TAGS, HTML_TAG_FULL) + OPT_TEXT_OUTSIDE_OF_TAGS + optional(HTML_TAG_PARTIAL_START);
+  private static final String HTML_CONTENT = optional(HTML_TAG_PARTIAL_END) + oneOrMore(OPT_TEXT_OUTSIDE_OF_TAGS, HTML_TAG_FULL) + OPT_TEXT_OUTSIDE_OF_TAGS
+    + optional(HTML_TAG_PARTIAL_START);
 
   private static final String FULL_ALLOWED_LITERALS_REGEX = firstOf(
     HTML_CONTENT,
