@@ -75,20 +75,35 @@ $output .= '<span class="payment">'.$total.'</span' + '>';
 $output .= '<span class="payment-summary">'.$total_payment.'</span' + '>';
 $output .= '<span class="badge normal">'.$inc_vat_text.'</span' + '>';
 
-// HTML tag with attribute
+// HTML tag with attribute and escaping '
 $output .= '<div some-attribute-1="value1" some-attribute-2=\'value2\' some-attribute-3=value3 some-attribute-4>'.$total.'</div>';
 $output .= '<div some-attribute-1="value1" some-attribute-2=\'value2\' some-attribute-3=value3 some-attribute-4>'.$total.'</div>';
 $output .= '<div some-attribute-1="value1" some-attribute-2=\'value2\' some-attribute-3=value3 some-attribute-4>'.$total.'</div>';
+
+// HTML tag with attribute and escaping "
+$output .= "<span class=\"payment\">".$total.'</span>';
+$output .= "<span class=\"payment\">".$total.'</span>';
+$output .= "<span class=\"payment\">".$total.'</span>';
 
 // partial HTML tag start
 $output .= '<div some-attr='.$value.'>';
 $output .= '<div some-attr='.$value.'>';
 $output .= '<div some-attr='.$value.'>';
 
+// partial HTML tag start with content before
+$test = 'When handling an <a href="http://';
+$test = 'When handling an <a href="http://';
+$test = 'When handling an <a href="http://';
+
 // partial HTML tag end
 $output .= '<div><'.$tag_name.' with="value">';
 $output .= '<div><'.$tag_name.' with="value">';
 $output .= '<div><'.$tag_name.' with="value">';
+
+// partial HTML tag end with content after
+$test = 'with="value"> some content after';
+$test = 'with="value"> some content after';
+$test = 'with="value"> some content after';
 
 // multiple HTML tags
 $output .= '<div><p><span>'.$tag_name.'</div></p></span>';
@@ -100,7 +115,7 @@ $output .= '<div> some <p> content <span> here '.$tag_name.'</div> and </p> ther
 $output .= '<div> some <p> content <span> here '.$tag_name.'</div> and </p> there </span>';
 $output .= '<div> some <p> content <span> here '.$tag_name.'</div> and </p> there </span>';
 
-// multiple HTML tags with parital end or start tag
+// multiple HTML tags with partial end or start tag
 $output .= ' left-from-previous="string"> here '.$tag_name.'</div><div';
 $output .= ' left-from-previous="string"> here '.$tag_name.'</div><div';
 $output .= ' left-from-previous="string"> here '.$tag_name.'</div><div';
@@ -109,3 +124,25 @@ $output .= ' left-from-previous="string"> here '.$tag_name.'</div><div';
 $output .= 'end-of-tag="val"><div start-of-tag="val" '.$additionl_attribute;
 $output .= 'end-of-tag="val"><div start-of-tag="val" '.$additionl_attribute;
 $output .= 'end-of-tag="val"><div start-of-tag="val" '.$additionl_attribute;
+
+// end and start tag with content between
+$test = 'end-of-tag="val"> some content <div start-of-tag="val" ';
+$test = 'end-of-tag="val"> some content <div start-of-tag="val" ';
+$test = 'end-of-tag="val"> some content <div start-of-tag="val" ';
+
+// Examples that still raise an issue
+$test = "<!-- /wp:query -->"; // Noncompliant
+$test = "<!-- /wp:query -->";
+$test = "<!-- /wp:query -->";
+
+$test = "/^<div>Content<\/div>$/"; // Noncompliant
+$test = "/^<div>Content<\/div>$/";
+$test = "/^<div>Content<\/div>$/";
+
+$test = '<<B>%s</B>%s>'; // Noncompliant
+$test = '<<B>%s</B>%s>';
+$test = '<<B>%s</B>%s>';
+
+$test = '<div><!--[if (gte mso 9)|(IE)]>'; // Noncompliant
+$test = '<div><!--[if (gte mso 9)|(IE)]>';
+$test = '<div><!--[if (gte mso 9)|(IE)]>';

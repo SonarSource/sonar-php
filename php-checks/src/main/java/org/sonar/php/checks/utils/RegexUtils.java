@@ -1,6 +1,9 @@
 package org.sonar.php.checks.utils;
 
 public class RegexUtils {
+  private RegexUtils() {
+  }
+
   public static String oneOrMore(String ...s) {
     return "(?:" + String.join("", s) + ")++";
   }
