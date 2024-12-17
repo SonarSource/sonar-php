@@ -17,6 +17,8 @@
 package org.sonar.php.metrics;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -28,6 +30,7 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 class MetricsVisitorTest extends ParsingTestUtils {
@@ -53,6 +56,19 @@ class MetricsVisitorTest extends ParsingTestUtils {
     assertThat(fileMeasures.getCommentLinesNumber()).isEqualTo(5);
 
     verify(fileLinesContext).setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, 21, 1);
+
+    verifyNCLOCDataMetric(fileLinesContext, 29, 13, 17, 19, 20, 21, 22, 23);
+  }
+
+  protected void verifyNCLOCDataMetric(FileLinesContext fileLinesContext, Integer sizeOfFile, Integer... linesOfCode) {
+    var linesOfCodeSet = Arrays.stream(linesOfCode).collect(Collectors.toSet());
+    for (var lineNumber = 1; lineNumber <= sizeOfFile; lineNumber++) {
+      if (linesOfCodeSet.contains(lineNumber)) {
+        verify(fileLinesContext).setIntValue(CoreMetrics.NCLOC_DATA_KEY, lineNumber, 1);
+      } else {
+        verify(fileLinesContext, never()).setIntValue(CoreMetrics.NCLOC_DATA_KEY, lineNumber, 1);
+      }
+    }
   }
 
 }
