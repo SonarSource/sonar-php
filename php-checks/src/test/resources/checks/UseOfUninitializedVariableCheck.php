@@ -333,3 +333,23 @@ function forEachWithReferenceKeyAndValue() {
     echo $key;
   }
 }
+
+class Example
+{
+    public static function example1(): string
+    {
+        static $value;
+
+        $value ??= rand(0, 9) > 5 ? 'yes' : 'no';
+
+        return $value;
+    }
+
+    public static function example2(): string {
+        static $value;
+
+        $value = $value ?? rand(0, 9) > 5 ? 'yes' : 'no';
+
+        return $value;
+    }
+}
