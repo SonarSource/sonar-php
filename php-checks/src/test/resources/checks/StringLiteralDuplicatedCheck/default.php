@@ -135,6 +135,14 @@ $test = 'end-of-tag="val"> some <i>extra</i> content <div start-of-tag="val" ';
 $test = 'end-of-tag="val"> some <i>extra</i> content <div start-of-tag="val" ';
 $test = 'end-of-tag="val"> some <i>extra</i> content <div start-of-tag="val" ';
 
+// self closing tag
+$test = "<br/>";
+$test = "<br/>";
+$test = "<br/>";
+$test = "<br />";
+$test = "<br />";
+$test = "<br />";
+
 // Examples that still raise an issue
 $test = "<!-- /wp:query -->"; // Noncompliant
 $test = "<!-- /wp:query -->";
@@ -151,3 +159,11 @@ $test = '<<B>%s</B>%s>';
 $test = '<div><!--[if (gte mso 9)|(IE)]>'; // Noncompliant
 $test = '<div><!--[if (gte mso 9)|(IE)]>';
 $test = '<div><!--[if (gte mso 9)|(IE)]>';
+
+$test = '$age < 5'; // Noncompliant
+$test = '$age < 5';
+$test = '$age < 5';
+
+$test = '$name => "abc"'; // Noncompliant
+$test = '$name => "abc"';
+$test = '$name => "abc"';
