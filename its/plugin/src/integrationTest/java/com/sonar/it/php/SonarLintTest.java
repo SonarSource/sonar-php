@@ -132,8 +132,10 @@ public class SonarLintTest {
   private static AnalyzeFilesResponse analyzeFile(String configScopeId, Path filePath, String... properties) {
     var fileUri = filePath.toUri();
     backend.getFileService().didUpdateFileSystem(
-      new DidUpdateFileSystemParams(List.of(), List.of(
-        new ClientFileDto(fileUri, filePath, configScopeId, false, null, filePath.toAbsolutePath(), null, null, true))));
+      new DidUpdateFileSystemParams(
+        List.of(new ClientFileDto(fileUri, filePath, configScopeId, false, null, filePath.toAbsolutePath(), null, null, true)),
+        List.of(),
+        List.of()));
 
     return backend.getAnalysisService().analyzeFiles(
       new AnalyzeFilesParams(configScopeId, UUID.randomUUID(), List.of(fileUri), toMap(properties), System.currentTimeMillis()))
