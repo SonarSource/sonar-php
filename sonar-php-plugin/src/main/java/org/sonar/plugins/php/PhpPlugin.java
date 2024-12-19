@@ -19,7 +19,7 @@ package org.sonar.plugins.php;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
+import org.sonar.api.config.PropertyDefinition.ConfigScope;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.reports.phpstan.PhpStanRulesDefinition;
 import org.sonar.plugins.php.reports.phpstan.PhpStanSensor;
@@ -67,7 +67,7 @@ public class PhpPlugin implements Plugin {
         .defaultValue(Php.DEFAULT_FILE_SUFFIXES)
         .name("File Suffixes")
         .description("List of suffixes of PHP files to analyze.")
-        .onQualifiers(Qualifiers.PROJECT)
+        .onConfigScopes(ConfigScope.PROJECT)
         .category(PHP_CATEGORY)
         .multiValues(true)
         .subCategory(GENERAL_SUBCATEGORY)
@@ -77,7 +77,7 @@ public class PhpPlugin implements Plugin {
         .defaultValue(PHP_EXCLUSIONS_DEFAULT_VALUE)
         .name("PHP Exclusions")
         .description("List of file path patterns to be excluded from analysis of PHP files.")
-        .onQualifiers(Qualifiers.PROJECT)
+        .onConfigScopes(ConfigScope.PROJECT)
         .category(PHP_CATEGORY)
         .subCategory(GENERAL_SUBCATEGORY)
         .multiValues(true)
@@ -87,7 +87,7 @@ public class PhpPlugin implements Plugin {
         .defaultValue(PHP_FRAMEWORK_DETECTION_DEFAULT_VALUE)
         .name("PHP Framework detection")
         .description("Enable the detection of PHP framework in analyzed file, which adapt some rules behavior.")
-        .onQualifiers(Qualifiers.PROJECT)
+        .onConfigScopes(ConfigScope.PROJECT)
         .category(PHP_CATEGORY)
         .subCategory(GENERAL_SUBCATEGORY)
         .build());
@@ -106,7 +106,7 @@ public class PhpPlugin implements Plugin {
       PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
         .name("Unit Test Report")
         .description("Comma-separated list of paths to PHPUnit unit test execution report files. Paths may be either absolute or relative to the project base directory.")
-        .onQualifiers(Qualifiers.PROJECT)
+        .onConfigScopes(ConfigScope.PROJECT)
         .category(PHP_CATEGORY)
         .multiValues(true)
         .subCategory(PHPUNIT_SUBCATEGORY)
@@ -114,7 +114,7 @@ public class PhpPlugin implements Plugin {
       PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
         .name("Coverage Reports")
         .description("List of PHPUnit code coverage report files. Each path can be either absolute or relative.")
-        .onQualifiers(Qualifiers.PROJECT)
+        .onConfigScopes(ConfigScope.PROJECT)
         .category(PHP_CATEGORY)
         .multiValues(true)
         .subCategory(PHPUNIT_SUBCATEGORY)
@@ -130,7 +130,7 @@ public class PhpPlugin implements Plugin {
         .description("Paths (absolute or relative) to report files with PHPStan issues.")
         .category(EXTERNAL_ANALYZERS_SUBCATEGORY)
         .subCategory(PHP_CATEGORY)
-        .onQualifiers(Qualifiers.PROJECT)
+        .onConfigScopes(ConfigScope.PROJECT)
         .multiValues(true)
         .build());
   }
@@ -144,7 +144,7 @@ public class PhpPlugin implements Plugin {
         .description("Paths (absolute or relative) to report files with Psalm issues.")
         .category(EXTERNAL_ANALYZERS_SUBCATEGORY)
         .subCategory(PHP_CATEGORY)
-        .onQualifiers(Qualifiers.PROJECT)
+        .onConfigScopes(ConfigScope.PROJECT)
         .multiValues(true)
         .build());
   }
