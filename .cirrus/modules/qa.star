@@ -13,6 +13,7 @@ load(
   "set_orchestrator_home_script",
   "mkdir_orchestrator_home_script",
 )
+load("cache.star", "cleanup_orchestrator_cache")
 
 QA_PLUGIN_GRADLE_TASK = "its:plugin:integrationTest"
 QA_RULING_GRADLE_TASK = "its:ruling:integrationTest"
@@ -73,6 +74,7 @@ def qa_task(env, run_its_script):
     "run_its_script": run_its_script,
     "on_failure": on_failure(),
     "cleanup_gradle_script": cleanup_gradle_script(),
+    "cleanup_orchestrator_cache_script": cleanup_orchestrator_cache(),
   }
 
 
