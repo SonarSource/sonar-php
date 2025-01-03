@@ -1230,6 +1230,7 @@ public class PHPGrammar {
         b.firstOf(
           CAST_EXPR(),
           ASSIGNMENT_EXPRESSION(),
+          MATCH_EXPRESSION(),
           POSTFIX_EXPRESSION()),
         b.zeroOrMore(f.newTuple(
           b.token(STAR_STAR),
