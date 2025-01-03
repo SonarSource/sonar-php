@@ -40,6 +40,10 @@ class UnaryExprTest {
       .matches("++$a = $b")
       .matches("(int) $a = $b")
 
+      .matches("match ($a) {$a=>1}")
+      .matches("!match ($a) {$a=>1}")
+      .matches("(string) match ($a) {$a=>1}")
+
       .notMatches("(int) $a + $b");
   }
 }

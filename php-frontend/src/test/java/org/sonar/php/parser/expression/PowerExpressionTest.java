@@ -29,7 +29,12 @@ class PowerExpressionTest {
       .matches("$a")
       .matches("$a ** $a")
       .matches("$a ** -2")
-      .matches("$a ** (int) $a");
+      .matches("$a ** (int) $a")
+      .matches("""
+        match ($food) {
+            'apple' => 1,
+            'bar' => 2
+        } ** 3""");
   }
 
 }
