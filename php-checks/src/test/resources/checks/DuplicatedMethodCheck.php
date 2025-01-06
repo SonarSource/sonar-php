@@ -20,6 +20,26 @@ function fun5($a, $c) {
 function fun6($a, $c) { // OK, not raising if there is less than 2 statements
   echo $a;
 }
+function fun7($a, $b) {
+    echo $a;
+    echo $b;
+    echo __FUNCTION__;
+}
+function fun8($a, $b) { // OK, not raising when constant __FUNCTION__ is used
+    echo $a;
+    echo $b;
+    echo __FUNCTION__;
+}
+function fun9($a, $b) {
+    echo $a;
+    echo $b;
+    echo __DIR__;
+}
+function fun10($a, $b) { // Noncompliant {{Update this method so that its implementation is not identical to "fun9" on line 33.}}
+    echo $a;
+    echo $b;
+    echo __DIR__;
+}
 
 class A {
     public $var = 'a default value';
@@ -38,7 +58,7 @@ class B {
         echo $this->var;
     }
 
-    public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 35.}}
+    public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 55.}}
     //              ^^^^^^^^^^^
         echo $this->var;
         echo $this->var;
@@ -59,11 +79,11 @@ class B {
                        echo $this->var;
                        echo $this->var;
                    }
-                   public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 58.}}
+                   public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 78.}}
                        echo $this->var;
                        echo $this->var;
                    }
-                   public function displayVar3() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 58.}}
+                   public function displayVar3() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 78.}}
                       echo $this->var;
                       echo $this->var;
                    }
@@ -72,6 +92,16 @@ class B {
                    }
                    public function displayVarSmall2() { // OK, not raising if there is less than 2 statements
                        echo $this->var;
+                   }
+                   public function displayVarMagicConstant1() {
+                      echo $this->var;
+                      echo $this->var;
+                      echo __FUNCTION__;
+                   }
+                   public function displayVarMagicConstant2() { // OK, not raising when constant __FUNCTION__ is used
+                      echo $this->var;
+                      echo $this->var;
+                      echo __FUNCTION__;
                    }
                 };
     }
