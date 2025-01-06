@@ -24,10 +24,23 @@ import static org.sonar.php.utils.Assertions.assertThat;
 class ArrayInitializerTest {
 
   @Test
-  void test() {
+  void shouldParseArrayInitializers() {
     assertThat(PHPLexicalGrammar.ARRAY_INIALIZER)
       .matches("array()")
-      .matches("[]");
+      .matches("array(1, 2, 3)")
+      .matches("array('key' => 'value', 'key2' => 'value2')")
+      .matches("array($a, getArr(), &$a, $a=>$b, $a=>&$b, ...$a, ...getArr())")
+      .matches("array(array(), [])")
+
+      .matches("[]")
+      .matches("[1, 2, 3]")
+      .matches("['key' => 'value', 'key2' => 'value2']")
+      .matches("[$a, getArr(), &$a, $a=>$b, $a=>&$b, ...$a, ...getArr()]")
+      .matches("[[], array()]")
+
+      .notMatches("array(1, 2, 3")
+      .notMatches("[1, 2, 3")
+      .notMatches("[][]");
   }
 
 }

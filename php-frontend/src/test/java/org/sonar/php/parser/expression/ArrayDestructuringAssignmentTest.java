@@ -24,9 +24,10 @@ import static org.sonar.php.utils.Assertions.assertThat;
 class ArrayDestructuringAssignmentTest {
 
   @Test
-  void test() {
+  void shouldParseArrayDestructuringAssignments() {
     assertThat(PHPLexicalGrammar.ARRAY_DESTRUCTURING_ASSIGNMENT)
       .matches("[$a, $b] = $array")
+      .matches("[$a, $b, $c] = [1] + [1,2,3]")
       .matches("[$a, &$b] = $array")
       .matches("[&$a, $b,, [&$c, $d]] = $array")
       .matches("[&$one, [$two, &$three]] = $a")
