@@ -24,7 +24,7 @@ import static org.sonar.php.utils.Assertions.assertThat;
 class ParameterTest {
 
   @Test
-  void test() {
+  void shouldParseParameters() {
     assertThat(PHPLexicalGrammar.PARAMETER)
       .matches("callable $a")
       .matches("array $a")
@@ -38,6 +38,15 @@ class ParameterTest {
       .matches("int|array|Foo $a")
       .matches("int $a { get; set => 123; }")
       .matches("int $a { final set($value) => $value - 1; }")
-      .matches("int $a { get { return $this->a+1; } }");
+      .matches("int $a { get { return $this->a+1; } }")
+      .matches("$a = []")
+      .matches("$a = [1]")
+      .matches("$a = [[1], [2]]")
+      .matches("$a = [\"bar\" => 3][\"bar\"]")
+      .matches("$a = [][][$a][$a or $b]")
+      .matches("$a = [1, 2, $b][]")
+      .matches("$a = [1] + [1, 2]")
+
+      .notMatches("$a = [1, 2, 3][$b, $c]");
   }
 }

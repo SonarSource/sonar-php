@@ -24,7 +24,7 @@ import static org.sonar.php.utils.Assertions.assertThat;
 class EnumCaseTest {
 
   @Test
-  void test() {
+  void shouldParseEnumCases() {
     assertThat(PHPLexicalGrammar.ENUM_CASE)
       .matches("case A;")
       .matches("#[A1(1)] case A;")
@@ -35,6 +35,15 @@ class EnumCaseTest {
       .matches("case NEW = 1;")
       .matches("case CLASS = 'a';")
       .matches("case EVAL = 'c';")
-      .notMatches("case A");
+      .matches("case ARR = [];")
+      .matches("case ARR = [1];")
+      .matches("case ARR = [[1], [2]];")
+      .matches("case ARR = [\"bar\" => 3][\"bar\"];")
+      .matches("case ARR = [][][$a][$a or $b];")
+      .matches("case ARR = [1, 2, $b][];")
+      .matches("case ARR = [1] + [1, 2];")
+
+      .notMatches("case A")
+      .notMatches("case ARR = [1, 2, 3][$b, $c];");
   }
 }

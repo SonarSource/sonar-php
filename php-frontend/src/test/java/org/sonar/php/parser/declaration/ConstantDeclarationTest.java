@@ -24,12 +24,21 @@ import static org.sonar.php.utils.Assertions.assertThat;
 class ConstantDeclarationTest {
 
   @Test
-  void test() {
+  void shouldParseConstantDeclarations() {
     assertThat(PHPLexicalGrammar.CONSTANT_DECLARATION)
       .matches("const A = 1 ;")
       .matches("const A = 1, B = 2 ;")
       .matches("const MATCH = 2;")
+      .matches("const ARR = [];")
+      .matches("const ARR = [1];")
+      .matches("const ARR = [[1], [2]];")
+      .matches("const ARR = [\"bar\" => 3][\"bar\"];")
+      .matches("const ARR = [][][$a][$a or $b];")
+      .matches("const ARR = [1, 2, $b][];")
+      .matches("const ARR = [1] + [1, 2];")
+
       .notMatches("public const A = 1 ;")
-      .notMatches("const A ;");
+      .notMatches("const A ;")
+      .notMatches("const ARR = [1, 2, 3][$a, $b];");
   }
 }
