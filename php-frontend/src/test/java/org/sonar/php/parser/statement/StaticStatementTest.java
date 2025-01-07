@@ -24,10 +24,17 @@ import static org.sonar.php.utils.Assertions.assertThat;
 class StaticStatementTest {
 
   @Test
-  void test() {
+  void shouldParseStaticStatements() {
     assertThat(PHPLexicalGrammar.STATIC_STATEMENT)
       .matches("static $a, $b;")
       .matches("static $a, $b = $c;")
-      .matches("static $a;");
+      .matches("static $a;")
+      .matches("static $a = $CONST1 + $CONST2;")
+      .matches("static $a = 1 + ($COND ? 2 : 3);")
+      .matches("static $a = array(1, 2, 3);")
+      .matches("static $a = [1];")
+      .matches("static $a = [1] + [1, 2];")
+      .matches("static $a = [1] + ($COND ? [2] : [3]);")
+      .matches("static $a = [E_COMPILE_ERROR => 'first',] + (1 < 2 ? [E_STRICT => 'b'] : []);");
   }
 }

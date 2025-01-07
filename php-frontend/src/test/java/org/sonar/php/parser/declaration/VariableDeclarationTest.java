@@ -24,13 +24,23 @@ import static org.sonar.php.utils.Assertions.assertThat;
 class VariableDeclarationTest {
 
   @Test
-  void variableDeclaration() {
+  void shouldParseVariableDeclarations() {
     assertThat(PHPLexicalGrammar.VARIABLE_DECLARATION)
       .matches("$a")
       .matches("$a = 1")
       .matches("$a = 1")
       .matches("$a = fn($x) => $x * 5")
-      .matches("$a = (fn($x) => $x * 5)(7)");
+      .matches("$a = (fn($x) => $x * 5)(7)")
+      .matches("$a = array(1, 2, 3)")
+      .matches("$a = []")
+      .matches("$a = [1]")
+      .matches("$a = [[1], [2]]")
+      .matches("$a = [\"bar\" => 3][\"bar\"]")
+      .matches("$a = [][][$a][$a or $b]")
+      .matches("$a = [1, 2, $b][]")
+      .matches("$a = [1] + [1, 2]")
+
+      .notMatches("$a = [1, 2, 3][$a, $b]");
   }
 
 }

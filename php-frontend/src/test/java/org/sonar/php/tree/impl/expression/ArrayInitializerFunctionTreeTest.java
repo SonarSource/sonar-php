@@ -28,7 +28,7 @@ class ArrayInitializerFunctionTreeTest extends PHPTreeModelTest {
 
   @Test
   void empty() {
-    ArrayInitializerFunctionTree tree = parse("array()", PHPLexicalGrammar.ARRAY_INIALIZER);
+    ArrayInitializerFunctionTree tree = parse("array()", PHPLexicalGrammar.ARRAY_INITIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_FUNCTION)).isTrue();
 
@@ -40,7 +40,7 @@ class ArrayInitializerFunctionTreeTest extends PHPTreeModelTest {
 
   @Test
   void nonEmpty() {
-    ArrayInitializerFunctionTree tree = parse("array($a, $b, $c)", PHPLexicalGrammar.ARRAY_INIALIZER);
+    ArrayInitializerFunctionTree tree = parse("array($a, $b, $c)", PHPLexicalGrammar.ARRAY_INITIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_FUNCTION)).isTrue();
 
@@ -56,7 +56,7 @@ class ArrayInitializerFunctionTreeTest extends PHPTreeModelTest {
 
   @Test
   void withTrailingComma() {
-    ArrayInitializerFunctionTree tree = parse("array($a,)", PHPLexicalGrammar.ARRAY_INIALIZER);
+    ArrayInitializerFunctionTree tree = parse("array($a,)", PHPLexicalGrammar.ARRAY_INITIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_FUNCTION)).isTrue();
 

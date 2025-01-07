@@ -217,7 +217,7 @@ public class PHPGrammar {
     return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.MEMBER_CONST_DECLARATION).is(
       f.memberConstDeclaration(
         b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD),
-        b.optional(f.newTuple(b.token(EQU), STATIC_SCALAR()))));
+        b.optional(f.newTuple(b.token(EQU), EXPRESSION()))));
   }
 
   public VariableDeclarationTree CONST_VAR() {
@@ -225,14 +225,14 @@ public class PHPGrammar {
       f.constDeclaration(
         b.token(PHPLexicalGrammar.IDENTIFIER),
         b.token(EQU),
-        STATIC_SCALAR()));
+        EXPRESSION()));
   }
 
   public VariableDeclarationTree VARIABLE_DECLARATION() {
     return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.VARIABLE_DECLARATION).is(
       f.variableDeclaration(
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
-        b.optional(f.newTuple(b.token(EQU), STATIC_SCALAR()))));
+        b.optional(f.newTuple(b.token(EQU), EXPRESSION()))));
   }
 
   public NamespaceNameTree NAMESPACE_NAME() {
@@ -358,7 +358,7 @@ public class PHPGrammar {
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.token(CASE),
         NAME_IDENTIFIER_OR_KEYWORD(),
-        b.optional(f.newTuple(b.token(EQU), STATIC_SCALAR())),
+        b.optional(f.newTuple(b.token(EQU), EXPRESSION())),
         EOS()));
   }
 
@@ -509,7 +509,7 @@ public class PHPGrammar {
         b.optional(
           f.newTuple(
             b.token(PHPPunctuator.EQU),
-            STATIC_SCALAR())),
+            EXPRESSION())),
         b.optional(PROPERTY_HOOK_LIST())));
   }
 
@@ -798,7 +798,7 @@ public class PHPGrammar {
     return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.STATIC_VAR).is(
       f.staticVar(
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
-        b.optional(f.newTuple(b.token(EQU), STATIC_SCALAR()))));
+        b.optional(f.newTuple(b.token(EQU), EXPRESSION()))));
   }
 
   public DeclareStatementTree DECLARE_STATEMENT() {
@@ -1816,13 +1816,6 @@ public class PHPGrammar {
         VARIABLE_IDENTIFIER()));
   }
 
-  public ExpressionTree STATIC_SCALAR() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.STATIC_SCALAR).is(
-      b.firstOf(
-        f.combinedScalarOffset(ARRAY_INITIALIZER(), b.zeroOrMore(DIMENSIONAL_OFFSET())),
-        EXPRESSION()));
-  }
-
   public FunctionCallTree INTERNAL_FUNCTION() {
     return b.<FunctionCallTree>nonterminal(PHPLexicalGrammar.INTERNAL_FUNCTION).is(
       b.firstOf(
@@ -1853,7 +1846,7 @@ public class PHPGrammar {
   }
 
   public ArrayInitializerTree ARRAY_INITIALIZER() {
-    return b.<ArrayInitializerTree>nonterminal(PHPLexicalGrammar.ARRAY_INIALIZER).is(
+    return b.<ArrayInitializerTree>nonterminal(PHPLexicalGrammar.ARRAY_INITIALIZER).is(
       b.firstOf(
         f.newArrayInitFunction(b.token(ARRAY), b.token(LPARENTHESIS), b.optional(ARRAY_PAIR_LIST()), b.token(RPARENTHESIS)),
         f.newArrayInitBracket(b.token(LBRACKET), b.optional(ARRAY_PAIR_LIST()), b.token(RBRACKET))));
