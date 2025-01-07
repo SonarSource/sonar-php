@@ -28,6 +28,7 @@ class MemberConstDeclarationTest {
     assertThat(PHPLexicalGrammar.MEMBER_CONST_DECLARATION)
       .matches("a")
       .matches("a = $a")
+      .matches("a = array(1, 2, 3)")
       .matches("a = []")
       .matches("a = [1]")
       .matches("a = [[1], [2]]")

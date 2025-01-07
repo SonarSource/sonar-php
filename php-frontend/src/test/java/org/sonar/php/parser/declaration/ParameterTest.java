@@ -39,6 +39,7 @@ class ParameterTest {
       .matches("int $a { get; set => 123; }")
       .matches("int $a { final set($value) => $value - 1; }")
       .matches("int $a { get { return $this->a+1; } }")
+      .matches("$a = array(1, 2, 3)")
       .matches("$a = []")
       .matches("$a = [1]")
       .matches("$a = [[1], [2]]")

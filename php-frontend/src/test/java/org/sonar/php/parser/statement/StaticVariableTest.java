@@ -28,6 +28,7 @@ class StaticVariableTest {
     assertThat(PHPLexicalGrammar.STATIC_VAR)
       .matches("$a")
       .matches("$a = $a")
+      .matches("$a = array(1, 2, 3)")
       .matches("$a = []")
       .matches("$a = [1]")
       .matches("$a = [[1], [2]]")

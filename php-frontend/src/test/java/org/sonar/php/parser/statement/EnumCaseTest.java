@@ -35,6 +35,7 @@ class EnumCaseTest {
       .matches("case NEW = 1;")
       .matches("case CLASS = 'a';")
       .matches("case EVAL = 'c';")
+      .matches("case ARR = array(1, 2, 3);")
       .matches("case ARR = [];")
       .matches("case ARR = [1];")
       .matches("case ARR = [[1], [2]];")

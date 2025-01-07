@@ -29,6 +29,7 @@ class ConstantDeclarationTest {
       .matches("const A = 1 ;")
       .matches("const A = 1, B = 2 ;")
       .matches("const MATCH = 2;")
+      .matches("const ARR = array(1, 2, 3);")
       .matches("const ARR = [];")
       .matches("const ARR = [1];")
       .matches("const ARR = [[1], [2]];")
