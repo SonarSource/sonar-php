@@ -33,9 +33,29 @@ function fun8($a, $b) { // OK, not raising when constant __FUNCTION__ is used
 function fun9($a, $b) {
     echo $a;
     echo $b;
+    echo __LINE__;
+}
+function fun10($a, $b) { // OK, not raising when constant __LINE__ is used
+    echo $a;
+    echo $b;
+    echo __LINE__;
+}
+function fun11($a, $b) {
+    echo $a;
+    echo $b;
+    echo __METHOD__;
+}
+function fun12($a, $b) { // OK, not raising when constant __METHOD__ is used
+    echo $a;
+    echo $b;
+    echo __METHOD__;
+}
+function fun13($a, $b) {
+    echo $a;
+    echo $b;
     echo __DIR__;
 }
-function fun10($a, $b) { // Noncompliant {{Update this method so that its implementation is not identical to "fun9" on line 33.}}
+function fun14($a, $b) { // Noncompliant {{Update this method so that its implementation is not identical to "fun13" on line 53.}}
     echo $a;
     echo $b;
     echo __DIR__;
@@ -58,7 +78,7 @@ class B {
         echo $this->var;
     }
 
-    public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 55.}}
+    public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 75.}}
     //              ^^^^^^^^^^^
         echo $this->var;
         echo $this->var;
@@ -79,11 +99,11 @@ class B {
                        echo $this->var;
                        echo $this->var;
                    }
-                   public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 78.}}
+                   public function displayVar2() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 98.}}
                        echo $this->var;
                        echo $this->var;
                    }
-                   public function displayVar3() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 78.}}
+                   public function displayVar3() { // Noncompliant {{Update this method so that its implementation is not identical to "displayVar" on line 98.}}
                       echo $this->var;
                       echo $this->var;
                    }
