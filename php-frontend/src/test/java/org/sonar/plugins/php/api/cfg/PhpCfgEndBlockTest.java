@@ -30,7 +30,7 @@ class PhpCfgEndBlockTest extends PHPTreeModelTest {
   @Test
   void cannotAddElement() {
     PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
-    Tree tree = parse("array()", PHPLexicalGrammar.ARRAY_INIALIZER);
+    Tree tree = parse("array()", PHPLexicalGrammar.ARRAY_INITIALIZER);
 
     assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> {
       endBlock.addElement(tree);

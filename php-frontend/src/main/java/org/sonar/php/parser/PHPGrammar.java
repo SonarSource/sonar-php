@@ -1846,7 +1846,7 @@ public class PHPGrammar {
   }
 
   public ArrayInitializerTree ARRAY_INITIALIZER() {
-    return b.<ArrayInitializerTree>nonterminal(PHPLexicalGrammar.ARRAY_INIALIZER).is(
+    return b.<ArrayInitializerTree>nonterminal(PHPLexicalGrammar.ARRAY_INITIALIZER).is(
       b.firstOf(
         f.newArrayInitFunction(b.token(ARRAY), b.token(LPARENTHESIS), b.optional(ARRAY_PAIR_LIST()), b.token(RPARENTHESIS)),
         f.newArrayInitBracket(b.token(LBRACKET), b.optional(ARRAY_PAIR_LIST()), b.token(RBRACKET))));

@@ -29,7 +29,7 @@ class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
 
   @Test
   void oneElement() {
-    ArrayInitializerBracketTree tree = parse("[0]", PHPLexicalGrammar.ARRAY_INIALIZER);
+    ArrayInitializerBracketTree tree = parse("[0]", PHPLexicalGrammar.ARRAY_INITIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_BRACKET)).isTrue();
 
@@ -41,7 +41,7 @@ class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
 
   @Test
   void multipleElements() {
-    ArrayInitializerBracketTree tree = parse("[0, 1, 2]", PHPLexicalGrammar.ARRAY_INIALIZER);
+    ArrayInitializerBracketTree tree = parse("[0, 1, 2]", PHPLexicalGrammar.ARRAY_INITIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_BRACKET)).isTrue();
 
@@ -56,7 +56,7 @@ class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
 
   @Test
   void withTrailingComma() {
-    ArrayInitializerBracketTree tree = parse("[0, 1, 2,]", PHPLexicalGrammar.ARRAY_INIALIZER);
+    ArrayInitializerBracketTree tree = parse("[0, 1, 2,]", PHPLexicalGrammar.ARRAY_INITIALIZER);
 
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_BRACKET)).isTrue();
 
@@ -71,7 +71,7 @@ class ArrayInitializerBracketTreeTest extends PHPTreeModelTest {
 
   @Test
   void spreadOperator() {
-    ArrayInitializerBracketTree tree = parse("[1, 2, ...$arr1, 5]", PHPLexicalGrammar.ARRAY_INIALIZER);
+    ArrayInitializerBracketTree tree = parse("[1, 2, ...$arr1, 5]", PHPLexicalGrammar.ARRAY_INITIALIZER);
     assertThat(tree.is(Kind.ARRAY_INITIALIZER_BRACKET)).isTrue();
     assertThat(tree.arrayPairs()).hasSize(4);
     ArrayPairTree spread = tree.arrayPairs().get(2);

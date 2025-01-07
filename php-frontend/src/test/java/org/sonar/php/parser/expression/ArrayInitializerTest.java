@@ -25,7 +25,7 @@ class ArrayInitializerTest {
 
   @Test
   void shouldParseArrayInitializers() {
-    assertThat(PHPLexicalGrammar.ARRAY_INIALIZER)
+    assertThat(PHPLexicalGrammar.ARRAY_INITIALIZER)
       .matches("array()")
       .matches("array(1, 2, 3)")
       .matches("array('key' => 'value', 'key2' => 'value2')")
