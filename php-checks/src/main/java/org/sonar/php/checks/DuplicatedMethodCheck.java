@@ -35,6 +35,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -52,9 +53,11 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
   private static final Function<FunctionTree, NameIdentifierTree> METHOD_TO_NAME = f -> ((MethodDeclarationTree) f).name();
   private static final Function<FunctionTree, NameIdentifierTree> FUNCTION_TO_NAME = f -> ((FunctionDeclarationTree) f).name();
   private static final int MINIMUM_NUMBER_OF_STATEMENTS = 2;
+  private static final Set<String> EXCLUDED_MAGIC_CONSTANTS = Set.of("__FUNCTION__", "__LINE__", "__METHOD__");
 
   private final Deque<List<MethodDeclarationTree>> methods = new LinkedList<>();
   private final List<FunctionDeclarationTree> functions = new ArrayList<>();
+  private final Deque<Boolean> scopeContainMagicConstantExclusion = new LinkedList<>();
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
@@ -66,20 +69,22 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    // Ignore functions with fewer than 2 statements
-    if (tree.body().statements().size() >= MINIMUM_NUMBER_OF_STATEMENTS) {
+    scopeContainMagicConstantExclusion.addFirst(false);
+    super.visitFunctionDeclaration(tree);
+    // Ignore functions with exceptions + ensure that the function has the minimum number of statements
+    if (Boolean.FALSE.equals(scopeContainMagicConstantExclusion.pop()) && tree.body().statements().size() >= MINIMUM_NUMBER_OF_STATEMENTS) {
       functions.add(tree);
     }
-    super.visitFunctionDeclaration(tree);
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    // Ignore abstract and empty methods
-    if (isDuplicateCandidate(tree)) {
+    scopeContainMagicConstantExclusion.addFirst(false);
+    super.visitMethodDeclaration(tree);
+    // Ignore functions with exceptions + abstract and empty methods
+    if (Boolean.FALSE.equals(scopeContainMagicConstantExclusion.pop()) && isDuplicateCandidate(tree)) {
       methods.peek().add(tree);
     }
-    super.visitMethodDeclaration(tree);
   }
 
   private static boolean isDuplicateCandidate(MethodDeclarationTree tree) {
@@ -116,6 +121,15 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
     methods.push(new ArrayList<>());
     super.visitAnonymousClass(tree);
     checkDuplications(methods.pop(), METHOD_TO_NAME);
+  }
+
+  @Override
+  public void visitLiteral(LiteralTree tree) {
+    if (!scopeContainMagicConstantExclusion.isEmpty() && tree.is(Tree.Kind.MAGIC_CONSTANT) && EXCLUDED_MAGIC_CONSTANTS.contains(tree.value())) {
+      scopeContainMagicConstantExclusion.pop();
+      scopeContainMagicConstantExclusion.addFirst(true);
+    }
+    super.visitLiteral(tree);
   }
 
   private void checkDuplications(List<? extends FunctionTree> functionDeclarations, Function<FunctionTree, NameIdentifierTree> toName) {
