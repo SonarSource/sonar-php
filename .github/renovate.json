@@ -17,7 +17,7 @@
   ],
   "packageRules": [
     {
-      "managers": [
+      "matchManagers": [
         "github-actions"
       ],
       "pinDigests": false,
@@ -25,11 +25,11 @@
       "groupSlug": "all-github-actions"
     },
     {
-      "managers": [
+      "matchManagers": [
         "gradle"
       ],
-      "matchPackagePatterns": [
-        "*"
+      "matchPackageNames": [
+        "!org.sonarsource.api.plugin:sonar-plugin-api"
       ],
       "matchUpdateTypes": [
         "minor",
@@ -37,6 +37,20 @@
       ],
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch"
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "org.sonarsource.api.plugin:sonar-plugin-api"
+      ],
+      "groupName": "sonar-plugin-api",
+      "groupSlug": "sonar-plugin-api",
+      "prBodyNotes": [
+        "Before updating the plugin-api version, make sure to check the compatibility matrix and stick to the lowest denominator.",
+        "https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility"
+      ]
     }
   ],
   "reviewers": ["team:analysis-cloud-squad"]
