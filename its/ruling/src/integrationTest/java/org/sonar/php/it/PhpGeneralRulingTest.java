@@ -66,7 +66,7 @@ public class PhpGeneralRulingTest {
   void testMonica() throws Exception {
     // To avoid error: File tests/Unit/Traits/SearchableTest.php can't be indexed twice...
     // the tests directory needs to be excluded
-    testProject("monica", "sonar.exclusions", "**/tests/**");
+    testProject("monica", "sonar.exclusions", "tests/**");
   }
 
   @Test

@@ -4,5 +4,8 @@
 ],
 "monica:public/index.php": [
 24
+],
+"monica:scripts/tests/server-cc.php": [
+26
 ]
 }

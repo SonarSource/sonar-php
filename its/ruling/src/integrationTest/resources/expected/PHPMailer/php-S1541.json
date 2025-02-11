@@ -3,6 +3,7 @@
 173
 ],
 "PHPMailer:src/PHPMailer.php": [
+1082,
 1222,
 1540,
 1724,
@@ -24,5 +25,8 @@
 512,
 730,
 1253
+],
+"PHPMailer:test/TestCase.php": [
+141
 ]
 }

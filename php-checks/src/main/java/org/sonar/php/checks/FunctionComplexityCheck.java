@@ -27,10 +27,8 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
-@Rule(key = FunctionComplexityCheck.KEY)
+@Rule(key = "S1541")
 public class FunctionComplexityCheck extends PHPSubscriptionCheck {
-
-  public static final String KEY = "S1541";
 
   private static final String MESSAGE = "The Cyclomatic Complexity of this function %s is %s which is greater than %s authorized.";
 

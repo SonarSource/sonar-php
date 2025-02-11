@@ -2,6 +2,9 @@
 "PHPWord:src/PhpWord/Element/Image.php": [
 530
 ],
+"PHPWord:src/PhpWord/Escaper/Rtf.php": [
+52
+],
 "PHPWord:src/PhpWord/Reader/MsDoc.php": [
 1536,
 1608,
@@ -13,7 +16,8 @@
 "PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
 191,
 331,
-493
+493,
+596
 ],
 "PHPWord:src/PhpWord/Reader/Word2007/Numbering.php": [
 34
@@ -49,7 +53,9 @@
 4309,
 4458,
 4784,
-5191
+5114,
+5191,
+5269
 ],
 "PHPWord:src/PhpWord/TemplateProcessor.php": [
 530,

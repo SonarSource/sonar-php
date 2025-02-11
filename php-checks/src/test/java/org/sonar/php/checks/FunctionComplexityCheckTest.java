@@ -26,7 +26,7 @@ import org.sonar.plugins.php.api.visitors.LineIssue;
 class FunctionComplexityCheckTest {
 
   private static final String FILE_NAME = "FunctionComplexityCheck.php";
-  private FunctionComplexityCheck check = new FunctionComplexityCheck();
+  private final FunctionComplexityCheck check = new FunctionComplexityCheck();
 
   @Test
   void defaultValue() throws Exception {

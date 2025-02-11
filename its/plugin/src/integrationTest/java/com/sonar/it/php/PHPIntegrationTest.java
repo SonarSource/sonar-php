@@ -69,7 +69,7 @@ class PHPIntegrationTest {
       softly.assertThat(getProjectMeasureAsDouble("public_api")).isNull();
 
       // Complexity
-      softly.assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(4341d);
+      softly.assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(4440d);
       softly.assertThat(getProjectMeasureAsDouble("cognitive_complexity")).isEqualTo(3203d);
     });
   }
@@ -96,7 +96,7 @@ class PHPIntegrationTest {
       softly.assertThat(getFileMeasureAsDouble("public_api")).isNull();
 
       // Complexity
-      softly.assertThat(getFileMeasureAsDouble("complexity")).isEqualTo(14d);
+      softly.assertThat(getFileMeasureAsDouble("complexity")).isEqualTo(15d);
       softly.assertThat(getFileMeasureAsDouble("cognitive_complexity")).isEqualTo(14d);
     });
   }
