@@ -75,3 +75,9 @@ function nesting() {
   if ($a) {}
   return 1;
 }
+
+function with_elseif() { // Noncompliant [[secondary=+0,+1,+2]]
+  if (true) {
+  } elseif (false) {
+  }
+}

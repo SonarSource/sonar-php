@@ -29,10 +29,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ComplexityVisitorTest {
 
-  private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
+  private final ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
 
   @Test
-  void declarations() {
+  void testDeclarations() {
     assertOneComplexityToken("function f() {}", "function");
     assertOneComplexityToken("$f = function() {};", "function");
     assertOneComplexityToken("$f = fn() => 0;", "fn");
@@ -47,11 +47,12 @@ class ComplexityVisitorTest {
   }
 
   @Test
-  void statements() {
+  void testStatements() {
     assertThat(complexity("$a = 0;")).isZero();
     assertOneComplexityToken("if ($a) {}", "if");
     assertOneComplexityToken("if ($a) {} else {}", "if");
     assertThat(complexity("if ($a) {} else if($b) {} else {}")).isEqualTo(2);
+    assertThat(complexity("if ($a) {} elseif($b) {} else {}")).isEqualTo(2);
     assertOneComplexityToken("if ($a): endif;", "if");
     assertOneComplexityToken("for (;;) {}", "for");
     assertOneComplexityToken("foreach ($a as $b) {}", "foreach");
@@ -69,7 +70,7 @@ class ComplexityVisitorTest {
   }
 
   @Test
-  void expressions() {
+  void testExpressions() {
     assertThat(complexity("$a;")).isZero();
     assertThat(complexity("$a + $b;")).isZero();
     assertThat(complexity("$f();")).isZero();
@@ -82,7 +83,7 @@ class ComplexityVisitorTest {
   }
 
   @Test
-  void withoutNestedFunctions() {
+  void testWithoutNestedFunctions() {
     assertThat(complexityWithoutNestedFunctions("$a && $b && $c;")).isEqualTo(2);
     assertThat(complexityWithoutNestedFunctions("$a && f(function () { return $a && $b; });")).isEqualTo(1);
     assertThat(complexityWithoutNestedFunctions("$a && f(fn() => $a && $b);")).isEqualTo(1);

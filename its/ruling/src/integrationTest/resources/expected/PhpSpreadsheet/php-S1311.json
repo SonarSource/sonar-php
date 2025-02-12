@@ -23,6 +23,9 @@
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php": [
 33
 ],
+"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php": [
+34
+],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php": [
 56
 ],

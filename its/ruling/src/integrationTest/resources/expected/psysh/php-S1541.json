@@ -1,6 +1,12 @@
 {
+"psysh:src/CodeCleaner/EmptyArrayDimFetchPass.php": [
+45
+],
 "psysh:src/CodeCleaner/FunctionReturnInWriteContextPass.php": [
 46
+],
+"psysh:src/CodeCleaner/ImplicitReturnPass.php": [
+45
 ],
 "psysh:src/CodeCleaner/ListPass.php": [
 42
@@ -37,6 +43,9 @@
 118,
 259
 ],
+"psysh:src/Command/ShowCommand.php": [
+236
+],
 "psysh:src/Configuration.php": [
 284
 ],
@@ -56,6 +65,7 @@
 32
 ],
 "psysh:src/Input/ShellInput.php": [
+124,
 291
 ],
 "psysh:src/Output/Theme.php": [
@@ -99,6 +109,7 @@
 68
 ],
 "psysh:src/Readline/Hoa/Xcallable.php": [
+85,
 149
 ],
 "psysh:src/Shell.php": [
