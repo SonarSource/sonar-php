@@ -1,5 +1,5 @@
 # Check Starlark specs: https://github.com/bazelbuild/starlark/blob/master/spec.md
-# DevInfra modules
+# Engineering Experience Squad modules
 load("github.com/SonarSource/cirrus-modules@v3", "load_features")
 # Modules
 load(
