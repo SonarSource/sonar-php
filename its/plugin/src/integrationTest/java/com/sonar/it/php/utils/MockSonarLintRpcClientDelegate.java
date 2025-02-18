@@ -18,20 +18,19 @@ package com.sonar.it.php.utils;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
+import javax.annotation.Nullable;
 import org.sonarsource.sonarlint.core.rpc.client.ConfigScopeNotFoundException;
 import org.sonarsource.sonarlint.core.rpc.client.ConnectionNotFoundException;
 import org.sonarsource.sonarlint.core.rpc.client.SonarLintCancelChecker;
 import org.sonarsource.sonarlint.core.rpc.client.SonarLintRpcClientDelegate;
 import org.sonarsource.sonarlint.core.rpc.protocol.backend.config.binding.BindingSuggestionDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.backend.tracking.TaintVulnerabilityDto;
-import org.sonarsource.sonarlint.core.rpc.protocol.client.analysis.RawIssueDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.binding.AssistBindingParams;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.binding.AssistBindingResponse;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.binding.NoBindingSuggestionFoundParams;
@@ -41,10 +40,12 @@ import org.sonarsource.sonarlint.core.rpc.protocol.client.connection.ConnectionS
 import org.sonarsource.sonarlint.core.rpc.protocol.client.event.DidReceiveServerHotspotEvent;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.fix.FixSuggestionDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.hotspot.HotspotDetailsDto;
+import org.sonarsource.sonarlint.core.rpc.protocol.client.hotspot.RaisedHotspotDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.http.GetProxyPasswordAuthenticationResponse;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.http.ProxyDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.http.X509CertificateDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.issue.IssueDetailsDto;
+import org.sonarsource.sonarlint.core.rpc.protocol.client.issue.RaisedIssueDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.log.LogParams;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.message.MessageType;
 import org.sonarsource.sonarlint.core.rpc.protocol.client.message.ShowSoonUnsupportedMessageParams;
@@ -62,20 +63,29 @@ import org.sonarsource.sonarlint.core.rpc.protocol.common.UsernamePasswordDto;
  *   sonarlint-core MockSonarLintRpcClientDelegate.java</a>
  */
 public class MockSonarLintRpcClientDelegate implements SonarLintRpcClientDelegate {
-  private final Map<String, List<RawIssueDto>> raisedIssues = new HashMap<>();
+  private final Map<String, Map<URI, List<RaisedIssueDto>>> raisedIssues = new HashMap<>();
+  private final Map<String, Map<URI, List<RaisedHotspotDto>>> raisedHotspots = new HashMap<>();
 
-  public List<RawIssueDto> getRaisedIssues(String configurationScopeId) {
+  public Map<URI, List<RaisedIssueDto>> getRaisedIssues(String configurationScopeId) {
     var issues = raisedIssues.get(configurationScopeId);
-    return issues != null ? issues : List.of();
+    return issues != null ? issues : Map.of();
   }
 
-  public Map<String, List<RawIssueDto>> getRaisedIssues() {
+  public Map<URI, List<RaisedHotspotDto>> getRaisedHotspots(String configurationScopeId) {
+    var hotspots = raisedHotspots.get(configurationScopeId);
+    return hotspots != null ? hotspots : Map.of();
+  }
+
+  public Map<String, Map<URI, List<RaisedIssueDto>>> getRaisedIssues() {
     return raisedIssues;
   }
 
-  @Override
-  public void didRaiseIssue(String configurationScopeId, UUID analysisId, RawIssueDto rawIssue) {
-    raisedIssues.computeIfAbsent(configurationScopeId, k -> new ArrayList<>()).add(rawIssue);
+  public List<RaisedIssueDto> getRaisedIssuesAsList(String configurationScopeId) {
+    return raisedIssues.getOrDefault(configurationScopeId, new HashMap<>()).values().stream().flatMap(List::stream).toList();
+  }
+
+  public List<RaisedHotspotDto> getRaisedHotspotsAsList(String configurationScopeId) {
+    return raisedHotspots.getOrDefault(configurationScopeId, new HashMap<>()).values().stream().flatMap(List::stream).toList();
   }
 
   @Override
@@ -224,7 +234,18 @@ public class MockSonarLintRpcClientDelegate implements SonarLintRpcClientDelegat
 
   }
 
+  @Override
+  public void raiseIssues(String configurationScopeId, Map<URI, List<RaisedIssueDto>> issuesByFileUri, boolean isIntermediatePublication, @Nullable UUID analysisId) {
+    raisedIssues.computeIfAbsent(configurationScopeId, k -> new HashMap<>()).putAll(issuesByFileUri);
+  }
+
+  @Override
+  public void raiseHotspots(String configurationScopeId, Map<URI, List<RaisedHotspotDto>> hotspotsByFileUri, boolean isIntermediatePublication, @Nullable UUID analysisId) {
+    raisedHotspots.computeIfAbsent(configurationScopeId, k -> new HashMap<>()).putAll(hotspotsByFileUri);
+  }
+
   public void clear() {
     raisedIssues.clear();
+    raisedHotspots.clear();
   }
 }

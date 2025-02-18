@@ -44,7 +44,7 @@ import org.sonarsource.sonarlint.core.rpc.client.ClientJsonRpcLauncher;
 import org.sonarsource.sonarlint.core.rpc.client.SonarLintRpcClientDelegate;
 import org.sonarsource.sonarlint.core.rpc.impl.BackendJsonRpcLauncher;
 import org.sonarsource.sonarlint.core.rpc.protocol.SonarLintRpcServer;
-import org.sonarsource.sonarlint.core.rpc.protocol.backend.analysis.AnalyzeFilesParams;
+import org.sonarsource.sonarlint.core.rpc.protocol.backend.analysis.AnalyzeFilesAndTrackParams;
 import org.sonarsource.sonarlint.core.rpc.protocol.backend.analysis.AnalyzeFilesResponse;
 import org.sonarsource.sonarlint.core.rpc.protocol.backend.file.DidUpdateFileSystemParams;
 import org.sonarsource.sonarlint.core.rpc.protocol.backend.initialize.HttpConfigurationDto;
@@ -103,7 +103,14 @@ public class SonarLintTest {
     assertThat(analyzeResponse.getFailedAnalysisFiles()).isEmpty();
     // it could happen that the notification is not yet received while the analysis request is finished.
     Awaitility.await().atMost(Duration.ofMillis(200)).untilAsserted(
-      () -> assertThat(((MockSonarLintRpcClientDelegate) client).getRaisedIssues(CONFIG_SCOPE_ID)).hasSize(3));
+      () -> assertThat(((MockSonarLintRpcClientDelegate) client).getRaisedIssuesAsList(CONFIG_SCOPE_ID)).hasSize(3));
+
+    var raisedIssues = ((MockSonarLintRpcClientDelegate) client).getRaisedIssues(CONFIG_SCOPE_ID);
+    assertThat(raisedIssues).hasSize(1);
+
+    var uri = ((MockSonarLintRpcClientDelegate) client).getRaisedIssues(CONFIG_SCOPE_ID).keySet().iterator().next();
+    assertThat(uri.getPath()).isEqualTo(inputFile.toAbsolutePath().toString());
+    assertThat(raisedIssues.get(uri)).hasSize(3);
   }
 
   static List<Path> shouldRaiseIssue() {
@@ -137,8 +144,9 @@ public class SonarLintTest {
         List.of(),
         List.of()));
 
-    return backend.getAnalysisService().analyzeFiles(
-      new AnalyzeFilesParams(configScopeId, UUID.randomUUID(), List.of(fileUri), toMap(properties), System.currentTimeMillis()))
+    return backend.getAnalysisService().analyzeFilesAndTrack(
+      new AnalyzeFilesAndTrackParams(configScopeId, UUID.randomUUID(), List.of(fileUri), toMap(properties), false,
+        System.currentTimeMillis()))
       .join();
   }
 
