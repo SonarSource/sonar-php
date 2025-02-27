@@ -38,7 +38,7 @@ fun enforceJarSize(
 
 fun Project.signingCondition(): Boolean {
   val branch = System.getenv()["CIRRUS_BRANCH"] ?: ""
-  return (branch == "master" || branch.matches("branch-[\\d.]+".toRegex())) &&
+  return (branch == "master" || branch.matches("branch-.+".toRegex())) &&
     gradle.taskGraph.hasTask(":artifactoryPublish")
 }
 
