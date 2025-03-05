@@ -32,6 +32,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RulingHelper {
 
+  // Both are false per default but can be turned on for local debugging
+  private static final boolean DEBUG_MODE = false;
+  private static final boolean VERBOSE_LOGS = false;
+
   private static final String SQ_VERSION_PROPERTY = "sonar.runtimeVersion";
   private static final String DEFAULT_SQ_VERSION = "LATEST_RELEASE";
   private static final Pattern DEBUG_AND_INFO_LOG_LINE_PATTERN = Pattern.compile("\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s(INFO|DEBUG)\\s.*");
@@ -58,7 +62,7 @@ public class RulingHelper {
   }
 
   static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile, String... keyValueProperties) {
-    return SonarScanner.create(path, keyValueProperties)
+    var sonarScanner = SonarScanner.create(path, keyValueProperties)
       .setProjectKey(projectKey)
       .setProjectName(projectKey)
       .setProjectVersion("1")
@@ -68,7 +72,15 @@ public class RulingHelper {
       .setProperty("sonar.lits.dump.new", FileLocation.of("build/actual").getFile().getAbsolutePath())
       .setProperty("sonar.lits.differences", litsDifferencesFile.getAbsolutePath())
       .setProperty("sonar.internal.analysis.failFast", "true")
+      .setDebugLogs(VERBOSE_LOGS)
       .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx2000m");
+
+    if (DEBUG_MODE) {
+      // SONAR_SCANNER_JAVA_OPTS is used for debugging analyzers with scanner version >= 6.0
+      sonarScanner.setEnvironmentVariable("SONAR_SCANNER_JAVA_OPTS", "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005");
+    }
+
+    return sonarScanner;
   }
 
   public static void assertAnalyzerLogs(String logs) {
