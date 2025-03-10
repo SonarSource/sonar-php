@@ -18,6 +18,10 @@ jobs:
           secrets: |
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader role | ARTIFACTORY_ROLE;
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
       - uses: gradle/actions/setup-gradle@v4
       - run: |
           ./gradlew :ruleApiUpdate -PartifactoryUsername=${ARTIFACTORY_ROLE} -PartifactoryPassword=${ARTIFACTORY_ACCESS_TOKEN}
