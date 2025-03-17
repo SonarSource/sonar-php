@@ -49,7 +49,7 @@ $hash = hash_pbkdf2('sha256', $password, $salt, 100000);
 <p>This code ensures that each user’s password has a unique salt value associated with it. It generates a salt randomly and with a length that
 provides the required security level. It uses a salt length of at least 32 bytes (256 bits), as recommended by industry standards.</p>
 <p>Here, the compliant code example ensures the salt is random and has a sufficient length by calling the <code>random_bytes</code> function with a
-length parameter set to 16. This one internally uses a cryptographically secure pseudo random number generator.</p>
+length parameter set to 32. This one internally uses a cryptographically secure pseudo random number generator.</p>
 <h2>Resources</h2>
 <h3>Standards</h3>
 <ul>
