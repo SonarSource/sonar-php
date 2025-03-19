@@ -143,7 +143,7 @@ class PHPSensorTest {
   }
 
   @BeforeEach
-  public void before() {
+  void before() {
     tmpFolderPath = tmpFolder.toPath();
     resetContext();
     disableCache();
@@ -357,6 +357,7 @@ class PHPSensorTest {
     context.setSettings(new MapSettings().setProperty("sonar.internal.analysis.failFast", "true"));
     analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
     assertThat(context.allAnalysisErrors()).hasSize(1);
+    assertThat(logTester.logs(Level.WARN)).hasSize(2);
   }
 
   private void analyseSingleFile(PHPSensor sensor, String fileName) {
@@ -387,7 +388,7 @@ class PHPSensorTest {
     PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException());
     addInputFiles(ANALYZED_FILE);
     createSensor(check).execute(context);
-    assertThat(logTester.logs(Level.ERROR)).contains("Could not analyse PHPSquidSensor.php");
+    assertThat(logTester.logs(Level.WARN)).contains("Could not analyse PHPSquidSensor.php");
   }
 
   @Test

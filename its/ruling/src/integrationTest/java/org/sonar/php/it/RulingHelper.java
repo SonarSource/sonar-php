@@ -95,8 +95,8 @@ public class RulingHelper {
       .map(line -> line.replaceAll("^\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s", ""))
       .filter(line -> !line.startsWith("WARN  PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results."))
       .filter(line -> !line.startsWith("WARN  Invalid character encountered in file"))
-      .filter(line -> !line.startsWith("ERROR Unable to parse file"))
-      .filter(line -> !line.startsWith("ERROR Parse error at line"))
+      .filter(line -> !line.startsWith("WARN  Unable to parse file"))
+      .filter(line -> !line.startsWith("WARN  Parse error at line"))
       .toList();
 
     assertThat(unexpectedLogs)

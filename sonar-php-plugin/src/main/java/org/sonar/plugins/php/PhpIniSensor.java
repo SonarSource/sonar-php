@@ -72,8 +72,8 @@ public class PhpIniSensor implements Sensor {
       try {
         phpIni = parser.parse(PhpFileImpl.create(inputFile));
       } catch (RecognitionException e) {
-        LOG.error("Unable to parse file: {}", inputFile);
-        LOG.error(e.getMessage());
+        LOG.warn("Unable to parse file: {}", inputFile);
+        LOG.warn(e.getMessage());
         continue;
       }
       for (PhpIniCheck check : checks.all()) {
