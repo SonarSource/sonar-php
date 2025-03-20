@@ -103,7 +103,7 @@ public class PHPAnalyzer {
         try {
           return check.analyze(context);
         } catch (StackOverflowError e) {
-          LOG.error("Stack overflow of {} in file {}", check.getClass().getName(), currentFile.uri());
+          LOG.warn("Stack overflow of {} in file {}", check.getClass().getName(), currentFile.uri());
           throw e;
         }
       });

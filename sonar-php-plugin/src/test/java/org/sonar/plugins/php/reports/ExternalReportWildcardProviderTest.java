@@ -54,7 +54,7 @@ class ExternalReportWildcardProviderTest {
     var reportFiles = ExternalReportWildcardProvider.getReportFiles(context, EXTERNAL_REPORTS_PROPERTY);
 
     assertThat(reportFiles).isEmpty();
-    assertThat(logTester.logs(Level.ERROR)).contains("Import of external issues requires SonarQube 7.2 or greater.");
+    assertThat(logTester.logs(Level.WARN)).contains("Import of external issues aborted! Import requires SonarQube 7.2 or greater.");
   }
 
   @Test
@@ -64,7 +64,7 @@ class ExternalReportWildcardProviderTest {
     var reportFiles = ExternalReportWildcardProvider.getReportFiles(context, EXTERNAL_REPORTS_PROPERTY);
 
     assertThat(reportFiles).isEmpty();
-    assertThat(logTester.logs(Level.ERROR)).doesNotContain("Import of external issues requires SonarQube 7.2 or greater.");
+    assertThat(logTester.logs(Level.WARN)).isEmpty();
   }
 
   static List<Arguments> shouldReturnFilesForPattern() {

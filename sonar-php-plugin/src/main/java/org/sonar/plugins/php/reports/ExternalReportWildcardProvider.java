@@ -45,7 +45,7 @@ public final class ExternalReportWildcardProvider {
     var minumumVersion = Version.create(MINIMUM_MAJOR_SUPPORTED_VERSION, MINIMUM_MINOR_SUPPORTED_VERSION);
     boolean externalIssuesSupported = context.runtime().getApiVersion().isGreaterThanOrEqual(minumumVersion);
     if (!externalIssuesSupported) {
-      LOG.error("Import of external issues requires SonarQube 7.2 or greater.");
+      LOG.warn("Import of external issues aborted! Import requires SonarQube 7.2 or greater.");
       return Collections.emptyList();
     }
 

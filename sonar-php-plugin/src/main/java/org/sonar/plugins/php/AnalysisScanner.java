@@ -159,8 +159,8 @@ class AnalysisScanner extends Scanner {
       phpAnalyzer.nextFile(inputFile);
     } catch (RecognitionException e) {
       checkInterrupted(e);
-      LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
-      LOG.error(e.getMessage());
+      LOG.warn("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
+      LOG.warn(e.getMessage());
       saveParsingIssue(context, e, inputFile);
       return;
     }
@@ -295,7 +295,7 @@ class AnalysisScanner extends Scanner {
 
   @Override
   void logException(Exception e, InputFile file) {
-    LOG.error("Could not analyse {}", file, e);
+    LOG.warn("Could not analyse {}", file, e);
   }
 
   @Override

@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -115,7 +116,7 @@ class PhpIniSensorTest {
     SensorContextTester context = SensorContextTester.create(baseDir);
     setupSingleFile(baseDir, context);
     sensor().execute(context, checks());
-    assertThat(logTester.logs()).contains("Unable to parse file: php.ini");
+    assertThat(logTester.logs(Level.WARN)).contains("Unable to parse file: php.ini");
   }
 
   private static DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context) throws IOException {

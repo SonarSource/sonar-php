@@ -34,7 +34,7 @@ class HardCodedCredentialsInFunctionCallsCheckTest {
   public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Test
-  void test() throws Exception {
+  void shouldRaiseCorrectly() {
     CheckVerifier.verify(new HardCodedCredentialsInFunctionCallsCheck(), "HardCodedCredentialsInFunctionCallsCheck.php");
   }
 
@@ -54,6 +54,6 @@ class HardCodedCredentialsInFunctionCallsCheckTest {
   void shouldLogErrorOnInvalidFile() {
     JsonSensitiveFunctionsReader.parseSensitiveFunctions("invalidLocation", Set.of("invalid_fileName"));
 
-    assertThat(logTester.setLevel(Level.ERROR).logs()).hasSize(1);
+    assertThat(logTester.setLevel(Level.WARN).logs()).hasSize(1);
   }
 }

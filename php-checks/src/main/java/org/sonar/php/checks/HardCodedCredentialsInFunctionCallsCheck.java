@@ -191,7 +191,7 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
             sensitiveFunctions.put(sensitiveMethod.uniqueName(), sensitiveMethod);
           }
         } catch (IOException | ParseException e) {
-          LOG.error("JSON containing the sensitive functions for hard coded credentials couldn't be read correctly from " +
+          LOG.warn("JSON containing the sensitive functions for hard coded credentials couldn't be read correctly from " +
             "resources at {}.", fileName);
         }
       }

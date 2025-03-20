@@ -104,8 +104,8 @@ class PHPAnalyzerTest {
     analyzer.nextFile(file);
 
     assertThatExceptionOfType(StackOverflowError.class).isThrownBy(analyzer::analyze);
-    assertThat(logTester.logs(Level.ERROR)).hasSize(1);
-    assertThat(logTester.logs(Level.ERROR).get(0)).startsWith("Stack overflow");
+    assertThat(logTester.logs(Level.WARN)).hasSize(1);
+    assertThat(logTester.logs(Level.WARN).get(0)).startsWith("Stack overflow");
   }
 
   @Test

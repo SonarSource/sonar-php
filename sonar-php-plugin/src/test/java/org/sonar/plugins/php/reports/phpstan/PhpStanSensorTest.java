@@ -72,7 +72,7 @@ class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  void raiseIssueWithUnixPath() throws IOException {
+  void shouldRaiseIssueWithUnixPath() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report.json");
     assertThat(externalIssues).hasSize(3);
 
@@ -117,7 +117,7 @@ class PhpStanSensorTest extends ReportSensorTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"phpstan-report_win.json", "phpstan-report-abs.json", "phpstan-report-abs_win.json"})
-  void raiseIssueWithPath(String path) throws IOException {
+  void shouldRaiseIssueWithPath(String path) throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting(path);
     assertThat(externalIssues).hasSize(3);
 
@@ -125,7 +125,7 @@ class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  void issuesWhenPhpstanFileHasErrors() throws IOException {
+  void shouldRaiseIssuesWhenPhpstanFileHasErrors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-error.json");
     assertThat(externalIssues).hasSize(1);
 
@@ -150,7 +150,7 @@ class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  void excludedFilesWillNotBeLogged() throws IOException {
+  void excludedFilesShouldNotBeLogged() throws IOException {
     executeSensorImporting("phpstan-report-with-error.json", Map.of("sonar.exclusion", "*/**/notExisting*.php"));
 
     assertThat(logTester.logs(Level.ERROR)).isEmpty();
@@ -159,36 +159,37 @@ class PhpStanSensorTest extends ReportSensorTest {
   }
 
   @Test
-  void issuesWhenPhpstanWithLineAndMessageErrors() throws IOException {
+  void shouldRaiseIssuesWhenPhpstanWithLineAndMessageErrors() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-with-line-and-message-error.json");
     assertThat(externalIssues).isEmpty();
 
-    assertThat(onlyOneLogElement(logTester.logs(Level.ERROR)))
+    assertThat(onlyOneLogElement(logTester.logs(Level.WARN)))
       .contains("100 is not a valid line for pointer. File phpstan/file2.php has 10 line(s)");
-    assertThat(logTester.logs(Level.WARN)).isEmpty();
+    assertThat(logTester.logs(Level.ERROR)).isEmpty();
     assertThat(logTester.logs(Level.DEBUG)).containsExactly(
       "Missing information for filePath:'phpstan/file2.php', message:'null'",
       "Missing information for filePath:'phpstan/file2.php', message:''");
   }
 
   @Test
-  void noObjectAsRoot() throws IOException {
+  void noObjectAsRootShouldLogWarn() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("no-object-as-root.php");
     assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester().logs(Level.ERROR)))
+    assertThat(onlyOneLogElement(logTester().logs(Level.WARN)))
       .startsWith("An error occurred when reading report file '")
       .contains("no issue will be imported from this report.\nThe content of the file probably does not have the expected format.");
   }
 
   @Test
-  void reportWithoutIssue() throws IOException {
+  void reportShouldReturnWithoutIssue() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-report-no-issue.json");
     assertThat(externalIssues).isEmpty();
     assertThat(logTester().logs(Level.ERROR)).isEmpty();
+    assertThat(logTester().logs(Level.WARN)).isEmpty();
   }
 
   @Test
-  void filePathIsCleanedWhenItContainsAdditionalContext() throws Exception {
+  void filePathShouldBeCleanedWhenItContainsAdditionalContext() throws Exception {
     List<ExternalIssue> externalIssues = executeSensorImporting("phpstan-with-context-in-path.json");
     assertThat(externalIssues).hasSize(1);
     assertThat(externalIssues.get(0).primaryLocation().inputComponent().key()).isEqualTo("reports-project:phpstan/file3.php");

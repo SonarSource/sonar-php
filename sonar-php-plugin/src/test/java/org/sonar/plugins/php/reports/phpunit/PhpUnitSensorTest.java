@@ -93,7 +93,7 @@ class PhpUnitSensorTest {
       "",
       PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH)
       .map(f -> reportsDir.resolve(f).toAbsolutePath().toString())
-      .collect(Collectors.toList());
+      .toList();
 
     context.settings().setProperty("sonar.php.coverage.reportPaths", String.join(", ", reportPaths));
 
@@ -112,8 +112,8 @@ class PhpUnitSensorTest {
     assertThat(context.lineHits(mainFileKey, 6)).isEqualTo(2);
     assertThat(context.lineHits(mainFileKey, 7)).isEqualTo(1);
 
-    assertThat(logTester.logs(Level.ERROR)).hasSize(1);
-    assertThat(logTester.logs(Level.ERROR).get(0))
+    assertThat(logTester.logs(Level.WARN)).hasSize(1);
+    assertThat(logTester.logs(Level.WARN).get(0))
       .startsWith("An error occurred when reading report file")
       .contains(reportsDir + "', nothing will be imported from this report.");
   }
