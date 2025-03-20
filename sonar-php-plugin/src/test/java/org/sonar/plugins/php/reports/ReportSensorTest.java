@@ -110,17 +110,17 @@ public abstract class ReportSensorTest {
   }
 
   @Test
-  void noIssuesWithoutReportPathsProperty() throws IOException {
+  void shouldRaiseNoIssuesWithoutReportPathsProperty() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting(null);
     assertThat(externalIssues).isEmpty();
     assertNoErrorWarnDebugLogs(logTester());
   }
 
   @Test
-  void noIssuesWithInvalidReportPath() throws IOException {
+  void shouldRaiseNoIssuesWithInvalidReportPath() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("invalid-path.txt");
     assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester().logs(Level.ERROR)))
+    assertThat(onlyOneLogElement(logTester().logs(Level.WARN)))
       .startsWith("An error occurred when reading report file '")
       .contains("invalid-path.txt', no issue will be imported from this report.\nThe file was not found.");
 
@@ -129,10 +129,10 @@ public abstract class ReportSensorTest {
   }
 
   @Test
-  void noIssuesWithInvalidFile() throws IOException {
+  void shouldRaiseNoIssuesWithInvalidFile() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting("not-" + sensor().reportKey() + "-report.json");
     assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester().logs(Level.ERROR)))
+    assertThat(onlyOneLogElement(logTester().logs(Level.WARN)))
       .startsWith("An error occurred when reading report file '")
       .contains("no issue will be imported from this report.\nThe content of the file probably does not have the expected format.");
 
@@ -141,7 +141,7 @@ public abstract class ReportSensorTest {
   }
 
   @Test
-  void noIssuesWithEmptyFile() throws IOException {
+  void shouldRaiseNoIssuesWithEmptyFile() throws IOException {
     List<ExternalIssue> externalIssues = executeSensorImporting(sensor().reportKey() + "-report-empty.json");
     assertThat(externalIssues).isEmpty();
     assertNoErrorWarnDebugLogs(logTester());

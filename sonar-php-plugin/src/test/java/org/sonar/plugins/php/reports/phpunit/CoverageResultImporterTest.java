@@ -33,7 +33,7 @@ import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.never;
@@ -55,7 +55,7 @@ class CoverageResultImporterTest {
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     context = SensorContextTester.create(new File(SRC_TEST_RESOURCES + BASE_DIR).getAbsoluteFile());
     DefaultInputFile monkeyFile = TestInputFileBuilder.create("moduleKey", MONKEY_FILE_NAME)
       .setType(InputFile.Type.MAIN)
@@ -71,8 +71,8 @@ class CoverageResultImporterTest {
   @Test
   void shouldAddWarningAndLogWhenReportNotFound() {
     executeSensorImporting(new File("notfound.txt"));
-    assertThat(logTester.logs(Level.ERROR)).hasSize(1);
-    assertThat((logTester.logs(Level.ERROR).get(0)))
+    assertThat(logTester.logs(Level.WARN)).hasSize(1);
+    assertThat((logTester.logs(Level.WARN).get(0)))
       .startsWith("An error occurred when reading report file '")
       .contains("notfound.txt', nothing will be imported from this report.");
 
@@ -180,11 +180,7 @@ class CoverageResultImporterTest {
    */
   @Test
   void shouldNotFailIfNoLineForFileNode() {
-    try {
-      executeSensorImporting(getReportFile("phpunit.coverage-with-filenode-without-line.xml"));
-    } catch (Exception e) {
-      fail("Should never happen");
-    }
+    assertThatNoException().isThrownBy(() -> executeSensorImporting(getReportFile("phpunit.coverage-with-filenode-without-line.xml")));
   }
 
   @Test

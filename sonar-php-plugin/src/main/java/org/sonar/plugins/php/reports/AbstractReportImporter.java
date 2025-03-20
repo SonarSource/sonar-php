@@ -44,7 +44,7 @@ public abstract class AbstractReportImporter implements ReportImporter {
     fileHandler = ExternalReportFileHandler.create(context);
     List<File> reportFiles = getReportFiles(context);
 
-    reportFiles.forEach(report -> {
+    reportFiles.forEach((File report) -> {
       unresolvedInputFiles.clear();
       importExternalReport(report, context);
       logUnresolvedInputFiles(report);
@@ -61,7 +61,7 @@ public abstract class AbstractReportImporter implements ReportImporter {
 
   public void logFileCantBeRead(Exception e, File reportPath) {
     String msg = getFileReadErrorMessage(e, reportPath);
-    logger().error(msg);
+    logger().warn(msg);
     analysisWarningsWrapper.addWarning(msg);
   }
 
@@ -76,7 +76,7 @@ public abstract class AbstractReportImporter implements ReportImporter {
       return false;
     }
 
-    Path path = Path.of(filePath);
+    var path = Path.of(filePath);
     for (ExclusionPattern exclusionPattern : exclusionPatterns) {
       if (exclusionPattern.match(path)) {
         return true;
@@ -93,7 +93,7 @@ public abstract class AbstractReportImporter implements ReportImporter {
     if (unresolvedInputFiles.size() > MAX_LOGGED_FILE_NAMES) {
       fileList += ";...";
     }
-    String msg = String.format(getUnresolvedInputFileMessageFormat(),
+    var msg = String.format(getUnresolvedInputFileMessageFormat(),
       unresolvedInputFiles.size(), reportName(), reportPath.getName(), fileList);
     logger().warn(msg);
     analysisWarningsWrapper.addWarning(msg);
@@ -102,24 +102,24 @@ public abstract class AbstractReportImporter implements ReportImporter {
   /**
    * Inspired by org.sonar.api.batch.fs.internal.PathPattern
    */
-  private static class ExclusionPattern {
+  private static final class ExclusionPattern {
 
-    final WildcardPattern pattern;
+    private final WildcardPattern pattern;
 
     private ExclusionPattern(String pattern) {
       this.pattern = WildcardPattern.create(pattern);
     }
 
     static ExclusionPattern[] create(String[] s) {
-      ExclusionPattern[] result = new ExclusionPattern[s.length];
-      for (int i = 0; i < s.length; i++) {
+      var result = new ExclusionPattern[s.length];
+      for (var i = 0; i < s.length; i++) {
         result[i] = new ExclusionPattern(s[i]);
       }
       return result;
     }
 
     boolean match(Path relativePath) {
-      String path = PathUtils.sanitize(relativePath.toString());
+      var path = PathUtils.sanitize(relativePath.toString());
       return path != null && pattern.match(path);
     }
   }

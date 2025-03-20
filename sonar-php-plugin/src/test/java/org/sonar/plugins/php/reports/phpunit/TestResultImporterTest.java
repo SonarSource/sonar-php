@@ -50,7 +50,7 @@ class TestResultImporterTest {
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     context = SensorContextTester.create(new File("src/test/resources"));
     importer = new TestResultImporter(analysisWarnings);
     fs = new DefaultFileSystem(BASE_DIR.getAbsoluteFile());
@@ -59,8 +59,8 @@ class TestResultImporterTest {
   @Test
   void shouldAddWarningAndLogWhenReportNotFound() {
     executeSensorImporting(new File("notfound.txt"));
-    assertThat(logTester.logs(Level.ERROR)).hasSize(1);
-    assertThat((logTester.logs(Level.ERROR).get(0)))
+    assertThat(logTester.logs(Level.WARN)).hasSize(1);
+    assertThat((logTester.logs(Level.WARN).get(0)))
       .startsWith("An error occurred when reading report file '")
       .contains("notfound.txt', nothing will be imported from this report.");
 
