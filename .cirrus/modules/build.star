@@ -18,8 +18,7 @@ load(
   "gradle_cache",
   "cleanup_gradle_script",
   "gradle_wrapper_cache",
-  "project_version_cache",
-  "store_project_version_script"
+  "project_version_cache"
 )
 
 
@@ -55,7 +54,7 @@ def build_env():
   env |= next_env()
   env |= {
     "DEPLOY_PULL_REQUEST": "true",
-    "BUILD_ARGUMENTS": "-x test -x sonar"
+    "BUILD_ARGUMENTS": "-x test -x sonar storeProjectVersion"
   }
   return env
 
@@ -69,8 +68,7 @@ def build_task():
       "gradle_cache": gradle_cache(),
       "gradle_wrapper_cache": gradle_wrapper_cache(),
       "build_script": build_script(),
-      "cleanup_gradle_script": cleanup_gradle_script(),
-      "store_project_version_script": store_project_version_script()
+      "cleanup_gradle_script": cleanup_gradle_script()
     }
   }
 
