@@ -15,9 +15,9 @@
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 plugins {
-  id("org.sonarsource.php.code-style-convention")
-  id("org.sonarsource.php.java-conventions")
-  id("org.sonarsource.php.integration-test")
+  id("org.sonarsource.cloud-native.code-style-conventions")
+  id("org.sonarsource.cloud-native.java-conventions")
+  id("org.sonarsource.cloud-native.integration-test")
 }
 
 description = "PHP :: Integration Tests :: Ruling"
@@ -30,9 +30,11 @@ dependencies {
   "integrationTestImplementation"(libs.sonar.orchestrator.junit5)
 }
 
-sonar {
-  isSkipProject = true
+integrationTest {
+  testSources = rootProject.file("its/sources")
 }
+
+sonar.isSkipProject = true
 
 codeStyleConvention {
   spotless {

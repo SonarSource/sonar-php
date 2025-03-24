@@ -14,14 +14,11 @@
  * You should have received a copy of the Sonar Source-Available License
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
-import org.sonarsource.php.enforceJarSize
-import org.sonarsource.php.registerCleanupTask
+import org.sonarsource.cloudnative.gradle.enforceJarSize
+
 
 plugins {
-  id("org.sonarsource.php.java-conventions")
-  id("org.sonarsource.php.artifactory-configuration")
-  id("org.sonarsource.php.code-style-convention")
-  alias(libs.plugins.shadow)
+  id("org.sonarsource.cloud-native.sonar-plugin")
 }
 
 dependencies {
@@ -67,16 +64,13 @@ tasks.jar {
         "Sonar-Version" to "9.9",
         "SonarLint-Supported" to "true",
         "Version" to project.version.toString(),
-        "Jre-Min-Version" to java.sourceCompatibility.majorVersion,
-      ),
+        "Jre-Min-Version" to java.sourceCompatibility.majorVersion
+      )
     )
   }
 }
 
-val cleanupTask = registerCleanupTask()
-
 tasks.shadowJar {
-  dependsOn(cleanupTask)
 
   minimize()
   exclude("META-INF/LICENSE*")
@@ -90,10 +84,6 @@ tasks.shadowJar {
   doLast {
     enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 5_500_000L)
   }
-}
-
-artifacts {
-  archives(tasks.shadowJar)
 }
 
 publishing {

@@ -15,6 +15,8 @@
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 pluginManagement {
+  includeBuild("build-logic")
+
   repositories {
     mavenCentral()
     gradlePluginPortal()
@@ -45,7 +47,6 @@ plugins {
 }
 
 rootProject.name = "php"
-includeBuild("build-logic")
 
 include(":sonar-php-plugin")
 include(":php-frontend")

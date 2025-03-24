@@ -72,6 +72,18 @@ If you have an idea for a rule but you are not sure that everyone needs it you c
 # <a name="testing"></a>Testing
 To run tests locally follow these instructions.
 
+To configure build dependencies, run the following command:
+
+```shell
+git submodule update --init -- build-logic
+```
+
+To always get the latest version of the build logic during git operations, set the following configuration:
+
+```shell
+git config submodule.recurse true
+```
+
 ### Build the Project and Run Unit Tests
 To build the plugin and run its unit tests, execute this command from the project's root directory:
 ```shell

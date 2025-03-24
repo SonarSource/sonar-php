@@ -1,9 +1,22 @@
-import org.sonarsource.php.registerCleanupTask
-
+/*
+ * SonarQube PHP Plugin
+ * Copyright (C) 2010-2025 SonarSource SA
+ * mailto:info AT sonarsource DOT com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
+ *
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
+ */
 plugins {
-  id("java-library")
+  id("org.sonarsource.cloud-native.sonar-plugin")
   id("jacoco")
-  alias(libs.plugins.shadow)
 }
 
 dependencies {
@@ -40,8 +53,8 @@ tasks.jar {
         "Sonar-Version" to "9.13",
         "SonarLint-Supported" to "true",
         "Version" to project.version.toString(),
-        "Jre-Min-Version" to java.sourceCompatibility.majorVersion,
-      ),
+        "Jre-Min-Version" to java.sourceCompatibility.majorVersion
+      )
     )
   }
 }
@@ -61,13 +74,6 @@ tasks.jacocoTestReport {
   }
 }
 
-val cleanupTask = registerCleanupTask()
-
 tasks.shadowJar {
-  dependsOn(cleanupTask)
   exclude("**/*.php")
-}
-
-artifacts {
-  archives(tasks.shadowJar)
 }

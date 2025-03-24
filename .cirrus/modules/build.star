@@ -41,6 +41,7 @@ def profile_report_artifacts():
 
 def build_script():
   return [
+    "git submodule update --init --depth 1 -- build-logic",
     "source cirrus-env BUILD",
     "source .cirrus/use-gradle-wrapper.sh",
     "regular_gradle_build_deploy_analyze ${BUILD_ARGUMENTS}",
@@ -115,6 +116,7 @@ def build_test_analyze_task():
 
 def whitesource_script():
   return [
+    "git submodule update --init --depth 1 -- build-logic",
     "source cirrus-env QA",
     "source .cirrus/use-gradle-wrapper.sh",
     "source ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt",
