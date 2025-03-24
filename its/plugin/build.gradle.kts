@@ -43,6 +43,7 @@ integrationTest {
 }
 
 tasks.named<Test>("integrationTest") {
+  dependsOn(":php-custom-rules-plugin:shadowJar")
   filter {
     setIncludePatterns("Tests")
   }
