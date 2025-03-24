@@ -35,7 +35,7 @@ public class GroupReplacementCheck extends AbstractRegexCheck {
 
   private static final String MESSAGE = "Referencing non-existing group%s: %s.";
   // Not allowing numbers starting by 0, other than zero itself.
-  private static final String NUMBER_PATTERN = "0(?!\\d)|[1-9]\\d*";
+  private static final String NUMBER_PATTERN = "0(?!\\d)|[1-9]\\d*+";
   private static final Pattern REFERENCE_PATTERN = Pattern.compile("\\$(" + NUMBER_PATTERN + ")|\\$\\{(" + NUMBER_PATTERN + ")}|\\\\(" + NUMBER_PATTERN + ")");
 
   @Override
