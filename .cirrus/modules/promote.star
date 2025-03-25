@@ -8,7 +8,7 @@ def promote_script():
   return [
     "source cirrus-env PROMOTE",
     "cirrus_jfrog_promote",
-    "source ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt",
+    "export PROJECT_VERSION=$(cat ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt)",
     "github-notify-promotion",
   ]
 
