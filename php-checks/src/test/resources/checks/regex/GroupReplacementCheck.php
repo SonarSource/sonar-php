@@ -21,8 +21,10 @@ class GroupReplacementCheck
     preg_replace("/(a)/", "$1", "");
     preg_replace("/(a)/", '${1}', "");
     preg_replace("/(a)/", "\1", "");
+    preg_replace("/(a)/", '\02', "");
     preg_replace("/(a)(b)/", "\1 \2", "");
     preg_replace("/(a(b))/", "\1 \2", "");
+    preg_replace('/(\"(\w+)\"\s?:)/im', "\"\033[36m$2\033[0m\":", $variable);
   }
 
   function unresolved_pattern() {
