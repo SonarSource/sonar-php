@@ -22,8 +22,8 @@ plugins {
 }
 
 artifactoryConfiguration {
-  buildName = providers.environmentVariable("CIRRUS_REPO_NAME").orElse("sonar-go")
-  artifactsToPublish = "org.sonarsource.go:sonar-go-plugin:jar"
+  buildName = providers.environmentVariable("CIRRUS_REPO_NAME").orElse("sonar-php")
+  artifactsToPublish = "org.sonarsource.php:sonar-php-plugin:jar"
   artifactsToDownload = ""
   repoKeyEnv = "ARTIFACTORY_DEPLOY_REPO"
   usernameEnv = "ARTIFACTORY_DEPLOY_USERNAME"

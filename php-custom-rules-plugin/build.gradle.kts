@@ -15,8 +15,9 @@
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 plugins {
-  id("org.sonarsource.cloud-native.sonar-plugin")
+  id("java-library")
   id("jacoco")
+  id("com.gradleup.shadow")
 }
 
 dependencies {
