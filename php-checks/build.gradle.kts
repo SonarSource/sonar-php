@@ -15,9 +15,8 @@
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 plugins {
-  id("org.sonarsource.php.java-conventions")
-  id("org.sonarsource.php.code-style-convention")
-  id("java-library")
+  id("org.sonarsource.cloud-native.java-conventions")
+  id("org.sonarsource.cloud-native.code-style-conventions")
 }
 
 description = "SonarSource PHP Analyzer :: Checks"

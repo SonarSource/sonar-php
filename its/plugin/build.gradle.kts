@@ -15,14 +15,15 @@
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 plugins {
-  id("org.sonarsource.php.code-style-convention")
-  id("org.sonarsource.php.java-conventions")
-  id("org.sonarsource.php.integration-test")
+  id("org.sonarsource.cloud-native.code-style-conventions")
+  id("org.sonarsource.cloud-native.java-conventions")
+  id("org.sonarsource.cloud-native.integration-test")
 }
 
 description = "PHP :: Integration Tests :: Plugin"
 
 dependencies {
+  // Mandatory for the orchestrator in the "Tests" class, since it requires the custom rules plugin JAR
   "integrationTestCompileOnly"(project(":sonar-php-plugin", configuration = "shadow"))
   "integrationTestImplementation"(libs.sonar.orchestrator.junit5)
   "integrationTestImplementation"(libs.sonar.plugin.api)
@@ -37,18 +38,18 @@ dependencies {
   "integrationTestCompileOnly"(libs.jsr305)
 }
 
-(tasks["integrationTest"] as Test).filter {
-  setIncludePatterns("Tests")
+integrationTest {
+  testSources.set(file("projects"))
 }
 
-// Mandatory for the orchestrator in the "Tests" class, since it requires the custom rules plugin JAR
-tasks.named("integrationTest") {
+tasks.named<Test>("integrationTest") {
   dependsOn(":php-custom-rules-plugin:shadowJar")
+  filter {
+    setIncludePatterns("Tests")
+  }
 }
 
-sonar {
-  isSkipProject = true
-}
+sonar.isSkipProject = true
 
 codeStyleConvention {
   spotless {

@@ -18,8 +18,7 @@ load(
   "gradle_cache",
   "cleanup_gradle_script",
   "gradle_wrapper_cache",
-  "project_version_cache",
-  "store_project_version_script"
+  "project_version_cache"
 )
 
 
@@ -41,6 +40,7 @@ def profile_report_artifacts():
 
 def build_script():
   return [
+    "git submodule update --init --depth 1 -- build-logic",
     "source cirrus-env BUILD",
     "source .cirrus/use-gradle-wrapper.sh",
     "regular_gradle_build_deploy_analyze ${BUILD_ARGUMENTS}",
@@ -54,7 +54,7 @@ def build_env():
   env |= next_env()
   env |= {
     "DEPLOY_PULL_REQUEST": "true",
-    "BUILD_ARGUMENTS": "-x test -x sonar"
+    "BUILD_ARGUMENTS": "-x test -x sonar storeProjectVersion"
   }
   return env
 
@@ -68,8 +68,7 @@ def build_task():
       "gradle_cache": gradle_cache(),
       "gradle_wrapper_cache": gradle_wrapper_cache(),
       "build_script": build_script(),
-      "cleanup_gradle_script": cleanup_gradle_script(),
-      "store_project_version_script": store_project_version_script()
+      "cleanup_gradle_script": cleanup_gradle_script()
     }
   }
 
@@ -115,9 +114,10 @@ def build_test_analyze_task():
 
 def whitesource_script():
   return [
+    "git submodule update --init --depth 1 -- build-logic",
     "source cirrus-env QA",
     "source .cirrus/use-gradle-wrapper.sh",
-    "source ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt",
+    "export PROJECT_VERSION=$(cat ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt)",
     "GRADLE_OPTS=\"-Xmx64m -Dorg.gradle.jvmargs='-Xmx3G' -Dorg.gradle.daemon=false\" ./gradlew ${GRADLE_COMMON_FLAGS} :php-frontend:processResources -Pkotlin.compiler.execution.strategy=in-process",
     "source ws_scan.sh"
   ]
