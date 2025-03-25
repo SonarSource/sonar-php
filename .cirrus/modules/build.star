@@ -117,7 +117,7 @@ def whitesource_script():
     "git submodule update --init --depth 1 -- build-logic",
     "source cirrus-env QA",
     "source .cirrus/use-gradle-wrapper.sh",
-    "source ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt",
+    "export PROJECT_VERSION=$(cat ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt)",
     "GRADLE_OPTS=\"-Xmx64m -Dorg.gradle.jvmargs='-Xmx3G' -Dorg.gradle.daemon=false\" ./gradlew ${GRADLE_COMMON_FLAGS} :php-frontend:processResources -Pkotlin.compiler.execution.strategy=in-process",
     "source ws_scan.sh"
   ]
