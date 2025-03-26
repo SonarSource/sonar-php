@@ -93,7 +93,7 @@ def build_test_analyze_task():
       "only_if": is_branch_qa_eligible(),
       "depends_on": "build",
       "env": build_test_env(),
-      "eks_container": base_image_container_builder(cpu=2, memory="6G"),
+      "eks_container": base_image_container_builder(cpu=2, memory="8G"),
       "gradle_cache": gradle_cache(),
       "gradle_wrapper_cache": gradle_wrapper_cache(),
       "build_script": build_script(),
