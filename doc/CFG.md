@@ -34,7 +34,7 @@ In other words, we do not explore the expressions inside the above statements wh
 
 ## Implementation
 
-The CFG is built bottom-up: we start with an empty END block (bottom), which represents the end of the control flow in the current function and recursively process the predecessor statements in the block. The algorithm is implemented as an AST visitor in [ControlFlowGraphBuilder](../php-frontend/src/main/java/org/sonar/php/cfg/ControlFlowGraphBuilder.java).
+The CFG is built bottom-up: we start with an empty END block (bottom), which represents the end of the control flow in the current function and recursively process the predecessor statements in the block. The algorithm is implemented as an AST visitor in [ControlFlowGraphBuilder](../php-frontend/src/main/java/org/sonar/plugins/php/api/cfg/ControlFlowGraphBuilder.java).
 
 A CFG is generated for the following trees: SCRIPT, FUNCTION_DECLARATION, FUNCTION_EXPRESSION, METHOD_DECLARATION.
 
@@ -98,4 +98,4 @@ Notice that the red edge is impossible, but it will be present in the CFG due to
 
 ## Tests
 
-The best documentation is Test Automation, see [ControlFlowGraphTest](../php-frontend/src/test/java/org/sonar/php/cfg/ControlFlowGraphTest.java).
+The best documentation is Test Automation, see [ControlFlowGraphTest](../php-frontend/src/test/java/org/sonar/plugins/php/api/cfg/ControlFlowGraphTest.java).
