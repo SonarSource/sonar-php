@@ -32,4 +32,5 @@ dependencies {
   testImplementation(libs.assertj.core)
   testImplementation(libs.mockito.core)
   testImplementation(libs.sonar.plugin.api.test.fixtures)
+  testRuntimeOnly(libs.junit.platform.launcher)
 }

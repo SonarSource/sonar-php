@@ -27,6 +27,7 @@ dependencies {
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.sonar.plugin.api.impl)
   testImplementation(testFixtures(project(":php-frontend")))
+  testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 description = "PHP Custom Rules Example for SonarQube"

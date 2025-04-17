@@ -1,20 +1,19 @@
 [versions]
-sonar-commons = "2.16.0.3141"
+sonar-commons = "2.17.0.3322"
 # Before updating the plugin-api version, make sure to check the compatibility matrix and stick to the lowest denominator
 # https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility
 sonar-plugin-api = "11.1.0.2693"
-sonarqube = "25.2.0.102705"
-sonar-orchestrator = "5.1.0.2254"
-sonarlint = "10.15.0.80289"
+sonarqube = "25.4.0.105899"
+sonar-orchestrator = "5.5.0.2535"
+sonarlint = "10.19.1.80951"
 sslr = "1.24.0.633"
-junit = "5.11.4"
+junit = "5.12.2"
 assertj = "3.27.3"
-mockito = "5.15.2"
+mockito = "5.17.0"
 commons-lang = "3.17.0"
 jsr305 = "3.0.2"
-junit-platform = "1.11.4"
 staxmate = "2.0.1"
-awaitility = "4.2.2"
+awaitility = "4.3.0"
 
 [libraries]
 sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
@@ -37,7 +36,8 @@ assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 commons-lang = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang" }
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
-junit-platform = { module = "org.junit.platform:junit-platform-suite", version.ref = "junit-platform" }
+# Version of JUnit Platform is taken from the JUnit BOM that is imported by junit-jupiter
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 staxmate = { module = "org.codehaus.staxmate:staxmate", version.ref = "staxmate" }
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility"}
 

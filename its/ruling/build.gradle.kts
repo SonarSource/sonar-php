@@ -28,6 +28,7 @@ dependencies {
   "integrationTestImplementation"(libs.assertj.core)
   "integrationTestImplementation"(libs.sonar.analyzer.commons)
   "integrationTestImplementation"(libs.sonar.orchestrator.junit5)
+  "integrationTestRuntimeOnly"(libs.junit.platform.launcher)
 }
 
 integrationTest {
