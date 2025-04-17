@@ -31,11 +31,11 @@ dependencies {
   "integrationTestImplementation"(libs.sonar.lint.core)
   "integrationTestImplementation"(libs.sonar.lint.rpc.java.client)
   "integrationTestImplementation"(libs.sonar.lint.rpc.impl)
-  "integrationTestImplementation"(libs.junit.platform)
   "integrationTestImplementation"(libs.junit.jupiter)
   "integrationTestImplementation"(libs.assertj.core)
   "integrationTestImplementation"(libs.awaitility)
   "integrationTestCompileOnly"(libs.jsr305)
+  "integrationTestRuntimeOnly"(libs.junit.platform.launcher)
 }
 
 integrationTest {

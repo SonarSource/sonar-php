@@ -38,6 +38,7 @@ dependencies {
   testImplementation(libs.sonar.testing.harness)
   testImplementation(libs.sonar.plugin.api.impl)
   testImplementation(libs.sslr.testing.harness)
+  testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 description = "SonarSource PHP Analyzer :: Sonar Plugin"

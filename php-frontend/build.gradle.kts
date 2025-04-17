@@ -37,6 +37,7 @@ dependencies {
   testImplementation(libs.sonar.plugin.api.impl)
   testImplementation(libs.sslr.testing.harness)
   testImplementation(libs.sonar.testing.harness)
+  testRuntimeOnly(libs.junit.platform.launcher)
 
   testFixturesImplementation(libs.sonar.plugin.api.impl)
 }
