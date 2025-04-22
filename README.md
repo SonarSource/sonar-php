@@ -75,7 +75,7 @@ To run tests locally follow these instructions.
 To configure build dependencies, run the following command:
 
 ```shell
-git submodule update --init -- build-logic
+git submodule update --init -- build-logic/common
 ```
 
 To always get the latest version of the build logic during git operations, set the following configuration:
