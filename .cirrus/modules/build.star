@@ -1,5 +1,6 @@
 load(
   "github.com/SonarSource/cirrus-modules/cloud-native/env.star@analysis/master",
+  "gradle_signing_env",
   "pgp_signing_env",
   "next_env",
   "whitesource_api_env"
@@ -49,6 +50,7 @@ def build_script():
 
 def build_env():
   env = pgp_signing_env()
+  env |= gradle_signing_env()
   env |= next_env()
   env |= {
     "DEPLOY_PULL_REQUEST": "true",
