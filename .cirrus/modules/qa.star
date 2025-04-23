@@ -36,7 +36,7 @@ def on_failure():
 def qa_win_script():
   return [
     "source cirrus-env CI",
-    "git submodule update --init --depth 1 -- build-logic",
+    "git submodule update --init --depth 1 -- build-logic/common",
     "./gradlew ${GRADLE_COMMON_FLAGS} test"
   ]
 

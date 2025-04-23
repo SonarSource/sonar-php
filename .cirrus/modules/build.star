@@ -1,5 +1,6 @@
 load(
   "github.com/SonarSource/cirrus-modules/cloud-native/env.star@analysis/master",
+  "gradle_signing_env",
   "pgp_signing_env",
   "next_env",
   "whitesource_api_env"
@@ -40,17 +41,16 @@ def profile_report_artifacts():
 
 def build_script():
   return [
-    "git submodule update --init --depth 1 -- build-logic",
+    "git submodule update --init --depth 1 -- build-logic/common",
     "source cirrus-env BUILD",
     "source .cirrus/use-gradle-wrapper.sh",
     "regular_gradle_build_deploy_analyze ${BUILD_ARGUMENTS}",
-    "source set_gradle_build_version ${BUILD_NUMBER}",
-    "echo export PROJECT_VERSION=${PROJECT_VERSION} >> ~/.profile"
   ]
 
 
 def build_env():
   env = pgp_signing_env()
+  env |= gradle_signing_env()
   env |= next_env()
   env |= {
     "DEPLOY_PULL_REQUEST": "true",
@@ -114,7 +114,7 @@ def build_test_analyze_task():
 
 def whitesource_script():
   return [
-    "git submodule update --init --depth 1 -- build-logic",
+    "git submodule update --init --depth 1 -- build-logic/common",
     "source cirrus-env QA",
     "source .cirrus/use-gradle-wrapper.sh",
     "export PROJECT_VERSION=$(cat ${PROJECT_VERSION_CACHE_DIR}/evaluated_project_version.txt)",

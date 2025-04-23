@@ -1,6 +1,6 @@
 [submodule "its/sources"]
 	path = its/sources
 	url = https://github.com/SonarSource/php-test-sources.git
-[submodule "build-logic"]
-	path = build-logic
+[submodule "build-logic/common"]
+	path = build-logic/common
 	url = https://github.com/SonarSource/cloud-native-gradle-modules
