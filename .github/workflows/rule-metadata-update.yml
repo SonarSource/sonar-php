@@ -18,6 +18,7 @@ jobs:
           secrets: |
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader role | ARTIFACTORY_ROLE;
+            development/kv/data/develocity token | develocity_token;
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -28,6 +29,7 @@ jobs:
         env:
           ARTIFACTORY_ROLE: vault-${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ROLE }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          DEVELOCITY_ACCESS_KEY: "develocity.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).develocity_token }}"
       - uses: peter-evans/create-pull-request@v7
         with:
           author: ${{ github.actor }} <${{ github.actor }}>
