@@ -51,6 +51,6 @@ sonar {
     property("sonar.links.ci", "https://cirrus-ci.com/github/SonarSource/sonar-php")
     property("sonar.links.scm", "https://github.com/SonarSource/sonar-php")
     property("sonar.links.issue", "https://jira.sonarsource.com/browse/SONARPHP")
-    property("sonar.sca.excludedManifests", "its/sources/**")
+    property("sonar.sca.exclusions", "its/sources/**")
   }
 }
