@@ -97,3 +97,14 @@ publishing {
     artifact(tasks.javadocJar)
   }
 }
+
+publishingConfiguration {
+  pomName = "SonarSource PHP Analyzer"
+  scmUrl = "https://github.com/SonarSource/sonar-php"
+
+  license {
+    name = "SSALv1"
+    url = "https://sonarsource.com/license/ssal/"
+    distribution = "repo"
+  }
+}
