@@ -25,6 +25,7 @@ jobs:
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
       - run: |
+          git submodule update --init --depth 1 -- build-logic/common
           ./gradlew :ruleApiUpdate -PartifactoryUsername=${ARTIFACTORY_ROLE} -PartifactoryPassword=${ARTIFACTORY_ACCESS_TOKEN}
         env:
           ARTIFACTORY_ROLE: vault-${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ROLE }}
