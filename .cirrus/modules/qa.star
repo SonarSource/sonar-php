@@ -1,7 +1,10 @@
 load("github.com/SonarSource/cirrus-modules/cloud-native/actions.star@analysis/master", "default_gradle_on_failure")
 load("github.com/SonarSource/cirrus-modules/cloud-native/platform.star@analysis/master", "base_image_container_builder",
      "ec2_instance_builder")
-load("github.com/SonarSource/cirrus-modules/cloud-native/conditions.star@analysis/master", "is_branch_qa_eligible")
+load("github.com/SonarSource/cirrus-modules/cloud-native/conditions.star@analysis/master",
+     "is_branch_qa_eligible",
+     "are_changes_doc_only"
+     )
 load("github.com/SonarSource/cirrus-modules/cloud-native/env.star@analysis/master", "artifactory_reader_env")
 load("build.star", "profile_report_artifacts")
 load(
@@ -44,7 +47,7 @@ def qa_win_script():
 def qa_os_win_task():
   return {
     "qa_os_win_task": {
-      "only_if": is_branch_qa_eligible(),
+      "only_if": "({}) && !({})".format(is_branch_qa_eligible(), are_changes_doc_only()),
       "depends_on": "build",
       "ec2_instance": ec2_instance_builder(),
       "env": artifactory_reader_env(),
@@ -62,7 +65,7 @@ def qa_os_win_task():
 
 def qa_task(env, run_its_script):
   return {
-    "only_if": is_branch_qa_eligible(),
+    "only_if": "({}) && !({})".format(is_branch_qa_eligible(), are_changes_doc_only()),
     "depends_on": "build",
     "eks_container": base_image_container_builder(cpu=4, memory="12G"),
     "env": env,
