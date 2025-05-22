@@ -56,8 +56,8 @@ class PHPIntegrationTest {
     SoftAssertions.assertSoftly(softly -> {
       // Size
       softly.assertThat(getProjectMeasureAsDouble("ncloc")).isEqualTo(23388d);
-      softly.assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(43250d);
-      softly.assertThat(getProjectMeasureAsDouble("files")).isEqualTo(310d);
+      softly.assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(43185d);
+      softly.assertThat(getProjectMeasureAsDouble("files")).isEqualTo(304d);
       softly.assertThat(getProjectMeasureAsDouble("classes")).isEqualTo(299d);
       softly.assertThat(getProjectMeasureAsDouble("functions")).isEqualTo(1977d);
 
