@@ -57,7 +57,7 @@
         "git-submodules"
       ],
       "matchDepNames": [
-        "its/sources"
+        "its/sources/**"
       ],
       "enabled": false
     }
