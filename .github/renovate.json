@@ -7,8 +7,11 @@
     "before 4am on Monday"
   ],
   "rebaseWhen": "conflicted",
-  "enabledManagers": ["gradle", "gradle-wrapper", "github-actions", "regex"],
+  "enabledManagers": ["gradle", "gradle-wrapper", "github-actions", "regex", "git-submodules"],
   "gradle": {
+    "enabled": true
+  },
+  "git-submodules": {
     "enabled": true
   },
   "ignorePaths": [
@@ -48,6 +51,15 @@
       "groupName": "sonar-plugin-api",
       "groupSlug": "sonar-plugin-api",
       "prHeader": "**Before updating the plugin-api version, make sure to check the [compatibility matrix](https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility) and stick to the lowest denominator.**"
+    },
+    {
+      "matchManagers": [
+        "git-submodules"
+      ],
+      "matchDepNames": [
+        "its/sources"
+      ],
+      "enabled": false
     }
   ],
   "reviewers": ["team:security-cloud-squad"]
