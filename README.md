@@ -13,7 +13,7 @@ This SonarSource project is a [static code analyzer](https://en.wikipedia.org/wi
 
 # Features
 * 200+ rules
-* Supports up to PHP 8.3
+* Supports up to PHP 8.4
 * Metrics (complexity, number of lines, etc.)
 * Import of [unit test and coverage results](https://docs.sonarqube.org/latest/analysis/coverage/)
 * Support of [custom rules](https://docs.sonarqube.org/latest/analysis/languages/php/)
