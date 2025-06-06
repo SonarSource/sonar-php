@@ -42,23 +42,15 @@ public class RulingHelper {
   private static final Pattern CODE_LINE_LOG_LINE_PATTERN = Pattern.compile("\\s*\\d+: .*");
   private static final Pattern CODE_POINTER_LOG_LINE_PATTERN = Pattern.compile("\\s*\\^+");
 
-  static OrchestratorExtension getOrchestrator(Edition sonarEdition) {
+  static OrchestratorExtension getOrchestrator() {
     OrchestratorBuilder<OrchestratorExtensionBuilder, OrchestratorExtension> builder = OrchestratorExtension.builderEnv()
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
-      .setEdition(sonarEdition)
+      .setEdition(Edition.ENTERPRISE_LW)
+      .activateLicense()
       .addPlugin(FileLocation.byWildcardFilename(new File("../../sonar-php-plugin/build/libs"), "sonar-php-plugin-*-all.jar"))
       .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.11.0.2659"));
-
-    if (sonarEdition != Edition.COMMUNITY) {
-      builder.activateLicense();
-    }
-
     return builder.build();
-  }
-
-  static OrchestratorExtension getOrchestrator() {
-    return getOrchestrator(Edition.COMMUNITY);
   }
 
   static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile, String... keyValueProperties) {
