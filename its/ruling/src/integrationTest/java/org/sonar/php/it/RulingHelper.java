@@ -63,6 +63,7 @@ public class RulingHelper {
 
   static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile, String... keyValueProperties) {
     var sonarScanner = SonarScanner.create(path, keyValueProperties)
+      .setProperty("sonar.scanner.skipJreProvisioning", "true")
       .setProjectKey(projectKey)
       .setProjectName(projectKey)
       .setProjectVersion("1")
