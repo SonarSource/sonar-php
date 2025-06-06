@@ -19,7 +19,6 @@ package org.sonar.php.it;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
-import com.sonar.orchestrator.container.Edition;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PhpPrAnalysisTest {
 
   @RegisterExtension
-  public static final Orchestrator ORCHESTRATOR = RulingHelper.getOrchestrator(Edition.DEVELOPER);
+  public static final Orchestrator ORCHESTRATOR = RulingHelper.getOrchestrator();
 
   private static final String PROJECT_KEY = "prAnalysis";
 
