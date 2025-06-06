@@ -79,6 +79,7 @@ class Tests {
 
   public static SonarScanner createScanner() {
     return SonarScanner.create()
+      .setProperty("sonar.scanner.skipJreProvisioning", "true")
       .setScannerVersion(SCANNER_VERSION)
       .setProjectVersion("1.0")
       .setSourceDirs("src");
