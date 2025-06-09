@@ -19,6 +19,7 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.container.Edition;
 import com.sonar.orchestrator.container.Server;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.locator.FileLocation;
@@ -65,6 +66,8 @@ class Tests {
   public static final OrchestratorExtension ORCHESTRATOR = OrchestratorExtension.builderEnv()
     .useDefaultAdminCredentialsForBuilds(true)
     .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
+    .setEdition(Edition.ENTERPRISE_LW)
+    .activateLicense()
     // PHP Plugin
     .addPlugin(PHP_PLUGIN_LOCATION)
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
