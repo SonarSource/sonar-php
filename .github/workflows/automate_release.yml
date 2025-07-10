@@ -48,7 +48,7 @@ jobs:
         uses: SonarSource/release-github-actions/.github/actions/create-jira-release@SONARIAC-2092
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: {{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           project_key: ${{ github.event.inputs.project_key }}
           project_name: ${{ github.event.inputs.project_name }}
           new_version: ${{ github.event.inputs.new_version }}
