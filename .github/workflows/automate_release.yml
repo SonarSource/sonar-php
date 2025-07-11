@@ -7,8 +7,8 @@ env:
 on:
   workflow_dispatch:
     inputs:
-      new_version:
-        description: 'New Version'
+      version:
+        description: 'Version'
         required: true
         default: '1.0.0'
       short_description:
@@ -47,7 +47,7 @@ jobs:
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           project_key: ${{ env.PROJECT_KEY }}
           project_name: ${{ env.PROJECT_NAME }}
-          new_version: ${{ github.event.inputs.new_version }}
+          version: ${{ github.event.inputs.version }}
           short_description: ${{ github.event.inputs.short_description }}
           targeted_product: ${{ github.event.inputs.targeted_product }}
           sq_compatibility: ${{ github.event.inputs.sq_compatibility }}
