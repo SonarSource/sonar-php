@@ -1,8 +1,8 @@
 name: Automate release
 
 env:
-  PROJECT_KEY: 'SONARIAC'
-  PROJECT_NAME: 'SonarIaC'
+  PROJECT_KEY: 'SONARPHP'
+  PROJECT_NAME: 'SonarPHP'
 
 on:
   workflow_dispatch:
@@ -28,9 +28,19 @@ on:
         required: false
 
 jobs:
+  check_releasability:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.gatekeeper.outputs.version }}
+    steps:
+      - name: Check Releasability and Get Version
+        id: check_releasability_status
+        uses: SonarSource/release-github-actions/.github/actions/check-releasability-status@SONARIAC-2113
+
   create_release_ticket:
     name: Create release ticket
     runs-on: ubuntu-latest
+    needs: check_releasability
     permissions:
       contents: read
       id-token: write # Required for authenticating to Vault
@@ -51,7 +61,7 @@ jobs:
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           project_key: ${{ env.PROJECT_KEY }}
           project_name: ${{ env.PROJECT_NAME }}
-          version: ${{ github.event.inputs.version }}
+          version: ${{ needs.check_releasability.outputs.version }}
           short_description: ${{ github.event.inputs.short_description }}
           targeted_product: ${{ github.event.inputs.targeted_product }}
           sq_compatibility: ${{ github.event.inputs.sq_compatibility }}
