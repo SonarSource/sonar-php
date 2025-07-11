@@ -1,16 +1,12 @@
 name: Automate release
 
+env:
+  PROJECT_KEY: 'SONARIAC'
+  PROJECT_NAME: 'SonarIaC'
+
 on:
   workflow_dispatch:
     inputs:
-      project_key:
-        description: 'Jira Project Key'
-        required: true
-        default: 'SONARIAC'
-      project_name:
-        description: 'Jira Project Name'
-        required: true
-        default: 'SonarIaC'
       new_version:
         description: 'New Version'
         required: true
@@ -30,7 +26,10 @@ on:
 
 jobs:
   create_release_ticket:
-    runs-on: ubuntu-latest
+    runs-on: sonar-runner
+    permissions:
+      contents: read # read for actions/checkout
+      id-token: write # required by SonarSource/vault-action-wrapper
     steps:
       - name: Get Jira Token
         id: secrets
@@ -40,17 +39,14 @@ jobs:
             development/kv/data/jira user | JIRA_USER;
             development/kv/data/jira token | JIRA_TOKEN;
 
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
       - name: Create Jira Release Ticket
         id: create_ticket
         uses: SonarSource/release-github-actions/.github/actions/create-jira-release-ticket@SONARIAC-2092
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
-          project_key: ${{ github.event.inputs.project_key }}
-          project_name: ${{ github.event.inputs.project_name }}
+          project_key: ${{ env.PROJECT_KEY }}
+          project_name: ${{ env.PROJECT_NAME }}
           new_version: ${{ github.event.inputs.new_version }}
           short_description: ${{ github.event.inputs.short_description }}
           targeted_product: ${{ github.event.inputs.targeted_product }}
