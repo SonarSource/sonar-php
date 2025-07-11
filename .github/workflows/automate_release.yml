@@ -23,10 +23,23 @@ on:
         description: 'SonarQube Compatibility'
         required: true
         default: '2025.3'
+      jira_release:
+        description: 'Jira release version'
+        required: false
 
 jobs:
+  check_releasability:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.gatekeeper.outputs.version }}
+    steps:
+      - name: Check Releasability and Get Version
+        id: check_releasability_status
+        uses: SonarSource/release-github-actions/.github/actions/check-releasability-status@SONARIAC-
+
   create_release_ticket:
     runs-on: ubuntu-latest
+    needs: check_releasability
     permissions:
       contents: read
       id-token: write # Required for authenticating to Vault
@@ -51,6 +64,7 @@ jobs:
           short_description: ${{ github.event.inputs.short_description }}
           targeted_product: ${{ github.event.inputs.targeted_product }}
           sq_compatibility: ${{ github.event.inputs.sq_compatibility }}
+          jira_release: ${{ github.event.inputs.jira_release }}
 
       - name: Echo Ticket Key
         run: echo "The created Jira ticket key is ${{ steps.create_ticket.outputs.ticket_key }}"
