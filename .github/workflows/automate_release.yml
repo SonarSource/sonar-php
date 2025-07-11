@@ -4,6 +4,9 @@ env:
   PROJECT_KEY: 'SONARPHP'
   PROJECT_NAME: 'SonarPHP'
 
+permissions:
+  checks: read
+
 on:
   workflow_dispatch:
     inputs:
