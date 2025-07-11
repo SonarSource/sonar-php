@@ -28,12 +28,12 @@ jobs:
   create_release_ticket:
     runs-on: ubuntu-latest
     permissions:
-      contents: read # read for actions/checkout
-      id-token: write # required by SonarSource/vault-action-wrapper
+      contents: read
+      id-token: write # Required for authenticating to Vault
     steps:
-      - name: Get Jira Token
+      - name: Get Jira Credentials from Vault
         id: secrets
-        uses: SonarSource/vault-action-wrapper@3996073b47b49ac5c58c750d27ab4edf469401c8 # 3.0.1
+        uses: SonarSource/vault-action-wrapper@v3
         with:
           secrets: |
             development/kv/data/jira user | JIRA_USER;
