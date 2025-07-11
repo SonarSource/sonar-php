@@ -29,6 +29,7 @@ on:
 
 jobs:
   create_release_ticket:
+    name: Create release ticket
     runs-on: ubuntu-latest
     permissions:
       contents: read
