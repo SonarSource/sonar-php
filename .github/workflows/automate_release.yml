@@ -10,10 +10,6 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version'
-        required: true
-        default: '1.0.0'
       short_description:
         description: 'Short Description'
         required: true
@@ -32,9 +28,10 @@ on:
 
 jobs:
   check_releasability:
+    name: Check releasability
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.gatekeeper.outputs.version }}
+      version: ${{ steps.check_releasability_status.outputs.version }}
     steps:
       - name: Check Releasability and Get Version
         id: check_releasability_status
