@@ -26,7 +26,7 @@ on:
 
 jobs:
   create_release_ticket:
-    runs-on: sonar-runner
+    runs-on: ubuntu-latest
     permissions:
       contents: read # read for actions/checkout
       id-token: write # required by SonarSource/vault-action-wrapper
