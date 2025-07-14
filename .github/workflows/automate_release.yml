@@ -22,7 +22,7 @@ on:
         description: 'SonarQube Compatibility'
         required: true
         default: '2025.3'
-      jira_release:
+      jira_release_name:
         description: 'Jira release version'
         required: false
 
@@ -55,7 +55,7 @@ jobs:
 
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/.github/actions/create-jira-release-ticket@SONARIAC-2092
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@SONARIAC-2092
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -65,7 +65,7 @@ jobs:
           short_description: ${{ github.event.inputs.short_description }}
           targeted_product: ${{ github.event.inputs.targeted_product }}
           sq_compatibility: ${{ github.event.inputs.sq_compatibility }}
-          jira_release: ${{ github.event.inputs.jira_release }}
+          jira_release_name: ${{ github.event.inputs.jira_release_name }}
 
       - name: Echo Ticket Key
         run: echo "The created Jira ticket key is ${{ steps.create_ticket.outputs.ticket_key }}"
