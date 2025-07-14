@@ -25,6 +25,9 @@ on:
       jira_release_name:
         description: 'Jira release version'
         required: false
+      sonarlint_changelog:
+        description: 'SonarLint changelog content'
+        required: false
 
 jobs:
   check_releasability:
@@ -66,6 +69,7 @@ jobs:
           targeted_product: ${{ github.event.inputs.targeted_product }}
           sq_compatibility: ${{ github.event.inputs.sq_compatibility }}
           jira_release_name: ${{ github.event.inputs.jira_release_name }}
+          sonarlint_changelog: ${{ github.event.inputs.sonarlint_changelog }}
 
       - name: Echo Ticket Key
         run: echo "The created Jira ticket key is ${{ steps.create_ticket.outputs.ticket_key }}"
