@@ -61,5 +61,11 @@ jobs:
           jira_release_name: ${{ github.event.inputs.jira_release_name }}
           sonarlint_changelog: ${{ github.event.inputs.sonarlint_changelog }}
 
-      - name: Echo Ticket Key
-        run: echo "The created Jira ticket key is ${{ steps.create_ticket.outputs.ticket_key }}"
+      - name: Set Jira Release Ticket Status to 'In Progress'
+        id: set_status_to_in_progress
+        uses: SonarSource/release-github-actions/update-release-ticket-status/@SONARIAC-2093
+        with:
+          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
+          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+          ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
+          status: "In Progress"
