@@ -49,7 +49,7 @@ jobs:
 
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@master
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@remove_targeted_product
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -57,7 +57,6 @@ jobs:
           project_name: ${{ env.PROJECT_NAME }}
           version: ${{ needs.check_releasability.outputs.version }}
           short_description: ${{ github.event.inputs.short_description }}
-          targeted_product: "11.0"
           sq_compatibility: ">=LTS"
           jira_release_name: ${{ github.event.inputs.jira_release_name }}
           sonarlint_changelog: ${{ github.event.inputs.sonarlint_changelog }}
