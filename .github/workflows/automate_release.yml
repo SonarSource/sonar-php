@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Check Releasability and Get Version
         id: check_releasability_status
-        uses: SonarSource/release-github-actions/.github/actions/check-releasability-status@SONARIAC-2113
+        uses: SonarSource/release-github-actions/check-releasability-status@SONARIAC-2113
 
   create_release_ticket:
     name: Create release ticket
