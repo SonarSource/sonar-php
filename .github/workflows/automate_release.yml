@@ -65,8 +65,7 @@ jobs:
         id: rel_ticket_start_progress
         uses: SonarSource/release-github-actions/update-release-ticket-status/@SONARIAC-2093
         with:
-          # Use the output from the fetch_secrets job
-          jira_user: ${{ fromJSON(needs.fetch_secrets.outputs.vault_secrets).JIRA_USER }}
-          jira_token: ${{ fromJSON(needs.fetch_secrets.outputs.vault_secrets).JIRA_TOKEN }}
-          ticket_key: ${{ needs.create_release_ticket.outputs.ticket_key }}
+          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
+          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+          ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
           status: "Start Progress"
