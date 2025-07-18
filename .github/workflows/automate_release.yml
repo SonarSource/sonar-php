@@ -13,8 +13,11 @@ on:
       short_description:
         description: 'Short Description'
         required: true
+      next_version:
+        description: 'Next version to create after release (if not provided the currently released version will be incremented)'
+        required: false
       jira_release_name:
-        description: 'Jira release version'
+        description: 'Jira release version (if not provided and there is only one unreleased release in jira for this project it will be used instead'
         required: false
       sonarlint_changelog:
         description: 'SonarLint changelog content'
@@ -97,3 +100,13 @@ jobs:
           jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+
+      - name: Release in Jira and Create Next Version
+        id: jira_release
+        uses: SonarSource/release-github-actions/release-jira-version@SONARIAC-2095
+        with:
+          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
+          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+          project_key: ${{ env.PROJECT_KEY }}
+          jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
+          new_version_name: ${{ github.event.inputs.next_version }}
