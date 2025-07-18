@@ -78,7 +78,16 @@ jobs:
     needs: [check_releasability, create_release_ticket]
     permissions:
       contents: write
+      id-token: write # Required for authenticating to Vault
     steps:
+      - name: Get Jira Credentials from Vault
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/jira user | JIRA_USER;
+            development/kv/data/jira token | JIRA_TOKEN;
+
       - name: Publish Github release
         id: publish_github_release
         uses: SonarSource/release-github-actions/publish-github-release@SONARIAC-2094
