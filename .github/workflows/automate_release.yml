@@ -49,7 +49,7 @@ jobs:
 
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@master
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@SONARIAC-2094
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -63,9 +63,21 @@ jobs:
 
       - name: Start progress on release ticket
         id: rel_ticket_start_progress
-        uses: SonarSource/release-github-actions/update-release-ticket-status/@SONARIAC-2093
+        uses: SonarSource/release-github-actions/update-release-ticket-status/@master
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
           status: "Start Progress"
+
+  publish_release:
+    name: Publish Release
+    runs-on: ubuntu-latest
+    needs: [check_releasability]
+    steps:
+      - name: Publish Github release
+        id: publish_github_release
+        uses: SonarSource/release-github-actions/publish-github-release@SONARIAC-2094
+        with:
+          version: ${{ needs.check_releasability.outputs.version }}
+          release_notes: "Test release notes"
