@@ -74,6 +74,8 @@ jobs:
     name: Publish Release
     runs-on: ubuntu-latest
     needs: [check_releasability]
+    permissions:
+      contents: write
     steps:
       - name: Publish Github release
         id: publish_github_release
