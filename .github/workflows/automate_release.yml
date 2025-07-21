@@ -24,6 +24,24 @@ on:
         required: false
 
 jobs:
+  retrieve_jira_credentials:
+    name: Retrieve Jira Credentials
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Required for authenticating to Vault
+    outputs:
+      jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
+      jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+    steps:
+      - name: Get Jira Credentials from Vault
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/jira user | JIRA_USER;
+            development/kv/data/jira token | JIRA_TOKEN;
+
   check_releasability:
     name: Check releasability
     runs-on: ubuntu-latest
@@ -37,27 +55,16 @@ jobs:
   create_release_ticket:
     name: Create release ticket
     runs-on: ubuntu-latest
-    needs: check_releasability
-    permissions:
-      contents: read
-      id-token: write # Required for authenticating to Vault
+    needs: [retrieve_jira_credentials, check_releasability]
     outputs:
       jira_release_name: ${{ steps.create_ticket.outputs.jira_release_name }}
     steps:
-      - name: Get Jira Credentials from Vault
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
-        with:
-          secrets: |
-            development/kv/data/jira user | JIRA_USER;
-            development/kv/data/jira token | JIRA_TOKEN;
-
       - name: Create Jira Release Ticket
         id: create_ticket
         uses: SonarSource/release-github-actions/create-jira-release-ticket@SONARIAC-2094
         with:
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+          jira_user: ${{ needs.retrieve_jira_credentials.outputs.jira_user }}
+          jira_token: ${{ needs.retrieve_jira_credentials.outputs.jira_token }}
           project_key: ${{ env.PROJECT_KEY }}
           project_name: ${{ env.PROJECT_NAME }}
           version: ${{ needs.check_releasability.outputs.version }}
@@ -70,43 +77,43 @@ jobs:
         id: rel_ticket_start_progress
         uses: SonarSource/release-github-actions/update-release-ticket-status/@master
         with:
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+          jira_user: ${{ needs.retrieve_jira_credentials.outputs.jira_user }}
+          jira_token: ${{ needs.retrieve_jira_credentials.outputs.jira_token }}
           ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
           status: "Start Progress"
 
-  publish_release:
-    name: Publish Release
-    runs-on: ubuntu-latest
-    needs: [check_releasability, create_release_ticket]
-    permissions:
-      contents: write
-      id-token: write # Required for authenticating to Vault
-    steps:
-      - name: Get Jira Credentials from Vault
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
-        with:
-          secrets: |
-            development/kv/data/jira user | JIRA_USER;
-            development/kv/data/jira token | JIRA_TOKEN;
-
-      - name: Publish Github release
-        id: publish_github_release
-        uses: SonarSource/release-github-actions/publish-github-release@SONARIAC-2094
-        with:
-          version: ${{ needs.check_releasability.outputs.version }}
-          jira_project_key: ${{ env.PROJECT_KEY }}
-          jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
-
-      - name: Release in Jira and Create Next Version
-        id: jira_release
-        uses: SonarSource/release-github-actions/release-jira-version@SONARIAC-2095
-        with:
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
-          project_key: ${{ env.PROJECT_KEY }}
-          jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
-          new_version_name: ${{ github.event.inputs.next_version }}
+#  publish_release:
+#    name: Publish Release
+#    runs-on: ubuntu-latest
+#    needs: [check_releasability, create_release_ticket]
+#    permissions:
+#      contents: write
+#      id-token: write # Required for authenticating to Vault
+#    steps:
+#      - name: Get Jira Credentials from Vault
+#        id: secrets
+#        uses: SonarSource/vault-action-wrapper@v3
+#        with:
+#          secrets: |
+#            development/kv/data/jira user | JIRA_USER;
+#            development/kv/data/jira token | JIRA_TOKEN;
+#
+#      - name: Publish Github release
+#        id: publish_github_release
+#        uses: SonarSource/release-github-actions/publish-github-release@SONARIAC-2094
+#        with:
+#          version: ${{ needs.check_releasability.outputs.version }}
+#          jira_project_key: ${{ env.PROJECT_KEY }}
+#          jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
+#          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
+#          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+#
+#      - name: Release in Jira and Create Next Version
+#        id: jira_release
+#        uses: SonarSource/release-github-actions/release-jira-version@SONARIAC-2095
+#        with:
+#          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
+#          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+#          project_key: ${{ env.PROJECT_KEY }}
+#          jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
+#          new_version_name: ${{ github.event.inputs.next_version }}
