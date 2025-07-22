@@ -103,7 +103,7 @@ jobs:
 
       - name: Release in Jira and Create Next Version
         id: jira_release
-        uses: SonarSource/release-github-actions/release-jira-version@SONARIAC-2095
+        uses: SonarSource/release-github-actions/release-jira-version@master
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
