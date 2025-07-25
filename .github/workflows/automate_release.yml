@@ -57,7 +57,7 @@ jobs:
 
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@SONARIAC-2094
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@master
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -96,7 +96,7 @@ jobs:
 
       - name: Publish Github release
         id: publish_github_release
-        uses: SonarSource/release-github-actions/publish-github-release@SONARIAC-2094
+        uses: SonarSource/release-github-actions/publish-github-release@master
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           jira_project_key: ${{ env.PROJECT_KEY }}
