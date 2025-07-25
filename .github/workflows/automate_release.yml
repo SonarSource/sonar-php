@@ -133,7 +133,7 @@ jobs:
 
       - name: Find and Update Tickets
         id: integration_update
-        uses: SonarSource/release-github-actions/.github/actions/update-integration-tickets@SONARIAC-2156
+        uses: SonarSource/release-github-actions/update-integration-tickets@SONARIAC-2156
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
