@@ -1,8 +1,8 @@
 name: Automate release
 
 env:
-  PROJECT_KEY: 'SONARPHP'
-  PROJECT_NAME: 'SonarPHP'
+  PROJECT_KEY: "SONARPHP"
+  PROJECT_NAME: "SonarPHP"
 
 permissions:
   checks: read
@@ -11,16 +11,19 @@ on:
   workflow_dispatch:
     inputs:
       short_description:
-        description: 'Short Description'
+        description: "Short Description"
         required: true
       next_version:
-        description: 'Next version to create after release (if not provided the currently released version will be incremented)'
+        description: "Next version to create after release (if not provided the currently released version will be incremented)"
         required: false
       jira_release_name:
-        description: 'Jira release version (if not provided and there is only one unreleased release in jira for this project it will be used instead'
+        description: "Jira release version (if not provided and there is only one unreleased release in jira for this project it will be used instead"
         required: false
       sonarlint_changelog:
-        description: 'SonarLint changelog content'
+        description: "SonarLint changelog content"
+        required: false
+      sqs_fix_versions:
+        description: "A comma-separated list of fix versions to set on the SQS integration ticket"
         required: false
 
 jobs:
@@ -110,3 +113,33 @@ jobs:
           project_key: ${{ env.PROJECT_KEY }}
           jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
           new_version_name: ${{ github.event.inputs.next_version }}
+
+  update-integration-tickets:
+    name: Find and Update Integration Tickets
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Get Jira Credentials from Vault
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/jira user | JIRA_USER;
+            development/kv/data/jira token | JIRA_TOKEN;
+
+      - name: Find and Update Tickets
+        id: integration_update
+        uses: SonarSource/release-github-actions/.github/actions/update-integration-tickets@SONARIAC-2156
+        with:
+          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
+          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+          release_ticket_key: "REL-3639"
+          sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
+
+      - name: Echo Found Ticket Keys
+        run: |
+          echo "Found SQS integration ticket: ${{ steps.integration_update.outputs.sqs_ticket_key }}"
+          echo "Found SC integration ticket: ${{ steps.integration_update.outputs.sc_ticket_key }}"
