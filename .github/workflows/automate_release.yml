@@ -154,6 +154,8 @@ jobs:
     name: Update Analyzers in SQS and SC
     runs-on: ubuntu-latest
     needs: [update-integration-tickets, check_releasability]
+    permissions:
+      id-token: write
     outputs:
       pull_request_url: ${{ steps.update_step.outputs.pr-url }}
     steps:
