@@ -23,7 +23,10 @@ on:
         description: "SonarLint changelog content"
         required: false
       sqs_fix_versions:
-        description: "A comma-separated list of fix versions to set on the SQS integration ticket"
+        description: "SQS Fix Versions. A comma-separated list of fix versions to set on the SQS integration ticket"
+        required: false
+      integration_prs_reviewers:
+        description: "Reviewers for the integration PRs."
         required: false
 
 jobs:
@@ -121,7 +124,9 @@ jobs:
     permissions:
       contents: read
       id-token: write
-
+    outputs:
+      sqs_ticket_key: ${{ steps.integration_update.outputs.sqs_ticket_key }}
+      sc_ticket_key: ${{ steps.integration_update.outputs.sc_ticket_key }}
     steps:
       - name: Get Jira Credentials from Vault
         id: secrets
@@ -144,3 +149,29 @@ jobs:
         run: |
           echo "Found SQS integration ticket: ${{ steps.integration_update.outputs.sqs_ticket_key }}"
           echo "Found SC integration ticket: ${{ steps.integration_update.outputs.sc_ticket_key }}"
+
+  update-analyzer-sqs:
+    name: Update Analyzer in SonarQube
+    runs-on: ubuntu-latest
+    needs: [update-integration-tickets, check_releasability]
+    outputs:
+      pull_request_url: ${{ steps.update_step.outputs.pr-url }}
+    steps:
+      - name: get secrets
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@d1c1ab4ca5ad07fd9cdfe1eff038a39673dfca64  # v2.4.2-1
+        with:
+          secrets: |
+            development/github/token/SonarSource-sonar-php-release-automation token | GITHUB_TOKEN;
+
+      - name: Update analyzer and create PR
+        id: update_step
+        uses: SonarSource/release-github-actions/update-analyzer@SONARIAC-2096
+        with:
+          version: ${{ needs.check_releasability.outputs.version }}
+          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
+          plugin-language: 'php'
+          plugin-name: 'PHP'
+          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+          draft: true
+          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
