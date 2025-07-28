@@ -118,7 +118,7 @@ jobs:
           new_version_name: ${{ github.event.inputs.next_version }}
 
   update-integration-tickets:
-    name: Find and Update Integration Tickets
+    name: Update Integration Tickets
     runs-on: ubuntu-latest
     needs: publish_release
     permissions:
@@ -138,7 +138,7 @@ jobs:
 
       - name: Find and Update Tickets
         id: integration_update
-        uses: SonarSource/release-github-actions/update-integration-tickets@SONARIAC-2156
+        uses: SonarSource/release-github-actions/update-integration-tickets@master
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -150,8 +150,8 @@ jobs:
           echo "Found SQS integration ticket: ${{ steps.integration_update.outputs.sqs_ticket_key }}"
           echo "Found SC integration ticket: ${{ steps.integration_update.outputs.sc_ticket_key }}"
 
-  update-analyzer-sqs:
-    name: Update Analyzer in SonarQube
+  update-analyzers:
+    name: Update Analyzers in SQS and SC
     runs-on: ubuntu-latest
     needs: [update-integration-tickets, check_releasability]
     outputs:
@@ -164,8 +164,8 @@ jobs:
           secrets: |
             development/github/token/SonarSource-sonar-php-release-automation token | GITHUB_TOKEN;
 
-      - name: Update analyzer and create PR
-        id: update_step
+      - name: Update analyzer in SQS
+        id: update_step_sqs
         uses: SonarSource/release-github-actions/update-analyzer@SONARIAC-2096
         with:
           version: ${{ needs.check_releasability.outputs.version }}
