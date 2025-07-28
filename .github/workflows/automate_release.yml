@@ -166,12 +166,24 @@ jobs:
           secrets: |
             development/github/token/SonarSource-sonar-php-release-automation token | GITHUB_TOKEN;
 
-      - name: Update analyzer in SQS
-        id: update_step_sqs
+#      - name: Update analyzer in SQS
+#        id: update_step_sqs
+#        uses: SonarSource/release-github-actions/update-analyzer@SONARIAC-2096
+#        with:
+#          version: ${{ needs.check_releasability.outputs.version }}
+#          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
+#          plugin-language: 'php'
+#          plugin-name: 'PHP'
+#          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+#          draft: true
+#          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
+
+      - name: Update analyzer in SC
+        id: update_step_sc
         uses: SonarSource/release-github-actions/update-analyzer@SONARIAC-2096
         with:
           version: ${{ needs.check_releasability.outputs.version }}
-          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
+          ticket: ${{ needs.update-integration-tickets.outputs.sc_ticket_key }}
           plugin-language: 'php'
           plugin-name: 'PHP'
           github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
