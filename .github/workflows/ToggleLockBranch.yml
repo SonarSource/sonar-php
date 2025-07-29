@@ -1,6 +1,7 @@
 name: Toggle lock branch
 
 on:
+  workflow_call:
   workflow_dispatch:    # Triggered manually from the GitHub UI / Actions
 
 jobs:
