@@ -145,7 +145,7 @@ jobs:
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
-          ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
+          ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
           status: "Technical Release Done"
           assignee: '735b5100-e517-49a8-b51e-1f6b1bed7e4c'
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
