@@ -5,7 +5,6 @@ env:
   PROJECT_NAME: "SonarPHP"
   LANGUAGE: "php"
   USE_JIRA_SANDBOX: true
-  UPDATE_PLUGINS_IN_PRODUCTS: false
 
 permissions:
   checks: read
@@ -189,7 +188,6 @@ jobs:
 
   update-analyzers:
     name: Update Analyzers in SQS and SC
-    if: ${{ env.UPDATE_PLUGINS_IN_PRODUCTS == 'true' }}
     runs-on: ubuntu-latest
     needs: [ update-integration-tickets, check_releasability ]
     permissions:
@@ -205,33 +203,32 @@ jobs:
           secrets: |
             development/github/token/SonarSource-sonar-php-release-automation token | GITHUB_TOKEN;
 
-      - name: Update analyzer in SQS
-        id: update_step_sqs
-        uses: SonarSource/release-github-actions/update-analyzer@output_urls
-        with:
-          version: ${{ needs.check_releasability.outputs.version }}
-          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
-          plugin-language: 'php'
-          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-          draft: true
-          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
-
-      - name: Update analyzer in SC
-        id: update_step_sc
-        uses: SonarSource/release-github-actions/update-analyzer@output_urls
-        with:
-          version: ${{ needs.check_releasability.outputs.version }}
-          ticket: ${{ needs.update-integration-tickets.outputs.sc_ticket_key }}
-          plugin-language: 'php'
-          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-          draft: true
-          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
+#      - name: Update analyzer in SQS
+#        id: update_step_sqs
+#        uses: SonarSource/release-github-actions/update-analyzer@output_urls
+#        with:
+#          version: ${{ needs.check_releasability.outputs.version }}
+#          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
+#          plugin-language: 'php'
+#          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+#          draft: true
+#          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
+#
+#      - name: Update analyzer in SC
+#        id: update_step_sc
+#        uses: SonarSource/release-github-actions/update-analyzer@output_urls
+#        with:
+#          version: ${{ needs.check_releasability.outputs.version }}
+#          ticket: ${{ needs.update-integration-tickets.outputs.sc_ticket_key }}
+#          plugin-language: 'php'
+#          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+#          draft: true
+#          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
   summarize_release:
     name: Release Summary
     runs-on: ubuntu-latest
     needs: [check_releasability, create_release_ticket, publish_release, update-integration-tickets, update-analyzers]
-    if: success()
     steps:
       - name: Post Summary to Workflow
         run: |
