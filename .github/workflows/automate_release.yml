@@ -124,7 +124,7 @@ jobs:
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           jira_project_key: ${{ env.PROJECT_KEY }}
-          jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
+          jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
 
@@ -135,7 +135,7 @@ jobs:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           project_key: ${{ env.PROJECT_KEY }}
-          jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
+          jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
           new_version_name: ${{ github.event.inputs.next_version }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
 
@@ -202,6 +202,28 @@ jobs:
         with:
           secrets: |
             development/github/token/SonarSource-sonar-php-release-automation token | GITHUB_TOKEN;
+
+#      - name: Update analyzer in SQS
+#        id: update_step_sqs
+#        uses: SonarSource/release-github-actions/update-analyzer@output_urls
+#        with:
+#          version: ${{ needs.check_releasability.outputs.version }}
+#          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
+#          plugin-language: 'php'
+#          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+#          draft: true
+#          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
+#
+#      - name: Update analyzer in SC
+#        id: update_step_sc
+#        uses: SonarSource/release-github-actions/update-analyzer@output_urls
+#        with:
+#          version: ${{ needs.check_releasability.outputs.version }}
+#          ticket: ${{ needs.update-integration-tickets.outputs.sc_ticket_key }}
+#          plugin-language: 'php'
+#          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+#          draft: true
+#          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
   summarize_release:
     name: Release Summary
