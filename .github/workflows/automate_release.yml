@@ -89,7 +89,7 @@ jobs:
           targeted_product: "11.0"
           jira_release_name: ${{ github.event.inputs.jira_release_name }}
           sonarlint_changelog: ${{ github.event.inputs.sonarlint_changelog }}
-          use_sandbox: ${{ USE_JIRA_SANDBOX }}}
+          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}}
 
       - name: Start progress on release ticket
         id: rel_ticket_start_progress
@@ -99,7 +99,7 @@ jobs:
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
           status: "Start Progress"
-          use_sandbox: ${{ USE_JIRA_SANDBOX }}}
+          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}}
 
   publish_release:
     name: Publish Release
@@ -138,7 +138,7 @@ jobs:
           project_key: ${{ env.PROJECT_KEY }}
           jira_release_name: ${{ needs.create_release_ticket.outputs.jira_release_name }}
           new_version_name: ${{ github.event.inputs.next_version }}
-          use_sandbox: ${{ USE_JIRA_SANDBOX }}}
+          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}}
 
       - name: Move release ticket to done
         id: rel_ticket_move_to_done
@@ -149,7 +149,7 @@ jobs:
           ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
           status: "Technical Release Done"
           assignee: '735b5100-e517-49a8-b51e-1f6b1bed7e4c'
-          use_sandbox: ${{ USE_JIRA_SANDBOX }}}
+          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}}
 
   update-integration-tickets:
     name: Update Integration Tickets
@@ -180,7 +180,7 @@ jobs:
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           release_ticket_key: "REL-3639"
           sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
-          use_sandbox: ${{ USE_JIRA_SANDBOX }}}
+          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}}
 
       - name: Echo Found Ticket Keys
         run: |
