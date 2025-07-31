@@ -48,7 +48,7 @@ To request a new feature, please create a new thread in [SonarSource Community F
 To submit a contribution, create a pull request for this repository. Please make sure that you follow our [code style](https://github.com/SonarSource/sonar-developer-toolset) and that all [tests](#testing) are passing.
 
 ### Custom Rules
-If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](https://docs.sonarqube.org/latest/analysis/languages/php/) available only for you.
+If you have an idea for a rule, but you are not sure that everyone needs it you can implement a [custom rule](https://docs.sonarqube.org/latest/analysis/languages/php/) available only for you.
 
 #### Custom Rules API Changes
 - **3.32** (October 2023)
