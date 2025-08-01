@@ -60,7 +60,7 @@ jobs:
     steps:
       - name: Check Releasability and Get Version
         id: check_releasability_status
-        uses: SonarSource/release-github-actions/check-releasability-status@master
+        uses: SonarSource/release-github-actions/check-releasability-status@09c557fb83722adbe2af2ca7e625324e15739362
 
   create_release_ticket:
     name: Create release ticket
@@ -85,7 +85,7 @@ jobs:
 
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@master
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@09c557fb83722adbe2af2ca7e625324e15739362
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -101,7 +101,7 @@ jobs:
 
       - name: Start progress on release ticket
         id: rel_ticket_start_progress
-        uses: SonarSource/release-github-actions/update-release-ticket-status@master
+        uses: SonarSource/release-github-actions/update-release-ticket-status@09c557fb83722adbe2af2ca7e625324e15739362
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -118,7 +118,6 @@ jobs:
       id-token: write # Required for authenticating to Vault
     outputs:
       release_url: ${{ steps.publish_github_release.outputs.release_url }}
-      new_release_version: ${{ steps.jira_release.outputs.new_version_name }}
     steps:
       - name: Get Jira Credentials from Vault
         id: secrets
@@ -130,7 +129,7 @@ jobs:
 
       - name: Publish Github release
         id: publish_github_release
-        uses: SonarSource/release-github-actions/publish-github-release@master
+        uses: SonarSource/release-github-actions/publish-github-release@09c557fb83722adbe2af2ca7e625324e15739362
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           jira_project_key: ${{ env.PROJECT_KEY }}
@@ -139,9 +138,27 @@ jobs:
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           draft: ${{ env.DRAFT_RELEASE }}
 
+  release_in_jira:
+    name: Release in Jira
+    runs-on: ubuntu-latest
+    needs: [ publish_release, create_release_ticket ]
+    permissions:
+      contents: read
+      id-token: write # Required for authenticating to Vault
+    outputs:
+      new_release_version: ${{ steps.jira_release.outputs.new_version_name }}
+    steps:
+      - name: Get Jira Credentials from Vault
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/jira user | JIRA_USER;
+            development/kv/data/jira token | JIRA_TOKEN;
+
       - name: Release in Jira and Create Next Version
         id: jira_release
-        uses: SonarSource/release-github-actions/release-jira-version@master
+        uses: SonarSource/release-github-actions/release-jira-version@09c557fb83722adbe2af2ca7e625324e15739362
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -152,7 +169,7 @@ jobs:
 
       - name: Move release ticket to done
         id: rel_ticket_move_to_done
-        uses: SonarSource/release-github-actions/update-release-ticket-status@master
+        uses: SonarSource/release-github-actions/update-release-ticket-status@09c557fb83722adbe2af2ca7e625324e15739362
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -163,7 +180,7 @@ jobs:
 
   unlock_master_branch:
     name: Unlock master branch
-    needs: [lock_master_branch, publish_release]
+    needs: [ lock_master_branch, release_in_jira ]
     if: always() && needs.lock_master_branch.result == 'success'
     uses: ./.github/workflows/ToggleLockBranch.yml
     permissions:
@@ -171,7 +188,7 @@ jobs:
 
   bump_versions:
     name: Bump versions
-    needs: [ unlock_master_branch, publish_release ]
+    needs: [ unlock_master_branch, release_in_jira ]
     uses: ./.github/workflows/bump-versions.yaml
     permissions:
       contents: write # write for peter-evans/create-pull-request, read for actions/checkout
@@ -202,7 +219,7 @@ jobs:
 
       - name: Find and Update Tickets
         id: integration_update
-        uses: SonarSource/release-github-actions/update-integration-tickets@master
+        uses: SonarSource/release-github-actions/update-integration-tickets@09c557fb83722adbe2af2ca7e625324e15739362
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -232,32 +249,32 @@ jobs:
           secrets: |
             development/github/token/SonarSource-sonar-php-release-automation token | GITHUB_TOKEN;
 
-#      - name: Update analyzer in SQS
-#        id: update_step_sqs
-#        uses: SonarSource/release-github-actions/update-analyzer@master
-#        with:
-#          version: ${{ needs.check_releasability.outputs.version }}
-#          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
-#          plugin-language: 'php'
-#          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-#          draft: true
-#          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
-#
-#      - name: Update analyzer in SC
-#        id: update_step_sc
-#        uses: SonarSource/release-github-actions/update-analyzer@master
-#        with:
-#          version: ${{ needs.check_releasability.outputs.version }}
-#          ticket: ${{ needs.update-integration-tickets.outputs.sc_ticket_key }}
-#          plugin-language: 'php'
-#          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-#          draft: true
-#          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
+  #      - name: Update analyzer in SQS
+  #        id: update_step_sqs
+  #        uses: SonarSource/release-github-actions/update-analyzer@09c557fb83722adbe2af2ca7e625324e15739362
+  #        with:
+  #          version: ${{ needs.check_releasability.outputs.version }}
+  #          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
+  #          plugin-language: 'php'
+  #          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+  #          draft: true
+  #          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
+  #
+  #      - name: Update analyzer in SC
+  #        id: update_step_sc
+  #        uses: SonarSource/release-github-actions/update-analyzer@09c557fb83722adbe2af2ca7e625324e15739362
+  #        with:
+  #          version: ${{ needs.check_releasability.outputs.version }}
+  #          ticket: ${{ needs.update-integration-tickets.outputs.sc_ticket_key }}
+  #          plugin-language: 'php'
+  #          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+  #          draft: true
+  #          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
   summarize_release:
     name: Release
     runs-on: ubuntu-latest
-    needs: [check_releasability, create_release_ticket, publish_release, update-integration-tickets, update-analyzers]
+    needs: [ check_releasability, create_release_ticket, publish_release, update-integration-tickets, update-analyzers ]
     steps:
       - name: Post Summary to Workflow
         run: |
