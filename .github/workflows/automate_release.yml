@@ -5,6 +5,8 @@ env:
   PROJECT_NAME: "SonarPHP"
   LANGUAGE: "php"
   USE_JIRA_SANDBOX: true
+  DRAFT_RELEASE: true
+  PM_EMAIL: 'yasen.pavlov@sonarsource.com'
 
 permissions:
   checks: read
@@ -43,9 +45,14 @@ on:
         required: false
 
 jobs:
+  lock_master_branch:
+    name: Lock master branch
+    uses: ./.github/workflows/ToggleLockBranch.yml@3db952b292ae9d3b3c8bece4443a700d5fd02346
+
   check_releasability:
     name: Check releasability
     runs-on: ubuntu-latest
+    needs: lock_master_branch
     outputs:
       version: ${{ steps.check_releasability_status.outputs.version }}
     steps:
@@ -128,6 +135,7 @@ jobs:
           jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
+          draft: ${{ env.DRAFT_RELEASE }}
 
       - name: Release in Jira and Create Next Version
         id: jira_release
@@ -148,8 +156,21 @@ jobs:
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
           status: "Technical Release Done"
-          assignee: 'yasen.pavlov@sonarsource.com'
+          assignee: ${{ env.PM_EMAIL }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
+
+  unlock_master_branch:
+    name: Unlock master branch
+    needs: [lock_master_branch, publish_release]
+    if: always() && needs.lock_master_branch.result == 'success'
+    uses: ./.github/workflows/ToggleLockBranch.yml@3db952b292ae9d3b3c8bece4443a700d5fd02346
+
+  bump_versions:
+    name: Bump versions
+    needs: [ unlock_master_branch, publish_release ]
+    uses: ./.github/workflows/bump-versions.yaml@3db952b292ae9d3b3c8bece4443a700d5fd02346
+    with:
+      version: ${{ needs.publish_release.outputs.new_release_version }}
 
   update-integration-tickets:
     name: Update Integration Tickets
