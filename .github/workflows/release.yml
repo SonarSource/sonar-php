@@ -3,6 +3,7 @@ name: sonar-release
 # This workflow is triggered when publishing a new github release
 # yamllint disable-line rule:truthy
 on:
+  workflow_call:
   release:
     types:
       - published
