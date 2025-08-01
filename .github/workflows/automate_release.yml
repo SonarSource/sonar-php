@@ -47,7 +47,7 @@ on:
 jobs:
   lock_master_branch:
     name: Lock master branch
-    uses: ./.github/workflows/ToggleLockBranch.yml@3db952b292ae9d3b3c8bece4443a700d5fd02346
+    uses: ./.github/workflows/ToggleLockBranch.yml
 
   check_releasability:
     name: Check releasability
@@ -163,12 +163,12 @@ jobs:
     name: Unlock master branch
     needs: [lock_master_branch, publish_release]
     if: always() && needs.lock_master_branch.result == 'success'
-    uses: ./.github/workflows/ToggleLockBranch.yml@3db952b292ae9d3b3c8bece4443a700d5fd02346
+    uses: ./.github/workflows/ToggleLockBranch.yml
 
   bump_versions:
     name: Bump versions
     needs: [ unlock_master_branch, publish_release ]
-    uses: ./.github/workflows/bump-versions.yaml@3db952b292ae9d3b3c8bece4443a700d5fd02346
+    uses: ./.github/workflows/bump-versions.yaml
     with:
       version: ${{ needs.publish_release.outputs.new_release_version }}
 
