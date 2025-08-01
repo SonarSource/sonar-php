@@ -194,7 +194,7 @@ jobs:
       contents: write # write for peter-evans/create-pull-request, read for actions/checkout
       pull-requests: write # write for peter-evans/create-pull-request
     with:
-      version: ${{ needs.publish_release.outputs.new_release_version }}-SNAPSHOT
+      version: ${{ needs.release_in_jira.outputs.new_release_version }}-SNAPSHOT
 
   update-integration-tickets:
     name: Update Integration Tickets
@@ -282,7 +282,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Summary of the release:**" >> $GITHUB_STEP_SUMMARY
           echo "- **Released Version:** ${{ needs.check_releasability.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **New Version:** ${{ needs.publish_release.outputs.new_release_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **New Version:** ${{ needs.release_in_jira.outputs.new_release_version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Jira Release URL:** ${{ needs.create_release_ticket.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Release Ticket URL:** ${{ needs.create_release_ticket.outputs.release_ticket_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **GitHub Release URL:** ${{ needs.publish_release.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
