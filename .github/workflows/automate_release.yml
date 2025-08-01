@@ -182,7 +182,7 @@ jobs:
   update-integration-tickets:
     name: Update Integration Tickets
     runs-on: ubuntu-latest
-    needs: publish_release
+    needs: bump_versions
     permissions:
       contents: read
       id-token: write
