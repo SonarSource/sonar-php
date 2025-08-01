@@ -60,7 +60,7 @@ jobs:
     steps:
       - name: Check Releasability and Get Version
         id: check_releasability_status
-        uses: SonarSource/release-github-actions/check-releasability-status@output_urls
+        uses: SonarSource/release-github-actions/check-releasability-status@master
 
   create_release_ticket:
     name: Create release ticket
@@ -85,7 +85,7 @@ jobs:
 
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@output_urls
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@master
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -130,7 +130,7 @@ jobs:
 
       - name: Publish Github release
         id: publish_github_release
-        uses: SonarSource/release-github-actions/publish-github-release@output_urls
+        uses: SonarSource/release-github-actions/publish-github-release@master
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           jira_project_key: ${{ env.PROJECT_KEY }}
@@ -141,7 +141,7 @@ jobs:
 
       - name: Release in Jira and Create Next Version
         id: jira_release
-        uses: SonarSource/release-github-actions/release-jira-version@output_urls
+        uses: SonarSource/release-github-actions/release-jira-version@master
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -202,7 +202,7 @@ jobs:
 
       - name: Find and Update Tickets
         id: integration_update
-        uses: SonarSource/release-github-actions/update-integration-tickets@output_urls
+        uses: SonarSource/release-github-actions/update-integration-tickets@master
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
@@ -234,7 +234,7 @@ jobs:
 
 #      - name: Update analyzer in SQS
 #        id: update_step_sqs
-#        uses: SonarSource/release-github-actions/update-analyzer@output_urls
+#        uses: SonarSource/release-github-actions/update-analyzer@master
 #        with:
 #          version: ${{ needs.check_releasability.outputs.version }}
 #          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
@@ -245,7 +245,7 @@ jobs:
 #
 #      - name: Update analyzer in SC
 #        id: update_step_sc
-#        uses: SonarSource/release-github-actions/update-analyzer@output_urls
+#        uses: SonarSource/release-github-actions/update-analyzer@master
 #        with:
 #          version: ${{ needs.check_releasability.outputs.version }}
 #          ticket: ${{ needs.update-integration-tickets.outputs.sc_ticket_key }}
