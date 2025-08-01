@@ -177,7 +177,7 @@ jobs:
       contents: write # write for peter-evans/create-pull-request, read for actions/checkout
       pull-requests: write # write for peter-evans/create-pull-request
     with:
-      version: ${{ needs.publish_release.outputs.new_release_version }}
+      version: ${{ needs.publish_release.outputs.new_release_version }}-SNAPSHOT
 
   update-integration-tickets:
     name: Update Integration Tickets
