@@ -294,6 +294,6 @@ jobs:
           echo "- **Release Ticket URL:** ${{ needs.create_release_ticket.outputs.release_ticket_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **GitHub Release URL:** ${{ needs.publish_release.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SQS Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sqs_ticket_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SonarCloud Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sc_ticket_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **SQC Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sc_ticket_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SQS Analyzer PR URL:** ${{ needs.update-analyzers.outputs.sqs_pr_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SonarCloud Analyzer PR URL:** ${{ needs.update-analyzers.outputs.sc_pr_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **SQC Analyzer PR URL:** ${{ needs.update-analyzers.outputs.sc_pr_url }}" >> $GITHUB_STEP_SUMMARY
