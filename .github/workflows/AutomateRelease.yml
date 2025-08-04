@@ -4,8 +4,8 @@ env:
   PROJECT_KEY: "SONARPHP"
   PROJECT_NAME: "SonarPHP"
   LANGUAGE: "php"
-  USE_JIRA_SANDBOX: false
-  IS_DRAFT_RELEASE: false
+  USE_JIRA_SANDBOX: true
+  IS_DRAFT_RELEASE: true
   PM_EMAIL: 'alexandre.gigleux@sonarsource.com'
 
 on:
@@ -147,13 +147,13 @@ jobs:
           draft: ${{ env.IS_DRAFT_RELEASE }}
           release_notes: ${{ github.event.inputs.release_notes }}
 
-  release:
-    name: Sonar release
-    needs: publish_release
-    uses: ./.github/workflows/release.yml
-    permissions:
-      id-token: write
-      contents: write
+#  release:
+#    name: Sonar release
+#    needs: publish_release
+#    uses: ./.github/workflows/release.yml
+#    permissions:
+#      id-token: write
+#      contents: write
 
   release_in_jira:
     name: Release in Jira
