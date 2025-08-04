@@ -28,7 +28,7 @@ on:
         required: false
       sonarlint_changelog:
         description: |
-          A summary of release notes relevant to the SonarLint IDE extension.
+          A summary of release notes relevant to the SonarQube IDE extensions.
         required: false
       sqs_fix_versions:
         description: |
