@@ -42,17 +42,8 @@ on:
         required: false
 
 jobs:
-  rule_metadata_update:
-    name: Rule metadata update
-    uses: ./.github/workflows/rule-metadata-update.yml
-    permissions:
-      id-token: write     # required by SonarSource/vault-action-wrapper
-      contents: write # write for peter-evans/create-pull-request, read for actions/checkout
-      pull-requests: write # write for peter-evans/create-pull-request
-
   lock_master_branch:
     name: Lock master branch
-    needs: rule_metadata_update
     uses: ./.github/workflows/ToggleLockBranch.yml
     permissions:
       id-token: write
