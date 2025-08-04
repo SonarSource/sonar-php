@@ -37,7 +37,7 @@ on:
           If blank, release notes will be generated from the Jira Release.
       sonarlint_changelog:
         description: |
-          A summary of release notes relevant to the SonarLint IDE extension.
+          A summary of release notes relevant to the SonarQube IDE extensions.
         required: false
       sqs_fix_versions:
         description: |
@@ -259,7 +259,7 @@ jobs:
       sqs_pr_url: ${{ steps.update_step_sqs.outputs.pr-url }}
       sqc_pr_url: ${{ steps.update_step_sqc.outputs.pr-url }}
     steps:
-      - name: get secrets
+      - name: Get GitHub token from Vault
         id: secrets
         uses: SonarSource/vault-action-wrapper@v3
         with:
