@@ -33,8 +33,8 @@ on:
         required: false
       release_notes:
         description: |
-          Github release notes
-          If blank, release notes will be generated from the Jira Release
+          Github release notes.
+          If blank, release notes will be generated from the Jira Release.
       sonarlint_changelog:
         description: |
           A summary of release notes relevant to the SonarLint IDE extension.
@@ -222,9 +222,9 @@ jobs:
       id-token: write
     outputs:
       sqs_ticket_key: ${{ steps.integration_update.outputs.sqs_ticket_key }}
-      sqc_ticket_key: ${{ steps.integration_update.outputs.sqc_ticket_key }}
+      sqc_ticket_key: ${{ steps.integration_update.outputs.sc_ticket_key }}
       sqs_ticket_url: ${{ steps.integration_update.outputs.sqs_ticket_url}}
-      sqc_ticket_url: ${{ steps.integration_update.outputs.sqc_ticket_url }}
+      sqc_ticket_url: ${{ steps.integration_update.outputs.sc_ticket_url }}
     steps:
       - name: Get Jira Credentials from Vault
         id: secrets
@@ -247,7 +247,7 @@ jobs:
       - name: Echo Found Ticket Keys
         run: |
           echo "Found SQS integration ticket: ${{ steps.integration_update.outputs.sqs_ticket_key }}"
-          echo "Found SQC integration ticket: ${{ steps.integration_update.outputs.sqc_ticket_key }}"
+          echo "Found SQC integration ticket: ${{ steps.integration_update.outputs.sc_ticket_key }}"
 
   update-analyzers:
     name: Update Analyzers in SQS and SQC
