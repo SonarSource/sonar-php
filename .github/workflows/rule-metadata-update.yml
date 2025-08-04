@@ -1,6 +1,5 @@
 name: rule-metadata-update
 on:
-  workflow_call:
   workflow_dispatch:
 
 jobs:
