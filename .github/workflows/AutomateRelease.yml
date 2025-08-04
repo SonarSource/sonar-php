@@ -18,8 +18,8 @@ on:
         required: true
       sq_compatibility:
         description: |
-          SonarQube compatibility
-          Default needs to be changed only in case of LTA fix release
+          SonarQube compatibility.
+          Default needs to be changed only in case of LTA fix release.
         default: ">=10.8"
       next_version:
         description: |
