@@ -22,8 +22,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          sed -i 's/version=.*/version=${{ github.event.inputs.version }}/' gradle.properties
-          cd php-custom-rules-plugin/maven && mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${{ github.event.inputs.version }}
+          sed -i 's/version=.*/version=${{ inputs.version }}/' gradle.properties
+          cd php-custom-rules-plugin/maven && mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${{ inputs.version }}
       - uses: peter-evans/create-pull-request@v7
         with:
           author: ${{ github.actor }} <${{ github.actor }}>
