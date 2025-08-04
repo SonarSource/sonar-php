@@ -7,7 +7,7 @@
   <groupId>org.sonar.samples.php</groupId>
   <artifactId>php-custom-rules-plugin</artifactId>
   <packaging>jar</packaging>
-  <version>3.47-SNAPSHOT</version>
+  <version>3.72-SNAPSHOT</version>
 
   <name>SonarSource PHP Custom Rules Example</name>
   <description>PHP Custom Rules Example for SonarQube</description>
