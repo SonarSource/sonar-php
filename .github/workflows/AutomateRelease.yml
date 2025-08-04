@@ -240,7 +240,7 @@ jobs:
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
-          release_ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
+          release_ticket_key: "REL-3639"
           sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
 
