@@ -19,6 +19,6 @@ jobs:
       - name: Send Slack Notification
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        uses: SonarSource/gh-action_slack-notify@v1
+        uses: SonarSource/gh-action_slack-notify@1.0.1
         with:
           slackChannel: squad-security-cloud-notifs
