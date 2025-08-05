@@ -5,7 +5,7 @@ env:
   PROJECT_NAME: "SonarPHP"
   LANGUAGE: "php"
   USE_JIRA_SANDBOX: false
-  DRAFT_RELEASE: false
+  IS_DRAFT_RELEASE: false
   PM_EMAIL: 'alexandre.gigleux@sonarsource.com'
 
 on:
@@ -16,6 +16,11 @@ on:
           A brief summary of what the release contains. 
           This will be added directly to the release ticket.
         required: true
+      sq_compatibility:
+        description: |
+          SonarQube compatibility.
+          Default needs to be changed only in case of LTA fix release.
+        default: ">=10.8"
       next_version:
         description: |
           Specify the version for the next release (e.g., 4.2.0).
@@ -26,6 +31,10 @@ on:
           The name of the release version in Jira.
           If blank, the action will try to use the *only* unreleased version in the project.
         required: false
+      release_notes:
+        description: |
+          Github release notes.
+          If blank, release notes will be generated from the Jira Release.
       sonarlint_changelog:
         description: |
           A summary of release notes relevant to the SonarQube IDE extensions.
@@ -92,7 +101,7 @@ jobs:
           project_name: ${{ env.PROJECT_NAME }}
           version: ${{ needs.check_releasability.outputs.version }}
           short_description: ${{ github.event.inputs.short_description }}
-          sq_compatibility: ">=LTS"
+          sq_compatibility: ${{ github.event.inputs.sq_compatibility }}
           targeted_product: "11.0"
           jira_release_name: ${{ github.event.inputs.jira_release_name }}
           sonarlint_changelog: ${{ github.event.inputs.sonarlint_changelog }}
@@ -135,7 +144,8 @@ jobs:
           jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
-          draft: ${{ env.DRAFT_RELEASE }}
+          draft: ${{ env.IS_DRAFT_RELEASE }}
+          release_notes: ${{ github.event.inputs.release_notes }}
 
   release:
     name: Sonar release
@@ -212,9 +222,9 @@ jobs:
       id-token: write
     outputs:
       sqs_ticket_key: ${{ steps.integration_update.outputs.sqs_ticket_key }}
-      sc_ticket_key: ${{ steps.integration_update.outputs.sc_ticket_key }}
+      sqc_ticket_key: ${{ steps.integration_update.outputs.sc_ticket_key }}
       sqs_ticket_url: ${{ steps.integration_update.outputs.sqs_ticket_url}}
-      sc_ticket_url: ${{ steps.integration_update.outputs.sc_ticket_url }}
+      sqc_ticket_url: ${{ steps.integration_update.outputs.sc_ticket_url }}
     steps:
       - name: Get Jira Credentials from Vault
         id: secrets
@@ -230,24 +240,24 @@ jobs:
         with:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
-          release_ticket_key: "REL-3639"
+          release_ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
           sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
 
       - name: Echo Found Ticket Keys
         run: |
           echo "Found SQS integration ticket: ${{ steps.integration_update.outputs.sqs_ticket_key }}"
-          echo "Found SC integration ticket: ${{ steps.integration_update.outputs.sc_ticket_key }}"
+          echo "Found SQC integration ticket: ${{ steps.integration_update.outputs.sc_ticket_key }}"
 
   update-analyzers:
-    name: Update Analyzers in SQS and SC
+    name: Update Analyzers in SQS and SQC
     runs-on: ubuntu-latest
     needs: [ update-integration-tickets, check_releasability ]
     permissions:
       id-token: write
     outputs:
       sqs_pr_url: ${{ steps.update_step_sqs.outputs.pr-url }}
-      sc_pr_url: ${{ steps.update_step_sc.outputs.pr-url }}
+      sqc_pr_url: ${{ steps.update_step_sqc.outputs.pr-url }}
     steps:
       - name: Get GitHub token from Vault
         id: secrets
@@ -262,20 +272,20 @@ jobs:
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
-          plugin-language: 'php'
+          plugin-language: ${{ env.LANGUAGE }}
           github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-          draft: true
+          draft: ${{ env.IS_DRAFT_RELEASE }}
           reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
-      - name: Update analyzer in SC
-        id: update_step_sc
+      - name: Update analyzer in SQC
+        id: update_step_sqc
         uses: SonarSource/release-github-actions/update-analyzer@09c557fb83722adbe2af2ca7e625324e15739362
         with:
           version: ${{ needs.check_releasability.outputs.version }}
-          ticket: ${{ needs.update-integration-tickets.outputs.sc_ticket_key }}
-          plugin-language: 'php'
+          ticket: ${{ needs.update-integration-tickets.outputs.sqc_ticket_key }}
+          plugin-language: ${{ env.LANGUAGE }}
           github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-          draft: true
+          draft: ${{ env.IS_DRAFT_RELEASE }}
           reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
   summarize_release:
@@ -294,6 +304,6 @@ jobs:
           echo "- **Release Ticket URL:** ${{ needs.create_release_ticket.outputs.release_ticket_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **GitHub Release URL:** ${{ needs.publish_release.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SQS Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sqs_ticket_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SQC Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sc_ticket_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **SQC Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sqc_ticket_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SQS Analyzer PR URL:** ${{ needs.update-analyzers.outputs.sqs_pr_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SQC Analyzer PR URL:** ${{ needs.update-analyzers.outputs.sc_pr_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **SQC Analyzer PR URL:** ${{ needs.update-analyzers.outputs.sqc_pr_url }}" >> $GITHUB_STEP_SUMMARY
