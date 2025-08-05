@@ -1,9 +1,9 @@
 <p>This rule is deprecated, and will eventually be removed.</p>
 <p>Deserializing objects is security-sensitive. For example, it has led in the past to the following vulnerabilities:</p>
 <ul>
-  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-17672">CVE-2017-17672</a>: vBulletin: Unserialize PHP Code Execution </li>
-  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1000167">CVE-2018-1000167</a>: Jenkins Pipeline: arbitrary code execution
-  vulnerability </li>
+  <li> <a href="https://www.cve.org/CVERecord?id=CVE-2017-17672">CVE-2017-17672</a>: vBulletin: Unserialize PHP Code Execution </li>
+  <li> <a href="https://www.cve.org/CVERecord?id=CVE-2018-1000167">CVE-2018-1000167</a>: Jenkins Pipeline: arbitrary code execution vulnerability
+  </li>
 </ul>
 <p>Object deserialization from an untrusted source can lead to unexpected code execution. Deserialization takes a stream of bits and turns it into an
 object. If the stream contains the type of object you expect, all is well. But if you’re deserializing data coming from untrusted input, and an
