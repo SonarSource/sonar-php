@@ -8,7 +8,7 @@
   <img alt="GitHub" src="https://img.shields.io/github/license/SonarSource/sonar-php">
 </p>
 
-This SonarSource project is a [static code analyzer](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](https://www.sonarqube.org/) platform.It will allow you to produce stable and easily supported projects with [integrated code quality and security](https://www.sonarsource.com/solutions/for-developers/) by helping you find and correct bugs, vulnerabilities and smells in your code.
+This SonarSource project is a [static code analyzer](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](https://www.sonarqube.org/) platform.It will allow you to produce stable and easily supported projects with [integrated code quality and security](https://www.sonarsource.com/solutions/for-developers/?utm_medium=referral&utm_source=github&utm_campaign=clean-code&utm_content=sonar-php) by helping you find and correct bugs, vulnerabilities and smells in your code.
 
 
 # Features
