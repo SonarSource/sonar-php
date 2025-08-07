@@ -4,9 +4,9 @@ env:
   PROJECT_KEY: "SONARPHP"
   PROJECT_NAME: "SonarPHP"
   LANGUAGE: "php"
-  USE_JIRA_SANDBOX: false
-  IS_DRAFT_RELEASE: false
-  PM_EMAIL: 'alexandre.gigleux@sonarsource.com'
+  USE_JIRA_SANDBOX: true
+  IS_DRAFT_RELEASE: true
+  PM_EMAIL: 'yasen.pavlov@sonarsource.com'
 
 on:
   workflow_dispatch:
@@ -51,16 +51,15 @@ on:
         required: false
 
 jobs:
-  lock_master_branch:
-    name: Lock master branch
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    permissions:
-      id-token: write
+#  lock_master_branch:
+#    name: Lock master branch
+#    uses: ./.github/workflows/ToggleLockBranch.yml
+#    permissions:
+#      id-token: write
 
   check_releasability:
     name: Check releasability
     runs-on: ubuntu-latest
-    needs: lock_master_branch
     permissions:
       checks: read
     outputs:
@@ -117,48 +116,27 @@ jobs:
           status: "Start Progress"
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
 
-  publish_release:
-    name: Publish Release
-    runs-on: ubuntu-latest
+  publish_and_release:
+    name: Publish and Release
     needs: [ check_releasability, create_release_ticket ]
     permissions:
       contents: write
       id-token: write # Required for authenticating to Vault
-    outputs:
-      release_url: ${{ steps.publish_github_release.outputs.release_url }}
-    steps:
-      - name: Get Jira Credentials from Vault
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
-        with:
-          secrets: |
-            development/kv/data/jira user | JIRA_USER;
-            development/kv/data/jira token | JIRA_TOKEN;
-
-      - name: Publish Github release
-        id: publish_github_release
-        uses: SonarSource/release-github-actions/publish-github-release@09c557fb83722adbe2af2ca7e625324e15739362
-        with:
-          version: ${{ needs.check_releasability.outputs.version }}
-          jira_project_key: ${{ env.PROJECT_KEY }}
-          jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
-          draft: ${{ env.IS_DRAFT_RELEASE }}
-          release_notes: ${{ github.event.inputs.release_notes }}
-
-  release:
-    name: Sonar release
-    needs: publish_release
-    uses: ./.github/workflows/release.yml
-    permissions:
-      id-token: write
-      contents: write
+    uses: SonarSource/release-github-actions/.github/workflows/publish-and-release.yml@publish_draft_version
+    with:
+      version: ${{ needs.check_releasability.outputs.version }}
+      jira_project_key: ${{ env.PROJECT_KEY }}
+      jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
+      draft: ${{ env.IS_DRAFT_RELEASE }}
+      release_notes: ${{ github.event.inputs.release_notes }}
+      publishToBinaries: true
+      mavenCentralSync: true
+      slackChannel: squad-security-cloud-notifs
 
   release_in_jira:
     name: Release in Jira
     runs-on: ubuntu-latest
-    needs: [ release, create_release_ticket ]
+    needs: [ publish_and_release, create_release_ticket ]
     permissions:
       contents: read
       id-token: write # Required for authenticating to Vault
@@ -195,17 +173,17 @@ jobs:
           assignee: ${{ env.PM_EMAIL }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
 
-  unlock_master_branch:
-    name: Unlock master branch
-    needs: [ lock_master_branch, release_in_jira ]
-    if: always() && needs.lock_master_branch.result == 'success'
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    permissions:
-      id-token: write
+#  unlock_master_branch:
+#    name: Unlock master branch
+#    needs: [ lock_master_branch, release_in_jira ]
+#    if: always() && needs.lock_master_branch.result == 'success'
+#    uses: ./.github/workflows/ToggleLockBranch.yml
+#    permissions:
+#      id-token: write
 
   bump_versions:
     name: Bump versions
-    needs: [ unlock_master_branch, release_in_jira ]
+    needs: release_in_jira
     uses: ./.github/workflows/bump-versions.yaml
     permissions:
       contents: write # write for peter-evans/create-pull-request, read for actions/checkout
@@ -216,7 +194,7 @@ jobs:
   update-integration-tickets:
     name: Update Integration Tickets
     runs-on: ubuntu-latest
-    needs: bump_versions
+    needs: [bump_versions, create_release_ticket]
     permissions:
       contents: read
       id-token: write
@@ -266,32 +244,32 @@ jobs:
           secrets: |
             development/github/token/SonarSource-sonar-php-release-automation token | GITHUB_TOKEN;
 
-      - name: Update analyzer in SQS
-        id: update_step_sqs
-        uses: SonarSource/release-github-actions/update-analyzer@09c557fb83722adbe2af2ca7e625324e15739362
-        with:
-          version: ${{ needs.check_releasability.outputs.version }}
-          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
-          plugin-language: ${{ env.LANGUAGE }}
-          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-          draft: ${{ env.IS_DRAFT_RELEASE }}
-          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
-
-      - name: Update analyzer in SQC
-        id: update_step_sqc
-        uses: SonarSource/release-github-actions/update-analyzer@09c557fb83722adbe2af2ca7e625324e15739362
-        with:
-          version: ${{ needs.check_releasability.outputs.version }}
-          ticket: ${{ needs.update-integration-tickets.outputs.sqc_ticket_key }}
-          plugin-language: ${{ env.LANGUAGE }}
-          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-          draft: ${{ env.IS_DRAFT_RELEASE }}
-          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
+#      - name: Update analyzer in SQS
+#        id: update_step_sqs
+#        uses: SonarSource/release-github-actions/update-analyzer@09c557fb83722adbe2af2ca7e625324e15739362
+#        with:
+#          version: ${{ needs.check_releasability.outputs.version }}
+#          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
+#          plugin-language: ${{ env.LANGUAGE }}
+#          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+#          draft: ${{ env.IS_DRAFT_RELEASE }}
+#          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
+#
+#      - name: Update analyzer in SQC
+#        id: update_step_sqc
+#        uses: SonarSource/release-github-actions/update-analyzer@09c557fb83722adbe2af2ca7e625324e15739362
+#        with:
+#          version: ${{ needs.check_releasability.outputs.version }}
+#          ticket: ${{ needs.update-integration-tickets.outputs.sqc_ticket_key }}
+#          plugin-language: ${{ env.LANGUAGE }}
+#          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+#          draft: ${{ env.IS_DRAFT_RELEASE }}
+#          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
   summarize_release:
     name: Release
     runs-on: ubuntu-latest
-    needs: [ check_releasability, create_release_ticket, publish_release, update-integration-tickets, update-analyzers, release_in_jira ]
+    needs: [ check_releasability, create_release_ticket, publish_and_release, update-integration-tickets, update-analyzers, release_in_jira ]
     steps:
       - name: Post Summary to Workflow
         run: |
@@ -302,7 +280,7 @@ jobs:
           echo "- **New Version:** ${{ needs.release_in_jira.outputs.new_release_version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Jira Release URL:** ${{ needs.create_release_ticket.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Release Ticket URL:** ${{ needs.create_release_ticket.outputs.release_ticket_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **GitHub Release URL:** ${{ needs.publish_release.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **GitHub Release URL:** ${{ needs.publish_and_release.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SQS Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sqs_ticket_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SQC Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sqc_ticket_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SQS Analyzer PR URL:** ${{ needs.update-analyzers.outputs.sqs_pr_url }}" >> $GITHUB_STEP_SUMMARY
