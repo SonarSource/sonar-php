@@ -125,9 +125,9 @@ jobs:
     uses: SonarSource/release-github-actions/.github/workflows/publish-and-release.yml@publish_draft_version
     with:
       version: ${{ needs.check_releasability.outputs.version }}
-      jira_project_key: ${{ env.PROJECT_KEY }}
+      jira_project_key: "SONARPHP"
       jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
-      draft: ${{ env.IS_DRAFT_RELEASE }}
+      draft: true
       release_notes: ${{ github.event.inputs.release_notes }}
       publishToBinaries: true
       mavenCentralSync: true
