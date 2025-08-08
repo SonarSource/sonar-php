@@ -27,7 +27,7 @@ jobs:
     with:
       releaseTagName: ${{ inputs.releaseTagName }}
       releaseId: ${{ inputs.releaseId }}
-      dryRun: ${{ inputs.dryRun }
+      dryRun: ${{ inputs.dryRun }}
       publishToBinaries: true
       mavenCentralSync: true
       slackChannel: squad-security-cloud-notifs
