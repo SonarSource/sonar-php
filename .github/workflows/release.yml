@@ -23,7 +23,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/release-github-actions/.github/workflows/sonar-release.yml@temp_release_workflow
+    uses: SonarSource/release-github-actions/.github/workflows/sonar-release.yaml@temp_release_workflow
     with:
       releaseTagName: ${{ inputs.releaseTagName }}
       releaseId: ${{ inputs.releaseId }}
