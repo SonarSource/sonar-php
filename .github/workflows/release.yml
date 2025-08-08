@@ -2,15 +2,15 @@
 name: sonar-release
 # yamllint disable-line rule:truthy
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       releaseTagName:
         type: string
-        description: Release tag name (alternative to release event)
+        description: Release tag name
         required: true
       releaseId:
         type: string
-        description: Release ID (alternative to release event)
+        description: Release ID
         required: true
       dryRun:
         type: boolean

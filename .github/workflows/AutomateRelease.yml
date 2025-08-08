@@ -123,6 +123,7 @@ jobs:
     permissions:
       contents: write
       id-token: write # Required for authenticating to Vault
+      actions: write
     outputs:
       release_url: ${{ steps.publish_github_release.outputs.release_url }}
     steps:
