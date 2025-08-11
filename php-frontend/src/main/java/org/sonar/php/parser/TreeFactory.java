@@ -1608,6 +1608,10 @@ public class TreeFactory {
       closeParenthesis);
   }
 
+  public ArrayPairTree arrayPair1(ExpressionTree expression) {
+    return new ArrayPairTreeImpl(null, expression);
+  }
+
   public ArrayPairTree arrayPair1(ExpressionTree expression, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> pairExpression) {
     if (pairExpression.isPresent()) {
       return new ArrayPairTreeImpl(expression, pairExpression.get().first(), pairExpression.get().second());

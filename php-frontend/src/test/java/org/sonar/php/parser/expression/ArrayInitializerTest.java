@@ -38,6 +38,16 @@ class ArrayInitializerTest {
       .matches("[$a, getArr(), &$a, $a=>$b, $a=>&$b, ...$a, ...getArr()]")
       .matches("[[], array()]")
 
+      .matches("""
+        [
+            ["\\xc3\\x28", '"\\ufffd("', 'invalid unicode sequence'],
+            [
+                [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[33]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]],
+                'exception',
+                'Maximum stack depth exceeded'
+            ]
+        ]""")
+
       .notMatches("array(1, 2, 3")
       .notMatches("[1, 2, 3")
       .notMatches("[][]");

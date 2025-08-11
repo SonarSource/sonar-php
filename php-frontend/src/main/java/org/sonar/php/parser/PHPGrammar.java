@@ -1863,6 +1863,8 @@ public class PHPGrammar {
   public ArrayPairTree ARRAY_PAIR() {
     return b.<ArrayPairTree>nonterminal(Kind.ARRAY_PAIR).is(
       b.firstOf(
+        // Match nested arrays early to avoid running into a combinatoric explosion
+        f.arrayPair1(ARRAY_INITIALIZER()),
         f.arrayPair2(b.token(ELLIPSIS), EXPRESSION()),
         f.arrayPair1(EXPRESSION(), b.optional(f.newTuple(b.token(DOUBLEARROW), b.firstOf(REFERENCE_VARIABLE(), EXPRESSION())))),
         f.arrayPair2(REFERENCE_VARIABLE())));
