@@ -146,9 +146,9 @@ jobs:
           jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           draft: ${{ env.IS_DRAFT_RELEASE }}
-          use_sandbox: ${{ env.IS_DRAFT_RELEASE }}
+          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
           release_notes: ${{ github.event.inputs.release_notes }}
-          release_workflow_ref: temp_release_workflow
+          release_workflow: sonar-release.yml
 
   release_in_jira:
     name: Release in Jira
