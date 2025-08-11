@@ -124,6 +124,7 @@ jobs:
     permissions:
       contents: write
       id-token: write # Required for authenticating to Vault
+      actions: write
     outputs:
       release_url: ${{ steps.publish_github_release.outputs.release_url }}
     steps:
@@ -137,7 +138,7 @@ jobs:
 
       - name: Publish Github release
         id: publish_github_release
-        uses: SonarSource/release-github-actions/publish-github-release@09c557fb83722adbe2af2ca7e625324e15739362
+        uses: SonarSource/release-github-actions/publish-github-release@publish_draft_version
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           jira_project_key: ${{ env.PROJECT_KEY }}
@@ -146,19 +147,12 @@ jobs:
           jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           draft: ${{ env.IS_DRAFT_RELEASE }}
           release_notes: ${{ github.event.inputs.release_notes }}
-
-  release:
-    name: Sonar release
-    needs: publish_release
-    uses: ./.github/workflows/release.yml
-    permissions:
-      id-token: write
-      contents: write
+          release_workflow_ref: temp_release_workflow
 
   release_in_jira:
     name: Release in Jira
     runs-on: ubuntu-latest
-    needs: [ release, create_release_ticket ]
+    needs: [ publish_release, create_release_ticket ]
     permissions:
       contents: read
       id-token: write # Required for authenticating to Vault
@@ -216,7 +210,7 @@ jobs:
   update-integration-tickets:
     name: Update Integration Tickets
     runs-on: ubuntu-latest
-    needs: bump_versions
+    needs: [bump_versions, create_release_ticket]
     permissions:
       contents: read
       id-token: write
