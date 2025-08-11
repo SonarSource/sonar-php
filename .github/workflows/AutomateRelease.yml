@@ -192,8 +192,7 @@ jobs:
 
   unlock_master_branch:
     name: Unlock master branch
-    needs: [ lock_master_branch, release_in_jira ]
-    if: always() && needs.lock_master_branch.result == 'success'
+    needs: release_in_jira
     uses: ./.github/workflows/ToggleLockBranch.yml
     permissions:
       id-token: write
