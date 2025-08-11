@@ -35,4 +35,19 @@ function numberOfMinutes($hours) {
   return hours * 60;
 }
 </pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+private function process_request() {
+    $validation_result = $this-&gt;validate_input();
+    if ($validation_result['is_successful']) {
+        $item_data = $validation_result['data']; // Noncompliant - $item_data is unused
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="2" data-diff-type="compliant">
+private function process_request() {
+    $this-&gt;validate_input();
+}
+</pre>
 
