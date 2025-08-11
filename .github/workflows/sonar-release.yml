@@ -5,9 +5,9 @@ name: Sonar Release
 on:
   workflow_dispatch:
     inputs:
-      releaseTagName:
+      version:
         type: string
-        description: Release tag name
+        description: Version
         required: true
       releaseId:
         type: string
@@ -26,7 +26,7 @@ jobs:
       contents: write
     uses: SonarSource/release-github-actions/.github/workflows/sonar-release.yaml@temp_release_workflow
     with:
-      releaseTagName: ${{ inputs.releaseTagName }}
+      version: ${{ inputs.version }}
       releaseId: ${{ inputs.releaseId }}
       dryRun: ${{ inputs.dryRun }}
       publishToBinaries: true
