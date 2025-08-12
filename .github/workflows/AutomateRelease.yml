@@ -174,21 +174,21 @@ jobs:
 #    uses: ./.github/workflows/ToggleLockBranch.yml
 #    permissions:
 #      id-token: write
-#
-#  bump_versions:
-#    name: Bump versions
-#    needs: [ unlock_master_branch, release_in_jira ]
-#    uses: ./.github/workflows/bump-versions.yaml
-#    permissions:
-#      contents: write # write for peter-evans/create-pull-request, read for actions/checkout
-#      pull-requests: write # write for peter-evans/create-pull-request
-#    with:
-#      version: ${{ needs.release_in_jira.outputs.new_release_version }}-SNAPSHOT
+
+  bump_versions:
+    name: Bump versions
+    needs: [ release_in_jira, release_in_jira ]
+    uses: ./.github/workflows/bump-versions.yaml
+    permissions:
+      contents: write # write for peter-evans/create-pull-request, read for actions/checkout
+      pull-requests: write # write for peter-evans/create-pull-request
+    with:
+      version: ${{ needs.release_in_jira.outputs.new_release_version }}-SNAPSHOT
 
   update-integration-tickets:
     name: Update Integration Tickets
     runs-on: ubuntu-latest
-    needs: [release_in_jira, create_release_ticket]
+    needs: [bump_versions, create_release_ticket]
     permissions:
       contents: read
       id-token: write
