@@ -68,23 +68,23 @@ jobs:
 #    permissions:
 #      id-token: write
 
-  check_releasability:
-    name: Check releasability
-    runs-on: ubuntu-latest
+#  check_releasability:
+#    name: Check releasability
+#    runs-on: ubuntu-latest
 #    needs: lock_master_branch
-    permissions:
-      checks: read
-    outputs:
-      version: ${{ steps.check_releasability_status.outputs.version }}
-    steps:
-      - name: Check Releasability and Get Version
-        id: check_releasability_status
-        uses: SonarSource/release-github-actions/check-releasability-status@f5dcae55c87796aed16a380979f6e234f18525bb
+#    permissions:
+#      checks: read
+#    outputs:
+#      version: ${{ steps.check_releasability_status.outputs.version }}
+#    steps:
+#      - name: Check Releasability and Get Version
+#        id: check_releasability_status
+#        uses: SonarSource/release-github-actions/check-releasability-status@f5dcae55c87796aed16a380979f6e234f18525bb
 
   create_release_ticket:
     name: Create release ticket
     runs-on: ubuntu-latest
-    needs: check_releasability
+#    needs: check_releasability
     permissions:
       contents: read
       id-token: write # Required for authenticating to Vault
