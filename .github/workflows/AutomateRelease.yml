@@ -120,7 +120,7 @@ jobs:
   publish_release:
     name: Publish Release
     runs-on: ubuntu-latest
-    needs: [ check_releasability, create_release_ticket ]
+    needs: [  create_release_ticket ]
     permissions:
       contents: write
       id-token: write # Required for authenticating to Vault
@@ -132,7 +132,7 @@ jobs:
         id: publish_github_release
         uses: SonarSource/release-github-actions/publish-github-release@move_vault_steps_to_actions
         with:
-          version: ${{ needs.check_releasability.outputs.version }}
+          version: "3.49.0.13492"
           jira_project_key: ${{ env.PROJECT_KEY }}
           jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
           draft: ${{ env.IS_DRAFT_RELEASE }}
@@ -214,7 +214,7 @@ jobs:
   update-analyzers:
     name: Update Analyzers in SQS and SQC
     runs-on: ubuntu-latest
-    needs: [ update-integration-tickets, check_releasability ]
+    needs: [ update-integration-tickets ]
     permissions:
       id-token: write
     outputs:
@@ -225,7 +225,7 @@ jobs:
         id: update_step_sqs
         uses: SonarSource/release-github-actions/update-analyzer@move_vault_steps_to_actions
         with:
-          version: ${{ needs.check_releasability.outputs.version }}
+          version: "3.49.0.13492"
           ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
           plugin_language: "text"
           secret_name: ${{ env.RELEASE_AUTOMATION_SECRET_NAME }}
@@ -247,14 +247,14 @@ jobs:
   summarize_release:
     name: Release
     runs-on: ubuntu-latest
-    needs: [ check_releasability, create_release_ticket, publish_release, update-integration-tickets, update-analyzers, release_in_jira ]
+    needs: [ create_release_ticket, publish_release, update-integration-tickets, update-analyzers, release_in_jira ]
     steps:
       - name: Post Summary to Workflow
         run: |
           echo "### 🎉🚀 Congratulations! Release Successful! 🚀🎉" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Summary of the release:**" >> $GITHUB_STEP_SUMMARY
-          echo "- **Released Version:** ${{ needs.check_releasability.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Released Version:** 3.49.0.13492" >> $GITHUB_STEP_SUMMARY
           echo "- **New Version:** ${{ needs.release_in_jira.outputs.new_release_version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Jira Release URL:** ${{ needs.create_release_ticket.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Release Ticket URL:** ${{ needs.create_release_ticket.outputs.release_ticket_url }}" >> $GITHUB_STEP_SUMMARY
