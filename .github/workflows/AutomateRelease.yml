@@ -4,9 +4,9 @@ env:
   PROJECT_KEY: "SONARPHP"
   PROJECT_NAME: "SonarPHP"
   LANGUAGE: "php"
-  USE_JIRA_SANDBOX: false
-  IS_DRAFT_RELEASE: false
-  PM_EMAIL: 'alexandre.gigleux@sonarsource.com'
+  USE_JIRA_SANDBOX: true
+  IS_DRAFT_RELEASE: true
+  PM_EMAIL: 'yasen.pavlov@sonarsource.com'
   RELEASE_AUTOMATION_SECRET_NAME: "sonar-php-release-automation"
 
 on:
@@ -62,16 +62,16 @@ on:
         required: false
 
 jobs:
-  lock_master_branch:
-    name: Lock master branch
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    permissions:
-      id-token: write
+#  lock_master_branch:
+#    name: Lock master branch
+#    uses: ./.github/workflows/ToggleLockBranch.yml
+#    permissions:
+#      id-token: write
 
   check_releasability:
     name: Check releasability
     runs-on: ubuntu-latest
-    needs: lock_master_branch
+#    needs: lock_master_branch
     permissions:
       checks: read
     outputs:
@@ -168,27 +168,27 @@ jobs:
           assignee: ${{ env.PM_EMAIL }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
 
-  unlock_master_branch:
-    name: Unlock master branch
-    needs: release_in_jira
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    permissions:
-      id-token: write
-
-  bump_versions:
-    name: Bump versions
-    needs: [ unlock_master_branch, release_in_jira ]
-    uses: ./.github/workflows/bump-versions.yaml
-    permissions:
-      contents: write # write for peter-evans/create-pull-request, read for actions/checkout
-      pull-requests: write # write for peter-evans/create-pull-request
-    with:
-      version: ${{ needs.release_in_jira.outputs.new_release_version }}-SNAPSHOT
+#  unlock_master_branch:
+#    name: Unlock master branch
+#    needs: release_in_jira
+#    uses: ./.github/workflows/ToggleLockBranch.yml
+#    permissions:
+#      id-token: write
+#
+#  bump_versions:
+#    name: Bump versions
+#    needs: [ unlock_master_branch, release_in_jira ]
+#    uses: ./.github/workflows/bump-versions.yaml
+#    permissions:
+#      contents: write # write for peter-evans/create-pull-request, read for actions/checkout
+#      pull-requests: write # write for peter-evans/create-pull-request
+#    with:
+#      version: ${{ needs.release_in_jira.outputs.new_release_version }}-SNAPSHOT
 
   update-integration-tickets:
     name: Update Integration Tickets
     runs-on: ubuntu-latest
-    needs: [bump_versions, create_release_ticket]
+    needs: [release_in_jira, create_release_ticket]
     permissions:
       contents: read
       id-token: write
@@ -202,7 +202,7 @@ jobs:
         id: integration_update
         uses: SonarSource/release-github-actions/update-integration-tickets@move_vault_steps_to_actions
         with:
-          release_ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
+          release_ticket_key: "REL-3639"
           sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
 
@@ -227,8 +227,9 @@ jobs:
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
-          plugin_language: ${{ env.LANGUAGE }}
+          plugin_language: "text"
           secret_name: ${{ env.RELEASE_AUTOMATION_SECRET_NAME }}
+          plugin_names: 'text, text-developer, text-enterprise'
           draft: ${{ env.IS_DRAFT_RELEASE }}
           reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
