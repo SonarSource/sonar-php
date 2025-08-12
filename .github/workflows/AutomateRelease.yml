@@ -4,6 +4,7 @@ env:
   PROJECT_KEY: "SONARPHP"
   PROJECT_NAME: "SonarPHP"
   LANGUAGE: "php"
+  RELEASE_AUTOMATION_SECRET_NAME: "sonar-php-release-automation"
   USE_JIRA_SANDBOX: false
   IS_DRAFT_RELEASE: false
   PM_EMAIL: 'alexandre.gigleux@sonarsource.com'
@@ -21,7 +22,6 @@ on:
         description: |
           Did any rule properties change in this release?
         required: true
-        default: "No"
         options:
           - "Yes"
           - "No"
@@ -94,20 +94,10 @@ jobs:
       release_url: ${{ steps.create_ticket.outputs.release_url }}
       release_ticket_url: ${{ steps.create_ticket.outputs.ticket_url }}
     steps:
-      - name: Get Jira Credentials from Vault
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
-        with:
-          secrets: |
-            development/kv/data/jira user | JIRA_USER;
-            development/kv/data/jira token | JIRA_TOKEN;
-
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@f5dcae55c87796aed16a380979f6e234f18525bb
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@move_vault_steps_to_actions
         with:
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           project_key: ${{ env.PROJECT_KEY }}
           project_name: ${{ env.PROJECT_NAME }}
           version: ${{ needs.check_releasability.outputs.version }}
@@ -121,10 +111,8 @@ jobs:
 
       - name: Start progress on release ticket
         id: rel_ticket_start_progress
-        uses: SonarSource/release-github-actions/update-release-ticket-status@f5dcae55c87796aed16a380979f6e234f18525bb
+        uses: SonarSource/release-github-actions/update-release-ticket-status@move_vault_steps_to_actions
         with:
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
           status: "Start Progress"
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
@@ -140,23 +128,13 @@ jobs:
     outputs:
       release_url: ${{ steps.publish_github_release.outputs.release_url }}
     steps:
-      - name: Get Jira Credentials from Vault
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
-        with:
-          secrets: |
-            development/kv/data/jira user | JIRA_USER;
-            development/kv/data/jira token | JIRA_TOKEN;
-
       - name: Publish Github release
         id: publish_github_release
-        uses: SonarSource/release-github-actions/publish-github-release@f5dcae55c87796aed16a380979f6e234f18525bb
+        uses: SonarSource/release-github-actions/publish-github-release@move_vault_steps_to_actions
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           jira_project_key: ${{ env.PROJECT_KEY }}
           jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           draft: ${{ env.IS_DRAFT_RELEASE }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
           release_notes: ${{ github.event.inputs.release_notes }}
@@ -172,20 +150,10 @@ jobs:
     outputs:
       new_release_version: ${{ steps.jira_release.outputs.new_version_name }}
     steps:
-      - name: Get Jira Credentials from Vault
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
-        with:
-          secrets: |
-            development/kv/data/jira user | JIRA_USER;
-            development/kv/data/jira token | JIRA_TOKEN;
-
       - name: Release in Jira and Create Next Version
         id: jira_release
-        uses: SonarSource/release-github-actions/release-jira-version@f5dcae55c87796aed16a380979f6e234f18525bb
+        uses: SonarSource/release-github-actions/release-jira-version@move_vault_steps_to_actions
         with:
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           project_key: ${{ env.PROJECT_KEY }}
           jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
           new_version_name: ${{ github.event.inputs.next_version }}
@@ -193,10 +161,8 @@ jobs:
 
       - name: Move release ticket to done
         id: rel_ticket_move_to_done
-        uses: SonarSource/release-github-actions/update-release-ticket-status@f5dcae55c87796aed16a380979f6e234f18525bb
+        uses: SonarSource/release-github-actions/update-release-ticket-status@move_vault_steps_to_actions
         with:
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
           status: "Technical Release Done"
           assignee: ${{ env.PM_EMAIL }}
@@ -232,20 +198,10 @@ jobs:
       sqs_ticket_url: ${{ steps.integration_update.outputs.sqs_ticket_url}}
       sqc_ticket_url: ${{ steps.integration_update.outputs.sc_ticket_url }}
     steps:
-      - name: Get Jira Credentials from Vault
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
-        with:
-          secrets: |
-            development/kv/data/jira user | JIRA_USER;
-            development/kv/data/jira token | JIRA_TOKEN;
-
       - name: Find and Update Tickets
         id: integration_update
-        uses: SonarSource/release-github-actions/update-integration-tickets@f5dcae55c87796aed16a380979f6e234f18525bb
+        uses: SonarSource/release-github-actions/update-integration-tickets@move_vault_steps_to_actions
         with:
-          jira_user: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_USER }}
-          jira_token: ${{ fromJSON(steps.secrets.outputs.vault).JIRA_TOKEN }}
           release_ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
           sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
@@ -265,32 +221,25 @@ jobs:
       sqs_pr_url: ${{ steps.update_step_sqs.outputs.pr-url }}
       sqc_pr_url: ${{ steps.update_step_sqc.outputs.pr-url }}
     steps:
-      - name: Get GitHub token from Vault
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
-        with:
-          secrets: |
-            development/github/token/SonarSource-sonar-php-release-automation token | GITHUB_TOKEN;
-
       - name: Update analyzer in SQS
         id: update_step_sqs
-        uses: SonarSource/release-github-actions/update-analyzer@f5dcae55c87796aed16a380979f6e234f18525bb
+        uses: SonarSource/release-github-actions/update-analyzer@move_vault_steps_to_actions
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
-          plugin-language: ${{ env.LANGUAGE }}
-          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+          plugin_language: ${{ env.LANGUAGE }}
+          secret_name: 'sonar-php-release-automation'
           draft: ${{ env.IS_DRAFT_RELEASE }}
           reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
       - name: Update analyzer in SQC
         id: update_step_sqc
-        uses: SonarSource/release-github-actions/update-analyzer@f5dcae55c87796aed16a380979f6e234f18525bb
+        uses: SonarSource/release-github-actions/update-analyzer@move_vault_steps_to_actions
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           ticket: ${{ needs.update-integration-tickets.outputs.sqc_ticket_key }}
-          plugin-language: ${{ env.LANGUAGE }}
-          github-token: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+          plugin_language: ${{ env.LANGUAGE }}
+          secret_name: 'sonar-php-release-automation'
           draft: ${{ env.IS_DRAFT_RELEASE }}
           reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
