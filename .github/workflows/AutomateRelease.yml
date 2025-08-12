@@ -4,10 +4,10 @@ env:
   PROJECT_KEY: "SONARPHP"
   PROJECT_NAME: "SonarPHP"
   LANGUAGE: "php"
-  RELEASE_AUTOMATION_SECRET_NAME: "sonar-php-release-automation"
   USE_JIRA_SANDBOX: false
   IS_DRAFT_RELEASE: false
   PM_EMAIL: 'alexandre.gigleux@sonarsource.com'
+  RELEASE_AUTOMATION_SECRET_NAME: "sonar-php-release-automation"
 
 on:
   workflow_dispatch:
@@ -228,7 +228,7 @@ jobs:
           version: ${{ needs.check_releasability.outputs.version }}
           ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
           plugin_language: ${{ env.LANGUAGE }}
-          secret_name: 'sonar-php-release-automation'
+          secret_name: ${{ env.RELEASE_AUTOMATION_SECRET_NAME }}
           draft: ${{ env.IS_DRAFT_RELEASE }}
           reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
@@ -239,7 +239,7 @@ jobs:
           version: ${{ needs.check_releasability.outputs.version }}
           ticket: ${{ needs.update-integration-tickets.outputs.sqc_ticket_key }}
           plugin_language: ${{ env.LANGUAGE }}
-          secret_name: 'sonar-php-release-automation'
+          secret_name: ${{ env.RELEASE_AUTOMATION_SECRET_NAME }}
           draft: ${{ env.IS_DRAFT_RELEASE }}
           reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
