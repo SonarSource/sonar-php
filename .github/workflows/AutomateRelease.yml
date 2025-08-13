@@ -20,7 +20,7 @@ on:
       rule_properties_changed:
         type: choice
         description: |
-          Set to `Yes` if any `PropertyDefinition` beans were added or updated.
+          Did any PropertyDefinition beans change in this release?
         required: true
         default: "No"
         options:
@@ -206,11 +206,6 @@ jobs:
           release_ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
           sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
-
-      - name: Echo Found Ticket Keys
-        run: |
-          echo "Found SQS integration ticket: ${{ steps.integration_update.outputs.sqs_ticket_key }}"
-          echo "Found SQC integration ticket: ${{ steps.integration_update.outputs.sc_ticket_key }}"
 
   update-analyzers:
     name: Update Analyzers in SQS and SQC
