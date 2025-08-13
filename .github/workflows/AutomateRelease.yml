@@ -202,7 +202,7 @@ jobs:
         id: integration_update
         uses: SonarSource/release-github-actions/update-integration-tickets@09b8b3b315362772140b0db837c08648533ead88
         with:
-          release_ticket_key: "REL-3639"
+          release_ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
           sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
           use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
 

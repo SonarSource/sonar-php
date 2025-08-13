@@ -31,3 +31,4 @@ jobs:
           title: Prepare next development iteration
           branch: bot/bump-project-version
           branch-suffix: timestamp
+          base: master
