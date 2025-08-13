@@ -20,8 +20,9 @@ on:
       rule_properties_changed:
         type: choice
         description: |
-          Did any rule properties change in this release?
+          Set to `Yes` if any `PropertyDefinition` beans were added or updated.
         required: true
+        default: "No"
         options:
           - "Yes"
           - "No"

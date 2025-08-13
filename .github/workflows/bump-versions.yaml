@@ -32,3 +32,4 @@ jobs:
           branch: bot/bump-project-version
           branch-suffix: timestamp
           base: master
+          reviewers: ${{ github.actor }}
