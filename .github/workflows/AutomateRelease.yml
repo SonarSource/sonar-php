@@ -20,7 +20,7 @@ on:
       rule_properties_changed:
         type: choice
         description: |
-          Did any PropertyDefinition beans change in this release?
+          Did any rule properties change in this release?
         required: true
         default: "No"
         options:
