@@ -71,7 +71,7 @@ jobs:
       - name: Post Summary to Workflow
         run: |
           echo "**Summary of the release:**" >> $GITHUB_STEP_SUMMARY
-          echo "- **BUILD_NUMBER:** ${{  }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **BUILD_NUMBER:** ${{ env.BUILD_NUMBER }}" >> $GITHUB_STEP_SUMMARY
           echo "- **JIRA_VERSION:** ${{ env.JIRA_VERSION }}" >> $GITHUB_STEP_SUMMARY
           echo "- **RELEASE_TICKET_KEY:** ${{ env.RELEASE_TICKET_KEY }}" >> $GITHUB_STEP_SUMMARY
           echo "- **RELEASE_TICKET_URL:** ${{ env.RELEASE_TICKET_URL }}" >> $GITHUB_STEP_SUMMARY
