@@ -49,19 +49,19 @@ jobs:
     name: Create release ticket
     runs-on: ubuntu-latest
     permissions:
+      statuses: read
       contents: read
       id-token: write # Required for authenticating to Vault
     steps:
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@2a3485bfb45f9ac4c45b154ddf24b3b146707458
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@switch_to_get_release_verison
         with:
           project-name: ${{ env.PROJECT_NAME }}
           short-description: ${{ github.event.inputs.short_description }}
           sq-compatibility: ${{ github.event.inputs.sq_compatibility }}
           rule-props-changed: ${{ github.event.inputs.rule_properties_changed }}
           sonarlint-changelog: ${{ github.event.inputs.sonarlint_changelog }}
-          version: '3.49.0.13536'
 
   summarize_release:
     name: Release
@@ -71,7 +71,7 @@ jobs:
       - name: Post Summary to Workflow
         run: |
           echo "**Summary of the release:**" >> $GITHUB_STEP_SUMMARY
-          echo "- **BUILD_NUMBER:** ${{ env.BUILD_NUMBER }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **BUILD_NUMBER:** ${{  }}" >> $GITHUB_STEP_SUMMARY
           echo "- **JIRA_VERSION:** ${{ env.JIRA_VERSION }}" >> $GITHUB_STEP_SUMMARY
           echo "- **RELEASE_TICKET_KEY:** ${{ env.RELEASE_TICKET_KEY }}" >> $GITHUB_STEP_SUMMARY
           echo "- **RELEASE_TICKET_URL:** ${{ env.RELEASE_TICKET_URL }}" >> $GITHUB_STEP_SUMMARY
