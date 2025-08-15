@@ -58,7 +58,6 @@ jobs:
           project-name: ${{ env.PROJECT_NAME }}
           short-description: ${{ github.event.inputs.short_description }}
           sq-compatibility: ${{ github.event.inputs.sq_compatibility }}
-          targeted-product: "11.0"
           rule-props-changed: ${{ github.event.inputs.rule_properties_changed }}
           sonarlint-changelog: ${{ github.event.inputs.sonarlint_changelog }}
 
