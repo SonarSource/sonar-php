@@ -4,6 +4,7 @@ env:
   JIRA_PROJECT_KEY: "SONARPHP"
   PROJECT_NAME: "SonarPHP"
   PM_EMAIL: 'yasen.pavlov@sonarsource.com'
+  BUILD_NUMBER: '3.49.0.13536'
 
 on:
   workflow_dispatch:
