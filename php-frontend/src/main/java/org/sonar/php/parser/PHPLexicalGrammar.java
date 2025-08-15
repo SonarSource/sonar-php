@@ -329,7 +329,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
     b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
 
-    b.rule(NULL).is(word(b, "NULL")).skip();
+    b.rule(NULL).is(word(b, "null")).skip();
     b.rule(CLASS_CONSTANT).is(word(b, "__CLASS__")).skip();
     b.rule(FILE_CONSTANT).is(word(b, "__FILE__")).skip();
     b.rule(DIR_CONSTANT).is(word(b, "__DIR__")).skip();
@@ -340,41 +340,41 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(TRAIT_CONSTANT).is(word(b, "__TRAIT__")).skip();
     b.rule(ENUM).is(word(b, "enum")).skip();
 
-    b.rule(BOOLEAN_LITERAL).is(b.firstOf(word(b, "TRUE"), word(b, "FALSE")));
+    b.rule(BOOLEAN_LITERAL).is(b.firstOf(word(b, "true"), word(b, "false")));
 
     b.rule(NEXT_IS_DOLLAR).is(b.next(PHPPunctuator.DOLLAR));
     b.rule(VARIABLE_VARIABLE_DOLLAR).is(PHPPunctuator.DOLLAR, b.nextNot(b.firstOf(IDENTIFIER, KEYWORDS, PHPPunctuator.LCURLYBRACE)));
 
-    b.rule(ISSET).is(word(b, "ISSET")).skip();
-    b.rule(EMPTY).is(word(b, "EMPTY")).skip();
-    b.rule(INCLUDE_ONCE).is(word(b, "INCLUDE_ONCE")).skip();
-    b.rule(INCLUDE).is(word(b, "INCLUDE")).skip();
-    b.rule(EVAL).is(word(b, "EVAL")).skip();
-    b.rule(REQUIRE_ONCE).is(word(b, "REQUIRE_ONCE")).skip();
-    b.rule(REQUIRE).is(word(b, "REQUIRE")).skip();
-    b.rule(CLONE).is(word(b, "CLONE")).skip();
-    b.rule(PRINT).is(word(b, "PRINT")).skip();
+    b.rule(ISSET).is(word(b, "isset")).skip();
+    b.rule(EMPTY).is(word(b, "empty")).skip();
+    b.rule(INCLUDE_ONCE).is(word(b, "include_once")).skip();
+    b.rule(INCLUDE).is(word(b, "include")).skip();
+    b.rule(EVAL).is(word(b, "eval")).skip();
+    b.rule(REQUIRE_ONCE).is(word(b, "require_once")).skip();
+    b.rule(REQUIRE).is(word(b, "require")).skip();
+    b.rule(CLONE).is(word(b, "clone")).skip();
+    b.rule(PRINT).is(word(b, "print")).skip();
 
-    b.rule(GET).is(word(b, "GET")).skip();
-    b.rule(SET).is(word(b, "SET")).skip();
+    b.rule(GET).is(word(b, "get")).skip();
+    b.rule(SET).is(word(b, "set")).skip();
 
-    b.rule(SELF).is(word(b, "SELF")).skip();
-    b.rule(PARENT).is(word(b, "PARENT")).skip();
+    b.rule(SELF).is(word(b, "self")).skip();
+    b.rule(PARENT).is(word(b, "parent")).skip();
 
-    b.rule(MIXED).is(word(b, "MIXED")).skip();
-    b.rule(INTEGER).is(word(b, "INTEGER")).skip();
-    b.rule(INT).is(word(b, "INT")).skip();
-    b.rule(DOUBLE).is(word(b, "DOUBLE")).skip();
-    b.rule(FLOAT).is(word(b, "FLOAT")).skip();
-    b.rule(REAL).is(word(b, "REAL")).skip();
-    b.rule(STRING).is(word(b, "STRING")).skip();
-    b.rule(OBJECT).is(word(b, "OBJECT")).skip();
-    b.rule(BOOLEAN).is(word(b, "BOOLEAN")).skip();
-    b.rule(BOOL).is(word(b, "BOOL")).skip();
-    b.rule(BINARY).is(word(b, "BINARY")).skip();
-    b.rule(ITERABLE).is(word(b, "ITERABLE")).skip();
+    b.rule(MIXED).is(word(b, "mixed")).skip();
+    b.rule(INTEGER).is(word(b, "integer")).skip();
+    b.rule(INT).is(word(b, "int")).skip();
+    b.rule(DOUBLE).is(word(b, "double")).skip();
+    b.rule(FLOAT).is(word(b, "float")).skip();
+    b.rule(REAL).is(word(b, "real")).skip();
+    b.rule(STRING).is(word(b, "string")).skip();
+    b.rule(OBJECT).is(word(b, "object")).skip();
+    b.rule(BOOLEAN).is(word(b, "boolean")).skip();
+    b.rule(BOOL).is(word(b, "bool")).skip();
+    b.rule(BINARY).is(word(b, "binary")).skip();
+    b.rule(ITERABLE).is(word(b, "iterable")).skip();
 
-    b.rule(FROM).is(word(b, "FROM")).skip();
+    b.rule(FROM).is(word(b, "from")).skip();
 
   }
 
@@ -385,21 +385,21 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
       PHPKeyword tokenType = PHPKeyword.values()[i];
 
       // PHP keywords are case insensitive
-      b.rule(tokenType).is(SPACING, keywordRegexp(b, tokenType.getValue()), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))).skip();
+      b.rule(tokenType).is(SPACING, caseInsensitive(tokenType.getValue()), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))).skip();
       if (i > 1) {
         if (tokenType == PHPKeyword.READONLY) {
           // Readonly is only a keyword when it is not used as a function name. SONARPHP-1266
-          rest[i - 2] = b.sequence(keywordRegexp(b, "readonly"), b.nextNot(b.regexp("[\\s]*\\(")));
+          rest[i - 2] = b.sequence(caseInsensitive("readonly"), b.nextNot(b.regexp("[\\s]*\\(")));
         } else {
-          rest[i - 2] = keywordRegexp(b, tokenType.getValue());
+          rest[i - 2] = caseInsensitive(tokenType.getValue());
         }
       }
     }
 
     b.rule(KEYWORDS).is(SPACING,
       b.firstOf(
-        keywordRegexp(b, PHPKeyword.getKeywordValues()[0]),
-        keywordRegexp(b, PHPKeyword.getKeywordValues()[1]),
+        caseInsensitive(PHPKeyword.getKeywordValues()[0]),
+        caseInsensitive(PHPKeyword.getKeywordValues()[1]),
         rest),
       b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART)));
   }
@@ -411,10 +411,10 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   }
 
   private static Object word(LexerlessGrammarBuilder b, String word) {
-    return b.sequence(SPACING, b.regexp("(?i)" + word), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART)));
+    return b.sequence(SPACING, caseInsensitive(word), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART)));
   }
 
-  private static Object keywordRegexp(LexerlessGrammarBuilder b, String keywordValue) {
-    return b.regexp("(?i)" + keywordValue);
+  private static Object caseInsensitive(String value) {
+    return new CaseInsensitiveStringExpression(value);
   }
 }
