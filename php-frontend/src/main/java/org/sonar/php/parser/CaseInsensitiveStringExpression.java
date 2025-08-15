@@ -41,7 +41,7 @@ public class CaseInsensitiveStringExpression extends NativeExpression implements
       machine.backtrack();
       return;
     }
-    for (int i = 0; i < string.length(); i++) {
+    for (var i = 0; i < string.length(); i++) {
       if (Character.toLowerCase(machine.charAt(i)) != Character.toLowerCase(string.charAt(i))) {
         machine.backtrack();
         return;

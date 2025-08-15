@@ -101,6 +101,13 @@ class KeywordTest {
   }
 
   @Test
+  void shouldMatchCaseInsensitiveKeywords() {
+    assertThat(PHPLexicalGrammar.KEYWORDS)
+      .matches("AbStRaCt")
+      .matches("AND");
+  }
+
+  @Test
   void getKeywordValues() {
     Assertions.assertThat(PHPKeyword.getKeywordValues()).hasSize(70);
   }
