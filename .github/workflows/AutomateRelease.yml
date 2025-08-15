@@ -4,7 +4,6 @@ env:
   JIRA_PROJECT_KEY: "SONARPHP"
   PROJECT_NAME: "SonarPHP"
   PM_EMAIL: 'yasen.pavlov@sonarsource.com'
-  BUILD_NUMBER: '3.49.0.13536'
 
 on:
   workflow_dispatch:
@@ -51,7 +50,7 @@ jobs:
     permissions:
       statuses: read
       contents: read
-      id-token: write # Required for authenticating to Vault
+      id-token: write
     steps:
       - name: Create Jira Release Ticket
         id: create_ticket
@@ -62,18 +61,3 @@ jobs:
           sq-compatibility: ${{ github.event.inputs.sq_compatibility }}
           rule-props-changed: ${{ github.event.inputs.rule_properties_changed }}
           sonarlint-changelog: ${{ github.event.inputs.sonarlint_changelog }}
-
-  summarize_release:
-    name: Release
-    runs-on: ubuntu-latest
-    needs: [ create_release_ticket ]
-    steps:
-      - name: Post Summary to Workflow
-        run: |
-          echo "**Summary of the release:**" >> $GITHUB_STEP_SUMMARY
-          echo "- **BUILD_NUMBER:** ${{ env.BUILD_NUMBER }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **JIRA_VERSION:** ${{ env.JIRA_VERSION }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **RELEASE_TICKET_KEY:** ${{ env.RELEASE_TICKET_KEY }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **RELEASE_TICKET_URL:** ${{ env.RELEASE_TICKET_URL }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **JIRA_RELEASE_URL:** ${{ env.JIRA_RELEASE_URL }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **RELEASE_NOTES:** ${{ env.RELEASE_NOTES }}" >> $GITHUB_STEP_SUMMARY
