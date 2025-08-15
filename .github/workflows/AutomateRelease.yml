@@ -1,13 +1,9 @@
 name: Automate release
 
 env:
-  PROJECT_KEY: "SONARPHP"
+  JIRA_PROJECT_KEY: "SONARPHP"
   PROJECT_NAME: "SonarPHP"
-  LANGUAGE: "php"
-  USE_JIRA_SANDBOX: false
-  IS_DRAFT_RELEASE: false
-  PM_EMAIL: 'alexandre.gigleux@sonarsource.com'
-  RELEASE_AUTOMATION_SECRET_NAME: "sonar-php-release-automation"
+  PM_EMAIL: 'yasen.pavlov@sonarsource.com'
 
 on:
   workflow_dispatch:
@@ -42,221 +38,42 @@ on:
           The name of the release version in Jira.
           If blank, the action will try to use the *only* unreleased version in the project.
         required: false
-      release_notes:
-        description: |
-          Github release notes.
-          If blank, release notes will be generated from the Jira Release.
       sonarlint_changelog:
         description: |
           A summary of release notes relevant to the SonarQube IDE extensions.
         required: false
 
-      sqs_fix_versions:
-        description: |
-          A comma-separated list of fix versions for the SQS integration ticket.
-          (e.g., sqs-2025.4, sqcb-25.7)
-        required: false
-      integration_prs_reviewers:
-        description: |
-          A comma-separated list of GitHub usernames to request as reviewers on integration PRs.
-          (e.g., gh-username,another-user)
-        required: false
-
 jobs:
-  lock_master_branch:
-    name: Lock master branch
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    permissions:
-      id-token: write
-
-  check_releasability:
-    name: Check releasability
-    runs-on: ubuntu-latest
-    needs: lock_master_branch
-    permissions:
-      checks: read
-    outputs:
-      version: ${{ steps.check_releasability_status.outputs.version }}
-    steps:
-      - name: Check Releasability and Get Version
-        id: check_releasability_status
-        uses: SonarSource/release-github-actions/check-releasability-status@09b8b3b315362772140b0db837c08648533ead88
-
   create_release_ticket:
     name: Create release ticket
     runs-on: ubuntu-latest
-    needs: check_releasability
     permissions:
       contents: read
       id-token: write # Required for authenticating to Vault
-    outputs:
-      release_name: ${{ steps.create_ticket.outputs.jira_release_name }}
-      release_ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
-      release_url: ${{ steps.create_ticket.outputs.release_url }}
-      release_ticket_url: ${{ steps.create_ticket.outputs.ticket_url }}
     steps:
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@2a3485bfb45f9ac4c45b154ddf24b3b146707458
         with:
-          project_key: ${{ env.PROJECT_KEY }}
-          project_name: ${{ env.PROJECT_NAME }}
-          version: ${{ needs.check_releasability.outputs.version }}
-          short_description: ${{ github.event.inputs.short_description }}
-          sq_compatibility: ${{ github.event.inputs.sq_compatibility }}
-          targeted_product: "11.0"
-          rule_props_changed: ${{ github.event.inputs.rule_properties_changed }}
-          jira_release_name: ${{ github.event.inputs.jira_release_name }}
-          sonarlint_changelog: ${{ github.event.inputs.sonarlint_changelog }}
-          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
+          project-name: ${{ env.PROJECT_NAME }}
+          short-description: ${{ github.event.inputs.short_description }}
+          sq-compatibility: ${{ github.event.inputs.sq_compatibility }}
+          targeted-product: "11.0"
+          rule-props-changed: ${{ github.event.inputs.rule_properties_changed }}
+          sonarlint-changelog: ${{ github.event.inputs.sonarlint_changelog }}
 
-      - name: Start progress on release ticket
-        id: rel_ticket_start_progress
-        uses: SonarSource/release-github-actions/update-release-ticket-status@09b8b3b315362772140b0db837c08648533ead88
-        with:
-          ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
-          status: "Start Progress"
-          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
-
-  publish_release:
-    name: Publish Release
-    runs-on: ubuntu-latest
-    needs: [ check_releasability, create_release_ticket ]
-    permissions:
-      contents: write
-      id-token: write # Required for authenticating to Vault
-      actions: write
-    outputs:
-      release_url: ${{ steps.publish_github_release.outputs.release_url }}
-    steps:
-      - name: Publish Github release
-        id: publish_github_release
-        uses: SonarSource/release-github-actions/publish-github-release@09b8b3b315362772140b0db837c08648533ead88
-        with:
-          version: ${{ needs.check_releasability.outputs.version }}
-          jira_project_key: ${{ env.PROJECT_KEY }}
-          jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
-          draft: ${{ env.IS_DRAFT_RELEASE }}
-          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
-          release_notes: ${{ github.event.inputs.release_notes }}
-          release_workflow: sonar-release.yml
-
-  release_in_jira:
-    name: Release in Jira
-    runs-on: ubuntu-latest
-    needs: [ publish_release, create_release_ticket ]
-    permissions:
-      contents: read
-      id-token: write # Required for authenticating to Vault
-    outputs:
-      new_release_version: ${{ steps.jira_release.outputs.new_version_name }}
-    steps:
-      - name: Release in Jira and Create Next Version
-        id: jira_release
-        uses: SonarSource/release-github-actions/release-jira-version@09b8b3b315362772140b0db837c08648533ead88
-        with:
-          project_key: ${{ env.PROJECT_KEY }}
-          jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
-          new_version_name: ${{ github.event.inputs.next_version }}
-          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
-
-      - name: Move release ticket to done
-        id: rel_ticket_move_to_done
-        uses: SonarSource/release-github-actions/update-release-ticket-status@09b8b3b315362772140b0db837c08648533ead88
-        with:
-          ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
-          status: "Technical Release Done"
-          assignee: ${{ env.PM_EMAIL }}
-          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
-
-  unlock_master_branch:
-    name: Unlock master branch
-    needs: release_in_jira
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    permissions:
-      id-token: write
-
-  bump_versions:
-    name: Bump versions
-    needs: [ unlock_master_branch, release_in_jira ]
-    uses: ./.github/workflows/bump-versions.yaml
-    permissions:
-      contents: write # write for peter-evans/create-pull-request, read for actions/checkout
-      pull-requests: write # write for peter-evans/create-pull-request
-    with:
-      version: ${{ needs.release_in_jira.outputs.new_release_version }}-SNAPSHOT
-
-  update-integration-tickets:
-    name: Update Integration Tickets
-    runs-on: ubuntu-latest
-    needs: [bump_versions, create_release_ticket]
-    permissions:
-      contents: read
-      id-token: write
-    outputs:
-      sqs_ticket_key: ${{ steps.integration_update.outputs.sqs_ticket_key }}
-      sqc_ticket_key: ${{ steps.integration_update.outputs.sc_ticket_key }}
-      sqs_ticket_url: ${{ steps.integration_update.outputs.sqs_ticket_url}}
-      sqc_ticket_url: ${{ steps.integration_update.outputs.sc_ticket_url }}
-    steps:
-      - name: Find and Update Tickets
-        id: integration_update
-        uses: SonarSource/release-github-actions/update-integration-tickets@09b8b3b315362772140b0db837c08648533ead88
-        with:
-          release_ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
-          sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
-          use_sandbox: ${{ env.USE_JIRA_SANDBOX }}
-
-  update-analyzers:
-    name: Update Analyzers in SQS and SQC
-    runs-on: ubuntu-latest
-    needs: [ update-integration-tickets, check_releasability ]
-    permissions:
-      id-token: write
-    outputs:
-      sqs_pr_url: ${{ steps.update_step_sqs.outputs.pr_url }}
-      sqc_pr_url: ${{ steps.update_step_sqc.outputs.pr_url }}
-    steps:
-      - name: Update analyzer in SQS
-        id: update_step_sqs
-        uses: SonarSource/release-github-actions/update-analyzer@09b8b3b315362772140b0db837c08648533ead88
-        with:
-          version: ${{ needs.check_releasability.outputs.version }}
-          ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
-          plugin_language: ${{ env.LANGUAGE }}
-          secret_name: ${{ env.RELEASE_AUTOMATION_SECRET_NAME }}
-          draft: ${{ env.IS_DRAFT_RELEASE }}
-          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
-
-      - name: Update analyzer in SQC
-        id: update_step_sqc
-        uses: SonarSource/release-github-actions/update-analyzer@09b8b3b315362772140b0db837c08648533ead88
-        with:
-          version: ${{ needs.check_releasability.outputs.version }}
-          ticket: ${{ needs.update-integration-tickets.outputs.sqc_ticket_key }}
-          plugin_language: ${{ env.LANGUAGE }}
-          secret_name: ${{ env.RELEASE_AUTOMATION_SECRET_NAME }}
-          draft: ${{ env.IS_DRAFT_RELEASE }}
-          reviewers: ${{ github.event.inputs.integration_prs_reviewers }}
 
   summarize_release:
     name: Release
     runs-on: ubuntu-latest
-    needs: [ check_releasability, create_release_ticket, publish_release, update-integration-tickets, update-analyzers, release_in_jira ]
+    needs: [ create_release_ticket ]
     steps:
       - name: Post Summary to Workflow
         run: |
-          echo "### 🎉🚀 Congratulations! Release Successful! 🚀🎉" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Summary of the release:**" >> $GITHUB_STEP_SUMMARY
-          echo "- **Released Version:** ${{ needs.check_releasability.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **New Version:** ${{ needs.release_in_jira.outputs.new_release_version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Jira Release URL:** ${{ needs.create_release_ticket.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Release Ticket URL:** ${{ needs.create_release_ticket.outputs.release_ticket_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **GitHub Release URL:** ${{ needs.publish_release.outputs.release_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SQS Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sqs_ticket_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SQC Integration Ticket URL:** ${{ needs.update-integration-tickets.outputs.sqc_ticket_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SQS Analyzer PR URL:** ${{ needs.update-analyzers.outputs.sqs_pr_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SQC Analyzer PR URL:** ${{ needs.update-analyzers.outputs.sqc_pr_url }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "PS: Don't forget to review and merge the bump version, SQS and SQC PRs!" >> $GITHUB_STEP_SUMMARY
+          echo "- **BUILD_NUMBER:** ${{ env.BUILD_NUMBER }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **JIRA_VERSION:** ${{ env.JIRA_VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **RELEASE_TICKET_KEY:** ${{ env.RELEASE_TICKET_KEY }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **RELEASE_TICKET_URL:** ${{ env.RELEASE_TICKET_URL }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **JIRA_RELEASE_URL:** ${{ env.JIRA_RELEASE_URL }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **RELEASE_NOTES:** ${{ env.RELEASE_NOTES }}" >> $GITHUB_STEP_SUMMARY
