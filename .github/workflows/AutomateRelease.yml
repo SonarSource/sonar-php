@@ -61,7 +61,7 @@ jobs:
           sq-compatibility: ${{ github.event.inputs.sq_compatibility }}
           rule-props-changed: ${{ github.event.inputs.rule_properties_changed }}
           sonarlint-changelog: ${{ github.event.inputs.sonarlint_changelog }}
-
+          version: '3.49.0.13536'
 
   summarize_release:
     name: Release
