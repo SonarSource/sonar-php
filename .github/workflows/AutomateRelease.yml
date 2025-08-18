@@ -45,7 +45,7 @@ on:
 
 jobs:
   check_releasability_status:
-    name: Get release notes
+    name: Check releasability status
     runs-on: ubuntu-latest
     permissions:
       statuses: read
