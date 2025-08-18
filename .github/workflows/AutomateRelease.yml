@@ -75,9 +75,6 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - name: Wait 15 seconds
-        run: sleep 15
-
       - id: get_release_version
         name: Get release version
         uses: SonarSource/release-github-actions/get-release-version@master
