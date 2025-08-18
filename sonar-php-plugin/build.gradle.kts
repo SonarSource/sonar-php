@@ -72,8 +72,12 @@ tasks.jar {
 }
 
 tasks.shadowJar {
-
-  minimize()
+  minimize {
+    exclude {
+      (it.moduleGroup == "org.sonarsource.sslr" && it.moduleName == "sslr-core") ||
+        (it.moduleGroup == "org.sonarsource.analyzer-commons" && it.moduleName == "sonar-regex-parsing")
+    }
+  }
   exclude("META-INF/LICENSE*")
   exclude("META-INF/NOTICE*")
   exclude("META-INF/*.RSA")
@@ -83,7 +87,7 @@ tasks.shadowJar {
   exclude("**/*.php")
 
   doLast {
-    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 6_000_000L)
+    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 5_500_000L)
   }
 }
 
