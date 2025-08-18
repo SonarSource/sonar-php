@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: Get Jira Release Notes
         id: jira-notes
-        uses: SonarSource/release-github-actions/get-jira-release-notes@master
+        uses: SonarSource/release-github-actions/get-jira-release-notes@6452648457a9c19d90b859faf36465af99454bc6
 
       - name: Use the outputs
         run: |
