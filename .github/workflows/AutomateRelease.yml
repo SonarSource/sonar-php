@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: Get Jira Release Notes
         id: jira-notes
-        uses: SonarSource/release-github-actions/get-jira-release-notes@6452648457a9c19d90b859faf36465af99454bc6
+        uses: SonarSource/release-github-actions/get-jira-release-notes@900bb9703b588f01de33df1680e0ed2749e87c64
 
       - name: Use the outputs
         run: |
@@ -72,7 +72,7 @@ jobs:
     steps:
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@6452648457a9c19d90b859faf36465af99454bc6
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@900bb9703b588f01de33df1680e0ed2749e87c64
         with:
           project-name: ${{ env.PROJECT_NAME }}
           short-description: ${{ github.event.inputs.short_description }}
