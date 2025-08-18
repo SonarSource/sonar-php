@@ -44,6 +44,17 @@ on:
         required: false
 
 jobs:
+  check_releasability_status:
+    name: Get release notes
+    runs-on: ubuntu-latest
+    permissions:
+      statuses: read
+    steps:
+      - name: Check Releasability Status
+        uses: SonarSource/release-github-actions/check-releasability-status@yasen/update_check-releasability-status_action
+        with:
+          with-optional-checks: 'false'
+
   get_release_notes:
     name: Get release notes
     runs-on: ubuntu-latest
@@ -54,7 +65,7 @@ jobs:
     steps:
       - name: Get Jira Release Notes
         id: jira-notes
-        uses: SonarSource/release-github-actions/get-jira-release-notes@900bb9703b588f01de33df1680e0ed2749e87c64
+        uses: SonarSource/release-github-actions/get-jira-release-notes@yasen/update_check-releasability-status_action
 
       - name: Use the outputs
         run: |
@@ -72,7 +83,7 @@ jobs:
     steps:
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@900bb9703b588f01de33df1680e0ed2749e87c64
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@yasen/update_check-releasability-status_action
         with:
           project-name: ${{ env.PROJECT_NAME }}
           short-description: ${{ github.event.inputs.short_description }}
