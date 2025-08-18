@@ -52,6 +52,8 @@ jobs:
       statuses: read
       contents: read
       id-token: write
+    outputs:
+      release-ticket-key: ${{ steps.create_ticket.outputs.release-ticket-key }}
     steps:
       - name: Create Jira Release Ticket
         id: create_ticket
@@ -85,3 +87,4 @@ jobs:
           release-version: ${{ steps.get_release_version.outputs.release-version }}
           analyzer-name: 'php'
           ticket-description: 'Test description'
+          use-jira-sandbox: 'true'
