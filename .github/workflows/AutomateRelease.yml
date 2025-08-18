@@ -64,6 +64,7 @@ jobs:
           sq-compatibility: ${{ github.event.inputs.sq_compatibility }}
           rule-props-changed: ${{ github.event.inputs.rule_properties_changed }}
           sonarlint-changelog: ${{ github.event.inputs.sonarlint_changelog }}
+          use-jira-sandbox: 'true'
 
   create_integration_tickets:
     name: Create SC integration ticket
