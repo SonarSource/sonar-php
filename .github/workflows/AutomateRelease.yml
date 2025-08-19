@@ -84,7 +84,7 @@ jobs:
         uses: SonarSource/release-github-actions/create-integration-ticket@nw/add-create-integration-ticket-action
         with:
           release-ticket-key: ${{needs.create_release_ticket.outputs.release-ticket-key }}
-          jira-project-key: 'SC'
-          target-jira-project: ${{ steps.get_release_version.outputs.release-version }}
+          target-jira-project: 'SC'
+          release-version: ${{ steps.get_release_version.outputs.release-version }}
           plugin-name: 'php'
           ticket-description: 'Test description'
