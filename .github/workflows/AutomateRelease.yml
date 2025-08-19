@@ -87,4 +87,3 @@ jobs:
           target-jira-project: 'SC'
           release-version: ${{ steps.get_release_version.outputs.release-version }}
           plugin-name: 'php'
-          ticket-description: 'Test description'
