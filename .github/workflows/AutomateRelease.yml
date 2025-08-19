@@ -83,9 +83,8 @@ jobs:
         name: Create SQS ticket
         uses: SonarSource/release-github-actions/create-integration-ticket@nw/add-create-integration-ticket-action
         with:
-          linked-ticket-key: ${{needs.create_release_ticket.outputs.release-ticket-key }}
+          release-ticket-key: ${{needs.create_release_ticket.outputs.release-ticket-key }}
           jira-project-key: 'SC'
-          release-version: ${{ steps.get_release_version.outputs.release-version }}
-          analyzer-name: 'php'
+          target-jira-project: ${{ steps.get_release_version.outputs.release-version }}
+          plugin-name: 'php'
           ticket-description: 'Test description'
-          use-jira-sandbox: 'true'
