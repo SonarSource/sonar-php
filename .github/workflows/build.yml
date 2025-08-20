@@ -1,143 +1,51 @@
-name: Main Workflow
-
+name: Build
 on:
   push:
     branches:
       - master
-      - 'branch-*'
-      - 'dogfood-on-*'
+      - branch-*
+      - dogfood-*
   pull_request:
-    branches:
-      - master
-      - 'branch-*'
+  merge_group:
   workflow_dispatch:
 
 jobs:
   build:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+    runs-on: ubuntu-24.04-large
     name: Build
-    runs-on: ubuntu-latest
     permissions:
-      contents: read
+      id-token: write
+      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
-          fetch-depth: 1
-          submodules: 'recursive'
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+          version: 2025.7.12
+      - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
-          java-version: 17
-          distribution: 'temurin'
+          deploy-pull-request: true
+          artifactory-reader-role: private-reader
+          artifactory-deployer-role: qa-deployer
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
-        with:
-          gradle-version: wrapper
-
-      - name: Export project version
-        id: project_version
-        run: |
-          mkdir -p project-version
-          PROJECTVERSION=$(./gradlew printVersion --console=plain -q)
-          echo "PROJECT_VERSION=$PROJECTVERSION" >> $GITHUB_ENV
-          echo "$PROJECTVERSION" > project-version/evaluated_project_version.txt
-
-      - name: Build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SIGN_KEY: ${{ secrets.SIGN_KEY }}
-          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-        run: |
-          source .github/workflows/cirrus-env BUILD
-          ./gradlew build storeProjectVersion -x test -x sonar --console=plain --no-daemon --info
-
-      - name: Upload project version
-        uses: actions/upload-artifact@v4
-        with:
-          name: project-version
-          path: project-version/
-          retention-days: 1
-
-  test:
-    name: Test
-    needs: build
-    runs-on: ubuntu-latest
+  promote:
+    needs: [build]
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+    runs-on: ubuntu-24.04-large
+    name: Promote
     permissions:
-      contents: read
+      id-token: write
+      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
-          fetch-depth: 1
-          submodules: 'recursive'
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+          cache_save: false
+          version: 2025.7.12
+      - uses: SonarSource/ci-github-actions/promote@v1
         with:
-          java-version: 17
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
-        with:
-          gradle-version: wrapper
-
-      - name: Download project version
-        uses: actions/download-artifact@v4
-        with:
-          name: project-version
-          path: project-version/
-
-      - name: Test and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          source .github/workflows/cirrus-env BUILD
-          ./gradlew test sonar --console=plain --no-daemon --info -x artifactoryPublish
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: '**/test-results/**/*.xml'
-
-  windows_qa:
-    name: Windows QA
-    needs: build
-    runs-on: windows-latest
-    if: ${{ !github.event.pull_request || !contains(github.event.pull_request.labels.*.name, 'skip-ci') }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-          submodules: 'recursive'
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
-        with:
-          gradle-version: wrapper
-
-      - name: Run Windows tests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          source .github/workflows/cirrus-env CI
-          ./gradlew test --console=plain --no-daemon --info
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-test-results
-          path: '**/test-results/**/*.xml'
+          promote-pull-request: true
