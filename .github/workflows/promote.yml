@@ -1,0 +1,39 @@
+name: Promote
+
+on:
+  workflow_run:
+    workflows:
+      - Main Workflow
+      - Windows QA
+      - Ruling Tests
+      - Plugin Integration Tests
+      - PR Analysis Tests
+    types:
+      - completed
+
+jobs:
+  promote:
+    name: Promote
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download project version
+        uses: actions/download-artifact@v4
+        with:
+          name: project-version
+          path: project-version/
+
+      - name: Promote artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+          ARTIFACTORY_PROMOTE_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_PROMOTE_ACCESS_TOKEN }}
+        run: |
+          source .github/workflows/cirrus-env PROMOTE
+          cirrus_jfrog_promote
+          export PROJECT_VERSION=$(cat project-version/evaluated_project_version.txt)
+          github-notify-promotion
+          
