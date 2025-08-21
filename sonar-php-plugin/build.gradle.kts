@@ -72,12 +72,7 @@ tasks.jar {
 }
 
 tasks.shadowJar {
-  minimize {
-    exclude {
-      (it.moduleGroup == "org.sonarsource.sslr" && it.moduleName == "sslr-core") ||
-        (it.moduleGroup == "org.sonarsource.analyzer-commons" && it.moduleName == "sonar-regex-parsing")
-    }
-  }
+  minimizeJar = true
   exclude("META-INF/LICENSE*")
   exclude("META-INF/NOTICE*")
   exclude("META-INF/*.RSA")
