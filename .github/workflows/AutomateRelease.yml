@@ -45,45 +45,12 @@ on:
         required: false
 
 jobs:
-  create_release_ticket:
-    name: Create release ticket
+  update-rule-metadata:
     runs-on: ubuntu-latest
     permissions:
-      statuses: read
-      contents: read
       id-token: write
-    outputs:
-      release-ticket-key: ${{ steps.create_ticket.outputs.release-ticket-key }}
+      contents: write
+      pull-requests: write
     steps:
-      - name: Create Jira Release Ticket
-        id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@master
-        with:
-          project-name: ${{ env.PROJECT_NAME }}
-          short-description: ${{ github.event.inputs.short_description }}
-          sq-compatibility: ${{ github.event.inputs.sq_compatibility }}
-          rule-props-changed: ${{ github.event.inputs.rule_properties_changed }}
-          sonarlint-changelog: ${{ github.event.inputs.sonarlint_changelog }}
-          use-jira-sandbox: 'true'
-
-  create_integration_tickets:
-    name: Create SC integration ticket
-    runs-on: ubuntu-latest
-    needs: create_release_ticket
-    permissions:
-      statuses: read
-      contents: read
-      id-token: write
-    steps:
-      - id: get_release_version
-        name: Get release version
-        uses: SonarSource/release-github-actions/get-release-version@master
-
-      - id: create_sqs_ticket
-        name: Create SQS ticket
-        uses: SonarSource/release-github-actions/create-integration-ticket@nw/add-create-integration-ticket-action
-        with:
-          release-ticket-key: ${{needs.create_release_ticket.outputs.release-ticket-key }}
-          target-jira-project: 'SC'
-          release-version: ${{ steps.get_release_version.outputs.release-version }}
-          plugin-name: 'php'
+      - name: Update Rule Metadata
+        uses: SonarSource/release-github-actions/update-rule-metadata@nw/add-update-rule-metadata-action
