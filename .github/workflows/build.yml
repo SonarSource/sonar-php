@@ -9,11 +9,12 @@ on:
   merge_group:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+
 jobs:
   build:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
     runs-on: sonar-l-public
     name: Build
     permissions:
@@ -39,9 +40,6 @@ jobs:
 
   build_test_analyze:
     needs: [build]
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
     runs-on: sonar-l-public
     name: Build Test Analyze
     permissions:
@@ -76,9 +74,6 @@ jobs:
     # if: github.ref_name == github.event.repository.default_branch || startsWith(github.ref_name, 'branch-')
     # TODO uncomment previous version, now it run for testing
     if: true
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
     runs-on: sonar-l-public
     name: SCA Scan
     continue-on-error: true  # Equivalent to allow_failures: true
@@ -126,9 +121,6 @@ jobs:
   qa_os_win:
     # TODO disabled for now, as build-gradle fails on Windows
 #    needs: [build]
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
     runs-on: windows-latest-large
     name: QA OS Windows
     # TODO disabled for now, as build-gradle fails on Windows
@@ -171,9 +163,6 @@ jobs:
   promote:
     # TODO add Windows job when fixed
     needs: [build, build_test_analyze]
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
     runs-on: sonar-m-public
     name: Promote
     permissions:
