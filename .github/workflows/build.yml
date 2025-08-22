@@ -32,9 +32,10 @@ jobs:
           deploy-pull-request: true
           artifactory-reader-role: public-reader
           artifactory-deployer-role: public-deployer
-          skip-tests: true
+#         issue in build-gradle action, skipping tests manually in gradle-args
+          skip-tests: false
           use-develocity: true
-          gradle-args: -x sonar storeProjectVersion
+          gradle-args: -x test -x sonar storeProjectVersion
 
   build_test_analyze:
     needs: [build]
@@ -69,8 +70,50 @@ jobs:
           name: test-results
           path: '**/test-results/**/*.xml'
 
+  qa_os_win:
+    needs: [build]
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+    runs-on: windows-latest-large
+    name: QA OS Windows
+    if: "!contains(github.event.head_commit.message, 'skip-win') && !contains(github.event.pull_request.title, 'skip-win')"
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          submodules: false
+      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+        with:
+          version: 2025.7.12
+      - name: Checkout submodules
+        run: |
+          git submodule update --init --depth 1 -- build-logic/common
+      - uses: SonarSource/ci-github-actions/build-gradle@v1
+        with:
+          deploy-pull-request: false
+          artifactory-reader-role: private-reader
+          artifactory-deployer-role: qa-deployer
+          skip-tests: false
+          use-develocity: true
+          gradle-args: test
+      - name: Upload test results
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: qa-os-win-test-results
+          path: '**/test-results/**/*.xml'
+      - name: Upload reports
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: qa-os-win-reports
+          path: '**/build/reports/**/*'
+
   promote:
-    needs: [build, build_test_analyze]
+    needs: [build, build_test_analyze, qa_os_win]
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
