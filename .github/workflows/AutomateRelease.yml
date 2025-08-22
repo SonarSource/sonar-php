@@ -46,6 +46,7 @@ on:
 
 jobs:
   pre-release-checks:
+    name: Pre-release checks
     runs-on: ubuntu-latest
     permissions:
       statuses: read
