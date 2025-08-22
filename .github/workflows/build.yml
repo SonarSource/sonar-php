@@ -95,11 +95,6 @@ jobs:
           secrets: |
             development/kv/data/mend apikey | WS_APIKEY;
             development/artifactory/token/SonarSource-sonar-php-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
-#      - name: Download project version
-#        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-#        with:
-#          name: project-version
-#          path: project-version
       - name: Run WhiteSource scan
         env:
           WS_APIKEY: ${{ steps.secrets.outputs.WS_APIKEY }}
@@ -108,6 +103,7 @@ jobs:
           GRADLE_OPTS: -Xmx64m -Dorg.gradle.jvmargs='-Xmx3G' -Dorg.gradle.daemon=false
           GRADLE_COMMON_FLAGS: --console plain --no-daemon --profile
           PROJECT_VERSION: ${{ needs.jobs.build.outputs.project-version }}
+          BUILD_NUMBER: ${{ needs.jobs.build.outputs.BUILD_NUMBER }}
         run: |
           ./gradlew ${GRADLE_COMMON_FLAGS} :php-frontend:processResources -Pkotlin.compiler.execution.strategy=in-process
           source ws_scan.sh
