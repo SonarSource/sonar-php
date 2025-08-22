@@ -110,7 +110,7 @@ jobs:
           ARTIFACTORY_URL: https://repox.jfrog.io/artifactory
           GRADLE_OPTS: -Xmx64m -Dorg.gradle.jvmargs='-Xmx3G' -Dorg.gradle.daemon=false
           GRADLE_COMMON_FLAGS: --console plain --no-daemon --profile
-          PROJECT_VERSION: ${{ jobs.build.outputs.project-version }}
+          PROJECT_VERSION: ${{ needs.jobs.build.outputs.project-version }}
         run: |
           ./gradlew ${GRADLE_COMMON_FLAGS} :php-frontend:processResources -Pkotlin.compiler.execution.strategy=in-process
           source ws_scan.sh
