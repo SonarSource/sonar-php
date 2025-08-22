@@ -69,7 +69,7 @@ jobs:
           exit 1
 
   prepare-release:
-    name: Pre-release checks
+    name: Prepare release
     runs-on: ubuntu-latest
     needs: pre-release-checks
     permissions:
@@ -102,13 +102,19 @@ jobs:
       id-token: write
     steps:
       - name: Create Jira Release Ticket
+        id: create-ticket
         uses: SonarSource/release-github-actions/create-jira-release-ticket@03368d584ef1b9bdcc0d786f99246f669ac6030c
         with:
           project-name: ${{env.PROJECT_NAME }}
           short-description: ${{ inputs.short_description }}
           sq-compatibility: ${{ inputs.sq_compatibility }}
           jira-release-url: ${{ needs.prepare-release.outputs.jira-release-url }}
-          start-progress: true
+      
+      - name: Start progress on ticket
+        uses: SonarSource/release-github-actions/update-release-ticket-status@update_release_ticket_status
+        with:
+          release-ticket-key: ${{ steps.create-ticket.outputs.release-ticket-key }}
+          status: "Start Progress"
 
   publish-github-release:
     name: Publish github release
