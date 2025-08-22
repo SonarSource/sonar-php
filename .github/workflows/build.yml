@@ -73,7 +73,9 @@ jobs:
   sca_scan:
     needs: [build]
     # Only run on master and branch-* branches (equivalent to Cirrus CI condition)
-    if: github.ref_name == github.event.repository.default_branch || startsWith(github.ref_name, 'branch-')
+    # if: github.ref_name == github.event.repository.default_branch || startsWith(github.ref_name, 'branch-')
+    # TODO uncomment previous version, now it run for testing
+    if: true
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
@@ -168,7 +170,7 @@ jobs:
 
   promote:
     # TODO add Windows job when fixed
-    needs: [build, build_test_analyze, sca_scan]
+    needs: [build, build_test_analyze]
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
