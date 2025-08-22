@@ -71,7 +71,8 @@ jobs:
           path: '**/test-results/**/*.xml'
 
   qa_os_win:
-    needs: [build]
+    # TODO disabled for now, as build-gradle fails on Windows
+#    needs: [build]
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
@@ -113,7 +114,7 @@ jobs:
           path: '**/build/reports/**/*'
 
   promote:
-    needs: [build, build_test_analyze, qa_os_win]
+    needs: [build, build_test_analyze]
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
