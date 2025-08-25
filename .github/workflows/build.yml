@@ -146,7 +146,7 @@ jobs:
         id: secrets
         with:
           secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/github/token/licenses-ro token | GITHUB_TOKEN;
       - name: Run Integration Tests
         env:
@@ -154,6 +154,7 @@ jobs:
           GRADLE_TASK: its:plugin:integrationTest
           KEEP_ORCHESTRATOR_RUNNING: "true"
           SQ_VERSION: ${{ matrix.SQ_VERSION }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
         run: |
           export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
           mkdir -p ${GRADLE_USER_HOME}
