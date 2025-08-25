@@ -143,8 +143,7 @@ jobs:
       - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
         with:
           secrets: |
-            development/github/token/licenses-ro token | GITHUB_TOKEN;
-            development/artifactory/token/${{ github.repository }}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/artifactory/token/${{ github.repository }}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
       - name: Run Integration Tests
         env:
           GRADLE_TASK: its:plugin:integrationTest
