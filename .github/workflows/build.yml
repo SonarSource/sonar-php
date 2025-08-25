@@ -95,6 +95,7 @@ jobs:
           secrets: |
             development/kv/data/mend apikey | WS_APIKEY;
             development/artifactory/token/SonarSource-sonar-php-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/kv/data/develocity token | DEVELOCITY_TOKEN;
       - name: Run WhiteSource scan
         env:
           WS_APIKEY: ${{ steps.secrets.outputs.WS_APIKEY }}
