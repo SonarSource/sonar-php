@@ -158,6 +158,9 @@ jobs:
         run: |
           export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
           mkdir -p ${GRADLE_USER_HOME}
+          export TODAY=$(date '+%Y-%m-%d')
+          export ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}
+          mkdir -p ${ORCHESTRATOR_HOME}
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
