@@ -68,53 +68,6 @@ jobs:
           name: test-results
           path: '**/test-results/**/*.xml'
 
-  sca_scan:
-    needs: [build]
-    # Only run on master and branch-* branches (equivalent to Cirrus CI condition)
-    # if: github.ref_name == github.event.repository.default_branch || startsWith(github.ref_name, 'branch-')
-    # TODO uncomment previous version, now it run for testing
-    if: true
-    runs-on: sonar-l-public
-    name: SCA Scan
-    continue-on-error: true  # Equivalent to allow_failures: true
-    permissions:
-      id-token: write
-      contents: write
-    steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
-      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
-        with:
-          version: 2025.7.12
-      - name: Checkout submodules
-        run: |
-          git submodule update --init --depth 1 -- build-logic/common
-      - name: Get Vault secrets
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
-        with:
-          secrets: |
-            development/kv/data/mend apikey | WS_APIKEY;
-            development/artifactory/token/SonarSource-sonar-php-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
-            development/kv/data/develocity token | DEVELOCITY_TOKEN;
-      - name: Run WhiteSource scan
-        env:
-          WS_APIKEY: ${{ steps.secrets.outputs.WS_APIKEY }}
-          ARTIFACTORY_ACCESS_TOKEN: ${{ steps.secrets.outputs.ARTIFACTORY_ACCESS_TOKEN }}
-          ARTIFACTORY_URL: https://repox.jfrog.io/artifactory
-          GRADLE_OPTS: -Xmx64m -Dorg.gradle.jvmargs='-Xmx3G' -Dorg.gradle.daemon=false
-          GRADLE_COMMON_FLAGS: --console plain --no-daemon --profile
-          PROJECT_VERSION: ${{ needs.jobs.build.outputs.project-version }}
-          BUILD_NUMBER: ${{ needs.jobs.build.outputs.BUILD_NUMBER }}
-        run: |
-          ./gradlew ${GRADLE_COMMON_FLAGS} :php-frontend:processResources -Pkotlin.compiler.execution.strategy=in-process
-          source ws_scan.sh
-      - name: Upload WhiteSource artifacts
-        if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
-        with:
-          name: whitesource-artifacts
-          path: whitesource/**/*
-
   qa_os_win:
     # TODO disabled for now, as build-gradle fails on Windows
 #    needs: [build]
