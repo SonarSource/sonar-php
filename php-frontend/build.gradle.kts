@@ -23,7 +23,6 @@ plugins {
 description = "SonarSource PHP Analyzer :: Frontend"
 
 dependencies {
-  api(libs.sonar.analyzer.test.commons)
   api(libs.sslr.core)
   api(libs.sonar.regex.parsing)
 
@@ -37,7 +36,9 @@ dependencies {
   testImplementation(libs.sonar.plugin.api.impl)
   testImplementation(libs.sslr.testing.harness)
   testImplementation(libs.sonar.testing.harness)
+  testImplementation(libs.sonar.analyzer.test.commons)
   testRuntimeOnly(libs.junit.platform.launcher)
 
+  testFixturesImplementation(libs.sonar.analyzer.test.commons)
   testFixturesImplementation(libs.sonar.plugin.api.impl)
 }

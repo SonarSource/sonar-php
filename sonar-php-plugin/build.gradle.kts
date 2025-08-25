@@ -72,8 +72,7 @@ tasks.jar {
 }
 
 tasks.shadowJar {
-
-  minimize()
+  minimizeJar = true
   exclude("META-INF/LICENSE*")
   exclude("META-INF/NOTICE*")
   exclude("META-INF/*.RSA")
@@ -83,7 +82,7 @@ tasks.shadowJar {
   exclude("**/*.php")
 
   doLast {
-    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 6_000_000L)
+    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 5_500_000L)
   }
 }
 
