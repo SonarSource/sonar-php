@@ -143,12 +143,14 @@ jobs:
       - name: The name ${{ github.repository }}
         run: echo "The name of the repository is ${{ github.repository }}"
       - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
+        id: secrets
         with:
           secrets: |
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/github/token/licenses-ro token | GITHUB_TOKEN;
       - name: Run Integration Tests
         env:
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GRADLE_TASK: its:plugin:integrationTest
           KEEP_ORCHESTRATOR_RUNNING: "true"
           SQ_VERSION: ${{ matrix.SQ_VERSION }}
