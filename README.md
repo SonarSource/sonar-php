@@ -1,7 +1,7 @@
 # Code Quality and Security for PHP 
 
 <p align="center">
-  <img alt="Cirrus CI - Task and Script Build Status" src="https://img.shields.io/cirrus/github/SonarSource/sonar-php">
+  <img alt="Build" src="https://github.com/SonarSource/sonar-php/actions/workflows/build.yml/badge.svg?branch=master">
   <img alt="Quality Gate Status" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status">
   <img alt="Coverage" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=coverage">
   <img alt="Maven Central" src="https://img.shields.io/maven-central/v/org.sonarsource.php/sonar-php-plugin">
@@ -155,4 +155,3 @@ are published under the [Sonar Source-Available License Version 1 (SSALv1)](LICE
 
 See individual files for details that specify the license applicable to each file.
 Files subject to the SSALv1 will be noted in their headers.
-
