@@ -140,10 +140,6 @@ jobs:
         with:
           path: ${{ env.ORCHESTRATOR_HOME }}
           key: orchestrator-${{ env.TODAY }}
-      - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
-        with:
-          secrets: |
-            development/artifactory/token/${{ github.repository }}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
       - name: Run Integration Tests
         env:
           GRADLE_TASK: its:plugin:integrationTest
