@@ -1,7 +1,7 @@
 name: Automate release
 
 env:
-  PROJECT_KEY: "SONARPHP"
+  JIRA_PROJECT_KEY: "SONARPHP"
   PROJECT_NAME: "SonarPHP"
   LANGUAGE: "php"
   USE_JIRA_SANDBOX: true
