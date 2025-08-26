@@ -1,11 +1,3 @@
-setup-orchestator-home: &setup-orchestator-home
-  name: Setup Orchestrator Home
-  run: |
-    export TODAY=$(date '+%Y-%m-%d')
-    echo "TODAY=${TODAY}" >> $GITHUB_ENV
-    echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
-    mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
-
 name: Build
 on:
   push:
@@ -312,3 +304,11 @@ jobs:
       - uses: SonarSource/ci-github-actions/promote@v1
         with:
           promote-pull-request: true
+
+setup-orchestator-home: &setup-orchestator-home
+  name: Setup Orchestrator Home
+  run: |
+    export TODAY=$(date '+%Y-%m-%d')
+    echo "TODAY=${TODAY}" >> $GITHUB_ENV
+    echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
+    mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
