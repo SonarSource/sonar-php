@@ -1,3 +1,11 @@
+setup-orchestator-home: &setup-orchestator-home
+  name: Setup Orchestrator Home
+  run: |
+    export TODAY=$(date '+%Y-%m-%d')
+    echo "TODAY=${TODAY}" >> $GITHUB_ENV
+    echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
+    mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
+
 name: Build
 on:
   push:
@@ -130,12 +138,7 @@ jobs:
         run: |
           git submodule update --init --depth 1
       # TODO extract this
-      - name: Setup Orchestrator Home
-        run: |
-          export TODAY=$(date '+%Y-%m-%d')
-          echo "TODAY=${TODAY}" >> $GITHUB_ENV
-          echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
-          mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
+      - <<: *setup-orchestator-home
       - name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
         with:
@@ -250,12 +253,12 @@ jobs:
       - name: Checkout submodules
         run: |
           git submodule update --init --depth 1
-#      - name: Setup Orchestrator Home
-#        run: |
-#          export TODAY=$(date '+%Y-%m-%d')
-#          echo "TODAY=${TODAY}" >> $GITHUB_ENV
-#          echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
-#          mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
+      - name: Setup Orchestrator Home
+        run: |
+          export TODAY=$(date '+%Y-%m-%d')
+          echo "TODAY=${TODAY}" >> $GITHUB_ENV
+          echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
+          mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
       - name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
         with:
