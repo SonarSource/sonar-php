@@ -68,7 +68,8 @@ jobs:
           path: '**/test-results/**/*.xml'
 
   qa_os_win:
-    needs: [build]
+    # TODO uncomment, commented for faster execution
+#    needs: [build]
     runs-on: windows-latest-large
     name: QA OS Windows
     if: "!contains(github.event.head_commit.message, 'skip-win') && !contains(github.event.pull_request.title, 'skip-win')"
@@ -87,12 +88,15 @@ jobs:
         id: secrets
         with:
           secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_DEPLOY_PASSWORD;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}--public-reader username | ARTIFACTORY_DEPLOY_USERNAME;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}--public-reader access_token | ARTIFACTORY_DEPLOY_PASSWORD;
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
       - *checkout-build-logic
       # TODO BUILD-8928 when build-gradle supports Windows, replace it with it
       - name: Build on Windows
         env:
+          ARTIFACTORY_URL: https://repox.jfrog.io/artifactory
+          ARTIFACTORY_DEPLOY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
           ARTIFACTORY_DEPLOY_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
           DEVELOCITY_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
         run: |
