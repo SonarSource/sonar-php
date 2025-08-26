@@ -234,9 +234,67 @@ jobs:
           name: qa-ruling-reports-${{ matrix.PHP_PROJECT }}
           path: '**/build/reports/**/*'
 
+  qa_pr_analysis:
+    needs: [build]
+    runs-on: sonar-l-public
+    name: QA PR Analysis
+    if: "!contains(github.event.head_commit.message, 'skip-qa') && !contains(github.event.pull_request.title, 'skip-qa')"
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+        with:
+          version: 2025.7.12
+      - name: Checkout submodules
+        run: |
+          git submodule update --init --depth 1
+#      - name: Setup Orchestrator Home
+#        run: |
+#          export TODAY=$(date '+%Y-%m-%d')
+#          echo "TODAY=${TODAY}" >> $GITHUB_ENV
+#          echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
+#          mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
+      - name: Cache Orchestrator
+        uses: SonarSource/ci-github-actions/cache@v1
+        with:
+          path: ${{ env.ORCHESTRATOR_HOME }}
+          key: orchestrator-${{ env.TODAY }}
+      - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
+        id: secrets
+        with:
+          secrets: |
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - name: Run PR Analysis Integration Tests
+        env:
+#         TODO Maybe getting secrets that way is working?
+          ARTIFACTORY_ACCESS_TOKEN: ${{ steps.secrets.outputs.ARTIFACTORY_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.secrets.outputs.GITHUB_TOKEN }}
+          GRADLE_TASK: its:ruling:integrationTest
+          KEEP_ORCHESTRATOR_RUNNING: "true"
+          SQ_VERSION: LATEST_RELEASE
+        run: |
+          export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
+          mkdir -p ${GRADLE_USER_HOME}
+          ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpPrAnalysisTest" --info --build-cache --console plain --no-daemon
+      - name: Upload test results
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: qa-pr-analysis-test-results
+          path: '**/test-results/**/*.xml'
+      - name: Upload reports
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: qa-pr-analysis-reports
+          path: '**/build/reports/**/*'
+
   promote:
     # TODO add Windows job when fixed BUILD-8928
-    needs: [build, build_test_analyze, qa_plugin, qa_ruling]
+    needs: [build, build_test_analyze, qa_plugin, qa_ruling, qa_pr_analysis]
     runs-on: sonar-m-public
     name: Promote
     permissions:
