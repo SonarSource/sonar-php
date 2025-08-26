@@ -130,7 +130,7 @@ jobs:
         run: |
           git submodule update --init --depth 1
       # TODO extract this
-      - name: Setup Orchestrator Home
+      - name: Setup Orchestrator Home &setup-orchestator-home
         run: |
           export TODAY=$(date '+%Y-%m-%d')
           echo "TODAY=${TODAY}" >> $GITHUB_ENV
@@ -192,6 +192,7 @@ jobs:
       - name: Checkout submodules
         run: |
           git submodule update --init --depth 1
+      - *setup-orchestator-home
       - name: Setup Orchestrator Home
         run: |
           export TODAY=$(date '+%Y-%m-%d')
@@ -269,9 +270,8 @@ jobs:
             development/github/token/licenses-ro token | GITHUB_TOKEN;
       - name: Run PR Analysis Integration Tests
         env:
-#         TODO Maybe getting secrets that way is working?
-          ARTIFACTORY_ACCESS_TOKEN: ${{ steps.secrets.outputs.ARTIFACTORY_ACCESS_TOKEN }}
-          GITHUB_TOKEN: ${{ steps.secrets.outputs.GITHUB_TOKEN }}
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
           GRADLE_TASK: its:ruling:integrationTest
           KEEP_ORCHESTRATOR_RUNNING: "true"
           SQ_VERSION: LATEST_RELEASE
