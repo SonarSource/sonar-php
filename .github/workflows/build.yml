@@ -25,7 +25,8 @@ jobs:
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - name: Checkout submodules
+      - &checkout-build-logic
+        name: Checkout build logic
         run: |
           git submodule update --init --depth 1 -- build-logic/common
       - uses: SonarSource/ci-github-actions/build-gradle@v1
@@ -50,9 +51,7 @@ jobs:
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - name: Checkout submodules
-        run: |
-          git submodule update --init --depth 1 -- build-logic/common
+      - *checkout-build-logic
       - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: false
@@ -72,9 +71,7 @@ jobs:
     needs: [build]
     runs-on: windows-latest-large
     name: QA OS Windows
-    # TODO disabled for now, as build-gradle fails on Windows
-    if: false
-#    if: "!contains(github.event.head_commit.message, 'skip-win') && !contains(github.event.pull_request.title, 'skip-win')"
+    if: "!contains(github.event.head_commit.message, 'skip-win') && !contains(github.event.pull_request.title, 'skip-win')"
     permissions:
       id-token: write
       contents: write
@@ -85,19 +82,17 @@ jobs:
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - name: Checkout submodules
-        run: |
-          git submodule update --init --depth 1 -- build-logic/common
+      - *checkout-build-logic
       - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
         id: secrets
         with:
           secrets: |
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_DEPLOY_PASSWORD;
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
+      - *checkout-build-logic
       # TODO BUILD-8928 when build-gradle supports Windows, replace it with it
       - name: Build on Windows
         run: |
-          git submodule update --init --depth 1 -- build-logic/common
           ./gradlew --console plain --no-daemon --profile test
 #      - uses: SonarSource/ci-github-actions/build-gradle@v1
 #        with:
@@ -136,7 +131,8 @@ jobs:
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - name: Checkout submodules
+      - &checkout-all-submodules
+        name: Checkout all submodules
         run: |
           git submodule update --init --depth 1
       - &setup-orchestator-home
@@ -199,9 +195,7 @@ jobs:
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - name: Checkout submodules
-        run: |
-          git submodule update --init --depth 1
+      - *checkout-all-submodules
       - *setup-orchestator-home
       - name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
@@ -252,9 +246,7 @@ jobs:
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - name: Checkout submodules
-        run: |
-          git submodule update --init --depth 1
+      - *checkout-all-submodules
       - *setup-orchestator-home
       - name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
