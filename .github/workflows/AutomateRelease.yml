@@ -58,11 +58,11 @@ jobs:
       id-token: write
     steps:
       - name: Check Releasability Status
-        uses: SonarSource/release-github-actions/check-releasability-status@03368d584ef1b9bdcc0d786f99246f669ac6030c
+        uses: SonarSource/release-github-actions/check-releasability-status@update_analyzer_action
       
       - name: Update Rule Metadata
         id: update-rule-metadata
-        uses: SonarSource/release-github-actions/update-rule-metadata@03368d584ef1b9bdcc0d786f99246f669ac6030c
+        uses: SonarSource/release-github-actions/update-rule-metadata@update_analyzer_action
       
       - name: Check Rule Metadata Changes
         if: steps.update-rule-metadata.outputs.has-changes == 'true'
@@ -88,15 +88,15 @@ jobs:
     steps:
       - name: Get Release Version
         id: get-release-version
-        uses: SonarSource/release-github-actions/get-release-version@03368d584ef1b9bdcc0d786f99246f669ac6030c
+        uses: SonarSource/release-github-actions/get-release-version@update_analyzer_action
 
       - name: Get Jira Version
         id: get-jira-version
-        uses: SonarSource/release-github-actions/get-jira-version@03368d584ef1b9bdcc0d786f99246f669ac6030c
+        uses: SonarSource/release-github-actions/get-jira-version@update_analyzer_action
 
       - name: Get Jira Release Notes
         id: get-jira-release-notes
-        uses: SonarSource/release-github-actions/get-jira-release-notes@03368d584ef1b9bdcc0d786f99246f669ac6030c
+        uses: SonarSource/release-github-actions/get-jira-release-notes@update_analyzer_action
 
   create-release-ticket:
     name: Create release ticket
@@ -110,7 +110,7 @@ jobs:
     steps:
       - name: Create Jira Release Ticket
         id: create-ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@03368d584ef1b9bdcc0d786f99246f669ac6030c
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@update_analyzer_action
         with:
           project-name: ${{env.PROJECT_NAME }}
           short-description: ${{ inputs.short_description }}
@@ -136,7 +136,7 @@ jobs:
     steps:
       - name: Publish GitHub Release
         id: publish-github-release
-        uses: SonarSource/release-github-actions/publish-github-release@update_publish-github-release
+        uses: SonarSource/release-github-actions/publish-github-release@update_analyzer_action
         with:
           release-version: ${{ needs.prepare-release.outputs.release-version }}
           release-notes: ${{ needs.prepare-release.outputs.release-notes }}
