@@ -69,8 +69,7 @@ jobs:
           path: '**/test-results/**/*.xml'
 
   qa_os_win:
-    # TODO disabled for now, as build-gradle fails on Windows
-#    needs: [build]
+    needs: [build]
     runs-on: windows-latest-large
     name: QA OS Windows
     # TODO disabled for now, as build-gradle fails on Windows
@@ -89,14 +88,25 @@ jobs:
       - name: Checkout submodules
         run: |
           git submodule update --init --depth 1 -- build-logic/common
-      - uses: SonarSource/ci-github-actions/build-gradle@v1
+      - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
+        id: secrets
         with:
-          deploy-pull-request: false
-          artifactory-reader-role: private-reader
-          artifactory-deployer-role: qa-deployer
-          skip-tests: false
-          use-develocity: true
-          gradle-args: test
+          secrets: |
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_DEPLOY_PASSWORD;
+            development/kv/data/develocity token | DEVELOCITY_TOKEN;
+      # TODO BUILD-8928 when build-gradle supports Windows, replace it with it
+      - name: Build on Windows
+        run: |
+          git submodule update --init --depth 1 -- build-logic/common
+          ./gradlew --console plain --no-daemon --profile test
+#      - uses: SonarSource/ci-github-actions/build-gradle@v1
+#        with:
+#          deploy-pull-request: false
+#          artifactory-reader-role: private-reader
+#          artifactory-deployer-role: qa-deployer
+#          skip-tests: false
+#          use-develocity: true
+#          gradle-args: test
       - name: Upload test results
         if: always() && ! cancelled()
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
@@ -129,7 +139,6 @@ jobs:
       - name: Checkout submodules
         run: |
           git submodule update --init --depth 1
-      # TODO extract this
       - &setup-orchestator-home
         name: Setup Orchestrator Home
         run: |
@@ -194,12 +203,6 @@ jobs:
         run: |
           git submodule update --init --depth 1
       - *setup-orchestator-home
-      - name: Setup Orchestrator Home
-        run: |
-          export TODAY=$(date '+%Y-%m-%d')
-          echo "TODAY=${TODAY}" >> $GITHUB_ENV
-          echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
-          mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
       - name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
         with:
@@ -252,12 +255,7 @@ jobs:
       - name: Checkout submodules
         run: |
           git submodule update --init --depth 1
-      - name: Setup Orchestrator Home
-        run: |
-          export TODAY=$(date '+%Y-%m-%d')
-          echo "TODAY=${TODAY}" >> $GITHUB_ENV
-          echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
-          mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
+      - *setup-orchestator-home
       - name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
         with:
@@ -294,7 +292,6 @@ jobs:
           path: '**/build/reports/**/*'
 
   promote:
-    # TODO add Windows job when fixed BUILD-8928
     needs: [build, build_test_analyze, qa_plugin, qa_ruling, qa_pr_analysis]
     runs-on: sonar-m-public
     name: Promote
