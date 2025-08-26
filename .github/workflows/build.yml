@@ -102,8 +102,11 @@ jobs:
         run: |
           echo "Java version:"
           java --version
+          where java
           echo "Gradle version:"
           ./gradlew --version
+          echo "Gradle version Windows:"
+          ./gradlew.bat --version
           ./gradlew --console plain --no-daemon --profile test
 #      - uses: SonarSource/ci-github-actions/build-gradle@v1
 #        with:
