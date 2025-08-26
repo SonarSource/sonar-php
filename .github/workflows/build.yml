@@ -55,7 +55,7 @@ jobs:
       - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: false
-          artifactory-reader-role: private-reader
+          artifactory-reader-role: public-reader
           artifactory-deployer-role: qa-deployer
           skip-tests: false
           use-develocity: true
@@ -88,7 +88,7 @@ jobs:
         id: secrets
         with:
           secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
       # TODO BUILD-8928 when build-gradle supports Windows, replace it with it
       - name: Build on Windows
