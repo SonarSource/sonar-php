@@ -100,23 +100,8 @@ jobs:
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           DEVELOCITY_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
         run: |
-          mise use -g java@17
-          echo "PATH:"
-          echo %PATH%
-          echo $Env:PATH
-          echo "JAVA_HOME:"
-          echo %JAVA_HOME%
-          echo $Env:JAVA_HOME
-          echo "Java version:"
-          java --version
-          where java
-          cd C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\
-          dir
-          echo "Gradle version:"
-          ./gradlew --version
-          echo "Gradle version Windows:"
-          ./gradlew.bat --version
-          ./gradlew --console plain --no-daemon --profile test
+          ./gradlew.bat -Dorg.gradle.java.home=C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\17.0.16-8\x64 --version
+          ./gradlew.bat -Dorg.gradle.java.home=C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\17.0.16-8\x64 --console plain --no-daemon --profile test
 #      - uses: SonarSource/ci-github-actions/build-gradle@v1
 #        with:
 #          deploy-pull-request: false
