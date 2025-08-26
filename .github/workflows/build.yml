@@ -100,7 +100,10 @@ jobs:
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           DEVELOCITY_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
         run: |
+          echo "Java version:"
           java --version
+          echo "Gradle version:"
+          ./gradlew --version
           ./gradlew --console plain --no-daemon --profile test
 #      - uses: SonarSource/ci-github-actions/build-gradle@v1
 #        with:
