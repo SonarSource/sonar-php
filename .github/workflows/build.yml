@@ -130,7 +130,12 @@ jobs:
         run: |
           git submodule update --init --depth 1
       # TODO extract this
-      - <<: *setup-orchestator-home
+      - name: Setup Orchestrator Home
+        run: |
+          export TODAY=$(date '+%Y-%m-%d')
+          echo "TODAY=${TODAY}" >> $GITHUB_ENV
+          echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
+          mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
       - name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
         with:
@@ -305,10 +310,3 @@ jobs:
         with:
           promote-pull-request: true
 
-setup-orchestator-home: &setup-orchestator-home
-  name: Setup Orchestrator Home
-  run: |
-    export TODAY=$(date '+%Y-%m-%d')
-    echo "TODAY=${TODAY}" >> $GITHUB_ENV
-    echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
-    mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
