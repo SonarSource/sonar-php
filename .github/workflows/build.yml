@@ -88,11 +88,15 @@ jobs:
         id: secrets
         with:
           secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader username | ARTIFACTORY_READER_USERNAME;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_READER_PASSWORD;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
       # TODO BUILD-8928 when build-gradle supports Windows, replace it with it
       - name: Build on Windows
         env:
+          ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_READER_PASSWORD }}
+          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_READER_USERNAME }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           DEVELOCITY_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
         run: |
@@ -100,7 +104,7 @@ jobs:
 #      - uses: SonarSource/ci-github-actions/build-gradle@v1
 #        with:
 #          deploy-pull-request: false
-#          artifactory-reader-role: private-reader
+#          artifactory-reader-role: public-reader
 #          artifactory-deployer-role: qa-deployer
 #          skip-tests: false
 #          use-develocity: true
