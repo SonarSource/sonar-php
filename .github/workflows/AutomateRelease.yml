@@ -80,7 +80,7 @@ jobs:
     steps:
       - name: Check Releasability and Get Version
         id: check_releasability_status
-        uses: SonarSource/release-github-actions/check-releasability-status@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/check-releasability-status@2c3bace2951f64028938affa53a0b68a651e4974
 
   create_release_ticket:
     name: Create release ticket
@@ -97,7 +97,7 @@ jobs:
     steps:
       - name: Create Jira Release Ticket
         id: create_ticket
-        uses: SonarSource/release-github-actions/create-jira-release-ticket@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/create-jira-release-ticket@2c3bace2951f64028938affa53a0b68a651e4974
         with:
           project_key: ${{ env.PROJECT_KEY }}
           project_name: ${{ env.PROJECT_NAME }}
@@ -112,7 +112,7 @@ jobs:
 
       - name: Start progress on release ticket
         id: rel_ticket_start_progress
-        uses: SonarSource/release-github-actions/update-release-ticket-status@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/update-release-ticket-status@2c3bace2951f64028938affa53a0b68a651e4974
         with:
           ticket_key: ${{ steps.create_ticket.outputs.ticket_key }}
           status: "Start Progress"
@@ -131,7 +131,7 @@ jobs:
     steps:
       - name: Publish Github release
         id: publish_github_release
-        uses: SonarSource/release-github-actions/publish-github-release@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/publish-github-release@2c3bace2951f64028938affa53a0b68a651e4974
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           jira_project_key: ${{ env.PROJECT_KEY }}
@@ -153,7 +153,7 @@ jobs:
     steps:
       - name: Release in Jira and Create Next Version
         id: jira_release
-        uses: SonarSource/release-github-actions/release-jira-version@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/release-jira-version@2c3bace2951f64028938affa53a0b68a651e4974
         with:
           project_key: ${{ env.PROJECT_KEY }}
           jira_release_name: ${{ needs.create_release_ticket.outputs.release_name }}
@@ -162,7 +162,7 @@ jobs:
 
       - name: Move release ticket to done
         id: rel_ticket_move_to_done
-        uses: SonarSource/release-github-actions/update-release-ticket-status@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/update-release-ticket-status@2c3bace2951f64028938affa53a0b68a651e4974
         with:
           ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
           status: "Technical Release Done"
@@ -201,7 +201,7 @@ jobs:
     steps:
       - name: Find and Update Tickets
         id: integration_update
-        uses: SonarSource/release-github-actions/update-integration-tickets@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/update-integration-tickets@2c3bace2951f64028938affa53a0b68a651e4974
         with:
           release_ticket_key: ${{ needs.create_release_ticket.outputs.release_ticket_key }}
           sqs_fix_versions: ${{ github.event.inputs.sqs_fix_versions }}
@@ -219,7 +219,7 @@ jobs:
     steps:
       - name: Update analyzer in SQS
         id: update_step_sqs
-        uses: SonarSource/release-github-actions/update-analyzer@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/update-analyzer@2c3bace2951f64028938affa53a0b68a651e4974
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           ticket: ${{ needs.update-integration-tickets.outputs.sqs_ticket_key }}
@@ -230,7 +230,7 @@ jobs:
 
       - name: Update analyzer in SQC
         id: update_step_sqc
-        uses: SonarSource/release-github-actions/update-analyzer@09b8b3b315362772140b0db837c08648533ead88
+        uses: SonarSource/release-github-actions/update-analyzer@2c3bace2951f64028938affa53a0b68a651e4974
         with:
           version: ${{ needs.check_releasability.outputs.version }}
           ticket: ${{ needs.update-integration-tickets.outputs.sqc_ticket_key }}
