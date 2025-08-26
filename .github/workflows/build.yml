@@ -100,6 +100,7 @@ jobs:
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           DEVELOCITY_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
         run: |
+          java --version
           ./gradlew --console plain --no-daemon --profile test
 #      - uses: SonarSource/ci-github-actions/build-gradle@v1
 #        with:
@@ -154,8 +155,6 @@ jobs:
         with:
           path: ${{ env.ORCHESTRATOR_HOME }}
           key: orchestrator-${{ env.TODAY }}
-      - name: The name ${{ github.repository }}
-        run: echo "The name of the repository is ${{ github.repository }}"
       - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
         id: secrets
         with:
