@@ -118,7 +118,7 @@ jobs:
           jira-release-url: ${{ needs.prepare-release.outputs.jira-release-url }}
       
       - name: Start progress on ticket
-        uses: SonarSource/release-github-actions/update-release-ticket-status@update_release_ticket_status
+        uses: SonarSource/release-github-actions/update-release-ticket-status@update_analyzer_action
         with:
           release-ticket-key: ${{ steps.create-ticket.outputs.release-ticket-key }}
           status: "Start Progress"
