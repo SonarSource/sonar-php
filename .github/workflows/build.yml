@@ -88,8 +88,8 @@ jobs:
         id: secrets
         with:
           secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}--public-reader username | ARTIFACTORY_DEPLOY_USERNAME;
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}--public-reader access_token | ARTIFACTORY_DEPLOY_PASSWORD;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader username | ARTIFACTORY_DEPLOY_USERNAME;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_DEPLOY_PASSWORD;
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
       - *checkout-build-logic
       # TODO BUILD-8928 when build-gradle supports Windows, replace it with it
