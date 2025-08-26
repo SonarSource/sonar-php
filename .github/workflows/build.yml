@@ -130,7 +130,8 @@ jobs:
         run: |
           git submodule update --init --depth 1
       # TODO extract this
-      - name: Setup Orchestrator Home &setup-orchestator-home
+      - &setup-orchestator-home
+        name: Setup Orchestrator Home
         run: |
           export TODAY=$(date '+%Y-%m-%d')
           echo "TODAY=${TODAY}" >> $GITHUB_ENV
