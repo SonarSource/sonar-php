@@ -41,8 +41,8 @@ jobs:
           export GRADLE_CACHE_KEY=$(find . -name '*.gradle.kts' -type f -exec md5sum {} \; | sort && md5sum gradle/libs.versions.toml && md5sum gradle/wrapper/gradle-wrapper.properties && md5sum gradle.properties)
           {
             echo <<EOF
-            "GRADLE_CACHE_KEY=${GRADLE_CACHE_KEY}"
-            EOF
+            echo "GRADLE_CACHE_KEY=${GRADLE_CACHE_KEY}"
+            echo EOF
           } >> $GITHUB_ENV
       - &cache-gradle-dependencies
         name: Cache Gradle Dependencies
