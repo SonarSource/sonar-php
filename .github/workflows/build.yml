@@ -103,6 +103,7 @@ jobs:
         shell: bash
         run: |
           git config list
+          cat -e php-frontend/src/test/resources/tests/testfile.php
           export JAVA_HOME=C:/hostedtoolcache/windows/Java_Temurin-Hotspot_jdk/17.0.16-8/x64
           ./gradlew --console plain --no-daemon --profile test
       - name: Upload test results
