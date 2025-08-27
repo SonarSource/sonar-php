@@ -42,6 +42,7 @@ def qa_win_script():
     "cat .gitconfig || true",
     "cat ~/.gitconfig || true",
     "git config --list",
+    "cat -e php-frontend/src/test/resources/tests/testfile.php",
     "source cirrus-env CI",
     "git submodule update --init --depth 1 -- build-logic/common",
     "./gradlew ${GRADLE_COMMON_FLAGS} test"
