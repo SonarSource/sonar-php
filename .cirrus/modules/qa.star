@@ -39,7 +39,9 @@ def on_failure():
 def qa_win_script():
   return [
     "cat .git/config || true",
-    "git config list",
+    "cat .gitconfig || true",
+    "cat ~/.gitconfig || true",
+    "git config --list",
     "source cirrus-env CI",
     "git submodule update --init --depth 1 -- build-logic/common",
     "./gradlew ${GRADLE_COMMON_FLAGS} test"
