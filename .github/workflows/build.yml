@@ -102,29 +102,9 @@ jobs:
           DEVELOCITY_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
         shell: bash
         run: |
-          echo "pwd:"
-          pwd
-          echo "Where java:"
-          where java
-          echo "---"
+          git config list
           export JAVA_HOME=C:/hostedtoolcache/windows/Java_Temurin-Hotspot_jdk/17.0.16-8/x64
-          export JAVA_EXE=$JAVA_HOME/bin/java.exe
-          
-          echo $JAVA_HOME
-          echo "Check Java exe version:"
-          $JAVA_EXE -version
-          echo "---- end java exe version"
-          export DEBUG=true
-          ./gradlew --version
           ./gradlew --console plain --no-daemon --profile test
-#      - uses: SonarSource/ci-github-actions/build-gradle@v1
-#        with:
-#          deploy-pull-request: false
-#          artifactory-reader-role: public-reader
-#          artifactory-deployer-role: qa-deployer
-#          skip-tests: false
-#          use-develocity: true
-#          gradle-args: test
       - name: Upload test results
         if: always() && ! cancelled()
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
