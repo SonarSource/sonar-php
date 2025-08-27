@@ -29,6 +29,13 @@ jobs:
         name: Checkout build logic
         run: |
           git submodule update --init --depth 1 -- build-logic/common
+      - name: Create Gradle User Home
+        run: |
+          export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
+          mkdir -p ${GRADLE_USER_HOME}
+          echo "GRADLE_USER_HOME=${GRADLE_USER_HOME}" >> $GITHUB_ENV
+          export TODAY=$(date '+%Y-%m-%d')
+          echo "TODAY=${TODAY}" >> $GITHUB_ENV
       - &cache-gradle-dependencies
         name: Cache Gradle Dependencies
         uses: SonarSource/ci-github-actions/cache@v1
