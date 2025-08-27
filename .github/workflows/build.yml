@@ -68,8 +68,7 @@ jobs:
           path: '**/test-results/**/*.xml'
 
   qa_os_win:
-    # TODO uncomment, commented for faster execution
-#    needs: [build]
+    needs: [build]
     runs-on: windows-latest-large
     name: QA OS Windows
     if: "!contains(github.event.head_commit.message, 'skip-win') && !contains(github.event.pull_request.title, 'skip-win')"
@@ -78,6 +77,7 @@ jobs:
       contents: write
     steps:
       - name: Configure git
+        # Without this, on Windows, git will check out files with CRLF endings, which will cause PhpTestFileTest to fail
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
@@ -142,7 +142,8 @@ jobs:
           echo "TODAY=${TODAY}" >> $GITHUB_ENV
           echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
           mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
-      - name: Cache Orchestrator
+      - &cache-orchestrator
+        name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
         with:
           path: ${{ env.ORCHESTRATOR_HOME }}
@@ -196,11 +197,7 @@ jobs:
         with:
           version: 2025.7.12
       - *setup-orchestator-home
-      - name: Cache Orchestrator
-        uses: SonarSource/ci-github-actions/cache@v1
-        with:
-          path: ${{ env.ORCHESTRATOR_HOME }}
-          key: orchestrator-${{ env.TODAY }}
+      - *cache-orchestrator
       - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
         id: secrets
         with:
@@ -248,11 +245,7 @@ jobs:
         with:
           version: 2025.7.12
       - *setup-orchestator-home
-      - name: Cache Orchestrator
-        uses: SonarSource/ci-github-actions/cache@v1
-        with:
-          path: ${{ env.ORCHESTRATOR_HOME }}
-          key: orchestrator-${{ env.TODAY }}
+      - *cache-orchestrator
       - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
         id: secrets
         with:
@@ -284,7 +277,7 @@ jobs:
           path: '**/build/reports/**/*'
 
   promote:
-    needs: [build, build_test_analyze, qa_plugin, qa_ruling, qa_pr_analysis]
+    needs: [build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis]
     runs-on: sonar-m-public
     name: Promote
     permissions:
