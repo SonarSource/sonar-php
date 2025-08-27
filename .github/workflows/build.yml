@@ -38,12 +38,14 @@ jobs:
           echo "GRADLE_USER_HOME=${GRADLE_USER_HOME}" >> $GITHUB_ENV
           export TODAY=$(date '+%Y-%m-%d')
           echo "TODAY=${TODAY}" >> $GITHUB_ENV
+          export GRADLE_CACHE_KEY=$(find . -name '*.gradle.kts' -type f -exec md5sum {} \; | sort && md5sum gradle/libs.versions.toml && md5sum gradle/wrapper/gradle-wrapper.properties && md5sum gradle.properties)
+          echo "GRADLE_CACHE_KEY=${GRADLE_CACHE_KEY}" >> $GITHUB_ENV
       - &cache-gradle-dependencies
         name: Cache Gradle Dependencies
         uses: SonarSource/ci-github-actions/cache@v1
         with:
           path: ${{ env.GRADLE_USER_HOME }}
-          key: gradle-${{ env.TODAY }}
+          key: gradle-${{ env.GRADLE_CACHE_KEY }}
       - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: true
