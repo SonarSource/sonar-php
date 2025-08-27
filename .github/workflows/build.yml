@@ -92,22 +92,16 @@ jobs:
         id: secrets
         with:
           secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader username | ARTIFACTORY_READER_USERNAME;
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_READER_PASSWORD;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
       # TODO BUILD-8928 when build-gradle supports Windows, replace it with it
       - name: Build on Windows
-        # TODO check what env is really needed
         env:
-          ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_READER_PASSWORD }}
-          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_READER_USERNAME }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           DEVELOCITY_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
         shell: bash
+        # It is important to set JAVA_HOME, otherwise Gradle will use Java 8 and fail
         run: |
-          git config list
-          cat -e php-frontend/src/test/resources/tests/testfile.php
           export JAVA_HOME=C:/hostedtoolcache/windows/Java_Temurin-Hotspot_jdk/17.0.16-8/x64
           ./gradlew --console plain --no-daemon --profile test
       - name: Upload test results
@@ -136,14 +130,11 @@ jobs:
         SQ_VERSION: [LATEST_RELEASE, DEV]
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          submodules: true
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      # TODO replace with actions/checkout ?
-      - &checkout-all-submodules
-        name: Checkout all submodules
-        run: |
-          git submodule update --init --depth 1
       - &setup-orchestator-home
         name: Setup Orchestrator Home
         run: |
@@ -199,10 +190,11 @@ jobs:
         PHP_PROJECT: [Flysystem, Monica, PhpCodeSniffer, PhpMailer, Psysh, PhpWord, RubixML, PhpSpreadsheet]
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          submodules: true
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - *checkout-all-submodules
       - *setup-orchestator-home
       - name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
@@ -250,10 +242,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          submodules: true
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - *checkout-all-submodules
       - *setup-orchestator-home
       - name: Cache Orchestrator
         uses: SonarSource/ci-github-actions/cache@v1
