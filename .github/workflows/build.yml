@@ -94,6 +94,7 @@ jobs:
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
       # TODO BUILD-8928 when build-gradle supports Windows, replace it with it
       - name: Build on Windows
+        # TODO check what env is really needed
         env:
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_READER_PASSWORD }}
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_READER_USERNAME }}
@@ -108,7 +109,7 @@ jobs:
           export JAVA_EXE=%JAVA_HOME%/bin/java.exe
           
           echo "Check Java exe version:"
-          "%JAVA_EXE%" -version
+          $JAVA_EXE -version
           echo "---- end java exe version"
           export DEBUG=true
           ./gradlew.bat -Dorg.gradle.java.home=C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\17.0.16-8\x64 --version
