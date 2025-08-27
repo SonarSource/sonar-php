@@ -79,8 +79,8 @@ jobs:
     steps:
       - name: Configure git
         run: |
-          git config --global core.autocrlf true
-          git config --global core.safecrlf true
+          git config --global core.autocrlf false
+          git config --global core.eol lf
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
         with:
           submodules: false
