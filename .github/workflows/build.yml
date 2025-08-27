@@ -115,8 +115,8 @@ jobs:
           $JAVA_EXE -version
           echo "---- end java exe version"
           export DEBUG=true
-          ./gradlew.bat -Dorg.gradle.java.home=C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\17.0.16-8\x64 --version
-          ./gradlew.bat -Dorg.gradle.java.home=C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\17.0.16-8\x64 --console plain --no-daemon --profile test
+          ./gradlew --version
+          ./gradlew --console plain --no-daemon --profile test
 #      - uses: SonarSource/ci-github-actions/build-gradle@v1
 #        with:
 #          deploy-pull-request: false
