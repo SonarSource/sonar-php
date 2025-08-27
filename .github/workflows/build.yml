@@ -31,6 +31,7 @@ jobs:
           git submodule update --init --depth 1 -- build-logic/common
       - &create-gradle-user-home
         name: Create Gradle User Home
+        shell: bash
         run: |
           export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
           mkdir -p ${GRADLE_USER_HOME}
