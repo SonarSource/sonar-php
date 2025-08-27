@@ -38,7 +38,7 @@ def on_failure():
 
 def qa_win_script():
   return [
-    "cat ~/.git/config",
+    "cat .git/config || true",
     "git config list",
     "source cirrus-env CI",
     "git submodule update --init --depth 1 -- build-logic/common",
