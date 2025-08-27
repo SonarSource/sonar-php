@@ -105,7 +105,6 @@ jobs:
           echo "---"
           set JAVA_HOME=C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\17.0.16-8\x64
           set JAVA_EXE=%JAVA_HOME%/bin/java.exe
-          if exist "%JAVA_EXE%" echo "JAVA EXEX exists"
           if (!(Test-Path "%JAVA_EXE%")) {
             Write-Warning "%JAVA_EXE% doesn't exist"
           }
