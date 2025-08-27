@@ -34,10 +34,12 @@ jobs:
           deploy-pull-request: true
           artifactory-reader-role: public-reader
           artifactory-deployer-role: public-deployer
-#         issue in build-gradle action, skipping tests manually in gradle-args
-          skip-tests: false
+          # issue in build-gradle action, skipping tests manually in gradle-args
+          skip-tests: true
+          # There might be a warning: Warning: Failed to fetch short-lived token for Develocity
+          # it will be addressed in BUILD-8926
           use-develocity: true
-          gradle-args: -x test -x sonar storeProjectVersion
+          gradle-args: -x sonar storeProjectVersion
 
   build_test_analyze:
     needs: [build]
