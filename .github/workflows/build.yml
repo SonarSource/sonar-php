@@ -106,9 +106,13 @@ jobs:
           set JAVA_HOME=C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\17.0.16-8\x64
           set JAVA_EXE=%JAVA_HOME%/bin/java.exe
           if exist "%JAVA_EXE%" echo "JAVA EXEX exists"
+          if (!(Test-Path "%JAVA_EXE%")) {
+            Write-Warning "%JAVA_EXE% doesn't exist"
+          }
           echo "Check Java exe version:"
           "%JAVA_EXE%" -version
           echo "---- end java exe version"
+          set DEBUG=true
           ./gradlew.bat -Dorg.gradle.java.home=C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\17.0.16-8\x64 --version
           ./gradlew.bat -Dorg.gradle.java.home=C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\17.0.16-8\x64 --console plain --no-daemon --profile test
 #      - uses: SonarSource/ci-github-actions/build-gradle@v1
