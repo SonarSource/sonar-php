@@ -91,7 +91,7 @@ jobs:
     needs: [build]
     runs-on: github-windows-latest-l
     name: QA OS Windows
-    if: &skip-qa-jobs
+    if: &skip-qa-jobs |
       !(github.event_name == 'pull_request' &&
       contains(github.event.pull_request.changed_files, '**/src/main/resources/org/sonar/l10n/*/rules/**') &&
       contains(github.event.pull_request.changed_files, '**/src/main/resources/com/sonar/l10n/*/rules/**') &&
