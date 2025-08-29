@@ -29,25 +29,6 @@ jobs:
         name: Checkout build logic
         run: |
           git submodule update --init --depth 1 -- build-logic/common
-      - &create-gradle-user-home
-        name: Create Gradle User Home
-        shell: bash
-        run: |
-          export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
-          mkdir -p ${GRADLE_USER_HOME}
-          echo "GRADLE_USER_HOME=${GRADLE_USER_HOME}" >> $GITHUB_ENV
-          export TODAY=$(date '+%Y-%m-%d')
-          echo "TODAY=${TODAY}" >> $GITHUB_ENV
-          find . -name '*.gradle.kts' -type f -exec md5sum {} \; | sort && md5sum gradle/libs.versions.toml && md5sum gradle/wrapper/gradle-wrapper.properties && md5sum gradle.properties > gradle-md5-sums.txt 
-          export GRADLE_CACHE_KEY=$(md5sum gradle-md5-sums.txt | awk '{ print $1 }')
-          echo "GRADLE_CACHE_KEY=${GRADLE_CACHE_KEY}" >> $GITHUB_ENV
-          rm gradle-md5-sums.txt
-      - &cache-gradle-dependencies
-        name: Cache Gradle Dependencies
-        uses: SonarSource/ci-github-actions/cache@v1
-        with:
-          path: ${{ env.GRADLE_USER_HOME }}
-          key: gradle-${{ env.GRADLE_CACHE_KEY }}
       - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: true
@@ -70,8 +51,6 @@ jobs:
         with:
           version: 2025.7.12
       - *checkout-build-logic
-      - *create-gradle-user-home
-      - *cache-gradle-dependencies
       - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: false
@@ -113,8 +92,6 @@ jobs:
         with:
           version: 2025.7.12
       - *checkout-build-logic
-      - *create-gradle-user-home
-      - *cache-gradle-dependencies
       - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
         id: secrets
         with:
@@ -162,8 +139,6 @@ jobs:
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - *create-gradle-user-home
-      - *cache-gradle-dependencies
       - &setup-orchestator-home
         name: Setup Orchestrator Home
         run: |
@@ -223,8 +198,6 @@ jobs:
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - *create-gradle-user-home
-      - *cache-gradle-dependencies
       - *setup-orchestator-home
       - *cache-orchestrator
       - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
@@ -273,8 +246,6 @@ jobs:
       - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           version: 2025.7.12
-      - *create-gradle-user-home
-      - *cache-gradle-dependencies
       - *setup-orchestator-home
       - *cache-orchestrator
       - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
