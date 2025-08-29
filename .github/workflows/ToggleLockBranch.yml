@@ -4,14 +4,15 @@ on:
   workflow_call:
     inputs:
       branch:
-        required: false
+        required: true
         type: string
+        default: "master"
   workflow_dispatch:    # Triggered manually from the GitHub UI / Actions
     inputs:
       branch:
         description: "Branch to lock"
-        required: false
-        type: string
+        required: true
+        default: "master"
 
 jobs:
   ToggleLockBranch_job:
