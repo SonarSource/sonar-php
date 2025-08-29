@@ -60,6 +60,7 @@ jobs:
       jira-project-key: "SONARPHP"
       project-name: "SonarPHP"
       plugin-name: "php"
+      plugin-artifacts: "php"
       use-jira-sandbox: true
       is-draft-release: true
       pm-email: "yasen.pavlov@sonarsource.com"
