@@ -28,6 +28,10 @@ on:
           Branch from which to do the release.
         required: true
         default: "master"
+      new-version:
+        description: |
+          Specify the version for the next release (e.g., 4.2.0).
+          If left blank, the minor version will be automatically incremented.
 
 jobs:
   automated-release:
@@ -50,3 +54,4 @@ jobs:
       rule-props-changed: ${{ inputs.rule-props-changed }}
       sq-compatibility: ${{ inputs.sq-compatibility }}
       branch: ${{ inputs.branch }}
+      new-version: ${{ inputs.new-version }}
