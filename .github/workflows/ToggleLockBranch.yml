@@ -10,7 +10,7 @@ on:
   workflow_dispatch:    # Triggered manually from the GitHub UI / Actions
     inputs:
       branch:
-        description: "Branch to lock"
+        description: "Branch to to toggle lock on"
         required: true
         default: "master"
 
