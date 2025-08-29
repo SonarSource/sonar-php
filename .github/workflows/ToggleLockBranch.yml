@@ -2,7 +2,16 @@ name: Toggle lock branch
 
 on:
   workflow_call:
+    inputs:
+      branch:
+        required: false
+        type: string
   workflow_dispatch:    # Triggered manually from the GitHub UI / Actions
+    inputs:
+      branch:
+        description: "Branch to lock"
+        required: false
+        type: string
 
 jobs:
   ToggleLockBranch_job:
@@ -22,3 +31,4 @@ jobs:
           github-token: ${{ fromJSON(steps.secrets.outputs.vault).lock_token }}
           slack-token: ${{ fromJSON(steps.secrets.outputs.vault).slack_api_token }}
           slack-channel: squad-security-cloud-notifs
+          branch-pattern: ${{ input.branch }}
