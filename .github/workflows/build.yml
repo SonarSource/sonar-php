@@ -89,7 +89,7 @@ jobs:
 
   qa_os_win:
     needs: [build]
-    runs-on: github-windows-latest-l
+    runs-on: github-windows-latest-s
     name: QA OS Windows
     if: &skip-qa-jobs |
       !(github.event_name == 'pull_request' &&
