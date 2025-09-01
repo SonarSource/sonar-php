@@ -81,8 +81,9 @@ tasks.shadowJar {
   exclude("NOTICE*")
   exclude("**/*.php")
 
+  val logger = project.logger
   doLast {
-    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 5_500_000L)
+    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 5_500_000L, logger)
   }
 }
 
