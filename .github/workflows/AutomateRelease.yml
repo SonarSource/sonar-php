@@ -38,18 +38,18 @@ on:
           If left blank, the minor version will be automatically incremented.
 
 jobs:
-  lock-branch:
-    name: Lock ${{ inputs.branch }} branch
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    permissions:
-      id-token: write
-    with:
-      branch: ${{ inputs.branch }}
-
+#  lock-branch:
+#    name: Lock ${{ inputs.branch }} branch
+#    uses: ./.github/workflows/ToggleLockBranch.yml
+#    permissions:
+#      id-token: write
+#    with:
+#      branch: ${{ inputs.branch }}
+#
   release:
     name: Release
     uses: SonarSource/release-github-actions/.github/workflows/cloud-security-automated-release.yml@yp/add_cloud_security_workflow
-    needs: lock-branch
+#    needs: lock-branch
     permissions:
       statuses: read
       id-token: write
@@ -72,21 +72,21 @@ jobs:
       release_notes: ${{ inputs.release-notes }}
       new-version: ${{ inputs.new-version }}
 
-  unlock-branch:
-    name: Unlock ${{ inputs.branch }} branch
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    needs: release
-    permissions:
-      id-token: write
-    with:
-      branch: ${{ inputs.branch }}
-
-  bump_versions:
-    name: Bump versions
-    needs: unlock-branch
-    uses: ./.github/workflows/bump-versions.yaml
-    permissions:
-      contents: write
-      pull-requests: write
-    with:
-      version: ${{ needs.release.outputs.new-version }}-SNAPSHOT
+#  unlock-branch:
+#    name: Unlock ${{ inputs.branch }} branch
+#    uses: ./.github/workflows/ToggleLockBranch.yml
+#    needs: release
+#    permissions:
+#      id-token: write
+#    with:
+#      branch: ${{ inputs.branch }}
+#
+#  bump_versions:
+#    name: Bump versions
+#    needs: unlock-branch
+#    uses: ./.github/workflows/bump-versions.yaml
+#    permissions:
+#      contents: write
+#      pull-requests: write
+#    with:
+#      version: ${{ needs.release.outputs.new-version }}-SNAPSHOT
