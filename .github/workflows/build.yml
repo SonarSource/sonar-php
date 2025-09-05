@@ -4,10 +4,10 @@ on:
     branches:
       - master
       - branch-*
-      - dogfood-*
   pull_request:
-  merge_group:
   workflow_dispatch:
+  schedule:
+    - cron: '0 17 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -48,14 +48,14 @@ jobs:
         with:
           path: ${{ env.GRADLE_USER_HOME }}
           key: gradle-${{ env.GRADLE_CACHE_KEY }}
-      - uses: SonarSource/ci-github-actions/build-gradle@acede72f7b231812e6d04f4f5c924efb6786ee87
+      - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: true
           skip-tests: true
           # There might be a warning: Warning: Failed to fetch short-lived token for Develocity
           # it will be addressed in BUILD-8926
           use-develocity: true
-          gradle-args: -x sonar storeProjectVersion
+          gradle-args: -x sonar
 
   build_test_analyze:
     needs: [build]
@@ -75,8 +75,6 @@ jobs:
       - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: false
-          artifactory-reader-role: public-reader
-          artifactory-deployer-role: public-deployer
           skip-tests: false
           use-develocity: true
           gradle-args: -x artifactoryPublish
@@ -189,8 +187,6 @@ jobs:
           KEEP_ORCHESTRATOR_RUNNING: "true"
           SQ_VERSION: ${{ matrix.SQ_VERSION }}
         run: |
-          export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
-          mkdir -p ${GRADLE_USER_HOME}
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
@@ -242,8 +238,6 @@ jobs:
           SQ_VERSION: LATEST_RELEASE
           PHP_PROJECT: ${{ matrix.PHP_PROJECT }}
         run: |
-          export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
-          mkdir -p ${GRADLE_USER_HOME}
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpGeneralRulingTest.test${PHP_PROJECT}" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
@@ -291,8 +285,6 @@ jobs:
           KEEP_ORCHESTRATOR_RUNNING: "true"
           SQ_VERSION: LATEST_RELEASE
         run: |
-          export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
-          mkdir -p ${GRADLE_USER_HOME}
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpPrAnalysisTest" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
