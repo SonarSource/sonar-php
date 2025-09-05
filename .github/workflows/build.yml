@@ -320,13 +320,13 @@ jobs:
           promote-pull-request: true
 
   releasability:
+    needs: [promote]
     runs-on: sonar-xs-public
     name: Releasability
     steps:
       - uses: SonarSource/gh-action_releasability/releasability-status@v2
         if: >-
           github.ref_name == github.event.repository.default_branch ||
-          startsWith(github.ref_name, 'dogfood-') ||
           startsWith(github.ref_name, 'branch-')
         env:
           GITHUB_TOKEN: ${{ github.token }}
