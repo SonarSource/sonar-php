@@ -48,7 +48,7 @@ jobs:
         with:
           path: ${{ env.GRADLE_USER_HOME }}
           key: gradle-${{ env.GRADLE_CACHE_KEY }}
-      - uses: SonarSource/ci-github-actions/build-gradle@v1
+      - uses: SonarSource/ci-github-actions/build-gradle@acede72f7b231812e6d04f4f5c924efb6786ee87
         with:
           deploy-pull-request: true
           skip-tests: true
