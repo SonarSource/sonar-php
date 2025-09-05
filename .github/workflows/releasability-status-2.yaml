@@ -9,6 +9,9 @@ on:
       - branch-*
       - SONARPHP-1701
 # TODO remove above branch before merge
+  push:
+    branches:
+      - SONARPHP-1701
 
 jobs:
   releasability-status:
