@@ -7,8 +7,6 @@ on:
     branches:
       - master
       - branch-*
-      - SONARPHP-1701
-# TODO remove above branch before merge
 
 jobs:
   releasability-status:
