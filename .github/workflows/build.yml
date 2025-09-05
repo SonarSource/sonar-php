@@ -57,6 +57,14 @@ jobs:
           # it will be addressed in BUILD-8926
           use-develocity: true
           gradle-args: -x sonar
+      - &send-slack-notification
+        name: Send Slack Notification
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        uses: SonarSource/gh-action_slack-notify@v1
+        with:
+          slackChannel: squad-security-cloud-notifs
 
   build_test_analyze:
     needs: [build]
@@ -86,6 +94,7 @@ jobs:
         with:
           name: test-results
           path: '**/test-results/**/*.xml'
+      - *send-slack-notification
 
   qa_os_win:
     needs: [build]
@@ -143,6 +152,7 @@ jobs:
         with:
           name: qa-os-win-reports
           path: '**/build/reports/**/*'
+      - *send-slack-notification
 
   qa_plugin:
     needs: [build]
@@ -202,6 +212,7 @@ jobs:
         with:
           name: qa-plugin-reports-${{ matrix.SQ_VERSION }}
           path: '**/build/reports/**/*'
+      - *send-slack-notification
 
   qa_ruling:
     needs: [build]
@@ -253,6 +264,7 @@ jobs:
         with:
           name: qa-ruling-reports-${{ matrix.PHP_PROJECT }}
           path: '**/build/reports/**/*'
+      - *send-slack-notification
 
   qa_pr_analysis:
     needs: [build]
@@ -300,6 +312,7 @@ jobs:
         with:
           name: qa-pr-analysis-reports
           path: '**/build/reports/**/*'
+      - *send-slack-notification
 
   promote:
     needs: [build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis]
@@ -312,6 +325,7 @@ jobs:
       - uses: SonarSource/ci-github-actions/promote@v1
         with:
           promote-pull-request: true
+      - *send-slack-notification
 
   releasability:
     needs: [promote]
@@ -324,3 +338,4 @@ jobs:
           startsWith(github.ref_name, 'branch-')
         env:
           GITHUB_TOKEN: ${{ github.token }}
+      - *send-slack-notification
