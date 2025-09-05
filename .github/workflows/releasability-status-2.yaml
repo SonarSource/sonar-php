@@ -2,21 +2,18 @@ name: Releasability Status
 on:
   workflow_run:
     workflows: [Build]  # Name must match the build workflow
-#    types:
-#      - completed
+    types:
+      - completed
     branches:
       - master
       - branch-*
       - SONARPHP-1701
 # TODO remove above branch before merge
-  push:
-    branches:
-      - SONARPHP-1701
 
 jobs:
   releasability-status:
     name: Releasability status
-    runs-on: sonar-xs
+    runs-on: sonar-s-public
     steps:
       - name: Debug
         run: |
