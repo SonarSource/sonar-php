@@ -1,0 +1,25 @@
+name: Releasability Status
+on:
+  workflow_run:
+    workflows: [Build]  # Name must match the build workflow
+#    types:
+#      - completed
+    branches:
+      - master
+      - branch-*
+      - SONARPHP-1701
+# TODO remove above branch before merge
+
+jobs:
+  releasability-status:
+    name: Releasability status
+    runs-on: sonar-xs
+    steps:
+      - name: Debug
+        run: |
+            echo "Event Name: ${{ github.event_name }}"
+            echo "Workflow Run Conclusion: ${{ github.event.workflow_run.conclusion }}"
+            echo "Workflow Run Branch: ${{ github.event.workflow_run.head_branch }}"
+      - uses: SonarSource/gh-action_releasability/releasability-status@v2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
