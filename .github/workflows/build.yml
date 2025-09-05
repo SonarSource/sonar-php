@@ -21,8 +21,8 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
-      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
       - &checkout-build-logic
@@ -48,8 +48,9 @@ jobs:
         with:
           path: ${{ env.GRADLE_USER_HOME }}
           key: gradle-${{ env.GRADLE_CACHE_KEY }}
-      # The pinned version from https://github.com/SonarSource/ci-github-actions/pull/81, let's update to v1 when released by EngXP
-      - uses: SonarSource/ci-github-actions/build-gradle@acede72f7b231812e6d04f4f5c924efb6786ee87
+      - name: Fail to test Slack notifications
+        run: exit 1
+      - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: true
           skip-tests: true
@@ -74,15 +75,14 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
-      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
       - *checkout-build-logic
       - *create-gradle-user-home
       - *cache-gradle-dependencies
-      # The pinned version from https://github.com/SonarSource/ci-github-actions/pull/81, let's update to v1 when released by EngXP
-      - uses: SonarSource/ci-github-actions/build-gradle@acede72f7b231812e6d04f4f5c924efb6786ee87
+      - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: false
           skip-tests: false
@@ -90,7 +90,7 @@ jobs:
           gradle-args: -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: test-results
           path: '**/test-results/**/*.xml'
@@ -115,16 +115,16 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           submodules: false
-      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
       - *checkout-build-logic
       - *create-gradle-user-home
       - *cache-gradle-dependencies
-      - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
+      - uses: SonarSource/vault-action-wrapper@v3
         id: secrets
         with:
           secrets: |
@@ -142,13 +142,13 @@ jobs:
           ./gradlew --console plain --no-daemon --profile test
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: qa-os-win-test-results
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: qa-os-win-reports
           path: '**/build/reports/**/*'
@@ -166,10 +166,10 @@ jobs:
       matrix:
         SQ_VERSION: [LATEST_RELEASE, DEV]
     steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           submodules: true
-      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
       - *create-gradle-user-home
@@ -185,7 +185,7 @@ jobs:
         with:
           path: ${{ env.ORCHESTRATOR_HOME }}
           key: orchestrator-${{ env.TODAY }}
-      - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
+      - uses: SonarSource/vault-action-wrapper@v3
         id: secrets
         with:
           secrets: |
@@ -202,13 +202,13 @@ jobs:
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: qa-plugin-test-results-${{ matrix.SQ_VERSION }}
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: qa-plugin-reports-${{ matrix.SQ_VERSION }}
           path: '**/build/reports/**/*'
@@ -226,17 +226,17 @@ jobs:
       matrix:
         PHP_PROJECT: [Flysystem, Monica, PhpCodeSniffer, PhpMailer, Psysh, PhpWord, RubixML, PhpSpreadsheet]
     steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           submodules: true
-      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
       - *create-gradle-user-home
       - *cache-gradle-dependencies
       - *setup-orchestator-home
       - *cache-orchestrator
-      - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
+      - uses: SonarSource/vault-action-wrapper@v3
         id: secrets
         with:
           secrets: |
@@ -254,13 +254,13 @@ jobs:
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpGeneralRulingTest.test${PHP_PROJECT}" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: qa-ruling-test-results-${{ matrix.PHP_PROJECT }}
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: qa-ruling-reports-${{ matrix.PHP_PROJECT }}
           path: '**/build/reports/**/*'
@@ -275,17 +275,17 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           submodules: true
-      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
       - *create-gradle-user-home
       - *cache-gradle-dependencies
       - *setup-orchestator-home
       - *cache-orchestrator
-      - uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32 # v3.1.0
+      - uses: SonarSource/vault-action-wrapper@v3
         id: secrets
         with:
           secrets: |
@@ -302,13 +302,13 @@ jobs:
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpPrAnalysisTest" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: qa-pr-analysis-test-results
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: qa-pr-analysis-reports
           path: '**/build/reports/**/*'
