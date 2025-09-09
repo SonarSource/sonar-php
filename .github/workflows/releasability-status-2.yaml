@@ -7,7 +7,6 @@ on:
     branches:
       - master
       - branch-*
-      - SONARPHP-1704-bis
 
 jobs:
   releasability-status:
