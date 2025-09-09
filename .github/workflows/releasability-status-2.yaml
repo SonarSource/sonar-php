@@ -7,6 +7,10 @@ on:
     branches:
       - master
       - branch-*
+  push:
+    branches:
+      - master
+      - branch-*
       - SONARPHP-1701-3
 # TODO remove above before merge
 
