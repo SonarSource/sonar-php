@@ -1,0 +1,63 @@
+name: Shadow scans
+on:
+  schedule:
+    # Run the workflow every day at 04:00 UTC
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+  push:
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: read
+  statuses: read
+  checks: read
+
+jobs:
+  build:
+    runs-on: sonar-m-public
+    name: Build
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+        with:
+          version: 2025.7.12
+      - name: Checkout build logic
+        run: |
+          git submodule update --init --depth 1 -- build-logic/common
+      - name: Create Gradle User Home
+        shell: bash
+        run: |
+          export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
+          mkdir -p ${GRADLE_USER_HOME}
+          echo "GRADLE_USER_HOME=${GRADLE_USER_HOME}" >> $GITHUB_ENV
+          export TODAY=$(date '+%Y-%m-%d')
+          echo "TODAY=${TODAY}" >> $GITHUB_ENV
+          find . -name '*.gradle.kts' -type f -exec md5sum {} \; | sort && md5sum gradle/libs.versions.toml && md5sum gradle/wrapper/gradle-wrapper.properties && md5sum gradle.properties > gradle-md5-sums.txt 
+          export GRADLE_CACHE_KEY=$(md5sum gradle-md5-sums.txt | awk '{ print $1 }')
+          echo "GRADLE_CACHE_KEY=${GRADLE_CACHE_KEY}" >> $GITHUB_ENV
+          rm gradle-md5-sums.txt
+      - name: Cache Gradle Dependencies
+        uses: SonarSource/ci-github-actions/cache@v1
+        with:
+          path: ${{ env.GRADLE_USER_HOME }}
+          key: gradle-${{ env.GRADLE_CACHE_KEY }}
+      - uses: SonarSource/ci-github-actions/build-gradle@v1
+        with:
+          deploy-pull-request: false
+          # There might be a warning: Warning: Failed to fetch short-lived token for Develocity
+          # it will be addressed in BUILD-8926
+          use-develocity: true
+          run-shadow-scans: true
+          # artifactory-reader-role: private-reader
+          # artifactory-deployer-role: qa-deployer
+          gradle-args: --no-parallel
+      - name: Run IRIS Analysis
+        uses: SonarSource/unified-dogfooding-actions/run-iris@v1
+        with:
+          primary_project_key: "org.sonarsource.php:php"
+          primary_platform: "Next"
+          shadow1_project_key: "SonarSource_sonar-php"
+          shadow1_platform: "SQC-EU"
+          shadow2_project_key: "SonarSource_sonar-php"
+          shadow2_platform: "SQC-US"
