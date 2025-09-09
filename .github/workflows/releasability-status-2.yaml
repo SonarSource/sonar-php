@@ -12,14 +12,11 @@ jobs:
   releasability-status:
     name: Releasability status
     runs-on: sonar-s-public
+    permissions:
+      id-token: write
+      statuses: write
+      contents: read
     steps:
-      - name: Debug
-        env:
-          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
-        run: |
-            echo "Event Name: ${{ github.event_name }}"
-            echo "Workflow Run Conclusion: ${{ github.event.workflow_run.conclusion }}"
-            echo "Workflow Run Branch: $HEAD_BRANCH"
-      - uses: SonarSource/gh-action_releasability/releasability-status@v2
+      - uses: SonarSource/gh-action_releasability/releasability-status@48220006021661f66278901a369cfede25b1d458
         env:
           GITHUB_TOKEN: ${{ github.token }}
