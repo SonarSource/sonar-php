@@ -1,0 +1,27 @@
+name: Run IRIS Analysis
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: read
+  statuses: read
+  checks: read
+
+on:
+  schedule:
+    # At 02:00 UTC every day
+    - cron: '0 2 * * *'
+
+jobs:
+  run-iris:
+    runs-on: sonar-xs-public
+    steps:
+      - name: Run IRIS Analysis
+        uses: SonarSource/unified-dogfooding-actions/run-iris@v1
+        with:
+          primary_project_key: "org.sonarsource.php:php"
+          primary_platform: "Next"
+          shadow1_project_key: "org.sonarsource.php:php"
+          shadow1_platform: "SQC-EU"
+          shadow2_project_key: "org.sonarsource.php:php"
+          shadow2_platform: "SQC-US"
