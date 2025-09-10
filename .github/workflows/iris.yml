@@ -9,7 +9,7 @@ permissions:
 
 on:
   schedule:
-    # At 06:00 every day
+    # At 02:00 UTC every day
     - cron: '0 2 * * *'
 
 jobs:
