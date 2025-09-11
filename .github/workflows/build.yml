@@ -15,7 +15,8 @@ concurrency:
 
 jobs:
   build:
-    runs-on: sonar-m-public
+    # TODO check if the SLack issue also exist in sonar-s-public
+    runs-on: sonar-s-public
     name: Build
     permissions:
       id-token: write
