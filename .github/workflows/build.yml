@@ -48,6 +48,9 @@ jobs:
         with:
           path: ${{ env.GRADLE_USER_HOME }}
           key: gradle-${{ env.GRADLE_CACHE_KEY }}
+      # TODO remove before merge
+      - name: Fail to test slack notification
+        run: exit 1
       - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: true
@@ -56,6 +59,29 @@ jobs:
           # it will be addressed in BUILD-8926
           use-develocity: true
           gradle-args: -x sonar
+      - &get-slack-token
+        name: Vault Secrets
+        id: slacktoken
+        if: failure()
+        uses: SonarSource/vault-action-wrapper@320bd31b03e5dacaac6be51bbbb15adf7caccc32  # v3.1.0
+        with:
+          secrets: |
+            development/kv/data/slack token | SLACK_BOT_TOKEN;
+      - &slack-notification
+        name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        if: failure()
+        env:
+          SLACK_TOKEN: >-
+            ${{ fromJSON(steps.slacktoken.outputs.vault).SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: squad-security-cloud-notifs
+          SLACK_TITLE: Details
+          SLACK_MESSAGE: |
+            Workflow failed. Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Actor: ${{ github.actor }}
+          SLACK_USERNAME: builld_notifier
 
   build_test_analyze:
     needs: [build]
