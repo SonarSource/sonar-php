@@ -318,6 +318,8 @@ jobs:
     runs-on: github-ubuntu-latest-s # Public GH runner is required, runners starting with sonar-* do not support this action
     if: ${{ always() }}
     needs: [ build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis, promote ]
+    permissions:
+      id-token: write
     steps:
       - name: Vault Secrets
         id: secrets
