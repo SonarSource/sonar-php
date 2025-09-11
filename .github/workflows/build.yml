@@ -338,8 +338,8 @@ jobs:
           SLACK_MESSAGE: |
             Workflow failed in ${{ github.repository }} 🚨
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            Branch: ${{ github.event.workflow_run.head_branch }}
-            Author: ${{ github.event.workflow_run.head_commit.author.name }}
+            Branch: ${{ github.head_ref || github.ref_name }}
+            Author: ${{ github.event.pull_request.user.login }}
 
           SLACK_USERNAME: BuildBot
           SLACK_COLOR: danger
