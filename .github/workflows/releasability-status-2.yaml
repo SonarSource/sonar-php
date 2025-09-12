@@ -1,5 +1,6 @@
 name: Releasability Status
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: [Build]  # Name must match the build workflow
     types:
