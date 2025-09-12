@@ -48,9 +48,6 @@ jobs:
         with:
           path: ${{ env.GRADLE_USER_HOME }}
           key: gradle-${{ env.GRADLE_CACHE_KEY }}
-      # TODO remove before merge
-      - name: Fail to test slack notification
-        run: exit 1
       - uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: true
@@ -163,6 +160,9 @@ jobs:
       - uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
         with:
           version: 2025.7.12
+      # TODO remove before merge
+      - name: Fail to test slack notification
+        run: exit 1
       - *create-gradle-user-home
       - *cache-gradle-dependencies
       - &setup-orchestator-home
