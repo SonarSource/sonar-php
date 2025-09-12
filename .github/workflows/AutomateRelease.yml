@@ -77,6 +77,7 @@ jobs:
       release-notes: ${{ inputs.release-notes }}
       sq-ide-short-description: ${{ inputs.sq-ide-short-description }}
       new-version: ${{ inputs.new-version }}
+      create-slvs-ticket: false
 
   unlock-branch:
     name: Unlock ${{ inputs.branch }} branch
