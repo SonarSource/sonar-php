@@ -44,11 +44,11 @@ jobs:
           rm gradle-md5-sums.txt
       - &cache-gradle-dependencies
         name: Cache Gradle Dependencies
-        uses: SonarSource/ci-github-actions/cache@v1
+        uses: SonarSource/ci-github-actions/cache@1.0.5
         with:
           path: ${{ env.GRADLE_USER_HOME }}
           key: gradle-${{ env.GRADLE_CACHE_KEY }}
-      - uses: SonarSource/ci-github-actions/build-gradle@v1
+      - uses: SonarSource/ci-github-actions/build-gradle@1.0.5
         with:
           deploy-pull-request: true
           skip-tests: true
@@ -72,7 +72,7 @@ jobs:
       - *checkout-build-logic
       - *create-gradle-user-home
       - *cache-gradle-dependencies
-      - uses: SonarSource/ci-github-actions/build-gradle@v1
+      - uses: SonarSource/ci-github-actions/build-gradle@1.0.5
         with:
           deploy-pull-request: false
           skip-tests: false
@@ -113,7 +113,7 @@ jobs:
       - *checkout-build-logic
       - *create-gradle-user-home
       - *cache-gradle-dependencies
-      - uses: SonarSource/vault-action-wrapper@v3
+      - uses: SonarSource/vault-action-wrapper@3.1.0
         id: secrets
         with:
           secrets: |
@@ -169,11 +169,11 @@ jobs:
           mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
       - &cache-orchestrator
         name: Cache Orchestrator
-        uses: SonarSource/ci-github-actions/cache@v1
+        uses: SonarSource/ci-github-actions/cache@1.0.5
         with:
           path: ${{ env.ORCHESTRATOR_HOME }}
           key: orchestrator-${{ env.TODAY }}
-      - uses: SonarSource/vault-action-wrapper@v3
+      - uses: SonarSource/vault-action-wrapper@3.1.0
         id: secrets
         with:
           secrets: |
@@ -223,7 +223,7 @@ jobs:
       - *cache-gradle-dependencies
       - *setup-orchestator-home
       - *cache-orchestrator
-      - uses: SonarSource/vault-action-wrapper@v3
+      - uses: SonarSource/vault-action-wrapper@3.1.0
         id: secrets
         with:
           secrets: |
@@ -271,7 +271,7 @@ jobs:
       - *cache-gradle-dependencies
       - *setup-orchestator-home
       - *cache-orchestrator
-      - uses: SonarSource/vault-action-wrapper@v3
+      - uses: SonarSource/vault-action-wrapper@3.1.0
         id: secrets
         with:
           secrets: |
@@ -307,7 +307,7 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: SonarSource/ci-github-actions/promote@v1
+      - uses: SonarSource/ci-github-actions/promote@1.0.5
         with:
           promote-pull-request: true
 

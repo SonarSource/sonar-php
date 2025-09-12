@@ -18,6 +18,6 @@ jobs:
       statuses: write
       contents: read
     steps:
-      - uses: SonarSource/gh-action_releasability/releasability-status@v2
+      - uses: SonarSource/gh-action_releasability/releasability-status@2.2.3
         env:
           GITHUB_TOKEN: ${{ github.token }}
