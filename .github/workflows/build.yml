@@ -326,7 +326,7 @@ jobs:
             development/kv/data/slack token | SLACK_BOT_TOKEN;
 
       - name: Slack Notification rtCamp
-        uses: rtCamp/action-slack-notify@v2
+        uses: rtCamp/action-slack-notify@e31e87e03dd19038e411e38ae27cbad084a90661  # v2.3.3
         env:
           SLACK_TOKEN: >-
             ${{ fromJSON(steps.secrets.outputs.vault).SLACK_BOT_TOKEN }}
