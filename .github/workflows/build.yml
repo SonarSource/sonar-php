@@ -311,3 +311,32 @@ jobs:
         with:
           promote-pull-request: true
 
+  notify:
+    runs-on: github-ubuntu-latest-s # Public GH runner is required, runners starting with sonar-* do not support this action
+    if: ${{ failure() }}
+    needs: [ build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis, promote ]
+    permissions:
+      id-token: write
+    steps:
+      - name: Vault Secrets
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/slack token | SLACK_BOT_TOKEN;
+
+      - name: Slack Notification rtCamp
+        uses: rtCamp/action-slack-notify@e31e87e03dd19038e411e38ae27cbad084a90661  # v2.3.3
+        env:
+          SLACK_TOKEN: >-
+            ${{ fromJSON(steps.secrets.outputs.vault).SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: squad-security-cloud-notifs
+          SLACK_TITLE: Build Failed
+          SLACK_MESSAGE: |
+            Workflow failed in ${{ github.repository }} 🚨
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Branch: ${{ github.head_ref || github.ref_name }}
+            Author: ${{ github.event.pull_request.user.login }}
+
+          SLACK_USERNAME: BuildBot
+          SLACK_COLOR: danger
