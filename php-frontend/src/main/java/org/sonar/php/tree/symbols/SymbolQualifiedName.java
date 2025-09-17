@@ -104,7 +104,7 @@ public class SymbolQualifiedName implements QualifiedName {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof SymbolQualifiedName)) {
+    if (o.getClass() != this.getClass()) {
       return false;
     }
     SymbolQualifiedName that = (SymbolQualifiedName) o;
