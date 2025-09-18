@@ -90,7 +90,7 @@ jobs:
 
   bump_versions:
     name: Bump versions
-    needs: unlock-branch
+    needs: [release, unlock-branch]
     uses: ./.github/workflows/bump-versions.yaml
     permissions:
       contents: write
