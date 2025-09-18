@@ -3,8 +3,6 @@ on:
   schedule:
     # Run the workflow every day at 01:00 UTC
     - cron: "0 1 * * *"
-  workflow_dispatch:
-  push:
 
 permissions:
   id-token: write
@@ -49,15 +47,14 @@ jobs:
           # it will be addressed in BUILD-8926
           use-develocity: true
           run-shadow-scans: true
-          # artifactory-reader-role: private-reader
-          # artifactory-deployer-role: qa-deployer
           gradle-args: --no-parallel
+
       - name: Run IRIS Analysis
         uses: SonarSource/unified-dogfooding-actions/run-iris@v1
         with:
           primary_project_key: "org.sonarsource.php:php"
           primary_platform: "Next"
-          shadow1_project_key: "SonarSource_sonar-php"
+          shadow1_project_key: "org.sonarsource.php:php"
           shadow1_platform: "SQC-EU"
-          shadow2_project_key: "SonarSource_sonar-php"
+          shadow2_project_key: "org.sonarsource.php:php"
           shadow2_platform: "SQC-US"
