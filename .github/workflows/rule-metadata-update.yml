@@ -10,32 +10,14 @@ jobs:
       contents: write # write for peter-evans/create-pull-request, read for actions/checkout
       pull-requests: write # write for peter-evans/create-pull-request
     steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
-      - name: Get vault secrets
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
-        with:
-          secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader role | ARTIFACTORY_ROLE;
-            development/kv/data/develocity token | develocity_token;
-      - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4
-        with:
-          distribution: temurin
-          java-version: 17
-      - uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4
-      - run: |
-          git submodule update --init --depth 1 -- build-logic/common
-          ./gradlew ruleApiUpdate -PartifactoryUsername=${ARTIFACTORY_ROLE} -PartifactoryPassword=${ARTIFACTORY_ACCESS_TOKEN}
-        env:
-          ARTIFACTORY_ROLE: vault-${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ROLE }}
-          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
-          DEVELOCITY_ACCESS_KEY: "develocity.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).develocity_token }}"
-      - uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7
-        with:
-          author: ${{ github.actor }} <${{ github.actor }}>
-          commit-message: Update rule metadata
-          title: Update rule metadata
-          base: master
-          branch: bot/rule-metadata-update
-          branch-suffix: timestamp
+      - name: Update Rule Metadata
+        id: update-rule-metadata
+        uses: SonarSource/release-github-actions/update-rule-metadata@v1
+
+      - name: Check Rule Metadata Changes
+        run: |
+          if [ "${{ steps.update-rule-metadata.outputs.has-changes }}" == "true" ]; then
+            echo "::notice title=Rule Metadata Changes::Changes detected and PR created: ${{ steps.update-rule-metadata.outputs.pull-request-url }}"
+          else
+            echo "::notice title=Rule Metadata Status::No changes to the rules metadata were detected"
+          fi
