@@ -48,7 +48,7 @@ class SymbolQualifiedNameTest {
   @Test
   void shouldThrowExceptionForEmptyNamespace() {
     var qualifiedName = SymbolQualifiedName.create("A", "B", "C");
-    var token = new InternalSyntaxToken(1,2,"my_name", List.of(), 0, false);
+    var token = new InternalSyntaxToken(1, 2, "my_name", List.of(), 0, false);
     var nameIdTree = new NameIdentifierTreeImpl(token);
     var namespaces = new SeparatedListImpl<NameIdentifierTree>(List.of(), List.of());
     var namespaceNameTree = new NamespaceNameTreeImpl(null, namespaces, nameIdTree);
@@ -56,7 +56,7 @@ class SymbolQualifiedNameTest {
       .isInstanceOf(IllegalStateException.class)
       .withMessage("Unable to resolve my_name which has only aliased name");
   }
-  
+
   @Test
   void shouldReturnFalseForEqualsForDifferentTypes() {
     var qualifiedName = SymbolQualifiedName.create("A", "B", "C");
