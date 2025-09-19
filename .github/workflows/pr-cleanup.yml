@@ -5,7 +5,7 @@ on:
 
 jobs:
   cleanup:
-    runs-on: ubuntu-24.04-large
+    runs-on: github-ubuntu-latest-s
     permissions:
       actions: write
     steps:
