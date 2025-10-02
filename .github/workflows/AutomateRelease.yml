@@ -17,12 +17,6 @@ on:
         options:
           - "Yes"
           - "No"
-      sq-compatibility:
-        description: |
-          SonarQube compatibility.
-          Default needs to be changed only in case of LTA fix release.
-        default: ">=10.8"
-        required: true
       branch:
         description: |
           Branch from which to do the release.
@@ -72,7 +66,6 @@ jobs:
       release-automation-secret-name: "sonar-php-release-automation"
       short-description: ${{ inputs.short-description }}
       rule-props-changed: ${{ inputs.rule-props-changed }}
-      sq-compatibility: ${{ inputs.sq-compatibility }}
       branch: ${{ inputs.branch }}
       release-notes: ${{ inputs.release-notes }}
       sq-ide-short-description: ${{ inputs.sq-ide-short-description }}
