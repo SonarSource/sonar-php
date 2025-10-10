@@ -1,0 +1,6 @@
+repos:
+  -   repo: https://github.com/SonarSource/sonar-secrets-pre-commit
+      rev: v2.30.0.8284
+      hooks:
+        -   id: sonar-secrets
+            stages: [pre-commit]
