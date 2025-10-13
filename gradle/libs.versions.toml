@@ -3,9 +3,9 @@ sonar-commons = "2.18.0.3393"
 # Before updating the plugin-api version, make sure to check the compatibility matrix and stick to the lowest denominator
 # https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility
 sonar-plugin-api = "11.1.0.2693"
-sonarqube = "25.9.0.112764"
+sonarqube = "25.10.0.114319"
 sonar-orchestrator = "5.6.2.2625"
-sonarlint = "10.32.0.82302"
+sonarlint = "10.33.0.82470"
 sslr = "1.24.0.633"
 junit = "6.0.0"
 assertj = "3.27.6"
