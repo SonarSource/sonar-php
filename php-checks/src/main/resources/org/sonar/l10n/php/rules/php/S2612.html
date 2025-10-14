@@ -11,43 +11,43 @@ information, disrupt services or elevate privileges.</p>
 <h2>Recommended Secure Coding Practices</h2>
 <p>The most restrictive possible permissions should be assigned to files and directories.</p>
 <h2>Sensitive Code Example</h2>
-<pre>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 chmod("foo", 0777); // Sensitive
 </pre>
-<pre>
+<pre data-diff-id="2" data-diff-type="noncompliant">
 umask(0); // Sensitive
 umask(0750); // Sensitive
 </pre>
 <p>For <a href="https://symfony.com/doc/current/components/filesystem.html">Symfony Filesystem</a>:</p>
-<pre>
+<pre data-diff-id="3" data-diff-type="noncompliant">
 use Symfony\Component\Filesystem\Filesystem;
 
 $fs = new Filesystem();
 $fs-&gt;chmod("foo", 0777); // Sensitive
 </pre>
-<p>For <a href="https://laravel.com/api/8.x/Illuminate/Filesystem/Filesystem.html">Laravel Filesystem</a>:</p>
-<pre>
+<p>For <a href="https://api.laravel.com/docs/12.x/Illuminate/Filesystem/Filesystem.html">Laravel Filesystem</a>:</p>
+<pre data-diff-id="4" data-diff-type="noncompliant">
 use Illuminate\Filesystem\Filesystem;
 
 $fs = new Filesystem();
 $fs-&gt;chmod("foo", 0777); // Sensitive
 </pre>
 <h2>Compliant Solution</h2>
-<pre>
+<pre data-diff-id="1" data-diff-type="compliant">
 chmod("foo", 0750); // Compliant
 </pre>
-<pre>
+<pre data-diff-id="2" data-diff-type="compliant">
 umask(0027); // Compliant
 </pre>
 <p>For <a href="https://symfony.com/doc/current/components/filesystem.html">Symfony Filesystem</a>:</p>
-<pre>
+<pre data-diff-id="3" data-diff-type="compliant">
 use Symfony\Component\Filesystem\Filesystem;
 
 $fs = new Filesystem();
 $fs-&gt;chmod("foo", 0750); // Compliant
 </pre>
-<p>For <a href="https://laravel.com/api/8.x/Illuminate/Filesystem/Filesystem.html">Laravel Filesystem</a>:</p>
-<pre>
+<p>For <a href="https://api.laravel.com/docs/12.x/Illuminate/Filesystem/Filesystem.html">Laravel Filesystem</a>:</p>
+<pre data-diff-id="4" data-diff-type="compliant">
 use Illuminate\Filesystem\Filesystem;
 
 $fs = new Filesystem();
