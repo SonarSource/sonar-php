@@ -39,4 +39,19 @@ class StringLiteralDuplicatedCheckTest {
     check.minimalLiteralLength = 4;
     CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/custom_length.php");
   }
+
+  @Test
+  void laravelValidation() {
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/laravel_validation.php");
+  }
+
+  @Test
+  void drupalForms() {
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/drupal_forms.php");
+  }
+
+  @Test
+  void arrayKeys() {
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/array_keys.php");
+  }
 }

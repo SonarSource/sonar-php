@@ -38,7 +38,7 @@ $a["name1_name-2"];
 $a["name1_name-2"];
 $a["name1_name-2"];
 
-$a["name1/name2"];    // Noncompliant {{Define a constant instead of duplicating this literal "name1/name2" 5 times.}}
+$a["name1/name2"];    // OK - Array keys are excluded
 $a["name1/name2"];
 $a["name1/name2"];
 $a["name1/name2"];
