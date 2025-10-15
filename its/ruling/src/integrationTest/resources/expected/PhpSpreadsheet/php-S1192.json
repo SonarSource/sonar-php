@@ -3,16 +3,6 @@
 216,
 992
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Settings.php": [
-39
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php": [
-111
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Theme.php": [
-86,
-113
-],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Engine/FormattedNumberTest.php": [
 98,
 105,
