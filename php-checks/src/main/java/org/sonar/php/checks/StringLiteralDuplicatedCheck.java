@@ -153,6 +153,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   private static boolean isArrayKey(LiteralTree tree) {
     Tree parent = tree.getParent();
     if (parent == null) {
+      // Defensive, should not happen
       return false;
     }
 

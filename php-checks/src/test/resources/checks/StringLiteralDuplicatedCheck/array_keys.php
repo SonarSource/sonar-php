@@ -1,6 +1,9 @@
 <?php
 
 // General test for array keys - these should NOT raise issues
+"mystr";
+"mystr";
+"mystr";
 
 // Array initialization with keys
 $user1 = [
