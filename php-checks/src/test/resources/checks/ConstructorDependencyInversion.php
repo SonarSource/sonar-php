@@ -69,3 +69,42 @@ class A {
     };
   }
 }
+
+class ConstructorWithDefaultParameters {
+  // Default parameter values should NOT be flagged
+  public function __construct(
+    $object = new SomeClass()       // OK - default parameter value
+  ) {
+  }
+}
+
+class ConstructorWithMultipleDefaults {
+  public function __construct(
+    $a = new ClassA(),              // OK
+    $b = new ClassB()               // OK
+  ) {
+  }
+}
+
+class ConstructorWithDefaultAndOther {
+  public function __construct(
+    $name,
+    $object = new SomeClass()       // OK - default parameter value
+  ) {
+  }
+}
+
+class ConstructorMixedDefaultAndCreation {
+  public function __construct(
+    $object = new SomeClass()       // OK - default parameter value
+  ) {
+    $this->config = new Config();   // Noncompliant {{Remove this creation of object in constructor. Use dependency injection instead.}}
+  }
+}
+
+class ConstructorWithComplexDefault {
+  public function __construct(
+    $object = new Namespace\SomeClass()  // OK - namespaced default
+  ) {
+  }
+}
