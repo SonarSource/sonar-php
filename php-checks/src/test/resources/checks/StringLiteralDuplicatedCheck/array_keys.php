@@ -1,10 +1,6 @@
 <?php
 
 // General test for array keys - these should NOT raise issues
-"mystr";
-"mystr";
-"mystr";
-
 // Array initialization with keys
 $user1 = [
     'name' => 'John',
@@ -82,3 +78,8 @@ $z = "value/path";
 //   ^^^^^^^^^^^^< {{Duplication.}}
 return "value/path";
 //     ^^^^^^^^^^^^< {{Duplication.}}
+
+
+"mystr"; // OK - too short, special cases in regards of how we detect array keys (getting the parent)
+"mystr";
+"mystr";
