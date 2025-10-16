@@ -76,7 +76,7 @@ public class ConstructorDependencyInversionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
-    if (!inConstructor.isEmpty() && inConstructor.getLast() && !isInParameterDefault(tree)) {
+    if (!inConstructor.isEmpty() && inConstructor.getLast().booleanValue() && !isInParameterDefault(tree)) {
       context().newIssue(this, tree.newToken(), MESSAGE);
     }
     super.visitNewExpression(tree);
