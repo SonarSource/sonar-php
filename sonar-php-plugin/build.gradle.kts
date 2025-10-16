@@ -24,7 +24,7 @@ plugins {
 dependencies {
   api(project(":php-frontend"))
   implementation(project(":php-checks"))
-  implementation(libs.sonar.plugin.api)
+  compileOnly(libs.sonar.plugin.api)
   implementation(libs.sonar.analyzer.commons)
   implementation(libs.sonar.xml.parsing)
   implementation(libs.staxmate)
@@ -83,7 +83,7 @@ tasks.shadowJar {
 
   val logger = project.logger
   doLast {
-    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 5_000_000L, 5_500_000L, logger)
+    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 4_000_000L, 4_500_000L, logger)
   }
 }
 

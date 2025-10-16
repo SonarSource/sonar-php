@@ -27,6 +27,7 @@ dependencies {
   "integrationTestImplementation"(libs.junit.jupiter)
   "integrationTestImplementation"(libs.assertj.core)
   "integrationTestImplementation"(libs.sonar.analyzer.commons)
+  "integrationTestImplementation"("xerces:xercesImpl:2.12.2")
   "integrationTestImplementation"(libs.sonar.orchestrator.junit5)
   "integrationTestRuntimeOnly"(libs.junit.platform.launcher)
 }
