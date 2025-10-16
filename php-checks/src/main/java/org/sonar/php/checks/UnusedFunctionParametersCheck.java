@@ -134,16 +134,9 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     String methodName = tree.name().text();
     int parameterCount = tree.parameters().parameters().size();
 
-    if (methodName.startsWith("before") && parameterCount >= 3) {
-      return true;
-    }
-    if (methodName.startsWith("around") && parameterCount >= 4) {
-      return true;
-    }
-    if (methodName.startsWith("after") && parameterCount >= 2) {
-      return true;
-    }
-    return false;
+    return (methodName.startsWith("before") && parameterCount >= 3)
+      || (methodName.startsWith("around") && parameterCount >= 4)
+      || (methodName.startsWith("after") && parameterCount >= 2);
   }
 
   private static boolean isExcluded(Symbol symbol) {
