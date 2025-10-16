@@ -126,9 +126,9 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   /**
    * Check if the method is a Magento plugin method with the expected signature.
    * Magento plugin methods are:
-   * - before* methods with at least 3 parameters (first is $subject)
-   * - around* methods with at least 4 parameters (first is $subject, second is callable)
-   * - after* methods with at least 2 parameters (first is $subject)
+   * - before* methods with at least 3 parameters
+   * - around* methods with at least 4 parameters
+   * - after* methods with at least 2 parameters
    */
   private static boolean isMagentoPluginMethod(MethodDeclarationTree tree) {
     String methodName = tree.name().text();
