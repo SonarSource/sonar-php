@@ -14,6 +14,7 @@ commons-lang = "3.19.0"
 jsr305 = "3.0.2"
 staxmate = "2.0.1"
 awaitility = "4.3.0"
+xerces = "2.12.2"
 
 [libraries]
 sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
@@ -40,4 +41,4 @@ jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 staxmate = { module = "org.codehaus.staxmate:staxmate", version.ref = "staxmate" }
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility"}
-
+xerces = { module = "xerces:xercesImpl", version.ref = "xerces" }
