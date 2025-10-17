@@ -85,8 +85,7 @@ public class ConstructorDependencyInversionCheck extends PHPVisitorCheck {
   private static boolean isInParameterDefault(NewExpressionTree newExpr) {
     Tree paramAncestor = TreeUtils.findAncestorWithKind(newExpr, Tree.Kind.PARAMETER);
     if (paramAncestor != null) {
-      ParameterTree param = (ParameterTree) paramAncestor;
-      return param.initValue() != null;
+      return ((ParameterTree) paramAncestor).initValue() != null;
     }
     return false;
   }
