@@ -23,7 +23,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.reports.phpunit.xml.FileNode;
-import org.sonarsource.analyzer.commons.xml.ParseException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,7 +36,7 @@ class CoverageFileParserForPhpUnitTest {
   private CoverageFileParserForPhpUnit parser;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     parser = new CoverageFileParserForPhpUnit();
   }
 

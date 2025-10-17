@@ -30,7 +30,6 @@ import org.sonar.plugins.php.reports.phpunit.xml.FileNode;
 import org.sonar.plugins.php.reports.phpunit.xml.LineNode;
 import org.sonar.plugins.php.reports.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.reports.phpunit.xml.ProjectNode;
-import org.sonarsource.analyzer.commons.xml.ParseException;
 
 class CoverageFileParserForPhpUnit {
 

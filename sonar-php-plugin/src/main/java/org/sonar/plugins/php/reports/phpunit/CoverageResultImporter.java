@@ -28,7 +28,6 @@ import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.plugins.php.reports.phpunit.xml.FileNode;
 import org.sonar.plugins.php.reports.phpunit.xml.LineNode;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
-import org.sonarsource.analyzer.commons.xml.ParseException;
 
 public class CoverageResultImporter extends PhpUnitReportImporter {
 
