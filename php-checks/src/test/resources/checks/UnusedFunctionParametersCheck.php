@@ -237,3 +237,69 @@ $x = function($p1, $_, $__) {
 $x = function($p1, $_p2, $__p3) { // Noncompliant 2
   return $p1;
 };
+
+// Magento plugin methods - before*, around*, after*
+namespace Vendor\Module\Plugin;
+
+class ExamplePlugin
+{
+    // Before method with 3 parameters - should not raise issues
+    public function beforeSomeMethod($subject, $arg1, $arg2)
+    {
+        return;
+    }
+
+    // Around method with 4 parameters - should not raise issues
+    public function aroundSomeMethod($subject, callable $proceed, $arg1, $arg2)
+    {
+        return;
+    }
+
+    // After method with 2 parameters - should not raise issues
+    public function afterSomeMethod($subject, $result)
+    {
+        return;
+    }
+
+    // Before method with more than 3 parameters - should not raise issues
+    public function beforeAnotherMethod($subject, $arg1, $arg2, $arg3, $arg4)
+    {
+        return;
+    }
+
+    // Around method with more than 4 parameters - should not raise issues
+    public function aroundAnotherMethod($subject, callable $proceed, $arg1, $arg2, $arg3)
+    {
+        return;
+    }
+
+    // After method with more than 2 parameters - should not raise issues
+    public function afterAnotherMethod($subject, $result, $extra)
+    {
+        return;
+    }
+
+    // Before method with less than 3 parameters - should raise issues
+    public function beforeInvalid($subject, $arg1) // Noncompliant 2
+    {
+        return;
+    }
+
+    // Around method with less than 4 parameters - should raise issues
+    public function aroundInvalid($subject, callable $proceed, $arg1) // Noncompliant 3
+    {
+        return;
+    }
+
+    // After method with less than 2 parameters - should raise issues
+    public function afterInvalid($subject) // Noncompliant
+    {
+        return;
+    }
+
+    // Method not starting with before/around/after - should raise issues normally
+    public function normalMethod($subject, $arg1, $arg2) // Noncompliant 3
+    {
+        return;
+    }
+}

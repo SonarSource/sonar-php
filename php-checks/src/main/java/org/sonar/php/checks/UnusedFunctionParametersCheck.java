@@ -113,12 +113,30 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   /**
    * Exclude methods from the check that is overriding/implementing a method and are not private.
+   * Also exclude Magento plugin methods (before*, around*, after*) with specific signatures.
    */
   private static boolean isExcluded(MethodDeclarationTree tree) {
     MethodSymbol methodSymbol = Symbols.get(tree);
     return !tree.body().is(Tree.Kind.BLOCK)
       || !(methodSymbol.isOverriding().isFalse())
-      || (methodSymbol.visibility() != Visibility.PRIVATE && methodSymbol.owner().is(ClassSymbol.Kind.ABSTRACT));
+      || (methodSymbol.visibility() != Visibility.PRIVATE && methodSymbol.owner().is(ClassSymbol.Kind.ABSTRACT))
+      || isMagentoPluginMethod(tree);
+  }
+
+  /**
+   * Check if the method is a Magento plugin method with the expected signature.
+   * Magento plugin methods are:
+   * - before* methods with at least 3 parameters
+   * - around* methods with at least 4 parameters
+   * - after* methods with at least 2 parameters
+   */
+  private static boolean isMagentoPluginMethod(MethodDeclarationTree tree) {
+    String methodName = tree.name().text();
+    int parameterCount = tree.parameters().parameters().size();
+
+    return (methodName.startsWith("before") && parameterCount >= 3)
+      || (methodName.startsWith("around") && parameterCount >= 4)
+      || (methodName.startsWith("after") && parameterCount >= 2);
   }
 
   private static boolean isExcluded(Symbol symbol) {
