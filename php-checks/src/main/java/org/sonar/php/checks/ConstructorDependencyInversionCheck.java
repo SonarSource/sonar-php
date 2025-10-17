@@ -19,6 +19,8 @@ package org.sonar.php.checks;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import org.sonar.check.Rule;
+import org.sonar.php.tree.TreeUtils;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
@@ -73,10 +75,14 @@ public class ConstructorDependencyInversionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
-    if (!inConstructor.isEmpty() && inConstructor.getLast()) {
+    if (!inConstructor.isEmpty() && inConstructor.getLast().booleanValue() && !isInParameterDefault(tree)) {
       context().newIssue(this, tree.newToken(), MESSAGE);
     }
     super.visitNewExpression(tree);
+  }
+
+  private static boolean isInParameterDefault(NewExpressionTree newExpr) {
+    return TreeUtils.findAncestorWithKind(newExpr, Tree.Kind.PARAMETER) != null;
   }
 
 }
