@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.php.warning.AnalysisWarningsWrapper;
-import org.sonarsource.analyzer.commons.xml.ParseException;
 
 public class TestResultImporter extends PhpUnitReportImporter {
 

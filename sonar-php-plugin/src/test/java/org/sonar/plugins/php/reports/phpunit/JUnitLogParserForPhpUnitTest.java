@@ -26,7 +26,6 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.reports.phpunit.xml.TestSuites;
-import org.sonarsource.analyzer.commons.xml.ParseException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -39,7 +38,7 @@ class JUnitLogParserForPhpUnitTest {
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @BeforeEach
-  public void setUp() throws Exception {
+  void setUp() {
     parser = new JUnitLogParserForPhpUnit();
   }
 
@@ -67,7 +66,7 @@ class JUnitLogParserForPhpUnitTest {
   }
 
   @Test
-  void shouldThrowAnExceptionWhenReportDoesNotExist() throws IOException {
+  void shouldThrowAnExceptionWhenReportDoesNotExist() {
     File report = new File("target/unexistingFile.xml");
     Throwable throwable = catchThrowable(() -> parser.parse(report));
     assertThat(throwable).isInstanceOf(IOException.class);
