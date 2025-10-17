@@ -28,6 +28,8 @@ dependencies {
   "integrationTestImplementation"(libs.assertj.core)
   "integrationTestImplementation"(libs.sonar.analyzer.commons)
   "integrationTestImplementation"(libs.sonar.orchestrator.junit5)
+  // Required to initialize logback when Orchestrator starts
+  "integrationTestRuntimeOnly"(libs.xerces)
   "integrationTestRuntimeOnly"(libs.junit.platform.launcher)
 }
 
