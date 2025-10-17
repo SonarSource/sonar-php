@@ -15,6 +15,7 @@ jsr305 = "3.0.2"
 staxmate = "2.0.1"
 awaitility = "4.3.0"
 xerces = "2.12.2"
+woodstox = "6.4.0"
 
 [libraries]
 sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
@@ -39,6 +40,6 @@ commons-lang = { module = "org.apache.commons:commons-lang3", version.ref = "com
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
 # Version of JUnit Platform is taken from the JUnit BOM that is imported by junit-jupiter
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+woodstox = { module = "com.fasterxml.woodstox:woodstox-core", version.ref = "woodstox" }
 staxmate = { module = "org.codehaus.staxmate:staxmate", version.ref = "staxmate" }
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility"}
-xerces = { module = "xerces:xercesImpl", version.ref = "xerces" }
