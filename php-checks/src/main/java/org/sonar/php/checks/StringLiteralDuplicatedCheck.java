@@ -24,7 +24,10 @@ import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
@@ -40,7 +43,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Define a constant instead of duplicating this literal \"%s\" %s times.";
   private static final String SECONDARY_MESSAGE = "Duplication.";
 
-  private static final String ONLY_ALPHANUMERIC_UNDERSCORES_HYPHENS_AND_PERIODS = "^[a-zA-Z_][.\\-\\w]+$";
+  private static final String ONLY_ALPHANUMERIC_UNDERSCORES_HYPHENS_AND_PERIODS = "^[a-zA-Z_][.:,|\\-\\w]+$";
 
   // Single elements
   private static final String IDENTIFIER = "[a-zA-Z][a-zA-Z0-9\\-_:.]*+";
@@ -119,7 +122,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   @Override
   public void visitLiteral(LiteralTree tree) {
-    if (tree.is(Kind.REGULAR_STRING_LITERAL)) {
+    if (tree.is(Kind.REGULAR_STRING_LITERAL) && !isArrayKey(tree)) {
       String literal = tree.value().replace("\\'", "'").replace("\\\"", "\"");
       String value = removeQuotesAndQuotesEscaping(literal);
 
@@ -139,6 +142,34 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   private static String removeQuotesAndQuotesEscaping(String s) {
     var quote = s.charAt(0);
     return s.substring(1, s.length() - 1).replace("\\" + quote, String.valueOf(quote));
+  }
+
+  /**
+   * Checks if a literal is used as an array key.
+   * This includes:
+   * - Keys in array initializers: ['key' => 'value']
+   * - Keys in array access: $array['key']
+   */
+  private static boolean isArrayKey(LiteralTree tree) {
+    Tree parent = tree.getParent();
+    if (parent == null) {
+      // Defensive, should not happen
+      return false;
+    }
+
+    // Check if the literal is a key in an array pair: ['key' => 'value']
+    if (parent.is(Kind.ARRAY_PAIR)) {
+      ArrayPairTree arrayPair = (ArrayPairTree) parent;
+      return tree.equals(arrayPair.key());
+    }
+
+    // Check if the literal is an offset in array access: $array['key']
+    if (parent.is(Kind.ARRAY_ACCESS)) {
+      ArrayAccessTree arrayAccess = (ArrayAccessTree) parent;
+      return tree.equals(arrayAccess.offset());
+    }
+
+    return false;
   }
 
 }
