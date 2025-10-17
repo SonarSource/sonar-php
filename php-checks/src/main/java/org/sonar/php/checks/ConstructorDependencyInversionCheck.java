@@ -25,7 +25,6 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
@@ -83,11 +82,7 @@ public class ConstructorDependencyInversionCheck extends PHPVisitorCheck {
   }
 
   private static boolean isInParameterDefault(NewExpressionTree newExpr) {
-    Tree paramAncestor = TreeUtils.findAncestorWithKind(newExpr, Tree.Kind.PARAMETER);
-    if (paramAncestor != null) {
-      return ((ParameterTree) paramAncestor).initValue() != null;
-    }
-    return false;
+    return TreeUtils.findAncestorWithKind(newExpr, Tree.Kind.PARAMETER) != null;
   }
 
 }
