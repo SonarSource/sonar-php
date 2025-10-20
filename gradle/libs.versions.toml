@@ -14,11 +14,11 @@ commons-lang = "3.19.0"
 jsr305 = "3.0.2"
 staxmate = "2.0.1"
 awaitility = "4.3.0"
+woodstox = "6.4.0"
 
 [libraries]
 sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
 sonar-analyzer-test-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-test-commons", version.ref = "sonar-commons" }
-sonar-xml-parsing = { module = "org.sonarsource.analyzer-commons:sonar-xml-parsing", version.ref = "sonar-commons" }
 sonar-regex-parsing = { module = "org.sonarsource.analyzer-commons:sonar-regex-parsing", version.ref = "sonar-commons" }
 sonar-plugin-api = { module = "org.sonarsource.api.plugin:sonar-plugin-api", version.ref = "sonar-plugin-api" }
 sonar-plugin-api-impl = { module = "org.sonarsource.sonarqube:sonar-plugin-api-impl", version.ref = "sonarqube" }
@@ -38,6 +38,6 @@ commons-lang = { module = "org.apache.commons:commons-lang3", version.ref = "com
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
 # Version of JUnit Platform is taken from the JUnit BOM that is imported by junit-jupiter
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+woodstox = { module = "com.fasterxml.woodstox:woodstox-core", version.ref = "woodstox" }
 staxmate = { module = "org.codehaus.staxmate:staxmate", version.ref = "staxmate" }
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility"}
-

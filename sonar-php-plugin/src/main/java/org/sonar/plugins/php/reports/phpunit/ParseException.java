@@ -14,24 +14,11 @@
  * You should have received a copy of the Sonar Source-Available License
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
-plugins {
-  id("org.sonarsource.cloud-native.java-conventions")
-  id("org.sonarsource.cloud-native.code-style-conventions")
-}
+package org.sonar.plugins.php.reports.phpunit;
 
-description = "SonarSource PHP Analyzer :: Checks"
+public class ParseException extends RuntimeException {
 
-dependencies {
-  implementation(project(":php-frontend"))
-  compileOnly(libs.sonar.plugin.api)
-  implementation(libs.sonar.analyzer.commons)
-  implementation(libs.commons.lang)
-
-  testImplementation(testFixtures(project(":php-frontend")))
-  testImplementation(libs.junit.jupiter)
-  testImplementation(libs.assertj.core)
-  testImplementation(libs.mockito.core)
-  testImplementation(libs.sonar.plugin.api.test.fixtures)
-  testImplementation(libs.sonar.analyzer.test.commons)
-  testRuntimeOnly(libs.junit.platform.launcher)
+  public ParseException(Exception cause) {
+    super(cause);
+  }
 }

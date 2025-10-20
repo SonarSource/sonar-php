@@ -26,7 +26,7 @@ dependencies {
   api(libs.sslr.core)
   api(libs.sonar.regex.parsing)
 
-  implementation(libs.sonar.plugin.api)
+  compileOnly(libs.sonar.plugin.api)
   implementation(libs.commons.lang)
 
   testImplementation(libs.junit.jupiter)

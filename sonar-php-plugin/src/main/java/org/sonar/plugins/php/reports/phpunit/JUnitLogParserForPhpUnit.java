@@ -17,12 +17,14 @@
 package org.sonar.plugins.php.reports.phpunit;
 
 import com.ctc.wstx.exc.WstxIOException;
+import com.ctc.wstx.stax.WstxInputFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
@@ -30,8 +32,6 @@ import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.plugins.php.reports.phpunit.xml.TestCase;
 import org.sonar.plugins.php.reports.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.reports.phpunit.xml.TestSuites;
-import org.sonarsource.analyzer.commons.xml.ParseException;
-import org.sonarsource.analyzer.commons.xml.SafetyFactory;
 
 /**
  * PHPUnit can generate test result logs that comply with JUnit's test results xml format.
@@ -54,7 +54,17 @@ public class JUnitLogParserForPhpUnit {
   }
 
   public static SMInputFactory inputFactory() {
-    return new SMInputFactory(SafetyFactory.createXMLInputFactory());
+    return new SMInputFactory(createXMLInputFactory());
+  }
+
+  public static XMLInputFactory createXMLInputFactory() {
+    // Copied from sonar-analzer-commons: xml-parsing/src/main/java/org/sonarsource/analyzer/commons/xml/SafeStaxParserFactory.java
+    XMLInputFactory factory = new WstxInputFactory();
+    factory.setProperty("javax.xml.stream.supportDTD", false);
+    factory.setProperty("javax.xml.stream.isReplacingEntityReferences", false);
+    factory.setProperty("javax.xml.stream.isValidating", false);
+    factory.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
+    return factory;
   }
 
   private static TestSuites processRoot(File file, SMInputFactory inputFactory) throws XMLStreamException {
