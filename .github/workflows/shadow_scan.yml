@@ -47,7 +47,6 @@ jobs:
           # it will be addressed in BUILD-8926
           use-develocity: true
           run-shadow-scans: true
-          gradle-args: --no-parallel
 
       - name: Run IRIS Analysis
         uses: SonarSource/unified-dogfooding-actions/run-iris@v1
