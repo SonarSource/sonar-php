@@ -22,8 +22,8 @@ plugins {
 description = "SonarSource PHP Analyzer :: Checks"
 
 dependencies {
-  implementation(project(":php-frontend"))
   compileOnly(libs.sonar.plugin.api)
+  implementation(project(":php-frontend"))
   implementation(libs.sonar.analyzer.commons)
   implementation(libs.commons.lang)
 
