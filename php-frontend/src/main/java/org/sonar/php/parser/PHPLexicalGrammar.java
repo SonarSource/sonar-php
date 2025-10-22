@@ -271,6 +271,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   BOOL,
   BINARY,
   ITERABLE,
+  VOID,
 
   FROM,
 
@@ -373,6 +374,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(BOOL).is(word(b, "bool")).skip();
     b.rule(BINARY).is(word(b, "binary")).skip();
     b.rule(ITERABLE).is(word(b, "iterable")).skip();
+    b.rule(VOID).is(word(b, "void")).skip();
 
     b.rule(FROM).is(word(b, "from")).skip();
 

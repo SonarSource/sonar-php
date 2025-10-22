@@ -43,6 +43,14 @@ class CastExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.castType().text()).isEqualTo("real");
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(expressionToString(tree.expression())).isEqualTo("$a");
+
+    tree = parse("(void)method_call()", PHPLexicalGrammar.CAST_TYPE);
+    assertThat(tree.is(Kind.CAST_EXPRESSION)).isTrue();
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
+    assertThat(tree.castType().text()).isEqualTo("void");
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
+    assertThat(expressionToString(tree.expression())).isEqualTo("method_call()");
+
   }
 
   @Test
