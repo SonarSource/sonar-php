@@ -72,12 +72,19 @@ public interface ParameterTree extends Tree, HasAttributes {
   @Nullable
   SyntaxToken readonlyToken();
 
+  @Nullable
+  SyntaxToken finalToken();
+
   default boolean isReadonly() {
     return readonlyToken() != null;
   }
 
   default boolean isPropertyPromotion() {
-    return visibility() != null;
+    return visibility() != null || finalToken() != null;
+  }
+
+  default boolean isFinal() {
+    return finalToken() != null;
   }
 
 }

@@ -448,6 +448,15 @@ public class PHPGrammar {
         b.token(PHPKeyword.FINAL)));
   }
 
+  public SyntaxToken PROMOTION_MODIFIER() {
+    return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.PROMOTION_MODIFIER).is(
+      b.firstOf(
+        b.token(PHPLexicalGrammar.ASYMMETRIC_VISIBILITY_MODIFIER),
+        VISIBILITY_MODIFIER(),
+        b.token(PHPKeyword.FINAL),
+        b.token(PHPKeyword.READONLY)));
+  }
+
   public MethodDeclarationTree METHOD_DECLARATION() {
     return b.<MethodDeclarationTree>nonterminal(PHPLexicalGrammar.METHOD_DECLARATION).is(
       f.methodDeclaration(
@@ -500,8 +509,7 @@ public class PHPGrammar {
     return b.<ParameterTree>nonterminal(PHPLexicalGrammar.PARAMETER).is(
       f.parameter(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
-        b.zeroOrMore(
-          b.firstOf(b.token(PHPLexicalGrammar.ASYMMETRIC_VISIBILITY_MODIFIER), VISIBILITY_MODIFIER(), b.token(PHPKeyword.READONLY))),
+        b.zeroOrMore(PROMOTION_MODIFIER()),
         b.optional(DECLARED_TYPE()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELLIPSIS)),

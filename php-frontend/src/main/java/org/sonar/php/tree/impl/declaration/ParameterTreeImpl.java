@@ -38,7 +38,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private static final Kind KIND = Kind.PARAMETER;
 
   private final List<AttributeGroupTree> attributeGroups;
-  private final List<SyntaxToken> visibilityAndReadonly;
+  private final List<SyntaxToken> promotionModifiers;
   private final DeclaredTypeTree type;
   private final InternalSyntaxToken referenceToken;
   private final InternalSyntaxToken ellipsisToken;
@@ -49,10 +49,11 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private final PropertyHookListTree propertyHookList;
   private SyntaxToken readonlyToken;
   private SyntaxToken visibility;
+  private SyntaxToken finalToken;
 
   public ParameterTreeImpl(
     List<AttributeGroupTree> attributeGroups,
-    List<SyntaxToken> visibilityAndReadonly,
+    List<SyntaxToken> promotionModifiers,
     @Nullable DeclaredTypeTree type,
     @Nullable InternalSyntaxToken referenceToken,
     @Nullable InternalSyntaxToken ellipsisToken,
@@ -61,11 +62,13 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     @Nullable ExpressionTree initValue,
     @Nullable PropertyHookListTree propertyHookList) {
     this.attributeGroups = attributeGroups;
-    this.visibilityAndReadonly = visibilityAndReadonly;
+    this.promotionModifiers = promotionModifiers;
 
-    for (SyntaxToken token : visibilityAndReadonly) {
+    for (SyntaxToken token : promotionModifiers) {
       if ("readonly".equals(token.text())) {
         this.readonlyToken = token;
+      } else if ("final".equals(token.text())) {
+        this.finalToken = token;
       } else {
         this.visibility = token;
       }
@@ -154,6 +157,12 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     return readonlyToken;
   }
 
+  @Nullable
+  @Override
+  public SyntaxToken finalToken() {
+    return finalToken;
+  }
+
   @Override
   public Kind getKind() {
     return KIND;
@@ -163,7 +172,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   public Iterator<Tree> childrenIterator() {
     return IteratorUtils.concat(
       attributeGroups.iterator(),
-      visibilityAndReadonly.iterator(),
+      promotionModifiers.iterator(),
       IteratorUtils.iteratorOf(type, referenceToken, ellipsisToken, variableIdentifier, equalToken, initValue),
       IteratorUtils.nullableIterator(propertyHookList));
   }

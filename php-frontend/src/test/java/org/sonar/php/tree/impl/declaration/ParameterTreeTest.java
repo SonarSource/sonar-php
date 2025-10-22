@@ -88,4 +88,27 @@ class ParameterTreeTest extends PHPTreeModelTest {
     assertThat(tree.propertyHookList().hooks()).hasSize(2);
     assertThat(tree.propertyHookList().closeCurlyBrace()).isNotNull();
   }
+
+  @Test
+  void shouldSupportFinalParameters() {
+    // protected final bool $a = true
+    ParameterTree tree = parse("protected final bool $a = true", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.finalToken()).isNotNull();
+    assertThat(tree.isPropertyPromotion()).isTrue();
+    assertThat(tree.isFinal()).isTrue();
+    assertThat(tree.visibility().text()).isEqualTo("protected");
+    // final protected bool $b = true
+    tree = parse("final protected bool $b = true", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.finalToken()).isNotNull();
+    assertThat(tree.isPropertyPromotion()).isTrue();
+    assertThat(tree.isFinal()).isTrue();
+    assertThat(tree.visibility().text()).isEqualTo("protected");
+    // final $i
+    tree = parse("final $i", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.finalToken()).isNotNull();
+    assertThat(tree.isPropertyPromotion()).isTrue();
+    assertThat(tree.isFinal()).isTrue();
+    assertThat(tree.visibility()).isNull();
+  }
+
 }
