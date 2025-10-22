@@ -1187,7 +1187,8 @@ public class PHPGrammar {
             b.token(PHPLexicalGrammar.OBJECT),
             b.token(PHPLexicalGrammar.BOOLEAN),
             b.token(PHPLexicalGrammar.BOOL),
-            b.token(PHPLexicalGrammar.BINARY)),
+            b.token(PHPLexicalGrammar.BINARY),
+            b.token(PHPLexicalGrammar.VOID)),
           b.token(PHPPunctuator.RPARENTHESIS),
           UNARY_EXPR()),
         PREFIXED_BINARY_CAST()));
