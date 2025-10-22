@@ -552,7 +552,7 @@ public class TreeFactory {
 
   public ParameterTree parameter(
     Optional<List<AttributeGroupTree>> attributeGroups,
-    Optional<List<SyntaxToken>> visibilityAndReadonly,
+    Optional<List<SyntaxToken>> promotionModifiers,
     Optional<DeclaredTypeTree> type,
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
@@ -568,7 +568,7 @@ public class TreeFactory {
 
     VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(identifier);
     return new ParameterTreeImpl(attributeGroups.or(Collections.emptyList()),
-      visibilityAndReadonly.or(Collections.emptyList()),
+      promotionModifiers.or(Collections.emptyList()),
       type.orNull(),
       ampersand.orNull(),
       ellipsis.orNull(),

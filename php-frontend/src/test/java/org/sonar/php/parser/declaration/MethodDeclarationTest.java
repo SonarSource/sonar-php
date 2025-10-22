@@ -58,6 +58,9 @@ class MethodDeclarationTest {
       .matches("public function __construct(readonly protected string $prop) {}")
       .matches("public function __construct(readonly $prop) {}")
       .matches("public function __construct(public $p { get; }) {}")
+      .matches("public function __construct(protected final bool $a = true) {}")
+      .matches("public function __construct(final protected bool $b = true) {}")
+      .matches("public function __construct(final $i) {}")
       .notMatches("public function __construct(var $prop) {}");
   }
 
