@@ -653,6 +653,12 @@ public interface Tree {
     NULL_COALESCING_EXPRESSION(BinaryExpressionTree.class),
 
     /**
+     * {@link BinaryExpressionTree}
+     * {@code |>}
+     */
+    PIPE(BinaryExpressionTree.class),
+
+    /**
      * {@link ConditionalExpressionTree}
      */
     CONDITIONAL_EXPRESSION(ConditionalExpressionTree.class),

@@ -1376,9 +1376,18 @@ public class PHPGrammar {
           CONDITIONAL_XOR_EXPR()))));
   }
 
+  public ExpressionTree PIPE_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.PIPE).is(
+      f.binaryExpression(
+        ALTERNATIVE_CONDITIONAL_OR_EXPR(),
+        b.zeroOrMore(f.newTuple(
+          b.token(PHPPunctuator.PIPE),
+          ALTERNATIVE_CONDITIONAL_OR_EXPR()))));
+  }
+
   public ExpressionTree EXPRESSION() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EXPRESSION).is(
-      ALTERNATIVE_CONDITIONAL_OR_EXPR());
+      PIPE_EXPR());
   }
 
   public ExpressionTree COMMON_SCALAR() {
