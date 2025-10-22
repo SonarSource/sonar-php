@@ -61,4 +61,26 @@ class PHPParserTest {
           ) {}
       }"""));
   }
+
+  @Test
+  void shouldParseClosuresInConstantExpressions() {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
+    assertDoesNotThrow(() -> parser.parse("""
+      <?php
+      function my_array_filter(
+          array $array,
+          Closure $callback = static function ($item) { return !empty($item); },
+      ) {
+          $result = [];
+
+          foreach ($array as $item) {
+              if ($callback($item)) {
+                  $result[] = $item;
+              }
+          }
+
+          return $result;
+      }
+      """));
+  }
 }
