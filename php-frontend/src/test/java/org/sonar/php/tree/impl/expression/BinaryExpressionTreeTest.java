@@ -111,6 +111,11 @@ class BinaryExpressionTreeTest extends PHPTreeModelTest {
     testBinary(Kind.INSTANCE_OF, "instanceof", PHPLexicalGrammar.POSTFIX_EXPR);
   }
 
+  @Test
+  void pipe() {
+    testBinary(Kind.PIPE, "|>");
+  }
+
   private void testBinary(Kind kind, String operator) {
     BinaryExpressionTree tree = parse("$a " + operator + " $b", kind);
 

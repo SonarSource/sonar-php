@@ -275,6 +275,7 @@ public class TreeFactory {
     .put(PHPKeyword.XOR.getValue(), Kind.ALTERNATIVE_CONDITIONAL_XOR)
     .put(PHPKeyword.OR.getValue(), Kind.ALTERNATIVE_CONDITIONAL_OR)
     .put(PHPPunctuator.NULL_COALESCE.getValue(), Kind.NULL_COALESCING_EXPRESSION)
+    .put(PHPPunctuator.PIPE.getValue(), Kind.PIPE)
     .build();
 
   private static final Map<String, Kind> UNARY_EXPRESSION_KINDS_BY_OPERATOR = MapBuilder.<String, Kind>builder()
