@@ -11,7 +11,31 @@ class C extends B {
   function doSomething($a, $b) {     // no issue reported on $b
     compute($a);
   }
+}
+</pre>
+<p>Additionally, methods with specific Magento plugin signatures are ignored because Magento requires these parameters:</p>
+<ul>
+  <li> Methods starting with <code>before</code> and having at least 3 parameters </li>
+  <li> Methods starting with <code>around</code> and having at least 4 parameters </li>
+  <li> Methods starting with <code>after</code> and having at least 2 parameters </li>
+</ul>
+<pre>
+class ExamplePlugin {
 
+  public function beforeAction($subject, $arg1, $arg2) {
+    // no issue on unused parameters, required by Magento plugin signature
+    return;
+  }
+
+  public function aroundAction($subject, callable $proceed, $arg1, $arg2) {
+    // no issue on unused parameters, required by Magento plugin signature
+    return;
+  }
+
+  public function afterAction($subject, $result) {
+    // no issue on unused parameters, required by Magento plugin signature
+    return;
+  }
 }
 </pre>
 <h2>How to fix it</h2>
