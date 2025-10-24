@@ -6,6 +6,8 @@ occurrences.</p>
 <ul>
   <li> strings with less than 5 characters </li>
   <li> strings with only letters, numbers, underscores, hyphens and periods </li>
+  <li> Laravel validation strings (e.g., <code>"required"</code>, <code>"max:100"</code>, <code>"email:rfc"</code>) </li>
+  <li> Drupal form keys (e.g., <code>"#type"</code>, <code>"#title"</code>) </li>
 </ul>
 <h2>How to fix it</h2>
 <p>Use constants to replace the duplicated string literals. Constants can be referenced from many places, but only need to be updated in a single
