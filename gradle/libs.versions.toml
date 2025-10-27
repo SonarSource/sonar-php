@@ -14,7 +14,7 @@ commons-lang = "3.19.0"
 jsr305 = "3.0.2"
 staxmate = "2.0.1"
 awaitility = "4.3.0"
-woodstox = "6.4.0"
+woodstox = "6.7.0"
 
 [libraries]
 sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
