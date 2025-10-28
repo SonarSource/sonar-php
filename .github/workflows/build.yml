@@ -163,6 +163,7 @@ jobs:
         with:
           path: ${{ env.ORCHESTRATOR_HOME }}
           key: orchestrator-${{ env.TODAY }}
+          enableCrossOsArchive: true
       - uses: SonarSource/vault-action-wrapper@v3
         id: secrets
         with:
