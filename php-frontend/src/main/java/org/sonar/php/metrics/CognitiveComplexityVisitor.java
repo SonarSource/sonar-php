@@ -249,7 +249,7 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
       List<SyntaxToken> flatOperators = new ArrayList<>();
       flattenLogicalExpression(0, flatOperators, tree);
 
-      if(tree.is(PIPE)){
+      if (tree.is(PIPE)) {
         complexity.addComplexityWithNesting(flatOperators.get(0));
 
         for (int i = 1; i < flatOperators.size(); i++) {
@@ -257,8 +257,7 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
             complexity.addComplexityWithNesting(flatOperators.get(i));
           }
         }
-      }
-      else{
+      } else {
         complexity.addComplexityWithoutNesting(flatOperators.get(0));
 
         for (int i = 1; i < flatOperators.size(); i++) {
@@ -267,7 +266,6 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
           }
         }
       }
-
 
     }
 
