@@ -22,7 +22,7 @@ plugins {
 }
 
 artifactoryConfiguration {
-  buildName = providers.environmentVariable("CIRRUS_REPO_NAME").orElse("sonar-php")
+  buildName = providers.environmentVariable("PROJECT").orElse("sonar-php")
   artifactsToPublish = "org.sonarsource.php:sonar-php-plugin:jar"
   artifactsToDownload = ""
   repoKeyEnv = "ARTIFACTORY_DEPLOY_REPO"
@@ -49,7 +49,7 @@ sonar {
     property("sonar.projectKey", "org.sonarsource.php:php")
     property("sonar.organization", "sonarsource")
     property("sonar.exclusions", "**/build/**/*")
-    property("sonar.links.ci", "https://cirrus-ci.com/github/SonarSource/sonar-php")
+    property("sonar.links.ci", "https://github.com/SonarSource/sonar-php/actions")
     property("sonar.links.scm", "https://github.com/SonarSource/sonar-php")
     property("sonar.links.issue", "https://jira.sonarsource.com/browse/SONARPHP")
     property("sonar.sca.exclusions", "its/sources/**")
