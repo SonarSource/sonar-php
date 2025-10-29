@@ -243,39 +243,41 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
     super.visitGotoStatement(tree);
   }
 
+  public void handleCognitiveComplexityPIPE(List<SyntaxToken> flatOperators) {
+    complexity.addComplexityWithNesting(flatOperators.get(0));
+
+    for (int i = 1; i < flatOperators.size(); i++) {
+      if (flatOperators.get(i).text().equals(flatOperators.get(i - 1).text())) {
+        complexity.addComplexityWithNesting(flatOperators.get(i));
+      }
+    }
+  }
+
+  public void handleCognitiveComplexityAndOr(List<SyntaxToken> flatOperators) {
+    complexity.addComplexityWithoutNesting(flatOperators.get(0));
+
+    for (int i = 1; i < flatOperators.size(); i++) {
+      if (!flatOperators.get(i).text().equals(flatOperators.get(i - 1).text())) {
+        complexity.addComplexityWithoutNesting(flatOperators.get(i));
+      }
+    }
+  }
+
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
     if (tree.is(CONDITIONAL_AND, CONDITIONAL_OR, PIPE) && !nestedLogicalExpressions.contains(tree)) {
       List<SyntaxToken> flatOperators = new ArrayList<>();
       flattenLogicalExpression(0, flatOperators, tree);
 
-
-
       if (tree.is(PIPE)) {
-        complexity.addComplexityWithNesting(flatOperators.get(0));
-      }else{
-        complexity.addComplexityWithoutNesting(flatOperators.get(0));
-      }
-
-      for (int i = 1; i < flatOperators.size(); i++) {
-        if (!flatOperators.get(i).text().equals(flatOperators.get(i - 1).text())) {
-          if(tree.is(PIPE)){
-            complexity.addComplexityWithNesting(flatOperators.get(i));
-          } else {
-            complexity.addComplexityWithoutNesting(flatOperators.get(i));
-          }
-
-        }
+        handleCognitiveComplexityPIPE(flatOperators);
+      } else {
+        handleCognitiveComplexityAndOr(flatOperators);
       }
     }
 
-
-
-
     super.visitBinaryExpression(tree);
   }
-
-
 
   private void flattenLogicalExpression(int i, List<SyntaxToken> operators, ExpressionTree expression) {
     if (expression.is(CONDITIONAL_AND, CONDITIONAL_OR, PIPE)) {
