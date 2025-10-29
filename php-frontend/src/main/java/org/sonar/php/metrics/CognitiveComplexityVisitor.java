@@ -51,6 +51,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.plugins.php.api.tree.Tree.Kind.CONDITIONAL_AND;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.CONDITIONAL_OR;
+import static org.sonar.plugins.php.api.tree.Tree.Kind.PIPE;
 
 public class CognitiveComplexityVisitor extends PHPVisitorCheck {
 
@@ -244,24 +245,37 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
-    if (tree.is(CONDITIONAL_AND, CONDITIONAL_OR) && !nestedLogicalExpressions.contains(tree)) {
+    if (tree.is(CONDITIONAL_AND, CONDITIONAL_OR, PIPE) && !nestedLogicalExpressions.contains(tree)) {
       List<SyntaxToken> flatOperators = new ArrayList<>();
       flattenLogicalExpression(0, flatOperators, tree);
 
-      complexity.addComplexityWithoutNesting(flatOperators.get(0));
+      if(tree.is(PIPE)){
+        complexity.addComplexityWithNesting(flatOperators.get(0));
 
-      for (int i = 1; i < flatOperators.size(); i++) {
-        if (!flatOperators.get(i).text().equals(flatOperators.get(i - 1).text())) {
-          complexity.addComplexityWithoutNesting(flatOperators.get(i));
+        for (int i = 1; i < flatOperators.size(); i++) {
+          if (flatOperators.get(i).text().equals(flatOperators.get(i - 1).text())) {
+            complexity.addComplexityWithNesting(flatOperators.get(i));
+          }
         }
       }
+      else{
+        complexity.addComplexityWithoutNesting(flatOperators.get(0));
+
+        for (int i = 1; i < flatOperators.size(); i++) {
+          if (!flatOperators.get(i).text().equals(flatOperators.get(i - 1).text())) {
+            complexity.addComplexityWithoutNesting(flatOperators.get(i));
+          }
+        }
+      }
+
+
     }
 
     super.visitBinaryExpression(tree);
   }
 
   private void flattenLogicalExpression(int i, List<SyntaxToken> operators, ExpressionTree expression) {
-    if (expression.is(CONDITIONAL_AND, CONDITIONAL_OR)) {
+    if (expression.is(CONDITIONAL_AND, CONDITIONAL_OR, PIPE)) {
       nestedLogicalExpressions.add(expression);
 
       BinaryExpressionTree binaryExpression = (BinaryExpressionTree) expression;
