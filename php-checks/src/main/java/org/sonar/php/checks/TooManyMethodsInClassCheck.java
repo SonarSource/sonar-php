@@ -16,11 +16,13 @@
  */
 package org.sonar.php.checks;
 
+import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
@@ -33,7 +35,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1448";
-  private static final String MESSAGE = "Class \"%s\" has %s methods, which is greater than %s authorized. Split it into smaller classes.";
+  private static final String MESSAGE = "Class \"%s\" has %s methods, which is greater than %s authorized and is not an Entity of a Database. Split it into smaller classes.";
   private static final String MESSAGE_ANONYMOUS_CLASS = "This anonymous class has %s methods, which is greater than %s authorized. Split it into smaller classes.";
 
   private static final int DEFAULT_THRESHOLD = 20;
@@ -67,7 +69,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
   private void checkClass(ClassTree tree) {
     int nbMethod = getNumberOfMethods(tree);
 
-    if (nbMethod > maximumMethodThreshold) {
+    if (nbMethod > maximumMethodThreshold && classIsDBEntity(tree) && !classHasEntityAnnotation(tree)) {
       String message;
       if (tree.is(Kind.ANONYMOUS_CLASS)) {
         message = String.format(MESSAGE_ANONYMOUS_CLASS, nbMethod, maximumMethodThreshold);
@@ -88,6 +90,39 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     }
 
     return nbMethod;
+  }
+
+  private static boolean classIsDBEntity(ClassTree tree) {
+    boolean foriegnMethodFound = Boolean.FALSE;
+
+    for (ClassMemberTree classMember : tree.members()) {
+
+      if (!classMember.toString().contains("get") && !classMember.toString().contains("set")) {
+
+        foriegnMethodFound = Boolean.TRUE;
+        break;
+      }
+    }
+
+    return foriegnMethodFound;
+
+  }
+
+  private static boolean classHasEntityAnnotation(ClassTree tree) {
+    boolean entityFound = Boolean.FALSE;
+
+    List<AttributeGroupTree> attributes = tree.attributeGroups();
+    if (!attributes.isEmpty()) {
+
+      for (AttributeGroupTree attribute : attributes) {
+
+        if (attribute.toString().equals("#[ORM\\Entity]")) {
+          entityFound = Boolean.TRUE;
+        }
+      }
+    }
+
+    return entityFound;
   }
 
   /**
