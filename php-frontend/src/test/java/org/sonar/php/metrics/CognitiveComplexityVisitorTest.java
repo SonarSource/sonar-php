@@ -222,6 +222,7 @@ class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
         + 1 // $func function expression
         + 1 // $func arrow function expression
         + 4 // rest of the script
+        + 2 // pipe operators
     );
   }
 
