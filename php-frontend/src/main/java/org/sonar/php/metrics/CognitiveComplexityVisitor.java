@@ -243,7 +243,7 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
     super.visitGotoStatement(tree);
   }
 
-  public void handleCognitiveComplexityPIPE(List<SyntaxToken> flatOperators) {
+  private void handlePipeOpBinaryExpression(List<SyntaxToken> flatOperators) {
     complexity.addComplexityWithNesting(flatOperators.get(0));
 
     for (int i = 1; i < flatOperators.size(); i++) {
@@ -253,7 +253,7 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
     }
   }
 
-  public void handleCognitiveComplexityAndOr(List<SyntaxToken> flatOperators) {
+  private void handleAndOrBinaryExpression(List<SyntaxToken> flatOperators) {
     complexity.addComplexityWithoutNesting(flatOperators.get(0));
 
     for (int i = 1; i < flatOperators.size(); i++) {
@@ -270,9 +270,9 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
       flattenLogicalExpression(0, flatOperators, tree);
 
       if (tree.is(PIPE)) {
-        handleCognitiveComplexityPIPE(flatOperators);
+        handlePipeOpBinaryExpression(flatOperators);
       } else {
-        handleCognitiveComplexityAndOr(flatOperators);
+        handleAndOrBinaryExpression(flatOperators);
       }
     }
 
