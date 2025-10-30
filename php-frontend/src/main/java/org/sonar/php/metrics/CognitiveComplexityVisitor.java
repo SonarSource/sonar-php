@@ -243,6 +243,22 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
     super.visitGotoStatement(tree);
   }
 
+  @Override
+  public void visitBinaryExpression(BinaryExpressionTree tree) {
+    if (tree.is(CONDITIONAL_AND, CONDITIONAL_OR, PIPE) && !nestedLogicalExpressions.contains(tree)) {
+      List<SyntaxToken> flatOperators = new ArrayList<>();
+      flattenLogicalExpression(0, flatOperators, tree);
+
+      if (tree.is(PIPE)) {
+        handlePipeOpBinaryExpression(flatOperators);
+      } else {
+        handleAndOrBinaryExpression(flatOperators);
+      }
+    }
+
+    super.visitBinaryExpression(tree);
+  }
+
   private void handlePipeOpBinaryExpression(List<SyntaxToken> flatOperators) {
     complexity.addComplexityWithNesting(flatOperators.get(0));
 
@@ -261,22 +277,6 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
         complexity.addComplexityWithoutNesting(flatOperators.get(i));
       }
     }
-  }
-
-  @Override
-  public void visitBinaryExpression(BinaryExpressionTree tree) {
-    if (tree.is(CONDITIONAL_AND, CONDITIONAL_OR, PIPE) && !nestedLogicalExpressions.contains(tree)) {
-      List<SyntaxToken> flatOperators = new ArrayList<>();
-      flattenLogicalExpression(0, flatOperators, tree);
-
-      if (tree.is(PIPE)) {
-        handlePipeOpBinaryExpression(flatOperators);
-      } else {
-        handleAndOrBinaryExpression(flatOperators);
-      }
-    }
-
-    super.visitBinaryExpression(tree);
   }
 
   private void flattenLogicalExpression(int i, List<SyntaxToken> operators, ExpressionTree expression) {
