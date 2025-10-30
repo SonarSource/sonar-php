@@ -116,7 +116,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
 
       for (AttributeGroupTree attribute : attributes) {
 
-        if (attribute.toString().equals("#[ORM\\Entity]")) {
+        if ("#[ORM\\Entity]".equals(attribute.toString())) {
           entityFound = Boolean.TRUE;
         }
       }
