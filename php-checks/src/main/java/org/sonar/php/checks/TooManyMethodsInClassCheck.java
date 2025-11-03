@@ -94,18 +94,18 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
   }
 
   private static boolean classIsDBEntity(ClassTree tree) {
-    boolean foriegnMethodFound = false;
+    boolean foreignMethodFound = false;
 
     for (ClassMemberTree classMember : tree.members()) {
       if (classMember.is(Kind.METHOD_DECLARATION)) {
         String showMember = ((MethodDeclarationTree) classMember).name().text();
         if (!showMember.startsWith("get") && !showMember.startsWith("set")) {
-          foriegnMethodFound = true;
+          foreignMethodFound = true;
           break;
         }
       }
     }
-    return foriegnMethodFound;
+    return foreignMethodFound;
   }
 
   private static boolean classHasEntityAnnotation(ClassTree tree) {
