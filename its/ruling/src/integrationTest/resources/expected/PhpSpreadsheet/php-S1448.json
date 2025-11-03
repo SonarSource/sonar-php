@@ -77,9 +77,6 @@
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Date.php": [
 15
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Shared/Escher/DgContainer/SpgrContainer/SpContainer.php": [
-7
-],
 "PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php": [
 5
 ],
@@ -91,9 +88,6 @@
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/Conditional.php": [
 9
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/ConditionalDataBarExtension.php": [
-5
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Style/Font.php": [
 7
