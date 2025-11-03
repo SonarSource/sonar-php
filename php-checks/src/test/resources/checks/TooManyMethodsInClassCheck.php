@@ -90,3 +90,27 @@ class ClassDB {         // OK
 
     public function f4() {  }
  }
+
+  #[ORM\Entity,Foo\Bar]
+  class AnnotationClass {   // OK
+
+    public function f1() {  }
+
+    public function f2() {  }
+
+    public function f3() {  }
+
+    public function f4() {  }
+  }
+
+  #[Entity(repositoryClass: DocumentRepository::class)]
+  class AnnotationArgsClass{ //OK
+
+      public function f1() {  }
+
+      public function f2() {  }
+
+      public function f3() {  }
+
+      public function f4() {  }
+  }

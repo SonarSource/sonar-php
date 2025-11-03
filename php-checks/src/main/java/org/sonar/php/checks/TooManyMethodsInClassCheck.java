@@ -23,6 +23,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
@@ -113,8 +114,11 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     List<AttributeGroupTree> attributes = tree.attributeGroups();
     if (!attributes.isEmpty()) {
       for (AttributeGroupTree attribute : attributes) {
-        if ("#[ORM\\Entity]".equals(attribute.toString())) {
-          entityFound = true;
+        for(AttributeTree attributeTree: attribute.attributes()){
+          String finalName = attributeTree.name().fullyQualifiedName();
+          if ("ORM\\Entity".equals(finalName) || "Entity".equals(finalName)) {
+            entityFound = true;
+          }
         }
       }
     }
