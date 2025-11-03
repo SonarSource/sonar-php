@@ -93,31 +93,28 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
   }
 
   private static boolean classIsDBEntity(ClassTree tree) {
-    boolean foriegnMethodFound = Boolean.FALSE;
+    boolean foriegnMethodFound = false;
 
     for (ClassMemberTree classMember : tree.members()) {
-
-      if (!classMember.toString().contains("get") && !classMember.toString().contains("set")) {
-
-        foriegnMethodFound = Boolean.TRUE;
-        break;
+      if (classMember.is(Kind.METHOD_DECLARATION)) {
+        String showMember = ((MethodDeclarationTree) classMember).name().text();
+        if (!showMember.startsWith("get") && !showMember.startsWith("set")) {
+          foriegnMethodFound = true;
+          break;
+        }
       }
     }
-
     return foriegnMethodFound;
-
   }
 
   private static boolean classHasEntityAnnotation(ClassTree tree) {
-    boolean entityFound = Boolean.FALSE;
+    boolean entityFound = false;
 
     List<AttributeGroupTree> attributes = tree.attributeGroups();
     if (!attributes.isEmpty()) {
-
       for (AttributeGroupTree attribute : attributes) {
-
         if ("#[ORM\\Entity]".equals(attribute.toString())) {
-          entityFound = Boolean.TRUE;
+          entityFound = true;
         }
       }
     }

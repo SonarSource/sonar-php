@@ -73,7 +73,7 @@ class ClassDB {         // OK
 
     public function ko() {  }
 
-    public function get3() {  }
+    public function Target3() {  }
 
     public function set1() {  }
 }
