@@ -114,7 +114,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     List<AttributeGroupTree> attributes = tree.attributeGroups();
     if (!attributes.isEmpty()) {
       for (AttributeGroupTree attribute : attributes) {
-        for(AttributeTree attributeTree: attribute.attributes()){
+        for (AttributeTree attributeTree : attribute.attributes()) {
           String finalName = attributeTree.name().fullyQualifiedName();
           if ("ORM\\Entity".equals(finalName) || "Entity".equals(finalName)) {
             entityFound = true;
