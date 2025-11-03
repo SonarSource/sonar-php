@@ -39,6 +39,22 @@ class FrameworkDetectionVisitorTest {
   }
 
   @Test
+  void shouldDetectYiiByUseClause() {
+    var code = """
+      <?php
+
+      use yii\\base\\Model;
+      use Symfony\\Component\\HttpFoundation\\Request;
+      """;
+    var tree = ParsingTestUtils.parseSource(code);
+    var visitor = new FrameworkDetectionVisitor();
+
+    tree.accept(visitor);
+
+    Assertions.assertThat(visitor.getFramework()).isEqualTo(SymbolTable.Framework.YII);
+  }
+
+  @Test
   void shouldReturnEmptyWithoutDrupalUseClause() {
     var code = """
       <?php

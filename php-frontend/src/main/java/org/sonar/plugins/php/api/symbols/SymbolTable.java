@@ -46,6 +46,7 @@ public interface SymbolTable {
    */
   enum Framework {
     DRUPAL,
+    YII,
     EMPTY,
   }
 }

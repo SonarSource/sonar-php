@@ -28,12 +28,25 @@ public class FrameworkDetectionVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitUseClause(UseClauseTree tree) {
-    if (tree.namespaceName().qualifiedName().startsWith("Drupal")) {
+    var qualifiedName = tree.namespaceName().qualifiedName();
+    var topLevelNamespace = extractTopLevelNamespace(qualifiedName);
+
+    if ("Drupal".equalsIgnoreCase(topLevelNamespace)) {
       this.framework = SymbolTable.Framework.DRUPAL;
+    } else if ("Yii".equalsIgnoreCase(topLevelNamespace)) {
+      this.framework = SymbolTable.Framework.YII;
     }
   }
 
   public SymbolTable.Framework getFramework() {
     return framework;
+  }
+
+  private static String extractTopLevelNamespace(String qualifiedName) {
+    int separatorIndex = qualifiedName.indexOf('\\');
+    if (separatorIndex == -1) {
+      return qualifiedName;
+    }
+    return qualifiedName.substring(0, separatorIndex);
   }
 }

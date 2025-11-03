@@ -189,6 +189,20 @@ class PHPAnalyzerTest {
   }
 
   @Test
+  void frameworkVisitorShouldDetectYii() {
+    PHPCheck check = new DummyCheck();
+    PHPCheck testCheck = new DummyCheck();
+    SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
+    PHPAnalyzer analyzer = createAnalyzer(List.of(check), List.of(testCheck), suppressWarningFilter, true);
+    InputFile file = new TestInputFileBuilder("projectKey", "file.php")
+      .setContents("<?php\nuse yii\\base\\Model;\n$a = 1;")
+      .build();
+
+    analyzer.nextFile(file);
+    assertThat(analyzer.currentFileSymbolTable().getFramework()).isEqualTo(SymbolTable.Framework.YII);
+  }
+
+  @Test
   void frameworkVisitorShouldNotBeTriggered() {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();
