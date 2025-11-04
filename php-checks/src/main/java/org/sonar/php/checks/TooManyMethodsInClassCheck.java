@@ -122,15 +122,15 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private static boolean classIsDBEntity(ClassTree tree){
+  private static boolean classIsDBEntity(ClassTree tree) {
     return !classHasOnlyGettersAndSetters(tree) && !classHasEntityAnnotation(tree);
   }
 
-  private static boolean checkGetSetKeywords(String showMember){
-    List<String> getSetKeywords = Arrays.asList("Get","get","GET","Set","set", "SET");
+  private static boolean checkGetSetKeywords(String showMember) {
+    List<String> getSetKeywords = Arrays.asList("Get", "get", "GET", "Set", "set", "SET");
 
-    for(String keyword : getSetKeywords){
-      if(showMember.startsWith(keyword)){
+    for (String keyword : getSetKeywords) {
+      if (showMember.startsWith(keyword)) {
         return true;
       }
     }
