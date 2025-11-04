@@ -16,6 +16,7 @@
  */
 package org.sonar.php.checks;
 
+import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -36,7 +37,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1448";
-  private static final String MESSAGE = "Class \"%s\" has %s methods, which is greater than %s authorized and is not an Entity of a Database. Split it into smaller classes.";
+  private static final String MESSAGE = "Class \"%s\" has %s methods, which is greater than %s authorized. Split it into smaller classes.";
   private static final String MESSAGE_ANONYMOUS_CLASS = "This anonymous class has %s methods, which is greater than %s authorized. Split it into smaller classes.";
 
   private static final int DEFAULT_THRESHOLD = 20;
@@ -70,7 +71,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
   private void checkClass(ClassTree tree) {
     int nbMethod = getNumberOfMethods(tree);
 
-    if (nbMethod > maximumMethodThreshold && classIsDBEntity(tree) && !classHasEntityAnnotation(tree)) {
+    if (nbMethod > maximumMethodThreshold && classIsDBEntity(tree)) {
       String message;
       if (tree.is(Kind.ANONYMOUS_CLASS)) {
         message = String.format(MESSAGE_ANONYMOUS_CLASS, nbMethod, maximumMethodThreshold);
@@ -93,37 +94,47 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     return nbMethod;
   }
 
-  private static boolean classIsDBEntity(ClassTree tree) {
-    boolean foreignMethodFound = false;
-
+  private static boolean classHasOnlyGettersAndSetters(ClassTree tree) {
     for (ClassMemberTree classMember : tree.members()) {
       if (classMember.is(Kind.METHOD_DECLARATION)) {
         String showMember = ((MethodDeclarationTree) classMember).name().text();
-        if (!showMember.startsWith("get") && !showMember.startsWith("set")) {
-          foreignMethodFound = true;
-          break;
+        if (!checkGetSetKeywords(showMember)) {
+          return false;
         }
       }
     }
-    return foreignMethodFound;
+    return true;
   }
 
   private static boolean classHasEntityAnnotation(ClassTree tree) {
-    boolean entityFound = false;
-
     List<AttributeGroupTree> attributes = tree.attributeGroups();
+
     if (!attributes.isEmpty()) {
       for (AttributeGroupTree attribute : attributes) {
         for (AttributeTree attributeTree : attribute.attributes()) {
           String finalName = attributeTree.name().fullyQualifiedName();
           if ("ORM\\Entity".equals(finalName) || "Entity".equals(finalName)) {
-            entityFound = true;
+            return true;
           }
         }
       }
     }
+    return false;
+  }
 
-    return entityFound;
+  private static boolean classIsDBEntity(ClassTree tree){
+    return !classHasOnlyGettersAndSetters(tree) && !classHasEntityAnnotation(tree);
+  }
+
+  private static boolean checkGetSetKeywords(String showMember){
+    List<String> getSetKeywords = Arrays.asList("Get","get","GET","Set","set", "SET");
+
+    for(String keyword : getSetKeywords){
+      if(showMember.startsWith(keyword)){
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

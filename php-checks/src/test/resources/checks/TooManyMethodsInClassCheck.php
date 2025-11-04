@@ -3,7 +3,7 @@
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-  interface I {             // Noncompliant {{Class "I" has 3 methods, which is greater than 2 authorized and is not an Entity of a Database. Split it into smaller classes.}}
+  interface I {             // Noncompliant {{Class "I" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.}}
 //^^^^^^^^^
 
   public function f1();
