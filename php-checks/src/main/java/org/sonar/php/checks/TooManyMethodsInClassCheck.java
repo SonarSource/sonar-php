@@ -106,7 +106,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     return true;
   }
 
-  private static boolean classHasEntityAnnotation(ClassTree tree) {
+  private static boolean classHasEntityAttribute(ClassTree tree) {
     List<AttributeGroupTree> attributes = tree.attributeGroups();
 
     if (!attributes.isEmpty()) {
