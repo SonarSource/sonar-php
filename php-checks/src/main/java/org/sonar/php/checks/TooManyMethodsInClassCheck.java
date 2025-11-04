@@ -94,7 +94,6 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     return nbMethod;
   }
 
-
   private static boolean classIsDBEntity(ClassTree tree) {
     return !classHasOnlyGettersAndSetters(tree) && !classHasEntityAttribute(tree);
   }
