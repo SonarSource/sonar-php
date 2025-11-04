@@ -27,18 +27,33 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 class ClassNameCheckTest {
 
   private ClassNameCheck check = new ClassNameCheck();
-  private String fileName = "ClassNameCheck.php";
+  private final String fileName = "ClassNameCheck.php";
+  private final String yiiFileName = "ClassNameCheckYii.php";
 
   @Test
   void defaultValue() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
   }
 
+  void yiiValue() throws Exception {
+    PHPCheckTest.check(check, TestUtils.getCheckFile(yiiFileName));
+  }
+
   @Test
   void custom() throws Exception {
-    check.format = "^[a-z][a-zA-Z0-9]*$";
+    check.format = "^[A-Z][a-zA-Z0-9]*$";
     List<PhpIssue> expectedIssues = new LinkedList<>();
-    expectedIssues.add(new LineIssue(check, 7, "Rename class \"MyClass\" to match the regular expression " + check.format + "."));
+    expectedIssues.add(new LineIssue(check, 3, "Rename class \"myClass\" to match the regular expression " + check.format + "."));
+    expectedIssues.add(new LineIssue(check, 13, "Rename class \"m150513_053633_add_dummy_user\" to match the regular expression " + check.format + "."));
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), expectedIssues);
   }
+
+  @Test
+  void customYii() throws Exception {
+    check.format = "^[a-z0-9_]+$";
+    List<PhpIssue> yiiExpectedIssues = new LinkedList<>();
+    yiiExpectedIssues.add(new LineIssue(check, 6, "Rename class \"myClass\" to match the regular expression " + check.format + "."));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(yiiFileName), yiiExpectedIssues);
+  }
+
 }

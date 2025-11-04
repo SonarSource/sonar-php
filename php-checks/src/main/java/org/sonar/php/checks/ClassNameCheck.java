@@ -16,23 +16,23 @@
  */
 package org.sonar.php.checks;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
-import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = ClassNameCheck.KEY)
-public class ClassNameCheck extends PHPSubscriptionCheck {
+public class ClassNameCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S101";
   private static final String MESSAGE = "Rename class \"%s\" to match the regular expression %s.";
 
   public static final String DEFAULT = "^[A-Z][a-zA-Z0-9]*$";
+  public static final String YII = "^[a-z0-9_]+$";
   private Pattern pattern = null;
 
   @RuleProperty(
@@ -41,24 +41,32 @@ public class ClassNameCheck extends PHPSubscriptionCheck {
   String format = DEFAULT;
 
   @Override
-  public List<Tree.Kind> nodesToVisit() {
-    return Collections.singletonList(Tree.Kind.CLASS_DECLARATION);
-  }
-
-  @Override
   public void init() {
     pattern = Pattern.compile(format);
   }
 
   @Override
-  public void visitNode(Tree tree) {
-    NameIdentifierTree nameTree = ((ClassDeclarationTree) tree).name();
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    if (frameworkYiiUsed()) {
+      pattern = Pattern.compile(YII);
+    }
+
+    super.visitCompilationUnit(tree);
+  }
+
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    NameIdentifierTree nameTree = tree.name();
     String className = nameTree.text();
 
     if (!pattern.matcher(className).matches()) {
       String message = String.format(MESSAGE, className, this.format);
       context().newIssue(this, nameTree, message);
     }
+  }
+
+  private boolean frameworkYiiUsed() {
+    return context().getFramework() == SymbolTable.Framework.YII;
   }
 
 }
