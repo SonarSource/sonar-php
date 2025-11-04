@@ -16,11 +16,15 @@
  */
 package org.sonar.php.checks;
 
+import java.util.Arrays;
+import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
@@ -67,7 +71,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
   private void checkClass(ClassTree tree) {
     int nbMethod = getNumberOfMethods(tree);
 
-    if (nbMethod > maximumMethodThreshold) {
+    if (nbMethod > maximumMethodThreshold && classIsDBEntity(tree)) {
       String message;
       if (tree.is(Kind.ANONYMOUS_CLASS)) {
         message = String.format(MESSAGE_ANONYMOUS_CLASS, nbMethod, maximumMethodThreshold);
@@ -88,6 +92,49 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     }
 
     return nbMethod;
+  }
+
+  private static boolean classIsDBEntity(ClassTree tree) {
+    return !classHasOnlyGettersAndSetters(tree) && !classHasEntityAttribute(tree);
+  }
+
+  private static boolean classHasOnlyGettersAndSetters(ClassTree tree) {
+    for (ClassMemberTree classMember : tree.members()) {
+      if (classMember.is(Kind.METHOD_DECLARATION)) {
+        String showMember = ((MethodDeclarationTree) classMember).name().text();
+        if (!checkGetSetKeywords(showMember)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private static boolean classHasEntityAttribute(ClassTree tree) {
+    List<AttributeGroupTree> attributes = tree.attributeGroups();
+
+    if (!attributes.isEmpty()) {
+      for (AttributeGroupTree attribute : attributes) {
+        for (AttributeTree attributeTree : attribute.attributes()) {
+          String finalName = attributeTree.name().fullyQualifiedName();
+          if ("ORM\\Entity".equals(finalName) || "Entity".equals(finalName)) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  private static boolean checkGetSetKeywords(String showMember) {
+    List<String> getSetKeywords = Arrays.asList("Get", "get", "GET", "Set", "set", "SET");
+
+    for (String keyword : getSetKeywords) {
+      if (showMember.startsWith(keyword)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

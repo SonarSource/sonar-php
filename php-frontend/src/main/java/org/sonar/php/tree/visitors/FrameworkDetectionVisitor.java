@@ -30,6 +30,8 @@ public class FrameworkDetectionVisitor extends PHPVisitorCheck {
   public void visitUseClause(UseClauseTree tree) {
     if (tree.namespaceName().qualifiedName().startsWith("Drupal")) {
       this.framework = SymbolTable.Framework.DRUPAL;
+    } else if (tree.namespaceName().qualifiedName().startsWith("Yii")) {
+      this.framework = SymbolTable.Framework.YII;
     }
   }
 
