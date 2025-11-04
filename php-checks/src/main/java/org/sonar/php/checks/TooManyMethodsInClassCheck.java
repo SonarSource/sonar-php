@@ -94,6 +94,11 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
     return nbMethod;
   }
 
+
+  private static boolean classIsDBEntity(ClassTree tree) {
+    return !classHasOnlyGettersAndSetters(tree) && !classHasEntityAttribute(tree);
+  }
+
   private static boolean classHasOnlyGettersAndSetters(ClassTree tree) {
     for (ClassMemberTree classMember : tree.members()) {
       if (classMember.is(Kind.METHOD_DECLARATION)) {
@@ -120,10 +125,6 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
       }
     }
     return false;
-  }
-
-  private static boolean classIsDBEntity(ClassTree tree) {
-    return !classHasOnlyGettersAndSetters(tree) && !classHasEntityAnnotation(tree);
   }
 
   private static boolean checkGetSetKeywords(String showMember) {
