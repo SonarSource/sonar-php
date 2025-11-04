@@ -16,8 +16,8 @@
  */
 package org.sonar.php.checks;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
@@ -101,8 +101,8 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
   private static boolean classHasOnlyGettersAndSetters(ClassTree tree) {
     for (ClassMemberTree classMember : tree.members()) {
       if (classMember.is(Kind.METHOD_DECLARATION)) {
-        String showMember = ((MethodDeclarationTree) classMember).name().text();
-        if (!checkGetSetKeywords(showMember)) {
+        String methodName = ((MethodDeclarationTree) classMember).name().text().toLowerCase(Locale.ROOT);
+        if (!methodName.startsWith("get") && !methodName.startsWith("set")) {
           return false;
         }
       }
@@ -121,17 +121,6 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
             return true;
           }
         }
-      }
-    }
-    return false;
-  }
-
-  private static boolean checkGetSetKeywords(String showMember) {
-    List<String> getSetKeywords = Arrays.asList("Get", "get", "GET", "Set", "set", "SET");
-
-    for (String keyword : getSetKeywords) {
-      if (showMember.startsWith(keyword)) {
-        return true;
       }
     }
     return false;
