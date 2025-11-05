@@ -189,6 +189,20 @@ class PHPAnalyzerTest {
   }
 
   @Test
+  void frameworkVisitorShouldDetectWordPress() {
+    PHPCheck check = new DummyCheck();
+    PHPCheck testCheck = new DummyCheck();
+    SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
+    PHPAnalyzer analyzer = createAnalyzer(List.of(check), List.of(testCheck), suppressWarningFilter, true);
+    InputFile file = new TestInputFileBuilder("projectKey", "file.php")
+      .setContents("<?php\nuse WP_CLI\\Utils;\n$a = 1;")
+      .build();
+
+    analyzer.nextFile(file);
+    assertThat(analyzer.currentFileSymbolTable().getFramework()).isEqualTo(SymbolTable.Framework.WORDPRESS);
+  }
+
+  @Test
   void frameworkVisitorShouldNotBeTriggered() {
     PHPCheck check = new DummyCheck();
     PHPCheck testCheck = new DummyCheck();

@@ -16,6 +16,7 @@
  */
 package org.sonar.php.tree.visitors;
 
+import java.util.Locale;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -28,14 +29,25 @@ public class FrameworkDetectionVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitUseClause(UseClauseTree tree) {
-    if (tree.namespaceName().qualifiedName().startsWith("Drupal")) {
+    var qualifiedName = tree.namespaceName().qualifiedName();
+    if (qualifiedName.startsWith("Drupal")) {
       this.framework = SymbolTable.Framework.DRUPAL;
-    } else if (tree.namespaceName().qualifiedName().startsWith("Yii")) {
+    } else if (isWordPressNamespace(qualifiedName)) {
+      this.framework = SymbolTable.Framework.WORDPRESS;
+    } else if (qualifiedName.startsWith("Yii")) {
       this.framework = SymbolTable.Framework.YII;
     }
   }
 
   public SymbolTable.Framework getFramework() {
     return framework;
+  }
+
+  private static boolean isWordPressNamespace(String qualifiedName) {
+    var normalized = qualifiedName.toUpperCase(Locale.ROOT);
+    return normalized.startsWith("WP_")
+      || normalized.startsWith("WP\\")
+      || normalized.startsWith("WORDPRESS_")
+      || normalized.startsWith("WORDPRESS\\");
   }
 }

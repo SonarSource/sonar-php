@@ -39,6 +39,22 @@ class FrameworkDetectionVisitorTest {
   }
 
   @Test
+  void shouldDetectWordPressByUseClause() {
+    var code = """
+      <?php
+
+      use WP_CLI\\Utils;
+      use Symfony\\Component\\HttpFoundation\\Request;
+      """;
+    var tree = ParsingTestUtils.parseSource(code);
+    var visitor = new FrameworkDetectionVisitor();
+
+    tree.accept(visitor);
+
+    Assertions.assertThat(visitor.getFramework()).isEqualTo(SymbolTable.Framework.WORDPRESS);
+  }
+
+  @Test
   void shouldReturnEmptyWithoutDrupalUseClause() {
     var code = """
       <?php
