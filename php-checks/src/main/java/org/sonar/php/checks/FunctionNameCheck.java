@@ -41,6 +41,9 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   public static final String DEFAULT_DRUPAL = "^[a-z][a-z0-9_]*$";
   private static final Pattern patternDrupal = Pattern.compile(DEFAULT_DRUPAL);
+  public static final String DEFAULT_WORDPRESS = "^[a-z][a-z0-9_]*$";
+  private static final Pattern patternWordpress = Pattern.compile(DEFAULT_WORDPRESS);
+
   private Pattern pattern = null;
 
   @RuleProperty(
@@ -77,6 +80,8 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   private Pattern computePattern() {
     if (isDrupal()) {
       return patternDrupal;
+    } else if (isWordpress()) {
+      return patternWordpress;
     }
     return pattern;
   }
@@ -84,11 +89,17 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   private String computeFormat() {
     if (isDrupal()) {
       return DEFAULT_DRUPAL;
+    } else if (isWordpress()) {
+      return DEFAULT_WORDPRESS;
     }
     return format;
   }
 
   private boolean isDrupal() {
     return context().getFramework() == SymbolTable.Framework.DRUPAL && format.equals(DEFAULT);
+  }
+
+  private boolean isWordpress() {
+    return context().getFramework() == SymbolTable.Framework.WORDPRESS && format.equals(DEFAULT);
   }
 }

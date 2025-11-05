@@ -48,5 +48,6 @@ public interface SymbolTable {
     DRUPAL,
     EMPTY,
     YII,
+    WORDPRESS,
   }
 }

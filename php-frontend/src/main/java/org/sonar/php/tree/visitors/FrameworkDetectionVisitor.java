@@ -32,6 +32,8 @@ public class FrameworkDetectionVisitor extends PHPVisitorCheck {
       this.framework = SymbolTable.Framework.DRUPAL;
     } else if (tree.namespaceName().qualifiedName().startsWith("Yii")) {
       this.framework = SymbolTable.Framework.YII;
+    } else if (tree.namespaceName().qualifiedName().startsWith("WP_CLI") || tree.namespaceName().qualifiedName().startsWith("WP\\")) {
+      this.framework = SymbolTable.Framework.WORDPRESS;
     }
   }
 
