@@ -35,6 +35,7 @@ class ClassNameCheckTest {
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
   }
 
+  @Test
   void yiiValue() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(yiiFileName));
   }

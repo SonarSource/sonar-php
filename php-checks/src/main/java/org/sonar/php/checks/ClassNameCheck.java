@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -46,12 +46,13 @@ public class ClassNameCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
+  public void visitScript(ScriptTree tree) {
     if (frameworkYiiUsed()) {
+      this.format = YII;
       pattern = Pattern.compile(YII);
     }
 
-    super.visitCompilationUnit(tree);
+    super.visitScript(tree);
   }
 
   @Override

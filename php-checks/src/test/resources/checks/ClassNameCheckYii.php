@@ -1,9 +1,9 @@
 <?php
 
-use yii\db\Migration;
+use Yii\DB\Migration;
 
 
-class myClass {  // NOK {{Rename class "myClass" to match the regular expression ^[a-z0-9_]+$}}
+class myClass {  // NOK {{Rename class "myClass" to match the regular expression ^[a-z0-9_]+$.}}
 //    ^^^^^^^
 }
 
