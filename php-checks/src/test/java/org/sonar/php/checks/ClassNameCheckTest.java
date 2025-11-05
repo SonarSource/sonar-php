@@ -36,7 +36,7 @@ class ClassNameCheckTest {
   }
 
   @Test
-  void yiiValue() throws Exception {
+  void yiiValue() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(yiiFileName));
   }
 
@@ -50,7 +50,7 @@ class ClassNameCheckTest {
   }
 
   @Test
-  void customYii() throws Exception {
+  void customYii() {
     check.format = "^[a-z0-9_]+$";
     List<PhpIssue> yiiExpectedIssues = new LinkedList<>();
     yiiExpectedIssues.add(new LineIssue(check, 6, "Rename class \"myClass\" to match the regular expression " + check.format + "."));
