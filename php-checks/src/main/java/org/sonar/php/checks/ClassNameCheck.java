@@ -33,6 +33,7 @@ public class ClassNameCheck extends PHPVisitorCheck {
 
   public static final String DEFAULT = "^[A-Z][a-zA-Z0-9]*$";
   public static final String YII = "^[a-z0-9_]+$";
+  public static final Pattern YII_PATTERN = Pattern.compile(YII);
   private Pattern pattern = null;
 
   @RuleProperty(
@@ -48,8 +49,8 @@ public class ClassNameCheck extends PHPVisitorCheck {
   @Override
   public void visitScript(ScriptTree tree) {
     if (frameworkYiiUsed()) {
-      this.format = YII;
-      pattern = Pattern.compile(YII);
+      format = YII;
+      pattern = YII_PATTERN;
     }
 
     super.visitScript(tree);
@@ -61,7 +62,7 @@ public class ClassNameCheck extends PHPVisitorCheck {
     String className = nameTree.text();
 
     if (!pattern.matcher(className).matches()) {
-      String message = String.format(MESSAGE, className, this.format);
+      String message = String.format(MESSAGE, className, format);
       context().newIssue(this, nameTree, message);
     }
   }

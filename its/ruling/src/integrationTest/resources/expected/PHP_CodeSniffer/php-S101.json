@@ -9,7 +9,20 @@
 6,
 10
 ],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneInterfacePerFileUnitTest.inc": [
+2,
+6,
+10
+],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneObjectStructurePerFileUnitTest.inc": [
+2,
+6,
+10,
+14,
+18,
+22
+],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/Files/OneTraitPerFileUnitTest.inc": [
 2,
 6,
 10
@@ -29,6 +42,9 @@
 125,
 164
 ],
+"PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/InterfaceNameSuffixUnitTest.inc": [
+24
+],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidClassNameUnitTest.inc": [
 3,
 5,
@@ -38,11 +54,42 @@
 13,
 15,
 19,
+22,
+24,
+26,
+28,
+30,
+32,
+34,
+38,
 40,
-44
+42,
+44,
+46,
+48,
+50,
+52,
+54,
+56,
+58,
+60,
+64,
+66,
+68,
+70,
+72,
+74,
+76,
+78,
+80,
+82,
+86,
+88,
+90
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
 3,
+63,
 109,
 151,
 173,
@@ -62,13 +109,20 @@
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Classes/ClassFileNameUnitTest.inc": [
 12,
-13
+13,
+15,
+16,
+18,
+19,
+21,
+22
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/PHP/DisallowMultipleAssignmentsUnitTest.inc": [
 31
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/Scope/MethodScopeUnitTest.inc": [
-12
+12,
+29
 ],
 "PHP_CodeSniffer:src/Standards/Squiz/Tests/WhiteSpace/MemberVarSpacingUnitTest.inc": [
 219,
