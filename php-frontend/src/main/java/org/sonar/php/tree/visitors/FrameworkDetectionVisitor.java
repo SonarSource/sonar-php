@@ -28,10 +28,13 @@ public class FrameworkDetectionVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitUseClause(UseClauseTree tree) {
-    if (tree.namespaceName().qualifiedName().startsWith("Drupal")) {
+    String qualifiedName = tree.namespaceName().qualifiedName();
+    if (qualifiedName.startsWith("Drupal")) {
       this.framework = SymbolTable.Framework.DRUPAL;
-    } else if (tree.namespaceName().qualifiedName().startsWith("Yii")) {
+    } else if (qualifiedName.startsWith("Yii")) {
       this.framework = SymbolTable.Framework.YII;
+    } else if (qualifiedName.startsWith("WP_CLI") || qualifiedName.startsWith("WP\\")) {
+      this.framework = SymbolTable.Framework.WORDPRESS;
     }
   }
 
