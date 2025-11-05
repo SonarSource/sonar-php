@@ -26,7 +26,7 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 class ClassNameCheckTest {
 
-  private ClassNameCheck check = new ClassNameCheck();
+  private final ClassNameCheck check = new ClassNameCheck();
   private final String fileName = "ClassNameCheck.php";
   private final String yiiFileName = "ClassNameCheckYii.php";
 
@@ -45,7 +45,9 @@ class ClassNameCheckTest {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
     List<PhpIssue> expectedIssues = new LinkedList<>();
     expectedIssues.add(new LineIssue(check, 3, "Rename class \"myClass\" to match the regular expression " + check.format + "."));
-    expectedIssues.add(new LineIssue(check, 13, "Rename class \"m150513_053633_add_dummy_user\" to match the regular expression " + check.format + "."));
+    expectedIssues.add(new LineIssue(check, 18, "Rename interface \"My_Interface\" to match the regular expression " + check.format + "."));
+    expectedIssues.add(new LineIssue(check, 21, "Rename trait \"My_Trait\" to match the regular expression " + check.format + "."));
+    expectedIssues.add(new LineIssue(check, 15, "Rename class \"m150513_053633_add_dummy_user\" to match the regular expression " + check.format + "."));
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), expectedIssues);
   }
 

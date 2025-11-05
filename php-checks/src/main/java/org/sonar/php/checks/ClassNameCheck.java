@@ -16,20 +16,25 @@
  */
 package org.sonar.php.checks;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = ClassNameCheck.KEY)
+@Rule(key = "S101")
 public class ClassNameCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "S101";
-  private static final String MESSAGE = "Rename class \"%s\" to match the regular expression %s.";
+  private static final String MESSAGE = "Rename %s \"%s\" to match the regular expression %s.";
+  private static final Map<Tree.Kind, String> DECLARATION_TYPE_LABELS = Map.of(
+    Tree.Kind.CLASS_DECLARATION, "class",
+    Tree.Kind.INTERFACE_DECLARATION, "interface",
+    Tree.Kind.TRAIT_DECLARATION, "trait");
 
   public static final String DEFAULT = "^[A-Z][a-zA-Z0-9]*$";
   public static final String YII = "^[a-z0-9_]+$";
@@ -62,7 +67,8 @@ public class ClassNameCheck extends PHPVisitorCheck {
     String className = nameTree.text();
 
     if (!pattern.matcher(className).matches()) {
-      String message = String.format(MESSAGE, className, format);
+      String declarationType = DECLARATION_TYPE_LABELS.get(tree.getKind());
+      String message = String.format(MESSAGE, declarationType, className, format);
       context().newIssue(this, nameTree, message);
     }
   }
