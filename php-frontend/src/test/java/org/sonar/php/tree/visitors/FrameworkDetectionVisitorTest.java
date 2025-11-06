@@ -60,7 +60,6 @@ class FrameworkDetectionVisitorTest {
       <?php
 
       use WP_CLI\\Utils;
-      use Symfony\\Component\\HttpFoundation\\Request;
       """;
     var tree = ParsingTestUtils.parseSource(code);
     var visitor = new FrameworkDetectionVisitor();
