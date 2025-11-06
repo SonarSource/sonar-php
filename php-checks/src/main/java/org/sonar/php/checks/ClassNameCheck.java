@@ -35,6 +35,10 @@ public class ClassNameCheck extends PHPSubscriptionCheck {
   private static final String MESSAGE = "Rename class \"%s\" to match the regular expression %s.";
 
   public static final String DEFAULT = "^[A-Z][a-zA-Z0-9]*$";
+  public static final List<String> YII_DB_CLASSES = List.of(
+    "yii\\db\\migration",
+    "yii\\mongodb\\migration");
+
   private Pattern pattern = null;
 
   @RuleProperty(
@@ -76,6 +80,6 @@ public class ClassNameCheck extends PHPSubscriptionCheck {
       return false;
     }
     String qualifiedName = superClass.qualifiedName().toString();
-    return "yii\\db\\migration".equals(qualifiedName);
+    return YII_DB_CLASSES.contains(qualifiedName);
   }
 }
