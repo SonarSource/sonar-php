@@ -69,8 +69,8 @@ If you have an idea for a rule, but you are not sure that everyone needs it you 
     * `ParameterTree` now has a `visibility` method.
     
 
-# <a name="testing"></a>Testing
-To run tests locally follow these instructions.
+# <a name="testing"></a>Build & Test
+To build and run tests locally follow these instructions.
 
 To configure build dependencies, run the following command:
 
