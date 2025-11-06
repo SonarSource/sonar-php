@@ -41,7 +41,7 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   public static final String DEFAULT_DRUPAL = "^[a-z][a-z0-9_]*$";
   private static final Pattern patternDrupal = Pattern.compile(DEFAULT_DRUPAL);
-  public static final String DEFAULT_WORDPRESS = "^[a-z][a-z0-9_]*$";
+  private static final String DEFAULT_WORDPRESS = "^[a-z][a-z0-9_]*$";
   private static final Pattern patternWordpress = Pattern.compile(DEFAULT_WORDPRESS);
 
   private Pattern pattern = null;
