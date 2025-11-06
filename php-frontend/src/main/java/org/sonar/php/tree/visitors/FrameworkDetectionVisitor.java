@@ -16,7 +16,6 @@
  */
 package org.sonar.php.tree.visitors;
 
-import java.util.Locale;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
