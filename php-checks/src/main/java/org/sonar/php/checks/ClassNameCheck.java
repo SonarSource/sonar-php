@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.symbols.ClassSymbol;
+import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
@@ -52,6 +54,10 @@ public class ClassNameCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
+    if (skipYiiDbMigrationClass((ClassDeclarationTreeImpl) tree)) {
+      return;
+    }
+
     NameIdentifierTree nameTree = ((ClassDeclarationTree) tree).name();
     String className = nameTree.text();
 
@@ -61,4 +67,15 @@ public class ClassNameCheck extends PHPSubscriptionCheck {
     }
   }
 
+  /**
+   * Skip generated Yii DB Migration classes as they have a specific naming convention.
+   */
+  private static boolean skipYiiDbMigrationClass(ClassDeclarationTreeImpl tree) {
+    ClassSymbol superClass = tree.symbol().superClass().orElse(null);
+    if (superClass == null) {
+      return false;
+    }
+    String qualifiedName = superClass.qualifiedName().toString();
+    return "yii\\db\\migration".equals(qualifiedName);
+  }
 }
