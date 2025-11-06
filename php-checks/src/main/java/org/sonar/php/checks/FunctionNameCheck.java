@@ -40,7 +40,7 @@ public class FunctionNameCheck extends PHPVisitorCheck {
     "__set_state", "__clone", "__debugInfo");
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   public static final String DEFAULT_DRUPAL = "^[a-z][a-z0-9_]*$";
-  private static final Pattern patternDrupal = Pattern.compile(DEFAULT_DRUPAL);
+  private static final Pattern PATTERN_DRUPAL = Pattern.compile(DEFAULT_DRUPAL);
   private static final String DEFAULT_WORDPRESS = "^[a-z][a-z0-9_]*$";
   private static final Pattern PATTERN_WORDPRESS = Pattern.compile(DEFAULT_WORDPRESS);
 
