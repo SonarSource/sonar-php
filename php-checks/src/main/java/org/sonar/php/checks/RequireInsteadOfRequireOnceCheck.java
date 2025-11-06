@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -36,11 +37,15 @@ public class RequireInsteadOfRequireOnceCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
 
     String callee = tree.callee().toString();
-
-    if (WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))) {
+    if (!isLaravelFrameworkUsed() && WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))) {
       String message = String.format(MESSAGE, callee, callee + "_once");
       context().newIssue(this, tree.callee(), message);
     }
+
+  }
+
+  private boolean isLaravelFrameworkUsed() {
+    return context().getFramework() == SymbolTable.Framework.LARAVEL;
   }
 
 }
