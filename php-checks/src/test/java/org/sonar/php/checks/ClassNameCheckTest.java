@@ -26,12 +26,12 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 class ClassNameCheckTest {
 
-  private ClassNameCheck check = new ClassNameCheck();
-  private String fileName = "ClassNameCheck.php";
+  private final ClassNameCheck check = new ClassNameCheck();
+  private static final String FILE = "ClassNameCheck.php";
 
   @Test
   void defaultValue() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE));
   }
 
   @Test
@@ -39,6 +39,6 @@ class ClassNameCheckTest {
     check.format = "^[a-z][a-zA-Z0-9]*$";
     List<PhpIssue> expectedIssues = new LinkedList<>();
     expectedIssues.add(new LineIssue(check, 9, "Rename class \"MyClass\" to match the regular expression " + check.format + "."));
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), expectedIssues);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE), expectedIssues);
   }
 }
