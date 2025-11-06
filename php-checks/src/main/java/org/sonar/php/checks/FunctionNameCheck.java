@@ -77,7 +77,7 @@ public class FunctionNameCheck extends PHPVisitorCheck {
     }
   }
 
-  private Pattern computePattern() {
+  private Pattern getPattern() {
     if (isDrupal()) {
       return patternDrupal;
     } else if (isWordpress()) {
