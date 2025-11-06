@@ -19,6 +19,7 @@ package org.sonar.php.checks;
 import java.util.Locale;
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -48,11 +49,11 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
 
     String callee = tree.callee().toString();
-
-    if (WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH)) && !isAutoloadImport(tree)) {
+    if (!isLaravelFrameworkUsed() && WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH)) && !isAutoloadImport(tree)) {
       String message = String.format(MESSAGE, callee);
       context().newIssue(this, tree.callee(), message);
     }
+
   }
 
   private boolean isExcludedFile() {
@@ -63,5 +64,9 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
   private static boolean isAutoloadImport(FunctionCallTree tree) {
     String call = tree.toString();
     return (call.startsWith("include") || call.startsWith("require")) && call.endsWith("autoload.php'");
+  }
+
+  private boolean isLaravelFrameworkUsed() {
+    return context().getFramework() == SymbolTable.Framework.LARAVEL;
   }
 }
