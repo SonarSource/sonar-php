@@ -53,4 +53,19 @@ class FrameworkDetectionVisitorTest {
 
     Assertions.assertThat(visitor.getFramework()).isEqualTo(SymbolTable.Framework.EMPTY);
   }
+
+  @Test
+  void shouldDetectWordPressByUseClause() {
+    var code = """
+      <?php
+
+      use WP_CLI\\Utils;
+      """;
+    var tree = ParsingTestUtils.parseSource(code);
+    var visitor = new FrameworkDetectionVisitor();
+
+    tree.accept(visitor);
+
+    Assertions.assertThat(visitor.getFramework()).isEqualTo(SymbolTable.Framework.WORDPRESS);
+  }
 }

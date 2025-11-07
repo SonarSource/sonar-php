@@ -40,7 +40,9 @@ public class FunctionNameCheck extends PHPVisitorCheck {
     "__set_state", "__clone", "__debugInfo");
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   public static final String DEFAULT_DRUPAL = "^[a-z][a-z0-9_]*$";
-  private static final Pattern patternDrupal = Pattern.compile(DEFAULT_DRUPAL);
+  private static final Pattern PATTERN_DRUPAL = Pattern.compile(DEFAULT_DRUPAL);
+  private static final String DEFAULT_WORDPRESS = "^[a-z][a-z0-9_]*$";
+  private static final Pattern PATTERN_WORDPRESS = Pattern.compile(DEFAULT_WORDPRESS);
   private Pattern pattern = null;
 
   @RuleProperty(
@@ -69,26 +71,26 @@ public class FunctionNameCheck extends PHPVisitorCheck {
 
   private void check(NameIdentifierTree name) {
     String functionName = name.text();
-    if (!computePattern().matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
-      context().newIssue(this, name, String.format(MESSAGE, functionName, computeFormat()));
+    if (!getPattern().matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
+      context().newIssue(this, name, String.format(MESSAGE, functionName, getFormat()));
     }
   }
 
-  private Pattern computePattern() {
-    if (isDrupal()) {
-      return patternDrupal;
+  private Pattern getPattern() {
+    if (context().isFramework(SymbolTable.Framework.DRUPAL)) {
+      return PATTERN_DRUPAL;
+    } else if (context().isFramework(SymbolTable.Framework.WORDPRESS)) {
+      return PATTERN_WORDPRESS;
     }
     return pattern;
   }
 
-  private String computeFormat() {
-    if (isDrupal()) {
+  private String getFormat() {
+    if (context().isFramework(SymbolTable.Framework.DRUPAL)) {
       return DEFAULT_DRUPAL;
+    } else if (context().isFramework(SymbolTable.Framework.WORDPRESS)) {
+      return DEFAULT_WORDPRESS;
     }
-    return format;
-  }
-
-  private boolean isDrupal() {
-    return context().getFramework() == SymbolTable.Framework.DRUPAL && format.equals(DEFAULT);
+    return DEFAULT;
   }
 }
