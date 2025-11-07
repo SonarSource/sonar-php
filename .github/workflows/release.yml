@@ -34,4 +34,4 @@ jobs:
       dryRun: ${{ inputs.dryRun }}
       publishToBinaries: true
       mavenCentralSync: true
-      slackChannel: squad-security-cloud-notifs
+      slackChannel: squad-security-taint-notifs

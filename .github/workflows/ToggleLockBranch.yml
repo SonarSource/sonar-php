@@ -31,5 +31,5 @@ jobs:
         with:
           github-token: ${{ fromJSON(steps.secrets.outputs.vault).lock_token }}
           slack-token: ${{ fromJSON(steps.secrets.outputs.vault).slack_api_token }}
-          slack-channel: squad-security-cloud-notifs
+          slack-channel: squad-security-taint-notifs
           branch-pattern: ${{ inputs.branch }}
