@@ -80,7 +80,7 @@ jobs:
           gradle-args: -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: test-results
           path: '**/test-results/**/*.xml'
@@ -121,13 +121,13 @@ jobs:
           gradle-args: -x artifactoryPublish -x sonar
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: qa-os-win-test-results
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: qa-os-win-reports
           path: '**/build/reports/**/*'
@@ -181,13 +181,13 @@ jobs:
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: qa-plugin-test-results-${{ matrix.SQ_VERSION }}
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: qa-plugin-reports-${{ matrix.SQ_VERSION }}
           path: '**/build/reports/**/*'
@@ -232,13 +232,13 @@ jobs:
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpGeneralRulingTest.test${PHP_PROJECT}" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: qa-ruling-test-results-${{ matrix.PHP_PROJECT }}
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: qa-ruling-reports-${{ matrix.PHP_PROJECT }}
           path: '**/build/reports/**/*'
@@ -279,13 +279,13 @@ jobs:
           ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpPrAnalysisTest" --info --build-cache --console plain --no-daemon
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: qa-pr-analysis-test-results
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: qa-pr-analysis-reports
           path: '**/build/reports/**/*'
