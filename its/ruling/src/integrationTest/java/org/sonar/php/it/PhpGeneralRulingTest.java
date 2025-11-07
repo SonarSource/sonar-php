@@ -33,6 +33,8 @@ import static org.sonar.php.it.RulingHelper.assertAnalyzerLogs;
 
 public class PhpGeneralRulingTest {
 
+  public static final String SONAR_EXCLUSIONS = "sonar.exclusions";
+
   @RegisterExtension
   public static OrchestratorExtension ORCHESTRATOR = RulingHelper.getOrchestrator();
 
@@ -66,7 +68,7 @@ public class PhpGeneralRulingTest {
   void testMonica() throws Exception {
     // To avoid error: File tests/Unit/Traits/SearchableTest.php can't be indexed twice...
     // the tests directory needs to be excluded
-    testProject("monica", "sonar.exclusions", "tests/**");
+    testProject("monica", SONAR_EXCLUSIONS, "tests/**");
   }
 
   @Test
@@ -116,10 +118,13 @@ public class PhpGeneralRulingTest {
       .setProperty("sonar.cpd.exclusions", "**/*")
       .setProperty("sonar.scm.disabled", "true");
 
-    if (System.getProperty("os.name").toLowerCase().contains("win")) {
-      // On unix systems, files or directories starting with a dot are hidden, so we don't get them from the scanner
-      // In order to have the same behavior on all systems, we exclude them on windows
-      build.setProperty("sonar.exclusions", "**/.*, **/.*/**");
+    String existingExclusions = build.getProperty(SONAR_EXCLUSIONS);
+    String dotFileExclusions = "**/.*, **/.*/**";
+
+    if (existingExclusions != null && !existingExclusions.isEmpty()) {
+      build.setProperty(SONAR_EXCLUSIONS, existingExclusions + ", " + dotFileExclusions);
+    } else {
+      build.setProperty(SONAR_EXCLUSIONS, dotFileExclusions);
     }
 
     var buildResult = ORCHESTRATOR.executeBuild(build);
