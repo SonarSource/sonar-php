@@ -118,7 +118,7 @@ public class PhpGeneralRulingTest {
       .setProperty("sonar.cpd.exclusions", "**/*")
       .setProperty("sonar.scm.disabled", "true");
 
-    //These exclusions were placed to avoid Windows os raising errors on the exclusions of test monica
+    // These exclusions were placed to avoid Windows os raising errors on the exclusions of test monica
     String existingExclusions = build.getProperty(SONAR_EXCLUSIONS);
     String dotFileExclusions = "**/.*, **/.*/**";
     if (existingExclusions != null && !existingExclusions.isEmpty()) {
