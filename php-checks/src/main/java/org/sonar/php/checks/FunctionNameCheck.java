@@ -77,20 +77,24 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   }
 
   private Pattern getPattern() {
-    if (context().isFramework(SymbolTable.Framework.DRUPAL)) {
+    if (checkFormat(SymbolTable.Framework.DRUPAL)) {
       return PATTERN_DRUPAL;
-    } else if (context().isFramework(SymbolTable.Framework.WORDPRESS)) {
+    } else if (checkFormat(SymbolTable.Framework.WORDPRESS)) {
       return PATTERN_WORDPRESS;
     }
     return pattern;
   }
 
   private String getFormat() {
-    if (context().isFramework(SymbolTable.Framework.DRUPAL)) {
+    if (checkFormat(SymbolTable.Framework.DRUPAL)) {
       return DEFAULT_DRUPAL;
-    } else if (context().isFramework(SymbolTable.Framework.WORDPRESS)) {
+    } else if (checkFormat(SymbolTable.Framework.WORDPRESS)) {
       return DEFAULT_WORDPRESS;
     }
-    return DEFAULT;
+    return format;
+  }
+
+  private boolean checkFormat(SymbolTable.Framework targetFramework) {
+    return context().isFramework(targetFramework) && format.equals(DEFAULT);
   }
 }
