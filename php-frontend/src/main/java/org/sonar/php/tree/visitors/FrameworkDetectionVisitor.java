@@ -28,10 +28,13 @@ public class FrameworkDetectionVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitUseClause(UseClauseTree tree) {
-    if (tree.namespaceName().qualifiedName().startsWith("Drupal")) {
+    String nameSpaceName = tree.namespaceName().qualifiedName();
+    if (nameSpaceName.startsWith("Drupal")) {
       this.framework = SymbolTable.Framework.DRUPAL;
-    } else if (tree.namespaceName().qualifiedName().startsWith("Yii")) {
+    } else if (nameSpaceName.startsWith("Yii")) {
       this.framework = SymbolTable.Framework.YII;
+    } else if (nameSpaceName.startsWith("Illuminate")) {
+      this.framework = SymbolTable.Framework.LARAVEL;
     }
   }
 

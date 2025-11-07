@@ -20,10 +20,17 @@ import org.junit.jupiter.api.Test;
 import org.sonar.plugins.php.CheckVerifier;
 
 class RequireInsteadOfRequireOnceCheckTest {
+  private static final String FILE_NAME = "RequireInsteadOfRequireOnceCheck.php";
+  private static final String FILE_NAME_LARAVEL = "RequireInsteadOfRequireOnceCheckLaravel.php";
 
   @Test
-  void test() throws Exception {
-    CheckVerifier.verify(new RequireInsteadOfRequireOnceCheck(), "RequireInsteadOfRequireOnceCheck.php");
+  void test() {
+    CheckVerifier.verify(new RequireInsteadOfRequireOnceCheck(), FILE_NAME);
+  }
+
+  @Test
+  void testLaravel() {
+    CheckVerifier.verifyNoIssue(new RequireInsteadOfRequireOnceCheck(), FILE_NAME_LARAVEL);
   }
 
 }

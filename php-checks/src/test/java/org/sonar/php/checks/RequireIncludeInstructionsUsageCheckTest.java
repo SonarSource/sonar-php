@@ -22,13 +22,18 @@ import org.sonar.plugins.php.CheckVerifier;
 class RequireIncludeInstructionsUsageCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new RequireIncludeInstructionsUsageCheck(), "RequireIncludeInstructionsUsageCheck.php");
   }
 
   @Test
-  void ignoreSpecialFiles() throws Exception {
+  void ignoreSpecialFiles() {
     CheckVerifier.verifyNoIssue(new RequireIncludeInstructionsUsageCheck(), "autoload.php");
+  }
+
+  @Test
+  void testLaravel() {
+    CheckVerifier.verifyNoIssue(new RequireIncludeInstructionsUsageCheck(), "RequireIncludeInstructionsUsageCheckLaravel.php");
   }
 
 }

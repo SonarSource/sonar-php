@@ -128,4 +128,8 @@ public interface CheckContext {
   default SymbolTable.Framework getFramework() {
     return symbolTable().getFramework();
   }
+
+  default boolean isFramework(SymbolTable.Framework expectedFramework) {
+    return getFramework() == expectedFramework;
+  }
 }

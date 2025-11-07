@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -29,6 +30,7 @@ public class RequireInsteadOfRequireOnceCheck extends PHPVisitorCheck {
   public static final String KEY = "S2003";
   private static final String MESSAGE = "Replace \"%s\" with \"%s\".";
 
+  private static final SymbolTable.Framework USED_FRAMEWORK = SymbolTable.Framework.LARAVEL;
   private static final List<String> WRONG_FUNCTIONS = Arrays.asList("require", "include");
 
   @Override
@@ -36,11 +38,10 @@ public class RequireInsteadOfRequireOnceCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
 
     String callee = tree.callee().toString();
-
-    if (WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))) {
+    if (!context().isFramework(USED_FRAMEWORK) && WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))) {
       String message = String.format(MESSAGE, callee, callee + "_once");
       context().newIssue(this, tree.callee(), message);
     }
-  }
 
+  }
 }
