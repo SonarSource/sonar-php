@@ -43,6 +43,7 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   private static final Pattern PATTERN_DRUPAL_AND_WORDPRESS = Pattern.compile(FORMAT_DRUPAL_AND_WORDPRESS);
 
   private Pattern pattern = null;
+  boolean wasDefaultOverridden = false;
 
   @RuleProperty(
     key = "format",
@@ -52,6 +53,7 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   @Override
   public void init() {
     pattern = Pattern.compile(format);
+    wasDefaultOverridden = !format.equals(DEFAULT);
   }
 
   @Override
@@ -70,34 +72,27 @@ public class FunctionNameCheck extends PHPVisitorCheck {
 
   private void check(NameIdentifierTree name) {
     String functionName = name.text();
+
     if (!getPattern().matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
       context().newIssue(this, name, String.format(MESSAGE, functionName, getFormat()));
     }
   }
 
   private Pattern getPattern() {
-    if (isFrameworkDrupalOrWordpress()) {
+    if (isFrameworkDrupalOrWordpress() && !wasDefaultOverridden) {
       return PATTERN_DRUPAL_AND_WORDPRESS;
     }
     return pattern;
   }
 
   private String getFormat() {
-    if (isFrameworkDrupalOrWordpress()) {
+    if (isFrameworkDrupalOrWordpress() && !wasDefaultOverridden) {
       return FORMAT_DRUPAL_AND_WORDPRESS;
     }
     return format;
   }
 
   private boolean isFrameworkDrupalOrWordpress() {
-    return isFrameworkMatching(SymbolTable.Framework.DRUPAL) || isFrameworkMatching(SymbolTable.Framework.WORDPRESS);
-  }
-
-  private boolean isFrameworkMatching(SymbolTable.Framework targetFramework) {
-    return context().isFramework(targetFramework) && isFormatOverridden();
-  }
-
-  private boolean isFormatOverridden() {
-    return format.equals(DEFAULT);
+    return context().isFramework(SymbolTable.Framework.DRUPAL) || context().isFramework((SymbolTable.Framework.WORDPRESS));
   }
 }
