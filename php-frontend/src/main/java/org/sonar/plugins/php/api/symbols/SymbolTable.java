@@ -49,5 +49,6 @@ public interface SymbolTable {
     EMPTY,
     YII,
     LARAVEL,
+    WORDPRESS,
   }
 }

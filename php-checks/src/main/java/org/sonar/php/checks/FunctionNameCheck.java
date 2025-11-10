@@ -39,9 +39,11 @@ public class FunctionNameCheck extends PHPVisitorCheck {
     "__set", "__isset", "__unset", "__sleep", "__wakeup", "__toString", "__invoke",
     "__set_state", "__clone", "__debugInfo");
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
-  public static final String DEFAULT_DRUPAL = "^[a-z][a-z0-9_]*$";
-  private static final Pattern patternDrupal = Pattern.compile(DEFAULT_DRUPAL);
+  public static final String FORMAT_DRUPAL_AND_WORDPRESS = "^[a-z][a-z0-9_]*$";
+  private static final Pattern PATTERN_DRUPAL_AND_WORDPRESS = Pattern.compile(FORMAT_DRUPAL_AND_WORDPRESS);
+
   private Pattern pattern = null;
+  boolean wasDefaultOverridden = false;
 
   @RuleProperty(
     key = "format",
@@ -51,6 +53,7 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   @Override
   public void init() {
     pattern = Pattern.compile(format);
+    wasDefaultOverridden = !format.equals(DEFAULT);
   }
 
   @Override
@@ -69,26 +72,27 @@ public class FunctionNameCheck extends PHPVisitorCheck {
 
   private void check(NameIdentifierTree name) {
     String functionName = name.text();
-    if (!computePattern().matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
-      context().newIssue(this, name, String.format(MESSAGE, functionName, computeFormat()));
+
+    if (!getPattern().matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
+      context().newIssue(this, name, String.format(MESSAGE, functionName, getFormat()));
     }
   }
 
-  private Pattern computePattern() {
-    if (isDrupal()) {
-      return patternDrupal;
+  private Pattern getPattern() {
+    if (isFrameworkDrupalOrWordpress() && !wasDefaultOverridden) {
+      return PATTERN_DRUPAL_AND_WORDPRESS;
     }
     return pattern;
   }
 
-  private String computeFormat() {
-    if (isDrupal()) {
-      return DEFAULT_DRUPAL;
+  private String getFormat() {
+    if (isFrameworkDrupalOrWordpress() && !wasDefaultOverridden) {
+      return FORMAT_DRUPAL_AND_WORDPRESS;
     }
     return format;
   }
 
-  private boolean isDrupal() {
-    return context().getFramework() == SymbolTable.Framework.DRUPAL && format.equals(DEFAULT);
+  private boolean isFrameworkDrupalOrWordpress() {
+    return context().isFramework(SymbolTable.Framework.DRUPAL) || context().isFramework((SymbolTable.Framework.WORDPRESS));
   }
 }
