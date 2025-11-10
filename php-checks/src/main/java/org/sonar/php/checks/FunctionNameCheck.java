@@ -90,10 +90,10 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   }
 
   private boolean isFrameworkDrupalOrWordpress() {
-    return isFormatMatching(SymbolTable.Framework.DRUPAL) || isFormatMatching(SymbolTable.Framework.WORDPRESS);
+    return isFrameworkMatching(SymbolTable.Framework.DRUPAL) || isFrameworkMatching(SymbolTable.Framework.WORDPRESS);
   }
 
-  private boolean isFormatMatching(SymbolTable.Framework targetFramework) {
+  private boolean isFrameworkMatching(SymbolTable.Framework targetFramework) {
     return context().isFramework(targetFramework) && isFormatOverridden();
   }
 
