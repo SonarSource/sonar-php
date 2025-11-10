@@ -39,10 +39,9 @@ public class FunctionNameCheck extends PHPVisitorCheck {
     "__set", "__isset", "__unset", "__sleep", "__wakeup", "__toString", "__invoke",
     "__set_state", "__clone", "__debugInfo");
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
-  public static final String DEFAULT_DRUPAL = "^[a-z][a-z0-9_]*$";
-  private static final Pattern PATTERN_DRUPAL = Pattern.compile(DEFAULT_DRUPAL);
-  private static final String DEFAULT_WORDPRESS = "^[a-z][a-z0-9_]*$";
-  private static final Pattern PATTERN_WORDPRESS = Pattern.compile(DEFAULT_WORDPRESS);
+  public static final String FORMAT_DRUPAL_AND_WORDPRESS = "^[a-z][a-z0-9_]*$";
+  private static final Pattern PATTERN_DRUPAL_AND_WORDPRESS = Pattern.compile(FORMAT_DRUPAL_AND_WORDPRESS);
+
   private Pattern pattern = null;
 
   @RuleProperty(
@@ -77,24 +76,28 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   }
 
   private Pattern getPattern() {
-    if (checkFormat(SymbolTable.Framework.DRUPAL)) {
-      return PATTERN_DRUPAL;
-    } else if (checkFormat(SymbolTable.Framework.WORDPRESS)) {
-      return PATTERN_WORDPRESS;
+    if (isFrameworkDrupalOrWordpress()) {
+      return PATTERN_DRUPAL_AND_WORDPRESS;
     }
     return pattern;
   }
 
   private String getFormat() {
-    if (checkFormat(SymbolTable.Framework.DRUPAL)) {
-      return DEFAULT_DRUPAL;
-    } else if (checkFormat(SymbolTable.Framework.WORDPRESS)) {
-      return DEFAULT_WORDPRESS;
+    if (isFrameworkDrupalOrWordpress()) {
+      return FORMAT_DRUPAL_AND_WORDPRESS;
     }
     return format;
   }
 
-  private boolean checkFormat(SymbolTable.Framework targetFramework) {
-    return context().isFramework(targetFramework) && format.equals(DEFAULT);
+  private boolean isFrameworkDrupalOrWordpress() {
+    return isFormatMatching(SymbolTable.Framework.DRUPAL) || isFormatMatching(SymbolTable.Framework.WORDPRESS);
+  }
+
+  private boolean isFormatMatching(SymbolTable.Framework targetFramework) {
+    return context().isFramework(targetFramework) && isFormatOverridden();
+  }
+
+  private boolean isFormatOverridden() {
+    return format.equals(DEFAULT);
   }
 }
