@@ -16,13 +16,16 @@
  */
 package org.sonar.php.checks;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -32,6 +35,7 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
+import static org.sonar.php.checks.utils.PhpFileUtils.isImportmapPhp;
 import static org.sonar.php.checks.utils.RegexUtils.firstOf;
 import static org.sonar.php.checks.utils.RegexUtils.oneOrMore;
 import static org.sonar.php.checks.utils.RegexUtils.optional;
@@ -77,6 +81,8 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
     ONLY_ALPHANUMERIC_UNDERSCORES_HYPHENS_AND_PERIODS);
   private static final Pattern ALLOWED_DUPLICATED_LITERALS = Pattern.compile(FULL_ALLOWED_LITERALS_REGEX);
 
+  private static volatile boolean SYMFONY_FRAMEWORK_DETECTED = false;
+
   public static final int THRESHOLD_DEFAULT = 3;
   public static final int MINIMAL_LITERAL_LENGTH_DEFAULT = 5;
 
@@ -95,12 +101,21 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    firstOccurrenceTrees.clear();
-    sameLiteralOccurrences.clear();
+    String stringFilePath = Objects.requireNonNull(context().getPhpFile().uri().getPath());
 
-    super.visitCompilationUnit(tree);
+    if(!SYMFONY_FRAMEWORK_DETECTED && isFrameworkSymfony()){
+      SYMFONY_FRAMEWORK_DETECTED = true;
+    }
 
-    finish();
+    //substring(1) to remove leading '/' added by URI
+    if(!(SYMFONY_FRAMEWORK_DETECTED && isImportmapPhp(stringFilePath.substring(1)))) {
+      firstOccurrenceTrees.clear();
+      sameLiteralOccurrences.clear();
+
+      super.visitCompilationUnit(tree);
+
+      finish();
+    }
   }
 
   private void finish() {
@@ -170,6 +185,10 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
     }
 
     return false;
+  }
+
+  private boolean isFrameworkSymfony() {
+    return context().isFramework(SymbolTable.Framework.SYMFONY);
   }
 
 }

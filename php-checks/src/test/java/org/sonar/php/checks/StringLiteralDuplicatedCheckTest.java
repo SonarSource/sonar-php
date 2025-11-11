@@ -54,4 +54,23 @@ class StringLiteralDuplicatedCheckTest {
   void arrayKeys() {
     CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/array_keys.php");
   }
+
+  @Test
+  void symfonyValidation() {
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/importmap.php");
+  }
+
+  @Test
+  void skipsImportmapPhpWhenSymfonyDetected() {
+    // First, verify a file that uses Symfony (simulate detection)
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/symfony_file.php");
+    // Then, verify that importmap.php is skipped (no issues should be reported)
+    CheckVerifier.verifyNoIssue(check, "StringLiteralDuplicatedCheck/importmap.php");
+  }
+
+  @Test
+  void analyzesImportmapPhpWhenSymfonyNotDetected() {
+    // When no Symfony file is present, importmap.php should be analyzed
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/importmap.php");
+  }
 }
