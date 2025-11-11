@@ -35,8 +35,6 @@ public class FrameworkDetectionVisitor extends PHPVisitorCheck {
       this.framework = SymbolTable.Framework.YII;
     } else if (nameSpaceName.startsWith("Illuminate")) {
       this.framework = SymbolTable.Framework.LARAVEL;
-    } else if (nameSpaceName.startsWith("Symfony")) {
-      this.framework = SymbolTable.Framework.SYMFONY;
     } else if (nameSpaceName.startsWith("WP_CLI") || nameSpaceName.startsWith("WP\\")) {
       this.framework = SymbolTable.Framework.WORDPRESS;
     }

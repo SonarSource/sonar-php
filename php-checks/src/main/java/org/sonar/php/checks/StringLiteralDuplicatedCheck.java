@@ -16,7 +16,6 @@
  */
 package org.sonar.php.checks;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -81,8 +79,6 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
     ONLY_ALPHANUMERIC_UNDERSCORES_HYPHENS_AND_PERIODS);
   private static final Pattern ALLOWED_DUPLICATED_LITERALS = Pattern.compile(FULL_ALLOWED_LITERALS_REGEX);
 
-  private static volatile boolean SYMFONY_FRAMEWORK_DETECTED = false;
-
   public static final int THRESHOLD_DEFAULT = 3;
   public static final int MINIMAL_LITERAL_LENGTH_DEFAULT = 5;
 
@@ -103,12 +99,8 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   public void visitCompilationUnit(CompilationUnitTree tree) {
     String stringFilePath = Objects.requireNonNull(context().getPhpFile().uri().getPath());
 
-    if(!SYMFONY_FRAMEWORK_DETECTED && isFrameworkSymfony()){
-      SYMFONY_FRAMEWORK_DETECTED = true;
-    }
-
-    //substring(1) to remove leading '/' added by URI
-    if(!(SYMFONY_FRAMEWORK_DETECTED && isImportmapPhp(stringFilePath.substring(1)))) {
+    // substring(1) to remove leading '/' added by URI
+    if (!isImportmapPhp(stringFilePath.substring(1))) {
       firstOccurrenceTrees.clear();
       sameLiteralOccurrences.clear();
 
@@ -185,10 +177,6 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
     }
 
     return false;
-  }
-
-  private boolean isFrameworkSymfony() {
-    return context().isFramework(SymbolTable.Framework.SYMFONY);
   }
 
 }

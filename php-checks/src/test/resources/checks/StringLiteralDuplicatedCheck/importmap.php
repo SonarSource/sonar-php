@@ -1,15 +1,15 @@
 <?php
 
-echo "aaaa()"; // Noncompliant {{Define a constant instead of duplicating this literal "aaaa()" 5 times.}}
-//   ^^^^^^^^
-echo "aaaa()"; // OK
+echo "aaaa()";
 
 echo "aaaa()";
-//   ^^^^^^^^< {{Duplication.}}
+
 echo "aaaa()";
-//   ^^^^^^^^< {{Duplication.}}
+
 echo "aaaa()";
-//   ^^^^^^^^< {{Duplication.}}
+
+echo "aaaa()";
+
 
 
 return [
