@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -96,7 +95,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    String fileName = Objects.requireNonNull(context().getPhpFile().filename());
+    String fileName = context().getPhpFile().filename();
 
     if (!"importmap.php".equals(fileName)) {
       firstOccurrenceTrees.clear();
