@@ -33,7 +33,6 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
-import static org.sonar.php.checks.utils.PhpFileUtils.isImportmapPhp;
 import static org.sonar.php.checks.utils.RegexUtils.firstOf;
 import static org.sonar.php.checks.utils.RegexUtils.oneOrMore;
 import static org.sonar.php.checks.utils.RegexUtils.optional;
@@ -97,10 +96,9 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    String stringFilePath = Objects.requireNonNull(context().getPhpFile().uri().getPath());
+    String fileName = Objects.requireNonNull(context().getPhpFile().filename());
 
-    // substring(1) to remove leading '/' added by URI
-    if (!isImportmapPhp(stringFilePath.substring(1))) {
+    if (!"importmap.php".equals(fileName)) {
       firstOccurrenceTrees.clear();
       sameLiteralOccurrences.clear();
 
