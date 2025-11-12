@@ -104,7 +104,6 @@ public class WordPressImportDetector {
     return INCLUDE_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT));
   }
 
-
   // Extracts the file path from a require/include function call
   private static Optional<String> extractFilePath(FunctionCallTree tree) {
     return CheckUtils.argument(tree, "", 0)
