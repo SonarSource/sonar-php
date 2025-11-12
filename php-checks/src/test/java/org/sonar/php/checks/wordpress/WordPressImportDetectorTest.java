@@ -144,6 +144,31 @@ class WordPressImportDetectorTest {
     CheckVerifier.verify(check, "WordPressImportDetector/case_insensitive.php");
   }
 
+  @Test
+  void testEmptyFile() {
+    CheckVerifier.verifyNoIssue(check, "WordPressImportDetector/empty_file.php");
+  }
+
+  @Test
+  void testWpContentDirectoryWithWpLoad() {
+    CheckVerifier.verify(check, "WordPressImportDetector/wp_content_wp_load.php");
+  }
+
+  @Test
+  void testWpContentDirectoryWithWpConfig() {
+    CheckVerifier.verify(check, "WordPressImportDetector/wp_content_wp_config.php");
+  }
+
+  @Test
+  void testWpContentDirectoryWithWpSettings() {
+    CheckVerifier.verify(check, "WordPressImportDetector/wp_content_wp_settings.php");
+  }
+
+  @Test
+  void testWpContentDirectoryWithWpBlogHeader() {
+    CheckVerifier.verify(check, "WordPressImportDetector/wp_content_wp_blog_header.php");
+  }
+
   static class TestWordPressImportDetectorCheck extends org.sonar.plugins.php.api.visitors.PHPVisitorCheck {
 
     @Override
