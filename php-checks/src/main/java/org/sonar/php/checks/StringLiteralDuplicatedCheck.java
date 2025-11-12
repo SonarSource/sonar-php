@@ -104,7 +104,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
     super.visitCompilationUnit(tree);
     finish();
    }
-  }
+  
 
   private void finish() {
     for (Map.Entry<String, List<LiteralTree>> literalOccurrences : sameLiteralOccurrences.entrySet()) {
