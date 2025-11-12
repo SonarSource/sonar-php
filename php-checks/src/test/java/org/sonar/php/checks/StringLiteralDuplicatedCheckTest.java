@@ -54,4 +54,9 @@ class StringLiteralDuplicatedCheckTest {
   void arrayKeys() {
     CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/array_keys.php");
   }
+
+  @Test
+  void ignoreImportmapFile() {
+    CheckVerifier.verifyNoIssue(check, "StringLiteralDuplicatedCheck/importmap.php");
+  }
 }
