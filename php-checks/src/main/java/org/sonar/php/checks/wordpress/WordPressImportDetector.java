@@ -162,21 +162,11 @@ public class WordPressImportDetector {
       }
     }
 
+    // Check if path contains WordPress file patterns
     for (String wpFile : WORDPRESS_FILES) {
       if (lowerPath.contains(wpFile)) {
         return true;
       }
-    }
-
-    // Check for WordPress directory patterns
-    if (lowerPath.contains("wp-includes/") ||
-      lowerPath.contains("wp-admin/") ||
-      lowerPath.contains("wp-content/")) {
-      // Could be a WordPress file, check more specifically
-      return lowerPath.contains("wp-load.php") ||
-        lowerPath.contains("wp-config.php") ||
-        lowerPath.contains("wp-settings.php") ||
-        lowerPath.contains("wp-blog-header.php");
     }
 
     return false;
