@@ -16,7 +16,9 @@
  */
 package org.sonar.php.tree.visitors;
 
+import org.sonar.php.tree.visitors.frameworkDetectors.WordPressImportDetector;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -35,9 +37,15 @@ public class FrameworkDetectionVisitor extends PHPVisitorCheck {
       this.framework = SymbolTable.Framework.YII;
     } else if (nameSpaceName.startsWith("Illuminate")) {
       this.framework = SymbolTable.Framework.LARAVEL;
-    } else if (nameSpaceName.startsWith("WP_CLI") || nameSpaceName.startsWith("WP\\")) {
+    }
+  }
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    if (WordPressImportDetector.isWordPressImport(tree)) {
       this.framework = SymbolTable.Framework.WORDPRESS;
     }
+    super.visitFunctionCall(tree);
   }
 
   public SymbolTable.Framework getFramework() {

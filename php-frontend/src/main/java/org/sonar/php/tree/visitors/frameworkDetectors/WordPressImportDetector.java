@@ -14,14 +14,13 @@
  * You should have received a copy of the Sonar Source-Available License
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
-package org.sonar.php.checks.wordpress;
+package org.sonar.php.tree.visitors.frameworkDetectors;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -30,6 +29,10 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 
+import static org.sonar.php.tree.TreeUtils.argument;
+import static org.sonar.php.tree.TreeUtils.functionName;
+import static org.sonar.php.tree.TreeUtils.trimQuotes;
+
 /**
  * Utility class for detecting WordPress import/loading patterns in PHP files.
  * Detects:
@@ -37,10 +40,10 @@ import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
  * - All WordPress bootstrap files (wp-load.php, wp-config.php, wp-settings.php, etc.)
  * - Path variations (absolute, relative, concatenated, variable-based)
  */
-public class WordPressImportDetector {
+public final class WordPressImportDetector {
 
   // Utility class to comply w rule S1118
-  private WordPressImportDetector() {
+  WordPressImportDetector() {
   }
 
   // WordPress bootstrap files to detect
@@ -66,7 +69,7 @@ public class WordPressImportDetector {
 
   // Checks if a function call is a WordPress import statement
   public static boolean isWordPressImport(FunctionCallTree tree) {
-    String functionName = CheckUtils.functionName(tree);
+    String functionName = functionName(tree);
 
     if (functionName == null || !isIncludeFunction(functionName)) {
       return false;
@@ -76,29 +79,6 @@ public class WordPressImportDetector {
     return filePath.isPresent() && isWordPressFile(filePath.get());
   }
 
-  // Extracts the WordPress file type from a function call
-  public static String getWordPressFileType(FunctionCallTree tree) {
-    Optional<String> filePath = extractFilePath(tree);
-    if (filePath.isEmpty()) {
-      return null;
-    }
-    return getWordPressFileType(filePath.get());
-  }
-
-  // Gets the WordPress file type from a path
-  private static String getWordPressFileType(String path) {
-
-    String lowerPath = path.toLowerCase(Locale.ROOT);
-
-    for (String wpFile : WORDPRESS_FILES) {
-      if (lowerPath.endsWith("/" + wpFile) || lowerPath.endsWith("\\" + wpFile) || lowerPath.contains(wpFile)) {
-        return wpFile;
-      }
-    }
-
-    return null;
-  }
-
   // Checks if the function is an include/require function
   private static boolean isIncludeFunction(String functionName) {
     return INCLUDE_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT));
@@ -106,7 +86,7 @@ public class WordPressImportDetector {
 
   // Extracts the file path from a require/include function call
   private static Optional<String> extractFilePath(FunctionCallTree tree) {
-    return CheckUtils.argument(tree, "", 0)
+    return argument(tree, "", 0)
       .map(CallArgumentTree::value)
       .map(WordPressImportDetector::extractPathFromExpression);
   }
@@ -125,13 +105,13 @@ public class WordPressImportDetector {
 
       // Check right operand (usually the filename)
       if (right.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-        return CheckUtils.trimQuotes((LiteralTree) right);
+        return trimQuotes((LiteralTree) right);
       }
 
       // Also check left operand for full paths
       ExpressionTree left = concat.leftOperand();
       if (left.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-        String leftPath = CheckUtils.trimQuotes((LiteralTree) left);
+        String leftPath = trimQuotes((LiteralTree) left);
         String rightPath = extractPathFromExpression(right);
         if (rightPath != null) {
           return leftPath + rightPath;
@@ -141,7 +121,7 @@ public class WordPressImportDetector {
 
     // Handle direct string literals: 'wp-load.php' or "wp-load.php"
     if (expression.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      return CheckUtils.trimQuotes((LiteralTree) expression);
+      return trimQuotes((LiteralTree) expression);
     }
 
     return null;
@@ -171,4 +151,5 @@ public class WordPressImportDetector {
 
     return false;
   }
+
 }

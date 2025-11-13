@@ -59,7 +59,29 @@ class FrameworkDetectionVisitorTest {
     var code = """
       <?php
 
-      use WP_CLI\\Utils;
+      require_once '/var/www/html/wp-load.php';
+      require_once 'WP-LOAD.PHP';
+      require_once __DIR__ . '/wp-load.php';
+      require_once "wp-load.php";
+      require_once '/path/to/' . 'wp-load.php';
+      require_once '/wordpress/' . ('wp-load' . ('.php'));
+      require_once '../wp-load.php';
+      require_once ABSPATH . 'wp-settings.php';
+      require_once( ABSPATH . 'wp-load.php' );
+      require_once( 'wp-load.php' );
+      require_once 'wp-admin/includes/admin.php';
+      require_once 'wp-admin/admin.php';
+      require_once 'wp-blog-header.php';
+      require_once 'wp-config.php';
+      require_once 'wp-includes/functions.php';
+      require_once 'wp-includes/load.php';
+      require_once 'wp-includes/wp-load.php';
+      require_once 'wp-includes/plugin.php';
+      require_once 'wp-load.php';
+      require_once 'wp-settings.php';
+      include_once 'wp-load.php';
+      include 'wp-load.php';
+      require 'wp-load.php';
       """;
     var tree = ParsingTestUtils.parseSource(code);
     var visitor = new FrameworkDetectionVisitor();

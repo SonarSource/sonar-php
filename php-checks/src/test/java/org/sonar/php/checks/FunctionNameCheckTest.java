@@ -24,7 +24,6 @@ class FunctionNameCheckTest {
   private static final String FILE_NAME = "FunctionNameCheck.php";
   private static final String FILE_NAME_DRUPAL = "FunctionNameCheckDrupal.php";
   private static final String FILE_NAME_DRUPAL_CUSTOM_REGEX = "FunctionNameCheckDrupalWithCustomRegex.php";
-  private static final String FILE_NAME_WORDPRESS = "FunctionNameCheckWordpress.php";
   private FunctionNameCheck check = new FunctionNameCheck();
 
   @Test
@@ -53,10 +52,5 @@ class FunctionNameCheckTest {
   void customShouldPreventDrupalOverride() {
     check.format = "^[a-zA-Z][a-zA-Z0-9]*$";
     CheckVerifier.verify(check, FILE_NAME_DRUPAL_CUSTOM_REGEX);
-  }
-
-  @Test
-  void testDefaultValueWordpress() {
-    CheckVerifier.verify(check, FILE_NAME_WORDPRESS);
   }
 }
