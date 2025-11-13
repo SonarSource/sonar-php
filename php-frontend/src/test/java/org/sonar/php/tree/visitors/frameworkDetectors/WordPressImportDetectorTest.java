@@ -21,6 +21,7 @@ import java.util.Objects;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.sonar.php.ParsingTestUtils;
+import org.sonar.php.tree.visitors.WordPressImportDetector;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;

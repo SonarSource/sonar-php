@@ -16,7 +16,6 @@
  */
 package org.sonar.php.tree.visitors;
 
-import org.sonar.php.tree.visitors.frameworkDetectors.WordPressImportDetector;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;

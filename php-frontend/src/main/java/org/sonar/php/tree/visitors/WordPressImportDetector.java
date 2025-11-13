@@ -14,7 +14,7 @@
  * You should have received a copy of the Sonar Source-Available License
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
-package org.sonar.php.tree.visitors.frameworkDetectors;
+package org.sonar.php.tree.visitors;
 
 import java.util.Arrays;
 import java.util.HashSet;
