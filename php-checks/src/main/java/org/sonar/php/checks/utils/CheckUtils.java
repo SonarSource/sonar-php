@@ -231,7 +231,10 @@ public final class CheckUtils {
   }
 
   public static String trimQuotes(String value) {
-    return TreeUtils.trimQuotes(value);
+    if (value.length() > 1 && (value.startsWith("'") || value.startsWith("\""))) {
+      return value.substring(1, value.length() - 1);
+    }
+    return value;
   }
 
   public static String trimQuotes(LiteralTree literalTree) {

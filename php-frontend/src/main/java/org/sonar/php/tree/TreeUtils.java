@@ -168,13 +168,6 @@ public class TreeUtils {
     return Optional.empty();
   }
 
-  public static String trimQuotes(String value) {
-    if (value.length() > 1 && (value.startsWith("'") || value.startsWith("\""))) {
-      return value.substring(1, value.length() - 1);
-    }
-    return value;
-  }
-
   public static String trimQuotes(LiteralTree literalTree) {
     if (literalTree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
       String value = literalTree.value();
