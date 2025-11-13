@@ -42,7 +42,7 @@ import static org.sonar.php.tree.TreeUtils.trimQuotes;
  */
 public final class WordPressImportDetector {
 
-  // Utility class to comply w rule S1118
+  // Utility class to comply with rule S1118
   WordPressImportDetector() {
   }
 
