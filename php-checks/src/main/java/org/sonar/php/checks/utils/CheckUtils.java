@@ -256,7 +256,7 @@ public final class CheckUtils {
     }
     if (tree.is(Kind.REGULAR_STRING_LITERAL)) {
       String value = trimQuotes(((LiteralTree) tree).value());
-      return value.isEmpty() || "0".equals(value);
+      return value == null || value.isEmpty() || "0".equals(value);
     }
     return tree.is(Kind.NULL_LITERAL);
   }
