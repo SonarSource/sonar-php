@@ -132,6 +132,11 @@ class WordPressImportDetectorTest {
   }
 
   @Test
+  void testEmptyFilePath() {
+    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once '';"))).isFalse();
+  }
+
+  @Test
   void testWpIncludesLoad() {
     Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-includes/load.php';"))).isTrue();
   }
