@@ -17,6 +17,7 @@
 package org.sonar.php.tree;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -28,7 +29,17 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 
 import static java.util.Arrays.asList;
@@ -97,5 +108,71 @@ public class TreeUtils {
     }
 
     return false;
+  }
+
+  // Helper method: Gets function name from FunctionCallTree (replaces CheckUtils.functionName)
+  @Nullable
+  public static String functionName(FunctionCallTree functionCall) {
+    ExpressionTree callee = functionCall.callee();
+    if (callee.is(Tree.Kind.CLASS_MEMBER_ACCESS) || callee.is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
+      return nameOf(((MemberAccessTree) callee).member());
+    }
+    return nameOf(callee);
+  }
+
+  // Helper method: Gets name from a tree (replaces CheckUtils.nameOf)
+  @Nullable
+  public static String nameOf(Tree tree) {
+    if (tree.is(Tree.Kind.NAMESPACE_NAME)) {
+      return ((NamespaceNameTree) tree).qualifiedName();
+    } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
+      return ((NameIdentifierTree) tree).text();
+    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) || tree.is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
+      MemberAccessTree memberAccess = (MemberAccessTree) tree;
+      String className = nameOf(memberAccess.object());
+      String memberName = nameOf(memberAccess.member());
+      if (className != null && memberName != null) {
+        return className + "::" + memberName;
+      }
+    } else if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      VariableIdentifierTree variableIdentifier = (VariableIdentifierTree) tree;
+      if ("$this".equals(variableIdentifier.text())) {
+        ClassDeclarationTree classDeclaration = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree,
+          EnumSet.of(Tree.Kind.CLASS_DECLARATION, Tree.Kind.TRAIT_DECLARATION));
+        if (classDeclaration != null) {
+          return nameOf(classDeclaration.name());
+        }
+      }
+    }
+    return null;
+  }
+
+  // Helper method: Gets argument from FunctionCallTree (replaces CheckUtils.argument)
+  public static Optional<CallArgumentTree> argument(FunctionCallTree call, String name, int position) {
+    SeparatedList<CallArgumentTree> callArguments = call.callArguments();
+
+    CallArgumentTree argument = callArguments.stream()
+      .filter(a -> a.name() != null)
+      .filter(a -> a.name().text().equalsIgnoreCase(name))
+      .findFirst()
+      .orElse(null);
+
+    if (argument != null) {
+      return Optional.of(argument);
+    }
+
+    if (callArguments.size() >= position + 1 && callArguments.get(position).name() == null) {
+      return Optional.of(callArguments.get(position));
+    }
+
+    return Optional.empty();
+  }
+
+  public static String trimQuotes(LiteralTree literalTree) {
+    if (literalTree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+      String value = literalTree.value();
+      return value.substring(1, value.length() - 1);
+    }
+    throw new IllegalArgumentException("Cannot trim quotes from non-string literal");
   }
 }

@@ -19,7 +19,6 @@ package org.sonar.php.checks.utils;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -37,7 +36,6 @@ import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.php.utils.collections.MapBuilder;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -47,14 +45,12 @@ import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
-import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -144,11 +140,7 @@ public final class CheckUtils {
    */
   @Nullable
   public static String functionName(FunctionCallTree functionCall) {
-    ExpressionTree callee = functionCall.callee();
-    if (callee.is(Kind.CLASS_MEMBER_ACCESS) || callee.is(Kind.OBJECT_MEMBER_ACCESS)) {
-      return nameOf(((MemberAccessTree) callee).member());
-    }
-    return getFunctionName(functionCall);
+    return TreeUtils.functionName(functionCall);
   }
 
   /**
@@ -177,28 +169,7 @@ public final class CheckUtils {
    */
   @Nullable
   public static String nameOf(Tree tree) {
-    if (tree.is(Tree.Kind.NAMESPACE_NAME)) {
-      return ((NamespaceNameTree) tree).qualifiedName();
-    } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
-      return ((NameIdentifierTree) tree).text();
-    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) || tree.is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
-      MemberAccessTree memberAccess = (MemberAccessTree) tree;
-      String className = nameOf(memberAccess.object());
-      String memberName = nameOf(memberAccess.member());
-      if (className != null && memberName != null) {
-        return className + "::" + memberName;
-      }
-    } else if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      VariableIdentifierTree variableIdentifier = (VariableIdentifierTree) tree;
-      if (variableIdentifier.text().equals("$this")) {
-        ClassDeclarationTree classDeclaration = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree,
-          EnumSet.of(Kind.CLASS_DECLARATION, Kind.TRAIT_DECLARATION));
-        if (classDeclaration != null) {
-          return nameOf(classDeclaration.name());
-        }
-      }
-    }
-    return null;
+    return TreeUtils.nameOf(tree);
   }
 
   public static boolean isExitExpression(FunctionCallTree functionCallTree) {
@@ -267,11 +238,7 @@ public final class CheckUtils {
   }
 
   public static String trimQuotes(LiteralTree literalTree) {
-    if (literalTree.is(Kind.REGULAR_STRING_LITERAL)) {
-      String value = literalTree.value();
-      return value.substring(1, value.length() - 1);
-    }
-    throw new IllegalArgumentException("Cannot trim quotes from non-string literal");
+    return TreeUtils.trimQuotes(literalTree);
   }
 
   /**
@@ -283,13 +250,13 @@ public final class CheckUtils {
   public static boolean isFalseValue(ExpressionTree tree) {
     if (tree.is(Tree.Kind.BOOLEAN_LITERAL, Kind.NUMERIC_LITERAL)) {
       String value = ((LiteralTree) tree).value();
-      return value.equalsIgnoreCase("false")
-        || value.equals("0")
-        || value.equals("0.0");
+      return "false".equalsIgnoreCase(value)
+        || "0".equals(value)
+        || "0.0".equals(value);
     }
     if (tree.is(Kind.REGULAR_STRING_LITERAL)) {
       String value = trimQuotes(((LiteralTree) tree).value());
-      return value.isEmpty() || value.equals("0");
+      return value == null || value.isEmpty() || "0".equals(value);
     }
     return tree.is(Kind.NULL_LITERAL);
   }
@@ -338,23 +305,7 @@ public final class CheckUtils {
    * @since 3.11
    */
   public static Optional<CallArgumentTree> argument(FunctionCallTree call, String name, int position) {
-    SeparatedList<CallArgumentTree> callArguments = call.callArguments();
-
-    CallArgumentTree argument = callArguments.stream()
-      .filter(a -> a.name() != null)
-      .filter(a -> a.name().text().equalsIgnoreCase(name))
-      .findFirst()
-      .orElse(null);
-
-    if (argument != null) {
-      return Optional.of(argument);
-    }
-
-    if (callArguments.size() >= position + 1 && callArguments.get(position).name() == null) {
-      return Optional.of(callArguments.get(position));
-    }
-
-    return Optional.empty();
+    return TreeUtils.argument(call, name, position);
   }
 
   public static Optional<LiteralTree> resolvedArgumentLiteral(FunctionCallTree call, String name, int position) {

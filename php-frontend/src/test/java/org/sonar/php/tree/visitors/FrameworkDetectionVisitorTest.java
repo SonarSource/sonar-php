@@ -59,7 +59,7 @@ class FrameworkDetectionVisitorTest {
     var code = """
       <?php
 
-      use WP_CLI\\Utils;
+      require_once "wp-load.php";
       """;
     var tree = ParsingTestUtils.parseSource(code);
     var visitor = new FrameworkDetectionVisitor();
