@@ -61,7 +61,7 @@ public final class WordPressImportDetector {
     "wp-admin/includes/admin.php"));
 
   // PHP include/require functions to check
-  private static final Set<String> INCLUDE_FUNCTIONS = new HashSet<>(Arrays.asList(
+  private static final Set<String> IMPORT_FUNCTIONS = new HashSet<>(Arrays.asList(
     "require",
     "require_once",
     "include",
@@ -81,7 +81,7 @@ public final class WordPressImportDetector {
 
   // Checks if the function is an include/require function
   private static boolean isIncludeFunction(String functionName) {
-    return INCLUDE_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT));
+    return IMPORT_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT));
   }
 
   // Extracts the file path from a require/include function call
@@ -134,13 +134,6 @@ public final class WordPressImportDetector {
     }
 
     String lowerPath = path.toLowerCase(Locale.ROOT);
-
-    // Check exact matches
-    for (String wpFile : WORDPRESS_FILES) {
-      if (lowerPath.equals(wpFile) || lowerPath.endsWith("/" + wpFile) || lowerPath.endsWith("\\" + wpFile)) {
-        return true;
-      }
-    }
 
     // Check if path contains WordPress file patterns
     for (String wpFile : WORDPRESS_FILES) {

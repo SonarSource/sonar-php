@@ -1,6 +1,6 @@
 <?php
 
-use WP_CLI\Utils; // Simulate importing a WordPress helper namespace
+require_once 'wp-settings.php';
 
 class c1 {
     public function register_custom_option(): void { }

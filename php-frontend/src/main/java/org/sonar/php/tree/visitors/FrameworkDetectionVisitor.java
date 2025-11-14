@@ -44,7 +44,6 @@ public class FrameworkDetectionVisitor extends PHPVisitorCheck {
     if (WordPressImportDetector.isWordPressImport(tree)) {
       this.framework = SymbolTable.Framework.WORDPRESS;
     }
-    super.visitFunctionCall(tree);
   }
 
   public SymbolTable.Framework getFramework() {

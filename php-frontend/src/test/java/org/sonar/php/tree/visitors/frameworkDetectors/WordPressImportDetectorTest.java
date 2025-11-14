@@ -19,7 +19,8 @@ package org.sonar.php.tree.visitors.frameworkDetectors;
 import java.net.URISyntaxException;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.tree.visitors.WordPressImportDetector;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -32,134 +33,44 @@ class WordPressImportDetectorTest {
   WordPressImportDetectorTest() throws URISyntaxException {
   }
 
-  @Test
-  void testWpLoad() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-load.php';"))).isTrue();
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "require_once 'wp-load.php';",
+    "require_once 'wp-config.php';",
+    "require_once 'wp-settings.php';",
+    "require_once 'wp-blog-header.php';",
+    "require_once( ABSPATH . 'wp-load.php' );",
+    "require_once( 'wp-load.php' );",
+    "require_once ABSPATH . 'wp-settings.php';",
+    "include 'wp-load.php';",
+    "include_once 'wp-load.php';",
+    "require 'wp-load.php';",
+    "require_once \"wp-load.php\";",
+    "require_once 'wp-includes/wp-load.php';",
+    "require_once 'wp-includes/functions.php';",
+    "require_once 'wp-admin/admin.php';",
+    "require_once '/var/www/html/wp-load.php';",
+    "require_once '../wp-load.php';",
+    "require_once __DIR__ . '/wp-load.php';",
+    "require_once '/path/to/' . 'wp-load.php';",
+    "require_once 'wp-includes/load.php';",
+    "require_once 'wp-includes/plugin.php';",
+    "require_once 'wp-admin/includes/admin.php'; ",
+    "require_once 'WP-LOAD.PHP';",
+    "require_once '/wordpress/' . ('wp-load' . ('.php'));"
+  })
+  void testWordPressImports(String importStatement) {
+    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement(importStatement))).isTrue();
   }
 
-  @Test
-  void testWpConfig() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-config.php';"))).isTrue();
-  }
-
-  @Test
-  void testWpSettings() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-settings.php';"))).isTrue();
-  }
-
-  @Test
-  void testWpBlogHeader() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-blog-header.php';"))).isTrue();
-  }
-
-  @Test
-  void testWithParentheses() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once( ABSPATH . 'wp-load.php' );"))).isTrue();
-  }
-
-  @Test
-  void testWithConcatenation() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once( 'wp-load.php' );"))).isTrue();
-  }
-
-  @Test
-  void testWithConcatenationAndParentheses() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once ABSPATH . 'wp-settings.php';"))).isTrue();
-  }
-
-  @Test
-  void testInclude() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("include 'wp-load.php';"))).isTrue();
-  }
-
-  @Test
-  void testIncludeOnce() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("include_once 'wp-load.php';"))).isTrue();
-  }
-
-  @Test
-  void testRequire() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require 'wp-load.php';"))).isTrue();
-  }
-
-  @Test
-  void testDoubleQuotes() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once \"wp-load.php\";"))).isTrue();
-  }
-
-  @Test
-  void testWpIncludesPath() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-includes/wp-load.php';"))).isTrue();
-  }
-
-  @Test
-  void testWpIncludesFunctions() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-includes/functions.php';"))).isTrue();
-  }
-
-  @Test
-  void testWpAdminPath() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-admin/admin.php';"))).isTrue();
-  }
-
-  @Test
-  void testAbsolutePath() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once '/var/www/html/wp-load.php';"))).isTrue();
-  }
-
-  @Test
-  void testRelativePath() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once '../wp-load.php';"))).isTrue();
-  }
-
-  @Test
-  void testDirConcatenation() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once __DIR__ . '/wp-load.php';"))).isTrue();
-  }
-
-  @Test
-  void testFullPathConcatenation() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once '/path/to/' . 'wp-load.php';"))).isTrue();
-  }
-
-  @Test
-  void testNonWordPressFile() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'config.php';"))).isFalse();
-  }
-
-  @Test
-  void testOtherFunction() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("echo 'test';"))).isFalse();
-  }
-
-  @Test
-  void testEmptyFilePath() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once '';"))).isFalse();
-  }
-
-  @Test
-  void testWpIncludesLoad() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-includes/load.php';"))).isTrue();
-  }
-
-  @Test
-  void testWpIncludesPlugin() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-includes/plugin.php';"))).isTrue();
-  }
-
-  @Test
-  void testWpAdminIncludesAdmin() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'wp-admin/includes/admin.php'; "))).isTrue();
-  }
-
-  @Test
-  void testCaseInsensitive() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once 'WP-LOAD.PHP';"))).isTrue();
-  }
-
-  @Test
-  void testNestedConcatenationWithLeftOperand() {
-    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement("require_once '/wordpress/' . ('wp-load' . ('.php'));"))).isTrue();
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "require_once 'config.php';",
+    "echo 'test';",
+    "require_once '';"
+  })
+  void testNonWordPressImports(String importStatement) {
+    Assertions.assertThat(WordPressImportDetector.isWordPressImport(getImportStatement(importStatement))).isFalse();
   }
 
   FunctionCallTree getImportStatement(String code) {
