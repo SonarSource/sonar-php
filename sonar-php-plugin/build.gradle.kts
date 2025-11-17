@@ -19,6 +19,7 @@ import org.sonarsource.cloudnative.gradle.enforceJarSize
 
 plugins {
   id("org.sonarsource.cloud-native.sonar-plugin")
+  id("org.sonarsource.cloud-native.license-file-generator")
 }
 
 dependencies {

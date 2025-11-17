@@ -90,6 +90,28 @@ To build the plugin and run its unit tests, execute this command from the projec
 ./gradlew build
 ```
 
+### Fix code formatting issues
+
+During the Gradle build, a spotless formatting check is executed.
+This check can also be triggered manually with `./gradlew spotlessCheck`.
+It checks if the code is correctly formatted using standard Sonar rules.
+If your build failed, you can fix the formatting just by running:
+
+```shell
+./gradlew spotlessApply
+```
+
+### Fix license packaging issues
+During the Gradle build, a license packaging check is executed.
+This check can also be triggered manually with `./gradlew validateLicenseFiles`.
+It checks if the license files of third party libraries are correctly packaged to the resource folder according to SonarSource standards.
+If your build failed, you can fix the license packaging by running:
+Note that this overwrites your current license files in the `resources/licenses/THIRD_PARTY_LICENSES` folder.
+
+```shell
+./gradlew generateLicenseResources
+```
+
 ### Integration Tests
 To run integration tests, you will need to create a properties file like the one shown below, and set its location in an environment variable named `ORCHESTRATOR_CONFIG_URL`.
 ```properties
