@@ -65,25 +65,16 @@ import org.sonar.php.checks.regex.VerboseRegexCheck;
 import org.sonar.php.checks.security.AuthorizationsCheck;
 import org.sonar.php.checks.security.CORSPolicyCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
-import org.sonar.php.checks.security.CommandLineArgumentCheck;
-import org.sonar.php.checks.security.CookieDomainCheck;
-import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.CryptographicHashCheck;
-import org.sonar.php.checks.security.DataEncryptionCheck;
 import org.sonar.php.checks.security.DisableCsrfCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
-import org.sonar.php.checks.security.LoggerConfigurationCheck;
 import org.sonar.php.checks.security.POSIXFilePermissionsCheck;
-import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.QueryUsageCheck;
-import org.sonar.php.checks.security.RegexUsageCheck;
 import org.sonar.php.checks.security.RequestContentLengthCheck;
 import org.sonar.php.checks.security.RobustCipherAlgorithmCheck;
 import org.sonar.php.checks.security.SessionFixationCheck;
 import org.sonar.php.checks.security.SessionFixationStrategyCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
-import org.sonar.php.checks.security.SocketUsageCheck;
-import org.sonar.php.checks.security.StandardInputUsageCheck;
 import org.sonar.php.checks.security.XxeCheck;
 import org.sonar.php.checks.wordpress.WordPressAutoUpdateCheck;
 import org.sonar.php.checks.wordpress.WordPressConfigNameCheck;
@@ -136,7 +127,6 @@ public class CheckList {
       ClosingTagInFullPHPFileCheck.class,
       CodeFollowingJumpStatementCheck.class,
       CollapsibleIfStatementCheck.class,
-      CommandLineArgumentCheck.class,
       CommentedOutCodeCheck.class,
       ConcatenatedStringLiteralCheck.class,
       ConditionalIndentationCheck.class,
@@ -147,14 +137,11 @@ public class CheckList {
       ConstructWithParenthesesCheck.class,
       ConstructorDeclarationCheck.class,
       ConstructorDependencyInversionCheck.class,
-      CookieDomainCheck.class,
-      CookieSensitiveDataCheck.class,
       CookiesSecureCheck.class,
       CountInsteadOfEmptyCheck.class,
       CORSPolicyCheck.class,
       CryptographicHashCheck.class,
       CryptographicKeySizeCheck.class,
-      DataEncryptionCheck.class,
       DeadStoreCheck.class,
       DebugModeCheck.class,
       DeprecatedPredefinedVariablesUseCheck.class,
@@ -217,7 +204,6 @@ public class CheckList {
       LineLengthCheck.class,
       LocalVariableAndParameterNameCheck.class,
       LocalVariableShadowsClassFieldCheck.class,
-      LoggerConfigurationCheck.class,
       LogicalWordOperatorUsageCheck.class,
       LoopExecutingAtMostOnceCheck.class,
       LowerCaseColorCheck.class,
@@ -248,7 +234,6 @@ public class CheckList {
       ParameterSequenceCheck.class,
       ParsingErrorCheck.class,
       PerlStyleCommentsUsageCheck.class,
-      PermissionsControlCheck.class,
       PHPDeprecatedFunctionUsageCheck.class,
       PhpSapiNameFunctionUsageCheck.class,
       POSIXFilePermissionsCheck.class,
@@ -260,7 +245,6 @@ public class CheckList {
       RedundantJumpCheck.class,
       RedundantParenthesesCheck.class,
       ReferenceInFunctionCallCheck.class,
-      RegexUsageCheck.class,
       RepeatedComplementOperatorCheck.class,
       RequestContentLengthCheck.class,
       RequireIncludeInstructionsUsageCheck.class,
@@ -276,10 +260,8 @@ public class CheckList {
       SignallingProcessCheck.class,
       SilencedErrorsCheck.class,
       SleepFunctionUsageCheck.class,
-      SocketUsageCheck.class,
       SSLCertificatesVerificationDisabledCheck.class,
       SSLHostVerificationDisabledCheck.class,
-      StandardInputUsageCheck.class,
       StringLiteralDuplicatedCheck.class,
       SwitchCaseTooBigCheck.class,
       SwitchDefaultPositionCheck.class,
@@ -301,7 +283,6 @@ public class CheckList {
       TrailingWhitespaceCheck.class,
       UncatchableExceptionCheck.class,
       UnreachableCatchBlockCheck.class,
-      UnserializeCallCheck.class,
       UnsetForeachReferenceVariableCheck.class,
       UnusedExceptionCheck.class,
       UnusedFunctionParametersCheck.class,
