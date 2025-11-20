@@ -24,7 +24,7 @@ on:
 jobs:
   update-rule-metadata:
     name: Update Rule Metadata
-    runs-on: sonar-runner
+    runs-on: sonar-xs-public
     permissions:
       id-token: write     # required by SonarSource/release-github-actions/update-rule-metadata
       contents: write # required by SonarSource/release-github-actions/update-rule-metadata
