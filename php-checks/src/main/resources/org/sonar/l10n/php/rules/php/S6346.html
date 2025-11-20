@@ -1,26 +1,23 @@
+<h2>Why is this an issue?</h2>
 <p>WordPress has a database repair and optimization mode that can be activated by setting <code>WP_ALLOW_REPAIR</code> to <code>true</code> in the
 configuration.</p>
 <p>If activated, the repair page can be accessed by any user, authenticated or not. This makes sense because if the database is corrupted, the
 authentication mechanism might not work.</p>
 <p>Malicious users could trigger this potentially costly operation repeatadly slowing down the website, and making it unavailable.</p>
-<h2>Ask Yourself Whether</h2>
-<ul>
-  <li> The database is not currently corrupted. </li>
-</ul>
-<p>There is a risk if you answered yes to this question.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<h2>How to fix it</h2>
 <p>It’s recommended to enable automatic database repair mode only in case of database corruption. This feature should be deactivated again when the
 database issue is resolved.</p>
-<h2>Sensitive Code Example</h2>
-<pre>
-define( 'WP_ALLOW_REPAIR', true ); // Sensitive
+<h3>Code Examples</h3>
+<h4>Noncompliant Code Example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+define( 'WP_ALLOW_REPAIR', true ); // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant Solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 // The default value is false, so the value does not have to be expilicitly set.
 define( 'WP_ALLOW_REPAIR', false );
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a> </li>
   <li> OWASP - <a href="https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/">Top 10 2021 Category A7 - Identification and

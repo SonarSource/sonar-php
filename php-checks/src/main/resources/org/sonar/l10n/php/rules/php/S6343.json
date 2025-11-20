@@ -1,6 +1,6 @@
 {
-  "title": "Disabling automatic updates is security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Automatic updates should not be disabled",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "MEDIUM"
@@ -12,6 +12,7 @@
     "func": "Constant\/Issue",
     "constantCost": "5min"
   },
+  "quickfix": "unknown",
   "tags": [],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-6343",

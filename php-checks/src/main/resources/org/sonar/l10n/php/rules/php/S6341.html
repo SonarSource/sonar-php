@@ -1,31 +1,26 @@
+<h2>Why is this an issue?</h2>
 <p>WordPress makes it possible to edit theme and plugin files directly in the Administration Screens. While it may look like an easy way to customize
 a theme or do a quick change, it’s a dangerous feature. When visiting the theme or plugin editor for the first time, WordPress displays a warning to
 make it clear that using such a feature may break the web site by mistake. More importantly, users who have access to this feature can trigger the
 execution of any PHP code and may therefore take full control of the WordPress instance. This security risk could be exploited by an attacker who
 manages to get access to one of the authorized users. Setting the <code>DISALLOW_FILE_EDIT</code> option to <code>true</code> in
 <code>wp-config.php</code> disables this risky feature. The default value is <code>false</code>.</p>
-<h2>Ask Yourself Whether</h2>
-<ul>
-  <li> You really need to use the theme and plugin editors. </li>
-  <li> The theme and plugin editors are available to users who cannot be fully trusted. </li>
-  <li> There’s a chance that the accounts of authorized users get compromised. </li>
-</ul>
-<p>There is a risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<h2>How to fix it</h2>
 <ul>
   <li> Modify the theme and plugin files using a local editor and deploy them to the server in a secure way. </li>
   <li> Make sure that <code>DISALLOW_FILE_EDIT</code> is defined in <code>wp-config.php</code>. </li>
   <li> Make sure that <code>DISALLOW_FILE_EDIT</code> is set to <code>true</code>. </li>
 </ul>
-<h2>Sensitive Code Example</h2>
-<pre>
-define( 'DISALLOW_FILE_EDIT', false ); // Sensitive
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+define( 'DISALLOW_FILE_EDIT', false ); // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 define( 'DISALLOW_FILE_EDIT', true );
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> OWASP - <a href="https://owasp.org/Top10/A03_2021-Injection/">Top 10 2021 Category A3 - Injection</a> </li>
   <li> OWASP - <a href="https://owasp.org/Top10/A04_2021-Insecure_Design/">Top 10 2021 Category A4 - Insecure Design</a> </li>

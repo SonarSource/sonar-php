@@ -1,6 +1,6 @@
 {
-  "title": "WordPress theme and plugin editors are security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Disable direct file editing in WordPress admin interface",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "MEDIUM"
@@ -12,6 +12,7 @@
     "func": "Constant\/Issue",
     "constantCost": "5min"
   },
+  "quickfix": "unknown",
   "tags": [
     "cwe"
   ],
