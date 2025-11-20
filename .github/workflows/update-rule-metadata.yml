@@ -1,0 +1,52 @@
+name: Update Rule Metadata
+run-name: Update Rule Metadata
+
+on:
+  workflow_dispatch:
+    inputs:
+      rule-api-version:
+        description: Version of the rule-api tooling to be used for the workflow.
+        type: string
+      branch:
+        description: Branch to run the check against and create the PR for.
+        type: string
+        default: 'master'
+      rspec-branch:
+        description: |
+          Branch of the rspec repository to be used.
+          If not specified, the 'master' branch of the rspec repository will be used.
+        type: string
+        default: 'master'
+  schedule:
+    - cron: '0 5 * * 1-5'
+
+jobs:
+  update-rule-metadata:
+    name: Update Rule Metadata
+    runs-on: sonar-runner
+    permissions:
+      id-token: write     # required by SonarSource/release-github-actions/update-rule-metadata
+      contents: write # required by SonarSource/release-github-actions/update-rule-metadata
+      pull-requests: write # required by SonarSource/release-github-actions/update-rule-metadata
+    steps:
+      - uses: SonarSource/release-github-actions/update-rule-metadata@10315ee17849ed1d5e600182786af1f07ce1ee52 # nw/update-rule-metadata-from-branch
+        id: update-rule-metadata
+        with:
+          rule-api-version: ${{ github.event.inputs.rule-api-version}}
+          branch: ${{ github.event.inputs.branch }}
+          rspec-branch: ${{ github.event.inputs.rspec-branch }}
+
+      - name: Workflow summary
+        shell: bash
+        run: |
+          echo "## Rule Metadata Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo -e "${{ steps.update-rule-metadata.outputs.summary }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ steps.update-rule-metadata.outputs.has-changes }}" == "true" ]]; then
+            echo "Rule metadata changes were detected. PR was created." >> $GITHUB_STEP_SUMMARY
+            echo "${{ steps.update-rule-metadata.outputs.pull-request-url }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No rule metadata changes detected. No PR was created." >> $GITHUB_STEP_SUMMARY
+          fi
