@@ -1,26 +1,24 @@
+<h2>Why is this an issue?</h2>
+<p>Session IDs are used to identify a user session. They are usually stored in cookies, URL parameters, or hidden form fields.</p>
 <p>If a session ID can be guessed (not generated with a secure pseudo random generator, or with insufficient length …​) an attacker may be able to
 hijack another user’s session.</p>
-<h2>Ask Yourself Whether</h2>
-<ul>
-  <li> the session ID is not unique. </li>
-  <li> the session ID is set from a user-controlled input. </li>
-  <li> the session ID is generated with not secure pseudo random generator. </li>
-  <li> the session ID length is too short. </li>
-</ul>
-<p>There is a risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>Don’t manually generate session IDs, use instead language based native functionality.</p>
-<h2>Sensitive Code Example</h2>
-<pre>
-session_id(bin2hex(random_bytes(4))); // Sensitive: 4 bytes is too short
-session_id($_POST["session_id"]); // Sensitive: session ID can be specified by the user
+<p>If an application allows users to specify their own session ID (for example via URL parameters or form fields), an attacker may be able to set a
+known session ID for a victim user, and then hijack the victim’s session (session fixation attack).</p>
+<h2>How to fix it</h2>
+<p>Don’t manually generate session IDs, use instead language based native functionality. In PHP, use session_regenerate_id() to generate a new session
+ID, or use session_id() with a securely generated random value of sufficient length (at least 16 bytes).</p>
+<h3>Code Examples</h3>
+<h3>Noncompliant Code Example</h3>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+session_id(bin2hex(random_bytes(4))); // Noncompliant, 4 bytes is too short
+session_id($_POST["session_id"]); // Noncompliant, session ID can be specified by the user
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant Solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 session_regenerate_id(); ; // Compliant
 session_id(bin2hex(random_bytes(16))); // Compliant
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> OWASP - <a href="https://owasp.org/Top10/A04_2021-Insecure_Design/">Top 10 2021 Category A4 - Insecure Design</a> </li>
   <li> OWASP - <a href="https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/">Top 10 2021 Category A7 - Identification and

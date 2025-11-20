@@ -1,6 +1,6 @@
 {
-  "title": "Hard-coded credentials are security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Credentials should not be hard-coded",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "BLOCKER"
@@ -41,5 +41,6 @@
       "3.5.2",
       "6.4.1"
     ]
-  }
+  },
+  "quickfix": "unknown"
 }

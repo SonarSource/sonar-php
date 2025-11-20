@@ -1,6 +1,6 @@
 {
-  "title": "Formatting SQL queries is security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Use prepared statements to securely construct SQL queries",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "MAINTAINABILITY": "LOW",
@@ -45,5 +45,6 @@
       "5.3.4",
       "5.3.5"
     ]
-  }
+  },
+  "quickfix": "unknown"
 }

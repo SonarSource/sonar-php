@@ -1,6 +1,6 @@
 {
-  "title": "Allowing unfiltered HTML content in WordPress is security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Prevent unfiltered HTML exposure in WordPress for enhanced security",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "MEDIUM"
@@ -12,6 +12,7 @@
     "func": "Constant\/Issue",
     "constantCost": "5min"
   },
+  "quickfix": "unknown",
   "tags": [
     "cwe"
   ],

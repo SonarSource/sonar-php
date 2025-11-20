@@ -1,4 +1,10 @@
 <h2>Why is this an issue?</h2>
 <p>A class that grows too much tends to aggregate too many responsibilities and inevitably becomes harder to understand and therefore to maintain.
 Above a specific threshold, it is strongly advised to refactor the class into smaller ones which focus on well defined topics.</p>
+<h3>Exceptions</h3>
+<p>The Rule ignores Classes that have:</p>
+<ul>
+  <li> Only getter and setter functions </li>
+  <li> An <code>@Entity</code> annotation implying that the class is an entity of a database </li>
+</ul>
 

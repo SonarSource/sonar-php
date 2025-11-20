@@ -1,6 +1,6 @@
 {
-  "title": "Allowing unauthenticated database repair in WordPress is security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Prevent unauthenticated WordPress database repair for enhanced security",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "MEDIUM"
@@ -12,6 +12,7 @@
     "func": "Constant\/Issue",
     "constantCost": "5min"
   },
+  "quickfix": "unknown",
   "tags": [],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-6346",

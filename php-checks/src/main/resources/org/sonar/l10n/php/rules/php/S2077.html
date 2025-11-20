@@ -1,32 +1,36 @@
-<p>Formatted SQL queries can be difficult to maintain, debug and can increase the risk of SQL injection when concatenating untrusted values into the
-query. However, this rule doesn’t detect SQL injections (unlike rule {rule:php:S3649}), the goal is only to highlight complex/formatted queries.</p>
-<h2>Ask Yourself Whether</h2>
-<ul>
-  <li> Some parts of the query come from untrusted values (like user inputs). </li>
-  <li> The query is repeated/duplicated in other parts of the code. </li>
-  <li> The application must support different types of relational databases. </li>
-</ul>
-<p>There is a risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<ul>
-  <li> Use <a href="https://cheatsheetseries.owasp.org/cheatsheets/Query_Parameterization_Cheat_Sheet.html">parameterized queries, prepared
-  statements, or stored procedures</a> and bind variables to SQL query parameters. </li>
-  <li> Consider using ORM frameworks if there is a need to have an abstract layer to access data. </li>
-</ul>
-<h2>Sensitive Code Example</h2>
+<h2>Why is this an issue?</h2>
+<p>Using dynamic SQL queries that concatenate user input directly into the query string can lead to SQL injection vulnerabilities. Attackers can
+manipulate the input to alter the SQL query’s structure, potentially gaining unauthorized access to or manipulating the database.</p>
+<h3>Exceptions</h3>
+<p>No issue will be raised if one of the functions is called with hard-coded string (no concatenation) and this string does not contain a "$"
+sign.</p>
 <pre>
+$result = mysql_query("SELECT * FROM myTable WHERE id = 42") or die('Query failed: ' . mysql_error());  // Compliant
+</pre>
+<p>The current implementation does not follow variables. It will only detect SQL queries which are concatenated or contain a <code>$</code> sign
+directly in the function call.</p>
+<pre>
+$query = "SELECT * FROM myTable WHERE id = " . $id;
+$result = mysql_query($query);  // No issue will be raised even if it is Sensitive
+</pre>
+<h2>How to fix it</h2>
+<p>To prevent SQL injection vulnerabilities, use prepared statements with parameterized queries. This approach separates the SQL code from the data,
+ensuring that user input is treated as data only and not executable code.</p>
+<h3>Code Examples</h3>
+<h4>Noncompliant Code Example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 $id = $_GET['id'];
 mysql_connect('localhost', $username, $password) or die('Could not connect: ' . mysql_error());
 mysql_select_db('myDatabase') or die('Could not select database');
 
-$result = mysql_query("SELECT * FROM myTable WHERE id = " . $id);  // Sensitive, could be susceptible to SQL injection
+$result = mysql_query("SELECT * FROM myTable WHERE id = " . $id);  // Noncompliant, could be susceptible to SQL injection
 
 while ($row = mysql_fetch_object($result)) {
     echo $row-&gt;name;
 }
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant Solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 $id = $_GET['id'];
 try {
     $conn = new PDO('mysql:host=localhost;dbname=myDatabase', $username, $password);
@@ -42,19 +46,7 @@ try {
     echo 'ERROR: ' . $e-&gt;getMessage();
 }
 </pre>
-<h2>Exceptions</h2>
-<p>No issue will be raised if one of the functions is called with hard-coded string (no concatenation) and this string does not contain a "$"
-sign.</p>
-<pre>
-$result = mysql_query("SELECT * FROM myTable WHERE id = 42") or die('Query failed: ' . mysql_error());  // Compliant
-</pre>
-<p>The current implementation does not follow variables. It will only detect SQL queries which are concatenated or contain a <code>$</code> sign
-directly in the function call.</p>
-<pre>
-$query = "SELECT * FROM myTable WHERE id = " . $id;
-$result = mysql_query($query);  // No issue will be raised even if it is Sensitive
-</pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> OWASP - <a href="https://owasp.org/Top10/A03_2021-Injection/">Top 10 2021 Category A3 - Injection</a> </li>
   <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A1_2017-Injection">Top 10 2017 Category A1 - Injection</a> </li>

@@ -1,32 +1,29 @@
+<h2>Why is this an issue?</h2>
 <p>External requests initiated by a WordPress server should be considered as security-sensitive. They may contain sensitive data which is stored in
 the files or in the database of the server. It’s important for the administrator of a WordPress server to understand what they contain and to which
 server they are sent.</p>
 <p>WordPress makes it possible to block external requests by setting the <code>WP_HTTP_BLOCK_EXTERNAL</code> option to <code>true</code>. It’s then
 possible to authorize requests to only a few servers using another option named <code>WP_ACCESSIBLE_HOSTS</code>.</p>
-<h2>Ask Yourself Whether</h2>
-<ul>
-  <li> Your WordPress website contains code which may call external requests to servers you don’t know. </li>
-  <li> Your WordPress website may send sensitive data to other servers. </li>
-  <li> Your WordPress website uses a lot of plugins or themes. </li>
-</ul>
-<p>There is a risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<p>If <code>WP_HTTP_BLOCK_EXTERNAL</code> is not defined or set to <code>false</code>, any plugin or theme installed on the WordPress server may send
+requests to any server on the internet. This may lead to data leaks or Server-Side Request Forgery (SSRF) attacks.</p>
+<h2>How to fix it</h2>
 <ul>
   <li> Uninstall WordPress plugins which send requests to servers you don’t know. </li>
   <li> Make sure that <code>WP_HTTP_BLOCK_EXTERNAL</code> is defined in <code>wp-config.php</code>. </li>
   <li> Make sure that <code>WP_HTTP_BLOCK_EXTERNAL</code> is set to <code>true</code>. </li>
   <li> Make sure that <code>WP_ACCESSIBLE_HOSTS</code> is configured to authorize requests to the servers you trust. </li>
 </ul>
-<h2>Sensitive Code Example</h2>
-<pre>
-define( 'WP_HTTP_BLOCK_EXTERNAL', false ); // Sensitive
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+define( 'WP_HTTP_BLOCK_EXTERNAL', false ); // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 define( 'WP_HTTP_BLOCK_EXTERNAL', true );
 define( 'WP_ACCESSIBLE_HOSTS', 'api.wordpress.org' );
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a> </li>
   <li> OWASP - <a href="https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/">Top 10 2021 Category A10 - Server-Side Request

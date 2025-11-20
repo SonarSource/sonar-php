@@ -1,6 +1,6 @@
 {
-  "title": "Hard-coded secrets are security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Secrets should not be hard-coded",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "BLOCKER"

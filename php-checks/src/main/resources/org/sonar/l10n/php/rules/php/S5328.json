@@ -1,6 +1,6 @@
 {
-  "title": "Manual generation of session ID is security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Session IDs must be securely generated and not user-specified",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "MEDIUM"
@@ -12,6 +12,7 @@
     "func": "Constant\/Issue",
     "constantCost": "15min"
   },
+  "quickfix": "unknown",
   "tags": [
     "cwe"
   ],

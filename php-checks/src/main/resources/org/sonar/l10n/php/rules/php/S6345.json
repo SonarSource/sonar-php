@@ -1,6 +1,6 @@
 {
-  "title": "Allowing all external requests from a WordPress server is security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "External requests should be restricted in WordPress to prevent data leaks and SSRF",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "MEDIUM"
@@ -12,6 +12,7 @@
     "func": "Constant\/Issue",
     "constantCost": "5min"
   },
+  "quickfix": "unknown",
   "tags": [
     "cwe"
   ],

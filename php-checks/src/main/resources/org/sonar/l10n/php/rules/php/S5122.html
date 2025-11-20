@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>Having a permissive Cross-Origin Resource Sharing policy is security-sensitive. It has led in the past to the following vulnerabilities:</p>
 <ul>
   <li> <a href="https://www.cve.org/CVERecord?id=CVE-2018-0269">CVE-2018-0269</a> </li>
@@ -8,60 +9,65 @@ security-reasons, a javascript frontend to perform a cross-origin HTTP request t
 from its own. The requested target can append additional HTTP headers in response, called <a
 href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">CORS</a>, that act like directives for the browser and change the access control policy
 / relax the same origin policy.</p>
-<h2>Ask Yourself Whether</h2>
-<ul>
-  <li> You don’t trust the origin specified, example: <code>Access-Control-Allow-Origin: untrustedwebsite.com</code>. </li>
-  <li> Access control policy is entirely disabled: <code>Access-Control-Allow-Origin: *</code> </li>
-  <li> Your access control policy is dynamically defined by a user-controlled input like <a
-  href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin"><code>origin</code></a> header. </li>
-</ul>
-<p>There is a risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<h2>How to fix it in Core PHP</h2>
 <ul>
   <li> The <code>Access-Control-Allow-Origin</code> header should be set only for a trusted origin and for specific resources. </li>
   <li> Allow only selected, trusted domains in the <code>Access-Control-Allow-Origin</code> header. Prefer whitelisting domains over blacklisting or
   allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks). </li>
 </ul>
-<h2>Sensitive Code Example</h2>
-<p>PHP built-in header function:</p>
-<pre>
-header("Access-Control-Allow-Origin: *"); // Sensitive
+<h3>Code Examples</h3>
+<h4>Noncompliant Code Example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+header("Access-Control-Allow-Origin: *"); // Noncompliant
 </pre>
-<p>Laravel:</p>
-<pre>
-response()-&gt;header('Access-Control-Allow-Origin', "*"); // Sensitive
+<h4>Compliant Solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+header("Access-Control-Allow-Origin: $trusteddomain");
 </pre>
-<p>Symfony:</p>
-<pre>
+<h2>How to fix it in Laravel</h2>
+<ul>
+  <li> The <code>Access-Control-Allow-Origin</code> header should be set only for a trusted origin and for specific resources. </li>
+  <li> Allow only selected, trusted domains in the <code>Access-Control-Allow-Origin</code> header. Prefer whitelisting domains over blacklisting or
+  allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks). </li>
+</ul>
+<h3>Code Examples</h3>
+<h4>Noncompliant Code Example</h4>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+response()-&gt;header('Access-Control-Allow-Origin', "*"); // Noncompliant
+</pre>
+<h4>Compliant Solution</h4>
+<pre data-diff-id="2" data-diff-type="compliant">
+response()-&gt;header('Access-Control-Allow-Origin', $trusteddomain);
+</pre>
+<h2>How to fix it in Symfony</h2>
+<ul>
+  <li> The <code>Access-Control-Allow-Origin</code> header should be set only for a trusted origin and for specific resources. </li>
+  <li> Allow only selected, trusted domains in the <code>Access-Control-Allow-Origin</code> header. Prefer whitelisting domains over blacklisting or
+  allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks). </li>
+</ul>
+<h3>Code Examples</h3>
+<h4>Noncompliant Code Example</h4>
+<pre data-diff-id="3" data-diff-type="noncompliant">
 use Symfony\Component\HttpFoundation\Response;
 
 $response = new Response(
     'Content',
     Response::HTTP_OK,
-    ['Access-Control-Allow-Origin' =&gt; '*'] // Sensitive
+    ['Access-Control-Allow-Origin' =&gt; '*'] // Noncompliant
 );
-$response-&gt;headers-&gt;set('Access-Control-Allow-Origin', '*'); // Sensitive
+$response-&gt;headers-&gt;set('Access-Control-Allow-Origin', '*'); // Noncompliant
 </pre>
 <p>User-controlled origin:</p>
-<pre>
+<pre data-diff-id="4" data-diff-type="noncompliant">
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 $origin = $request-&gt;headers-&gt;get('Origin');
 
-$response-&gt;headers-&gt;set('Access-Control-Allow-Origin', $origin); // Sensitive
+$response-&gt;headers-&gt;set('Access-Control-Allow-Origin', $origin); // Noncompliant
 </pre>
-<h2>Compliant Solution</h2>
-<p>PHP built-in header function:</p>
-<pre>
-header("Access-Control-Allow-Origin: $trusteddomain");
-</pre>
-<p>Laravel:</p>
-<pre>
-response()-&gt;header('Access-Control-Allow-Origin', $trusteddomain);
-</pre>
-<p>Symfony:</p>
-<pre>
+<h4>Compliant Solution</h4>
+<pre data-diff-id="3" data-diff-type="compliant">
 use Symfony\Component\HttpFoundation\Response;
 
 $response = new Response(
@@ -73,7 +79,7 @@ $response = new Response(
 $response-&gt;headers-&gt;set('Access-Control-Allow-Origin', $trusteddomain);
 </pre>
 <p>User-controlled origin validated with an allow-list:</p>
-<pre>
+<pre data-diff-id="4" data-diff-type="compliant">
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -83,7 +89,7 @@ if (in_array($origin, $trustedOrigins)) {
     $response-&gt;headers-&gt;set('Access-Control-Allow-Origin', $origin);
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a> </li>
   <li> OWASP - <a href="https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/">Top 10 2021 Category A7 - Identification and

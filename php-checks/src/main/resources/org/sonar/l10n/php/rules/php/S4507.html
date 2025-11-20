@@ -1,49 +1,42 @@
+<h2>Why is this an issue?</h2>
 <p>Development tools and frameworks usually have options to make debugging easier for developers. Although these features are useful during
 development, they should never be enabled for applications deployed in production. Debug instructions or error messages can leak detailed information
 about the system, like the application’s path or file names.</p>
-<h2>Ask Yourself Whether</h2>
-<ul>
-  <li> The code or configuration enabling the application debug features is deployed on production servers or distributed to end users. </li>
-  <li> The application runs by default with debug features activated. </li>
-</ul>
-<p>There is a risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
+<h2>How to fix it in WordPress</h2>
 <p>Do not enable debugging features on production servers or applications distributed to end users.</p>
-<h2>Sensitive Code Example</h2>
-<p>CakePHP 1.x, 2.x:</p>
-<pre>
-Configure::write('debug', 1); // Sensitive: development mode
-or
-Configure::write('debug', 2); // Sensitive: development mode
-or
-Configure::write('debug', 3); // Sensitive: development mode
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="3" data-diff-type="noncompliant">
+define( 'WP_DEBUG', true ); // Noncompliant
 </pre>
-<p>CakePHP 3.0:</p>
-<pre>
-use Cake\Core\Configure;
-
-Configure::config('debug', true); // Sensitive: development mode
-</pre>
-<p>WordPress:</p>
-<pre>
-define( 'WP_DEBUG', true ); // Sensitive: development mode
-</pre>
-<h2>Compliant Solution</h2>
-<p>CakePHP 1.2:</p>
-<pre>
-Configure::write('debug', 0); // Compliant; this is the production mode
-</pre>
-<p>CakePHP 3.0:</p>
-<pre>
-use Cake\Core\Configure;
-
-Configure::config('debug', false); // Compliant:  "0" or "false" for CakePHP 3.x is suitable (production mode) to not leak sensitive data on the logs.
-</pre>
-<p>WordPress:</p>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="3" data-diff-type="compliant">
 define( 'WP_DEBUG', false ); // Compliant
 </pre>
-<h2>See</h2>
+<h2>How to fix it in CakePHP</h2>
+<p>Do not enable debugging features on production servers or applications distributed to end users.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<p>CakePHP 1.x, 2.x:</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+Cake\Core\Configure::write('debug', 1); // Noncompliant
+Cake\Core\Configure::write('debug', 2); // Noncompliant
+Cake\Core\Configure::write('debug', 3); // Noncompliant
+</pre>
+<p>CakePHP 3.0:</p>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+Cake\Core\Configure::config('debug', true); // Noncompliant
+</pre>
+<h4>Compliant solution</h4>
+<p>CakePHP 1.2:</p>
+<pre data-diff-id="1" data-diff-type="compliant">
+Cake\Core\Configure::write('debug', 0); // Compliant, this is the production mode
+</pre>
+<p>CakePHP 3.0:</p>
+<pre data-diff-id="2" data-diff-type="compliant">
+Cake\Core\Configure::config('debug', false); // Compliant, "0" or "false" for CakePHP 3.x is suitable (production mode) to not leak sensitive data on the logs.
+</pre>
+<h2>Resources</h2>
 <ul>
   <li> OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a> </li>
   <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">Top 10 2017 Category A3 - Sensitive Data

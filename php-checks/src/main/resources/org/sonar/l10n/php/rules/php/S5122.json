@@ -1,6 +1,6 @@
 {
-  "title": "Having a permissive Cross-Origin Resource Sharing policy is security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Avoid overly permissive Cross-Origin Resource Sharing (CORS) policies to enhance security",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "LOW"
@@ -37,5 +37,10 @@
       "14.5.2",
       "14.5.3"
     ]
-  }
+  },
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "quickfix": "unknown"
 }
