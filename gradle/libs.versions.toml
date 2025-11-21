@@ -1,16 +1,16 @@
 [versions]
-sonar-commons = "2.18.0.3393"
+sonar-commons = "2.20.0.4607"
 # Before updating the plugin-api version, make sure to check the compatibility matrix and stick to the lowest denominator
 # https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility
 sonar-plugin-api = "11.1.0.2693"
-sonarqube = "25.10.0.114319"
+sonarqube = "25.11.0.114957"
 sonar-orchestrator = "6.0.0.3852"
-sonarlint = "10.34.1.83453"
+sonarlint = "10.36.0.83732"
 sslr = "1.24.0.633"
-junit = "6.0.0"
+junit = "6.0.1"
 assertj = "3.27.6"
 mockito = "5.20.0"
-commons-lang = "3.19.0"
+commons-lang = "3.20.0"
 jsr305 = "3.0.2"
 staxmate = "2.0.1"
 awaitility = "4.3.0"
