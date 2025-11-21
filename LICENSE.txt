@@ -69,7 +69,7 @@ including Contributors.
 SonarSource that is branded "SonarQube".
 
 "SonarSource" means SonarSource Sàrl, a Swiss company registered in Switzerland
-under UID No. CHE-114.587.664.
+under UID No. CHE-267.954.862.
 
 "Source Code" means the form of a Program preferred for making modifications,
 including but not limited to software source code, documentation source, and
