@@ -24,6 +24,19 @@ function run() {
 </pre>
 <h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
+function performAll($message) {
+  prepare($message);
+  execute($message);
+  release($message);
+}
+
+function run() {
+  performAll('this is a duplicate'); // Compliant - the duplicated string literal is turned into a parameter
+}
+</pre>
+
+<h4>Alternative compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 MESSAGE = 'this is a duplicate';
 
 function run() {
