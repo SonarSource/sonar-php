@@ -28,10 +28,6 @@ jobs:
       - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
         with:
           version: 2025.7.12
-      - &checkout-build-logic
-        name: Checkout build logic
-        run: |
-          git submodule update --init --depth 1 -- build-logic/common
       - &create-gradle-user-home
         name: Create Gradle User Home
         shell: bash
@@ -72,7 +68,6 @@ jobs:
       - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
         with:
           version: 2025.7.12
-      - *checkout-build-logic
       - *create-gradle-user-home
       - *cache-gradle-dependencies
       - uses: SonarSource/ci-github-actions/build-gradle@v1
@@ -113,7 +108,6 @@ jobs:
       - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
         with:
           version: 2025.7.12
-      - *checkout-build-logic
       - *create-gradle-user-home
       - *cache-gradle-dependencies
       - uses: SonarSource/ci-github-actions/build-gradle@v1
