@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2025 SonarSource SA
+ * Copyright (C) 2010-2025 SonarSource Sàrl
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ public class RulingHelper {
   private static final boolean VERBOSE_LOGS = false;
 
   private static final String SQ_VERSION_PROPERTY = "sonar.runtimeVersion";
-  private static final String DEFAULT_SQ_VERSION = "LATEST_RELEASE";
+  private static final String DEFAULT_SQ_VERSION = "25.7.0.110598";
   private static final Pattern DEBUG_AND_INFO_LOG_LINE_PATTERN = Pattern.compile("\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s(INFO|DEBUG)\\s.*");
   private static final Pattern CODE_LINE_LOG_LINE_PATTERN = Pattern.compile("\\s*\\d+: .*");
   private static final Pattern CODE_POINTER_LOG_LINE_PATTERN = Pattern.compile("\\s*\\^+");
@@ -58,7 +58,7 @@ public class RulingHelper {
   }
 
   static OrchestratorExtension getOrchestrator() {
-    return getOrchestrator(Edition.COMMUNITY);
+    return getOrchestrator(Edition.DEVELOPER);
   }
 
   static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile, String... keyValueProperties) {

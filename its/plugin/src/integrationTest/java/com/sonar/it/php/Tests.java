@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010-2025 SonarSource SA
+ * Copyright (C) 2010-2025 SonarSource Sàrl
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ class Tests {
   @RegisterExtension
   public static final OrchestratorExtension ORCHESTRATOR = OrchestratorExtension.builderEnv()
     .useDefaultAdminCredentialsForBuilds(true)
-    .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE"))
+    .setSonarVersion(System.getProperty("sonar.runtimeVersion", "25.7.0.110598"))
     // PHP Plugin
     .addPlugin(PHP_PLUGIN_LOCATION)
     .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
