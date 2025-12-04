@@ -54,7 +54,7 @@ public class RulingHelper {
   }
 
   static OrchestratorExtension getOrchestrator() {
-    return getOrchestrator(Edition.COMMUNITY);
+    return getOrchestrator(Edition.DEVELOPER);
   }
 
   static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile, String... keyValueProperties) {

@@ -1,0 +1,336 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+      - branch-*
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 17 * * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+
+env:
+  ARTIFACTORY_URL: https://repox.jfrog.io/artifactory
+
+jobs:
+  build:
+    runs-on: sonar-m-public
+    name: Build
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
+        with:
+          version: 2025.7.12
+      - &checkout-build-logic
+        name: Checkout build logic
+        run: |
+          git submodule update --init --depth 1 -- build-logic/common
+      - &create-gradle-user-home
+        name: Create Gradle User Home
+        shell: bash
+        run: |
+          export GRADLE_USER_HOME=${GITHUB_WORKSPACE}/.gradle
+          mkdir -p ${GRADLE_USER_HOME}
+          echo "GRADLE_USER_HOME=${GRADLE_USER_HOME}" >> $GITHUB_ENV
+          export TODAY=$(date '+%Y-%m-%d')
+          echo "TODAY=${TODAY}" >> $GITHUB_ENV
+          find . -name '*.gradle.kts' -type f -exec md5sum {} \; | sort && md5sum gradle/libs.versions.toml && md5sum gradle/wrapper/gradle-wrapper.properties && md5sum gradle.properties > gradle-md5-sums.txt 
+          export GRADLE_CACHE_KEY=$(md5sum gradle-md5-sums.txt | awk '{ print $1 }')
+          echo "GRADLE_CACHE_KEY=${GRADLE_CACHE_KEY}" >> $GITHUB_ENV
+          rm gradle-md5-sums.txt
+      - &cache-gradle-dependencies
+        name: Cache Gradle Dependencies
+        uses: SonarSource/ci-github-actions/cache@v1
+        with:
+          path: ${{ env.GRADLE_USER_HOME }}
+          key: gradle-${{ env.GRADLE_CACHE_KEY }}
+      - uses: SonarSource/ci-github-actions/build-gradle@v1
+        with:
+          deploy-pull-request: true
+          skip-tests: true
+          # There might be a warning: Warning: Failed to fetch short-lived token for Develocity
+          # it will be addressed in BUILD-8926
+          use-develocity: true
+          gradle-args: -x sonar
+
+  build_test_analyze:
+    needs: [build]
+    runs-on: sonar-m-public
+    name: Build Test Analyze
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
+        with:
+          version: 2025.7.12
+      - *checkout-build-logic
+      - *create-gradle-user-home
+      - *cache-gradle-dependencies
+      - uses: SonarSource/ci-github-actions/build-gradle@v1
+        with:
+          deploy-pull-request: false
+          skip-tests: false
+          use-develocity: true
+          gradle-args: -x artifactoryPublish
+      - name: Upload test results
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: test-results
+          path: '**/test-results/**/*.xml'
+
+  qa_os_win:
+    needs: [build]
+    runs-on: github-windows-latest-s
+    name: QA OS Windows
+    if: &skip-qa-jobs |
+      !(github.event_name == 'pull_request' &&
+      contains(github.event.pull_request.changed_files, '**/src/main/resources/org/sonar/l10n/*/rules/**') &&
+      contains(github.event.pull_request.changed_files, '**/src/main/resources/com/sonar/l10n/*/rules/**') &&
+      contains(github.event.pull_request.changed_files, '**sonarpedia.json') &&
+      contains(github.event.pull_request.changed_files, '**.md'))
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - name: Configure git
+        # Without this, on Windows, git will check out files with CRLF endings, which will cause PhpTestFileTest to fail
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          submodules: false
+      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
+        with:
+          version: 2025.7.12
+      - *checkout-build-logic
+      - *create-gradle-user-home
+      - *cache-gradle-dependencies
+      - uses: SonarSource/ci-github-actions/build-gradle@v1
+        with:
+          deploy-pull-request: false
+          skip-tests: false
+          use-develocity: true
+          gradle-args: -x artifactoryPublish -x sonar
+      - name: Upload test results
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: qa-os-win-test-results
+          path: '**/test-results/**/*.xml'
+      - name: Upload reports
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: qa-os-win-reports
+          path: '**/build/reports/**/*'
+
+  qa_plugin:
+    needs: [build]
+    runs-on: sonar-m-public
+    name: QA Plugin
+    if: *skip-qa-jobs
+    permissions:
+      id-token: write
+      contents: write
+    strategy:
+      matrix:
+        SQ_VERSION: [25.7.0.110598]
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          submodules: true
+      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
+        with:
+          version: 2025.7.12
+      - *create-gradle-user-home
+      - *cache-gradle-dependencies
+      - &setup-orchestator-home
+        name: Setup Orchestrator Home
+        run: |
+          echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
+          mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
+      - &cache-orchestrator
+        name: Cache Orchestrator
+        uses: SonarSource/ci-github-actions/cache@v1
+        with:
+          path: ${{ env.ORCHESTRATOR_HOME }}
+          key: orchestrator-${{ env.TODAY }}
+          enableCrossOsArchive: true
+      - uses: SonarSource/vault-action-wrapper@v3
+        id: secrets
+        with:
+          secrets: |
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - name: Run Integration Tests
+        env:
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+          GRADLE_TASK: its:plugin:integrationTest
+          KEEP_ORCHESTRATOR_RUNNING: "true"
+          SQ_VERSION: ${{ matrix.SQ_VERSION }}
+        run: |
+          ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --info --build-cache --console plain --no-daemon
+      - name: Upload test results
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: qa-plugin-test-results-${{ matrix.SQ_VERSION }}
+          path: '**/test-results/**/*.xml'
+      - name: Upload reports
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: qa-plugin-reports-${{ matrix.SQ_VERSION }}
+          path: '**/build/reports/**/*'
+
+  qa_ruling:
+    needs: [build]
+    runs-on: sonar-l-public
+    name: QA Ruling
+    if: *skip-qa-jobs
+    permissions:
+      id-token: write
+      contents: write
+    strategy:
+      matrix:
+        PHP_PROJECT: [Flysystem, Monica, PhpCodeSniffer, PhpMailer, Psysh, PhpWord, RubixML, PhpSpreadsheet]
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          submodules: true
+      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
+        with:
+          version: 2025.7.12
+      - *create-gradle-user-home
+      - *cache-gradle-dependencies
+      - *setup-orchestator-home
+      - *cache-orchestrator
+      - uses: SonarSource/vault-action-wrapper@v3
+        id: secrets
+        with:
+          secrets: |
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - name: Run Ruling Integration Tests
+        env:
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+          GRADLE_TASK: its:ruling:integrationTest
+          KEEP_ORCHESTRATOR_RUNNING: "true"
+          SQ_VERSION: 2025.1.4.113907
+          PHP_PROJECT: ${{ matrix.PHP_PROJECT }}
+        run: |
+          ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpGeneralRulingTest.test${PHP_PROJECT}" --info --build-cache --console plain --no-daemon
+      - name: Upload test results
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: qa-ruling-test-results-${{ matrix.PHP_PROJECT }}
+          path: '**/test-results/**/*.xml'
+      - name: Upload reports
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: qa-ruling-reports-${{ matrix.PHP_PROJECT }}
+          path: '**/build/reports/**/*'
+
+  qa_pr_analysis:
+    needs: [build]
+    runs-on: sonar-m-public
+    name: QA PR Analysis
+    if: *skip-qa-jobs
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          submodules: true
+      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
+        with:
+          version: 2025.7.12
+      - *create-gradle-user-home
+      - *cache-gradle-dependencies
+      - *setup-orchestator-home
+      - *cache-orchestrator
+      - uses: SonarSource/vault-action-wrapper@v3
+        id: secrets
+        with:
+          secrets: |
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - name: Run PR Analysis Integration Tests
+        env:
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+          GRADLE_TASK: its:ruling:integrationTest
+          KEEP_ORCHESTRATOR_RUNNING: "true"
+          SQ_VERSION: LATEST_RELEASE
+        run: |
+          ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpPrAnalysisTest" --info --build-cache --console plain --no-daemon
+      - name: Upload test results
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: qa-pr-analysis-test-results
+          path: '**/test-results/**/*.xml'
+      - name: Upload reports
+        if: always() && ! cancelled()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: qa-pr-analysis-reports
+          path: '**/build/reports/**/*'
+
+  promote:
+    needs: [build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis]
+    runs-on: sonar-xs-public
+    name: Promote
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: SonarSource/ci-github-actions/promote@v1
+        with:
+          promote-pull-request: true
+
+  notify:
+    runs-on: github-ubuntu-latest-s # Public GH runner is required, runners starting with sonar-* do not support this action
+    if: failure() && (contains(fromJSON('["main", "master"]'), github.event.check_suite.head_branch) || startsWith(github.event.check_suite.head_branch, 'branch-'))
+    needs: [ build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis, promote ]
+    permissions:
+      id-token: write
+    steps:
+      - name: Vault Secrets
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/slack token | SLACK_BOT_TOKEN;
+
+      - name: Slack Notification rtCamp
+        uses: rtCamp/action-slack-notify@e31e87e03dd19038e411e38ae27cbad084a90661  # v2.3.3
+        env:
+          SLACK_TOKEN: >-
+            ${{ fromJSON(steps.secrets.outputs.vault).SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: squad-security-taint-notifs
+          SLACK_TITLE: Build Failed
+          SLACK_MESSAGE: |
+            Workflow failed in ${{ github.repository }} 🚨
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Branch: ${{ github.head_ref || github.ref_name }}
+            Author: ${{ github.event.pull_request.user.login }}
+
+          SLACK_USERNAME: BuildBot
+          SLACK_COLOR: danger
