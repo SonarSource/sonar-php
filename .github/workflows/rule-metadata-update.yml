@@ -4,7 +4,7 @@ on:
   
 jobs:
   rule-metadata-update:
-    runs-on: ubuntu-latest-large
+    runs-on: github-ubuntu-latest-s
     permissions:
       id-token: write     # required by SonarSource/vault-action-wrapper
       contents: write # write for peter-evans/create-pull-request, read for actions/checkout
