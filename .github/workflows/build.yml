@@ -21,8 +21,10 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
-      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
+      - &checkout-simple
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - &mise-install
+        uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
         with:
           version: 2025.7.12
       - &checkout-build-logic
@@ -65,10 +67,8 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
-      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
-        with:
-          version: 2025.7.12
+      - *checkout-simple
+      - *mise-install
       - *checkout-build-logic
       - *create-gradle-user-home
       - *cache-gradle-dependencies
@@ -104,12 +104,8 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
-        with:
-          submodules: false
-      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
-        with:
-          version: 2025.7.12
+      - *checkout-simple
+      - *mise-install
       - *checkout-build-logic
       - *create-gradle-user-home
       - *cache-gradle-dependencies
@@ -144,12 +140,11 @@ jobs:
       matrix:
         SQ_VERSION: [LATEST_RELEASE, DEV]
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - &checkout-submodules
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           submodules: true
-      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
-        with:
-          version: 2025.7.12
+      - *mise-install
       - *create-gradle-user-home
       - *cache-gradle-dependencies
       - &setup-orchestator-home
@@ -164,21 +159,28 @@ jobs:
           path: ${{ env.ORCHESTRATOR_HOME }}
           key: orchestrator-${{ env.TODAY }}
           enableCrossOsArchive: true
-      - uses: SonarSource/vault-action-wrapper@v3
+      - &orchestrator-secrets
+        uses: SonarSource/vault-action-wrapper@v3
         id: secrets
         with:
           secrets: |
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/github/token/licenses-ro token | GITHUB_TOKEN;
-      - name: Run Integration Tests
+      - name: Run QA Plugin Tests
+        uses: SonarSource/ci-github-actions/build-gradle@v1
         env:
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-          GRADLE_TASK: its:plugin:integrationTest
           KEEP_ORCHESTRATOR_RUNNING: "true"
-          SQ_VERSION: ${{ matrix.SQ_VERSION }}
-        run: |
-          ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --info --build-cache --console plain --no-daemon
+        with:
+          deploy-pull-request: false
+          skip-tests: false
+          use-develocity: true
+          gradle-args: >
+            its:plugin:integrationTest
+            -Dsonar.runtimeVersion=LATEST_RELEASE
+            -x sonar
+            -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
@@ -204,32 +206,29 @@ jobs:
       matrix:
         PHP_PROJECT: [Flysystem, Monica, PhpCodeSniffer, PhpMailer, Psysh, PhpWord, RubixML, PhpSpreadsheet]
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
-        with:
-          submodules: true
-      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
-        with:
-          version: 2025.7.12
+      - *checkout-submodules
+      - *mise-install
       - *create-gradle-user-home
       - *cache-gradle-dependencies
       - *setup-orchestator-home
       - *cache-orchestrator
-      - uses: SonarSource/vault-action-wrapper@v3
-        id: secrets
-        with:
-          secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
-            development/github/token/licenses-ro token | GITHUB_TOKEN;
-      - name: Run Ruling Integration Tests
+      - *orchestrator-secrets
+      - name: Run QA Ruling Tests
+        uses: SonarSource/ci-github-actions/build-gradle@v1
         env:
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-          GRADLE_TASK: its:ruling:integrationTest
           KEEP_ORCHESTRATOR_RUNNING: "true"
-          SQ_VERSION: LATEST_RELEASE
-          PHP_PROJECT: ${{ matrix.PHP_PROJECT }}
-        run: |
-          ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpGeneralRulingTest.test${PHP_PROJECT}" --info --build-cache --console plain --no-daemon
+        with:
+          deploy-pull-request: false
+          skip-tests: false
+          use-develocity: true
+          gradle-args: >
+            its:ruling:integrationTest
+            -Dsonar.runtimeVersion=LATEST_RELEASE
+            --tests "PhpGeneralRulingTest.test${{ matrix.PHP_PROJECT }}"
+            -x sonar
+            -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
@@ -252,31 +251,29 @@ jobs:
       id-token: write
       contents: write
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
-        with:
-          submodules: true
-      - uses: jdx/mise-action@9dc7d5dd454262207dea3ab5a06a3df6afc8ff26 # v3.4.1
-        with:
-          version: 2025.7.12
+      - *checkout-submodules
+      - *mise-install
       - *create-gradle-user-home
       - *cache-gradle-dependencies
       - *setup-orchestator-home
       - *cache-orchestrator
-      - uses: SonarSource/vault-action-wrapper@v3
-        id: secrets
-        with:
-          secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
-            development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - *orchestrator-secrets
       - name: Run PR Analysis Integration Tests
+        uses: SonarSource/ci-github-actions/build-gradle@v1
         env:
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
-          GRADLE_TASK: its:ruling:integrationTest
           KEEP_ORCHESTRATOR_RUNNING: "true"
-          SQ_VERSION: LATEST_RELEASE
-        run: |
-          ./gradlew "${GRADLE_TASK}" "-Dsonar.runtimeVersion=${SQ_VERSION}" --tests "PhpPrAnalysisTest" --info --build-cache --console plain --no-daemon
+        with:
+          deploy-pull-request: false
+          skip-tests: false
+          use-develocity: true
+          gradle-args: >
+            its:ruling:integrationTest
+            -Dsonar.runtimeVersion=LATEST_RELEASE
+            --tests "PhpPrAnalysisTest"
+            -x sonar
+            -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
