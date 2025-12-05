@@ -302,32 +302,22 @@ jobs:
         with:
           promote-pull-request: true
 
-  notify:
-    runs-on: github-ubuntu-latest-s # Public GH runner is required, runners starting with sonar-* do not support this action
-    if: failure() && (contains(fromJSON('["main", "master"]'), github.event.check_suite.head_branch) || startsWith(github.event.check_suite.head_branch, 'branch-'))
+  notify_slack:
+    name: Notify Slack on Failure
     needs: [ build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis, promote ]
+    if: >-
+      !cancelled() && failure() &&
+      (github.ref_name == github.event.repository.default_branch ||
+      startsWith(github.ref_name, 'branch-') ||
+      startsWith(github.ref_name, 'dogfood-'))
     permissions:
       id-token: write
+      statuses: read
+    runs-on: github-ubuntu-latest-s
     steps:
-      - name: Vault Secrets
-        id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
+      - uses: SonarSource/release-github-actions/notify-slack@master
         with:
-          secrets: |
-            development/kv/data/slack token | SLACK_BOT_TOKEN;
-
-      - name: Slack Notification rtCamp
-        uses: rtCamp/action-slack-notify@e31e87e03dd19038e411e38ae27cbad084a90661  # v2.3.3
-        env:
-          SLACK_TOKEN: >-
-            ${{ fromJSON(steps.secrets.outputs.vault).SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL: squad-security-taint-notifs
-          SLACK_TITLE: Build Failed
-          SLACK_MESSAGE: |
-            Workflow failed in ${{ github.repository }} 🚨
-            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            Branch: ${{ github.head_ref || github.ref_name }}
-            Author: ${{ github.event.pull_request.user.login }}
-
-          SLACK_USERNAME: BuildBot
-          SLACK_COLOR: danger
+          project-name: "SonarPHP"
+          slack-channel: "squad-security-taint-notifs"
+          icon: ':elephpant:'
+          jobs: ${{ toJSON(needs) }}
