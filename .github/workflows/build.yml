@@ -38,9 +38,7 @@ jobs:
           # There might be a warning: Warning: Failed to fetch short-lived token for Develocity
           # it will be addressed in BUILD-8926
           use-develocity: true
-          gradle-args: >
-            --parallel
-            -x sonar
+          gradle-args: -x sonar
 
   build_test_analyze:
     needs: [build]
