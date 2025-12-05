@@ -223,12 +223,7 @@ jobs:
           deploy-pull-request: false
           skip-tests: false
           use-develocity: true
-          gradle-args: >
-            its:ruling:integrationTest
-            -Dsonar.runtimeVersion=LATEST_RELEASE
-            --tests "PhpGeneralRulingTest.test${{ matrix.PHP_PROJECT }}"
-            -x sonar
-            -x artifactoryPublish
+          gradle-args: its:ruling:integrationTest -Dsonar.runtimeVersion=LATEST_RELEASE --tests "PhpGeneralRulingTest.test${{ matrix.PHP_PROJECT }}" -x sonar -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
@@ -268,12 +263,7 @@ jobs:
           deploy-pull-request: false
           skip-tests: false
           use-develocity: true
-          gradle-args: >
-            its:ruling:integrationTest
-            -Dsonar.runtimeVersion=LATEST_RELEASE
-            --tests "PhpPrAnalysisTest"
-            -x sonar
-            -x artifactoryPublish
+          gradle-args: its:ruling:integrationTest -Dsonar.runtimeVersion=LATEST_RELEASE --tests "PhpPrAnalysisTest" -x sonar -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
