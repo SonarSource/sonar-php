@@ -228,7 +228,7 @@ jobs:
             -x build
             its:ruling:integrationTest
             -Dsonar.runtimeVersion=LATEST_RELEASE
-            --tests "org.sonar.php.it.PhpGeneralRulingTest.test${{ matrix.PHP_PROJECT }}"
+            --tests org.sonar.php.it.PhpGeneralRulingTest.test${{ matrix.PHP_PROJECT }}
             -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
