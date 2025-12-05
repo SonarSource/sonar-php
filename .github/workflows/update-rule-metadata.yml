@@ -19,7 +19,6 @@ on:
         default: 'master'
   schedule:
     - cron: '0 5 * * 1-5'
-  pull_request:
 
 jobs:
   update-rule-metadata:
