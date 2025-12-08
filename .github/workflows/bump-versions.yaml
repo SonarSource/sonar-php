@@ -26,7 +26,7 @@ jobs:
         run: |
           sed -i "s/version=.*/version=$VERSION/" gradle.properties
           cd php-custom-rules-plugin/maven && mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$VERSION
-      - uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7
+      - uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
         with:
           author: ${{ github.actor }} <${{ github.actor }}>
           commit-message: Prepare next development iteration
