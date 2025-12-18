@@ -19,7 +19,6 @@ package org.sonar.php.checks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.tuple.Pair;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -36,6 +35,29 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class UselessExpressionStatementCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S905";
+
+  private static class TreePair {
+    private final Tree left;
+    private final Tree right;
+
+    private TreePair(Tree left, Tree right) {
+      this.left = left;
+      this.right = right;
+    }
+
+    static TreePair of(Tree left, Tree right) {
+      return new TreePair(left, right);
+    }
+
+    Tree getLeft() {
+      return left;
+    }
+
+    Tree getRight() {
+      return right;
+    }
+  }
+
   private static final String MESSAGE = "Remove or refactor this statement.";
   private static final String MESSAGE_PARTIAL = "This statement part is useless, remove or refactor it.";
   private static final String MESSAGE_OPERATOR = "This binary operation is useless, remove it.";
@@ -88,7 +110,7 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
 
   private boolean fileContainsHTML;
   private List<Tree> uselessNodes;
-  private List<Pair<Tree, Tree>> uselessPartialNodes;
+  private List<TreePair> uselessPartialNodes;
   private List<Tree> uselessOperatorNodes;
 
   @Override
@@ -104,7 +126,7 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
       for (Tree uselessNode : uselessNodes) {
         context().newIssue(this, uselessNode, MESSAGE);
       }
-      for (Pair<Tree, Tree> uselessPartialNode : uselessPartialNodes) {
+      for (TreePair uselessPartialNode : uselessPartialNodes) {
         context().newIssue(this, uselessPartialNode.getLeft(), uselessPartialNode.getRight(), MESSAGE_PARTIAL);
       }
       for (Tree uselessOperatorNode : uselessOperatorNodes) {
@@ -137,9 +159,9 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
     if (isLeftUseless && isRightUseless) {
       uselessNodes.add(binaryExpression);
     } else if (isLeftUseless) {
-      uselessPartialNodes.add(Pair.of(binaryExpression.leftOperand(), binaryExpression.operator()));
+      uselessPartialNodes.add(TreePair.of(binaryExpression.leftOperand(), binaryExpression.operator()));
     } else if (isRightUseless) {
-      uselessPartialNodes.add(Pair.of(binaryExpression.operator(), binaryExpression.rightOperand()));
+      uselessPartialNodes.add(TreePair.of(binaryExpression.operator(), binaryExpression.rightOperand()));
     } else {
       uselessOperatorNodes.add(binaryExpression.operator());
     }

@@ -16,7 +16,6 @@
  */
 package org.sonar.php.checks;
 
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.tree.impl.PHPTree;
@@ -50,7 +49,8 @@ public class MethodNameReturningBooleanCheck extends PHPVisitorCheck {
     for (SyntaxTrivia comment : ((PHPTree) methodDeclaration).getFirstToken().trivias()) {
       for (String line : comment.text().split(LexicalConstant.LINE_TERMINATOR)) {
 
-        if (StringUtils.containsIgnoreCase(line, RETURN_TAG)) {
+        if (line.toLowerCase().contains(RETURN_TAG.toLowerCase())) {
+
           return returnsBoolean(line);
         }
       }

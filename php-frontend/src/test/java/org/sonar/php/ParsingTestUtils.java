@@ -18,7 +18,6 @@ package org.sonar.php;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -44,6 +43,6 @@ public class ParsingTestUtils {
   }
 
   public static String asCode(String... args) {
-    return StringUtils.join(args, System.lineSeparator());
+    return String.join(System.lineSeparator(), args);
   }
 }

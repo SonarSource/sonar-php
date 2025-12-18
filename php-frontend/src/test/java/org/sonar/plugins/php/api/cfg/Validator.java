@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.cfg.LiveVariablesAnalysis;
 import org.sonar.plugins.php.api.symbols.Symbol;
 
@@ -151,7 +150,7 @@ public class Validator {
       .isEqualTo(expectedSize);
     Set<String> actualVariableNames = actualVariables.stream().map(Symbol::name).collect(Collectors.toSet());
     assertThat(actualVariableNames)
-      .withFailMessage(buildDebugMessage(variableType + " elements differ. Actual: " + StringUtils.join(actualVariableNames, " ; "), blockTestId))
+      .withFailMessage(buildDebugMessage(variableType + " elements differ. Actual: " + String.join(" ; ", actualVariableNames), blockTestId))
       .hasSameElementsAs(expectedVariables);
   }
 

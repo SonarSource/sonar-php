@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.LexicalConstant;
@@ -168,7 +167,9 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
 
     if (commentLine.length > 2 && DOC_TAGS.contains(commentLine[1])) {
       for (String type : commentLine[2].split("\\|")) {
-        type = StringUtils.removeEnd(type, "[]");
+        if (type.endsWith("[]")) {
+          type = type.substring(0, type.length() - 2);
+        }
 
         if (!EXCLUDED_TYPES.contains(type.toLowerCase(Locale.ROOT))) {
           addType(type, trivia);
@@ -195,7 +196,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
   private static String getTypeName(NamespaceNameTree namespaceName) {
     String name = namespaceName.fullName();
     String prefix = "namespace\\";
-    if (StringUtils.startsWithIgnoreCase(name, prefix)) {
+    if (name.toLowerCase().startsWith(prefix.toLowerCase())) {
       // fixme (SONARPHP-552): Handle namespaces properly
       name = name.substring(prefix.length() - 1);
     }

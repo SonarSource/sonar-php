@@ -25,7 +25,6 @@ dependencies {
   compileOnly(libs.sonar.plugin.api)
   implementation(project(":php-frontend"))
   implementation(libs.sonar.analyzer.commons)
-  implementation(libs.commons.lang)
 
   testImplementation(testFixtures(project(":php-frontend")))
   testImplementation(libs.junit.jupiter)

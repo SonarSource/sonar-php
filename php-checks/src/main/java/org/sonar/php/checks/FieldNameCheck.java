@@ -19,7 +19,6 @@ package org.sonar.php.checks;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -58,7 +57,7 @@ public class FieldNameCheck extends PHPSubscriptionCheck {
     ClassPropertyDeclarationTree property = (ClassPropertyDeclarationTree) tree;
     for (VariableDeclarationTree variableDeclarationTree : property.declarations()) {
       String propertyName = variableDeclarationTree.identifier().text();
-      if (!pattern.matcher(StringUtils.remove(propertyName, "$")).matches()) {
+      if (!pattern.matcher(propertyName.replace("$", "")).matches()) {
         context().newIssue(this, variableDeclarationTree.identifier(), String.format(MESSAGE, propertyName, format));
       }
     }

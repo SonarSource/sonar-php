@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -104,7 +103,7 @@ public class TreeUtils {
     List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
 
     if (!trivias.isEmpty()) {
-      return StringUtils.containsIgnoreCase(getLast(trivias).text(), annotation);
+      return getLast(trivias).text().toLowerCase().contains(annotation.toLowerCase());
     }
 
     return false;

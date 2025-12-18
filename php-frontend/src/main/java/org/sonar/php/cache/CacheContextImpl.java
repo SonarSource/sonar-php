@@ -17,7 +17,6 @@
 package org.sonar.php.cache;
 
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.SonarProduct;
@@ -48,12 +47,12 @@ public class CacheContextImpl implements CacheContext {
   public static CacheContextImpl of(SensorContext context) {
     String pluginVersion = getImplementationVersion(ProjectSymbolData.class);
     String sonarModules = context.config().get("sonar.modules").orElse("");
-    if (StringUtils.isNotBlank(sonarModules) && context.isCacheEnabled()) {
+    if (!sonarModules.trim().isEmpty() && context.isCacheEnabled()) {
       LOG.warn("The sonar.modules is a deprecated property and should not be used anymore, it inhibits an optimized analysis");
     }
     if (!context.runtime().getProduct().equals(SonarProduct.SONARLINT)
       && context.runtime().getApiVersion().isGreaterThanOrEqual(MINIMUM_RUNTIME_VERSION)
-      && StringUtils.isBlank(sonarModules)) {
+      && (sonarModules.trim().isEmpty())) {
       return new CacheContextImpl(context.isCacheEnabled(),
         new PhpWriteCacheImpl(context.nextCache()),
         new PhpReadCacheImpl(context.previousCache()),

@@ -29,7 +29,6 @@ dependencies {
   implementation(libs.sonar.analyzer.commons)
   implementation(libs.woodstox)
   implementation(libs.staxmate)
-  implementation(libs.commons.lang)
 
   testImplementation(testFixtures(project(":php-frontend")))
   testImplementation(libs.junit.jupiter)
@@ -84,7 +83,7 @@ tasks.shadowJar {
 
   val logger = project.logger
   doLast {
-    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 3_000_000L, 3_500_000L, logger)
+    enforceJarSize(tasks.shadowJar.get().archiveFile.get().asFile, 2_900_000L, 3_500_000L, logger)
   }
 }
 
