@@ -67,8 +67,7 @@ public final class TestCase {
 
   @Override
   public String toString() {
-    return """
-      TestCase{className='%s', name='%s', status=%s}""".formatted(className, name, getStatus());
+    return "TestCase{className='%s', name='%s', status=%s}".formatted(className, name, getStatus());
   }
 
   String fullName() {

@@ -19,6 +19,7 @@ package org.sonar.php.tree;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -103,7 +104,7 @@ public class TreeUtils {
     List<SyntaxTrivia> trivias = ((PHPTree) declaration).getFirstToken().trivias();
 
     if (!trivias.isEmpty()) {
-      return getLast(trivias).text().toLowerCase().contains(annotation.toLowerCase());
+      return getLast(trivias).text().toLowerCase(Locale.ROOT).contains(annotation.toLowerCase(Locale.ROOT));
     }
 
     return false;

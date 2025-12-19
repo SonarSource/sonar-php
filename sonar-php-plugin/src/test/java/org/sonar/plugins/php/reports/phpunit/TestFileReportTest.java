@@ -101,15 +101,9 @@ class TestFileReportTest {
 
     String result = report.toString();
 
-    assertThat(result).contains("errors=1");
-    assertThat(result).contains("failures=1");
-    assertThat(result).contains("file=" + testFileName);
-    assertThat(result).contains("skipped=1");
-    assertThat(result).contains("tests=4");
-    assertThat(result).contains("testDuration=2.5");
-    assertThat(result).startsWith("org.sonar.plugins.php.reports.phpunit.TestFileReport@");
-    assertThat(result).contains("[");
-    assertThat(result).contains("]");
+    assertThat(result)
+      .startsWith("org.sonar.plugins.php.reports.phpunit.TestFileReport@")
+      .contains("errors=1", "failures=1", "file=" + testFileName, "skipped=1", "tests=4", "testDuration=2.5", "[", "]");
   }
 
   @Test

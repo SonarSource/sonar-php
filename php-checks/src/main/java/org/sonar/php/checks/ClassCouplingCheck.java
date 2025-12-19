@@ -196,7 +196,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
   private static String getTypeName(NamespaceNameTree namespaceName) {
     String name = namespaceName.fullName();
     String prefix = "namespace\\";
-    if (name.toLowerCase().startsWith(prefix.toLowerCase())) {
+    if (name.toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT))) {
       // fixme (SONARPHP-552): Handle namespaces properly
       name = name.substring(prefix.length() - 1);
     }
