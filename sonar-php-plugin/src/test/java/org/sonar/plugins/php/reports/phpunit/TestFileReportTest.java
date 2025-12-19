@@ -91,4 +91,42 @@ class TestFileReportTest {
     assertThat(unresolvedInputFiles).isEmpty();
   }
 
+  @Test
+  void shouldGenerateToString() {
+    final TestFileReport report = new TestFileReport(testFileName, 2.5);
+    report.addTestCase(new TestCase(null, null, null, null, null));
+    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report.addTestCase(new TestCase(TestCase.Status.FAILURE));
+    report.addTestCase(new TestCase(TestCase.Status.ERROR));
+
+    String result = report.toString();
+
+    assertThat(result).contains("errors=1");
+    assertThat(result).contains("failures=1");
+    assertThat(result).contains("file=" + testFileName);
+    assertThat(result).contains("skipped=1");
+    assertThat(result).contains("tests=4");
+    assertThat(result).contains("testDuration=2.5");
+    assertThat(result).startsWith("org.sonar.plugins.php.reports.phpunit.TestFileReport@");
+    assertThat(result).contains("[");
+    assertThat(result).contains("]");
+  }
+
+  @Test
+  void shouldTestEqualsMethod() {
+    final TestFileReport report1 = new TestFileReport(testFileName, 2.5);
+    report1.addTestCase(new TestCase(null, null, null, null, null));
+    report1.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report1.addTestCase(new TestCase(TestCase.Status.FAILURE));
+    report1.addTestCase(new TestCase(TestCase.Status.ERROR));
+
+    final TestFileReport report2 = new TestFileReport(testFileName, 2.5);
+    report2.addTestCase(new TestCase(null, null, null, null, null));
+    report2.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report2.addTestCase(new TestCase(TestCase.Status.FAILURE));
+    report2.addTestCase(new TestCase(TestCase.Status.ERROR));
+
+    assertThat(report1).isEqualTo(report2);
+    assertThat(report1.hashCode()).isEqualTo(report2.hashCode());
+  }
 }

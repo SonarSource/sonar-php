@@ -77,7 +77,7 @@ class JUnitLogParserForPhpUnitTest {
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-junit-report.xml"));
     List<TestFileReport> reportsPerFile = suites.arrangeSuitesIntoTestFileReports();
     assertThat(reportsPerFile).hasSize(8);
-    assertThat(reportsPerFile.get(5).getTests()).isEqualTo(3);
+    assertThat(reportsPerFile.get(0).getTests()).isEqualTo(3);
     assertThat(logTester.logs())
       .doesNotContain("Test cases must always be descendants of a file-based suite, skipping : testCanBeUsedAsString with data set #0 in App3Test::testCanBeUsedAsString");
   }
