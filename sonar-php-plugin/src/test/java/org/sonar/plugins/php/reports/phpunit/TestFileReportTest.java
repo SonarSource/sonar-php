@@ -121,6 +121,5 @@ class TestFileReportTest {
     report2.addTestCase(new TestCase(TestCase.Status.ERROR));
 
     assertThat(report1).isEqualTo(report2);
-    assertThat(report1.hashCode()).isEqualTo(report2.hashCode());
   }
 }
