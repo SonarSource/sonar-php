@@ -91,4 +91,33 @@ class TestFileReportTest {
     assertThat(unresolvedInputFiles).isEmpty();
   }
 
+  @Test
+  void shouldGenerateToString() {
+    final TestFileReport report = new TestFileReport(testFileName, 2.5);
+    report.addTestCase(new TestCase(null, null, null, null, null));
+    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report.addTestCase(new TestCase(TestCase.Status.FAILURE));
+    report.addTestCase(new TestCase(TestCase.Status.ERROR));
+
+    assertThat(report.toString())
+      .startsWith("org.sonar.plugins.php.reports.phpunit.TestFileReport@")
+      .endsWith("[errors=1,failures=1,file=testfile.php,skipped=1,tests=4,testDuration=2.5]");
+  }
+
+  @Test
+  void shouldTestEqualsMethod() {
+    final TestFileReport report1 = new TestFileReport(testFileName, 2.5);
+    report1.addTestCase(new TestCase(null, null, null, null, null));
+    report1.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report1.addTestCase(new TestCase(TestCase.Status.FAILURE));
+    report1.addTestCase(new TestCase(TestCase.Status.ERROR));
+
+    final TestFileReport report2 = new TestFileReport(testFileName, 2.5);
+    report2.addTestCase(new TestCase(null, null, null, null, null));
+    report2.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report2.addTestCase(new TestCase(TestCase.Status.FAILURE));
+    report2.addTestCase(new TestCase(TestCase.Status.ERROR));
+
+    assertThat(report1).isEqualTo(report2);
+  }
 }

@@ -27,7 +27,6 @@ dependencies {
   api(libs.sonar.regex.parsing)
 
   compileOnly(libs.sonar.plugin.api)
-  implementation(libs.commons.lang)
 
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.mockito.core)

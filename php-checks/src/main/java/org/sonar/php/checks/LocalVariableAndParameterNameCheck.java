@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -128,7 +127,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
   }
 
   private boolean isCompliant(String varName) {
-    return pattern.matcher(StringUtils.remove(varName, "$")).matches() || isSuperGlobal(varName);
+    return pattern.matcher(varName.replace("$", "")).matches() || isSuperGlobal(varName);
   }
 
   private static boolean isSuperGlobal(String varName) {

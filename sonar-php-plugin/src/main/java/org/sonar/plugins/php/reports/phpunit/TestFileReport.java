@@ -16,10 +16,8 @@
  */
 package org.sonar.plugins.php.reports.phpunit;
 
+import java.util.Objects;
 import java.util.function.Consumer;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -102,38 +100,30 @@ public class TestFileReport {
 
     TestFileReport that = (TestFileReport) o;
 
-    return new EqualsBuilder()
-      .append(errors, that.errors)
-      .append(failures, that.failures)
-      .append(skipped, that.skipped)
-      .append(tests, that.tests)
-      .append(testDuration, that.testDuration)
-      .append(file, that.file)
-      .isEquals();
+    return errors == that.errors &&
+      failures == that.failures &&
+      skipped == that.skipped &&
+      tests == that.tests &&
+      testDuration == that.testDuration &&
+      Objects.equals(file, that.file);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-      .append(errors)
-      .append(failures)
-      .append(file)
-      .append(skipped)
-      .append(tests)
-      .append(testDuration)
-      .toHashCode();
+    return Objects.hash(errors, failures, file, skipped, tests, testDuration);
   }
 
   @Override
   public String toString() {
-    ToStringBuilder builder = new ToStringBuilder(this);
-    builder.append("errors", errors);
-    builder.append("failures", failures);
-    builder.append("file", file);
-    builder.append("skipped", skipped);
-    builder.append("tests", tests);
-    builder.append("testDuration", testDuration);
-    return builder.toString();
+    return "%s@%s[errors=%s,failures=%s,file=%s,skipped=%s,tests=%s,testDuration=%s]".formatted(
+      this.getClass().getName(),
+      Integer.toHexString(System.identityHashCode(this)),
+      errors,
+      failures,
+      file,
+      skipped,
+      tests,
+      testDuration);
   }
 
   public int getTests() {

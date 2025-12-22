@@ -18,7 +18,7 @@ package org.sonar.plugins.php.api;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
+import java.util.Locale;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
 import org.sonar.plugins.php.PhpPlugin;
@@ -50,7 +50,7 @@ public final class Php extends AbstractLanguage {
   public String[] getFileSuffixes() {
     String[] suffixes = filterEmptyStrings(settings.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY));
     if (suffixes.length == 0) {
-      suffixes = StringUtils.split(Php.DEFAULT_FILE_SUFFIXES, ",");
+      suffixes = Php.DEFAULT_FILE_SUFFIXES.split(",");
     }
     return suffixes;
   }
@@ -58,7 +58,7 @@ public final class Php extends AbstractLanguage {
   private static String[] filterEmptyStrings(String[] stringArray) {
     List<String> nonEmptyStrings = new ArrayList<>();
     for (String string : stringArray) {
-      if (StringUtils.isNotBlank(string.trim())) {
+      if (!string.isBlank()) {
         nonEmptyStrings.add(string.trim());
       }
     }
@@ -72,9 +72,9 @@ public final class Php extends AbstractLanguage {
    * @return boolean <code>true</code> if the file name's suffix is known, <code>false</code> any other way
    */
   public boolean hasValidSuffixes(String fileName) {
-    String pathLowerCase = StringUtils.lowerCase(fileName);
+    String pathLowerCase = fileName.toLowerCase(Locale.ROOT);
     for (String suffix : getFileSuffixes()) {
-      if (pathLowerCase.endsWith("." + StringUtils.lowerCase(suffix))) {
+      if (pathLowerCase.endsWith("." + suffix.toLowerCase(Locale.ROOT))) {
         return true;
       }
     }

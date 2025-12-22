@@ -17,7 +17,7 @@
 package org.sonar.php.checks;
 
 import java.lang.reflect.Field;
-import org.apache.commons.lang3.ArrayUtils;
+import java.util.Arrays;
 
 public abstract class FormattingStandardCheckTest {
 
@@ -29,7 +29,7 @@ public abstract class FormattingStandardCheckTest {
       if (!f.getType().equals(boolean.class)) {
         continue;
       }
-      f.setBoolean(check, ArrayUtils.contains(fieldNames, f.getName()));
+      f.setBoolean(check, Arrays.asList(fieldNames).contains(f.getName()));
     }
   }
 

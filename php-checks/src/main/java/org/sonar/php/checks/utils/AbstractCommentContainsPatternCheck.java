@@ -16,7 +16,7 @@
  */
 package org.sonar.php.checks.utils;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.Locale;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -29,12 +29,11 @@ public abstract class AbstractCommentContainsPatternCheck extends PHPVisitorChec
   @Override
   public void visitTrivia(SyntaxTrivia trivia) {
     String comment = trivia.text();
-
-    if (StringUtils.containsIgnoreCase(comment, pattern())) {
+    if (comment.toLowerCase(Locale.ROOT).contains(pattern().toLowerCase(Locale.ROOT))) {
       String[] lines = comment.split("\r\n?|\n");
 
       for (int i = 0; i < lines.length; i++) {
-        if (StringUtils.containsIgnoreCase(lines[i], pattern()) && !isLetterAround(lines[i])) {
+        if (lines[i].toLowerCase(Locale.ROOT).contains(pattern().toLowerCase(Locale.ROOT)) && !isLetterAround(lines[i])) {
           createIssue(trivia.line() + i);
         }
       }
@@ -42,7 +41,7 @@ public abstract class AbstractCommentContainsPatternCheck extends PHPVisitorChec
   }
 
   private boolean isLetterAround(String line) {
-    int start = StringUtils.indexOfIgnoreCase(line, pattern());
+    int start = line.toLowerCase(Locale.ROOT).indexOf(pattern().toLowerCase(Locale.ROOT));
     int end = start + pattern().length();
 
     boolean pre = start > 0 && Character.isLetter(line.charAt(start - 1));

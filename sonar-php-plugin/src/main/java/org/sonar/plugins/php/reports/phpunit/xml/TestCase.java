@@ -16,9 +16,6 @@
  */
 package org.sonar.plugins.php.reports.phpunit.xml;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 public final class TestCase {
 
   public enum Status {
@@ -56,10 +53,10 @@ public final class TestCase {
   }
 
   public Status getStatus() {
-    if (StringUtils.isNotBlank(error)) {
+    if (error != null && !error.isBlank()) {
       return Status.ERROR;
     }
-    if (StringUtils.isNotBlank(failure)) {
+    if (failure != null && !failure.isBlank()) {
       return Status.FAILURE;
     }
     if (skipped != null) {
@@ -70,11 +67,12 @@ public final class TestCase {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this)
-      .append("className", className)
-      .append("name", name)
-      .append("status", getStatus())
-      .toString();
+    return "%s@%s[className=%s,name=%s,status=%s]".formatted(
+      this.getClass().getName(),
+      Integer.toHexString(System.identityHashCode(this)),
+      className,
+      name,
+      getStatus());
   }
 
   String fullName() {

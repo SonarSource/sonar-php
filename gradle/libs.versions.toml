@@ -10,7 +10,6 @@ sslr = "1.24.0.633"
 junit = "6.0.0"
 assertj = "3.27.6"
 mockito = "5.20.0"
-commons-lang = "3.19.0"
 jsr305 = "3.0.2"
 staxmate = "2.0.1"
 awaitility = "4.3.0"
@@ -34,7 +33,6 @@ sslr-testing-harness = { module = "org.sonarsource.sslr:sslr-testing-harness", v
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
-commons-lang = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang" }
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
 # Version of JUnit Platform is taken from the JUnit BOM that is imported by junit-jupiter
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }

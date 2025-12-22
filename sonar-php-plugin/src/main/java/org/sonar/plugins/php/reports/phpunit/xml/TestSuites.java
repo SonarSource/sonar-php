@@ -18,8 +18,7 @@ package org.sonar.plugins.php.reports.phpunit.xml;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.Objects;
 import org.sonar.plugins.php.reports.phpunit.TestFileReport;
 
 public final class TestSuites {
@@ -50,15 +49,11 @@ public final class TestSuites {
 
     TestSuites that = (TestSuites) o;
 
-    return new EqualsBuilder()
-      .append(suites, that.suites)
-      .isEquals();
+    return Objects.equals(suites, that.suites);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-      .append(suites)
-      .toHashCode();
+    return Objects.hashCode(suites);
   }
 }
