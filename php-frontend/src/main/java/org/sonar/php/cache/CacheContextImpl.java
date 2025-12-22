@@ -47,12 +47,12 @@ public class CacheContextImpl implements CacheContext {
   public static CacheContextImpl of(SensorContext context) {
     String pluginVersion = getImplementationVersion(ProjectSymbolData.class);
     String sonarModules = context.config().get("sonar.modules").orElse("");
-    if (!sonarModules.trim().isEmpty() && context.isCacheEnabled()) {
+    if (!sonarModules.isBlank() && context.isCacheEnabled()) {
       LOG.warn("The sonar.modules is a deprecated property and should not be used anymore, it inhibits an optimized analysis");
     }
     if (!context.runtime().getProduct().equals(SonarProduct.SONARLINT)
       && context.runtime().getApiVersion().isGreaterThanOrEqual(MINIMUM_RUNTIME_VERSION)
-      && (sonarModules.trim().isEmpty())) {
+      && (sonarModules.isBlank())) {
       return new CacheContextImpl(context.isCacheEnabled(),
         new PhpWriteCacheImpl(context.nextCache()),
         new PhpReadCacheImpl(context.previousCache()),

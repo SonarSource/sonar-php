@@ -50,7 +50,7 @@ public class MethodNameReturningBooleanCheck extends PHPVisitorCheck {
     for (SyntaxTrivia comment : ((PHPTree) methodDeclaration).getFirstToken().trivias()) {
       for (String line : comment.text().split(LexicalConstant.LINE_TERMINATOR)) {
 
-        if (line.toLowerCase(Locale.ROOT).contains(RETURN_TAG.toLowerCase(Locale.ROOT))) {
+        if (line.toLowerCase(Locale.ROOT).contains(RETURN_TAG)) {
 
           return returnsBoolean(line);
         }

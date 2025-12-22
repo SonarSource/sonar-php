@@ -58,7 +58,7 @@ public final class Php extends AbstractLanguage {
   private static String[] filterEmptyStrings(String[] stringArray) {
     List<String> nonEmptyStrings = new ArrayList<>();
     for (String string : stringArray) {
-      if (!string.trim().isEmpty()) {
+      if (!string.isBlank()) {
         nonEmptyStrings.add(string.trim());
       }
     }

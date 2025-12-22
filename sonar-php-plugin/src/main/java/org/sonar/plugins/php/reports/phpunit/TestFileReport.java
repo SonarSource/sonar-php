@@ -104,7 +104,7 @@ public class TestFileReport {
       failures == that.failures &&
       skipped == that.skipped &&
       tests == that.tests &&
-      Double.compare(testDuration, that.testDuration) == 0 &&
+      testDuration == that.testDuration &&
       Objects.equals(file, that.file);
   }
 
@@ -115,14 +115,15 @@ public class TestFileReport {
 
   @Override
   public String toString() {
-    return getClass().getName() + "@" + Integer.toHexString(hashCode()) +
-      "[errors=" + errors +
-      ",failures=" + failures +
-      ",file=" + file +
-      ",skipped=" + skipped +
-      ",tests=" + tests +
-      ",testDuration=" + testDuration +
-      "]";
+    return "%s@%s[errors=%s,failures=%s,file=%s,skipped=%s,tests=%s,testDuration=%s]".formatted(
+      this.getClass().getName(),
+      Integer.toHexString(System.identityHashCode(this)),
+      errors,
+      failures,
+      file,
+      skipped,
+      tests,
+      testDuration);
   }
 
   public int getTests() {

@@ -99,11 +99,9 @@ class TestFileReportTest {
     report.addTestCase(new TestCase(TestCase.Status.FAILURE));
     report.addTestCase(new TestCase(TestCase.Status.ERROR));
 
-    String result = report.toString();
-
-    assertThat(result)
+    assertThat(report.toString())
       .startsWith("org.sonar.plugins.php.reports.phpunit.TestFileReport@")
-      .contains("errors=1", "failures=1", "file=" + testFileName, "skipped=1", "tests=4", "testDuration=2.5", "[", "]");
+      .endsWith("[errors=1,failures=1,file=testfile.php,skipped=1,tests=4,testDuration=2.5]");
   }
 
   @Test

@@ -36,28 +36,6 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S905";
 
-  private static class TreePair {
-    private final Tree left;
-    private final Tree right;
-
-    private TreePair(Tree left, Tree right) {
-      this.left = left;
-      this.right = right;
-    }
-
-    static TreePair of(Tree left, Tree right) {
-      return new TreePair(left, right);
-    }
-
-    Tree getLeft() {
-      return left;
-    }
-
-    Tree getRight() {
-      return right;
-    }
-  }
-
   private static final String MESSAGE = "Remove or refactor this statement.";
   private static final String MESSAGE_PARTIAL = "This statement part is useless, remove or refactor it.";
   private static final String MESSAGE_OPERATOR = "This binary operation is useless, remove it.";
@@ -127,7 +105,7 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
         context().newIssue(this, uselessNode, MESSAGE);
       }
       for (TreePair uselessPartialNode : uselessPartialNodes) {
-        context().newIssue(this, uselessPartialNode.getLeft(), uselessPartialNode.getRight(), MESSAGE_PARTIAL);
+        context().newIssue(this, uselessPartialNode.left, uselessPartialNode.right, MESSAGE_PARTIAL);
       }
       for (Tree uselessOperatorNode : uselessOperatorNodes) {
         context().newIssue(this, uselessOperatorNode, MESSAGE_OPERATOR);
@@ -182,6 +160,12 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
   public void visitToken(SyntaxToken token) {
     if (token.is(Kind.INLINE_HTML_TOKEN) && !CheckUtils.isClosingTag(token)) {
       fileContainsHTML = true;
+    }
+  }
+
+  private record TreePair(Tree left, Tree right) {
+    static TreePair of(Tree left, Tree right) {
+      return new TreePair(left, right);
     }
   }
 }

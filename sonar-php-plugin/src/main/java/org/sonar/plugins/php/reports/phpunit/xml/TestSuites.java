@@ -54,6 +54,6 @@ public final class TestSuites {
 
   @Override
   public int hashCode() {
-    return suites != null ? suites.hashCode() : 0;
+    return Objects.hashCode(suites);
   }
 }

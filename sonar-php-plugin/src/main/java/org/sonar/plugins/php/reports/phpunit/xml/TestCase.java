@@ -53,10 +53,10 @@ public final class TestCase {
   }
 
   public Status getStatus() {
-    if (error != null && !error.trim().isEmpty()) {
+    if (error != null && !error.isBlank()) {
       return Status.ERROR;
     }
-    if (failure != null && !failure.trim().isEmpty()) {
+    if (failure != null && !failure.isBlank()) {
       return Status.FAILURE;
     }
     if (skipped != null) {
@@ -67,7 +67,12 @@ public final class TestCase {
 
   @Override
   public String toString() {
-    return "TestCase{className='%s', name='%s', status=%s}".formatted(className, name, getStatus());
+    return "%s@%s[className=%s,name=%s,status=%s]".formatted(
+      this.getClass().getName(),
+      Integer.toHexString(System.identityHashCode(this)),
+      className,
+      name,
+      getStatus());
   }
 
   String fullName() {
