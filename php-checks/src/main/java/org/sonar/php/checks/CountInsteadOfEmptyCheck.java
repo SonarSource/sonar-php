@@ -34,6 +34,8 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -59,7 +61,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     ExpressionTree argumentValue = CheckUtils.argument(tree, "array_or_countable", 0)
       .map(CallArgumentTree::value)
       .orElse(null);
-    if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(argumentValue)) {
+    if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(argumentValue) && !isEmptyUsedInExpression(tree, argumentValue)) {
       context().newIssue(this, tree.getParent(), "Use empty() to check whether the array is empty or not.");
     }
     super.visitFunctionCall(tree);
@@ -87,6 +89,114 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
   private boolean isCountFunction(FunctionCallTree tree) {
     return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable()));
+  }
+
+  // Checks if empty() is used on the same variable in the surrounding expression context
+  // Returns true if empty() call is found, indicating we should skip raising an issue
+  private boolean isEmptyUsedInExpression(FunctionCallTree countCallTree, @Nullable ExpressionTree countArgument) {
+    // Early return if count() has no argument
+    if (countArgument == null) {
+      return false;
+    }
+
+    // Navigate up the tree to find logical expressions (&&, ||)
+    Tree current = countCallTree.getParent();
+    while (current != null) {
+      // Stop at statement boundaries or function definitions
+      if (current.is(
+        Tree.Kind.EXPRESSION_STATEMENT,
+        Tree.Kind.RETURN_STATEMENT,
+        Tree.Kind.IF_STATEMENT,
+        Tree.Kind.WHILE_STATEMENT,
+        Tree.Kind.DO_WHILE_STATEMENT,
+        Tree.Kind.FOR_STATEMENT,
+        Tree.Kind.FOREACH_STATEMENT,
+        Tree.Kind.SWITCH_STATEMENT,
+        Tree.Kind.ASSIGNMENT,
+        Tree.Kind.FUNCTION_DECLARATION,
+        Tree.Kind.METHOD_DECLARATION)) {
+        break;
+      }
+
+      // Check if we're in a logical expression context (&&, ||, and, or)
+      if (current.is(Tree.Kind.CONDITIONAL_AND, Tree.Kind.CONDITIONAL_OR, Tree.Kind.ALTERNATIVE_CONDITIONAL_AND, Tree.Kind.ALTERNATIVE_CONDITIONAL_OR)) {
+        if (containsEmptyCallOnVariable((BinaryExpressionTree) current, countArgument)) {
+          return true;
+        }
+        // Check the condition part of ternary operator
+      } else if (current.is(Tree.Kind.CONDITIONAL_EXPRESSION)) {
+        if (containsEmptyCallInTree(current, countArgument)) {
+          return true;
+        }
+      }
+
+      current = current.getParent();
+    }
+
+    return false;
+  }
+
+  // Checks both left and right operands of a binary logical expression for empty() calls
+  private boolean containsEmptyCallOnVariable(BinaryExpressionTree logicalExpression, ExpressionTree targetVariable) {
+    return containsEmptyCallInTree(logicalExpression.leftOperand(), targetVariable) ||
+      containsEmptyCallInTree(logicalExpression.rightOperand(), targetVariable);
+  }
+
+  // Recursively searches a tree for empty() calls on the target variable
+  private boolean containsEmptyCallInTree(Tree tree, ExpressionTree targetVariable) {
+    // Check if this node is a function call to empty() with the same variable
+    if (tree.is(Tree.Kind.FUNCTION_CALL)) {
+      FunctionCallTree functionCall = (FunctionCallTree) tree;
+      if (isEmptyFunction(functionCall)) {
+        ExpressionTree emptyArgument = CheckUtils.argument(functionCall, "var", 0)
+          .map(CallArgumentTree::value)
+          .orElse(null);
+        if (emptyArgument != null && areSameVariable(emptyArgument, targetVariable)) {
+          return true;
+        }
+      }
+    }
+
+    // Recursively check children for nested logical expressions
+    if (tree.is(Tree.Kind.CONDITIONAL_AND, Tree.Kind.CONDITIONAL_OR,
+      Tree.Kind.ALTERNATIVE_CONDITIONAL_AND, Tree.Kind.ALTERNATIVE_CONDITIONAL_OR)) {
+      BinaryExpressionTree binaryTree = (BinaryExpressionTree) tree;
+      return containsEmptyCallInTree(binaryTree.leftOperand(), targetVariable) ||
+        containsEmptyCallInTree(binaryTree.rightOperand(), targetVariable);
+    }
+
+    // Check inside negation operators (!)
+    if (tree.is(Tree.Kind.LOGICAL_COMPLEMENT)) {
+      return containsEmptyCallInTree(((UnaryExpressionTree) tree).expression(), targetVariable);
+    }
+
+    // Check inside parentheses
+    if (tree.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
+      return containsEmptyCallInTree(((ParenthesisedExpressionTree) tree).expression(), targetVariable);
+    }
+
+    return false;
+  }
+
+  // Checks if a function call tree is a call to the empty() function
+  private boolean isEmptyFunction(FunctionCallTree tree) {
+    return new FunctionCall("empty").test(TreeValues.of(tree, context().symbolTable()));
+  }
+
+  // Makes sure empty() and count() have the same value argument before skipping the issue raising, in case they are joined by a logical
+  // expression
+  // Compares two variable expressions to check if they reference the same variable
+  private static boolean areSameVariable(ExpressionTree var1, ExpressionTree var2) {
+    // Both expressions must be variable identifiers
+    if (!var1.is(Tree.Kind.VARIABLE_IDENTIFIER) || !var2.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      return false;
+    }
+
+    // Extract and compare variable names
+    String name1 = ((VariableIdentifierTree) var1).variableExpression().text();
+    String name2 = ((VariableIdentifierTree) var2).variableExpression().text();
+
+    return name1.equals(name2);
   }
 
   private boolean isArrayVariable(@Nullable ExpressionTree tree) {

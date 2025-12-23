@@ -143,3 +143,17 @@ function named_arguments() {
   sizeof(mode: 1, array_or_countable: $_POST) > 0; // Noncompliant
   sizeof(mode: 1, array_or_countable: $unknown_var) > 0;
 }
+
+$example = (!empty($exampleName) && count($exampleName) > 0) ? $exampleName[0] : '';
+$example2 = (empty($exampleName2) || count($exampleName2) == 0) ? '' : $exampleName2[0];
+if (!empty($exampleName3) && count($exampleName3) > 0) {
+  echo $exampleName3[0];
+}
+if (empty($exampleName4) or count($exampleName4) == 0) {
+  echo "empty";
+}
+
+if (!empty($differentVar) && count($exampleName5) > 0) { // Noncompliant
+  echo $exampleName5[0];
+}
+
