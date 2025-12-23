@@ -303,3 +303,117 @@ class ExamplePlugin
         return;
     }
 }
+
+// Magic methods - methods starting with __ should not raise issues (except __construct which has special handling)
+class MagicMethodsClass
+{
+    // Destructor - should not raise issues
+    public function __destruct()
+    {
+        return;
+    }
+
+    // __call - should not raise issues
+    public function __call($name, $arguments)
+    {
+        return;
+    }
+
+    // __callStatic - should not raise issues
+    public static function __callStatic($name, $arguments)
+    {
+        return;
+    }
+
+    // __get - should not raise issues
+    public function __get($name)
+    {
+        return;
+    }
+
+    // __set - should not raise issues
+    public function __set($name, $value)
+    {
+        return;
+    }
+
+    // __isset - should not raise issues
+    public function __isset($name)
+    {
+        return;
+    }
+
+    // __unset - should not raise issues
+    public function __unset($name)
+    {
+        return;
+    }
+
+    // __sleep - should not raise issues
+    public function __sleep()
+    {
+        return [];
+    }
+
+    // __wakeup - should not raise issues
+    public function __wakeup()
+    {
+        return;
+    }
+
+    // __toString - should not raise issues
+    public function __toString()
+    {
+        return "";
+    }
+
+    // __invoke - should not raise issues
+    public function __invoke($param1, $param2, $param3)
+    {
+        return;
+    }
+
+    // __set_state - should not raise issues
+    public static function __set_state($properties)
+    {
+        return new self();
+    }
+
+    // __clone - should not raise issues
+    public function __clone()
+    {
+        return;
+    }
+
+    // __debugInfo - should not raise issues
+    public function __debugInfo()
+    {
+        return [];
+    }
+
+    // __serialize - should not raise issues
+    public function __serialize()
+    {
+        return [];
+    }
+
+    // __unserialize - should not raise issues
+    public function __unserialize($data)
+    {
+        return;
+    }
+
+    // Regular method starting with __ (but not a standard magic method) - should not raise issues
+    public function __customMagicMethod($param1, $param2)
+    {
+        return;
+    }
+
+    // Non-magic method - should raise issues normally
+    public function regularMethod($param1, $param2) // Noncompliant 2
+    {
+        return;
+    }
+}
+
+
