@@ -242,3 +242,41 @@ if (!empty($boundary1)) {
 if (!empty($sizeof1) && sizeof($sizeof1) > 0) {
   echo $sizeof1[0]; // Compliant - empty() is used
 }
+
+// Test count with no argument - line 98/99 coverage (countArgument == null)
+if (count() > 0) { // Compliant - no argument to check
+  echo "test";
+}
+
+// Test where empty() is found but areSameVariable returns false (line 150 partial)
+// This tests when empty() has an array access expression, not a simple variable
+if (!empty($arr1[0]) && count($arr2) > 0) { // Noncompliant
+  echo $arr2[0];
+}
+
+// Test where containsEmptyCallOnVariable returns false (line 126 miss)
+// Logical expression without any empty() call on the variable
+if ($someCondition && count($noEmptyCheck) > 0) { // Noncompliant
+  echo $noEmptyCheck[0];
+}
+
+// Test where leftOperand doesn't have empty but rightOperand does (line 138 partial - right side)
+if (count($rightEmpty1) > 0 && !empty($rightEmpty1)) {
+  echo $rightEmpty1[0]; // Compliant - empty() is on right side
+}
+
+// Test non-empty function call in tree (line 146 partial - isEmptyFunction returns false)
+// This has a different function call (not empty) in the logical expression
+if (isset($issetVar) && count($issetVar) > 0) { // Noncompliant
+  echo $issetVar[0];
+}
+
+// Test areSameVariable with non-variable identifiers (line 187/188)
+// Using array access in empty() vs simple variable in count()
+if (!empty($complexExpr[0]) && count($simpleVar) > 0) { // Noncompliant
+  echo $simpleVar[0];
+}
+
+// Test conditional expression (ternary) where containsEmptyCallInTree returns false
+$noEmptyTernary = (count($ternNoEmpty) > 0 && $flag) ? $ternNoEmpty[0] : ''; // Noncompliant
+
