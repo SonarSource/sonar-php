@@ -149,7 +149,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
    */
   private static boolean isMagicMethod(MethodDeclarationTree tree) {
     String methodName = tree.name().text();
-    return methodName.startsWith("__") && !methodName.equalsIgnoreCase("__construct");
+    return methodName.startsWith("__") && !"__construct".equalsIgnoreCase(methodName);
   }
 
   private static boolean isExcluded(Symbol symbol) {
