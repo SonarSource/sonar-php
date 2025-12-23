@@ -100,7 +100,6 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     }
 
     Tree current = countCallTree.getParent();
-    // Navigate up the tree to find logical expressions (&&, ||)
     while (current != null) {
       // Stop at statement boundaries or function definitions
       if (current.is(
