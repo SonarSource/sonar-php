@@ -6,18 +6,6 @@
 2121,
 2148
 ],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/Blanks.php": [
-85
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/DateValue.php": [
-99
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/Duplicates.php": [
-64
-],
-"PhpSpreadsheet:src/PhpSpreadsheet/Style/ConditionalFormatting/Wizard/Errors.php": [
-81
-],
 "PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/HtmlTest.php": [
 41
 ]
