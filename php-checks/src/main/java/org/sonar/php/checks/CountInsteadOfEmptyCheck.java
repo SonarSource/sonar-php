@@ -99,8 +99,8 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
       return false;
     }
 
-    // Navigate up the tree to find logical expressions (&&, ||)
     Tree current = countCallTree.getParent();
+    // Navigate up the tree to find logical expressions (&&, ||)
     while (current != null) {
       // Stop at statement boundaries or function definitions
       if (current.is(
@@ -118,16 +118,13 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
         break;
       }
 
-      // Check if we're in a logical expression context (&&, ||, and, or)
       if (current.is(Tree.Kind.CONDITIONAL_AND, Tree.Kind.CONDITIONAL_OR, Tree.Kind.ALTERNATIVE_CONDITIONAL_AND, Tree.Kind.ALTERNATIVE_CONDITIONAL_OR)) {
         if (containsEmptyCallOnVariable((BinaryExpressionTree) current, countArgument)) {
           return true;
         }
         // Check the condition part of ternary operator
-      } else if (current.is(Tree.Kind.CONDITIONAL_EXPRESSION)) {
-        if (containsEmptyCallInTree(current, countArgument)) {
-          return true;
-        }
+      } else if (current.is(Tree.Kind.CONDITIONAL_EXPRESSION) && containsEmptyCallInTree(current, countArgument)) {
+        return true;
       }
 
       current = current.getParent();

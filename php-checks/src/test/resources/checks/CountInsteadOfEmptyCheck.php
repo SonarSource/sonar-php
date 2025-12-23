@@ -157,3 +157,88 @@ if (!empty($differentVar) && count($exampleName5) > 0) { // Noncompliant
   echo $exampleName5[0];
 }
 
+// Test nested logical expressions with empty()
+if (!empty($nested1) && (count($nested1) > 0 && $nested1[0] == 'test')) {
+  echo $nested1[0]; // Compliant - empty() is used
+}
+
+// Test with parentheses around empty()
+if ((!empty($parens1)) && count($parens1) > 0) {
+  echo $parens1[0]; // Compliant - empty() is used with parentheses
+}
+
+// Test with alternative operators (and, or) with different positions
+if (!empty($altOp1) and count($altOp1) > 0) {
+  echo $altOp1[0]; // Compliant - empty() is used with 'and'
+}
+
+// Test with 'or' operator
+if (empty($orOp1) or count($orOp1) == 0) {
+  echo "empty"; // Compliant - empty() is used with 'or'
+}
+
+// Test ternary operator with empty() in condition
+$ternary1 = !empty($ternVar1) && count($ternVar1) > 0 ? $ternVar1[0] : ''; // Compliant - empty() is used
+
+// Test without empty() - should raise issue
+if ($someFlag && count($noEmpty1) > 0) { // Noncompliant
+  echo $noEmpty1[0];
+}
+
+// Test statement boundary - assignment
+$assignment1 = count($assign1) > 0; // Noncompliant
+if (!empty($assign1)) {
+  echo $assign1[0];
+}
+
+// Test statement boundary - return statement
+function testReturn(array $ret1) {
+  if (count($ret1) > 0) { // Noncompliant
+    return true;
+  }
+  return false;
+}
+
+// Test in while statement
+while (count($while1) > 0) { // Noncompliant
+  echo $while1[0];
+  array_shift($while1);
+}
+
+// Test in for statement
+for ($i = 0; count($for1) > 0; $i++) { // Noncompliant
+  echo $for1[0];
+  array_shift($for1);
+}
+
+// Test in foreach with empty() - should not raise
+if (!empty($foreach1)) {
+  foreach ($foreach1 as $item) {
+    if (count($foreach1) > 0) { // Compliant - crosses foreach statement boundary
+      echo $item;
+    }
+  }
+}
+
+// Test complex nested logical with multiple empty() calls
+if (!empty($complex1) && !empty($complex2) && count($complex1) > 0) {
+  echo $complex1[0]; // Compliant - empty() is used on same variable
+}
+
+// Test with triple nested logical expressions
+if (($a || !empty($triple1)) && ($b && count($triple1) > 0)) {
+  echo $triple1[0]; // Compliant - empty() is used
+}
+
+// Test method call boundary - empty() should not cross function boundaries
+function testFunctionBoundary(array $boundary1) {
+  return count($boundary1) > 0; // Noncompliant
+}
+if (!empty($boundary1)) {
+  echo testFunctionBoundary($boundary1);
+}
+
+// Test with sizeof() instead of count()
+if (!empty($sizeof1) && sizeof($sizeof1) > 0) {
+  echo $sizeof1[0]; // Compliant - empty() is used
+}
