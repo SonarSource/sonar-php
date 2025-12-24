@@ -303,3 +303,43 @@ class ExamplePlugin
         return;
     }
 }
+
+// Magic methods - methods starting with __ should not raise issues
+class MagicMethodsClass
+{
+    // Destructor - should not raise issues
+    public function __destruct()
+    {
+        return;
+    }
+
+    // ToString - should not raise issues
+    public function __toString($param1)
+    {
+        return;
+    }
+
+    // Setter - should not raise issues
+    public function __set($param1,$param2)
+    {
+        return;
+    }
+
+    public function __construct(private $promoted, $used, $unused) { //Noncompliant
+         print($used);
+    }
+
+    // Regular method starting with __ (but not a standard magic method) - should raise issues
+    public function __customMagicMethod($param1, $param2) // Noncompliant 2
+    {
+        return;
+    }
+
+    // Non-magic method - should raise issues normally
+    public function regularMethod($param1, $param2) // Noncompliant 2
+    {
+        return;
+    }
+}
+
+

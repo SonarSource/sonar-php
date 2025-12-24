@@ -22,6 +22,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
@@ -114,13 +115,15 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   /**
    * Exclude methods from the check that is overriding/implementing a method and are not private.
    * Also exclude Magento plugin methods (before*, around*, after*) with specific signatures.
+   * Also exclude magic methods (methods starting with __).
    */
   private static boolean isExcluded(MethodDeclarationTree tree) {
     MethodSymbol methodSymbol = Symbols.get(tree);
     return !tree.body().is(Tree.Kind.BLOCK)
       || !(methodSymbol.isOverriding().isFalse())
       || (methodSymbol.visibility() != Visibility.PRIVATE && methodSymbol.owner().is(ClassSymbol.Kind.ABSTRACT))
-      || isMagentoPluginMethod(tree);
+      || isMagentoPluginMethod(tree)
+      || isMagicMethod(tree);
   }
 
   /**
@@ -137,6 +140,17 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     return (methodName.startsWith("before") && parameterCount >= 3)
       || (methodName.startsWith("around") && parameterCount >= 4)
       || (methodName.startsWith("after") && parameterCount >= 2);
+  }
+
+  /**
+   * Check if the method is a PHP magic method (excluding __construct which has special handling).
+   * Uses the official list of PHP magic methods from CheckUtils.
+   * __construct is excluded because it should still check for unused parameters
+   * (promoted properties are handled separately).
+   */
+  private static boolean isMagicMethod(MethodDeclarationTree tree) {
+    String methodName = tree.name().text();
+    return CheckUtils.MAGIC_METHODS.contains(methodName) && !"__construct".equalsIgnoreCase(methodName);
   }
 
   private static boolean isExcluded(Symbol symbol) {
