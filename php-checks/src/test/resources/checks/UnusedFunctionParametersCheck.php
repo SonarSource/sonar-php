@@ -314,13 +314,13 @@ class MagicMethodsClass
     }
 
     // ToString - should not raise issues
-    public function __toString()
+    public function __toString($param1)
     {
         return;
     }
 
     // Setter - should not raise issues
-    public function __set()
+    public function __set($param1,$param2)
     {
         return;
     }
