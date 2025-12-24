@@ -313,8 +313,26 @@ class MagicMethodsClass
         return;
     }
 
-    // Regular method starting with __ (but not a standard magic method) - should not raise issues
-    public function __customMagicMethod($param1, $param2)
+    // ToString - should not raise issues
+    public function __toString()
+    {
+        return;
+    }
+
+    // Setter - should not raise issues
+    public function __set()
+    {
+        return;
+    }
+
+    // Constructor - should not raise issues
+    public function __construct()
+    {
+        return;
+    }
+
+    // Regular method starting with __ (but not a standard magic method) - should raise issues
+    public function __customMagicMethod($param1, $param2) // Noncompliant 2
     {
         return;
     }

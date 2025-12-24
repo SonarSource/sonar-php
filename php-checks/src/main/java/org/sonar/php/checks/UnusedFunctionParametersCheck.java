@@ -22,6 +22,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
@@ -143,13 +144,13 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   /**
    * Check if the method is a PHP magic method (excluding __construct which has special handling).
-   * Magic methods are methods starting with __ (double underscore).
+   * Uses the official list of PHP magic methods from CheckUtils.
    * __construct is excluded because it should still check for unused parameters
    * (promoted properties are handled separately).
    */
   private static boolean isMagicMethod(MethodDeclarationTree tree) {
     String methodName = tree.name().text();
-    return methodName.startsWith("__") && !"__construct".equalsIgnoreCase(methodName);
+    return CheckUtils.MAGIC_METHODS.contains(methodName) && !"__construct".equalsIgnoreCase(methodName);
   }
 
   private static boolean isExcluded(Symbol symbol) {

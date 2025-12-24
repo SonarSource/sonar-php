@@ -16,10 +16,10 @@
  */
 package org.sonar.php.checks;
 
-import java.util.Set;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -34,10 +34,6 @@ public class FunctionNameCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Rename function \"%s\" to match the regular expression %s.";
 
-  private static final Set<String> MAGIC_METHODS = Set.of(
-    "__construct", "__destruct", "__call", "__callStatic", "__get",
-    "__set", "__isset", "__unset", "__sleep", "__wakeup", "__toString", "__invoke",
-    "__set_state", "__clone", "__debugInfo");
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   public static final String FORMAT_DRUPAL_AND_WORDPRESS = "^[a-z][a-z0-9_]*$";
   private static final Pattern PATTERN_DRUPAL_AND_WORDPRESS = Pattern.compile(FORMAT_DRUPAL_AND_WORDPRESS);
@@ -73,7 +69,7 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   private void check(NameIdentifierTree name) {
     String functionName = name.text();
 
-    if (!getPattern().matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
+    if (!getPattern().matcher(functionName).matches() && !CheckUtils.MAGIC_METHODS.contains(functionName)) {
       context().newIssue(this, name, String.format(MESSAGE, functionName, getFormat()));
     }
   }
