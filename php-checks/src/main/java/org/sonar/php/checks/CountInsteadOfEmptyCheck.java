@@ -22,6 +22,7 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.type.FunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.php.checks.utils.type.TypePredicateList;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
@@ -91,6 +92,22 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable()));
   }
 
+  private static final Tree.Kind[] USED_STATEMENTS = {
+    Tree.Kind.EXPRESSION_STATEMENT,
+    Tree.Kind.RETURN_STATEMENT,
+    Tree.Kind.IF_STATEMENT,
+    Tree.Kind.WHILE_STATEMENT,
+    Tree.Kind.DO_WHILE_STATEMENT,
+    Tree.Kind.FOR_STATEMENT,
+    Tree.Kind.FOREACH_STATEMENT,
+    Tree.Kind.SWITCH_STATEMENT,
+    Tree.Kind.ASSIGNMENT,
+    Tree.Kind.FUNCTION_DECLARATION,
+    Tree.Kind.METHOD_DECLARATION};
+
+  private static final Tree.Kind[] AND_OR_TREE = {Tree.Kind.CONDITIONAL_AND, Tree.Kind.CONDITIONAL_OR, Tree.Kind.ALTERNATIVE_CONDITIONAL_AND, Tree.Kind.ALTERNATIVE_CONDITIONAL_OR};
+
+
   // Checks if empty() is used on the same variable in the surrounding expression context
   // Returns true if empty() call is found, indicating we should skip raising an issue
   private boolean isEmptyUsedInExpression(FunctionCallTree countCallTree, @Nullable ExpressionTree countArgument) {
@@ -102,27 +119,12 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     Tree current = countCallTree.getParent();
     while (current != null) {
       // Stop at statement boundaries or function definitions
-      if (current.is(
-        Tree.Kind.EXPRESSION_STATEMENT,
-        Tree.Kind.RETURN_STATEMENT,
-        Tree.Kind.IF_STATEMENT,
-        Tree.Kind.WHILE_STATEMENT,
-        Tree.Kind.DO_WHILE_STATEMENT,
-        Tree.Kind.FOR_STATEMENT,
-        Tree.Kind.FOREACH_STATEMENT,
-        Tree.Kind.SWITCH_STATEMENT,
-        Tree.Kind.ASSIGNMENT,
-        Tree.Kind.FUNCTION_DECLARATION,
-        Tree.Kind.METHOD_DECLARATION)) {
+      if (current.is(USED_STATEMENTS)) {
         break;
       }
 
-      if (current.is(Tree.Kind.CONDITIONAL_AND, Tree.Kind.CONDITIONAL_OR, Tree.Kind.ALTERNATIVE_CONDITIONAL_AND, Tree.Kind.ALTERNATIVE_CONDITIONAL_OR)) {
-        if (containsEmptyCallOnVariable((BinaryExpressionTree) current, countArgument)) {
-          return true;
-        }
-        // Check the condition part of ternary operator
-      } else if (current.is(Tree.Kind.CONDITIONAL_EXPRESSION) && containsEmptyCallInTree(current, countArgument)) {
+      if (current.is(AND_OR_TREE) && containsEmptyCallOnVariable((BinaryExpressionTree) current, countArgument)
+        || current.is(Tree.Kind.CONDITIONAL_EXPRESSION) && containsEmptyCallInTree(current, countArgument)) {
         return true;
       }
 
@@ -141,21 +143,17 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   // Recursively searches a tree for empty() calls on the target variable
   private boolean containsEmptyCallInTree(Tree tree, ExpressionTree targetVariable) {
     // Check if this node is a function call to empty() with the same variable
-    if (tree.is(Tree.Kind.FUNCTION_CALL)) {
-      FunctionCallTree functionCall = (FunctionCallTree) tree;
-      if (isEmptyFunction(functionCall)) {
-        ExpressionTree emptyArgument = CheckUtils.argument(functionCall, "var", 0)
-          .map(CallArgumentTree::value)
-          .orElse(null);
-        if (emptyArgument != null && areSameVariable(emptyArgument, targetVariable)) {
-          return true;
-        }
+    if (tree.is(Tree.Kind.FUNCTION_CALL) && tree instanceof FunctionCallTree functionCall && isEmptyFunction(functionCall)) {
+      ExpressionTree emptyArgument = CheckUtils.argument(functionCall, "var", 0)
+        .map(CallArgumentTree::value)
+        .orElse(null);
+      if (emptyArgument != null && areSameVariable(emptyArgument, targetVariable)) {
+        return true;
       }
     }
 
     // Recursively check children for nested logical expressions
-    if (tree.is(Tree.Kind.CONDITIONAL_AND, Tree.Kind.CONDITIONAL_OR,
-      Tree.Kind.ALTERNATIVE_CONDITIONAL_AND, Tree.Kind.ALTERNATIVE_CONDITIONAL_OR)) {
+    if (tree.is(AND_OR_TREE)) {
       BinaryExpressionTree binaryTree = (BinaryExpressionTree) tree;
       return containsEmptyCallInTree(binaryTree.leftOperand(), targetVariable) ||
         containsEmptyCallInTree(binaryTree.rightOperand(), targetVariable);
@@ -182,17 +180,10 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   // Makes sure empty() and count() have the same value argument before skipping the issue raising, in case they are joined by a logical
   // expression
   // Compares two variable expressions to check if they reference the same variable
-  private static boolean areSameVariable(ExpressionTree var1, ExpressionTree var2) {
-    // Both expressions must be variable identifiers
-    if (!var1.is(Tree.Kind.VARIABLE_IDENTIFIER) || !var2.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      return false;
-    }
-
-    // Extract and compare variable names
-    String name1 = ((VariableIdentifierTree) var1).variableExpression().text();
-    String name2 = ((VariableIdentifierTree) var2).variableExpression().text();
-
-    return name1.equals(name2);
+  private static boolean areSameVariable(ExpressionTree varCandidate1, ExpressionTree varCandidate2) {
+    return varCandidate1.is(Tree.Kind.VARIABLE_IDENTIFIER) && varCandidate2.is(Tree.Kind.VARIABLE_IDENTIFIER)
+      && varCandidate1 instanceof VariableIdentifierTreeImpl var1 && varCandidate2 instanceof VariableIdentifierTreeImpl var2
+      && var1.symbol() == var2.symbol();
   }
 
   private boolean isArrayVariable(@Nullable ExpressionTree tree) {

@@ -146,10 +146,10 @@ function named_arguments() {
 
 $example = (!empty($exampleName) && count($exampleName) > 0) ? $exampleName[0] : '';
 $example2 = (empty($exampleName2) || count($exampleName2) == 0) ? '' : $exampleName2[0];
-if (!empty($exampleName3) && count($exampleName3) > 0) {
+if (!empty($exampleName3) && count($exampleName3) > 0) { // Compliant
   echo $exampleName3[0];
 }
-if (empty($exampleName4) or count($exampleName4) == 0) {
+if (empty($exampleName4) or count($exampleName4) == 0) { // Compliant
   echo "empty";
 }
 
@@ -158,23 +158,23 @@ if (!empty($differentVar) && count($exampleName5) > 0) { // Noncompliant
 }
 
 // Test nested logical expressions with empty()
-if (!empty($nested1) && (count($nested1) > 0 && $nested1[0] == 'test')) {
-  echo $nested1[0]; // Compliant - empty() is used
+if (!empty($nested1) && (count($nested1) > 0 && $nested1[0] == 'test')) { // Compliant - empty() is used
+  echo $nested1[0];
 }
 
 // Test with parentheses around empty()
-if ((!empty($parens1)) && count($parens1) > 0) {
-  echo $parens1[0]; // Compliant - empty() is used with parentheses
+if ((!empty($parens1)) && count($parens1) > 0) { // Compliant - empty() is used with parentheses
+  echo $parens1[0];
 }
 
 // Test with alternative operators (and, or) with different positions
-if (!empty($altOp1) and count($altOp1) > 0) {
-  echo $altOp1[0]; // Compliant - empty() is used with 'and'
+if (!empty($altOp1) and count($altOp1) > 0) { // Compliant - empty() is used with 'and'
+  echo $altOp1[0];
 }
 
 // Test with 'or' operator
-if (empty($orOp1) or count($orOp1) == 0) {
-  echo "empty"; // Compliant - empty() is used with 'or'
+if (empty($orOp1) or count($orOp1) == 0) { // Compliant - empty() is used with 'or'
+  echo "empty";
 }
 
 // Test ternary operator with empty() in condition
@@ -187,7 +187,7 @@ if ($someFlag && count($noEmpty1) > 0) { // Noncompliant
 
 // Test statement boundary - assignment
 $assignment1 = count($assign1) > 0; // Noncompliant
-if (!empty($assign1)) {
+if (!empty($assign1)) { // Compliant
   echo $assign1[0];
 }
 
@@ -221,8 +221,8 @@ if (!empty($foreach1)) {
 }
 
 // Test complex nested logical with multiple empty() calls
-if (!empty($complex1) && !empty($complex2) && count($complex1) > 0) {
-  echo $complex1[0]; // Compliant - empty() is used on same variable
+if (!empty($complex1) && !empty($complex2) && count($complex1) > 0) { // Compliant - empty() is used on same variable
+  echo $complex1[0];
 }
 
 // Test with triple nested logical expressions
@@ -235,7 +235,7 @@ function testFunctionBoundary(array $boundary1) {
   return count($boundary1) > 0; // Noncompliant
 }
 if (!empty($boundary1)) {
-  echo testFunctionBoundary($boundary1);
+  echo testFunctionBoundary($boundary1); // Compliant
 }
 
 // Test with sizeof() instead of count()
