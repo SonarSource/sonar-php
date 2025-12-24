@@ -201,4 +201,3 @@ class TreeUtilsTest {
     assertThat(hasAnnotationOrAttribute(method, "doesNotPerformAssertions")).isTrue(); // from attribute
   }
 }
-
