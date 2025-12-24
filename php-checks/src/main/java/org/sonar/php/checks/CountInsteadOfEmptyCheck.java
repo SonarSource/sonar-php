@@ -122,8 +122,8 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
         break;
       }
 
-      if (current.is(AND_OR_TREE) && containsEmptyCallOnVariable((BinaryExpressionTree) current, countArgument)
-        || current.is(Tree.Kind.CONDITIONAL_EXPRESSION) && containsEmptyCallInTree(current, countArgument)) {
+      if ((current.is(AND_OR_TREE) && containsEmptyCallOnVariable((BinaryExpressionTree) current, countArgument))
+        || (current.is(Tree.Kind.CONDITIONAL_EXPRESSION) && containsEmptyCallInTree(current, countArgument))) {
         return true;
       }
 
