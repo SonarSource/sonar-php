@@ -19,6 +19,7 @@ package org.sonar.php.checks.phpunit;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -31,6 +32,8 @@ import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -61,9 +64,9 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       return;
     }
 
-    if (TreeUtils.hasAnnotation(tree, "expectedException")
-      || TreeUtils.hasAnnotation(tree, "doesNotPerformAssertions")
-      || TreeUtils.hasAnnotation(tree, "expectedDeprecation")) {
+    if (hasAnnotationOrAttribute(tree, "expectedException")
+      || hasAnnotationOrAttribute(tree, "doesNotPerformAssertions")
+      || hasAnnotationOrAttribute(tree, "expectedDeprecation")) {
       return;
     }
 
@@ -73,6 +76,32 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
     if (!assertionsFindVisitor.hasFoundAssertion) {
       newIssue(tree.name(), MESSAGE);
     }
+  }
+
+  /**
+   * Check if a method has an annotation (PHPDoc comment) or attribute (PHP 8+ syntax).
+   * The check is case-insensitive for both formats.
+   */
+  private static boolean hasAnnotationOrAttribute(MethodDeclarationTree tree, String name) {
+    // Check PHPDoc annotations
+    if (TreeUtils.hasAnnotation(tree, name)) {
+      return true;
+    }
+
+    // Check PHP 8+ attributes
+    String lowerCaseName = name.toLowerCase(Locale.ROOT);
+    for (AttributeGroupTree attributeGroup : tree.attributeGroups()) {
+      for (AttributeTree attribute : attributeGroup.attributes()) {
+        String attributeName = attribute.name().fullyQualifiedName();
+        // Extract the simple name from the fully qualified name
+        String simpleName = attributeName.substring(attributeName.lastIndexOf('\\') + 1);
+        if (simpleName.toLowerCase(Locale.ROOT).equals(lowerCaseName)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   private class AssertionsFindVisitor extends PHPVisitorCheck {
