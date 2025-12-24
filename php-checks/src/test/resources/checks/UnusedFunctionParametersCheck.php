@@ -325,10 +325,8 @@ class MagicMethodsClass
         return;
     }
 
-    // Constructor - should not raise issues
-    public function __construct()
-    {
-        return;
+    public function __construct(private $promoted, $used, $unused) { //Noncompliant
+         print($used);
     }
 
     // Regular method starting with __ (but not a standard magic method) - should raise issues
