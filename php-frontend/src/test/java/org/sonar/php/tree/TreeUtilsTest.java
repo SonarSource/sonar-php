@@ -25,6 +25,7 @@ import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -34,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
 import static org.sonar.php.tree.TreeUtils.firstDescendant;
 import static org.sonar.php.tree.TreeUtils.hasAnnotation;
+import static org.sonar.php.tree.TreeUtils.hasAnnotationOrAttribute;
 import static org.sonar.php.tree.TreeUtils.isDescendant;
 import static org.sonar.php.tree.TreeUtils.nameOf;
 
@@ -94,5 +96,108 @@ class TreeUtilsTest {
       .orElseThrow();
     assertThat(variableIdentifier.is(Tree.Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(nameOf(variableIdentifier)).isEqualTo("MyClass");
+  }
+
+  @Test
+  void testHasAnnotationOrAttributeWithPHPDocAnnotation() {
+    String code = """
+      <?php
+      class TestClass {
+        /** @doesNotPerformAssertions */
+        public function testMethod() {}
+      }
+      """;
+    Tree tree = PHPParserBuilder.createParser().parse(code);
+    MethodDeclarationTree method = firstDescendant(tree, MethodDeclarationTree.class).orElseThrow();
+
+    assertThat(hasAnnotationOrAttribute(method, "doesNotPerformAssertions")).isTrue();
+    assertThat(hasAnnotationOrAttribute(method, "DoesNotPerformAssertions")).isTrue(); // case-insensitive
+    assertThat(hasAnnotationOrAttribute(method, "otherAnnotation")).isFalse();
+  }
+
+  @Test
+  void testHasAnnotationOrAttributeWithPHP8Attribute() {
+    String code = """
+      <?php
+      class TestClass {
+        #[DoesNotPerformAssertions]
+        public function testMethod() {}
+      }
+      """;
+    Tree tree = PHPParserBuilder.createParser().parse(code);
+    MethodDeclarationTree method = firstDescendant(tree, MethodDeclarationTree.class).orElseThrow();
+
+    assertThat(hasAnnotationOrAttribute(method, "doesNotPerformAssertions")).isTrue(); // case-insensitive
+    assertThat(hasAnnotationOrAttribute(method, "DoesNotPerformAssertions")).isTrue();
+    assertThat(hasAnnotationOrAttribute(method, "otherAttribute")).isFalse();
+  }
+
+  @Test
+  void testHasAnnotationOrAttributeWithFullyQualifiedAttribute() {
+    String code = """
+      <?php
+      class TestClass {
+        #[\\PHPUnit\\Framework\\Attributes\\DoesNotPerformAssertions]
+        public function testMethod() {}
+      }
+      """;
+    Tree tree = PHPParserBuilder.createParser().parse(code);
+    MethodDeclarationTree method = firstDescendant(tree, MethodDeclarationTree.class).orElseThrow();
+
+    assertThat(hasAnnotationOrAttribute(method, "doesNotPerformAssertions")).isTrue(); // matches simple name
+    assertThat(hasAnnotationOrAttribute(method, "DoesNotPerformAssertions")).isTrue();
+  }
+
+  @Test
+  void testHasAnnotationOrAttributeWithMultipleAttributes() {
+    String code = """
+      <?php
+      class TestClass {
+        #[Group('unit')]
+        #[DoesNotPerformAssertions]
+        public function testMethod() {}
+      }
+      """;
+    Tree tree = PHPParserBuilder.createParser().parse(code);
+    MethodDeclarationTree method = firstDescendant(tree, MethodDeclarationTree.class).orElseThrow();
+
+    assertThat(hasAnnotationOrAttribute(method, "group")).isTrue();
+    assertThat(hasAnnotationOrAttribute(method, "Group")).isTrue();
+    assertThat(hasAnnotationOrAttribute(method, "doesNotPerformAssertions")).isTrue();
+    assertThat(hasAnnotationOrAttribute(method, "DoesNotPerformAssertions")).isTrue();
+    assertThat(hasAnnotationOrAttribute(method, "Test")).isFalse();
+  }
+
+  @Test
+  void testHasAnnotationOrAttributeWithNoAnnotationsOrAttributes() {
+    String code = """
+      <?php
+      class TestClass {
+        public function testMethod() {}
+      }
+      """;
+    Tree tree = PHPParserBuilder.createParser().parse(code);
+    MethodDeclarationTree method = firstDescendant(tree, MethodDeclarationTree.class).orElseThrow();
+
+    assertThat(hasAnnotationOrAttribute(method, "doesNotPerformAssertions")).isFalse();
+    assertThat(hasAnnotationOrAttribute(method, "Test")).isFalse();
+  }
+
+  @Test
+  void testHasAnnotationOrAttributeWithBothAnnotationAndAttribute() {
+    String code = """
+      <?php
+      class TestClass {
+        /** @test */
+        #[DoesNotPerformAssertions]
+        public function testMethod() {}
+      }
+      """;
+    Tree tree = PHPParserBuilder.createParser().parse(code);
+    MethodDeclarationTree method = firstDescendant(tree, MethodDeclarationTree.class).orElseThrow();
+
+    assertThat(hasAnnotationOrAttribute(method, "test")).isTrue(); // from annotation
+    assertThat(hasAnnotationOrAttribute(method, "Test")).isTrue(); // case-insensitive
+    assertThat(hasAnnotationOrAttribute(method, "doesNotPerformAssertions")).isTrue(); // from attribute
   }
 }

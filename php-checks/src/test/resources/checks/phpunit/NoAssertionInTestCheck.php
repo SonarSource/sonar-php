@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 class MyTest extends TestCase {
   /** @test */
@@ -44,6 +45,18 @@ class MyTest extends TestCase {
 
   /** @doesNotPerformAssertions */
   public function testG() { // Compliant
+  }
+
+  #[DoesNotPerformAssertions]
+  public function testG2() { // Compliant
+  }
+
+  #[DoesNotPerformAssertions]
+  public function testBulkUpdateNonScalarParameterDDC1341(): void { // Compliant
+    $this->_em->createQuery('UPDATE ' . CompanyEmployee::class)
+              ->setParameter(0, new DateTime())
+              ->setParameter(1, 'IT')
+              ->execute();
   }
 
   /** @expectedDeprecation */

@@ -37,6 +37,8 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import static org.sonar.php.tree.TreeUtils.hasAnnotationOrAttribute;
+
 @Rule(key = "S2699")
 public class NoAssertionInTestCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Add at least one assertion to this test case.";
@@ -61,9 +63,9 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
       return;
     }
 
-    if (TreeUtils.hasAnnotation(tree, "expectedException")
-      || TreeUtils.hasAnnotation(tree, "doesNotPerformAssertions")
-      || TreeUtils.hasAnnotation(tree, "expectedDeprecation")) {
+    if (hasAnnotationOrAttribute(tree, "expectedException")
+      || hasAnnotationOrAttribute(tree, "doesNotPerformAssertions")
+      || hasAnnotationOrAttribute(tree, "expectedDeprecation")) {
       return;
     }
 

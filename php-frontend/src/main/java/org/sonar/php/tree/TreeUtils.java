@@ -31,8 +31,11 @@ import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeTree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -94,6 +97,32 @@ public class TreeUtils {
 
   public static <T extends Tree> Optional<T> firstDescendant(Tree root, Class<T> clazz) {
     return (Optional<T>) firstDescendant(root, clazz::isInstance);
+  }
+
+  /**
+   * Check if a method has an annotation (PHPDoc comment) or attribute (PHP 8+ syntax).
+   * The check is case-insensitive for both formats.
+   */
+  public static boolean hasAnnotationOrAttribute(MethodDeclarationTree tree, String name) {
+    // Check PHPDoc annotations
+    if (TreeUtils.hasAnnotation(tree, name)) {
+      return true;
+    }
+
+    // Check PHP 8+ attributes
+    String lowerCaseName = name.toLowerCase(Locale.ROOT);
+    for (AttributeGroupTree attributeGroup : tree.attributeGroups()) {
+      for (AttributeTree attribute : attributeGroup.attributes()) {
+        String attributeName = attribute.name().fullyQualifiedName();
+        // Extract the simple name from the fully qualified name
+        String simpleName = attributeName.substring(attributeName.lastIndexOf('\\') + 1);
+        if (simpleName.toLowerCase(Locale.ROOT).equals(lowerCaseName)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   public static boolean hasAnnotation(Tree declaration, String annotation) {
