@@ -107,7 +107,6 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
   private static final Tree.Kind[] AND_OR_TREE = {Tree.Kind.CONDITIONAL_AND, Tree.Kind.CONDITIONAL_OR, Tree.Kind.ALTERNATIVE_CONDITIONAL_AND, Tree.Kind.ALTERNATIVE_CONDITIONAL_OR};
 
-
   // Checks if empty() is used on the same variable in the surrounding expression context
   // Returns true if empty() call is found, indicating we should skip raising an issue
   private boolean isEmptyUsedInExpression(FunctionCallTree countCallTree, @Nullable ExpressionTree countArgument) {
