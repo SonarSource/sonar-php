@@ -93,7 +93,7 @@ public final class CheckUtils {
   public static final Set<String> MAGIC_METHODS = Set.of(
     "__construct", "__destruct", "__call", "__callStatic", "__get",
     "__set", "__isset", "__unset", "__sleep", "__wakeup", "__toString", "__invoke",
-    "__set_state", "__clone", "__debugInfo");
+    "__set_state", "__clone", "__debugInfo", "__serialize", "__unserialize");
 
   private CheckUtils() {
   }

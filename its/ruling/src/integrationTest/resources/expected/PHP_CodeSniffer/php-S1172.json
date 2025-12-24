@@ -124,6 +124,7 @@
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/NamingConventions/CamelCapsFunctionNameUnitTest.inc": [
 70,
+100,
 103
 ],
 "PHP_CodeSniffer:src/Standards/Generic/Tests/PHP/LowerCaseTypeUnitTest.inc": [
@@ -220,6 +221,7 @@
 ],
 "PHP_CodeSniffer:src/Standards/PEAR/Tests/NamingConventions/ValidFunctionNameUnitTest.inc": [
 142,
+175,
 178,
 207,
 207
