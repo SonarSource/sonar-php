@@ -114,6 +114,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   private boolean isEmptyUsedInCondition(FunctionCallTree countCallTree, @Nullable ExpressionTree countArgument) {
     // Early return if count() has no argument
     if (!(countArgument instanceof VariableIdentifierTreeImpl countArgumentVariable)) {
+      // "countArgument" is called without an argument
       return false;
     }
 
@@ -123,7 +124,6 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
       currentCondition = currentCondition.getParent();
     }
     if (currentCondition == null) {
-      // "count" is called without an argument
       return false;
     }
 
