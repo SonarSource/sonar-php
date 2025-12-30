@@ -621,9 +621,22 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
     tree.member().accept(this);
   }
 
-  private static boolean isSelfMember(MemberAccessTree tree) {
+  private boolean isSelfMember(MemberAccessTree tree) {
     String strObject = SourceBuilder.build(tree.object()).trim();
-    return SELF_OBJECTS.contains(strObject.toLowerCase(Locale.ENGLISH));
+    if (SELF_OBJECTS.contains(strObject.toLowerCase(Locale.ENGLISH))) {
+      return true;
+    }
+
+    // Check if the object refers to the current class by name (e.g., MySingleton::$instance inside MySingleton class)
+    if (isInClassScope() && tree.object().is(Kind.NAMESPACE_NAME)) {
+      Tree classTree = currentClassScope().tree();
+      if (classTree instanceof ClassDeclarationTree classDeclaration) {
+        String className = ((NamespaceNameTree) tree.object()).fullName();
+        return classDeclaration.name().text().equals(className);
+      }
+    }
+
+    return false;
   }
 
   @Override
