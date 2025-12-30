@@ -144,8 +144,8 @@ function named_arguments() {
   sizeof(mode: 1, array_or_countable: $unknown_var) > 0;
 }
 
-$example = (!empty($exampleName) && count($exampleName) > 0) ? $exampleName[0] : '';
-$example2 = (empty($exampleName2) || count($exampleName2) == 0) ? '' : $exampleName2[0];
+$example = (!empty($exampleName) && count($exampleName) > 0) ? $exampleName[0] : ''; // Compliant
+$example2 = (empty($exampleName2) || count($exampleName2) == 0) ? '' : $exampleName2[0]; // Compliant
 if (!empty($exampleName3) && count($exampleName3) > 0) { // Compliant
   echo $exampleName3[0];
 }
