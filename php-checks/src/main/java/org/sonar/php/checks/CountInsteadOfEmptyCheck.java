@@ -122,11 +122,12 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
       // Stop at condition boundaries (e.g., once an if statement parent is reached)
       currentCondition = currentCondition.getParent();
     }
-
-    EmptyMethodCallCheck emptyCheck = new EmptyMethodCallCheck(context(), countArgumentVariable.symbol());
     if (currentCondition == null) {
+      // "count" is called without an argument
       return false;
     }
+
+    EmptyMethodCallCheck emptyCheck = new EmptyMethodCallCheck(context(), countArgumentVariable.symbol());
     currentCondition.accept(emptyCheck);
     return emptyCheck.containsEmpty();
   }
