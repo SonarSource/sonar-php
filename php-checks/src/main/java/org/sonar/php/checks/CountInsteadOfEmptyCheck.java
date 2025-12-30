@@ -61,7 +61,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     ExpressionTree argumentValue = CheckUtils.argument(tree, "array_or_countable", 0)
       .map(CallArgumentTree::value)
       .orElse(null);
-    if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(argumentValue) && !isEmptyUsedInExpression(tree, argumentValue)) {
+    if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(argumentValue) && !isEmptyUsedInCondition(tree, argumentValue)) {
       context().newIssue(this, tree.getParent(), "Use empty() to check whether the array is empty or not.");
     }
     super.visitFunctionCall(tree);
@@ -107,21 +107,19 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
   /**
    * Checks if "empty" is called for the given variable in the current condition.
    * For example, in case of "empty($foo) && count($foo) > 0" we want to know if "empty" is called in addition to "count".
+   * @param countCallTree represents the count call in the current condition.
    * @param countArgument the argument passed to the call of count.
    * @return true if there exists an "empty" call for the countArgument in the scope of the current condition.
    */
-  private boolean isEmptyUsedInExpression(FunctionCallTree countCallTree, @Nullable ExpressionTree countArgument) {
+  private boolean isEmptyUsedInCondition(FunctionCallTree countCallTree, @Nullable ExpressionTree countArgument) {
     // Early return if count() has no argument
     if (!(countArgument instanceof VariableIdentifierTreeImpl countArgumentVariable)) {
       return false;
     }
 
     Tree currentCondition = countCallTree.getParent();
-    while (currentCondition != null) {
+    while (currentCondition != null && !currentCondition.is(CONDITION_BOUNDARIES)) {
       // Stop at condition boundaries (e.g., once an if statement parent is reached)
-      if (currentCondition.is(CONDITION_BOUNDARIES)) {
-        break;
-      }
       currentCondition = currentCondition.getParent();
     }
 
@@ -155,6 +153,8 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     public void visitFunctionCall(FunctionCallTree tree) {
       if (!emptyCallFound && isEmptyFunction(tree) && !tree.callArguments().isEmpty()) {
         ExpressionTree firstArgument = tree.callArguments().get(0).value();
+
+        // Check if "empty" is called for the same variable as "count"
         if (firstArgument.is(Tree.Kind.VARIABLE_IDENTIFIER)
           && firstArgument instanceof VariableIdentifierTreeImpl firstArgumentVariable
           && firstArgumentVariable.symbol() == countArgumentSymbol) {
@@ -164,7 +164,6 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
       super.visitFunctionCall(tree);
     }
 
-    // Checks if a function call tree is a call to the empty() function
     private boolean isEmptyFunction(FunctionCallTree tree) {
       return EMPTY_FUNCTION_CALL.test(TreeValues.of(tree, context().symbolTable()));
     }
