@@ -122,7 +122,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     do {
       currentCondition = currentCondition.getParent();
     } while (currentCondition != null &&
-            (currentCondition.is(COMPARE_OPERATORS) || currentCondition.is(CONDITIONAL_KINDS) || currentCondition.is(CONDITION_STATEMENTS)));
+      (currentCondition.is(COMPARE_OPERATORS) || currentCondition.is(CONDITIONAL_KINDS) || currentCondition.is(CONDITION_STATEMENTS)));
 
     if (currentCondition == null) {
       return false;
