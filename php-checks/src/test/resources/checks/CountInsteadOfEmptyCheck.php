@@ -143,3 +143,134 @@ function named_arguments() {
   sizeof(mode: 1, array_or_countable: $_POST) > 0; // Noncompliant
   sizeof(mode: 1, array_or_countable: $unknown_var) > 0;
 }
+
+$example = (!empty($exampleName) && count($exampleName) > 0) ? $exampleName[0] : ''; // Compliant
+$example2 = (empty($exampleName2) || count($exampleName2) == 0) ? '' : $exampleName2[0]; // Compliant
+if (!empty($exampleName3) && count($exampleName3) > 0) { // Compliant
+  echo $exampleName3[0];
+}
+if (empty($exampleName4) or count($exampleName4) == 0) { // Compliant
+  echo "empty";
+}
+
+if (!empty($differentVar) && count($exampleName5) > 0) { // Noncompliant
+  echo $exampleName5[0];
+}
+
+// Test nested logical expressions with empty()
+if (!empty($nested1) && (count($nested1) > 0 && $nested1[0] == 'test')) { // Compliant - empty() is used
+  echo $nested1[0];
+}
+
+// Test with parentheses around empty()
+if ((!empty($parens1)) && count($parens1) > 0) { // Compliant - empty() is used with parentheses
+  echo $parens1[0];
+}
+
+// Test with alternative operators (and, or) with different positions
+if (!empty($altOp1) and count($altOp1) > 0) { // Compliant - empty() is used with 'and'
+  echo $altOp1[0];
+}
+
+// Test with 'or' operator
+if (empty($orOp1) or count($orOp1) == 0) { // Compliant - empty() is used with 'or'
+  echo "empty";
+}
+
+// Test ternary operator with empty() in condition
+$ternary1 = !empty($ternVar1) && count($ternVar1) > 0 ? $ternVar1[0] : ''; // Compliant - empty() is used
+
+// Test without empty() - should raise issue
+if ($someFlag && count($noEmpty1) > 0) { // Noncompliant
+  echo $noEmpty1[0];
+}
+
+// Test statement boundary - assignment
+$assignment1 = count($assign1) > 0; // Noncompliant
+if (!empty($assign1)) { // Compliant
+  echo $assign1[0];
+}
+
+// Test statement boundary - return statement
+function testReturn(array $ret1) {
+  if (count($ret1) > 0) { // Noncompliant
+    return true;
+  }
+  return false;
+}
+
+// Test in while statement
+while (count($while1) > 0) { // Noncompliant
+  echo $while1[0];
+  array_shift($while1);
+}
+
+// Test in for statement
+for ($i = 0; count($for1) > 0; $i++) { // Noncompliant
+  echo $for1[0];
+  array_shift($for1);
+}
+
+// Test in foreach with empty() - should not raise
+if (!empty($foreach1)) {
+  foreach ($foreach1 as $item) {
+    if (count($foreach1) > 0) { // Compliant - crosses foreach statement boundary
+      echo $item;
+    }
+  }
+}
+
+// Test complex nested logical with multiple empty() calls
+if (!empty($complex1) && !empty($complex2) && count($complex1) > 0) { // Compliant - empty() is used on same variable
+  echo $complex1[0];
+}
+
+// Test with triple nested logical expressions
+if (($a || !empty($triple1)) && ($b && count($triple1) > 0)) {
+  echo $triple1[0]; // Compliant - empty() is used
+}
+
+// Test method call boundary - empty() should not cross function boundaries
+function testFunctionBoundary(array $boundary1) {
+  return count($boundary1) > 0; // Noncompliant
+}
+if (!empty($boundary1)) {
+  echo testFunctionBoundary($boundary1); // Compliant
+}
+
+// Test with sizeof() instead of count()
+if (!empty($sizeof1) && sizeof($sizeof1) > 0) {
+  echo $sizeof1[0]; // Compliant - empty() is used
+}
+
+// Test count with no argument - line 98/99 coverage (countArgument == null)
+if (count() > 0) { // Compliant - no argument to check
+  echo "test";
+}
+
+// This tests when empty() has an array access expression, not a simple variable
+if (!empty($arr1[0]) && count($arr2) > 0) { // Noncompliant
+  echo $arr2[0];
+}
+
+// Logical expression without any empty() call on the variable
+if ($someCondition && count($noEmptyCheck) > 0) { // Noncompliant
+  echo $noEmptyCheck[0];
+}
+
+// Test where leftOperand doesn't have empty but rightOperand does
+if (count($rightEmpty1) > 0 && !empty($rightEmpty1)) {
+  echo $rightEmpty1[0]; // Compliant - empty() is on right side
+}
+
+// This has a different function call (not empty) in the logical expression
+if (isset($issetVar) && count($issetVar) > 0) { // Noncompliant
+  echo $issetVar[0];
+}
+
+if (!empty($complexExpr[0]) && count($simpleVar) > 0) { // Noncompliant
+  echo $simpleVar[0];
+}
+
+$noEmptyTernary = (count($ternNoEmpty) > 0 && $flag) ? $ternNoEmpty[0] : ''; // Noncompliant
+

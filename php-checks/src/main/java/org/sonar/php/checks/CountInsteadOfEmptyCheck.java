@@ -22,6 +22,7 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.type.FunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.php.checks.utils.type.TypePredicateList;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
@@ -35,6 +36,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S1155")
@@ -54,12 +56,25 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     Tree.Kind.STRICT_NOT_EQUAL_TO
   };
 
+  private static final Tree.Kind[] CONDITIONAL_KINDS = {
+    Tree.Kind.CONDITIONAL_AND,
+    Tree.Kind.CONDITIONAL_OR,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_AND,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_OR,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR,
+  };
+
+  private static final Tree.Kind[] CONDITION_STATEMENTS = {
+    Tree.Kind.PARENTHESISED_EXPRESSION,
+    Tree.Kind.CONDITIONAL_EXPRESSION
+  };
+
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     ExpressionTree argumentValue = CheckUtils.argument(tree, "array_or_countable", 0)
       .map(CallArgumentTree::value)
       .orElse(null);
-    if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(argumentValue)) {
+    if (isCountFunction(tree) && isEmptyComparison(tree) && isArrayVariable(argumentValue) && !isEmptyUsedInCondition(tree, argumentValue)) {
       context().newIssue(this, tree.getParent(), "Use empty() to check whether the array is empty or not.");
     }
     super.visitFunctionCall(tree);
@@ -87,6 +102,77 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
 
   private boolean isCountFunction(FunctionCallTree tree) {
     return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable()));
+  }
+
+  /**
+   * Checks if "empty" is called for the given variable in the current condition.
+   * For example, in case of "empty($foo) && count($foo) > 0" we want to know if "empty" is called in addition to "count".
+   * @param countCallTree represents the count call in the current condition.
+   * @param countArgument the argument passed to the call of count.
+   * @return true if there exists an "empty" call for the countArgument in the scope of the current condition.
+   */
+  private boolean isEmptyUsedInCondition(FunctionCallTree countCallTree, @Nullable ExpressionTree countArgument) {
+    if (!(countArgument instanceof VariableIdentifierTreeImpl countArgumentVariable)) {
+      // "count" is called without an argument
+      return false;
+    }
+
+    Tree currentCondition = countCallTree;
+
+    do {
+      currentCondition = currentCondition.getParent();
+    } while (currentCondition != null &&
+      (currentCondition.is(COMPARE_OPERATORS) || currentCondition.is(CONDITIONAL_KINDS) || currentCondition.is(CONDITION_STATEMENTS)));
+
+    if (currentCondition == null) {
+      return false;
+    }
+
+    EmptyMethodCallCheck emptyCheck = new EmptyMethodCallCheck(context(), countArgumentVariable.symbol());
+    currentCondition.accept(emptyCheck);
+    return emptyCheck.containsEmpty();
+  }
+
+  private static class EmptyMethodCallCheck extends PHPVisitorCheck {
+    private static final FunctionCall EMPTY_FUNCTION_CALL = new FunctionCall("empty");
+
+    private boolean emptyCallFound = false;
+
+    CheckContext parentContext;
+    Symbol countArgumentSymbol;
+
+    EmptyMethodCallCheck(CheckContext parentContext, Symbol countArgumentSymbol) {
+      this.parentContext = parentContext;
+      this.countArgumentSymbol = countArgumentSymbol;
+    }
+
+    @Override
+    public CheckContext context() {
+      return parentContext;
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCallTree tree) {
+      if (!emptyCallFound && isEmptyFunction(tree) && !tree.callArguments().isEmpty()) {
+        ExpressionTree firstArgument = tree.callArguments().get(0).value();
+
+        // Check if "empty" is called for the same variable as "count"
+        if (firstArgument.is(Tree.Kind.VARIABLE_IDENTIFIER)
+          && firstArgument instanceof VariableIdentifierTreeImpl firstArgumentVariable
+          && firstArgumentVariable.symbol() == countArgumentSymbol) {
+          emptyCallFound = true;
+        }
+      }
+      super.visitFunctionCall(tree);
+    }
+
+    private boolean isEmptyFunction(FunctionCallTree tree) {
+      return EMPTY_FUNCTION_CALL.test(TreeValues.of(tree, context().symbolTable()));
+    }
+
+    public boolean containsEmpty() {
+      return emptyCallFound;
+    }
   }
 
   private boolean isArrayVariable(@Nullable ExpressionTree tree) {
