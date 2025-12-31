@@ -56,6 +56,19 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     Tree.Kind.STRICT_NOT_EQUAL_TO
   };
 
+  private static final Tree.Kind[] CONDITIONAL_KINDS = {
+    Tree.Kind.CONDITIONAL_AND,
+    Tree.Kind.CONDITIONAL_OR,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_AND,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_OR,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR,
+  };
+
+  private static final Tree.Kind[] CONDITION_STATEMENTS = {
+    Tree.Kind.PARENTHESISED_EXPRESSION,
+    Tree.Kind.CONDITIONAL_EXPRESSION
+  };
+
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     ExpressionTree argumentValue = CheckUtils.argument(tree, "array_or_countable", 0)
@@ -91,19 +104,6 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable()));
   }
 
-  private static final Tree.Kind[] CONDITIONAL_KINDS = {
-    Tree.Kind.CONDITIONAL_AND,
-    Tree.Kind.CONDITIONAL_OR,
-    Tree.Kind.ALTERNATIVE_CONDITIONAL_AND,
-    Tree.Kind.ALTERNATIVE_CONDITIONAL_OR,
-    Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR,
-  };
-
-  private static final Tree.Kind[] CONDITION_STATEMENTS = {
-    Tree.Kind.PARENTHESISED_EXPRESSION,
-    Tree.Kind.CONDITIONAL_EXPRESSION
-  };
-
   /**
    * Checks if "empty" is called for the given variable in the current condition.
    * For example, in case of "empty($foo) && count($foo) > 0" we want to know if "empty" is called in addition to "count".
@@ -117,7 +117,7 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
       return false;
     }
 
-    Tree currentCondition = countCallTree.getParent();
+    Tree currentCondition = countCallTree;
 
     do {
       currentCondition = currentCondition.getParent();
