@@ -91,18 +91,18 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
     return FUNCTION_PREDICATE.test(TreeValues.of(tree, context().symbolTable()));
   }
 
-  private static final Tree.Kind[] CONDITION_BOUNDARIES = {
-    Tree.Kind.EXPRESSION_STATEMENT,
-    Tree.Kind.RETURN_STATEMENT,
-    Tree.Kind.IF_STATEMENT,
-    Tree.Kind.WHILE_STATEMENT,
-    Tree.Kind.DO_WHILE_STATEMENT,
-    Tree.Kind.FOR_STATEMENT,
-    Tree.Kind.FOREACH_STATEMENT,
-    Tree.Kind.SWITCH_STATEMENT,
-    Tree.Kind.ASSIGNMENT,
-    Tree.Kind.FUNCTION_DECLARATION,
-    Tree.Kind.METHOD_DECLARATION};
+  private static final Tree.Kind[] CONDITIONAL_KINDS = {
+    Tree.Kind.CONDITIONAL_AND,
+    Tree.Kind.CONDITIONAL_OR,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_AND,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_OR,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR,
+  };
+
+  private static final Tree.Kind[] CONDITION_STATEMENTS = {
+    Tree.Kind.PARENTHESISED_EXPRESSION,
+    Tree.Kind.CONDITIONAL_EXPRESSION
+  };
 
   /**
    * Checks if "empty" is called for the given variable in the current condition.
@@ -112,17 +112,18 @@ public class CountInsteadOfEmptyCheck extends PHPVisitorCheck {
    * @return true if there exists an "empty" call for the countArgument in the scope of the current condition.
    */
   private boolean isEmptyUsedInCondition(FunctionCallTree countCallTree, @Nullable ExpressionTree countArgument) {
-    // Early return if count() has no argument
     if (!(countArgument instanceof VariableIdentifierTreeImpl countArgumentVariable)) {
-      // "countArgument" is called without an argument
+      // "count" is called without an argument
       return false;
     }
 
     Tree currentCondition = countCallTree.getParent();
-    while (currentCondition != null && !currentCondition.is(CONDITION_BOUNDARIES)) {
-      // Stop at condition boundaries (e.g., once an if statement parent is reached)
+
+    do {
       currentCondition = currentCondition.getParent();
-    }
+    } while (currentCondition != null &&
+            (currentCondition.is(COMPARE_OPERATORS) || currentCondition.is(CONDITIONAL_KINDS) || currentCondition.is(CONDITION_STATEMENTS)));
+
     if (currentCondition == null) {
       return false;
     }
