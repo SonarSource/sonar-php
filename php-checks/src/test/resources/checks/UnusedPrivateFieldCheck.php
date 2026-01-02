@@ -120,3 +120,19 @@ class CaseSensitiveClassMembers {
   }
 }
 
+class MySingleton {
+  private static ?MySingleton $instance = null; // Compliant
+  private ?object $latestTransactionClass = null; // NonCompliant
+
+  private function __construct() {
+
+  }
+
+  public static function getInstance(): MySingleton {
+    if (MySingleton::$instance === null) {
+      MySingleton::$instance = new MySingleton();
+    }
+
+    return MySingleton::$instance;
+  }
+}
