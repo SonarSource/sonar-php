@@ -32,6 +32,15 @@ function run() {
   release(MESSAGE);
 }
 </pre>
+<pre data-diff-id="1" data-diff-type="compliant">
+function run($message) {
+  prepare($message); // Compliant - the duplicated string literal is turned into a parameter
+  execute($message);
+  release($message);
+}
+
+run('this is no duplicate');
+</pre>
 <pre>
 $severity = $request-&gt;getParam('severity-score');
 </pre>
