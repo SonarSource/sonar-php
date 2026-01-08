@@ -29,7 +29,7 @@ jobs:
       contents: write # required by SonarSource/release-github-actions/update-rule-metadata
       pull-requests: write # required by SonarSource/release-github-actions/update-rule-metadata
     steps:
-      - uses: SonarSource/release-github-actions/update-rule-metadata@6522bb713edc8d76bad000a48ada334aa3c8692f
+      - uses: SonarSource/release-github-actions/update-rule-metadata@d20a9079ed0eecd6d3e0c2850252b0d1c699185c
         id: update-rule-metadata
         with:
           rule-api-version: ${{ github.event.inputs.rule-api-version}}
