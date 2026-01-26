@@ -14,6 +14,7 @@ jsr305 = "3.0.2"
 staxmate = "2.0.1"
 awaitility = "4.3.0"
 woodstox = "7.1.1"
+ch-qos-logback-logback = "1.5.26"
 
 [libraries]
 sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
@@ -39,3 +40,4 @@ junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher
 woodstox = { module = "com.fasterxml.woodstox:woodstox-core", version.ref = "woodstox" }
 staxmate = { module = "org.codehaus.staxmate:staxmate", version.ref = "staxmate" }
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility"}
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback-logback" }

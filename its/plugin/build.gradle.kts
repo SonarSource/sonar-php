@@ -34,6 +34,7 @@ dependencies {
   "integrationTestImplementation"(libs.junit.jupiter)
   "integrationTestImplementation"(libs.assertj.core)
   "integrationTestImplementation"(libs.awaitility)
+  "integrationTestImplementation"(libs.logback.classic)
   "integrationTestCompileOnly"(libs.jsr305)
   "integrationTestRuntimeOnly"(libs.junit.platform.launcher)
 }
