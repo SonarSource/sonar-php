@@ -43,6 +43,15 @@ spotless {
   }
 }
 
+subprojects {
+  configurations.all {
+    resolutionStrategy {
+      // Pinned to avoid dependency risks
+      force(libs.logback.classic)
+    }
+  }
+}
+
 sonar {
   properties {
     property("sonar.projectName", "SonarPHP")
