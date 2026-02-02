@@ -13,9 +13,14 @@ secrets management service. If a secret is exposed in the source code, it must b
 $secret = '47828a8dd77ee1eb9dde2d5e93cb221ce8c32b37'; // Noncompliant
 MyClass-&gt;callMyService($secret);
 </pre>
-<h4>Compliant Solution</h4>
-<p>Using <a href="https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/php/example_code/secretsmanager">AWS Secrets Manager</a>:</p>
+<h4>Compliant solution</h4>
+<p>Store the secret in an environment variable or configuration file:</p>
 <pre data-diff-id="1" data-diff-type="compliant">
+$secret = getenv('MY_SECRET');
+MyClass-&gt;callMyService($secret);
+</pre>
+<p>Or using <a href="https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/php/example_code/secretsmanager">AWS Secrets Manager</a>:</p>
+<pre>
 use Aws\SecretsManager\SecretsManagerClient;
 use Aws\Exception\AwsException;
 $client = new SecretsManagerClient(...);
@@ -45,5 +50,6 @@ function doSomething($client, $secretName) {
   <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication">Top 10 2017 Category A2 - Broken Authentication</a>
   </li>
   <li> CWE - <a href="https://cwe.mitre.org/data/definitions/798">CWE-798 - Use of Hard-coded Credentials</a> </li>
+  <li> MSC - <a href="https://wiki.sei.cmu.edu/confluence/x/OjdGBQ">MSC03-J - Never hard code sensitive information</a> </li>
 </ul>
 
