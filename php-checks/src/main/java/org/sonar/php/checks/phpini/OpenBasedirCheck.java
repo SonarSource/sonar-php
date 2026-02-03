@@ -51,7 +51,7 @@ public class OpenBasedirCheck implements PhpIniCheck {
         value = value.substring(0, value.length() - 1);
       }
 
-      for (String path : value.split(":|;")) {
+      for (String path : value.split("[:;]")) {
         if (".".equals(path) || "/".equals(path)) {
           String message = String.format(DIRECTIVE_MESSAGE, path);
           int line = directive.name().line();
