@@ -25,7 +25,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class AliasFunctionUsageCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new AliasFunctionUsageCheck(), "AliasFunctionUsageCheck.php");
   }
 
