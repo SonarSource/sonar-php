@@ -12,7 +12,6 @@
     "func": "Constant\/Issue",
     "constantCost": "30min"
   },
-  "quickfix": "infeasible",
   "tags": [
     "cwe"
   ],
@@ -41,5 +40,6 @@
       "3.5.2",
       "6.4.1"
     ]
-  }
+  },
+  "quickfix": "unknown"
 }
