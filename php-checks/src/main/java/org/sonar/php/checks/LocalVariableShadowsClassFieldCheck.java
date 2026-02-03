@@ -114,7 +114,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
 
   @Override
   public void visitAnonymousClass(AnonymousClassTree tree) {
-    scan(tree.arguments());
+    scan(tree.argumentList().arguments());
     classStates.push(new ClassState());
     collectClassData(tree);
 
