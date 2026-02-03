@@ -154,13 +154,13 @@ public class MultilineBlocksCurlyBracesCheck extends AbstractStatementsCheck {
         return false;
       } else if (column == parentMarginColumn &&
         (firstStatementOneLiner || column != lastStatementColumn || !isOneLineAfterPreviousStatement(line))) {
-          return false;
-        } else {
-          otherStatement.add(statement);
-          lastStatementLine = line;
-          lastStatementColumn = column;
-          return true;
-        }
+        return false;
+      } else {
+        otherStatement.add(statement);
+        lastStatementLine = line;
+        lastStatementColumn = column;
+        return true;
+      }
     }
 
     private boolean isLineCloseToPreviousStatement(int line) {
