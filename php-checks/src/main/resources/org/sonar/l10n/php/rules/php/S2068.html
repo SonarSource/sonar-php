@@ -3,18 +3,23 @@
 open-source applications. This practice exposes your application to significant security risks.</p>
 <p>This rule flags instances of hard-coded credentials used in database and LDAP connections. It looks for hard-coded credentials in connection
 strings, and for variable names that match any of the patterns from the provided list.</p>
+<p>In the past, it has led to the following vulnerabilities:</p>
+<ul>
+  <li> <a href="https://www.cve.org/CVERecord?id=CVE-2019-13466">CVE-2019-13466</a> </li>
+  <li> <a href="https://www.cve.org/CVERecord?id=CVE-2018-15389">CVE-2018-15389</a> </li>
+</ul>
 <h2>How to fix it</h2>
 <p>Credentials should be stored in a configuration file that is not committed to the code repository, in a database, or managed by your cloud
 provider’s secrets management service. If a password is exposed in the source code, it must be changed immediately.</p>
 <h3>Code Examples</h3>
-<h4>Noncompliant Code Example</h4>
+<h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 $password = "65DBGgwe4uazdWQA"; // Noncompliant
 
 $httpUrl = "https://example.domain?user=user&amp;password=65DBGgwe4uazdWQA" // Noncompliant
 $sshUrl = "ssh://user:65DBGgwe4uazdWQA@example.domain" // Noncompliant
 </pre>
-<h4>Compliant Solution</h4>
+<h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 $user = getUser();
 $password = getPassword(); // Compliant
