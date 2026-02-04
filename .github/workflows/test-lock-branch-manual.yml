@@ -1,0 +1,26 @@
+name: Test Lock Branch (Manual)
+
+on:
+  pull_request:
+
+jobs:
+  lock-branch:
+    name: Lock branch master
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Run Lock Branch Action
+        id: lock-branch
+        uses: SonarSource/release-github-actions/lock-branch@nw/add-branch-freeze-action
+        with:
+          branch: 'master'
+          freeze: 'true'
+          slack-channel: 'squad-security-taint-notifs'
+
+      - name: Print Results
+        run: |
+          echo "Branch: ${{ steps.lock-branch.outputs.branch }}"
+          echo "Previous state: ${{ steps.lock-branch.outputs.previous-state }}"
+          echo "Current state: ${{ steps.lock-branch.outputs.current-state }}"
