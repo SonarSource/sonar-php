@@ -16,7 +16,7 @@ jobs:
         uses: SonarSource/release-github-actions/lock-branch@nw/add-branch-freeze-action
         with:
           branch: 'master'
-          freeze: 'true'
+          freeze: 'false'
           slack-channel: 'squad-security-taint-notifs'
 
       - name: Print Results
