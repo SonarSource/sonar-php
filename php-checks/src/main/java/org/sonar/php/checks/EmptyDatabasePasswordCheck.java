@@ -75,7 +75,7 @@ public class EmptyDatabasePasswordCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private boolean hasEmptyValue(ExpressionTree expression) {
+  private static boolean hasEmptyValue(ExpressionTree expression) {
     if (isEmptyLiteral(expression)) {
       return true;
     } else if (expression.is(Kind.VARIABLE_IDENTIFIER)) {
