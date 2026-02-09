@@ -22,7 +22,7 @@ jobs:
       contents: write
     steps:
       - &checkout-simple
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - &mise-install
         uses: jdx/mise-action@6d1e696aa24c1aa1bcc1adea0212707c71ab78a8 # v3.6.1
         with:
@@ -80,7 +80,7 @@ jobs:
           gradle-args: -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: test-results
           path: '**/test-results/**/*.xml'
@@ -117,13 +117,13 @@ jobs:
           gradle-args: -x artifactoryPublish -x sonar
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: qa-os-win-test-results
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: qa-os-win-reports
           path: '**/build/reports/**/*'
@@ -141,7 +141,7 @@ jobs:
         SQ_VERSION: [LATEST_RELEASE, DEV]
     steps:
       - &checkout-submodules
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: true
       - *mise-install
@@ -183,13 +183,13 @@ jobs:
             -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: qa-plugin-test-results-${{ matrix.SQ_VERSION }}
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: qa-plugin-reports-${{ matrix.SQ_VERSION }}
           path: '**/build/reports/**/*'
@@ -233,13 +233,13 @@ jobs:
             -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: qa-ruling-test-results-${{ matrix.PHP_PROJECT }}
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: qa-ruling-reports-${{ matrix.PHP_PROJECT }}
           path: '**/build/reports/**/*'
@@ -279,13 +279,13 @@ jobs:
             -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: qa-pr-analysis-test-results
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: qa-pr-analysis-reports
           path: '**/build/reports/**/*'
