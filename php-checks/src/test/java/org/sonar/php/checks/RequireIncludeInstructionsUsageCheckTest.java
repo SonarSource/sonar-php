@@ -36,4 +36,9 @@ class RequireIncludeInstructionsUsageCheckTest {
     CheckVerifier.verifyNoIssue(new RequireIncludeInstructionsUsageCheck(), "RequireIncludeInstructionsUsageCheckLaravel.php");
   }
 
+  @Test
+  void testWordPress() {
+    CheckVerifier.verifyNoIssue(new RequireIncludeInstructionsUsageCheck(), "RequireIncludeInstructionsUsageCheckWordPress.php");
+  }
+
 }

@@ -17,3 +17,14 @@ require_once("./modules/vegetable/src/Entity/Tomato.php"); // Noncompliant {{Rep
 require 'vendor/autoload.php'; // Compliant
 include 'vendor/autoload.php'; // Compliant
 require __DIR__ . '/vendor/autoload.php'; // Compliant
+
+// Return value used - Compliant
+$config = require 'config.php'; // Compliant
+$data = include 'data.php'; // Compliant
+return require 'bootstrap.php'; // Compliant
+foo(require 'helper.php'); // Compliant
+
+// Non-PHP extensions - Compliant
+include 'template.html'; // Compliant
+require 'layout.twig'; // Compliant
+include_once 'data.json'; // Compliant
