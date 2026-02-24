@@ -56,10 +56,10 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
 
     String callee = tree.callee().toString();
     if (!isFrameworkWithBuiltInRequires()
-        && WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))
-        && !isAutoloadImport(tree)
-        && !isReturnValueUsed(tree)
-        && !isNonPhpFileInclude(tree)) {
+      && WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))
+      && !isAutoloadImport(tree)
+      && !isReturnValueUsed(tree)
+      && !isNonPhpFileInclude(tree)) {
       String message = String.format(MESSAGE, callee);
       context().newIssue(this, tree.callee(), message);
     }
