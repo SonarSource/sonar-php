@@ -20,14 +20,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
@@ -77,11 +81,15 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
     ONLY_ALPHANUMERIC_UNDERSCORES_HYPHENS_AND_PERIODS);
   private static final Pattern ALLOWED_DUPLICATED_LITERALS = Pattern.compile(FULL_ALLOWED_LITERALS_REGEX);
 
+  private static final Set<String> TRANSLATION_FUNCTIONS = Set.of(
+    "__", "_e", "t", "esc_html__", "esc_html_e", "esc_attr__", "esc_attr_e", "_n", "_x", "_nx", "_ex");
+
   public static final int THRESHOLD_DEFAULT = 3;
   public static final int MINIMAL_LITERAL_LENGTH_DEFAULT = 5;
 
   private final Map<String, LiteralTree> firstOccurrenceTrees = new HashMap<>();
   private final Map<String, List<LiteralTree>> sameLiteralOccurrences = new HashMap<>();
+  private boolean isPhpUnitTestCase = false;
 
   @RuleProperty(
     key = "threshold",
@@ -123,8 +131,15 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   }
 
   @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    isPhpUnitTestCase = CheckUtils.isSubClassOfTestCase(tree);
+    super.visitClassDeclaration(tree);
+    isPhpUnitTestCase = false;
+  }
+
+  @Override
   public void visitLiteral(LiteralTree tree) {
-    if (tree.is(Kind.REGULAR_STRING_LITERAL) && !isArrayKey(tree)) {
+    if (tree.is(Kind.REGULAR_STRING_LITERAL) && !isArrayKey(tree) && !isTranslationFunctionArgument(tree) && !isPhpUnitTestCase) {
       String literal = tree.value().replace("\\'", "'").replace("\\\"", "\"");
       String value = removeQuotesAndQuotesEscaping(literal);
 
@@ -144,6 +159,22 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   private static String removeQuotesAndQuotesEscaping(String s) {
     var quote = s.charAt(0);
     return s.substring(1, s.length() - 1).replace("\\" + quote, String.valueOf(quote));
+  }
+
+  private static boolean isTranslationFunctionArgument(LiteralTree tree) {
+    Tree parent = tree.getParent();
+    if (parent == null) {
+      return false;
+    }
+    if (parent.is(Kind.CALL_ARGUMENT)) {
+      Tree grandParent = parent.getParent();
+      if (grandParent != null && grandParent.is(Kind.FUNCTION_CALL)) {
+        FunctionCallTree funcCall = (FunctionCallTree) grandParent;
+        String funcName = CheckUtils.lowerCaseFunctionName(funcCall);
+        return funcName != null && TRANSLATION_FUNCTIONS.contains(funcName);
+      }
+    }
+    return false;
   }
 
   /**

@@ -59,4 +59,14 @@ class StringLiteralDuplicatedCheckTest {
   void ignoreImportmapFile() {
     CheckVerifier.verifyNoIssue(check, "StringLiteralDuplicatedCheck/importmap.php");
   }
+
+  @Test
+  void translationFunctions() {
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/translation_functions.php");
+  }
+
+  @Test
+  void testClassFiles() {
+    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/test_class.php");
+  }
 }
