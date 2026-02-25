@@ -19,9 +19,13 @@ package org.sonar.php.checks;
 import java.util.Locale;
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = RequireIncludeInstructionsUsageCheck.KEY)
@@ -31,6 +35,8 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Replace \"%s\" with namespace import mechanism through the \"use\" keyword.";
 
   private static final Set<String> EXCLUDED_FILES = Set.of("autoload.php", "ScriptHandler.php");
+  // Mirrors Php.DEFAULT_FILE_SUFFIXES from sonar-php-plugin (inlined to avoid cross-module dependency)
+  private static final Set<String> PHP_FILE_SUFFIXES = Set.of("php", "php3", "php4", "php5", "phtml", "inc");
   private static final Set<String> WRONG_FUNCTIONS = Set.of(
     "require",
     "include",
@@ -49,7 +55,11 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
 
     String callee = tree.callee().toString();
-    if (!isLaravelFrameworkUsed() && WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH)) && !isAutoloadImport(tree)) {
+    if (!isFrameworkWithBuiltInRequires()
+      && WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))
+      && !isAutoloadImport(tree)
+      && !isReturnValueUsed(tree)
+      && !isNonPhpFileInclude(tree)) {
       String message = String.format(MESSAGE, callee);
       context().newIssue(this, tree.callee(), message);
     }
@@ -66,7 +76,31 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
     return (call.startsWith("include") || call.startsWith("require")) && call.endsWith("autoload.php'");
   }
 
-  private boolean isLaravelFrameworkUsed() {
-    return context().getFramework() == SymbolTable.Framework.LARAVEL;
+  private boolean isFrameworkWithBuiltInRequires() {
+    SymbolTable.Framework framework = context().getFramework();
+    return framework == SymbolTable.Framework.LARAVEL
+      || framework == SymbolTable.Framework.WORDPRESS;
+  }
+
+  private static boolean isReturnValueUsed(FunctionCallTree tree) {
+    Tree parent = tree.getParent();
+    return parent != null && !parent.is(Tree.Kind.EXPRESSION_STATEMENT);
+  }
+
+  private static boolean isNonPhpFileInclude(FunctionCallTree tree) {
+    if (tree.callArguments().isEmpty()) {
+      return false;
+    }
+    ExpressionTree arg = tree.callArguments().get(0).value();
+    if (!arg.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+      return false;
+    }
+    String path = CheckUtils.trimQuotes((LiteralTree) arg).toLowerCase(Locale.ENGLISH);
+    int dotIndex = path.lastIndexOf('.');
+    if (dotIndex == -1) {
+      return false;
+    }
+    String extension = path.substring(dotIndex + 1);
+    return !PHP_FILE_SUFFIXES.contains(extension);
   }
 }
