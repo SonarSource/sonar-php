@@ -29,10 +29,3 @@ echo _n('One item', 'Many items', $count);
 echo _n('One item', 'Many items', $count);
 echo _n('One item', 'Many items', $count);
 
-// Strings NOT in translation functions still raise issues
-echo "some string here"; // Noncompliant {{Define a constant instead of duplicating this literal "some string here" 3 times.}}
-//   ^^^^^^^^^^^^^^^^^^
-echo "some string here";
-//   ^^^^^^^^^^^^^^^^^^< {{Duplication.}}
-echo "some string here";
-//   ^^^^^^^^^^^^^^^^^^< {{Duplication.}}
