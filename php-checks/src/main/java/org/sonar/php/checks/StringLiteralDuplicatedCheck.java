@@ -109,6 +109,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
     }
     firstOccurrenceTrees.clear();
     sameLiteralOccurrences.clear();
+    isPhpUnitTestCase = false;
     super.visitCompilationUnit(tree);
     finish();
   }
