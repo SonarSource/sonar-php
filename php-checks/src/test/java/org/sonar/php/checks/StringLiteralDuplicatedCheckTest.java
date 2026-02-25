@@ -62,7 +62,7 @@ class StringLiteralDuplicatedCheckTest {
 
   @Test
   void translationFunctions() {
-    CheckVerifier.verify(check, "StringLiteralDuplicatedCheck/translation_functions.php");
+    CheckVerifier.verifyNoIssue(check, "StringLiteralDuplicatedCheck/translation_functions.php");
   }
 
   @Test
