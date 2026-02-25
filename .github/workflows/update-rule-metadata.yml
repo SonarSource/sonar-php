@@ -25,28 +25,13 @@ jobs:
     name: Update Rule Metadata
     runs-on: sonar-xs-public
     permissions:
-      id-token: write     # required by SonarSource/release-github-actions/update-rule-metadata
-      contents: write # required by SonarSource/release-github-actions/update-rule-metadata
-      pull-requests: write # required by SonarSource/release-github-actions/update-rule-metadata
+      id-token: write
+      contents: write
+      pull-requests: write
     steps:
-      - uses: SonarSource/release-github-actions/update-rule-metadata@123a1065a5668b69b5f2c8152c79368b1935b773
+      - uses: SonarSource/release-github-actions/update-rule-metadata@nw/update-rule-metadata-action
         id: update-rule-metadata
         with:
           rule-api-version: ${{ github.event.inputs.rule-api-version}}
           branch: ${{ github.event.inputs.branch }}
           rspec-branch: ${{ github.event.inputs.rspec-branch }}
-
-      - name: Workflow summary
-        shell: bash
-        run: |
-          echo "## Rule Metadata Update Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo -e "${{ steps.update-rule-metadata.outputs.summary }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [[ "${{ steps.update-rule-metadata.outputs.has-changes }}" == "true" ]]; then
-            echo "Rule metadata changes were detected. PR was created." >> $GITHUB_STEP_SUMMARY
-            echo "${{ steps.update-rule-metadata.outputs.pull-request-url }}" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "No rule metadata changes detected. No PR was created." >> $GITHUB_STEP_SUMMARY
-          fi
