@@ -23,7 +23,10 @@ class RequireIncludeInstructionsUsageCheckTest {
 
   @Test
   void test() {
-    CheckVerifier.verify(new RequireIncludeInstructionsUsageCheck(), "RequireIncludeInstructionsUsageCheck.php");
+    CheckVerifier.verify(new RequireIncludeInstructionsUsageCheck(),
+      "RequireIncludeInstructionsUsageCheck.php",
+      "requireIncludeUsage/WithNamespace.php",
+      "requireIncludeUsage/WithoutNamespace.php");
   }
 
   @Test
@@ -39,6 +42,14 @@ class RequireIncludeInstructionsUsageCheckTest {
   @Test
   void testWordPress() {
     CheckVerifier.verifyNoIssue(new RequireIncludeInstructionsUsageCheck(), "RequireIncludeInstructionsUsageCheckWordPress.php");
+  }
+
+  @Test
+  void testNamespaceDetection() {
+    CheckVerifier.verify(new RequireIncludeInstructionsUsageCheck(),
+      "RequireIncludeInstructionsUsageCheckNamespaceDetection.php",
+      "requireIncludeUsage/WithNamespace.php",
+      "requireIncludeUsage/WithoutNamespace.php");
   }
 
 }
