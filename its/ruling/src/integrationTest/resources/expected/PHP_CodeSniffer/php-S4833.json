@@ -3,8 +3,7 @@
     13,
     14,
     18,
-    33,
-    35
+    33
   ],
   "PHP_CodeSniffer:tests/Core/Autoloader/TestFiles/B.inc": [
     3
