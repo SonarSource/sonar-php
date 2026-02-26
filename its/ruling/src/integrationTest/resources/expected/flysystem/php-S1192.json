@@ -1,17 +1,1 @@
-{
-"flysystem:src/AdapterTestUtilities/FilesystemAdapterTestCase.php": [
-268
-],
-"flysystem:src/AwsS3V3/AwsS3V3AdapterTest.php": [
-117
-],
-"flysystem:src/FilesystemTest.php": [
-333
-],
-"flysystem:src/Local/LocalFilesystemAdapterTest.php": [
-107
-],
-"flysystem:src/MountManagerTest.php": [
-174
-]
-}
+{}

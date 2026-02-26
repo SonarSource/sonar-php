@@ -3,54 +3,6 @@
 216,
 992
 ],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Engine/FormattedNumberTest.php": [
-98,
-105,
-114
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/TextData/ErrorPropagationTest.php": [
-13,
-15
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/ParseFormulaTest.php": [
-35,
-51,
-57,
-162,
-182,
-268
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/DefinedNameTest.php": [
-26
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Reader/Xls/ColorMapTest.php": [
-27
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/ReferenceHelper4Test.php": [
-34
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/ReferenceHelperTest.php": [
-569
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Shared/FontFileNameTest.php": [
-64
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php": [
-69,
-137,
-180,
-256,
-425
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/Protection2Test.php": [
-20
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ArrayFunctionsTest.php": [
-104
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/DrawingsTest.php": [
-147
-],
 "PhpSpreadsheet:tests/data/Calculation/DateTime/DATEDIF.php": [
 14,
 36,
