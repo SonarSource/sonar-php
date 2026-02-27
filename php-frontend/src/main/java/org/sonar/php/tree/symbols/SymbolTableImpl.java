@@ -48,6 +48,7 @@ public class SymbolTableImpl implements SymbolTable {
   private final Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
   private Collection<ClassSymbolData> classSymbolData;
   private Collection<FunctionSymbolData> functionSymbolData;
+  private ProjectSymbolData projectSymbolData = new ProjectSymbolData();
   private Framework framework = Framework.EMPTY;
 
   private SymbolTableImpl() {
@@ -63,6 +64,7 @@ public class SymbolTableImpl implements SymbolTable {
 
   public static SymbolTableImpl create(CompilationUnitTree compilationUnit, ProjectSymbolData projectSymbolData, @Nullable PhpFile file, boolean frameworkDetectionEnabled) {
     var symbolModel = new SymbolTableImpl();
+    symbolModel.projectSymbolData = projectSymbolData;
     var declarationVisitor = new DeclarationVisitor(symbolModel, projectSymbolData, file);
     declarationVisitor.visitCompilationUnit(compilationUnit);
     symbolModel.classSymbolData = declarationVisitor.classSymbolData();
@@ -208,5 +210,9 @@ public class SymbolTableImpl implements SymbolTable {
 
   public Collection<FunctionSymbolData> functionSymbolDatas() {
     return functionSymbolData;
+  }
+
+  public ProjectSymbolData projectSymbolData() {
+    return projectSymbolData;
   }
 }

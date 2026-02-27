@@ -1,8 +1,1 @@
-{
-"flysystem:bin/check-versions.php": [
-24
-],
-"flysystem:bin/set-flysystem-version.php": [
-8
-]
-}
+{}

@@ -16,10 +16,16 @@
  */
 package org.sonar.php.checks;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -43,11 +49,28 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
     "require_once",
     "include_once");
 
+  @Nullable
+  private Set<String> filesWithNamespacedSymbols = null;
+
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
+    if (filesWithNamespacedSymbols == null) {
+      filesWithNamespacedSymbols = buildFilesWithNamespacedSymbols();
+    }
     if (!isExcludedFile()) {
       super.visitCompilationUnit(tree);
     }
+  }
+
+  private Set<String> buildFilesWithNamespacedSymbols() {
+    SymbolTable symbolTable = context().symbolTable();
+    if (!(symbolTable instanceof SymbolTableImpl symbolTableImpl)) {
+      return Set.of();
+    }
+    return symbolTableImpl.projectSymbolData().classSymbolsByQualifiedName().values().stream()
+      .map(data -> data.location().filePath())
+      .filter(Objects::nonNull)
+      .collect(Collectors.toSet());
   }
 
   @Override
@@ -59,7 +82,8 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
       && WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))
       && !isAutoloadImport(tree)
       && !isReturnValueUsed(tree)
-      && !isNonPhpFileInclude(tree)) {
+      && !isNonPhpFileInclude(tree)
+      && includedFileHasNamespacedSymbols(tree)) {
       String message = String.format(MESSAGE, callee);
       context().newIssue(this, tree.callee(), message);
     }
@@ -102,5 +126,25 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
     }
     String extension = path.substring(dotIndex + 1);
     return !PHP_FILE_SUFFIXES.contains(extension);
+  }
+
+  /**
+   * Returns true if the included file is known to contain at least one namespaced class, meaning
+   * the include/require could be replaced by a {@code use} import.
+   * Returns false when the path is dynamic (unresolvable) or when the file is not known to contain
+   * any namespaced class — in which case flagging would be a false positive.
+   */
+  private boolean includedFileHasNamespacedSymbols(FunctionCallTree tree) {
+    if (tree.callArguments().isEmpty()) {
+      return false;
+    }
+    ExpressionTree arg = CheckUtils.skipParenthesis(tree.callArguments().get(0).value());
+    if (!arg.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+      return false;
+    }
+    String includedPath = CheckUtils.trimQuotes((LiteralTree) arg);
+    Path currentFilePath = Paths.get(context().getPhpFile().uri());
+    Path resolvedPath = currentFilePath.getParent().resolve(includedPath).normalize();
+    return filesWithNamespacedSymbols.contains(resolvedPath.toString());
   }
 }
