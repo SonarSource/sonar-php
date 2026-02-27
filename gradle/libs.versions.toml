@@ -1,20 +1,20 @@
 [versions]
-sonar-commons = "2.18.0.3393"
+sonar-commons = "2.21.0.4626"
 # Before updating the plugin-api version, make sure to check the compatibility matrix and stick to the lowest denominator
 # https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility
 sonar-plugin-api = "13.4.3.4290"
-sonarqube = "26.2.0.118776"
+sonarqube = "26.2.0.119303"
 sonar-orchestrator = "6.1.0.3962"
-sonarlint = "10.34.1.83453"
-sslr = "1.24.0.633"
-junit = "6.0.0"
+sonarlint = "10.45.0.84373"
+sslr = "1.25.1.3886"
+junit = "6.0.3"
 assertj = "3.27.7"
-mockito = "5.20.0"
+mockito = "5.22.0"
 jsr305 = "3.0.2"
 staxmate = "2.0.1"
 awaitility = "4.3.0"
 woodstox = "7.1.1"
-ch-qos-logback-logback = "1.5.26"
+ch-qos-logback-logback = "1.5.32"
 
 [libraries]
 sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
