@@ -18,7 +18,7 @@ plugins {
   id("org.sonarsource.cloud-native.code-style-conventions")
   id("org.sonarsource.cloud-native.artifactory-configuration")
   id("org.sonarsource.cloud-native.rule-api")
-  id("org.sonarqube") version "7.0.1.6134"
+  id("org.sonarqube") version "7.2.2.6593"
 }
 
 artifactoryConfiguration {
