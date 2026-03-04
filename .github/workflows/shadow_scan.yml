@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: jdx/mise-action@6d1e696aa24c1aa1bcc1adea0212707c71ab78a8 # v3.6.1
         with:
-          version: 2026.1.12
+          version: 2026.2.24
       - name: Checkout build logic
         run: |
           git submodule update --init --depth 1 -- build-logic/common
