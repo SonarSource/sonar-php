@@ -80,7 +80,7 @@ jobs:
           gradle-args: -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: test-results
           path: '**/test-results/**/*.xml'
@@ -117,13 +117,13 @@ jobs:
           gradle-args: -x artifactoryPublish -x sonar
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: qa-os-win-test-results
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: qa-os-win-reports
           path: '**/build/reports/**/*'
@@ -183,13 +183,13 @@ jobs:
             -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: qa-plugin-test-results-${{ matrix.SQ_VERSION }}
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: qa-plugin-reports-${{ matrix.SQ_VERSION }}
           path: '**/build/reports/**/*'
@@ -233,13 +233,13 @@ jobs:
             -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: qa-ruling-test-results-${{ matrix.PHP_PROJECT }}
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: qa-ruling-reports-${{ matrix.PHP_PROJECT }}
           path: '**/build/reports/**/*'
@@ -279,13 +279,13 @@ jobs:
             -x artifactoryPublish
       - name: Upload test results
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: qa-pr-analysis-test-results
           path: '**/test-results/**/*.xml'
       - name: Upload reports
         if: always() && ! cancelled()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: qa-pr-analysis-reports
           path: '**/build/reports/**/*'
