@@ -8,10 +8,10 @@ possible to authorize requests to only a few servers using another option named 
 requests to any server on the internet. This may lead to data leaks or Server-Side Request Forgery (SSRF) attacks.</p>
 <h2>How to fix it</h2>
 <ul>
-  <li> Uninstall WordPress plugins which send requests to servers you don’t know. </li>
-  <li> Make sure that <code>WP_HTTP_BLOCK_EXTERNAL</code> is defined in <code>wp-config.php</code>. </li>
-  <li> Make sure that <code>WP_HTTP_BLOCK_EXTERNAL</code> is set to <code>true</code>. </li>
-  <li> Make sure that <code>WP_ACCESSIBLE_HOSTS</code> is configured to authorize requests to the servers you trust. </li>
+  <li>Uninstall WordPress plugins which send requests to servers you don’t know.</li>
+  <li>Make sure that <code>WP_HTTP_BLOCK_EXTERNAL</code> is defined in <code>wp-config.php</code>.</li>
+  <li>Make sure that <code>WP_HTTP_BLOCK_EXTERNAL</code> is set to <code>true</code>.</li>
+  <li>Make sure that <code>WP_ACCESSIBLE_HOSTS</code> is configured to authorize requests to the servers you trust.</li>
 </ul>
 <h3>Code examples</h3>
 <h4>Noncompliant code example</h4>
@@ -25,14 +25,14 @@ define( 'WP_ACCESSIBLE_HOSTS', 'api.wordpress.org' );
 </pre>
 <h2>Resources</h2>
 <ul>
-  <li> OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a> </li>
-  <li> OWASP - <a href="https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/">Top 10 2021 Category A10 - Server-Side Request
-  Forgery (SSRF)</a> </li>
-  <li> <a href="https://wordpress.org/support/article/editing-wp-config-php/#block-external-url-requestsl">wordpress.org</a> - Block External URL
-  Requests </li>
-  <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">Top 10 2017 Category A6 - Security
-  Misconfiguration</a> </li>
-  <li> <a href="https://owasp.org/www-community/attacks/Server_Side_Request_Forgery">OWASP Attack Category</a> - Server Side Request Forgery </li>
-  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/918">CWE-918 - Server-Side Request Forgery (SSRF)</a> </li>
+  <li>OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a></li>
+  <li>OWASP - <a href="https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/">Top 10 2021 Category A10 - Server-Side Request
+  Forgery (SSRF)</a></li>
+  <li><a href="https://wordpress.org/support/article/editing-wp-config-php/#block-external-url-requestsl">wordpress.org</a> - Block External URL
+  Requests</li>
+  <li>OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">Top 10 2017 Category A6 - Security
+  Misconfiguration</a></li>
+  <li><a href="https://owasp.org/www-community/attacks/Server_Side_Request_Forgery">OWASP Attack Category</a> - Server Side Request Forgery</li>
+  <li>CWE - <a href="https://cwe.mitre.org/data/definitions/918">CWE-918 - Server-Side Request Forgery (SSRF)</a></li>
 </ul>
 
