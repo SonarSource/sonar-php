@@ -1,8 +1,8 @@
 <h2>Why is this an issue?</h2>
 <p>Having a permissive Cross-Origin Resource Sharing policy is security-sensitive. It has led in the past to the following vulnerabilities:</p>
 <ul>
-  <li> <a href="https://www.cve.org/CVERecord?id=CVE-2018-0269">CVE-2018-0269</a> </li>
-  <li> <a href="https://www.cve.org/CVERecord?id=CVE-2017-14460">CVE-2017-14460</a> </li>
+  <li><a href="https://www.cve.org/CVERecord?id=CVE-2018-0269">CVE-2018-0269</a></li>
+  <li><a href="https://www.cve.org/CVERecord?id=CVE-2017-14460">CVE-2017-14460</a></li>
 </ul>
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">Same origin policy</a> in browsers prevents, by default and for
 security-reasons, a javascript frontend to perform a cross-origin HTTP request to a resource that has a different origin (domain, protocol, or port)
@@ -11,9 +11,9 @@ href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">CORS</a>, that act
 / relax the same origin policy.</p>
 <h2>How to fix it in Core PHP</h2>
 <ul>
-  <li> The <code>Access-Control-Allow-Origin</code> header should be set only for a trusted origin and for specific resources. </li>
-  <li> Allow only selected, trusted domains in the <code>Access-Control-Allow-Origin</code> header. Prefer whitelisting domains over blacklisting or
-  allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks). </li>
+  <li>The <code>Access-Control-Allow-Origin</code> header should be set only for a trusted origin and for specific resources.</li>
+  <li>Allow only selected, trusted domains in the <code>Access-Control-Allow-Origin</code> header. Prefer whitelisting domains over blacklisting or
+  allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks).</li>
 </ul>
 <h3>Code Examples</h3>
 <h4>Noncompliant Code Example</h4>
@@ -26,9 +26,9 @@ header("Access-Control-Allow-Origin: $trusteddomain");
 </pre>
 <h2>How to fix it in Laravel</h2>
 <ul>
-  <li> The <code>Access-Control-Allow-Origin</code> header should be set only for a trusted origin and for specific resources. </li>
-  <li> Allow only selected, trusted domains in the <code>Access-Control-Allow-Origin</code> header. Prefer whitelisting domains over blacklisting or
-  allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks). </li>
+  <li>The <code>Access-Control-Allow-Origin</code> header should be set only for a trusted origin and for specific resources.</li>
+  <li>Allow only selected, trusted domains in the <code>Access-Control-Allow-Origin</code> header. Prefer whitelisting domains over blacklisting or
+  allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks).</li>
 </ul>
 <h3>Code Examples</h3>
 <h4>Noncompliant Code Example</h4>
@@ -41,9 +41,9 @@ response()-&gt;header('Access-Control-Allow-Origin', $trusteddomain);
 </pre>
 <h2>How to fix it in Symfony</h2>
 <ul>
-  <li> The <code>Access-Control-Allow-Origin</code> header should be set only for a trusted origin and for specific resources. </li>
-  <li> Allow only selected, trusted domains in the <code>Access-Control-Allow-Origin</code> header. Prefer whitelisting domains over blacklisting or
-  allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks). </li>
+  <li>The <code>Access-Control-Allow-Origin</code> header should be set only for a trusted origin and for specific resources.</li>
+  <li>Allow only selected, trusted domains in the <code>Access-Control-Allow-Origin</code> header. Prefer whitelisting domains over blacklisting or
+  allowing any domain (do not use * wildcard nor blindly return the <code>Origin</code> header content without any checks).</li>
 </ul>
 <h3>Code Examples</h3>
 <h4>Noncompliant Code Example</h4>
@@ -91,16 +91,16 @@ if (in_array($origin, $trustedOrigins)) {
 </pre>
 <h2>Resources</h2>
 <ul>
-  <li> OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a> </li>
-  <li> OWASP - <a href="https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/">Top 10 2021 Category A7 - Identification and
-  Authentication Failures</a> </li>
-  <li> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">developer.mozilla.org</a> - CORS </li>
-  <li> <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">developer.mozilla.org</a> - Same origin policy </li>
-  <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">Top 10 2017 Category A6 - Security
-  Misconfiguration</a> </li>
-  <li> <a href="https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html#cross-origin-resource-sharing">OWASP HTML5 Security
-  Cheat Sheet</a> - Cross Origin Resource Sharing </li>
-  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/346">CWE-346 - Origin Validation Error</a> </li>
-  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/942">CWE-942 - Overly Permissive Cross-domain Whitelist</a> </li>
+  <li>OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a></li>
+  <li>OWASP - <a href="https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/">Top 10 2021 Category A7 - Identification and
+  Authentication Failures</a></li>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">developer.mozilla.org</a> - CORS</li>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">developer.mozilla.org</a> - Same origin policy</li>
+  <li>OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">Top 10 2017 Category A6 - Security
+  Misconfiguration</a></li>
+  <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html#cross-origin-resource-sharing">OWASP HTML5 Security
+  Cheat Sheet</a> - Cross Origin Resource Sharing</li>
+  <li>CWE - <a href="https://cwe.mitre.org/data/definitions/346">CWE-346 - Origin Validation Error</a></li>
+  <li>CWE - <a href="https://cwe.mitre.org/data/definitions/942">CWE-942 - Overly Permissive Cross-domain Whitelist</a></li>
 </ul>
 

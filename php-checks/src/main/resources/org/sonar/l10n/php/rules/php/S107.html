@@ -8,7 +8,7 @@ function setCoordinates($x1, $y1, $z1, $x2, $y2, $z2) { // Noncompliant
 </pre>
 <p>The solution can be to:</p>
 <ul>
-  <li> Split the function into smaller ones </li>
+  <li>Split the function into smaller ones</li>
 </ul>
 <pre>
 // Each function does a part of what the original setCoordinates function was doing, so confusion risks are lower
@@ -21,7 +21,7 @@ function setSize(int $width, int $height, float $depth) {
 }
 </pre>
 <ul>
-  <li> Find a better data structure for the parameters that group data in a way that makes sense for the specific application domain </li>
+  <li>Find a better data structure for the parameters that group data in a way that makes sense for the specific application domain</li>
 </ul>
 <pre>
 class Point

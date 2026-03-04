@@ -3,9 +3,9 @@
 statements with conditions that are always true are completely redundant, and make the code less readable.</p>
 <p>There are three possible causes for the presence of such code:</p>
 <ul>
-  <li> An if statement was changed during debugging and that debug code has been committed. </li>
-  <li> Some value was left unset. </li>
-  <li> Some logic is not doing what the programmer thought it did. </li>
+  <li>An if statement was changed during debugging and that debug code has been committed.</li>
+  <li>Some value was left unset.</li>
+  <li>Some logic is not doing what the programmer thought it did.</li>
 </ul>
 <p>In any of these cases, unconditional <code>if</code> statements should be removed.</p>
 <h3>Noncompliant code example</h3>
@@ -24,8 +24,8 @@ doSomething();
 </pre>
 <h2>Resources</h2>
 <ul>
-  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/489">CWE-489 - Active Debug Code</a> </li>
-  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/570">CWE-570 - Expression is Always False</a> </li>
-  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/571">CWE-571 - Expression is Always True</a> </li>
+  <li>CWE - <a href="https://cwe.mitre.org/data/definitions/489">CWE-489 - Active Debug Code</a></li>
+  <li>CWE - <a href="https://cwe.mitre.org/data/definitions/570">CWE-570 - Expression is Always False</a></li>
+  <li>CWE - <a href="https://cwe.mitre.org/data/definitions/571">CWE-571 - Expression is Always True</a></li>
 </ul>
 

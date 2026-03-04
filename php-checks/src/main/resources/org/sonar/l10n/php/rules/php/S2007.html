@@ -2,10 +2,10 @@
 <p>Defining and using global variables and global functions, when the convention dictates OOP can be confusing and difficult to use properly for
 multiple reasons:</p>
 <ul>
-  <li> You run the risk of name clashes. </li>
-  <li> Global functions must be stateless, or they can cause difficult-to-track bugs. </li>
-  <li> Global variables can be updated from anywhere and may no longer hold the value you expect. </li>
-  <li> It is difficult to properly test classes that use global functions. </li>
+  <li>You run the risk of name clashes.</li>
+  <li>Global functions must be stateless, or they can cause difficult-to-track bugs.</li>
+  <li>Global variables can be updated from anywhere and may no longer hold the value you expect.</li>
+  <li>It is difficult to properly test classes that use global functions.</li>
 </ul>
 <p>Instead of being declared globally, such variables and functions should be moved into a class, potentially marked <code>static</code>, so they can
 be used without a class instance.</p>
