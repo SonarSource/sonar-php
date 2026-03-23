@@ -163,14 +163,14 @@ public class SonarLintTest {
     var clientLauncher = new ClientJsonRpcLauncher(serverToClientInputStream, clientToServerOutputStream, client);
     backend = clientLauncher.getServerProxy();
 
-    var featureFlags = SonarLintUtils.featureFlagsForStandaloneMode();
+    var backendCapabilities = SonarLintUtils.backendCapabilitiesForStandaloneMode();
     backend.initialize(
       new InitializeParams(
         IT_CLIENT_INFO,
         IT_TELEMETRY_ATTRIBUTES,
         HttpConfigurationDto.defaultConfig(),
         null,
-        featureFlags,
+        backendCapabilities,
         sonarUserHome.resolve("storage"),
         sonarUserHome.resolve("work"),
         Set.of(Tests.PHP_PLUGIN_LOCATION.getFile().toPath()),
