@@ -35,3 +35,4 @@ jobs:
           rule-api-version: ${{ github.event.inputs.rule-api-version}}
           branch: ${{ github.event.inputs.branch }}
           rspec-branch: ${{ github.event.inputs.rspec-branch }}
+          slack-channel: squad-security-taint-notifs
