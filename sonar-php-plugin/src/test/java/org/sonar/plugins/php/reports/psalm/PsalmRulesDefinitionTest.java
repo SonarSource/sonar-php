@@ -42,7 +42,7 @@ class PsalmRulesDefinitionTest extends AbstractExternalRulesDefinitionTest {
       assertThat(rule.defaultImpacts()).containsOnly(Map.entry(SoftwareQuality.RELIABILITY, Severity.HIGH));
     } else {
       assertThat(rule.cleanCodeAttribute()).isNull();
-      assertThat(rule.defaultImpacts()).containsOnly(Map.entry(SoftwareQuality.MAINTAINABILITY, Severity.MEDIUM));
+      assertThat(rule.defaultImpacts()).containsOnly(Map.entry(SoftwareQuality.RELIABILITY, Severity.MEDIUM));
     }
   }
 
