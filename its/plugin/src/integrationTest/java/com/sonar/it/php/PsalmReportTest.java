@@ -54,7 +54,7 @@ class PsalmReportTest {
     assertThat(firstImpact.getSeverity()).isEqualTo(Common.ImpactSeverity.MEDIUM);
 
     assertThat(first.getCleanCodeAttribute()).isEqualTo(Common.CleanCodeAttribute.CONVENTIONAL);
-    assertThat(first.getType()).isEqualTo(Common.RuleType.BUG);
+    assertThat(first.getType()).isEqualTo(Common.RuleType.CODE_SMELL);
     assertThat(first.getSeverity()).isEqualTo(Common.Severity.CRITICAL);
     assertThat(first.getEffort()).isEqualTo("5min");
     Common.TextRange firstTextRange = first.getTextRange();
