@@ -76,5 +76,5 @@
       "enabled": false
     }
   ],
-  "reviewers": ["team:security-engine-squad"]
+  "reviewers": ["team:security-stl-taint-squad"]
 }
