@@ -21,8 +21,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.sonarsource.sonarlint.core.rpc.protocol.backend.initialize.BackendCapability;
 import org.sonarsource.sonarlint.core.rpc.protocol.backend.initialize.ClientConstantInfoDto;
-import org.sonarsource.sonarlint.core.rpc.protocol.backend.initialize.FeatureFlagsDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.backend.initialize.TelemetryClientConstantAttributesDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.common.Language;
 
@@ -34,19 +34,14 @@ public class SonarLintUtils {
   public static final TelemetryClientConstantAttributesDto IT_TELEMETRY_ATTRIBUTES = new TelemetryClientConstantAttributesDto(
     "SonarLint ITs", "SonarLint ITs", "1.2.3", "4.5.6", emptyMap());
 
-  public static FeatureFlagsDto featureFlagsForStandaloneMode() {
-    return new FeatureFlagsDto(
-      true,
-      true,
-      true,
-      false,
-      true,
-      true,
-      false,
-      true,
-      false,
-      false,
-      false);
+  public static Set<BackendCapability> backendCapabilitiesForStandaloneMode() {
+    return EnumSet.of(
+      BackendCapability.SMART_NOTIFICATIONS,
+      BackendCapability.PROJECT_SYNCHRONIZATION,
+      BackendCapability.EMBEDDED_SERVER,
+      BackendCapability.SERVER_SENT_EVENTS,
+      BackendCapability.DATAFLOW_BUG_DETECTION,
+      BackendCapability.TELEMETRY);
   }
 
   public static Map<String, String> toMap(String[] keyValues) {
