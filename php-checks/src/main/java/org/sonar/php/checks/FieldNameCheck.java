@@ -16,7 +16,6 @@
  */
 package org.sonar.php.checks;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
@@ -24,6 +23,8 @@ import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
@@ -49,16 +50,38 @@ public class FieldNameCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return Collections.singletonList(Kind.CLASS_PROPERTY_DECLARATION);
+    return List.of(Kind.CLASS_PROPERTY_DECLARATION, Kind.METHOD_DECLARATION);
   }
 
   @Override
   public void visitNode(Tree tree) {
-    ClassPropertyDeclarationTree property = (ClassPropertyDeclarationTree) tree;
+    if (tree.is(Kind.CLASS_PROPERTY_DECLARATION)) {
+      checkClassPropertyDeclaration((ClassPropertyDeclarationTree) tree);
+    } else {
+      checkPromotedConstructorProperties((MethodDeclarationTree) tree);
+    }
+  }
+
+  private void checkClassPropertyDeclaration(ClassPropertyDeclarationTree property) {
     for (VariableDeclarationTree variableDeclarationTree : property.declarations()) {
       String propertyName = variableDeclarationTree.identifier().text();
       if (!pattern.matcher(propertyName.replace("$", "")).matches()) {
         context().newIssue(this, variableDeclarationTree.identifier(), String.format(MESSAGE, propertyName, format));
+      }
+    }
+  }
+
+  private void checkPromotedConstructorProperties(MethodDeclarationTree method) {
+    if (!"__construct".equals(method.name().text())) {
+      return;
+    }
+    for (ParameterTree parameter : method.parameters().parameters()) {
+      if (!parameter.isPropertyPromotion()) {
+        continue;
+      }
+      String propertyName = parameter.variableIdentifier().variableExpression().text();
+      if (!pattern.matcher(propertyName.replace("$", "")).matches()) {
+        context().newIssue(this, parameter.variableIdentifier(), String.format(MESSAGE, propertyName, format));
       }
     }
   }

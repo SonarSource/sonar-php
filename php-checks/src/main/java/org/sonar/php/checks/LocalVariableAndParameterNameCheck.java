@@ -105,6 +105,10 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
 
   private void checkParameters(FunctionTree functionDec) {
     for (ParameterTree parameter : functionDec.parameters().parameters()) {
+      // Promoted properties are class fields, not parameters; naming is checked by S116 (FieldNameCheck)
+      if (parameter.isPropertyPromotion()) {
+        continue;
+      }
       String paramName = parameter.variableIdentifier().variableExpression().text();
       if (!isCompliant(paramName)) {
         reportIssue("parameter", parameter, paramName);
