@@ -50,6 +50,7 @@ class ConstructorPropertyPromotion {
     public string $myField,          // OK - promoted property, checked by S116 not S117
     protected int $MY_FIELD,         // OK - promoted property, not subject to parameter naming
     private string $entityTypeManager, // OK - promoted property
+    final string $MY_FINAL_FIELD,    // OK - final-only promoted property (PHP 8.5), not subject to parameter naming
     string $regularParam,            // OK
     string $REGULAR_PARAM,           // Noncompliant {{Rename this parameter "$REGULAR_PARAM" to match the regular expression ^[a-z_][a-zA-Z0-9_]*$.}}
   ) {}

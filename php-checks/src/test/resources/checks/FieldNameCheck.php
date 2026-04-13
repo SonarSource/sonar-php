@@ -14,6 +14,8 @@ class ConstructorPropertyPromotion {
 //                ^^^^^^^^
     private string $my_field,         // Noncompliant {{Rename this field "$my_field" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
     public readonly string $myReadonly, // OK
+    final string $myFinalField,         // OK - final-only promoted property (PHP 8.5)
+    final string $MY_FINAL_FIELD,         // Noncompliant {{Rename this field "$MY_FINAL_FIELD" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
     string $regularParam,             // OK - not a promoted property
     string $REGULAR_PARAM             // OK - not a promoted property, checked by S117
   ) {}

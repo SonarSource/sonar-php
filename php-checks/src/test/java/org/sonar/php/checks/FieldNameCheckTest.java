@@ -42,6 +42,8 @@ class FieldNameCheckTest {
       new LineIssue(check, 7, "Rename this field \"$myVariable\" to match the regular expression " + format + "."),
       new LineIssue(check, 12, "Rename this field \"$myField\" to match the regular expression " + format + "."),
       new LineIssue(check, 15, "Rename this field \"$my_field\" to match the regular expression " + format + "."),
-      new LineIssue(check, 16, "Rename this field \"$myReadonly\" to match the regular expression " + format + ".")));
+      new LineIssue(check, 16, "Rename this field \"$myReadonly\" to match the regular expression " + format + "."),
+      new LineIssue(check, 17, "Rename this field \"$myFinalField\" to match the regular expression " + format + "."),
+      new LineIssue(check, 18, "Rename this field \"$MY_FINAL_FIELD\" to match the regular expression " + format + ".")));
   }
 }
