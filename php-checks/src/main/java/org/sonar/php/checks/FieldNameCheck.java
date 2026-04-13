@@ -64,10 +64,7 @@ public class FieldNameCheck extends PHPSubscriptionCheck {
 
   private void checkClassPropertyDeclaration(ClassPropertyDeclarationTree property) {
     for (VariableDeclarationTree variableDeclarationTree : property.declarations()) {
-      String propertyName = variableDeclarationTree.identifier().text();
-      if (!pattern.matcher(propertyName.replace("$", "")).matches()) {
-        context().newIssue(this, variableDeclarationTree.identifier(), String.format(MESSAGE, propertyName, format));
-      }
+      checkPropertyName(variableDeclarationTree.identifier(), variableDeclarationTree.identifier().text());
     }
   }
 
@@ -79,10 +76,13 @@ public class FieldNameCheck extends PHPSubscriptionCheck {
       if (!parameter.isPropertyPromotion()) {
         continue;
       }
-      String propertyName = parameter.variableIdentifier().variableExpression().text();
-      if (!pattern.matcher(propertyName.replace("$", "")).matches()) {
-        context().newIssue(this, parameter.variableIdentifier(), String.format(MESSAGE, propertyName, format));
-      }
+      checkPropertyName(parameter.variableIdentifier(), parameter.variableIdentifier().variableExpression().text());
+    }
+  }
+
+  private void checkPropertyName(Tree identifier, String propertyName) {
+    if (!pattern.matcher(propertyName.replace("$", "")).matches()) {
+      context().newIssue(this, identifier, String.format(MESSAGE, propertyName, format));
     }
   }
 
