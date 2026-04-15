@@ -16,7 +16,7 @@
  */
 package org.sonar.php.checks;
 
-import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.sonar.php.utils.PHPCheckTest;
 import org.sonar.plugins.php.CheckVerifier;
@@ -37,8 +37,13 @@ class FieldNameCheckTest {
   @Test
   void custom() throws Exception {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
-    String message = "Rename this field \"$myVariable\" to match the regular expression " + check.format + ".";
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),
-      Collections.singletonList(new LineIssue(check, 7, message)));
+    String format = check.format;
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), List.of(
+      new LineIssue(check, 7, "Rename this field \"$myVariable\" to match the regular expression " + format + "."),
+      new LineIssue(check, 12, "Rename this field \"$myField\" to match the regular expression " + format + "."),
+      new LineIssue(check, 15, "Rename this field \"$my_field\" to match the regular expression " + format + "."),
+      new LineIssue(check, 16, "Rename this field \"$myReadonly\" to match the regular expression " + format + "."),
+      new LineIssue(check, 17, "Rename this field \"$myFinalField\" to match the regular expression " + format + "."),
+      new LineIssue(check, 18, "Rename this field \"$MY_FINAL_FIELD\" to match the regular expression " + format + ".")));
   }
 }
