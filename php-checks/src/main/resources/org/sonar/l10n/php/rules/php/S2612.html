@@ -3,9 +3,6 @@
 members of the group assigned to this resource.</p>
 <p>Granting permissions to this category can lead to unintended access to files or directories that could allow attackers to obtain sensitive
 information, disrupt services or elevate privileges.</p>
-<p>In Unix file system permissions, the "others" category refers to all users except the owner of the file system resource and the members of the
-group assigned to this resource. Granting permissions to this category can lead to unintended access to files or directories. This creates a security
-vulnerability where any user on the system can potentially access, modify, or execute sensitive resources.</p>
 <h3>What is the potential impact?</h3>
 <h4>Unauthorized access to sensitive information</h4>
 <p>When file or directory permissions grant access to all users on a system (often represented as "others" or "everyone" in permission models),
@@ -31,7 +28,7 @@ chmod("foo", 0777); // Noncompliant
 </pre>
 <h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
-chmod("foo", 0750); // Compliant
+chmod("foo", 0750);
 </pre>
 <p>When using umask(), set it to a value that restricts permissions for the "others" category. The umask value 0027 ensures that newly created files
 and directories do not grant any permissions to "others".</p>
@@ -42,7 +39,7 @@ umask(0750); // Noncompliant
 </pre>
 <h4>Compliant solution</h4>
 <pre data-diff-id="2" data-diff-type="compliant">
-umask(0027); // Compliant
+umask(0027);
 </pre>
 <h2>How to fix it in Laravel</h2>
 <p>When using Laravel’s Filesystem component, ensure that chmod() is called with restrictive permission values. Use 0750 instead of 0777 to prevent
@@ -60,7 +57,7 @@ $fs-&gt;chmod("foo", 0777); // Noncompliant
 use Illuminate\Filesystem\Filesystem;
 
 $fs = new Filesystem();
-$fs-&gt;chmod("foo", 0750); // Compliant
+$fs-&gt;chmod("foo", 0750);
 </pre>
 <h2>How to fix it in Symfony</h2>
 <p>When using Symfony’s Filesystem component, ensure that chmod() is called with restrictive permission values. Use 0750 instead of 0777 to prevent
@@ -78,7 +75,7 @@ $fs-&gt;chmod("foo", 0777); // Noncompliant
 use Symfony\Component\Filesystem\Filesystem;
 
 $fs = new Filesystem();
-$fs-&gt;chmod("foo", 0750); // Compliant
+$fs-&gt;chmod("foo", 0750);
 </pre>
 <h2>Resources</h2>
 <h3>Documentation</h3>
