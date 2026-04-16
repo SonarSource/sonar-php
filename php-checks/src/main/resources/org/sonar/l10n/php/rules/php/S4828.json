@@ -1,15 +1,21 @@
 {
-  "title": "Signaling processes is security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "OS process signal parameters should be validated",
+  "type": "CODE_SMELL",
   "code": {
     "impacts": {
       "SECURITY": "HIGH"
     },
     "attribute": "CONVENTIONAL"
   },
-  "status": "ready",
+  "status": "deprecated",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "30min"
+  },
+  "quickfix": "unknown",
   "tags": [
-    "cwe"
+    "cwe",
+    "former-hotspot"
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-4828",

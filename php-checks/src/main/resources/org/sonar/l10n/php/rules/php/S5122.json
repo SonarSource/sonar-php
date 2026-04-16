@@ -1,17 +1,23 @@
 {
-  "title": "Avoid overly permissive Cross-Origin Resource Sharing (CORS) policies to enhance security",
+  "title": "Cross-Origin Resource Sharing (CORS) policy should be restricted to trusted origins",
   "type": "VULNERABILITY",
   "code": {
     "impacts": {
-      "SECURITY": "LOW"
+      "SECURITY": "MEDIUM"
     },
     "attribute": "COMPLETE"
   },
   "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "4h"
+  },
+  "quickfix": "unknown",
   "tags": [
-    "cwe"
+    "cwe",
+    "former-hotspot"
   ],
-  "defaultSeverity": "Minor",
+  "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-5122",
   "sqKey": "S5122",
   "scope": "Main",
@@ -37,10 +43,5 @@
       "14.5.2",
       "14.5.3"
     ]
-  },
-  "remediation": {
-    "func": "Constant\/Issue",
-    "constantCost": "5min"
-  },
-  "quickfix": "unknown"
+  }
 }
