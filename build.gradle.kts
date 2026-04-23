@@ -49,6 +49,7 @@ subprojects {
       // Pinned to avoid dependency risks
       force(libs.logback.classic)
     }
+    resolutionStrategy.activateDependencyLocking()
   }
 }
 
