@@ -1,0 +1,7 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.sonarsource.rule-api:rule-api:2.19.0.5763=ruleApi
+org.slf4j:slf4j-api:1.7.36=ruleApi
+org.slf4j:slf4j-nop:1.7.36=ruleApi
+empty=
