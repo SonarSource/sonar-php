@@ -43,8 +43,16 @@ spotless {
   }
 }
 
-dependencyLocking {
-  lockAllConfigurations()
+allprojects {
+  dependencyLocking {
+    lockAllConfigurations()
+  }
+}
+
+tasks.register("writeAllLockFiles") {
+  group = "help"
+  description = "Regenerate all dependency lock files. Run with: ./gradlew writeAllLockFiles --write-locks"
+  dependsOn(allprojects.map { it.tasks.named("dependencies") })
 }
 
 subprojects {

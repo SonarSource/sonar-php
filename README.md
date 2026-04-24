@@ -112,6 +112,14 @@ Note that this overwrites your current license files in the `resources/licenses/
 ./gradlew generateLicenseResources
 ```
 
+### Regenerate Dependency Lock Files
+
+Gradle lock files pin dependency versions to ensure reproducible builds. When dependencies change (e.g. after updating versions in `build.gradle.kts` or `gradle/libs.versions.toml`), regenerate all lock files with:
+
+```shell
+./gradlew writeAllLockFiles --write-locks
+```
+
 ### Integration Tests
 To run integration tests, you will need to create a properties file like the one shown below, and set its location in an environment variable named `ORCHESTRATOR_CONFIG_URL`.
 ```properties
