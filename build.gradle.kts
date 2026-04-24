@@ -43,13 +43,16 @@ spotless {
   }
 }
 
+dependencyLocking {
+  lockAllConfigurations()
+}
+
 subprojects {
   configurations.all {
     resolutionStrategy {
       // Pinned to avoid dependency risks
       force(libs.logback.classic)
     }
-    resolutionStrategy.activateDependencyLocking()
   }
 }
 
