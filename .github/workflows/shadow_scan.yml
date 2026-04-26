@@ -38,11 +38,11 @@ jobs:
           echo "GRADLE_CACHE_KEY=${GRADLE_CACHE_KEY}" >> $GITHUB_ENV
           rm gradle-md5-sums.txt
       - name: Cache Gradle Dependencies
-        uses: SonarSource/ci-github-actions/cache@v1
+        uses: SonarSource/ci-github-actions/cache@1.3.34
         with:
           path: ${{ env.GRADLE_USER_HOME }}
           key: gradle-${{ env.GRADLE_CACHE_KEY }}
-      - uses: SonarSource/ci-github-actions/build-gradle@v1
+      - uses: SonarSource/ci-github-actions/build-gradle@1.3.34
         with:
           deploy-pull-request: false
           # There might be a warning: Warning: Failed to fetch short-lived token for Develocity
@@ -51,7 +51,7 @@ jobs:
           run-shadow-scans: true
 
       - name: Run IRIS Analysis
-        uses: SonarSource/unified-dogfooding-actions/run-iris@v1
+        uses: SonarSource/unified-dogfooding-actions/run-iris@1.0.0
         with:
           primary_project_key: "org.sonarsource.php:php"
           primary_platform: "Next"
