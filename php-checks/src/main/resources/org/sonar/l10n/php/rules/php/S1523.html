@@ -20,9 +20,9 @@ security code reviews.</p>
 <p>Regarding the execution of unknown code, the best solution is to not run code provided by an untrusted source. If you really need to do it, run the
 code in a <a href="https://en.wikipedia.org/wiki/Sandbox_(computer_security)">sandboxed</a> environment. Use jails, firewalls and whatever means your
 operating system and programming language provide (example: <a
-href="https://wiki.sei.cmu.edu/confluence/display/java/SEC54-J.+Create+a+secure+sandbox+using+a+security+manager">Security Managers</a> in java, <a
-href="https://www.w3schools.com/tags/att_iframe_sandbox.asp">iframes</a> and <a href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin
-policy</a> for javascript in a web browser).</p>
+href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/recommendations/platform-security-sec/sec54-j">Security
+Managers</a> in java, <a href="https://www.w3schools.com/tags/att_iframe_sandbox.asp">iframes</a> and <a
+href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin policy</a> for javascript in a web browser).</p>
 <p>Do not try to create a blacklist of dangerous code. It is impossible to cover all attacks that way.</p>
 <p>Avoid using dynamic code APIs whenever possible. Hard-coded code is always safer.</p>
 <h2>Sensitive Code Example</h2>
