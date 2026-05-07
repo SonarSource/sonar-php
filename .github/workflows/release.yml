@@ -1,20 +1,15 @@
 ---
 name: sonar-release
-# This workflow is triggered when publishing a new github release
+# This workflow is triggered by SonarSource/release-github-actions/publish-github-release,
+# which creates a draft GitHub release and then dispatches this workflow.
+# gh-action_release@v7 reuses the draft, attaches assets, and atomically publishes it.
 # yamllint disable-line rule:truthy
 on:
-  release:
-    types:
-      - published
   workflow_dispatch:
     inputs:
       version:
         type: string
-        description: Version
-        required: true
-      releaseId:
-        type: string
-        description: Release ID
+        description: Full version including build number, e.g. 1.2.3.456
         required: true
       dryRun:
         type: boolean
@@ -27,10 +22,9 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@v6
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@v7
     with:
       version: ${{ inputs.version }}
-      releaseId: ${{ inputs.releaseId }}
       dryRun: ${{ inputs.dryRun }}
       publishToBinaries: true
       mavenCentralSync: true
