@@ -167,6 +167,10 @@ class AnalysisScanner extends Scanner {
 
     computeMeasuresAndSaveCpdData(inputFile, cpdVisitor);
 
+    if (!inSonarLint(context)) {
+      SonarResolveHandler.handle(context, inputFile, phpAnalyzer.currentFileTree(), SonarResolveHandler.apiSupportsIssueResolution(context));
+    }
+
     noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
     List<PhpIssue> issues = inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest();
     issues = filterIssuesByWarningSuppressor(inputFile, issues);
