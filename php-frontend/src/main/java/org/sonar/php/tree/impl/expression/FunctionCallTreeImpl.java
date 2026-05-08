@@ -97,7 +97,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   /**
    * @deprecated since 3.11 . Use {@link #callArguments()} instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = true)
   @Override
   public SeparatedListImpl<ExpressionTree> arguments() {
     return arguments;
