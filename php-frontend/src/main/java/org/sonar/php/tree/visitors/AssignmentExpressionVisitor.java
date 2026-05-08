@@ -81,7 +81,7 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
     }
   }
 
-  private void assignToUnknown(Tree lhs) {
+  private static void assignToUnknown(Tree lhs) {
     SymbolImpl symbol = getSymbol(lhs);
     if (symbol != null) {
       symbol.assignUnknown();
