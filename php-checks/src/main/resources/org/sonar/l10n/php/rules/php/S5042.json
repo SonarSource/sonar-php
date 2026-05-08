@@ -17,7 +17,7 @@
     "cwe",
     "former-hotspot"
   ],
-  "defaultSeverity": "Minor",
+  "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-5042",
   "sqKey": "S5042",
   "scope": "Main",
