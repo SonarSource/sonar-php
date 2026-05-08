@@ -13,7 +13,9 @@
     "constantCost": "5min"
   },
   "quickfix": "unknown",
-  "tags": [],
+  "tags": [
+    "former-hotspot"
+  ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-6343",
   "sqKey": "S6343",
