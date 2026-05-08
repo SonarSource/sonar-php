@@ -45,7 +45,7 @@ class AnonymousClassTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.ANONYMOUS_CLASS)).isTrue();
     assertThat(tree.classToken().text()).isEqualTo("class");
     assertThat(tree.openCurlyBraceToken()).isNotNull();
-    assertThat(tree.arguments()).hasSize(2);
+    assertThat(tree.callArguments()).hasSize(2);
     assertThat(tree.closeCurlyBraceToken()).isNotNull();
     assertThat(tree.extendsToken()).isNotNull();
     assertThat(tree.superClass().fullName()).isEqualTo("A");
