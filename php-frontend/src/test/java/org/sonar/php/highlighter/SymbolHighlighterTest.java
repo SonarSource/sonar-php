@@ -51,7 +51,7 @@ class SymbolHighlighterTest {
   public File tempFolder;
 
   @BeforeEach
-  public void setUp() throws IOException {
+  void setUp() throws IOException {
     file = new File(tempFolder, "file");
   }
 

@@ -29,13 +29,14 @@ import static java.util.Collections.singletonList;
 import static org.sonar.php.symbols.UnknownLocationInFile.UNKNOWN_LOCATION;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
-public enum BuiltinSymbolData {
+public final class BuiltinSymbolData {
 
-  BUILTINS;
+  private static final Map<QualifiedName, ClassSymbolData> CLASS_SYMBOLS_BY_QUALIFIED_NAME = init();
 
-  private final Map<QualifiedName, ClassSymbolData> classSymbolsByQualifiedName = init();
+  private BuiltinSymbolData() {
+  }
 
-  private Map<QualifiedName, ClassSymbolData> init() {
+  private static Map<QualifiedName, ClassSymbolData> init() {
     List<ClassSymbolData> data = Arrays.asList(
       new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Throwable"), null, emptyList(), ClassSymbol.Kind.ABSTRACT, Collections.emptyList()),
       new ClassSymbolData(UNKNOWN_LOCATION, qualifiedName("Exception"), null, singletonList(qualifiedName("Throwable")), Collections.emptyList()),
@@ -43,8 +44,8 @@ public enum BuiltinSymbolData {
     return data.stream().collect(Collectors.toMap(ClassSymbolData::qualifiedName, a -> a));
   }
 
-  public Optional<ClassSymbolData> classSymbolData(QualifiedName qualifiedName) {
-    return Optional.ofNullable(classSymbolsByQualifiedName.get(qualifiedName));
+  public static Optional<ClassSymbolData> classSymbolData(QualifiedName qualifiedName) {
+    return Optional.ofNullable(CLASS_SYMBOLS_BY_QUALIFIED_NAME.get(qualifiedName));
   }
 
 }

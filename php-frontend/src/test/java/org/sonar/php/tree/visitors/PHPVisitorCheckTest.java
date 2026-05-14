@@ -63,7 +63,7 @@ class PHPVisitorCheckTest {
   private CacheContext cacheContext;
 
   @BeforeEach
-  public void setUp() throws Exception {
+  void setUp() throws Exception {
     PhpFile file = FileTestUtils.getFile(new File(WORKDIR + "test.php"));
     cacheContext = mock(CacheContext.class);
     fileContext = new PhpInputFileContext(file, new File(WORKDIR), cacheContext);

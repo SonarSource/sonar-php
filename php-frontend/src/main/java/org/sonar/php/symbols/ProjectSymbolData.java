@@ -30,7 +30,6 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
  */
 public class ProjectSymbolData {
 
-  private static final BuiltinSymbolData builtinSymbolData = BuiltinSymbolData.BUILTINS;
   private final Map<QualifiedName, ClassSymbolData> classSymbolsByQualifiedName = new HashMap<>();
   private final Map<QualifiedName, List<FunctionSymbolData>> functionSymbolsByQualifiedName = new HashMap<>();
 
@@ -46,7 +45,7 @@ public class ProjectSymbolData {
 
   public Optional<ClassSymbolData> classSymbolData(QualifiedName qualifiedName) {
     ClassSymbolData value = classSymbolsByQualifiedName.get(qualifiedName);
-    return value == null ? builtinSymbolData.classSymbolData(qualifiedName) : Optional.of(value);
+    return value == null ? BuiltinSymbolData.classSymbolData(qualifiedName) : Optional.of(value);
   }
 
   public List<FunctionSymbolData> functionSymbolData(QualifiedName qualifiedName) {

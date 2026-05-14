@@ -18,9 +18,12 @@ package org.sonar.php.symbols;
 
 import org.sonar.plugins.php.api.visitors.LocationInFile;
 
-public enum UnknownLocationInFile implements LocationInFile {
+public final class UnknownLocationInFile implements LocationInFile {
 
-  UNKNOWN_LOCATION;
+  public static final UnknownLocationInFile UNKNOWN_LOCATION = new UnknownLocationInFile();
+
+  UnknownLocationInFile() {
+  }
 
   @Override
   public String filePath() {

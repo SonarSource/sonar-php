@@ -38,7 +38,7 @@ class NonLFCharAsEOLCheckTest {
   private PhpFile koFile;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     okFile = TestUtils.getFile(new File(temporaryFolder, "test1.php"), "<?php $foo = 1; \n");
     koFile = TestUtils.getFile(new File(temporaryFolder, "test2.php"), "<?php $foo = 1; \r\n");
   }
