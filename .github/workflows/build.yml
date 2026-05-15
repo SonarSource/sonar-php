@@ -313,7 +313,7 @@ jobs:
     permissions:
       id-token: write
       statuses: read
-    runs-on: github-ubuntu-latest-s
+    runs-on: warp-custom-ubuntu-24-04
     steps:
       - uses: SonarSource/release-github-actions/notify-slack@master
         with:
