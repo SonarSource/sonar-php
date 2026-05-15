@@ -46,7 +46,7 @@ class TestFileReportTest {
   private final Consumer<String> addUnresolvedInputFiles = file -> unresolvedInputFiles.add(file);
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     testFileName = "testfile.php";
     DefaultInputFile testFile = TestInputFileBuilder.create("moduleKey", testFileName).setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
     context = SensorContextTester.create(new File("src/test/resources"));

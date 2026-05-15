@@ -30,7 +30,7 @@ class FileUploadsCheckTest {
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  void lineIssues() throws Exception {
+  void lineIssues() {
     check(check, new File(dir, "file_uploads.ini"));
   }
 
