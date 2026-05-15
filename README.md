@@ -1,5 +1,7 @@
 # Code Quality and Security for PHP 
 
+Test Commit
+
 <p align="center">
   <img alt="Build" src="https://github.com/SonarSource/sonar-php/actions/workflows/build.yml/badge.svg?branch=master">
   <img alt="Quality Gate Status" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status">
