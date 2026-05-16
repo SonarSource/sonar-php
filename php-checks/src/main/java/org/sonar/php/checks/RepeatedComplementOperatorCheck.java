@@ -16,7 +16,7 @@
  */
 package org.sonar.php.checks;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -42,7 +42,7 @@ public class RepeatedComplementOperatorCheck extends PHPVisitorCheck {
   private static final Map<Kind, String> CAST_FUNCTION = castFunctions();
 
   public static Map<Kind, String> castFunctions() {
-    Map<Kind, String> map = new HashMap();
+    Map<Kind, String> map = new EnumMap<>(Kind.class);
     map.put(Kind.LOGICAL_COMPLEMENT, "(bool)");
     map.put(Kind.UNARY_MINUS, "(int)");
     return map;
