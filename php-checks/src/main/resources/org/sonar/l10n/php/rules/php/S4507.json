@@ -13,10 +13,7 @@
     "constantCost": "1min"
   },
   "tags": [
-    "cwe",
-    "error-handling",
-    "debug",
-    "user-experience"
+    "former-hotspot"
   ],
   "defaultSeverity": "Minor",
   "ruleSpecification": "RSPEC-4507",
