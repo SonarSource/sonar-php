@@ -14,9 +14,7 @@
     "constantCost": "20min"
   },
   "tags": [
-    "cwe",
-    "bad-practice",
-    "sql"
+    "former-hotspot"
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-2077",
