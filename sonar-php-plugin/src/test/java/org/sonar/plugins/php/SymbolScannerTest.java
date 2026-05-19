@@ -55,7 +55,7 @@ class SymbolScannerTest {
   private DurationStatistics statistics;
 
   @BeforeEach
-  public void init() throws IOException {
+  void init() throws IOException {
     context = SensorContextTester.create(PhpTestUtils.getModuleBaseDir());
     Path workDir = Files.createTempDirectory("workDir");
     context.fileSystem().setWorkDir(workDir);

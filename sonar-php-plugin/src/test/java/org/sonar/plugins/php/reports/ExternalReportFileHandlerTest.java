@@ -36,7 +36,7 @@ class ExternalReportFileHandlerTest {
   private SensorContextTester context;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     context = SensorContextTester.create(PROJECT_DIR);
     addInputFiles("index.php", "subfolder/index.php");
     fileHandler = ExternalReportFileHandler.create(context);

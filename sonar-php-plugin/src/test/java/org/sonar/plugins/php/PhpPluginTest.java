@@ -32,7 +32,7 @@ class PhpPluginTest {
   private PhpPlugin plugin;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     this.plugin = new PhpPlugin();
   }
 
