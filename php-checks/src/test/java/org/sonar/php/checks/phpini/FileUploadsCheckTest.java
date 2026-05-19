@@ -35,7 +35,7 @@ class FileUploadsCheckTest {
   }
 
   @Test
-  void fileIssue() throws Exception {
+  void fileIssue() {
     check(check, new File(dir, "empty.ini"), Collections.singletonList(issue("Explicitly disable \"file_uploads\".")));
   }
 

@@ -21,7 +21,7 @@ import org.sonar.plugins.php.CheckVerifier;
 
 class SSLHostVerificationDisabledCheckTest {
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new SSLHostVerificationDisabledCheck(), "SSLHostVerificationDisabledCheck.php");
   }
 }
