@@ -25,7 +25,7 @@ class GenericExceptionCheckTest {
   private static final String TEST_DIR = "GenericExceptionCheck/";
 
   @Test
-  void okNonNamespace() throws Exception {
+  void okNonNamespace() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok1.php");
   }
 
