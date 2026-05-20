@@ -29,12 +29,12 @@ class CgiForceRedirectCheckTest {
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  void lineIssue() throws Exception {
+  void lineIssue() {
     check(check, new File(dir, "cgi_force_redirect.ini"));
   }
 
   @Test
-  void emptyFile() throws Exception {
+  void emptyFile() {
     check(check, new File(dir, "empty.ini"), Collections.emptyList());
   }
 
