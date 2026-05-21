@@ -30,27 +30,27 @@ class GenericExceptionCheckTest {
   }
 
   @Test
-  void okNamespace() throws Exception {
+  void okNamespace() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok2.php");
   }
 
   @Test
-  void koNonNamespace() throws Exception {
+  void koNonNamespace() {
     CheckVerifier.verify(check, TEST_DIR + "ko1.php");
   }
 
   @Test
-  void koNamespace() throws Exception {
+  void koNamespace() {
     CheckVerifier.verify(check, TEST_DIR + "ko2.php");
   }
 
   @Test
-  void koNamespaceUse() throws Exception {
+  void koNamespaceUse() {
     CheckVerifier.verify(check, TEST_DIR + "ko3.php");
   }
 
   @Test
-  void koMultipleNamespaces() throws Exception {
+  void koMultipleNamespaces() {
     CheckVerifier.verify(check, TEST_DIR + "ko4.php");
   }
 
