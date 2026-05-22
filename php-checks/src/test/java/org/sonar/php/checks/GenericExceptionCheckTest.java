@@ -55,7 +55,7 @@ class GenericExceptionCheckTest {
   }
 
   @Test
-  void throwExpressions() throws Exception {
+  void throwExpressions() {
     CheckVerifier.verify(check, TEST_DIR + "throw_expressions.php");
   }
 }

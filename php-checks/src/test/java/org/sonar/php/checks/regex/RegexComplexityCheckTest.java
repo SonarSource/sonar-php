@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class RegexComplexityCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new RegexComplexityCheck(), "regex/RegexComplexityCheck.php");
   }
 

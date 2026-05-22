@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class POSIXFilePermissionsCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new POSIXFilePermissionsCheck(), "security/POSIXFilePermissionsCheck.php");
   }
 }
