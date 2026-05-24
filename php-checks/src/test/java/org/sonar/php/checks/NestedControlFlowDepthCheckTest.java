@@ -29,7 +29,7 @@ class NestedControlFlowDepthCheckTest {
   private NestedControlFlowDepthCheck check = new NestedControlFlowDepthCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(check, FILE_NAME);
   }
 

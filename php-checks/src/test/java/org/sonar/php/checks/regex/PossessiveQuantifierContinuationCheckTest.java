@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class PossessiveQuantifierContinuationCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new PossessiveQuantifierContinuationCheck(), "regex/PossessiveQuantifierContinuationCheck.php");
   }
 

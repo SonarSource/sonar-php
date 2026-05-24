@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class ImpossibleBackReferenceCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ImpossibleBackReferenceCheck(), "regex/ImpossibleBackReferenceCheck.php");
   }
 
