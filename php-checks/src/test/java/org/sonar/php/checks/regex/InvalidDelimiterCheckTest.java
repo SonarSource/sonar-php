@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class InvalidDelimiterCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new InvalidDelimiterCheck(), "regex/InvalidDelimiterCheck.php");
   }
 }
