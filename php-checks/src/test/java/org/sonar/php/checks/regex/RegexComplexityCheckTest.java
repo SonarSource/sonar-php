@@ -27,7 +27,7 @@ class RegexComplexityCheckTest {
   }
 
   @Test
-  void testMaxParameter() throws Exception {
+  void testMaxParameter() {
     RegexComplexityCheck check = new RegexComplexityCheck();
     check.max = 21;
     CheckVerifier.verify(check, "regex/RegexComplexityCheck-21.php");

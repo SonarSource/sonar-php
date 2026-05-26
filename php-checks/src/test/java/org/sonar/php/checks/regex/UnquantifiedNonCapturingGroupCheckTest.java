@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class UnquantifiedNonCapturingGroupCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new UnquantifiedNonCapturingGroupCheck(), "regex/UnquantifiedNonCapturingGroupCheck.php");
   }
 
