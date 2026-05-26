@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class DuplicatesInCharacterClassCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new DuplicatesInCharacterClassCheck(), "regex/DuplicatesInCharacterClassCheck.php");
   }
 }
