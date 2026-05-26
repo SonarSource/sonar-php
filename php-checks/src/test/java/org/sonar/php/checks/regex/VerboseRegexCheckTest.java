@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class VerboseRegexCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new VerboseRegexCheck(), "regex/VerboseRegexCheck.php");
   }
 
