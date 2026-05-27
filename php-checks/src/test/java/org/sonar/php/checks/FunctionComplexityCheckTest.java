@@ -35,7 +35,7 @@ class FunctionComplexityCheckTest {
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.threshold = 2;
     CheckVerifier.verify(check, FILE_NAME);
   }
