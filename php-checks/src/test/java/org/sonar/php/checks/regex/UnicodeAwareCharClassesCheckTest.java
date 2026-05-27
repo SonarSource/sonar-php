@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class UnicodeAwareCharClassesCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new UnicodeAwareCharClassesCheck(), "regex/UnicodeAwareCharClassesCheck.php");
   }
 

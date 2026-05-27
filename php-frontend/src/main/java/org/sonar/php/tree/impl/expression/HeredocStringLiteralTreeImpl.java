@@ -51,7 +51,7 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
     String content = matcher.group(3);
     int contentStartIndex = matcher.start(3);
     int contentEndIndex = contentStartIndex == -1 ? openingTagEndIndex : matcher.end(3);
-    if (content != null && content.length() > 0) {
+    if (content != null && !content.isEmpty()) {
       HeredocBody heredoc = (HeredocBody) PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, tmpHeredocToken.line()).parse(content);
       this.elements = heredoc.expressions();
     } else {
