@@ -1,39 +1,45 @@
-<p>Executing code dynamically is security-sensitive. It has led in the past to the following vulnerabilities:</p>
-<ul>
-  <li><a href="https://www.cve.org/CVERecord?id=CVE-2017-9807">CVE-2017-9807</a></li>
-  <li><a href="https://www.cve.org/CVERecord?id=CVE-2017-9802">CVE-2017-9802</a></li>
-</ul>
-<p>Some APIs enable the execution of dynamic code by providing it as strings at runtime. These APIs might be useful in some very specific
-meta-programming use-cases. However most of the time their use is frowned upon as they also increase the risk of <a
-href="https://owasp.org/www-community/attacks/Code_Injection">Injected Code</a>. Such attacks can either run on the server or in the client (exemple:
-XSS attack) and have a huge impact on an application’s security.</p>
-<p>This rule marks for review each occurrence of the <a href="https://www.php.net/manual/en/function.eval.php"><code>eval</code> function</a>. This
-rule does not detect code injections. It only highlights the use of APIs which should be used sparingly and very carefully. The goal is to guide
-security code reviews.</p>
-<h2>Ask Yourself Whether</h2>
-<ul>
-  <li>the executed code may come from an untrusted source and hasn’t been sanitized.</li>
-  <li>you really need to run code dynamically.</li>
-</ul>
-<p>There is a risk if you answered yes to any of those questions.</p>
-<h2>Recommended Secure Coding Practices</h2>
-<p>Regarding the execution of unknown code, the best solution is to not run code provided by an untrusted source. If you really need to do it, run the
-code in a <a href="https://en.wikipedia.org/wiki/Sandbox_(computer_security)">sandboxed</a> environment. Use jails, firewalls and whatever means your
-operating system and programming language provide (example: <a
-href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/recommendations/platform-security-sec/sec54-j">Security
-Managers</a> in java, <a href="https://www.w3schools.com/tags/att_iframe_sandbox.asp">iframes</a> and <a
-href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin policy</a> for javascript in a web browser).</p>
-<p>Do not try to create a blacklist of dangerous code. It is impossible to cover all attacks that way.</p>
-<p>Avoid using dynamic code APIs whenever possible. Hard-coded code is always safer.</p>
-<h2>Sensitive Code Example</h2>
-<pre>
-eval($code_to_be_dynamically_executed)
+<p>Dynamic code execution APIs allow code to be provided and executed as strings at runtime.</p>
+<h2>Why is this an issue?</h2>
+<p>Some APIs enable the execution of code provided as strings at runtime. These APIs might be useful in specific meta-programming use-cases, but they
+also increase the risk of <a href="https://owasp.org/www-community/attacks/Code_Injection">code injection</a>. When user-controlled data is included
+in the code string, an attacker can inject and execute arbitrary instructions within the application.</p>
+<p>PHP’s <a href="https://www.php.net/manual/en/function.eval.php"><code>eval</code></a> function executes the string passed to it as PHP code.</p>
+<h3>What is the potential impact?</h3>
+<p>When user-controlled data reaches a dynamic code execution API, an attacker can craft input that alters the intended logic of the program.</p>
+<h4>Arbitrary code execution</h4>
+<p>An attacker who can influence the code being executed can run arbitrary commands on the host system or within the database, potentially leading to
+full system compromise, data exfiltration, or privilege escalation.</p>
+<h2>How to fix it</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+function run(string $role): void {
+    eval("handle_$role();"); // Noncompliant
+}
 </pre>
-<h2>See</h2>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+enum Role: string {
+    case User = 'user';
+    case Admin = 'admin';
+}
+
+function run(Role $role): void {
+    $handlers = [
+        Role::User-&gt;value =&gt; 'handle_user',
+        Role::Admin-&gt;value =&gt; 'handle_admin',
+    ];
+    $handlers[$role-&gt;value]();
+}
+</pre>
+<h2>Resources</h2>
+<h3>Standards</h3>
 <ul>
   <li>OWASP - <a href="https://owasp.org/Top10/A03_2021-Injection/">Top 10 2021 Category A3 - Injection</a></li>
   <li>OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A1_2017-Injection">Top 10 2017 Category A1 - Injection</a></li>
   <li>CWE - <a href="https://cwe.mitre.org/data/definitions/95">CWE-95 - Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval
   Injection')</a></li>
+  <li>CWE - <a href="https://cwe.mitre.org/data/definitions/470">CWE-470 - Use of Externally-Controlled Input to Select Classes or Code ('Unsafe
+  Reflection')</a></li>
 </ul>
 
