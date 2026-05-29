@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class EmptyAlternativeCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new EmptyAlternativeCheck(), "regex/EmptyAlternativeCheck.php");
   }
 
