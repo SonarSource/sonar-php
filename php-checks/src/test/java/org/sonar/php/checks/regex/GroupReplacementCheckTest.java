@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class GroupReplacementCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new GroupReplacementCheck(), "regex/GroupReplacementCheck.php");
   }
 

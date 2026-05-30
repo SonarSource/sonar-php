@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class RedefineConstantCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new RedefineConstantCheck(), "RedefineConstantCheck.php");
   }
 
