@@ -29,7 +29,7 @@ class TooManyLinesInFileCheckTest {
   private String fileName = "TooManyLinesInFileCheck.php";
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verifyNoIssue(check, fileName);
   }
 

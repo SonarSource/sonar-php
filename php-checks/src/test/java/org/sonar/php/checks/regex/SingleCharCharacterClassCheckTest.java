@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class SingleCharCharacterClassCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new SingleCharCharacterClassCheck(), "regex/SingleCharCharacterClassCheck.php");
   }
 }

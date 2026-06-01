@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class ImpossibleBoundariesCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ImpossibleBoundariesCheck(), "regex/ImpossibleBoundariesCheck.php");
   }
 
