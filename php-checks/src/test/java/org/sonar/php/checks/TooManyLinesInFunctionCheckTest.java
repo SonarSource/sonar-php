@@ -26,7 +26,7 @@ class TooManyLinesInFunctionCheckTest {
   private TooManyLinesInFunctionCheck check = new TooManyLinesInFunctionCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
