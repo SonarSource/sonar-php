@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class RegexLookaheadCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new RegexLookaheadCheck(), "regex/RegexLookaheadCheck.php");
   }
 

@@ -29,7 +29,7 @@ class CharacterBeforeOpeningPHPTagCheckTest {
   private static final String TEST_DIR = "CharacterBeforeOpeningPHPTagCheck/";
 
   @Test
-  void ok() throws Exception {
+  void ok() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 

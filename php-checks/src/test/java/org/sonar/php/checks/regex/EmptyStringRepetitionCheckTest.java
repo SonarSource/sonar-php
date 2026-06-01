@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class EmptyStringRepetitionCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new EmptyStringRepetitionCheck(), "regex/EmptyStringRepetitionCheck.php");
   }
 
