@@ -31,7 +31,7 @@ class TooManyLinesInFunctionCheckTest {
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.max = 3;
     CheckVerifier.verify(check, FILE_NAME);
   }

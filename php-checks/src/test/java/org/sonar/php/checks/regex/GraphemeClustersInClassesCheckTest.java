@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class GraphemeClustersInClassesCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new GraphemeClustersInClassesCheck(), "regex/GraphemeClustersInClassesCheck.php");
   }
 

@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class DirectlyAccessingSuperGlobalCheckTest {
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(new DirectlyAccessingSuperGlobalCheck(), "DirectlyAccessingSuperGlobalCheck.php");
   }
 
