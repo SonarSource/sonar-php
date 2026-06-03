@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class SuperfluousCurlyBraceCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new SuperfluousCurlyBraceCheck(), "regex/SuperfluousCurlyBraceCheck.php");
   }
 }
