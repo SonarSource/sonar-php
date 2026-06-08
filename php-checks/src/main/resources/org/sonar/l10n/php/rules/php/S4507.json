@@ -1,5 +1,5 @@
 {
-  "title": "Deactivate debugging features before deploying to production",
+  "title": "Debugging features should not be enabled in production",
   "type": "VULNERABILITY",
   "code": {
     "impacts": {
@@ -8,11 +8,16 @@
     "attribute": "CONVENTIONAL"
   },
   "status": "ready",
+  "quickfix": "unknown",
   "remediation": {
     "func": "Constant\/Issue",
     "constantCost": "1min"
   },
   "tags": [
+    "cwe",
+    "error-handling",
+    "debug",
+    "user-experience",
     "former-hotspot"
   ],
   "defaultSeverity": "Minor",
@@ -33,6 +38,5 @@
     "ASVS 4.0": [
       "14.3.2"
     ]
-  },
-  "quickfix": "unknown"
+  }
 }
