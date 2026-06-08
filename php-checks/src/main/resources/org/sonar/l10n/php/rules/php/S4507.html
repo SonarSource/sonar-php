@@ -1,18 +1,16 @@
+<p>Development tools and frameworks usually have options to make debugging easier for developers, but these features should never be enabled for
+applications deployed in production.</p>
 <h2>Why is this an issue?</h2>
-<p>Development tools and frameworks usually have options to make debugging easier for developers. Although these features are useful during
-development, they should never be enabled for applications deployed in production. Debug instructions or error messages can leak detailed information
-about the system, like the application’s path or file names.</p>
-<h2>How to fix it in WordPress</h2>
-<p>Do not enable debugging features on production servers or applications distributed to end users.</p>
-<h3>Code examples</h3>
-<h4>Noncompliant code example</h4>
-<pre data-diff-id="3" data-diff-type="noncompliant">
-define( 'WP_DEBUG', true ); // Noncompliant
-</pre>
-<h4>Compliant solution</h4>
-<pre data-diff-id="3" data-diff-type="compliant">
-define( 'WP_DEBUG', false ); // Compliant
-</pre>
+<p>Debug instructions or error messages can leak detailed information about the system, such as the application’s path, file names, or stack traces.
+The rule flags configurations and API calls that enable debug features, including stack trace printing, verbose logging, debug mode flags, and remote
+debugging endpoints.</p>
+<h3>What is the potential impact?</h3>
+<h4>Information disclosure</h4>
+<p>Attackers can exploit debug output to learn internal application details, file paths, stack traces, and configuration data that can be leveraged to
+craft further attacks.</p>
+<h4>Increased attack surface</h4>
+<p>Debug features may expose remote debugging endpoints, profiling APIs, or detailed error pages that significantly increase the attack surface of the
+application.</p>
 <h2>How to fix it in CakePHP</h2>
 <p>Do not enable debugging features on production servers or applications distributed to end users.</p>
 <h3>Code examples</h3>
@@ -30,13 +28,25 @@ Cake\Core\Configure::config('debug', true); // Noncompliant
 <h4>Compliant solution</h4>
 <p>CakePHP 1.2:</p>
 <pre data-diff-id="1" data-diff-type="compliant">
-Cake\Core\Configure::write('debug', 0); // Compliant, this is the production mode
+Cake\Core\Configure::write('debug', 0); // this is the production mode
 </pre>
 <p>CakePHP 3.0:</p>
 <pre data-diff-id="2" data-diff-type="compliant">
-Cake\Core\Configure::config('debug', false); // Compliant, "0" or "false" for CakePHP 3.x is suitable (production mode) to not leak sensitive data on the logs.
+Cake\Core\Configure::config('debug', false); // "0" or "false" for CakePHP 3.x is suitable (production mode) to not leak sensitive data on the logs.
+</pre>
+<h2>How to fix it in WordPress</h2>
+<p>Do not enable debugging features on production servers or applications distributed to end users.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="3" data-diff-type="noncompliant">
+define( 'WP_DEBUG', true ); // Noncompliant
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="3" data-diff-type="compliant">
+define( 'WP_DEBUG', false );
 </pre>
 <h2>Resources</h2>
+<h3>Standards</h3>
 <ul>
   <li>OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a></li>
   <li>OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">Top 10 2017 Category A3 - Sensitive Data
