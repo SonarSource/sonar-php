@@ -1,8 +1,8 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-ch.qos.logback:logback-classic:1.5.32=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-ch.qos.logback:logback-core:1.5.32=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+ch.qos.logback:logback-classic:1.5.34=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+ch.qos.logback:logback-core:1.5.34=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.eclipsesource.minimal-json:minimal-json:0.9.5=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.fasterxml.jackson.core:jackson-annotations:2.21=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.fasterxml.jackson.core:jackson-core:2.21.1=integrationTestCompileClasspath,integrationTestRuntimeClasspath
@@ -118,7 +118,7 @@ org.sonarsource.sonarlint.core:sonarlint-server-connection:11.4.0.85676=integrat
 org.sonarsource.sonarlint.core:sonarlint-telemetry:11.4.0.85676=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.sonarsource.sonarqube:sonar-markdown:25.3.0.104237=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.sonarsource.sonarqube:sonar-scanner-protocol:9.9.0.65466=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.sonarsource.sonarqube:sonar-ws:26.5.0.122743=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.sonarsource.sonarqube:sonar-ws:26.6.0.123539=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.springframework:spring-aop:6.2.16=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.springframework:spring-beans:6.2.16=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.springframework:spring-context:6.2.16=integrationTestCompileClasspath,integrationTestRuntimeClasspath

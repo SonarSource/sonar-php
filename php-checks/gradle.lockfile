@@ -1,8 +1,8 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-ch.qos.logback:logback-classic:1.5.32=testRuntimeClasspath
-ch.qos.logback:logback-core:1.5.32=testRuntimeClasspath
+ch.qos.logback:logback-classic:1.5.34=testRuntimeClasspath
+ch.qos.logback:logback-core:1.5.34=testRuntimeClasspath
 com.github.spotbugs:spotbugs-annotations:4.9.8=testRuntimeClasspath
 com.google.code.findbugs:jsr305:3.0.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 commons-codec:commons-codec:1.21.0=testRuntimeClasspath
@@ -42,6 +42,6 @@ org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:2.22.0.4796=testCom
 org.sonarsource.analyzer-commons:sonar-regex-parsing:2.22.0.4796=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api-test-fixtures:13.7.0.4381=testCompileClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api:13.7.0.4381=compileClasspath,testCompileClasspath,testRuntimeClasspath
-org.sonarsource.sonarqube:sonar-plugin-api-impl:26.5.0.122743=testRuntimeClasspath
+org.sonarsource.sonarqube:sonar-plugin-api-impl:26.6.0.123539=testRuntimeClasspath
 org.sonarsource.sslr:sslr-core:1.25.1.3886=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 empty=annotationProcessor,testAnnotationProcessor

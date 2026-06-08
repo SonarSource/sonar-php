@@ -1,8 +1,8 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-ch.qos.logback:logback-classic:1.5.32=testRuntimeClasspath
-ch.qos.logback:logback-core:1.5.32=testRuntimeClasspath
+ch.qos.logback:logback-classic:1.5.34=testRuntimeClasspath
+ch.qos.logback:logback-core:1.5.34=testRuntimeClasspath
 com.github.spotbugs:spotbugs-annotations:4.9.8=testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
 com.google.code.findbugs:jsr305:3.0.2=compileClasspath,runtimeClasspath,testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
 com.google.code.gson:gson:2.13.2=testCompileClasspath,testRuntimeClasspath
@@ -54,10 +54,9 @@ org.slf4j:slf4j-api:2.0.17=testRuntimeClasspath
 org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:2.22.0.4796=testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
 org.sonarsource.analyzer-commons:sonar-regex-parsing:2.22.0.4796=compileClasspath,runtimeClasspath,testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api-test-fixtures:13.7.0.4381=testCompileClasspath,testRuntimeClasspath
-org.sonarsource.api.plugin:sonar-plugin-api:13.5.0.4319=testFixturesCompileClasspath,testFixturesRuntimeClasspath
-org.sonarsource.api.plugin:sonar-plugin-api:13.7.0.4381=compileClasspath,testCompileClasspath,testRuntimeClasspath
-org.sonarsource.sonarqube:sonar-plugin-api-impl:26.5.0.122743=testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
-org.sonarsource.sonarqube:sonar-testing-harness:26.5.0.122743=testCompileClasspath,testRuntimeClasspath
+org.sonarsource.api.plugin:sonar-plugin-api:13.7.0.4381=compileClasspath,testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
+org.sonarsource.sonarqube:sonar-plugin-api-impl:26.6.0.123539=testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
+org.sonarsource.sonarqube:sonar-testing-harness:26.6.0.123539=testCompileClasspath,testRuntimeClasspath
 org.sonarsource.sslr:sslr-core:1.25.1.3886=compileClasspath,runtimeClasspath,testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
 org.sonarsource.sslr:sslr-testing-harness:1.25.1.3886=testCompileClasspath,testRuntimeClasspath
 org.sonarsource.sslr:sslr-toolkit:1.25.1.3886=testCompileClasspath,testRuntimeClasspath
