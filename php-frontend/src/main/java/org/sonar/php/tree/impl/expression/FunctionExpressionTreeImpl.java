@@ -44,23 +44,70 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
   private final ReturnTypeClauseTree returnTypeClause;
   private final BlockTree body;
 
-  public FunctionExpressionTreeImpl(
-    List<AttributeGroupTree> attributeGroups,
-    @Nullable InternalSyntaxToken staticToken,
-    InternalSyntaxToken functionToken,
-    @Nullable InternalSyntaxToken referenceToken,
-    ParameterListTree parameters,
-    @Nullable LexicalVariablesTree lexicalVars,
-    @Nullable ReturnTypeClauseTree returnTypeClause,
-    BlockTree body) {
-    this.attributeGroups = attributeGroups;
-    this.staticToken = staticToken;
-    this.functionToken = functionToken;
-    this.referenceToken = referenceToken;
-    this.parameters = parameters;
-    this.lexicalVars = lexicalVars;
-    this.returnTypeClause = returnTypeClause;
-    this.body = body;
+  private FunctionExpressionTreeImpl(Builder builder) {
+    this.attributeGroups = builder.attributeGroups;
+    this.staticToken = builder.staticToken;
+    this.functionToken = builder.functionToken;
+    this.referenceToken = builder.referenceToken;
+    this.parameters = builder.parameters;
+    this.lexicalVars = builder.lexicalVars;
+    this.returnTypeClause = builder.returnTypeClause;
+    this.body = builder.body;
+  }
+
+  public static class Builder {
+    private List<AttributeGroupTree> attributeGroups;
+    private InternalSyntaxToken staticToken;
+    private InternalSyntaxToken functionToken;
+    private InternalSyntaxToken referenceToken;
+    private ParameterListTree parameters;
+    private LexicalVariablesTree lexicalVars;
+    private ReturnTypeClauseTree returnTypeClause;
+    private BlockTree body;
+
+    public Builder attributeGroups(List<AttributeGroupTree> attributeGroups) {
+      this.attributeGroups = attributeGroups;
+      return this;
+    }
+
+    public Builder staticToken(@Nullable InternalSyntaxToken staticToken) {
+      this.staticToken = staticToken;
+      return this;
+    }
+
+    public Builder functionToken(InternalSyntaxToken functionToken) {
+      this.functionToken = functionToken;
+      return this;
+    }
+
+    public Builder referenceToken(@Nullable InternalSyntaxToken referenceToken) {
+      this.referenceToken = referenceToken;
+      return this;
+    }
+
+    public Builder parameters(ParameterListTree parameters) {
+      this.parameters = parameters;
+      return this;
+    }
+
+    public Builder lexicalVars(@Nullable LexicalVariablesTree lexicalVars) {
+      this.lexicalVars = lexicalVars;
+      return this;
+    }
+
+    public Builder returnTypeClause(@Nullable ReturnTypeClauseTree returnTypeClause) {
+      this.returnTypeClause = returnTypeClause;
+      return this;
+    }
+
+    public Builder body(BlockTree body) {
+      this.body = body;
+      return this;
+    }
+
+    public FunctionExpressionTreeImpl build() {
+      return new FunctionExpressionTreeImpl(this);
+    }
   }
 
   @Nullable

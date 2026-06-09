@@ -44,6 +44,9 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
   private final InternalSyntaxToken doubleArrowToken;
   private final ExpressionTree body;
 
+  public record ArrowBody(InternalSyntaxToken doubleArrowToken, ExpressionTree body) {
+  }
+
   public ArrowFunctionExpressionTreeImpl(
     List<AttributeGroupTree> attributeGroups,
     @Nullable InternalSyntaxToken staticToken,
@@ -51,16 +54,15 @@ public class ArrowFunctionExpressionTreeImpl extends PHPTree implements ArrowFun
     @Nullable InternalSyntaxToken referenceToken,
     ParameterListTree parameters,
     @Nullable ReturnTypeClauseTree returnTypeClause,
-    InternalSyntaxToken doubleArrowToken,
-    ExpressionTree body) {
+    ArrowBody arrowBody) {
     this.attributeGroups = attributeGroups;
     this.staticToken = staticToken;
     this.fnToken = fnToken;
     this.referenceToken = referenceToken;
     this.parameters = parameters;
     this.returnTypeClause = returnTypeClause;
-    this.doubleArrowToken = doubleArrowToken;
-    this.body = body;
+    this.doubleArrowToken = arrowBody.doubleArrowToken();
+    this.body = arrowBody.body();
   }
 
   @Nullable

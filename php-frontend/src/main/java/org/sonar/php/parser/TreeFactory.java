@@ -1659,15 +1659,16 @@ public class TreeFactory {
     Optional<ReturnTypeClauseTree> returnTypeClause,
     BlockTree block) {
 
-    return new FunctionExpressionTreeImpl(
-      attributes.or(Collections.emptyList()),
-      staticToken.orNull(),
-      functionToken,
-      ampersandToken.orNull(),
-      parameters,
-      lexicalVariables.orNull(),
-      returnTypeClause.orNull(),
-      block);
+    return new FunctionExpressionTreeImpl.Builder()
+      .attributeGroups(attributes.or(Collections.emptyList()))
+      .staticToken(staticToken.orNull())
+      .functionToken(functionToken)
+      .referenceToken(ampersandToken.orNull())
+      .parameters(parameters)
+      .lexicalVars(lexicalVariables.orNull())
+      .returnTypeClause(returnTypeClause.orNull())
+      .body(block)
+      .build();
   }
 
   public ArrowFunctionExpressionTree arrowFunctionExpression(
@@ -1686,8 +1687,7 @@ public class TreeFactory {
       ampersandToken.orNull(),
       parameters,
       returnTypeClause.orNull(),
-      doubleArrowToken,
-      body);
+      new ArrowFunctionExpressionTreeImpl.ArrowBody(doubleArrowToken, body));
   }
 
   public NewExpressionTree newExpression(InternalSyntaxToken newToken, ExpressionTree expression) {

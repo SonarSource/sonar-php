@@ -685,10 +685,6 @@ public class PHPGrammar {
   }
 
   /**
-   * [ END ] Declaration
-   */
-
-  /**
    * [ START ] Statement
    */
 
@@ -1171,11 +1167,9 @@ public class PHPGrammar {
   }
 
   /**
-   * [ END ] Statement
-   */
-
-  /**
    * [ START ] Expression
+   *
+   * [ END ] Statement
    */
 
   public ExpressionTree CAST_EXPR() {

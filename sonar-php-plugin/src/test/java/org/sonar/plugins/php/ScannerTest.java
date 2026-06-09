@@ -67,6 +67,7 @@ class ScannerTest {
 
     @Override
     void scanFile(InputFile file) {
+      // No implementation needed for test stub
     }
 
     @Override
