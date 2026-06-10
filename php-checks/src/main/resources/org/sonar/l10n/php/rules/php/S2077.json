@@ -1,5 +1,5 @@
 {
-  "title": "Use prepared statements to securely construct SQL queries",
+  "title": "SQL queries should not be dynamically formatted",
   "type": "VULNERABILITY",
   "code": {
     "impacts": {
@@ -9,11 +9,15 @@
     "attribute": "COMPLETE"
   },
   "status": "ready",
+  "quickfix": "unknown",
   "remediation": {
     "func": "Constant\/Issue",
     "constantCost": "20min"
   },
   "tags": [
+    "cwe",
+    "bad-practice",
+    "sql",
     "former-hotspot"
   ],
   "defaultSeverity": "Major",
@@ -22,8 +26,8 @@
   "scope": "Main",
   "securityStandards": {
     "CWE": [
-      20,
-      89
+      89,
+      943
     ],
     "OWASP": [
       "A1"
@@ -43,6 +47,5 @@
       "5.3.4",
       "5.3.5"
     ]
-  },
-  "quickfix": "unknown"
+  }
 }
