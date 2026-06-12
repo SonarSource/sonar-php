@@ -75,3 +75,27 @@ mhash($data, hash: MHASH_HAVAL224); // Noncompliant
 mhash(MHASH_SHA512, $data); // Compliant
 mhash("xyz", $data); // Compliant
 mhash(algo: "xyz", $data); // Compliant
+
+// Compliant: truncated output signals a non-cryptographic use (cache key, ETag, short identifier, etc.)
+substr(md5($data), 0, 8);
+substr(sha1($url), 0, 4);
+substr(hash('sha1', $email), 0, 5);
+substr(hash('sha1', $seed), -6);
+mb_substr(md5($data), 0, 8);
+mb_substr(sha1($data), 0, 4);
+SUBSTR(md5($data), 0, 8);
+
+// Hash used as length argument rather than string to truncate - still noncompliant
+substr($str, 0, md5($str));  // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}
+//              ^^^
+substr($str, 0, sha1($str)); // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}
+substr($str, 0, hash('sha1', $str)); // Noncompliant
+//                   ^^^^^^
+
+// Wrapped in something other than substr/mb_substr - still noncompliant
+strtolower(md5($data)); // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}
+//         ^^^
+strtolower(sha1($data)); // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}
+
+// Dynamic/variable callee - still noncompliant, no NPE on null function name
+$fn(md5($data)); // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}

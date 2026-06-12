@@ -21,6 +21,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.argumentmatching.ArgumentVerifierValueContainment;
 import org.sonar.php.checks.utils.argumentmatching.FunctionArgumentCheck;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
@@ -30,6 +31,7 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
   private static final String MESSAGE = "Make sure this weak hash algorithm is not used in a sensitive context here.";
 
   private static final Set<String> WEAK_HASH_FUNCTIONS = Set.of("md5", "sha1");
+  private static final Set<String> SUBSTR_FUNCTIONS = Set.of("substr", "mb_substr");
   private static final Set<String> WEAK_HASH_ARGUMENTS = Set.of(
     "md2",
     "md4",
@@ -71,14 +73,37 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
 
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     if (functionName != null && WEAK_HASH_FUNCTIONS.contains(functionName)) {
-      createIssue(tree);
+      if (!isWrappedInSubstr(tree)) {
+        createIssue(tree);
+      }
       return;
     }
 
     checkArgument(tree, "hash_init", hashArgumentVerifier);
-    checkArgument(tree, "hash", hashArgumentVerifier);
+    if (!isWrappedInSubstr(tree)) {
+      checkArgument(tree, "hash", hashArgumentVerifier);
+    }
     checkArgument(tree, "hash_pbkdf2", hashArgumentVerifier);
     checkArgument(tree, "mhash", mHashArgumentVerifier);
+  }
+
+  // SONARPHP-1840: Suppress when the hash output is immediately truncated by substr/mb_substr,
+  // which signals a non-cryptographic use (cache key, ETag, short identifier, etc.)
+  private static boolean isWrappedInSubstr(FunctionCallTree hashCall) {
+    Tree parent = hashCall.getParent();
+    if (parent == null || !parent.is(Tree.Kind.CALL_ARGUMENT)) {
+      return false;
+    }
+    Tree grandParent = parent.getParent();
+    if (grandParent == null || !grandParent.is(Tree.Kind.FUNCTION_CALL)) {
+      return false;
+    }
+    FunctionCallTree outerCall = (FunctionCallTree) grandParent;
+    String outerName = CheckUtils.getLowerCaseFunctionName(outerCall);
+    if (outerName == null || !SUBSTR_FUNCTIONS.contains(outerName)) {
+      return false;
+    }
+    return !outerCall.callArguments().isEmpty() && outerCall.callArguments().get(0) == parent;
   }
 
   protected void createIssue(FunctionCallTree tree) {
