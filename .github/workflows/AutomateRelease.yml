@@ -79,3 +79,4 @@ jobs:
       runner-environment: sonar-xs
       verbose: ${{ inputs.verbose }}
       bump-version: true
+      ktlo-jira-project-key: "SONARSEC"
