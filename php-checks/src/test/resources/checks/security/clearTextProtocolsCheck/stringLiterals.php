@@ -28,7 +28,8 @@ $doc = "See telnet://exemple.com"; // Compliant
 // The url domain component is a loopback address
 $url = "http://localhost"; // Compliant
 $url = "http://127.0.0.1"; // Compliant
-$url = "http://::1"; // Compliant
+$url = "http://[::1]"; // Compliant - proper bracketed IPv6 loopback
+$url = "http://::1"; // Noncompliant
 $url = "ftp://user@localhost"; // Compliant
 $url = 123; // Compliant
 
@@ -36,14 +37,29 @@ $url = "http://"; // Compliant
 $url = "ftp://"; // Compliant
 $url = "telnet://"; // Compliant
 
-$url = "http://test.com"; // Compliant
-$url = "http://someSubdomain.test.com"; // Compliant
+// Cloud IMDS and internal network hosts
+$url = "http://169.254.169.254"; // Compliant - link-local (AWS/Azure/GCP IMDS)
+$url = "http://metadata.google.internal"; // Compliant - GCP cloud metadata
+$url = "http://host.docker.internal"; // Compliant - Docker internal hostname
+$url = "http://my-service.default.svc.cluster.local"; // Compliant - Kubernetes cluster-internal
+
+// test.com is a real registered domain, not an RFC 6761 reserved TLD
+$url = "http://test.com"; // Noncompliant
+$url = "http://someSubdomain.test.com"; // Noncompliant
 $url = "http://someUrl.com?url=test.com"; // Noncompliant
 $url = "http://shortest.com"; // Noncompliant
+
+// RFC 6761 reserved TLDs and IANA documentation domains
+$url = "http://api.test"; // Compliant - RFC 6761 .test reserved TLD
+$url = "http://example.net"; // Compliant - IANA documentation domain
+$url = "http://example.org"; // Compliant - IANA documentation domain
 
 $url = "http://xmlns.com"; // Compliant
 $url = "http://someSubdomain.xmlns.com"; // Noncompliant
 $url = "http://someUrl.com?url=xmlns.com"; // Noncompliant
+
+// schemas.openxmlformats.org is not yet covered by CleartextProtocolFilter
+$url = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"; // Noncompliant
 
 $url = str_replace('http://', '', $foo);  // Compliant
 $url = str_replace('http://', '', $foo) . $bar;  // Compliant
