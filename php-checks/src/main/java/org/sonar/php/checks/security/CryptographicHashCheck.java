@@ -16,6 +16,7 @@
  */
 package org.sonar.php.checks.security;
 
+import java.util.Map;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -32,6 +33,19 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
 
   private static final Set<String> WEAK_HASH_FUNCTIONS = Set.of("md5", "sha1");
   private static final Set<String> SUBSTR_FUNCTIONS = Set.of("substr", "mb_substr");
+  // Maps each WordPress cache/transient function to its key parameter name, used to resolve
+  // the key argument correctly even when PHP 8 named arguments reorder the call.
+  private static final Map<String, String> WORDPRESS_CACHE_KEY_PARAMS = Map.of(
+    "wp_cache_get", "key",
+    "wp_cache_set", "key",
+    "wp_cache_add", "key",
+    "wp_cache_delete", "key",
+    "wp_cache_replace", "key",
+    "wp_cache_incr", "key",
+    "wp_cache_decr", "key",
+    "get_transient", "transient",
+    "set_transient", "transient",
+    "delete_transient", "transient");
   private static final Set<String> WEAK_HASH_ARGUMENTS = Set.of(
     "md2",
     "md4",
@@ -73,14 +87,14 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
 
     String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     if (functionName != null && WEAK_HASH_FUNCTIONS.contains(functionName)) {
-      if (!isWrappedInSubstr(tree)) {
+      if (!isWrappedInSubstr(tree) && !isUsedAsWordPressCacheKey(tree)) {
         createIssue(tree);
       }
       return;
     }
 
     checkArgument(tree, "hash_init", hashArgumentVerifier);
-    if (!isWrappedInSubstr(tree)) {
+    if (!isWrappedInSubstr(tree) && !isUsedAsWordPressCacheKey(tree)) {
       checkArgument(tree, "hash", hashArgumentVerifier);
     }
     checkArgument(tree, "hash_pbkdf2", hashArgumentVerifier);
@@ -104,6 +118,33 @@ public class CryptographicHashCheck extends FunctionArgumentCheck {
       return false;
     }
     return !outerCall.callArguments().isEmpty() && outerCall.callArguments().get(0) == parent;
+  }
+
+  // SONARPHP-1839: Suppress when the hash output is used as a WordPress cache/transient key,
+  // either directly or as part of a concatenated key string (e.g. 'prefix_' . sha1($q)).
+  // Cache keys are not a security primitive — a collision yields a stale read, not a security incident.
+  private static boolean isUsedAsWordPressCacheKey(FunctionCallTree hashCall) {
+    Tree node = hashCall.getParent();
+    while (node != null && node.is(Tree.Kind.CONCATENATION)) {
+      node = node.getParent();
+    }
+    Tree callArg = node;
+    if (callArg == null || !callArg.is(Tree.Kind.CALL_ARGUMENT)) {
+      return false;
+    }
+    Tree grandParent = callArg.getParent();
+    if (grandParent == null || !grandParent.is(Tree.Kind.FUNCTION_CALL)) {
+      return false;
+    }
+    FunctionCallTree outerCall = (FunctionCallTree) grandParent;
+    String outerName = CheckUtils.getLowerCaseFunctionName(outerCall);
+    String keyParamName = outerName != null ? WORDPRESS_CACHE_KEY_PARAMS.get(outerName) : null;
+    if (keyParamName == null) {
+      return false;
+    }
+    return CheckUtils.argument(outerCall, keyParamName, 0)
+      .filter(keyArg -> keyArg == callArg)
+      .isPresent();
   }
 
   protected void createIssue(FunctionCallTree tree) {

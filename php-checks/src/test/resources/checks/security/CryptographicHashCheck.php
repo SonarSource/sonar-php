@@ -99,3 +99,34 @@ strtolower(sha1($data)); // Noncompliant {{Make sure this weak hash algorithm is
 
 // Dynamic/variable callee - still noncompliant, no NPE on null function name
 $fn(md5($data)); // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}
+
+// Compliant: hash used as a WordPress cache/transient key - not a security primitive
+wp_cache_get(md5($sql), 'group');
+wp_cache_set(sha1($sql), $value, 'group');
+wp_cache_add(md5($sql), $value);
+wp_cache_delete(md5($sql), 'group');
+wp_cache_replace(md5($sql), $value);
+wp_cache_incr(md5($sql));
+wp_cache_decr(sha1($sql));
+get_transient(md5($sql));
+set_transient(sha1($query), $result, HOUR_IN_SECONDS);
+set_transient('tx_' . sha1($query), $result, HOUR_IN_SECONDS);
+set_transient('prefix_' . md5($query) . '_suffix', $result, HOUR_IN_SECONDS);
+wp_cache_get('key_' . hash('sha1', $sql), 'group');
+delete_transient(md5($sql));
+wp_cache_get(hash('sha1', $sql), 'group');
+
+// Named argument places hash in the value slot, not the key slot - still noncompliant
+wp_cache_set(value: md5($value), key: $key); // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}
+//                  ^^^
+
+// Hash not in the key position (not first argument) - still noncompliant
+wp_cache_set($key, md5($value)); // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}
+//                 ^^^
+wp_cache_set($key, sha1($value)); // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}
+wp_cache_set($key, hash('sha1', $value)); // Noncompliant
+//                      ^^^^^^
+
+// Hash passed to a non-cache function or dynamic callee - still noncompliant, no NPE on null function name
+some_function(md5($data)); // Noncompliant {{Make sure this weak hash algorithm is not used in a sensitive context here.}}
+//            ^^^
