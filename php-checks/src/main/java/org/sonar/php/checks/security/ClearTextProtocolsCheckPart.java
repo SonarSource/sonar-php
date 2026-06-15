@@ -94,8 +94,11 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
       CLEARTEXT_PROTOCOLS.stream()
         .filter(value::startsWith)
         .findFirst()
-        .ifPresent(prefix -> CleartextProtocolFilter.getIssueMessage(prefix.substring(0, prefix.length() - 3))
-          .ifPresent(msg -> context().newIssue(getBundle(), tree, msg)));
+        .ifPresent(prefix -> {
+          String protocol = prefix.endsWith("://") ? prefix.substring(0, prefix.length() - 3) : prefix;
+          CleartextProtocolFilter.getIssueMessage(protocol)
+            .ifPresent(msg -> context().newIssue(getBundle(), tree, msg));
+        });
     }
   }
 
