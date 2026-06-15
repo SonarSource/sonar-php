@@ -22,7 +22,7 @@ plugins {
   id("org.sonarsource.cloud-native.common-settings")
 }
 
-// TODO SONARPHP-1848: remove mavenLocal() once sonar-analyzer-commons PR #398 is released
+// TODO SONARPHP-1848: remove mavenLocal() once sonar-analyzer-commons 2.24.0 is released
 dependencyResolutionManagement {
   repositories {
     mavenLocal()

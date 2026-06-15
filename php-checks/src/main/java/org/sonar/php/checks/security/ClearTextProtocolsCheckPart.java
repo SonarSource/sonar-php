@@ -45,7 +45,6 @@ import org.sonarsource.analyzer.commons.appsec.CleartextProtocolFilter;
 
 public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements CheckBundlePart {
   private static final Set<String> CLEARTEXT_PROTOCOLS = CleartextProtocolFilter.getCleartextProtocols();
-  private static final Map<String, String> ALTERNATIVE_PROTOCOLS = CleartextProtocolFilter.getAlternativeProtocols();
 
   private static final String LOOPBACK_IPV4 = "^127(?:\\.[0-9]+){0,2}\\.[0-9]+$";
   private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
@@ -54,7 +53,6 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
   private static final QualifiedName SWIFTMAILER_QN = QualifiedName.qualifiedName("Swift_SmtpTransport");
   private static final QualifiedName PHPMAILER_QN = QualifiedName.qualifiedName("PHPMailer\\PHPMailer\\PHPMailer");
 
-  private static final String MESSAGE_PROTOCOL = "Using %s protocol is insecure. Use %s instead";
   private static final String MESSAGE_FTP = "Using ftp_connect() is insecure. Use ftp_ssl_connect() instead";
   private static final String MESSAGE_MAIL = "Mail transport without encryption is insecure. Specify an encryption";
 
@@ -93,9 +91,11 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
     }
 
     if (startsWithUnsafeProtocol(value) && !isExceptionUrl(value, tree)) {
-      ALTERNATIVE_PROTOCOLS.keySet().stream().filter(value::startsWith)
+      CLEARTEXT_PROTOCOLS.stream()
+        .filter(value::startsWith)
         .findFirst()
-        .ifPresent(usedProtocol -> context().newIssue(getBundle(), tree, String.format(MESSAGE_PROTOCOL, usedProtocol, ALTERNATIVE_PROTOCOLS.get(usedProtocol))));
+        .ifPresent(prefix -> CleartextProtocolFilter.getIssueMessage(prefix.substring(0, prefix.length() - 3))
+          .ifPresent(msg -> context().newIssue(getBundle(), tree, msg)));
     }
   }
 

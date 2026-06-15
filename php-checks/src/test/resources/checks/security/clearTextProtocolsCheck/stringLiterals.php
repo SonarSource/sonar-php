@@ -1,6 +1,6 @@
 <?php
 /** String literals **/
-$url = "http://exemple.com"; // Noncompliant {{Using http protocol is insecure. Use https instead}}
+$url = "http://exemple.com"; // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
 $url = "http://0001::1"; // Noncompliant
 $url = "http://dead:beef::1"; // Noncompliant
 $url = "http://::dead:beef:1"; // Noncompliant
@@ -8,8 +8,8 @@ $url = "http://192.168.0.1"; // Noncompliant
 $url = "http://10.1.1.123"; // Noncompliant
 $url = "http://subdomain.exemple.com"; // Noncompliant
 
-$url = "ftp://anonymous@exemple.com"; // Noncompliant {{Using ftp protocol is insecure. Use sftp, scp or ftps instead}}
-$url = "telnet://anonymous@exemple.com"; // Noncompliant {{Using telnet protocol is insecure. Use ssh instead}}
+$url = "ftp://anonymous@exemple.com"; // Noncompliant {{Using FTP protocol is insecure. Use SFTP, SCP or FTPS instead.}}
+$url = "telnet://anonymous@exemple.com"; // Noncompliant {{Using Telnet protocol is insecure. Use SSH instead.}}
 
 function test(string $xxx = 'http://someUrl.com') {} // Noncompliant
 
@@ -58,14 +58,14 @@ $url = "http://xmlns.com"; // Compliant
 $url = "http://someSubdomain.xmlns.com"; // Noncompliant
 $url = "http://someUrl.com?url=xmlns.com"; // Noncompliant
 
-// schemas.openxmlformats.org is not yet covered by CleartextProtocolFilter
-$url = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"; // Noncompliant
+$url = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"; // Compliant - OOXML namespace URI authority
 
 $url = str_replace('http://', '', $foo);  // Compliant
 $url = str_replace('http://', '', $foo) . $bar;  // Compliant
 $url = 'http://' . $bar; // Noncompliant
 $url = 'http://something'; // Noncompliant
 
-$url = "http:///www.php-fig.org/"; // Compliant - Malformed URL (no host part)
+// starts with http:// regardless of the empty authority
+$url = "http:///www.php-fig.org/"; // Noncompliant
 
 return;
