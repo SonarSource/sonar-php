@@ -22,7 +22,6 @@ plugins {
   id("org.sonarsource.cloud-native.common-settings")
 }
 
-
 rootProject.name = "php"
 includeBuild("build-logic")
 
