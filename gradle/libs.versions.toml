@@ -1,6 +1,5 @@
 [versions]
-# TODO SONARPHP-1848: bump to the released version once sonar-analyzer-commons 2.24.0 is released
-sonar-commons = "2.24.0-SNAPSHOT"
+sonar-commons = "2.24.0.4903"
 # Before updating the plugin-api version, make sure to check the compatibility matrix and stick to the lowest denominator
 # https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility
 sonar-plugin-api = "13.8.0.4399"
