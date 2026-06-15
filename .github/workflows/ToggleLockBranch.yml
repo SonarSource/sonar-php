@@ -13,6 +13,10 @@ on:
         description: "Branch to to toggle lock on"
         required: true
         default: "master"
+    inputs:
+      additional-message:
+        description: 'Additional Slack message text'
+        required: false
 
 jobs:
   ToggleLockBranch_job:
@@ -31,5 +35,6 @@ jobs:
         with:
           github-token: ${{ fromJSON(steps.secrets.outputs.vault).lock_token }}
           slack-token: ${{ fromJSON(steps.secrets.outputs.vault).slack_api_token }}
+          additional-message: ${{ github.event.inputs.additional-message }}
           slack-channel: squad-security-taint-notifs
           branch-pattern: ${{ inputs.branch }}
