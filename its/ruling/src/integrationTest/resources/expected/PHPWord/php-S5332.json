@@ -16,24 +16,6 @@
 "PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php": [
 47
 ],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Comments.php": [
-55
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Document.php": [
-55
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Footer.php": [
-61
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Footnotes.php": [
-85
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Numbering.php": [
-53
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php": [
-317
-],
 "PHPWord:tests/PhpWordTests/AbstractWebServerEmbeddedTest.php": [
 53,
 62,
@@ -42,11 +24,11 @@
 "PHPWord:tests/PhpWordTests/Element/SectionTest.php": [
 79
 ],
+"PHPWord:tests/PhpWordTests/MediaTest.php": [
+86
+],
 "PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
 163,
 176
-],
-"PHPWord:tests/PhpWordTests/XmlDocument.php": [
-156
 ]
 }

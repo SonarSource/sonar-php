@@ -4,23 +4,13 @@
 35
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Namespaces.php": [
-33,
-71,
-73,
-75,
-77,
-79,
-81,
-91,
 107,
 109,
 111,
 113,
 115,
 117,
-119,
-121,
-123
+119
 ],
 "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Ods/Content.php": [
 74,

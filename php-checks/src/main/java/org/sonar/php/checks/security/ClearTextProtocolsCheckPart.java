@@ -16,12 +16,7 @@
  */
 package org.sonar.php.checks.security;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -46,16 +41,10 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonarsource.analyzer.commons.appsec.CleartextProtocolFilter;
 
 public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements CheckBundlePart {
-  private static final List<String> UNSAFE_PROTOCOLS = Arrays.asList("http://", "ftp://", "telnet://");
-  private static final Map<String, String> ALTERNATIVE_PROTOCOLS = new HashMap<>();
-
-  static {
-    ALTERNATIVE_PROTOCOLS.put("http", "https");
-    ALTERNATIVE_PROTOCOLS.put("ftp", "sftp, scp or ftps");
-    ALTERNATIVE_PROTOCOLS.put("telnet", "ssh");
-  }
+  private static final Set<String> CLEARTEXT_PROTOCOLS = CleartextProtocolFilter.getCleartextProtocols();
 
   private static final String LOOPBACK_IPV4 = "^127(?:\\.[0-9]+){0,2}\\.[0-9]+$";
   private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
@@ -64,28 +53,6 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
   private static final QualifiedName SWIFTMAILER_QN = QualifiedName.qualifiedName("Swift_SmtpTransport");
   private static final QualifiedName PHPMAILER_QN = QualifiedName.qualifiedName("PHPMailer\\PHPMailer\\PHPMailer");
 
-  private static final Set<String> EXCEPTION_FULL_HOSTS = new HashSet<>(Arrays.asList(
-    "www.w3.org",
-    "xml.apache.org",
-    "schemas.xmlsoap.org",
-    "schemas.openxmlformats.org",
-    "rdfs.org",
-    "purl.org",
-    "xmlns.com",
-    "schemas.google.com",
-    "a9.com",
-    "ns.adobe.com",
-    "ltsc.ieee.org",
-    "docbook.org",
-    "graphml.graphdrawing.org",
-    "json-schema.org"));
-
-  private static final Set<String> EXCEPTION_TOP_HOSTS = new HashSet<>(Arrays.asList(
-    "(.*\\.)?example\\.com$",
-    "(.*\\.)?example\\.org$",
-    "(.*\\.)?test\\.com$"));
-
-  private static final String MESSAGE_PROTOCOL = "Using %s protocol is insecure. Use %s instead";
   private static final String MESSAGE_FTP = "Using ftp_connect() is insecure. Use ftp_ssl_connect() instead";
   private static final String MESSAGE_MAIL = "Mail transport without encryption is insecure. Specify an encryption";
 
@@ -124,18 +91,23 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
     }
 
     if (startsWithUnsafeProtocol(value) && !isExceptionUrl(value, tree)) {
-      ALTERNATIVE_PROTOCOLS.keySet().stream().filter(value::startsWith)
+      CLEARTEXT_PROTOCOLS.stream()
+        .filter(value::startsWith)
         .findFirst()
-        .ifPresent(usedProtocol -> context().newIssue(getBundle(), tree, String.format(MESSAGE_PROTOCOL, usedProtocol, ALTERNATIVE_PROTOCOLS.get(usedProtocol))));
+        .ifPresent(prefix -> {
+          String protocol = prefix.endsWith("://") ? prefix.substring(0, prefix.length() - 3) : prefix;
+          CleartextProtocolFilter.getIssueMessage(protocol)
+            .ifPresent(msg -> context().newIssue(getBundle(), tree, msg));
+        });
     }
   }
 
   private static boolean isExceptionUrl(String value, LiteralTree tree) {
-    if (UNSAFE_PROTOCOLS.contains(value)) {
+    if (CLEARTEXT_PROTOCOLS.contains(value)) {
       return !tree.getParent().is(Tree.Kind.CONCATENATION);
     }
 
-    return hasExceptionHost(value);
+    return CleartextProtocolFilter.isSafeWithoutTls(value);
   }
 
   @Override
@@ -399,29 +371,7 @@ public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements Chec
   }
 
   private static boolean startsWithUnsafeProtocol(String value) {
-    return UNSAFE_PROTOCOLS.stream().anyMatch(value::startsWith);
-  }
-
-  private static boolean hasExceptionHost(String url) {
-    URI uri;
-
-    try {
-      uri = new URI(url);
-    } catch (URISyntaxException e) {
-      return false;
-    }
-
-    String host = uri.getHost();
-    if (host == null) {
-      // Fallback for some IPV6 cases
-      host = uri.getAuthority();
-    }
-
-    return host == null
-      || "localhost".equals(host)
-      || LOOPBACK_IP.matcher(host).matches()
-      || EXCEPTION_FULL_HOSTS.stream().anyMatch(host::equals)
-      || EXCEPTION_TOP_HOSTS.stream().anyMatch(host::matches);
+    return CLEARTEXT_PROTOCOLS.stream().anyMatch(value::startsWith);
   }
 
   private static boolean isArray(Tree tree) {
