@@ -6,17 +6,6 @@
 23,
 24
 ],
-"PHPWord:src/PhpWord/Reader/Word2007.php": [
-162,
-163
-],
-"PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php": [
-265,
-520,
-521,
-522,
-523
-],
 "PHPWord:src/PhpWord/Writer/ODText/Part/AbstractPart.php": [
 64,
 65,
@@ -27,84 +16,6 @@
 "PHPWord:src/PhpWord/Writer/ODText/Part/Meta.php": [
 47
 ],
-"PHPWord:src/PhpWord/Writer/Word2007/Element/Chart.php": [
-57,
-59,
-63,
-64
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Chart.php": [
-84,
-85,
-86
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Comments.php": [
-47,
-49,
-50,
-52,
-54
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/ContentTypes.php": [
-70
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/DocPropsApp.php": [
-36,
-41
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/DocPropsCore.php": [
-36
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/DocPropsCustom.php": [
-41,
-42
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Document.php": [
-43,
-47,
-49,
-50,
-54
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Footer.php": [
-49,
-53,
-55,
-56,
-60
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Footnotes.php": [
-73,
-77,
-79,
-80,
-84
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Numbering.php": [
-41,
-45,
-47,
-48,
-52
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Rels.php": [
-60,
-115
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Settings.php": [
-52,
-53,
-54,
-55
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/Styles.php": [
-49,
-50
-],
-"PHPWord:src/PhpWord/Writer/Word2007/Part/WebSettings.php": [
-40,
-41
-],
 "PHPWord:tests/PhpWordTests/AbstractWebServerEmbeddedTest.php": [
 53,
 62,
@@ -112,9 +23,6 @@
 ],
 "PHPWord:tests/PhpWordTests/Element/SectionTest.php": [
 79
-],
-"PHPWord:tests/PhpWordTests/MediaTest.php": [
-86
 ],
 "PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
 163,
