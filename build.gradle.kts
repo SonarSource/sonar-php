@@ -60,6 +60,7 @@ subprojects {
     resolutionStrategy {
       // Pinned to avoid dependency risks
       force(libs.logback.classic)
+      force(libs.plexus.utils)
     }
   }
 }
