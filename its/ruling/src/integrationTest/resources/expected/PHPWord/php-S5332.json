@@ -24,6 +24,9 @@
 "PHPWord:tests/PhpWordTests/Element/SectionTest.php": [
 79
 ],
+"PHPWord:tests/PhpWordTests/MediaTest.php": [
+86
+],
 "PHPWord:tests/PhpWordTests/Shared/XMLReaderTest.php": [
 163,
 176
