@@ -34,19 +34,23 @@ import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
 
 public class EnumDeclarationTreeImpl extends ClassDeclarationTreeImpl implements EnumDeclarationTree {
 
+  public record BackingTypeInfo(@Nullable SyntaxToken typeColonToken, @Nullable TypeTree backingType) {
+  }
+
   private final SyntaxToken typeColonToken;
   private final TypeTree backingType;
   private final List<EnumCaseTree> cases;
 
   public EnumDeclarationTreeImpl(List<AttributeGroupTree> attributeGroups, SyntaxToken enumToken, NameIdentifierTree name,
-    @Nullable SyntaxToken typeColonToken, @Nullable TypeTree backingType,
-    @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces, SyntaxToken openCurlyBraceToken,
-    List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken) {
-    super(Kind.ENUM_DECLARATION, attributeGroups, List.of(), enumToken, name, null, null,
-      implementsToken, superInterfaces, openCurlyBraceToken, members, closeCurlyBraceToken);
-    this.typeColonToken = typeColonToken;
-    this.backingType = backingType;
-    this.cases = members.stream().filter(m -> m.is(Kind.ENUM_CASE)).map(EnumCaseTree.class::cast).toList();
+    BackingTypeInfo backingTypeInfo,
+    @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
+    ClassBody classBody) {
+    super(Kind.ENUM_DECLARATION, attributeGroups, List.of(), enumToken, name,
+      new ClassInheritance(null, null, implementsToken, superInterfaces),
+      classBody);
+    this.typeColonToken = backingTypeInfo.typeColonToken();
+    this.backingType = backingTypeInfo.backingType();
+    this.cases = classBody.members().stream().filter(m -> m.is(Kind.ENUM_CASE)).map(EnumCaseTree.class::cast).toList();
   }
 
   @Nullable

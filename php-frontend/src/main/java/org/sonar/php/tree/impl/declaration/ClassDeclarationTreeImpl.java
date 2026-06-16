@@ -37,6 +37,19 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclarationTree, HasClassSymbol {
 
+  protected record ClassInheritance(
+    @Nullable SyntaxToken extendsToken,
+    @Nullable NamespaceNameTree superClass,
+    @Nullable SyntaxToken implementsToken,
+    SeparatedListImpl<NamespaceNameTree> superInterfaces) {
+  }
+
+  protected record ClassBody(
+    SyntaxToken openCurlyBraceToken,
+    List<ClassMemberTree> members,
+    SyntaxToken closeCurlyBraceToken) {
+  }
+
   private final Kind kind;
 
   private final List<AttributeGroupTree> attributeGroups;
@@ -56,21 +69,19 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
     Kind kind,
     List<AttributeGroupTree> attributeGroups,
     List<SyntaxToken> modifiersToken, SyntaxToken classEntryTypeToken, NameIdentifierTree name,
-    @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
-    @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
-    SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken) {
+    ClassInheritance inheritance, ClassBody body) {
     this.kind = kind;
     this.attributeGroups = attributeGroups;
     this.modifiersToken = modifiersToken;
     this.classEntryTypeToken = classEntryTypeToken;
     this.name = name;
-    this.extendsToken = extendsToken;
-    this.superClass = superClass;
-    this.implementsToken = implementsToken;
-    this.superInterfaces = superInterfaces;
-    this.openCurlyBraceToken = openCurlyBraceToken;
-    this.members = members;
-    this.closeCurlyBraceToken = closeCurlyBraceToken;
+    this.extendsToken = inheritance.extendsToken();
+    this.superClass = inheritance.superClass();
+    this.implementsToken = inheritance.implementsToken();
+    this.superInterfaces = inheritance.superInterfaces();
+    this.openCurlyBraceToken = body.openCurlyBraceToken();
+    this.members = body.members();
+    this.closeCurlyBraceToken = body.closeCurlyBraceToken();
   }
 
   @Nullable
@@ -211,13 +222,8 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
       List.of(),
       interfaceToken,
       name,
-      extendsToken,
-      null,
-      null,
-      interfaceList,
-      openCurlyBraceToken,
-      members,
-      closeCurlyBraceToken);
+      new ClassInheritance(extendsToken, null, null, interfaceList),
+      new ClassBody(openCurlyBraceToken, members, closeCurlyBraceToken));
   }
 
   public static ClassDeclarationTree createTrait(
@@ -230,34 +236,22 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
       List.of(),
       traitToken,
       name,
-      null,
-      null,
-      null,
-      SeparatedListImpl.empty(),
-      openCurlyBraceToken,
-      members,
-      closeCurlyBraceToken);
+      new ClassInheritance(null, null, null, SeparatedListImpl.empty()),
+      new ClassBody(openCurlyBraceToken, members, closeCurlyBraceToken));
   }
 
   public static ClassDeclarationTree createClass(
     List<AttributeGroupTree> attributes, List<SyntaxToken> modifiersToken,
     InternalSyntaxToken classToken, NameIdentifierTree name,
-    @Nullable InternalSyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
-    @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
-    InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
+    ClassInheritance inheritance, ClassBody body) {
     return new ClassDeclarationTreeImpl(
       Kind.CLASS_DECLARATION,
       attributes,
       modifiersToken,
       classToken,
       name,
-      extendsToken,
-      superClass,
-      implementsToken,
-      superInterfaces,
-      openCurlyBraceToken,
-      members,
-      closeCurlyBraceToken);
+      inheritance,
+      body);
   }
 
   public ClassSymbol symbol() {

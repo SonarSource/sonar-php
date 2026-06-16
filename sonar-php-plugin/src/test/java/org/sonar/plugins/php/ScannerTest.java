@@ -71,6 +71,7 @@ class ScannerTest {
 
     @Override
     void logException(Exception e, InputFile file) {
+      // No logging needed in test scanner
     }
   }
 }

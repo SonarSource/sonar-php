@@ -673,9 +673,12 @@ public class TreeFactory {
     return ClassDeclarationTreeImpl.createClass(
       attributes.or(Collections.emptyList()),
       modifiers.or(Collections.emptyList()),
-      classToken, name, extendsToken(extendsClause), superClass(extendsClause),
-      implementsToken(implementsClause), superInterfaces(implementsClause),
-      openCurlyBrace, optionalList(members), closeCurlyBrace);
+      classToken, name,
+      new ClassDeclarationTreeImpl.ClassInheritance(
+        extendsToken(extendsClause), superClass(extendsClause),
+        implementsToken(implementsClause), superInterfaces(implementsClause)),
+      new ClassDeclarationTreeImpl.ClassBody(
+        openCurlyBrace, optionalList(members), closeCurlyBrace));
   }
 
   public EnumDeclarationTree enumDeclaration(Optional<List<AttributeGroupTree>> attributes,
@@ -688,9 +691,10 @@ public class TreeFactory {
     SyntaxToken closeCurlyBraceToken) {
     SyntaxToken typeColonToken = colonAndType.isPresent() ? colonAndType.get().first() : null;
     TypeTree backingType = colonAndType.isPresent() ? colonAndType.get().second() : null;
-    return new EnumDeclarationTreeImpl(attributes.or(Collections.emptyList()), enumToken, name, typeColonToken, backingType,
-      implementsToken(implementsClause), superInterfaces(implementsClause), openCurlyBraceToken,
-      members.or(Collections.emptyList()), closeCurlyBraceToken);
+    return new EnumDeclarationTreeImpl(attributes.or(Collections.emptyList()), enumToken, name,
+      new EnumDeclarationTreeImpl.BackingTypeInfo(typeColonToken, backingType),
+      implementsToken(implementsClause), superInterfaces(implementsClause),
+      new ClassDeclarationTreeImpl.ClassBody(openCurlyBraceToken, members.or(Collections.emptyList()), closeCurlyBraceToken));
   }
 
   public EnumCaseTree enumCase(Optional<List<AttributeGroupTree>> attributes, SyntaxToken caseToken, NameIdentifierTree name,
@@ -1581,7 +1585,7 @@ public class TreeFactory {
     return internalFunction(
       functionNameToken,
       openParenthesis,
-      new SeparatedListImpl(Collections.singletonList(expression), Collections.emptyList()),
+      new SeparatedListImpl<>(Collections.singletonList(expression), Collections.emptyList()),
       closeParenthesis);
   }
 
@@ -1589,7 +1593,7 @@ public class TreeFactory {
     return internalFunction(
       includeOnceToken,
       null,
-      new SeparatedListImpl(Collections.singletonList(expression), Collections.emptyList()),
+      new SeparatedListImpl<>(Collections.singletonList(expression), Collections.emptyList()),
       null);
   }
 
