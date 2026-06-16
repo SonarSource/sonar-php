@@ -13,7 +13,6 @@ on:
         description: "Branch to to toggle lock on"
         required: true
         default: "master"
-    inputs:
       additional-message:
         description: 'Additional Slack message text'
         required: false
