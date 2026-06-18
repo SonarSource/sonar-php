@@ -1,43 +1,45 @@
 [versions]
-sonar-commons = "2.24.0.4903"
+assertj = "3.27.7"
+plexus-utils = "4.0.3"
+awaitility = "4.3.0"
+ch-qos-logback-logback = "1.5.34"
+jsr305 = "3.0.2"
+junit = "6.1.0"
+mockito = "5.23.0"
+sonar-commons = "2.25.0.4905"
+sonar-orchestrator = "6.3.0.4458"
 # Before updating the plugin-api version, make sure to check the compatibility matrix and stick to the lowest denominator
 # https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility
-sonar-plugin-api = "13.8.0.4399"
-sonarqube = "26.6.0.123539"
-sonar-orchestrator = "6.2.0.4392"
-sonarlint = "11.4.0.85676"
-sslr = "1.25.1.3886"
-junit = "6.1.0"
-assertj = "3.27.7"
-mockito = "5.23.0"
-jsr305 = "3.0.2"
+sonar-plugin-api = "13.4.2.4284"
+sonarlint = "11.5.0.85769"
+sonarqube = "26.7.0.123958"
+sslr = "1.26.0.4095"
 staxmate = "2.0.1"
-awaitility = "4.3.0"
 woodstox = "7.2.1"
-ch-qos-logback-logback = "1.5.34"
 
 [libraries]
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
+jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+# Version of JUnit Platform is taken from the JUnit BOM that is imported by junit-jupiter
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback-logback" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 sonar-analyzer-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-commons", version.ref = "sonar-commons" }
 sonar-analyzer-test-commons = { module = "org.sonarsource.analyzer-commons:sonar-analyzer-test-commons", version.ref = "sonar-commons" }
-sonar-regex-parsing = { module = "org.sonarsource.analyzer-commons:sonar-regex-parsing", version.ref = "sonar-commons" }
+sonar-lint-core = { module = "org.sonarsource.sonarlint.core:sonarlint-core", version.ref = "sonarlint" }
+sonar-lint-rpc-impl = { module = "org.sonarsource.sonarlint.core:sonarlint-rpc-impl", version.ref = "sonarlint" }
+sonar-lint-rpc-java-client = { module = "org.sonarsource.sonarlint.core:sonarlint-rpc-java-client", version.ref = "sonarlint" }
+sonar-orchestrator-junit5 = { module = "org.sonarsource.orchestrator:sonar-orchestrator-junit5", version.ref = "sonar-orchestrator" }
 sonar-plugin-api = { module = "org.sonarsource.api.plugin:sonar-plugin-api", version.ref = "sonar-plugin-api" }
 sonar-plugin-api-impl = { module = "org.sonarsource.sonarqube:sonar-plugin-api-impl", version.ref = "sonarqube" }
 sonar-plugin-api-test-fixtures = { module = "org.sonarsource.api.plugin:sonar-plugin-api-test-fixtures", version.ref = "sonar-plugin-api" }
+sonar-regex-parsing = { module = "org.sonarsource.analyzer-commons:sonar-regex-parsing", version.ref = "sonar-commons" }
 sonar-testing-harness = { module = "org.sonarsource.sonarqube:sonar-testing-harness", version.ref = "sonarqube" }
 sonar-ws = { module = "org.sonarsource.sonarqube:sonar-ws", version.ref = "sonarqube" }
-sonar-orchestrator-junit5 = { module = "org.sonarsource.orchestrator:sonar-orchestrator-junit5", version.ref = "sonar-orchestrator" }
-sonar-lint-core = { module = "org.sonarsource.sonarlint.core:sonarlint-core", version.ref = "sonarlint" }
-sonar-lint-rpc-java-client = { module = "org.sonarsource.sonarlint.core:sonarlint-rpc-java-client", version.ref = "sonarlint" }
-sonar-lint-rpc-impl = { module = "org.sonarsource.sonarlint.core:sonarlint-rpc-impl", version.ref = "sonarlint" }
+plexus-utils = { module = "org.codehaus.plexus:plexus-utils", version.ref = "plexus-utils" }
 sslr-core = { module = "org.sonarsource.sslr:sslr-core", version.ref = "sslr" }
 sslr-testing-harness = { module = "org.sonarsource.sslr:sslr-testing-harness", version.ref = "sslr" }
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
-assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
-jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
-# Version of JUnit Platform is taken from the JUnit BOM that is imported by junit-jupiter
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
-woodstox = { module = "com.fasterxml.woodstox:woodstox-core", version.ref = "woodstox" }
 staxmate = { module = "org.codehaus.staxmate:staxmate", version.ref = "staxmate" }
-awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback-logback" }
+woodstox = { module = "com.fasterxml.woodstox:woodstox-core", version.ref = "woodstox" }
