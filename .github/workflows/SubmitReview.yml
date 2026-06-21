@@ -17,7 +17,7 @@ jobs:
             || github.event.review.state == 'approved')
     steps:
       - id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
+        uses: SonarSource/vault-action-wrapper@3.6.1
         with:
           secrets: |
             development/github/token/{REPO_OWNER_NAME_DASH}-jira token | GITHUB_TOKEN;
