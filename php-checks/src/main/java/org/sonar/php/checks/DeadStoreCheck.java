@@ -96,21 +96,26 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
     for (Tree element : ListUtils.reverse(block.elements())) {
       Map<Symbol, VariableUsage> usagesInElement = blockLiveVariables.getVariableUsages(element);
       for (Map.Entry<Symbol, VariableUsage> symbolWithUsage : usagesInElement.entrySet()) {
-        Symbol symbol = symbolWithUsage.getKey();
-        if (outOfScope(readSymbols, symbol)) {
-          // These cases are verified by other checks
-          continue;
-        }
-        VariableUsage usage = symbolWithUsage.getValue();
-        if (usage.isWrite() && !usage.isRead()) {
-          if (!willBeRead.contains(symbol) && !shouldSkip(element, symbol)) {
-            context().newIssue(this, element, String.format(MESSAGE_TEMPLATE, symbol.name()));
-          }
-          willBeRead.remove(symbol);
-        } else if (usage.isRead()) {
-          willBeRead.add(symbol);
-        }
+        processSymbolUsage(symbolWithUsage, readSymbols, willBeRead, element);
       }
+    }
+  }
+
+  private void processSymbolUsage(Map.Entry<Symbol, VariableUsage> symbolWithUsage, Set<Symbol> readSymbols,
+    Set<Symbol> willBeRead, Tree element) {
+    Symbol symbol = symbolWithUsage.getKey();
+    if (outOfScope(readSymbols, symbol)) {
+      // These cases are verified by other checks
+      return;
+    }
+    VariableUsage usage = symbolWithUsage.getValue();
+    if (usage.isWrite() && !usage.isRead()) {
+      if (!willBeRead.contains(symbol) && !shouldSkip(element, symbol)) {
+        context().newIssue(this, element, String.format(MESSAGE_TEMPLATE, symbol.name()));
+      }
+      willBeRead.remove(symbol);
+    } else if (usage.isRead()) {
+      willBeRead.add(symbol);
     }
   }
 

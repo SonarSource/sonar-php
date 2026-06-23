@@ -43,7 +43,7 @@ import static org.sonar.php.tree.TreeUtils.hasAnnotationOrAttribute;
 public class NoAssertionInTestCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Add at least one assertion to this test case.";
 
-  private static final Pattern ASSERTION_METHODS_PATTERN = Pattern.compile("(assert|verify|fail|pass|should|will|check|expect|validate|.*test).*");
+  private static final Pattern ASSERTION_METHODS_PATTERN = Pattern.compile("(assert|verify|fail|pass|should|will|check|expect|validate).*|.*test.*");
   private static final List<String> TEST_CONTROL_FUNCTIONS = Arrays.asList(
     "addtoassertioncount",
     "marktestskipped",
@@ -127,8 +127,7 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
         return false;
       }
 
-      if (!assertionInMethod.containsKey(methodDeclaration)) {
-        assertionInMethod.put(methodDeclaration, false);
+      if (assertionInMethod.putIfAbsent(methodDeclaration, false) == null) {
         AssertionsFindVisitor v = new AssertionsFindVisitor(symbolTable);
         methodDeclaration.accept(v);
         assertionInMethod.put(methodDeclaration, v.hasFoundAssertion);
