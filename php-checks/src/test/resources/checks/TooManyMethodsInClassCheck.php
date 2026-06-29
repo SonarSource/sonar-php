@@ -114,3 +114,48 @@ class ClassDB {         // OK
 
       public function f4() {  }
   }
+
+  /**
+   * @Entity
+   */
+  class PhpDocEntityClass { // OK
+
+      public function f1() {  }
+
+      public function f2() {  }
+
+      public function f3() {  }
+
+      public function f4() {  }
+  }
+
+  /**
+   * @ORM\Entity(repositoryClass="MyClassRepository")
+   * @Table(name="my_class")
+   */
+  class PhpDocOrmEntityClass { // OK
+
+      public function f1() {  }
+
+      public function f2() {  }
+
+      public function f3() {  }
+
+      public function f4() {  }
+  }
+
+  /**
+   * @author Someone
+   * @Entity(repositoryClass="X\Y\Z\MyClassRepository")
+   * @HasLifecycleCallbacks
+   */
+  abstract class AbstractPhpDocEntityClass { // OK
+
+      public function f1() {  }
+
+      public function f2() {  }
+
+      public function f3() {  }
+
+      public function f4() {  }
+  }
