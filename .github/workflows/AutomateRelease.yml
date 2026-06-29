@@ -76,6 +76,7 @@ jobs:
       create-sli-ticket: true
       create-sle-ticket: true
       slack-channel: "squad-security-taint-notifs"
+      freeze-branch-slack-notification: false
       runner-environment: sonar-xs
       verbose: ${{ inputs.verbose }}
       bump-version: true
