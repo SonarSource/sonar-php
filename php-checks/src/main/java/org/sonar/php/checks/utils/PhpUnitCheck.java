@@ -38,6 +38,16 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
 
   private static Map<String, Assertion> assertions() {
     return Stream.of(
+      arrayContainsAndEqualityAssertions(),
+      fileAndDirectoryAssertions(),
+      typeStateAndIdentityAssertions(),
+      stringXmlJsonAndConstraintAssertions())
+      .flatMap(s -> s)
+      .collect(Collectors.toMap(e -> e.name().toLowerCase(Locale.ENGLISH), e -> e));
+  }
+
+  private static Stream<Assertion> arrayContainsAndEqualityAssertions() {
+    return Stream.of(
       new Assertion("assertArrayHasKey"),
       new Assertion("assertArraySubset"),
       new Assertion("assertArrayNotHasKey"),
@@ -77,7 +87,11 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
       new Assertion("assertLessThan", true),
       new Assertion("assertAttributeLessThan", true),
       new Assertion("assertLessThanOrEqual", true),
-      new Assertion("assertAttributeLessThanOrEqual"),
+      new Assertion("assertAttributeLessThanOrEqual"));
+  }
+
+  private static Stream<Assertion> fileAndDirectoryAssertions() {
+    return Stream.of(
       new Assertion("assertFileEquals", true),
       new Assertion("assertFileEqualsCanonicalizing", true),
       new Assertion("assertFileEqualsIgnoringCase", true),
@@ -105,7 +119,11 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
       new Assertion("assertFileIsReadable"),
       new Assertion("assertFileNotIsReadable"),
       new Assertion("assertFileIsWritable"),
-      new Assertion("assertFileNotIsWritable"),
+      new Assertion("assertFileNotIsWritable"));
+  }
+
+  private static Stream<Assertion> typeStateAndIdentityAssertions() {
+    return Stream.of(
       new Assertion("assertTrue"),
       new Assertion("assertNotTrue"),
       new Assertion("assertFalse"),
@@ -158,7 +176,11 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
       new Assertion("assertRegExp"),
       new Assertion("assertNotRegExp"),
       new Assertion("assertSameSize", true),
-      new Assertion("assertNotSameSize", true),
+      new Assertion("assertNotSameSize", true));
+  }
+
+  private static Stream<Assertion> stringXmlJsonAndConstraintAssertions() {
+    return Stream.of(
       new Assertion("assertStringMatchesFormat"),
       new Assertion("assertStringNotMatchesFormat"),
       new Assertion("assertStringMatchesFormatFile"),
@@ -227,7 +249,7 @@ public abstract class PhpUnitCheck extends PHPVisitorCheck {
       new Assertion("matches"),
       new Assertion("stringStartsWith"),
       new Assertion("stringContains"),
-      new Assertion("stringEndsWith")).collect(Collectors.toMap(e -> e.name().toLowerCase(Locale.ENGLISH), e -> e));
+      new Assertion("stringEndsWith"));
   }
 
   @Override

@@ -34,7 +34,7 @@ public abstract class PhpUnitReportImporter extends AbstractReportImporter {
   @Override
   public final void execute(SensorContext context) {
     super.execute(context);
-    if (getReportFiles(context).isEmpty()) {
+    if (getReportFiles(context).isEmpty() && logger().isInfoEnabled()) {
       logger().info("No {} reports provided (see '{}' property)", reportName(), reportPathKey());
     }
   }
