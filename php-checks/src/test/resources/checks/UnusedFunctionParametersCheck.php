@@ -342,4 +342,15 @@ class MagicMethodsClass
     }
 }
 
+class ReadonlyOnlyPromotion {
+    // readonly without explicit visibility is valid property promotion (visibility defaults to public)
+    public function __construct(
+        readonly int $usedViaThis,   // promoted: access via $this->usedViaThis — not an issue
+        readonly int $neverRead,     // promoted: promotion itself is the use — not an issue
+        $unusedPlain,                // Noncompliant
+    ) {
+        echo $this->usedViaThis;
+    }
+}
+
 

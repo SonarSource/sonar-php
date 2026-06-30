@@ -111,4 +111,14 @@ class ParameterTreeTest extends PHPTreeModelTest {
     assertThat(tree.visibility()).isNull();
   }
 
+  @Test
+  void shouldSupportReadonlyOnlyPropertyPromotion() {
+    // readonly int $a without explicit visibility: valid PHP promotion, visibility defaults to public
+    ParameterTree tree = parse("readonly int $a", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.readonlyToken()).isNotNull();
+    assertThat(tree.isReadonly()).isTrue();
+    assertThat(tree.isPropertyPromotion()).isTrue();
+    assertThat(tree.visibility()).isNull();
+  }
+
 }

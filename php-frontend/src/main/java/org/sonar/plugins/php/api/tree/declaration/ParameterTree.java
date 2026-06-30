@@ -80,7 +80,7 @@ public interface ParameterTree extends Tree, HasAttributes {
   }
 
   default boolean isPropertyPromotion() {
-    return visibility() != null || finalToken() != null;
+    return visibility() != null || finalToken() != null || readonlyToken() != null;
   }
 
   default boolean isFinal() {
