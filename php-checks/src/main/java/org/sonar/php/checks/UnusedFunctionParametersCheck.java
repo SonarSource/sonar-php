@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -106,7 +107,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   private void collectConstructorPromotedProperties(MethodDeclarationTree tree) {
     if (tree.name().text().equalsIgnoreCase("__construct")) {
       constructorPromotedProperties = tree.parameters().parameters().stream()
-        .filter(p -> p.visibility() != null)
+        .filter(ParameterTree::isPropertyPromotion)
         .map(p -> p.variableIdentifier().variableExpression())
         .collect(Collectors.toList());
     }
