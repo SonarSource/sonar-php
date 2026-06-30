@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -43,7 +42,18 @@ import static org.sonar.php.tree.TreeUtils.hasAnnotationOrAttribute;
 public class NoAssertionInTestCheck extends PhpUnitCheck {
   private static final String MESSAGE = "Add at least one assertion to this test case.";
 
-  private static final Pattern ASSERTION_METHODS_PATTERN = Pattern.compile("(assert|verify|fail|pass|should|will|check|expect|validate|.*test).*");
+  private static final List<String> ASSERTION_METHOD_PREFIXES = Arrays.asList(
+    "assert",
+    "verify",
+    "fail",
+    "pass",
+    "should",
+    "will",
+    "check",
+    "expect",
+    "validate");
+  private static final List<String> ASSERTION_METHOD_INFIXES = Arrays.asList(
+    "test");
   private static final List<String> TEST_CONTROL_FUNCTIONS = Arrays.asList(
     "addtoassertioncount",
     "marktestskipped",
@@ -104,7 +114,8 @@ public class NoAssertionInTestCheck extends PhpUnitCheck {
         return false;
       }
 
-      return ASSERTION_METHODS_PATTERN.matcher(functionName).matches()
+      return ASSERTION_METHOD_PREFIXES.stream().anyMatch(functionName::startsWith)
+        || ASSERTION_METHOD_INFIXES.stream().anyMatch(functionName::contains)
         || TEST_CONTROL_FUNCTIONS.contains(functionName);
     }
 
