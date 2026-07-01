@@ -159,3 +159,29 @@ class ClassDB {         // OK
 
       public function f4() {  }
   }
+
+  /**
+   * @EntityListeners
+   */
+  class NotAnEntity { // Noncompliant
+
+      public function f1() {  }
+
+      public function f2() {  }
+
+      public function f3() {  }
+
+      public function f4() {  }
+  }
+
+  // TODO: turn this into an @Entity later
+  class AnotherGodClass { // Noncompliant
+
+      public function f1() {  }
+
+      public function f2() {  }
+
+      public function f3() {  }
+
+      public function f4() {  }
+  }
