@@ -16,11 +16,12 @@
  */
 package org.sonar.php.checks;
 
-import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.symbols.HasMethodSymbol;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
@@ -42,6 +43,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
 
   private static final int DEFAULT_THRESHOLD = 20;
   private static final boolean DEFAULT_NON_PUBLIC = true;
+  private static final Pattern ENTITY_PHPDOC_PATTERN = Pattern.compile("(?m)^\\s*+(?:/\\*\\*|\\*)?+\\s*+@(ORM\\\\)?Entity\\b");
 
   @RuleProperty(
     key = "maximumMethodThreshold",
@@ -111,19 +113,16 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
   }
 
   private static boolean classHasEntityAttribute(ClassTree tree) {
-    List<AttributeGroupTree> attributes = tree.attributeGroups();
-
-    if (!attributes.isEmpty()) {
-      for (AttributeGroupTree attribute : attributes) {
-        for (AttributeTree attributeTree : attribute.attributes()) {
-          String finalName = attributeTree.name().fullyQualifiedName();
-          if ("ORM\\Entity".equals(finalName) || "Entity".equals(finalName)) {
-            return true;
-          }
+    for (AttributeGroupTree attribute : tree.attributeGroups()) {
+      for (AttributeTree attributeTree : attribute.attributes()) {
+        String finalName = attributeTree.name().fullyQualifiedName();
+        if ("ORM\\Entity".equals(finalName) || "Entity".equals(finalName)) {
+          return true;
         }
       }
     }
-    return false;
+    return ((PHPTree) tree).getFirstToken().trivias().stream()
+      .anyMatch(trivia -> ENTITY_PHPDOC_PATTERN.matcher(trivia.text()).find());
   }
 
   /**

@@ -49,7 +49,9 @@ class TooManyMethodsInClassCheckTest {
     List<PhpIssue> issues = Arrays.asList(
       new LineIssue(check, 6, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes."),
       new LineIssue(check, 47, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes."),
-      new LineIssue(check, 69, "Class \"ClassDB2\" has 4 methods, which is greater than 2 authorized. Split it into smaller classes."));
+      new LineIssue(check, 69, "Class \"ClassDB2\" has 4 methods, which is greater than 2 authorized. Split it into smaller classes."),
+      new LineIssue(check, 166, "Class \"NotAnEntity\" has 4 methods, which is greater than 2 authorized. Split it into smaller classes."),
+      new LineIssue(check, 178, "Class \"AnotherGodClass\" has 4 methods, which is greater than 2 authorized. Split it into smaller classes."));
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues);
   }
 
