@@ -43,7 +43,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
 
   private static final int DEFAULT_THRESHOLD = 20;
   private static final boolean DEFAULT_NON_PUBLIC = true;
-  private static final Pattern ENTITY_PHPDOC_PATTERN = Pattern.compile("(?m)^\\s*(?:/\\*\\*|\\*)?\\s*@(ORM\\\\)?Entity\\b");
+  private static final Pattern ENTITY_PHPDOC_PATTERN = Pattern.compile("(?m)^\\s*+(?:/\\*\\*|\\*)?+\\s*+@(ORM\\\\)?Entity\\b");
 
   @RuleProperty(
     key = "maximumMethodThreshold",
