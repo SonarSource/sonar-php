@@ -179,3 +179,15 @@ class AnotherG extends G
         parent::__construct($arg);
     }
 }
+
+//////////////////////////////////
+// shouldn't trigger if the overriding method declares an attribute
+
+abstract class BaseFoo {
+    public function getFoo(): string { return 'foo'; }
+}
+
+class Foo extends BaseFoo {
+    #[\Deprecated]
+    public function getFoo(): string { return parent::getFoo(); } // OK
+}

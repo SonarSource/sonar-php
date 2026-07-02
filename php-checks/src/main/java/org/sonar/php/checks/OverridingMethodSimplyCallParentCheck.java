@@ -77,6 +77,9 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
   }
 
   private void checkMethod(MethodDeclarationTree method, ClassSymbol superClass) {
+    if (!method.attributeGroups().isEmpty()) {
+      return;
+    }
     if (method.body().is(Kind.BLOCK)) {
       BlockTree blockTree = (BlockTree) method.body();
 
