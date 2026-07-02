@@ -46,6 +46,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonarsource.analyzer.commons.appsec.SecretClassifier;
 import org.sonarsource.analyzer.commons.internal.json.simple.JSONArray;
 import org.sonarsource.analyzer.commons.internal.json.simple.JSONObject;
 import org.sonarsource.analyzer.commons.internal.json.simple.parser.JSONParser;
@@ -148,7 +149,8 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     }
 
     public Set<ArgumentMatcher> getCorrespondingMatchers() {
-      Function<ExpressionTree, Boolean> isRegularStringLiteral = tree -> tree.is(Kind.REGULAR_STRING_LITERAL) && !isEmptyStringLiteral((LiteralTree) tree);
+      Function<ExpressionTree, Boolean> isRegularStringLiteral = tree -> tree.is(Kind.REGULAR_STRING_LITERAL)
+        && !SecretClassifier.isKnownNonSecret(CheckUtils.trimQuotes((LiteralTree) tree));
 
       return sensitiveIndices.stream().map(index -> matcherMap.computeIfAbsent(index + ";" + orderedArguments.get(index),
         key -> ArgumentVerifierUnaryFunction.builder()
@@ -157,10 +159,6 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
           .matchingFunction(isRegularStringLiteral)
           .build()))
         .collect(Collectors.toSet());
-    }
-
-    private static boolean isEmptyStringLiteral(LiteralTree literal) {
-      return literal.value().substring(1, literal.value().length() - 1).isEmpty();
     }
   }
 

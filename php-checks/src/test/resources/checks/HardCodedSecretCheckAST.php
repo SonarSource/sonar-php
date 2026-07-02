@@ -1,66 +1,66 @@
 <?php
 
 // Global Constants
-const PASSED = "abcdefghijklmnopqrs";   // Compliant nothing to do with secrets
+const PASSED = "Qm7vXpLr2FzT9baWtHx";   // Compliant nothing to do with secrets
 
 // Noncompliant@+1 {{'SECRET' detected in this expression, review this potentially hard-coded secret.}}
-const MY_SECRET = "abcdefghijklmnopqrs";
+const MY_SECRET = "Qm7vXpLr2FzT9baWtHx";
 //                ^^^^^^^^^^^^^^^^^^^^^
 
 // Noncompliant@+1 {{'api_key' detected in this expression, review this potentially hard-coded secret.}}
-const api_key = 'abcdefghijklmnopqrs';
+const api_key = 'Qm7vXpLr2FzT9baWtHx';
 
 // Noncompliant@+1
-const ABC = "abcdefghijklmnopqrs", AUTH = "abcdefghijklmnopqrs", XYZ = "abcdefghijklmnopqrs";
+const ABC = "Qm7vXpLr2FzT9baWtHx", AUTH = "Qm7vXpLr2FzT9baWtHx", XYZ = "Qm7vXpLr2FzT9baWtHx";
 //                                        ^^^^^^^^^^^^^^^^^^^^^
 
 // Noncompliant@+2
 const TOKEN_HEREDOC = <<<END
-abcdefghijklmnopqrs
+Qm7vXpLr2FzT9baWtHx
 END;
 
 // FN it is literal tree and contains new lines
 const TOKEN_NOWDOC = <<<'EOD'
-abcdefghijklmnopqrs
+Qm7vXpLr2FzT9baWtHx
 EOD;
 
-define("AUTH", "abcdefghijklmnopqrs");                    // Noncompliant
+define("AUTH", "Qm7vXpLr2FzT9baWtHx");                    // Noncompliant
 
-define("credential", "abcdefghijklmnopqrs");              // Noncompliant
+define("credential", "Qm7vXpLr2FzT9baWtHx");              // Noncompliant
 
-define("namespace\level\Token", "abcdefghijklmnopqrs");   // Noncompliant
+define("namespace\level\Token", "Qm7vXpLr2FzT9baWtHx");   // Noncompliant
 
-define("abcdefghijklmnopqrs");    // Compliant
+define("Qm7vXpLr2FzT9baWtHx");    // Compliant
 
 // Variables declarations (as AssignmentExpression)
-$var_ok = "abcdefghijklmnopqrs";  // Compliant
+$var_ok = "Qm7vXpLr2FzT9baWtHx";  // Compliant
 
-$oauth = "abcdefghijklmnopqrs";   // Noncompliant
+$oauth = "Qm7vXpLr2FzT9baWtHx";   // Noncompliant
 
 // Variables in function
 function do_something(): void
 {
-  $a = "abcdefghijklmnopqrs";         // Compliant
-  $apikey = "abcdefghijklmnopqrs";    // Noncompliant
+  $a = "Qm7vXpLr2FzT9baWtHx";         // Compliant
+  $apikey = "Qm7vXpLr2FzT9baWtHx";    // Noncompliant
 }
 
 // Class Constants (as Variables in AST)
 class ContainsConstrants
 {
   // Noncompliant@+1
-  const Token = "abcdefghijklmnopqrs";
+  const Token = "Qm7vXpLr2FzT9baWtHx";
 //              ^^^^^^^^^^^^^^^^^^^^^
 
-  const API_KEY = "abcdefghijklmnopqrs";  // Noncompliant
-  const AUTH = "abcdefghijklmnopqrs";               // Noncompliant
+  const API_KEY = "Qm7vXpLr2FzT9baWtHx";  // Noncompliant
+  const AUTH = "Qm7vXpLr2FzT9baWtHx";               // Noncompliant
 
-  const OK_CONSTANT = "abcdefghijklmnopqrs";        // Compliant
+  const OK_CONSTANT = "Qm7vXpLr2FzT9baWtHx";        // Compliant
 
   // Assignments
   function doSomething()
   {
     $someSecret = "";
-    $someSecret = "abcdefghijklmnopqrs";          // Noncompliant
+    $someSecret = "Qm7vXpLr2FzT9baWtHx";          // Noncompliant
 
   }
 }
@@ -68,19 +68,19 @@ class ContainsConstrants
 // Class Properties
 class ContainsProperties
 {
-  public $passed = 'abcdefghijklmnopqrs';
-  public $apikey = 'abcdefghijklmnopqrs';                   // Noncompliant
-  public string $api_key = "abcdefghijklmnopqrs";           // Noncompliant
+  public $passed = 'Qm7vXpLr2FzT9baWtHx';
+  public $apikey = 'Qm7vXpLr2FzT9baWtHx';                   // Noncompliant
+  public string $api_key = "Qm7vXpLr2FzT9baWtHx";           // Noncompliant
 
-  protected $credential = "abcdefghijklmnopqrs";            // Noncompliant
-  private $private_credential = "abcdefghijklmnopqrs";      // Noncompliant
-  static $static_credential = "abcdefghijklmnopqrs";        // Noncompliant
+  protected $credential = "Qm7vXpLr2FzT9baWtHx";            // Noncompliant
+  private $private_credential = "Qm7vXpLr2FzT9baWtHx";      // Noncompliant
+  static $static_credential = "Qm7vXpLr2FzT9baWtHx";        // Noncompliant
 
   public function __construct(
-    public readonly string $auth = "abcdefghijklmnopqrs",             // Noncompliant
-    protected              $protected_auth = "abcdefghijklmnopqrs",   // Noncompliant
-    private                $private_auth = "abcdefghijklmnopqrs",     // Noncompliant
-                           $oauth = "abcdefghijklmnopqrs",            // Noncompliant
+    public readonly string $auth = "Qm7vXpLr2FzT9baWtHx",             // Noncompliant
+    protected              $protected_auth = "Qm7vXpLr2FzT9baWtHx",   // Noncompliant
+    private                $private_auth = "Qm7vXpLr2FzT9baWtHx",     // Noncompliant
+                           $oauth = "Qm7vXpLr2FzT9baWtHx",            // Noncompliant
                            $empty_auth
   )
   {
@@ -91,16 +91,16 @@ class ContainsProperties
 
 // Object
 $object = (object)[
-  'propertyOne' => 'abcdefghijklmnopqrs',
-  'secret' => 'abcdefghijklmnopqrs',        // Noncompliant
-  "token" => "abcdefghijklmnopqrs"          // Noncompliant
+  'propertyOne' => 'Qm7vXpLr2FzT9baWtHx',
+  'secret' => 'Qm7vXpLr2FzT9baWtHx',        // Noncompliant
+  "token" => "Qm7vXpLr2FzT9baWtHx"          // Noncompliant
 ];
 
 // Array
 $array = array(
-  'passed' => 'abcdefghijklmnopqrs',
-  'auth' => 'abcdefghijklmnopqrs',          // Noncompliant
-  "credential" => "abcdefghijklmnopqrs"     // Noncompliant
+  'passed' => 'Qm7vXpLr2FzT9baWtHx',
+  'auth' => 'Qm7vXpLr2FzT9baWtHx',          // Noncompliant
+  "credential" => "Qm7vXpLr2FzT9baWtHx"     // Noncompliant
 );
 
 function compareStrings($auth)
@@ -117,27 +117,27 @@ function compareStrings($auth)
   {
     return;
   }
-  if ($auth == "abcdefghijklmnopqrs")                     // Noncompliant
+  if ($auth == "Qm7vXpLr2FzT9baWtHx")                     // Noncompliant
   {
     echo $auth;
   }
-  if ("abcdefghijklmnopqrs" == $auth)                     // Noncompliant
+  if ("Qm7vXpLr2FzT9baWtHx" == $auth)                     // Noncompliant
   {
     echo $auth;
   }
-  if ($auth === "abcdefghijklmnopqrs")                     // Noncompliant
+  if ($auth === "Qm7vXpLr2FzT9baWtHx")                     // Noncompliant
   {
     echo $auth;
   }
-  if ("abcdefghijklmnopqrs" === $auth)                     // Noncompliant
+  if ("Qm7vXpLr2FzT9baWtHx" === $auth)                     // Noncompliant
   {
     echo $auth;
   }
-  if ($auth <=> "abcdefghijklmnopqrs")                     // Noncompliant
+  if ($auth <=> "Qm7vXpLr2FzT9baWtHx")                     // Noncompliant
   {
     echo $auth;
   }
-  if ("abcdefghijklmnopqrs" <=> $auth)                     // Noncompliant
+  if ("Qm7vXpLr2FzT9baWtHx" <=> $auth)                     // Noncompliant
   {
     echo $auth;
   }
@@ -151,11 +151,11 @@ function compareStrings($auth)
   }
 
   // case sensitive
-  if (strcmp($auth, "abcdefghijklmnopqrs"))         // Noncompliant
+  if (strcmp($auth, "Qm7vXpLr2FzT9baWtHx"))         // Noncompliant
   {
     echo $auth;
   }
-  if (strcmp("abcdefghijklmnopqrs", $auth))         // Noncompliant
+  if (strcmp("Qm7vXpLr2FzT9baWtHx", $auth))         // Noncompliant
   {
     echo $auth;
   }
@@ -183,21 +183,21 @@ function compareStrings($auth)
   {
     echo $auth;
   }
-  if (strcmp("abcdefghijklmnopqrs"))
+  if (strcmp("Qm7vXpLr2FzT9baWtHx"))
   {
     echo $auth;
   }
-  if (strcmp("abcdefghijklmnopqrs", $auth, "abc"))
+  if (strcmp("Qm7vXpLr2FzT9baWtHx", $auth, "abc"))
   {
     echo $auth;
   }
 
   // case insensitive
-  if (strcasecmp($auth, "abcdefghijklmnopqrs"))    // Noncompliant
+  if (strcasecmp($auth, "Qm7vXpLr2FzT9baWtHx"))    // Noncompliant
   {
     echo $auth;
   }
-  if (strcasecmp("abcdefghijklmnopqrs", $auth))    // Noncompliant
+  if (strcasecmp("Qm7vXpLr2FzT9baWtHx", $auth))    // Noncompliant
   {
     echo $auth;
   }
@@ -225,11 +225,11 @@ function compareStrings($auth)
   {
     echo $auth;
   }
-  if (strcasecmp("abcdefghijklmnopqrs"))
+  if (strcasecmp("Qm7vXpLr2FzT9baWtHx"))
   {
     echo $auth;
   }
-  if (strcasecmp("abcdefghijklmnopqrs", $auth, "abc"))
+  if (strcasecmp("Qm7vXpLr2FzT9baWtHx", $auth, "abc"))
   {
     echo $auth;
   }
@@ -243,9 +243,9 @@ function some2ArgsFunction($arg1, $arg2)
 // When a function call has two arguments potentially containing String, we report an issue the same way we would with a variable declaration
 function callSome2ArgsFunction()
 {
-  some2ArgsFunction("secret", "abcdefghijklmnopqrs");        // Noncompliant
-  some2ArgsFunction("abcdefghijklmnopqrs", "secret");        // Noncompliant
-  some2ArgsFunction('abcdefghijklmnopqrs', 'secret');        // Noncompliant
+  some2ArgsFunction("secret", "Qm7vXpLr2FzT9baWtHx");        // Noncompliant
+  some2ArgsFunction("Qm7vXpLr2FzT9baWtHx", "secret");        // Noncompliant
+  some2ArgsFunction('Qm7vXpLr2FzT9baWtHx', 'secret');        // Noncompliant
   some2ArgsFunction("secret", PASSED);                       // FN unable to resolve the value
   some2ArgsFunction(PASSED, "secret");                       // FN unable to resolve the value
   some2ArgsFunction("secret", "X");
@@ -263,9 +263,9 @@ function callSome2ArgsFunction()
 function callSome2ArgsMethod()
 {
   $box = new Box();
-  $box->setProperty("secret", "abcdefghijklmnopqrs");        // Noncompliant
-  $box->setProperty("abcdefghijklmnopqrs", "secret");        // Noncompliant
-  $box->setProperty('abcdefghijklmnopqrs', 'secret');        // Noncompliant
+  $box->setProperty("secret", "Qm7vXpLr2FzT9baWtHx");        // Noncompliant
+  $box->setProperty("Qm7vXpLr2FzT9baWtHx", "secret");        // Noncompliant
+  $box->setProperty('Qm7vXpLr2FzT9baWtHx', 'secret');        // Noncompliant
   $box->setProperty("secret", PASSED);                       // FN unable to resolve the value
   $box->setProperty(PASSED, "secret");                       // FN unable to resolve the value
   $box->setProperty("secret", "X");
@@ -286,22 +286,22 @@ class Box
 function detectSecretsInStrings($secret)
 {
   $variable1 = "blabla";
-  $variable2 = "login=a&secret=abcdefghijklmnopqrs"; // Noncompliant
-  $variable3 = "login=a&token=abcdefghijklmnopqrs"; // Noncompliant
-  $variable4 = "login=a&api_key=abcdefghijklmnopqrs"; // Noncompliant
-  $variable5 = "login=a&api.key=abcdefghijklmnopqrs"; // Noncompliant
-  $variable6 = "login=a&api-key=abcdefghijklmnopqrs"; // Noncompliant
-  $variable7 = "login=a&credential=abcdefghijklmnopqrs"; // Noncompliant
-  $variable8 = "login=a&auth=abcdefghijklmnopqrs"; // Noncompliant
+  $variable2 = "login=a&secret=Qm7vXpLr2FzT9baWtHx"; // Noncompliant
+  $variable3 = "login=a&token=Qm7vXpLr2FzT9baWtHx"; // Noncompliant
+  $variable4 = "login=a&api_key=Qm7vXpLr2FzT9baWtHx"; // Noncompliant
+  $variable5 = "login=a&api.key=Qm7vXpLr2FzT9baWtHx"; // Noncompliant
+  $variable6 = "login=a&api-key=Qm7vXpLr2FzT9baWtHx"; // Noncompliant
+  $variable7 = "login=a&credential=Qm7vXpLr2FzT9baWtHx"; // Noncompliant
+  $variable8 = "login=a&auth=Qm7vXpLr2FzT9baWtHx"; // Noncompliant
   $variable9 = "login=a&secret=";
   $variableA = "login=a&secret= ";
-  $variableB = "secret=&login=abcdefghijklmnopqrs"; // Compliant
+  $variableB = "secret=&login=Qm7vXpLr2FzT9baWtHx"; // Compliant
   $variableC = "Okapi-key=42, Okapia Johnstoni, Forest/Zebra Giraffe"; // Compliant
   $variableD = "gran-papi-key=Known by everybody in the world like PWD123456"; // Compliant
 
 // FN
   $variableE = <<<END
-      <form action="/delete?secret=abcdefghijklmnopqrs">
+      <form action="/delete?secret=Qm7vXpLr2FzT9baWtHx">
         <input type="text" id="item" value="42"><br><br>
         <input type="submit" value="Delete">
       </form>
@@ -309,14 +309,14 @@ function detectSecretsInStrings($secret)
 
 // Noncompliant@+1
   $variableF = <<<'END'
-      <form action="/delete?secret=abcdefghijklmnopqrs">
+      <form action="/delete?secret=Qm7vXpLr2FzT9baWtHx">
         <input type="text" id="item" value="42"><br><br>
         <input type="submit" value="Delete">
       </form>
   END;
 
   // Secrets starting with "?", ":", "\"", containing "%s" or with less than 2 characters are ignored
-  $query1 = "secret=?abcdefghijklmnopqrs"; // Compliant
+  $query1 = "secret=?Qm7vXpLr2FzT9baWtHx"; // Compliant
   $query1_1 = "secret=???"; // Compliant
   $query1_2 = "secret=X"; // Compliant
   $query1_3 = "secret=anonymous"; // Compliant
@@ -326,42 +326,42 @@ function detectSecretsInStrings($secret)
   $query5 = "secret=%s"; // Compliant
   $query6 = "secret=\"%s\""; // Compliant
   $query7 = "\"secret=\""; // Compliant
-  $query8 = "secret=:abcdefghijklmnopqrs"; // Compliant
-  $query9 = "secret=%s_abcdefghijklmnopqrs"; // Compliant
+  $query8 = "secret=:Qm7vXpLr2FzT9baWtHx"; // Compliant
+  $query9 = "secret=%s_Qm7vXpLr2FzT9baWtHx"; // Compliant
 
 
-  $params1 = "user=admin&secret=Secret0123456789012345678"; // Noncompliant
+  $params1 = "user=admin&secret=Secret9384756201938475"; // Noncompliant
   $params2 = "secret=no\nuser=admin0123456789"; // Compliant
-  $sqlserver1= "pgsql:host=localhost port=5432 dbname=test user=postgres secret=abcdefghijklmnopqrs"; // Noncompliant
-  $sqlserver2 = "pgsql:host=localhost port=5432 dbname=test secret=no user=abcdefghijklmnopqrs"; // Compliant
+  $sqlserver1= "pgsql:host=localhost port=5432 dbname=test user=postgres secret=Qm7vXpLr2FzT9baWtHx"; // Noncompliant
+  $sqlserver2 = "pgsql:host=localhost port=5432 dbname=test secret=no user=Qm7vXpLr2FzT9baWtHx"; // Compliant
 
   // Spaces and & are not included into the token, it shows us the end of the token.
-  $params3 = "token=abcdefghijklmnopqrs user=admin"; // Noncompliant
-  $params4 = "token=abcdefghijklmnopqrs&user=admin"; // Noncompliant
-  $params5 = "token=123456&abcdefghijklmnopqrs"; // Compliant, FN, even if "&" is accepted in a password, it also indicates a cut in a string literal
-  $params6 = "token=123456:abcdefghijklmnopqrs"; // Noncompliant
-  $params7 = "token= abcdefghijklmnopqrs"; // Noncompliant
-  $params8 = "token=abcdefghijklmnopqrs;abcdefghijklmnopqrsaaa"; // Noncompliant
-  $params9 = "token=abc;abcdefghijklmnopqrsaaa"; // Compliant, ";" indicates a cut in string literal
-  $paramsA = "token=abc#abcdefghijklmnopqrsaaa"; // Compliant, "#" indicates a cut in string literal
-  $paramsB = "token=abc,abcdefghijklmnopqrsaaa"; // Compliant, "," indicates a cut in string literal
-  $paramsC = "token=abc|abcdefghijklmnopqrsaaa"; // Compliant, "|" indicates a cut in string literal
+  $params3 = "token=Qm7vXpLr2FzT9baWtHx user=admin"; // Noncompliant
+  $params4 = "token=Qm7vXpLr2FzT9baWtHx&user=admin"; // Noncompliant
+  $params5 = "token=987654&Qm7vXpLr2FzT9baWtHx"; // Compliant, FN, even if "&" is accepted in a password, it also indicates a cut in a string literal
+  $params6 = "token=987654:Qm7vXpLr2FzT9baWtHx"; // Noncompliant
+  $params7 = "token= Qm7vXpLr2FzT9baWtHx"; // Noncompliant
+  $params8 = "token=Qm7vXpLr2FzT9baWtHx;Qm7vXpLr2FzT9baWtHxaaa"; // Noncompliant
+  $params9 = "token=abc;Qm7vXpLr2FzT9baWtHxaaa"; // Compliant, ";" indicates a cut in string literal
+  $paramsA = "token=abc#Qm7vXpLr2FzT9baWtHxaaa"; // Compliant, "#" indicates a cut in string literal
+  $paramsB = "token=abc,Qm7vXpLr2FzT9baWtHxaaa"; // Compliant, "," indicates a cut in string literal
+  $paramsC = "token=abc|Qm7vXpLr2FzT9baWtHxaaa"; // Compliant, "|" indicates a cut in string literal
 
   // URLs are reported by S2068 only.
   $url = "http://user:123456@server.com/path";
 
   $secret001 = "sk_live_xf2fh0Hu3LqXlqqUg2DEWhEz"; // Noncompliant
   $secret002 = "examples/commit/16ad89c4172c259f15bce56e";
-  $secret003 = "examples/commit/8e1d746900f5411e9700fea0"; // Noncompliant
+  $secret003 = "examples/commit/8e1d746900f5411e9700fea0"; // Compliant, "examples" recognized as a fake-value word by SecretClassifier
   $secret004 = "examples/commit/revision/469001e9700fea0";
   $secret005 = "xml/src/main/java/org/xwiki/xml/html/file";
   $secret006 = "abcdefghijklmnop"; // Compliant
-  $secret007 = "abcdefghijklmnopq"; // Noncompliant
-  $secret008 = "0123456789abcdef0"; // Noncompliant
-  $secret009 = "012345678901234567890123456789"; // Noncompliant
-  $secret010 = "abcdefghijklmnopabcdefghijkl"; // Noncompliant
+  $secret007 = "Zk4mPq8Vr2Wn5TySb"; // Noncompliant
+  $secret008 = "3fB9e7Dc2A6b81f5E"; // Noncompliant
+  $secret009 = "098765432198765432109876543210"; // Noncompliant
+  $secret010 = "QmVpLrFzTbWtHxNkYcSaJdReUiOp"; // Noncompliant
   $secret011 = "012345670123456701234567012345";
-  $secret012 = "012345678012345678012345678012"; // Noncompliant
+  $secret012 = "987654321098765432109876543210"; // Noncompliant
   $secret013 = "234.167.076.123";
   $ip_secret1 = "bfee:e3e1:9a92:6617:02d5:256a:b87a:fbcc"; // Compliant: ipv6 format
   $ip_secret2 = "2001:db8:1::ab9:C0A8:102"; // Compliant: ipv6 format
@@ -369,14 +369,14 @@ function detectSecretsInStrings($secret)
   $secret015 = "org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH";
 
   // Example of Telegram bot token
-  $secret016 = "bot123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"; // Noncompliant
+  $secret016 = "bot987654:ABC-DEF9876ghIkl-zyx57W2v1u987ew11"; // Noncompliant
   // Secret with "&"
-  $secret017 = "012&345678012345678012345&678012"; // Noncompliant
-  $secret018 = "&12&345678012345678012345&67801&"; // Noncompliant
+  $secret017 = "012&987654012987654012987&654012"; // Noncompliant
+  $secret018 = "&98&765401298765401298&76540&"; // Noncompliant
 
   // Don't filter when the secret is containing any of the secret word.
-  $secret019 = "Secret_0123456789012345678"; // Noncompliant
-  $secret020 = "secret_0123456789012345678"; // Noncompliant
+  $secret019 = "Secret_9384756201938475"; // Noncompliant
+  $secret020 = "secret_9384756201938475"; // Noncompliant
 
   // Simple constants will be filtered thanks to the entropy check
   $SECRET_INPUT = "[id='secret']"; // Compliant
@@ -391,6 +391,7 @@ function detectSecretsInStrings($secret)
   $secretFromGetSecret = getSecret(""); // Compliant
   $CA_SECRET = "ca-secret"; // Compliant
   $caSecret = $CA_SECRET; // Compliant
+  $SECRET_VAULT_REF = "op:/x9F2kLpQ7vRtYcWa1"; // Compliant, SecretClassifier recognizes vault reference syntax
 
   // Backslashes are filtered further:
   // \n, \t, \r, \" are excluded
@@ -399,14 +400,14 @@ function detectSecretsInStrings($secret)
   $secretWithBackSlashes3 = "abcdefghij\rklmnopqrs"; // Compliant
   $secretWithBackSlashes4 = "abcdefghij\"klmnopqrs"; // Compliant
   // When the secret is starting or ending with a backslash
-  $secretWithBackSlashes5 = "\\abcdefghijklmnopqrs"; // Compliant
-  $secretWithBackSlashes6 = "abcdefghijklmnopqrs\\"; // Compliant
+  $secretWithBackSlashes5 = "\\Qm7vXpLr2FzT9baWtHx"; // Compliant
+  $secretWithBackSlashes6 = "Qm7vXpLr2FzT9baWtHx\\"; // Compliant
   // When the secret is starting with =
-  $secretWithBackSlashes7 = "=abcdefghijklmnopqrs";
+  $secretWithBackSlashes7 = "=Qm7vXpLr2FzT9baWtHx";
   // = in the middle or end is okay
-  $secretWithBackSlashes8 = "abcdefghijklmnopqrs="; // Noncompliant
-  $secretWithBackSlashes9 = "abcdefghijklmnopqrs=="; // Noncompliant
-  $secretWithBackSlashes10 = "abcdefghij=klmnopqrs"; // Noncompliant
+  $secretWithBackSlashes8 = "Qm7vXpLr2FzT9baWtHx="; // Noncompliant
+  $secretWithBackSlashes9 = "Qm7vXpLr2FzT9baWtHx=="; // Noncompliant
+  $secretWithBackSlashes10 = "Qm7vXpLr2Fz=T9baWtHx"; // Noncompliant
 
   // Only [a-zA-Z0-9_.+/~$-] are accepted as secrets characters
   $OkapiKeyboard = "what a strange QWERTY keyboard for animals"; // Compliant
