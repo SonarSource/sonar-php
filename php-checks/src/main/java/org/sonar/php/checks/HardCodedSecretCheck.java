@@ -38,6 +38,7 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonarsource.analyzer.commons.EntropyDetector;
 import org.sonarsource.analyzer.commons.HumanLanguageDetector;
+import org.sonarsource.analyzer.commons.appsec.SecretClassifier;
 
 import static org.sonar.php.checks.HardCodedIpAddressCheck.IP_V4;
 import static org.sonar.php.checks.HardCodedIpAddressCheck.IP_V6;
@@ -237,7 +238,7 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
     if (literal.length() < MINIMUM_CREDENTIAL_LENGTH || !SECRET_PATTERN.matcher(literal).matches()) {
       return false;
     }
-    return isRandom(literal) && isNotIpV6(literal);
+    return isRandom(literal) && isNotIpV6(literal) && !SecretClassifier.isKnownNonSecret(literal);
   }
 
   private boolean isRandom(String literal) {
@@ -252,7 +253,8 @@ public class HardCodedSecretCheck extends PHPVisitorCheck {
     return !isPotentialCredential(followingString)
       || followingString.startsWith("?")
       || followingString.startsWith(":")
-      || followingString.contains("%s");
+      || followingString.contains("%s")
+      || SecretClassifier.isKnownNonSecret(followingString);
   }
 
   private static boolean isPotentialCredential(String literal) {

@@ -5,7 +5,7 @@ ldap_bind("a", "b", ""); // Compliant
 class A {
 
   public $fieldNameWithPasswordInIt = retrievePassword();
-  public $fieldNameWithPasswordInIt = "xxx"; // Noncompliant {{Detected 'password' in this variable name, review this potentially hardcoded credential.}}
+  public $fieldNameWithPasswordInIt = "azerty123"; // Noncompliant {{Detected 'password' in this variable name, review this potentially hardcoded credential.}}
 //       ^^^^^^^^^^^^^^^^^^^^^^^^^^
   public $fieldNameWithPasswordInIt = ""; // OK, empty
   public $fieldNameWithPasswordInIt = ''; // OK, empty
@@ -19,22 +19,22 @@ class A {
 
   private function a() {
     $variable1 = "blabla";
-    $variable2 = "login=a&pwd=xxx"; // Noncompliant {{Detected 'pwd' in this variable name, review this potentially hardcoded credential.}}
-//               ^^^^^^^^^^^^^^^^^
+    $variable2 = "login=a&pwd=azerty123"; // Noncompliant {{Detected 'pwd' in this variable name, review this potentially hardcoded credential.}}
+//               ^^^^^^^^^^^^^^^^^^^^^^^
     $variable3 = "login=a&password=";
     $variable4 = "login=a&password=$password";
 
-    $variableNameWithPasswordInIt = "xxx"; // Noncompliant
+    $variableNameWithPasswordInIt = "azerty123"; // Noncompliant
 //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     $otherVariableNameWithPasswordInIt;
-    $this->fieldNameWithPasswdInIt = "xx"; // Noncompliant
+    $this->fieldNameWithPasswdInIt = "azerty123"; // Noncompliant
 //         ^^^^^^^^^^^^^^^^^^^^^^^
     $this->fieldNameWithPasswordInIt = retrievePassword();
   }
 
 }
 
-const secretPassword = "xxx"; // Noncompliant
+const secretPassword = "azerty123"; // Noncompliant
 const otherConstant = "xxx";
 const nonRelatedValue = 42;
 
@@ -45,7 +45,7 @@ class A {
 }
 
 function foo() {
-  static $staticVariableNameWithPasswordInIt = "xxx"; // Noncompliant
+  static $staticVariableNameWithPasswordInIt = "azerty123"; // Noncompliant
   static $otherStaticVariableName = "xxx";
 }
 
@@ -59,17 +59,18 @@ $var1 = "password=?&login=a"; // Compliant
 $var1 = "password=:password&login=a"; // Compliant
 $var1 = "password=:param&login=a"; // Compliant
 $var1 = "password=%s&login=a"; // Compliant
-$var1 = "password=(secret)"; // Noncompliant
+$var1 = "password=(secret)"; // Compliant, bracketed placeholder recognized by SecretClassifier
+$var1 = "password=Tr8pQz2Ln9"; // Noncompliant
 
 $pwd = "pwd"; // Compliant
-$password = "pwd"; // Noncompliant
+$password = "pwd"; // Compliant, too short to be a real secret (SecretClassifier)
 $password = "password"; // Compliant
 $ampq_password = 'amqp-password'; // Compliant
 const CONFIG_PATH_QUEUE_AMQP_PASSWORD = 'queue/amqp/password'; // Compliant
 const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password'; // Compliant
 
 // The literal string doesn't contain the wordlist item matched on the variable name
-const DEFAULT_AMQP_PASSWORD = 'pwd'; // Noncompliant
+const DEFAULT_AMQP_PASSWORD = 'azerty123'; // Noncompliant
 
 $uri = "ftp://user:azerty123@domain.com"; // Noncompliant {{Detected URI with password, review this potentially hardcoded credential.}}
 $uri = "ssh://user:azerty123@domain.com"; // Noncompliant
@@ -85,3 +86,10 @@ Request::create('http://user:password@test.com'); // Compliant - often used for 
 Request::create('https://username:password@test.com'); // Compliant - often used for tests
 preg_match('#(^git://|\.git/?$|git(?:olite)?@|//git\.|//github.com/)#i', $url); // Compliant
 $gitUri = "https://user:azerty@github.com/username/repository.git"; // Noncompliant
+
+// Values recognized by SecretClassifier as known non-secrets don't raise, even though the name matches.
+$password = "changeit"; // Compliant, well-known placeholder secret
+$password = "Xk28"; // Compliant, too short to be a real secret
+$password = '${SECRET_PASSWORD}'; // Compliant, variable interpolation
+$password = "op://vault/secret"; // Compliant, external secret store reference
+$password = "{cipher}1e3faa2cdab2deae117dca102e52922a"; // Compliant, encrypted marker

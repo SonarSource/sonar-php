@@ -19,6 +19,7 @@ package org.sonar.php.checks;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -33,6 +34,7 @@ import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonarsource.analyzer.commons.appsec.SecretClassifier;
 
 @Rule(key = "S2068")
 public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck {
@@ -40,7 +42,7 @@ public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck
   private static final String MESSAGE_URI = "Detected URI with password, review this potentially hardcoded credential.";
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
 
-  private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))..";
+  private static final String LITERAL_PATTERN_SUFFIX = "=(?!([\\?:']|%s))(?<value>[^&'\"]+)";
 
   private static final int LITERAL_PATTERN_SUFFIX_LENGTH = LITERAL_PATTERN_SUFFIX.length();
 
@@ -84,8 +86,10 @@ public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck
 
   private void checkForCredentialQuery(LiteralTree literal) {
     literalPatterns()
-      .filter(pattern -> pattern.matcher(literal.token().text()).find())
-      .findAny().ifPresent(pattern -> addIssue(pattern, literal));
+      .map(pattern -> pattern.matcher(literal.token().text()))
+      .filter(Matcher::find)
+      .filter(matcher -> !SecretClassifier.isKnownNonSecret(matcher.group("value")))
+      .findAny().ifPresent(matcher -> addIssue(matcher.pattern(), literal));
   }
 
   private void checkForCredentialUri(LiteralTree literal) {
@@ -102,7 +106,7 @@ public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck
       String userInfo = uri.getUserInfo();
 
       String[] splitUserInfo = userInfo.split(":");
-      if (splitUserInfo.length < 2 || splitUserInfo[0].equals(splitUserInfo[1]) || isCommonTestCredential(userInfo)) {
+      if (splitUserInfo.length < 2 || splitUserInfo[0].equals(splitUserInfo[1]) || SecretClassifier.isKnownNonSecret(splitUserInfo[1])) {
         return;
       }
       context().newIssue(this, literal, MESSAGE_URI);
@@ -122,19 +126,16 @@ public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck
   }
 
   private void checkVariable(SyntaxToken reportTree, @Nullable Tree assignedValue) {
-    if (assignedValue != null && assignedValue.is(Kind.REGULAR_STRING_LITERAL) && !isEmptyStringLiteral((LiteralTree) assignedValue)) {
-      variablePatterns().filter(pattern -> pattern.matcher(reportTree.text()).find()).findAny().ifPresent(pattern -> checkAssignedValue(pattern, reportTree, assignedValue));
+    if (assignedValue != null && assignedValue.is(Kind.REGULAR_STRING_LITERAL)) {
+      LiteralTree literalValue = (LiteralTree) assignedValue;
+      variablePatterns().filter(pattern -> pattern.matcher(reportTree.text()).find()).findAny().ifPresent(pattern -> checkAssignedValue(pattern, reportTree, literalValue));
     }
   }
 
-  private void checkAssignedValue(Pattern pattern, SyntaxToken reportTree, Tree assignedValue) {
-    if (!pattern.matcher(assignedValue.toString()).find()) {
+  private void checkAssignedValue(Pattern pattern, SyntaxToken reportTree, LiteralTree assignedValue) {
+    if (!pattern.matcher(assignedValue.toString()).find() && !SecretClassifier.isKnownNonSecret(CheckUtils.trimQuotes(assignedValue))) {
       addIssue(pattern, reportTree);
     }
-  }
-
-  private static boolean isEmptyStringLiteral(LiteralTree literal) {
-    return literal.value().substring(1, literal.value().length() - 1).isEmpty();
   }
 
   private void addIssue(Pattern pattern, Tree tree) {
@@ -146,10 +147,5 @@ public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck
       return pattern.substring(0, pattern.length() - LITERAL_PATTERN_SUFFIX_LENGTH);
     }
     return pattern;
-  }
-
-  private static boolean isCommonTestCredential(String userInfo) {
-    return "user:password".equals(userInfo)
-      || "username:password".equals(userInfo);
   }
 }

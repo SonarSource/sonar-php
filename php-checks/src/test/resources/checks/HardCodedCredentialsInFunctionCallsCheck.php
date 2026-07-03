@@ -13,7 +13,7 @@ class ConstructorTestService
 
     public function createKey(): KeyOrPassword
     {
-        $password = "example";
+        $password = "Tr8pQz2Ln9";
         new TwitterOAuth("shouldBePassing", $shouldBePassing, $password); // Noncompliant
     }
 }
@@ -29,7 +29,7 @@ class ConstructorTestService
 
     public function createKey(): KeyOrPassword
     {
-        $password = "example";
+        $password = "Tr8pQz2Ln9";
         new TwitterOAuth("shouldBePassing", $shouldBePassing, $shouldBePassing);
     }
 }
@@ -38,7 +38,7 @@ class TestClass extends PHPUnit\Framework\TestCase
 {
     public function createKey(): KeyOrPassword
     {
-        $password = "example";
+        $password = "Tr8pQz2Ln9";
         new TwitterOAuth("shouldBePassing", $shouldBePassing, $password); // Compliant, as inside test class
     }
 }
@@ -49,7 +49,7 @@ class TestClass extends TestCase
 {
     public function createKey(): KeyOrPassword
     {
-        $password = "example";
+        $password = "Tr8pQz2Ln9";
         new TwitterOAuth("shouldBePassing", $shouldBePassing, $password); // Compliant, as inside test class
     }
 }
@@ -58,22 +58,22 @@ class NoClass
 {
     public function createKey(): KeyOrPassword
     {
-        $password = "example";
+        $password = "Tr8pQz2Ln9";
         new TwitterOAuth("shouldBePassing", $shouldBePassing, $password); // Noncompliant
     }
 }
 
 use Defuse\Crypto\KeyOrPassword;
 
-$key = "example";
+$key = "Tr8pQz2Ln9";
 KeyOrPassword::createFromPassword($key); // Noncompliant
 KeyOrPassword::createFromPassword(password: $key); // Noncompliant
-$password = "example";
+$password = "Tr8pQz2Ln9";
 KeyOrPassword::createFromPassword(password: $password); // Noncompliant
 KeyOrPassword::createFromPassword($password); // Noncompliant
 
-$duplicateAssignment ="example";
-$duplicateAssignment ="example";
+$duplicateAssignment ="Tr8pQz2Ln9";
+$duplicateAssignment ="Tr8pQz2Ln9";
 KeyOrPassword::createFromPassword($duplicateAssignment); // FN, parser not able to resolve multiple assignments to one variable
 
 KeyOrPassword::notASensitiveMethod($password);
@@ -110,7 +110,7 @@ class PasswordServiceSecond
 
     public function createKey(): KeyOrPassword
     {
-        $password = "example";
+        $password = "Tr8pQz2Ln9";
         return KeyOrPassword::createFromPassword($password); // Noncompliant
     }
 }
@@ -158,3 +158,10 @@ $enc = new Encrypter('staticKey'); // Noncompliant
 namespace notlaravel;
 use my\Other\Encrypter;
 $enc = new Encrypter('staticKey'); // Compliant
+
+namespace secretclassifier;
+use Illuminate\Encryption\Encrypter;
+// Values recognized by SecretClassifier as known non-secrets don't raise.
+$enc = new Encrypter('changeit'); // Compliant, well-known placeholder secret
+$enc = new Encrypter('Xk28'); // Compliant, too short to be a real secret
+$enc = new Encrypter('{cipher}1e3faa2cdab2deae117dca102e52922a'); // Compliant, encrypted marker
