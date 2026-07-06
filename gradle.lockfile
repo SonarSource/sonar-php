@@ -1,6 +1,7 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
+# To regenerate this file, run: ./gradlew :dependencies --write-locks
 com.sonarsource.rule-api:rule-api:2.20.0.5857=ruleApi
 org.slf4j:slf4j-api:1.7.36=ruleApi
 org.slf4j:slf4j-nop:1.7.36=ruleApi

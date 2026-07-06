@@ -330,7 +330,7 @@ function detectSecretsInStrings($secret)
   $query9 = "secret=%s_Qm7vXpLr2FzT9baWtHx"; // Compliant
 
 
-  $params1 = "user=admin&secret=Secret9384756201938475"; // Noncompliant
+  $params1 = "user=admin&secret=Secret9384756201938475"; // Compliant, "Secret" recognized as a fake-value word by SecretClassifier
   $params2 = "secret=no\nuser=admin0123456789"; // Compliant
   $sqlserver1= "pgsql:host=localhost port=5432 dbname=test user=postgres secret=Qm7vXpLr2FzT9baWtHx"; // Noncompliant
   $sqlserver2 = "pgsql:host=localhost port=5432 dbname=test secret=no user=Qm7vXpLr2FzT9baWtHx"; // Compliant
@@ -374,9 +374,9 @@ function detectSecretsInStrings($secret)
   $secret017 = "012&987654012987654012987&654012"; // Noncompliant
   $secret018 = "&98&765401298765401298&76540&"; // Noncompliant
 
-  // Don't filter when the secret is containing any of the secret word.
-  $secret019 = "Secret_9384756201938475"; // Noncompliant
-  $secret020 = "secret_9384756201938475"; // Noncompliant
+  // Now filtered because the value contains the secret word, recognized as a fake-value word by SecretClassifier.
+  $secret019 = "Secret_9384756201938475"; // Compliant
+  $secret020 = "secret_9384756201938475"; // Compliant
 
   // Simple constants will be filtered thanks to the entropy check
   $SECRET_INPUT = "[id='secret']"; // Compliant

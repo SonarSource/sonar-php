@@ -1,6 +1,7 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
+# To regenerate this file, run: ./gradlew :php-checks:dependencies --write-locks
 ch.qos.logback:logback-classic:1.5.37=testRuntimeClasspath
 ch.qos.logback:logback-core:1.5.37=testRuntimeClasspath
 com.github.spotbugs:spotbugs-annotations:4.9.8=testRuntimeClasspath
@@ -37,9 +38,9 @@ org.ow2.asm:asm:9.0=compileClasspath,runtimeClasspath,testCompileClasspath,testR
 org.ow2.asm:asm:9.9=jacocoAnt
 org.slf4j:slf4j-api:1.7.30=compileClasspath,testCompileClasspath
 org.slf4j:slf4j-api:2.0.17=testRuntimeClasspath
-org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.25.0.4954=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
-org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:2.25.0.4954=testCompileClasspath,testRuntimeClasspath
-org.sonarsource.analyzer-commons:sonar-regex-parsing:2.25.0.4954=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.26.0.4969=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:2.26.0.4969=testCompileClasspath,testRuntimeClasspath
+org.sonarsource.analyzer-commons:sonar-regex-parsing:2.26.0.4969=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api-test-fixtures:13.8.0.4399=testCompileClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api:13.8.0.4399=compileClasspath,testCompileClasspath,testRuntimeClasspath
 org.sonarsource.sonarqube:sonar-plugin-api-impl:26.6.0.123539=testRuntimeClasspath
