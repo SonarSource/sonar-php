@@ -1,6 +1,7 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
+# To regenerate this file, run: ./gradlew :its:ruling:dependencies --write-locks
 ch.qos.logback:logback-classic:1.5.37=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 ch.qos.logback:logback-core:1.5.37=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.eclipsesource.minimal-json:minimal-json:0.9.5=integrationTestCompileClasspath,integrationTestRuntimeClasspath
@@ -47,7 +48,7 @@ org.ow2.asm:asm:9.9=jacocoAnt
 org.slf4j:jcl-over-slf4j:2.0.17=integrationTestRuntimeClasspath
 org.slf4j:log4j-over-slf4j:2.0.17=integrationTestRuntimeClasspath
 org.slf4j:slf4j-api:2.0.17=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.25.0.4954=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.27.0.5007=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.sonarsource.orchestrator:sonar-orchestrator-build:6.3.0.4464=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.sonarsource.orchestrator:sonar-orchestrator-config:6.3.0.4464=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.sonarsource.orchestrator:sonar-orchestrator-http:6.3.0.4464=integrationTestCompileClasspath,integrationTestRuntimeClasspath

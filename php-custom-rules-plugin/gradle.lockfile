@@ -1,6 +1,7 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
+# To regenerate this file, run: ./gradlew :php-custom-rules-plugin:dependencies --write-locks
 com.github.spotbugs:spotbugs-annotations:4.9.8=testCompileClasspath,testRuntimeClasspath
 com.google.code.findbugs:jsr305:3.0.2=compileClasspath,testCompileClasspath,testRuntimeClasspath
 commons-codec:commons-codec:1.21.0=testCompileClasspath,testRuntimeClasspath
@@ -29,8 +30,8 @@ org.ow2.asm:asm-tree:9.9=jacocoAnt
 org.ow2.asm:asm:9.0=compileClasspath,testCompileClasspath,testRuntimeClasspath
 org.ow2.asm:asm:9.9=jacocoAnt
 org.slf4j:slf4j-api:1.7.30=compileClasspath,testCompileClasspath,testRuntimeClasspath
-org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:2.25.0.4954=testRuntimeClasspath
-org.sonarsource.analyzer-commons:sonar-regex-parsing:2.25.0.4954=compileClasspath,testCompileClasspath,testRuntimeClasspath
+org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:2.27.0.5007=testRuntimeClasspath
+org.sonarsource.analyzer-commons:sonar-regex-parsing:2.27.0.5007=compileClasspath,testCompileClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api:13.7.0.4381=testCompileClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api:13.8.0.4399=compileClasspath
 org.sonarsource.sonarqube:sonar-plugin-api-impl:26.6.0.123539=testCompileClasspath,testRuntimeClasspath
