@@ -500,8 +500,7 @@ public class TreeFactory {
   public MethodDeclarationTree methodDeclaration(
     Optional<List<AttributeGroupTree>> attributes,
     Optional<List<SyntaxToken>> modifiers,
-    InternalSyntaxToken functionToken,
-    Optional<InternalSyntaxToken> referenceToken,
+    Tuple<InternalSyntaxToken, Optional<InternalSyntaxToken>> functionTokenAndReference,
     NameIdentifierTree name,
     ParameterListTree parameters,
     Optional<ReturnTypeClauseTree> returnTypeClause,
@@ -511,8 +510,8 @@ public class TreeFactory {
     }
     return new MethodDeclarationTreeImpl(attributes.or(Collections.emptyList()),
       optionalList(modifiers),
-      functionToken,
-      referenceToken.orNull(),
+      functionTokenAndReference.first(),
+      functionTokenAndReference.second().orNull(),
       name,
       parameters,
       returnTypeClause.orNull(),
@@ -667,25 +666,28 @@ public class TreeFactory {
   public ClassDeclarationTree classDeclaration(
     Optional<List<AttributeGroupTree>> attributes, Optional<List<SyntaxToken>> modifiers,
     InternalSyntaxToken classToken, NameIdentifierTree name,
-    Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
-    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
-    InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace) {
+    Tuple<Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>>, Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>>> clauses,
+    Tuple<InternalSyntaxToken, Optional<List<ClassMemberTree>>> openBraceAndMembers,
+    InternalSyntaxToken closeCurlyBrace) {
+    var extendsClause = clauses.first();
+    var implementsClause = clauses.second();
     return ClassDeclarationTreeImpl.createClass(
       attributes.or(Collections.emptyList()),
       modifiers.or(Collections.emptyList()),
       classToken, name, extendsToken(extendsClause), superClass(extendsClause),
       implementsToken(implementsClause), superInterfaces(implementsClause),
-      openCurlyBrace, optionalList(members), closeCurlyBrace);
+      openBraceAndMembers.first(), optionalList(openBraceAndMembers.second()), closeCurlyBrace);
   }
 
   public EnumDeclarationTree enumDeclaration(Optional<List<AttributeGroupTree>> attributes,
-    SyntaxToken enumToken,
-    NameIdentifierTree name,
+    Tuple<SyntaxToken, NameIdentifierTree> enumTokenAndName,
     Optional<Tuple<InternalSyntaxToken, TypeTree>> colonAndType,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
     SyntaxToken openCurlyBraceToken,
     Optional<List<ClassMemberTree>> members,
     SyntaxToken closeCurlyBraceToken) {
+    SyntaxToken enumToken = enumTokenAndName.first();
+    NameIdentifierTree name = enumTokenAndName.second();
     SyntaxToken typeColonToken = colonAndType.isPresent() ? colonAndType.get().first() : null;
     TypeTree backingType = colonAndType.isPresent() ? colonAndType.get().second() : null;
     return new EnumDeclarationTreeImpl(attributes.or(Collections.emptyList()), enumToken, name, typeColonToken, backingType,
@@ -762,24 +764,22 @@ public class TreeFactory {
   public UseStatementTree groupUseStatement(
     InternalSyntaxToken useToken,
     Optional<InternalSyntaxToken> useTypeToken,
-    NamespaceNameTree prefix,
-    InternalSyntaxToken nsSeparator,
-    InternalSyntaxToken lCurlyBrace,
-    UseClauseTree firstDeclaration,
+    Tuple<NamespaceNameTree, InternalSyntaxToken> prefixAndSeparator,
+    Tuple<InternalSyntaxToken, UseClauseTree> braceAndFirstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, UseClauseTree>>> additionalDeclarations,
     Optional<InternalSyntaxToken> trailingComma,
-    InternalSyntaxToken rCurlyBrace,
-    InternalSyntaxToken eosToken) {
-    SeparatedListImpl<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations, trailingComma.orNull());
+    Tuple<InternalSyntaxToken, InternalSyntaxToken> closingBraceAndEos) {
+    SeparatedListImpl<UseClauseTree> declarations = separatedList(
+      braceAndFirstDeclaration.second(), additionalDeclarations, trailingComma.orNull());
     return UseStatementTreeImpl.createGroupUseStatement(
       useToken,
       useTypeToken.orNull(),
-      prefix,
-      nsSeparator,
-      lCurlyBrace,
+      prefixAndSeparator.first(),
+      prefixAndSeparator.second(),
+      braceAndFirstDeclaration.first(),
       declarations,
-      rCurlyBrace,
-      eosToken);
+      closingBraceAndEos.first(),
+      closingBraceAndEos.second());
   }
 
   public ReturnStatementTree returnStatement(InternalSyntaxToken returnToken, Optional<ExpressionTree> expression, InternalSyntaxToken eos) {
@@ -960,6 +960,7 @@ public class TreeFactory {
     }
   }
 
+  @SuppressWarnings("java:S107")
   public ForStatementHeader forStatementHeader(
     InternalSyntaxToken forToken, InternalSyntaxToken lParenthesis,
     Optional<SeparatedListImpl<ExpressionTree>> init, InternalSyntaxToken semicolon1,

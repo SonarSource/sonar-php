@@ -297,10 +297,10 @@ public class PHPGrammar {
         b.zeroOrMore(b.firstOf(b.token(READONLY), b.token(ABSTRACT), b.token(FINAL))),
         b.token(CLASS),
         NAME_IDENTIFIER(),
-        b.optional(f.newTuple(b.token(EXTENDS), f.classNamespaceName(NAMESPACE_NAME()))),
-        b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
-        b.token(LCURLYBRACE),
-        b.zeroOrMore(CLASS_MEMBER()),
+        f.newTuple(
+          b.optional(f.newTuple(b.token(EXTENDS), f.classNamespaceName(NAMESPACE_NAME()))),
+          b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST()))),
+        f.newTuple(b.token(LCURLYBRACE), b.zeroOrMore(CLASS_MEMBER())),
         b.token(RCURLYBRACE)));
   }
 
@@ -331,8 +331,7 @@ public class PHPGrammar {
     return b.<EnumDeclarationTree>nonterminal(PHPLexicalGrammar.ENUM_DECLARATION).is(
       f.enumDeclaration(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
-        b.token(PHPLexicalGrammar.ENUM),
-        NAME_IDENTIFIER(),
+        f.newTuple(b.token(PHPLexicalGrammar.ENUM), NAME_IDENTIFIER()),
         b.optional(f.newTuple(b.token(COLON), TYPE())),
         b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
@@ -462,8 +461,7 @@ public class PHPGrammar {
       f.methodDeclaration(
         b.zeroOrMore(ATTRIBUTE_GROUP()),
         b.zeroOrMore(MEMBER_MODIFIER()),
-        b.token(PHPKeyword.FUNCTION),
-        b.optional(b.token(PHPPunctuator.AMPERSAND)),
+        f.newTuple(b.token(PHPKeyword.FUNCTION), b.optional(b.token(PHPPunctuator.AMPERSAND))),
         NAME_IDENTIFIER_OR_KEYWORD(),
         PARAMETER_LIST(),
         b.optional(RETURN_TYPE_CLAUSE()),
@@ -747,14 +745,11 @@ public class PHPGrammar {
       f.groupUseStatement(
         b.token(PHPKeyword.USE),
         b.optional(USE_TYPE()),
-        NAMESPACE_NAME(),
-        b.token(NS_SEPARATOR),
-        b.token(LCURLYBRACE),
-        GROUP_USE_CLAUSE(),
+        f.newTuple(NAMESPACE_NAME(), b.token(NS_SEPARATOR)),
+        f.newTuple(b.token(LCURLYBRACE), GROUP_USE_CLAUSE()),
         b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), GROUP_USE_CLAUSE())),
         b.optional(b.token(COMMA)),
-        b.token(RCURLYBRACE),
-        EOS()));
+        f.newTuple(b.token(RCURLYBRACE), EOS())));
   }
 
   public StatementTree STATEMENT() {
