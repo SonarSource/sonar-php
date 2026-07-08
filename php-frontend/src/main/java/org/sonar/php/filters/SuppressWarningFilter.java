@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
@@ -105,7 +106,7 @@ public class SuppressWarningFilter extends PHPVisitorCheck implements PHPIssueFi
     }
   }
 
-  private static Set<Integer> computeLines(PHPTree phpTree, SyntaxToken startToken, SyntaxToken endToken) {
+  private static Set<Integer> computeLines(@Nullable PHPTree phpTree, SyntaxToken startToken, SyntaxToken endToken) {
     int startLine = Optional.ofNullable(phpTree)
       .map(PHPTree::getFirstToken)
       .map(SyntaxToken::line)

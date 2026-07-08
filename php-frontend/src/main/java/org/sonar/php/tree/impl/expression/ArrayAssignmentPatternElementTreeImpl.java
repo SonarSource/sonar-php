@@ -30,11 +30,13 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 public class ArrayAssignmentPatternElementTreeImpl extends PHPTree implements ArrayAssignmentPatternElementTree {
 
   private static final Kind KIND = Kind.ARRAY_ASSIGNMENT_PATTERN_ELEMENT;
+  @Nullable
   private final ExpressionTree key;
+  @Nullable
   private final InternalSyntaxToken doubleArrow;
   private final Tree variable;
 
-  public ArrayAssignmentPatternElementTreeImpl(ExpressionTree key, InternalSyntaxToken doubleArrow, Tree variable) {
+  public ArrayAssignmentPatternElementTreeImpl(@Nullable ExpressionTree key, @Nullable InternalSyntaxToken doubleArrow, Tree variable) {
     this.key = key;
     this.doubleArrow = doubleArrow;
     this.variable = variable;
