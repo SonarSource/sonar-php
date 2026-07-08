@@ -36,10 +36,13 @@ public class TryStatementTreeImpl extends PHPTree implements TryStatementTree {
   private final InternalSyntaxToken tryToken;
   private final BlockTree block;
   private final List<CatchBlockTree> catchBlocks;
+  @Nullable
   private final InternalSyntaxToken finallyToken;
+  @Nullable
   private final BlockTree finallyBlock;
 
-  public TryStatementTreeImpl(InternalSyntaxToken tryToken, BlockTree blockTree, List<CatchBlockTree> catchBlocks, InternalSyntaxToken finallyToken, BlockTree finallyBlock) {
+  public TryStatementTreeImpl(InternalSyntaxToken tryToken, BlockTree blockTree, List<CatchBlockTree> catchBlocks, @Nullable InternalSyntaxToken finallyToken,
+    @Nullable BlockTree finallyBlock) {
     this.tryToken = tryToken;
     this.block = blockTree;
     this.catchBlocks = catchBlocks;
