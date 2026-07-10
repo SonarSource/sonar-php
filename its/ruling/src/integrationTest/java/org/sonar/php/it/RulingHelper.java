@@ -87,6 +87,7 @@ public class RulingHelper {
       .filter(line -> !CODE_POINTER_LOG_LINE_PATTERN.matcher(line).matches())
       .map(line -> line.replaceAll("^\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\s", ""))
       .filter(line -> !line.startsWith("WARN  PHPUnit test cases are detected. Make sure to specify test sources via `sonar.test` to get more precise analysis results."))
+      .filter(line -> !line.startsWith("WARN  Test files were detected using a path heuristic because \"sonar.tests\" is not set."))
       .filter(line -> !line.startsWith("WARN  Invalid character encountered in file"))
       .filter(line -> !line.startsWith("WARN  Unable to parse file"))
       .filter(line -> !line.startsWith("WARN  Parse error at line"))
