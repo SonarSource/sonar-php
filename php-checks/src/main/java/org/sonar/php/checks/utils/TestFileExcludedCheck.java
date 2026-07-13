@@ -21,7 +21,7 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 /**
  * Marker interface for checks that should not raise issues on files that look like test files.
  * When a file resides in a test-like directory (e.g. {@code test/}, {@code tests/},
- * {@code __tests__/}) and the project has not explicitly configured {@code sonar.tests},
+ * {@code Tests/}) and the project has not explicitly configured {@code sonar.tests},
  * issues from checks implementing this interface are suppressed.
  *
  * <p>To exclude an additional check from test-like files, add {@code implements TestFileExcludedCheck}

@@ -432,7 +432,7 @@ class PHPSensorTest {
   @Test
   void testFileExcludedChecksShouldNotRaiseIssuesOnTestLikePaths() {
     checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S2068")).build());
-    context.fileSystem().add(inputFile("tests/HardCodedCredentials.php"));
+    context.fileSystem().add(inputFile("testFileExcludedCheck/tests/HardCodedCredentials.php"));
     createSensor().execute(context);
     assertThat(context.allIssues()).as("S2068 should be suppressed in tests/").isEmpty();
   }
@@ -442,7 +442,7 @@ class PHPSensorTest {
     checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S2068")).build());
     // sonar.tests configured elsewhere — heuristic must not suppress files in tests/
     context.settings().setProperty("sonar.tests", "src/test");
-    context.fileSystem().add(inputFile("tests/HardCodedCredentials.php"));
+    context.fileSystem().add(inputFile("testFileExcludedCheck/tests/HardCodedCredentials.php"));
     createSensor().execute(context);
     assertThat(context.allIssues()).as("S2068 should raise when sonar.tests is configured").hasSize(1);
   }
@@ -451,17 +451,17 @@ class PHPSensorTest {
   void testFileExcludedChecksShouldSuppressForAllTestPathPatterns() {
     checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S2068")).build());
     // Tests/ built inline to avoid macOS case-insensitive filesystem collision with tests/
-    DefaultInputFile capsTests = TestInputFileBuilder.create("moduleKey", "Tests/HardCodedCredentials.php")
+    DefaultInputFile capsTests = TestInputFileBuilder.create("moduleKey", "testFileExcludedCheck/Tests/HardCodedCredentials.php")
       .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
       .setType(InputFile.Type.MAIN)
       .setCharset(java.nio.charset.StandardCharsets.UTF_8)
       .setLanguage("php")
       .initMetadata("<?php\n$password = \"dT4iHEwBc7NL\";\n")
       .build();
-    context.fileSystem().add(inputFile("tests/HardCodedCredentials.php"));
-    context.fileSystem().add(inputFile("test/HardCodedCredentials.php"));
+    context.fileSystem().add(inputFile("testFileExcludedCheck/tests/HardCodedCredentials.php"));
+    context.fileSystem().add(inputFile("testFileExcludedCheck/test/HardCodedCredentials.php"));
     context.fileSystem().add(capsTests);
-    context.fileSystem().add(inputFile("spec/HardCodedCredentials.php"));
+    context.fileSystem().add(inputFile("testFileExcludedCheck/spec/HardCodedCredentials.php"));
     createSensor().execute(context);
     assertThat(context.allIssues()).as("S2068 should be suppressed for all test-like path patterns").isEmpty();
   }
@@ -469,7 +469,7 @@ class PHPSensorTest {
   @Test
   void s2068ShouldRaiseIssueOnNonTestPath() {
     checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S2068")).build());
-    context.fileSystem().add(inputFile("HardCodedCredentials.php"));
+    context.fileSystem().add(inputFile("testFileExcludedCheck/HardCodedCredentials.php"));
     createSensor().execute(context);
     assertThat(context.allIssues()).as("S2068 should raise on a regular path").hasSize(1);
   }
@@ -477,7 +477,7 @@ class PHPSensorTest {
   @Test
   void s6418ShouldBeSuppressedOnTestLikePath() {
     checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S6418")).build());
-    context.fileSystem().add(inputFile("tests/HardCodedSecret.php"));
+    context.fileSystem().add(inputFile("testFileExcludedCheck/tests/HardCodedSecret.php"));
     createSensor().execute(context);
     assertThat(context.allIssues()).as("S6418 should be suppressed in tests/").isEmpty();
   }
