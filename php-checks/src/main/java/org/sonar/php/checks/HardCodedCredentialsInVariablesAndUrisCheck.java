@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.TestFileExcludedCheck;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -37,7 +38,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonarsource.analyzer.commons.appsec.SecretClassifier;
 
 @Rule(key = "S2068")
-public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck {
+public class HardCodedCredentialsInVariablesAndUrisCheck extends PHPVisitorCheck implements TestFileExcludedCheck {
   private static final String MESSAGE = "Detected '%s' in this variable name, review this potentially hardcoded credential.";
   private static final String MESSAGE_URI = "Detected URI with password, review this potentially hardcoded credential.";
   private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";

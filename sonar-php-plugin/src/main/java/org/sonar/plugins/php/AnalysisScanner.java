@@ -40,6 +40,7 @@ import org.sonar.php.cache.Cache;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.checks.UncatchableExceptionCheck;
 import org.sonar.php.checks.utils.PhpUnitCheck;
+import org.sonar.php.checks.utils.TestFileExcludedCheck;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.php.filters.SuppressWarningFilter;
 import org.sonar.php.highlighter.SymbolHighlighter;
@@ -57,6 +58,7 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpInputFileContext;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+import org.sonarsource.analyzer.commons.appsec.TestFileClassifier;
 
 class AnalysisScanner extends Scanner {
 
@@ -71,6 +73,7 @@ class AnalysisScanner extends Scanner {
   private final CacheContext cacheContext;
   private final PHPAnalyzer phpAnalyzer;
   private final SuppressWarningFilter suppressWarningFilter = new SuppressWarningFilter();
+  private final TestFileClassifier testFileClassifier;
   private int numScannedWithoutParsing = 0;
 
   public AnalysisScanner(SensorContext context,
@@ -86,6 +89,7 @@ class AnalysisScanner extends Scanner {
     this.noSonarFilter = noSonarFilter;
     this.parsingErrorRuleKey = getParsingErrorRuleKey();
     this.cacheContext = cacheContext;
+    this.testFileClassifier = TestFileClassifier.of(context.config(), "**/test/**", "**/tests/**", "**/Tests/**", "**/spec/**");
 
     List<PHPCheck> mainFileChecks = getMainFileChecks();
     List<PHPCheck> testFileChecks = getTestFileChecks();
@@ -169,6 +173,7 @@ class AnalysisScanner extends Scanner {
 
     noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
     List<PhpIssue> issues = inputFile.type() == InputFile.Type.MAIN ? phpAnalyzer.analyze() : phpAnalyzer.analyzeTest();
+    issues = filterTestFileExcludedIssues(inputFile, issues);
     issues = filterIssuesByWarningSuppressor(inputFile, issues);
     saveIssues(context, issues, inputFile);
   }
@@ -216,6 +221,15 @@ class AnalysisScanner extends Scanner {
   @Override
   protected boolean fileCanBeSkipped(InputFile file) {
     return super.fileCanBeSkipped(file) || (file.type() == InputFile.Type.TEST && !hasTestFileChecks);
+  }
+
+  private List<PhpIssue> filterTestFileExcludedIssues(InputFile inputFile, List<PhpIssue> issues) {
+    if (testFileClassifier.looksLikeTestFile(inputFile)) {
+      return issues.stream()
+        .filter(issue -> !(issue.check() instanceof TestFileExcludedCheck))
+        .toList();
+    }
+    return issues;
   }
 
   private List<PhpIssue> filterIssuesByWarningSuppressor(InputFile inputFile, List<PhpIssue> issues) {
