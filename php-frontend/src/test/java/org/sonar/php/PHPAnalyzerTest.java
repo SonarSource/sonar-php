@@ -17,6 +17,8 @@
 package org.sonar.php;
 
 import com.sonar.sslr.api.RecognitionException;
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester;
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -29,8 +31,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.event.Level;
 import org.sonar.DurationStatistics;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.php.filters.SuppressWarningFilter;

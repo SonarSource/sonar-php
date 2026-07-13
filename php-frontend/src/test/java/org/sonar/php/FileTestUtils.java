@@ -16,15 +16,15 @@
  */
 package org.sonar.php;
 
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.php.compat.PhpFileImpl;
 import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.scanner.plugin.api.impl.fs.DefaultInputFile;
 
 public class FileTestUtils {
 
