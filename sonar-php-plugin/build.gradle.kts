@@ -34,9 +34,11 @@ dependencies {
   testImplementation(libs.junit.jupiter)
   testImplementation(libs.assertj.core)
   testImplementation(libs.mockito.core)
-  testImplementation(libs.sonar.plugin.api.test.fixtures)
-  testImplementation(libs.sonar.testing.harness)
   testImplementation(libs.sonar.plugin.api.impl)
+  testImplementation(libs.sonar.plugin.api.test.fixtures)
+  testImplementation(libs.sonar.scanner.engine.plugin.api.impl)
+  testImplementation(libs.sonar.scanner.engine.sensor.test.fixtures)
+  testImplementation(libs.sonar.testing.harness)
   testImplementation(libs.sslr.testing.harness)
   testRuntimeOnly(libs.junit.platform.launcher)
 }
