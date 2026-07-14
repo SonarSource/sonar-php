@@ -339,7 +339,7 @@ public interface VisitorCheck extends PHPCheck {
   /**
    * @deprecated since 3.1. Use {@link #visitEchoTagStatement(EchoTagStatementTree)}
    */
-  @Deprecated
+  @Deprecated(since = "3.1", forRemoval = true)
   void visitExpressionListStatement(ExpressionListStatementTree tree);
 
   void visitCallArgument(CallArgumentTree tree);

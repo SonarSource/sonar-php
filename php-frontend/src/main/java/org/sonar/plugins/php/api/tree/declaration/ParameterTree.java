@@ -43,7 +43,7 @@ public interface ParameterTree extends Tree, HasAttributes {
    * @deprecated since 3.11 - Use {@link #declaredType()} instead.
    */
   @Nullable
-  @Deprecated
+  @Deprecated(since = "3.11", forRemoval = true)
   TypeTree type();
 
   @Nullable
