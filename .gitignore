@@ -39,3 +39,6 @@ Desktop.ini
 .scannerwork
 
 rule-api*.jar
+
+# MCP configuration
+.mcp.json

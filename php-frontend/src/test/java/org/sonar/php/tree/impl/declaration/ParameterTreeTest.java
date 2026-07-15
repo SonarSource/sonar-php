@@ -21,6 +21,7 @@ import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,7 +31,7 @@ class ParameterTreeTest extends PHPTreeModelTest {
   void shouldSupportOnlyIdentifier() {
     ParameterTree tree = parse("$param1", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.is(Kind.PARAMETER)).isTrue();
-    assertThat(tree.type()).isNull();
+    assertThat(tree.declaredType()).isNull();
     assertThat(tree.referenceToken()).isNull();
     assertThat(tree.ellipsisToken()).isNull();
     assertThat(tree.variableIdentifier().variableExpression().text()).isEqualTo("$param1");
@@ -44,7 +45,7 @@ class ParameterTreeTest extends PHPTreeModelTest {
   @Test
   void shouldSupportFullExample() {
     ParameterTree tree = parse("Class1&...$param1=$value1", PHPLexicalGrammar.PARAMETER);
-    assertThat(tree.type().typeName().is(Kind.NAMESPACE_NAME)).isTrue();
+    assertThat(((TypeTree) tree.declaredType()).typeName().is(Kind.NAMESPACE_NAME)).isTrue();
     assertThat(tree.referenceToken().text()).isEqualTo("&");
     assertThat(tree.ellipsisToken().text()).isEqualTo("...");
     assertThat(tree.variableIdentifier().variableExpression().text()).isEqualTo("$param1");

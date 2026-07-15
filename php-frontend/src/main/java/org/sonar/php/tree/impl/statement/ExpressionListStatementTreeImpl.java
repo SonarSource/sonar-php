@@ -24,10 +24,11 @@ import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class ExpressionListStatementTreeImpl extends PHPTree implements ExpressionListStatementTree {
+public class ExpressionListStatementTreeImpl extends PHPTree implements ExpressionListStatementTree, EchoTagStatementTree {
 
   private static final Kind KIND = Kind.EXPRESSION_LIST_STATEMENT;
 
@@ -56,7 +57,7 @@ public class ExpressionListStatementTreeImpl extends PHPTree implements Expressi
 
   @Override
   public void accept(VisitorCheck visitor) {
-    visitor.visitExpressionListStatement(this);
+    visitor.visitEchoTagStatement(this);
   }
 
   @Override
