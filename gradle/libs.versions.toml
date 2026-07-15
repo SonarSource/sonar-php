@@ -11,8 +11,9 @@ sonar-orchestrator = "6.3.0.4464"
 # Before updating the plugin-api version, make sure to check the compatibility matrix and stick to the lowest denominator
 # https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility
 sonar-plugin-api = "13.8.0.4399"
+sonar-scanner-engine = "13.5.0.4001"
 sonarlint = "11.6.0.85952"
-sonarqube = "26.6.0.123539"
+sonarqube = "26.7.0.124771"
 sslr = "1.25.1.3886"
 staxmate = "2.0.1"
 woodstox = "7.2.1"
@@ -36,6 +37,7 @@ sonar-plugin-api = { module = "org.sonarsource.api.plugin:sonar-plugin-api", ver
 sonar-plugin-api-impl = { module = "org.sonarsource.sonarqube:sonar-plugin-api-impl", version.ref = "sonarqube" }
 sonar-plugin-api-test-fixtures = { module = "org.sonarsource.api.plugin:sonar-plugin-api-test-fixtures", version.ref = "sonar-plugin-api" }
 sonar-regex-parsing = { module = "org.sonarsource.analyzer-commons:sonar-regex-parsing", version.ref = "sonar-commons" }
+sonar-scanner-engine-sensor-test-fixtures = { module = "org.sonarsource.scanner.engine:sensor-test-fixtures", version.ref = "sonar-scanner-engine" }
 sonar-testing-harness = { module = "org.sonarsource.sonarqube:sonar-testing-harness", version.ref = "sonarqube" }
 sonar-ws = { module = "org.sonarsource.sonarqube:sonar-ws", version.ref = "sonarqube" }
 plexus-utils = { module = "org.codehaus.plexus:plexus-utils", version.ref = "plexus-utils" }

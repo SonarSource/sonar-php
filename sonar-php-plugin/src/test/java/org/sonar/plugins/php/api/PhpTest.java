@@ -17,8 +17,8 @@
 package org.sonar.plugins.php.api;
 
 import org.junit.jupiter.api.Test;
-import org.sonar.api.config.internal.MapSettings;
 import org.sonar.plugins.php.PhpPlugin;
+import org.sonar.scanner.plugin.api.impl.config.MapSettings;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

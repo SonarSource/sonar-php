@@ -16,6 +16,8 @@
  */
 package org.sonar.plugins.php;
 
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester;
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -23,10 +25,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.scanner.plugin.api.impl.fs.DefaultInputFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.cache.Cache.CONTENT_HASHES_KEY;

@@ -16,6 +16,8 @@
  */
 package org.sonar.plugins.php.reports.phpunit;
 
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester;
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder;
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -23,14 +25,12 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.reports.ExternalReportFileHandler;
 import org.sonar.plugins.php.reports.phpunit.xml.TestCase;
+import org.sonar.scanner.plugin.api.impl.fs.DefaultInputFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
