@@ -37,7 +37,6 @@ sonar-plugin-api = { module = "org.sonarsource.api.plugin:sonar-plugin-api", ver
 sonar-plugin-api-impl = { module = "org.sonarsource.sonarqube:sonar-plugin-api-impl", version.ref = "sonarqube" }
 sonar-plugin-api-test-fixtures = { module = "org.sonarsource.api.plugin:sonar-plugin-api-test-fixtures", version.ref = "sonar-plugin-api" }
 sonar-regex-parsing = { module = "org.sonarsource.analyzer-commons:sonar-regex-parsing", version.ref = "sonar-commons" }
-sonar-scanner-engine-plugin-api-impl = { module = "org.sonarsource.scanner.engine:plugin-api-scanner-impl", version.ref = "sonar-scanner-engine" }
 sonar-scanner-engine-sensor-test-fixtures = { module = "org.sonarsource.scanner.engine:sensor-test-fixtures", version.ref = "sonar-scanner-engine" }
 sonar-testing-harness = { module = "org.sonarsource.sonarqube:sonar-testing-harness", version.ref = "sonarqube" }
 sonar-ws = { module = "org.sonarsource.sonarqube:sonar-ws", version.ref = "sonarqube" }
