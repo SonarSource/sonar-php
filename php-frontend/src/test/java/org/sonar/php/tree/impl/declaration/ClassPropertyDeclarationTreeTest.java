@@ -104,7 +104,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     ClassPropertyDeclarationTree tree = parse("public final $a, $b, $c;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
     assertThat(tree.modifierTokens()).hasSize(2);
-    assertThat(tree.typeAnnotation()).isNull();
+    assertThat(tree.declaredType()).isNull();
     assertThat(tree.declarations()).hasSize(3);
     assertThat(tree.eosToken().text()).isEqualTo(";");
 
@@ -173,13 +173,13 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   void shouldSupportTypeAnnotation() {
     ClassPropertyDeclarationTree tree = parse("public int $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
-    assertThat(tree.typeAnnotation().typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
-    assertThat(tree.typeAnnotation().questionMarkToken()).isNull();
+    assertThat(((TypeTree) tree.declaredType()).typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
+    assertThat(((TypeTree) tree.declaredType()).questionMarkToken()).isNull();
     assertThat(builtinType(tree)).isEqualTo("int");
 
     assertThat(((PHPTree) tree).childrenIterator()).toIterable().containsExactly(
       tree.modifierTokens().get(0),
-      tree.typeAnnotation(),
+      tree.declaredType(),
       tree.declarations().get(0),
       tree.eosToken());
   }
@@ -188,8 +188,8 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   void shouldSupportTypeAnnotationClassname() {
     ClassPropertyDeclarationTree tree = parse("public MyClass $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
-    assertThat(tree.typeAnnotation().typeName().is(Kind.NAMESPACE_NAME)).isTrue();
-    assertThat(((NamespaceNameTree) tree.typeAnnotation().typeName()).fullName()).isEqualTo("MyClass");
+    assertThat(((TypeTree) tree.declaredType()).typeName().is(Kind.NAMESPACE_NAME)).isTrue();
+    assertThat(((NamespaceNameTree) ((TypeTree) tree.declaredType()).typeName()).fullName()).isEqualTo("MyClass");
   }
 
   @Test
@@ -230,7 +230,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   void shouldSupportTypeAnnotationNullable() {
     ClassPropertyDeclarationTree tree = parse("public ?int $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
-    TypeTree type = tree.typeAnnotation();
+    TypeTree type = (TypeTree) tree.declaredType();
     assertThat(type.questionMarkToken().text()).isEqualTo("?");
     assertThat(builtinType(tree)).isEqualTo("int");
   }
@@ -287,6 +287,6 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   private static String builtinType(ClassPropertyDeclarationTree tree) {
-    return ((BuiltInTypeTree) tree.typeAnnotation().typeName()).token().text();
+    return ((BuiltInTypeTree) ((TypeTree) tree.declaredType()).typeName()).token().text();
   }
 }

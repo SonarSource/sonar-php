@@ -25,7 +25,7 @@ class ExpressionListTest {
 
   @Test
   void shouldMatch() {
-    assertThat(PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT)
+    assertThat(PHPLexicalGrammar.ECHO_TAG_STATEMENT)
       .matches("1 ?>")
       .matches("foo() ?>")
       .matches("1 + 2;")
@@ -36,7 +36,7 @@ class ExpressionListTest {
 
   @Test
   void shouldNotMatch() {
-    assertThat(PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT)
+    assertThat(PHPLexicalGrammar.ECHO_TAG_STATEMENT)
       .notMatches("?>")
       .notMatches("1, ?>")
       .notMatches("1; 2;")

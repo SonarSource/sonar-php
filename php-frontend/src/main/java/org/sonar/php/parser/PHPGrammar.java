@@ -92,11 +92,11 @@ import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -782,7 +782,7 @@ public class PHPGrammar {
         UNSET_VARIABLE_STATEMENT(),
         EXPRESSION_STATEMENT(),
         LABEL(),
-        EXPRESSION_LIST_STATEMENT()));
+        ECHO_TAG_STATEMENT()));
   }
 
   public ExpressionStatementTree ECHO_STATEMENT() {
@@ -1152,9 +1152,9 @@ public class PHPGrammar {
       f.expressionStatement(EXPRESSION(), EOS()));
   }
 
-  public ExpressionListStatementTree EXPRESSION_LIST_STATEMENT() {
-    return b.<ExpressionListStatementTree>nonterminal(PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT).is(
-      f.expressionListStatement(
+  public EchoTagStatementTree ECHO_TAG_STATEMENT() {
+    return b.<EchoTagStatementTree>nonterminal(PHPLexicalGrammar.ECHO_TAG_STATEMENT).is(
+      f.echoTagStatement(
         EXPRESSION(),
         b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), EXPRESSION())),
         EOS()));
