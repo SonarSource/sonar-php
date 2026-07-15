@@ -41,7 +41,7 @@ public interface FunctionCallTree extends ExpressionTree {
   /**
    * @deprecated since 3.11 . Use {@link #callArguments()} instead.
    */
-  @Deprecated
+  @Deprecated(since = "3.11")
   SeparatedList<ExpressionTree> arguments();
 
   SeparatedList<CallArgumentTree> callArguments();

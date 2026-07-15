@@ -45,7 +45,7 @@ public interface ClassPropertyDeclarationTree extends ClassMemberTree, HasAttrib
   /**
    * @deprecated since 3.11 - Use {@link #declaredType()} instead.
    */
-  @Deprecated
+  @Deprecated(since = "3.11", forRemoval = true)
   @Nullable
   TypeTree typeAnnotation();
 
