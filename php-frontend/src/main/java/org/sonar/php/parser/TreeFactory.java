@@ -801,7 +801,7 @@ public class TreeFactory {
     return new ExpressionStatementTreeImpl(expression, eos);
   }
 
-  public EchoTagStatementTree expressionListStatement(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressions, InternalSyntaxToken eos) {
+  public EchoTagStatementTree echoTagStatement(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressions, InternalSyntaxToken eos) {
     List<ExpressionTree> elements = new ArrayList<>();
     List<SyntaxToken> separators = new ArrayList<>();
 

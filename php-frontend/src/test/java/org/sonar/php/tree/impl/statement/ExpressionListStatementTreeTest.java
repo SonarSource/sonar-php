@@ -28,7 +28,7 @@ class ExpressionListStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   void test() throws Exception {
-    EchoTagStatementTree tree = parse("$a, foo();", PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT);
+    EchoTagStatementTree tree = parse("$a, foo();", PHPLexicalGrammar.ECHO_TAG_STATEMENT);
 
     assertThat(tree.is(Kind.ECHO_TAG_STATEMENT)).isTrue();
     assertThat(tree.expressions()).hasSize(2);

@@ -782,7 +782,7 @@ public class PHPGrammar {
         UNSET_VARIABLE_STATEMENT(),
         EXPRESSION_STATEMENT(),
         LABEL(),
-        EXPRESSION_LIST_STATEMENT()));
+        ECHO_TAG_STATEMENT()));
   }
 
   public ExpressionStatementTree ECHO_STATEMENT() {
@@ -1152,9 +1152,9 @@ public class PHPGrammar {
       f.expressionStatement(EXPRESSION(), EOS()));
   }
 
-  public EchoTagStatementTree EXPRESSION_LIST_STATEMENT() {
-    return b.<EchoTagStatementTree>nonterminal(PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT).is(
-      f.expressionListStatement(
+  public EchoTagStatementTree ECHO_TAG_STATEMENT() {
+    return b.<EchoTagStatementTree>nonterminal(PHPLexicalGrammar.ECHO_TAG_STATEMENT).is(
+      f.echoTagStatement(
         EXPRESSION(),
         b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), EXPRESSION())),
         EOS()));
