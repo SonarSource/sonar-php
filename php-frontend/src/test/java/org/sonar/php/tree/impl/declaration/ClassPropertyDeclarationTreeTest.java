@@ -179,7 +179,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
 
     assertThat(((PHPTree) tree).childrenIterator()).toIterable().containsExactly(
       tree.modifierTokens().get(0),
-      tree.typeAnnotation(),
+      tree.declaredType(),
       tree.declarations().get(0),
       tree.eosToken());
   }

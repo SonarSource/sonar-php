@@ -65,7 +65,7 @@ class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     FunctionDeclarationTree tree = parse("function f() : array|int {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.returnTypeClause()).isNotNull();
     assertThat(tree.returnTypeClause().colonToken().text()).isEqualTo(":");
-    assertThat(((TypeTree) tree.returnTypeClause().declaredType()).typeName()).hasToString("array");
+    assertThat(((UnionTypeTree) tree.returnTypeClause().declaredType()).types().get(0).typeName()).hasToString("array");
     assertThat(tree.returnTypeClause().declaredType().isSimple()).isFalse();
     assertThat(((UnionTypeTree) tree.returnTypeClause().declaredType()).types()).hasSize(2);
   }
