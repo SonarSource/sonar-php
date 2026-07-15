@@ -115,7 +115,6 @@ import org.sonar.php.tree.impl.statement.ElseClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseifClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.EmptyStatementImpl;
 import org.sonar.php.tree.impl.statement.EnumCaseTreeImpl;
-import org.sonar.php.tree.impl.statement.ExpressionListStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
@@ -217,7 +216,6 @@ import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -352,9 +350,6 @@ public class TreeFactory {
     if (statement.is(Kind.EXPRESSION_STATEMENT)) {
       ExpressionStatementTree expressionStatement = (ExpressionStatementTree) statement;
       return newEchoTagStatement(expressionStatement.expression(), (InternalSyntaxToken) expressionStatement.eosToken());
-    } else if (statement.is(Kind.EXPRESSION_LIST_STATEMENT)) {
-      ExpressionListStatementTree list = (ExpressionListStatementTree) statement;
-      return newEchoTagStatement(list.expressions(), (InternalSyntaxToken) list.eosToken());
     }
     return statement;
   }
@@ -806,7 +801,7 @@ public class TreeFactory {
     return new ExpressionStatementTreeImpl(expression, eos);
   }
 
-  public ExpressionListStatementTree expressionListStatement(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressions, InternalSyntaxToken eos) {
+  public EchoTagStatementTree expressionListStatement(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressions, InternalSyntaxToken eos) {
     List<ExpressionTree> elements = new ArrayList<>();
     List<SyntaxToken> separators = new ArrayList<>();
 
@@ -819,7 +814,7 @@ public class TreeFactory {
       });
     }
 
-    return new ExpressionListStatementTreeImpl(new SeparatedListImpl<>(elements, separators), eos);
+    return newEchoTagStatement(new SeparatedListImpl<>(elements, separators), eos);
   }
 
   public LabelTree label(InternalSyntaxToken identifier, InternalSyntaxToken colon) {

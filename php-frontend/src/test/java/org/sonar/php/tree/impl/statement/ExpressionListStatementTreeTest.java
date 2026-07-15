@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,9 +28,9 @@ class ExpressionListStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   void test() throws Exception {
-    ExpressionListStatementTree tree = parse("$a, foo();", PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT);
+    EchoTagStatementTree tree = parse("$a, foo();", PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT);
 
-    assertThat(tree.is(Kind.EXPRESSION_LIST_STATEMENT)).isTrue();
+    assertThat(tree.is(Kind.ECHO_TAG_STATEMENT)).isTrue();
     assertThat(tree.expressions()).hasSize(2);
     assertThat(tree.expressions().get(0).is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(tree.expressions().get(1).is(Kind.FUNCTION_CALL)).isTrue();
