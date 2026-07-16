@@ -81,4 +81,5 @@ class TokenVisitorTest {
 
     assertThat(visitor.firstKeyword()).isNull();
   }
+
 }
