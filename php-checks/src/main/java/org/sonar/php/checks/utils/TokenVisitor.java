@@ -64,7 +64,11 @@ public class TokenVisitor extends PHPVisitorCheck {
       .orElse(null);
   }
 
-  public SyntaxToken prevToken(SyntaxToken token) {
+  @Nullable
+  public SyntaxToken prevToken(@Nullable SyntaxToken token) {
+    if (token == null) {
+      return null;
+    }
     for (int i = 0; i < tokens.size(); i++) {
       if (token.equals(tokens.get(i))) {
         if (i > 0) {
@@ -77,7 +81,11 @@ public class TokenVisitor extends PHPVisitorCheck {
     return null;
   }
 
-  public SyntaxToken nextToken(SyntaxToken token) {
+  @Nullable
+  public SyntaxToken nextToken(@Nullable SyntaxToken token) {
+    if (token == null) {
+      return null;
+    }
     for (int i = 0; i < tokens.size(); i++) {
       if (token.equals(tokens.get(i))) {
         if (i < tokens.size() - 1) {

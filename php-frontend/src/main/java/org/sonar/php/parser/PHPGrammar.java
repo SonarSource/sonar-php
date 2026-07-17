@@ -1569,6 +1569,8 @@ public class PHPGrammar {
       f.yieldExpression(b.token(YIELD)));
   }
 
+  // Seemingly infinite recursion is correctly handled by SSLR
+  @SuppressWarnings("javabugs:S2190")
   public ParenthesisedExpressionTree PARENTHESIZED_EXPRESSION() {
     return b.<ParenthesisedExpressionTree>nonterminal(Kind.PARENTHESISED_EXPRESSION).is(
       f.parenthesizedExpression(

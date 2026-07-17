@@ -111,7 +111,10 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
     return isExactlyOneSpaceBetweenOrLineSplit(prevToken, token) && isExactlyOneSpaceBetweenOrLineSplit(token, nextToken);
   }
 
-  private static boolean isExactlyOneSpaceBetweenOrLineSplit(SyntaxToken leftToken, SyntaxToken rightToken) {
+  private static boolean isExactlyOneSpaceBetweenOrLineSplit(@Nullable SyntaxToken leftToken, @Nullable SyntaxToken rightToken) {
+    if (leftToken == null || rightToken == null) {
+      return true;
+    }
     return TokenUtils.getNbSpaceBetween(leftToken, rightToken) == 1 || !TokenUtils.isOnSameLine(leftToken, rightToken);
   }
 
@@ -164,7 +167,10 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
   /**
    * Check that there is exactly one space between a control structure keyword and a opening parenthesis or curly brace.
    */
-  private void checkSpaceBetweenKeywordAndNextNode(SyntaxToken keyword, SyntaxToken nextToken) {
+  private void checkSpaceBetweenKeywordAndNextNode(@Nullable SyntaxToken keyword, @Nullable SyntaxToken nextToken) {
+    if (keyword == null || nextToken == null) {
+      return;
+    }
     if (TokenUtils.isType(nextToken, PHPPunctuator.LCURLYBRACE, PHPPunctuator.LPARENTHESIS) && TokenUtils.isOnSameLine(keyword, nextToken)) {
       int nbSpace = TokenUtils.getNbSpaceBetween(keyword, nextToken);
 
