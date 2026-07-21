@@ -77,8 +77,11 @@ public class PhpIniSensor implements Sensor {
         continue;
       }
       for (PhpIniCheck check : checks.all()) {
-        List<PhpIniIssue> issues = check.analyze(phpIni);
-        saveIssues(context, inputFile, checks.ruleKey(check), issues);
+        RuleKey ruleKey = checks.ruleKey(check);
+        if (ruleKey != null) {
+          List<PhpIniIssue> issues = check.analyze(phpIni);
+          saveIssues(context, inputFile, ruleKey, issues);
+        }
       }
     }
   }
