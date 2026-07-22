@@ -44,7 +44,8 @@ class CommentedOutCodeCheckTest {
       newIssue(85),
       newIssue(87),
       newIssue(93),
-      newIssue(97));
+      newIssue(97),
+      newIssue(132));
 
     PHPCheckTest.check(CHECK, TestUtils.getCheckFile("CommentedOutCodeCheck.php"), issues);
   }

@@ -128,3 +128,5 @@ $helper->log('Set header/footer');
  *
  * @return void
  */
+
+/* $foo = 1 ?><?php */
