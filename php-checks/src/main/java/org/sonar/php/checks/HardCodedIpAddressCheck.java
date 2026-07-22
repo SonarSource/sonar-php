@@ -91,7 +91,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
   }
 
   private static boolean couldBeIpAddress(String value) {
-    // An IPv4 cannot start with a dot thus the ">". A v6 one cant start with ":".
+    // An IPv4 cannot start with a dot thus the ">". A v6 one can start with ":".
     return value.indexOf('.') > 0 || value.indexOf(':') >= 0;
   }
 
