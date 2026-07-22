@@ -104,8 +104,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
   }
 
   private static boolean isParsableCode(String possibleCode) {
-    // empty comment should not be commented out code
-    if (MULTIPLE_LINEBREAKS.matcher(possibleCode).replaceAll("").trim().isEmpty()) {
+    if (!couldBeCode(possibleCode)) {
       return false;
     }
 
@@ -138,6 +137,14 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
     }
 
     return false;
+  }
+
+  /**
+   * Pre-filtering to avoid starting the parser on most strings.
+   * The rules we parse for should contain at least one of the below according to the grammar.
+   */
+  private static boolean couldBeCode(String possibleCode) {
+    return possibleCode.indexOf('{') != -1 || possibleCode.indexOf(';') != -1 || possibleCode.contains("?>");
   }
 
 }

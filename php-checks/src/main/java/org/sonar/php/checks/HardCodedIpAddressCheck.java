@@ -74,8 +74,13 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
   public void visitLiteral(LiteralTree tree) {
     if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
       String literalValue = trimQuotes(tree.value());
+
+      if (!couldBeIpAddress(literalValue)) {
+        return;
+      }
+
       Matcher matcher = IP_PATTERN.matcher(literalValue);
-      if (matcher.find() && matcher.start() == 0) {
+      if (matcher.lookingAt()) {
         String ip = matcher.group("ip");
         if (isSensitive(ip)) {
           context().newIssue(this, tree, MESSAGE);
@@ -83,6 +88,11 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
       }
     }
     super.visitLiteral(tree);
+  }
+
+  private static boolean couldBeIpAddress(String value) {
+    // An IPv4 cannot start with a dot thus the ">". A v6 one can start with ":".
+    return value.indexOf('.') > 0 || value.indexOf(':') >= 0;
   }
 
   private static boolean isSensitive(String ip) {
