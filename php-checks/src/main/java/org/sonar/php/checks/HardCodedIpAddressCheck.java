@@ -90,7 +90,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
     super.visitLiteral(tree);
   }
 
-  private boolean couldBeIpAddress(String value) {
+  private static boolean couldBeIpAddress(String value) {
     return value.indexOf('.') > 0 || value.indexOf(':') >= 0;
   }
 
