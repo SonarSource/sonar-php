@@ -1597,11 +1597,12 @@ public class TreeFactory {
       .map(a -> new CallArgumentTreeImpl(null, a))
       .collect(Collectors.toList());
 
-    return new FunctionCallTreeImpl(
-      new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(callee)),
-      openParenthesis,
-      new SeparatedListImpl<>(functionCallArguments, arguments.getSeparators()),
-      closeParenthesis);
+    ExpressionTree calleeExpression = new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(callee));
+    SeparatedListImpl<CallArgumentTree> callArgs = new SeparatedListImpl<>(functionCallArguments, arguments.getSeparators());
+    if (openParenthesis != null && closeParenthesis != null) {
+      return new FunctionCallTreeImpl(calleeExpression, openParenthesis, callArgs, closeParenthesis);
+    }
+    return new FunctionCallTreeImpl(calleeExpression, callArgs);
   }
 
   public ArrayPairTree arrayPair1(ExpressionTree expression, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> pairExpression) {
