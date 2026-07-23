@@ -37,7 +37,6 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
 
   private static final Pattern MULTILINE_COMMENT_REPLACE = Pattern.compile("((/\\*\\*?)|(\\n\\s*\\*(?!/))|(\\*/))");
   private static final Pattern SINGLE_LINE_COMMENT_REPLACE = Pattern.compile("^((//)|(#))");
-  private static final Pattern MULTIPLE_LINEBREAKS = Pattern.compile("\\R+");
 
   private static final String INNER_CLASS_CONTEXT = "class DummyClass{%s}";
   private static final String INNER_METHOD_CONTEXT = "class DummyClass{public function dummyMethod(){%s}}";
