@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: sonar-m-public
+    runs-on: sonar-m
     name: Build
     if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'shadow_scan')
     steps:
