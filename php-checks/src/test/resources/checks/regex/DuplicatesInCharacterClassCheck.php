@@ -51,6 +51,7 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[[^\s\S]x]/", $input); // Noncompliant
     preg_match("/(?i)[A-_d-{]/", $input); // Noncompliant
     preg_match("/(?i)[A-z_]/", $input); // Noncompliant
+    preg_match('/[ \s \' " \: \{ \} \[ \] , & \* \# \?]/x', $input); // Noncompliant
   }
 
   function compliant($input)
@@ -85,7 +86,7 @@ class DuplicatesInCharacterClassCheck
     preg_match("/[[a-z&&b-e]c]/", $input); // FN because we don't support intersections
     preg_match("/[\p{Armenian}x]/", $input); // FN because we don't support \p at the moment
     preg_match("/[\\\\abc]/", $input);
-    preg_match('/[ \s \' " \: \{ \} \[ \] , & \* \# \?]/x', $input);
+    preg_match('/[\s\'"\:\{\}\[\],&\*\#\?]/x', $input);
     preg_match("/[0-9\\\d]/", $input); // Compliant
     preg_match("/[[:alnum:]alnum]/", $input);
   }

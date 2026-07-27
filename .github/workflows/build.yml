@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: sonar-m-public
+    runs-on: sonar-m
     name: Build
     permissions:
       id-token: write
@@ -60,8 +60,8 @@ jobs:
           gradle-args: -x sonar
 
   build_test_analyze:
-    needs: [build]
-    runs-on: sonar-m-public
+    needs: [ build ]
+    runs-on: sonar-m
     name: Build Test Analyze
     permissions:
       id-token: write
@@ -86,7 +86,7 @@ jobs:
           path: '**/test-results/**/*.xml'
 
   qa_os_win:
-    needs: [build]
+    needs: [ build ]
     runs-on: github-windows-latest-s
     name: QA OS Windows
     if: &skip-qa-jobs |
@@ -129,8 +129,8 @@ jobs:
           path: '**/build/reports/**/*'
 
   qa_plugin:
-    needs: [build]
-    runs-on: sonar-m-public
+    needs: [ build ]
+    runs-on: sonar-m
     name: QA Plugin
     if: *skip-qa-jobs
     permissions:
@@ -138,7 +138,7 @@ jobs:
       contents: write
     strategy:
       matrix:
-        SQ_VERSION: [LATEST_RELEASE, DEV]
+        SQ_VERSION: [ LATEST_RELEASE, DEV ]
     steps:
       - &checkout-submodules
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -195,7 +195,7 @@ jobs:
           path: '**/build/reports/**/*'
 
   qa_ruling:
-    needs: [build]
+    needs: [ build ]
     runs-on: sonar-l-public
     name: QA Ruling
     if: *skip-qa-jobs
@@ -204,7 +204,7 @@ jobs:
       contents: write
     strategy:
       matrix:
-        PHP_PROJECT: [Flysystem, Monica, PhpCodeSniffer, PhpMailer, Psysh, PhpWord, RubixML, PhpSpreadsheet]
+        PHP_PROJECT: [ Flysystem, Monica, PhpCodeSniffer, PhpMailer, Psysh, PhpWord, RubixML, PhpSpreadsheet ]
     steps:
       - *checkout-submodules
       - *mise-install
@@ -245,8 +245,8 @@ jobs:
           path: '**/build/reports/**/*'
 
   qa_pr_analysis:
-    needs: [build]
-    runs-on: sonar-m-public
+    needs: [ build ]
+    runs-on: sonar-m
     name: QA PR Analysis
     if: *skip-qa-jobs
     permissions:
@@ -291,7 +291,7 @@ jobs:
           path: '**/build/reports/**/*'
 
   promote:
-    needs: [build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis]
+    needs: [ build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis ]
     runs-on: sonar-xs-public
     name: Promote
     permissions:
