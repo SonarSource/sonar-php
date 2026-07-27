@@ -11,7 +11,7 @@
   "cloneSubmodulesFilter": [
     "build-logic/common"
   ],
-  "enabledManagers": ["gradle", "gradle-wrapper", "github-actions", "regex", "git-submodules"],
+  "enabledManagers": ["gradle", "gradle-wrapper", "github-actions", "custom.regex", "git-submodules"],
   "postUpdateOptions": ["gradleLockfileUpdate"],
   "gradle": {
     "enabled": true
