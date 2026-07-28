@@ -16,6 +16,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -37,8 +38,8 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
 
   private static final Kind KIND = Kind.METHOD_DECLARATION;
 
-  private final List<AttributeGroupTree> attributeGroups;
-  private final List<SyntaxToken> modifiersToken;
+  private List<AttributeGroupTree> attributeGroups;
+  private List<SyntaxToken> modifiersToken;
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
   private final NameIdentifierTree name;
@@ -48,22 +49,28 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   private MethodSymbol symbol;
 
   public MethodDeclarationTreeImpl(
-    List<AttributeGroupTree> attributeGroups,
-    List<SyntaxToken> modifiersToken,
     InternalSyntaxToken functionToken,
     @Nullable InternalSyntaxToken referenceToken,
     NameIdentifierTree name,
     ParameterListTree parameters,
     @Nullable ReturnTypeClauseTree returnTypeClause,
     Tree body) {
-    this.attributeGroups = attributeGroups;
-    this.modifiersToken = modifiersToken;
+    this.attributeGroups = Collections.emptyList();
+    this.modifiersToken = Collections.emptyList();
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;
     this.name = name;
     this.parameters = parameters;
     this.returnTypeClause = returnTypeClause;
     this.body = body;
+  }
+
+  public MethodDeclarationTreeImpl completeModifiers(
+    List<AttributeGroupTree> attributeGroups,
+    List<SyntaxToken> modifiersToken) {
+    this.attributeGroups = attributeGroups;
+    this.modifiersToken = modifiersToken;
+    return this;
   }
 
   @Override

@@ -504,14 +504,14 @@ public class TreeFactory {
     if (!"__construct".equalsIgnoreCase(name.text())) {
       throwOnParameterWithVisibility(parameters);
     }
-    return new MethodDeclarationTreeImpl(attributes.or(Collections.emptyList()),
-      optionalList(modifiers),
+    return new MethodDeclarationTreeImpl(
       functionToken,
       referenceToken.orNull(),
       name,
       parameters,
       returnTypeClause.orNull(),
-      body);
+      body)
+        .completeModifiers(attributes.or(Collections.emptyList()), optionalList(modifiers));
   }
 
   public FunctionDeclarationTree functionDeclaration(
@@ -629,18 +629,15 @@ public class TreeFactory {
     InternalSyntaxToken interfaceToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> extendsClause,
     InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken) {
-    InternalSyntaxToken extendsToken = null;
-    SeparatedListImpl<NamespaceNameTree> interfaceList = SeparatedListImpl.empty();
+    ClassDeclarationTreeImpl.ExtendsClause clause = null;
     if (extendsClause.isPresent()) {
-      extendsToken = extendsClause.get().first();
-      interfaceList = extendsClause.get().second();
+      clause = new ClassDeclarationTreeImpl.ExtendsClause(extendsClause.get().first(), extendsClause.get().second());
     }
     return ClassDeclarationTreeImpl.createInterface(
       attributes.or(Collections.emptyList()),
       interfaceToken,
       name,
-      extendsToken,
-      interfaceList,
+      clause,
       openCurlyBraceToken,
       optionalList(members),
       closeCurlyBraceToken);
@@ -931,10 +928,12 @@ public class TreeFactory {
     InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
     ExpressionTree expression, InternalSyntaxToken asToken, Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey, ExpressionTree value,
     InternalSyntaxToken closeParenthesisToken) {
-    return new ForEachStatementHeader(
+    ForEachStatementHeader header = new ForEachStatementHeader(
       forEachToken, openParenthesisToken,
-      expression, asToken, getForEachKey(optionalKey), getForEachArrow(optionalKey), value,
+      expression, asToken, value,
       closeParenthesisToken);
+    header.setKeyAndArrow(getForEachKey(optionalKey), getForEachArrow(optionalKey));
+    return header;
   }
 
   @Nullable
@@ -1009,8 +1008,7 @@ public class TreeFactory {
       interposeEchoTagStatements(optionalList(statements)),
       optionalList(elseifClauses),
       elseClause.orNull(),
-      endIfToken,
-      eosToken);
+      new IfStatementTreeImpl.AlternativeIfEnding(endIfToken, eosToken));
   }
 
   public ElseClauseTree alternativeElseClause(InternalSyntaxToken elseToken, InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements) {

@@ -160,25 +160,15 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
 
     private final InternalSyntaxToken forToken;
     private final InternalSyntaxToken openParenthesisToken;
-    private final SeparatedListImpl<ExpressionTree> init;
-    private final InternalSyntaxToken firstSemicolonToken;
-    private final SeparatedListImpl<ExpressionTree> condition;
-    private final InternalSyntaxToken secondSemicolonToken;
-    private final SeparatedListImpl<ExpressionTree> update;
+    private final ForClauses clauses;
     private final InternalSyntaxToken closeParenthesisToken;
 
     public ForStatementHeader(
       InternalSyntaxToken forToken, InternalSyntaxToken openParenthesisToken,
-      SeparatedListImpl<ExpressionTree> init, InternalSyntaxToken firstSemicolonToken,
-      SeparatedListImpl<ExpressionTree> condition, InternalSyntaxToken secondSemicolonToken,
-      SeparatedListImpl<ExpressionTree> update, InternalSyntaxToken closeParenthesisToken) {
+      ForClauses clauses, InternalSyntaxToken closeParenthesisToken) {
       this.forToken = forToken;
       this.openParenthesisToken = openParenthesisToken;
-      this.init = init;
-      this.firstSemicolonToken = firstSemicolonToken;
-      this.condition = condition;
-      this.secondSemicolonToken = secondSemicolonToken;
-      this.update = update;
+      this.clauses = clauses;
       this.closeParenthesisToken = closeParenthesisToken;
     }
 
@@ -191,27 +181,46 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
     }
 
     public SeparatedListImpl<ExpressionTree> init() {
-      return init;
+      return clauses.init;
     }
 
     public InternalSyntaxToken firstSemicolonToken() {
-      return firstSemicolonToken;
+      return clauses.firstSemicolonToken;
     }
 
     public SeparatedListImpl<ExpressionTree> condition() {
-      return condition;
+      return clauses.condition;
     }
 
     public InternalSyntaxToken secondSemicolonToken() {
-      return secondSemicolonToken;
+      return clauses.secondSemicolonToken;
     }
 
     public SeparatedListImpl<ExpressionTree> update() {
-      return update;
+      return clauses.update;
     }
 
     public InternalSyntaxToken closeParenthesisToken() {
       return closeParenthesisToken;
+    }
+
+    public static class ForClauses {
+      private final SeparatedListImpl<ExpressionTree> init;
+      private final InternalSyntaxToken firstSemicolonToken;
+      private final SeparatedListImpl<ExpressionTree> condition;
+      private final InternalSyntaxToken secondSemicolonToken;
+      private final SeparatedListImpl<ExpressionTree> update;
+
+      public ForClauses(
+        SeparatedListImpl<ExpressionTree> init, InternalSyntaxToken firstSemicolonToken,
+        SeparatedListImpl<ExpressionTree> condition, InternalSyntaxToken secondSemicolonToken,
+        SeparatedListImpl<ExpressionTree> update) {
+        this.init = init;
+        this.firstSemicolonToken = firstSemicolonToken;
+        this.condition = condition;
+        this.secondSemicolonToken = secondSemicolonToken;
+        this.update = update;
+      }
     }
   }
 }

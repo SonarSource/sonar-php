@@ -155,23 +155,26 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
     private final InternalSyntaxToken openParenthesisToken;
     private final ExpressionTree expression;
     private final InternalSyntaxToken asToken;
-    private final ExpressionTree key;
-    private final InternalSyntaxToken doubleArrowToken;
+    private ExpressionTree key;
+    private InternalSyntaxToken doubleArrowToken;
     private final ExpressionTree value;
     private final InternalSyntaxToken closeParenthesisToken;
 
     public ForEachStatementHeader(
       InternalSyntaxToken foreachToken, InternalSyntaxToken openParenthesisToken,
-      ExpressionTree expression, InternalSyntaxToken asToken, ExpressionTree key, InternalSyntaxToken doubleArrowToken, ExpressionTree value,
+      ExpressionTree expression, InternalSyntaxToken asToken, ExpressionTree value,
       InternalSyntaxToken closeParenthesisToken) {
       this.foreachToken = foreachToken;
       this.openParenthesisToken = openParenthesisToken;
       this.expression = expression;
       this.asToken = asToken;
-      this.key = key;
-      this.doubleArrowToken = doubleArrowToken;
       this.value = value;
       this.closeParenthesisToken = closeParenthesisToken;
+    }
+
+    public void setKeyAndArrow(@Nullable ExpressionTree key, @Nullable InternalSyntaxToken doubleArrowToken) {
+      this.key = key;
+      this.doubleArrowToken = doubleArrowToken;
     }
 
     public InternalSyntaxToken foreachToken() {

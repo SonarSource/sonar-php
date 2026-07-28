@@ -203,8 +203,10 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   public static ClassDeclarationTree createInterface(
     List<AttributeGroupTree> attributes,
     InternalSyntaxToken interfaceToken, NameIdentifierTree name,
-    @Nullable InternalSyntaxToken extendsToken, SeparatedListImpl<NamespaceNameTree> interfaceList,
+    @Nullable ExtendsClause extendsClause,
     InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
+    InternalSyntaxToken extendsToken = extendsClause != null ? extendsClause.extendsToken() : null;
+    SeparatedListImpl<NamespaceNameTree> interfaceList = extendsClause != null ? extendsClause.interfaceList() : SeparatedListImpl.empty();
     return new ClassDeclarationTreeImpl(
       Kind.INTERFACE_DECLARATION,
       attributes,
@@ -218,6 +220,9 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
       openCurlyBraceToken,
       members,
       closeCurlyBraceToken);
+  }
+
+  public record ExtendsClause(InternalSyntaxToken extendsToken, SeparatedListImpl<NamespaceNameTree> interfaceList) {
   }
 
   public static ClassDeclarationTree createTrait(

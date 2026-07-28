@@ -64,7 +64,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   public IfStatementTreeImpl(
     InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
     List<StatementTree> statements, List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause,
-    InternalSyntaxToken endifToken, InternalSyntaxToken eosToken) {
+    AlternativeIfEnding ending) {
     kind = Kind.ALTERNATIVE_IF_STATEMENT;
 
     this.ifToken = ifToken;
@@ -74,8 +74,8 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
     this.elseClause = elseClause;
 
     this.colonToken = colonToken;
-    this.endifToken = endifToken;
-    this.eosToken = eosToken;
+    this.endifToken = ending.endifToken();
+    this.eosToken = ending.eosToken();
   }
 
   @Override
@@ -139,5 +139,24 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   @Override
   public void accept(VisitorCheck visitor) {
     visitor.visitIfStatement(this);
+  }
+
+  public static class AlternativeIfEnding {
+
+    private final InternalSyntaxToken endifToken;
+    private final InternalSyntaxToken eosToken;
+
+    public AlternativeIfEnding(InternalSyntaxToken endifToken, InternalSyntaxToken eosToken) {
+      this.endifToken = endifToken;
+      this.eosToken = eosToken;
+    }
+
+    public InternalSyntaxToken endifToken() {
+      return endifToken;
+    }
+
+    public InternalSyntaxToken eosToken() {
+      return eosToken;
+    }
   }
 }
