@@ -2,8 +2,8 @@
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
 # To regenerate this file, run: ./gradlew :its:ruling:dependencies --write-locks
-ch.qos.logback:logback-classic:1.5.38=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-ch.qos.logback:logback-core:1.5.38=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+ch.qos.logback:logback-classic:1.6.1=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+ch.qos.logback:logback-core:1.6.1=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.eclipsesource.minimal-json:minimal-json:0.9.5=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.fasterxml.jackson.core:jackson-annotations:2.22=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.fasterxml.jackson.core:jackson-core:2.22.1=integrationTestCompileClasspath,integrationTestRuntimeClasspath
@@ -49,11 +49,11 @@ org.slf4j:jcl-over-slf4j:2.0.18=integrationTestRuntimeClasspath
 org.slf4j:log4j-over-slf4j:2.0.18=integrationTestRuntimeClasspath
 org.slf4j:slf4j-api:2.0.18=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.29.0.5138=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.sonarsource.orchestrator:sonar-orchestrator-build:6.3.1.4538=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.sonarsource.orchestrator:sonar-orchestrator-config:6.3.1.4538=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.sonarsource.orchestrator:sonar-orchestrator-http:6.3.1.4538=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.sonarsource.orchestrator:sonar-orchestrator-junit5:6.3.1.4538=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.sonarsource.orchestrator:sonar-orchestrator-locators:6.3.1.4538=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.sonarsource.orchestrator:sonar-orchestrator-utils:6.3.1.4538=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.sonarsource.orchestrator:sonar-orchestrator:6.3.1.4538=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.sonarsource.orchestrator:sonar-orchestrator-build:6.4.0.4580=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.sonarsource.orchestrator:sonar-orchestrator-config:6.4.0.4580=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.sonarsource.orchestrator:sonar-orchestrator-http:6.4.0.4580=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.sonarsource.orchestrator:sonar-orchestrator-junit5:6.4.0.4580=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.sonarsource.orchestrator:sonar-orchestrator-locators:6.4.0.4580=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.sonarsource.orchestrator:sonar-orchestrator-utils:6.4.0.4580=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.sonarsource.orchestrator:sonar-orchestrator:6.4.0.4580=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 empty=annotationProcessor,compileClasspath,integrationTestAnnotationProcessor,runtimeClasspath,testAnnotationProcessor,testCompileClasspath,testRuntimeClasspath
