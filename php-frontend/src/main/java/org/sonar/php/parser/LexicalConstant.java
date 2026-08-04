@@ -29,7 +29,7 @@ public class LexicalConstant {
   public static final String PHP_END_TAG = PHP_CLOSING_TAG + PHP_START_TAG + "?+";
   public static final String ANYTHING_BUT_START_TAG = ANY_CHAR_BUT_START_TAG + "++";
 
-  /**
+  /*
    * WHITESPACES
    */
 
@@ -53,7 +53,7 @@ public class LexicalConstant {
   private static final String VAR_IDENTIFIER_START = "\\$";
   public static final String VAR_IDENTIFIER = VAR_IDENTIFIER_START + IDENTIFIER;
 
-  /**
+  /*
    * COMMENT
    */
 
@@ -66,7 +66,7 @@ public class LexicalConstant {
   private static final String MULTI_LINE_COMMENT = "/\\*[\\s\\S]*?\\*/";
   public static final String COMMENT = "(?:" + SINGLE_LINE_COMMENT1 + "|" + SINGLE_LINE_COMMENT2 + "|" + MULTI_LINE_COMMENT + ")";
 
-  /**
+  /*
    * LITERAL
    */
 
