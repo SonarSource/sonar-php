@@ -57,10 +57,15 @@ tasks.register("writeAllLockFiles") {
 
 subprojects {
   configurations.all {
-    resolutionStrategy {
-      // Pinned to avoid dependency risks
-      force(libs.logback.classic)
-      force(libs.plexus.utils)
+    resolutionStrategy.eachDependency {
+      if (requested.group == "ch.qos.logback") {
+        useVersion(libs.versions.ch.qos.logback.logback.get())
+        because("Pinned to avoid dependency risks")
+      }
+      if (requested.group == "org.codehaus.plexus" && requested.name == "plexus-utils") {
+        useVersion(libs.versions.plexus.utils.get())
+        because("Pinned to avoid dependency risks")
+      }
     }
   }
 }
