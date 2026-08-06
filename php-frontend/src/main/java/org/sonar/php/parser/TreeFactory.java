@@ -720,11 +720,11 @@ public class TreeFactory {
       body);
   }
 
-  /**
+  /*
    * [ END ] Declarations
    */
 
-  /**
+  /*
    * [ START ] Statement
    */
 
@@ -1224,11 +1224,11 @@ public class TreeFactory {
       eosToken);
   }
 
-  /**
+  /*
    * [ END ] Statement
    */
 
-  /**
+  /*
    * [ START ] Expression
    */
 
