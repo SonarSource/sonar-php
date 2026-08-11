@@ -82,8 +82,8 @@ public class NotDiscoverableTestCheck extends PhpUnitCheck {
     } else if (CheckUtils.isPublic(tree) && !isMarkedAsTestMethod(tree)
       && !isCalledMethod(tree) && methodContainsAssertions(tree)
       && (!CheckUtils.isStatic(tree) || !isMethodWithReturn(tree))) {
-        newIssue(tree.name(), MESSAGE_MARKED);
-      }
+      newIssue(tree.name(), MESSAGE_MARKED);
+    }
   }
 
   private boolean isCalledMethod(MethodDeclarationTree tree) {
