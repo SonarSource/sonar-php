@@ -44,7 +44,7 @@ public interface AnonymousClassTree extends ExpressionTree, ClassTree {
   /**
    * @deprecated since 3.11 . Use {@link #callArguments()} instead.
    */
-  @Deprecated
+  @Deprecated(since = "3.11", forRemoval = true)
   SeparatedList<ExpressionTree> arguments();
 
   SeparatedList<CallArgumentTree> callArguments();
