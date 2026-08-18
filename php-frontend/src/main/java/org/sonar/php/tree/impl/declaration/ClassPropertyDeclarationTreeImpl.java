@@ -114,7 +114,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
    */
   @Nullable
   @Override
-  @Deprecated
+  @Deprecated(since = "3.11", forRemoval = true)
   public TypeTree typeAnnotation() {
     if (typeAnnotation == null) {
       return null;
