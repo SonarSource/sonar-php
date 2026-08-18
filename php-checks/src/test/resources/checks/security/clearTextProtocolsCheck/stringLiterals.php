@@ -63,7 +63,7 @@ $url = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"; // Compliant
 $url = str_replace('http://', '', $foo);  // Compliant
 $url = str_replace('http://', '', $foo) . $bar;  // Compliant
 $url = 'http://' . $bar; // Noncompliant
-$url = 'http://something'; // Noncompliant
+$url = 'http://something'; // Compliant - single-label hostname
 
 // starts with http:// regardless of the empty authority
 $url = "http:///www.php-fig.org/"; // Noncompliant
