@@ -16,10 +16,9 @@
  */
 package org.sonar.php.checks;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.LexicalConstant;
@@ -38,13 +37,9 @@ public class TrailingWhitespaceCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    Stream<String> lines = CheckUtils.lines(context().getPhpFile());
-
-    Iterator<String> it = lines.iterator();
-    int lineNumber = 1;
-    while (it.hasNext()) {
-      checkLine(it.next(), lineNumber);
-      lineNumber++;
+    List<String> lines = CheckUtils.lines(context().getPhpFile()).toList();
+    for (int lineNumber = 1; lineNumber <= lines.size(); lineNumber++) {
+      checkLine(lines.get(lineNumber - 1), lineNumber);
     }
   }
 

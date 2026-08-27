@@ -17,6 +17,7 @@
 package org.sonar.php.checks;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -49,7 +50,8 @@ public class FileHeaderCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    Iterator<String> it = CheckUtils.lines(context().getPhpFile()).iterator();
+    List<String> lines = CheckUtils.lines(context().getPhpFile()).toList();
+    Iterator<String> it = lines.iterator();
 
     if (it.hasNext() && !matches(expectedLines, it)) {
       context().newFileIssue(this, MESSAGE);
