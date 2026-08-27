@@ -50,7 +50,10 @@ public class FileHeaderCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    List<String> lines = CheckUtils.lines(context().getPhpFile()).toList();
+    // only the optional PHP open tag plus the expected header lines are ever inspected
+    List<String> lines = CheckUtils.lines(context().getPhpFile())
+      .limit(expectedLines.length + 1L)
+      .toList();
     Iterator<String> it = lines.iterator();
 
     if (it.hasNext() && !matches(expectedLines, it)) {
