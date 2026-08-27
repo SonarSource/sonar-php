@@ -46,7 +46,7 @@ import static org.sonar.php.checks.HardCodedIpAddressCheck.IP_V6;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
 @Rule(key = "S6418")
-public class HardCodedSecretCheck extends PHPVisitorCheck implements TestFileExcludedCheck {
+public final class HardCodedSecretCheck extends PHPVisitorCheck implements TestFileExcludedCheck {
   private static final String DEFAULT_SECRET_WORDS = "api[_.-]?key,auth,credential,secret,token";
   private static final String DEFAULT_RANDOMNESS_SENSIBILITY = "5.0";
   private static final double LANGUAGE_SCORE_INCREMENT = 0.3;
