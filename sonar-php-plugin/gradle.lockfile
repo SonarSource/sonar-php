@@ -2,8 +2,8 @@
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
 # To regenerate this file, run: ./gradlew :sonar-php-plugin:dependencies --write-locks
-ch.qos.logback:logback-classic:1.6.2=testRuntimeClasspath
-ch.qos.logback:logback-core:1.6.2=testRuntimeClasspath
+ch.qos.logback:logback-classic:1.6.3=testRuntimeClasspath
+ch.qos.logback:logback-core:1.6.3=testRuntimeClasspath
 com.android.tools:r8:9.1.31=shadowR8
 com.fasterxml.woodstox:woodstox-core:7.2.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 com.github.spotbugs:spotbugs-annotations:4.10.1=testCompileClasspath,testRuntimeClasspath

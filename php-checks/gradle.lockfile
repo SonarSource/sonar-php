@@ -2,8 +2,8 @@
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
 # To regenerate this file, run: ./gradlew :php-checks:dependencies --write-locks
-ch.qos.logback:logback-classic:1.6.2=testRuntimeClasspath
-ch.qos.logback:logback-core:1.6.2=testRuntimeClasspath
+ch.qos.logback:logback-classic:1.6.3=testRuntimeClasspath
+ch.qos.logback:logback-core:1.6.3=testRuntimeClasspath
 com.github.spotbugs:spotbugs-annotations:4.10.1=testRuntimeClasspath
 com.google.code.findbugs:jsr305:3.0.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 commons-codec:commons-codec:1.22.0=testRuntimeClasspath
