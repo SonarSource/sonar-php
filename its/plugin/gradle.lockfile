@@ -2,8 +2,8 @@
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
 # To regenerate this file, run: ./gradlew :its:plugin:dependencies --write-locks
-ch.qos.logback:logback-classic:1.6.2=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-ch.qos.logback:logback-core:1.6.2=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+ch.qos.logback:logback-classic:1.6.3=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+ch.qos.logback:logback-core:1.6.3=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.eclipsesource.minimal-json:minimal-json:0.9.5=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.fasterxml.jackson.core:jackson-annotations:2.22=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 com.fasterxml.jackson.core:jackson-core:2.22.1=integrationTestCompileClasspath,integrationTestRuntimeClasspath
@@ -57,7 +57,7 @@ org.awaitility:awaitility:4.3.0=integrationTestCompileClasspath,integrationTestR
 org.bouncycastle:bcpg-jdk18on:1.85=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.bouncycastle:bcprov-jdk18on:1.85=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.bouncycastle:bcutil-jdk18on:1.85=integrationTestCompileClasspath,integrationTestRuntimeClasspath
-org.codehaus.plexus:plexus-utils:4.0.3=integrationTestCompileClasspath,integrationTestRuntimeClasspath
+org.codehaus.plexus:plexus-utils:4.1.0=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.codehaus.sonar:sonar-channel:4.2=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.codehaus.woodstox:stax2-api:4.3.0=integrationTestCompileClasspath,integrationTestRuntimeClasspath
 org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r=integrationTestCompileClasspath,integrationTestRuntimeClasspath
