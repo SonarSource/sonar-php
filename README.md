@@ -124,7 +124,7 @@ Gradle lock files pin dependency versions to ensure reproducible builds. When de
 To run integration tests, you will need to create a properties file like the one shown below, and set its location in an environment variable named `ORCHESTRATOR_CONFIG_URL`.
 ```properties
 # version of SonarQube server
-sonar.runtimeVersion=9.9
+sonar.runtimeVersion=LATEST_RELEASE
 ```
 Before running any of the integration tests make sure the submodules are checked out:
 ```shell
