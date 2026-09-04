@@ -25,6 +25,7 @@ description = "PHP :: Integration Tests :: Plugin"
 dependencies {
   // Mandatory for the orchestrator in the "Tests" class, since it requires the custom rules plugin JAR
   "integrationTestCompileOnly"(project(":sonar-php-plugin", configuration = "shadow"))
+  "integrationTestImplementation"(platform(libs.jackson.bom))
   "integrationTestImplementation"(libs.sonar.orchestrator.junit5)
   "integrationTestImplementation"(libs.sonar.plugin.api)
   "integrationTestImplementation"(libs.sonar.ws)

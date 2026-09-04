@@ -24,6 +24,7 @@ description = "PHP :: Integration Tests :: Ruling"
 
 dependencies {
   "integrationTestImplementation"(project(":sonar-php-plugin", configuration = "shadow"))
+  "integrationTestImplementation"(platform(libs.jackson.bom))
   "integrationTestImplementation"(libs.junit.jupiter)
   "integrationTestImplementation"(libs.assertj.core)
   "integrationTestImplementation"(libs.sonar.analyzer.commons)
