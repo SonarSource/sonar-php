@@ -2,7 +2,7 @@
 
 # Prerequisites
 
-* SonarQube ITs need Java 17 to run
+* SonarQube ITs need Java 21 to run
 
 # First time configuration
 
