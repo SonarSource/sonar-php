@@ -18,11 +18,11 @@ redirecting users to malicious endpoints, injecting malicious content into respo
 interception.</p>
 <h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
-$url = "http://example.com"; // Noncompliant
-$url = "ftp://anonymous@example.com"; // Noncompliant
-$url = "telnet://anonymous@example.com"; // Noncompliant
+$url = "http://sonar.com"; // Noncompliant
+$url = "ftp://anonymous@sonar.com"; // Noncompliant
+$url = "telnet://anonymous@sonar.com"; // Noncompliant
 
-$con = ftp_connect('example.com'); // Noncompliant
+$con = ftp_connect('sonar.com'); // Noncompliant
 
 $trans = (new Swift_SmtpTransport('XXX', 1234)); // Noncompliant
 
@@ -33,13 +33,13 @@ define( 'FORCE_SSL_LOGIN', false); // Noncompliant
 </pre>
 <h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
-$url = "https://example.com";
-$url = "sftp://anonymous@example.com";
-$url = "ssh://anonymous@example.com";
+$url = "https://sonar.com";
+$url = "sftp://anonymous@sonar.com";
+$url = "ssh://anonymous@sonar.com";
 
-$con = ftp_ssl_connect('example.com');
+$con = ftp_ssl_connect('sonar.com');
 
-$trans = (new Swift_SmtpTransport('smtp.example.org', 1234))
+$trans = (new Swift_SmtpTransport('smtp.sonar.com', 1234))
   -&gt;setEncryption('tls')
 ;
 
