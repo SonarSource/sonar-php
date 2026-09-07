@@ -116,7 +116,7 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   /**
    * @deprecated since 3.11 . Use {@link #callArguments()} instead.
    */
-  @Deprecated
+  @Deprecated(since = "3.11", forRemoval = true)
   @Override
   public SeparatedList<ExpressionTree> arguments() {
     return arguments;

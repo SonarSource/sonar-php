@@ -24,7 +24,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * {@link ExpressionListStatementTree} represents a comma-separated list of expressions following <code><?=</code>
  * @deprecated since 3.1. Use {@link EchoTagStatementTree}
  */
-@Deprecated
+@Deprecated(since = "3.1", forRemoval = true)
 public interface ExpressionListStatementTree extends StatementTree {
 
   SeparatedList<ExpressionTree> expressions();

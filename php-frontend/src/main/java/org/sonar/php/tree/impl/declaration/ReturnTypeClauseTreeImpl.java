@@ -63,7 +63,7 @@ public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClaus
    * @deprecated since 3.11 - Use {@link #declaredType()} instead.
    */
   @Override
-  @Deprecated
+  @Deprecated(since = "3.11", forRemoval = true)
   public TypeTree type() {
     if (type.is(Kind.TYPE)) {
       return (TypeTree) type;
