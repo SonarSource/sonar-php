@@ -23,7 +23,6 @@
 
     <!-- JDK Build versions -->
     <maven.compiler.release>21</maven.compiler.release>
-    <version.maven-compiler-plugin>3.13.0</version.maven-compiler-plugin>
   </properties>
 
   <dependencies>
@@ -69,6 +68,7 @@
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <version>1.25.1.3002</version>
         <!-- More details about the configuration here: https://docs.sonarsource.com/sonarqube/latest/extension-guide/developing-a-plugin/plugin-basics/ -->
         <configuration>
           <pluginKey>custom</pluginKey>
@@ -89,7 +89,7 @@
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${version.maven-compiler-plugin}</version>
+        <version>3.16.0</version>
         <configuration>
           <release>${maven.compiler.release}</release>
         </configuration>
@@ -97,6 +97,7 @@
 
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.2</version>
         <executions>
           <execution>
             <phase>package</phase>
