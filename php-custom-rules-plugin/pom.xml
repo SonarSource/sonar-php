@@ -20,7 +20,8 @@
 
   <licenses>
     <license>
-      <name>GNU LGPL 3</name>
+      <name>SSALv1</name>
+      <url>https://sonarsource.com/license/ssal/</url>
     </license>
   </licenses>
 

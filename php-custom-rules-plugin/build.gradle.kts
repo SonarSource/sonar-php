@@ -32,6 +32,15 @@ dependencies {
 
 description = "PHP Custom Rules Example for SonarQube"
 
+java {
+  sourceCompatibility = JavaVersion.VERSION_21
+  targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.withType<JavaCompile> {
+  options.release.set(21)
+}
+
 tasks.jar {
   manifest {
     // More details about the attributes here: https://docs.sonarsource.com/sonarqube/latest/extension-guide/developing-a-plugin/plugin-basics/
@@ -45,7 +54,7 @@ tasks.jar {
         "Plugin-Homepage" to "https://sonarsource.atlassian.net/browse/SONARPHP",
         "Plugin-IssueTrackerUrl" to "https://sonarsource.atlassian.net/browse/SONARPHP",
         "Plugin-Key" to "custom",
-        "Plugin-License" to "GNU LGPL 3",
+        "Plugin-License" to "SSALv1",
         "Plugin-Name" to "PHP Custom Rules",
         "Plugin-Organization" to "SonarSource",
         "Plugin-OrganizationUrl" to "https://www.sonarsource.com",
