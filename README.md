@@ -51,9 +51,6 @@ To submit a contribution, create a pull request for this repository. Please make
 If you have an idea for a rule, but you are not sure that everyone needs it you can implement a [custom rule](https://docs.sonarqube.org/latest/analysis/languages/php/) available only for you.
 
 #### Custom Rules API Changes
-- **4.0**
-    * SonarPHP artifacts now target and require Java 21. Custom rules that depend on `php-frontend` 4.x must build and run with Java 21.
-    * Deprecated public APIs are intentionally retained in this release; their removal is tracked separately.
 - **3.32** (October 2023)
     * Additional `newIssue` endpoint added to the `CheckContext` API interface
 - **3.15** (January 2021)

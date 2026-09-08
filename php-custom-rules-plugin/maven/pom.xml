@@ -22,9 +22,8 @@
     <jre.min.version>21</jre.min.version>
 
     <!-- JDK Build versions -->
-    <jdk.min.version>21</jdk.min.version>
-    <jdk.source.version>21</jdk.source.version>
-    <jdk.target.version>21</jdk.target.version>
+    <maven.compiler.release>21</maven.compiler.release>
+    <version.maven-compiler-plugin>3.13.0</version.maven-compiler-plugin>
   </properties>
 
   <dependencies>
@@ -85,6 +84,14 @@
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
             </manifest>
           </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.maven-compiler-plugin}</version>
+        <configuration>
+          <release>${maven.compiler.release}</release>
         </configuration>
       </plugin>
 
