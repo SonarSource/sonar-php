@@ -42,7 +42,7 @@ public class LDAPAuthenticatedConnectionCheck extends FunctionUsageCheck {
     }
   }
 
-  private boolean argumentIsNullOrEmptyString(FunctionCallTree tree, String argumentName, int argumentIndex) {
+  private static boolean argumentIsNullOrEmptyString(FunctionCallTree tree, String argumentName, int argumentIndex) {
     Optional<CallArgumentTree> argument = CheckUtils.argument(tree, argumentName, argumentIndex);
     if (argument.isPresent()) {
       ExpressionTree argumentValue = CheckUtils.assignedValue(argument.get().value());

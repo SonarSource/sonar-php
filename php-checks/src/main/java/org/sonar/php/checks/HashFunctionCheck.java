@@ -73,7 +73,7 @@ public class HashFunctionCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
   }
 
-  private boolean isPredictable(ExpressionTree tree) {
+  private static boolean isPredictable(ExpressionTree tree) {
     if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
       return true;
     }
