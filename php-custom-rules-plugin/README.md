@@ -14,25 +14,10 @@ The default build system is Gradle. To build the project and run its unit tests,
 
 The custom rules example can also be built with Maven. The Maven and Gradle build files can coexist in the same directory.
 
-The Maven build requires `php-frontend` to be available in the local Maven repository. Build and install it manually by executing these commands from the project's root directory:
+The Maven build requires `php-frontend` to be available in the local Maven repository. Publish it locally by executing this command from the project's root directory:
 
 ```shell
-./gradlew :php-frontend:jar :php-frontend:testFixturesJar
-mvn install:install-file \
-  -Dfile=php-frontend/build/libs/php-frontend-4.0-SNAPSHOT.jar \
-  -DgroupId=org.sonarsource.php \
-  -DartifactId=php-frontend \
-  -Dversion=4.0-SNAPSHOT \
-  -Dpackaging=jar \
-  -DgeneratePom=true
-mvn install:install-file \
-  -Dfile=php-frontend/build/libs/php-frontend-4.0-SNAPSHOT-test-fixtures.jar \
-  -DgroupId=org.sonarsource.php \
-  -DartifactId=php-frontend \
-  -Dversion=4.0-SNAPSHOT \
-  -Dpackaging=jar \
-  -Dclassifier=test-fixtures \
-  -DgeneratePom=false
+./gradlew :php-frontend:publishToMavenLocal
 ```
 
 Then execute this command from the `php-custom-rules-plugin` directory:
