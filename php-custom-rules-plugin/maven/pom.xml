@@ -7,7 +7,7 @@
   <groupId>org.sonar.samples.php</groupId>
   <artifactId>php-custom-rules-plugin</artifactId>
   <packaging>jar</packaging>
-  <version>3.61-SNAPSHOT</version>
+  <version>4.0-SNAPSHOT</version>
 
   <name>SonarSource PHP Custom Rules Example</name>
   <description>PHP Custom Rules Example for SonarQube</description>
@@ -19,12 +19,12 @@
     <version.junit-jupiter>5.10.3</version.junit-jupiter>
 
     <!-- Advertise minimal required JRE version -->
-    <jre.min.version>17</jre.min.version>
+    <jre.min.version>21</jre.min.version>
 
     <!-- JDK Build versions -->
-    <jdk.min.version>17</jdk.min.version>
-    <jdk.source.version>17</jdk.source.version>
-    <jdk.target.version>17</jdk.target.version>
+    <jdk.min.version>21</jdk.min.version>
+    <jdk.source.version>21</jdk.source.version>
+    <jdk.target.version>21</jdk.target.version>
   </properties>
 
   <dependencies>
