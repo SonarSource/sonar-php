@@ -483,6 +483,14 @@ class PHPSensorTest {
   }
 
   @Test
+  void s3011ShouldBeSuppressedOnTestLikePath() {
+    checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S3011")).build());
+    context.fileSystem().add(inputFile("testFileExcludedCheck/tests/ChangingAccessibility.php"));
+    createSensor().execute(context);
+    assertThat(context.allIssues()).as("S3011 should be suppressed in tests/").isEmpty();
+  }
+
+  @Test
   void testIssues() {
     checkFactory = new CheckFactory(getActiveRules());
     analyseSingleFile(createSensor(), ANALYZED_FILE);
