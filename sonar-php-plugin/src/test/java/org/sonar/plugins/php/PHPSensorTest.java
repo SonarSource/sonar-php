@@ -27,6 +27,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.slf4j.event.Level;
@@ -474,20 +476,16 @@ class PHPSensorTest {
     assertThat(context.allIssues()).as("S2068 should raise on a regular path").hasSize(1);
   }
 
-  @Test
-  void s6418ShouldBeSuppressedOnTestLikePath() {
-    checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S6418")).build());
-    context.fileSystem().add(inputFile("testFileExcludedCheck/tests/HardCodedSecret.php"));
+  @ParameterizedTest
+  @CsvSource({
+    "S6418, HardCodedSecret.php",
+    "S3011, ChangingAccessibility.php"
+  })
+  void shouldBeSuppressedOnTestLikePath(String ruleKey, String fileName) {
+    checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule(ruleKey)).build());
+    context.fileSystem().add(inputFile("testFileExcludedCheck/tests/" + fileName));
     createSensor().execute(context);
-    assertThat(context.allIssues()).as("S6418 should be suppressed in tests/").isEmpty();
-  }
-
-  @Test
-  void s3011ShouldBeSuppressedOnTestLikePath() {
-    checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule("S3011")).build());
-    context.fileSystem().add(inputFile("testFileExcludedCheck/tests/ChangingAccessibility.php"));
-    createSensor().execute(context);
-    assertThat(context.allIssues()).as("S3011 should be suppressed in tests/").isEmpty();
+    assertThat(context.allIssues()).as(ruleKey + " should be suppressed in tests/").isEmpty();
   }
 
   @Test
