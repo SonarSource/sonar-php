@@ -61,7 +61,7 @@ public class RulingHelper {
       .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
-      .setProperty("sonar.lits.dump.old", FileLocation.of("src/integrationTest/resources/" + expectedIssueLocation).getFile().getAbsolutePath())
+      .setProperty("sonar.lits.dump.old", FileLocation.of("src/test/resources/" + expectedIssueLocation).getFile().getAbsolutePath())
       .setProperty("sonar.lits.dump.new", FileLocation.of("build/actual").getFile().getAbsolutePath())
       .setProperty("sonar.lits.differences", litsDifferencesFile.getAbsolutePath())
       .setProperty("sonar.internal.analysis.failFast", "true")
