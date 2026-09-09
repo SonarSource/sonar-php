@@ -78,7 +78,7 @@ public class PhpPrAnalysisTest {
 
     // Analyze the changed branch
     setUpChanges(tempDirectory, scenario, deletedFiles);
-    SonarScanner build = RulingHelper.prepareScanner(tempDirectory, PROJECT_KEY, "expected_pr_analysis/" + scenario, litsDifferencesFile)
+    SonarScanner build = RulingHelper.prepareScanner(tempDirectory, PROJECT_KEY, "expected/php/prAnalysis/" + scenario, litsDifferencesFile)
       .setProperty("sonar.pullrequest.key", "1")
       .setProperty("sonar.pullrequest.branch", "incremental");
 
@@ -101,7 +101,7 @@ public class PhpPrAnalysisTest {
     // (if we set up a PR Analysis, LITS will fail comparing all the expected issues).
     // Thus, in the test we perform branch analysis, and we manually enable incremental analysis for testing purposes.
     setUpChanges(tempDirectory, scenario, deletedFiles);
-    SonarScanner build = RulingHelper.prepareScanner(tempDirectory, PROJECT_KEY, "expected_pr_analysis/" + scenario, litsDifferencesFile)
+    SonarScanner build = RulingHelper.prepareScanner(tempDirectory, PROJECT_KEY, "expected/php/prAnalysis/" + scenario, litsDifferencesFile)
       .setProperty("sonar.php.skipUnchanged", "true");
 
     BuildResult result = ORCHESTRATOR.executeBuild(build);
@@ -115,7 +115,7 @@ public class PhpPrAnalysisTest {
   private void analyzeAndAssertBaseCommit(File tempFile, File litsDifferencesFile) throws IOException {
     FileUtils.copyDirectory(new File("../sources_pr_analysis", "base"), tempFile);
 
-    SonarScanner build = RulingHelper.prepareScanner(tempFile, PROJECT_KEY, "expected_pr_analysis/base", litsDifferencesFile);
+    SonarScanner build = RulingHelper.prepareScanner(tempFile, PROJECT_KEY, "expected/php/prAnalysis/base", litsDifferencesFile);
     ORCHESTRATOR.executeBuild(build);
 
     String litsDifferences = new String(Files.readAllBytes(litsDifferencesFile.toPath()), UTF_8);
