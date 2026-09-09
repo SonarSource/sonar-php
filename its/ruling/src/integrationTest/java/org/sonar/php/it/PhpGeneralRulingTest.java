@@ -110,7 +110,7 @@ public class PhpGeneralRulingTest {
     SonarScanner build = RulingHelper.prepareScanner(
       projectLocation,
       project,
-      "expected/" + project,
+      "expected/php/" + project,
       litsDifferencesFile,
       keyValueProperties)
       .setProperty("sonar.import_unknown_files", "true")
