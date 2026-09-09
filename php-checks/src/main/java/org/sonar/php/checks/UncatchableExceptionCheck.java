@@ -43,7 +43,7 @@ public class UncatchableExceptionCheck extends PHPVisitorCheck {
     }
   }
 
-  private boolean isBracketedNamespace(NamespaceStatementTree tree) {
+  private static boolean isBracketedNamespace(NamespaceStatementTree tree) {
     return tree.openCurlyBrace() != null;
   }
 

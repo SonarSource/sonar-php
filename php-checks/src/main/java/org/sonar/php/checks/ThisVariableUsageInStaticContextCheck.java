@@ -54,7 +54,7 @@ public class ThisVariableUsageInStaticContextCheck extends PHPVisitorCheck {
     super.visitVariableIdentifier(varIdentifier);
   }
 
-  private boolean isWithinNonStaticFunctionExpression(VariableIdentifierTree varIdentifier) {
+  private static boolean isWithinNonStaticFunctionExpression(VariableIdentifierTree varIdentifier) {
     Tree parent = varIdentifier.getParent();
     while (parent != null) {
       if (parent.is(Tree.Kind.FUNCTION_EXPRESSION)) {

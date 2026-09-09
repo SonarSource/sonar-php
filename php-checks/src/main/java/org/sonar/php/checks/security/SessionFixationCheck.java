@@ -44,7 +44,7 @@ public class SessionFixationCheck extends PHPVisitorCheck {
     return call.callArguments().get(0).value();
   }
 
-  private boolean hasArguments(FunctionCallTree tree) {
+  private static boolean hasArguments(FunctionCallTree tree) {
     return !tree.callArguments().isEmpty();
   }
 }
