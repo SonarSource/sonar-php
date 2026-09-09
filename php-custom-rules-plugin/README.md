@@ -12,12 +12,18 @@ The default build system is Gradle. To build the project and run its unit tests,
 
 ### Maven
 
-To use Maven instead of Gradle, replace the `build.gradle.kts` file with the `maven/pom.xml` file.
+The custom rules example can also be built with Maven. The Maven and Gradle build files can coexist in the same directory.
 
-This change will also require to build the plugin dependency manually by executing this command from the project's root directory:
+The Maven build requires `php-frontend` to be available in the local Maven repository. Publish it locally by executing this command from the project's root directory:
 
 ```shell
-./gradlew publishToMavenLocal
+./gradlew :php-frontend:publishToMavenLocal
+```
+
+Then execute this command from the `php-custom-rules-plugin` directory:
+
+```shell
+mvn package
 ```
 
 ## API Changes

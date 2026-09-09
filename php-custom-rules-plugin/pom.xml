@@ -6,25 +6,51 @@
 
   <groupId>org.sonar.samples.php</groupId>
   <artifactId>php-custom-rules-plugin</artifactId>
-  <packaging>jar</packaging>
-  <version>3.61-SNAPSHOT</version>
+  <version>4.0-SNAPSHOT</version>
+  <packaging>sonar-plugin</packaging>
 
   <name>SonarSource PHP Custom Rules Example</name>
   <description>PHP Custom Rules Example for SonarQube</description>
+  <url>https://sonarsource.atlassian.net/browse/SONARPHP</url>
+
+  <organization>
+    <name>SonarSource</name>
+    <url>https://www.sonarsource.com</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>SSALv1</name>
+      <url>https://sonarsource.com/license/ssal/</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>SonarSource Team</name>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/SonarSource/sonar-php</url>
+  </scm>
+
+  <issueManagement>
+    <url>https://sonarsource.atlassian.net/browse/SONARPHP</url>
+  </issueManagement>
 
   <properties>
     <!-- JAR versions -->
+    <version.sonar-analyzer-commons>2.31.0.5284</version.sonar-analyzer-commons>
     <version.sonar-plugin-api>10.13.0.2560</version.sonar-plugin-api>
     <version.sonarqube-plugin-api>10.7.0.96327</version.sonarqube-plugin-api>
     <version.junit-jupiter>5.10.3</version.junit-jupiter>
 
     <!-- Advertise minimal required JRE version -->
-    <jre.min.version>17</jre.min.version>
+    <jre.min.version>21</jre.min.version>
 
     <!-- JDK Build versions -->
-    <jdk.min.version>17</jdk.min.version>
-    <jdk.source.version>17</jdk.source.version>
-    <jdk.target.version>17</jdk.target.version>
+    <maven.compiler.release>21</maven.compiler.release>
   </properties>
 
   <dependencies>
@@ -39,6 +65,13 @@
       <groupId>org.sonarsource.php</groupId>
       <artifactId>php-frontend</artifactId>
       <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.2</version>
       <scope>provided</scope>
     </dependency>
 
@@ -63,6 +96,13 @@
       <classifier>test-fixtures</classifier>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-test-commons</artifactId>
+      <version>${version.sonar-analyzer-commons}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -70,6 +110,8 @@
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <version>1.25.1.3002</version>
+        <extensions>true</extensions>
         <!-- More details about the configuration here: https://docs.sonarsource.com/sonarqube/latest/extension-guide/developing-a-plugin/plugin-basics/ -->
         <configuration>
           <pluginKey>custom</pluginKey>
@@ -89,7 +131,16 @@
       </plugin>
 
       <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.16.0</version>
+        <configuration>
+          <release>${maven.compiler.release}</release>
+        </configuration>
+      </plugin>
+
+      <plugin>
         <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.2</version>
         <executions>
           <execution>
             <phase>package</phase>

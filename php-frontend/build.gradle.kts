@@ -17,6 +17,7 @@
 plugins {
   id("org.sonarsource.cloud-native.java-conventions")
   id("org.sonarsource.cloud-native.code-style-conventions")
+  id("org.sonarsource.cloud-native.publishing-configuration")
   id("java-test-fixtures")
 }
 
@@ -41,4 +42,21 @@ dependencies {
 
   testFixturesImplementation(libs.sonar.analyzer.test.commons)
   testFixturesImplementation(libs.sonar.plugin.api.impl)
+}
+
+publishing {
+  publications.withType<MavenPublication> {
+    from(components["java"])
+  }
+}
+
+publishingConfiguration {
+  pomName = "SonarSource PHP Analyzer :: Frontend"
+  scmUrl = "https://github.com/SonarSource/sonar-php"
+
+  license {
+    name = "SSALv1"
+    url = "https://sonarsource.com/license/ssal/"
+    distribution = "repo"
+  }
 }
